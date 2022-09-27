@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009D15EC6E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839F05EC6E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbiI0OvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
+        id S232733AbiI0OvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233204AbiI0OuR (ORCPT
+        with ESMTP id S233212AbiI0OuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:50:17 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BA3BC3E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:48:41 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id g2so6171444qkk.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:48:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=sIkic6SUoveiF5m/KjLf8xeEdyIptPVHhr889tOMLnU=;
-        b=nYzOcKx3EJuyAfJ9aDUTKc7o3DLunj3aAejfVjB0X73KAdvT3KafO//JxCjPR8ufRT
-         MayerniMjK2tqrlBl9VY6HP+t9/hw05OI83yQIpwAr0UIhuWevST1fd0RiHB+ZVWwJ6L
-         3PoyAiELEARRMn7w7sXGb5yqQjJJixxrEV5OUj98FnhM80XGIDZuLEZS0sOGxhKatOp1
-         i6mIPxLG0Wh7At3ImvI+LdY5s+myK3pGHhLf6jBaWNAkw7fuFz2bcocQcrDeiSlLaiih
-         BO85ML5Y9852c49Swi7/N+JaJLrLe8rMMaLv5f2KhfI415rlLWYxFAMTcRL4CoOc8Azy
-         kdgA==
-X-Gm-Message-State: ACrzQf2KuCc8aZAg4Y4xD5ySpRv926nnBeyel/ctUJZQM969HHgjobUc
-        WGT1MFy+nePFDthfKiTgvZKTXq6RQxa1VA==
-X-Google-Smtp-Source: AMsMyM4021cvju3rcgJdLmgELtzjPb+e7V7xF+b6WIz3V4OUUwF5uHCbyr4GZL82Ixv1pt5A5s5rEw==
-X-Received: by 2002:a37:8a87:0:b0:6cf:3ee4:56e0 with SMTP id m129-20020a378a87000000b006cf3ee456e0mr17640225qkd.200.1664290120685;
-        Tue, 27 Sep 2022 07:48:40 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id w23-20020a05620a0e9700b006b60d5a7205sm1105363qkm.51.2022.09.27.07.48.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 07:48:39 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-3457bc84d53so103180717b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:48:39 -0700 (PDT)
-X-Received: by 2002:a81:758a:0:b0:345:450b:6668 with SMTP id
- q132-20020a81758a000000b00345450b6668mr24868987ywc.316.1664290119137; Tue, 27
- Sep 2022 07:48:39 -0700 (PDT)
+        Tue, 27 Sep 2022 10:50:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D449A465
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:48:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE288619F2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:48:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7BAC433D6;
+        Tue, 27 Sep 2022 14:48:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664290122;
+        bh=oW2GlI27eoYpEACDh9WXB1kbVwlV6tTbo8tfVLYs1tg=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ljSsMs6yGMFG8QDrdU9Ff24nYRnOwWJ8toPTJ+sG610laF9brbINOA4nSxaRlKt6T
+         QCQqgdq2xJEF4yO+dFwbVaupusWDikmxrpShQgjRNdDMZxZg3neejvIjKuNNTXoByV
+         7Te1C8f6zXuXbW6972psmWh/YFCsz4OboD8byKyQq7472UOxlpxlwHaAh7dctxnt8+
+         9h43dRBMFtzyCpEBeFBiXqlUZT45xGAy9jED7WHRkgeL8zL6RqBokQOqExtZEbwn9A
+         O2FXgD8O7rZsi4zDFHvNj59Bqp81IoUkaeM0swehBGZOJ3IVovaOcJfINYcI/n80Wj
+         pi9qJY+M5s3kg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+In-Reply-To: <20220927121440.2506632-1-sbinding@opensource.cirrus.com>
+References: <20220927121440.2506632-1-sbinding@opensource.cirrus.com>
+Subject: Re: [PATCH v1] ASoC: cs42l42: Fallback to headphones for type detect
+Message-Id: <166429012122.444806.6143435073545852825.b4-ty@kernel.org>
+Date:   Tue, 27 Sep 2022 15:48:41 +0100
 MIME-Version: 1.0
-References: <b0981cb5a97452af73b9dd0dd0eb03c5002f7af4.1664285626.git.geert+renesas@glider.be>
- <fe2b1f48-e18a-b1d9-0c62-ddddf9e6515f@arm.com>
-In-Reply-To: <fe2b1f48-e18a-b1d9-0c62-ddddf9e6515f@arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 27 Sep 2022 16:48:27 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVFAwqVtrRFf-_jSODWeJuGAzbpoyk65HDOqj9h6AUt2A@mail.gmail.com>
-Message-ID: <CAMuHMdVFAwqVtrRFf-_jSODWeJuGAzbpoyk65HDOqj9h6AUt2A@mail.gmail.com>
-Subject: Re: [PATCH] iommu/io-pgtable: Make IOMMU_IO_PGTABLE_DART invisible
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Sven Peter <sven@svenpeter.dev>, Janne Grunau <j@jannau.net>,
-        Hector Martin <marcan@marcan.st>, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+On Tue, 27 Sep 2022 13:14:40 +0100, Stefan Binding wrote:
+> After tip sense detects a jack insertion, if automatic
+> type detection, and manual type detection fails, then
+> fall back to assume the jack connected belongs to
+> headphones.
+> 
+> 
 
-On Tue, Sep 27, 2022 at 4:15 PM Robin Murphy <robin.murphy@arm.com> wrote:
-> On 2022-09-27 14:36, Geert Uytterhoeven wrote:
-> > There is no point in asking the user about both "Apple DART Formats" and
-> > "Apple DART IOMMU Support", as the former is useless without the latter,
-> > and the latter auto-selects the former.
-> >
-> > Fixes: 745ef1092bcfcf3b ("iommu/io-pgtable: Move Apple DART support to its own file")
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> > Should IOMMU_IO_PGTABLE_LPAE and IOMMU_IO_PGTABLE_ARMV7S be made
-> > invisible, too?
-> > Are there users that do not select them?
->
-> The aim was for formats to be independently selectable for COMPILE_TEST
-> coverage. The Arm formats are manually selectable for the sake of their
-> runtime self-tests, which are self-contained, but since DART format
-> doesn't do anything by itself I'd agree there's no need to prompt when
-> !COMPILE_TEST here.
+Applied to
 
-IOMMU_IO_PGTABLE_LPAE and IOMMU_IO_PGTABLE_ARMV7S are
-selected by other symbols that can be enabled when compile-testing, so
-the tests can still be enabled in those cases, too
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Gr{oetje,eeting}s,
+Thanks!
 
-                        Geert
+[1/1] ASoC: cs42l42: Fallback to headphones for type detect
+      commit: 45560891506fae31be66f2a73693c5c8bd7dbedb
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
