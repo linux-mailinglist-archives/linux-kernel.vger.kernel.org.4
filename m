@@ -2,97 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A535EBBB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56515EBBC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiI0HjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 03:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
+        id S230325AbiI0Hle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 03:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiI0Hi6 (ORCPT
+        with ESMTP id S230425AbiI0Hl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 03:38:58 -0400
+        Tue, 27 Sep 2022 03:41:26 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E05C8306D
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:38:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B788901AD
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664264335;
+        s=mimecast20190719; t=1664264483;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GyQ7MTY6w6UVeTjuMMQPlEFUMTLxq0n0wD/7sfCc6UI=;
-        b=Enr2fQT8tdY783QrD2x11mthMoSiZdD6gcyL2TT4GJvy6O4xDIcKvmW1PnnehADKdZPRD3
-        pBu8yxeXiHeQB01faFBig+raWDS9aFvDaQZEn1IG/oH/pyfIZUnY4Aw9xLnxc4BD70TvFF
-        X1/CGsmflfzjTgnT4Pj+nmSvz9S0ZUQ=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Wz0ur1AHxlH7fz/miPX8mkQPPUSyAQo52GQCeq+89y0=;
+        b=YZG4xQSg/Fqa4WjHC60QqdtbfUj4b8VC7NT18r4X4jG7pdV4WNbLgcH4Ofa9P4FqD///4V
+        baYSGLtyMmwqcM1/1lKlJLiJ1wlG5OerOZerD9jYVsfwCkfpSO5YIYro79BFl4Nboxf8WU
+        eslWmSu8JNbY96ldQaPq4NGNPAnrqSY=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-613-NlGFnb0XPHyHMMXIq6oF7Q-1; Tue, 27 Sep 2022 03:38:54 -0400
-X-MC-Unique: NlGFnb0XPHyHMMXIq6oF7Q-1
-Received: by mail-qv1-f72.google.com with SMTP id oj15-20020a056214440f00b004ac6db57cacso5307654qvb.17
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:38:53 -0700 (PDT)
+ us-mta-591-TLCSmKhpP5qI6PiZ7oLlzA-1; Tue, 27 Sep 2022 03:41:21 -0400
+X-MC-Unique: TLCSmKhpP5qI6PiZ7oLlzA-1
+Received: by mail-wr1-f71.google.com with SMTP id d18-20020adfa352000000b0022cbe33d2a5so298464wrb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:41:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=GyQ7MTY6w6UVeTjuMMQPlEFUMTLxq0n0wD/7sfCc6UI=;
-        b=E+UfcVHu0OgqeeroI7l6SXah7L0tvlA9V2u8VtpUsZl7bJQh13fDuDJDtkr0IwqTqs
-         zwgrkCfXzGixZmYgSGtMdvknmJj2wL/FEJ+mRVpMJ31iWwBCx1q7vMJ5wqSanfq1Drsf
-         UMPKGXz22fk2crzd5SpgkygLPDKUtaEhNZNEw6tSII2hp7FopBHAq/jzcNBGp83+nYpH
-         LmXjcHLQePsnyEfY1Yqcd9Ghse9bY9ajssNSh9lSjdTjCaR2Xrh1nQiviT+iIBW9JyYk
-         95fdj197UNjmmY4v/XU5NPckTc3QDjZo6DGya6lc40a+sJ4evC22wBHhtVXlBOCyy3j6
-         H3XQ==
-X-Gm-Message-State: ACrzQf2PIl3LcYAB4Cbvhn4KSDCQJmDV/k+tErbPhu5twNjvo/zk3vxg
-        6y6xgEqTKkNa78FXSjZOpjLuqtfmlEL8Xbv+a5JgqIDrCL7ePjCnGsaKz8h5HBfBddEA6P94+Va
-        hLSF3s3IB/m2Zk30VsYroIkCe
-X-Received: by 2002:ae9:e914:0:b0:6cf:68a0:58a3 with SMTP id x20-20020ae9e914000000b006cf68a058a3mr15973842qkf.290.1664264333348;
-        Tue, 27 Sep 2022 00:38:53 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6W/2SNgwjXkD+qSZ8ng7DrYaEd2pctVRaoUmbpDBPnf8EKX6LmR5f6l7Xr1FYaLCqylJNGdg==
-X-Received: by 2002:ae9:e914:0:b0:6cf:68a0:58a3 with SMTP id x20-20020ae9e914000000b006cf68a058a3mr15973829qkf.290.1664264333052;
-        Tue, 27 Sep 2022 00:38:53 -0700 (PDT)
-Received: from [192.168.149.123] (58.254.164.109.static.wline.lns.sme.cust.swisscom.ch. [109.164.254.58])
-        by smtp.gmail.com with ESMTPSA id v15-20020a05620a0f0f00b006ce7316f361sm519262qkl.118.2022.09.27.00.38.49
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=Wz0ur1AHxlH7fz/miPX8mkQPPUSyAQo52GQCeq+89y0=;
+        b=vplcg6zwSaa63a6IVsNoyr1msaXYily+NSCrdX2h4uxudk6Ta+FcOlyqqZTyPZpbmP
+         b0iHXHYa5UtnvujhJxBFrlU8NKn4G4or7lfWCDrPQNvK24j4SWBFiDp8L4qUwyds4nuR
+         9ORsraXZgjxrkg1Gbf5PXAX6S9elcWPUNKF1DEd6o+Lv5H4Q2r9TZxUrIOWbpES/pe7D
+         qUa9IqfUPGDqM4XkRDwDoVQVrvEL/OjOPtJVT2YyW7MyZQY/XQbDrok6do8s0/iyHNyO
+         EZ052epyJAXxox83inQHaBYhDZ5FfhEIT4HhPKSh8jZdl242lqoN2eqb0Mt61VVys402
+         /Fvw==
+X-Gm-Message-State: ACrzQf17jwK1UGrkaUoMbOpxzW0ofS2tyeiFhdWMaBUsH+RHKjUOFdrq
+        gONXLURArnPHT+V4lCF4IBtoliRWgUn5sKLxNCLZQRTiOTpNgIWzg8EJG3C0MUwzGsBZ0MCqTbM
+        AiaezJJYG/RCy+0+pTqWoaUoc
+X-Received: by 2002:a5d:64eb:0:b0:22b:fe0:98e2 with SMTP id g11-20020a5d64eb000000b0022b0fe098e2mr15858722wri.178.1664264480858;
+        Tue, 27 Sep 2022 00:41:20 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7e+48WcaWEDSJYJpZ1vL2d444VYu79LJ/bkUvle1DpEGVRI2Nvd7IRUsVqoVTh4Ecfwry9Og==
+X-Received: by 2002:a5d:64eb:0:b0:22b:fe0:98e2 with SMTP id g11-20020a5d64eb000000b0022b0fe098e2mr15858710wri.178.1664264480570;
+        Tue, 27 Sep 2022 00:41:20 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:ff00:9ec2:6ff6:11a1:3e80? (p200300cbc705ff009ec26ff611a13e80.dip0.t-ipconnect.de. [2003:cb:c705:ff00:9ec2:6ff6:11a1:3e80])
+        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b003b4fdbb6319sm15712391wmq.21.2022.09.27.00.41.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 00:38:52 -0700 (PDT)
-Message-ID: <3b04db9d-0177-7e6e-a54c-a28ada8b1d36@redhat.com>
-Date:   Tue, 27 Sep 2022 09:38:46 +0200
+        Tue, 27 Sep 2022 00:41:20 -0700 (PDT)
+Message-ID: <9178c097-664b-11ce-272f-c24d24f012e7@redhat.com>
+Date:   Tue, 27 Sep 2022 09:41:19 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH -next v4 2/3] selftests/memory-hotplug: Restore memory
+ before exit
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        David Hildenbrand <david@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Like Xu <like.xu.linux@gmail.com>
-References: <20220909104506.738478-1-eesposit@redhat.com>
- <YxtOEgJhe4EcAJsE@google.com>
- <5f0345d2-d4d1-f4fe-86ba-6e22561cb6bd@redhat.com>
- <37b3162e-7b3a-919f-80e2-f96eca7d4b4c@redhat.com>
- <dfcbdf1d-b078-ec6c-7706-6af578f79ec2@redhat.com>
- <55d7f0bd-ace1-506b-ea5b-105a86290114@redhat.com>
- <f753391e-7bdc-bada-856a-87344e75bd74@redhat.com>
- <111a46c1-7082-62e3-4f3a-860a95cd560a@redhat.com>
- <14d5b8f2-7cb6-ce24-c7a7-32aa9117c953@redhat.com>
- <YzIZhn47brWBfQah@google.com>
-From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
-In-Reply-To: <YzIZhn47brWBfQah@google.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Zhao Gongyi <zhaogongyi@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Cc:     akinobu.mita@gmail.com, corbet@lwn.net, osalvador@suse.de,
+        shuah@kernel.org
+References: <20220927032851.128174-1-zhaogongyi@huawei.com>
+ <20220927032851.128174-3-zhaogongyi@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220927032851.128174-3-zhaogongyi@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,57 +86,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Am 26/09/2022 um 23:28 schrieb Sean Christopherson:
-> On Mon, Sep 26, 2022, David Hildenbrand wrote:
->> On 23.09.22 15:38, Emanuele Giuseppe Esposito wrote:
->>>
->>>
->>> Am 23/09/2022 um 15:21 schrieb David Hildenbrand:
->>>> On 23.09.22 15:10, Emanuele Giuseppe Esposito wrote:
->>>>>
->>>>>
->>>>> Am 19/09/2022 um 19:30 schrieb David Hildenbrand:
->>>>>> On 19.09.22 09:53, David Hildenbrand wrote:
->>>>>>> On 18.09.22 18:13, Emanuele Giuseppe Esposito wrote:
->>>>>>>>
->>>>>>>>
->>>>>>>> Am 09/09/2022 um 16:30 schrieb Sean Christopherson:
->>>>>>>>> On Fri, Sep 09, 2022, Emanuele Giuseppe Esposito wrote:
->>>>>>>>>> KVM is currently capable of receiving a single memslot update
->>>>>>>>>> through
->>>>>>>>>> the KVM_SET_USER_MEMORY_REGION ioctl.
->>>>>>>>>> The problem arises when we want to atomically perform multiple
->>>>>>>>>> updates,
->>>>>>>>>> so that readers of memslot active list avoid seeing incomplete
->>>>>>>>>> states.
->>>>>>>>>>
->>>>>>>>>> For example, in RHBZ
->>>>>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1979276
+On 27.09.22 05:28, Zhao Gongyi wrote:
+> Some momory will be left in offline state when calling
+> offline_memory_expect_fail() failed. Restore it before exit.
 > 
-> ...
+> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
+> ---
+>   .../memory-hotplug/mem-on-off-test.sh         | 21 ++++++++++++++-----
+>   1 file changed, 16 insertions(+), 5 deletions(-)
 > 
->> As Sean said "This is an awful lot of a complexity to take on for something
->> that appears to be solvable in userspace."
+> diff --git a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+> index 1d87611a7d52..91a7457616bb 100755
+> --- a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+> +++ b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+> @@ -134,6 +134,16 @@ offline_memory_expect_fail()
+>   	return 0
+>   }
 > 
-> And if the userspace solution is unpalatable for whatever reason, I'd like to
-> understand exactly what KVM behavior is problematic for userspace.  E.g. the
-> above RHBZ bug should no longer be an issue as the buggy commit has since been
-> reverted.
-
-It still is because I can reproduce the bug, as also pointed out in
-multiple comments below.
-
+> +online_all_offline_memory()
+> +{
+> +	for memory in `hotpluggable_offline_memory`; do
+> +		if ! online_memory_expect_success $memory; then
+> +			echo "$FUNCNAME $memory: unexpected fail" >&2
+> +			retval=1
+> +		fi
+> +	done
+> +}
+> +
+>   error=-12
+>   priority=0
+>   # Run with default of ratio=2 for Kselftest run
+> @@ -275,11 +285,7 @@ done
+>   # Online all hot-pluggable memory
+>   #
+>   echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_ONLINE/error
+> -for memory in `hotpluggable_offline_memory`; do
+> -	if ! online_memory_expect_success $memory; then
+> -		retval=1
+> -	fi
+> -done
+> +online_all_offline_memory
 > 
-> If the issue is KVM doing something nonsensical on a code fetch to MMIO, then I'd
-> much rather fix _that_ bug and improve KVM's user exit ABI to let userspace handle
-> the race _if_ userspace chooses not to pause vCPUs.
+>   #
+>   # Test memory hot-remove error handling (online => offline)
+> @@ -296,4 +302,9 @@ done
+>   echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_OFFLINE/error
+>   /sbin/modprobe -q -r memory-notifier-error-inject
 > 
+> +#
+> +# Restore memory before exit
+> +#
+> +online_all_offline_memory
+> +
+>   exit $retval
+> --
 
-Also on the BZ they all seem (Paolo included) to agree that the issue is
-non-atomic memslots update.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-To be more precise, what I did mostly follows what Peter explained in
-comment 19 : https://bugzilla.redhat.com/show_bug.cgi?id=1979276#c19
+-- 
+Thanks,
+
+David / dhildenb
 
