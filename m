@@ -2,117 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7537A5EC547
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED88B5EC54A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232942AbiI0N71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S233057AbiI0N7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbiI0N6k (ORCPT
+        with ESMTP id S232985AbiI0N7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:58:40 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C38146610;
-        Tue, 27 Sep 2022 06:58:39 -0700 (PDT)
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4McLm45ks9z688Z6;
-        Tue, 27 Sep 2022 21:57:24 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 27 Sep 2022 15:58:37 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 27 Sep
- 2022 14:58:37 +0100
-Date:   Tue, 27 Sep 2022 14:58:36 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V3 2/2] cxl/doe: Request exclusive DOE access
-Message-ID: <20220927145836.0000572e@huawei.com>
-In-Reply-To: <20220926215711.2893286-3-ira.weiny@intel.com>
-References: <20220926215711.2893286-1-ira.weiny@intel.com>
-        <20220926215711.2893286-3-ira.weiny@intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 27 Sep 2022 09:59:19 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BE21616F2;
+        Tue, 27 Sep 2022 06:58:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8B5361FCF5;
+        Tue, 27 Sep 2022 13:58:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664287133; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=px0sFDh89qomZMV5WztXjGmCBWJe2Ndh6D4h5jyTjxQ=;
+        b=PFEU6f0BOxVvjmuPPfAHpthYreZsZAoyIuCck5vkKfdQ/eAKv+/8BQfGW+IIYWWtjUqDhD
+        s/B+bZMvsPg2fuT99+VvTbHrqbTQLTImERjcW1HTVO8gtIbk8w2gwy9xhAB2UsrXICP4a4
+        Z7HqJd3fViX4h7UMTU0+oNVUO4F39sk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6A8DC139BE;
+        Tue, 27 Sep 2022 13:58:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LG+5F50BM2P2MwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 27 Sep 2022 13:58:53 +0000
+Date:   Tue, 27 Sep 2022 15:58:52 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Zhongkun He <hezhongkun.hzk@bytedance.com>, corbet@lwn.net,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [External] Re: [RFC] proc: Add a new isolated
+ /proc/pid/mempolicy type.
+Message-ID: <YzMBnKUo8ny9S/7+@dhcp22.suse.cz>
+References: <20220926091033.340-1-hezhongkun.hzk@bytedance.com>
+ <YzF3aaLvEvFhTQa3@dhcp22.suse.cz>
+ <24b20953-eca9-eef7-8e60-301080a17d2d@bytedance.com>
+ <YzGya2Q3iuWS2WdM@dhcp22.suse.cz>
+ <7ac9abce-4458-982b-6c04-f9569a78c0da@bytedance.com>
+ <YzLVTxGHgYp3Es4t@dhcp22.suse.cz>
+ <9a0130ce-6528-6652-5a8e-3612c5de2d96@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a0130ce-6528-6652-5a8e-3612c5de2d96@bytedance.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_SBL_A autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sep 2022 14:57:11 -0700
-ira.weiny@intel.com wrote:
-
-> From: Ira Weiny <ira.weiny@intel.com>
+On Tue 27-09-22 21:07:02, Abel Wu wrote:
+> On 9/27/22 6:49 PM, Michal Hocko wrote:
+> > On Tue 27-09-22 11:20:54, Abel Wu wrote:
+> > [...]
+> > > > > Btw.in order to add per-thread-group mempolicy, is it possible to add
+> > > > > mempolicy in mm_struct?
+> > > > 
+> > > > I dunno. This would make the mempolicy interface even more confusing.
+> > > > Per mm behavior makes a lot of sense but we already do have per-thread
+> > > > semantic so I would stick to it rather than introducing a new semantic.
+> > > > 
+> > > > Why is this really important?
+> > > 
+> > > We want soft control on memory footprint of background jobs by applying
+> > > NUMA preferences when necessary, so the impact on different NUMA nodes
+> > > can be managed to some extent. These NUMA preferences are given by the
+> > > control panel, and it might not be suitable to overwrite the tasks with
+> > > specific memory policies already (or vice versa).
+> > 
+> > Maybe the answer is somehow implicit but I do not really see any
+> > argument for the per thread-group semantic here. In other words why a
+> > new interface has to cover more than the local [sg]et_mempolicy?
+> > I can see convenience as one potential argument. Also if there is a
+> > requirement to change the policy in atomic way then this would require a
+> > single syscall.
 > 
-> The PCIE Data Object Exchange (DOE) mailbox is a protocol run over
-> configuration cycles.  It assumes one initiator at a time.  While the
-> kernel has control of the mailbox user space writes could interfere with
-> the kernel access.
+> Convenience is not our major concern. A well-tuned workload can have
+> specific memory policies for different tasks/vmas in one process, and
+> this can be achieved by set_mempolicy()/mbind() respectively. While
+> other workloads are not, they don't care where the memory residents,
+> so the impact they brought on the co-located workloads might vary in
+> different NUMA nodes.
 > 
-> Mark DOE mailbox config space exclusive when iterated by the CXL driver.
+> The control panel, which has a full knowledge of workload profiling,
+> may want to interfere the behavior of the non-mempolicied processes
+> by giving them NUMA preferences, to better serve the co-located jobs.
 > 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-I wonder a bit on whether the failure should be fatal given that something
-very odd would be required for it to fail.
-
-I'm not that bothered though.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
+> So in this scenario, a process's memory policy can be assigned by two
+> objects dynamically:
 > 
-> ---
-> Changes from V2:
-> 	Jonathan:
-> 		s/PCI_DOE_CAP_SIZE/PCI_DOE_CAP_SIZEOF
-> 		Set PCI_DOE_CAP_SIZEOF directly
-> ---
->  drivers/cxl/pci.c             | 5 +++++
->  include/uapi/linux/pci_regs.h | 1 +
->  2 files changed, 6 insertions(+)
+>  a) the process itself, through set_mempolicy()/mbind()
+>  b) the control panel, but API is not available right now
 > 
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index faeb5d9d7a7a..621a0522b554 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -418,6 +418,11 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
->  			continue;
->  		}
->  
-> +		if (!pci_request_config_region_exclusive(pdev, off,
-> +							 PCI_DOE_CAP_SIZEOF,
-> +							 dev_name(dev)))
-> +			pci_err(pdev, "Failed to exclude DOE registers\n");
-> +
->  		if (xa_insert(&cxlds->doe_mbs, off, doe_mb, GFP_KERNEL)) {
->  			dev_err(dev, "xa_insert failed to insert MB @ %x\n",
->  				off);
-> diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
-> index 57b8e2ffb1dd..82a03ea954af 100644
-> --- a/include/uapi/linux/pci_regs.h
-> +++ b/include/uapi/linux/pci_regs.h
-> @@ -1119,6 +1119,7 @@
->  #define  PCI_DOE_STATUS_DATA_OBJECT_READY	0x80000000  /* Data Object Ready */
->  #define PCI_DOE_WRITE		0x10    /* DOE Write Data Mailbox Register */
->  #define PCI_DOE_READ		0x14    /* DOE Read Data Mailbox Register */
-> +#define PCI_DOE_CAP_SIZEOF	0x18	/* Size of DOE register block */
->  
->  /* DOE Data Object - note not actually registers */
->  #define PCI_DOE_DATA_OBJECT_HEADER_1_VID		0x0000ffff
+> Considering the two policies should not fight each other, it sounds
+> reasonable to introduce a new syscall to assign memory policy to a
+> process through struct mm_struct.
 
+So you want to allow restoring the original local policy if the external
+one is disabled?
+
+Anyway, pidfd_$FOO behavior should be semantically very similar to the
+original $FOO. Moving from per-task to per-mm is a major shift in the
+semantic.  I can imagine to have a dedicated flag for the syscall to
+enfore the policy to the full thread group. But having a different
+semantic is both tricky and also constrained because per-thread binding
+is then impossible.
+-- 
+Michal Hocko
+SUSE Labs
