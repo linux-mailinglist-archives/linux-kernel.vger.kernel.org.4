@@ -2,316 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE465ED0A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 01:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783DC5ED0AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 01:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232213AbiI0XAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 19:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
+        id S231897AbiI0XCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 19:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbiI0XAV (ORCPT
+        with ESMTP id S231965AbiI0XCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 19:00:21 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D994676473
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 16:00:04 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RK4N1L026979;
-        Tue, 27 Sep 2022 23:00:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=5rplwrq/XV7vzgs2p3h36mGYiKDgDoyMQ6NCM7Kr7uE=;
- b=N8S7iZJ0n9QCL66Baf6PGSZStBleqSGSO9d2xEDhzFwqtABAB33DYRHQ+RXOM534o5U9
- mhS/iY41NLCoHZYT6sG/iK3yeZZ2VpAOuOiQvxaD2Ui/MitY762I5BtxPiWZbl4khPJV
- ClQPcgyDm0hGBBQfMvA4XFNi827HowJDXLsYNxIoZdbqdkKKW+0AEW9d5yD1TBeJwhdX
- s58xkSqqotO1j41j5Nizw+wDV/ZebP7jVyvVDi+BJFmkaSXDEXnOtBl9RvfVmWYvNyys
- ToI9kSTJfCotJ3mKREoB3y3hv8T11T4iw8Y4AaFg7Yw+HK2kh/OJ1DUiS21GNjxJkjZC xg== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jsstpqxt2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Sep 2022 23:00:01 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28RLS3xj002590;
-        Tue, 27 Sep 2022 23:00:00 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2109.outbound.protection.outlook.com [104.47.70.109])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jtpruqg3v-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Sep 2022 23:00:00 +0000
+        Tue, 27 Sep 2022 19:02:02 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2099.outbound.protection.outlook.com [40.107.220.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CE160D5;
+        Tue, 27 Sep 2022 16:02:01 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aRrqI8ElsBRlVcr0hcUEjVjgs4QzFLOvSLPws2OQpX2ZYekjvrBCUTzolSv+zXoYCZ09qzfUnymJ/LBRgG+s5ZCQ1k7HxR+r+fFk7eo36QuBtug4ZehWpajEIrSo0uRx3CNalfhuK4jPUyuYoLfe2VIONXZB4wKnKQ5Oy2mlUkyyPOLgXUB09k9pdizbqe9frcVP4bQniCVRc3BJUHp/89jTwkglRiTmStUHB13m6er35i7HpGQhAdo9IJMPvJlbgDYUxzgzpyQasINshd4RErX2hMA3vySXqJEnkmUbA0udESm5NiRPKwBvw7zolqd76vTEqKIi2gLt0mmS6/4GGw==
+ b=WExuBqJ7dF4xuA7RBKapbOmnM/6p0SqkyEX1tpHV2LLXs1Q6W4udNUz6J4sCeDoy9zm6UMH3XT+RM1mu6EVtiitCKc5G0ROKMZbaIqsTsggWjo0GR5dUdNigbiW0JAM48+gWpru1K1L6fFe8sTgc+PfHHp54lhVTsBdvH4aTDnT1MUYOJq6T010ha0rowCFnq5zUJ8qSfSAVPI5VBLQrRKmG4YroDgb0ru1aeIWPhlJ3fIcapkS19SP4tt1/T2I16md1TKG7iTEpNPrZAJh0/aYihSzRMTYsAxD0szEIczaIAwXQGsOd/Bxp835MjKW6aIb+WvUTJ7okxov8DtzW6g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5rplwrq/XV7vzgs2p3h36mGYiKDgDoyMQ6NCM7Kr7uE=;
- b=Xc7QKGHE/yyiTJoktFsocy4Mrpkl4OadM7O3wB3OzkXyh/QILR/itNM0AVDDsHuUTgg06XvDTDfEJpToKRzrdxw8ZCGgyoVKhqxIBsG80rjKnan75XH4PXC4dcZBxdkxYKGjCNKD8wxxCoA+EaWZ8CaFB1/inLQ4F1BCpV12MHJfkPCb8F2+GWdWEIQYi+I0uklsh9N573NCpRCY5ZdUapKCXXEfJ6szAtUAiqs7z+Oqj4fabDg4ZVZ4ay4HMU/lpa0woMB7HRKV9uXnyllie1Pz6Pbse+yXlJoZV5UJ4T+RXqmkJVaTInSH7mblTQ+x8M6K9EPJnVaEApq2TupQKg==
+ bh=sQBvWDPleDMQr/XOGSA59C7H9WzrlpNADlmMEBGPQtA=;
+ b=erZJCyZJCznd9RK+MunjfEjkCEd5RBspHpfBsaxSxP26Uxhv9ULcK6rkTYbyjCx3u0DTfjByyO7Ne9Ovkwg/pNf/M2o5PAhkOI4J6f6rsxUuSIEazib3+nS3VPTdYy/2L2AP/z1WnfTR8hIIKbs9uVJw6jgHk+Byo3dDvA4Q3idFMlqIR81Ru2LSvQjt3PuUyRKxg8mazUxTj5SSMXlIra6Hl93PPhAPts2iLyKztyUXCi8F5byvM9uheh7yvk49Qv9amoaRgutvx8MQcyT3aHqGHFNbB3DDa0k/9HaUG7zkH9eVBxWKGgwO9/hhUBHAA1PN0OggZNchHV7hlbbLvA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5rplwrq/XV7vzgs2p3h36mGYiKDgDoyMQ6NCM7Kr7uE=;
- b=N8wlIYpWnvP6I1AZyKjZoA7QHxuMcYe2OzanjFR5uSNSTQWZD+x+sEK6Ys/SOS2fLN94QNX05zDIcNRYelFQILPHFK24C0UoVedmZBm+0mZUcIbGv1a5s8I0y96AOV39ADIWljIUkiK7tXU5T1bt5Oqsx6Sah+gb1RrdxNnvMeY=
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
- by IA1PR10MB6900.namprd10.prod.outlook.com (2603:10b6:208:420::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
- 2022 22:59:55 +0000
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::4c38:703a:3910:61d6]) by CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::4c38:703a:3910:61d6%4]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
- 22:59:55 +0000
-From:   Ankur Arora <ankur.a.arora@oracle.com>
-To:     linux-audit@redhat.com
-Cc:     paul@paul-moore.com, eparis@redhat.com,
-        linux-kernel@vger.kernel.org, boris.ostrovsky@oracle.com,
-        konrad.wilk@oracle.com
-Subject: [PATCH 3/3] audit: unify audit_filter_{uring(),inode_name(),syscall()}
-Date:   Tue, 27 Sep 2022 15:59:44 -0700
-Message-Id: <20220927225944.2254360-4-ankur.a.arora@oracle.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220927225944.2254360-1-ankur.a.arora@oracle.com>
-References: <20220927225944.2254360-1-ankur.a.arora@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MW2PR2101CA0035.namprd21.prod.outlook.com
- (2603:10b6:302:1::48) To CO6PR10MB5409.namprd10.prod.outlook.com
- (2603:10b6:5:357::14)
+ bh=sQBvWDPleDMQr/XOGSA59C7H9WzrlpNADlmMEBGPQtA=;
+ b=SJX8M+xhYyu3W4CNOL3zy8ZZyLsUUSuyf9YV15g4zJqfj7Blyryaasnnwj2gyxxKd6f5gDmlnCSu9UcJUrVOKXpmJn0zFQxwHYZQbFXCtHW/As5UHLEyzJhwITSaDyye7Qx2LVSIUonRiZfGULeS28egXPvxiPOYYQO/Vy79/N0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by PH0PR10MB5657.namprd10.prod.outlook.com
+ (2603:10b6:510:fc::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Tue, 27 Sep
+ 2022 23:01:57 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::b417:2ac7:1925:8f69]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::b417:2ac7:1925:8f69%4]) with mapi id 15.20.5654.026; Tue, 27 Sep 2022
+ 23:01:55 +0000
+Date:   Tue, 27 Sep 2022 16:01:51 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 net-next 11/14] mfd: ocelot: add regmaps for ocelot_ext
+Message-ID: <YzOA35MxZ6S6E6qe@colin-ia-desktop>
+References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
+ <20220926002928.2744638-12-colin.foster@in-advantage.com>
+ <20220927210411.6oc3aphlyp4imgsq@skbuf>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927210411.6oc3aphlyp4imgsq@skbuf>
+X-ClientProxiedBy: SJ0PR05CA0086.namprd05.prod.outlook.com
+ (2603:10b6:a03:332::31) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|IA1PR10MB6900:EE_
-X-MS-Office365-Filtering-Correlation-Id: 57396e2b-a3f1-405c-a402-08daa0dbfe4b
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|PH0PR10MB5657:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1c06d40f-ee39-40fe-b0a1-08daa0dc45f2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kZxmMUNGCIfbSGhxXu/Gknz7DhmZ7ZjRktJrrudOwwQEO4WDaCe7P9IV/d46R/HgAbZp3xl5GQe0xNuhI8SApWHDlFPuOzKLwid7Kty4b9HgZVK1BFZmM1DW5AhE7oVY8XNpBRkNnhPM9JGlSQdB3DRH21R69sJsfY5lDYuRJU6vYRHVMRFdgGieQaM7mkPbphiq8LJBOmDeBpvqr5YoFoHjL3eC8vn3E7rC/ORd4wTj3oXm9+/s5ctdarYxzGuwwuP/eN0lCwUj2a1AUne2NhaDiFawRb9d1rYoqTO6TvET0X3cPLeU76HYl5cMS9Kfy9PXNeJLEcLfo+QHp+WtW9Mr1qt7LdTIVodFO7c9fxpAGZiRo3FOMb9Vkyu4PuH9aL0Grmr+cm+Fh3xdup7pZCzjORQSQn971f9Wp3gzukhTnJnEp9fOWagU3Jv8/UDmVgQGfU//ySAj7k+d+BGhNS2e2LrhVSGyhrViI/UIZ7q0GluUBOjPwsw6AD+3qGPwMOofLLS25Ql3aIJ6pKf9StSK86V9dsc0sJ3jUlYmq/xyjLWgT6l6yEwAx8R9IpdrBSLJvBY0rjyr4w2PnE2CpIFbqi+xXzDlEpydNBj1PLlz6YFEIH9JsYURS2FFSZizESZMdJv9ZWlCroyo9q+QWBobFsV2UrcBJdAa+mYXyFfc9xjTI0aJeV6Y0zLSmfXC6KmtWuG6wM+2X2gIBKG/qA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(376002)(39860400002)(366004)(396003)(451199015)(1076003)(103116003)(2616005)(186003)(86362001)(38100700002)(83380400001)(5660300002)(66946007)(66476007)(41300700001)(4326008)(8676002)(66556008)(2906002)(26005)(107886003)(6666004)(6916009)(6506007)(316002)(8936002)(6512007)(478600001)(6486002)(36756003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: uo1vFX4RUxojFf63pkhkS2v9IejbY+PgL8+ZW5BRuIG65B/7H7vWsVT5+XN4sFiXHL/tBAiKGslkXG34j7L8Nh6cN332X/orf/h/2UwjOt41ogou7gu7Lp8xbJm+hOZ+myOzL8sL2U4Ym8q/qc220MqMSIheo74En7qLEAeBcVjH+FFxQ//F/us/7033YnbjVvemJklVR8yHegkbEB7wdKLdsuO9SCt0RJdqPnoFMyvLZK+fDLYcKyhr4zWudJlcUNpc5Gne541jG5nPwayQTxzJwQ+0DdjdgFMSIzNSAJSraVkud93WRIU1ohEdsGD1WYuZ42qfOyTdXRCF8Dg0bBcJ2AWeSp4dysyTnQuzIdfMx/AHwgsn3e73M7JgDfA82bVa7W4FztoQbzCkHc8CQmkxMJLMgPIgiGfBH5A9nhJRzMnI8GszN05NARoTkfjPfec9KqZDI2g6CGuDGUPxWjXiXQ45YBwUHjQPVp1mBwqWlxlsR301HaGDleb8pENn4ve7nZnOnSB+JDsoFEJrT8rzr3PyRiLA4LaQBfOMAXERDf2Aoq1yilcvuQ8/98BngT0AEAN+UaRzichtcekcTPFVObTt2YrIzMdZTdWmUYpJdSuf3B3Z+vBx3r4lfR2g5GYZMiCEgyN3V52Ua22NMoXwNrYhZgx9r7BQd1dUhDPMH9sDcBI94wizUwnEPNseAT9FBzjWIzQv7R9tudnxwA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(39830400003)(366004)(376002)(136003)(346002)(451199015)(6486002)(478600001)(7416002)(44832011)(6666004)(5660300002)(9686003)(6512007)(26005)(86362001)(8936002)(316002)(33716001)(6506007)(6916009)(186003)(54906003)(66476007)(66946007)(4326008)(38100700002)(66556008)(41300700001)(2906002)(8676002)(83380400001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vRp7nV6mZNFToy0/CNRNisjauemq1ena0YKDCWhAnSCpQiSV1gQ6+nEmB6/i?=
- =?us-ascii?Q?Ey1RyK9QueWcYkSwjEllnksgyYoCZMOKZDs0i1U4eAYS/7warjUdP+91D9na?=
- =?us-ascii?Q?ZDhcTwBNS/uZYcdYbkneqQ1EMwUEaRCTk5Rnz1VLpAlfk7oTiYsYRxnvgIMA?=
- =?us-ascii?Q?00R9t48nABDgQJZOBSl9zNK0WKngQdoQjainJy3m1IZ79/NhAjJ0vD1ovt3Y?=
- =?us-ascii?Q?BDwSMLlad6Jtki/H1g7CzU+VFEJxmkaSQ9zAdPdKS2+al9IfkZuPOf++YS04?=
- =?us-ascii?Q?cJw5SoDB6zisACfja6haZ9jXI6/A6QAEtiU2zF25O7Hty70lKzAgyhL5VDpg?=
- =?us-ascii?Q?nAXLpKgacV2wGlhN3t0w6d32yzOBmIOgF50/Y3MvQKfkyJVul8WE/ynDkrU9?=
- =?us-ascii?Q?GfyIJqioeXFyBZwz4ToLC7YkSLpE3s7IUng0ZFq3F5MDZNX5DA4b5u/ncGsT?=
- =?us-ascii?Q?lUvYTE+oXTVKKQG333faBCCl70BJ9I0uk6iHpjgbxWXMxoJD2a38fSl0HSlh?=
- =?us-ascii?Q?2BLqjnB1Nkftwj93Ro6SC8Q7tTcl9rUBkEO316tKUqzmJvIWEupAdXP5Lb6J?=
- =?us-ascii?Q?t/LfMeixBks2ZXETl3flFwCczgbIv8uf10jN2EcnB7EQpZcUfJvKAaUcpVfY?=
- =?us-ascii?Q?p6ZiL9myEA/kz4vXIxM+US1GC6geBZPHkKrzICpDmjjOIb+EL5MplwsJtf+L?=
- =?us-ascii?Q?od/DffeGo2nzzYpcLKW7xysDlXIo895+aMWs5MIqEbeOvQI2IKtay6hyAeOf?=
- =?us-ascii?Q?qC9/svBjcCj7eL0DU+sDtNRH6IPAKWwTZD4CT1M9VrbvnDMFA+ogTlqp6/OR?=
- =?us-ascii?Q?OLmeb2Ud7yp6RSkw2AATQ5BJ1BNAfsW7WODJ6dUT0fc10SEWLvrf9A+c5Rfg?=
- =?us-ascii?Q?/6UmQUkYEr2vL6Pp/xN0oZduszCItapvcpSpzYCr03qXee2O8w+Fvwxyj6KQ?=
- =?us-ascii?Q?V2K1U1ZGlSeaIURpJEba929U0hsGMkLfT4QYnAFa32Ye1CCIOSEBtaCleRlX?=
- =?us-ascii?Q?sm+tECHh5UXK+HJqaBLjMEKqiaeUYrMXQ8av73CtbyyhOLUs9YU6pGkEOFG2?=
- =?us-ascii?Q?QklyC1MCtbM/F18lt+z3CV7PIY4m7c2OVwJt9/Ls6fUDXU6Pgs4lnktO5u+n?=
- =?us-ascii?Q?sRi0FXa7FCP+f1rCJO3cYxfIWo9pHW55OLhKkj/7eadRwTcIdQItRK6r4VW6?=
- =?us-ascii?Q?IlhGxZw2HziumKgkpkjO0CikOan1RHwSVccuoqBFb3CeI6SF3qSgTL9r6Jop?=
- =?us-ascii?Q?9TfW1HND6EPzl4XEaCv3Y6JsEnFeFUM0cp6X18An3rKTB/uUFpz/ZZdEWixZ?=
- =?us-ascii?Q?nu+s++d5Q3cCAAMjIyMweh7Waj9AUlocHQnsA+sp5F6XKwH1yZVppBoNTatq?=
- =?us-ascii?Q?aideaJAY7Ughe7eqq5gd6aHy7Mzf3ywOybwdwpCgCPswcTKXIavqfqUGuiWX?=
- =?us-ascii?Q?l5SLT+OP3Ot6xTHE9rggOTIkFMtFCM1Rq/KjNMty567QqT4cR/TaMu8pR13q?=
- =?us-ascii?Q?x7nK23AhkzDgsi8fQpeqMzyiGj+cmkKgt/HF03j7E7ckcAQAQPIGFKZ8UHZc?=
- =?us-ascii?Q?aUdqWeQ/8iFk3vjuQ8tISTKXySDgcxqv7tfzlcG4?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57396e2b-a3f1-405c-a402-08daa0dbfe4b
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zXer53tKHjzkkEFZ/IOHjKOvyL40T0K8XiC91uXZ8kACiROXd4Ce1bFVp4iv?=
+ =?us-ascii?Q?gAy5ASsdJzl5NxegdZmYci/eG6DQymo0MNtdrq63AfChXeZOCUt4wMupx+fk?=
+ =?us-ascii?Q?YtxOZGuoyNc9Tv9TYVcBWURzNM06b9dI40oiRna0HTIRzNV1McAsiEkRFCJ7?=
+ =?us-ascii?Q?WoptDZlKpP2s1Zc8kMgeQIWwf4kFptj0hQyq+Nzcg6knCgnOA+lxUOoaShyS?=
+ =?us-ascii?Q?zzYhIBOcY3up1mhI/e2Mw7RYwy1Lwu5m8tLJdsw4+M0A8xd5kWVREhEf65zD?=
+ =?us-ascii?Q?6BQ+dKCXAMFrYTLWjg/IEP0M+tTtMnpEmX6enKOyvLGoiZpfx++ar8HWRwl9?=
+ =?us-ascii?Q?2fNAScUP7L8x7Gk1MiXp403mJD8c2qAV2dzWrZwwqduk4yORzReQ1tpvNMVx?=
+ =?us-ascii?Q?c1EKQL9GnIwpQs9WHN6NIe+U+jeGbovVl1ba8c8RLu8tkcG+2HBBT9ufSj13?=
+ =?us-ascii?Q?NoP6MlzXpqKJ9mvdFW2RXJn4tPU2pIKGH4H9TtwDhQ9DH1rJBQN6cU7SXMfZ?=
+ =?us-ascii?Q?/uMOM9fBy88M1ePar4UVwxmB2xypHtVq5UVBXda0IWTj+OgdVhIS1nLD0Taj?=
+ =?us-ascii?Q?w9UW5uTi5dXK4AvlebkWZiZTJrKnAYTCwyXIssuDDnT3pOhy5hJfAwsTh1bx?=
+ =?us-ascii?Q?BvBd4/qFIePUhOFiuXli/5qAScHt0VZt6Gpj35kE2Z6cX3HOWJhicVJNBBvj?=
+ =?us-ascii?Q?yO8jY8FygdCpoNO6BJG0yIwV/0yqzzBdAXbOfpfpEkgI4Y0cOKDsO7QtxKsf?=
+ =?us-ascii?Q?ayeNewB3Zhkeq3oy8+Rz0jlcwO+CmzhrBq2JcsMRlGqMJMUA+iRq+o7dbfRb?=
+ =?us-ascii?Q?koJ3nERLog6sY2yqt0z2and9G6+2X4PlZxUFc+Ae3fcbN6nauBzcFhtwRNP8?=
+ =?us-ascii?Q?S2/FUjbExIQZIWq2TRDsk8YOqjQbOMaZRgTG/e0cNnVkBchZZipwslZOnog9?=
+ =?us-ascii?Q?QgB8CizZWMnab2klSwtqexfIloGDA5vHNlgMAPS6172JeYTqGEf9cYlO5jWe?=
+ =?us-ascii?Q?LK/SAjniPWBgd2Xm5PYTlHPFtMnYsE4r80n1YZtfM4s5j8irpkAkB+wsi1Xu?=
+ =?us-ascii?Q?N6XPtgCE2f+p113EeGBVOlP92E25c6MIMYka9cBITvyLHIlOaNRbRD+BnieY?=
+ =?us-ascii?Q?meXcjbPMk1sLKobagU3I/vpdBs9WZI++rFBhvprYI6ZRdUtRNH9H7Mo4o2wn?=
+ =?us-ascii?Q?ggOmeStlKj8mhF2RYDBYAP/TcfuvQgiufMId8roJzaEUbebJg21NYEJJS+SB?=
+ =?us-ascii?Q?ZiDyU2cr77QNdPlPihHgwE21uLa++jg9yonqyh8odc35wsWvN6C/iAP5UsRI?=
+ =?us-ascii?Q?UVWr+LaHlbRhkU2C0HyuixXLIU99v2RJMUKjeqvW+5xkEnmp4hSc38EE74+P?=
+ =?us-ascii?Q?YpysGWKni+9+oA20TI7mswmshOxR/9Ry75+Pb6C6DPkvP4E6BnMUpxVFNzvk?=
+ =?us-ascii?Q?raJ9azOFTbi+BWMAcwUNjqHKWhpDejwGk2jQj2f2Uv7+RXUG2KliW5Q/iIXo?=
+ =?us-ascii?Q?2qi75g7yfbGfxFxGoprpT0nhNQ/gfJw+5lliDKiZk+jMyGFmg0SMaWWqaLe3?=
+ =?us-ascii?Q?Ly4FLLctbLLnuHoqH596jeP0fyW3PZaH/nmr/bExUF+J7OUPnT0cagQW4I7a?=
+ =?us-ascii?Q?IjqbuuYP7zq/E2otpwaqcSc=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c06d40f-ee39-40fe-b0a1-08daa0dc45f2
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 22:59:55.3654
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 23:01:55.8440
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jjWAobYO+WhzXOyi1G5tva712tIOITRz609oWOxaoPu+hk4DV7LQ3tbikanKLeM8NYodJqej8AzljXGv6tSvYgUG9CAPUUjpXB5b67UFxgg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6900
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-27_11,2022-09-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
- suspectscore=0 phishscore=0 mlxscore=0 mlxlogscore=999 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209270141
-X-Proofpoint-ORIG-GUID: tqvi48CRmi8Ed9jN-S_2keNs323j4jeW
-X-Proofpoint-GUID: tqvi48CRmi8Ed9jN-S_2keNs323j4jeW
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: TSsAqPQKCAsJUwbZqlRLydI1LDi+ZBAyRB0xIXm7YmhI9aC7NVf11B57oxEmnaxioNhzTRu1FLdEeSqx4yXlkj/FmGfYwEXLRPt1e/tvKOI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5657
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-audit_filter_uring(), audit_filter_inode_name() are substantially similar
-to audit_filter_syscall(). Move the core logic to __audit_filter() which
-can be parametrized for all three.
+On Wed, Sep 28, 2022 at 12:04:11AM +0300, Vladimir Oltean wrote:
+> On Sun, Sep 25, 2022 at 05:29:25PM -0700, Colin Foster wrote:
+> > The Ocelot switch core driver relies heavily on a fixed array of resources
+> > for both ports and peripherals. This is in contrast to existing peripherals
+> > - pinctrl for example - which have a one-to-one mapping of driver <>
+> > resource. As such, these regmaps must be created differently so that
+> > enumeration-based offsets are preserved.
+> > 
+> > Register the regmaps to the core MFD device unconditionally so they can be
+> > referenced by the Ocelot switch / Felix DSA systems.
+> > 
+> > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> > ---
+> > 
+> > v3
+> >     * No change
+> > 
+> > v2
+> >     * Alignment of variables broken out to a separate patch
+> >     * Structs now correctly use EXPORT_SYMBOL*
+> >     * Logic moved and comments added to clear up conditionals around
+> >       vsc7512_target_io_res[i].start
+> > 
+> > v1 from previous RFC:
+> >     * New patch
+> > 
+> > ---
+> >  drivers/mfd/ocelot-core.c  | 87 ++++++++++++++++++++++++++++++++++++++
+> >  include/linux/mfd/ocelot.h |  5 +++
+> >  2 files changed, 92 insertions(+)
+> > 
+> > diff --git a/drivers/mfd/ocelot-core.c b/drivers/mfd/ocelot-core.c
+> > index 013e83173062..702555fbdcc5 100644
+> > --- a/drivers/mfd/ocelot-core.c
+> > +++ b/drivers/mfd/ocelot-core.c
+> > @@ -45,6 +45,45 @@
+> >  #define VSC7512_SIO_CTRL_RES_START	0x710700f8
+> >  #define VSC7512_SIO_CTRL_RES_SIZE	0x00000100
+> >  
+> > +#define VSC7512_HSIO_RES_START		0x710d0000
+> > +#define VSC7512_HSIO_RES_SIZE		0x00000128
+> 
+> I don't think you should give the HSIO resource to the switching driver.
+> In drivers/net/ethernet/mscc/ocelot_vsc7514.c, there is this comment:
+> 
+> static void ocelot_pll5_init(struct ocelot *ocelot)
+> {
+> 	/* Configure PLL5. This will need a proper CCF driver
+> 	 * The values are coming from the VTSS API for Ocelot
+> 	 */
+> 
+> I believe CCF stands for Common Clock Framework.
 
-On a Skylakex system, getpid() latency (all results aggregated
-across 12 boot cycles):
+It does stand for common clock framework. And this function / comment
+keeps me up at night.
 
-         Min     Mean    Median   Max      pstdev
-         (ns)    (ns)    (ns)     (ns)
+Agreed that the HSIO resource isn't currently used, and should be
+dropped from this set. The resource will be brought back in as soon as I
+add in phy-ocelot-serdes support during the third and final (?) patch
+set of adding 7512 copper ethernet support.
 
- -    173.11   182.51  179.65  202.09     (+- 4.34%)
- +    162.11   175.26  173.71  190.56     (+- 4.33%)
+My fear is that the lines:
 
-Performance counter stats for 'bin/getpid' (3 runs) go from:
-    cycles               706.13  (  +-  4.13% )
-    instructions        1654.70  (  +-   .06% )
-    IPC                    2.35  (  +-  4.25% )
-    branches             430.99  (  +-   .06% )
-    branch-misses          0.50  (  +-  2.00% )
-    L1-dcache-loads      440.02  (  +-   .07% )
-    L1-dcache-load-misses  5.22  (  +- 82.75% )
+if (ocelot->targets[HSIO])
+    ocelot_pll5_init(ocelot);
 
- to:
-    cycles               678.79  (  +-  4.22% )
-    instructions        1657.79  (  +-   .05% )
-    IPC                    2.45  (  +-  4.08% )
-    branches             432.00  (  +-   .05% )
-    branch-misses          0.38  (  +- 23.68% )
-    L1-dcache-loads      444.96  (  +-   .03% )
-    L1-dcache-load-misses  5.13  (  +- 73.09% )
+won't fly inside felix_setup(), and I'm not sure how far that scope will
+creep. Maybe it is easier than I suspect.
 
-(Both aggregated over 12 boot cycles.)
 
-Unclear if the improvement is just run-to-run variation or because of
-a slightly denser loop (the list parameter in the list_for_each_entry_rcu()
-exit check now comes from a register rather than a constant as before.)
+But I'm getting ahead of myself. I'll remove this for now.
 
-Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
----
- kernel/auditsc.c | 86 +++++++++++++++++++++++++-----------------------
- 1 file changed, 44 insertions(+), 42 deletions(-)
+> 
+> > +
+> > +#define VSC7512_ANA_RES_START		0x71880000
+> > +#define VSC7512_ANA_RES_SIZE		0x00010000
+> > +
+> > +#define VSC7512_QS_RES_START		0x71080000
+> > +#define VSC7512_QS_RES_SIZE		0x00000100
+> > +
+> > +#define VSC7512_QSYS_RES_START		0x71800000
+> > +#define VSC7512_QSYS_RES_SIZE		0x00200000
+> > +
+> > +#define VSC7512_REW_RES_START		0x71030000
+> > +#define VSC7512_REW_RES_SIZE		0x00010000
+> > +
+> > +#define VSC7512_SYS_RES_START		0x71010000
+> > +#define VSC7512_SYS_RES_SIZE		0x00010000
+> > +
+> > +#define VSC7512_S0_RES_START		0x71040000
+> > +#define VSC7512_S1_RES_START		0x71050000
+> > +#define VSC7512_S2_RES_START		0x71060000
+> > +#define VSC7512_S_RES_SIZE		0x00000400
+> 
+> VCAP_RES_SIZE?
 
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index bf26f47b5226..dd89a52988b0 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -805,6 +805,41 @@ static bool audit_in_mask(const struct audit_krule *rule, unsigned long val)
- 	return rule->mask[word] & bit;
- }
- 
-+/**
-+ * __audit_filter - common filter
-+ *
-+ * @tsk: associated task
-+ * @ctx: audit context
-+ * @list: audit filter list
-+ * @op: current syscall/uring_op
-+ * @name: name to be filtered (used by audit_filter_inode_name)
-+ *
-+ * return: 1 if we hit a filter, 0 if we don't
-+ */
-+static int __audit_filter(struct task_struct *tsk,
-+			   struct audit_context *ctx,
-+			   struct list_head *list,
-+			   unsigned long op,
-+			   struct audit_names *name)
-+{
-+	struct audit_entry *e;
-+	enum audit_state state;
-+
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(e, list, list) {
-+		if (unlikely(audit_in_mask(&e->rule, op))) {
-+			if (audit_filter_rules(tsk, &e->rule, ctx, name,
-+					       &state, false)) {
-+				rcu_read_unlock();
-+				ctx->current_state = state;
-+				return 1;
-+			}
-+		}
-+	}
-+	rcu_read_unlock();
-+	return 0;
-+}
-+
- /**
-  * audit_filter_uring - apply filters to an io_uring operation
-  * @tsk: associated task
-@@ -813,24 +848,11 @@ static bool audit_in_mask(const struct audit_krule *rule, unsigned long val)
- static void audit_filter_uring(struct task_struct *tsk,
- 			       struct audit_context *ctx)
- {
--	struct audit_entry *e;
--	enum audit_state state;
--
- 	if (auditd_test_task(tsk))
- 		return;
- 
--	rcu_read_lock();
--	list_for_each_entry_rcu(e, &audit_filter_list[AUDIT_FILTER_URING_EXIT],
--				list) {
--		if (audit_in_mask(&e->rule, ctx->uring_op) &&
--		    audit_filter_rules(tsk, &e->rule, ctx, NULL, &state,
--				       false)) {
--			rcu_read_unlock();
--			ctx->current_state = state;
--			return;
--		}
--	}
--	rcu_read_unlock();
-+	__audit_filter(tsk, ctx, &audit_filter_list[AUDIT_FILTER_URING_EXIT],
-+			ctx->uring_op, NULL);
- }
- 
- /* At syscall exit time, this filter is called if the audit_state is
-@@ -841,26 +863,11 @@ static void audit_filter_uring(struct task_struct *tsk,
- static void audit_filter_syscall(struct task_struct *tsk,
- 				 struct audit_context *ctx)
- {
--	struct audit_entry *e;
--	enum audit_state state;
--	unsigned long major = ctx->major;
--
- 	if (auditd_test_task(tsk))
- 		return;
- 
--	rcu_read_lock();
--	list_for_each_entry_rcu(e, &audit_filter_list[AUDIT_FILTER_EXIT], list) {
--		if (unlikely(audit_in_mask(&e->rule, major))) {
--			if (audit_filter_rules(tsk, &e->rule, ctx, NULL,
--					       &state, false)) {
--				rcu_read_unlock();
--				ctx->current_state = state;
--				return;
--			}
--		}
--	}
--	rcu_read_unlock();
--	return;
-+	__audit_filter(tsk, ctx, &audit_filter_list[AUDIT_FILTER_EXIT],
-+			ctx->major, NULL);
- }
- 
- /*
-@@ -872,17 +879,12 @@ static int audit_filter_inode_name(struct task_struct *tsk,
- 				   struct audit_context *ctx) {
- 	int h = audit_hash_ino((u32)n->ino);
- 	struct list_head *list = &audit_inode_hash[h];
--	struct audit_entry *e;
--	enum audit_state state;
- 
--	list_for_each_entry_rcu(e, list, list) {
--		if (audit_in_mask(&e->rule, ctx->major) &&
--		    audit_filter_rules(tsk, &e->rule, ctx, n, &state, false)) {
--			ctx->current_state = state;
--			return 1;
--		}
--	}
--	return 0;
-+	/*
-+	 * We are called holding an rcu read lock. __audit_filter() will take
-+	 * one as well.
-+	 */
-+	return __audit_filter(tsk, ctx, list, ctx->major, n);
- }
- 
- /* At syscall exit time, this filter is called if any audit_names have been
--- 
-2.31.1
+I'll change this name to VCAP_RES_SIZE.
 
+> 
+> > +
+> > +#define VSC7512_GCB_RES_START		0x71070000
+> > +#define VSC7512_GCB_RES_SIZE		0x0000022c
+> 
+> Again, I don't think devcpu_gcb should be given to a switching-only
+> driver. There's nothing switching-related about it.
+
+Yes, this is no longer necessary and I missed this. I think you caught
+them all, but I'll do another sweep just in case.
+
+> > +const struct resource vsc7512_target_io_res[TARGET_MAX] = {
+> > +	[ANA] = DEFINE_RES_REG_NAMED(VSC7512_ANA_RES_START, VSC7512_ANA_RES_SIZE, "ana"),
+> > +	[QS] = DEFINE_RES_REG_NAMED(VSC7512_QS_RES_START, VSC7512_QS_RES_SIZE, "qs"),
+> > +	[QSYS] = DEFINE_RES_REG_NAMED(VSC7512_QSYS_RES_START, VSC7512_QSYS_RES_SIZE, "qsys"),
+> > +	[REW] = DEFINE_RES_REG_NAMED(VSC7512_REW_RES_START, VSC7512_REW_RES_SIZE, "rew"),
+> > +	[SYS] = DEFINE_RES_REG_NAMED(VSC7512_SYS_RES_START, VSC7512_SYS_RES_SIZE, "sys"),
+> > +	[S0] = DEFINE_RES_REG_NAMED(VSC7512_S0_RES_START, VSC7512_S_RES_SIZE, "s0"),
+> > +	[S1] = DEFINE_RES_REG_NAMED(VSC7512_S1_RES_START, VSC7512_S_RES_SIZE, "s1"),
+> > +	[S2] = DEFINE_RES_REG_NAMED(VSC7512_S2_RES_START, VSC7512_S_RES_SIZE, "s2"),
+> > +	[GCB] = DEFINE_RES_REG_NAMED(VSC7512_GCB_RES_START, VSC7512_GCB_RES_SIZE, "devcpu_gcb"),
+> > +	[HSIO] = DEFINE_RES_REG_NAMED(VSC7512_HSIO_RES_START, VSC7512_HSIO_RES_SIZE, "hsio"),
+> > +};
+> > +EXPORT_SYMBOL_NS(vsc7512_target_io_res, MFD_OCELOT);
+> > +
+> > +const struct resource vsc7512_port_io_res[] = {
+> 
+> I hope you will merge these 2 arrays now.
+
+Yep. And with that I should be able to add them via the standard
+.num_resources, .resources method all the other drivers use. As
+mentioned, without the GCB and HSIO entries.
+
+> >  int ocelot_core_init(struct device *dev)
+> >  {
+> > +	const struct resource *port_res;
+> >  	int i, ndevs;
+> >  
+> >  	ndevs = ARRAY_SIZE(vsc7512_devs);
+> > @@ -151,6 +221,23 @@ int ocelot_core_init(struct device *dev)
+> >  	for (i = 0; i < ndevs; i++)
+> >  		ocelot_core_try_add_regmaps(dev, &vsc7512_devs[i]);
+> >  
+> > +	/*
+> > +	 * Both the target_io_res and the port_io_res structs need to be referenced directly by
+> > +	 * the ocelot_ext driver, so they can't be attached to the dev directly and referenced by
+> > +	 * offset like the rest of the drivers. Instead, create these regmaps always and allow any
+> > +	 * children look these up by name.
+> > +	 */
+> > +	for (i = 0; i < TARGET_MAX; i++)
+> > +		/*
+> > +		 * The target_io_res array is sparsely populated. Use .start as an indication that
+> > +		 * the entry isn't defined
+> > +		 */
+> > +		if (vsc7512_target_io_res[i].start)
+> > +			ocelot_core_try_add_regmap(dev, &vsc7512_target_io_res[i]);
+> > +
+> > +	for (port_res = vsc7512_port_io_res; port_res->start; port_res++)
+> > +		ocelot_core_try_add_regmap(dev, port_res);
+> > +
+> 
+> Will need to be updated.
+
+Yep. I think it can all go away for the above
+ocelot_core_try_add_regmaps() call now.
+
+> 
+> >  	return devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, vsc7512_devs, ndevs, NULL, 0, NULL);
+> >  }
+> >  EXPORT_SYMBOL_NS(ocelot_core_init, MFD_OCELOT);
+> > diff --git a/include/linux/mfd/ocelot.h b/include/linux/mfd/ocelot.h
+> > index dd72073d2d4f..439ff5256cf0 100644
+> > --- a/include/linux/mfd/ocelot.h
+> > +++ b/include/linux/mfd/ocelot.h
+> > @@ -11,8 +11,13 @@
+> >  #include <linux/regmap.h>
+> >  #include <linux/types.h>
+> >  
+> > +#include <soc/mscc/ocelot.h>
+> > +
+> 
+> Is this the problematic include that makes it necessary to have the
+> pinctrl hack? Can we drop the #undef REG now?
+
+Yes, this include was specifically for TARGET_MAX below. That undef REG
+should not be necessary anymore. I'll drop it.
+
+> 
+> >  struct resource;
+> >  
+> > +extern const struct resource vsc7512_target_io_res[TARGET_MAX];
+> > +extern const struct resource vsc7512_port_io_res[];
+> > +
+> 
+> Will need to be removed.
+
+Gladly :-)
+
+> 
+> >  static inline struct regmap *
+> >  ocelot_regmap_from_resource_optional(struct platform_device *pdev,
+> >  				     unsigned int index,
+> > -- 
+> > 2.25.1
+> > 
