@@ -2,109 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508245EC472
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5262B5EC470
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232797AbiI0N3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
+        id S232721AbiI0N3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232944AbiI0N2l (ORCPT
+        with ESMTP id S232879AbiI0N2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:28:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97DE1B5244;
-        Tue, 27 Sep 2022 06:24:02 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RC0YoU002831;
-        Tue, 27 Sep 2022 13:21:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=REne0rFZeUne3WZwhw7vlLiRIJAbtmQ7qs7Su0Z39Tc=;
- b=CwAoNDT79g3u/ZXcIWYAG9kI9TuyKh13ryciVwfEdtj8k2yPdxv+7vH27YDEvLW+yPYG
- U5O2vGwCjIU1sZBa73ywTHLe8VEldgFi4Dq2dHSeqHEY8PrLIB/r/zNWib7dNwwwrHKt
- cFwudd360cfAO9xvuwj0ij63VJN1BeCt1mKV6R8duFHQ3zO2Lmaq73Mu2+hZAjobVjES
- ajLiLxTgdXeRu825AbID4B8CZU1scchukvFitADEfdpZRQKuneAT1geszdJ0eNKuA9xS
- 0lRmaxLQl+BVaEMxFWoKb2QejWnwwPmIgY1Y/58Chhaf+r939PozoIru9UZrlMP53Qgh 8Q== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jupssspug-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 13:21:47 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28RDLkpG016337
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 13:21:46 GMT
-Received: from [10.216.22.231] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 27 Sep
- 2022 06:21:41 -0700
-Message-ID: <23dd9c44-df18-3b54-9150-e4e57f1d49bd@quicinc.com>
-Date:   Tue, 27 Sep 2022 18:51:38 +0530
+        Tue, 27 Sep 2022 09:28:34 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCA7638D
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:23:52 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id i17so2984719qkk.12
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:23:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=vjjvifvRbyamwiKwXAGlU+rtv6BwVcIgFInlxUxWOFk=;
+        b=Me2NuFx7YYw5/6VUYsnM6+enyki04bmQjGYAmmDKSrf5RtYBaK9xqhr2G7e1NqO0QF
+         Ul827IrzQJQRfEOyZkgCsX2wki8XYKYL5cf9AzTRaaapKaLlle+822jZUhlylP3lvpFO
+         UzIDaN64+l2wrTV3kGjAhxlCc5+oL3qZq2hKSlJPIpr5pmyESjbis/n61/yAxqrx5wJe
+         nBoHEvtvfn/inr7H2QrVltHXGms0vN5cgTjxAgUBCyKQ/QUm7FsmTSNJUwJhqi8aZIvu
+         fYk0CsF+jffSBWIMmB3n81wwlP0GqE6NeVwKpmS/G7hpZxBC7g//LH0VSKKAmF+MH6yz
+         nEvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=vjjvifvRbyamwiKwXAGlU+rtv6BwVcIgFInlxUxWOFk=;
+        b=2dOhErJsOu7cGVdIV3ZFZ/DFiafJ1xVQ+UUOyVORIz8y4uz0Ie+EMCc3VV6OZILFtr
+         ZA75qLbR2QQPSgnq2uVpigZX65ZKJT1uuuTlS78h6ajq+kXvNX8gcsyFQaqXMYTpA/eD
+         Ww/0Wn75M9CRtuuAbki22DW2pub/BvKrUk0nv3FqmGO9W/N0SmxhnYZg3J2c/hC0yHxt
+         rL7gfM7pPjl/1PyD3lP1qgwHSLis0A03abhMXp4XlreK+a8QLEmGYHo/3Aykoy/M5qbA
+         FvVvdpJf49NNjctmuhJU4ZDNVzyt1DNXlP5DqwQ90+8KkNUsSDBUBPpUruuwTysRd9N8
+         S9Cw==
+X-Gm-Message-State: ACrzQf200YRZmMNW+YTQEQsLgybHdnKMTGPo41f7bIoIIUq+6pmFJC7R
+        lF7hgi2HO/QAxJ3kkR2Q2VLcnw==
+X-Google-Smtp-Source: AMsMyM65yqybhnl7GHNiayZJMKpPszKKQOL9Jzw6Xdn4Vy42enBAU5bETyNDytnE3YEGZgVI1i+Rvw==
+X-Received: by 2002:a05:620a:1922:b0:6ce:fbfc:d19e with SMTP id bj34-20020a05620a192200b006cefbfcd19emr17944366qkb.22.1664284990061;
+        Tue, 27 Sep 2022 06:23:10 -0700 (PDT)
+Received: from localhost (2603-7000-0c01-2716-9175-2920-760a-79fa.res6.spectrum.com. [2603:7000:c01:2716:9175:2920:760a:79fa])
+        by smtp.gmail.com with ESMTPSA id f6-20020ac80146000000b0035a70a25651sm838545qtg.55.2022.09.27.06.23.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 06:23:09 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 09:23:08 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Anatoly Pugachev <matorola@gmail.com>,
+        Vasily Averin <vvs@openvz.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH] Revert "net: set proper memcg for net_init hooks
+ allocations"
+Message-ID: <YzL5PNgp/43a5N6K@cmpxchg.org>
+References: <20220926195931.2497968-1-shakeelb@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 7/7] remoteproc: qcom: Add support for memory sandbox
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
-References: <1663938340-24345-1-git-send-email-quic_srivasam@quicinc.com>
- <1663938340-24345-8-git-send-email-quic_srivasam@quicinc.com>
- <a15fa97e-de7d-c2a6-e39a-2dd7ba8caf31@linaro.org>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <a15fa97e-de7d-c2a6-e39a-2dd7ba8caf31@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Cy_HqGZmPi03KkJOFvN13e8lVzurty3Q
-X-Proofpoint-ORIG-GUID: Cy_HqGZmPi03KkJOFvN13e8lVzurty3Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-27_05,2022-09-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0 mlxlogscore=916
- phishscore=0 adultscore=0 impostorscore=0 spamscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209270081
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220926195931.2497968-1-shakeelb@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Sep 26, 2022 at 07:59:31PM +0000, Shakeel Butt wrote:
+> This reverts commit 1d0403d20f6c281cb3d14c5f1db5317caeec48e9.
+> 
+> Anatoly Pugachev reported that the commit 1d0403d20f6c ("net: set proper
+> memcg for net_init hooks allocations") is somehow causing the sparc64
+> VMs failed to boot and the VMs boot fine with that patch reverted. So,
+> revert the patch for now and later we can debug the issue.
+> 
+> Reported-by: Anatoly Pugachev <matorola@gmail.com>
+> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> Cc: Vasily Averin <vvs@openvz.org>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Michal Koutný <mkoutny@suse.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: cgroups@vger.kernel.org
+> Cc: sparclinux@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
 
-On 9/23/2022 10:56 PM, Krzysztof Kozlowski wrote:
-Thanks for Your time Krzyszto!!!
-> On 23/09/2022 15:05, Srinivasa Rao Mandadapu wrote:
->> Update pil driver with SMMU mapping for allowing authorised
->> memory access to ADSP firmware, by carveout reserved adsp memory
->> region from device tree file.
->>
->
-> Thank you for your patch. There is something to discuss/improve.
->
->> +	if (!rproc->domain)
->> +		return -EINVAL;
->> +
->> +	ret = of_parse_phandle_with_args(adsp->dev->of_node, "iommus", "#iommu-cells", 0, &args);
-> I think your bindings do not allow iommus property.
-Okay. Will add iommus in dt-bindings.
->
-> Best regards,
-> Krzysztof
->
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
