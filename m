@@ -2,183 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5032C5EB92F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 585AF5EB935
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbiI0EZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 00:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        id S229741AbiI0E0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 00:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiI0EZX (ORCPT
+        with ESMTP id S229512AbiI0E0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 00:25:23 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978016CD2F
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1664252722; x=1695788722;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZX5ScZxEDRRPrjPNxZCwWnXDrfGgHDWgIXxYCuy/rXg=;
-  b=YkJTfut220H0uA7cYWe5wXq9k4uq7RvBx42VdYAHp5GKdvVT70TSkMk9
-   FBrQ3n/UZEk/qvKl+HN1xw0PGh/SIjHot+YxyJwoD3x9NCnPGI5i82Zxj
-   A/M7ILNmRhv4Nu9eAN80B8wnGCunFvk/HjoHKMNA7kung2tFat/7/EBeu
-   PM726oKHgJJcVWURmRRnDB68P2Tz0irmA3hjr9Za6l4bcrCn0VKAPuszs
-   U4l/b5w8F8bnrig8kwH90hNJxqnxnlueAmgByVE2Ew/2i8hq241nhDBhg
-   GYnp3gshlXiRc0Ek7EtrkCezx3UI2O++wEA1HW+0GIdiiPb5qLCBrXPLG
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,348,1654531200"; 
-   d="scan'208";a="212767269"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Sep 2022 12:25:20 +0800
-IronPort-SDR: arjonVyP12rHlYL9Y8De2HK4fYBRZiRJmwsjaNnW+tvx3h2qR1yIcwpAaBSNLdXgHSCCfgH16E
- eYJ4vnEJNeb1aUdxhn49o9gMKj+t/YLurCG135S04CoOjt2KeDlRNz/EA1TeT5wQP3VobIyf3Q
- KcFzD+gBtsqh5CkVJvIPYXYtfEgARdR+C7E3ZVRLSI97VEdfck8x4wvHNis1UYMxvZyks8ngCb
- 6OD7HFwLxvmH5LarWktyF0sUYXDgvIcyhRC16GDGtkThidzfpD9wm7vFL70IgQBwE7lrtfCEJc
- 7gM4fqLn4rla2hb/YCdohNK3
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Sep 2022 20:39:47 -0700
-IronPort-SDR: 6v3vDQiRa92y7WWO9/jN3aJhpdyJK1Xq1EH2T+X5isijwuGXyNzuq55olqO3pqKQsat+qH0AF9
- iVBmW4itjSgau7xQXhL5t7nNjkNt9Brk58CMz05O2o1wm30hDbLeRmY4pU5xNSmrblWs/4KNJo
- iMWwpj4Mu39F87BzJKCv84llae2UPWTSh75g6hr8lcV17zhu62iGyqdUk+YuHG2zzdsChVeQ7R
- 7Mi9TupRlBFeNfELHqvBg4t+ABG0+VJxPpHekdREM+vqFEnqVz6dFG9rFK+I3InHNdCgWWDvsJ
- mTw=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Sep 2022 21:25:20 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mc6403zp8z1Rwtl
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:25:20 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1664252719; x=1666844720; bh=ZX5ScZxEDRRPrjPNxZCwWnXDrfGgHDWgIXx
-        YCuy/rXg=; b=qKcD8V6JDfpnkoO3PsUh3Du4DG9rH0NqQ6dUoy1OZ2H/GiQeOT8
-        hvXeSzgbCTncSgvaGXU1dUsK6hFS7kg+zuop3RZGlhFelr8xnmpSiHmkC6JGsRoo
-        WUqH+SFVWLH7HkNFmfvDuJ+J3MxBAuifozjHljJhdCDOdcAYP24q3Q1B4w89SyUH
-        5LOydn75D5hsl2H6aMB4Rz+jUo8hazkr5dnAt114VizOyI4S1kRqVoiKE0+ULE9K
-        nMsKo+0d0iATQO/FMv2A3AdZEqoQA9lB1VXUdwPMh/GlBzIMFureK0bSgh9c7ovS
-        6WDSAKq3fsqF+sfYGRn7mIuNoVLJIuVTiBA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 2oO8ampItuyB for <linux-kernel@vger.kernel.org>;
-        Mon, 26 Sep 2022 21:25:19 -0700 (PDT)
-Received: from [10.225.163.91] (unknown [10.225.163.91])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mc63x6bkyz1RvLy;
-        Mon, 26 Sep 2022 21:25:17 -0700 (PDT)
-Message-ID: <390e2a2f-c54e-69f6-a0fd-27e00adcf214@opensource.wdc.com>
-Date:   Tue, 27 Sep 2022 13:25:16 +0900
+        Tue, 27 Sep 2022 00:26:38 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E396B5E54B;
+        Mon, 26 Sep 2022 21:26:35 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R441e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VQq1IO4_1664252789;
+Received: from 30.240.100.75(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VQq1IO4_1664252789)
+          by smtp.aliyun-inc.com;
+          Tue, 27 Sep 2022 12:26:31 +0800
+Message-ID: <cb061cbb-5f28-9dde-270e-6d7ccb6d4433@linux.alibaba.com>
+Date:   Tue, 27 Sep 2022 12:26:29 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 6/8] scsi: libsas: use sas_phy_match_dev_addr() instead
- of open coded
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH 16/16] crypto: arm64/sm4 - add ARMv9 SVE cryptography
+ acceleration implementation
 Content-Language: en-US
-To:     Jason Yan <yanaijie@huawei.com>, martin.petersen@oracle.com,
-        jejb@linux.ibm.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hare@suse.com, hch@lst.de, bvanassche@acm.org,
-        john.garry@huawei.com, jinpu.wang@cloud.ionos.com
-References: <20220927032605.78103-1-yanaijie@huawei.com>
- <20220927032605.78103-7-yanaijie@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220927032605.78103-7-yanaijie@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Ard Biesheuvel <ardb@kernel.org>, Mark Brown <broonie@kernel.org>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20220926093620.99898-1-tianjia.zhang@linux.alibaba.com>
+ <20220926093620.99898-17-tianjia.zhang@linux.alibaba.com>
+ <CAMj1kXF8Fi9cG4p6udRYT4LbCAj0UBXQL12nmQBFEWvZsVX7Wg@mail.gmail.com>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <CAMj1kXF8Fi9cG4p6udRYT4LbCAj0UBXQL12nmQBFEWvZsVX7Wg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 12:26, Jason Yan wrote:
-> The sas address comparison of domain device and expander phy is open
-> coded. Now we can replace it with sas_phy_match_dev_addr().
+Hi Ard,
+
+On 9/26/22 6:02 PM, Ard Biesheuvel wrote:
+> (cc Mark Brown)
 > 
-> Signed-off-by: Jason Yan <yanaijie@huawei.com>
-
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
-> ---
->  drivers/scsi/libsas/sas_expander.c | 18 ++++++------------
->  1 file changed, 6 insertions(+), 12 deletions(-)
+> Hello Tianjia,
 > 
-> diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-> index df5a64ad902f..06efdfc11d2e 100644
-> --- a/drivers/scsi/libsas/sas_expander.c
-> +++ b/drivers/scsi/libsas/sas_expander.c
-> @@ -738,9 +738,7 @@ static void sas_ex_get_linkrate(struct domain_device *parent,
->  		    phy->phy_state == PHY_NOT_PRESENT)
->  			continue;
->  
-> -		if (SAS_ADDR(phy->attached_sas_addr) ==
-> -		    SAS_ADDR(child->sas_addr)) {
-> -
-> +		if (sas_phy_match_dev_addr(child, phy)) {
->  			child->min_linkrate = min(parent->min_linkrate,
->  						  phy->linkrate);
->  			child->max_linkrate = max(parent->max_linkrate,
-> @@ -1012,8 +1010,7 @@ static int sas_ex_discover_dev(struct domain_device *dev, int phy_id)
->  		sas_add_parent_port(dev, phy_id);
->  		return 0;
->  	}
-> -	if (dev->parent && (SAS_ADDR(ex_phy->attached_sas_addr) ==
-> -			    SAS_ADDR(dev->parent->sas_addr))) {
-> +	if (dev->parent && sas_phy_match_dev_addr(dev->parent, ex_phy)) {
->  		sas_add_parent_port(dev, phy_id);
->  		if (ex_phy->routing_attr == TABLE_ROUTING)
->  			sas_configure_phy(dev, phy_id, dev->port->sas_addr, 1);
-> @@ -1312,7 +1309,7 @@ static int sas_check_parent_topology(struct domain_device *child)
->  		    parent_phy->phy_state == PHY_NOT_PRESENT)
->  			continue;
->  
-> -		if (SAS_ADDR(parent_phy->attached_sas_addr) != SAS_ADDR(child->sas_addr))
-> +		if (!sas_phy_match_dev_addr(child, parent_phy))
->  			continue;
->  
->  		child_phy = &child_ex->ex_phy[parent_phy->attached_phy_id];
-> @@ -1522,8 +1519,7 @@ static int sas_configure_parent(struct domain_device *parent,
->  		struct ex_phy *phy = &ex_parent->ex_phy[i];
->  
->  		if ((phy->routing_attr == TABLE_ROUTING) &&
-> -		    (SAS_ADDR(phy->attached_sas_addr) ==
-> -		     SAS_ADDR(child->sas_addr))) {
-> +		    sas_phy_match_dev_addr(child, phy)) {
->  			res = sas_configure_phy(parent, i, sas_addr, include);
->  			if (res)
->  				return res;
-> @@ -1858,8 +1854,7 @@ static void sas_unregister_devs_sas_addr(struct domain_device *parent,
->  	if (last) {
->  		list_for_each_entry_safe(child, n,
->  			&ex_dev->children, siblings) {
-> -			if (SAS_ADDR(child->sas_addr) ==
-> -			    SAS_ADDR(phy->attached_sas_addr)) {
-> +			if (sas_phy_match_dev_addr(child, phy)) {
->  				set_bit(SAS_DEV_GONE, &child->state);
->  				if (dev_is_expander(child->dev_type))
->  					sas_unregister_ex_tree(parent->port, child);
-> @@ -1941,8 +1936,7 @@ static int sas_discover_new(struct domain_device *dev, int phy_id)
->  	if (res)
->  		return res;
->  	list_for_each_entry(child, &dev->ex_dev.children, siblings) {
-> -		if (SAS_ADDR(child->sas_addr) ==
-> -		    SAS_ADDR(ex_phy->attached_sas_addr)) {
-> +		if (sas_phy_match_dev_addr(child, ex_phy)) {
->  			if (dev_is_expander(child->dev_type))
->  				res = sas_discover_bfs_by_root(child);
->  			break;
+> On Mon, 26 Sept 2022 at 11:37, Tianjia Zhang
+> <tianjia.zhang@linux.alibaba.com> wrote:
+>>
+>> Scalable Vector Extension (SVE) is the next-generation SIMD extension for
+>> arm64. SVE allows flexible vector length implementations with a range of
+>> possible values in CPU implementations. The vector length can vary from a
+>> minimum of 128 bits up to a maximum of 2048 bits, at 128-bit increments.
+>> The SVE design guarantees that the same application can run on different
+>> implementations that support SVE, without the need to recompile the code.
+>>
+>> SVE was originally introduced by ARMv8, and ARMv9 introduced SVE2 to
+>> expand and improve it. Similar to the Crypto Extension supported by the
+>> NEON instruction set for the algorithm, SVE also supports the similar
+>> instructions, called cryptography acceleration instructions, but this is
+>> also optional instruction set.
+>>
+>> This patch uses SM4 cryptography acceleration instructions and SVE2
+>> instructions to optimize the SM4 algorithm for ECB/CBC/CFB/CTR modes.
+>> Since the encryption of CBC/CFB cannot be parallelized, the Crypto
+>> Extension instruction is used.
+>>
+> 
+> Given that we currently do not support the use of SVE in kernel mode,
+> this patch cannot be accepted at this time (but the rest of the series
+> looks reasonable to me, although I have only skimmed over the patches)
+> 
+> In view of the disappointing benchmark results below, I don't think
+> this is worth the hassle at the moment. If we can find a case where
+> using SVE in kernel mode truly makes a [favorable] difference, we can
+> revisit this, but not without a thorough analysis of the impact it
+> will have to support SVE in the kernel. Also, the fact that SVE may
+> also cover cryptographic extensions does not necessarily imply that a
+> micro-architecture will perform those crypto transformations in
+> parallel and so the performance may be the same even if VL > 128.
+> 
+> In summary, please drop this patch for now, and once there are more
+> encouraging performance numbers, please resubmit it as part of a
+> series that explicitly enables SVE in kernel mode on arm64, and
+> documents the requirements and constraints.
+> 
+> I have cc'ed Mark who has been working on the SVE support., who might
+> have something to add here as well.
+> 
+> Thanks,
+> Ard.
+> 
+> 
 
--- 
-Damien Le Moal
-Western Digital Research
+Thanks for your reply, the current performance of SVE is really
+unsatisfactory. One reason is that the optimization of SVE needs to deal
+with more and more complex data shifting operations, such as in CBC/CFB
+mode, but also in CTR mode. needing more instruction to complete the
+128-bit count increment, and the use of CE optimization does not have
+these complications.
+
+In addition, I naively thought that when the VL is 256-bit, the
+performance will simply double compared to 128-bit. At present, this is
+not the case. Maybe it is worth using SVE until there are significantly
+improved performance data. I'll follow your advice and drop this
+patch.
+
+Best regards,
+Tianjia
 
