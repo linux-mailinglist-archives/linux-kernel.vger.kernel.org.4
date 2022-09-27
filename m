@@ -2,153 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDE55EC9DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 419D05EC9E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233191AbiI0Qps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
+        id S233249AbiI0QqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbiI0Qp3 (ORCPT
+        with ESMTP id S233093AbiI0Qph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:45:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF28213F26
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:45:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664297120;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eJgd373y00u6OoO8RAM18F2fCJ0BD0Jh8m7p8Foc1w4=;
-        b=HALDpdaJJLm/mtmrTR1NvNXdF1gAkfyEJhTdz1VkZ+a8KhyOnUv6AtQiiShCrc4vs+WoQw
-        mC85HfDF0tcYDONig82lumt86TOlPAp1eJAkJb3DoIE74EQPfFu2sDYxZgGVFqrKcju3cl
-        V3yUt1KCA7gq27k8sgqbfAGrsq52eyg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-247-2wGeArcLMaKnGWTeeoKwlg-1; Tue, 27 Sep 2022 12:45:19 -0400
-X-MC-Unique: 2wGeArcLMaKnGWTeeoKwlg-1
-Received: by mail-wm1-f71.google.com with SMTP id r7-20020a1c4407000000b003b3f017f259so5798523wma.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:45:19 -0700 (PDT)
+        Tue, 27 Sep 2022 12:45:37 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17E61C430
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:45:30 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id w2so10237067pfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:45:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=ghIr72d2MFWvVwzY3IxpJDMS5fyhMuvWUPUhopPN/qk=;
+        b=K48GzDxdHhXcap5UllwByJj0tI7kwKfo9xjWBjGAHwE5rdcf9RcSbdsQfKAwyhHc7N
+         o4P8EyCHs8tKNMTikv/JzA9qUP9dYc49/+OSdohoV4ceYj2l82iv5RLw4hxz4877Qtxi
+         hZnpBGv7DyN1hlKa2RbKrC1zGiLQyOxO2pNfNh8BfexgGU/po7eZA9sZY18TSzNHNlkJ
+         chr/K0WNdWeoDHzAZWRcwj5/ppCKpgZtCalznQKf7LLqa7c19cBf4wosicUeGoVcNfDJ
+         GnaP5a5XS9iXSDcGeexRAa+IjyGQLWV89KCZnbZOWGWgBRQYczARFSjMOtEnvt3BS8rv
+         UD/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=eJgd373y00u6OoO8RAM18F2fCJ0BD0Jh8m7p8Foc1w4=;
-        b=jkPOwlSofqjZPMvYmpFTiqmzkeP5LDlcYa7L/VrpfjbF7s88ECffE165p+sYL7jPlI
-         HDR/OP6q3XnPsxPLHOOQ8L+C+vkOJIManJWMLgO+Eec9Y5kayxOzn+GiejCaBPNW7sCD
-         93UJ6xeWpVk1+xL/QgP+Qj5EPMun6+p6898Caj/bhEzpK5piZjYjtPTRlyWr7BSJA4KM
-         RcdGhOZQugrDbN3X0CTqs/lfWXFt15RjNqUbtr2BT7pYCCbu3H24XAZFf9Lz7XYxcxB8
-         G7h2/DP64+L2yAGmt9v/p26Y0fy2vfeM418FRgIXSatcv+klNbwCLbxM3bLp4AjWtf1L
-         frEg==
-X-Gm-Message-State: ACrzQf0UTKczaQjSAWYMYa0mtJ9qVuv/JbXYZkg1wWJ1hpzZaVvqjAEC
-        feyO7v2BcV1f5e3OB8ep6LbDLGecNyzG3sDHxv+NuCCAAHdpQW6l04MQ7iGFv6zHp02+rz3/B8Y
-        kI5ts4KgpReRCmJn3GJgEayQg
-X-Received: by 2002:a05:6000:1687:b0:22a:3516:4f98 with SMTP id y7-20020a056000168700b0022a35164f98mr17198012wrd.525.1664297118139;
-        Tue, 27 Sep 2022 09:45:18 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5TSt7aiYS9wyhijktid6xBQmelnexwMFjxC9sY22eg66YL48Ms5o3nyBrUuZcLFa9dXplgPw==
-X-Received: by 2002:a05:6000:1687:b0:22a:3516:4f98 with SMTP id y7-20020a056000168700b0022a35164f98mr17197998wrd.525.1664297117969;
-        Tue, 27 Sep 2022 09:45:17 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id l2-20020a05600c1d0200b003b477532e66sm3637988wms.2.2022.09.27.09.45.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 09:45:17 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>
-Subject: Re: [PATCH v4 5/7] sched/topology: Introduce sched_numa_hop_mask()
-In-Reply-To: <YzCYXEytXy8UJQFv@yury-laptop>
-References: <20220923132527.1001870-1-vschneid@redhat.com>
- <20220923155542.1212814-4-vschneid@redhat.com>
- <YzCYXEytXy8UJQFv@yury-laptop>
-Date:   Tue, 27 Sep 2022 17:45:15 +0100
-Message-ID: <xhsmhfsgc4vhg.mognet@vschneid.remote.csb>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=ghIr72d2MFWvVwzY3IxpJDMS5fyhMuvWUPUhopPN/qk=;
+        b=FDB5ryOeEa4/Derphi4WZj6UjCTBtPjrQHHsAr+GWP0ar4hV+a1NsgpGq4JAI8WV3V
+         WIDblSCdyEjW0r4svNTYIjQ24wwxaQFGr1nOeLXuJErw3XX/1gfySP2COwFc1cQvCJlX
+         PgNbJ21GAYou2JAoKNhqoaK5hM5pBPxABD0mcYiq8iqGZATbiYCGgLzgTmttnCVvBJ3e
+         9exT8czz6g0wXFDrZK6xl6m3ybQJr4hSJtZ9sOtnE3Vvf/vwBnJw02MrffflXo+Oj9sr
+         R5Oa61fXND9GRPqid+6b8iU3aP81XFRdNwUi4GO6n8SolIJFs0nyQQiQn/a/fgksN4eM
+         r8jg==
+X-Gm-Message-State: ACrzQf1EcvgsXAFdoNuc1wkyYGeyhUerWli2+QKYHDm84ffz8QV2Z343
+        BLGPYiZBKZzx/bg771J8NPVN0o/v+tGAQOhKdMqOaw==
+X-Google-Smtp-Source: AMsMyM43m6tgs4G5qKkkxE77ZyJQmNDRdrfNh2BPt8T8lYzbrTNppaqkTELd+catwTn4ZNL8SRmR5P3qzcrLknIA/xI=
+X-Received: by 2002:a63:e709:0:b0:438:98e8:d1c with SMTP id
+ b9-20020a63e709000000b0043898e80d1cmr25730430pgi.403.1664297129249; Tue, 27
+ Sep 2022 09:45:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220927153125.811911-1-zengheng4@huawei.com>
+In-Reply-To: <20220927153125.811911-1-zengheng4@huawei.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 27 Sep 2022 09:45:17 -0700
+Message-ID: <CAKwvOdm2r_PPogCecGL4TMeYLq3qNkCbt7zqYTLmQf-PAQMGMg@mail.gmail.com>
+Subject: Re: [PATCH -next] Makefile: add implicit enum-conversion check for
+ compile build
+To:     Zeng Heng <zengheng4@huawei.com>
+Cc:     masahiroy@kernel.org, michal.lkml@markovi.net,
+        akpm@linux-foundation.org, peterz@infradead.org,
+        keescook@chromium.org, davidgow@google.com, nathan@kernel.org,
+        jpoimboe@kernel.org, dan.j.williams@intel.com, ojeda@kernel.org,
+        isabbasso@riseup.net, dmitrii.bundin.a@gmail.com, vbabka@suse.cz,
+        linux@rasmusvillemoes.dk, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liwei391@huawei.com,
+        weiyongjun1@huawei.com, clang-built-linux <llvm@lists.linux.dev>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/09/22 11:05, Yury Norov wrote:
-> On Fri, Sep 23, 2022 at 04:55:40PM +0100, Valentin Schneider wrote:
->> +const struct cpumask *sched_numa_hop_mask(int node, int hops)
->> +{
->> +	struct cpumask ***masks = rcu_dereference(sched_domains_numa_masks);
->> +
->> +	if (node == NUMA_NO_NODE && !hops)
->> +		return cpu_online_mask;
->> +
->> +	if (node >= nr_node_ids || hops >= sched_domains_numa_levels)
->> +		return ERR_PTR(-EINVAL);
+On Tue, Sep 27, 2022 at 8:15 AM Zeng Heng <zengheng4@huawei.com> wrote:
 >
-> This looks like a sanity check. If so, it should go before the snippet
-> above, so that client code would behave consistently.
+> Provide implicit enum-conversion warning option
+> in general build. When it set enabled, it can
+> detect implicit enum type conversion and find
+> potential conversion errors like below
+> (use "allmodconfig"):
+>
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.c:=
+3904:46:
+> error: implicit conversion from =E2=80=98enum <anonymous>=E2=80=99 to =E2=
+=80=98enum odm_combine_mode=E2=80=99 [-Werror=3Denum-conversion]
+>  3904 |       locals->ODMCombineEnablePerState[i][k] =3D true;
+>       |                                              ^
+>
+> The '-Wenum-conversion' could be regarded as
+> effective check on compile runtime and
+> call attention on potential mistakes.
+>
+> Anothor practical example could be referred to:
+> https://lore.kernel.org/all/CADnq5_OE0yZvEYGu82QJHL9wvVcTFZrmeTgX7URgh7FV=
+A=3DjqYg@mail.gmail.com
+>
+> "-Wenum-conversion" was firstly introduced from
+> GNU gcc-10.
+
+What about clang? ;)
+
+>
+> Although "-Wenum-conversion" could be enabled
+> by "-Wextra" when compiling with 'W=3D1' option,
+> there are many warnings generated by '-Wextra'
+> that cause too much noise in a build.
+
+With clang, I believe that -Wenum-conversion is part of -Wall or
+-Wextra; so enabling this explicitly is only necessary for GCC.  I
+wonder why it's not part of -Wall or -Wextra for GCC?  Perhaps worth a
+bug report/feature request?
+
+>
+> Seeing the details from the following link:
+> https://gcc.gnu.org/onlinedocs/gcc-11.3.0/gcc/Warning-Options.html
+>
+> Because there are still some concerned warnings
+> exist, the patch marks the option disabled in default
+> for avoiding compile failed like using "allmodconfig".
+>
+> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+> ---
+>  Makefile          | 5 +++++
+>  lib/Kconfig.debug | 7 +++++++
+>  2 files changed, 12 insertions(+)
+>
+> diff --git a/Makefile b/Makefile
+> index ebd48fc956a3..1790a3624358 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -880,6 +880,11 @@ endif
+>  KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-but-set-variable)
+>  KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-const-variable)
+>
+> +# check implicit enum conversion
+> +ifdef CONFIG_ENUM_CONVERSION
+> +KBUILD_CFLAGS +=3D -Wenum-conversion
+> +endif
+
+Having a kconfig for this is overkill.  cc-option with a comment about
+the compiler default versions is the way to go.
+
+> +
+>  # These result in bogus false positives
+>  KBUILD_CFLAGS +=3D $(call cc-disable-warning, dangling-pointer)
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 4f2b81229a2f..a64e06a747d8 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -417,6 +417,13 @@ config FRAME_WARN
+>           Setting this too low will cause a lot of warnings.
+>           Setting it to 0 disables the warning.
+>
+> +config ENUM_CONVERSION
+> +       bool "Warn for implicit enum conversion"
+> +       depends on GCC_VERSION >=3D 100300
+> +       default n
+> +       help
+> +         Tell gcc to warn at build time for implicit enum conversion.
+> +
+>  config STRIP_ASM_SYMS
+>         bool "Strip assembler-generated symbols during link"
+>         default n
+> --
+> 2.25.1
 >
 
-nr_node_ids is unsigned, so -1 >= nr_node_ids is true.
 
->> +
->> +	if (!masks)
->> +		return NULL;
->
-> In (node == NUMA_NO_NODE && !hops) case you return online cpus. Here
-> you return NULL just to convert it to cpu_online_mask in the caller.
-> This looks inconsistent. So, together with the above comment, this
-> makes me feel that you'd do it like this:
->
->  const struct cpumask *sched_numa_hop_mask(int node, int hops)
->  {
->       struct cpumask ***masks;
->
->       if (node >= nr_node_ids || hops >= sched_domains_numa_levels)
->         {
->  #ifdef CONFIG_SCHED_DEBUG
->                 pr_err(...);
->  #endif
->               return ERR_PTR(-EINVAL);
->         }
->
->       if (node == NUMA_NO_NODE && !hops)
->               return cpu_online_mask; /* or NULL */
->
->         masks = rcu_dereference(sched_domains_numa_masks);
->       if (!masks)
->               return cpu_online_mask; /* or NULL */
->
->       return masks[hops][node];
->  }
-
-If we're being pedantic, sched_numa_hop_mask() shouldn't return
-cpu_online_mask in those cases, but that was the least horrible
-option I found to get something sensible for the NUMA_NO_NODE /
-!CONFIG_NUMA case. I might be able to better handle this with your
-suggestion of having a mask iterator.
-
+--=20
+Thanks,
+~Nick Desaulniers
