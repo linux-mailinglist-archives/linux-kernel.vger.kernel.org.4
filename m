@@ -2,78 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA645EBDA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7A65EBDAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiI0Inr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 04:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
+        id S231263AbiI0IoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 04:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbiI0Ind (ORCPT
+        with ESMTP id S230494AbiI0IoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 04:43:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0E67539B;
-        Tue, 27 Sep 2022 01:43:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0253661736;
-        Tue, 27 Sep 2022 08:43:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11144C433D6;
-        Tue, 27 Sep 2022 08:43:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664268211;
-        bh=cMC0mbnCxjb8IKzSlWcakWh/99h0aVPN0peMWzbTBdg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s7XInvNcFk1a+0zD9fVBCEVG9kYlk7mXr09rw68F3kZvjpm5uRpNFEQxYuKaeSLir
-         mIGs8cffCmPWHhII0K4CXPglklQAJlCPAIe5y8RfX6BzBc2yOLmBwfN0p260mAnmZH
-         X8HcolgRgPJTG2ytlQ5WI8DnbW2ZtYEa2/LSl3/I=
-Date:   Tue, 27 Sep 2022 10:43:29 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Kristen Carlson Accardi <kristen@linux.intel.com>,
-        linux-doc@vger.kernel.org, corbet@lwn.net,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation/CoC: Reflect current CoC interpretation
- and practices
-Message-ID: <YzK3sSrHSckm7T3b@kroah.com>
-References: <20220926211149.2278214-1-kristen@linux.intel.com>
- <dd89a30e-5403-8844-036c-9c9107cac888@gmail.com>
- <YzKyqNJk72TY//42@kroah.com>
- <f0c27a5b-fee2-eb64-6855-639e7ea65d37@gmail.com>
+        Tue, 27 Sep 2022 04:44:03 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986E675CD7;
+        Tue, 27 Sep 2022 01:44:01 -0700 (PDT)
+X-UUID: 0858ea5688ba4961adf2483bfe49b09e-20220927
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=CSa/p/zpHyX4lGO/pfARnTvy0LVC/OySswcI+oOiq+w=;
+        b=o/60iJHrOk9YoguZchqif/wc6aJLOzd7K7XAhtR4J8THKkgxNZkBVo23xWnuPck2ZpNMAfzwtcWWxWhWT+gTOTKuZvL0V9UqF8UxnmQYsKc9WaF87I+RIBi47y0ZqehxSjidPHgPEazf95yzjyUZvesMN5MroXiWJu/nD/xIBtU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:fef051df-6ce3-477c-a4d1-2aae656b7669,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.11,REQID:fef051df-6ce3-477c-a4d1-2aae656b7669,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:39a5ff1,CLOUDID:ccd32907-1cee-4c38-b21b-a45f9682fdc0,B
+        ulkID:2209271643576FUGZFGP,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 0858ea5688ba4961adf2483bfe49b09e-20220927
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <jianguo.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 898136717; Tue, 27 Sep 2022 16:43:55 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 27 Sep 2022 16:43:54 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Tue, 27 Sep 2022 16:43:53 +0800
+Message-ID: <5d0980dd11afdd948059bcf9afa2484e5ee97bec.camel@mediatek.com>
+Subject: Re: [PATCH v5 4/4] net: stmmac: Update the name of property
+ 'clk_csr'
+From:   Jianguo Zhang <jianguo.zhang@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@collabora.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
+CC:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Tue, 27 Sep 2022 16:43:53 +0800
+In-Reply-To: <4f205f0d-420d-8f51-ad26-0c2475c0decd@linaro.org>
+References: <20220923052828.16581-1-jianguo.zhang@mediatek.com>
+         <20220923052828.16581-5-jianguo.zhang@mediatek.com>
+         <e0fa3ddf-575d-9e25-73d8-e0858782b73f@collabora.com>
+         <ac24dc0f-0038-5068-3ce6-bbace55c7027@linaro.org>
+         <4f205f0d-420d-8f51-ad26-0c2475c0decd@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f0c27a5b-fee2-eb64-6855-639e7ea65d37@gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 03:27:24PM +0700, Bagas Sanjaya wrote:
-> On 9/27/22 15:22, Greg Kroah-Hartman wrote:
-> >> When was the bootstrap period be concluded?
-> > 
-> > I do not understand the question, sorry.  What exactly are you asking
-> > here?
-> > 
-> > confused,
-> > 
-> > greg k-h
-> 
-> Hi Greg,
-> 
-> In the patch, the mention to bootstrap period of CoC committee is
-> replaced with note about dynamic nature of CoC interpretation. I asked
-> when the duration of bootstrap period was before we got into status quo.
+Dear Krzysztof,
+	Thanks for your comment.
 
-It was a while ago, a few years perhaps?  We had forgotten to update the
-document since then, sorry.
+On Fri, 2022-09-23 at 20:15 +0200, Krzysztof Kozlowski wrote:
+> On 23/09/2022 20:14, Krzysztof Kozlowski wrote:
+> > > This is going to break MT2712e on old devicetrees.
+> > > 
+> > > The right way of doing that is to check the return value of
+> > > of_property_read_u32()
+> > > for "snps,clk-csr": if the property is not found, fall back to
+> > > the old "clk_csr".
+> > 
+> > I must admit - I don't care. That's the effect when submitter
+> > bypasses
+> > DT bindings review (81311c03ab4d ("net: ethernet: stmmac: add
+> > management
+> > of clk_csr property")).
+> > 
+> > If anyone wants ABI, please document the properties.
+> > 
+> > If out-of-tree users complain, please upstream your DTS or do not
+> > use
+> > undocumented features...
+> > 
+> 
+> OTOH, as Angelo pointed out, handling old and new properties is quite
+> easy to achieve, so... :)
+> 
+So, the conclusion is as following:
 
-greg k-h
+1. add new property 'snps,clk-csr' and document it in binding file.
+2. parse new property 'snps,clk-csr' firstly, if failed, fall back to
+old property 'clk_csr' in driver.
+
+Is my understanding correct?
+
+> Best regards,
+> Krzysztof
+> 
+BRS
+Jianguo
+
