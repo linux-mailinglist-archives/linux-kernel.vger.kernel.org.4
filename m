@@ -2,103 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE3B5EC235
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FA35EC23A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbiI0MOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
+        id S232272AbiI0MPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232262AbiI0MO2 (ORCPT
+        with ESMTP id S232269AbiI0MPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:14:28 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6568AFAD9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:14:26 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id z6so14735212wrq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=JEiHz/34anv+sw3YKePZRjvV+9euJIIIAjKXG/xyX1c=;
-        b=t/+7n69a4OmAhKy+ZWE+4OQ2hMUftmYmgtIOEk57+qqwu7JzJRaIUREi2L/JQ1n/9S
-         eyky4GOl6B2rnoZizxF4MKwqzMG6xe5aFTDTpPislQe3Gx9iVHcKxAlYJ5HMNJTVphlE
-         ZIBhYwxeJWARxeNBjVFt4SE3GomnHqbJ42peP0Iaohmk0b7UPb2VsbfKAbi/Ds17WnJV
-         Le0JoDm0L9loO6d83+AB1yIlqETsZVeqc3Fpztiac1aDbQ4kcYpPJm7ybECGTtwvKQ8H
-         V9V8+OFSfOqxZ94RB8Oc7e2GuZdekCldDWtFIecz+Ot8SVW86Id31SEXQs9MBBN4y/0A
-         A85g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=JEiHz/34anv+sw3YKePZRjvV+9euJIIIAjKXG/xyX1c=;
-        b=ktLO4GFVrhsYXbwkx0E1n7KsQ6/myXS5dv8yWbrh6hE9XrZgTYjdL8FJ2DZV9h3do8
-         IKAuMoCnZUMpqNZ86zrqPMnerwYDq8vEMkHDCKpEuyBE6gIx7CZVB8RU94y0vyMbxRcG
-         CF/dNTFZpfuRN2tDhK0nipk+6a6yQXhH0HDVCJRptOSgRirAOuc4sV5McNEmy2Vv0QHa
-         2D6D5tg0hHQKPmvY9n1UhlgAGrhcnNqu3SwKREW3lLAWshrJsTq6rVT2+3T5bRBYef31
-         P2exi/3fAASm61mGjm3/2RzsbKFDcxG6w4OZ3ZnC0VZSquTsPd1QEknxhhtb+SVWfS1t
-         0U6g==
-X-Gm-Message-State: ACrzQf2OG34iQmc3JHdyugWUhK/OQHimEyJDAafuRjz0mHWilZAWId7y
-        BJdjoYHw3QkyVkx0pwnjKa5eDqJTy1O3tE8dQ+KbS/Ji1s8=
-X-Google-Smtp-Source: AMsMyM79n3MIxjAoajTxuCPqGzixd4TjlcvHFd3QhhkoLQkaGt20dlcjC/18m/goKhSip4RrtZLqjN+0za+VfNrY78M=
-X-Received: by 2002:a5d:6d8e:0:b0:22a:4831:e0e with SMTP id
- l14-20020a5d6d8e000000b0022a48310e0emr15723503wrs.442.1664280864867; Tue, 27
- Sep 2022 05:14:24 -0700 (PDT)
+        Tue, 27 Sep 2022 08:15:07 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1828175A8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:15:04 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28R6OnaL022026;
+        Tue, 27 Sep 2022 07:14:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=vInO/r8CP2irGLFP0WnlEE++JH/IImoDg4aYw3XeL10=;
+ b=OIdSAPLnjjRog17GK3egdqPZNTTbZhKup92L5/COtwgah0zqGujp9CROHP05XTRtIimQ
+ S9fuxfQ8s2YOWsyCFl42EEif1UyQntOYoVCK36140Kt3BVUtcvUWD94vesVi2FBpv9Mc
+ Jgc6PJcFENagW57PGul3c+TBinDinzB/a0Al0KX7R42qkgJUfB3OpP6OpgqGNc2PWpV9
+ MOYFj8Cq2kVWOUmPFQv7JA06+4oSmyT1SmMrv5uo/emt+lenb23fm7/1fTDrUuHrFbSp
+ o6WapEwSTRsFrIqP0nNkhlZ0RZrGOBzUiuGufUjhkjUO7nmdGG5hUdgbylfILAav2DSL GA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3jsya2bb7p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 07:14:51 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Tue, 27 Sep
+ 2022 07:14:49 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.12 via Frontend Transport; Tue, 27 Sep 2022 07:14:49 -0500
+Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (unknown [198.90.202.160])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7867D15A3;
+        Tue, 27 Sep 2022 12:14:49 +0000 (UTC)
+From:   Stefan Binding <sbinding@opensource.cirrus.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: [PATCH v1] ASoC: cs42l42: Fallback to headphones for type detect
+Date:   Tue, 27 Sep 2022 13:14:40 +0100
+Message-ID: <20220927121440.2506632-1-sbinding@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220923065005.20062-1-kishon@ti.com>
-In-Reply-To: <20220923065005.20062-1-kishon@ti.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 27 Sep 2022 14:13:48 +0200
-Message-ID: <CAPDyKFqxAaoC0+PQFdWN_ovgsn-ti2HkWH+2g056EVVwm7gJ-g@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Vignesh as maintainer of TI SDHCI OMAP DRIVER
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     linux-mmc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: t5qUL_Y7G8WnIHC7TnrHLA_52lnw49Yy
+X-Proofpoint-GUID: t5qUL_Y7G8WnIHC7TnrHLA_52lnw49Yy
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sept 2022 at 08:50, Kishon Vijay Abraham I <kishon@ti.com> wrote:
->
-> Add Vignesh Raghavendra as maintainer of TI SDHCI OMAP DRIVER.
->
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+After tip sense detects a jack insertion, if automatic
+type detection, and manual type detection fails, then
+fall back to assume the jack connected belongs to
+headphones.
 
-Kishon, thanks for your contributions during the years! Vignesh,
-thanks for stepping in and helping out!
+Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+---
+ sound/soc/codecs/cs42l42.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Applied for next, thanks!
+diff --git a/sound/soc/codecs/cs42l42.c b/sound/soc/codecs/cs42l42.c
+index bdc7e6bed6ac..2fefbcf7bd13 100644
+--- a/sound/soc/codecs/cs42l42.c
++++ b/sound/soc/codecs/cs42l42.c
+@@ -1199,14 +1199,11 @@ static void cs42l42_manual_hs_type_detect(struct cs42l42_private *cs42l42)
+ 			cs42l42->hs_type = CS42L42_PLUG_OMTP;
+ 			hs_det_sw = CS42L42_HSDET_SW_TYPE2;
+ 			break;
+-		case CS42L42_HSDET_COMP_TYPE3:
++		/* Detect Type 3 and Type 4 Headsets as Headphones */
++		default:
+ 			cs42l42->hs_type = CS42L42_PLUG_HEADPHONE;
+ 			hs_det_sw = CS42L42_HSDET_SW_TYPE3;
+ 			break;
+-		default:
+-			cs42l42->hs_type = CS42L42_PLUG_INVALID;
+-			hs_det_sw = CS42L42_HSDET_SW_TYPE4;
+-			break;
+ 		}
+ 	}
+ 
+-- 
+2.34.1
 
-Kind regards
-Uffe
-
-
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c368f5aa7429..ffad3f1dfe9c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18302,7 +18302,7 @@ S:      Maintained
->  F:     drivers/mmc/host/sdhci-spear.c
->
->  SECURE DIGITAL HOST CONTROLLER INTERFACE (SDHCI) TI OMAP DRIVER
-> -M:     Kishon Vijay Abraham I <kishon@ti.com>
-> +M:     Vignesh Raghavendra <vigneshr@ti.com>
->  L:     linux-mmc@vger.kernel.org
->  S:     Maintained
->  F:     drivers/mmc/host/sdhci-omap.c
-> --
-> 2.17.1
->
