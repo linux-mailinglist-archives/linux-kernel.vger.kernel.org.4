@@ -2,101 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8506C5EBBAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 836725EBBB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiI0Hhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 03:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53166 "EHLO
+        id S230427AbiI0Hhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 03:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbiI0HhU (ORCPT
+        with ESMTP id S230438AbiI0Hhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 03:37:20 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6D976758;
-        Tue, 27 Sep 2022 00:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664264238; x=1695800238;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pX+zNRfLn5le6aSKqq4PcNUTp9fg1Q7IQ0BbM+hchz8=;
-  b=PA/LudmQEmVZG9CUtvXH8Ce5B9bVRfvGHPLflGMeo5+EHtRrxX6YPa7A
-   f2HfPRb8Cc36n/3khT+OWBmYcrT4/UIpeRCIQ7gl848tlECsicokqX3ah
-   /ZAwPP1HYERSy2JmlAGqiRVJ0wChHArRUpIizK8k4R5fh5OflBIzHVive
-   ORr8OpSiKO9pubXymObvxQvZ27JqTA85zH4g/FFpH4lFyJHzKMmmB7HQ4
-   Kr7hiN8oriPfNUPjv1TFAcLVlqtG+UXuYOnxGhpoJ1vs7qt1lb/9NtLMm
-   BuRv+0uYo5tDiOPCbYcwFa4lPdeRC7HryBiwIdpif+G+I+1NHgw+5gQFF
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="280968673"
-X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
-   d="scan'208";a="280968673"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 00:37:17 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="599083965"
-X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
-   d="scan'208";a="599083965"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.249.206]) ([10.99.249.206])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 00:37:15 -0700
-Message-ID: <677f4f9d-9224-b2d9-1574-f64985fcedbc@linux.intel.com>
-Date:   Tue, 27 Sep 2022 09:37:12 +0200
+        Tue, 27 Sep 2022 03:37:41 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078EE6AA2E
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:37:31 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 3so8697971pga.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=W2hJLXZEpV+2eqAKMNoZcDhofs3a0fuyhAGVXRo+6bw=;
+        b=HV2aiRfB7j2HuSCGbeaG8xWOrbAAAfT66diyqRtVCxff5bV/waDkXk80TCe8Agw+HR
+         n8iRedjkAZtjUPXhN5LOz1gwEyW3phDWstVjIxIy6tcfXb1IaRsaFu3kIRXlvpIrEObO
+         0zTpda8yukRNAjkYVffy5vLVqyv+YjLVM7aOvAaf2zfRAT6FTLz5IJeuM2jGHPlTP1uH
+         oHdpwUlwF9uKKijdalFx1H1XOxwJDB7fq7n0qjLXiQVlLRgvdhKo0boPDRUh7Yw0gC8w
+         qUNy9mQyGufeXvMY1HWmAJ6yt6xOcLZvnuE4UbI0AtEYgG3lNW1iblk+yYDqz4nQQ2oD
+         ewIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=W2hJLXZEpV+2eqAKMNoZcDhofs3a0fuyhAGVXRo+6bw=;
+        b=UgbU2/2OzB4KhcCkDdD9YYF2UY/J0SBd6ZAGQ8Tgi7oeN4hwc2YSib585HB5KgjDy9
+         2advZaKbEuYefbafSMst2h6Rhzl3hTnhIS1EajmVvL9tdI2w/Pzlv3ZbVlgdJV0BXUb4
+         y0INDVkvLieIAHf9FhNEQntc8IzI4ncOfXC/CCd0VCv/XlaWlTNClc9APGbFI3+ZDIkD
+         J34B7JRzXdKzBowwkqQIvnhiYB9cMqfVAA9VbGWaEq/a2rMpTbxOmy2vhFWuc1bIU8K4
+         J4c8mYnvHg/Q0pNxb50l6yBLosDxnXW0Ev1ZIDO3d+nLH4lJcz7PCYcUmeez/llzUfh8
+         sKcQ==
+X-Gm-Message-State: ACrzQf0cuZ7SYafxQZFXXlWQ4EowQJRq7P63pM/6EEdjaMU0PffcXLfW
+        zNOi1wZbtOVpbrAGfCQxzY8D0Mg+IPtsU3bJAXU=
+X-Google-Smtp-Source: AMsMyM7c7wgd9OzrVTQ5mWvrzUBWwUWYdREQJQ3w3wQcWpJsQT5nlfVk3cr+S8oMWcwXLcrXHnc3Hy6DA1ypgXBrkcY=
+X-Received: by 2002:a05:6a00:1951:b0:54d:a413:7c68 with SMTP id
+ s17-20020a056a00195100b0054da4137c68mr27952396pfk.10.1664264250512; Tue, 27
+ Sep 2022 00:37:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH][next] ASoC: uapi: Replace zero-length arrays with
- __DECLARE_FLEX_ARRAY() helper
-Content-Language: en-US
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <YzIzUjUuJKf0mkKg@work>
-From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <YzIzUjUuJKf0mkKg@work>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7300:189c:b0:6f:2236:258 with HTTP; Tue, 27 Sep 2022
+ 00:37:29 -0700 (PDT)
+Reply-To: stefanopessia8766@hotmail.com
+From:   Stefano Pessina <georgekadatsa@gmail.com>
+Date:   Tue, 27 Sep 2022 10:37:29 +0300
+Message-ID: <CA++jw3ZGw8_chr4U3BVwdzKHa9t=ctL_47Nt-3UAPnfQ2ASrtw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/2022 1:18 AM, Gustavo A. R. Silva wrote:
-> Zero-length arrays are deprecated and we are moving towards adopting
-> C99 flexible-array members, instead. So, replace zero-length arrays
-> declarations in anonymous union with the new __DECLARE_FLEX_ARRAY()
-> helper macro.
-> 
-> This helper allows for flexible-array members in unions.
-> 
-> Link: https://github.com/KSPP/linux/issues/193
-> Link: https://github.com/KSPP/linux/issues/227
-> Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->   include/uapi/sound/asoc.h | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/uapi/sound/asoc.h b/include/uapi/sound/asoc.h
-> index 053949287ce8..dd8ad790fc15 100644
-> --- a/include/uapi/sound/asoc.h
-> +++ b/include/uapi/sound/asoc.h
-> @@ -226,9 +226,9 @@ struct snd_soc_tplg_vendor_array {
->   	__le32 type;	/* SND_SOC_TPLG_TUPLE_TYPE_ */
->   	__le32 num_elems;	/* number of elements in array */
->   	union {
-> -		struct snd_soc_tplg_vendor_uuid_elem uuid[0];
-> -		struct snd_soc_tplg_vendor_value_elem value[0];
-> -		struct snd_soc_tplg_vendor_string_elem string[0];
-> +		__DECLARE_FLEX_ARRAY(struct snd_soc_tplg_vendor_uuid_elem, uuid);
-> +		__DECLARE_FLEX_ARRAY(struct snd_soc_tplg_vendor_value_elem, value);
-> +		__DECLARE_FLEX_ARRAY(struct snd_soc_tplg_vendor_string_elem, string);
->   	};
->   } __attribute__((packed));
->   
-
-Reviewed-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+--=20
+Kwot=C4=99 500 000 $ przekaza=C5=82 Pa=C5=84stwu STEFANO PESSINA. Uprzejmie=
+ wr=C3=B3=C4=87 po
+wi=C4=99cej informacji przez stefanopessia8766@hotmail.com
