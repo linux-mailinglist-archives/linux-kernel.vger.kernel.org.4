@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8041E5EC6EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB2D5EC6F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbiI0Ovy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52362 "EHLO
+        id S231789AbiI0OxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233159AbiI0OvL (ORCPT
+        with ESMTP id S232754AbiI0Ow5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:51:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B64EE26;
-        Tue, 27 Sep 2022 07:50:17 -0700 (PDT)
+        Tue, 27 Sep 2022 10:52:57 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9034199C;
+        Tue, 27 Sep 2022 07:51:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 328B761A14;
-        Tue, 27 Sep 2022 14:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 99125C43470;
-        Tue, 27 Sep 2022 14:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664290216;
-        bh=jB5siogusOcKXvYF/OL9C7cDiSZqSCGB14hV5AyzrEQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=EFEkuG7qnOHyWeiLsWUJk1DM/yKO509rf6co3JsiG3iTMCfRmr54UwgOujIiuahFZ
-         IXbTmKCpxWG2Jdvhu2FwpSLguXYN/c/laZ9DbiwOV27rTrGSRZXvHvFnpLpaEgW90B
-         mmxtvvBq/yG+j2X9jvdLtVDuFqkJCQ6TOm41K7dcL12IJFayvGLZzQaTHVJtCBb7bD
-         v7X0Whmcl2+SRvF8QzwzBrUbkh1vtgKLX5rXyhSAe1O9aCO0RyrXYq/khd8636N5hZ
-         MtnTA88+Rel8r7tCWlqZyoZ4YyiYe2EdD+fqIUvtwI2fvyLhkQzUnukyi2PLPyh2Ci
-         J+5I8bNtvQNBw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7EE73E21EC6;
-        Tue, 27 Sep 2022 14:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by sin.source.kernel.org (Postfix) with ESMTPS id 098B3CE19A9;
+        Tue, 27 Sep 2022 14:51:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0001DC433C1;
+        Tue, 27 Sep 2022 14:51:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664290278;
+        bh=TUI2vY0GcI+g0Kd0i6XohCJSFPp7CBvJcwNd96s8s38=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LlZiJ4qYXxC4ez7DpTkBYW516ZQnlJFjLSK4jfZUOByay98IA7t5xsmIynXGygXQe
+         AlFIUAjTy4NPR8v9uPPT/4tFjJqgWMJaCzhc94WfhdM74Kf7R+0ito1h6x/nTr/Etv
+         jONPSgpTPeXNWL6cT2llYg/fbzCtVNXCrZe2HTeg=
+Date:   Tue, 27 Sep 2022 16:51:15 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v10 01/27] kallsyms: use `ARRAY_SIZE` instead of
+ hardcoded size
+Message-ID: <YzMN48rlIHrl/c8Z@kroah.com>
+References: <20220927131518.30000-1-ojeda@kernel.org>
+ <20220927131518.30000-2-ojeda@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] NFC: hci: Split memcpy() of struct hcp_message flexible array
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166429021651.22749.12436522168132240366.git-patchwork-notify@kernel.org>
-Date:   Tue, 27 Sep 2022 14:50:16 +0000
-References: <20220924040835.3364912-1-keescook@chromium.org>
-In-Reply-To: <20220924040835.3364912-1-keescook@chromium.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     krzysztof.kozlowski@linaro.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, gustavoars@kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927131518.30000-2-ojeda@kernel.org>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,28 +56,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 23 Sep 2022 21:08:35 -0700 you wrote:
-> To work around a misbehavior of the compiler's ability to see into
-> composite flexible array structs (as detailed in the coming memcpy()
-> hardening series[1]), split the memcpy() of the header and the payload
-> so no false positive run-time overflow warning will be generated. This
-> split already existed for the "firstfrag" case, so just generalize the
-> logic further.
+On Tue, Sep 27, 2022 at 03:14:32PM +0200, Miguel Ojeda wrote:
+> From: Boqun Feng <boqun.feng@gmail.com>
 > 
-> [...]
+> This removes one place where the `500` constant is hardcoded.
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  scripts/kallsyms.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Here is the summary with links:
-  - NFC: hci: Split memcpy() of struct hcp_message flexible array
-    https://git.kernel.org/netdev/net-next/c/de4feb4e3d61
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
