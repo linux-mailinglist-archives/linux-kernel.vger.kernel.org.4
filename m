@@ -2,126 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E37495EC07F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0079C5EC088
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbiI0LGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
+        id S231768AbiI0LGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbiI0LFZ (ORCPT
+        with ESMTP id S231753AbiI0LFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:05:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20042F0D;
-        Tue, 27 Sep 2022 04:04:31 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B673E1042;
-        Tue, 27 Sep 2022 04:04:18 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3848D3F66F;
-        Tue, 27 Sep 2022 04:04:11 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     robh+dt@kernel.org, frowand.list@gmail.com
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: [PATCH] of: Fix "dma-ranges" handling for bus controllers
-Date:   Tue, 27 Sep 2022 12:04:06 +0100
-Message-Id: <6319e6d0b39b58552dcfb1c111b6ec45a5ca6bf8.1664276646.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.36.1.dirty
+        Tue, 27 Sep 2022 07:05:51 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C741B1D306;
+        Tue, 27 Sep 2022 04:04:46 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4McGqY0D5Fz1P6vl;
+        Tue, 27 Sep 2022 19:00:09 +0800 (CST)
+Received: from [10.174.179.191] (10.174.179.191) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 19:04:22 +0800
+Message-ID: <d4f9badc-a39d-02f2-192a-3cb07e80bbf7@huawei.com>
+Date:   Tue, 27 Sep 2022 19:04:22 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [bpf-next v6 1/3] bpftool: Add auto_attach for bpf prog
+ load|loadall
+To:     Quentin Monnet <quentin@isovalent.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <hawk@kernel.org>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>, <trix@redhat.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <1664014430-5286-1-git-send-email-wangyufen@huawei.com>
+ <2f670f3f-4d91-9b74-4fbe-8ea1351444cb@isovalent.com>
+From:   wangyufen <wangyufen@huawei.com>
+In-Reply-To: <2f670f3f-4d91-9b74-4fbe-8ea1351444cb@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.179.191]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 951d48855d86 ("of: Make of_dma_get_range() work on bus nodes")
-relaxed the handling of "dma-ranges" for any leaf node on the assumption
-that it would still represent a usage error for the property to be
-present on a non-bus leaf node. However there turns out to be a fiddly
-case where a bus also represents a DMA-capable device in its own right,
-such as a PCIe root complex with an integrated DMA engine on its
-platform side. In such cases, "dma-ranges" translation is entirely valid
-for devices discovered behind the bus, but should not be erroneously
-applied to the bus controller device itself which operates in its
-parent's address space. Fix this by restoring the previous behaviour for
-the specific case where a device is configured via its own OF node,
-since it is logical to assume that a device should never represent its
-own parent bus.
 
-Reported-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
- drivers/of/address.c    | 2 +-
- drivers/of/device.c     | 9 ++++++++-
- drivers/of/of_private.h | 5 +++++
- 3 files changed, 14 insertions(+), 2 deletions(-)
+在 2022/9/26 18:46, Quentin Monnet 写道:
+> Sat Sep 24 2022 11:13:48 GMT+0100 (British Summer Time) ~ Wang Yufen
+> <wangyufen@huawei.com>
+>> Add auto_attach optional to support one-step load-attach-pin_link.
+>>
+>> For example,
+>>     $ bpftool prog loadall test.o /sys/fs/bpf/test autoattach
+>>
+>>     $ bpftool link
+>>     26: tracing  name test1  tag f0da7d0058c00236  gpl
+>>     	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>>     	xlated 88B  jited 55B  memlock 4096B  map_ids 3
+>>     	btf_id 55
+>>     28: kprobe  name test3  tag 002ef1bef0723833  gpl
+>>     	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>>     	xlated 88B  jited 56B  memlock 4096B  map_ids 3
+>>     	btf_id 55
+>>     57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+>>     	loaded_at 2022-09-09T21:41:32+0800  uid 0
+>>     	xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+>>     	btf_id 82
+>>
+>>     $ bpftool link
+>>     1: tracing  prog 26
+>>     	prog_type tracing  attach_type trace_fentry
+>>     3: perf_event  prog 28
+>>     10: perf_event  prog 57
+>>
+>> The autoattach optional can support tracepoints, k(ret)probes,
+>> u(ret)probes.
+>>
+>> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+>> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+>> ---
+>> v5 -> v6: skip the programs not supporting auto-attach,
+>> 	  and change optional name from "auto_attach" to "autoattach"
+>> v4 -> v5: some formatting nits of doc
+>> v3 -> v4: rename functions, update doc, bash and do_help()
+>> v2 -> v3: switch to extend prog load command instead of extend perf
+>> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+>> v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+>>   tools/bpf/bpftool/prog.c | 76 ++++++++++++++++++++++++++++++++++++++--
+>>   1 file changed, 74 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+>> index c81362a001ba..b1cbd06dee19 100644
+>> --- a/tools/bpf/bpftool/prog.c
+>> +++ b/tools/bpf/bpftool/prog.c
+>> @@ -1453,6 +1453,67 @@ get_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
+>>   	return ret;
+>>   }
+>>   
+>> +static int
+>> +auto_attach_program(struct bpf_program *prog, const char *path)
+>> +{
+>> +	struct bpf_link *link;
+>> +	int err;
+>> +
+>> +	link = bpf_program__attach(prog);
+>> +	if (!link)
+>> +		return -1;
+>> +
+>> +	err = bpf_link__pin(link, path);
+>> +	if (err) {
+>> +		bpf_link__destroy(link);
+>> +		return err;
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> +static int pathname_concat(const char *path, const char *name, char *buf)
+>> +{
+>> +	int len;
+>> +
+>> +	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
+>> +	if (len < 0)
+>> +		return -EINVAL;
+>> +	if (len >= PATH_MAX)
+>> +		return -ENAMETOOLONG;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int
+>> +auto_attach_programs(struct bpf_object *obj, const char *path)
+>> +{
+>> +	struct bpf_program *prog;
+>> +	char buf[PATH_MAX];
+>> +	int err;
+>> +
+>> +	bpf_object__for_each_program(prog, obj) {
+>> +		err = pathname_concat(path, bpf_program__name(prog), buf);
+>> +		if (err)
+>> +			goto err_unpin_programs;
+>> +
+>> +		err = auto_attach_program(prog, buf);
+>> +		if (err && errno != EOPNOTSUPP)
+>> +			goto err_unpin_programs;
+> If I read the above correctly, we skip entirely programs that couldn't
+> be auto-attached. I'm not sure what Andrii had in mind exactly, but it
+> would make sense to me to fallback to regular program pinning if the
+> program couldn't be attached/linked, so we still keep it loaded in the
+> kernel after bpftool exits. Probably with a p_info() message to let
+> users know?
 
-diff --git a/drivers/of/address.c b/drivers/of/address.c
-index 96f0a12e507c..497bb64e338b 100644
---- a/drivers/of/address.c
-+++ b/drivers/of/address.c
-@@ -579,7 +579,7 @@ u64 of_translate_address(struct device_node *dev, const __be32 *in_addr)
- }
- EXPORT_SYMBOL(of_translate_address);
- 
--static struct device_node *__of_get_dma_parent(const struct device_node *np)
-+struct device_node *__of_get_dma_parent(const struct device_node *np)
- {
- 	struct of_phandle_args args;
- 	int ret, index;
-diff --git a/drivers/of/device.c b/drivers/of/device.c
-index 75b6cbffa755..8cefe5a7d04e 100644
---- a/drivers/of/device.c
-+++ b/drivers/of/device.c
-@@ -116,12 +116,19 @@ int of_dma_configure_id(struct device *dev, struct device_node *np,
- {
- 	const struct iommu_ops *iommu;
- 	const struct bus_dma_region *map = NULL;
-+	struct device_node *bus_np;
- 	u64 dma_start = 0;
- 	u64 mask, end, size = 0;
- 	bool coherent;
- 	int ret;
- 
--	ret = of_dma_get_range(np, &map);
-+	if (np == dev->of_node)
-+		bus_np = __of_get_dma_parent(np);
-+	else
-+		bus_np = of_node_get(np);
-+
-+	ret = of_dma_get_range(bus_np, &map);
-+	of_node_put(bus_np);
- 	if (ret < 0) {
- 		/*
- 		 * For legacy reasons, we have to assume some devices need
-diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
-index 9324483397f6..fb6792d381a6 100644
---- a/drivers/of/of_private.h
-+++ b/drivers/of/of_private.h
-@@ -155,12 +155,17 @@ struct bus_dma_region;
- #if defined(CONFIG_OF_ADDRESS) && defined(CONFIG_HAS_DMA)
- int of_dma_get_range(struct device_node *np,
- 		const struct bus_dma_region **map);
-+struct device_node *__of_get_dma_parent(const struct device_node *np);
- #else
- static inline int of_dma_get_range(struct device_node *np,
- 		const struct bus_dma_region **map)
- {
- 	return -ENODEV;
- }
-+static inline struct device_node *__of_get_dma_parent(const struct device_node *np)
-+{
-+	return of_get_parent(np);
-+}
- #endif
- 
- void fdt_init_reserved_mem(void);
--- 
-2.36.1.dirty
+Thanks for your comment.
+I agree with you.
+add in v7.
 
+>
+>> +	}
+>> +
+>> +	return 0;
+>> +
+>> +err_unpin_programs:
+>> +	while ((prog = bpf_object__prev_program(obj, prog))) {
+>> +		if (pathname_concat(path, bpf_program__name(prog), buf))
+>> +			continue;
+>> +
+>> +		bpf_program__unpin(prog, buf);
+>> +	}
+>> +
+>> +	return err;
+>> +}
