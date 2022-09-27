@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3645EC192
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F505EC194
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbiI0Lgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
+        id S231895AbiI0Lg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbiI0Lgr (ORCPT
+        with ESMTP id S231653AbiI0Lgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:36:47 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7512D1438E6
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:36:45 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 30so12790086edw.5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=bfnlfMH2qv7WqV/DohbyJR0+KCA0Bxzz3Ju/20TTuck=;
-        b=KM7+7YtJEU2Jt+VczH+FOJJOGb2IQecJ5Qp1owYwAeXYYw7n4YJnvJGlvsAu0sIYva
-         d1jLfvg8N7/Bur0LJzRfEOo/Qyqv1Syt77BJzLLwLKVVrrVXrvXN4RRQNehUnTHqwYPh
-         5H2lHSKo79omxG4lLqBfM0Bsyzjx2Hr/gchEWLz18n0SYiFmD7u/45x+usEs01hzNU36
-         oPzPjr7SrqfuMmnEv1fnPxtmGjseJw2CQE455Po685QQVFgQ27BpmDPlwScRqXyNePpO
-         rSiwOKLPiVeJDcA6ztX1QOrpSf57DGLMLyZOa9X6GDUFXgkWeZCbAJsHDZc/kL/f9Thq
-         nKXQ==
+        Tue, 27 Sep 2022 07:36:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87041449D5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:36:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664278610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EoQe3mHnQYoYlajKMGO7Dx2ZrN3SElKzFqBGu4p1Rsc=;
+        b=Dh8p/QR6dw1GSxpJIxpYx0VRh4HPFVFaBS54uW1L5E7XAI1yKM5TLmL3TuEmDP0oCZlSOn
+        PDGj/tujYSyGw1jAN8thAtXJz6UvP08MmAZtXf4xwyNvZsDxyh9PI7MrSURX0N6FcASfBn
+        PH4U4eE2sjKDWVtlLOvqOy3n1BddQm4=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-99-gZWp9wisMwe15h7_KCuhMw-1; Tue, 27 Sep 2022 07:36:49 -0400
+X-MC-Unique: gZWp9wisMwe15h7_KCuhMw-1
+Received: by mail-wm1-f69.google.com with SMTP id g8-20020a05600c4ec800b003b4bcbdb63cso5421250wmq.7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:36:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=bfnlfMH2qv7WqV/DohbyJR0+KCA0Bxzz3Ju/20TTuck=;
-        b=S0YoLQPRGim6+/D+7dbm8XFE/ASaVA3Y30ebP48nnJjgud6HuF1izAa9TtiZcbPv5P
-         wBxovlN4+7mO37p4LuK8EcdmG+w8xAk6JM7529kCjgj6vOO8OKjrFKnV50uaXZhNCG7F
-         miJQTv/Bu4oX+TjG16rItz0ddNH6ypWJEAyFKBKhghS34Nws6RLjZ7JAyhim0vsK32gl
-         1xlqSRxjm/JBN5Ssf9cvjOuFnP6U9AF62vISdsfUi1DA8QngSFNxcd97uytECoiizHgu
-         esoJZVTRndj0pAJBOSZPnDxFZVI1YSPw+cw3GMtElCpxzUzp5n25Gqp7uFTzIro/Owtg
-         ug3w==
-X-Gm-Message-State: ACrzQf0nnkV1+ha+8lh1wKXXlZD5FZyLTZxbHt7PirC/p9+6VKmnt2xu
-        Kg4ngkQ0RFHD4vKZHOebX8o=
-X-Google-Smtp-Source: AMsMyM67I24tsHpRlol/3ysQkUh+uaBFlDqnjfAw2LpK6jbhg/uMMY3S0UKgNq5+9B6bZ4OfH4iWzw==
-X-Received: by 2002:a05:6402:51c6:b0:451:6379:81cb with SMTP id r6-20020a05640251c600b00451637981cbmr27022708edd.372.1664278603621;
-        Tue, 27 Sep 2022 04:36:43 -0700 (PDT)
-Received: from nam-dell (ip-217-105-46-158.ip.prioritytelecom.net. [217.105.46.158])
-        by smtp.gmail.com with ESMTPSA id t23-20020a17090616d700b0077b523d309asm648689ejd.185.2022.09.27.04.36.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 04:36:43 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 13:36:37 +0200
-From:   Nam Cao <namcaov@gmail.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     forest@alittletooquiet.net, gregkh@linuxfoundation.org,
-        philipp.g.hortmann@gmail.com, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [RFC PATCH 2/5] staging: vt6655: change vnt_receive_frame return
- type to void
-Message-ID: <20220927113637.GA10468@nam-dell>
-References: <cover.1663273218.git.namcaov@gmail.com>
- <f727ea04703858920f6da694676ec323469e7b97.1663273218.git.namcaov@gmail.com>
- <Yyg6J/u23jcB2v+n@kadam>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=EoQe3mHnQYoYlajKMGO7Dx2ZrN3SElKzFqBGu4p1Rsc=;
+        b=OUw8xbcA6N09HmvGf+BQ9V6YTWu8vA8giNdWP8mlrR4QCUkrmG8wQk1baSOCDvZFZl
+         TvpnaYPt7b0lBgj/mzUYhNkgmBgXQ3+cfqgzEKu01omF6Yqtupc0AdXKBryblmTlE6g3
+         yq/BIJewwu4jy8ig8FzyvQ8Q+AwJvCO6vUMYodKMu8gJk0xTviH65blzXzNL9rOlbOM0
+         4I3kfj+RMfwLRA1PVzryCvgFrAA9WMDA2uzUsMoXFhxkjOSImylUHKzhqRrDF+rTFwEe
+         K2PwExRh7bbGh5Z/l/cWXq+I7kBmlCEMJjwRhDb3EaDJGxvMiv9pGbgKEln1nCam4Enk
+         fDzA==
+X-Gm-Message-State: ACrzQf2HEAkDRn3WCsbISGl9AwzW2nDV3AZ/MD0Xa4OlHj8FVeWiTpbo
+        OjgzX900U2zD7wzXmpwUmfKsffwPS6Dd8R00AZwl903aViKVJnzQlMcsxZEAqCGDbU+zS766slz
+        br/wK3bErvwSCZtHmI+sUBfgq
+X-Received: by 2002:a05:6000:178e:b0:22b:451:9f63 with SMTP id e14-20020a056000178e00b0022b04519f63mr15895501wrg.521.1664278608349;
+        Tue, 27 Sep 2022 04:36:48 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5aRKpUsAhOykOk2Jxp+/Ojmr91lbVAF3k9VyYwNBaAklCp5COwFMiCEfMmUrrqWwr8i/YAZA==
+X-Received: by 2002:a05:6000:178e:b0:22b:451:9f63 with SMTP id e14-20020a056000178e00b0022b04519f63mr15895488wrg.521.1664278608138;
+        Tue, 27 Sep 2022 04:36:48 -0700 (PDT)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id y1-20020a056000108100b002250c35826dsm1491711wrw.104.2022.09.27.04.36.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 04:36:47 -0700 (PDT)
+Message-ID: <21ce0011-4ffa-d229-404f-58f98aba5860@redhat.com>
+Date:   Tue, 27 Sep 2022 13:36:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yyg6J/u23jcB2v+n@kadam>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] drm/ssd130x: Synchronize access to dma-buf imported GEM
+ BOs
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+References: <20220927095249.1919385-1-javierm@redhat.com>
+ <bd64206e-4d67-6932-30c2-740237a05bd0@suse.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <bd64206e-4d67-6932-30c2-740237a05bd0@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,33 +83,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 12:45:11PM +0300, Dan Carpenter wrote:
-> On Thu, Sep 15, 2022 at 10:29:33PM +0200, Nam Cao wrote:
-> > -bool vnt_receive_frame(struct vnt_private *priv, struct vnt_rx_desc *curr_rd)
-> > +void vnt_receive_frame(struct vnt_private *priv, struct vnt_rx_desc *curr_rd)
-> >  {
-> >  	struct vnt_rd_info *rd_info = curr_rd->rd_info;
-> >  	struct sk_buff *skb;
-> > @@ -133,13 +133,13 @@ bool vnt_receive_frame(struct vnt_private *priv, struct vnt_rx_desc *curr_rd)
-> >  		/* Frame Size error drop this packet.*/
-> >  		dev_dbg(&priv->pcid->dev, "Wrong frame size %d\n", frame_size);
-> >  		dev_kfree_skb_irq(skb);
-> > -		return true;
-> > +		return;
-> >  	}
-> >  
-> >  	if (vnt_rx_data(priv, skb, frame_size))
-> > -		return true;
-> > +		return;
-> >  
-> >  	dev_kfree_skb_irq(skb);
-> >  
-> > -	return true;
-> > +	return;
+On 9/27/22 13:18, Thomas Zimmermann wrote:
+> Hi
 > 
-> Just delete this last return (it's pointless now).
+> Am 27.09.22 um 11:52 schrieb Javier Martinez Canillas:
+>> Synchronize CPU access to GEM BOs with other drivers when updating the
+>> screen buffer. Imported DMA buffers might otherwise contain stale data.
+>>
+>> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> 
+> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+> 
 
-Will be changed, thanks.
+Pushed to drm-misc (drm-misc-next). Thanks!
 
+-- 
 Best regards,
-Nam
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
