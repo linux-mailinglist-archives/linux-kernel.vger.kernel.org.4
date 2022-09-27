@@ -2,116 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A2F5EB803
+	by mail.lfdr.de (Postfix) with ESMTP id 3726B5EB801
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbiI0C7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 22:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
+        id S230462AbiI0C7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 22:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiI0C6O (ORCPT
+        with ESMTP id S230461AbiI0C6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 22:58:14 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A4210FCB
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:54:37 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=shawnwang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VQpkEBa_1664247269;
-Received: from localhost(mailfrom:shawnwang@linux.alibaba.com fp:SMTPD_---0VQpkEBa_1664247269)
-          by smtp.aliyun-inc.com;
-          Tue, 27 Sep 2022 10:54:34 +0800
-From:   Shawn Wang <shawnwang@linux.alibaba.com>
-To:     fenghua.yu@intel.com, reinette.chatre@intel.com
-Cc:     james.morse@arm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/resctrl: Clear the staged configs when destroying schemata list
-Date:   Tue, 27 Sep 2022 10:54:29 +0800
-Message-Id: <1664247269-41295-1-git-send-email-shawnwang@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 26 Sep 2022 22:58:21 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710E15F87
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:54:44 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 429D22C0655;
+        Tue, 27 Sep 2022 02:54:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1664247281;
+        bh=x6rLsjU8n4jK+ehuEmcUEt5EsONMMCmZGKiq+TmClpc=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=rwpgkgMT+RTSYx9ibufWkrqd1ME2wnPUWLq17Kz9o1TiAkRPbG2ueUHMliNa/zcrg
+         FR55iaLR3e17e1PZoD/AgNa4CsH+Ld/CzwmrByMjkwx7iqar2n6wUcQOxu2Q7cWL4a
+         kTxEWXM74coRqXNdmZ7ev2MkRVEBOtW8n+coMD9DxB6ceHCUOfTJVlfM7d+679CpnE
+         1kswTYRB344oiIZWDldp1uUWRtmybvYHwMn08LCjnqX12pdxdOFqZb/BYyQXhXxYt0
+         YlLirxJgYu1lE4YhvAWPZg0Ub5PoQoz1AXfeXSTA1PfMYHaaKg8TFGWbQwiCpnYkLU
+         VNNB+WzyZgT8w==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B633265f10001>; Tue, 27 Sep 2022 15:54:41 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.38; Tue, 27 Sep 2022 15:54:40 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.040; Tue, 27 Sep 2022 15:54:40 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "bbrezillon@kernel.org" <bbrezillon@kernel.org>
+CC:     Tony O'Brien <Tony.OBrien@alliedtelesis.co.nz>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mtd: rawnand: marvell: Use correct logic for
+ nand-keep-config
+Thread-Topic: [PATCH] mtd: rawnand: marvell: Use correct logic for
+ nand-keep-config
+Thread-Index: AQHY0huGvn+cu0p4h0STUiMnaqi9wa3xutQA
+Date:   Tue, 27 Sep 2022 02:54:40 +0000
+Message-ID: <e234270c-4169-bddb-5c2d-9c6ac48467b6@alliedtelesis.co.nz>
+References: <20220927024728.28447-1-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20220927024728.28447-1-chris.packham@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9665FE8B14A88C4891D7CFA1E0C7CA91@atlnz.lc>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=UoQdyN4B c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=xOM3xZuef0cA:10 a=nZ5tDJ4FkKnVFCT0SwEA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Array staged_config in struct rdt_domain still maintains the original value when
-resctrl is unmounted. If resctrl is mounted with cdp option and then remounted
-without cdp option, field have_new_ctrl in staged_config[CDP_CODE] and
-staged_config[CDP_DATA] will still be true. Since resctrl_arch_update_domains()
-traverses all resctrl_conf_type, it will continue to update CDP_CODE and
-CDP_DATA configurations, which can cause overflow problem.
-
-The problem can be reproduced by the following commands:
-    # A system with 16 usable closids and mba disabled
-    mount -t resctrl resctrl -o cdp /sys/fs/resctrl
-    mkdir /sys/fs/resctrl/p{1..7}
-    umount /sys/fs/resctrl/
-    mount -t resctrl resctrl /sys/fs/resctrl
-    mkdir /sys/fs/resctrl/p{1..8}
-
-dmesg will generate the following error:
-    [ 6180.939345] unchecked MSR access error: WRMSR to 0xca0 (tried to write
-    0x00000000000007ff) at rIP: 0xffffffff82249142 (cat_wrmsr+0x32/0x60)
-    [ 6180.951983] Call Trace:
-    [ 6180.954516]  <IRQ>
-    [ 6180.956619]  __flush_smp_call_function_queue+0x11d/0x170
-    [ 6180.962028]  __sysvec_call_function+0x24/0xd0
-    [ 6180.966485]  sysvec_call_function+0x89/0xc0
-    [ 6180.970760]  </IRQ>
-    [ 6180.972947]  <TASK>
-    [ 6180.975131]  asm_sysvec_call_function+0x16/0x20
-    [ 6180.979757] RIP: 0010:cpuidle_enter_state+0xcd/0x400
-    [ 6180.984821] Code: 49 89 c5 0f 1f 44 00 00 31 ff e8 1e e5 77 ff 45 84
-    ff 74 12 9c 58 f6 c4 02 0f 85 13 03 00 00 31 ff e8 67 70 7d ff fb 45 85
-    f6 <0f> 88 75 01 00 00 49 63 c6 4c 2b 2c 24 48 8d 14 40 48 8d 14 90 49
-    [ 6181.003710] RSP: 0018:ffffffff83a03e48 EFLAGS: 00000202
-    [ 6181.009028] RAX: ffff943400800000 RBX: 0000000000000001 RCX: 000000000000001f
-    [ 6181.016261] RDX: 0000000000000000 RSI: ffffffff83795059 RDI: ffffffff837c101e
-    [ 6181.023490] RBP: ffff9434c9352000 R08: 0000059f1cb1a05e R09: 0000000000000008
-    [ 6181.030717] R10: 0000000000000001 R11: 0000000000005c66 R12: ffffffff83bbf3a0
-    [ 6181.037944] R13: 0000059f1cb1a05e R14: 0000000000000001 R15: 0000000000000000
-    [ 6181.045202]  ? cpuidle_enter_state+0xb2/0x400
-    [ 6181.049678]  cpuidle_enter+0x24/0x40
-    [ 6181.053370]  do_idle+0x1dd/0x260
-    [ 6181.056713]  cpu_startup_entry+0x14/0x20
-    [ 6181.060753]  rest_init+0xbb/0xc0
-    [ 6181.064097]  arch_call_rest_init+0x5/0xa
-    [ 6181.068137]  start_kernel+0x668/0x691
-    [ 6181.071914]  secondary_startup_64_no_verify+0xe0/0xeb
-    [ 6181.077086]  </TASK>
-
-We fix this issue by clearing the staged configs when destroying schemata list.
-
-Signed-off-by: Shawn Wang <shawnwang@linux.alibaba.com>
-Suggested-by: Xin Hao <xhao@linux.alibaba.com>
----
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index f276aff521e8..b4a817ae83ab 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -2127,8 +2127,15 @@ static int schemata_list_create(void)
- static void schemata_list_destroy(void)
- {
- 	struct resctrl_schema *s, *tmp;
-+	struct rdt_domain *dom;
- 
- 	list_for_each_entry_safe(s, tmp, &resctrl_schema_all, list) {
-+		/*
-+		 * Clear staged_config on each domain before schemata list is
-+		 * destroyed.
-+		 */
-+		list_for_each_entry(dom, &s->res->domains, list)
-+			memset(dom->staged_config, 0, sizeof(dom->staged_config));
- 		list_del(&s->list);
- 		kfree(s);
- 	}
--- 
-2.27.0
-
+DQpPbiAyNy8wOS8yMiAxNTo0NywgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4gRnJvbTogVG9ueSBP
+J0JyaWVuIDx0b255Lm9icmllbkBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPg0KPiBPcmlnaW5hbGx5
+IHRoZSBhYnNlbmNlIG9mIHRoZSBtYXJ2ZWxsLG5hbmQta2VlcC1jb25maWcgcHJvcGVydHkgY2F1
+c2VkDQo+IHRoZSBzZXR1cF9kYXRhX2ludGVyZmFjZSBmdW5jdGlvbiB0byBiZSBwcm92aWRlZC4g
+SG93ZXZlciB3aGVuDQo+IHNldHVwX2RhdGFfaW50ZXJmYWNlIHdhcyBtb3ZlZCBpbnRvIG5hbmRf
+Y29udHJvbGxlcl9vcHMgdGhlIGxvZ2ljIHdhcw0KPiB1bmludGVudGlvbmFsbHkgaW52ZXJ0ZWQu
+IFVwZGF0ZSB0aGUgbG9naWMgc28gdGhhdCBvbmx5IGlmIHRoZQ0KPiBtYXJ2ZWxsLG5hbmQta2Vl
+cC1jb25maWcgcHJvcGVydHkgaXMgcHJlc2VudCB0aGUgYm9vdGxvYWRlciBOQU5EIGNvbmZpZw0K
+PiBrZXB0Lg0KPg0KPiBGaXhlczogN2EwOGRiYWVkZDM2ICgibXRkOiByYXduYW5kOiBNb3ZlIC0+
+c2V0dXBfZGF0YV9pbnRlcmZhY2UoKSB0byBuYW5kX2NvbnRyb2xsZXJfb3BzIikNCj4gU2lnbmVk
+LW9mZi1ieTogVG9ueSBPJ0JyaWVuIDx0b255Lm9icmllbkBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0K
+PiBTaWduZWQtb2ZmLWJ5OiBDaHJpcyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVz
+aXMuY28ubno+DQo+IC0tLQ0KPg0KPiBOb3RlczoNCj4gICAgICBJIHRoaW5rIHRoaXMgaXMgYSBi
+dWcgdGhhdCdzIGJlZW4gbHVya2luZyBmb3IgNCB5ZWFycyBvciBzby4gSSdtIG5vdA0KPiAgICAg
+IHN1cmUgdGhhdCdzIHBhcnRpY3VsYXJseSBsb25nIGluIHRoZSBsaWZlIG9mIGFuIGVtYmVkZGVk
+IGRldmljZSBidXQgaXQNCj4gICAgICBkb2VzIG1ha2UgbWUgd29uZGVyIGlmIHRoZXJlIGhhdmUg
+YmVlbiBvdGhlciBidWcgcmVwb3J0cyBhYm91dCBpdC4NCj4gICAgICANCj4gICAgICBXZSBub3Rp
+Y2VkIHRoaXMgYmVjYXVzZSB3ZSBoYWQgYSBib290bG9hZGVyIHRoYXQgdXNlZCBtYXhlZCBvdXQg
+TkFORA0KPiAgICAgIHRpbWluZ3Mgd2hpY2ggbWFkZSB0aGUgdGltZSBpdCB0b29rIHRoZSBrZXJu
+ZWwgdG8gZG8gYW55dGhpbmcgb24gdGhlDQo+ICAgICAgZmlsZSBzeXN0ZW0gbG9uZ2VyIHRoYW4g
+d2UgZXhwZWN0ZWQuDQoNCkkgdGhpbmsgdGhlcmUgbWlnaHQgYmUgYSBzaW1pbGFyIGxvZ2ljIGlu
+dmVyc2lvbiBidWcgaW4gDQpkcml2ZXJzL210ZC9uYW5kL3Jhdy9kZW5hbGkuYyBidXQgSSBsYWNr
+IHRoZSBhYmlsaXR5IHRvIHRlc3QgZm9yIHRoYXQgDQpwbGF0Zm9ybS4NCg0KPiAgIGRyaXZlcnMv
+bXRkL25hbmQvcmF3L21hcnZlbGxfbmFuZC5jIHwgMiArLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAx
+IGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9t
+dGQvbmFuZC9yYXcvbWFydmVsbF9uYW5kLmMgYi9kcml2ZXJzL210ZC9uYW5kL3Jhdy9tYXJ2ZWxs
+X25hbmQuYw0KPiBpbmRleCAyNDU1YTU4MWZkNzAuLmIyNDhjNWY2NTdkNSAxMDA2NDQNCj4gLS0t
+IGEvZHJpdmVycy9tdGQvbmFuZC9yYXcvbWFydmVsbF9uYW5kLmMNCj4gKysrIGIvZHJpdmVycy9t
+dGQvbmFuZC9yYXcvbWFydmVsbF9uYW5kLmMNCj4gQEAgLTI2NzIsNyArMjY3Miw3IEBAIHN0YXRp
+YyBpbnQgbWFydmVsbF9uYW5kX2NoaXBfaW5pdChzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCBt
+YXJ2ZWxsX25mYyAqbmZjLA0KPiAgIAljaGlwLT5jb250cm9sbGVyID0gJm5mYy0+Y29udHJvbGxl
+cjsNCj4gICAJbmFuZF9zZXRfZmxhc2hfbm9kZShjaGlwLCBucCk7DQo+ICAgDQo+IC0JaWYgKCFv
+Zl9wcm9wZXJ0eV9yZWFkX2Jvb2wobnAsICJtYXJ2ZWxsLG5hbmQta2VlcC1jb25maWciKSkNCj4g
+KwlpZiAob2ZfcHJvcGVydHlfcmVhZF9ib29sKG5wLCAibWFydmVsbCxuYW5kLWtlZXAtY29uZmln
+IikpDQo+ICAgCQljaGlwLT5vcHRpb25zIHw9IE5BTkRfS0VFUF9USU1JTkdTOw0KPiAgIA0KPiAg
+IAltdGQgPSBuYW5kX3RvX210ZChjaGlwKTs=
