@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 037F75EC97D
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9EF5EC97E
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232806AbiI0Q3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
+        id S231686AbiI0Q3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233019AbiI0Q2c (ORCPT
+        with ESMTP id S233066AbiI0Q2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:28:32 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6711D6D3E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:28:15 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id e68so10168527pfe.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:28:15 -0700 (PDT)
+        Tue, 27 Sep 2022 12:28:33 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344E51D73C0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:28:21 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d24so9564060pls.4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:28:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=VnIN7aCnF5zg62leJbyDnNV6liD03aQ32fsEaaJloIU=;
-        b=fsg0KihQvoWiGIhH+ksRX4pZozCAqcUXZJoJDAUOprO4czcq1U39r9FGLdAzAg5g/8
-         7Mr3k/AeEoktBnacW68xdRXUhpTTZjOo/v6XuvgTVXCvS0TamvuJeCuldOKVjsQks+At
-         6s7IhGc5QaPrpOUuBrs/vKjstyY+qKvpcDQ4mWOG2idoGXQy1+040YxdD+k7VDrYF/Xf
-         pL0HVUEhBoStMBOrcju6EGrhEGUejxsBN4TSYYvWfmDqBdPGqt8/cbBS5FyZ7BbAjrvl
-         YPIy88e3FkvrGeYVRDmc5FdhevfzNafGweJvM9nC8iLeSDz957d2fkqQEyu5j04z5F38
-         Xkog==
+        bh=AsJY41XMXFwgdgJedGBIEW9iEXdmuZaxFchvtZgLRts=;
+        b=m6GcP6wWedee5WJZJaWbkT5RTdd55uan6Np016DjpR8muG6vIptBwf3QzE4ERNpttX
+         affNl+gUFcSzOYXosWJ/VRNjxYXy6FJfUHO5liFb7f0D5IstX1F597GLJSGrDA7jLhUD
+         agxRfB3pWC7X6zWYvj7pwv0ePgUXr9cf1klPUuTHnNmaQhlQA0/PzaK0mKwVXiZUPXMj
+         OZSsmozTQGpDPKL7eaUGXjsln2FL4L4E1wk/WU0AWbsxNpjOvcdECApM3/JSfUfxUR1B
+         /ivlVLd+zH8EmphX+KW4fYQo4eRP8Tu2zNIh1l1qyg+uW8hsnnAiVXXZYMF2KwGSTiBq
+         rHnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=VnIN7aCnF5zg62leJbyDnNV6liD03aQ32fsEaaJloIU=;
-        b=m6h9XPEwP2qov+HAfMRJwicqvzCMXuaUXQw8LegZeie0heA06HEqkV9ovDYrMjS0Ba
-         LaulnkU2ZSsWd66kAq3flTZ1j4fFPisSIS85NP8TxcLrFT0dOwjGuCb2WmcmjEO/ncKo
-         ueJsujKioAtZP3a7FaFkjxzD3n41oIOc24eJ+toeRa7BGS0uGybWhgzqgcXPaVUbeVUS
-         l0qHje/7soZ7S6JOuMPSHltuflNczTqzSU14W67MelWi30ob79LlCl/PrgqcnwgzwoDX
-         3UOIu37hJVgi74AoNZMHMN/UVIS5S4t2X9HWr8I1YO/+h41GQAQm2KX9utzA5bHsW0VN
-         j6Tw==
-X-Gm-Message-State: ACrzQf2KP92/94pkUTu5Vu/cGm+4nCIPQ77oOi5AqQARXL6alOU/uM3B
-        lMCyjdq4y2DZ7K1If6rerYc=
-X-Google-Smtp-Source: AMsMyM67l7AHsumdCaArKikJNOJaaDkNNe3imQK1Gmo9dsopNJWErpmOsAxQEwlR62zMKUsb8Rld5A==
-X-Received: by 2002:a63:5a44:0:b0:431:fa3a:f92c with SMTP id k4-20020a635a44000000b00431fa3af92cmr25975839pgm.471.1664296094902;
-        Tue, 27 Sep 2022 09:28:14 -0700 (PDT)
+        bh=AsJY41XMXFwgdgJedGBIEW9iEXdmuZaxFchvtZgLRts=;
+        b=vrgCuG15IJzeQU7BBhj6kXrdX1+LCQcXlvunXrVX2V0uARqoKj+eDVbwrrpHIvnhnS
+         DF0I+vFXgK0hV09vcI8/qCD4FQFOufYOqwZX122qx/jRTf6nVyMwmLR1S+LGYIAvS4Pp
+         2xmraXaKgmX2W7XZGEuM1/QxShK2a6dF0YguBpvci7FAw8U9b/MBNyKEQCnlVf4f2fCk
+         SHL2XZ9Zy3ykTZDmBsvLZRq8iiHX1y0mAK8r8z4RUpftK24rk1wAJRKgGjAGLvWFarRt
+         mobLqTikZyvQoufwOWYdjWO7G06quAoUw4u20ZliIXsBU3QFCSwIFzsceEOm3psGdwa5
+         nNzg==
+X-Gm-Message-State: ACrzQf1a1ySS3GtGOZnPW9pRKGGfcrvXC5vt/1lLdVcyru0i8lFgEm8G
+        no05zvyfE7DrrKlRt/jvmg8=
+X-Google-Smtp-Source: AMsMyM718HLi2PtSjot1gUUVGevKickODf7v55QPmyvyloREZ18G25HdbEpAcyTcqIr1Rfcie5ZhUg==
+X-Received: by 2002:a17:90b:3e86:b0:205:d88c:616d with SMTP id rj6-20020a17090b3e8600b00205d88c616dmr4387498pjb.78.1664296100553;
+        Tue, 27 Sep 2022 09:28:20 -0700 (PDT)
 Received: from archlinux.localdomain ([140.121.198.213])
-        by smtp.googlemail.com with ESMTPSA id 9-20020a17090a0f0900b001f333fab3d6sm8602360pjy.18.2022.09.27.09.28.09
+        by smtp.googlemail.com with ESMTPSA id 9-20020a17090a0f0900b001f333fab3d6sm8602360pjy.18.2022.09.27.09.28.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 09:28:14 -0700 (PDT)
+        Tue, 27 Sep 2022 09:28:19 -0700 (PDT)
 From:   Chih-En Lin <shiyn.lin@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Qi Zheng <zhengqi.arch@bytedance.com>,
@@ -81,9 +81,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Jim Huang <jserv@ccns.ncku.edu.tw>,
         Huichun Feng <foxhoundsk.tw@gmail.com>,
         Chih-En Lin <shiyn.lin@gmail.com>
-Subject: [RFC PATCH v2 7/9] mm: Add the break COW PTE handler
-Date:   Wed, 28 Sep 2022 00:29:55 +0800
-Message-Id: <20220927162957.270460-8-shiyn.lin@gmail.com>
+Subject: [RFC PATCH v2 8/9] mm: Handle COW PTE with reclaim algorithm
+Date:   Wed, 28 Sep 2022 00:29:56 +0800
+Message-Id: <20220927162957.270460-9-shiyn.lin@gmail.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220927162957.270460-1-shiyn.lin@gmail.com>
 References: <20220927162957.270460-1-shiyn.lin@gmail.com>
@@ -99,311 +99,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To handle the COW PTE with write fault, introduce the helper function
-handle_cow_pte(). The function provides two behaviors. One is breaking
-COW by decreasing the refcount, pgables_bytes, and RSS. Another is
-copying all the information in the shared PTE table by using
-copy_pte_page() with a wrapper.
-
-Also, add the wrapper functions to help us find out the COWed or
-COW-available PTE table.
+To avoid the PFRA reclaiming the page resided in the COWed PTE table,
+break COW when it using rmap to unmap all the processes.
 
 Signed-off-by: Chih-En Lin <shiyn.lin@gmail.com>
 ---
- include/linux/pgtable.h |  75 +++++++++++++++++
- mm/memory.c             | 179 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 254 insertions(+)
+ include/linux/rmap.h | 2 ++
+ mm/page_vma_mapped.c | 5 +++++
+ mm/rmap.c            | 2 +-
+ mm/swapfile.c        | 1 +
+ mm/vmscan.c          | 1 +
+ 5 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index 9b08a3361d490..85255f5223ae3 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -10,6 +10,7 @@
+diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+index b89b4b86951f8..5c7e3bedc068b 100644
+--- a/include/linux/rmap.h
++++ b/include/linux/rmap.h
+@@ -312,6 +312,8 @@ int make_device_exclusive_range(struct mm_struct *mm, unsigned long start,
+ #define PVMW_SYNC		(1 << 0)
+ /* Look for migration entries rather than present PTEs */
+ #define PVMW_MIGRATION		(1 << 1)
++/* Break COW PTE during the walking */
++#define PVMW_COW_PTE		(1 << 2)
  
- #include <linux/mm_types.h>
- #include <linux/page_ref.h>
-+#include <linux/sched/coredump.h> /* For MMF_COW_PTE flag */
- #include <linux/bug.h>
- #include <linux/errno.h>
- #include <asm-generic/pgtable_uffd.h>
-@@ -674,6 +675,42 @@ static inline void pmd_cow_pte_clear_mkexclusive(pmd_t *pmd)
- 	set_cow_pte_owner(pmd, NULL);
- }
- 
-+static inline unsigned long get_pmd_start_edge(struct vm_area_struct *vma,
-+						unsigned long addr)
-+{
-+	unsigned long start = addr & PMD_MASK;
+ struct page_vma_mapped_walk {
+ 	unsigned long pfn;
+diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
+index 8e9e574d535aa..5008957bbe4a7 100644
+--- a/mm/page_vma_mapped.c
++++ b/mm/page_vma_mapped.c
+@@ -251,6 +251,11 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+ 			step_forward(pvmw, PMD_SIZE);
+ 			continue;
+ 		}
 +
-+	if (start < vma->vm_start)
-+		start = vma->vm_start;
++		/* TODO: Does breaking COW PTE here is correct? */
++		if (pvmw->flags & PVMW_COW_PTE)
++			handle_cow_pte(vma, pvmw->pmd, pvmw->address, false);
 +
-+	return start;
-+}
-+
-+static inline unsigned long get_pmd_end_edge(struct vm_area_struct *vma,
-+						unsigned long addr)
-+{
-+	unsigned long end = (addr + PMD_SIZE) & PMD_MASK;
-+
-+	if (end > vma->vm_end)
-+		end = vma->vm_end;
-+
-+	return end;
-+}
-+
-+static inline bool is_cow_pte_available(struct vm_area_struct *vma, pmd_t *pmd)
-+{
-+	if (!vma || !pmd)
-+		return false;
-+	if (!test_bit(MMF_COW_PTE, &vma->vm_mm->flags))
-+		return false;
-+	if (pmd_cow_pte_exclusive(pmd))
-+		return false;
-+	return true;
-+}
-+
-+int handle_cow_pte(struct vm_area_struct *vma, pmd_t *pmd, unsigned long addr,
-+		    bool alloc);
-+
- #ifndef pte_access_permitted
- #define pte_access_permitted(pte, write) \
- 	(pte_present(pte) && (!(write) || pte_write(pte)))
-@@ -1002,6 +1039,44 @@ int cow_pte_handler(struct ctl_table *table, int write, void *buffer,
- 
- extern int sysctl_cow_pte_pid;
- 
-+static inline bool __is_pte_table_cowing(struct vm_area_struct *vma, pmd_t *pmd,
-+				       unsigned long addr)
-+{
-+	if (!vma)
-+		return false;
-+	if (!pmd) {
-+		pgd_t *pgd;
-+		p4d_t *p4d;
-+		pud_t *pud;
-+
-+		if (addr == 0)
-+			return false;
-+
-+		pgd = pgd_offset(vma->vm_mm, addr);
-+		if (pgd_none_or_clear_bad(pgd))
-+			return false;
-+		p4d = p4d_offset(pgd, addr);
-+		if (p4d_none_or_clear_bad(p4d))
-+			return false;
-+		pud = pud_offset(p4d, addr);
-+		if (pud_none_or_clear_bad(pud))
-+			return false;
-+		pmd = pmd_offset(pud, addr);
-+	}
-+	if (!test_bit(MMF_COW_PTE, &vma->vm_mm->flags))
-+		return false;
-+	if (pmd_none(*pmd) || pmd_write(*pmd))
-+		return false;
-+	if (pmd_cow_pte_exclusive(pmd))
-+		return false;
-+	return true;
-+}
-+
-+static inline bool is_pte_table_cowing(struct vm_area_struct *vma, pmd_t *pmd)
-+{
-+	return __is_pte_table_cowing(vma, pmd, 0UL);
-+}
-+
- #endif /* CONFIG_MMU */
- 
- /*
-diff --git a/mm/memory.c b/mm/memory.c
-index 3e66e229f4169..4cf3f74fb183f 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2911,6 +2911,185 @@ void cow_pte_fallback(struct vm_area_struct *vma, pmd_t *pmd,
- 	set_pmd_at(mm, addr, pmd, new);
- }
- 
-+static inline int copy_cow_pte_range(struct vm_area_struct *vma,
-+				     pmd_t *dst_pmd, pmd_t *src_pmd,
-+				     unsigned long start, unsigned long end)
-+{
-+	struct mm_struct *mm = vma->vm_mm;
-+	struct mmu_notifier_range range;
-+	int ret;
-+	bool is_cow;
-+
-+	is_cow = is_cow_mapping(vma->vm_flags);
-+	if (is_cow) {
-+		mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_PAGE,
-+					0, vma, mm, start, end);
-+		mmu_notifier_invalidate_range_start(&range);
-+		mmap_assert_write_locked(mm);
-+		raw_write_seqcount_begin(&mm->write_protect_seq);
-+	}
-+
-+	ret = copy_pte_range(vma, vma, dst_pmd, src_pmd, start, end);
-+
-+	if (is_cow) {
-+		raw_write_seqcount_end(&mm->write_protect_seq);
-+		mmu_notifier_invalidate_range_end(&range);
-+	}
-+
-+	return ret;
-+}
-+
-+/*
-+ * Break COW PTE, two state here:
-+ *   - After fork :   [parent, rss=1, ref=2, write=NO , owner=parent]
-+ *                 to [parent, rss=1, ref=1, write=YES, owner=NULL  ]
-+ *                    COW PTE become [ref=1, write=NO , owner=NULL  ]
-+ *                    [child , rss=0, ref=2, write=NO , owner=parent]
-+ *                 to [child , rss=1, ref=1, write=YES, owner=NULL  ]
-+ *                    COW PTE become [ref=1, write=NO , owner=parent]
-+ *   NOTE
-+ *     - Copy the COW PTE to new PTE.
-+ *     - Clear the owner of COW PTE and set PMD entry writable when it is owner.
-+ *     - Increase RSS if it is not owner.
-+ */
-+static int break_cow_pte(struct vm_area_struct *vma, pmd_t *pmd,
-+			 unsigned long addr)
-+{
-+	struct mm_struct *mm = vma->vm_mm;
-+	unsigned long pte_start, pte_end;
-+	unsigned long start, end;
-+	struct vm_area_struct *prev = vma->vm_prev;
-+	struct vm_area_struct *next = vma->vm_next;
-+	pmd_t cowed_entry = *pmd;
-+
-+	if (cow_pte_count(&cowed_entry) == 1) {
-+		cow_pte_fallback(vma, pmd, addr);
-+		return 1;
-+	}
-+
-+	pte_start = start = addr & PMD_MASK;
-+	pte_end = end = (addr + PMD_SIZE) & PMD_MASK;
-+
-+	pmd_clear(pmd);
-+	/*
-+	 * If the vma does not cover the entire address range of the PTE table,
-+	 * it should check the previous and next.
-+	 */
-+	if (start < vma->vm_start && prev) {
-+		/* The part of address range is covered by previous. */
-+		if (start < prev->vm_end)
-+			copy_cow_pte_range(prev, pmd, &cowed_entry,
-+					   start, prev->vm_end);
-+		start = vma->vm_start;
-+	}
-+	if (end > vma->vm_end && next) {
-+		/* The part of address range is covered by next. */
-+		if (end > next->vm_start)
-+			copy_cow_pte_range(next, pmd, &cowed_entry,
-+					   next->vm_start, end);
-+		end = vma->vm_end;
-+	}
-+	if (copy_cow_pte_range(vma, pmd, &cowed_entry, start, end))
-+		return -ENOMEM;
-+
-+	/*
-+	 * Here, it is the owner, so clear the ownership. To keep RSS state and
-+	 * page table bytes correct, it needs to decrease them.
-+	 * Also, handle the address range issue here.
-+	 */
-+	if (cow_pte_owner_is_same(&cowed_entry, pmd)) {
-+		set_cow_pte_owner(&cowed_entry, NULL);
-+		if (pte_start < vma->vm_start && prev &&
-+		    pte_start < prev->vm_end)
-+			cow_pte_rss(mm, vma->vm_prev, pmd,
-+				    pte_start, prev->vm_end, false /* dec */);
-+		if (pte_end > vma->vm_end && next &&
-+		    pte_end > next->vm_start)
-+			cow_pte_rss(mm, vma->vm_next, pmd,
-+				    next->vm_start, pte_end, false /* dec */);
-+		cow_pte_rss(mm, vma, pmd, start, end, false /* dec */);
-+		mm_dec_nr_ptes(mm);
-+	}
-+
-+	/* Already handled it, don't reuse cowed table. */
-+	pmd_put_pte(vma, &cowed_entry, addr, false);
-+
-+	VM_BUG_ON(cow_pte_count(pmd) != 1);
-+
-+	return 0;
-+}
-+
-+static int zap_cow_pte(struct vm_area_struct *vma, pmd_t *pmd,
-+		       unsigned long addr)
-+{
-+	struct mm_struct *mm = vma->vm_mm;
-+	unsigned long start, end;
-+
-+	if (pmd_put_pte(vma, pmd, addr, true)) {
-+		/* fallback, reuse pgtable */
-+		return 1;
-+	}
-+
-+	start = addr & PMD_MASK;
-+	end = (addr + PMD_SIZE) & PMD_MASK;
-+
-+	/*
-+	 * If PMD entry is owner, clear the ownership,
-+	 * and decrease RSS state and pgtable_bytes.
-+	 */
-+	if (cow_pte_owner_is_same(pmd, pmd)) {
-+		set_cow_pte_owner(pmd, NULL);
-+		cow_pte_rss(mm, vma, pmd, start, end, false /* dec */);
-+		mm_dec_nr_ptes(mm);
-+	}
-+
-+	pmd_clear(pmd);
-+	return 0;
-+}
-+
-+/**
-+ * handle_cow_pte - Break COW PTE, copy/dereference the shared PTE table
-+ * @vma: target vma want to break COW
-+ * @pmd: pmd index that maps to the shared PTE table
-+ * @addr: the address trigger the break COW
-+ * @alloc: copy PTE table if alloc is true, otherwise dereference
-+ *
-+ * The address needs to be in the range of the PTE table that the pmd index
-+ * mapped. If pmd is NULL, it will get the pmd from vma and check it is COWing.
-+ */
-+int handle_cow_pte(struct vm_area_struct *vma, pmd_t *pmd, unsigned long addr,
-+		    bool alloc)
-+{
-+	pgd_t *pgd;
-+	p4d_t *p4d;
-+	pud_t *pud;
-+	struct mm_struct *mm = vma->vm_mm;
-+	int ret = 0;
-+
-+	if (!pmd) {
-+		pgd = pgd_offset(mm, addr);
-+		if (pgd_none_or_clear_bad(pgd))
-+			return 0;
-+		p4d = p4d_offset(pgd, addr);
-+		if (p4d_none_or_clear_bad(p4d))
-+			return 0;
-+		pud = pud_offset(p4d, addr);
-+		if (pud_none_or_clear_bad(pud))
-+			return 0;
-+		pmd = pmd_offset(pud, addr);
-+	}
-+
-+	if (!is_pte_table_cowing(vma, pmd))
-+		return 0;
-+
-+	if (alloc)
-+		ret = break_cow_pte(vma, pmd, addr);
-+	else
-+		ret = zap_cow_pte(vma, pmd, addr);
-+
-+	return ret;
-+}
-+
- /*
-  * handle_pte_fault chooses page fault handler according to an entry which was
-  * read non-atomically.  Before making any commitment, on those architectures
+ 		if (!map_pte(pvmw))
+ 			goto next_pte;
+ this_pte:
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 93d5a6f793d20..8f737cb44e48a 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -1477,7 +1477,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+ 		     unsigned long address, void *arg)
+ {
+ 	struct mm_struct *mm = vma->vm_mm;
+-	DEFINE_FOLIO_VMA_WALK(pvmw, folio, vma, address, 0);
++	DEFINE_FOLIO_VMA_WALK(pvmw, folio, vma, address, PVMW_COW_PTE);
+ 	pte_t pteval;
+ 	struct page *subpage;
+ 	bool anon_exclusive, ret = true;
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 1fdccd2f1422e..ef4d3d81a824b 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -1916,6 +1916,7 @@ static inline int unuse_pmd_range(struct vm_area_struct *vma, pud_t *pud,
+ 	do {
+ 		cond_resched();
+ 		next = pmd_addr_end(addr, end);
++		handle_cow_pte(vma, pmd, addr, false);
+ 		if (pmd_none_or_trans_huge_or_clear_bad(pmd))
+ 			continue;
+ 		ret = unuse_pte_range(vma, pmd, addr, next, type);
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index b2b1431352dcd..030fad3d310d9 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1822,6 +1822,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 		/*
+ 		 * The folio is mapped into the page tables of one or more
+ 		 * processes. Try to unmap it here.
++		 * It will write to the page tables, break COW PTE here.
+ 		 */
+ 		if (folio_mapped(folio)) {
+ 			enum ttu_flags flags = TTU_BATCH_FLUSH;
 -- 
 2.37.3
 
