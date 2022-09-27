@@ -2,82 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8E85EB644
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EF95EB628
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbiI0A2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 20:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
+        id S229746AbiI0AT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 20:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiI0A2I (ORCPT
+        with ESMTP id S229495AbiI0ATz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 20:28:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FC579A73
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 17:28:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4DEB61524
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:28:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3603AC433D6;
-        Tue, 27 Sep 2022 00:28:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664238486;
-        bh=196d/MXQhFQtb6lq5NyscBwIT4g5hA6PUW5f6L4dGTo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JrBcJhnw70G986UbtQOdtITn/sEzt1I6kEhCpGaLMYD+O6fYxwWJWlzq7png6q8qV
-         WvsfliYUlQ5myg7DVRJ0qAh6JuB7nDreSL86qUEc3BGbrX0ccxnvv3YrgNWOdlc5Sg
-         iWn8Bi6RigPzYv2HOKbyZkDVtOoRHQlH+Y3XF+V8PgjeLUcNNC40ZvmMOm8e5DNDCi
-         ZWWZToeFdVQK1M6t/TnYV4rPGcP/VtGNPuW1dlv01Xxmg5e6DDXkOLQJ49PMWI9gfX
-         szMz2zEUWhMe/f4fSlrp8OZ8Kadzj5XgZjz2BUvh6+katb6S/64hK1/RalOnFmhVCx
-         S0ZvJwJhHG6XA==
-Date:   Tue, 27 Sep 2022 08:18:38 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 3/4] riscv: fix race when vmap stack overflow and remove
- shadow_stack
-Message-ID: <YzJBXsiWrbmxM6Q2@xhacker>
-References: <20220925175356.681-1-jszhang@kernel.org>
- <20220925175356.681-4-jszhang@kernel.org>
- <CAJF2gTRFXwu5QtA8GywGaSVRPA7zeexcDHRzcngcY1zD3MFjog@mail.gmail.com>
+        Mon, 26 Sep 2022 20:19:55 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6264C5A16D
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 17:19:53 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VQpBVKM_1664237989;
+Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VQpBVKM_1664237989)
+          by smtp.aliyun-inc.com;
+          Tue, 27 Sep 2022 08:19:50 +0800
+From:   Xin Hao <xhao@linux.alibaba.com>
+To:     sj@kernel.org
+Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        xhao@linux.alibaba.com
+Subject: [PATCH v2 1/2] mm/damon: move sz_damon_region to damon_sz_region
+Date:   Tue, 27 Sep 2022 08:19:45 +0800
+Message-Id: <20220927001946.85375-1-xhao@linux.alibaba.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTRFXwu5QtA8GywGaSVRPA7zeexcDHRzcngcY1zD3MFjog@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Here, i rename sz_damon_region() to damon_sz_region(), and move it to
+"include/linux/damon.h", because in many places, we can to use this func.
 
-> >  #ifdef CONFIG_VMAP_STACK
-> > -static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
-> > -               overflow_stack)__aligned(16);
-> > -/*
-> > - * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
-> > - * to get per-cpu overflow stack(get_overflow_stack).
-> > - */
-> > -long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
-> > -asmlinkage unsigned long get_overflow_stack(void)
-> > -{
-> > -       return (unsigned long)this_cpu_ptr(overflow_stack) +
-> > -               OVERFLOW_STACK_SIZE;
-> > -}
-> > +unsigned long overflow_stack[NR_CPUS][OVERFLOW_STACK_SIZE/sizeof(long)] __aligned(16);
+Suggested-by: SeongJae Park <sj@kernel.org>
+Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+---
 
-If NR_CPUS is large, there's a non-trival memory waste, I have a
-solution for this case, will send a new version today.
+Changes from v1
+( https://lore.kernel.org/linux-mm/20220926071100.76379-1-xhao@linux.alibaba.com/)
+- Move sz_damon_region() to static inline in include/linux/damon.h
+- Rename sz_damon_region() to damon_sz_region()
 
-Thanks
+ include/linux/damon.h | 6 ++++++
+ mm/damon/core.c       | 9 ++-------
+ 2 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/damon.h b/include/linux/damon.h
+index ed5470f50bab..620ada094c3b 100644
+--- a/include/linux/damon.h
++++ b/include/linux/damon.h
+@@ -484,6 +484,12 @@ static inline struct damon_region *damon_first_region(struct damon_target *t)
+ 	return list_first_entry(&t->regions_list, struct damon_region, list);
+ }
+
++static inline unsigned long damon_sz_region(struct damon_region *r)
++{
++	return r->ar.end - r->ar.start;
++}
++
++
+ #define damon_for_each_region(r, t) \
+ 	list_for_each_entry(r, &t->regions_list, list)
+
+diff --git a/mm/damon/core.c b/mm/damon/core.c
+index 4de8c7c52979..5b9e0d585aef 100644
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -864,18 +864,13 @@ static void kdamond_apply_schemes(struct damon_ctx *c)
+ 	}
+ }
+
+-static inline unsigned long sz_damon_region(struct damon_region *r)
+-{
+-	return r->ar.end - r->ar.start;
+-}
+-
+ /*
+  * Merge two adjacent regions into one region
+  */
+ static void damon_merge_two_regions(struct damon_target *t,
+ 		struct damon_region *l, struct damon_region *r)
+ {
+-	unsigned long sz_l = sz_damon_region(l), sz_r = sz_damon_region(r);
++	unsigned long sz_l = damon_sz_region(l), sz_r = damon_sz_region(r);
+
+ 	l->nr_accesses = (l->nr_accesses * sz_l + r->nr_accesses * sz_r) /
+ 			(sz_l + sz_r);
+@@ -904,7 +899,7 @@ static void damon_merge_regions_of(struct damon_target *t, unsigned int thres,
+
+ 		if (prev && prev->ar.end == r->ar.start &&
+ 		    abs(prev->nr_accesses - r->nr_accesses) <= thres &&
+-		    sz_damon_region(prev) + sz_damon_region(r) <= sz_limit)
++		    damon_sz_region(prev) + damon_sz_region(r) <= sz_limit)
+ 			damon_merge_two_regions(t, prev, r);
+ 		else
+ 			prev = r;
+--
+2.31.0
