@@ -2,234 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9735EC5F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1CB5EC5FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbiI0O1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        id S231948AbiI0O1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231687AbiI0O1F (ORCPT
+        with ESMTP id S231537AbiI0O1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:27:05 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAF6E62E9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:27:03 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id z25so16016758lfr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Oxh+GrGgW5Md/ssq5B/P1uixYEHvWSD7HAtKuTrp8ws=;
-        b=kwWYQBcJQDPMoCbe5L0ONOgX7dAaz/hzZIE73gFP53KUL8HJlLM5ns5ztbYPjP2MY6
-         1EG0A8RBurq0SvWYG8cmIXOpjy53hFEZvurDE7P07tPBd3are6N9PdUmGyzf7hClCNy/
-         rPj6wm9tK6HEFxEVbHMhQuS/wmSe4P/wyT9RtQis23sORgLfKVxpRGGU0FD3+Wwj6EUi
-         tCQdFw039Fve2WC2G6OGgl0zackViCXno781D9n75HdkgufEY+l0IVpK/CIG5Lhv4/mP
-         VabJx2dbsrHfR11+DYdX1tlY4ytdYUTHXzcUW3yKVCTVXzRWl/0omoWC8Kk03PIXTfnV
-         SHfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Oxh+GrGgW5Md/ssq5B/P1uixYEHvWSD7HAtKuTrp8ws=;
-        b=ok5c5fNAtPte7zB3bIUfzJBAxA3H/LZG8o6jFEssjIRZ/9Tfcb3zHhXmcyXx8UKD6c
-         cCrO3+q7bIr/D3ZBcgw1JNF3W/nrB48mlcijhI3UGFpXshI5prax67lAKAusxXle7eBw
-         AumHwhnFRloFtVUGBRnVtWGDef/yCyunKQcO/Hn0bxq0CffvdmTJD7aaNVPevZlz6IUg
-         tv5KNsKMQJz+/BZctzlaCoxuhBqNDl0Fu8khDh/0CnVlEaFOwj0aq00QjFCWtD8/aLIz
-         3Do4543LYtHEi6nTuHEcVNJVriM/8iJRkR2ft8jWd3nvTtsYorbgnm2F3d5AV14/JkUR
-         j0jQ==
-X-Gm-Message-State: ACrzQf1KCnxWqXTZSP73rzXEeK09zP+hMXOKRYEIst82i7DfjwkKGvg2
-        NeqQ1xfZ/vyD20BZJ6F29oLr7w==
-X-Google-Smtp-Source: AMsMyM5bFbLGFxGNSahMhk0VwJDZDb1OhGvbPdW4UtUtIYJI7u5azAjXn0QJGAS62JDqCDDZz9mtmg==
-X-Received: by 2002:ac2:5584:0:b0:497:815c:d854 with SMTP id v4-20020ac25584000000b00497815cd854mr11214397lfg.532.1664288821907;
-        Tue, 27 Sep 2022 07:27:01 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id f25-20020a2e3819000000b0026c47426cd0sm170134lja.140.2022.09.27.07.26.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 07:26:59 -0700 (PDT)
-Message-ID: <a88274ce-279e-3a36-d929-1901d6b760cf@linaro.org>
-Date:   Tue, 27 Sep 2022 16:26:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
- which controls
+        Tue, 27 Sep 2022 10:27:07 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CBE78BE0;
+        Tue, 27 Sep 2022 07:27:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664288826; x=1695824826;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ag3Tjw49gNZSWNugG5+sIPxd5/txzE6eJoEkE4QLnhI=;
+  b=eYkvzDGTktFiYYKAOU7gYu8kdvoLjGEnjVLAdnWIx7hhBT8868Sj8/+u
+   SkLfeFw9JPoNuSmimeJlt+9AL1CmyZqd5cTRddYKE2UGUST/9qquuHTO6
+   tUbCD/0y7oCvEtnf57i1jAFvB7SGtk5Qom/Rm81E3JIEx9vTtSd27uaYv
+   n+TckK7mjjnK9FvvxO1dsdLpqZ+bNsWz6b5gaZCrlBgddiNdPHBZ8+PzJ
+   vqo8uvm0HgbXyTnMf4OENBd9r9HRsjyUZgRl4VsfqXlNIU2IVkuhFPB79
+   ZLAm4W3+jzPn4KNSSomQ3wGEx++jTi+SwsqRbMLITW4F7oLbsrFdiPmef
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="327686373"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="327686373"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 07:27:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="616845718"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="616845718"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga007.jf.intel.com with ESMTP; 27 Sep 2022 07:27:03 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 07:27:03 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 07:27:02 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 27 Sep 2022 07:27:02 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 27 Sep 2022 07:27:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i+aVjhxz7fC0Kd0d07b6MXS7VlWGerfOWp2K3UaGU1Cj20DmxL2G2Lrce3w6ejagD+0/uy+kXIA9h4TdYPvlt1UcKXmHRFlEOh6DpAMuJU567gj4rWyG0M/aLFqfTwPI7bMWMg5aTkfdV17if68HRUvMy8Ldrg10g5oLQUwpq7oUoZbP9HY1MUdfheROAOOn+1q+p8y7IQgJ0svVztunB2vDsLE7ytSF4wWw0RZUTq+YFldW0OMCSiJXOi6i/NSNAX/WJYzhqKSQLmqwjsuK9AJ3Hteuy1mByk6PjDa4FGkJg54y3gJGDXStfkJ3ZrIHv8suyBGDxIxGBIVSeeJ16A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ag3Tjw49gNZSWNugG5+sIPxd5/txzE6eJoEkE4QLnhI=;
+ b=icFUE7Yr9LGIH7bqQT2oZI5iSEmLDgeH6VSfu/aYexd51xtAKArll+Igjk/5JhNagcXLdOfVgZ6KFN5w4dqExQdRbAGweVsUyvgo40b67eM6H93PhS6UFwOx4BQSQAjFV6LBYOaYSKn8s0InpqSNiAh+TJjLYBlC8kiRF5fySbKpT9xeARNwnbeXlc5XSaVsSrL/F2JiYZ+U9+tWesBeEPoQCrkCfm4VpzXDwJj+dI+it//UAff9oFjBq1qx/tum2KMgyfrIRxv9GMpsGc+//N6XZZY2XpkymA36Ury9JHqOlfX+zbh4Kn2bLWMzR7N3hf9HlTfIkTctfeLi0Y8Rmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DS0PR11MB6373.namprd11.prod.outlook.com (2603:10b6:8:cb::20) by
+ MW4PR11MB6787.namprd11.prod.outlook.com (2603:10b6:303:209::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5654.25; Tue, 27 Sep 2022 14:27:00 +0000
+Received: from DS0PR11MB6373.namprd11.prod.outlook.com
+ ([fe80::817a:fd68:f270:1ea0]) by DS0PR11MB6373.namprd11.prod.outlook.com
+ ([fe80::817a:fd68:f270:1ea0%9]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
+ 14:27:00 +0000
+From:   "Wang, Wei W" <wei.w.wang@intel.com>
+To:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        "Li, Xiaoyao" <xiaoyao.li@intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: RE: [RFC PATCH v2 2/3] perf/x86/intel/pt: Introduce and export
+ pt_get_curr_event()
+Thread-Topic: [RFC PATCH v2 2/3] perf/x86/intel/pt: Introduce and export
+ pt_get_curr_event()
+Thread-Index: AQHYzdmZiDfxfKVenUORyjhoUz2tZ63rY3WAgAAA7VCAABAZgIAAAWLQgAAITwCAAAOJIIAGYXgAgAAaq4CAAAyEgIAA8aCA
+Date:   Tue, 27 Sep 2022 14:27:00 +0000
+Message-ID: <DS0PR11MB63730CE4DAE000E338F092A0DC559@DS0PR11MB6373.namprd11.prod.outlook.com>
+References: <20220921164521.2858932-1-xiaoyao.li@intel.com>
+ <20220921164521.2858932-3-xiaoyao.li@intel.com>
+ <175b518c-d202-644e-a3a7-67e877852548@linux.intel.com>
+ <DS0PR11MB6373C84139621DC447D3F466DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <Yyxke/IO+AP4EWwT@hirez.programming.kicks-ass.net>
+ <DS0PR11MB637346E9F224C5330CDEF3BFDC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <YyxsnAFYMLn2U9BT@hirez.programming.kicks-ass.net>
+ <DS0PR11MB63730A85E00683AB7F6F3E26DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <62d4bec1-a0c3-3b01-61bb-f284eede6378@linux.intel.com>
+ <CALMp9eTG7EbRv_fnQpDMQ3YUjYANgu=6QwVj_ACgHnK-Mhk39Q@mail.gmail.com>
+ <e1327377-8e82-56a2-25e5-2ba91f2eec42@linux.intel.com>
+In-Reply-To: <e1327377-8e82-56a2-25e5-2ba91f2eec42@linux.intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Max Krummenacher <max.oss.09@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220609150851.23084-1-max.oss.09@gmail.com>
- <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
- <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
- <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com>
- <20220726160337.GA41736@francesco-nb.int.toradex.com>
- <CAPDyKFqGFjywJ-Vmmn9=-NOzJX=24mH9A03H9djS=nJotKWK8A@mail.gmail.com>
- <20220728112146.GA97654@francesco-nb.int.toradex.com>
- <CAPDyKFqtCxrjALeCmhuqQ2VmmUHhi-DjXO30uHChTPFeDbp+JQ@mail.gmail.com>
- <20220909142247.GA238001@francesco-nb.int.toradex.com>
- <CAPDyKFrwpz=gi3iY5YsO6k4o33eLQRp-wXvBx3nQ0q=G9YrqHA@mail.gmail.com>
- <70ee4f8e-7529-307e-656c-2a65d0187af6@linaro.org>
- <CAPDyKFoyNWZvT+QPdX4sQuS3DL8mepfnLraHLusMi9K8MOfLgg@mail.gmail.com>
- <d19ffd93-bbb3-ac61-0ec3-58fd48443eb2@linaro.org>
- <CAPDyKFrDFAif3DnvPoLrgJ2+fv+aB9GyOoG_O3q-1m=2Y5eT5w@mail.gmail.com>
- <CAMuHMdVteS1va320fAAx445eFQ75XnapQbeGWEkg2aagnjN6Jg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMuHMdVteS1va320fAAx445eFQ75XnapQbeGWEkg2aagnjN6Jg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.500.17
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS0PR11MB6373:EE_|MW4PR11MB6787:EE_
+x-ms-office365-filtering-correlation-id: 2a24bf58-64b7-4d92-70c0-08daa094571c
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 95aJBEXoBDiptzwjJO17Y9NrQhTxTSoKIEz8qWXrV8Nbyum/Zqgqgj8W4cYZzMC52LHtNG54CH83LJsdhl4RkTGHGnV0V/YHf3x5BbT88qwlmSZhVVXnBjRQ+L4PptC30u8u6MOBCUcfi4+yowZ36UunXhQWbOS676LyOSXgkeI9bk7bN90gCtef7IkQ5SdSkiO4HDfioXmlyTE5014zwkuHuQvycfJMsDZ6pOku/wtIF1n25fhUQHRDr5gbdUDbBxn5F3QT093PoK0fQvj8n+PNYZ949mwfOjPo6HmjYynU/fv9++OuVu3HEObfm2v7flgVe//C1uZ3ZOei9HppAVkKKH7yMdmuw53IAGKmaamfmDnIpr3K4LR4CjKxCjlSK+D2fELFLdk1dPft3NtBWlRKcxjzAjBFOXIuqFGpj0BSBE5JyF/OTc4+Hs41hqlEc4CVG/Em8sN3OL7xG0s2saINTNRwmvIP85rLA3lZ/oAcRBw9LTYPFsTrb6NU1GND6dGAk/fWpIG4NPR0REuNcjgbTxQY1Q0p6wIn58R+vXLMRx9NoFvkxzwJvOUwHFGujuK0/aJfQF+c4wHEaFg2iKy7dVftvUVrhcCjt5IIUMXKm75toy7ipY0IyJ+8DV+49bYTkmqpdspRkI9MSr0wqreCqoAPVHjCJGb/CloeRsygPCBcHV//jF9jgMuQCzJFXHYxw2chvOLJkM8EzJskY0m3DLHyackJwgFWKrS4iAwq/hTM29IeVEeot4ei3tqfmPkpq0zIwt+xUGN14zWgNQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB6373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(39860400002)(366004)(346002)(376002)(451199015)(9686003)(7416002)(26005)(5660300002)(41300700001)(4744005)(53546011)(8936002)(2906002)(33656002)(38070700005)(66946007)(64756008)(66446008)(66476007)(66556008)(4326008)(7696005)(52536014)(6506007)(76116006)(8676002)(122000001)(38100700002)(71200400001)(86362001)(55016003)(186003)(82960400001)(54906003)(110136005)(316002)(83380400001)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?55aGMvwiTz001IfGoivZR4Yd2Kv5BnnmEtd9OkfGc0o4Vzd/BrqX/Dvf0Qj4?=
+ =?us-ascii?Q?NO09dwNbYIZXjF5N+yq4Dw+KhwOlB9O3S3ucxfvsqNlTP0xeFcSeOZ5UzLCy?=
+ =?us-ascii?Q?vp72FyvPrFJBgTJ0Wa5hWG1/chnN+jSSz5qNxL2+2ZltT2KoLrlCzAljiKnu?=
+ =?us-ascii?Q?2WpqGmTjK3pi00ny2iBbQKfTDjvlKYrVRUr6Cegp2SnHhr6gPvSqTJV4L+TI?=
+ =?us-ascii?Q?0tZgDE10PL/pFj96kmObRSby055jKN1uxt8iu9XZlfGw95yGq8E6mUjpnKCJ?=
+ =?us-ascii?Q?bakhKWITcE3sJJN9dkkhTDsnFxylbbZsi8VunAoKuUrLP663CN8aMTlvatW6?=
+ =?us-ascii?Q?Ekoh0m/XgXkCkNXIiauSIQGH8ecA9pZwvmP3pkhQRNZoihJfsbEhyraDEmvD?=
+ =?us-ascii?Q?yrCAT7UPapsUMSWwWWsHNXhjCJReeRDGpX2uWdIEdKW0zfVqOXX+r1jcr+tw?=
+ =?us-ascii?Q?GqYNtoUarR4rnqXTc2xkvUerelvlPwvmVCzM6Qf7BnE6OInkcMwrvpLelqBc?=
+ =?us-ascii?Q?iaqUqN1QwNvsnGVNHSAJ7I1U2zPIdrxxccCAv8qe8Hi66rYGcwFUzI302Zuj?=
+ =?us-ascii?Q?OP+1F6aRG0HhVjLm3NrF8yFAUxMZIcW798J7jkl9mfMA/yxZhPqGvMnoZ2Yk?=
+ =?us-ascii?Q?G9DRMir7LGneLTQ4PwpFit7nG2SnJ/Qud2y33L5xGC3IXkdGm48aTStrtQPb?=
+ =?us-ascii?Q?J5uFeB2NRw7d+DWS6w2Db6TLg5/326f5UJwpkiCPCcFvWEm+SrHYcJTvYJ8g?=
+ =?us-ascii?Q?ryxTwFgwBaxfby08XlEo7+a7PRCtSlx3x8gZqS5sZp63Qhb33cgHpPPFhclA?=
+ =?us-ascii?Q?IBSc3FNVxZGn97se7OnL5oZtL0Ss6UJifdkItN6RyCpJLT0kDSohqNtVxl5F?=
+ =?us-ascii?Q?ai9pTwsI5Ut3bYaxNIi/+p/9/UggV4bv3k6izwmBGW/cl9CvP8rume5WGEaS?=
+ =?us-ascii?Q?W0XWKnXt4wK5sZtBnfASVYZzUrlfn5A12Fqn8tchLiFkilRcy9y8GV7mLmm8?=
+ =?us-ascii?Q?IHv7amSiP+O75kTRsCzuxd/1PbwS8jxhKD6H6oY/4GVkAaGuTOKOp+/o2or5?=
+ =?us-ascii?Q?MqFXjDSHXmnRqNtKkuFl7c1RiUx+Yfnkz7PDoswtK3dLZCJfEuga0JaR2MSp?=
+ =?us-ascii?Q?WLRnQoEBUmqGVIUJleRWQduFRlcxMeb545MTuTnIRGJxdqWRQAZybZHlSptU?=
+ =?us-ascii?Q?SSIKa54bfOAb7BJYwVG69+sVbWuukG4I1ZyOcXLXcegpXsWHkhlWtaR9AQUQ?=
+ =?us-ascii?Q?V9Y0NeMbZ1TukUvwQDom8qrVtc9dLdaZlqjI2AsSHaCao5XyIJdQhDeax8Mo?=
+ =?us-ascii?Q?hMAlPTNZvlrK/4lDInOyn2/DhxNvyVUTH+IOxpO8iLAcMwGSOlWyKeIfyY+2?=
+ =?us-ascii?Q?EKYjGMcywf2rP2VyU9sL5GMTV6/1lNVVyXbB1SWLmwQksgSeDhar+h9O3ueY?=
+ =?us-ascii?Q?5deno87vdrM/lD2uzFtR1yC1Wp+TbKYYnPZ/HGn0w+SYzr31ew2bLgHCBun2?=
+ =?us-ascii?Q?EHnwSSevtThhe+0TY+7JJ+4h3hsu36E5+ZCEop+9MI9yBpKYZ69PSaw/Z6q4?=
+ =?us-ascii?Q?ouvmPMtPoIjuccY48ZeLb8Pq1DpdHc7RlsuGabln?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB6373.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a24bf58-64b7-4d92-70c0-08daa094571c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2022 14:27:00.2794
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WBkW2pDDTGBEilJ6V2KbcGoBBwtBb2ngoogXz0klzD0+RRz7hyAIHIFodCu5QJCM4VdWZPlEFmX2E6YptWmXnQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6787
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/09/2022 14:49, Geert Uytterhoeven wrote:
-> Hi Ulf,
-> 
-> On Tue, Sep 27, 2022 at 11:49 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->>>>>>> The main concern that was raised on this topic was that we have to
->>>>>>> somehow link the power-domain to the specific peripherals (the power
->>>>>>> domain consumer) in the device tree.
->>>>>>
->>>>>> Yes, that is needed. Although, I don't see how that is a concern?
->>>>>>
->>>>>> We already have the valid bindings to use for this, see more below.
->>>>>>
->>>>>>>
->>>>>>> Adding the power-domain property there will trigger validation errors
->>>>>>> unless we do explicitly add the power-domains to the schema for each
->>>>>>> peripheral we need this. To me this does not really work, but maybe I'm
->>>>>>> not understanding something.
->>>>>>>
->>>>>>> This is what Rob wrote on the topic [1]:
->>>>>>>   > No. For 'power-domains' bindings have to define how many there are and
->>>>>>>   > what each one is.
->>>>>>>
->>>>>>> Just as an example from patch [2]:
->>>>>>>
->>>>>>>   can1: can@0 {
->>>>>>>     compatible = "microchip,mcp251xfd";
->>>>>>>     power-domains = <&pd_sleep_moci>;
->>>>>>>   };
->>>>>>>
->>>>>>> leads to:
->>>>>>>
->>>>>>>   imx8mm-verdin-nonwifi-dahlia.dtb: can@0: 'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
->>>>>>>           From schema: .../bindings/net/can/microchip,mcp251xfd.yaml
->>>>>>
->>>>>> I think it should be fine to just add the below line to the DT
->>>>>> bindings, for each peripheral device to fix the above problem.
->>>>>>
->>>>>> power-domains: true
->>>>>
->>>>> Again, as Rob said, no, because it must be strictly defined. So for
->>>>> example: "maxItems: 1" for simple cases. But what if device is then part
->>>>> of two power domains?
->>>>>
->>>>>>
->>>>>> That should be okay, right?
->>>>>
->>>>> Adding it to each peripheral scales poorly. Especially that literally
->>>>> any device can be part of such power domain.
->>>>
->>>> Right.
->>>>
->>>>>
->>>>> If we are going with power domain approach, then it should be applicable
->>>>> basically to every device or to every device of some class (e.g. I2C,
->>>>> SPI). This means it should be added to respective core schema in
->>>>> dtschema repo, in a way it does not interfere with other power-domains
->>>>> properties (existing ones).
->>>>
->>>> Isn't that already taken care of [1]?
->>>
->>> No, because it does not define the items (what are the power domains and
->>> how many). This binding expects that any device has maxItems restricting it.
->>
->> Right, apologize for my ignorance.
->>
->>>
->>>>
->>>> If there is more than one power domain per device, perhaps we may need
->>>> to extend it with a more strict binding? But, that doesn't seem to be
->>>> the case here - and if it turns out to be needed later on, we can
->>>> always extend the bindings, no?
->>>>
->>>> Note also that we already have DT bindings specifying "power-domains:
->>>> true" to deal with the above. Isn't that what we want?
->>>
->>> You mentioned it before and both me and Rob already responded - no,
->>> because it does not restrict the number of items.
->>
->> Okay, so maxItems need to be specified for each peripheral. It's not a
->> big deal, right?
+On Tuesday, September 27, 2022 2:09 AM, Liang, Kan wrote:
+> From my understanding of the host-guest mode, the host PT event never
+> traces the guest no matter whether the guest enables PT. So when VM-entry=
+,
+> there is only a guest PT event or no event. If so, I think the perf tool =
+should
+> warn the user if they try to create a host event with !exclude_guest, sin=
+ce the
+> host event never traces a guest.
 
-It's a bit of effort to add it manually to each device binding. It just
-does not scale well.
-
->>
->> Of course, it would be even easier if the core schema would use a
->> default "maxItems: 1" for power domain consumers, which of course must
->> be possible to be overridden for those consumers that need something
->> else. But perhaps it's not that simple. :-)
-
-I think this would be the way to do it properly.
-
-> 
-> It's not that simple: being part of a PM Domain is not a property of the
-> device being described, but a property of the integration into the SoC.
-
-I agree.
-
-This concept of power domains for every device does not look like really
-describing the hardware. The hardware itself, e.g. some camera sensor or
-I2C device, might have power supply and reset pin. It does not have
-something like power-domain.
-
-Although one could also argue that it is the same case with SoC blocks -
-being part of power domain is a property of a SoC and its power domain
-controller.
-
-
-> All synchronous hardware needs power (single/multiple), clock(s), and
-> reset(s).  But the granularity of control over power(s), clocks, and resets
-> depends on the integration.  So the related properties can appear
-> anywhere.
-
-Best regards,
-Krzysztof
-
+Probably not from the perf side. It's actually an issue of the KVM's pt_mod=
+e:
+How can KVM prevent host from profiling the guest when in host-guest mode?
+Just a warning from the perf side wouldn't be enough. I think that's a wron=
+g
+assumption from KVM side. I had a plan to fix this one. Exposing the host e=
+vent
+can tell KVM if the host is profiling the guest or not (i.e. host-guest is =
+allowed).
