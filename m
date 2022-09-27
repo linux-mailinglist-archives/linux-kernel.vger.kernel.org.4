@@ -2,149 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA9D5EC9CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8597F5EC9D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232845AbiI0QnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
+        id S232095AbiI0QoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232896AbiI0Qmx (ORCPT
+        with ESMTP id S231602AbiI0QoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:42:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7681C00C2;
-        Tue, 27 Sep 2022 09:42:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C741760FBB;
-        Tue, 27 Sep 2022 16:42:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8ADDC433C1;
-        Tue, 27 Sep 2022 16:42:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664296971;
-        bh=ViNq6LYgdEbfo2489j+uRo51d1QTLEOg+E/Vq2a5SVY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Gba3xc+YUCTWcb9XfurPU3KT+OOyhGv9uLAhDVcK7TAP3+0NeB5jcTOpmUOmKitbz
-         Gdksj3p7HOcJBI15S7Qeg8PHVPkjpX2eVZnfVpAWKjTWLcEjFNx+I3fWyfvBj8bwk8
-         1S69zK2NsYEFLW8cFHTMSfBhE4fKzkEBN3Ogio5s=
-Date:   Tue, 27 Sep 2022 18:42:48 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dan Vacura <w36195@motorola.com>
-Cc:     linux-usb@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        stable@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: fix sg handling in error case
-Message-ID: <YzMoCMIh85XxWcdh@kroah.com>
-References: <20220926195307.110121-1-w36195@motorola.com>
- <20220926195307.110121-2-w36195@motorola.com>
- <YzK1Xry5KIrMr18F@kroah.com>
- <YzMbK0ZZ08WD8ql+@p1g3>
+        Tue, 27 Sep 2022 12:44:17 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6718A1E05E3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:44:15 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso1575309pjq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:44:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=hka2MB6GtBxZvbqko4sxk5z5NDTLJ3qOesEZCD0X7vU=;
+        b=i/cUOlzvOFqjpGlqE7Jt5HlWISkyhBpSqtHRYPwIs2x/jE14c88WOLIDeVswI5sXGi
+         /JZEoefvgVUIUeEmIgtO345p6YNqrwTSqHX1ME9QhHmNciQix8sRA9s3FCuUhDawbhh8
+         4EspsgU1Z30HYK8eA575FPhVusVE7l+aj5FGoGsPLxSFF9GSmvIlt+pIK7FI/YInT1nT
+         CKxSDbXfHgxDKQmQarcXrnT+OufYvQFXHZ52c1Zf8qINJbeZtGzQhsJAPdd9MY16bagL
+         Gyw9A2mOz0JDIEOkepz+uaJEDHNgCbyV474fp0QClmBSRxtevHIoZQV7LlPiVYK1eqZV
+         YOKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=hka2MB6GtBxZvbqko4sxk5z5NDTLJ3qOesEZCD0X7vU=;
+        b=AILzJUNnRvXnO9tbyYd2Mmh8ZAfy6/AfY6qYo0DoILdJ3WwoHNB/CNKt+gCRmjlqXs
+         i/0NL5xGKDRdn1pOO0rMU8epNZQo/Snc5XQXfgpj+TLPoFEl1tKTEag6x8Mh/1yrToBC
+         knIC9WsgdnEKp9W6qJ9eZpUXtRAQ8QUcpFxzqsEFe/M26aMEs7EBeS+KDquUIu65+Iib
+         zbq0oQaEWPVdcpUV9LPHR5Yf5pWOwpMMu2QS6j/TVYfis+Io53QVRzCvcgAinIfDpDSN
+         ChxEFwCTjgjXBdqOt46M2uWKtt61YQAEldV8box7bj5YktmjVZVrrAkY60NqmS2ahMvm
+         dIUg==
+X-Gm-Message-State: ACrzQf1BFFvPfI6zD69S3aGDNNP8xgxX8qATwS+H8/ee/XwKTB22w1+8
+        bdWlMmMsfKZC4j1JmaTbVMP+KQ==
+X-Google-Smtp-Source: AMsMyM5ZMAA2SXfBrFTNG9fxkYHpjr6RQ+BUu3NQP5cpiVcAurwmVWV/yehxLHBCN2cZdEEycppZlw==
+X-Received: by 2002:a17:903:247:b0:179:b5e1:54b7 with SMTP id j7-20020a170903024700b00179b5e154b7mr27777288plh.84.1664297054476;
+        Tue, 27 Sep 2022 09:44:14 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id mn22-20020a17090b189600b001fde265ff4bsm158957pjb.4.2022.09.27.09.44.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 09:44:13 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 16:44:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Robert Hoo <robert.hu@linux.intel.com>
+Cc:     David Matlack <dmatlack@google.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Lan Tianyu <Tianyu.Lan@microsoft.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: Fix wrong gfn range of tlb flushing
+ in validate_direct_spte()
+Message-ID: <YzMoWghqNJdYBlaE@google.com>
+References: <cover.1661331396.git.houwenlong.hwl@antgroup.com>
+ <c0ee12e44f2d218a0857a5e05628d05462b32bf9.1661331396.git.houwenlong.hwl@antgroup.com>
+ <f6fd8ccff13f9f48cbca06f0a5278654198d0d06.camel@linux.intel.com>
+ <YyoHNMz3CH4SnJwJ@google.com>
+ <CALzav=f=y7-2uOnXUi---hvCTa2otDBPsY1VoUtDWnS7+0QX=w@mail.gmail.com>
+ <d55ccf1c085d4adadc8dbbbae6443059a94eaf90.camel@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzMbK0ZZ08WD8ql+@p1g3>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d55ccf1c085d4adadc8dbbbae6443059a94eaf90.camel@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 10:47:55AM -0500, Dan Vacura wrote:
-> Hi Greg,
+On Tue, Sep 27, 2022, Robert Hoo wrote:
+> On Tue, 2022-09-20 at 11:44 -0700, David Matlack wrote:
+> > That being said, we might as well replace the WARN_ON_ONCE() with
+> > KVM_BUG_ON(). That will still do a WARN_ON_ONCE() but has the added
+> > benefit of terminating the VM.
 > 
-> On Tue, Sep 27, 2022 at 10:33:34AM +0200, Greg Kroah-Hartman wrote:
-> > On Mon, Sep 26, 2022 at 02:53:07PM -0500, Dan Vacura wrote:
-> > > If there is a transmission error the buffer will be returned too early,
-> > > causing a memory fault as subsequent requests for that buffer are still
-> > > queued up to be sent. Refactor the error handling to wait for the final
-> > > request to come in before reporting back the buffer to userspace for all
-> > > transfer types (bulk/isoc/isoc_sg) to ensure userspace knows if the
-> > > frame was successfully sent.
-> > > 
-> > > Fixes: e81e7f9a0eb9 ("usb: gadget: uvc: add scatter gather support")
-> > > Cc: <stable@vger.kernel.org> # 859c675d84d4: usb: gadget: uvc: consistently use define for headerlen
-> > > Cc: <stable@vger.kernel.org> # f262ce66d40c: usb: gadget: uvc: use on returned header len in video_encode_isoc_sg
-> > > Cc: <stable@vger.kernel.org> # 61aa709ca58a: usb: gadget: uvc: rework uvcg_queue_next_buffer to uvcg_complete_buffer
-> > > Cc: <stable@vger.kernel.org> # 9b969f93bcef: usb: gadget: uvc: giveback vb2 buffer on req complete
-> > > Cc: <stable@vger.kernel.org> # aef11279888c: usb: gadget: uvc: improve sg exit condition
-> > 
-> > I don't understand, why we backport all of these commits to 5.15.y if
-> > the original problem isn't in 5.15.y?
-> > 
-> > Or is it?
-> > 
-> > I'm confused,
-> 
-> It seems we have a regression in 5.15 with some recent, still in
-> development, features for the uvc gadget driver. Compared to the last
-> kernel I worked with, 5.10, I'm seeing stability and functional issues
-> in 5.15, explained in my summary here:
-> https://lore.kernel.org/all/20220926195307.110121-1-w36195@motorola.com/
-> 
-> I think we have few approaches.
-> 1) Work through these issues and get the fixes into mainline and stable
-> versions, this patch starts that effort, but there's still more work to
-> be done.
-> 2) Revert the changes that are causing regressions in 5.15 (two changes
-> from what I can see).
-> 3) Add a configfs ability to allow sg isoc transfers and couple the
-> quarter interrupt logic to only sg xfers.
-> 
-> Approach 2 is my preference, as there are issues still present that need
-> to be figured out. However, I don't know how we can revert to just a
-> stable line. I'm basically looking for feedback and input for the next
-> steps, and if it's just me with these issues on 5.15.
+> Yeah, here was my point, WARN_ON_ONCE() might not be warning obviously
+> enough, as it usually for recoverable cases. But terminating VM is also
+> over action I think.
 
-Worry about the latest kernel release first.  Once we get things fixed
-there, we can backport any needed changes to older stable/LTS kernels as
-needed.
+Agreed, from the helper's perspective, killing the VM is unnecessary, e.g. it can
+simply flush the entire TLB as a fallback.
 
-We can't go back in time and do new development on older kernels.
+	if (WARN_ON_ONCE(!sp->role.direct)) {
+		kvm_flush_remote_tlbs(kvm);
+		return;
+	}
 
-For Android devices, you can always use the `android-mainline` AOSP
-kernel branch as it is up to date with Linus's tree at all times and is
-known to successfully boot and run at least one real device.
+But looking at the series as a whole, I think the better option is to just not
+introduce this helper.  There's exactly one user, and if that path encounters an
+indirect shadow page then KVM is deep in the weeds.  But that's a moot point,
+because unless I'm misreading the flow, there's no need for the unique helper.
+kvm_flush_remote_tlbs_sptep() will do the right thing even if the target SP happens
+to be indirect.
 
+If we really want to assert that the child is a direct shadow page, then
+validate_direct_spte() would be the right location for such an assert.  IMO that's
+unnecessary paranoia.  The odds of KVM reaching this point with a completely messed
+up shadow paging tree, and without already having hosed the guest and/or yelled
+loudly are very, very low.
 
-> > >  #define UVC_QUEUE_DISCONNECTED		(1 << 0)
-> > > -#define UVC_QUEUE_DROP_INCOMPLETE	(1 << 1)
-> > > +#define UVC_QUEUE_MISSED_XFER 		(1 << 1)
-> > 
-> > Why change the name of the error?
-> 
-> I thought MISSED_XFER was a more explicit name to what is going on,
-> instead of an action. I can change it back.
+In other words, IMO we're getting too fancy for this one and we should instead
+simply do:
 
-That's fine, but you didn't document why you were doing this.
+		child = to_shadow_page(*sptep & SPTE_BASE_ADDR_MASK);
+		if (child->role.access == direct_access)
+			return;
 
-Perhaps this needs to be a patch series, remember, each patch only
-should do 1 thing.
+		drop_parent_pte(child, sptep);
+		kvm_flush_remote_tlbs_sptep(kvm, sptep);
 
-> > > +	case -EXDEV:
-> > > +		uvcg_info(&video->uvc->func, "VS request missed xfer.\n");
-> > 
-> > Why are you spamming the kernel logs at the info level for a USB
-> > transmission problem?   That could get very noisy, please change this to
-> > be at the debug level.
-> 
-> Previously this would printout as a dev_warn in a725d0f6dfc5 ("usb:
-> gadget: uvc: call uvc uvcg_warn on completed status instead of
-> uvcg_info"), which I think might be too noisy. Info is helpful to
-> see what's going on if there is video corruption, but I can change to a
-> dbg as well.
+That has the added benefit of flushing the same "thing" that is zapped, i.e. both
+operate on the parent SPTE, not the child.
 
-info is never a valid level for an error.  dbg is best if a user can not
-actually do something about the error.
-
-thanks,
-
-greg k-h
+Note, kvm_flush_remote_tlbs_sptep() operates on the _parent_, where the above
+snippets retrieves the child.  This becomes much more obvious once spte_to_child_sp()
+comes along: https://lore.kernel.org/all/20220805230513.148869-8-seanjc@google.com.
