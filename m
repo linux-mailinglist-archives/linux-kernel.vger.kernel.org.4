@@ -2,121 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94E35EBD67
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D125EBD6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbiI0IfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 04:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
+        id S231693AbiI0IgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 04:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiI0Ieh (ORCPT
+        with ESMTP id S231666AbiI0Ifm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 04:34:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BE91CB;
-        Tue, 27 Sep 2022 01:34:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EABCC616C3;
-        Tue, 27 Sep 2022 08:34:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02144C433B5;
-        Tue, 27 Sep 2022 08:34:32 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BeuQ3Qnt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1664267669;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ls3g6qEVoyxJ/LRppKHOZrlHupBiDmkmlvpmcbvCVBg=;
-        b=BeuQ3QntwPhr3dKqVxdDwUjrlGxCYXy6cgNvqsA3bYZGavIAh6kv44f+JYd6qCDunb2BPp
-        Eh/DDxL6qQ/SeM4NV3xxGbp+oz0f4eKMjaRSz46jfJqdgvbcUBMq1bD+v1EOBynQz9nMvF
-        1kdTBaM2t9QhG4LwqdXM4EJ0UgELQek=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f2e7f81e (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 27 Sep 2022 08:34:28 +0000 (UTC)
-Received: by mail-ua1-f42.google.com with SMTP id s2so964500uae.1;
-        Tue, 27 Sep 2022 01:34:28 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1iGF/bF/qAKOt24JaZw17o/2sskckXvK7BIz4Am9unXZOXkCSL
-        6X7FaVjlwzJO32ef3ufk4hXmfUCHPBF6iIJm2u4=
-X-Google-Smtp-Source: AMsMyM5zZc0GSJoMj25i2Bh88A0n1LAxv8890igtLA6QhnkuCbHokR818i1MqXLf53Ved5KTqhIWgp66jBz7aAZiJM0=
-X-Received: by 2002:ab0:758a:0:b0:3af:2b2d:dae7 with SMTP id
- q10-20020ab0758a000000b003af2b2ddae7mr11153931uap.24.1664267667770; Tue, 27
- Sep 2022 01:34:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220926160332.1473462-1-Jason@zx2c4.com> <202209261105.9C6AEEEE1@keescook>
- <CAHmME9pFDzyKJd5ixyB9E05jkZvHShFimbiQsGTcdQO1E5R0QQ@mail.gmail.com> <202209262017.D751DDC38F@keescook>
-In-Reply-To: <202209262017.D751DDC38F@keescook>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 27 Sep 2022 10:34:16 +0200
-X-Gmail-Original-Message-ID: <CAHmME9qTf+aDmBen2dFXPmbDGkn1E4=oXqqeBRiguLCo7K9EhQ@mail.gmail.com>
-Message-ID: <CAHmME9qTf+aDmBen2dFXPmbDGkn1E4=oXqqeBRiguLCo7K9EhQ@mail.gmail.com>
-Subject: Re: [PATCH] random: split initialization into early arch step and
- later non-arch step
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 27 Sep 2022 04:35:42 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B334512AA9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:35:27 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id r3-20020a05600c35c300b003b4b5f6c6bdso5014845wmq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=Wgzj4PEma5PTYVT9ZoB1Xyd1riKSuBv/hZE/DnlehtA=;
+        b=dhVS1R/5nouuaVhxiWKee3goPDCx1/Zb9H2ran+I5j0m2f/soQPt4tau/DCtke8DZm
+         4tBmSjPN0W1R9SKYH9wUMzPLh1tX8y+BnNwHfTpef6y2CDRXBzNvs97wqjVWvlqoZrFy
+         blZQ65qCmymBjpQHysBpwu115sn2FUuN3LdFdXAIqZjivi0d6fevLy5hUG53mnVJUsZs
+         bdtP8v8lVNRm4qMb1moZdTUGMUxVTz9SAC0Bk7nrywjzujjX0G64n7WH2poxOmXf3BHh
+         b4z11LEac58P31f438pempIAe+4VozUWPkCHGtNjOKZ9nkWyzXxQyZmMDcEUzkub/UCG
+         Lbaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Wgzj4PEma5PTYVT9ZoB1Xyd1riKSuBv/hZE/DnlehtA=;
+        b=7lEcjbQJQlPej0MxEuDdGesN8DWwrEZ6jqOw+X/+46SAkqYWU6gYoAYERHDpdqZn/N
+         ECo6a4K4gIilKdVT9SQHP+sFMHjhmKsKd1dRgjsygFD78oho/N2qe6bXjrE8fSXX91GN
+         e9g6JC/Auoptx69VdlOMd/0Clc9IevzdhtaVW9qGKw23VVQFqmGE5aUBV8k8s+nTeZp6
+         65KzYR8Ji9LlXOQIELHRgHQR2pJX5KZ3HGv1WnfxhZDs/YTMkX9dHWGZoz3nkTXEcZEL
+         TEIBsNLO51fxMSC6rRhLN/thHmAk9P08u8voPFawNyDxTyPxjsok4tSlDyueerpHWTnG
+         Htcw==
+X-Gm-Message-State: ACrzQf3bMZFVk3lJSNDiSPfEKsjr1aGBWdYr5Yo7jtmyklQ4plj74MUy
+        R+ymjYJ1+aTia0IOUhRe948IbQ==
+X-Google-Smtp-Source: AMsMyM7xzvDY5xB8UD85ebsPVp6soLExVLIxGPsyigmSohRtp+2G9pnLZ+jOaw80MTkGpyYvAt5A0A==
+X-Received: by 2002:a7b:c40e:0:b0:3b3:3faa:10c2 with SMTP id k14-20020a7bc40e000000b003b33faa10c2mr1776728wmi.32.1664267726249;
+        Tue, 27 Sep 2022 01:35:26 -0700 (PDT)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id n30-20020a05600c501e00b003b492b30822sm1122120wmr.2.2022.09.27.01.35.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 01:35:25 -0700 (PDT)
+From:   Jerome Neanne <jneanne@baylibre.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        nm@ti.com, kristo@kernel.org, dmitry.torokhov@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com,
+        will@kernel.org, lee@kernel.org, tony@atomide.com, vigneshr@ti.com,
+        bjorn.andersson@linaro.org, shawnguo@kernel.org,
+        geert+renesas@glider.be, dmitry.baryshkov@linaro.org,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, arnd@arndb.de, jeff@labundy.com
+Cc:     afd@ti.com, khilman@baylibre.com, narmstrong@baylibre.com,
+        msp@baylibre.com, j-keerthy@ti.com, jneanne@baylibre.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: [PATCH v5 0/6] Add support for TI TPS65219 PMIC.
+Date:   Tue, 27 Sep 2022 10:35:14 +0200
+Message-Id: <20220927083520.15766-1-jneanne@baylibre.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 5:23 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Mon, Sep 26, 2022 at 08:52:39PM +0200, Jason A. Donenfeld wrote:
-> > On Mon, Sep 26, 2022 at 8:22 PM Kees Cook <keescook@chromium.org> wrote:
-> > > Can find a way to get efi_get_random_bytes() in here too? (As a separate
-> > > patch.) I don't see where that actually happens anywhere currently,
-> > > and we should have it available at this point in the boot, yes?
-> >
-> > No, absolutely not. That is not how EFI works. EFI gets its seed to
-> > random.c much earlier by way of add_bootloader_randomness().
->
-> Ah! Okay, so, yes, it _does_ get entropy in there, just via a path I
-> didn't see?
+Hi everyone,
 
-Yes.
+Sending again v5 changing deprecated mail for Lee Jones.
+bindings and regulator are already there as it is based on the regulator tree branch for-6.1:
+https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git
 
-> > Yes, we could maybe *change* to using init_utsname if we wanted. That
-> > seems kind of different though. So I'd prefer that to be a different
-> > patch, which would require looking at the interaction with early
-> > hostname setting and such. If you want to do that work, I'd certainly
-> > welcome the patch.
->
-> Er, isn't that _WAY_ later? Like, hostname isn't set until sysctls up
-> and running, etc. I haven't actually verified 100% but it looks like
-> current->utsname is exactly init_utsname currently.
+Changes in v5:
+- Remove pm_power_off functionality as it is unused in ARM64 systems
+- Change mfd subject to prefixes matching subsystem
 
-If init_utsname()==utsname() and all is fine, can you please send a
-patch atop random.git adjusting that and explaining why? I would
-happily take such a patch. If your suspicion is correct, it would make
-a most welcome improvement.
+Validation:
+regulator: tps65219: Fix .bypass_val_on setting
+reported by Axel Lin has been validated on board. 
 
-> > > Was there a reason kfence_init() was happening before time_init()?
-> >
-> > Historically there was, I think, because random_init() used to make
-> > weird allocations. But that's been gone for a while. At this point
-> > it's a mistake, and removing it allows me to do this:
-> >
-> > https://groups.google.com/g/kasan-dev/c/jhExcSv_Pj4
->
-> Cool. Is that true for all the -stable releases this is aimed at?
+Regards,
+Jerome
 
-Yes.
+Previous versions:
+v4 - https://lore.kernel.org/lkml/20220825150224.826258-1-msp@baylibre.com/
+v3 - https://lore.kernel.org/lkml/20220805121852.21254-1-jneanne@baylibre.com/
+v2 - https://lore.kernel.org/lkml/20220726103355.17684-1-jneanne@baylibre.com/
+v1 - https://lore.kernel.org/lkml/20220719091742.3221-1-jneanne@baylibre.com/
 
-Though I'll likely drop the stable@ tag for this, and instead visit
-backporting it later in 6.1's cycle, or even after. There's no need to
-rush it, and this is an area that has been historically temperamental.
 
-Jason
+Jerome Neanne (5):
+  DONOTMERGE: arm64: dts: ti: Add TI TPS65219 PMIC support for AM642 SK
+    board.
+  DONOTMERGE: arm64: dts: ti: Add pinmux and irq mapping for TPS65219
+    external interrupts
+  DONOTMERGE: arm64: dts: ti: k3-am642-sk: Enable tps65219 power-button
+  mfd: tps65219: Add driver for TI TPS65219 PMIC
+  arm64: defconfig: Add tps65219 as modules
+
+Markus Schneider-Pargmann (1):
+  Input: Add tps65219 interrupt driven powerbutton
+
+ MAINTAINERS                             |   1 +
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts  | 115 ++++++++
+ arch/arm64/configs/defconfig            |   3 +
+ drivers/input/misc/Kconfig              |  10 +
+ drivers/input/misc/Makefile             |   1 +
+ drivers/input/misc/tps65219-pwrbutton.c | 149 ++++++++++
+ drivers/mfd/Kconfig                     |  14 +
+ drivers/mfd/Makefile                    |   1 +
+ drivers/mfd/tps65219.c                  | 320 ++++++++++++++++++++++
+ include/linux/mfd/tps65219.h            | 345 ++++++++++++++++++++++++
+ 10 files changed, 959 insertions(+)
+ create mode 100644 drivers/input/misc/tps65219-pwrbutton.c
+ create mode 100644 drivers/mfd/tps65219.c
+ create mode 100644 include/linux/mfd/tps65219.h
+
+-- 
+2.17.1
+
