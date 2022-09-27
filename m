@@ -2,164 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754985EC0C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2565EC0DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiI0LPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
+        id S231685AbiI0LQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbiI0LOn (ORCPT
+        with ESMTP id S232059AbiI0LQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:14:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB9215FEA;
-        Tue, 27 Sep 2022 04:14:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D152EB81B10;
-        Tue, 27 Sep 2022 11:14:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C55C433D6;
-        Tue, 27 Sep 2022 11:14:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664277272;
-        bh=5RonbP18IW8Z1fzGmvbzApRwvceRQaHvox4MafxU4WM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=jPMifld9Bgt7hQQIZP4NRfbCWgUUNzwL6HS1//AyhPQuhCxgajDcxDDX/IjN3dzp0
-         aRijbdoPQLxecjpIv+XrikW9FVpKmVIt9XrPx83dZDoJRtO4rA2tfDGL5+jPOOGXHE
-         dBCMMpfl3TQY1hcxDVcLgkN3iZVUrmcvpwoT7lvIkWVp28WHlg0DtaD3Cell82dfvc
-         RZJonJLYZbRRBIuz7w8Gy5LPXTUemXiCsxLPbXXIyyVClhIpq7JzhX7+Nu48q9Mgcl
-         Z2oQfGygH6flhHdLwADKaxx8/xQHSoeHKDHRSkCJXRDLwP6zG8b+dzYIaWTQet5NZc
-         7bvm2jVgTJhgQ==
-Message-ID: <32723e738a37806a76b9c346295b9464f45f410b.camel@kernel.org>
-Subject: Re: [man-pages RFC PATCH v4] statx, inode: document the new
- STATX_INO_VERSION field
-From:   Jeff Layton <jlayton@kernel.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "david@fromorbit.com" <david@fromorbit.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "ceph-devel@vger.kernel.org" <ceph-devel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
-Date:   Tue, 27 Sep 2022 07:14:28 -0400
-In-Reply-To: <166423223623.17572.7229091435446226718@noble.neil.brown.name>
-References: <24005713ad25370d64ab5bd0db0b2e4fcb902c1c.camel@kernel.org>
-        , <20220918235344.GH3600936@dread.disaster.area>
-        , <87fb43b117472c0a4c688c37a925ac51738c8826.camel@kernel.org>
-        , <20220920001645.GN3600936@dread.disaster.area>
-        , <5832424c328ea427b5c6ecdaa6dd53f3b99c20a0.camel@kernel.org>
-        , <20220921000032.GR3600936@dread.disaster.area>
-        , <93b6d9f7cf997245bb68409eeb195f9400e55cd0.camel@kernel.org>
-        , <20220921214124.GS3600936@dread.disaster.area>
-        , <e04e349170bc227b330556556d0592a53692b5b5.camel@kernel.org>
-        , <1ef261e3ff1fa7fcd0d75ed755931aacb8062de2.camel@kernel.org>
-        , <20220923095653.5c63i2jgv52j3zqp@quack3>
-        , <2d41c08e1fd96d55c794c3b4cd43a51a0494bfcf.camel@hammerspace.com>
-        , <baf852dfb57aaf5a670bc88236f8d62c99668fcc.camel@kernel.org>
-         <166423223623.17572.7229091435446226718@noble.neil.brown.name>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Tue, 27 Sep 2022 07:16:32 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EB06D562
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:15:58 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id t62so11447147oie.10
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:15:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=R6DEIK2Zq+FTX+wZyA6Mcr+7aOgLXcB6/3yVSe028aA=;
+        b=RysijwsUAJ4+AIMPMC72NnJNhU1LRFV/xN+4XEjPHCtNvNhAooO3QNXxGIrHD3zvZj
+         qFWMnbTbREVx92DLjafJmkzXtbVClWEB9KvKD62HrSIEEDCdZItaQRTrp31bxXLGlVJ4
+         K/EOtnC0RNgEQGyBZqMf/UXWUj+WYsrm8Iv2KJ0Pg+cwVMwfoFk7uBsGWfpwX3XcmHLh
+         V+lLHddpoD9SXn4OAUPgVPBo33FrI/SsGfCuE/XHojDfvoc5ganpSwavjgzxv5laz3No
+         quq2QtFZv+S1jnGgwpvsMoWYaCzb3wF5uQt/CLtqYXP5zEnrU3vRkSrjJgmZo9Tn8kZC
+         RQlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=R6DEIK2Zq+FTX+wZyA6Mcr+7aOgLXcB6/3yVSe028aA=;
+        b=Xk36qwASEzaohOR5665jfrpnPg3E1zM7d0DOQaXq9SCAxvUU4H07Fnui9jzgLP7RXS
+         g5r1i80h56fmsjxD2wNo5BbcIyzUwooN9B90rm2erZH850vfs1MphX4DXX3hBHoIubcR
+         GpOiak3b8Fwrtvx4yajuPKhM8kLD8tRku5DOhabu6Iloxy1DPZz/2RtLawowBmGeTTtr
+         yefHA0e2iCYHxRA30xe7imwBili8BJ64g8XvOLhKOjwPaIgEpa2uDTzQInNpohyi4g9M
+         /y0EMVir/AbIw6Fh12+l3mt/d9fbb26nZPsn07GSCWDs05NlzXNX9xlJLhDvIjBjqr7f
+         OkvA==
+X-Gm-Message-State: ACrzQf2yjUuLLexjE9QMlyiGlX8fLqubpWlvqvkhbhGltl6ZsxSZrsTF
+        OWj0EjsPl8PhIYiR6RSq0HSawS/GfJxkJnm7bttBkY8QUOOuDuQe
+X-Google-Smtp-Source: AMsMyM6ZFNdptDkcaJzdd4BuwwP5UqO4ID3fTeODCcJ8PdTnxhwQseJ8nJrPrng+q6GITOhMhHDgXb0m3aGt0rQYaxI=
+X-Received: by 2002:a05:6808:148d:b0:350:7858:63ce with SMTP id
+ e13-20020a056808148d00b00350785863cemr1518431oiw.106.1664277357708; Tue, 27
+ Sep 2022 04:15:57 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <88410cddd31197ea26840d7dd71612bece8c6acf.1663871981.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <88410cddd31197ea26840d7dd71612bece8c6acf.1663871981.git.christophe.jaillet@wanadoo.fr>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Date:   Tue, 27 Sep 2022 07:15:46 -0400
+Message-ID: <CAM0EoM=EsyAYfQreLvUhyr1csuR2SQx1hLFzVX86OhHhLdU5WA@mail.gmail.com>
+Subject: Re: [PATCH v2] headers: Remove some left-over license text
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     yhs@fb.com, Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-09-27 at 08:43 +1000, NeilBrown wrote:
-> On Fri, 23 Sep 2022, Jeff Layton wrote:
-> >=20
-> > Absolutely. That is the downside of this approach, but the priority her=
-e
-> > has always been to improve nfsd. If we don't get the ability to present
-> > this info via statx, then so be it. Later on, I suppose we can move tha=
-t
-> > handling into the kernel in some fashion if we decide it's worthwhile.
-> >=20
-> > That said, not having this in statx makes it more difficult to test
-> > i_version behavior. Maybe we can add a generic ioctl for that in the
-> > interim?
->=20
-> I wonder if we are over-thinking this, trying too hard, making "perfect"
-> the enemy of "good".
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
 
-I tend to think we are.
+cheers,
+jamal
 
-> While we agree that the current implementation of i_version is
-> imperfect, it isn't causing major data corruption all around the world.
-> I don't think there are even any known bug reports are there?
-> So while we do want to fix it as best we can, we don't need to make that
-> the first priority.
->=20
-
-I'm not aware of any bug reports aside from the issue of atime updates
-affecting the change attribute, but the effects of misbehavior here can
-be very subtle.
-
-
-> I think the first priority should be to document how we want it to work,
-> which is what this thread is really all about.  The documentation can
-> note that some (all) filesystems do not provide perfect semantics across
-> unclean restarts, and can list any other anomalies that we are aware of.
-> And on that basis we can export the current i_version to user-space via
-> statx and start trying to write some test code.
->=20
-> We can then look at moving the i_version/ctime update from *before* the
-> write to *after* the write, and any other improvements that can be
-> achieved easily in common code.  We can then update the man page to say
-> "since Linux 6.42, this list of anomalies is no longer present".
->=20
-
-I have a patch for this for ext4, and started looking at the same for
-btrfs and xfs.
-
-> Then we can explore some options for handling unclean restart - in a
-> context where we can write tests and maybe even demonstrate a concrete
-> problem before we start trying to fix it.
->=20
-
-I think too that we need to recognize that there are multiple distinct
-issues around i_version handling:
-
-1/ atime updates affecting i_version in ext4 and xfs, which harms
-performance
-
-2/ ext4 should enable the change attribute by default
-
-3/ we currently mix the ctime into the change attr for directories,
-which is unnecessary.
-
-4/ we'd like to be able to report NFS4_CHANGE_TYPE_IS_MONOTONIC_INCR
-from nfsd, but the change attr on regular files can appear to go
-backward after a crash+clock jump.
-
-5/ testing i_version behavior is very difficult since there is no way to
-query it from userland.
-
-We can work on the first three without having to solve the last two
-right away.
---=20
-Jeff Layton <jlayton@kernel.org>
+On Thu, Sep 22, 2022 at 2:41 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> Remove some left-over from commit e2be04c7f995 ("License cleanup: add SPDX
+> license identifier to uapi header files with a license")
+>
+> When the SPDX-License-Identifier tag has been added, the corresponding
+> license text has not been removed.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Changes since v1:
+>   - add tools/include/uapi/linux/tc_act/tc_bpf.h   [Yonghong Song <yhs@fb.com>]
+>
+> v1: https://lore.kernel.org/all/2a15aba72497e78ff08c8b8a8bfe3cf5a3e6ee18.1662897019.git.christophe.jaillet@wanadoo.fr/
+> ---
+>  include/uapi/linux/tc_act/tc_bpf.h        |  5 -----
+>  include/uapi/linux/tc_act/tc_skbedit.h    | 13 -------------
+>  include/uapi/linux/tc_act/tc_skbmod.h     |  7 +------
+>  include/uapi/linux/tc_act/tc_tunnel_key.h |  5 -----
+>  include/uapi/linux/tc_act/tc_vlan.h       |  5 -----
+>  tools/include/uapi/linux/tc_act/tc_bpf.h  |  5 -----
+>  6 files changed, 1 insertion(+), 39 deletions(-)
+>
+> diff --git a/include/uapi/linux/tc_act/tc_bpf.h b/include/uapi/linux/tc_act/tc_bpf.h
+> index 653c4f94f76e..fe6c8f8f3e8c 100644
+> --- a/include/uapi/linux/tc_act/tc_bpf.h
+> +++ b/include/uapi/linux/tc_act/tc_bpf.h
+> @@ -1,11 +1,6 @@
+>  /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+>  /*
+>   * Copyright (c) 2015 Jiri Pirko <jiri@resnulli.us>
+> - *
+> - * This program is free software; you can redistribute it and/or modify
+> - * it under the terms of the GNU General Public License as published by
+> - * the Free Software Foundation; either version 2 of the License, or
+> - * (at your option) any later version.
+>   */
+>
+>  #ifndef __LINUX_TC_BPF_H
+> diff --git a/include/uapi/linux/tc_act/tc_skbedit.h b/include/uapi/linux/tc_act/tc_skbedit.h
+> index 6cb6101208d0..64032513cc4c 100644
+> --- a/include/uapi/linux/tc_act/tc_skbedit.h
+> +++ b/include/uapi/linux/tc_act/tc_skbedit.h
+> @@ -2,19 +2,6 @@
+>  /*
+>   * Copyright (c) 2008, Intel Corporation.
+>   *
+> - * This program is free software; you can redistribute it and/or modify it
+> - * under the terms and conditions of the GNU General Public License,
+> - * version 2, as published by the Free Software Foundation.
+> - *
+> - * This program is distributed in the hope it will be useful, but WITHOUT
+> - * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+> - * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+> - * more details.
+> - *
+> - * You should have received a copy of the GNU General Public License along with
+> - * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+> - * Place - Suite 330, Boston, MA 02111-1307 USA.
+> - *
+>   * Author: Alexander Duyck <alexander.h.duyck@intel.com>
+>   */
+>
+> diff --git a/include/uapi/linux/tc_act/tc_skbmod.h b/include/uapi/linux/tc_act/tc_skbmod.h
+> index af6ef2cfbf3d..ac62c9a993ea 100644
+> --- a/include/uapi/linux/tc_act/tc_skbmod.h
+> +++ b/include/uapi/linux/tc_act/tc_skbmod.h
+> @@ -1,12 +1,7 @@
+>  /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+>  /*
+>   * Copyright (c) 2016, Jamal Hadi Salim
+> - *
+> - * This program is free software; you can redistribute it and/or modify
+> - * it under the terms of the GNU General Public License as published by
+> - * the Free Software Foundation; either version 2 of the License, or
+> - * (at your option) any later version.
+> -*/
+> + */
+>
+>  #ifndef __LINUX_TC_SKBMOD_H
+>  #define __LINUX_TC_SKBMOD_H
+> diff --git a/include/uapi/linux/tc_act/tc_tunnel_key.h b/include/uapi/linux/tc_act/tc_tunnel_key.h
+> index 3f10dc4e7a4b..49ad4033951b 100644
+> --- a/include/uapi/linux/tc_act/tc_tunnel_key.h
+> +++ b/include/uapi/linux/tc_act/tc_tunnel_key.h
+> @@ -2,11 +2,6 @@
+>  /*
+>   * Copyright (c) 2016, Amir Vadai <amir@vadai.me>
+>   * Copyright (c) 2016, Mellanox Technologies. All rights reserved.
+> - *
+> - * This program is free software; you can redistribute it and/or modify
+> - * it under the terms of the GNU General Public License as published by
+> - * the Free Software Foundation; either version 2 of the License, or
+> - * (at your option) any later version.
+>   */
+>
+>  #ifndef __LINUX_TC_TUNNEL_KEY_H
+> diff --git a/include/uapi/linux/tc_act/tc_vlan.h b/include/uapi/linux/tc_act/tc_vlan.h
+> index 5b306fe815cc..3e1f8e57cdd2 100644
+> --- a/include/uapi/linux/tc_act/tc_vlan.h
+> +++ b/include/uapi/linux/tc_act/tc_vlan.h
+> @@ -1,11 +1,6 @@
+>  /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+>  /*
+>   * Copyright (c) 2014 Jiri Pirko <jiri@resnulli.us>
+> - *
+> - * This program is free software; you can redistribute it and/or modify
+> - * it under the terms of the GNU General Public License as published by
+> - * the Free Software Foundation; either version 2 of the License, or
+> - * (at your option) any later version.
+>   */
+>
+>  #ifndef __LINUX_TC_VLAN_H
+> diff --git a/tools/include/uapi/linux/tc_act/tc_bpf.h b/tools/include/uapi/linux/tc_act/tc_bpf.h
+> index 653c4f94f76e..fe6c8f8f3e8c 100644
+> --- a/tools/include/uapi/linux/tc_act/tc_bpf.h
+> +++ b/tools/include/uapi/linux/tc_act/tc_bpf.h
+> @@ -1,11 +1,6 @@
+>  /* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+>  /*
+>   * Copyright (c) 2015 Jiri Pirko <jiri@resnulli.us>
+> - *
+> - * This program is free software; you can redistribute it and/or modify
+> - * it under the terms of the GNU General Public License as published by
+> - * the Free Software Foundation; either version 2 of the License, or
+> - * (at your option) any later version.
+>   */
+>
+>  #ifndef __LINUX_TC_BPF_H
+> --
+> 2.34.1
+>
