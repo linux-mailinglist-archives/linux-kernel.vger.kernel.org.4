@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0D75EC109
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A377A5EC10A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbiI0LVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
+        id S232109AbiI0LVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbiI0LUR (ORCPT
+        with ESMTP id S230328AbiI0LUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:20:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE919E0D6
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:20:14 -0700 (PDT)
+        Tue, 27 Sep 2022 07:20:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A099F0F8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:20:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 500BC617BE
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 11:20:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA1BC43470;
-        Tue, 27 Sep 2022 11:20:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A641161828
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 11:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4425EC433D7;
+        Tue, 27 Sep 2022 11:20:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664277613;
-        bh=46E4hEqTXKtt3oYNYZmUQp96STvltVuR/8PwPOxvs5M=;
+        s=k20201202; t=1664277617;
+        bh=bvLdn54WLXXGn2K8gs+IJk07fcYXo6kaZWU8LNj08H0=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=F/BZt7oXeXYKGeuTfx4diaRQDTewf7FAdiLUQZZX/uKSP6z+ukj2P4rBJHo+w2dPg
-         LaJ8U8n7bLXfCCL34Gx7JJF6lRC6oxB/no+5QU7FrWZgoNISSUY+cOySe2elXG8EB7
-         AnBl5J4jSS3U1nsYDrVS3A8+CfwWhXFSQYji8obIjBxpZiRcBOroWS0QjeiukA/mKJ
-         EKaokeougXAVuQZrHVTnM7jwGqhnA2gpY+GHMsNmW12/fDFTgBIs35eSlL1v1dAZUW
-         /zQ8cD4AcPlpWkkqitb6mbypZmydtQKrOrVjy7R6iuNuseFPG9kuhTz8h1Z7DIkNwG
-         I3XVesSYafT/w==
+        b=eQ3OSM6hORTvgyGe/6NEH0F5/Wc89CERpmLGFFegS6jDIZDe0mZLnyJaTtE6DGDHZ
+         0Lshm/pylr1Grnd25nhLXrHTin3YxaW06YF5svmYzC43o/KReM3L/8P4YDKALsS9pC
+         /5D22R/L+lBdCd2xO1MzfkZxtuz8JhX2htkfQXDun/AcGnjpO/N8hxqWYnbIc0NaPx
+         pkBPm2TLHaMjoEI6oIQFs3DMbdrYjWEBofGkOYV8JzuYJOFUX6+20Uj6EIj/WgcIJq
+         XcOEgkWxPw45NR7jDq2zkZGMp2f5IpkMqxIiCVzpFsvqd5hcOY/iCi09hiYGadyYdZ
+         aDltiXSQNzPmg==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Takashi Iwai <tiwai@suse.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>
-In-Reply-To: <20220923203140.514730-1-krzysztof.kozlowski@linaro.org>
-References: <20220923203140.514730-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH RESEND] ASoC: MAINTAINERS: add bindings and APR to Qualcomm Audio entry
-Message-Id: <166427760891.294040.2558313442791079333.b4-ty@kernel.org>
-Date:   Tue, 27 Sep 2022 12:20:08 +0100
+To:     cy_huang@richtek.com, perex@perex.cz,
+        ckeepax@opensource.cirrus.com, james.schulman@cirrus.com,
+        tiwai@suse.com, Ren Zhijie <renzhijie2@huawei.com>,
+        lukas.bulwahn@gmail.com, flatmax@flatmax.com,
+        pierre-louis.bossart@linux.intel.com,
+        tanureal@opensource.cirrus.com, srinivas.kandagatla@linaro.org,
+        lgirdwood@gmail.com, krzysztof.kozlowski@linaro.org
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220926074042.13297-1-renzhijie2@huawei.com>
+References: <20220926074042.13297-1-renzhijie2@huawei.com>
+Subject: Re: [PATCH -next] ASoC: codecs: wcd934x: Fix Kconfig dependency
+Message-Id: <166427761398.294040.9515810041975112450.b4-ty@kernel.org>
+Date:   Tue, 27 Sep 2022 12:20:13 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,12 +59,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Sep 2022 22:31:40 +0200, Krzysztof Kozlowski wrote:
-> Extend the Qualcomm Audio maintainer entry to include sound related
-> bindings and the Qualcomm APR/GPR (Asynchronous/Generic Packet Router)
-> IPC driver, which is tightly related to the Audio DSP.
+On Mon, 26 Sep 2022 07:40:42 +0000, Ren Zhijie wrote:
+> If CONFIG_REGMAP_SLIMBUS is not set,
+> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
+> will be failed, like this:
 > 
+> sound/soc/codecs/wcd934x.o: In function `wcd934x_codec_probe':
+> wcd934x.c:(.text+0x3310): undefined reference to `__regmap_init_slimbus'
+> make: *** [vmlinux] Error 1
 > 
+> [...]
 
 Applied to
 
@@ -71,8 +76,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: MAINTAINERS: add bindings and APR to Qualcomm Audio entry
-      commit: 2b381b4a91e94bd1d328de6e66cf97dec13bb40c
+[1/1] ASoC: codecs: wcd934x: Fix Kconfig dependency
+      commit: 4d73b97b8dbaf09af6e5878ce3288ba93956a3fd
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
