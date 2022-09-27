@@ -2,118 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5015EBD85
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F037C5EBD86
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbiI0IhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 04:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
+        id S230248AbiI0IhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 04:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbiI0IgK (ORCPT
+        with ESMTP id S230374AbiI0IgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 04:36:10 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3B22127B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:35:51 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id h7so1440134wru.10
+        Tue, 27 Sep 2022 04:36:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEAD2125C
         for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=wxovnf5KPHC5iL/G2DCCvsq9cB2n/hhE49OVBFVzwkI=;
-        b=UkqqOpPVPVDImx9bgWxR6E7nSNp47HRYWNmcrb0PR+agi8lTeA4L0ONGurjzu3Mdzj
-         V5Jr5TvP9HiR3noHMtbRxN00k1hZ/LyDTuvh31Hd1hgFZm2Iwe21AoaQfx3NXWndUrjA
-         mVI26+PZI6jBdxjodzaKIVkzPUCRA0P5Sa6tlgFGofcbOsqC/lPyMILG+R4953kwfg5j
-         PpDvO2gFH8RVP+z6RDyiAipux/OjAL7PZ0ybu1HqPfbaDVZlCFuohQ4D+nzaloW6qyt9
-         McgQGbvnuDEYUOnFEnXlogHwjqSZIt7IyUyLOWzf6XkqtlqVzGc5rtkr4ZT0cY7HtsMp
-         8sjw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664267749;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AM7Ag3R1FhhmxAI1wRPUG0RaWTwM4UqjFY6j2yTgwJQ=;
+        b=JrUHYIPVk2MIpY8G3ZUnl5lMwHZmjtj1/79OJp2kLUnSh30ViSiDn807YlQ6FJELQY7Zwv
+        HA7PrgLnxaUEnfi4vbfQbykjdqQJ3TLNWT6YiLT8z6BcKaviuIsOfioI9WA7qkULL7K1Pc
+        t2Z3J4ViKEzgHMS/85JvOdArU3lF4as=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-226-QZHpahRqPdeFiVvdonorsA-1; Tue, 27 Sep 2022 04:35:48 -0400
+X-MC-Unique: QZHpahRqPdeFiVvdonorsA-1
+Received: by mail-qv1-f72.google.com with SMTP id m7-20020a0ce6e7000000b004ad69308f01so5336313qvn.9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:35:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=wxovnf5KPHC5iL/G2DCCvsq9cB2n/hhE49OVBFVzwkI=;
-        b=LqfDw83ixV+U/lysUSqvxwWKaOEKoJ4TSpE6WAmxjP1HdeGaYLgcNyLlT8+OhA6eRz
-         2j2ygtmlvkFGzMP/jcXSzCenshJfy+xtidHdzRyiCP8fVlcQ4GkdmmZIEGqjd4UoLxUJ
-         UhqYQZMH88QaWkbkki4V8ZhKMeV+U4/GphQSt38BA6MlY34kPGQJpD6n7veHLQvxJ/d/
-         vidJzcjaurxLBHbgemrymnI2IeOtktBIB5PVlGwbSgzxSTqTUO1TRDT6T4wPCgyD/D0X
-         mbELN1dGP0/8YxWNyn3Bd1YBDkIwYjy3bcE+ZUhsSZzk8X7ipOCYYvqOqQfyjOVE05vj
-         Ez5g==
-X-Gm-Message-State: ACrzQf0EEZOcvSD2L3mtOtWzaLQq3fttPpcKmYFiBPPEBuUiw7MuPuu3
-        kcdd2rJbq/gKJRVBZqW3JV//hQ==
-X-Google-Smtp-Source: AMsMyM6ODLNqJ9ymtQdYGh+Rm894BS+CNfsgKvcSY19/1pxMn2NEmnOG/8CEslYfiE98vqP7au7bjw==
-X-Received: by 2002:a5d:47c1:0:b0:22a:5858:993b with SMTP id o1-20020a5d47c1000000b0022a5858993bmr15649108wrc.99.1664267749510;
-        Tue, 27 Sep 2022 01:35:49 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id n30-20020a05600c501e00b003b492b30822sm1122120wmr.2.2022.09.27.01.35.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 01:35:49 -0700 (PDT)
-From:   Jerome Neanne <jneanne@baylibre.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        nm@ti.com, kristo@kernel.org, dmitry.torokhov@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com,
-        will@kernel.org, lee@kernel.org, tony@atomide.com, vigneshr@ti.com,
-        bjorn.andersson@linaro.org, shawnguo@kernel.org,
-        geert+renesas@glider.be, dmitry.baryshkov@linaro.org,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, arnd@arndb.de, jeff@labundy.com
-Cc:     afd@ti.com, khilman@baylibre.com, narmstrong@baylibre.com,
-        msp@baylibre.com, j-keerthy@ti.com, jneanne@baylibre.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: [PATCH v5 6/6] arm64: defconfig: Add tps65219 as modules
-Date:   Tue, 27 Sep 2022 10:35:20 +0200
-Message-Id: <20220927083520.15766-7-jneanne@baylibre.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220927083520.15766-1-jneanne@baylibre.com>
-References: <20220927083520.15766-1-jneanne@baylibre.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        bh=AM7Ag3R1FhhmxAI1wRPUG0RaWTwM4UqjFY6j2yTgwJQ=;
+        b=hanqlulHEaQSGVdAy6dRvomjC0/jLHahhqzvY3m8RcM5zPWta3krPdHX15y9Z+mEWz
+         91VtmvG/kB2Ja8xi/fl5kOoQM0CVa1iHKmJi7w5CB2J3cKnOHRH2sF9DRK8H+QP128ph
+         pEYtoMhzWQr6kNK+nvBIKoRNrJn/vbXpB6X+lkurQ8sISh3e31idqisj0dV9wha7HMIA
+         Gkz7lv59NuyigeoXgF2SuCrrdE/EnQo1m042Ti/n1HGYyIcr8RwiwAl2oDbmarze7j8z
+         07SjRKNXgLex7CfxmWwQqemaL3bhxL7Om22UFodrOUJ3M5MqdixH1RoZ6dJ2XktjGour
+         ioog==
+X-Gm-Message-State: ACrzQf2DHtNy4i5YailT8BSl5038wAOYT392M0tvsvxwqE7f7+Gm2nvB
+        wQpwAux2K4WSaEKQGQ7JRaiygAa7TE6w8lGWHHwolnRu//cI+i17njR52oV6bsPeXrt4HYU8EVV
+        ZO391SNqhJL3/qWp2Tu5Z0Uiq
+X-Received: by 2002:a05:620a:b51:b0:6cf:68b2:d86e with SMTP id x17-20020a05620a0b5100b006cf68b2d86emr16329431qkg.176.1664267747427;
+        Tue, 27 Sep 2022 01:35:47 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5MALcAfa3QgOA5vjMb3lzeNy2EAYRtu/tLCNJjqEezFwM7HOiQUF2wu8EvBKTjJ3BOkTmxCw==
+X-Received: by 2002:a05:620a:b51:b0:6cf:68b2:d86e with SMTP id x17-20020a05620a0b5100b006cf68b2d86emr16329418qkg.176.1664267747218;
+        Tue, 27 Sep 2022 01:35:47 -0700 (PDT)
+Received: from [192.168.149.123] (58.254.164.109.static.wline.lns.sme.cust.swisscom.ch. [109.164.254.58])
+        by smtp.gmail.com with ESMTPSA id f2-20020ac86ec2000000b0035d420c4ba7sm466320qtv.54.2022.09.27.01.35.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 01:35:46 -0700 (PDT)
+Message-ID: <07014070-5186-ca95-7028-82f77612dedd@redhat.com>
+Date:   Tue, 27 Sep 2022 10:35:42 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [RFC PATCH 9/9] kvm_main.c: handle atomic memslot update
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+References: <20220909104506.738478-1-eesposit@redhat.com>
+ <20220909104506.738478-10-eesposit@redhat.com>
+ <cde8be9d-64c0-80e5-7663-4302d075dcbc@redhat.com>
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+In-Reply-To: <cde8be9d-64c0-80e5-7663-4302d075dcbc@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds defconfig option to support TPS65219 PMIC, MFD, Regulators
-and power-button.
 
-Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
----
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index d5b2d2dd4904..d64e00355fcd 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -406,6 +406,7 @@ CONFIG_TOUCHSCREEN_GOODIX=m
- CONFIG_TOUCHSCREEN_EDT_FT5X06=m
- CONFIG_INPUT_MISC=y
- CONFIG_INPUT_PM8941_PWRKEY=y
-+CONFIG_INPUT_TPS65219_PWRBUTTON=m
- CONFIG_INPUT_PM8XXX_VIBRATOR=m
- CONFIG_INPUT_PWM_BEEPER=m
- CONFIG_INPUT_PWM_VIBRA=m
-@@ -639,6 +640,7 @@ CONFIG_MFD_SPMI_PMIC=y
- CONFIG_MFD_RK808=y
- CONFIG_MFD_SEC_CORE=y
- CONFIG_MFD_SL28CPLD=y
-+CONFIG_MFD_TPS65219=m
- CONFIG_MFD_ROHM_BD718XX=y
- CONFIG_MFD_WCD934X=m
- CONFIG_REGULATOR_FIXED_VOLTAGE=y
-@@ -666,6 +668,7 @@ CONFIG_REGULATOR_QCOM_SPMI=y
- CONFIG_REGULATOR_RK808=y
- CONFIG_REGULATOR_S2MPS11=y
- CONFIG_REGULATOR_TPS65132=m
-+CONFIG_REGULATOR_TPS65219=m
- CONFIG_REGULATOR_VCTRL=m
- CONFIG_RC_CORE=m
- CONFIG_RC_DECODERS=y
--- 
-2.17.1
+Am 27/09/2022 um 09:46 schrieb David Hildenbrand:
+> On 09.09.22 12:45, Emanuele Giuseppe Esposito wrote:
+>> When kvm_vm_ioctl_set_memory_region_list() is invoked, we need
+>> to make sure that all memslots are updated in the inactive list
+>> and then swap (preferreably only once) the lists, so that all
+>> changes are visible immediately.
+>>
+>> The only issue is that DELETE and MOVE need to perform 2 swaps:
+>> firstly replace old memslot with invalid, and then remove invalid.
+>>
+> 
+> I'm curious, how would a resize (grow/shrink) or a split be handled?
+> 
+
+There are only 4 operations possible in KVM: KVM_MR_{DELETE, MOVE,
+CREATE, FLAGS_ONLY}.
+
+A resize should be implemented in QEMU as DELETE+CREATE.
+
+Therefore a resize on memslot X will be implemented as:
+First pass on the userspace operations:
+	invalidate memslot X;
+	swap_memslot_list(); // NOW it is visible to the guest
+
+What guest sees: memslot X is invalid, so MMU keeps retrying the page fault
+
+Second pass:
+	create new memslot X
+	delete old memslot X
+
+
+What guest sees: memslot X is invalid, so MMU keeps retrying the page fault
+
+Third pass:
+	swap() // 1 for each address space affected
+
+What guest sees: new memslot replacing the old one
+
+
+
+A split is DELETE+CREATE+CREATE, so it's the same:
+
+First pass on the userspace operations:
+	invalidate memslot X;
+	swap_memslot_list(); // NOW it is visible to the guest
+
+What guest sees: memslot X is invalid, so MMU keeps retrying the page fault
+
+Second pass:
+	delete old memslot X
+	create new memslot X1
+	create new memslot X2
+
+What guest sees: memslot X is invalid, so MMU keeps retrying the page fault
+
+Third pass:
+	swap() // 1 for each address space affected
+
+What guest sees: two new memslots replacing the old one
 
