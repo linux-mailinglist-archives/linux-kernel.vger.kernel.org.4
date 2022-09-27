@@ -2,159 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B22E5EC940
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A25AC5EC944
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbiI0QSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        id S231969AbiI0QT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbiI0QSl (ORCPT
+        with ESMTP id S232320AbiI0QTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:18:41 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A381C5CBD;
-        Tue, 27 Sep 2022 09:18:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664295519; x=1695831519;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hoMnsdHSL/otoK4knDLGk7Hgdze88gWA9flLcFtU+LU=;
-  b=AZPKWuPnIMg5qmb/JklOiVzjhpUyhzjp9/NN8Er0nRvFVfJuuKWLgNps
-   1upSWxp/998dzgVi6rWsGBVL36T/TifCSntV//dhb6rnYG9sKEfzvNUkP
-   BUNmXkIQR/8gk7Se2oruuJgOWIe3kwYskkZSYLoMxdruKgbDMRJKGvzds
-   0M9O1zjfLxeeYdrYAUiloVl8NYfmJQAFu0NDXUHU2an6hPwhV3wujvnVL
-   EDL4+a1YWexLvb26sqnsoKlu6pfvhzKMlpbl2Xp2BQhSkFCazrsziHq+b
-   2C91lvQ4nsKqf0gM+9i3uWSNNYjTYctzZEfWxgDOyoAQb5Vn64FblLk7Y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="302838825"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="302838825"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 09:18:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="763933823"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="763933823"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Sep 2022 09:18:37 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1odDI4-008WgJ-0h;
-        Tue, 27 Sep 2022 19:18:36 +0300
-Date:   Tue, 27 Sep 2022 19:18:35 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH v3 4/8] pwm: lpss: Include headers we are direct user of
-Message-ID: <YzMiW0rjFek8VTS7@smile.fi.intel.com>
-References: <20220927144723.9655-1-andriy.shevchenko@linux.intel.com>
- <20220927144723.9655-5-andriy.shevchenko@linux.intel.com>
- <20220927151053.7eh63stoganpgawr@pengutronix.de>
- <YzMWJFmeMAvn0e1c@smile.fi.intel.com>
- <20220927155521.t4hanojroe247lqr@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220927155521.t4hanojroe247lqr@pengutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Sep 2022 12:19:24 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FF51C8881
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:19:21 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id hy2so21758192ejc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:19:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
+        bh=wtuYP/U8JcCds+Y8vgYt3RNPN+IvgKtQC+pNVMQXjHw=;
+        b=VPLGTAFsQ9vqWDNFPxTFeBhouiEHc5CpVWDjOnwMbJMnR2o39RyG6YtrR3o28npFwP
+         RvPNVrmMcTHfxXqqprE1I5VtYa7YQ60pF98aTQ8Tb1SpBkupjZZ3QaLsxKYxN/WKSVCj
+         07MJxNSBzx+dfnRsdbHVHytZBHXt3PW0m9HY68qnzjB3XE88/WUY7A5Cm2UaC45QUkq0
+         bxmwyOugjFh4VMs0Pm9Fd3npFFxpLLX9ipH7sCscaAPU/MUnbSrbBpX4xo0ZwCo89NNN
+         HYrWeJGzdTh3nQOQUfJhcISoeetoY9O8jd7mn23F7GWhydPmwRhsEH7Sv81uCEYHJA4V
+         UG4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=wtuYP/U8JcCds+Y8vgYt3RNPN+IvgKtQC+pNVMQXjHw=;
+        b=YA6wuMrsIn6RoGvlPEYyRHUt56I96M4oMP/iiCnMIWqbNE/EX1z9JUJi77MDLEVxgS
+         q4bbvOJBzP+YXoOW+dVtBKUASCzqL/vLhHSAolM6+4DohpSBVq+cdO5ZLxheTvPwUnnB
+         JLy/hHjn5G7UxbEFAIvYZC1RKFx7mhFO7CFMZziNg/zynCLQnN/A5ki1YWWeco8nxIB4
+         jiUKEf8AMxpRGxRCbmdYkDi+PAh9Oo2fzbJThC+miANGsEGPjTfuUYW2pF8Gtql9OsjO
+         KgXkU6Pfjd/CzYORFDj1yBmSGB3TeEDz0Iv80ciaskd7Vi2gw3L73e+KLuKOgTH4nsEY
+         PQWw==
+X-Gm-Message-State: ACrzQf3kf5xFayGXF7rorxD3uBK9R7c9cfvc4nVDdBQt5lriEkfC+B4q
+        zyOFFQklhtnIsPRKn8dfbaGQHA==
+X-Google-Smtp-Source: AMsMyM72s9GjR424MSP071Z2GqS/d2ATvAkbBHFTQyGzmNysECeWNT9rATKse5Hkg/ENGXsjfefBeg==
+X-Received: by 2002:a17:907:62a1:b0:781:b320:90c0 with SMTP id nd33-20020a17090762a100b00781b32090c0mr22413279ejc.255.1664295560374;
+        Tue, 27 Sep 2022 09:19:20 -0700 (PDT)
+Received: from mbp-di-paolo.station (net-2-37-207-44.cust.vodafonedsl.it. [2.37.207.44])
+        by smtp.gmail.com with ESMTPSA id b18-20020a17090630d200b00780982d77d1sm974784ejb.154.2022.09.27.09.19.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 27 Sep 2022 09:19:19 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [patch v11 5/6] block, bfq: cleanup bfq_weights_tree add/remove
+ apis
+From:   Paolo Valente <paolo.valente@linaro.org>
+In-Reply-To: <20220919084633.nmzastqkjool5jnc@quack3>
+Date:   Tue, 27 Sep 2022 18:19:18 +0200
+Cc:     Yu Kuai <yukuai1@huaweicloud.com>, tj@kernel.org, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <6E987AC9-9EBD-4172-A440-2FC13BA9AFD1@linaro.org>
+References: <20220916071942.214222-1-yukuai1@huaweicloud.com>
+ <20220916071942.214222-6-yukuai1@huaweicloud.com>
+ <20220919084633.nmzastqkjool5jnc@quack3>
+To:     Jan Kara <jack@suse.cz>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 05:55:21PM +0200, Uwe Kleine-König wrote:
-> On Tue, Sep 27, 2022 at 06:26:28PM +0300, Andy Shevchenko wrote:
-> > On Tue, Sep 27, 2022 at 05:10:53PM +0200, Uwe Kleine-König wrote:
-> > > On Tue, Sep 27, 2022 at 05:47:19PM +0300, Andy Shevchenko wrote:
-> > > > For the sake of integrity, include headers we are direct user of.
-> > > > 
-> > > > While at it, add missed struct pwm_lpss_boardinfo one and replace
-> > > > device.h with a forward declaration. The latter improves compile
-> > > > time due to reducing overhead of device.h parsing with entire train
-> > > > of dependencies.
-> > > 
-> > > Hm, I copied the cmdline for the compiler from a V=1 build and only run
-> > > the compiler on drivers/pwm/pwm-lpss-pci.c.
-> > > 
-> > > With #include <device.h> I got:
-> > > 
-> > > 	real	0m0.421s
-> > > 	user	0m0.354s
-> > > 	sys	0m0.066s
-> > > 
-> > > With struct device; I got:
-> > > 
-> > > 	real	0m0.431s
-> > > 	user	0m0.378s
-> > > 	sys	0m0.052s
-> > > 
-> > > Are the numbers for you considerably different?
-> > 
-> > Why Ingo created thousands of patches to do something similar? Because for
-> > a single user you won't see a big difference, but when amount of small pieces
-> > are gathered together, you definitely will.
-> 
-> My doubt is that for me the effect of using struct device over #include
-> <device.h> is even negative (looking at real and user). Is it sys which
-> counts in the end?
 
-The main time required for the header inclusion is mmap():ing it (that's what
-I believe preprocessor does) and parsing. In any case, testing on a high-speed
-machine one file case is not correct (scientific) approach. Of course with
-your measurements will be in the error range.
 
-As I have learnt at university the very first question for the experiment
-we should ask ourselves is "what exactly have we measured?"
+> Il giorno 19 set 2022, alle ore 10:46, Jan Kara <jack@suse.cz> ha =
+scritto:
+>=20
+> On Fri 16-09-22 15:19:41, Yu Kuai wrote:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>=20
+>> The 'bfq_data' and 'rb_root_cached' can both be accessed through
+>> 'bfq_queue', thus only pass 'bfq_queue' as parameter.
+>>=20
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>=20
 
-I'm not sure any continuation of this makes sense if we haven't answered
-to this. When I measured preprocessor speed up (not in this case, though),
-I used ccache tool, because it makes more clear the time spend for C
-preprocessor (by caching the compiler results), so 10 runs of that maybe
-closer to the real world (hot cache which should have no effect on the
-iteration-to-iteration time).
+Thanks for keeping improving BFQ's code.
 
-That said, if you want to NAK this, please do it explicitly. I'm not going
-to waste my time on this simple change anymore.
+Acked-by: Paolo Valente <paolo.valente@linaro.org>
 
-> > > > +struct device;
-
-...
-
-> > > > +struct pwm_lpss_boardinfo;
-> > > 
-> > > Hmm, I wonder why there is no compiler warning without that declaration.
-> > > At least in my builds. Do you see a warning? IMHO it's better to fix
-> > > that be swapping the order of struct pwm_lpss_chip and struct
-> > > pwm_lpss_boardinfo.
-> > 
-> > Have I told about warning?
-> 
-> No, it's just me who expected there would be a warning if a pointer to
-> struct pwm_lpss_boardinfo is used before struct pwm_lpss_boardinfo is
-> defined (or declared).
-> 
-> Anyhow, I stand by my opinion that swapping the order of struct
-> pwm_lpss_chip and struct pwm_lpss_boardinfo is a saner fix.
-
-I agree on this. But I expect a NAK, so simplest to me is to drop this patch
-from the series.
-
-> > It's a proper C programming style.
-> > You don't have a warning because all pointers are considered to be the same,
-> > but it is better style to explicitly point that out.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> Looks good. Feel free to add:
+>=20
+> Reviewed-by: Jan Kara <jack@suse.cz>
+>=20
+> 								Honza
+>> ---
+>> block/bfq-iosched.c | 19 +++++++++----------
+>> block/bfq-iosched.h | 10 +++-------
+>> block/bfq-wf2q.c    | 18 ++++++------------
+>> 3 files changed, 18 insertions(+), 29 deletions(-)
+>>=20
+>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+>> index 6d95b0e488a8..4ad4fa0dad4a 100644
+>> --- a/block/bfq-iosched.c
+>> +++ b/block/bfq-iosched.c
+>> @@ -870,9 +870,9 @@ static bool bfq_asymmetric_scenario(struct =
+bfq_data *bfqd,
+>>  * In most scenarios, the rate at which nodes are created/destroyed
+>>  * should be low too.
+>>  */
+>> -void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue =
+*bfqq,
+>> -			  struct rb_root_cached *root)
+>> +void bfq_weights_tree_add(struct bfq_queue *bfqq)
+>> {
+>> +	struct rb_root_cached *root =3D &bfqq->bfqd->queue_weights_tree;
+>> 	struct bfq_entity *entity =3D &bfqq->entity;
+>> 	struct rb_node **new =3D &(root->rb_root.rb_node), *parent =3D =
+NULL;
+>> 	bool leftmost =3D true;
+>> @@ -944,13 +944,14 @@ void bfq_weights_tree_add(struct bfq_data =
+*bfqd, struct bfq_queue *bfqq,
+>>  * See the comments to the function bfq_weights_tree_add() for =
+considerations
+>>  * about overhead.
+>>  */
+>> -void __bfq_weights_tree_remove(struct bfq_data *bfqd,
+>> -			       struct bfq_queue *bfqq,
+>> -			       struct rb_root_cached *root)
+>> +void __bfq_weights_tree_remove(struct bfq_queue *bfqq)
+>> {
+>> +	struct rb_root_cached *root;
+>> +
+>> 	if (!bfqq->weight_counter)
+>> 		return;
+>>=20
+>> +	root =3D &bfqq->bfqd->queue_weights_tree;
+>> 	bfqq->weight_counter->num_active--;
+>> 	if (bfqq->weight_counter->num_active > 0)
+>> 		goto reset_entity_pointer;
+>> @@ -967,11 +968,9 @@ void __bfq_weights_tree_remove(struct bfq_data =
+*bfqd,
+>>  * Invoke __bfq_weights_tree_remove on bfqq and decrement the number
+>>  * of active groups for each queue's inactive parent entity.
+>>  */
+>> -void bfq_weights_tree_remove(struct bfq_data *bfqd,
+>> -			     struct bfq_queue *bfqq)
+>> +void bfq_weights_tree_remove(struct bfq_queue *bfqq)
+>> {
+>> -	__bfq_weights_tree_remove(bfqd, bfqq,
+>> -				  &bfqd->queue_weights_tree);
+>> +	__bfq_weights_tree_remove(bfqq);
+>> }
+>>=20
+>> /*
+>> @@ -6220,7 +6219,7 @@ static void bfq_completed_request(struct =
+bfq_queue *bfqq, struct bfq_data *bfqd)
+>> 		bfqq->budget_timeout =3D jiffies;
+>>=20
+>> 		bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
+>> -		bfq_weights_tree_remove(bfqd, bfqq);
+>> +		bfq_weights_tree_remove(bfqq);
+>> 	}
+>>=20
+>> 	now_ns =3D ktime_get_ns();
+>> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+>> index 257acb54c6dc..4bb58ab0c90a 100644
+>> --- a/block/bfq-iosched.h
+>> +++ b/block/bfq-iosched.h
+>> @@ -973,13 +973,9 @@ struct bfq_queue *bic_to_bfqq(struct bfq_io_cq =
+*bic, bool is_sync);
+>> void bic_set_bfqq(struct bfq_io_cq *bic, struct bfq_queue *bfqq, bool =
+is_sync);
+>> struct bfq_data *bic_to_bfqd(struct bfq_io_cq *bic);
+>> void bfq_pos_tree_add_move(struct bfq_data *bfqd, struct bfq_queue =
+*bfqq);
+>> -void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue =
+*bfqq,
+>> -			  struct rb_root_cached *root);
+>> -void __bfq_weights_tree_remove(struct bfq_data *bfqd,
+>> -			       struct bfq_queue *bfqq,
+>> -			       struct rb_root_cached *root);
+>> -void bfq_weights_tree_remove(struct bfq_data *bfqd,
+>> -			     struct bfq_queue *bfqq);
+>> +void bfq_weights_tree_add(struct bfq_queue *bfqq);
+>> +void __bfq_weights_tree_remove(struct bfq_queue *bfqq);
+>> +void bfq_weights_tree_remove(struct bfq_queue *bfqq);
+>> void bfq_bfqq_expire(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>> 		     bool compensate, enum bfqq_expiration reason);
+>> void bfq_put_queue(struct bfq_queue *bfqq);
+>> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+>> index 5e8224c96921..124aaea6196e 100644
+>> --- a/block/bfq-wf2q.c
+>> +++ b/block/bfq-wf2q.c
+>> @@ -707,7 +707,6 @@ __bfq_entity_update_weight_prio(struct =
+bfq_service_tree *old_st,
+>> 		struct bfq_queue *bfqq =3D bfq_entity_to_bfqq(entity);
+>> 		unsigned int prev_weight, new_weight;
+>> 		struct bfq_data *bfqd =3D NULL;
+>> -		struct rb_root_cached *root;
+>> #ifdef CONFIG_BFQ_GROUP_IOSCHED
+>> 		struct bfq_sched_data *sd;
+>> 		struct bfq_group *bfqg;
+>> @@ -770,19 +769,15 @@ __bfq_entity_update_weight_prio(struct =
+bfq_service_tree *old_st,
+>> 		 * queue, remove the entity from its old weight counter =
+(if
+>> 		 * there is a counter associated with the entity).
+>> 		 */
+>> -		if (prev_weight !=3D new_weight && bfqq) {
+>> -			root =3D &bfqd->queue_weights_tree;
+>> -			__bfq_weights_tree_remove(bfqd, bfqq, root);
+>> -		}
+>> +		if (prev_weight !=3D new_weight && bfqq)
+>> +			__bfq_weights_tree_remove(bfqq);
+>> 		entity->weight =3D new_weight;
+>> 		/*
+>> 		 * Add the entity, if it is not a weight-raised queue,
+>> 		 * to the counter associated with its new weight.
+>> 		 */
+>> -		if (prev_weight !=3D new_weight && bfqq && =
+bfqq->wr_coeff =3D=3D 1) {
+>> -			/* If we get here, root has been initialized. */
+>> -			bfq_weights_tree_add(bfqd, bfqq, root);
+>> -		}
+>> +		if (prev_weight !=3D new_weight && bfqq && =
+bfqq->wr_coeff =3D=3D 1)
+>> +			bfq_weights_tree_add(bfqq);
+>>=20
+>> 		new_st->wsum +=3D entity->weight;
+>>=20
+>> @@ -1687,7 +1682,7 @@ void bfq_del_bfqq_busy(struct bfq_queue *bfqq, =
+bool expiration)
+>> 		 * Next function is invoked last, because it causes bfqq =
+to be
+>> 		 * freed. DO NOT use bfqq after the next function =
+invocation.
+>> 		 */
+>> -		bfq_weights_tree_remove(bfqd, bfqq);
+>> +		bfq_weights_tree_remove(bfqq);
+>> 	}
+>> }
+>>=20
+>> @@ -1708,8 +1703,7 @@ void bfq_add_bfqq_busy(struct bfq_queue *bfqq)
+>> 	if (!bfqq->dispatched) {
+>> 		bfq_add_bfqq_in_groups_with_pending_reqs(bfqq);
+>> 		if (bfqq->wr_coeff =3D=3D 1)
+>> -			bfq_weights_tree_add(bfqd, bfqq,
+>> -					     &bfqd->queue_weights_tree);
+>> +			bfq_weights_tree_add(bfqq);
+>> 	}
+>>=20
+>> 	if (bfqq->wr_coeff > 1)
+>> --=20
+>> 2.31.1
+>>=20
+> --=20
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
 
