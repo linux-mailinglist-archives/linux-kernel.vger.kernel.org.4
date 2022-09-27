@@ -2,133 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6903D5EC126
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C005EC046
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbiI0LX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
+        id S230472AbiI0LBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbiI0LXJ (ORCPT
+        with ESMTP id S231723AbiI0LAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:23:09 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A081913E7DC;
-        Tue, 27 Sep 2022 04:21:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1664277713;
-  x=1695813713;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=r9z94nHNbG/a3bIMb6JB09Z2qRd5LB6E0MBIYBQgOAE=;
-  b=SoT9DtW2m2H2jeVrb/N8+U+iqGJFc2f2fBMM82CxZnPClXAWHdOsz/Jk
-   knsbru/ncOM0CGg2biKkMyJS4u0mjQMYyjVGObC34ZjzjaIsi7y3bOdJK
-   588WlhWJOfTKXIuyOMnxJN4wpjFitMr1xThC4fmhZ0HTe/eUYkq6pfPhE
-   YSiDezPuaXcViOnADnOlhVbNQDR+E9tLWa4rp715u/t3tvIhK1zcI6xl4
-   FdvMXKk5mDJgi9WnDOw/4NNeeS3PsZFXL5qPkD+lZifVf/niv4lRvy7Ku
-   ZyZEQUc3z2UK1VSAqmCQkUIXgGlMKTaCTmX7PD+hHgYeUbMErR010YHR2
-   A==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <broonie@kernel.org>, <krzysztof.kozlowski@linaro.org>,
-        <andi@etezian.org>
-CC:     <kernel@axis.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <alim.akhtar@samsung.com>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v2 1/4] spi: Save current RX and TX DMA devices
-Date:   Tue, 27 Sep 2022 13:21:14 +0200
-Message-ID: <20220927112117.77599-2-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220927112117.77599-1-vincent.whitchurch@axis.com>
-References: <20220927112117.77599-1-vincent.whitchurch@axis.com>
+        Tue, 27 Sep 2022 07:00:47 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74602AC58;
+        Tue, 27 Sep 2022 04:00:43 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4McGlG2FykzlXH3;
+        Tue, 27 Sep 2022 18:56:26 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 19:00:40 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <hawk@kernel.org>,
+        <nathan@kernel.org>, <ndesaulniers@google.com>, <trix@redhat.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: [bpf-next v7 1/3] bpftool: Add auto_attach for bpf prog load|loadall
+Date:   Tue, 27 Sep 2022 19:21:14 +0800
+Message-ID: <1664277676-2228-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Save the current RX and TX DMA devices to avoid having to duplicate the
-logic to pick them, since we'll need access to them in some more
-functions to fix a bug in the cache handling.
+Add auto_attach optional to support one-step load-attach-pin_link.
 
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+For example,
+   $ bpftool prog loadall test.o /sys/fs/bpf/test autoattach
+
+   $ bpftool link
+   26: tracing  name test1  tag f0da7d0058c00236  gpl
+   	loaded_at 2022-09-09T21:39:49+0800  uid 0
+   	xlated 88B  jited 55B  memlock 4096B  map_ids 3
+   	btf_id 55
+   28: kprobe  name test3  tag 002ef1bef0723833  gpl
+   	loaded_at 2022-09-09T21:39:49+0800  uid 0
+   	xlated 88B  jited 56B  memlock 4096B  map_ids 3
+   	btf_id 55
+   57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+   	loaded_at 2022-09-09T21:41:32+0800  uid 0
+   	xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+   	btf_id 82
+
+   $ bpftool link
+   1: tracing  prog 26
+   	prog_type tracing  attach_type trace_fentry
+   3: perf_event  prog 28
+   10: perf_event  prog 57
+
+The autoattach optional can support tracepoints, k(ret)probes,
+u(ret)probes.
+
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
 ---
- drivers/spi/spi.c       | 19 ++++---------------
- include/linux/spi/spi.h |  4 ++++
- 2 files changed, 8 insertions(+), 15 deletions(-)
+v6 -> v7: add info msg print and update doc for the skip program
+v5 -> v6: skip the programs not supporting auto-attach,
+	  and change optional name from "auto_attach" to "autoattach"
+v4 -> v5: some formatting nits of doc
+v3 -> v4: rename functions, update doc, bash and do_help()
+v2 -> v3: switch to extend prog load command instead of extend perf
+v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+ tools/bpf/bpftool/prog.c | 81 ++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 79 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index ad254b94308e..dd885df23870 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1147,6 +1147,8 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
- 		}
- 	}
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index c81362a..84eced8 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1453,6 +1453,72 @@ static int do_run(int argc, char **argv)
+ 	return ret;
+ }
  
-+	ctlr->cur_rx_dma_dev = rx_dev;
-+	ctlr->cur_tx_dma_dev = tx_dev;
- 	ctlr->cur_msg_mapped = true;
- 
- 	return 0;
-@@ -1154,26 +1156,13 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
- 
- static int __spi_unmap_msg(struct spi_controller *ctlr, struct spi_message *msg)
++static int
++auto_attach_program(struct bpf_program *prog, const char *path)
++{
++	struct bpf_link *link;
++	int err;
++
++	link = bpf_program__attach(prog);
++	if (!link)
++		return -1;
++
++	err = bpf_link__pin(link, path);
++	if (err) {
++		bpf_link__destroy(link);
++		return err;
++	}
++	return 0;
++}
++
++static int pathname_concat(const char *path, const char *name, char *buf)
++{
++	int len;
++
++	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
++	if (len < 0)
++		return -EINVAL;
++	if (len >= PATH_MAX)
++		return -ENAMETOOLONG;
++
++	return 0;
++}
++
++static int
++auto_attach_programs(struct bpf_object *obj, const char *path)
++{
++	struct bpf_program *prog;
++	char buf[PATH_MAX];
++	int err;
++
++	bpf_object__for_each_program(prog, obj) {
++		err = pathname_concat(path, bpf_program__name(prog), buf);
++		if (err)
++			goto err_unpin_programs;
++
++		err = auto_attach_program(prog, buf);
++		if (!err)
++			continue;
++		if (errno == EOPNOTSUPP)
++			p_info("Program %s does not support autoattach",
++			       bpf_program__name(prog));
++		else
++			goto err_unpin_programs;
++	}
++
++	return 0;
++
++err_unpin_programs:
++	while ((prog = bpf_object__prev_program(obj, prog))) {
++		if (pathname_concat(path, bpf_program__name(prog), buf))
++			continue;
++
++		bpf_program__unpin(prog, buf);
++	}
++
++	return err;
++}
++
+ static int load_with_options(int argc, char **argv, bool first_prog_only)
  {
-+	struct device *rx_dev = ctlr->cur_rx_dma_dev;
-+	struct device *tx_dev = ctlr->cur_tx_dma_dev;
- 	struct spi_transfer *xfer;
--	struct device *tx_dev, *rx_dev;
+ 	enum bpf_prog_type common_prog_type = BPF_PROG_TYPE_UNSPEC;
+@@ -1464,6 +1530,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 	struct bpf_program *prog = NULL, *pos;
+ 	unsigned int old_map_fds = 0;
+ 	const char *pinmaps = NULL;
++	bool auto_attach = false;
+ 	struct bpf_object *obj;
+ 	struct bpf_map *map;
+ 	const char *pinfile;
+@@ -1583,6 +1650,9 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 				goto err_free_reuse_maps;
  
- 	if (!ctlr->cur_msg_mapped || !ctlr->can_dma)
- 		return 0;
+ 			pinmaps = GET_ARG();
++		} else if (is_prefix(*argv, "autoattach")) {
++			auto_attach = true;
++			NEXT_ARG();
+ 		} else {
+ 			p_err("expected no more arguments, 'type', 'map' or 'dev', got: '%s'?",
+ 			      *argv);
+@@ -1692,14 +1762,20 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 			goto err_close_obj;
+ 		}
  
--	if (ctlr->dma_tx)
--		tx_dev = ctlr->dma_tx->device->dev;
--	else if (ctlr->dma_map_dev)
--		tx_dev = ctlr->dma_map_dev;
--	else
--		tx_dev = ctlr->dev.parent;
--
--	if (ctlr->dma_rx)
--		rx_dev = ctlr->dma_rx->device->dev;
--	else if (ctlr->dma_map_dev)
--		rx_dev = ctlr->dma_map_dev;
--	else
--		rx_dev = ctlr->dev.parent;
--
- 	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
- 		if (!ctlr->can_dma(ctlr, msg->spi, xfer))
- 			continue;
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 6ea889df0813..fbf8c0d95968 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -378,6 +378,8 @@ extern struct spi_device *spi_new_ancillary_device(struct spi_device *spi, u8 ch
-  * @cleanup: frees controller-specific state
-  * @can_dma: determine whether this controller supports DMA
-  * @dma_map_dev: device which can be used for DMA mapping
-+ * @cur_rx_dma_dev: device which is currently used for RX DMA mapping
-+ * @cur_tx_dma_dev: device which is currently used for TX DMA mapping
-  * @queued: whether this controller is providing an internal message queue
-  * @kworker: pointer to thread struct for message pump
-  * @pump_messages: work struct for scheduling work to the message pump
-@@ -610,6 +612,8 @@ struct spi_controller {
- 					   struct spi_device *spi,
- 					   struct spi_transfer *xfer);
- 	struct device *dma_map_dev;
-+	struct device *cur_rx_dma_dev;
-+	struct device *cur_tx_dma_dev;
- 
- 	/*
- 	 * These hooks are for drivers that want to use the generic
+-		err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
++		if (auto_attach)
++			err = auto_attach_program(prog, pinfile);
++		else
++			err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
+ 		if (err) {
+ 			p_err("failed to pin program %s",
+ 			      bpf_program__section_name(prog));
+ 			goto err_close_obj;
+ 		}
+ 	} else {
+-		err = bpf_object__pin_programs(obj, pinfile);
++		if (auto_attach)
++			err = auto_attach_programs(obj, pinfile);
++		else
++			err = bpf_object__pin_programs(obj, pinfile);
+ 		if (err) {
+ 			p_err("failed to pin all programs");
+ 			goto err_close_obj;
+@@ -2338,6 +2414,7 @@ static int do_help(int argc, char **argv)
+ 		"                         [type TYPE] [dev NAME] \\\n"
+ 		"                         [map { idx IDX | name NAME } MAP]\\\n"
+ 		"                         [pinmaps MAP_DIR]\n"
++		"                         [autoattach]\n"
+ 		"       %1$s %2$s attach PROG ATTACH_TYPE [MAP]\n"
+ 		"       %1$s %2$s detach PROG ATTACH_TYPE [MAP]\n"
+ 		"       %1$s %2$s run PROG \\\n"
 -- 
-2.34.1
+1.8.3.1
 
