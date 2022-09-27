@@ -2,48 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33EA95EB8C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C5D5EB8BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbiI0DZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 23:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
+        id S230145AbiI0DZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 23:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbiI0DX4 (ORCPT
+        with ESMTP id S230489AbiI0DX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 23:23:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B404DB29;
-        Mon, 26 Sep 2022 20:23:12 -0700 (PDT)
+        Mon, 26 Sep 2022 23:23:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E00C57BE3;
+        Mon, 26 Sep 2022 20:23:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E5F361585;
-        Tue, 27 Sep 2022 03:23:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD61DC43141;
-        Tue, 27 Sep 2022 03:23:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DABD1B81910;
+        Tue, 27 Sep 2022 03:23:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA21BC4347C;
+        Tue, 27 Sep 2022 03:23:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664248991;
-        bh=bZonAAcYzPjbxgWAIwzer8elBdCorKx05VbGTfWGEiA=;
+        s=k20201202; t=1664248993;
+        bh=WPTi/MLtEp6ejiLdeHDqeJBbCy8zfALjPLNAZfwnaTU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ChUgWNdCfEUYKElTZbeOm+uQxPAkp+iu0mYTMM2rQA9dElyAZGyHsmPnP7880UnFq
-         3NxaYGA3ykRuyU6deClPPt6FkpGSIwJbXSWimNTX2lP/6X3J9JmLNCV+fpEXy4Cmd9
-         KOSodwZ9Y8bZY9a0HonC8HmDjKkkE/vnzxwDxUxMCzmkCgSx6TdvVkvN+PwZpwsKUn
-         T8CcUHM3iY0f5iRPdyVfQ54bDh5s1a10PHu3OOLG/7jDnkxqW01WfepuRYDZjsyAQE
-         zpUtTnok2m7Dk7w7Zaa6AhqDKJ3i5WDY4cDiIx6LFi1kTRTec+42gm6odEndUk2P4Q
-         4bxX+pVr7wJfQ==
+        b=cVbpZHibYUbFbbCo3awQ65Obu32RYX70+lwY7amHfgd5tCoizCCYWCKhPz/uyN3fX
+         1kkaQ4egx2PuDxGlFplUrjYE5x9HTNO46UzzpNDmDqbS2WKez/tYWOvoYkypp9jKMT
+         /tpEOm16jAMmatm0coenAEb6y2Q6xwexwOYy8FwWZRoh+Wzb70/t7WQcKsDovHGLZ/
+         y+AUTedsTONS8qoEVOexxvWYZrdoCl884zpNmyNU3VS9GpiSR4e56wm5gyjqr4WeU+
+         NFY8YOLj+Q6hOUjt2RlJlPjcSU5F0k92KQaS/oqD0UWu5OqY1Y7fqocrgIlYuhPQju
+         jz52H4FPe5NIw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>, quic_c_skakit@quicinc.com
-Cc:     swboyd@chromium.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_tdas@quicinc.com, linux-arm-msm@vger.kernel.org,
-        agross@kernel.org
-Subject: Re: [PATCH] clk: qcom: lpass: Fix lpass audiocc probe
-Date:   Mon, 26 Sep 2022 22:23:02 -0500
-Message-Id: <166424897970.1766486.10035457157175258141.b4-ty@kernel.org>
+To:     quic_krichai@quicinc.com, helgaas@kernel.org
+Cc:     quic_vbadigan@quicinc.com, vkoul@kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-kernel@vger.kernel.org, quic_ramkri@quicinc.com,
+        konrad.dybcio@somainline.org, bhelgaas@google.com,
+        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
+        swboyd@chromium.org, quic_nitegupt@quicinc.com,
+        svarbanov@mm-sol.com, lpieralisi@kernel.org, kishon@ti.com,
+        quic_skananth@quicinc.com, mturquette@baylibre.com,
+        robh@kernel.org, mka@chromium.org, linux-phy@lists.infradead.org,
+        agross@kernel.org, quic_hemantk@quicinc.com, kw@linux.com,
+        linux-pci@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: (subset) [PATCH v7 0/5] PCI: qcom: Add system suspend & resume support
+Date:   Mon, 26 Sep 2022 22:23:03 -0500
+Message-Id: <166424897975.1766486.8316270705903909845.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <1663673683-7018-1-git-send-email-quic_c_skakit@quicinc.com>
-References: <1663673683-7018-1-git-send-email-quic_c_skakit@quicinc.com>
+In-Reply-To: <1663669347-29308-1-git-send-email-quic_krichai@quicinc.com>
+References: <1663669347-29308-1-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,17 +63,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Sep 2022 17:04:43 +0530, Satya Priya wrote:
-> Change the qcom_cc_probe_by_index() call to qcom_cc_really_probe()
-> to avoid remapping of memory region for index 0, which is already
-> being done through qcom_cc_map().
+On Tue, 20 Sep 2022 15:52:22 +0530, Krishna chaitanya chundru wrote:
+> Few PCIe endpoints like NVMe and WLANs are always expecting the device
+> to be in D0 state and the link to be active (or in l1ss) all the
+> time (including in S3 state).
 > 
+> This patch series adds this support for allowing the system to enter
+> S3 state (and further low power states) with PCIe Device being in D0
+> state and with link being in l1ss on qcom platforms.
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] clk: qcom: lpass: Fix lpass audiocc probe
-      commit: 31e4fcf9713096c187f84bf3cb249637b8b681e1
+[5/5] clk: qcom: gcc-sc7280: Update the .pwrsts for PCIe GDSC
+      commit: 1a58ee1330b2cb6d71feb0aaf827cc10030f78b4
 
 Best regards,
 -- 
