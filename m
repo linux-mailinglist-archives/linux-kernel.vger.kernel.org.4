@@ -2,148 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192775EBEAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E32E5EBEB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiI0Jcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 05:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
+        id S231544AbiI0Jf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 05:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiI0Jct (ORCPT
+        with ESMTP id S230317AbiI0JfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 05:32:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB643CBD1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:32:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664271167;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SWzvIWhu2p5oGZsL7YjmEHhgIgzvZ3iiY7FpFO/QMaY=;
-        b=bWjfRPj38PcZX9Tw3XfICb0R8sWbDv8NGQjk6sXxGnEdMRVD8HHqP//8c1ODXw2OfBw75P
-        tVr+rsFu/+jiwkHs1CPvUmJ59LJlOw4Z0hyl8wrLja/yt9mBRoDAhWuygDJth2TzsphzPp
-        dsg3DIhZ3qEBgAdK1Dklvn5/G+dSKfk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-202-kPsBc1PNOI6r9PXcouFtkA-1; Tue, 27 Sep 2022 05:32:46 -0400
-X-MC-Unique: kPsBc1PNOI6r9PXcouFtkA-1
-Received: by mail-wr1-f71.google.com with SMTP id j16-20020adfa550000000b0022cbdfcea2dso401633wrb.19
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:32:46 -0700 (PDT)
+        Tue, 27 Sep 2022 05:35:25 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CDF89803
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:35:24 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id cc5so14074247wrb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:35:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=nZKlStsukXTiXMspHE/cDk5Om1miIJs0rtHlxN58scw=;
+        b=WgRuPgXbYPwOZJBGBtvGwIF6k9jaqXIuXShKS6mViB/1sb+TXAcASNRdmnfYTxow23
+         e7zuPgopsZ0uDgLx9oIXmLukND7haDWAAEM3msOJ3+Bul4On0e3/hVpVhlIPKv/5tgvC
+         iNgAG5DwHrl/0ZAFXghccez3HPu0zD7LCvoph755d69qQPVIRfo8xFdcDcW6udUA6Avf
+         753Irtor7A5wxmWPdQNEbjASM7ZPl6ojeb7IK4Ts6GcuopmAFGrnnPFSmHUIZRZYJSB7
+         ili1MC/txUR2YX4w0VQnwYqwnSHqOFCkHepxpVBDFcXbArHDttnC95VgS8Egzv1qAHOh
+         imUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=SWzvIWhu2p5oGZsL7YjmEHhgIgzvZ3iiY7FpFO/QMaY=;
-        b=k0wVLWLqU0FGxEvhX58Zw2fmMmR3CNSMWSLoTaZUSCn2iaTHjaWXtN7DRwtt9YV6LF
-         PspRPZtL8fHUtDOd5GR+A6rp4IvOQTe2ppenSvCpD/zVESfAUhrZJbGaNcRishEAwCXO
-         t2plSEGJ820W0BHyJ5HbAJJsLuiX0xiK6Izo93JAyGax6ou6yxad583HYBGQIDUaYyEP
-         5RDxjW8qc0Tnzs+4enwQwbDD2GXfh7r3eNG85Y4AI6BjS6gGHSvG70w2sDJNTh5xrIXV
-         OLCAyO0FeomB4l4Q3WxtHYRCJguevQk7mjz6onYzbaPDKIjNO9r9f+oqdhhBm5UqBmpD
-         Ikhg==
-X-Gm-Message-State: ACrzQf1SxMEugHbGN3FtfWxR66hXV3iDilIaAzDzLFRAOajNL90nMUbg
-        dLm0OetCoO+JdHNWF/w5FJ8BtFpWVWdxFx7v3/s3i/ptEMuuxL/zExnzfm/B4jCtxO0UWOmtAFs
-        Hk2iLc3dFmDNPQPhqlYAQEH0u
-X-Received: by 2002:adf:fa83:0:b0:205:c0cb:33c6 with SMTP id h3-20020adffa83000000b00205c0cb33c6mr17004728wrr.39.1664271165244;
-        Tue, 27 Sep 2022 02:32:45 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4565MFwjtigqjrfzQqmtzphrZ6sO+5jsO8tFcq1hCl3Ew+gbKmypG209xqcSaWhBh8bXCIrg==
-X-Received: by 2002:adf:fa83:0:b0:205:c0cb:33c6 with SMTP id h3-20020adffa83000000b00205c0cb33c6mr17004711wrr.39.1664271164966;
-        Tue, 27 Sep 2022 02:32:44 -0700 (PDT)
-Received: from [192.168.149.123] (58.254.164.109.static.wline.lns.sme.cust.swisscom.ch. [109.164.254.58])
-        by smtp.gmail.com with ESMTPSA id i6-20020a05600c354600b003b47b80cec3sm14617665wmq.42.2022.09.27.02.32.44
+        bh=nZKlStsukXTiXMspHE/cDk5Om1miIJs0rtHlxN58scw=;
+        b=p8zlMiJDcWUW5YJuhMqxVhbzgJI7DdCkHudZFu97HbF2qs7tbM4b1JdEyKmVAlP6X2
+         m0THkr2wsammWzXBBKRGZ6kklXieuFXdTYKdq6pT9mqV2yTFge4Oo9AAEY4HbkU4aQc9
+         +GR1bJothky+v7CH/hpSFUmVwG6ebbX4NARAp+HIN8JX860SzyZ0E4atI4brQ6KlyERT
+         3u9hocAuHaIJeQiqDbZwoWoze8ErXzY/twBUe1N6AbLK40jhsIXAExE5O0OFCyc7r6tL
+         DzX15n6n3eCFoBut1Qp4SqrIxKMw7kVvhuC4yiu+13dzHiYxl+GdSd1R1zrOAOfGvYxJ
+         OJfw==
+X-Gm-Message-State: ACrzQf27VmJt/rN5m7sE70Tv/bzf6jfEhc3L2BbMB2jiRjzV5evIKaxQ
+        JjCgU4HnchoFey5wQ3Lvkn7rng==
+X-Google-Smtp-Source: AMsMyM59DN9FLmFmygbaxvKvQrOnMoCZWLcuZEwpCKhb6PyTPe6TeSvziEJhWS+XJUbDBjtSnEXWfA==
+X-Received: by 2002:a5d:5887:0:b0:22b:1255:42e5 with SMTP id n7-20020a5d5887000000b0022b125542e5mr16623537wrf.114.1664271322835;
+        Tue, 27 Sep 2022 02:35:22 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id g11-20020a05600c310b00b003b4fe03c881sm14137452wmo.48.2022.09.27.02.35.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 02:32:44 -0700 (PDT)
-Message-ID: <81c235cc-1198-9765-d1e7-a158ea63eac4@redhat.com>
-Date:   Tue, 27 Sep 2022 11:32:43 +0200
+        Tue, 27 Sep 2022 02:35:22 -0700 (PDT)
+Message-ID: <49dacbf3-01e2-3687-f6d6-9346e418e98b@linaro.org>
+Date:   Tue, 27 Sep 2022 11:35:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC PATCH 9/9] kvm_main.c: handle atomic memslot update
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] thermal: qcom: tsens-v0_1: Fix MSM8939 fourth sensor
+ hw_id
 Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-References: <20220909104506.738478-1-eesposit@redhat.com>
- <20220909104506.738478-10-eesposit@redhat.com>
- <cde8be9d-64c0-80e5-7663-4302d075dcbc@redhat.com>
- <07014070-5186-ca95-7028-82f77612dedd@redhat.com>
- <a8c40c94-771c-ca3d-ee1d-44cbed2398e8@redhat.com>
-From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
-In-Reply-To: <a8c40c94-771c-ca3d-ee1d-44cbed2398e8@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     bryan.odonoghue@linaro.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org
+References: <20220811105014.7194-1-vincent.knecht@mailoo.org>
+ <9ef673f2-4296-8761-4d7a-dca323ba272e@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <9ef673f2-4296-8761-4d7a-dca323ba272e@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Am 27/09/2022 um 11:22 schrieb David Hildenbrand:
-> On 27.09.22 10:35, Emanuele Giuseppe Esposito wrote:
+On 24/09/2022 18:38, Dmitry Baryshkov wrote:
+> On 11/08/2022 13:50, Vincent Knecht wrote:
+>> Reading temperature from this sensor fails with 'Invalid argument'.
+>>
+>> Looking at old vendor dts [1], its hw_id should be 3 instead of 4.
+>> Change this hw_id accordingly.
+>>
+>> [1] 
+>> https://github.com/msm8916-mainline/android_kernel_qcom_msm8916/blob/master/arch/arm/boot/dts/qcom/msm8939-common.dtsi#L511 
 >>
 >>
->> Am 27/09/2022 um 09:46 schrieb David Hildenbrand:
->>> On 09.09.22 12:45, Emanuele Giuseppe Esposito wrote:
->>>> When kvm_vm_ioctl_set_memory_region_list() is invoked, we need
->>>> to make sure that all memslots are updated in the inactive list
->>>> and then swap (preferreably only once) the lists, so that all
->>>> changes are visible immediately.
->>>>
->>>> The only issue is that DELETE and MOVE need to perform 2 swaps:
->>>> firstly replace old memslot with invalid, and then remove invalid.
->>>>
->>>
->>> I'm curious, how would a resize (grow/shrink) or a split be handled?
->>>
->>
->> There are only 4 operations possible in KVM: KVM_MR_{DELETE, MOVE,
->> CREATE, FLAGS_ONLY}.
->>
->> A resize should be implemented in QEMU as DELETE+CREATE.
->>
->> Therefore a resize on memslot X will be implemented as:
->> First pass on the userspace operations:
->>     invalidate memslot X;
->>     swap_memslot_list(); // NOW it is visible to the guest
->>
->> What guest sees: memslot X is invalid, so MMU keeps retrying the page
->> fault
->>
->> Second pass:
->>     create new memslot X
->>     delete old memslot X
+>> Fixes: 332bc8ebab2c ("thermal: qcom: tsens-v0_1: Add support for 
+>> MSM8939")
+>> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
 > 
-> Thanks a lot for the very nice explanation!
-
-Anytime :)
-
-> Does the invalidation already free up memslot metadata (especially the
-> rmaps) or will we end up temporarily allocating twice the memslot metadata?
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > 
+> Daniel, gracious ping for getting this patch into 6.1.
 
-Invalidation creates a new temporary identical memslot, I am not sure
-about the rmaps. It is anyways the same code as it was done before and
-if I understand correctly, a new slot is required to keep the old
-intact, in case something goes wrong and we need to revert.
+Applied for 6.1, thanks
 
-Thanks,
-Emanuele
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
