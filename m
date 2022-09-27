@@ -2,81 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34B75EC47A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1035EC482
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbiI0Nbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
+        id S231984AbiI0NcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232859AbiI0NbO (ORCPT
+        with ESMTP id S232837AbiI0Nbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:31:14 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FA9E7E18
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:26:51 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:d95b:5c9b:4085:7c0d])
-        by albert.telenet-ops.be with bizsmtp
-        id R1Sl2800E3Qogd1061Sl7e; Tue, 27 Sep 2022 15:26:47 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1odAbk-006Qb7-KW; Tue, 27 Sep 2022 15:26:44 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1odAbk-000uvu-7K; Tue, 27 Sep 2022 15:26:44 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] ARM: Drop CMDLINE_FORCE dependency on !ARCH_MULTIPLATFORM
-Date:   Tue, 27 Sep 2022 15:26:26 +0200
-Message-Id: <c557b149780faa2299700585afc9d270ede7f78b.1664285062.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Tue, 27 Sep 2022 09:31:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B2338687;
+        Tue, 27 Sep 2022 06:28:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D0A6B81BBD;
+        Tue, 27 Sep 2022 13:28:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F0ADC433D7;
+        Tue, 27 Sep 2022 13:28:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664285296;
+        bh=L5XWbAoVUICGVz9qUaMDvnJiWWRc6SqEtKyCMV3wxSk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ElT1ECIlrJNtzE4yL/NfhN7NwMcGi6/bFDtdxn1RUPRm2VQYPeskI1TRnv3aNEdTh
+         Bn38zFcm8pijFMS7yNdXnZmFrbZdr/z6QAM+XHLhDaiiYqr1NCoSeu4ojwMmYyXcQL
+         shVGMT+/yNa7ekN94wtLiheTgZWMQm0lGnZhKoNwKE/gHGxajZcVBzpEOfYgBWr4lL
+         /y7AJ0WLjD2SMX/w6oz/zQtuyiIIr7TpUucsUEXSOIcH3xtxgZSW55+ycu2ERR0tFc
+         11neib8lKkCCxW2CEzUwlgtXBIVI6tgDlT4mC+2arSsFkO5evuaraPBjqlB5F/bk4T
+         cLB3uo6Jbd9zg==
+Date:   Tue, 27 Sep 2022 15:28:09 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: qcom: Add support for modular builds
+Message-ID: <YzL6aS6mktksLnqn@lpieralisi>
+References: <20220721064720.10762-1-johan+linaro@kernel.org>
+ <Yyl+PNcbtSwzlgvh@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yyl+PNcbtSwzlgvh@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On older platforms that boot an image with an appended DTB, or where
-the boot loader has no support for updating chosen/bootargs, it is
-common to rely on CMDLINE_FORCE.
+On Tue, Sep 20, 2022 at 10:47:56AM +0200, Johan Hovold wrote:
+> Hi Lorenzo,
+> 
+> On Thu, Jul 21, 2022 at 08:47:20AM +0200, Johan Hovold wrote:
+> > Allow the Qualcomm PCIe controller driver to be built as a module, which
+> > is useful for multi-platform kernels as well as during development.
+> > 
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> > 
+> > Changes in v2
+> >  - rebase on next-20220720 (adjust context)
+> >  - add Rob and Mani's reviewed-by tags
+> 
+> Have you had a change to look at this one since you got back from
+> vacation?
+> 
+> I believe this should be uncontroversial as we already have other
+> modular dwc drivers and there's no mapping of legacy INTx interrupts
+> involved.
 
-While a fixed command line can make the kernel unbootable on other
-platforms, it is not guaranteed to cause that.  E.g. all Renesas boards
-use the same chosen/bootargs in upstream DTS, which works fine if your
-DHCP server hands out proper nfsroot parameters.
+Sincere apologies for the delay.
 
-Fixes: 84fc863606239d8b ("ARM: make ARCH_MULTIPLATFORM user-visible")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- arch/arm/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+I am afraid it does look controversial - I need some time to go through
+the full discussion and make up my mind, unfortunately we are late in
+the cycle and I am dealing with the patch backlog, I believe this may
+end up being a discussion targeting the v6.2 merge window I am afraid.
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 22f62ad919bfd831..ea8adbf25651438a 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -1616,7 +1616,6 @@ config CMDLINE_EXTEND
- 
- config CMDLINE_FORCE
- 	bool "Always use the default kernel command string"
--	depends on !ARCH_MULTIPLATFORM
- 	help
- 	  Always use the default kernel command string, even if the boot
- 	  loader passes other arguments to the kernel.
--- 
-2.25.1
+Lorenzo
 
+> >  drivers/pci/controller/dwc/Kconfig     |  2 +-
+> >  drivers/pci/controller/dwc/pcie-qcom.c | 36 +++++++++++++++++++++++---
+> >  2 files changed, 34 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
+> > index 62ce3abf0f19..230f56d1a268 100644
+> > --- a/drivers/pci/controller/dwc/Kconfig
+> > +++ b/drivers/pci/controller/dwc/Kconfig
+> > @@ -168,7 +168,7 @@ config PCI_HISI
+> >  	  Hip05 and Hip06 SoCs
+> >  
+> >  config PCIE_QCOM
+> > -	bool "Qualcomm PCIe controller"
+> > +	tristate "Qualcomm PCIe controller"
+> >  	depends on OF && (ARCH_QCOM || COMPILE_TEST)
+> >  	depends on PCI_MSI_IRQ_DOMAIN
+> >  	select PCIE_DW_HOST
+> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > index 5ed164c2afa3..d176c635016b 100644
+> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > @@ -16,7 +16,7 @@
+> >  #include <linux/io.h>
+> >  #include <linux/iopoll.h>
+> >  #include <linux/kernel.h>
+> > -#include <linux/init.h>
+> > +#include <linux/module.h>
+> >  #include <linux/of_device.h>
+> >  #include <linux/of_gpio.h>
+> >  #include <linux/pci.h>
+> > @@ -1518,6 +1518,15 @@ static int qcom_pcie_host_init(struct dw_pcie_rp *pp)
+> >  	return ret;
+> >  }
+> >  
+> > +static void qcom_pcie_host_deinit(struct qcom_pcie *pcie)
+> > +{
+> > +	qcom_ep_reset_assert(pcie);
+> > +	if (pcie->cfg->ops->post_deinit)
+> > +		pcie->cfg->ops->post_deinit(pcie);
+> > +	phy_power_off(pcie->phy);
+> > +	pcie->cfg->ops->deinit(pcie);
+> > +}
+> > +
+> >  static const struct dw_pcie_host_ops qcom_pcie_dw_ops = {
+> >  	.host_init = qcom_pcie_host_init,
+> >  };
+> > @@ -1752,6 +1761,22 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+> >  	return ret;
+> >  }
+> >  
+> > +static int qcom_pcie_remove(struct platform_device *pdev)
+> > +{
+> > +	struct qcom_pcie *pcie = platform_get_drvdata(pdev);
+> > +	struct device *dev = &pdev->dev;
+> > +
+> > +	dw_pcie_host_deinit(&pcie->pci->pp);
+> > +	qcom_pcie_host_deinit(pcie);
+> > +
+> > +	phy_exit(pcie->phy);
+> > +
+> > +	pm_runtime_put_sync(dev);
+> > +	pm_runtime_disable(dev);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static const struct of_device_id qcom_pcie_match[] = {
+> >  	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
+> >  	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
+> > @@ -1771,6 +1796,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+> >  	{ .compatible = "qcom,pcie-ipq6018", .data = &ipq6018_cfg },
+> >  	{ }
+> >  };
+> > +MODULE_DEVICE_TABLE(of, qcom_pcie_match);
+> >  
+> >  static void qcom_fixup_class(struct pci_dev *dev)
+> >  {
+> > @@ -1786,10 +1812,14 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
+> >  
+> >  static struct platform_driver qcom_pcie_driver = {
+> >  	.probe = qcom_pcie_probe,
+> > +	.remove = qcom_pcie_remove,
+> >  	.driver = {
+> >  		.name = "qcom-pcie",
+> > -		.suppress_bind_attrs = true,
+> >  		.of_match_table = qcom_pcie_match,
+> >  	},
+> >  };
+> > -builtin_platform_driver(qcom_pcie_driver);
+> > +module_platform_driver(qcom_pcie_driver);
+> > +
+> > +MODULE_AUTHOR("Stanimir Varbanov <svarbanov@mm-sol.com>");
+> > +MODULE_DESCRIPTION("Qualcomm PCIe root complex driver");
+> > +MODULE_LICENSE("GPL");
+> 
+> Johan
