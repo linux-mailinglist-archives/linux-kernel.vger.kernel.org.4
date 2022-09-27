@@ -2,207 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B0B5ECC67
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 20:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3C15ECC6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 20:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbiI0SuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 14:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
+        id S230207AbiI0Svu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Sep 2022 14:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiI0Stu (ORCPT
+        with ESMTP id S229898AbiI0Svo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 14:49:50 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61179752F;
-        Tue, 27 Sep 2022 11:49:48 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id e18so7142174wmq.3;
-        Tue, 27 Sep 2022 11:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Uy/Lr8Tfy+eWDjAiAzx45YwI3RpsjEElaf8OKPLhdUU=;
-        b=CBghdfSs0ZPHWHMsOLsBnh5ZpxNT2s3g56DctsO8Mf9mTpDTB6p+jLVy8bOu2+/Gdf
-         tHL+M2v6uQVCGGRhWriixY2hCCodfeT0NIK+rYSYcft3K607LdN7ljgevSDIHv+kB3Gr
-         HMsq/7WpVUVStI31bLmpFEsfqmJoSciNbeX25w53xC6CZIpTPnuQqWDor1eo5aXCW7wo
-         SZpbfEGfJ6MzmHDdU111Gj1BibSRBV7O+ut5u/8Y9GWObPkyxRBc09l85ScndiwvQ9n8
-         YzhcWh35A87K/iIPqzydlaTmJwgvg0mI8E1jMY79EiCdwUXdWqrJ8HQb6RvUBox+QqTC
-         T43A==
+        Tue, 27 Sep 2022 14:51:44 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CDDF960C
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 11:51:43 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id b21-20020a5d8915000000b0068aaf634432so6427930ion.20
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 11:51:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Uy/Lr8Tfy+eWDjAiAzx45YwI3RpsjEElaf8OKPLhdUU=;
-        b=Zdm8lGfyPII/VkiEEvfqGQcLSFc/X3t60bCTOgVMlNE6rYukuJla1qinFeDPbvRGAe
-         NsngmELu8SNoUOeag8AO7JqIdI3fz/8plDe7OE+qRydbL4hpU8C55Mg0Pd+xWD0K6+gw
-         8RYTnbUQOcEzgijBMrpRIH33pGP5znbJp5zWo22WHE5A5vXWwph/da/tlkidG7+p342g
-         lGQlQoLvP8iGmze4LX3Bf9+NoQIA4TzfRV99fMkq65V8zJsoeUugPLeAZSG8MqQZgihP
-         /3fINtfHJX1/vqGaX+ZHP6+o8hXmpTtQfny+X+hVdSC5QuzuBWdpNaO+z05yoaL5LHhQ
-         +i8A==
-X-Gm-Message-State: ACrzQf1QAKQT/C0i7cyHupTb0igUBQPz5kDuVGKkC+wShHe/7Ib2Gt5h
-        YhdbRc7iqoDG+lBq/Svyh6k=
-X-Google-Smtp-Source: AMsMyM5I8+ROinB1laAu4ZG/L6R5Rm2MX5ZivMTsJ4uvWRtjro0IKjNXqFxx0x9bEj5jkdygW04R1g==
-X-Received: by 2002:a05:600c:3cd:b0:3b4:8372:294c with SMTP id z13-20020a05600c03cd00b003b48372294cmr3852346wmd.191.1664304587170;
-        Tue, 27 Sep 2022 11:49:47 -0700 (PDT)
-Received: from [192.168.8.100] (94.196.228.157.threembb.co.uk. [94.196.228.157])
-        by smtp.gmail.com with ESMTPSA id f10-20020adff58a000000b002285f73f11dsm2848176wro.81.2022.09.27.11.49.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 11:49:46 -0700 (PDT)
-Message-ID: <c06897d4-4883-2756-87f9-9b10ab495c43@gmail.com>
-Date:   Tue, 27 Sep 2022 19:48:28 +0100
+        h=content-transfer-encoding:to:from:subject:message-id:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=+UtalqemC23LCsMVIprSKVlKapSr2rP3wl6kZxQ368M=;
+        b=cJeOQRMJbJ4dBzhVQ1b4U2M8eMhTaUEvKVoIJVHBOQj7DJQNJ7bIla1k+3uIFnu9hx
+         aOSLuku+UNc22vY85wCi95bp8qxtS0+vFYBMqwhmxLYrTyhZmgvT9guxkQf7W0ABnPoA
+         wo2RLxg2anCRWhDH86AyEG/JvlWwZT7oZj6OTdBG2hJiYM5nRt0fOsivwh7r9L96a7Me
+         os1/pIXv7cIz/is/DOib1j2HHoTGLHh/u9lgkd1e6sXiLOKvBK8uwJHE52p30AWkeGyy
+         f87uinLdz9g2v+3ZQqy0S5Bivj1dk3Unv6oDCC/1nbyPcG8DnSktRZiUpwZzf/jVAiwq
+         /gRA==
+X-Gm-Message-State: ACrzQf3YDKCx8Um/Drr2hgv0WynEz4F3vfFBnFDEk/pJJ+3awUdPEZ/8
+        8CztALiiztCGpfI9b0ctqB++SGfIFDonmN5l1xwL54sxc7eI
+X-Google-Smtp-Source: AMsMyM7DCld31+pivdSCsltbh1AUXK2CIlKuj+zz94o6QBBPBtPBOmwAoBFoqy2Zhf00fC3qU0jQ6NaMKUl1pM/OAqhkzrose8Up
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH net-next 0/4] shrink struct ubuf_info
-Content-Language: en-US
-To:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org, Wei Liu <wei.liu@kernel.org>,
-        Paul Durrant <paul@xen.org>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-References: <cover.1663892211.git.asml.silence@gmail.com>
- <7fef56880d40b9d83cc99317df9060c4e7cdf919.camel@redhat.com>
- <021d8ea4-891c-237d-686e-64cecc2cc842@gmail.com>
- <bbb212f6-0165-0747-d99d-b49acbb02a80@gmail.com>
- <85cccb780608e830024fc82a8e4f703031646f4e.camel@redhat.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <85cccb780608e830024fc82a8e4f703031646f4e.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:687:b0:2f8:e16a:a3fb with SMTP id
+ o7-20020a056e02068700b002f8e16aa3fbmr900770ils.163.1664304702539; Tue, 27 Sep
+ 2022 11:51:42 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 11:51:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000097ce6405e9ad2282@google.com>
+Subject: [syzbot] possible deadlock in __mod_timer
+From:   syzbot <syzbot+622205cc61a6d1bb6452@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, bigeasy@linutronix.de,
+        bpf@vger.kernel.org, brauner@kernel.org, ebiederm@xmission.com,
+        linux-kernel@vger.kernel.org, luto@kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 18:56, Paolo Abeni wrote:
-> On Tue, 2022-09-27 at 18:16 +0100, Pavel Begunkov wrote:
->> On 9/27/22 15:28, Pavel Begunkov wrote:
->>> Hello Paolo,
->>>
->>> On 9/27/22 14:49, Paolo Abeni wrote:
->>>> Hello,
->>>>
->>>> On Fri, 2022-09-23 at 17:39 +0100, Pavel Begunkov wrote:
->>>>> struct ubuf_info is large but not all fields are needed for all
->>>>> cases. We have limited space in io_uring for it and large ubuf_info
->>>>> prevents some struct embedding, even though we use only a subset
->>>>> of the fields. It's also not very clean trying to use this typeless
->>>>> extra space.
->>>>>
->>>>> Shrink struct ubuf_info to only necessary fields used in generic paths,
->>>>> namely ->callback, ->refcnt and ->flags, which take only 16 bytes. And
->>>>> make MSG_ZEROCOPY and some other users to embed it into a larger struct
->>>>> ubuf_info_msgzc mimicking the former ubuf_info.
->>>>>
->>>>> Note, xen/vhost may also have some cleaning on top by creating
->>>>> new structs containing ubuf_info but with proper types.
->>>>
->>>> That sounds a bit scaring to me. If I read correctly, every uarg user
->>>> should check 'uarg->callback == msg_zerocopy_callback' before accessing
->>>> any 'extend' fields.
->>>
->>> Providers of ubuf_info access those fields via callbacks and so already
->>> know the actual structure used. The net core, on the opposite, should
->>> keep it encapsulated and not touch them at all.
->>>
->>> The series lists all places where we use extended fields just on the
->>> merit of stripping the structure of those fields and successfully
->>> building it. The only user in net/ipv{4,6}/* is MSG_ZEROCOPY, which
->>> again uses callbacks.
->>>
->>> Sounds like the right direction for me. There is a couple of
->>> places where it might get type safer, i.e. adding types instead
->>> of void* in for struct tun_msg_ctl and getting rid of one macro
->>> hiding types in xen. But seems more like TODO for later.
->>>
->>>> AFAICS the current code sometimes don't do the
->>>> explicit test because the condition is somewhat implied, which in turn
->>>> is quite hard to track.
->>>>
->>>> clearing uarg->zerocopy for the 'wrong' uarg was armless and undetected
->>>> before this series, and after will trigger an oops..
->>>
->>> And now we don't have this field at all to access, considering that
->>> nobody blindly casts it.
->>>
->>>> There is some noise due to uarg -> uarg_zc renaming which make the
->>>> series harder to review. Have you considered instead keeping the old
->>>> name and introducing a smaller 'struct ubuf_info_common'? the overall
->>>> code should be mostly the same, but it will avoid the above mentioned
->>>> noise.
->>>
->>> I don't think there will be less noise this way, but let me try
->>> and see if I can get rid of some churn.
->>
->> It doesn't look any better for me
->>
->> TL;DR; This series converts only 3 users: tap, xen and MSG_ZEROCOPY
->> and doesn't touch core code. If we do ubuf_info_common though I'd need
->> to convert lots of places in skbuff.c and multiple places across
->> tcp/udp, which is much worse.
-> 
-> Uhmm... I underlook the fact we must preserve the current accessors for
-> the common fields.
-> 
-> I guess something like the following could do (completely untested,
-> hopefully should illustrate the idea):
-> 
-> struct ubuf_info {
-> 	struct_group_tagged(ubuf_info_common, common,
-> 		void (*callback)(struct sk_buff *, struct ubuf_info *,
->                           bool zerocopy_success);
-> 		refcount_t refcnt;
-> 	        u8 flags;
-> 	);
-> 
-> 	union {
->                  struct {
->                          unsigned long desc;
->                          void *ctx;
->                  };
->                  struct {
->                          u32 id;
->                          u16 len;
->                          u16 zerocopy:1;
->                          u32 bytelen;
->                  };
->          };
-> 
->          struct mmpin {
->                  struct user_struct *user;
->                  unsigned int num_pg;
->          } mmp;
-> };
-> 
-> Then you should be able to:
-> - access ubuf_info->callback,
-> - access the same field via ubuf_info->common.callback
-> - declare variables as 'struct ubuf_info_commom' with appropriate
-> contents.
-> 
-> WDYT?
+Hello,
 
-Interesting, I didn't think about struct_group, this would
-let to split patches better and would limit non-core changes.
-But if the plan is to convert the core helpers to
-ubuf_info_common, than I think it's still messier than changing
-ubuf providers only.
+syzbot found the following issue on:
 
-I can do the exercise, but I don't really see what is the goal.
-Let me ask this, if we forget for a second how diffs look,
-do you care about which pair is going to be in the end?
-ubuf_info_common/ubuf_info vs ubuf_info/ubuf_info_msgzc?
-Are there you concerned about naming or is there more to it?
+HEAD commit:    a1375562c0a8 Merge tag 'x86_urgent_for_v6.0-rc8' of git://..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15760950880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a1992c90769e07
+dashboard link: https://syzkaller.appspot.com/bug?extid=622205cc61a6d1bb6452
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
--- 
-Pavel Begunkov
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+622205cc61a6d1bb6452@syzkaller.appspotmail.com
+
+chnl_net:caif_netlink_parms(): no params data found
+======================================================
+WARNING: possible circular locking dependency detected
+6.0.0-rc7-syzkaller-00034-ga1375562c0a8 #0 Not tainted
+------------------------------------------------------
+syz-executor.2/3684 is trying to acquire lock:
+ffffffff8c0be788 (zonelist_update_seq.seqcount){...-}-{0:0}, at: __alloc_pages+0x43d/0x510 mm/page_alloc.c:5562
+
+but task is already holding lock:
+ffff88802cb29498 (&base->lock){-.-.}-{2:2}, at: __mod_timer+0x60c/0xe30 kernel/time/timer.c:1096
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #4 (&base->lock){-.-.}-{2:2}:
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
+       lock_timer_base+0x5a/0x1f0 kernel/time/timer.c:999
+       __mod_timer+0x398/0xe30 kernel/time/timer.c:1072
+       __queue_delayed_work+0x1a7/0x270 kernel/workqueue.c:1676
+       queue_delayed_work_on+0x105/0x120 kernel/workqueue.c:1701
+       psi_enqueue kernel/sched/stats.h:136 [inline]
+       enqueue_task+0x1ec/0x3a0 kernel/sched/core.c:2062
+       activate_task kernel/sched/core.c:2091 [inline]
+       wake_up_new_task+0x582/0xbf0 kernel/sched/core.c:4680
+       kernel_clone+0x1eb/0xab0 kernel/fork.c:2695
+       user_mode_thread+0xad/0xe0 kernel/fork.c:2740
+       rest_init+0x23/0x270 init/main.c:692
+       arch_call_rest_init+0xf/0x14 init/main.c:883
+       start_kernel+0x46e/0x48f init/main.c:1138
+       secondary_startup_64_no_verify+0xce/0xdb
+
+-> #3 (&rq->__lock){-.-.}-{2:2}:
+       _raw_spin_lock_nested+0x30/0x40 kernel/locking/spinlock.c:378
+       raw_spin_rq_lock_nested+0x2b/0x120 kernel/sched/core.c:544
+       raw_spin_rq_lock kernel/sched/sched.h:1355 [inline]
+       rq_lock kernel/sched/sched.h:1653 [inline]
+       task_fork_fair+0x68/0x520 kernel/sched/fair.c:11440
+       sched_cgroup_fork+0x340/0x480 kernel/sched/core.c:4624
+       copy_process+0x4416/0x7090 kernel/fork.c:2371
+       kernel_clone+0xe7/0xab0 kernel/fork.c:2671
+       user_mode_thread+0xad/0xe0 kernel/fork.c:2740
+       rest_init+0x23/0x270 init/main.c:692
+       arch_call_rest_init+0xf/0x14 init/main.c:883
+       start_kernel+0x46e/0x48f init/main.c:1138
+       secondary_startup_64_no_verify+0xce/0xdb
+
+-> #2 (&p->pi_lock){-.-.}-{2:2}:
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
+       try_to_wake_up+0xab/0x1e60 kernel/sched/core.c:4082
+       up+0x75/0xb0 kernel/locking/semaphore.c:191
+       __up_console_sem+0xa4/0xc0 kernel/printk/printk.c:263
+       __console_unlock kernel/printk/printk.c:2652 [inline]
+       console_unlock+0x480/0x5a0 kernel/printk/printk.c:2863
+       vga_remove_vgacon drivers/pci/vgaarb.c:189 [inline]
+       vga_remove_vgacon.cold+0x99/0x9e drivers/pci/vgaarb.c:170
+       aperture_remove_conflicting_pci_devices+0x59/0x200 drivers/video/aperture.c:336
+       virtio_gpu_pci_quirk drivers/gpu/drm/virtio/virtgpu_drv.c:61 [inline]
+       virtio_gpu_probe.cold+0x16a/0x189 drivers/gpu/drm/virtio/virtgpu_drv.c:118
+       virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
+       call_driver_probe drivers/base/dd.c:560 [inline]
+       really_probe+0x249/0xb90 drivers/base/dd.c:639
+       __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+       driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+       __driver_attach+0x1d0/0x550 drivers/base/dd.c:1190
+       bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
+       bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
+       driver_register+0x220/0x3a0 drivers/base/driver.c:246
+       do_one_initcall+0xfe/0x650 init/main.c:1296
+       do_initcall_level init/main.c:1369 [inline]
+       do_initcalls init/main.c:1385 [inline]
+       do_basic_setup init/main.c:1404 [inline]
+       kernel_init_freeable+0x6b1/0x73a init/main.c:1623
+       kernel_init+0x1a/0x1d0 init/main.c:1512
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+-> #1 ((console_sem).lock){-...}-{2:2}:
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
+       down_trylock+0xe/0x60 kernel/locking/semaphore.c:139
+       __down_trylock_console_sem+0x40/0x120 kernel/printk/printk.c:246
+       console_trylock kernel/printk/printk.c:2586 [inline]
+       console_trylock_spinning kernel/printk/printk.c:1870 [inline]
+       vprintk_emit+0x167/0x5f0 kernel/printk/printk.c:2270
+       vprintk+0x80/0x90 kernel/printk/printk_safe.c:50
+       _printk+0xba/0xed kernel/printk/printk.c:2292
+       build_zonelists+0x2e7/0x400 mm/page_alloc.c:6468
+       __build_all_zonelists+0x111/0x180 mm/page_alloc.c:6584
+       build_all_zonelists_init+0x2f/0x104 mm/page_alloc.c:6609
+       build_all_zonelists+0x11f/0x140 mm/page_alloc.c:6642
+       start_kernel+0xb9/0x48f init/main.c:960
+       secondary_startup_64_no_verify+0xce/0xdb
+
+-> #0 (zonelist_update_seq.seqcount){...-}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain kernel/locking/lockdep.c:3829 [inline]
+       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
+       lock_acquire kernel/locking/lockdep.c:5666 [inline]
+       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+       seqcount_lockdep_reader_access include/linux/seqlock.h:102 [inline]
+       read_seqbegin include/linux/seqlock.h:836 [inline]
+       zonelist_iter_begin mm/page_alloc.c:4722 [inline]
+       __alloc_pages_slowpath.constprop.0+0x1a5/0x2300 mm/page_alloc.c:5044
+       __alloc_pages+0x43d/0x510 mm/page_alloc.c:5562
+       __alloc_pages_node include/linux/gfp.h:243 [inline]
+       kmem_getpages mm/slab.c:1363 [inline]
+       cache_grow_begin+0x75/0x360 mm/slab.c:2569
+       cache_alloc_refill+0x27f/0x380 mm/slab.c:2942
+       ____cache_alloc mm/slab.c:3018 [inline]
+       ____cache_alloc mm/slab.c:3001 [inline]
+       __do_cache_alloc mm/slab.c:3246 [inline]
+       slab_alloc mm/slab.c:3287 [inline]
+       __kmem_cache_alloc_lru mm/slab.c:3471 [inline]
+       kmem_cache_alloc+0x433/0x520 mm/slab.c:3491
+       kmem_cache_zalloc include/linux/slab.h:723 [inline]
+       fill_pool+0x264/0x5c0 lib/debugobjects.c:168
+       __debug_object_init+0x7a/0xd10 lib/debugobjects.c:562
+       debug_object_init lib/debugobjects.c:617 [inline]
+       debug_object_activate+0x32c/0x3e0 lib/debugobjects.c:703
+       debug_timer_activate kernel/time/timer.c:782 [inline]
+       __mod_timer+0x77d/0xe30 kernel/time/timer.c:1103
+       __queue_delayed_work+0x1a7/0x270 kernel/workqueue.c:1676
+       queue_delayed_work_on+0x105/0x120 kernel/workqueue.c:1701
+       queue_delayed_work include/linux/workqueue.h:518 [inline]
+       wg_ratelimiter_init+0x198/0x2c0 drivers/net/wireguard/ratelimiter.c:191
+       wg_newlink+0x4f2/0x9a0 drivers/net/wireguard/device.c:367
+       rtnl_newlink_create net/core/rtnetlink.c:3363 [inline]
+       __rtnl_newlink+0x1087/0x17e0 net/core/rtnetlink.c:3580
+       rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3593
+       rtnetlink_rcv_msg+0x43a/0xca0 net/core/rtnetlink.c:6090
+       netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
+       netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+       netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+       netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+       sock_sendmsg_nosec net/socket.c:714 [inline]
+       sock_sendmsg+0xcf/0x120 net/socket.c:734
+       __sys_sendto+0x236/0x340 net/socket.c:2117
+       __do_sys_sendto net/socket.c:2129 [inline]
+       __se_sys_sendto net/socket.c:2125 [inline]
+       __x64_sys_sendto+0xdd/0x1b0 net/socket.c:2125
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  zonelist_update_seq.seqcount --> &rq->__lock --> &base->lock
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&base->lock);
+                               lock(&rq->__lock);
+                               lock(&base->lock);
+  lock(zonelist_update_seq.seqcount);
+
+ *** DEADLOCK ***
+
+3 locks held by syz-executor.2/3684:
+ #0: ffffffff8d7a89a8 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:74 [inline]
+ #0: ffffffff8d7a89a8 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x3e5/0xca0 net/core/rtnetlink.c:6087
+ #1: ffffffff8ccaad48 (init_lock){+.+.}-{3:3}, at: wg_ratelimiter_init+0x17/0x2c0 drivers/net/wireguard/ratelimiter.c:160
+ #2: ffff88802cb29498 (&base->lock){-.-.}-{2:2}, at: __mod_timer+0x60c/0xe30 kernel/time/timer.c:1096
+
+stack backtrace:
+CPU: 3 PID: 3684 Comm: syz-executor.2 Not tainted 6.0.0-rc7-syzkaller-00034-ga1375562c0a8 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain kernel/locking/lockdep.c:3829 [inline]
+ __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
+ lock_acquire kernel/locking/lockdep.c:5666 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+ seqcount_lockdep_reader_access include/linux/seqlock.h:102 [inline]
+ read_seqbegin include/linux/seqlock.h:836 [inline]
+ zonelist_iter_begin mm/page_alloc.c:4722 [inline]
+ __alloc_pages_slowpath.constprop.0+0x1a5/0x2300 mm/page_alloc.c:5044
+ __alloc_pages+0x43d/0x510 mm/page_alloc.c:5562
+ __alloc_pages_node include/linux/gfp.h:243 [inline]
+ kmem_getpages mm/slab.c:1363 [inline]
+ cache_grow_begin+0x75/0x360 mm/slab.c:2569
+ cache_alloc_refill+0x27f/0x380 mm/slab.c:2942
+ ____cache_alloc mm/slab.c:3018 [inline]
+ ____cache_alloc mm/slab.c:3001 [inline]
+ __do_cache_alloc mm/slab.c:3246 [inline]
+ slab_alloc mm/slab.c:3287 [inline]
+ __kmem_cache_alloc_lru mm/slab.c:3471 [inline]
+ kmem_cache_alloc+0x433/0x520 mm/slab.c:3491
+ kmem_cache_zalloc include/linux/slab.h:723 [inline]
+ fill_pool+0x264/0x5c0 lib/debugobjects.c:168
+ __debug_object_init+0x7a/0xd10 lib/debugobjects.c:562
+ debug_object_init lib/debugobjects.c:617 [inline]
+ debug_object_activate+0x32c/0x3e0 lib/debugobjects.c:703
+ debug_timer_activate kernel/time/timer.c:782 [inline]
+ __mod_timer+0x77d/0xe30 kernel/time/timer.c:1103
+ __queue_delayed_work+0x1a7/0x270 kernel/workqueue.c:1676
+ queue_delayed_work_on+0x105/0x120 kernel/workqueue.c:1701
+ queue_delayed_work include/linux/workqueue.h:518 [inline]
+ wg_ratelimiter_init+0x198/0x2c0 drivers/net/wireguard/ratelimiter.c:191
+ wg_newlink+0x4f2/0x9a0 drivers/net/wireguard/device.c:367
+ rtnl_newlink_create net/core/rtnetlink.c:3363 [inline]
+ __rtnl_newlink+0x1087/0x17e0 net/core/rtnetlink.c:3580
+ rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3593
+ rtnetlink_rcv_msg+0x43a/0xca0 net/core/rtnetlink.c:6090
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ __sys_sendto+0x236/0x340 net/socket.c:2117
+ __do_sys_sendto net/socket.c:2129 [inline]
+ __se_sys_sendto net/socket.c:2125 [inline]
+ __x64_sys_sendto+0xdd/0x1b0 net/socket.c:2125
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0030e3c5bc
+Code: fa fa ff ff 44 8b 4c 24 2c 4c 8b 44 24 20 89 c5 44 8b 54 24 28 48 8b 54 24 18 b8 2c 00 00 00 48 8b 74 24 10 8b 7c 24 08 0f 05 <48> 3d 00 f0 ff ff 77 34 89 ef 48 89 44 24 08 e8 20 fb ff ff 48 8b
+RSP: 002b:00007ffdc46c8050 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00007f0031ee4320 RCX: 00007f0030e3c5bc
+RDX: 000000000000003c RSI: 00007f0031ee4370 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007ffdc46c80a4 R09: 000000000000000c
+R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
+R13: 00007f0031ee4370 R14: 0000000000000003 R15: 0000000000000000
+ </TASK>
+bridge0: port 1(bridge_slave_0) entered blocking state
+bridge0: port 1(bridge_slave_0) entered disabled state
+device bridge_slave_0 entered promiscuous mode
+bridge0: port 2(bridge_slave_1) entered blocking state
+bridge0: port 2(bridge_slave_1) entered disabled state
+device bridge_slave_1 entered promiscuous mode
+bond0: (slave bond_slave_0): Enslaving as an active interface with an up link
+bond0: (slave bond_slave_1): Enslaving as an active interface with an up link
+team0: Port device team_slave_0 added
+team0: Port device team_slave_1 added
+batman_adv: batadv0: Adding interface: batadv_slave_0
+batman_adv: batadv0: The MTU of interface batadv_slave_0 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1560 would solve the problem.
+batman_adv: batadv0: Not using interface batadv_slave_0 (retrying later): interface not active
+batman_adv: batadv0: Adding interface: batadv_slave_1
+batman_adv: batadv0: The MTU of interface batadv_slave_1 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1560 would solve the problem.
+batman_adv: batadv0: Not using interface batadv_slave_1 (retrying later): interface not active
+device hsr_slave_0 entered promiscuous mode
+device hsr_slave_1 entered promiscuous mode
+netdevsim netdevsim2 netdevsim0: renamed from eth0
+netdevsim netdevsim2 netdevsim1: renamed from eth1
+netdevsim netdevsim2 netdevsim2: renamed from eth2
+netdevsim netdevsim2 netdevsim3: renamed from eth3
+8021q: adding VLAN 0 to HW filter on device bond0
+8021q: adding VLAN 0 to HW filter on device team0
+hsr0: Slave A (hsr_slave_0) is not up; please bring it up to get a fully working HSR network
+hsr0: Slave B (hsr_slave_1) is not up; please bring it up to get a fully working HSR network
+8021q: adding VLAN 0 to HW filter on device batadv0
+device veth0_vlan entered promiscuous mode
+device veth1_vlan entered promiscuous mode
+device veth0_macvtap entered promiscuous mode
+device veth1_macvtap entered promiscuous mode
+batman_adv: The newly added mac address (aa:aa:aa:aa:aa:3e) already exists on: batadv_slave_0
+batman_adv: It is strongly recommended to keep mac addresses unique to avoid problems!
+batman_adv: batadv0: Interface activated: batadv_slave_0
+batman_adv: The newly added mac address (aa:aa:aa:aa:aa:3f) already exists on: batadv_slave_1
+batman_adv: It is strongly recommended to keep mac addresses unique to avoid problems!
+batman_adv: batadv0: Interface activated: batadv_slave_1
+netdevsim netdevsim2 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim2 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim2 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim2 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
