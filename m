@@ -2,118 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C08C5EC0E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA8F5EC0EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbiI0LSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S231367AbiI0LSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbiI0LSF (ORCPT
+        with ESMTP id S231829AbiI0LSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:18:05 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CDA11BCDD;
-        Tue, 27 Sep 2022 04:17:37 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id m3so12701437eda.12;
-        Tue, 27 Sep 2022 04:17:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=5+kF5Y0/203zzrdLAOZ9QTBoJ3rERNsk4sXaumVZuYA=;
-        b=P1pr7qRYb3951aLNn/CBQ8BqiBgzZ1kad+bR3TfANi+ZSu6uwdQ6EEpnR59OnNd8TF
-         MjC8/3hV5xTTqni2mubK+aEfbxmfXd8RXzDMVB+qd+Vq5By5znhsLcSpH1TmvKqsQaCK
-         ru1nw5fXw+0rVBx/gNRV59cNoQpQXtwcqPFXhPUMU6luhkhlaS8tfMeCExPcwMxflka5
-         +ooTe81Df7g6xdLrjZX4d8/cCWo0wa7LuGnl9/lAWLUcZ/s6SO0O5HEnTi2p8zkkQKcm
-         dz4AuZuOnfwstR6DjyoCUR81W4sHXnJ2HsqpWGg79ZftZ0+V/hTqnJp/UazY1EZdFpeT
-         WaEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=5+kF5Y0/203zzrdLAOZ9QTBoJ3rERNsk4sXaumVZuYA=;
-        b=vbah14I7F4GSkin+x0bHCQAsHaRYJuX2RJTha8I3XIEJngz2GAaLEvVz5RZNFcSKM6
-         u5c3sSMh7VsKP9rU/kIYfXxNl670OTMK3h3H97Cx0fKjUyISzUhzY9lO7eavS7oQ/jxq
-         L091EiAQNyUCtKJxsQuVNY0bCLSssO7RttyiKBFEvlA6Rf7NGgsyytG/0a211jXtoxC6
-         c9Lp7HdcNZfzSradtlg3586IjPqqmN1ftr3ZLj9lAsdkuXDzhx9OV4HfssM+m1dLTDvT
-         zsaN5JWB+6Fm3cx1UtNWfSVp9Cyky08Fj9KWt2vjsuXaKRIKncUQ2juzGfJT6J/4N9xT
-         DjMQ==
-X-Gm-Message-State: ACrzQf1/zBAIgRYAGHebeddcqEs8HeC+gQQJBZBkze+uK+3wC0/n2bKT
-        ruO1KyixNKDSO5GCbmsnoJxTPKtRbms=
-X-Google-Smtp-Source: AMsMyM7Ba26gbv0elp/pmHXdzEJc+KV4yTb3jSaLl1tIyeaybPhJvPLItfQ4DfNN8miR7/bjWmHp5w==
-X-Received: by 2002:a05:6402:3552:b0:451:2037:639e with SMTP id f18-20020a056402355200b004512037639emr27811797edd.136.1664277455225;
-        Tue, 27 Sep 2022 04:17:35 -0700 (PDT)
-Received: from [10.23.0.4] ([37.120.217.82])
-        by smtp.gmail.com with ESMTPSA id r17-20020a17090609d100b00781d411a63csm624283eje.151.2022.09.27.04.17.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 04:17:34 -0700 (PDT)
-Message-ID: <93a51c6f-40f4-1808-dbd6-4cd57bbaa3ed@gmail.com>
-Date:   Tue, 27 Sep 2022 13:17:33 +0200
+        Tue, 27 Sep 2022 07:18:16 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FB5792C6
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:18:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1D6561FD03;
+        Tue, 27 Sep 2022 11:18:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664277483; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vS+2Z0w98N21eSUSqoUOHnDYdgH8k2LY+nOe6UayVhY=;
+        b=liXtDfUMlNlHISSlkwUKA0zuVAP7F70N56DLpitXLhB/oy7xdIzr24ang2uW65Q/GJhfA4
+        dBf/RJdKzbx338Z+3Nl+RAztQ+yhsCBuoRTxaF+TJMzWIgjrGIBhDi9bGjM9HRsP6f246L
+        jPwAEghiQrlyAORdL1ai9deL5W3q52Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664277483;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vS+2Z0w98N21eSUSqoUOHnDYdgH8k2LY+nOe6UayVhY=;
+        b=JeRP8O80N0y98ro4AZXy0AY2ozgWlcHDpkRNNteRYjISbFW0QlUTOdqeNbyabfhBW3Yj2Z
+        5mUeQ0w35zpH0rCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 00E48139BE;
+        Tue, 27 Sep 2022 11:18:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id PzbfOurbMmPNZQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 27 Sep 2022 11:18:02 +0000
+Message-ID: <bd64206e-4d67-6932-30c2-740237a05bd0@suse.de>
+Date:   Tue, 27 Sep 2022 13:18:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] platform/surface: Split memcpy() of struct ssam_event
- flexible array
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] drm/ssd130x: Synchronize access to dma-buf imported GEM
+ BOs
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+References: <20220927095249.1919385-1-javierm@redhat.com>
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20220927004011.1942739-1-keescook@chromium.org>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <20220927004011.1942739-1-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220927095249.1919385-1-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------chZAy4n5uKEh8OIqyb80reWc"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 02:40, Kees Cook wrote:
-> To work around a misbehavior of the compiler's ability to see into
-> composite flexible array structs (as detailed in the coming memcpy()
-> hardening series[1]), split the memcpy() of the header and the payload
-> so no false positive run-time overflow warning will be generated.
-> 
-> [1] https://lore.kernel.org/linux-hardening/20220901065914.1417829-2-keescook@chromium.org
-> 
-> Cc: Maximilian Luz <luzmaximilian@gmail.com>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Mark Gross <markgross@kernel.org>
-> Cc: platform-driver-x86@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------chZAy4n5uKEh8OIqyb80reWc
+Content-Type: multipart/mixed; boundary="------------G0ypG6Hm7GGFzDdHaNRPCwiG";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+Message-ID: <bd64206e-4d67-6932-30c2-740237a05bd0@suse.de>
+Subject: Re: [PATCH] drm/ssd130x: Synchronize access to dma-buf imported GEM
+ BOs
+References: <20220927095249.1919385-1-javierm@redhat.com>
+In-Reply-To: <20220927095249.1919385-1-javierm@redhat.com>
 
-Thanks!
+--------------G0ypG6Hm7GGFzDdHaNRPCwiG
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
+SGkNCg0KQW0gMjcuMDkuMjIgdW0gMTE6NTIgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IFN5bmNocm9uaXplIENQVSBhY2Nlc3MgdG8gR0VNIEJPcyB3aXRoIG90aGVy
+IGRyaXZlcnMgd2hlbiB1cGRhdGluZyB0aGUNCj4gc2NyZWVuIGJ1ZmZlci4gSW1wb3J0ZWQg
+RE1BIGJ1ZmZlcnMgbWlnaHQgb3RoZXJ3aXNlIGNvbnRhaW4gc3RhbGUgZGF0YS4NCj4gDQo+
+IFN1Z2dlc3RlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+
+DQo+IFNpZ25lZC1vZmYtYnk6IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyA8amF2aWVybUBy
+ZWRoYXQuY29tPg0KDQpSZXZpZXdlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJt
+YW5uQHN1c2UuZGU+DQoNCj4gLS0tDQo+IA0KPiAgIGRyaXZlcnMvZ3B1L2RybS9zb2xvbW9u
+L3NzZDEzMHguYyB8IDcgKysrKysrKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlv
+bnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2Qx
+MzB4LmMgYi9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMNCj4gaW5kZXggYTUz
+NzY5MjEwMGQxLi5iYzQxYTVhZTgxMGEgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2Ry
+bS9zb2xvbW9uL3NzZDEzMHguYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9z
+c2QxMzB4LmMNCj4gQEAgLTU1NSwxMSArNTU1LDE4IEBAIHN0YXRpYyBpbnQgc3NkMTMweF9m
+Yl9ibGl0X3JlY3Qoc3RydWN0IGRybV9mcmFtZWJ1ZmZlciAqZmIsIGNvbnN0IHN0cnVjdCBp
+b3N5c19tDQo+ICAgCWlmICghYnVmKQ0KPiAgIAkJcmV0dXJuIC1FTk9NRU07DQo+ICAgDQo+
+ICsJcmV0ID0gZHJtX2dlbV9mYl9iZWdpbl9jcHVfYWNjZXNzKGZiLCBETUFfRlJPTV9ERVZJ
+Q0UpOw0KPiArCWlmIChyZXQpDQo+ICsJCWdvdG8gb3V0X2ZyZWU7DQo+ICsNCj4gICAJaW9z
+eXNfbWFwX3NldF92YWRkcigmZHN0LCBidWYpOw0KPiAgIAlkcm1fZmJfeHJnYjg4ODhfdG9f
+bW9ubygmZHN0LCAmZHN0X3BpdGNoLCB2bWFwLCBmYiwgcmVjdCk7DQo+ICAgDQo+ICsJZHJt
+X2dlbV9mYl9lbmRfY3B1X2FjY2VzcyhmYiwgRE1BX0ZST01fREVWSUNFKTsNCj4gKw0KPiAg
+IAlzc2QxMzB4X3VwZGF0ZV9yZWN0KHNzZDEzMHgsIGJ1ZiwgcmVjdCk7DQo+ICAgDQo+ICtv
+dXRfZnJlZToNCj4gICAJa2ZyZWUoYnVmKTsNCj4gICANCj4gICAJcmV0dXJuIHJldDsNCg0K
+LS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VT
+RSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQw
+OSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2No
+w6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-Regards,
-Max
+--------------G0ypG6Hm7GGFzDdHaNRPCwiG--
 
-> ---
->   drivers/platform/surface/surface_acpi_notify.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/surface/surface_acpi_notify.c b/drivers/platform/surface/surface_acpi_notify.c
-> index 44e317970557..50500e562963 100644
-> --- a/drivers/platform/surface/surface_acpi_notify.c
-> +++ b/drivers/platform/surface/surface_acpi_notify.c
-> @@ -355,7 +355,8 @@ static u32 san_evt_bat_nf(struct ssam_event_notifier *nf,
->   	INIT_DELAYED_WORK(&work->work, san_evt_bat_workfn);
->   	work->dev = d->dev;
->   
-> -	memcpy(&work->event, event, sizeof(struct ssam_event) + event->length);
-> +	work->event = *event;
-> +	memcpy(work->event.data, event->data, event->length);
->   
->   	queue_delayed_work(san_wq, &work->work, delay);
->   	return SSAM_NOTIF_HANDLED;
+--------------chZAy4n5uKEh8OIqyb80reWc
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMy2+oFAwAAAAAACgkQlh/E3EQov+Ao
+YxAAkuijTvBW5TUnz7ZmG6jKhxbr3jrKIA83T7TXfKxbiqPXiFV/IDe3CSlF7axljH+a1rv4JjJc
+5lhVPBHsoYZ7Ax/CW3IAtfyzchPvyf88yy0+YV6nj5ffI4Wp9UL2kXot0X0BFpL8O8P20LRp53um
+/wAHZNBtLID45cWGtItRm6xbpKQ4bhRGhdE51ATModyB8f+7gWQL/ziWQstPLNUN6y5FD7OGA2B2
+uOokVPLc6ZVAbtrYC9Jc1dcsIOLyOSrKEu0nHOHxJIKvVJXUE1jDPWIQUAshEskYrwvU4A1PRVgq
+5GEgjpNiCyTlPOHbXqJIEc+TGRG3bzF0WhdUhtF1Gmh6fcSruJRizAMt3oxg6N/P801MZREmjX7j
+i6zf9rQU1BmncB2J3DZ90fmqJJIX0nKbyiYo64dPOfIbJICfYV9Azzoa3GDX0eyZGmpvKHu7D5Z7
+lztCL4DB+xGM5zJNYcqxc8uJmiVeDQPDgMAtJPOV0hDjCbaPzz/jneH5YQ3YSbYvPMjTKB5YJSS5
+9bKBoBvxUwAGDvvi194GzKRNasEcKWdzLw7HxV/TcN8V4kprLxjY6RaOHhR+sKsu0czo/Z3tCR4q
+eC8wdKSbC/8DHchksr/PiCELd0SCj5465pI8u3/CcyfcTtGzCbIJOZKqalKhWAcmYO1lTM16foJ8
+yAc=
+=/mg8
+-----END PGP SIGNATURE-----
+
+--------------chZAy4n5uKEh8OIqyb80reWc--
