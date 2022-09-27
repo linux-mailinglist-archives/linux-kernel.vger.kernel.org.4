@@ -2,68 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA2F5EC660
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D18E5EC62D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbiI0Oeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
+        id S232446AbiI0OdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbiI0OdQ (ORCPT
+        with ESMTP id S232273AbiI0Ocj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:33:16 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B804AE7227
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:33:13 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id r7so15341877wrm.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:33:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=cMvv+kIwS7Npnyybgo7TEwbxPHKi63Y9shqXlNy7AcU=;
-        b=Ydbg+MssqB7RwjHf2K40atoy7zuIeabeDDojGpytwXJqoQ/LgQ3OLBpeb2rbEfHXuS
-         zuuiSDqNzZZTdDo7cMkTorWEYjsCjbKRe5EfB7Y7obuYZ+svwXA6KvncfmvW5zZP3AlG
-         3E6q31jV7PZlkiszxEnPRzMMo6+uDeyx/r17kyho+3MBHVdeoR/5MrVSbEcROX/Mf5Sy
-         pZ/7T0FZYmjYmY5AJA1+cL+lLJd/lGvySr6pe1S8fJkYdZZxw053EfR5iv1nxrBxsk8O
-         OKUHT+I/7USadD47rfc7wdB6/GOtXvS5HkPjd92J9ECXMu8eHHUqA1PT/1U1wttn9inn
-         VxVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=cMvv+kIwS7Npnyybgo7TEwbxPHKi63Y9shqXlNy7AcU=;
-        b=nlEV2A8s56nk00m/OsgGA4dhFhu6oaob/hR7l6Qr+exnHLSp2L7vaeh1a+kjBu8J2Q
-         wKjzZLD1CeWYaRjugvZr5B4KMpyJxP9G+8c7b8JOoMHdMjRSgvQYbyCSCxrjat3IsPyu
-         p+Zla8owcTz8QP8PkHXcmeukx9VbEKdVryGJzRWR2TbpwLScfsMlUx9NPXGhgNt9jkuk
-         07N5A/oQ8tig5O8qzyP4RH7tSinJkLbfzhzRF7auxZ49zwtSatB3zgj/8O4iE5Y6930P
-         XCpnlGU1993zsmQCsk0bzV876BQnOuZksb+bKRN05aMI7ftGp5KHav4dJdJXH5fafjJY
-         YptA==
-X-Gm-Message-State: ACrzQf0bASZnCE2hnKQJs3MYmVjppOrq01l1URcc4F4ONSkQXt7KDr8V
-        X3qMB0bnaVnDM68mpd1YcXmg5g==
-X-Google-Smtp-Source: AMsMyM59XWmRo/sjoJxixxbLj6+kpQz2W/z+ZHPgdk1CXw2aS+dL60R16v/fRRffufcUM49trOTgQA==
-X-Received: by 2002:adf:e841:0:b0:22a:cb58:f8c1 with SMTP id d1-20020adfe841000000b0022acb58f8c1mr17425483wrn.173.1664289191249;
-        Tue, 27 Sep 2022 07:33:11 -0700 (PDT)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id l6-20020a05600c4f0600b003b4924493bfsm17518371wmq.9.2022.09.27.07.33.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 07:33:10 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v6 14/29] thermal/drivers/armada: Use generic thermal_zone_get_trip() function
-Date:   Tue, 27 Sep 2022 16:32:24 +0200
-Message-Id: <20220927143239.376737-15-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220927143239.376737-1-daniel.lezcano@linaro.org>
-References: <20220927143239.376737-1-daniel.lezcano@linaro.org>
+        Tue, 27 Sep 2022 10:32:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8545F543FF
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:32:38 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1odBdT-0005tX-4C; Tue, 27 Sep 2022 16:32:35 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1odBdS-003F7h-A5; Tue, 27 Sep 2022 16:32:32 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1odBdP-003uny-P8; Tue, 27 Sep 2022 16:32:31 +0200
+Date:   Tue, 27 Sep 2022 16:32:25 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     David Miller <davem@davemloft.net>
+Cc:     broonie@kernel.org, Networking <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Subject: Re: linux-next: manual merge of the net-next tree with the i2c tree
+Message-ID: <20220927143225.j4yztggdqqozdiwa@pengutronix.de>
+References: <20220927130206.368099-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7mgoxxaeekmkd6jf"
+Content-Disposition: inline
+In-Reply-To: <20220927130206.368099-1-broonie@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,76 +57,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The thermal framework gives the possibility to register the trip
-points with the thermal zone. When that is done, no get_trip_* ops are
-needed and they can be removed.
 
-Convert ops content logic into generic trip points and register them with the
-thermal zone.
+--7mgoxxaeekmkd6jf
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/armada_thermal.c | 39 ++++++++++++++++----------------
- 1 file changed, 20 insertions(+), 19 deletions(-)
+Hello,
 
-diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
-index 52d63b3997fe..9444e5a22ca0 100644
---- a/drivers/thermal/armada_thermal.c
-+++ b/drivers/thermal/armada_thermal.c
-@@ -785,33 +785,34 @@ static int armada_configure_overheat_int(struct armada_thermal_priv *priv,
- 					 int sensor_id)
- {
- 	/* Retrieve the critical trip point to enable the overheat interrupt */
--	const struct thermal_trip *trips = of_thermal_get_trip_points(tz);
-+	struct thermal_trip trip;
- 	int ret;
- 	int i;
- 
--	if (!trips)
--		return -EINVAL;
--
--	for (i = 0; i < of_thermal_get_ntrips(tz); i++)
--		if (trips[i].type == THERMAL_TRIP_CRITICAL)
--			break;
-+	for (i = 0; i < thermal_zone_get_num_trips(tz); i++) {
- 
--	if (i == of_thermal_get_ntrips(tz))
--		return -EINVAL;
-+		ret = thermal_zone_get_trip(tz, i, &trip);
-+		if (ret)
-+			return ret;
-+		
-+		if (trip.type != THERMAL_TRIP_CRITICAL) 
-+			continue;
- 
--	ret = armada_select_channel(priv, sensor_id);
--	if (ret)
--		return ret;
-+		ret = armada_select_channel(priv, sensor_id);
-+		if (ret)
-+			return ret;
-+		
-+		armada_set_overheat_thresholds(priv, trip.temperature,
-+					       trip.hysteresis);
-+		priv->overheat_sensor = tz;
-+		priv->interrupt_source = sensor_id;
- 
--	armada_set_overheat_thresholds(priv,
--				       trips[i].temperature,
--				       trips[i].hysteresis);
--	priv->overheat_sensor = tz;
--	priv->interrupt_source = sensor_id;
-+		armada_enable_overheat_interrupt(priv);
- 
--	armada_enable_overheat_interrupt(priv);
-+		return 0;
-+	}
- 
--	return 0;
-+	return -EINVAL;
- }
- 
- static int armada_thermal_probe(struct platform_device *pdev)
--- 
-2.34.1
+On Tue, Sep 27, 2022 at 02:02:06PM +0100, broonie@kernel.org wrote:
+> Hi all,
+>=20
+> Today's linux-next merge of the net-next tree got conflicts in:
+>=20
+>   drivers/net/dsa/lan9303_i2c.c
+>   drivers/net/dsa/microchip/ksz9477_i2c.c
+>   drivers/net/dsa/xrs700x/xrs700x_i2c.c
+>=20
+> between commit:
+>=20
+>   ed5c2f5fd10dd ("i2c: Make remove callback return void")
+>=20
+> from the i2c tree and commits:
+>=20
+>   db5d451c4640a ("net: dsa: lan9303: remove unnecessary i2c_set_clientdat=
+a()")
+>   008971adb95d3 ("net: dsa: microchip: ksz9477: remove unnecessary i2c_se=
+t_clientdata()")
+>   6387bf7c390a1 ("net: dsa: xrs700x: remove unnecessary i2c_set_clientdat=
+a()")
+>=20
+> from the net-next tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc drivers/net/dsa/lan9303_i2c.c
+> index b25e91b26d991,79be5fc044bd4..0000000000000
+> --- a/drivers/net/dsa/lan9303_i2c.c
+> +++ b/drivers/net/dsa/lan9303_i2c.c
+> @@@ -70,11 -70,11 +70,9 @@@ static void lan9303_i2c_remove(struct i
+>   	struct lan9303_i2c *sw_dev =3D i2c_get_clientdata(client);
+>  =20
+>   	if (!sw_dev)
+>  -		return 0;
+>  +		return;
+>  =20
+>   	lan9303_remove(&sw_dev->chip);
+> --
+> - 	i2c_set_clientdata(client, NULL);
+>  -	return 0;
+>   }
+>  =20
+>   static void lan9303_i2c_shutdown(struct i2c_client *client)
+> diff --cc drivers/net/dsa/microchip/ksz9477_i2c.c
+> index 4a719ab8aa89c,e111756f64735..0000000000000
+> --- a/drivers/net/dsa/microchip/ksz9477_i2c.c
+> +++ b/drivers/net/dsa/microchip/ksz9477_i2c.c
+> @@@ -58,8 -58,8 +58,6 @@@ static void ksz9477_i2c_remove(struct i
+>  =20
+>   	if (dev)
+>   		ksz_switch_remove(dev);
+> --
+> - 	i2c_set_clientdata(i2c, NULL);
+>  -	return 0;
+>   }
+>  =20
+>   static void ksz9477_i2c_shutdown(struct i2c_client *i2c)
+> diff --cc drivers/net/dsa/xrs700x/xrs700x_i2c.c
+> index bbaf5a3fbf000,cd533b9e17eca..0000000000000
+> --- a/drivers/net/dsa/xrs700x/xrs700x_i2c.c
+> +++ b/drivers/net/dsa/xrs700x/xrs700x_i2c.c
+> @@@ -110,11 -110,11 +110,9 @@@ static void xrs700x_i2c_remove(struct i
+>   	struct xrs700x *priv =3D i2c_get_clientdata(i2c);
+>  =20
+>   	if (!priv)
+>  -		return 0;
+>  +		return;
+>  =20
+>   	xrs700x_switch_remove(priv);
+> --
+> - 	i2c_set_clientdata(i2c, NULL);
+>  -	return 0;
+>   }
+>  =20
+>   static void xrs700x_i2c_shutdown(struct i2c_client *i2c)
 
+To fix that issue before sending a PR to Linus you might want to pull
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux i2c/make_remove_=
+callback_void-immutable
+
+into your tree.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--7mgoxxaeekmkd6jf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMzCXYACgkQwfwUeK3K
+7AmW1Qf/bgiNo2Mo68dWX3kd8AOMpEiW4YG/Hy6lGGWSOzLC473XhiRnN2nzM/cJ
+TnIf5vRyVks8DYhy31HY5nnnJRYFiJMqHm1J9XzsYO3f6mY7P1BhmW1toagFKRdg
+nxOCZTDh+Aos2m4FSXm91HUExFJ1hMaH4CH7nPjr+584+ZN+0ILVovTTchHuEzjl
+Cy3+UN+d83DmLUoEjAVFKdURWggKpO5TYAbPluB5jZ1PsR4xeRMe72EU9FcWS0X8
++Pp+gUduEnEYgsWrJNBXmpSz2yWAiYEGYrsVNdfMt3PuuWAjWxW/3lYAX6YNXmJd
+miAKxj5Akk0JK22aBXVj51nkKXblVQ==
+=ONMS
+-----END PGP SIGNATURE-----
+
+--7mgoxxaeekmkd6jf--
