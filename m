@@ -2,97 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D6B5EB975
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 07:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203845EB977
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 07:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiI0FNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 01:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S229749AbiI0FOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 01:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiI0FNi (ORCPT
+        with ESMTP id S229470AbiI0FOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 01:13:38 -0400
-Received: from out199-14.us.a.mail.aliyun.com (out199-14.us.a.mail.aliyun.com [47.90.199.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2EE88DF2;
-        Mon, 26 Sep 2022 22:13:36 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VQqIJYE_1664255610;
-Received: from 30.240.121.51(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VQqIJYE_1664255610)
+        Tue, 27 Sep 2022 01:14:21 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CC488DF2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 22:14:20 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VQqJQ6N_1664255655;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VQqJQ6N_1664255655)
           by smtp.aliyun-inc.com;
-          Tue, 27 Sep 2022 13:13:32 +0800
-Message-ID: <7502d496-9ec1-1ca4-c643-376ec2aa662e@linux.alibaba.com>
-Date:   Tue, 27 Sep 2022 13:13:29 +0800
+          Tue, 27 Sep 2022 13:14:17 +0800
+Date:   Tue, 27 Sep 2022 13:14:14 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Yue Hu <zbestahu@gmail.com>
+Cc:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, zhangwen@coolpad.com,
+        Yue Hu <huyue2@coolpad.com>
+Subject: Re: [PATCH] erofs: fold in z_erofs_reload_indexes()
+Message-ID: <YzKGpUJsVh/T1nVO@B-P7TQMD6M-0146.local>
+References: <20220927032518.25266-1-zbestahu@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH v1 2/3] drivers/perf: add DesignWare PCIe PMU driver
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     will@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, rdunlap@infradead.org,
-        robin.murphy@arm.com, mark.rutland@arm.com,
-        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
-        linux-pci@vger.kernel.org
-References: <20220926171857.GA1609097@bhelgaas>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20220926171857.GA1609097@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220927032518.25266-1-zbestahu@gmail.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/9/27 AM1:18, Bjorn Helgaas 写道:
-> On Mon, Sep 26, 2022 at 09:31:34PM +0800, Shuai Xue wrote:
->> 在 2022/9/23 PM11:54, Jonathan Cameron 写道:
->>>> I found a similar definition in arch/ia64/pci/pci.c .
->>>>
->>>> 	#define PCI_SAL_ADDRESS(seg, bus, devfn, reg)		\
->>>> 	(((u64) seg << 24) | (bus << 16) | (devfn << 8) | (reg))
->>>>
->>>> Should we move it into a common header first?
->>>
->>> Maybe. The bus, devfn, reg part is standard bdf, but I don't think
->>> the PCI 6.0 spec defined a version with the seg in the upper bits.
->>> I'm not sure if we want to adopt that in LInux.
->>
->> I found lots of code use seg,bus,devfn,reg with format "%04x:%02x:%02x.%x",
->> I am not quite familiar with PCIe spec. What do you think about it, Bjorn?
+On Tue, Sep 27, 2022 at 11:25:18AM +0800, Yue Hu wrote:
+> From: Yue Hu <huyue2@coolpad.com>
 > 
-> The PCIe spec defines an address encoding for bus/device/function/reg
-> for the purposes of ECAM (PCIe r6.0, sec 7.2.2), but as far as I know,
-> it doesn't define anything similar that includes the segment.  The
-> segment is really outside the scope of PCIe because each segment is a
-> completely separate PCIe hierarchy.
-
-Thank you for your explanation.
-
+> The name of this function looks not very accurate compared to it's
+> implementation and it's only a wrapper to erofs_read_metabuf(). So,
+> let's fold it directly instead.
 > 
-> So I probably wouldn't make this a generic definition.  But if/when
-> you print things like this out, please do use the format spec you
-> mentioned above so it matches the style used elsewhere.
+> Signed-off-by: Yue Hu <huyue2@coolpad.com>
+
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+
+Thanks,
+Gao Xiang
+
+> ---
+>  fs/erofs/zmap.c | 28 ++++++++--------------------
+>  1 file changed, 8 insertions(+), 20 deletions(-)
 > 
-
-Agree. The print format of bus/device/function/reg is "%04x:%02x:%02x.%x",
-so I named the PMU as the same format. Then the usage flow would be:
-
-- lspci to get the device root port in format seg/bus/device/function/reg.
-	10:00.0 PCI bridge: Device 1ded:8000 (rev 01)
-- select its PMU name pcie_bdf_100000.
-- monitor with perf:
-	perf stat -a -e pcie_bdf_200/Rx_PCIe_TLP_Data_Payload/
-
-Bjorn and Jonathan, are you happy with this flow?
-
-Thank you.
-
-Best Regards,
-Shuai
+> diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+> index ccdddb755be8..4cecd32b87c6 100644
+> --- a/fs/erofs/zmap.c
+> +++ b/fs/erofs/zmap.c
+> @@ -166,18 +166,6 @@ struct z_erofs_maprecorder {
+>  	bool partialref;
+>  };
+>  
+> -static int z_erofs_reload_indexes(struct z_erofs_maprecorder *m,
+> -				  erofs_blk_t eblk)
+> -{
+> -	struct super_block *const sb = m->inode->i_sb;
+> -
+> -	m->kaddr = erofs_read_metabuf(&m->map->buf, sb, eblk,
+> -				      EROFS_KMAP_ATOMIC);
+> -	if (IS_ERR(m->kaddr))
+> -		return PTR_ERR(m->kaddr);
+> -	return 0;
+> -}
+> -
+>  static int legacy_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+>  					 unsigned long lcn)
+>  {
+> @@ -190,11 +178,11 @@ static int legacy_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+>  		lcn * sizeof(struct z_erofs_vle_decompressed_index);
+>  	struct z_erofs_vle_decompressed_index *di;
+>  	unsigned int advise, type;
+> -	int err;
+>  
+> -	err = z_erofs_reload_indexes(m, erofs_blknr(pos));
+> -	if (err)
+> -		return err;
+> +	m->kaddr = erofs_read_metabuf(&m->map->buf, inode->i_sb,
+> +				      erofs_blknr(pos), EROFS_KMAP_ATOMIC);
+> +	if (IS_ERR(m->kaddr))
+> +		return PTR_ERR(m->kaddr);
+>  
+>  	m->nextpackoff = pos + sizeof(struct z_erofs_vle_decompressed_index);
+>  	m->lcn = lcn;
+> @@ -393,7 +381,6 @@ static int compacted_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+>  	unsigned int compacted_4b_initial, compacted_2b;
+>  	unsigned int amortizedshift;
+>  	erofs_off_t pos;
+> -	int err;
+>  
+>  	if (lclusterbits != 12)
+>  		return -EOPNOTSUPP;
+> @@ -430,9 +417,10 @@ static int compacted_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+>  	amortizedshift = 2;
+>  out:
+>  	pos += lcn * (1 << amortizedshift);
+> -	err = z_erofs_reload_indexes(m, erofs_blknr(pos));
+> -	if (err)
+> -		return err;
+> +	m->kaddr = erofs_read_metabuf(&m->map->buf, inode->i_sb,
+> +				      erofs_blknr(pos), EROFS_KMAP_ATOMIC);
+> +	if (IS_ERR(m->kaddr))
+> +		return PTR_ERR(m->kaddr);
+>  	return unpack_compacted_index(m, amortizedshift, pos, lookahead);
+>  }
+>  
+> -- 
+> 2.17.1
