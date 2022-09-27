@@ -2,226 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B659D5EC32F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9615EC332
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiI0Mp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
+        id S231433AbiI0MrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiI0Mpy (ORCPT
+        with ESMTP id S230447AbiI0MrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:45:54 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254B51406F7;
-        Tue, 27 Sep 2022 05:45:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664282753; x=1695818753;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4sq1AHyWFyOqVpjRETvsq1ss7KGQ2KV4EhyDYN3JmJg=;
-  b=I7yjHeho+za68gzOwraRmsxbgUx2YpejdX8V+q8S2tYNMVCmqWhO+LMp
-   XRHbpru5G+uQV1WlnrhWjqABEqDNdh83KwfghtlBJrJCaL6rPTFG7vb54
-   TtTzsykrzPnA5FObh8SVPcryoOAtI0S8ytxVV9Y6o1+MUpSuh67k5pDve
-   oE2nsGat0d2HgDnVbqDq9XAFfKOnbsDcRpRRwvwJxdpHj+hBTOMYcn98r
-   bLN6xYAwfwszE1VdjbCiEieGXI7YkNPoslMGRAdgnAxx2Kqbw7PaO4w16
-   N343ydjGmDdwKHdfXTRieo/8feyegJ/BsrpTjpRK4JITqGw5b9U54zEAT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="363143665"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="363143665"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:45:52 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="763863509"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="763863509"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.35.200])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:45:49 -0700
-Message-ID: <a5c231e8-f28a-e692-5961-58e6838711ed@intel.com>
-Date:   Tue, 27 Sep 2022 15:45:44 +0300
+        Tue, 27 Sep 2022 08:47:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7293146F9A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:47:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4288B6179B
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:47:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E222C433D6;
+        Tue, 27 Sep 2022 12:47:10 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V2] irqchip: Make irqchip_init() usable on pure ACPI systems
+Date:   Tue, 27 Sep 2022 20:45:57 +0800
+Message-Id: <20220927124557.3246737-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v5 2/3] mmc: sdhci-tegra: Add support to program MC stream
- ID
-Content-Language: en-US
-To:     Prathamesh Shete <pshete@nvidia.com>, ulf.hansson@linaro.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     anrao@nvidia.com, smangipudi@nvidia.com, kyarlagadda@nvidia.com
-References: <df68846a-2a09-ef98-6823-d536d99ccb61@intel.com>
- <20220927111314.32229-1-pshete@nvidia.com>
- <20220927111314.32229-2-pshete@nvidia.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220927111314.32229-2-pshete@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/09/22 14:13, Prathamesh Shete wrote:
-> SMMU clients are supposed to program stream ID from
-> their respective address spaces instead of MC override.
-> Define NVQUIRK_PROGRAM_STREAMID and use it to program
-> SMMU stream ID from the SDMMC client address space.
-> 
-> Signed-off-by: Aniruddha TVS Rao <anrao@nvidia.com>
-> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
-> ---
->  drivers/mmc/host/sdhci-tegra.c | 47 ++++++++++++++++++++++++++++++++++
->  1 file changed, 47 insertions(+)
-> 
-> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
-> index a6c5bbae77b4..46f37cc26dbb 100644
-> --- a/drivers/mmc/host/sdhci-tegra.c
-> +++ b/drivers/mmc/host/sdhci-tegra.c
-> @@ -25,6 +25,9 @@
->  #include <linux/mmc/slot-gpio.h>
->  #include <linux/gpio/consumer.h>
->  #include <linux/ktime.h>
-> +#ifdef CONFIG_IOMMU_API
-> +#include <linux/iommu.h>
-> +#endif
->  
->  #include <soc/tegra/common.h>
->  
-> @@ -94,6 +97,8 @@
->  #define SDHCI_TEGRA_AUTO_CAL_STATUS			0x1ec
->  #define SDHCI_TEGRA_AUTO_CAL_ACTIVE			BIT(31)
->  
-> +#define SDHCI_TEGRA_CIF2AXI_CTRL_0			0x1fc
-> +
->  #define NVQUIRK_FORCE_SDHCI_SPEC_200			BIT(0)
->  #define NVQUIRK_ENABLE_BLOCK_GAP_DET			BIT(1)
->  #define NVQUIRK_ENABLE_SDHCI_SPEC_300			BIT(2)
-> @@ -121,6 +126,7 @@
->  #define NVQUIRK_HAS_TMCLK				BIT(10)
->  
->  #define NVQUIRK_HAS_ANDROID_GPT_SECTOR			BIT(11)
-> +#define NVQUIRK_PROGRAM_STREAMID			BIT(12)
->  
->  /* SDMMC CQE Base Address for Tegra Host Ver 4.1 and Higher */
->  #define SDHCI_TEGRA_CQE_BASE_ADDR			0xF000
-> @@ -128,6 +134,8 @@
->  #define SDHCI_TEGRA_CQE_TRNS_MODE	(SDHCI_TRNS_MULTI | \
->  					 SDHCI_TRNS_BLK_CNT_EN | \
->  					 SDHCI_TRNS_DMA)
-> +#define SDHCI_TEGRA_STREAMID_MASK			0xff
-> +#define SDHCI_TEGRA_WRITE_STREAMID_SHIFT		0x8
->  
->  struct sdhci_tegra_soc_data {
->  	const struct sdhci_pltfm_data *pdata;
-> @@ -177,6 +185,9 @@ struct sdhci_tegra {
->  	bool enable_hwcq;
->  	unsigned long curr_clk_rate;
->  	u8 tuned_tap_delay;
-> +#ifdef CONFIG_IOMMU_API
-> +	u32 streamid;
-> +#endif
->  };
->  
->  static u16 tegra_sdhci_readw(struct sdhci_host *host, int reg)
-> @@ -1564,6 +1575,7 @@ static const struct sdhci_tegra_soc_data soc_data_tegra234 = {
->  		    NVQUIRK_DIS_CARD_CLK_CONFIG_TAP |
->  		    NVQUIRK_ENABLE_SDR50 |
->  		    NVQUIRK_ENABLE_SDR104 |
-> +		    NVQUIRK_PROGRAM_STREAMID |
->  		    NVQUIRK_HAS_TMCLK,
->  	.min_tap_delay = 95,
->  	.max_tap_delay = 111,
-> @@ -1636,6 +1648,9 @@ static int sdhci_tegra_probe(struct platform_device *pdev)
->  	struct sdhci_host *host;
->  	struct sdhci_pltfm_host *pltfm_host;
->  	struct sdhci_tegra *tegra_host;
-> +#ifdef CONFIG_IOMMU_API
-> +	struct iommu_fwspec *fwspec;
-> +#endif
+Pure ACPI system (e.g., LoongArch) doesn't select OF and OF_IRQ, but it
+still need a non-empty irqchip_init(). So, change the IRQCHIP dependency
+from OF_IRQ to (OF_IRQ || ACPI_GENERIC_GSI), and then define an empty
+inline of_irq_init() in the !CONFIG_OF_IRQ case, so as to make the non-
+empty irqchip_init() be usable on pure ACPI systems.
 
-Move this below
+Without this patch we get such errors:
 
->  	struct clk *clk;
->  	int rc;
->  
-> @@ -1775,6 +1790,25 @@ static int sdhci_tegra_probe(struct platform_device *pdev)
->  	if (rc)
->  		goto err_add_host;
->  
-> +	/* Program MC streamID for DMA transfers */
-> +#ifdef CONFIG_IOMMU_API
-> +	if (soc_data->nvquirks & NVQUIRK_PROGRAM_STREAMID) {
+[    0.000000] NR_IRQS: 576, nr_irqs: 576, preallocated irqs: 16
+[    0.000000] Kernel panic - not syncing: IPI IRQ mapping failed
+[    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0.0-rc6+ #2189
+[    0.000000] Hardware name: Loongson Loongson-3A5000-7A1000-1w-CRB/Loongson-LS3A5000-7A1000-1w-CRB, BIOS vUDK2018-LoongArch-V2.0.pre-beta8 08/18/2022
+[    0.000000] Stack : 0000000000000000 9000000000fa4388 900000000140c000 900000000140fb70
+[    0.000000]         0000000000000000 900000000140fb70 90000000012f4aa0 900000000140fa98
+[    0.000000]         900000000140fa0c 900000008140f9ff 0000000000000030 0000000000000005
+[    0.000000]         900000000578f708 0000000004750000 0000000000000000 00000000ffffdfff
+[    0.000000]         0000000000000000 0000000000000000 0000000000000030 000000000000002f
+[    0.000000]         900000000141f000 0000000004750000 9000000001427348 00000000000000b0
+[    0.000000]         90000000012f4aa0 0000000000000004 0000000000000000 9000000001020000
+[    0.000000]         9000000005781b80 9000000005781ba9 0000000000000000 9000000001315e30
+[    0.000000]         900000000129a3b0 9000000000222b64 0000000000000000 00000000000000b0
+[    0.000000]         0000000000000004 0000000000000000 0000000000070000 0000000000000800
+[    0.000000]         ...
+[    0.000000] Call Trace:
+[    0.000000] [<9000000000222b64>] show_stack+0x24/0x124
+[    0.000000] [<9000000000fa4388>] dump_stack_lvl+0x60/0x88
+[    0.000000] [<9000000000f9965c>] panic+0x130/0x2f8
+[    0.000000] [<9000000000fd4324>] init_IRQ+0xa8/0x240
+[    0.000000] [<9000000000fd0b38>] start_kernel+0x488/0x5f0
+[    0.000000] [<9000000000fb10c4>] kernel_entry+0xc4/0xc8
+[    0.000000]
+[    0.000000] ---[ end Kernel panic - not syncing: IPI IRQ mapping failed ]---
 
-Can put it here
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ drivers/irqchip/Kconfig   | 2 +-
+ include/linux/of_irq.h    | 6 ++++--
+ 3 files changed, 7 insertions(+), 3 deletions(-)
 
-		struct iommu_fwspec *fwspec;
-
-
-> +		fwspec = dev_iommu_fwspec_get(&pdev->dev);
-> +		if (fwspec == NULL) {
-> +			dev_warn(mmc_dev(host->mmc),
-> +				"iommu fwspec is NULL, continue without stream ID\n");
-> +		} else {
-> +			tegra_host->streamid = fwspec->ids[0] & 0xffff;
-> +			tegra_sdhci_writel(host, (tegra_host->streamid &
-> +						SDHCI_TEGRA_STREAMID_MASK) |
-> +						((tegra_host->streamid <<
-> +						SDHCI_TEGRA_WRITE_STREAMID_SHIFT)
-> +						& SDHCI_TEGRA_STREAMID_MASK),
-> +						SDHCI_TEGRA_CIF2AXI_CTRL_0);
-
-This is hard to read.  Maybe use GENMASK and FIELD_PREP, or if the bytes
-need swapping, one of the byte swapping macros.
-
-Also, isn't this always zero ?
-
-	((tegra_host->streamid << SDHCI_TEGRA_WRITE_STREAMID_SHIFT) & SDHCI_TEGRA_STREAMID_MASK),
-
-
-> +		}
-> +	}
-> +#endif
-> +
->  	return 0;
->  
->  err_add_host:
-> @@ -1861,6 +1895,10 @@ static int sdhci_tegra_suspend(struct device *dev)
->  static int sdhci_tegra_resume(struct device *dev)
->  {
->  	struct sdhci_host *host = dev_get_drvdata(dev);
-> +#ifdef CONFIG_IOMMU_API
-> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> +	struct sdhci_tegra *tegra_host = sdhci_pltfm_priv(pltfm_host);
-> +#endif
->  	int ret;
->  
->  	ret = mmc_gpio_set_cd_wake(host->mmc, false);
-> @@ -1871,6 +1909,15 @@ static int sdhci_tegra_resume(struct device *dev)
->  	if (ret)
->  		return ret;
->  
-> +	/* Re-program MC streamID for DMA transfers */
-> +#ifdef CONFIG_IOMMU_API
-> +	if (tegra_host->soc_data->nvquirks & NVQUIRK_PROGRAM_STREAMID) {
-> +		tegra_sdhci_writel(host, tegra_host->streamid |
-> +					(tegra_host->streamid << 8),
-
-This looks like it ought to be the same calculation as above ?
-
-> +					SDHCI_TEGRA_CIF2AXI_CTRL_0);
-> +	}
-> +#endif
-> +
->  	ret = sdhci_resume_host(host);
->  	if (ret)
->  		goto disable_clk;
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 66b9fa408bf2..93ad04d58f17 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -3,7 +3,7 @@ menu "IRQ chip support"
+ 
+ config IRQCHIP
+ 	def_bool y
+-	depends on OF_IRQ
++	depends on (OF_IRQ || ACPI_GENERIC_GSI)
+ 
+ config ARM_GIC
+ 	bool
+diff --git a/include/linux/of_irq.h b/include/linux/of_irq.h
+index 83fccd0c9bba..d6d3eae2f145 100644
+--- a/include/linux/of_irq.h
++++ b/include/linux/of_irq.h
+@@ -37,9 +37,8 @@ extern unsigned int irq_create_of_mapping(struct of_phandle_args *irq_data);
+ extern int of_irq_to_resource(struct device_node *dev, int index,
+ 			      struct resource *r);
+ 
+-extern void of_irq_init(const struct of_device_id *matches);
+-
+ #ifdef CONFIG_OF_IRQ
++extern void of_irq_init(const struct of_device_id *matches);
+ extern int of_irq_parse_one(struct device_node *device, int index,
+ 			  struct of_phandle_args *out_irq);
+ extern int of_irq_count(struct device_node *dev);
+@@ -57,6 +56,9 @@ extern struct irq_domain *of_msi_map_get_device_domain(struct device *dev,
+ extern void of_msi_configure(struct device *dev, struct device_node *np);
+ u32 of_msi_map_id(struct device *dev, struct device_node *msi_np, u32 id_in);
+ #else
++static inline void of_irq_init(const struct of_device_id *matches)
++{
++}
+ static inline int of_irq_parse_one(struct device_node *device, int index,
+ 				   struct of_phandle_args *out_irq)
+ {
+-- 
+2.31.1
 
