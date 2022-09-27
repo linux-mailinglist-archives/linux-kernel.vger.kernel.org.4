@@ -2,146 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16005EB79F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1435EB7A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiI0C20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 22:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
+        id S230225AbiI0C3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 22:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiI0C2M (ORCPT
+        with ESMTP id S230179AbiI0C31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 22:28:12 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8DEAD9AA
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:28:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1664245692; x=1695781692;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dtpZvmFtYIdkdXBy+L2NjqNKdBMsA002GGQLmcuex7k=;
-  b=G8/vWFfgAexGjzDgkahBU2YPurw7gAVEfFo4KNAaG0o1G8vprCdtWcec
-   TGeIz1Hk1xyPXuqb4gPxK/SBy2sdw4Sh+h+cG7O2wgFh01Bd2PdeVsJcT
-   hDvYLUmbl4HpMXSUl96O7o0ewa8zl2+4CPDR/eHf54fAxQwse5WdxDilQ
-   suX5cmUQjD9FKV2YIO28T/6R5EoYfp+03thh3eIxIhDbAplfCGPt+nb3N
-   35wTaD+kqayePU7XcF6nzZ84LWvh27bLuajtmqynBA8D8mPbjTVX3yEau
-   loHpWE0EgZpe6dA1Mc9JSNy9KMHv7+F+SrR+w7AjybKAFPyn+Ai7oYX+K
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,347,1654531200"; 
-   d="scan'208";a="210704774"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Sep 2022 10:28:09 +0800
-IronPort-SDR: mk4UssP0QejoeM69QQYi7jdAIfQqz81v6Yk3/cEtaA+ME0D/q1WKsj1rfOq5JYIIwLhL0Dz672
- EDufl5uQiNyE1UG7+yQG4kMpjxLhU6MEIm4guhcB2ao6V0l7q8GcWAbh/XaGBDlnWejJO2YTz5
- A1OyPPgSNCbKv0tJWRCfUA1HEGXa6n90PAAbyu14m0ai+sw2oTtsW1kHzqel4TDbLnRijlSx59
- 2SYNed4KmA+CrGzKsK4/I0imhkkthtwPG4OAAAsaXbKomSBEa0MkXDWCotaVF8i5TuCxbKWIZ9
- 9mV3ROXnTgodMJCU/jEbSybD
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Sep 2022 18:42:35 -0700
-IronPort-SDR: Vi1Iig0EFnWEbtPaXVmWKsZItEmxzsQe+WAhhvwvN5QccytS5gRN4AE881KQSb+nyR02I9s4cW
- 2flzhIHovIGV8oVz5FB8PNa5B2DazcyBK0EjEMd++J6sjoblYdxWpRM2dncCEOOUoo8tpP8ZAC
- OcegIeEByQGn1LURnNPYas1JmF/sp1WLI37VBwP/m+szsvD1nz8uCD6CRzXxj3b66yjPiPbBda
- YDOXqcflALTXE6ZuGvTVz0tKRw2EdQFFgzrGqDKUMgYeySlOhvpx83wAzRMcDt/d9PEquYKHHG
- OYQ=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Sep 2022 19:28:09 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mc3Sn03QMz1RwvT
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:28:08 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1664245688; x=1666837689; bh=dtpZvmFtYIdkdXBy+L2NjqNKdBMsA002GGQ
-        Lmcuex7k=; b=X8DFloejAxpZb/j/MJILnW0ULQSpx1imZ2DWIwvFLnRss1+3hO3
-        1EyzSguoUXVjC2Kg6FHEVJCzFLYOoYjnL8jxC5aV57cek8LTm85DL8t5GkPkoKG5
-        05LTnfA7XJNynWun3VpQm6PzlpjsyFWKELTmjgIlsmvaAJNVHtHjZnvXevIBShtM
-        piYkmJ7mrJXwSd0l5TFhnobgXEgU1NlUGWBiHcMny4phMQOi1Dr1f6TCqpZlktNl
-        iSz57FsIaQ5V9pE0b1vjaV6dihWIVLhnEyt8hDyoDMuTuxEkDv6VMwZ/5oIY2c4J
-        IdlOKTPlEQYZ94ifG5AAHH0hI7QPczVf+PQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id YbVTfq32janP for <linux-kernel@vger.kernel.org>;
-        Mon, 26 Sep 2022 19:28:08 -0700 (PDT)
-Received: from [10.225.163.91] (unknown [10.225.163.91])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mc3Sk4BF5z1RvLy;
-        Mon, 26 Sep 2022 19:28:06 -0700 (PDT)
-Message-ID: <6654484e-70ce-d34f-ec48-44b0eb2bd0a5@opensource.wdc.com>
-Date:   Tue, 27 Sep 2022 11:28:05 +0900
+        Mon, 26 Sep 2022 22:29:27 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378C4AB4D8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:29:26 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so8773217pjk.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:29:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=HkG5DDzOTjCT+STCoSnaLb6sU8To/yLBmMx+e5BAYr4=;
+        b=l30XfCY9tFyykLEHQUXZXzs+C9ThZtl5dRyE1N5osCy57G9qi8PsyotFwEV7Q3EpO2
+         a6oez/kXWoVi5on7ipYsOIBKZxqjG0mmF4eIxwBHSY2x6K1EnWWhYzUUvn07s+M5UF0z
+         iXXvL2W2m/QO1oq7pvuZqG7TLR2CA1/KoFpTs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=HkG5DDzOTjCT+STCoSnaLb6sU8To/yLBmMx+e5BAYr4=;
+        b=alsk6jbcltNtY7YBCIGvgKVn69p4bTcnhtY7dyeu1OJNupoBB1UJiix2X4c1gnlDlg
+         wJdlQgva03hA9Dc0vbNN05XPaI6mnQFVkE1odng+UIFIHh390Zqs6YpN+gJqcveP2xoe
+         HffceLt6wlERZDMRDWK+l753/HhOHSEsa4DydP8apreas6flOf6SsuACL8mBaL2TQkyM
+         Bbwbf7/QSqY8yB8K3eah9glpa5drIiUscpnn1NXgXnV9aBLif8xkd3DNorg58Q+OdQiC
+         t0nWcjrMw4WzNs5FsNZqqSZkBizwVgkb379gAYe/21QUOoobMahjtmL5YxtC+VaO683R
+         //vg==
+X-Gm-Message-State: ACrzQf0j0Kd/hIBseT7VmBf55aad39IBVePLhQb8Cyd5TZ9H8QWMFAuK
+        YhZvllQ1+k/dkFTn+PGlc6DO5w==
+X-Google-Smtp-Source: AMsMyM4xJPjTZPujx7xMCWGZbF9BnM9hvgko7haE0v+9a5Wrvi1kCxrMKe0GWEcmA3LQ2oAq7dwnbg==
+X-Received: by 2002:a17:902:db12:b0:178:1f91:74e6 with SMTP id m18-20020a170902db1200b001781f9174e6mr25393937plx.100.1664245765635;
+        Mon, 26 Sep 2022 19:29:25 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d14-20020a17090a3b0e00b002009db534d1sm162794pjc.24.2022.09.26.19.29.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 19:29:25 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2] wifi: nl80211: Split memcpy() of struct nl80211_wowlan_tcp_data_token flexible array
+Date:   Mon, 26 Sep 2022 19:29:23 -0700
+Message-Id: <20220927022923.1956205-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v3 5/8] scsi: hisi_sas: use sas_find_attathed_phy()
- instead of open coded
-Content-Language: en-US
-To:     Jason Yan <yanaijie@huawei.com>, martin.petersen@oracle.com,
-        jejb@linux.ibm.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hare@suse.com, hch@lst.de, bvanassche@acm.org,
-        john.garry@huawei.com, jinpu.wang@cloud.ionos.com,
-        Jack Wang <jinpu.wang@ionos.com>
-References: <20220927022941.4029476-1-yanaijie@huawei.com>
- <20220927022941.4029476-6-yanaijie@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220927022941.4029476-6-yanaijie@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1471; h=from:subject; bh=JH3nHmX97RrKwbrYnh+CkGDW8T/FyqjEp+7uXQKUIY4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjMmACR0B3zP+7TGPHd2I2yN+GXV+Fdp/seF7yyoWT qNxfGkWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYzJgAgAKCRCJcvTf3G3AJosfD/ wP7GvxgVeGTAOiAl1tDUS/8VQ+Pc/tLzsp1DqjvxHY6zV598jUyMDm5eLmvfl55V6W72r2t8PnoOTX X/q6VLlK0tJI8ryPD6wTLPjAIzQhxailq94i0IRNnm8bGbt7Ykq9T385zTbORgRPjSe5fnXksldmfM fJNPhqduy6yAXz/4juijaEZ+tpuZkEgGQzNafIAz30SyqLme/0gQqH9LedN11YWtJOFoomEeD+oWz+ obu86NOHsaKxUXEIv3F1wEe5tXvEpcsHxMq6xFOnp02r3SkgwcF1ypEld0gBgtU52S0ym2hPjm1SsY 2YA2P6wEqQcBkrgr/N4dAiMBpy3CXXjZ16WQUETA/x9X45IdFAhCKYbHhnMIY2W5/peZKWmNlZ7ulM 2phamcmzOM2FFs/e+cy0ASSarJK3uw6c1ZBk93uOXkOufz8/50J0QmXddKriDvpewAlAbA5AgA3iUp OYh+Fxw4ig9KZYovtkm7URcwcJlzR7rNoclWkSNClRWvlfcGJbB8SY6+aq83tsuiuFZ+CtZxg7Mg43 VNXi3lvRLDSNqMfDN+3EUIu/3g0rB/f8+1mR8xj6dtPMlW5/+ji5uR31yShYyoQoY9f6GQ8bcDF3Qg 2PhaANaBZMU5PDkBync0nlFu960PTrV/e6FTakuOJ4ezc4obRf3xiTyy0ErA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 11:29, Jason Yan wrote:
-> The attached phy finding is open coded. Now we can replace it with
-> sas_find_attached_phy().
-> 
-> Signed-off-by: Jason Yan <yanaijie@huawei.com>
-> Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+To work around a misbehavior of the compiler's ability to see into
+composite flexible array structs (as detailed in the coming memcpy()
+hardening series[1]), split the memcpy() of the header and the payload
+so no false positive run-time overflow warning will be generated.
 
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+[1] https://lore.kernel.org/linux-hardening/20220901065914.1417829-2-keescook@chromium.org/
 
-> ---
->  drivers/scsi/hisi_sas/hisi_sas_main.c | 12 ++----------
->  1 file changed, 2 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> index 33af5b8dede2..995ccb13fb9d 100644
-> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-> @@ -792,17 +792,9 @@ static int hisi_sas_dev_found(struct domain_device *device)
->  
->  	if (parent_dev && dev_is_expander(parent_dev->dev_type)) {
->  		int phy_no;
-> -		u8 phy_num = parent_dev->ex_dev.num_phys;
-> -		struct ex_phy *phy;
->  
-> -		for (phy_no = 0; phy_no < phy_num; phy_no++) {
-> -			phy = &parent_dev->ex_dev.ex_phy[phy_no];
-> -			if (SAS_ADDR(phy->attached_sas_addr) ==
-> -				SAS_ADDR(device->sas_addr))
-> -				break;
-> -		}
-> -
-> -		if (phy_no == phy_num) {
-> +		phy_no = sas_find_attached_phy(&parent_dev->ex_dev, device);
-> +		if (phy_no == -ENODEV) {
->  			dev_info(dev, "dev found: no attached "
->  				 "dev:%016llx at ex:%016llx\n",
->  				 SAS_ADDR(device->sas_addr),
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v2: - fix typo leading "+" (Gustavo)
+v1: https://lore.kernel.org/lkml/20220927003903.1941873-1-keescook@chromium.org
+---
+ net/wireless/nl80211.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
+index 2705e3ee8fc4..169e3ec33466 100644
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@ -13171,7 +13171,9 @@ static int nl80211_parse_wowlan_tcp(struct cfg80211_registered_device *rdev,
+ 	       wake_mask_size);
+ 	if (tok) {
+ 		cfg->tokens_size = tokens_size;
+-		memcpy(&cfg->payload_tok, tok, sizeof(*tok) + tokens_size);
++		cfg->payload_tok = *tok;
++		memcpy(cfg->payload_tok.token_stream, tok->token_stream,
++		       tokens_size);
+ 	}
+ 
+ 	trig->tcp = cfg;
 -- 
-Damien Le Moal
-Western Digital Research
+2.34.1
 
