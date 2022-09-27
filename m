@@ -2,139 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EFFA5EC4D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC8A5EC4DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbiI0Nph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S232870AbiI0Nqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232267AbiI0Npf (ORCPT
+        with ESMTP id S231883AbiI0Nqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:45:35 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2089.outbound.protection.outlook.com [40.107.237.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFA8B6D17;
-        Tue, 27 Sep 2022 06:45:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jw0YEs948WSlQBLqqasufVk0znBUAgxL2rvqa40ZDKSS0asLm+8f5d9U/Kmo/MOCtuFECP2J1SurI6c8ioWF4fLhGK0bwVK/qxC2VaReXd0XqDeqe50p1v3p6yGG8zPwzHIcg6ofBTVzR+DfhiZHOiaHgBnFXRVprI6RnZPkGc0Mmrad/5ipTQYZ+lbXTQKswVg+YthDss33PgbzsTNR3mLycg8PePnsCs5LTEJK1aMZzSXrHmRZ4u2m4IO5U9mGo17ho9L4IQK+Gc9+uOqSTkfsg/V8w1M5VHyPUb+it42bKG3LNOVD50bpEndbKCwvHRMhtfSCaMN3bfcaWGYDaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aBKHW4cQRVzbZBcgs8Ikna7eEHjwVJlhtI5J1/zrAeI=;
- b=aSR9yKBzfAEo+6KdRklpbpOe5dAQMLlhxt/afzEcEdHQQi/UVP5OQMlVaKIiiX5tOfYNi3KycHxl4iWQrNrWI7Wh0YdKcKIzH9QFqOg3XjrTDd6ynlZQAE92I8nYgDLe3Qs1h2LCAjKVLt/ivs9IcsbiGEIzVlNIQYzHl5cvIuYUfJhVibzxNVqRZXVdGiOJu/wJFBb8BAZCx4JDMlxO/nn4hU8os+r4wDrMJXjgbq1qIamF4+KUZd5ua8c0ssc3A+3gNO+E3AD4pFc/1GEuf0RtUGN5kppwVyTYdvIgs7C7XOkDAxJJKhQNLo47A9N4ifeDUp2WtSgPv+GFf6/PYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aBKHW4cQRVzbZBcgs8Ikna7eEHjwVJlhtI5J1/zrAeI=;
- b=c2Zzj/I/pA8gXW8c7bBu6ANZmQLGKrzuXxa/7ZPBoHyGYcl3Zq9BE7VsGzODbSrZLrn0bl/1sWFbUyXlvLo505GBr0v5pmQslI74msPfYDgNk5EIWuVOUVFr2Zt8KXvOkbgwTW4PkNE1D6ujsZ1LK4BPE+TzAxMFcCgfR5rf9WS8DllFaLfiAK6PzgCOnuKcSANOYaSms1put00ug/CJqS4U6VooJIovQRrg8vAUVT2G3hlaOu6rWqfYCks1ikc+OlmKGZPgUi+SVqln8JaaYEs+Z9/U5xUJ+I0zG17xO7Cqoi1G7wADlZIx2CYdr6MTlclWrQ2yoJpgrn0iad1ymw==
-Received: from BN9PR03CA0131.namprd03.prod.outlook.com (2603:10b6:408:fe::16)
- by CY5PR12MB6648.namprd12.prod.outlook.com (2603:10b6:930:42::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.15; Tue, 27 Sep
- 2022 13:45:30 +0000
-Received: from BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:fe:cafe::c6) by BN9PR03CA0131.outlook.office365.com
- (2603:10b6:408:fe::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25 via Frontend
- Transport; Tue, 27 Sep 2022 13:45:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BN8NAM11FT064.mail.protection.outlook.com (10.13.176.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5654.14 via Frontend Transport; Tue, 27 Sep 2022 13:45:29 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 27 Sep
- 2022 06:45:16 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 27 Sep 2022 06:45:16 -0700
-Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
- mail.nvidia.com (10.126.190.182) with Microsoft SMTP Server id 15.2.986.29
- via Frontend Transport; Tue, 27 Sep 2022 06:45:14 -0700
-From:   Wayne Chang <waynec@nvidia.com>
-To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC:     <quic_linyyuan@quicinc.com>, <quic_jackp@quicinc.com>,
-        <saranya.gopal@intel.com>, <tiwai@suse.de>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <waynec@nvidia.com>
-Subject: [PATCH v3 1/1] usb: typec: ucsi: Don't warn on probe deferral
-Date:   Tue, 27 Sep 2022 21:45:12 +0800
-Message-ID: <20220927134512.2651067-1-waynec@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 27 Sep 2022 09:46:43 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E75EC57A;
+        Tue, 27 Sep 2022 06:46:42 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id y15so5115228ilq.4;
+        Tue, 27 Sep 2022 06:46:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=JYhubVsYX6ouoh07xHct6JKDa2u34ATcTX+f9kydsg0=;
+        b=SFNBETuy+YwSF+Q5f3FRDqDN/eaViyqw5he3UZgTk4MtyJF6NRCFNYIKYJPmlsEAMt
+         DeyMJfFPjEHThTWRJp3rwRQNYq+ZP2jaZRHsnPQUIIDoSjEnb2J9Ee7Ql7vsi1f3j6o/
+         jljy4aCW1hQFLl0pqMecxtsOTvbgdYBKABSzUnLo1vpbsoWJhvmEPoLD5bs7HSEIMWBU
+         wuvLfswFLjp0hC6zhxiQcY5dIDIbYgEDKhQ9j0i+rprfbNfGwV1WpoNmxVOp4RQ0vso/
+         Md84BYiwvupF5tMaidkzgxgcpXnhMJk0px5c/qoGPkjlQ7myoI/dmvljGCU6pWvZLAl2
+         eVMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=JYhubVsYX6ouoh07xHct6JKDa2u34ATcTX+f9kydsg0=;
+        b=OsUwitFeFBUkqbBjvwldvn2fv9Ob6UFkSwbTA5Q26rQopwrULRCD5wjpbfeKzW+mDo
+         62XpRWspSR92mjjQohN+MLt9zY9e3Mw6qLwjFgsktX7it8xg55Ru0oKL5SCrxXYscVL3
+         f39/w2HxnzIy0u2F+JlrMi6J1Am0ctOPzBvCXktJEm+TOnd0179J4amtWaV0oCbhdXmN
+         gJ3KjC+/jCHG8f6nb1VE4M9fs4/NTyjMfoJKsFvO77z3dK0dLXLgjIOF7BKhTd4Uihrv
+         15ex3YWjzCV0Ee8x6K25h0fSmUK/YGC0wcWmnrAqr7EVktgqO4ppPTA+KzGY1135ZPmW
+         u1Dw==
+X-Gm-Message-State: ACrzQf0KwBTPUHc+XlEiqVRoew1w4hxklC/0OSJl+CcRSNWSWeoRjxLW
+        bVcc5vziwX462YBq/FfniSc3Mt3M2Q4xfJVy8xk=
+X-Google-Smtp-Source: AMsMyM74SUeo8HFBuN8kt3k2EUdmy5YSQU9ffddju6d2f4+EfiQh0gzO1dPkP75z7a8X/jcoAFX7j9B59EvRj65nyGI=
+X-Received: by 2002:a92:360c:0:b0:2f6:33ed:e2a2 with SMTP id
+ d12-20020a92360c000000b002f633ede2a2mr13076960ila.29.1664286401415; Tue, 27
+ Sep 2022 06:46:41 -0700 (PDT)
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT064:EE_|CY5PR12MB6648:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ed6471a-ad58-4b8e-dd82-08daa08e8acb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: L8MkxPJDoGQcQohfI0q6sxgEHAdRS9Ebtajg8E576jRXDfSxPSElrQbl8gvlDBbtnI1kv3ozGeLmGN9aFNCfx76xXe/Oh/gthTp0qAt0vWh37Qe9lzhtcBbcUo5C2zBWmxAiLB1faL6HcJ33fiOO3xnMmYxxsMnrIRMWHPne8rFPLSqAa05aibNK7tcD7VyRDkWOpg9gyuV2AeY1GDZ632eqsKpAtqmtr/4apcRhDV+lzDkfxq1sC9td/jitArcH5mgiL4EOWQMJuWo8yTe4yn5NNB9vDGLNSBMB77chkxhq4t32X8h9u4vVu4cm5aKd2PB4ybGlkVGom7H/10Q00Uh1C/BbxRe7frKCrstCY/c7GFYI+SjeOKoRg7ZePuXetPQpuFN35lSbHZOljwlDA/X/YEo69cJBhy/7jdOPKW3AykHkejjO85wGWbfoiHt9oC3iqOco6Or+/xg1qH8B/galX8RVZFubyHaeO537AEe/VH3++rW4bi8eEWP8O4wMCiLLQHYtMnuBmIBzVyKC8x7g5yT/Gux9LO1f+U09tIJmiagntMVIGy9b0lTtJJSneeV1XfV7ORXDly4EfscBi8Q3N68G56y3lEXcgy5asL2GwPUaPB4+Y6b5GnKYdb/w7yVr+BQCgBYLCoiuRwFDkHc094GuaAFkyE2bUyQZOEetl+GAYAYsuWGBXLoVzKbPE+hUyXozgrTOrT/X4F8zDNobAe+Ul9mH1X9+/Fy23vyGH3NXcnaQkpZcN8xa1Td8pOfwfpB67RYw4CcgEMwavg==
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(376002)(136003)(451199015)(36840700001)(46966006)(40470700004)(8676002)(4326008)(40460700003)(70206006)(70586007)(41300700001)(478600001)(36756003)(7696005)(83380400001)(7636003)(107886003)(54906003)(82740400003)(8936002)(5660300002)(40480700001)(110136005)(36860700001)(2906002)(66899015)(316002)(86362001)(82310400005)(336012)(356005)(1076003)(186003)(47076005)(2616005)(426003)(26005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 13:45:29.8888
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ed6471a-ad58-4b8e-dd82-08daa08e8acb
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6648
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220926061420.1248-1-linux.amoon@gmail.com> <20220926180102.37614-1-amadeus@jmu.edu.cn>
+In-Reply-To: <20220926180102.37614-1-amadeus@jmu.edu.cn>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Tue, 27 Sep 2022 19:16:25 +0530
+Message-ID: <CANAwSgTyt2D-aEMMowO6d+0ddTQb46o0pWMahnr7ny2rjY7iaQ@mail.gmail.com>
+Subject: Re: [PATCH-next v1] arm64: dts: rockchip: Enable NVM Express PCIe
+ controller on rock3a
+To:     Chukun Pan <amadeus@jmu.edu.cn>
+Cc:     heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        michael.riesch@wolfvision.net, robh+dt@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Deferred probe is an expected return value for fwnode_usb_role_switch_get().
-Given that the driver deals with it properly, there's no need to output a
-warning that may potentially confuse users.
+Hi Chukun,
 
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
---
-V2 -> V3: remove the Fixes and Cc
-V1 -> V2: adjust the coding style for better reading format.
- drivers/usb/typec/ucsi/ucsi.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+On Mon, 26 Sept 2022 at 23:31, Chukun Pan <amadeus@jmu.edu.cn> wrote:
+>
+> Hi,
+>
+> On 26-09-22, 06:14, Anand Moon wrote:
+>
+> > +     pcie30_3v3: gpio-regulator {
+> > +             compatible = "regulator-gpio";
+> > +             regulator-name = "pcie30_3v3";
+> > +             regulator-min-microvolt = <100000>;
+> > +             regulator-max-microvolt = <3300000>;
+> > +             gpios = <&gpio0 RK_PD4 GPIO_ACTIVE_HIGH>;
+> > +             gpios-states = <0x1>;
+> > +             states = <100000 0x0>, <3300000 0x1>;
+> > +     };
+>
+> This is actually no different from vcc3v3-pcie regulator?
+>
+> > +&pcie30phy {
+> > +     data-lanes = <0 1 2 3>;
+> > +     phy-supply = <&vcc3v3_pi6c_03>;
+> > +     status = "okay";
+> > +};
+>
+> It seems that there is no need to define additional data-lanes when
+> the pcie3x1 node is not enabled, and phy-supply seems unnecessary on
+> this board.
+>
+As per the schematic below pice support with 2 regulators
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 7f2624f42724..e961ebecd7df 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1069,11 +1069,9 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
- 
- 	cap->fwnode = ucsi_find_fwnode(con);
- 	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
--	if (IS_ERR(con->usb_role_sw)) {
--		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
--			con->num);
--		return PTR_ERR(con->usb_role_sw);
--	}
-+	if (IS_ERR(con->usb_role_sw))
-+		return dev_err_probe(ucsi->dev, PTR_ERR(con->usb_role_sw),
-+			"con%d: failed to get usb role switch\n", con->num);
- 
- 	/* Delay other interactions with the con until registration is complete */
- 	mutex_lock(&con->lock);
--- 
-2.25.1
+VCC3V3_PCIE        (SCT2250FPA)
+VCC3V3_PI6C_03  (PI6C557-03 is a spread spectrum clock generator
+supporting PCI Express and Ethernet requirements)
 
+[0] https://dl.radxa.com/rock3/docs/hw/3a/rock3a_v1.3_sch.pdf
+
+> Excuse me, can you try the patches I posted? Lspci can recognize
+> pcie3x2 normally, but I don't have a spare nvme hard drive right
+> now to test if it works.
+>
+
+No, it did not work on my board, see bool logs.
+[0] https://pastebin.com/Lk93VFxg
+
+[ 0.725985] phy phy-fe8c0000.phy.4: lane number 0, val 1
+[ 0.726975] phy phy-fe8c0000.phy.4: rockchip_p3phy_rk3568_init: lock
+failed 0x6890000, check input refclk and power supply
+[ 0.728172] phy phy-fe8c0000.phy.4: phy init failed --> -110
+[ 0.728704] rockchip-dw-pcie: probe of 3c0800000.pcie failed with error -110
+[ 0.745193] ALSA device list:
+
+Thanks
+-Anand
+
+> Thanks, Chukun
+>
+> ---
+> Chukun Pan (3):
+>   arm64: dts: rockchip: Add regulator suffix to ROCK3 Model A
+>   arm64: dts: rockchip: Rename pinctrl label of pcie2x1 on rock-3a
+>   arm64: dts: rockchip: Add PCIe v3 nodes to rock-3a
+>
+>  .../boot/dts/rockchip/rk3568-rock-3a.dts      | 36 ++++++++++++++-----
+>  1 file changed, 27 insertions(+), 9 deletions(-)
+>
+> --
+> 2.25.1
+>
