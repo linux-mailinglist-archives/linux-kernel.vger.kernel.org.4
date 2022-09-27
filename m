@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444265EAEEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 19:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9F05EAEF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Sep 2022 20:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiIZR7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 13:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39562 "EHLO
+        id S230159AbiIZSCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 14:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiIZR7N (ORCPT
+        with ESMTP id S229903AbiIZSBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:59:13 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9135E79EF0;
-        Mon, 26 Sep 2022 10:39:02 -0700 (PDT)
+        Mon, 26 Sep 2022 14:01:39 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0D625CD;
+        Mon, 26 Sep 2022 10:42:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664213943; x=1695749943;
+  t=1664214156; x=1695750156;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=JvTSl/oW27tlByKXkPZg0qsDhpE2mhOWqj2kdVVDAp4=;
-  b=dEmVk1uhGy85EW7zfJn63ljiooYj17G3yAxhxwFpHNfIvElXaGIVxA1z
-   pg+4OtK3Galahj9BnFp+tf23fwQm3f+mN7+uUvMx5f3vtN+hxB2S9v0Hw
-   me3lIT/K7xHU1Y23Rwbpz18sHB7MsSmD573g9y+AjT8Fz0648P3CyP0si
-   3ZMiCWO7OMxgIeNKmXsSNo2WfFqPFsIczSJ2Ro8DW7636Msga6p9INy7L
-   PochfAvNghFQTVGmNzkZOp7gencfoonhYFhRczClePSaRdre87p+8fVGF
-   AuMLg36LbjymTtt8ikhiZsWxpQBKWXQ9RioBEGd5SnOnv7GMHR17F3DOh
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="365130707"
+  bh=cG2DvqSDLyI1J+v9C/CXBPyOFA8Bzn/CTqdg+/ubto0=;
+  b=jcLuSexnv1HK6URTVRO/UFQfnxcICphtiQZYCCgIlmIWVhMosPL9TC8Q
+   4CgrhYguKwR0XaQ/QFNrmW3XPqpBHMYRc52vkyIrQES4hPkKxYgzD/5Nt
+   e0kH1X7Ymsvxe9copiD6JoPXry4+WDfD9TxhowUTkrYgoGElKAGAEeQJV
+   nehO6GE8yT8vQ4aNimLxmv8O3V3cbZ0UGie2WqnPxR17JTNMxL4sWCohP
+   3QS6NC2puTKhtC3Tf4Iot6TDD8+MfyulTIh2YfQ6jVt4fluLRmwcwN4Ut
+   y25PeeHlWVgHJYQ4TMGlu1u9zpWsISL7uluoO29AlmKaxnz1ClEEYqPkc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="302569735"
 X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
-   d="scan'208";a="365130707"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 10:39:02 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="572306983"
+   d="scan'208";a="302569735"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 10:42:35 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="651920180"
 X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
-   d="scan'208";a="572306983"
+   d="scan'208";a="651920180"
 Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.55])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 10:39:00 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 10:42:33 -0700
 From:   Rajat Khandelwal <rajat.khandelwal@intel.com>
 To:     jic23@kernel.org, lars@metafoo.de
 Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
         Rajat Khandelwal <rajat.khandelwal@intel.com>
-Subject: [PATCH] iio: pressure: mpl115: Implementing low power mode by
-Date:   Tue, 27 Sep 2022 23:08:38 +0530
-Message-Id: <20220927173838.1776453-1-rajat.khandelwal@intel.com>
+Subject: [PATCH v2] iio: pressure: mpl115: Implementing low power mode by shutdown gpio
+Date:   Tue, 27 Sep 2022 23:12:12 +0530
+Message-Id: <20220927174212.1776567-1-rajat.khandelwal@intel.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,6 +70,9 @@ implemented using sleep delay.
 
 Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
 ---
+
+v2: Grammatically completing subject line
+
  drivers/iio/pressure/mpl115.c | 33 +++++++++++++++++++++++++++++----
  1 file changed, 29 insertions(+), 4 deletions(-)
 
