@@ -2,116 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB9A5EBE4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9875EBE7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbiI0JTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 05:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
+        id S231280AbiI0JYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 05:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231809AbiI0JTQ (ORCPT
+        with ESMTP id S231872AbiI0JYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 05:19:16 -0400
-Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171F8E9CDD
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:18:08 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id WKU00000;
-        Tue, 27 Sep 2022 17:18:00 +0800
-Received: from jtjnmail201606.home.langchao.com (10.100.2.6) by
- jtjnmail201603.home.langchao.com (10.100.2.3) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 27 Sep 2022 17:18:01 +0800
-Received: from jtjnmail201606.home.langchao.com ([fe80::8583:33f:807a:3430])
- by jtjnmail201606.home.langchao.com ([fe80::8583:33f:807a:3430%10]) with mapi
- id 15.01.2507.012; Tue, 27 Sep 2022 17:18:01 +0800
-From:   =?utf-8?B?Um9jayBMaSjmnY7lro/kvJ8p?= <lihongweizz@inspur.com>
-To:     Joseph Qi <joseph.qi@linux.alibaba.com>,
-        "mark@fasheh.com" <mark@fasheh.com>,
-        "jlbec@evilplan.org" <jlbec@evilplan.org>
-CC:     "ocfs2-devel@oss.oracle.com" <ocfs2-devel@oss.oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ocfs2: fix crash issue if access released lockres in
- debugfs
-Thread-Topic: [PATCH] ocfs2: fix crash issue if access released lockres in
- debugfs
-Thread-Index: AdjSTgjzs68j6v4ZSxestKMYGpn8kQ==
-Date:   Tue, 27 Sep 2022 09:18:01 +0000
-Message-ID: <33c7f114b4ee498fbb5d233bb354e396@inspur.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.180.204.84]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 27 Sep 2022 05:24:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7486FB311
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664270544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6+Ba1/Qa0bdARicBepVl0B2bwfkxaeMWLDXIhxaAd8k=;
+        b=EeOA/5iwGUlOLM5Kpm189twXoxm8y9AEd1WTuJN6hZVSn20rVhh2NYIfLYG6VNXRB910H0
+        m5uL0zPyB3pSsFdWr54c19af92Dblf8F0OdPcb8yGrG56+IooM6Yr7zTEDJ14rRghVQOoO
+        +w/paGdPU697EBJYUlPLkiChmPcJ9o4=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-330-Qut-A9wYO8-6Bv6bEVj91A-1; Tue, 27 Sep 2022 05:22:23 -0400
+X-MC-Unique: Qut-A9wYO8-6Bv6bEVj91A-1
+Received: by mail-wr1-f70.google.com with SMTP id g15-20020adfbc8f000000b0022a4510a491so1968943wrh.12
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:22:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=6+Ba1/Qa0bdARicBepVl0B2bwfkxaeMWLDXIhxaAd8k=;
+        b=epXnjqsAevbtNpI1CyV/ILfTr26NWRvUARbML88ISASeZ/WHcdwB+Me4li8JLTv87Y
+         jQ+RUELBJKz6mDQDd29Mo0hJh5Zj0jHVQOXQ5uTHExgIo1tqae7rfzeUvVawyYsoIQip
+         avWNpT0oaD/RpYW5WXa7t/ACmPoGJdVDdo5L/d+QLg2QESoAAjzhkT07r1gWHM5las//
+         pxZaEi8cqXQOPVrYQhxYw52QTTgwNm2XgZNUePAynUnezCqeBSPTfQi7cgsufYyQbN/b
+         dNTZ+YP/VJOkD64fiJ3XGv8pqASHjz5ViSX3sV3cR8g7uFVB5Hen7r5KM/K3y/z42xRZ
+         hmtQ==
+X-Gm-Message-State: ACrzQf26CbFFZPhiQ67cV1dwi99XOdFxz3z5eQO4dYRt94t7tu9DZ/3i
+        /u43hB9e3EAlo3rjULJMHGWy85HCxXSVgwKtSk9kttojib2ZD2Qe2yhCB5174xqO12UfnM9Xrut
+        nQxnDQK+IW66H1nC3qCra8Epl
+X-Received: by 2002:a5d:6d4e:0:b0:22c:9dfd:4159 with SMTP id k14-20020a5d6d4e000000b0022c9dfd4159mr7051784wri.307.1664270542274;
+        Tue, 27 Sep 2022 02:22:22 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5XU1e+ar3H07xcOqysuVeYiMro12Mx6YEVDsbU7wsLpdnjZ1sK2jRqwDOMRAqdXSPn1M3AAg==
+X-Received: by 2002:a5d:6d4e:0:b0:22c:9dfd:4159 with SMTP id k14-20020a5d6d4e000000b0022c9dfd4159mr7051751wri.307.1664270541978;
+        Tue, 27 Sep 2022 02:22:21 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:ff00:9ec2:6ff6:11a1:3e80? (p200300cbc705ff009ec26ff611a13e80.dip0.t-ipconnect.de. [2003:cb:c705:ff00:9ec2:6ff6:11a1:3e80])
+        by smtp.gmail.com with ESMTPSA id d12-20020adfe88c000000b002205a5de337sm1226236wrm.102.2022.09.27.02.22.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 02:22:21 -0700 (PDT)
+Message-ID: <a8c40c94-771c-ca3d-ee1d-44cbed2398e8@redhat.com>
+Date:   Tue, 27 Sep 2022 11:22:19 +0200
 MIME-Version: 1.0
-tUid:   20229271718004bb7c0e07da3a80c9c3a277ef3517944
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFC PATCH 9/9] kvm_main.c: handle atomic memslot update
+Content-Language: en-US
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+References: <20220909104506.738478-1-eesposit@redhat.com>
+ <20220909104506.738478-10-eesposit@redhat.com>
+ <cde8be9d-64c0-80e5-7663-4302d075dcbc@redhat.com>
+ <07014070-5186-ca95-7028-82f77612dedd@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <07014070-5186-ca95-7028-82f77612dedd@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSm9zZXBoLA0KDQpUaGFua3MgZm9yIHlvdXIgcmVwbHkuIA0KSW4gb3VyIHVzZSBjYXNlLCBh
-IHVzZXJzcGFjZSBkYWVtb24gdG9vbCB3aWxsIHBlcmlvZGljYWxseSByZWFkIC9zeXMva2VybmVs
-L2RlYnVnL28yZGxtLzx1dWlkPi9sb2NraW5nX3N0YXRlIHRvIGNoZWNrIHRoZSBsb2NrIHJlcXVl
-c3Qgc3RhdGUuIFN5c3RlbSBjcmFzaGVzIGNhc3VhbGx5IGFmdGVyIGEgbG9uZyB0aW1lIHJ1bm5p
-bmcuIEFmdGVyIGFuYWx5emVkIHRoZSB2bWNvcmUgZmlsZSwgSSBmb3VuZCB0aGUgZGFlbW9uIHRv
-b2wgcHJvY2VzcyBpcyBhY2Nlc3NpbmcgYW4gaW52YWxpZCBwb2ludGVyIGluc2lkZSB0aGUgc2Vx
-ZmlsZSBpdGVyYXRpb24gd2hlbiByZWFkaW5nIGxvY2tpbmdfc3RhdGUuIA0KDQpJIG5lZWQgdG8g
-Y29ycmVjdCBteSBwYXRjaCBjb21tZW50IHNsaWdodGx5IHRoYXQgYWRkaW5nIGxvY2tyZXNBIGFu
-ZCByZW1vdmluZyBsb2NrcmVzQiBkbyBub3QgaGF2ZSB0byBiZSB0aGUgc2FtZSBwcm9jZXNzLCB0
-aGUga2V5IHBvaW50IGlzIHRoYXQgdGhlIGxvY2sgdHJhY2tpbmcgbGlzdCBpcyBjaGFuZ2VkIGR1
-cmluZyBzZXFmaWxlIGl0ZXJhdGlvbi4NCg0KQnIsDQpSb2NrDQoNCj4gUmU6IFtQQVRDSF0gb2Nm
-czI6IGZpeCBjcmFzaCBpc3N1ZSBpZiBhY2Nlc3MgcmVsZWFzZWQgbG9ja3JlcyBpbiBkZWJ1Z2Zz
-DQo+IA0KPiBIaSwNCj4gU29ycnkgZm9yIHRoZSBsYXRlIHJlcGx5Lg0KPiBJdCBzZWVtcyBpdCBp
-cyBpbmRlZWQgYW4gaXNzdWUgYW5kIEknbGwgZ2V0IGludG8gaXQgbW9yZSBkZWVwbHkuDQo+IEkn
-bSBjdXJpb3VzIGFib3V0IGhvdyB5b3UgZmlndXJlIG91dCB0aGlzPyBJcyBpdCBhIHJlYWwgaXNz
-dWUgeW91J3ZlIGVuY291bnRlcmVkPw0KPiANCj4gVGhhbmtzLA0KPiBKb3NlcGgNCj4gDQo+IE9u
-IDkvMjAvMjIgMzozNiBQTSwgUm9jayBMaSB3cm90ZToNCj4gPiBBY2Nlc3MgbG9ja2luZ19zdGF0
-ZSBvZiBkbG0gZGVidWdmcyBtYXkgY2F1c2UgY3Jhc2ggYXMgc2NlbmUgYmVsb3c6DQo+ID4NCj4g
-PiBQcm9jIEE6ICAgICAgICAgICAgICAgICAgUHJvYyB0aGF0IGFjY2VzcyBkZWJ1Z2luZm86DQo+
-ID4gYWRkX2xvY2tyZXNfdHJhY2tpbmcobG9ja3Jlc0EpDQo+ID4gLi4uDQo+ID4gICAgICAgICAg
-ICAgICAgICAgICAgICAgIG9jZnMyX2RsbV9zZXFfbmV4dCgpOg0KPiA+ICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIC8vcHJpdi0+cF9pdGVyX3JlcyBwb2ludHMgdG8gbmV4dA0KPiA+ICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIC8vbG9ja3JlcyBlLmcuIEIuIHByaXYtPnBfdG1wX3JlcyBo
-b2xkDQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgLy9jb3B5IG9mIGxvY2tyZXMgQSBi
-ZWZvcmUgbGVhdmUNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgb2NmczJfZGxtX3NlcV9z
-aG93KCkgLi4uDQo+ID4gcmVtb3ZlX2xvY2tyZXNfdHJhY2tpbmcobG9ja3JlcyBCKToNCj4gPiAg
-IC8vZnJlZSBsb2NrcmVzIEIsIGxfZGVidWdfbGlzdCBpbg0KPiA+ICAgLy9wcml2LT5wX3Rlcl9y
-ZXMgaXMgdXBkYXRlZCBidXQgbm90DQo+ID4gICAvL3ByaXYtPnBfdG1wX3Jlcw0KPiA+IC4uLg0K
-PiA+ICAgICAgICAgICAgICAgICAgICAgICAgICBvY2ZzMl9kbG1fc2VxX25leHQoKToNCj4gPiAJ
-CQkgICAgICAgICAgICAgICAgICAvL3ByaXYtPnBfdG1wX3JlcyB3aGljaCBob2xkcyBhIG9sZCBj
-b3B5IG9mDQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgLy9sb2NrcmVzIEEsIHRoZSBs
-X2RlYnVnX2xpc3QgaG9sZHMgYQ0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIC8vb3V0
-LW9mLWRhdGUgc3VjY2VlZCBwb2ludGVyLCB3aGljaCB3aWxsDQo+ID4gICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgLy9jYXVzZSBjcmFzaCBhcyAvL2FjY2VzcyBpbnZhbGlkIG1lbW9yeQ0KPiA+
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIGl0ZXIgPSB2OyAvL3ByaXYtPnBfdG1wX3Jlcw0K
-PiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIGl0ZXIgPSBvY2ZzMl9kbG1fbmV4dF9yZXMo
-aXRlciwgcHJpdikNCj4gPg0KPiA+IFRoZSByb290IGNhdXNlIG9mIHRoaXMgaXNzdWUgaXMgdGhh
-dCBwcml2YXRlLT5wX2l0ZXJfcmVzIGFjdHMgYXMgdGhlDQo+ID4gYWdlbnQgb2YgYWNjZXNzaW5n
-IGxvY2tyZXMgYW5kIGlzIHByb3RlY3RlZCBieSBvY2ZzMl9kbG1fdHJhY2tpbmdfbG9jaw0KPiA+
-IHdoaWxlIHBfdG1wX3JlcyBpcyBvbmx5IGEgY29weSBvZiB0aGUgbG9ja3JlcyBhbmQgd2lsbCBi
-ZSBvdXQtb2YtZGF0ZWQNCj4gPiBhZnRlciBsZWF2ZSBjcml0aWFsIHJlZ2lvbiBvZiBvY2ZzMl9k
-bG1fdHJhY2tpbmdfbG9jay4gV2Ugc2hvdWxkIHVzZQ0KPiA+IHByaXYtPnBfdGVyX3JlcyBhcyB0
-aGUgZm9yd2FyZCBpdGVyYXRlciBpbnN0ZWFkLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogUm9j
-ayBMaSA8bGlob25nd2VpenpAaW5zcHVyLmNvbT4NCj4gPiAtLS0NCj4gPiAgZnMvb2NmczIvZGxt
-Z2x1ZS5jIHwgMiArLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVs
-ZXRpb24oLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9mcy9vY2ZzMi9kbG1nbHVlLmMgYi9mcy9v
-Y2ZzMi9kbG1nbHVlLmMgaW5kZXgNCj4gPiBjMjhiYzk4Li41ZDg0MzUwIDEwMDY0NA0KPiA+IC0t
-LSBhL2ZzL29jZnMyL2RsbWdsdWUuYw0KPiA+ICsrKyBiL2ZzL29jZnMyL2RsbWdsdWUuYw0KPiA+
-IEBAIC0zMTA5LDcgKzMxMDksNyBAQCBzdGF0aWMgdm9pZCAqb2NmczJfZGxtX3NlcV9uZXh0KHN0
-cnVjdCBzZXFfZmlsZQ0KPiAqbSwgdm9pZCAqdiwgbG9mZl90ICpwb3MpDQo+ID4gIAlzdHJ1Y3Qg
-b2NmczJfbG9ja19yZXMgKmR1bW15ID0gJnByaXYtPnBfaXRlcl9yZXM7DQo+ID4NCj4gPiAgCXNw
-aW5fbG9jaygmb2NmczJfZGxtX3RyYWNraW5nX2xvY2spOw0KPiA+IC0JaXRlciA9IG9jZnMyX2Rs
-bV9uZXh0X3JlcyhpdGVyLCBwcml2KTsNCj4gPiArCWl0ZXIgPSBvY2ZzMl9kbG1fbmV4dF9yZXMo
-ZHVtbXksIHByaXYpOw0KPiA+ICAJbGlzdF9kZWxfaW5pdCgmZHVtbXktPmxfZGVidWdfbGlzdCk7
-DQo+ID4gIAlpZiAoaXRlcikgew0KPiA+ICAJCWxpc3RfYWRkKCZkdW1teS0+bF9kZWJ1Z19saXN0
-LCAmaXRlci0+bF9kZWJ1Z19saXN0KTsNCg==
+On 27.09.22 10:35, Emanuele Giuseppe Esposito wrote:
+> 
+> 
+> Am 27/09/2022 um 09:46 schrieb David Hildenbrand:
+>> On 09.09.22 12:45, Emanuele Giuseppe Esposito wrote:
+>>> When kvm_vm_ioctl_set_memory_region_list() is invoked, we need
+>>> to make sure that all memslots are updated in the inactive list
+>>> and then swap (preferreably only once) the lists, so that all
+>>> changes are visible immediately.
+>>>
+>>> The only issue is that DELETE and MOVE need to perform 2 swaps:
+>>> firstly replace old memslot with invalid, and then remove invalid.
+>>>
+>>
+>> I'm curious, how would a resize (grow/shrink) or a split be handled?
+>>
+> 
+> There are only 4 operations possible in KVM: KVM_MR_{DELETE, MOVE,
+> CREATE, FLAGS_ONLY}.
+> 
+> A resize should be implemented in QEMU as DELETE+CREATE.
+> 
+> Therefore a resize on memslot X will be implemented as:
+> First pass on the userspace operations:
+> 	invalidate memslot X;
+> 	swap_memslot_list(); // NOW it is visible to the guest
+> 
+> What guest sees: memslot X is invalid, so MMU keeps retrying the page fault
+> 
+> Second pass:
+> 	create new memslot X
+> 	delete old memslot X
+
+Thanks a lot for the very nice explanation!
+
+Does the invalidation already free up memslot metadata (especially the 
+rmaps) or will we end up temporarily allocating twice the memslot metadata?
+
+-- 
+Thanks,
+
+David / dhildenb
+
