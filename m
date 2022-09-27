@@ -2,85 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598D95ECF14
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9C55ECF0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbiI0VEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 17:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
+        id S232676AbiI0VDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 17:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiI0VEG (ORCPT
+        with ESMTP id S229838AbiI0VC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 17:04:06 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC01B6D07;
-        Tue, 27 Sep 2022 14:04:05 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id ay36so7367337wmb.0;
-        Tue, 27 Sep 2022 14:04:05 -0700 (PDT)
+        Tue, 27 Sep 2022 17:02:59 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7EE78BD6
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:02:56 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id v17-20020a259d91000000b006b4c31c0640so9574752ybp.18
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:02:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=4utwpaiX+nwZ8/aoptuiHSf3C3V/LbDfmFnwMH4/AB4=;
-        b=jyusM2yPG8DlGbki+SxcWD6f5AVuoTEYdygVIP1p9R1YD5O0l8LILbnNLh79Kns0Cz
-         PU2FjB4OLLFvCtesBimyiKrjAxE76xJPFK4G5iWTBnjZC9Slf5dWWzF/bNtBtvilVrM1
-         mU5ndgUOIZoGA3OaFQC28I30J3MVXpoenboUg/GvOz/mgpNzAztconza319TBTPc0yjP
-         x7LwT4WqJq5UH/nWhLn2NNZVso3FZ2V8bqvYSkYKSK3KradKkiksbySeShprzUuVrx7x
-         Up4t7mmKBdBoZ6osAnsLCMG5BVkRdKutYS2XUmqQTbrbtNMGHtRblysYOpO3k1Mol3IS
-         kCnQ==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=FiUQwbw/K3PWDajAgxyDvdNkiQcWFYTMqZWiwI919S8=;
+        b=lwqmRRqO39oklD0EjVFaIblRb5yr8EHZ4w17UBJ9TCozFbx5UIN9HWmkM58sbrilgY
+         nYhZF5QNbLcxTQj1DSNX/yC0h+b/DBHCRa9s8G2VBWwF24ue3PxwGFlVkm+CNK/ldkSH
+         tirvWES6q/Agbx58Gs0Dmzkh0iONaY/E0gH4eeyR62MId85kQNmA98qSyBmcqNsocHIb
+         D78AIPs5W6Lw47O7GvjfqvtRRabddJpwu1KZaSauImp9njKyG7NT6pbJmzfcPEUTC2Gr
+         BCqhqFl83+qJFYtqtFLJYh7rgFvV23W7Fy/L3N15vhOWt4qhkVxbOrshHb0AhVagcHpF
+         4xaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=4utwpaiX+nwZ8/aoptuiHSf3C3V/LbDfmFnwMH4/AB4=;
-        b=wzJuvlf7Qm2bLhm/mDkYR5tVNrFqGLxxz4EoP/CfCMdFr6KGKIQHf6C+AXHbSFDhsG
-         kI1wUrq3xR3iAq5ZBboSJJ9k7pcqi1OdYMimloJD4zJMQ0Kk/2v7FooHMubXYiKxYG8t
-         76/9L4KY2zHChOZKWKQawbft0MlUtMwMulnStBtwu+yJXauDACxDKRPqrd2c7zWwT/6P
-         R5JfOuvtKcAL5+w0fAL7tT/QbdY52s0PxLngwXof18TflTL5RF+OvvELzVVxnhPl9t8o
-         6AJ4EgmNfvl/k7SrRqMFf0U3oj+GIW+S9n/o6jG8qfRAeqroSdKdcCAo+9vGfow+g7Fm
-         6pUw==
-X-Gm-Message-State: ACrzQf3/OH21zXeDxYMXUyFAHRuB0lmSDPQXxQBlcVIgSwXD1o7Y5UXp
-        5J/J0x9oiE4tFTQrV64IlKQ=
-X-Google-Smtp-Source: AMsMyM5bRqdJoS8GkrzVBsbwQ/0Om0L4715MSQx2Luhy1dmQdbONNx03zPxwGHpo4vbTsTgRYmFHwA==
-X-Received: by 2002:a05:600c:35cf:b0:3b4:c0c2:d213 with SMTP id r15-20020a05600c35cf00b003b4c0c2d213mr4320200wmq.162.1664312643840;
-        Tue, 27 Sep 2022 14:04:03 -0700 (PDT)
-Received: from [192.168.8.100] (94.196.228.157.threembb.co.uk. [94.196.228.157])
-        by smtp.gmail.com with ESMTPSA id i7-20020adffc07000000b0022917d58603sm2578282wrr.32.2022.09.27.14.04.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 14:04:03 -0700 (PDT)
-Message-ID: <b52ae230-3a31-e29b-42fa-ff25393161c9@gmail.com>
-Date:   Tue, 27 Sep 2022 22:02:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH net-next 0/4] shrink struct ubuf_info
-Content-Language: en-US
-To:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org, Wei Liu <wei.liu@kernel.org>,
-        Paul Durrant <paul@xen.org>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-References: <cover.1663892211.git.asml.silence@gmail.com>
- <7fef56880d40b9d83cc99317df9060c4e7cdf919.camel@redhat.com>
- <021d8ea4-891c-237d-686e-64cecc2cc842@gmail.com>
- <bbb212f6-0165-0747-d99d-b49acbb02a80@gmail.com>
- <85cccb780608e830024fc82a8e4f703031646f4e.camel@redhat.com>
- <c06897d4-4883-2756-87f9-9b10ab495c43@gmail.com>
- <6502e1a45526f97a1e6d7d27bbe07e3bb3623de3.camel@redhat.com>
- <eb543907-190f-c661-b5d6-b4d67b6184e6@gmail.com>
- <b06d81fe39710b948a74a365c173b316252ed1f8.camel@redhat.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <b06d81fe39710b948a74a365c173b316252ed1f8.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=FiUQwbw/K3PWDajAgxyDvdNkiQcWFYTMqZWiwI919S8=;
+        b=gdULwisAkOgjqqjjF52Km3Rfi1BmidnYSPLOnlvXoKW0f5Zr9tGZNgahttDmHDiCZ7
+         7eH+XsYr5yh2mKA+rcSw1fBIu1O1t+nUSBeqf3uorGzvL3qXkbjILHavU3g+TY7iwRnC
+         ci0nzawyRPsUz4PiQE7HFDvaYb9Zs+XG1nUFY+pNvNjDmOMlsUs0cQ674XZzVYUD4Gui
+         TlZqjR1ayfkNN7pySdVwTU/c3i+aATl9NwGdOw+FzhesfzXOMkp620T9SShl/JW0WksX
+         MxdYVVd1WZfsXgNVzRp6EkvZG0yD9D7sX3mE/g1xSUWgBRiWlzQyBxw2ygQb7kivRqbV
+         Z9NA==
+X-Gm-Message-State: ACrzQf02VtBAV5U7GGNwfOW+ywbDmM+P6WIm6lJYTS9EQJA6Z59TOKA9
+        WL2yWW3dOeBzLmDA2rV2QKWokjxTn/sYmntqIMg=
+X-Google-Smtp-Source: AMsMyM7uXko43YDq4oJb+NcL+0b9zkeN3AYMYNEs0PfjglCk4TMxi/imeb7qZMnLEle5iCqk7gZ2YXlhf8Nhjeo/M9w=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:5d88:f716:dcf7:513])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:b790:0:b0:66f:7978:f166 with SMTP
+ id n16-20020a25b790000000b0066f7978f166mr26994725ybh.17.1664312575961; Tue,
+ 27 Sep 2022 14:02:55 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 14:02:48 -0700
+In-Reply-To: <202209271333.10AE3E1D@keescook>
+Mime-Version: 1.0
+References: <202209271333.10AE3E1D@keescook>
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1664312568; l=11508;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=E9dqHqgrx4iCHolRjiLF7r4lhsWqQ1o4NbALhoV2fj8=;
+ b=dvwxNwKx9zrqPIEQoHKhRtc+EmFQjAJl+5xWnG+GKPTcpGJSE53xmVUJsmaMZuvh47jR0B9qlyeC
+ El5GKCNFBiTEqy8Xo5q9eoQP56fvnnV+/JqunREGeMriiQv3RtZJ
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+Message-ID: <20220927210248.3950201-1-ndesaulniers@google.com>
+Subject: [PATCH v3] x86, mem: move memmove to out of line assembler
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        llvm@lists.linux.dev, Andy Lutomirski <luto@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,174 +80,489 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 21:23, Paolo Abeni wrote:
-> On Tue, 2022-09-27 at 21:17 +0100, Pavel Begunkov wrote:
->> On 9/27/22 20:59, Paolo Abeni wrote:
->>> On Tue, 2022-09-27 at 19:48 +0100, Pavel Begunkov wrote:
->>>> On 9/27/22 18:56, Paolo Abeni wrote:
->>>>> On Tue, 2022-09-27 at 18:16 +0100, Pavel Begunkov wrote:
->>>>>> On 9/27/22 15:28, Pavel Begunkov wrote:
->>>>>>> Hello Paolo,
->>>>>>>
->>>>>>> On 9/27/22 14:49, Paolo Abeni wrote:
->>>>>>>> Hello,
->>>>>>>>
->>>>>>>> On Fri, 2022-09-23 at 17:39 +0100, Pavel Begunkov wrote:
->>>>>>>>> struct ubuf_info is large but not all fields are needed for all
->>>>>>>>> cases. We have limited space in io_uring for it and large ubuf_info
->>>>>>>>> prevents some struct embedding, even though we use only a subset
->>>>>>>>> of the fields. It's also not very clean trying to use this typeless
->>>>>>>>> extra space.
->>>>>>>>>
->>>>>>>>> Shrink struct ubuf_info to only necessary fields used in generic paths,
->>>>>>>>> namely ->callback, ->refcnt and ->flags, which take only 16 bytes. And
->>>>>>>>> make MSG_ZEROCOPY and some other users to embed it into a larger struct
->>>>>>>>> ubuf_info_msgzc mimicking the former ubuf_info.
->>>>>>>>>
->>>>>>>>> Note, xen/vhost may also have some cleaning on top by creating
->>>>>>>>> new structs containing ubuf_info but with proper types.
->>>>>>>>
->>>>>>>> That sounds a bit scaring to me. If I read correctly, every uarg user
->>>>>>>> should check 'uarg->callback == msg_zerocopy_callback' before accessing
->>>>>>>> any 'extend' fields.
->>>>>>>
->>>>>>> Providers of ubuf_info access those fields via callbacks and so already
->>>>>>> know the actual structure used. The net core, on the opposite, should
->>>>>>> keep it encapsulated and not touch them at all.
->>>>>>>
->>>>>>> The series lists all places where we use extended fields just on the
->>>>>>> merit of stripping the structure of those fields and successfully
->>>>>>> building it. The only user in net/ipv{4,6}/* is MSG_ZEROCOPY, which
->>>>>>> again uses callbacks.
->>>>>>>
->>>>>>> Sounds like the right direction for me. There is a couple of
->>>>>>> places where it might get type safer, i.e. adding types instead
->>>>>>> of void* in for struct tun_msg_ctl and getting rid of one macro
->>>>>>> hiding types in xen. But seems more like TODO for later.
->>>>>>>
->>>>>>>> AFAICS the current code sometimes don't do the
->>>>>>>> explicit test because the condition is somewhat implied, which in turn
->>>>>>>> is quite hard to track.
->>>>>>>>
->>>>>>>> clearing uarg->zerocopy for the 'wrong' uarg was armless and undetected
->>>>>>>> before this series, and after will trigger an oops..
->>>>>>>
->>>>>>> And now we don't have this field at all to access, considering that
->>>>>>> nobody blindly casts it.
->>>>>>>
->>>>>>>> There is some noise due to uarg -> uarg_zc renaming which make the
->>>>>>>> series harder to review. Have you considered instead keeping the old
->>>>>>>> name and introducing a smaller 'struct ubuf_info_common'? the overall
->>>>>>>> code should be mostly the same, but it will avoid the above mentioned
->>>>>>>> noise.
->>>>>>>
->>>>>>> I don't think there will be less noise this way, but let me try
->>>>>>> and see if I can get rid of some churn.
->>>>>>
->>>>>> It doesn't look any better for me
->>>>>>
->>>>>> TL;DR; This series converts only 3 users: tap, xen and MSG_ZEROCOPY
->>>>>> and doesn't touch core code. If we do ubuf_info_common though I'd need
->>>>>> to convert lots of places in skbuff.c and multiple places across
->>>>>> tcp/udp, which is much worse.
->>>>>
->>>>> Uhmm... I underlook the fact we must preserve the current accessors for
->>>>> the common fields.
->>>>>
->>>>> I guess something like the following could do (completely untested,
->>>>> hopefully should illustrate the idea):
->>>>>
->>>>> struct ubuf_info {
->>>>> 	struct_group_tagged(ubuf_info_common, common,
->>>>> 		void (*callback)(struct sk_buff *, struct ubuf_info *,
->>>>>                             bool zerocopy_success);
->>>>> 		refcount_t refcnt;
->>>>> 	        u8 flags;
->>>>> 	);
->>>>>
->>>>> 	union {
->>>>>                    struct {
->>>>>                            unsigned long desc;
->>>>>                            void *ctx;
->>>>>                    };
->>>>>                    struct {
->>>>>                            u32 id;
->>>>>                            u16 len;
->>>>>                            u16 zerocopy:1;
->>>>>                            u32 bytelen;
->>>>>                    };
->>>>>            };
->>>>>
->>>>>            struct mmpin {
->>>>>                    struct user_struct *user;
->>>>>                    unsigned int num_pg;
->>>>>            } mmp;
->>>>> };
->>>>>
->>>>> Then you should be able to:
->>>>> - access ubuf_info->callback,
->>>>> - access the same field via ubuf_info->common.callback
->>>>> - declare variables as 'struct ubuf_info_commom' with appropriate
->>>>> contents.
->>>>>
->>>>> WDYT?
->>>>
->>>> Interesting, I didn't think about struct_group, this would
->>>> let to split patches better and would limit non-core changes.
->>>> But if the plan is to convert the core helpers to
->>>> ubuf_info_common, than I think it's still messier than changing
->>>> ubuf providers only.
->>>>
->>>> I can do the exercise, but I don't really see what is the goal.
->>>> Let me ask this, if we forget for a second how diffs look,
->>>> do you care about which pair is going to be in the end?
->>>
->>> Uhm... I proposed this initially with the goal of remove non fuctional
->>> changes from a patch that was hard to digest for me (4/4). So it's
->>> about diffstat to me ;)
->>
->> Ah, got it
->>
->>> On the flip side the change suggested would probably not be as
->>> straighforward as I would hope for.
->>>
->>>> ubuf_info_common/ubuf_info vs ubuf_info/ubuf_info_msgzc?
->>>
->>> The specific names used are not much relevant.
->>>
->>>> Are there you concerned about naming or is there more to it?
->>>
->>> I feel like this series is potentially dangerous, but I could not spot
->>> bugs into the code. I would have felt more relaxed eariler in the devel
->>> cycle.
->>
->> union {
->> 	struct {
->> 		unsigned long desc;
->> 		void *ctx;
->> 	};
->> 	struct {
->> 		u32 id;
->> 		u16 len;
->> 		u16 zerocopy:1;
->> 		u32 bytelen;
->> 	};
->> };
->>
->>
->> btw, nobody would frivolously change ->zerocopy anyway as it's
->> in a union. Even without the series we're absolutely screwed
->> if someone does that. If anything it adds a way to get rid of it:
->>
->> 1) Make vhost and xen use their own structures with right types.
->> 2) kill unused struct {ctx, desc} for MSG_ZEROCOPY
-> 
-> Ok, the above sounds reasonable. Additionally I've spent the last
-> surviving neuron on my side to on this series, and it looks sane, so...
-> 
-> Acked-by: Paolo Abeni <pabeni@redhat.com>
+When building ARCH=i386 with CONFIG_LTO_CLANG_FULL=y, it's possible
+(depending on additional configs which I have not been able to isolate)
+to observe a failure during register allocation:
 
-Great, thanks for taking a look!
+  error: inline assembly requires more registers than available
 
+when memmove is inlined into tcp_v4_fill_cb() or tcp_v6_fill_cb().
+
+memmove is quite large and probably shouldn't be inlined due to size
+alone. A noinline function attribute would be the simplest fix, but
+there's a few things that stand out with the current definition:
+
+In addition to having complex constraints that can't always be resolved,
+the clobber list seems to be missing %bx and %dx, and possibly %cl. By
+using numbered operands rather than symbolic operands, the constraints
+are quite obnoxious to refactor.
+
+Having a large function be 99% inline asm is a code smell that this
+function should simply be written in stand-alone out-of-line assembler.
+That gives the opportunity for other cleanups like fixing the
+inconsistent use of tabs vs spaces and instruction suffixes, and the
+label 3 appearing twice.  Symbolic operands and local labels would
+provide this code with a fresh coat of paint.
+
+Moving this to out of line assembler guarantees that the
+compiler cannot inline calls to memmove.
+
+This has been done previously for 64b:
+commit 9599ec0471de ("x86-64, mem: Convert memmove() to assembly file
+and fix return value bug")
+
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Changes v2 -> v3:
+* Fix bug I introduced in v1 when I changed one of temp register
+  operands for one of the two instructions performing a mem to mem swap,
+  but not the other instruction's operand, and discovered by Kees.
+  Verified KUnit memcpy tests are passing via:
+  $ ./tools/testing/kunit/kunit.py run --arch=i386 --make_options LLVM=1
+  $ ./tools/testing/kunit/kunit.py run --arch=i386
+  Fixed by using symbolic identifiers rather than open coded registers
+  for the less-than-word-size temporary registers.
+* Expand the comment about callee saved registers on i386 with a
+  reference to the psABI.
+
+Changes v1 -> v2:
+* Add reference to 9599ec0471de in commit message.
+* Include asm/export.h then make sure to EXPORT_SYMBOL(memmove).
+
+ arch/x86/lib/Makefile     |   1 +
+ arch/x86/lib/memcpy_32.c  | 187 ---------------------------------
+ arch/x86/lib/memmove_32.S | 215 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 216 insertions(+), 187 deletions(-)
+ create mode 100644 arch/x86/lib/memmove_32.S
+
+diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
+index f76747862bd2..9a0b8ed782e2 100644
+--- a/arch/x86/lib/Makefile
++++ b/arch/x86/lib/Makefile
+@@ -60,6 +60,7 @@ ifeq ($(CONFIG_X86_32),y)
+         lib-y += checksum_32.o
+         lib-y += strstr_32.o
+         lib-y += string_32.o
++        lib-y += memmove_32.o
+ ifneq ($(CONFIG_X86_CMPXCHG64),y)
+         lib-y += cmpxchg8b_emu.o atomic64_386_32.o
+ endif
+diff --git a/arch/x86/lib/memcpy_32.c b/arch/x86/lib/memcpy_32.c
+index ef3af7ff2c8a..a29b64befb93 100644
+--- a/arch/x86/lib/memcpy_32.c
++++ b/arch/x86/lib/memcpy_32.c
+@@ -17,190 +17,3 @@ __visible void *memset(void *s, int c, size_t count)
+ 	return __memset(s, c, count);
+ }
+ EXPORT_SYMBOL(memset);
+-
+-__visible void *memmove(void *dest, const void *src, size_t n)
+-{
+-	int d0,d1,d2,d3,d4,d5;
+-	char *ret = dest;
+-
+-	__asm__ __volatile__(
+-		/* Handle more 16 bytes in loop */
+-		"cmp $0x10, %0\n\t"
+-		"jb	1f\n\t"
+-
+-		/* Decide forward/backward copy mode */
+-		"cmp %2, %1\n\t"
+-		"jb	2f\n\t"
+-
+-		/*
+-		 * movs instruction have many startup latency
+-		 * so we handle small size by general register.
+-		 */
+-		"cmp  $680, %0\n\t"
+-		"jb 3f\n\t"
+-		/*
+-		 * movs instruction is only good for aligned case.
+-		 */
+-		"mov %1, %3\n\t"
+-		"xor %2, %3\n\t"
+-		"and $0xff, %3\n\t"
+-		"jz 4f\n\t"
+-		"3:\n\t"
+-		"sub $0x10, %0\n\t"
+-
+-		/*
+-		 * We gobble 16 bytes forward in each loop.
+-		 */
+-		"3:\n\t"
+-		"sub $0x10, %0\n\t"
+-		"mov 0*4(%1), %3\n\t"
+-		"mov 1*4(%1), %4\n\t"
+-		"mov  %3, 0*4(%2)\n\t"
+-		"mov  %4, 1*4(%2)\n\t"
+-		"mov 2*4(%1), %3\n\t"
+-		"mov 3*4(%1), %4\n\t"
+-		"mov  %3, 2*4(%2)\n\t"
+-		"mov  %4, 3*4(%2)\n\t"
+-		"lea  0x10(%1), %1\n\t"
+-		"lea  0x10(%2), %2\n\t"
+-		"jae 3b\n\t"
+-		"add $0x10, %0\n\t"
+-		"jmp 1f\n\t"
+-
+-		/*
+-		 * Handle data forward by movs.
+-		 */
+-		".p2align 4\n\t"
+-		"4:\n\t"
+-		"mov -4(%1, %0), %3\n\t"
+-		"lea -4(%2, %0), %4\n\t"
+-		"shr $2, %0\n\t"
+-		"rep movsl\n\t"
+-		"mov %3, (%4)\n\t"
+-		"jmp 11f\n\t"
+-		/*
+-		 * Handle data backward by movs.
+-		 */
+-		".p2align 4\n\t"
+-		"6:\n\t"
+-		"mov (%1), %3\n\t"
+-		"mov %2, %4\n\t"
+-		"lea -4(%1, %0), %1\n\t"
+-		"lea -4(%2, %0), %2\n\t"
+-		"shr $2, %0\n\t"
+-		"std\n\t"
+-		"rep movsl\n\t"
+-		"mov %3,(%4)\n\t"
+-		"cld\n\t"
+-		"jmp 11f\n\t"
+-
+-		/*
+-		 * Start to prepare for backward copy.
+-		 */
+-		".p2align 4\n\t"
+-		"2:\n\t"
+-		"cmp  $680, %0\n\t"
+-		"jb 5f\n\t"
+-		"mov %1, %3\n\t"
+-		"xor %2, %3\n\t"
+-		"and $0xff, %3\n\t"
+-		"jz 6b\n\t"
+-
+-		/*
+-		 * Calculate copy position to tail.
+-		 */
+-		"5:\n\t"
+-		"add %0, %1\n\t"
+-		"add %0, %2\n\t"
+-		"sub $0x10, %0\n\t"
+-
+-		/*
+-		 * We gobble 16 bytes backward in each loop.
+-		 */
+-		"7:\n\t"
+-		"sub $0x10, %0\n\t"
+-
+-		"mov -1*4(%1), %3\n\t"
+-		"mov -2*4(%1), %4\n\t"
+-		"mov  %3, -1*4(%2)\n\t"
+-		"mov  %4, -2*4(%2)\n\t"
+-		"mov -3*4(%1), %3\n\t"
+-		"mov -4*4(%1), %4\n\t"
+-		"mov  %3, -3*4(%2)\n\t"
+-		"mov  %4, -4*4(%2)\n\t"
+-		"lea  -0x10(%1), %1\n\t"
+-		"lea  -0x10(%2), %2\n\t"
+-		"jae 7b\n\t"
+-		/*
+-		 * Calculate copy position to head.
+-		 */
+-		"add $0x10, %0\n\t"
+-		"sub %0, %1\n\t"
+-		"sub %0, %2\n\t"
+-
+-		/*
+-		 * Move data from 8 bytes to 15 bytes.
+-		 */
+-		".p2align 4\n\t"
+-		"1:\n\t"
+-		"cmp $8, %0\n\t"
+-		"jb 8f\n\t"
+-		"mov 0*4(%1), %3\n\t"
+-		"mov 1*4(%1), %4\n\t"
+-		"mov -2*4(%1, %0), %5\n\t"
+-		"mov -1*4(%1, %0), %1\n\t"
+-
+-		"mov  %3, 0*4(%2)\n\t"
+-		"mov  %4, 1*4(%2)\n\t"
+-		"mov  %5, -2*4(%2, %0)\n\t"
+-		"mov  %1, -1*4(%2, %0)\n\t"
+-		"jmp 11f\n\t"
+-
+-		/*
+-		 * Move data from 4 bytes to 7 bytes.
+-		 */
+-		".p2align 4\n\t"
+-		"8:\n\t"
+-		"cmp $4, %0\n\t"
+-		"jb 9f\n\t"
+-		"mov 0*4(%1), %3\n\t"
+-		"mov -1*4(%1, %0), %4\n\t"
+-		"mov  %3, 0*4(%2)\n\t"
+-		"mov  %4, -1*4(%2, %0)\n\t"
+-		"jmp 11f\n\t"
+-
+-		/*
+-		 * Move data from 2 bytes to 3 bytes.
+-		 */
+-		".p2align 4\n\t"
+-		"9:\n\t"
+-		"cmp $2, %0\n\t"
+-		"jb 10f\n\t"
+-		"movw 0*2(%1), %%dx\n\t"
+-		"movw -1*2(%1, %0), %%bx\n\t"
+-		"movw %%dx, 0*2(%2)\n\t"
+-		"movw %%bx, -1*2(%2, %0)\n\t"
+-		"jmp 11f\n\t"
+-
+-		/*
+-		 * Move data for 1 byte.
+-		 */
+-		".p2align 4\n\t"
+-		"10:\n\t"
+-		"cmp $1, %0\n\t"
+-		"jb 11f\n\t"
+-		"movb (%1), %%cl\n\t"
+-		"movb %%cl, (%2)\n\t"
+-		".p2align 4\n\t"
+-		"11:"
+-		: "=&c" (d0), "=&S" (d1), "=&D" (d2),
+-		  "=r" (d3),"=r" (d4), "=r"(d5)
+-		:"0" (n),
+-		 "1" (src),
+-		 "2" (dest)
+-		:"memory");
+-
+-	return ret;
+-
+-}
+-EXPORT_SYMBOL(memmove);
+diff --git a/arch/x86/lib/memmove_32.S b/arch/x86/lib/memmove_32.S
+new file mode 100644
+index 000000000000..146664b7eb92
+--- /dev/null
++++ b/arch/x86/lib/memmove_32.S
+@@ -0,0 +1,215 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#include <linux/linkage.h>
++#include <asm/export.h>
++
++SYM_FUNC_START(memmove)
++/*
++ * void *memmove(void *dest, const void *src, size_t n)
++ * -mregparm=3 passes these in registers:
++ */
++.set dest, %eax
++.set src, %edx
++.set n, %ecx
++
++/*
++ * Need 3 scratch registers. These need to be saved+restored. Section 3.2.1
++ * Footnote 7 of the System V Application Binary Interface Version 1.0 aka
++ * "psABI" notes:
++ *   Note that in contrast to the Intel386 ABI, %rdi, and %rsi belong to the
++ *   called function, not the caller.
++ * i.e. %edi and %esi are callee saved for i386 (because they belong to the
++ * caller).
++ */
++.set tmp0, %edi
++.set tmp0w, %di
++.set tmp1, %ebx
++.set tmp1w, %bx
++.set tmp2, %esi
++.set tmp3b, %cl
++
++	pushl	%ebp
++	movl	%esp, %ebp
++
++	pushl	dest
++	pushl	tmp0
++	pushl	tmp1
++	pushl	tmp2
++
++	/* Handle more 16 bytes in loop */
++	cmpl	$0x10, n
++	jb	.L16_byteswap
++
++	/* Decide forward/backward copy mode */
++	cmpl	dest, src
++	jb	.Lbackwards_header
++
++	/*
++	 * movs instruction have many startup latency
++	 * so we handle small size by general register.
++	 */
++	cmpl	$680, n
++	jb	.Ltoo_small_forwards
++	/*
++	 * movs instruction is only good for aligned case.
++	 */
++	movl	src, tmp0
++	xorl	dest, tmp0
++	andl	$0xff, tmp0
++	jz	.Lforward_movs
++.Ltoo_small_forwards:
++	subl	$0x10, n
++
++	/*
++	 * We gobble 16 bytes forward in each loop.
++	 */
++.L16_byteswap_forwards_loop:
++	subl	$0x10, n
++	movl	0*4(src), tmp0
++	movl	1*4(src), tmp1
++	movl	tmp0, 0*4(dest)
++	movl	tmp1, 1*4(dest)
++	movl	2*4(src), tmp0
++	movl	3*4(src), tmp1
++	movl	tmp0, 2*4(dest)
++	movl	tmp1, 3*4(dest)
++	leal	0x10(src), src
++	leal	0x10(dest), dest
++	jae	.L16_byteswap_forwards_loop
++	addl	$0x10, n
++	jmp	.L16_byteswap
++
++	/*
++	 * Handle data forward by movs.
++	 */
++.p2align 4
++.Lforward_movs:
++	movl	-4(src, n), tmp0
++	leal	-4(dest, n), tmp1
++	shrl	$2, n
++	rep	movsl
++	movl	tmp0, (tmp1)
++	jmp	.Ldone
++	/*
++	 * Handle data backward by movs.
++	 */
++.p2align 4
++.Lbackwards_movs:
++	movl	(src), tmp0
++	movl	dest, tmp1
++	leal	-4(src, n), src
++	leal	-4(dest, n), dest
++	shrl	$2, n
++	std
++	rep	movsl
++	movl	tmp0,(tmp1)
++	cld
++	jmp	.Ldone
++
++	/*
++	 * Start to prepare for backward copy.
++	 */
++.p2align 4
++.Lbackwards_header:
++	cmpl	$680, n
++	jb	.Ltoo_small_backwards
++	movl	src, tmp0
++	xorl	dest, tmp0
++	andl	$0xff, tmp0
++	jz	.Lbackwards_movs
++
++	/*
++	 * Calculate copy position to tail.
++	 */
++.Ltoo_small_backwards:
++	addl	n, src
++	addl	n, dest
++	subl	$0x10, n
++
++	/*
++	 * We gobble 16 bytes backward in each loop.
++	 */
++.L16_byteswap_backwards_loop:
++	subl	$0x10, n
++
++	movl	-1*4(src), tmp0
++	movl	-2*4(src), tmp1
++	movl	tmp0, -1*4(dest)
++	movl	tmp1, -2*4(dest)
++	movl	-3*4(src), tmp0
++	movl	-4*4(src), tmp1
++	movl	tmp0, -3*4(dest)
++	movl	tmp1, -4*4(dest)
++	leal	-0x10(src), src
++	leal	-0x10(dest), dest
++	jae	.L16_byteswap_backwards_loop
++	/*
++	 * Calculate copy position to head.
++	 */
++	addl	$0x10, n
++	subl	n, src
++	subl	n, dest
++
++	/*
++	 * Move data from 8 bytes to 15 bytes.
++	 */
++.p2align 4
++.L16_byteswap:
++	cmpl	$8, n
++	jb	.L8_byteswap
++	movl	0*4(src), tmp0
++	movl	1*4(src), tmp1
++	movl	-2*4(src, n), tmp2
++	movl	-1*4(src, n), src
++
++	movl	tmp0, 0*4(dest)
++	movl	tmp1, 1*4(dest)
++	movl	tmp2, -2*4(dest, n)
++	movl	src, -1*4(dest, n)
++	jmp	.Ldone
++
++	/*
++	 * Move data from 4 bytes to 7 bytes.
++	 */
++.p2align 4
++.L8_byteswap:
++	cmpl	$4, n
++	jb	.L4_byteswap
++	movl	0*4(src), tmp0
++	movl	-1*4(src, n), tmp1
++	movl	tmp0, 0*4(dest)
++	movl	tmp1, -1*4(dest, n)
++	jmp	.Ldone
++
++	/*
++	 * Move data from 2 bytes to 3 bytes.
++	 */
++.p2align 4
++.L4_byteswap:
++	cmpl	$2, n
++	jb	.Lbyteswap
++	movw	0*2(src), tmp0w
++	movw	-1*2(src, n), tmp1w
++	movw	tmp0w, 0*2(dest)
++	movw	tmp1w, -1*2(dest, n)
++	jmp	.Ldone
++
++	/*
++	 * Move data for 1 byte.
++	 */
++.p2align 4
++.Lbyteswap:
++	cmpl	$1, n
++	jb	.Ldone
++	movb	(src), tmp3b
++	movb	tmp3b, (dest)
++.p2align 4
++.Ldone:
++	popl	tmp2
++	popl	tmp1
++	popl	tmp0
++	popl	%eax
++	popl	%ebp
++	RET
++SYM_FUNC_END(memmove)
++EXPORT_SYMBOL(memmove)
 -- 
-Pavel Begunkov
+2.37.3.998.g577e59143f-goog
+
