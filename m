@@ -2,92 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF675EC772
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCE05EC775
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiI0PTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38472 "EHLO
+        id S230149AbiI0PTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiI0PT1 (ORCPT
+        with ESMTP id S230396AbiI0PTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:19:27 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2199A1432B9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:19:27 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id AEC2C1F891;
-        Tue, 27 Sep 2022 15:19:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664291965; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=P9H9FuxWTVZeaYAprCOlqzp8J1vVr73QDuMTqkuhcOk=;
-        b=gy8gZezK29Bc7BAGDAS3J70kAMK63Xiv+kq+9OzOd3fWp29fbweFnDys8/6HmcwOp1e6hP
-        1EFiKFMPX9p5N+UI53pjMOi+hBDnxC38pOHQ7xB84Me1jdHCl2RB3Uqlnx+KRbi/mMslOz
-        Oa+E8qSMjiNUAevwOysHe1wlA1NDiw0=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4281C2C16B;
-        Tue, 27 Sep 2022 15:19:24 +0000 (UTC)
-Date:   Tue, 27 Sep 2022 17:19:23 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        Tue, 27 Sep 2022 11:19:50 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E0312AEC
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:19:46 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id r62so5868703pgr.12
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=ozwz/kr75NpC96tOUqziv2FbYDcS1Xg/Xc9JrcnYDIw=;
+        b=aD4rrECu2ausOVlLE4gUsa1xeFXbzCDqhUSEM6rCLHK5rgBwyb5IlVpaAwSzAj9rFc
+         8ss/JFQrnzUDOWJOgToiGQz3DbeSTLrRlmlivZobo7sNCVAPyZFjQXP4xDr73rtevCI5
+         12CxpLpirpMPby3pdyIUMhC7x3a/7EJIzGNLg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ozwz/kr75NpC96tOUqziv2FbYDcS1Xg/Xc9JrcnYDIw=;
+        b=gU0NaK4mQoJWx9ca28HD9cSxkMOJLa4BvMzHCqxRIlZR7Z2NC2rbyzccZhcxU9xzKI
+         I14CFaZBAuWkBjH++2vRnG1vP/rBDskYp+Tm189Q9irGuzPTX5vfwzvDzViljYOtncFB
+         gDppKRI60BXf5mWfuY3p+42qNJfQZntUrdONUDPZRhY9HmN8sPco2LZBFS2SNeBkWLEi
+         jyqYwy4wrzp5Mkt5rhNXGdQT3S4v9LS3t2DJhBnkul9NIQooB8v2+aWZOgdnuiCsr2jE
+         oNwUmcXzwj3ewB4p0ifiU/U15KNAzzWAPf61SY3ylhaBJ2ZDfuvSYghO7F5gWETRBox/
+         wzyw==
+X-Gm-Message-State: ACrzQf3QEZ1Ajk8fY7bJfdlNgNcSgeExMh2lubJ3I+tKgIkrI97boR3s
+        XJwD9ZUgHP+dTu2cdLIpBr8eHA==
+X-Google-Smtp-Source: AMsMyM6u3m9PcqcUS16zstLBXfgnAsEawKfJRgbn2Z1VogzvRHBpOu67PA1zUb8r5rtEtpXZP+Nddw==
+X-Received: by 2002:a63:8942:0:b0:43b:e87e:3fc0 with SMTP id v63-20020a638942000000b0043be87e3fc0mr25309584pgd.531.1664291986021;
+        Tue, 27 Sep 2022 08:19:46 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i14-20020a636d0e000000b0043954df3162sm1653393pgc.10.2022.09.27.08.19.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 08:19:45 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 08:19:44 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Geert Stappers <stappers@stappers.nl>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>
-Subject: Re: [patch RFC 06/29] printk: Protect [un]register_console() with a
- mutex
-Message-ID: <YzMUe5soxMrsFM8V@alley>
-References: <20220910221947.171557773@linutronix.de>
- <20220910222300.712668210@linutronix.de>
- <YzLIy4emYX6JpzuN@alley>
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Subject: Re: [PATCH v10 27/27] MAINTAINERS: Rust
+Message-ID: <202209270818.5BA5AA62@keescook>
+References: <20220927131518.30000-1-ojeda@kernel.org>
+ <20220927131518.30000-28-ojeda@kernel.org>
+ <20220927141137.iovhhjufqdqcs6qn@gpm.stappers.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YzLIy4emYX6JpzuN@alley>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220927141137.iovhhjufqdqcs6qn@gpm.stappers.nl>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-09-27 11:56:30, Petr Mladek wrote:
-> On Sun 2022-09-11 00:27:41, Thomas Gleixner wrote:
-> > Unprotected list walks are a brilliant idea. Especially in the context of
-> > hotpluggable consoles.
+On Tue, Sep 27, 2022 at 04:11:38PM +0200, Geert Stappers wrote:
+> On Tue, Sep 27, 2022 at 03:14:58PM +0200, Miguel Ojeda wrote:
+> > Miguel, Alex and Wedson will be maintaining the Rust support.
+> >
+> > Boqun, Gary and Björn will be reviewers.
+> >
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> > Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> > Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> > Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> > ---
+> >  MAINTAINERS | 18 ++++++++++++++++++
+> >  1 file changed, 18 insertions(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index f5ca4aefd184..944dc265b64d 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -17758,6 +17758,24 @@ F:	include/rv/
+> >  F:	kernel/trace/rv/
+> >  F:	tools/verification/
+> >
+> > +RUST
+> > +M:	Miguel Ojeda <ojeda@kernel.org>
+> > +M:	Alex Gaynor <alex.gaynor@gmail.com>
+> > +M:	Wedson Almeida Filho <wedsonaf@google.com>
+> <screenshot from="response of a reply-to-all that I just did">
+>   ** Address not found **
 > 
-> Yeah, it is crazy. And it is there probably since the beginning.
+>   Your message wasn't delivered to wedsonaf@google.com because the
+>   address couldn't be found, or is unable to receive mail.
 > 
-> > @@ -3107,13 +3143,14 @@ void register_console(struct console *ne
-> >  	bool realcon_enabled = false;
-> >  	int err;
-> >  
-> > -	for_each_console(con) {
-> > +	console_list_lock();
+>   Learn more here: https://support.google.com/mail/answer/6596
 > 
-> Hmm, the new mutex is really nasty. It has very strange semantic.
-> It makes the locking even more complicated.
+>   The response was:
+> 
+>     The email account that you tried to reach does not exist. Please try
+>     double-checking the recipient's email address for typos or unnecessary
+>     spaces. Learn more at https://support.google.com/mail/answer/6596
+> </screenshot>
 
-Please, continue the discussion in the reply to the v1 patchset,
-see https://lore.kernel.org/r/YzMT27FVllY3u05k@alley
+Wedson, can you send (or Ack) the following patch? :)
 
-I send it to this RFC by mistake.
+diff --git a/.mailmap b/.mailmap
+index d175777af078..3a7fe4ee56fb 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -433,6 +433,7 @@ Vlad Dogaru <ddvlad@gmail.com> <vlad.dogaru@intel.com>
+ Vladimir Davydov <vdavydov.dev@gmail.com> <vdavydov@parallels.com>
+ Vladimir Davydov <vdavydov.dev@gmail.com> <vdavydov@virtuozzo.com>
+ WeiXiong Liao <gmpy.liaowx@gmail.com> <liaoweixiong@allwinnertech.com>
++Wedson Almeida Filho <wedsonaf@gmail.com> <wedsonaf@google.com>
+ Will Deacon <will@kernel.org> <will.deacon@arm.com>
+ Wolfram Sang <wsa@kernel.org> <w.sang@pengutronix.de>
+ Wolfram Sang <wsa@kernel.org> <wsa@the-dreams.de>
 
-I am sorry for the mess.
-
-Best Regards,
-Petr
+-- 
+Kees Cook
