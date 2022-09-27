@@ -2,82 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3565EC2EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC175EC247
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232412AbiI0MjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34574 "EHLO
+        id S232270AbiI0MRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbiI0MjL (ORCPT
+        with ESMTP id S232271AbiI0MR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:39:11 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [5.144.164.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5778C15E44D;
-        Tue, 27 Sep 2022 05:39:08 -0700 (PDT)
-Received: from [192.168.1.101] (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 3ED1B3F246;
-        Tue, 27 Sep 2022 14:39:06 +0200 (CEST)
-Message-ID: <c50039ee-144a-bc31-a67c-42de7ae24d1f@somainline.org>
-Date:   Tue, 27 Sep 2022 14:39:05 +0200
+        Tue, 27 Sep 2022 08:17:28 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB13721E38;
+        Tue, 27 Sep 2022 05:17:26 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4McJRB1GsMzHtg1;
+        Tue, 27 Sep 2022 20:12:38 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 27 Sep
+ 2022 20:17:24 +0800
+From:   Jason Yan <yanaijie@huawei.com>
+To:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
+        <john.garry@huawei.com>, <jinpu.wang@cloud.ionos.com>,
+        <damien.lemoal@opensource.wdc.com>, Jason Yan <yanaijie@huawei.com>
+Subject: [PATCH v5 0/8] scsi: libsas: sas address comparison refactor
+Date:   Tue, 27 Sep 2022 20:39:18 +0800
+Message-ID: <20220927123926.953297-1-yanaijie@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 08/15] arm64: dts: qcom: sdm845: align TLMM pin
- configuration with DT schema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220925110608.145728-1-krzysztof.kozlowski@linaro.org>
- <20220925110608.145728-9-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220925110608.145728-9-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Sas address conversion and comparison is widely used in libsas and
+drivers. However they are all opencoded and to avoid the line spill over
+80 columns, are mostly split into multi-lines.
 
+To make the code easier to read, introduce some helpers with clearer
+semantics and replace the opencoded segments with them.
 
-On 25.09.2022 13:06, Krzysztof Kozlowski wrote:
-> DT schema expects TLMM pin configuration nodes to be named with
-> '-state' suffix and their optional children with '-pins' suffix.
-> 
->   qcom/sdm845-lg-judyln.dtb: gpios@c000: 'vol-up-active-pins' does not match any of the regexes: '-state$', 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+v4->v5:
+  Rename sas_find_attached_phy() to sas_find_attached_phy_id().
+  Return error code from sas_find_attached_phy_id() directly.
+  Add review tags from John and Damien.
 
-Konrad
->  arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi
-> index 20f275f8694d..1eb423e4be24 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi
-> @@ -604,7 +604,7 @@ pinconf {
->  };
->  
->  &pm8998_gpio {
-> -	vol_up_pin_a: vol-up-active-pins {
-> +	vol_up_pin_a: vol-up-active-state {
->  		pins = "gpio6";
->  		function = "normal";
->  		input-enable;
+v3->v4:
+  Fix comparison typo.
+  Fix test condition error in sas_check_parent_topology() of patch #6.
+
+v2->v3:
+  Rename sas_phy_addr_same() to sas_phy_addr_match().
+  Rearrange patches, move patch #6 to #1 and directly use the helper
+  	sas_phy_match_dev_addr() in sas_find_attached_phy().
+  Add some review tags from Jack Wang.
+
+v1->v2:
+  First factor out sas_find_attached_phy() and replace LLDDs's code
+  	with it.
+  Remove three too simple helpers.
+  Rename the helpers with 'sas_' prefix.
+
+Jason Yan (8):
+  scsi: libsas: introduce sas address comparison helpers
+  scsi: libsas: introduce sas_find_attached_phy_id() helper
+  scsi: pm8001: use sas_find_attached_phy_id() instead of open coded
+  scsi: mvsas: use sas_find_attached_phy_id() instead of open coded
+  scsi: hisi_sas: use sas_find_attathed_phy_id() instead of open coded
+  scsi: libsas: use sas_phy_match_dev_addr() instead of open coded
+  scsi: libsas: use sas_phy_addr_match() instead of open coded
+  scsi: libsas: use sas_phy_match_port_addr() instead of open coded
+
+ drivers/scsi/hisi_sas/hisi_sas_main.c | 14 ++--------
+ drivers/scsi/libsas/sas_expander.c    | 40 ++++++++++++++++-----------
+ drivers/scsi/libsas/sas_internal.h    | 17 ++++++++++++
+ drivers/scsi/mvsas/mv_sas.c           | 17 ++++--------
+ drivers/scsi/pm8001/pm8001_sas.c      | 18 ++++--------
+ include/scsi/libsas.h                 |  2 ++
+ 6 files changed, 57 insertions(+), 51 deletions(-)
+
+-- 
+2.31.1
+
