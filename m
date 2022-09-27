@@ -2,139 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9875EBE7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E015EBE83
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbiI0JYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 05:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
+        id S231822AbiI0JZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 05:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbiI0JYU (ORCPT
+        with ESMTP id S231772AbiI0JY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 05:24:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7486FB311
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:22:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664270544;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6+Ba1/Qa0bdARicBepVl0B2bwfkxaeMWLDXIhxaAd8k=;
-        b=EeOA/5iwGUlOLM5Kpm189twXoxm8y9AEd1WTuJN6hZVSn20rVhh2NYIfLYG6VNXRB910H0
-        m5uL0zPyB3pSsFdWr54c19af92Dblf8F0OdPcb8yGrG56+IooM6Yr7zTEDJ14rRghVQOoO
-        +w/paGdPU697EBJYUlPLkiChmPcJ9o4=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-330-Qut-A9wYO8-6Bv6bEVj91A-1; Tue, 27 Sep 2022 05:22:23 -0400
-X-MC-Unique: Qut-A9wYO8-6Bv6bEVj91A-1
-Received: by mail-wr1-f70.google.com with SMTP id g15-20020adfbc8f000000b0022a4510a491so1968943wrh.12
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:22:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=6+Ba1/Qa0bdARicBepVl0B2bwfkxaeMWLDXIhxaAd8k=;
-        b=epXnjqsAevbtNpI1CyV/ILfTr26NWRvUARbML88ISASeZ/WHcdwB+Me4li8JLTv87Y
-         jQ+RUELBJKz6mDQDd29Mo0hJh5Zj0jHVQOXQ5uTHExgIo1tqae7rfzeUvVawyYsoIQip
-         avWNpT0oaD/RpYW5WXa7t/ACmPoGJdVDdo5L/d+QLg2QESoAAjzhkT07r1gWHM5las//
-         pxZaEi8cqXQOPVrYQhxYw52QTTgwNm2XgZNUePAynUnezCqeBSPTfQi7cgsufYyQbN/b
-         dNTZ+YP/VJOkD64fiJ3XGv8pqASHjz5ViSX3sV3cR8g7uFVB5Hen7r5KM/K3y/z42xRZ
-         hmtQ==
-X-Gm-Message-State: ACrzQf26CbFFZPhiQ67cV1dwi99XOdFxz3z5eQO4dYRt94t7tu9DZ/3i
-        /u43hB9e3EAlo3rjULJMHGWy85HCxXSVgwKtSk9kttojib2ZD2Qe2yhCB5174xqO12UfnM9Xrut
-        nQxnDQK+IW66H1nC3qCra8Epl
-X-Received: by 2002:a5d:6d4e:0:b0:22c:9dfd:4159 with SMTP id k14-20020a5d6d4e000000b0022c9dfd4159mr7051784wri.307.1664270542274;
-        Tue, 27 Sep 2022 02:22:22 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5XU1e+ar3H07xcOqysuVeYiMro12Mx6YEVDsbU7wsLpdnjZ1sK2jRqwDOMRAqdXSPn1M3AAg==
-X-Received: by 2002:a5d:6d4e:0:b0:22c:9dfd:4159 with SMTP id k14-20020a5d6d4e000000b0022c9dfd4159mr7051751wri.307.1664270541978;
-        Tue, 27 Sep 2022 02:22:21 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:ff00:9ec2:6ff6:11a1:3e80? (p200300cbc705ff009ec26ff611a13e80.dip0.t-ipconnect.de. [2003:cb:c705:ff00:9ec2:6ff6:11a1:3e80])
-        by smtp.gmail.com with ESMTPSA id d12-20020adfe88c000000b002205a5de337sm1226236wrm.102.2022.09.27.02.22.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 02:22:21 -0700 (PDT)
-Message-ID: <a8c40c94-771c-ca3d-ee1d-44cbed2398e8@redhat.com>
-Date:   Tue, 27 Sep 2022 11:22:19 +0200
+        Tue, 27 Sep 2022 05:24:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97F3CDCC4;
+        Tue, 27 Sep 2022 02:23:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AE806174F;
+        Tue, 27 Sep 2022 09:23:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01F7FC433D7;
+        Tue, 27 Sep 2022 09:23:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664270591;
+        bh=fxyKD3idrxd/Kwm5HJI4SBtsysFFrlTJnWuARd0zvNw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Sey6YFB7+D5kctKLKQvVOBFkabkp4Q5/W2Th/2QtSyYxaxkqzTu9QEyTSl6eVitA2
+         1nOC82tfXPdXwVuXIVJGPEE3rAJsvuFlIfBPYpFv7cwTW+2h8dmMon3+JUrmRZbfkf
+         ZGqh4wUnXwHG1KcwNFelmhwRWdWjux53J6cadvd1BtyHNjeScFmMOfsdc95H+oKBXH
+         B2It17OpaiPixryi3x+EsstDWdeA1GSp6gTMWHs0H54VcJH7PXst6dnF6Dmx3KiUJV
+         BOHgI9q0evNQ9ppNINpOPM7HznK3C7H+RblXN2S2dmllMt0e6HAnIWOGPfXrEQb7+6
+         IAS61smLHdvjA==
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     helgaas@kernel.org,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>, mka@chromium.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, quic_ramkri@quicinc.com,
+        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
+        quic_skananth@quicinc.com, quic_vbadigan@quicinc.com,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        quic_nitegupt@quicinc.com, quic_hemantk@quicinc.com
+Subject: Re: (subset) [PATCH v4 0/2] PCI: qcom: sc7280: add missing aggre0 and aggre1 clocks
+Date:   Tue, 27 Sep 2022 11:23:03 +0200
+Message-Id: <166427053134.73906.17497859805426997677.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <1662626776-19636-1-git-send-email-quic_krichai@quicinc.com>
+References: <1662626776-19636-1-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC PATCH 9/9] kvm_main.c: handle atomic memslot update
-Content-Language: en-US
-To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-References: <20220909104506.738478-1-eesposit@redhat.com>
- <20220909104506.738478-10-eesposit@redhat.com>
- <cde8be9d-64c0-80e5-7663-4302d075dcbc@redhat.com>
- <07014070-5186-ca95-7028-82f77612dedd@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <07014070-5186-ca95-7028-82f77612dedd@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.09.22 10:35, Emanuele Giuseppe Esposito wrote:
+On Thu, 8 Sep 2022 14:16:14 +0530, Krishna chaitanya chundru wrote:
+> Add missing aggre0 and aggre1 clocks supports to PCIe node.
 > 
+> Without voting these clocks, PCIe link is going down when system is
+> suspended as these clocks can get turned off as no-one is voting for them.
 > 
-> Am 27/09/2022 um 09:46 schrieb David Hildenbrand:
->> On 09.09.22 12:45, Emanuele Giuseppe Esposito wrote:
->>> When kvm_vm_ioctl_set_memory_region_list() is invoked, we need
->>> to make sure that all memslots are updated in the inactive list
->>> and then swap (preferreably only once) the lists, so that all
->>> changes are visible immediately.
->>>
->>> The only issue is that DELETE and MOVE need to perform 2 swaps:
->>> firstly replace old memslot with invalid, and then remove invalid.
->>>
->>
->> I'm curious, how would a resize (grow/shrink) or a split be handled?
->>
+> Krishna chaitanya chundru (2):
+>   arm64: dts: qcom: sc7280: Add missing aggre0, aggre1 clocks
+>   dt-bindings: pci: QCOM Add missing sc7280 aggre0, aggre1 clocks
 > 
-> There are only 4 operations possible in KVM: KVM_MR_{DELETE, MOVE,
-> CREATE, FLAGS_ONLY}.
-> 
-> A resize should be implemented in QEMU as DELETE+CREATE.
-> 
-> Therefore a resize on memslot X will be implemented as:
-> First pass on the userspace operations:
-> 	invalidate memslot X;
-> 	swap_memslot_list(); // NOW it is visible to the guest
-> 
-> What guest sees: memslot X is invalid, so MMU keeps retrying the page fault
-> 
-> Second pass:
-> 	create new memslot X
-> 	delete old memslot X
+> [...]
 
-Thanks a lot for the very nice explanation!
+Applied to pci/dt - dts changes (patch 1) should go via
+platform tree, thanks!
 
-Does the invalidation already free up memslot metadata (especially the 
-rmaps) or will we end up temporarily allocating twice the memslot metadata?
+[2/2] dt-bindings: pci: QCOM Add missing sc7280 aggre0, aggre1 clocks
+      https://git.kernel.org/lpieralisi/pci/c/1abbe04a1b55
 
--- 
 Thanks,
-
-David / dhildenb
-
+Lorenzo
