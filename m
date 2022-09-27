@@ -2,105 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A145ECCFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE345ECD0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231934AbiI0Te6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 15:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
+        id S231960AbiI0Tkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 15:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiI0Tez (ORCPT
+        with ESMTP id S231965AbiI0TkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 15:34:55 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342966FA17;
-        Tue, 27 Sep 2022 12:34:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664307294; x=1695843294;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JZPmuA9NArT3KuyZCskF79bot+02uPrqjNJBcTvQL8E=;
-  b=dYx6U3hoeiuGyLZV84V+IVZ0WUhV2NNGed5KNEMC2Y1Mct8+qYXO3QQY
-   PeRAQsTZo5iW4Iy7Jsmdqlup2CGsghHTtFgcCoHnTtHE88xFWbj/RPI35
-   FBaM1/Qa9Ei6Rx/RqWblyZumMCPnHLP6k9uHvY+absROXEtE7u7CP4HNC
-   W8PHkBwvWcvX1Q3Zf2urj3wGjH9RA1okZ5e6afSUSEyTFdtIouLjkDQXr
-   xXezgviIuev7znDHq2YaEJNZKRSXpJYBWW8fOQ9ZEBbRHMgthJOkrBgdy
-   aNxLdAc0GdFibCXdnRzNkDyYRi+Fwg/204n1vg1Ll2jDq1xYrU/uN5fkw
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="363252337"
-X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
-   d="scan'208";a="363252337"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 12:34:53 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="684110152"
-X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
-   d="scan'208";a="684110152"
-Received: from weimingg-mobl.amr.corp.intel.com (HELO [10.212.244.112]) ([10.212.244.112])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 12:34:52 -0700
-Message-ID: <caf2949a-e98d-e0a2-dc8a-af632d9b610a@linux.intel.com>
-Date:   Tue, 27 Sep 2022 12:34:52 -0700
+        Tue, 27 Sep 2022 15:40:23 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66696AA3DA;
+        Tue, 27 Sep 2022 12:40:22 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id m81so13082452oia.1;
+        Tue, 27 Sep 2022 12:40:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=iruhQjRYRTGwe5/TLaTxBohqBJDpNWfMEkvXB7N5Nm8=;
+        b=QwEIwspVTzTdR8qiiMDnh0OMESLS+bpH/V1erPKT4hp2qrRM/xxLuYCHFdDAGTI+kp
+         nkJHX95wQEBFcEGKYWmAYruDnmaNkm4zVI+7rtrL9mnYI86raioGRNH2v+pPVnNoZ1pG
+         RiQf9TzfuPZu4QAmb8i5L3BoO36mF75eHbZzYY2aiLyTwJgY2mPdSdcj46VTCu8GL3Nf
+         tG7dgCtq63eU4V8jjMb+WsEC1rWrZUOs3nAkwSgwlUiRkYuqb4Zb+ikhZ/NKW5bT8Ry2
+         UHc+Ko6Nd+tyBOUr92HmiV5cjnMijr2z4cu6UqtnPuoaIZeII1YyJ/8u/yI1kW1yyxXg
+         ArFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=iruhQjRYRTGwe5/TLaTxBohqBJDpNWfMEkvXB7N5Nm8=;
+        b=fvS5EsLksSvO1sJRH14LBNEWSAs6pyDxG+Hr80erIw0RGM+apM8CerzkKbTExs0Ky0
+         n31YP8K1VjuXz8dS6UcXrCpfTIFOrg987HQ4xLbzE5+mh758KntgG4aLB/dZvaySb9Yi
+         kSQd9wmevS0ypkvYMqu/cRQ+nKMlfCOudFRyQUZs6aRNlqxUYi2kjjq83Xs8jS7yQb4X
+         1DfkE/9ortq79ZfASn9PGBg9pdx22gVpD/tWorsGNuqgfJjLHQZd/Fna1+z1TOrAPSS8
+         jCJhMlr3t/Q6omeVEgpDp8r4MT7WNlx4/4nzIQwOTRmxiDH+aC9bvxXxzG5bLg88r/uc
+         Hgew==
+X-Gm-Message-State: ACrzQf1bJpUSN0QncFlN5ljvEpMng7EGpjlVdvDwOnIaXCBE/D8Hfgn/
+        HZosyb8VB/xuaN7cp+tpvmw=
+X-Google-Smtp-Source: AMsMyM4fpFvhPQfJKwvwez1vvCt2fJlPRTC1a4Mi01EK+EZwCWxWdqKbv9oII3PNatNaScp19TsAqg==
+X-Received: by 2002:a05:6808:201f:b0:34f:9c4e:2b9d with SMTP id q31-20020a056808201f00b0034f9c4e2b9dmr2608851oiw.156.1664307621606;
+        Tue, 27 Sep 2022 12:40:21 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id r33-20020a056870e9a100b0010d7242b623sm1331360oao.21.2022.09.27.12.40.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 12:40:21 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 12:38:09 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     broonie@kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the mm-stable tree with the bitmap
+ tree
+Message-ID: <YzNRIep0dLbT2HGr@yury-laptop>
+References: <20220927192650.516143-1-broonie@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/9] PCI/DPC: Use
- pci_aer_clear_uncorrect_error_status() to clear uncorrectable error status
-Content-Language: en-US
-To:     Zhuo Chen <chenzhuo.1@bytedance.com>, bhelgaas@google.com,
-        ruscur@russell.cc, oohall@gmail.com, fancer.lancer@gmail.com,
-        jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
-        james.smart@broadcom.com, dick.kennedy@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ntb@lists.linux.dev,
-        linux-scsi@vger.kernel.org
-References: <20220927153524.49172-1-chenzhuo.1@bytedance.com>
- <20220927153524.49172-3-chenzhuo.1@bytedance.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20220927153524.49172-3-chenzhuo.1@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927192650.516143-1-broonie@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Sep 27, 2022 at 08:26:49PM +0100, broonie@kernel.org wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the mm-stable tree got a conflict in:
+> 
+>   include/linux/nodemask.h
+> 
+> between commit:
+> 
+>   97848c10f9f8a ("lib/bitmap: remove bitmap_ord_to_pos")
+> 
+> from the bitmap tree and commit:
+> 
+>   3e061d924fe9c ("lib/nodemask: optimize node_random for nodemask with single NUMA node")
+> 
+> from the mm-stable tree.
 
-On 9/27/22 8:35 AM, Zhuo Chen wrote:
-> Use pci_aer_clear_nonfatal_status() in dpc_process_error(), which has
-> no functional changes.
-
-Just say pci_aer_clear_uncorrect_error_status() clears both fatal and
-non-fatal errors. So use it in place of pci_aer_clear_nonfatal_status()
-and pci_aer_clear_fatal_status().
+The fix is correct. I sent the updated patch to Stephen, and
+apparently had to CC you. Thanks.
 
 > 
-> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
-> ---
->  drivers/pci/pcie/dpc.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 > 
-> diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
-> index 3e9afee02e8d..7942073fbb34 100644
-> --- a/drivers/pci/pcie/dpc.c
-> +++ b/drivers/pci/pcie/dpc.c
-> @@ -288,8 +288,7 @@ void dpc_process_error(struct pci_dev *pdev)
->  		 dpc_get_aer_uncorrect_severity(pdev, &info) &&
->  		 aer_get_device_error_info(pdev, &info)) {
->  		aer_print_error(pdev, &info);
-> -		pci_aer_clear_nonfatal_status(pdev);
-> -		pci_aer_clear_fatal_status(pdev);
-> +		pci_aer_clear_uncorrect_error_status(pdev);
->  	}
->  }
->  
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+> diff --cc include/linux/nodemask.h
+> index 0c45fb066caa7,e66742db741cf..0000000000000
+> --- a/include/linux/nodemask.h
+> +++ b/include/linux/nodemask.h
+> @@@ -504,11 -505,21 +505,20 @@@ static inline int num_node_state(enum n
+>   static inline int node_random(const nodemask_t *maskp)
+>   {
+>   #if defined(CONFIG_NUMA) && (MAX_NUMNODES > 1)
+> - 	int w, bit = NUMA_NO_NODE;
+> + 	int w, bit;
+>   
+>   	w = nodes_weight(*maskp);
+> - 	if (w)
+> + 	switch (w) {
+> + 	case 0:
+> + 		bit = NUMA_NO_NODE;
+> + 		break;
+> + 	case 1:
+> + 		bit = first_node(*maskp);
+> + 		break;
+> + 	default:
+>  -		bit = bitmap_ord_to_pos(maskp->bits,
+>  -					get_random_int() % w, MAX_NUMNODES);
+>  +		bit = find_nth_bit(maskp->bits, MAX_NUMNODES, get_random_int() % w);
+> + 		break;
+> + 	}
+>   	return bit;
+>   #else
+>   	return 0;
