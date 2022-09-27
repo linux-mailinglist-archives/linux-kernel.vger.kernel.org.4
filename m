@@ -2,266 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0385ED12C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 01:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C751E5ED136
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 01:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiI0Xpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 19:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
+        id S231824AbiI0XsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 19:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiI0Xpg (ORCPT
+        with ESMTP id S229515AbiI0XsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 19:45:36 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010601F2C0;
-        Tue, 27 Sep 2022 16:45:33 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RMftZw006504;
-        Tue, 27 Sep 2022 23:45:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=y74FZvHHQjkj9jCboc2P/4mPAbNy1xVAGRrtNynT4Qc=;
- b=n1DO9Lfyn3O1c4jzkFbOcALeihK70p3SziK0S3899kl8yJ3kHt/KgzP8ZT44v/lbf3o/
- AIcBrckiAmPf6rGRYZ5DbZkIMlGVuBlvQm2WVQp8SqIAtsdC0M3KeyfAXdidQY2q726a
- xsDGMOSuUbydbvKtqMAsM2X+tXQKx0KLFEaHPaKlhmCoga5bJ3MNOJ+5dOLCq9+36lns
- F0VZ181IoO4bFNHKvJ5/YsQgUvY1H2oJ6pGKCFIBcsq12sS/r/4Hl+i+qlbR3yF9AHUS
- K/GLiLFQQjKIuGQ9GYxjk09hV0B1MlUhJsVuwWK3QXscfgCt7cex9FH4IDe9xq5YbTIY UA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jva6qr426-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 23:45:25 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28RNjO5x002177
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 23:45:24 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 27 Sep 2022 16:45:24 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5] drm/msm/dp: add atomic_check to bridge ops
-Date:   Tue, 27 Sep 2022 16:45:14 -0700
-Message-ID: <1664322314-10494-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
+        Tue, 27 Sep 2022 19:48:07 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70084.outbound.protection.outlook.com [40.107.7.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856071B2D25;
+        Tue, 27 Sep 2022 16:48:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RahDJZzJLDIEsTnPHeHHHLA554BC8yhDmMIR/TfuQ6GY5jWItj59rISbqBs/oZMoB/b0qKaSlVvWpmfSqK/wK+QlwQEHtX+28xOExeG2SqMSceTrG+Uvk4HnAN6lRb7/ZnjI7d+BCNdka/tDDatCWoiw+QMw6a8hBUEEBtiTPwDArE7xPqy4H+mpQ/0nq07IUw8zCTdC1bFJ2XkYzr72kDPFz10Ebs9zYIL5wqoeMk5YUxvzgknMtURTL4EipEOZVBnsgqvZgEdYegQKM4GSUc1VBBbmtnkt8j0iLfaB4cKCzNYGGsZhKOyIKOuVbrnyeTY7u7RyyeCwBSbxTBYnTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HyAuMIrkAuMz5us/4inZFLqxmdMX30NAq4x82Y6sHJ8=;
+ b=fnQsolEPaeeti+KcqzznWB3U3BFghndGbrjIHAOWKYuyduVOdYfsqYfbN5uQkhTQ+Ud20VfOrQFnRSlX2ghEzTFysMSM6jSRoT5FTNTXXfiNsO1ZAT1IhgGEJW4Lct8pLLbrW6zUDSQb2EX9YKvjScnmJQlRr/3rd1MhNsdOc0mQa33ie2PR++ehW/0llOmi5q2daodv3c1EO2duh6GtmWcQ+rTko8MtZalqkPt3K2Js1ES9A6Iotb6blbRkAimrDMf7mLh0CLb+JG792v2rxRulyyfOiO6rrrtthYQ8MfuVWsedCxQmyV61Q3qrxNPLfgDLTyuE66RgE5b1znVEhA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HyAuMIrkAuMz5us/4inZFLqxmdMX30NAq4x82Y6sHJ8=;
+ b=p01JqWaXTM9Ij1eLfmM5+UKJPBtUZHn8zAmMWNbCzehdVMsFkk9TB07zSSMUUbIDW5PIfnJBMoTTN1xZp8Sram7JZr3p6FUQia8mAQFVfV8UHAftpJ1d3dSzvT7Td4L1oCX0XV08yaejaYl1FgU8HXrV7+oNFIO24YHOqbj7bJM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by DU0PR04MB9444.eurprd04.prod.outlook.com (2603:10a6:10:35c::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20; Tue, 27 Sep
+ 2022 23:48:00 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
+ 23:47:59 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Rui Sousa <rui.sousa@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Walle <michael@walle.cc>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Richie Pearn <richard.pearn@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 net-next 0/8] Add tc-taprio support for queueMaxSDU
+Date:   Wed, 28 Sep 2022 02:47:38 +0300
+Message-Id: <20220927234746.1823648-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Lyl4IrGNnsA3WU3-eiNbhLM__dZCBAUl
-X-Proofpoint-ORIG-GUID: Lyl4IrGNnsA3WU3-eiNbhLM__dZCBAUl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-27_11,2022-09-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
- clxscore=1011 impostorscore=0 mlxscore=0 spamscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209270146
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: VI1PR0501CA0025.eurprd05.prod.outlook.com
+ (2603:10a6:800:60::11) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|DU0PR04MB9444:EE_
+X-MS-Office365-Filtering-Correlation-Id: 172b805e-3175-4d19-b08f-08daa0e2b597
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: u4LugFOP8FWIq4VGaMiNyF1L9fLnXrh5S8L+HXZEjKyDuBBa0Z1iv6IaU6X1jKfMbYBQT6owVlRoiS2P6KC6p5nkEwX473Zz3AxsgyDXJDD1gyBvsnq6nfyzm5imOpVOQb6XyGqEiFmDuKp8HYWtgoUdfHyxnK2tagie+P7PMlgSzDovK0MQMY50KAAI9Ti4mvhkDOKR1WyVFRwzjVqaGPPLTc9LwdMgiBwVdks+LXTc8QUdjMiFLF6ONZ80yZGTr1u/UZnmPbA+JBnW822GgtKJPf8LDmdSHzhmbAnHFwQhc1NOAST7N6jmbtfGFw3Jztqk/l+WSOWlDbSdq94NRleJTczAyxoYBqaKUHqS9wreWUH/DG8Q5OQhUSUqiraBQgbQNjt6wgQ0MkNzoYaffZt1TARu5E6o7J6Y1FotVcpz4JsbjNtkz0fAv1jMPscumuLgQM81GTVjg8yJbilocG6VBFKN1tZnr5nP9uDm/ZkHD8XPqB1Wwc6T6iC+z7hGTsejFUGq7up+hB6k2f6PhkVvsvgpiXrfjI7DRA6sFEpfFINfmdRRtX3zPNMl3jk+8USigexGKjyILH2UTfg9WEZltxiGIS1568CqFoExDtCCKmx5+pGS1RVmAIWufSAc0vEfytnnpGOpD9DnECqr6S2W+/pd2ruKUY7JnCpFHTQ/VajchJZ9S5i/IhawkJMTSof7S5Nt0ogxXSTxF7AI/a6PE03GHHE+NEEOXVkfEbxWE23eGxrmqL2VhRQXbT4ErKHtEy6XV4apAOom8dAret83oUA5lw3v6nK5zNVccvNb+lAtebyFfqMBPuIJDIbWz5KANwrPNGa23MEI9Ct+OA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(376002)(39860400002)(396003)(346002)(451199015)(7416002)(66899015)(6512007)(966005)(41300700001)(6666004)(36756003)(6486002)(38350700002)(6506007)(6916009)(8676002)(86362001)(66476007)(4326008)(26005)(52116002)(8936002)(66946007)(83380400001)(38100700002)(316002)(54906003)(186003)(1076003)(2906002)(5660300002)(66556008)(478600001)(44832011)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gB07w/Eb+bulIi6gG5QFJZ6Mm6kYtBUSrEvBQ6l27nrMDi8VHM9kRV1WEk0F?=
+ =?us-ascii?Q?4lbX7cPcN3ysscni87V2MpZLHslmvLgPiztTK+jexQMv/P0a/zKzeZRPQAfb?=
+ =?us-ascii?Q?IgHaTEBGLwopQxynvfBO3i5wCGSDXmalShAwsgMUjvacjHO/2EMkton8g3uu?=
+ =?us-ascii?Q?6Om8f7kQVpxWzo2T6NZi6q4GvfNcb1uPD+Vq/PROQmJZfrDZDY7y/F/0KEOb?=
+ =?us-ascii?Q?4XgIPNXcUmpa0B0EoHdtimIM+Elv5IxLj4ujYJdOkj26uEVhOOcZC5tO/jsZ?=
+ =?us-ascii?Q?NMwwwvKd+VFdbYMVFh685sLeuWi2hroNlmOacrD3J29wA9QEKFKa6nRNHn0j?=
+ =?us-ascii?Q?vHmJG04NDNhlfSdzXZzS7jraJmvLgTz3Jmbnp0UNeujV571lHr2xQqNZuE2/?=
+ =?us-ascii?Q?lkNz9J9VaW+nao/cmje0lth3eg7BDfAoB+vsceVg3UVDra6pEkARKv7cC6gg?=
+ =?us-ascii?Q?JB6APIQweJMB/u/6C4ZCg+UM+8bSWcR6rONQDcc4yLN3tjUqsQDlsu6qU7ff?=
+ =?us-ascii?Q?x4NgNK6gwKkldYHdL46OChcvOLCMmE6p2FoRiUDz/5RBTU1xaFK6As778mvZ?=
+ =?us-ascii?Q?gva/oMs0dLEEqn5JPm3KgcPAKAPlg0Qcv5OGIsSnj/PTOICWCUaHi70AUyJG?=
+ =?us-ascii?Q?mjpIUzZJJOAhh3diYs2M6rB32OCPWXbkupISv3Rvk/Z51uA1KKOeZ1QnTuFe?=
+ =?us-ascii?Q?VQUd0dgyzinXrgtz2Wja0umCyQ2zDWLQS7EekIJm2dcfbgMEUCZcg58j6ebm?=
+ =?us-ascii?Q?QMq5c9EHEJdX1Db9M2KwMSjB/AslGgelabrhM6tSybcb6VilftxdC5CkYh7S?=
+ =?us-ascii?Q?1fY3QTDsvILH++LtgyDClycijlSwCTbeMVMBku+UYAqekCwNN6MIsW3GuR97?=
+ =?us-ascii?Q?zUjOVlYqoMLzmuDWn5c7ZPZ4cSHtWq5L5ALnfkJTEt4PAKWHfCuCzY/KT4wq?=
+ =?us-ascii?Q?nz/JiSpIfHz/dMDe9JdE8nCF5kCTDQOX0x82JiZsWY0aLP9vS+K4eZLOaien?=
+ =?us-ascii?Q?ioJcyV8eVQ0Z9bmHNQ55VmvDh6oO4NZfr9HfQ6dLdTqwRxV9acv0IkN6yH0H?=
+ =?us-ascii?Q?AIFhAEa3heCPV/Ag3y2OLYr2SxgXdZNL6A10H9w79qUCZJHm72UdjC2MRYk4?=
+ =?us-ascii?Q?iLI9qp6Hedl0bGcMHYfxm1HFX0WJpzKFw5Murgswev+4tYpsZPU3R5xCMuni?=
+ =?us-ascii?Q?zs+rgVLdfB1jash4zs+1txef8eEN2sEU1NscbB0igv+o4JGIMRyYwuYfBpHx?=
+ =?us-ascii?Q?Km2NqlOjktA5HubjfCHO5fN6yx8HrdAGONn2O05InYnmJjUsJauxZwzB7jLl?=
+ =?us-ascii?Q?2zJNAutnyOFFptpgIJ4/ri3wazejV+atSELLLgv1dAUZUO4J9bBGCg+sEOoM?=
+ =?us-ascii?Q?ovDTrWEVjt5ptIzhOyqTh0rHc0IzEi4+udCMc1ONe3jIbgubKe7KI3+HPzsI?=
+ =?us-ascii?Q?bmNkfWxP5Vkfva8GUVvYyld298IZhIx9Lz/d4Nx2XuyMir87Gx4tipldPGAT?=
+ =?us-ascii?Q?37/tMZmpc4AzBSIjjYdv6SxSDPlF6aMpJW8endLabcrVhg7fPkGxlg7XN3U+?=
+ =?us-ascii?Q?36MOt28SNdo9+0EkiSW7yfKnf/Lmm+6gynrly+3yUZbSw2+piTNUbCQYxKPg?=
+ =?us-ascii?Q?Ng=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 172b805e-3175-4d19-b08f-08daa0e2b597
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 23:47:59.7422
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kZ7hWkYsKZ0dpK5ekxZFad/kQSHuhPdjQANi6Swqcn0xYvISMMnjvQB6rsfmFujoHs4vCO79tjXfNXuq4K2Ztg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9444
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DRM commit_tails() will disable downstream crtc/encoder/bridge if
-both disable crtc is required and crtc->active is set before pushing
-a new frame downstream.
+Changes in v3:
+- at Jakub's suggestion, implement a TC_QUERY_CAPS functionality in
+  ndo_setup_tc through which drivers can opt into features, rather than
+  out of them
+- consequently, drop patches to am65-cpsw, stmmac, igc, tsnep, lan966x
 
-There is a rare case that user space display manager issue an extra
-screen update immediately followed by close DRM device while down
-stream display interface is disabled. This extra screen update will
-timeout due to the downstream interface is disabled but will cause
-crtc->active be set. Hence the followed commit_tails() called by
-drm_release() will pass the disable downstream crtc/encoder/bridge
-conditions checking even downstream interface is disabled.
-This cause the crash to happen at dp_bridge_disable() due to it trying
-to access the main link register to push the idle pattern out while main
-link clocks is disabled.
+Non-changes in v3:
+- still not using the nla_policy to limit the range for the tc index
+- still not using the NL_SET_ERR_ATTR_MISS() helper to report a missing
+  tc entry index attribute
+As discussed here, this would actually make things less user friendly,
+until iproute2 gains support for policy tables and for meaningfully
+parsing the offset to the bad attribute, something which I've no idea
+how to do.
+https://patchwork.kernel.org/project/netdevbpf/patch/20220923163310.3192733-2-vladimir.oltean@nxp.com/
 
-This patch adds atomic_check to prevent the extra frame will not
-be pushed down if display interface is down so that crtc->active
-will not be set neither. This will fail the conditions checking
-of disabling down stream crtc/encoder/bridge which prevent
-drm_release() from calling dp_bridge_disable() so that crash
-at dp_bridge_disable() prevented.
-
-There is no protection in the DRM framework to check if the display
-pipeline has been already disabled before trying again. The only
-check is the crtc_state->active but this is controlled by usermode
-using UAPI. Hence if the usermode sets this and then crashes, the
-driver needs to protect against double disable.
-
-SError Interrupt on CPU7, code 0x00000000be000411 -- SError
-CPU: 7 PID: 3878 Comm: Xorg Not tainted 5.19.0-stb-cbq #19
-Hardware name: Google Lazor (rev3 - 8) (DT)
-pstate: a04000c9 (NzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __cmpxchg_case_acq_32+0x14/0x2c
-lr : do_raw_spin_lock+0xa4/0xdc
-sp : ffffffc01092b6a0
-x29: ffffffc01092b6a0 x28: 0000000000000028 x27: 0000000000000038
-x26: 0000000000000004 x25: ffffffd2973dce48 x24: 0000000000000000
-x23: 00000000ffffffff x22: 00000000ffffffff x21: ffffffd2978d0008
-x20: ffffffd2978d0008 x19: ffffff80ff759fc0 x18: 0000000000000000
-x17: 004800a501260460 x16: 0441043b04600438 x15: 04380000089807d0
-x14: 07b0089807800780 x13: 0000000000000000 x12: 0000000000000000
-x11: 0000000000000438 x10: 00000000000007d0 x9 : ffffffd2973e09e4
-x8 : ffffff8092d53300 x7 : ffffff808902e8b8 x6 : 0000000000000001
-x5 : ffffff808902e880 x4 : 0000000000000000 x3 : ffffff80ff759fc0
-x2 : 0000000000000001 x1 : 0000000000000000 x0 : ffffff80ff759fc0
-Kernel panic - not syncing: Asynchronous SError Interrupt
-CPU: 7 PID: 3878 Comm: Xorg Not tainted 5.19.0-stb-cbq #19
-Hardware name: Google Lazor (rev3 - 8) (DT)
-Call trace:
- dump_backtrace.part.0+0xbc/0xe4
- show_stack+0x24/0x70
- dump_stack_lvl+0x68/0x84
- dump_stack+0x18/0x34
- panic+0x14c/0x32c
- nmi_panic+0x58/0x7c
- arm64_serror_panic+0x78/0x84
- do_serror+0x40/0x64
- el1h_64_error_handler+0x30/0x48
- el1h_64_error+0x68/0x6c
- __cmpxchg_case_acq_32+0x14/0x2c
- _raw_spin_lock_irqsave+0x38/0x4c
- lock_timer_base+0x40/0x78
- __mod_timer+0xf4/0x25c
- schedule_timeout+0xd4/0xfc
- __wait_for_common+0xac/0x140
- wait_for_completion_timeout+0x2c/0x54
- dp_ctrl_push_idle+0x40/0x88
- dp_bridge_disable+0x24/0x30
- drm_atomic_bridge_chain_disable+0x90/0xbc
- drm_atomic_helper_commit_modeset_disables+0x198/0x444
- msm_atomic_commit_tail+0x1d0/0x374
- commit_tail+0x80/0x108
- drm_atomic_helper_commit+0x118/0x11c
- drm_atomic_commit+0xb4/0xe0
- drm_client_modeset_commit_atomic+0x184/0x224
- drm_client_modeset_commit_locked+0x58/0x160
- drm_client_modeset_commit+0x3c/0x64
- __drm_fb_helper_restore_fbdev_mode_unlocked+0x98/0xac
- drm_fb_helper_set_par+0x74/0x80
- drm_fb_helper_hotplug_event+0xdc/0xe0
- __drm_fb_helper_restore_fbdev_mode_unlocked+0x7c/0xac
- drm_fb_helper_restore_fbdev_mode_unlocked+0x20/0x2c
- drm_fb_helper_lastclose+0x20/0x2c
- drm_lastclose+0x44/0x6c
- drm_release+0x88/0xd4
- __fput+0x104/0x220
- ____fput+0x1c/0x28
- task_work_run+0x8c/0x100
- do_exit+0x450/0x8d0
- do_group_exit+0x40/0xac
- __wake_up_parent+0x0/0x38
- invoke_syscall+0x84/0x11c
- el0_svc_common.constprop.0+0xb8/0xe4
- do_el0_svc+0x8c/0xb8
- el0_svc+0x2c/0x54
- el0t_64_sync_handler+0x120/0x1c0
- el0t_64_sync+0x190/0x194
-SMP: stopping secondary CPUs
-Kernel Offset: 0x128e800000 from 0xffffffc008000000
-PHYS_OFFSET: 0x80000000
-CPU features: 0x800,00c2a015,19801c82
-Memory Limit: none
+v2 at:
+https://patchwork.kernel.org/project/netdevbpf/list/?series=679954&state=*
 
 Changes in v2:
--- add more commit text
+- precompute the max_frm_len using dev->hard_header_len, so that the
+  fast path can directly check against skb->len
+- add the newly added lan966x taprio offload to the list of drivers
+  which must reject the new option
+- add some enetc cleanup patches from
+  https://patchwork.kernel.org/project/netdevbpf/patch/20220921144349.1529150-2-vladimir.oltean@nxp.com/
+- get rid of some taprio cleanup patches which were merged separately
+  via https://patchwork.kernel.org/project/netdevbpf/cover/20220915105046.2404072-1-vladimir.oltean@nxp.com/
+- make enetc_vf.ko compile by excluding the taprio offload code:
+  https://patchwork.kernel.org/project/netdevbpf/patch/20220916133209.3351399-2-vladimir.oltean@nxp.com/
 
-Changes in v3:
--- add comments into dp_bridge_atomic_check()
+v1 at:
+https://patchwork.kernel.org/project/netdevbpf/cover/20220914153303.1792444-1-vladimir.oltean@nxp.com/
 
-Changes in v4:
--- rewording the comment into dp_bridge_atomic_check()
 
-Changes in v5:
--- removed quote x at end of commit text
 
-Fixes: 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display enable and disable")
-Reported-by: Leonard Lausen <leonard@lausen.nl>
-Suggested-by: Rob Clark <robdclark@gmail.com>
-Closes: https://gitlab.freedesktop.org/drm/msm/-/issues/17
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_drm.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+The tc-taprio offload mode supported by the Felix DSA driver has
+limitations surrounding its guard bands.
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-index 6df25f7..2e8e8ce 100644
---- a/drivers/gpu/drm/msm/dp/dp_drm.c
-+++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-@@ -31,6 +31,36 @@ static enum drm_connector_status dp_bridge_detect(struct drm_bridge *bridge)
- 					connector_status_disconnected;
- }
- 
-+static int dp_bridge_atomic_check(struct drm_bridge *bridge,
-+			    struct drm_bridge_state *bridge_state,
-+			    struct drm_crtc_state *crtc_state,
-+			    struct drm_connector_state *conn_state)
-+{
-+	struct msm_dp *dp;
-+
-+	dp = to_dp_bridge(bridge)->dp_display;
-+
-+	drm_dbg_dp(dp->drm_dev, "is_connected = %s\n",
-+		(dp->is_connected) ? "true" : "false");
-+
-+	/*
-+	 * There is no protection in the DRM framework to check if the display
-+	 * pipeline has been already disabled before trying to disable it again.
-+	 * Hence if the sink is unplugged, the pipeline gets disabled, but the
-+	 * crtc->active is still true. Any attempt to set the mode or manually
-+	 * disable this encoder will result in the crash.
-+	 *
-+	 * TODO: add support for telling the DRM subsystem that the pipeline is
-+	 * disabled by the hardware and thus all access to it should be forbidden.
-+	 * After that this piece of code can be removed." 
-+	 */
-+	if (bridge->ops & DRM_BRIDGE_OP_HPD)
-+		return (dp->is_connected) ? 0 : -ENOTCONN;
-+
-+	return 0;
-+}
-+
-+
- /**
-  * dp_bridge_get_modes - callback to add drm modes via drm_mode_probed_add()
-  * @bridge: Poiner to drm bridge
-@@ -61,6 +91,9 @@ static int dp_bridge_get_modes(struct drm_bridge *bridge, struct drm_connector *
- }
- 
- static const struct drm_bridge_funcs dp_bridge_ops = {
-+	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-+	.atomic_destroy_state   = drm_atomic_helper_bridge_destroy_state,
-+	.atomic_reset           = drm_atomic_helper_bridge_reset,
- 	.enable       = dp_bridge_enable,
- 	.disable      = dp_bridge_disable,
- 	.post_disable = dp_bridge_post_disable,
-@@ -68,6 +101,7 @@ static const struct drm_bridge_funcs dp_bridge_ops = {
- 	.mode_valid   = dp_bridge_mode_valid,
- 	.get_modes    = dp_bridge_get_modes,
- 	.detect       = dp_bridge_detect,
-+	.atomic_check = dp_bridge_atomic_check,
- };
- 
- struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
+The initial discussion was at:
+https://lore.kernel.org/netdev/c7618025da6723418c56a54fe4683bd7@walle.cc/
+
+with the latest status being that we now have a vsc9959_tas_guard_bands_update()
+method which makes a best-guess attempt at how much useful space to
+reserve for packet scheduling in a taprio interval, and how much to
+reserve for guard bands.
+
+IEEE 802.1Q actually does offer a tunable variable (queueMaxSDU) which
+can determine the max MTU supported per traffic class. In turn we can
+determine the size we need for the guard bands, depending on the
+queueMaxSDU. This way we can make the guard band of small taprio
+intervals smaller than one full MTU worth of transmission time, if we
+know that said traffic class will transport only smaller packets.
+
+As discussed with Gerhard Engleder, the queueMaxSDU may also be useful
+in limiting the latency on an endpoint, if some of the TX queues are
+outside of the control of the Linux driver.
+https://patchwork.kernel.org/project/netdevbpf/patch/20220914153303.1792444-11-vladimir.oltean@nxp.com/
+
+Allow input of queueMaxSDU through netlink into tc-taprio, offload it to
+the hardware I have access to (LS1028A), and (implicitly) deny
+non-default values to everyone else. Kurt Kanzenbach has also kindly
+tested and shared a patch to offload this to hellcreek.
+
+Kurt Kanzenbach (1):
+  net: dsa: hellcreek: Offload per-tc max SDU from tc-taprio
+
+Vladimir Oltean (7):
+  net/sched: query offload capabilities through ndo_setup_tc()
+  net/sched: taprio: allow user input of per-tc max SDU
+  net: dsa: felix: offload per-tc max SDU from tc-taprio
+  net: dsa: hellcreek: refactor hellcreek_port_setup_tc() to use
+    switch/case
+  net: enetc: cache accesses to &priv->si->hw
+  net: enetc: use common naming scheme for PTGCR and PTGCAPR registers
+  net: enetc: offload per-tc max SDU from tc-taprio
+
+ drivers/net/dsa/hirschmann/hellcreek.c        |  94 +++++++++--
+ drivers/net/dsa/hirschmann/hellcreek.h        |   7 +
+ drivers/net/dsa/ocelot/felix_vsc9959.c        |  35 +++-
+ drivers/net/ethernet/freescale/enetc/enetc.c  |  28 ++--
+ drivers/net/ethernet/freescale/enetc/enetc.h  |  14 +-
+ .../net/ethernet/freescale/enetc/enetc_hw.h   |  10 +-
+ .../net/ethernet/freescale/enetc/enetc_pf.c   |  27 +++-
+ .../net/ethernet/freescale/enetc/enetc_qos.c  |  94 ++++++-----
+ include/linux/netdevice.h                     |   1 +
+ include/net/pkt_sched.h                       |  10 ++
+ include/net/sch_generic.h                     |   3 +
+ include/uapi/linux/pkt_sched.h                |  11 ++
+ net/sched/sch_api.c                           |  17 ++
+ net/sched/sch_taprio.c                        | 152 +++++++++++++++++-
+ 14 files changed, 429 insertions(+), 74 deletions(-)
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.34.1
 
