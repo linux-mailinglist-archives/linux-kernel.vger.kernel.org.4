@@ -2,39 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D6E5EC8EF
+	by mail.lfdr.de (Postfix) with ESMTP id 4F55B5EC8EE
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232991AbiI0QDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
+        id S232975AbiI0QC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbiI0QBr (ORCPT
+        with ESMTP id S232367AbiI0QBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Sep 2022 12:01:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB38F6863
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:01:43 -0700 (PDT)
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB70FD98C2;
+        Tue, 27 Sep 2022 09:01:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E1ACB81C63
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 16:01:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA163C433B5;
-        Tue, 27 Sep 2022 16:01:40 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EAF27CE19D1;
+        Tue, 27 Sep 2022 16:01:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48BE2C43470;
+        Tue, 27 Sep 2022 16:01:41 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1odD2p-00G2xS-17;
+        id 1odD2p-00G2y1-2g;
         Tue, 27 Sep 2022 12:02:51 -0400
-Message-ID: <20220927160250.943561392@goodmis.org>
+Message-ID: <20220927160251.443413557@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 27 Sep 2022 12:02:34 -0400
+Date:   Tue, 27 Sep 2022 12:02:35 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: [for-next][PATCH 18/20] x86: kprobes: Remove unused macro stack_addr
+        Ingo Molnar <mingo@redhat.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>, stable@vger.kernel.org,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Tao Chen <chentao.kernel@linux.alibaba.com>
+Subject: [for-next][PATCH 19/20] tracing/eprobe: Fix alloc event dir failed when event name no set
 References: <20220927160216.349640304@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,41 +50,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Zhongjin <chenzhongjin@huawei.com>
+From: Tao Chen <chentao.kernel@linux.alibaba.com>
 
-An unused macro reported by [-Wunused-macros].
+The event dir will alloc failed when event name no set, using the
+command:
+"echo "e:esys/ syscalls/sys_enter_openat file=\$filename:string"
+>> dynamic_events"
+It seems that dir name="syscalls/sys_enter_openat" is not allowed
+in debugfs. So just use the "sys_enter_openat" as the event name.
 
-This macro is used to access the sp in pt_regs because at that time
-x86_32 can only get sp by kernel_stack_pointer(regs).
+Link: https://lkml.kernel.org/r/1664028814-45923-1-git-send-email-chentao.kernel@linux.alibaba.com
 
-'3c88c692c287 ("x86/stackframe/32: Provide consistent pt_regs")'
-This commit have unified the pt_regs and from them we can get sp from
-pt_regs with regs->sp easily. Nowhere is using this macro anymore.
-
-Refrencing pt_regs directly is more clear. Remove this macro for
-code cleaning.
-
-Link: https://lkml.kernel.org/r/20220924072629.104759-1-chenzhongjin@huawei.com
-
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Tom Zanussi <zanussi@kernel.org>
+Cc: Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc: Tao Chen <chentao.kernel@linux.alibaba.com
+Cc: stable@vger.kernel.org
+Fixes: 95c104c378dc ("tracing: Auto generate event name when creating a group of events")
 Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Tao Chen <chentao.kernel@linux.alibaba.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- arch/x86/kernel/kprobes/core.c | 2 --
- 1 file changed, 2 deletions(-)
+ kernel/trace/trace_eprobe.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 4c3c27b6aea3..eb8bc82846b9 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -59,8 +59,6 @@
- DEFINE_PER_CPU(struct kprobe *, current_kprobe) = NULL;
- DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
+diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+index 78299d3724a2..c08bde9871ec 100644
+--- a/kernel/trace/trace_eprobe.c
++++ b/kernel/trace/trace_eprobe.c
+@@ -1039,8 +1039,7 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+ 	}
  
--#define stack_addr(regs) ((unsigned long *)regs->sp)
--
- #define W(row, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, ba, bb, bc, bd, be, bf)\
- 	(((b0##UL << 0x0)|(b1##UL << 0x1)|(b2##UL << 0x2)|(b3##UL << 0x3) |   \
- 	  (b4##UL << 0x4)|(b5##UL << 0x5)|(b6##UL << 0x6)|(b7##UL << 0x7) |   \
+ 	if (!event) {
+-		strscpy(buf1, argv[1], MAX_EVENT_NAME_LEN);
+-		sanitize_event_name(buf1);
++		strscpy(buf1, sys_event, MAX_EVENT_NAME_LEN);
+ 		event = buf1;
+ 	}
+ 
 -- 
 2.35.1
