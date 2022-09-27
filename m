@@ -2,184 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0895C5EC134
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8185B5EC12F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiI0L0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
+        id S231404AbiI0LZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbiI0LZk (ORCPT
+        with ESMTP id S230452AbiI0LZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:25:40 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF4374BB8;
-        Tue, 27 Sep 2022 04:23:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664277829; x=1695813829;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n2HPdcc3mpaZRYQIKMMPJJTcYN9hCCX4WnYqtare8TQ=;
-  b=x+vnEDu+xvyJUb7YGpLMFOEz5NeXmCQegBPObn0M6/TGczT7MuF08sdM
-   yBWnNRgP08Fm0z4z4UvVzFjG3sAv9GSUwYIvLAHCBOP9d72QX0KhpRbNk
-   +41EaD3XdL5yL5xqpcXOECGsoGMPwemPh8Aa27VNcHgPeo3L4c91FlWxB
-   mnrT/0AYZDc1iYXKG8/QgpEPfrjI8a4enQqczaaG9/xEoq2vkaGSy0h0u
-   JvTY2OSwVEDkXT0asuCO0m4p8O7K8zVt3aodMdDzRpfCVF54ZSYtWfNtl
-   W3k7LLf9Xl0Bfslt8TRKq/lL2vieXUTf5EWkeKzz55OIRU0AUbuW7t8T1
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="192656218"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Sep 2022 04:23:11 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 27 Sep 2022 04:23:11 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 27 Sep 2022 04:23:08 -0700
-Date:   Tue, 27 Sep 2022 12:22:38 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Shravan Chippa <shravan.chippa@microchip.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cyril Jean <Cyril.Jean@microchip.com>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        Vattipalli Praveen <praveen.kumar@microchip.com>,
-        Wolfgang Grandegger <wg@aries-embedded.de>,
-        Hugh Breslin <hugh.breslin@microchip.com>,
-        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 00/11] New PolarFire SoC devkit devicetrees & 22.09
- reference design updates
-Message-ID: <YzLc/v68wW93CaLq@wendy>
-References: <20220927111922.3602838-1-conor.dooley@microchip.com>
+        Tue, 27 Sep 2022 07:25:31 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7291438CA
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:23:42 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id j188so11578496oih.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:23:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Ptj4K7elJYJEC7rm4kDcuNdHODe1p7cGdh2w5mcF+qY=;
+        b=EszomKr/yjq68/qyms5eY53nhctGp/zrP5YK+lF7uSEuBL61XHu3oCmsrIALWj8CeO
+         DnTkQp8cLT1BNnj1bbpbnXzJuygi6En8UhcT3VtG5eT0zOZ8L04g4TnOiqnDi2WLAyix
+         pBZSrQ5JQlJplDUBSscKpOrivMI6K+0uUfo0oxiRWrm2RPK4AtUh7btjcpn4/CdMnnc1
+         99rCRFpl0IA7yggIE+NJDwjSSb6nb2g8xywyTBpfvGCYZBuMesCeCyRkRSW3VG7Qp+nz
+         rqIZXvXLWyo61w1uPdKajcNmkVY9t2fCYzKQaTVCzlFicMdfgCBxJOIjfJM4L33PDuWq
+         8u6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ptj4K7elJYJEC7rm4kDcuNdHODe1p7cGdh2w5mcF+qY=;
+        b=HNOgmGnlhAXxVFT5Oc1sVB3fyhMQYR+YML+sAtgzgwVsAtTpgO8PKfe4bZpKk9SPwU
+         QlGBnSsqUwPYKdJj4xzNbVhEaMNuyrQ++/Ur2m3qkBn8FsPA94SmbQHOm835ww8xjLfb
+         GHwbz3lOf9od6vCsw0PW2cc8ZMu+QKE56Y/imTcxMO8fgq1nGRZRPGh09/owHhX9t6Jm
+         b73O/hkBvNalK7aDJOJi9hl5VR0TEsE22WMgrIUc8oByH/ZFtOvClG2MbHm53d/wW0dQ
+         87gnw2uEOsOPP9rYRG7fIlAwA9kX3yWkL4GzrIePEzlv8Ha9YgBq8OKUNCPlrkEpUl64
+         fAfA==
+X-Gm-Message-State: ACrzQf3y3aIRceRjvoLtZBIlsdO/v3hOE54pEA1aMGhqNtaL4hYw+lmG
+        ZYGQWGtz8fqSjH7FC5msnuZ7YoJoJtpAyxFL02+QZg==
+X-Google-Smtp-Source: AMsMyM5YoZjpacyWWVpadqmKtZIzpELnFYB2CWIdbic/gFcPxN5PH1gXIE8R5MBEJnQi8yzfO5Kr24If6+DYa+iZumg=
+X-Received: by 2002:a05:6808:148d:b0:350:7858:63ce with SMTP id
+ e13-20020a056808148d00b00350785863cemr1535344oiw.106.1664277821441; Tue, 27
+ Sep 2022 04:23:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220927111922.3602838-1-conor.dooley@microchip.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000a96c0b05e97f0444@google.com> <CAM0EoMnJ=STtk5BnZ9oJtnkXY2Q+Px2cKa4gowFRGpp40UNKww@mail.gmail.com>
+ <CAM0EoMm9uBQQepMb5bda1vR-Okw-tPp2nnf6TvfA0FzPu_D_2A@mail.gmail.com>
+ <CANn89i+4pgJe8M1cjLF6SkqG1Yp6e+5J2xEkMdSChiVYKMC09g@mail.gmail.com>
+ <CAM0EoMkLdOUQ3yrBuYsLdZvqniZ_r0VoACzOzKCo1VVzYeyPbw@mail.gmail.com>
+ <CAM0EoMmr8trH0EOtOfvTpYiTq1tt7RUamf1u_R0+USOU_gYUVg@mail.gmail.com>
+ <CANn89i+6NpmCyGdicmv+BiQqhUZ71TfN+P4=9NGpV4GxOba1Cw@mail.gmail.com> <202209251935.0469930C@keescook>
+In-Reply-To: <202209251935.0469930C@keescook>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Date:   Tue, 27 Sep 2022 07:23:29 -0400
+Message-ID: <CAM0EoMm91Gmt6M7AVqp+OKvTH0Y0vCxQzpLndhwHzE-tke7J3g@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in u32_change
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        syzbot <syzbot+a2c4601efc75848ba321@syzkaller.appspotmail.com>,
+        David Miller <davem@davemloft.net>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 12:19:12PM +0100, Conor Dooley wrote:
-> Resending with an extra patch making some more memory map changes that
-> are to be introduced in the v2022.10 reference design. Since the
-> v2022.10 and v2022.09 reference designs both indepedently break
-> backwards compat, v2022.09 is not compatible with <= v2022.05 and
-> v2022.10 is not compatible with v2022.09, I am doing the jump directly
-> to v2022.10 rather than putting an intermediate step at v2022.09.
-> 
-> I did not drop Krzysztof's Ack on patch 1 as s/09/10 has no impact on
-> the correctness of the binding.
+Do you want to submit that patch then?
+FWIW, I could not recreate what syzbot saw even after setting
+CONFIG_FORTIFY_SOURCE=y
 
-I had already applied v5, but I am going to apply this version instead.
-I will send a PR once the v2022.10 reference design has been released on
-the PolarFire SoC GitHub.
+cheers,
+jamal
 
-Thanks,
-Conor.
-
-> 
-> --8<---
-> Hey all,
-> 
-> Some 6.1 targeted changes here.
-> Firstly, two new dev kits (one first-party & one from Aries Embedded).
-> They've been sitting in our vendor tree, so are being sent where they
-> belong.
-> 
-> Secondly, another release of our reference design for the Icicle kit
-> is due in September. Usually these do not really change much for the
-> devicetree, but this time around a pair of changes impact the memory
-> map.
-> 
-> The first of these is adding dma-ranges to the pcie controller. The
-> controller had some issues to begin with & with the current reference
-> design (v2022.05) would not work with mainline Linux nor has it since
-> reference design v2021.08. A combination of the property, a change
-> to the FPGA design & a small fix to the driver will get it working
-> with mainline again. The other non-backwards compatible change to the
-> reference design is moves of the peripherals instantiated in the
-> fabric. Currently they are fairly spread out & a common complaint has
-> been that this leaves little room in the fic3 section of the memory map
-> for custom peripherals without removing the existing ones.
-> 
-> This series depends on [0] so as not to add dtbs_check warnings. The
-> fabric clock support is added by [1].
-> 
-> Thanks,
-> Conor.
-> 
-> Changes since v5:
-> - swap v2022.09 for v2022.10 in the binding
-> - add a patch with the v2022.10 memory map changes
-> 
-> Changes since v4:
-> - fix the incompatible interrupts on m100pfsevp
-> 
-> Changes since v3:
-> - add an extra patch reducing the fic3 clock rate
-> 
-> Changes since v2:
-> - drop the sd & emmc versions of the aries devicetree
-> - remove a extra newline
-> 
-> Changes since v1:
-> - made the polarberry part of an enum in patch 1
-> 
-> 0 - https://lore.kernel.org/linux-gpio/20220825143522.3102546-1-conor.dooley@microchip.com/
-> 1 - https://lore.kernel.org/linux-clk/20220824093342.187844-1-conor.dooley@microchip.com/
-> 
-> Conor Dooley (9):
->   dt-bindings: riscv: microchip: document icicle reference design
->   dt-bindings: riscv: microchip: document the aries m100pfsevp
->   riscv: dts: microchip: add pci dma ranges for the icicle kit
->   riscv: dts: microchip: move the mpfs' pci node to -fabric.dtsi
->   riscv: dts: microchip: icicle: update pci address properties
->   riscv: dts: microchip: icicle: re-jig fabric peripheral addresses
->   riscv: dts: microchip: reduce the fic3 clock rate
->   riscv: dts: microchip: add a devicetree for aries' m100pfsevp
->   riscv: dts: microchip: update memory configuration for v2022.10
-> 
-> Shravan Chippa (1):
->   dt-bindings: riscv: microchip: document the sev kit
-> 
-> Vattipalli Praveen (1):
->   riscv: dts: microchip: add sevkit device tree
-> 
->  .../devicetree/bindings/riscv/microchip.yaml  |  20 +-
->  arch/riscv/boot/dts/microchip/Makefile        |   2 +
->  .../dts/microchip/mpfs-icicle-kit-fabric.dtsi |  43 ++++-
->  .../boot/dts/microchip/mpfs-icicle-kit.dts    |  18 +-
->  .../dts/microchip/mpfs-m100pfs-fabric.dtsi    |  45 +++++
->  .../boot/dts/microchip/mpfs-m100pfsevp.dts    | 179 ++++++++++++++++++
->  .../dts/microchip/mpfs-polarberry-fabric.dtsi |  29 +++
->  .../dts/microchip/mpfs-sev-kit-fabric.dtsi    |  45 +++++
->  .../riscv/boot/dts/microchip/mpfs-sev-kit.dts | 145 ++++++++++++++
->  arch/riscv/boot/dts/microchip/mpfs.dtsi       |  30 ---
->  10 files changed, 511 insertions(+), 45 deletions(-)
->  create mode 100644 arch/riscv/boot/dts/microchip/mpfs-m100pfs-fabric.dtsi
->  create mode 100644 arch/riscv/boot/dts/microchip/mpfs-m100pfsevp.dts
->  create mode 100644 arch/riscv/boot/dts/microchip/mpfs-sev-kit-fabric.dtsi
->  create mode 100644 arch/riscv/boot/dts/microchip/mpfs-sev-kit.dts
-> 
-> -- 
-> 2.37.3
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+On Sun, Sep 25, 2022 at 10:39 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Sun, Sep 25, 2022 at 10:34:37AM -0700, Eric Dumazet wrote:
+> > Sure, please look at:
+> >
+> > commit 54d9469bc515dc5fcbc20eecbe19cea868b70d68
+> > Author: Kees Cook <keescook@chromium.org>
+> > Date:   Thu Jun 24 15:39:26 2021 -0700
+> >
+> >     fortify: Add run-time WARN for cross-field memcpy()
+> > [...]
+> > Here, we might switch to unsafe_memcpy() instead of memcpy()
+>
+> I would tend to agree. Something like:
+>
+> diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
+> index 4d27300c287c..21e0e6206ecc 100644
+> --- a/net/sched/cls_u32.c
+> +++ b/net/sched/cls_u32.c
+> @@ -1040,7 +1040,9 @@ static int u32_change(struct net *net, struct sk_buff *in_skb,
+>         }
+>  #endif
+>
+> -       memcpy(&n->sel, s, sel_size);
+> +       unsafe_memcpy(&n->sel, s, sel_size,
+> +                     /* A composite flex-array structure destination,
+> +                      * which was correctly sized and allocated above. */);
+>         RCU_INIT_POINTER(n->ht_up, ht);
+>         n->handle = handle;
+>         n->fshift = s->hmask ? ffs(ntohl(s->hmask)) - 1 : 0;
+>
+> This alloc/partial-copy pattern is relatively common in the kernel, so
+> I've been considering adding a helper for it. It'd be like kmemdup(),
+> but more like kmemdup_offset(), which only the object from a certainly
+> point is copied.
+>
+> --
+> Kees Cook
