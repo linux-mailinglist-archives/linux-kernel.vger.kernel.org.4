@@ -2,122 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015C75EC7C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12A85EC7D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbiI0Pc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
+        id S232223AbiI0Pdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbiI0PcX (ORCPT
+        with ESMTP id S232285AbiI0Pde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:32:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63D31C00F6;
-        Tue, 27 Sep 2022 08:32:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B57B61A2A;
-        Tue, 27 Sep 2022 15:32:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 284C9C433C1;
-        Tue, 27 Sep 2022 15:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664292741;
-        bh=HnO17c79QWZdKEnu0tf8BfIuBm6ZnXghdoli6EdxWYY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HRp6BasLHPp12GKH64z8vC/L8a6gie5hI/aV8EtoNvtzxunxuSKZUUgJgvos2Zhsi
-         oKK8l0qp3abovT0zPXPyIvPYS0r7RDlYo481RUTphE+WmQq0PH3aOYWJomGRkN5wdS
-         4Ms/2skM942xIS5i4R9b9ulyyg5R9kzW2C7SuVN8=
-Date:   Tue, 27 Sep 2022 17:32:19 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>
-Subject: Re: [PATCH v10 13/27] rust: export generated symbols
-Message-ID: <YzMXgwsbWem2j7iG@kroah.com>
-References: <20220927131518.30000-1-ojeda@kernel.org>
- <20220927131518.30000-14-ojeda@kernel.org>
+        Tue, 27 Sep 2022 11:33:34 -0400
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371F11C00FB;
+        Tue, 27 Sep 2022 08:33:33 -0700 (PDT)
+Received: by mail-ot1-f43.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so6545124otu.7;
+        Tue, 27 Sep 2022 08:33:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=zjI6ubeIbgQT2Yf0aGxPciDY+P2liDNjOEnL2+LkAyE=;
+        b=cN3Bg1R7tKngsluouxTcd9k3VeYyD9sY7FjN6G5SWlngQRuZUpmrBYK9MkKBJ6dkTh
+         E9v+2vvW6/dVwS2ArzV1xzzH5CiiE6Jdxj2Of+qUBVZk4rwgG7u11DV0pkdpF+bQ/Czv
+         eHhn7Jb3eiIbrPRn+voZ3I1EwbOIHkkhS6qWSpj6OjOuBCXoy8aESrM6RsGA+nJ3RCKu
+         lTaGXckJSOF9z7TqbBNtlx9vu+2/IOSHlp5N932ryCDxG4J/8fv31BwujvuxF3lOy3Cu
+         dMMXjdopz2Ztk91BkhkaTjftDIfc7uGEApkqmUfCcU76B4gCMAM5i5wvhx0Xo438gvTr
+         izqA==
+X-Gm-Message-State: ACrzQf0BQaiJlFgBCbbzFcFB8iQ7A7A+AtwpF59PwUKMTuaNcZrusjVb
+        Yz+AwY7BCTbs/vFRqo30Ug==
+X-Google-Smtp-Source: AMsMyM5eq9K8ICY6X0Mr3tOx3IJ4dvoj1unYKLRLY6r5PgzFpoQnkpXjPvXns1r165xN5VFsaDkAWw==
+X-Received: by 2002:a05:6830:1d4c:b0:65b:5ca1:3c5c with SMTP id p12-20020a0568301d4c00b0065b5ca13c5cmr12714674oth.77.1664292812364;
+        Tue, 27 Sep 2022 08:33:32 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o11-20020a4ae58b000000b00425678b9c4bsm744517oov.0.2022.09.27.08.33.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 08:33:32 -0700 (PDT)
+Received: (nullmailer pid 4069847 invoked by uid 1000);
+        Tue, 27 Sep 2022 15:33:31 -0000
+Date:   Tue, 27 Sep 2022 10:33:31 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        Camelia Alexandra Groza <camelia.groza@nxp.com>,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        "linuxppc-dev @ lists . ozlabs . org" <linuxppc-dev@lists.ozlabs.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v5 1/9] dt-bindings: net: Expand pcs-handle to
+ an array
+Message-ID: <20220927153331.GA4057163-robh@kernel.org>
+References: <20220926190322.2889342-1-sean.anderson@seco.com>
+ <20220926190322.2889342-2-sean.anderson@seco.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220927131518.30000-14-ojeda@kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220926190322.2889342-2-sean.anderson@seco.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 03:14:44PM +0200, Miguel Ojeda wrote:
-> All symbols are reexported reusing the `EXPORT_SYMBOL_GPL` macro
-> from C. The lists of symbols are generated on the fly.
+On Mon, Sep 26, 2022 at 03:03:13PM -0400, Sean Anderson wrote:
+> This allows multiple phandles to be specified for pcs-handle, such as
+> when multiple PCSs are present for a single MAC. To differentiate
+> between them, also add a pcs-handle-names property.
 > 
-> There are three main sets of symbols to distinguish:
-> 
->   - The ones from the `core` and `alloc` crates (from the Rust
->     standard library). The code is licensed as Apache/MIT.
-> 
->   - The ones from our abstractions in the `kernel` crate.
-> 
->   - The helpers (already exported since they are not generated).
-> 
-> We export everything as GPL. This ensures we do not mistakenly
-> expose GPL kernel symbols/features as non-GPL, even indirectly.
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Co-developed-by: Björn Roy Baron <bjorn3_gh@protonmail.com>
-> Signed-off-by: Björn Roy Baron <bjorn3_gh@protonmail.com>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 > ---
->  rust/exports.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->  create mode 100644 rust/exports.c
+> This was previously submitted as [1]. I expect to update this series
+> more, so I have moved it here. Changes from that version include:
+> - Add maxItems to existing bindings
+> - Add a dependency from pcs-names to pcs-handle.
 > 
-> diff --git a/rust/exports.c b/rust/exports.c
-> new file mode 100644
-> index 000000000000..bb7cc64cecd0
-> --- /dev/null
-> +++ b/rust/exports.c
-> @@ -0,0 +1,21 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * A hack to export Rust symbols for loadable modules without having to redo
-> + * the entire `include/linux/export.h` logic in Rust.
-> + *
-> + * This requires the Rust's new/future `v0` mangling scheme because the default
-> + * one ("legacy") uses invalid characters for C identifiers (thus we cannot use
-> + * the `EXPORT_SYMBOL_*` macros).
-> + *
-> + * All symbols are exported as GPL-only to guarantee no GPL-only feature is
-> + * accidentally exposed.
-> + */
+> [1] https://lore.kernel.org/netdev/20220711160519.741990-3-sean.anderson@seco.com/
+> 
+> (no changes since v4)
+> 
+> Changes in v4:
+> - Use pcs-handle-names instead of pcs-names, as discussed
+> 
+> Changes in v3:
+> - New
+> 
+>  .../bindings/net/dsa/renesas,rzn1-a5psw.yaml           |  1 +
+>  .../devicetree/bindings/net/ethernet-controller.yaml   | 10 +++++++++-
+>  .../devicetree/bindings/net/fsl,qoriq-mc-dpmac.yaml    |  2 +-
+>  3 files changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+> index 7ca9c19a157c..a53552ee1d0e 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+> @@ -74,6 +74,7 @@ properties:
+>  
+>          properties:
+>            pcs-handle:
+> +            maxItems: 1
+
+Forgot to remove the $ref here.
+
+>              description:
+>                phandle pointing to a PCS sub-node compatible with
+>                renesas,rzn1-miic.yaml#
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> index 4b3c590fcebf..5bb2ec2963cf 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> @@ -108,11 +108,16 @@ properties:
+>      $ref: "#/properties/phy-connection-type"
+>  
+>    pcs-handle:
+> -    $ref: /schemas/types.yaml#/definitions/phandle
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+
+'phandle-array' is really a matrix, so this needs a bit more:
+
+items:
+  maxItems: 1
+
+Which basically says this is phandles with no arg cells.
+
+>      description:
+>        Specifies a reference to a node representing a PCS PHY device on a MDIO
+>        bus to link with an external PHY (phy-handle) if exists.
+>  
+> +  pcs-handle-names:
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+
+No need for a type as *-names already has a type.
+
+> +    description:
+> +      The name of each PCS in pcs-handle.
 > +
-> +#include <linux/module.h>
+>    phy-handle:
+>      $ref: /schemas/types.yaml#/definitions/phandle
+>      description:
+> @@ -216,6 +221,9 @@ properties:
+>          required:
+>            - speed
+>  
+> +dependencies:
+> +  pcs-handle-names: [pcs-handle]
 > +
-> +#define EXPORT_SYMBOL_RUST_GPL(sym) extern int sym; EXPORT_SYMBOL_GPL(sym)
-> +
-> +#include "exports_core_generated.h"
-> +#include "exports_alloc_generated.h"
-> +#include "exports_bindings_generated.h"
-> +#include "exports_kernel_generated.h"
+>  allOf:
+>    - if:
+>        properties:
+> diff --git a/Documentation/devicetree/bindings/net/fsl,qoriq-mc-dpmac.yaml b/Documentation/devicetree/bindings/net/fsl,qoriq-mc-dpmac.yaml
+> index 7f620a71a972..600240281e8c 100644
+> --- a/Documentation/devicetree/bindings/net/fsl,qoriq-mc-dpmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/fsl,qoriq-mc-dpmac.yaml
+> @@ -31,7 +31,7 @@ properties:
+>    phy-mode: true
+>  
+>    pcs-handle:
+> -    $ref: /schemas/types.yaml#/definitions/phandle
+> +    maxItems: 1
+>      description:
+>        A reference to a node representing a PCS PHY device found on
+>        the internal MDIO bus.
 > -- 
-> 2.37.3
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-
+> 2.35.1.1320.gc452695387.dirty
+> 
+> 
