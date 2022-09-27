@@ -2,268 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531225EB854
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98C65EB857
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbiI0DKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 23:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
+        id S231224AbiI0DLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 23:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiI0DKO (ORCPT
+        with ESMTP id S231211AbiI0DKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 23:10:14 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2071.outbound.protection.outlook.com [40.107.20.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5061EA5731;
-        Mon, 26 Sep 2022 20:03:53 -0700 (PDT)
+        Mon, 26 Sep 2022 23:10:41 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D109B3F30F
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 20:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664247859; x=1695783859;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=uaPcHPTilp8O2BL8QJZmJr89QOaWfqVxKMnLlwNJ3yQ=;
+  b=DSysgW9XnbU+lyglhbt9gkKjrJ0TsmuS+65/XE/mmt1S6RN1OIL80+QY
+   18U4dqLM1l66ENXWx0Ak31H6H0lI6c0gthYoh8Fzqb8xWIAx3+3SPYw+H
+   Oh1vMC64DpHu5v8lLC9hBy57IgsL7zsSr1zmyZ1FzHx9NLCYXIhe4gqGR
+   Fs9QTm5VZARTmUUg6LYYIKRRUSk1i2I7LMvip03lmvft22PNXnrgko1oP
+   URP/3Z7zLaSgujb6mt0Mq7qeHgdcraZwIVCZtfde5vQDhEbIdzHrp8IHN
+   n5ZkvK4pAQQ2depeVgT+TOLjMAeKG6D7pCbLPkglJQBac1e21DXCD4frU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="298799668"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="298799668"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 20:04:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="621347151"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="621347151"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga002.jf.intel.com with ESMTP; 26 Sep 2022 20:04:18 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 26 Sep 2022 20:04:18 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 26 Sep 2022 20:04:17 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 26 Sep 2022 20:04:17 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 26 Sep 2022 20:04:17 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ld8DKMTisZPQaKBcgOBh1x3KgjyPw43yHvfVr+rNVNCd3jXzLZDtjBKHw5Er29daE+IubbIK7gWGdYgAzPNaAPcMPe+WE6L0gNTvt1gs6E/p3XxFRtWfueZuMsDe291OrdWAxBX8+DhmTscY41qdGOtKG6AKIAlsV9yKGHNGpuyLwT7nngFwgKAsUUN2Lx0JRnueTFVVDTRMFd4dkI7JrC7WZGO7M4sVwdt80T7zzJRPiUn4k7ubvb5pWEYkJxBVeuV+T9BYC+giMbh92ySDPvtrd5M77QAXj3W0rp88C/voSGnRhtY2bDSUj0FjQTns5Tme6flxD4HQt29UJPUbGA==
+ b=Nyk3C8oisTw5cuiEGgxhH/bHPAep8SDakJy/AavfPxXCXxP2PfH92sLD6cxZBrnu9W/HNZj+TP3K3WiomboBrzvvCn8isXLLcJa+1/u7v5yUsCUyZLU2KbwSpmQqMf1QLcbsvj84RRhqSPpxeKKGQqgoVP/dEbboWCuT0CvCPQR53Vd3Mg68EVDDmMPK+Ta5qoLbYeX0C8iqpK7fAyv3QS2z8bXYDZolnH2cc57UMEyZ7kAzDtAAHQvl0dgLkl2aU7wCzxT8EcUHWpo9WMHCjbhUsyzE2/TwaSRvtVVBxFOHQNLh32xXS/iszxUOjbPmO+vj6WXs0kzrI+fPOORTZA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yT/NPt387VsjwbCRBF+vFTMQrXXZQLzX/Shii6vydQ8=;
- b=nXNoWGcl0nMj0P/Eg/0s8r316ACTCGq1fz5bKya7P1Q7aFbdwoWtMZT5jkz1fWlrCo95lirWQK0MOLKhojOLjUOjzYg3iBoX8ju2fdIWbK3P5Q+b6xGardOXigYy2w/tRaQFgL/6pRDui0bkIHq6m8vUU9B9x3g7l9D8F5caSmuTFH8axwdY0/AxxeluXX+DS/T1pl/M72efNrHBnhhnZ+t8rPIQCZfJYMzqvWA5B4p5/m31KYHTh/+K9H9tztTTNQwGhsHCf52gWBSD2JGec3zu2nv9I4uGGg2l1uK3dO+AVvVcEDirla3GLDCM40Y9QvNpukyI8BRIZSr46opI2A==
+ bh=JYNywAhiHNg/H9rXQvueIznLWc9QKsiLPJCoqvKn22s=;
+ b=GHPHIl99ENiSYGeh8kwPiB4mF7KJiKY2JmNjUQKryFZh45Fz68+QPJnkwKptTw0fSLg21nBICwwkSV892k6Z9PJUokqAGv1n8mNG89QRiVGw0KIyJTm+up86Mmj/yl2tveT2gDjtwsjLi36XHZUS11QGnkCbGdGKWMyuvqC89CYLdSahDPVZMWzd9t2Lzxu/UqnvksS2hYQrkK29RajG3M5E53vv2fZkvqVmHPS2TF0td3rHOKr0Oo0sI+1A2M8gxsJJGGKfpiyxV+z64ZSeFXyGQiV5sSFh9tjhh5L/wdVvARvTl1Db48TUEVvL6hWQOrwcNwvssjyumWyx5L+VWA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yT/NPt387VsjwbCRBF+vFTMQrXXZQLzX/Shii6vydQ8=;
- b=O/zvzXNe7zNijp8SL+FXDIo12BOXWWG93RAJ5N4Edfdo1d1YLGQ9xPhSgU+HX+5CY4qR8M/zZzjhPF1vlBdTbO24B6Hxp2iX7IVGFxbegnePhCTY+/alkR90bDeymL6CR+dHyOXqjGM1FgldYt71SLQyNK0X/Y34PMP8EEPqAwo=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AS8PR04MB8900.eurprd04.prod.outlook.com (2603:10a6:20b:42f::9) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ by SN7PR11MB7042.namprd11.prod.outlook.com (2603:10b6:806:299::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Tue, 27 Sep
- 2022 03:03:07 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1eb:dcf:8fd7:867]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1eb:dcf:8fd7:867%5]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
- 03:03:07 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH V7 2/2] remoteproc: support attach recovery after rproc
- crash
-Thread-Topic: [PATCH V7 2/2] remoteproc: support attach recovery after rproc
- crash
-Thread-Index: AQHYkAx8ptlj9Q9SikKeYc8v9edOla3yyEUAgABQJgA=
-Date:   Tue, 27 Sep 2022 03:03:06 +0000
-Message-ID: <DU0PR04MB941767AEDD07DBA7E7FF9B6E88559@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220705011527.2849057-1-peng.fan@oss.nxp.com>
- <20220705011527.2849057-3-peng.fan@oss.nxp.com>
- <20220926220610.GA2817947@p14s>
-In-Reply-To: <20220926220610.GA2817947@p14s>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|AS8PR04MB8900:EE_
-x-ms-office365-filtering-correlation-id: 39fe97af-2b78-46fb-b65b-08daa034cd56
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: noPqFLAGKpCink43+owJGtFHz5zE1iLUNIjC54glJCon6Nt72ww3iAjBGT0WBNsAK1vtqXHnTbjfC48l1NFqxyaCdpXMd4huA1AKBpwq0yPZQvPr0sPyCPMfH4jdTdFgDRDelp/R11QNZx43L95B6rYExCs8HwRle4FSbVbUV7u/dOtFMH1v2zb346VcIGtTSa/3Wwyq3No29elZhOsoSQ8e+9SFFuSFIfjeWXUzTtNA1KXE64Oec0bql9iyzIsYk2MWNokoAHID3ei6pzJ/+pyBbz0J5GeFGjhb9SXz+qVBE6iK09UTRi/kJ/wKv4FncX7EvP5jCJ7dWMjnhzK2dUDxAO6Nl6yDHExcfgNhuWu+pYmzYRIMvl+D6ukOC9drppW4/yeR2ffsArYb0VVhl1eEcn/jXPOc0R97iTM2nnRiWH5kOGiFJQ9fQtFqM3GgAHR0psI32VV77X2mzF2NwzrmzsZb9/IYlYOBzCT+I7/PQcvcNx4U59DlwaU7WIQfHe2K/qfpy09EiWr+R9xgCyK2lh1LovdKUH67Aieg/9zb7T9O4Sd9IvyQR3reARrWJFJFZfbXEMhTpT6Sw4MbEc31UNlyoX8P/aUsxGt3NZdXjoQ4IfusbhDBS8gAxK/8tjdtJEfDaixfvaoBxbO/BrAKV9DHvKlkUc+k0v+Z8uVI0TRkGHx6DlzP4+cRFTUTkazhLmTZHRmUrgHD3Z7kBKkVf/DTTdoSs5nW2ic/iDT2EXEZL/IGTrzPBmKlh9zY
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(346002)(39860400002)(396003)(376002)(451199015)(38100700002)(122000001)(38070700005)(86362001)(33656002)(44832011)(26005)(9686003)(2906002)(55016003)(83380400001)(71200400001)(186003)(6506007)(7696005)(478600001)(76116006)(316002)(54906003)(8676002)(110136005)(8936002)(41300700001)(66476007)(64756008)(66946007)(4326008)(5660300002)(66556008)(52536014)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xc5FuMcu+xXZ6xZqJqkkmAPPsar/KCHDrpY6qVdv2EjPb25LeqWz2FVZewz/?=
- =?us-ascii?Q?3XqIJ690WmARffWIxW9x1LhEo6VMVeoAJdJeiIBIR/m8YlatlrtFcInile7j?=
- =?us-ascii?Q?g+3kMMZjjP/VV7XYAKXGWXLRM4lbU6Lw8eWDB7WBFaQeb6bJn5b76Oraao6e?=
- =?us-ascii?Q?c6OH3a8tyt7GXq2cuz38iXKDtkdms9Eb8lQB3eyGVRa6T+nECnspoUjbwUIB?=
- =?us-ascii?Q?XNQ4Ga23ufoGZkPsPwt3qns+FXIXrbLJEOWgdvv9055Gz2g+AJu1F17wMtIx?=
- =?us-ascii?Q?QReWeHRxZ1eA4R6Irg3M16mw597wDkKnw0w4S6Wg1ywGH35hu4lGDCZQA5mh?=
- =?us-ascii?Q?75UWcNadF+/8LB2KMf7Susa5HYPsCgQ5f+D8wdYeKyY28c30eyB4qxklt3BV?=
- =?us-ascii?Q?nskC8SMHt2pdzTFcAmgSjORC4uleMowzqaGfjUy+QXIfnjxId3tBJK7HLq76?=
- =?us-ascii?Q?e9i8z0stdBD+avsF5q2aJWYqCKPwWjTHbDJwRpe5S8Av52SxXrI7NdCFl6mF?=
- =?us-ascii?Q?EN/NZ/xkdv0ftZo+OI9WT07mBP5WnHnZFTS444frNwlmrDLcb3W+AAfEUNrR?=
- =?us-ascii?Q?U4IlkraXd5Khe5blbEC0VX+3w1jOchlyEfqzTqyzmiVXoqI0YvoA1FKfxWE7?=
- =?us-ascii?Q?DIhAbY2CUzEjWfY9v6ttNRfHinEDQwQYcsBlPT8JflkoO7drDTwnyLSBfovT?=
- =?us-ascii?Q?9T7jOkkuyqZrMa9bwujzRdC+PiseEnmJ90X4KPqoN3NBjPQQKEZngGko0gMI?=
- =?us-ascii?Q?ILDhiOpKjC/ZD3VmscH6j1S337/0h1IcZ3qotcq2Z4COc34wWcsGmhSW1aRX?=
- =?us-ascii?Q?mBmoZNPXdXuhDEz3eHFK9GOVZ5mHiby61x9fmVBVXeNVfYvV8xwx4oRJhdch?=
- =?us-ascii?Q?8apJ7uRyhM8XZMM4N91iyBYecDWJIadsNPSs/iRvqP+5ZwYxxWMLgIJ2vTs5?=
- =?us-ascii?Q?5t0B07L8nLWlRrvl7KAm5eqXepNs9iuMdr6XEBCY2/65XAWdbTnNRdzfM97O?=
- =?us-ascii?Q?M77cHDY6FR9kL0gqZeutABpqmge2FK6ZaM2K462FgzurBDwL4BLFO1s3mOk8?=
- =?us-ascii?Q?ttauSVArrtoc/jQOlWYn3o3QDA+yJ60eI3cnhf7DQ0Sm51XThz+lLEZ5hg9s?=
- =?us-ascii?Q?nKyiuhlYs7aPfssyqeeXu9XFuGWLBr+Gt59g/87YrcUtIwxx5aGAq/4uEWep?=
- =?us-ascii?Q?iLL85AJimiRRuFg6At1BI0ZlcVsNUI44QDbcknr8Oc/kJ1mQnqTlCwM/aLT0?=
- =?us-ascii?Q?FjAgjMDe7FcVdTuB7Kg92o6AFyai0u1726LxvHQip7gBt3ecgCabaZpvkjJf?=
- =?us-ascii?Q?K5dG4u8CdkDl1sGOyL4PH85t5lzvZRp67LkaMw1M4j+rZ6mKCTrPHsGaEBsN?=
- =?us-ascii?Q?rYvNXnPKbGyKJGKUapG5CFFeClBuRhOGWuUALwu6/UIIiyaS2cWis8BSE4YU?=
- =?us-ascii?Q?EvgAwiJmQqVxdYeN3/ucSL6kniYEaXdZef8+zkjxvGvwU7NVvVafr53lHPg5?=
- =?us-ascii?Q?bPswBqPfXSSsKuBlONEudR7xhWquM/dbygYFxoozgbdbLLbep585b/i1KbuZ?=
- =?us-ascii?Q?YsK3ok8VqXRjWP6vjRU=3D?=
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
+ 2022 03:04:14 +0000
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::ccec:43dc:464f:4100]) by MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::ccec:43dc:464f:4100%7]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
+ 03:04:14 +0000
+Date:   Tue, 27 Sep 2022 11:03:49 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+CC:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Linux Memory Management List" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "Sang, Oliver" <oliver.sang@intel.com>
+Subject: Re: [PATCH v6 3/4] mm: kasan: Add free_meta size info in struct
+ kasan_cache
+Message-ID: <YzJoFZ8u7eTIJWVW@feng-clx>
+References: <20220913065423.520159-1-feng.tang@intel.com>
+ <20220913065423.520159-4-feng.tang@intel.com>
+ <CA+fCnZdFi471MxQG9RduQcBZWR10GCqxyNkuaDXzX6y4zCaYAQ@mail.gmail.com>
+ <Yyr9ZZnVPgr4GHYQ@feng-clx>
+ <CA+fCnZdUF3YiNpy10=xOJmPVbftaJr76wB5E58v0W_946Uketw@mail.gmail.com>
+ <YzA68cSh5Uuh5pjZ@feng-clx>
+ <CA+fCnZd4SD4rSD5yWogwvYm0h7YZ73CXFNCSd8PVOSeNXdWR1Q@mail.gmail.com>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+In-Reply-To: <CA+fCnZd4SD4rSD5yWogwvYm0h7YZ73CXFNCSd8PVOSeNXdWR1Q@mail.gmail.com>
+X-ClientProxiedBy: SG2PR06CA0238.apcprd06.prod.outlook.com
+ (2603:1096:4:ac::22) To MN0PR11MB6304.namprd11.prod.outlook.com
+ (2603:10b6:208:3c0::7)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|SN7PR11MB7042:EE_
+X-MS-Office365-Filtering-Correlation-Id: c74fc780-4772-4a3f-5d1a-08daa034f579
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xs+f/+e3BZ43LSc2+HZwLcN6VoqPfdZBKzRE5lwA57ah6SrCUSTc425Smg1qNfByzl2YcJZnPlfF9vfHH1OcyT0Epd6m3SOVwP9oIbBEesxD6TUyyTGy1CUfmU59TvRqzBFV0PJ7PFb1FP5oQTrJRa3SXmOU2JuWNry0eqQ16AvsPozuChpayJRoOPlQI4fXL833D25AzBAzSeKhgxILWBLl5ezx4Sbk+K/Th7iFhlz5Ap/5vlgmcmNT8NpZtUb8Po+PQEc56JgsJ84AX3sLuYRnuJx36XFDZoldGFcDmHFJxhm79n5/1o2fnKl1WAwwTJCRwqWmtH8Kb9fVpRryItZZAnEtZnzjJ59X30R9v2d2+1YOQ3LvM6guET8wGVNprpnVslskYf0kSFsByIRAruk8Q21TPZwQwRcWs1s30HQeEL3lHrsxMoFT53GBrUpr5MEJW7gZuBSmz49/D3d/qZ87PvsJ7LVFU6ys9G9GngkeeQaJ7YdiiyGXbtMs9kO7RVt81QZ+uJxFsrfuQLTMPKPsxX2y9zKm/Vdmm5yM1Xt0xGqPRv3YzKlkWoX7AzGP5L/hQQOAG1CKL+taNmzAP52/N35/i8QhNgzZKoAl2htwPM3s0GVol/R/4a8DzGSzAtxypj/UaGbDVrWDJaGqbAbMkaoJHt5ToH5jdL/xiXegszKja/NoUR8ooaGf2kXUkqiIag62sWzWrQC4tKAgZK+n/n9KBGqdqk+ZBzDtAHK73hMBrCtXg7uzDQNjBLO0IVinZgjQtbgfFqBcVWNyUQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(39860400002)(136003)(346002)(396003)(376002)(451199015)(33716001)(7416002)(41300700001)(5660300002)(2906002)(8936002)(44832011)(66476007)(38100700002)(4326008)(66946007)(8676002)(54906003)(110136005)(478600001)(316002)(66556008)(6486002)(966005)(6666004)(186003)(107886003)(6506007)(82960400001)(86362001)(9686003)(83380400001)(53546011)(6512007)(26005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XFsyP1iPrjyuMBGFPA+hoS8ucrtRcigeM8RVL3v2+wh4tZweA47TiSUWOLkX?=
+ =?us-ascii?Q?ESnYraHhBnqyd5W3cg8zshm/SMCCAejoeKRayVWH56fQGNMjJtkH5lfiXat8?=
+ =?us-ascii?Q?87iPeRKEPRIFE6UjjtvkuXWlmqOKrgdBQM14PFgfKjKHqC8oJnFjgjQsRvi3?=
+ =?us-ascii?Q?JkqPHoj5p8MmZ80fvdEyaSnQeSZsuO9HLiH+S++1C/2+jcTxPJhYSuDzDgLh?=
+ =?us-ascii?Q?JaF0RwFgSob6qV4bKDzI9FgwE9H4uSswSDBf15vAbhkxeJHwd4wTpKfvkfQt?=
+ =?us-ascii?Q?s5dS81nWfKHqEL1Le1ACyTzKt+rIEBYTSzPczq/C/zLFL0gk1TSewxyp9DAs?=
+ =?us-ascii?Q?8kALZtKnuRdRrxBFIMUebkMaTRAfv0LxwUfOWwHmNG8SNp1/4t/r+vUhbHcB?=
+ =?us-ascii?Q?2mHR/feOjN3BpzwKhT9DhN4h6c+lFlIqSmfvr2OoiQVIz5D9ERnLOK99hrzx?=
+ =?us-ascii?Q?2SgoEciuVIGPL5LdibhFVE8RnkKAhxXpYGYbAd0r12ZsMm3FY9XzSSNhBVW0?=
+ =?us-ascii?Q?4Kbj+pWjJLntKQPC4UisNZHJe/bV4CFFVGqzZtYOlMJ61cqRRIXSIibUMlzm?=
+ =?us-ascii?Q?ml6G+A1I5EHschPsRKqkRTw+woRisGuIcCwWrT0+ICSSsiHJogjUDxyYg1Zs?=
+ =?us-ascii?Q?a8Ufr+sFMhKUg2//RJKmq8SjDLOsMbtKa/1RUj/5P+nmC6OS8knnm5pIK/hE?=
+ =?us-ascii?Q?uARsdlIOewxNlNIwWRmof38Z11PovCbjU9otfDo2iFdwtb/IRWpwe8qsl6zN?=
+ =?us-ascii?Q?tIa6xjWCCc6+DeW1GqqaM429dgu+WsAvx+2nddZA9Gzy6h4JYS/wSMSfiqCu?=
+ =?us-ascii?Q?6mmdPOz8RPzMZnBgtylVFfEqLK/O8aTaSBUpbGOwCnxGqCnDeQaKvVcaHpRj?=
+ =?us-ascii?Q?eoMKF+1JUlEGhZD7BT6uobtd+aLKev0bPZV/9HtuMP1ex2JBo7a+fr8Unnmb?=
+ =?us-ascii?Q?nWRpLOQJs+LmSU2yGswwC4rHENMpc3G9wSSqkFYuesySBQ8wC3DbyDoUKXG5?=
+ =?us-ascii?Q?ubpEf97N10MehimppmWeAMKBnbHxiCFPkvWQTy9zwDvASH5mKbUlIlXZjHD5?=
+ =?us-ascii?Q?yiTuDxwUy9/uoalMpcOrOlBODNuxwPWEc3dWGkwNzgC1uUkhWsDYg/MQ0Xqg?=
+ =?us-ascii?Q?iOcsWDP/d5WXHlz2hPlvp3BvcKI5c/xWN4n37/+hiFQNhxU9ygAzeuoClSw+?=
+ =?us-ascii?Q?YB9wqQYpTaQo80PaPBwF6oFAlmiizcPYN1zb3vqxdaU1D06wimNgIk39APfo?=
+ =?us-ascii?Q?yOEDMSPhFvbp+TWbQOiJbfw3xpxeNLhfkJUVR2anrN+lplIC8+RQEBOrRIGP?=
+ =?us-ascii?Q?IPnZTUV4jmEM4rNH7eUiAGNSzuaQM+uj1JHWfZUSKJM5La037MuYlD0mJHd4?=
+ =?us-ascii?Q?OiuOzHRFHEXlhN2nZk54cF9pjtEz64BVkWDdQjvtjFdLWlDfPkFOJmad5SHB?=
+ =?us-ascii?Q?jYdiMJgBk6wKImt5fnoGNhGRfQZTbKuMa0cdDh/zL65qCiVepsElM6LJg+I/?=
+ =?us-ascii?Q?k0N6Kq95JI1sULALQK3P5Sa7xkQJOac2BZY80Rf7apGGa+dKwevr46jlFDiJ?=
+ =?us-ascii?Q?vVBlT9VApsu6YomSt/LAm5FO/QIbgF0NCJsRgane?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c74fc780-4772-4a3f-5d1a-08daa034f579
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39fe97af-2b78-46fb-b65b-08daa034cd56
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2022 03:03:06.9945
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 03:04:14.5023
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dYNmFqcbSKUC9LatGVmsML9RnaGJErbqfjLO/ZbJ1PYKu1qpveA6vk2gHl4mtK0NYG/XbfVkPdyadndu4dzyrA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8900
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WXcSYqjJNYb9BXMUus3zMXGljp0zkmxg+QxSjgll4l3zTrItyAliCi/wrvIbkJN6fWEdRpHjz6D9QKquYrIcCw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7042
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathieu,
-
-> Subject: Re: [PATCH V7 2/2] remoteproc: support attach recovery after rpr=
-oc
-> crash
->=20
-> On Tue, Jul 05, 2022 at 09:15:27AM +0800, Peng Fan (OSS) wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
+On Mon, Sep 26, 2022 at 12:31:37AM +0800, Andrey Konovalov wrote:
+> On Sun, Sep 25, 2022 at 1:27 PM Feng Tang <feng.tang@intel.com> wrote:
 > >
-> > Current logic only support main processor to stop/start the remote
-> > processor after crash. However to SoC, such as i.MX8QM/QXP, the remote
-> > processor could do attach recovery after crash and trigger watchdog to
-> > reboot itself. It does not need main processor to load image, or
-> > stop/start remote processor.
+> > > [1] https://lore.kernel.org/linux-mm/c7b316d30d90e5947eb8280f4dc78856a49298cf.1662411799.git.andreyknvl@google.com/
 > >
-> > Introduce two functions: rproc_attach_recovery, rproc_boot_recovery
-> > for the two cases. Boot recovery is as before, let main processor to
-> > help recovery, while attach recovery is to recover itself without help.
-> > To attach recovery, we only do detach and attach.
+> > I noticed this has been merged to -mm tree's 'mm-everything' branch,
+> > so following is the patch againt that. Thanks!
 > >
-> > Acked-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > ---
-> >  drivers/remoteproc/remoteproc_core.c | 62
-> > +++++++++++++++++++---------
-> >  1 file changed, 43 insertions(+), 19 deletions(-)
+> > One thing I'm not very sure is, to check 'in-object' kasan's meta
+> > size, I didn't check 'alloc_meta_offset', as from the code reading
+> > the alloc_meta is never put inside slab object data area.
+> 
+> Yes, this is correct.
+> 
+> > @@ -1042,7 +1042,7 @@ static int check_pad_bytes(struct kmem_cache *s, struct slab *slab, u8 *p)
+> >                 /* We also have user information there */
+> >                 off += 2 * sizeof(struct track);
 > >
-> > diff --git a/drivers/remoteproc/remoteproc_core.c
-> > b/drivers/remoteproc/remoteproc_core.c
-> > index ed374c8bf14a..ef5b9310bc83 100644
-> > --- a/drivers/remoteproc/remoteproc_core.c
-> > +++ b/drivers/remoteproc/remoteproc_core.c
-> > @@ -1884,6 +1884,45 @@ static int __rproc_detach(struct rproc *rproc)
-> >  	return 0;
-> >  }
+> > -       off += kasan_metadata_size(s);
+> > +       off += kasan_metadata_size(s, false);
 > >
-> > +static int rproc_attach_recovery(struct rproc *rproc) {
-> > +	int ret;
-> > +
-> > +	ret =3D __rproc_detach(rproc);
-> > +	if (ret)
-> > +		return ret;
->=20
-> I thought there was a specific reason to _not_ call rproc->ops->coredump(=
-)
-> for processors that have been attached to but looking at the STM32 and
-> IMX_DSP now, it would seem logical to do so.  Am I missing something?
+> >         if (size_from_object(s) == off)
+> >                 return 1;
+> 
+> Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+ 
+Thank you!
 
-ATTACH RECOVERY is to support recovery without help from Linux,
-
-STM32 and IMX_DSP, both require linux to load image and start remote
-core. So the two cases should not enable feature:
-RPROC_FEAT_ATTACH_ON_RECOVERY
-
-Also considering the recovery is out of linux control, actually when linux
-start dump, remote core may already recovered.=20
-
->=20
-> And this set will need a rebase.
-
-I'll do the rebase and send V8 if the upper explanation could eliminate
-your concern.
+I made a formal patch, which is based on your latest kasan patchset
+in -mm tree
 
 Thanks,
-Peng.
+Feng
 
->=20
-> Thanks,
-> Mathieu
->=20
-> > +
-> > +	return __rproc_attach(rproc);
-> > +}
-> > +
-> > +static int rproc_boot_recovery(struct rproc *rproc) {
-> > +	const struct firmware *firmware_p;
-> > +	struct device *dev =3D &rproc->dev;
-> > +	int ret;
-> > +
-> > +	ret =3D rproc_stop(rproc, true);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* generate coredump */
-> > +	rproc->ops->coredump(rproc);
-> > +
-> > +	/* load firmware */
-> > +	ret =3D request_firmware(&firmware_p, rproc->firmware, dev);
-> > +	if (ret < 0) {
-> > +		dev_err(dev, "request_firmware failed: %d\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	/* boot the remote processor up again */
-> > +	ret =3D rproc_start(rproc, firmware_p);
-> > +
-> > +	release_firmware(firmware_p);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> >  /**
-> >   * rproc_trigger_recovery() - recover a remoteproc
-> >   * @rproc: the remote processor
-> > @@ -1898,7 +1937,6 @@ static int __rproc_detach(struct rproc *rproc)
-> >   */
-> >  int rproc_trigger_recovery(struct rproc *rproc)  {
-> > -	const struct firmware *firmware_p;
-> >  	struct device *dev =3D &rproc->dev;
-> >  	int ret;
-> >
-> > @@ -1912,24 +1950,10 @@ int rproc_trigger_recovery(struct rproc
-> > *rproc)
-> >
-> >  	dev_err(dev, "recovering %s\n", rproc->name);
-> >
-> > -	ret =3D rproc_stop(rproc, true);
-> > -	if (ret)
-> > -		goto unlock_mutex;
-> > -
-> > -	/* generate coredump */
-> > -	rproc->ops->coredump(rproc);
-> > -
-> > -	/* load firmware */
-> > -	ret =3D request_firmware(&firmware_p, rproc->firmware, dev);
-> > -	if (ret < 0) {
-> > -		dev_err(dev, "request_firmware failed: %d\n", ret);
-> > -		goto unlock_mutex;
-> > -	}
-> > -
-> > -	/* boot the remote processor up again */
-> > -	ret =3D rproc_start(rproc, firmware_p);
-> > -
-> > -	release_firmware(firmware_p);
-> > +	if (rproc_has_feature(rproc, RPROC_FEAT_ATTACH_ON_RECOVERY))
-> > +		ret =3D rproc_attach_recovery(rproc);
-> > +	else
-> > +		ret =3D rproc_boot_recovery(rproc);
-> >
-> >  unlock_mutex:
-> >  	mutex_unlock(&rproc->lock);
-> > --
-> > 2.25.1
-> >
+---
+From ba4cfd81b86c3339523b467451baa5e87ca1c9f8 Mon Sep 17 00:00:00 2001
+From: Feng Tang <feng.tang@intel.com>
+Date: Sun, 25 Sep 2022 15:37:31 +0800
+Subject: [PATCH] mm: kasan: Extend kasan_metadata_size() to also cover
+ in-object size
+
+When kasan is enabled for slab/slub, it may save kasan' free_meta
+data in the former part of slab object data area in slab object's
+free path, which works fine.
+
+There is ongoing effort to extend slub's debug function which will
+redzone the latter part of kmalloc object area, and when both of
+the debug are enabled, there is possible conflict, especially when
+the kmalloc object has small size, as caught by 0Day bot [1].
+
+To solve it, slub code needs to know the in-object kasan's meta
+data size. Currently, there is existing kasan_metadata_size()
+which returns the kasan's metadata size inside slub's metadata
+area, so extend it to also cover the in-object meta size by
+adding a boolean flag 'in_object'.
+
+There is no functional change to existing code logic.
+
+[1]. https://lore.kernel.org/lkml/YuYm3dWwpZwH58Hu@xsang-OptiPlex-9020/
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Feng Tang <feng.tang@intel.com>
+Suggested-by: Andrey Konovalov <andreyknvl@gmail.com>
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+---
+ include/linux/kasan.h |  5 +++--
+ mm/kasan/generic.c    | 19 +++++++++++++------
+ mm/slub.c             |  4 ++--
+ 3 files changed, 18 insertions(+), 10 deletions(-)
+
+diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+index d811b3d7d2a1..96c9d56e5510 100644
+--- a/include/linux/kasan.h
++++ b/include/linux/kasan.h
+@@ -302,7 +302,7 @@ static inline void kasan_unpoison_task_stack(struct task_struct *task) {}
+ 
+ #ifdef CONFIG_KASAN_GENERIC
+ 
+-size_t kasan_metadata_size(struct kmem_cache *cache);
++size_t kasan_metadata_size(struct kmem_cache *cache, bool in_object);
+ slab_flags_t kasan_never_merge(void);
+ void kasan_cache_create(struct kmem_cache *cache, unsigned int *size,
+ 			slab_flags_t *flags);
+@@ -315,7 +315,8 @@ void kasan_record_aux_stack_noalloc(void *ptr);
+ #else /* CONFIG_KASAN_GENERIC */
+ 
+ /* Tag-based KASAN modes do not use per-object metadata. */
+-static inline size_t kasan_metadata_size(struct kmem_cache *cache)
++static inline size_t kasan_metadata_size(struct kmem_cache *cache,
++						bool in_object)
+ {
+ 	return 0;
+ }
+diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
+index d8b5590f9484..b076f597a378 100644
+--- a/mm/kasan/generic.c
++++ b/mm/kasan/generic.c
+@@ -450,15 +450,22 @@ void kasan_init_object_meta(struct kmem_cache *cache, const void *object)
+ 		__memset(alloc_meta, 0, sizeof(*alloc_meta));
+ }
+ 
+-size_t kasan_metadata_size(struct kmem_cache *cache)
++size_t kasan_metadata_size(struct kmem_cache *cache, bool in_object)
+ {
++	struct kasan_cache *info = &cache->kasan_info;
++
+ 	if (!kasan_requires_meta())
+ 		return 0;
+-	return (cache->kasan_info.alloc_meta_offset ?
+-		sizeof(struct kasan_alloc_meta) : 0) +
+-		((cache->kasan_info.free_meta_offset &&
+-		  cache->kasan_info.free_meta_offset != KASAN_NO_FREE_META) ?
+-		 sizeof(struct kasan_free_meta) : 0);
++
++	if (in_object)
++		return (info->free_meta_offset ?
++			0 : sizeof(struct kasan_free_meta));
++	else
++		return (info->alloc_meta_offset ?
++			sizeof(struct kasan_alloc_meta) : 0) +
++			((info->free_meta_offset &&
++			info->free_meta_offset != KASAN_NO_FREE_META) ?
++			sizeof(struct kasan_free_meta) : 0);
+ }
+ 
+ static void __kasan_record_aux_stack(void *addr, bool can_alloc)
+diff --git a/mm/slub.c b/mm/slub.c
+index ce8310e131b3..a75c21a0da8b 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -887,7 +887,7 @@ static void print_trailer(struct kmem_cache *s, struct slab *slab, u8 *p)
+ 	if (s->flags & SLAB_STORE_USER)
+ 		off += 2 * sizeof(struct track);
+ 
+-	off += kasan_metadata_size(s);
++	off += kasan_metadata_size(s, false);
+ 
+ 	if (off != size_from_object(s))
+ 		/* Beginning of the filler is the free pointer */
+@@ -1042,7 +1042,7 @@ static int check_pad_bytes(struct kmem_cache *s, struct slab *slab, u8 *p)
+ 		/* We also have user information there */
+ 		off += 2 * sizeof(struct track);
+ 
+-	off += kasan_metadata_size(s);
++	off += kasan_metadata_size(s, false);
+ 
+ 	if (size_from_object(s) == off)
+ 		return 1;
+-- 
+2.34.1
+
+
+
+
