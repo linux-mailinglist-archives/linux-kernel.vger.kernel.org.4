@@ -2,207 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD4B5EB633
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF875EB635
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiI0AVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 20:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S229799AbiI0AWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 20:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiI0AVO (ORCPT
+        with ESMTP id S229663AbiI0AWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 20:21:14 -0400
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6B7A4BA8
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 17:21:12 -0700 (PDT)
-Received: by mail-ua1-x934.google.com with SMTP id s2so687277uae.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 17:21:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=3IzVwXkFM8Cc1CGnFjsCxlD0U12h7ddTKb7YMIGDc+Y=;
-        b=FHoiLztvWMF2A1g4txzIdEL8uHEeoKzqCsBlgtAgbqcWGbO5eT2RPRqkzg/7gbb20f
-         tOFCAJQaaqyQIlps2L+scQhcMYoE0k4wEopripmBH+HTk/McETsoRzXzxDCD9Qhe5ArK
-         vh36l184zkhDCUcQWVbeNV3PymI6FIw/4yDq0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=3IzVwXkFM8Cc1CGnFjsCxlD0U12h7ddTKb7YMIGDc+Y=;
-        b=KhohmyAAq21Xb0nXbtOA+l0nXls3JWYw/qrR0bImQfWEqDdBuvMih6WDUdbOmxP7F8
-         VNBdvgsouAesoXcvJvwNO2iR4wtzRjCuj346e3LfWWsKfBh2hT9MUiMOB5Rck7XMORrj
-         ujNp1zNCWIch2YBYuKu+B2xOMrnUAkraheohHmpblhwgFIJZSzWtVuvoZfrBtpY5EuoP
-         eyBh8MoAlq/hgsLYEyqFRkXavOnGU3NpoL9vYzSLKP2LV6uzWVj6sVCJvpIs6KgjSjSk
-         WxO1qkKc1VdP04lht5voDXNHvGdS6wcF4VXhAom+av6NvdM/vRQQoBNJoIk0bckTHm/b
-         SzIg==
-X-Gm-Message-State: ACrzQf1RMM/pHhJ4acPISqaDZS8FEkZeF7ztFsbmwblmbV/Qf823ti/m
-        VftVCfLlS75sBLYZP6PU2wF/bXKhYFaOWqlGyiOdew==
-X-Google-Smtp-Source: AMsMyM5HvOsn1v+eePDF4Fh51/AiOugSGswCtVOk8JZnG8Qh6wALbwk7vMMHMk1LElPBz+Gcw2Y3fSK00/ks4QD5fqg=
-X-Received: by 2002:ab0:7697:0:b0:3d0:26e9:fc3 with SMTP id
- v23-20020ab07697000000b003d026e90fc3mr1057414uaq.85.1664238071188; Mon, 26
- Sep 2022 17:21:11 -0700 (PDT)
+        Mon, 26 Sep 2022 20:22:31 -0400
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4981A50C9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 17:22:29 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 00:22:18 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1664238143; x=1664497343;
+        bh=5j/BEoc0a/g5EW5k+sV4JTG+NFX2wc5KQ3lCLfh0eMc=;
+        h=Date:To:From:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=oa2MVjC4hXURwkbhbHor4a9M7Eh0k3LlOha/g4vbR50HBLbRePoTZCBbrp8MuaKrk
+         sV1KI0he81EW1Hq0okXORCfVZpsPstL6bezNG2f8jmPYJaEzKgq+6IUlTv7BnGbDCy
+         BC8VOBdFXbsQB7zg2Dftw7VC2iTggAZZa2bPcDyms5/WVxUIwMGyBife2ZRyRyKwp7
+         9llUKL+rA6XQ3uuObyyDEu3NzHu0t26xMzEMBkxlLx8CEv+ih9H8XnSrN3QpWuRvt9
+         ShHp//DGu7x4TS0iJzZyc4q1N/Ygn9MC0mX4+Z1d6j4rnmxmWaSyVJlD0Ifop7G7mm
+         dj6PYbM5JSPxQ==
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Paul Starzetz <ihaquer@protonmail.com>
+Subject: Linux Kernel 0day Exploit inside
+Message-ID: <h9bY6oJIw5zGVb-cAXdz0dPk_Ti5vKRu5aLwoLharC7XaPh-kqjr-bIRVjNam1SaFsXhXu-BgN1ES-6tpbpMHygWkRqHRF4k7_nvQXOT9ak=@protonmail.com>
+Feedback-ID: 52680148:user:proton
 MIME-Version: 1.0
-References: <20220926164358.v2.1.Ic8eabc8ed89a07c3d52726dd017539069faac6c4@changeid>
- <CABBYNZJNrnmw6uUwQekqz1zQnG++kAHDqGfHJOxO082g+1Y1kw@mail.gmail.com>
-In-Reply-To: <CABBYNZJNrnmw6uUwQekqz1zQnG++kAHDqGfHJOxO082g+1Y1kw@mail.gmail.com>
-From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date:   Mon, 26 Sep 2022 17:20:59 -0700
-Message-ID: <CANFp7mW9tO9gEE2L7WGBNsoi9uyP1-k2t-OWnF3Qz=h0TW8WuQ@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: Call shutdown for HCI_USER_CHANNEL
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Abhishek Pandit-Subedi <abhishekpandit@google.com>,
-        linux-bluetooth@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed;
+ boundary="b1_QhVbvzYDKvegn67m5RFd3bZMvgYrJbe08wKtOxE2Kk"
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 5:10 PM Luiz Augusto von Dentz
-<luiz.dentz@gmail.com> wrote:
->
-> Hi Abhishek,
->
-> On Mon, Sep 26, 2022 at 4:44 PM Abhishek Pandit-Subedi
-> <abhishekpandit@google.com> wrote:
-> >
-> > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> >
-> > Some drivers depend on shutdown being called for proper operation.
-> > Unset HCI_USER_CHANNEL and call the full close routine since shutdown is
-> > complementary to setup.
-> >
-> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> > ---
-> >
-> > Using hci_qca, we can get the controller into a bad state simply by
-> > trying to bind to userchannel twice (open+bind+close, then open+bind).
-> > Without running the shutdown routine, the device seems to get into a bad
-> > state. A similar bug also occurs with btmtksdio (using MT7921).
-> >
-> > This change properly runs the shutdown routine, which should be
-> > complementary to setup. The reason it unsets the HCI_USER_CHANNEL flag
-> > is that some drivers have complex operations in their shutdown routine
-> > (including sending hci packets) and we need to support the normal data
-> > path for them (including cmd_timeout + recovery mechanisms).
-> >
-> > Note for v2: I've gotten a chance to test this on more devices
-> > and figure out why it wasn't working before in v1. I found two problems:
-> > I had a signal pending (SIGTERM) that was messing things up in the
-> > socket release function and the HCI_USER_CHANNEL flag was preventing
-> > hci_sync from operating properly during shutdown on Intel chipsets
-> > (which use the sync functions to send a reset command + other commands
-> > sometimes).
-> >
-> > This was tested with hci_qca (QCA6174-A-3), btmtksdio (MT7921-SDIO)
-> > and btusb (with AX200).
-> >
-> >
-> > Changes in v2:
-> > - Clear HCI_USER_CHANNEL flag at start of close and restore at end.
-> > - Add comment explaning why we need to clear flag and run shutdown.
-> >
-> >  net/bluetooth/hci_sync.c | 19 ++++++++++++++++---
-> >  1 file changed, 16 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> > index 422f7c6911d9..f9591fcefb8d 100644
-> > --- a/net/bluetooth/hci_sync.c
-> > +++ b/net/bluetooth/hci_sync.c
-> > @@ -4731,9 +4731,18 @@ int hci_dev_close_sync(struct hci_dev *hdev)
-> >  {
-> >         bool auto_off;
-> >         int err = 0;
-> > +       bool was_userchannel;
-> >
-> >         bt_dev_dbg(hdev, "");
-> >
-> > +       /* Similar to how we first do setup and then set the exclusive access
-> > +        * bit for userspace, we must first unset userchannel and then clean up.
-> > +        * Otherwise, the kernel can't properly use the hci channel to clean up
-> > +        * the controller (some shutdown routines require sending additional
-> > +        * commands to the controller for example).
-> > +        */
-> > +       was_userchannel = hci_dev_test_and_clear_flag(hdev, HCI_USER_CHANNEL);
-> > +
-> >         cancel_delayed_work(&hdev->power_off);
-> >         cancel_delayed_work(&hdev->ncmd_timer);
-> >         cancel_delayed_work(&hdev->le_scan_disable);
-> > @@ -4747,7 +4756,6 @@ int hci_dev_close_sync(struct hci_dev *hdev)
-> >         }
-> >
-> >         if (!hci_dev_test_flag(hdev, HCI_UNREGISTER) &&
-> > -           !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
-> >             test_bit(HCI_UP, &hdev->flags)) {
-> >                 /* Execute vendor specific shutdown routine */
-> >                 if (hdev->shutdown)
->
-> I guess the idea here is that shutdown can be run without the
-> HCI_USER_CHANNEL flag since the hdev is closing we don't expect any
-> traffic from socket/user channel? In that case I'd probably suggest
-> having this on its own function e.g. hci_dev_shutdown which can have
-> the logic of resetting the flag and restoring at the end. Also it is
-> probably a good idea to have some test mimicking this behavior on
-> userchan-tester so we do not accidentally break it.
+This is a multi-part message in MIME format.
 
-Yup, that sounds reasonable. I'll look into userchan-tester before
-sending up a v3.
+--b1_QhVbvzYDKvegn67m5RFd3bZMvgYrJbe08wKtOxE2Kk
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
->
-> > @@ -4756,6 +4764,8 @@ int hci_dev_close_sync(struct hci_dev *hdev)
-> >
-> >         if (!test_and_clear_bit(HCI_UP, &hdev->flags)) {
-> >                 cancel_delayed_work_sync(&hdev->cmd_timer);
-> > +               if (was_userchannel)
-> > +                       hci_dev_set_flag(hdev, HCI_USER_CHANNEL);
-> >                 return err;
-> >         }
-> >
-> > @@ -4795,7 +4805,7 @@ int hci_dev_close_sync(struct hci_dev *hdev)
-> >         auto_off = hci_dev_test_and_clear_flag(hdev, HCI_AUTO_OFF);
-> >
-> >         if (!auto_off && hdev->dev_type == HCI_PRIMARY &&
-> > -           !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
-> > +           !was_userchannel &&
-> >             hci_dev_test_flag(hdev, HCI_MGMT))
-> >                 __mgmt_power_off(hdev);
-> >
-> > @@ -4808,7 +4818,7 @@ int hci_dev_close_sync(struct hci_dev *hdev)
-> >
-> >         hci_sock_dev_event(hdev, HCI_DEV_DOWN);
-> >
-> > -       if (!hci_dev_test_flag(hdev, HCI_USER_CHANNEL)) {
-> > +       if (!was_userchannel)
-> >                 aosp_do_close(hdev);
-> >                 msft_do_close(hdev);
-> >         }
-> > @@ -4858,6 +4868,9 @@ int hci_dev_close_sync(struct hci_dev *hdev)
-> >         memset(hdev->dev_class, 0, sizeof(hdev->dev_class));
-> >         bacpy(&hdev->random_addr, BDADDR_ANY);
-> >
-> > +       if (was_userchannel)
-> > +               hci_dev_set_flag(hdev, HCI_USER_CHANNEL);
-> > +
-> >         hci_dev_put(hdev);
-> >         return err;
-> >  }
-> > --
-> > 2.37.3.998.g577e59143f-goog
-> >
->
->
-> --
-> Luiz Augusto von Dentz
+Hi folks,
+
+after 13 years of professional experience I'm back on the market - company =
+abandoned OS security research.
+
+Zero day exploits for Linux kernel, Solaris, (Free)BSD, OsX (and more) can =
+be produced upon request. Do not hesitate to contact me for CV.
+
+sincerely,
+P.Starzetz
+
+
+Sent with Proton Mail secure email.
+--b1_QhVbvzYDKvegn67m5RFd3bZMvgYrJbe08wKtOxE2Kk
+Content-Type: text/x-csrc; name=i.c
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=i.c
+
+I2luY2x1ZGUgPHN0ZGlvLmg+CgovKgogKiBjb21waWxlIHdpdGggZ2NjIGkuYyAtbyBpIC1PMQog
+KiB0aGVuIHJ1biAuL2kKICogCiAqLwoKCmNoYXIgY29udGFjdFtdID0JIlxuIgoJCQkiQ29udGFj
+dCBtZSBhdDoJXG4iCgkJCSJcbiIKCQkJImloYXF1ZXJAcHJvdG9ubWFpbC5jb21cbiIKCQkJIlxu
+IgoJCQkiLS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tXG4iCgkJCSJcbiIKCQkJ
+Im1RR05CR0xqTmc0QkRBREEyNDY0VThYT3JyRThVQ09selkxK0JUUzF4SzFBd2VUcTBZL2ZrQUJj
+RjdQM09RcFJcbiIKCQkJImx0UzZNTG5yZDVXTVRTMytRMklKS1hlQ1JYcFVlTFRkeW5rdHg4bnJm
+UmIvZkw4bjdxNUlueFJ4YVo2UVN1bDRcbiIKCQkJImYvYVNNbDlTeVpaWXpGb1RjV2lDWFFmR0Ev
+cnRGU1RJaVVTQ21JNU9CR2xPSEtoYjF0UEtScXZLK3dlQUpZZDlcbiIKCQkJIm4rQVJFRkI1bXV3
+aDVEeTJET2V4NkRSVk4wamNmb21Hd1kvdmJzdG1Jd1MrUjB2OUg5OE5TNmpaUkJkRkFrVUdcbiIK
+CQkJIjd3MHR5UEpFdmI1MUtuK3Z3MGIycWgrYVR6bzl4eCt3ekxMK21JME5mekxxYnJldWs5ZWJL
+SVpCNHdqb1VxNXVcbiIKCQkJIjRNZXNsaDZGdGRTbVhiMG52S3IzOVJubG8vcWRFSWR2eEFYTEY1
+bzkzN3c5NWZwMDltQ0locmI1MWt2QmRiOFhcbiIKCQkJIm9xcDJQaXdhVEdQU3VhNVhBR3hoaXZS
+Yk4vQXhtTWQyWk1JZjF6eUFWNVFjVzJQWHVxSVFyVjBYdU9HWEtaVkdcbiIKCQkJInhaRmZ0QkRi
+NXhPT1U5bU1uOWZ5L0lVeHI2WDNFYnM2UVdPYjBNUVFaZEVnOExiM1BUbnowYzYxR0JLSmZXY3Rc
+biIKCQkJIjNjcTlFZkg1WERTN3Z2OEFFUUVBQWJRbVVHRjFiQ0JUZEdGeWVtVjBlaUE4YVdoaGNY
+Vmxja0J3Y205MGIyNXRcbiIKCQkJIllXbHNMbU52YlQ2SkFkUUVFd0VJQUQ0V0lRVFpSa29NR1hh
+UnptVUI1RWpOOW9TSW85Q1QxQVVDWXVNMkRnSWJcbiIKCQkJIkF3VUpBOEpuQUFVTENRZ0hBZ1lW
+Q2drSUN3SUVGZ0lEQVFJZUFRSVhnQUFLQ1JETjlvU0lvOUNUMUgwc0MvNDVcbiIKCQkJIm5MQ2hK
+eUpxZndiWjJqdjRlUlFnVW9INjhLbUVPSHQydHZXSEhFdzFqSml3ZDYrcVVwbmNYOERTZ3ZhZWJP
+NUJcbiIKCQkJIndJVWlxWnljU3JYSlZWamVJNDdoVDlPeXZGTncwcDhPUk9acWpUNUpuM21Yditw
+U2pJcFg3ZXZ5TmQzbFR6a1dcbiIKCQkJIkxHbnE0Q1lINklSUnl1V3o1N0hWZHJQditPUlZ0NE11
+Sm56eldHZlhocmRNcTFLaUE0M25QUkI4akdxakQ3VmFcbiIKCQkJIktoRFhjUFFjVnQxTUFFRTlF
+ck9EWDBETEx6TFhqYmpXcitWTUNGSXhSSU10SVZFakFvSjBQMXhUOUNWWVZtQklcbiIKCQkJImRq
+eDNtbU5DcGxSQkRCWnFMRmw2TzdvNmY0ZVhsNEttWnArSGZ1dVhjZ2p2ckk4ei95ckduSHRLZEFY
+QUFGU0dcbiIKCQkJIjJWeXRGQ2I2WkZMOFNwcDJTY3RpRzljeGtrSFUrNll3Yjc4T1BUTHlRdUxl
+Sk0xalZUcWI5Slp2emhtU2sxbjRcbiIKCQkJIndiZ3NZdWowbklicTgvdFNMd1VyRGpFRml3RmdG
+Uk82N1pkYlp4WGdNUHRoOWdGbHZ4YVVxcjF1RTcrR05xWThcbiIKCQkJInNCL3pqaEJ4OFpwbFJP
+cng0TzVwUGxuVC81RG8zSEtTT2QrVTl4ZVRWSWEwckVLQWhIK0ZFYW5kVHE3OXlsZTVcbiIKCQkJ
+IkFZMEVZdU0yRGdFTUFNQXdJVDRMTEsvN21PQUNSTkJpSElvb1FndmtjTkF4bmlnS2pnV004SDRH
+M242eFpDc21cbiIKCQkJInNlQjhxeExIV2tJdUNFOTQyNnc5dzAxS3lzNHhWd2puYlI5cVlDRmxC
+MDVueUcweTNTU3hjcjdCYXJIYXRnR2pcbiIKCQkJImE3VDBqQ2tmdFhYQktyQWdzSnN0aWJ3TFhD
+VDk5WGxhM1VIRmQxbkRNR1Axdjd5U1dNZldidEJJakh4cjI0K0xcbiIKCQkJIjY4c1Jhd1dDRHE0
+Y3kvZVRsdkMvUWg0eGRyZlliWi9tN1hneGt5bWdEYXpOd0NHSnBMa0hEZ2FnS2Z4cVVIQjdcbiIK
+CQkJIktVcGRicTVieW1QM2xNdzFETUJ0K29PTnJERlg0U0wzdElyNjJUamdPemQvcnBFeUk1ckhj
+bTdjKzNuRy9HZ2lcbiIKCQkJImhCZ2w5N0I5UmdWUndETTdTK01hdzIxRW1uT0xtbE1uZ3RMY0Uz
+V0Q3TEozL2tRckdubWZnc0lxaGtqUFh5enZcbiIKCQkJIjE2bWxlbnRwMmV0dkc4RXFvQjZaR3Zv
+WEsyNndwbE5FUzhraU1qRzUyaDQya2FtWW1UVzRKd21nczdCcU1pcmxcbiIKCQkJIlNDbk1KOGRM
+U3h1WExuTWdCelNEeHdPVDcwbDdSS1VKZjFMLzR6Ni9lbEF2OFMxM1N6SjdZVzJFN1ZzdTJGOURc
+biIKCQkJIkFZR2w4QVF5dEhYZE1RQVJBUUFCaVFHOEJCZ0JDQUFtRmlFRTJVWktEQmwya2M1bEFl
+Ukl6ZmFFaUtQUWs5UUZcbiIKCQkJIkFtTGpOZzRDR3d3RkNRUENad0FBQ2drUXpmYUVpS1BRazlU
+QlZ3d0Fxazl6ZHFBUHBuUGNibm9rZC9qVzJCaldcbiIKCQkJIldKbUJEcXZ5bldyQndaL3dMcEY4
+YmN3VW5acTM4SW42OVU0eC9ZYTNYVXY4eWdkcjloRVIwZzJuSmRHWjRFVHNcbiIKCQkJIk1uZDlB
+MFFTbGE3U2U5RStzd3kxNFhPTUdjbEp3UFRva05wV1BpQ3IzQ1RUakZVaWNLbzMzMlBJZ0N1UTBC
+c2lcbiIKCQkJIjB4bGVSRG80U1BmZTA2WDJEQkh4cW5PYkh0dDVMVmhJZmVHbnFuVFZUWFg5bDZ2
+OURpQU9OZWRSdHZuU1lzOGJcbiIKCQkJImFta0hHKzlLV0sxZG9WVHEyQ2UxUzFvYVFaRFRsaGF3
+dmNJWDlKc0w5ZDFSbXlQdG1ldU54cVl1NytTTUlBTjlcbiIKCQkJIkZrcjR4WXRRSmwzU1dKT2dr
+eUpxc2V1NDY2QjhRTnM0Vkt2UUVFSUR6V2JrOVBZZmlma1lpYThVRTQxNUpzVUhcbiIKCQkJImFz
+U0FqSVJhQVZFQ0wxVy82MEFoYVByWlJwYm9VczEzK1lLS1RiY0p5b3hJWVJJelAwa1pGckRNNjFw
+bTF1ZXdcbiIKCQkJIkJ0T1hFdjEzSVNvUUpjOThlcHZ5OUIzcmQxRTNPb0NZWEdvb0NGR2ljeVY1
+aUx5aUJUMmZoSDhYUXp1aksxQ1dcbiIKCQkJIlFhMmdPRWZRUnpFNkp2RkpzOXFiSW1KSk0wM2dW
+MmZuUExzNDRDa2pcbiIKCQkJIj1QYXJkXG4iCgkJCSItLS0tLUVORCBQR1AgUFVCTElDIEtFWSBC
+TE9DSy0tLS0tXG4iCgkJCSJcbiIKCQkJOwoKaW50IG1haW4oKQp7CglwcmludGYoIiVzIiwgY29u
+dGFjdCk7CglmZmx1c2goc3Rkb3V0KTsKCQoJcmV0dXJuIDMxMzM3Owp9Cg==
+
+--b1_QhVbvzYDKvegn67m5RFd3bZMvgYrJbe08wKtOxE2Kk--
+
