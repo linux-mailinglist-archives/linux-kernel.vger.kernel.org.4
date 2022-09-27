@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804975ECB71
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38AF75ECB79
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbiI0RmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 13:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45702 "EHLO
+        id S233479AbiI0RmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 13:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233375AbiI0RlF (ORCPT
+        with ESMTP id S233350AbiI0RlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 13:41:05 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1DE1EB182
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:39:30 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 126-20020a630284000000b0043942ef3ac7so6131890pgc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:39:30 -0700 (PDT)
+        Tue, 27 Sep 2022 13:41:08 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B225DFB
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:39:32 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id f15-20020a17090a664f00b002038154eb4bso4934954pjm.9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:39:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=IKdJN12DRpFj3Z7eV3WQcVmnbvEiTsS1DNQZcY7sFU4=;
-        b=jqSSQ+SNKGpYgrmFMeRjpKbbhPXBL8a2RIc4B+WwahrFGOnESrRXL29oiJ53VH7HDt
-         CWaCkJgOlgz22Q1+onQNKm8PM4H2Jx1lOxGMH5GEBl9WSLlRGIirafMf/CKKOACNSmbd
-         YUnbm0iL4zTzJj0/yQfMvIQvF1nE9nbaCXQwnuYZLYOq2HiLdmO/Xhp/MXVpHwKVl36f
-         P1rLHymoro4Tq0BqsANUD0QjNqUWDWplmZEHRx+RzjF06ISltAaRNvyAV8WvZI++AxC/
-         oPAYneQ2XOsPpm3tPgRyVdjnL8kXCggHfQ8ZUc356w+LJmlBmvLwMMyF1/HM9rdsDQY2
-         9X+g==
+        bh=LKa2EWOH75ZXoIQz8iJsf15zmXg+mcEaCfZdnIoCDl8=;
+        b=GYnYXIqhIDBBrd9uswEbBLefhqiFuI3W4dE1JQ8t4ZePyjbWFuHxVP7oWd37h1++w/
+         LWZj+xk6vpnHaWrC5ATggx6aUxoC5h14WSD1+EdoMuvrngQ0UsDTJi0CgvRY8nDZl6Mc
+         tXHVm5d6SHnZI7Lu8Ubcxo9EHQQQF/oOkfTScfGuhiiJ+0DWO5NEcE3xxpkNakiF8mwt
+         57xrFA9wH8XkgCGC1c1odivGOwxJ1WB6LrPtpewirWFQdlpq4T6In6tHiZC7jwUyQRaI
+         cg8hRc7ikN4meIQ2bh2RY1aBvmJAGhw7apovwzddrcNunHn8VBf3EurZ509/3n+ciDfn
+         DVtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=IKdJN12DRpFj3Z7eV3WQcVmnbvEiTsS1DNQZcY7sFU4=;
-        b=Yv6Y40/OoFKMpGR20sZyh+SGBHuZcKd3PuumwFJ5Wdq65twK5YOCOUecC7FWb2wd70
-         HGPN/Ua2z2wAuiCK8yqg88AuvwqEXECqTeRFJtfJAs9ofT1SuPS2++IidKdeGpYGzH+a
-         BV4Tvj0506wOjZ3AEZ1Mg9+85U8QHjjw7VGxZvRR3WDVPCzsRdYiFqNLdebdRdQpURIL
-         ovW+A0kvz8trTvDz9jGvGj5zyKHIvcSs4t7Z5RVsoiEm3ke3XBForcyM94dV6KlYKtQD
-         b5o2/2F+whrkBWi1Ce2AbkKmr6u+gecCOTNMvXDXpG7xj/WLeTR+NoR8aylmo6e+8kb0
-         waTg==
-X-Gm-Message-State: ACrzQf2lzENAkygJCaZ4/FXaULmtrLITh5sDgMnymlRY8sMZDeNjQWYY
-        cBH/j4+TIH2r1Xc3gPv9ultuPf2u/VRA
-X-Google-Smtp-Source: AMsMyM44EJkDGNhKhPeQSfrFWM8vE9s7KzHjLjNdc81z+VPETA18vVlBAhA93zJxWr28vXUMmBRWh/bMHRio
+        bh=LKa2EWOH75ZXoIQz8iJsf15zmXg+mcEaCfZdnIoCDl8=;
+        b=Y63jSVphTUowXO0rM2wNWAjR6Z+tuFrF0WMzxbX1/hGNXdjfupblPKvFhr+SqnLoRK
+         LBxBLDsZqDZHMKebvHkEPL2LpejU95aBUGaohmQONoIhDdKmp5E0gjIuGpWKnVJtXF+F
+         pClYFZieZmpn/DD+Kcu1+ZFi9t9NhQAdCOein9s9gk+5UKUZ6dl4V5+9UeF+KbdIc5v5
+         JBUAggO2WvKDRc8WRoOXAfYOnK+/rXlDfnWX8FwnphDQo01YjxKXaZ6uYmvDzwx0KxuL
+         2DapE+DvKYPTq4YRaUJ28wyU4c08vSkKi7nHt3/XTu8IpZFzXcIwTJoApGMShNQXxYY0
+         BdSA==
+X-Gm-Message-State: ACrzQf3ENBT1ktqt2VXx5x3PrZP1J8WKcN8+vy0iflA+uPV0jnmXLg9u
+        k7EMdo/sjmnR8bzuMuyVchPxHU+PmkuH
+X-Google-Smtp-Source: AMsMyM5J6i/YqOcI+hTNRY2P8XVevJYiVh4MV1n67GgcgyhzZsBzTNeLRFP9/gfvmoX+DNI1R3BjtZBhkXX+
 X-Received: from sgzhang.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3d89])
- (user=sgzhang job=sendgmr) by 2002:a17:902:f70e:b0:178:8895:d1fb with SMTP id
- h14-20020a170902f70e00b001788895d1fbmr28179268plo.166.1664300356878; Tue, 27
- Sep 2022 10:39:16 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 17:38:44 +0000
+ (user=sgzhang job=sendgmr) by 2002:a17:90b:4a82:b0:200:a89e:6f1f with SMTP id
+ lp2-20020a17090b4a8200b00200a89e6f1fmr5625770pjb.13.1664300359293; Tue, 27
+ Sep 2022 10:39:19 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 17:38:45 +0000
 In-Reply-To: <20220927173845.2293378-1-sgzhang@google.com>
 Mime-Version: 1.0
 References: <20220927173845.2293378-1-sgzhang@google.com>
 X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
-Message-ID: <20220927173845.2293378-2-sgzhang@google.com>
-Subject: [PATCH v1 1/2] mtd: mtdoops: change printk() to counterpart pr_ functions
+Message-ID: <20220927173845.2293378-3-sgzhang@google.com>
+Subject: [PATCH v1 2/2] mtd: mtdoops: panic caused mtdoops to call mtd erase
+ function immediately
 From:   Ray Zhang <sgzhang@google.com>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -70,193 +71,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To comply with latest kernel code requirement, change printk() to
-counterpart pr_ functions in mtdoops driver:
-- change printk(INFO) to pr_info()
-- change printk(DEBUG) to pr_debug()
-- change printk(WARNING) to pr_warn()
-- change printk(ERR) to pr_err()
+The panic function disables the local interrupts, preemption, and all
+other processors. When the invoked mtdoops needs to erase a used page,
+calling schedule_work() to do it will not work. Instead, just call mtd
+erase function immediately.
+
+Tested:
+~# echo c > /proc/sysrq-trigger
+[  171.654759] sysrq: Trigger a crash
+[  171.658325] Kernel panic - not syncing: sysrq triggered crash
+......
+[  172.406423] mtdoops: not ready 34, 35 (erase immediately)
+[  172.432285] mtdoops: ready 34, 35
+[  172.435633] Rebooting in 10 seconds..
 
 Signed-off-by: Ray Zhang <sgzhang@google.com>
 ---
- drivers/mtd/mtdoops.c | 50 +++++++++++++++++++++----------------------
- 1 file changed, 25 insertions(+), 25 deletions(-)
+ drivers/mtd/mtdoops.c | 66 ++++++++++++++++++++++++++-----------------
+ 1 file changed, 40 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/mtd/mtdoops.c b/drivers/mtd/mtdoops.c
-index 3d4a2ffb5b01..84b21be347f6 100644
+index 84b21be347f6..73c6a55eb391 100644
 --- a/drivers/mtd/mtdoops.c
 +++ b/drivers/mtd/mtdoops.c
-@@ -93,9 +93,9 @@ static int mtdoops_erase_block(struct mtdoops_context *cxt, int offset)
- 
- 	ret = mtd_erase(mtd, &erase);
- 	if (ret) {
--		printk(KERN_WARNING "mtdoops: erase of region [0x%llx, 0x%llx] on \"%s\" failed\n",
--		       (unsigned long long)erase.addr,
--		       (unsigned long long)erase.len, mtddev);
-+		pr_warn("mtdoops: erase of region [0x%llx, 0x%llx] on \"%s\" failed\n",
-+			(unsigned long long)erase.addr,
-+			(unsigned long long)erase.len, mtddev);
- 		return ret;
- 	}
- 
-@@ -120,8 +120,8 @@ static void mtdoops_inc_counter(struct mtdoops_context *cxt)
- 		return;
- 	}
- 
--	printk(KERN_DEBUG "mtdoops: ready %d, %d (no erase)\n",
--	       cxt->nextpage, cxt->nextcount);
-+	pr_debug("mtdoops: ready %d, %d (no erase)\n",
-+		 cxt->nextpage, cxt->nextcount);
+@@ -106,29 +106,8 @@ static int mtdoops_erase_block(struct mtdoops_context *cxt, int offset)
+ 	return 0;
  }
  
- /* Scheduled work - when we can't proceed without erasing a block */
-@@ -145,20 +145,20 @@ static void mtdoops_workfunc_erase(struct work_struct *work)
+-static void mtdoops_inc_counter(struct mtdoops_context *cxt)
++static void mtdoops_erase(struct mtdoops_context *cxt)
+ {
+-	cxt->nextpage++;
+-	if (cxt->nextpage >= cxt->oops_pages)
+-		cxt->nextpage = 0;
+-	cxt->nextcount++;
+-	if (cxt->nextcount == 0xffffffff)
+-		cxt->nextcount = 0;
+-
+-	if (page_is_used(cxt, cxt->nextpage)) {
+-		schedule_work(&cxt->work_erase);
+-		return;
+-	}
+-
+-	pr_debug("mtdoops: ready %d, %d (no erase)\n",
+-		 cxt->nextpage, cxt->nextcount);
+-}
+-
+-/* Scheduled work - when we can't proceed without erasing a block */
+-static void mtdoops_workfunc_erase(struct work_struct *work)
+-{
+-	struct mtdoops_context *cxt =
+-			container_of(work, struct mtdoops_context, work_erase);
+ 	struct mtd_info *mtd = cxt->mtd;
+ 	int i = 0, j, ret, mod;
  
- 	while ((ret = mtd_block_isbad(mtd, cxt->nextpage * record_size)) > 0) {
- badblock:
--		printk(KERN_WARNING "mtdoops: bad block at %08lx\n",
--		       cxt->nextpage * record_size);
-+		pr_warn("mtdoops: bad block at %08lx\n",
-+			cxt->nextpage * record_size);
- 		i++;
- 		cxt->nextpage = cxt->nextpage + (mtd->erasesize / record_size);
- 		if (cxt->nextpage >= cxt->oops_pages)
- 			cxt->nextpage = 0;
- 		if (i == cxt->oops_pages / (mtd->erasesize / record_size)) {
--			printk(KERN_ERR "mtdoops: all blocks bad!\n");
-+			pr_err("mtdoops: all blocks bad!\n");
- 			return;
- 		}
- 	}
- 
- 	if (ret < 0) {
--		printk(KERN_ERR "mtdoops: mtd_block_isbad failed, aborting\n");
-+		pr_err("mtdoops: mtd_block_isbad failed, aborting\n");
- 		return;
- 	}
- 
-@@ -166,15 +166,15 @@ static void mtdoops_workfunc_erase(struct work_struct *work)
+@@ -166,8 +145,8 @@ static void mtdoops_workfunc_erase(struct work_struct *work)
  		ret = mtdoops_erase_block(cxt, cxt->nextpage * record_size);
  
  	if (ret >= 0) {
--		printk(KERN_DEBUG "mtdoops: ready %d, %d\n",
--		       cxt->nextpage, cxt->nextcount);
-+		pr_debug("mtdoops: ready %d, %d\n",
-+			 cxt->nextpage, cxt->nextcount);
+-		pr_debug("mtdoops: ready %d, %d\n",
+-			 cxt->nextpage, cxt->nextcount);
++		pr_notice("mtdoops: ready %d, %d\n",
++			  cxt->nextpage, cxt->nextcount);
  		return;
  	}
  
- 	if (ret == -EIO) {
- 		ret = mtd_block_markbad(mtd, cxt->nextpage * record_size);
- 		if (ret < 0 && ret != -EOPNOTSUPP) {
--			printk(KERN_ERR "mtdoops: block_markbad failed, aborting\n");
-+			pr_err("mtdoops: block_markbad failed, aborting\n");
- 			return;
- 		}
- 	}
-@@ -201,7 +201,7 @@ static void mtdoops_write(struct mtdoops_context *cxt, int panic)
- 		ret = mtd_panic_write(mtd, cxt->nextpage * record_size,
- 				      record_size, &retlen, cxt->oops_buf);
- 		if (ret == -EOPNOTSUPP) {
--			printk(KERN_ERR "mtdoops: Cannot write from panic without panic_write\n");
-+			pr_err("mtdoops: Cannot write from panic without panic_write\n");
- 			goto out;
- 		}
- 	} else
-@@ -209,7 +209,7 @@ static void mtdoops_write(struct mtdoops_context *cxt, int panic)
- 				record_size, &retlen, cxt->oops_buf);
- 
- 	if (retlen != record_size || ret < 0)
--		printk(KERN_ERR "mtdoops: write failure at %ld (%td of %ld written), error %d\n",
-+		pr_err("mtdoops: write failure at %ld (%td of %ld written), error %d\n",
- 		       cxt->nextpage * record_size, retlen, record_size, ret);
- 	mark_page_used(cxt, cxt->nextpage);
- 	memset(cxt->oops_buf, 0xff, record_size);
-@@ -244,7 +244,7 @@ static void find_next_position(struct mtdoops_context *cxt)
- 			       &retlen, (u_char *)&hdr);
- 		if (retlen != sizeof(hdr) ||
- 				(ret < 0 && !mtd_is_bitflip(ret))) {
--			printk(KERN_ERR "mtdoops: read failure at %ld (%zu of %zu read), err %d\n",
-+			pr_err("mtdoops: read failure at %ld (%zu of %zu read), err %d\n",
- 			       page * record_size, retlen, sizeof(hdr), ret);
- 			continue;
- 		}
-@@ -324,17 +324,17 @@ static void mtdoops_notify_add(struct mtd_info *mtd)
- 		return;
- 
- 	if (mtd->size < mtd->erasesize * 2) {
--		printk(KERN_ERR "mtdoops: MTD partition %d not big enough for mtdoops\n",
-+		pr_err("mtdoops: MTD partition %d not big enough for mtdoops\n",
- 		       mtd->index);
- 		return;
- 	}
- 	if (mtd->erasesize < record_size) {
--		printk(KERN_ERR "mtdoops: eraseblock size of MTD partition %d too small\n",
-+		pr_err("mtdoops: eraseblock size of MTD partition %d too small\n",
- 		       mtd->index);
- 		return;
- 	}
- 	if (mtd->size > MTDOOPS_MAX_MTD_SIZE) {
--		printk(KERN_ERR "mtdoops: mtd%d is too large (limit is %d MiB)\n",
-+		pr_err("mtdoops: mtd%d is too large (limit is %d MiB)\n",
- 		       mtd->index, MTDOOPS_MAX_MTD_SIZE / 1024 / 1024);
- 		return;
- 	}
-@@ -345,7 +345,7 @@ static void mtdoops_notify_add(struct mtd_info *mtd)
- 				   DIV_ROUND_UP(mtdoops_pages,
- 						BITS_PER_LONG)));
- 	if (!cxt->oops_page_used) {
--		printk(KERN_ERR "mtdoops: could not allocate page array\n");
-+		pr_err("mtdoops: could not allocate page array\n");
- 		return;
- 	}
- 
-@@ -353,7 +353,7 @@ static void mtdoops_notify_add(struct mtd_info *mtd)
- 	cxt->dump.dump = mtdoops_do_dump;
- 	err = kmsg_dump_register(&cxt->dump);
- 	if (err) {
--		printk(KERN_ERR "mtdoops: registering kmsg dumper failed, error %d\n", err);
-+		pr_err("mtdoops: registering kmsg dumper failed, error %d\n", err);
- 		vfree(cxt->oops_page_used);
- 		cxt->oops_page_used = NULL;
- 		return;
-@@ -362,7 +362,7 @@ static void mtdoops_notify_add(struct mtd_info *mtd)
- 	cxt->mtd = mtd;
- 	cxt->oops_pages = (int)mtd->size / record_size;
- 	find_next_position(cxt);
--	printk(KERN_INFO "mtdoops: Attached to MTD device %d\n", mtd->index);
-+	pr_info("mtdoops: Attached to MTD device %d\n", mtd->index);
+@@ -181,6 +160,41 @@ static void mtdoops_workfunc_erase(struct work_struct *work)
+ 	goto badblock;
  }
  
- static void mtdoops_notify_remove(struct mtd_info *mtd)
-@@ -373,7 +373,7 @@ static void mtdoops_notify_remove(struct mtd_info *mtd)
- 		return;
++/* Scheduled work - when we can't proceed without erasing a block */
++static void mtdoops_workfunc_erase(struct work_struct *work)
++{
++	struct mtdoops_context *cxt =
++			container_of(work, struct mtdoops_context, work_erase);
++
++	mtdoops_erase(cxt);
++}
++
++static void mtdoops_inc_counter(struct mtdoops_context *cxt, int panic)
++{
++	cxt->nextpage++;
++	if (cxt->nextpage >= cxt->oops_pages)
++		cxt->nextpage = 0;
++	cxt->nextcount++;
++	if (cxt->nextcount == 0xffffffff)
++		cxt->nextcount = 0;
++
++	if (page_is_used(cxt, cxt->nextpage)) {
++		pr_notice("mtdoops: not ready %d, %d (erase %s)\n",
++			  cxt->nextpage, cxt->nextcount,
++			  panic ? "immediately" : "scheduled");
++		if (panic) {
++			/* In case of panic, erase immediately */
++			mtdoops_erase(cxt);
++		} else {
++			/* Otherwise, schedule work to erase it "nicely" */
++			schedule_work(&cxt->work_erase);
++		}
++	} else {
++		pr_notice("mtdoops: ready %d, %d (no erase)\n",
++			  cxt->nextpage, cxt->nextcount);
++	}
++}
++
+ static void mtdoops_write(struct mtdoops_context *cxt, int panic)
+ {
+ 	struct mtd_info *mtd = cxt->mtd;
+@@ -214,7 +228,7 @@ static void mtdoops_write(struct mtdoops_context *cxt, int panic)
+ 	mark_page_used(cxt, cxt->nextpage);
+ 	memset(cxt->oops_buf, 0xff, record_size);
  
- 	if (kmsg_dump_unregister(&cxt->dump) < 0)
--		printk(KERN_WARNING "mtdoops: could not unregister kmsg_dumper\n");
-+		pr_warn("mtdoops: could not unregister kmsg_dumper\n");
- 
- 	cxt->mtd = NULL;
- 	flush_work(&cxt->work_erase);
-@@ -393,15 +393,15 @@ static int __init mtdoops_init(void)
- 	char *endp;
- 
- 	if (strlen(mtddev) == 0) {
--		printk(KERN_ERR "mtdoops: mtd device (mtddev=name/number) must be supplied\n");
-+		pr_err("mtdoops: mtd device (mtddev=name/number) must be supplied\n");
- 		return -EINVAL;
+-	mtdoops_inc_counter(cxt);
++	mtdoops_inc_counter(cxt, panic);
+ out:
+ 	clear_bit(0, &cxt->oops_buf_busy);
+ }
+@@ -279,7 +293,7 @@ static void find_next_position(struct mtdoops_context *cxt)
+ 		cxt->nextcount = maxcount;
  	}
- 	if ((record_size & 4095) != 0) {
--		printk(KERN_ERR "mtdoops: record_size must be a multiple of 4096\n");
-+		pr_err("mtdoops: record_size must be a multiple of 4096\n");
- 		return -EINVAL;
- 	}
- 	if (record_size < 4096) {
--		printk(KERN_ERR "mtdoops: record_size must be over 4096 bytes\n");
-+		pr_err("mtdoops: record_size must be over 4096 bytes\n");
- 		return -EINVAL;
- 	}
  
+-	mtdoops_inc_counter(cxt);
++	mtdoops_inc_counter(cxt, 0);
+ }
+ 
+ static void mtdoops_do_dump(struct kmsg_dumper *dumper,
 -- 
 2.37.3.998.g577e59143f-goog
 
