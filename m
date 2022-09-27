@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC705EC01B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DE75EC01A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbiI0Ktj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 06:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
+        id S231377AbiI0Kt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 06:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiI0KtZ (ORCPT
+        with ESMTP id S229942AbiI0KtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Sep 2022 06:49:25 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4927E115470
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492ED115A67
         for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 03:49:23 -0700 (PDT)
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1664275761;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=M0Oct6wfnG8hz2H5aHcY9EbvNf7uNtw1xpb054RCO8w=;
-        b=eru3KZ7jmqHf0jwEF0TLfVWiuvTIVIzbTvDd8qaIymjvHShsSm6P+NXe/J8WaqaftzzfAC
-        ShuReTbfsiWizU3lCKlCJVJA5u6UvF9RCi4TBcRPBLWUhUqE4kTdJ+BUl+U9zb1n6YRYsc
-        MFbciMGpG1us7ZBn4OIqPo3RXG3o7TEspu0yu/cGs0XqsGlINUOigWOWeO3By1rQ4vUWE0
-        WrMH+V6kkIpr8JWVM4rUTEUWV6Vc1cMxMP1b1WhbGXzj4nld9mTq4duRMeO46nWxTKTzZ9
-        fcwFchjOMIAYzgMYykABGBc3wP0mIhNNju3YUn7YeLEYmIv2TnDqteiMeucsZQ==
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tjHYpXrjzW1rmVIilucq4/ssa0Amaz+1GwZoY2Y89Iw=;
+        b=zFTpq95r4D5NqlkmuN9pEhscWPE7cPO2fN5uED3CsSQbzHXGGmqMcOhy/J3PXruBdiULco
+        oSktp/Mh8ZspyuF6Sri7gdxareiwoFR64PsBO5/vKh42DOVNCgx2D4y7BpogBlShXGBVcF
+        2NQ/gw4CWGF8ojCSjcKW7wCxTpiy4sM+wXCWtiotwkKWEkm5HEoNmRFItcZSvwpKEPP/ps
+        4vnoaxltzTxIY2g4Ga3WF1aDv6LHzG9BcUFlFdwLaDjGnAsbabyeCtZFTunC6ZGFRYp+/v
+        P32+lNzyuZbql5az2tViepYqZJjWDfT7h5fupUNmmxxesrewrXtANoL9cpYT1w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1664275761;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=M0Oct6wfnG8hz2H5aHcY9EbvNf7uNtw1xpb054RCO8w=;
-        b=TIFq5ccH5hVTspA3oFzA5r405DSsZdUmDg6IxGfkfl8PYrgk/gvWhXr1L2xt0dQNjC9bVy
-        vI9D7N99NI249XCg==
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tjHYpXrjzW1rmVIilucq4/ssa0Amaz+1GwZoY2Y89Iw=;
+        b=pPVlaCGpLDTtzDN3jwnlsTTQGdk+Xt9bp0TLbyOwS/0tiKM7QWz6zPFoBeIzMoFuBQNswb
+        8Rm3QAAXtuZ64rDg==
 To:     linux-kernel@vger.kernel.org
 Cc:     Theodore Ts'o <tytso@mit.edu>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -46,12 +48,14 @@ Cc:     Theodore Ts'o <tytso@mit.edu>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 0/2 v4] Init the hashed pointer from a worker.
-Date:   Tue, 27 Sep 2022 12:49:10 +0200
-Message-Id: <20220927104912.622645-1-bigeasy@linutronix.de>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH v4 1/2] lib/vsprintf: Remove static_branch_likely() from __ptr_to_hashval().
+Date:   Tue, 27 Sep 2022 12:49:11 +0200
+Message-Id: <20220927104912.622645-2-bigeasy@linutronix.de>
+In-Reply-To: <20220927104912.622645-1-bigeasy@linutronix.de>
+References: <20220927104912.622645-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -62,156 +66,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a mini series to initialize the random value, needed for the %p
-format argument, upfront during boot instead on demand. The latter is
-problematic on PREEMPT_RT if the first user happens to be in an atomic
-region.
+Using static_branch_likely() to signal that ptr_key has been filled is a
+bit much given that it is not a fast path.
 
-v3=E2=80=A6v4:
-    - Added a __read_mostly.
-    - Added Jason's Acked-by for 2/2 after talking to him at Plumbers.
-      While we were discussion several ways of tackling this differently
-      and the possible problems/ side effects that this may cause we
-      happen to notice that the current way of doing things is also a
-      problem if the first printk("%p\n") user happens to be in NMI
-      context.
-      Therefore I leave it to the vsprintf/ printk maintainer to decide
-      if this is -stable material or not. I'm not aware of any NMI code
-      path using %p but then it is not officially forbidden.
-      Assuming unknown_nmi_error() contains %p format the string, then
-      the backtrace at the end of the email will be printed.
+Replace static_branch_likely() with bool for condition and a memory
+barrier for ptr_key.
 
-v2=E2=80=A6v3:
-    - schedule a worker every two seconds if the RNG core is not ready.
-    https://lore.kernel.org/all/YueeIgPGUJgsnsAh@linutronix.de
+Suggested-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ lib/vsprintf.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
-v1=E2=80=A6v2:
-   - Remove the static_branch_likely() as suggested by Petr Mladek.
-   - Jason wasn't onboard with fiddling in random core to get the job
-     done. Instead a worker is scheduled from an initcall and
-     get_random_bytes_wait() is used to get the date once it is
-     available.
-   https://lore.kernel.org/all/20220729154716.429964-1-bigeasy@linutronix.d=
-e/
-
-v1:
-   https://lore.kernel.org/all/YuOf6qu453dOkR+S@linutronix.de/
-
-Before the series after adding "%p" to unknown_nmi_error() and
-triggering a NMI:
-| =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
-| WARNING: inconsistent lock state
-| 6.0.0-rc7+ #6 Not tainted
-| --------------------------------
-| inconsistent {INITIAL USE} -> {IN-NMI} usage.
-| swapper/0/0 [HC1[1]:SC0[0]:HE0:SE1] takes:
-| ffffffff82aea4f0 (input_pool.lock){..-.}-{2:2}, at: extract_entropy.const=
-prop.0+0x76/0x240
-| {INITIAL USE} state was registered at:
-| irq event stamp: 37104
-| hardirqs last  enabled at (37103): [<ffffffff81cc8e80>] default_idle_call=
-+0x20/0x90
-| hardirqs last disabled at (37104): [<ffffffff81cbbb2b>] exc_nmi+0x7b/0x120
-| softirqs last  enabled at (37098): [<ffffffff810f3a8c>] __irq_exit_rcu+0x=
-8c/0xb0
-| softirqs last disabled at (37085): [<ffffffff810f3a8c>] __irq_exit_rcu+0x=
-8c/0xb0
-|=20
-| other info that might help us debug this:
-|  Possible unsafe locking scenario:
-|=20
-|        CPU0
-|        ----
-|   lock(input_pool.lock);
-|   <Interrupt>
-|     lock(input_pool.lock);
-|=20
-|  *** DEADLOCK ***
-|=20
-| no locks held by swapper/0/0.
-|=20
-| stack backtrace:
-| CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0.0-rc7+ #6
-| Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian=
--1.16.0-4 04/01/2014
-| Call Trace:
-|  <NMI>
-|  dump_stack_lvl+0x4c/0x63
-|  lock_acquire.cold+0x43/0x48
-|  _raw_spin_lock_irqsave+0x33/0x50
-|  extract_entropy.constprop.0+0x76/0x240
-|  crng_reseed+0x20/0xf0
-|  crng_make_state+0x51/0x2b0
-|  _get_random_bytes.part.0+0x47/0x150
-|  default_pointer+0x3e9/0x420
-|  vsnprintf+0x1a8/0x550
-|  vprintk_store+0x13e/0x4c0
-|  vprintk+0x2e/0x50
-|  _printk+0x53/0x6e
-|  default_do_nmi+0x224/0x290
-|  exc_nmi+0xf1/0x120
-|  end_repeat_nmi+0x16/0x67
-| RIP: 0010:default_idle+0xb/0x10
-=E2=80=A6
-|  </NMI>
-|  <TASK>
-|  default_idle_call+0x51/0x90
-|  do_idle+0x201/0x270
-|  cpu_startup_entry+0x14/0x20
-|  rest_init+0xe5/0x170
-|  arch_call_rest_init+0x5/0xa
-|  start_kernel+0x68c/0x6b5
-|  secondary_startup_64_no_verify+0xe0/0xeb
-|  </TASK>
-| ------------[ cut here ]------------
-| WARNING: CPU: 0 PID: 0 at arch/x86/kernel/fpu/core.c:60 irq_fpu_usable+0x=
-34/0x40
-| Modules linked in:
-| CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0.0-rc7+ #6
-| Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian=
--1.16.0-4 04/01/2014
-| RIP: 0010:irq_fpu_usable+0x34/0x40
-=E2=80=A6
-| Call Trace:
-|  <NMI>
-|  blake2s_compress+0x1b/0xa0
-|  blake2s_final+0x3c/0x60
-|  extract_entropy.constprop.0+0x8d/0x240
-|  crng_reseed+0x20/0xf0
-|  crng_make_state+0x51/0x2b0
-|  _get_random_bytes.part.0+0x47/0x150
-|  default_pointer+0x3e9/0x420
-|  vsnprintf+0x1a8/0x550
-|  vprintk_store+0x13e/0x4c0
-|  vprintk+0x2e/0x50
-|  _printk+0x53/0x6e
-|  default_do_nmi+0x224/0x290
-|  exc_nmi+0xf1/0x120
-|  end_repeat_nmi+0x16/0x67
-| RIP: 0010:default_idle+0xb/0x10
-=E2=80=A6
-|  </NMI>
-|  <TASK>
-|  default_idle_call+0x51/0x90
-|  do_idle+0x201/0x270
-|  cpu_startup_entry+0x14/0x20
-|  rest_init+0xe5/0x170
-|  arch_call_rest_init+0x5/0xa
-|  start_kernel+0x68c/0x6b5
-|  secondary_startup_64_no_verify+0xe0/0xeb
-|  </TASK>
-| irq event stamp: 37104
-| hardirqs last  enabled at (37103): [<ffffffff81cc8e80>] default_idle_call=
-+0x20/0x90
-| hardirqs last disabled at (37104): [<ffffffff81cbbb2b>] exc_nmi+0x7b/0x120
-| softirqs last  enabled at (37098): [<ffffffff810f3a8c>] __irq_exit_rcu+0x=
-8c/0xb0
-| softirqs last disabled at (37085): [<ffffffff810f3a8c>] __irq_exit_rcu+0x=
-8c/0xb0
-| ---[ end trace 0000000000000000 ]---
-| Uhhuh. NMI received for unknown reason 30 on CPU 0 / 00000000f8da9c8a.
-| Dazed and confused, but trying to continue
-
-Sebastian
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 3c1853a9d1c09..bce63cbf23779 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -750,12 +750,7 @@ static int __init debug_boot_weak_hash_enable(char *st=
+r)
+ }
+ early_param("debug_boot_weak_hash", debug_boot_weak_hash_enable);
+=20
+-static DEFINE_STATIC_KEY_FALSE(filled_random_ptr_key);
+-
+-static void enable_ptr_key_workfn(struct work_struct *work)
+-{
+-	static_branch_enable(&filled_random_ptr_key);
+-}
++static bool filled_random_ptr_key __read_mostly;
+=20
+ /* Maps a pointer to a 32 bit unique identifier. */
+ static inline int __ptr_to_hashval(const void *ptr, unsigned long *hashval=
+_out)
+@@ -763,24 +758,26 @@ static inline int __ptr_to_hashval(const void *ptr, u=
+nsigned long *hashval_out)
+ 	static siphash_key_t ptr_key __read_mostly;
+ 	unsigned long hashval;
+=20
+-	if (!static_branch_likely(&filled_random_ptr_key)) {
++	if (!READ_ONCE(filled_random_ptr_key)) {
+ 		static bool filled =3D false;
+ 		static DEFINE_SPINLOCK(filling);
+-		static DECLARE_WORK(enable_ptr_key_work, enable_ptr_key_workfn);
+ 		unsigned long flags;
+=20
+-		if (!system_unbound_wq || !rng_is_initialized() ||
++		if (!rng_is_initialized() ||
+ 		    !spin_trylock_irqsave(&filling, flags))
+ 			return -EAGAIN;
+=20
+ 		if (!filled) {
+ 			get_random_bytes(&ptr_key, sizeof(ptr_key));
+-			queue_work(system_unbound_wq, &enable_ptr_key_work);
++			/* Pairs with smp_rmb() before reading ptr_key. */
++			smp_wmb();
++			WRITE_ONCE(filled_random_ptr_key, true);
+ 			filled =3D true;
+ 		}
+ 		spin_unlock_irqrestore(&filling, flags);
+ 	}
+-
++	/* Pairs with smp_wmb() after writing ptr_key. */
++	smp_rmb();
+=20
+ #ifdef CONFIG_64BIT
+ 	hashval =3D (unsigned long)siphash_1u64((u64)ptr, &ptr_key);
+--=20
+2.37.2
 
