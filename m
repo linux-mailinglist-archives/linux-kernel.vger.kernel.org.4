@@ -2,92 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F69E5EB6BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 03:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5865EB6C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 03:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbiI0BTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 21:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S229436AbiI0BUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 21:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiI0BTg (ORCPT
+        with ESMTP id S229484AbiI0BUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 21:19:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133D6DEF5;
-        Mon, 26 Sep 2022 18:19:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12A8AB80D31;
-        Tue, 27 Sep 2022 01:19:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C2DC433C1;
-        Tue, 27 Sep 2022 01:19:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664241571;
-        bh=XsqzGj/zWuZsitseB/D9my2WzhOclfA82mFT1se7Bik=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vCENPE6xAox7qXTh8VWWEZvvlBRGB76QvIe+cde8DgHNI55slk4LqtHgN/r5wKaoG
-         lfn7i/EtyH4ITQ5AjeI05OUJsUCemvFKjF+QhocRcmHScijPhMsdKCWyYXP1lTmuyE
-         zISZK787nRioUnirFCNJB/amFXd5GB+Sb938z8DaMLamsOFZeJNdxD52vHIA+GRBdB
-         HOZRp8ly6CSGj4D95ubbcRQcQ/4LZ6QB4sSDGTYGOTlfrUGUc/rfSngzSUIw+VZ2Mq
-         cPwaKL2E24298y/aQr/MnlbzHwLHimfG14BUGLVuss4+KWR5Y7NibQplFCmtcyTSQa
-         m29NtP4drsP5g==
-Date:   Mon, 26 Sep 2022 20:19:26 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Evgeniy Polyakov <zbr@ioremap.net>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] w1: Split memcpy() of struct cn_msg flexible array
-Message-ID: <YzJPnsps2R1f+mxE@work>
-References: <20220927003927.1942170-1-keescook@chromium.org>
+        Mon, 26 Sep 2022 21:20:43 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460FBA02F8;
+        Mon, 26 Sep 2022 18:20:41 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mc1tC47SXzWgvc;
+        Tue, 27 Sep 2022 09:16:35 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 09:20:39 +0800
+Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 27 Sep
+ 2022 09:20:39 +0800
+Message-ID: <eb4db7a7-d84e-7228-d564-4a31fe255331@huawei.com>
+Date:   Tue, 27 Sep 2022 09:20:36 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927003927.1942170-1-keescook@chromium.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH -next 3/5] perf: Remove duplicate errbuf
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <peterz@infradead.org>, <mingo@redhat.com>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+        <namhyung@kernel.org>, <irogers@google.com>,
+        <john.garry@huawei.com>, <adrian.hunter@intel.com>,
+        <ak@linux.intel.com>, <florian.fischer@muhq.space>
+References: <20220926031440.28275-1-chenzhongjin@huawei.com>
+ <20220926031440.28275-4-chenzhongjin@huawei.com>
+ <YzIDcPVXLabTeZ11@kernel.org>
+Content-Language: en-US
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <YzIDcPVXLabTeZ11@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 05:39:27PM -0700, Kees Cook wrote:
-> To work around a misbehavior of the compiler's ability to see into
-> composite flexible array structs (as detailed in the coming memcpy()
-> hardening series[1]), split the memcpy() of the header and the payload
-> so no false positive run-time overflow warning will be generated.
-> 
-> [1] https://lore.kernel.org/linux-hardening/20220901065914.1417829-2-keescook@chromium.org/
-> 
-> Cc: Evgeniy Polyakov <zbr@ioremap.net>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+Hi,
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+On 2022/9/27 3:54, Arnaldo Carvalho de Melo wrote:
+> Em Mon, Sep 26, 2022 at 11:14:38AM +0800, Chen Zhongjin escreveu:
+>> char errbuf[BUFSIZ] is defined twice in trace__run.
+>>
+>> However out_error_open is not cross to other out_error path, they can
+>> share one errbuf together.
+>>
+>> Define the errbuf[BUFSIZ] at the beginning of function, and remove the
+>> redefinations of them for code cleaning.
+> Have you looked at the end result in the generated code? Just out of
+> curiosity.
 
-Thanks!
---
-Gustavo
+Good question. Because it is an auto reported warning of clang I didn't 
+try it.
 
-> ---
->  drivers/w1/w1_netlink.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/w1/w1_netlink.c b/drivers/w1/w1_netlink.c
-> index fa490aa4407c..db110cc442b1 100644
-> --- a/drivers/w1/w1_netlink.c
-> +++ b/drivers/w1/w1_netlink.c
-> @@ -611,7 +611,8 @@ static void w1_cn_callback(struct cn_msg *cn, struct netlink_skb_parms *nsp)
->  		}
->  		atomic_set(&block->refcnt, 1);
->  		block->portid = nsp->portid;
-> -		memcpy(&block->request_cn, cn, sizeof(*cn) + cn->len);
-> +		block->request_cn = *cn;
-> +		memcpy(block->request_cn.data, cn->data, cn->len);
->  		node = (struct w1_cb_node *)(block->request_cn.data + cn->len);
->  
->  		/* Sneeky, when not bundling, reply_size is the allocated space
-> -- 
-> 2.34.1
-> 
+Just tried and found no different for 'objdump -d perf' on two version.
+
+
+Best,
+
+Chen
+
+>
+> - Arnaldo
+>   
+>> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+>> ---
+>>   tools/perf/builtin-trace.c | 7 ++-----
+>>   1 file changed, 2 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+>> index 7ecd76428440..5660c0ee3507 100644
+>> --- a/tools/perf/builtin-trace.c
+>> +++ b/tools/perf/builtin-trace.c
+>> @@ -3937,6 +3937,7 @@ static int trace__run(struct trace *trace, int argc, const char **argv)
+>>   	unsigned long before;
+>>   	const bool forks = argc > 0;
+>>   	bool draining = false;
+>> +	char errbuf[BUFSIZ];
+>>   
+>>   	trace->live = true;
+>>   
+>> @@ -4027,8 +4028,6 @@ static int trace__run(struct trace *trace, int argc, const char **argv)
+>>   
+>>   	err = bpf__apply_obj_config();
+>>   	if (err) {
+>> -		char errbuf[BUFSIZ];
+>> -
+>>   		bpf__strerror_apply_obj_config(err, errbuf, sizeof(errbuf));
+>>   		pr_err("ERROR: Apply config to BPF failed: %s\n",
+>>   			 errbuf);
+>> @@ -4185,8 +4184,6 @@ static int trace__run(struct trace *trace, int argc, const char **argv)
+>>   	trace->evlist = NULL;
+>>   	trace->live = false;
+>>   	return err;
+>> -{
+>> -	char errbuf[BUFSIZ];
+>>   
+>>   out_error_sched_stat_runtime:
+>>   	tracing_path__strerror_open_tp(errno, errbuf, sizeof(errbuf), "sched", "sched_stat_runtime");
+>> @@ -4213,7 +4210,7 @@ static int trace__run(struct trace *trace, int argc, const char **argv)
+>>   		evsel->filter, evsel__name(evsel), errno,
+>>   		str_error_r(errno, errbuf, sizeof(errbuf)));
+>>   	goto out_delete_evlist;
+>> -}
+>> +
+>>   out_error_mem:
+>>   	fprintf(trace->output, "Not enough memory to run!\n");
+>>   	goto out_delete_evlist;
+>> -- 
+>> 2.17.1
