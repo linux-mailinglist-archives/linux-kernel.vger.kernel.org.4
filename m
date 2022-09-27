@@ -2,88 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07B05EC375
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6AF5EC379
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbiI0NBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        id S232097AbiI0NCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbiI0NB1 (ORCPT
+        with ESMTP id S231814AbiI0NCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:01:27 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120FAA2209
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JajMUTWFWdf52LEvQ3sdkC4KhamKYR9MOGDGh7+XACA=; b=UBtsrGDqWvvym8LUIXYIIW653+
-        ia4Y+PnhWnbokr6Rn0/I9FQCCO3A8142BQhLdTYyK96xplEyXFQRfHHQi9q64fg9+uvStOY/oqfo1
-        P4eNU+/9IuPx4KEoA1PRjnyC0X3rctkoyBy03qhpNENCT8NzEw/7uW6C+zFLdvghOeGtivtjFwlgQ
-        e87NSRAKcz9/9Bhi9+KhFFzdZGotAK1XQxu6RS7zQ6f+mm8zwI09ZW/8aVdJey+ZBqnmb3obCjgWg
-        6vUYbDVHNY/rS6dZ5bzglqv80ypOHMt38503jiDYjc4DCdhs25/JplTkb8KbptK4NwRZYJg1sG0HO
-        W/wcO+rQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1odACy-00GHzB-C7; Tue, 27 Sep 2022 13:01:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E295B3001D6;
-        Tue, 27 Sep 2022 15:01:07 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BFDDD2BDF120B; Tue, 27 Sep 2022 15:01:07 +0200 (CEST)
-Date:   Tue, 27 Sep 2022 15:01:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 01/23] sched/task_struct: Introduce classes of tasks
-Message-ID: <YzL0E/8sz1viLau7@hirez.programming.kicks-ass.net>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-2-ricardo.neri-calderon@linux.intel.com>
- <YyHbOqoH+V6FUY68@hirez.programming.kicks-ass.net>
- <20220916144112.GA29395@ranerica-svr.sc.intel.com>
+        Tue, 27 Sep 2022 09:02:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D42AB18C;
+        Tue, 27 Sep 2022 06:02:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C79AB81BE1;
+        Tue, 27 Sep 2022 13:02:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291BCC433D6;
+        Tue, 27 Sep 2022 13:02:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664283739;
+        bh=xvoJ+OW9l4BhVywumi/8ss3JCeIzNvyx47l4j80wEpY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hu/ZGjZUx+YKxna8QJPq9YEtENFVjxiyumA+BXZQ34qJyuIThGup+w9noHq4TNd+k
+         7bcOWKNbRFlH9bKbSWtakhRbWWU9IhoE80gikToBJa8/cj4kJhMlNolOihdlycBJ24
+         bWlrleSmKmG8lk3H8/qZ5sR4ZsrvglHzdqesgunxKt7pKRZZywDEvAl4/t+Rv9NWva
+         wO7PAP+VOY3oIvuOUWHOhLRveJL3aqhGCcc1WjeRCNC6PjsxzBipM9mqTOOs20Y8lt
+         7H+FPTbvogYL1mXMLRnd17upd8wui/YMEL50MNnKKURoNzuTXulqxrzV6xZTRvl0N6
+         qBLtBkPNVMRaA==
+From:   broonie@kernel.org
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@kernel.org>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Subject: linux-next: manual merge of the net-next tree with the i2c tree
+Date:   Tue, 27 Sep 2022 14:02:06 +0100
+Message-Id: <20220927130206.368099-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916144112.GA29395@ranerica-svr.sc.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 07:41:13AM -0700, Ricardo Neri wrote:
+Hi all,
 
-> At least on Intel processors, class 0 is a valid class. The scheduler needs to
-> have a notion of unclassified tasks and decide how to handle them, IMO.
-> 
-> Intel processors currently support 8-bit, unsigned classes. I doubt other
-> architectures will ever support more than 256 classes. Short can handle all the
-> possible classification values and also the unclassified case.
-> 
-> On the other hand, class 0 could be the default classification unless hardware
-> classifies differently. 0 would be special and need to be documented clearly.
-> This would work for Intel processors.
+Today's linux-next merge of the net-next tree got conflicts in:
 
-You can always do: class = hw_class + 1; that makes 0 'special' and the
-hardware class can be trivially reconstructed by subtracting 1.
+  drivers/net/dsa/lan9303_i2c.c
+  drivers/net/dsa/microchip/ksz9477_i2c.c
+  drivers/net/dsa/xrs700x/xrs700x_i2c.c
+
+between commit:
+
+  ed5c2f5fd10dd ("i2c: Make remove callback return void")
+
+from the i2c tree and commits:
+
+  db5d451c4640a ("net: dsa: lan9303: remove unnecessary i2c_set_clientdata()")
+  008971adb95d3 ("net: dsa: microchip: ksz9477: remove unnecessary i2c_set_clientdata()")
+  6387bf7c390a1 ("net: dsa: xrs700x: remove unnecessary i2c_set_clientdata()")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc drivers/net/dsa/lan9303_i2c.c
+index b25e91b26d991,79be5fc044bd4..0000000000000
+--- a/drivers/net/dsa/lan9303_i2c.c
++++ b/drivers/net/dsa/lan9303_i2c.c
+@@@ -70,11 -70,11 +70,9 @@@ static void lan9303_i2c_remove(struct i
+  	struct lan9303_i2c *sw_dev = i2c_get_clientdata(client);
+  
+  	if (!sw_dev)
+ -		return 0;
+ +		return;
+  
+  	lan9303_remove(&sw_dev->chip);
+--
+- 	i2c_set_clientdata(client, NULL);
+ -	return 0;
+  }
+  
+  static void lan9303_i2c_shutdown(struct i2c_client *client)
+diff --cc drivers/net/dsa/microchip/ksz9477_i2c.c
+index 4a719ab8aa89c,e111756f64735..0000000000000
+--- a/drivers/net/dsa/microchip/ksz9477_i2c.c
++++ b/drivers/net/dsa/microchip/ksz9477_i2c.c
+@@@ -58,8 -58,8 +58,6 @@@ static void ksz9477_i2c_remove(struct i
+  
+  	if (dev)
+  		ksz_switch_remove(dev);
+--
+- 	i2c_set_clientdata(i2c, NULL);
+ -	return 0;
+  }
+  
+  static void ksz9477_i2c_shutdown(struct i2c_client *i2c)
+diff --cc drivers/net/dsa/xrs700x/xrs700x_i2c.c
+index bbaf5a3fbf000,cd533b9e17eca..0000000000000
+--- a/drivers/net/dsa/xrs700x/xrs700x_i2c.c
++++ b/drivers/net/dsa/xrs700x/xrs700x_i2c.c
+@@@ -110,11 -110,11 +110,9 @@@ static void xrs700x_i2c_remove(struct i
+  	struct xrs700x *priv = i2c_get_clientdata(i2c);
+  
+  	if (!priv)
+ -		return 0;
+ +		return;
+  
+  	xrs700x_switch_remove(priv);
+--
+- 	i2c_set_clientdata(i2c, NULL);
+ -	return 0;
+  }
+  
+  static void xrs700x_i2c_shutdown(struct i2c_client *i2c)
