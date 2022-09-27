@@ -2,56 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1985EC8F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A59485EC8FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbiI0QEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
+        id S233052AbiI0QGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbiI0QEa (ORCPT
+        with ESMTP id S233008AbiI0QFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:04:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75801C8893;
-        Tue, 27 Sep 2022 09:02:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3D4F61A90;
-        Tue, 27 Sep 2022 16:02:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D400C433D6;
-        Tue, 27 Sep 2022 16:02:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664294569;
-        bh=q2PgX0FVMvjEOsQGJ0Z4Rp2fHN8quFSL88LHc/A4pJQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LepGIAypkn5ICKnpSqAhtivRKIpbQawmlkzkmPTkrkDxHuURprVN5KhuGEw+fL7bU
-         GTnsGpQvPcdFa5DOps2nSqKruetSljruJsRo5J84Oz4WYTVdkHp1cdWFG14mk0ZNKB
-         ONOvno4yA5WYYJmMbtqJLZ+NJk2hx1MPuiTuJAd4TicZrmskpXpJvNFv1PMpJQqnP0
-         TqjCc+EzTHREppb+xZf5PY2oVToms4GFYfLiFlFC6msC30PSwVezO1Q7JYjnFLrbN2
-         hVOcrQZ/DdYTI4PBlCa6VG/RtCvzkDRLmh6n38Hdn0y6KBOw+BGiIcy5Zi4stjcRhI
-         0iLkbMKTXnSbw==
-Date:   Tue, 27 Sep 2022 09:02:48 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     Dave Chinner <david@fromorbit.com>, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        dan.j.williams@intel.com
-Subject: Re: [RFC PATCH] xfs: drop experimental warning for fsdax
-Message-ID: <YzMeqNg56v0/t/8x@magnolia>
-References: <1663234002-17-1-git-send-email-ruansy.fnst@fujitsu.com>
- <20220919045003.GJ3600936@dread.disaster.area>
- <20220919211533.GK3600936@dread.disaster.area>
- <f10de555-370b-f236-1107-e3089258ebbc@fujitsu.com>
+        Tue, 27 Sep 2022 12:05:55 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974CA1C4317
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:04:05 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id hy2so21663335ejc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:04:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=liXObbgP3O1j9wnHRMWomBTfFdrqTMOSRmMpI7BXVVY=;
+        b=n2Lk2q1OenQsBHB6/6w7EytQnVWgaCyzH63n8WLXHc9dTCHJyXCOhhf2LGOQ4BGMrC
+         Fh8x4BoeM8b2tTPzogSAqD5NNiWEWowB8EInMzJnxyyfQVOFNsLTDc2Ov2/aNGCamFFP
+         p5QciKn4hMoDlwkMbNEsmkIo4GYpzZn3Tz34o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=liXObbgP3O1j9wnHRMWomBTfFdrqTMOSRmMpI7BXVVY=;
+        b=6A5tP1LErdpggaqxD3mgW8QHgaJw3S5ybyc9ei9jkU/sq+ipLLO05Xuesxk3WlMz2g
+         LsY8Pv3D43zc9REFalATvsYf+JlNOjdyx9lLcGg84xh/+iwk2IvCdFQ7WWeDfEJGsuQj
+         uClEnNEqrEUhXRSJN1oS9i7YtgFKwz9JNeFLEWBCWPGHcO1uMxfPTFr5gKdggyrm9obX
+         5DmcWQNDNXlRVAi/Sk92wuAhBotk5bQ4jY39CjCwlJpKqd64VnjGn95W/jBL8q9PYDuY
+         s2HzBNrJf4HtUzvO6onLMBHSqeAij9BLAv4sQFNcBuP9cHX/xesEwX5/GAzgYJBevocG
+         wS2g==
+X-Gm-Message-State: ACrzQf3l94SsFkaqtmrK53H6DrN0focBKYA1WEnIflYk9U+izvPFP1Mo
+        orPjL1ZGZ+Jwgtz3tXj38Fhj2DiYPByuxQ==
+X-Google-Smtp-Source: AMsMyM7M1p77WE00wBBhePA/vIg/Z42Zxdid+eUwoOByLpU8Atg7pCR6cSbYpotuAtJVF4elomQlNg==
+X-Received: by 2002:a17:907:9602:b0:780:8c9f:f99a with SMTP id gb2-20020a170907960200b007808c9ff99amr23816143ejc.465.1664294643350;
+        Tue, 27 Sep 2022 09:04:03 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id l17-20020a1709062a9100b00780b1979adesm983734eje.218.2022.09.27.09.03.58
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 09:03:59 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id x18so15704441wrm.7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:03:58 -0700 (PDT)
+X-Received: by 2002:a5d:69ce:0:b0:22b:19d:2856 with SMTP id
+ s14-20020a5d69ce000000b0022b019d2856mr18516147wrw.591.1664294638093; Tue, 27
+ Sep 2022 09:03:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f10de555-370b-f236-1107-e3089258ebbc@fujitsu.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220504161439.6.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
+ <deafaf6f-8e79-b193-68bf-3ab01bddd5c2@linux.ibm.com> <CAHSSk06+CNQLKS8p_jh8JH7acn6=Ck8W3W2DM75rV3paZQ+MbA@mail.gmail.com>
+ <Yw7L+X2cHf9qprxl@kernel.org> <CAE=gft68it0VtFfddCiSQYfz2+Fmoc+6ZK-ounDrjuRJ8nsOLw@mail.gmail.com>
+ <96360ec16b21d8b37461a5de083ff794f3604300.camel@linux.ibm.com>
+ <Yxl8tbJERqrmsgpU@kernel.org> <96cfd1f3f084f6d145bd22e0989dc046fe15b66a.camel@linux.ibm.com>
+ <YylDYU+KTX/KJpqU@kernel.org> <2bc656bf67af52e0b9a68e91c5b574e0ab4ffa8e.camel@linux.ibm.com>
+ <Yy21B4EGumiI9XsU@kernel.org>
+In-Reply-To: <Yy21B4EGumiI9XsU@kernel.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Tue, 27 Sep 2022 09:03:21 -0700
+X-Gmail-Original-Message-ID: <CAE=gft7CnUVPqKpCHKPSpa3z-NR9pimhUJbz+qTkVV0E6WeoPw@mail.gmail.com>
+Message-ID: <CAE=gft7CnUVPqKpCHKPSpa3z-NR9pimhUJbz+qTkVV0E6WeoPw@mail.gmail.com>
+Subject: Re: TPM: hibernate with IMA PCR 10
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Ken Goldman <kgold@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniil Lunev <dlunev@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,191 +88,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 02:53:14PM +0800, Shiyang Ruan wrote:
-> 
-> 
-> 在 2022/9/20 5:15, Dave Chinner 写道:
-> > On Mon, Sep 19, 2022 at 02:50:03PM +1000, Dave Chinner wrote:
-> > > On Thu, Sep 15, 2022 at 09:26:42AM +0000, Shiyang Ruan wrote:
-> > > > Since reflink&fsdax can work together now, the last obstacle has been
-> > > > resolved.  It's time to remove restrictions and drop this warning.
-> > > > 
-> > > > Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> > > 
-> > > I haven't looked at reflink+DAX for some time, and I haven't tested
-> > > it for even longer. So I'm currently running a v6.0-rc6 kernel with
-> > > "-o dax=always" fstests run with reflink enabled and it's not
-> > > looking very promising.
-> > > 
-> > > All of the fsx tests are failing with data corruption, several
-> > > reflink/clone tests are failing with -EINVAL (e.g. g/16[45]) and
-> > > *lots* of tests are leaving stack traces from WARN() conditions in
-> > > DAx operations such as dax_insert_entry(), dax_disassociate_entry(),
-> > > dax_writeback_mapping_range(), iomap_iter() (called from
-> > > dax_dedupe_file_range_compare()), and so on.
-> > > 
-> > > At thsi point - the tests are still running - I'd guess that there's
-> > > going to be at least 50 test failures by the time it completes -
-> > > in comparison using "-o dax=never" results in just a single test
-> > > failure and a lot more tests actually being run.
-> > 
-> > The end results with dax+reflink were:
-> > 
-> > SECTION       -- xfs_dax
-> > =========================
-> > 
-> > Failures: generic/051 generic/068 generic/074 generic/075
-> > generic/083 generic/091 generic/112 generic/127 generic/164
-> > generic/165 generic/175 generic/231 generic/232 generic/247
-> > generic/269 generic/270 generic/327 generic/340 generic/388
-> > generic/390 generic/413 generic/447 generic/461 generic/471
-> > generic/476 generic/517 generic/519 generic/560 generic/561
-> > generic/605 generic/617 generic/619 generic/630 generic/649
-> > generic/650 generic/656 generic/670 generic/672 xfs/011 xfs/013
-> > xfs/017 xfs/068 xfs/073 xfs/104 xfs/127 xfs/137 xfs/141 xfs/158
-> > xfs/168 xfs/179 xfs/243 xfs/297 xfs/305 xfs/328 xfs/440 xfs/442
-> > xfs/517 xfs/535 xfs/538 xfs/551 xfs/552
-> > Failed 61 of 1071 tests
-> > 
-> > Ok, so I did a new no-reflink run as a baseline, because it is a
-> > while since I've tested DAX at all:
-> > 
-> > SECTION       -- xfs_dax_noreflink
-> > =========================
-> > Failures: generic/051 generic/068 generic/074 generic/075
-> > generic/083 generic/112 generic/231 generic/232 generic/269
-> > generic/270 generic/340 generic/388 generic/461 generic/471
-> > generic/476 generic/519 generic/560 generic/561 generic/617
-> > generic/650 generic/656 xfs/011 xfs/013 xfs/017 xfs/073 xfs/297
-> > xfs/305 xfs/517 xfs/538
-> > Failed 29 of 1071 tests
-> > 
-> > Yeah, there's still lots of warnings from dax_insert_entry() and
-> > friends like:
-> > 
-> > [43262.025815] WARNING: CPU: 9 PID: 1309428 at fs/dax.c:380 dax_insert_entry+0x2ab/0x320
-> > [43262.028355] Modules linked in:
-> > [43262.029386] CPU: 9 PID: 1309428 Comm: fsstress Tainted: G W          6.0.0-rc6-dgc+ #1543
-> > [43262.032168] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-> > [43262.034840] RIP: 0010:dax_insert_entry+0x2ab/0x320
-> > [43262.036358] Code: 08 48 83 c4 30 5b 5d 41 5c 41 5d 41 5e 41 5f c3 48 8b 58 20 48 8d 53 01 e9 65 ff ff ff 48 8b 58 20 48 8d 53 01 e9 50 ff ff ff <0f> 0b e9 70 ff ff ff 31 f6 4c 89 e7 e8 84 b1 5a 00 eb a4 48 81 e6
-> > [43262.042255] RSP: 0018:ffffc9000a0cbb78 EFLAGS: 00010002
-> > [43262.043946] RAX: ffffea0018cd1fc0 RBX: 0000000000000001 RCX: 0000000000000001
-> > [43262.046233] RDX: ffffea0000000000 RSI: 0000000000000221 RDI: ffffea0018cd2000
-> > [43262.048518] RBP: 0000000000000011 R08: 0000000000000000 R09: 0000000000000000
-> > [43262.050762] R10: ffff888241a6d318 R11: 0000000000000001 R12: ffffc9000a0cbc58
-> > [43262.053020] R13: ffff888241a6d318 R14: ffffc9000a0cbe20 R15: 0000000000000000
-> > [43262.055309] FS:  00007f8ce25e2b80(0000) GS:ffff8885fec80000(0000) knlGS:0000000000000000
-> > [43262.057859] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [43262.059713] CR2: 00007f8ce25e1000 CR3: 0000000152141001 CR4: 0000000000060ee0
-> > [43262.061993] Call Trace:
-> > [43262.062836]  <TASK>
-> > [43262.063557]  dax_fault_iter+0x243/0x600
-> > [43262.064802]  dax_iomap_pte_fault+0x199/0x360
-> > [43262.066197]  __xfs_filemap_fault+0x1e3/0x2c0
-> > [43262.067602]  __do_fault+0x31/0x1d0
-> > [43262.068719]  __handle_mm_fault+0xd6d/0x1650
-> > [43262.070083]  ? do_mmap+0x348/0x540
-> > [43262.071200]  handle_mm_fault+0x7a/0x1d0
-> > [43262.072449]  ? __kvm_handle_async_pf+0x12/0xb0
-> > [43262.073908]  exc_page_fault+0x1d9/0x810
-> > [43262.075123]  asm_exc_page_fault+0x22/0x30
-> > [43262.076413] RIP: 0033:0x7f8ce268bc23
-> > 
-> > So it looks to me like DAX is well and truly broken in 6.0-rc6. And,
-> > yes, I'm running the fixes in mm-hotifxes-stable branch that allow
-> > xfs/550 to pass.
-> 
-> I have tested these two mode for many times:
-> 
-> xfs_dax mode did failed so many cases.  (If you tested with this "drop"
-> patch, some warning around "dax_dedupe_file_range_compare()" won't occur any
-> more.)  I think warning around "dax_disassociate_entry()" is a problem with
-> concurrency.  Still looking into it.
-> 
-> But xfs_dax_noreflink didn't have so many failure, just 3 in my environment:
-> Failures: generic/471 generic/519 xfs/148.  I am thinking that did you
-> forget to reformat the TEST_DEV to be non-reflink before run the test?  If
-> so it will make sense.
+On Fri, Sep 23, 2022 at 6:30 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Wed, Sep 21, 2022 at 04:15:20PM -0400, Mimi Zohar wrote:
+> > On Tue, 2022-09-20 at 07:36 +0300, Jarkko Sakkinen wrote:
+> > > On Sat, Sep 10, 2022 at 10:40:05PM -0400, Mimi Zohar wrote:
+> > > > On Thu, 2022-09-08 at 08:25 +0300, Jarkko Sakkinen wrote:
+> > > > > On Wed, Sep 07, 2022 at 07:57:27PM -0400, Mimi Zohar wrote:
+> > > > > > On Wed, 2022-09-07 at 13:47 -0700, Evan Green wrote:
+> > > > > > > On Tue, Aug 30, 2022 at 7:48 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > > > > > >
+> > > > > > > > On Mon, Aug 29, 2022 at 02:51:50PM -0700, Matthew Garrett wrote:
+> > > > > > > > > On Mon, Aug 29, 2022 at 2:45 PM Ken Goldman <kgold@linux.ibm.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > On 5/4/2022 7:20 PM, Evan Green wrote:
+> > > > > > > > > > > Enabling the kernel to be able to do encryption and integrity checks on
+> > > > > > > > > > > the hibernate image prevents a malicious userspace from escalating to
+> > > > > > > > > > > kernel execution via hibernation resume.  [snip]
+> > > > > > > > > >
+> > > > > > > > > > I have a related question.
+> > > > > > > > > >
+> > > > > > > > > > When a TPM powers up from hibernation, PCR 10 is reset.  When a
+> > > > > > > > > > hibernate image is restored:
+> > > > > > > > > >
+> > > > > > > > > > 1. Is there a design for how PCR 10 is restored?
+> > > > > > > > >
+> > > > > > > > > I don't see anything that does that at present.
+> > > > > > > > >
+> > > > > > > > > > 2. How are /sys/kernel/security/ima/[pseudofiles] saved and
+> > > > > > > > > > restored?
+> > > > > > > > >
+> > > > > > > > > They're part of the running kernel state, so should re-appear without
+> > > > > > > > > any special casing. However, in the absence of anything repopulating
+> > > > > > > > > PCR 10, they'll no longer match the in-TPM value.
+> > > > > > > >
+> > > > > > > > This feature could still be supported, if IMA is disabled
+> > > > > > > > in the kernel configuration, which I see a non-issue as
+> > > > > > > > long as config flag checks are there.
+> > > > > > >
+> > > > > > > Right, from what I understand about IMA, the TPM's PCR getting out of
+> > > > > > > sync with the in-kernel measurement list across a hibernate (because
+> > > > > > > TPM is reset) or kexec() (because in-memory list gets reset) is
+> > > > > > > already a problem. This series doesn't really address that, in that it
+> > > > > > > doesn't really make that situation better or worse.
+> > > > > >
+> > > > > > For kexec, the PCRs are not reset, so the IMA measurment list needs to
+> > > > > > be carried across kexec and restored.  This is now being done on most
+> > > > > > architectures.  Afterwards, the IMA measurement list does match the
+> > > > > > PCRs.
+> > > > > >
+> > > > > > Hibernation introduces a different situation, where the the PCRs are
+> > > > > > reset, but the measurement list is restored, resulting in their not
+> > > > > > matching.
+> > > > >
+> > > > > As I said earlier the feature still can be supported if
+> > > > > kernel does not use IMA but obviously needs to be flagged.
+> > > >
+> > > > Jumping to the conclusion that "hibernate" is acceptable for non-IMA
+> > > > enabled kernels misses the security implications of mixing (kexec) non-
+> > > > IMA and IMA enabled kernels.
+> > > > I would prefer some sort of hibernate marker, the equivalent of a
+> > > > "boot_aggregate" record.
+> > >
+> > > Not sure if this matters. If you run a kernel, which is not aware
+> > > of IMA, it's your choice. I don't undestand why here is so important
+> > > to protect user from doing illogical decisions.
+> > >
+> > > If you want non-IMA kernels to support IMA, CONFIG_IMA should not
+> > > probably even exist because you are essentially saying that any
+> > > kernel play well with IMA.
+> >
+> > That will never happen, nor am I suggesting it should.
+> >
+> > Enabling hibernate or IMA shouldn't be an either-or decision, if at all
+> > possible.  The main concern is that attestation servers be able to
+> > detect hibernation and possibly the loss of measurement
+> > history.  Luckily, although the PCRs are reset, the TPM
+> > pcrUpdateCounter is not.
+> >
+> > I would appreciate including a "hibernate" marker, similar to the
+> > "boot_aggregate".
+>
+> Yeah, I guess that would not do harm.
 
-FWIW I saw dmesg failures in xfs/517 and xfs/013 starting with 6.0-rc5,
-and I haven't even turned on reflink yet:
+I think I understand it. It's pretty much exactly a boot_aggregate
+marker that we want, correct?
 
-run fstests xfs/517 at 2022-09-26 19:53:34
-XFS (pmem1): EXPERIMENTAL Large extent counts feature in use. Use at your own risk!
-XFS (pmem1): Mounting V5 Filesystem
-XFS (pmem1): Ending clean mount
-XFS (pmem1): Quotacheck needed: Please wait.
-XFS (pmem1): Quotacheck: Done.
-XFS (pmem1): Unmounting Filesystem
-XFS (pmem0): EXPERIMENTAL online scrub feature in use. Use at your own risk!
-XFS (pmem1): EXPERIMENTAL Large extent counts feature in use. Use at your own risk!
-XFS (pmem1): Mounting V5 Filesystem
-XFS (pmem1): Ending clean mount
-XFS (pmem1): Quotacheck needed: Please wait.
-XFS (pmem1): Quotacheck: Done.
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 415317 at fs/dax.c:380 dax_insert_entry+0x22d/0x320
-Modules linked in: xfs nft_chain_nat xt_REDIRECT nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip6t_REJECT nf_reject_ipv6 ipt_REJECT nf_reject_ipv4 xt_tcpudp ip_set_hash_ip ip_set_hash_net xt_set nft_compat ip_set_hash_mac ip_set nf_tables libcrc32c bfq nfnetlink pvpanic_mmio pvpanic nd_pmem dax_pmem nd_btt sch_fq_codel fuse configfs ip_tables x_tables overlay nfsv4 af_packet [last unloaded: scsi_d
+Should it have its own name, or is it sufficient to simply infer that
+a boot_aggregate marker that isn't the first item in the list must
+come from hibernate resume?
 
-CPU: 1 PID: 415317 Comm: fsstress Tainted: G        W          6.0.0-rc7-xfsx #rc7 727341edbd0773a36b78b09dab448fa1896eb3a5
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1 04/01/2014
-RIP: 0010:dax_insert_entry+0x22d/0x320
-Code: e0 48 83 c4 20 5b 5d 41 5c 41 5d 41 5e 41 5f c3 48 8b 58 20 48 8d 53 01 e9 62 ff ff ff 48 8b 58 20 48 8d 53 01 e9 4d ff ff ff <0f> 0b e9 6d ff ff ff 31 f6 48 89 ef e8 72 74 12 00 eb a1 83 e0 02
-RSP: 0000:ffffc90004693b28 EFLAGS: 00010002
-RAX: ffffea0010a20480 RBX: 0000000000000001 RCX: 0000000000000001
-RDX: ffffea0000000000 RSI: 0000000000000033 RDI: ffffea0010a204c0
-RBP: ffffc90004693c08 R08: 0000000000000000 R09: 0000000000000000
-R10: ffff88800c226228 R11: 0000000000000001 R12: 0000000000000011
-R13: ffff88800c226228 R14: ffffc90004693e08 R15: 0000000000000000
-FS:  00007f3aad8db740(0000) GS:ffff88803ed00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f3aad8d1000 CR3: 0000000043104003 CR4: 00000000001706e0
-Call Trace:
- <TASK>
- dax_fault_iter+0x26e/0x670
- dax_iomap_pte_fault+0x1ab/0x3e0
- __xfs_filemap_fault+0x32f/0x5a0 [xfs c617487f99e14abfa5deb24e923415b927df3d4b]
- __do_fault+0x30/0x1e0
- do_fault+0x316/0x6d0
- ? mmap_region+0x2a5/0x620
- __handle_mm_fault+0x649/0x1250
- handle_mm_fault+0xc1/0x220
- do_user_addr_fault+0x1ac/0x610
- ? _copy_to_user+0x63/0x80
- exc_page_fault+0x63/0x130
- asm_exc_page_fault+0x22/0x30
-RIP: 0033:0x7f3aada7f1ca
-Code: c5 fe 7f 07 c5 fe 7f 47 20 c5 fe 7f 47 40 c5 fe 7f 47 60 c5 f8 77 c3 66 0f 1f 84 00 00 00 00 00 40 0f b6 c6 48 89 d1 48 89 fa <f3> aa 48 89 d0 c5 f8 77 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90
-RSP: 002b:00007ffe47afa688 EFLAGS: 00010206
-RAX: 000000000000002e RBX: 0000000000033000 RCX: 000000000000999c
-RDX: 00007f3aad8d1000 RSI: 000000000000002e RDI: 00007f3aad8d1000
-RBP: 0000558851e13240 R08: 0000000000000000 R09: 0000000000033000
-R10: 0000000000000008 R11: 0000000000000246 R12: 028f5c28f5c28f5c
-R13: 8f5c28f5c28f5c29 R14: 000000000000999c R15: 0000000000001c81
- </TASK>
----[ end trace 0000000000000000 ]---
-XFS (pmem0): Unmounting Filesystem
-XFS (pmem1): EXPERIMENTAL online scrub feature in use. Use at your own risk!
-XFS (pmem1): *** REPAIR SUCCESS ino 0x80 type probe agno 0x0 inum 0x0 gen 0x0 flags 0x80000001 error 0
-XFS (pmem1): Unmounting Filesystem
-XFS (pmem1): EXPERIMENTAL Large extent counts feature in use. Use at your own risk!
-XFS (pmem1): Mounting V5 Filesystem
-XFS (pmem1): Ending clean mount
-XFS (pmem1): Unmounting Filesystem
+Should it include PCR10, to essentially say "the resuming system may
+have extended this, but we can't reason about it and simply treat it
+as a starting value"?
+-Evan
 
---D
-
-> 
-> 
-> --
-> Thanks,
-> Ruan.
-> 
-> > 
-> > Who is actually testing this DAX code, and what are they actually
-> > testing on? These are not random failures - I haven't run DAX
-> > testing since ~5.18, and none of these failures were present on the
-> > same DAX test VM running the same configuration back then....
-> > 
-> > -Dave.
+>
+> BR, Jarkko
