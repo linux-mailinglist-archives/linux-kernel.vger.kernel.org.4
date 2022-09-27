@@ -2,159 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC05D5EC4FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BE75EC503
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbiI0NyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
+        id S231808AbiI0Nyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbiI0Nx4 (ORCPT
+        with ESMTP id S230334AbiI0Nyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:53:56 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E9E13C853
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:53:54 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id o2so15782175lfc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:53:54 -0700 (PDT)
+        Tue, 27 Sep 2022 09:54:40 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672DE1057A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:54:34 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id z20so2263197plb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:54:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=fBDINxAKnVMimDBQEi5sLrEjPa2VMBXc9bFx7Koe3Mw=;
-        b=WiQaPcFumyj9eMUr9LVhUFc0gQAjHjLqjXn+PVXbpqsKSNACjTC8jlxDyL5nXeirlm
-         L7RRwhNk/tciNdpDQ5RSgNgspO0wmb4P5Fe2JpFqLMWDZLuwlkyePgwwmH9w5vqqNcjO
-         vR+f9H166qMHTQuPQDQqVakwLx0unppFe8up9QBkDA2bSHmUBzPjLnjsjIsDmNJUg7+A
-         Cdp8J7Bwk6aMpwoi03oeZZ3ny1q7+338kBYeQjChvp5EE7wW3+QZBhIm0y8sZJkjVSnl
-         9w5IIuz3Zx8AqU58VJthKknqgdKkvMe7B7UWiY97n1LOh0ka5+i406PnMLP+Ug5GL4E7
-         38iQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:from:to:cc:subject:date;
+        bh=5qwETXszsJHRG+KNZAfDuGy2+IIkJBoKDnABLfH60tQ=;
+        b=f6CmSv0OlzXmED5tWFMSEinGTJEbhs3apO2o1WVlHEn+fFfXX/l+1/NWVY0KujLper
+         X/2WcJl9nH8Xw5kR9mL+LHRjOMu43tSGWSUwpvW9zKPDPXKjDOCRlWV7xlNA4fU9O3uO
+         EMLs8HS8JsxOPDDfvIp20W1TauC+8dKOsL0XnOUFHRZiSa+Zbjqid1dyRpVlomKM4otZ
+         zh6z3rpfTqgJ1FKaCaI+uRceIOXR7ELINnOEvNzy5OSpCn6dwVULSLU4AeDcDUINb9b0
+         wiTFGntz5cRLbyKXTdNoLvrKQdmT7WT5bwZGjE1l5eZ42VfsffuzvLg2MDN0nikd2ZHZ
+         OhNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=fBDINxAKnVMimDBQEi5sLrEjPa2VMBXc9bFx7Koe3Mw=;
-        b=QDt7GBbgvQ7OWcdk3aReV9tZ0435UsNd2F8b+ni7Fx13aKyV9EY59Via2iOT6cHddI
-         z5TNznH027Vm55LNN+wAzoUQTBq/S8oGjDrotC0+wnNWeTUo2B3zUxwXcXroFmh93iUn
-         aQ0S/75jP2JoeItnF7b/rgAwxUbZbkqEoeUNycUFxWltGnRT9eE+5jND8Y6IbLQSPBMn
-         FsGms1Gqo6jipyjzG0xhGjdjLVVyOUahWZ8sSGR0c/HqBKq7GR3SZEsmYwgN3EiZyXX0
-         q8k9dbxcaNdK6T4HzCUspEYMhyFp3csb7kt682yrmSCRYRlar0T5NV/pggnme9QmC8Uf
-         J4Fg==
-X-Gm-Message-State: ACrzQf33Eghc3LnXSY6geeZmJ2meh1fzr2dyYUlylTcll3XL/KJKNKXt
-        bRMzwyVnGHA0pcElWv3aR/b/Hw==
-X-Google-Smtp-Source: AMsMyM4apfh7IRPxjykl6TJRH1NidZnJy2ZGSCr4l2uWusE3YY7A8BEw7miOrmS2bQllaV6PqjUybw==
-X-Received: by 2002:ac2:4c8d:0:b0:4a0:559c:d40e with SMTP id d13-20020ac24c8d000000b004a0559cd40emr8466481lfl.508.1664286833103;
-        Tue, 27 Sep 2022 06:53:53 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q7-20020a0565123a8700b004a05c425cb7sm168575lfu.184.2022.09.27.06.53.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 06:53:52 -0700 (PDT)
-Message-ID: <5465c938-57bb-b081-d246-9a9317fff96e@linaro.org>
-Date:   Tue, 27 Sep 2022 15:53:51 +0200
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=5qwETXszsJHRG+KNZAfDuGy2+IIkJBoKDnABLfH60tQ=;
+        b=Y9GvkICwygXNTB3X0Hf+l3xn/IzDqYdJRJJEeqUS2KStOWeLRs7jbZmAHk3jVOuLfi
+         DL9xcXoFAWvkEuLpvStyvRdeSZobk76LAHwKUmS5wHV2NVFVzqftVOERjuQTfURyaHCp
+         F0IgSasxSzfOk6/2hpIiKG/Ji/Ghtx1Sx536+1WU1+8wcCCDv8y7boET045MQ7hXLudd
+         ra83952bCcy1L0ZGnetF8/wG/CTL2WSltKB0NwZOLKkewi+yp+GjUf58niUMJJ0FuBEc
+         b9+SXMY9XNQu+XU+x/NoFHdsb/I1kxUxg2obFPFrwu+/XX+auQvF+9kpQq7PzhzOg7gt
+         evAg==
+X-Gm-Message-State: ACrzQf3BXaM5TCEKjQWiVSDBVEo6sbzO5x9QBoA6aFW9U9o+F73EuTNo
+        7JzghcO4VBTRJHzYZWkbRjUPIv9Oc/UBSJwh1mK9Ey44XFA=
+X-Google-Smtp-Source: AMsMyM4+x7J4OZ7W3bVeH4hHPFvWPmyfihQv01BR+E1ukDBABSgNNIPaY8dNmMrk3y51NserN90WcMrsVcQRB6ZIwYk=
+X-Received: by 2002:a17:90b:3807:b0:205:d746:93a0 with SMTP id
+ mq7-20020a17090b380700b00205d74693a0mr3837620pjb.188.1664286873871; Tue, 27
+ Sep 2022 06:54:33 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 27 Sep 2022 06:54:33 -0700
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: meli 0.7.2
+References: <20220919-v1-0-4844816c9808@baylibre.com> <20220919-v1-4-4844816c9808@baylibre.com>
+ <260bb17f-efc8-1287-3e03-f9b8e79a6e31@linaro.org>
+In-Reply-To: <260bb17f-efc8-1287-3e03-f9b8e79a6e31@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v5] dt-bindings: qcom: document preferred compatible
- naming
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+Date:   Tue, 27 Sep 2022 06:54:33 -0700
+Message-ID: <CABnWg9vifOaAgwr7tkELUqbQA_1f-FfMFZ9o7sjZCaneo_FUmw@mail.gmail.com>
+Subject: Re: [PATCH v1 04/17] dt-bindings: display: mediatek: add MT8195 hdmi bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
         Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>
-References: <20220720073326.19591-1-krzysztof.kozlowski@linaro.org>
- <96ef23e9-4bf8-a92a-ea14-990621dfd3ef@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <96ef23e9-4bf8-a92a-ea14-990621dfd3ef@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/09/2022 13:57, Bhupesh Sharma wrote:
-> 
-> On 7/20/22 1:03 PM, Krzysztof Kozlowski wrote:
->> Compatibles can come in two formats.  Either "vendor,ip-soc" or
->> "vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
->> DT schema file documenting preferred policy and enforcing it for all new
->> compatibles, except few existing patterns.
+On Thu, 22 Sep 2022 09:18, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>On 19/09/2022 18:56, Guillaume Ranquet wrote:
+>> Add mt8195 SoC bindings for hdmi and hdmi-ddc
 >>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Make port1 optional for mt8195 as it only supports HDMI tx for now.
+>> Requires a ddc-i2c-bus phandle.
+>> Requires a power-domains phandle.
 >>
->> ---
+>> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
 >>
->> Depends on:
->> https://lore.kernel.org/all/20220627143340.477120-1-krzysztof.kozlowski@linaro.org/
->> https://lore.kernel.org/all/20220628092253.21905-1-krzysztof.kozlowski@linaro.org/
+>> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+>> index bdaf0b51e68c..abb231a0694b 100644
+>> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+>> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+>> @@ -21,6 +21,10 @@ properties:
+>>        - mediatek,mt7623-hdmi
+>>        - mediatek,mt8167-hdmi
+>>        - mediatek,mt8173-hdmi
+>> +      - mediatek,mt8195-hdmi
+>> +
+>> +  clocks: true
+>> +  clock-names: true
+>
+>????
+>Why is this moved?
+>
 >>
->> Changes since v4:
->> 1. Add qcm.
->> 2. Add more qcom,ipq806x exceptions.
->> 3. Add Rob's tag.
+>>    reg:
+>>      maxItems: 1
+>> @@ -28,20 +32,6 @@ properties:
+>>    interrupts:
+>>      maxItems: 1
 >>
->> Changes since v3:
->> 1. Add qcom,kpss-wdt-xxx to pattern for exceptions.
->> 2. Add ipq806x entries to list of exceptions.
+>> -  clocks:
+>> -    items:
+>> -      - description: Pixel Clock
+>> -      - description: HDMI PLL
+>> -      - description: Bit Clock
+>> -      - description: S/PDIF Clock
+>> -
+>> -  clock-names:
+>> -    items:
+>> -      - const: pixel
+>> -      - const: pll
+>> -      - const: bclk
+>> -      - const: spdif
+>
+>Clock definition with constraints should stay here. You just customize
+>it per variant.
+>
+Clocks are different between the two hardwares, so I've tried moving everything
+inside the if/else block.
+
+Is there a better way to express this?
+
+>> -
+>>    phys:
+>>      maxItems: 1
 >>
->> Changes since v2:
->> 1. Narrow the expected pattern to be followed by dash '-' after model
->>     number (msm8996-) or by two letters and a dash (sc8280xp-).
->> 2. Add qcom,apss-wdt-xxx to list of exceptions.
->> 3. Use comment instead of description in the oneOf list.
+>> @@ -58,6 +48,16 @@ properties:
+>>      description: |
+>>        phandle link and register offset to the system configuration registers.
 >>
->> Changes since v1:
->> 1. Add schema instead of readme (Rob).
+>> +  ddc-i2c-bus:
+>> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+>
+>Drop quotes
+>
+>> +    description: Phandle to the ddc-i2c device
+>
+>Isn't this property of panel?
+>
+It's a property used in panels and connectors.
+But since this IP doesn't use a connector per say, I've added the property here.
+
+Which doesn't sound reasonnable when I'm explaining it like this...
+I'll see what I can do to fit a connector and have things look a bit
+more standard.
+
+>> +
+>> +  power-domains:
+>> +    description:
+>> +      A phandle and PM domain specifier as defined by bindings
+>> +      of the power controller specified by phandle. See
+>> +      Documentation/devicetree/bindings/power/power-domain.yaml for details.
+>
+>No need for this text. This is standard property. You miss maxItems.
+>
+>
+>> +
+>>    ports:
+>>      $ref: /schemas/graph.yaml#/properties/ports
 >>
->> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Cc: Vinod Koul <vkoul@kernel.org>
->> Cc: Alex Elder <elder@linaro.org>
->> Cc: Robert Foss <robert.foss@linaro.org>
->> Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->> ---
->>   .../devicetree/bindings/arm/qcom-soc.yaml     | 65 +++++++++++++++++++
->>   1 file changed, 65 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/arm/qcom-soc.yaml
+>> @@ -76,7 +76,6 @@ properties:
 >>
->> diff --git a/Documentation/devicetree/bindings/arm/qcom-soc.yaml b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+>>      required:
+>>        - port@0
+>> -      - port@1
+>>
+>>  required:
+>>    - compatible
+>> @@ -86,9 +85,55 @@ required:
+>>    - clock-names
+>>    - phys
+>>    - phy-names
+>> -  - mediatek,syscon-hdmi
+>>    - ports
+>>
+>> +allOf:
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: mediatek,mt8195-hdmi
+>> +    then:
+>> +      properties:
+>> +        clocks:
+>> +          items:
+>> +            - description: APB
+>> +            - description: HDCP
+>> +            - description: HDCP 24M
+>> +            - description: Split HDMI
+>> +        clock-names:
+>> +          items:
+>> +            - const: hdmi_apb_sel
+>> +            - const: hdcp_sel
+>> +            - const: hdcp24_sel
+>> +            - const: split_hdmi
+>
+>Clocks are entirely different. I am not sure there is benefit in keeping
+>these devices in one bindings.
+>
+
+I agree with that, but it was requested by CK that the driver and bindings be
+as common as possible.
+
+>> +
+>> +      required:
+>> +        - power-domains
+>> +        - ddc-i2c-bus
+>
+>Blank line,
+>
+>> +    else:
+>> +      properties:
+>> +        clocks:
+>> +          items:
+>> +            - description: Pixel Clock
+>> +            - description: HDMI PLL
+>> +            - description: Bit Clock
+>> +            - description: S/PDIF Clock
+>> +
+>> +        clock-names:
+>> +          items:
+>> +            - const: pixel
+>> +            - const: pll
+>> +            - const: bclk
+>> +            - const: spdif
+>> +
+>> +        ports:
+>> +          required:
+>> +            - port@1
+>> +
+>> +      required:
+>> +        - mediatek,syscon-hdmi
+>> +
+>>  additionalProperties: false
+>>
+>>  examples:
+>> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml
 >> new file mode 100644
->> index 000000000000..9918b20e4478
+>> index 000000000000..3c80bcebe6d3
 >> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
->> @@ -0,0 +1,65 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml
+>> @@ -0,0 +1,45 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 >> +%YAML 1.2
 >> +---
->> +$id: http://devicetree.org/schemas/arm/qcom-soc.yaml#
+>> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml#
 >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >> +
->> +title: Qualcomm SoC compatibles naming convention
+>> +title: Mediatek HDMI DDC Device Tree Bindings for mt8195
+>
+>Drop Device Tree Bindings
+>
 >> +
 >> +maintainers:
->> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> Please use Bjorn's new email id.
+>> +  - CK Hu <ck.hu@mediatek.com>
+>> +  - Jitao shi <jitao.shi@mediatek.com>
+>> +
+>> +description: |
+>> +  The HDMI DDC i2c controller is used to interface with the HDMI DDC pins.
+>
+>Why is this different than existing ddc bindings?
+>
+This ddc is actually part of the MT8195 hdmi IP.
 
-Indeed, thanks!
+So it is a bit simpler than the mediatek,hdmi-ddc.yaml
+As it has only one clock, no reg, no interrupts.
 
-
-Best regards,
-Krzysztof
-
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - mediatek,mt8195-hdmi-ddc
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: ddc-i2c
+>> +
+>> +required:
+>> +  - compatible
+>> +  - clocks
+>> +  - clock-names
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    hdmiddc0: ddc_i2c {
+>
+>No underscores in node names. Generic node names.
+>
+>
+>Best regards,
+>Krzysztof
+>
