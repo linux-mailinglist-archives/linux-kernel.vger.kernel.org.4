@@ -2,104 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236235EBD5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FF95EBD5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiI0IdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 04:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        id S231395AbiI0Idi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 04:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiI0IdP (ORCPT
+        with ESMTP id S231307AbiI0Idc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 04:33:15 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B50B9F775;
-        Tue, 27 Sep 2022 01:33:13 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id ED7CD1884A23;
-        Tue, 27 Sep 2022 08:33:10 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id CE0B82500015;
-        Tue, 27 Sep 2022 08:33:10 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id B2A64A0A1E66; Tue, 27 Sep 2022 08:33:10 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Tue, 27 Sep 2022 04:33:32 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898ECA74F7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:33:30 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id y8so12191335edc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:33:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=VTXV7aT5R11yPSl13EAHJwJP2TKui3gFrJyt6UxcJIg=;
+        b=Gi6/JYHJ0hnLxKiFkRwbLYS6VNogPTBrgAmNcIn0aTFtZ5ArPWCpLtzCB9HLVIc9AL
+         5GlxlOcV2pUoAfqbZXRcPSjZgiUYh0inwUlkn+E1FyVhIHd0lGphlg3QJ38FSbALQVzQ
+         Bxy2wOaD3WpeI9aEXGKgdSJ5WP5+nIi6UUN/Dtvkmsx5L6gexvQeAceWkGdvdA2bDcr2
+         sdXYG5QmjJfERJ3jJA00b1bxmB5l10AN7nrKvFuO6myWftF4B0W5OZjaoKQRl3X3sPE3
+         ECd7t9pnp+0DHMrjseL4nhlLfPFodz2QL5TIhXa39bUmXVuEiQP1WkD64wcvt5DorHkv
+         8rjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=VTXV7aT5R11yPSl13EAHJwJP2TKui3gFrJyt6UxcJIg=;
+        b=FG298+INh87SKpEliZHpqfMjDn7n03LZ+idbvo1Bt8j0L92FuLEYDlBSBHYTY4gAhj
+         AqIE/LNNhezDbIvVSMS7Mta8kCcbc12nd1TNP6rKffZKzB95i00UmTh/m3KcOa0mURqw
+         4y7vtJaRuBUKrWdzy6pslD9e3jqwhU9lRJt+vGXBUEktvtu6etZ4U6HoO47K/Jy8MOVJ
+         YaQrhk7lyt/HTN8Xdj1Pq4Ivwg4VmeHcQw1nc4AFmyrrR7DVw9YF7CTSD8jq+CO3JjQi
+         rLU/vLq8J+Ci9UljdlYpCn0/v+VDOt89RDTbQSexGPiUgnD+scv8PCOcoyG8Sq+PkKkP
+         zcpw==
+X-Gm-Message-State: ACrzQf3vP8E3CQCVGQr+n394u0tqrCo1z+ApvQAw6nGBRLQH4VcaUgK+
+        1tFc2Ox6qI36VLjd6hVa9Rzs2k9F8oLMQeNxq7xKaw==
+X-Google-Smtp-Source: AMsMyM6GGOfUNT9MJr+yLdS+k05XCxUHmRj3Qj3ApsCdkVhD5WehDKt+rRZGhTtu7Z6FtEyaykEgz4Xd1wStXh6G8AQ=
+X-Received: by 2002:a05:6402:1298:b0:457:c38a:2f10 with SMTP id
+ w24-20020a056402129800b00457c38a2f10mr768435edv.264.1664267608964; Tue, 27
+ Sep 2022 01:33:28 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Tue, 27 Sep 2022 10:33:10 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <Yyq6BnUfctLeerqE@shredder>
-References: <YxNo/0+/Sbg9svid@shredder>
- <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
- <Yxmgs7Du62V1zyjK@shredder>
- <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
- <20220908112044.czjh3xkzb4r27ohq@skbuf>
- <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
- <20220911001346.qno33l47i6nvgiwy@skbuf>
- <15ee472a68beca4a151118179da5e663@kapio-technology.com>
- <Yx73FOpN5uhPQhFl@shredder>
- <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
- <Yyq6BnUfctLeerqE@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <7a4549d645f9bbbf41e814f087eb07d1@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220926163551.791017156@linuxfoundation.org>
+In-Reply-To: <20220926163551.791017156@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 27 Sep 2022 14:03:17 +0530
+Message-ID: <CA+G9fYtYKN9jUe615NsTecTeAg-3EZDjWPa7N2c+oAd-Ze0rnA@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/143] 5.15.71-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-21 09:15, Ido Schimmel wrote:
-> 	bridge fdb add `mac_get $h2` dev br0 blackhole
+On Mon, 26 Sept 2022 at 22:07, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.71 release.
+> There are 143 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 28 Sep 2022 16:35:25 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.71-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-To make this work, I think we need to change the concept, so that 
-blackhole FDB entries are added to ports connected to the bridge, thus
-      bridge fdb add MAC dev $swpX master blackhole
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-This makes sense as the driver adds them based on the port where the 
-SMAC is seen, even though the effect of the blackhole FDB entry is 
-switch wide.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Adding them to the bridge (e.g. f.ex. br0) will not work in the SW 
-bridge as the entries then are not found. We could deny this possibility 
-or just document the use?
+## Build
+* kernel: 5.15.71-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 0b09b5df445f9effa9457d604de74e4c3b6606e9
+* git describe: v5.15.70-144-g0b09b5df445f
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.70-144-g0b09b5df445f
 
+## No test Regressions (compared to v5.15.70)
 
-For offloaded I can change the add, so that it does a delete (even if 
-none are present) and a add, thus facilitating the replace.
+## No metric Regressions (compared to v5.15.70)
 
-How does this sound?
+## No mest Fixes (compared to v5.15.70)
+
+## No metric Fixes (compared to v5.15.70)
+
+## Test result summary
+total: 105358, pass: 93051, fail: 638, skip: 11351, xfail: 318
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 339 total, 336 passed, 3 failed
+* arm64: 72 total, 70 passed, 2 failed
+* i386: 60 total, 54 passed, 6 failed
+* mips: 62 total, 59 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 69 total, 66 passed, 3 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 30 total, 27 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 65 total, 63 passed, 2 failed
+
+## Test suites summary
+* fwts
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
