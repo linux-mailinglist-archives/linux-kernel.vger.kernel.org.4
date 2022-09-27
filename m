@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9205EBF52
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 055455EBF78
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbiI0KLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 06:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
+        id S231893AbiI0KLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 06:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231921AbiI0KLF (ORCPT
+        with ESMTP id S231761AbiI0KLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 06:11:05 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0951BA4071
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 03:11:00 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e757329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e757:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 27 Sep 2022 06:11:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192F893534;
+        Tue, 27 Sep 2022 03:11:35 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1D02F1EC058A;
-        Tue, 27 Sep 2022 12:10:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1664273455;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=/v55aZP64ds0qEf5pSfgJzfEvm/TVqPTvdeXcoCxATk=;
-        b=qu2RiuVPERrby2mkgKedt4K0HJeWBVi/JHFjJNAc5f+jUrlxgvuAiF6WYpcagYOuPbVCMF
-        yiIBLQZBX+B6DyPwmygD2M5WJVllVwddXLfF7Dz96FohO12c8NyLokHpoJ/UfW5B2+DrC+
-        +4LvUK6UoVRNkuc1YZU1iTArutJgUa8=
-Date:   Tue, 27 Sep 2022 12:10:50 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
- mtrr_aps_delayed_init
-Message-ID: <YzLMKk4OK9FtjjKQ@zn.tnic>
-References: <20220908084914.21703-1-jgross@suse.com>
- <20220908084914.21703-9-jgross@suse.com>
- <YzIVfj/lvzQrK15Y@zn.tnic>
- <ce8cb1d3-a7d2-7484-26eb-60d3e29fa369@suse.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 88253660205F;
+        Tue, 27 Sep 2022 11:11:32 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664273493;
+        bh=wLKQ8bajA+e/ikXm5x/+8XAGljaSNHIIE+LrYJVbQc0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EeFVMdR4WBe/VIn37ShwE0RyPEHETCwPy3691cH8Sh6TEvpLUP85UwlgT9lJQJus/
+         viowz+lpEtj1NBVRv0Lk17WENx3phYNALtsM4+cigz8925QNTYvmmXJEpa5vATATIG
+         wWJKceuN26tBkagsBUDYp7Vxdk15M3C9tCJSY/TGwTfl7qXsH2rcRvcmOUsKfPe2Ol
+         QPxaHF5njo1RrI5H9xw5Rt3CuzzVFTMXRCX1/uE0c/wu2TqxzE9aY2kDeZqUsNuyy5
+         4QtYg+8YudzHdC3QHaV0GTMbYklup86dr+2aih0NLzJk2bxIlus1NK+L1fQpBmCB/x
+         fHAM4JCqZEGXA==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
+        miles.chen@mediatek.com, rex-bc.chen@mediatek.com,
+        nfraprado@collabora.com, chun-jie.chen@mediatek.com,
+        jose.exposito89@gmail.com, drinkcat@chromium.org,
+        weiyi.lu@mediatek.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Subject: [PATCH v3 00/10] MediaTek SoC safe clock muxing and GPU clocks
+Date:   Tue, 27 Sep 2022 12:11:18 +0200
+Message-Id: <20220927101128.44758-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ce8cb1d3-a7d2-7484-26eb-60d3e29fa369@suse.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -57,36 +60,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 10:57:37AM +0200, Juergen Gross wrote:
-> TBH I don't see the point of having an accessor which is just setting a
-> variable to "true". But if you like it better, I can keep it.
+This series adds a clock notifier for MediaTek clock muxes, required
+in order to achieve stability for GPU DVFS.
 
-Accessors are always better, no matter how silly. :)
+The GPU frequency scaling mechanism requires us to switch the GPU
+mux clock to a safe parent which frequency is always less or equal
+to the "current" GPU frequency before reprogramming its dedicated
+"MFG" PLL.
+This is needed because the PLL needs time to reconfigure for its
+output to stabilize (so, for the PLL to lock again): failing to do
+so will lead to instabilities such as glitches, GPU lockups and/or
+full system lockups.
 
-But, in trying to grok your next patch - you really should split those
-more complex ones because they're a pain to review - I'm starting to
-wonder whether we could even remove mtrr_aps_delayed_init and make the
-delayed init the default.
+While at it, reparenting of some GPU clocks was also performed, as
+the clock tree was slightly incorrect.
 
-Because, AFAICT, set_mtrr_aps_delayed_init() is called by default
-by native_smp_prepare_cpus(). Which is called by hyperv and
-arch/x86/xen/smp_hvm.c.
+This series was tested, along with mtk-regulator-coupler [1], on
+Chromebooks with different SoCs (MT8183, MT8192, MT8195*), resulting
+in fully working GPU DVFS with the Panfrost driver.
 
-The only one that's not calling it is arch/x86/xen/smp_pv.c but that
-thing doesn't support MTRRs in the first place, right?
+[1]: https://patchwork.kernel.org/project/linux-mediatek/patch/20220628120224.81180-1-angelogioacchino.delregno@collabora.com/
 
-Which means, it doesn't need delayed MTRR init anyway.
+* MT8195 does not require mtk-regulator-coupler. This series, along
+  with [1], are required to perform GPU DVFS also on non-Chromebook SoCs.
 
-Which would then mean that this would simplify this ugly logic even more.
+Changes in v3:
+ - Clarified commit description in patch [05/10]
 
-Or am I missing an angle?
+Changes in v2:
+ - Added comment in clk-mt8195-topckgen to keep the mfg parents
+   documented after removal, as suggested by Chen-Yu
 
-It is possible in this nuts code.
+AngeloGioacchino Del Regno (6):
+  clk: mediatek: clk-mt8195-mfg: Reparent mfg_bg3d and propagate rate
+    changes
+  clk: mediatek: clk-mt8195-topckgen: Register mfg_ck_fast_ref as
+    generic mux
+  clk: mediatek: clk-mt8195-topckgen: Add GPU clock mux notifier
+  clk: mediatek: clk-mt8195-topckgen: Drop univplls from mfg mux parents
+  clk: mediatek: clk-mt8192-mfg: Propagate rate changes to parent
+  clk: mediatek: clk-mt8192: Add clock mux notifier for mfg_pll_sel
 
-Thx.
+Chen-Yu Tsai (4):
+  arm64: dts: mt8183: Fix Mali GPU clock
+  clk: mediatek: mt8183: mfgcfg: Propagate rate changes to parent
+  clk: mediatek: mux: add clk notifier functions
+  clk: mediatek: mt8183: Add clk mux notifier for MFG mux
+
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi   |  2 +-
+ drivers/clk/mediatek/clk-mt8183-mfgcfg.c   |  6 +--
+ drivers/clk/mediatek/clk-mt8183.c          | 28 +++++++++++++
+ drivers/clk/mediatek/clk-mt8192-mfg.c      |  6 ++-
+ drivers/clk/mediatek/clk-mt8192.c          | 28 +++++++++++++
+ drivers/clk/mediatek/clk-mt8195-mfg.c      |  6 ++-
+ drivers/clk/mediatek/clk-mt8195-topckgen.c | 46 +++++++++++++++-------
+ drivers/clk/mediatek/clk-mux.c             | 38 ++++++++++++++++++
+ drivers/clk/mediatek/clk-mux.h             | 15 +++++++
+ 9 files changed, 153 insertions(+), 22 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.37.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
