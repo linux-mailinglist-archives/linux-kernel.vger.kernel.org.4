@@ -2,343 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1545EC05E
+	by mail.lfdr.de (Postfix) with ESMTP id C7AA25EC060
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbiI0LDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        id S231821AbiI0LDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbiI0LC0 (ORCPT
+        with ESMTP id S231790AbiI0LC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:02:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EFD501BB
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:01:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664276517;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EXlbqV3bMihYU4DcJv9mg2N2kXbruPismRocuYGvJL4=;
-        b=YcgKsfCKqgXs6wITqnTmhIjVdP+djtb0SpA7QDzNN634gIPYM4VHbWHxiMc8jmSM2h8UUz
-        jG4atHmnbCPnArKvtFOU7Dste40/NF1PDMViajCiBcGj79pfYBCf++pYcq76aLD1a4XDw/
-        HWW52B81tTaKVFapwdnOV2XqTrKN17M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-533-ZI3TsViQOP20dkgQFxNpFQ-1; Tue, 27 Sep 2022 07:01:48 -0400
-X-MC-Unique: ZI3TsViQOP20dkgQFxNpFQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 99E39803D4A;
-        Tue, 27 Sep 2022 11:01:47 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 24964C15BA5;
-        Tue, 27 Sep 2022 11:01:45 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mike Rapoport <rppt@kernel.org>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>
-Subject: [PATCH v1 7/7] selftests/vm: anon_cow: add R/O longterm tests via gup_test
-Date:   Tue, 27 Sep 2022 13:01:20 +0200
-Message-Id: <20220927110120.106906-8-david@redhat.com>
-In-Reply-To: <20220927110120.106906-1-david@redhat.com>
-References: <20220927110120.106906-1-david@redhat.com>
+        Tue, 27 Sep 2022 07:02:27 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30A75B05B
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:01:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wYhiq2/Za/de0IEl5LhlGi70WgQaMWWx/ATEKmG1PWU=; b=QJ1Hq7/hcmtvhS9BDeKIkGYVYb
+        g0ULCQ4QLTgW2qPHtwe4OXju8ssrE8ArhQmuJf5JAyYoatdddt9BCq/aLQ1kdvSKnkUfVYARtUK9P
+        +bYSIxTBYtrfNV/esromWGfdA1ksfa7NNTrw0ubdtgQwY1IenS2oP+7wnypD/Eizv1gxjh8J6z1Ry
+        CZ0ozMfS9BUIfP9+YIVZVFlQ0QEAe45KQhah5o78RsMoBKKCTc470SBxoBBui1J/vRLEMK4l/FU++
+        CqORrWeebBbQfWmQf2ra/lLn8dMOojfc2LhX2ahH5yzg9Q4brNYDl+D9zEWhuXCc3fLn1puV8qlst
+        IExeE9tg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1od8LG-00GGo7-Pb; Tue, 27 Sep 2022 11:01:35 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5CC2A300205;
+        Tue, 27 Sep 2022 13:01:33 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 123062BDDA85A; Tue, 27 Sep 2022 13:01:33 +0200 (CEST)
+Date:   Tue, 27 Sep 2022 13:01:32 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [RFC PATCH 09/23] sched/fair: Use task-class performance score
+ to pick the busiest group
+Message-ID: <YzLYDPU+upHeUG65@hirez.programming.kicks-ass.net>
+References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
+ <20220909231205.14009-10-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220909231205.14009-10-ricardo.neri-calderon@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's trigger a R/O longterm pin on three cases of R/O mapped anonymous
-pages:
-* exclusive (never shared)
-* shared (child still alive)
-* previously shared (child no longer alive)
+On Fri, Sep 09, 2022 at 04:11:51PM -0700, Ricardo Neri wrote:
+> update_sd_pick_busiest() keeps on selecting as the busiest group scheduling
+> groups of identical priority. Since both groups have the same priority,
+> either group is a good choice. The classes of tasks in the scheduling
+> groups can break this tie.
+> 
+> Pick as busiest the scheduling group that yields a higher task-class
+> performance score after load balancing.
 
-... and make sure that the pin is reliable: whatever we write via the page
-tables has to be observable via the pin.
+> +/**
+> + * sched_asym_class_pick - Select a sched group based on classes of tasks
+> + * @a:		A scheduling group
+> + * @b:		A second scheduling group
+> + * @a_stats:	Load balancing statistics of @a
+> + * @b_stats:	Load balancing statistics of @b
+> + *
+> + * Returns: true if @a has the same priority and @a has classes of tasks that
+> + * yield higher overall throughput after load balance. Returns false otherwise.
+> + */
+> +static bool sched_asym_class_pick(struct sched_group *a,
+> +				  struct sched_group *b,
+> +				  struct sg_lb_stats *a_stats,
+> +				  struct sg_lb_stats *b_stats)
+> +{
+> +	/*
+> +	 * Only use the class-specific preference selection if both sched
+> +	 * groups have the same priority.
+> +	 */
+> +	if (arch_asym_cpu_priority(a->asym_prefer_cpu) !=
+> +	    arch_asym_cpu_priority(b->asym_prefer_cpu))
+> +		return false;
+> +
+> +	return sched_asym_class_prefer(a_stats, b_stats);
+> +}
+> +
+>  #else /* CONFIG_SCHED_TASK_CLASSES */
+>  static void update_rq_task_classes_stats(struct sg_lb_task_class_stats *class_sgs,
+>  					 struct rq *rq)
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- tools/testing/selftests/vm/anon_cow.c | 210 ++++++++++++++++++++++++++
- 1 file changed, 210 insertions(+)
+> @@ -9049,6 +9111,12 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+>  		/* Prefer to move from lowest priority CPU's work */
+>  		if (sched_asym_prefer(sg->asym_prefer_cpu, sds->busiest->asym_prefer_cpu))
+>  			return false;
+> +
+> +		/* @sg and @sds::busiest have the same priority. */
+> +		if (sched_asym_class_pick(sds->busiest, sg, &sds->busiest_stat, sgs))
+> +			return false;
+> +
+> +		/* @sg has lower priority than @sds::busiest. */
+>  		break;
+>  
+>  	case group_misfit_task:
 
-diff --git a/tools/testing/selftests/vm/anon_cow.c b/tools/testing/selftests/vm/anon_cow.c
-index 369b3e15647d..055bf13a05d9 100644
---- a/tools/testing/selftests/vm/anon_cow.c
-+++ b/tools/testing/selftests/vm/anon_cow.c
-@@ -17,6 +17,7 @@
- #include <dirent.h>
- #include <assert.h>
- #include <sys/mman.h>
-+#include <sys/ioctl.h>
- #include <sys/wait.h>
- 
- #include "local_config.h"
-@@ -24,6 +25,7 @@
- #include <liburing.h>
- #endif /* LOCAL_CONFIG_HAVE_LIBURING */
- 
-+#include "../../../../mm/gup_test.h"
- #include "../kselftest.h"
- #include "vm_util.h"
- 
-@@ -32,6 +34,7 @@ static int pagemap_fd;
- static size_t thpsize;
- static int nr_hugetlbsizes;
- static size_t hugetlbsizes[10];
-+static int gup_fd;
- 
- static void detect_thpsize(void)
- {
-@@ -503,6 +506,170 @@ static void test_iouring_fork(char *mem, size_t size)
- 
- #endif /* LOCAL_CONFIG_HAVE_LIBURING */
- 
-+enum ro_pin_test {
-+	RO_PIN_TEST_SHARED,
-+	RO_PIN_TEST_PREVIOUSLY_SHARED,
-+	RO_PIN_TEST_RO_EXCLUSIVE,
-+};
-+
-+static void do_test_ro_pin(char *mem, size_t size, enum ro_pin_test test,
-+			   bool fast)
-+{
-+	struct pin_longterm_test args;
-+	struct comm_pipes comm_pipes;
-+	char *tmp, buf;
-+	__u64 tmp_val;
-+	int ret;
-+
-+	if (gup_fd < 0) {
-+		ksft_test_result_skip("gup_test not available\n");
-+		return;
-+	}
-+
-+	tmp = malloc(size);
-+	if (!tmp) {
-+		ksft_test_result_fail("malloc() failed\n");
-+		return;
-+	}
-+
-+	ret = setup_comm_pipes(&comm_pipes);
-+	if (ret) {
-+		ksft_test_result_fail("pipe() failed\n");
-+		goto free_tmp;
-+	}
-+
-+	switch (test) {
-+	case RO_PIN_TEST_SHARED:
-+	case RO_PIN_TEST_PREVIOUSLY_SHARED:
-+		/*
-+		 * Share the pages with our child. As the pages are not pinned,
-+		 * this should just work.
-+		 */
-+		ret = fork();
-+		if (ret < 0) {
-+			ksft_test_result_fail("fork() failed\n");
-+			goto close_comm_pipes;
-+		} else if (!ret) {
-+			write(comm_pipes.child_ready[1], "0", 1);
-+			while (read(comm_pipes.parent_ready[0], &buf, 1) != 1)
-+				;
-+			exit(0);
-+		}
-+
-+		/* Wait until our child is ready. */
-+		while (read(comm_pipes.child_ready[0], &buf, 1) != 1)
-+			;
-+
-+		if (test == RO_PIN_TEST_PREVIOUSLY_SHARED) {
-+			/*
-+			 * Tell the child to quit now and wait until it quit.
-+			 * The pages should now be mapped R/O into our page
-+			 * tables, but they are no longer shared.
-+			 */
-+			write(comm_pipes.parent_ready[1], "0", 1);
-+			wait(&ret);
-+			if (!WIFEXITED(ret))
-+				ksft_print_msg("[INFO] wait() failed\n");
-+		}
-+		break;
-+	case RO_PIN_TEST_RO_EXCLUSIVE:
-+		/*
-+		 * Map the page R/O into the page table. Enable softdirty
-+		 * tracking to stop the page from getting mapped R/W immediately
-+		 * again by mprotect() optimizations. Note that we don't have an
-+		 * easy way to test if that worked (the pagemap does not export
-+		 * if the page is mapped R/O vs. R/W).
-+		 */
-+		ret = mprotect(mem, size, PROT_READ);
-+		clear_softdirty();
-+		ret |= mprotect(mem, size, PROT_READ | PROT_WRITE);
-+		if (ret) {
-+			ksft_test_result_fail("mprotect() failed\n");
-+			goto close_comm_pipes;
-+		}
-+		break;
-+	default:
-+		assert(false);
-+	}
-+
-+	/* Take a R/O pin. This should trigger unsharing. */
-+	args.addr = (__u64)mem;
-+	args.size = size;
-+	args.flags = fast ? PIN_LONGTERM_TEST_FLAG_USE_FAST : 0;
-+	ret = ioctl(gup_fd, PIN_LONGTERM_TEST_START, &args);
-+	if (ret) {
-+		if (errno == EINVAL)
-+			ksft_test_result_skip("PIN_LONGTERM_TEST_START failed\n");
-+		else
-+			ksft_test_result_fail("PIN_LONGTERM_TEST_START failed\n");
-+		goto wait;
-+	}
-+
-+	/* Modify the page. */
-+	memset(mem, 0xff, size);
-+
-+	/*
-+	 * Read back the content via the pin to the temporary buffer and
-+	 * test if we observed the modification.
-+	 */
-+	tmp_val = (__u64)tmp;
-+	ret = ioctl(gup_fd, PIN_LONGTERM_TEST_READ, &tmp_val);
-+	if (ret)
-+		ksft_test_result_fail("PIN_LONGTERM_TEST_READ failed\n");
-+	else
-+		ksft_test_result(!memcmp(mem, tmp, size),
-+				 "Longterm R/O pin is reliable\n");
-+
-+	ret = ioctl(gup_fd, PIN_LONGTERM_TEST_STOP);
-+	if (ret)
-+		ksft_print_msg("[INFO] PIN_LONGTERM_TEST_STOP failed\n");
-+wait:
-+	switch (test) {
-+	case RO_PIN_TEST_SHARED:
-+		write(comm_pipes.parent_ready[1], "0", 1);
-+		wait(&ret);
-+		if (!WIFEXITED(ret))
-+			ksft_print_msg("[INFO] wait() failed\n");
-+		break;
-+	default:
-+		break;
-+	}
-+close_comm_pipes:
-+	close_comm_pipes(&comm_pipes);
-+free_tmp:
-+	free(tmp);
-+}
-+
-+static void test_ro_pin_on_shared(char *mem, size_t size)
-+{
-+	do_test_ro_pin(mem, size, RO_PIN_TEST_SHARED, false);
-+}
-+
-+static void test_ro_fast_pin_on_shared(char *mem, size_t size)
-+{
-+	do_test_ro_pin(mem, size, RO_PIN_TEST_SHARED, true);
-+}
-+
-+static void test_ro_pin_on_ro_previously_shared(char *mem, size_t size)
-+{
-+	do_test_ro_pin(mem, size, RO_PIN_TEST_PREVIOUSLY_SHARED, false);
-+}
-+
-+static void test_ro_fast_pin_on_ro_previously_shared(char *mem, size_t size)
-+{
-+	do_test_ro_pin(mem, size, RO_PIN_TEST_PREVIOUSLY_SHARED, true);
-+}
-+
-+static void test_ro_pin_on_ro_exclusive(char *mem, size_t size)
-+{
-+	do_test_ro_pin(mem, size, RO_PIN_TEST_RO_EXCLUSIVE, false);
-+}
-+
-+static void test_ro_fast_pin_on_ro_exclusive(char *mem, size_t size)
-+{
-+	do_test_ro_pin(mem, size, RO_PIN_TEST_RO_EXCLUSIVE, true);
-+}
-+
- typedef void (*test_fn)(char *mem, size_t size);
- 
- static void do_run_with_base_page(test_fn fn, bool swapout)
-@@ -850,6 +1017,48 @@ static const struct test_case test_cases[] = {
- 	},
- 
- #endif /* LOCAL_CONFIG_HAVE_LIBURING */
-+	/*
-+	 * Take a R/O longterm pin on a R/O-mapped shared anonymous page.
-+	 * When modifying the page via the page table, the page content change
-+	 * must be visible via the pin.
-+	 */
-+	{
-+		"R/O GUP pin on R/O-mapped shared page",
-+		test_ro_pin_on_shared,
-+	},
-+	/* Same as above, but using GUP-fast. */
-+	{
-+		"R/O GUP-fast pin on R/O-mapped shared page",
-+		test_ro_fast_pin_on_shared,
-+	},
-+	/*
-+	 * Take a R/O longterm pin on a R/O-mapped exclusive anonymous page that
-+	 * was previously shared. When modifying the page via the page table,
-+	 * the page content change must be visible via the pin.
-+	 */
-+	{
-+		"R/O GUP pin on R/O-mapped previously-shared page",
-+		test_ro_pin_on_ro_previously_shared,
-+	},
-+	/* Same as above, but using GUP-fast. */
-+	{
-+		"R/O GUP-fast pin on R/O-mapped previously-shared page",
-+		test_ro_fast_pin_on_ro_previously_shared,
-+	},
-+	/*
-+	 * Take a R/O longterm pin on a R/O-mapped exclusive anonymous page.
-+	 * When modifying the page via the page table, the page content change
-+	 * must be visible via the pin.
-+	 */
-+	{
-+		"R/O GUP pin on R/O-mapped exclusive page",
-+		test_ro_pin_on_ro_exclusive,
-+	},
-+	/* Same as above, but using GUP-fast. */
-+	{
-+		"R/O GUP-fast pin on R/O-mapped exclusive page",
-+		test_ro_fast_pin_on_ro_exclusive,
-+	},
- };
- 
- static void run_test_case(struct test_case const *test_case)
-@@ -902,6 +1111,7 @@ int main(int argc, char **argv)
- 	ksft_print_header();
- 	ksft_set_plan(nr_test_cases * tests_per_test_case());
- 
-+	gup_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
- 	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
- 	if (pagemap_fd < 0)
- 		ksft_exit_fail_msg("opening pagemap failed\n");
--- 
-2.37.3
+So why does only this one instance of asym_prefer() require tie
+breaking?
+
+I must also re-iterate how much I hate having two different means of
+dealing with big-little topologies.
+
+And while looking through this, I must ask about the comment that goes
+with sched_set_itmt_core_prio() vs the sg->asym_prefer_cpu assignment in
+init_sched_groups_capacity(), what-up ?!
+
 
