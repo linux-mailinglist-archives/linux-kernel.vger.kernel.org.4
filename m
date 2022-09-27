@@ -2,98 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADE85EC759
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 690875EC75B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbiI0PNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
+        id S230452AbiI0POH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbiI0PNo (ORCPT
+        with ESMTP id S232196AbiI0POA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:13:44 -0400
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C978115A67;
-        Tue, 27 Sep 2022 08:13:43 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 8F9B940355;
-        Tue, 27 Sep 2022 15:13:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        in-reply-to:content-transfer-encoding:content-disposition
-        :content-type:content-type:mime-version:references:message-id
-        :subject:subject:from:from:date:date:received:received:received
-        :received; s=mta-01; t=1664291620; x=1666106021; bh=pxm0swS28gLH
-        pgdYF3S4Vmr6d+161ywTaiLccywugbM=; b=KlZud3yWQh72L/P3lz8vI9bBAsRU
-        iB9l5E/9TlmHyvSppykpCdUBIE7apkOGiL02mUp6+2UWcrvYRtOIz/6JBuS4YrQp
-        uDuSSiRADIsRBaPR3EsSgM/nVPaqX2rH4aUbI+u2fHQbNZVRpqS2k16RSc0Bynby
-        M7uuMGk8qg/vGa4=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id An4g0pvpQUWU; Tue, 27 Sep 2022 18:13:40 +0300 (MSK)
-Received: from T-EXCH-01.corp.yadro.com (T-EXCH-01.corp.yadro.com [172.17.10.101])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 8699A40311;
-        Tue, 27 Sep 2022 18:13:39 +0300 (MSK)
-Received: from T-EXCH-09.corp.yadro.com (172.17.11.59) by
- T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Tue, 27 Sep 2022 18:13:39 +0300
-Received: from yadro.com (10.199.23.254) by T-EXCH-09.corp.yadro.com
- (172.17.11.59) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Tue, 27 Sep
- 2022 18:13:37 +0300
-Date:   Tue, 27 Sep 2022 18:13:35 +0300
-From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-CC:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <patches@lists.linux.dev>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Matthew Bakhtiari <dev@mtbk.me>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
-Subject: Re: [PATCH v10 08/27] rust: adapt `alloc` crate to the kernel
-Message-ID: <YzMTH1v9yZQcujLa@yadro.com>
-References: <20220927131518.30000-1-ojeda@kernel.org>
- <20220927131518.30000-9-ojeda@kernel.org>
- <YzL/9mlOHemaey2n@yadro.com>
- <CANiq72kDPMKd0qLAMVrd2A3n9aAWhh2ps5DvKos58L=_V2-XwQ@mail.gmail.com>
+        Tue, 27 Sep 2022 11:14:00 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7C0123D91;
+        Tue, 27 Sep 2022 08:13:58 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RF7b0V005477;
+        Tue, 27 Sep 2022 15:13:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=suQc2ohV2UHcHZRjb/BQRqa5yc0AJwLQ4xnejAiqQpg=;
+ b=QpmGLE7kck1/+nLQalritFgu1NYnCTtUGOsushncg7TS5A2SAwfRXELganJ7p/QUlVzX
+ MTgdS8WnjcznQVKqMHsD25j9vTCdCv5b7CfTbafK48U0exNlL9SdsBVsY8kdCt9RsJhq
+ QFZpt132e8VcEt+GpjCgPyIZxCEPCJqIRDvSljn3DzmfKqZxDtdFSD1umjIiUv4pg/cD
+ ugixaApt9PurGuNar87Fu9C4R+1rBKfB5Maf8m74XTdbyw14g1RN+QJa2Lc8s5KlZwig
+ nmyYcysZj2bqNSPdChZt2TYkNZR9FRG4Z/ZeeIRF6XAnrGF6iTOuqU2P/L3h/BXK9t6A wA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3juvnnhbyj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 15:13:52 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28RFDpep003686
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 15:13:51 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 27 Sep
+ 2022 08:13:49 -0700
+Message-ID: <26b36812-cbe6-744d-6fb7-e7aec0bf5496@quicinc.com>
+Date:   Tue, 27 Sep 2022 09:13:49 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: GPU device resource reservations with cgroups?
+Content-Language: en-US
+To:     "T.J. Mercier" <tjmercier@google.com>
+CC:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        <cgroups@vger.kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Carl Vanderlip <quic_carlv@quicinc.com>,
+        <quic_ajitpals@quicinc.com>, <quic_pkanojiy@quicinc.com>
+References: <7e047ee0-0243-d9d4-f0bc-7ed19ed33c19@quicinc.com>
+ <CABdmKX2sGw-TwRYnHWuyaWYrxX7wgcK4gFSb5hGAwk0ztZxbcA@mail.gmail.com>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <CABdmKX2sGw-TwRYnHWuyaWYrxX7wgcK4gFSb5hGAwk0ztZxbcA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72kDPMKd0qLAMVrd2A3n9aAWhh2ps5DvKos58L=_V2-XwQ@mail.gmail.com>
-X-Originating-IP: [10.199.23.254]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-09.corp.yadro.com (172.17.11.59)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: v4aoXDjBljFL4HhKaQb4H72FBDl_sZfM
+X-Proofpoint-GUID: v4aoXDjBljFL4HhKaQb4H72FBDl_sZfM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-27_05,2022-09-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ clxscore=1011 mlxscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
+ priorityscore=1501 malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209270094
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 04:06:43PM +0200, Miguel Ojeda wrote:
-> «Внимание! Данное письмо от внешнего адресата!»
-> 
-> On Tue, Sep 27, 2022 at 3:52 PM Konstantin Shelekhin
-> <k.shelekhin@yadro.com> wrote:
-> >
-> > Not being able to pass GFP flags here kinda limits the scope of Rust in
-> > kernel. I think that it must be supported in the final version that gets
-> > in.
-> 
-> Flags will be supported one way or the other in the future, but I was
-> requested to do v10 as a v9 with the last nits resolved.
-> 
-> Please see the cover letter for details.
+On 9/8/2022 10:44 AM, T.J. Mercier wrote:
+> On Tue, Aug 16, 2022 at 1:39 PM Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
+>>
+>> Hello cgroup experts,
+>>
+>> I have a GPU device [1] that supports organizing its resources for the
+>> purposes of supporting containers.  I am attempting to determine how to
+>> represent this in the upstream kernel, and I wonder if it fits in cgroups.
+>>
+>> The device itself has a number of resource types – compute cores,
+>> memory, bus replicators, semaphores, and dma channels.  Any particular
+>> workload may consume some set of these resources.  For example, a
+>> workload may consume two compute cores, 1GB of memory, one dma channel,
+>> but no semaphores and no bus replicators.
+>>
+>> By default all of the resources are in a global pool.  This global pool
+>> is managed by the device firmware.  Linux makes a request to the
+>> firmware to load a workload.  The firmware reads the resource
+>> requirements from the workload itself, and then checks the global pool.
+>> If the global pool contains sufficient resources to satisfy the needs of
+>> the workload, the firmware assigns the required resources from the
+>> global pool to the workload.  If there are insufficient resources, the
+>> workload request from Linux is rejected.
+>>
+>> Some users may want to share the device between multiple containers, but
+>> provide device level isolation between those containers.  For example, a
+>> user may have 4 workloads to run, one per container, and each workload
+>> takes 1/4th of the set of compute cores.  The user would like to reserve
+>> sets of compute cores for each container so that container X always has
+>> the expected set of resources available, and if container Y
+>> malfunctions, it cannot “steal” resources from container X.
+>>
+>> To support this, the firmware supports a concept of partitioning.  A
+>> partition is a pool of resources which are removed from the global pool,
+>> and pre-assigned to the partition’s pool.  A workload can then be run
+>> from within a partition, and it consumes resources from that partition’s
+>> pool instead of from the global pool.  The firmware manages creating
+>> partitions and assigning resources to them.
+>>
+>> Partitions do not nest.
+>>
+> Do partitions have any significance in hardware, or are they just a
+> logical concept? Does it matter which compute core / bus replicator /
+> dma channel a user gets, or are they interchangeable between uses?
 
-Sorry, my bad.
+Logical concept.  Resources are interchangeable.
+
+In the future, I think it is possible that NUMA comes into the picture. 
+  Just like now a CPU may be closer to a particular bank of memory (DDR) 
+and thus keeping a task that uses that bank of memory scheduled on the 
+associated CPU is an ideal situation from the perspective of the Linux 
+scheduler, a particular compute core may have specific locality to other 
+resources.
+
+I'm guessing if we were to consider such a scenario, the partition would 
+be flagged to request resources which are "close" to each-other.
+
+>> In the above user example, the user can create 4 partitions, and divide
+>> up the compute cores among them.  Then the user can assign each
+>> individual container their own individual partition.  Each container
+>> would be limited to the resources within it’s assigned partition, but
+>> also that container would have exclusive access to those resources.
+>> This essentially provides isolation, and some Quality of Service (QoS).
+>>
+>> How this is currently implemented (in downstream), is perhaps not ideal.
+>>    A privileged daemon process reads a configuration file which defines
+>> the number of partitions, and the set of resources assigned to each.
+>> That daemon makes requests to the firmware to create the partitions, and
+>> gets a unique ID for each.  Then the daemon makes a request to the
+>> driver to create a “shadow device”, which is a child dev node.  The
+>> driver verifies with the firmware that the partition ID is valid, and
+>> then creates the dev node.  Internally the driver associates this shadow
+>> device with the partition ID so that each request to the firmware is
+>> tagged with the partition ID by the driver.  This tagging allows the
+>> firmware to determine that a request is targeted for a specific
+>> partition.  Finally, the shadow device is passed into the container,
+>> instead of the normal dev node.  The userspace within the container
+>> operates the shadow device normally.
+>>
+>> One concern with the current implementation is that it is possible to
+>> create a large number of partitions.  Since each partition is
+>> represented by a shadow device dev node, this can create a large number
+>> of dev nodes and exhaust the minor number space.
+>>
+>> I wonder if this functionality is better represented by a cgroup.
+>> Instead of creating a dev node for the partition, we can just run the
+>> container process within the cgroup.  However it doesn’t look like
+>> cgroups have a concept of resource reservation.  It is just a limit.  If
+>> that impression is accurate, then I struggle to see how to provide the
+>> desired isolation as some entity not under the cgroup could consume all
+>> of the device resources, leaving the containers unable to perform their
+>> tasks.
+> 
+> Given the top-down resource distribution policy for cgroups, I think
+> you'd have to have a cgroup subtree where limits for these resources
+> are exclusively passed to, and maintain the placement of processes in
+> the appropriate cgroup under this subtree (one per partition +
+> global). The limit for these resources in all other subtrees under the
+> root would need to be 0. The only trick would be to maintain the
+> limit(s) on the global pool based on the sum of the limits for the
+> partitions to ensure that the global pool cannot exhaust resources
+> "reserved" for the partitions. If partitions don't come and go at
+> runtime then that seems pretty straightforward, otherwise I could see
+> the maintenance/adjustment of those limits as a source of frustration.
+> 
+> 
+> 
+>>
+>> So, cgroup experts, does this sound like something that should be
+>> represented by a cgroup, or is cgroup the wrong mechanism for this usecase?
+>>
+>> [1] -
+>> https://lore.kernel.org/all/1660588956-24027-1-git-send-email-quic_jhugo@quicinc.com/
+
