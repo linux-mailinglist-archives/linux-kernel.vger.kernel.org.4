@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F025EBB24
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC10D5EBB26
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiI0HJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 03:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
+        id S230106AbiI0HJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 03:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiI0HJg (ORCPT
+        with ESMTP id S230163AbiI0HJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 03:09:36 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A021C5595;
-        Tue, 27 Sep 2022 00:09:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664262573; x=1695798573;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hfOuLUmJESa9TndPikP9Oj/5VtYTzryYL4S2klro3to=;
-  b=LjM5rqVv8lFEMPedf0jC9Xa+PVE8JERuUfTMYLFO/LqucPXyFjg64evL
-   Dl063Wl305O2FbAkkNfcsGDReY7cC2VJKR9OLImYb+KCSDsBXeqloRTuT
-   K/Seb53mv4d1fLGjdW0wncwBqbd2LyOYOgWEu2tx2HpFvuHnDuwOhQ/HK
-   T4ZjJJczPdKlaxua5ZtwtASCQCLQJC9+qSAFyNY7pJY6oKP8Naw0ticp6
-   emO9XOrZvKvuTxPVusFRXkiKUDuar+cz06V1Pay4BX29DcEUqaim8oDDx
-   nDpOnx15oAwToJNTl/3lUbQdFRkDsVj3PXqN6c3Y7tnOZOTDNcct4yUbS
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="299961400"
-X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
-   d="scan'208";a="299961400"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 00:09:33 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="866463287"
-X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
-   d="scan'208";a="866463287"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.35.200])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 00:09:30 -0700
-Message-ID: <2260a908-47c0-705c-3d87-099b7d6fa9fd@intel.com>
-Date:   Tue, 27 Sep 2022 10:09:26 +0300
+        Tue, 27 Sep 2022 03:09:45 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013415720D;
+        Tue, 27 Sep 2022 00:09:44 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id v1so8283409plo.9;
+        Tue, 27 Sep 2022 00:09:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=q4/UCAdrgH5/GRrTWwXDpUGYGeL5LkfX+ixNfTJb3Lg=;
+        b=qC+QP3RPbFkZzcLbuapJk0gP4hBzcd47bB69ZQXPN7qNC8TaR92z+cT6p/RiFhJA0m
+         eQACuVf9Kj1XYyLdyKSEOHcBV6Nd4evipSuYSlMT1u7WZCqaCT5EF+K7QLoO+RS6VPDH
+         yCI8vUIQI3xYa6QQkGdWRxKBPKAj36/1ukrzMFyyywYsfElc5VAp4LECuuNRCMYehW0j
+         XrYdNbsGOOWtiPH15Hi5ILuSaClm4y8GllnBh2LxBCaS7ffbWom67YW7bDka05Vv7xik
+         q/NcSuXta7wlXvNsNFLQ8BoHW7tp346/Zf7ZpX/seopmrqL6pD0Au06XgRWi7sVBE+Rs
+         Z6oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=q4/UCAdrgH5/GRrTWwXDpUGYGeL5LkfX+ixNfTJb3Lg=;
+        b=n1hwBlhAR0xdg4IkwpQbNKi0wg9mUlTHq8BNCFzlD2+ROX5FME3DKIodVr+vmIIomt
+         Wzo9P/aVbzVM6UiLr0UzhZ49fRIzbTuf3/eKzIGD/fjzUnxPd3mjvuFJbkAXKGjFcZL8
+         XN/S4BgBTQ0Y0VEVbPN5kXP9bUWftIbQz/5dTwQta3iekTbsJwbGkpSNyhewYWHFzFsQ
+         htwo3NucwGNWR6gbDYxEkRux7eWM05bkLzrAah2cHDqs1yHEjROqS3S0dW5+tQU7ugW+
+         zh00ozq2II9idwUyg2l+YEWbC3jeg3AWmwJxF/ZiZcHW4xzC/+UKC8v308SFYCtfNxdL
+         GJRA==
+X-Gm-Message-State: ACrzQf0PKc1DOZetAQks8YxloKmlzoPcnMT9qbSc3IskTjAR3sGWrSm8
+        cTxdpr14QNGHQ0UBiq8QHtxa2BUQDDSX3HvxpPI=
+X-Google-Smtp-Source: AMsMyM7SUlyyqHrx8cD7Fo5L27ptsyCu9syK4mNvecV0u3XZxbPawvEy0jMTHKgxEiegttlfDQf3fQ==
+X-Received: by 2002:a17:902:ea11:b0:178:f0a:7472 with SMTP id s17-20020a170902ea1100b001780f0a7472mr25592484plg.46.1664262583225;
+        Tue, 27 Sep 2022 00:09:43 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id j5-20020a62c505000000b005499599ed30sm820554pfg.10.2022.09.27.00.09.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 00:09:43 -0700 (PDT)
+From:   zhangsongyi.cgel@gmail.com
+X-Google-Original-From: zhang.songyi@zte.com.cn
+To:     dmitry.torokhov@gmail.com
+Cc:     zhang.songyi@zte.com.cn, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] Input: synaptics-rmi4 - Convert to use sysfs_emit() APIs
+Date:   Tue, 27 Sep 2022 07:09:36 +0000
+Message-Id: <20220927070936.258300-1-zhang.songyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH 5/5] perf tools: Remove special handling of system-wide
- evsel
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>
-References: <20220924165737.956428-1-namhyung@kernel.org>
- <20220924165737.956428-6-namhyung@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220924165737.956428-6-namhyung@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,101 +69,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/09/22 19:57, Namhyung Kim wrote:
-> For system-wide evsels, the thread map should be dummy - i.e. it has a
-> single entry of -1.  But the code guarantees such a thread map, so no
-> need to handle it specially.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+From: zhang songyi <zhang.songyi@zte.com.cn>
 
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the value
+to be returned to user space.
 
-> ---
->  tools/lib/perf/evsel.c      |  3 ---
->  tools/perf/builtin-script.c |  3 ---
->  tools/perf/util/evsel.c     | 12 ++----------
->  tools/perf/util/stat.c      |  3 ---
->  4 files changed, 2 insertions(+), 19 deletions(-)
-> 
-> diff --git a/tools/lib/perf/evsel.c b/tools/lib/perf/evsel.c
-> index 8ce5bbd09666..8b51b008a81f 100644
-> --- a/tools/lib/perf/evsel.c
-> +++ b/tools/lib/perf/evsel.c
-> @@ -515,9 +515,6 @@ int perf_evsel__alloc_id(struct perf_evsel *evsel, int ncpus, int nthreads)
->  	if (ncpus == 0 || nthreads == 0)
->  		return 0;
->  
-> -	if (evsel->system_wide)
-> -		nthreads = 1;
-> -
->  	evsel->sample_id = xyarray__new(ncpus, nthreads, sizeof(struct perf_sample_id));
->  	if (evsel->sample_id == NULL)
->  		return -ENOMEM;
-> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> index 886f53cfa257..7fa467ed91dc 100644
-> --- a/tools/perf/builtin-script.c
-> +++ b/tools/perf/builtin-script.c
-> @@ -2243,9 +2243,6 @@ static void __process_stat(struct evsel *counter, u64 tstamp)
->  	struct perf_cpu cpu;
->  	static int header_printed;
->  
-> -	if (counter->core.system_wide)
-> -		nthreads = 1;
-> -
->  	if (!header_printed) {
->  		printf("%3s %8s %15s %15s %15s %15s %s\n",
->  		       "CPU", "THREAD", "VAL", "ENA", "RUN", "TIME", "EVENT");
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index 5776bfa70f11..e319bb17d10d 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -1813,7 +1813,7 @@ static struct perf_thread_map *empty_thread_map;
->  static int __evsel__prepare_open(struct evsel *evsel, struct perf_cpu_map *cpus,
->  		struct perf_thread_map *threads)
->  {
-> -	int nthreads;
-> +	int nthreads = perf_thread_map__nr(threads);
->  
->  	if ((perf_missing_features.write_backward && evsel->core.attr.write_backward) ||
->  	    (perf_missing_features.aux_output     && evsel->core.attr.aux_output))
-> @@ -1839,11 +1839,6 @@ static int __evsel__prepare_open(struct evsel *evsel, struct perf_cpu_map *cpus,
->  		threads = empty_thread_map;
->  	}
->  
-> -	if (evsel->core.system_wide)
-> -		nthreads = 1;
-> -	else
-> -		nthreads = threads->nr;
-> -
->  	if (evsel->core.fd == NULL &&
->  	    perf_evsel__alloc_fd(&evsel->core, perf_cpu_map__nr(cpus), nthreads) < 0)
->  		return -ENOMEM;
-> @@ -2061,10 +2056,7 @@ static int evsel__open_cpu(struct evsel *evsel, struct perf_cpu_map *cpus,
->  	if (threads == NULL)
->  		threads = empty_thread_map;
->  
-> -	if (evsel->core.system_wide)
-> -		nthreads = 1;
-> -	else
-> -		nthreads = threads->nr;
-> +	nthreads = perf_thread_map__nr(threads);
->  
->  	if (evsel->cgrp)
->  		pid = evsel->cgrp->fd;
-> diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
-> index ce5e9e372fc4..cef943377ad7 100644
-> --- a/tools/perf/util/stat.c
-> +++ b/tools/perf/util/stat.c
-> @@ -420,9 +420,6 @@ static int process_counter_maps(struct perf_stat_config *config,
->  	int ncpus = evsel__nr_cpus(counter);
->  	int idx, thread;
->  
-> -	if (counter->core.system_wide)
-> -		nthreads = 1;
-> -
->  	for (thread = 0; thread < nthreads; thread++) {
->  		for (idx = 0; idx < ncpus; idx++) {
->  			if (process_counter_values(config, counter, idx, thread,
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
+---
+ drivers/input/rmi4/rmi_f34.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/input/rmi4/rmi_f34.c b/drivers/input/rmi4/rmi_f34.c
+index e5dca9868f87..e6e7dde76c5b 100644
+--- a/drivers/input/rmi4/rmi_f34.c
++++ b/drivers/input/rmi4/rmi_f34.c
+@@ -321,11 +321,11 @@ static ssize_t rmi_driver_bootloader_id_show(struct device *dev,
+ 		f34 = dev_get_drvdata(&fn->dev);
+ 
+ 		if (f34->bl_version == 5)
+-			return scnprintf(buf, PAGE_SIZE, "%c%c\n",
++			return sysfs_emit(buf, "%c%c\n",
+ 					 f34->bootloader_id[0],
+ 					 f34->bootloader_id[1]);
+ 		else
+-			return scnprintf(buf, PAGE_SIZE, "V%d.%d\n",
++			return sysfs_emit(buf, "V%d.%d\n",
+ 					 f34->bootloader_id[1],
+ 					 f34->bootloader_id[0]);
+ 	}
+@@ -346,7 +346,7 @@ static ssize_t rmi_driver_configuration_id_show(struct device *dev,
+ 	if (fn) {
+ 		f34 = dev_get_drvdata(&fn->dev);
+ 
+-		return scnprintf(buf, PAGE_SIZE, "%s\n", f34->configuration_id);
++		return sysfs_emit(buf, "%s\n", f34->configuration_id);
+ 	}
+ 
+ 	return 0;
+@@ -499,7 +499,7 @@ static ssize_t rmi_driver_update_fw_status_show(struct device *dev,
+ 	if (data->f34_container)
+ 		update_status = rmi_f34_status(data->f34_container);
+ 
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", update_status);
++	return sysfs_emit(buf, "%d\n", update_status);
+ }
+ 
+ static DEVICE_ATTR(update_fw_status, 0444,
+-- 
+2.25.1
+
 
