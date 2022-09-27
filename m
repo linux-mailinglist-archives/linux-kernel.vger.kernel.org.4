@@ -2,126 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EDC95ECDA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85DC5ECDA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbiI0UCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 16:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
+        id S232139AbiI0UDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 16:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbiI0UCH (ORCPT
+        with ESMTP id S232734AbiI0UCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 16:02:07 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A891E1CED;
-        Tue, 27 Sep 2022 13:01:35 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 8B394320030E;
-        Tue, 27 Sep 2022 16:01:19 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 27 Sep 2022 16:01:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1664308879; x=
-        1664395279; bh=mICjPnNaqxu4gzadim9OQSUrJ0m9K+Z9yEzI6Vaz0y4=; b=u
-        KMPp6BRC4PbTpzQ+kaD8xQiqpdAF2cwqKoHj3M2c3o6c4nGgfnrfhgAPT1GgTwk8
-        LXDaI45RxDkgORPwPnRJ9ASUfFW0xueuaAACOzUuhfPVfWLYwupRLMd4ZXQVvDFH
-        +bL+DAD7UUnfl+X87GwBAzvY+RiScP5n3YEKuyiQTUFAc37vjxgGvRgtIueS90+i
-        RtDjY1guNofghhKQP43vbDVHYLlUxIxPvfkXMKJEbiSQq5aulY+Im6beOI9bIwNy
-        Ci9n8X9PT7hzUpZFY75XxbWLBLGI7INJEHDci0XUZX7FcpP93yJUdtsbBLDzznHA
-        D6grgvuDrtf3puUQm0LCQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1664308879; x=
-        1664395279; bh=mICjPnNaqxu4gzadim9OQSUrJ0m9K+Z9yEzI6Vaz0y4=; b=P
-        X8Amxtdr8CPmwnv/lJvn7dMlW6EpyZwsPfbKmO+XmF//8urpRrLtlekeBn5qHFsI
-        LO8q3A8iLxXVxgVpYtRb3a/FyopAAmZqN7odrz5Ujx9wosnEJbMAmhZlQ4MqhyZV
-        BspBIVvvmrS/iKwXjVfRXdR/zaaRLbDs/TkdvIW4VtVR0BNcie2wyELNdph439H+
-        Tc3dewO8+wOoiDqwwJQIE/LcSh39RjZajj0eq1F9tKSgVTSE/X1L6ZnhoQG2fOBP
-        uQvEDF6SFD0XE+hFAnsbweNEzh1MWrsbAaoGL+vzfmRk2XVbWmxgM9ZDG5O0//w9
-        XR5/uk/5u05YXda2NXYOQ==
-X-ME-Sender: <xms:jVYzY3YIdGvwn1kAwKqvutD0lK1D5ZZYSflhHj0pxeCK4oiSDsfjAQ>
-    <xme:jVYzY2a6v2jiNfKYJEhcrOjUekCeAb1yD2r6repV3V0PZU3J1cP5Ly3pvHdrpr01T
-    CISqA3IPdR5GY011OM>
-X-ME-Received: <xmr:jVYzY59ZghwF9DQwvrGyfs4lmU9vBKSiU56WKLJy4b8VysccbgXUVoaUH7gLhsPWsM-0Mg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegiedguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkuffhvfevffgjfhgtgfgfggesthgsredttderjeenucfhrhhomhepnfhu
-    khgvucflohhnvghsuceolhhukhgvsehljhhonhgvshdruggvvheqnecuggftrfgrthhtvg
-    hrnhepfffgfeeiudeutdeftdevudeflefhffdukedttdevtddvveegfeevleeutdetgfek
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheplhhukh
-    gvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:jVYzY9pufAUipyFx24bxSj1uy7PbNOx68V-V9WhqQvV_tqkfeklbXg>
-    <xmx:jVYzYyrTzpqOfCm_XlTdFu29FOoEEhMVePhCVwjVOL-grxa4tkY3bQ>
-    <xmx:jVYzYzRBZlOclBrJtpyJZuXyV05d3OHu_-rB7LX-T-9mNhhf2jdoXQ>
-    <xmx:j1YzY_QIn0NlgeUIMlxSdXBSUCL0h2gyLNOpuyrHHBXZazzZme9kOg>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 27 Sep 2022 16:01:11 -0400 (EDT)
-Message-ID: <3d32f14710b8437d010c146f306d15359a405f1d.camel@ljones.dev>
-Subject: Re: [PATCH v4 7/7] acpi/x86: s2idle: Add a quirk for ASUSTeK
- COMPUTER INC. ROG Flow X13
-From:   Luke Jones <luke@ljones.dev>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        rafael@kernel.org, linux-kernel@vger.kernel.org
-Cc:     travisghansen@yahoo.com, catalin@antebit.com,
-        Shyam-sundar.S-k@amd.com, ruinairas1992@gmail.com,
-        philipp.zabel@gmail.com, iam@decentr.al, hdegoede@redhat.com,
-        davidedp91@gmail.com, marko.cekrlic.26@gmail.com,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Date:   Wed, 28 Sep 2022 09:00:47 +1300
-In-Reply-To: <df22755c-bf4c-9d85-2c7c-a149f8580d05@amd.com>
-References: <20220921204055.22889-1-mario.limonciello@amd.com>
-         <20220921204055.22889-8-mario.limonciello@amd.com>
-         <26bbda5d03f0eadc54dfa0036e24e16ae9134f5e.camel@ljones.dev>
-         <df22755c-bf4c-9d85-2c7c-a149f8580d05@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.0 (by Flathub.org)) 
+        Tue, 27 Sep 2022 16:02:25 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558FA1C5CBF
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 13:01:48 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id a80so10629150pfa.4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 13:01:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=SNLo4c9BXtM0z8UOQgf5tFMG8y138Obd6dyre72qoDc=;
+        b=YGNnK0RD7gMznPaSdiz+8/9d+mAhbgcMjrKjGfS4Ua0g7pNb438g/v79EXPXkPfnuH
+         a5DqrcBgZSyqMknfCCnZfSt2baOkOFcOiroT+L7+Mns7eHGbtweRaw5F1DOX7AN7wicX
+         Llm+dO8eq5ifmRMGFFRawrgjjoHFYDxkKzBKoKZZLmxGEmWFUV1/a8n+k5wS8imXAVaC
+         QKINXr+UsuuOyH/ho3RNnrdCHxmI6WQ55Ed+OZmL5HR6b/jHFxAjSrzKSRocPL7eQ1j7
+         xZ2jVnhxMjMrRnbdIDcBPxHFcgCbvdKyHpNkMiCFxOe57ZZhYrE40AIhvoC15AQYbOOy
+         MxIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=SNLo4c9BXtM0z8UOQgf5tFMG8y138Obd6dyre72qoDc=;
+        b=P3a7jJyO+S6g3pwT4StZ6sfRanJIUGUov2Eg7owG497f2KSrFZXspjXbL7UpFIIVon
+         YIgz9UhOC1gJeGvdbn/zG0B+7KXmcFX6HRXgF3/RiJweZQ5mLQ646n0EBTnQxIYYfCsn
+         wGgG/Q06ZdpfZ5Lb5RdBtX/Ez5mQJ2TMaVzfXOouCR5F+FEgZU4xMvJv1mDTs9T3Sz0I
+         eVh0O9mD3k3+1Xa74rUckSVPeXKrsCvFwBPJr+iRttg1Ks51NMTpAIWGZAqBRdvXBwiz
+         bHA46rRR6gxJ9rE2e5MSnucxQY1YTTZh5Rs0fg12wKo+KuSp9l0juQSyKtKcccpEzJXJ
+         Td3Q==
+X-Gm-Message-State: ACrzQf2JVv61bzo8TXcNNVxZ4aPykenGX/1MPUBJAEkzwcOIBROAqbBi
+        Ah+bjUdLRIGtVTIVlsbcIgVFzQtRakyvTNnT9PuKoA==
+X-Google-Smtp-Source: AMsMyM5nUZ7pJPZM0NapVjvtCoXp0CCfy1zzFCgNJOsgpQxvYoYW8apQuNO9SAObnHlget6TUmiX9lei/L0iloYqEGQ=
+X-Received: by 2002:a62:1ad5:0:b0:540:4830:7df6 with SMTP id
+ a204-20020a621ad5000000b0054048307df6mr30046652pfa.37.1664308907250; Tue, 27
+ Sep 2022 13:01:47 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAKwvOd=a+0VNP-d=mHnbM4ujdtPrujru4dxHtfDo+EEM+b6deg@mail.gmail.com>
+ <20220927172839.3708280-1-ndesaulniers@google.com> <202209271143.7B7D15D@keescook>
+In-Reply-To: <202209271143.7B7D15D@keescook>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 27 Sep 2022 13:01:35 -0700
+Message-ID: <CAKwvOdk1QM4iZqEVj5MzTW3jMr1FiD_0C065Kub=EHKnH+xNaw@mail.gmail.com>
+Subject: Re: [PATCH v2] x86, mem: move memmove to out of line assembler
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        llvm@lists.linux.dev, Andy Lutomirski <luto@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTA5LTI3IGF0IDExOjA3IC0wNTAwLCBMaW1vbmNpZWxsbywgTWFyaW8gd3Jv
-dGU6Cj4gT24gOS8yNy8yMDIyIDA0OjA2LCBMdWtlIEpvbmVzIHdyb3RlOgo+ID4gSGVsbG8gTWFy
-aW8sCj4gPiAKPiA+IEkgaGF2ZSBjb25maXJtZWQgdGhhdCBhbm90aGVyIHN1c3BlY3QgQVNVUyBs
-YXB0b3AgcmVxdWlyZXMgdGhlCj4gPiBxdWlyaywKPiA+IHBhdGNoIGlzIGFzIGZvbGxvd3M6Cj4g
-PiAKPiA+IAo+ID4gLS0tCj4gPiDCoCBkcml2ZXJzL2FjcGkveDg2L3MyaWRsZS5jIHwgMTIgKysr
-KysrKysrKysrCj4gPiDCoCAxIGZpbGUgY2hhbmdlZCwgMTIgaW5zZXJ0aW9ucygrKQo+ID4gCj4g
-PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9hY3BpL3g4Ni9zMmlkbGUuYyBiL2RyaXZlcnMvYWNwaS94
-ODYvczJpZGxlLmMKPiA+IGluZGV4IDJjZDM4MWY2YzAwMi4uYzgxMWVlZWQ0MmNkIDEwMDY0NAo+
-ID4gLS0tIGEvZHJpdmVycy9hY3BpL3g4Ni9zMmlkbGUuYwo+ID4gKysrIGIvZHJpdmVycy9hY3Bp
-L3g4Ni9zMmlkbGUuYwo+ID4gQEAgLTQyOCw2ICs0MjgsMTYgQEAgc3RhdGljIGNvbnN0IHN0cnVj
-dCBkbWlfc3lzdGVtX2lkCj4gPiBzMmlkbGVfZG1pX3RhYmxlW10gX19pbml0Y29uc3QgPSB7Cj4g
-PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBETUlfTUFU
-Q0goRE1JX1BST0RVQ1RfTkFNRSwgIlJPRyBaZXBoeXJ1cwo+ID4gRzE0Cj4gPiBHQTQwMiIpLAo+
-ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9LAo+ID4gwqDCoMKgwqDCoMKgwqDC
-oH0sCj4gPiArwqDCoMKgwqDCoMKgwqB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgLyoKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBBU1VTIFJPRyBGbG93
-IFgxNiAtIEdWNjAxCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLmNhbGxiYWNrID0gbHBzMF9wcmVmZXJfbWlj
-cm9zb2Z0LAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC5tYXRjaGVzID0gewo+
-ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBETUlfTUFU
-Q0goRE1JX0JPQVJEX1ZFTkRPUiwgIkFTVVNUZUsKPiA+IENPTVBVVEVSCj4gPiBJTkMuIiksCj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoERNSV9NQVRD
-SChETUlfUFJPRFVDVF9OQU1FLCAiR1Y2MDEiKSwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqB9LAo+ID4gK8KgwqDCoMKgwqDCoMKgfSwKPiA+IMKgwqDCoMKgwqDCoMKgwqB7fQo+
-ID4gwqAgfTsKPiA+IMKgIAo+IAo+IEhleSBMdWtlLAo+IAo+IFRoZSBzZXJpZXMgdGhhdCB3YXMg
-dW5kZXIgZGV2ZWxvcG1lbnQgaGFzIGJlZW4gbWVyZ2VkIGZvciA2LjEuwqAgQXQKPiB0aGlzIAo+
-IHBvaW50LCBjYW4geW91IGp1c3QgbWFrZSBhIHByb3BlciBwYXRjaCB3aXRoIGEgUy1vLWIgb24g
-dG9wIG9mIAo+IGxpbnV4LXBtL2JsZWVkaW5nLWVkZ2UgZm9yIHRoZSBuZXcgbW9kZWwgdG8gYWRk
-IHRvIHRoZSBsaXN0IGFuZCBzZW5kCj4gaXQgb3V0Pwo+IAo+IEluIGFkZGl0aW9uIHRvIHRoYXQs
-IGlmIHlvdSBjYW4gcGxlYXNlIGFkZCBhIExpbms6IHRvIHRoZSBhY3BpZHVtcAo+IGFuZCAKPiBk
-bWVzZyBpZiBhdmFpbGFibGU/Cj4gCj4gVGhhbmtzCgpTdXJlIG5vIHByb2JsZW0gYXQgYWxsCg==
+On Tue, Sep 27, 2022 at 12:24 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Tue, Sep 27, 2022 at 10:28:39AM -0700, Nick Desaulniers wrote:
+> > In addition to having complex constraints that can't always be resolved,
+> > the clobber list seems to be missing %bx and %dx, and possibly %cl. By
+> > using numbered operands rather than symbolic operands, the constraints
+> > are quite obnoxious to refactor.
+> > [...]
+> > -             /*
+> > -              * Move data from 2 bytes to 3 bytes.
+> > -              */
+> > -             ".p2align 4\n\t"
+> > -             "9:\n\t"
+> > -             "cmp $2, %0\n\t"
+> > -             "jb 10f\n\t"
+> > -             "movw 0*2(%1), %%dx\n\t"
+> > -             "movw -1*2(%1, %0), %%bx\n\t"
+> > -             "movw %%dx, 0*2(%2)\n\t"
+> > -             "movw %%bx, -1*2(%2, %0)\n\t"
+> > -             "jmp 11f\n\t"
+> > [...]
+> > +.set tmp0, %edi
+> > [...]
+> > +     /*
+> > +      * Move data from 2 bytes to 3 bytes.
+> > +      */
+> > +.p2align 4
+> > +.L4_byteswap:
+> > +     cmpl    $2, n
+> > +     jb      .Lbyteswap
+> > +     movw    0*2(src), %di
+> > +     movw    -1*2(src, n), %bx
+> > +     movw    %dx, 0*2(dest)
+> > +     movw    %bx, -1*2(dest, n)
+> > +     jmp     .Ldone
+>
+> Found it (need to use %di instead of %dx). With this changed, the kunit
+> test passes again:
+>
+> diff --git a/arch/x86/lib/memmove_32.S b/arch/x86/lib/memmove_32.S
+> index 73314a391a72..9e33c9a1c595 100644
+> --- a/arch/x86/lib/memmove_32.S
+> +++ b/arch/x86/lib/memmove_32.S
+> @@ -179,7 +179,7 @@ SYM_FUNC_START(memmove)
+>         jb      .Lbyteswap
+>         movw    0*2(src), %di
+>         movw    -1*2(src, n), %bx
+> -       movw    %dx, 0*2(dest)
+> +       movw    %di, 0*2(dest)
+>         movw    %bx, -1*2(dest, n)
+>         jmp     .Ldone
 
+That was stupid of me, I updated the scratch register operand in the
+instruction 2 before the one at issue and forgot to update the operand
+for the register in question, breaking the swap.
+
+I'll use .set directives to give these more descriptive names to avoid
+such a mistake.
+
+.set tmp0w %di
+
+then use tmp0w everywhere.  I will give names to the remaining
+register operands, too.
+
+Off thread, can you show me how to run the kunit tests, please?
+
+Will send a v3 shortly.
+
+>
+> -Kees
+>
+> --
+> Kees Cook
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers
