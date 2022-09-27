@@ -2,93 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE635EC747
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662445EC74A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232073AbiI0PK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
+        id S232135AbiI0PLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiI0PKX (ORCPT
+        with ESMTP id S230042AbiI0PLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:10:23 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549F61AF23;
-        Tue, 27 Sep 2022 08:10:20 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-12803ac8113so13656988fac.8;
-        Tue, 27 Sep 2022 08:10:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=01hEAkY1hMZUkwcBVy5mGusCts5qnC2yIn3xsipxquI=;
-        b=PbzJN576EireVHTK/eCYrEUDcQ46N8P6L9WvbmElKcTKN17ipe64tgFMqsKs5gnoBR
-         9ekLhxN6jJEZU6M7a7rq+zdaFJyeaki3Igqpqz/hkw4QRpt99cpDIy/uoPMQOJ4+P+eG
-         pF54cb5qfXwKXusijIyGkyQVwat50cBJLJTSUD7Dq8jbS4pD8M2NJ8AvFfp4OhH1AXcw
-         0A7hGtro8frNRavy1pXLW4ON2nqr0riVBYiV1jAahnFvCfF1fVXIxYZ8Pz4x5jWbh9gw
-         tM/WdIuzkeFvr75SZtsjHUNa18MZ7fX0QutB2Mkhy9GzIQv4d6GNKXZPMyytHPCmBp3/
-         5+AQ==
-X-Gm-Message-State: ACrzQf34Y8+xrBx5aJ8bTDKWjXylrVkf0mSmIP496hVYz6+1lVk2kYCC
-        UqdIAFd/8iUoC3hkw4jFjw==
-X-Google-Smtp-Source: AMsMyM66lHwKEQ473dWPH2HWqmnDEcxhSbVpH7P6xCNk3/33RnDl3cG96wIPt0dQhAv2wSmYzPtQ9w==
-X-Received: by 2002:a05:6870:65a5:b0:126:e94e:926f with SMTP id fp37-20020a05687065a500b00126e94e926fmr2377774oab.230.1664291419464;
-        Tue, 27 Sep 2022 08:10:19 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d186-20020aca36c3000000b00342ece494ffsm666372oia.46.2022.09.27.08.10.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 08:10:19 -0700 (PDT)
-Received: (nullmailer pid 1096523 invoked by uid 1000);
-        Tue, 27 Sep 2022 15:10:18 -0000
-Date:   Tue, 27 Sep 2022 10:10:18 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2] kbuild: take into account DT_SCHEMA_FILES changes
- while checking dtbs
-Message-ID: <20220927151018.GA1095814-robh@kernel.org>
-References: <20220915114422.79378-1-dmitry.baryshkov@linaro.org>
+        Tue, 27 Sep 2022 11:11:11 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165E524F0E
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:11:10 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1odCEc-0002ON-Ab; Tue, 27 Sep 2022 17:10:58 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1odCEc-003Fam-7u; Tue, 27 Sep 2022 17:10:56 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1odCEa-003vHY-6Y; Tue, 27 Sep 2022 17:10:56 +0200
+Date:   Tue, 27 Sep 2022 17:10:53 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH v3 4/8] pwm: lpss: Include headers we are direct user of
+Message-ID: <20220927151053.7eh63stoganpgawr@pengutronix.de>
+References: <20220927144723.9655-1-andriy.shevchenko@linux.intel.com>
+ <20220927144723.9655-5-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eethafq2wituzhkq"
 Content-Disposition: inline
-In-Reply-To: <20220915114422.79378-1-dmitry.baryshkov@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220927144723.9655-5-andriy.shevchenko@linux.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Sep 2022 14:44:22 +0300, Dmitry Baryshkov wrote:
-> It is useful to be able to recheck dtbs files against a limited set of
-> DT schema files. This can be accomplished by using differnt
-> DT_SCHEMA_FILES argument values while rerunning make dtbs_check. However
-> for some reason if_changed_rule doesn't pick up the rule_dtc changes
-> (and doesn't retrigger the build).
-> 
-> Fix this by changing if_changed_rule to if_changed_dep and squashing DTC
-> and dt-validate into a single new command. Then if_changed_dep triggers
-> on DT_SCHEMA_FILES changes and reruns the build/check.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
-> 
-> Changes since v1:
->  - Fixed the quiet_cmd_dtb to fit into the 7 chars limit
-> 
-> ---
->  scripts/Makefile.lib | 14 ++++++--------
->  1 file changed, 6 insertions(+), 8 deletions(-)
-> 
 
-Applied, thanks!
+--eethafq2wituzhkq
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+On Tue, Sep 27, 2022 at 05:47:19PM +0300, Andy Shevchenko wrote:
+> For the sake of integrity, include headers we are direct user of.
+>=20
+> While at it, add missed struct pwm_lpss_boardinfo one and replace
+> device.h with a forward declaration. The latter improves compile
+> time due to reducing overhead of device.h parsing with entire train
+> of dependencies.
+
+Hm, I copied the cmdline for the compiler from a V=3D1 build and only run
+the compiler on drivers/pwm/pwm-lpss-pci.c.
+
+With #include <device.h> I got:
+
+	real	0m0.421s
+	user	0m0.354s
+	sys	0m0.066s
+
+With struct device; I got:
+
+	real	0m0.431s
+	user	0m0.378s
+	sys	0m0.052s
+
+Are the numbers for you considerably different?
+
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+>  drivers/pwm/pwm-lpss.h | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/pwm/pwm-lpss.h b/drivers/pwm/pwm-lpss.h
+> index c344921b2cab..839622964b2a 100644
+> --- a/drivers/pwm/pwm-lpss.h
+> +++ b/drivers/pwm/pwm-lpss.h
+> @@ -10,11 +10,15 @@
+>  #ifndef __PWM_LPSS_H
+>  #define __PWM_LPSS_H
+> =20
+> -#include <linux/device.h>
+>  #include <linux/pwm.h>
+> +#include <linux/types.h>
+> =20
+>  #define MAX_PWMS			4
+> =20
+> +struct device;
+> +
+> +struct pwm_lpss_boardinfo;
+
+Hmm, I wonder why there is no compiler warning without that declaration.
+At least in my builds. Do you see a warning? IMHO it's better to fix
+that be swapping the order of struct pwm_lpss_chip and struct
+pwm_lpss_boardinfo.
+
+>  struct pwm_lpss_chip {
+>  	struct pwm_chip chip;
+>  	void __iomem *regs;
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--eethafq2wituzhkq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMzEnoACgkQwfwUeK3K
+7AkrQQf/fZ6ptu/CNAn9zoSn9UaThTEMfKdorGSn8tlmlgLIOC8/ei8xwRnvQ3Bd
+dzDnyF/f7mh22PaBsLQBK6GeKB9bJr7Nu6MPc5URE7ML9o3CZjmpTqTHyqiLuGhu
+3ZO2htBOBKDZdxK4o96IV4nEwQPPZivsn504DgMeXnpe0SHmBQbR1wuUbUlfN8Wg
+NCrM3p9LD20ZdjK6oj/pEtiPa0dX/gdI4OoVgg9UJkn45oa0g7gsofmczsDOIs+x
+RJZ/tzMxmY5/q1EMr4fnQV9CquE5A2Osw9UxQaCyT4geVRRVe9yybJXckV5/2tvI
+QXfhP7Mkj53HBm4tITtY2iI9e7ZTjA==
+=MlPl
+-----END PGP SIGNATURE-----
+
+--eethafq2wituzhkq--
