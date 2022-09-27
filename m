@@ -2,105 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537A75ECD2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCA45ECD31
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbiI0Tvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 15:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38824 "EHLO
+        id S232054AbiI0TxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 15:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbiI0Tvw (ORCPT
+        with ESMTP id S229572AbiI0TxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 15:51:52 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FB84D175
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:51:50 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id m16so5622495ili.9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=vatT0SjX3NY2U9704T3rmB4+zptS7Iq13IphnWVOULo=;
-        b=VDBr1DEpZakwgEBBffkB2Y7gaS4rfctKIIdPUO++q9iH+NEtFX7MmB6fK5J86NDeF1
-         7s1VoKhiY90lMbhzlP+ktqEW/m3/HwKHi/LVE6KGxbjN39tfbPur203L83F1BlIzOkZk
-         gsgquWsyhMlQXu1ycSBaMjtfAnI+/8HuXhSL8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=vatT0SjX3NY2U9704T3rmB4+zptS7Iq13IphnWVOULo=;
-        b=mNvGw2f+7Hj4IeVK1AOAf4EVrfeEJdU6oqClOH/P6evAF5MbXgiPAhAXstdmCQvt3O
-         3yYtrdJt9gdlJGoozNTjMTMjnwprPC8yeWiQA/3lyxhUtkW/Q1o4mAQ2ukPWsFeKm2Mo
-         YsyThah8iloFtYmFOWihy+uV+5dq650AzUIpYmGQABQHMRwi3lMRnGyLX8FSfx3v4ICQ
-         gncfBIc+2zmcfZomvYjGPYehnzloLE1ZlYNJe0mWd4IhTz0pJBGu+Zjb13FqVoBUSj95
-         mphFA+gma0tPXisBvlo5YUXSWuRRVyuJdr0/6RWONmtiuHuqc7iVwzhnSiwHer53FZGm
-         bV0g==
-X-Gm-Message-State: ACrzQf3Qlgyu5ARBZDJFpgd6kmfkqt2ZtDDKj8Vi0sxWiiBWn0XkSf9U
-        rQZFpm/BI46DLNCpKlFSccbwpQ==
-X-Google-Smtp-Source: AMsMyM6og55zbZYLITEuu8TP1VjxOGbk3Q3j7F9cNOMC0TXH6IDFkvCm1KHZdAwgObFe52V3uqJwuA==
-X-Received: by 2002:a92:cdae:0:b0:2f5:8aea:654d with SMTP id g14-20020a92cdae000000b002f58aea654dmr13676601ild.135.1664308309819;
-        Tue, 27 Sep 2022 12:51:49 -0700 (PDT)
-Received: from [172.22.22.26] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id x13-20020a0566380cad00b0035b2f0ebf65sm928031jad.76.2022.09.27.12.51.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 12:51:49 -0700 (PDT)
-Message-ID: <353ae92d-57a2-5ca3-c3dc-c68b6a8f80ab@ieee.org>
-Date:   Tue, 27 Sep 2022 14:51:48 -0500
+        Tue, 27 Sep 2022 15:53:03 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0560C96FD0;
+        Tue, 27 Sep 2022 12:53:01 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id C6A235C00E8;
+        Tue, 27 Sep 2022 15:52:58 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 27 Sep 2022 15:52:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wfchandler.org;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1664308378; x=1664394778; bh=7t7ZSB2d97
+        FUKxKcAQJgF8klof7GgnZ1fb9Gj6c5RzQ=; b=cRSBxxSOyLaVoMUJH54v5PDP8Y
+        uyJEhEWa4HdUTpYrVrkWqnhITZX0fQiG6K3I+dmPW1NHLLsCldGUtVUcKAj06+0v
+        m3mrKr0ECfTVhXNWigzKIrZamj4iyPLQkuQ4HK3dx1BQ3Z22B/t41jgX2D0B5Y0G
+        F4F6I24ehXW4U/SeqV82bQj3oEc4jPWFQxG4PlM0cHlJpKxvHMpRD+qLXoPFAW4B
+        /pVx+b8U/UAznJF04fonbGRQpGv6zcNxLO33whuvpXiKR/c3IHo8UWQqx0OKKKVK
+        BZR2v5PE7751lpBcmTR0Rj6pV+S00qz62kt2ab+PgGsYZTdiEDN8AqRdPX6g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1664308378; x=1664394778; bh=7t7ZSB2d97FUKxKcAQJgF8klof7GgnZ1fb9
+        Gj6c5RzQ=; b=BfE43Jsu8CUJz65dHl9oE7WNYUJ7ePxlBH19BHYfXyLkIK5CeYm
+        mBed2EYiMjRX7NBiX5f/L2IApuSHXn1s6CXhDgG6Q3HfRaHf1y0q+wOJBq9QIkwO
+        M7lxcOTmqCGlgY8LOkBdnbjuVbdYtZvXSteJ8ram30qpHVYsF/LXUOxFJp3rCG6P
+        qiVAN0ZF0nPEgaSPWO0/E9kb7wyExpfNIFy5rVrFM81tkMQHTuBxz2foyTDFxHaT
+        kI/KITD19PcwerXCr/mxKv7Hj6PG7GWa6DuO47SF9QJiTiEI5xaO2QJ3yTlI460F
+        Ul9mWoekBUcu7KbiVoWJigB2aGGchZ2McPQ==
+X-ME-Sender: <xms:mlQzY1aZqUKgF6HnEMAcoi8H23RU2vI207Y7lbHSCcAxE1W0SuWEKw>
+    <xme:mlQzY8apN_ktvGYHBbIxc8lkKsgtdn4rP5-6__s7kKPU6gAh9BAFf5l64tnRymimy
+    smOHwl8VZ3PuRQy1HQ>
+X-ME-Received: <xmr:mlQzY3-FI02zyKnCMXPWDn7vkfzhXSQrb0lkRTJnTmzvlMQtK0mFG4B6swYRX45VB_yJ5a0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegiedguddukecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekre
+    dtredttdenucfhrhhomhephghilhhlucevhhgrnhgulhgvrhcuoeiffhgtseiffhgthhgr
+    nhgulhgvrhdrohhrgheqnecuggftrfgrthhtvghrnhephfegffevtdeuueeugedvledvfe
+    eikeefueetteekffdthfekfeeggffgheelleehnecuffhomhgrihhnpehkvghrnhgvlhdr
+    ohhrghdpfhgvughorhgrphhrohhjvggtthdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiffhgtseiffhgthhgrnhgulhgvrhdrohhr
+    gh
+X-ME-Proxy: <xmx:mlQzYzpdBzrqmkWrgL71hBie0yHdZCqDi2t0sDlMIIsIWh1lM_mbKw>
+    <xmx:mlQzYwqSoMxxg7QiMzNJhl9O2RD9ao-Dcc46vPC5-Lveuzr-K5XuAA>
+    <xmx:mlQzY5TGsTFxp2xOgV5PMJW5wDOK-adF98KpkmgJn7PdG2QfZ8GXZQ>
+    <xmx:mlQzY31A9uXv7LPxprs8rjgODL536pnNLusdUd8YQltNWr-0zDl-kw>
+Feedback-ID: ica594744:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 27 Sep 2022 15:52:57 -0400 (EDT)
+From:   Will Chandler <wfc@wfchandler.org>
+To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     john.garry@huawei.com, wfc@wfchandler.org
+Subject: [PATCH] perf tools: Fix empty version number when building outside of a git repo
+Date:   Tue, 27 Sep 2022 15:52:28 -0400
+Message-Id: <20220927195228.47304-1-wfc@wfchandler.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V13 1/7] dt-bindings: Added the yaml bindings for DCC
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>, vkoul@kernel.org
-References: <cover.1663642051.git.quic_schowdhu@quicinc.com>
- <c6b55a5b44a8add13ea9015542522b2562cf8f60.1663642052.git.quic_schowdhu@quicinc.com>
- <f09fabec-f5a3-df21-f776-956732d60359@kernel.org>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <f09fabec-f5a3-df21-f776-956732d60359@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/23/22 2:27 PM, Krzysztof Kozlowski wrote:
-> On 20/09/2022 05:56, Souradeep Chowdhury wrote:
->> Documentation for Data Capture and Compare(DCC) device tree bindings
->> in yaml format.
->>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>				
+When perf is built in a full source tree that is not a git repository,
+e.g. from a kernel source tarball, `perf version` will print empty tag
+and commit strings:
 
-Souradeep, I will review v14 (of the code anyway--patch 3) when you send it.
+  $ perf version
+  perf version
 
-					-Alex
-	
->> ---
->>   .../devicetree/bindings/arm/msm/qcom,dcc.yaml      | 44 ++++++++++++++++++++++
->>   1 file changed, 44 insertions(+)
-> 
-> Rebase your tree on some current Linux kernel (and use
-> scripts/get_maintainers.pl).
-> 
-> Best regards,
-> Krzysztof
-> 
+Currently the tag version is only generated from the root Makefile when
+building in a git repository. If PERF-VERSION-FILE has not been
+generated and the source tree is not in a git repository, then
+PERF-VERSION-GEN will return an empty version.
+
+The problem can be reproduced with the following steps:
+
+  $ wget https://git.kernel.org/torvalds/t/linux-6.0-rc7.tar.gz
+  $ tar -xf linux-6.0-rc7.tar.gz && cd linux-6.0-rc7
+  $ make -C tools/perf
+  $ tools/perf/perf -v
+  perf version
+
+Builds from tarballs generated with `make perf-tar-src-pkg` are not
+impacted by this issue as PERF-VERSION-FILE is included in the archive.
+
+The perf RPM provided by Fedora for 5.18+ is experiencing this problem.
+Package build logs[0] show that the build is attempting to fall back on
+PERF-VERSION-FILE, but it is not present.
+
+To resolve this, always use the tag from the root Makefile if available.
+
+[0] https://kojipkgs.fedoraproject.org/packages/kernel-tools/5.19.4/200.fc36/data/logs/x86_64/build.log
+
+Fixes: 7572733b8499 ("perf tools: Fix version kernel tag, 2022-02-21")
+Signed-off-by: Will Chandler <wfc@wfchandler.org>
+---
+ tools/perf/util/PERF-VERSION-GEN | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/tools/perf/util/PERF-VERSION-GEN b/tools/perf/util/PERF-VERSION-GEN
+index 0ee5af529238..43b8a8ea6f53 100755
+--- a/tools/perf/util/PERF-VERSION-GEN
++++ b/tools/perf/util/PERF-VERSION-GEN
+@@ -15,10 +15,13 @@ LF='
+ #
+ CID=
+ TAG=
+-if test -d ../../.git -o -f ../../.git
++if test -r ../../Makefile
+ then
+ 	TAG=$(MAKEFLAGS= make -sC ../.. kernelversion)
+-	CID=$(git log -1 --abbrev=12 --pretty=format:"%h" 2>/dev/null) && CID="-g$CID"
++	if test -d ../../.git -o -f ../../.git
++	then
++	    CID=$(git log -1 --abbrev=12 --pretty=format:"%h" 2>/dev/null) && CID="-g$CID"
++	fi
+ else
+ 	TAG=$(cut -d' ' -f3 ../../PERF-VERSION-FILE | sed -e 's/\"//g')
+ fi
+-- 
+2.37.3
 
