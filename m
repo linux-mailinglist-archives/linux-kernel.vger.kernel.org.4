@@ -2,133 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8597F5EC9D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B2F5EC9D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbiI0QoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
+        id S232995AbiI0Qo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbiI0QoR (ORCPT
+        with ESMTP id S232158AbiI0QoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:44:17 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6718A1E05E3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:44:15 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso1575309pjq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:44:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=hka2MB6GtBxZvbqko4sxk5z5NDTLJ3qOesEZCD0X7vU=;
-        b=i/cUOlzvOFqjpGlqE7Jt5HlWISkyhBpSqtHRYPwIs2x/jE14c88WOLIDeVswI5sXGi
-         /JZEoefvgVUIUeEmIgtO345p6YNqrwTSqHX1ME9QhHmNciQix8sRA9s3FCuUhDawbhh8
-         4EspsgU1Z30HYK8eA575FPhVusVE7l+aj5FGoGsPLxSFF9GSmvIlt+pIK7FI/YInT1nT
-         CKxSDbXfHgxDKQmQarcXrnT+OufYvQFXHZ52c1Zf8qINJbeZtGzQhsJAPdd9MY16bagL
-         Gyw9A2mOz0JDIEOkepz+uaJEDHNgCbyV474fp0QClmBSRxtevHIoZQV7LlPiVYK1eqZV
-         YOKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=hka2MB6GtBxZvbqko4sxk5z5NDTLJ3qOesEZCD0X7vU=;
-        b=AILzJUNnRvXnO9tbyYd2Mmh8ZAfy6/AfY6qYo0DoILdJ3WwoHNB/CNKt+gCRmjlqXs
-         i/0NL5xGKDRdn1pOO0rMU8epNZQo/Snc5XQXfgpj+TLPoFEl1tKTEag6x8Mh/1yrToBC
-         knIC9WsgdnEKp9W6qJ9eZpUXtRAQ8QUcpFxzqsEFe/M26aMEs7EBeS+KDquUIu65+Iib
-         zbq0oQaEWPVdcpUV9LPHR5Yf5pWOwpMMu2QS6j/TVYfis+Io53QVRzCvcgAinIfDpDSN
-         ChxEFwCTjgjXBdqOt46M2uWKtt61YQAEldV8box7bj5YktmjVZVrrAkY60NqmS2ahMvm
-         dIUg==
-X-Gm-Message-State: ACrzQf1BFFvPfI6zD69S3aGDNNP8xgxX8qATwS+H8/ee/XwKTB22w1+8
-        bdWlMmMsfKZC4j1JmaTbVMP+KQ==
-X-Google-Smtp-Source: AMsMyM5ZMAA2SXfBrFTNG9fxkYHpjr6RQ+BUu3NQP5cpiVcAurwmVWV/yehxLHBCN2cZdEEycppZlw==
-X-Received: by 2002:a17:903:247:b0:179:b5e1:54b7 with SMTP id j7-20020a170903024700b00179b5e154b7mr27777288plh.84.1664297054476;
-        Tue, 27 Sep 2022 09:44:14 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id mn22-20020a17090b189600b001fde265ff4bsm158957pjb.4.2022.09.27.09.44.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 09:44:13 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 16:44:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Robert Hoo <robert.hu@linux.intel.com>
-Cc:     David Matlack <dmatlack@google.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Lan Tianyu <Tianyu.Lan@microsoft.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: Fix wrong gfn range of tlb flushing
- in validate_direct_spte()
-Message-ID: <YzMoWghqNJdYBlaE@google.com>
-References: <cover.1661331396.git.houwenlong.hwl@antgroup.com>
- <c0ee12e44f2d218a0857a5e05628d05462b32bf9.1661331396.git.houwenlong.hwl@antgroup.com>
- <f6fd8ccff13f9f48cbca06f0a5278654198d0d06.camel@linux.intel.com>
- <YyoHNMz3CH4SnJwJ@google.com>
- <CALzav=f=y7-2uOnXUi---hvCTa2otDBPsY1VoUtDWnS7+0QX=w@mail.gmail.com>
- <d55ccf1c085d4adadc8dbbbae6443059a94eaf90.camel@linux.intel.com>
+        Tue, 27 Sep 2022 12:44:19 -0400
+Received: from mail-m118207.qiye.163.com (mail-m118207.qiye.163.com [115.236.118.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 057F11E05CE
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:44:16 -0700 (PDT)
+Received: from lyc-workstation.. (unknown [221.212.176.62])
+        by mail-m118207.qiye.163.com (HMail) with ESMTPA id 10B7F9016AB;
+        Wed, 28 Sep 2022 00:44:12 +0800 (CST)
+From:   YingChi Long <me@inclyc.cn>
+To:     david.laight@aculab.com
+Cc:     bp@alien8.de, chang.seok.bae@intel.com,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, me@inclyc.cn, mingo@redhat.com,
+        ndesaulniers@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+        x86@kernel.org
+Subject: RE: [PATCH v2] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
+Date:   Wed, 28 Sep 2022 00:44:11 +0800
+Message-Id: <20220927164411.99297-1-me@inclyc.cn>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <38114d1b752c497eba1640360daf5b9e@AcuMS.aculab.com>
+References: <38114d1b752c497eba1640360daf5b9e@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d55ccf1c085d4adadc8dbbbae6443059a94eaf90.camel@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFPN1dZLVlBSVdZDwkaFQgSH1lBWRpLTk1WGRpPHRhLQk1KSB5KVQIWExYaEhckFA4PWV
+        dZGBILWUFZSUlKVUlKSVVKTE1VTUlZV1kWGg8SFR0UWUFZT0tIVUpKS0hNSlVKS0tVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MQg6Qxw4PjlNGTc5NE4xFDQI
+        AgxPCT5VSlVKTU1PSUJMS05IS0NDVTMWGhIXVRYeOxIVGBcCGFUYFUVZV1kSC1lBWUlJSlVJSklV
+        SkxNVU1JWVdZCAFZQUlIT0M3Bg++
+X-HM-Tid: 0a837fd5a9cc2d29kusn10b7f9016ab
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022, Robert Hoo wrote:
-> On Tue, 2022-09-20 at 11:44 -0700, David Matlack wrote:
-> > That being said, we might as well replace the WARN_ON_ONCE() with
-> > KVM_BUG_ON(). That will still do a WARN_ON_ONCE() but has the added
-> > benefit of terminating the VM.
-> 
-> Yeah, here was my point, WARN_ON_ONCE() might not be warning obviously
-> enough, as it usually for recoverable cases. But terminating VM is also
-> over action I think.
+> Interesting - what justification do they give?
+> Linux kernel requires that the compiler add no unnecessary padding
+> so that structure definitions are well defined.
 
-Agreed, from the helper's perspective, killing the VM is unnecessary, e.g. it can
-simply flush the entire TLB as a fallback.
+Yes, that's a clarification given in 2019.
 
-	if (WARN_ON_ONCE(!sp->role.direct)) {
-		kvm_flush_remote_tlbs(kvm);
-		return;
-	}
+> So using a type definition inside offsetof() won't give a
+> useful value - but it still isn't really UB.
 
-But looking at the series as a whole, I think the better option is to just not
-introduce this helper.  There's exactly one user, and if that path encounters an
-indirect shadow page then KVM is deep in the weeds.  But that's a moot point,
-because unless I'm misreading the flow, there's no need for the unique helper.
-kvm_flush_remote_tlbs_sptep() will do the right thing even if the target SP happens
-to be indirect.
+WG14 may worry about commas and the scope of new definitions. So they provide
+new words into the standard and said:
 
-If we really want to assert that the child is a direct shadow page, then
-validate_direct_spte() would be the right location for such an assert.  IMO that's
-unnecessary paranoia.  The odds of KVM reaching this point with a completely messed
-up shadow paging tree, and without already having hosed the guest and/or yelled
-loudly are very, very low.
+> If the specified type defines a new type or if the specified member is a
+> bit-field, the behavior is undefined.
 
-In other words, IMO we're getting too fancy for this one and we should instead
-simply do:
+https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
 
-		child = to_shadow_page(*sptep & SPTE_BASE_ADDR_MASK);
-		if (child->role.access == direct_access)
-			return;
+I've provided this link in the patch.
 
-		drop_parent_pte(child, sptep);
-		kvm_flush_remote_tlbs_sptep(kvm, sptep);
+> Has that ever worked?
+> Given:
+> 	struct foo {
+> 		int a;
+> 		char b;
+> 		char c;
+> 	};
 
-That has the added benefit of flushing the same "thing" that is zapped, i.e. both
-operate on the parent SPTE, not the child.
+TYPE_ALIGN(struct foo) evaluates to 4 in the previous approach (based on
+offsetof). _Align(struct foo) evaluates to the same value.
 
-Note, kvm_flush_remote_tlbs_sptep() operates on the _parent_, where the above
-snippets retrieves the child.  This becomes much more obvious once spte_to_child_sp()
-comes along: https://lore.kernel.org/all/20220805230513.148869-8-seanjc@google.com.
+See https://godbolt.org/z/sqebhEnsq
+
+> I think CHECK_MEMBER_AT_END_OF_TYPE(struct foo, b) is true.
+
+Hmm, both the previous version and after this patch the macro gives me
+false. (See the godbolt link).
