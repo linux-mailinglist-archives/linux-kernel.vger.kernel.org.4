@@ -2,97 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2A85EC216
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 147845EC219
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbiI0MI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S232002AbiI0MJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbiI0MIX (ORCPT
+        with ESMTP id S232197AbiI0MJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:08:23 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B342AA2AA8;
-        Tue, 27 Sep 2022 05:08:18 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id a80so9497742pfa.4;
-        Tue, 27 Sep 2022 05:08:18 -0700 (PDT)
+        Tue, 27 Sep 2022 08:09:09 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD371A7A87
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:09:07 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id nb11so20224957ejc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:09:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=kWbWkuKWvVGaeeFfHEB2UkzJbLFThe5KkEvYUbeof1g=;
-        b=QiIlkU5VJGjW3xNo8lW81gmbbWTpoogY3aFw8UUx+R5v2LKlhX7yLyJzzFRAekwLNV
-         3D1AW1IIizT6obpp/GJ17O1DqEXNlPk4tYPgNhWg/u20V4ggTBPlKHAs6X/TNWa95yK1
-         lz4+n/IAFQJyzEKvmhY2iWbg1Inf1SzZvSnhyICO8FMPaDz5Xbs0e5n2tzBzZyeEAMUk
-         NiLqa8BlbkYbzxhAggp13rU4RhMSvrRvyPmhM286vmE4If5grOX1kJ0TewpeE0KZIJ9n
-         fzNGju1tnQmaLi64p75mUJ1mUlt22CVLJb7HOVe8F0qwtDRtwSGpLOtqrnK17stsdVqZ
-         V89Q==
+        d=ionos.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=k07p0rf0vkA3gAMEm4COhp2yO1grpwLyq/HgUM2N6qY=;
+        b=EPGbeF9gmDZS2nP9x/LMlRQge6IdIpxC2sP93nfMuVwIZq2ePHbzWIRkp1OIzeeHT9
+         D6aULyed6qPZihmernkcntzYKgbu5nxLqrV4yoy9gROUd3QKMQ1fsUw+XEQPWcxW58oY
+         jZL1fYGZF/rQ+CcuWB/Tl/s4Hz4unvYKLTrz5eLjx8OHGOKtWhyvqZyb0ofvtytbrQkJ
+         HMLZL7/+ZD/FD+ZkwhAIIVaL0x2zymdIVyOEuWWlyD774HAZ4wRe6N3aQkM7JZxQm2QV
+         slKkuZKqOZ3HshfdtMmfXiYyguZTOm3N8BXmtH157u1JtdNeupPe3M+Lwoa1DY51n2bX
+         W8Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=kWbWkuKWvVGaeeFfHEB2UkzJbLFThe5KkEvYUbeof1g=;
-        b=nc1t2NrjEPxhxOdKh+HYQnUublEHTvmRpHSMON+bg/jiSAx3I7pt5uvJXpEExJy7ZP
-         eNL1MBAG6xKXoVvLyZNQzQKvvyX5+Je5EueEDeBjCLwfwiNt/ghDsl42RbyoxjRq0JEA
-         mcmN5i6/4Ug8MXgR19rr0yPzGClg7Lwa6U3zXNBW7VoOf7N2GFdyPEtK2aA6olby+SwZ
-         gL1GwnoAUNa6v3xsVOLYrTXovxiV1DgZeR+EzGYz0vCohlJzRW6fDbRHJkQ59ZbkQEK7
-         A/witkWwB4PdanUsALMEKaf9tRF+whHpFlwKmthma9/hvY4XRChUeDpf79imAPcbFvhm
-         Lscg==
-X-Gm-Message-State: ACrzQf095PMEqM+1inBNMVND1fQy/Kmn4NRV5K2vIQwVyrTrP5F+dB5s
-        uThAU/bayXCafDU0Go4zfkIGPND+nr8=
-X-Google-Smtp-Source: AMsMyM41ioVUEdSMLDienYDhZ9Bh/Sytq2y6mQVYRhL7zxWz7UrXW8/vgwG+Y0kmXuEW0ngKos8A3Q==
-X-Received: by 2002:a63:a18:0:b0:43b:e1c8:fdae with SMTP id 24-20020a630a18000000b0043be1c8fdaemr23826019pgk.163.1664280498131;
-        Tue, 27 Sep 2022 05:08:18 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-58.three.co.id. [116.206.12.58])
-        by smtp.gmail.com with ESMTPSA id j13-20020a170903024d00b0017541ecdcfesm1354079plh.229.2022.09.27.05.08.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 05:08:17 -0700 (PDT)
-Message-ID: <c5099b4d-eb37-a210-b852-51e02c185a87@gmail.com>
-Date:   Tue, 27 Sep 2022 19:08:11 +0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=k07p0rf0vkA3gAMEm4COhp2yO1grpwLyq/HgUM2N6qY=;
+        b=1P7mG/IweMaSTALmeZC8XMPpvzR7CY195j6FvIv3CoTEBG22bORY+0+DhCW5At8pI2
+         eM7+3eVc87lBxb3TYoSzyWIZzl3EVAJTxbJu9AWB7eucnYLx0ymju3kxHSRbm3N9G6pz
+         r9ouDi/RTlMUQU93v6ZNdXF+N8XXJvJ9NrRS/l7mmXyk3AXxcVvZKlhXAEYNSX1xBtq8
+         SkCxUpeZlmmwDKNqLRipeGGBRdM8CCEXAyZSqIyrS/G/nugyDcSwTMGmRAXG5rOkT/ev
+         K7dFZyfPXnPLgIC+gGSd9wywQ4QEuyDkpQVAVYgVL+6P5O/l95S4m5XQqgpVR03kJbgU
+         iKeA==
+X-Gm-Message-State: ACrzQf1hIXBvihGGvibHhkwk+x5GaiGElII11JQ1YWqFDaYMJ8z+e9Dc
+        rTL4mlfFUKZpIOkgHh3YAbzd3A==
+X-Google-Smtp-Source: AMsMyM6b6/kkAN9mo9OPtDRwtTEWRbYu/iQFFoGizn3BOKZzOMO8GaLBqZzYWJkaiwlLNEMeO8heLg==
+X-Received: by 2002:a17:907:da9:b0:783:a3b4:2cff with SMTP id go41-20020a1709070da900b00783a3b42cffmr7308324ejc.51.1664280546378;
+        Tue, 27 Sep 2022 05:09:06 -0700 (PDT)
+Received: from heron.intern.cm-ag (p200300dc6f0da700529a4cfffe3dd983.dip0.t-ipconnect.de. [2003:dc:6f0d:a700:529a:4cff:fe3d:d983])
+        by smtp.gmail.com with ESMTPSA id ne13-20020a1709077b8d00b0073dc4385d3bsm726827ejc.105.2022.09.27.05.09.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 05:09:06 -0700 (PDT)
+From:   Max Kellermann <max.kellermann@ionos.com>
+To:     xiubli@redhat.com, idryomov@gmail.com, jlayton@kernel.org,
+        ceph-devel@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Kellermann <max.kellermann@ionos.com>
+Subject: [PATCH] fs/ceph/super: add mount options "snapdir{mode,uid,gid}"
+Date:   Tue, 27 Sep 2022 14:08:57 +0200
+Message-Id: <20220927120857.639461-1-max.kellermann@ionos.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH] Documentation/CoC: Reflect current CoC interpretation and
- practices
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kristen Carlson Accardi <kristen@linux.intel.com>,
-        linux-doc@vger.kernel.org, corbet@lwn.net,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-References: <20220926211149.2278214-1-kristen@linux.intel.com>
- <dd89a30e-5403-8844-036c-9c9107cac888@gmail.com> <YzKyqNJk72TY//42@kroah.com>
- <f0c27a5b-fee2-eb64-6855-639e7ea65d37@gmail.com> <YzK3sSrHSckm7T3b@kroah.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <YzK3sSrHSckm7T3b@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 15:43, Greg Kroah-Hartman wrote:
->> Hi Greg,
->>
->> In the patch, the mention to bootstrap period of CoC committee is
->> replaced with note about dynamic nature of CoC interpretation. I asked
->> when the duration of bootstrap period was before we got into status quo.
-> 
-> It was a while ago, a few years perhaps?  We had forgotten to update the
-> document since then, sorry.
-> 
-> greg k-h
+By default, the ".snap" directory inherits the parent's permissions
+and ownership, which allows all users to create new cephfs snapshots
+in arbitrary directories they have write access on.
 
-Thanks Greg for the info!
+In some environments, giving everybody this capability is not
+desirable, but there is currently no way to disallow only some users
+to create snapshots.  It is only possible to revoke the permission to
+the whole client (i.e. all users on the computer which mounts the
+cephfs).
 
+This patch allows overriding the permissions and ownership of all
+virtual ".snap" directories in a cephfs mount, which allows
+restricting (read and write) access to snapshots.
+
+For example, the mount options:
+
+ snapdirmode=0751,snapdiruid=0,snapdirgid=4
+
+... allows only user "root" to create or delete snapshots, and group
+"adm" (gid=4) is allowed to get a list of snapshots.  All others are
+allowed to read the contents of existing snapshots (if they know the
+name).
+
+Signed-off-by: Max Kellermann <max.kellermann@ionos.com>
+---
+ fs/ceph/inode.c |  7 ++++---
+ fs/ceph/super.c | 33 +++++++++++++++++++++++++++++++++
+ fs/ceph/super.h |  4 ++++
+ 3 files changed, 41 insertions(+), 3 deletions(-)
+
+diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+index 56c53ab3618e..0e9388af2821 100644
+--- a/fs/ceph/inode.c
++++ b/fs/ceph/inode.c
+@@ -80,6 +80,7 @@ struct inode *ceph_get_snapdir(struct inode *parent)
+ 	};
+ 	struct inode *inode = ceph_get_inode(parent->i_sb, vino);
+ 	struct ceph_inode_info *ci = ceph_inode(inode);
++	struct ceph_mount_options *const fsopt = ceph_inode_to_client(parent)->mount_options;
+ 
+ 	if (IS_ERR(inode))
+ 		return inode;
+@@ -96,9 +97,9 @@ struct inode *ceph_get_snapdir(struct inode *parent)
+ 		goto err;
+ 	}
+ 
+-	inode->i_mode = parent->i_mode;
+-	inode->i_uid = parent->i_uid;
+-	inode->i_gid = parent->i_gid;
++	inode->i_mode = fsopt->snapdir_mode == (umode_t)-1 ? parent->i_mode : fsopt->snapdir_mode;
++	inode->i_uid = uid_eq(fsopt->snapdir_uid, INVALID_UID) ? parent->i_uid : fsopt->snapdir_uid;
++	inode->i_gid = gid_eq(fsopt->snapdir_gid, INVALID_GID) ? parent->i_gid : fsopt->snapdir_gid;
+ 	inode->i_mtime = parent->i_mtime;
+ 	inode->i_ctime = parent->i_ctime;
+ 	inode->i_atime = parent->i_atime;
+diff --git a/fs/ceph/super.c b/fs/ceph/super.c
+index 40140805bdcf..5e5713946f7b 100644
+--- a/fs/ceph/super.c
++++ b/fs/ceph/super.c
+@@ -143,6 +143,9 @@ enum {
+ 	Opt_readdir_max_entries,
+ 	Opt_readdir_max_bytes,
+ 	Opt_congestion_kb,
++	Opt_snapdirmode,
++	Opt_snapdiruid,
++	Opt_snapdirgid,
+ 	/* int args above */
+ 	Opt_snapdirname,
+ 	Opt_mds_namespace,
+@@ -200,6 +203,9 @@ static const struct fs_parameter_spec ceph_mount_parameters[] = {
+ 	fsparam_flag_no ("require_active_mds",		Opt_require_active_mds),
+ 	fsparam_u32	("rsize",			Opt_rsize),
+ 	fsparam_string	("snapdirname",			Opt_snapdirname),
++	fsparam_u32oct	("snapdirmode",			Opt_snapdirmode),
++	fsparam_u32	("snapdiruid",			Opt_snapdiruid),
++	fsparam_u32	("snapdirgid",			Opt_snapdirgid),
+ 	fsparam_string	("source",			Opt_source),
+ 	fsparam_string	("mon_addr",			Opt_mon_addr),
+ 	fsparam_u32	("wsize",			Opt_wsize),
+@@ -414,6 +420,22 @@ static int ceph_parse_mount_param(struct fs_context *fc,
+ 		fsopt->snapdir_name = param->string;
+ 		param->string = NULL;
+ 		break;
++	case Opt_snapdirmode:
++		fsopt->snapdir_mode = result.uint_32;
++		if (fsopt->snapdir_mode & ~0777)
++			return invalfc(fc, "Invalid snapdirmode");
++		fsopt->snapdir_mode |= S_IFDIR;
++		break;
++	case Opt_snapdiruid:
++		fsopt->snapdir_uid = make_kuid(current_user_ns(), result.uint_32);
++		if (!uid_valid(fsopt->snapdir_uid))
++			return invalfc(fc, "Invalid snapdiruid");
++		break;
++	case Opt_snapdirgid:
++		fsopt->snapdir_gid = make_kgid(current_user_ns(), result.uint_32);
++		if (!gid_valid(fsopt->snapdir_gid))
++			return invalfc(fc, "Invalid snapdirgid");
++		break;
+ 	case Opt_mds_namespace:
+ 		if (!namespace_equals(fsopt, param->string, strlen(param->string)))
+ 			return invalfc(fc, "Mismatching mds_namespace");
+@@ -734,6 +756,14 @@ static int ceph_show_options(struct seq_file *m, struct dentry *root)
+ 		seq_printf(m, ",readdir_max_bytes=%u", fsopt->max_readdir_bytes);
+ 	if (strcmp(fsopt->snapdir_name, CEPH_SNAPDIRNAME_DEFAULT))
+ 		seq_show_option(m, "snapdirname", fsopt->snapdir_name);
++	if (fsopt->snapdir_mode != (umode_t)-1)
++		seq_printf(m, ",snapdirmode=%o", fsopt->snapdir_mode);
++	if (!uid_eq(fsopt->snapdir_uid, INVALID_UID))
++		seq_printf(m, ",snapdiruid=%o",
++			   from_kuid_munged(&init_user_ns, fsopt->snapdir_uid));
++	if (!gid_eq(fsopt->snapdir_gid, INVALID_GID))
++		seq_printf(m, ",snapdirgid=%o",
++			   from_kgid_munged(&init_user_ns, fsopt->snapdir_gid));
+ 
+ 	return 0;
+ }
+@@ -1335,6 +1365,9 @@ static int ceph_init_fs_context(struct fs_context *fc)
+ 	fsopt->wsize = CEPH_MAX_WRITE_SIZE;
+ 	fsopt->rsize = CEPH_MAX_READ_SIZE;
+ 	fsopt->rasize = CEPH_RASIZE_DEFAULT;
++	fsopt->snapdir_mode = (umode_t)-1;
++	fsopt->snapdir_uid = INVALID_UID;
++	fsopt->snapdir_gid = INVALID_GID;
+ 	fsopt->snapdir_name = kstrdup(CEPH_SNAPDIRNAME_DEFAULT, GFP_KERNEL);
+ 	if (!fsopt->snapdir_name)
+ 		goto nomem;
+diff --git a/fs/ceph/super.h b/fs/ceph/super.h
+index d44a366b2f1b..3c930816078d 100644
+--- a/fs/ceph/super.h
++++ b/fs/ceph/super.h
+@@ -85,6 +85,10 @@ struct ceph_mount_options {
+ 	unsigned int max_readdir;       /* max readdir result (entries) */
+ 	unsigned int max_readdir_bytes; /* max readdir result (bytes) */
+ 
++	umode_t snapdir_mode;
++	kuid_t snapdir_uid;
++	kgid_t snapdir_gid;
++
+ 	bool new_dev_syntax;
+ 
+ 	/*
 -- 
-An old man doll... just what I always wanted! - Clara
+2.35.1
+
