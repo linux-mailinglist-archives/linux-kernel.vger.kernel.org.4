@@ -2,198 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690875EC75B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7915EC75D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbiI0POH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        id S231898AbiI0POY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232196AbiI0POA (ORCPT
+        with ESMTP id S232085AbiI0POV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:14:00 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7C0123D91;
-        Tue, 27 Sep 2022 08:13:58 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RF7b0V005477;
-        Tue, 27 Sep 2022 15:13:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=suQc2ohV2UHcHZRjb/BQRqa5yc0AJwLQ4xnejAiqQpg=;
- b=QpmGLE7kck1/+nLQalritFgu1NYnCTtUGOsushncg7TS5A2SAwfRXELganJ7p/QUlVzX
- MTgdS8WnjcznQVKqMHsD25j9vTCdCv5b7CfTbafK48U0exNlL9SdsBVsY8kdCt9RsJhq
- QFZpt132e8VcEt+GpjCgPyIZxCEPCJqIRDvSljn3DzmfKqZxDtdFSD1umjIiUv4pg/cD
- ugixaApt9PurGuNar87Fu9C4R+1rBKfB5Maf8m74XTdbyw14g1RN+QJa2Lc8s5KlZwig
- nmyYcysZj2bqNSPdChZt2TYkNZR9FRG4Z/ZeeIRF6XAnrGF6iTOuqU2P/L3h/BXK9t6A wA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3juvnnhbyj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 15:13:52 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28RFDpep003686
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 15:13:51 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 27 Sep
- 2022 08:13:49 -0700
-Message-ID: <26b36812-cbe6-744d-6fb7-e7aec0bf5496@quicinc.com>
-Date:   Tue, 27 Sep 2022 09:13:49 -0600
+        Tue, 27 Sep 2022 11:14:21 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D273C1251B0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:14:16 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id i15so6398537qvp.5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:14:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=jbmPaXjwsVDY1AN/HRtWM1ofxdcO2XSj8Vv58jSa1+U=;
+        b=HeQBREf2pKuUYgS4eZIcHY8BNuj31cGuPueOiQUEHmUMRmz1K/eQOieKIDnMrFM6Gv
+         zb9bF1NNPsnO7jhA9+Jb1/BmSK3lGWsV2jhv7js/c8fcOJZ9xIPgBs/eQjgaGuF/w6T0
+         mwlV4fA6Q3CL6nd5UClqCcS2AwIPtrQT0Cad8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=jbmPaXjwsVDY1AN/HRtWM1ofxdcO2XSj8Vv58jSa1+U=;
+        b=57jVAzLrMOXG0+jHveyMWWiQavI4aq64FrEe+Efu202GNTPkbW7lcJvT6WGY2qzWZO
+         +fekd08FPAGQsRIwSdWb+02XY1R+xzSB4A46MExgwwBf6ExFO+X2GMg7YHyOHb//mXL7
+         JTVkaYPpMQmkcgpSmDcQdkTZihyTubixmyFdPKFrSAvrZmaysrjdZqDQDnHHijAINETy
+         GBElGIWlgXaGCz7ieuRA6MThXJbYFuk1Tc+6h1tMY+pfElB13vERL5xMn5/wFKHCCrNV
+         b/ur/qhkOOfPVQ1VNLk2t6UsgTLRyXNLOOavv+jg+vKVSQ3EtdESp1/jfGIh4XCxGM3X
+         e4NQ==
+X-Gm-Message-State: ACrzQf3aTPAfjf/vrlByXKwYbfc+KOX+7BfzEG3n2m84mpMf7Uxs5bcf
+        asQB6CZPhLKMUBHRFauHPXgsRQ==
+X-Google-Smtp-Source: AMsMyM5qFpL6YVYNNOcjFaiePEUxR+p5LZkevzl6LVx2pIMIsxWABx/5VMEnMVA7XW7hljToBvef6g==
+X-Received: by 2002:a05:6214:2629:b0:4ad:88cb:66ac with SMTP id gv9-20020a056214262900b004ad88cb66acmr17341441qvb.87.1664291655354;
+        Tue, 27 Sep 2022 08:14:15 -0700 (PDT)
+Received: from localhost (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
+        by smtp.gmail.com with ESMTPSA id dt39-20020a05620a47a700b006bbd2c4cccfsm1159084qkb.53.2022.09.27.08.14.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 08:14:15 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 15:14:14 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, neeraj.iitr10@gmail.com,
+        frederic@kernel.org, paulmck@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Message-ID: <YzMTRrMKCnEMl/ov@google.com>
+References: <20220922220104.2446868-1-joel@joelfernandes.org>
+ <20220922220104.2446868-2-joel@joelfernandes.org>
+ <YzAX5kOwjrZzoed6@pc636>
+ <YzCUDXn3htWbqM4f@google.com>
+ <YzH/646RHxhHBy6+@pc636>
+ <YzIRg2u2JYXN9bnK@google.com>
+ <YzMD0pdR6rvGSZ/o@pc636>
+ <YzMI68pbXXVWWKEN@google.com>
+ <YzMP4LaIUY8Dh9Nw@pc636>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: GPU device resource reservations with cgroups?
-Content-Language: en-US
-To:     "T.J. Mercier" <tjmercier@google.com>
-CC:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        <cgroups@vger.kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
-        <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Carl Vanderlip <quic_carlv@quicinc.com>,
-        <quic_ajitpals@quicinc.com>, <quic_pkanojiy@quicinc.com>
-References: <7e047ee0-0243-d9d4-f0bc-7ed19ed33c19@quicinc.com>
- <CABdmKX2sGw-TwRYnHWuyaWYrxX7wgcK4gFSb5hGAwk0ztZxbcA@mail.gmail.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <CABdmKX2sGw-TwRYnHWuyaWYrxX7wgcK4gFSb5hGAwk0ztZxbcA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: v4aoXDjBljFL4HhKaQb4H72FBDl_sZfM
-X-Proofpoint-GUID: v4aoXDjBljFL4HhKaQb4H72FBDl_sZfM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-27_05,2022-09-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- clxscore=1011 mlxscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
- priorityscore=1501 malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2209270094
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzMP4LaIUY8Dh9Nw@pc636>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/8/2022 10:44 AM, T.J. Mercier wrote:
-> On Tue, Aug 16, 2022 at 1:39 PM Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
->>
->> Hello cgroup experts,
->>
->> I have a GPU device [1] that supports organizing its resources for the
->> purposes of supporting containers.  I am attempting to determine how to
->> represent this in the upstream kernel, and I wonder if it fits in cgroups.
->>
->> The device itself has a number of resource types – compute cores,
->> memory, bus replicators, semaphores, and dma channels.  Any particular
->> workload may consume some set of these resources.  For example, a
->> workload may consume two compute cores, 1GB of memory, one dma channel,
->> but no semaphores and no bus replicators.
->>
->> By default all of the resources are in a global pool.  This global pool
->> is managed by the device firmware.  Linux makes a request to the
->> firmware to load a workload.  The firmware reads the resource
->> requirements from the workload itself, and then checks the global pool.
->> If the global pool contains sufficient resources to satisfy the needs of
->> the workload, the firmware assigns the required resources from the
->> global pool to the workload.  If there are insufficient resources, the
->> workload request from Linux is rejected.
->>
->> Some users may want to share the device between multiple containers, but
->> provide device level isolation between those containers.  For example, a
->> user may have 4 workloads to run, one per container, and each workload
->> takes 1/4th of the set of compute cores.  The user would like to reserve
->> sets of compute cores for each container so that container X always has
->> the expected set of resources available, and if container Y
->> malfunctions, it cannot “steal” resources from container X.
->>
->> To support this, the firmware supports a concept of partitioning.  A
->> partition is a pool of resources which are removed from the global pool,
->> and pre-assigned to the partition’s pool.  A workload can then be run
->> from within a partition, and it consumes resources from that partition’s
->> pool instead of from the global pool.  The firmware manages creating
->> partitions and assigning resources to them.
->>
->> Partitions do not nest.
->>
-> Do partitions have any significance in hardware, or are they just a
-> logical concept? Does it matter which compute core / bus replicator /
-> dma channel a user gets, or are they interchangeable between uses?
-
-Logical concept.  Resources are interchangeable.
-
-In the future, I think it is possible that NUMA comes into the picture. 
-  Just like now a CPU may be closer to a particular bank of memory (DDR) 
-and thus keeping a task that uses that bank of memory scheduled on the 
-associated CPU is an ideal situation from the perspective of the Linux 
-scheduler, a particular compute core may have specific locality to other 
-resources.
-
-I'm guessing if we were to consider such a scenario, the partition would 
-be flagged to request resources which are "close" to each-other.
-
->> In the above user example, the user can create 4 partitions, and divide
->> up the compute cores among them.  Then the user can assign each
->> individual container their own individual partition.  Each container
->> would be limited to the resources within it’s assigned partition, but
->> also that container would have exclusive access to those resources.
->> This essentially provides isolation, and some Quality of Service (QoS).
->>
->> How this is currently implemented (in downstream), is perhaps not ideal.
->>    A privileged daemon process reads a configuration file which defines
->> the number of partitions, and the set of resources assigned to each.
->> That daemon makes requests to the firmware to create the partitions, and
->> gets a unique ID for each.  Then the daemon makes a request to the
->> driver to create a “shadow device”, which is a child dev node.  The
->> driver verifies with the firmware that the partition ID is valid, and
->> then creates the dev node.  Internally the driver associates this shadow
->> device with the partition ID so that each request to the firmware is
->> tagged with the partition ID by the driver.  This tagging allows the
->> firmware to determine that a request is targeted for a specific
->> partition.  Finally, the shadow device is passed into the container,
->> instead of the normal dev node.  The userspace within the container
->> operates the shadow device normally.
->>
->> One concern with the current implementation is that it is possible to
->> create a large number of partitions.  Since each partition is
->> represented by a shadow device dev node, this can create a large number
->> of dev nodes and exhaust the minor number space.
->>
->> I wonder if this functionality is better represented by a cgroup.
->> Instead of creating a dev node for the partition, we can just run the
->> container process within the cgroup.  However it doesn’t look like
->> cgroups have a concept of resource reservation.  It is just a limit.  If
->> that impression is accurate, then I struggle to see how to provide the
->> desired isolation as some entity not under the cgroup could consume all
->> of the device resources, leaving the containers unable to perform their
->> tasks.
+On Tue, Sep 27, 2022 at 04:59:44PM +0200, Uladzislau Rezki wrote:
+[...]
+> > >    systemd-udevd-642     [050] .....    17.349832: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+> > >    systemd-udevd-665     [061] .....    17.349834: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+> > >    systemd-udevd-675     [012] .....    17.349835: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+> > >    systemd-udevd-675     [012] .....    17.349853: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+> > >    systemd-udevd-642     [050] .....    17.349861: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+> > >    systemd-udevd-675     [012] .....    17.349873: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+> > >    systemd-udevd-665     [061] .....    17.349879: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+> > >    systemd-udevd-665     [061] .....    17.350007: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+> > >    systemd-udevd-665     [061] .....    17.350011: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+> > >    systemd-udevd-665     [061] .....    17.350080: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+> > >    systemd-udevd-665     [061] .....    17.350175: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+> > >    systemd-udevd-665     [061] .....    17.350362: dev_change_name: --> renamed from eth0
+> > > <snip>
+> > > 
+> > > First delay:
+> > > 
+> > > <snip>
+> > > systemd-udevd-645     [053] .....     2.339024: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+> > >   kworker/0:3-546     [000] d..1.     6.329516: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70effe40a0
+> > > <snip>
+> > > 
+> > > __dentry_kill() function and after 4 seconds there is another one queue_rcu_work().
+> > > I have checked the __dentry_kill() if it can do any sync talk with RCU but from the
+> > > first glance i do not see anything critical. But more attention is required.
+> > 
+> > Can you log rcu_barrier() as well? It could be that the print is just a side
+> > effect of something else that is not being printed.
+> > 
+> It has nothing to do with rcu_barrier() in my case. Also i have checked
+> the synchronize_rcu() it also works as expected, i.e. it is not a
+> blocking reason.
 > 
-> Given the top-down resource distribution policy for cgroups, I think
-> you'd have to have a cgroup subtree where limits for these resources
-> are exclusively passed to, and maintain the placement of processes in
-> the appropriate cgroup under this subtree (one per partition +
-> global). The limit for these resources in all other subtrees under the
-> root would need to be 0. The only trick would be to maintain the
-> limit(s) on the global pool based on the sum of the limits for the
-> partitions to ensure that the global pool cannot exhaust resources
-> "reserved" for the partitions. If partitions don't come and go at
-> runtime then that seems pretty straightforward, otherwise I could see
-> the maintenance/adjustment of those limits as a source of frustration.
-> 
-> 
-> 
->>
->> So, cgroup experts, does this sound like something that should be
->> represented by a cgroup, or is cgroup the wrong mechanism for this usecase?
->>
->> [1] -
->> https://lore.kernel.org/all/1660588956-24027-1-git-send-email-quic_jhugo@quicinc.com/
+> Have you tried my config?
+
+Yes I am in the process of trying it.
+
+thanks,
+
+ - Joel
 
