@@ -2,84 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06105ECC9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15DC5ECC9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbiI0TD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 15:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
+        id S231654AbiI0TEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 15:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiI0TDY (ORCPT
+        with ESMTP id S231661AbiI0TEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 15:03:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627A11CEDCA;
-        Tue, 27 Sep 2022 12:03:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 000D761B44;
-        Tue, 27 Sep 2022 19:03:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26D8EC433D7;
-        Tue, 27 Sep 2022 19:03:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664305403;
-        bh=I8bCAI3GcknRsGWFi5y4kb0GXANrzOyH5tFRETHYIpc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Ls7LIYi6mlIW2fL6r3rmqh9Jz+48o4mONAIpixPMaKQ6J2Hya1jqdTmSWGnhmxecy
-         Q0W8hjNcGUJNmI5V7KpISQnjxoGUByQJ3eHNITXlx4IYKwGqxtsiY5N2j2qv3ec+pJ
-         hXrYhs0rImoMV5tq4zgzxG1FDONef2OpUxFgrmifnDNbxM4Z/Bx+wsBJBaxF3EJ/m8
-         ZxCrpTkSpXqXoFWSlHWU25EjgIcvriKvw2x6pAGneHjura+a+plZtIro8mVD/PWYAo
-         thl/3HF1UlUzgNBCOH+9hd48F2N+xRHbucAScvk0/8v01DYit3zJ14J/ZDZXwLwOZM
-         CEj6stT3FgkyA==
-From:   broonie@kernel.org
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Will Deacon <will@kernel.org>
-Subject: linux-next: manual merge of the kspp tree with the arm64-fixes tree
-Date:   Tue, 27 Sep 2022 20:03:18 +0100
-Message-Id: <20220927190318.513999-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 27 Sep 2022 15:04:45 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B20BF5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:04:43 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id sd10so22725533ejc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:04:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=YYEkPOqjhpHK7QuNDpSW1icWON78rkdfyhJquQM2y/8=;
+        b=QniEgUxIIPob4hj9DF+Bak9AW/dqhl5JHkElLy1fTLgY2RtrTfpRKzaLpbyDrXL5SO
+         Q4lOBBso7RjfBXJ2wb/ucp36el00jgR9IPf2LCIcnX3EvKvABRDyNIWhq77qvtTzHbb9
+         uTLlXiFNTuvDGWDgImHjH42QztNpzR+ruaVCFSlz57Phv53Ee23cNPLzX9gs78SGkhVf
+         LO66Tjc0a+ijD0wKa/PLVL57A6bgXSJUugjS/o/E2wI/o3nsWmkGCrb26QOqDQiKOj+2
+         5w8Ja1ueyA08qDyy5HizUBD46M/TNY3SCoFcm2XGW4H2JJg+331cVKZrPlWrwnwyHYKm
+         gdzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=YYEkPOqjhpHK7QuNDpSW1icWON78rkdfyhJquQM2y/8=;
+        b=nUXuYHspFpi4YxkxT6AjYJMs4OTmnY58meqZQdcvL59FEwmrMkPNoV0RMZprx5P4d3
+         2U2934daR8PIi7aXBUfC2///PG2V+qj77cyB9WHCAWOE02W86vaji2bah3OQrlOUg8AX
+         H6yLzGNAjYEjh4HsSL9g/ycpQ/PB8wHaa9tORaiHRAv1Oha0J/aPR2wkI8F3yZUIUGdy
+         SJrhGE6hTlJ5N93+CykgcwKWh8dGBjS0V9C2bNFxyIz67kJ9wrdCljteX+r0e5wCiJjT
+         5SBIFFg8N63V83rF8IObfl7iXZrXsPBB+uC85mkOGGq3DS1spDWs6/lS6gHDjpeq/XR9
+         npNw==
+X-Gm-Message-State: ACrzQf1A7hGlCzSLhVlr433OntsrgXeRt6VDFtdvxcJZllDkbsrcO4oB
+        v+lKm8XvZEeXQExO9CUacOFAFqAAtZ889sUksnGpwA==
+X-Google-Smtp-Source: AMsMyM5UPT1wQQOK8mZlarkl31jHeZEVxDZ4ltAZeCzBRqHmXrcTEPip6RSsl+qk4gefnnF0cgiuwc/UlVcPfO/39ls=
+X-Received: by 2002:a17:907:628f:b0:72f:58fc:3815 with SMTP id
+ nd15-20020a170907628f00b0072f58fc3815mr23781325ejc.719.1664305482137; Tue, 27
+ Sep 2022 12:04:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <cover.1664298261.git.thomas.lendacky@amd.com> <afd222473c7b18ea942e754a6c4df26ed74eedee.1664298261.git.thomas.lendacky@amd.com>
+In-Reply-To: <afd222473c7b18ea942e754a6c4df26ed74eedee.1664298261.git.thomas.lendacky@amd.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Tue, 27 Sep 2022 12:04:30 -0700
+Message-ID: <CAAH4kHZZ+3Q3-k_OQ+y7zkVnNffCpgP-Kd5Pp24epn0LyVgDag@mail.gmail.com>
+Subject: Re: [PATCH v5 1/6] x86/sev: Fix calculation of end address based on
+ number of pages
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+>
+> When calculating an end address based on an unsigned int number of pages,
+> the number of pages must be cast to an unsigned long so that any value
+> greater than or equal to 0x100000 does not result in zero after the shift.
+>
+> Fixes: 5e5ccff60a29 ("x86/sev: Add helper for validating pages in early enc attribute changes")
 
-Today's linux-next merge of the kspp tree got a conflict in:
+Tested-by: Dionna Glaze <dionnaglaze@google.com>
 
-  include/asm-generic/vmlinux.lds.h
-
-between commit:
-
-  13b0566962914 ("vmlinux.lds.h: CFI: Reduce alignment of jump-table to function alignment")
-
-from the arm64-fixes tree and commit:
-
-  89245600941e4 ("cfi: Switch to -fsanitize=kcfi")
-
-from the kspp tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc include/asm-generic/vmlinux.lds.h
-index ae63dd8a3a2cf,7501edfce11ea..0000000000000
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-
-[The block updated in Will's commit is just plain removed with no
-equivalent in kspp]
+-- 
+-Dionna Glaze, PhD (she/her)
