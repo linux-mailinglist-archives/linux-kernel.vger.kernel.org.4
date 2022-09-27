@@ -2,179 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60DF5EC3C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3EF5EC3C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbiI0NKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
+        id S232321AbiI0NJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232432AbiI0NJ6 (ORCPT
+        with ESMTP id S232262AbiI0NJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:09:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856AC8C45C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:09:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A3726197F
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 13:09:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DEEDC433D6;
-        Tue, 27 Sep 2022 13:09:42 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="MkVOTeC2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1664284181;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fe4akEYhBM/2Bu4YmMN7wSpP8cjz6zgjKU1u9J3cJnk=;
-        b=MkVOTeC2BY0/fo5n74FI4g5RMZNnsFZrDlqKyZan3g0m8UkkB1AedpdQ5422859IbG/KmY
-        rS2hgntBXVok+GU6Ev4ZCLEd2RXdc8rCB+7IpPMFhPIf4b93p8YvUAwBQXsO/zoGt5Xg+L
-        BEJgFjc+XOK5GF1gGqbFgw5BJ1gh3eo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b284f1a1 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 27 Sep 2022 13:09:40 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Laurent Vivier <laurent@vivier.eu>
-Subject: [PATCH v5 2/2] m68k: rework BI_VIRT_RNG_SEED as BI_RNG_SEED
-Date:   Tue, 27 Sep 2022 15:08:35 +0200
-Message-Id: <20220927130835.1629806-2-Jason@zx2c4.com>
-In-Reply-To: <20220927130835.1629806-1-Jason@zx2c4.com>
-References: <20220927130835.1629806-1-Jason@zx2c4.com>
+        Tue, 27 Sep 2022 09:09:34 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E33A1879DC
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:08:47 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id b21so9027973plz.7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:08:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:from:to:cc:subject:date;
+        bh=YoaKPGbtL0W6yKop2Q5GqUbFMulbchm58vJX4E+Hvss=;
+        b=Y3O5T8rz166uc6HJ4FhMI44NIUgz7yP8NiLJa38oQ3iQqcCvEf1JKUSMRRQjUmvMTd
+         4ctpIh9zL2BGVRzkWihc/0+zJA0vvqQaNIcdLVBGBjlJgpCdtH9UA6CaIZ8fAsMB7Qa5
+         MAmXOYJLBFGb76dyw/0GYl4Ud9bQLwonphTsObGEXWQEk9eA57oxtDSmPKQJHfic3A3j
+         HkZqwW/hayyIYLR1Y0kHnLheguF50xHZLRtrPOgrjZtl0trmUGTA+HLEUWgduM2GBkWu
+         ThZ/NjoYcg+Qh9SrbLP+UhAR4BHGL1ZL/OyBADAi8nYVZqFUBSIRwmAXmM7f9rMGutH+
+         2GAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=YoaKPGbtL0W6yKop2Q5GqUbFMulbchm58vJX4E+Hvss=;
+        b=mAJPUwgyNvVs+r1EA7701Idg5yjhajvMoQhVPScXVfYIQ33QFRVmwHAHuchEVNYt/r
+         /0ZzrgsPME2LazdOq70TnXzB9z7dUifmwgHElxdADvaq6zkYarxHpSOChr8cbB+LLc5M
+         fIZ1fnZoFzxB1wwMwsEyHBE4Yh+MwF8TT58UimGYYJ5Rt1hIkZZKjrlflqccqSnTnX8A
+         ET7YDnFljOCb/U/ILClptBW6qCkda8Oa0a9FCmcWbRIFIusm5d1Sv080ZG6PCbuIE/rt
+         wbUtCjl8pi2sorJhklMJpx/Olia6fHdf2fcXGbEl3bPalZrF8H+YKU+zcILs8Kpuyb3z
+         w1og==
+X-Gm-Message-State: ACrzQf3DWj4Kw9tqPi97/fo77STVe7ICGOIzLccEQxQfOscUTCxXw5Om
+        okL8RwbhbI8a5HdgIGf1b2hcZGlolyxUcis4sN+TEQ==
+X-Google-Smtp-Source: AMsMyM6X8Fa6ezRZqL7m/lEJjF3Bh5CG2glAPpLeLqQI0M9YdLpt4yB4B9sD/oFbG2+k4WA70xAHEax+sQbaSKsrxhc=
+X-Received: by 2002:a17:90b:3807:b0:205:d746:93a0 with SMTP id
+ mq7-20020a17090b380700b00205d74693a0mr3635933pjb.188.1664284124030; Tue, 27
+ Sep 2022 06:08:44 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 27 Sep 2022 06:08:43 -0700
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: meli 0.7.2
+References: <20220919-v1-0-4844816c9808@baylibre.com> <20220919-v1-7-4844816c9808@baylibre.com>
+ <153dcb4f-4583-427e-83c7-bdd33e3b11aa@collabora.com>
+In-Reply-To: <153dcb4f-4583-427e-83c7-bdd33e3b11aa@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Date:   Tue, 27 Sep 2022 06:08:43 -0700
+Message-ID: <CABnWg9uDo_P7FKzL7zjsZbfrhjT7MtWinhy5pKvDbNp_R5oJPg@mail.gmail.com>
+Subject: Re: [PATCH v1 07/17] drm/mediatek: extract common functions from the
+ mtk hdmi driver
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is useful on !virt platforms for kexec, so change things from
-BI_VIRT_RNG_SEED to be BI_RNG_SEED, and simply remove BI_VIRT_RNG_SEED
-because it only ever lasted one release, and nothing is broken by not
-having it. At the same time, keep a comment noting that it's been
-removed, so that ID isn't reused. In addition, we previously documented
-2-byte alignment, but 4-byte alignment is actually necessary, so update
-that comment.
+On Tue, 20 Sep 2022 12:25, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>Il 19/09/22 18:56, Guillaume Ranquet ha scritto:
+>> Create a common "framework" that can be used to add support for
+>> different hdmi IPs within the mediatek range of products.
+>>
+>> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+>>
+>> diff --git a/drivers/gpu/drm/mediatek/Makefile b/drivers/gpu/drm/mediatek/Makefile
+>> index d4d193f60271..008ec69da67b 100644
+>> --- a/drivers/gpu/drm/mediatek/Makefile
+>> +++ b/drivers/gpu/drm/mediatek/Makefile
+>> @@ -22,7 +22,8 @@ obj-$(CONFIG_DRM_MEDIATEK) += mediatek-drm.o
+>>
+>>   mediatek-drm-hdmi-objs := mtk_cec.o \
+>>   			  mtk_hdmi.o \
+>
+>abcd ... mtk_hdmi_common.o goes here :-)
+>
+>> -			  mtk_hdmi_ddc.o
+>> +			  mtk_hdmi_ddc.o \
+>> +			  mtk_hdmi_common.o \
+>>
+>>   obj-$(CONFIG_DRM_MEDIATEK_HDMI) += mediatek-drm-hdmi.o
+>>
+>> diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi.c b/drivers/gpu/drm/mediatek/mtk_hdmi.c
+>> index 5cd05d4fe1a9..837d36ec4d64 100644
+>> --- a/drivers/gpu/drm/mediatek/mtk_hdmi.c
+>> +++ b/drivers/gpu/drm/mediatek/mtk_hdmi.c
+>> @@ -32,187 +32,18 @@
+>>   #include <drm/drm_probe_helper.h>
+>>
+>>   #include "mtk_cec.h"
+>> -#include "mtk_hdmi.h"
+>>   #include "mtk_hdmi_regs.h"
+>> +#include "mtk_hdmi_common.h"
+>>
+>>   #define NCTS_BYTES	7
+>>
+>> -enum mtk_hdmi_clk_id {
+>> -	MTK_HDMI_CLK_HDMI_PIXEL,
+>> -	MTK_HDMI_CLK_HDMI_PLL,
+>> -	MTK_HDMI_CLK_AUD_BCLK,
+>> -	MTK_HDMI_CLK_AUD_SPDIF,
+>> -	MTK_HDMI_CLK_COUNT
+>> +const char * const mtk_hdmi_clk_names_mt8183[MTK_MT8183_HDMI_CLK_COUNT] = {
+>
+>Why MT8183? This can be either MT8167 or MT2701... or, IMO more appropriately, you
+>should name the IP version.
+>Example: MTK_HDMIV123_CLK_COUNT (I don't know what IP version would that be!).
 
-Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Laurent Vivier <laurent@vivier.eu>
-Fixes: a1ee38ab1a75 ("m68k: virt: Use RNG seed from bootinfo block")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- arch/m68k/include/uapi/asm/bootinfo-virt.h |  9 ++-------
- arch/m68k/include/uapi/asm/bootinfo.h      |  8 +++++++-
- arch/m68k/kernel/setup_mm.c                | 12 ++++++++++++
- arch/m68k/virt/config.c                    | 11 -----------
- 4 files changed, 21 insertions(+), 19 deletions(-)
+You're right, the naming isn't great.
+I'll ask mediatek if they have a good name that would regroup the "legacy"
+HDMI IP and the new IP in mt8195.
 
-diff --git a/arch/m68k/include/uapi/asm/bootinfo-virt.h b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-index b091ee9b06e0..7dbcd7bec103 100644
---- a/arch/m68k/include/uapi/asm/bootinfo-virt.h
-+++ b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-@@ -13,13 +13,8 @@
- #define BI_VIRT_VIRTIO_BASE	0x8004
- #define BI_VIRT_CTRL_BASE	0x8005
- 
--/*
-- * A random seed used to initialize the RNG. Record format:
-- *
-- *   - length       [ 2 bytes, 16-bit big endian ]
-- *   - seed data    [ `length` bytes, padded to preserve 2-byte alignment ]
-- */
--#define BI_VIRT_RNG_SEED	0x8006
-+/* No longer used -- replaced with BI_RNG_SEED -- but don't reuse this index:
-+ * #define BI_VIRT_RNG_SEED	0x8006 */
- 
- #define VIRT_BOOTI_VERSION	MK_BI_VERSION(2, 0)
- 
-diff --git a/arch/m68k/include/uapi/asm/bootinfo.h b/arch/m68k/include/uapi/asm/bootinfo.h
-index 95ecf3ae4c49..6ce7644ab3d6 100644
---- a/arch/m68k/include/uapi/asm/bootinfo.h
-+++ b/arch/m68k/include/uapi/asm/bootinfo.h
-@@ -64,7 +64,13 @@ struct mem_info {
- 					/* (struct mem_info) */
- #define BI_COMMAND_LINE		0x0007	/* kernel command line parameters */
- 					/* (string) */
--
-+/*
-+ * A random seed used to initialize the RNG. Record format:
-+ *
-+ *   - length       [ 2 bytes, 16-bit big endian ]
-+ *   - seed data    [ `length` bytes, padded to preserve 4-byte struct alignment ]
-+ */
-+#define BI_RNG_SEED		0x0008
- 
-     /*
-      *  Linux/m68k Architectures (BI_MACHTYPE)
-diff --git a/arch/m68k/kernel/setup_mm.c b/arch/m68k/kernel/setup_mm.c
-index 7e7ef67cff8b..e45cc9923703 100644
---- a/arch/m68k/kernel/setup_mm.c
-+++ b/arch/m68k/kernel/setup_mm.c
-@@ -25,6 +25,7 @@
- #include <linux/module.h>
- #include <linux/nvram.h>
- #include <linux/initrd.h>
-+#include <linux/random.h>
- 
- #include <asm/bootinfo.h>
- #include <asm/byteorder.h>
-@@ -151,6 +152,17 @@ static void __init m68k_parse_bootinfo(const struct bi_record *record)
- 				sizeof(m68k_command_line));
- 			break;
- 
-+		case BI_RNG_SEED: {
-+			u16 len = be16_to_cpup(data);
-+			add_bootloader_randomness(data + 2, len);
-+			/*
-+			 * Zero the data to preserve forward secrecy, and zero the
-+			 * length to prevent kexec from using it.
-+			 */
-+			memzero_explicit((void *)data, len + 2);
-+			break;
-+		}
-+
- 		default:
- 			if (MACH_IS_AMIGA)
- 				unknown = amiga_parse_bootinfo(record);
-diff --git a/arch/m68k/virt/config.c b/arch/m68k/virt/config.c
-index 4ab22946ff68..632ba200ad42 100644
---- a/arch/m68k/virt/config.c
-+++ b/arch/m68k/virt/config.c
-@@ -2,7 +2,6 @@
- 
- #include <linux/reboot.h>
- #include <linux/serial_core.h>
--#include <linux/random.h>
- #include <clocksource/timer-goldfish.h>
- 
- #include <asm/bootinfo.h>
-@@ -93,16 +92,6 @@ int __init virt_parse_bootinfo(const struct bi_record *record)
- 		data += 4;
- 		virt_bi_data.virtio.irq = be32_to_cpup(data);
- 		break;
--	case BI_VIRT_RNG_SEED: {
--		u16 len = be16_to_cpup(data);
--		add_bootloader_randomness(data + 2, len);
--		/*
--		 * Zero the data to preserve forward secrecy, and zero the
--		 * length to prevent kexec from using it.
--		 */
--		memzero_explicit((void *)data, len + 2);
--		break;
--	}
- 	default:
- 		unknown = 1;
- 		break;
--- 
-2.37.3
+Thx,
+Guillaume.
 
+>
+>> +	[MTK_MT8183_HDMI_CLK_HDMI_PIXEL] = "pixel",
+>> +	[MTK_MT8183_HDMI_CLK_HDMI_PLL] = "pll",
+>> +	[MTK_MT8183_HDMI_CLK_AUD_BCLK] = "bclk",
+>> +	[MTK_MT8183_HDMI_CLK_AUD_SPDIF] = "spdif",
+>>   };
+>>
+>
+>Regards,
+>Angelo
+>
+>
