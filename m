@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5662B5ECA31
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE21D5ECA33
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbiI0Q4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
+        id S232999AbiI0Q4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232788AbiI0Qzq (ORCPT
+        with ESMTP id S232384AbiI0Q4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:55:46 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97254E85B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:55:16 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id s14so12945703ybe.7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:55:16 -0700 (PDT)
+        Tue, 27 Sep 2022 12:56:00 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404B456B96
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:55:34 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id a20so6392619qtw.10
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:55:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=vv3W7RQ7dbZpyBjlAQgi1M2Mtk3zvmXTUqiF3crSNUY=;
-        b=WW16dMN983lgj7CgWDAI1u+cbIcZvIuoT1QF4KByI9XPKrblTCqJ+fiueGcp5vlHT3
-         HWcCr0UV2jMVaJPltFx6TxPGBPOfBOrHTW5omESJCIXOn19wYqHUIU56mR6RsELxKoz4
-         XOXh0q7aEvNUHvdq8otTruXqYyH0wlnIqai7dfGeYPRCTku/jOszoEmEUOCXhm/2KXaC
-         ZHWGCvsqBOOal2tc4BUB8WhDGwoi87OPQqWFWqdZK54OjugNl6dTyWL/EeF67Pds/Sfk
-         Pc8eooNqTvezdHI7UKVch9QpGoKUHpNn1hg10bn8yM0+Nb78a3iXXZl4Jq9QLVmv+vVE
-         uMOg==
+        bh=OsRxyvAnPbJINHsqDJOAOdVVGQpFFWbztg0hEari6CQ=;
+        b=og5ZIfxp2QlBMoHAcPkqgBIihTOf1EBA+NkwUg9jRwG0/tUPbAFVNJ8HijT0/UM7oj
+         dGvAplq21ZBx+uJOM960gKWAdgWHmxR5YYAjQZ3fsz79cArLc0GF6KOxFedjxrsMorV3
+         e6dKQVDNzpkHTgDEVsrq6f+P5s82tah2xLH3Q/iaBfBJCVXI9CnnBxn6Z9gi88IghX8v
+         ZgE6v/kKD8TxVlam6SimXoRg3eOQGyKzJpXjJQLxYWrppidMa7PgFKCGbO/gl6yqWC06
+         z+7547nthM+plmehFPhFtL/3+le1XXZMJoiLAGYnUVMu6Tx/PIf4dL1sVyW2r+DF7vs+
+         ugag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=vv3W7RQ7dbZpyBjlAQgi1M2Mtk3zvmXTUqiF3crSNUY=;
-        b=emlYYXFVgMR5KrvfyQAhbkaoCkDoViz4+NX8RMHmkczmZFqcrke7035UuA0FOtVVzn
-         47RsRQXlFbRhIEnti4MMxfhNQy18+1KLkwZPhgx8irD6ZWpNxssSwP4a+YiMV9rnGm/y
-         Q2qSBc0dQ6pm7mxvMHSzujFHg+y+fEA5frEOsb9KEvT7lr9NCZL0Se1UlpxweHkdNmLN
-         VLPE60xPAnoupVlsTl+cc9m0OeH2xkVoRbBZTm0u4RvbwKb39tUWCboocD8dVcJrBUM2
-         hiR2j11SOyducRvfn4aCO78R4pxLWAKVXrfzoyG2/v5Rx5hKaWmSv592DY4YWoPrkZmP
-         ye4Q==
-X-Gm-Message-State: ACrzQf2htjtR2piEWMd6GxSTotE3c3288smQxOPWoeQ8L+9kVMimFff5
-        UuSO+8ICBGFVVUrMGylNjWCBR9D82fbU5wKFFf6xLw==
-X-Google-Smtp-Source: AMsMyM6NbbMtdQMpVfLCAh0D0q68PKe3qwWQ3D+kcPlFlbxLVmV17y2Ou35POHeKahxqYviJ1ZAc33Ny+NGeQhVBJcQ=
-X-Received: by 2002:a25:80d0:0:b0:6b3:f287:93a4 with SMTP id
- c16-20020a2580d0000000b006b3f28793a4mr25039297ybm.427.1664297715530; Tue, 27
- Sep 2022 09:55:15 -0700 (PDT)
+        bh=OsRxyvAnPbJINHsqDJOAOdVVGQpFFWbztg0hEari6CQ=;
+        b=dKOES1nIH8d0jX1kyQ684WPogBTHjtDh3JyzOUmj/iyeqwRNQH8psvC5069SCD+Zpy
+         t30Rq2Nr4M9HD8gtxd9dlQyTCeB7vpJS8ixMO6a6MDB2NcAC4qmaCjVYbmEi035WmzJ4
+         xEtPTXZ16cJbpTPvcwDDC4vu2s0Xx2ikyKC2h6AoBx71e4yZ+M9dZBbZiArQnll32A/t
+         e4VO9kQSL4qEApuEcdtlEjfFaI8Xf2sO1cWmwuYx3gNfrEujldvuXn9sOwbX7ufgs78g
+         LEcYjZSDnzxTLnoBpOT5e6HkRlC04jcEyQbWh5KxUu8uRVPtfltuCOv6Tef8tyUgrkIy
+         go0A==
+X-Gm-Message-State: ACrzQf226qWrnIockTMXcmDs06oM46XqAdm8jS6GD+qdqZnaj7r4ryQO
+        VeT5xHeVTvL2d/9VR/NdOebFI2Q7Fk6B0YQYVvw=
+X-Google-Smtp-Source: AMsMyM7hA8Exhfh3CZ2FJoEA7sAvQ9GkqDI0HE773roPJBf+1BZhZKoIkla5cTytXnL1fL8lzDrwPloJ89IImeJKeGA=
+X-Received: by 2002:a05:622a:180d:b0:35b:d283:7e65 with SMTP id
+ t13-20020a05622a180d00b0035bd2837e65mr23378318qtc.106.1664297733975; Tue, 27
+ Sep 2022 09:55:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <CANn89iLyqG8SRmHhWZOZUc-HDR88z_TNZn4_zbJz5MW4+kh2ZQ@mail.gmail.com>
- <20220927164824.36027-1-kuniyu@amazon.com>
-In-Reply-To: <20220927164824.36027-1-kuniyu@amazon.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 27 Sep 2022 09:55:03 -0700
-Message-ID: <CANn89iJ-a6DQ=ZmaQJKag3Tpa15TK-3E2o9=FHQVZb8QDCEvHQ@mail.gmail.com>
-Subject: Re: [PATCH v1 net 5/5] tcp: Fix data races around icsk->icsk_af_ops.
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     David Miller <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
+References: <0000000000004387dc05e5888ae5@google.com> <CA+fCnZc9u+QrF-JCQSA+uCM9-egh_=9x4hPdJng6T_uh6XWMZQ@mail.gmail.com>
+ <YxdJ684ypgAy8k98@arm.com> <CACT4Y+YOnTpWT5NCNhsPY=kV=2gFfQkY=7xGdU_1k7AdGhQneg@mail.gmail.com>
+ <YxdZXvsWr37RrFRk@arm.com> <CA+fCnZf-GOZpnBRLkRPrL7FUwYrAb-bu=PV0zMfbKOuNYrZ00A@mail.gmail.com>
+ <Yxd0C7ndn+iPAGcj@arm.com>
+In-Reply-To: <Yxd0C7ndn+iPAGcj@arm.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Tue, 27 Sep 2022 18:55:23 +0200
+Message-ID: <CA+fCnZcpba7qinx4DmuJPjRQj07uJ5H9Xq9Zhi8v1rw-AW_yWQ@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: invalid-access Read in copy_page
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        tongtiangen@huawei.com,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        syzbot <syzbot+c2c79c6d6eddc5262b77@syzkaller.appspotmail.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,116 +78,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 9:48 AM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+On Tue, Sep 6, 2022 at 6:23 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
 >
-> From:   Eric Dumazet <edumazet@google.com>
-> Date:   Tue, 27 Sep 2022 09:39:37 -0700
-> > On Tue, Sep 27, 2022 at 9:33 AM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
-> > >
-> > > IPV6_ADDRFORM changes icsk->icsk_af_ops under lock_sock(), but
-> > > tcp_(get|set)sockopt() read it locklessly.  To avoid load/store
-> > > tearing, we need to add READ_ONCE() and WRITE_ONCE() for the reads
-> > > and write.
+> On Tue, Sep 06, 2022 at 04:39:57PM +0200, Andrey Konovalov wrote:
+> > On Tue, Sep 6, 2022 at 4:29 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > > > Does it take long to reproduce this kasan warning?
+> > > >
+> > > > syzbot finds several such cases every day (200 crashes for the past 35 days):
+> > > > https://syzkaller.appspot.com/bug?extid=c2c79c6d6eddc5262b77
+> > > > So once it reaches the tested tree, we should have an answer within a day.
 > >
-> > I am pretty sure I have released a syzkaller bug recently with this issue.
-> > Have you seen this?
-> > If yes, please include the appropriate syzbot tag.
+> > To be specific, this syzkaller instance fuzzes the mainline, so the
+> > patch with the WARN_ON needs to end up there.
+> >
+> > If this is unacceptable, perhaps, we could switch the MTE syzkaller
+> > instance to the arm64 testing tree.
 >
-> No, I haven't.
-> Could you provide the URL?
-> I'm happy to include the syzbot tag and KCSAN report in the changelog.
->
->
+> It needs some more digging first. My first guess was that a PROT_MTE
+> page was mapped into the user address space and the task repainted it
+> but I don't think that's the case.
 
-Report has been released 10 days ago, but apparently the syzbot queue
-is so full these days that the report is still throttled.
+Hi Catalin,
 
-==================================================================
-BUG: KCSAN: data-race in tcp_setsockopt / tcp_v6_connect
+syzkaller still keeps hitting this issue and I was wondering if you
+have any ideas of what could be wrong here?
 
-write to 0xffff88813c624518 of 8 bytes by task 23936 on cpu 0:
-tcp_v6_connect+0x5b3/0xce0 net/ipv6/tcp_ipv6.c:240
-__inet_stream_connect+0x159/0x6d0 net/ipv4/af_inet.c:660
-inet_stream_connect+0x44/0x70 net/ipv4/af_inet.c:724
-__sys_connect_file net/socket.c:1976 [inline]
-__sys_connect+0x197/0x1b0 net/socket.c:1993
-__do_sys_connect net/socket.c:2003 [inline]
-__se_sys_connect net/socket.c:2000 [inline]
-__x64_sys_connect+0x3d/0x50 net/socket.c:2000
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> Since I can't find the kernel boot log for these runs, is there any kind
+> of swap enabled? I'm trying to narrow down where the problem may be.
 
-read to 0xffff88813c624518 of 8 bytes by task 23937 on cpu 1:
-tcp_setsockopt+0x147/0x1c80 net/ipv4/tcp.c:3789
-sock_common_setsockopt+0x5d/0x70 net/core/sock.c:3585
-__sys_setsockopt+0x212/0x2b0 net/socket.c:2252
-__do_sys_setsockopt net/socket.c:2263 [inline]
-__se_sys_setsockopt net/socket.c:2260 [inline]
-__x64_sys_setsockopt+0x62/0x70 net/socket.c:2260
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
+I don't think there is.
 
-value changed: 0xffffffff8539af68 -> 0xffffffff8539aff8
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 23937 Comm: syz-executor.5 Not tainted
-6.0.0-rc4-syzkaller-00331-g4ed9c1e971b1-dirty #0
-
-Hardware name: Google Google Compute Engine/Google Compute Engine,
-BIOS Google 08/26/2022
-==================================================================
-
-> > > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> > > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-> > > ---
-> > >  net/ipv4/tcp.c           | 10 ++++++----
-> > >  net/ipv6/ipv6_sockglue.c |  3 ++-
-> > >  2 files changed, 8 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> > > index e373dde1f46f..c86dd0ccef5b 100644
-> > > --- a/net/ipv4/tcp.c
-> > > +++ b/net/ipv4/tcp.c
-> > > @@ -3795,8 +3795,9 @@ int tcp_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
-> > >         const struct inet_connection_sock *icsk = inet_csk(sk);
-> > >
-> > >         if (level != SOL_TCP)
-> > > -               return icsk->icsk_af_ops->setsockopt(sk, level, optname,
-> > > -                                                    optval, optlen);
-> > > +               /* IPV6_ADDRFORM can change icsk->icsk_af_ops under us. */
-> > > +               return READ_ONCE(icsk->icsk_af_ops)->setsockopt(sk, level, optname,
-> > > +                                                               optval, optlen);
-> > >         return do_tcp_setsockopt(sk, level, optname, optval, optlen);
-> > >  }
-> > >  EXPORT_SYMBOL(tcp_setsockopt);
-> > > @@ -4394,8 +4395,9 @@ int tcp_getsockopt(struct sock *sk, int level, int optname, char __user *optval,
-> > >         struct inet_connection_sock *icsk = inet_csk(sk);
-> > >
-> > >         if (level != SOL_TCP)
-> > > -               return icsk->icsk_af_ops->getsockopt(sk, level, optname,
-> > > -                                                    optval, optlen);
-> > > +               /* IPV6_ADDRFORM can change icsk->icsk_af_ops under us. */
-> > > +               return READ_ONCE(icsk->icsk_af_ops)->getsockopt(sk, level, optname,
-> > > +                                                               optval, optlen);
-> > >         return do_tcp_getsockopt(sk, level, optname, optval, optlen);
-> > >  }
-> > >  EXPORT_SYMBOL(tcp_getsockopt);
-> > > diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
-> > > index a89db5872dc3..726d95859898 100644
-> > > --- a/net/ipv6/ipv6_sockglue.c
-> > > +++ b/net/ipv6/ipv6_sockglue.c
-> > > @@ -479,7 +479,8 @@ static int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
-> > >
-> > >                                 /* Paired with READ_ONCE(sk->sk_prot) in inet6_stream_ops */
-> > >                                 WRITE_ONCE(sk->sk_prot, &tcp_prot);
-> > > -                               icsk->icsk_af_ops = &ipv4_specific;
-> > > +                               /* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-> > > +                               WRITE_ONCE(icsk->icsk_af_ops, &ipv4_specific);
-> > >                                 sk->sk_socket->ops = &inet_stream_ops;
-> > >                                 sk->sk_family = PF_INET;
-> > >                                 tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
-> > > --
-> > > 2.30.2
-> > >
+Thanks!
