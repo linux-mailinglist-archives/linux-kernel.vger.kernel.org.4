@@ -2,144 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E4D5EC552
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7537A5EC547
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232992AbiI0OAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
+        id S232942AbiI0N71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233010AbiI0OAX (ORCPT
+        with ESMTP id S233009AbiI0N6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:00:23 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113B06DAE4
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:59:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664287184; x=1695823184;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZXrmu/PunYDe1xIi4jB5rE+3PR+QFCMY2cJy+0qk9sE=;
-  b=Ns8YpL9MPL/E+gzlIW7Nh/yMhxg6NO0UbBhSNWthjH2VxjNmIfgBCJC8
-   QQjbBbA401YNO2nFcP3GgsU2Qw3eKqQR7579AlWElU/J2PuHf+dO82aNS
-   6jhh7ZfF/hpjq9mBJVyb5NBOg5Oy7E4KwelSOO3dLtFBL6vyM3Uhtec59
-   rVxpW/JunVl5TzDGr4nnbYnYT1vv6ABipMieqju2QurRSAHqnuVJmNaz6
-   5bcFT+FhOAKKAxdUFAYaSky09b3ww4o0w1HT2slx7CNZT1AP2VAIc/ECr
-   xUsANBbSaBVQ9N1RgKqm/KyzlEPdkHUNOH2orGxyvt/rxMwQoICDiXr2v
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="301299147"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="301299147"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 06:59:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="683999422"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="683999422"
-Received: from brentlu-brix.itwn.intel.com ([10.5.253.25])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Sep 2022 06:59:42 -0700
-From:   Brent Lu <brent.lu@intel.com>
-To:     alsa-devel@alsa-project.org
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Mohan Kumar <mkumard@nvidia.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>, Brent Lu <brent.lu@intel.com>,
-        Yong Zhi <yong.zhi@intel.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] ALSA: hda/hdmi: run eld notify in delay work
-Date:   Tue, 27 Sep 2022 21:58:07 +0800
-Message-Id: <20220927135807.4097052-1-brent.lu@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 27 Sep 2022 09:58:40 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C38146610;
+        Tue, 27 Sep 2022 06:58:39 -0700 (PDT)
+Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4McLm45ks9z688Z6;
+        Tue, 27 Sep 2022 21:57:24 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 15:58:37 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 27 Sep
+ 2022 14:58:37 +0100
+Date:   Tue, 27 Sep 2022 14:58:36 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH V3 2/2] cxl/doe: Request exclusive DOE access
+Message-ID: <20220927145836.0000572e@huawei.com>
+In-Reply-To: <20220926215711.2893286-3-ira.weiny@intel.com>
+References: <20220926215711.2893286-1-ira.weiny@intel.com>
+        <20220926215711.2893286-3-ira.weiny@intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During resolution change, display driver would disable HDMI audio then
-enable it in a short time. There is possibility that eld notify for
-HDMI audio enable is called when previous runtime suspend is still
-running. In this case, the elf nofity just returns and not updating the
-status of corresponding HDMI pin/port. Here we move the eld nofity to
-a delay work so we don't lose it.
+On Mon, 26 Sep 2022 14:57:11 -0700
+ira.weiny@intel.com wrote:
 
-Signed-off-by: Brent Lu <brent.lu@intel.com>
----
- sound/pci/hda/patch_hdmi.c | 38 +++++++++++++++++++++++++++++++++-----
- 1 file changed, 33 insertions(+), 5 deletions(-)
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> The PCIE Data Object Exchange (DOE) mailbox is a protocol run over
+> configuration cycles.  It assumes one initiator at a time.  While the
+> kernel has control of the mailbox user space writes could interfere with
+> the kernel access.
+> 
+> Mark DOE mailbox config space exclusive when iterated by the CXL driver.
+> 
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+I wonder a bit on whether the failure should be fatal given that something
+very odd would be required for it to fail.
 
-diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
-index 6c209cd26c0c..a4c305ee8ff9 100644
---- a/sound/pci/hda/patch_hdmi.c
-+++ b/sound/pci/hda/patch_hdmi.c
-@@ -2907,13 +2907,21 @@ static int intel_port2pin(struct hda_codec *codec, int port)
- 	return spec->port_map[port];
- }
- 
--static void intel_pin_eld_notify(void *audio_ptr, int port, int pipe)
-+struct pin_eld_notify {
-+	void *audio_ptr;
-+	int port;
-+	int pipe;
-+	struct delayed_work notify_work;
-+};
-+
-+static void pin_eld_notify_work(struct work_struct *work)
- {
--	struct hda_codec *codec = audio_ptr;
-+	struct pin_eld_notify *notify = container_of(work, struct pin_eld_notify, notify_work.work);
-+	struct hda_codec *codec = notify->audio_ptr;
- 	int pin_nid;
--	int dev_id = pipe;
-+	int dev_id = notify->pipe;
- 
--	pin_nid = intel_port2pin(codec, port);
-+	pin_nid = intel_port2pin(codec, notify->port);
- 	if (!pin_nid)
- 		return;
- 	/* skip notification during system suspend (but not in runtime PM);
-@@ -2922,13 +2930,33 @@ static void intel_pin_eld_notify(void *audio_ptr, int port, int pipe)
- 	if (codec->core.dev.power.power_state.event == PM_EVENT_SUSPEND)
- 		return;
- 	/* ditto during suspend/resume process itself */
--	if (snd_hdac_is_in_pm(&codec->core))
-+	if (snd_hdac_is_in_pm(&codec->core)) {
-+		schedule_delayed_work(&notify->notify_work, msecs_to_jiffies(10));
- 		return;
-+	}
- 
- 	snd_hdac_i915_set_bclk(&codec->bus->core);
- 	check_presence_and_report(codec, pin_nid, dev_id);
- }
- 
-+static void intel_pin_eld_notify(void *audio_ptr, int port, int pipe)
-+{
-+	struct hda_codec *codec = audio_ptr;
-+	struct device *dev = hda_codec_dev(codec);
-+	struct pin_eld_notify *notify;
-+
-+	notify = devm_kzalloc(dev, sizeof(struct pin_eld_notify), GFP_KERNEL);
-+	if (!notify)
-+		return;
-+
-+	notify->audio_ptr = audio_ptr;
-+	notify->port = port;
-+	notify->pipe = pipe;
-+	INIT_DELAYED_WORK(&notify->notify_work, pin_eld_notify_work);
-+
-+	schedule_delayed_work(&notify->notify_work, 0);
-+}
-+
- static const struct drm_audio_component_audio_ops intel_audio_ops = {
- 	.pin2port = intel_pin2port,
- 	.pin_eld_notify = intel_pin_eld_notify,
--- 
-2.25.1
+I'm not that bothered though.
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+> 
+> ---
+> Changes from V2:
+> 	Jonathan:
+> 		s/PCI_DOE_CAP_SIZE/PCI_DOE_CAP_SIZEOF
+> 		Set PCI_DOE_CAP_SIZEOF directly
+> ---
+>  drivers/cxl/pci.c             | 5 +++++
+>  include/uapi/linux/pci_regs.h | 1 +
+>  2 files changed, 6 insertions(+)
+> 
+> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> index faeb5d9d7a7a..621a0522b554 100644
+> --- a/drivers/cxl/pci.c
+> +++ b/drivers/cxl/pci.c
+> @@ -418,6 +418,11 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
+>  			continue;
+>  		}
+>  
+> +		if (!pci_request_config_region_exclusive(pdev, off,
+> +							 PCI_DOE_CAP_SIZEOF,
+> +							 dev_name(dev)))
+> +			pci_err(pdev, "Failed to exclude DOE registers\n");
+> +
+>  		if (xa_insert(&cxlds->doe_mbs, off, doe_mb, GFP_KERNEL)) {
+>  			dev_err(dev, "xa_insert failed to insert MB @ %x\n",
+>  				off);
+> diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
+> index 57b8e2ffb1dd..82a03ea954af 100644
+> --- a/include/uapi/linux/pci_regs.h
+> +++ b/include/uapi/linux/pci_regs.h
+> @@ -1119,6 +1119,7 @@
+>  #define  PCI_DOE_STATUS_DATA_OBJECT_READY	0x80000000  /* Data Object Ready */
+>  #define PCI_DOE_WRITE		0x10    /* DOE Write Data Mailbox Register */
+>  #define PCI_DOE_READ		0x14    /* DOE Read Data Mailbox Register */
+> +#define PCI_DOE_CAP_SIZEOF	0x18	/* Size of DOE register block */
+>  
+>  /* DOE Data Object - note not actually registers */
+>  #define PCI_DOE_DATA_OBJECT_HEADER_1_VID		0x0000ffff
 
