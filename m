@@ -2,226 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F79F5EBD66
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 981BF5EBD65
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbiI0Iem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 04:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
+        id S231389AbiI0Iei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 04:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbiI0IeF (ORCPT
+        with ESMTP id S230149AbiI0IeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Sep 2022 04:34:05 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62301B5165
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:34:03 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h7so1432823wru.10
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:34:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Wblt6hLF9bmZyY1xDVXY8pdC3K0ygNsNvIqaUDgmAkk=;
-        b=k5uZMHyyZZmc2Xqpu8euyz3vL78JbusbBDZDc5AcSSNoVW3Yhi4GLppmbrPIQV4jDS
-         K1rJ8qnO5OiV2uvl8oIzLv2fhJmZdlT/ef1xU8f6+LNomSj4XdnpJN0hEvQ7uODlwx+g
-         n70sLpGzU/p2GGxzt+RczSwYIy4OZ/Zvphtv1DznsTdqZ5Wt6FQBdcPbSCG34yCAoFs6
-         hLEpbRrkN2VQXC98z0N+uyk6Iq9doz2CAe3ioOSt7nSpx6fMGiM+XEEE7I+pQxba61pA
-         x6NRaj0dyvoF6+peUn+bqEAAsLJHdNA3EzEoml5bGCYpAY1APrJXwU2T4SJiMeDAXm5Z
-         /Epw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Wblt6hLF9bmZyY1xDVXY8pdC3K0ygNsNvIqaUDgmAkk=;
-        b=U3+6O/Uu8GvdvhdAEtwPDzYIUp0/xFYpsslkszOTeOtmmDbFGTybpWIOWFefvJJIS9
-         NlCoJjuP+aSmMH+9lcwkzOwnnyZPji2AWBxGM4gfv9r8MX7deDDQHrxHXllIKmO+v2IK
-         +qBon4HrW+5hZ21CxE7jOPF7xhUnKipa31lHjY/5kftF9btKEfiTkpX2ygftJHc5yxXm
-         NQPz0RPqN9ND6LHY64h3NZLRgNdWrOGZT62k3ebAqZDNCpTkDcOSq8+Iyt0YPPZgG1h2
-         /RMVxmMMGySrfRYNo5kk0iFAi+iCguXh610FrHpEmPXk91Cq9qkkgjANOj10nE3sn9ae
-         g8mg==
-X-Gm-Message-State: ACrzQf38u2g6SnUpqj6+mQ5pFaM5gpGwX780qYm7VLXW7w4w+a48XpuD
-        E1wESUhXz3d0y2+JfYh5yv5kkAkNd97MFQ==
-X-Google-Smtp-Source: AMsMyM6RttDAp/0iAh9Rj9RVW67dy+WEPWz+sYwSPYhKnTfO1uSdnEFAlOW1e0GfroFJ2d11LfowhA==
-X-Received: by 2002:a5d:61d1:0:b0:22c:c284:a886 with SMTP id q17-20020a5d61d1000000b0022cc284a886mr323562wrv.30.1664267641820;
-        Tue, 27 Sep 2022 01:34:01 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id t126-20020a1c4684000000b003b505d26776sm13136638wma.5.2022.09.27.01.34.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 01:34:01 -0700 (PDT)
-Message-ID: <bf7ab516-3d18-6a5a-95f2-71f918b54cf1@linaro.org>
-Date:   Tue, 27 Sep 2022 10:34:00 +0200
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED6AB4EA5;
+        Tue, 27 Sep 2022 01:34:03 -0700 (PDT)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4McCXZ2X8gz685Tw;
+        Tue, 27 Sep 2022 16:31:58 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 10:34:00 +0200
+Received: from [10.48.156.245] (10.48.156.245) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 09:33:59 +0100
+Message-ID: <9e9f8384-0662-73ef-ab17-8420c94762fb@huawei.com>
+Date:   Tue, 27 Sep 2022 09:34:02 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 RESEND] thermal: qoriq: Only enable sites that actually
- exist
-Content-Language: en-US
-To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        linux-kernel@vger.kernel.org, kernel@puri.sm,
-        stable@vger.kernel.org
-References: <7115709.31r3eYUQgx@pliszka>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <7115709.31r3eYUQgx@pliszka>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v4 3/8] scsi: pm8001: use sas_find_attached_phy() instead
+ of open coded
+To:     Jason Yan <yanaijie@huawei.com>, <martin.petersen@oracle.com>,
+        <jejb@linux.ibm.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
+        <jinpu.wang@cloud.ionos.com>, <damien.lemoal@opensource.wdc.com>,
+        Jack Wang <jinpu.wang@ionos.com>
+References: <20220927032605.78103-1-yanaijie@huawei.com>
+ <20220927032605.78103-4-yanaijie@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220927032605.78103-4-yanaijie@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.156.245]
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Sebastian,
-
-On 27/09/2022 08:15, Sebastian Krzyszkowiak wrote:
-> On i.MX8MQ, enabling monitoring sites that aren't connected to anything
-> can cause unwanted side effects on some units. This seems to happen
-> once some of these sites report out-of-range readings and results in
-> sensor misbehavior, such as thermal zone readings getting stuck or even
-> suddenly reporting an impossibly high value, triggering emergency
-> shutdowns.
-> 
-> The datasheet lists all non-existent sites as "reserved" and doesn't
-> make any guarantees about being able to enable them at all, so let's
-> not do that. Instead, iterate over sensor DT nodes and only enable
-> monitoring sites that are specified there prior to registering their
-> thermal zones. This still fixes the issue with bogus data being
-> reported on the first reading, but doesn't introduce problems that
-> come with reading from non-existent sites.
-
-Can you have a look at these patches:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/commit/?h=thermal/linux-next&id=ab2266ecaa3254811f9f83992cf53fdfe3c62c86
-
-and
-
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/commit/?h=thermal/linux-next&id=7be4288625df54887b444991d743c6e1af21e27a
-
-Thanks
-   -- Daniel
-
-> Fixes: 45038e03d633 ("thermal: qoriq: Enable all sensors before registering them")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-> ---
-> Resent <20220321170852.654094-1-sebastian.krzyszkowiak@puri.sm>
-> v3: add cc: stable
-> v2: augment the commit message with details on what the patch is doing
-> ---
->   drivers/thermal/qoriq_thermal.c | 63 ++++++++++++++++++++++-----------
->   1 file changed, 43 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
-> index 73049f9bea25..ef0848849ee2 100644
-> --- a/drivers/thermal/qoriq_thermal.c
-> +++ b/drivers/thermal/qoriq_thermal.c
-> @@ -32,7 +32,6 @@
->   #define TMR_DISABLE	0x0
->   #define TMR_ME		0x80000000
->   #define TMR_ALPF	0x0c000000
-> -#define TMR_MSITE_ALL	GENMASK(15, 0)
->   
->   #define REGS_TMTMIR	0x008	/* Temperature measurement interval Register */
->   #define TMTMIR_DEFAULT	0x0000000f
-> @@ -129,33 +128,51 @@ static const struct thermal_zone_of_device_ops tmu_tz_ops = {
->   static int qoriq_tmu_register_tmu_zone(struct device *dev,
->   				       struct qoriq_tmu_data *qdata)
->   {
-> -	int id;
-> +	int ret = 0;
-> +	struct device_node *np, *child, *sensor_np;
->   
-> -	if (qdata->ver == TMU_VER1) {
-> -		regmap_write(qdata->regmap, REGS_TMR,
-> -			     TMR_MSITE_ALL | TMR_ME | TMR_ALPF);
-> -	} else {
-> -		regmap_write(qdata->regmap, REGS_V2_TMSR, TMR_MSITE_ALL);
-> -		regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
-> -	}
-> +	np = of_find_node_by_name(NULL, "thermal-zones");
-> +	if (!np)
-> +		return -ENODEV;
+On 27/09/2022 04:26, Jason Yan wrote:
+> +++ b/drivers/scsi/pm8001/pm8001_sas.c
+> @@ -645,22 +645,16 @@ static int pm8001_dev_found_notify(struct domain_device *dev)
+>   	pm8001_device->dcompletion = &completion;
+>   	if (parent_dev && dev_is_expander(parent_dev->dev_type)) {
+>   		int phy_id;
+> -		struct ex_phy *phy;
+> -		for (phy_id = 0; phy_id < parent_dev->ex_dev.num_phys;
+> -		phy_id++) {
+> -			phy = &parent_dev->ex_dev.ex_phy[phy_id];
+> -			if (SAS_ADDR(phy->attached_sas_addr)
+> -				== SAS_ADDR(dev->sas_addr)) {
+> -				pm8001_device->attached_phy = phy_id;
+> -				break;
+> -			}
+> -		}
+> -		if (phy_id == parent_dev->ex_dev.num_phys) {
 > +
-> +	sensor_np = of_node_get(dev->of_node);
->   
-> -	for (id = 0; id < SITES_MAX; id++) {
-> +	for_each_available_child_of_node(np, child) {
->   		struct thermal_zone_device *tzd;
-> -		struct qoriq_sensor *sensor = &qdata->sensor[id];
-> -		int ret;
-> +		struct qoriq_sensor *sensor;
-> +		int id, site;
-> +
-> +		ret = thermal_zone_of_get_sensor_id(child, sensor_np, &id);
-> +
-> +		if (ret < 0) {
-> +			dev_err(dev, "failed to get valid sensor id: %d\n", ret);
-> +			of_node_put(child);
-> +			break;
-> +		}
->   
-> +		sensor = &qdata->sensor[id];
->   		sensor->id = id;
->   
-> +		/* Enable monitoring */
-> +		if (qdata->ver == TMU_VER1) {
-> +			site = 0x1 << (15 - id);
-> +			regmap_update_bits(qdata->regmap, REGS_TMR,
-> +					   site | TMR_ME | TMR_ALPF,
-> +					   site | TMR_ME | TMR_ALPF);
+> +		phy_id = sas_find_attached_phy(&parent_dev->ex_dev, dev);
+> +		if (phy_id == -ENODEV) {
+>   			pm8001_dbg(pm8001_ha, FAIL,
+>   				   "Error: no attached dev:%016llx at ex:%016llx.\n",
+>   				   SAS_ADDR(dev->sas_addr),
+>   				   SAS_ADDR(parent_dev->sas_addr));
+>   			res = -1;
+
+I think that you can just pass the linux error code (-ENODEV) back here.
+
+And for hisi_sas we change to -EINVAL for this code. I don't think it's 
+required, so I think that we can pass -ENODEV back there also. Using 
+-EINVAL seems to come from when the code was originally added in 
+abda97c2fe874 and from a quick glance libsas does not seem to have 
+special processing for -EINVAL.
+
+Thanks,
+John
+
 > +		} else {
-> +			site = 0x1 << id;
-> +			regmap_update_bits(qdata->regmap, REGS_V2_TMSR, site, site);
-> +			regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
-> +		}
-> +
->   		tzd = devm_thermal_zone_of_sensor_register(dev, id,
->   							   sensor,
->   							   &tmu_tz_ops);
-> -		ret = PTR_ERR_OR_ZERO(tzd);
-> -		if (ret) {
-> -			if (ret == -ENODEV)
-> -				continue;
-> -
-> -			regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
-> -			return ret;
-> +		if (IS_ERR(tzd)) {
-> +			ret = PTR_ERR(tzd);
-> +			dev_err(dev, "failed to register thermal zone: %d\n", ret);
-> +			of_node_put(child);
-> +			break;
+> +			pm8001_device->attached_phy = phy_id;
 >   		}
->   
->   		if (devm_thermal_add_hwmon_sysfs(tzd))
-> @@ -164,7 +181,13 @@ static int qoriq_tmu_register_tmu_zone(struct device *dev,
->   
->   	}
->   
-> -	return 0;
-> +	of_node_put(sensor_np);
-> +	of_node_put(np);
-> +
-> +	if (ret)
-> +		regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
-> +
-> +	return ret;
->   }
->   
->   static int qoriq_tmu_calibration(struct device *dev,
+>   	} else {
+>   		if (dev->dev_type == SAS_SATA
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
