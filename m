@@ -2,144 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA8F5EC0EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8D85EC0EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbiI0LSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S231352AbiI0LSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbiI0LSQ (ORCPT
+        with ESMTP id S230269AbiI0LSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:18:16 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FB5792C6
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:18:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1D6561FD03;
-        Tue, 27 Sep 2022 11:18:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664277483; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        Tue, 27 Sep 2022 07:18:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CCDDFD4;
+        Tue, 27 Sep 2022 04:18:22 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id A53E421CF7;
+        Tue, 27 Sep 2022 11:18:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1664277500; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vS+2Z0w98N21eSUSqoUOHnDYdgH8k2LY+nOe6UayVhY=;
-        b=liXtDfUMlNlHISSlkwUKA0zuVAP7F70N56DLpitXLhB/oy7xdIzr24ang2uW65Q/GJhfA4
-        dBf/RJdKzbx338Z+3Nl+RAztQ+yhsCBuoRTxaF+TJMzWIgjrGIBhDi9bGjM9HRsP6f246L
-        jPwAEghiQrlyAORdL1ai9deL5W3q52Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664277483;
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gauer3q/6k/4Xyqww0eSr4tTUC9z7vKer7hN1rUB1yk=;
+        b=DCnqFTEYl6CGA/Fm6EpN3TNE8dZlBeTOe83SbYxQZOz1zJrOLmVq9NU94NfcGhNpxFf/0L
+        YACS/wO9Ww77XQU0oNbJu8xsLF02RKjTxVTugv/VrJb8CjwXcgefmkT50V/uHozdWJp2zD
+        HBxOEP1Y90/aXHAIaalVTJDg8RKFqRM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1664277500;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vS+2Z0w98N21eSUSqoUOHnDYdgH8k2LY+nOe6UayVhY=;
-        b=JeRP8O80N0y98ro4AZXy0AY2ozgWlcHDpkRNNteRYjISbFW0QlUTOdqeNbyabfhBW3Yj2Z
-        5mUeQ0w35zpH0rCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gauer3q/6k/4Xyqww0eSr4tTUC9z7vKer7hN1rUB1yk=;
+        b=+/egnLgHcsNlsuC1XvG75HXSYdE5bs5Xk4YYODqMLoS+HyhGaXKKLh6C4tdoHfUob7/PGv
+        XCbr+5ZfhtEyJRCw==
+Received: from localhost.localdomain (unknown [10.100.208.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 00E48139BE;
-        Tue, 27 Sep 2022 11:18:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id PzbfOurbMmPNZQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 27 Sep 2022 11:18:02 +0000
-Message-ID: <bd64206e-4d67-6932-30c2-740237a05bd0@suse.de>
-Date:   Tue, 27 Sep 2022 13:18:02 +0200
+        by relay2.suse.de (Postfix) with ESMTPS id 40B482C162;
+        Tue, 27 Sep 2022 11:18:20 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 1/4] tty: serial: extend lqasc_tx_ready() to lqasc_console_putchar()
+Date:   Tue, 27 Sep 2022 13:18:16 +0200
+Message-Id: <20220927111819.18516-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] drm/ssd130x: Synchronize access to dma-buf imported GEM
- BOs
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
-References: <20220927095249.1919385-1-javierm@redhat.com>
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220927095249.1919385-1-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------chZAy4n5uKEh8OIqyb80reWc"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------chZAy4n5uKEh8OIqyb80reWc
-Content-Type: multipart/mixed; boundary="------------G0ypG6Hm7GGFzDdHaNRPCwiG";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
-Message-ID: <bd64206e-4d67-6932-30c2-740237a05bd0@suse.de>
-Subject: Re: [PATCH] drm/ssd130x: Synchronize access to dma-buf imported GEM
- BOs
-References: <20220927095249.1919385-1-javierm@redhat.com>
-In-Reply-To: <20220927095249.1919385-1-javierm@redhat.com>
+There is one more place where lqasc_tx_ready() can be used now:
+lqasc_console_putchar(). So replace the open-coded variant by the
+helper.
 
---------------G0ypG6Hm7GGFzDdHaNRPCwiG
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Suggested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
+ drivers/tty/serial/lantiq.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-SGkNCg0KQW0gMjcuMDkuMjIgdW0gMTE6NTIgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IFN5bmNocm9uaXplIENQVSBhY2Nlc3MgdG8gR0VNIEJPcyB3aXRoIG90aGVy
-IGRyaXZlcnMgd2hlbiB1cGRhdGluZyB0aGUNCj4gc2NyZWVuIGJ1ZmZlci4gSW1wb3J0ZWQg
-RE1BIGJ1ZmZlcnMgbWlnaHQgb3RoZXJ3aXNlIGNvbnRhaW4gc3RhbGUgZGF0YS4NCj4gDQo+
-IFN1Z2dlc3RlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+
-DQo+IFNpZ25lZC1vZmYtYnk6IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyA8amF2aWVybUBy
-ZWRoYXQuY29tPg0KDQpSZXZpZXdlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJt
-YW5uQHN1c2UuZGU+DQoNCj4gLS0tDQo+IA0KPiAgIGRyaXZlcnMvZ3B1L2RybS9zb2xvbW9u
-L3NzZDEzMHguYyB8IDcgKysrKysrKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlv
-bnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2Qx
-MzB4LmMgYi9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMNCj4gaW5kZXggYTUz
-NzY5MjEwMGQxLi5iYzQxYTVhZTgxMGEgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2Ry
-bS9zb2xvbW9uL3NzZDEzMHguYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vc29sb21vbi9z
-c2QxMzB4LmMNCj4gQEAgLTU1NSwxMSArNTU1LDE4IEBAIHN0YXRpYyBpbnQgc3NkMTMweF9m
-Yl9ibGl0X3JlY3Qoc3RydWN0IGRybV9mcmFtZWJ1ZmZlciAqZmIsIGNvbnN0IHN0cnVjdCBp
-b3N5c19tDQo+ICAgCWlmICghYnVmKQ0KPiAgIAkJcmV0dXJuIC1FTk9NRU07DQo+ICAgDQo+
-ICsJcmV0ID0gZHJtX2dlbV9mYl9iZWdpbl9jcHVfYWNjZXNzKGZiLCBETUFfRlJPTV9ERVZJ
-Q0UpOw0KPiArCWlmIChyZXQpDQo+ICsJCWdvdG8gb3V0X2ZyZWU7DQo+ICsNCj4gICAJaW9z
-eXNfbWFwX3NldF92YWRkcigmZHN0LCBidWYpOw0KPiAgIAlkcm1fZmJfeHJnYjg4ODhfdG9f
-bW9ubygmZHN0LCAmZHN0X3BpdGNoLCB2bWFwLCBmYiwgcmVjdCk7DQo+ICAgDQo+ICsJZHJt
-X2dlbV9mYl9lbmRfY3B1X2FjY2VzcyhmYiwgRE1BX0ZST01fREVWSUNFKTsNCj4gKw0KPiAg
-IAlzc2QxMzB4X3VwZGF0ZV9yZWN0KHNzZDEzMHgsIGJ1ZiwgcmVjdCk7DQo+ICAgDQo+ICtv
-dXRfZnJlZToNCj4gICAJa2ZyZWUoYnVmKTsNCj4gICANCj4gICAJcmV0dXJuIHJldDsNCg0K
-LS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VT
-RSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQw
-OSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2No
-w6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+diff --git a/drivers/tty/serial/lantiq.c b/drivers/tty/serial/lantiq.c
+index 6da1b7496c6c..ba9739af30ed 100644
+--- a/drivers/tty/serial/lantiq.c
++++ b/drivers/tty/serial/lantiq.c
+@@ -606,15 +606,12 @@ static const struct uart_ops lqasc_pops = {
+ static void
+ lqasc_console_putchar(struct uart_port *port, unsigned char ch)
+ {
+-	int fifofree;
+-
+ 	if (!port->membase)
+ 		return;
+ 
+-	do {
+-		fifofree = (__raw_readl(port->membase + LTQ_ASC_FSTAT)
+-			& ASCFSTAT_TXFREEMASK) >> ASCFSTAT_TXFREEOFF;
+-	} while (fifofree == 0);
++	while (!lqasc_tx_ready(port))
++		;
++
+ 	writeb(ch, port->membase + LTQ_ASC_TBUF);
+ }
+ 
+-- 
+2.37.3
 
---------------G0ypG6Hm7GGFzDdHaNRPCwiG--
-
---------------chZAy4n5uKEh8OIqyb80reWc
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmMy2+oFAwAAAAAACgkQlh/E3EQov+Ao
-YxAAkuijTvBW5TUnz7ZmG6jKhxbr3jrKIA83T7TXfKxbiqPXiFV/IDe3CSlF7axljH+a1rv4JjJc
-5lhVPBHsoYZ7Ax/CW3IAtfyzchPvyf88yy0+YV6nj5ffI4Wp9UL2kXot0X0BFpL8O8P20LRp53um
-/wAHZNBtLID45cWGtItRm6xbpKQ4bhRGhdE51ATModyB8f+7gWQL/ziWQstPLNUN6y5FD7OGA2B2
-uOokVPLc6ZVAbtrYC9Jc1dcsIOLyOSrKEu0nHOHxJIKvVJXUE1jDPWIQUAshEskYrwvU4A1PRVgq
-5GEgjpNiCyTlPOHbXqJIEc+TGRG3bzF0WhdUhtF1Gmh6fcSruJRizAMt3oxg6N/P801MZREmjX7j
-i6zf9rQU1BmncB2J3DZ90fmqJJIX0nKbyiYo64dPOfIbJICfYV9Azzoa3GDX0eyZGmpvKHu7D5Z7
-lztCL4DB+xGM5zJNYcqxc8uJmiVeDQPDgMAtJPOV0hDjCbaPzz/jneH5YQ3YSbYvPMjTKB5YJSS5
-9bKBoBvxUwAGDvvi194GzKRNasEcKWdzLw7HxV/TcN8V4kprLxjY6RaOHhR+sKsu0czo/Z3tCR4q
-eC8wdKSbC/8DHchksr/PiCELd0SCj5465pI8u3/CcyfcTtGzCbIJOZKqalKhWAcmYO1lTM16foJ8
-yAc=
-=/mg8
------END PGP SIGNATURE-----
-
---------------chZAy4n5uKEh8OIqyb80reWc--
