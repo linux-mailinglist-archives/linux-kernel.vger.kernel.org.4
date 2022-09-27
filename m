@@ -2,260 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 741735EC9B5
+	by mail.lfdr.de (Postfix) with ESMTP id C00885EC9B6
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232641AbiI0QjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
+        id S232587AbiI0QjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231784AbiI0Qiz (ORCPT
+        with ESMTP id S232459AbiI0Qiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Sep 2022 12:38:55 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0711D9839
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:38:29 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id lh5so21867325ejb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:38:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
-        bh=F2goyNpyd3IXhayCEGATlVULW4jrbgSh4ZPgZuwoLUY=;
-        b=VufMgnwF8XYZxQrCy+h78oyt/89LDSA/P6+xgdHgQp1Jb1Wn+VwztMpPMIP+EK7F22
-         s4v39KDbH5rzEXL0glxq9/BuT9m75v0rHl9dCqBy1alkRvgh4wfDE3AaQ1Ygw6IvtWB3
-         476zV6duj7KCxwM3Nj2ABXwvPaitFT+jH81XWw/ZVH5JzYgv8nwJesdqsWYhNK5YliG4
-         8BwhvRCtAAwPf5djmV6BSTu3/+qORqY0uB9d/qGU429lJk/8XRkUAInHp7DE50h+lymT
-         Q5WnKLOMZVHwiMfS5IWtQ5g/R9yAMp8MXt5AI+1yiOlck0dY7NXhVTYub2iTFGgRwrxs
-         nt9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=F2goyNpyd3IXhayCEGATlVULW4jrbgSh4ZPgZuwoLUY=;
-        b=CslVdq5sZVn5EejvVWyiwMuFBASk80jbh5UZJ251l+e9The06vhP/yHU7ZlYz4Uf/3
-         Eq91/b4c1tXaD3Va2VHE36pwZWaMrNE66/VhYW3XqDbA+5R/vWiG+qV1+s2JE6cWtK7q
-         s6uy2+MQp1YlwwFoHzbRlevVHkJ5eVokswVu5U20T+CcB7nfYu/rYUm25LbRg2np463b
-         6U+jRUQcOt/fzuubMik8erRz1SGjPSr4jbM7srTqIeycRMx+R9OlkGEcsJB984q9VdYO
-         KubbwuPW/YLL4SJ0xaAfO2PXo6/pgj0eS9Ee/oNwaMCULwrlBbqJS8v59mR4dJ7j8VBm
-         wxkA==
-X-Gm-Message-State: ACrzQf2THgqovhcWcw/jn2f20EVyrA6cMCVmKydqIDZTD1sRWMAIr6SD
-        bqw8oxvRi5lMUk9leyQOYXEmEQ==
-X-Google-Smtp-Source: AMsMyM73RkuKKJlYmIndQtNTIOY78PnlqUDLGnitn23kmuwbfrhZJ4PHpaokmWMklMutu6huS6ADgQ==
-X-Received: by 2002:a17:907:3dab:b0:783:4b01:1ffe with SMTP id he43-20020a1709073dab00b007834b011ffemr11507259ejc.107.1664296700560;
-        Tue, 27 Sep 2022 09:38:20 -0700 (PDT)
-Received: from mbp-di-paolo.station (net-2-37-207-44.cust.vodafonedsl.it. [2.37.207.44])
-        by smtp.gmail.com with ESMTPSA id z21-20020aa7cf95000000b004575c9db638sm1569057edx.54.2022.09.27.09.38.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Sep 2022 09:38:20 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [patch v11 0/6] support concurrent sync io for bfq on a specail
- occasion
-From:   Paolo Valente <paolo.valente@linaro.org>
-In-Reply-To: <20220916071942.214222-1-yukuai1@huaweicloud.com>
-Date:   Tue, 27 Sep 2022 18:38:18 +0200
-Cc:     Tejun Heo <tj@kernel.org>, axboe@kernel.dk,
-        Jan Kara <jack@suse.cz>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <29348B39-94AE-4D76-BD2E-B759056264B6@linaro.org>
-References: <20220916071942.214222-1-yukuai1@huaweicloud.com>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58011D6D15;
+        Tue, 27 Sep 2022 09:38:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42C1861A8E;
+        Tue, 27 Sep 2022 16:38:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DE8BC433D6;
+        Tue, 27 Sep 2022 16:38:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664296710;
+        bh=WHByPJEBtA2x8lXXGVyeijgKXWmnipT6Ece6QaKDu+U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o812oZ1EQiIrdIMLkoq6OUD0v/TTPGZjQ23bH5nnAYLeONSwMgzCGB1mdUOIyzwQt
+         qrkqbUdpF5WjRGj4r3cTwXDlwTng+jrMus6eEfYnCYtzdlaCFSfufwX2EoHS3CveYA
+         s4mEjN7Co4dI2G5vTsA1PXCfUNC2DBToc0VC9gk4=
+Date:   Tue, 27 Sep 2022 18:38:27 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: Re: [PATCH v10 27/27] MAINTAINERS: Rust
+Message-ID: <YzMnAyQbNe9YoymU@kroah.com>
+References: <20220927131518.30000-1-ojeda@kernel.org>
+ <20220927131518.30000-28-ojeda@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220927131518.30000-28-ojeda@kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 27, 2022 at 03:14:58PM +0200, Miguel Ojeda wrote:
+> Miguel, Alex and Wedson will be maintaining the Rust support.
+> 
+> Boqun, Gary and Björn will be reviewers.
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  MAINTAINERS | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f5ca4aefd184..944dc265b64d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17758,6 +17758,24 @@ F:	include/rv/
+>  F:	kernel/trace/rv/
+>  F:	tools/verification/
+>  
+> +RUST
+> +M:	Miguel Ojeda <ojeda@kernel.org>
+> +M:	Alex Gaynor <alex.gaynor@gmail.com>
+> +M:	Wedson Almeida Filho <wedsonaf@google.com>
 
+As was pointed out, please don't put a known-invalid email in this file.
 
-> Il giorno 16 set 2022, alle ore 09:19, Yu Kuai =
-<yukuai1@huaweicloud.com> ha scritto:
->=20
-> From: Yu Kuai <yukuai3@huawei.com>
->=20
-> Changes in v11:
-> - keep the comments in bfq_weights_tree_remove() and move it to the
-> caller where bfqq can be freed.
-> - add two followed up cleanup patches.
->=20
-> Changes in v10:
-> - Add reviewed-tag for patch 2
->=20
-> Changes in v9:
-> - also update how many bfqqs have pending_reqs bfq_bfqq_move().
-> - fix one language in patch 4
-> - Add reviewed-tag for patch 1,3,4
->=20
-> Changes in v8:
-> - Instead of using whether bfqq is busy, using whether bfqq has =
-pending
-> requests. As Paolo pointed out the former way is problematic.
->=20
-> Changes in v7:
-> - fix mismatch bfq_inc/del_busy_queues() and bfqq_add/del_bfqq_busy(),
-> also retest this patchset on v5.18 to make sure functionality is
-> correct.
-> - move the updating of 'bfqd->busy_queues' into new apis
->=20
-> Changes in v6:
-> - add reviewed-by tag for patch 1
->=20
-> Changes in v5:
-> - rename bfq_add_busy_queues() to bfq_inc_busy_queues() in patch 1
-> - fix wrong definition in patch 1
-> - fix spelling mistake in patch 2: leaset -> least
-> - update comments in patch 3
-> - add reviewed-by tag in patch 2,3
->=20
-> Changes in v4:
-> - split bfq_update_busy_queues() to bfq_add/dec_busy_queues(),
->   suggested by Jan Kara.
-> - remove unused 'in_groups_with_pending_reqs',
->=20
-> Changes in v3:
-> - remove the cleanup patch that is irrelevant now(I'll post it
->   separately).
-> - instead of hacking wr queues and using weights tree =
-insertion/removal,
->   using bfq_add/del_bfqq_busy() to count the number of groups
->   (suggested by Jan Kara).
->=20
-> Changes in v2:
-> - Use a different approch to count root group, which is much simple.
->=20
-> Currently, bfq can't handle sync io concurrently as long as they
-> are not issued from root group. This is because
-> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
-> bfq_asymmetric_scenario().
->=20
-> The way that bfqg is counted into 'num_groups_with_pending_reqs':
->=20
-> Before this patchset:
-> 1) root group will never be counted.
-> 2) Count if bfqg or it's child bfqgs have pending requests.
-> 3) Don't count if bfqg and it's child bfqgs complete all the requests.
->=20
-> After this patchset:
-> 1) root group is counted.
-> 2) Count if bfqg has pending requests.
-> 3) Don't count if bfqg complete all the requests.
->=20
-> With the above changes, concurrent sync io can be supported if only
-> one group is activated.
->=20
-> fio test script(startdelay is used to avoid queue merging):
-> [global]
-> filename=3D/dev/sda
-> allow_mounted_write=3D0
-> ioengine=3Dpsync
-> direct=3D1
-> ioscheduler=3Dbfq
-> offset_increment=3D10g
-> group_reporting
-> rw=3Drandwrite
-> bs=3D4k
->=20
-> [test1]
-> numjobs=3D1
->=20
-> [test2]
-> startdelay=3D1
-> numjobs=3D1
->=20
-> [test3]
-> startdelay=3D2
-> numjobs=3D1
->=20
-> [test4]
-> startdelay=3D3
-> numjobs=3D1
->=20
-> [test5]
-> startdelay=3D4
-> numjobs=3D1
->=20
-> [test6]
-> startdelay=3D5
-> numjobs=3D1
->=20
-> [test7]
-> startdelay=3D6
-> numjobs=3D1
->=20
-> [test8]
-> startdelay=3D7
-> numjobs=3D1
->=20
-> test result:
-> running fio on root cgroup
-> v5.18:	   112 Mib/s
-> v5.18-patched: 112 Mib/s
->=20
-> running fio on non-root cgroup
-> v5.18:	   51.2 Mib/s
-> v5.18-patched: 112 Mib/s
->=20
-> Note that I also test null_blk with "irqmode=3D2
-> completion_nsec=3D100000000(100ms) hw_queue_depth=3D1", and tests show
-> that service guarantees are still preserved.
->=20
+thanks,
 
-Your patches seem ok to me now (thanks for you contribution and, above =
-all, for your patience). I have only a high-level concern: what do you =
-mean when you say that service guarantees are still preserved? What test =
-did you run exactly? This point is very important to me. I'd like to see =
-some convincing test with differentiated weights. In case you don't have =
-other tools for executing such tests quickly, you may want to use the =
-bandwidth-latency test in my simple S benchmark suite (for which I'm =
-willing to help).
-
-Thanks,
-Paolo
-
-> Previous versions:
-> RFC: =
-https://lore.kernel.org/all/20211127101132.486806-1-yukuai3@huawei.com/
-> v1: =
-https://lore.kernel.org/all/20220305091205.4188398-1-yukuai3@huawei.com/
-> v2: =
-https://lore.kernel.org/all/20220416093753.3054696-1-yukuai3@huawei.com/
-> v3: =
-https://lore.kernel.org/all/20220427124722.48465-1-yukuai3@huawei.com/
-> v4: =
-https://lore.kernel.org/all/20220428111907.3635820-1-yukuai3@huawei.com/
-> v5: =
-https://lore.kernel.org/all/20220428120837.3737765-1-yukuai3@huawei.com/
-> v6: =
-https://lore.kernel.org/all/20220523131818.2798712-1-yukuai3@huawei.com/
-> v7: =
-https://lore.kernel.org/all/20220528095020.186970-1-yukuai3@huawei.com/
->=20
->=20
-> Yu Kuai (6):
->  block, bfq: support to track if bfqq has pending requests
->  block, bfq: record how many queues have pending requests
->  block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
->  block, bfq: do not idle if only one group is activated
->  block, bfq: cleanup bfq_weights_tree add/remove apis
->  block, bfq: cleanup __bfq_weights_tree_remove()
->=20
-> block/bfq-cgroup.c  | 10 +++++++
-> block/bfq-iosched.c | 71 +++++++--------------------------------------
-> block/bfq-iosched.h | 30 +++++++++----------
-> block/bfq-wf2q.c    | 69 ++++++++++++++++++++++++++-----------------
-> 4 files changed, 76 insertions(+), 104 deletions(-)
->=20
-> --=20
-> 2.31.1
->=20
-
+greg k-h
