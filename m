@@ -2,85 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DE45ECD74
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0555ECD8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbiI0T73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 15:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
+        id S232664AbiI0UAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 16:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232200AbiI0T7N (ORCPT
+        with ESMTP id S232142AbiI0T7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 15:59:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B34A1C4829
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664308750;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dx5HDOePnyxgHzqa6DOD5MnqegsYWwrLtgMoZQ1P8dI=;
-        b=foQAH5nakY7QGTs1zy17OITp0hzS+NleBEm/R7EPaMexNqiNMfVAyMl3oSnslTRyeZLDzR
-        Mq9C+MILsXcbi53GcHgDGXVSJxA2jAHWDul+Bcc2h3m/wLlOBnpLsI0DYDX0Se3CEXMCPn
-        i24kp/BImMOWZhc+6S2LhKA4BrxGuNU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-348-4F8IJ_ixOq6nPyQm-EMgsQ-1; Tue, 27 Sep 2022 15:59:09 -0400
-X-MC-Unique: 4F8IJ_ixOq6nPyQm-EMgsQ-1
-Received: by mail-wm1-f71.google.com with SMTP id c2-20020a1c3502000000b003b535aacc0bso4266019wma.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:59:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=Dx5HDOePnyxgHzqa6DOD5MnqegsYWwrLtgMoZQ1P8dI=;
-        b=vfjqLgL5b6M+jKuUsU7IaDS5buyf97lLAILgevwCEF+0HXZ2IuOlPZChdpVP/0XN2E
-         pllqYMf286CqtQcvyQh20pbWGNcodFho1YdcZ7jTTpxDs4NR9YRRlL0fK8HOX3n6PJYp
-         wm9g1iT0APnvv4MgAZRPvvv9IkKjTp+gfmB/jyzTE9DXtHjNYQfiUNhTA576BBlyWzVM
-         71UxpJbX12PgW8z753cWJkxDuHYeWgwXY3yTZ6J0pL0+av8zVs7f49GViRPHL9F+h7hR
-         /BKkE5FzW1yDsCreKTqHh1i68jxioY10fTTDdehKLRUoU1yXJqpbI84eGPD2KUE8IcvT
-         KWsA==
-X-Gm-Message-State: ACrzQf1TI+5o1KlWFXlj8RkBrMsckUa6nIbKywbWd5fB2WZEw6Pg9xYp
-        I/RDotFhnIvsDpQIG8D1h2UVuJmLUzlYsF5J+jQ/uZKtDDSZ7NZrBAHP1TCnURuvCExgGB7vgVR
-        qzonXwOe+gaCK2o/PxllXqkyH
-X-Received: by 2002:a05:6000:1a8a:b0:22a:33aa:a907 with SMTP id f10-20020a0560001a8a00b0022a33aaa907mr17893670wry.322.1664308748213;
-        Tue, 27 Sep 2022 12:59:08 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7eOWYFV9iprtkvNGfif9TK9/JHNd5re5oxCk70ig0yrmbrjCmGTXstvwdg4i4Hc1mUWp0nvA==
-X-Received: by 2002:a05:6000:1a8a:b0:22a:33aa:a907 with SMTP id f10-20020a0560001a8a00b0022a33aaa907mr17893654wry.322.1664308747882;
-        Tue, 27 Sep 2022 12:59:07 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-104-40.dyn.eolo.it. [146.241.104.40])
-        by smtp.gmail.com with ESMTPSA id f12-20020a05600c4e8c00b003b33943ce5esm17310012wmq.32.2022.09.27.12.59.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 12:59:07 -0700 (PDT)
-Message-ID: <6502e1a45526f97a1e6d7d27bbe07e3bb3623de3.camel@redhat.com>
-Subject: Re: [PATCH net-next 0/4] shrink struct ubuf_info
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Pavel Begunkov <asml.silence@gmail.com>, netdev@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org, Wei Liu <wei.liu@kernel.org>,
-        Paul Durrant <paul@xen.org>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Date:   Tue, 27 Sep 2022 21:59:06 +0200
-In-Reply-To: <c06897d4-4883-2756-87f9-9b10ab495c43@gmail.com>
-References: <cover.1663892211.git.asml.silence@gmail.com>
-         <7fef56880d40b9d83cc99317df9060c4e7cdf919.camel@redhat.com>
-         <021d8ea4-891c-237d-686e-64cecc2cc842@gmail.com>
-         <bbb212f6-0165-0747-d99d-b49acbb02a80@gmail.com>
-         <85cccb780608e830024fc82a8e4f703031646f4e.camel@redhat.com>
-         <c06897d4-4883-2756-87f9-9b10ab495c43@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 27 Sep 2022 15:59:38 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E844E1C483D;
+        Tue, 27 Sep 2022 12:59:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664308770; x=1695844770;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hHMW6dKcSr50LmzJxBbJqerolMIPg6Gn2+JmAaKAzHQ=;
+  b=HkjBZn39TzCR4sNt6SAAne2GnMObisw+JDT9ogoCVOPz9I0B42IClLBE
+   jw0ap1E0VATm9PrwrlDIMF23cbxiY8ig+ZlTWR1c2qQBks3c+EVZx7LSt
+   P2MxgAtLPYIjuuFACPBznDNLQ4680QNo49zAnZtbDCXq+moleNH1wXZBt
+   nN/a8u/xRsxDk3V5XV3aQA2z72GkNj9W9R5MYaQwHPUGkoehCIkU76VT5
+   CHlj+7g9ZcSfNeouJ9eqMtRUaSsE4gdSQFVqI3mxUORSdJZP42LRg9Fh1
+   yJpNUuCncnnv1tAX/h+BtPh9ViZLdQracOlDl6Q6aYH/MFtszE3uw0wHE
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="363256903"
+X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
+   d="scan'208";a="363256903"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 12:59:29 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="684116462"
+X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
+   d="scan'208";a="684116462"
+Received: from weimingg-mobl.amr.corp.intel.com (HELO [10.212.244.112]) ([10.212.244.112])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 12:59:28 -0700
+Message-ID: <8bf3e3c0-78b6-7121-1951-300175ede3b9@linux.intel.com>
+Date:   Tue, 27 Sep 2022 12:59:27 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v2 5/9] PCI/AER: Unexport pci_aer_clear_nonfatal_status()
+Content-Language: en-US
+To:     Zhuo Chen <chenzhuo.1@bytedance.com>, bhelgaas@google.com,
+        ruscur@russell.cc, oohall@gmail.com, fancer.lancer@gmail.com,
+        jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
+        james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ntb@lists.linux.dev,
+        linux-scsi@vger.kernel.org
+References: <20220927153524.49172-1-chenzhuo.1@bytedance.com>
+ <20220927153524.49172-6-chenzhuo.1@bytedance.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220927153524.49172-6-chenzhuo.1@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,143 +69,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-09-27 at 19:48 +0100, Pavel Begunkov wrote:
-> On 9/27/22 18:56, Paolo Abeni wrote:
-> > On Tue, 2022-09-27 at 18:16 +0100, Pavel Begunkov wrote:
-> > > On 9/27/22 15:28, Pavel Begunkov wrote:
-> > > > Hello Paolo,
-> > > > 
-> > > > On 9/27/22 14:49, Paolo Abeni wrote:
-> > > > > Hello,
-> > > > > 
-> > > > > On Fri, 2022-09-23 at 17:39 +0100, Pavel Begunkov wrote:
-> > > > > > struct ubuf_info is large but not all fields are needed for all
-> > > > > > cases. We have limited space in io_uring for it and large ubuf_info
-> > > > > > prevents some struct embedding, even though we use only a subset
-> > > > > > of the fields. It's also not very clean trying to use this typeless
-> > > > > > extra space.
-> > > > > > 
-> > > > > > Shrink struct ubuf_info to only necessary fields used in generic paths,
-> > > > > > namely ->callback, ->refcnt and ->flags, which take only 16 bytes. And
-> > > > > > make MSG_ZEROCOPY and some other users to embed it into a larger struct
-> > > > > > ubuf_info_msgzc mimicking the former ubuf_info.
-> > > > > > 
-> > > > > > Note, xen/vhost may also have some cleaning on top by creating
-> > > > > > new structs containing ubuf_info but with proper types.
-> > > > > 
-> > > > > That sounds a bit scaring to me. If I read correctly, every uarg user
-> > > > > should check 'uarg->callback == msg_zerocopy_callback' before accessing
-> > > > > any 'extend' fields.
-> > > > 
-> > > > Providers of ubuf_info access those fields via callbacks and so already
-> > > > know the actual structure used. The net core, on the opposite, should
-> > > > keep it encapsulated and not touch them at all.
-> > > > 
-> > > > The series lists all places where we use extended fields just on the
-> > > > merit of stripping the structure of those fields and successfully
-> > > > building it. The only user in net/ipv{4,6}/* is MSG_ZEROCOPY, which
-> > > > again uses callbacks.
-> > > > 
-> > > > Sounds like the right direction for me. There is a couple of
-> > > > places where it might get type safer, i.e. adding types instead
-> > > > of void* in for struct tun_msg_ctl and getting rid of one macro
-> > > > hiding types in xen. But seems more like TODO for later.
-> > > > 
-> > > > > AFAICS the current code sometimes don't do the
-> > > > > explicit test because the condition is somewhat implied, which in turn
-> > > > > is quite hard to track.
-> > > > > 
-> > > > > clearing uarg->zerocopy for the 'wrong' uarg was armless and undetected
-> > > > > before this series, and after will trigger an oops..
-> > > > 
-> > > > And now we don't have this field at all to access, considering that
-> > > > nobody blindly casts it.
-> > > > 
-> > > > > There is some noise due to uarg -> uarg_zc renaming which make the
-> > > > > series harder to review. Have you considered instead keeping the old
-> > > > > name and introducing a smaller 'struct ubuf_info_common'? the overall
-> > > > > code should be mostly the same, but it will avoid the above mentioned
-> > > > > noise.
-> > > > 
-> > > > I don't think there will be less noise this way, but let me try
-> > > > and see if I can get rid of some churn.
-> > > 
-> > > It doesn't look any better for me
-> > > 
-> > > TL;DR; This series converts only 3 users: tap, xen and MSG_ZEROCOPY
-> > > and doesn't touch core code. If we do ubuf_info_common though I'd need
-> > > to convert lots of places in skbuff.c and multiple places across
-> > > tcp/udp, which is much worse.
-> > 
-> > Uhmm... I underlook the fact we must preserve the current accessors for
-> > the common fields.
-> > 
-> > I guess something like the following could do (completely untested,
-> > hopefully should illustrate the idea):
-> > 
-> > struct ubuf_info {
-> > 	struct_group_tagged(ubuf_info_common, common,
-> > 		void (*callback)(struct sk_buff *, struct ubuf_info *,
-> >                           bool zerocopy_success);
-> > 		refcount_t refcnt;
-> > 	        u8 flags;
-> > 	);
-> > 
-> > 	union {
-> >                  struct {
-> >                          unsigned long desc;
-> >                          void *ctx;
-> >                  };
-> >                  struct {
-> >                          u32 id;
-> >                          u16 len;
-> >                          u16 zerocopy:1;
-> >                          u32 bytelen;
-> >                  };
-> >          };
-> > 
-> >          struct mmpin {
-> >                  struct user_struct *user;
-> >                  unsigned int num_pg;
-> >          } mmp;
-> > };
-> > 
-> > Then you should be able to:
-> > - access ubuf_info->callback,
-> > - access the same field via ubuf_info->common.callback
-> > - declare variables as 'struct ubuf_info_commom' with appropriate
-> > contents.
-> > 
-> > WDYT?
+
+
+On 9/27/22 8:35 AM, Zhuo Chen wrote:
+> Since pci_aer_clear_nonfatal_status() is used only internally, move
+> its declaration to the PCI internal header file. Also, no one cares
+> about return value of pci_aer_clear_nonfatal_status(), so make it void.
 > 
-> Interesting, I didn't think about struct_group, this would
-> let to split patches better and would limit non-core changes.
-> But if the plan is to convert the core helpers to
-> ubuf_info_common, than I think it's still messier than changing
-> ubuf providers only.
+> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+> ---
+
+Looks good to me.
+
+>  drivers/pci/pci.h      | 2 ++
+>  drivers/pci/pcie/aer.c | 7 ++-----
+>  include/linux/aer.h    | 5 -----
+>  3 files changed, 4 insertions(+), 10 deletions(-)
 > 
-> I can do the exercise, but I don't really see what is the goal.
-> Let me ask this, if we forget for a second how diffs look,
-> do you care about which pair is going to be in the end?
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index 785f31086313..a114175d08e4 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -684,6 +684,7 @@ void pci_aer_init(struct pci_dev *dev);
+>  void pci_aer_exit(struct pci_dev *dev);
+>  extern const struct attribute_group aer_stats_attr_group;
+>  void pci_aer_clear_fatal_status(struct pci_dev *dev);
+> +void pci_aer_clear_nonfatal_status(struct pci_dev *dev);
+>  int pci_aer_clear_status(struct pci_dev *dev);
+>  int pci_aer_raw_clear_status(struct pci_dev *dev);
+>  #else
+> @@ -691,6 +692,7 @@ static inline void pci_no_aer(void) { }
+>  static inline void pci_aer_init(struct pci_dev *d) { }
+>  static inline void pci_aer_exit(struct pci_dev *d) { }
+>  static inline void pci_aer_clear_fatal_status(struct pci_dev *dev) { }
+> +static inline void pci_aer_clear_nonfatal_status(struct pci_dev *dev) { }
+>  static inline int pci_aer_clear_status(struct pci_dev *dev) { return -EINVAL; }
+>  static inline int pci_aer_raw_clear_status(struct pci_dev *dev) { return -EINVAL; }
+>  #endif
+> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> index 4e637121be23..e2ebd108339d 100644
+> --- a/drivers/pci/pcie/aer.c
+> +++ b/drivers/pci/pcie/aer.c
+> @@ -251,13 +251,13 @@ int pci_disable_pcie_error_reporting(struct pci_dev *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(pci_disable_pcie_error_reporting);
+>  
+> -int pci_aer_clear_nonfatal_status(struct pci_dev *dev)
+> +void pci_aer_clear_nonfatal_status(struct pci_dev *dev)
+>  {
+>  	int aer = dev->aer_cap;
+>  	u32 status, sev;
+>  
+>  	if (!pcie_aer_is_native(dev))
+> -		return -EIO;
+> +		return;
+>  
+>  	/* Clear status bits for ERR_NONFATAL errors only */
+>  	pci_read_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, &status);
+> @@ -265,10 +265,7 @@ int pci_aer_clear_nonfatal_status(struct pci_dev *dev)
+>  	status &= ~sev;
+>  	if (status)
+>  		pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, status);
+> -
+> -	return 0;
+>  }
+> -EXPORT_SYMBOL_GPL(pci_aer_clear_nonfatal_status);
+>  
+>  void pci_aer_clear_fatal_status(struct pci_dev *dev)
+>  {
+> diff --git a/include/linux/aer.h b/include/linux/aer.h
+> index 154690c278cb..f638ad955deb 100644
+> --- a/include/linux/aer.h
+> +++ b/include/linux/aer.h
+> @@ -44,7 +44,6 @@ struct aer_capability_regs {
+>  /* PCIe port driver needs this function to enable AER */
+>  int pci_enable_pcie_error_reporting(struct pci_dev *dev);
+>  int pci_disable_pcie_error_reporting(struct pci_dev *dev);
+> -int pci_aer_clear_nonfatal_status(struct pci_dev *dev);
+>  int pci_aer_clear_uncorrect_error_status(struct pci_dev *dev);
+>  void pci_save_aer_state(struct pci_dev *dev);
+>  void pci_restore_aer_state(struct pci_dev *dev);
+> @@ -57,10 +56,6 @@ static inline int pci_disable_pcie_error_reporting(struct pci_dev *dev)
+>  {
+>  	return -EINVAL;
+>  }
+> -static inline int pci_aer_clear_nonfatal_status(struct pci_dev *dev)
+> -{
+> -	return -EINVAL;
+> -}
+>  static inline int pci_aer_clear_uncorrect_error_status(struct pci_dev *dev)
+>  {
+>  	return -EINVAL;
 
-Uhm... I proposed this initially with the goal of remove non fuctional
-changes from a patch that was hard to digest for me (4/4). So it's
-about diffstat to me ;) 
-
-On the flip side the change suggested would probably not be as
-straighforward as I would hope for.
-
-> ubuf_info_common/ubuf_info vs ubuf_info/ubuf_info_msgzc?
-
-The specific names used are not much relevant.
-
-> Are there you concerned about naming or is there more to it?
-
-I feel like this series is potentially dangerous, but I could not spot
-bugs into the code. I would have felt more relaxed eariler in the devel
-cycle.
-
-Cheers,
-
-Paolo
-
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
