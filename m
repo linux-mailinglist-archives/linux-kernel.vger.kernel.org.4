@@ -2,154 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327F15ECF0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598D95ECF14
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbiI0VAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 17:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
+        id S232741AbiI0VEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 17:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbiI0VAp (ORCPT
+        with ESMTP id S229838AbiI0VEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 17:00:45 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2059.outbound.protection.outlook.com [40.107.237.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354582D764;
-        Tue, 27 Sep 2022 14:00:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jpBE7ObT1bgCh3ElEVgwe5XHpzaizp2O3YH22W6vUOXn9ssyqXt9AybrXVphti4cA51WrV0g/FeebR9KpcVnWwTt+GPb9yGaD1s+1dVvdQpusGnsGAHXSY5ElZKaC8e5w582I0FIB7cKOKaCKgDios4U0jISfS5xGHNF7yGiIE5FguqQC23Cl0inZV7MQrTfjJYHpBCnF1756zEggzQR7qJXWTRDIEIXSdtheJwvmpDSMsmpkckSxdCuUAPdf2J6ew+fp4IaYfGU+mxhvStSpnBT9EqYmEotg0qPUsOdgQaE1vNuMD0L5kpTNoqMXwX+I4wt2F3GBjEF7nNrMRSoyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LLniJsbDvNACMcsOkJ2syfefWQLDookg3p968kJ6Wvk=;
- b=CDqra1iZrfy5UC9HGM6E2CVuQMJv/LA9AI1EI02HaaLnRNsizDof2QgMXOnkXoTl+VoDlu0tlfK1vG/td+RN1R6NLWHPGFUL4b1e8XLRhFLx11YGDWBk89rQRD4SXzuXW3H9Uj+k/Hv3nXQm20bGQ7ofJM5NLmKy+TsC1cXB0HyuNnBh2ggNTJlgYeEV0y0bKltX0oY7E0QKNBolQEpDkM6vF6Za/XbIdzG9eX+UKxQhY5Bd7TW1dXSePcC9z6SURTpSR8c+TbfmjvLNA+Q5KJjnUf1ypXTt2dVDGmAy3QDxje5kiy5rhPpKeS7pjts8rxUHVzPUdkZuug0rvk5gMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LLniJsbDvNACMcsOkJ2syfefWQLDookg3p968kJ6Wvk=;
- b=Iw8ap9/eUmpPzH40bd67WoW4pD/l1lfJK7MwQOKXWmjgKGil225uIt3hNmQ8HNNK8K6ihSzw10v+aYWmDhla6sKH4Y7/s19iSzeC6YUKeQ5ab8CqusxULAHjkmf14qEkLVrq8HtcTk4oq2wB4f6LuY+Y7UyRBAkq95xAkbRGg5l6ZAtCnEtPS1bbHRfHQfjw4d7fLjIK78akKQgyHcJDFXL/Gcmy0261r88pxwunYpZbieru4uMGPcVg2vcguIgqjcSG69612rh89rr873Suz8s111gC78YRCg2HWuLvCuHKzHzEX+Zkb/HzD0MtC7hzrG5Vsct84l/lsVL2TzwDSQ==
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com (2603:10b6:610:2a::13)
- by DM4PR12MB6350.namprd12.prod.outlook.com (2603:10b6:8:a3::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
- 2022 21:00:42 +0000
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::7129:e05:131a:b109]) by CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::7129:e05:131a:b109%5]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
- 21:00:42 +0000
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Khalil Blaiech <kblaiech@nvidia.com>
-Subject: RE: [PATCH v7 1/2] i2c: mlxbf: support BlueField-3 SoC
-Thread-Topic: [PATCH v7 1/2] i2c: mlxbf: support BlueField-3 SoC
-Thread-Index: AQHY0rFDBbmvpN77U0KWiiFfo0QmwK3zvygAgAABWaA=
-Date:   Tue, 27 Sep 2022 21:00:42 +0000
-Message-ID: <CH2PR12MB3895CE98DCE26556680A6FDAD7559@CH2PR12MB3895.namprd12.prod.outlook.com>
-References: <20220927203924.22644-1-asmaa@nvidia.com>
- <20220927203924.22644-2-asmaa@nvidia.com> <YzNhPL0lUeqjCymv@shikoro>
-In-Reply-To: <YzNhPL0lUeqjCymv@shikoro>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB3895:EE_|DM4PR12MB6350:EE_
-x-ms-office365-filtering-correlation-id: a352b6f4-5377-419c-fd4d-08daa0cb570e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lG7r7M9x6uhd8e9bTgFbuX1ux/KxJNCiwyGMm/ANxH/GCSPS3PzYvc8Nce6FK/e+tG1jV62y3AcM8fMm31a07xsEbJ5kEL1wZ2313fbkeJ8NzlHCiHApvSi2FjVmVnjCtvUXUlWxiunbHIy58nD5Prtov18d1tqakxCNVdTSalESIPAUy7UxgwGsqFPAAA2z6xr7r2pt2FwR2q6IVqcnUDCwj5VPG6yJECnjXD3vqm5KtnSgoh73jMNICWNvHVSwhrdC/EfSqfpfyb/H+DwUo872ivqbUKkBPzMqy6E4E0tYF8ddjkfVhkdCt+u4y6DKY3MVA/5CvVOK248a/gZ0nXrdJdKhlTHG74ZVGPegwGwHo6qEpDXwZip93Q1/5DSsD9Fcr7o218KEunNdVH2gvTNCf0YkVRTc7g0Xte5qtS6E5D6PJRfE/q0bDo2xACYLWPGqRNtQNAWzcSsWGYozR9aoghOU3cAgOz9SlZYx5U7Cv/wGTr0sOPV1NyVV4k0/Mr6Qb10BZXKhCPlDiyZvZ1NNkBT7MIdSKrzG5wv6H6zY+YZSBhHOhnHnuOIj5yXlo1/s2lDQdaTVZh7OOnlWKPN/lkRQBBTWNMhMQrkskN8F+RBTNGBuEVo+nFRDfwABzVKjT+kDUajbnT98LFwykjaeZy2KLSh66HQYvxk98J6Lt+CejKJK5J5Q1pR+vHdwgyfJBpV+EQFudavLMgzeitCFs7q7kcSBNocw+gIBoz96QcqTbu4zDCnLtx5H6milaeJV1QtifYSm+przka8u1A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3895.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(136003)(366004)(396003)(451199015)(8936002)(5660300002)(41300700001)(186003)(2906002)(54906003)(316002)(52536014)(33656002)(26005)(478600001)(71200400001)(7696005)(6506007)(9686003)(107886003)(53546011)(83380400001)(55016003)(38070700005)(66556008)(8676002)(76116006)(66446008)(66476007)(66946007)(4326008)(64756008)(122000001)(38100700002)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?WQUSDS/6lKPfBvRTO/DVTaLj3pEkhiGhZXRd1o6HS9U2vsfP0uywQgRjTg6m?=
- =?us-ascii?Q?0C5HE0KsgYv++D0cS5lnhTDwdD2f2Azc04QJ6navpaPYGAQfdC/qzhDndvC3?=
- =?us-ascii?Q?zDVW/B9uWHYe+DlcnWViYdAIo/JcdHcyGqx2setpTTv9P4THYt5llIQBJX5A?=
- =?us-ascii?Q?e7Dm8OBXa4wBzXgsLBLBncoocYCZ11qwZSwXVXuIFqCLBt1WG2SLzMV9fs5z?=
- =?us-ascii?Q?Andz6gcaBLmx8q4xJB//nvx4TpDJvP8bOrLJMEa4usxTje0MtIPnRvxzmGOe?=
- =?us-ascii?Q?xV0Fjknp9AnHXHnOj9DlCOHW12/78e+8b8JVhmUDUQsMe54i42xaDOyY85xM?=
- =?us-ascii?Q?+RLBd004/Tlq+MqxoGnga7KWuSu87Hn7hhXeA3MHH5dnG33xxx7UJHxD63z/?=
- =?us-ascii?Q?e3q6ofMfaBxG7RLeoVsb/n19mlYUXA4cMztxDgAghw6lPJaXIpv2fu9dUPoc?=
- =?us-ascii?Q?BYcs97wTRx7qtulJqDxnJXeIhrrdyxuOkXabHBtZePijGXQGjg+7zRItzncX?=
- =?us-ascii?Q?fVmtlmMW1zVxpVl4Z8Vf8479t8h8hyXfdTrkMrtoB3A+IgRVTlmoNsADMokD?=
- =?us-ascii?Q?aAQtPIdNOND2wNnA3ZnlM1kMoCEs1eEW+5QbVSVUMob7kKn+Z9m0LTGB4rYM?=
- =?us-ascii?Q?VIkvqCqjE4lv+YH0nm98iBs73FFpmP2OHMxFJoh3YucsKqNH8tY14QEuyGQu?=
- =?us-ascii?Q?7vARdvYOJPbuu4Z+6m8C8GnXbVV8DA0S1E3O5IkqMoNKplLrZBYFNtyJIiRb?=
- =?us-ascii?Q?41mPl9hRomblZMsU1+DwQfIyo+j+Kgs89xNDLsqIxZoFETqORK4kAsJfqxLh?=
- =?us-ascii?Q?UlzEEOB8y2yVsYiXgwsWuqGtmsZwRDV8e5j5v4Ltefrkz64I9SqHbI4P1NHh?=
- =?us-ascii?Q?JJNv9lOkzcFF7TAEClypJqUMiZ8396MqKLhbnQyfjPS2bkraYyqWSOXxm3l+?=
- =?us-ascii?Q?CbHt3r8eN5KI4UgfodCuYU3ELdvVpGXrOpxaRXV8eM3KpZZcjTVVDeFViZjJ?=
- =?us-ascii?Q?WLLnDXZiRvTOJPgMr8LDK73tKZCDSbVd51I1MQpO4kub3V9e1HqP6QexVbGe?=
- =?us-ascii?Q?c4sHsGnKAnPYGcO6w+v/RffQisNZ5F4it0kOhHSWushHioHNLrilbd2UO1QB?=
- =?us-ascii?Q?9L2Gp2cjGx2G6SNpxQR8QHl8QOxdwjasUpoA+x5lU1VUQlrRPXW/gYUQUb2N?=
- =?us-ascii?Q?on6/fE9Jo9x8pd7ISP2jJQmebiBSWS2GKBKbd7mkVKygSVb1gRtOe5edMayC?=
- =?us-ascii?Q?WaW9gCgZlsv47c0DJPuE4FxUtkDy/RGqM/g0qRbalLM/kKxj4cV6z8/We+Qj?=
- =?us-ascii?Q?YLp4Fh7bBYNpJLFAF4rYaYA0UIZCc2nIBKdYHxnvPesxOhpYQwXAeZIV1upO?=
- =?us-ascii?Q?c1Zn8X7EkysfBQa2iGyNnS5HgkiYxLjCLzjR5WBR4NEpIQYHlUxEQ2Q7iN/S?=
- =?us-ascii?Q?4mJm0lN2SLVQefPWFauNwcSVNRQkCEaupDn0V7dC/jgcF+CYdw/XOPPMzLoS?=
- =?us-ascii?Q?mp0dtqMcU3uAnLBfYsSjFzLEAu4W4WWTSO1r3zr80lICTkYz9hT18u3GiRCs?=
- =?us-ascii?Q?u5RJbBti/IZC5Gox/Us=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 27 Sep 2022 17:04:06 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC01B6D07;
+        Tue, 27 Sep 2022 14:04:05 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id ay36so7367337wmb.0;
+        Tue, 27 Sep 2022 14:04:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=4utwpaiX+nwZ8/aoptuiHSf3C3V/LbDfmFnwMH4/AB4=;
+        b=jyusM2yPG8DlGbki+SxcWD6f5AVuoTEYdygVIP1p9R1YD5O0l8LILbnNLh79Kns0Cz
+         PU2FjB4OLLFvCtesBimyiKrjAxE76xJPFK4G5iWTBnjZC9Slf5dWWzF/bNtBtvilVrM1
+         mU5ndgUOIZoGA3OaFQC28I30J3MVXpoenboUg/GvOz/mgpNzAztconza319TBTPc0yjP
+         x7LwT4WqJq5UH/nWhLn2NNZVso3FZ2V8bqvYSkYKSK3KradKkiksbySeShprzUuVrx7x
+         Up4t7mmKBdBoZ6osAnsLCMG5BVkRdKutYS2XUmqQTbrbtNMGHtRblysYOpO3k1Mol3IS
+         kCnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=4utwpaiX+nwZ8/aoptuiHSf3C3V/LbDfmFnwMH4/AB4=;
+        b=wzJuvlf7Qm2bLhm/mDkYR5tVNrFqGLxxz4EoP/CfCMdFr6KGKIQHf6C+AXHbSFDhsG
+         kI1wUrq3xR3iAq5ZBboSJJ9k7pcqi1OdYMimloJD4zJMQ0Kk/2v7FooHMubXYiKxYG8t
+         76/9L4KY2zHChOZKWKQawbft0MlUtMwMulnStBtwu+yJXauDACxDKRPqrd2c7zWwT/6P
+         R5JfOuvtKcAL5+w0fAL7tT/QbdY52s0PxLngwXof18TflTL5RF+OvvELzVVxnhPl9t8o
+         6AJ4EgmNfvl/k7SrRqMFf0U3oj+GIW+S9n/o6jG8qfRAeqroSdKdcCAo+9vGfow+g7Fm
+         6pUw==
+X-Gm-Message-State: ACrzQf3/OH21zXeDxYMXUyFAHRuB0lmSDPQXxQBlcVIgSwXD1o7Y5UXp
+        5J/J0x9oiE4tFTQrV64IlKQ=
+X-Google-Smtp-Source: AMsMyM5bRqdJoS8GkrzVBsbwQ/0Om0L4715MSQx2Luhy1dmQdbONNx03zPxwGHpo4vbTsTgRYmFHwA==
+X-Received: by 2002:a05:600c:35cf:b0:3b4:c0c2:d213 with SMTP id r15-20020a05600c35cf00b003b4c0c2d213mr4320200wmq.162.1664312643840;
+        Tue, 27 Sep 2022 14:04:03 -0700 (PDT)
+Received: from [192.168.8.100] (94.196.228.157.threembb.co.uk. [94.196.228.157])
+        by smtp.gmail.com with ESMTPSA id i7-20020adffc07000000b0022917d58603sm2578282wrr.32.2022.09.27.14.04.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 14:04:03 -0700 (PDT)
+Message-ID: <b52ae230-3a31-e29b-42fa-ff25393161c9@gmail.com>
+Date:   Tue, 27 Sep 2022 22:02:37 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3895.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a352b6f4-5377-419c-fd4d-08daa0cb570e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2022 21:00:42.5126
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Vvm4gBCno0e/xvXb/7o3J5sjvxLbhDNPNTfMlN6Grn1ZwjfardY7yGD+8gywyOF7vNFpumU44g/xexoICp5t5w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6350
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH net-next 0/4] shrink struct ubuf_info
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org, Wei Liu <wei.liu@kernel.org>,
+        Paul Durrant <paul@xen.org>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+References: <cover.1663892211.git.asml.silence@gmail.com>
+ <7fef56880d40b9d83cc99317df9060c4e7cdf919.camel@redhat.com>
+ <021d8ea4-891c-237d-686e-64cecc2cc842@gmail.com>
+ <bbb212f6-0165-0747-d99d-b49acbb02a80@gmail.com>
+ <85cccb780608e830024fc82a8e4f703031646f4e.camel@redhat.com>
+ <c06897d4-4883-2756-87f9-9b10ab495c43@gmail.com>
+ <6502e1a45526f97a1e6d7d27bbe07e3bb3623de3.camel@redhat.com>
+ <eb543907-190f-c661-b5d6-b4d67b6184e6@gmail.com>
+ <b06d81fe39710b948a74a365c173b316252ed1f8.camel@redhat.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <b06d81fe39710b948a74a365c173b316252ed1f8.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you Wolfram!
+On 9/27/22 21:23, Paolo Abeni wrote:
+> On Tue, 2022-09-27 at 21:17 +0100, Pavel Begunkov wrote:
+>> On 9/27/22 20:59, Paolo Abeni wrote:
+>>> On Tue, 2022-09-27 at 19:48 +0100, Pavel Begunkov wrote:
+>>>> On 9/27/22 18:56, Paolo Abeni wrote:
+>>>>> On Tue, 2022-09-27 at 18:16 +0100, Pavel Begunkov wrote:
+>>>>>> On 9/27/22 15:28, Pavel Begunkov wrote:
+>>>>>>> Hello Paolo,
+>>>>>>>
+>>>>>>> On 9/27/22 14:49, Paolo Abeni wrote:
+>>>>>>>> Hello,
+>>>>>>>>
+>>>>>>>> On Fri, 2022-09-23 at 17:39 +0100, Pavel Begunkov wrote:
+>>>>>>>>> struct ubuf_info is large but not all fields are needed for all
+>>>>>>>>> cases. We have limited space in io_uring for it and large ubuf_info
+>>>>>>>>> prevents some struct embedding, even though we use only a subset
+>>>>>>>>> of the fields. It's also not very clean trying to use this typeless
+>>>>>>>>> extra space.
+>>>>>>>>>
+>>>>>>>>> Shrink struct ubuf_info to only necessary fields used in generic paths,
+>>>>>>>>> namely ->callback, ->refcnt and ->flags, which take only 16 bytes. And
+>>>>>>>>> make MSG_ZEROCOPY and some other users to embed it into a larger struct
+>>>>>>>>> ubuf_info_msgzc mimicking the former ubuf_info.
+>>>>>>>>>
+>>>>>>>>> Note, xen/vhost may also have some cleaning on top by creating
+>>>>>>>>> new structs containing ubuf_info but with proper types.
+>>>>>>>>
+>>>>>>>> That sounds a bit scaring to me. If I read correctly, every uarg user
+>>>>>>>> should check 'uarg->callback == msg_zerocopy_callback' before accessing
+>>>>>>>> any 'extend' fields.
+>>>>>>>
+>>>>>>> Providers of ubuf_info access those fields via callbacks and so already
+>>>>>>> know the actual structure used. The net core, on the opposite, should
+>>>>>>> keep it encapsulated and not touch them at all.
+>>>>>>>
+>>>>>>> The series lists all places where we use extended fields just on the
+>>>>>>> merit of stripping the structure of those fields and successfully
+>>>>>>> building it. The only user in net/ipv{4,6}/* is MSG_ZEROCOPY, which
+>>>>>>> again uses callbacks.
+>>>>>>>
+>>>>>>> Sounds like the right direction for me. There is a couple of
+>>>>>>> places where it might get type safer, i.e. adding types instead
+>>>>>>> of void* in for struct tun_msg_ctl and getting rid of one macro
+>>>>>>> hiding types in xen. But seems more like TODO for later.
+>>>>>>>
+>>>>>>>> AFAICS the current code sometimes don't do the
+>>>>>>>> explicit test because the condition is somewhat implied, which in turn
+>>>>>>>> is quite hard to track.
+>>>>>>>>
+>>>>>>>> clearing uarg->zerocopy for the 'wrong' uarg was armless and undetected
+>>>>>>>> before this series, and after will trigger an oops..
+>>>>>>>
+>>>>>>> And now we don't have this field at all to access, considering that
+>>>>>>> nobody blindly casts it.
+>>>>>>>
+>>>>>>>> There is some noise due to uarg -> uarg_zc renaming which make the
+>>>>>>>> series harder to review. Have you considered instead keeping the old
+>>>>>>>> name and introducing a smaller 'struct ubuf_info_common'? the overall
+>>>>>>>> code should be mostly the same, but it will avoid the above mentioned
+>>>>>>>> noise.
+>>>>>>>
+>>>>>>> I don't think there will be less noise this way, but let me try
+>>>>>>> and see if I can get rid of some churn.
+>>>>>>
+>>>>>> It doesn't look any better for me
+>>>>>>
+>>>>>> TL;DR; This series converts only 3 users: tap, xen and MSG_ZEROCOPY
+>>>>>> and doesn't touch core code. If we do ubuf_info_common though I'd need
+>>>>>> to convert lots of places in skbuff.c and multiple places across
+>>>>>> tcp/udp, which is much worse.
+>>>>>
+>>>>> Uhmm... I underlook the fact we must preserve the current accessors for
+>>>>> the common fields.
+>>>>>
+>>>>> I guess something like the following could do (completely untested,
+>>>>> hopefully should illustrate the idea):
+>>>>>
+>>>>> struct ubuf_info {
+>>>>> 	struct_group_tagged(ubuf_info_common, common,
+>>>>> 		void (*callback)(struct sk_buff *, struct ubuf_info *,
+>>>>>                             bool zerocopy_success);
+>>>>> 		refcount_t refcnt;
+>>>>> 	        u8 flags;
+>>>>> 	);
+>>>>>
+>>>>> 	union {
+>>>>>                    struct {
+>>>>>                            unsigned long desc;
+>>>>>                            void *ctx;
+>>>>>                    };
+>>>>>                    struct {
+>>>>>                            u32 id;
+>>>>>                            u16 len;
+>>>>>                            u16 zerocopy:1;
+>>>>>                            u32 bytelen;
+>>>>>                    };
+>>>>>            };
+>>>>>
+>>>>>            struct mmpin {
+>>>>>                    struct user_struct *user;
+>>>>>                    unsigned int num_pg;
+>>>>>            } mmp;
+>>>>> };
+>>>>>
+>>>>> Then you should be able to:
+>>>>> - access ubuf_info->callback,
+>>>>> - access the same field via ubuf_info->common.callback
+>>>>> - declare variables as 'struct ubuf_info_commom' with appropriate
+>>>>> contents.
+>>>>>
+>>>>> WDYT?
+>>>>
+>>>> Interesting, I didn't think about struct_group, this would
+>>>> let to split patches better and would limit non-core changes.
+>>>> But if the plan is to convert the core helpers to
+>>>> ubuf_info_common, than I think it's still messier than changing
+>>>> ubuf providers only.
+>>>>
+>>>> I can do the exercise, but I don't really see what is the goal.
+>>>> Let me ask this, if we forget for a second how diffs look,
+>>>> do you care about which pair is going to be in the end?
+>>>
+>>> Uhm... I proposed this initially with the goal of remove non fuctional
+>>> changes from a patch that was hard to digest for me (4/4). So it's
+>>> about diffstat to me ;)
+>>
+>> Ah, got it
+>>
+>>> On the flip side the change suggested would probably not be as
+>>> straighforward as I would hope for.
+>>>
+>>>> ubuf_info_common/ubuf_info vs ubuf_info/ubuf_info_msgzc?
+>>>
+>>> The specific names used are not much relevant.
+>>>
+>>>> Are there you concerned about naming or is there more to it?
+>>>
+>>> I feel like this series is potentially dangerous, but I could not spot
+>>> bugs into the code. I would have felt more relaxed eariler in the devel
+>>> cycle.
+>>
+>> union {
+>> 	struct {
+>> 		unsigned long desc;
+>> 		void *ctx;
+>> 	};
+>> 	struct {
+>> 		u32 id;
+>> 		u16 len;
+>> 		u16 zerocopy:1;
+>> 		u32 bytelen;
+>> 	};
+>> };
+>>
+>>
+>> btw, nobody would frivolously change ->zerocopy anyway as it's
+>> in a union. Even without the series we're absolutely screwed
+>> if someone does that. If anything it adds a way to get rid of it:
+>>
+>> 1) Make vhost and xen use their own structures with right types.
+>> 2) kill unused struct {ctx, desc} for MSG_ZEROCOPY
+> 
+> Ok, the above sounds reasonable. Additionally I've spent the last
+> surviving neuron on my side to on this series, and it looks sane, so...
+> 
+> Acked-by: Paolo Abeni <pabeni@redhat.com>
 
------Original Message-----
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>=20
-Sent: Tuesday, September 27, 2022 4:47 PM
-To: Asmaa Mnebhi <asmaa@nvidia.com>
-Cc: linux-i2c@vger.kernel.org; linux-kernel@vger.kernel.org; Khalil Blaiech=
- <kblaiech@nvidia.com>
-Subject: Re: [PATCH v7 1/2] i2c: mlxbf: support BlueField-3 SoC
+Great, thanks for taking a look!
 
-On Tue, Sep 27, 2022 at 04:39:23PM -0400, Asmaa Mnebhi wrote:
-> BlueField-3 SoC has the same I2C IP logic as previous
-> BlueField-1 and 2 SoCs but it has different registers' addresses.
-> This is an effort to keep this driver generic accross all BlueField=20
-> generations.
-> This patch breaks down the "smbus" resource into 3 separate resources=20
-> to enable us to use common registers' offsets for all BlueField SoCs:
-> struct mlxbf_i2c_resource *timer;
-> struct mlxbf_i2c_resource *mst;
-> struct mlxbf_i2c_resource *slv;
->=20
-> Of course, all offsets had to be adjusted accordingly, and we took=20
-> this chance to reorganize the macros depending on the register block=20
-> they target.
->=20
-> There are only 2 registers' offsets that do not fit within this schema=20
-> so their offsets are passed as SoC-specific parameters:
-> smbus_master_rs_bytes_off
-> smbus_master_fsm_off
->=20
-> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
-
-Applied to for-next, thanks!
-
+-- 
+Pavel Begunkov
