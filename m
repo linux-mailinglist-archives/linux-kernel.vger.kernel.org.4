@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA6E5EB9A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 07:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C995EB9C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 07:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiI0F0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 01:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
+        id S230060AbiI0Fhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 01:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiI0F0p (ORCPT
+        with ESMTP id S229631AbiI0Fhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 01:26:45 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 26 Sep 2022 22:26:43 PDT
-Received: from esa3.hc1455-7.c3s2.iphmx.com (esa3.hc1455-7.c3s2.iphmx.com [207.54.90.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2436476755;
-        Mon, 26 Sep 2022 22:26:42 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="90090448"
-X-IronPort-AV: E=Sophos;i="5.93,348,1654527600"; 
-   d="scan'208";a="90090448"
-Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
-  by esa3.hc1455-7.c3s2.iphmx.com with ESMTP; 27 Sep 2022 14:25:37 +0900
-Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
-        by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 441F3D4323;
-        Tue, 27 Sep 2022 14:25:36 +0900 (JST)
-Received: from kws-ab1.gw.nic.fujitsu.com (kws-ab1.gw.nic.fujitsu.com [192.51.206.11])
-        by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 6D77DBF3E3;
-        Tue, 27 Sep 2022 14:25:35 +0900 (JST)
-Received: from FNSTPC.g08.fujitsu.local (unknown [10.167.226.45])
-        by kws-ab1.gw.nic.fujitsu.com (Postfix) with ESMTP id 7EF2B11403D7;
-        Tue, 27 Sep 2022 14:25:34 +0900 (JST)
-From:   Li Zhijian <lizhijian@fujitsu.com>
-To:     zyjzyj2000@gmail.com, jgg@ziepe.ca, leon@kernel.org,
-        linux-rdma@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Li Zhijian <lizhijian@fujitsu.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>
-Subject: [PATCH jgg-for-next] RDMA/rxe: Fix pd refcount_t: underflow; use-after-free
-Date:   Tue, 27 Sep 2022 13:25:30 +0800
-Message-Id: <20220927052530.21397-1-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.36.0
+        Tue, 27 Sep 2022 01:37:36 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F2D80E81
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 22:37:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664257055; x=1695793055;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=q/Y1+fWAykwz5hhA2gaUjad2dAwBHe4vhPbOrljnxJg=;
+  b=VejkLn0oULAkAYQWMWmjXo40Coutg/CjSp4vV12zDRQLXT5VTTRHr7f6
+   N+s9/SzJFaaHCAXxX5ZkZqVVzV84QWgqaxuGsfjMvmLUYu44OU+vMZ69L
+   B8kXLYneFUXAwLKx86DoH6n5lT8ljtpFs7NY/V/U6Dq5nHsGb2INC8exE
+   wQDOVqbXUBkuBgcRFH6ztbAOCVxFp0dmQTDiOpAA9vqw2Sci3Yg9JBdbL
+   /0HZAsFgt+kybhZfTWMcTTNuH8kayKWBmfU3yBCZ7Fp2ttqIZ9aoRXMTO
+   aCOAGeItOe488THMz4izlWhZB2H4k0ljyhd6JiTmf/8xxhLCALeIvHawi
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="302706770"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="302706770"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 22:37:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="623633335"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="623633335"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by fmsmga007.fm.intel.com with ESMTP; 26 Sep 2022 22:37:13 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH 0/2] iommu/vt-d: Fix lockdep splat in intel_iommu_init()
+Date:   Tue, 27 Sep 2022 13:31:07 +0800
+Message-Id: <20220927053109.4053662-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27166.005
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27166.005
-X-TMASE-Result: 10-0.495300-10.000000
-X-TMASE-MatchedRID: Qgrh8rFiqFSlTHNxJDwdpM36paW7ZnFoUdPVQTIo4RLfUY2boz4kpOgU
-        rKBxousFHeLURnkZ9/50fjyPLAxbIArdexLvyJVkOjf3A4DTYuFN8rmPQRlvK/XGsfmQor+uP0E
-        ECAycyB4i+t+0AiFaYvL3NxFKQpq18gFf6MN9caueAiCmPx4NwJuJ+Pb8n/VxSnQ4MjwaO9cqtq
-        5d3cxkNZKQ2nSmoAeRxuKRNK6+2Pw/kRCYiDjRDeiecGk1ifHvKQeLuRDovJbv4XJedG181T7Wz
-        GfzeXJkt1UGZw1E8niazv5f7A5SCRiKAP5Y7TkhFcUQf3Yp/ridO0/GUi4gFb0fOPzpgdcEKeJ/
-        HkAZ8Is=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the error path, both rxe_put(pd) and rxe_cleanup(mr) will
-drop pd's ref_cont.
-rxe_cleanup(mr)
- -> __rxe_cleanup
-   -> rxe_put(mr->elem)
-   -> rxe_mr_cleanup(mr)
-     -> rxe_put(mr_pd(mr))
+Hi folks,
 
-[342431.583189] ------------[ cut here ]------------
-[342431.585051] refcount_t: underflow; use-after-free.
-[342431.586677] WARNING: CPU: 0 PID: 660500 at lib/refcount.c:28 refcount_warn_saturate+0xcd/0x120
-[342431.605247] RIP: 0010:refcount_warn_saturate+0xcd/0x120
-[342431.661981]  __rxe_cleanup+0x1c3/0x1e0 [rdma_rxe]
-[342431.663260]  rxe_dealloc_pd+0x16/0x20 [rdma_rxe]
-[342431.664883]  ib_dealloc_pd_user+0x95/0xd0 [ib_core]
-[342431.666803]  destroy_hw_idr_uobject+0x46/0x90 [ib_uverbs]
-[342431.668514]  uverbs_destroy_uobject+0xc8/0x360 [ib_uverbs]
-[342431.670232]  __uverbs_cleanup_ufile+0x157/0x210 [ib_uverbs]
-[342431.671920]  ? uverbs_destroy_uobject+0x360/0x360 [ib_uverbs]
+As commit c919739ce472 ("iommu/vt-d: Handle race between registration
+and device probe") highlights, a lockdep splat issue happens after
+moving iommu probing device process into iommu_device_register().
 
-CC: Bob Pearson <rpearsonhpe@gmail.com>
-Fixes: 0d0e4b528c3b ("RDMA/rxe: Set pd early in mr alloc routines")
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
----
-I have to say i made a mistake in previous review, I missed this WARN_ONCE messages.
-And the V6 patch that i had applied fix this problem in another way.
----
- drivers/infiniband/sw/rxe/rxe_verbs.c | 2 --
- 1 file changed, 2 deletions(-)
+This is due to a conflict that get_resv_regions wants hold the
+dmar_global_lock, but it's also possible to be called from within a
+section where intel_iommu_init() already holds the lock.
 
-diff --git a/drivers/infiniband/sw/rxe/rxe_verbs.c b/drivers/infiniband/sw/rxe/rxe_verbs.c
-index 933277d67b7c..88825edc7dce 100644
---- a/drivers/infiniband/sw/rxe/rxe_verbs.c
-+++ b/drivers/infiniband/sw/rxe/rxe_verbs.c
-@@ -939,7 +939,6 @@ static struct ib_mr *rxe_reg_user_mr(struct ib_pd *ibpd,
- 	return &mr->ibmr;
- 
- err3:
--	rxe_put(pd);
- 	rxe_cleanup(mr);
- err2:
- 	return ERR_PTR(err);
-@@ -974,7 +973,6 @@ static struct ib_mr *rxe_alloc_mr(struct ib_pd *ibpd, enum ib_mr_type mr_type,
- 	return &mr->ibmr;
- 
- err2:
--	rxe_put(pd);
- 	rxe_cleanup(mr);
- err1:
- 	return ERR_PTR(err);
+Historically, before commit 5f64ce5411b46 ("iommu/vt-d: Duplicate
+iommu_resv_region objects per device list"), the rcu_lock is used in
+get_resv_regions. This commit converted it to dmar_global_lock in order
+to allowing sleeping in iommu_alloc_resv_region().
+
+This aims to fix the lockdep issue by making iommu_alloc_resv_region()
+available in critical section and rolling dmar_global_lock back to rcu
+lock in get_resv_regions of the Intel IOMMU driver.
+
+Best regards,
+baolu
+
+Lu Baolu (2):
+  iommu: Add gfp parameter to iommu_alloc_resv_region
+  iommu/vt-d: Use rcu_lock in get_resv_regions
+
+ include/linux/iommu.h                       |  2 +-
+ drivers/acpi/arm64/iort.c                   |  3 ++-
+ drivers/iommu/amd/iommu.c                   |  7 ++++---
+ drivers/iommu/apple-dart.c                  |  2 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |  2 +-
+ drivers/iommu/arm/arm-smmu/arm-smmu.c       |  2 +-
+ drivers/iommu/intel/iommu.c                 | 12 +++++++-----
+ drivers/iommu/iommu.c                       |  7 ++++---
+ drivers/iommu/mtk_iommu.c                   |  3 ++-
+ drivers/iommu/virtio-iommu.c                |  9 ++++++---
+ 10 files changed, 29 insertions(+), 20 deletions(-)
+
 -- 
-2.31.1
+2.34.1
 
