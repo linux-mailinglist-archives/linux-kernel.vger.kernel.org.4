@@ -2,129 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5575EB89C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75E95EB89D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiI0DWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 23:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
+        id S231528AbiI0DW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 23:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231450AbiI0DVS (ORCPT
+        with ESMTP id S230514AbiI0DVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 23:21:18 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8CF8A1D7
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 20:21:00 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id s26so8251653pgv.7
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 20:21:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=gJSpeC3acOdE1deb6CRGlYyNAu45L1g+bIJ1h5Tmd0Y=;
-        b=8EkLAgwZLfVvgJvVIU7PCfEIoNhZ6TzqC/Im9C6pJdGo7ONY4xK2NNh2/Oqm83SkCm
-         3CDCMXfWyd+dHuO4OBUDuasbemAK/ulf7HP5hmd2qrfRY1MNLen0L9IxkoS27WB/50YE
-         PCeWC8Ww+2fzTnWS7OsR93tlHW2UozCqDK05XFzcmUgFKhTQHNwTRtY7GIPitdbkTJIf
-         pXbv/N7umBU3OuI2V2HtOzZIqmsi8zYjtbBJXrJ4PstJbu6nxM4l6CeYizM2NmTt9KSg
-         gi7ybENpJOffa18GybvGaN97VsqzSiyrn2EKhEnenU1aNOJ0XrBkQ/UCvKRSsz9ava2Y
-         5NYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=gJSpeC3acOdE1deb6CRGlYyNAu45L1g+bIJ1h5Tmd0Y=;
-        b=aSfJghU3FKSGuLIgpU2A7vHJwosD0MfxXfDnwjzwkm5qFw0btWoi3buIBWWcBoMOsF
-         iEtCxnBNvxARLtauHo7VkRrde3aW1MXfqJMPdcwaeH0sOISfr1C11fuqKE/To6kxT71A
-         XRv9/L+VnauqUzST5vwaEV69zq1365gyhVwARdsYokUet/QDObb302kAWP9+UlEhHsyp
-         i/N0tvwVU5jwtmUWN9ZzbgFLB0e6DLjPHUzWmIgFqoTBDuNiHKXlN5IiC+nTX5A+R8h/
-         Fn//nAQRS8MOZiNV0DqPRhsIqcbzxcQ6CLuBF6pt6njR9rqzjClI2E4mVUOvSSyRrZf8
-         nrkQ==
-X-Gm-Message-State: ACrzQf3f2GOqbbX9vythUbdGfXXRGGasIRobtXFYKdR/PSN07tgh3F7B
-        q13y8YNK9ItaYeyMTCcj1Cz+fA==
-X-Google-Smtp-Source: AMsMyM6UNlMWxj+4hK+7MEVtLFzHUlsUqma1gXOwIueoKn9DvqI+ZL4yPxyRpb4Kijt2V67UV2LZgw==
-X-Received: by 2002:a63:91ca:0:b0:436:64db:c902 with SMTP id l193-20020a6391ca000000b0043664dbc902mr22917146pge.87.1664248859946;
-        Mon, 26 Sep 2022 20:20:59 -0700 (PDT)
-Received: from [10.255.19.83] ([139.177.225.240])
-        by smtp.gmail.com with ESMTPSA id c3-20020a170902d48300b0017870f471f6sm185074plg.226.2022.09.26.20.20.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 20:20:59 -0700 (PDT)
-Message-ID: <7ac9abce-4458-982b-6c04-f9569a78c0da@bytedance.com>
-Date:   Tue, 27 Sep 2022 11:20:54 +0800
+        Mon, 26 Sep 2022 23:21:20 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666B48C44A;
+        Mon, 26 Sep 2022 20:21:15 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mc4Y719FGz1P6sy;
+        Tue, 27 Sep 2022 11:16:59 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 11:21:13 +0800
+Received: from [10.67.102.67] (10.67.102.67) by kwepemm600016.china.huawei.com
+ (7.193.23.20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 27 Sep
+ 2022 11:21:12 +0800
+Subject: Re: [PATCH net-next 00/14] redefine some macros of feature abilities
+ judgement
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     Leon Romanovsky <leon@kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lipeng321@huawei.com>, <lanhao@huawei.com>
+References: <20220924023024.14219-1-huangguangbin2@huawei.com>
+ <Yy7pjTX8VLLIiA0G@unreal> <77050062-93b5-7488-a427-815f4c631b32@huawei.com>
+ <20220926101135.26382c0c@kernel.org>
+From:   "huangguangbin (A)" <huangguangbin2@huawei.com>
+Message-ID: <f3fedfe4-da32-8f56-000a-7f441a303ea0@huawei.com>
+Date:   Tue, 27 Sep 2022 11:21:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.0
-Subject: Re: [RFC] proc: Add a new isolated /proc/pid/mempolicy type.
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>,
-        Zhongkun He <hezhongkun.hzk@bytedance.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20220926091033.340-1-hezhongkun.hzk@bytedance.com>
- <YzF3aaLvEvFhTQa3@dhcp22.suse.cz>
- <24b20953-eca9-eef7-8e60-301080a17d2d@bytedance.com>
- <YzGya2Q3iuWS2WdM@dhcp22.suse.cz>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <YzGya2Q3iuWS2WdM@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220926101135.26382c0c@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_SBL_A autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.102.67]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal, thanks very much for your patience!
 
-On 9/26/22 10:08 PM, Michal Hocko wrote:
-> On Mon 26-09-22 20:53:19, Zhongkun He wrote:
->>> [Cc linux-api - please do so for any patches making/updating
->>> kernel<->user interfaces]
+
+On 2022/9/27 1:11, Jakub Kicinski wrote:
+> On Mon, 26 Sep 2022 20:56:26 +0800 huangguangbin (A) wrote:
+>> On 2022/9/24 19:27, Leon Romanovsky wrote:
+>>> On Sat, Sep 24, 2022 at 10:30:10AM +0800, Guangbin Huang wrote:
+>>>> The macros hnae3_dev_XXX_supported just can be used in hclge layer, but
+>>>> hns3_enet layer may need to use, so this serial redefine these macros.
 >>>
+>>> IMHO, you shouldn't add new obfuscated code, but delete it.
 >>>
->>> On Mon 26-09-22 17:10:33, hezhongkun wrote:
->>>> From: Zhongkun He <hezhongkun.hzk@bytedance.com>
->>>>
->>>> /proc/pid/mempolicy can be used to check and adjust the userspace task's
->>>> mempolicy dynamically.In many case, the application and the control plane
->>>> are two separate systems. When the application is created, it doesn't know
->>>> how to use memory, and it doesn't care. The control plane will decide the
->>>> memory usage policy based on different reasons.In that case, we can
->>>> dynamically adjust the mempolicy using /proc/pid/mempolicy interface.
+>>> Jakub,
 >>>
->>> Is there any reason to make it procfs interface rather than pidfd one?
+>>> The more drivers authors will obfuscate in-kernel primitives and reinvent
+>>> their own names, macros e.t.c, the less external reviewers you will be able
+>>> to attract.
+>>>
+>>> IMHO, netdev should have more active position do not allow obfuscated code.
+>>>
+>>> Thanks
+>>>    
 >>
->> Hi michal,  thanks for your reply.
->>
->> I just think that it is easy to display and adjust the mempolicy using
->> procfs. But it may not be suitable, I will send a pidfd_set_mempolicy patch
->> later.
+>> Hi, Leon
+>> I'm sorry, I can not get your point. Can you explain in more detail?
+>> Do you mean the name "macro" should not be used?
 > 
-> proc interface has many usability issues. That is why pidfd has been
-> introduced. So I would rather go with the pidfd interface than repeating
-> old proc API mistakes.
-
-I can't agree more.
-
+> He is saying that you should try to remove those macros rather than
+> touch them up. The macros may seem obvious to people working on the
+> driver but to upstream reviewers any local conventions obfuscate the
+> code and require looking up definitions.
 > 
->> Btw.in order to add per-thread-group mempolicy, is it possible to add
->> mempolicy in mm_struct?
+> For example the first patch is better off as:
 > 
-> I dunno. This would make the mempolicy interface even more confusing.
-> Per mm behavior makes a lot of sense but we already do have per-thread
-> semantic so I would stick to it rather than introducing a new semantic.
+> diff --git a/drivers/net/ethernet/hisilicon/hns3/hnae3.h b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
+> index 0179fc288f5f..449d496b824b 100644
+> --- a/drivers/net/ethernet/hisilicon/hns3/hnae3.h
+> +++ b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
+> @@ -107,9 +107,6 @@ enum HNAE3_DEV_CAP_BITS {
+>   #define hnae3_ae_dev_gro_supported(ae_dev) \
+>   		test_bit(HNAE3_DEV_SUPPORT_GRO_B, (ae_dev)->caps)
+>   
+> -#define hnae3_dev_fec_supported(hdev) \
+> -	test_bit(HNAE3_DEV_SUPPORT_FEC_B, (hdev)->ae_dev->caps)
+> -
+>   #define hnae3_dev_udp_gso_supported(hdev) \
+>   	test_bit(HNAE3_DEV_SUPPORT_UDP_GSO_B, (hdev)->ae_dev->caps)
+>   
+> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
+> index 6962a9d69cf8..ded92f7dbd79 100644
+> --- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
+> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
+> @@ -1179,7 +1179,7 @@ static void hclge_parse_fiber_link_mode(struct hclge_dev *hdev,
+>   	hclge_convert_setting_sr(speed_ability, mac->supported);
+>   	hclge_convert_setting_lr(speed_ability, mac->supported);
+>   	hclge_convert_setting_cr(speed_ability, mac->supported);
+> -	if (hnae3_dev_fec_supported(hdev))
+> +	if (test_bit(HNAE3_DEV_SUPPORT_FEC_B, hdev->caps))
+>   		hclge_convert_setting_fec(mac);
+>   
+>   	if (hnae3_dev_pause_supported(hdev))
+> @@ -1195,7 +1195,7 @@ static void hclge_parse_backplane_link_mode(struct hclge_dev *hdev,
+>   	struct hclge_mac *mac = &hdev->hw.mac;
+>   
+>   	hclge_convert_setting_kr(speed_ability, mac->supported);
+> -	if (hnae3_dev_fec_supported(hdev))
+> +	if (test_bit(HNAE3_DEV_SUPPORT_FEC_B, hdev->caps))
+>   		hclge_convert_setting_fec(mac);
+>   
+>   	if (hnae3_dev_pause_supported(hdev))
+> @@ -3232,7 +3232,7 @@ static void hclge_update_advertising(struct hclge_dev *hdev)
+>   static void hclge_update_port_capability(struct hclge_dev *hdev,
+>   					 struct hclge_mac *mac)
+>   {
+> -	if (hnae3_dev_fec_supported(hdev))
+> +	if (test_bit(HNAE3_DEV_SUPPORT_FEC_B, hdev->caps))
+>   		hclge_convert_setting_fec(mac);
+>   
+>   	/* firmware can not identify back plane type, the media type
+> .
 > 
-> Why is this really important?
-
-We want soft control on memory footprint of background jobs by applying
-NUMA preferences when necessary, so the impact on different NUMA nodes
-can be managed to some extent. These NUMA preferences are given by the
-control panel, and it might not be suitable to overwrite the tasks with
-specific memory policies already (or vice versa).
-
-Best Regards,
-Abel
+Ok, I see, thanks!
