@@ -2,38 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63CC55ED0F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 01:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4C95ED0EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 01:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbiI0XRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 19:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
+        id S232304AbiI0XRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 19:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232302AbiI0XRS (ORCPT
+        with ESMTP id S231949AbiI0XRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 19:17:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFC91129E7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 16:17:15 -0700 (PDT)
+        Tue, 27 Sep 2022 19:17:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DBE1129F7;
+        Tue, 27 Sep 2022 16:17:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 353C8B81E49
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:17:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7848C433D7;
-        Tue, 27 Sep 2022 23:17:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D478961C30;
+        Tue, 27 Sep 2022 23:17:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C3BC433B5;
+        Tue, 27 Sep 2022 23:17:13 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1odJqJ-00HDd9-1s;
-        Tue, 27 Sep 2022 19:18:23 -0400
-Message-ID: <20220927231523.298295015@goodmis.org>
+        id 1odJqK-00HDdk-0N;
+        Tue, 27 Sep 2022 19:18:24 -0400
+Message-ID: <20220927231823.718039222@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 27 Sep 2022 19:15:23 -0400
+Date:   Tue, 27 Sep 2022 19:15:24 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 0/5] tracing: Handle ring buffer waiters
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org
+Subject: [PATCH 1/5] ring-buffer: Have the shortest_full queue be the shortest not longest
+References: <20220927231523.298295015@goodmis.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -43,26 +47,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While working on libtracefs functions that allow for reading the
-raw trace files, I found that my test programs would get stuck
-waiting on the buffer when they should stop. Signals work fine, but
-closing the file would not break them out of the wait.
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-I found this confusing and the reading functions would lose a lot
-of data. This fixes the wake up issue, which should have always been
-the case. I also added an ioctl() to the trace_pipe_raw that will
-wake up all waiters on any ioctl.
+The logic to know when the shortest waiters on the ring buffer should be
+woken up or not has uses a less than instead of a greater than compare,
+which causes the shortest_full to actually be the longest.
 
-Steven Rostedt (Google) (5):
-      ring-buffer: Have the shortest_full queue be the shortest not longest
-      ring-buffer: Check pending waiters when doing wake ups as well
-      ring-buffer: Add ring_buffer_wake_waiters()
-      tracing: Wake up ring buffer waiters on closing of the file
-      tracing: Add ioctl() to force ring buffer waiters to wake up
+Cc: stable@vger.kernel.org
+Fixes: 2c2b0a78b3739 ("ring-buffer: Add percentage of ring buffer full to wake up reader")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/ring_buffer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-----
- include/linux/ring_buffer.h  |  2 +-
- include/linux/trace_events.h |  1 +
- kernel/trace/ring_buffer.c   | 39 +++++++++++++++++++++++++++++++++++++--
- kernel/trace/trace.c         | 33 +++++++++++++++++++++++++++++++++
- 4 files changed, 72 insertions(+), 3 deletions(-)
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index 6b145d48dfd1..02db92c9eb1b 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -1011,7 +1011,7 @@ int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full)
+ 			nr_pages = cpu_buffer->nr_pages;
+ 			dirty = ring_buffer_nr_dirty_pages(buffer, cpu);
+ 			if (!cpu_buffer->shortest_full ||
+-			    cpu_buffer->shortest_full < full)
++			    cpu_buffer->shortest_full > full)
+ 				cpu_buffer->shortest_full = full;
+ 			raw_spin_unlock_irqrestore(&cpu_buffer->reader_lock, flags);
+ 			if (!pagebusy &&
+-- 
+2.35.1
