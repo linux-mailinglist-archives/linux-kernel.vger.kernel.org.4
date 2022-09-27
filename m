@@ -2,315 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBE85EC995
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B775EC999
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232713AbiI0Qd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
+        id S232762AbiI0Qeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbiI0Qdy (ORCPT
+        with ESMTP id S232766AbiI0QeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:33:54 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC091D73D3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:33:52 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id hy2so21841503ejc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unimore.it; s=google;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
-        bh=NWib1BZP+0BB7z4L8r7ENuhYmK12OU/ifEJLPtod0pM=;
-        b=Lp7cNiswBAVjx7sydDucguZBRf0PrssrUMOtaZeI8ib/1qgWy8iWPtVZHKmOn1aTG+
-         PjdCVnotDv/LHd6tCYIZvh91PTBofanYhH0wwTG+pHp/dMgMoCpXSeN6fAVWlbcuwajc
-         HNX6+ytAOHDunbIEk6FHC/ZLs7T+CYCU1I0Oc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=NWib1BZP+0BB7z4L8r7ENuhYmK12OU/ifEJLPtod0pM=;
-        b=cy1v4zI385XTjiifCp6w0P+Ws7LxZSj3T2UgctRY2WPVfCjLK5CCCgwm8eIgnOgnVm
-         9GAW+Im57fu8Qu78M+pkwk6y8r8duZvIFXHgveufGdIiYYmp8XGTioGuhu5I5yZbv1G+
-         XjYlFBeQwJT7/P0u5LRhw9v+b8njcLFtCYZIHdEJ1yiskyDLRF2MgyNaam6dgXEjuBb9
-         xjtYQCWuZIelwl7lgH/8Xzw96aZcUGKOK3ZQCfxMLE8VH7slVxzXtVdBruK+sYsJyrKA
-         tpRe2Ntw+G3iydWdImjXpCLHK4/Bc2CIco64ZTNJ2Lvv4UAdFDykP971obVPdZ1Ep1yA
-         zqdw==
-X-Gm-Message-State: ACrzQf1r93KszKOBAe/3jIKsO7oAzh4FFD6MDJ8M930Gokuxuo1LU3Az
-        E5mn3Tr9vk/LKhsiH1dd+ePK
-X-Google-Smtp-Source: AMsMyM6IDexLb7umbRFxKkkNVzZo6d/MZRCyIohiVXE9WTdiYRtYBhopjkNVYs8OTNX7IuCl1w1/xQ==
-X-Received: by 2002:a17:906:844a:b0:77c:1d87:b81e with SMTP id e10-20020a170906844a00b0077c1d87b81emr23674827ejy.675.1664296430785;
-        Tue, 27 Sep 2022 09:33:50 -0700 (PDT)
-Received: from mbp-di-paolo.station (net-2-37-207-44.cust.vodafonedsl.it. [2.37.207.44])
-        by smtp.gmail.com with ESMTPSA id l2-20020aa7c3c2000000b00447e5983478sm1535580edr.76.2022.09.27.09.33.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Sep 2022 09:33:50 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [patch v11 3/6] block, bfq: refactor the counting of
- 'num_groups_with_pending_reqs'
-From:   Paolo VALENTE <paolo.valente@unimore.it>
-In-Reply-To: <11AC4611-79BC-478F-821E-7AF70BE69A04@linaro.org>
+        Tue, 27 Sep 2022 12:34:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2A61D929B;
+        Tue, 27 Sep 2022 09:34:16 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RG6jQq031235;
+        Tue, 27 Sep 2022 16:33:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=7Qmvt/yiIMwMHM6EZgLoxQRN9yMjBsbBXFpoJxb/6lg=;
+ b=aOIZXUDTK2x38vWd1OGUh6ZYr9MjpNou6T/5DoaaFe4I9OTZ1qgtLEVu47X5seMwQhJB
+ lR5JUtIOyBE/ELZsVzQ1dyXHHseB1J0X/HO/SP3eeYT6nkeZTuJyrqM/1pOw0wwCX1sn
+ kzKsM0BzeGKfnewOB4j2AxOiF6mq5gjmIxaQDzyTEGk5uDcBWx79YCFaTTgzgGtCr2X0
+ 5ll8uns+UFmzK/Z+4FaD1Mx/ATO6bVRMZrj563A3U2T/kXB5YygveqI4JlId9ZetstlO
+ YO/QfOirAs8M0tODYjSaEmg0lZQRyG+/V42MiBAdFjtrP0BrbQnrPs3VIFF5jrQb4+7F Xw== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jv2fgdpu2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 16:33:56 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28RGK0tO022586;
+        Tue, 27 Sep 2022 16:33:52 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3jssh9c3cr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 16:33:52 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28RGXnSa62259638
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 27 Sep 2022 16:33:49 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 29D214C046;
+        Tue, 27 Sep 2022 16:33:49 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9B3D34C040;
+        Tue, 27 Sep 2022 16:33:48 +0000 (GMT)
+Received: from oc-nschnelle.boeblingen.de.ibm.com (unknown [9.155.199.46])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 27 Sep 2022 16:33:48 +0000 (GMT)
+Message-ID: <1a10b5baedafb56335231ccbd585412bbb3a108c.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 1/3] iommu/s390: Fix duplicate domain attachments
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, linux-kernel@vger.kernel.org
 Date:   Tue, 27 Sep 2022 18:33:48 +0200
-Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Jan Kara <jack@suse.cz>, cgroups@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "yukuai (C)" <yukuai3@huawei.com>, yi.zhang@huawei.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <E7780B07-FE62-4E8B-ABE9-43A4295D6A0A@unimore.it>
-References: <20220916071942.214222-1-yukuai1@huaweicloud.com>
- <20220916071942.214222-4-yukuai1@huaweicloud.com>
- <11AC4611-79BC-478F-821E-7AF70BE69A04@linaro.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YzGtQY+uw4ZzZoSH@nvidia.com>
+References: <20220922095239.2115309-1-schnelle@linux.ibm.com>
+         <20220922095239.2115309-2-schnelle@linux.ibm.com>
+         <YyxyMtKXyvgHt3Kp@nvidia.com>
+         <81463119aeadd55465cfac1f5bc6a8b79f0c9738.camel@linux.ibm.com>
+         <YzGtQY+uw4ZzZoSH@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fnREZ9yzlkXPKEbReJ3GIeRoVNmTed3v
+X-Proofpoint-ORIG-GUID: fnREZ9yzlkXPKEbReJ3GIeRoVNmTed3v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-27_07,2022-09-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
+ impostorscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209270102
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 2022-09-26 at 10:46 -0300, Jason Gunthorpe wrote:
+> On Mon, Sep 26, 2022 at 11:00:53AM +0200, Niklas Schnelle wrote:
+> 
+> > > > +out_unregister_restore:
+> > > > +	zpci_unregister_ioat(zdev, 0);
+> > > >  out_restore:
+> > > > -	if (!zdev->s390_domain) {
+> > > > +	zdev->dma_table = NULL;
+> > > > +	if (prev_domain)
+> > > > +		s390_iommu_attach_device(&prev_domain->domain,
+> > > > +					 dev);
+> > > 
+> > > Huh. That is a surprising thing
+> > > 
+> > > I think this function needs some re-ordering to avoid this condition
+> > > 
+> > > The checks for aperture should be earlier, and they are not quite
+> > > right. The aperture is only allowed to grow. If it starts out as 0 and
+> > > then is set to something valid on first attach, a later attach cannot
+> > > then shrink it. There could already be mappings in the domain under
+> > > the now invalidated aperture and no caller is prepared to deal with
+> > > this.
+> > 
+> > Ohh I think this is indeed broken. Let me rephrase to see if I
+> > understand correctly. You're saying that while we only allow exactly
+> > matching apertures on additional attaches, we do allow shrinking if
+> > there is temporarily no device attached to the domain. That part is
+> > then broken because there could still be mappings outside the new
+> > aperture stored in the translation tables?
+> 
+> Right, go from 0 -> sized apperture on first attach, and then once it
+> is sized it doesn't change again.
 
+Ok, some background. This is currently largely a theoretical issue as
+all native PCI devices that currently exist on s390 have the same zdev-
+>start_dma (0x100000000) and we will set zdev->end_dma to (zdev-
+>start_dma + MEMORY_SIZE) in zpci_dma_init_device() to save space for
+our IOVA allocation bitmap. So currently no shrinking can occur.
 
-> Il giorno 27 set 2022, alle ore 18:32, Paolo Valente =
-<paolo.valente@linaro.org> ha scritto:
->=20
->=20
->=20
->> Il giorno 16 set 2022, alle ore 09:19, Yu Kuai =
-<yukuai1@huaweicloud.com> ha scritto:
->>=20
->> From: Yu Kuai <yukuai3@huawei.com>
->>=20
->> Currently, bfq can't handle sync io concurrently as long as they
->> are not issued from root group. This is because
->> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
->> bfq_asymmetric_scenario().
->>=20
->> The way that bfqg is counted into 'num_groups_with_pending_reqs':
->>=20
->> Before this patch:
->> 1) root group will never be counted.
->> 2) Count if bfqg or it's child bfqgs have pending requests.
->> 3) Don't count if bfqg and it's child bfqgs complete all the =
-requests.
->>=20
->> After this patch:
->> 1) root group is counted.
->> 2) Count if bfqg have pending requests.
->> 3) Don't count if bfqg complete all the requests.
->>=20
->> With this change, the occasion that only one group is activated can =
-be
->> detected, and next patch will support concurrent sync io in the
->> occasion.
->>=20
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> Reviewed-by: Jan Kara <jack@suse.cz>
->> ---
->> block/bfq-iosched.c | 42 ------------------------------------------
->> block/bfq-iosched.h | 18 +++++++++---------
->> block/bfq-wf2q.c    | 23 ++++++++---------------
->> 3 files changed, 17 insertions(+), 66 deletions(-)
->>=20
->> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
->> index 0dcae2f52896..970b302a7a3e 100644
->> --- a/block/bfq-iosched.c
->> +++ b/block/bfq-iosched.c
->> @@ -970,48 +970,6 @@ void __bfq_weights_tree_remove(struct bfq_data =
-*bfqd,
->> void bfq_weights_tree_remove(struct bfq_data *bfqd,
->> 			     struct bfq_queue *bfqq)
->> {
->> -	struct bfq_entity *entity =3D bfqq->entity.parent;
->> -
->> -	for_each_entity(entity) {
->> -		struct bfq_sched_data *sd =3D entity->my_sched_data;
->> -
->> -		if (sd->next_in_service || sd->in_service_entity) {
->> -			/*
->> -			 * entity is still active, because either
->> -			 * next_in_service or in_service_entity is not
->> -			 * NULL (see the comments on the definition of
->> -			 * next_in_service for details on why
->> -			 * in_service_entity must be checked too).
->> -			 *
->> -			 * As a consequence, its parent entities are
->> -			 * active as well, and thus this loop must
->> -			 * stop here.
->> -			 */
->> -			break;
->> -		}
->> -
->> -		/*
->> -		 * The decrement of num_groups_with_pending_reqs is
->> -		 * not performed immediately upon the deactivation of
->> -		 * entity, but it is delayed to when it also happens
->> -		 * that the first leaf descendant bfqq of entity gets
->> -		 * all its pending requests completed. The following
->> -		 * instructions perform this delayed decrement, if
->> -		 * needed. See the comments on
->> -		 * num_groups_with_pending_reqs for details.
->> -		 */
->> -		if (entity->in_groups_with_pending_reqs) {
->> -			entity->in_groups_with_pending_reqs =3D false;
->> -			bfqd->num_groups_with_pending_reqs--;
->> -		}
->> -	}
->> -
->> -	/*
->> -	 * Next function is invoked last, because it causes bfqq to be
->> -	 * freed if the following holds: bfqq is not in service and
->> -	 * has no dispatched request. DO NOT use bfqq after the next
->> -	 * function invocation.
->> -	 */
->> 	__bfq_weights_tree_remove(bfqd, bfqq,
->> 				  &bfqd->queue_weights_tree);
->=20
-> Why are you keeping the wrapper function bfq_weights_tree_remove() if =
-it contains only the invocation of __bfq_weights_tree_remove()?
->=20
+Still I think we should do this properly. Also by the way, there is a
+known off-by-one (aperture too small) in the current checks for which I
+was about to send a patch as part of the conversion to using dma-
+iommu.c.
 
-I had not seen patch 6/6, sorry.
+>  
+> > > That leaves the only error case as zpci_register_ioat() - which seems
+> > > like it is the actual "attach" operation. Since
+> > > __s390_iommu_detach_device() is just internal accounting (and can't
+> > > fail) it should be moved after
+> > > 
+> > > So the logic order should be
+> > > 
+> > > 1) Attempt to widen the aperture, if this fails the domain is
+> > >    incompatible bail immediately
+> > 
+> > Question. If the widening succeeds but we fail later during the attach
+> > e.g. in 2) then the aperture remains widend or would that be rolled
+> > back? 
+> 
+> I'd leave it widened.
+> 
+> IMHO I don't like this trick of setting the aperture on attach. It is
+> logically wrong. The aperture is part of the configuration of the page
+> table itself. The domain should know what page table format and thus
+> apterture it has the moment it is allocated. Usually this is the
+> related to the number of levels in the radix tree.
+> 
+> It seems to me that the issue here is trying to use the aperture when
+> the reserved region is the appropriate tool.
+> 
+> eg I see that s390_domain_alloc calls dma_alloc_cpu_table() which just
+> allocates a 3 level radix tree. This means it has a specific max
+> address that can be passed to dma_walk_cpu_trans(). So the aperture
+> should be fixed based on the radix tree parameters.
 
-Paolo
+Yes, we even have the ZPCI_TABLE_SIZE_RT constant already that is the
+maximum number of translations.
 
->> }
->> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
->> index 338ff5418ea8..257acb54c6dc 100644
->> --- a/block/bfq-iosched.h
->> +++ b/block/bfq-iosched.h
->> @@ -496,27 +496,27 @@ struct bfq_data {
->> 	struct rb_root_cached queue_weights_tree;
->>=20
->> 	/*
->> -	 * Number of groups with at least one descendant process that
->> +	 * Number of groups with at least one process that
->> 	 * has at least one request waiting for completion. Note that
->> 	 * this accounts for also requests already dispatched, but not
->> 	 * yet completed. Therefore this number of groups may differ
->> 	 * (be larger) than the number of active groups, as a group is
->> 	 * considered active only if its corresponding entity has
->> -	 * descendant queues with at least one request queued. This
->> +	 * queues with at least one request queued. This
->> 	 * number is used to decide whether a scenario is symmetric.
->> 	 * For a detailed explanation see comments on the computation
->> 	 * of the variable asymmetric_scenario in the function
->> 	 * bfq_better_to_idle().
->> 	 *
->> 	 * However, it is hard to compute this number exactly, for
->> -	 * groups with multiple descendant processes. Consider a group
->> -	 * that is inactive, i.e., that has no descendant process with
->> +	 * groups with multiple processes. Consider a group
->> +	 * that is inactive, i.e., that has no process with
->> 	 * pending I/O inside BFQ queues. Then suppose that
->> 	 * num_groups_with_pending_reqs is still accounting for this
->> -	 * group, because the group has descendant processes with some
->> +	 * group, because the group has processes with some
->> 	 * I/O request still in flight. num_groups_with_pending_reqs
->> 	 * should be decremented when the in-flight request of the
->> -	 * last descendant process is finally completed (assuming that
->> +	 * last process is finally completed (assuming that
->> 	 * nothing else has changed for the group in the meantime, in
->> 	 * terms of composition of the group and active/inactive state =
-of child
->> 	 * groups and processes). To accomplish this, an additional
->> @@ -525,7 +525,7 @@ struct bfq_data {
->> 	 * we resort to the following tradeoff between simplicity and
->> 	 * accuracy: for an inactive group that is still counted in
->> 	 * num_groups_with_pending_reqs, we decrement
->> -	 * num_groups_with_pending_reqs when the first descendant
->> +	 * num_groups_with_pending_reqs when the first
->> 	 * process of the group remains with no request waiting for
->> 	 * completion.
->> 	 *
->> @@ -533,12 +533,12 @@ struct bfq_data {
->> 	 * carefulness: to avoid multiple decrements, we flag a group,
->> 	 * more precisely an entity representing a group, as still
->> 	 * counted in num_groups_with_pending_reqs when it becomes
->> -	 * inactive. Then, when the first descendant queue of the
->> +	 * inactive. Then, when the first queue of the
->> 	 * entity remains with no request waiting for completion,
->> 	 * num_groups_with_pending_reqs is decremented, and this flag
->> 	 * is reset. After this flag is reset for the entity,
->> 	 * num_groups_with_pending_reqs won't be decremented any
->> -	 * longer in case a new descendant queue of the entity remains
->> +	 * longer in case a new queue of the entity remains
->> 	 * with no request waiting for completion.
->> 	 */
->> 	unsigned int num_groups_with_pending_reqs;
->> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
->> index 5549ccf09cd2..5e8224c96921 100644
->> --- a/block/bfq-wf2q.c
->> +++ b/block/bfq-wf2q.c
->> @@ -984,19 +984,6 @@ static void __bfq_activate_entity(struct =
-bfq_entity *entity,
->> 		entity->on_st_or_in_serv =3D true;
->> 	}
->>=20
->> -#ifdef CONFIG_BFQ_GROUP_IOSCHED
->> -	if (!bfq_entity_to_bfqq(entity)) { /* bfq_group */
->> -		struct bfq_group *bfqg =3D
->> -			container_of(entity, struct bfq_group, entity);
->> -		struct bfq_data *bfqd =3D bfqg->bfqd;
->> -
->> -		if (!entity->in_groups_with_pending_reqs) {
->> -			entity->in_groups_with_pending_reqs =3D true;
->> -			bfqd->num_groups_with_pending_reqs++;
->> -		}
->> -	}
->> -#endif
->> -
->> 	bfq_update_fin_time_enqueue(entity, st, backshifted);
->> }
->>=20
->> @@ -1653,7 +1640,8 @@ void =
-bfq_add_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
->> 	if (!entity->in_groups_with_pending_reqs) {
->> 		entity->in_groups_with_pending_reqs =3D true;
->> #ifdef CONFIG_BFQ_GROUP_IOSCHED
->> -		bfqq_group(bfqq)->num_queues_with_pending_reqs++;
->> +		if (!(bfqq_group(bfqq)->num_queues_with_pending_reqs++))
->> +			bfqq->bfqd->num_groups_with_pending_reqs++;
->> #endif
->> 	}
->> }
->> @@ -1665,7 +1653,8 @@ void =
-bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
->> 	if (entity->in_groups_with_pending_reqs) {
->> 		entity->in_groups_with_pending_reqs =3D false;
->> #ifdef CONFIG_BFQ_GROUP_IOSCHED
->> -		bfqq_group(bfqq)->num_queues_with_pending_reqs--;
->> +		if (!(--bfqq_group(bfqq)->num_queues_with_pending_reqs))
->> +			bfqq->bfqd->num_groups_with_pending_reqs--;
->> #endif
->> 	}
->> }
->> @@ -1694,6 +1683,10 @@ void bfq_del_bfqq_busy(struct bfq_queue *bfqq, =
-bool expiration)
->>=20
->> 	if (!bfqq->dispatched) {
->> 		bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
->> +		/*
->> +		 * Next function is invoked last, because it causes bfqq =
-to be
->> +		 * freed. DO NOT use bfqq after the next function =
-invocation.
->> +		 */
->=20
-> Great, you moved this comment to the best place.
->=20
-> Thanks,
-> Paolo
->=20
->> 		bfq_weights_tree_remove(bfqd, bfqq);
->> 	}
->> }
->> --=20
->> 2.31.1
+> 
+> The device specific start/end should be represented as a reserved
+> regions per-device. See patch below..
+> 
+> This is meaningful because it effects when VFIO can share the domains
+> across devices. If devices have different reserved ranges we can still
+> share domains, so long as no mapping is placed in the union of the
+> reserved ranges. However if you vary the aperture, like is currently
+> happening, then the domains become unsharable.
+
+Ok, interesting idea.
+
+As we haven't used these reserved regions so far and I'm not familiar
+with what they are usually used for, I had a look at my x86_64 test box
+(amd_iommu=on) and see the following:
+
+# cat /sys/bus/pci/devices/*/iommu_group/reserved_regions | sort | uniq 
+0x00000000fee00000 0x00000000feefffff msi
+0x000000fd00000000 0x000000ffffffffff reserved
+
+Not sure what the non-MSI reservation is for? It does seem like x86_64
+also uses this for quite large ranges.
+
+With your patch and the off by one fixed (see below) on an s390x
+machine with 32 GiB memory I then get the following:
+
+# cat /sys/bus/pci/devices/*/iommu_group/reserved_regions | sort | uniq
+0x0000000000000000 0x00000000ffffffff reserved
+0x0000000900000000 0x000003ffffffffff reserved
+
+As the upper limit is shown inclusive this looks correct to me. 
+
+Not all is rosy though, while this seems to work with the current code
+and KVM pass-through, it breaks my conversion for using dma-iommu. 
+
+This is because I'm getting a map request for an IOVA in the reserved
+region. I pass the zdev->start_dma and zdev->end_dma to
+iommu_setup_dma_ops() but while iommu_dma_init_domain() uses the lower
+limit for the base_pfn it only checks if the upper limit fits in the
+aperture and otherwise ignores it.  Looking at iommu_dma_alloc_iova() I
+don't think that avoids the reserved regions either but it does use the
+domain->geometry.aperture_end or dev->bus_dma_limit, whichever is
+smaller.
+
+With that knowledge setting dev->bus_dma_limit to zdev->end_dma makes
+my conversion work again that feels wrong though but at least confirms
+the issue.
+
+> 
+> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+> index c898bcbbce118f..ba80325da76cd9 100644
+> --- a/drivers/iommu/s390-iommu.c
+> +++ b/drivers/iommu/s390-iommu.c
+> @@ -51,6 +51,12 @@ static bool s390_iommu_capable(enum iommu_cap cap)
+>  	}
+>  }
+>  
+> 
+---8<---
+>  
+> +static void s390_iommu_get_resv_regions(struct device *dev,
+> +					struct list_head *list)
+> +{
+> +	struct zpci_dev *zdev = to_zpci_dev(dev);
+> +	struct iommu_resv_region *region;
+> +
+> +	if (zdev->start_dma) {
+> +		region = iommu_alloc_resv_region(0, zdev->start_dma, 0,
+> +						 IOMMU_RESV_RESERVED);
+> +		if (!region)
+> +			return;
+> +		list_add_tail(&region->list, list);
+> +	}
+> +
+> +	if (zdev->end_dma < MAX_DMA_TABLE_ADDR) {
+> +		region = iommu_alloc_resv_region(
+> +			zdev->end_dma, MAX_DMA_TABLE_ADDR - zdev->end_dma, 0,
+
+Not your fault since there is a pre-existing bug in the range check but
+I think there is an off-by-one error here as zdev->end_dma is the
+highest usable address.
+
+> +			IOMMU_RESV_RESERVED);
+> +		if (!region)
+> +			return;
+> +		list_add_tail(&region->list, list);
+> +	}
+> +}
+> +
+>  static void s390_iommu_detach_device(struct iommu_domain *domain,
+>  				     struct device *dev)
+>  {
+> @@ -376,6 +398,7 @@ static const struct iommu_ops s390_iommu_ops = {
+>  	.release_device = s390_iommu_release_device,
+>  	.device_group = generic_device_group,
+>  	.pgsize_bitmap = S390_IOMMU_PGSIZES,
+> +	.get_resv_regions = s390_iommu_get_resv_regions,
+>  	.default_domain_ops = &(const struct iommu_domain_ops) {
+>  		.attach_dev	= s390_iommu_attach_device,
+>  		.detach_dev	= s390_iommu_detach_device,
+
 
