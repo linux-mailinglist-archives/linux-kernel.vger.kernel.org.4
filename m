@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271825EC4F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48565EC4F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbiI0Nv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        id S231594AbiI0Nxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiI0Nv5 (ORCPT
+        with ESMTP id S231861AbiI0Nxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:51:57 -0400
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEEF125DAB;
-        Tue, 27 Sep 2022 06:51:56 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 3B4CC41203;
-        Tue, 27 Sep 2022 13:51:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:references:message-id:subject:subject:from:from
-        :date:date:received:received:received:received; s=mta-01; t=
-        1664286714; x=1666101115; bh=djkTMrw3NuDNUlcbgKWdUAMdOE33vBB/qXd
-        2X5QY5YE=; b=iMmU13TmtIETymKDE54w7K8dAQmy2j5wKzhW8LlTZCXsKIT0c+p
-        5yvIgsyLroZOUqfZEqEI1yaxHw8Bd3gIAiGssPBeZ54agqJvg4sBBrItDOdGOLmL
-        +9Z8AISJyaqRsyMLv2uWyDd5+z7ve944JY2yce7ksuElvPdY0hn3K0KY=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id KZtp7uwSd8tN; Tue, 27 Sep 2022 16:51:54 +0300 (MSK)
-Received: from T-EXCH-01.corp.yadro.com (T-EXCH-01.corp.yadro.com [172.17.10.101])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id A558C40355;
-        Tue, 27 Sep 2022 16:51:53 +0300 (MSK)
-Received: from T-EXCH-09.corp.yadro.com (172.17.11.59) by
- T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Tue, 27 Sep 2022 16:51:53 +0300
-Received: from yadro.com (10.199.23.254) by T-EXCH-09.corp.yadro.com
- (172.17.11.59) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Tue, 27 Sep
- 2022 16:51:52 +0300
-Date:   Tue, 27 Sep 2022 16:51:50 +0300
-From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
-To:     Miguel Ojeda <ojeda@kernel.org>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <patches@lists.linux.dev>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Matthew Bakhtiari <dev@mtbk.me>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
-Subject: Re: [PATCH v10 08/27] rust: adapt `alloc` crate to the kernel
-Message-ID: <YzL/9mlOHemaey2n@yadro.com>
-References: <20220927131518.30000-1-ojeda@kernel.org>
- <20220927131518.30000-9-ojeda@kernel.org>
+        Tue, 27 Sep 2022 09:53:33 -0400
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183C212E40E
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:53:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1664286806;
+        bh=wOQSCm79AChosleiwmfsR5IN1ZodaJieOpEm/KfINVE=;
+        h=From:To:Cc:Subject:Date;
+        b=Mtqnpz5vNXxU/h0cal6xO4zVkLyQesV+e5iJfAKZZa4GU9lvILQ4aBXW70PsOyhav
+         6OSJJs79Uo9Z3b+eqUJGK8uyKGK23AXRbfN/99l7AnwzW8PgREWsPMx3zr6iQDYY6m
+         GSZMh7lO+sRagYFqYagbXyQ1mnPhO/8kAsVf5pnI=
+Received: from localhost.localdomain ([111.199.187.40])
+        by newxmesmtplogicsvrsza8.qq.com (NewEsmtp) with SMTP
+        id D0F35288; Tue, 27 Sep 2022 21:52:15 +0800
+X-QQ-mid: xmsmtpt1664286735ti9aw2fou
+Message-ID: <tencent_BAA30488EB06A842C1595097BA2A7FAF9908@qq.com>
+X-QQ-XMAILINFO: NKv2G1wnhDBnrr4E/kVfuAaW0EF+dO6VIZgsqtYyK/87TCmjT9CP5srANxSFY9
+         j/hcKrE2+e9etoGo+3zm0I4Sl203WVpcvQ8f1JH8Vx6dot5H/R/7aiVxyIMNsftO336neivpG/PL
+         9YsClPsZYJNpBkJrcVl/7TLq0o9Kbl6GhypqGmrWiuUN7DMzb1HTehlT6k0lq+3YSbQK5ItmCJZI
+         EQG8DeMtb8pBV1FiU33nXSOMrmJmR2UK3AOU26Yh6pRAdjibczIoGEZOCWMczsfCO90usAt/W1J/
+         u7vPTJr3F2q53v5sD0mhYHo8Of6V8b+W9abqDqYYDY1ZfqoHc2X7CJoEopmR4L0oedEMxJmzJz8b
+         P6g22UeYfTunvgId+ltfMqbXcBs04qvbi6ty5L7aD3bgBv4OlwUcDudLv6pFONR+o0CFacuZGIq4
+         qVrJLNCMJi+qmOMYDv1e/yI/nPFprhrPNmJVv3gbuKt1g/jD0uQqTbOxDo9HAuO5Z+WYYa1l8Yre
+         jwpwlDo1B2VwSRzl+AQ/veDj+9rL+/91FBeN8JmM6WU5Qig7l+d9pgfjthrsjamIT520d7aNCc8t
+         I95vYXsOZgQMxhmaT59DypThHS9wj9m5U3BhcOG6EA0ViUaIccMugj+c0aYbeE1STIq5mAsp40X1
+         Lctc1FuvB3ZWaGwgugGcXLZVeEApKPKW1/Q41ytvJtaze4xMfmI5lKPFPVi03HrNCtf4W86MMQMW
+         BlFllmXZKk8iHhJ8bA/kviKbwm8z9QLzoqET2U6mO+SQmBW6jCpcJfRAqSLmCDqQXI6rp7VdO5Xm
+         EC05TaMm3JjXS7X/Dp1OwEqn+YSbwHq1Wrg8s+c+DNqMNawjnKG4TjgHWnsw4ZDsZ5GpzMtLfEry
+         S8AH3Zec0fRy3G2lUHkkf/vfGE0z7oyCk8ykfhEZ24eLYMwgT9YPUEMJ6aEpMi5kUyNDjhqctJUx
+         sWwjhi/EoLzvTLHAZndIllWBrKjKMjpE57sjub/0o4wSVovfdMhqG7lAgstqzk5D5Qjqqw5f0=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     rostedt@goodmis.org
+Cc:     Rong Tao <rtoax@foxmail.com>, Jan Kara <jack@suse.cz>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] samples/Kconfig: fix up indentation
+Date:   Tue, 27 Sep 2022 21:52:07 +0800
+X-OQ-MSGID: <20220927135208.18662-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220927131518.30000-9-ojeda@kernel.org>
-X-Originating-IP: [10.199.23.254]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-09.corp.yadro.com (172.17.11.59)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 03:14:39PM +0200, Miguel Ojeda wrote:
-[...]
-> +    /// Tries to append an element to the back of a collection.
-> +    ///
-> +    /// # Examples
-> +    ///
-> +    /// ```
-> +    /// let mut vec = vec![1, 2];
-> +    /// vec.try_push(3).unwrap();
-> +    /// assert_eq!(vec, [1, 2, 3]);
-> +    /// ```
-> +    #[inline]
-> +    #[stable(feature = "kernel", since = "1.0.0")]
-> +    pub fn try_push(&mut self, value: T) -> Result<(), TryReserveError> {
-> +        if self.len == self.buf.capacity() {
-> +            self.buf.try_reserve_for_push(self.len)?;
-> +        }
-> +        unsafe {
-> +            let end = self.as_mut_ptr().add(self.len);
-> +            ptr::write(end, value);
-> +            self.len += 1;
-> +        }
-> +        Ok(())
-> +    }
-[...]
+Fix up indentation before we get complaints from tooling.
 
-Not being able to pass GFP flags here kinda limits the scope of Rust in
-kernel. I think that it must be supported in the final version that gets
-in.
+Signed-off-by: Rong Tao <rtoax@foxmail.com>
+---
+ samples/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/samples/Kconfig b/samples/Kconfig
+index 470ee3baf2e1..2605582d4e8f 100644
+--- a/samples/Kconfig
++++ b/samples/Kconfig
+@@ -23,7 +23,7 @@ config SAMPLE_TRACE_CUSTOM_EVENTS
+ 	  This builds the custom trace event example module.
+ 
+ config SAMPLE_TRACE_PRINTK
+-        tristate "Build trace_printk module - tests various trace_printk formats"
++	tristate "Build trace_printk module - tests various trace_printk formats"
+ 	depends on EVENT_TRACING && m
+ 	help
+ 	 This builds a module that calls trace_printk() and can be used to
+@@ -47,7 +47,7 @@ config SAMPLE_FTRACE_DIRECT_MULTI
+ 	  the function addresses.
+ 
+ config SAMPLE_TRACE_ARRAY
+-        tristate "Build sample module for kernel access to Ftrace instancess"
++	tristate "Build sample module for kernel access to Ftrace instancess"
+ 	depends on EVENT_TRACING && m
+ 	help
+ 	 This builds a module that demonstrates the use of various APIs to
+-- 
+2.31.1
+
