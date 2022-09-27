@@ -2,71 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918425EC35B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036545EC366
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbiI0MzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
+        id S231815AbiI0M6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbiI0MzT (ORCPT
+        with ESMTP id S231655AbiI0M54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:55:19 -0400
-Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827A11684DE
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:55:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1664283309;
-        bh=42xfWSmhmYjq+twL20Yxs1MCHTnMRhNYnQ9ldZwy/Rs=;
-        h=From:To:Cc:Subject:Date;
-        b=xMO2xKkAHQKFEvZzbi+vWLWtiDB7TcPE4jc9eWNLetHKk5mBMnFh8sqxm6MorknHt
-         v2cl65Bfrk920xLR1lBxEM4nonhx48r16kzvFtVaK2ZI8IFIuGbX1ymDJq58T7nXae
-         k+L1JQPy2aRCYUdH0x9t1bCFQiCT4bwodJwut3kg=
-X-QQ-FEAT: oHWrrGTW1dDJ34LybywUcSCPpAkOV9c4
-X-QQ-SSF: 00000000000000F0000000000000
-X-QQ-XMAILINFO: OZiGlmjmGvyhz+Fl1v8DirpiVJ32lMdcI4u69eni3+5I4OSUoCGndESeQL4cH9
-         xcB47NT2lW6qO8+x/ooIhmqFNE2WDENG9Jdg/kqJ6DWe01nKutKgw25lqQvxFqG7sjxQTZMUoG3KT
-         oj9q3YmbX2i5/8dItlAcKgWteQZTPFbUNQ49YavH1OAMIHGT74x4NsmkEyP5sgjROU4VXUx1CsnWQ
-         FypB4bAVRtEY5kP6LMcwp31z82tawu309+UvmmpSw4tpINSVbOla2n1dCVeG8Ra8ccz82EDTvm10g
-         AaXRqAZF6WqVX+PRTHzC7QVN85FWrIN8gU4VWoqYKG9krSsMMzenyt15q4zTjqwKmQLmWwvTbKkCl
-         g00rVAL3ZZlzzArC/kPHhyCCY8lscAsilzb6vUkWcQA3aQ6FbkrsDtfRFVVF5CTvnPMFKDNe6wtxd
-         JNXj1LZ7hckvB/kK+09I7eudYQBNrPJuQOt7arKKzniYWRP8KOhTMN/2OYjc71TWQyYEWwFuVHEj3
-         rBbh7Yrp6GCsgAnS/M9IqgbxgrOt83XoJj/kGGKF9j8VGeML4tp448/NqP9cRc88rhbZfDcUljcCv
-         8KgiDvH9FARtPZxWEC7jo78QxjjH9t6MQeOJ8k0AMy54I143rQsVVyKKG0td3bquGJBPJW10AT06i
-         TGcDQ56zvdiQ2wOp0TyiUimanrNOKrcnBgrYeXhtEidaKR2pSWz9OkYQM9Xr75gUjp/7KBKdQlsY1
-         SQhi3aPmJa3I0MujBjNI0MQUkyXevvH+uknqvq56e3HHtyQBLXbuMcfc1gV0vfJ54Evfr1RnMDmpf
-         YS0BOVaoUtBQfEWAXxn/bt7BeNcklG+7hsbC92U8+hZqgfnxKXTf9sWoybUp/AZQZ8sIHBBbxWVu8
-         uqzRA/WPiOBCq7HhqzqdPk0T4TjHwg0jQynq1KSR12qA908dM/obgydk2ESkjgAumKXMK0Be+1EqF
-         4hndg/xGI44w3/4MMt
-X-HAS-ATTACH: no
-X-QQ-BUSINESS-ORIGIN: 2
-X-Originating-IP: 111.47.122.156
-X-QQ-STYLE: 
-X-QQ-mid: webmail740t1664283308t8147702
-From:   "=?ISO-8859-1?B?WGlhb2tlIFdhbmc=?=" <xkernel.wang@foxmail.com>
-To:     "=?ISO-8859-1?B?RGFuIENhcnBlbnRlcg==?=" <dan.carpenter@oracle.com>
-Cc:     "=?ISO-8859-1?B?TGFycnkuRmluZ2Vy?=" <Larry.Finger@lwfinger.net>,
-        "=?ISO-8859-1?B?Zmxvcmlhbi5jLnNjaGlsaGFiZWw=?=" 
-        <florian.c.schilhabel@googlemail.com>,
-        "=?ISO-8859-1?B?Z3JlZ2to?=" <gregkh@linuxfoundation.org>,
-        "=?ISO-8859-1?B?bGludXgtc3RhZ2luZw==?=" 
-        <linux-staging@lists.linux.dev>,
-        "=?ISO-8859-1?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] staging: rtl8712: fix potential memory leak in _r8712_init_xmit_priv()
-Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="ISO-8859-1"
-Content-Transfer-Encoding: base64
-Date:   Tue, 27 Sep 2022 20:55:08 +0800
-X-Priority: 3
-Message-ID: <tencent_FACCCAB91E1C6F141FE1CA4AC1FF2420DA08@qq.com>
-X-QQ-MIME: TCMime 1.0 by Tencent
-X-Mailer: QQMail 2.x
-X-QQ-Mailer: QQMail 2.x
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_EXCESS_BASE64,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Tue, 27 Sep 2022 08:57:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0864C16F9E7;
+        Tue, 27 Sep 2022 05:57:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C0D941042;
+        Tue, 27 Sep 2022 05:57:59 -0700 (PDT)
+Received: from [10.57.65.170] (unknown [10.57.65.170])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 322003F792;
+        Tue, 27 Sep 2022 05:57:51 -0700 (PDT)
+Message-ID: <fcd5f62d-2059-6993-3f51-d8b65a9c8d7f@arm.com>
+Date:   Tue, 27 Sep 2022 13:57:46 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 1/3] Input: add `SW_BOOT_ALT`
+Content-Language: en-GB
+To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Jeff LaBundy <jeff@labundy.com>
+Cc:     Quentin Schulz <foss+kernel@0leil.net>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        dmitry.torokhov@gmail.com, klaus.goger@theobroma-systems.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org
+References: <20220922101211.3215888-1-foss+kernel@0leil.net>
+ <20220922101211.3215888-2-foss+kernel@0leil.net> <YyyZRt5j180KzGqc@nixie71>
+ <7add41ad-2cff-adef-08c4-dbc02f7c7c31@theobroma-systems.com>
+ <Yy3qj432McMJ/5rl@nixie71>
+ <953e4d00-110e-b337-3c6c-af008c843046@theobroma-systems.com>
+ <YzJYZrw09dXEihnn@nixie71>
+ <af9fa1c4-0db1-6776-c362-d375f934422e@theobroma-systems.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <af9fa1c4-0db1-6776-c362-d375f934422e@theobroma-systems.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,70 +56,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCBTZXAgMjcsIDIwMjIgMDM6NTcgUE0sIGRhbi5jYXJwZW50ZXJAb3JhY2xlLmNv
-bSB3cm90ZToKJmd0OyBPbiBNb24sIFNlcCAyNiwgMjAyMiBhdCAwMzowNjowNVBNICswODAw
-LCB4a2VybmVsLndhbmdAZm94bWFpbC5jb20gd3JvdGU6CiZndDsmZ3Q7IGRpZmYgLS1naXQg
-YS9kcml2ZXJzL3N0YWdpbmcvcnRsODcxMi9ydGw4NzF4X3htaXQuYyBiL2RyaXZlcnMvc3Rh
-Z2luZy9ydGw4NzEyL3J0bDg3MXhfeG1pdC5jCiZndDsmZ3Q7IGluZGV4IDA5MDM0NWIuLmRj
-ZjNmNzYgMTAwNjQ0CiZndDsmZ3Q7IC0tLSBhL2RyaXZlcnMvc3RhZ2luZy9ydGw4NzEyL3J0
-bDg3MXhfeG1pdC5jCiZndDsmZ3Q7ICsrKyBiL2RyaXZlcnMvc3RhZ2luZy9ydGw4NzEyL3J0
-bDg3MXhfeG1pdC5jCiZndDsmZ3Q7IEBAIC0xMTcsMTEgKzExNyw4IEBAIGludCBfcjg3MTJf
-aW5pdF94bWl0X3ByaXYoc3RydWN0IHhtaXRfcHJpdiAqcHhtaXRwcml2LAomZ3Q7Jmd0OyBf
-aW5pdF9xdWV1ZSgmYW1wO3B4bWl0cHJpdi0mZ3Q7cGVuZGluZ194bWl0YnVmX3F1ZXVlKTsK
-Jmd0OyZndDsgcHhtaXRwcml2LSZndDtwYWxsb2NhdGVkX3htaXRidWYgPQomZ3Q7Jmd0OyAg
-a21hbGxvYyhOUl9YTUlUQlVGRiAqIHNpemVvZihzdHJ1Y3QgeG1pdF9idWYpICsgNCwgR0ZQ
-X0FUT01JQyk7CiZndDsmZ3Q7IC0gaWYgKCFweG1pdHByaXYtJmd0O3BhbGxvY2F0ZWRfeG1p
-dGJ1ZikgewomZ3Q7Jmd0OyAta2ZyZWUocHhtaXRwcml2LSZndDtwYWxsb2NhdGVkX2ZyYW1l
-X2J1Zik7CiZndDsmZ3Q7IC1weG1pdHByaXYtJmd0O3BhbGxvY2F0ZWRfZnJhbWVfYnVmID0g
-TlVMTDsKJmd0OyZndDsgLXJldHVybiAtRU5PTUVNOwomZ3Q7Jmd0OyAtIH0KJmd0OyZndDsg
-KyBpZiAoIXB4bWl0cHJpdi0mZ3Q7cGFsbG9jYXRlZF94bWl0YnVmKQomZ3Q7Jmd0OyArZ290
-byBmcmVlX2ZyYW1lX2J1ZjsKCk5vdGUgaGVyZTogbWF5IGhhdmUgdGhlIHNhbWUgY29uY2Vy
-bi4KCiZndDsmZ3Q7IHB4bWl0cHJpdi0mZ3Q7cHhtaXRidWYgPSBweG1pdHByaXYtJmd0O3Bh
-bGxvY2F0ZWRfeG1pdGJ1ZiArIDQgLQomZ3Q7Jmd0OyAgICAgICAoKGFkZHJfdCkocHhtaXRw
-cml2LSZndDtwYWxsb2NhdGVkX3htaXRidWYpICZhbXA7IDMpOwomZ3Q7Jmd0OyBweG1pdGJ1
-ZiA9IChzdHJ1Y3QgeG1pdF9idWYgKilweG1pdHByaXYtJmd0O3B4bWl0YnVmOwomZ3Q7Jmd0
-OyBAQCAtMTMwLDEyICsxMjcsMTQgQEAgaW50IF9yODcxMl9pbml0X3htaXRfcHJpdihzdHJ1
-Y3QgeG1pdF9wcml2ICpweG1pdHByaXYsCiZndDsmZ3Q7ICBweG1pdGJ1Zi0mZ3Q7cGFsbG9j
-YXRlZF9idWYgPQomZ3Q7Jmd0OyBrbWFsbG9jKE1BWF9YTUlUQlVGX1NaICsgWE1JVEJVRl9B
-TElHTl9TWiwgR0ZQX0FUT01JQyk7CiZndDsmZ3Q7ICBpZiAoIXB4bWl0YnVmLSZndDtwYWxs
-b2NhdGVkX2J1ZikKJmd0OyZndDsgLSByZXR1cm4gLUVOT01FTTsKJmd0OyZndDsgKyBnb3Rv
-IGZyZWVfeG1pdGJ1ZjsKJmd0OyZndDsgIHB4bWl0YnVmLSZndDtwYnVmID0gcHhtaXRidWYt
-Jmd0O3BhbGxvY2F0ZWRfYnVmICsgWE1JVEJVRl9BTElHTl9TWiAtCiZndDsmZ3Q7ICgoYWRk
-cl90KSAocHhtaXRidWYtJmd0O3BhbGxvY2F0ZWRfYnVmKSAmYW1wOwomZ3Q7Jmd0OyAoWE1J
-VEJVRl9BTElHTl9TWiAtIDEpKTsKJmd0OyZndDsgLWlmIChyODcxMl94bWl0X3Jlc291cmNl
-X2FsbG9jKHBhZGFwdGVyLCBweG1pdGJ1ZikpCiZndDsmZ3Q7IC0gcmV0dXJuIC1FTk9NRU07
-CiZndDsmZ3Q7ICtpZiAocjg3MTJfeG1pdF9yZXNvdXJjZV9hbGxvYyhwYWRhcHRlciwgcHht
-aXRidWYpKSB7CiZndDsmZ3Q7ICsga2ZyZWUocHhtaXRidWYtJmd0O3BhbGxvY2F0ZWRfYnVm
-KTsKJmd0OyZndDsgKyBnb3RvIGZyZWVfeG1pdGJ1ZjsKJmd0OyZndDsgK30KJmd0OyZndDsg
-IGxpc3RfYWRkX3RhaWwoJmFtcDtweG1pdGJ1Zi0mZ3Q7bGlzdCwKJmd0OyZndDsgJmFtcDso
-cHhtaXRwcml2LSZndDtmcmVlX3htaXRidWZfcXVldWUucXVldWUpKTsKJmd0OwomZ3Q7CiZn
-dDsgcHhtaXRidWYgcG9pbnRzIHRvIHNvbWV3aGVyZSBpbiB0aGUgbWlkZGxlIG9mIHB4bWl0
-cHJpdi0mZ3Q7cGFsbG9jYXRlZF94bWl0YnVmLgomZ3Q7IFdlIGFkZCBpdCB0byB0aGUgbGlz
-dCBoZXJlLgomZ3Q7CiZndDsmZ3Q7ICBweG1pdGJ1ZisrOwomZ3Q7Jmd0OyBAQCAtMTQ2LDYg
-KzE0NSwxOCBAQCBpbnQgX3I4NzEyX2luaXRfeG1pdF9wcml2KHN0cnVjdCB4bWl0X3ByaXYg
-KnB4bWl0cHJpdiwKJmd0OyZndDsgaW5pdF9od3htaXRzKHB4bWl0cHJpdi0mZ3Q7aHd4bWl0
-cywgcHhtaXRwcml2LSZndDtod3htaXRfZW50cnkpOwomZ3Q7Jmd0OyB0YXNrbGV0X3NldHVw
-KCZhbXA7cHhtaXRwcml2LSZndDt4bWl0X3Rhc2tsZXQsIHI4NzEyX3htaXRfYmgpOwomZ3Q7
-Jmd0OyByZXR1cm4gMDsKJmd0OyZndDsgKwomZ3Q7Jmd0OyArZnJlZV94bWl0YnVmOgomZ3Q7
-Jmd0OyArIHB4bWl0YnVmID0gKHN0cnVjdCB4bWl0X2J1ZiAqKXB4bWl0cHJpdi0mZ3Q7cHht
-aXRidWY7CiZndDsmZ3Q7ICsgd2hpbGUgKGktLSkgewomZ3Q7Jmd0OyArcjg3MTJfeG1pdF9y
-ZXNvdXJjZV9mcmVlKHBhZGFwdGVyLCBweG1pdGJ1Zik7CiZndDsmZ3Q7ICtrZnJlZShweG1p
-dGJ1Zi0mZ3Q7cGFsbG9jYXRlZF9idWYpOwomZ3Q7Jmd0OyArcHhtaXRidWYrKzsKJmd0OyZn
-dDsgKyB9CiZndDsmZ3Q7ICsga2ZyZWUocHhtaXRwcml2LSZndDtwYWxsb2NhdGVkX3htaXRi
-dWYpOwomZ3Q7CiZndDsgQnV0IHRoZW4gd2UgZnJlZSBweG1pdHByaXYtJmd0O3BhbGxvY2F0
-ZWRfeG1pdGJ1ZiBoZXJlIGJ1dCBpdCB0aGUgbWVtb3J5CiZndDsgaXMgc3RpbGwgb24gdGhl
-IGxpc3QuICBTbyB0aGF0IG1lYW5zIHRoZXJlIHdpbGwgYmUgYSB1c2UgYWZ0ZXIgZnJlZQom
-Z3Q7IGV2ZW50dWFsbHkuCgpZZXMsIHRoZSBtZW1vcnkgYWRkcmVzcyBpcyBzdGlsbCBvbiB0
-aGUgbGlzdCwgYW5kIGF0IHRoZSBhYm92ZSBwb3NpdGlvbiBvZgpgTm90ZWAsIHRoZSBhZGRy
-ZXNzIG9mIGBweG1pdHByaXYtJmd0O3BhbGxvY2F0ZWRfZnJhbWVfYnVmYCBpcyBhbHNvIGxl
-ZnQgb24gYQpsaXN0IG5hbWVkIGBweG1pdHByaXYtJmd0O2ZyZWVfeG1pdF9xdWV1ZWAuCkhv
-d2V2ZXIsIHRoZXNlIGxpc3RzIGFyZSBpbiBgcHhtaXRwcml2YCBhbmQgdGhpcyBmdW5jdGlv
-biBpcyBmb3IKaW5pdGlhbGl6aW5nIGBweG1pdHByaXZgLiBXaGVuIHRoaXMgZnVuY3Rpb24g
-ZmFpbHMsIHRoZSBwcm9iZSBmdW5jdGlvbiBvZgp0aGlzIGRyaXZlciB3aWxsIGZpbmFsbHkg
-ZmFpbC4gU28gSSBndWVzcyB0aGUgbGlzdCBpbiBgcHhtaXRwcml2YCB3aWxsIG5vdApiZSBh
-Y2Nlc3NlZC4KClBsZWFzZSBsZXQgbWUga25vdyBpZiB5b3Ugc3RpbGwgaG9sZCBzdWNoIGNv
-bmNlcm5zLCBJIGFtIGdsYWQgdG8gZmluZCBhCnRpbWUgKGluIDIgd2Vla3MgSSBndWVzcykg
-dG8gYWRkIGBsaXN0X2RlbF9pbml0KClgIG9uIHRoZSBlcnJvciBwYXRocwp0byBjbGVhciBh
-bGwgdGhlIGltcHJvcGVyIHBvaW50aW5nIHJlY29yZHMuCgpSZWdhcmRzLApYaWFva2UgV2Fu
-Zw==
-ÿÿÿÿI
+On 2022-09-27 09:51, Quentin Schulz wrote:
+> Hi Jeff,
+> 
+> On 9/27/22 03:56, Jeff LaBundy wrote:
+>> Hi Quentin,
+>>
+>> On Mon, Sep 26, 2022 at 11:37:45AM +0200, Quentin Schulz wrote:
+>>> Hi all,
+>>>
+>>> On 9/23/22 19:19, Jeff LaBundy wrote:
+>>> [...]
+>>>>>
+>>>>> I have this switch on the board and I want to expose its state to 
+>>>>> the user,
+>>>>> if this new event code is not possible/a good idea what would you 
+>>>>> suggest we
+>>>>> could use?
+>>>>>
+>>>>> Note that we already support the same switch but in a different 
+>>>>> way: 
+>>>>> https://urldefense.proofpoint.com/v2/url?u=https-3A__git.kernel.org_pub_scm_linux_kernel_git_torvalds_linux.git_tree_arch_arm64_boot_dts_rockchip_rk3399-2Dpuma-2Dhaikou.dts-23n167&d=DwIBAg&c=_sEr5x9kUWhuk4_nFwjJtA&r=LYjLexDn7rXIzVmkNPvw5ymA1XTSqHGq8yBP6m6qZZ4njZguQhZhkI_-172IIy1t&m=vObtDja6hUlL_kVvKRILCvaQfklw1gl7TAW7cm5_9H_Yi00zkzGV6-D3yzazR2gU&s=0Xo-7CDmMoriaTNn_hJdMwftLlcY-tgopPcgzXfQtJE&e=
+>>>>> We are just configuring the GPIOs into the GPIO mode with a 
+>>>>> pull-up, and
+>>>>> then it's up to the user to use gpiod or gpio-sysfs to check the 
+>>>>> state of
+>>>>> the GPIO used for this switch. I don't like this, very not 
+>>>>> user-friendly and
+>>>>> was looking for something better :)
+>>>>
+>>>> Actually, that's exactly what I was going to suggest. What in 
+>>>> particular
+>>>> is not user-friendly about it?
+>>>>
+>>>
+>>> The implementation we currently have in place for Puma Haikou is just 
+>>> muxing
+>>> the pins in their GPIO function with a pull-up. Nothing else. This 
+>>> means the
+>>> user still needs to know exactly which GPIO number is for which
+>>> signal/event. Not that great. Also does not allow for a consistent user
+>>> "experience" across modules on the same devkit (different GPIOs 
+>>> depending on
+>>> the SoM).
+>>>
+>>> I had hoped gpio-hog in input mode would expose it to userspace but 
+>>> it does
+>>> not seem to?
+>>
+>> No, I don't believe that is the case. That being said, you should be
+>> able to grep /sys/kernel/debug/gpio for the hog node's label and get
+>> the pin state (lo or hi).
+>>
+>>>
+>>> Anything to recommend so that we can export a GPIO line for a specific
+>>> function to usersapce without needing the user to know which GPIO number
+>>> they should look at?
+>>
+>> If debugfs won't work for your purposes, another option is to request
+>> the GPIO from a general-purpose platform driver and return one of two
+>> strings via sysfs.
+>>
+> 
+> This board will be fully supported upstream and I don't feel like this 
+> general-purpose platform driver would be accepted, but maybe I'm wrong.
+> 
+> I didn't know about the /sys/kernel/debug/gpio file just yet for some 
+> reason, so that's one way to do it, thanks for the info.
+> 
+> Good thing is that the kernel requests this pin in GPIO input mode so at 
+> least that's one less possible misconfiguration from userspace. Not so 
+> good thing is that you need to grep in this file and it's not that great 
+> for scripts :) We'll discuss internally what feels the best to us and go 
+> for it, thanks for the tips!
+> 
+> I'm wondering if allowing sysfs/libgpiod to access the state of GPIOs 
+> requested by the kernel would make sense on the subsystem level though. 
+> I'm sure I'm missing obvious security/HW-limitations pitfalls, but I 
+> think allowing userspace to get the value of a GPIO input pin requested 
+> by the kernel would be nice? Nothing for the input subsystem folks 
+> though :)
+
+FWIW there was a series a while back proposing to add a boot status 
+interface, but I'm not sure if there was any further progress:
+
+https://lore.kernel.org/lkml/20220204072234.304543-1-joel@jms.id.au/
+
+Either way though, these kinds of GPIO (or ADC) configuration inputs for 
+things like boot functionality or board ID are just about common enough 
+that even if not tied in to any other specific interface, I reckon there 
+might be a valid argument to be made for a simple generic driver for 
+reporting the state of a named configuration input in a standardised 
+manner. Perhaps hwmon might be a better fit?
+
+Robin.
