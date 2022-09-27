@@ -2,127 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457165EB7E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92235EB7E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbiI0CpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 22:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
+        id S230405AbiI0Cs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 22:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiI0CpD (ORCPT
+        with ESMTP id S230309AbiI0Crv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 22:45:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7625FA8
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:44:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2B2F61542
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D85EC433C1;
-        Tue, 27 Sep 2022 02:44:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664246698;
-        bh=aPhM8cKTA6dQyU1256UxQ8auvOKzd7pI92C/A1V002w=;
+        Mon, 26 Sep 2022 22:47:51 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B930F61DAF
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:47:49 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 743802C0274;
+        Tue, 27 Sep 2022 02:47:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1664246866;
+        bh=rKulz42nZwV2iWZGSRczYGFQgXLRYskFDwJgUbHm7gs=;
         h=From:To:Cc:Subject:Date:From;
-        b=gROzKsyyApUtzhal/gNoSsvkKuujY+kBdBam7IqAejbwerNBpTgYvEnrEDjUfmEoS
-         CRMStTLNKnrCiV5Uj+wLtUhoHla+01DcXbX03OC+ZSIPzLT9J/AJuQc2y5vsqmeWq+
-         nY5TC7CkhV+UWai7etPhigeXGJTBlAXhoFoSfcocgjfL/8nqstAXiz9KJz1ZMK0EY/
-         omGgkLTQkcDdAL+jBTYFsqMwPuwmn9953vW1r9sxB0gv7Xs94a5nXvL6W0UTu222TE
-         nhUy/bidsVYermqW9gwLxLyYuc4DaIS584R7P+zQLG1G/t3nCfnlNXQStK+DQPQnAM
-         /fUhK/U28wMPQ==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
-Subject: [PATCH] f2fs: introduce cp_status sysfs entry
-Date:   Tue, 27 Sep 2022 10:44:47 +0800
-Message-Id: <20220927024447.2547950-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        b=r8zHnsA2Xef4GkU1VR1rpxWSgUTc2hhSKGvRCZgKV9pVmPkcjgaMC+gapmCqFnMHM
+         jvL55jbqxJQNrnIhIUD+Q0KPn5K8DgsEflEbzT4vSOImVYWozOoDZsbXJlXpjan5xB
+         x2jw1xuO6cMJMk/ywph09Lwg6LEM+Rf3UyptxvMC/7VNhY+mwH8wcC6Wap1i63Cw6K
+         0eJ3X01lfHULrHh4wisrSfTbx3zDHIvtjCGORpDXO5BAp6+pDSki0Vqd8TjHQwwTNr
+         cad5tlb4r5Cyg0oS1T/y6ijjQTJoK4y5OQAMOkbkuCLkZcCCkNmQYReOTjeem/lH30
+         cRvzJ3Uah9RvA==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B633264520000>; Tue, 27 Sep 2022 15:47:46 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 48B9D13EDD7;
+        Tue, 27 Sep 2022 15:47:46 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 44CE62A00A4; Tue, 27 Sep 2022 15:47:46 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        bbrezillon@kernel.org
+Cc:     Tony O'Brien <tony.obrien@alliedtelesis.co.nz>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] mtd: rawnand: marvell: Use correct logic for nand-keep-config
+Date:   Tue, 27 Sep 2022 15:47:28 +1300
+Message-Id: <20220927024728.28447-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=UoQdyN4B c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=xOM3xZuef0cA:10 a=JPI76n4z2mF8gNG91igA:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a new sysfs entry named cp_status, it can output
-checkpoint flags in real time.
+From: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
 
-Signed-off-by: Chao Yu <chao@kernel.org>
+Originally the absence of the marvell,nand-keep-config property caused
+the setup_data_interface function to be provided. However when
+setup_data_interface was moved into nand_controller_ops the logic was
+unintentionally inverted. Update the logic so that only if the
+marvell,nand-keep-config property is present the bootloader NAND config
+kept.
+
+Fixes: 7a08dbaedd36 ("mtd: rawnand: Move ->setup_data_interface() to nand=
+_controller_ops")
+Signed-off-by: Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 ---
- Documentation/ABI/testing/sysfs-fs-f2fs | 24 ++++++++++++++++++++++++
- fs/f2fs/sysfs.c                         |  8 ++++++++
- 2 files changed, 32 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-index 083ac2d63eef..483639fb727b 100644
---- a/Documentation/ABI/testing/sysfs-fs-f2fs
-+++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-@@ -466,6 +466,30 @@ Description:	Show status of f2fs superblock in real time.
- 		0x4000 SBI_IS_FREEZING       freefs is in process
- 		====== ===================== =================================
- 
-+What:		/sys/fs/f2fs/<disk>/stat/cp_status
-+Date:		September 2022
-+Contact:	"Chao Yu" <chao.yu@oppo.com>
-+Description:	Show status of f2fs checkpoint in real time.
-+
-+		=============================== ==============================
-+		cp flag				value
-+		CP_UMOUNT_FLAG			0x00000001
-+		CP_ORPHAN_PRESENT_FLAG		0x00000002
-+		CP_COMPACT_SUM_FLAG		0x00000004
-+		CP_ERROR_FLAG			0x00000008
-+		CP_FSCK_FLAG			0x00000010
-+		CP_FASTBOOT_FLAG		0x00000020
-+		CP_CRC_RECOVERY_FLAG		0x00000040
-+		CP_NAT_BITS_FLAG		0x00000080
-+		CP_TRIMMED_FLAG			0x00000100
-+		CP_NOCRC_RECOVERY_FLAG		0x00000200
-+		CP_LARGE_NAT_BITMAP_FLAG	0x00000400
-+		CP_QUOTA_NEED_FSCK_FLAG		0x00000800
-+		CP_DISABLED_FLAG		0x00001000
-+		CP_DISABLED_QUICK_FLAG		0x00002000
-+		CP_RESIZEFS_FLAG		0x00004000
-+		=============================== ==============================
-+
- What:		/sys/fs/f2fs/<disk>/ckpt_thread_ioprio
- Date:		January 2021
- Contact:	"Daeho Jeong" <daehojeong@google.com>
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index 39ebf0ad133a..df27afd71ef4 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -128,6 +128,12 @@ static ssize_t sb_status_show(struct f2fs_attr *a,
- 	return sprintf(buf, "%lx\n", sbi->s_flag);
- }
- 
-+static ssize_t cp_status_show(struct f2fs_attr *a,
-+		struct f2fs_sb_info *sbi, char *buf)
-+{
-+	return sprintf(buf, "%x\n", le32_to_cpu(F2FS_CKPT(sbi)->ckpt_flags));
-+}
-+
- static ssize_t pending_discard_show(struct f2fs_attr *a,
- 		struct f2fs_sb_info *sbi, char *buf)
- {
-@@ -1029,8 +1035,10 @@ static struct attribute *f2fs_feat_attrs[] = {
- ATTRIBUTE_GROUPS(f2fs_feat);
- 
- F2FS_GENERAL_RO_ATTR(sb_status);
-+F2FS_GENERAL_RO_ATTR(cp_status);
- static struct attribute *f2fs_stat_attrs[] = {
- 	ATTR_LIST(sb_status),
-+	ATTR_LIST(cp_status),
- 	NULL,
- };
- ATTRIBUTE_GROUPS(f2fs_stat);
--- 
-2.25.1
+Notes:
+    I think this is a bug that's been lurking for 4 years or so. I'm not
+    sure that's particularly long in the life of an embedded device but i=
+t
+    does make me wonder if there have been other bug reports about it.
+   =20
+    We noticed this because we had a bootloader that used maxed out NAND
+    timings which made the time it took the kernel to do anything on the
+    file system longer than we expected.
+
+ drivers/mtd/nand/raw/marvell_nand.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/mtd/nand/raw/marvell_nand.c b/drivers/mtd/nand/raw/m=
+arvell_nand.c
+index 2455a581fd70..b248c5f657d5 100644
+--- a/drivers/mtd/nand/raw/marvell_nand.c
++++ b/drivers/mtd/nand/raw/marvell_nand.c
+@@ -2672,7 +2672,7 @@ static int marvell_nand_chip_init(struct device *de=
+v, struct marvell_nfc *nfc,
+ 	chip->controller =3D &nfc->controller;
+ 	nand_set_flash_node(chip, np);
+=20
+-	if (!of_property_read_bool(np, "marvell,nand-keep-config"))
++	if (of_property_read_bool(np, "marvell,nand-keep-config"))
+ 		chip->options |=3D NAND_KEEP_TIMINGS;
+=20
+ 	mtd =3D nand_to_mtd(chip);
+--=20
+2.37.3
 
