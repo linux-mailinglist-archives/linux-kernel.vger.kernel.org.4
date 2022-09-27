@@ -2,66 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B90D5EBF96
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0395EBF97
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiI0KUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 06:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        id S229608AbiI0KUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 06:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiI0KUH (ORCPT
+        with ESMTP id S230404AbiI0KUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 06:20:07 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A656B91D23
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 03:20:03 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id v2so11661052edc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 03:20:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=kg4wzP7dI4MPJJBqKBHwbPOCwSqMZKp1H54qferqwdo=;
-        b=C+bCu7NlsojnDd8u7g7J3rBBZ/wDTCG87AtNjFqRk167LyvAF9oPm89e31O1aLGPgW
-         O0QLVM1zQtmklPtlZOpQ6LlqPnwnYyDBFU82iOewwSL355zGu9kpS07Fj7n5YBEDYGsc
-         45L2/zEzjfDPbd8tp8Lw1jStboTKbVZyBagDUgH3iA1Az5adU1G3dH8iqAInk/avSbYg
-         rRqJSIc9RgyGClE1FCgX2+hrLEvi1ry8hK3ZdSqOuoXdp1BTkehws9iwOUci73gbL6d5
-         +yp7TACjlsKncujUp1Ymi1U/QwxfKoXF5O10bdYr3q1Ct41r6uPkGEIB3rM7+vIIMY/P
-         nszA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=kg4wzP7dI4MPJJBqKBHwbPOCwSqMZKp1H54qferqwdo=;
-        b=iABUOAKePKFay66K3z6HlKS/EsrMdgGUhH0Bodw4c5CSqQHlhDYzzZ0NYeVAfEofM9
-         LBGiEbVu0y1QutJz4ifMJpWm4dfbi4+5CQSXzI8GHF0v6puu5UFezanP+SsEEpksK51n
-         rI5mgsNJ6TS17E8jVmd7RLgy9mgBSLsUcuwFi8ZMuQ9vBOzuNZxvWqQEwXKRyh9wph9a
-         fv3nlcmeURwo4XenHrjpNhC136xtyvjNQ5LFaT2af4DuadajYwtk9C6iF9O+XgOTy3AY
-         MA5hv6aEB+q3MoVS7lVNnTmiKhIUl6uD5z45+offjTjjE8fXoHFc7TvGkwiSL9qbGKPH
-         KVYw==
-X-Gm-Message-State: ACrzQf2ueLqstFMhx8uyxgmzDyzAIvZx/4i1dz73HtFosc68rqbr8O+i
-        SJCBVRf7pMgzc4wRx7whBC3tNoh8r30yNJoWFwt4Hw==
-X-Google-Smtp-Source: AMsMyM6m4BBIa1LbwbPWa0/OXhMnb5e10al3HpegCgBMzIDmEpJ3z+SdxSpxeOnYBc0gKIZTiecG35utDPbyVWY2epQ=
-X-Received: by 2002:a05:6402:2989:b0:44e:90d0:b9ff with SMTP id
- eq9-20020a056402298900b0044e90d0b9ffmr26708279edb.110.1664274001877; Tue, 27
- Sep 2022 03:20:01 -0700 (PDT)
+        Tue, 27 Sep 2022 06:20:20 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C31AADCC5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 03:20:19 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1od7hJ-0000hh-P0; Tue, 27 Sep 2022 12:20:17 +0200
+Message-ID: <e00c6eed-da22-7859-d660-a16af6280844@leemhuis.info>
+Date:   Tue, 27 Sep 2022 12:20:17 +0200
 MIME-Version: 1.0
-References: <20220926163533.310693334@linuxfoundation.org>
-In-Reply-To: <20220926163533.310693334@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 27 Sep 2022 15:49:50 +0530
-Message-ID: <CA+G9fYtKxzBcEdSDJkN-4=bPQDg9bd8sprwXigm+mLnWZmXF9Q@mail.gmail.com>
-Subject: Re: [PATCH 4.9 00/21] 4.9.330-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v5] cpu/hotplug: Do not bail-out in DYING/STARTING
+ sections
+Content-Language: en-US, de-DE
+To:     Vincent Donnefort <vdonnefort@google.com>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        vschneid@redhat.com, kernel-team@android.com,
+        Derek Dolney <z23@posteo.net>, peterz@infradead.org
+References: <20220725095952.206884-1-vdonnefort@google.com>
+ <b5c5b02d-85ca-9d3b-2b3d-8892ab6d22a7@leemhuis.info>
+ <42237005-5a6e-9462-bfdd-f1ba0c725c72@leemhuis.info>
+ <YzLLBBRiwuQnD2zc@google.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <YzLLBBRiwuQnD2zc@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1664274019;2530b15d;
+X-HE-SMSGID: 1od7hJ-0000hh-P0
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,100 +48,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sept 2022 at 22:06, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.9.330 release.
-> There are 21 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 28 Sep 2022 16:35:25 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.330-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 27.09.22 12:05, Vincent Donnefort wrote:
+> On Tue, Sep 20, 2022 at 11:59:06AM +0200, Thorsten Leemhuis wrote:
+>> On 17.08.22 11:46, Thorsten Leemhuis wrote:
+>>>
+>>> On 25.07.22 11:59, Vincent Donnefort wrote:
+>>>> The DYING/STARTING callbacks are not expected to fail. However, as reported
+>>>> by Derek, drivers such as tboot are still free to return errors within
+>>>> those sections, which halts the hot(un)plug and leaves the CPU in an
+>>>> unrecoverable state.
+>>>>
+>>>> No rollback being possible there, let's only log the failures and proceed
+>>>> with the following steps. This restores the hotplug behaviour prior to
+>>>> commit 453e41085183 ("cpu/hotplug: Add cpuhp_invoke_callback_range()")
+>>>>
+>>>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215867
+>>>> Fixes: 453e41085183 ("cpu/hotplug: Add cpuhp_invoke_callback_range()")
+>>>> Reported-by: Derek Dolney <z23@posteo.net>
+>>>> Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+>>>> Tested-by: Derek Dolney <z23@posteo.net>
+>>>
+>>> What's the status here? Did that patch to fixing a regression fall
+>>> through the cracks? It looks like nothing happened for 3 weeks now,
+>>> that's why I wondered, but maybe I missed something.
+>>
+>> Hmm, Vincent seems to be MIA, at least I see no recent messages from him
+>> on lore. Odd. But well, it's still a fix for a regression and it's up to
+>> v5 already; Valentin already added his Reviewed-by, too. Would be a
+>> shame to waste this.
+>>
+>> Thomas, could you maybe take a look at the patch?  Maybe we're lucky and
+>> the patch is already good to go...
+> 
+> AFAIK, this patch is still valid.
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Great, thx for confirming!
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> I don't think I do have any further action on
+> that though.
 
-## Build
-* kernel: 4.9.330-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.9.y
-* git commit: f631754acd7bd6586aec88964a9882d05e5a604b
-* git describe: v4.9.329-22-gf631754acd7b
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.329-22-gf631754acd7b
+Well, it seems in this case someone needs to knock on some doors to get
+the maintainers to look at this fix to finally get the regression
+resolved, as it seems they haven't looked closely at the patch for good
+or bad reasons. I hope this mail exchange was enough to get things
+rolling again, otherwise we sooner or later we have to get Linus
+involved. :-/
 
-## No Test Regressions (compared to v4.9.329)
-
-## No Metric Regressions (compared to v4.9.329)
-
-## No Test Fixes (compared to v4.9.329)
-
-## No Metric Fixes (compared to v4.9.329)
-
-## Test result summary
-total: 38356, pass: 33768, fail: 305, skip: 3945, xfail: 338
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 282 total, 277 passed, 5 failed
-* arm64: 53 total, 46 passed, 7 failed
-* i386: 29 total, 28 passed, 1 failed
-* mips: 41 total, 40 passed, 1 failed
-* parisc: 12 total, 0 passed, 12 failed
-* powerpc: 45 total, 19 passed, 26 failed
-* s390: 15 total, 11 passed, 4 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 48 total, 47 passed, 1 failed
-
-## Test suites summary
-* igt-gpu-tools
-* kunit
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Ciao, Thorsten
