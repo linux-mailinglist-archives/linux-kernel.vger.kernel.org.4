@@ -2,195 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207455EC8CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0C55EC8D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231924AbiI0P7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
+        id S232184AbiI0QAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiI0P7q (ORCPT
+        with ESMTP id S231981AbiI0QA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:59:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30321272D;
-        Tue, 27 Sep 2022 08:59:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A07D161A5E;
-        Tue, 27 Sep 2022 15:59:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 010CEC433C1;
-        Tue, 27 Sep 2022 15:59:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664294383;
-        bh=yKBA+mhcyl7el7HrbsJjrF+9PpXqNwzgQsopCdVv6YY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=cRGiIfZGp38IjvdJTXJjrl28kSzQVipJiDp/Otr9+q2UUcNdWAhdTLw16go9G+E42
-         hVHXmG2+LcXelKEA+WKjw0Q5RNQa2DPdClebJxVaYdEfiU/Ne0ihPR+lsf6MFD1uDj
-         KIeOhJKyb7SZG0e4ZY45U2yz7ZicqHoDBqMMlsMLuSeehyy/7XfAiQIVno1nk1QwzK
-         y9OyK3136CczGKGnk0M9dVpDNOEAMUZqH/Dn3bZDvWVM1VcQgWKOszAm8YKbMFe0gw
-         PCIhk/ePgc7mt2MXJrZ9KFi61mDF0DwBkoIbdarHyVeoddpE5mV2z6Sd4zMXRbGiVd
-         pSngXRXn30kOw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 8F7135C0829; Tue, 27 Sep 2022 08:59:42 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 08:59:42 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
-Message-ID: <20220927155942.GL4196@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220926223222.GX4196@paulmck-ThinkPad-P17-Gen-1>
- <8344B0AB-608E-44DA-8FEE-3FE56EDF9172@joelfernandes.org>
- <20220926235944.GE4196@paulmck-ThinkPad-P17-Gen-1>
- <YzJWoRui7mUEDtox@google.com>
- <20220927032246.GH4196@paulmck-ThinkPad-P17-Gen-1>
- <YzL1JauFkeLEMgqV@google.com>
- <20220927141403.GJ4196@paulmck-ThinkPad-P17-Gen-1>
- <YzMHQPStqfm7ll/P@google.com>
- <20220927143020.GK4196@paulmck-ThinkPad-P17-Gen-1>
- <YzMVzpvvHbbkFMs8@google.com>
+        Tue, 27 Sep 2022 12:00:29 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC95C7CB73;
+        Tue, 27 Sep 2022 09:00:25 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so10500255pjk.2;
+        Tue, 27 Sep 2022 09:00:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=/4Cya9CjV4N5Sr7mOC5bS8nn29gbgT+L6zRPTFmyUBk=;
+        b=V9EgwFsB9S7m3ODTCzkW2bhniuFar+JJyRuvMoEF3JRZLYR3H39+Muu35G1GoEUi0/
+         dGOKQ4ghBWznXQo93OwWmzDsAC0mIVD6+JY1N70BqQw6OPDcX4HBgaRsoUy0ysejZwys
+         eh3aU0vF0vRJ51Qqplm5BeNrVDW5pC/f/HQFApDr5yAdzs7y1Iv3agMg6jDIM8bbkwkm
+         BxHRuR/f3hPSqN60OD6P2e0Zwmlwx+X6yhQcchZJGTDLt+xRPxz+rbaX++iwZVMqFjcv
+         chEtLoDmMkxyKE+kHfe8c2+HPtXuvGIOTY4VbltEYmtMjVav6hT8tlVb907QppfLto1H
+         QkDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=/4Cya9CjV4N5Sr7mOC5bS8nn29gbgT+L6zRPTFmyUBk=;
+        b=C7qDs49B28RrcNRqqEMBVZbSec3Ub8a3DOi0JREVD8/SfnN1trBaMmtwgUXel+Ni2t
+         mX4FPPvdwr46rjXyeU4AgvTo6HYSKJsyn8DmsU+pnVAyHBDm2FS1FSNqn0cBiNSA8hdN
+         VyjRnqFGj94bZxb8QERkwfy/EsNEO2eojPhPbuL3pucR0QIW0v2U31bNb4/Qa3W2YVmD
+         WMXA4LX4mmaF8AElZsY3ILHiUN2GcZHSvBNfAKWpOL6MCWaHhdHl/4QCu3RtGeDHWfiE
+         tVQoW1ilHYexCZrvbvIT8UyF0DW4rfkmcM5EDQYnm9e6DPWOn2MocI1P5A+tFceOP+y5
+         SsMQ==
+X-Gm-Message-State: ACrzQf3VvXXCcj6bW+iZ2x0v3aiEfv00sFCRxw/ceCscYae3bAxq2QiQ
+        YRDsw51YFBQPG3UtZTrKLEyukxwiQ2pEdpP40gLSOmB8iURLvw==
+X-Google-Smtp-Source: AMsMyM6hcpIN7XxM6Qqe1iqgpXg/gQNwNhKhih7O5Q++zwaFY67XdEVUE6/9V3oSVAIQYiAcZ8NqDgZb9t5pMvejsRo=
+X-Received: by 2002:a17:902:cec4:b0:176:be0f:5c79 with SMTP id
+ d4-20020a170902cec400b00176be0f5c79mr28456466plg.40.1664294424710; Tue, 27
+ Sep 2022 09:00:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YzMVzpvvHbbkFMs8@google.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220927131518.30000-1-ojeda@kernel.org> <20220927131518.30000-28-ojeda@kernel.org>
+ <20220927141137.iovhhjufqdqcs6qn@gpm.stappers.nl> <202209270818.5BA5AA62@keescook>
+In-Reply-To: <202209270818.5BA5AA62@keescook>
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+Date:   Tue, 27 Sep 2022 17:00:13 +0100
+Message-ID: <CANeycqqDNjRjcRNW02cDNsZSiA+ixEXAZzpJSJFgLtTrM6k9Ww@mail.gmail.com>
+Subject: Re: [PATCH v10 27/27] MAINTAINERS: Rust
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Geert Stappers <stappers@stappers.nl>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 03:25:02PM +0000, Joel Fernandes wrote:
-> On Tue, Sep 27, 2022 at 07:30:20AM -0700, Paul E. McKenney wrote:
-> > On Tue, Sep 27, 2022 at 02:22:56PM +0000, Joel Fernandes wrote:
-> > > On Tue, Sep 27, 2022 at 07:14:03AM -0700, Paul E. McKenney wrote:
-> > > > On Tue, Sep 27, 2022 at 01:05:41PM +0000, Joel Fernandes wrote:
-> > > > > On Mon, Sep 26, 2022 at 08:22:46PM -0700, Paul E. McKenney wrote:
-> > > > > [..]
-> > > > > > > > > >>> --- a/kernel/workqueue.c
-> > > > > > > > > >>> +++ b/kernel/workqueue.c
-> > > > > > > > > >>> @@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork)
-> > > > > > > > > >>> 
-> > > > > > > > > >>>        if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
-> > > > > > > > > >>>                rwork->wq = wq;
-> > > > > > > > > >>> -               call_rcu(&rwork->rcu, rcu_work_rcufn);
-> > > > > > > > > >>> +               call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
-> > > > > > > > > >>>                return true;
-> > > > > > > > > >>>        }
-> > > > > > > > > >>> 
-> > > > > > > > > >>> <snip>
-> > > > > > > > > >>> 
-> > > > > > > > > >>> ?
-> > > > > > > > > >>> 
-> > > > > > > > > >>> But it does not fully solve my boot-up issue. Will debug tomorrow further.
-> > > > > > > > > >> 
-> > > > > > > > > >> Ah, but at least its progress, thanks. Could you send me a patch to include
-> > > > > > > > > >> in the next revision with details of this?
-> > > > > > > > > >> 
-> > > > > > > > > >>>> Might one more proactive approach be to use Coccinelle to locate such
-> > > > > > > > > >>>> callback functions?  We might not want -all- callbacks that do wakeups
-> > > > > > > > > >>>> to use call_rcu_flush(), but knowing which are which should speed up
-> > > > > > > > > >>>> slow-boot debugging by quite a bit.
-> > > > > > > > > >>>> 
-> > > > > > > > > >>>> Or is there a better way to do this?
-> > > > > > > > > >>>> 
-> > > > > > > > > >>> I am not sure what Coccinelle is. If we had something automated that measures
-> > > > > > > > > >>> a boot time and if needed does some profiling it would be good. Otherwise it
-> > > > > > > > > >>> is a manual debugging mainly, IMHO.
-> > > > > > > > > >> 
-> > > > > > > > > >> Paul, What about using a default-off kernel CONFIG that splats on all lazy
-> > > > > > > > > >> call_rcu() callbacks that do a wake up. We could use the trace hooks to do it
-> > > > > > > > > >> in kernel I think. I can talk to Steve to get ideas on how to do that but I
-> > > > > > > > > >> think it can be done purely from trace events (we might need a new
-> > > > > > > > > >> trace_end_invoke_callback to fire after the callback is invoked). Thoughts?
-> > > > > > > > > > 
-> > > > > > > > > > Could you look for wakeups invoked between trace_rcu_batch_start() and
-> > > > > > > > > > trace_rcu_batch_end() that are not from interrupt context?  This would
-> > > > > > > > > > of course need to be associated with a task rather than a CPU.
-> > > > > > > > > 
-> > > > > > > > > Yes this sounds good, but we also need to know if the callbacks are
-> > > > > > > > > lazy or not since wake-up is ok from a non lazy one. I think I’ll
-> > > > > > > > > need a table to track that at queuing time.
-> > > > > > > > 
-> > > > > > > > Agreed.
-> > > > > > > > 
-> > > > > > > > > > Note that you would need to check for wakeups from interrupt handlers
-> > > > > > > > > > even with the extra trace_end_invoke_callback().  The window where an
-> > > > > > > > > > interrupt handler could do a wakeup would be reduced, but not eliminated.
-> > > > > > > > > 
-> > > > > > > > > True! Since this is a  debugging option, can we not just disable interrupts across callback invocation?
-> > > > > > > > 
-> > > > > > > > Not without terminally annoying lockdep, at least for any RCU callbacks
-> > > > > > > > doing things like spin_lock_bh().
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > Sorry if my last email bounced. Looks like my iPhone betrayed me this once ;)
-> > > > > > > 
-> > > > > > > I was thinking something like this:
-> > > > > > > 1. Put a flag in rcu_head to mark CBs as lazy.
-> > > > > > > 2. Add a trace_rcu_invoke_callback_end() trace point.
-> > > > > > > 
-> > > > > > > Both #1 and #2 can be a debug CONFIG option. #2 can be a tracepoint and not
-> > > > > > > exposed if needed.
-> > > > > > > 
-> > > > > > > 3. Put an in-kernel probe on both trace_rcu_invoke_callback_start() and
-> > > > > > > trace_rcu_invoke_callback_end(). In the start probe, set a per-task flag if
-> > > > > > > the current CB is lazy. In the end probe, clear it.
-> > > > > > > 
-> > > > > > > 4. Put an in-kernel probe on trace_rcu_sched_wakeup().
-> > > > > > > 
-> > > > > > > Splat in the wake up probe if:
-> > > > > > > 1. Hard IRQs are on.
-> > > > > > > 2. The per-cpu flag is set.
-> > > > > > > 
-> > > > > > > #3 actually does not even need probes if we can directly call the functions
-> > > > > > > from the rcu_do_batch() function.
-> > > > > > 
-> > > > > > This is fine for an experiment or a debugging session, but a solution
-> > > > > > based totally on instrumentation would be better for production use.
-> > > > > 
-> > > > > Maybe we can borrow the least-significant bit of rhp->func to mark laziness?
-> > > > > Then it can be production as long as we're ok with the trace_sched_wakeup
-> > > > > probe.
-> > > > 
-> > > > Last time I tried this, there were architectures that could have odd-valued
-> > > > function addresses.  Maybe this is no longer the case?
-> > > 
-> > > Oh ok! If this happens, maybe we can just make it depend on x86-64 assuming
-> > > x86-64 does not have pointer oddness. We can also add a warning for if the
-> > > function address is odd before setting the bit.
-> > 
-> > Let me rephrase this...  ;-)
-> > 
-> > Given that this used to not work and still might not work, let's see
-> > if we can find some other way to debug this.  Unless and until it can
-> > be demonstrated that there is no supported compiler that will generated
-> > odd-valued function addresses on any supported architecture.
-> > 
-> > Plus there was a time that x86 did odd-valued pointer addresses.
-> > The instruction set is plenty fine with this, so it would have to be a
-> > compiler and assembly-language convention to avoid it.
-> 
-> Ok, so then I am not sure how to make it work in production at the moment. I
-> could track the lazy callbacks in a hashtable but then that's overhead.
-> 
-> Or, I could focus on trying Vlad's config and figure out what's going on and
-> keep the auto-debug for later.
+On Tue, 27 Sept 2022 at 16:19, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Tue, Sep 27, 2022 at 04:11:38PM +0200, Geert Stappers wrote:
+> > On Tue, Sep 27, 2022 at 03:14:58PM +0200, Miguel Ojeda wrote:
+> > > Miguel, Alex and Wedson will be maintaining the Rust support.
+> > >
+> > > Boqun, Gary and Bj=C3=B6rn will be reviewers.
+> > >
+> > > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > > Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> > > Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> > > Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> > > Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> > > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> > > ---
+> > >  MAINTAINERS | 18 ++++++++++++++++++
+> > >  1 file changed, 18 insertions(+)
+> > >
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index f5ca4aefd184..944dc265b64d 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -17758,6 +17758,24 @@ F: include/rv/
+> > >  F: kernel/trace/rv/
+> > >  F: tools/verification/
+> > >
+> > > +RUST
+> > > +M: Miguel Ojeda <ojeda@kernel.org>
+> > > +M: Alex Gaynor <alex.gaynor@gmail.com>
+> > > +M: Wedson Almeida Filho <wedsonaf@google.com>
+> > <screenshot from=3D"response of a reply-to-all that I just did">
+> >   ** Address not found **
+> >
+> >   Your message wasn't delivered to wedsonaf@google.com because the
+> >   address couldn't be found, or is unable to receive mail.
+> >
+> >   Learn more here: https://support.google.com/mail/answer/6596
+> >
+> >   The response was:
+> >
+> >     The email account that you tried to reach does not exist. Please tr=
+y
+> >     double-checking the recipient's email address for typos or unnecess=
+ary
+> >     spaces. Learn more at https://support.google.com/mail/answer/6596
+> > </screenshot>
+>
+> Wedson, can you send (or Ack) the following patch? :)
 
-For one thing, experience with manual debugging might inform later
-auto-debugging efforts.
+Acked-by: Wedson Almeida Filho <wedsonaf@gmail.com>
 
-> On another thought, this is the sort of thing that should be doable via Daniel
-> Bristot's runtime verification framework, as its a classical "see if these
-> traces look right" issue which should be teachable to a computer with a few rules.
-
-Worth a shot!  Failing that, there is always BPF.  ;-)
-
-								Thanx, Paul
+>
+> diff --git a/.mailmap b/.mailmap
+> index d175777af078..3a7fe4ee56fb 100644
+> --- a/.mailmap
+> +++ b/.mailmap
+> @@ -433,6 +433,7 @@ Vlad Dogaru <ddvlad@gmail.com> <vlad.dogaru@intel.com=
+>
+>  Vladimir Davydov <vdavydov.dev@gmail.com> <vdavydov@parallels.com>
+>  Vladimir Davydov <vdavydov.dev@gmail.com> <vdavydov@virtuozzo.com>
+>  WeiXiong Liao <gmpy.liaowx@gmail.com> <liaoweixiong@allwinnertech.com>
+> +Wedson Almeida Filho <wedsonaf@gmail.com> <wedsonaf@google.com>
+>  Will Deacon <will@kernel.org> <will.deacon@arm.com>
+>  Wolfram Sang <wsa@kernel.org> <w.sang@pengutronix.de>
+>  Wolfram Sang <wsa@kernel.org> <wsa@the-dreams.de>
+>
+> --
+> Kees Cook
