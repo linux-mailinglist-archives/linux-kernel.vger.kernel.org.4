@@ -2,54 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9845EC36C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83755EC36D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbiI0M74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
+        id S231979AbiI0NAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbiI0M7y (ORCPT
+        with ESMTP id S231151AbiI0M7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Sep 2022 08:59:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A324F67F;
-        Tue, 27 Sep 2022 05:59:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B127F50185;
+        Tue, 27 Sep 2022 05:59:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 529C461964;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08E6F61965;
+        Tue, 27 Sep 2022 12:59:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 329B8C433D7;
         Tue, 27 Sep 2022 12:59:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F8F9C433C1;
-        Tue, 27 Sep 2022 12:59:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664283589;
-        bh=ef0fll36tZayaTkXFFwATMBk/FB37HxBMxP+ebvIFKE=;
+        s=k20201202; t=1664283591;
+        bh=BSMIKJNSh2UY7QcBDbGnHiB8Z9/zuSk77eFA25iPrYA=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=VI80a1NrJMMaXrKdkqJnKLwutGC8e9QbcQRorV7r9tp5huhfO6Egj3HJdg0Hpu73O
-         3fbZ38GhjbBUi49B96emzG4YipnDJ1VGLq7/SINg4EnZb8BoDng93RS9fyceiL0moB
-         TwnYE0R0hvMoGpmxHgST+XTi5w9Lo2oHG62R27bWLsgYf1UZ53l5pq64yd4T5rQC6p
-         J1I8gYNeYixJts9aojoBeSLSDzAw70qNDqo0U6PWGkNVkvKZgFsP7VlzXBeYA4XX9F
-         /r2LDyJpyJ0KltaNKI3FB2C7MHVo+Q/xyoTCJvMAvkHuw+VKS4pWSWHvH17c3E2uYp
-         J+wWxreRDICvw==
+        b=TP3jMC8TxSwQTANEvrCHalkWW8MMNfHVWAlA4oD7xkq4YoPkoLV+71w/28Rtx8Dpx
+         Fss7T8HWH0rUxOgCPdhme2NqzMsW88PaXYQJnTsp5oXu+iivTLrgI9AO7bJeL6G9Te
+         18zkBdNzghB9nFdj/g+UD7+YJN1Cc//ZtB1i/qSb+8U5tvAl3m6Q3JHBEozEuVCKeM
+         NSbikZJVgMPyFLmKFuIJRFQwDbebT3QTTdZBtr28Rj/WSFIgqFp0CHhQ9L68UZ+3zD
+         zdUHEJmYmwJ7WZcwsjfJYXbYlnXj6kHspv7/3lbJ783c2sy/uB+qft+Ilku/ynhdV4
+         +kSUhioD9fzNw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>
-Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
         alsa-devel@alsa-project.org
-In-Reply-To: <YzIuiUul2CwPlkKh@work>
-References: <YzIuiUul2CwPlkKh@work>
-Subject: Re: [PATCH][next] ASoC: Intel: Skylake: Replace zero-length arrays with DECLARE_FLEX_ARRAY() helper
-Message-Id: <166428358688.365276.7811132471034976434.b4-ty@kernel.org>
-Date:   Tue, 27 Sep 2022 13:59:46 +0100
+In-Reply-To: <YzIcZ11k8RiQtS2T@work>
+References: <YzIcZ11k8RiQtS2T@work>
+Subject: Re: [PATCH][next] ASoC: SOF: control.h: Replace zero-length array with DECLARE_FLEX_ARRAY() helper
+Message-Id: <166428358991.365276.17332366204767237765.b4-ty@kernel.org>
+Date:   Tue, 27 Sep 2022 13:59:49 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,7 +55,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sep 2022 17:58:17 -0500, Gustavo A. R. Silva wrote:
+On Mon, 26 Sep 2022 16:40:55 -0500, Gustavo A. R. Silva wrote:
 > Zero-length arrays are deprecated and we are moving towards adopting
 > C99 flexible-array members, instead. So, replace zero-length arrays
 > declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
@@ -79,8 +71,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: Intel: Skylake: Replace zero-length arrays with DECLARE_FLEX_ARRAY() helper
-      commit: 6fed3265c3c811c79819860051375f6d7efc1d7e
+[1/1] ASoC: SOF: control.h: Replace zero-length array with DECLARE_FLEX_ARRAY() helper
+      commit: b264ef796959cb65cdbc811da5ab950e33df4162
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
