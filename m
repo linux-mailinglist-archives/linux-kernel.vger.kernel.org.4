@@ -2,91 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C7D5EBAC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 08:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1726C5EBACD
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 08:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbiI0Gfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 02:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
+        id S230103AbiI0Gg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 02:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiI0Gfc (ORCPT
+        with ESMTP id S229890AbiI0GgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 02:35:32 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FB861B13
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 23:35:30 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d24so8246643pls.4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 23:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=SRYYQ3707grqaxVxUN3p9E6nOdleDAi4s45cvWAivxY=;
-        b=L+4fX/BsaccZku8y8TMKmgsuB9wZmC428zVKBfeQ1cDazTSPIP+B4KLav9sC1OGJgx
-         AoYkVU08Ihc9nSCfien0w6YM7IeevVdXJJg3DeiwH/r/E5vJym8myAi9kdt4tycChYMO
-         FXf8W7roVySBaps9xfOcRzX30mLVe6r+tl5xGOspQ0C453SmIFbnDN5RAlpZ+asqnUx3
-         yEntW7z6zHBLfuSC5Aq6kyJsSX5pj7a/p7LgpOOL2cH2nxkFB36N26qCpz+I5pjpClnz
-         Mud1RWPZmTnTW9KTIeRZlXiXVfgTt1w7uh+B5zM9oND+nuhn2R5gRg1ZMf5m3jTaMjGQ
-         BOcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=SRYYQ3707grqaxVxUN3p9E6nOdleDAi4s45cvWAivxY=;
-        b=yJwFil78iBQY4ZgD/jSZwwe1s0wvbLtAPGuCtXxR8TAd6q6Q+/H9tLjkoiuNbuDJj1
-         bGklUvjl463kJrvQ1ad/rYzXfS1RegFecFJ4WrXTScooUl3Dk6V6xTj2HVOTIOdGaIRS
-         GhmlOk7lnypP3VV7RzvVXkUXnsCCp1FLsk/VkWw6S9MP0Zd7/Za5aTORNZwGUQ3hO72E
-         wydX435n5If5Xe7GcMVQm57OGIup93Cd3BqlDGofFAH78jymmCCIAEf1v5S6QZX74RgO
-         LTHd0tQKQJHq8F3rJuJUrfAdyPFZjgqLRTbqUF+XnLiTMwSWkpNDycgmi39CNUtGgmni
-         YMCQ==
-X-Gm-Message-State: ACrzQf2O87lvkMn2JsFe3e/6a0HqiNHRBl/879NwRP4vjlm6FASVArpj
-        lmsU6ohA2dzbv7vBKyNpQHoSbUjY9se5ow==
-X-Google-Smtp-Source: AMsMyM7blyFe7Mx+4ipAFYRiiAEK9NkBdRNW5a8w7wiqjFY/2liM7kAMcwnAsqMB7ulDEC5GfGb5vQ==
-X-Received: by 2002:a17:90b:4acf:b0:202:65e3:da5a with SMTP id mh15-20020a17090b4acf00b0020265e3da5amr2824997pjb.174.1664260530240;
-        Mon, 26 Sep 2022 23:35:30 -0700 (PDT)
-Received: from sean-biuld-server.itotolink.net (1-34-200-211.hinet-ip.hinet.net. [1.34.200.211])
-        by smtp.gmail.com with ESMTPSA id a8-20020a63e408000000b0042f62120c1bsm634714pgi.17.2022.09.26.23.35.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 23:35:29 -0700 (PDT)
-From:   Sean Hong <sean.hong@quanta.corp-partner.google.com>
-To:     dianders@chromium.org, thierry.reding@gmail.com, sam@ravnborg.org,
-        airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Sean Hong <sean.hong@quanta.corp-partner.google.com>
-Subject: [PATCH] drm/panel-edp: Add BOE NT116WHM-N4C (HW: V8.1)
-Date:   Tue, 27 Sep 2022 14:35:24 +0800
-Message-Id: <20220927063524.493591-1-sean.hong@quanta.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 27 Sep 2022 02:36:20 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD236051E
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 23:36:15 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VQqcSYY_1664260568;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VQqcSYY_1664260568)
+          by smtp.aliyun-inc.com;
+          Tue, 27 Sep 2022 14:36:13 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     linux-erofs@lists.ozlabs.org
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [PATCH 1/2] erofs: clean up unnecessary code and comments
+Date:   Tue, 27 Sep 2022 14:36:06 +0800
+Message-Id: <20220927063607.54832-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the BOE - NT116WHM-N4C (HW: V8.1) panel.
+Some conditional macros and comments are useless.
 
-Signed-off-by: Sean Hong <sean.hong@quanta.corp-partner.google.com>
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 ---
- drivers/gpu/drm/panel/panel-edp.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/erofs/internal.h |  2 --
+ fs/erofs/namei.c    | 11 +----------
+ fs/erofs/xattr.h    |  2 --
+ fs/erofs/zmap.c     |  3 +--
+ 4 files changed, 2 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-index 102ab9f5d40a..03a4a49e4ecb 100644
---- a/drivers/gpu/drm/panel/panel-edp.c
-+++ b/drivers/gpu/drm/panel/panel-edp.c
-@@ -1890,6 +1890,7 @@ static const struct edp_panel_entry edp_panels[] = {
- 	EDP_PANEL_ENTRY('B', 'O', 'E', 0x098d, &boe_nv110wtm_n61.delay, "NV110WTM-N61"),
- 	EDP_PANEL_ENTRY('B', 'O', 'E', 0x09dd, &delay_200_500_e50, "NT116WHM-N21"),
- 	EDP_PANEL_ENTRY('B', 'O', 'E', 0x0a5d, &delay_200_500_e50, "NV116WHM-N45"),
-+	EDP_PANEL_ENTRY('B', 'O', 'E', 0x0ac5, &delay_200_500_e50, "NV116WHM-N4C"),
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index a6333c283e3d..0318530bc78a 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -196,7 +196,6 @@ enum {
+ 	EROFS_ZIP_CACHE_READAROUND
+ };
  
- 	EDP_PANEL_ENTRY('C', 'M', 'N', 0x114c, &innolux_n116bca_ea1.delay, "N116BCA-EA1"),
- 	EDP_PANEL_ENTRY('C', 'M', 'N', 0x1152, &delay_200_500_p2e80, "N116BCN-EA1"),
+-#ifdef CONFIG_EROFS_FS_ZIP
+ #define EROFS_LOCKED_MAGIC     (INT_MIN | 0xE0F510CCL)
+ 
+ /* basic unit of the workstation of a super_block */
+@@ -236,7 +235,6 @@ static inline int erofs_wait_on_workgroup_freezed(struct erofs_workgroup *grp)
+ 	return atomic_cond_read_relaxed(&grp->refcount,
+ 					VAL != EROFS_LOCKED_MAGIC);
+ }
+-#endif	/* !CONFIG_EROFS_FS_ZIP */
+ 
+ /* we strictly follow PAGE_SIZE and no buffer head yet */
+ #define LOG_BLOCK_SIZE		PAGE_SHIFT
+diff --git a/fs/erofs/namei.c b/fs/erofs/namei.c
+index fd75506799c4..afbb80d4e2f1 100644
+--- a/fs/erofs/namei.c
++++ b/fs/erofs/namei.c
+@@ -185,7 +185,6 @@ int erofs_namei(struct inode *dir, const struct qstr *name, erofs_nid_t *nid,
+ 	if (IS_ERR(de))
+ 		return PTR_ERR(de);
+ 
+-	/* the target page has been mapped */
+ 	if (ndirents)
+ 		de = find_target_dirent(&qn, (u8 *)de, EROFS_BLKSIZ, ndirents);
+ 
+@@ -197,9 +196,7 @@ int erofs_namei(struct inode *dir, const struct qstr *name, erofs_nid_t *nid,
+ 	return PTR_ERR_OR_ZERO(de);
+ }
+ 
+-/* NOTE: i_mutex is already held by vfs */
+-static struct dentry *erofs_lookup(struct inode *dir,
+-				   struct dentry *dentry,
++static struct dentry *erofs_lookup(struct inode *dir, struct dentry *dentry,
+ 				   unsigned int flags)
+ {
+ 	int err;
+@@ -207,17 +204,11 @@ static struct dentry *erofs_lookup(struct inode *dir,
+ 	unsigned int d_type;
+ 	struct inode *inode;
+ 
+-	DBG_BUGON(!d_really_is_negative(dentry));
+-	/* dentry must be unhashed in lookup, no need to worry about */
+-	DBG_BUGON(!d_unhashed(dentry));
+-
+ 	trace_erofs_lookup(dir, dentry, flags);
+ 
+-	/* file name exceeds fs limit */
+ 	if (dentry->d_name.len > EROFS_NAME_LEN)
+ 		return ERR_PTR(-ENAMETOOLONG);
+ 
+-	/* false uninitialized warnings on gcc 4.8.x */
+ 	err = erofs_namei(dir, &dentry->d_name, &nid, &d_type);
+ 
+ 	if (err == -ENOENT) {
+diff --git a/fs/erofs/xattr.h b/fs/erofs/xattr.h
+index 332462c59f11..0a43c9ee9f8f 100644
+--- a/fs/erofs/xattr.h
++++ b/fs/erofs/xattr.h
+@@ -39,9 +39,7 @@ static inline unsigned int xattrblock_offset(struct erofs_sb_info *sbi,
+ #ifdef CONFIG_EROFS_FS_XATTR
+ extern const struct xattr_handler erofs_xattr_user_handler;
+ extern const struct xattr_handler erofs_xattr_trusted_handler;
+-#ifdef CONFIG_EROFS_FS_SECURITY
+ extern const struct xattr_handler erofs_xattr_security_handler;
+-#endif
+ 
+ static inline const struct xattr_handler *erofs_xattr_handler(unsigned int idx)
+ {
+diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+index ccdddb755be8..0a2e41adc78a 100644
+--- a/fs/erofs/zmap.c
++++ b/fs/erofs/zmap.c
+@@ -743,8 +743,7 @@ static int z_erofs_do_map_blocks(struct inode *inode,
+ 	return err;
+ }
+ 
+-int z_erofs_map_blocks_iter(struct inode *inode,
+-			    struct erofs_map_blocks *map,
++int z_erofs_map_blocks_iter(struct inode *inode, struct erofs_map_blocks *map,
+ 			    int flags)
+ {
+ 	struct erofs_inode *const vi = EROFS_I(inode);
 -- 
-2.25.1
+2.24.4
 
