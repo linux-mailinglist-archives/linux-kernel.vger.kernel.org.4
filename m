@@ -2,204 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C181B5EC1E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC635EC206
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbiI0LxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
+        id S232178AbiI0MD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbiI0LxJ (ORCPT
+        with ESMTP id S229572AbiI0MDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:53:09 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F236F193B;
-        Tue, 27 Sep 2022 04:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664279588; x=1695815588;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ODLmI427IsMzWM/AOdddr0PFtw8lwBYgEBUiC5uoEEc=;
-  b=BavZdWQEuXg/mx13qz/pGqHJOk+Qi8hYwgROyNZ0O8MQdTpq3LMmPJLu
-   cvvaGRvmK8B6K+3xj+NA6P0UYgMClJR4bYacMxSa9HxqSLNtne4vf6soM
-   9NscoG+vkkohp5xAwk+GFlUNV/n6so7JCstKCaSW7I6wgiZQtWNaWxCi9
-   H4N6MJjTym7qSRtftoiYle5KofXz0zTUAYLannWjP2C11EQC77+5UGhdB
-   pwThtVXfHt7ZMh7CBzveYXH9bUY3praKajI+XzLHtkPe/T6EUSTcMUEm+
-   LRpXOR05zthibmK9eQY4EzNE8eh0bxJOL04j8Ew+XDBEjmNlCOUeWgW4s
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="301273099"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="301273099"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 04:53:08 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="866542843"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="866542843"
-Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.55])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 04:53:05 -0700
-From:   Rajat Khandelwal <rajat.khandelwal@intel.com>
-To:     mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rajat Khandelwal <rajat.khandelwal@intel.com>
-Subject: [PATCH v4] thunderbolt: Add wake on connect/disconnect on USB4 ports
-Date:   Wed, 28 Sep 2022 17:22:30 +0530
-Message-Id: <20220928115230.2031934-1-rajat.khandelwal@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 27 Sep 2022 08:03:25 -0400
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E66DF3A0;
+        Tue, 27 Sep 2022 05:03:23 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id 56F452049B;
+        Tue, 27 Sep 2022 14:03:20 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id jEMa5iUXLDMK; Tue, 27 Sep 2022 14:03:19 +0200 (CEST)
+Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id C1EFC20080;
+        Tue, 27 Sep 2022 14:03:19 +0200 (CEST)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout1.secunet.com (Postfix) with ESMTP id B2C7B80004A;
+        Tue, 27 Sep 2022 14:03:19 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 14:03:19 +0200
+Received: from [10.182.6.203] (10.182.6.203) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 27 Sep
+ 2022 14:03:19 +0200
+To:     Steffen Klassert <steffen.klassert@secunet.com>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From:   Christian Langrock <christian.langrock@secunet.com>
+Subject: [PATCH net-ipsec v2] xfrm: replay: Fix ESN wrap around for GSO
+Autocrypt: addr=christian.langrock@secunet.com; keydata=
+ mQENBFee7jkBCACkeMIuzZu/KBA1q3kKGr7d9iiZGF5IpJnIE9dMiK3uaz7uM26VSTJVp6jd
+ GuSGGGmb81OSLEcIEIsYKXvjblAKUX1A74t3WMRcky3MwJbmN6AkN8QlP45mDddtPRf1ElB2
+ S32i9OrEkvw8xcvHYPwbaHenXic4/8fHWEh+vtd/5/5TDTIU/ag9tQfPea13ixXN0PuccMub
+ FeUMpwFCg324+Z19iGvfDWWZmQQGlBjc3Q6z0hXOb/deWL/+lPS4t+tTgpmmZO4XkIs+18Kq
+ xCVukCbnqV0y+04sj3G1GQ/DlGvZHxwywBceAL7BvmdeXQKAS0KRL5zrghIBCgnUyutDABEB
+ AAG0M0NocmlzdGlhbiBMYW5ncm9jayA8Y2hyaXN0aWFuLmxhbmdyb2NrQHNlY3VuZXQuY29t
+ PokBNwQTAQgAIQUCV57uOQIbAwULCQgHAgYVCAkKCwIEFgIDAQIeAQIXgAAKCRCjeMdfgutr
+ Xu3kCACIBx6UHReBtBciNUPkP3fRaGeSOADIrql72VKD9faLAHTt6w8kvyzb8Ctpa77jswJt
+ 21c349mF3maPlpNtpswqH27bTlXYhNcXxcmHPCbNtN3yGUy0UuIJfBMZc8PLqiqYoY5GKD3u
+ imeVbDYjgNhebO2f1cUvwY2wTwX6b0tgKVK0xYYTDpXI1/2MVGsjXqak7PQoqVq0sDu0gIAA
+ i1QO0Fbb6jIaHj6CEM2hpBTBk8qbkPs/MqYGdLl4oXvkWTLduQjm6dMtjxvIt6WJWZQbLjTe
+ QIfc21luNQKDmfT623pVTPPMMAciWfpdw63FblfGcfBnAKCJ8JBj0z9T6/PmuQENBFee7jkB
+ CADS7amJPbY2dWpeGtE+I9yLL53lSriP4L6rI9UoEwNM1OkjnB7wFnH8dm8N68K2OJogkHwo
+ X2OnzGhxJ28NHRuAh++3hIYY+gU4HMLaX3onDK1oqAdYczhJ7f6UCPbYaghkzJ6Vg/FEWpA8
+ u5vG/BX4y+F3/Y98l6mzAX5wLmTapRwdfuRCXRA6jlIHIOwP3NPKK4Pz2E7witsimV1ucN4u
+ XFiZ36CUPAiXXlER9iPZnQUSyCobqJOJKm4C7wUNQ1negCXDBd3KjSyzTIafw/oYG4RrWGul
+ iI2ig/qTUC8cZdAJTMBjUJR6ugJazMB1Rg17p2GRD0AzUOV2qdqYFqQFABEBAAGJAR8EGAEI
+ AAkFAlee7jkCGwwACgkQo3jHX4Lra17vtQgAg2g0JEXVTGT36BDJgVjIUY1evnm1fWwTPpco
+ kP/8/aO2ubmlxtWQ2hV5OPfL5nDday2S4Nq5j3kqQq+rvUrORVmvT4WxYZM1fr2nibuzaUbs
+ JtxphNpjahrsEcLLTzBW4CbHTaL4YTT+ZD/GDeHoxAh9JfMkdMBXHyWTuw+QSP0pp7WvNsDo
+ sukKFyQ0rve9PH2dry6A0oLP7UxtAzEERV2Se0BueZPQuVnU6Cvj3ZStK28JDhMjxIPkZPE5
+ kCV8QNF8OsiwymA3aoPKe5Bw0lOcjuuJkxRa5bazyuubX9pIIgTeGsecgpSgpfA9jsEHKFqo
+ LuxUA+77VQ5hSydVaQ==
+Message-ID: <056c6bc1-0371-fca4-500b-e84bbcbcfc34@secunet.com>
+Date:   Tue, 27 Sep 2022 14:03:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wake on connect/disconnect is only supported while runtime suspend
-for now, which is obviously necessary. Its also not inherently
-desired for the system to wakeup on thunderbolt hot events.
-However, we can still make user in control of waking up the system
-in the events of hot plug/unplug.
-This patch adds 'wakeup' attribute under 'usb4_portX/power' sysfs
-attribute and only enables wakes on connect/disconnect to the
-respective port when 'wakeup' is set to 'enabled'. The attribute
-is set to 'disabled' by default.
+When using GSO it can happen that the wrong seq_hi is used for the last
+packets before the wrap around. This can lead to double usage of a
+sequence number. To avoid this, we should serialize this last GSO
+packet.
 
-Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
+Fixes: d7dbefc45cf5 ("xfrm: Add xfrm_replay_overflow functions for...")
+Signed-off-by: Christian Langrock <christian.langrock@secunet.com>
 ---
+ include/net/xfrm.h     |  1 +
+ net/xfrm/xfrm_output.c |  2 +-
+ net/xfrm/xfrm_replay.c | 33 +++++++++++++++++++++++++++++++++
+ 3 files changed, 35 insertions(+), 1 deletion(-)
 
-Significant changes and reasons:
-1. 'if (!port->cap_usb4)' is added under the loop in
-'usb4_switch_check_wakes' function since the checks later are
-explicitly targeted to the USB4 port configuration capability.
-'if (!tb_port_has_remote(port))' is removed because events now can
-be connection/disconnection along with USB4 events. Thus, a wake
-on connection can be triggered by user on the USB4 port (initially
-no remote).
-2. Verified runtime wakeup. It works absolutely fine.
-3. Wakeup count has to be increased in the 'wakeup_count' attribute
-under usb4_port/power, thus requiring another pm_wakeup_event.
+diff --git a/include/net/xfrm.h b/include/net/xfrm.h
+index 6e8fa98f786f..49d6d974f493 100644
+--- a/include/net/xfrm.h
++++ b/include/net/xfrm.h
+@@ -1749,6 +1749,7 @@ void xfrm_replay_advance(struct xfrm_state *x,
+__be32 net_seq);
+ int xfrm_replay_check(struct xfrm_state *x, struct sk_buff *skb, __be32
+net_seq);
+ void xfrm_replay_notify(struct xfrm_state *x, int event);
+ int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb);
++int xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb);
+ int xfrm_replay_recheck(struct xfrm_state *x, struct sk_buff *skb,
+__be32 net_seq);
 
-Fixes in v4:
-1. I don't think device_init_wakeup(&usb4->dev, false) will suffice
-our purpose since it doesn't set the device wakeup capable. We need
-device wakeup capable but not wakeup enabled by default. However, I
-have shortened the two lines by using only one.
-2. Reverse christmas format - checked.
-3. Reformatting comments which are not to be included in commit.
-4. Multi-line comment terminated with full stop.
+ static inline int xfrm_aevent_is_on(struct net *net)
+diff --git a/net/xfrm/xfrm_output.c b/net/xfrm/xfrm_output.c
+index 9a5e79a38c67..c470a68d9c88 100644
+--- a/net/xfrm/xfrm_output.c
++++ b/net/xfrm/xfrm_output.c
+@@ -738,7 +738,7 @@ int xfrm_output(struct sock *sk, struct sk_buff *skb)
+ 		skb->encapsulation = 1;
 
- drivers/thunderbolt/tb_regs.h   |  2 ++
- drivers/thunderbolt/usb4.c      | 33 +++++++++++++++++++++++++--------
- drivers/thunderbolt/usb4_port.c |  3 +++
- 3 files changed, 30 insertions(+), 8 deletions(-)
+ 		if (skb_is_gso(skb)) {
+-			if (skb->inner_protocol)
++			if (skb->inner_protocol || xfrm_replay_overflow_check(x, skb))
+ 				return xfrm_output_gso(net, sk, skb);
 
-diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-index 166054110388..04733fc1130c 100644
---- a/drivers/thunderbolt/tb_regs.h
-+++ b/drivers/thunderbolt/tb_regs.h
-@@ -358,6 +358,8 @@ struct tb_regs_port_header {
- #define PORT_CS_18_BE				BIT(8)
- #define PORT_CS_18_TCM				BIT(9)
- #define PORT_CS_18_CPS				BIT(10)
-+#define PORT_CS_18_WOCS				BIT(16)
-+#define PORT_CS_18_WODS				BIT(17)
- #define PORT_CS_18_WOU4S			BIT(18)
- #define PORT_CS_19				0x13
- #define PORT_CS_19_PC				BIT(3)
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index 3a2e7126db9d..0d5ff086814b 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -155,6 +155,8 @@ static inline int usb4_switch_op_data(struct tb_switch *sw, u16 opcode,
- 
- static void usb4_switch_check_wakes(struct tb_switch *sw)
- {
-+	bool wakeup_usb4 = false;
-+	struct usb4_port *usb4;
- 	struct tb_port *port;
- 	bool wakeup = false;
- 	u32 val;
-@@ -173,20 +175,31 @@ static void usb4_switch_check_wakes(struct tb_switch *sw)
- 		wakeup = val & (ROUTER_CS_6_WOPS | ROUTER_CS_6_WOUS);
- 	}
- 
--	/* Check for any connected downstream ports for USB4 wake */
-+	/*
-+	 * Check for any downstream ports for USB4 wake,
-+	 * connection wake and disconnection wake.
+ 			skb_shinfo(skb)->gso_type |= SKB_GSO_ESP;
+diff --git a/net/xfrm/xfrm_replay.c b/net/xfrm/xfrm_replay.c
+index 9277d81b344c..991cfc7a091d 100644
+--- a/net/xfrm/xfrm_replay.c
++++ b/net/xfrm/xfrm_replay.c
+@@ -750,6 +750,34 @@ int xfrm_replay_overflow(struct xfrm_state *x,
+struct sk_buff *skb)
+
+ 	return xfrm_replay_overflow_offload(x, skb);
+ }
++
++static bool xfrm_replay_overflow_check_offload_esn(struct xfrm_state
+*x, struct sk_buff *skb)
++{
++	struct xfrm_replay_state_esn *replay_esn = x->replay_esn;
++	__u32 oseq = replay_esn->oseq;
++	bool ret = false;
++
++	/* We assume that this function is called with
++	 * skb_is_gso(skb) == true
 +	 */
- 	tb_switch_for_each_port(sw, port) {
--		if (!tb_port_has_remote(port))
-+		if (!port->cap_usb4)
- 			continue;
- 
- 		if (tb_port_read(port, &val, TB_CFG_PORT,
- 				 port->cap_usb4 + PORT_CS_18, 1))
- 			break;
- 
--		tb_port_dbg(port, "USB4 wake: %s\n",
--			    (val & PORT_CS_18_WOU4S) ? "yes" : "no");
-+		tb_port_dbg(port, "USB4 wake: %s, connection wake: %s, disconnection wake: %s\n",
-+			    (val & PORT_CS_18_WOU4S) ? "yes" : "no",
-+			    (val & PORT_CS_18_WOCS) ? "yes" : "no",
-+			    (val & PORT_CS_18_WODS) ? "yes" : "no");
 +
-+		wakeup_usb4 = val & (PORT_CS_18_WOU4S | PORT_CS_18_WOCS |
-+				     PORT_CS_18_WODS);
++	if (x->type->flags & XFRM_TYPE_REPLAY_PROT) {
++		oseq = oseq + 1 + skb_shinfo(skb)->gso_segs;
++		if (unlikely(oseq < replay_esn->oseq))
++			ret = true;
++	}
 +
-+		usb4 = port->usb4;
-+		if (device_may_wakeup(&usb4->dev) && wakeup_usb4)
-+			pm_wakeup_event(&usb4->dev, 0);
- 
--		if (val & PORT_CS_18_WOU4S)
--			wakeup = true;
-+		wakeup |= wakeup_usb4;
- 	}
- 
- 	if (wakeup)
-@@ -366,6 +379,7 @@ bool usb4_switch_lane_bonding_possible(struct tb_switch *sw)
-  */
- int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags)
++	return ret;
++}
++
++bool xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb)
++{
++	if (x->repl_mode == XFRM_REPLAY_MODE_ESN)
++		return xfrm_replay_overflow_check_offload_esn(x, skb);
++
++	return false;
++}
++
+ #else
+ int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb)
  {
-+	struct usb4_port *usb4;
- 	struct tb_port *port;
- 	u64 route = tb_route(sw);
- 	u32 val;
-@@ -395,10 +409,13 @@ int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags)
- 			val |= PORT_CS_19_WOU4;
- 		} else {
- 			bool configured = val & PORT_CS_19_PC;
-+			usb4 = port->usb4;
- 
--			if ((flags & TB_WAKE_ON_CONNECT) && !configured)
-+			if (((flags & TB_WAKE_ON_CONNECT) |
-+			      device_may_wakeup(&usb4->dev)) && !configured)
- 				val |= PORT_CS_19_WOC;
--			if ((flags & TB_WAKE_ON_DISCONNECT) && configured)
-+			if (((flags & TB_WAKE_ON_DISCONNECT) |
-+			      device_may_wakeup(&usb4->dev)) && configured)
- 				val |= PORT_CS_19_WOD;
- 			if ((flags & TB_WAKE_ON_USB4) && configured)
- 				val |= PORT_CS_19_WOU4;
-diff --git a/drivers/thunderbolt/usb4_port.c b/drivers/thunderbolt/usb4_port.c
-index 6b02945624ee..442ed1152e59 100644
---- a/drivers/thunderbolt/usb4_port.c
-+++ b/drivers/thunderbolt/usb4_port.c
-@@ -282,6 +282,9 @@ struct usb4_port *usb4_port_device_add(struct tb_port *port)
- 		}
- 	}
- 
-+	if (!tb_is_upstream_port(port))
-+		device_set_wakeup_capable(&usb4->dev, true);
-+
- 	pm_runtime_no_callbacks(&usb4->dev);
- 	pm_runtime_set_active(&usb4->dev);
- 	pm_runtime_enable(&usb4->dev);
--- 
-2.34.1
+@@ -764,6 +792,11 @@ int xfrm_replay_overflow(struct xfrm_state *x,
+struct sk_buff *skb)
 
+ 	return __xfrm_replay_overflow(x, skb);
+ }
++
++int xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb)
++{
++	return 0;
++}
+ #endif
+
+ int xfrm_init_replay(struct xfrm_state *x)
+-- 
+2.37.1.223.g6a475b71f8
