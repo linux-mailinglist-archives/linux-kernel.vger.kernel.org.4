@@ -2,206 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B455EB6C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 03:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A8C5EB6CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 03:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiI0BXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 21:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
+        id S229822AbiI0B0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 21:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiI0BXb (ORCPT
+        with ESMTP id S229508AbiI0BZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 21:23:31 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91B2A220A
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 18:23:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664241809; x=1695777809;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=etqFYmOWnb/0NwM20dV67j7IF0zYvly2dsWqwKJVv4I=;
-  b=XUSFn/RpfwQT1cZxkdqAbidrWNguJWww5SlZ9LzXQRQwh8Ijacl7+xaY
-   6vngl54U5lChM89Quwas1b0kiDGv8j9PfEJCR5tGWQLQ2Ryy9BgKgVED5
-   uHoa8B4lVeKhygMHKU2oezMIe5yOWPOjmE2tZKw+jCIWfNrLoIY1BdbEl
-   8tKiDfUAZiOIhOrlwx7M3ZZDl9Ofl4dEBI30rgAA3A9YUrC0f0zMGozKs
-   PfUTgQnqbREQVHZd90drzG9Z45MDtVDY77EADoX/pmMNtlUZTXi1j4wNN
-   ivX4w6OwT0K01eDolky48OWfVgyjyw/1L/miXsSanv1RpfA7AmVhRxCcT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="363016601"
-X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
-   d="scan'208";a="363016601"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 18:23:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="950090891"
-X-IronPort-AV: E=Sophos;i="5.93,347,1654585200"; 
-   d="scan'208";a="950090891"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Sep 2022 18:23:25 -0700
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+        Mon, 26 Sep 2022 21:25:59 -0400
+Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E765963F07;
+        Mon, 26 Sep 2022 18:25:56 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id VAA00051;
+        Tue, 27 Sep 2022 09:25:51 +0800
+Received: from jtjnmail201619.home.langchao.com (10.100.2.19) by
+ jtjnmail201622.home.langchao.com (10.100.2.22) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 18:23:25 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 18:23:24 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 26 Sep 2022 18:23:24 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 26 Sep 2022 18:23:23 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BZx1E6xWDtcQ1JX1rn7yb1zcVR5nPd+gRIReTYoyFDZ77VxC9VPWTqhdqrMyxbvu70Ql+xtnCkc4w2YdTvn3y8cON+vV7tcEqPWsMa3B8eYaooRfDre/rVmXrHa5NhClt6R8cbSTyqhmZ/Toq96vS+OxlmLJQ7/AnWfqLCSr8eKIj3K7CMsMDQ6+abEqcayHw1vP5syIcu24ZdGpIENEGJR2QU1hq04oUS3BSMqtxGJwunquByz6eGBXgbuT6czscQj43F5L/RlEH1r2KVQpkbhRuPczKAURrRMt/Ugm+xrs0KmFxlLUBXAARGNpghANTMCwLJslAMPkyNw9tHYFIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4DR855aNl5Ve/EkPQjXh3JlHJt98MMVHtafRKeMx3qg=;
- b=Y5/zUmfUBX9rOtw7TnqwvnM/zBoZKv4WoaLcQQ+vTshc0ZYntvjdnRI8ykMA5FIdUERiEkWyEkDdNKMD5kD9vFfoZ0h99zrLOe0FlbR6MqOOxqif7sCEJxhRjliK89+7GCgm0vqu/p+WgbeODotah9DDBrFqBopa/ZEvuPrV9sCPzjXPhjvtP4YXztOC+hNi+UASFOxn01bfY3GyBkfNMoWUiq5xUSiNuy8aSDwkV2pvj1wlu/TYMGfuzxkzlWSTqaOePg8WzCcx0GxGz8P2v099CTdOL3h2hrh1Qfh4GxdMmaxnPj51YsQANVA6iT9vjSXBE/VoBazT3/CeYNN+jg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
- by SJ0PR11MB5663.namprd11.prod.outlook.com (2603:10b6:a03:3bc::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
- 2022 01:23:21 +0000
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::ccec:43dc:464f:4100]) by MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::ccec:43dc:464f:4100%7]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
- 01:23:21 +0000
-Date:   Tue, 27 Sep 2022 09:22:55 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>
-Subject: Re: [PATCH v6 2/4] mm/slub: only zero the requested size of buffer
- for kzalloc
-Message-ID: <YzJQb2znPB1fDjVE@feng-clx>
-References: <20220913065423.520159-1-feng.tang@intel.com>
- <20220913065423.520159-3-feng.tang@intel.com>
- <CA+fCnZfSv98uvxop7YN_L-F=WNVkb5rcwa6Nmf5yN-59p8Sr4Q@mail.gmail.com>
- <202209261305.CF6ED6EEC@keescook>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <202209261305.CF6ED6EEC@keescook>
-X-ClientProxiedBy: SG2PR06CA0183.apcprd06.prod.outlook.com (2603:1096:4:1::15)
- To MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ 15.1.2507.12; Tue, 27 Sep 2022 09:25:51 +0800
+Received: from jtjnmail201619.home.langchao.com ([fe80::c426:eceb:41d0:3372])
+ by jtjnmail201619.home.langchao.com ([fe80::c426:eceb:41d0:3372%2]) with mapi
+ id 15.01.2507.012; Tue, 27 Sep 2022 09:25:51 +0800
+From:   =?gb2312?B?dG9tb3Jyb3cgV2FuZyAozfW1wsP3KQ==?= 
+        <wangdeming@inspur.com>
+To:     "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jgg@nvidia.com" <jgg@nvidia.com>
+CC:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] vfio: Use filp instead of fd
+Thread-Topic: [PATCH] vfio: Use filp instead of fd
+Thread-Index: AdjSD382bkUUuQYWTu6MpzuiJRbcew==
+Date:   Tue, 27 Sep 2022 01:25:51 +0000
+Message-ID: <0a80a16aa10142c5811eb6151f7cdbc9@inspur.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.200.104.82]
+Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
+        micalg=SHA1; boundary="----=_NextPart_000_000F_01D8D253.0843A8C0"
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|SJ0PR11MB5663:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7c9afb2e-51f7-40f7-f1d1-08daa026dda7
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5+KAMJKBayON7KiIVEORAY5EH1JDGc61lEdgs4U7fkkRHKeFW9nIh1N3jGIXFZ/aWLYCcqY70HCsWJyE8TI97fwViEoA1XTL5c4UQWzLd4s1bkk2zwVHSmwNwbsqkGtl6qk87WbVBAhwoQltZ94Km1tk75cww3MWQIUlrny2d+s/K7AEXrGAOZKEmh0NkufRymGI0PSbS260DNlH8FTh9iN96jWF/BMkz2AO/bo3pLLS6vlKQsDsN8AwrjXidRZNGBXIgBQSbtr5ontTNrIh4SE3/YluVbrdc4u8NqonJYGlyHOCb+l6lUG81RIohDcQOKIu3lB6CW3kfvbVuoe6we3zuk9YfKVFqjUyYXFn/G2O7lGavG8UCa4JDUpo77e5csJ9s6BfU8i78AkEQPRFO/0p/y8PpRpr1Yu96VqmSm8yJr/wqF4AY7wjEZUKuA+eYNLzQGPXJSTjNb3VjOSLa060R2TMnEJ197+xvQgdTqvT1oVcGx3WQyIfvtSOqm8csHAAES3HgXzWekhQJ/0dz/NtR1k1dxY9ZdyPF3R7A1t2ULtavpgJrSzTHNIM9SsD3Eo8JU53loF6LX1z+y82CntWJZ7fK3pSdwIwAOHdVsUJonSrUH6EvVmL9RiVeL7pjWgRCsRSP0ptG2G6qg2YZoiNUvpNIeO8XnlULrgl2OOPi5awPeB32cPO7N1PFt/MQQ3OhMpO7UWkAEWn/Gl6CQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(376002)(396003)(136003)(366004)(346002)(451199015)(6486002)(110136005)(478600001)(54906003)(316002)(86362001)(8676002)(66946007)(4326008)(66476007)(66556008)(9686003)(26005)(7416002)(6506007)(83380400001)(53546011)(8936002)(41300700001)(6666004)(44832011)(82960400001)(186003)(5660300002)(6512007)(33716001)(2906002)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Lgx/XuE4rVBtCMpKCGZV6/8Q1GIEhAfkMp7j3UCSnketLRQc5s4n7P1Pza85?=
- =?us-ascii?Q?EO542c5244e8VXjzUPB48qJmJ/Yg/wHmwcfAqKdhlg3ct1nCSw7dyiDL8jgd?=
- =?us-ascii?Q?Po25hmbAhCxPSziaxTVjTCJSSZzTcdSH3rfr5Q6SZQeD1JznuAwabkSKXWfl?=
- =?us-ascii?Q?H3ka92d55NO6XKNXCmmWCXnXznnYbzfBewnokVBkacUN5Tj1pv+prLRvST1p?=
- =?us-ascii?Q?dTtJVQ0FTQxguGIW4jNDldwhrwER4+pbzk/QrkZzTI45jYdaTpdoL+90svwV?=
- =?us-ascii?Q?n/1SQZsBX3QwLY6afwTs4vNEqgFLLNU6TcsjhY4n0fqW2bum54wMQdaFhihn?=
- =?us-ascii?Q?sBU0dmDh4u2o9rQyZT9MnEMyIvglIpolKl23S34exEhi4dp6NoRmDjEsYgCW?=
- =?us-ascii?Q?8S8hLBg1tReUMcwmyyNb/NoUoYLUDJJBUbRmgaqiKnJuzx7zA4io1p5K4jog?=
- =?us-ascii?Q?fQjPHALrVuNukIkYiP+zb9z0MShFL8gXzVdcM7z9MSUgNN+fFekK7/wbihbA?=
- =?us-ascii?Q?rL3Fhg2z5tmCtmfBdE8E/ruVfBfbI/EFAo0x1fjkYR6OLs93XHpDfjtSHgl7?=
- =?us-ascii?Q?xtpDj8weEBUejP/UdlFaU4x+pVXTl3TQmR7bn34hDEPpCcK71sfS6vsb3tlI?=
- =?us-ascii?Q?1YTWUi0yOwvwcOH13LGiNDeb8pvvDc7hLo8+ab5b0tjpwXPrEFl8GSbuE9Bb?=
- =?us-ascii?Q?9JMAOiHVFSjo58x31ObHnHzSpBXPrmjCXPiXWYHnHPcfyjvSnjL4EGVS+dFK?=
- =?us-ascii?Q?XxYSBsH2ZKpJm4WLUBY/exoH+tyXKDBSdvrW+iVVlR3j6EvHuLbISOUonWTa?=
- =?us-ascii?Q?1vj4ozNt5DgzGhokTukQdaKQ1zi9c/XoeWlVcC+U28aAB4/gnA83MyeS95kt?=
- =?us-ascii?Q?S6vQs/38Cnd8X4OSLfugVFtuLBzgft1s2f3Gdo1o4yO6XrFky1HEPgmuesRE?=
- =?us-ascii?Q?SKoG8rDrbAqvMZ3dgGB2TbmAngl8ESYLtbmM9PbR8goq09X2s9AvUrXU9+8d?=
- =?us-ascii?Q?O+dOwpGgPQsi38FEXX7YbUymObhJqtULexGvcxKRR4d5QocnooLstAY+mYkb?=
- =?us-ascii?Q?tIY4rLm9tA+EcyiHB5QpmdDVd9u020Czg7zUZ/EPsxT+QNydPD1/Ggr6ag7J?=
- =?us-ascii?Q?h+raPAcHtQqIZoT884ve6sHl4/ju7E8Qk5Rjj5f32I3kcA5mUBab4QDso59A?=
- =?us-ascii?Q?+JgRnO/UUWaFxFGw6NdTpkFoon6zm4Tx8Higo0JrbAZ+dGQg3xfWEPvZQI3b?=
- =?us-ascii?Q?xohiA2TOlMDxAH8LGy7B2VtjEnzwiIABybDoYNfRj0N2HqrPwRNVzI5J7jLU?=
- =?us-ascii?Q?HQtewcDMfIGxC7gCLT8DQA377NK9oDn7XyNLtYunQ9ip4J1uZcsrSyQzcuhu?=
- =?us-ascii?Q?1swyuajmjcy5K2ede7FtQEAPfiJcrUwMSQM0PsDAYORm6DrsRak9nm/TXL/L?=
- =?us-ascii?Q?CGAWA9vvnudhMcfFjP9Re+/pa1mX6nr5+c5aigGGmz8005kwKfRBu2gbYqHb?=
- =?us-ascii?Q?95myTSe9wHZ/032cGVK8Vl08TIqj67QH9YdzO+JLOP3QtTKA46iPy1x2fUMJ?=
- =?us-ascii?Q?2YvPkEwMOUO6GbLhHK+G2/LQWbpQjDVJ8g8ELXIv?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c9afb2e-51f7-40f7-f1d1-08daa026dda7
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 01:23:21.4943
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PpqWUXhL6YfTg1JBetOC5Io6+vTpnHXqvks4d4ksOPh7qYMbdmqh7tycklM0wQDERAF5YwFCjRUXBaPw81Ylmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5663
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+tUid:   20229270925510745c261ed230e182cf321e4f577c8ab
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 04:15:02AM +0800, Kees Cook wrote:
-> On Mon, Sep 26, 2022 at 09:11:24PM +0200, Andrey Konovalov wrote:
-> > On Tue, Sep 13, 2022 at 8:54 AM Feng Tang <feng.tang@intel.com> wrote:
+------=_NextPart_000_000F_01D8D253.0843A8C0
+Content-Type: text/plain;
+	charset="gb2312"
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+Why kvm_vfio_group_add use file?=20
+
+  struct file *filp;
+  ......
+  filp =3D fget(fd);
+  ......
+  fput(filp);
+
+
+
+>--------
+> send: Al Viro <viro@ftp.linux.org.uk> =B4=FA=B1=ED Al Viro
+> =B7=A2=CB=CD=CA=B1=BC=E4: 2022=C4=EA9=D4=C227=C8=D5 3:38
+>to: Jason Gunthorpe <jgg@nvidia.com>
+> pbonzini@redhat.com; kvm@vger.kernel.org; linux-kernel@vger.kernel.org
+> sub: Re: [PATCH] vfio: Use filp instead of fd
+>=20
+> On Mon, Sep 26, 2022 at 02:07:43PM -0300, Jason Gunthorpe wrote:
+> > On Mon, Sep 26, 2022 at 02:54:07AM -0400, Deming Wang wrote:
+> > > The function of kvm_vfio_group_set_spapr_tce and =
+kvm_vfio_group_del
+> > > use fd indirectly.But,it only be used for fd.file. So,we can
+> > > directly use the struct of file instead.
 > > >
-> > 
-> > Hi Feng,
-> > 
-> > > kzalloc/kmalloc will round up the request size to a fixed size
-> > > (mostly power of 2), so the allocated memory could be more than
-> > > requested. Currently kzalloc family APIs will zero all the
-> > > allocated memory.
-> > >
-> > > To detect out-of-bound usage of the extra allocated memory, only
-> > > zero the requested part, so that sanity check could be added to
-> > > the extra space later.
-> > 
-> > I still don't like the idea of only zeroing the requested memory and
-> > not the whole object. Considering potential info-leak vulnerabilities.
-> 
-> I really really do not like reducing the zeroing size. We're trying to
-> be proactive against _flaws_, which means that when there's a memory
-> over-read (or uninitialized use), suddenly the scope of the exposure (or
-> control) is wider/looser.
-> 
-> Imagine the (unfortunately very common) case of use-after-free attacks,
-> which leverage type confusion: some object is located in kmalloc-128
-> because it's 126 bytes. That slot gets freed and reallocated to, say, a
-> 97 byte object going through kzalloc() or zero-on-init. With this patch
-> the bytes above the 97 don't get zeroed, and the stale data from the
-> prior 126 byte object say there happily to be used again later through
-> a dangling pointer, or whatever. Without the proposed patch, the entire
-> 128 bytes is wiped, which makes stale data re-use more difficult.
+> > > Signed-off-by: Deming Wang <wangdeming@inspur.com>
+> > > ---
+> > >  virt/kvm/vfio.c | 24 ++++++++++++------------
+> > >  1 file changed, 12 insertions(+), 12 deletions(-)
+> >
+> > I thought about changing this too when I was looking at this.
+> > fdget/fdput includes a tiny micro-optimization that is legal here,
+> > however I doubt anyone cares about performance on this path.
+>=20
+> Microoptimization or not, I'd rather keep fget() limited to cases =
+where we
+> really need it.  There are non-trivial cases and having them easy to =
+find
+is a
+> good thing.
+>=20
+> Again, the preferred way to do descriptor lookups is fdget() family, =
+not
+fget()
+> one.
 
-Thanks for the details explaination, which is a valid concern.
+------=_NextPart_000_000F_01D8D253.0843A8C0
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
 
-And Andrey's suggestion is a good solution: only reduce the zeroing
-size for kmalloc-redzone enabled objects, as the extra space will be
-redzoned, and no info will be leaked.
+MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIK8zCCA6Iw
+ggKKoAMCAQICEGPKUixTOHaaTcIS5DrQVuowDQYJKoZIhvcNAQELBQAwWTETMBEGCgmSJomT8ixk
+ARkWA2NvbTEYMBYGCgmSJomT8ixkARkWCGxhbmdjaGFvMRQwEgYKCZImiZPyLGQBGRYEaG9tZTES
+MBAGA1UEAxMJSU5TUFVSLUNBMB4XDTE3MDEwOTA5MjgzMFoXDTI3MDEwOTA5MzgyOVowWTETMBEG
+CgmSJomT8ixkARkWA2NvbTEYMBYGCgmSJomT8ixkARkWCGxhbmdjaGFvMRQwEgYKCZImiZPyLGQB
+GRYEaG9tZTESMBAGA1UEAxMJSU5TUFVSLUNBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAq+Q17xtjJLyp5hgXDie1r4DeNj76VUvbZNSywWU5zhx+e0Lu0kwcZ0T3KncZdgdWyqYvRJMQ
+/VVqX3gS4VxtLw3zBrg9kGuD0LfpH0cA2b0ZHpxRh5WapP14flcSh/lnawig29z44wfUEg43yTZO
+lOfPKos/Dm6wyrJtaPmD6AF7w4+vFZH0zMYfjQkSN/xGgS3OPBNAB8PTHM2sV+fFmnnlTFpyRg0O
+IIA2foALZvjIjNdUfp8kMGSh/ZVMfHqTH4eo+FcZPZ+t9nTaJQz9cSylw36+Ig6FGZHA/Zq+0fYy
+VCxR1ZLULGS6wsVep8j075zlSinrVpMadguOcArThwIDAQABo2YwZDATBgkrBgEEAYI3FAIEBh4E
+AEMAQTALBgNVHQ8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUXlkDprRMWGCRTvYe
+taU5pjLBNWowEAYJKwYBBAGCNxUBBAMCAQAwDQYJKoZIhvcNAQELBQADggEBAErE37vtdSu2iYVX
+Fvmrg5Ce4Y5NyEyvaTh5rTGt/CeDjuFS5kwYpHVLt3UFYJxLPTlAuBKNBwJuQTDXpnEOkBjTwukC
+0VZ402ag3bvF/AQ81FVycKZ6ts8cAzd2GOjRrQylYBwZb/H3iTfEsAf5rD/eYFBNS6a4cJ27OQ3s
+Y4N3ZyCXVRlogsH+dXV8Nn68BsHoY76TvgWbaxVsIeprTdSZUzNCscb5rx46q+fnE0FeHK01iiKA
+xliHryDoksuCJoHhKYxQTuS82A9r5EGALTdmRxhSLL/kvr2M3n3WZmVL6UulBFsNSKJXuIzTe2+D
+mMr5DYcsm0ZfNbDOAVrLPnUwggdJMIIGMaADAgECAhN+AADW2NzeiRillYrtAAAAANbYMA0GCSqG
+SIb3DQEBCwUAMFkxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZFghsYW5nY2hh
+bzEUMBIGCgmSJomT8ixkARkWBGhvbWUxEjAQBgNVBAMTCUlOU1BVUi1DQTAeFw0yMDA4MDYxMTEz
+MzdaFw0yNTA4MDUxMTEzMzdaMIGfMRMwEQYKCZImiZPyLGQBGRYDY29tMRgwFgYKCZImiZPyLGQB
+GRYIbGFuZ2NoYW8xFDASBgoJkiaJk/IsZAEZFgRob21lMR4wHAYDVQQLDBXkupHmlbDmja7kuK3l
+v4Ppm4blm6IxEjAQBgNVBAMMCeeOi+W+t+aYjjEkMCIGCSqGSIb3DQEJARYVd2FuZ2RlbWluZ0Bp
+bnNwdXIuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2vlBZLJq8TGM+29yQN3P
+JA6nQmkd95s06bHPiYoLyRo1s8ow3GEo+AXrGTrvfAQSqDuM20xwoTdNxaxzHw73OT/a1WaBGZBG
+LSExU/PwnxpYNWy6VEkOEMgLzb790SRCsJ+tg9JDYzSoQYx2nxVI6qoR4lEOeQcwGkgO76IsJrEk
+L4/i9bgkH8SGGN8OCIG8OyKag4j12raDfKEV4B1g+RhQqPua6orrK30akBWSL0P1anheVOlWDrqy
+osJcF64HTzmDyqPLMzISF69XMhCfmxyaKSkLbFLmNE0eEZVJsdhGyV4e0qAx3kpqeTThtzOYMwkT
+oiUcyhkbr/tlBqNlwQIDAQABo4IDwTCCA70wPQYJKwYBBAGCNxUHBDAwLgYmKwYBBAGCNxUIgvKp
+H4SB13qGqZE9hoD3FYPYj1yBSv2LJoGUp00CAWQCAWAwKQYDVR0lBCIwIAYIKwYBBQUHAwIGCCsG
+AQUFBwMEBgorBgEEAYI3CgMEMAsGA1UdDwQEAwIFoDA1BgkrBgEEAYI3FQoEKDAmMAoGCCsGAQUF
+BwMCMAoGCCsGAQUFBwMEMAwGCisGAQQBgjcKAwQwRAYJKoZIhvcNAQkPBDcwNTAOBggqhkiG9w0D
+AgICAIAwDgYIKoZIhvcNAwQCAgCAMAcGBSsOAwIHMAoGCCqGSIb3DQMHMB0GA1UdDgQWBBT2m8+B
+pv3zOH+FCDvTbpfMkvPbAzAfBgNVHSMEGDAWgBReWQOmtExYYJFO9h61pTmmMsE1ajCCAQ8GA1Ud
+HwSCAQYwggECMIH/oIH8oIH5hoG6bGRhcDovLy9DTj1JTlNQVVItQ0EsQ049SlRDQTIwMTIsQ049
+Q0RQLENOPVB1YmxpYyUyMEtleSUyMFNlcnZpY2VzLENOPVNlcnZpY2VzLENOPUNvbmZpZ3VyYXRp
+b24sREM9aG9tZSxEQz1sYW5nY2hhbyxEQz1jb20/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlzdD9i
+YXNlP29iamVjdENsYXNzPWNSTERpc3RyaWJ1dGlvblBvaW50hjpodHRwOi8vSlRDQTIwMTIuaG9t
+ZS5sYW5nY2hhby5jb20vQ2VydEVucm9sbC9JTlNQVVItQ0EuY3JsMIIBKQYIKwYBBQUHAQEEggEb
+MIIBFzCBsQYIKwYBBQUHMAKGgaRsZGFwOi8vL0NOPUlOU1BVUi1DQSxDTj1BSUEsQ049UHVibGlj
+JTIwS2V5JTIwU2VydmljZXMsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1ob21lLERD
+PWxhbmdjaGFvLERDPWNvbT9jQUNlcnRpZmljYXRlP2Jhc2U/b2JqZWN0Q2xhc3M9Y2VydGlmaWNh
+dGlvbkF1dGhvcml0eTBhBggrBgEFBQcwAoZVaHR0cDovL0pUQ0EyMDEyLmhvbWUubGFuZ2NoYW8u
+Y29tL0NlcnRFbnJvbGwvSlRDQTIwMTIuaG9tZS5sYW5nY2hhby5jb21fSU5TUFVSLUNBLmNydDBH
+BgNVHREEQDA+oCUGCisGAQQBgjcUAgOgFwwVd2FuZ2RlbWluZ0BpbnNwdXIuY29tgRV3YW5nZGVt
+aW5nQGluc3B1ci5jb20wDQYJKoZIhvcNAQELBQADggEBAKD6Oh0Yu1g2xXDIaczYlx8WZiYqTi7t
+bFCmsNT5DmNUfLaJre5UDyaWjgwW6Z/KN1X19Piy6oS8ex93gaeF4siDuQimREZoKxePJyUeyFs5
+oC6kpsw95f/0RM5zhHb4I8L4AgplfwySCGAeMRr74rThzkYWfoU1AM+c8cBtViIispknx6KxJFo2
+b533lCx168UKeNRb1n7pUANxFYd+1jjdRKCPrszdJcJddFmnLBetcnD4DG0ID62hnw+/g0KoAlfd
+ORikFVBLobsDNy+NQ++5ZYgx1ahEQ6BESIjeWxut+2Zqis6Zbwd5ZsBhm892l5EdzJCuYe5xDEZw
+0Z0bGvUxggOTMIIDjwIBATBwMFkxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZ
+FghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUxEjAQBgNVBAMTCUlOU1BVUi1DQQITfgAA
+1tjc3okYpZWK7QAAAADW2DAJBgUrDgMCGgUAoIIB+DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA5MjcwMTI1MDdaMCMGCSqGSIb3DQEJBDEWBBTwjNsrSZpPKUh0
+g8frdXbNy5KD1zB/BgkrBgEEAYI3EAQxcjBwMFkxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJ
+kiaJk/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUxEjAQBgNVBAMTCUlOU1BV
+Ui1DQQITfgAA1tjc3okYpZWK7QAAAADW2DCBgQYLKoZIhvcNAQkQAgsxcqBwMFkxEzARBgoJkiaJ
+k/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhv
+bWUxEjAQBgNVBAMTCUlOU1BVUi1DQQITfgAA1tjc3okYpZWK7QAAAADW2DCBkwYJKoZIhvcNAQkP
+MYGFMIGCMAoGCCqGSIb3DQMHMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAEC
+MA4GCCqGSIb3DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUrDgMCGjALBglghkgBZQMEAgMwCwYJ
+YIZIAWUDBAICMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQA9bA1oV93h2REQptZ9z952
+Kh0R2Ka02hjW1V9LS/tT7egXmAyUrwIHcG4mSv9/adRPLaqj6QiYM/KPv/LZkuENqBJDPSIuMBF3
+ODKEA/t750FJ1uwE+fXMuwT5gvbahI2nQZFVHpq5EybJIfqOzLkGH0DNmLmxgiiKz8eqEZE51+l8
+PSaBOGYpv3TuSnHNxhN8rJXRH56lyatHJzzs7P6PffPgyFEazEUA4MxfuyYX/DitIkAcsFMRsKEb
+hroS5uCSNXAaJ92aZep2xtZ0svTbgJgKC06dsqcg1/GNQ5O6JyaBMOGIzutCW96rdHpNfry8pWn6
+VgrfZgnMEiN5XrP2AAAAAAAA
 
-Thanks,
-Feng
+------=_NextPart_000_000F_01D8D253.0843A8C0--
