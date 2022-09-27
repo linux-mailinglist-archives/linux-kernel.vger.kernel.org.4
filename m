@@ -2,107 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10F25EB76C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 352C85EB774
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiI0CQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 22:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
+        id S229700AbiI0CSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 22:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiI0CQW (ORCPT
+        with ESMTP id S229511AbiI0CSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 22:16:22 -0400
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7E85578A2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:16:20 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-01 (Coremail) with SMTP id qwCowACnrY3tXDJj8U5dAg--.19578S2;
-        Tue, 27 Sep 2022 10:16:13 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, aurabindo.pillai@amd.com, Jerry.Zuo@amd.com,
-        Alvin.Lee2@amd.com, dillon.varone@amd.com, Martin.Leung@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] drm/amd/display: Add check for memory allocation
-Date:   Tue, 27 Sep 2022 10:16:12 +0800
-Message-Id: <20220927021612.31815-1-jiasheng@iscas.ac.cn>
+        Mon, 26 Sep 2022 22:18:41 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B803CA9255
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:18:40 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso8710126pjd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:18:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=dZD2Q3sJnT7LtqyYnQOsH2aHhEx3TviV9Oc+ahsq2us=;
+        b=GhCkuBE/fHzYH5gF0AE6yQROWfKQZpwIzbVd/3JlWvKeILaZfA2vAIE5mSMY2eo+Vy
+         0quWl57+5MjcqRup+fn6FNfOEuqEOFiHMh1vB+WdKzi5azE7u/pkPXpeDiroIoFLBcYD
+         qpBeOOkemLQH7vQcL1k3s6yS3sScqQpTlIpS4cF870MbbXflIufLnjKhDi9s2Y9qqlpy
+         UE+cRTLvCM6X3zenCUOq12fsjgouNtFF/FglVwRVN5J3utjGJ5rSzViBohLTfK/02Tkr
+         XRvrxWzuu4EnR3aDJiwhz5jXI4OE/9YOGZWMDKTZ2T3wtfEGexg2LsvmrF0xeehOKpGk
+         kCbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=dZD2Q3sJnT7LtqyYnQOsH2aHhEx3TviV9Oc+ahsq2us=;
+        b=L5L5r3C6tFP1bpPi5txnuSrUcel9S/KDFZiGy6WKK9O7BvK1lqz3SJ11wLFoGFQN7m
+         j/AWGPIdXAnFsuhLoBa1fWNSz9KGNeN10xIfEdb1a6W0OWOuw4UmPftq3S44fL8nsSHd
+         TUHJcnlp1JicfXWB28NkhndTSPGIVIyVJ8iBHKVX0qi148EJ1YLXv4PNAa6Okqd40aFu
+         dk2MHOdjMBr+q3FkT2wo2H1QD4sUwsAngz0tbRggpNt/U7QQ6DzStdd8g6rS+rwNSyj/
+         mkBDEJMrm9kLeRJwBOLhBF0qLvKMcOef2jCJiVFSL32yMHq+3fC5bl3Di1Sar8zRBiKp
+         O7MQ==
+X-Gm-Message-State: ACrzQf11FRDBJoYvOtSOttKOmnn0TGbRQFInDfag0e34ZRT6IK9+efcz
+        6okOw3qF2yoy1lbeUzLdz8r/DQ==
+X-Google-Smtp-Source: AMsMyM593Juk1zH98oEDl8t13zXBDlUN69CYGKGRf6UzGixRbC0Zp3bCpxxMatnnfxJ6+L2oxJ8ALQ==
+X-Received: by 2002:a17:90b:38c3:b0:205:d6b5:582d with SMTP id nn3-20020a17090b38c300b00205d6b5582dmr1275417pjb.229.1664245120262;
+        Mon, 26 Sep 2022 19:18:40 -0700 (PDT)
+Received: from sean-biuld-server.itotolink.net (1-34-200-211.hinet-ip.hinet.net. [1.34.200.211])
+        by smtp.gmail.com with ESMTPSA id u17-20020a17090341d100b00172a670607asm101844ple.300.2022.09.26.19.18.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 19:18:39 -0700 (PDT)
+From:   Sean Hong <sean.hong@quanta.corp-partner.google.com>
+To:     dianders@chromium.org, thierry.reding@gmail.com, sam@ravnborg.org,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Sean Hong <sean.hong@quanta.corp-partner.google.com>
+Subject: [PATCH] drm/panel-edp: Fix delays for INX N116BCA-EA2 (HW: C1)
+Date:   Tue, 27 Sep 2022 10:18:35 +0800
+Message-Id: <20220927021835.488803-1-sean.hong@quanta.corp-partner.google.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowACnrY3tXDJj8U5dAg--.19578S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFW5Cr4fJrykGF1xJFWxXrb_yoW8Aw1Upa
-        10y34YgwsrJF4jqry7JF4UWF4rAa4F9FyrCrZ8A3sIva47tr4rZF1YqF1qyan5KFWUCr17
-        Ja1jgr43uFnFkrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7Cj
-        xVA2Y2ka0xkIwI1lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4l
-        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-        C2KfnxnUUI43ZEXa7VUb9NVDUUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As kzalloc and dm_helpers_allocate_gpu_mem can return NULL pointer,
-it should be better to check the return value and return error.
-Moreover, the return value of dcn32_clk_mgr_construct should be checked
-by cascade.
+This panel has the same delay timing as N116BCA-EA1. So, fix the
+delay timing from delay_200_500_p2e80 to delay_200_500_e80_d50.
 
-Fixes: 265280b99822 ("drm/amd/display: add CLKMGR changes for DCN32/321")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Sean Hong <sean.hong@quanta.corp-partner.google.com>
 ---
- .../drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c   | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/panel/panel-edp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c
-index c6785969eb1a..3dc04d780fbf 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c
-@@ -718,7 +718,7 @@ static struct clk_mgr_funcs dcn32_funcs = {
- 		.is_smu_present = dcn32_is_smu_present,
- };
+diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+index 102ab9f5d40a..e25851de7954 100644
+--- a/drivers/gpu/drm/panel/panel-edp.c
++++ b/drivers/gpu/drm/panel/panel-edp.c
+@@ -1893,7 +1893,7 @@ static const struct edp_panel_entry edp_panels[] = {
  
--void dcn32_clk_mgr_construct(
-+int dcn32_clk_mgr_construct(
- 		struct dc_context *ctx,
- 		struct clk_mgr_internal *clk_mgr,
- 		struct pp_smu_funcs *pp_smu,
-@@ -779,11 +779,19 @@ void dcn32_clk_mgr_construct(
- 	clk_mgr->smu_present = false;
+ 	EDP_PANEL_ENTRY('C', 'M', 'N', 0x114c, &innolux_n116bca_ea1.delay, "N116BCA-EA1"),
+ 	EDP_PANEL_ENTRY('C', 'M', 'N', 0x1152, &delay_200_500_p2e80, "N116BCN-EA1"),
+-	EDP_PANEL_ENTRY('C', 'M', 'N', 0x1154, &delay_200_500_p2e80, "N116BCA-EA2"),
++	EDP_PANEL_ENTRY('C', 'M', 'N', 0x1154, &delay_200_500_e80_d50, "N116BCA-EA2"),
+ 	EDP_PANEL_ENTRY('C', 'M', 'N', 0x1247, &delay_200_500_e80_d50, "N120ACA-EA1"),
  
- 	clk_mgr->base.bw_params = kzalloc(sizeof(*clk_mgr->base.bw_params), GFP_KERNEL);
-+	if (!clk_mgr->base.bw_params)
-+		return -ENOMEM;
- 
- 	/* need physical address of table to give to PMFW */
- 	clk_mgr->wm_range_table = dm_helpers_allocate_gpu_mem(clk_mgr->base.ctx,
- 			DC_MEM_ALLOC_TYPE_GART, sizeof(WatermarksExternal_t),
- 			&clk_mgr->wm_range_table_addr);
-+	if (!clk_mgr->wm_range_table) {
-+		kfree(clk_mgr->base.bw_params);
-+		return -ENOMEM;
-+	}
-+
-+	return 0;
- }
- 
- void dcn32_clk_mgr_destroy(struct clk_mgr_internal *clk_mgr)
+ 	EDP_PANEL_ENTRY('I', 'V', 'O', 0x057d, &delay_200_500_e200, "R140NWF5 RH"),
 -- 
 2.25.1
 
