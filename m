@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C5D5EB8BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 944515EB8BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiI0DZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 23:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        id S231172AbiI0DZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 23:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbiI0DX5 (ORCPT
+        with ESMTP id S231137AbiI0DX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 23:23:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E00C57BE3;
+        Mon, 26 Sep 2022 23:23:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E7F5C37A;
         Mon, 26 Sep 2022 20:23:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DABD1B81910;
-        Tue, 27 Sep 2022 03:23:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA21BC4347C;
-        Tue, 27 Sep 2022 03:23:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A31F061585;
+        Tue, 27 Sep 2022 03:23:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD677C43143;
+        Tue, 27 Sep 2022 03:23:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664248993;
-        bh=WPTi/MLtEp6ejiLdeHDqeJBbCy8zfALjPLNAZfwnaTU=;
+        s=k20201202; t=1664248995;
+        bh=MbHislodbHWamvfQ72iARjTJC113lxMjN7t13HcDaCQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cVbpZHibYUbFbbCo3awQ65Obu32RYX70+lwY7amHfgd5tCoizCCYWCKhPz/uyN3fX
-         1kkaQ4egx2PuDxGlFplUrjYE5x9HTNO46UzzpNDmDqbS2WKez/tYWOvoYkypp9jKMT
-         /tpEOm16jAMmatm0coenAEb6y2Q6xwexwOYy8FwWZRoh+Wzb70/t7WQcKsDovHGLZ/
-         y+AUTedsTONS8qoEVOexxvWYZrdoCl884zpNmyNU3VS9GpiSR4e56wm5gyjqr4WeU+
-         NFY8YOLj+Q6hOUjt2RlJlPjcSU5F0k92KQaS/oqD0UWu5OqY1Y7fqocrgIlYuhPQju
-         jz52H4FPe5NIw==
+        b=aApuCfnscjtUP2X01tAoaY7Z3EPOKYw0faY5GFVVDcrcGFIvI16MkQ5aeGM/Vgbyd
+         hMFfghzbzr3Fy4LCq1KZ0LKJHqpS5Lbgd5lY88Qk2VytxWM8wLvFKS8KYEz/6WBqkO
+         QvNp5/cFvdXETXUdw99tay5DRtwic5CxvEWKtIYZf0oc4Rq0HpEf+TkP60us85GGoy
+         6FqXrvRGCgnyibz1s8ms4H4CSex1zCn9F+WiW+LkfU3mfo8VWCi7vKiutlK5b46WpM
+         mA1Busa6JAsdLJ6A9ZQKhBt5cbliFdzpJdinP561ei7T4OamZ7eHAj3PSs+mozDi6/
+         F3lgtF/WAoewA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     quic_krichai@quicinc.com, helgaas@kernel.org
-Cc:     quic_vbadigan@quicinc.com, vkoul@kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-kernel@vger.kernel.org, quic_ramkri@quicinc.com,
-        konrad.dybcio@somainline.org, bhelgaas@google.com,
-        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
-        swboyd@chromium.org, quic_nitegupt@quicinc.com,
-        svarbanov@mm-sol.com, lpieralisi@kernel.org, kishon@ti.com,
-        quic_skananth@quicinc.com, mturquette@baylibre.com,
-        robh@kernel.org, mka@chromium.org, linux-phy@lists.infradead.org,
-        agross@kernel.org, quic_hemantk@quicinc.com, kw@linux.com,
-        linux-pci@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: (subset) [PATCH v7 0/5] PCI: qcom: Add system suspend & resume support
-Date:   Mon, 26 Sep 2022 22:23:03 -0500
-Message-Id: <166424897975.1766486.8316270705903909845.b4-ty@kernel.org>
+To:     loic.poulain@linaro.org, robh+dt@kernel.org,
+        mturquette@baylibre.com, Bjorn Andersson <andersson@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        sboyd@kernel.org, yassine.oudjana@gmail.com
+Cc:     y.oudjana@protonmail.com, konrad.dybcio@somainline.org,
+        marijn.suijten@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        jami.kettunen@somainline.org, linux-clk@vger.kernel.org,
+        martin.botka@somainline.org, dmitry.baryshkov@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH 0/6] clk: qcom: msm8996-cpu: Cleanup and migrate to parent_data
+Date:   Mon, 26 Sep 2022 22:23:04 -0500
+Message-Id: <166424897968.1766486.11324579765862390238.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <1663669347-29308-1-git-send-email-quic_krichai@quicinc.com>
-References: <1663669347-29308-1-git-send-email-quic_krichai@quicinc.com>
+In-Reply-To: <20220621160621.24415-1-y.oudjana@protonmail.com>
+References: <20220621160621.24415-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,21 +62,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Sep 2022 15:52:22 +0530, Krishna chaitanya chundru wrote:
-> Few PCIe endpoints like NVMe and WLANs are always expecting the device
-> to be in D0 state and the link to be active (or in l1ss) all the
-> time (including in S3 state).
+On Tue, 21 Jun 2022 20:06:15 +0400, Yassine Oudjana wrote:
+> This series includes some cleanup of the MSM8996 CPU clock driver, as well as
+> migration from parent_names to parent_data for all of its clocks. The DT schema
+> is also fixed in this series to show the actual clocks consumed by the clock
+> controller and pass checks.
 > 
-> This patch series adds this support for allowing the system to enter
-> S3 state (and further low power states) with PCIe Device being in D0
-> state and with link being in l1ss on qcom platforms.
+> Yassine Oudjana (6):
+>   clk: qcom: msm8996-cpu: Rename DIV_2_INDEX to SMUX_INDEX
+>   clk: qcom: msm8996-cpu: Statically define PLL dividers
+>   clk: qcom: msm8996-cpu: Unify cluster order
+>   clk: qcom: msm8996-cpu: Convert secondary muxes to clk_regmap_mux
+>   dt-bindings: clock: qcom,msm8996-apcc: Fix clocks
+>   clk: qcom: msm8996-cpu: Use parent_data for all clocks
 > 
 > [...]
 
 Applied, thanks!
 
-[5/5] clk: qcom: gcc-sc7280: Update the .pwrsts for PCIe GDSC
-      commit: 1a58ee1330b2cb6d71feb0aaf827cc10030f78b4
+[1/6] clk: qcom: msm8996-cpu: Rename DIV_2_INDEX to SMUX_INDEX
+      commit: 1ba0a3bbd5ed5a1bb8d0165912d9904b812af74b
+[2/6] clk: qcom: msm8996-cpu: Statically define PLL dividers
+      commit: de37e0214c28330cf0dbf4fe51db1d9d38c13c93
+[3/6] clk: qcom: msm8996-cpu: Unify cluster order
+      commit: 382139bfd68fe6cc9dc94ffe3b9d783b85be3b1c
+[4/6] clk: qcom: msm8996-cpu: Convert secondary muxes to clk_regmap_mux
+      commit: 9a9f5f9a5a0ca3f463eb28ba5920a6fd18dc9956
+[5/6] dt-bindings: clock: qcom,msm8996-apcc: Fix clocks
+      commit: b4feed4a3d0a6b8cef4a574a9df707c556928ec2
 
 Best regards,
 -- 
