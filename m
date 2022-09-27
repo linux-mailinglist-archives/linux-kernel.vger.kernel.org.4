@@ -2,110 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25F45EC039
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5A55EC03E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbiI0K6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 06:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
+        id S230479AbiI0LA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbiI0K6M (ORCPT
+        with ESMTP id S231623AbiI0LAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 06:58:12 -0400
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752BC6AE97;
-        Tue, 27 Sep 2022 03:58:10 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id z6so14430937wrq.1;
-        Tue, 27 Sep 2022 03:58:10 -0700 (PDT)
+        Tue, 27 Sep 2022 07:00:25 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A6027B06;
+        Tue, 27 Sep 2022 04:00:22 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id x18so14390724wrm.7;
+        Tue, 27 Sep 2022 04:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=8Dw7PnH+G2Bh6k4CKjwpqJqAR4B+90JCnNrI22kvuHk=;
+        b=Lc3Cav/OwSRwG1/9OrtThBRc8lgqAN5vfp73D6QSTYorQqB4v47aqOVUtysoaURyCY
+         WBep4VgRWYy4vQIDACNAgc9nXVbnERrgBsfPJ2o5GFsNjQWN76wZGmu9pV7e+wdGUi3M
+         k7e5s5pyyGk1FWUsm5MECbTbDgQaa3s7+gPv5JdieBKjWtnXXgrBZY/HG+atoBsAhDrm
+         8ccJf7RBAxc7SqGbKKYyJF8UbdwN/06BeTKZ/JB3ZKPj0qzM+tV+5rkAt/HZHCLVCneS
+         LJU+CMndrsO+tYF8Siso+lC3e3dHRBmkZQv42Xgb/rmbbhMMGwz5DGVPtBH6uC/cHaOf
+         a4CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=EjbYwEB4aUSvoakBSHtMBtNMFeoYUjvUaUSAqImO7JY=;
-        b=Lbh/sD85kvQ+4hqW8CXNy1KqgkxXBaQnJoTBdCC41CWDmOkewSBbL8DTX2+8AtThzh
-         h9lcBXKWJobmi2GyCcPUE9qPmPAPrH90ihzPZAZQDVtCV/j/9eGfRcugD5Kn6G4PPQqb
-         mPZUT6rqew1q6bJiwX+U98ouGdKrUcl/SlEHCsVWZalrOrxpA6ovTCULqsr3hJfxEcNV
-         R4XTmPqB5CjU2fHiDo9Zocvb3NlCCZS8Nd91G9GuWqK+eL0Wf9G8WEY5U89dX2ZTQcJ9
-         +GwfKfOpxrcOOgV+bThN3ecNRjB7/LrNJwZCdwG2Ry+Y5Ygk09TaAR1fxBP5gPm0h0IT
-         +TwQ==
-X-Gm-Message-State: ACrzQf0TTS0URZoMn2Tee0xfzweU+8OxzKdY7uOndCr0RQOq1Nmjs8IY
-        pe9l9MHUtOo1fYQvPoBwweY=
-X-Google-Smtp-Source: AMsMyM4CJmcmicknDIVtF3w0gV2zdBrrF+539QrxrQoQRpbuYMtHtaJKBaiGaGJw6MeMm00BDZJlgQ==
-X-Received: by 2002:adf:e9ce:0:b0:22c:ae77:b75c with SMTP id l14-20020adfe9ce000000b0022cae77b75cmr4544603wrn.380.1664276288559;
-        Tue, 27 Sep 2022 03:58:08 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id l6-20020a05600c4f0600b003b4924493bfsm16926995wmq.9.2022.09.27.03.58.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 03:58:08 -0700 (PDT)
-Message-ID: <f4143edb-cbc2-8b36-c227-b1ca13f3619b@kernel.org>
-Date:   Tue, 27 Sep 2022 12:58:07 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=8Dw7PnH+G2Bh6k4CKjwpqJqAR4B+90JCnNrI22kvuHk=;
+        b=af6oIKHMD+qw/G4OkdYLjeeEiroFB8mE4U3lDMyP3QZLV0mbKv3Wk/423IPx52vlWR
+         5bfCt4JuXbsaK5ziWLRU5hoU3f8lMbCZfm74EyEVtFzWMWG/dgJtJW+R1JfZql1JsXha
+         47+YIfUgOz4NVpccaseybyvI7sb1qO5VewP4mZovRbKlZ6zk9pV7r2qP325KgPsK4wEq
+         plcmj9xee3h2/rNokG3sy3gmCbf2qVluiQrXecg19dqtw3++eK+gTr6rf9D1y02kcuZY
+         y0ME/kMk8Fh+xfl06z3Tb5PS5Ol0jzqdmJQFbVSn7jGOOWOH0SbpxvQcB8bdhckS132t
+         iBlQ==
+X-Gm-Message-State: ACrzQf1IAo7RZ5qp1NR9J/KuFjms9kxnX6YOdLs52Cc3OYgOQla52mjr
+        yK4SXDLl7GDDm+U9xoXYNXI=
+X-Google-Smtp-Source: AMsMyM5UNsMufZuKmYD+bEDyW3y2ncpRlaZCUrExfqme5TJXyRQfuutXX6kIfZu0+F/y/395V/glfA==
+X-Received: by 2002:a5d:6907:0:b0:22c:b9b7:c96a with SMTP id t7-20020a5d6907000000b0022cb9b7c96amr1957606wru.44.1664276420848;
+        Tue, 27 Sep 2022 04:00:20 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id n188-20020a1ca4c5000000b003a8434530bbsm13256435wme.13.2022.09.27.04.00.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 04:00:20 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 12:00:18 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 4.19 00/55] 4.19.260-rc2 review
+Message-ID: <YzLXwrCjFeK/GBX5@debian>
+References: <20220926163538.084331103@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2] serial: Convert serial_rs485 to kernel doc
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <1c401476-8f4d-827c-f8e1-b4853988e2@linux.intel.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <1c401476-8f4d-827c-f8e1-b4853988e2@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220926163538.084331103@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27. 09. 22, 12:47, Ilpo Järvinen wrote:
-> --- a/Documentation/driver-api/serial/serial-rs485.rst
-> +++ b/Documentation/driver-api/serial/serial-rs485.rst
-> @@ -29,11 +29,11 @@ RS485 Serial Communications
->   3. Data Structures Already Available in the Kernel
->   ==================================================
->   
-> -   The Linux kernel provides the serial_rs485 structure (see [1]) to handle
-> -   RS485 communications. This data structure is used to set and configure RS485
-> +   The Linux kernel provides the serial_rs485 structure to handle RS485
-> +   communications.  This data structure is used to set and configure RS485
->      parameters in the platform data and in ioctls.
->   
-> -   The device tree can also provide RS485 boot time parameters (see [2]
-> +   The device tree can also provide RS485 boot time parameters (see [1]
->      for bindings). The driver is in charge of filling this data structure from
->      the values given by the device tree.
->   
-> @@ -47,6 +47,9 @@ RS485 Serial Communications
->      for the uart_port. TIOCGRS485 ioctl can be used to read back the
->      serial_rs485 structure matching to the current configuration.
->   
-> +.. kernel-doc:: include/uapi/linux/serial.h
-> +   :identifiers: serial_rs485
-> +
->   4. Usage from user-level
->   ========================
->   
-> @@ -126,6 +129,4 @@ RS485 Serial Communications
->   6. References
->   =============
->   
-> - [1]	include/uapi/linux/serial.h
-> -
-> - [2]	Documentation/devicetree/bindings/serial/rs485.txt
-> + [1]	Documentation/devicetree/bindings/serial/rs485.txt
+Hi Greg,
 
-BTW could that [1] be converted into proper hyperlink too (separately)?
+On Mon, Sep 26, 2022 at 06:36:43PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.260 release.
+> There are 55 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 28 Sep 2022 16:35:25 +0000.
+> Anything received after that time might be too late.
 
-thanks,
--- 
-js
-suse labs
+Build test (gcc version 11.3.1 20220925):
+mips: 63 configs -> no  failure
+arm: 115 configs -> no failure
+arm64: 2 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/1903
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
