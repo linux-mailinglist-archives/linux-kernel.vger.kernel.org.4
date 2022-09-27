@@ -2,324 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3895EB91F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0306D5EB92B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiI0EHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 00:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
+        id S229598AbiI0EZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 00:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiI0EH1 (ORCPT
+        with ESMTP id S229603AbiI0EZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 00:07:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B480CA2207
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:07:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664251644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qcLBCLM+PH8ycKWx1k07/7s89oEdWy95TuEbp0KpqhA=;
-        b=JYk9Yd9d6/AEj2GbBqlGE5GFHuPWBrVJJYmaT8bzc5gYXCCfioDxbNvmhAxQIsHZ7RiJ2T
-        Yj+Atgtxn8T6vHpwQu0zbvNodm0yVh6qLuHFMPpTlAwpFjdHMHA3nQ3q3NFx08z85Z+wtW
-        zN59671Xh4HNAnDBfBt1pHayplO3Ip8=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-461-y5AWby3sM-u8neNpqTN8fQ-1; Tue, 27 Sep 2022 00:07:18 -0400
-X-MC-Unique: y5AWby3sM-u8neNpqTN8fQ-1
-Received: by mail-oi1-f200.google.com with SMTP id a26-20020aca1a1a000000b0034fdf34de68so2787880oia.12
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:07:18 -0700 (PDT)
+        Tue, 27 Sep 2022 00:25:01 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2619443331;
+        Mon, 26 Sep 2022 21:24:59 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id y8so11583141edc.10;
+        Mon, 26 Sep 2022 21:24:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
+        bh=Qhij+rjILZXDr+3dJvPrhS9Wzmxt2vE9xc3gwCW9y/4=;
+        b=MO/JQMEj73YcZ/TIrS8pPfV+iuy3VJR8dRpw29+9WYGZDSonxZc/74EYBxh5ZUaZfX
+         Mosu/tmNVv6t1j22MBYa343rFWbWNOJfVLGu6c0u0sesxklANU2pCqJRN4NjMwRu9w+d
+         TykOZ6slxWujmmXB0oxj5n+sJIElWZOHOSuugz17Fr2+8m1heUncxI1VjjPYVPCju61K
+         XweLR7MQY71toSelqK1k1lr6MoNUPSBA807HsdjGOv8B04VHpylCmkg+xUoD124vgA51
+         H1/CQ21ktsXoVHPBBV3ZGThPxyacV7QVVIYbRUkU8dZ3XrG9sz/2UIR556brZXgYGW3b
+         G8qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=qcLBCLM+PH8ycKWx1k07/7s89oEdWy95TuEbp0KpqhA=;
-        b=xTLVl7S7kzjYrgkHyZZypihWC8M9HG9QZkrAz4gu/gT0p68VTJ3xxTn3fU/sffH9G0
-         XAsvHwj5mnzjGVaLhPqdgHEdU8Fbp2MvwJ6dqgi68siMtIDD4//8B29+bQKWmPXM6KBh
-         yP3pDUgyMXlgs0EE5YdJzH97rTJ0+GSNsXkBDY5SMut+21yN1xeD2IvU9kJ/ssMoynib
-         K5NXy1h5HaoSza+43BWDbCeNiG7YBwp12PjR5xUQQNK0sC9v+yj03CKCZbFcGIlY9weR
-         phrz8n+XprsCeA8sC/Yx7VIxO/26yp/PGGPxYtuTp6d0xE3ZMxCFq+rsJ5YZilA+NxNs
-         +GHw==
-X-Gm-Message-State: ACrzQf1j7+Mv39tNy9zy2ygMKkxTJ+uhywLZB9EtXQ++5Em+veonYfIC
-        xxCIjT++Bb1zdbsPgHzHs9RaKceF5WU3tbgKeFZ7PD2CnYKZ42dYTuvspNBYgNvcWRAePxUFnmM
-        TipTGuxx8qS6j1b5EHPGBO0yfgEdex1Pe2vj2kUC1
-X-Received: by 2002:a05:6808:1304:b0:350:649b:f8a1 with SMTP id y4-20020a056808130400b00350649bf8a1mr895310oiv.280.1664251637623;
-        Mon, 26 Sep 2022 21:07:17 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4QxXyHj924wjaBEB7J29sMV1LhennrHiDY3BAsK2SHC05C6DnICL3Vj/1TwCJGn69NBgD2UzusGqwUyLj6jxw=
-X-Received: by 2002:a05:6808:1304:b0:350:649b:f8a1 with SMTP id
- y4-20020a056808130400b00350649bf8a1mr895301oiv.280.1664251637343; Mon, 26 Sep
- 2022 21:07:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220922024305.1718-1-jasowang@redhat.com> <20220922024305.1718-3-jasowang@redhat.com>
- <a1e98754-114e-b401-e927-5f2b71c3c641@oracle.com> <CACGkMEu9JfBDP4VkK76jdAnH225yUfTF+xMnqmy7_yDW3P0rKA@mail.gmail.com>
- <afe960d3-730a-b52c-e084-40bf080b27fa@oracle.com> <CACGkMEsWPbTs+D4PBHQL2hUOtGWj_6zo-669cUhYK5zK039QCQ@mail.gmail.com>
-In-Reply-To: <CACGkMEsWPbTs+D4PBHQL2hUOtGWj_6zo-669cUhYK5zK039QCQ@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 27 Sep 2022 12:07:06 +0800
-Message-ID: <CACGkMEuQHV-pECAPy3EozDE20Gdeh6QjaBvu6u0djeL3PZT2NA@mail.gmail.com>
-Subject: Re: [PATCH V2 2/3] vdpa_sim_net: support feature provisioning
-To:     Si-Wei Liu <si-wei.liu@oracle.com>
-Cc:     mst <mst@redhat.com>, Eli Cohen <elic@nvidia.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        eperezma <eperezma@redhat.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        Gautam Dawar <gdawar@xilinx.com>, Cindy Lu <lulu@redhat.com>,
-        Yongji Xie <xieyongji@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
+        bh=Qhij+rjILZXDr+3dJvPrhS9Wzmxt2vE9xc3gwCW9y/4=;
+        b=JcOUE/jk4WPN+dGodew+MNdJTeXFoon3PfQus4Y8eL/JgR1ScqpuA/sqzLdkM8WTwL
+         q9Bo5RERyhZW00OhtcEbmtu9MCZiKgGH22K6JyOiK6izLkgPm8/PwFho0JHej+xVVY0Y
+         +wSnSShqbMTOU/UJ3kLBQ+OL7rJ9c/VEerkyZHQYlc+TG2KOtXPZsDwThcgNJ54WZefK
+         diMx3js+10O2ZYFlFz5lKvyEQIoRneH+EX/ODYAkLwu02FFBuSpW+pSM+ISPl9sGbdS7
+         KoaZnj0dVM/ly2uEKvV3tfAMvDDa9LB1zEig3RhY2uUjaFo/pvEUDcMlEy1PbKwMwsyi
+         VoJQ==
+X-Gm-Message-State: ACrzQf02M4Ny53y+iZnGymZmciaR1e5soDKt93qZ6qzQckAOYkb7d9t0
+        btrLcObZ5Dppvp3swsBshSA=
+X-Google-Smtp-Source: AMsMyM44RQ84B1aDVXGrsKZWMZ75w4JYXnkVyZ6xfoLOwA+BhvLmo6gdR5iABqiuOKBEPYVAIHIjDQ==
+X-Received: by 2002:a50:fb17:0:b0:457:1808:8471 with SMTP id d23-20020a50fb17000000b0045718088471mr12993300edq.338.1664252697661;
+        Mon, 26 Sep 2022 21:24:57 -0700 (PDT)
+Received: from smtpclient.apple ([178.254.237.20])
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906329200b0077f5e96129fsm110839ejw.158.2022.09.26.21.24.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 26 Sep 2022 21:24:57 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH net] rhashtable: fix crash due to mm api change
+From:   Martin Zaharinov <micron10@gmail.com>
+In-Reply-To: <20220926151939.GG12777@breakpoint.cc>
+Date:   Tue, 27 Sep 2022 07:24:55 +0300
+Cc:     Michal Hocko <mhocko@suse.com>, netdev <netdev@vger.kernel.org>,
+        tgraf@suug.ch, urezki@gmail.com, Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, herbert@gondor.apana.org.au,
+        "linux-kernel@vger kernel. org" <linux-kernel@vger.kernel.org>,
+        akpm@linux-foundation.org, Paolo Bonzini <pbonzini@redhat.com>,
+        kvm@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <3AF0514E-57AB-417A-A800-A68FCF65749F@gmail.com>
+References: <20220926083139.48069-1-fw@strlen.de>
+ <YzFp4H/rbdov7iDg@dhcp22.suse.cz> <20220926151939.GG12777@breakpoint.cc>
+To:     Florian Westphal <fw@strlen.de>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 11:59 AM Jason Wang <jasowang@redhat.com> wrote:
->
-> On Tue, Sep 27, 2022 at 9:02 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
-> >
-> >
-> >
-> > On 9/26/2022 12:11 AM, Jason Wang wrote:
-> >
-> > On Sat, Sep 24, 2022 at 4:01 AM Si-Wei Liu <si-wei.liu@oracle.com> wrot=
-e:
-> >
-> >
-> > On 9/21/2022 7:43 PM, Jason Wang wrote:
-> >
-> > This patch implements features provisioning for vdpa_sim_net.
-> >
-> > 1) validating the provisioned features to be a subset of the parent
-> >     features.
-> > 2) clearing the features that is not wanted by the userspace
-> >
-> > For example:
-> >
-> > # vdpa mgmtdev show
-> > vdpasim_net:
-> >    supported_classes net
-> >    max_supported_vqs 3
-> >    dev_features MTU MAC CTRL_VQ CTRL_MAC_ADDR ANY_LAYOUT VERSION_1 ACCE=
-SS_PLATFORM
-> >
-> > Sighs, not to blame any one and it's perhaps too late, but this
-> > "dev_features" attr in "mgmtdev show" command output should have been
-> > called "supported_features" in the first place.
-> >
-> > Not sure I get this, but I guess this is the negotiated features actual=
-ly.
-> >
-> > Actually no, that is why I said the name is a bit confusing and "suppor=
-ted_features" might sound better.
->
-> You're right, it's an mgmtdev show actually.
->
-> >This attribute in the parent device (mgmtdev) denotes the real device ca=
-pability for what virtio features can be supported by the parent device. An=
-y unprivileged user can check into this field to know parent device's capab=
-ility without having to create a child vDPA device at all. The features tha=
-t child vDPA device may support should be a subset of, or at most up to wha=
-t the parent device offers. For e.g. the vdpa device dev1 you created below=
- can expose less or equal device_features bit than 0x308820028 (MTU MAC CTR=
-L_VQ CTRL_MAC_ADDR ANY_LAYOUT VERSION_1 ACCESS_PLATFORM), but shouldn't be =
-no more than what the parent device can actually support.
->
-> Yes, I didn't see anything wrong with "dev_features", it aligns to the
-> virtio spec which means the features could be used to create a vdpa
-> device. But if everyone agree on the renaming, I'm fine.
->
-> >
-> >
-> > I think Ling Shan is working on reporting both negotiated features
-> > with the device features.
-> >
-> > Does it imply this series is connected to another work in parallel? Is =
-it possible to add a reference in the cover letter?
->
-> I'm not sure, I remember Ling Shan did some work to not block the
-> config show in this commit:
->
-> commit a34bed37fc9d3da319bb75dfbf02a7d3e95e12de
-> Author: Zhu Lingshan <lingshan.zhu@intel.com>
-> Date:   Fri Jul 22 19:53:07 2022 +0800
->
->     vDPA: !FEATURES_OK should not block querying device config space
->
-> We need some changes in the vdpa tool to show device_features
-> unconditionally in the "dev config show" command.
+Hi Florian
 
-Ok, Lingshan post an example here:
+Apply v2 patch and upload on sever , after 4-5 hours work server crash =
+see log:=20
 
-https://lore.kernel.org/netdev/20220927025035.4972-2-lingshan.zhu@intel.com=
-/T/#u
+Sep 27 04:15:53  [35863.462862][   C28] ------------[ cut here =
+]------------
+Sep 27 04:15:53  [35863.463590][   C28] NETDEV WATCHDOG: eth0 (i40e): =
+transmit queue 18 timed out
+Sep 27 04:15:53  [35863.464567][   C28] WARNING: CPU: 28 PID: 0 at =
+net/sched/sch_generic.c:529 dev_watchdog+0x167/0x170
+Sep 27 04:15:53  [35863.465799][   C28] Modules linked in: nft_limit =
+nf_conntrack_netlink pppoe pppox ppp_generic slhc nft_ct =
+nft_flow_offload nf_flow_table_inet nf_flow_table nft_nat nft_chain_nat =
+team_mode_loadbalance team nf_tables netconsole coretemp i40e nf_nat_sip =
+nf_conntrack_sip nf_nat_pptp nf_conntrack_pptp nf_nat_tftp =
+nf_conntrack_tftp nf_nat_ftp nf_conntrack_ftp nf_nat nf_conntrack =
+nf_defrag_ipv6 nf_defrag_ipv4 acpi_ipmi ipmi_si ipmi_devintf =
+ipmi_msghandler rtc_cmos
+Sep 27 04:15:53  [35863.471915][   C28] CPU: 28 PID: 0 Comm: swapper/28 =
+Tainted: G           O      5.19.11 #1
+Sep 27 04:15:53  [35863.473036][   C28] Hardware name: Supermicro =
+SYS-5038MR-H8TRF/X10SRD-F, BIOS 3.3 10/28/2020
+Sep 27 04:15:53  [35863.474179][   C28] RIP: =
+0010:dev_watchdog+0x167/0x170
+Sep 27 04:15:53  [35863.474875][   C28] Code: 28 e9 77 ff ff ff 48 89 df =
+c6 05 63 57 c4 00 01 e8 de 59 fb ff 48 89 c2 44 89 e1 48 89 de 48 c7 c7 =
+08 c7 ec 97 e8 52 c6 13 00 <0f> 0b eb 85 0f 1f 44 00 00 41 55 41 54 55 =
+53 48 8b 47 50 4c 8b 28
+Sep 27 04:15:53  [35863.477517][   C28] RSP: 0018:ffff9ae9806b8ee8 =
+EFLAGS: 00010292
+Sep 27 04:15:53  [35863.478320][   C28] RAX: 0000000000000039 RBX: =
+ffff96ad92269800 RCX: 0000000000000001
+Sep 27 04:15:53  [35863.479379][   C28] RDX: 00000000ffffffea RSI: =
+00000000fff7ffff RDI: 00000000fff7ffff
+Sep 27 04:15:53  [35863.480439][   C28] RBP: ffff96ad92269bc0 R08: =
+0000000000000001 R09: 00000000fff7ffff
+Sep 27 04:15:53  [35863.481499][   C28] R10: ffff96b4dae00000 R11: =
+0000000000000003 R12: 0000000000000012
+Sep 27 04:15:53  [35863.482560][   C28] R13: 0000000000000000 R14: =
+ffff96b4dfd207a8 R15: 0000000000000082
+Sep 27 04:15:53  [35863.483621][   C28] FS:  0000000000000000(0000) =
+GS:ffff96b4dfd00000(0000) knlGS:0000000000000000
+Sep 27 04:15:53  [35863.484809][   C28] CS:  0010 DS: 0000 ES: 0000 CR0: =
+0000000080050033
+Sep 27 04:15:53  [35863.485681][   C28] CR2: 00007f87fae3d2e8 CR3: =
+000000016063b004 CR4: 00000000003706e0
+Sep 27 04:15:53  [35863.486743][   C28] DR0: 0000000000000000 DR1: =
+0000000000000000 DR2: 0000000000000000
+Sep 27 04:15:53  [35863.487802][   C28] DR3: 0000000000000000 DR6: =
+00000000fffe0ff0 DR7: 0000000000000400
+Sep 27 04:15:53  [35863.488862][   C28] Call Trace:
+Sep 27 04:15:53  [35863.489289][   C28]  <IRQ>
+Sep 27 04:15:53  [35863.489653][   C28]  ? pfifo_fast_destroy+0x30/0x30
+Sep 27 04:15:53  [35863.490313][   C28]  =
+call_timer_fn.constprop.0+0x14/0x70
+Sep 27 04:15:53  [35863.491033][   C28]  __run_timers.part.0+0x164/0x190
+Sep 27 04:15:53  [35863.491706][   C28]  ? =
+__hrtimer_run_queues+0x143/0x1a0
+Sep 27 04:15:53  [35863.492414][   C28]  ? ktime_get+0x30/0x90
+Sep 27 04:15:53  [35863.492969][   C28]  run_timer_softirq+0x21/0x50
+Sep 27 04:15:53  [35863.493598][   C28]  __do_softirq+0xaf/0x1d7
+Sep 27 04:15:53  [35863.494175][   C28]  __irq_exit_rcu+0x9a/0xd0
+Sep 27 04:15:53  [35863.494767][   C28]  =
+sysvec_apic_timer_interrupt+0x66/0x80
+Sep 27 04:15:53  [35863.495510][   C28]  </IRQ>
+Sep 27 04:15:53  [35863.495886][   C28]  <TASK>
+Sep 27 04:15:53  [35863.496263][   C28]  =
+asm_sysvec_apic_timer_interrupt+0x16/0x20
+Sep 27 04:15:53  [35863.497054][   C28] RIP: =
+0010:cpuidle_enter_state+0xb3/0x290
+Sep 27 04:15:53  [35863.497822][   C28] Code: e8 12 25 b0 ff 31 ff 49 89 =
+c5 e8 c8 80 af ff 45 84 ff 74 12 9c 58 f6 c4 02 0f 85 cf 01 00 00 31 ff =
+e8 c1 cb b3 ff fb 45 85 f6 <0f> 88 d0 00 00 00 49 63 ce 48 6b f1 68 48 =
+8b 04 24 4c 89 ea 48 29
+Sep 27 04:15:53  [35863.500462][   C28] RSP: 0018:ffff9ae9801cfe98 =
+EFLAGS: 00000202
+Sep 27 04:15:53  [35863.501266][   C28] RAX: ffff96b4dfd26800 RBX: =
+ffff96ad80bfa000 RCX: 000000000000001f
+Sep 27 04:15:53  [35863.502324][   C28] RDX: 0000209e1cf6d09d RSI: =
+00000000313b14ef RDI: 0000000000000000
+Sep 27 04:15:53  [35863.503387][   C28] RBP: 0000000000000001 R08: =
+0000000000000002 R09: ffff96b4dfd25704
+Sep 27 04:15:54  [35863.537016][   C28] R10: 0000000000000008 R11: =
+00000000000000f3 R12: ffffffff98222da0
+Sep 27 04:15:54  [35863.570647][   C28] R13: 0000209e1cf6d09d R14: =
+0000000000000001 R15: 0000000000000000
+Sep 27 04:15:54  [35863.603939][   C28]  ? =
+cpuidle_enter_state+0x98/0x290
+Sep 27 04:15:54  [35863.637176][   C28]  cpuidle_enter+0x24/0x40
+Sep 27 04:15:54  [35863.669424][   C28]  cpuidle_idle_call+0xbb/0x100
+Sep 27 04:15:54  [35863.701075][   C28]  do_idle+0x76/0xc0
+Sep 27 04:15:54  [35863.731736][   C28]  cpu_startup_entry+0x14/0x20
+Sep 27 04:15:54  [35863.761417][   C28]  start_secondary+0xd6/0xe0
+Sep 27 04:15:54  [35863.790449][   C28]  =
+secondary_startup_64_no_verify+0xd3/0xdb
+Sep 27 04:15:54  [35863.818324][   C28]  </TASK>
+Sep 27 04:15:54  [35863.844969][   C28] ---[ end trace 0000000000000000 =
+]---
+Sep 27 04:15:54  [35863.871638][   C28] i40e 0000:03:00.0 eth0: =
+tx_timeout: VSI_seid: 390, Q 18, NTC: 0xa44, HWB: 0xd18, NTU: 0xd1a, =
+TAIL: 0xd1a, INT: 0x0
+Sep 27 04:15:54  [35863.926113][   C28] i40e 0000:03:00.0 eth0: =
+tx_timeout recovery level 1, txqueue 18
 
-Thanks
 
->
-> >
-> >
-> > 1) provision vDPA device with all features that are supported by the
-> >     net simulator
-> >
-> > # vdpa dev add name dev1 mgmtdev vdpasim_net
-> > # vdpa dev config show
-> > dev1: mac 00:00:00:00:00:00 link up link_announce false mtu 1500
-> >    negotiated_features MTU MAC CTRL_VQ CTRL_MAC_ADDR VERSION_1 ACCESS_P=
-LATFORM
-> >
-> > Maybe not in this patch, but for completeness for the whole series,
-> > could we also add device_features to the output?
-> >
-> > Lingshan, could you please share your thoughts or patch on this?
-> >
-> > Noted here the device_features argument specified during vdpa creation =
-is introduced by this series itself, it somehow slightly changed the origin=
-al semantics of what device_features used to be.
->
-> I'm not sure I get this, we don't support device_features in the past
-> and it is used to provision device features to the vDPA device which
-> seems to be fine.
->
-> >
-> >
-> > When simply look at the "vdpa dev config show" output, I cannot really
-> > tell the actual device_features that was used in vdpa creation. For e.g=
-.
-> > there is a missing feature ANY_LAYOUT from negotiated_features compared
-> > with supported_features in mgmtdev, but the orchestration software
-> > couldn't tell if the vdpa device on destination host should be created
-> > with or without the ANY_LAYOUT feature.
-> >
-> > I think VERSION_1 implies ANY_LAYOUT.
-> >
-> > Right, ANY_LAYOUT is a bad example. A good example might be that, I kne=
-w the parent mgmtdev on migration source node supports CTRL_MAC_ADDR, but I=
- don't find it in negotiated_features.
->
-> I think we should use the features that we got from "mgmtdev show"
-> instead of "negotiated features".
->
-> >On the migration destination node, the parent device does support all fe=
-atures as the source offers, including CTRL_MAC_ADDR. What device features =
-you would expect the mgmt software to create destination vdpa device with, =
-if not otherwise requiring mgmt software to remember all the arguments on d=
-evice creation?
->
-> So in this example, we need use "dev_features" so we get exact the
-> same features after and operation as either src or dst.
->
-> >
-> > SOURCE# vdpa mgmtdev show
-> > vdpasim_net:
-> >    supported_classes net
-> >    max_supported_vqs 3
-> >    dev_features MTU MAC CTRL_VQ CTRL_MAC_ADDR ANY_LAYOUT VERSION_1 ACCE=
-SS_PLATFORM
-> > SOURCE# vdpa dev config show
-> > dev1: mac 00:00:00:00:00:00 link up link_announce false mtu 1500
-> >    negotiated_features MTU MAC CTRL_VQ VERSION_1 ACCESS_PLATFORM
-> >
-> > DESTINATION# vdpa mgmtdev show
-> > vdpasim_net:
-> >    supported_classes net
-> >    max_supported_vqs 3
-> >    dev_features MTU MAC CTRL_VQ CTRL_MAC_ADDR ANY_LAYOUT VERSION_1 ACCE=
-SS_PLATFORM
-> >
-> >  But it should be sufficient to
-> > use features_src & feature_dst in this case. Actually, it should work
-> > similar as to the cpu flags, the management software should introduce
-> > the concept of cluster which means the maximal set of common features
-> > is calculated and provisioned during device creation to allow
-> > migration among the nodes inside the cluster.
-> >
-> > Yes, this is one way mgmt software may implement, but I am not sure if =
-it's the only way. For e.g. for cpu flags, mgmt software can infer the gues=
-t cpus features in use from all qemu command line arguments and host cpu fe=
-atures/capability, which doesn't need to remember creation arguments and is=
- easy to recover from failure without having to make the VM config persiste=
-nt in data store. I thought it would be great if vdpa CLI design could offe=
-r the same.
->
-> One minor difference is that we have cpu model abstraction, so we can
-> have things like:
->
-> ./qemu-system-x86_64 -cpu EPYC
->
-> Which implies the cpu features/flags where vDPA doesn't have. But
-> consider it's just a 64bit (or 128 in the future), it doesn't seems to
-> be too complex for the management to know, we probably need to start
-> from this and then we can try to introduce some generation/model after
-> it is agreed on most of the vendors.
->
-> Thanks
->
-> >
-> > Thanks,
-> > -Siwei
-> >
-> >
-> > Thanks
-> >
-> > Thanks,
-> > -Siwei
-> >
-> >
-> > 2) provision vDPA device with a subset of the features
-> >
-> > # vdpa dev add name dev1 mgmtdev vdpasim_net device_features 0x30002000=
-0
-> > # vdpa dev config show
-> > dev1: mac 00:00:00:00:00:00 link up link_announce false mtu 1500
-> >    negotiated_features CTRL_VQ VERSION_1 ACCESS_PLATFORM
-> >
-> > Reviewed-by: Eli Cohen <elic@nvidia.com>
-> > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > ---
-> >   drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 11 ++++++++++-
-> >   1 file changed, 10 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_s=
-im/vdpa_sim_net.c
-> > index 886449e88502..a9ba02be378b 100644
-> > --- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> > @@ -254,6 +254,14 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_de=
-v *mdev, const char *name,
-> >       dev_attr.work_fn =3D vdpasim_net_work;
-> >       dev_attr.buffer_size =3D PAGE_SIZE;
-> >
-> > +     if (config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) {
-> > +             if (config->device_features &
-> > +                 ~dev_attr.supported_features)
-> > +                     return -EINVAL;
-> > +             dev_attr.supported_features &=3D
-> > +                      config->device_features;
-> > +     }
-> > +
-> >       simdev =3D vdpasim_create(&dev_attr);
-> >       if (IS_ERR(simdev))
-> >               return PTR_ERR(simdev);
-> > @@ -294,7 +302,8 @@ static struct vdpa_mgmt_dev mgmt_dev =3D {
-> >       .id_table =3D id_table,
-> >       .ops =3D &vdpasim_net_mgmtdev_ops,
-> >       .config_attr_mask =3D (1 << VDPA_ATTR_DEV_NET_CFG_MACADDR |
-> > -                          1 << VDPA_ATTR_DEV_NET_CFG_MTU),
-> > +                          1 << VDPA_ATTR_DEV_NET_CFG_MTU |
-> > +                          1 << VDPA_ATTR_DEV_FEATURES),
-> >       .max_supported_vqs =3D VDPASIM_NET_VQ_NUM,
-> >       .supported_features =3D VDPASIM_NET_FEATURES,
-> >   };
-> >
-> >
+Sep 27 05:44:05  [ 5136.419612][   C14] watchdog: BUG: soft lockup - =
+CPU#14 stuck for 89s! [swapper/14:0]
+Sep 27 05:44:05  [ 5136.420830][   C14] Kernel panic - not syncing: =
+softlockup: hung tasks
+Sep 27 05:44:05  [ 5136.421718][   C14] CPU: 14 PID: 0 Comm: swapper/14 =
+Tainted: G           O L    5.19.11 #1
+Sep 27 05:44:05  [ 5136.422842][   C14] Hardware name: Supermicro =
+SYS-5038MR-H8TRF/X10SRD-F, BIOS 3.3 10/28/2020
+Sep 27 05:44:05  [ 5136.423990][   C14] Call Trace:
+Sep 27 05:44:05  [ 5136.424417][   C14]  <IRQ>
+Sep 27 05:44:05  [ 5136.424784][   C14]  dump_stack_lvl+0x33/0x42
+Sep 27 05:44:05  [ 5136.425377][   C14]  panic+0xea/0x24b
+Sep 27 05:44:05  [ 5136.425875][   C14]  watchdog_timer_fn.cold+0xc/0x16
+Sep 27 05:44:05  [ 5136.426549][   C14]  ? =
+lockup_detector_update_enable+0x50/0x50
+Sep 27 05:44:05  [ 5136.427343][   C14]  __hrtimer_run_queues+0xff/0x1a0
+Sep 27 05:44:05  [ 5136.428021][   C14]  hrtimer_interrupt+0xee/0x200
+Sep 27 05:44:05  [ 5136.428660][   C14]  =
+__sysvec_apic_timer_interrupt+0x47/0x60
+Sep 27 05:44:05  [ 5136.429430][   C14]  =
+sysvec_apic_timer_interrupt+0x2d/0x80
+Sep 27 05:44:05  [ 5136.430176][   C14]  =
+asm_sysvec_apic_timer_interrupt+0x16/0x20
+Sep 27 05:44:05  [ 5136.430970][   C14] RIP: =
+0010:queued_spin_lock_slowpath+0x105/0x1a0
+Sep 27 05:44:05  [ 5136.431822][   C14] Code: ff c0 41 c1 e0 12 c1 e6 10 =
+41 09 f0 44 89 c0 c1 e8 10 66 87 42 02 89 c6 c1 e6 10 81 fe ff ff 00 00 =
+77 48 31 f6 eb 03 0f ae e8 <8b> 02 66 85 c0 75 f6 89 c7 66 31 ff 44 39 =
+c7 74 75 c6 02 01 48 85
+Sep 27 05:44:05  [ 5136.434475][   C14] RSP: 0018:ffff9eaa80450d20 =
+EFLAGS: 00000202
+Sep 27 05:44:05  [ 5136.435279][   C14] RAX: 00000000003c0101 RBX: =
+ffff88c800ce4800 RCX: ffff88ce1f9a73c0
+Sep 27 05:44:05  [ 5136.436345][   C14] RDX: ffff88c800ce4804 RSI: =
+0000000000000000 RDI: ffff88c800ce4804
+Sep 27 05:44:05  [ 5136.437410][   C14] RBP: ffff88c7e8cd28e2 R08: =
+00000000003c0000 R09: 0000000000000000
+Sep 27 05:44:05  [ 5136.438477][   C14] R10: 382ecf75f888481b R11: =
+68035d3c9e84f0bf R12: ffff88c7f91dea00
+Sep 27 05:44:05  [ 5136.439543][   C14] R13: 0000000000000014 R14: =
+0000000000000001 R15: ffff9eaa80450e78
+Sep 27 05:44:05  [ 5136.440610][   C14]  =
+nf_conntrack_tcp_packet+0xab/0xbb0 [nf_conntrack]
+Sep 27 05:44:05  [ 5136.441505][   C14]  ? dev_hard_start_xmit+0x95/0xe0
+Sep 27 05:44:05  [ 5136.442182][   C14]  ? =
+hash_conntrack_raw.constprop.0+0x89/0x100 [nf_conntrack]
+Sep 27 05:44:05  [ 5136.443180][   C14]  nf_conntrack_in+0x32f/0x500 =
+[nf_conntrack]
+Sep 27 05:44:05  [ 5136.443988][   C14]  nf_hook_slow+0x36/0xa0
+Sep 27 05:44:05  [ 5136.444556][   C14]  ip_rcv+0x65/0xa0
+Sep 27 05:44:05  [ 5136.445053][   C14]  ? =
+ip_rcv_finish_core.constprop.0+0x2c0/0x2c0
+Sep 27 05:44:05  [ 5136.445883][   C14]  =
+__netif_receive_skb_one_core+0x3f/0x50
+Sep 27 05:44:05  [ 5136.446641][   C14]  process_backlog+0x7c/0x110
+Sep 27 05:44:05  [ 5136.447257][   C14]  __napi_poll+0x20/0x100
+Sep 27 05:44:05  [ 5136.447826][   C14]  net_rx_action+0x26d/0x330
+Sep 27 05:44:05  [ 5136.448429][   C14]  __do_softirq+0xaf/0x1d7
+Sep 27 05:44:05  [ 5136.449009][   C14]  do_softirq+0x5a/0x80
+Sep 27 05:44:05  [ 5136.449554][   C14]  </IRQ>
+Sep 27 05:44:05  [ 5136.449932][   C14]  <TASK>
+Sep 27 05:44:05  [ 5136.450312][   C14]  =
+flush_smp_call_function_queue+0x3f/0x60
+Sep 27 05:44:05  [ 5136.451083][   C14]  do_idle+0xa6/0xc0
+Sep 27 05:44:05  [ 5136.451592][   C14]  cpu_startup_entry+0x14/0x20
+Sep 27 05:44:05  [ 5136.452220][   C14]  start_secondary+0xd6/0xe0
+Sep 27 05:44:05  [ 5136.452826][   C14]  =
+secondary_startup_64_no_verify+0xd3/0xdb
+Sep 27 05:44:05  [ 5136.453607][   C14]  </TASK>
+Sep 27 05:44:05  [ 5136.565092][   C14] Kernel Offset: 0x3000000 from =
+0xffffffff81000000 (relocation range: =
+0xffffffff80000000-0xffffffffbfffffff)
+Sep 27 05:44:05  [ 5136.621741][   C14] Rebooting in 10 seconds..
+
+
+> On 26 Sep 2022, at 18:19, Florian Westphal <fw@strlen.de> wrote:
+>=20
+> Michal Hocko <mhocko@suse.com> wrote:
+>> On Mon 26-09-22 10:31:39, Florian Westphal wrote:
+>>> Martin Zaharinov reports BUG() in mm land for 5.19.10 kernel:
+>>> kernel BUG at mm/vmalloc.c:2437!
+>>> invalid opcode: 0000 [#1] SMP
+>>> CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 =
+#1
+>>> [..]
+>>> RIP: 0010:__get_vm_area_node+0x120/0x130
+>>>  __vmalloc_node_range+0x96/0x1e0
+>>>  kvmalloc_node+0x92/0xb0
+>>>  bucket_table_alloc.isra.0+0x47/0x140
+>>>  rhashtable_try_insert+0x3a4/0x440
+>>>  rhashtable_insert_slow+0x1b/0x30
+>>> [..]
+>>>=20
+>>> bucket_table_alloc uses kvzalloc(GPF_ATOMIC).  If kmalloc fails, =
+this now
+>>> falls through to vmalloc and hits code paths that assume GFP_KERNEL.
+>>>=20
+>>> I sent a patch to restore GFP_ATOMIC support in kvmalloc but mm
+>>> maintainers rejected it.
+>>>=20
+>>> This patch is partial revert of
+>>> commit 93f976b5190d ("lib/rhashtable: simplify =
+bucket_table_alloc()"),
+>>> to avoid kvmalloc for ATOMIC case.
+>>>=20
+>>> As kvmalloc doesn't warn when used with ATOMIC, kernel will only =
+crash
+>>> once vmalloc fallback occurs, so we may see more crashes in other =
+areas
+>>> in the future.
+>>>=20
+>>> Most other callers seem ok but kvm_mmu_topup_memory_cache looks like =
+it
+>>> might be affected by the same breakage, so Cc kvm@.
+>>>=20
+>>> Reported-by: Martin Zaharinov <micron10@gmail.com>
+>>> Fixes: a421ef303008 ("mm: allow !GFP_KERNEL allocations for =
+kvmalloc")
+>>> Link: https://lore.kernel.org/linux-mm/Yy3MS2uhSgjF47dy@pc636/T/#t
+>>> Cc: Michal Hocko <mhocko@suse.com>
+>>> Cc: Paolo Bonzini <pbonzini@redhat.com>
+>>> Cc: kvm@vger.kernel.org
+>>> Signed-off-by: Florian Westphal <fw@strlen.de>
+>>=20
+>> Please continue in the original email thread until we sort out the =
+most
+>> reasonable solution for this.
+>=20
+> I've submitted a v2 using Michals proposed fix for kvmalloc api, if
+> thats merged no fixes are required in the callers, so this rhashtable
+> patch can be discarded.
 
