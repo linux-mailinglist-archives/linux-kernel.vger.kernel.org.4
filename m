@@ -2,136 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72FD5EC345
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FDC45EC348
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbiI0MtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
+        id S231741AbiI0Mt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiI0MtO (ORCPT
+        with ESMTP id S231445AbiI0MtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:49:14 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8549F161CD0;
-        Tue, 27 Sep 2022 05:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664282953; x=1695818953;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=twC8J74oF5U4VjbrKchulu7kV1CD0jt7Ue2RhLxOFbM=;
-  b=Yp6MfISXoztMGe/zd6lxfp+QrzUH7hIpWsjUeu0VQV4Wf+zrNPy37I3d
-   y5ggwXh6QzSfBcWUSp/NxkKze/XF4SMhohDroO86M/z9+KnLNJG98L1L5
-   YHA3RfvcN76sQLhMmGT4lqDeqPTuwLVGEhXtfCQJKTorLFJHJcvnOJu8c
-   t6YHIFzWAivQxKq3vEHXmizdhmRL5ij5kmGD07ynZFI//Ldm9Z+LTxw2Z
-   uWgb7cSJ/X2WES8qOS01H5sWAsvW5FQ2NuJ1y8i1BOS04uZK8M+uehDpl
-   egqWFWbl3mQFePmo+eaadJvHidOKrHPgNuEuysxwHcVNnhXkGeFhVb+CB
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="300026346"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="300026346"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:49:13 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="683976885"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="683976885"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.35.200])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:49:06 -0700
-Message-ID: <b0343411-4514-37a2-3417-ecdd383046ce@intel.com>
-Date:   Tue, 27 Sep 2022 15:49:01 +0300
+        Tue, 27 Sep 2022 08:49:19 -0400
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CC4167066;
+        Tue, 27 Sep 2022 05:49:17 -0700 (PDT)
+Received: by mail-qk1-f175.google.com with SMTP id x18so5911004qkn.6;
+        Tue, 27 Sep 2022 05:49:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=kxKNS5DDyDVwQYf8SSh+Z282XSXl8OO2BaUjOfJxTOs=;
+        b=xb6AyPT0DL1frZJ//0cOhbZdCmM8J0lIRf1W6Pmx9QR/wzkQOLYzooofyE033sdQT4
+         BVhg9ssWXT74uSFLT0DM+441DkrbYQJIigzv9desA8Poa3mDemECt//lO0IJGHgpA0Cq
+         V57BkUfYvtC8vIfogrIvouNHfZch3XwNYKM5jRoq1EYvbSGe9PPcfCYehdRQnZIfQViH
+         J/xMC2dAHAapwcBxP9KrV/0CKaXCkpsLIeVMGMiGT9+ex7qXXVogKizDA5HZryJPa0sq
+         i8/A03XLyzBvMIwMGW2CBuH9I0IgPEjUUoKUK3G1bZNDGypbgsh7M8guQdinP969h/J9
+         SZ6Q==
+X-Gm-Message-State: ACrzQf3rQ0d/VHEdO7GWNciJu+Az6WGZGnJeAkUJFId1thvI8UEsOBmi
+        /UPL+gM79Ns3/SPmDvi2lNIoEH5hWr5JUQ==
+X-Google-Smtp-Source: AMsMyM4CyBLabq0ZbBgwCR3Gqlzbn0bg99UnLwPevLhtmzH5TJDJkERMQLybGBIbqSfb1g5ZxmyyPA==
+X-Received: by 2002:a37:852:0:b0:6cf:7510:3c91 with SMTP id 79-20020a370852000000b006cf75103c91mr14259370qki.657.1664282956686;
+        Tue, 27 Sep 2022 05:49:16 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id c25-20020a05620a269900b006cea2984c9bsm939654qkp.100.2022.09.27.05.49.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 05:49:16 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 4so3923511ybe.2;
+        Tue, 27 Sep 2022 05:49:15 -0700 (PDT)
+X-Received: by 2002:a25:8e84:0:b0:696:466c:baa with SMTP id
+ q4-20020a258e84000000b00696466c0baamr24148017ybl.604.1664282955514; Tue, 27
+ Sep 2022 05:49:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v5 3/3] mmc: sdhci-tegra: Issue CMD and DAT resets
- together
-Content-Language: en-US
-To:     Prathamesh Shete <pshete@nvidia.com>, ulf.hansson@linaro.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     anrao@nvidia.com, smangipudi@nvidia.com, kyarlagadda@nvidia.com
-References: <df68846a-2a09-ef98-6823-d536d99ccb61@intel.com>
- <20220927111314.32229-1-pshete@nvidia.com>
- <20220927111314.32229-3-pshete@nvidia.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220927111314.32229-3-pshete@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
+ <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
+ <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com>
+ <20220726160337.GA41736@francesco-nb.int.toradex.com> <CAPDyKFqGFjywJ-Vmmn9=-NOzJX=24mH9A03H9djS=nJotKWK8A@mail.gmail.com>
+ <20220728112146.GA97654@francesco-nb.int.toradex.com> <CAPDyKFqtCxrjALeCmhuqQ2VmmUHhi-DjXO30uHChTPFeDbp+JQ@mail.gmail.com>
+ <20220909142247.GA238001@francesco-nb.int.toradex.com> <CAPDyKFrwpz=gi3iY5YsO6k4o33eLQRp-wXvBx3nQ0q=G9YrqHA@mail.gmail.com>
+ <70ee4f8e-7529-307e-656c-2a65d0187af6@linaro.org> <CAPDyKFoyNWZvT+QPdX4sQuS3DL8mepfnLraHLusMi9K8MOfLgg@mail.gmail.com>
+ <d19ffd93-bbb3-ac61-0ec3-58fd48443eb2@linaro.org> <CAPDyKFrDFAif3DnvPoLrgJ2+fv+aB9GyOoG_O3q-1m=2Y5eT5w@mail.gmail.com>
+In-Reply-To: <CAPDyKFrDFAif3DnvPoLrgJ2+fv+aB9GyOoG_O3q-1m=2Y5eT5w@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 27 Sep 2022 14:49:02 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVteS1va320fAAx445eFQ75XnapQbeGWEkg2aagnjN6Jg@mail.gmail.com>
+Message-ID: <CAMuHMdVteS1va320fAAx445eFQ75XnapQbeGWEkg2aagnjN6Jg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Max Krummenacher <max.oss.09@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/09/22 14:13, Prathamesh Shete wrote:
-> In case of error condition to avoid system crash
-> Tegra SDMMC controller requires CMD and DAT resets
-> issued together. SDHCI controller FSM goes into
-> bad state due to rapid SD card hot-plug event.
-> Issuing reset on the CMD FSM before DATA FSM results
-> in kernel panic, hence add support to issue CMD and
-> DAT resets together.
-> This is applicable to Tegra186 and later chips.
-> 
-> Signed-off-by: Aniruddha TVS Rao <anrao@nvidia.com>
-> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+Hi Ulf,
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+On Tue, Sep 27, 2022 at 11:49 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >>>> The main concern that was raised on this topic was that we have to
+> > >>>> somehow link the power-domain to the specific peripherals (the power
+> > >>>> domain consumer) in the device tree.
+> > >>>
+> > >>> Yes, that is needed. Although, I don't see how that is a concern?
+> > >>>
+> > >>> We already have the valid bindings to use for this, see more below.
+> > >>>
+> > >>>>
+> > >>>> Adding the power-domain property there will trigger validation errors
+> > >>>> unless we do explicitly add the power-domains to the schema for each
+> > >>>> peripheral we need this. To me this does not really work, but maybe I'm
+> > >>>> not understanding something.
+> > >>>>
+> > >>>> This is what Rob wrote on the topic [1]:
+> > >>>>   > No. For 'power-domains' bindings have to define how many there are and
+> > >>>>   > what each one is.
+> > >>>>
+> > >>>> Just as an example from patch [2]:
+> > >>>>
+> > >>>>   can1: can@0 {
+> > >>>>     compatible = "microchip,mcp251xfd";
+> > >>>>     power-domains = <&pd_sleep_moci>;
+> > >>>>   };
+> > >>>>
+> > >>>> leads to:
+> > >>>>
+> > >>>>   imx8mm-verdin-nonwifi-dahlia.dtb: can@0: 'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
+> > >>>>           From schema: .../bindings/net/can/microchip,mcp251xfd.yaml
+> > >>>
+> > >>> I think it should be fine to just add the below line to the DT
+> > >>> bindings, for each peripheral device to fix the above problem.
+> > >>>
+> > >>> power-domains: true
+> > >>
+> > >> Again, as Rob said, no, because it must be strictly defined. So for
+> > >> example: "maxItems: 1" for simple cases. But what if device is then part
+> > >> of two power domains?
+> > >>
+> > >>>
+> > >>> That should be okay, right?
+> > >>
+> > >> Adding it to each peripheral scales poorly. Especially that literally
+> > >> any device can be part of such power domain.
+> > >
+> > > Right.
+> > >
+> > >>
+> > >> If we are going with power domain approach, then it should be applicable
+> > >> basically to every device or to every device of some class (e.g. I2C,
+> > >> SPI). This means it should be added to respective core schema in
+> > >> dtschema repo, in a way it does not interfere with other power-domains
+> > >> properties (existing ones).
+> > >
+> > > Isn't that already taken care of [1]?
+> >
+> > No, because it does not define the items (what are the power domains and
+> > how many). This binding expects that any device has maxItems restricting it.
+>
+> Right, apologize for my ignorance.
+>
+> >
+> > >
+> > > If there is more than one power domain per device, perhaps we may need
+> > > to extend it with a more strict binding? But, that doesn't seem to be
+> > > the case here - and if it turns out to be needed later on, we can
+> > > always extend the bindings, no?
+> > >
+> > > Note also that we already have DT bindings specifying "power-domains:
+> > > true" to deal with the above. Isn't that what we want?
+> >
+> > You mentioned it before and both me and Rob already responded - no,
+> > because it does not restrict the number of items.
+>
+> Okay, so maxItems need to be specified for each peripheral. It's not a
+> big deal, right?
+>
+> Of course, it would be even easier if the core schema would use a
+> default "maxItems: 1" for power domain consumers, which of course must
+> be possible to be overridden for those consumers that need something
+> else. But perhaps it's not that simple. :-)
 
-> ---
->  drivers/mmc/host/sdhci-tegra.c | 3 ++-
->  drivers/mmc/host/sdhci.c       | 5 +++++
->  drivers/mmc/host/sdhci.h       | 2 ++
->  3 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
-> index 46f37cc26dbb..61dc5ee0726d 100644
-> --- a/drivers/mmc/host/sdhci-tegra.c
-> +++ b/drivers/mmc/host/sdhci-tegra.c
-> @@ -1536,7 +1536,8 @@ static const struct sdhci_pltfm_data sdhci_tegra186_pdata = {
->  		  SDHCI_QUIRK_NO_HISPD_BIT |
->  		  SDHCI_QUIRK_BROKEN_ADMA_ZEROLEN_DESC |
->  		  SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN,
-> -	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
-> +	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
-> +		   SDHCI_QUIRK2_ISSUE_CMD_DAT_RESET_TOGETHER,
->  	.ops  = &tegra186_sdhci_ops,
->  };
->  
-> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-> index 2b5dda521b0e..8512a69f1aae 100644
-> --- a/drivers/mmc/host/sdhci.c
-> +++ b/drivers/mmc/host/sdhci.c
-> @@ -270,6 +270,11 @@ enum sdhci_reset_reason {
->  
->  static void sdhci_reset_for_reason(struct sdhci_host *host, enum sdhci_reset_reason reason)
->  {
-> +	if (host->quirks2 &
-> +		SDHCI_QUIRK2_ISSUE_CMD_DAT_RESET_TOGETHER) {
-> +		sdhci_do_reset(host, SDHCI_RESET_CMD | SDHCI_RESET_DATA);
-> +		return;
-> +	}
->  	switch (reason) {
->  	case SDHCI_RESET_FOR_INIT:
->  		sdhci_do_reset(host, SDHCI_RESET_CMD | SDHCI_RESET_DATA);
-> diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
-> index d750c464bd1e..6a5766774b05 100644
-> --- a/drivers/mmc/host/sdhci.h
-> +++ b/drivers/mmc/host/sdhci.h
-> @@ -478,6 +478,8 @@ struct sdhci_host {
->   * block count.
->   */
->  #define SDHCI_QUIRK2_USE_32BIT_BLK_CNT			(1<<18)
-> +/* Issue CMD and DATA reset together */
-> +#define SDHCI_QUIRK2_ISSUE_CMD_DAT_RESET_TOGETHER	(1<<19)
->  
->  	int irq;		/* Device IRQ */
->  	void __iomem *ioaddr;	/* Mapped address */
+It's not that simple: being part of a PM Domain is not a property of the
+device being described, but a property of the integration into the SoC.
 
+All synchronous hardware needs power (single/multiple), clock(s), and
+reset(s).  But the granularity of control over power(s), clocks, and resets
+depends on the integration.  So the related properties can appear
+anywhere.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
