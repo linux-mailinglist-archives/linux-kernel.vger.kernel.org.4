@@ -2,129 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05A15EC20D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2935EC214
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbiI0MFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
+        id S231282AbiI0MIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbiI0MFc (ORCPT
+        with ESMTP id S229810AbiI0MIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:05:32 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9069413CE1;
-        Tue, 27 Sep 2022 05:05:28 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id s14so14748076wro.0;
-        Tue, 27 Sep 2022 05:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=aMFz74PifNUSu/W0zEbEDzLNbyXt9EcYY4KaI+IEVt0=;
-        b=G+gMsz+4fAGkT5Px+9K2xvQvfj9D9TKBj+P18qWucd+8pQw+U/rOWuTlHv5B+ULWgT
-         5y7QcT8rOOYXt6E2TDNxd5r7cd86ngoHaw5Qxuxys3fzcgGygoE0f++c7fNDk1eXEYl1
-         6Z/wo+8NHwi1sqwA5Z3kjzgK1LP2QNOmlaO0g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=aMFz74PifNUSu/W0zEbEDzLNbyXt9EcYY4KaI+IEVt0=;
-        b=bJx33mF6zJh126LPomwxUd2lBlESZEQQ5UyPU9e6ePi5FmUL6vZE/FsbP+PPvFajQd
-         tW96aBzMvB9KRE9gWuClbigZ7TGndR8PZtoagOiMpxaP4EwW2COYbe4GF3KU/43BXRcW
-         Cqqqmyd89/eq1fXbECre2YHRica9kQWV2EJN3mYw6xbcjewpjJ1VjhL+9Cd7LNCpR+ZW
-         KdekCTLK4C6Na+LQ6D9ZZM2th613emZf0lFMp3yPCmsSvm+bdG8RN6DjdQAkcxjQ9mDH
-         jyJuTb32pZJpFuzf37G+0y91jTskWyWUJIptIt7Os03sA1mml1IIsQPXaoPiDtugxi75
-         Nniw==
-X-Gm-Message-State: ACrzQf025lMgBkYAsIeyfpf8ADOnhVI7GbgG14ito6ODPjzHibA9N1hi
-        FVLmoOT7rf4v/YwjFqTeqEnbSA9xbZXO2PkJK1IpV0Dv
-X-Google-Smtp-Source: AMsMyM7nMLB0IrCPb2M/nxRoglUKQkXLXDTvev/T6b71kPxYN6T7MwuZB65wnFvN2X+RV+DTVJ2yZoF81QdnU8NDvZ8=
-X-Received: by 2002:a5d:4bc3:0:b0:22a:4b7a:6f60 with SMTP id
- l3-20020a5d4bc3000000b0022a4b7a6f60mr16447585wrt.549.1664280326958; Tue, 27
- Sep 2022 05:05:26 -0700 (PDT)
+        Tue, 27 Sep 2022 08:08:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07E2A2A9F;
+        Tue, 27 Sep 2022 05:08:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48D7F60EF1;
+        Tue, 27 Sep 2022 12:08:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F11CC433D6;
+        Tue, 27 Sep 2022 12:07:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664280479;
+        bh=ICu0Mbj7QJ+Q9rgfCJL0ERLgAyF1QTBOrSbazfxcV8k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R8jWz48QdCdkCpBHDo8SrbZyq2yp/aty3qEKLFySWdlBWePxkemalROMgE2XqWky3
+         t0tv+8tbkuoRIv8LGQbVuz4m7P+NPWp4xj9hFU1ZyFJk+K0+99snDljH7njF+NjZN3
+         t/2VCIMp6VQWJEyWtsMfhsZkTuTSbCHkM7JrD4VOGvhXTj6pVnC9FIWyeK+JdSWkpd
+         ez3Cg45AfWOgQP3p//NxzRGDs8MN8K3iqmU+kJD6xox07kmOVdr7Cy+bPP0fGAtuPY
+         Qndq+L+XgcyMpDAN4pwr2wRoqtMnDDgRdtguRWdZh8Ld5PNrwXk380yFJCnrc2wfJW
+         XqoSVNiYhjl2Q==
+Date:   Tue, 27 Sep 2022 14:07:52 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>, gregkh@linuxfoundation.org
+Cc:     cgel.zte@gmail.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH linux-next] PCI: iproc: Remove the unneeded result
+ variable
+Message-ID: <YzLnmGiU7qcWkeH2@lpieralisi>
+References: <20220906071636.336853-1-ye.xingchen@zte.com.cn>
+ <20220906212520.GA45166@bhelgaas>
 MIME-Version: 1.0
-References: <20220927114515.GA22344@hcl-ThinkPad-T495>
-In-Reply-To: <20220927114515.GA22344@hcl-ThinkPad-T495>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 27 Sep 2022 12:05:14 +0000
-Message-ID: <CACPK8XdHaExSzdHpCXNzSEK7L-QDDSkz2rud3OynBC-KhEApFA@mail.gmail.com>
-Subject: Re: [PATCH v6] ARM: dts: aspeed: Yosemite V2: Enable OCP debug card
-To:     Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906212520.GA45166@bhelgaas>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Sept 2022 at 11:45, Karthikeyan Pasupathi
-<pkarthikeyan1509@gmail.com> wrote:
->
-> Added IPMB-13 channel for Debug Card communication.
-> which improves the readability of the machine and makes
-> it easier to debug the server and it will display some
-> pieces of information about the server like "system info",
-> "Critical sensors" and "critical sel".
->
-> Signed-off-by: Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
+[+Greg]
 
-Thanks, I've queued this.
+On Tue, Sep 06, 2022 at 04:25:20PM -0500, Bjorn Helgaas wrote:
+> On Tue, Sep 06, 2022 at 07:16:36AM +0000, cgel.zte@gmail.com wrote:
+> > From: ye xingchen <ye.xingchen@zte.com.cn>
+> > 
+> > Return the value iproc_pcie_setup_ib() directly instead of storing it in
+> > another redundant variable.
+> > 
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> This patch itself is fine, but was posted by cgel.zte@gmail.com, not by
+> "ye xingchen <ye.xingchen@zte.com.cn>", so it needs another signoff
+> and full name so the chain is complete.  For more details see:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?id=v5.18#n363
 
-Thanks Zev for your help reviewing.
+Greg, Bjorn,
 
-> ---
-> v6:
->  -Fix the commit format
->
-> v5:
->  -Updated commit message
->
-> v4:
->  -Resolved syntax error
->
-> v3:
->  -Updated the title and commit
->
-> v2:
->  -Updated the title
->
-> v1:
->  - Initial draft
-> ---
-> ---
->  arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-> index 8864e9c312a8..84236df522dc 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
-> @@ -215,6 +215,17 @@
->         };
->  };
->
-> +&i2c13 {
-> +       status = "okay";
-> +       // Debug Card
-> +       multi-master;
-> +       ipmb13@10 {
-> +               compatible = "ipmb-dev";
-> +               reg = <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
-> +               i2c-protocol;
-> +       };
-> +};
-> +
->  &pwm_tacho {
->         status = "okay";
->         //FSC
-> --
-> 2.17.1
->
+I believe that appending a SoB like this myself is fine:
+
+Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+
+It is a SOB already in kernel commit logs - I assume
+that's the right thing to do in this case, please
+let me know if it isn't and what should we do instead.
+
+Thanks,
+Lorenzo
+
+> Bjorn
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
