@@ -2,228 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498B05EBE62
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB9A5EBE4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiI0JVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 05:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S231807AbiI0JTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 05:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiI0JUH (ORCPT
+        with ESMTP id S231809AbiI0JTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 05:20:07 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB51AE1725;
-        Tue, 27 Sep 2022 02:19:15 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28R8JZjS010803;
-        Tue, 27 Sep 2022 09:18:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=QnN8HlcE5S4rIlypLNB91LaEr+2BPdSCVHaTJssOnwo=;
- b=DDjdPF2EYyHEjVKV/mDImT0LQdc+z50mVBsOwnMVwZmRBbiCVF8M+BRWr9CZCM9xWbn1
- JRCrGcJXL0OdlTQFRiMAI2qpjwcoIfwlb91vSjtbpiiJSFXhWnKha2ahjyc1R2G+GbX4
- ChHD0dien+iEkYzxW8AiaT0ocUrQYbPZJIY3zaYdF7d5yaDWQmqur/tAJ2iJcM+j3CGN
- f/xP1HT+BNy26U4P3DdKfhQtY3AnDjvzaUpPDg5437h5Zc6eCTMlfMA9FEBFY1oHiLiA
- G7bMK+qQll0i4jc1GJO/zvI2CJ3etZN26ssbocXdWNX0sOyspuijEy2I6PDE+41UiVjs Wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3juwjk9t07-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 09:18:47 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28R8LiAI016543;
-        Tue, 27 Sep 2022 09:18:46 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3juwjk9syn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 09:18:46 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28R95tBi008940;
-        Tue, 27 Sep 2022 09:18:44 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3juapuh8u3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 09:18:44 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28R9IfMt40501632
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Sep 2022 09:18:41 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2000942041;
-        Tue, 27 Sep 2022 09:18:41 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A7AFC4203F;
-        Tue, 27 Sep 2022 09:18:38 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.61.44])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Sep 2022 09:18:38 +0000 (GMT)
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>
-Cc:     Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, rookxu <brookxu.cn@gmail.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Subject: [RFC v3 8/8] ext4: Remove the logic to trim inode PAs
-Date:   Tue, 27 Sep 2022 14:46:48 +0530
-Message-Id: <a26fdd12f4f60cf506a42b6a95e8014e5f380b05.1664269665.git.ojaswin@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1664269665.git.ojaswin@linux.ibm.com>
-References: <cover.1664269665.git.ojaswin@linux.ibm.com>
+        Tue, 27 Sep 2022 05:19:16 -0400
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171F8E9CDD
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:18:08 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id WKU00000;
+        Tue, 27 Sep 2022 17:18:00 +0800
+Received: from jtjnmail201606.home.langchao.com (10.100.2.6) by
+ jtjnmail201603.home.langchao.com (10.100.2.3) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 27 Sep 2022 17:18:01 +0800
+Received: from jtjnmail201606.home.langchao.com ([fe80::8583:33f:807a:3430])
+ by jtjnmail201606.home.langchao.com ([fe80::8583:33f:807a:3430%10]) with mapi
+ id 15.01.2507.012; Tue, 27 Sep 2022 17:18:01 +0800
+From:   =?utf-8?B?Um9jayBMaSjmnY7lro/kvJ8p?= <lihongweizz@inspur.com>
+To:     Joseph Qi <joseph.qi@linux.alibaba.com>,
+        "mark@fasheh.com" <mark@fasheh.com>,
+        "jlbec@evilplan.org" <jlbec@evilplan.org>
+CC:     "ocfs2-devel@oss.oracle.com" <ocfs2-devel@oss.oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ocfs2: fix crash issue if access released lockres in
+ debugfs
+Thread-Topic: [PATCH] ocfs2: fix crash issue if access released lockres in
+ debugfs
+Thread-Index: AdjSTgjzs68j6v4ZSxestKMYGpn8kQ==
+Date:   Tue, 27 Sep 2022 09:18:01 +0000
+Message-ID: <33c7f114b4ee498fbb5d233bb354e396@inspur.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.180.204.84]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: q7XGBxpj9oLUQLxYdQu1mxNBeZeK1vcp
-X-Proofpoint-ORIG-GUID: xUtyDBZFC9iBnEFzDtu3vE0-Ya69oEnd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-27_02,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- bulkscore=0 malwarescore=0 impostorscore=0 adultscore=0 suspectscore=0
- spamscore=0 lowpriorityscore=0 mlxlogscore=999 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209270053
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+tUid:   20229271718004bb7c0e07da3a80c9c3a277ef3517944
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Earlier, inode PAs were stored in a linked list. This caused a need to
-periodically trim the list down inorder to avoid growing it to a very
-large size, as this would severly affect performance during list
-iteration.
-
-Recent patches changed this list to an rbtree, and since the tree scales
-up much better, we no longer need to have the trim functionality, hence
-remove it.
-
-Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
----
- Documentation/admin-guide/ext4.rst |  3 ---
- fs/ext4/ext4.h                     |  1 -
- fs/ext4/mballoc.c                  | 20 --------------------
- fs/ext4/mballoc.h                  |  5 -----
- fs/ext4/sysfs.c                    |  2 --
- 5 files changed, 31 deletions(-)
-
-diff --git a/Documentation/admin-guide/ext4.rst b/Documentation/admin-guide/ext4.rst
-index 4c559e08d11e..5740d85439ff 100644
---- a/Documentation/admin-guide/ext4.rst
-+++ b/Documentation/admin-guide/ext4.rst
-@@ -489,9 +489,6 @@ Files in /sys/fs/ext4/<devname>:
-         multiple of this tuning parameter if the stripe size is not set in the
-         ext4 superblock
- 
--  mb_max_inode_prealloc
--        The maximum length of per-inode ext4_prealloc_space list.
--
-   mb_max_to_scan
-         The maximum number of extents the multiblock allocator will search to
-         find the best extent.
-diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-index d54b972f1f0f..bca4b41cc192 100644
---- a/fs/ext4/ext4.h
-+++ b/fs/ext4/ext4.h
-@@ -1612,7 +1612,6 @@ struct ext4_sb_info {
- 	unsigned int s_mb_stats;
- 	unsigned int s_mb_order2_reqs;
- 	unsigned int s_mb_group_prealloc;
--	unsigned int s_mb_max_inode_prealloc;
- 	unsigned int s_max_dir_size_kb;
- 	/* where last allocation was done - for stream allocation */
- 	unsigned long s_mb_last_group;
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index cd19b9e84767..57e1ec88477a 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -3420,7 +3420,6 @@ int ext4_mb_init(struct super_block *sb)
- 	sbi->s_mb_stats = MB_DEFAULT_STATS;
- 	sbi->s_mb_stream_request = MB_DEFAULT_STREAM_THRESHOLD;
- 	sbi->s_mb_order2_reqs = MB_DEFAULT_ORDER2_REQS;
--	sbi->s_mb_max_inode_prealloc = MB_DEFAULT_MAX_INODE_PREALLOC;
- 	/*
- 	 * The default group preallocation is 512, which for 4k block
- 	 * sizes translates to 2 megabytes.  However for bigalloc file
-@@ -5546,29 +5545,11 @@ static void ext4_mb_add_n_trim(struct ext4_allocation_context *ac)
- 	return ;
- }
- 
--/*
-- * if per-inode prealloc list is too long, trim some PA
-- */
--static void ext4_mb_trim_inode_pa(struct inode *inode)
--{
--	struct ext4_inode_info *ei = EXT4_I(inode);
--	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
--	int count, delta;
--
--	count = atomic_read(&ei->i_prealloc_active);
--	delta = (sbi->s_mb_max_inode_prealloc >> 2) + 1;
--	if (count > sbi->s_mb_max_inode_prealloc + delta) {
--		count -= sbi->s_mb_max_inode_prealloc;
--		ext4_discard_preallocations(inode, count);
--	}
--}
--
- /*
-  * release all resource we used in allocation
-  */
- static int ext4_mb_release_context(struct ext4_allocation_context *ac)
- {
--	struct inode *inode = ac->ac_inode;
- 	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
- 	struct ext4_prealloc_space *pa = ac->ac_pa;
- 	if (pa) {
-@@ -5604,7 +5585,6 @@ static int ext4_mb_release_context(struct ext4_allocation_context *ac)
- 	if (ac->ac_flags & EXT4_MB_HINT_GROUP_ALLOC)
- 		mutex_unlock(&ac->ac_lg->lg_mutex);
- 	ext4_mb_collect_stats(ac);
--	ext4_mb_trim_inode_pa(inode);
- 	return 0;
- }
- 
-diff --git a/fs/ext4/mballoc.h b/fs/ext4/mballoc.h
-index f8e8ee493867..6d85ee8674a6 100644
---- a/fs/ext4/mballoc.h
-+++ b/fs/ext4/mballoc.h
-@@ -73,11 +73,6 @@
-  */
- #define MB_DEFAULT_GROUP_PREALLOC	512
- 
--/*
-- * maximum length of inode prealloc list
-- */
--#define MB_DEFAULT_MAX_INODE_PREALLOC	512
--
- /*
-  * Number of groups to search linearly before performing group scanning
-  * optimization.
-diff --git a/fs/ext4/sysfs.c b/fs/ext4/sysfs.c
-index d233c24ea342..f0d42cf44c71 100644
---- a/fs/ext4/sysfs.c
-+++ b/fs/ext4/sysfs.c
-@@ -214,7 +214,6 @@ EXT4_RW_ATTR_SBI_UI(mb_min_to_scan, s_mb_min_to_scan);
- EXT4_RW_ATTR_SBI_UI(mb_order2_req, s_mb_order2_reqs);
- EXT4_RW_ATTR_SBI_UI(mb_stream_req, s_mb_stream_request);
- EXT4_RW_ATTR_SBI_UI(mb_group_prealloc, s_mb_group_prealloc);
--EXT4_RW_ATTR_SBI_UI(mb_max_inode_prealloc, s_mb_max_inode_prealloc);
- EXT4_RW_ATTR_SBI_UI(mb_max_linear_groups, s_mb_max_linear_groups);
- EXT4_RW_ATTR_SBI_UI(extent_max_zeroout_kb, s_extent_max_zeroout_kb);
- EXT4_ATTR(trigger_fs_error, 0200, trigger_test_error);
-@@ -264,7 +263,6 @@ static struct attribute *ext4_attrs[] = {
- 	ATTR_LIST(mb_order2_req),
- 	ATTR_LIST(mb_stream_req),
- 	ATTR_LIST(mb_group_prealloc),
--	ATTR_LIST(mb_max_inode_prealloc),
- 	ATTR_LIST(mb_max_linear_groups),
- 	ATTR_LIST(max_writeback_mb_bump),
- 	ATTR_LIST(extent_max_zeroout_kb),
--- 
-2.31.1
-
+SGkgSm9zZXBoLA0KDQpUaGFua3MgZm9yIHlvdXIgcmVwbHkuIA0KSW4gb3VyIHVzZSBjYXNlLCBh
+IHVzZXJzcGFjZSBkYWVtb24gdG9vbCB3aWxsIHBlcmlvZGljYWxseSByZWFkIC9zeXMva2VybmVs
+L2RlYnVnL28yZGxtLzx1dWlkPi9sb2NraW5nX3N0YXRlIHRvIGNoZWNrIHRoZSBsb2NrIHJlcXVl
+c3Qgc3RhdGUuIFN5c3RlbSBjcmFzaGVzIGNhc3VhbGx5IGFmdGVyIGEgbG9uZyB0aW1lIHJ1bm5p
+bmcuIEFmdGVyIGFuYWx5emVkIHRoZSB2bWNvcmUgZmlsZSwgSSBmb3VuZCB0aGUgZGFlbW9uIHRv
+b2wgcHJvY2VzcyBpcyBhY2Nlc3NpbmcgYW4gaW52YWxpZCBwb2ludGVyIGluc2lkZSB0aGUgc2Vx
+ZmlsZSBpdGVyYXRpb24gd2hlbiByZWFkaW5nIGxvY2tpbmdfc3RhdGUuIA0KDQpJIG5lZWQgdG8g
+Y29ycmVjdCBteSBwYXRjaCBjb21tZW50IHNsaWdodGx5IHRoYXQgYWRkaW5nIGxvY2tyZXNBIGFu
+ZCByZW1vdmluZyBsb2NrcmVzQiBkbyBub3QgaGF2ZSB0byBiZSB0aGUgc2FtZSBwcm9jZXNzLCB0
+aGUga2V5IHBvaW50IGlzIHRoYXQgdGhlIGxvY2sgdHJhY2tpbmcgbGlzdCBpcyBjaGFuZ2VkIGR1
+cmluZyBzZXFmaWxlIGl0ZXJhdGlvbi4NCg0KQnIsDQpSb2NrDQoNCj4gUmU6IFtQQVRDSF0gb2Nm
+czI6IGZpeCBjcmFzaCBpc3N1ZSBpZiBhY2Nlc3MgcmVsZWFzZWQgbG9ja3JlcyBpbiBkZWJ1Z2Zz
+DQo+IA0KPiBIaSwNCj4gU29ycnkgZm9yIHRoZSBsYXRlIHJlcGx5Lg0KPiBJdCBzZWVtcyBpdCBp
+cyBpbmRlZWQgYW4gaXNzdWUgYW5kIEknbGwgZ2V0IGludG8gaXQgbW9yZSBkZWVwbHkuDQo+IEkn
+bSBjdXJpb3VzIGFib3V0IGhvdyB5b3UgZmlndXJlIG91dCB0aGlzPyBJcyBpdCBhIHJlYWwgaXNz
+dWUgeW91J3ZlIGVuY291bnRlcmVkPw0KPiANCj4gVGhhbmtzLA0KPiBKb3NlcGgNCj4gDQo+IE9u
+IDkvMjAvMjIgMzozNiBQTSwgUm9jayBMaSB3cm90ZToNCj4gPiBBY2Nlc3MgbG9ja2luZ19zdGF0
+ZSBvZiBkbG0gZGVidWdmcyBtYXkgY2F1c2UgY3Jhc2ggYXMgc2NlbmUgYmVsb3c6DQo+ID4NCj4g
+PiBQcm9jIEE6ICAgICAgICAgICAgICAgICAgUHJvYyB0aGF0IGFjY2VzcyBkZWJ1Z2luZm86DQo+
+ID4gYWRkX2xvY2tyZXNfdHJhY2tpbmcobG9ja3Jlc0EpDQo+ID4gLi4uDQo+ID4gICAgICAgICAg
+ICAgICAgICAgICAgICAgIG9jZnMyX2RsbV9zZXFfbmV4dCgpOg0KPiA+ICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIC8vcHJpdi0+cF9pdGVyX3JlcyBwb2ludHMgdG8gbmV4dA0KPiA+ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIC8vbG9ja3JlcyBlLmcuIEIuIHByaXYtPnBfdG1wX3JlcyBo
+b2xkDQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgLy9jb3B5IG9mIGxvY2tyZXMgQSBi
+ZWZvcmUgbGVhdmUNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgb2NmczJfZGxtX3NlcV9z
+aG93KCkgLi4uDQo+ID4gcmVtb3ZlX2xvY2tyZXNfdHJhY2tpbmcobG9ja3JlcyBCKToNCj4gPiAg
+IC8vZnJlZSBsb2NrcmVzIEIsIGxfZGVidWdfbGlzdCBpbg0KPiA+ICAgLy9wcml2LT5wX3Rlcl9y
+ZXMgaXMgdXBkYXRlZCBidXQgbm90DQo+ID4gICAvL3ByaXYtPnBfdG1wX3Jlcw0KPiA+IC4uLg0K
+PiA+ICAgICAgICAgICAgICAgICAgICAgICAgICBvY2ZzMl9kbG1fc2VxX25leHQoKToNCj4gPiAJ
+CQkgICAgICAgICAgICAgICAgICAvL3ByaXYtPnBfdG1wX3JlcyB3aGljaCBob2xkcyBhIG9sZCBj
+b3B5IG9mDQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgLy9sb2NrcmVzIEEsIHRoZSBs
+X2RlYnVnX2xpc3QgaG9sZHMgYQ0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIC8vb3V0
+LW9mLWRhdGUgc3VjY2VlZCBwb2ludGVyLCB3aGljaCB3aWxsDQo+ID4gICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgLy9jYXVzZSBjcmFzaCBhcyAvL2FjY2VzcyBpbnZhbGlkIG1lbW9yeQ0KPiA+
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIGl0ZXIgPSB2OyAvL3ByaXYtPnBfdG1wX3Jlcw0K
+PiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIGl0ZXIgPSBvY2ZzMl9kbG1fbmV4dF9yZXMo
+aXRlciwgcHJpdikNCj4gPg0KPiA+IFRoZSByb290IGNhdXNlIG9mIHRoaXMgaXNzdWUgaXMgdGhh
+dCBwcml2YXRlLT5wX2l0ZXJfcmVzIGFjdHMgYXMgdGhlDQo+ID4gYWdlbnQgb2YgYWNjZXNzaW5n
+IGxvY2tyZXMgYW5kIGlzIHByb3RlY3RlZCBieSBvY2ZzMl9kbG1fdHJhY2tpbmdfbG9jaw0KPiA+
+IHdoaWxlIHBfdG1wX3JlcyBpcyBvbmx5IGEgY29weSBvZiB0aGUgbG9ja3JlcyBhbmQgd2lsbCBi
+ZSBvdXQtb2YtZGF0ZWQNCj4gPiBhZnRlciBsZWF2ZSBjcml0aWFsIHJlZ2lvbiBvZiBvY2ZzMl9k
+bG1fdHJhY2tpbmdfbG9jay4gV2Ugc2hvdWxkIHVzZQ0KPiA+IHByaXYtPnBfdGVyX3JlcyBhcyB0
+aGUgZm9yd2FyZCBpdGVyYXRlciBpbnN0ZWFkLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogUm9j
+ayBMaSA8bGlob25nd2VpenpAaW5zcHVyLmNvbT4NCj4gPiAtLS0NCj4gPiAgZnMvb2NmczIvZGxt
+Z2x1ZS5jIHwgMiArLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVs
+ZXRpb24oLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9mcy9vY2ZzMi9kbG1nbHVlLmMgYi9mcy9v
+Y2ZzMi9kbG1nbHVlLmMgaW5kZXgNCj4gPiBjMjhiYzk4Li41ZDg0MzUwIDEwMDY0NA0KPiA+IC0t
+LSBhL2ZzL29jZnMyL2RsbWdsdWUuYw0KPiA+ICsrKyBiL2ZzL29jZnMyL2RsbWdsdWUuYw0KPiA+
+IEBAIC0zMTA5LDcgKzMxMDksNyBAQCBzdGF0aWMgdm9pZCAqb2NmczJfZGxtX3NlcV9uZXh0KHN0
+cnVjdCBzZXFfZmlsZQ0KPiAqbSwgdm9pZCAqdiwgbG9mZl90ICpwb3MpDQo+ID4gIAlzdHJ1Y3Qg
+b2NmczJfbG9ja19yZXMgKmR1bW15ID0gJnByaXYtPnBfaXRlcl9yZXM7DQo+ID4NCj4gPiAgCXNw
+aW5fbG9jaygmb2NmczJfZGxtX3RyYWNraW5nX2xvY2spOw0KPiA+IC0JaXRlciA9IG9jZnMyX2Rs
+bV9uZXh0X3JlcyhpdGVyLCBwcml2KTsNCj4gPiArCWl0ZXIgPSBvY2ZzMl9kbG1fbmV4dF9yZXMo
+ZHVtbXksIHByaXYpOw0KPiA+ICAJbGlzdF9kZWxfaW5pdCgmZHVtbXktPmxfZGVidWdfbGlzdCk7
+DQo+ID4gIAlpZiAoaXRlcikgew0KPiA+ICAJCWxpc3RfYWRkKCZkdW1teS0+bF9kZWJ1Z19saXN0
+LCAmaXRlci0+bF9kZWJ1Z19saXN0KTsNCg==
