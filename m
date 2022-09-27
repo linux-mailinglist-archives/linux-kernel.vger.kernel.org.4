@@ -2,81 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF665EC573
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A30845EC579
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbiI0OGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
+        id S232918AbiI0OG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232744AbiI0OF4 (ORCPT
+        with ESMTP id S232183AbiI0OG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:05:56 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B24C8051B;
-        Tue, 27 Sep 2022 07:05:52 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 537541C0017; Tue, 27 Sep 2022 16:05:51 +0200 (CEST)
-Date:   Tue, 27 Sep 2022 16:05:50 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 000/138] 5.10.146-rc2 review
-Message-ID: <20220927140550.GC11533@duo.ucw.cz>
-References: <20220926163550.904900693@linuxfoundation.org>
+        Tue, 27 Sep 2022 10:06:56 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F193D87F88;
+        Tue, 27 Sep 2022 07:06:54 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id a4so5138601ilj.8;
+        Tue, 27 Sep 2022 07:06:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=08FYPXF8NGV3I7f8HvvukPdlDJ2mobJpfZ4nRRDrtDs=;
+        b=b6TVXxWSSs1wWwgyy76IisEm+bMUWZ/TZVqBW0IiwdaKjq1GvfK4WvX0uioXtu2Hs3
+         jcf/7ASYzYYGjL6N1NOc5gzJbhcbPXgiIpLgwYqW868sFRLRPVM6/+k64STgGvPwJUew
+         W9D1rzvOyRhdq6qvOoo4l+TQhxonD+mm0Tmi89kwo2eBCe1tBmw5oSnGlOZ0+03lwIqh
+         UWG5nRt7SlGk/zMWRiNvqo4hOtRSMoXiKKmuQuQA/I2I6ZhsS1naaE54ERdmVXQLa3Kt
+         LpqxHrraYDNE+qytp1tQoK+LfPJPeUxJG720eFeQevCd3+3SR0yrd/vkxJRqWRuRvrkX
+         XJTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=08FYPXF8NGV3I7f8HvvukPdlDJ2mobJpfZ4nRRDrtDs=;
+        b=z4Akm1n+v6OpRl69uAPD8Id09lo7Xdy67AZgOhiycM6D4OazO9x9peiU3ZOGb3ItvW
+         ZqQySMpj//I6u0wP4HV/ds6osKKQPqj2F/y55rds4GYH37tHz9VsUNl/A6JNcKzRZRRX
+         ML/C9OIVdQrvD5ApyuefQdnhNNA7QDyaoMGKSkXgHmlZvOvnnmna4JukgogV4+Gxyfts
+         /W+g7jRPou3vdhxAItEUmJixayvBQCQoiALmnnNCfTJ+x9WgzdDdkCE8NNOGmEKNmEd6
+         hJtQ3XLPit5k5sR9iusAINW6sDq+moNxaSYFogHvFZ7oDkAZ89cO9Gx3RYeIwy7bXJB1
+         9gvw==
+X-Gm-Message-State: ACrzQf17UTII1EbaQmlIgfS0LdQd9BE+X6pj6NX2SrTIGj2h32zWZqUf
+        PmaCcwe6NQExVQxsMR88t93LSNBYmMN+NQNM8XU=
+X-Google-Smtp-Source: AMsMyM5syx+SHzekoKk5qqoxYITfSS3Xf+tq/gzESB0d3rgzZ2K4BALmcjzwKNLccON5ri7Ug7BCkO3JsxrTkg8RzqI=
+X-Received: by 2002:a05:6e02:188f:b0:2f8:993:e7ba with SMTP id
+ o15-20020a056e02188f00b002f80993e7bamr7861514ilu.321.1664287614225; Tue, 27
+ Sep 2022 07:06:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="QRj9sO5tAVLaXnSD"
-Content-Disposition: inline
-In-Reply-To: <20220926163550.904900693@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+References: <20220927131518.30000-1-ojeda@kernel.org> <20220927131518.30000-9-ojeda@kernel.org>
+ <YzL/9mlOHemaey2n@yadro.com>
+In-Reply-To: <YzL/9mlOHemaey2n@yadro.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 27 Sep 2022 16:06:43 +0200
+Message-ID: <CANiq72kDPMKd0qLAMVrd2A3n9aAWhh2ps5DvKos58L=_V2-XwQ@mail.gmail.com>
+Subject: Re: [PATCH v10 08/27] rust: adapt `alloc` crate to the kernel
+To:     Konstantin Shelekhin <k.shelekhin@yadro.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Matthew Bakhtiari <dev@mtbk.me>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 27, 2022 at 3:52 PM Konstantin Shelekhin
+<k.shelekhin@yadro.com> wrote:
+>
+> Not being able to pass GFP flags here kinda limits the scope of Rust in
+> kernel. I think that it must be supported in the final version that gets
+> in.
 
---QRj9sO5tAVLaXnSD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Flags will be supported one way or the other in the future, but I was
+requested to do v10 as a v9 with the last nits resolved.
 
-Hi!
+Please see the cover letter for details.
 
-> This is the start of the stable review cycle for the 5.10.146 release.
-> There are 138 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-
-CIP testing did not find any problems here:
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y
-
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---QRj9sO5tAVLaXnSD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYzMDPgAKCRAw5/Bqldv6
-8pF6AKC/NTneO2fYwBX6PfxXt4JnlnJ8jACfelo4vdroBQ1ofTz2n+vH2YrBHnc=
-=rngu
------END PGP SIGNATURE-----
-
---QRj9sO5tAVLaXnSD--
+Cheers,
+Miguel
