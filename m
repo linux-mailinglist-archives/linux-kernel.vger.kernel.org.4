@@ -2,97 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED8B5EC740
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F54B5EC742
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiI0PJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S232063AbiI0PKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbiI0PJa (ORCPT
+        with ESMTP id S232041AbiI0PJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:09:30 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282D8F08A2;
-        Tue, 27 Sep 2022 08:09:28 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id r18so21316616eja.11;
-        Tue, 27 Sep 2022 08:09:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=KHLyz6AkS4gp/pOeIr3BypKhbZG4yCjiW/SpU96Iryo=;
-        b=cjw8/h7VG0SaIVmCFjdWpsAHxpp3nWFe1RznpM3jek+WCdZFl+Mslsvh/jH11HvKtJ
-         AVWFJWhJo8Y6gzmy7DGnbKf/FyFxWPrGMLZXqfqBTcPn18YJxiwqJQfsZDNMqohVTPgJ
-         wTTtxLIbVhILuOo/4SdugzMqcaWPXKQlkPHMwwTDcMaHMS72Wjubi9D3PHMf3GEMqUz/
-         /2TB9oc2zqC15CD3Iqa1IwrbMZBvVVajmAQzfUV7AE6zAz5ZTfyrQp3Omow7wuRCHv5m
-         XozGtO9VY++ihFR91pnLXMIwO6hK1QSlV5nzS9ElZAXcQyN46sB5j+ntvkft+ONQsAg+
-         NzCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=KHLyz6AkS4gp/pOeIr3BypKhbZG4yCjiW/SpU96Iryo=;
-        b=YRiys61GFrZPWYVh8nYibYOpZygnHgfcRrlrtsAhQaRpgXqvYyUJRGmBeKBazFdDZQ
-         l/bmSUqdHM9X09ocZRohYxkk/etMwWLz7mlkNxZ4dZRlMxYqyIKragMN3spctgqJB8/Q
-         0jeQ11HEiS8m/FUKAE66UUg3c0DxlTov74pR0cMJWmW1smN2UtnSS3Fj024YHHHdBuJn
-         4L5lZga8uHVvRaBIK9x2PKl6Q3v4GBiU3fgclZ26/TGRl2/jB9WZKXNAbRexn284RDLf
-         XImPmJTmMopVd5uqQyBwPusmhmrrH1tWI447bnMYRmHPfuMLuqC3RGuUCe6REzbcYbkO
-         kxkg==
-X-Gm-Message-State: ACrzQf1P7BPWa0r6y33VMhLf7Em9nJrwX01UNVkZQR5+RRdvbUIGnK6b
-        gf9O9jVsFqF0AzSP3ILzdz8=
-X-Google-Smtp-Source: AMsMyM7H+F+9f3bZUmPnQj7mocZmAZM3JwbpiyfuZwoyIF1GkZ93FtMqWrR8NEJjIsl7SSWtI6u8QQ==
-X-Received: by 2002:a17:907:a40e:b0:783:4d41:a159 with SMTP id sg14-20020a170907a40e00b007834d41a159mr10683296ejc.212.1664291366308;
-        Tue, 27 Sep 2022 08:09:26 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id v2-20020aa7d9c2000000b00457c321454asm1097001eds.37.2022.09.27.08.09.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 08:09:25 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 18:09:21 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Rui Sousa <rui.sousa@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Richie Pearn <richard.pearn@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 01/12] net/sched: taprio: allow user input of
- per-tc max SDU
-Message-ID: <20220927150921.ffjdliwljccusxad@skbuf>
-References: <20220923163310.3192733-1-vladimir.oltean@nxp.com>
- <20220923163310.3192733-2-vladimir.oltean@nxp.com>
- <20220926133829.6bb62b8a@kernel.org>
+        Tue, 27 Sep 2022 11:09:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 011255FB4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:09:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47CC91063;
+        Tue, 27 Sep 2022 08:09:52 -0700 (PDT)
+Received: from [10.57.65.170] (unknown [10.57.65.170])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 22CC83F792;
+        Tue, 27 Sep 2022 08:09:44 -0700 (PDT)
+Message-ID: <9db42ab0-da49-95fd-3fea-eb505af0867e@arm.com>
+Date:   Tue, 27 Sep 2022 16:09:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926133829.6bb62b8a@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] iommu/io-pgtable: Make IOMMU_IO_PGTABLE_DART invisible
+Content-Language: en-GB
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>, Janne Grunau <j@jannau.net>,
+        Hector Martin <marcan@marcan.st>, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <b0981cb5a97452af73b9dd0dd0eb03c5002f7af4.1664285626.git.geert+renesas@glider.be>
+ <fe2b1f48-e18a-b1d9-0c62-ddddf9e6515f@arm.com>
+ <CAMuHMdVFAwqVtrRFf-_jSODWeJuGAzbpoyk65HDOqj9h6AUt2A@mail.gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <CAMuHMdVFAwqVtrRFf-_jSODWeJuGAzbpoyk65HDOqj9h6AUt2A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,39 +50,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 01:38:29PM -0700, Jakub Kicinski wrote:
-> On Fri, 23 Sep 2022 19:32:59 +0300 Vladimir Oltean wrote:
-> > +	if (!tb[TCA_TAPRIO_TC_ENTRY_INDEX]) {
-> > +		NL_SET_ERR_MSG_MOD(extack, "TC entry index missing");
+On 2022-09-27 15:48, Geert Uytterhoeven wrote:
+> Hi Robin,
 > 
-> NL_SET_ERR_ATTR_MISS() ?
+> On Tue, Sep 27, 2022 at 4:15 PM Robin Murphy <robin.murphy@arm.com> wrote:
+>> On 2022-09-27 14:36, Geert Uytterhoeven wrote:
+>>> There is no point in asking the user about both "Apple DART Formats" and
+>>> "Apple DART IOMMU Support", as the former is useless without the latter,
+>>> and the latter auto-selects the former.
+>>>
+>>> Fixes: 745ef1092bcfcf3b ("iommu/io-pgtable: Move Apple DART support to its own file")
+>>> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>>> ---
+>>> Should IOMMU_IO_PGTABLE_LPAE and IOMMU_IO_PGTABLE_ARMV7S be made
+>>> invisible, too?
+>>> Are there users that do not select them?
+>>
+>> The aim was for formats to be independently selectable for COMPILE_TEST
+>> coverage. The Arm formats are manually selectable for the sake of their
+>> runtime self-tests, which are self-contained, but since DART format
+>> doesn't do anything by itself I'd agree there's no need to prompt when
+>> !COMPILE_TEST here.
 > 
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	tc = nla_get_u32(tb[TCA_TAPRIO_TC_ENTRY_INDEX]);
-> > +	if (tc >= TC_QOPT_MAX_QUEUE) {
-> > +		NL_SET_ERR_MSG_MOD(extack, "TC entry index out of range");
-> 
-> NLA_POLICY_MAX()
-> 
-> Are you not using those on purpose? :(
+> IOMMU_IO_PGTABLE_LPAE and IOMMU_IO_PGTABLE_ARMV7S are
+> selected by other symbols that can be enabled when compile-testing, so
+> the tests can still be enabled in those cases, too
 
-I don't exactly see it as being super user friendly to leave it to the
-policy validator (or to use NL_SET_ERR_ATTR_MISS()) because all that
-will be reported back to user space will be the offset to the original
-attribute in the nlmsghdr, which is pretty hard to retrieve and
-re-interpret (at least in the iproute2 tc source code, I can't seem to
-find a way to stringify it or something like that). For the NLA_POLICY_MAX(),
-all I'll get now is an uninformative "Error: integer out of range."
-What integer?  What range?
+Sure, but when you want to compile-test a thing, what would you rather 
+do: enable the thing, or go hunting to find some other thing that 
+happens to select the thing you actually want, then potentially have to 
+figure out *that* thing's dependencies, and so on?
 
-I don't understand what is the gain of removing extack message strings
-and just pointing to the netlink attribute via NLMSGERR_ATTR_OFFS? Could
-I at least use the NL_SET_ERR_ATTR_MISS() helper *and* set a custom message?
-That's for the missing nlattr. Regarding the range checking in the
-policy, I'd like a custom message there as well, but the NLA_POLICY_MAX()
-doesn't provide one. However, I see that struct nla_policy has a const
-char *reject_message for NLA_REJECT types. Would it be an abuse to move
-this outside of the union and allow U32 policies and such to also
-provide it?
+Coverage isn't solely about whether it's technically possible to ever 
+reach somewhere at all, it's just as much about how easily and/or often 
+you can get there in practice. I don't see who benefits from making 
+COMPILE_TEST harder to use :/
+
+Thanks,
+Robin.
