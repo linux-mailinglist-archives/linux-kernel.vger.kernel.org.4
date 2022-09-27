@@ -2,134 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD005EC5A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FEFE5EC5A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbiI0ONv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
+        id S231482AbiI0OOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbiI0ONk (ORCPT
+        with ESMTP id S230411AbiI0OOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:13:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444DC1BB6D0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:13:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664288018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HKGdAdKWhJTx/Xv7Sz8bsLwa+ZuDoj3wym0zFd3EU8g=;
-        b=AyNNojJ0eoOt7rQLaW3WHDjkBsaqNTO9bsb0qtKP2XPBwf0zemwrm1d7u4srCSuuOwfjMe
-        NV6EivZwXnj0cRHzw5OHJ7P0tCd+/GPNnu2mbCIQlXLCdupCWYc7J4jGItGVNionjR0GQX
-        34u4Px79cm21QW9HRhchQkq7PLBww/U=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-404-IoxBtaHZPFug6w7-MIzwog-1; Tue, 27 Sep 2022 10:13:37 -0400
-X-MC-Unique: IoxBtaHZPFug6w7-MIzwog-1
-Received: by mail-ed1-f70.google.com with SMTP id c6-20020a05640227c600b004521382116dso8033322ede.22
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:13:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=HKGdAdKWhJTx/Xv7Sz8bsLwa+ZuDoj3wym0zFd3EU8g=;
-        b=ytvZHjf5UVNIsuvT/ilFifkswlgczkVJtRLgyNJmsw5GPuQKK1BV1qm9toTy/i+gUq
-         SfeTS90KM978BGRF+MDKfJ5v7efvb8Jx1Dzk+Nh2Ew4MKD5VlRmSlo9RwVmuEV4sb2Q/
-         YA9Q++jNVqXZgLFWZiQhlxAFIIQEcqRp0vb4143V3aXsGFscQsShg7ylm3FNpeG6fYNy
-         GTs3w3SkYZ8/pq8hVLLnK5OczIx8cse4Go/KgycJw/PLLR+h8P6UgqFxyE5/hrXKcX6I
-         T/VkuahCy/+Tqqi+DVVPsDO502ku2GW4PPDVsMJ2aEet4bN1DoD/dwGDVHjclkdCVvVX
-         gvaQ==
-X-Gm-Message-State: ACrzQf3CmHcl33P5OnK1AzQGg+I70ZCKGxGLym8ypoG5WJ6+UeoNQFzT
-        kQYYEdR9L5hm4hFN7N6TjQwDNO+OKvIrs9kcR9PUbyYxTiR8vz2hDH1wMdj0PoutnIb8tge2I4V
-        ULebBAx/gHP4VjdYLsv2cHTBw
-X-Received: by 2002:a05:6402:849:b0:453:10c3:2ee3 with SMTP id b9-20020a056402084900b0045310c32ee3mr28141358edz.339.1664288015987;
-        Tue, 27 Sep 2022 07:13:35 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM48+iUYPej+zslJBIkvtvG5lG69A/kb6fiPhXTmUhm+OZkn3tzqFE7c8bbmgOMXiyaun4ITGg==
-X-Received: by 2002:a05:6402:849:b0:453:10c3:2ee3 with SMTP id b9-20020a056402084900b0045310c32ee3mr28141345edz.339.1664288015785;
-        Tue, 27 Sep 2022 07:13:35 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id a26-20020a170906369a00b0077fc47605b4sm857235ejc.217.2022.09.27.07.13.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 07:13:35 -0700 (PDT)
-Message-ID: <04a42b71-27ad-7bcd-a270-5c342f764b77@redhat.com>
-Date:   Tue, 27 Sep 2022 16:13:34 +0200
+        Tue, 27 Sep 2022 10:14:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8601BB234;
+        Tue, 27 Sep 2022 07:14:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86186B81C00;
+        Tue, 27 Sep 2022 14:14:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2795DC433D6;
+        Tue, 27 Sep 2022 14:14:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664288044;
+        bh=ES+41ghICW5j6wt9QtkiJibdGxWXcMG6lv2kxpnkenY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=HPVwjHLZdns3/+a4usYxVvzu7UFdaz+/OJgxtwwd5l57PJ/JuFLs5q46CL/JfIJH2
+         TJvn8yPSeojS5w5rN4I8HMEXF4FT4pDprDRNmSadFPW+FD1Ki+H+m7WYsLNfFwNjGD
+         z1b+u14VL4PW/5E9zshOhMhlYD7KNdqHru4PSOKapqKwwuNql4ZNSrHTLPS4CaBdth
+         HZ8DeX9Oe/NHzKbJzERrfYA2dMg+BGHOH8cGS+NZbb1TvjyM7kGhFQWhMUWNmGG83A
+         21RG7lDQdxSZ8u6R+/m4Cik/3wpo/InBPUkLa5QX/k+7oOJYTvNtWzy66aXQtMhSUW
+         OQpoeT1Pg7ivQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B26355C0668; Tue, 27 Sep 2022 07:14:03 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 07:14:03 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Message-ID: <20220927141403.GJ4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220926223222.GX4196@paulmck-ThinkPad-P17-Gen-1>
+ <8344B0AB-608E-44DA-8FEE-3FE56EDF9172@joelfernandes.org>
+ <20220926235944.GE4196@paulmck-ThinkPad-P17-Gen-1>
+ <YzJWoRui7mUEDtox@google.com>
+ <20220927032246.GH4196@paulmck-ThinkPad-P17-Gen-1>
+ <YzL1JauFkeLEMgqV@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2 0/9] pwm: lpss: Clean up and convert to a pure library
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>
-References: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220908135658.64463-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YzL1JauFkeLEMgqV@google.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 9/8/22 15:56, Andy Shevchenko wrote:
-> First of all, a set of cleanups and code deduplications (for better
-> maintenance) to the PWM LPSS driver.
+On Tue, Sep 27, 2022 at 01:05:41PM +0000, Joel Fernandes wrote:
+> On Mon, Sep 26, 2022 at 08:22:46PM -0700, Paul E. McKenney wrote:
+> [..]
+> > > > > >>> --- a/kernel/workqueue.c
+> > > > > >>> +++ b/kernel/workqueue.c
+> > > > > >>> @@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork)
+> > > > > >>> 
+> > > > > >>>        if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
+> > > > > >>>                rwork->wq = wq;
+> > > > > >>> -               call_rcu(&rwork->rcu, rcu_work_rcufn);
+> > > > > >>> +               call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
+> > > > > >>>                return true;
+> > > > > >>>        }
+> > > > > >>> 
+> > > > > >>> <snip>
+> > > > > >>> 
+> > > > > >>> ?
+> > > > > >>> 
+> > > > > >>> But it does not fully solve my boot-up issue. Will debug tomorrow further.
+> > > > > >> 
+> > > > > >> Ah, but at least its progress, thanks. Could you send me a patch to include
+> > > > > >> in the next revision with details of this?
+> > > > > >> 
+> > > > > >>>> Might one more proactive approach be to use Coccinelle to locate such
+> > > > > >>>> callback functions?  We might not want -all- callbacks that do wakeups
+> > > > > >>>> to use call_rcu_flush(), but knowing which are which should speed up
+> > > > > >>>> slow-boot debugging by quite a bit.
+> > > > > >>>> 
+> > > > > >>>> Or is there a better way to do this?
+> > > > > >>>> 
+> > > > > >>> I am not sure what Coccinelle is. If we had something automated that measures
+> > > > > >>> a boot time and if needed does some profiling it would be good. Otherwise it
+> > > > > >>> is a manual debugging mainly, IMHO.
+> > > > > >> 
+> > > > > >> Paul, What about using a default-off kernel CONFIG that splats on all lazy
+> > > > > >> call_rcu() callbacks that do a wake up. We could use the trace hooks to do it
+> > > > > >> in kernel I think. I can talk to Steve to get ideas on how to do that but I
+> > > > > >> think it can be done purely from trace events (we might need a new
+> > > > > >> trace_end_invoke_callback to fire after the callback is invoked). Thoughts?
+> > > > > > 
+> > > > > > Could you look for wakeups invoked between trace_rcu_batch_start() and
+> > > > > > trace_rcu_batch_end() that are not from interrupt context?  This would
+> > > > > > of course need to be associated with a task rather than a CPU.
+> > > > > 
+> > > > > Yes this sounds good, but we also need to know if the callbacks are
+> > > > > lazy or not since wake-up is ok from a non lazy one. I think I’ll
+> > > > > need a table to track that at queuing time.
+> > > > 
+> > > > Agreed.
+> > > > 
+> > > > > > Note that you would need to check for wakeups from interrupt handlers
+> > > > > > even with the extra trace_end_invoke_callback().  The window where an
+> > > > > > interrupt handler could do a wakeup would be reduced, but not eliminated.
+> > > > > 
+> > > > > True! Since this is a  debugging option, can we not just disable interrupts across callback invocation?
+> > > > 
+> > > > Not without terminally annoying lockdep, at least for any RCU callbacks
+> > > > doing things like spin_lock_bh().
+> > > > 
+> > > 
+> > > Sorry if my last email bounced. Looks like my iPhone betrayed me this once ;)
+> > > 
+> > > I was thinking something like this:
+> > > 1. Put a flag in rcu_head to mark CBs as lazy.
+> > > 2. Add a trace_rcu_invoke_callback_end() trace point.
+> > > 
+> > > Both #1 and #2 can be a debug CONFIG option. #2 can be a tracepoint and not
+> > > exposed if needed.
+> > > 
+> > > 3. Put an in-kernel probe on both trace_rcu_invoke_callback_start() and
+> > > trace_rcu_invoke_callback_end(). In the start probe, set a per-task flag if
+> > > the current CB is lazy. In the end probe, clear it.
+> > > 
+> > > 4. Put an in-kernel probe on trace_rcu_sched_wakeup().
+> > > 
+> > > Splat in the wake up probe if:
+> > > 1. Hard IRQs are on.
+> > > 2. The per-cpu flag is set.
+> > > 
+> > > #3 actually does not even need probes if we can directly call the functions
+> > > from the rcu_do_batch() function.
+> > 
+> > This is fine for an experiment or a debugging session, but a solution
+> > based totally on instrumentation would be better for production use.
 > 
-> Second, we may (re-)use the core part as a library in the future in
-> the devices that combine the same PWM IP in their address space. So
-> convert the core file to be a pure library which doesn't require any
-> special resource handling or alike.
-> 
-> Changelog v2:
-> - replace patch 1 by Uwe's version (Uwe)
-> - update NS patch to have a default namespace defined (Uwe)
-> - describe all changes done in patch 4 (Uwe)
-> 
-> Andy Shevchenko (8):
->   pwm: lpss: Move exported symbols to PWM_LPSS namespace
->   pwm: lpss: Move resource mapping to the glue drivers
->   pwm: lpss: Include headers we are direct user of
->   pwm: lpss: Use device_get_match_data to get device data
->   pwm: lpss: Use DEFINE_RUNTIME_DEV_PM_OPS() and pm_ptr() macros
->   pwm: lpss: Make use of bits.h macros for all masks
->   pwm: lpss: Add a comment to the bypass field
->   pwm: lpss: Allow other drivers to enable PWM LPSS
-> 
-> Uwe Kleine-König (1):
->   pwm: lpss: Deduplicate board info data structures
-> 
->  drivers/pwm/pwm-lpss-pci.c                 | 48 +++++-----------------
->  drivers/pwm/pwm-lpss-platform.c            | 40 +++++-------------
->  drivers/pwm/pwm-lpss.c                     | 46 ++++++++++++++++++---
->  drivers/pwm/pwm-lpss.h                     | 22 ++++------
->  include/linux/platform_data/x86/pwm-lpss.h | 33 +++++++++++++++
->  5 files changed, 101 insertions(+), 88 deletions(-)
->  create mode 100644 include/linux/platform_data/x86/pwm-lpss.h
+> Maybe we can borrow the least-significant bit of rhp->func to mark laziness?
+> Then it can be production as long as we're ok with the trace_sched_wakeup
+> probe.
 
-Uwe, thank you for Cc-ing me.
+Last time I tried this, there were architectures that could have odd-valued
+function addresses.  Maybe this is no longer the case?
 
-Andy, thank you for the patches.
-
-The entire series looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-for the series.
-
-Regards,
-
-Hans
-
+							Thanx, Paul
