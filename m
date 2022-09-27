@@ -2,201 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97105ECA44
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5469E5ECA3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbiI0Q6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbiI0Q6V (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231464AbiI0Q6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 27 Sep 2022 12:58:21 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85A09C2C3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:58:18 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id u10-20020a056a00098a00b00543b3eb6416so6098924pfg.15
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:58:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=/a/nRCvi5803KEjxs2Dftg9xnS7geCJ0St0MIV9P0E0=;
-        b=dl80onQmkaC+7R0Tux6aOyBkRBdNixvpxHOZr4CIjHwIqny7X7AoCoFZREakNMav+9
-         Cw2FxTg4rCtTPoZbHNosuSegQDiSjCd628WzqS/YjIj/HXWPKZumk9gJGElYoOkuw5sX
-         qnqdOY33waMauV12yw0JmNf9nHynNsYRKJRbijHJdOds74WM2q7olLShCLLsG39FNUCP
-         c7yRmJzzzqroVOrJNGlnf39u69C6ILXfB4zrSMNxS1LTWYrBg5a0PklL6cP7Xyia0yzt
-         /xe75dD08Pwq1MjIleeprvflCxT33Xeq7DTSHqHmGAkMc87XBfsL/U2TXByhZqwF1WpY
-         FTmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=/a/nRCvi5803KEjxs2Dftg9xnS7geCJ0St0MIV9P0E0=;
-        b=KqHyK+iTPinXwesVU1L4kGKiiKjkeKEh1lj6aSofKNEI7swrH5xx0Kua9jWHFlDCGm
-         Fja8/iZnKmf753+p4XkjAseEXCneF6ss0nDbUI91YaXBIurVu2obRSaJL9UDf/kN7zX6
-         ew8E2uoZZaGGTD6/NyvaQbyDgqS1V0M4wm2bJNtdoWGpDP2aQA/UVltCRnEW7gMDzuHN
-         JDFduFhOmCziazhD2MNLynxqkjZAvK5mUUQ7Q7MbOn0FMubRj6UsCQaBatQ0LjxcWQEa
-         2B+kMPcvPu+nXtD6umpAOODtBgA6hGYKsmipXO5ec0iEyDi6F+wmW4IjAvQIzzxmisoj
-         CTYQ==
-X-Gm-Message-State: ACrzQf1y5IP1Cs1wQBvUNM3m6P3jHrWX/wimcmpsjK2Oj5MTddraKqwR
-        3QiqTg2ukyShYRuHLcSwSqyqx6NhOsmjLvSXEFFing==
-X-Google-Smtp-Source: AMsMyM5+59p1E+QIu6HyE+h4AgY63qutNQlLKSmmvpb2XHbtpn7suAT0pqZs43cUtFmkBlz/UWsoWKCkC5+83BMbfWI7fA==
-X-Received: from abps.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:9b4])
- (user=abhishekpandit job=sendgmr) by 2002:a05:6a00:10c2:b0:547:4991:c985 with
- SMTP id d2-20020a056a0010c200b005474991c985mr30670142pfu.67.1664297898012;
- Tue, 27 Sep 2022 09:58:18 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 09:58:15 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
-Message-ID: <20220927095813.v2.1.Ia168b651a69b253059f2bbaa60b98083e619545c@changeid>
-Subject: [PATCH v2] Bluetooth: Prevent double register of suspend
-From:   Abhishek Pandit-Subedi <abhishekpandit@google.com>
-To:     linux-bluetooth@vger.kernel.org
-Cc:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        syzbot <syzkaller@googlegroups.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231436AbiI0Q6C (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 27 Sep 2022 12:58:02 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559ECADCEA;
+        Tue, 27 Sep 2022 09:57:53 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 967875809C1;
+        Tue, 27 Sep 2022 12:57:50 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 27 Sep 2022 12:57:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1664297870; x=1664305070; bh=gk
+        fETQGOUkN/p+KkeVW4lZaExlmLKRZn8wJCWXZOXRI=; b=sl/KntKinPRXzDDFxY
+        luTWeO/SAjzn6ocbPDU+4KC12/bVB6ccIpBzxeskfUvDq2NgfLfP3ltMZX4+xa6X
+        BhM0uzytzQN2YmEsxfOPgepG40v0MKaXtnPL3fujQWOK7fsXRv+lLYXEfTf8Ex6y
+        LW+YRy64iVE2l+jp4KNKtXCxHGQRYUkmhkb6+tZrgjVrLfa5UlTvyQ8GWbNDMBSe
+        iTpYp2NbuxpA4SC0WuhpORxMR7exRrXmD1CI+rCPyDCT5v0Bd4UykGSrpEdbDlTN
+        pW6LoTYLKUq9Y057QwyPJdKta6TKAwUs+8WTuIuIPki55EHVRFtUq3rZF1mUWqF2
+        sSMA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1664297870; x=1664305070; bh=gkfETQGOUkN/p+KkeVW4lZaExlmL
+        KRZn8wJCWXZOXRI=; b=q6PBxVsB6TAiVJKjj7grNbonKK2ajkzvu/Dzd2TH3CFA
+        hnLfkasV7cvf9QZxfOLarnnYK4fGDO+k/0vjt3ORJi3AYKxeDF2cHfdTtzgkZOA/
+        bVWzsJkB/rtVBcG17iWEeLE/B16IzohQIu4UGywnXvxCXy0G3oVEs2Tu8U6fYPGt
+        2F1d6esauHi1hMziOUxsKaOKag/bzfMP3IqBrCogwrG73VGlF+jc9EB9QKkBZVCo
+        E6s8ewS0UBSQvkPpmfsqmmIFjuX2ddnMMMQXsV0J2jiUexlrYdBAiq0dfWhQ4D7V
+        5X1QklITrS/WgLhZpKhKtd8fejhParaszKfQhyWxvA==
+X-ME-Sender: <xms:jCszY4DySiXJMko8aH6ARcnYUKhk1nQi75b_4TxTydAkX-i5tBjsHQ>
+    <xme:jCszY6hcvgxD2NlospONkVCWUqCc3PiXfrpm_LanOFkBoMSm7flrlvr4SDlb21x_l
+    JQy-Yf_ouczQM4S9pQ>
+X-ME-Received: <xmr:jCszY7m7jIY0Xy2HazcDIdh3ZA0Eo72olKfXUhzEFnmyCVMfBpkYLWaYlbg900Ic2HboBLBaREjLPih9_uSZNXwAkw9grUotXmJC>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegiedgkeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujggfsehttdertddtreejnecuhfhrohhmpeeuvghn
+    uceuohgvtghkvghluceomhgvsegsvghnsghovggtkhgvlhdrnhgvtheqnecuggftrfgrth
+    htvghrnheptefgvefgfffhveeltefhfeettdefgfelteefheetgfejfefgfeeigfeutedv
+    ffefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmvgessggvnhgsohgvtghkvghlrdhnvght
+X-ME-Proxy: <xmx:jCszY-yPA3xV8oQtg5ZtGJXt4TmA6x6rX1ngeAi_022fFsS3t8EEsg>
+    <xmx:jCszY9QTppKQQ1N4lpPLZeDhBloVWFiXZ7EFUFrSGLpGxl6ntHpOvg>
+    <xmx:jCszY5aF3UZCKkuN0OUZuydwsb0cgRuNUjIFsfCqkoEmX372jSuqmw>
+    <xmx:jiszY6DAdqedfCLj4PUBmMx1pjlY_6_JFeLFpGgiurvmFr5Us6WkyA>
+Feedback-ID: iffc1478b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 27 Sep 2022 12:57:48 -0400 (EDT)
+Date:   Tue, 27 Sep 2022 12:58:43 -0400
+From:   Ben Boeckel <me@benboeckel.net>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        apronin@chromium.org, dlunev@google.com, jarkko@kernel.org,
+        Pavel Machek <pavel@ucw.cz>, rjw@rjwysocki.net, corbet@lwn.net,
+        linux-pm@vger.kernel.org, zohar@linux.ibm.com,
+        Kees Cook <keescook@chromium.org>,
+        Eric Biggers <ebiggers@kernel.org>, jejb@linux.ibm.com,
+        gwendal@chromium.org, Matthew Garrett <mgarrett@aurora.tech>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 05/11] security: keys: trusted: Allow storage of PCR
+ values in creation data
+Message-ID: <YzMrw3TASWemgRTh@megas.dev.benboeckel.internal>
+References: <20220927164922.3383711-1-evgreen@chromium.org>
+ <20220927094559.v3.5.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220927094559.v3.5.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+On Tue, Sep 27, 2022 at 09:49:16 -0700, Evan Green wrote:
+> From: Matthew Garrett <matthewgarrett@google.com>
+> 
+> When TPMs generate keys, they can also generate some information
+> describing the state of the PCRs at creation time. This data can then
+> later be certified by the TPM, allowing verification of the PCR values.
+> This allows us to determine the state of the system at the time a key
+> was generated. Add an additional argument to the trusted key creation
+> options, allowing the user to provide the set of PCRs that should have
+> their values incorporated into the creation data.
+> 
+> Link: https://lore.kernel.org/lkml/20210220013255.1083202-6-matthewgarrett@google.com/
+> Signed-off-by: Matthew Garrett <mjg59@google.com>
+> Signed-off-by: Evan Green <evgreen@chromium.org>
+> ---
 
-Suspend notifier should only be registered and unregistered once per
-hdev. Simplify this by only registering during driver registration and
-simply exiting early when HCI_USER_CHANNEL is set.
+Reviewed-by: Ben Boeckel <linux@me.benboeckel.net>
 
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Fixes: 359ee4f834f5 (Bluetooth: Unregister suspend with userchannel)
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
----
-This is fixing a syzbot reported warning. Tested in the following ways:
-* Normal start-up of driver with bluez.
-* Start/stop loop using HCI_USER_CHANNEL (sock path).
-* USB reset triggering hci_dev_unregister (driver path).
+Thanks!
 
-------------[ cut here ]------------
-double register detected
-WARNING: CPU: 0 PID: 2657 at kernel/notifier.c:27
-notifier_chain_register kernel/notifier.c:27 [inline]
-WARNING: CPU: 0 PID: 2657 at kernel/notifier.c:27
-notifier_chain_register+0x5c/0x124 kernel/notifier.c:22
-Modules linked in:
-CPU: 0 PID: 2657 Comm: syz-executor212 Not tainted
-5.10.136-syzkaller-19376-g6f46a5fe0124 #0
-    8f0771607702f5ef7184d2ee33bd0acd70219fc4
-    Hardware name: Google Google Compute Engine/Google Compute Engine,
-    BIOS Google 07/22/2022
-    RIP: 0010:notifier_chain_register kernel/notifier.c:27 [inline]
-    RIP: 0010:notifier_chain_register+0x5c/0x124 kernel/notifier.c:22
-    Code: 6a 41 00 4c 8b 23 4d 85 e4 0f 84 88 00 00 00 e8 c2 1e 19 00 49
-    39 ec 75 18 e8 b8 1e 19 00 48 c7 c7 80 6d ca 84 e8 2c 68 48 03 <0f> 0b
-        e9 af 00 00 00 e8 a0 1e 19 00 48 8d 7d 10 48 89 f8 48 c1 e8
-        RSP: 0018:ffffc900009d7da8 EFLAGS: 00010286
-        RAX: 0000000000000000 RBX: ffff8881076fd1d8 RCX: 0000000000000000
-        RDX: 0000001810895100 RSI: ffff888110895100 RDI: fffff5200013afa7
-        RBP: ffff88811a4191d0 R08: ffffffff813b8ca1 R09: 0000000080000000
-        R10: 0000000000000000 R11: 0000000000000005 R12: ffff88811a4191d0
-        R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-        FS: 00005555571f5300(0000) GS:ffff8881f6c00000(0000)
-        knlGS:0000000000000000
-        CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-        CR2: 000078e3857f3075 CR3: 000000010d668000 CR4: 00000000003506f0
-        DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-        DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-        Call Trace:
-        blocking_notifier_chain_register+0x8c/0xa6 kernel/notifier.c:254
-        hci_register_suspend_notifier net/bluetooth/hci_core.c:2733
-        [inline]
-        hci_register_suspend_notifier+0x6b/0x7c
-        net/bluetooth/hci_core.c:2727
-        hci_sock_release+0x270/0x3cf net/bluetooth/hci_sock.c:889
-        __sock_release+0xcd/0x1de net/socket.c:597
-        sock_close+0x18/0x1c net/socket.c:1267
-        __fput+0x418/0x729 fs/file_table.c:281
-        task_work_run+0x12b/0x15b kernel/task_work.c:151
-        tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-        exit_to_user_mode_loop kernel/entry/common.c:165 [inline]
-        exit_to_user_mode_prepare+0x8f/0x130 kernel/entry/common.c:192
-        syscall_exit_to_user_mode+0x172/0x1b2 kernel/entry/common.c:268
-        entry_SYSCALL_64_after_hwframe+0x61/0xc6
-        RIP: 0033:0x78e38575e1db
-        Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89
-        7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05
-        <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-        RSP: 002b:00007ffffc20a0b0 EFLAGS: 00000293 ORIG_RAX:
-        0000000000000003
-        RAX: 0000000000000000 RBX: 0000000000000006 RCX: 000078e38575e1db
-        RDX: ffffffffffffffb8 RSI: 0000000020000000 RDI: 0000000000000005
-        RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000150
-        R10: 0000000000000000 R11: 0000000000000293 R12: 000000000000e155
-        R13: 00007ffffc20a140 R14: 00007ffffc20a130 R15: 00007ffffc20a0e8
-
-Changes in v2:
-- Removed suspend registration from hci_sock.
-- Exit hci_suspend_notifier early if user channel.
-
- net/bluetooth/hci_core.c | 4 ++++
- net/bluetooth/hci_sock.c | 3 ---
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 66c7cdba0d32..86ce2dd1c7fb 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -2406,6 +2406,10 @@ static int hci_suspend_notifier(struct notifier_block *nb, unsigned long action,
- 		container_of(nb, struct hci_dev, suspend_notifier);
- 	int ret = 0;
- 
-+	/* Userspace has full control of this device. Do nothing. */
-+	if (hci_dev_test_flag(hdev, HCI_USER_CHANNEL))
-+		return NOTIFY_DONE;
-+
- 	if (action == PM_SUSPEND_PREPARE)
- 		ret = hci_suspend_dev(hdev);
- 	else if (action == PM_POST_SUSPEND)
-diff --git a/net/bluetooth/hci_sock.c b/net/bluetooth/hci_sock.c
-index b2a33a05c93e..06581223238c 100644
---- a/net/bluetooth/hci_sock.c
-+++ b/net/bluetooth/hci_sock.c
-@@ -887,7 +887,6 @@ static int hci_sock_release(struct socket *sock)
- 			 */
- 			hci_dev_do_close(hdev);
- 			hci_dev_clear_flag(hdev, HCI_USER_CHANNEL);
--			hci_register_suspend_notifier(hdev);
- 			mgmt_index_added(hdev);
- 		}
- 
-@@ -1216,7 +1215,6 @@ static int hci_sock_bind(struct socket *sock, struct sockaddr *addr,
- 		}
- 
- 		mgmt_index_removed(hdev);
--		hci_unregister_suspend_notifier(hdev);
- 
- 		err = hci_dev_open(hdev->id);
- 		if (err) {
-@@ -1231,7 +1229,6 @@ static int hci_sock_bind(struct socket *sock, struct sockaddr *addr,
- 				err = 0;
- 			} else {
- 				hci_dev_clear_flag(hdev, HCI_USER_CHANNEL);
--				hci_register_suspend_notifier(hdev);
- 				mgmt_index_added(hdev);
- 				hci_dev_put(hdev);
- 				goto done;
--- 
-2.37.3.998.g577e59143f-goog
-
+--Ben
