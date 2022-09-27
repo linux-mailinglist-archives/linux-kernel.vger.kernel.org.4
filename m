@@ -2,119 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6632F5EBFD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073D35EBFDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbiI0Kej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 06:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
+        id S229967AbiI0KgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 06:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbiI0Keb (ORCPT
+        with ESMTP id S229493AbiI0KgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 06:34:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902BEE2365;
-        Tue, 27 Sep 2022 03:34:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CF9FB81AE1;
-        Tue, 27 Sep 2022 10:34:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 124C9C433D6;
-        Tue, 27 Sep 2022 10:34:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664274865;
-        bh=B2GDKcwdgITexSrV6c7//f4qj6nximN7W8IEtr7vxYY=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=qLiNA4NBmNGXiOqsXlliQQqxRMpo8l4h/R2zFVjJwYg1XJMoZT8hrd8a3mfcOANIO
-         lJZ7yx1fqVM7GWZAKYzvk5i21yWGaCfxHYZ976l6hgeeksQkrd9CnMim7ykocovyRn
-         tMLrjDjTWEJG6SotMqknI3bXR1DJBEBktdLeTS1ExEHTKLars8t1ztyrH8qPw1omDu
-         dI2hqhXxSL2K29OSJj4YkOJJ7r4psME++yc85pAlRAMT/K3/j8hAhdHj4XwmcBnVGn
-         LOEr1+CQ1q+DJFPydn+KUp+tm25Vq1zx9+sfBpDI2rVRfnwVTV7u/sZeSL2ipnTYFQ
-         Gr4NMzCZZNUGA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     devicetree@vger.kernel.org, lgirdwood@gmail.com, tiwai@suse.com,
-        perex@perex.cz, robh+dt@kernel.org, alsa-devel@alsa-project.org,
-        bgoswami@quicinc.com, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-In-Reply-To: <20220906170112.1984-1-srinivas.kandagatla@linaro.org>
-References: <20220906170112.1984-1-srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH v2 00/12] ASoC: codecs: qcom add support for SM8450 and SC8280XP
-Message-Id: <166427486278.60697.18427258412799379354.b4-ty@kernel.org>
-Date:   Tue, 27 Sep 2022 11:34:22 +0100
+        Tue, 27 Sep 2022 06:36:01 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F230C5E674;
+        Tue, 27 Sep 2022 03:36:00 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d10so8186648pfh.6;
+        Tue, 27 Sep 2022 03:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date;
+        bh=2IJ0GUrWSfVuXvjku1aZYWTTFoICjkcjAz4qRr8Pokg=;
+        b=G+GLpRcaDYyeYSjg+lm6dRsVDaEJke+ToAbc4BJnbwmNCu7Gpm/Oq6DrdvNAgAw65p
+         b1dfIoB7+TRi/Du52w843IuwOFN8rQ1Wy71WsX/QG+OdmCO6dUa/WYyseMBBAklU1/QC
+         0OPV4dJxzDCed3jT3hvSjqk+YrVt1suDO75kb0LF1REmW3A0FexPsG/ir1ebTpXsFXPx
+         ivrEbsn0xLe/WNRZUAMUzEfzLTfSCeBoR9kOkW1zl6WSnKQvSJI7uYx7SXhPTG07CVof
+         EohWqGtioCxXitoYuUMvLiS23/5ySpS6hqwRiTr4cFQnAOIFLtOn8t+o1ve3GRtdsOuQ
+         W20Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=2IJ0GUrWSfVuXvjku1aZYWTTFoICjkcjAz4qRr8Pokg=;
+        b=ztG6ykf55C+KMnOuptheOWYasuxi5s0kxEqGgwz/3RuBIst63vDC5VjD46kHwlUdnT
+         wdbpt04/VImrxWE9Cnn2MZ42o2nvNHALkAb/UQkKRxeyuppdRq078iE2b86yqAFDbVfD
+         RhAuMInIJpMzg9m53WxC9Y3bvESbNlVtyys6pQTnQFXaKpLBfbaDuP2HDxYhRIB7rVsZ
+         mVjJu9i5up8/aQ3cjcKZp45TxutJr/komVvLIzqzfDXZZPzZpInAFpXLYNj6Xj81o8uN
+         4GFC2R37sqBm7l1deM/lc2DQP+6/HgL536jDkZ5eCfdu7yxFdWKhyOxiBHWCBhAxSbc9
+         DKEw==
+X-Gm-Message-State: ACrzQf2dukJye69KHb0Ti9ylXItSepRz+7pFOxBex+qeM5x2n+W8jrJa
+        negvY2k1/1WBOENUZlvJCys=
+X-Google-Smtp-Source: AMsMyM54ou2TtGKukpmfWvtabIrcijf70iFeioZQMw64840b5golUIUyHYO2fU3JoU9g7kRmCoVVvw==
+X-Received: by 2002:a65:44c1:0:b0:428:ab8f:62dd with SMTP id g1-20020a6544c1000000b00428ab8f62ddmr24173397pgs.211.1664274960504;
+        Tue, 27 Sep 2022 03:36:00 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id k129-20020a628487000000b0053e5daf1a25sm1401933pfd.45.2022.09.27.03.35.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 03:35:59 -0700 (PDT)
+Message-ID: <69fc1b11-d26b-de44-ebee-cbb17cc2c893@gmail.com>
+Date:   Tue, 27 Sep 2022 19:35:55 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Akira Yokosawa <akiyks@gmail.com>
+Subject: Re: [PATCH] overflow: Fix kern-doc markup for functions
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-doc@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>
+References: <20220926194713.1806917-1-keescook@chromium.org>
+ <YzIUS/+H2YA7RBvA@casper.infradead.org> <202209261408.59F78C0D@keescook>
+ <ada70afe-64d5-ccab-242e-9a3c3c85e6c4@gmail.com>
+ <202209261959.A202D045@keescook>
+Content-Language: en-US
+In-Reply-To: <202209261959.A202D045@keescook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Sep 2022 18:01:00 +0100, Srinivas Kandagatla wrote:
-> This patchset adds support for SM8450 and SC8280XP SoC and also some of
-> the fixes requried to get stable audio on X13s.
+Hi,
+
+On Mon, 26 Sep 2022 20:02:16 -0700, Kees Cook wrote:
+> On Tue, Sep 27, 2022 at 11:53:38AM +0900, Akira Yokosawa wrote:
+>> Hi,
+>>
+>> Somehow Kees added me in Cc:, so let me comment.  :-)
+>>
+>> On Mon, 26 Sep 2022 14:09:10 -0700, Kees Cook wrote:
+>>> On Mon, Sep 26, 2022 at 10:06:19PM +0100, Matthew Wilcox wrote:
+>>>> On Mon, Sep 26, 2022 at 12:47:13PM -0700, Kees Cook wrote:
+>>>>> -/** check_add_overflow() - Calculate addition with overflow checking
+>>>>> +/**
+>>>>> + * check_add_overflow - Calculate addition with overflow checking
+>>>>>   *
+>>>>>   * @a: first addend
+>>>>>   * @b: second addend
+>>>>
+>>>> Why did you remove the ()?  And why didn't you delete the blank line?
+>>>> According to our documentation, the canonical form is:
+>>>>
+>>>>   /**
+>>>>    * function_name() - Brief description of function.
+>>>>    * @arg1: Describe the first argument.
+>>>>    * @arg2: Describe the second argument.
+>>>>    *        One can provide multiple line descriptions
+>>>>    *        for arguments.
+>>
+>> Matthew, you call it the "canonical form", my take is more of a "template
+>> that is known to work".
 > 
-> Tested SmartSpeakers and Headset on SM8450 MTP and
-> Lenovo Thinkpad X13s.
+> Out of curiosity, why is the trailing "()" part of the standard
+> template? Isn't it redundant? Or is trying to help differentiate between
+> things that are non-callable? (i.e. a variable, etc.)
+
+I don't know the historic background of this template and I have done
+some digging of Git history. I'm afraid this won't be straight answers
+to your questions.
+
+This template originated from commit 0842b245a8e6 ("doc: document the
+kernel-doc conventions for kernel hackers") back in 2008 and is more
+or less unchanged with later additions of "Context:" and "Return:" keywords.
+
+As far as I can see, the kernel-doc script removes "()" in the early phase
+of parsing kernel-doc comments. So yes, "()" is redundant.
+
+Up until v5.17 (ever since the epoch of v2.6.12-rc2), there was a comment
+block on the format of function comments in the kernel-doc script and there
+was no mention of "()", as quoted below:
+
+    # So .. the trivial example would be:
+    #
+    # /**
+    #  * my_function
+    #  */
+    #
+    # If the Description: header tag is omitted, then there must be a blank line
+    # after the last parameter specification.
+    # e.g.
+    # /**
+    #  * my_function - does my stuff
+    #  * @my_arg: its mine damnit
+    #  *
+    #  * Does my stuff explained.
+    #  */
+    #
+    #  or, could also use:
+    # /**
+    #  * my_function - does my stuff
+    #  * @my_arg: its mine damnit
+    #  * Description: Does my stuff explained.
+    #  */
+    # etc.
+
+Which suggests "()" has always been redundant since early days.
+
+(Note: Nowadays, the first example without brief description will cause
+a warning.)
+
+This comment block was removed in commit 258092a89085 ("scripts:
+kernel-doc: Drop obsolete comments"). Its changelog says:
+
+    4. The "format of comments" comment block
+    
+    As suggested by Jani Nikula in a reply to my first version of this
+    transformation, Documentation/doc-guide/kernel-doc.rst can serve as the
+    information hub for comment formatting. The section DESCRIPTION already
+    points there, so the original comment block can just be removed.
+
+It sounds to me like the removal was premature at that time, because some
+of those format variations were (and still are) not properly covered in
+kernel-doc.rst.
+
 > 
-> Changes since v1:
-> - moved va-macro from using of_device_is_compatible to compatible data
-> - added some fixes for qcom codecs.
+>>> Hunh, everywhere I'd looked didn't have the "()" (which seems
+>>> redundant). The blank line was entirely aesthetics for me. If it's
+>>> supposed to be without a blank, I can fix it up everwhere.
+>>
+>> So, I think this is more of a territory of preference or consistency
+>> rather than that of correctness.  Those extra blank lines can be confusing
+>> as most people expect it in front of description part.
+>>
+>> get_maintainer.pl says Kees is the sole maintainer of overflow.h, so
+>> it's his call, I guess.
 > 
-> [...]
+> Well, maintainer or not, I want to make sure stuff is as readable as
+> possible by everyone else too. :) I'm happy to skip the blank lines!
 
-Applied to
+Yeah, that sounds nice to me!
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+        Thanks, Akira
 
-Thanks!
-
-[01/12] ASoC: codecs: wsa-macro: handle swr_reset correctly
-        commit: fdc972d4a754b32cdf05294669ae0d6036242826
-[02/12] ASoC: codecs: rx-macro: handle swr_reset correctly
-        commit: 1a4e73915a7553d7ffb4f365b8a671bb2fa1f7ef
-[03/12] ASoC: codecs: tx-macro: handle swr_reset correctly
-        commit: d83a7201412d32e2ac76f20439470976b2edf699
-[04/12] ASoC: codecs: tx-macro: fix active_decimator array
-        commit: 1c6a7f5250ce81f11a248f9bf88fdbca8b6b0b5d
-[05/12] ASoC: codecs: tx-macro: fix kcontrol put
-        commit: c1057a08af438e0cf5450c1d977a3011198ed2f8
-[06/12] ASoC: codecs: wsa883x: add clock stop support
-        commit: 3e29fb7479760d6d03380125d500b60081ccb5e9
-[07/12] ASoC: qcom: dt-bindings: add sm8450 and sc8280xp compatibles
-        commit: 473d218b56559934ef4720a6fc086c8ad0da9d38
-[08/12] ASoC: codecs: wsa-macro: add support for sm8450 and sc8280xp
-        commit: 8d2be441ebc1078eaa9f2b7aa7c6d3880973851e
-[09/12] ASoC: codecs: tx-macro: add support for sm8450 and sc8280xp
-        commit: 7ca36514752fa5bdf0d237436dc0042aefbf42ad
-[10/12] ASoC: codecs: rx-macro: add support for sm8450 and sc8280xp
-        commit: c0bcaa72fabab1f2900aecc8643f33212c0072cc
-[11/12] ASoC: codecs: va-macro: clear the frame sync counter before enabling
-        commit: c55b7381d7932eb303dbd97691f89c1a9c452956
-[12/12] ASoC: codecs: va-macro: add support for sm8450 and sc8280xp
-        commit: 0f47dd211938d5646f4041407089390bf89b96e8
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+> 
