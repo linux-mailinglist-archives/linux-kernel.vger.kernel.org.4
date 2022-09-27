@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A377A5EC10A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5845EC110
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232109AbiI0LVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S232126AbiI0LVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbiI0LUT (ORCPT
+        with ESMTP id S231519AbiI0LUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:20:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A099F0F8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:20:18 -0700 (PDT)
+        Tue, 27 Sep 2022 07:20:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A944F6AB
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:20:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A641161828
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 11:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4425EC433D7;
-        Tue, 27 Sep 2022 11:20:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2FB7CB81B31
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 11:20:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7816C433D7;
+        Tue, 27 Sep 2022 11:20:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664277617;
-        bh=bvLdn54WLXXGn2K8gs+IJk07fcYXo6kaZWU8LNj08H0=;
+        s=k20201202; t=1664277621;
+        bh=yyoRKDYAu9onR60+95S2nR+oSix9hlQ/RirKeQktxow=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=eQ3OSM6hORTvgyGe/6NEH0F5/Wc89CERpmLGFFegS6jDIZDe0mZLnyJaTtE6DGDHZ
-         0Lshm/pylr1Grnd25nhLXrHTin3YxaW06YF5svmYzC43o/KReM3L/8P4YDKALsS9pC
-         /5D22R/L+lBdCd2xO1MzfkZxtuz8JhX2htkfQXDun/AcGnjpO/N8hxqWYnbIc0NaPx
-         pkBPm2TLHaMjoEI6oIQFs3DMbdrYjWEBofGkOYV8JzuYJOFUX6+20Uj6EIj/WgcIJq
-         XcOEgkWxPw45NR7jDq2zkZGMp2f5IpkMqxIiCVzpFsvqd5hcOY/iCi09hiYGadyYdZ
-         aDltiXSQNzPmg==
+        b=osdaNwN5ilz/6X8qPJ80wVeeEDaUUFrYqGQHl2qorvfs1Ogw7ARN8De9jfPRsm5bK
+         qukyzj1fw1PKh8Oyp3Z9CTQGYpxevEskL7Ry0dhwZdjYn8F6zHFfsW7DvYHx3wMMGj
+         pqbFF59GCMDjAXBd2yIe6K92AkIAO889qwav/q5n/DOBXSAuSkX9cdJR5xoEAIJEce
+         WckRo2QHSsSAo5Y64+nEkMw5p4JNK/LXNmtRuv7lsVHQjqnHfFcO9asvHllmpGw7J+
+         NLBjyKaNbR3sqpXhjppvbLtgGWEdsany9D489Dr/rILJ9i8ta/LFoZvsEcL+EU+1Vw
+         TXouF93WS4NCw==
 From:   Mark Brown <broonie@kernel.org>
-To:     cy_huang@richtek.com, perex@perex.cz,
-        ckeepax@opensource.cirrus.com, james.schulman@cirrus.com,
-        tiwai@suse.com, Ren Zhijie <renzhijie2@huawei.com>,
-        lukas.bulwahn@gmail.com, flatmax@flatmax.com,
-        pierre-louis.bossart@linux.intel.com,
-        tanureal@opensource.cirrus.com, srinivas.kandagatla@linaro.org,
-        lgirdwood@gmail.com, krzysztof.kozlowski@linaro.org
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220926074042.13297-1-renzhijie2@huawei.com>
-References: <20220926074042.13297-1-renzhijie2@huawei.com>
-Subject: Re: [PATCH -next] ASoC: codecs: wcd934x: Fix Kconfig dependency
-Message-Id: <166427761398.294040.9515810041975112450.b4-ty@kernel.org>
-Date:   Tue, 27 Sep 2022 12:20:13 +0100
+To:     Axel Lin <axel.lin@ingics.com>
+Cc:     Jerome Neanne <jneanne@baylibre.com>, linux-kernel@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>
+In-Reply-To: <20220919122353.384171-1-axel.lin@ingics.com>
+References: <20220919122353.384171-1-axel.lin@ingics.com>
+Subject: Re: [PATCH] regulator: tps65219: Fix is_enabled checking in tps65219_set_bypass
+Message-Id: <166427762040.294303.15716985071433693302.b4-ty@kernel.org>
+Date:   Tue, 27 Sep 2022 12:20:20 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,25 +54,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sep 2022 07:40:42 +0000, Ren Zhijie wrote:
-> If CONFIG_REGMAP_SLIMBUS is not set,
-> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
-> will be failed, like this:
+On Mon, 19 Sep 2022 20:23:53 +0800, Axel Lin wrote:
+> Testing .enable cannot tell if a regulator is enabled or not, check return
+> value of .is_enabled() instead.
+> Also remove unneeded ret variable.
 > 
-> sound/soc/codecs/wcd934x.o: In function `wcd934x_codec_probe':
-> wcd934x.c:(.text+0x3310): undefined reference to `__regmap_init_slimbus'
-> make: *** [vmlinux] Error 1
 > 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
 Thanks!
 
-[1/1] ASoC: codecs: wcd934x: Fix Kconfig dependency
-      commit: 4d73b97b8dbaf09af6e5878ce3288ba93956a3fd
+[1/1] regulator: tps65219: Fix is_enabled checking in tps65219_set_bypass
+      commit: 947934e389f716d505a656d04388b2ecbe43281d
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
