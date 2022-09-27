@@ -2,110 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34BCA5EC693
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE525EC6A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232469AbiI0Oh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33450 "EHLO
+        id S233053AbiI0Ojn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232977AbiI0Ogt (ORCPT
+        with ESMTP id S233004AbiI0OjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:36:49 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BEC72B4C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:34:09 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id a8so15980859lff.13
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:34:09 -0700 (PDT)
+        Tue, 27 Sep 2022 10:39:17 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61055FDC4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:35:23 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id t16so7138291ljh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:35:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=acCfIXSEg+p9BRvSasg6n7vxaIKD1v6nwDt9haJjID4=;
-        b=QgEOT9R7HvQuURmKpD32ePt8X/quN8Mgms7zIlqxXEcuZleC+WkiU6rnIAE+VOmA7p
-         AKzoefSiS+qwHB+RuNgQ0M3GmuolLohQFherQZ0AQBC3yixvLnOdC33YVzDDv9X7r8tK
-         aYLCscnoOlTGquASwxHmHpWsb0NAu+HbL/EVJBFbYptd9RwN96a9gdrHM1l4gRagQz3L
-         NG6fprtn5K+fQNxStOR2eiPqSzmPinMtwXA67Js/hpFtHVyh9fqsrOBNFU2kA9rJXK0g
-         /+VD+gSvlzp0OWaSUeHR9geB86zWpfjOqV9sp3iZlclo9CD0jNWyFHdPPS2N2ys74vsh
-         Qk8w==
+        bh=/clpfezaOe8mLPrQfl3pX+kpaqNYyTiLhiE5Y1A/Axg=;
+        b=ZyxJ0VAXz3Yx6wVEKSkMktMdGFJ+xOEWNqSzclwgt627nnfNxbSWBkdUOdDVZIdPeO
+         ztKr1AfIi1u6h4wPXg0FlTTwg/AM2jMJONWfS9196v7E7IgYRPzJ/YrgMBsmiV4AGi9E
+         BZtY7qdtZg80u0PwB1t3FI+gH9HiiKMDR+3fhvMlpQyVAM74KbmRPelfIgKkO5/eRmIe
+         WQf37Y2jfiKxOBPKiXsa/rTdHymfI3YNyXBi8U3BLwu6w0/Q9bF0gsmUdr9B01p8PSGW
+         sbBayxucHNKPWzlzFqQi0sB/QK0yX49GQwHuULeeybmD+opaRa0BiJ7ZQ7WIosw7tFch
+         UDSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=acCfIXSEg+p9BRvSasg6n7vxaIKD1v6nwDt9haJjID4=;
-        b=ynXb1aZheXPS7/fahPkQD02YECFS+Czw0xO977kzzTKNL7ZRyONr+BkIHnKo0JorXb
-         1o5FMeDusI11ye+nPxR3CHFFGItwKGvFstmAVE8/kSaJLeLtcgTXi0tIkoPI6MFdQ/oF
-         5riAxRMz0IvXeMyeTFoQbUl+43ZUcfl0dKVsELprqFK6eLSYIPkW2BgU4kYaKmeA9faL
-         zWOCc6/YbewRgW9y8o8P2jITpGq4ZVKVNS+9I/9DDpWR0Mxam5h6pVaGsmn2kHDKEpQb
-         Zcud91Q6WaxUlStKEuieAkcWLi/1L6b+yiV+JZNYjhLRKkIacY1wC/vtoW4JIvNR69zK
-         hcaA==
-X-Gm-Message-State: ACrzQf0nah8S1zJyiFjXysNytMr0xT/SfsXZobHqyGevkcJrwAHxtMP7
-        i1NxM1zFSEwEvHdyLVENCS1YxA==
-X-Google-Smtp-Source: AMsMyM5HF32G8zBKxBDSRk0Co6DuTb44eQb2XOpoqNIlWhBA00YGIY7V1/dw12NficsJu7DCThiLCg==
-X-Received: by 2002:a19:654d:0:b0:49f:5309:1cb6 with SMTP id c13-20020a19654d000000b0049f53091cb6mr10928341lfj.522.1664289247824;
-        Tue, 27 Sep 2022 07:34:07 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id be43-20020a056512252b00b00498ee99a749sm176228lfb.304.2022.09.27.07.33.50
+        bh=/clpfezaOe8mLPrQfl3pX+kpaqNYyTiLhiE5Y1A/Axg=;
+        b=AyPv+QOIFjh6jaOi99UVgWlbjnZm/01MLV4B7bS8o+WjXGCLjWjLDGcK7uBKOJVBGd
+         03ys7SDE6mR6SC+aEblVLd/M0ukrduuLtTeJef1yzsLg7PTcyD/mOvVOg3deagzi83or
+         HJ8RJWNs885zvgIhXomFiFxZoQIfbJ+2DF9u2ozhQGWU+NMj2QXUXChoz/HVzgGNByTg
+         3K+hhpiIY3fV+20TkM1eE6hUBkaa0ZcWsb0ZvXcTE3hPN4QArllCV/nYFLkMEIMa+efr
+         7cWdJrD5KXHgG+OLiLuEtBbrJB6UQc/B8oLVlwLFDExUk46fO4tD2X122Q14n4s142GV
+         twVQ==
+X-Gm-Message-State: ACrzQf2S205LQLwWDlbaG+b3txb9HVH9MQX/dFBCxTvgYF5n1ZGC3d3K
+        YBBLJzmdcxVXnthWfutCV8d/EQ==
+X-Google-Smtp-Source: AMsMyM6PT4U1pTFDQtF2QivAJie+RqkxW7ZZSiD2PM7A3oNR4iAzYYKKhCpfzt7mx7GPKsQjtnSovA==
+X-Received: by 2002:a05:651c:23a1:b0:26d:9eb6:7b60 with SMTP id bk33-20020a05651c23a100b0026d9eb67b60mr3329748ljb.208.1664289321468;
+        Tue, 27 Sep 2022 07:35:21 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id k4-20020a05651239c400b0048b143c09c2sm178450lfu.259.2022.09.27.07.35.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 07:33:56 -0700 (PDT)
-Message-ID: <e7697876-f2bc-b0ef-c8bc-6737d8a54551@linaro.org>
-Date:   Tue, 27 Sep 2022 16:33:46 +0200
+        Tue, 27 Sep 2022 07:35:20 -0700 (PDT)
+Message-ID: <5e269e1a-8819-a326-90e0-a020cb2c0d73@linaro.org>
+Date:   Tue, 27 Sep 2022 17:35:19 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 01/33] arm64: dts: qcom: ipq6018-cp01-c1: correct
- blspi1 pins
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220926074415.53100-1-krzysztof.kozlowski@linaro.org>
- <20220926074415.53100-2-krzysztof.kozlowski@linaro.org>
- <647d12dd-9bc6-ebe3-7a72-9b9c0d4610dd@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <647d12dd-9bc6-ebe3-7a72-9b9c0d4610dd@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v5 00/30] Rework the trip points creation
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com, Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Kaestle <peter@piie.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Antoine Tenart <atenart@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Dmitry Osipenko <digetx@gmail.com>, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org
+References: <20220927143239.376737-1-daniel.lezcano@linaro.org>
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220927143239.376737-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/09/2022 16:01, Robert Marko wrote:
-> 
-> On 26. 09. 2022. 09:43, Krzysztof Kozlowski wrote:
->> When BLSPI1 (originally SPI0, later renamed in commit f82c48d46852
->> ("arm64: dts: qcom: ipq6018: correct QUP peripheral labels")) was added,
->> the device node lacked respective pin configuration assignment.   It
->> used also blsp0_spi function but that was probably the same mistake as
->> naming it SPI0.
-> 
-> Hi,
-> 
-> Sorry for making it confusing, but "blsp0_spi" is the correct function.
-> Pinctrl driver and datasheets call functions blsp0-blps5, but usually in DT
-> we call the nodes blsp1-blsp6.
-> 
-> It would probably be better for me to rename the nodes to blsp0-5 instead.
+Hi Daniel,
 
-OK, so instead I will add blsp0_spi to the bindings.
+On 27/09/2022 17:32, Daniel Lezcano wrote:
 
-Best regards,
-Krzysztof
+[skipped]
+
+>   drivers/net/ethernet/chelsio/cxgb4/cxgb4.h    |   2 -
+>   .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |  41 +----
+>   drivers/platform/x86/acerhdf.c                |  73 +++-----
+>   drivers/thermal/armada_thermal.c              |  39 ++---
+>   drivers/thermal/broadcom/bcm2835_thermal.c    |   8 +-
+>   drivers/thermal/da9062-thermal.c              |  52 +-----
+>   drivers/thermal/gov_bang_bang.c               |  39 +++--
+>   drivers/thermal/gov_fair_share.c              |  18 +-
+>   drivers/thermal/gov_power_allocator.c         |  51 +++---
+>   drivers/thermal/gov_step_wise.c               |  22 ++-
+>   drivers/thermal/hisi_thermal.c                |  11 +-
+>   drivers/thermal/imx_thermal.c                 |  72 +++-----
+>   .../int340x_thermal/int340x_thermal_zone.c    |  33 ++--
+>   .../int340x_thermal/int340x_thermal_zone.h    |   4 +-
+>   .../processor_thermal_device.c                |  10 +-
+>   drivers/thermal/intel/x86_pkg_temp_thermal.c  | 120 +++++++------
+>   drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |  39 ++---
+>   drivers/thermal/rcar_gen3_thermal.c           |   2 +-
+>   drivers/thermal/rcar_thermal.c                |  53 +-----
+>   drivers/thermal/samsung/exynos_tmu.c          |  57 +++----
+>   drivers/thermal/st/st_thermal.c               |  47 +----
+>   drivers/thermal/tegra/soctherm.c              |  33 ++--
+>   drivers/thermal/tegra/tegra30-tsensor.c       |  17 +-
+>   drivers/thermal/thermal_core.c                | 161 +++++++++++++++---
+>   drivers/thermal/thermal_core.h                |  24 +--
+>   drivers/thermal/thermal_helpers.c             |  28 +--
+>   drivers/thermal/thermal_netlink.c             |  21 +--
+>   drivers/thermal/thermal_of.c                  | 116 -------------
+>   drivers/thermal/thermal_sysfs.c               | 133 +++++----------
+>   drivers/thermal/ti-soc-thermal/ti-thermal.h   |  15 --
+>   drivers/thermal/uniphier_thermal.c            |  27 ++-
+>   include/linux/thermal.h                       |  10 ++
+>   32 files changed, 559 insertions(+), 819 deletions(-)
+
+
+Could you please cc mailing lists on all patches? It's really hard to 
+determine whether qcom changes are correct without seeing other patches.
+
+-- 
+With best wishes
+Dmitry
 
