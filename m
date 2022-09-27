@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CB35EBF5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E2E5EBF6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbiI0KLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 06:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42532 "EHLO
+        id S231931AbiI0KLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 06:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbiI0KLi (ORCPT
+        with ESMTP id S231790AbiI0KLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 06:11:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197EF9E0F6;
-        Tue, 27 Sep 2022 03:11:35 -0700 (PDT)
+        Tue, 27 Sep 2022 06:11:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C838725C1;
+        Tue, 27 Sep 2022 03:11:37 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BBEEA6602265;
-        Tue, 27 Sep 2022 11:11:33 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E62DA660225F;
+        Tue, 27 Sep 2022 11:11:34 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664273494;
-        bh=0o/8cVorzOsad5b/Haf5ctcd6DYaAoupPjEfo3dU2RU=;
+        s=mail; t=1664273495;
+        bh=7wZZwX2byJ4bhuDUY3CPvHNsdJ6p7fqNLcyFmuOhg2o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eJZnYEZfTW2546Q2EMvR2zOhotutnmTNfvUp5QmaRpkiW1g4Wt14O3+WNGym1Amm5
-         8smEJPUErM/974lSgBmHLaFNa4oG5vZP63vrbr9CvjBye9eJXgESWlqjw1X+dAut0F
-         XLBduncdVcXKfxWJ3RMpyLVnShssV42OD+omYQWkdJPaahFEKKuZsmUV80Guk8zQGZ
-         YuvNqD9q/zgf9gwogttzCxa4gbtU8F7/nCVcFHTx8tsUQ70JCp31E6E+a22Lj94DRf
-         c9PoYLK467JFbItzlAxjNe27VpsAzup5DbNljauDEAY0VATAvPkPw9n5Gn31yEWubg
-         fq5Gmn2dVtRnw==
+        b=Qezv6W8zxnuAA3zBI16JQxZl9vMpMD9zW0jQdQdpik5nEOuNVfeJeImRxkletuuvc
+         qjnAGhrYcVjeT1caHTsR7bCMucUiMibdyYfK4ZSOnsKEINaXbKFd9eLSVX4pMVAqmr
+         RJHDw+7km8C5veYZ3l97tdV7T9xTq8qaaDXkyJ83GqssKA4yJNS6bQVffEuAC9jM8p
+         tdWquB5fFiKW3SpHmR3rI8e1kRrM4/3ZcRppoKMfizENHXZIhdHXbaRozf6ZOchILI
+         8zAdzZIoIfy9o8BZhwRyJwrwpdphnPGHbXw1TdcRWXgmMfY0JErDqTxvZ6jBPFW1Ab
+         73yfmoXgpOMbQ==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -45,9 +45,9 @@ Cc:     mturquette@baylibre.com, sboyd@kernel.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org
-Subject: [PATCH v3 01/10] arm64: dts: mt8183: Fix Mali GPU clock
-Date:   Tue, 27 Sep 2022 12:11:19 +0200
-Message-Id: <20220927101128.44758-2-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 02/10] clk: mediatek: mt8183: mfgcfg: Propagate rate changes to parent
+Date:   Tue, 27 Sep 2022 12:11:20 +0200
+Message-Id: <20220927101128.44758-3-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220927101128.44758-1-angelogioacchino.delregno@collabora.com>
 References: <20220927101128.44758-1-angelogioacchino.delregno@collabora.com>
@@ -64,34 +64,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chen-Yu Tsai <wenst@chromium.org>
 
-The actual clock feeding into the Mali GPU on the MT8183 is from the
-clock gate in the MFGCFG block, not CLK_TOP_MFGPLL_CK from the TOPCKGEN
-block, which itself is simply a pass-through placeholder for the MFGPLL
-in the APMIXEDSYS block.
+The only clock in the MT8183 MFGCFG block feeds the GPU. Propagate its
+rate change requests to its parent, so that DVFS for the GPU can work
+properly.
 
-Fix the hardware description with the correct clock reference.
-
-Fixes: a8168cebf1bc ("arm64: dts: mt8183: Add node for the Mali GPU")
+Fixes: acddfc2c261b ("clk: mediatek: Add MT8183 clock support")
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/mediatek/clk-mt8183-mfgcfg.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index a70b669c49ba..402136bfd535 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -1678,7 +1678,7 @@ gpu: gpu@13040000 {
- 				<GIC_SPI 278 IRQ_TYPE_LEVEL_LOW>;
- 			interrupt-names = "job", "mmu", "gpu";
+diff --git a/drivers/clk/mediatek/clk-mt8183-mfgcfg.c b/drivers/clk/mediatek/clk-mt8183-mfgcfg.c
+index d774edaf760b..230299728859 100644
+--- a/drivers/clk/mediatek/clk-mt8183-mfgcfg.c
++++ b/drivers/clk/mediatek/clk-mt8183-mfgcfg.c
+@@ -18,9 +18,9 @@ static const struct mtk_gate_regs mfg_cg_regs = {
+ 	.sta_ofs = 0x0,
+ };
  
--			clocks = <&topckgen CLK_TOP_MFGPLL_CK>;
-+			clocks = <&mfgcfg CLK_MFG_BG3D>;
+-#define GATE_MFG(_id, _name, _parent, _shift)			\
+-	GATE_MTK(_id, _name, _parent, &mfg_cg_regs, _shift,	\
+-		&mtk_clk_gate_ops_setclr)
++#define GATE_MFG(_id, _name, _parent, _shift)				\
++	GATE_MTK_FLAGS(_id, _name, _parent, &mfg_cg_regs, _shift,	\
++		       &mtk_clk_gate_ops_setclr, CLK_SET_RATE_PARENT)
  
- 			power-domains =
- 				<&spm MT8183_POWER_DOMAIN_MFG_CORE0>,
+ static const struct mtk_gate mfg_clks[] = {
+ 	GATE_MFG(CLK_MFG_BG3D, "mfg_bg3d", "mfg_sel", 0)
 -- 
 2.37.2
 
