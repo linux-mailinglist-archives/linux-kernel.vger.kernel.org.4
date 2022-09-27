@@ -2,234 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8A15ED00A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 00:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98AC55ED012
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 00:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbiI0WGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 18:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
+        id S230222AbiI0WNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 18:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiI0WGn (ORCPT
+        with ESMTP id S229477AbiI0WNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 18:06:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBAAE7E3F;
-        Tue, 27 Sep 2022 15:06:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B98E61BF2;
-        Tue, 27 Sep 2022 22:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B287BC433D6;
-        Tue, 27 Sep 2022 22:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664316402;
-        bh=zf6/Ek9VKvQvAUEeQpa349iNcZYlcL9HB0j5vGBv2wM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=nZcNZxKuqKNGjZBBtQc2ZU+b7Pm9DTuqEGy7HC1wBS/KalBLpbnLgj1VjUHr5zWFa
-         nxDtqdbxpSuNnOvuv3+E0ZFv/jIvlgho/9kgROGLbvxlinP4y2HMs7zIgyR6hCGwF1
-         gD9nVPHvzryd+rSXUkw2yeQsbRhK7LTO1oxVMgtYf2BeRXoscL3Rh+aPmmp75tCC6v
-         Q0SGFhpU/WdyVC0H6vrUP4sPO7hg185EVTUeLlLWVIQOdic6v9zOjvMHy2HgQT8URX
-         CsQwFNryEohGIChOV1++eRAqW9HVzXxqtRTHISugoE5f91l12XDC5LjDBoJQkLN3dy
-         y5/V/7/GNVBtw==
-Date:   Tue, 27 Sep 2022 17:06:40 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Rui Ma <Rui.Ma@amd.com>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI/IOV: Decrease VF memory BAR size to save host memory
- occupied by PTEs
-Message-ID: <20220927220640.GA1728095@bhelgaas>
+        Tue, 27 Sep 2022 18:13:09 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111D410963B
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 15:13:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:
+        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=OQqrYheo/UyRR+1g1GEetPZjkt3ZHK1BPRuh8I0zE84=; b=lklDJPjWTcQu09wGTjZ2PHsQGj
+        sBmn4fVwC4uh/mtiMmx0afSo7wKHHhJW0a2V6UP+/+FQi+H4Cn29plPyT4kVUxMj1YWosDwYAp0lf
+        /0l1eQEe0l8dNLIZRbtdp0v3YHtPeHVgYdnh3FEg+d913ULJvkuUycQa0lu1pLf6W9J21gHzgA1VS
+        sKf3am6xz1LnVah0TXXLv8hrTpRXPwo0o5sBfGfCAEKECU15XarYdwgXvKeugIxegn+KxY9N+Yd9t
+        cKZJxasXVODlTkcaSwmTqM85j9Cw+2u+iut8YCBeF9JPTA/PL+OLkkpB/HKbDnpPv0R0yQbF9/bTq
+        UIcKBZGw==;
+Received: from [177.34.169.227] (helo=bowie..)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1odIom-00E9Og-4k; Wed, 28 Sep 2022 00:12:44 +0200
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Melissa Wen <mwen@igalia.com>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        David Gow <davidgow@google.com>
+Cc:     Arthur Grillo <arthur.grillo@usp.br>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
+Subject: [PATCH v2 1/2] drm/tests: Split drm_test_dp_mst_calc_pbn_mode into parameterized tests
+Date:   Tue, 27 Sep 2022 19:12:05 -0300
+Message-Id: <20220927221206.55930-1-mcanal@igalia.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926080542.920427-1-Rui.Ma@amd.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 04:05:42PM +0800, Rui Ma wrote:
-> In SR_IOV scene, when the device physical space(such as Video RAM)is fixed,
-> as the number of VFs increases, the actual BAR memory space used by each VF
-> decreases.
+The drm_test_dp_mst_calc_pbn_mode is based on a loop that executes tests
+for a couple of test cases. This could be better represented by
+parameterized tests, provided by KUnit.
 
-s/SR_IOV/SR-IOV/ to match spec usage.
+So, convert the drm_test_dp_mst_calc_pbn_mode into parameterized tests.
 
-I think this is device-specific behavior, right?  I don't see anything
-in the PCIe spec about the BAR size being dependent on NumVFs.  If
-it's device-specific, it shouldn't be presented as "for all SR-IOV
-devices, the actual BAR memory space decreases as number of VFs
-increases."
+Signed-off-by: Maíra Canal <mcanal@igalia.com>
+Reviewed-by: Michał Winiarski <michal.winiarski@intel.com>
+---
+v1 -> v2: https://lore.kernel.org/dri-devel/20220925222719.345424-1-mcanal@igalia.com/T/#m056610a23a63109484afeafefb5846178c4d36b2
+- Add Michał's Reviewed-by tag.
+---
+ .../gpu/drm/tests/drm_dp_mst_helper_test.c    | 77 +++++++++++++------
+ 1 file changed, 53 insertions(+), 24 deletions(-)
 
-> However, the BAR memory mapping is always based on the initial
-> device physical device. So do not map this unneeded memory can save host
-> memory occupied by PTEs. Although each PTE only occupies a few bytes of
-> space on its own, a large number of PTEs can still take up a lot of space.
+diff --git a/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c b/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
+index 65c9d225b558..12f41881db6b 100644
+--- a/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
++++ b/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
+@@ -16,33 +16,62 @@
+ 
+ #include "../display/drm_dp_mst_topology_internal.h"
+ 
++struct drm_dp_mst_calc_pbn_mode_test {
++	const int clock;
++	const int bpp;
++	const bool dsc;
++	const int expected;
++};
++
++static const struct drm_dp_mst_calc_pbn_mode_test drm_dp_mst_calc_pbn_mode_cases[] = {
++	{
++		.clock = 154000,
++		.bpp = 30,
++		.dsc = false,
++		.expected = 689
++	},
++	{
++		.clock = 234000,
++		.bpp = 30,
++		.dsc = false,
++		.expected = 1047
++	},
++	{
++		.clock = 297000,
++		.bpp = 24,
++		.dsc = false,
++		.expected = 1063
++	},
++	{
++		.clock = 332880,
++		.bpp = 24,
++		.dsc = true,
++		.expected = 50
++	},
++	{
++		.clock = 324540,
++		.bpp = 24,
++		.dsc = true,
++		.expected = 49
++	},
++};
++
+ static void drm_test_dp_mst_calc_pbn_mode(struct kunit *test)
+ {
+-	int pbn, i;
+-	const struct {
+-		int rate;
+-		int bpp;
+-		int expected;
+-		bool dsc;
+-	} test_params[] = {
+-		{ 154000, 30, 689, false },
+-		{ 234000, 30, 1047, false },
+-		{ 297000, 24, 1063, false },
+-		{ 332880, 24, 50, true },
+-		{ 324540, 24, 49, true },
+-	};
+-
+-	for (i = 0; i < ARRAY_SIZE(test_params); i++) {
+-		pbn = drm_dp_calc_pbn_mode(test_params[i].rate,
+-					   test_params[i].bpp,
+-					   test_params[i].dsc);
+-		KUNIT_EXPECT_EQ_MSG(test, pbn, test_params[i].expected,
+-				    "Expected PBN %d for clock %d bpp %d, got %d\n",
+-		     test_params[i].expected, test_params[i].rate,
+-		     test_params[i].bpp, pbn);
+-	}
++	const struct drm_dp_mst_calc_pbn_mode_test *params = test->param_value;
++
++	KUNIT_EXPECT_EQ(test, drm_dp_calc_pbn_mode(params->clock, params->bpp, params->dsc),
++			params->expected);
+ }
+ 
++static void dp_mst_calc_pbn_mode_desc(const struct drm_dp_mst_calc_pbn_mode_test *t, char *desc)
++{
++	sprintf(desc, "Clock %d BPP %d DSC %s", t->clock, t->bpp, t->dsc ? "enabled" : "disabled");
++}
++
++KUNIT_ARRAY_PARAM(drm_dp_mst_calc_pbn_mode, drm_dp_mst_calc_pbn_mode_cases,
++		  dp_mst_calc_pbn_mode_desc);
++
+ static bool
+ sideband_msg_req_equal(const struct drm_dp_sideband_msg_req_body *in,
+ 		       const struct drm_dp_sideband_msg_req_body *out)
+@@ -271,7 +300,7 @@ static void drm_test_dp_mst_sideband_msg_req_decode(struct kunit *test)
+ }
+ 
+ static struct kunit_case drm_dp_mst_helper_tests[] = {
+-	KUNIT_CASE(drm_test_dp_mst_calc_pbn_mode),
++	KUNIT_CASE_PARAM(drm_test_dp_mst_calc_pbn_mode, drm_dp_mst_calc_pbn_mode_gen_params),
+ 	KUNIT_CASE(drm_test_dp_mst_sideband_msg_req_decode),
+ 	{ }
+ };
+-- 
+2.37.3
 
-So IIUC this is basically a quirk to override the "VF BAR aperture"
-size, which PCIe r6.0, sec 9.2.1.1.1 says is "determined by the usual
-BAR probing algorithm as described in Section 9.3.3.14."
-
-Except that this doesn't affect the *starting* address of each VF BAR,
-which I guess is what you mean by "BAR memory mapping is always based
-on the initial device physical device."
-
-Hmm.  This kind of breaks the "plug and play" model of PCI because the
-device is no longer self-describing.  Well, I guess the device still
-describes its worst-case BAR size; the quirk basically just optimizes
-space usage.  Right?
-
-It's a shame if we can't reduce PTE usage by using hugeTLB pages for
-this.  Aren't both virt and phys contiguous and nicely aligned for
-this case?  It seems like the perfect application for huge pages.
-
-> Signed-off-by: Rui Ma <Rui.Ma@amd.com>
-> ---
->  drivers/pci/iov.c    | 14 ++++++++++++--
->  drivers/pci/pci.h    | 15 +++++++++++++++
->  drivers/pci/quirks.c | 37 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 64 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-> index 952217572113..6b9f9b6b9be1 100644
-> --- a/drivers/pci/iov.c
-> +++ b/drivers/pci/iov.c
-> @@ -296,6 +296,14 @@ int pci_iov_add_virtfn(struct pci_dev *dev, int id)
->  	struct pci_sriov *iov = dev->sriov;
->  	struct pci_bus *bus;
->  
-> +    /*
-> +     * Some SR-IOV device's BAR map range is larger than they can actually use.
-> +     * This extra BAR space occupy too much reverse mapping size(physical page
-> +     * back to the PTEs). So add a divisor shift parameter to resize the
-> +     * request resource of VF.
-> +     */
-> +	u16 shift = 1;
-> +
->  	bus = virtfn_add_bus(dev->bus, pci_iov_virtfn_bus(dev, id));
->  	if (!bus)
->  		goto failed;
-> @@ -328,8 +336,10 @@ int pci_iov_add_virtfn(struct pci_dev *dev, int id)
->  		virtfn->resource[i].name = pci_name(virtfn);
->  		virtfn->resource[i].flags = res->flags;
->  		size = pci_iov_resource_size(dev, i + PCI_IOV_RESOURCES);
-> +		shift = 1;
-> +		shift = virtfn_get_shift(dev, iov->num_VFs, i);
-
-Maybe more of the fiddling could be hidden in the quirk, e.g.,
-
-  size = quirk_vf_bar_size(dev, iov->num_VFs, i);
-  if (!size)
-    size = pci_iov_resource_size(dev, i + PCI_IOV_RESOURCES);
-
->  		virtfn->resource[i].start = res->start + size * id;
-> -		virtfn->resource[i].end = virtfn->resource[i].start + size - 1;
-> +		virtfn->resource[i].end = virtfn->resource[i].start + (size >> (shift - 1)) - 1;
->  		rc = request_resource(res, &virtfn->resource[i]);
->  		BUG_ON(rc);
->  	}
-> @@ -680,12 +690,12 @@ static int sriov_enable(struct pci_dev *dev, int nr_virtfn)
->  	msleep(100);
->  	pci_cfg_access_unlock(dev);
->  
-> +	iov->num_VFs = nr_virtfn;
->  	rc = sriov_add_vfs(dev, initial);
->  	if (rc)
->  		goto err_pcibios;
->  
->  	kobject_uevent(&dev->dev.kobj, KOBJ_CHANGE);
-> -	iov->num_VFs = nr_virtfn;
->  
->  	return 0;
->  
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index 3d60cabde1a1..befc67a280eb 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -603,6 +603,21 @@ static inline int pci_dev_specific_reset(struct pci_dev *dev, bool probe)
->  }
->  #endif
->  
-> +struct virtfn_get_shift_methods {
-> +	u16 vendor;
-> +	u16 device;
-> +	u16 (*get_shift)(struct pci_dev *dev, u16 arg, int arg2);
-> +};
-> +
-> +#ifdef CONFIG_PCI_QUIRKS
-> +u16 virtfn_get_shift(struct pci_dev *dev, u16 arg1, int arg2);
-> +#else
-> +static inline u16 virtfn_get_shift(struct pci_dev *dev, u16 arg1, int arg2)
-> +{
-> +	return (u16)1;
-> +}
-> +#endif
-> +
->  #if defined(CONFIG_PCI_QUIRKS) && defined(CONFIG_ARM64)
->  int acpi_get_rc_resources(struct device *dev, const char *hid, u16 segment,
->  			  struct resource *res);
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index da829274fc66..add587919705 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -4085,6 +4085,43 @@ int pci_dev_specific_reset(struct pci_dev *dev, bool probe)
->  	return -ENOTTY;
->  }
->  
-> +static u16 divided_by_VF(struct pci_dev *dev, u16 num_VFs, int bar_num)
-
-This is clearly ATI specific or at the very least specific to devices
-that divvy up BAR0 in special ways, so the name is a bit too generic.
-
-> +{
-> +	u16 shift = 1;
-> +
-> +	if (bar_num == 0) {
-> +		while ((1 << shift) <= num_VFs)
-> +			shift += 1;
-> +	}
-> +	pci_info(dev, "BAR %d get shift: %d.\n", bar_num, shift);
-
-Drop the period at end.  If we're changing the size, I think it would
-be useful to know num_VFs, BAR #, and the new size.  IIUC, "dev" here
-is the PF, so this is the "VF BAR", not the BAR 0 of the PF.
-
-> +	return shift;
-> +}
-> +
-> +static const struct virtfn_get_shift_methods virtfn_get_shift_methods[] = {
-> +	{ PCI_VENDOR_ID_ATI, 0x73a1, divided_by_VF},
-> +	{ 0 }
-> +};
-> +
-> +/*
-> + * Get shift num to calculate SR-IOV device BAR. Sometimes the BAR size for
-> + * SR-IOV device is too large and we want to calculate the size to define
-> + * the end of virtfn.
-> + */
-> +u16 virtfn_get_shift(struct pci_dev *dev, u16 arg1, int arg2)
-> +{
-> +	const struct virtfn_get_shift_methods *i;
-> +
-> +	for (i = virtfn_get_shift_methods; i->get_shift; i++) {
-> +		if ((i->vendor == dev->vendor ||
-> +		     i->vendor == (u16)PCI_ANY_ID) &&
-> +		    (i->device == dev->device ||
-> +		     i->device == (u16)PCI_ANY_ID))
-> +			return i->get_shift(dev, arg1, arg2);
-> +	}
-> +
-> +	return (u16)1;
-> +}
-> +
->  static void quirk_dma_func0_alias(struct pci_dev *dev)
->  {
->  	if (PCI_FUNC(dev->devfn) != 0)
-> -- 
-> 2.25.1
-> 
