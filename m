@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0306D5EB92B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A885EB930
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiI0EZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 00:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        id S229766AbiI0EZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 00:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiI0EZB (ORCPT
+        with ESMTP id S229889AbiI0EZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 00:25:01 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2619443331;
-        Mon, 26 Sep 2022 21:24:59 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id y8so11583141edc.10;
-        Mon, 26 Sep 2022 21:24:59 -0700 (PDT)
+        Tue, 27 Sep 2022 00:25:29 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D396526F;
+        Mon, 26 Sep 2022 21:25:28 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 3so8377111pga.1;
+        Mon, 26 Sep 2022 21:25:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
-        bh=Qhij+rjILZXDr+3dJvPrhS9Wzmxt2vE9xc3gwCW9y/4=;
-        b=MO/JQMEj73YcZ/TIrS8pPfV+iuy3VJR8dRpw29+9WYGZDSonxZc/74EYBxh5ZUaZfX
-         Mosu/tmNVv6t1j22MBYa343rFWbWNOJfVLGu6c0u0sesxklANU2pCqJRN4NjMwRu9w+d
-         TykOZ6slxWujmmXB0oxj5n+sJIElWZOHOSuugz17Fr2+8m1heUncxI1VjjPYVPCju61K
-         XweLR7MQY71toSelqK1k1lr6MoNUPSBA807HsdjGOv8B04VHpylCmkg+xUoD124vgA51
-         H1/CQ21ktsXoVHPBBV3ZGThPxyacV7QVVIYbRUkU8dZ3XrG9sz/2UIR556brZXgYGW3b
-         G8qw==
+        h=in-reply-to:references:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date;
+        bh=LxbOuUcp4Fl9hDEOZUCmihBUghEH6LuaJsPJ+RBDT+I=;
+        b=Yq57LBzDbv3oiuzWFlq6XSE7gOd1EqfBKzoiQRWN3okeLKqWjn+DJN/0LKvTpID8V+
+         WhTnX2rem4x42LZEr+1C344NB2Pp9P49cc0kOCZO6lsHqFUTsyhLfkNbKscRHuh7lmIn
+         L0dV++ksHe8sAFNeNCnTXHbxg/Nera/5JrEBPkD8XDX6dPYqKiwZXXIvt4NTUfrnFiFV
+         8Vnzunyx22JaK32NUqadIR+KaR9wX5wWqC9rMwHPzPRay5utMcPNrzxTXRLQeDH56+I0
+         h891SOpl2SCBWq1e3FJ36OyZQ/RBVxkD94GkQyyfTce+vLULVign5e5HDc5Yk+dfq9ER
+         Shgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Qhij+rjILZXDr+3dJvPrhS9Wzmxt2vE9xc3gwCW9y/4=;
-        b=JcOUE/jk4WPN+dGodew+MNdJTeXFoon3PfQus4Y8eL/JgR1ScqpuA/sqzLdkM8WTwL
-         q9Bo5RERyhZW00OhtcEbmtu9MCZiKgGH22K6JyOiK6izLkgPm8/PwFho0JHej+xVVY0Y
-         +wSnSShqbMTOU/UJ3kLBQ+OL7rJ9c/VEerkyZHQYlc+TG2KOtXPZsDwThcgNJ54WZefK
-         diMx3js+10O2ZYFlFz5lKvyEQIoRneH+EX/ODYAkLwu02FFBuSpW+pSM+ISPl9sGbdS7
-         KoaZnj0dVM/ly2uEKvV3tfAMvDDa9LB1zEig3RhY2uUjaFo/pvEUDcMlEy1PbKwMwsyi
-         VoJQ==
-X-Gm-Message-State: ACrzQf02M4Ny53y+iZnGymZmciaR1e5soDKt93qZ6qzQckAOYkb7d9t0
-        btrLcObZ5Dppvp3swsBshSA=
-X-Google-Smtp-Source: AMsMyM44RQ84B1aDVXGrsKZWMZ75w4JYXnkVyZ6xfoLOwA+BhvLmo6gdR5iABqiuOKBEPYVAIHIjDQ==
-X-Received: by 2002:a50:fb17:0:b0:457:1808:8471 with SMTP id d23-20020a50fb17000000b0045718088471mr12993300edq.338.1664252697661;
-        Mon, 26 Sep 2022 21:24:57 -0700 (PDT)
-Received: from smtpclient.apple ([178.254.237.20])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906329200b0077f5e96129fsm110839ejw.158.2022.09.26.21.24.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 26 Sep 2022 21:24:57 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH net] rhashtable: fix crash due to mm api change
-From:   Martin Zaharinov <micron10@gmail.com>
-In-Reply-To: <20220926151939.GG12777@breakpoint.cc>
-Date:   Tue, 27 Sep 2022 07:24:55 +0300
-Cc:     Michal Hocko <mhocko@suse.com>, netdev <netdev@vger.kernel.org>,
-        tgraf@suug.ch, urezki@gmail.com, Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, herbert@gondor.apana.org.au,
-        "linux-kernel@vger kernel. org" <linux-kernel@vger.kernel.org>,
-        akpm@linux-foundation.org, Paolo Bonzini <pbonzini@redhat.com>,
-        kvm@vger.kernel.org
+        h=in-reply-to:references:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=LxbOuUcp4Fl9hDEOZUCmihBUghEH6LuaJsPJ+RBDT+I=;
+        b=C/50Yw+r02gA2gMmQI+3CJvMwLFrhcGoankS/5eEG5mReThy1+blo+c/Jphk7qqxR7
+         70U+gnqnADjiuPEi2sC17curbyb0GLse9CDC+/b8ZLXjyTxzN4gAnxyABPngqaYmowjQ
+         JuokAAASAoaAVmdIBlP1zfhJ/i8vbfoaUaMXpkgN8KUr1hJfRP8T/No4V8WmI7dLLDpc
+         5EQxO4zXBU17uaOz2Pk31mY82gladWxi0uy1FGWUSlW6JriRxxwnEsgrxR6Zl/UIBa3N
+         eqta2CyCSaR/E9m7Rov9j4vCkfs2gWlbkdpYfTigemsx2IzTf864SOeRZGUVy6NfVN2l
+         mmcQ==
+X-Gm-Message-State: ACrzQf1NMm4XKGCK3rmiBkdYDjfbYgrdSqnfk1Snfq/zzQgoLj1s1TNU
+        bgokIi0L7aOwl3LTnw3IGQo=
+X-Google-Smtp-Source: AMsMyM4jbwJBH9/KA7yuA+aWNSWhwZqGyrtNeoPNi1T9QPhwZLiMgk1/cvQpoKtdDEHGUxkZuzOUWA==
+X-Received: by 2002:a63:5144:0:b0:43b:ed4b:224 with SMTP id r4-20020a635144000000b0043bed4b0224mr23144492pgl.594.1664252727543;
+        Mon, 26 Sep 2022 21:25:27 -0700 (PDT)
+Received: from localhost (193-116-92-8.tpgi.com.au. [193.116.92.8])
+        by smtp.gmail.com with ESMTPSA id y24-20020a634958000000b0043941566481sm353486pgk.39.2022.09.26.21.25.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 21:25:26 -0700 (PDT)
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <3AF0514E-57AB-417A-A800-A68FCF65749F@gmail.com>
-References: <20220926083139.48069-1-fw@strlen.de>
- <YzFp4H/rbdov7iDg@dhcp22.suse.cz> <20220926151939.GG12777@breakpoint.cc>
-To:     Florian Westphal <fw@strlen.de>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 27 Sep 2022 14:25:14 +1000
+Message-Id: <CN6WCMKCWHOG.LT2QV3910UJ2@bobo>
+Subject: Re: [PATCH linux-next][RFC] powerpc: avoid lockdep when we are
+ offline
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Zhouyi Zhou" <zhouzhouyi@gmail.com>, <mpe@ellerman.id.au>,
+        <christophe.leroy@csgroup.eu>, <atrajeev@linux.vnet.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <lance@osuosl.org>, <paulmck@kernel.org>, <rcu@vger.kernel.org>
+X-Mailer: aerc 0.11.0
+References: <20220927014823.11439-1-zhouzhouyi@gmail.com>
+In-Reply-To: <20220927014823.11439-1-zhouzhouyi@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,241 +74,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian
+On Tue Sep 27, 2022 at 11:48 AM AEST, Zhouyi Zhou wrote:
+> This is second version of my fix to PPC's  "WARNING: suspicious RCU usage=
+",
+> I improved my fix under Paul E. McKenney's guidance:
+> Link: https://lore.kernel.org/lkml/20220914021528.15946-1-zhouzhouyi@gmai=
+l.com/T/
+>
+> During the cpu offlining, the sub functions of xive_teardown_cpu will
+> call __lock_acquire when CONFIG_LOCKDEP=3Dy. The latter function will
+> travel RCU protected list, so "WARNING: suspicious RCU usage" will be
+> triggered.
+>
+> Avoid lockdep when we are offline.
 
-Apply v2 patch and upload on sever , after 4-5 hours work server crash =
-see log:=20
+I don't see how this is safe. If RCU is no longer watching the CPU then
+the memory it is accessing here could be concurrently freed. I think the
+warning is valid.
 
-Sep 27 04:15:53  [35863.462862][   C28] ------------[ cut here =
-]------------
-Sep 27 04:15:53  [35863.463590][   C28] NETDEV WATCHDOG: eth0 (i40e): =
-transmit queue 18 timed out
-Sep 27 04:15:53  [35863.464567][   C28] WARNING: CPU: 28 PID: 0 at =
-net/sched/sch_generic.c:529 dev_watchdog+0x167/0x170
-Sep 27 04:15:53  [35863.465799][   C28] Modules linked in: nft_limit =
-nf_conntrack_netlink pppoe pppox ppp_generic slhc nft_ct =
-nft_flow_offload nf_flow_table_inet nf_flow_table nft_nat nft_chain_nat =
-team_mode_loadbalance team nf_tables netconsole coretemp i40e nf_nat_sip =
-nf_conntrack_sip nf_nat_pptp nf_conntrack_pptp nf_nat_tftp =
-nf_conntrack_tftp nf_nat_ftp nf_conntrack_ftp nf_nat nf_conntrack =
-nf_defrag_ipv6 nf_defrag_ipv4 acpi_ipmi ipmi_si ipmi_devintf =
-ipmi_msghandler rtc_cmos
-Sep 27 04:15:53  [35863.471915][   C28] CPU: 28 PID: 0 Comm: swapper/28 =
-Tainted: G           O      5.19.11 #1
-Sep 27 04:15:53  [35863.473036][   C28] Hardware name: Supermicro =
-SYS-5038MR-H8TRF/X10SRD-F, BIOS 3.3 10/28/2020
-Sep 27 04:15:53  [35863.474179][   C28] RIP: =
-0010:dev_watchdog+0x167/0x170
-Sep 27 04:15:53  [35863.474875][   C28] Code: 28 e9 77 ff ff ff 48 89 df =
-c6 05 63 57 c4 00 01 e8 de 59 fb ff 48 89 c2 44 89 e1 48 89 de 48 c7 c7 =
-08 c7 ec 97 e8 52 c6 13 00 <0f> 0b eb 85 0f 1f 44 00 00 41 55 41 54 55 =
-53 48 8b 47 50 4c 8b 28
-Sep 27 04:15:53  [35863.477517][   C28] RSP: 0018:ffff9ae9806b8ee8 =
-EFLAGS: 00010292
-Sep 27 04:15:53  [35863.478320][   C28] RAX: 0000000000000039 RBX: =
-ffff96ad92269800 RCX: 0000000000000001
-Sep 27 04:15:53  [35863.479379][   C28] RDX: 00000000ffffffea RSI: =
-00000000fff7ffff RDI: 00000000fff7ffff
-Sep 27 04:15:53  [35863.480439][   C28] RBP: ffff96ad92269bc0 R08: =
-0000000000000001 R09: 00000000fff7ffff
-Sep 27 04:15:53  [35863.481499][   C28] R10: ffff96b4dae00000 R11: =
-0000000000000003 R12: 0000000000000012
-Sep 27 04:15:53  [35863.482560][   C28] R13: 0000000000000000 R14: =
-ffff96b4dfd207a8 R15: 0000000000000082
-Sep 27 04:15:53  [35863.483621][   C28] FS:  0000000000000000(0000) =
-GS:ffff96b4dfd00000(0000) knlGS:0000000000000000
-Sep 27 04:15:53  [35863.484809][   C28] CS:  0010 DS: 0000 ES: 0000 CR0: =
-0000000080050033
-Sep 27 04:15:53  [35863.485681][   C28] CR2: 00007f87fae3d2e8 CR3: =
-000000016063b004 CR4: 00000000003706e0
-Sep 27 04:15:53  [35863.486743][   C28] DR0: 0000000000000000 DR1: =
-0000000000000000 DR2: 0000000000000000
-Sep 27 04:15:53  [35863.487802][   C28] DR3: 0000000000000000 DR6: =
-00000000fffe0ff0 DR7: 0000000000000400
-Sep 27 04:15:53  [35863.488862][   C28] Call Trace:
-Sep 27 04:15:53  [35863.489289][   C28]  <IRQ>
-Sep 27 04:15:53  [35863.489653][   C28]  ? pfifo_fast_destroy+0x30/0x30
-Sep 27 04:15:53  [35863.490313][   C28]  =
-call_timer_fn.constprop.0+0x14/0x70
-Sep 27 04:15:53  [35863.491033][   C28]  __run_timers.part.0+0x164/0x190
-Sep 27 04:15:53  [35863.491706][   C28]  ? =
-__hrtimer_run_queues+0x143/0x1a0
-Sep 27 04:15:53  [35863.492414][   C28]  ? ktime_get+0x30/0x90
-Sep 27 04:15:53  [35863.492969][   C28]  run_timer_softirq+0x21/0x50
-Sep 27 04:15:53  [35863.493598][   C28]  __do_softirq+0xaf/0x1d7
-Sep 27 04:15:53  [35863.494175][   C28]  __irq_exit_rcu+0x9a/0xd0
-Sep 27 04:15:53  [35863.494767][   C28]  =
-sysvec_apic_timer_interrupt+0x66/0x80
-Sep 27 04:15:53  [35863.495510][   C28]  </IRQ>
-Sep 27 04:15:53  [35863.495886][   C28]  <TASK>
-Sep 27 04:15:53  [35863.496263][   C28]  =
-asm_sysvec_apic_timer_interrupt+0x16/0x20
-Sep 27 04:15:53  [35863.497054][   C28] RIP: =
-0010:cpuidle_enter_state+0xb3/0x290
-Sep 27 04:15:53  [35863.497822][   C28] Code: e8 12 25 b0 ff 31 ff 49 89 =
-c5 e8 c8 80 af ff 45 84 ff 74 12 9c 58 f6 c4 02 0f 85 cf 01 00 00 31 ff =
-e8 c1 cb b3 ff fb 45 85 f6 <0f> 88 d0 00 00 00 49 63 ce 48 6b f1 68 48 =
-8b 04 24 4c 89 ea 48 29
-Sep 27 04:15:53  [35863.500462][   C28] RSP: 0018:ffff9ae9801cfe98 =
-EFLAGS: 00000202
-Sep 27 04:15:53  [35863.501266][   C28] RAX: ffff96b4dfd26800 RBX: =
-ffff96ad80bfa000 RCX: 000000000000001f
-Sep 27 04:15:53  [35863.502324][   C28] RDX: 0000209e1cf6d09d RSI: =
-00000000313b14ef RDI: 0000000000000000
-Sep 27 04:15:53  [35863.503387][   C28] RBP: 0000000000000001 R08: =
-0000000000000002 R09: ffff96b4dfd25704
-Sep 27 04:15:54  [35863.537016][   C28] R10: 0000000000000008 R11: =
-00000000000000f3 R12: ffffffff98222da0
-Sep 27 04:15:54  [35863.570647][   C28] R13: 0000209e1cf6d09d R14: =
-0000000000000001 R15: 0000000000000000
-Sep 27 04:15:54  [35863.603939][   C28]  ? =
-cpuidle_enter_state+0x98/0x290
-Sep 27 04:15:54  [35863.637176][   C28]  cpuidle_enter+0x24/0x40
-Sep 27 04:15:54  [35863.669424][   C28]  cpuidle_idle_call+0xbb/0x100
-Sep 27 04:15:54  [35863.701075][   C28]  do_idle+0x76/0xc0
-Sep 27 04:15:54  [35863.731736][   C28]  cpu_startup_entry+0x14/0x20
-Sep 27 04:15:54  [35863.761417][   C28]  start_secondary+0xd6/0xe0
-Sep 27 04:15:54  [35863.790449][   C28]  =
-secondary_startup_64_no_verify+0xd3/0xdb
-Sep 27 04:15:54  [35863.818324][   C28]  </TASK>
-Sep 27 04:15:54  [35863.844969][   C28] ---[ end trace 0000000000000000 =
-]---
-Sep 27 04:15:54  [35863.871638][   C28] i40e 0000:03:00.0 eth0: =
-tx_timeout: VSI_seid: 390, Q 18, NTC: 0xa44, HWB: 0xd18, NTU: 0xd1a, =
-TAIL: 0xd1a, INT: 0x0
-Sep 27 04:15:54  [35863.926113][   C28] i40e 0000:03:00.0 eth0: =
-tx_timeout recovery level 1, txqueue 18
+powerpc's problem is that cpuhp_report_idle_dead() is called before
+arch_cpu_idle_dead(), so it must not rely on any RCU protection there.
+I would say xive cleanup just needs to be done earlier. I wonder why it
+is not done in __cpu_disable or thereabouts, that's where the interrupt
+controller is supposed to be stopped.
 
+Thanks,
+Nick
 
-Sep 27 05:44:05  [ 5136.419612][   C14] watchdog: BUG: soft lockup - =
-CPU#14 stuck for 89s! [swapper/14:0]
-Sep 27 05:44:05  [ 5136.420830][   C14] Kernel panic - not syncing: =
-softlockup: hung tasks
-Sep 27 05:44:05  [ 5136.421718][   C14] CPU: 14 PID: 0 Comm: swapper/14 =
-Tainted: G           O L    5.19.11 #1
-Sep 27 05:44:05  [ 5136.422842][   C14] Hardware name: Supermicro =
-SYS-5038MR-H8TRF/X10SRD-F, BIOS 3.3 10/28/2020
-Sep 27 05:44:05  [ 5136.423990][   C14] Call Trace:
-Sep 27 05:44:05  [ 5136.424417][   C14]  <IRQ>
-Sep 27 05:44:05  [ 5136.424784][   C14]  dump_stack_lvl+0x33/0x42
-Sep 27 05:44:05  [ 5136.425377][   C14]  panic+0xea/0x24b
-Sep 27 05:44:05  [ 5136.425875][   C14]  watchdog_timer_fn.cold+0xc/0x16
-Sep 27 05:44:05  [ 5136.426549][   C14]  ? =
-lockup_detector_update_enable+0x50/0x50
-Sep 27 05:44:05  [ 5136.427343][   C14]  __hrtimer_run_queues+0xff/0x1a0
-Sep 27 05:44:05  [ 5136.428021][   C14]  hrtimer_interrupt+0xee/0x200
-Sep 27 05:44:05  [ 5136.428660][   C14]  =
-__sysvec_apic_timer_interrupt+0x47/0x60
-Sep 27 05:44:05  [ 5136.429430][   C14]  =
-sysvec_apic_timer_interrupt+0x2d/0x80
-Sep 27 05:44:05  [ 5136.430176][   C14]  =
-asm_sysvec_apic_timer_interrupt+0x16/0x20
-Sep 27 05:44:05  [ 5136.430970][   C14] RIP: =
-0010:queued_spin_lock_slowpath+0x105/0x1a0
-Sep 27 05:44:05  [ 5136.431822][   C14] Code: ff c0 41 c1 e0 12 c1 e6 10 =
-41 09 f0 44 89 c0 c1 e8 10 66 87 42 02 89 c6 c1 e6 10 81 fe ff ff 00 00 =
-77 48 31 f6 eb 03 0f ae e8 <8b> 02 66 85 c0 75 f6 89 c7 66 31 ff 44 39 =
-c7 74 75 c6 02 01 48 85
-Sep 27 05:44:05  [ 5136.434475][   C14] RSP: 0018:ffff9eaa80450d20 =
-EFLAGS: 00000202
-Sep 27 05:44:05  [ 5136.435279][   C14] RAX: 00000000003c0101 RBX: =
-ffff88c800ce4800 RCX: ffff88ce1f9a73c0
-Sep 27 05:44:05  [ 5136.436345][   C14] RDX: ffff88c800ce4804 RSI: =
-0000000000000000 RDI: ffff88c800ce4804
-Sep 27 05:44:05  [ 5136.437410][   C14] RBP: ffff88c7e8cd28e2 R08: =
-00000000003c0000 R09: 0000000000000000
-Sep 27 05:44:05  [ 5136.438477][   C14] R10: 382ecf75f888481b R11: =
-68035d3c9e84f0bf R12: ffff88c7f91dea00
-Sep 27 05:44:05  [ 5136.439543][   C14] R13: 0000000000000014 R14: =
-0000000000000001 R15: ffff9eaa80450e78
-Sep 27 05:44:05  [ 5136.440610][   C14]  =
-nf_conntrack_tcp_packet+0xab/0xbb0 [nf_conntrack]
-Sep 27 05:44:05  [ 5136.441505][   C14]  ? dev_hard_start_xmit+0x95/0xe0
-Sep 27 05:44:05  [ 5136.442182][   C14]  ? =
-hash_conntrack_raw.constprop.0+0x89/0x100 [nf_conntrack]
-Sep 27 05:44:05  [ 5136.443180][   C14]  nf_conntrack_in+0x32f/0x500 =
-[nf_conntrack]
-Sep 27 05:44:05  [ 5136.443988][   C14]  nf_hook_slow+0x36/0xa0
-Sep 27 05:44:05  [ 5136.444556][   C14]  ip_rcv+0x65/0xa0
-Sep 27 05:44:05  [ 5136.445053][   C14]  ? =
-ip_rcv_finish_core.constprop.0+0x2c0/0x2c0
-Sep 27 05:44:05  [ 5136.445883][   C14]  =
-__netif_receive_skb_one_core+0x3f/0x50
-Sep 27 05:44:05  [ 5136.446641][   C14]  process_backlog+0x7c/0x110
-Sep 27 05:44:05  [ 5136.447257][   C14]  __napi_poll+0x20/0x100
-Sep 27 05:44:05  [ 5136.447826][   C14]  net_rx_action+0x26d/0x330
-Sep 27 05:44:05  [ 5136.448429][   C14]  __do_softirq+0xaf/0x1d7
-Sep 27 05:44:05  [ 5136.449009][   C14]  do_softirq+0x5a/0x80
-Sep 27 05:44:05  [ 5136.449554][   C14]  </IRQ>
-Sep 27 05:44:05  [ 5136.449932][   C14]  <TASK>
-Sep 27 05:44:05  [ 5136.450312][   C14]  =
-flush_smp_call_function_queue+0x3f/0x60
-Sep 27 05:44:05  [ 5136.451083][   C14]  do_idle+0xa6/0xc0
-Sep 27 05:44:05  [ 5136.451592][   C14]  cpu_startup_entry+0x14/0x20
-Sep 27 05:44:05  [ 5136.452220][   C14]  start_secondary+0xd6/0xe0
-Sep 27 05:44:05  [ 5136.452826][   C14]  =
-secondary_startup_64_no_verify+0xd3/0xdb
-Sep 27 05:44:05  [ 5136.453607][   C14]  </TASK>
-Sep 27 05:44:05  [ 5136.565092][   C14] Kernel Offset: 0x3000000 from =
-0xffffffff81000000 (relocation range: =
-0xffffffff80000000-0xffffffffbfffffff)
-Sep 27 05:44:05  [ 5136.621741][   C14] Rebooting in 10 seconds..
-
-
-> On 26 Sep 2022, at 18:19, Florian Westphal <fw@strlen.de> wrote:
->=20
-> Michal Hocko <mhocko@suse.com> wrote:
->> On Mon 26-09-22 10:31:39, Florian Westphal wrote:
->>> Martin Zaharinov reports BUG() in mm land for 5.19.10 kernel:
->>> kernel BUG at mm/vmalloc.c:2437!
->>> invalid opcode: 0000 [#1] SMP
->>> CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 =
-#1
->>> [..]
->>> RIP: 0010:__get_vm_area_node+0x120/0x130
->>>  __vmalloc_node_range+0x96/0x1e0
->>>  kvmalloc_node+0x92/0xb0
->>>  bucket_table_alloc.isra.0+0x47/0x140
->>>  rhashtable_try_insert+0x3a4/0x440
->>>  rhashtable_insert_slow+0x1b/0x30
->>> [..]
->>>=20
->>> bucket_table_alloc uses kvzalloc(GPF_ATOMIC).  If kmalloc fails, =
-this now
->>> falls through to vmalloc and hits code paths that assume GFP_KERNEL.
->>>=20
->>> I sent a patch to restore GFP_ATOMIC support in kvmalloc but mm
->>> maintainers rejected it.
->>>=20
->>> This patch is partial revert of
->>> commit 93f976b5190d ("lib/rhashtable: simplify =
-bucket_table_alloc()"),
->>> to avoid kvmalloc for ATOMIC case.
->>>=20
->>> As kvmalloc doesn't warn when used with ATOMIC, kernel will only =
-crash
->>> once vmalloc fallback occurs, so we may see more crashes in other =
-areas
->>> in the future.
->>>=20
->>> Most other callers seem ok but kvm_mmu_topup_memory_cache looks like =
-it
->>> might be affected by the same breakage, so Cc kvm@.
->>>=20
->>> Reported-by: Martin Zaharinov <micron10@gmail.com>
->>> Fixes: a421ef303008 ("mm: allow !GFP_KERNEL allocations for =
-kvmalloc")
->>> Link: https://lore.kernel.org/linux-mm/Yy3MS2uhSgjF47dy@pc636/T/#t
->>> Cc: Michal Hocko <mhocko@suse.com>
->>> Cc: Paolo Bonzini <pbonzini@redhat.com>
->>> Cc: kvm@vger.kernel.org
->>> Signed-off-by: Florian Westphal <fw@strlen.de>
->>=20
->> Please continue in the original email thread until we sort out the =
-most
->> reasonable solution for this.
->=20
-> I've submitted a v2 using Michals proposed fix for kvmalloc api, if
-> thats merged no fixes are required in the callers, so this rhashtable
-> patch can be discarded.
+>
+> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> ---
+> Dear PPC and RCU developers
+>
+> I found this bug when trying to do rcutorture tests in ppc VM of
+> Open Source Lab of Oregon State University
+>
+> console.log report following bug:
+> [   37.635545][    T0] WARNING: suspicious RCU usage^M
+> [   37.636409][    T0] 6.0.0-rc4-next-20220907-dirty #8 Not tainted^M
+> [   37.637575][    T0] -----------------------------^M
+> [   37.638306][    T0] kernel/locking/lockdep.c:3723 RCU-list traversed i=
+n non-reader section!!^M
+> [   37.639651][    T0] ^M
+> [   37.639651][    T0] other info that might help us debug this:^M
+> [   37.639651][    T0] ^M
+> [   37.641381][    T0] ^M
+> [   37.641381][    T0] RCU used illegally from offline CPU!^M
+> [   37.641381][    T0] rcu_scheduler_active =3D 2, debug_locks =3D 1^M
+> [   37.667170][    T0] no locks held by swapper/6/0.^M
+> [   37.668328][    T0] ^M
+> [   37.668328][    T0] stack backtrace:^M
+> [   37.669995][    T0] CPU: 6 PID: 0 Comm: swapper/6 Not tainted 6.0.0-rc=
+4-next-20220907-dirty #8^M
+> [   37.672777][    T0] Call Trace:^M
+> [   37.673729][    T0] [c000000004653920] [c00000000097f9b4] dump_stack_l=
+vl+0x98/0xe0 (unreliable)^M
+> [   37.678579][    T0] [c000000004653960] [c0000000001f2eb8] lockdep_rcu_=
+suspicious+0x148/0x16c^M
+> [   37.680425][    T0] [c0000000046539f0] [c0000000001ed9b4] __lock_acqui=
+re+0x10f4/0x26e0^M
+> [   37.682450][    T0] [c000000004653b30] [c0000000001efc2c] lock_acquire=
++0x12c/0x420^M
+> [   37.684113][    T0] [c000000004653c20] [c0000000010d704c] _raw_spin_lo=
+ck_irqsave+0x6c/0xc0^M
+> [   37.686154][    T0] [c000000004653c60] [c0000000000c7b4c] xive_spapr_p=
+ut_ipi+0xcc/0x150^M
+> [   37.687879][    T0] [c000000004653ca0] [c0000000010c72a8] xive_cleanup=
+_cpu_ipi+0xc8/0xf0^M
+> [   37.689856][    T0] [c000000004653cf0] [c0000000010c7370] xive_teardow=
+n_cpu+0xa0/0xf0^M
+> [   37.691877][    T0] [c000000004653d30] [c0000000000fba5c] pseries_cpu_=
+offline_self+0x5c/0x100^M
+> [   37.693882][    T0] [c000000004653da0] [c00000000005d2c4] arch_cpu_idl=
+e_dead+0x44/0x60^M
+> [   37.695739][    T0] [c000000004653dc0] [c0000000001c740c] do_idle+0x16=
+c/0x3d0^M
+> [   37.697536][    T0] [c000000004653e70] [c0000000001c7a1c] cpu_startup_=
+entry+0x3c/0x40^M
+> [   37.699694][    T0] [c000000004653ea0] [c00000000005ca20] start_second=
+ary+0x6c0/0xb50^M
+> [   37.701742][    T0] [c000000004653f90] [c00000000000d054] start_second=
+ary_prolog+0x10/0x14^M
+>
+>
+> Tested on PPC VM of Open Source Lab of Oregon State University.
+> Test results show that although "WARNING: suspicious RCU usage" has gone,
+> and there are less "BUG: soft lockup" reports than the original kernel
+> (9 vs 13), which sounds good ;-)
+>
+> But after my modification, results-rcutorture-kasan/SRCU-P/console.log.di=
+ags
+> shows a new warning:
+> [  222.289242][  T110] WARNING: CPU: 6 PID: 110 at kernel/rcu/rcutorture.=
+c:2806 rcu_torture_fwd_prog+0xc88/0xdd0
+>
+> I guess above new warning also exits in original kernel, so I write a tin=
+y test script as follows:
+>
+> #!/bin/sh
+>
+> COUNTER=3D0
+> while [ $COUNTER -lt 1000 ] ; do
+>     qemu-system-ppc64 -nographic -smp cores=3D8,threads=3D1 -net none -M =
+pseries -nodefaults -device spapr-vscsi -serial file:/tmp/console.log -m 2G=
+ -kernel /tmp/vmlinux -append "debug_boot_weak_hash panic=3D-1 console=3Dtt=
+yS0 rcupdate.rcu_cpu_stall_suppress_at_boot=3D1 torture.disable_onoff_at_bo=
+ot rcupdate.rcu_task_stall_timeout=3D30000 rcutorture.torture_type=3Dsrcud =
+rcupdate.rcu_self_test=3D1 rcutorture.fwd_progress=3D3 srcutree.big_cpu_lim=
+=3D5 rcutorture.onoff_interval=3D1000 rcutorture.onoff_holdoff=3D30 rcutort=
+ure.n_barrier_cbs=3D4 rcutorture.stat_interval=3D15 rcutorture.shutdown_sec=
+s=3D420 rcutorture.test_no_idle_hz=3D1 rcutorture.verbose=3D1"&
+>     qemu_pid=3D$!
+>     cd ~/next1/linux-next
+>     make clean
+> #I use "make vmlinux -j 8" to create heavy background jitter
+>     make vmlinux -j 8  > /dev/null 2>&1=20
+>     make_pid=3D$!
+>     wait $qemu_pid
+>     kill $qemu_pid
+>     kill $make_id
+>     if grep -q WARN /tmp/console.log;
+>     then
+>         echo $COUNTER > /tmp/counter
+>         exit
+>     fi
+>     COUNTER=3D$(($COUNTER+1))
+> done
+>
+> Above test shows that original kernel also warn about
+> "WARNING: CPU: 6 PID: 110 at kernel/rcu/rcutorture.c:2806 rcu_torture_fwd=
+_prog+0xc88/0xdd0"
+>
+> But I am not very sure about my results, so I still add a [RFC] to my sub=
+ject line.
+>
+> Thank all of you for your guidance and encouragement ;-)
+>
+> Cheers
+> Zhouyi
+> --
+>  arch/powerpc/platforms/pseries/hotplug-cpu.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/arch/powerpc/platforms/pseries/hotplug-cpu.c b/arch/powerpc/=
+platforms/pseries/hotplug-cpu.c
+> index e0a7ac5db15d..e47098f00da1 100644
+> --- a/arch/powerpc/platforms/pseries/hotplug-cpu.c
+> +++ b/arch/powerpc/platforms/pseries/hotplug-cpu.c
+> @@ -64,10 +64,15 @@ static void pseries_cpu_offline_self(void)
+> =20
+>  	local_irq_disable();
+>  	idle_task_exit();
+> +	/* prevent lockdep code from traveling RCU protected list
+> +	 * when we are offline.
+> +	 */
+> +	lockdep_off();
+>  	if (xive_enabled())
+>  		xive_teardown_cpu();
+>  	else
+>  		xics_teardown_cpu();
+> +	lockdep_on();
+> =20
+>  	unregister_slb_shadow(hwcpu);
+>  	rtas_stop_self();
+> --=20
+> 2.25.1
 
