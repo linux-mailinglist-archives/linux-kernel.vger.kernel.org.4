@@ -2,68 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C307D5EC30C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504765EC313
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbiI0MlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
+        id S232405AbiI0Mlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbiI0Mk5 (ORCPT
+        with ESMTP id S232006AbiI0Ml2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:40:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CB8B4E9D;
-        Tue, 27 Sep 2022 05:40:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 27 Sep 2022 08:41:28 -0400
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3E6D70D3;
+        Tue, 27 Sep 2022 05:41:12 -0700 (PDT)
+Received: from [192.168.1.101] (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BCE3B81B99;
-        Tue, 27 Sep 2022 12:40:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9862DC433B5;
-        Tue, 27 Sep 2022 12:40:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664282449;
-        bh=f86Tzo1UuxVuSvOOrHf3105xrwBWh9OVOPklQbr/1kg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Meeehbd1zhdJrnk7mOp1xsNBDgYIsjfSE+SjXNxG5fpaMIp/8NjQ3CwcmbM0PDUGk
-         wB/Djbi5E1N0+d2RaYls0d3H+H2wTZkfBlJSG/uJT5OqtfobAszM2WK9L9J4+J++C6
-         +D0TDNwSHhDiHS3dTzc4OQpkq8LEiQnuFJI2zhh8=
-Date:   Tue, 27 Sep 2022 14:40:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wayne Chang <waynec@nvidia.com>
-Cc:     heikki.krogerus@linux.intel.com, quic_linyyuan@quicinc.com,
-        quic_jackp@quicinc.com, saranya.gopal@intel.com, tiwai@suse.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] usb: typec: ucsi: Don't warn on probe deferral
-Message-ID: <YzLvTgzMce9TDzDA@kroah.com>
-References: <20220927122913.2642497-1-waynec@nvidia.com>
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 821E33F5A3;
+        Tue, 27 Sep 2022 14:41:10 +0200 (CEST)
+Message-ID: <149af8eb-cfa9-c2f1-1aa6-6057df3aa03d@somainline.org>
+Date:   Tue, 27 Sep 2022 14:41:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927122913.2642497-1-waynec@nvidia.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 11/15] dt-bindings: pinctrl: qcom,sm8250: add
+ gpio-reserved-ranges and gpio-line-names
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220925110608.145728-1-krzysztof.kozlowski@linaro.org>
+ <20220925110608.145728-12-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220925110608.145728-12-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 08:29:13PM +0800, Wayne Chang wrote:
-> Deferred probe is an expected return value for fwnode_usb_role_switch_get().
-> Given that the driver deals with it properly, there's no need to output a
-> warning that may potentially confuse users.
+
+
+On 25.09.2022 13:06, Krzysztof Kozlowski wrote:
+> Document common GPIO properties (gpio-reserved-ranges and
+> gpio-line-names), already used on qrb5165-rb5 board.
 > 
-> Fixes: 3c162511530c ("usb: typec: ucsi: Wait for the USB role switches")
-> Cc: stable@vger.kernel.org
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/pinctrl/qcom,sm8250-pinctrl.yaml   | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm8250-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm8250-pinctrl.yaml
+> index c44d02d28bc9..d7d8e5d3b659 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sm8250-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm8250-pinctrl.yaml
+> @@ -49,6 +49,13 @@ properties:
+>    gpio-ranges:
+>      maxItems: 1
+>  
+> +  gpio-reserved-ranges:
+> +    minItems: 1
+Not sure about this.. However, this will apply to 99.9% of boards, so:
 
-Why is this a bugfix that needs to be backported?  The current code
-works the same as what you are changing it to be, there's no functional
-difference, right?
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-thanks,
-
-greg k-h
+Konrad
+> +    maxItems: 90
+> +
+> +  gpio-line-names:
+> +    maxItems: 180
+> +
+>    wakeup-parent: true
+>  
+>  #PIN CONFIGURATION NODES
