@@ -2,140 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3724A5EB7DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 381665EB759
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiI0CnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 22:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        id S229621AbiI0CEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 22:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiI0CnS (ORCPT
+        with ESMTP id S230009AbiI0CEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 22:43:18 -0400
-X-Greylist: delayed 3068 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 26 Sep 2022 19:43:17 PDT
-Received: from mx0b-00268f01.pphosted.com (mx0b-00268f01.pphosted.com [148.163.159.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054B3E5FBB;
-        Mon, 26 Sep 2022 19:43:16 -0700 (PDT)
-Received: from pps.filterd (m0105197.ppops.net [127.0.0.1])
-        by mx0a-00268f01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QKx0jg022112;
-        Tue, 27 Sep 2022 01:51:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=equinix.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pps202002;
- bh=PVK+00F/fHK6zi0e9j8KP71Xhqecd+tFCPpdchEgLQE=;
- b=hZdQmXIdk0Pye+hnKquWxQwkXG6x9zAT4B0FYfd/AbLPuR+DfejBRXrsXT0c6841H/Wk
- yZX9BSBXFFRND8xfaRgVm1PYyLFO+ngyl16OSRoA+a9OG75W75VbqNy9y1bH/vfsNsGj
- 6W+X+0w1/Ck9QPoq3CIIti7H+dcY1HOddm3zs76EifhZo15bso5nxGie5PGXQCIJOYUA
- KXWOCcCGHUpHEaSnTIyCIfQQQZJG6KzKJtFRRzGCJ43EeDfs2RdbNIekIZglgjipXJyh
- RnRzLJkC/1r84kFh1j8LuqzCgvb30csdVJ7y52n/djhQbE7msQg0A9G8M9g1ZhRXC6rp hg== 
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
-        by mx0a-00268f01.pphosted.com (PPS) with ESMTPS id 3jukkernx4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 01:51:34 +0000
+        Mon, 26 Sep 2022 22:04:39 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2119.outbound.protection.outlook.com [40.107.117.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABB3192A4;
+        Mon, 26 Sep 2022 19:04:36 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E5/y8y+yZ2d22C2mqv7oVSu8cdGPukc1ffgEU7k97InSmeP47CWaqBNwn3+kdpABYS8wLnsRmtS0/hD06eiiebDSknDTPuWR6yovQQXAc23POLVj8hw1/bhSuyYzQuUtjtAmsuZNfCpoXPKW3kSs11QYLtHdzFlSoN1JU6LmIc4P8Jd8s2VxrwXJqnysWwZsl4Z4Y/q1ta8YVbtlDsqmdYdpQ3DYK0fgpkdHhfdthA4lu5zHfAcWvCCkeIxHm7Ll9YbXPvxNLSlqzO5+mbxsniTP8pOtJVJnube2+m2p9yQtYDUqqY4XJsRgeOJsbOHdk7GHYuyvmfRoBLrPB1IiHA==
+ b=D9pNLvK9xd4bc50P2ru1dBTI/qtaJdye5DCZhVjth/RRd+Lquo19FHIvHI72xHKRL7H8JsU0+ejhI6jCN0eVnQH4Ig3Nz8IjSlmCixsJpTyN/4Cb4pQCCZYDbhJYBhmyFDyIdth/ODEYiwQW8GAthfRpLN0+BpgoS78RAL+Lx2l12kHl0guX6OSsidzJLQ0UYwy3NL16Fmsv+3Nyo0efP7JxFzLz9Z2xC+p/e2yr/9kFzfFeaj6yr8Of+rdix3xI9MCzT2EIu5R2xt2eyX9kdW2L5uqmNtbAm9mYN4IduOwD0worubsXYJ3cxNKVHFRE7SX7s9rPPVhMHorZDOodKA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PVK+00F/fHK6zi0e9j8KP71Xhqecd+tFCPpdchEgLQE=;
- b=Gu4TlyWwNlM4O1MnYYEpzI1Q6jkV9BWbcgnEZYOS4Hji6gRWdNZaXnDvIfO4NeSFc/AaNVC4cm7eFSW7G5keQdKZJ3wuhD5U54wVTmn6fq0r28kaKf7AgmTAsjGvXDO1ce1wKpHJL7b0XmyjJOYv454HYFnjzFx86Qd/V6cT4SDflCg9ZDpW0+kI53jtod+8Y6yqIf850iiPMQmhqh6fiHuS8XZB1hNMowIApAghnOeZjpSnOIiSyTY8xQ99Q72Xr0Q/gYtB8E+ZxjRBgu0IuzRcu/3iR+BjSxAyj7/KDB6nQtFmhhIGHoMwHVOLFp+LZOuoZuP/XzUhhTz+0gNMiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=equinix.com; dmarc=pass action=none header.from=equinix.com;
- dkim=pass header.d=equinix.com; arc=none
-Received: from DM8PR04MB8007.namprd04.prod.outlook.com (2603:10b6:5:314::20)
- by BY5PR04MB6550.namprd04.prod.outlook.com (2603:10b6:a03:1db::10) with
+ bh=NgdjSBSr5KgI8JrdSOWfgzPiEFHXHP52KocBJ8BR3FY=;
+ b=dXKEjB2Px/ykgXZehh0V+xctOei0wo6m8lCeQ/x8Gfk0yYgJLyKJ50yVOeGkiheS6ka+/BdETYt/IROL8LEsR9Et+kkJVmfV0qoGt14Nr75NAfZk6PwDVh0iyfqu2Lpe17slnl40y+iYw81v3uSfGBYGhFVWkHeKif2KCx6k9bwQpA5xZdzg1OCuyzL1BBoe04Ff/wPKTdtv2vOWEzLkwqZ9SUrLXhOM3f/nvivFdICmAw9LnomtR+0op7L3DMeefo2MkiPqRBwWr0uW4Vm7aaeBxUPeQ86GISQ5P56ueVo080p1I5rk5ErZrml10GxsLPIUj5XzQm6Q98vF+wdYPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 103.192.253.182) smtp.rcpttodomain=linaro.org smtp.mailfrom=zeku.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=zeku.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zeku.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NgdjSBSr5KgI8JrdSOWfgzPiEFHXHP52KocBJ8BR3FY=;
+ b=BBxPn1RcIAGfG304yRKhnup1yxTLyl00v9pk9eTwYXw2hlb8oELNFec4nm+BwZKnb4vQawgxWjWMH/PUC85T++PgztZLZE6/vGLp2Fo7pCODYOhdrhoCSDEoXepNy7zwjgNlWXT2aLFgv8aTdeYeDGHqy5bVyTsVtwH/6QkIPwHpjtfpLdx4U6WZlr89wP3kz4gmt5O1qbdwN0kfRSYG3Ila8wExXaohzKyn+78kAcqY4z7NnRlY+PNzWyVbXup2IKgGfbgY2r3dzj7m3AOgNGWNWAQ/YDpQzSDeOLDXuACD3fht6CTj1eThPLjqD96BQ5WvJnPBWqYfgoXlQX6YFQ==
+Received: from PS2PR02CA0070.apcprd02.prod.outlook.com (2603:1096:300:5a::34)
+ by TY0PR02MB5576.apcprd02.prod.outlook.com (2603:1096:400:1b8::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
- 2022 01:51:31 +0000
-Received: from DM8PR04MB8007.namprd04.prod.outlook.com
- ([fe80::4043:b584:ed2f:7b95]) by DM8PR04MB8007.namprd04.prod.outlook.com
- ([fe80::4043:b584:ed2f:7b95%4]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
- 01:51:31 +0000
-From:   Zev Weiss <zweiss@equinix.com>
-To:     Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
-CC:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
-Subject: Re: [PATCH v5] ARM: dts: aspeed: Yosemite V2: Enable OCP debug card
-Thread-Topic: [PATCH v5] ARM: dts: aspeed: Yosemite V2: Enable OCP debug card
-Thread-Index: AQHY0hOqzhlbl775rEujDf7XROiYCA==
-Date:   Tue, 27 Sep 2022 01:51:31 +0000
-Message-ID: <20220927015130.GG30806@packtop>
-References: <20220926124313.GA8400@hcl-ThinkPad-T495>
-In-Reply-To: <20220926124313.GA8400@hcl-ThinkPad-T495>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM8PR04MB8007:EE_|BY5PR04MB6550:EE_
-x-ms-office365-filtering-correlation-id: 8b04e200-c0b4-4074-5907-08daa02accfe
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tr6Y2tivMNaJAwiLTbsq0X5dm4iUycvAdHmj93Xb5OPOdeuVUK145IfwCoou+KPXx0e5oe2ONzC05kBSzT4hI76jVVKtS3TdXS+WyrGILqYKKgQAdg1NAT0Jz9Ib2pMfO1F7kITN9WsJDLlly1x2gRG9vT20igNqY/9E036Ziirh5WQ8i8OYsyYk7esSg9g0Nce9z+NolvNaU+AGMwF7RP2upmCO4a8P1CDhL3bBz+0W+2yK88WG1790hmJSaelb/646bydL9hca/us/+g8HwjdPVVNKw5m6vunRjhkuLn93r6dK0zNOcTOWSrOssBesSUc77a1NjjFX4XdH+Zr1FBp47690e6cPLLYZYO9/ZEyl0yHgVltErTlfjaG46vFdlYYxpMObXUTeA/NIaQxIvGRv+ng7hrRFwInHX5xqdHQC9cFzkcUADh1WqGLci+0YVF0DzCY2FsIlG68qlZwJyOCk+sQmOKY1g8UKhmQvueomb4oWieiai2qbwKtZx4fnIpO+fa0/fO9GswWc4b8zpnFijXf1Tz2+uxC8FvNt9+zHU0SienXDAsLYuFANAmrsbPRZeQkZ58OX6CRLBiMn8x7xPIFdxG5bXF0ZU1WsbFlGic+2Gvy/IzP9oLIn+AEhOjNb0Yn2U89rkdgQAAAG3f7NXMdi/YhLgkCWLIMwkxX+j4CetlKaNWz7yGWo2rmgVYKbYTxdSq6P7FqoE6ZjIPJTCm5jeR4CdxMxSq10lvVKK7RcM+sQYT34Nc57faSXjRKx6t+khkpnqC8oMsv9eA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8007.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(376002)(346002)(396003)(366004)(39860400002)(136003)(451199015)(33716001)(2906002)(4326008)(83380400001)(316002)(122000001)(38100700002)(64756008)(41300700001)(86362001)(6916009)(26005)(8936002)(66476007)(66946007)(8676002)(66446008)(66556008)(76116006)(54906003)(5660300002)(33656002)(1076003)(478600001)(9686003)(6512007)(6486002)(38070700005)(91956017)(186003)(71200400001)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8vvxCFWqQTgdxgWxpaq8mBSQWxI81QUqoUESv4Ff/lv2NGCSLfl/uTh5TcI/?=
- =?us-ascii?Q?RGxdYBUOXIQRGAwKaKfW/YA7Jv+mAagbLBZZEYvM3QvCkDvFKSCN4vVxVkw7?=
- =?us-ascii?Q?DdfZm3+WXkYlramopQnVCIkYqEmIrM4WK+rhVWF7qhZzgcOzDEyd1HdWf16j?=
- =?us-ascii?Q?Rs1FueVLnaFXNh+XESvSiGRBfPphuCyvQcPoTgWyxF/I/nUuKlkJESMyQRqe?=
- =?us-ascii?Q?qjSRwj9aRm7CwUHWvxSguqnzMXsl3dHTg/9EwZpC2SCS9Oq9zu/YN5YsJwSx?=
- =?us-ascii?Q?bptCW9nAJD/6KcuYMcfTKzd0SlGTkQ1dPwFOmflX8WkuCE0w30ud8vGUqBsW?=
- =?us-ascii?Q?oMy1BVMaUeg1hg0tasvl7E0tjCvFcLQAV6zzkyu8YrFgI9fzyySh+OH0xkcZ?=
- =?us-ascii?Q?ETxPMOTzaKp8ztMHVZ08nzDmGxA0stb0AoOZtOl3BqoGUu+pdikVWwbsYVno?=
- =?us-ascii?Q?TYcFjMssRjseRjeEl+xPmgE8vkiapT9Ks3mYImEh3gZES1lDWtEw4wjqq+1j?=
- =?us-ascii?Q?fqa4wnG5WsL6SOU4kZ/Ee0pnGzspHtrvGHz+C3F33ahmBcIdQ5AF/WaZku8q?=
- =?us-ascii?Q?kBiqdPORr05t7XKFuaRH+PNoPgyOHw0rHFL74M1z3G6aCjiitU3ubILJLLY5?=
- =?us-ascii?Q?4KGiiS9/ogKtYUchnDD+he2wjqXljY73jgFekjRRiajNZvucjYdwgU9tdKHV?=
- =?us-ascii?Q?3hmVgW4iUdLQQ8pmTPtDq8p1BDY5n74lZnKAyhJaeaDKaDZlqvk/yoybHNVN?=
- =?us-ascii?Q?9aTfO4WdbIrtGtpVVXIqeaMjgyp4eB+dZ6ZBXJ+J6yETiWHFC54OEV4Z87mz?=
- =?us-ascii?Q?YEns75qwhOa/r6wSbqejHT8XDW5V1TI3YPjUwWRRxuzBxAfUyS++J67KJxjM?=
- =?us-ascii?Q?zbmvi+O/JUQhLGYspwtapHW8jGP5WJlVF2NXdfNch8qOjmZ7LprTbSI0WQsp?=
- =?us-ascii?Q?cKyYfkEsz7XLN2yE8TBB4vm9q8H/oSqyz3aEOc5asZllRedYdXphmM8nQ4cZ?=
- =?us-ascii?Q?+e0vDzxItwjmgo2qklAGCGPrr2nxE4Ltx3ZenM2Tf61Ez2BGgteLrhCGzKG7?=
- =?us-ascii?Q?Lnr/uookVSSZUDns88nQNhWq00VJycDkoOFxpT16WtXLynVDL71ssYQb2IqK?=
- =?us-ascii?Q?GlA8zcjk+N9Dt/r92LQSRLTnyap2RYQP3NwEtEv9+WfHxt7prHXK0CgIf0XT?=
- =?us-ascii?Q?MTcwJ9rAiS2gcrm6mg+ne5pesTYyrjeXH59kPMixliVKcaGuZAAHl5Jil4gr?=
- =?us-ascii?Q?WLZ5sE2ypmTL/E4c4tk6NkpVOjLUkJ2VA4101oLR/ciAG0bgs1eKRdMKBYs5?=
- =?us-ascii?Q?rj3CRqiNvVdhpXaNIs5ZU1oYK48e2oz6pQ7xWba6j2m2ZEnMDQVJc3Q3T03h?=
- =?us-ascii?Q?9KkUno+EOVqInnTHGwe53qhJw2lEIBZK6/ol1XURgkMFKEms2hELtyecWT8P?=
- =?us-ascii?Q?KuRBUU2qTs0CeRirNuv7afR5l/Ggo7TWEzTjM2IExeRX+R7dbHIGdUWUkzP8?=
- =?us-ascii?Q?2K/tp+e69nreqDovVp/9mO9uFII780PeKSPcaJBnIgKNWoqShzltQLcb6Kx3?=
- =?us-ascii?Q?yTRjuPQigtU8dROhn90lx/xMNXpR8dvSU0BhMA++?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C94E632F4FEE6F45BE949DD6A33DE9C8@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.24; Tue, 27 Sep
+ 2022 02:04:34 +0000
+Received: from PSAAPC01FT042.eop-APC01.prod.protection.outlook.com
+ (2603:1096:300:5a:cafe::83) by PS2PR02CA0070.outlook.office365.com
+ (2603:1096:300:5a::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25 via Frontend
+ Transport; Tue, 27 Sep 2022 02:04:34 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 103.192.253.182)
+ smtp.mailfrom=zeku.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=zeku.com;
+Received-SPF: Pass (protection.outlook.com: domain of zeku.com designates
+ 103.192.253.182 as permitted sender) receiver=protection.outlook.com;
+ client-ip=103.192.253.182; helo=sh-exhtc2.internal.zeku.com; pr=C
+Received: from sh-exhtc2.internal.zeku.com (103.192.253.182) by
+ PSAAPC01FT042.mail.protection.outlook.com (10.13.38.161) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5654.14 via Frontend Transport; Tue, 27 Sep 2022 02:04:33 +0000
+Received: from sh-exhtc1.internal.zeku.com (10.123.21.105) by
+ sh-exhtc2.internal.zeku.com (10.123.21.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.12; Tue, 27 Sep 2022 10:04:32 +0800
+Received: from localhost.localdomain (10.123.154.19) by
+ sh-exhtc1.internal.zeku.com (10.123.21.105) with Microsoft SMTP Server id
+ 15.1.2375.12 via Frontend Transport; Tue, 27 Sep 2022 10:04:32 +0800
+From:   Weizhao Ouyang <ouyangweizhao@zeku.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        John Wang <wangdayu@zeku.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Matthew Ma <mahongwei@zeku.com>,
+        "Weizhao Ouyang" <ouyangweizhao@zeku.com>,
+        Pierre Ossman <drzeus@drzeus.cx>
+CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] mmc: sdio: fix kernel panic when remove non-standard SDIO card
+Date:   Tue, 27 Sep 2022 10:01:58 +0800
+Message-ID: <20220927020158.1218469-1-ouyangweizhao@zeku.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: equinix.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8007.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b04e200-c0b4-4074-5907-08daa02accfe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2022 01:51:31.4168
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PSAAPC01FT042:EE_|TY0PR02MB5576:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1e47c2eb-8079-4c03-0d0d-08daa02c9f3f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 27/ma2m3JcJ0kXyXUZR2J+6oQKzZWz90HCYhPDFilVQiQI7Li4cbIchmItD6Di8rzhg2XchmEW6V1JMCuS+Seuew5W5sb1Rk3DVQGmCVnmDSxfcIzQpzUDjYQyjt6ErHXbYcFW5Zxx66Vp/wOb6+A0/+KJyzXY/SkhMdvl2gCzajqeNtKYQN0EX8DU+zJ4hKXZWAghm9g0Sj9RE4eZWGnjoKADfE0hwbXStNaZ4W+4AQgmrcczSSMsQ7F4DbgT4DgX3cO3gZirKgTeQp25iFfpEtI5GzYQsyotoOvzmdAWX7V7irPP6gJOFcrrS91VHbdeWrDI/Zvszl4ufPFopgMBQhayF8CMeX8liFhmMbOCGTZVannj2X3c6FFlEBprfVIH49lMoh6Ly6NKj5xOas0opuWzO1iKSrZqansb26p0bS38kb7vpL2ge8uvBPwHp6fWJFJU2i5b9z+rO4GKNF4TUuQf0IOPlSEYwbnbuB6sT9STD1FgdyOHfNpk5BgjsHONaChSv2tICM/qv7vBoLtSzA1UC+tMvVGiLIUOX+ZKTU4/+xkrmrLInzR7Ea7OT5dy5ESOw2P5SRlfc6Sd3bh7Uo0WU4nvNP41qnQhSooZrg9i9zddPUqhNXD+CqEYRAZ1Kgj58TzZInqnARMZa6veb/T2Fi8Lx9Ep1EENR4YtW2Ws60Kp97ND6HOgjEWYThoulZchBc0M7PN1wnsdGH8DiL+hRmhYgKoQAg+CXh01TsdakHOHE3/aRwjtfoQIhHukNuZ4w0hH75r9yOYYhwmg==
+X-Forefront-Antispam-Report: CIP:103.192.253.182;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:sh-exhtc2.internal.zeku.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(396003)(39850400004)(451199015)(36840700001)(46966006)(186003)(110136005)(70206006)(70586007)(81166007)(40480700001)(36756003)(356005)(8676002)(478600001)(4326008)(82310400005)(36860700001)(336012)(426003)(83380400001)(316002)(36906005)(8936002)(47076005)(1076003)(54906003)(26005)(86362001)(82740400003)(41300700001)(2616005)(2906002)(6666004)(5660300002)(36900700001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: zeku.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 02:04:33.5811
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72adb271-2fc7-4afe-a5ee-9de6a59f6bfb
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: l4BOqZUNsbtJM2Q/A8Kxk/wvuuQKmJjwvI5BYyRrF93jWWT+8ShqtqhI2wc1Or8peLdfmCWfVaUahsCqRSnIsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR04MB6550
-X-Proofpoint-ORIG-GUID: cVhZWHx9wK3T_6Sc3Z_5PxrLSeR8b3Ts
-X-Proofpoint-GUID: cVhZWHx9wK3T_6Sc3Z_5PxrLSeR8b3Ts
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-26_11,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 adultscore=0 phishscore=0 mlxscore=0 suspectscore=0
- spamscore=0 priorityscore=1501 bulkscore=0 lowpriorityscore=0
- clxscore=1011 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2209270009
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e47c2eb-8079-4c03-0d0d-08daa02c9f3f
+X-MS-Exchange-CrossTenant-Id: 171aedba-f024-43df-bc82-290d40e185ac
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=171aedba-f024-43df-bc82-290d40e185ac;Ip=[103.192.253.182];Helo=[sh-exhtc2.internal.zeku.com]
+X-MS-Exchange-CrossTenant-AuthSource: PSAAPC01FT042.eop-APC01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR02MB5576
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -143,62 +101,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 05:43:13AM PDT, Karthikeyan Pasupathi wrote:
->Added IPMB-13 channel for Debug Card communication.
->which improves the readability of the machine and makes
->it easier to debug the server and it will display some
->pieces of information about the server like "system info",
->"Critical sensors" and "critical sel".
->
->---
->--- v5- Updated commit message
->--- v4- Resolved syntax error
->--- v3- Updated the title and commit
->--- v2- Updated the title
->--- v1- Initial draft
->---
->
+From: Matthew Ma <mahongwei@zeku.com>
 
-Note that git treats a '---' line as a separator, so everything past the
-first one above will be discarded when this patch is applied (e.g. via
-'git am')...
+SDIO tuple is only allocated for standard SDIO card, especially it
+causes memory corruption issues when the non-standard SDIO card has
+removed since the card device's reference counter does not increase for
+it at sdio_init_func(), but all SDIO card device reference counter has
+decreased at sdio_release_func().
 
->Signed-off-by: Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
+Fixes: 1a632f8cdc33 ("sdio: split up common and function CIS parsing")
+Signed-off-by: Matthew Ma <mahongwei@zeku.com>
+Reviewed-by: Weizhao Ouyang <ouyangweizhao@zeku.com>
+Reviewed-by: John Wang <wangdayu@zeku.com>
+---
+ drivers/mmc/core/sdio_bus.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-...including your S-O-B line here.
+diff --git a/drivers/mmc/core/sdio_bus.c b/drivers/mmc/core/sdio_bus.c
+index c6268c38c69e..babf21a0adeb 100644
+--- a/drivers/mmc/core/sdio_bus.c
++++ b/drivers/mmc/core/sdio_bus.c
+@@ -291,7 +291,8 @@ static void sdio_release_func(struct device *dev)
+ {
+	struct sdio_func *func = dev_to_sdio_func(dev);
+ 
+-	sdio_free_func_cis(func);
++	if (!(func->card->quirks & MMC_QUIRK_NONSTD_SDIO))
++		sdio_free_func_cis(func);
+ 
+	kfree(func->info);
+	kfree(func->tmpbuf);
+-- 
+2.25.1
 
-If you're aiming to do something like what Joel describes on his blog
-(https://shenki.github.io/git-patch-workflow/), you should make sure put
-your first '---' line and any non-commit-message notes *after* your
-S-O-B and any other tags.
-
->---
-> arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts | 11 +++++++++++
-> 1 file changed, 11 insertions(+)
->
->diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts b/arch/a=
-rm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
->index 8864e9c312a8..84236df522dc 100644
->--- a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
->+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
->@@ -215,6 +215,17 @@
-> 	};
-> };
->
->+&i2c13 {
->+	status =3D "okay";
->+	// Debug Card
->+	multi-master;
->+	ipmb13@10 {
->+		compatible =3D "ipmb-dev";
->+		reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
->+		i2c-protocol;
->+	};
->+};
->+
-> &pwm_tacho {
-> 	status =3D "okay";
-> 	//FSC
->--=20
->2.17.1
->=
