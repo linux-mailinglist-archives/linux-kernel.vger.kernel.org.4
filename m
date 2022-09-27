@@ -2,54 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EEEC5EC3E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9355EC3EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbiI0NMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
+        id S232502AbiI0NOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiI0NME (ORCPT
+        with ESMTP id S232602AbiI0NNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:12:04 -0400
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3817F1876AA;
-        Tue, 27 Sep 2022 06:11:44 -0700 (PDT)
-Received: from [192.168.1.101] (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C9DEE3F33A;
-        Tue, 27 Sep 2022 15:11:41 +0200 (CEST)
-Message-ID: <6d64de60-90af-5452-642e-8a6247629022@somainline.org>
-Date:   Tue, 27 Sep 2022 15:11:41 +0200
+        Tue, 27 Sep 2022 09:13:42 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4A81591D2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:13:40 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a26so20637927ejc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:13:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=xKQUJ8crDSiafngxlHWxH3oZauT5Eq9qaoxq/VTtdws=;
+        b=QCzn9+LBEWtv03A3zMGdq2xANA/WgN/QhSTWl3M74FSY91wfGosM7O1ACH+OdpvawE
+         u7oFFk3kwcfdA7yhe+NsGeCkvb2djwO5FLIjxmCKMH7rdlM0zQJjvqGQz/IIIJtV0aC5
+         TECmKd4yjnBB9BPuma+AmqfHl99lj8jX3hsHL+szmPhbZs8Ovxj32ggBzL1Cao6b3K58
+         gPk9skKwAo+hOw+jatMChu1pXB+6TmFRgBXsjzEojgs23mKEFvr6OpDXsPZTaoJka3d2
+         bbNUvBeEamzTowLKXCBGcGnIhU4zfjF8LSCrTdb1vDImANmZsa6lTXSgO8AkYOUhft/C
+         lc6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=xKQUJ8crDSiafngxlHWxH3oZauT5Eq9qaoxq/VTtdws=;
+        b=R7iJ6KW89ZOUXs4gEDPYUB+60Duv3hK7IVpgGccUa1buWsSDN5t3BznG2guP5mW9yX
+         dzBzfYVXiwWULSVBtGAFTh8vDgtuemeKbrJa2qYrBbyNoaXBaVV6hgiO6bG7kkumk2Sn
+         vqSJgeiSFCEX8RXf9VcJLUwEaD45mF5tEznhRapESqiTYB6ToOWCxhq4wo9kgEUUp+vG
+         9KHA7uKwLAltbP1wJrbnGWkx2xKMVOsFuPaL6e06b9RqCZ1A4bZ4+U6pFQIIZU8lda80
+         VsdX33fgJXMKVTAaT3arLd23pzhAYbL6tFBJNSrMwhbP5GB1Z+fgSvfKcquxSemS51AT
+         1keA==
+X-Gm-Message-State: ACrzQf2nq2CKaEJiK1Qvns9ul5CcjUi+VeXLzsUQ3yHpziZUUVWVRrE6
+        HpRYT4YCkVv6yx+N/PduAJsRZw==
+X-Google-Smtp-Source: AMsMyM6IazSuWmATHKaG9FWJD3wvDPiaZfgItkify6a5DbB7PexUdLedG0xN1DdrVlMBYfTd77o9QQ==
+X-Received: by 2002:a17:906:8473:b0:77b:efa8:50e4 with SMTP id hx19-20020a170906847300b0077befa850e4mr22495363ejc.250.1664284412975;
+        Tue, 27 Sep 2022 06:13:32 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:693c:15a1:a531:bb4e])
+        by smtp.gmail.com with ESMTPSA id u24-20020a056402065800b004571907240asm1265720edx.36.2022.09.27.06.13.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 06:13:32 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 15:13:25 +0200
+From:   Marco Elver <elver@google.com>
+To:     andrey.konovalov@linux.dev
+Cc:     Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH mm 1/3] kasan: switch kunit tests to console tracepoints
+Message-ID: <YzL29buAUPzOa9CG@elver.google.com>
+References: <653d43e9a6d9aad2ae148a941dab048cb8e765a8.1664044241.git.andreyknvl@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 06/33] ARM: dts: qcom: msm8974: align TLMM pin
- configuration with DT schema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220926074415.53100-1-krzysztof.kozlowski@linaro.org>
- <20220926074415.53100-7-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220926074415.53100-7-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <653d43e9a6d9aad2ae148a941dab048cb8e765a8.1664044241.git.andreyknvl@google.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,114 +79,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 26.09.2022 09:43, Krzysztof Kozlowski wrote:
-> DT schema expects TLMM pin configuration nodes to be named with
-> '-state' suffix and their optional children with '-pins' suffix.
+On Sat, Sep 24, 2022 at 08:31PM +0200, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@google.com>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Switch KUnit-compatible KASAN tests from using per-task KUnit resources
+> to console tracepoints.
+> 
+> This allows for two things:
+> 
+> 1. Migrating tests that trigger a KASAN report in the context of a task
+>    other than current to KUnit framework.
+>    This is implemented in the patches that follow.
+> 
+> 2. Parsing and matching the contents of KASAN reports.
+>    This is not yet implemented.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-
-Konrad
->  .../qcom-msm8974-lge-nexus5-hammerhead.dts    | 30 +++++++++----------
->  1 file changed, 15 insertions(+), 15 deletions(-)
+>  lib/Kconfig.kasan     |  2 +-
+>  mm/kasan/kasan_test.c | 85 +++++++++++++++++++++++++++++++------------
+>  mm/kasan/report.c     | 31 ----------------
+>  3 files changed, 63 insertions(+), 55 deletions(-)
 > 
-> diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-> index 6daceaa87802..8138f37233aa 100644
-> --- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-> +++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-> @@ -573,43 +573,43 @@ bcrmf@1 {
->  };
+> diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
+> index ca09b1cf8ee9..ba5b27962c34 100644
+> --- a/lib/Kconfig.kasan
+> +++ b/lib/Kconfig.kasan
+> @@ -181,7 +181,7 @@ config KASAN_VMALLOC
 >  
->  &tlmm {
-> -	sdc1_on: sdc1-on {
-> -		clk {
-> +	sdc1_on: sdc1-on-state {
-> +		clk-pins {
->  			pins = "sdc1_clk";
->  			drive-strength = <16>;
->  			bias-disable;
->  		};
+>  config KASAN_KUNIT_TEST
+>  	tristate "KUnit-compatible tests of KASAN bug detection capabilities" if !KUNIT_ALL_TESTS
+> -	depends on KASAN && KUNIT
+> +	depends on KASAN && KUNIT && TRACEPOINTS
+>  	default KUNIT_ALL_TESTS
+>  	help
+>  	  A KUnit-based KASAN test suite. Triggers different kinds of
+> diff --git a/mm/kasan/kasan_test.c b/mm/kasan/kasan_test.c
+> index f25692def781..3a2886f85e69 100644
+> --- a/mm/kasan/kasan_test.c
+> +++ b/mm/kasan/kasan_test.c
+> @@ -5,8 +5,12 @@
+>   * Author: Andrey Ryabinin <a.ryabinin@samsung.com>
+>   */
 >  
-> -		cmd-data {
-> +		cmd-data-pins {
->  			pins = "sdc1_cmd", "sdc1_data";
->  			drive-strength = <10>;
->  			bias-pull-up;
->  		};
->  	};
+> +#define pr_fmt(fmt) "kasan_test: " fmt
+> +
+> +#include <kunit/test.h>
+>  #include <linux/bitops.h>
+>  #include <linux/delay.h>
+> +#include <linux/io.h>
+>  #include <linux/kasan.h>
+>  #include <linux/kernel.h>
+>  #include <linux/mm.h>
+> @@ -14,21 +18,28 @@
+>  #include <linux/module.h>
+>  #include <linux/printk.h>
+>  #include <linux/random.h>
+> +#include <linux/set_memory.h>
+>  #include <linux/slab.h>
+>  #include <linux/string.h>
+> +#include <linux/tracepoint.h>
+>  #include <linux/uaccess.h>
+> -#include <linux/io.h>
+>  #include <linux/vmalloc.h>
+> -#include <linux/set_memory.h>
+> +#include <trace/events/printk.h>
 >  
-> -	sdc2_on: sdc2-on {
-> -		clk {
-> +	sdc2_on: sdc2-on-state {
-> +		clk-pins {
->  			pins = "sdc2_clk";
->  			drive-strength = <6>;
->  			bias-disable;
->  		};
+>  #include <asm/page.h>
 >  
-> -		cmd-data {
-> +		cmd-data-pins {
->  			pins = "sdc2_cmd", "sdc2_data";
->  			drive-strength = <6>;
->  			bias-pull-up;
->  		};
->  	};
+> -#include <kunit/test.h>
+> -
+>  #include "kasan.h"
 >  
-> -	mpu6515_pin: mpu6515 {
-> +	mpu6515_pin: mpu6515-state {
->  		pins = "gpio73";
->  		function = "gpio";
->  		bias-disable;
->  		input-enable;
->  	};
+>  #define OOB_TAG_OFF (IS_ENABLED(CONFIG_KASAN_GENERIC) ? 0 : KASAN_GRANULE_SIZE)
 >  
-> -	touch_pin: touch {
-> -		int {
-> +	touch_pin: touch-state {
-> +		int-pins {
->  			pins = "gpio5";
->  			function = "gpio";
+> +static bool multishot;
+> +
+> +/* Fields set based on lines observed in the console. */
+> +static struct {
+> +	bool report_found;
+> +	bool async_fault;
+> +} test_status;
+> +
+>  /*
+>   * Some tests use these global variables to store return values from function
+>   * calls that could otherwise be eliminated by the compiler as dead code.
+> @@ -36,35 +47,61 @@
+>  void *kasan_ptr_result;
+>  int kasan_int_result;
 >  
-> @@ -618,7 +618,7 @@ int {
->  			input-enable;
->  		};
->  
-> -		reset {
-> +		reset-pins {
->  			pins = "gpio8";
->  			function = "gpio";
->  
-> @@ -627,25 +627,25 @@ reset {
->  		};
->  	};
->  
-> -	panel_pin: panel {
-> +	panel_pin: panel-state {
->  		pins = "gpio12";
->  		function = "mdp_vsync";
->  		drive-strength = <2>;
->  		bias-disable;
->  	};
->  
-> -	bt_pin: bt {
-> -		hostwake {
-> +	bt_pin: bt-state {
-> +		hostwake-pins {
->  			pins = "gpio42";
->  			function = "gpio";
->  		};
->  
-> -		devwake {
-> +		devwake-pins {
->  			pins = "gpio62";
->  			function = "gpio";
->  		};
->  
-> -		shutdown {
-> +		shutdown-pins {
->  			pins = "gpio41";
->  			function = "gpio";
->  		};
+> -static struct kunit_resource resource;
+> -static struct kunit_kasan_status test_status;
+
+Also remove this struct from kasan.h?
