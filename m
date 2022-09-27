@@ -2,100 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FA35EC23A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CB95EC239
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbiI0MPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
+        id S232250AbiI0MPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbiI0MPH (ORCPT
+        with ESMTP id S232308AbiI0MPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:15:07 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1828175A8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:15:04 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28R6OnaL022026;
-        Tue, 27 Sep 2022 07:14:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=vInO/r8CP2irGLFP0WnlEE++JH/IImoDg4aYw3XeL10=;
- b=OIdSAPLnjjRog17GK3egdqPZNTTbZhKup92L5/COtwgah0zqGujp9CROHP05XTRtIimQ
- S9fuxfQ8s2YOWsyCFl42EEif1UyQntOYoVCK36140Kt3BVUtcvUWD94vesVi2FBpv9Mc
- Jgc6PJcFENagW57PGul3c+TBinDinzB/a0Al0KX7R42qkgJUfB3OpP6OpgqGNc2PWpV9
- MOYFj8Cq2kVWOUmPFQv7JA06+4oSmyT1SmMrv5uo/emt+lenb23fm7/1fTDrUuHrFbSp
- o6WapEwSTRsFrIqP0nNkhlZ0RZrGOBzUiuGufUjhkjUO7nmdGG5hUdgbylfILAav2DSL GA== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3jsya2bb7p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 07:14:51 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Tue, 27 Sep
- 2022 07:14:49 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.12 via Frontend Transport; Tue, 27 Sep 2022 07:14:49 -0500
-Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (unknown [198.90.202.160])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7867D15A3;
-        Tue, 27 Sep 2022 12:14:49 +0000 (UTC)
-From:   Stefan Binding <sbinding@opensource.cirrus.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v1] ASoC: cs42l42: Fallback to headphones for type detect
-Date:   Tue, 27 Sep 2022 13:14:40 +0100
-Message-ID: <20220927121440.2506632-1-sbinding@opensource.cirrus.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 27 Sep 2022 08:15:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7026113D57
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664280899;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rSE3SZr7AU4BSfTZW9EzqUJqNHJZJS1agFSm+3MsOAM=;
+        b=UigL3dT8bhVsb5z6RXv7Ii0OgqjjeoH97JzvKZE4qav8VPLjw8NlsBv/PFLWlBvYTDPnLo
+        sKG5Ti3jIo5y07R1dapdgxj/AExqo9aaEswvclfkDTVuPHHNjoekOMqp7kkx2fD1Tjjfvf
+        J6FTxC0RUdvso8C2o7qMis73n981MXI=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-516--e0YmoDANcC-NQj3AoyB6g-1; Tue, 27 Sep 2022 08:14:56 -0400
+X-MC-Unique: -e0YmoDANcC-NQj3AoyB6g-1
+Received: by mail-ed1-f71.google.com with SMTP id i17-20020a05640242d100b0044f18a5379aso7761521edc.21
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:14:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=rSE3SZr7AU4BSfTZW9EzqUJqNHJZJS1agFSm+3MsOAM=;
+        b=J6tcQuavRC5xlchA2IqWSctXjX76MDd3m6JXmnE9+ejFmWLHt/5lVyXBENj1gfhZkB
+         h1TRpk+TbL2bkin/oim/34J1wAmMuCtGWk04ZlVNLBWv7Ef+ySFU5zA9F77e19HE77Yf
+         3Mlqufd6pdWL0ZhgDYp+9KtrfigKCS+uCXt9dKz5HbnRZeLw1rFeiF9NpEP4sThAUZH2
+         Su9YjK1mNSs6yCI1g+yRQGxhzuTwILUW1lO/GYy7ZKh+7cI6Mj8h/4HhfhD1ia0MpchY
+         ZRYDg2EB0k946CQd7X53HNLLzduUhPP+jYcO/MSOHA0yW8qiVMqKsHFNwp/3NwsegCKd
+         1X1w==
+X-Gm-Message-State: ACrzQf2GHpIVJTOAjOz2mfopdB4dWJY3ujVY6uyV4YH8wFElb/tidA9l
+        PB2gW8ku2fET8jozcYYtxERoUvfm2dBLFSO5Z1kFBvONYZQH1XPI6yiL9tF9lKCNmTx5LwqkXOG
+        UOAuc7r1cAdeHLASdiq6VyQpv
+X-Received: by 2002:aa7:c04f:0:b0:457:1b08:d056 with SMTP id k15-20020aa7c04f000000b004571b08d056mr14655691edo.146.1664280895437;
+        Tue, 27 Sep 2022 05:14:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5dF2l0zCe+9PMvtpzvSQRGqYKmswR21oDA/D9ukNUOBwPFoxUVmoO0fb4CxB4+uAI8q522lA==
+X-Received: by 2002:aa7:c04f:0:b0:457:1b08:d056 with SMTP id k15-20020aa7c04f000000b004571b08d056mr14655669edo.146.1664280895219;
+        Tue, 27 Sep 2022 05:14:55 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id u11-20020a170906780b00b0077a8fa8ba55sm695214ejm.210.2022.09.27.05.14.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 05:14:54 -0700 (PDT)
+Message-ID: <005c8afa-d290-d140-0dac-19a41f2ef81a@redhat.com>
+Date:   Tue, 27 Sep 2022 14:14:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: t5qUL_Y7G8WnIHC7TnrHLA_52lnw49Yy
-X-Proofpoint-GUID: t5qUL_Y7G8WnIHC7TnrHLA_52lnw49Yy
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] KVM: selftests: replace assertion with warning in
+ access_tracking_perf_test
+Content-Language: en-US
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220926082923.299554-1-eesposit@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220926082923.299554-1-eesposit@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After tip sense detects a jack insertion, if automatic
-type detection, and manual type detection fails, then
-fall back to assume the jack connected belongs to
-headphones.
+On 9/26/22 10:29, Emanuele Giuseppe Esposito wrote:
+> Page_idle uses {ptep/pmdp}_clear_young_notify which in turn calls
+> the mmu notifier callback ->clear_young(), which purposefully
+> does not flush the TLB.
+> 
+> When running the test in a nested guest, point 1. of the test
+> doc header is violated, because KVM TLB is unbounded by size
+> and since no flush is forced, KVM does not update the sptes
+> accessed/idle bits resulting in guest assertion failure.
+> 
+> More precisely, only the first ACCESS_WRITE in run_test() actually
+> makes visible changes, because sptes are created and the accessed
+> bit is set to 1 (or idle bit is 0). Then the first mark_memory_idle()
+> passes since access bit is still one, and sets all pages as idle
+> (or not accessed). When the next write is performed, the update
+> is not flushed therefore idle is still 1 and next mark_memory_idle()
+> fails.
 
-Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
----
- sound/soc/codecs/cs42l42.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Queued, thanks.
 
-diff --git a/sound/soc/codecs/cs42l42.c b/sound/soc/codecs/cs42l42.c
-index bdc7e6bed6ac..2fefbcf7bd13 100644
---- a/sound/soc/codecs/cs42l42.c
-+++ b/sound/soc/codecs/cs42l42.c
-@@ -1199,14 +1199,11 @@ static void cs42l42_manual_hs_type_detect(struct cs42l42_private *cs42l42)
- 			cs42l42->hs_type = CS42L42_PLUG_OMTP;
- 			hs_det_sw = CS42L42_HSDET_SW_TYPE2;
- 			break;
--		case CS42L42_HSDET_COMP_TYPE3:
-+		/* Detect Type 3 and Type 4 Headsets as Headphones */
-+		default:
- 			cs42l42->hs_type = CS42L42_PLUG_HEADPHONE;
- 			hs_det_sw = CS42L42_HSDET_SW_TYPE3;
- 			break;
--		default:
--			cs42l42->hs_type = CS42L42_PLUG_INVALID;
--			hs_det_sw = CS42L42_HSDET_SW_TYPE4;
--			break;
- 		}
- 	}
- 
--- 
-2.34.1
+Paolo
 
