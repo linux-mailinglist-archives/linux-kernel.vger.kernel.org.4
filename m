@@ -2,391 +2,521 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A0B5ECEF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933E15ECF00
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiI0Uys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 16:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
+        id S232078AbiI0U4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 16:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiI0Uyo (ORCPT
+        with ESMTP id S231232AbiI0U4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 16:54:44 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A4319C2B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 13:54:40 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id a80so10742362pfa.4
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 13:54:40 -0700 (PDT)
+        Tue, 27 Sep 2022 16:56:20 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AE6149D2F
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 13:56:18 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id h194so8737384iof.4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 13:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ze8Hz2Sj/MLvbYPmZGFfNuN394Vx5A99Jv8XWxnWW6k=;
-        b=Q04riSaV+mpS7w2kR4BY5sksyhqrQmKfwFwptSV2IcvvGrR8UANkLm89ZZMim6+8Su
-         apIe+pta7XEMdXgYrygADltplPLFFDBUWV7AEqgcoEm+OfmT/8vGhiH8DMXrGxBpVB+Y
-         jVzH7LGDjjUKibOcNgTQGqOt9HWR6/96gPLBZCu1M39zOwerxVoj5X/Y6R5OP61PSFK1
-         mQo5PFiQTYwSkYb/QpZLpuKbvpvocp+uhnRojRzNqNazaa0tV/PRvz+pAxDxeWLPoL63
-         QifVLxq+E8CQuENwkhg/PN4pVE0XvW4aPwGcH75tPczFFYbTgs8nu30Zn0HzxDKz6AuV
-         qR1A==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=NLdmA2G3+4LKjzOS2LFvW4d2eEyJUZSkBqrqnf9gmSE=;
+        b=d1Eg4jHVT/hoyfN4G8pEbWok3WM/2/ssBADJdX+s1k09eszH+2IJGiujEJsmn1tq/e
+         VqrBk/jCxqglGBZBeEj2x7RTWYESs+WVgIf6in/vWWUYMEWbkY0bl7PdhRVUcVuIezeY
+         rFkSZDv2RyXAcvj+6suBVErOmsyS/sVc77OdU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ze8Hz2Sj/MLvbYPmZGFfNuN394Vx5A99Jv8XWxnWW6k=;
-        b=yc8jxLcDjiD7xt2QZ9zB1xQQkIZEz03n+rELu1nHtId+u/6JcxA+mWaIZD5KQ5vkFg
-         4lTHATix8PLTDVG90PGBJf1g/307GvpdOCimztAtL/aSOVnX1giTFTobgyK8taZA/xUB
-         dK9PubIbbbclIxSjFGOnzvcz8Yup/2ldvtQmX8zzRaKn/nvA/CdzS//WgyN7jkqh+v6J
-         ZbJmMhrZLEvBQfdfFEiZZ5S9Ensi7o3Tz47lR/rExrRsVAMr+br9ESQ76uOfOcLKUQQ7
-         Xe+UCMoK1n2TP7WytDn5uifquVNYAFUal4LkFZMe2S2jKyE+GZtEuAk5tqg9hD6aCV5E
-         PoDQ==
-X-Gm-Message-State: ACrzQf1XmEdhvI+Z2NIFyDbIb3lRxK8SEtpq/h5dJJRMdfUtFgwx5krv
-        1C48sqsrpkOr+/1inAAIVnvTW/DMJfhCa2DxAOM=
-X-Google-Smtp-Source: AMsMyM6RdFn1+I+3Mw2UTRCCxyFAIJn7ekMITPQvJEkiUDips5G17oFMAyGGfkdJLZgtQNCvED00M2Obd+WD3eYbWj4=
-X-Received: by 2002:a63:de16:0:b0:438:675c:9f30 with SMTP id
- f22-20020a63de16000000b00438675c9f30mr26537963pgg.294.1664312080442; Tue, 27
- Sep 2022 13:54:40 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=NLdmA2G3+4LKjzOS2LFvW4d2eEyJUZSkBqrqnf9gmSE=;
+        b=IiAO4eP4eK73qgLWL/OmHvWa2VltgkfAL+I5x0PcrPbcAjKBX3X5C6UX5mpsvct/YC
+         5qnqc+BFJEOdf7+mVf5mwvUC31KByMlS1WhmjdXnWGSsvnOvpbq8mDBfgT34k9PqrQMT
+         LwILg59jZKRmqgpFrSYD0RFEBcqeKtqkV+hs35wuwYF85uCI2D2uSB1M9jWQhqHtym64
+         LOIsXCbadmnlwS1bizFjr/kUDInSLO+KpBVV+/9vqOm3zbSHbbujJfRdcAaADF5waVzf
+         rtQvJKAAR6zq6bKJC0C5dWUbTCPwchGVGJgMUADpVaYKLtHdDH40gTatDCC18F81JfRd
+         oWAQ==
+X-Gm-Message-State: ACrzQf26/pD00ZQV+nElFCoLqRyUBUsRBCwn4FFeYgQyPzMkWmAC17xF
+        0klJ7PPSjBXtyAjy9WEWIkT9txxfomysSQ==
+X-Google-Smtp-Source: AMsMyM7hvmXiBFA4XsfgP5YBRDTE/73QXRBT/fFeicer5obGPDJfco3H/6ZM7S+xFVVK7jWXounMoQ==
+X-Received: by 2002:a05:6638:4304:b0:343:5953:5fc8 with SMTP id bt4-20020a056638430400b0034359535fc8mr15406481jab.123.1664312178016;
+        Tue, 27 Sep 2022 13:56:18 -0700 (PDT)
+Received: from jrosenth45.lan (c-73-217-34-248.hsd1.co.comcast.net. [73.217.34.248])
+        by smtp.gmail.com with ESMTPSA id p6-20020a0566022b0600b006a10d068d39sm1151901iov.41.2022.09.27.13.56.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 13:56:17 -0700 (PDT)
+From:   Jack Rosenthal <jrosenth@chromium.org>
+To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        gregkh@linuxfoundation.org
+Cc:     Jack Rosenthal <jrosenth@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Julius Werner <jwerner@chromium.org>
+Subject: [RESEND PATCH v10] firmware: google: Implement cbmem in sysfs driver
+Date:   Tue, 27 Sep 2022 14:55:51 -0600
+Message-Id: <20220927205551.2017473-1-jrosenth@chromium.org>
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
 MIME-Version: 1.0
-References: <20220921060616.73086-1-ying.huang@intel.com> <20220921060616.73086-3-ying.huang@intel.com>
- <87o7v2lbn4.fsf@nvdebian.thelocal> <CAHbLzkpPNbggD+AaT7wFQXkKqCS2cXnq=Xv3m4WuHLMBWGTmpQ@mail.gmail.com>
- <87fsgdllmb.fsf@nvdebian.thelocal>
-In-Reply-To: <87fsgdllmb.fsf@nvdebian.thelocal>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Tue, 27 Sep 2022 13:54:27 -0700
-Message-ID: <CAHbLzkpDTfCDF8MPFxYu3if+6=TcxqamvZYzLbPKwvsCzBJHrQ@mail.gmail.com>
-Subject: Re: [RFC 2/6] mm/migrate_pages: split unmap_and_move() to _unmap()
- and _move()
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Huang Ying <ying.huang@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 5:14 PM Alistair Popple <apopple@nvidia.com> wrote:
->
->
-> Yang Shi <shy828301@gmail.com> writes:
->
-> > On Mon, Sep 26, 2022 at 2:37 AM Alistair Popple <apopple@nvidia.com> wrote:
-> >>
-> >>
-> >> Huang Ying <ying.huang@intel.com> writes:
-> >>
-> >> > This is a preparation patch to batch the page unmapping and moving
-> >> > for the normal pages and THP.
-> >> >
-> >> > In this patch, unmap_and_move() is split to migrate_page_unmap() and
-> >> > migrate_page_move().  So, we can batch _unmap() and _move() in
-> >> > different loops later.  To pass some information between unmap and
-> >> > move, the original unused newpage->mapping and newpage->private are
-> >> > used.
-> >>
-> >> This looks like it could cause a deadlock between two threads migrating
-> >> the same pages if force == true && mode != MIGRATE_ASYNC as
-> >> migrate_page_unmap() will call lock_page() while holding the lock on
-> >> other pages in the list. Therefore the two threads could deadlock if the
-> >> pages are in a different order.
-> >
-> > It seems unlikely to me since the page has to be isolated from lru
-> > before migration. The isolating from lru is atomic, so the two threads
-> > unlikely see the same pages on both lists.
->
-> Oh thanks! That is a good point and I agree since lru isolation is
-> atomic the two threads won't see the same pages. migrate_vma_setup()
-> does LRU isolation after locking the page which is why the potential
-> exists there. We could potentially switch that around but given
-> ZONE_DEVICE pages aren't on an lru it wouldn't help much.
+The CBMEM area is a downward-growing memory region used by coreboot to
+dynamically allocate tagged data structures ("CBMEM entries") that
+remain resident during boot.
 
-Aha, I see. It has a different lock - isolation order from regular pages.
+This implements a driver which exports access to the CBMEM entries
+via sysfs under /sys/firmware/coreboot/cbmem/<id>.
 
->
-> > But there might be other cases which may incur deadlock, for example,
-> > filesystem writeback IIUC. Some filesystems may lock a bunch of pages
-> > then write them back in a batch. The same pages may be on the
-> > migration list and they are also dirty and seen by writeback. I'm not
-> > sure whether I miss something that could prevent such a deadlock from
-> > happening.
->
-> I'm not overly familiar with that area but I would assume any filesystem
-> code doing this would already have to deal with deadlock potential.
+This implementation is quite versatile.  Examples of how it could be
+used are given below:
 
-AFAIK, actually not IIUC. For example, write back just simply look up
-page cache and lock them one by one.
+* Tools like util/cbmem from the coreboot tree could use this driver
+  instead of finding CBMEM in /dev/mem directly.  Alternatively,
+  firmware developers debugging an issue may find the sysfs interface
+  more ergonomic than the cbmem tool and choose to use it directly.
 
->
-> >>
-> >> > Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> >> > Cc: Zi Yan <ziy@nvidia.com>
-> >> > Cc: Yang Shi <shy828301@gmail.com>
-> >> > Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-> >> > Cc: Oscar Salvador <osalvador@suse.de>
-> >> > Cc: Matthew Wilcox <willy@infradead.org>
-> >> > ---
-> >> >  mm/migrate.c | 164 ++++++++++++++++++++++++++++++++++++++-------------
-> >> >  1 file changed, 122 insertions(+), 42 deletions(-)
-> >> >
-> >> > diff --git a/mm/migrate.c b/mm/migrate.c
-> >> > index 117134f1c6dc..4a81e0bfdbcd 100644
-> >> > --- a/mm/migrate.c
-> >> > +++ b/mm/migrate.c
-> >> > @@ -976,13 +976,32 @@ static int move_to_new_folio(struct folio *dst, struct folio *src,
-> >> >       return rc;
-> >> >  }
-> >> >
-> >> > -static int __unmap_and_move(struct page *page, struct page *newpage,
-> >> > +static void __migrate_page_record(struct page *newpage,
-> >> > +                               int page_was_mapped,
-> >> > +                               struct anon_vma *anon_vma)
-> >> > +{
-> >> > +     newpage->mapping = (struct address_space *)anon_vma;
-> >> > +     newpage->private = page_was_mapped;
-> >> > +}
-> >> > +
-> >> > +static void __migrate_page_extract(struct page *newpage,
-> >> > +                                int *page_was_mappedp,
-> >> > +                                struct anon_vma **anon_vmap)
-> >> > +{
-> >> > +     *anon_vmap = (struct anon_vma *)newpage->mapping;
-> >> > +     *page_was_mappedp = newpage->private;
-> >> > +     newpage->mapping = NULL;
-> >> > +     newpage->private = 0;
-> >> > +}
-> >> > +
-> >> > +#define MIGRATEPAGE_UNMAP            1
-> >> > +
-> >> > +static int __migrate_page_unmap(struct page *page, struct page *newpage,
-> >> >                               int force, enum migrate_mode mode)
-> >> >  {
-> >> >       struct folio *folio = page_folio(page);
-> >> > -     struct folio *dst = page_folio(newpage);
-> >> >       int rc = -EAGAIN;
-> >> > -     bool page_was_mapped = false;
-> >> > +     int page_was_mapped = 0;
-> >> >       struct anon_vma *anon_vma = NULL;
-> >> >       bool is_lru = !__PageMovable(page);
-> >> >
-> >> > @@ -1058,8 +1077,8 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
-> >> >               goto out_unlock;
-> >> >
-> >> >       if (unlikely(!is_lru)) {
-> >> > -             rc = move_to_new_folio(dst, folio, mode);
-> >> > -             goto out_unlock_both;
-> >> > +             __migrate_page_record(newpage, page_was_mapped, anon_vma);
-> >> > +             return MIGRATEPAGE_UNMAP;
-> >> >       }
-> >> >
-> >> >       /*
-> >> > @@ -1085,11 +1104,41 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
-> >> >               VM_BUG_ON_PAGE(PageAnon(page) && !PageKsm(page) && !anon_vma,
-> >> >                               page);
-> >> >               try_to_migrate(folio, 0);
-> >> > -             page_was_mapped = true;
-> >> > +             page_was_mapped = 1;
-> >> > +     }
-> >> > +
-> >> > +     if (!page_mapped(page)) {
-> >> > +             __migrate_page_record(newpage, page_was_mapped, anon_vma);
-> >> > +             return MIGRATEPAGE_UNMAP;
-> >> >       }
-> >> >
-> >> > -     if (!page_mapped(page))
-> >> > -             rc = move_to_new_folio(dst, folio, mode);
-> >> > +     if (page_was_mapped)
-> >> > +             remove_migration_ptes(folio, folio, false);
-> >> > +
-> >> > +out_unlock_both:
-> >> > +     unlock_page(newpage);
-> >> > +out_unlock:
-> >> > +     /* Drop an anon_vma reference if we took one */
-> >> > +     if (anon_vma)
-> >> > +             put_anon_vma(anon_vma);
-> >> > +     unlock_page(page);
-> >> > +out:
-> >> > +
-> >> > +     return rc;
-> >> > +}
-> >> > +
-> >> > +static int __migrate_page_move(struct page *page, struct page *newpage,
-> >> > +                            enum migrate_mode mode)
-> >> > +{
-> >> > +     struct folio *folio = page_folio(page);
-> >> > +     struct folio *dst = page_folio(newpage);
-> >> > +     int rc;
-> >> > +     int page_was_mapped = 0;
-> >> > +     struct anon_vma *anon_vma = NULL;
-> >> > +
-> >> > +     __migrate_page_extract(newpage, &page_was_mapped, &anon_vma);
-> >> > +
-> >> > +     rc = move_to_new_folio(dst, folio, mode);
-> >> >
-> >> >       /*
-> >> >        * When successful, push newpage to LRU immediately: so that if it
-> >> > @@ -1110,14 +1159,11 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
-> >> >               remove_migration_ptes(folio,
-> >> >                       rc == MIGRATEPAGE_SUCCESS ? dst : folio, false);
-> >> >
-> >> > -out_unlock_both:
-> >> >       unlock_page(newpage);
-> >> > -out_unlock:
-> >> >       /* Drop an anon_vma reference if we took one */
-> >> >       if (anon_vma)
-> >> >               put_anon_vma(anon_vma);
-> >> >       unlock_page(page);
-> >> > -out:
-> >> >       /*
-> >> >        * If migration is successful, decrease refcount of the newpage,
-> >> >        * which will not free the page because new page owner increased
-> >> > @@ -1129,18 +1175,31 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
-> >> >       return rc;
-> >> >  }
-> >> >
-> >> > -/*
-> >> > - * Obtain the lock on page, remove all ptes and migrate the page
-> >> > - * to the newly allocated page in newpage.
-> >> > - */
-> >> > -static int unmap_and_move(new_page_t get_new_page,
-> >> > -                                free_page_t put_new_page,
-> >> > -                                unsigned long private, struct page *page,
-> >> > -                                int force, enum migrate_mode mode,
-> >> > -                                enum migrate_reason reason,
-> >> > -                                struct list_head *ret)
-> >> > +static void migrate_page_done(struct page *page,
-> >> > +                           enum migrate_reason reason)
-> >> > +{
-> >> > +     /*
-> >> > +      * Compaction can migrate also non-LRU pages which are
-> >> > +      * not accounted to NR_ISOLATED_*. They can be recognized
-> >> > +      * as __PageMovable
-> >> > +      */
-> >> > +     if (likely(!__PageMovable(page)))
-> >> > +             mod_node_page_state(page_pgdat(page), NR_ISOLATED_ANON +
-> >> > +                                 page_is_file_lru(page), -thp_nr_pages(page));
-> >> > +
-> >> > +     if (reason != MR_MEMORY_FAILURE)
-> >> > +             /* We release the page in page_handle_poison. */
-> >> > +             put_page(page);
-> >> > +}
-> >> > +
-> >> > +/* Obtain the lock on page, remove all ptes. */
-> >> > +static int migrate_page_unmap(new_page_t get_new_page, free_page_t put_new_page,
-> >> > +                           unsigned long private, struct page *page,
-> >> > +                           struct page **newpagep, int force,
-> >> > +                           enum migrate_mode mode, enum migrate_reason reason,
-> >> > +                           struct list_head *ret)
-> >> >  {
-> >> > -     int rc = MIGRATEPAGE_SUCCESS;
-> >> > +     int rc = MIGRATEPAGE_UNMAP;
-> >> >       struct page *newpage = NULL;
-> >> >
-> >> >       if (!thp_migration_supported() && PageTransHuge(page))
-> >> > @@ -1151,19 +1210,48 @@ static int unmap_and_move(new_page_t get_new_page,
-> >> >               ClearPageActive(page);
-> >> >               ClearPageUnevictable(page);
-> >> >               /* free_pages_prepare() will clear PG_isolated. */
-> >> > -             goto out;
-> >> > +             list_del(&page->lru);
-> >> > +             migrate_page_done(page, reason);
-> >> > +             return MIGRATEPAGE_SUCCESS;
-> >> >       }
-> >> >
-> >> >       newpage = get_new_page(page, private);
-> >> >       if (!newpage)
-> >> >               return -ENOMEM;
-> >> > +     *newpagep = newpage;
-> >> >
-> >> > -     newpage->private = 0;
-> >> > -     rc = __unmap_and_move(page, newpage, force, mode);
-> >> > +     rc = __migrate_page_unmap(page, newpage, force, mode);
-> >> > +     if (rc == MIGRATEPAGE_UNMAP)
-> >> > +             return rc;
-> >> > +
-> >> > +     /*
-> >> > +      * A page that has not been migrated will have kept its
-> >> > +      * references and be restored.
-> >> > +      */
-> >> > +     /* restore the page to right list. */
-> >> > +     if (rc != -EAGAIN)
-> >> > +             list_move_tail(&page->lru, ret);
-> >> > +
-> >> > +     if (put_new_page)
-> >> > +             put_new_page(newpage, private);
-> >> > +     else
-> >> > +             put_page(newpage);
-> >> > +
-> >> > +     return rc;
-> >> > +}
-> >> > +
-> >> > +/* Migrate the page to the newly allocated page in newpage. */
-> >> > +static int migrate_page_move(free_page_t put_new_page, unsigned long private,
-> >> > +                          struct page *page, struct page *newpage,
-> >> > +                          enum migrate_mode mode, enum migrate_reason reason,
-> >> > +                          struct list_head *ret)
-> >> > +{
-> >> > +     int rc;
-> >> > +
-> >> > +     rc = __migrate_page_move(page, newpage, mode);
-> >> >       if (rc == MIGRATEPAGE_SUCCESS)
-> >> >               set_page_owner_migrate_reason(newpage, reason);
-> >> >
-> >> > -out:
-> >> >       if (rc != -EAGAIN) {
-> >> >               /*
-> >> >                * A page that has been migrated has all references
-> >> > @@ -1179,20 +1267,7 @@ static int unmap_and_move(new_page_t get_new_page,
-> >> >        * we want to retry.
-> >> >        */
-> >> >       if (rc == MIGRATEPAGE_SUCCESS) {
-> >> > -             /*
-> >> > -              * Compaction can migrate also non-LRU pages which are
-> >> > -              * not accounted to NR_ISOLATED_*. They can be recognized
-> >> > -              * as __PageMovable
-> >> > -              */
-> >> > -             if (likely(!__PageMovable(page)))
-> >> > -                     mod_node_page_state(page_pgdat(page), NR_ISOLATED_ANON +
-> >> > -                                     page_is_file_lru(page), -thp_nr_pages(page));
-> >> > -
-> >> > -             if (reason != MR_MEMORY_FAILURE)
-> >> > -                     /*
-> >> > -                      * We release the page in page_handle_poison.
-> >> > -                      */
-> >> > -                     put_page(page);
-> >> > +             migrate_page_done(page, reason);
-> >> >       } else {
-> >> >               if (rc != -EAGAIN)
-> >> >                       list_add_tail(&page->lru, ret);
-> >> > @@ -1405,6 +1480,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
-> >> >       int pass = 0;
-> >> >       bool is_thp = false;
-> >> >       struct page *page;
-> >> > +     struct page *newpage = NULL;
-> >> >       struct page *page2;
-> >> >       int rc, nr_subpages;
-> >> >       LIST_HEAD(ret_pages);
-> >> > @@ -1493,9 +1569,13 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
-> >> >                       if (PageHuge(page))
-> >> >                               continue;
-> >> >
-> >> > -                     rc = unmap_and_move(get_new_page, put_new_page,
-> >> > -                                             private, page, pass > 2, mode,
-> >> > +                     rc = migrate_page_unmap(get_new_page, put_new_page, private,
-> >> > +                                             page, &newpage, pass > 2, mode,
-> >> >                                               reason, &ret_pages);
-> >> > +                     if (rc == MIGRATEPAGE_UNMAP)
-> >> > +                             rc = migrate_page_move(put_new_page, private,
-> >> > +                                                    page, newpage, mode,
-> >> > +                                                    reason, &ret_pages);
-> >> >                       /*
-> >> >                        * The rules are:
-> >> >                        *      Success: page will be freed
+* The crossystem tool, which exposes verified boot variables, can use
+  this driver to read the vboot work buffer.
+
+* Tools which read the BIOS SPI flash (e.g., flashrom) can find the
+  flash layout in CBMEM directly, which is significantly faster than
+  searching the flash directly.
+
+Write access is provided to all CBMEM regions via
+/sys/firmware/coreboot/cbmem/<id>/mem, as the existing cbmem tooling
+updates this memory region, and envisioned use cases with crossystem
+can benefit from updating memory regions.
+
+Link: https://issuetracker.google.com/239604743
+Cc: Stephen Boyd <swboyd@chromium.org>
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Reviewed-by: Julius Werner <jwerner@chromium.org>
+Tested-by: Jack Rosenthal <jrosenth@chromium.org>
+Signed-off-by: Jack Rosenthal <jrosenth@chromium.org>
+---
+ .../ABI/testing/sysfs-firmware-coreboot       |  49 ++++
+ drivers/firmware/google/Kconfig               |   8 +
+ drivers/firmware/google/Makefile              |   3 +
+ drivers/firmware/google/cbmem.c               | 225 ++++++++++++++++++
+ drivers/firmware/google/coreboot_table.c      |  10 +
+ drivers/firmware/google/coreboot_table.h      |  16 ++
+ 6 files changed, 311 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-firmware-coreboot
+ create mode 100644 drivers/firmware/google/cbmem.c
+
+diff --git a/Documentation/ABI/testing/sysfs-firmware-coreboot b/Documentation/ABI/testing/sysfs-firmware-coreboot
+new file mode 100644
+index 000000000000..c003eb515d0c
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-firmware-coreboot
+@@ -0,0 +1,49 @@
++What:		/sys/firmware/coreboot/
++Date:		August 2022
++Contact:	Jack Rosenthal <jrosenth@chromium.org>
++Description:
++		Kernel objects associated with the Coreboot-based BIOS firmware.
++
++What:		/sys/firmware/coreboot/cbmem/
++Date:		August 2022
++Contact:	Jack Rosenthal <jrosenth@chromium.org>
++Description:
++		Coreboot provides a variety of information in CBMEM.  This
++		directory contains each CBMEM entry, which can be found via
++		Coreboot tables.
++
++What:		/sys/firmware/coreboot/cbmem/<id>/
++Date:		August 2022
++Contact:	Jack Rosenthal <jrosenth@chromium.org>
++Description:
++		Each CBMEM entry is given a directory based on the id
++		corresponding to the entry.  A list of ids known to coreboot can
++		be found in the coreboot source tree at
++		``src/commonlib/bsd/include/commonlib/bsd/cbmem_id.h``.
++
++What:		/sys/firmware/coreboot/cbmem/<id>/address
++Date:		August 2022
++Contact:	Jack Rosenthal <jrosenth@chromium.org>
++Description:
++		The memory address that the CBMEM entry's data begins at.
++
++What:		/sys/firmware/coreboot/cbmem/<id>/size
++Date:		August 2022
++Contact:	Jack Rosenthal <jrosenth@chromium.org>
++Description:
++		The size of the data being stored.
++
++What:		/sys/firmware/coreboot/cbmem/<id>/id
++Date:		August 2022
++Contact:	Jack Rosenthal <jrosenth@chromium.org>
++Description:
++		The CBMEM id corresponding to the entry.
++
++What:		/sys/firmware/coreboot/cbmem/<id>/mem
++Date:		August 2022
++Contact:	Jack Rosenthal <jrosenth@chromium.org>
++Description:
++		A file exposing read/write access to the entry's data.  Note
++		that this file does not support mmap(), and should be used for
++		basic data access only.  Users requiring mmap() should read the
++		address and size files, and mmap() /dev/mem.
+diff --git a/drivers/firmware/google/Kconfig b/drivers/firmware/google/Kconfig
+index 983e07dc022e..b0f7a24fd90a 100644
+--- a/drivers/firmware/google/Kconfig
++++ b/drivers/firmware/google/Kconfig
+@@ -19,6 +19,14 @@ config GOOGLE_SMI
+ 	  driver provides an interface for reading and writing NVRAM
+ 	  variables.
+ 
++config GOOGLE_CBMEM
++	tristate "CBMEM entries in sysfs"
++	depends on GOOGLE_COREBOOT_TABLE
++	help
++	  This option enables the kernel to search for Coreboot CBMEM
++	  entries, and expose the memory for each entry in sysfs under
++	  /sys/firmware/coreboot/cbmem.
++
+ config GOOGLE_COREBOOT_TABLE
+ 	tristate "Coreboot Table Access"
+ 	depends on HAS_IOMEM && (ACPI || OF)
+diff --git a/drivers/firmware/google/Makefile b/drivers/firmware/google/Makefile
+index d17caded5d88..8151e323cc43 100644
+--- a/drivers/firmware/google/Makefile
++++ b/drivers/firmware/google/Makefile
+@@ -7,5 +7,8 @@ obj-$(CONFIG_GOOGLE_MEMCONSOLE)            += memconsole.o
+ obj-$(CONFIG_GOOGLE_MEMCONSOLE_COREBOOT)   += memconsole-coreboot.o
+ obj-$(CONFIG_GOOGLE_MEMCONSOLE_X86_LEGACY) += memconsole-x86-legacy.o
+ 
++# Must come after coreboot_table.o, as this driver depends on that bus type.
++obj-$(CONFIG_GOOGLE_CBMEM)		+= cbmem.o
++
+ vpd-sysfs-y := vpd.o vpd_decode.o
+ obj-$(CONFIG_GOOGLE_VPD)		+= vpd-sysfs.o
+diff --git a/drivers/firmware/google/cbmem.c b/drivers/firmware/google/cbmem.c
+new file mode 100644
+index 000000000000..835950a14fa6
+--- /dev/null
++++ b/drivers/firmware/google/cbmem.c
+@@ -0,0 +1,225 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * cbmem.c
++ *
++ * Driver for exporting cbmem entries in sysfs.
++ *
++ * Copyright 2022 Google LLC
++ */
++
++#include <linux/device.h>
++#include <linux/init.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/kobject.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
++#include <linux/sysfs.h>
++
++#include "coreboot_table.h"
++
++#define LB_TAG_CBMEM_ENTRY 0x31
++
++static struct kobject *cbmem_kobj;
++
++struct cbmem_entry;
++struct cbmem_entry_attr {
++	struct kobj_attribute kobj_attr;
++	struct cbmem_entry *entry;
++};
++
++struct cbmem_entry {
++	struct kobject *kobj;
++	struct coreboot_device *dev;
++	struct bin_attribute mem_file;
++	char *mem_file_buf;
++	struct cbmem_entry_attr address_file;
++	struct cbmem_entry_attr size_file;
++	struct cbmem_entry_attr id_file;
++};
++
++static struct cbmem_entry_attr *to_cbmem_entry_attr(struct kobj_attribute *a)
++{
++	return container_of(a, struct cbmem_entry_attr, kobj_attr);
++}
++
++static ssize_t cbmem_entry_mem_read(struct file *filp, struct kobject *kobp,
++				    struct bin_attribute *bin_attr, char *buf,
++				    loff_t pos, size_t count)
++{
++	struct cbmem_entry *entry = bin_attr->private;
++
++	return memory_read_from_buffer(buf, count, &pos, entry->mem_file_buf,
++				       bin_attr->size);
++}
++
++static ssize_t cbmem_entry_mem_write(struct file *filp, struct kobject *kobp,
++				     struct bin_attribute *bin_attr, char *buf,
++				     loff_t pos, size_t count)
++{
++	struct cbmem_entry *entry = bin_attr->private;
++
++	if (pos < 0 || pos >= bin_attr->size)
++		return -EINVAL;
++	if (count > bin_attr->size - pos)
++		count = bin_attr->size - pos;
++
++	memcpy(entry->mem_file_buf + pos, buf, count);
++	return count;
++}
++
++static ssize_t cbmem_entry_address_show(struct kobject *kobj,
++					struct kobj_attribute *a, char *buf)
++{
++	struct cbmem_entry_attr *entry_attr = to_cbmem_entry_attr(a);
++
++	return sysfs_emit(buf, "0x%llx\n",
++			  entry_attr->entry->dev->cbmem_entry.address);
++}
++
++static ssize_t cbmem_entry_size_show(struct kobject *kobj,
++				     struct kobj_attribute *a, char *buf)
++{
++	struct cbmem_entry_attr *entry_attr = to_cbmem_entry_attr(a);
++
++	return sysfs_emit(buf, "0x%x\n",
++			  entry_attr->entry->dev->cbmem_entry.entry_size);
++}
++
++static ssize_t cbmem_entry_id_show(struct kobject *kobj,
++				   struct kobj_attribute *a, char *buf)
++{
++	struct cbmem_entry_attr *entry_attr = to_cbmem_entry_attr(a);
++
++	return sysfs_emit(buf, "0x%08x\n",
++			  entry_attr->entry->dev->cbmem_entry.id);
++}
++
++static int cbmem_entry_probe(struct coreboot_device *dev)
++{
++	struct cbmem_entry *entry;
++	char *kobj_name;
++	int ret;
++
++	entry = devm_kzalloc(&dev->dev, sizeof(*entry), GFP_KERNEL);
++	if (!entry)
++		return -ENOMEM;
++
++	dev_set_drvdata(&dev->dev, entry);
++	entry->dev = dev;
++	entry->mem_file_buf =
++		devm_memremap(&entry->dev->dev, entry->dev->cbmem_entry.address,
++			      entry->dev->cbmem_entry.entry_size, MEMREMAP_WB);
++	if (!entry->mem_file_buf)
++		return -ENOMEM;
++
++	kobj_name = devm_kasprintf(&entry->dev->dev, GFP_KERNEL, "%08x",
++				   entry->dev->cbmem_entry.id);
++	if (!kobj_name)
++		return -ENOMEM;
++
++	entry->kobj = kobject_create_and_add(kobj_name, cbmem_kobj);
++	if (!entry->kobj)
++		return -ENOMEM;
++
++	sysfs_bin_attr_init(&entry->mem_file);
++	entry->mem_file.attr.name = "mem";
++	entry->mem_file.attr.mode = 0600;
++	entry->mem_file.size = entry->dev->cbmem_entry.entry_size;
++	entry->mem_file.read = cbmem_entry_mem_read;
++	entry->mem_file.write = cbmem_entry_mem_write;
++	entry->mem_file.private = entry;
++	ret = sysfs_create_bin_file(entry->kobj, &entry->mem_file);
++	if (ret)
++		goto free_kobj;
++
++	sysfs_attr_init(&entry->address_file.kobj_attr.attr);
++	entry->address_file.kobj_attr.attr.name = "address";
++	entry->address_file.kobj_attr.attr.mode = 0444;
++	entry->address_file.kobj_attr.show = cbmem_entry_address_show;
++	entry->address_file.entry = entry;
++	ret = sysfs_create_file(entry->kobj,
++				&entry->address_file.kobj_attr.attr);
++	if (ret)
++		goto free_mem_file;
++
++	sysfs_attr_init(&entry->size_file.kobj_attr.attr);
++	entry->size_file.kobj_attr.attr.name = "size";
++	entry->size_file.kobj_attr.attr.mode = 0444;
++	entry->size_file.kobj_attr.show = cbmem_entry_size_show;
++	entry->size_file.entry = entry;
++	ret = sysfs_create_file(entry->kobj, &entry->size_file.kobj_attr.attr);
++	if (ret)
++		goto free_address_file;
++
++	sysfs_attr_init(&entry->id_file.kobj_attr.attr);
++	entry->id_file.kobj_attr.attr.name = "id";
++	entry->id_file.kobj_attr.attr.mode = 0444;
++	entry->id_file.kobj_attr.show = cbmem_entry_id_show;
++	entry->id_file.entry = entry;
++	ret = sysfs_create_file(entry->kobj, &entry->id_file.kobj_attr.attr);
++	if (ret)
++		goto free_size_file;
++
++	return 0;
++
++free_size_file:
++	sysfs_remove_file(entry->kobj, &entry->size_file.kobj_attr.attr);
++free_address_file:
++	sysfs_remove_file(entry->kobj, &entry->address_file.kobj_attr.attr);
++free_mem_file:
++	sysfs_remove_bin_file(entry->kobj, &entry->mem_file);
++free_kobj:
++	kobject_put(entry->kobj);
++	return ret;
++}
++
++static void cbmem_entry_remove(struct coreboot_device *dev)
++{
++	struct cbmem_entry *entry = dev_get_drvdata(&dev->dev);
++
++	sysfs_remove_bin_file(entry->kobj, &entry->mem_file);
++	sysfs_remove_file(entry->kobj, &entry->address_file.kobj_attr.attr);
++	sysfs_remove_file(entry->kobj, &entry->size_file.kobj_attr.attr);
++	sysfs_remove_file(entry->kobj, &entry->id_file.kobj_attr.attr);
++	kobject_put(entry->kobj);
++}
++
++static struct coreboot_driver cbmem_entry_driver = {
++	.probe = cbmem_entry_probe,
++	.remove = cbmem_entry_remove,
++	.drv = {
++		.name = "cbmem",
++		.owner = THIS_MODULE,
++	},
++	.tag = LB_TAG_CBMEM_ENTRY,
++};
++
++static int __init cbmem_init(void)
++{
++	int ret;
++
++	cbmem_kobj = kobject_create_and_add("cbmem", coreboot_kobj);
++	if (!cbmem_kobj)
++		return -ENOMEM;
++
++	ret = coreboot_driver_register(&cbmem_entry_driver);
++	if (ret) {
++		kobject_put(cbmem_kobj);
++		return ret;
++	}
++
++	return 0;
++}
++module_init(cbmem_init);
++
++static void __exit cbmem_exit(void)
++{
++	kobject_put(cbmem_kobj);
++	coreboot_driver_unregister(&cbmem_entry_driver);
++}
++module_exit(cbmem_exit);
++
++MODULE_AUTHOR("Jack Rosenthal <jrosenth@chromium.org>");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/firmware/google/coreboot_table.c b/drivers/firmware/google/coreboot_table.c
+index c52bcaa9def6..a3e2720e4638 100644
+--- a/drivers/firmware/google/coreboot_table.c
++++ b/drivers/firmware/google/coreboot_table.c
+@@ -14,16 +14,21 @@
+ #include <linux/init.h>
+ #include <linux/io.h>
+ #include <linux/kernel.h>
++#include <linux/kobject.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
++#include <linux/sysfs.h>
+ 
+ #include "coreboot_table.h"
+ 
+ #define CB_DEV(d) container_of(d, struct coreboot_device, dev)
+ #define CB_DRV(d) container_of(d, struct coreboot_driver, drv)
+ 
++struct kobject *coreboot_kobj;
++EXPORT_SYMBOL(coreboot_kobj);
++
+ static int coreboot_bus_match(struct device *dev, struct device_driver *drv)
+ {
+ 	struct coreboot_device *device = CB_DEV(dev);
+@@ -157,6 +162,10 @@ static int coreboot_table_probe(struct platform_device *pdev)
+ 	}
+ 	memunmap(ptr);
+ 
++	coreboot_kobj = kobject_create_and_add("coreboot", firmware_kobj);
++	if (!coreboot_kobj)
++		return -ENOMEM;
++
+ 	return ret;
+ }
+ 
+@@ -170,6 +179,7 @@ static int coreboot_table_remove(struct platform_device *pdev)
+ {
+ 	bus_for_each_dev(&coreboot_bus_type, NULL, NULL, __cb_dev_unregister);
+ 	bus_unregister(&coreboot_bus_type);
++	kobject_put(coreboot_kobj);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/firmware/google/coreboot_table.h b/drivers/firmware/google/coreboot_table.h
+index beb778674acd..76c31e6e5376 100644
+--- a/drivers/firmware/google/coreboot_table.h
++++ b/drivers/firmware/google/coreboot_table.h
+@@ -14,6 +14,11 @@
+ 
+ #include <linux/device.h>
+ 
++struct kobject;
++
++/* This is /sys/firmware/coreboot */
++extern struct kobject *coreboot_kobj;
++
+ /* Coreboot table header structure */
+ struct coreboot_table_header {
+ 	char signature[4];
+@@ -39,6 +44,16 @@ struct lb_cbmem_ref {
+ 	u64 cbmem_addr;
+ };
+ 
++/* Corresponds to LB_TAG_CBMEM_ENTRY */
++struct lb_cbmem_entry {
++	u32 tag;
++	u32 size;
++
++	u64 address;
++	u32 entry_size;
++	u32 id;
++};
++
+ /* Describes framebuffer setup by coreboot */
+ struct lb_framebuffer {
+ 	u32 tag;
+@@ -65,6 +80,7 @@ struct coreboot_device {
+ 	union {
+ 		struct coreboot_table_entry entry;
+ 		struct lb_cbmem_ref cbmem_ref;
++		struct lb_cbmem_entry cbmem_entry;
+ 		struct lb_framebuffer framebuffer;
+ 	};
+ };
+-- 
+2.37.3.998.g577e59143f-goog
+
