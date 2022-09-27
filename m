@@ -2,74 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1FF5EB753
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3724A5EB7DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiI0CBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 22:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
+        id S229970AbiI0CnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 22:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiI0CBT (ORCPT
+        with ESMTP id S229482AbiI0CnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 22:01:19 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE2D67C95;
-        Mon, 26 Sep 2022 19:01:18 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id q35-20020a17090a752600b002038d8a68fbso14272765pjk.0;
-        Mon, 26 Sep 2022 19:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=14/7xaPNJVGIb6l6sz37+DnxUg7Jl23Ck+bNit2j3/I=;
-        b=KYxub2H+TlzZas8lnX/d2lMlgAHHIMrnh9cbvw2JX9stxGfUHWYupu0iEnstFW4Vqy
-         kb/MEkisnExCbOX0DJ7Nxb16iQWikBy2MIvMO74l0sMf+cURI0gp3eas2ROnjGekMz1z
-         xb2NhfX+BFre+1+zaBEru+X4mzzZHFjUb4tKjMATuCbtCDLTkMvhf4iTIcCKq4xzT/m6
-         KsoqJ8IKXEFLr1JeBgdT+InzOLBbNjLk8M+VKCGCEmg4zDH9Hs8g1QA5VFaVhCAxKuNy
-         izaoxcNurV5gRJB2JetnG7AHuvFP3AnaQBgobeY0uegVzHbGy2SqFm2mivX5OADYVQQ0
-         pf4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=14/7xaPNJVGIb6l6sz37+DnxUg7Jl23Ck+bNit2j3/I=;
-        b=yFVC0FU4gpyfTQD371tfwcLn20bqpH0retE/tkmVbjTYtz4Y57++gSH3CMe/v8pDPV
-         Rku/B4D+lwITjs0MesgfjPTXQ+1HP+XFxxvsBVK3gM+dLNWa42Vxpu3Cy+VDKLn9i/5m
-         RsYhECflkEc54POjJPK0Q/oJfoQGrdX20seWFonbrIaUOxkr9TlBlFmClfEcaIDtH2CK
-         FQ0Aa4uKcNUMDaJu5hCWHkPxCRMRkYLVT/MHa9JufBccd3qDzpAI2vV/fvHLEZqcwsIT
-         L64doWht6CgZoSpcJ/iZz2hXTlYWz2N8HAcgaW/k7LY7hAml2pkqd+1JCJcCY0G4V+sL
-         T/Hg==
-X-Gm-Message-State: ACrzQf2NgxZMCmH9KgCnU4kMV9YKcp/gf/rgO616ZIT/yLjXcVfG/WYG
-        Pr+RGOqzYyvR2muHTFO/tB5S5r5SpK45vmxB
-X-Google-Smtp-Source: AMsMyM6jfTXNSrocHv1AOOWcHkhVyiuMuRiQ6V5g6dfHdc2HeYzrWAJFX4BWQs8QmOemPZXlDC/IMA==
-X-Received: by 2002:a17:90a:cf92:b0:202:ae52:43a4 with SMTP id i18-20020a17090acf9200b00202ae5243a4mr1767228pju.141.1664244078126;
-        Mon, 26 Sep 2022 19:01:18 -0700 (PDT)
-Received: from [192.168.50.247] ([129.227.150.140])
-        by smtp.gmail.com with ESMTPSA id 1-20020a630101000000b0043dc4ee8d9esm147206pgb.87.2022.09.26.19.01.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 19:01:17 -0700 (PDT)
-Message-ID: <b4b52911-e135-38b6-ab2e-4580e1ac0302@gmail.com>
-Date:   Tue, 27 Sep 2022 10:01:11 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] media: dvb_vb2: fix possible out of bound access
+        Mon, 26 Sep 2022 22:43:18 -0400
+X-Greylist: delayed 3068 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 26 Sep 2022 19:43:17 PDT
+Received: from mx0b-00268f01.pphosted.com (mx0b-00268f01.pphosted.com [148.163.159.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054B3E5FBB;
+        Mon, 26 Sep 2022 19:43:16 -0700 (PDT)
+Received: from pps.filterd (m0105197.ppops.net [127.0.0.1])
+        by mx0a-00268f01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QKx0jg022112;
+        Tue, 27 Sep 2022 01:51:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=equinix.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pps202002;
+ bh=PVK+00F/fHK6zi0e9j8KP71Xhqecd+tFCPpdchEgLQE=;
+ b=hZdQmXIdk0Pye+hnKquWxQwkXG6x9zAT4B0FYfd/AbLPuR+DfejBRXrsXT0c6841H/Wk
+ yZX9BSBXFFRND8xfaRgVm1PYyLFO+ngyl16OSRoA+a9OG75W75VbqNy9y1bH/vfsNsGj
+ 6W+X+0w1/Ck9QPoq3CIIti7H+dcY1HOddm3zs76EifhZo15bso5nxGie5PGXQCIJOYUA
+ KXWOCcCGHUpHEaSnTIyCIfQQQZJG6KzKJtFRRzGCJ43EeDfs2RdbNIekIZglgjipXJyh
+ RnRzLJkC/1r84kFh1j8LuqzCgvb30csdVJ7y52n/djhQbE7msQg0A9G8M9g1ZhRXC6rp hg== 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
+        by mx0a-00268f01.pphosted.com (PPS) with ESMTPS id 3jukkernx4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 01:51:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E5/y8y+yZ2d22C2mqv7oVSu8cdGPukc1ffgEU7k97InSmeP47CWaqBNwn3+kdpABYS8wLnsRmtS0/hD06eiiebDSknDTPuWR6yovQQXAc23POLVj8hw1/bhSuyYzQuUtjtAmsuZNfCpoXPKW3kSs11QYLtHdzFlSoN1JU6LmIc4P8Jd8s2VxrwXJqnysWwZsl4Z4Y/q1ta8YVbtlDsqmdYdpQ3DYK0fgpkdHhfdthA4lu5zHfAcWvCCkeIxHm7Ll9YbXPvxNLSlqzO5+mbxsniTP8pOtJVJnube2+m2p9yQtYDUqqY4XJsRgeOJsbOHdk7GHYuyvmfRoBLrPB1IiHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PVK+00F/fHK6zi0e9j8KP71Xhqecd+tFCPpdchEgLQE=;
+ b=Gu4TlyWwNlM4O1MnYYEpzI1Q6jkV9BWbcgnEZYOS4Hji6gRWdNZaXnDvIfO4NeSFc/AaNVC4cm7eFSW7G5keQdKZJ3wuhD5U54wVTmn6fq0r28kaKf7AgmTAsjGvXDO1ce1wKpHJL7b0XmyjJOYv454HYFnjzFx86Qd/V6cT4SDflCg9ZDpW0+kI53jtod+8Y6yqIf850iiPMQmhqh6fiHuS8XZB1hNMowIApAghnOeZjpSnOIiSyTY8xQ99Q72Xr0Q/gYtB8E+ZxjRBgu0IuzRcu/3iR+BjSxAyj7/KDB6nQtFmhhIGHoMwHVOLFp+LZOuoZuP/XzUhhTz+0gNMiA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=equinix.com; dmarc=pass action=none header.from=equinix.com;
+ dkim=pass header.d=equinix.com; arc=none
+Received: from DM8PR04MB8007.namprd04.prod.outlook.com (2603:10b6:5:314::20)
+ by BY5PR04MB6550.namprd04.prod.outlook.com (2603:10b6:a03:1db::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
+ 2022 01:51:31 +0000
+Received: from DM8PR04MB8007.namprd04.prod.outlook.com
+ ([fe80::4043:b584:ed2f:7b95]) by DM8PR04MB8007.namprd04.prod.outlook.com
+ ([fe80::4043:b584:ed2f:7b95%4]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
+ 01:51:31 +0000
+From:   Zev Weiss <zweiss@equinix.com>
+To:     Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
+CC:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Subject: Re: [PATCH v5] ARM: dts: aspeed: Yosemite V2: Enable OCP debug card
+Thread-Topic: [PATCH v5] ARM: dts: aspeed: Yosemite V2: Enable OCP debug card
+Thread-Index: AQHY0hOqzhlbl775rEujDf7XROiYCA==
+Date:   Tue, 27 Sep 2022 01:51:31 +0000
+Message-ID: <20220927015130.GG30806@packtop>
+References: <20220926124313.GA8400@hcl-ThinkPad-T495>
+In-Reply-To: <20220926124313.GA8400@hcl-ThinkPad-T495>
+Accept-Language: en-US
 Content-Language: en-US
-To:     mchehab@kernel.org, senozhatsky@chromium.org,
-        cai.huoqing@linux.dev, hverkuil-cisco@xs4all.nl,
-        sw0312.kim@samsung.com, satendra.t@samsung.com,
-        jh1009.sung@samsung.com, nenggun.kim@samsung.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220519021743.8295-1-hbh25y@gmail.com>
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <20220519021743.8295-1-hbh25y@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM8PR04MB8007:EE_|BY5PR04MB6550:EE_
+x-ms-office365-filtering-correlation-id: 8b04e200-c0b4-4074-5907-08daa02accfe
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tr6Y2tivMNaJAwiLTbsq0X5dm4iUycvAdHmj93Xb5OPOdeuVUK145IfwCoou+KPXx0e5oe2ONzC05kBSzT4hI76jVVKtS3TdXS+WyrGILqYKKgQAdg1NAT0Jz9Ib2pMfO1F7kITN9WsJDLlly1x2gRG9vT20igNqY/9E036Ziirh5WQ8i8OYsyYk7esSg9g0Nce9z+NolvNaU+AGMwF7RP2upmCO4a8P1CDhL3bBz+0W+2yK88WG1790hmJSaelb/646bydL9hca/us/+g8HwjdPVVNKw5m6vunRjhkuLn93r6dK0zNOcTOWSrOssBesSUc77a1NjjFX4XdH+Zr1FBp47690e6cPLLYZYO9/ZEyl0yHgVltErTlfjaG46vFdlYYxpMObXUTeA/NIaQxIvGRv+ng7hrRFwInHX5xqdHQC9cFzkcUADh1WqGLci+0YVF0DzCY2FsIlG68qlZwJyOCk+sQmOKY1g8UKhmQvueomb4oWieiai2qbwKtZx4fnIpO+fa0/fO9GswWc4b8zpnFijXf1Tz2+uxC8FvNt9+zHU0SienXDAsLYuFANAmrsbPRZeQkZ58OX6CRLBiMn8x7xPIFdxG5bXF0ZU1WsbFlGic+2Gvy/IzP9oLIn+AEhOjNb0Yn2U89rkdgQAAAG3f7NXMdi/YhLgkCWLIMwkxX+j4CetlKaNWz7yGWo2rmgVYKbYTxdSq6P7FqoE6ZjIPJTCm5jeR4CdxMxSq10lvVKK7RcM+sQYT34Nc57faSXjRKx6t+khkpnqC8oMsv9eA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8007.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(376002)(346002)(396003)(366004)(39860400002)(136003)(451199015)(33716001)(2906002)(4326008)(83380400001)(316002)(122000001)(38100700002)(64756008)(41300700001)(86362001)(6916009)(26005)(8936002)(66476007)(66946007)(8676002)(66446008)(66556008)(76116006)(54906003)(5660300002)(33656002)(1076003)(478600001)(9686003)(6512007)(6486002)(38070700005)(91956017)(186003)(71200400001)(6506007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8vvxCFWqQTgdxgWxpaq8mBSQWxI81QUqoUESv4Ff/lv2NGCSLfl/uTh5TcI/?=
+ =?us-ascii?Q?RGxdYBUOXIQRGAwKaKfW/YA7Jv+mAagbLBZZEYvM3QvCkDvFKSCN4vVxVkw7?=
+ =?us-ascii?Q?DdfZm3+WXkYlramopQnVCIkYqEmIrM4WK+rhVWF7qhZzgcOzDEyd1HdWf16j?=
+ =?us-ascii?Q?Rs1FueVLnaFXNh+XESvSiGRBfPphuCyvQcPoTgWyxF/I/nUuKlkJESMyQRqe?=
+ =?us-ascii?Q?qjSRwj9aRm7CwUHWvxSguqnzMXsl3dHTg/9EwZpC2SCS9Oq9zu/YN5YsJwSx?=
+ =?us-ascii?Q?bptCW9nAJD/6KcuYMcfTKzd0SlGTkQ1dPwFOmflX8WkuCE0w30ud8vGUqBsW?=
+ =?us-ascii?Q?oMy1BVMaUeg1hg0tasvl7E0tjCvFcLQAV6zzkyu8YrFgI9fzyySh+OH0xkcZ?=
+ =?us-ascii?Q?ETxPMOTzaKp8ztMHVZ08nzDmGxA0stb0AoOZtOl3BqoGUu+pdikVWwbsYVno?=
+ =?us-ascii?Q?TYcFjMssRjseRjeEl+xPmgE8vkiapT9Ks3mYImEh3gZES1lDWtEw4wjqq+1j?=
+ =?us-ascii?Q?fqa4wnG5WsL6SOU4kZ/Ee0pnGzspHtrvGHz+C3F33ahmBcIdQ5AF/WaZku8q?=
+ =?us-ascii?Q?kBiqdPORr05t7XKFuaRH+PNoPgyOHw0rHFL74M1z3G6aCjiitU3ubILJLLY5?=
+ =?us-ascii?Q?4KGiiS9/ogKtYUchnDD+he2wjqXljY73jgFekjRRiajNZvucjYdwgU9tdKHV?=
+ =?us-ascii?Q?3hmVgW4iUdLQQ8pmTPtDq8p1BDY5n74lZnKAyhJaeaDKaDZlqvk/yoybHNVN?=
+ =?us-ascii?Q?9aTfO4WdbIrtGtpVVXIqeaMjgyp4eB+dZ6ZBXJ+J6yETiWHFC54OEV4Z87mz?=
+ =?us-ascii?Q?YEns75qwhOa/r6wSbqejHT8XDW5V1TI3YPjUwWRRxuzBxAfUyS++J67KJxjM?=
+ =?us-ascii?Q?zbmvi+O/JUQhLGYspwtapHW8jGP5WJlVF2NXdfNch8qOjmZ7LprTbSI0WQsp?=
+ =?us-ascii?Q?cKyYfkEsz7XLN2yE8TBB4vm9q8H/oSqyz3aEOc5asZllRedYdXphmM8nQ4cZ?=
+ =?us-ascii?Q?+e0vDzxItwjmgo2qklAGCGPrr2nxE4Ltx3ZenM2Tf61Ez2BGgteLrhCGzKG7?=
+ =?us-ascii?Q?Lnr/uookVSSZUDns88nQNhWq00VJycDkoOFxpT16WtXLynVDL71ssYQb2IqK?=
+ =?us-ascii?Q?GlA8zcjk+N9Dt/r92LQSRLTnyap2RYQP3NwEtEv9+WfHxt7prHXK0CgIf0XT?=
+ =?us-ascii?Q?MTcwJ9rAiS2gcrm6mg+ne5pesTYyrjeXH59kPMixliVKcaGuZAAHl5Jil4gr?=
+ =?us-ascii?Q?WLZ5sE2ypmTL/E4c4tk6NkpVOjLUkJ2VA4101oLR/ciAG0bgs1eKRdMKBYs5?=
+ =?us-ascii?Q?rj3CRqiNvVdhpXaNIs5ZU1oYK48e2oz6pQ7xWba6j2m2ZEnMDQVJc3Q3T03h?=
+ =?us-ascii?Q?9KkUno+EOVqInnTHGwe53qhJw2lEIBZK6/ol1XURgkMFKEms2hELtyecWT8P?=
+ =?us-ascii?Q?KuRBUU2qTs0CeRirNuv7afR5l/Ggo7TWEzTjM2IExeRX+R7dbHIGdUWUkzP8?=
+ =?us-ascii?Q?2K/tp+e69nreqDovVp/9mO9uFII780PeKSPcaJBnIgKNWoqShzltQLcb6Kx3?=
+ =?us-ascii?Q?yTRjuPQigtU8dROhn90lx/xMNXpR8dvSU0BhMA++?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <C94E632F4FEE6F45BE949DD6A33DE9C8@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: equinix.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8007.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b04e200-c0b4-4074-5907-08daa02accfe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2022 01:51:31.4168
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72adb271-2fc7-4afe-a5ee-9de6a59f6bfb
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: l4BOqZUNsbtJM2Q/A8Kxk/wvuuQKmJjwvI5BYyRrF93jWWT+8ShqtqhI2wc1Or8peLdfmCWfVaUahsCqRSnIsw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR04MB6550
+X-Proofpoint-ORIG-GUID: cVhZWHx9wK3T_6Sc3Z_5PxrLSeR8b3Ts
+X-Proofpoint-GUID: cVhZWHx9wK3T_6Sc3Z_5PxrLSeR8b3Ts
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_11,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 adultscore=0 phishscore=0 mlxscore=0 suspectscore=0
+ spamscore=0 priorityscore=1501 bulkscore=0 lowpriorityscore=0
+ clxscore=1011 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2209270009
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,63 +143,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/5/2022 10:17, Hangyu Hua wrote:
-> vb2_core_qbuf and vb2_core_querybuf don't check the range of b->index
-> controlled by the user.
-> 
-> Fix this by adding range checking code before using them.
-> 
-> Fixes: 57868acc369a ("media: videobuf2: Add new uAPI for DVB streaming I/O")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> ---
-> 
-> v2:
-> 1. fix inappropriate use of dprintk.
-> 2. add "fixes" tag
-> 
->   drivers/media/dvb-core/dvb_vb2.c | 11 +++++++++++
->   1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/media/dvb-core/dvb_vb2.c b/drivers/media/dvb-core/dvb_vb2.c
-> index a1bd6d9c9223..909df82fed33 100644
-> --- a/drivers/media/dvb-core/dvb_vb2.c
-> +++ b/drivers/media/dvb-core/dvb_vb2.c
-> @@ -354,6 +354,12 @@ int dvb_vb2_reqbufs(struct dvb_vb2_ctx *ctx, struct dmx_requestbuffers *req)
->   
->   int dvb_vb2_querybuf(struct dvb_vb2_ctx *ctx, struct dmx_buffer *b)
->   {
-> +	struct vb2_queue *q = &ctx->vb_q;
-> +
-> +	if (b->index >= q->num_buffers) {
-> +		dprintk(1, "[%s] buffer index out of range\n", ctx->name);
-> +		return -EINVAL;
-> +	}
->   	vb2_core_querybuf(&ctx->vb_q, b->index, b);
->   	dprintk(3, "[%s] index=%d\n", ctx->name, b->index);
->   	return 0;
-> @@ -378,8 +384,13 @@ int dvb_vb2_expbuf(struct dvb_vb2_ctx *ctx, struct dmx_exportbuffer *exp)
->   
->   int dvb_vb2_qbuf(struct dvb_vb2_ctx *ctx, struct dmx_buffer *b)
->   {
-> +	struct vb2_queue *q = &ctx->vb_q;
->   	int ret;
->   
-> +	if (b->index >= q->num_buffers) {
-> +		dprintk(1, "[%s] buffer index out of range\n", ctx->name);
-> +		return -EINVAL;
-> +	}
->   	ret = vb2_core_qbuf(&ctx->vb_q, b->index, b, NULL);
->   	if (ret) {
->   		dprintk(1, "[%s] index=%d errno=%d\n", ctx->name,
+On Mon, Sep 26, 2022 at 05:43:13AM PDT, Karthikeyan Pasupathi wrote:
+>Added IPMB-13 channel for Debug Card communication.
+>which improves the readability of the machine and makes
+>it easier to debug the server and it will display some
+>pieces of information about the server like "system info",
+>"Critical sensors" and "critical sel".
+>
+>---
+>--- v5- Updated commit message
+>--- v4- Resolved syntax error
+>--- v3- Updated the title and commit
+>--- v2- Updated the title
+>--- v1- Initial draft
+>---
+>
 
-Hi guys,
+Note that git treats a '---' line as a separator, so everything past the
+first one above will be discarded when this patch is applied (e.g. via
+'git am')...
 
-Looks like this patch was forgotten to to merge into master branch. This 
-bug still in:
-https://git.linuxtv.org/media_tree.git/tree/drivers/media/dvb-core/dvb_vb2.c#n355
-and
-https://git.linuxtv.org/media_tree.git/tree/drivers/media/dvb-core/dvb_vb2.c#n379
+>Signed-off-by: Karthikeyan Pasupathi <pkarthikeyan1509@gmail.com>
 
-Thanks,
-Hangyu
+...including your S-O-B line here.
+
+If you're aiming to do something like what Joel describes on his blog
+(https://shenki.github.io/git-patch-workflow/), you should make sure put
+your first '---' line and any non-commit-message notes *after* your
+S-O-B and any other tags.
+
+>---
+> arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts | 11 +++++++++++
+> 1 file changed, 11 insertions(+)
+>
+>diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts b/arch/a=
+rm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
+>index 8864e9c312a8..84236df522dc 100644
+>--- a/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
+>+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts
+>@@ -215,6 +215,17 @@
+> 	};
+> };
+>
+>+&i2c13 {
+>+	status =3D "okay";
+>+	// Debug Card
+>+	multi-master;
+>+	ipmb13@10 {
+>+		compatible =3D "ipmb-dev";
+>+		reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+>+		i2c-protocol;
+>+	};
+>+};
+>+
+> &pwm_tacho {
+> 	status =3D "okay";
+> 	//FSC
+>--=20
+>2.17.1
+>=
