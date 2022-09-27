@@ -2,178 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7145EC3A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5384F5EC3A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232353AbiI0NG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
+        id S232389AbiI0NHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232350AbiI0NGx (ORCPT
+        with ESMTP id S232369AbiI0NHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:06:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B418177349
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:06:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F2E11042;
-        Tue, 27 Sep 2022 06:06:57 -0700 (PDT)
-Received: from [10.1.197.78] (eglon.cambridge.arm.com [10.1.197.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B1E03F792;
-        Tue, 27 Sep 2022 06:06:49 -0700 (PDT)
-Message-ID: <80d6238b-223c-e60a-6930-24a981d9dd0c@arm.com>
-Date:   Tue, 27 Sep 2022 14:06:41 +0100
+        Tue, 27 Sep 2022 09:07:10 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F6F17D415
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:07:08 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id iw17so9067883plb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:07:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=wLWYmfFySAd0GACOj4/rphI/57VoRcvb+5EekgbbspY=;
+        b=vpZuuu+cF8tKQW52wVI/FmSsjrI369ARx9x3l38QFDVBOY19iVxTCIFY2z5Z/RDz3c
+         /KqBkQMe4HZvIYPfm/Q4Fj2R0q1L+Y6n3yo9mpWc/7QINyfciOuJ+CEbUu90eoA8MsvO
+         wLL1YBsaHOMLuSkbDqCbZ9yRM0epZd8t+yVGMB3d8hKZuPMjQJ+ZfC32vFaybi9/L+Qe
+         Dkpf6LxbuzCH8EAmobz/VVimGkbsUIwtpxwKTeXhIW6f5qb14YamDSOJ9PS+hG7NAuW2
+         KNnSDh8AQ2ixJUAHn2Q/qJKMWDQkFBR147zZRAozzgYpU11id1HWzvLMCBtWMRFKVnD3
+         bwXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=wLWYmfFySAd0GACOj4/rphI/57VoRcvb+5EekgbbspY=;
+        b=FuW5gpoUM/Ow7sB0SIgeNfmWC+OXeRq2sofKDavFh8oMtyZZuQc8IcvImgln2ksRyz
+         ErxlTR9ZiOX/LpDhKbHxceTvaFg9fGlriD47D/HfkinSJlsp1qeLXIwMvlkMNO8mjjih
+         7SYMsb247zsRPz/g9stNyLbGNBq4q4IIpguxLJcDLWYE2S2r6EH9QVOtrZ7YdVZq9Ol9
+         US1BmA1A2h6z9Jg87Dp5xl6QxtmiuLpcEY34OQ3dQZkqDqKX8cgERXlYFpMtY1jwehtC
+         5y+mz2J20r8OwCzjBVtLXeb3wpkKQYpTDVswZwnxkJ5NW/sKBfXmo2XSMkfmGGA2feOw
+         JvSg==
+X-Gm-Message-State: ACrzQf3F12XT+zGVRlJjsKRyEbGIR69dQYpYRCp8IzcC27SrEOuvWajf
+        NLPpfbd9/tZcojGrn06UKfX2FEM6p3OXRQ==
+X-Google-Smtp-Source: AMsMyM7ruRMzAu8IGLLKYxSovEqEH/m8RWT1TTaVupSf2kDnDsYqaynyezwuWSmpP6dyNWjHeKLljA==
+X-Received: by 2002:a17:902:e841:b0:177:82b6:e6f7 with SMTP id t1-20020a170902e84100b0017782b6e6f7mr27664517plg.66.1664284027853;
+        Tue, 27 Sep 2022 06:07:07 -0700 (PDT)
+Received: from [10.255.19.83] ([139.177.225.224])
+        by smtp.gmail.com with ESMTPSA id f22-20020a63f116000000b0042a713dd68csm1515083pgi.53.2022.09.27.06.07.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 06:07:07 -0700 (PDT)
+Message-ID: <9a0130ce-6528-6652-5a8e-3612c5de2d96@bytedance.com>
+Date:   Tue, 27 Sep 2022 21:07:02 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] x86/resctrl: Clear the staged configs when destroying
- schemata list
-Content-Language: en-GB
-To:     Shawn Wang <shawnwang@linux.alibaba.com>, fenghua.yu@intel.com,
-        reinette.chatre@intel.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-References: <1664247269-41295-1-git-send-email-shawnwang@linux.alibaba.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <1664247269-41295-1-git-send-email-shawnwang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.0
+Subject: Re: [External] Re: [RFC] proc: Add a new isolated /proc/pid/mempolicy
+ type.
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Zhongkun He <hezhongkun.hzk@bytedance.com>, corbet@lwn.net,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20220926091033.340-1-hezhongkun.hzk@bytedance.com>
+ <YzF3aaLvEvFhTQa3@dhcp22.suse.cz>
+ <24b20953-eca9-eef7-8e60-301080a17d2d@bytedance.com>
+ <YzGya2Q3iuWS2WdM@dhcp22.suse.cz>
+ <7ac9abce-4458-982b-6c04-f9569a78c0da@bytedance.com>
+ <YzLVTxGHgYp3Es4t@dhcp22.suse.cz>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <YzLVTxGHgYp3Es4t@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_SBL_A autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shawn,
+On 9/27/22 6:49 PM, Michal Hocko wrote:
+> On Tue 27-09-22 11:20:54, Abel Wu wrote:
+> [...]
+>>>> Btw.in order to add per-thread-group mempolicy, is it possible to add
+>>>> mempolicy in mm_struct?
+>>>
+>>> I dunno. This would make the mempolicy interface even more confusing.
+>>> Per mm behavior makes a lot of sense but we already do have per-thread
+>>> semantic so I would stick to it rather than introducing a new semantic.
+>>>
+>>> Why is this really important?
+>>
+>> We want soft control on memory footprint of background jobs by applying
+>> NUMA preferences when necessary, so the impact on different NUMA nodes
+>> can be managed to some extent. These NUMA preferences are given by the
+>> control panel, and it might not be suitable to overwrite the tasks with
+>> specific memory policies already (or vice versa).
+> 
+> Maybe the answer is somehow implicit but I do not really see any
+> argument for the per thread-group semantic here. In other words why a
+> new interface has to cover more than the local [sg]et_mempolicy?
+> I can see convenience as one potential argument. Also if there is a
+> requirement to change the policy in atomic way then this would require a
+> single syscall.
 
-On 27/09/2022 03:54, Shawn Wang wrote:
-> Array staged_config in struct rdt_domain still maintains the original value when
-> resctrl is unmounted. If resctrl is mounted with cdp option and then remounted
-> without cdp option, field have_new_ctrl in staged_config[CDP_CODE] and
-> staged_config[CDP_DATA] will still be true.
+Convenience is not our major concern. A well-tuned workload can have
+specific memory policies for different tasks/vmas in one process, and
+this can be achieved by set_mempolicy()/mbind() respectively. While
+other workloads are not, they don't care where the memory residents,
+so the impact they brought on the co-located workloads might vary in
+different NUMA nodes.
 
-staged_config[CDP_DATA] is an array - its always 'true'. I think you mean
-staged_config[CDP_DATA].have_new_ctrl, which will still be true because it is only
-memset() when the schemata file is written to.
+The control panel, which has a full knowledge of workload profiling,
+may want to interfere the behavior of the non-mempolicied processes
+by giving them NUMA preferences, to better serve the co-located jobs.
 
+So in this scenario, a process's memory policy can be assigned by two
+objects dynamically:
 
-> Since resctrl_arch_update_domains()
-> traverses all resctrl_conf_type, it will continue to update CDP_CODE and
-> CDP_DATA configurations, which can cause overflow problem.
+  a) the process itself, through set_mempolicy()/mbind()
+  b) the control panel, but API is not available right now
 
-Only if its called with a stale staged config, and it should only be called when the
-schemata file is written to, which would memset() the staged config first.
+Considering the two policies should not fight each other, it sounds
+reasonable to introduce a new syscall to assign memory policy to a
+process through struct mm_struct.
 
-
-> The problem can be reproduced by the following commands:
->     # A system with 16 usable closids and mba disabled
->     mount -t resctrl resctrl -o cdp /sys/fs/resctrl
->     mkdir /sys/fs/resctrl/p{1..7}
->     umount /sys/fs/resctrl/
->     mount -t resctrl resctrl /sys/fs/resctrl
->     mkdir /sys/fs/resctrl/p{1..8}
-
-Thanks for the reproducer - but I don't see what could set have_new_ctrl in this sequence.
-You can't call apply_config() to set CPUs in the mask without that being set.
-
-Creating a new control group, (your mkdir step) shouldn't touch the hardware at all, as it
-should be left in its reset state from the last umount(), or setup.
-
-I can't reproduce this on v6.0-rc7.
-Even if I dirty the configuration by writing to the schemata file, I can't reproduce this.
-
-(I have mba enabled, but all this should affect is the number of closid available)
-
-
-> dmesg will generate the following error:
-
-Which kernel version is this?
-
->     [ 6180.939345] unchecked MSR access error: WRMSR to 0xca0 (tried to write
->     0x00000000000007ff) at rIP: 0xffffffff82249142 (cat_wrmsr+0x32/0x60)
-
-Is 0x7ff the default CBM bitmap for this CPU? Or was it written in a step missing from the
-reproducer above?
-
-
-The rest of this splat isn't helpful as its the result of an IPI...
-
->     [ 6180.951983] Call Trace:
->     [ 6180.954516]  <IRQ>
->     [ 6180.956619]  __flush_smp_call_function_queue+0x11d/0x170
->     [ 6180.962028]  __sysvec_call_function+0x24/0xd0
->     [ 6180.966485]  sysvec_call_function+0x89/0xc0
->     [ 6180.970760]  </IRQ>
->     [ 6180.972947]  <TASK>
->     [ 6180.975131]  asm_sysvec_call_function+0x16/0x20
->     [ 6180.979757] RIP: 0010:cpuidle_enter_state+0xcd/0x400
->     [ 6180.984821] Code: 49 89 c5 0f 1f 44 00 00 31 ff e8 1e e5 77 ff 45 84
->     ff 74 12 9c 58 f6 c4 02 0f 85 13 03 00 00 31 ff e8 67 70 7d ff fb 45 85
->     f6 <0f> 88 75 01 00 00 49 63 c6 4c 2b 2c 24 48 8d 14 40 48 8d 14 90 49
->     [ 6181.003710] RSP: 0018:ffffffff83a03e48 EFLAGS: 00000202
->     [ 6181.009028] RAX: ffff943400800000 RBX: 0000000000000001 RCX: 000000000000001f
->     [ 6181.016261] RDX: 0000000000000000 RSI: ffffffff83795059 RDI: ffffffff837c101e
->     [ 6181.023490] RBP: ffff9434c9352000 R08: 0000059f1cb1a05e R09: 0000000000000008
->     [ 6181.030717] R10: 0000000000000001 R11: 0000000000005c66 R12: ffffffff83bbf3a0
->     [ 6181.037944] R13: 0000059f1cb1a05e R14: 0000000000000001 R15: 0000000000000000
->     [ 6181.045202]  ? cpuidle_enter_state+0xb2/0x400
->     [ 6181.049678]  cpuidle_enter+0x24/0x40
->     [ 6181.053370]  do_idle+0x1dd/0x260
->     [ 6181.056713]  cpu_startup_entry+0x14/0x20
->     [ 6181.060753]  rest_init+0xbb/0xc0
->     [ 6181.064097]  arch_call_rest_init+0x5/0xa
->     [ 6181.068137]  start_kernel+0x668/0x691
->     [ 6181.071914]  secondary_startup_64_no_verify+0xe0/0xeb
->     [ 6181.077086]  </TASK>
-
-It would be good to know what triggered this IPI. It may not have been
-resctrl_arch_update_domains(). This pattern also happens from reset_all_ctrls() which
-happens during umount(). (and that would write the default CBM bitmap)
-
-If you can reproduce this easily, could you add dump_stack() to update_config() to see if
-any path is setting have_new_ctrl. You aren't writing to the schemata file in your reproducer.
-
-
-> We fix this issue by clearing the staged configs when destroying schemata list.
-
-
-> Signed-off-by: Shawn Wang <shawnwang@linux.alibaba.com>
-> Suggested-by: Xin Hao <xhao@linux.alibaba.com>
-
-If we can work out why you are seeing this, it would need a Fixes tag.
-
-Otherwise I agree it makes sense to make this more robust, but it would need a different
-commit message.
-
-
-Thanks,
-
-James
-
-
-
-> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> index f276aff521e8..b4a817ae83ab 100644
-> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> @@ -2127,8 +2127,15 @@ static int schemata_list_create(void)
->  static void schemata_list_destroy(void)
->  {
->  	struct resctrl_schema *s, *tmp;
-> +	struct rdt_domain *dom;
->  
->  	list_for_each_entry_safe(s, tmp, &resctrl_schema_all, list) {
-> +		/*
-> +		 * Clear staged_config on each domain before schemata list is
-> +		 * destroyed.
-> +		 */
-> +		list_for_each_entry(dom, &s->res->domains, list)
-> +			memset(dom->staged_config, 0, sizeof(dom->staged_config));
->  		list_del(&s->list);
->  		kfree(s);
->  	}
 
