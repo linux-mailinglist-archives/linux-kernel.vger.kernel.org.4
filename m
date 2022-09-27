@@ -2,148 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8368B5EC96E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657485EC970
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232650AbiI0Q0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
+        id S231420AbiI0Q1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231446AbiI0QZt (ORCPT
+        with ESMTP id S232014AbiI0Q1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:25:49 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C608048F;
-        Tue, 27 Sep 2022 09:25:18 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RG6b6E014364;
-        Tue, 27 Sep 2022 16:25:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=2Jf4cLHEJz6cP+3bclMk1SyEciUpTiMBLFI+t+FRu3A=;
- b=BEMAdIn4CvdeIlQ51j9FFuykwhyrmpJNLumOU4/TQcUAAgZLCTAtw1waGXbedmNO8osy
- 5AtQ4PMfhv7avp5cMc9yLyZUJe3gDskJkqvVA1H1DtiBs9z3u5Q1wnOFKO9nnCSwKMQ8
- aaDQ90322yTA/N3E475qchI+6opcNvqMnecEF0p6nBWGJ5xh5oGNnzarH3XD3xlYZ/N9
- PxQsCFZqmQ2Hd0z6GSPUrlHyEOKcdy3uIyZRT4ziXRT50NmWF9bRr31To3HgqsePmxgk
- smJ1BoWSv7Nbc3olU52w+erOnYSGTUTIT5fB5vKS1wrsEzzVuQ7zc3PfJ2nx9ebi91G7 rQ== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jv21567uh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 16:25:00 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28RGJdHb022554;
-        Tue, 27 Sep 2022 16:24:59 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3jssh9c33p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 16:24:58 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28RGOtZk34341520
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Sep 2022 16:24:55 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A69A34C044;
-        Tue, 27 Sep 2022 16:24:55 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 322964C046;
-        Tue, 27 Sep 2022 16:24:55 +0000 (GMT)
-Received: from oc-nschnelle.boeblingen.de.ibm.com (unknown [9.155.199.46])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Sep 2022 16:24:55 +0000 (GMT)
-Message-ID: <07d5527984912ef4c9174fad038ae951a79fd4dc.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 1/3] iommu/s390: Fix duplicate domain attachments
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        robin.murphy@arm.com, linux-kernel@vger.kernel.org
-Date:   Tue, 27 Sep 2022 18:24:54 +0200
-In-Reply-To: <YzGuc7jVSvE2g91T@nvidia.com>
-References: <20220922095239.2115309-1-schnelle@linux.ibm.com>
-         <20220922095239.2115309-2-schnelle@linux.ibm.com>
-         <YyxyMtKXyvgHt3Kp@nvidia.com>
-         <b581d4f575b834831f8c17054f73b5b92a891d25.camel@linux.ibm.com>
-         <YzGuc7jVSvE2g91T@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+        Tue, 27 Sep 2022 12:27:09 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E966A12BD84
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:27:07 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id n1-20020a170902f60100b00179c0a5c51fso6576748plg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:27:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=Lq5meZH9J23ejhp1+iXz6uyRlJLTwuaXjbw1z3oUWJY=;
+        b=QJCktUvhzo/bq/yLbO4EKOenRZYtHPJ7xE1acOcq7aqBAwCiWDP+VQjW8bJwm4MEX5
+         WuLhOh8Vn2sNZxJKiB9pQ365cpkAKaZ6SlllmCly17HB551jeCESkHoec0isT1nZlg88
+         e67zJHcoKQHkWe5PYmLZDPu0LvUVCqJW7gpyxyHi1snMTcJ/WLdV2WM+r7IFMmFXcinV
+         P3TJNForru1ldshZLr4LVMufiKMrdIj2nycWSAdJtpP9C2JZmFImDnnxiJLxIp9Kaydt
+         fWkY8bGrI6mA6C4m7zHRbI8t4qnu6YZicxnvi9chyzuDKY8aR/GSPydLBQ6SFodiIZlM
+         8wwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=Lq5meZH9J23ejhp1+iXz6uyRlJLTwuaXjbw1z3oUWJY=;
+        b=jMs3nZLIlzk7A0QWrIyjlph66xlmypUWiOAjEm51M9zynudpa/jW9w4OClBWTVDJEk
+         oh9+NoaZGrQ52x5AWwmtMDoYNm7erck7/VFIPFhx+NOkuzhcXw5Qn3XYPebiM3q4jXZb
+         lKV156vRft1yuW6M34z9WL8XJxB7LeY6KzSG8Jpz/Hpp/f1b5nT1ov196vUlmIdDkJzL
+         XFAciHena6V0/cUu78c2EWmGZSMDl0PIN71c70/G32l+QhENGdAcvjyDWY+8J1UHVYgK
+         TWsF1ONPZrOHkVln78ITO+QyXywbjiVInNJBmRCW7deEBhG+ar9i6dj/JcwSGqkvbij9
+         XLSA==
+X-Gm-Message-State: ACrzQf0IDBYkhlFrtmLzvMHka1ROKVmnO0LRE0k2A2mUfu9zgoK81Csp
+        GyKlXFfNztIZszJpGeEe5iHhne2YatA=
+X-Google-Smtp-Source: AMsMyM44gNrwgjwtFC0nqKySI5qcwPWkaPTr9QxPcNNrW/28Cbbd8QBVhZJJP3YitgAwZ89k7ySchJyTidk=
+X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:c009:adb5:9cbc:438])
+ (user=raychi job=sendgmr) by 2002:a05:6a00:4287:b0:543:7bae:55f7 with SMTP id
+ bx7-20020a056a00428700b005437bae55f7mr29810383pfb.58.1664296027347; Tue, 27
+ Sep 2022 09:27:07 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 00:27:01 +0800
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TnNKiZA_UasRIyZnaoA8DYpMofmm0q0x
-X-Proofpoint-ORIG-GUID: TnNKiZA_UasRIyZnaoA8DYpMofmm0q0x
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-27_07,2022-09-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- mlxscore=0 mlxlogscore=999 malwarescore=0 spamscore=0 suspectscore=0
- priorityscore=1501 adultscore=0 clxscore=1015 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209270099
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+Message-ID: <20220927162701.3260996-1-raychi@google.com>
+Subject: [Patch v4] usb: core: stop USB enumeration if too many retries
+From:   Ray Chi <raychi@google.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        mchehab+huawei@kernel.org
+Cc:     albertccwang@google.com, pumahsu@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Ray Chi <raychi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-09-26 at 10:51 -0300, Jason Gunthorpe wrote:
-> On Mon, Sep 26, 2022 at 03:29:49PM +0200, Niklas Schnelle wrote:
-> > I did miss a problem in my initial answer. While zpci_register_ioat()
-> > is indeed the actual "attach" operation, it assumes that at that point
-> > no DMA address translations are registered. In that state DMA is
-> > blocked of course. With that zpci_register_ioat() needs to come after
-> > the zpci_unregister_ioat() that is part of __s390_iommu_detach_device()
-> > and zpci_dma_exit_device(). If we do call those though we fundamentally
-> > need to restore the previous domain / DMA API state on any subsequent
-> > failure. If we don't restore we would leave the device detached from
-> > any domain with DMA blocked. I wonder if this could be an acceptable
-> > failure state though? It's safe as no DMA is possible and we could get
-> > out of it with a successful attach.
-> 
-> Is this because of that FW call it does?
-> 
-> It seems like an FW API misdesign to not allow an unfailable change of
-> translation, if the FW forces an unregister first then there are
-> always error cases you can't correctly recover from.
-> 
-> IMHO if the FW fails an attach you are just busted, there is no reason
-> to think it would suddenly accept attaching the old domain just
-> because it has a different physical address, right?
+When a broken USB accessory connects to a USB host, usbcore might
+keep doing enumeration retries. If the host has a watchdog mechanism,
+the kernel panic will happen on the host.
 
-While I can't come up with a case where an immediate retry would
-actually help, there is at least one error case that one should be able
-to recover from. The attach can fail if a firmware driven PCI device
-recovery is in progress. Now if that happens during a switch between
-domains I think one will have to do the equivalent of 
+This patch provides an attribute early_stop to limit the numbers of retries
+for each port of a hub. If a port was marked with early_stop attribute,
+unsuccessful connection attempts will fail quickly. In addition, if an
+early_stop port has failed to initialize, it will ignore all future
+connection events until early_stop attribute is clear.
 
-   echo 0 > /sys/bus/pci/slots/<dev>/power; echo 1 > /.../power
+Signed-off-by: Ray Chi <raychi@google.com>
+---
+Changes since v3:
+ - rename the attribute from quick_init to early_stop
+ - rename the variable of port_dev from ignore_connect to ignore_event
+ - modify changelog, documentation
+ - add more comments for hub_port_stop_enumerate()
 
-That of course tears down the whole PCI device so we don't have to
-answer the question if the old or new domain is the active one.
+Changes since v2:
+ - replace the quirk with the attribute
+ - Document the attribute
+ - modify hub_port_stop_enumerate() position in port_event()
+ - modify the changelog
 
-So I think in the consequences you're still right, attempting to re-
-attach is a lot of hassle for little or no gain.
+Changes since v1:
+ - remove usb_hub_set_port_power()
+ - add a variable ignore_connect into struct port_dev
+ - modify hub_port_stop_enumerate() and set ignore_connect in
+   this function
+ - avoid calling hub_port_connect_change() in port_event()
+---
+ Documentation/ABI/testing/sysfs-bus-usb | 11 +++++
+ drivers/usb/core/hub.c                  | 59 +++++++++++++++++++++++++
+ drivers/usb/core/hub.h                  |  4 ++
+ drivers/usb/core/port.c                 | 27 +++++++++++
+ 4 files changed, 101 insertions(+)
 
-> 
-> So make it simple, leave it DMA blocked and throw a WARN_ON..
-
-To me a WARN_ON() isn't appropriate here, as stated above there is at
-least one error case that is recoverable and doesn't necessarily
-indicate a progamming bug. Also while not recoverable the device having
-been surprise unplugged is another case where the attach failing is not
-necessarily a bug. It would also thus cause false panics for e.g. CI
-systems with PANIC_ON_WARN.
-
-That said yes I think leaving DMA blocked and the device detached from
-any domain is reasonable. That way the above recover scenario will work
-and the device is in a defined and isolated state. Maybe in the future
-we could even make this explicit and attach to the blocking domain on
-failed attach, does that make sense?
+diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
+index 568103d3376e..545c2dd97ed0 100644
+--- a/Documentation/ABI/testing/sysfs-bus-usb
++++ b/Documentation/ABI/testing/sysfs-bus-usb
+@@ -264,6 +264,17 @@ Description:
+ 		attached to the port will not be detected, initialized,
+ 		or enumerated.
+ 
++What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/early_stop
++Date:		Sep 2022
++Contact:	Ray Chi <raychi@google.com>
++Description:
++		Some USB hosts have some watchdog mechanisms so that the device
++		may enter ramdump if it takes a long time during port initialization.
++		This attribute allows each port just has two attempts so that the
++		port initialization will be failed quickly. In addition, if a port
++		which is marked with early_stop has failed to initialize, it will ignore
++		all future connections until this attribute is clear.
++
+ What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
+ Date:		May 2013
+ Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index bbab424b0d55..5510dbef3243 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3081,6 +3081,48 @@ static int hub_port_reset(struct usb_hub *hub, int port1,
+ 	return status;
+ }
+ 
++/*
++ * hub_port_stop_enumerate - stop USB enumeration or ignore port events
++ * @hub: target hub
++ * @port1: port num of the port
++ * @retries: port retries number of hub_port_init()
++ *
++ * Return:
++ *    true: ignore port actions/events or give up connection attempts.
++ *    false: keep original behavior.
++ *
++ * This function will be based on retries to check whether the port which is
++ * marked with early_stop attribute would stop enumeration or ignore events.
++ *
++ * Note:
++ * This function didn't change anything if early_stop is not set, and it will
++ * prevent all connection attempts when early_stop is set and the attempts of
++ * the port are more than 1.
++ */
++static bool hub_port_stop_enumerate(struct usb_hub *hub, int port1, int retries)
++{
++	struct usb_port *port_dev = hub->ports[port1 - 1];
++
++	if (port_dev->early_stop) {
++		if (port_dev->ignore_event)
++			return true;
++
++		/*
++		 * We want unsuccessful attempts to fail quickly.
++		 * Since some devices may need one failure during
++		 * port initialization, we allow two tries but no
++		 * more.
++		 */
++		if (retries < 1)
++			return false;
++
++		port_dev->ignore_event = 1;
++	} else
++		port_dev->ignore_event = 0;
++
++	return port_dev->ignore_event;
++}
++
+ /* Check if a port is power on */
+ int usb_port_is_power_on(struct usb_hub *hub, unsigned int portstatus)
+ {
+@@ -4855,6 +4897,11 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+ 					buf->bMaxPacketSize0;
+ 			kfree(buf);
+ 
++			if (r < 0 && hub_port_stop_enumerate(hub, port1, retries)) {
++				retval = r;
++				goto fail;
++			}
++
+ 			retval = hub_port_reset(hub, port1, udev, delay, false);
+ 			if (retval < 0)		/* error or disconnect */
+ 				goto fail;
+@@ -5387,6 +5434,9 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+ 		if ((status == -ENOTCONN) || (status == -ENOTSUPP))
+ 			break;
+ 
++		if (hub_port_stop_enumerate(hub, port1, i))
++			break;
++
+ 		/* When halfway through our retry count, power-cycle the port */
+ 		if (i == (PORT_INIT_TRIES - 1) / 2) {
+ 			dev_info(&port_dev->dev, "attempt power cycle\n");
+@@ -5614,6 +5664,10 @@ static void port_event(struct usb_hub *hub, int port1)
+ 	if (!pm_runtime_active(&port_dev->dev))
+ 		return;
+ 
++	/* skip port actions if ignore_event is true*/
++	if (hub_port_stop_enumerate(hub, port1, 0))
++		return;
++
+ 	if (hub_handle_remote_wakeup(hub, port1, portstatus, portchange))
+ 		connect_change = 1;
+ 
+@@ -5934,6 +5988,9 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+ 		ret = hub_port_init(parent_hub, udev, port1, i);
+ 		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
+ 			break;
++
++		if (hub_port_stop_enumerate(parent_hub, port1, i))
++			goto stop_enumerate;
+ 	}
+ 	mutex_unlock(hcd->address0_mutex);
+ 
+@@ -6022,6 +6079,8 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
+ 	udev->bos = bos;
+ 	return 0;
+ 
++stop_enumerate:
++	mutex_unlock(hcd->address0_mutex);
+ re_enumerate:
+ 	usb_release_bos_descriptor(udev);
+ 	udev->bos = bos;
+diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+index b2925856b4cb..e23833562e4f 100644
+--- a/drivers/usb/core/hub.h
++++ b/drivers/usb/core/hub.h
+@@ -90,6 +90,8 @@ struct usb_hub {
+  * @is_superspeed cache super-speed status
+  * @usb3_lpm_u1_permit: whether USB3 U1 LPM is permitted.
+  * @usb3_lpm_u2_permit: whether USB3 U2 LPM is permitted.
++ * @early_stop: whether port initialization will be stopped earlier.
++ * @ignore_event: whether events of the port are ignored.
+  */
+ struct usb_port {
+ 	struct usb_device *child;
+@@ -103,6 +105,8 @@ struct usb_port {
+ 	u32 over_current_count;
+ 	u8 portnum;
+ 	u32 quirks;
++	unsigned int early_stop:1;
++	unsigned int ignore_event:1;
+ 	unsigned int is_superspeed:1;
+ 	unsigned int usb3_lpm_u1_permit:1;
+ 	unsigned int usb3_lpm_u2_permit:1;
+diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+index 38c1a4f4fdea..126da9408359 100644
+--- a/drivers/usb/core/port.c
++++ b/drivers/usb/core/port.c
+@@ -17,6 +17,32 @@ static int usb_port_block_power_off;
+ 
+ static const struct attribute_group *port_dev_group[];
+ 
++static ssize_t early_stop_show(struct device *dev,
++			    struct device_attribute *attr, char *buf)
++{
++	struct usb_port *port_dev = to_usb_port(dev);
++
++	return sysfs_emit(buf, "%s\n", port_dev->early_stop ? "yes" : "no");
++}
++
++static ssize_t early_stop_store(struct device *dev, struct device_attribute *attr,
++				const char *buf, size_t count)
++{
++	struct usb_port *port_dev = to_usb_port(dev);
++	bool value;
++
++	if (kstrtobool(buf, &value))
++		return -EINVAL;
++
++	if (value)
++		port_dev->early_stop = 1;
++	else
++		port_dev->early_stop = 0;
++
++	return count;
++}
++static DEVICE_ATTR_RW(early_stop);
++
+ static ssize_t disable_show(struct device *dev,
+ 			      struct device_attribute *attr, char *buf)
+ {
+@@ -236,6 +262,7 @@ static struct attribute *port_dev_attrs[] = {
+ 	&dev_attr_quirks.attr,
+ 	&dev_attr_over_current_count.attr,
+ 	&dev_attr_disable.attr,
++	&dev_attr_early_stop.attr,
+ 	NULL,
+ };
+ 
+-- 
+2.37.3.998.g577e59143f-goog
 
