@@ -2,117 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F815EC48E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16EC5EC494
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232934AbiI0Nd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
+        id S232689AbiI0Nfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbiI0NdZ (ORCPT
+        with ESMTP id S231139AbiI0NfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:33:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB3929CB2;
-        Tue, 27 Sep 2022 06:32:03 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RC7MK7021419;
-        Tue, 27 Sep 2022 13:31:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=MdCRng429X186D9J5471uKUeBpf1L3mUsZeSHfDOuuo=;
- b=Ea++vmzat+1IfdSk5AE8yUJBcop1GbKcnP2NoXbX/dbGGYA9QRi9t7/kwgfnN8xIIfaL
- ggq5fz5qhSr2SSScuUd8DxhEzavE23skcgkzrLFTnZU0ceiFXTsIpTAssbbXEOrW/epZ
- EqfP5OMXXosSPMJkwk4zR2/GxKxl1L8lwy5oiYiP4YYslzHH7ycs7K9wchAVC/J9tj2V
- I+qPKnzogVaBILi2/4xNhUg3r5a/Qt10bH0/BqvQreC7ysYW6Rxy39WkiZyfzYnxtKCJ
- pTFaQY/djLGnmjUF9SIinb6C9jU0apkHWuSkafNwlZmv8JVcz6DNbJsb6ibeUnYBrSPV JA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3juwmn0x1h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 13:31:54 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28RC7woq023440;
-        Tue, 27 Sep 2022 13:31:54 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3juwmn0wyy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 13:31:54 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28RDQB7l007072;
-        Tue, 27 Sep 2022 13:31:51 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3jss5j3w2g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 13:31:51 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28RDVmtU5374536
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Sep 2022 13:31:48 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8808642041;
-        Tue, 27 Sep 2022 13:31:48 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 401AF42042;
-        Tue, 27 Sep 2022 13:31:48 +0000 (GMT)
-Received: from [9.152.224.236] (unknown [9.152.224.236])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Sep 2022 13:31:48 +0000 (GMT)
-Message-ID: <03ac1fb3-ea5d-d5b8-1d7e-92c13fba339d@linux.ibm.com>
-Date:   Tue, 27 Sep 2022 15:31:47 +0200
+        Tue, 27 Sep 2022 09:35:06 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D027BB4B2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:34:35 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id w2so9742825pfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:34:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:from:to:cc:subject:date;
+        bh=5KO5UAD2T7DgoYPQgFD91UfqIRE232yyISaSFCJ9s3Q=;
+        b=SoU+eGuksQQhlnS7N57Z73aJoRcn1Yf2NhRhsCodkYOiV7LO9opJ5E2VCYREe5jIix
+         Oek/U1yUHENSgLff5LPnC8g96rDkpkyHkyN8K4ng0t6VFbZFhaiBdfyEbni+0RGn8Bvq
+         Xr0f0Eoqt6tUwJZdRxqQtkBIbO01YSyEzs/YfPOplLElabdw79du1/QP496W/K521tAO
+         KKfJLi1VzArX+CrDYSiZD5o0f3yZ/lI0HMD3tk0S9NVt07KumdMGtpOn2kdj3DfJ9Blo
+         P1h+q5XNmMceyQpXed0kBCLxxC8hoyH9lz/GILiJzcJK3VEBQWlBG8Gm4O571ponUsdt
+         IIhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=5KO5UAD2T7DgoYPQgFD91UfqIRE232yyISaSFCJ9s3Q=;
+        b=1+9BDexbxbbePMWRtVOPTFD6GSm0w1ZwBpwHAU7RAKPKWhCl7vmYKCX3c5ZVws7gTo
+         15ZldFeJq6Q/qTMQXc0ofWT/XuL+2IEA2Dqg1o5W6BWj66uXDG3GvtI5kJEAarG460kd
+         A39p9ELGoqiyMeSsniULoFxjfrpMWFmzT4ZCs/KgoVgodD0aJI8UJCO1EDT6m2kpMMrL
+         Aj0+oKwfVX8X+x40vjwuwXCEYc52vQTldPtOt5Pc1ahpcDrEXKC61755Fb+By20BOkos
+         ZY8zUQSnkylz1kRC1eOz6WskxhH532EtXHUGicBmx17pPaGNMMv14LAOgTNcSrdS+EEN
+         nVVw==
+X-Gm-Message-State: ACrzQf2CpaLUSejpzuOomH7/RooUPD6RbV9BGuJiNWmRD5IY7GRgveRi
+        kzxxXmDZ9GNP5F5G3myFlVueqOM4s89GV58XxziEGQ==
+X-Google-Smtp-Source: AMsMyM4YIhFYJqfTMqQFxzcbSAJDenFpMeYijY6ikC/aRvNNUlM8pp9LqLPwxTZew8CdZonFZQtK3Mf4GpGS1w183Kg=
+X-Received: by 2002:a63:b55d:0:b0:439:7a97:b89 with SMTP id
+ u29-20020a63b55d000000b004397a970b89mr24899166pgo.70.1664285675305; Tue, 27
+ Sep 2022 06:34:35 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 27 Sep 2022 06:34:34 -0700
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: meli 0.7.2
+References: <20220919-v1-0-4844816c9808@baylibre.com> <20220919-v1-16-4844816c9808@baylibre.com>
+ <812a5de2-dbe3-2f0d-492c-16ea004c996a@collabora.com>
+In-Reply-To: <812a5de2-dbe3-2f0d-492c-16ea004c996a@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH 3/7] s390/qeth: Convert snprintf() to scnprintf()
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Jules Irenge <jbi.octave@gmail.com>
-Cc:     borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, agordeev@linux.ibm.com
-References: <YzHyniCyf+G/2xI8@fedora> <20220926173312.7a735619@kernel.org>
-From:   Alexandra Winter <wintera@linux.ibm.com>
-In-Reply-To: <20220926173312.7a735619@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: M714Eh_pQXytoOwcg4b1iSr1bFrEZ10w
-X-Proofpoint-ORIG-GUID: LrFxKqbuAeCJmJhsbHQj367zWD2JyA2_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-27_05,2022-09-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- bulkscore=0 mlxscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0
- mlxlogscore=819 spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2209270080
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 27 Sep 2022 06:34:34 -0700
+Message-ID: <CABnWg9sSbtXYLpcCoEts73CAsciKMEeMMRwfcfGng8H-rGYvkA@mail.gmail.com>
+Subject: Re: [PATCH v1 16/17] drm/mediatek: dpi: Add mt8195 hdmi to DPI driver
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 27.09.22 02:33, Jakub Kicinski wrote:
-> On Mon, 26 Sep 2022 19:42:38 +0100 Jules Irenge wrote:
->> Coccinnelle reports a warning
->> Warning: Use scnprintf or sprintf
->> Adding to that, there has been a slow migration from snprintf to scnprintf.
->> This LWN article explains the rationale for this change
->> https: //lwn.net/Articles/69419/
->> Ie. snprintf() returns what *would* be the resulting length,
->> while scnprintf() returns the actual length.
+On Tue, 20 Sep 2022 14:22, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>Il 19/09/22 18:56, Guillaume Ranquet ha scritto:
+>> Add the DPI1 hdmi path support in mtk dpi driver
 >>
->> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
-> 
-> Looks legit but please repost this separately.
-> We only see patch 3 of the series.
-When you repost, you can add
-Reviewed-by: Alexandra Winter <wintera@linux.ibm.com>
+>> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+>>
+>> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+>> index 630a4e301ef6..91212b7610e8 100644
+>> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+>> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+>> @@ -15,7 +15,10 @@
+>>   #include <linux/of_graph.h>
+>>   #include <linux/pinctrl/consumer.h>
+>>   #include <linux/platform_device.h>
+>> +#include <linux/reset.h>
+>>   #include <linux/types.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/mfd/syscon.h>
+>>
+>>   #include <video/videomode.h>
+>>
+>> @@ -66,10 +69,14 @@ struct mtk_dpi {
+>>   	struct drm_bridge *next_bridge;
+>>   	struct drm_connector *connector;
+>>   	void __iomem *regs;
+>> +	struct reset_control *reset_ctl;
+>>   	struct device *dev;
+>>   	struct clk *engine_clk;
+>> +	struct clk *dpi_ck_cg;
+>>   	struct clk *pixel_clk;
+>> +	struct clk *dpi_sel_clk;
+>>   	struct clk *tvd_clk;
+>> +	struct clk *hdmi_cg;
+>
+>
+>You're adding new clocks and then you're making *all clocks*, including the
+>already existing ones... optional.
+>
+>That looks seriously odd.... can you please give a devicetree example for
+>MT8195 in the next version, perhaps in the cover letter?
+>
+>Would also make it easier to test this entire big series.
+>
+>Regards,
+>Angelo
+>
 
-Thank you
-Alexandra
+The clock names are different for MT8195 HDMI than for the legacy DP.
+Making everything optional might not have been a smart move.
+I'll try to think of something else to make it look less odd.
+
+The device tree I'm using to test things is rather "hackish" and has a bunch of
+changes from what is found on linux-next.
+I think Jason and Nancy are due to upstream those patches.
+
+I'll try to include something minimal for you to test.
+Otherwise would a public branch containing everything work for you?
+
+Thx,
+Guillaume.
