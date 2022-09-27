@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958815EC962
+	by mail.lfdr.de (Postfix) with ESMTP id EB0975EC963
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231917AbiI0QYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
+        id S233025AbiI0QY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232215AbiI0QYJ (ORCPT
+        with ESMTP id S232877AbiI0QYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:24:09 -0400
+        Tue, 27 Sep 2022 12:24:10 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C5EF3907;
-        Tue, 27 Sep 2022 09:24:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822AF177343;
+        Tue, 27 Sep 2022 09:24:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664295848; x=1695831848;
+  t=1664295849; x=1695831849;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ukOdzELifqcnXw/bosHJZLdsOJjTP4tM401DI/ki8bI=;
-  b=bzUkcsuzSGjYQ99Hch1LBSTWj7q318eKZCNx+j1NS7BIIGrCE24zWCVC
-   gTCPcmuI6VhcwmDk9MiwS80JtwL4Z+2vCx3Hu6HWuAh4KoNygQeZC6GNC
-   kvOUEE9smB6P1KZ2tM9fRknwFD4Glg7Iu++uAY6i3HEZVZQSw66gvEw4n
-   iRfATeBfqu/9fyJkeYa+1dUqXPMoF1wwP2fjTwuClQnIh+0C/JY/+XlSS
-   oOA590PFQW+8R0hzAQG/+0oHhcqUWZeoB8CnAx7ubQqB0dsPP/hSezUKw
-   /ki4GAKFdrTlQe9fit95A/BVcVqzwbn3pJqHBwqT1aVLZyfmD59rZzbCo
+  bh=yIqxRHRS1triyvN1zukI7EVS4f3lxjAFUc90xkhDIu4=;
+  b=dp5BVjDqlQff+n5t2CUTcILZREXOYk035xXnqtWfYnF16gUS0i+SjJlM
+   VCpknJhhusxtRTgVbPczTsTrF7tSkkJ6Vnuc69vd8SW1U5ysbOi/lbwLy
+   cI/99WT5dP7YD5gmKMTkYDrUyybryQElcUcyRshsiqstDMsNZ66DSyo1I
+   xCjCKTYcpQwgyNNbxyrVDPF/uG4wCdlRLknonRyrAKSa/Nb2zAiiTg7Xq
+   gU+1a6LBJy2x5TFScdASsvTdx9RU0YR8tFJZgA/Pm8x5gmeAG9my36d5+
+   nq58WXtLzx+csUknqpqI8ogjwuTCI1mw+r22qQGxvi12C6gH0VsWBIbdG
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="327719509"
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="327719522"
 X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="327719509"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 09:24:07 -0700
+   d="scan'208";a="327719522"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 09:24:09 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="763935896"
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="684047856"
 X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="763935896"
+   d="scan'208";a="684047856"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Sep 2022 09:24:05 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 27 Sep 2022 09:24:07 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 91272265; Tue, 27 Sep 2022 19:24:23 +0300 (EEST)
+        id 9CC46268; Tue, 27 Sep 2022 19:24:23 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Hans de Goede <hdegoede@redhat.com>,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
@@ -48,9 +48,9 @@ To:     Hans de Goede <hdegoede@redhat.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Thierry Reding <thierry.reding@gmail.com>
-Subject: [PATCH v4 4/7] pwm: lpss: Use device_get_match_data to get device data
-Date:   Tue, 27 Sep 2022 19:24:18 +0300
-Message-Id: <20220927162421.11052-5-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v4 5/7] pwm: lpss: Use DEFINE_RUNTIME_DEV_PM_OPS() and pm_ptr() macros
+Date:   Tue, 27 Sep 2022 19:24:19 +0300
+Message-Id: <20220927162421.11052-6-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220927162421.11052-1-andriy.shevchenko@linux.intel.com>
 References: <20220927162421.11052-1-andriy.shevchenko@linux.intel.com>
@@ -67,54 +67,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-device_get_match_data() in ACPI case calls similar to the
-acpi_match_device(). We may simplify the code and make it
-generic by replacing the latter with the former.
+Using these new macros allows the compiler to remove the unused dev_pm_ops
+structure and related functions if !CONFIG_PM without the need to mark
+the functions __maybe_unused.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/pwm/pwm-lpss-platform.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/pwm/pwm-lpss-pci.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/pwm/pwm-lpss-platform.c b/drivers/pwm/pwm-lpss-platform.c
-index 7bbbb7a9b578..c48c6f2b2cd8 100644
---- a/drivers/pwm/pwm-lpss-platform.c
-+++ b/drivers/pwm/pwm-lpss-platform.c
-@@ -7,11 +7,12 @@
-  * Derived from the original pwm-lpss.c
-  */
+diff --git a/drivers/pwm/pwm-lpss-pci.c b/drivers/pwm/pwm-lpss-pci.c
+index f3367e844e61..98413d364338 100644
+--- a/drivers/pwm/pwm-lpss-pci.c
++++ b/drivers/pwm/pwm-lpss-pci.c
+@@ -48,7 +48,6 @@ static void pwm_lpss_remove_pci(struct pci_dev *pdev)
+ 	pm_runtime_get_sync(&pdev->dev);
+ }
  
--#include <linux/acpi.h>
- #include <linux/kernel.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-+#include <linux/property.h>
- 
- #include "pwm-lpss.h"
- 
-@@ -19,16 +20,13 @@
- static int pwm_lpss_probe_platform(struct platform_device *pdev)
+-#ifdef CONFIG_PM
+ static int pwm_lpss_runtime_suspend_pci(struct device *dev)
  {
- 	const struct pwm_lpss_boardinfo *info;
--	const struct acpi_device_id *id;
- 	struct pwm_lpss_chip *lpwm;
- 	void __iomem *base;
+ 	/*
+@@ -62,12 +61,11 @@ static int pwm_lpss_runtime_resume_pci(struct device *dev)
+ {
+ 	return 0;
+ }
+-#endif
  
--	id = acpi_match_device(pdev->dev.driver->acpi_match_table, &pdev->dev);
--	if (!id)
-+	info = device_get_match_data(&pdev->dev);
-+	if (!info)
- 		return -ENODEV;
+-static const struct dev_pm_ops pwm_lpss_pci_pm = {
+-	SET_RUNTIME_PM_OPS(pwm_lpss_runtime_suspend_pci,
+-			   pwm_lpss_runtime_resume_pci, NULL)
+-};
++static DEFINE_RUNTIME_DEV_PM_OPS(pwm_lpss_pci_pm,
++				 pwm_lpss_runtime_suspend_pci,
++				 pwm_lpss_runtime_resume_pci,
++				 NULL);
  
--	info = (const struct pwm_lpss_boardinfo *)id->driver_data;
--
- 	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
+ static const struct pci_device_id pwm_lpss_pci_ids[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x0ac8), (unsigned long)&pwm_lpss_bxt_info},
+@@ -89,7 +87,7 @@ static struct pci_driver pwm_lpss_driver_pci = {
+ 	.probe = pwm_lpss_probe_pci,
+ 	.remove = pwm_lpss_remove_pci,
+ 	.driver = {
+-		.pm = &pwm_lpss_pci_pm,
++		.pm = pm_ptr(&pwm_lpss_pci_pm),
+ 	},
+ };
+ module_pci_driver(pwm_lpss_driver_pci);
 -- 
 2.35.1
 
