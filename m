@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CCD5EBD2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707415EBD39
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbiI0IYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 04:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
+        id S231520AbiI0I1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 04:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbiI0IYJ (ORCPT
+        with ESMTP id S230404AbiI0I13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 04:24:09 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61066B1B84;
-        Tue, 27 Sep 2022 01:24:05 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id r20so5562002qtn.12;
-        Tue, 27 Sep 2022 01:24:05 -0700 (PDT)
+        Tue, 27 Sep 2022 04:27:29 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC096A9C24;
+        Tue, 27 Sep 2022 01:27:28 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id c24so8459448plo.3;
+        Tue, 27 Sep 2022 01:27:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=JumtaG8idfRuPN7IPsQOajX6NdF5kvAB/Ix+jKSGj3w=;
-        b=N58abmOnIGGqnlAybUTb6/zEYEJoeCDbvBN6ZDSUATu52v0yGALiq7faPI444bxBPp
-         QfKKQ/K9NcfE3RMxaALdup2gleJgCtuqIHWzFuhLDLeqCqosMAT99ZGGwIZUSORXM3YZ
-         QzlbyGmblLnFemh+SPTLYKFThhPMvZBYRiVR7WExOAKJLXTKl0S6DSUzmpyaI1pYX6S3
-         bi2xDBU/GNYZrR49CeEauOmIjy0B0VAjx1h5Urax0kHHK1qGpH/TsXiRDKJWOI+6pMDO
-         6VvsLOcLhybyWNmUIvPw3C0hIdzf/1SCz+2YjzRt9MmuoaAvSwnV7EnA8Lr7CEKhyLzm
-         YLzQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=0iQkW1MBbd3Qu0jhcGLXpiVvHU6Vrhi7uAf9jfUn1nw=;
+        b=SMNBjjIrhylzKBYnyQT9wFzHYKCcI+omcAbDBU1yTUGayONVrXfX1RYtGX2gkuvd+S
+         bR2FZNjSOVeX5AjSndtPVrVbFWX5TCNP9C4T2h3BS6m4wOOrWjxDmCjlXh5ZGuhHQjbo
+         BvOCJWFywvVQwNizqbU1LsOKi8dLHUA4r5NpA2d9I85BsviMmdJzXNmR1HMR7ubQAMBi
+         6rlAAHJRHkHTVjKEP9QFrsVPxKFSoNxyubz5osesjUhFLoCe7SnM5vzPIYbPzuKvpemp
+         vQOu+dVPHCh8NA5ZKZ89FqrsCYAUNtCcuwVvaBvE2mgdYx5nZK6WCTgpColFYdxnpU6y
+         Bgag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=JumtaG8idfRuPN7IPsQOajX6NdF5kvAB/Ix+jKSGj3w=;
-        b=U851kVTQXYEfeMqrkXHogbGYnxAXGWCYaA8XzaVYfv22CNYlk5CojIcjDtClke6lYH
-         q4d/CW+j20lelxPd2hJM2KQjzaQ3yoC74dIfyROd4qTRwT5vqQIfzMCEmnqWjI32fC38
-         PAGqCYuFjQYzkOGtpWBeGmzjNcL32uy898WKK01Oo+0ig5oQCO5AqXUj7QO4bJf1sgJ+
-         3516gq54amDZXBSNCBJ20mxqVLItl13Dm9r8D6IUa+paA+28ayyyfu5YHjiDw7Mn1G8M
-         ri6rD+LobIwZHDEu2SJkXouSGQ878xZ0KFuppfSPwRXhc447ZY+oHspF++bXR2Ql1AZP
-         cMag==
-X-Gm-Message-State: ACrzQf0H2bv8kwZ+lQRm3ganTb2UHruK/eQq1+CRC2C5t9SGYHLdf9Ur
-        gXha/CvFcAhbxm+KkdHbGuuFSsucOzkHAhfvPvA=
-X-Google-Smtp-Source: AMsMyM4cdEyBYxd3DGv4ep5x3l2RfKrLChy4QD9sRS5fzZ4K310L6/eK1kKbo1BQuQk2emvdJqriiNWagfICQslq9lM=
-X-Received: by 2002:a05:622a:54f:b0:35c:f68f:44c3 with SMTP id
- m15-20020a05622a054f00b0035cf68f44c3mr20937765qtx.546.1664267044459; Tue, 27
- Sep 2022 01:24:04 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=0iQkW1MBbd3Qu0jhcGLXpiVvHU6Vrhi7uAf9jfUn1nw=;
+        b=tVjdC1aFmjbZAbDkBwYP74Iv/bED32ZAy3HgWhOhgss+hrUoCGrPeF9Za2unwCPHCW
+         gIwkSKCJ11o9qltjNVPqBJjHEYNd68Wmo4Y5AAArcy80qsnYW+36tX2tw2IX+jHuRsS0
+         D29liqhwsiY7QvY2hxtns023PAG0stWBhALJX0ChPKHcPaTX9UqXetYMFs/dfSgHVBED
+         9jNomTUXy8dMfp413zi4CcvPxj+9qHKTUmHLrmE4+fDhzAT9fB7XIJuaJWHsbGkVoeUz
+         aU0wM2ezXs4CYiAjzqfGk27Fi2yl5/bm0cWO804aUDaxtdTrqawIuZ3aXwbOUSoLmEua
+         drhA==
+X-Gm-Message-State: ACrzQf12Koj1ZBTANPG8tGGuc7c3Nmxe038RmZlNbNpRo4hOL7YK/7xP
+        SJ5WvClY6tb3pRRcOe8VgvQ=
+X-Google-Smtp-Source: AMsMyM7fqDaei6uuGADfoP38nOHpulV98Is8xC72Gfefg86j4ozZVgKCMDhuKsWuZgHbj8S5aExPAw==
+X-Received: by 2002:a17:902:ec8f:b0:177:ff40:19bf with SMTP id x15-20020a170902ec8f00b00177ff4019bfmr25484792plg.141.1664267248368;
+        Tue, 27 Sep 2022 01:27:28 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-32.three.co.id. [116.206.12.32])
+        by smtp.gmail.com with ESMTPSA id y63-20020a626442000000b0053b9e5d365bsm1007487pfb.216.2022.09.27.01.27.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 01:27:27 -0700 (PDT)
+Message-ID: <f0c27a5b-fee2-eb64-6855-639e7ea65d37@gmail.com>
+Date:   Tue, 27 Sep 2022 15:27:24 +0700
 MIME-Version: 1.0
-References: <20220818220245.338396-1-robimarko@gmail.com> <20220818220245.338396-2-robimarko@gmail.com>
- <1efe2f7d-05e2-6207-f4df-5b597d00c862@linaro.org>
-In-Reply-To: <1efe2f7d-05e2-6207-f4df-5b597d00c862@linaro.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Tue, 27 Sep 2022 10:23:53 +0200
-Message-ID: <CAOX2RU7C-ocdmBBOoXurh0nrhkntHVHvPsC33DQd9o3FuFAN6Q@mail.gmail.com>
-Subject: Re: [PATCH v7 2/5] drivers: thermal: tsens: Add support for combined interrupt
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
-        konrad.dybcio@somainline.org, rafael@kernel.org,
-        rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andersson@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH] Documentation/CoC: Reflect current CoC interpretation and
+ practices
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kristen Carlson Accardi <kristen@linux.intel.com>,
+        linux-doc@vger.kernel.org, corbet@lwn.net,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20220926211149.2278214-1-kristen@linux.intel.com>
+ <dd89a30e-5403-8844-036c-9c9107cac888@gmail.com> <YzKyqNJk72TY//42@kroah.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <YzKyqNJk72TY//42@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,31 +79,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 at 00:49, Daniel Lezcano <daniel.lezcano@linaro.org> wr=
-ote:
->
-> On 19/08/2022 00:02, Robert Marko wrote:
-> > Despite using tsens v2.3 IP, IPQ8074 and IPQ6018 only have one IRQ for
-> > signaling both up/low and critical trips.
-> >
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
->
-> I'll pick the patches 1-4 as soon as Bjorn gives its blessing for this on=
-e
-Resending with Bjorns new email as Linaro one bounces.
+On 9/27/22 15:22, Greg Kroah-Hartman wrote:
+>> When was the bootstrap period be concluded?
+> 
+> I do not understand the question, sorry.  What exactly are you asking
+> here?
+> 
+> confused,
+> 
+> greg k-h
 
-Sounds good to me,
+Hi Greg,
 
-Bjorn can you please take a look?
+In the patch, the mention to bootstrap period of CoC committee is
+replaced with note about dynamic nature of CoC interpretation. I asked
+when the duration of bootstrap period was before we got into status quo.
 
-Regards,
-Robert
->
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
