@@ -2,132 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA425EBB8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8685EBB94
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiI0HfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 03:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
+        id S230398AbiI0HfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 03:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiI0He6 (ORCPT
+        with ESMTP id S230267AbiI0HfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 03:34:58 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4426010565
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:34:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664264097; x=1695800097;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=aGdiIa2AskwQtLlBRejm6EBBRYZSm6Aal1pnfF0CKs4=;
-  b=a6Q6dvkXQAxKqH9vLak5Qka7Uu808mzp1293ADG2+bOAfiASnFKUqfcO
-   f8HNIXCVUqriLAsBNax7+6gyGHno05jJcwPZatRRD1wbjKtBbmVN8Ateo
-   Rsa6zNxMLljUo0eDR6/o0wzV+ws8tq6McnV3rN9QQA5seLBIX7IMeQCjv
-   JcVWZi2Q7LgaBmAn3cpSRcdqCWDsAEafLkIpEbZCkG7HCqfeaz99TTQNT
-   Su8CRCH03l6HINA+TBzaH7OX5vx0jhnIt6qTqxFhKPJNwad+sbG27+N2w
-   x+z8z9yLM/XLeVu9DCpWjrle4tAL0HE8Shh9DDl0MR9rENQ5fFl2RxPkU
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="327602360"
-X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
-   d="scan'208";a="327602360"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 00:34:56 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="572558408"
-X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
-   d="scan'208";a="572558408"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.249.206]) ([10.99.249.206])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 00:34:52 -0700
-Message-ID: <b54daa61-ba1d-81d4-5238-ca7cc2a41b48@linux.intel.com>
-Date:   Tue, 27 Sep 2022 09:34:49 +0200
+        Tue, 27 Sep 2022 03:35:07 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F75140E4;
+        Tue, 27 Sep 2022 00:35:04 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id d15so5540628qka.9;
+        Tue, 27 Sep 2022 00:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=Iva8djnsoEGavqO2e35Aa/Y4zh21Iw1HIh/3kt9CYVw=;
+        b=TqWrNqA08yJ1QmcRmdAjVd7FE4fa1mA4kDfqKxNNf5QdtIUMQFScby3w3BRkDs9230
+         +hELU8sRtnGMLIbvgPQEmcDCwxv8I/4spFbACL9Mn9V8QGF1hLxJdQfJspwB0NAfXT11
+         +8HnU04htn7BvZpH3iiLxjdVgMASUQsxa0D2pt+vxHaHW1mFY9Y4MV7vG/fGOZbGoqCB
+         ySe02NNKpcnAzw599IMTf/5FM8lJVxc2+x9ygsfpKJ78t8M7b64I8virWuMUM+dvkNLV
+         kUUEv8FtdzsnfUAwubhVboOilZ7luwjT/4X01isILYB69/BhtQFIwizqIBvKw9Eqxg8y
+         xEmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Iva8djnsoEGavqO2e35Aa/Y4zh21Iw1HIh/3kt9CYVw=;
+        b=yrD0RYcx+9WniDbt1u6D5hMthLxmLhO7ZMKTzuKbktt4jDS0/77fBt0dLK3gIuO3tS
+         iw3KXmMAj+ZU4l1LPb9AWJeU4Lf7UzzYSgx8eLoUwQ5dEFAAiEiYUMLDMZIysHEXsnkh
+         7CIhNEJ8bmyllbq1YwkJ8JOMTTzFbaT0lFWyQOFNZlP0jQfZ7tf0jo2Q8StcNuqbvY0F
+         qRZPyBgQzqpky3nblA46RnGpl8Iajpy4hg4ToZHZVTN4CnHv6Zryb1Jmie6ENR9j6Und
+         lVMT4jklhtzyUbt2ekqa6xdwu/V60cKRQ57NXuiuxz2Gn9z3pp6vzaabYrwIXlDUvLkj
+         kLZg==
+X-Gm-Message-State: ACrzQf2gRT2fge4bgudoTYbwxnedQX0wO/DBRdiveIWkpBvgfQkXFmF3
+        YTcLYB18W5jojDJiHUtO9g8d5GwCGoysJm4Ovfo=
+X-Google-Smtp-Source: AMsMyM4wpdGeMMvg71oY+a/6SCIsiBEsaXv1cet+JHT87uV9K6xp3/eJdWBy5o7ltRI14xFiPCr7keF82xgoPKzTqLw=
+X-Received: by 2002:ae9:ed44:0:b0:6ce:19bb:7780 with SMTP id
+ c65-20020ae9ed44000000b006ce19bb7780mr17046769qkg.25.1664264103481; Tue, 27
+ Sep 2022 00:35:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH] ASoC: soc-pcm: fix fe and be race when accessing
- substream->runtime
-Content-Language: en-US
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+References: <20220818220245.338396-1-robimarko@gmail.com> <20220818220245.338396-2-robimarko@gmail.com>
+ <1efe2f7d-05e2-6207-f4df-5b597d00c862@linaro.org>
+In-Reply-To: <1efe2f7d-05e2-6207-f4df-5b597d00c862@linaro.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Tue, 27 Sep 2022 09:34:52 +0200
+Message-ID: <CAOX2RU4vDC5emP=SA6cNmxyj=zBF+uWXSm9tNVytOhV16k--Dw@mail.gmail.com>
+Subject: Re: [PATCH v7 2/5] drivers: thermal: tsens: Add support for combined interrupt
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        rafael@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Yanmin Zhang <yanmin_zhang@linux.intel.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>,
-        Jiada Wang <jiada_wang@mentor.com>,
-        Zhang Yanmin <yanmin.zhang@intel.com>,
-        Ramesh Babu <ramesh.babu@intel.com>,
-        Dean Jenkins <Dean_Jenkins@mentor.com>,
-        Ramesh Babu B <ramesh.babu.b@intel.com>,
-        xiao jin <jin.xiao@intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>
-References: <1664210154-11552-1-git-send-email-erosca@de.adit-jv.com>
-From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <1664210154-11552-1-git-send-email-erosca@de.adit-jv.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/26/2022 6:35 PM, Eugeniu Rosca wrote:
-> From: xiao jin <jin.xiao@intel.com>
-> 
-> After start of fe and be, fe might go to close without triggering
-> STOP, and substream->runtime is freed. However, be is still at
-> START state and its substream->runtime still points to the
-> freed runtime.
-> 
+On Fri, 19 Aug 2022 at 00:49, Daniel Lezcano <daniel.lezcano@linaro.org> wr=
+ote:
+>
+> On 19/08/2022 00:02, Robert Marko wrote:
+> > Despite using tsens v2.3 IP, IPQ8074 and IPQ6018 only have one IRQ for
+> > signaling both up/low and critical trips.
+> >
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+>
+> I'll pick the patches 1-4 as soon as Bjorn gives its blessing for this on=
+e
 
-Well if it is being freed, maybe pointer should be set to NULL instead 
-in place that happens?
+Sounds good to me,
 
-> Later on, FE is opened/started again, and triggers STOP.
-> snd_pcm_do_stop => dpcm_fe_dai_trigger
->                  => dpcm_fe_dai_do_trigger
->                  => dpcm_be_dai_trigger
->                  => dpcm_do_trigger
->                  => soc_pcm_trigger
->                  => skl_platform_pcm_trigger
-> skl_platform_pcm_trigger accesses the freed old runtime data and
-> kernel panic.
-> 
-> The patch fixes it by assigning be_substream->runtime in
-> dpcm_be_dai_startup when be's state is START.
-> 
-> Signed-off-by: xiao jin <jin.xiao@intel.com>
-> Signed-off-by: Zhang Yanmin <yanmin.zhang@intel.com>
-> Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-> ---
->   sound/soc/soc-pcm.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
-> index 4f60c0a83311..6ca1d02065ce 100644
-> --- a/sound/soc/soc-pcm.c
-> +++ b/sound/soc/soc-pcm.c
-> @@ -1608,6 +1608,8 @@ int dpcm_be_dai_startup(struct snd_soc_pcm_runtime *fe, int stream)
->   		if (be->dpcm[stream].users++ != 0)
->   			continue;
->   
-> +		be_substream->runtime = be->dpcm[stream].runtime;
-> +
->   		if ((be->dpcm[stream].state != SND_SOC_DPCM_STATE_NEW) &&
->   		    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_CLOSE))
->   			continue;
-> @@ -1615,7 +1617,6 @@ int dpcm_be_dai_startup(struct snd_soc_pcm_runtime *fe, int stream)
->   		dev_dbg(be->dev, "ASoC: open %s BE %s\n",
->   			stream ? "capture" : "playback", be->dai_link->name);
->   
-> -		be_substream->runtime = be->dpcm[stream].runtime;
->   		err = __soc_pcm_open(be, be_substream);
->   		if (err < 0) {
->   			be->dpcm[stream].users--;
+Bjorn can you please take a look?
 
+Regards,
+Robert
+>
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
