@@ -2,75 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E88F5EBA4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 08:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F215EBA4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 08:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiI0GBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 02:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
+        id S229871AbiI0GBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 02:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiI0GBG (ORCPT
+        with ESMTP id S229449AbiI0GBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 02:01:06 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164FC9E8A6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 23:01:05 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so9150348pjl.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 23:01:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=KmMk56mDUlyDTTT32tWxFwynOn3qJ7x9u3+7ehaDfuo=;
-        b=KCy0tVmVEkDRvL4k8tW4HdlD7/t4El1jiHZ/dK47R/aICnJoUkkAUmo7AfVY2Sum58
-         STsc7/BM9qCcEUSA5QTukxQNCgmkxBPhsEv4X9Xd1HxclqWEjwEnOCwIDihX72hVZzZ3
-         mzJ9bOI2bpGJ0+DRjaMHDCADTwuU28HL45U7c1RgaCbWVnmDNHSHhR1ugvspk6fEo2io
-         4MnbydsfNVyETPaug3dBlYni4GsZrgNYc5N0+3W4AcLN+aP41jaQnrmhJxUORJAH5hpQ
-         OBn6x69D4YMZN42Og6X9g6Wn8+cEnJmtxiHi80xbBnO5VmLlKHIYYk/FNbvLtI+mnIvs
-         FRTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=KmMk56mDUlyDTTT32tWxFwynOn3qJ7x9u3+7ehaDfuo=;
-        b=mUu5X1Og1hmjJH0z5bXvYHtAMbIxTkU/FzshwRL83NVcFzXAhFZLT6a3Vny5ld2m9Y
-         mh+A/IgVa1k3iwDxFJm2SBJLwr7DpypEdW8jJRgV0U2JxBf8BCAX4WZ6B/pfJ49FKPp2
-         KC0/wr1DpDo92pMiyKkB1aO6XuEyryCNoXrlCrsElIbCt1s5KWH5O6d9hOO++Nf41Jro
-         /ytn6WQl/j3bpX/mF/QQ7OUdNTJyKcYv9ia2USjd1IE9v1r/NgUIolAlsGJYsIpRNFd9
-         RVNrhsi4zGIoVNgPe7pAFPbIE2bVzKHXfk7fKFgWT8Il3lX6iibJg6+897IvCyXe8ckD
-         DlGw==
-X-Gm-Message-State: ACrzQf2Ij8eqAKXT2LIB1ihYZtA3OpNX72DqObqSlnPJU8XLXrxgsYeW
-        muwWY7oEia+FFDzfEqKDX9s=
-X-Google-Smtp-Source: AMsMyM6wTi9h110kts0nAn7gMK8AVBYLbc/xGdTaubZBOpxPIgmpCmDeU8r8ymWE0aiXhIs1JZ3bNg==
-X-Received: by 2002:a17:903:2346:b0:178:4c17:eef7 with SMTP id c6-20020a170903234600b001784c17eef7mr25015442plh.30.1664258464390;
-        Mon, 26 Sep 2022 23:01:04 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:9739:ab49:3830:2cbb])
-        by smtp.gmail.com with ESMTPSA id a203-20020a621ad4000000b0053b0d88220csm641172pfa.3.2022.09.26.23.01.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 23:01:03 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 23:01:01 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ssx@qnx.com" <ssx@qnx.com>
-Subject: Re: Is PPC 44x PIKA Warp board still relevant?
-Message-ID: <YzKRnaFYmaQd2XWD@google.com>
-References: <Yy/hv2fOLzdWOuvT@google.com>
- <ed43b0d6-d6d4-73d2-b4ab-637f6d2e310e@csgroup.eu>
- <87o7v2zaby.fsf@mpe.ellerman.id.au>
+        Tue, 27 Sep 2022 02:01:31 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8059A8962;
+        Mon, 26 Sep 2022 23:01:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R551e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VQqLV.E_1664258485;
+Received: from 30.240.86.142(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VQqLV.E_1664258485)
+          by smtp.aliyun-inc.com;
+          Tue, 27 Sep 2022 14:01:26 +0800
+Message-ID: <63037753-af65-6229-95e9-72eb310069d7@linux.alibaba.com>
+Date:   Tue, 27 Sep 2022 14:01:24 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v1 2/3] drivers/perf: add DesignWare PCIe PMU driver
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     will@kernel.org, Jonathan.Cameron@Huawei.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        rdunlap@infradead.org, robin.murphy@arm.com, mark.rutland@arm.com,
+        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
+        linux-pci@vger.kernel.org
+References: <20220923185141.GA1407035@bhelgaas>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20220923185141.GA1407035@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <87o7v2zaby.fsf@mpe.ellerman.id.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,61 +47,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 08:41:53PM +1000, Michael Ellerman wrote:
-> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> > Hi Dmitry
-> >
-> > Le 25/09/2022 � 07:06, Dmitry Torokhov a �crit�:
-> >> Hi Michael, Nick,
-> >> 
-> >> I was wondering if PIKA Warp board still relevant. The reason for my
-> >> question is that I am interested in dropping legacy gpio APIs,
-> >> especially OF-specific ones, in favor of newer gpiod APIs, and
-> >> arch/powerpc/platforms/44x/warp.c is one of few users of it.
-> >
-> > As far as I can see, that board is still being sold, see
-> >
-> > https://www.voipon.co.uk/pika-warp-asterisk-appliance-p-932.html
-> 
-> On the other hand it looks like PIKA technologies went bankrupt earlier
-> this year.
-> 
-> >> The code in question is supposed to turn off green led and flash red led
-> >> in case of overheating, and is doing so by directly accessing GPIOs
-> >> owned by led-gpio driver without requesting/allocating them. This is not
-> >> really supported with gpiod API, and is not a good practice in general.
-> >
-> > As far as I can see, it was ported to led-gpio by
-> >
-> > ba703e1a7a0b powerpc/4xx: Have Warp take advantage of GPIO LEDs 
-> > default-state = keep
-> > 805e324b7fbd powerpc: Update Warp to use leds-gpio driver
-> >
-> >> Before I spend much time trying to implement a replacement without
-> >> access to the hardware, I wonder if this board is in use at all, and if
-> >> it is how important is the feature of flashing red led on critical
-> >> temperature shutdown?
-> >
-> > Don't know who can tell it ?
-> 
-> I would be surprised if anyone is still running upstream kernels on it.
-> 
-> I can't find any sign of any activity on the mailing list related to it
-> since it was initially merged.
-> 
-> > Maybe let's perform a more standard implementation is see if anybody 
-> > screams ?
-> 
-> How much work is it to convert it?
-> 
-> Flashing a LED when the machine dies is nice, but not exactly critical,
-> hopefully the machine *isn't* dying that often :)
 
-OK, I think I figured out how to let platform code access the GPIOs
-while still using leds-gpio driver for normal operation. I will send a
-patch shortly.
 
-Thanks.
+在 2022/9/24 AM2:51, Bjorn Helgaas 写道:
+> On Fri, Sep 23, 2022 at 10:46:09PM +0800, Shuai Xue wrote:
+>> 在 2022/9/23 AM1:36, Bjorn Helgaas 写道:
+>>> On Sat, Sep 17, 2022 at 08:10:35PM +0800, Shuai Xue wrote:
+> 
+>>>> +static struct device_attribute dwc_pcie_pmu_cpumask_attr =
+>>>> +__ATTR(cpumask, 0444, dwc_pcie_pmu_cpumask_show, NULL);
+>>>
+>>> DEVICE_ATTR_RO()?
+> 
+>> DEVICE_ATTR_RO may a good choice. But does it fit the code style to use
+>> DEVICE_ATTR_RO in drivers/perf? As far as know, CCN, CCI, SMMU,
+>> qcom_l2_pmu use "struct device_attribute" directly.
+> 
+> DEVICE_ATTR_RO is just newer, and I think CCN, CCI, SMMU, etc. would
+> be using it if they were written today.  Of course, the drivers/perf
+> maintainers may have a different opinion :)
 
--- 
-Dmitry
+Well, you are right, I will use DEVICE_ATTR_RO instead :)
+
+> 
+>>> I think every caller of dwc_pcie_pmu_read_dword() makes the same check
+>>> and prints the same message; maybe the message should be moved inside
+>>> dwc_pcie_pmu_read_dword()?
+>>>
+>>> Same with dwc_pcie_pmu_write_dword(); moving the message there would
+>>> simplify all callers.
+>>
+>> I would like to wrap dwc_pcie_pmu_{write}_dword out, use
+>> pci_{read}_config_dword and drop the snaity check of return value as
+>> Jonathan suggests.  How did you like it?
+> 
+> Sounds good.  Not sure the error checking is worthwhile since
+> pci_read_config_dword() really doesn't return meaningful errors
+> anyway.
+> 
+>>>> +static struct dwc_pcie_info_table *pmu_to_pcie_info(struct pmu *pmu)
+>>>> +{
+>>>> +	struct dwc_pcie_info_table *pcie_info;
+>>>> +	struct dwc_pcie_pmu *pcie_pmu = to_pcie_pmu(pmu);
+>>>> +
+>>>> +	pcie_info = container_of(pcie_pmu, struct dwc_pcie_info_table, pcie_pmu);
+>>>> +	if (pcie_info == NULL)
+>>>> +		pci_err(pcie_info->pdev, "Can't get pcie info\n");
+>>>
+>>> It shouldn't be possible to get here for a pmu with no pcie_info, and
+>>> callers don't check for a NULL pointer return value before
+>>> dereferencing it, so I guess all this adds is an error message before
+>>> a NULL pointer oops?  Not sure the code clutter is worth it.
+>>
+>> Do you mean to drop the snaity check of container_of?
+> 
+> Yes.  I'm suggesting that the NULL pointer oops itself has enough
+> information to debug this problem, even without the pci_err().
+
+I will drop the snaity check in next version.
+
+
+Thank you for you valuable comments.
+
+Best Regards,
+Shuai
