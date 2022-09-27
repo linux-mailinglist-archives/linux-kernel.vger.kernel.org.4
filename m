@@ -2,149 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A56515EBBC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E55FC5EBBC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbiI0Hle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 03:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35080 "EHLO
+        id S230458AbiI0HmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 03:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiI0Hl0 (ORCPT
+        with ESMTP id S230452AbiI0HmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 03:41:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B788901AD
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:41:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664264483;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wz0ur1AHxlH7fz/miPX8mkQPPUSyAQo52GQCeq+89y0=;
-        b=YZG4xQSg/Fqa4WjHC60QqdtbfUj4b8VC7NT18r4X4jG7pdV4WNbLgcH4Ofa9P4FqD///4V
-        baYSGLtyMmwqcM1/1lKlJLiJ1wlG5OerOZerD9jYVsfwCkfpSO5YIYro79BFl4Nboxf8WU
-        eslWmSu8JNbY96ldQaPq4NGNPAnrqSY=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-591-TLCSmKhpP5qI6PiZ7oLlzA-1; Tue, 27 Sep 2022 03:41:21 -0400
-X-MC-Unique: TLCSmKhpP5qI6PiZ7oLlzA-1
-Received: by mail-wr1-f71.google.com with SMTP id d18-20020adfa352000000b0022cbe33d2a5so298464wrb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:41:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=Wz0ur1AHxlH7fz/miPX8mkQPPUSyAQo52GQCeq+89y0=;
-        b=vplcg6zwSaa63a6IVsNoyr1msaXYily+NSCrdX2h4uxudk6Ta+FcOlyqqZTyPZpbmP
-         b0iHXHYa5UtnvujhJxBFrlU8NKn4G4or7lfWCDrPQNvK24j4SWBFiDp8L4qUwyds4nuR
-         9ORsraXZgjxrkg1Gbf5PXAX6S9elcWPUNKF1DEd6o+Lv5H4Q2r9TZxUrIOWbpES/pe7D
-         qUa9IqfUPGDqM4XkRDwDoVQVrvEL/OjOPtJVT2YyW7MyZQY/XQbDrok6do8s0/iyHNyO
-         EZ052epyJAXxox83inQHaBYhDZ5FfhEIT4HhPKSh8jZdl242lqoN2eqb0Mt61VVys402
-         /Fvw==
-X-Gm-Message-State: ACrzQf17jwK1UGrkaUoMbOpxzW0ofS2tyeiFhdWMaBUsH+RHKjUOFdrq
-        gONXLURArnPHT+V4lCF4IBtoliRWgUn5sKLxNCLZQRTiOTpNgIWzg8EJG3C0MUwzGsBZ0MCqTbM
-        AiaezJJYG/RCy+0+pTqWoaUoc
-X-Received: by 2002:a5d:64eb:0:b0:22b:fe0:98e2 with SMTP id g11-20020a5d64eb000000b0022b0fe098e2mr15858722wri.178.1664264480858;
-        Tue, 27 Sep 2022 00:41:20 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7e+48WcaWEDSJYJpZ1vL2d444VYu79LJ/bkUvle1DpEGVRI2Nvd7IRUsVqoVTh4Ecfwry9Og==
-X-Received: by 2002:a5d:64eb:0:b0:22b:fe0:98e2 with SMTP id g11-20020a5d64eb000000b0022b0fe098e2mr15858710wri.178.1664264480570;
-        Tue, 27 Sep 2022 00:41:20 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:ff00:9ec2:6ff6:11a1:3e80? (p200300cbc705ff009ec26ff611a13e80.dip0.t-ipconnect.de. [2003:cb:c705:ff00:9ec2:6ff6:11a1:3e80])
-        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b003b4fdbb6319sm15712391wmq.21.2022.09.27.00.41.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 00:41:20 -0700 (PDT)
-Message-ID: <9178c097-664b-11ce-272f-c24d24f012e7@redhat.com>
-Date:   Tue, 27 Sep 2022 09:41:19 +0200
+        Tue, 27 Sep 2022 03:42:00 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE269AF86
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:41:58 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-14-jMsfJ6V8OjGSAZiFmgYF0g-1; Tue, 27 Sep 2022 08:41:55 +0100
+X-MC-Unique: jMsfJ6V8OjGSAZiFmgYF0g-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Tue, 27 Sep
+ 2022 08:41:52 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Tue, 27 Sep 2022 08:41:52 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Sherry Yang <sherry.yang@oracle.com>,
+        Paul Webb <paul.x.webb@oracle.com>,
+        Phillip Goerl <phillip.goerl@oracle.com>,
+        Jack Vogel <jack.vogel@oracle.com>,
+        Nicky Veitch <nicky.veitch@oracle.com>,
+        Colm Harrington <colm.harrington@oracle.com>,
+        Ramanan Govindarajan <ramanan.govindarajan@oracle.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tejun Heo <tj@kernel.org>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH v2] random: use immediate per-cpu timer rather than
+ workqueue for mixing fast pool
+Thread-Topic: [PATCH v2] random: use immediate per-cpu timer rather than
+ workqueue for mixing fast pool
+Thread-Index: AQHY0fQr7t6Ylvgn6ECciijyeMbEm63y5QKQ
+Date:   Tue, 27 Sep 2022 07:41:52 +0000
+Message-ID: <62ae29f10d65401ab79e9bdb6af1576a@AcuMS.aculab.com>
+References: <20220922165528.3679479-1-Jason@zx2c4.com>
+ <20220926220457.1517120-1-Jason@zx2c4.com>
+In-Reply-To: <20220926220457.1517120-1-Jason@zx2c4.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH -next v4 2/3] selftests/memory-hotplug: Restore memory
- before exit
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Zhao Gongyi <zhaogongyi@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Cc:     akinobu.mita@gmail.com, corbet@lwn.net, osalvador@suse.de,
-        shuah@kernel.org
-References: <20220927032851.128174-1-zhaogongyi@huawei.com>
- <20220927032851.128174-3-zhaogongyi@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220927032851.128174-3-zhaogongyi@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.09.22 05:28, Zhao Gongyi wrote:
-> Some momory will be left in offline state when calling
-> offline_memory_expect_fail() failed. Restore it before exit.
-> 
-> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
-> ---
->   .../memory-hotplug/mem-on-off-test.sh         | 21 ++++++++++++++-----
->   1 file changed, 16 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-> index 1d87611a7d52..91a7457616bb 100755
-> --- a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-> +++ b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-> @@ -134,6 +134,16 @@ offline_memory_expect_fail()
->   	return 0
->   }
-> 
-> +online_all_offline_memory()
-> +{
-> +	for memory in `hotpluggable_offline_memory`; do
-> +		if ! online_memory_expect_success $memory; then
-> +			echo "$FUNCNAME $memory: unexpected fail" >&2
-> +			retval=1
-> +		fi
-> +	done
-> +}
-> +
->   error=-12
->   priority=0
->   # Run with default of ratio=2 for Kselftest run
-> @@ -275,11 +285,7 @@ done
->   # Online all hot-pluggable memory
->   #
->   echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_ONLINE/error
-> -for memory in `hotpluggable_offline_memory`; do
-> -	if ! online_memory_expect_success $memory; then
-> -		retval=1
-> -	fi
-> -done
-> +online_all_offline_memory
-> 
->   #
->   # Test memory hot-remove error handling (online => offline)
-> @@ -296,4 +302,9 @@ done
->   echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_OFFLINE/error
->   /sbin/modprobe -q -r memory-notifier-error-inject
-> 
-> +#
-> +# Restore memory before exit
-> +#
-> +online_all_offline_memory
-> +
->   exit $retval
-> --
-
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
--- 
-Thanks,
-
-David / dhildenb
+RnJvbTogSmFzb24gQS4gRG9uZW5mZWxkDQo+IFNlbnQ6IDI2IFNlcHRlbWJlciAyMDIyIDIzOjA1
+DQo+IA0KPiBQcmV2aW91c2x5LCB0aGUgZmFzdCBwb29sIHdhcyBkdW1wZWQgaW50byB0aGUgbWFp
+biBwb29sIHBlcm9pZGljYWxseSBpbg0KPiB0aGUgZmFzdCBwb29sJ3MgaGFyZCBJUlEgaGFuZGxl
+ci4gVGhpcyB3b3JrZWQgZmluZSBhbmQgdGhlcmUgd2VyZW4ndA0KPiBwcm9ibGVtcyB3aXRoIGl0
+LCB1bnRpbCBSVCBjYW1lIGFyb3VuZC4gU2luY2UgUlQgY29udmVydHMgc3BpbmxvY2tzIGludG8N
+Cj4gc2xlZXBpbmcgbG9ja3MsIHByb2JsZW1zIGNyb3BwZWQgdXAuIFJhdGhlciB0aGFuIHN3aXRj
+aGluZyB0byByYXcNCj4gc3BpbmxvY2tzLCB0aGUgUlQgZGV2ZWxvcGVycyBwcmVmZXJyZWQgd2Ug
+bWFrZSB0aGUgdHJhbnNmb3JtYXRpb24gZnJvbQ0KPiBvcmlnaW5hbGx5IGRvaW5nOg0KPiANCj4g
+ICAgIGRvX3NvbWVfc3R1ZmYoKQ0KPiAgICAgc3Bpbl9sb2NrKCkNCj4gICAgIGRvX3NvbWVfb3Ro
+ZXJfc3R1ZmYoKQ0KPiAgICAgc3Bpbl91bmxvY2soKQ0KPiANCj4gdG8gZG9pbmc6DQo+IA0KPiAg
+ICAgZG9fc29tZV9zdHVmZigpDQo+ICAgICBxdWV1ZV93b3JrX29uKHNvbWVfb3RoZXJfc3R1ZmZf
+d29ya2VyKQ0KPiANCj4gVGhpcyBpcyBhbiBvcmRpbmFyeSBwYXR0ZXJuIGRvbmUgYWxsIG92ZXIg
+dGhlIGtlcm5lbC4gSG93ZXZlciwgU2hlcnJ5DQo+IG5vdGljZWQgYSAxMCUgcGVyZm9ybWFuY2Ug
+cmVncmVzc2lvbiBpbiBxcGVyZiBUQ1Agb3ZlciBhIDQwZ2Jwcw0KPiBJbmZpbmlCYW5kIGNhcmQu
+IFF1b3RpbmcgaGVyIG1lc3NhZ2U6DQo+IA0KPiA+IE1UMjc1MDAgRmFtaWx5IFtDb25uZWN0WC0z
+XSBjYXJkczoNCj4gPiBJbmZpbmliYW5kIGRldmljZSAnbWx4NF8wJyBwb3J0IDEgc3RhdHVzOg0K
+PiA+IGRlZmF1bHQgZ2lkOiBmZTgwOjAwMDA6MDAwMDowMDAwOjAwMTA6ZTAwMDowMTc4OjllYjEN
+Cj4gPiBiYXNlIGxpZDogMHg2DQo+ID4gc20gbGlkOiAweDENCj4gPiBzdGF0ZTogNDogQUNUSVZF
+DQo+ID4gcGh5cyBzdGF0ZTogNTogTGlua1VwDQo+ID4gcmF0ZTogNDAgR2Ivc2VjICg0WCBRRFIp
+DQo+ID4gbGlua19sYXllcjogSW5maW5pQmFuZA0KPiA+DQo+ID4gQ2FyZHMgYXJlIGNvbmZpZ3Vy
+ZWQgd2l0aCBJUCBhZGRyZXNzZXMgb24gcHJpdmF0ZSBzdWJuZXQgZm9yIElQb0lCDQo+ID4gcGVy
+Zm9ybWFuY2UgdGVzdGluZy4NCj4gPiBSZWdyZXNzaW9uIGlkZW50aWZpZWQgaW4gdGhpcyBidWcg
+aXMgaW4gVENQIGxhdGVuY3kgaW4gdGhpcyBzdGFjayBhcyByZXBvcnRlZA0KPiA+IGJ5IHFwZXJm
+IHRjcF9sYXQgbWV0cmljOg0KPiA+DQo+ID4gV2UgaGF2ZSBvbmUgc3lzdGVtIGxpc3RlbiBhcyBh
+IHFwZXJmIHNlcnZlcjoNCj4gPiBbcm9vdEB5b3VyUXBlcmZTZXJ2ZXIgfl0jIHFwZXJmDQo+ID4N
+Cj4gPiBIYXZlIHRoZSBvdGhlciBzeXN0ZW0gY29ubmVjdCB0byBxcGVyZiBzZXJ2ZXIgYXMgYSBj
+bGllbnQgKGluIHRoaXMNCj4gPiBjYXNlLCBpdOKAmXMgWDcgc2VydmVyIHdpdGggTWVsbGFub3gg
+Y2FyZCk6DQo+ID4gW3Jvb3RAeW91clFwZXJmQ2xpZW50IH5dIyBudW1hY3RsIC1tMCAtTjAgcXBl
+cmYgMjAuMjAuMjAuMTAxIC12IC11dSAtdWIgLS10aW1lIDYwIC0td2FpdF9zZXJ2ZXIgMjAgLQ0K
+PiBvbyBtc2dfc2l6ZTo0SzoxMDI0SzoqMiB0Y3BfbGF0DQo+IA0KPiBSYXRoZXIgdGhhbiBpbmN1
+ciB0aGUgc2NoZWR1bGluZyBsYXRlbmN5IGZyb20gcXVldWVfd29ya19vbiwgd2UgY2FuDQo+IGlu
+c3RlYWQgc3dpdGNoIHRvIHJ1bm5pbmcgb24gdGhlIG5leHQgdGltZXIgdGljaywgb24gdGhlIHNh
+bWUgY29yZSwNCj4gZGVmZXJyYWJseSBzby4gVGhpcyBhbHNvIGJhdGNoZXMgdGhpbmdzIGEgYml0
+IG1vcmUgLS0gb25jZSBwZXIgamlmZnkgLS0NCj4gd2hpY2ggaXMgcHJvYmFibHkgb2theSBub3cg
+dGhhdCBtaXhfaW50ZXJydXB0X3JhbmRvbW5lc3MoKSBjYW4gY3JlZGl0DQo+IG11bHRpcGxlIGJp
+dHMgYXQgb25jZS4gSXQgc3RpbGwgcHV0cyBhIGJpdCBvZiBwcmVzc3VyZSBvbiBmYXN0X21peCgp
+LA0KPiBidXQgaG9wZWZ1bGx5IHRoYXQncyBhY2NlcHRhYmxlLg0KDQpJIHRob3VnaCBOT0haIHN5
+c3RlbXMgZGlkbid0IHRha2UgYSB0aW1lciBpbnRlcnJ1cHQgZXZlcnkgJ2ppZmZ5Jy4NCklmIHRo
+YXQgaXMgdHJ1ZSB3aGF0IGFjdHVhbGx5IGhhcHBlbnM/DQoNCglEYXZpZA0KDQotDQpSZWdpc3Rl
+cmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtl
+eW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
