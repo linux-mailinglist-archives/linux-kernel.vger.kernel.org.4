@@ -2,110 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342DD5EB78F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0DB5EB792
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiI0CWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 22:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
+        id S230097AbiI0CXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 22:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiI0CWd (ORCPT
+        with ESMTP id S229622AbiI0CXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 22:22:33 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9698BA9C24
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:22:32 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id s206so8183340pgs.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:22:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=4u3DF202lZRW0YOPuz3zxb4HZyH1RZ22Lsn3DoaRjKE=;
-        b=JeE3U11iOk0uuiMw6Ukzurncyh213htFxID3LVptKPtm/h9sEEUbPC1B0I1b7CEKQS
-         GBDx+APAnctavyUBFGJ7JdxI+VOAPGzR7NzYl/4/aLh7ojYEz77xZVqEOnhySNJCVRN9
-         tNh0bUJCXbCN0go3kUhaovd3r62M4f10vHeuk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=4u3DF202lZRW0YOPuz3zxb4HZyH1RZ22Lsn3DoaRjKE=;
-        b=JAJi1QllgkqiwL83mDvlSiWwyh+QzcqiMQgv0NvKWhEZ0rd/DNf3/JIxl/Rq7mg2d+
-         eUXLY6Vf9oWiJEmI0tq0yiCU0RA2W/8zIa5kLvUbRwWnSw6EIkQ9qpZVzFfVyS0TlvVw
-         +6WX7oYFqAlZZY0DBdu3w47WKLf1iOKpqADaS4lj7HYorgfp/X3D0GRGq0P6ubk5RCr2
-         LGRxEOohOhryafjo24VBBXPaINs97CDzP4tlg2e9XagwfzhyA+QXkHyWvVj93r0OqYaj
-         EB2N4gyM0t9yMhCygvdhAt9dd2u+oWdPNrmMHbjITJ8vYaIsjZq0VR7XCrVxoOLxfX99
-         mybw==
-X-Gm-Message-State: ACrzQf3uIIVfDpBvbFnRMKVafQRuuRUkCeetc9RQD+sHDc+xHQiV12F7
-        ks19y3ir/VjzHyEzldoPTSuFFlfPe0DTKQ==
-X-Google-Smtp-Source: AMsMyM4XIvwSnoqajH9j/PTPQ5c5zIvRChiseWAkIXp1b211TTbIE+Xwz/yjVPu3Po52v+Jq5u9gPQ==
-X-Received: by 2002:a65:6e4a:0:b0:438:874c:53fd with SMTP id be10-20020a656e4a000000b00438874c53fdmr23105047pgb.355.1664245352087;
-        Mon, 26 Sep 2022 19:22:32 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id bg8-20020a056a02010800b004348bd693a8sm189625pgb.31.2022.09.26.19.22.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 19:22:31 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 19:22:30 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Subash Abhinov Kasiviswanathan <quic_subashab@quicinc.com>,
-        Sean Tranchetti <quic_stranche@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] net: ethernet: rmnet: Replace zero-length array
- with DECLARE_FLEX_ARRAY() helper
-Message-ID: <202209261920.3A2EA07D4@keescook>
-References: <YzIei3tLO1IWtMjs@work>
- <202209261502.7DB9C7119@keescook>
- <20220926172604.71a20b7d@kernel.org>
+        Mon, 26 Sep 2022 22:23:17 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC2CA6C2F
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:23:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1664245396; x=1695781396;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CcydczoRB1wShpaonoeda496cVy8GQEVlia89fuRyPU=;
+  b=Z4W/lf4/FFqIrzQfu/sE0RDjx9qW4qX7vXvq23ZRRHNITIqodHWvoDhq
+   W4qSkU+VaGyMA+0TK9xN1Kk4VTc6lW5fWuAZhZ8uktNhZ/u5Dilb97KI1
+   T/1KrYhxUfvhj8PhLrNsF4QkLHcmT54XzQ38fM+b/uLwYLa5GC23PjqDn
+   Byvo6XVahZRNWHSQ4RLXABcG/jqB7itWwP0g7iXUfb/Cz8+M79GQiNGNL
+   P+mrD5KZFnSgtzltak6F4rigzfaZX/K1WBoTzG8KCPpvGA0m24o+AO/1m
+   JW/S6I0SxID0hG+iUJ+LP5fK/0iPStyQ6qCjn5/lwgOkpIM3gMr5G8kTt
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,347,1654531200"; 
+   d="scan'208";a="210704490"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Sep 2022 10:23:14 +0800
+IronPort-SDR: bI7NtMaw2YkKbjFQABgEDnNhMMYA6b8uBAAwU9z85PtRZaSZCyo25OlAT0HGpSFvn3Ft3dPWGd
+ WPAiDw4aWy5a0InN/sMurKtx2aaKYShJe2It89odvDsWNkFTWNOfsHldmMY+mMC/wrwEWOj6Ag
+ ba8YPLATNU0jvKzKPJqYCrXZhPFh2LibxBgXMJECxPevOGlOuEQ0pJIMZfpjMFftHbLq0UH5Q9
+ dSOh+X9HDGKWESgzefiziChRuwWbdBiFs8G+6fM5Egjo6tEyTtOYiOSdcmDMOKlESmZdQ1mRnb
+ Bjd+SaG2Qbdt793fbYUhtnkO
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Sep 2022 18:37:40 -0700
+IronPort-SDR: TSdCl4g6FtqvlNtAznOAiXM9fwUi9CkqOCfBRyTvM+cwfEPaQpMifEQQD+62H5kSwq1XBEXf1L
+ UjI26z5P9ioT6+LIklUtzjFM/mmLvNmXoGSG6wTvIpuMOXXIbvVxCCx4qK+CXRqBMyt9oI1y4h
+ oa3GI6yvhNgbDatIL15LmgAOYHwq+n1ua9+1YziXv+0aMcE7IXhP0QrpGNHe8SJP03uTceFiu+
+ nwcBRMVKV48fzz2v4DmWNG1TPBlt79RalHhPS0e4yiGEgQTbw4dT68DH5LpnSPkX67tX39o5xw
+ 6ls=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Sep 2022 19:23:13 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mc3M54zx4z1Rwrq
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:23:13 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1664245393; x=1666837394; bh=CcydczoRB1wShpaonoeda496cVy8GQEVlia
+        89fuRyPU=; b=RCASez9hpIQxk/TENgJZvKTUug33qAtamS/J2XKyOWc6AY4zRSI
+        aXJKuwZFPmm5fXHUqgk94P6tJPgBk69ITciOJb9GawXxZuh4FNrmXbb2Yo9wnFRb
+        auFtFqPj89AP/qRhHGuKH7+wcjXv6Kzr1mupQRbC2yui9FyIgw2CcGbbQ8oG1wXK
+        V2LuxpcmnhJLyGPaIhrnZdcwiCKTiTed9fnpgMFH45F3kNr/MOs0izhOQr9vrBpI
+        OM9erGxUK3FwAckRO88l5wznbYpWQIZMUxhwGcdhfvYNVqaptY2T+MRozoq93HKL
+        CaxeQeafB3hMZ8L5xs5NQf69mkG3IfmBnUg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2VutbCbbEwHn for <linux-kernel@vger.kernel.org>;
+        Mon, 26 Sep 2022 19:23:13 -0700 (PDT)
+Received: from [10.225.163.91] (unknown [10.225.163.91])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mc3M31B1rz1RvLy;
+        Mon, 26 Sep 2022 19:23:10 -0700 (PDT)
+Message-ID: <4e829dd7-6db3-4dbf-1b8e-9f7bb805f723@opensource.wdc.com>
+Date:   Tue, 27 Sep 2022 11:23:09 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926172604.71a20b7d@kernel.org>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 1/8] scsi: libsas: introduce sas address comparation
+ helpers
+Content-Language: en-US
+To:     Jason Yan <yanaijie@huawei.com>, martin.petersen@oracle.com,
+        jejb@linux.ibm.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hare@suse.com, hch@lst.de, bvanassche@acm.org,
+        john.garry@huawei.com, jinpu.wang@cloud.ionos.com
+References: <20220927022941.4029476-1-yanaijie@huawei.com>
+ <20220927022941.4029476-2-yanaijie@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220927022941.4029476-2-yanaijie@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 05:26:04PM -0700, Jakub Kicinski wrote:
-> On Mon, 26 Sep 2022 15:02:48 -0700 Kees Cook wrote:
-> > On Mon, Sep 26, 2022 at 04:50:03PM -0500, Gustavo A. R. Silva wrote:
-> > > Zero-length arrays are deprecated and we are moving towards adopting
-> > > C99 flexible-array members, instead. So, replace zero-length arrays
-> > > declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
-> > > helper macro.
-> > > 
-> > > This helper allows for flexible-array members in unions.
-> > > 
-> > > Link: https://github.com/KSPP/linux/issues/193
-> > > Link: https://github.com/KSPP/linux/issues/221
-> > > Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> > > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>  
-> > 
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
-> Not directly related to this patch, but I just had to look at pahole
-> output for sk_buff and the struct_group() stuff makes is really painful
-> to read :/ Offsets for the members are relative to the "group" and they
-> are all repeated.
-> 
-> Is there any chance you could fix that? Before we sprinkle more pixie
-> dust around, perhaps?
+On 9/27/22 11:29, Jason Yan wrote:
+> Sas address comparation is widely used in libsas. However they are all
 
-Unfortunately I don't see a way around it until we can make changes to
-the C language spec, and that's measured in decades. :(
+s/comparation/comparison
 
-Perhaps we could add some kind of heuristic to pahole to "hide" one of
-the internal struct_group() copies, and to hide the empty flexible-array
-wrapper structs? (pahole already can't tell the difference between a
-0-length array and a flexible-array.) Would that be workable?
+Here and in the patch title.
+
+Other than that, Looks OK to me.
+
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+
+> opencoded and to avoid the line spill over 80 columns, are mostly split
+> into multi-lines. Introduce some helpers to prepare some refactor.
+> 
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+> ---
+>  drivers/scsi/libsas/sas_internal.h | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
+> index 8d0ad3abc7b5..3384429b7eb0 100644
+> --- a/drivers/scsi/libsas/sas_internal.h
+> +++ b/drivers/scsi/libsas/sas_internal.h
+> @@ -111,6 +111,23 @@ static inline void sas_smp_host_handler(struct bsg_job *job,
+>  }
+>  #endif
+>  
+> +static inline bool sas_phy_match_dev_addr(struct domain_device *dev,
+> +					 struct ex_phy *phy)
+> +{
+> +	return SAS_ADDR(dev->sas_addr) == SAS_ADDR(phy->attached_sas_addr);
+> +}
+> +
+> +static inline bool sas_phy_match_port_addr(struct asd_sas_port *port,
+> +					   struct ex_phy *phy)
+> +{
+> +	return SAS_ADDR(port->sas_addr) == SAS_ADDR(phy->attached_sas_addr);
+> +}
+> +
+> +static inline bool sas_phy_addr_match(struct ex_phy *p1, struct ex_phy *p2)
+> +{
+> +	return  SAS_ADDR(p1->attached_sas_addr) == SAS_ADDR(p2->attached_sas_addr);
+> +}
+> +
+>  static inline void sas_fail_probe(struct domain_device *dev, const char *func, int err)
+>  {
+>  	pr_warn("%s: for %s device %016llx returned %d\n",
 
 -- 
-Kees Cook
+Damien Le Moal
+Western Digital Research
+
