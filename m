@@ -2,81 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A755EC56B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DCD5EC571
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbiI0OFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47686 "EHLO
+        id S232375AbiI0OFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbiI0OFL (ORCPT
+        with ESMTP id S232086AbiI0OFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:05:11 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84301449E5;
-        Tue, 27 Sep 2022 07:05:10 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id A97371C0017; Tue, 27 Sep 2022 16:05:09 +0200 (CEST)
-Date:   Tue, 27 Sep 2022 16:05:09 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.9 00/21] 4.9.330-rc2 review
-Message-ID: <20220927140509.GB11533@duo.ucw.cz>
-References: <20220926163533.310693334@linuxfoundation.org>
+        Tue, 27 Sep 2022 10:05:46 -0400
+Received: from hop.stappers.nl (hop.stappers.nl [141.105.120.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C441EECE;
+        Tue, 27 Sep 2022 07:05:45 -0700 (PDT)
+Received: from gpm.stappers.nl (gpm.stappers.nl [IPv6:2a02:a46d:659e:1::696e:626f])
+        by hop.stappers.nl (Postfix) with ESMTP id 088DA2000F;
+        Tue, 27 Sep 2022 14:05:42 +0000 (UTC)
+Received: by gpm.stappers.nl (Postfix, from userid 1000)
+        id AD319304049; Tue, 27 Sep 2022 16:05:41 +0200 (CEST)
+Date:   Tue, 27 Sep 2022 16:05:41 +0200
+From:   Geert Stappers <stappers@stappers.nl>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v10 01/27] kallsyms: use `ARRAY_SIZE` instead of
+ hardcoded size
+Message-ID: <20220927140541.zpb2effrshaxndqi@gpm.stappers.nl>
+References: <20220927131518.30000-1-ojeda@kernel.org>
+ <20220927131518.30000-2-ojeda@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="Yylu36WmvOXNoKYn"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220926163533.310693334@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220927131518.30000-2-ojeda@kernel.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 27, 2022 at 03:14:32PM +0200, Miguel Ojeda wrote:
+> From: Boqun Feng <boqun.feng@gmail.com>
+> 
+> This removes one place where the `500` constant is hardcoded.
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  scripts/kallsyms.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index f18e6dfc68c5..8551513f9311 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -206,7 +206,7 @@ static struct sym_entry *read_symbol(FILE *in)
+>  
+>  	rc = fscanf(in, "%llx %c %499s\n", &addr, &type, name);
+>  	if (rc != 3) {
+> -		if (rc != EOF && fgets(name, 500, in) == NULL)
+> +		if (rc != EOF && fgets(name, ARRAY_SIZE(name), in) == NULL)
+>  			fprintf(stderr, "Read error or end of file.\n");
+>  		return NULL;
+>  	}
+> -- 
+> 2.37.3
+> 
 
---Yylu36WmvOXNoKYn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Geert Stappers <stappers@stappers.nl>
+ 
 
-Hi!
-
-> This is the start of the stable review cycle for the 4.9.330 release.
-> There are 21 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-
-CIP testing did not find any problems here:
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-4.9.y
-
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---Yylu36WmvOXNoKYn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYzMDFQAKCRAw5/Bqldv6
-8hUuAJ907PHsztw6bZELLE/4KVK9NmjUQACaAx6jo8opwWOfLxAOaLX3zK1bgbo=
-=zDsT
------END PGP SIGNATURE-----
-
---Yylu36WmvOXNoKYn--
+Regards
+Geert Stappers
+Hopes to see the kallsyms patches getting accepted,
+that they don't show up in v11 of the Rust patch serie.
+-- 
+Silence is hard to parse
