@@ -2,192 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0438D5EBDDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A49C5EBDEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbiI0I5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 04:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
+        id S230168AbiI0I7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 04:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiI0I5l (ORCPT
+        with ESMTP id S231424AbiI0I7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 04:57:41 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41ABB7C1CF
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:57:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E5F8F1F999;
-        Tue, 27 Sep 2022 08:57:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664269057; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a5aHiD4rZbP/VHCDDbsZS6HtaQz2jtnZB5/EX4LRiKc=;
-        b=dRpWNwpOnnK8mVkTRo+xhlF0Vkfjj3xIipCxOz9xtapCSVZJtJNdelOv9m2A2WhGyq0YuM
-        e/57kid22xPmOXn+Dls3imbcVJdIoSDs/BxC5wwphUjtAhJFj2ddtHQT2z//nZezqPYL7r
-        b4Df8ktj1m/Vpov2mvFMbx+/Jj2sYwg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A2543139BE;
-        Tue, 27 Sep 2022 08:57:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OGo1JgG7MmOvJgAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 27 Sep 2022 08:57:37 +0000
-Message-ID: <ce8cb1d3-a7d2-7484-26eb-60d3e29fa369@suse.com>
-Date:   Tue, 27 Sep 2022 10:57:37 +0200
+        Tue, 27 Sep 2022 04:59:22 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37698A222C
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:59:20 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id e18so12308695edj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:59:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=6rS0/ChZuqVBYTELA3WptGZlwUxaalQ08AWo3cS66tw=;
+        b=kzLb7hk2+2vOwXDeLEo2waKWNiTBrEgBXeS96zG23jlrgUDJVUbMWP6Wp5n4uaKSMO
+         1PG/DslP6Ujnnvq8DR3IsN3+LlWe9pz9Ct1vOwZ7JwRheOdzjvzGopmF57lToHwzcZxx
+         KgJuSpqRI1dLye0BCOp65TLBdszwt2VABawM7A8m9YI4Fp6eQlAqgvF683LLx117uGys
+         C3ellgbDpovANX6KmllsGV6g89DubxxQoh+PbGK65xO+A8xfG5FGKSXlM2RpCM1KZd0v
+         b47NMbOPGNzhrm5lXy5yE28zwPQQWyjws1O/RwfkniXQPt18RWdSwZh2kZfGbTeJAMGU
+         V/Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=6rS0/ChZuqVBYTELA3WptGZlwUxaalQ08AWo3cS66tw=;
+        b=KuTyk6XHgG9kjwFInCFBgJt2ohiQ/FcOs4ZWtQm8Bh/rmV2JKwA5q0ehUAcNqnxZ+D
+         2QgUcfElOOKTmHbWH62yB+LroKw8lnKsOH/LY1xp1cFyck+SfbeJZrozSqqYR8Ahi0tX
+         ltQL9aXgUXc1M6JaoA+MMATl3ZyoSJpBDTHCUduJs4XAoEhqzYf19zN3nENNA868GdEO
+         yR0EUys33ie79JDRWkbB7KEEWWqgHdCTeXgn79qgsF2G+wREN0pisGDk8j0p5sGI3bCY
+         EoUNh66GpOeWTx9kwYVl1yblLq6WCYueBVhlEJuGS+aFwh9m/AOnQAv80zPXIeASHGcP
+         ZxHw==
+X-Gm-Message-State: ACrzQf3uDBUDTun30tcv8AYTXaisdEdmPvImYLibMQA3NtN1aL7O9onK
+        6sTKMkCLEx0H2kp1ZokGq/I4ZO6ZVaUOwBuhmPbrtg==
+X-Google-Smtp-Source: AMsMyM5qBK8hMo8IsjYOiCeMJ/9MecGYPq8OjEjpXwR+gKT89c2vHGwckrWENTSXy3+ipluQogkPUEspLLV8mhRNAOE=
+X-Received: by 2002:a05:6402:27cf:b0:451:6ccc:4ea0 with SMTP id
+ c15-20020a05640227cf00b004516ccc4ea0mr26898277ede.193.1664269158448; Tue, 27
+ Sep 2022 01:59:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20220908084914.21703-1-jgross@suse.com>
- <20220908084914.21703-9-jgross@suse.com> <YzIVfj/lvzQrK15Y@zn.tnic>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
- mtrr_aps_delayed_init
-In-Reply-To: <YzIVfj/lvzQrK15Y@zn.tnic>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------0omw3ZfM27TVCp1IFTspqxRw"
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220926163550.904900693@linuxfoundation.org>
+In-Reply-To: <20220926163550.904900693@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 27 Sep 2022 14:29:06 +0530
+Message-ID: <CA+G9fYu=ydivmC6Hv77NyHEPkR+c_rsUbycMCKBhtvLEM_k+Nw@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/138] 5.10.146-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------0omw3ZfM27TVCp1IFTspqxRw
-Content-Type: multipart/mixed; boundary="------------iOwbv5oefZcAe4yIQj1pJUSW";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: xen-devel@lists.xenproject.org, x86@kernel.org,
- linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <ce8cb1d3-a7d2-7484-26eb-60d3e29fa369@suse.com>
-Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
- mtrr_aps_delayed_init
-References: <20220908084914.21703-1-jgross@suse.com>
- <20220908084914.21703-9-jgross@suse.com> <YzIVfj/lvzQrK15Y@zn.tnic>
-In-Reply-To: <YzIVfj/lvzQrK15Y@zn.tnic>
+On Mon, 26 Sept 2022 at 22:07, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.146 release.
+> There are 138 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 28 Sep 2022 16:35:25 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.146-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
---------------iOwbv5oefZcAe4yIQj1pJUSW
-Content-Type: multipart/mixed; boundary="------------VF8nyolFe3q90VxADFU1RzkZ"
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
---------------VF8nyolFe3q90VxADFU1RzkZ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-T24gMjYuMDkuMjIgMjM6MTEsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVGh1LCBT
-ZXAgMDgsIDIwMjIgYXQgMTA6NDk6MTJBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
-Cj4+IC12b2lkIHNldF9tdHJyX2Fwc19kZWxheWVkX2luaXQodm9pZCkNCj4+IC17DQo+PiAt
-CWlmICghY2FjaGVfZ2VuZXJpYykNCj4+IC0JCXJldHVybjsNCj4+IC0NCj4+IC0JbXRycl9h
-cHNfZGVsYXllZF9pbml0ID0gdHJ1ZTsNCj4+IC19DQo+PiAtDQo+IA0KPiBFeGNlcHQgdGhh
-dCB5b3UndmUgcmVtb3ZlZCB0aGUgYWNjZXNzb3JzIGFuZCBtYWRlIHRoYXQgYm9vbCBnbG9i
-YWwuDQo+IFdoaWNoIGlzIGxlc3MgcHJldHR5IHRoYW4gaXQgd2FzIGJlZm9yZS4uLg0KPiAN
-Cg0KVGhlIGFjY2Vzc29yIHdvdWxkIG5vdyBvbmx5IG5lZWQgdG8gc2V0IHRoZSBib29sLCB3
-aGlsZSBpdCBoYWQgYXQgbGVhc3QNCnNvbWUgbG9naWMgYmVmb3JlLg0KDQpUQkggSSBkb24n
-dCBzZWUgdGhlIHBvaW50IG9mIGhhdmluZyBhbiBhY2Nlc3NvciB3aGljaCBpcyBqdXN0IHNl
-dHRpbmcgYQ0KdmFyaWFibGUgdG8gInRydWUiLiBCdXQgaWYgeW91IGxpa2UgaXQgYmV0dGVy
-LCBJIGNhbiBrZWVwIGl0Lg0KDQpBbm90aGVyIHBvc3NpYmlsaXR5IHdvdWxkIGJlIHRvIG1v
-dmUgdGhlIGFyY2hfdGhhd19zZWNvbmRhcnlfY3B1c19iZWdpbigpDQphbmQgYXJjaF90aGF3
-X3NlY29uZGFyeV9jcHVzX2VuZCgpIGZ1bmN0aW9ucyB0byBjYWNoZWluZm8uYywgcmVzdWx0
-aW5nDQppbiBvbmx5IGEgc2luZ2xlIHBsYWNlIG91dHNpZGUgb2YgY2FjaGVpbmZvLmMgc2V0
-dGluZyB0aGUgdmFyaWFibGUgKGluDQp0aGVvcnkgdGhlIGFyY2hfdGhhd19zZWNvbmRhcnlf
-Y3B1c18qKCkgZnVuY3Rpb25zIGNvdWxkIGp1c3QgYmUgcmVkZWZpbmVkDQp0byB0aGUgYWNj
-ZXNzb3IgYW5kIGNhY2hlX2Fwc19pbml0KCksIGJ1dCB0aGlzIHdvdWxkIGJlIHJhdGhlciBo
-YWNreSBJTU8pLg0KDQoNCkp1ZXJnZW4NCg==
---------------VF8nyolFe3q90VxADFU1RzkZ
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Following new build warning noticed on all the builds,
+net/core/dev_ioctl.c: In function 'dev_ifconf':
+net/core/dev_ioctl.c:41:6: warning: unused variable 'i' [-Wunused-variable]
+   41 |  int i;
+      |      ^
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Due to patch,
+net: socket: remove register_gifconf
+[ Upstream commit b0e99d03778b2418aec20db99d97d19d25d198b6 ]
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+## Build
+* kernel: 5.10.146-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 2b148b97fcdfb026b1536a9c78b013e28c5f0689
+* git describe: v5.10.145-139-g2b148b97fcdf
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.145-139-g2b148b97fcdf
 
---------------VF8nyolFe3q90VxADFU1RzkZ--
+## Test Regressions (compared to v5.10.145)
 
---------------iOwbv5oefZcAe4yIQj1pJUSW--
+## Metric Regressions (compared to v5.10.145)
 
---------------0omw3ZfM27TVCp1IFTspqxRw
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+## Test Fixes (compared to v5.10.145)
 
------BEGIN PGP SIGNATURE-----
+## Metric Fixes (compared to v5.10.145)
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmMyuwEFAwAAAAAACgkQsN6d1ii/Ey8g
-hAf/ffuLvYbtvTozZxPD7F3rv26Okz0If7EaJkiWS7vKU/LKQGAITr3GxMcbrKg6F/MGE8sXfq1I
-BekA8owLDMvhqqKbFg68rikW8Coy9h67lJsWMzOqkctEUsGXBTD2IW9Yqfd4UvqCcT1YwfEQWgtl
-QmM/ID6E/krI7ee6dk/gs5dDze0kTwKCnHCG7L1slL+tHPQ0K6lyeFoxGLPNvq+tar5IhjEu8aJP
-+PkcmyzCUspxl8mLtk13eixPWYjfPxZb0nO29io3zUO4uuyms74or6Wx3o5gt76/wInoJGLa3bSl
-w7wUNAD8k2d8KfXLLhS8XTbvqDGGXng/bl1NfmeEiA==
-=B+dC
------END PGP SIGNATURE-----
+## Test result summary
+total: 95427, pass: 84769, fail: 681, skip: 9693, xfail: 284
 
---------------0omw3ZfM27TVCp1IFTspqxRw--
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 333 total, 333 passed, 0 failed
+* arm64: 65 total, 63 passed, 2 failed
+* i386: 55 total, 53 passed, 2 failed
+* mips: 56 total, 56 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 55 passed, 5 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 23 total, 23 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 58 total, 56 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
