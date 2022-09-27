@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E4C5EC4A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 034E75EC4A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232692AbiI0NjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39252 "EHLO
+        id S232729AbiI0Nj4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Sep 2022 09:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbiI0NjI (ORCPT
+        with ESMTP id S231425AbiI0Njx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:39:08 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B29DC11E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:39:06 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id y2so5984225qkl.11
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:39:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=7gCyUz8tGUngYdmFRNWTPdCGvdUrFoEBtlzOr30DYNY=;
-        b=UW2s/qZBxAVBGY+MFSKKB5elf/hxzNdxBsNu20+T2SpgNTk67eMpYqkVugVG8U3ylX
-         Dy49yhrWIyG/5IBkTHkiPk+ctwBFvXRLHRxsCVfR7TEksPXPSHOdlu1oDx/AgLViyYXH
-         uJ73vl2c9EXmpWHAvRiCoStt8OXSWmgBRRGijYllDfwhoeszoyccGU7fA9EecgvrZDQC
-         uAe0PlyDotDavra+zymnGBl0zzPYdwN4911g2e3eyc+J9rvUASGza5w0dA5jRkU9NPmD
-         2AUa+Zkkjm255oqJLY073Sp3quQww+2aPFuAhW9KZlCPII/WPaP4LXob958tDx3sVWoI
-         I1FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=7gCyUz8tGUngYdmFRNWTPdCGvdUrFoEBtlzOr30DYNY=;
-        b=nAkz+5qV+7RNbMW38n1hSK1P95nG8HpMWeQjtj03E3K/qvun/t24yct27/PvJx0naM
-         uHEVqtjl9ALMiu33jFCW9dfeyeel0DDQHNk2Ppc8G5gmN/4FXG6eBME42vhhYWZF7cUv
-         C+WtcPVa2+kIT4C3YsD36Z8kaKn0QyvtvsGST5sRkm+36ex7XEklL/Zl9GtYozEzfPii
-         oLWW52m8vpqtI/k3Gp9zKuBufKoyVIT8f9iP8NuX2UKmPhxx/vj+X1YZgt0jH4Ly8XHf
-         y/3oZtW2pk0ss+w4tOxRzeB8gHgNEFj5BpdKfUJrJuIY4wLTk4rZAF8LqMyZBz7OrvXY
-         AxDQ==
-X-Gm-Message-State: ACrzQf0GwIwi5EYf0KO9tydAQUVgKQU8m0nBrYhDp8LOSkETpFJ1p+1q
-        du1s0ERT6NQdeZsydqDfYxbPOA==
-X-Google-Smtp-Source: AMsMyM4UFI6XUGb2S7KeUgW4ghFCq/EoVD2Yi7kZTqkQpaU5YhIiejAWGxx+Fazj0ux45S8DzCncvw==
-X-Received: by 2002:a05:620a:2043:b0:6ce:6035:9f51 with SMTP id d3-20020a05620a204300b006ce60359f51mr18004440qka.18.1664285945538;
-        Tue, 27 Sep 2022 06:39:05 -0700 (PDT)
-Received: from localhost (2603-7000-0c01-2716-9175-2920-760a-79fa.res6.spectrum.com. [2603:7000:c01:2716:9175:2920:760a:79fa])
-        by smtp.gmail.com with ESMTPSA id bp12-20020a05620a458c00b006b9c9b7db8bsm955223qkb.82.2022.09.27.06.39.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 06:39:04 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 09:39:03 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     surenb@google.com, mingo@redhat.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/psi: Use task->psi_flags to clear in CPU migration
-Message-ID: <YzL89wKVbIn8y/QF@cmpxchg.org>
-References: <20220926081931.45420-1-zhouchengming@bytedance.com>
+        Tue, 27 Sep 2022 09:39:53 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A1C3FA2A;
+        Tue, 27 Sep 2022 06:39:52 -0700 (PDT)
+Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4McLLN6tv7z67kws;
+        Tue, 27 Sep 2022 21:38:36 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 15:39:49 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 27 Sep
+ 2022 14:39:49 +0100
+Date:   Tue, 27 Sep 2022 14:39:48 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+CC:     Robin Murphy <robin.murphy@arm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>, <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <rdunlap@infradead.org>,
+        <mark.rutland@arm.com>, <baolin.wang@linux.alibaba.com>,
+        <zhuo.song@linux.alibaba.com>, <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v1 2/3] drivers/perf: add DesignWare PCIe PMU driver
+Message-ID: <20220927143948.00004c43@huawei.com>
+In-Reply-To: <2085a695-7fa2-b560-3164-c62cb17dd5f7@linux.alibaba.com>
+References: <20220926171857.GA1609097@bhelgaas>
+        <7502d496-9ec1-1ca4-c643-376ec2aa662e@linux.alibaba.com>
+        <20220927110435.00005b4d@huawei.com>
+        <5372edb4-5717-42a0-142e-91657a9b18c3@arm.com>
+        <2085a695-7fa2-b560-3164-c62cb17dd5f7@linux.alibaba.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926081931.45420-1-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,16 +60,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 04:19:31PM +0800, Chengming Zhou wrote:
-> The commit d583d360a620 ("psi: Fix psi state corruption when schedule()
-> races with cgroup move") fixed a race problem by making cgroup_move_task()
-> use task->psi_flags instead of looking at the scheduler state.
-> 
-> We can extend task->psi_flags usage to CPU migration, which should be
-> a minor optimization for performance and code simplicity.
-> 
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+On Tue, 27 Sep 2022 20:49:26 +0800
+Shuai Xue <xueshuai@linux.alibaba.com> wrote:
 
-Nice one!
+> + Jonathan
+> 
+> 在 2022/9/27 PM6:14, Robin Murphy 写道:
+> > On 2022-09-27 11:04, Jonathan Cameron wrote:  
+> >> On Tue, 27 Sep 2022 13:13:29 +0800
+> >> Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+> >>  
+> >>> 在 2022/9/27 AM1:18, Bjorn Helgaas 写道:  
+> >>>> On Mon, Sep 26, 2022 at 09:31:34PM +0800, Shuai Xue wrote:  
+> >>>>> 在 2022/9/23 PM11:54, Jonathan Cameron 写道:  
+> >>>>>>> I found a similar definition in arch/ia64/pci/pci.c .
+> >>>>>>>
+> >>>>>>>     #define PCI_SAL_ADDRESS(seg, bus, devfn, reg)        \
+> >>>>>>>     (((u64) seg << 24) | (bus << 16) | (devfn << 8) | (reg))
+> >>>>>>>
+> >>>>>>> Should we move it into a common header first?  
+> >>>>>>
+> >>>>>> Maybe. The bus, devfn, reg part is standard bdf, but I don't think
+> >>>>>> the PCI 6.0 spec defined a version with the seg in the upper bits.
+> >>>>>> I'm not sure if we want to adopt that in LInux.  
+> >>>>>
+> >>>>> I found lots of code use seg,bus,devfn,reg with format "%04x:%02x:%02x.%x",
+> >>>>> I am not quite familiar with PCIe spec. What do you think about it, Bjorn?  
+> >>>>
+> >>>> The PCIe spec defines an address encoding for bus/device/function/reg
+> >>>> for the purposes of ECAM (PCIe r6.0, sec 7.2.2), but as far as I know,
+> >>>> it doesn't define anything similar that includes the segment.  The
+> >>>> segment is really outside the scope of PCIe because each segment is a
+> >>>> completely separate PCIe hierarchy.  
+> >>>
+> >>> Thank you for your explanation.
+> >>>  
+> >>>>
+> >>>> So I probably wouldn't make this a generic definition.  But if/when
+> >>>> you print things like this out, please do use the format spec you
+> >>>> mentioned above so it matches the style used elsewhere.
+> >>>>      
+> >>>
+> >>> Agree. The print format of bus/device/function/reg is "%04x:%02x:%02x.%x",
+> >>> so I named the PMU as the same format. Then the usage flow would be:
+> >>>
+> >>> - lspci to get the device root port in format seg/bus/device/function/reg.
+> >>>     10:00.0 PCI bridge: Device 1ded:8000 (rev 01)
+> >>> - select its PMU name pcie_bdf_100000.
+> >>> - monitor with perf:
+> >>>     perf stat -a -e pcie_bdf_100000/Rx_PCIe_TLP_Data_Payload/  
+> >>
+> >> I think you probably want something in there to indicate it's an RP
+> >> and the bdf part may be redundant...  
+> > 
+> > Indeed that seems horribly unclear; personally I reckon something like "dw_pcie_200" would be more appropriate. The address is just a disambiguator between multiple instances so doesn't need any further emphasis, but what is crucial to the user is exactly what kind of PMU it is (especially if there's potential for other unrelated PCIe functions to start exposing their own different PMUs).  
+> 
+> I see your point. The current prefix `pcie_bdf` is not appropriate,
+> 
+> - it does not indicate it is for a root point as Jonathan mentioned.
+> - its prefix is not `dwc`
+> 
+> Is dwc_rootport_100000 more appropriate?
+> 
+> - `dwc` indicates the PMU is for Synopsys DesignWare Cores PCIe controller IP
+> - `rootport` indicates the PMU is for a root port device
+> - `100000` indicates the device address
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Looks good to me.
+
+J
+> 
+> 
+> Thank you.
+> 
+> Best Regards,
+> Shuai
+> 
+> 
+> 
+> 
+
