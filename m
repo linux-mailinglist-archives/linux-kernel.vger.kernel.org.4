@@ -2,75 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15DC5ECC9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660855ECC9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbiI0TEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 15:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
+        id S231659AbiI0THZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 15:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231661AbiI0TEp (ORCPT
+        with ESMTP id S231167AbiI0THX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 15:04:45 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B20BF5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:04:43 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id sd10so22725533ejc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:04:43 -0700 (PDT)
+        Tue, 27 Sep 2022 15:07:23 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BD41C6A5A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:07:22 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id f193so10279070pgc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:07:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=YYEkPOqjhpHK7QuNDpSW1icWON78rkdfyhJquQM2y/8=;
-        b=QniEgUxIIPob4hj9DF+Bak9AW/dqhl5JHkElLy1fTLgY2RtrTfpRKzaLpbyDrXL5SO
-         Q4lOBBso7RjfBXJ2wb/ucp36el00jgR9IPf2LCIcnX3EvKvABRDyNIWhq77qvtTzHbb9
-         uTLlXiFNTuvDGWDgImHjH42QztNpzR+ruaVCFSlz57Phv53Ee23cNPLzX9gs78SGkhVf
-         LO66Tjc0a+ijD0wKa/PLVL57A6bgXSJUugjS/o/E2wI/o3nsWmkGCrb26QOqDQiKOj+2
-         5w8Ja1ueyA08qDyy5HizUBD46M/TNY3SCoFcm2XGW4H2JJg+331cVKZrPlWrwnwyHYKm
-         gdzg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=TganKE5ujEzwcNzLIUtCyIVdPLaa9W7UwC/PPJN5TMg=;
+        b=XKxxvLcIteR4SajvZ6q3lTfxxgv+onl6aCwE3qNraQJKKbQvKUF4KDQh4HHDtDrCqf
+         icsI/UANgZaT5cNb94sUvnNT3tewZDV/vfylWxFZIqsXrSpQwS4OJN5WPWevGYnnTybz
+         TpWFIqeVCTHkSuYQ/26eFfIcmuQECb/XUJqky7GDOSozTOrhPXYfRh8D4iKh+KAocwMd
+         Wb0buyGOgSwY+79UHE4cHqsKPODHfTKHQI1ZWJDvd8eKJ+6tzWjEwwj/LTtuXPywC9pC
+         Fz+b9zLoC36sHJkiZCdccZLJ5sdfk8S+Za2DdudqcuSjrQ892ugDa+2udxz+0/kF2a5x
+         ykrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=YYEkPOqjhpHK7QuNDpSW1icWON78rkdfyhJquQM2y/8=;
-        b=nUXuYHspFpi4YxkxT6AjYJMs4OTmnY58meqZQdcvL59FEwmrMkPNoV0RMZprx5P4d3
-         2U2934daR8PIi7aXBUfC2///PG2V+qj77cyB9WHCAWOE02W86vaji2bah3OQrlOUg8AX
-         H6yLzGNAjYEjh4HsSL9g/ycpQ/PB8wHaa9tORaiHRAv1Oha0J/aPR2wkI8F3yZUIUGdy
-         SJrhGE6hTlJ5N93+CykgcwKWh8dGBjS0V9C2bNFxyIz67kJ9wrdCljteX+r0e5wCiJjT
-         5SBIFFg8N63V83rF8IObfl7iXZrXsPBB+uC85mkOGGq3DS1spDWs6/lS6gHDjpeq/XR9
-         npNw==
-X-Gm-Message-State: ACrzQf1A7hGlCzSLhVlr433OntsrgXeRt6VDFtdvxcJZllDkbsrcO4oB
-        v+lKm8XvZEeXQExO9CUacOFAFqAAtZ889sUksnGpwA==
-X-Google-Smtp-Source: AMsMyM5UPT1wQQOK8mZlarkl31jHeZEVxDZ4ltAZeCzBRqHmXrcTEPip6RSsl+qk4gefnnF0cgiuwc/UlVcPfO/39ls=
-X-Received: by 2002:a17:907:628f:b0:72f:58fc:3815 with SMTP id
- nd15-20020a170907628f00b0072f58fc3815mr23781325ejc.719.1664305482137; Tue, 27
- Sep 2022 12:04:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <cover.1664298261.git.thomas.lendacky@amd.com> <afd222473c7b18ea942e754a6c4df26ed74eedee.1664298261.git.thomas.lendacky@amd.com>
-In-Reply-To: <afd222473c7b18ea942e754a6c4df26ed74eedee.1664298261.git.thomas.lendacky@amd.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Tue, 27 Sep 2022 12:04:30 -0700
-Message-ID: <CAAH4kHZZ+3Q3-k_OQ+y7zkVnNffCpgP-Kd5Pp24epn0LyVgDag@mail.gmail.com>
-Subject: Re: [PATCH v5 1/6] x86/sev: Fix calculation of end address based on
- number of pages
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=TganKE5ujEzwcNzLIUtCyIVdPLaa9W7UwC/PPJN5TMg=;
+        b=uUYxu23UaBWUI5+eDU0nyKCE0lIfABAtW++7k684arJRZdcGdll47NsE4THJW4THrm
+         rIAwsBbgdtT1bDPpwwxAiJwa9MWwKj95i7e0hAo4xlJtfvxA98sQYAtBA2YsrAW66i7V
+         nG/u2YH3ovuKMFvse2MlhKiFBwukRWzPeqR6CY731uXBuh7i7wnE/c1kLh+meFyf3tyq
+         jH5j7w5kexXEd9Vy3rO7Ku9xle7nsEtOq99Zfxman0cqzFmZLgk+Tf1k89NnNZaWfjeD
+         xIfMfknLypdfNvM0NHf4vBM+lu7zrZcMaWL+qCgm5U2z9Z0hqhWu30xEdV+jBIFNHDfM
+         qpZQ==
+X-Gm-Message-State: ACrzQf0MZbY7vp1MgWOcRefTg/TB2F5eeQCrNy5odAEdrbG1CkjE8AYc
+        +bJZvlURc3PTaxSzIwPQZpE=
+X-Google-Smtp-Source: AMsMyM4nwBTr1WtUt3Z7FqBSlx3z1lIHjrRvu5Pe1cwl55ZGnSpGzfT+VszOE8d7Ny197LF3bCQq9A==
+X-Received: by 2002:a63:1450:0:b0:439:3806:9b91 with SMTP id 16-20020a631450000000b0043938069b91mr25623673pgu.407.1664305641578;
+        Tue, 27 Sep 2022 12:07:21 -0700 (PDT)
+Received: from strix-laptop (2001-b011-20e0-1b32-d148-19d6-82fa-6094.dynamic-ip6.hinet.net. [2001:b011:20e0:1b32:d148:19d6:82fa:6094])
+        by smtp.gmail.com with ESMTPSA id s75-20020a632c4e000000b0042af14719f4sm1900407pgs.51.2022.09.27.12.07.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 12:07:21 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 03:07:13 +0800
+From:   Chih-En Lin <shiyn.lin@gmail.com>
+To:     Nadav Amit <namit@vmware.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Peter Xu <peterx@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Li kunyu <kunyu@nfschina.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Yang Shi <shy828301@gmail.com>, Song Liu <song@kernel.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dinglan Peng <peng301@purdue.edu>,
+        Pedro Fonseca <pfonseca@purdue.edu>,
+        Jim Huang <jserv@ccns.ncku.edu.tw>,
+        Huichun Feng <foxhoundsk.tw@gmail.com>
+Subject: Re: [RFC PATCH v2 5/9] mm, pgtable: Add a refcount to PTE table
+Message-ID: <YzNJ4byJRZN7vBX8@strix-laptop>
+References: <20220927162957.270460-1-shiyn.lin@gmail.com>
+ <20220927162957.270460-6-shiyn.lin@gmail.com>
+ <8C7248F0-55E4-4813-9167-C8CD2D02F1D0@vmware.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8C7248F0-55E4-4813-9167-C8CD2D02F1D0@vmware.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,14 +101,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> When calculating an end address based on an unsigned int number of pages,
-> the number of pages must be cast to an unsigned long so that any value
-> greater than or equal to 0x100000 does not result in zero after the shift.
->
-> Fixes: 5e5ccff60a29 ("x86/sev: Add helper for validating pages in early enc attribute changes")
+On Tue, Sep 27, 2022 at 05:59:16PM +0000, Nadav Amit wrote:
+> Is there some assumption that pmd_get_pte() would not be called between the
+> page_ref_add_unless() and cow_pte_fallback()?
+> 
+> Hard to know without comments or context.
 
-Tested-by: Dionna Glaze <dionnaglaze@google.com>
+Yes.
+It is one of the corner case that I need to handle it.
 
--- 
--Dionna Glaze, PhD (she/her)
+Thanks,
+Chih-En Lin
