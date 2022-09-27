@@ -2,53 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D18E5EC62D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D0B5EC649
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232446AbiI0OdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
+        id S233116AbiI0Oem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232273AbiI0Ocj (ORCPT
+        with ESMTP id S232618AbiI0OdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:32:39 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8545F543FF
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:32:38 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1odBdT-0005tX-4C; Tue, 27 Sep 2022 16:32:35 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1odBdS-003F7h-A5; Tue, 27 Sep 2022 16:32:32 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1odBdP-003uny-P8; Tue, 27 Sep 2022 16:32:31 +0200
+        Tue, 27 Sep 2022 10:33:16 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83015DB960
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:33:13 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id cc5so15313464wrb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:33:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=XrpGuF2vxbaEuk6VfKG2/A6XesW21KLMiogPr2+Ux0s=;
+        b=HYMVagpkuZ4iwK7gYaWt6I09PBdgmc0cg3H3T00viug84DQSekcZ4lHE6K5sDigMWG
+         8X5AZbpmvsqH7FUf7sZL8wF77LMaX1eHJV1Caqy529BPli6cRU1l70kF+TKg1WzVDHMl
+         LyoIBraFm7QBXXNDvSyCS70tfZkroai2Y8+zih/UBMdxzZT7ERNXvMUF1zAr1zhiBJ1f
+         bvIXiAT475TSYrYOuDi7AAhggayAG1u+c4aLNONEeQ1yJoYuSgIb3o9Q+dvMt5VGT+3e
+         rsjskeRNesLJHEF6JwKGyJkTfXCE2VBqnrxA3SOCzdGf2l46zxz6bi9KqiQNqIEvvyXu
+         MjYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=XrpGuF2vxbaEuk6VfKG2/A6XesW21KLMiogPr2+Ux0s=;
+        b=ufbdQYRcfwAOLVkZsoxb/tpqTUxkJkw+cZsIem/eqUx1dW841o1blG1MMZYohTd4dc
+         mYOU6tlatHQUWRI7M/SDoi89MXW3uE6LZTnEs3uFXRPuZXKY43hlHXUxGK9f7QdHlUg9
+         dOCqb0961Dv5KVya11AZfUzLAWmMjnSQoBnipm44k48+tW/R7WtHPol7jqK6VZ32j2ar
+         D3zZENxJjUhgQRHoK2u6b4qhbiNof0J9mJbJKsTIRpds4Vo0s/eP8PJb66hlyrMZU6CW
+         pFvIkySXj4HkPXauOfwF5tlve4ELFGaaiRJV8b4//0oslgJVo9V0q9KLl0VryW4NJfvS
+         c/pw==
+X-Gm-Message-State: ACrzQf1aYY4pZoz3u02abUVbttb1zPd0sJPQ9mzVzAJnPERvGAfFPUza
+        QZ4wWY6UC+CVFjfxschM0X5wGg==
+X-Google-Smtp-Source: AMsMyM4CAFZP57R8XEA7yg4spePw1uV+D0tYMzJ9FsIDee7DlSWMc9AH8FsWeB/aAQCacOdHX24jGw==
+X-Received: by 2002:a05:6000:16c5:b0:22c:bdbd:e06b with SMTP id h5-20020a05600016c500b0022cbdbde06bmr2468842wrf.53.1664289192505;
+        Tue, 27 Sep 2022 07:33:12 -0700 (PDT)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id l6-20020a05600c4f0600b003b4924493bfsm17518371wmq.9.2022.09.27.07.33.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 07:33:12 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Amit Kucheria <amitk@kernel.org>,
+        linux-renesas-soc@vger.kernel.org (open list:RENESAS R-CAR THERMAL
+        DRIVERS)
+Subject: [PATCH v6 15/29] thermal/drivers/rcar_gen3: Use the generic function to get the number of trips
 Date:   Tue, 27 Sep 2022 16:32:25 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     David Miller <davem@davemloft.net>
-Cc:     broonie@kernel.org, Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the i2c tree
-Message-ID: <20220927143225.j4yztggdqqozdiwa@pengutronix.de>
-References: <20220927130206.368099-1-broonie@kernel.org>
+Message-Id: <20220927143239.376737-16-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220927143239.376737-1-daniel.lezcano@linaro.org>
+References: <20220927143239.376737-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7mgoxxaeekmkd6jf"
-Content-Disposition: inline
-In-Reply-To: <20220927130206.368099-1-broonie@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,123 +78,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The thermal core framework allows to get the number of thermal trips,
+use it instead of visiting the thermal core structure internals.
 
---7mgoxxaeekmkd6jf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+---
+ drivers/thermal/rcar_gen3_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hello,
+diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+index 4c1c6f89aa2f..4ef927437842 100644
+--- a/drivers/thermal/rcar_gen3_thermal.c
++++ b/drivers/thermal/rcar_gen3_thermal.c
+@@ -529,7 +529,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+ 		if (ret)
+ 			goto error_unregister;
+ 
+-		ret = of_thermal_get_ntrips(tsc->zone);
++		ret = thermal_zone_get_num_trips(tsc->zone);
+ 		if (ret < 0)
+ 			goto error_unregister;
+ 
+-- 
+2.34.1
 
-On Tue, Sep 27, 2022 at 02:02:06PM +0100, broonie@kernel.org wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the net-next tree got conflicts in:
->=20
->   drivers/net/dsa/lan9303_i2c.c
->   drivers/net/dsa/microchip/ksz9477_i2c.c
->   drivers/net/dsa/xrs700x/xrs700x_i2c.c
->=20
-> between commit:
->=20
->   ed5c2f5fd10dd ("i2c: Make remove callback return void")
->=20
-> from the i2c tree and commits:
->=20
->   db5d451c4640a ("net: dsa: lan9303: remove unnecessary i2c_set_clientdat=
-a()")
->   008971adb95d3 ("net: dsa: microchip: ksz9477: remove unnecessary i2c_se=
-t_clientdata()")
->   6387bf7c390a1 ("net: dsa: xrs700x: remove unnecessary i2c_set_clientdat=
-a()")
->=20
-> from the net-next tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> diff --cc drivers/net/dsa/lan9303_i2c.c
-> index b25e91b26d991,79be5fc044bd4..0000000000000
-> --- a/drivers/net/dsa/lan9303_i2c.c
-> +++ b/drivers/net/dsa/lan9303_i2c.c
-> @@@ -70,11 -70,11 +70,9 @@@ static void lan9303_i2c_remove(struct i
->   	struct lan9303_i2c *sw_dev =3D i2c_get_clientdata(client);
->  =20
->   	if (!sw_dev)
->  -		return 0;
->  +		return;
->  =20
->   	lan9303_remove(&sw_dev->chip);
-> --
-> - 	i2c_set_clientdata(client, NULL);
->  -	return 0;
->   }
->  =20
->   static void lan9303_i2c_shutdown(struct i2c_client *client)
-> diff --cc drivers/net/dsa/microchip/ksz9477_i2c.c
-> index 4a719ab8aa89c,e111756f64735..0000000000000
-> --- a/drivers/net/dsa/microchip/ksz9477_i2c.c
-> +++ b/drivers/net/dsa/microchip/ksz9477_i2c.c
-> @@@ -58,8 -58,8 +58,6 @@@ static void ksz9477_i2c_remove(struct i
->  =20
->   	if (dev)
->   		ksz_switch_remove(dev);
-> --
-> - 	i2c_set_clientdata(i2c, NULL);
->  -	return 0;
->   }
->  =20
->   static void ksz9477_i2c_shutdown(struct i2c_client *i2c)
-> diff --cc drivers/net/dsa/xrs700x/xrs700x_i2c.c
-> index bbaf5a3fbf000,cd533b9e17eca..0000000000000
-> --- a/drivers/net/dsa/xrs700x/xrs700x_i2c.c
-> +++ b/drivers/net/dsa/xrs700x/xrs700x_i2c.c
-> @@@ -110,11 -110,11 +110,9 @@@ static void xrs700x_i2c_remove(struct i
->   	struct xrs700x *priv =3D i2c_get_clientdata(i2c);
->  =20
->   	if (!priv)
->  -		return 0;
->  +		return;
->  =20
->   	xrs700x_switch_remove(priv);
-> --
-> - 	i2c_set_clientdata(i2c, NULL);
->  -	return 0;
->   }
->  =20
->   static void xrs700x_i2c_shutdown(struct i2c_client *i2c)
-
-To fix that issue before sending a PR to Linus you might want to pull
-
-	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux i2c/make_remove_=
-callback_void-immutable
-
-into your tree.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---7mgoxxaeekmkd6jf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMzCXYACgkQwfwUeK3K
-7AmW1Qf/bgiNo2Mo68dWX3kd8AOMpEiW4YG/Hy6lGGWSOzLC473XhiRnN2nzM/cJ
-TnIf5vRyVks8DYhy31HY5nnnJRYFiJMqHm1J9XzsYO3f6mY7P1BhmW1toagFKRdg
-nxOCZTDh+Aos2m4FSXm91HUExFJ1hMaH4CH7nPjr+584+ZN+0ILVovTTchHuEzjl
-Cy3+UN+d83DmLUoEjAVFKdURWggKpO5TYAbPluB5jZ1PsR4xeRMe72EU9FcWS0X8
-+Pp+gUduEnEYgsWrJNBXmpSz2yWAiYEGYrsVNdfMt3PuuWAjWxW/3lYAX6YNXmJd
-miAKxj5Akk0JK22aBXVj51nkKXblVQ==
-=ONMS
------END PGP SIGNATURE-----
-
---7mgoxxaeekmkd6jf--
