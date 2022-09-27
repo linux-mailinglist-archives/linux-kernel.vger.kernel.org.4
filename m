@@ -2,112 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D645EB7E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 457165EB7E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiI0CoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 22:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
+        id S230091AbiI0CpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 22:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiI0CoX (ORCPT
+        with ESMTP id S230141AbiI0CpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 22:44:23 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5E0F161D;
-        Mon, 26 Sep 2022 19:44:22 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mc3kZ049wzlX9t;
-        Tue, 27 Sep 2022 10:40:06 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 27 Sep 2022 10:44:20 +0800
-Subject: Re: [PATCH v3 1/8] scsi: libsas: introduce sas address comparation
- helpers
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <martin.petersen@oracle.com>, <jejb@linux.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
-        <john.garry@huawei.com>, <jinpu.wang@cloud.ionos.com>
-References: <20220927022941.4029476-1-yanaijie@huawei.com>
- <20220927022941.4029476-2-yanaijie@huawei.com>
- <4e829dd7-6db3-4dbf-1b8e-9f7bb805f723@opensource.wdc.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <52ccb73b-f133-25cb-2275-fc042dee3ab4@huawei.com>
-Date:   Tue, 27 Sep 2022 10:44:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Mon, 26 Sep 2022 22:45:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7625FA8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:44:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2B2F61542
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:44:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D85EC433C1;
+        Tue, 27 Sep 2022 02:44:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664246698;
+        bh=aPhM8cKTA6dQyU1256UxQ8auvOKzd7pI92C/A1V002w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gROzKsyyApUtzhal/gNoSsvkKuujY+kBdBam7IqAejbwerNBpTgYvEnrEDjUfmEoS
+         CRMStTLNKnrCiV5Uj+wLtUhoHla+01DcXbX03OC+ZSIPzLT9J/AJuQc2y5vsqmeWq+
+         nY5TC7CkhV+UWai7etPhigeXGJTBlAXhoFoSfcocgjfL/8nqstAXiz9KJz1ZMK0EY/
+         omGgkLTQkcDdAL+jBTYFsqMwPuwmn9953vW1r9sxB0gv7Xs94a5nXvL6W0UTu222TE
+         nhUy/bidsVYermqW9gwLxLyYuc4DaIS584R7P+zQLG1G/t3nCfnlNXQStK+DQPQnAM
+         /fUhK/U28wMPQ==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH] f2fs: introduce cp_status sysfs entry
+Date:   Tue, 27 Sep 2022 10:44:47 +0800
+Message-Id: <20220927024447.2547950-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <4e829dd7-6db3-4dbf-1b8e-9f7bb805f723@opensource.wdc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Damien,
+This patch adds a new sysfs entry named cp_status, it can output
+checkpoint flags in real time.
 
-On 2022/9/27 10:23, Damien Le Moal wrote:
-> On 9/27/22 11:29, Jason Yan wrote:
->> Sas address comparation is widely used in libsas. However they are all
-> 
-> s/comparation/comparison
-> 
-> Here and in the patch title.
-> 
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ Documentation/ABI/testing/sysfs-fs-f2fs | 24 ++++++++++++++++++++++++
+ fs/f2fs/sysfs.c                         |  8 ++++++++
+ 2 files changed, 32 insertions(+)
 
-Thank you. I will fix the typo.
+diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
+index 083ac2d63eef..483639fb727b 100644
+--- a/Documentation/ABI/testing/sysfs-fs-f2fs
++++ b/Documentation/ABI/testing/sysfs-fs-f2fs
+@@ -466,6 +466,30 @@ Description:	Show status of f2fs superblock in real time.
+ 		0x4000 SBI_IS_FREEZING       freefs is in process
+ 		====== ===================== =================================
+ 
++What:		/sys/fs/f2fs/<disk>/stat/cp_status
++Date:		September 2022
++Contact:	"Chao Yu" <chao.yu@oppo.com>
++Description:	Show status of f2fs checkpoint in real time.
++
++		=============================== ==============================
++		cp flag				value
++		CP_UMOUNT_FLAG			0x00000001
++		CP_ORPHAN_PRESENT_FLAG		0x00000002
++		CP_COMPACT_SUM_FLAG		0x00000004
++		CP_ERROR_FLAG			0x00000008
++		CP_FSCK_FLAG			0x00000010
++		CP_FASTBOOT_FLAG		0x00000020
++		CP_CRC_RECOVERY_FLAG		0x00000040
++		CP_NAT_BITS_FLAG		0x00000080
++		CP_TRIMMED_FLAG			0x00000100
++		CP_NOCRC_RECOVERY_FLAG		0x00000200
++		CP_LARGE_NAT_BITMAP_FLAG	0x00000400
++		CP_QUOTA_NEED_FSCK_FLAG		0x00000800
++		CP_DISABLED_FLAG		0x00001000
++		CP_DISABLED_QUICK_FLAG		0x00002000
++		CP_RESIZEFS_FLAG		0x00004000
++		=============================== ==============================
++
+ What:		/sys/fs/f2fs/<disk>/ckpt_thread_ioprio
+ Date:		January 2021
+ Contact:	"Daeho Jeong" <daehojeong@google.com>
+diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+index 39ebf0ad133a..df27afd71ef4 100644
+--- a/fs/f2fs/sysfs.c
++++ b/fs/f2fs/sysfs.c
+@@ -128,6 +128,12 @@ static ssize_t sb_status_show(struct f2fs_attr *a,
+ 	return sprintf(buf, "%lx\n", sbi->s_flag);
+ }
+ 
++static ssize_t cp_status_show(struct f2fs_attr *a,
++		struct f2fs_sb_info *sbi, char *buf)
++{
++	return sprintf(buf, "%x\n", le32_to_cpu(F2FS_CKPT(sbi)->ckpt_flags));
++}
++
+ static ssize_t pending_discard_show(struct f2fs_attr *a,
+ 		struct f2fs_sb_info *sbi, char *buf)
+ {
+@@ -1029,8 +1035,10 @@ static struct attribute *f2fs_feat_attrs[] = {
+ ATTRIBUTE_GROUPS(f2fs_feat);
+ 
+ F2FS_GENERAL_RO_ATTR(sb_status);
++F2FS_GENERAL_RO_ATTR(cp_status);
+ static struct attribute *f2fs_stat_attrs[] = {
+ 	ATTR_LIST(sb_status),
++	ATTR_LIST(cp_status),
+ 	NULL,
+ };
+ ATTRIBUTE_GROUPS(f2fs_stat);
+-- 
+2.25.1
 
-Jason
-
-> Other than that, Looks OK to me.
-> 
-> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> 
->> opencoded and to avoid the line spill over 80 columns, are mostly split
->> into multi-lines. Introduce some helpers to prepare some refactor.
->>
->> Signed-off-by: Jason Yan <yanaijie@huawei.com>
->> ---
->>   drivers/scsi/libsas/sas_internal.h | 17 +++++++++++++++++
->>   1 file changed, 17 insertions(+)
->>
->> diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
->> index 8d0ad3abc7b5..3384429b7eb0 100644
->> --- a/drivers/scsi/libsas/sas_internal.h
->> +++ b/drivers/scsi/libsas/sas_internal.h
->> @@ -111,6 +111,23 @@ static inline void sas_smp_host_handler(struct bsg_job *job,
->>   }
->>   #endif
->>   
->> +static inline bool sas_phy_match_dev_addr(struct domain_device *dev,
->> +					 struct ex_phy *phy)
->> +{
->> +	return SAS_ADDR(dev->sas_addr) == SAS_ADDR(phy->attached_sas_addr);
->> +}
->> +
->> +static inline bool sas_phy_match_port_addr(struct asd_sas_port *port,
->> +					   struct ex_phy *phy)
->> +{
->> +	return SAS_ADDR(port->sas_addr) == SAS_ADDR(phy->attached_sas_addr);
->> +}
->> +
->> +static inline bool sas_phy_addr_match(struct ex_phy *p1, struct ex_phy *p2)
->> +{
->> +	return  SAS_ADDR(p1->attached_sas_addr) == SAS_ADDR(p2->attached_sas_addr);
->> +}
->> +
->>   static inline void sas_fail_probe(struct domain_device *dev, const char *func, int err)
->>   {
->>   	pr_warn("%s: for %s device %016llx returned %d\n",
-> 
