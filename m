@@ -2,507 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B34415ED014
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 00:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79E45ED024
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 00:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbiI0WNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 18:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
+        id S229966AbiI0WTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 18:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiI0WNS (ORCPT
+        with ESMTP id S229951AbiI0WTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 18:13:18 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982EA1E274D
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 15:13:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=DZxATggICtuyiR/V8abucxNMVUrFKH9x8XlNL53pA5Q=; b=JUL5NJnGLkc8GowAzg+sGR1Hd7
-        b45TwXU5g/LWa8ZQj8eG6+mQBmJ8fvFP8ASDOnb5ilxuRfPxgCsvyxDgRBGM2CAh9tbDB/0XEmZKp
-        0XVJ8BCZQr7S98Eo9h+8XmW03HQxuHczr4w2gF8vpaPwaGwnBCiZ09pxIbGuaH1dtJpBHW4PGnTpk
-        NFLi9kPNRLGAWDUKZ7eECklL3rrsxOGC3OjRdPy7TeBDYLH7PIXbQFG427UafzzrlA7kp9GVjzzpQ
-        TlpsCTiQdlKQl7aZ1o+pHu0cXNcR4TEXhFEKejYDm1QeapuBUy3TY3qKIr0fF/7IIBJh6ICYAUaI6
-        4+w1wMiQ==;
-Received: from [177.34.169.227] (helo=bowie..)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1odIoy-00E9Og-Ka; Wed, 28 Sep 2022 00:12:57 +0200
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Melissa Wen <mwen@igalia.com>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        David Gow <davidgow@google.com>
-Cc:     Arthur Grillo <arthur.grillo@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-Subject: [PATCH v2 2/2] drm/tests: Split drm_test_dp_mst_sideband_msg_req_decode into parameterized tests
-Date:   Tue, 27 Sep 2022 19:12:06 -0300
-Message-Id: <20220927221206.55930-2-mcanal@igalia.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220927221206.55930-1-mcanal@igalia.com>
-References: <20220927221206.55930-1-mcanal@igalia.com>
+        Tue, 27 Sep 2022 18:19:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02BA1E45AE
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 15:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664317157;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sPkv0tXRBGRFHsPE4skY8laZ5MwDJA/XEqh88B2Acpo=;
+        b=gMTwnWsUCSfmLIhaxYsB9FqoYTzmb84Q+aXWw09dVkDgXItsGvIzlA/kpjyKDTXkiF5ys8
+        Q8bcpByNlXzLZC1N4KM/mYL0VRQFh/BTLr6FAl0gu9wdnZXWbU4f9Xw94hTVWrs+YNbKG4
+        xV/8zfwOC5y9inBYITZ6a8U6nN6Jqs8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-531-vxD0pDGQN5y0S5-GUDj4tQ-1; Tue, 27 Sep 2022 18:19:14 -0400
+X-MC-Unique: vxD0pDGQN5y0S5-GUDj4tQ-1
+Received: by mail-wm1-f70.google.com with SMTP id r7-20020a1c4407000000b003b3309435a9so31946wma.6
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 15:19:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=sPkv0tXRBGRFHsPE4skY8laZ5MwDJA/XEqh88B2Acpo=;
+        b=t9cgPOtdDW6Vh57J3NjvZ0WX59GCcRX8DxTWnwUKHe2R9wI2iFmz6lrYzoawSWxy1W
+         EJyE1lzlWMCF+eee+WGd/KuFOULEkXN4i5hubsXa1fiQ6aecreIKv6+x9qH05IMquOiy
+         mr3TwH1a96xUJD/oEP51Ut6JRuuCb5qQn2WygIyv3Ail+Wz+WzUs6MqqTx2j37QPOJpA
+         xAu2kI3REgVdOmf+qpGTpnOwcrwB/7nVjCDU5aicK8Q2cYFKPQ7NngTGtaAtkJrmtht1
+         tjdUvFYzlw5/vEBXRMubF5Qmn6HfblBsK6m50H8jc55cGQVrodP2C/z6gOmfnkUWyI27
+         LBGw==
+X-Gm-Message-State: ACrzQf0GJwj4QxqiWxpAQTMW2B9iUpoDFM7Eccj2KT9aYZv+xy7MeJyD
+        GpFV+DFeiXJ9kEx+wqEWUveF+1PFNC9NYRJYhY2zkMNK3vumx4gShIEPLaVTuHT4AQjxQlq34kZ
+        0BazPAelAfrJOIO4/y1OMvQW7
+X-Received: by 2002:a7b:cb49:0:b0:3b4:b08a:89b with SMTP id v9-20020a7bcb49000000b003b4b08a089bmr4264617wmj.173.1664317152715;
+        Tue, 27 Sep 2022 15:19:12 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4yVAuON4IWBfCSPhgaypPYe4TWmLMMFvQJVnsSDJhPqJfgdzcdmJoPl9f9OuBfTy70adiwkA==
+X-Received: by 2002:a7b:cb49:0:b0:3b4:b08a:89b with SMTP id v9-20020a7bcb49000000b003b4b08a089bmr4264604wmj.173.1664317152467;
+        Tue, 27 Sep 2022 15:19:12 -0700 (PDT)
+Received: from redhat.com ([2.55.47.213])
+        by smtp.gmail.com with ESMTPSA id d37-20020a05600c4c2500b003b332a7b898sm2561817wmp.45.2022.09.27.15.19.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 15:19:11 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 18:19:07 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     syzbot <syzbot+21da700f3c9f0bc40150@syzkaller.appspotmail.com>
+Cc:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
+        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org, hch@lst.de
+Subject: Re: [syzbot] linux-next boot error: WARNING in cpumask_next_wrap
+Message-ID: <20220927181728-mutt-send-email-mst@kernel.org>
+References: <000000000000dfa4f105e9af8c54@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000dfa4f105e9af8c54@google.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The drm_test_dp_mst_sideband_msg_req_decode repeats the same test
-structure with different parameters. This could be better represented
-by parameterized tests, provided by KUnit.
+On Tue, Sep 27, 2022 at 02:44:35PM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    1bd8b75fe6ad Add linux-next specific files for 20220927
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=109d3404880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=fab8618a7c989c9d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=21da700f3c9f0bc40150
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/b150a04debdc/disk-1bd8b75f.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/2bf7d4b812bc/vmlinux-1bd8b75f.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+21da700f3c9f0bc40150@syzkaller.appspotmail.com
+> 
+> ACPI: button: Sleep Button [SLPF]
+> ACPI: \_SB_.LNKC: Enabled at IRQ 11
+> virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+> ACPI: \_SB_.LNKD: Enabled at IRQ 10
+> virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+> ACPI: \_SB_.LNKB: Enabled at IRQ 10
+> virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
+> virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
+> N_HDLC line discipline registered with maxframe=4096
+> Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+> 00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+> 00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+> 00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
+> 00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
+> Non-volatile memory driver v1.3
+> Linux agpgart interface v0.103
+> ACPI: bus type drm_connector registered
+> [drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
+> [drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
+> Console: switching to colour frame buffer device 128x48
+> platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
+> usbcore: registered new interface driver udl
+> brd: module loaded
+> loop: module loaded
+> zram: Added device: zram0
+> null_blk: disk nullb0 created
+> null_blk: module loaded
+> Guest personality initialized and is inactive
+> VMCI host device registered (name=vmci, major=10, minor=119)
+> Initialized host personality
+> usbcore: registered new interface driver rtsx_usb
+> usbcore: registered new interface driver viperboard
+> usbcore: registered new interface driver dln2
+> usbcore: registered new interface driver pn533_usb
+> nfcsim 0.2 initialized
+> usbcore: registered new interface driver port100
+> usbcore: registered new interface driver nfcmrvl
+> Loading iSCSI transport class v2.0-870.
+> scsi host0: Virtio SCSI HBA
+> st: Version 20160209, fixed bufsize 32768, s/g segs 256
+> Rounding down aligned max_sectors from 4294967295 to 4294967288
+> db_root: cannot open: /etc/target
+> slram: not enough parameters.
+> ftl_cs: FTL header not found.
+> wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+> wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+> eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
+> MACsec IEEE 802.1AE
+> tun: Universal TUN/TAP device driver, 1.6
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
+> WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_check include/linux/cpumask.h:117 [inline]
+> WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next include/linux/cpumask.h:178 [inline]
+> WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
+> Modules linked in:
+> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc7-next-20220927-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+> RIP: 0010:cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
+> RIP: 0010:cpumask_check include/linux/cpumask.h:117 [inline]
+> RIP: 0010:cpumask_next include/linux/cpumask.h:178 [inline]
+> RIP: 0010:cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
+> Code: df e8 1b 07 3e f8 39 eb 77 64 e8 c2 0a 3e f8 41 8d 6c 24 01 89 de 89 ef e8 04 07 3e f8 39 dd 0f 82 54 ff ff ff e8 a7 0a 3e f8 <0f> 0b e9 48 ff ff ff e8 9b 0a 3e f8 48 c7 c2 00 ae e1 8d 48 b8 00
+> RSP: 0000:ffffc90000067920 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+> RDX: ffff88813fe50000 RSI: ffffffff893e3c59 RDI: 0000000000000004
+> RBP: 0000000000000002 R08: 0000000000000004 R09: 0000000000000002
+> R10: 0000000000000002 R11: 0000000000000000 R12: 0000000000000001
+> R13: 0000000000000000 R14: 0000000000000002 R15: ffffffff8de1ac10
+> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  virtnet_set_affinity+0x35a/0x750 drivers/net/virtio_net.c:2300
 
-In order to convert the tests to parameterized tests, the test case for
-the client ID was changed: instead of using get_random_bytes to generate
-the client ID, the client ID is now hardcoded in the test case.
 
-So, convert drm_test_dp_mst_sideband_msg_req_decode into parameterized
-tests and make the tests' allocations and prints completely managed by KUnit.
 
-Signed-off-by: Maíra Canal <mcanal@igalia.com>
----
-v1 -> v2: https://lore.kernel.org/dri-devel/20220925222719.345424-1-mcanal@igalia.com/T/#m056610a23a63109484afeafefb5846178c4d36b2
-- Mention on the commit message the change on the test case for the client ID (Michał Winiarski).
----
- .../gpu/drm/tests/drm_dp_mst_helper_test.c    | 370 ++++++++++++------
- 1 file changed, 243 insertions(+), 127 deletions(-)
+Also related to affinity things?
+I wonder what does virtio do wrong?
 
-diff --git a/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c b/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
-index 12f41881db6b..545beea33e8c 100644
---- a/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
-+++ b/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
-@@ -5,12 +5,8 @@
-  * Copyright (c) 2022 Maíra Canal <mairacanal@riseup.net>
-  */
- 
--#define PREFIX_STR "[drm_dp_mst_helper]"
--
- #include <kunit/test.h>
- 
--#include <linux/random.h>
--
- #include <drm/display/drm_dp_mst_helper.h>
- #include <drm/drm_print.h>
- 
-@@ -72,6 +68,217 @@ static void dp_mst_calc_pbn_mode_desc(const struct drm_dp_mst_calc_pbn_mode_test
- KUNIT_ARRAY_PARAM(drm_dp_mst_calc_pbn_mode, drm_dp_mst_calc_pbn_mode_cases,
- 		  dp_mst_calc_pbn_mode_desc);
- 
-+static u8 data[] = { 0xff, 0x00, 0xdd };
-+
-+struct drm_dp_mst_sideband_msg_req_test {
-+	const char *desc;
-+	const struct drm_dp_sideband_msg_req_body in;
-+};
-+
-+static const struct drm_dp_mst_sideband_msg_req_test drm_dp_mst_sideband_msg_req_cases[] = {
-+	{
-+		.desc = "DP_ENUM_PATH_RESOURCES with port number",
-+		.in = {
-+			.req_type = DP_ENUM_PATH_RESOURCES,
-+			.u.port_num.port_number = 5,
-+		},
-+	},
-+	{
-+		.desc = "DP_POWER_UP_PHY with port number",
-+		.in = {
-+			.req_type = DP_POWER_UP_PHY,
-+			.u.port_num.port_number = 5,
-+		},
-+	},
-+	{
-+		.desc = "DP_POWER_DOWN_PHY with port number",
-+		.in = {
-+			.req_type = DP_POWER_DOWN_PHY,
-+			.u.port_num.port_number = 5,
-+		},
-+	},
-+	{
-+		.desc = "DP_ALLOCATE_PAYLOAD with SDP stream sinks",
-+		.in = {
-+			.req_type = DP_ALLOCATE_PAYLOAD,
-+			.u.allocate_payload.number_sdp_streams = 3,
-+			.u.allocate_payload.sdp_stream_sink = { 1, 2, 3 },
-+		},
-+	},
-+	{
-+		.desc = "DP_ALLOCATE_PAYLOAD with port number",
-+		.in = {
-+			.req_type = DP_ALLOCATE_PAYLOAD,
-+			.u.allocate_payload.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.desc = "DP_ALLOCATE_PAYLOAD with VCPI",
-+		.in = {
-+			.req_type = DP_ALLOCATE_PAYLOAD,
-+			.u.allocate_payload.vcpi = 0x7f,
-+		},
-+	},
-+	{
-+		.desc = "DP_ALLOCATE_PAYLOAD with PBN",
-+		.in = {
-+			.req_type = DP_ALLOCATE_PAYLOAD,
-+			.u.allocate_payload.pbn = U16_MAX,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_PAYLOAD with port number",
-+		.in = {
-+			.req_type = DP_QUERY_PAYLOAD,
-+			.u.query_payload.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_PAYLOAD with VCPI",
-+		.in = {
-+			.req_type = DP_QUERY_PAYLOAD,
-+			.u.query_payload.vcpi = 0x7f,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_DPCD_READ with port number",
-+		.in = {
-+			.req_type = DP_REMOTE_DPCD_READ,
-+			.u.dpcd_read.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_DPCD_READ with DPCD address",
-+		.in = {
-+			.req_type = DP_REMOTE_DPCD_READ,
-+			.u.dpcd_read.dpcd_address = 0xfedcb,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_DPCD_READ with max number of bytes",
-+		.in = {
-+			.req_type = DP_REMOTE_DPCD_READ,
-+			.u.dpcd_read.num_bytes = U8_MAX,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_DPCD_WRITE with port number",
-+		.in = {
-+			.req_type = DP_REMOTE_DPCD_WRITE,
-+			.u.dpcd_write.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_DPCD_WRITE with DPCD address",
-+		.in = {
-+			.req_type = DP_REMOTE_DPCD_WRITE,
-+			.u.dpcd_write.dpcd_address = 0xfedcb,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_DPCD_WRITE with data array",
-+		.in = {
-+			.req_type = DP_REMOTE_DPCD_WRITE,
-+			.u.dpcd_write.num_bytes = ARRAY_SIZE(data),
-+			.u.dpcd_write.bytes = data,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_I2C_READ with port number",
-+		.in = {
-+			.req_type = DP_REMOTE_I2C_READ,
-+			.u.i2c_read.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_I2C_READ with I2C device ID",
-+		.in = {
-+			.req_type = DP_REMOTE_I2C_READ,
-+			.u.i2c_read.read_i2c_device_id = 0x7f,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_I2C_READ with transactions array",
-+		.in = {
-+			.req_type = DP_REMOTE_I2C_READ,
-+			.u.i2c_read.num_transactions = 3,
-+			.u.i2c_read.num_bytes_read = ARRAY_SIZE(data) * 3,
-+			.u.i2c_read.transactions = {
-+				{ .bytes = data, .num_bytes = ARRAY_SIZE(data), .i2c_dev_id = 0x7f,
-+				  .i2c_transaction_delay = 0xf, },
-+				{ .bytes = data, .num_bytes = ARRAY_SIZE(data), .i2c_dev_id = 0x7e,
-+				  .i2c_transaction_delay = 0xe, },
-+				{ .bytes = data, .num_bytes = ARRAY_SIZE(data), .i2c_dev_id = 0x7d,
-+				  .i2c_transaction_delay = 0xd, },
-+			},
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_I2C_WRITE with port number",
-+		.in = {
-+			.req_type = DP_REMOTE_I2C_WRITE,
-+			.u.i2c_write.port_number = 0xf,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_I2C_WRITE with I2C device ID",
-+		.in = {
-+			.req_type = DP_REMOTE_I2C_WRITE,
-+			.u.i2c_write.write_i2c_device_id = 0x7f,
-+		},
-+	},
-+	{
-+		.desc = "DP_REMOTE_I2C_WRITE with data array",
-+		.in = {
-+			.req_type = DP_REMOTE_I2C_WRITE,
-+			.u.i2c_write.num_bytes = ARRAY_SIZE(data),
-+			.u.i2c_write.bytes = data,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_STREAM_ENC_STATUS with stream ID",
-+		.in = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.stream_id = 1,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_STREAM_ENC_STATUS with client ID",
-+		.in = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.client_id = { 0x4f, 0x7f, 0xb4, 0x00, 0x8c, 0x0d, 0x67 },
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_STREAM_ENC_STATUS with stream event",
-+		.in = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.stream_event = 3,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_STREAM_ENC_STATUS with valid stream event",
-+		.in = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.valid_stream_event = 0,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_STREAM_ENC_STATUS with stream behavior",
-+		.in = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.stream_behavior = 3,
-+		},
-+	},
-+	{
-+		.desc = "DP_QUERY_STREAM_ENC_STATUS with a valid stream behavior",
-+		.in = {
-+			.req_type = DP_QUERY_STREAM_ENC_STATUS,
-+			.u.enc_status.valid_stream_behavior = 1,
-+		}
-+	},
-+};
-+
- static bool
- sideband_msg_req_equal(const struct drm_dp_sideband_msg_req_body *in,
- 		       const struct drm_dp_sideband_msg_req_body *out)
-@@ -147,41 +354,41 @@ sideband_msg_req_equal(const struct drm_dp_sideband_msg_req_body *in,
- 	return true;
- }
- 
--static bool
--sideband_msg_req_encode_decode(struct drm_dp_sideband_msg_req_body *in)
-+static void drm_test_dp_mst_msg_printf(struct drm_printer *p, struct va_format *vaf)
-+{
-+	struct kunit *test = p->arg;
-+
-+	kunit_err(test, "%pV", vaf);
-+}
-+
-+static void drm_test_dp_mst_sideband_msg_req_decode(struct kunit *test)
- {
-+	const struct drm_dp_mst_sideband_msg_req_test *params = test->param_value;
-+	const struct drm_dp_sideband_msg_req_body *in = &params->in;
- 	struct drm_dp_sideband_msg_req_body *out;
--	struct drm_printer p = drm_err_printer(PREFIX_STR);
- 	struct drm_dp_sideband_msg_tx *txmsg;
--	int i, ret;
--	bool result = true;
-+	struct drm_printer p = {
-+		.printfn = drm_test_dp_mst_msg_printf,
-+		.arg = test
-+	};
-+	int i;
- 
--	out = kzalloc(sizeof(*out), GFP_KERNEL);
--	if (!out)
--		return false;
-+	out = kunit_kzalloc(test, sizeof(*out), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, out);
- 
--	txmsg = kzalloc(sizeof(*txmsg), GFP_KERNEL);
--	if (!txmsg) {
--		kfree(out);
--		return false;
--	}
-+	txmsg = kunit_kzalloc(test, sizeof(*txmsg), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_NULL(test, txmsg);
- 
- 	drm_dp_encode_sideband_req(in, txmsg);
--	ret = drm_dp_decode_sideband_req(txmsg, out);
--	if (ret < 0) {
--		drm_printf(&p, "Failed to decode sideband request: %d\n",
--			   ret);
--		result = false;
--		goto out;
--	}
-+	KUNIT_EXPECT_GE_MSG(test, drm_dp_decode_sideband_req(txmsg, out), 0,
-+			    "Failed to decode sideband request");
- 
- 	if (!sideband_msg_req_equal(in, out)) {
--		drm_printf(&p, "Encode/decode failed, expected:\n");
-+		KUNIT_FAIL(test, "Encode/decode failed");
-+		kunit_err(test, "Expected:");
- 		drm_dp_dump_sideband_msg_req_body(in, 1, &p);
--		drm_printf(&p, "Got:\n");
-+		kunit_err(test, "Got:");
- 		drm_dp_dump_sideband_msg_req_body(out, 1, &p);
--		result = false;
--		goto out;
- 	}
- 
- 	switch (in->req_type) {
-@@ -196,112 +403,21 @@ sideband_msg_req_encode_decode(struct drm_dp_sideband_msg_req_body *in)
- 		kfree(out->u.i2c_write.bytes);
- 		break;
- 	}
--
--	/* Clear everything but the req_type for the input */
--	memset(&in->u, 0, sizeof(in->u));
--
--out:
--	kfree(out);
--	kfree(txmsg);
--	return result;
- }
- 
--static void drm_test_dp_mst_sideband_msg_req_decode(struct kunit *test)
-+static void
-+drm_dp_mst_sideband_msg_req_desc(const struct drm_dp_mst_sideband_msg_req_test *t, char *desc)
- {
--	struct drm_dp_sideband_msg_req_body in = { 0 };
--	u8 data[] = { 0xff, 0x0, 0xdd };
--	int i;
--
--	in.req_type = DP_ENUM_PATH_RESOURCES;
--	in.u.port_num.port_number = 5;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_POWER_UP_PHY;
--	in.u.port_num.port_number = 5;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_POWER_DOWN_PHY;
--	in.u.port_num.port_number = 5;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_ALLOCATE_PAYLOAD;
--	in.u.allocate_payload.number_sdp_streams = 3;
--	for (i = 0; i < in.u.allocate_payload.number_sdp_streams; i++)
--		in.u.allocate_payload.sdp_stream_sink[i] = i + 1;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.allocate_payload.port_number = 0xf;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.allocate_payload.vcpi = 0x7f;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.allocate_payload.pbn = U16_MAX;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_QUERY_PAYLOAD;
--	in.u.query_payload.port_number = 0xf;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.query_payload.vcpi = 0x7f;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_REMOTE_DPCD_READ;
--	in.u.dpcd_read.port_number = 0xf;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.dpcd_read.dpcd_address = 0xfedcb;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.dpcd_read.num_bytes = U8_MAX;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_REMOTE_DPCD_WRITE;
--	in.u.dpcd_write.port_number = 0xf;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.dpcd_write.dpcd_address = 0xfedcb;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.dpcd_write.num_bytes = ARRAY_SIZE(data);
--	in.u.dpcd_write.bytes = data;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_REMOTE_I2C_READ;
--	in.u.i2c_read.port_number = 0xf;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.i2c_read.read_i2c_device_id = 0x7f;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.i2c_read.num_transactions = 3;
--	in.u.i2c_read.num_bytes_read = ARRAY_SIZE(data) * 3;
--	for (i = 0; i < in.u.i2c_read.num_transactions; i++) {
--		in.u.i2c_read.transactions[i].bytes = data;
--		in.u.i2c_read.transactions[i].num_bytes = ARRAY_SIZE(data);
--		in.u.i2c_read.transactions[i].i2c_dev_id = 0x7f & ~i;
--		in.u.i2c_read.transactions[i].i2c_transaction_delay = 0xf & ~i;
--	}
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_REMOTE_I2C_WRITE;
--	in.u.i2c_write.port_number = 0xf;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.i2c_write.write_i2c_device_id = 0x7f;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.i2c_write.num_bytes = ARRAY_SIZE(data);
--	in.u.i2c_write.bytes = data;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--
--	in.req_type = DP_QUERY_STREAM_ENC_STATUS;
--	in.u.enc_status.stream_id = 1;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	get_random_bytes(in.u.enc_status.client_id,
--			 sizeof(in.u.enc_status.client_id));
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.enc_status.stream_event = 3;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.enc_status.valid_stream_event = 0;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.enc_status.stream_behavior = 3;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
--	in.u.enc_status.valid_stream_behavior = 1;
--	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
-+	strcpy(desc, t->desc);
- }
- 
-+KUNIT_ARRAY_PARAM(drm_dp_mst_sideband_msg_req, drm_dp_mst_sideband_msg_req_cases,
-+		  drm_dp_mst_sideband_msg_req_desc);
-+
- static struct kunit_case drm_dp_mst_helper_tests[] = {
- 	KUNIT_CASE_PARAM(drm_test_dp_mst_calc_pbn_mode, drm_dp_mst_calc_pbn_mode_gen_params),
--	KUNIT_CASE(drm_test_dp_mst_sideband_msg_req_decode),
-+	KUNIT_CASE_PARAM(drm_test_dp_mst_sideband_msg_req_decode,
-+			 drm_dp_mst_sideband_msg_req_gen_params),
- 	{ }
- };
- 
--- 
-2.37.3
+
+>  init_vqs drivers/net/virtio_net.c:3578 [inline]
+>  init_vqs drivers/net/virtio_net.c:3564 [inline]
+>  virtnet_probe+0x110f/0x2ea0 drivers/net/virtio_net.c:3868
+>  virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
+>  call_driver_probe drivers/base/dd.c:560 [inline]
+>  really_probe+0x249/0xb90 drivers/base/dd.c:639
+>  __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+>  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+>  __driver_attach+0x1d0/0x550 drivers/base/dd.c:1190
+>  bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
+>  bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
+>  driver_register+0x220/0x3a0 drivers/base/driver.c:246
+>  virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4074
+>  do_one_initcall+0x13d/0x780 init/main.c:1306
+>  do_initcall_level init/main.c:1381 [inline]
+>  do_initcalls init/main.c:1397 [inline]
+>  do_basic_setup init/main.c:1416 [inline]
+>  kernel_init_freeable+0x6ff/0x788 init/main.c:1636
+>  kernel_init+0x1a/0x1d0 init/main.c:1524
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+>  </TASK>
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
