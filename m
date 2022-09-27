@@ -2,145 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662445EC74A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9A95EC74B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbiI0PLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
+        id S232182AbiI0PMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiI0PLL (ORCPT
+        with ESMTP id S232158AbiI0PL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:11:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165E524F0E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:11:10 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1odCEc-0002ON-Ab; Tue, 27 Sep 2022 17:10:58 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1odCEc-003Fam-7u; Tue, 27 Sep 2022 17:10:56 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1odCEa-003vHY-6Y; Tue, 27 Sep 2022 17:10:56 +0200
-Date:   Tue, 27 Sep 2022 17:10:53 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH v3 4/8] pwm: lpss: Include headers we are direct user of
-Message-ID: <20220927151053.7eh63stoganpgawr@pengutronix.de>
-References: <20220927144723.9655-1-andriy.shevchenko@linux.intel.com>
- <20220927144723.9655-5-andriy.shevchenko@linux.intel.com>
+        Tue, 27 Sep 2022 11:11:58 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E28100395
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:11:50 -0700 (PDT)
+X-UUID: 5123190f57b04aac8915a50865dc35ab-20220927
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=9tjx5t8k5Luxw2O54U9tC1FC5+hKWB1/DzXaoINrLXE=;
+        b=GM3RIT9OpYSuKnPaqG9AWeo7d2qcRYKpeX4zfRzCi5JhE2D+XFKiHO2uYc8Xc1V5+2beI8LoEsXXGzqxufq4ivMffKvWcJ/W9SNiPDehAu8J9HOiJ4H/6kbdQ1LIGgcTeGAweF1gGbCf7bwhhIzzVeybFNYRh1oCgft6XJ+/NfU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:ed2a5966-de9d-4aa5-a0ce-70977a3e2cd6,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.11,REQID:ed2a5966-de9d-4aa5-a0ce-70977a3e2cd6,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:39a5ff1,CLOUDID:f22d40a3-dc04-435c-b19b-71e131a5fc35,B
+        ulkID:220927231145B3R6UNXY,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|823|
+        824,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,
+        COL:0
+X-UUID: 5123190f57b04aac8915a50865dc35ab-20220927
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <trevor.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 474841654; Tue, 27 Sep 2022 23:11:45 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 27 Sep 2022 23:11:44 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 27 Sep 2022 23:11:44 +0800
+From:   Trevor Wu <trevor.wu@mediatek.com>
+To:     <broonie@kernel.org>, <tiwai@suse.com>, <matthias.bgg@gmail.com>
+CC:     <trevor.wu@mediatek.com>, <alsa-devel@alsa-project.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ASoC: mediatek: mt8195: update audio tuner settings
+Date:   Tue, 27 Sep 2022 23:11:41 +0800
+Message-ID: <20220927151141.11846-1-trevor.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eethafq2wituzhkq"
-Content-Disposition: inline
-In-Reply-To: <20220927144723.9655-5-andriy.shevchenko@linux.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Audio tuner is used to handle clock drift between 26M and APLL domain.
 
---eethafq2wituzhkq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's expected when abs(chg_cnt) equals to upper bound, tuner updates pcw
+setting automatically, and then abs(chg_cnt) decreases.
+In the stress test, we found abs(chg_cnt) possibly equals to 2 at the
+unexpected timing. This results in wrong pcw updating.
+Finally, abs(chg_cnt) will always be larger than upper bound,
 
-Hello,
+As a result, we update the upper bound to 3 to handle the corner case.
 
-On Tue, Sep 27, 2022 at 05:47:19PM +0300, Andy Shevchenko wrote:
-> For the sake of integrity, include headers we are direct user of.
->=20
-> While at it, add missed struct pwm_lpss_boardinfo one and replace
-> device.h with a forward declaration. The latter improves compile
-> time due to reducing overhead of device.h parsing with entire train
-> of dependencies.
+Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+---
+ sound/soc/mediatek/mt8195/mt8195-afe-clk.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Hm, I copied the cmdline for the compiler from a V=3D1 build and only run
-the compiler on drivers/pwm/pwm-lpss-pci.c.
+diff --git a/sound/soc/mediatek/mt8195/mt8195-afe-clk.c b/sound/soc/mediatek/mt8195/mt8195-afe-clk.c
+index 2ee3872c83c3..9ca2cb8c8a9c 100644
+--- a/sound/soc/mediatek/mt8195/mt8195-afe-clk.c
++++ b/sound/soc/mediatek/mt8195/mt8195-afe-clk.c
+@@ -117,7 +117,7 @@ static struct mt8195_afe_tuner_cfg mt8195_afe_tuner_cfgs[MT8195_AUD_PLL_NUM] = {
+ 		.upper_bound_reg = AFE_APLL_TUNER_CFG,
+ 		.upper_bound_shift = 8,
+ 		.upper_bound_maskbit = 0xff,
+-		.upper_bound_default = 0x2,
++		.upper_bound_default = 0x3,
+ 	},
+ 	[MT8195_AUD_PLL2] = {
+ 		.id = MT8195_AUD_PLL2,
+@@ -135,7 +135,7 @@ static struct mt8195_afe_tuner_cfg mt8195_afe_tuner_cfgs[MT8195_AUD_PLL_NUM] = {
+ 		.upper_bound_reg = AFE_APLL_TUNER_CFG1,
+ 		.upper_bound_shift = 8,
+ 		.upper_bound_maskbit = 0xff,
+-		.upper_bound_default = 0x2,
++		.upper_bound_default = 0x3,
+ 	},
+ 	[MT8195_AUD_PLL3] = {
+ 		.id = MT8195_AUD_PLL3,
+-- 
+2.18.0
 
-With #include <device.h> I got:
-
-	real	0m0.421s
-	user	0m0.354s
-	sys	0m0.066s
-
-With struct device; I got:
-
-	real	0m0.431s
-	user	0m0.378s
-	sys	0m0.052s
-
-Are the numbers for you considerably different?
-
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> ---
->  drivers/pwm/pwm-lpss.h | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/pwm/pwm-lpss.h b/drivers/pwm/pwm-lpss.h
-> index c344921b2cab..839622964b2a 100644
-> --- a/drivers/pwm/pwm-lpss.h
-> +++ b/drivers/pwm/pwm-lpss.h
-> @@ -10,11 +10,15 @@
->  #ifndef __PWM_LPSS_H
->  #define __PWM_LPSS_H
-> =20
-> -#include <linux/device.h>
->  #include <linux/pwm.h>
-> +#include <linux/types.h>
-> =20
->  #define MAX_PWMS			4
-> =20
-> +struct device;
-> +
-> +struct pwm_lpss_boardinfo;
-
-Hmm, I wonder why there is no compiler warning without that declaration.
-At least in my builds. Do you see a warning? IMHO it's better to fix
-that be swapping the order of struct pwm_lpss_chip and struct
-pwm_lpss_boardinfo.
-
->  struct pwm_lpss_chip {
->  	struct pwm_chip chip;
->  	void __iomem *regs;
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---eethafq2wituzhkq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmMzEnoACgkQwfwUeK3K
-7AkrQQf/fZ6ptu/CNAn9zoSn9UaThTEMfKdorGSn8tlmlgLIOC8/ei8xwRnvQ3Bd
-dzDnyF/f7mh22PaBsLQBK6GeKB9bJr7Nu6MPc5URE7ML9o3CZjmpTqTHyqiLuGhu
-3ZO2htBOBKDZdxK4o96IV4nEwQPPZivsn504DgMeXnpe0SHmBQbR1wuUbUlfN8Wg
-NCrM3p9LD20ZdjK6oj/pEtiPa0dX/gdI4OoVgg9UJkn45oa0g7gsofmczsDOIs+x
-RJZ/tzMxmY5/q1EMr4fnQV9CquE5A2Osw9UxQaCyT4geVRRVe9yybJXckV5/2tvI
-QXfhP7Mkj53HBm4tITtY2iI9e7ZTjA==
-=MlPl
------END PGP SIGNATURE-----
-
---eethafq2wituzhkq--
