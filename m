@@ -2,113 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E545EBABC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 08:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437FE5EBAAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 08:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiI0Gbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 02:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S229623AbiI0GbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 02:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiI0GbS (ORCPT
+        with ESMTP id S229910AbiI0GbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 02:31:18 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B430979F9;
-        Mon, 26 Sep 2022 23:31:14 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 5E7B081BD;
-        Tue, 27 Sep 2022 06:22:54 +0000 (UTC)
-Date:   Tue, 27 Sep 2022 09:31:11 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
-        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
-        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
-        richard@nod.at, anton.ivanov@cambridgegreys.com,
-        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 00/44] cpuidle,rcu: Clean up the mess
-Message-ID: <YzKYrx8Kd9SBYcUg@atomide.com>
-References: <20220919095939.761690562@infradead.org>
+        Tue, 27 Sep 2022 02:31:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE6090811;
+        Mon, 26 Sep 2022 23:31:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B07F9B819CA;
+        Tue, 27 Sep 2022 06:31:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 033DCC4347C;
+        Tue, 27 Sep 2022 06:31:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664260263;
+        bh=wUd05ZMtrzG2JapTfKgG4cD0+3UZkyeQPhw+AsgVJ38=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R6+BRoYQFeO2spfMDsKTKVKUtDe5QyBP6ltwAUOVMu+3XSZz9y0CzZLYwPGa4ZkU5
+         Bxl7Ikr2p245BLXUFnDcCTuy+XNkzEceZ07Z6nQIK1nX3Ps29XQpxL7mdAg4oHGMSJ
+         YSQ/qh8Q8c0Y2JgEJSzk6QnwzggqBDFEcgeBTR0s=
+Date:   Tue, 27 Sep 2022 08:31:36 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>,
+        Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
+        stable <stable@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.19 014/207] Revert "usb: add quirks for Lenovo OneLink+
+ Dock"
+Message-ID: <YzKYyDaTsoX1RliA@kroah.com>
+References: <20220926100806.522017616@linuxfoundation.org>
+ <20220926100807.118539823@linuxfoundation.org>
+ <d9d9651b-2561-03ce-8076-5b471929ff2d@kernel.org>
+ <YzKOdhT7jTXwCaG8@kroah.com>
+ <5ce2a0bd-d39a-71d7-2327-3850dfdd646c@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220919095939.761690562@infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5ce2a0bd-d39a-71d7-2327-3850dfdd646c@kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-* Peter Zijlstra <peterz@infradead.org> [220919 10:08]:
-> Hi All!
+On Tue, Sep 27, 2022 at 08:18:26AM +0200, Jiri Slaby wrote:
+> On 27. 09. 22, 7:47, Greg Kroah-Hartman wrote:
+> > On Tue, Sep 27, 2022 at 07:23:46AM +0200, Jiri Slaby wrote:
+> > > I wonder, does it make sense to queue the commit (as 011/207) and
+> > > immediately its revert (the patch below) in a single release? I doubt
+> > > that...
+> > > 
+> > > The same holds for 012 (patch) + 015 (revert).
+> > 
+> > Yes it does, otherwise tools will pick up "hey, you forgot this patch
+> > that should have been applied here!" all the time.  Having the patch,
+> > and the revert, in the tree prevents that from happening.
 > 
-> At long last, a respin of the cpuidle vs rcu cleanup patches.
-> 
-> v1: https://lkml.kernel.org/r/20220608142723.103523089@infradead.org
-> 
-> These here patches clean up the mess that is cpuidle vs rcuidle.
+> It'd be fairly easy to fix the tools not to pick up reverted commits, right?
 
-I just gave these a quick test and things still work for me. The old
-omap3 off mode during idle still works. No more need to play the
-whack the mole game with RCU-idle :) I did not test on x86, or on other
-ARMs, but considering the test pretty much covered the all the
-affected RCU-idle related paths, where suitable, feel free to add:
+Not really as they are usually quite "far" away from the original
+commits.
 
-Tested-by: Tony Lindgren <tony@atomide.com>
+But hey, if you have some scripts that can find all of that, I'm all for
+it, the ones I have right now don't account for this.
+
+thanks,
+
+greg k-h
