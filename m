@@ -2,66 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61D55ECBAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5676A5ECBB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbiI0RxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 13:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51944 "EHLO
+        id S231446AbiI0RyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 13:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbiI0Rws (ORCPT
+        with ESMTP id S229567AbiI0RyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 13:52:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC8395E72
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:52:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664301156;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vTXCL/aFlsahWsadKe+XhRADwg3WoAZR3yqJT/snh3I=;
-        b=N/G0P7ZsewsB1PUbuOgwiD+U5GDhV2ly1VGc9NFjXHSql7iJOFBqpJ0tbVlSkSp2xfJbbX
-        Pmv9BEIqRtktKgf7EzrUdwtCThIuczlBbSrQTxFAlbBtvDzSH+k8kp2H+J6ZyHrgYyNAPk
-        YHiBGc3I7vpUq7VQpmPdSgcn3g+kXTI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-su196LE4PIOhchNIv-poMA-1; Tue, 27 Sep 2022 13:52:33 -0400
-X-MC-Unique: su196LE4PIOhchNIv-poMA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9E526185A7A3;
-        Tue, 27 Sep 2022 17:52:32 +0000 (UTC)
-Received: from [10.22.9.237] (unknown [10.22.9.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7AC8B1759E;
-        Tue, 27 Sep 2022 17:52:31 +0000 (UTC)
-Message-ID: <1ee8f429-bc79-c984-29a2-f131c750551f@redhat.com>
-Date:   Tue, 27 Sep 2022 13:52:31 -0400
+        Tue, 27 Sep 2022 13:54:00 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3935FA7;
+        Tue, 27 Sep 2022 10:53:59 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id y8so14230988edc.10;
+        Tue, 27 Sep 2022 10:53:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=1Ypdl4TRQC+1OSWNoWtNsZeRHzU6ew8cFJ+YEjQfHTc=;
+        b=KqO/zXxWkOwDPjKbXu8hyuaZYWxR9s9hv1at+3jJv5Y1FY6E0+h8Rgc0BE+pauKcdo
+         KHXPYY5Co95VFHegGHFKyg6eiNfyncmORzdlLOM59YxHuYo71OEdMGc7Ksu/R5LhQoOZ
+         0p9c3auRYjW/2g0W3Q6WUoij8rvt0NMtgGAlcR5plE0dZ81MJZF/Azy7wu8EPC6Irpjp
+         XH/XHMPcsLmTqi/yWbjhr/zx0XFFBFjLbwJ66lmIyRI6cb6QtL2HavkWTR2OaXE9FhpL
+         BZiTfbXVybauGSTo3aHFuTOTrl0rpWhC0oTQQhrdhrPhW+EZ8+S794xtfQZ0DlGDZf+3
+         pYBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=1Ypdl4TRQC+1OSWNoWtNsZeRHzU6ew8cFJ+YEjQfHTc=;
+        b=pW7VVKvcXKzj/WNEnVBSXe00pojx5BLdJ3WSXu1j0dLGhDJCFc0HT8VdHf1PzP2w2L
+         Q5feWq4vsvffPoURHcj0hracjXklcjU2af0K+61VaQU0XV4EkTuiHwEtq3Lsx/ZKPBmB
+         zEUxbpfrCBSLordqWRiVAszNvQeYKTxpgNJHpoW832hL1a2dlJMBA0whWYo37QZKL3/9
+         Fq5wvAjzvCU0mMxiAztVMlyuy3Ck8+IcDUKImYcDwzdZOw44tKW0cUGCA0sGdWJEnPzY
+         VU8H4rtihBIK2s1CzCG21mt3Z9F2Y72OQvVOnK5n1NkSFNcsQ1AVJQ40EO+OP8glN11q
+         RGCg==
+X-Gm-Message-State: ACrzQf1N5Mlp6Kr3e5ElOhWELtPOumNnyeyKAFErFtd29PmBzOucBMWh
+        mtA48fO8nDz10PjLxRhm4c+s9YuSRBT12IMy
+X-Google-Smtp-Source: AMsMyM4oYDuidVOOn0Lqag9BVv4J+Q7FYAuopwpG4GOuNpRt6Rih4mCc0JdTv2q9+6xTw0yPNXZZ+w==
+X-Received: by 2002:a05:6402:1554:b0:457:375e:7289 with SMTP id p20-20020a056402155400b00457375e7289mr13151127edx.171.1664301237455;
+        Tue, 27 Sep 2022 10:53:57 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id k22-20020a17090632d600b007030c97ae62sm1123767ejk.191.2022.09.27.10.53.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 10:53:56 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 20:53:53 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 net-next 08/14] net: dsa: felix: update init_regmap to
+ be string-based
+Message-ID: <20220927175353.mn5lpxopp2n2yegr@skbuf>
+References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
+ <20220926002928.2744638-9-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [Resend PATCH v2] tracing: Disable interrupt or preemption before
- acquiring arch_spinlock_t
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-References: <20220922133158.1731333-1-longman@redhat.com>
- <20220922145622.1744826-1-longman@redhat.com>
- <9c798af6-aa2c-5f76-7a50-ef1983f9bdcd@redhat.com>
- <20220927131221.1b3a736b@gandalf.local.home>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220927131221.1b3a736b@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220926002928.2744638-9-colin.foster@in-advantage.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,38 +87,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 13:12, Steven Rostedt wrote:
-> On Tue, 27 Sep 2022 11:28:13 -0400
-> Waiman Long <longman@redhat.com> wrote:
->
->> On 9/22/22 10:56, Waiman Long wrote:
->>> It was found that some tracing functions in kernel/trace/trace.c acquire
->>> an arch_spinlock_t with preemption and irqs enabled. An example is the
->>> tracing_saved_cmdlines_size_read() function which intermittently causes
->>> a "BUG: using smp_processor_id() in preemptible" warning when the LTP
->>> read_all_proc test is run.
->>>
->>> That can be problematic in case preemption happens after acquiring the
->>> lock. Add the necessary preemption or interrupt disabling code in the
->>> appropriate places before acquiring an arch_spinlock_t.
->>>
->>> The convention here is to disable preemption for trace_cmdline_lock and
->>> interupt for max_lock.
->>>
->>> Fixes: a35873a0993b ("tracing: Add conditional snapshot")
->>> Fixes: 939c7a4f04fc ("tracing: Introduce saved_cmdlines_size file")
->>> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
->>> Signed-off-by: Waiman Long <longman@redhat.com>
->>> ---
->>>    kernel/trace/trace.c | 23 +++++++++++++++++++++++
->>>    1 file changed, 23 insertions(+)
->> Ping!
->>
->> Any comment on this patch?
-> You may have noticed (from today's emailing) I applied the patch ;-)
+Hi Colin,
 
-Yes, I saw it after I sent this mail :-)
+On Sun, Sep 25, 2022 at 05:29:22PM -0700, Colin Foster wrote:
+> During development, it was believed that a wrapper for ocelot_regmap_init()
+> would be sufficient for the felix driver to work in non-mmio scenarios.
+> This was merged in during commit 242bd0c10bbd ("net: dsa: ocelot: felix:
+> add interface for custom regmaps")
+> 
+> As the external ocelot DSA driver grew closer to an acceptable state, it
+> was realized that most of the parameters that were passed in from struct
+> resource *res were useless and ignored. This is due to the fact that the
+> external ocelot DSA driver utilizes dev_get_regmap(dev, resource->name).
+> 
+> Instead of simply ignoring those parameters, refactor the API to only
+> require the name as an argument. MMIO scenarios this will reconstruct the
+> struct resource before calling ocelot_regmap_init(ocelot, resource). MFD
+> scenarios need only call dev_get_regmap(dev, name).
+> 
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> ---
 
-Thanks,
-Longman
+I don't like how this turned out. I was expecting you not to look at the
+exported resources from the ocelot-core anymore - that was kind of the
+point of using just the names rather than the whole resource definitions.
 
+I am also sorry for the mess that the felix driver currently is in, and
+the fact that some things may have confused you. I will prepare a patch
+set which offers an alternative to this, and send it for review.
