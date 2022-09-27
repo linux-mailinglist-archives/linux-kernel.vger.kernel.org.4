@@ -2,102 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B535ED0FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 01:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB785ED107
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 01:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiI0XXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 19:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44108 "EHLO
+        id S231669AbiI0XcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 19:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbiI0XXc (ORCPT
+        with ESMTP id S229692AbiI0XcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 19:23:32 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C119B1DA7E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 16:23:29 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 3so10742140pga.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 16:23:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=4MnMVs6E8JaSDSsn99y8Cflsak9Vn4oCEKVAnOpimrc=;
-        b=KTBy7fQLQX03opurQqZ2U9ctULmybQ5FJUoo4PZb+gpAETjrkid149E9fk/0W8/73E
-         ZrwvTRfgroj/9bgiZZ8XJyKrd78XrYX2iQYAUldEdxqL5OZpVAi1zS9yu8prYMHVa77l
-         4zjeo6ZBuAJWWGf1zHyMcSzUGInYNji/wPL8fWTGb5gG2xdIaqbbpro066Nv0icVdUH8
-         qi08NfiTgaHr/ClJbZ6TR3Yy/OpgSs603ryzzPCdNeTU5ylFZxeFY2UaHzVWoEaEC5jr
-         gHQ/fgp9BIfxbbHrCGK8KR3V4hCHTuvinL4qrNVOIDHv67EUocIGa2CUS0dDgpDBgy9Q
-         85BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=4MnMVs6E8JaSDSsn99y8Cflsak9Vn4oCEKVAnOpimrc=;
-        b=fb9qMZHbYXMo/KzrMeKfASzSpmgc64Pjz4U/mmeFQUPV8VeHS3GNAQf3Aec32igB3q
-         omn9y4+UX6+ud9aZ1v3TiS5yvVCpgxYKjQnP7AtpIkv1/oWybwwpuofWMc/OHZcO0Yk1
-         RMXVer6BEsL/BOeW0ttiA3DeYSZosJUqWwyPnCvmM7hUYFGDGBznJrYwJ5P6LeI2mzJV
-         SmEtsX6yiIxznDNBHApwgi++gfPKFAeyFt9GZQx8/8rGi+hOvEYx9AO5HTklys1Bh/Bf
-         Etsqu77vybXTw34V6pK+tcU2jQy+RbQhvT2SMi2nmo1oNXQNyuVuMiNGX1ZwgSmrvSm9
-         0r7Q==
-X-Gm-Message-State: ACrzQf1dcSQWyCG7A+evM/F8qzZlocKEPf/aQnpGb4+4BJgg1IprIvjP
-        2TlsVz7MV95wUFPP2uDfcJTf0w==
-X-Google-Smtp-Source: AMsMyM5cCdZ/UJFMHAs5b3PS1i/34zTcpqdwe1Srr8AE4gzK5DkIpIp9pBozWLBz/E9ieWU+3YHPog==
-X-Received: by 2002:a05:6a00:124f:b0:542:6c43:5be8 with SMTP id u15-20020a056a00124f00b005426c435be8mr31885111pfi.5.1664321009101;
-        Tue, 27 Sep 2022 16:23:29 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j1-20020a17090a318100b002007b60e288sm58733pjb.23.2022.09.27.16.23.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 16:23:28 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 23:23:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        aarcange@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-Message-ID: <YzOF7MT15nfBX0Ma@google.com>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
- <d16284f5-3493-2892-38e6-f1fa5c10bdbb@redhat.com>
- <20220923005808.vfltoecttoatgw5o@box.shutemov.name>
- <f703e615-3b75-96a2-fb48-2fefd8a2069b@redhat.com>
- <20220926144854.dyiacztlpx4fkjs5@box.shutemov.name>
- <0a99aa24-599c-cc60-b23b-b77887af3702@redhat.com>
+        Tue, 27 Sep 2022 19:32:14 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D487D1C6A41;
+        Tue, 27 Sep 2022 16:32:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=S8UJUP0VBuQngd2OEhP0OtJLPeHHAHk+DG1PtoI2pnk=; b=xRpltdoE+BX4wJj6Dn/xqNhxlx
+        dNbrhZ20jxjllsS1ta1wO+7ebIr+chPK780UY/3Y9XqriWy5TXjz53IfQpA4PQyuszNpgBF79SQ90
+        MKDt/qDALUhpwL/XrjAZzfRVunyxJkfVw3Ka5tk/dqfXjOlsuK0gfBzsGkVG8CToVfU/QRQ+T3nXY
+        1wXjQlbfLxb9c/A3hML8pHwk6Qg0VU+eNHdUV1EmLgPH1LTXTjrJr6hx5jOyiC6Lyorup2B3f6XQb
+        VQ5Y5BFREOKh5/3Wy8fn0pJIaHZ2+oVmAwD3b9hu1B7FEM9SmJs+RGTJBR8xNdMndP/c5/HTG1pcl
+        VCYMtUqQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1odK3O-00D9Po-9y; Tue, 27 Sep 2022 23:31:54 +0000
+Date:   Tue, 27 Sep 2022 16:31:54 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org,
+        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH v6 0/4] Let userspace know when snd-hda-intel needs i915
+Message-ID: <YzOH6oV6B6UKb7DF@bombadil.infradead.org>
+References: <cover.1652113087.git.mchehab@kernel.org>
+ <Ynl7xGy+a9MYjXi1@bombadil.infradead.org>
+ <20220920072454.4cf91f24@maurocar-mobl2>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0a99aa24-599c-cc60-b23b-b77887af3702@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <20220920072454.4cf91f24@maurocar-mobl2>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,51 +68,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022, David Hildenbrand wrote:
-> On 26.09.22 16:48, Kirill A. Shutemov wrote:
-> > On Mon, Sep 26, 2022 at 12:35:34PM +0200, David Hildenbrand wrote:
-> > > When using DAX, what happens with the shared <->private conversion? Which
-> > > "type" is supposed to use dax, which not?
-> > > 
-> > > In other word, I'm missing too many details on the bigger picture of how
-> > > this would work at all to see why it makes sense right now to prepare for
-> > > that.
-> > 
-> > IIUC, KVM doesn't really care about pages or folios. They need PFN to
-> > populate SEPT. Returning page/folio would make KVM do additional steps to
-> > extract PFN and one more place to have a bug.
+On Tue, Sep 20, 2022 at 07:24:54AM +0200, Mauro Carvalho Chehab wrote:
+> Hi Luis,
 > 
-> Fair enough. Smells KVM specific, though.
+> On Mon, 9 May 2022 13:38:28 -0700
+> Luis Chamberlain <mcgrof@kernel.org> wrote:
+> 
+> > On Mon, May 09, 2022 at 06:23:35PM +0200, Mauro Carvalho Chehab wrote:
+> > > Currently, kernel/module annotates module dependencies when
+> > > request_symbol is used, but it doesn't cover more complex inter-driver
+> > > dependencies that are subsystem and/or driver-specific.
+> > >   
+> > 
+> > At this pount v5.18-rc7 is out and so it is too late to soak this
+> > in for the proper level of testing I'd like to see for modules-next.
+> > So I can review this after the next merge window. I'd want to beat
+> > the hell out of this and if possible I'd like to see if we can have
+> > some test coverage for the intended goal and how to break it.
+> 
+> Any news with regards to this patch series?
 
-TL;DR: I'm good with either approach, though providing a "struct page" might avoid
-       refactoring the API in the nearish future.
+0-day had a rant about a bug with it, it would be wonderful if you can
+fix that bug and rebase. Yet again we're now on v6.0-rc7 but it doesn't
+mean we can't start testing all this on linux-next. I can just get this
+merged to linux-next as soon as this is ready for a new spin, but we
+certainly will have to wait until 6.2 as we haven't yet gotten proper
+coverage for this on v6.1.
 
-Playing devil's advocate for a second, the counter argument is that KVM is the
-only user for the foreseeable future.
+Is there any testing situations you can think of using which can demo
+this a bit more separately from existing drivers, perhaps a new
+selftests or something?
 
-That said, it might make sense to return a "struct page" from the core API and
-force KVM to do page_to_pfn().  KVM already does that for HVA-based memory, so
-it's not exactly new code.
-
-More importantly, KVM may actually need/want the "struct page" in the not-too-distant
-future to support mapping non-refcounted "struct page" memory into the guest.  The
-ChromeOS folks have a use case involving virtio-gpu blobs where KVM can get handed a
-"struct page" that _isn't_ refcounted[*].  Once the lack of mmu_notifier integration
-is fixed, the remaining issue is that KVM doesn't currently have a way to determine
-whether or not it holds a reference to the page.  Instead, KVM assumes that if the
-page is "normal", it's refcounted, e.g. see kvm_release_pfn_clean().
-
-KVM's current workaround for this is to refuse to map these pages into the guest,
-i.e. KVM simply forces its assumption that normal pages are refcounted to be true.
-To remove that workaround, the likely solution will be to pass around a tuple of
-page+pfn, where "page" is non-NULL if the pfn is a refcounted "struct page".
-
-At that point, getting handed a "struct page" from the core API would be a good
-thing as KVM wouldn't need to probe the PFN to determine whether or not it's a
-refcounted page.
-
-Note, I still want the order to be provided by the API so that KVM doesn't need
-to run through a bunch of helpers to try and figure out the allowed mapping size.
-
-[*] https://lore.kernel.org/all/CAD=HUj736L5oxkzeL2JoPV8g1S6Rugy_TquW=PRt73YmFzP6Jw@mail.gmail.com
-
+  Luis
