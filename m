@@ -2,51 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25635EC39E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7145EC3A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbiI0NGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
+        id S232353AbiI0NG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232346AbiI0NGP (ORCPT
+        with ESMTP id S232350AbiI0NGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:06:15 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4EF155669
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:06:14 -0700 (PDT)
-Received: from [192.168.1.101] (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 02A323F3F2;
-        Tue, 27 Sep 2022 15:06:11 +0200 (CEST)
-Message-ID: <7e849f73-216e-a03e-fb03-87941722c847@somainline.org>
-Date:   Tue, 27 Sep 2022 15:06:11 +0200
+        Tue, 27 Sep 2022 09:06:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B418177349
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:06:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F2E11042;
+        Tue, 27 Sep 2022 06:06:57 -0700 (PDT)
+Received: from [10.1.197.78] (eglon.cambridge.arm.com [10.1.197.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B1E03F792;
+        Tue, 27 Sep 2022 06:06:49 -0700 (PDT)
+Message-ID: <80d6238b-223c-e60a-6930-24a981d9dd0c@arm.com>
+Date:   Tue, 27 Sep 2022 14:06:41 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v5 3/3] ARM: dts: qcom: Add support for Samsung Galaxy Tab
- 4 10.1 (SM-T530)
-Content-Language: en-US
-To:     =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] x86/resctrl: Clear the staged configs when destroying
+ schemata list
+Content-Language: en-GB
+To:     Shawn Wang <shawnwang@linux.alibaba.com>, fenghua.yu@intel.com,
+        reinette.chatre@intel.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-References: <20220925204416.715687-1-matti.lehtimaki@gmail.com>
- <20220925204416.715687-4-matti.lehtimaki@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220925204416.715687-4-matti.lehtimaki@gmail.com>
+References: <1664247269-41295-1-git-send-email-shawnwang@linux.alibaba.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <1664247269-41295-1-git-send-email-shawnwang@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,519 +48,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Shawn,
+
+On 27/09/2022 03:54, Shawn Wang wrote:
+> Array staged_config in struct rdt_domain still maintains the original value when
+> resctrl is unmounted. If resctrl is mounted with cdp option and then remounted
+> without cdp option, field have_new_ctrl in staged_config[CDP_CODE] and
+> staged_config[CDP_DATA] will still be true.
+
+staged_config[CDP_DATA] is an array - its always 'true'. I think you mean
+staged_config[CDP_DATA].have_new_ctrl, which will still be true because it is only
+memset() when the schemata file is written to.
 
 
-On 25.09.2022 22:44, Matti Lehtimäki wrote:
-> Add a device tree for the Samsung Galaxy Tab 4 10.1 (SM-T530) wifi tablet
-> based on the apq8026 platform.
-> 
-> Currently supported are accelerometer sensor, hall sensor,
-> internal storage, physical buttons (power & volume), screen
-> (based on simple-framebuffer set up by the bootloader), sdcard,
-> touchscreen and USB.
-> 
-> Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-> ---
-> Changes in v5:
->   - Rename pm8226-regulators node to fix issue reported by make dtbs_check
-> 
-> Changes in v4:
->   - Move delete-node to memory-region
->   - Move usb-switch node to blsp_i2c4
-> 
-> Changes in v3:
->   - Fix sdhc_2 bus width
->   - Reorder includes
-> 
-> Changes in v2:
->   - Change codename to matisse-wifi
->   - Remove msm-id, not needed when lk2nd is used
->   - Remove unused labels from reserved memory regions
->   - Rename muic node
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../dts/qcom-apq8026-samsung-matisse-wifi.dts | 453 ++++++++++++++++++
->  2 files changed, 454 insertions(+)
->  create mode 100644 arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 05d8aef6e5d2..69f6bbcf90c6 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1027,6 +1027,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
->  	qcom-apq8016-sbc.dtb \
->  	qcom-apq8026-asus-sparrow.dtb \
->  	qcom-apq8026-lg-lenok.dtb \
-> +	qcom-apq8026-samsung-matisse-wifi.dtb \
->  	qcom-apq8060-dragonboard.dtb \
->  	qcom-apq8064-cm-qs600.dtb \
->  	qcom-apq8064-ifc6410.dtb \
-> diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> new file mode 100644
-> index 000000000000..3029bc566832
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> @@ -0,0 +1,453 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2022, Matti Lehtimäki <matti.lehtimaki@gmail.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/input/input.h>
-> +#include "qcom-msm8226.dtsi"
-> +#include "qcom-pm8226.dtsi"
-> +
-> +/ {
-> +	model = "Samsung Galaxy Tab 4 10.1";
-> +	compatible = "samsung,matisse-wifi", "qcom,apq8026";
-> +	chassis-type = "tablet";
-> +
-> +	aliases {
-> +		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
-> +		mmc1 = &sdhc_2; /* SDC2 SD card slot */
-> +		display0 = &framebuffer0;
-> +	};
-> +
-> +	chosen {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		stdout-path = "display0";
-> +
-> +		framebuffer0: framebuffer@3200000 {
-> +			compatible = "simple-framebuffer";
-> +			reg = <0x3200000 0x800000>;
-Addresses should be padded to 8 hex digits.
+> Since resctrl_arch_update_domains()
+> traverses all resctrl_conf_type, it will continue to update CDP_CODE and
+> CDP_DATA configurations, which can cause overflow problem.
 
-> +			width = <1280>;
-> +			height = <800>;
-> +			stride = <(1280 * 3)>;
-> +			format = "r8g8b8";
-> +		};
-> +	};
-> +
-> +	gpio-hall-sensor {
-> +		compatible = "gpio-keys";
-> +
-> +		event-hall-sensor {
-> +			label = "Hall Effect Sensor";
-> +			gpios = <&tlmm 110 GPIO_ACTIVE_HIGH>;
-> +			interrupts = <&tlmm 110 IRQ_TYPE_EDGE_FALLING>;
-> +			linux,input-type = <EV_SW>;
-> +			linux,code = <SW_LID>;
-> +			debounce-interval = <15>;
-> +			wakeup-source;
-> +		};
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +		autorepeat;
-> +
-> +		key-home {
-> +			label = "Home";
-> +			gpios = <&tlmm 108 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_HOMEPAGE>;
-> +			debounce-interval = <15>;
-> +		};
-> +
-> +		key-volume-down {
-> +			label = "Volume Down";
-> +			gpios = <&tlmm 107 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_VOLUMEDOWN>;
-> +			debounce-interval = <15>;
-> +		};
-> +
-> +		key-volume-up {
-> +			label = "Volume Up";
-> +			gpios = <&tlmm 106 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_VOLUMEUP>;
-> +			debounce-interval = <15>;
-> +		};
-> +	};
-> +
-> +	reg_tsp_1p8v: regulator-tsp-1p8v {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "tsp_1p8v";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +
-> +		gpio = <&tlmm 31 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&tsp_en_default_state>;
-> +	};
-> +
-> +	reg_tsp_3p3v: regulator-tsp-3p3v {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "tsp_3p3v";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +
-> +		gpio = <&tlmm 73 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&tsp_en1_default_state>;
-> +	};
-> +
-> +	reserved-memory {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		framebuffer@3200000 {
-> +			reg = <0x3200000 0x800000>;
-Ditto
-> +			no-map;
-> +		};
-> +
-> +		mpss@8400000 {
-> +			reg = <0x08400000 0x1f00000>;
-> +			no-map;
-> +		};
-> +
-> +		mba@a300000 {
-> +			reg = <0x0a300000 0x100000>;
-> +			no-map;
-> +		};
-> +
-> +		reserved@cb00000 {
-> +			reg = <0x0cb00000 0x700000>;
-> +			no-map;
-> +		};
-> +
-> +		wcnss@d200000 {
-> +			reg = <0x0d200000 0x700000>;
-> +			no-map;
-> +		};
-> +
-> +		adsp@d900000 {
-> +			reg = <0x0d900000 0x1800000>;
-> +			no-map;
-> +		};
-> +
-> +		venus@f100000 {
-> +			reg = <0x0f100000 0x500000>;
-> +			no-map;
-> +		};
-> +
-> +		/delete-node/ smem@3000000;
-> +		smem_region: smem@fa00000 {
-> +			reg = <0xfa00000 0x100000>;
-> +			no-map;
-> +		};
-> +
-> +		reserved@fb00000 {
-> +			reg = <0x0fb00000 0x260000>;
-> +			no-map;
-> +		};
-> +
-> +		rfsa@fd60000 {
-> +			reg = <0x0fd60000 0x20000>;
-> +			no-map;
-> +		};
-> +
-> +		rmtfs@fd80000 {
-> +			compatible = "qcom,rmtfs-mem";
-> +			reg = <0x0fd80000 0x180000>;
-> +			no-map;
-> +
-> +			qcom,client-id = <1>;
-> +		};
-> +	};
-> +};
-> +
-> +&blsp1_i2c2 {
-> +	status = "okay";
-> +
-> +	accelerometer@1d {
-> +		compatible = "st,lis2hh12";
-> +		reg = <0x1d>;
-> +
-> +		interrupt-parent = <&tlmm>;
-> +		interrupts = <54 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&accel_int_default_state>;
-> +
-> +		st,drdy-int-pin = <1>;
-> +
-> +		vdd-supply = <&pm8226_l19>;
-> +		vddio-supply = <&pm8226_lvs1>;
-> +	};
-> +};
-> +
-> +&blsp1_i2c4 {
-> +	status = "okay";
-> +
-> +	muic: usb-switch@25 {
-> +		compatible = "siliconmitus,sm5502-muic";
-> +		reg = <0x25>;
-> +
-> +		interrupt-parent = <&tlmm>;
-> +		interrupts = <67 IRQ_TYPE_EDGE_FALLING>;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&muic_int_default_state>;
-> +	};
-> +};
-> +
-> +&blsp1_i2c5 {
-> +	status = "okay";
-> +
-> +	touchscreen@4a {
-> +		compatible = "atmel,maxtouch";
-> +		reg = <0x4a>;
-> +
-> +		interrupt-parent = <&tlmm>;
-> +		interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&tsp_int_rst_default_state>;
-> +
-> +		reset-gpios = <&pm8226_gpios 6 GPIO_ACTIVE_LOW>;
-> +
-> +		vdd-supply = <&reg_tsp_1p8v>;
-> +		vdda-supply = <&reg_tsp_3p3v>;
-> +	};
-> +};
-> +
-> +&rpm_requests {
-> +	regulators {
-> +		compatible = "qcom,rpm-pm8226-regulators";
-> +
-> +		pm8226_s3: s3 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1300000>;
-> +		};
-> +
-> +		pm8226_s4: s4 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		pm8226_s5: s5 {
-> +			regulator-min-microvolt = <1150000>;
-> +			regulator-max-microvolt = <1150000>;
-> +		};
-> +
-> +		pm8226_l1: l1 {
-> +			regulator-min-microvolt = <1225000>;
-> +			regulator-max-microvolt = <1225000>;
-> +		};
-> +
-> +		pm8226_l2: l2 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +		};
-> +
-> +		pm8226_l3: l3 {
-> +			regulator-min-microvolt = <750000>;
-> +			regulator-max-microvolt = <1337500>;
-> +			regulator-always-on;
-> +		};
-> +
-> +		pm8226_l4: l4 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +		};
-> +
-> +		pm8226_l5: l5 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +		};
-> +
-> +		pm8226_l6: l6 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			regulator-always-on;
-> +		};
-> +
-> +		pm8226_l7: l7 {
-> +			regulator-min-microvolt = <1850000>;
-> +			regulator-max-microvolt = <1850000>;
-> +		};
-> +
-> +		pm8226_l8: l8 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			regulator-always-on;
-> +		};
-> +
-> +		pm8226_l9: l9 {
-> +			regulator-min-microvolt = <2050000>;
-> +			regulator-max-microvolt = <2050000>;
-> +		};
-> +
-> +		pm8226_l10: l10 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		pm8226_l12: l12 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		pm8226_l14: l14 {
-> +			regulator-min-microvolt = <2750000>;
-> +			regulator-max-microvolt = <2750000>;
-> +		};
-> +
-> +		pm8226_l15: l15 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <3300000>;
-> +		};
-> +
-> +		pm8226_l16: l16 {
-> +			regulator-min-microvolt = <3000000>;
-> +			regulator-max-microvolt = <3350000>;
-> +		};
-> +
-> +		pm8226_l17: l17 {
-> +			regulator-min-microvolt = <2950000>;
-> +			regulator-max-microvolt = <2950000>;
-> +
-> +			regulator-system-load = <200000>;
-> +			regulator-allow-set-load;
-> +			regulator-always-on;
-> +		};
-> +
-> +		pm8226_l18: l18 {
-> +			regulator-min-microvolt = <2950000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +
-> +		pm8226_l19: l19 {
-> +			regulator-min-microvolt = <2850000>;
-> +			regulator-max-microvolt = <3000000>;
-> +		};
-> +
-> +		pm8226_l20: l20 {
-> +			regulator-min-microvolt = <3075000>;
-> +			regulator-max-microvolt = <3075000>;
-> +		};
-> +
-> +		pm8226_l21: l21 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +
-> +		pm8226_l22: l22 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <3000000>;
-> +		};
-> +
-> +		pm8226_l23: l23 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <3300000>;
-> +		};
-> +
-> +		pm8226_l24: l24 {
-> +			regulator-min-microvolt = <1300000>;
-> +			regulator-max-microvolt = <1350000>;
-> +		};
-> +
-> +		pm8226_l25: l25 {
-> +			regulator-min-microvolt = <1775000>;
-> +			regulator-max-microvolt = <2125000>;
-> +		};
-> +
-> +		pm8226_l26: l26 {
-> +			regulator-min-microvolt = <1225000>;
-> +			regulator-max-microvolt = <1300000>;
-> +		};
-> +
-> +		pm8226_l27: l27 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +		};
-> +
-> +		pm8226_l28: l28 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2950000>;
-> +		};
-> +
-> +		pm8226_lvs1: lvs1 {};
-> +	};
-> +};
-> +
-> +&sdhc_1 {
-> +	status = "okay";
-Status last, please.
+Only if its called with a stale staged config, and it should only be called when the
+schemata file is written to, which would memset() the staged config first.
 
-> +
-> +	vmmc-supply = <&pm8226_l17>;
-> +	vqmmc-supply = <&pm8226_l6>;
-> +
-> +	bus-width = <8>;
-> +	non-removable;
-> +};
-> +
-> +&sdhc_2 {
-> +	status = "okay";
-Status last, please.
 
-> +
-> +	vmmc-supply = <&pm8226_l18>;
-> +	vqmmc-supply = <&pm8226_l21>;
-> +
-> +	bus-width = <4>;
-> +	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
-> +};
-> +
-> +&tlmm {
-> +	accel_int_default_state: accel-int-default-state {
-> +		pins = "gpio54";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +	};
-> +
-> +	muic_int_default_state: muic-int-default-state {
-> +		pins = "gpio67";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +	};
-> +
-> +	tsp_en_default_state: tsp-en-default-state {
-> +		pins = "gpio31";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +	};
-> +
-> +	tsp_en1_default_state: tsp-en1-default-state {
-> +		pins = "gpio73";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +	};
-> +
-> +	tsp_int_rst_default_state: tsp-int-rst-default-state {
-> +		pins = "gpio17";
-> +		function = "gpio";
-> +		drive-strength = <10>;
-> +		bias-pull-up;
-> +	};
-> +};
-> +
-> +&usb {
-> +	status = "okay";
-> +	extcon = <&muic>, <&muic>;
-Status last, please.
+> The problem can be reproduced by the following commands:
+>     # A system with 16 usable closids and mba disabled
+>     mount -t resctrl resctrl -o cdp /sys/fs/resctrl
+>     mkdir /sys/fs/resctrl/p{1..7}
+>     umount /sys/fs/resctrl/
+>     mount -t resctrl resctrl /sys/fs/resctrl
+>     mkdir /sys/fs/resctrl/p{1..8}
 
-Konrad
-> +};
-> +
-> +&usb_hs_phy {
-> +	extcon = <&muic>;
-> +	v1p8-supply = <&pm8226_l10>;
-> +	v3p3-supply = <&pm8226_l20>;
-> +};
+Thanks for the reproducer - but I don't see what could set have_new_ctrl in this sequence.
+You can't call apply_config() to set CPUs in the mask without that being set.
+
+Creating a new control group, (your mkdir step) shouldn't touch the hardware at all, as it
+should be left in its reset state from the last umount(), or setup.
+
+I can't reproduce this on v6.0-rc7.
+Even if I dirty the configuration by writing to the schemata file, I can't reproduce this.
+
+(I have mba enabled, but all this should affect is the number of closid available)
+
+
+> dmesg will generate the following error:
+
+Which kernel version is this?
+
+>     [ 6180.939345] unchecked MSR access error: WRMSR to 0xca0 (tried to write
+>     0x00000000000007ff) at rIP: 0xffffffff82249142 (cat_wrmsr+0x32/0x60)
+
+Is 0x7ff the default CBM bitmap for this CPU? Or was it written in a step missing from the
+reproducer above?
+
+
+The rest of this splat isn't helpful as its the result of an IPI...
+
+>     [ 6180.951983] Call Trace:
+>     [ 6180.954516]  <IRQ>
+>     [ 6180.956619]  __flush_smp_call_function_queue+0x11d/0x170
+>     [ 6180.962028]  __sysvec_call_function+0x24/0xd0
+>     [ 6180.966485]  sysvec_call_function+0x89/0xc0
+>     [ 6180.970760]  </IRQ>
+>     [ 6180.972947]  <TASK>
+>     [ 6180.975131]  asm_sysvec_call_function+0x16/0x20
+>     [ 6180.979757] RIP: 0010:cpuidle_enter_state+0xcd/0x400
+>     [ 6180.984821] Code: 49 89 c5 0f 1f 44 00 00 31 ff e8 1e e5 77 ff 45 84
+>     ff 74 12 9c 58 f6 c4 02 0f 85 13 03 00 00 31 ff e8 67 70 7d ff fb 45 85
+>     f6 <0f> 88 75 01 00 00 49 63 c6 4c 2b 2c 24 48 8d 14 40 48 8d 14 90 49
+>     [ 6181.003710] RSP: 0018:ffffffff83a03e48 EFLAGS: 00000202
+>     [ 6181.009028] RAX: ffff943400800000 RBX: 0000000000000001 RCX: 000000000000001f
+>     [ 6181.016261] RDX: 0000000000000000 RSI: ffffffff83795059 RDI: ffffffff837c101e
+>     [ 6181.023490] RBP: ffff9434c9352000 R08: 0000059f1cb1a05e R09: 0000000000000008
+>     [ 6181.030717] R10: 0000000000000001 R11: 0000000000005c66 R12: ffffffff83bbf3a0
+>     [ 6181.037944] R13: 0000059f1cb1a05e R14: 0000000000000001 R15: 0000000000000000
+>     [ 6181.045202]  ? cpuidle_enter_state+0xb2/0x400
+>     [ 6181.049678]  cpuidle_enter+0x24/0x40
+>     [ 6181.053370]  do_idle+0x1dd/0x260
+>     [ 6181.056713]  cpu_startup_entry+0x14/0x20
+>     [ 6181.060753]  rest_init+0xbb/0xc0
+>     [ 6181.064097]  arch_call_rest_init+0x5/0xa
+>     [ 6181.068137]  start_kernel+0x668/0x691
+>     [ 6181.071914]  secondary_startup_64_no_verify+0xe0/0xeb
+>     [ 6181.077086]  </TASK>
+
+It would be good to know what triggered this IPI. It may not have been
+resctrl_arch_update_domains(). This pattern also happens from reset_all_ctrls() which
+happens during umount(). (and that would write the default CBM bitmap)
+
+If you can reproduce this easily, could you add dump_stack() to update_config() to see if
+any path is setting have_new_ctrl. You aren't writing to the schemata file in your reproducer.
+
+
+> We fix this issue by clearing the staged configs when destroying schemata list.
+
+
+> Signed-off-by: Shawn Wang <shawnwang@linux.alibaba.com>
+> Suggested-by: Xin Hao <xhao@linux.alibaba.com>
+
+If we can work out why you are seeing this, it would need a Fixes tag.
+
+Otherwise I agree it makes sense to make this more robust, but it would need a different
+commit message.
+
+
+Thanks,
+
+James
+
+
+
+> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> index f276aff521e8..b4a817ae83ab 100644
+> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> @@ -2127,8 +2127,15 @@ static int schemata_list_create(void)
+>  static void schemata_list_destroy(void)
+>  {
+>  	struct resctrl_schema *s, *tmp;
+> +	struct rdt_domain *dom;
+>  
+>  	list_for_each_entry_safe(s, tmp, &resctrl_schema_all, list) {
+> +		/*
+> +		 * Clear staged_config on each domain before schemata list is
+> +		 * destroyed.
+> +		 */
+> +		list_for_each_entry(dom, &s->res->domains, list)
+> +			memset(dom->staged_config, 0, sizeof(dom->staged_config));
+>  		list_del(&s->list);
+>  		kfree(s);
+>  	}
+
