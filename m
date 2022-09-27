@@ -2,66 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95865ED0A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 01:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E77C45ED0A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 01:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231851AbiI0W7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 18:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
+        id S231967AbiI0XA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 19:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiI0W7S (ORCPT
+        with ESMTP id S231854AbiI0XAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 18:59:18 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF450EF090;
-        Tue, 27 Sep 2022 15:59:16 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-13175b79807so5149610fac.9;
-        Tue, 27 Sep 2022 15:59:16 -0700 (PDT)
+        Tue, 27 Sep 2022 19:00:17 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F33B58DF9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 15:59:53 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RK4OYk027172;
+        Tue, 27 Sep 2022 22:59:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=B8gyiiT7o/eJWsn4vpP/IZGXm7jAkz2ji8IbM1PQvzs=;
+ b=HVni21xVlCzyvwQybtIq3CKC3iKUAdn5SpueTBswPOKGgLi+OKvck91rMKfGZUXKI/nh
+ 3hWdfsUImi2jqxKL6d+km59ODyXA4xK6dII7+RuHP5X5/s4pbxam0C5vuFfjcRNtorl2
+ RbDnzLfqVCE7P/zxEBFigFidMhb3g88O9fJKi9nIvP4l0maXjjdsStf1k6Ia0KqGoEik
+ 59EulDK7Lox1FReugqmSd+dZV7J+IglDtEZz/F6sTAUAQMnW++g3q6qJttYcRJdkku1M
+ coT3d2SZ/S2NwPtrvcIZKHeEpElnqDZ9M1K+4thuqEF6AMqBQgo766Fhc7A5k0M8wNN6 Fg== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jsstpqxsm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 27 Sep 2022 22:59:50 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28RKmf0W001421;
+        Tue, 27 Sep 2022 22:59:49 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jtpv0yphf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 27 Sep 2022 22:59:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Kej6ZI3/TjT1Keeu0czSMfR9sWUYA4L0G6OnSmmMiBhWUZdIDhqpJ+X1/sd9NdNoc+AYhchgCHBNoCVaBfMD9ry9hgf2x0NveVTlplnIZxCcWpFaMMQwN4vOUB6b+xe/F2aF7npirwfHS2C/ekL2gmXVwY4BfD9G4cKFUkZTO5Iq1XU/eUr/HfzbEYgIWCUfFNCRDOlcMjXpOhcrjPY1vXl3Ik18yQcyEKjnATq4KL2tbrCdGhZHPjRd92deBb68oWIapwW7eBfBd7xIawKP7AAUloATBtGLvo5nyZHseYF/wHPWox/roXy9qy1D47x4RDlJCIifeAbi2/pQEl3/4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B8gyiiT7o/eJWsn4vpP/IZGXm7jAkz2ji8IbM1PQvzs=;
+ b=mEshahV7X7RrN6CawR157eSDt1BhFkX21uFtdVzWhkM4uSloez8Ml98D21AItOvxU92jNl9aq8nU4vT4IuycnTz7IvSCVyDorM+QpmOiSxVCvdYVnbF4k0YkbdnDXtUAeHKALewO6HJ7IVxBfwcB0lVRiXyGP3nwUTb6EY0VpNUmPqQ4AcBprCM/CBaF17jMqpRoJCzXwm3tr2HbOPsbZJZKCqIM1mLmoi5ku2KDyOICa/UzgowlSCH1spmdeW6Qr8+PpS5l/Rsbx0P0+6I6udI4PcGRTVQ5bkg6hEd/uLs8wvtN1+R8ZijNBrc4sldVbEKWCb/m8q37BcysOLa5TA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ZWhbXo4LHHOgqEY3MQYQGmP0WVsbYvhjsz/W36gZzVI=;
-        b=JrkkY9/wWFIvfQ0dvTDYi6mrEW1SSO1/kcDOUvFeC9xZrG9+kTDhSIuFGxX7OfYA+f
-         KdCMe3aU52bro9i+vmWl72sfBnHMW6+b3IoP4DdmPOfzVqmq9Db8V4g7sf8hCujrgKfA
-         qukyVD3NIHEq3cGlxnfPOrmhiU4O0b/DCGk9UIrMJDID5clZTQ5ZiEfDGxp83Gakr0Gq
-         RkYKzMgkS2jaqOvefEIwTV6k3Kafn7PKNyAhdXlpERAFxDxj9yZx3SZ3RjEa6PWgBXeq
-         CvEWR2bdn3+n4YDbvj8LfJeYXUvZwUEkC6Bcdi1Lx8nCzKa2dcultFN16124x5tEu77a
-         knqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZWhbXo4LHHOgqEY3MQYQGmP0WVsbYvhjsz/W36gZzVI=;
-        b=7OE5nv7LpsE48J3NJ1k4G2VO1UwFJcHEqMtLn43MorLbtnn39KiNeKYTha9HYBoed0
-         RvtsrMarTDUWn4A74OVuCkujCYBC6rWYvo6iqYba7d/p9VwiiE/ZCpO2yRpGWcrFMf8C
-         tLnF2uZeW+nXiLId+l2qZXORjisJk5m2CGibve63PkHup3590lQQcDav/qrxQMnASuQv
-         EPODMIonYj/5lxVaQOSOi/GQrDk5R7OoNBP4xQ5d0UXdgZjJ4i3Wci/lv1DaBGoFlnax
-         FOMQxWoD5j6YnwvbkRwg/3iTtiJXWBmx4GKo0MJ5R0o2pyifHhBlZwttrSuirNY4SFUU
-         SWjg==
-X-Gm-Message-State: ACrzQf1ws5KI3GCc8c8DB1F7coNEl5BSP3MWsm+1b9aQR3+EWuC8K5Ij
-        UCM9U68Ie7e2qY5esn4mFNLwxDlIPjHe/LFiclk=
-X-Google-Smtp-Source: AMsMyM5sS4jw0h2JbCUGtPHH2kVbGsiot79GdN1r7qbvIQMBDfUxHd3hBatAL8YCG7cbwtYxOlCxwNZyZa7TCQxI4Uc=
-X-Received: by 2002:a05:6870:9614:b0:11d:3906:18fc with SMTP id
- d20-20020a056870961400b0011d390618fcmr3683600oaq.190.1664319555991; Tue, 27
- Sep 2022 15:59:15 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B8gyiiT7o/eJWsn4vpP/IZGXm7jAkz2ji8IbM1PQvzs=;
+ b=RGgQfg4FPq1SD8sK86Q9IqkB3PAB1XCMCF7Z7cUDdX1WOxU5NIPKefSdHPY2UZzHNgnAGtbNRuHPJ6a8QRZdiK+oi+5LRg6A3n+Qav/7YBh/4t1Comk7mOYgdbFYzMC6Kf3lQ0FyVMLF/mWl51aG6o5u21Dc4KwiZM6K6/KjI2g=
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
+ by BN0PR10MB5175.namprd10.prod.outlook.com (2603:10b6:408:115::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
+ 2022 22:59:47 +0000
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::4c38:703a:3910:61d6]) by CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::4c38:703a:3910:61d6%4]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
+ 22:59:47 +0000
+From:   Ankur Arora <ankur.a.arora@oracle.com>
+To:     linux-audit@redhat.com
+Cc:     paul@paul-moore.com, eparis@redhat.com,
+        linux-kernel@vger.kernel.org, boris.ostrovsky@oracle.com,
+        konrad.wilk@oracle.com
+Subject: [PATCH 0/3] improve audit syscall-exit latency
+Date:   Tue, 27 Sep 2022 15:59:41 -0700
+Message-Id: <20220927225944.2254360-1-ankur.a.arora@oracle.com>
+X-Mailer: git-send-email 2.31.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MW4P223CA0029.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:303:80::34) To CO6PR10MB5409.namprd10.prod.outlook.com
+ (2603:10b6:5:357::14)
 MIME-Version: 1.0
-References: <000000000000212d3205e9984e12@google.com>
-In-Reply-To: <000000000000212d3205e9984e12@google.com>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Tue, 27 Sep 2022 18:58:34 -0400
-Message-ID: <CADvbK_csG9_6coaKE0hqnzRudhTi3BXOsaANGfH2QC1Cx8OO5w@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: use-after-free Write in sctp_auth_shkey_hold (2)
-To:     syzbot <syzbot+a236dd8e9622ed8954a3@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        marcelo.leitner@gmail.com, netdev@vger.kernel.org,
-        nhorman@tuxdriver.com, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, vyasevich@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|BN0PR10MB5175:EE_
+X-MS-Office365-Filtering-Correlation-Id: 93e15367-1d86-4cb6-0650-08daa0dbf957
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wwgZiPNkQIFt6iNlTix7kFryWCW+CGkS34jzsRLv4BamjjP99CtBueVLhycZThKdXGesd7/8IIcJZxSY6htGI12E15v8fMGhznv92XmkDDcOfKP+qpJMRrYz3T0p4MFgY869+Gg9hfSzZ2yUDdE50W0tWnNhfrtfG1vVSS/U6hmHH39l7/yCOPJeXo+i/wYlvDcijITCXcoLc7DzJfSZDf/AYjIKZHiiJd21HECcBokd0EDAiJnbiBLp4dH9s1CcCaPkNSSUu1SbOOyHKEzZIsiOx9pVbeLtxqNMvoHJr8hpRxkBroovHGtTFCSGzXjlHo/KFRuORKLhOWgDe5ONXOgbnh4YpeQ4FuoFnW0z0IyFJmVHBuysWdmOdqzbF2r0Nrzg2lfAJB95a6MCVthDZTEKy0D/sdZIVZukH8GgmzwZ9+g/490+hmtZmLEL/6krPm9vhQ5F1QFofCqgrjMQZRary2CkHDH08rzA6LPSMw15ItoS1vlBIcyDGBfB3tP5dMWD4DrnUPaSIJ1NJXzlDKgmsQGOG7QyjTHINUQWMlPS1L/CxQKyRMFJu7vzRhN4rXI3tVo0KPZmF4dbVLeGqaq/vJTx+kCVikFyMTOkBoSOS6yrZ0YGlHAAPt5nHHr+STOCB6HfnpPLtbKZK7OsOU87eWF+c/SYvaTNetYeVqs0t96hJTZ5WAjKQhmOAoDVOoJme7RrRxvUogjtSihOuA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(366004)(39860400002)(136003)(396003)(451199015)(36756003)(83380400001)(38100700002)(66556008)(66476007)(8676002)(26005)(8936002)(4326008)(6506007)(41300700001)(66946007)(5660300002)(2906002)(86362001)(107886003)(6666004)(2616005)(1076003)(103116003)(6486002)(316002)(186003)(6512007)(478600001)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?13vXfGq0Ht7Wjr4vwCOHDm1E6lwRqoz6nZgl2jHJS/YFCV2fdSt49UvuMMAi?=
+ =?us-ascii?Q?CEmr/Jdvtr8LTR7rOstEY1ir7WCU8fW0fflP8iwzAmta6o1hk1yHTOUs/HM0?=
+ =?us-ascii?Q?TmrP8PwAJt5Z4Q9zcEADbUYE2srF7nJXG6X1N8VDj6xE6ZxwbCTXapM1G92M?=
+ =?us-ascii?Q?97O9SAbPe76vMDEqJvvhhH3gZ0zVBd6zV+OX5u/dAKpOpcZnrv7PAbBZ0+Cq?=
+ =?us-ascii?Q?3sRMR9XTdu391csY2GbxKKdH2VXkanLUzTIEpS68+SIU3468aeL2T0n3yG5D?=
+ =?us-ascii?Q?MDfaYOPi4cSa4OFnzKNAdthVGJBnAyztdRz+6EGMBlMdwfepy5pQuPG9OZiD?=
+ =?us-ascii?Q?hJ1ERW+Bn0hGjWde6wK/ajptfEhI4PTawTYoMI6rjOdXRMiC99ZNouPRcZEJ?=
+ =?us-ascii?Q?B0k2MSXmLknUGKRB1WsgRu7IMQdDQwYilGfTjdXVHVOTrcvD22GZPkNpBgbt?=
+ =?us-ascii?Q?vaW5EQkCxl4oFRs/zexxUfcC6COmoOkjCKGk+nj7ouUWVosl0gbKK+EU5RiY?=
+ =?us-ascii?Q?xnvfocmxjjPfMKIlVHMbcLEIp5nTW9nuiHfFUJkCch89NxDzv9a7jmQrKMpA?=
+ =?us-ascii?Q?EoRUkRvt7ZjJdujH8t4KWkeP8Iu0SMXmvQa6H0C0IFcGrD4lMph+V8jbZB23?=
+ =?us-ascii?Q?YAkciluRN2PJQU0fUTEBKDMwxW8Z9ceLliFkceecvtkRcXFbEGHsRSZbl5AD?=
+ =?us-ascii?Q?jFQBOsi+By9kMe7VlXBtLxCQzzZkWduk8VoK5u/Y7ZvvEveR7HkowBPVSL3x?=
+ =?us-ascii?Q?zLwkX9yTLPO5wng604GQep8vBH93WHQS9ONdZh7fOjxX2v7Y+hSLw//jBnpo?=
+ =?us-ascii?Q?0d+fdbsS6c7+rVap3HTeaewVFOeB4AewSu2PQy7lmkiLyAqSa5jwR9PRVZp1?=
+ =?us-ascii?Q?iFSOeNJp0yUzp+vXylqvTW+kBhov+XfeNYceqxxXhM9AbdXuu5p/4cWidp1U?=
+ =?us-ascii?Q?HEwDwJflrn8STo5NmQuvMUG7d5c/p2iZdnvEsJ+s9mxvFzgpcUdha613wha1?=
+ =?us-ascii?Q?SBLPDNQtM5xKvfNwpkN6RcTP2t9tJ7B7yE9hycxEeTEFWj8gYZsCaWwL8h5x?=
+ =?us-ascii?Q?odWReWbJTec4b8cX3ePXVNOF6oNjH9Np10iQgWbhl28OqVdLbw+ZlHIYCeOB?=
+ =?us-ascii?Q?C138Rd4nso5XKCBKLzNKAaYEVYag1J5SLqBybCYQZYRbGuZWwMoqv3G55SLY?=
+ =?us-ascii?Q?tGX+8JlY1LJI17wzni+IAiwowlP1AdKIjQZNS7nNNyPqyH9pVdIuHNma9h6v?=
+ =?us-ascii?Q?ZV6SXBBGUZtntSmLJMfo0zNsV7TdQuFqikXDk9DQJ94J1I07vwdj/YnpuzJg?=
+ =?us-ascii?Q?w7rrh8Qefs41STX5/wDOTzzN05B77C5mVC6IKTcR+Gp6iD7DVLcKynouNqUT?=
+ =?us-ascii?Q?5EIm/7rYhfsHocGS+DziyvZ1sqYeh2iV/+FPEAG176a5HYvDIeIAklT7kRie?=
+ =?us-ascii?Q?MrlrmWJ0HZNsBdQA8yFpuSho+gBGRv6zOPdDltIOSFhIoFHTmiaTh6rXnIfy?=
+ =?us-ascii?Q?I9xyLEwEQDudBwHNIBzYg0YzHHAaccydoRN8MCB+1eC4s345VHf6Ju0dbLJ4?=
+ =?us-ascii?Q?E4Ml9tKXneLRT3+07DCDyt3LrjHF9V4zJ6mUSVAI?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93e15367-1d86-4cb6-0650-08daa0dbf957
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 22:59:47.0514
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZhiNhfX/04kLdIRa3azeVDn83IjxhB4qn//cdZnUwkFcQSiRBeu0pGQVAp3NB2G4DQl0qpYIbckgDhRham2bm1Go4zMh7IbMAd4D8bNhDhk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5175
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-27_11,2022-09-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 phishscore=0
+ mlxscore=0 mlxlogscore=999 adultscore=0 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209270141
+X-Proofpoint-ORIG-GUID: x2ImYmQfliJQWW-zgWB_SC1WYY9Qxdq4
+X-Proofpoint-GUID: x2ImYmQfliJQWW-zgWB_SC1WYY9Qxdq4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,232 +143,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 2:14 PM syzbot
-<syzbot+a236dd8e9622ed8954a3@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    cb71b93c2dc3 Add linux-next specific files for 20220628
-> git tree:       linux-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=12e40342080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a236dd8e9622ed8954a3
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1689249a080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1618ab1c080000
->
-> Bisection is inconclusive: the issue happens on the oldest tested release.
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1155cda4080000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=1355cda4080000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1555cda4080000
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+a236dd8e9622ed8954a3@syzkaller.appspotmail.com
->
-> ==================================================================
-> BUG: KASAN: use-after-free in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
-> BUG: KASAN: use-after-free in atomic_fetch_add_relaxed include/linux/atomic/atomic-instrumented.h:116 [inline]
-> BUG: KASAN: use-after-free in __refcount_add include/linux/refcount.h:193 [inline]
-> BUG: KASAN: use-after-free in __refcount_inc include/linux/refcount.h:250 [inline]
-> BUG: KASAN: use-after-free in refcount_inc include/linux/refcount.h:267 [inline]
-> BUG: KASAN: use-after-free in sctp_auth_shkey_hold+0x22/0xa0 net/sctp/auth.c:112
-> Write of size 4 at addr ffff88807cd4ad98 by task syz-executor284/3719
->
-> CPU: 0 PID: 3719 Comm: syz-executor284 Not tainted 5.19.0-rc4-next-20220628-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_address_description mm/kasan/report.c:317 [inline]
->  print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
->  kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
->  check_region_inline mm/kasan/generic.c:183 [inline]
->  kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
->  instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
->  atomic_fetch_add_relaxed include/linux/atomic/atomic-instrumented.h:116 [inline]
->  __refcount_add include/linux/refcount.h:193 [inline]
->  __refcount_inc include/linux/refcount.h:250 [inline]
->  refcount_inc include/linux/refcount.h:267 [inline]
->  sctp_auth_shkey_hold+0x22/0xa0 net/sctp/auth.c:112
->  sctp_set_owner_w net/sctp/socket.c:132 [inline]
->  sctp_sendmsg_to_asoc+0xbd5/0x1a20 net/sctp/socket.c:1863
->  sctp_sendmsg+0x1053/0x1d50 net/sctp/socket.c:2025
->  inet_sendmsg+0x99/0xe0 net/ipv4/af_inet.c:819
->  sock_sendmsg_nosec net/socket.c:714 [inline]
->  sock_sendmsg+0xcf/0x120 net/socket.c:734
-The call trace is very similar with the one fixed in:
+This series attempts to reduce syscall-exit latency in the audit path,
+especially for cases where there are a lot of audit exit rules.
 
-commit 58acd10092268831e49de279446c314727101292
-Author: Xin Long <lucien.xin@gmail.com>
-Date:   Tue Jul 20 16:07:01 2021 -0400
+From profiling, audit_filter_syscall() takes the largest chunk of time,
+specifically in this list-walk while processing the AUDIT_FILTER_EXIT
+list:
 
-    sctp: update active_key for asoc when old key is being replaced
+      list = &audit_filter_list[AUDIT_FILTER_EXIT];
 
-It was caused by active_key not being updated.
+      list_for_each_entry_rcu(e, list, list) {
+          if (audit_in_mask(&e->rule, ctx->major) &&
+              audit_filter_rules(tsk, &e->rule, ctx, NULL,
+                                 &state, false, x)) {
+                  rcu_read_unlock();
+                  ctx->current_state = state;
+                  return state;
+          }
+      }
 
-"setsockopt$inet_sctp6_SCTP_AUTH_KEY(r0, 0x84, 0x17,
-&(0x7f00000002c0)={0x0, 0x0, 0x1, "8b"}, 0x9) (fail_nth: 5)"
+(Note that almost identical logic exists in audit_filter_uring(),
+audit_filter_inode_name().)
 
-If the 5th failure is the one in sctp_auth_asoc_init_active_key(),
-this same issue will be triggered.
+Comparing baseline performance with audit=0/audit=1 with a user-space
+getpid() loop (executes 10^7 times.) For audit=1, this uses an
+audit-rule set where the audit_filter_syscall() loop iterates over
+42 AUDIT_FILTER_EXIT rules which, for getpid(), calls audit_filter_rules()
+for 5 of them (we use this set of rules in production.)
 
-I will prepare a fix to handle the error returned from
-sctp_auth_asoc_init_active_key() in sctp_auth_set_key().
+Test system:
+ Server: ORACLE SERVER X8-2L
+ CPU: Intel Skylakex (6:85:6)
+ Microcode: 0x400320a
 
-Thanks.
+ # v6.0.0-rc5.baseline, audit=0
+ Performance counter stats for 'bin/getpid' (3 runs):
 
+            734.10 msec task-clock                       #    0.999 CPUs utilized            ( +-  0.03% )
+                 1      context-switches                 #    1.361 /sec                     ( +- 66.67% )
+                 0      cpu-migrations                   #    0.000 /sec
+                53      page-faults                      #   72.152 /sec                     ( +-  0.63% )
+     2,838,869,156      cycles                           #    3.865 GHz                      ( +-  0.01% )  (62.40%)
+     4,174,224,305      instructions                     #    1.47  insn per cycle           ( +-  0.01% )  (74.93%)
+       890,798,133      branches                         #    1.213 G/sec                    ( +-  0.01% )  (74.93%)
+         5,015,118      branch-misses                    #    0.56% of all branches          ( +-  0.05% )  (74.93%)
+     1,231,150,558      L1-dcache-loads                  #    1.676 G/sec                    ( +-  0.01% )  (74.94%)
+           418,297      L1-dcache-load-misses            #    0.03% of all L1-dcache accesses  ( +-  0.68% )  (75.07%)
+             3,937      LLC-loads                        #    5.360 K/sec                    ( +-  3.76% )  (50.13%)
+               510      LLC-load-misses                  #   13.39% of all LL-cache accesses  ( +- 79.89% )  (50.00%)
 
->  __sys_sendto+0x21a/0x320 net/socket.c:2116
->  __do_sys_sendto net/socket.c:2128 [inline]
->  __se_sys_sendto net/socket.c:2124 [inline]
->  __x64_sys_sendto+0xdd/0x1b0 net/socket.c:2124
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> RIP: 0033:0x7f9b40d281d9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 a1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f9b40cb52d8 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
-> RAX: ffffffffffffffda RBX: 00007f9b40db04b0 RCX: 00007f9b40d281d9
-> RDX: 0000000000000001 RSI: 0000000020000400 RDI: 0000000000000003
-> RBP: 00007f9b40d7d5dc R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f9b40cb52f0
-> R13: 00007f9b40db04b8 R14: 0100000000000000 R15: 0000000000022000
->  </TASK>
->
-> Allocated by task 3717:
->  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
->  kasan_set_track mm/kasan/common.c:45 [inline]
->  set_alloc_info mm/kasan/common.c:436 [inline]
->  ____kasan_kmalloc mm/kasan/common.c:515 [inline]
->  ____kasan_kmalloc mm/kasan/common.c:474 [inline]
->  __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
->  kmalloc include/linux/slab.h:600 [inline]
->  kzalloc include/linux/slab.h:733 [inline]
->  sctp_auth_shkey_create+0x85/0x1f0 net/sctp/auth.c:84
->  sctp_auth_asoc_copy_shkeys+0x1e8/0x350 net/sctp/auth.c:363
->  sctp_association_init net/sctp/associola.c:257 [inline]
->  sctp_association_new+0x189e/0x2330 net/sctp/associola.c:298
->  sctp_connect_new_asoc+0x1ac/0x770 net/sctp/socket.c:1089
->  sctp_sendmsg_new_asoc net/sctp/socket.c:1691 [inline]
->  sctp_sendmsg+0x13d7/0x1d50 net/sctp/socket.c:1998
->  inet_sendmsg+0x99/0xe0 net/ipv4/af_inet.c:819
->  sock_sendmsg_nosec net/socket.c:714 [inline]
->  sock_sendmsg+0xcf/0x120 net/socket.c:734
->  __sys_sendto+0x21a/0x320 net/socket.c:2116
->  __do_sys_sendto net/socket.c:2128 [inline]
->  __se_sys_sendto net/socket.c:2124 [inline]
->  __x64_sys_sendto+0xdd/0x1b0 net/socket.c:2124
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x46/0xb0
->
-> Freed by task 3720:
->  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
->  kasan_set_track+0x21/0x30 mm/kasan/common.c:45
->  kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
->  ____kasan_slab_free mm/kasan/common.c:366 [inline]
->  ____kasan_slab_free+0x166/0x1c0 mm/kasan/common.c:328
->  kasan_slab_free include/linux/kasan.h:200 [inline]
->  slab_free_hook mm/slub.c:1754 [inline]
->  slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1780
->  slab_free mm/slub.c:3534 [inline]
->  kfree+0xe2/0x4d0 mm/slub.c:4562
->  sctp_auth_shkey_destroy net/sctp/auth.c:101 [inline]
->  sctp_auth_shkey_release+0x100/0x160 net/sctp/auth.c:107
->  sctp_auth_set_key+0x443/0x960 net/sctp/auth.c:866
->  sctp_setsockopt_auth_key net/sctp/socket.c:3640 [inline]
->  sctp_setsockopt+0x4c33/0xa9a0 net/sctp/socket.c:4683
->  __sys_setsockopt+0x2d6/0x690 net/socket.c:2251
->  __do_sys_setsockopt net/socket.c:2262 [inline]
->  __se_sys_setsockopt net/socket.c:2259 [inline]
->  __x64_sys_setsockopt+0xba/0x150 net/socket.c:2259
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x46/0xb0
->
-> The buggy address belongs to the object at ffff88807cd4ad80
->  which belongs to the cache kmalloc-32 of size 32
-> The buggy address is located 24 bytes inside of
->  32-byte region [ffff88807cd4ad80, ffff88807cd4ada0)
->
-> The buggy address belongs to the physical page:
-> page:ffffea0001f35280 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7cd4a
-> flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-> raw: 00fff00000000200 0000000000000000 dead000000000122 ffff888011841500
-> raw: 0000000000000000 0000000000400040 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
-> page_owner tracks the page as allocated
-> page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12820(GFP_ATOMIC|__GFP_NOWARN|__GFP_NORETRY), pid 3653, tgid 3653 (kworker/1:6), ts 62971434672, free_ts 62952459810
->  prep_new_page mm/page_alloc.c:2535 [inline]
->  get_page_from_freelist+0x210d/0x3a30 mm/page_alloc.c:4282
->  __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5506
->  alloc_pages+0x1aa/0x310 mm/mempolicy.c:2280
->  alloc_slab_page mm/slub.c:1824 [inline]
->  allocate_slab+0x27e/0x3d0 mm/slub.c:1969
->  new_slab mm/slub.c:2029 [inline]
->  ___slab_alloc+0x89d/0xef0 mm/slub.c:3031
->  __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
->  slab_alloc_node mm/slub.c:3209 [inline]
->  slab_alloc mm/slub.c:3251 [inline]
->  kmem_cache_alloc_trace+0x323/0x3e0 mm/slub.c:3282
->  kmalloc include/linux/slab.h:600 [inline]
->  kzalloc include/linux/slab.h:733 [inline]
->  ref_tracker_alloc+0x14c/0x550 lib/ref_tracker.c:85
->  __netdev_tracker_alloc include/linux/netdevice.h:3960 [inline]
->  netdev_hold include/linux/netdevice.h:3989 [inline]
->  dst_init+0xe0/0x520 net/core/dst.c:52
->  dst_alloc+0x16b/0x1f0 net/core/dst.c:96
->  ip6_dst_alloc+0x2e/0x90 net/ipv6/route.c:344
->  icmp6_dst_alloc+0x6d/0x680 net/ipv6/route.c:3261
->  ndisc_send_skb+0x10eb/0x1730 net/ipv6/ndisc.c:487
->  ndisc_send_ns+0xa6/0x120 net/ipv6/ndisc.c:665
->  addrconf_dad_work+0xbf9/0x12d0 net/ipv6/addrconf.c:4171
->  process_one_work+0x991/0x1610 kernel/workqueue.c:2289
-> page last free stack trace:
->  reset_page_owner include/linux/page_owner.h:24 [inline]
->  free_pages_prepare mm/page_alloc.c:1453 [inline]
->  free_pcp_prepare+0x5e4/0xd20 mm/page_alloc.c:1503
->  free_unref_page_prepare mm/page_alloc.c:3383 [inline]
->  free_unref_page_list+0x16f/0xb90 mm/page_alloc.c:3525
->  release_pages+0xbe8/0x1810 mm/swap.c:1017
->  tlb_batch_pages_flush+0xa8/0x1a0 mm/mmu_gather.c:58
->  tlb_flush_mmu_free mm/mmu_gather.c:255 [inline]
->  tlb_flush_mmu mm/mmu_gather.c:262 [inline]
->  tlb_finish_mmu+0x147/0x7e0 mm/mmu_gather.c:353
->  exit_mmap+0x1fe/0x720 mm/mmap.c:3212
->  __mmput+0x128/0x4c0 kernel/fork.c:1180
->  mmput+0x5c/0x70 kernel/fork.c:1201
->  exit_mm kernel/exit.c:510 [inline]
->  do_exit+0xa09/0x29f0 kernel/exit.c:782
->  do_group_exit+0xd2/0x2f0 kernel/exit.c:925
->  __do_sys_exit_group kernel/exit.c:936 [inline]
->  __se_sys_exit_group kernel/exit.c:934 [inline]
->  __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x46/0xb0
->
-> Memory state around the buggy address:
->  ffff88807cd4ac80: 00 00 00 00 fc fc fc fc 00 00 00 00 fc fc fc fc
->  ffff88807cd4ad00: 00 00 00 00 fc fc fc fc fa fb fb fb fc fc fc fc
-> >ffff88807cd4ad80: fa fb fb fb fc fc fc fc fa fb fb fb fc fc fc fc
->                             ^
->  ffff88807cd4ae00: 00 00 00 00 fc fc fc fc 00 00 00 00 fc fc fc fc
->  ffff88807cd4ae80: 00 00 00 00 fc fc fc fc 00 00 00 00 fc fc fc fc
-> ==================================================================
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+          0.735018 +- 0.000275 seconds time elapsed  ( +-  0.04% )
+
+ # v6.0.0-rc5.baseline, audit=1
+ Performance counter stats for 'bin/getpid' (3 runs):
+
+          2,158.81 msec task-clock                       #    0.998 CPUs utilized            ( +-  0.13% )
+                 2      context-switches                 #    0.925 /sec                     ( +- 28.87% )
+                 0      cpu-migrations                   #    0.000 /sec
+                52      page-faults                      #   24.056 /sec                     ( +-  0.64% )
+     8,364,119,898      cycles                           #    3.869 GHz                      ( +-  0.11% )  (62.48%)
+    19,996,521,678      instructions                     #    2.39  insn per cycle           ( +-  0.01% )  (74.98%)
+     4,302,068,252      branches                         #    1.990 G/sec                    ( +-  0.00% )  (74.98%)
+        15,135,694      branch-misses                    #    0.35% of all branches          ( +-  0.16% )  (74.99%)
+     4,714,694,841      L1-dcache-loads                  #    2.181 G/sec                    ( +-  0.01% )  (74.99%)
+        66,407,857      L1-dcache-load-misses            #    1.41% of all L1-dcache accesses  ( +-  1.50% )  (75.01%)
+             6,785      LLC-loads                        #    3.139 K/sec                    ( +- 12.49% )  (50.03%)
+             3,235      LLC-load-misses                  #   41.29% of all LL-cache accesses  ( +-  6.08% )  (50.01%)
+
+           2.16213 +- 0.00288 seconds time elapsed  ( +-  0.13% )
+
+perf stat numbers for each getpid() iteration:
+
+		  baseline      baseline 
+                   audit=0       audit=1 
+
+  cycles               283           836 
+  instructions         417          1999 
+  IPC                 1.47          2.39 
+  branches              89           430 
+  branch-misses       0.50          1.51 
+  L1-loads             123           471 
+  L1-load-misses        ~0          ~6.6*
+
+  * the L1-load-misses are largely stable for runs across a single
+    boot, but vary across boots due to vagaries of the SLAB allocator.
+
+baseline audit=1 spends a significant amount of time executing in audit
+code and incurs a new branch-miss and a few new L1-load-misses. Also
+note that computed audit-only IPC is 2.86 so the baseline is not
+ill-performant code.
+
+Patches
+==
+
+Patch 1 "audit: cache ctx->major in audit_filter_syscall()", caches
+ctx->major in a local variable. This gets rid of a persistent entry
+from L1-dcache  (audit_context::major) that had similar alignment
+constraints as a potentially busy cache-set (audit_entry::list) and
+allows some of the error checking in audit_in_mask() to be hoisted out
+of the loop.
+
+Patch 2: "audit: annotate branch direction for audit_in_mask()", so
+the compiler can pessimize the call to audit_filter_rules().
+
+Patch 3, "audit: unify audit_filter_{uring(),inode_name(),syscall()}"
+centralizes this logic in a common function.
+
+with these changes:
+
+ Performance counter stats for 'bin/getpid' (3 runs):
+
+          1,750.21 msec task-clock                       #    0.994 CPUs utilized            ( +-  0.45% )
+                 3      context-switches                 #    1.705 /sec                     ( +- 11.11% )
+                 0      cpu-migrations                   #    0.000 /sec
+                52      page-faults                      #   29.548 /sec                     ( +-  0.64% )
+     6,770,976,590      cycles                           #    3.848 GHz                      ( +-  0.40% )  (27.74%)
+    16,588,372,024      instructions                     #    2.44  insn per cycle           ( +-  0.03% )  (33.34%)
+     4,322,555,829      branches                         #    2.456 G/sec                    ( +-  0.02% )  (33.40%)
+         2,803,286      branch-misses                    #    0.06% of all branches          ( +- 26.45% )  (33.46%)
+     4,449,426,336      L1-dcache-loads                  #    2.528 G/sec                    ( +-  0.01% )  (27.71%)
+        63,612,108      L1-dcache-load-misses            #    1.43% of all L1-dcache accesses  ( +-  0.50% )  (27.71%)
+             6,123      LLC-loads                        #    3.479 K/sec                    ( +-  8.68% )  (27.71%)
+             1,890      LLC-load-misses                  #   26.69% of all LL-cache accesses  ( +- 46.99% )  (27.71%)
+
+           1.76033 +- 0.00791 seconds time elapsed  ( +-  0.45% )
+
+And, overall getpid() latency numbers (aggregated over 12 boots for each):
+                Min     Mean    Median    Max         pstdev
+                (ns)    (ns)      (ns)    (ns)
+
+ baseline     201.30   216.14   216.22  228.46      (+- 1.45%)
+ patch1       196.63   207.86   206.60  230.98      (+- 3.92%)
+ patch1-2     173.11   182.51   179.65  202.09      (+- 4.34%)
+ patch1-3     162.11   175.26   173.71  190.56      (+- 4.33%)
+
+This gives a reasonable speedup. My testing was on Intel Skylake, but I
+suspect this should translate to other archs as well (especially on less
+wide architectures.)
+
+Please review.
+
+Thanks
+Ankur
+
+Ankur Arora (3):
+  audit: cache ctx->major in audit_filter_syscall()
+  audit: annotate branch direction for audit_in_mask()
+  audit: unify audit_filter_{uring(),inode_name(),syscall()}
+
+ kernel/auditsc.c | 86 +++++++++++++++++++++++++-----------------------
+ 1 file changed, 45 insertions(+), 41 deletions(-)
+
+-- 
+2.31.1
+
