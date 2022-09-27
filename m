@@ -2,45 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312575EBA55
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 08:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0115EBA5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 08:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiI0GG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 02:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
+        id S229495AbiI0GIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 02:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiI0GG1 (ORCPT
+        with ESMTP id S229530AbiI0GIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 02:06:27 -0400
+        Tue, 27 Sep 2022 02:08:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F84A59BC
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 23:06:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B9BA6C3B;
+        Mon, 26 Sep 2022 23:08:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC116B81992
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:06:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B9BC433D6;
-        Tue, 27 Sep 2022 06:06:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664258782;
-        bh=ELNhhCi+S5ZqZBiReMIGnz1u6k1WzveV05AquK4V1+8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uR1U/UyeXKZJ+AHBMQ+Bo5NnTdVRBKl8zqiteJ+kUZLmiGYaqK+ez9vr1POdJBj4U
-         8ss5ugOXkdibUQgT4vnsW+AtxT9wWNTNN5yCOUGTnKEqvgcsTWpEPTy9PuTUuw/DpE
-         RV6WoNHgA3A+b65zzjRaXNHAmMeLzKsIwxVOr/Fo=
-Date:   Tue, 27 Sep 2022 08:06:55 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jules Irenge <jbi.octave@gmail.com>
-Cc:     abbotti@mev.co.uk, hsweeten@visionengravers.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] comedi: Convert snprintf() to scnprintf()
-Message-ID: <YzKS/3z2cQsFFfxD@kroah.com>
-References: <YzHxcb5VzWeSNKo0@fedora>
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA358B8198C;
+        Tue, 27 Sep 2022 06:08:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 462F4C433D6;
+        Tue, 27 Sep 2022 06:08:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664258921;
+        bh=w3EvjEl2w444FDkaGcaMBXMqh4XDEqATPXWfLB6KEW0=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=YKKUWOvSvMzWpNaacN2UVJA4PX7oufPHofneTilffSjT4Fj3xUmlNzRxgVHyY48jr
+         hZ5s9JI3Dvor6THtpCV7We5LRWzaR2PGDGxvlUcmwszSC6OVx5euWXmHvjzX8fOdYb
+         fV2xLKOROR0hgvldaacPTH1mzNTSm4Mc92plqZQNg9eFOzlpNL4aY/y+JvKdUWk3RR
+         n/alSKAvdD1V1c5zPdEhITCAacedWPEsnpYs5bD0p82weORCpqJGCPRz3P/cmOYz47
+         QquJiLxjTPYo2ek3kLxyVhkwPUsggi5djOYObxBnkTy4FnvKtwJ37PNsGorTIFOeHq
+         l4GhyMEWXVqMg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzHxcb5VzWeSNKo0@fedora>
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v3] cw1200: fix incorrect check to determine if no element
+ is
+ found in list
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220413091723.17596-1-xiam0nd.tong@gmail.com>
+References: <20220413091723.17596-1-xiam0nd.tong@gmail.com>
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     pizza@shaftnet.org, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, linville@tuxdriver.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <166425891751.10854.17954228621330378644.kvalo@kernel.org>
+Date:   Tue, 27 Sep 2022 06:08:39 +0000 (UTC)
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -50,34 +59,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 07:37:37PM +0100, Jules Irenge wrote:
-> Coccinnelle reports a warning
-> Warning: Use scnprintf or sprintf
-> Adding to that, there has been a slow migration from snprintf to scnprintf.
-> This LWN article explains the rationale for this change
-> https: //lwn.net/Articles/69419/
-> Ie. snprintf() returns what *would* be the resulting length,
-> while scnprintf() returns the actual length.
+Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
+
+> The bug is here: "} else if (item) {".
 > 
-> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
-> ---
->  drivers/comedi/comedi_fops.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+> The list iterator value will *always* be set and non-NULL by
+> list_for_each_entry(), so it is incorrect to assume that the iterator
+> value will be NULL if the list is empty or no element is found in list.
 > 
-> diff --git a/drivers/comedi/comedi_fops.c b/drivers/comedi/comedi_fops.c
-> index 55a0cae04b8d..e8a0142d5894 100644
-> --- a/drivers/comedi/comedi_fops.c
-> +++ b/drivers/comedi/comedi_fops.c
-> @@ -396,7 +396,7 @@ static ssize_t max_read_buffer_kb_show(struct device *csdev,
->  	mutex_unlock(&dev->mutex);
->  
->  	comedi_dev_put(dev);
-> -	return snprintf(buf, PAGE_SIZE, "%u\n", size);
-> +	return scnprintf(buf, PAGE_SIZE, "%u\n", size);
+> Use a new value 'iter' as the list iterator, while use the old value
+> 'item' as a dedicated pointer to point to the found element, which
+> 1. can fix this bug, due to now 'item' is NULL only if it's not found.
+> 2. do not need to change all the uses of 'item' after the loop.
+> 3. can also limit the scope of the list iterator 'iter' *only inside*
+>    the traversal loop by simply declaring 'iter' inside the loop in the
+>    future, as usage of the iterator outside of the list_for_each_entry
+>    is considered harmful. https://lkml.org/lkml/2022/2/17/1032
+> 
+> Fixes: a910e4a94f692 ("cw1200: add driver for the ST-E CW1100 & CW1200 WLAN chipsets")
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-Ick, no, you should use sysfs_emit() if you really want to change these
-functions to "do the right thing".
+Patch applied to wireless-next.git, thanks.
 
-thanks,
+86df5de5c632 cw1200: fix incorrect check to determine if no element is found in list
 
-greg k-h
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20220413091723.17596-1-xiam0nd.tong@gmail.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
