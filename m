@@ -2,150 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3A65EB65F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E845EB658
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiI0AkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 20:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
+        id S229611AbiI0AjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 20:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiI0AkB (ORCPT
+        with ESMTP id S229596AbiI0AjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 20:40:01 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1B71A23D;
-        Mon, 26 Sep 2022 17:39:59 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id c81so10276675oif.3;
-        Mon, 26 Sep 2022 17:39:59 -0700 (PDT)
+        Mon, 26 Sep 2022 20:39:08 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54FA6E8B2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 17:39:06 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d82so8255458pfd.10
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 17:39:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=QK6s3qWgSzcfpcdtH25aSluRGCB5Dal9WKGY9WgXnoY=;
-        b=A+LoIsFX52NYi2E4snRfYJDUCYS7ukrKgEjVAWhG2E4ltzMpil6FOgQ10ECOR/VAsE
-         EALHMGcluPmiGF/5Ca0kHxGatmwgjXx/t+/8aNwG5eaU6TJmTCmX0u1Zudo8MrPmLaok
-         Ope7nOj9/sjvVk1Ge4OP1wr1CTQhez6nPAmRY/TFdFLlVQEE6Xit3FvlYf5cShRHPJ5W
-         Qhvt0Z5oZp/0zEWw778pIa/YuPkpaIFwI1KuD503lCBILScTwguySu0defhTYWpddep+
-         sTZUXQQ3J/EPL8xgjStFh1yjC9Kx6akqkPIjrCVbGvWAs62YRzC5PfqUNfptj/3l97ci
-         /xQg==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=gQu7elRjtkCVA25XrVVbJfx6p1CMn4Ad596tpddKVlI=;
+        b=YHebRPudhMY4JpJy26i+5DvYruGoNwqaW5ZMAt0vWMfaa8s/7dXu8M/fl4fQa19Gnz
+         vLzC143K2ga7QJlxaNKDJUvpvf0cLBbgX1EjUrJpB6Z3t4WpacTX3HoTMqOpemeTum9T
+         9oFif1air1pJeo6iuwNTEWyXGmy0dYAd6eQW8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=QK6s3qWgSzcfpcdtH25aSluRGCB5Dal9WKGY9WgXnoY=;
-        b=b74Gcsz18k0XzPJf/dxuyyFuMaW4zxJqDIAg50KNX9tLICKDlnzADQekSV37h+aZ1p
-         Gzh5FOegoBdlXqioRtVO99ygLAWnUsU6mJDQGdLDEAbCpQBHMtQZVgb5e6cjZfpOBKlj
-         oiMrt01sV97w6APivC2gBlcsohWGvHcUfrkSnHNDOSPBrcOedkzYD5v3pYm0gRJxzMqg
-         p3Phk75aO2iT5GF1eAMxDud4aKEQGyY4ZQulNd8q+PZaFTelaSQB0ORTiWb1a5PhNC7y
-         D8KYR3INYeg/6w99FLb95YFn6TieWU2nh81ohAWzChS/jHsKzRImlfQgt9vWfxaY2zrv
-         YQdQ==
-X-Gm-Message-State: ACrzQf0EnPzXgK743BSoUmGAejTx1w+wAGsh2viXEhcTEXMN7rUIHlZ2
-        T+akLbVojNYIH6MmleJw/Vtgxjy+tXQ=
-X-Google-Smtp-Source: AMsMyM6Hebx4KfgsUvEYqtv3W940TqkjSJ9T9yRRN1UqLwb4B/3Np5aPTbHn9YROliZkJpiQSu30gQ==
-X-Received: by 2002:a05:6808:1c07:b0:34f:5d29:f597 with SMTP id ch7-20020a0568081c0700b0034f5d29f597mr645843oib.275.1664239197402;
-        Mon, 26 Sep 2022 17:39:57 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id y123-20020a4a4581000000b00472874bc2ffsm55719ooa.28.2022.09.26.17.39.56
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=gQu7elRjtkCVA25XrVVbJfx6p1CMn4Ad596tpddKVlI=;
+        b=T9q7KzN9/BlwCj3XnmeaDo0K3k047m5ItZLgGIouXSqywXffKCE3gDfrMuts819U6m
+         2GCUPhCUeS+q7hZchK8nBOO2lTY6yx7m5N+EdzyzEU4dUUd10EJWNn67bd4hpkTn6OTR
+         /9AJN4ui4SgCF9C6jCnwVLdMK1SubsuiV7GTA9LLfd9zKFOaU0G+PBft7KiIXGyevksS
+         pHNRDb6hIdzy1IKN2/goQVi5HmnjQPxyOrF53IcoFibzz/+J46nGdSG79Wrb14BuRE/3
+         xAb1O9qxH2yvGkwtFApmt8rO2xiw1Lxb8S55qpmCobCqu/i5DSbXoKFOpZrVjiFxdxA9
+         5BXg==
+X-Gm-Message-State: ACrzQf2LthiICDxGHORvIE5Bf/SDKEJkAmm7Mjjj2hjIs3395icSOcH4
+        gZBN3wlOblvDa/hTKXCNKt7p8g==
+X-Google-Smtp-Source: AMsMyM6q0zPqAMRND+djOBD0BQnRq2QDhkvE4RH/RgvnTgUqDK1CruQVfWtNLbKRzhdMj1eVuuvJSw==
+X-Received: by 2002:aa7:838a:0:b0:536:101a:9ccf with SMTP id u10-20020aa7838a000000b00536101a9ccfmr26231438pfm.18.1664239146413;
+        Mon, 26 Sep 2022 17:39:06 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id mm10-20020a17090b358a00b002005f5ab6a8sm7093317pjb.29.2022.09.26.17.39.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 17:39:57 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 17:37:46 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     broonie@kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the bitmap tree
-Message-ID: <YzJF2hx4O6vnkVKC@yury-laptop>
-References: <20220926235348.1269963-1-broonie@kernel.org>
+        Mon, 26 Sep 2022 17:39:05 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] wifi: nl80211: Split memcpy() of struct nl80211_wowlan_tcp_data_token flexible array
+Date:   Mon, 26 Sep 2022 17:39:03 -0700
+Message-Id: <20220927003903.1941873-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926235348.1269963-1-broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1337; h=from:subject; bh=AcWKG6SkGHm1gQFQvlTO3I8cYnqLZrK49tPiWkFFMpw=; b=owEBbAKT/ZANAwAKAYly9N/cbcAmAcsmYgBjMkYnfizOgUmpq7MUHlsWh6gWfRW7q3xItKmsLGpl X8AuJEaJAjIEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYzJGJwAKCRCJcvTf3G3AJiMaD/ jjVEt170Tm/FPxJt7hfeZS5dWFWiFhm9o0lQDNKfZK7An5FYM5rxs1tgw/uBVrxDpn9nHxo3PianPB vkFHHGCJK3XYlgOf8kGfaCaDo4rd4eCKH0fh8dNfCPfZuoshRMTwMfpqaf2G3X6gDrUXCAo4NKAyCU VLKuI/qPdbJ3Cl8XU18DPmS+D5/u+O08vZZG2RRNsR5FLlrRXK2x8+bOSmUogRQ23GS89lDWRrw35+ WFkwJYm5YOiNRlKUmGkHaJdgibMOdzz/3ZLW1lkQJZ9M5zGsDmL7e5FdfpuMaLmN4OJsuskcOxqllk vzG+wP6+lih/tlhgYC076dbmea4o5xo0K2CoRr5V9NBQE9yPQmRwx13eM9JC7APzJgIXclrRj/lFFZ QpPBSWyhRZmlfeVmAQX7wQTXAZAl103DViGGZZNe5Mq3KGc3h9w4nLN/lEfBW+SDERbJmfclTpMjUY jt8z8a/MqcNZnoj/HArxoQaHAA6lGE6Q/83AqwGsJfiBmoRe8ulOnsrAyK/M+9C2mhd46bTIuxyXLn ywC+aXxVFVGxKL92NTCk3jhVVZRVqASA1xGs2b7Xy1jMHtl6rIhVTZ9sDOCi6fPFMLrrkDey5pt4pC 4REvbF0sq67ulYGwx6TXOFS1/UFnzmuyi2ZbVtuJgt0sMYDfY8Jg7PXJWG
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 12:53:48AM +0100, broonie@kernel.org wrote:
-> Hi all,
-> 
-> After merging the bitmap tree, today's linux-next build (x86
-> allmodconfig) failed like this:
+To work around a misbehavior of the compiler's ability to see into
+composite flexible array structs (as detailed in the coming memcpy()
+hardening series[1]), split the memcpy() of the header and the payload
+so no false positive run-time overflow warning will be generated.
 
-Hmm, this weird. I checked the next-20220923, and the drivers' code
-mentioned in the log differs from what I see, and looks correct.
-bitmap_weight() definition hasn't been changed in bitmap-for-next
-patches.
+[1] https://lore.kernel.org/linux-hardening/20220901065914.1417829-2-keescook@chromium.org/
 
-Allmodconfig build looks good to me.
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ net/wireless/nl80211.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Check what I see in next-20220923 below.
-
-Thanks,
-Yury
+diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
+index 2705e3ee8fc4..461897933e92 100644
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@ -13171,7 +13171,8 @@ static int nl80211_parse_wowlan_tcp(struct cfg80211_registered_device *rdev,
+ 	       wake_mask_size);
+ 	if (tok) {
+ 		cfg->tokens_size = tokens_size;
+-		memcpy(&cfg->payload_tok, tok, sizeof(*tok) + tokens_size);
++		cfg->payload_tok = *tok;
++		memcpy(cfg->payload_tok.token_stream, tok->token_stream, + tokens_size);
+ 	}
  
-> /tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:492:3: note: in expansion of macro 'dev_err'
->   492 |   dev_err(rvu->dev, "%s: No space in id bitmap (%lu)\n",
->       |   ^~~~~~~
-> /tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:492:51: note: format string is defined here
->   492 |   dev_err(rvu->dev, "%s: No space in id bitmap (%lu)\n",
->       |                                                 ~~^
->       |                                                   |
->       |                                                   long unsigned int
->       |                                                 %u
+ 	trig->tcp = cfg;
+-- 
+2.34.1
 
-                dev_err(rvu->dev, "%s: No space in id bitmap (%d)\n",
-                        __func__, bitmap_weight(table->id_bmap, table->tot_ids));
-
-> /tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c:525:22: error: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Werror=format=]
->   525 |   dev_info(rvu->dev, "%s: No space in exact cam table, weight=%lu\n", __func__,
->       |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                dev_info(rvu->dev, "%s: No space in exact cam table, weight=%u\n", __func__,
-                         bitmap_weight(table->cam_table.bmap, table->cam_table.depth));jj
-
-> /tmp/next/build/drivers/gpu/drm/i915/gt/intel_sseu.c:867:39: error: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Werror=format=]
->   867 |   seq_printf(m, "  %s Geometry DSS: %lu\n", type,
->       |                                     ~~^
->       |                                       |
->       |                                       long unsigned int
->       |                                     %u
->   868 |       bitmap_weight(sseu->geometry_subslice_mask.xehp,
->       |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |       |
->       |       unsigned int
->   869 |       XEHP_BITMAP_BITS(sseu->geometry_subslice_mask)));
-
-                seq_printf(m, "  %s Geometry DSS: %u\n", type,
-                           bitmap_weight(sseu->geometry_subslice_mask.xehp,
-                                         XEHP_BITMAP_BITS(sseu->geometry_subslice_mask)));
-
-
->       |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> /tmp/next/build/drivers/gpu/drm/i915/gt/intel_sseu.c:870:38: error: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Werror=format=]
->   870 |   seq_printf(m, "  %s Compute DSS: %lu\n", type,
->       |                                    ~~^
->       |                                      |
->       |                                      long unsigned int
->       |                                    %u
->   871 |       bitmap_weight(sseu->compute_subslice_mask.xehp,
->       |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |       |
->       |       unsigned int
->   872 |       XEHP_BITMAP_BITS(sseu->compute_subslice_mask)));
-
-                           bitmap_weight(sseu->compute_subslice_mask.xehp,
-                                         XEHP_BITMAP_BITS(sseu->compute_subslice_mask)));
-
->       |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
-> 
-> These look like they have probably been there for a while but I've used
-> a slightly different compiler version to Stephen so they're showing up
-> now once the bitmap tree is merged.  I will have a proper look tomorrow
-> hopefully but for now I've dropped the bitmap tree as it's getting very
-> late and it is likely I'll not finish the -next run today at all.
