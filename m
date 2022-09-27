@@ -2,179 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322D55EBBE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4507B5EBBE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiI0Ht3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 03:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        id S230503AbiI0Hs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 03:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbiI0Hsq (ORCPT
+        with ESMTP id S229687AbiI0HsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 03:48:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E1A9E2CB
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 00:48:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664264919;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O+xVSYvrcExNi3b5vWTVxTrujIqDhZXI0mpvkuH7plY=;
-        b=Ms/R3cbTqies3dfaFt3kL7fGfz8qi8wqJumWBrlJ2Fm027zaJhfJtk+fNFh39ChpCFZcXB
-        ZW8iof7Qm8DfExIF3SKW80O5+0nn+b3lDrXzEpmjIjigBHd9qGvT3w/QiOdZpITLqOPw3w
-        sm7KWTxB40hwKj62pkzf7yKaAzG/dmc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-79-cxwJkCMIOE2EZUhENpU4zg-1; Tue, 27 Sep 2022 03:48:37 -0400
-X-MC-Unique: cxwJkCMIOE2EZUhENpU4zg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4ED75862FDC;
-        Tue, 27 Sep 2022 07:48:37 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-13-192.pek2.redhat.com [10.72.13.192])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F197140EBF5;
-        Tue, 27 Sep 2022 07:48:31 +0000 (UTC)
-From:   Jason Wang <jasowang@redhat.com>
-To:     mst@redhat.com, jasowang@redhat.com
-Cc:     elic@nvidia.com, si-wei.liu@oracle.com, parav@nvidia.com,
-        wuzongyong@linux.alibaba.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, eperezma@redhat.com,
-        lingshan.zhu@intel.com, gdawar@xilinx.com, lulu@redhat.com,
-        xieyongji@bytedance.com, sgarzare@redhat.com
-Subject: [PATCH V3 3/3] vp_vdpa: support feature provisioning
-Date:   Tue, 27 Sep 2022 15:48:10 +0800
-Message-Id: <20220927074810.28627-4-jasowang@redhat.com>
-In-Reply-To: <20220927074810.28627-1-jasowang@redhat.com>
-References: <20220927074810.28627-1-jasowang@redhat.com>
+        Tue, 27 Sep 2022 03:48:25 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B957B28C;
+        Tue, 27 Sep 2022 00:48:24 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 78so8663244pgb.13;
+        Tue, 27 Sep 2022 00:48:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=zi1Y8jSaMyM1hXTYB71esr2odkqj9tfK/vSz550IFdI=;
+        b=DTkOPXoWCgNZARijQYixdNfLvEfl8XBhwtEdWCDIB25wfX/3EUoOf9l8IukW8POB6U
+         kW4AIVXclTr3fdyEJDbwLYr8LBt1Up0h2a3tFybX+z4MjPs4n8nSnq6YT8ADCEtyDg2K
+         Suk/GdH3WCu19HOcx/j+q5N6+x5OG13M04AZNMHfbtZ1mkeA70LFV0uggSQLte3cnp4A
+         Il004X6f5cy4++w8VX9x2C1NTVr2JNy9GsnZOcDlsHm2VpAZA0OsbbUk2eVFcexhEWNq
+         D9Kcm/cetMSmsHmF6h95HWsLG/TU5tb04RXfK017qugk6W9LpdDgClO2m59aD/3Ws1LA
+         tQWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=zi1Y8jSaMyM1hXTYB71esr2odkqj9tfK/vSz550IFdI=;
+        b=4RC6Cae9u82++bIKZ/K/BC6SrLICvsv6Wk1R/zgYBx/bgob5AZgL1xLqdjAZpFdFo+
+         aENgrdEwfV3vD1M7pJWbxzdsgB0GhrGnA1P+PeCmSPF+VDvUuNmvb+pnZ6BkjFLBlfK0
+         DwdyqaKtl3JMhKOAmUi0wWdoODGNhqFt+EZe2oY1EbHnKrjXA4HydHOVMwEELIp0G2Zh
+         ooofnAcFQ8lbkyFUDlBAZ+u+DtqYjxPEZrjrG8C5VjkAiUE0aW0QuxLO9dfWuoaGtVnH
+         6b3EXIUU+09dA/fBDxJcTvusZjm0/Qfm0HNNfdqylsIY8M0WmgDTQDiwcGwgSj2ENZXX
+         SUOA==
+X-Gm-Message-State: ACrzQf3GubHuRjE4yQTShrzr+K2XXZJuvAZif1K/4jaoROgJP9ISs062
+        UkcL/UhDB9MrSAmgNr+GT/S5bPc6lyY=
+X-Google-Smtp-Source: AMsMyM545x9gn1r5MfJu04xCCdCypw0uxJLuS6vVcN3LHH6OdfsdjcucZ3m6jP/qG0rDiuH4MYMXAg==
+X-Received: by 2002:a63:6206:0:b0:439:54e1:c220 with SMTP id w6-20020a636206000000b0043954e1c220mr23109702pgb.445.1664264903508;
+        Tue, 27 Sep 2022 00:48:23 -0700 (PDT)
+Received: from debian.me (subs28-116-206-12-32.three.co.id. [116.206.12.32])
+        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b0016c5306917fsm802263plk.53.2022.09.27.00.48.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 00:48:22 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 9EF791037F7; Tue, 27 Sep 2022 14:48:15 +0700 (WIB)
+Date:   Tue, 27 Sep 2022 14:48:15 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.19 000/207] 5.19.12-rc1 review
+Message-ID: <YzKqv29Z+6/LsJ9x@debian.me>
+References: <20220926100806.522017616@linuxfoundation.org>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="P65GX/BAqZEjdHOC"
+Content-Disposition: inline
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch allows the device features to be provisioned via
-netlink. This is done by:
 
-1) validating the provisioned features to be a subset of the parent
-   features.
-2) clearing the features that is not wanted by the userspace
+--P65GX/BAqZEjdHOC
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-For example:
+On Mon, Sep 26, 2022 at 12:09:49PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.12 release.
+> There are 207 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+=20
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.1.0).
 
-# vdpa mgmtdev show
-pci/0000:02:00.0:
-  supported_classes net
-  max_supported_vqs 3
-  dev_features CSUM GUEST_CSUM CTRL_GUEST_OFFLOADS MAC GUEST_TSO4
-  GUEST_TSO6 GUEST_ECN GUEST_UFO HOST_TSO4 HOST_TSO6 HOST_ECN HOST_UFO
-  MRG_RXBUF STATUS CTRL_VQ CTRL_RX CTRL_VLAN CTRL_RX_EXTRA
-  GUEST_ANNOUNCE CTRL_MAC_ADDR RING_INDIRECT_DESC RING_EVENT_IDX
-  VERSION_1 ACCESS_PLATFORM
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-1) provision vDPA device with all features that are supported by the virtio-pci
+--=20
+An old man doll... just what I always wanted! - Clara
 
-# vdpa dev add name dev1 mgmtdev pci/0000:02:00.0
-# vdpa dev config show
-dev1: mac 52:54:00:12:34:56 link up link_announce false mtu 65535
-  negotiated_features CSUM GUEST_CSUM CTRL_GUEST_OFFLOADS MAC
-  GUEST_TSO4 GUEST_TSO6 GUEST_ECN GUEST_UFO HOST_TSO4 HOST_TSO6
-  HOST_ECN HOST_UFO MRG_RXBUF STATUS CTRL_VQ CTRL_RX CTRL_VLAN
-  GUEST_ANNOUNCE CTRL_MAC_ADDR RING_INDIRECT_DESC RING_EVENT_IDX
-  VERSION_1 ACCESS_PLATFORM
+--P65GX/BAqZEjdHOC
+Content-Type: application/pgp-signature; name="signature.asc"
 
-2) provision vDPA device with a subset of the features
+-----BEGIN PGP SIGNATURE-----
 
-# vdpa dev add name dev1 mgmtdev pci/0000:02:00.0 device_features 0x300020000
-# dev1: mac 52:54:00:12:34:56 link up link_announce false mtu 65535
-  negotiated_features CTRL_VQ VERSION_1 ACCESS_PLATFORM
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYzKqugAKCRD2uYlJVVFO
+o9ViAP9ChpOBeXQV1hOCHANj9896r8IN4zT2Z7q14Ec4VosnNwEAl0HLiy7zVfGe
+iUgOyaJj5R66MCc9PgjUtUTwqaI70gs=
+=QSRu
+-----END PGP SIGNATURE-----
 
-Reviewed-by: Eli Cohen <elic@nvidia.com>
-Signed-off-by: Jason Wang <jasowang@redhat.com>
----
- drivers/vdpa/virtio_pci/vp_vdpa.c | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
-index 04522077735b..d448db0c4de3 100644
---- a/drivers/vdpa/virtio_pci/vp_vdpa.c
-+++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
-@@ -17,6 +17,7 @@
- #include <linux/virtio_ring.h>
- #include <linux/virtio_pci.h>
- #include <linux/virtio_pci_modern.h>
-+#include <uapi/linux/vdpa.h>
- 
- #define VP_VDPA_QUEUE_MAX 256
- #define VP_VDPA_DRIVER_NAME "vp_vdpa"
-@@ -35,6 +36,7 @@ struct vp_vdpa {
- 	struct virtio_pci_modern_device *mdev;
- 	struct vp_vring *vring;
- 	struct vdpa_callback config_cb;
-+	u64 device_features;
- 	char msix_name[VP_VDPA_NAME_SIZE];
- 	int config_irq;
- 	int queues;
-@@ -66,9 +68,9 @@ static struct virtio_pci_modern_device *vp_vdpa_to_mdev(struct vp_vdpa *vp_vdpa)
- 
- static u64 vp_vdpa_get_device_features(struct vdpa_device *vdpa)
- {
--	struct virtio_pci_modern_device *mdev = vdpa_to_mdev(vdpa);
-+	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
- 
--	return vp_modern_get_features(mdev);
-+	return vp_vdpa->device_features;
- }
- 
- static int vp_vdpa_set_driver_features(struct vdpa_device *vdpa, u64 features)
-@@ -475,6 +477,7 @@ static int vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 	struct pci_dev *pdev = mdev->pci_dev;
- 	struct device *dev = &pdev->dev;
- 	struct vp_vdpa *vp_vdpa = NULL;
-+	u64 device_features;
- 	int ret, i;
- 
- 	vp_vdpa = vdpa_alloc_device(struct vp_vdpa, vdpa,
-@@ -491,6 +494,20 @@ static int vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 	vp_vdpa->queues = vp_modern_get_num_queues(mdev);
- 	vp_vdpa->mdev = mdev;
- 
-+	device_features = vp_modern_get_features(mdev);
-+	if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) {
-+		if (add_config->device_features & ~device_features) {
-+			ret = -EINVAL;
-+			dev_err(&pdev->dev, "Try to provision features "
-+				"that are not supported by the device: "
-+				"device_features 0x%llx provisioned 0x%llx\n",
-+				device_features, add_config->device_features);
-+			goto err;
-+		}
-+		device_features = add_config->device_features;
-+	}
-+	vp_vdpa->device_features = device_features;
-+
- 	ret = devm_add_action_or_reset(dev, vp_vdpa_free_irq_vectors, pdev);
- 	if (ret) {
- 		dev_err(&pdev->dev,
-@@ -599,6 +616,7 @@ static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	mgtdev->id_table = mdev_id;
- 	mgtdev->max_supported_vqs = vp_modern_get_num_queues(mdev);
- 	mgtdev->supported_features = vp_modern_get_features(mdev);
-+	mgtdev->config_attr_mask = (1 << VDPA_ATTR_DEV_FEATURES);
- 	pci_set_master(pdev);
- 	pci_set_drvdata(pdev, vp_vdpa_mgtdev);
- 
--- 
-2.25.1
-
+--P65GX/BAqZEjdHOC--
