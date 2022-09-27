@@ -2,133 +2,447 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAE35EC3EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4FC35EC3FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbiI0NOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
+        id S232568AbiI0NQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232596AbiI0NNm (ORCPT
+        with ESMTP id S232501AbiI0NP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:13:42 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DA21577F3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:13:39 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so10080136pjl.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:13:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
-         :user-agent:from:from:to:cc:subject:date;
-        bh=uw1gvMh/1zxeYeQnV6wZiimhJI0pYdqIU/T7gR133DU=;
-        b=KGZxffdgEWrc+nIKZQdWmZ3shdGF0hcnG/eimwyIfxhrmALI1rYCYrjvI7h/XUgVGA
-         AC6SvAtl53+/uRBU3anLk1UvpVRaNBemAR7Oyh2pHvX7bjmJNbSDXufs8hRYtyXsG5vQ
-         jd3iWOu4rVRR/EnzQp9aaeBmal/AfKg+NmoFOYFIDeJe+wLcey51NCuMUbD1u2T1V94U
-         R0nuad1PG+imVaMqobj/rIzM1PIjkWlf6o0msI+SnoIU3CpMuPKph0lfdyOcWwBg0vLZ
-         dTGoMaNPB1H8WboG58vSq5A7eIOFKcqFwcw4AAp8tg8XHTSKsuUNf6zQOBzI1wa4MP6X
-         qvxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
-         :user-agent:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=uw1gvMh/1zxeYeQnV6wZiimhJI0pYdqIU/T7gR133DU=;
-        b=DvZW/Q/RmPkMjAW9ZudsKkpqVSwnAj6SLCkK3mvD106zycQ2aLEwo5ju2OK62B7s97
-         PPY6My9sC/rhGNFd+1/LTGOOEVVJ5IqC2TRqnh904lb7z3+Etz/x+C4FQWoP3y8Ts5bI
-         hJIEYG2rFc0opDr2hRSJ0OUa5KRhOCfapoRfJsjSRWydyLwj6O3uNM4nE7i8V0405htv
-         I1g0SOKNU6tZlnTh5dbCo35eVvn3nv+mafC6vP5BK06+x22brHSM/GqSJZJjNte+A553
-         ZC5Zf7nXFU5I2EP3YIhesE039USsC1IOMmVreNQCn8zBXoVf/b5i7OONI+OhP8cZtouz
-         Ftvw==
-X-Gm-Message-State: ACrzQf3R7uq2cUhVlhUtHASr3U+oOwXajO/jSP6DppFcCo1fG2qFgcGV
-        wHtuPNoncDM605dBdoOa965uiKwJJI/psLWKcB0Dcg==
-X-Google-Smtp-Source: AMsMyM5foO9hRFfJNeJsExDA4MlTDjL11pmea0BPzSUwTLsGAoVk8kBgQmDpzSWwATR1ZA70FE3cdWBnn6SlAjNkjO4=
-X-Received: by 2002:a17:902:f710:b0:178:a692:b1f7 with SMTP id
- h16-20020a170902f71000b00178a692b1f7mr27434461plo.112.1664284411364; Tue, 27
- Sep 2022 06:13:31 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 27 Sep 2022 06:13:30 -0700
-From:   Guillaume Ranquet <granquet@baylibre.com>
-User-Agent: meli 0.7.2
-References: <20220919-v1-0-4844816c9808@baylibre.com> <20220919-v1-12-4844816c9808@baylibre.com>
- <b05f8687-8f34-c425-ed8e-56c8aeccdaf9@collabora.com>
-In-Reply-To: <b05f8687-8f34-c425-ed8e-56c8aeccdaf9@collabora.com>
+        Tue, 27 Sep 2022 09:15:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1F613E2D;
+        Tue, 27 Sep 2022 06:15:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DA57B81BB6;
+        Tue, 27 Sep 2022 13:15:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12A1BC433C1;
+        Tue, 27 Sep 2022 13:15:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664284551;
+        bh=BtTLH+cSHuBy5Q/9p2KfMksnestZXgZpovnz/yO4aJw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VC7Jyj3ldKs6uGLJvtu8S7SgTUbTgxVotzSP7w/DgHix9+xSYQma0Jmp4XtqdfeUH
+         IuRu1c+n3EEwbQ8T/NiJ48Ah612UPH54jAmfe+QAm/hcg2xAAlRMy2uozXNWOtOUUJ
+         cvpRY/g7HqOF1mQSCnrDlT1ZJGm2j7NL+ax3Eh5n1MF+1XFqRSMCpmYoCiL2mTYMYW
+         7BGzGieNBuW9saY4D4d3QBEvk7rN8UajLYduvtLbDmCLxh1e2ElP2VXbn6g5zTpJzT
+         nV9J/1Jw/K+YQLg1OXb472ttSPahspZ0p3FT+N3O9D+yBCkp75PUAXBW8ekGuzH00q
+         e8v692I515F4A==
+From:   Miguel Ojeda <ojeda@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        live-patching@vger.kernel.org
+Subject: [PATCH v10 00/27] Rust support
+Date:   Tue, 27 Sep 2022 15:14:31 +0200
+Message-Id: <20220927131518.30000-1-ojeda@kernel.org>
 MIME-Version: 1.0
-Date:   Tue, 27 Sep 2022 06:13:30 -0700
-Message-ID: <CABnWg9tidG-HHhJ-nbE0UD2=EUCqF4WkdQ__j+2sarmSm=MsAQ@mail.gmail.com>
-Subject: Re: [PATCH v1 12/17] drm/mediatek: hdmi: mt8195: add audio support
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Sep 2022 13:11, AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->Il 19/09/22 18:56, Guillaume Ranquet ha scritto:
->> Add HDMI audio support for mt8195
->>
->> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
->>
->> diff --git a/drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c b/drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c
->> index 39e07a6dd490..bb7593ea4c86 100644
->> --- a/drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c
->> +++ b/drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c
->> @@ -215,6 +215,26 @@ static void mtk_hdmi_hw_vid_black(struct mtk_hdmi *hdmi, bool black)
->>   		mtk_hdmi_mask(hdmi, TOP_VMUTE_CFG1, 0, REG_VMUTE_EN);
->>   }
->>
->> +static void mtk_hdmi_hw_aud_mute(struct mtk_hdmi *hdmi)
->> +{
->> +	u32 val;
->> +
->> +	val = mtk_hdmi_read(hdmi, AIP_CTRL, &val);
->> +
->
->val_tx = AUD_MUTE_FIFO_EN;
->if (val & DSD_EN)
->	val_tx |= DSD_MUTE_DATA;
->
->regmap_set_bits(regmap, AIP_TXCTRL, val_tx);
->
->Easier, shorter.
+Rust support
 
-Thx for the tip.
+This is the patch series (v10) to add support for Rust as a second
+language to the Linux kernel.
 
->
->> +	if (val & DSD_EN)
->> +		mtk_hdmi_mask(hdmi, AIP_TXCTRL,
->> +			      DSD_MUTE_DATA | AUD_MUTE_FIFO_EN,
->> +			      DSD_MUTE_DATA | AUD_MUTE_FIFO_EN);
->> +	else
->> +		mtk_hdmi_mask(hdmi, AIP_TXCTRL, AUD_MUTE_FIFO_EN,
->> +			      AUD_MUTE_FIFO_EN);
->> +}
->
->Regards,
->Angelo
->
+If you are interested in following this effort, please join us in
+the mailing list at:
+
+    rust-for-linux@vger.kernel.org
+
+and take a look at the project itself at:
+
+    https://github.com/Rust-for-Linux
+
+As usual, special thanks go to ISRG (Internet Security Research Group)
+and Google for their financial support on this endeavor.
+
+Cheers,
+Miguel
+
+--
+
+# Rust support
+
+This cover letter explains the major changes and updates done since
+the previous ones. For those, please see:
+
+    RFC: https://lore.kernel.org/lkml/20210414184604.23473-1-ojeda@kernel.org/
+    v1:  https://lore.kernel.org/lkml/20210704202756.29107-1-ojeda@kernel.org/
+    v2:  https://lore.kernel.org/lkml/20211206140313.5653-1-ojeda@kernel.org/
+    v3:  https://lore.kernel.org/lkml/20220117053349.6804-1-ojeda@kernel.org/
+    v4:  https://lore.kernel.org/lkml/20220212130410.6901-1-ojeda@kernel.org/
+    v5:  https://lore.kernel.org/lkml/20220317181032.15436-1-ojeda@kernel.org/
+    v6:  https://lore.kernel.org/lkml/20220507052451.12890-1-ojeda@kernel.org/
+    v7:  https://lore.kernel.org/lkml/20220523020209.11810-1-ojeda@kernel.org/
+    v8:  https://lore.kernel.org/lkml/20220802015052.10452-1-ojeda@kernel.org/
+    v9:  https://lore.kernel.org/lkml/20220805154231.31257-1-ojeda@kernel.org/
+
+This is v9 with only minimal/trivial changes, intended for v6.1:
+
+  - `scripts/kallsyms.c`: replaced `sizeof` with `ARRAY_SIZE`.
+
+  - `scripts/kallsyms.c`: added a comment on `KSYM_NAME_LEN_BUFFER`
+    to clarify why the `_Static_assert` is needed.
+
+  - `Makefile`: added a comment on `export RUSTC_BOOTSTRAP := 1` to
+    explain that it enables unstable features in the stable compiler.
+
+  - Moved `min-tool-version.sh` changes to commit "scripts: add
+    `rust_is_available.sh`".
+
+  - Reworded commit "rust: import upstream `alloc` crate" to add
+    a script snippet to verify that the contents match upstream.
+
+  - Reworded commit "rust: add C helpers" to explain that the file
+    will grow over time.
+
+  - Picked `Reviewed-by` and `Tested-by` tags.
+
+  - Rebased on top of v6.0-rc7, which clears a few conflicts.
+
+Most of the code has been around in linux-next for some months now.
+In particular, v9 has been 7 weeks there.
+
+
+## Patch series status
+
+The Rust support is still to be considered experimental. However,
+support is good enough that kernel developers can start working on the
+Rust abstractions for subsystems and write drivers and other modules.
+
+The current series will appear in the next `linux-next`, as usual.
+
+I have kept the docs as they were in v8/v9 since they showcase best
+what the docs would eventually look like:
+
+    https://rust-for-linux.github.io/docs/kernel/
+
+As usual, please see the following link for the live list of unstable
+Rust features we are using (note that this trimmed version does not
+require all of them):
+
+    https://github.com/Rust-for-Linux/linux/issues/2
+
+
+## Conferences, meetings and liaisons
+
+Thanks a lot to everyone that joined us in LPC 2022 (Linux Plumbers
+Conference) for the Rust MC (microconference)!
+
+    https://lpc.events/event/16/sessions/150/
+    https://www.youtube.com/watch?v=Xw9pKeJ-4Bw
+
+In addition, I would like to personally thank Google and ISRG
+(Internet Security Research Group) for sponsoring Kangrejos,
+the Rust for Linux workshop; and everyone that made the effort
+to travel to Spain before LPC:
+
+    https://kangrejos.com
+
+
+## Acknowledgements
+
+The signatures in the main commits correspond to the people that
+wrote code that has ended up in them at the present time. For details
+on contributions to code and discussions, please see our repository:
+
+    https://github.com/Rust-for-Linux/linux
+
+However, we would like to give credit to everyone that has contributed
+in one way or another to the Rust for Linux project. Since the
+previous cover letter:
+
+  - Kees Cook, Nick Desaulniers, Konstantin Shelekhin and Masahiro
+    Yamada for their reviews of some of the v9 patches.
+
+  - Matthew Wilcox, Linus Torvalds, comex, Eric W. Biederman,
+    Greg Kroah-Hartman and Geert Stappers for their feedback on v9.
+
+  - Asahi Lina for working on her M1 GPU driver.
+
+  - FUJITA Tomonori for continuing his work on PCI, IRQ, BAR, DMA,
+    `ioremap`... support for a NVMe Rust driver, as well as adding
+    `be16/32/64` and `le16/32/64` types.
+
+  - Li Hongyu for working on making the `get_id_info` function more
+    general so that it is not tied to `platform`, continuing the work
+    on the virtio abstraction and the `virtio-net` driver, which
+    includes abstractions for `ethtool`, `scatterlist`, NAPI...
+
+  - Arnaldo Carvalho de Melo for releasing `pahole` 1.24 with support
+    for `--lang` and `--lang_exclude`, useful "to exclude Rust compile
+    units while aspects of the DWARF generated for it get sorted out
+    in a way that the kernel BPF verifier don't refuse loading the BTF
+    generated from them".
+
+  - Martin Rodriguez Reboredo for working on USB abstractions as well
+    as using the new `pahole` `--lang_exclude` feature to exclude
+    Rust compilation units.
+
+  - David Gow for fixing the UML support.
+
+  - Adam Bratschi-Kaye for redoing his debugfs implementation without
+    `seq_file`.
+
+  - Alice Ryhl for continuing her work on adding `BINDER_TYPE_PTR`
+    support.
+
+  - Philipp Gesang for updating the `sysctl` module to deal with
+    commit 32927393dc1c ("sysctl: pass kernel pointers to
+    ->proc_handler") as well as improving the `module!` macro to allow
+    overriding the name of module param constants.
+
+  - Masahiro Yamada for proposing a refactor of the Kbuild support for
+    Rust as well as removing the `-v` option of the
+    `rust_is_available.sh` script.
+
+  - Russell Currey for making `scripts/rust_is_available.sh`
+    compatible with using multiple words for `$CC`, e.g. for `ccache`.
+
+  - Jalil David Salamé Messina for marking the `bit` function as
+    `const` so that it can be used for e.g. creating `const` masks.
+
+  - Jon Olson for continuing his work on a `cpu` module with utilities
+    for SMP systems.
+
+  - Raghvender for working on improving a check on
+    `scripts/rust-is-available.sh`.
+
+  - Angelos for working on using `NonZeroI16` as the `Error` inner
+    type.
+
+  - Finn Behrens for updating his work on making it possible to
+    compile the kernel on macOS with Rust enabled.
+
+  - Kaviraj Kanagaraj for suggesting improvements to the quick start
+    guide.
+
+  - Sergio González Collado for suggesting improvements to the
+    `Makefile` to show an extra message.
+
+  - Wei Liu for taking the time to answer questions from newcomers
+    in Zulip.
+
+  - Philip Li, Yujie Liu et al. for continuing their work on adding
+    Rust support to the Intel 0DAY/LKP kernel test robot.
+
+  - Philip Herron and Arthur Cohen (and his supporters Open Source
+    Security and Embecosm) et al. for their ongoing work on Rust GCC.
+
+  - Antoni Boucher (and his supporters) et al. for their ongoing
+    work on `rustc_codegen_gcc`.
+
+  - Emilio Cobos Álvarez, Christian Poveda et al. for their work on
+    `bindgen`, including on issues that affect the kernel.
+
+  - Mats Larsen, Marc Poulhiès et al. for their ongoing work on
+    improving Rust support in Compiler Explorer.
+
+  - Many folks that have reported issues, tested the project,
+    helped spread the word, joined discussions and contributed in
+    other ways!
+
+Please see also the acknowledgements on the previous cover letters.
+
+
+Boqun Feng (2):
+  kallsyms: use `ARRAY_SIZE` instead of hardcoded size
+  kallsyms: avoid hardcoding buffer size
+
+Daniel Xu (1):
+  scripts: add `is_rust_module.sh`
+
+Gary Guo (1):
+  vsprintf: add new `%pA` format specifier
+
+Miguel Ojeda (22):
+  kallsyms: add static relationship between `KSYM_NAME_LEN{,_BUFFER}`
+  kallsyms: support "big" kernel symbols
+  kallsyms: increase maximum kernel symbol length to 512
+  rust: add C helpers
+  rust: import upstream `alloc` crate
+  rust: adapt `alloc` crate to the kernel
+  rust: add `compiler_builtins` crate
+  rust: add `macros` crate
+  rust: add `bindings` crate
+  rust: export generated symbols
+  scripts: checkpatch: diagnose uses of `%pA` in the C side as errors
+  scripts: checkpatch: enable language-independent checks for Rust
+  scripts: decode_stacktrace: demangle Rust symbols
+  scripts: add `generate_rust_analyzer.py`
+  scripts: add `generate_rust_target.rs`
+  scripts: add `rust_is_available.sh`
+  rust: add `.rustfmt.toml`
+  Kbuild: add Rust support
+  docs: add Rust documentation
+  x86: enable initial Rust support
+  samples: add first Rust examples
+  MAINTAINERS: Rust
+
+Wedson Almeida Filho (1):
+  rust: add `kernel` crate
+
+ .gitignore                                   |    6 +
+ .rustfmt.toml                                |   12 +
+ Documentation/core-api/printk-formats.rst    |   10 +
+ Documentation/doc-guide/kernel-doc.rst       |    3 +
+ Documentation/index.rst                      |    1 +
+ Documentation/kbuild/kbuild.rst              |   17 +
+ Documentation/kbuild/makefiles.rst           |   50 +-
+ Documentation/process/changes.rst            |   41 +
+ Documentation/rust/arch-support.rst          |   19 +
+ Documentation/rust/coding-guidelines.rst     |  216 ++
+ Documentation/rust/general-information.rst   |   79 +
+ Documentation/rust/index.rst                 |   22 +
+ Documentation/rust/quick-start.rst           |  232 ++
+ MAINTAINERS                                  |   18 +
+ Makefile                                     |  172 +-
+ arch/Kconfig                                 |    6 +
+ arch/x86/Kconfig                             |    1 +
+ arch/x86/Makefile                            |   10 +
+ include/linux/compiler_types.h               |    6 +-
+ include/linux/kallsyms.h                     |    2 +-
+ init/Kconfig                                 |   46 +-
+ kernel/configs/rust.config                   |    1 +
+ kernel/kallsyms.c                            |   26 +-
+ kernel/livepatch/core.c                      |    4 +-
+ lib/Kconfig.debug                            |   34 +
+ lib/vsprintf.c                               |   13 +
+ rust/.gitignore                              |    8 +
+ rust/Makefile                                |  381 +++
+ rust/alloc/README.md                         |   33 +
+ rust/alloc/alloc.rs                          |  440 +++
+ rust/alloc/borrow.rs                         |  498 +++
+ rust/alloc/boxed.rs                          | 2028 +++++++++++
+ rust/alloc/collections/mod.rs                |  156 +
+ rust/alloc/lib.rs                            |  244 ++
+ rust/alloc/raw_vec.rs                        |  527 +++
+ rust/alloc/slice.rs                          | 1204 +++++++
+ rust/alloc/vec/drain.rs                      |  186 ++
+ rust/alloc/vec/drain_filter.rs               |  145 +
+ rust/alloc/vec/into_iter.rs                  |  366 ++
+ rust/alloc/vec/is_zero.rs                    |  120 +
+ rust/alloc/vec/mod.rs                        | 3140 ++++++++++++++++++
+ rust/alloc/vec/partial_eq.rs                 |   49 +
+ rust/bindgen_parameters                      |   21 +
+ rust/bindings/bindings_helper.h              |   13 +
+ rust/bindings/lib.rs                         |   53 +
+ rust/compiler_builtins.rs                    |   63 +
+ rust/exports.c                               |   21 +
+ rust/helpers.c                               |   51 +
+ rust/kernel/allocator.rs                     |   64 +
+ rust/kernel/error.rs                         |   59 +
+ rust/kernel/lib.rs                           |   78 +
+ rust/kernel/prelude.rs                       |   20 +
+ rust/kernel/print.rs                         |  198 ++
+ rust/kernel/str.rs                           |   72 +
+ rust/macros/helpers.rs                       |   51 +
+ rust/macros/lib.rs                           |   72 +
+ rust/macros/module.rs                        |  282 ++
+ samples/Kconfig                              |    2 +
+ samples/Makefile                             |    1 +
+ samples/rust/Kconfig                         |   30 +
+ samples/rust/Makefile                        |    5 +
+ samples/rust/hostprogs/.gitignore            |    3 +
+ samples/rust/hostprogs/Makefile              |    5 +
+ samples/rust/hostprogs/a.rs                  |    7 +
+ samples/rust/hostprogs/b.rs                  |    5 +
+ samples/rust/hostprogs/single.rs             |   12 +
+ samples/rust/rust_minimal.rs                 |   38 +
+ scripts/.gitignore                           |    1 +
+ scripts/Kconfig.include                      |    6 +-
+ scripts/Makefile                             |    3 +
+ scripts/Makefile.build                       |   60 +
+ scripts/Makefile.debug                       |    8 +
+ scripts/Makefile.host                        |   34 +-
+ scripts/Makefile.lib                         |   12 +
+ scripts/Makefile.modfinal                    |    8 +-
+ scripts/cc-version.sh                        |   12 +-
+ scripts/checkpatch.pl                        |   12 +-
+ scripts/decode_stacktrace.sh                 |   14 +
+ scripts/generate_rust_analyzer.py            |  135 +
+ scripts/generate_rust_target.rs              |  182 +
+ scripts/is_rust_module.sh                    |   16 +
+ scripts/kallsyms.c                           |   53 +-
+ scripts/kconfig/confdata.c                   |   75 +
+ scripts/min-tool-version.sh                  |    6 +
+ scripts/rust_is_available.sh                 |  160 +
+ scripts/rust_is_available_bindgen_libclang.h |    2 +
+ tools/include/linux/kallsyms.h               |    2 +-
+ tools/lib/perf/include/perf/event.h          |    2 +-
+ tools/lib/symbol/kallsyms.h                  |    2 +-
+ 89 files changed, 12552 insertions(+), 51 deletions(-)
+ create mode 100644 .rustfmt.toml
+ create mode 100644 Documentation/rust/arch-support.rst
+ create mode 100644 Documentation/rust/coding-guidelines.rst
+ create mode 100644 Documentation/rust/general-information.rst
+ create mode 100644 Documentation/rust/index.rst
+ create mode 100644 Documentation/rust/quick-start.rst
+ create mode 100644 kernel/configs/rust.config
+ create mode 100644 rust/.gitignore
+ create mode 100644 rust/Makefile
+ create mode 100644 rust/alloc/README.md
+ create mode 100644 rust/alloc/alloc.rs
+ create mode 100644 rust/alloc/borrow.rs
+ create mode 100644 rust/alloc/boxed.rs
+ create mode 100644 rust/alloc/collections/mod.rs
+ create mode 100644 rust/alloc/lib.rs
+ create mode 100644 rust/alloc/raw_vec.rs
+ create mode 100644 rust/alloc/slice.rs
+ create mode 100644 rust/alloc/vec/drain.rs
+ create mode 100644 rust/alloc/vec/drain_filter.rs
+ create mode 100644 rust/alloc/vec/into_iter.rs
+ create mode 100644 rust/alloc/vec/is_zero.rs
+ create mode 100644 rust/alloc/vec/mod.rs
+ create mode 100644 rust/alloc/vec/partial_eq.rs
+ create mode 100644 rust/bindgen_parameters
+ create mode 100644 rust/bindings/bindings_helper.h
+ create mode 100644 rust/bindings/lib.rs
+ create mode 100644 rust/compiler_builtins.rs
+ create mode 100644 rust/exports.c
+ create mode 100644 rust/helpers.c
+ create mode 100644 rust/kernel/allocator.rs
+ create mode 100644 rust/kernel/error.rs
+ create mode 100644 rust/kernel/lib.rs
+ create mode 100644 rust/kernel/prelude.rs
+ create mode 100644 rust/kernel/print.rs
+ create mode 100644 rust/kernel/str.rs
+ create mode 100644 rust/macros/helpers.rs
+ create mode 100644 rust/macros/lib.rs
+ create mode 100644 rust/macros/module.rs
+ create mode 100644 samples/rust/Kconfig
+ create mode 100644 samples/rust/Makefile
+ create mode 100644 samples/rust/hostprogs/.gitignore
+ create mode 100644 samples/rust/hostprogs/Makefile
+ create mode 100644 samples/rust/hostprogs/a.rs
+ create mode 100644 samples/rust/hostprogs/b.rs
+ create mode 100644 samples/rust/hostprogs/single.rs
+ create mode 100644 samples/rust/rust_minimal.rs
+ create mode 100755 scripts/generate_rust_analyzer.py
+ create mode 100644 scripts/generate_rust_target.rs
+ create mode 100755 scripts/is_rust_module.sh
+ create mode 100755 scripts/rust_is_available.sh
+ create mode 100644 scripts/rust_is_available_bindgen_libclang.h
+
+
+base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
+-- 
+2.37.3
+
