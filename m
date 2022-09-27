@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F755EB93C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6D55EB952
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiI0Ece (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 00:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
+        id S229545AbiI0EoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 00:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiI0Ecb (ORCPT
+        with ESMTP id S229484AbiI0EoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 00:32:31 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0798FD57
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:32:30 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1280590722dso11896822fac.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:32:30 -0700 (PDT)
+        Tue, 27 Sep 2022 00:44:15 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFC1A896C;
+        Mon, 26 Sep 2022 21:44:13 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bj12so18163355ejb.13;
+        Mon, 26 Sep 2022 21:44:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date;
-        bh=FDQFIFZmEpESx0NkqzxjgqXPNxrdAestfMo8AUyrMOE=;
-        b=kULZoJlDicz0Mvl7mbueMpEQ5yYYEMcP3Z1fjIcQYDrqIP66UvDEW6JosIoYafCqDL
-         srhWW0XYZfRoFAA520ocChY69AvOV1Y+7Dk02s1Es0dLOD5HNoWIPI7OI863/2Wn709c
-         waqECJLYGI/dcCK48Mnr1b0kaLzsSjH60YXr9YVNhUhLTAAXC1Sbs5aYL3H+WqEi5o2e
-         DI/ZKWquZ/ZR0OrwQT7dZvIDy7rzvvH62f4L0SFNTVmkaggtNjViT1BbbifFbIi2fcnI
-         W4e4Op1Kn8NMW5XwhtTyKmH2LqEy823o4fhRAhy0kx8KE49Ei+ey4oi61uZ7HWvXGNoB
-         DPUg==
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date;
+        bh=l1wBi+6umvncLDBKieZ1XfXH8kSugLZm2o3CnBG1w44=;
+        b=im7Sx2Cfiel3Nb1P60hkLEkIwjc956AdHjop3aTwDymCONtuBpYwtcVtbY6UdAEcZh
+         4NhgCFrnvJpGu5miRNQijeaE5rRvu3VoaA5U+W+NZgcCsFdcFctuXVCvP5cwyoyFdFCv
+         a3NC+ObvcHP4WDiZtBtcDIz7H/oZ88/FZzJXzgR1tR4tjrcgLaaz2y7rPN6v6c7+At8T
+         AvZjatw90+uVLHIaa3uVbijbPUMC+nWB0zeTnzy56B/k+tRpe6V8KpINlrLw14o5kH7y
+         K1GjMO84zXy2RI8w0ijgBr9p1YIlm8HD+gXeLlOoaYkpoq6HXaor2dVUOUZ1KCwmXjtg
+         tTWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=FDQFIFZmEpESx0NkqzxjgqXPNxrdAestfMo8AUyrMOE=;
-        b=YLZnFTjQsYQNaIYRhUkO4TiroXkeV0b9i/LSS88ZI3V9j05Ddb8Cm4s8iNVv6iO95j
-         Ew4sKyJcboJwj7/jXcOdOJCQpXKE6fZSTM5PqkMkbwtz019TNtlt9KpkReLmI3piWvMS
-         ca4Vj8EoeDtUPDKlTUbqU00Ojm2fsRTfnnA4t/sLMDA28YRJpJHIbhPTESP1typERglL
-         AMSZeZUodOaRuRCmOTZzSv2P7O94YQhEYh5xYYeNntqKIbnzsUPtTitHsT/OXHuCP9NL
-         whpLLDWWQg+m0fcb5kb3MU52PSiv1AgCOdcCjhyMLIDCMCpHH5ioZRxJyeW227wAffwh
-         6JBQ==
-X-Gm-Message-State: ACrzQf33QXmaR1Hu4ny5QgwPG0drdnevLruz0dYvlTyJRj2GbyCH0ni0
-        jLkp2wFe6VoO5dCpDsXENicFyQ==
-X-Google-Smtp-Source: AMsMyM6cIE/LRH032XT9mtZiYlLXaS3kgkwA4uIfynJ/ZZ0iX27yHrL7c1y+I6nQ/GCBvjpf+QYogQ==
-X-Received: by 2002:a05:6870:529:b0:130:b1cd:f6f8 with SMTP id j41-20020a056870052900b00130b1cdf6f8mr1108784oao.55.1664253149830;
-        Mon, 26 Sep 2022 21:32:29 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id r5-20020acac105000000b0034ffacec0basm156663oif.15.2022.09.26.21.32.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 21:32:29 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 21:32:16 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Matthew Wilcox <willy@infradead.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        syzbot <syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com>,
-        Hugh Dickins <hughd@google.com>, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        songmuchun@bytedance.com, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com, vishal.moola@gmail.com, peterx@redhat.com
-Subject: Re: [syzbot] general protection fault in PageHeadHuge
-In-Reply-To: <Yy988Jv7/28k8l5x@casper.infradead.org>
-Message-ID: <8bad8f70-b5a2-8f36-d7a-db78e4465820@google.com>
-References: <0000000000006c300705e95a59db@google.com> <Yy4g/BKpnJga1toG@monkey> <Yy988Jv7/28k8l5x@casper.infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=l1wBi+6umvncLDBKieZ1XfXH8kSugLZm2o3CnBG1w44=;
+        b=dSgJNGuoWF5du6k/D0TVqcPVKse64d9uWMtkNjfwkk60tOFiYqQ+HqT9yLajsej7nc
+         vMi5UgbNk0ibx9XiCOViqWgk0oynUkEPMxhUqCZoRWq2sVXHcwrjLrMmX2B9TbZ/1QTC
+         DSoV938G1GGn1fPLqs77qR/DcETpBgpzTqdpnYlQnybkNaX4eINwim4LNeiBi6nNNFmh
+         uW5u2l7TPE6VNJYh8iypzI5lJ0a4zVNaBEycJ3biknvxdYo7Bga15j/H8MqqQvKNSKjL
+         H8CcZn+S+l2DOmqOZfl0EFfwclgKs6lHuYFIweu6Oaif13DN8Z0I/brdF3nnlG99+beK
+         Zheg==
+X-Gm-Message-State: ACrzQf2VN23j9eQMrMjJoIH05x+WTar34FHWxHFRx+wj4es6dvlJkGw9
+        qFRE1vf95o26jVuvWcV7NGs=
+X-Google-Smtp-Source: AMsMyM7TxU0q3RRO4eY7tXMJeGNLQWWlQeC1LFjKN1GQmdpFh4FtYwyNG7CaaC+7bAATwY9bl/oH5A==
+X-Received: by 2002:a17:906:974c:b0:784:d96c:b4fa with SMTP id o12-20020a170906974c00b00784d96cb4famr970916ejy.391.1664253852194;
+        Mon, 26 Sep 2022 21:44:12 -0700 (PDT)
+Received: from smtpclient.apple ([178.254.237.20])
+        by smtp.gmail.com with ESMTPSA id x3-20020a1709064a8300b0078082f95e5csm122080eju.204.2022.09.26.21.44.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 26 Sep 2022 21:44:11 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH net] rhashtable: fix crash due to mm api change
+From:   Martin Zaharinov <micron10@gmail.com>
+In-Reply-To: <20220926151939.GG12777@breakpoint.cc>
+Date:   Tue, 27 Sep 2022 07:44:09 +0300
+Cc:     Michal Hocko <mhocko@suse.com>, netdev <netdev@vger.kernel.org>,
+        tgraf@suug.ch, urezki@gmail.com, Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, herbert@gondor.apana.org.au,
+        "linux-kernel@vger kernel. org" <linux-kernel@vger.kernel.org>,
+        akpm@linux-foundation.org, Paolo Bonzini <pbonzini@redhat.com>,
+        kvm@vger.kernel.org, david.switzer@intel.com,
+        Intel-wired-lan@osuosl.org, intel-wired-lan@lists.osuosl.org,
+        anthony.l.nguyen@intel.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D304A05C-D535-43D0-AC70-D5943CE66D89@gmail.com>
+References: <20220926083139.48069-1-fw@strlen.de>
+ <YzFp4H/rbdov7iDg@dhcp22.suse.cz> <20220926151939.GG12777@breakpoint.cc>
+To:     Florian Westphal <fw@strlen.de>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,184 +82,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 24 Sep 2022, Matthew Wilcox wrote:
-> On Fri, Sep 23, 2022 at 02:11:24PM -0700, Mike Kravetz wrote:
-> > On 09/23/22 09:05, syzbot wrote:
-> > > Hello,
-> > > 
-> > > syzbot found the following issue on:
-> > > 
-> > > HEAD commit:    483fed3b5dc8 Add linux-next specific files for 20220921
-> > > git tree:       linux-next
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=16f0a418880000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=849cb9f70f15b1ba
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=152d76c44ba142f8992b
-> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b97b64880000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11fb9040880000
-> > > 
-> > > Downloadable assets:
-> > > disk image: https://storage.googleapis.com/syzbot-assets/1cb3f4618323/disk-483fed3b.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/cc02cb30b495/vmlinux-483fed3b.xz
-> > > 
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com
-> > > 
-> > > general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-> > > KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-> > > CPU: 1 PID: 3617 Comm: syz-executor722 Not tainted 6.0.0-rc6-next-20220921-syzkaller #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/16/2022
-> > > RIP: 0010:PagePoisoned include/linux/page-flags.h:304 [inline]
-> > > RIP: 0010:PageHead include/linux/page-flags.h:787 [inline]
-> > > RIP: 0010:PageHeadHuge+0x1d/0x200 mm/hugetlb.c:1892
-> > > Code: ff 66 66 2e 0f 1f 84 00 00 00 00 00 90 41 54 55 48 89 fd 53 e8 54 c9 b9 ff 48 89 ea 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 a2 01 00 00 48 8b 5d 00 48 c7 c7 ff ff ff ff 48
-> > > RSP: 0018:ffffc90003e7f5a0 EFLAGS: 00010246
-> > > RAX: dffffc0000000000 RBX: ffffc90003e7f788 RCX: 0000000000000000
-> > > RDX: 0000000000000000 RSI: ffffffff81c2cb2c RDI: 0000000000000000
-> > > RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-> > > R10: 0000000000000000 R11: 0000000000000001 R12: ffffc90003e7f798
-> > > R13: 0000000000000000 R14: 0000000000000000 R15: 00000000000003f4
-> > > FS:  00007f5642262700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > CR2: 00000000203f4ef0 CR3: 000000007adcc000 CR4: 00000000003506e0
-> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > Call Trace:
-> > >  <TASK>
-> > >  folio_test_hugetlb include/linux/page-flags.h:831 [inline]
-> > >  folio_file_page include/linux/pagemap.h:683 [inline]
-> > >  shmem_fault+0x27c/0x8a0 mm/shmem.c:2130
-> > >  __do_fault+0x107/0x600 mm/memory.c:4191
-> > >  do_shared_fault mm/memory.c:4597 [inline]
-> > >  do_fault mm/memory.c:4675 [inline]
-> > >  handle_pte_fault mm/memory.c:4943 [inline]
-> > >  __handle_mm_fault+0x2200/0x3a40 mm/memory.c:5085
-> > >  handle_mm_fault+0x1c8/0x780 mm/memory.c:5206
-> > >  do_user_addr_fault+0x475/0x1210 arch/x86/mm/fault.c:1428
-> > >  handle_page_fault arch/x86/mm/fault.c:1519 [inline]
-> > >  exc_page_fault+0x94/0x170 arch/x86/mm/fault.c:1575
-> > >  asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-> > > RIP: 0010:__put_user_nocheck_4+0x3/0x11
-> > > Code: 00 00 48 39 d9 73 54 0f 01 cb 66 89 01 31 c9 0f 01 ca c3 0f 1f 44 00 00 48 bb fd ef ff ff ff 7f 00 00 48 39 d9 73 34 0f 01 cb <89> 01 31 c9 0f 01 ca c3 66 0f 1f 44 00 00 48 bb f9 ef ff ff ff 7f
-> > > RSP: 0018:ffffc90003e7fa00 EFLAGS: 00050293
-> > > RAX: 0000000000000000 RBX: ffffc90003e7fdf4 RCX: 00000000203f4ef0
-> > > RDX: ffff888020c51d40 RSI: ffffffff8726d52f RDI: 0000000000000005
-> > > RBP: ffffc90003e7fdb0 R08: 0000000000000005 R09: 0000000000000000
-> > > R10: 0000000000000002 R11: 0000000000000001 R12: 0000000000000000
-> > > R13: 0000000000000002 R14: 00000000203f4ef0 R15: 0000000000000000
-> > >  ____sys_recvmsg+0x3ba/0x610 net/socket.c:2714
-> > >  ___sys_recvmsg+0xf2/0x180 net/socket.c:2743
-> > >  do_recvmmsg+0x25e/0x6e0 net/socket.c:2837
-> > >  __sys_recvmmsg net/socket.c:2916 [inline]
-> > >  __do_sys_recvmmsg net/socket.c:2939 [inline]
-> > >  __se_sys_recvmmsg net/socket.c:2932 [inline]
-> > >  __x64_sys_recvmmsg+0x20b/0x260 net/socket.c:2932
-> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > > RIP: 0033:0x7f56422dabb9
-> > > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 91 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > > RSP: 002b:00007f5642262208 EFLAGS: 00000246 ORIG_RAX: 000000000000012b
-> > > RAX: ffffffffffffffda RBX: 00007f564235c4b8 RCX: 00007f56422dabb9
-> > > RDX: 0000000000010106 RSI: 00000000200000c0 RDI: 0000000000000003
-> > > RBP: 00007f564235c4b0 R08: 0000000000000000 R09: 0000000000000000
-> > > R10: 0000000000000002 R11: 0000000000000246 R12: 00007f564235c4bc
-> > > R13: 00007fffbde3618f R14: 00007f5642262300 R15: 0000000000022000
-> > >  </TASK>
-> > > Modules linked in:
-> > > ---[ end trace 0000000000000000 ]---
-> > 
-> > While it is true that the addressing exception is happening in the hugetlb
-> > routine PageHeadHuge(), the reason is because it is passed a NULL page
-> > pointer.  This is via the call to folio_file_page() at the end of shmem_fault.
-> > 
-> > 	err = shmem_get_folio_gfp(inode, vmf->pgoff, &folio, SGP_CACHE,
-> > 				  gfp, vma, vmf, &ret);
-> > 	if (err)
-> > 		return vmf_error(err);
-> > 
-> > 	vmf->page = folio_file_page(folio, vmf->pgoff);
-> > 	return ret;
-> > 
-> > The code assumes that if a non-zero value is returned from shmem_get_folio_gfp,
-> > then folio pointer will be set to a folio.  However, it looks like there are
-> > a few places in shmem_get_folio_gfp where it will return zero and not set
-> > folio.
-> > 
-> > In this specific case, it is the code block:
-> > 
-> >         if (vma && userfaultfd_missing(vma)) {
-> >                 *fault_type = handle_userfault(vmf, VM_UFFD_MISSING);
-> >                 return 0;
-> >         }
-> > 
-> > I could try to sort this out, but I believe Matthew has the most context as
-> > he has been changing this code recently.
-> 
-> Vishal sent me a patch a few days ago, but I was on holiday so haven't
-> seen it until now.
-> 
-> From: "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-> To: willy@infradead.org
-> Cc: "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-> Subject: [PATCH 1/1] Fix an issue in shmem_fault()
-> Date: Wed, 21 Sep 2022 17:38:56 -0700
-> Message-Id: <20220922003855.23411-2-vishal.moola@gmail.com>
-> X-Mailer: git-send-email 2.36.1
-> In-Reply-To: <20220922003855.23411-1-vishal.moola@gmail.com>
-> References: <20220922003855.23411-1-vishal.moola@gmail.com>
-> 
-> If shmem_get_folio_gfp returns 0 AND does not assign folio,
-> folio_file_page() runs into issues. Make sure to assign vmf->page only
-> if a folio is assigned, otherwise set it to NULL.
-> 
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+Add intel=20
+And one more from last min:
 
-Acked-by: Hugh Dickins <hughd@google.com>
 
-Peter, thank you for reviewing and advising and testing mine, and
-Andrew, thank you for taking it into mm-unstable.  But I think that
-since Vishal sent his first, thank you, it is his that should go in.
+Sep 27 06:28:58 [ 1715.463514][   C28] ------------[ cut here =
+]------------
+Sep 27 06:28:58 [ 1715.464245][   C28] NETDEV WATCHDOG: eth0 (i40e): =
+transmit queue 0 timed out
+Sep 27 06:28:58 [ 1715.465216][   C28] WARNING: CPU: 28 PID: 0 at =
+net/sched/sch_generic.c:529 dev_watchdog+0x167/0x170
+Sep 27 06:28:58 [ 1715.466459][   C28] Modules linked in: nft_limit =
+nf_conntrack_netlink pppoe pppox ppp_generic slhc nft_ct nft_nat =
+nft_chain_nat team_mode_loadbalance team nf_tables netconsole coretemp =
+i40e nf_nat_sip nf_conntrack_sip nf_nat_pptp nf_conntrack_pptp =
+nf_nat_tftp nf_conntrack_tftp nf_nat_ftp nf_conntrack_ftp nf_nat =
+nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 acpi_ipmi ipmi_si =
+ipmi_devintf ipmi_msghandler rtc_cmos [last unloaded: nf_flow_table]
+Sep 27 06:28:58 [ 1715.472099][   C28] CPU: 28 PID: 0 Comm: swapper/28 =
+Tainted: G           O      5.19.11 #1
+Sep 27 06:28:58 [ 1715.473225][   C28] Hardware name: Supermicro =
+SYS-5038MR-H8TRF/X10SRD-F, BIOS 3.3 10/28/2020
+Sep 27 06:28:58 [ 1715.474377][   C28] RIP: =
+0010:dev_watchdog+0x167/0x170
+Sep 27 06:28:58 [ 1715.475081][   C28] Code: 28 e9 77 ff ff ff 48 89 df =
+c6 05 63 57 c4 00 01 e8 de 59 fb ff 48 89 c2 44 89 e1 48 89 de 48 c7 c7 =
+08 c7 ec 98 e8 52 c6 13 00 <0f> 0b eb 85 0f 1f 44 00 00 41 55 41 54 55 =
+53 48 8b 47 50 4c 8b 28
+Sep 27 06:28:58 [ 1715.477736][   C28] RSP: 0018:ffffa93c806b8ee8 =
+EFLAGS: 00010292
+Sep 27 06:28:58 [ 1715.478542][   C28] RAX: 0000000000000038 RBX: =
+ffffa01591bb0000 RCX: 0000000000000001
+Sep 27 06:28:58 [ 1715.479608][   C28] RDX: 00000000ffffffea RSI: =
+00000000fff7ffff RDI: 00000000fff7ffff
+Sep 27 06:28:58 [ 1715.480674][   C28] RBP: ffffa01591bb03c0 R08: =
+0000000000000001 R09: 00000000fff7ffff
+Sep 27 06:28:58 [ 1715.481741][   C28] R10: ffffa01cdae00000 R11: =
+0000000000000003 R12: 0000000000000000
+Sep 27 06:28:58 [ 1715.482807][   C28] R13: 0000000000000001 R14: =
+ffffa01cdfd207a8 R15: 0000000000000082
+Sep 27 06:28:58 [ 1715.483876][   C28] FS:  0000000000000000(0000) =
+GS:ffffa01cdfd00000(0000) knlGS:0000000000000000
+Sep 27 06:28:58 [ 1715.485072][   C28] CS:  0010 DS: 0000 ES: 0000 CR0: =
+0000000080050033
+Sep 27 06:28:58 [ 1715.485949][   C28] CR2: 000000c000c19010 CR3: =
+00000001974a4005 CR4: 00000000003706e0
+Sep 27 06:28:58 [ 1715.487018][   C28] DR0: 0000000000000000 DR1: =
+0000000000000000 DR2: 0000000000000000
+Sep 27 06:28:58 [ 1715.488084][   C28] DR3: 0000000000000000 DR6: =
+00000000fffe0ff0 DR7: 0000000000000400
+Sep 27 06:28:58 [ 1715.489151][   C28] Call Trace:
+Sep 27 06:28:58 [ 1715.489582][   C28]  <IRQ>
+Sep 27 06:28:58 [ 1715.489949][   C28]  ? pfifo_fast_destroy+0x30/0x30
+Sep 27 06:28:58 [ 1715.490615][   C28]  =
+call_timer_fn.constprop.0+0x14/0x70
+Sep 27 06:28:58 [ 1715.491342][   C28]  __run_timers.part.0+0x164/0x190
+Sep 27 06:28:58 [ 1715.492019][   C28]  ? ktime_get+0x30/0x90
+Sep 27 06:28:58 [ 1715.492576][   C28]  run_timer_softirq+0x21/0x50
+Sep 27 06:28:58 [ 1715.493204][   C28]  __do_softirq+0xaf/0x1d7
+Sep 27 06:28:58 [ 1715.493788][   C28]  __irq_exit_rcu+0x9a/0xd0
+Sep 27 06:28:58 [ 1715.494383][   C28]  =
+sysvec_apic_timer_interrupt+0x66/0x80
+Sep 27 06:28:58 [ 1715.495131][   C28]  </IRQ>
+Sep 27 06:28:58 [ 1715.495509][   C28]  <TASK>
+Sep 27 06:28:58 [ 1715.495887][   C28]  =
+asm_sysvec_apic_timer_interrupt+0x16/0x20
+Sep 27 06:28:58 [ 1715.496683][   C28] RIP: =
+0010:cpuidle_enter_state+0xb3/0x290
+Sep 27 06:28:58 [ 1715.497455][   C28] Code: e8 12 25 b0 ff 31 ff 49 89 =
+c5 e8 c8 80 af ff 45 84 ff 74 12 9c 58 f6 c4 02 0f 85 cf 01 00 00 31 ff =
+e8 c1 cb b3 ff fb 45 85 f6 <0f> 88 d0 00 00 00 49 63 ce 48 6b f1 68 48 =
+8b 04 24 4c 89 ea 48 29
+Sep 27 06:28:58 [ 1715.500111][   C28] RSP: 0018:ffffa93c801cfe98 =
+EFLAGS: 00000202
+Sep 27 06:28:58 [ 1715.500916][   C28] RAX: ffffa01cdfd26800 RBX: =
+ffffa01580bff000 RCX: 000000000000001f
+Sep 27 06:28:58 [ 1715.501983][   C28] RDX: 0000018f6997dcb8 RSI: =
+00000000313b13b1 RDI: 0000000000000000
+Sep 27 06:28:58 [ 1715.503050][   C28] RBP: 0000000000000001 R08: =
+0000000000000002 R09: ffffa01cdfd25724
+Sep 27 06:28:58 [ 1715.504118][   C28] R10: 0000000000000018 R11: =
+000000000000007b R12: ffffffff99222da0
+Sep 27 06:28:58 [ 1715.536292][   C28] R13: 0000018f6997dcb8 R14: =
+0000000000000001 R15: 0000000000000000
+Sep 27 06:28:58 [ 1715.568539][   C28]  ? cpuidle_enter_state+0x98/0x290
+Sep 27 06:28:58 [ 1715.600850][   C28]  cpuidle_enter+0x24/0x40
+Sep 27 06:28:58 [ 1715.632878][   C28]  cpuidle_idle_call+0xbb/0x100
+Sep 27 06:28:58 [ 1715.664572][   C28]  do_idle+0x76/0xc0
+Sep 27 06:28:58 [ 1715.695803][   C28]  cpu_startup_entry+0x14/0x20
+Sep 27 06:28:58 [ 1715.726582][   C28]  start_secondary+0xd6/0xe0
+Sep 27 06:28:58 [ 1715.756507][   C28]  =
+secondary_startup_64_no_verify+0xd3/0xdb
+Sep 27 06:28:58 [ 1715.785770][   C28]  </TASK>
+Sep 27 06:28:58 [ 1715.813710][   C28] ---[ end trace 0000000000000000 =
+]---
+Sep 27 06:28:58 [ 1715.840988][   C28] i40e 0000:03:00.0 eth0: =
+tx_timeout: VSI_seid: 390, Q 0, NTC: 0x697, HWB: 0x78c, NTU: 0x78c, =
+TAIL: 0x78c, INT: 0x0
+Sep 27 06:28:58 [ 1715.896233][   C28] i40e 0000:03:00.0 eth0: =
+tx_timeout recovery level 1, txqueue 0
 
-Me, I tend to avoid an "else", but that's not a very good reason to
-prefer mine.  If, in my ignorance, I'd been right about userfaultfd
-setting vmf->page, then mine would have been the right patch; but
-Peter showed I was wrong on that, so Vishal's seems slightly the better.
 
-Matthew, please send Vishal's with your signoff on to Andrew;
-or I can do so (mutatis mutandis) if you prefer.
 
-Thanks,
-Hugh
+> On 26 Sep 2022, at 18:19, Florian Westphal <fw@strlen.de> wrote:
+>=20
+> Michal Hocko <mhocko@suse.com> wrote:
+>> On Mon 26-09-22 10:31:39, Florian Westphal wrote:
+>>> Martin Zaharinov reports BUG() in mm land for 5.19.10 kernel:
+>>> kernel BUG at mm/vmalloc.c:2437!
+>>> invalid opcode: 0000 [#1] SMP
+>>> CPU: 28 PID: 0 Comm: swapper/28 Tainted: G        W  O      5.19.9 =
+#1
+>>> [..]
+>>> RIP: 0010:__get_vm_area_node+0x120/0x130
+>>>  __vmalloc_node_range+0x96/0x1e0
+>>>  kvmalloc_node+0x92/0xb0
+>>>  bucket_table_alloc.isra.0+0x47/0x140
+>>>  rhashtable_try_insert+0x3a4/0x440
+>>>  rhashtable_insert_slow+0x1b/0x30
+>>> [..]
+>>>=20
+>>> bucket_table_alloc uses kvzalloc(GPF_ATOMIC).  If kmalloc fails, =
+this now
+>>> falls through to vmalloc and hits code paths that assume GFP_KERNEL.
+>>>=20
+>>> I sent a patch to restore GFP_ATOMIC support in kvmalloc but mm
+>>> maintainers rejected it.
+>>>=20
+>>> This patch is partial revert of
+>>> commit 93f976b5190d ("lib/rhashtable: simplify =
+bucket_table_alloc()"),
+>>> to avoid kvmalloc for ATOMIC case.
+>>>=20
+>>> As kvmalloc doesn't warn when used with ATOMIC, kernel will only =
+crash
+>>> once vmalloc fallback occurs, so we may see more crashes in other =
+areas
+>>> in the future.
+>>>=20
+>>> Most other callers seem ok but kvm_mmu_topup_memory_cache looks like =
+it
+>>> might be affected by the same breakage, so Cc kvm@.
+>>>=20
+>>> Reported-by: Martin Zaharinov <micron10@gmail.com>
+>>> Fixes: a421ef303008 ("mm: allow !GFP_KERNEL allocations for =
+kvmalloc")
+>>> Link: https://lore.kernel.org/linux-mm/Yy3MS2uhSgjF47dy@pc636/T/#t
+>>> Cc: Michal Hocko <mhocko@suse.com>
+>>> Cc: Paolo Bonzini <pbonzini@redhat.com>
+>>> Cc: kvm@vger.kernel.org
+>>> Signed-off-by: Florian Westphal <fw@strlen.de>
+>>=20
+>> Please continue in the original email thread until we sort out the =
+most
+>> reasonable solution for this.
+>=20
+> I've submitted a v2 using Michals proposed fix for kvmalloc api, if
+> thats merged no fixes are required in the callers, so this rhashtable
+> patch can be discarded.
 
-> ---
->  mm/shmem.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index d6921b8e2cb5..986c07362eab 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -2060,7 +2060,7 @@ static vm_fault_t shmem_fault(struct vm_fault *vmf)
->  	struct vm_area_struct *vma = vmf->vma;
->  	struct inode *inode = file_inode(vma->vm_file);
->  	gfp_t gfp = mapping_gfp_mask(inode->i_mapping);
-> -	struct folio *folio;
-> +	struct folio *folio = NULL;
->  	int err;
->  	vm_fault_t ret = VM_FAULT_LOCKED;
->  
-> @@ -2127,7 +2127,10 @@ static vm_fault_t shmem_fault(struct vm_fault *vmf)
->  				  gfp, vma, vmf, &ret);
->  	if (err)
->  		return vmf_error(err);
-> -	vmf->page = folio_file_page(folio, vmf->pgoff);
-> +	if (folio)
-> +		vmf->page = folio_file_page(folio, vmf->pgoff);
-> +	else
-> +		vmf->page = NULL;
->  	return ret;
->  }
->  
-> -- 
-> 2.36.1
