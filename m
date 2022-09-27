@@ -2,100 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD3E5ECAC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A655ECABA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbiI0RZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 13:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
+        id S232323AbiI0RYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 13:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbiI0RZB (ORCPT
+        with ESMTP id S232252AbiI0RYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 13:25:01 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9832672854;
-        Tue, 27 Sep 2022 10:24:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=guho5G/NH6Uu9NUxWGjhkF77HE9kSSuZnRLp6eRk7MxRSjvqQl0Yhw0ci7kmX1BZcS62AG+oWMxR4h78EU9Fdz0W9AGfgVQomT4RtteryyRYE/iPK78K/3to7iRtQvgT4loIxuyUS2FdX7ZU2o9XMxRlkhme7hGE6q8eWq/cogFRuWfupjV23gWCb8dwQg10gpA8ozKbnmqW/8BWX8yopFcgZdRnrIx6n16j2NuaTDY95Tifa7yZvCiPQIzfnCuxUYiOkJGzmAwJkgJFcP7O7KzvYIe+dZYIevYYGh8tcG/3e2Y5wOVmgf1oLzMYjNfvaTzNkLOaaHZEV0tIZcZHmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZxjL6udLV/T1l2yE4VhuGlIkYVYM5IUzlKBuY7TuvR0=;
- b=ci7l0hkU8RRgQ+lX1l3zWKlAZixQSJn2Xzy3b7Y5wHbXQu8TaYIzEDGCmqh1yNWQjd1pbyU5M8KzmR89uiQ8vpk0xI2KGrCZlumPtUsXa6lCDGu+OkfQ7M0+nHkx0AULa2tY5yXn0MM6aZvhtAQJIUJ5FXdjuONgEAw2uoUQIGYPm8QZOq/U7lD358Gcc8bVi0/5rNG0jY0ayzBY0Yl1eDEqffRROHsxpAEMnHGz61m8SuF6ldlPiKMD8l6hJdCsyhKg3MB/e9v1HH5+agaB6jhAY/u84Bx1mFbuSsckKb1v8ecsM2ZW6KnyTry1ek+Uuu3WHEMyvl7/Xp463Y4+3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZxjL6udLV/T1l2yE4VhuGlIkYVYM5IUzlKBuY7TuvR0=;
- b=5KpjGn737RF8cH5DLQLUBGS9Ii9dHKm4vO5JQ7gMHom+9bYOisSpuQMjqJcbWFwpXPZt/W23z3gU+C3WKId+fw2u+1JLcUjDL0SwaYbmJplWt903rNwjsk+N9G8v+GEEa/pL+K13XhOzBQT7Exb4Z+RGTWJ0BhWrpsQtIRUIceU=
-Received: from MW4P223CA0029.NAMP223.PROD.OUTLOOK.COM (2603:10b6:303:80::34)
- by PH0PR12MB5450.namprd12.prod.outlook.com (2603:10b6:510:e8::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Tue, 27 Sep
- 2022 17:24:56 +0000
-Received: from CO1NAM11FT039.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:80:cafe::61) by MW4P223CA0029.outlook.office365.com
- (2603:10b6:303:80::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.19 via Frontend
- Transport; Tue, 27 Sep 2022 17:24:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT039.mail.protection.outlook.com (10.13.174.110) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5654.14 via Frontend Transport; Tue, 27 Sep 2022 17:24:56 +0000
-Received: from amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 27 Sep
- 2022 12:24:51 -0500
-From:   Arvind Yadav <Arvind.Yadav@amd.com>
-To:     <Christian.Koenig@amd.com>, <andrey.grodzovsky@amd.com>,
-        <shashank.sharma@amd.com>, <amaranath.somalapuram@amd.com>,
-        <Arunpravin.PaneerSelvam@amd.com>, <sumit.semwal@linaro.org>,
-        <gustavo@padovan.org>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>
-CC:     Arvind Yadav <Arvind.Yadav@amd.com>
-Subject: [PATCH 3/3] dma-buf: Check status of enable-signaling bit on debug
-Date:   Tue, 27 Sep 2022 22:54:09 +0530
-Message-ID: <20220927172409.484061-4-Arvind.Yadav@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220927172409.484061-1-Arvind.Yadav@amd.com>
-References: <20220927172409.484061-1-Arvind.Yadav@amd.com>
+        Tue, 27 Sep 2022 13:24:40 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FF462EA
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:24:37 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id lc7so22269091ejb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=3c45jsBfv/NH6ArNEDI+dXny5k9HP9bISyg7K6ga1ts=;
+        b=A9smj7vz+qXIDrXFOce54GGadi4+0MBQ64+xEpFiyzmPvWsnPMC0Iv0pQvXnMOvAwt
+         B0V7G+EO3Uyv8jlRg4lx7PG7tN4x3a0ZaLlowekA/sq3IGrjgz99SKnfo77padvYjMPC
+         aPi5MNfgEywdVKsbE47fcqyp9YlaUUxZqws397f82lE9YCT/bNgWXVvIm1+VUbc180xZ
+         xyA3j1qPIUwvr+YnKT/x9QG/6qLcuiEJs2wKzSvI+TmdMxST4veC+xfWU91w4q6AnR+L
+         H/OK0V+o1/HleO3nO3U0uj1kW3bObARHtXVR2iSWvwq7M6vflC9bTgO1bQvcihYUHGiG
+         4OTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=3c45jsBfv/NH6ArNEDI+dXny5k9HP9bISyg7K6ga1ts=;
+        b=O0k5B6Ypxj76s19xFtjDNVi7iMDDVuxYd2ypQzI/5+uYXrRD/2bkm6pl1hHfQfsF1h
+         VA7wdY6LHmy9nmlxY9o4Fc36/aNRBqz7zKyz5fihO5j7cmMUUa+zu0oRC3U1isb/9mO0
+         2a3CRhO1yYLiW5/ZSHrrUjPq6NTEbxFeRkVwAf2XKrNk2g8fJxwg8PSYC2tl0dDimttE
+         CaeOfIuB7E9IvPJ2uLcJTV52MsUbLOtb7AAJLT8ow0w11oPX0qg78lfhQIZpc0w2uLns
+         p42209DL2K2GekZLUr3gjd4f1ktUpD6+OvdqHuvdH6EeaGtJyc1WOvCEDDk5AcFyb473
+         QuGQ==
+X-Gm-Message-State: ACrzQf21/JlnB99WRUTH5AKylz/00QZlcGhA7/MUkJKjk+NnIi9xmzfc
+        fwJpUJZgQtDTtuENG7jGAao=
+X-Google-Smtp-Source: AMsMyM6bVGEoBNsDGah9Y6IQGvNvYH0w0SrpNOSHA4CTKcxN33annU5SfoYAToZI6Zn8b3kERzk/0A==
+X-Received: by 2002:a17:907:9602:b0:780:8c9f:f99a with SMTP id gb2-20020a170907960200b007808c9ff99amr24136114ejc.465.1664299475905;
+        Tue, 27 Sep 2022 10:24:35 -0700 (PDT)
+Received: from [192.168.2.30] (85-70-151-113.rcd.o2.cz. [85.70.151.113])
+        by smtp.gmail.com with ESMTPSA id m9-20020a509989000000b0045391f7d877sm1715837edb.53.2022.09.27.10.24.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 10:24:35 -0700 (PDT)
+Message-ID: <1a5e3ecd-04f5-cdd6-a284-a4c9d0999f11@gmail.com>
+Date:   Tue, 27 Sep 2022 19:24:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT039:EE_|PH0PR12MB5450:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4bf6b998-fc9d-4ad3-f00d-08daa0ad3272
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: y50vJD8GGXWyhmE+X+CQ/XcTz3zF4YmHs1Imndn0Z3CiRyuRiQ/UUx78fZvi6HinR2exwG3H8EAQmCLH3RNI5q9e5swuTMXx1qGwYjO+Y1kxHrcbkQ/Gx7Kpis7WeH4yBNDMaZT3iREvdK7BgcMuc+xjiy9CAo/9L13Ps26UKJTq88oJpB4x4q5zniqfO6N8UO7EkQxnzbVgc+ZT8YYqnBxjcaySCa+zVC3enCQWXGlXeFRezrKsWZAPPG+A4vh2kZlKm/cysgUQbXwyD8/Fd16QqiwoBGxta+cC1/i2K1GCop4Q1O1iM1csC+xF1vnhGgrJWO97V0o2REmSmqSkHSMafs9GUWAWSQisFO4vMrgY20svql2lmSNPqL+FsTZN8GCvtXZWE0Kio5SM7aZNPDBy5p71ZDQCe9xH7KdT2vlPL94vb7n/9qqHcpNlCCdtazFarvQ+RqsYG8+ybhWTh/v7SXalfC3Pk2Hhjb6KHeEKAdmCk5t6m3hhZaE1BwKaxyWks0Mw5btnyyNVJBWb9u5OxmWh8e79yRf2moZA2oxIxWbfsECKZMK81hmwMgQfjwWhwTbOLiP5yeLY59+czrWBGogzs91wYOAY4i37OazSUqnFaDw1qoh3Z2QIAxlEv9EeaEFEnubyxy/dxvZBzNFFRq+YHEYsmClC2ZFfzvIfGClPi1ZzyQgVk+/HNJQw1R71JKJ2j/LSPAH1S8iz8GOUe2xy2YfjdBHUPhz5rs5lfsUXqrA6iILSeqWujQpaB55IXrUy7ZK1zCWGw7vYAhu5UdAo4y18rGs78sAal4uq2IZcxQmxh6TkztrQvKqDxOmTHBmoyy2+dMDRrbHfEIh7GEF+X03cOcrFOiWantAbJQKLdlN5Am32P1e89/cO
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(396003)(39860400002)(136003)(451199015)(36840700001)(40470700004)(46966006)(2906002)(16526019)(186003)(1076003)(47076005)(83380400001)(356005)(86362001)(81166007)(82310400005)(2616005)(36756003)(40480700001)(921005)(82740400003)(4326008)(426003)(36860700001)(336012)(40460700003)(110136005)(478600001)(70586007)(8676002)(70206006)(316002)(26005)(5660300002)(41300700001)(6666004)(7696005)(8936002)(36900700001)(2101003)(83996005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 17:24:56.0651
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4bf6b998-fc9d-4ad3-f00d-08daa0ad3272
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT039.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5450
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [dm-devel] [PATCH] kernfs: fix a crash when two processes delete
+ the same directory
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mikulas Patocka <mpatocka@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com,
+        Christoph Lameter <cl@linux.com>
+References: <alpine.LRH.2.02.2209260418360.16612@file01.intranet.prod.int.rdu2.redhat.com>
+ <YzGYFBv0pdt+DQg+@kroah.com> <6c75a90d-3793-55fc-e525-eca14e562350@gmail.com>
+ <YzMYuAaHRpydr7Fy@kroah.com>
+From:   Milan Broz <gmazyland@gmail.com>
+In-Reply-To: <YzMYuAaHRpydr7Fy@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,35 +81,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fence signaling must be enabled to make sure that
-the dma_fence_is_signaled_locked() function ever returns true.
-Since drivers and implementations sometimes mess this up,
-this ensures correct behaviour when DMABUF_DEBUG_ENABLE_SIGNALING
-is used during debugging.
-This should make any implementation bugs resulting in not
-signaled fences much more obvious.
+On 9/27/22 17:37, Greg Kroah-Hartman wrote:
+> On Tue, Sep 27, 2022 at 05:22:46PM +0200, Milan Broz wrote:
+>> On 9/26/22 14:16, Greg Kroah-Hartman wrote:
+>>> On Mon, Sep 26, 2022 at 07:04:52AM -0400, Mikulas Patocka wrote:
+>>>> There is a crash when running the cryptsetup testsuite on Fedora Rawhide.
+>>>> It can be reproduced by installing Rawhide with the 6.0-rc6 kernel,
+>>>> downloading and compiling the cryptsetup repository and running this test
+>>>> in a loop for about 15 minuts:
+>>>> 	while ./integrity-compat-test; do :; done
+>>>>
+>>>>    ------------[ cut here ]------------
+>>>>    WARNING: CPU: 0 PID: 50087 at fs/kernfs/dir.c:504 __kernfs_remove.part.0+0x26f/0x2b0
+>>>>    Modules linked in: crc32_generic loop dm_integrity async_xor async_tx tls isofs uinput snd_seq_dummy snd_hrtimer nft_objref nf_conntrack_netbios_ns nf_conntrack_broadcast nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink qrtr sunrpc snd_hda_codec_generic ledtrig_audio snd_hda_intel iTCO_wdt snd_intel_dspcfg intel_pmc_bxt snd_intel_sdw_acpi iTCO_vendor_support snd_hda_codec snd_hda_core snd_hwdep snd_seq snd_seq_device joydev snd_pcm i2c_i801 snd_timer pcspkr i2c_smbus virtio_balloon snd lpc_ich soundcore zram virtio_net net_failover virtio_blk serio_raw failover qxl virtio_console drm_ttm_helper ttm ip6_tables ip_tables fuse qemu_fw_cfg
+>>>>    Unloaded tainted modules: crc32_pclmul():1 pcc_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 acpi_cpufreq():1
+>>>>    CPU: 0 PID: 50087 Comm: integritysetup Not tainted 6.0.0-0.rc6.41.fc38.x86_64 #1
+>>>>    Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+>>>>    RIP: 0010:__kernfs_remove.part.0+0x26f/0x2b0
+>>
+>> ...
+>>
+>>> Can you see if 4abc99652812 ("kernfs: fix use-after-free in
+>>> __kernfs_remove") in linux-next fixes this for you or not?  It seems to
+>>> be the same issue, as was also reported at:
+>>> 	https://lore.kernel.org/r/7f489b14-2fdc-3d91-c87e-6a802bd8592d@I-love.SAKURA.ne.jp
+>>
+>>
+>> I tried it on system where cryptsetup testsuite almost immediately crashed in the integrity test.
+>>
+>> With the patch in https://lore.kernel.org/r/7f489b14-2fdc-3d91-c87e-6a802bd8592d@I-love.SAKURA.ne.jp
+>> it now iterates for some time without any problems, so I think it is fixed.
+>>
+>> Tested-by: Milan Broz <gmazyland@gmail.com>
+> 
+> Wait, what about the patch that is in linux-next that I pointed to, not
+> the one in the email?
 
-Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
----
- include/linux/dma-fence.h | 5 +++++
- 1 file changed, 5 insertions(+)
+Ehm, yes, my mistake.
 
-diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
-index 775cdc0b4f24..5156dc6be0a6 100644
---- a/include/linux/dma-fence.h
-+++ b/include/linux/dma-fence.h
-@@ -398,6 +398,11 @@ void dma_fence_enable_sw_signaling(struct dma_fence *fence);
- static inline bool
- dma_fence_is_signaled_locked(struct dma_fence *fence)
- {
-+#ifdef CONFIG_DMABUF_DEBUG_ENABLE_SIGNALING
-+	if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
-+		return false;
-+#endif
-+
- 	if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
- 		return true;
- 
--- 
-2.25.1
+Now tested 4abc99652812 (it is not visible in any branch anymore, perhaps rebased).
 
+Already running several iterations and no problems, so for the correct patch now:
+
+Tested-by: Milan Broz <gmazyland@gmail.com>
+
+Milan
