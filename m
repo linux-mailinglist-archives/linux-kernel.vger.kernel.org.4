@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E37D25ECF64
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 902655ECF67
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbiI0VjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 17:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
+        id S231833AbiI0Vjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 17:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiI0VjW (ORCPT
+        with ESMTP id S231218AbiI0Vjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 17:39:22 -0400
+        Tue, 27 Sep 2022 17:39:41 -0400
 Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277DB107DC2;
-        Tue, 27 Sep 2022 14:39:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1335CD1;
+        Tue, 27 Sep 2022 14:39:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-        ; s=202004.hall; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:Reply-To:
+        ; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
+        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
         Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-        bh=DPYju4UlrsNG5SoXMWeppqqTGHjGy6TmKutDfna9o1U=; b=CNJUM2005XPaqlP9SugZU2blwO
-        NZi2KpZqaG8DT8fSrD20aOas6nr2FdSN3QpeRZzI9rEOwtDRoTru7EoERB4Z2R5mQXhrAf4AyPZOD
-        LRofPE50ju7Dj6kV7a51ijmnOeSclMi1cD/DK6bgQIcFSGEmWwRzYb14DMCTfyxUxD3PSxVrWmmVt
-        RCCWAXxO9kVhswg7xu8iZtoOSqVqk3fMrt0uK1E36CIxp9QNNtQwYaRdTp5QC1VFH1NA1N8zzAg6H
-        dpUQm7OPhuv6jHzSaI0QeRs3zh+ft2K2kBjsIX+3RdqxxSWrCQlEaYGMXiQZ6or1/ioX6mtULcAOl
-        ySBNfN/Q==;
+        bh=2JMLfcmZeS6Sxey/juZszgrKjCQGK3qAWvZUg82Nalo=; b=DE817yt/jIg3i8+SdpFozjOoLX
+        O9WbPIlD+89sho1SMwwgLDKgMTxPJwFlwnO2Yido0b1bzVUUsqddDjM7x7NK2I/ulnI9GjVPKYrjs
+        DUlaIwgsY8rTKxQbPKyjuBWOyZw6RYW1pdR1WtXme2ayi1MXPD1OPnUbUxA2LYt1lQgiEPl4LSO5N
+        VUsD4IvPYZydEbA/mjKYd1Mn+iSOKXjYct3TGTJwRQnEDuvlMWOJwsed/5pMkpdUze9Gjzs6GTanC
+        uH01DAX1kp89bLWi23bY4hX07VpgzFxj4Cfm8J+LX+nrnY7sTliWjTpXAtvVk/mToI1ukf/w7uJzY
+        8frYoYTw==;
 Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
         by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <aurelien@aurel32.net>)
-        id 1odIIP-00C1hU-ME; Tue, 27 Sep 2022 23:39:17 +0200
+        id 1odIId-00C1hi-Hs; Tue, 27 Sep 2022 23:39:31 +0200
 Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
         (envelope-from <aurelien@aurel32.net>)
-        id 1odIIP-000VSG-0F;
-        Tue, 27 Sep 2022 23:39:17 +0200
-Date:   Tue, 27 Sep 2022 23:39:17 +0200
+        id 1odIIc-000VSP-3D;
+        Tue, 27 Sep 2022 23:39:31 +0200
+Date:   Tue, 27 Sep 2022 23:39:30 +0200
 From:   Aurelien Jarno <aurelien@aurel32.net>
-To:     LABBE Corentin <clabbe@baylibre.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Lin Jinhan <troy.lin@rock-chips.com>, wevsty <ty@wevs.org>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lin Huang <hl@rock-chips.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     heiko@sntech.de, davem@davemloft.net, herbert@gondor.apana.org.au,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH] hw_random: rockchip: import driver from vendor tree
-Message-ID: <YzNthZ0MtfwjIqdH@aurel32.net>
-Mail-Followup-To: LABBE Corentin <clabbe@baylibre.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Lin Jinhan <troy.lin@rock-chips.com>, wevsty <ty@wevs.org>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>, Lin Huang <hl@rock-chips.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
+Subject: Re: [PATCH RFT 4/5] crypto: rockchip: support the new crypto IP for
+ rk3568/rk3588
+Message-ID: <YzNtkiR/dD0aEZrv@aurel32.net>
+Mail-Followup-To: Corentin Labbe <clabbe@baylibre.com>, heiko@sntech.de,
+        davem@davemloft.net, herbert@gondor.apana.org.au,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-References: <20220919210025.2376254-1-Jason@zx2c4.com>
- <32f8797a-4b65-69df-ee8e-7891a6b4f1af@arm.com>
- <YzMm4d3sZBHpitm9@aurel32.net>
- <YzNTB+RQK6yITi7/@Red>
+References: <20220927080048.3151911-1-clabbe@baylibre.com>
+ <20220927080048.3151911-5-clabbe@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YzNTB+RQK6yITi7/@Red>
+In-Reply-To: <20220927080048.3151911-5-clabbe@baylibre.com>
 User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
@@ -78,41 +67,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-27 21:46, LABBE Corentin wrote:
-> Le Tue, Sep 27, 2022 at 06:37:53PM +0200, Aurelien Jarno a =C3=A9crit :
-> > On 2022-09-20 10:35, Robin Murphy wrote:
-> > > On 2022-09-19 22:00, Jason A. Donenfeld wrote:
-> > > > The Rockchip driver has long existed out of tree, but not upstream.
-> > > > There is support for it upstream in u-boot, but not in Linux proper.
-> > > > This commit imports the GPLv2 driver written by Lin Jinhan, together
-> > > > with the DTS and config blobs from Wevsty.
-> > >=20
-> > > Note that Corentin has a series enabling the full crypto driver for=
-=20
-> > > RK3328 and RK3399[1], so it would seem more sensible to add TRNG supp=
-ort=20
-> > > to that. Having confliciting compatibles for the same hardware that=
-=20
-> > > force the user to change their DT to choose one functionality or the=
-=20
-> > > other isn't good (plus there's also no binding for this one).
-> >=20
-> > It might make sense for the cryptov1-rng driver (I haven't checked). For
-> > the cryptov2-rng driver, I looked at the RK3568 TRM (I can't find the
-> > RK3588 one), and from what I understand crypto and TRNG are two
-> > different devices, using different address spaces, clock, reset and
-> > interrupts. The vendor kernel uses two different drivers.
-> >=20
->=20
-> I confirm that TRNG is not on the same IP on rk3568, something I didnt re=
-mark when doing my V2 driver. (I need to remove rng clock from rk3568 dt).
-> But the rk3588 crypto IP and the TRNG are in the same device.
+On 2022-09-27 08:00, Corentin Labbe wrote:
+> Rockchip rk3568 and rk3588 have a common crypto offloader IP.
+> This driver adds support for it.
+> 
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+>  drivers/crypto/rockchip/Kconfig               |  28 +
+>  drivers/crypto/rockchip/Makefile              |   5 +
+>  drivers/crypto/rockchip/rk3588_crypto.c       | 646 ++++++++++++++++++
+>  drivers/crypto/rockchip/rk3588_crypto.h       | 221 ++++++
+>  drivers/crypto/rockchip/rk3588_crypto_ahash.c | 346 ++++++++++
+>  .../crypto/rockchip/rk3588_crypto_skcipher.c  | 340 +++++++++
+>  6 files changed, 1586 insertions(+)
+>  create mode 100644 drivers/crypto/rockchip/rk3588_crypto.c
+>  create mode 100644 drivers/crypto/rockchip/rk3588_crypto.h
+>  create mode 100644 drivers/crypto/rockchip/rk3588_crypto_ahash.c
+>  create mode 100644 drivers/crypto/rockchip/rk3588_crypto_skcipher.c
+> 
+> diff --git a/drivers/crypto/rockchip/Kconfig b/drivers/crypto/rockchip/Kconfig
+> index 1010d897d9ef..84ca1081fd0c 100644
+> --- a/drivers/crypto/rockchip/Kconfig
+> +++ b/drivers/crypto/rockchip/Kconfig
+> @@ -26,3 +26,31 @@ config CRYPTO_DEV_ROCKCHIP_DEBUG
+>  	  Say y to enable Rockchip crypto debug stats.
+>  	  This will create /sys/kernel/debug/rk3288_crypto/stats for displaying
+>  	  the number of requests per algorithm and other internal stats.
+> +
+> +config CRYPTO_DEV_ROCKCHIP2
+> +	tristate "Rockchip's cryptographic offloader V2"
+> +	depends on OF && ARCH_ROCKCHIP
+> +	depends on PM
+> +	select CRYPTO_ECB
+> +	select CRYPTO_CBC
+> +	select CRYPTO_AES
+> +	select CRYPTO_MD5
+> +	select CRYPTO_SHA1
+> +	select CRYPTO_SHA256
+> +	select CRYPTO_SM3
 
-Ok, thanks for confirming about the rk3568. It seems the only one in the
-family with separate devices for TRNG and crypto. Does it means we need
-a separate TRNG driver only for it? Or could we handle it the same way
-than for instance rk3588 anyway?
+That should be CRYPTO_SM3_GENERIC
 
---=20
+-- 
 Aurelien Jarno                          GPG: 4096R/1DDD8C9B
 aurelien@aurel32.net                 http://www.aurel32.net
