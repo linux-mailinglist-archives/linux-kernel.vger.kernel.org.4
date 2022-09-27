@@ -2,143 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4315EC867
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935045EC86C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232787AbiI0PrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
+        id S232868AbiI0PrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232526AbiI0Pqi (ORCPT
+        with ESMTP id S229572AbiI0Pqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:46:38 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586BD25C2;
-        Tue, 27 Sep 2022 08:43:23 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id p202so8040813iod.6;
-        Tue, 27 Sep 2022 08:43:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=RGfTD4NBOLWMCkradB21iOUt0wxo832XK6CrqAqR2GY=;
-        b=FRmqHXAnA0Nlr7CuCFa/vix9iR1N23MYD3UAIyxIrWl3zMGywdKlliuS+7RvdJLp0s
-         AOp4ynTOO5Dw1uoCO2t6YKv+AEutCv6Qm+TF2dlX/Rsc94zPvoiWdWDWfbhx48QrnVua
-         B8Rdk5ZI5hVFb09DwXb3dvLS5z47+wzRTvQfCcN+2nEDjnHjirh9TekDHGXtzlxPepYQ
-         hd+OhA9reVu234odrbQBh/Hbt20ydVYftwxy6YDwqJtl9pGAqXlXC6cog6jNnHp357Ze
-         b6aLaGVCgQiotev4H0qmTYFG/U8MfgaJkw3rPXOo/5XGR8IyHUeWxnyj77iepW02vFmi
-         6E+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=RGfTD4NBOLWMCkradB21iOUt0wxo832XK6CrqAqR2GY=;
-        b=WcdzLwt2d3yxCh040luQVdL4aaLsnfJKKCuuXiwTY3CzrMFpgkh6jodYWdGHW00Ho1
-         s+8xwvQZw1qpl32VFgA8vvX6nFNnodpsf2iyC+GDjh6zMYt5bK9fe8Giohj8Nau/yZhe
-         cwZXepwTmzBFhGyZGExujgrMK0ej+YtSuOD1pr8XXq57o5RXlz8OX+u8TRUZ2UNqpj57
-         /h2QByxHtDJLIqv20Fd0TSLBTvPXIljMvqvxE9L79xlrOL6oecq2pB5CWnXp5q2jCd6A
-         78jg9tidCtJnhs2GdpxWNf6JirsMVYBn6G1w6VMJ4O6jkjMJYunbQQ3cuSXQbN2u5t2L
-         OZYQ==
-X-Gm-Message-State: ACrzQf2XW653PJJJ0mQoTtn/bDCw6zbNwHTqX2ya7sexjRrfcFFX21B6
-        4P2rtjbfYThAXW8RBrSw3eKvpxKDoVWkL+gtU+Y=
-X-Google-Smtp-Source: AMsMyM5638P6n2YDuzc4zVDow6i/V+t/qyQWRPEc72Q9aoMVNm+viu9quW2HEvNYC/icgeKNC0a6wPTZ5TN0vtRaDjY=
-X-Received: by 2002:a05:6638:4115:b0:35a:2729:fc6b with SMTP id
- ay21-20020a056638411500b0035a2729fc6bmr15445039jab.264.1664293402668; Tue, 27
- Sep 2022 08:43:22 -0700 (PDT)
+        Tue, 27 Sep 2022 11:46:44 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3862438B5;
+        Tue, 27 Sep 2022 08:44:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1664293461;
+        bh=xapIOah0tx06ZorbO2OBOQdT6JMIjrDJogdiPnNn/+g=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=jVzcNPrCjUtznpRRl8i1wIdrxVOTWjy7GI27X+VbWjmuQS8iU2WXQ5QrfQ+d8tLty
+         +tRKsj3T/5mVcQ86y/vwI8uwOQiSym9nIXOPg8ruFZGWstWxB1vYlDqR0KbnFSVBFW
+         Kw5gUjmxOJuakdZH0gskmZ0MlOLHQyMLnVBHQwKE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MCsQ4-1oURKX1oDw-008p78; Tue, 27
+ Sep 2022 17:44:21 +0200
+Subject: Re: [PATCH 1/5] ACPI: battery: Do not unload battery hooks on single
+ error
+To:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Mark Gross <markgross@kernel.org>, Len Brown <lenb@kernel.org>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Matan Ziv-Av <matan@svgalib.org>,
+        Corentin Chary <corentin.chary@gmail.com>,
+        Jeremy Soller <jeremy@system76.com>, productdev@system76.com,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220912125342.7395-1-W_Armin@gmx.de>
+ <20220912125342.7395-2-W_Armin@gmx.de>
+ <f8fa6d10-6eb1-7fa7-80eb-ea190d29ba4a@redhat.com>
+ <CAJZ5v0jWVMMTjc+KtBRS86f8kYpbPcDCH9JV2ZgeN4f-MSO8rQ@mail.gmail.com>
+ <f2af5d01-a2cd-ae96-24c7-d61f5f0d0bc3@gmx.de>
+ <f0b17ba6-3d3c-cbc1-ec0d-ec59c73f06f6@gmx.de>
+ <471449b3-cced-d75d-e349-6bec950b0bc1@redhat.com>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <f6ac14a8-6403-029e-6179-f8ef0a7d5457@gmx.de>
+Date:   Tue, 27 Sep 2022 17:44:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20220927131518.30000-1-ojeda@kernel.org> <20220927131518.30000-13-ojeda@kernel.org>
- <YzMVLkr3ZlbENMcG@kroah.com>
-In-Reply-To: <YzMVLkr3ZlbENMcG@kroah.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 27 Sep 2022 17:43:11 +0200
-Message-ID: <CANiq72n86arq4isngUXdn0VYBkMDDyu81WEkfUDwGw32Fk8iBQ@mail.gmail.com>
-Subject: Re: [PATCH v10 12/27] rust: add `kernel` crate
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Fox Chen <foxhlchen@gmail.com>,
-        Viktor Garske <viktor@v-gar.de>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        =?UTF-8?Q?L=C3=A9o_Lanteri_Thauvin?= <leseulartichaut@gmail.com>,
-        Niklas Mohrin <dev@niklasmohrin.de>,
-        Milan Landaverde <milan@mdaverde.com>,
-        Morgan Bartlett <mjmouse9999@gmail.com>,
-        Maciej Falkowski <m.falkowski@samsung.com>,
-        =?UTF-8?B?TsOhbmRvciBJc3R2w6FuIEtyw6Fjc2Vy?= <bonifaido@gmail.com>,
-        David Gow <davidgow@google.com>,
-        John Baublitz <john.m.baublitz@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <471449b3-cced-d75d-e349-6bec950b0bc1@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Provags-ID: V03:K1:5MyBv8IKsYLuUsVsJMopstbGuvu343mvzrzSNTs3XpZouvuB+sw
+ 41Id43MAQxI3DUcH2Ni9/Ogq+LyWZatySfktIDCOJJBL6UwWRG1/cH2NgEkWSvaNvGgId9f
+ d9DC3xV/45bIaUxdfrfLJdE06TKCrXzPJfStc0A4jXrba5KM+5lsGsFu1am2x2YVOGUmamy
+ GJjPotM7zMCpkaM2iPGfA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Dj8zzLGJBJ8=:yEiB015XrdNoRKwZ8QnYti
+ 2J5lDllNRvJ6Z5Q0FjkuLLlaN2OlVTKzpVpR/ymF/sDHXckj7FhmZPM0HUwOZo0Sk+8PgkXi2
+ xg7YYVOOZVW/fV2j/+57tKRO42/P9TPgSd+h4Fp1lKj1JnXNfDLOtc0g43aRIDiQjaiyJwDmk
+ teiy5sFa2kc0PFDIW3RPg1hWo31NBeuJe8zj1mUyVIwAUrlG+lv6hIYuo3GBOYW6q5JLY1TVb
+ qhQD20nM3oZWe5OAE3mHoaOa/RmAvhu4/dWYx5ug26tzFfgngw2eUMDgjNMuvIdwU8jkx95vS
+ axCgPbiEEaomUJrCipIkyGwoJ0tJUQsdv6oRYnX5acxKUtL2kM/WXs4nfgOIOjtyRP/WL8LuB
+ 0NJhbvzNgbu/PxS0MbsJk5o8UrZMavA3mSmhz8xNityx6z8YXJaaNVtHPl+U8m+GmFrg3Is9D
+ RSsmqDz042udb7TZ2fwcjGZvtnvRkcXy/A8yzo2dYfcZ5sVOYbtlV13ZzCuQ7kL26ZV3sSvvP
+ NZbYuHUJgefgN596lcxhIz49vCHdjkapQ1DYWHCYU5QxSAGLWNjesxggIuuMSnQnoHJQDPrhw
+ 1ATfwfY2XLDDpGVfAb1Jug8p8hxtOIqGXqa6DEICurOewGl8+H4saIfsnMNv/P9oVWfOs1/ZT
+ IdAxECIDEye/0qUFsZrAnkriJATabEWWYsLOh6cslAW2ZYCqQzL5zI0WEphCTS/8xiOe5ahO4
+ o/mFx0pTnS5JJtV9oyvZXjwaF8x8hPq143NF26zCbVC6teC51XQfqLTw/d/NUvMSnnHC0yoHr
+ 2SeqJbz9EMezMJval78U7lpcRSJ8rIxpssg0gVPuOa+yDytN8Yve+LjAqH+skyq5fKOFs+rHh
+ E2+uvk9x1yohwfNvcRhigwk6/1GYeDDTwWEVp2nomSYiHMOOoMbCu91/N24JMpZwUxtgrFj0M
+ DyAbFH1zNACxVREPTdBCRSnroDtNFrTr07mvhZJJOZBPdEoHNybwGMO0A0IfWwf3KnkL0/kCO
+ OpK1/4pIsGPpqDBfGAESR3M7BVT2s8sVGWEmZ7WN0XbDw0iADaBG7ONZ/KmcnSi3dQmF5M7x2
+ Hn3ACkZHZgKsbuyHxe2VFT63QdTAr5ELnS45Dnld57tlofDtC+9Xrb1jCX23o55AAgwqGITww
+ RmYbKkjSXhru5vmmaYZUGA00C1
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_H2,RCVD_IN_MSPIKE_ZBI,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 5:22 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Am 27.09.22 um 16:29 schrieb Hans de Goede:
+
+> Hi,
 >
-> This feels "odd" to me.  Why not just use __kmalloc() instead of
-> krealloc()?  I think that will get you the same kasan tracking, and
-> should be a tiny bit faster (1-2 less function calls).
+> On 9/19/22 22:35, Armin Wolf wrote:
+>> Am 19.09.22 um 21:12 schrieb Armin Wolf:
+>>
+>>> Am 19.09.22 um 18:27 schrieb Rafael J. Wysocki:
+>>>
+>>>> On Mon, Sep 19, 2022 at 12:42 PM Hans de Goede <hdegoede@redhat.com> =
+wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On 9/12/22 13:53, Armin Wolf wrote:
+>>>>>> Currently, battery hooks are being unloaded if they return
+>>>>>> an error when adding a single battery.
+>>>>>> This however also causes the removal of successfully added
+>>>>>> hooks if they return -ENODEV for a single unsupported
+>>>>>> battery.
+>>>>>>
+>>>>>> Do not unload battery hooks in such cases since the hook
+>>>>>> handles any cleanup actions.
+>>>>>>
+>>>>>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+>>>>> Maybe instead of removing all error checking, allow -ENODEV
+>>>>> and behave as before when the error is not -ENODEV ?
+>>>>>
+>>>>> Otherwise we should probably make the add / remove callbacks
+>>>>> void to indicate that any errors are ignored.
+>>>>>
+>>>>> Rafael, do you have any opinion on this?
+>>>> IMV this is not a completely safe change, because things may simply
+>>>> not work in the cases in which an error is returned.
+>>>>
+>>>> It would be somewhat better to use a special error code to indicate
+>>>> "no support" (eg. -ENOTSUPP) and ignore that one only.
+>>> I would favor -ENODEV then, since it is already used by quiet a few dr=
+ivers
+>>> to indicate a unsupported battery.
+>>>
+>>> Armin Wolf
+>>>
+>> While checking all instances where the battery hook mechanism is curren=
+tly used,
+>> i found out that all but a single battery hook return -ENODEV for all e=
+rrors they
+>> encounter, the exception being the huawei-wmi driver.
+> Right, so this means that using -ENODEV to not automatically unload the
+> extension on error will result in a behavior change for those drivers,
+> with possibly unwanted side-effects.
 >
-> I guess it probably doesn't matter right now, just curious, and not a
-> big deal at all.
-
-Yeah, nowadays I think a "C helper" could have been used instead.
-
-> You'll be adding other error values here over time, right?
-
-Indeed, I removed all the ones we didn't use in v8 to reduce it a bit
-more. Sorry for the confusion! :)
-
-> What about functions that do have return functions of:
->         >= 0 number of bytes read/written/consumed/whatever
->         < 0  error code
+> As such I believe that using -ENOTSUP for the case where the extension
+> does not work for 1 battery but should still be used for the other
+> batter{y|ies} would be better as this preserves the existing behavior
+> for existing drivers.
 >
-> Would that use Result or Error as a type?  Or is it best just to not try
-> to model that mess in Rust calls? :)
-
-`Result`, i.e. the "number of bytes" part would go in the `Ok` variant
-and the "error code" in the `Err` variant.
-
-The benefit is that then you have to handle them "separately", i.e.
-you cannot confuse the number of bytes for the error code by mistake,
-or vice versa.
-
-> In the long run, using "raw" print macros like this is usually not the
-> thing to do.  Drivers always have a device to reference the message to,
-> and other things like filesystems and subsystems have a prefix to use as
-> well.
+>> I do not know the reason for this, but i fear unloading the extension o=
+n for
+>> example -ENOTSUP will result in similar behavior by hooks wanting to av=
+oid being
+>> unloaded on harmless errors.
+> I am not sure what you are trying to say here. The whole idea is
+> to add new behavior for -ENOTSUP to allow drivers to opt out of
+> getting their extension unregistered when they return this.
 >
-> Hopefully not many will use these as-is and we can wrap them properly
-> later on.
+> Although I wonder why not just have extensions return 0 when
+> they don't want to register any sysfs attr and that not considered
+> an error. If it is not considered an error the hook can just
+> return 0, which would not require any ACPI battery code changes
+> at all. So maybe just returning 0 is the easiest (which is
+> also often the best) answer here?
 
-Definitely, we will have e.g. the `dev_*!` ones:
+I agree, i will send v2 soon.
 
-    https://github.com/Rust-for-Linux/linux/blob/fcad53ca9071c7bf6a412640a82e679bad6d1cd4/rust/kernel/device.rs#L479-L502
+Armin Wolf
 
-> Anyway, all looks sane to me, sorry for the noise:
+>> However, i agree that when ignoring all errors, battery extensions whic=
+h provide
+>> similar attributes may currently delete each others attributes.
+> AFAIK there are no cases where more then 1 extension driver gets loaded,
+> since all the extension drivers are tied to a specific vendor's interfac=
+es
+> so we won't e.g. see the thinkpad_acpi driver load on the same laptop as
+> where toshiba_acpi also loads.
 >
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Thanks a lot for taking a look!
-
-Cheers,
-Miguel
+> IOW I think you are trying to solve a problem which does not exist here.
+>
+> Regards,
+>
+> Hans
+>
+>
+>
+>
+>> Any idea on how to solve this?
+>>
+>> Armin Wolf
+>>
+>>>>>> ---
+>>>>>>  =C2=A0 drivers/acpi/battery.c | 24 +++---------------------
+>>>>>>  =C2=A0 1 file changed, 3 insertions(+), 21 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
+>>>>>> index 306513fec1e1..e59c261c7c59 100644
+>>>>>> --- a/drivers/acpi/battery.c
+>>>>>> +++ b/drivers/acpi/battery.c
+>>>>>> @@ -724,20 +724,10 @@ void battery_hook_register(struct acpi_batter=
+y_hook *hook)
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * its attributes.
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 list_for_each_entry(battery, =
+&acpi_battery_list, list) {
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 if (hook->add_battery(battery->bat)) {
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * If a add-ba=
+ttery returns non-zero,
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * the registr=
+ation of the extension has failed,
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * and we will=
+ not add it to the list of loaded
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * hooks.
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr_err("extension f=
+ailed to load: %s", hook->name);
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __battery_hook_unre=
+gister(hook, 0);
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto end;
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 }
+>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 hook->add_battery(battery->bat);
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr_info("new extension: %s\n"=
+, hook->name);
+>>>>>> -end:
+>>>>>> +
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mutex_unlock(&hook_mutex);
+>>>>>>  =C2=A0 }
+>>>>>>  =C2=A0 EXPORT_SYMBOL_GPL(battery_hook_register);
+>>>>>> @@ -762,15 +752,7 @@ static void battery_hook_add_battery(struct ac=
+pi_battery *battery)
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * during the battery mo=
+dule initialization.
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 list_for_each_entry_safe(hook=
+_node, tmp, &battery_hook_list, list) {
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 if (hook_node->add_battery(battery->bat)) {
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * The notific=
+ation of the extensions has failed, to
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * prevent fur=
+ther errors we will unload the extension.
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr_err("error in ex=
+tension, unloading: %s",
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 hook_node->name);
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __battery_hook_unre=
+gister(hook_node, 0);
+>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 }
+>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 hook_node->add_battery(battery->bat);
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mutex_unlock(&hook_mutex);
+>>>>>>  =C2=A0 }
+>>>>>> --
+>>>>>> 2.30.2
+>>>>>>
