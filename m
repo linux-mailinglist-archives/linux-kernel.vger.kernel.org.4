@@ -2,91 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30845EC579
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E375EC57B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbiI0OG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
+        id S232305AbiI0OHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232183AbiI0OG4 (ORCPT
+        with ESMTP id S231628AbiI0OHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:06:56 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F193D87F88;
-        Tue, 27 Sep 2022 07:06:54 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id a4so5138601ilj.8;
-        Tue, 27 Sep 2022 07:06:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=08FYPXF8NGV3I7f8HvvukPdlDJ2mobJpfZ4nRRDrtDs=;
-        b=b6TVXxWSSs1wWwgyy76IisEm+bMUWZ/TZVqBW0IiwdaKjq1GvfK4WvX0uioXtu2Hs3
-         jcf/7ASYzYYGjL6N1NOc5gzJbhcbPXgiIpLgwYqW868sFRLRPVM6/+k64STgGvPwJUew
-         W9D1rzvOyRhdq6qvOoo4l+TQhxonD+mm0Tmi89kwo2eBCe1tBmw5oSnGlOZ0+03lwIqh
-         UWG5nRt7SlGk/zMWRiNvqo4hOtRSMoXiKKmuQuQA/I2I6ZhsS1naaE54ERdmVXQLa3Kt
-         LpqxHrraYDNE+qytp1tQoK+LfPJPeUxJG720eFeQevCd3+3SR0yrd/vkxJRqWRuRvrkX
-         XJTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=08FYPXF8NGV3I7f8HvvukPdlDJ2mobJpfZ4nRRDrtDs=;
-        b=z4Akm1n+v6OpRl69uAPD8Id09lo7Xdy67AZgOhiycM6D4OazO9x9peiU3ZOGb3ItvW
-         ZqQySMpj//I6u0wP4HV/ds6osKKQPqj2F/y55rds4GYH37tHz9VsUNl/A6JNcKzRZRRX
-         ML/C9OIVdQrvD5ApyuefQdnhNNA7QDyaoMGKSkXgHmlZvOvnnmna4JukgogV4+Gxyfts
-         /W+g7jRPou3vdhxAItEUmJixayvBQCQoiALmnnNCfTJ+x9WgzdDdkCE8NNOGmEKNmEd6
-         hJtQ3XLPit5k5sR9iusAINW6sDq+moNxaSYFogHvFZ7oDkAZ89cO9Gx3RYeIwy7bXJB1
-         9gvw==
-X-Gm-Message-State: ACrzQf17UTII1EbaQmlIgfS0LdQd9BE+X6pj6NX2SrTIGj2h32zWZqUf
-        PmaCcwe6NQExVQxsMR88t93LSNBYmMN+NQNM8XU=
-X-Google-Smtp-Source: AMsMyM5syx+SHzekoKk5qqoxYITfSS3Xf+tq/gzESB0d3rgzZ2K4BALmcjzwKNLccON5ri7Ug7BCkO3JsxrTkg8RzqI=
-X-Received: by 2002:a05:6e02:188f:b0:2f8:993:e7ba with SMTP id
- o15-20020a056e02188f00b002f80993e7bamr7861514ilu.321.1664287614225; Tue, 27
- Sep 2022 07:06:54 -0700 (PDT)
+        Tue, 27 Sep 2022 10:07:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BC69E890;
+        Tue, 27 Sep 2022 07:07:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FAE4B81BE3;
+        Tue, 27 Sep 2022 14:07:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E108BC433D6;
+        Tue, 27 Sep 2022 14:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664287624;
+        bh=FHPwFJeY9xWzW2Uk+ZnQDGf3FYmwkr51wCUPbEMEj3k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LtB0EZLRO4gsesP4oqdp9LWO1rEq6ilefO8qkDxElaPVeV0KPLwOvEYoLabyouJSb
+         zxK6QQKtBbsWcAszvfSsGBAt+ryT6J8lGt2nnwWN0u1LqYEZnF374bhUcyfP97tqVW
+         ed05mxqIfbMLK70xty2z78o61uGM1qmC4DBBM2uvsrw+S8he8LOleVF0RuWbY/9X0x
+         QyS1Irs5V+1jv2LawotH9adV7k3v5filWe1mgz/jT9jIj3LP7+5+M3+hOOHxnEYYB4
+         VbdW+YeMIK3V27ug/p9SKnRwY6XjqDNgbI0m95gcFKDoi4FK79j82hzk9K9us1lypI
+         IEqOR4FG+/EKw==
+Date:   Tue, 27 Sep 2022 07:07:02 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Subash Abhinov Kasiviswanathan <quic_subashab@quicinc.com>,
+        Sean Tranchetti <quic_stranche@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH][next] net: ethernet: rmnet: Replace zero-length array
+ with DECLARE_FLEX_ARRAY() helper
+Message-ID: <20220927070702.1c2da2b8@kernel.org>
+In-Reply-To: <202209261920.3A2EA07D4@keescook>
+References: <YzIei3tLO1IWtMjs@work>
+        <202209261502.7DB9C7119@keescook>
+        <20220926172604.71a20b7d@kernel.org>
+        <202209261920.3A2EA07D4@keescook>
 MIME-Version: 1.0
-References: <20220927131518.30000-1-ojeda@kernel.org> <20220927131518.30000-9-ojeda@kernel.org>
- <YzL/9mlOHemaey2n@yadro.com>
-In-Reply-To: <YzL/9mlOHemaey2n@yadro.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 27 Sep 2022 16:06:43 +0200
-Message-ID: <CANiq72kDPMKd0qLAMVrd2A3n9aAWhh2ps5DvKos58L=_V2-XwQ@mail.gmail.com>
-Subject: Re: [PATCH v10 08/27] rust: adapt `alloc` crate to the kernel
-To:     Konstantin Shelekhin <k.shelekhin@yadro.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Matthew Bakhtiari <dev@mtbk.me>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 3:52 PM Konstantin Shelekhin
-<k.shelekhin@yadro.com> wrote:
->
-> Not being able to pass GFP flags here kinda limits the scope of Rust in
-> kernel. I think that it must be supported in the final version that gets
-> in.
+On Mon, 26 Sep 2022 19:22:30 -0700 Kees Cook wrote:
+> > Not directly related to this patch, but I just had to look at pahole
+> > output for sk_buff and the struct_group() stuff makes is really painful
+> > to read :/ Offsets for the members are relative to the "group" and they
+> > are all repeated.
+> > 
+> > Is there any chance you could fix that? Before we sprinkle more pixie
+> > dust around, perhaps?  
+> 
+> Unfortunately I don't see a way around it until we can make changes to
+> the C language spec, and that's measured in decades. :(
 
-Flags will be supported one way or the other in the future, but I was
-requested to do v10 as a v9 with the last nits resolved.
+I think BPF folks have had some success adding C extensions, like
+tagging. Some form of attribute would really look so much better than
+this DECLARE_FLEX_ARRAY() macro indirection. Maybe it's just me :(
 
-Please see the cover letter for details.
+> Perhaps we could add some kind of heuristic to pahole to "hide" one of
+> the internal struct_group() copies, and to hide the empty flexible-array
+> wrapper structs? (pahole already can't tell the difference between a
+> 0-length array and a flexible-array.) Would that be workable?
 
-Cheers,
-Miguel
+That'd be my knee-jerk fix, too. Or at least render the offsets for 
+the anonymous side of the union as absolute rather than relative.
