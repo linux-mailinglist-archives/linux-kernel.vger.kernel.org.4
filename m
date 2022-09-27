@@ -2,124 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 136655EC350
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F2B5EC351
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbiI0Mxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38472 "EHLO
+        id S231728AbiI0MyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiI0Mxu (ORCPT
+        with ESMTP id S229734AbiI0MyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:53:50 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42A5B6D56
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:53:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aloRj8yOFal8+2rRTL0YzwFMaENdV4F/Ynk/LWIEuhI=; b=G9gO0yugVGRa+9tV2jeoEaKQjx
-        NAMzKQmscCu+sgLPh8bWSFrJubYL95VyYZJAnVfMYTKOmXmgHCZ6XD/t75Vfqct3YKYMHO8fF5pyj
-        DJDrzgK1DVkrb3WToQb4hBau+nptFn/mob2uvDok9TjItqAa46ke8eBRB9sl57cdHhHIO/RqeBmT9
-        2BIcKhpIVTx9ZxeKutyCccW/i7ajSLUwvyDugbhK9AZBF2mw0gsNrNLRrKNoBzRdtvvCTCrYlvBPT
-        qUsh+rYHL1OMDjlod2Z9YVtq/ft2FSVpMEmLuNwGTWbESZywp2tN+jfVD0CjaxkG9zFGCjQJ+6DRG
-        9lT3QJQA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1odA5a-00GHsz-LL; Tue, 27 Sep 2022 12:53:30 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D37B9300205;
-        Tue, 27 Sep 2022 14:53:29 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C365C20424F6E; Tue, 27 Sep 2022 14:53:29 +0200 (CEST)
-Date:   Tue, 27 Sep 2022 14:53:29 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 23/23] x86/process: Reset hardware history in context
- switch
-Message-ID: <YzLySV4545F0MKSl@hirez.programming.kicks-ass.net>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-24-ricardo.neri-calderon@linux.intel.com>
+        Tue, 27 Sep 2022 08:54:03 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A0BCDCE3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:53:59 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 21:53:50 +0900
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1664283238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xlZJ/Kh6cvan+YPeLMPgG+E2Ues2lCHrz7rn9R03zos=;
+        b=W1atcqI3NaWtFt0xWb+YaT32TTC/fiDYeOgL8A2SZV8DsySbiuZmRJAH16HMPoGeQpvoO1
+        DcN2TfRZxSTK7eGB2kbbrB81YuGIqFGAMjSRZ0AYS7eoeR+sT7fuqDjTnbGKSsGZF6tQ3K
+        +oi4mf6siSvuC2qneEMcYzgNWOWyXzQ=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     Hui Tang <tanghui20@huawei.com>
+Cc:     naoya.horiguchi@nec.com, linmiaohe@huawei.com,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/hwpoison: fix build error without
+ CONFIG_MEMORY_FAILURE
+Message-ID: <20220927125350.GA500539@u2004.lan>
+References: <20220927102946.98622-1-tanghui20@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220909231205.14009-24-ricardo.neri-calderon@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220927102946.98622-1-tanghui20@huawei.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 04:12:05PM -0700, Ricardo Neri wrote:
-> Reset the classification history of the current task when switching to
-> the next task. Hardware will start anew the classification of the next
-> running task.
+On Tue, Sep 27, 2022 at 06:29:46PM +0800, Hui Tang wrote:
+> Building without CONFIG_MEMORY_FAILURE will fail:
+> 
+> mm/memory-failure.o: In function `action_result':
+> memory-failure.c: undefined reference to `memblk_nr_poison_inc'
+> mm/memory-failure.o: In function `page_handle_poison':
+> memory-failure.c: undefined reference to `memblk_nr_poison_inc'
+> mm/memory-failure.o: In function `__get_huge_page_for_hwpoison':
+> memory-failure.c: undefined reference to `memblk_nr_poison_inc'
+> mm/memory-failure.o: In function `unpoison_memory':
+> memory-failure.c: undefined reference to `memblk_nr_poison_sub'
+> mm/memory-failure.o: In function `num_poisoned_pages_inc':
+> memory-failure.c: undefined reference to `memblk_nr_poison_inc'
+> 
+> Add CONFIG_MEMORY_FAILURE wrapper for invoking memblk_nr_poison_{inc|sub}.
+> 
+> Fixes: 69b496f03bb4 ("mm/hwpoison: introduce per-memory_block hwpoison counter")
+> Signed-off-by: Hui Tang <tanghui20@huawei.com>
 
-Please quantify the cost of this HRESET instruction.
+Thank you for the patch.  I have a question.
+If you disables CONFIG_MEMORY_FAILURE, mm/memory-failure.c should
+not be compiled, so I wonder why you saw the compile error.
+Could you share your .config file?
 
-> diff --git a/arch/x86/kernel/process_32.c b/arch/x86/kernel/process_32.c
-> index 2f314b170c9f..74d8ad83e0b3 100644
-> --- a/arch/x86/kernel/process_32.c
-> +++ b/arch/x86/kernel/process_32.c
-> @@ -52,6 +52,7 @@
->  #include <asm/switch_to.h>
->  #include <asm/vm86.h>
->  #include <asm/resctrl.h>
-> +#include <asm/hreset.h>
->  #include <asm/proto.h>
->  
->  #include "process.h"
-> @@ -214,6 +215,8 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
->  	/* Load the Intel cache allocation PQR MSR. */
->  	resctrl_sched_in();
->  
-> +	reset_hardware_history();
-> +
->  	return prev_p;
+Acutally I saw the similar report a few days ago
+https://lore.kernel.org/lkml/20220923095013.1151252-1-michael@walle.cc/
+, where the build error happened in aarch64,  so I likely missed some arch
+dependency.  I responded to the report by updating the patch by applying
+"#if defined(CONFIG_MEMORY_FAILURE) && defined(CONFIG_MEMORY_HOTPLUG)"
+to the definition of memblk_nr_poison_{inc,sub}.
+https://lore.kernel.org/lkml/20220923141204.GA1484969@ik1-406-35019.vs.sakura.ne.jp/
+
+I did not confirm that this fix is really right, because I can't reproduced
+the build error in my environment.  So could you check that v5 patch fixes
+the build error you're seeing?  (The current version in mm-unstable is v4,
+so that should be replaced with v5.)
+
+Thanks,
+Naoya Horiguchi
+
+> ---
+>  mm/memory-failure.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 03479895086d..5bb9d2d20234 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -77,14 +77,18 @@ static bool hw_memory_failure __read_mostly = false;
+>  void num_poisoned_pages_inc(unsigned long pfn)
+>  {
+>  	atomic_long_inc(&num_poisoned_pages);
+> +#ifdef CONFIG_MEMORY_FAILURE
+>  	memblk_nr_poison_inc(pfn);
+> +#endif
 >  }
 >  
-> diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-> index 1962008fe743..0b175f30f359 100644
-> --- a/arch/x86/kernel/process_64.c
-> +++ b/arch/x86/kernel/process_64.c
-> @@ -53,6 +53,7 @@
->  #include <asm/xen/hypervisor.h>
->  #include <asm/vdso.h>
->  #include <asm/resctrl.h>
-> +#include <asm/hreset.h>
->  #include <asm/unistd.h>
->  #include <asm/fsgsbase.h>
->  #ifdef CONFIG_IA32_EMULATION
-> @@ -657,6 +658,8 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
->  	/* Load the Intel cache allocation PQR MSR. */
->  	resctrl_sched_in();
->  
-> +	reset_hardware_history();
-> +
->  	return prev_p;
+>  static inline void num_poisoned_pages_sub(unsigned long pfn, long i)
+>  {
+>  	atomic_long_sub(i, &num_poisoned_pages);
+> +#ifdef CONFIG_MEMORY_FAILURE
+>  	if (pfn != -1UL)
+>  		memblk_nr_poison_sub(pfn, i);
+> +#endif
 >  }
 >  
+>  /*
 > -- 
-> 2.25.1
+> 2.17.1
+> 
+> 
 > 
