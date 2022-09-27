@@ -2,362 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB805EC78D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891245EC78A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiI0PXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:23:20 -0400
+        id S231974AbiI0PXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:23:05 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiI0PXB (ORCPT
+        with ESMTP id S231814AbiI0PW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:23:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060E9161CE9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:22:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664292179;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+wxxaQvAmOhXqvbiroKphZbmEyl3ZzPK5pDgkODGqhg=;
-        b=DCq3uoIttzvCboLXAV0zP8p0icGKlbPPf+4/W0C+UC4v8hgrOx+dvmKAyNxEKKDj/4fm/1
-        GRH1OmpqVPQtP2DX8Iyi+SJSYBRZM4DG7DSYfD58r6LKpjsaBeZdoqwCMZ4yX4NUSavIav
-        0IHv6E2AEWP9K4J/kH5dTqJvyaZWfqA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-65-6kT8QB9CNNWEUYegk9Uxmg-1; Tue, 27 Sep 2022 11:22:42 -0400
-X-MC-Unique: 6kT8QB9CNNWEUYegk9Uxmg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 13C3C185A7A8;
-        Tue, 27 Sep 2022 15:22:42 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E039E2166B2A;
-        Tue, 27 Sep 2022 15:22:41 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>
-Subject: [PATCH] KVM: allow compiling out SMM support
-Date:   Tue, 27 Sep 2022 11:22:41 -0400
-Message-Id: <20220927152241.194900-1-pbonzini@redhat.com>
+        Tue, 27 Sep 2022 11:22:56 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE748160E60
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:22:50 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id nb11so21440744ejc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=erSV/LQniRo494ECVW4U1bCw7qSOzHbBVNjiw4aEUwM=;
+        b=Tp660BAjo3G+BsL/ugjmeq1Rct7qvWoZz8hDMb9aW0yo0LV225kCt7w84VPk0RS1Ml
+         0pZIfCPqC7Xjm69W/p1iuJOqCLHLc7FfaOz1jFoYQrex9wgHKoLXee7kQeoTECqRfjcj
+         IdXihVu6JOTBHCQQfHZojyC+iC22+I3ROEBNO3X/rIdEw1juqcRNR93OvcXRsMsbSEcb
+         tkWWkB5G/VPfF7x20pjCF29ZuqmclJCXlK5njoXIdOUqiBQY5GGDp4+hSoZHMWrSIUFV
+         0HqiiF6MJP0ICcdbFwqDZx63dAXxzV4Hx0uDsqBPGjtJ5+RoeV+HbL1AejyaDP2U3+42
+         jJOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=erSV/LQniRo494ECVW4U1bCw7qSOzHbBVNjiw4aEUwM=;
+        b=xEb0NbJpRzdsMYvapHUhVUHggHA7PPu6DQqQqQUaefpq4Rth8plKhb5aqV83MEhl4w
+         FQFTrtTcw6muXPp+xJQKgsLIkQicEUPmaCRl9n1xM8RZfC2Lv++W+vcOPJHHxlCEMEWQ
+         DEvJ6fYt1mEY3Rq+zXAtt4mofpdk5ecYvMwcyUjqvhRoILEW5rgn2tAhVhGsM7Yt2etz
+         izc/IEP7gYNRIF321BtNpIhgcCYulpyypVueES+TOQSOSQzDqDdOYRbdax56PBF9uW20
+         HxWkETP44ZNEozlHxyGWLJxBUhawc6kcCT9mO7vmRrQRR9y+oSQeAMKItLNvGPPPCuSm
+         pHXA==
+X-Gm-Message-State: ACrzQf0f6fwwhM8/Dr/2dJ8JmS5PI+9ilDWPSjRisJJCjlGx6l6oDk+7
+        8dVJk6zvUgXiiv6muswvfLqSbkj5LTU=
+X-Google-Smtp-Source: AMsMyM6ORwEPx17ooVtnAkD8sUM9hP3viynQDYDPUEMwUEn+64CkCaKPHB1Kn62qQ+5ltV+3woym6Q==
+X-Received: by 2002:a17:907:2c75:b0:77c:2b6a:6b63 with SMTP id ib21-20020a1709072c7500b0077c2b6a6b63mr23937278ejc.702.1664292169261;
+        Tue, 27 Sep 2022 08:22:49 -0700 (PDT)
+Received: from [147.251.42.107] (nbbroz2.fi.muni.cz. [147.251.42.107])
+        by smtp.gmail.com with ESMTPSA id l17-20020a1709060cd100b007417041fb2bsm913340ejh.116.2022.09.27.08.22.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 08:22:48 -0700 (PDT)
+Message-ID: <6c75a90d-3793-55fc-e525-eca14e562350@gmail.com>
+Date:   Tue, 27 Sep 2022 17:22:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [dm-devel] [PATCH] kernfs: fix a crash when two processes delete
+ the same directory
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com,
+        Christoph Lameter <cl@linux.com>
+References: <alpine.LRH.2.02.2209260418360.16612@file01.intranet.prod.int.rdu2.redhat.com>
+ <YzGYFBv0pdt+DQg+@kroah.com>
+From:   Milan Broz <gmazyland@gmail.com>
+In-Reply-To: <YzGYFBv0pdt+DQg+@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some users of KVM implement the UEFI variable store through a paravirtual device
-that does not require the "SMM lockbox" component of edk2; allow them to
-compile out system management mode, which is not a full implementation
-especially in how it interacts with nested virtualization.
+On 9/26/22 14:16, Greg Kroah-Hartman wrote:
+> On Mon, Sep 26, 2022 at 07:04:52AM -0400, Mikulas Patocka wrote:
+>> There is a crash when running the cryptsetup testsuite on Fedora Rawhide.
+>> It can be reproduced by installing Rawhide with the 6.0-rc6 kernel,
+>> downloading and compiling the cryptsetup repository and running this test
+>> in a loop for about 15 minuts:
+>> 	while ./integrity-compat-test; do :; done
+>>
+>>   ------------[ cut here ]------------
+>>   WARNING: CPU: 0 PID: 50087 at fs/kernfs/dir.c:504 __kernfs_remove.part.0+0x26f/0x2b0
+>>   Modules linked in: crc32_generic loop dm_integrity async_xor async_tx tls isofs uinput snd_seq_dummy snd_hrtimer nft_objref nf_conntrack_netbios_ns nf_conntrack_broadcast nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 rfkill ip_set nf_tables nfnetlink qrtr sunrpc snd_hda_codec_generic ledtrig_audio snd_hda_intel iTCO_wdt snd_intel_dspcfg intel_pmc_bxt snd_intel_sdw_acpi iTCO_vendor_support snd_hda_codec snd_hda_core snd_hwdep snd_seq snd_seq_device joydev snd_pcm i2c_i801 snd_timer pcspkr i2c_smbus virtio_balloon snd lpc_ich soundcore zram virtio_net net_failover virtio_blk serio_raw failover qxl virtio_console drm_ttm_helper ttm ip6_tables ip_tables fuse qemu_fw_cfg
+>>   Unloaded tainted modules: crc32_pclmul():1 pcc_cpufreq():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 edac_mce_amd():1 acpi_cpufreq():1 pcc_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 edac_mce_amd():1 pcc_cpufreq():1 acpi_cpufreq():1 acpi_cpufreq():1
+>>   CPU: 0 PID: 50087 Comm: integritysetup Not tainted 6.0.0-0.rc6.41.fc38.x86_64 #1
+>>   Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+>>   RIP: 0010:__kernfs_remove.part.0+0x26f/0x2b0
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
-	The patch isn't pretty.  I could skip all the changes to add WARNs
-	to called functions, but the point of adding the config symbol is
-	to make sure that those functions, and all the baggage they bring,
-	are dead.
+...
 
- arch/x86/kvm/Kconfig                          | 11 +++++++
- arch/x86/kvm/emulate.c                        |  3 +-
- arch/x86/kvm/kvm_cache_regs.h                 |  2 +-
- arch/x86/kvm/lapic.c                          |  2 ++
- arch/x86/kvm/svm/svm.c                        | 13 ++++++++
- arch/x86/kvm/vmx/vmx.c                        | 12 +++++++
- arch/x86/kvm/x86.c                            | 33 ++++++++++++++++---
- tools/testing/selftests/kvm/x86_64/smm_test.c |  2 ++
- 8 files changed, 72 insertions(+), 6 deletions(-)
+> Can you see if 4abc99652812 ("kernfs: fix use-after-free in
+> __kernfs_remove") in linux-next fixes this for you or not?  It seems to
+> be the same issue, as was also reported at:
+> 	https://lore.kernel.org/r/7f489b14-2fdc-3d91-c87e-6a802bd8592d@I-love.SAKURA.ne.jp
 
-diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-index a107df22ffee..1679f9b4e96d 100644
---- a/arch/x86/kvm/Kconfig
-+++ b/arch/x86/kvm/Kconfig
-@@ -88,6 +88,17 @@ config KVM_INTEL
- 	  To compile this as a module, choose M here: the module
- 	  will be called kvm-intel.
- 
-+config KVM_SMM
-+	bool "System Management Mode emulation"
-+	default y
-+	depends on KVM
-+	help
-+	  Provides support for KVM to emulate System Management Mode (SMM)
-+	  in virtual machines.  This can be used by the virtual machine
-+	  firmware to implement UEFI secure boot.
-+
-+	  If unsure, say Y.
-+
- config X86_SGX_KVM
- 	bool "Software Guard eXtensions (SGX) Virtualization"
- 	depends on X86_SGX && KVM_INTEL
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index b6180032dfd6..7c1f772ec69f 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -2557,7 +2557,8 @@ static int em_rsm(struct x86_emulate_ctxt *ctxt)
- 	u64 smbase;
- 	int ret;
- 
--	if ((ctxt->ops->get_hflags(ctxt) & X86EMUL_SMM_MASK) == 0)
-+	if (!IS_ENABLED(CONFIG_KVM_SMM) ||
-+	    (ctxt->ops->get_hflags(ctxt) & X86EMUL_SMM_MASK) == 0)
- 		return emulate_ud(ctxt);
- 
- 	smbase = ctxt->ops->get_smbase(ctxt);
-diff --git a/arch/x86/kvm/kvm_cache_regs.h b/arch/x86/kvm/kvm_cache_regs.h
-index 3febc342360c..a9e46dcac4bb 100644
---- a/arch/x86/kvm/kvm_cache_regs.h
-+++ b/arch/x86/kvm/kvm_cache_regs.h
-@@ -202,7 +202,7 @@ static inline bool is_guest_mode(struct kvm_vcpu *vcpu)
- 
- static inline bool is_smm(struct kvm_vcpu *vcpu)
- {
--	return vcpu->arch.hflags & HF_SMM_MASK;
-+	return IS_ENABLED(CONFIG_KVM_SMM) && (vcpu->arch.hflags & HF_SMM_MASK);
- }
- 
- #endif
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index d7639d126e6c..d2d08a202b75 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -1171,8 +1171,10 @@ static int __apic_accept_irq(struct kvm_lapic *apic, int delivery_mode,
- 
- 	case APIC_DM_SMI:
- 		result = 1;
-+#ifdef CONFIG_KVM_SMM
- 		kvm_make_request(KVM_REQ_SMI, vcpu);
- 		kvm_vcpu_kick(vcpu);
-+#endif
- 		break;
- 
- 	case APIC_DM_NMI:
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 58f0077d9357..2b60a0123ae7 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4149,6 +4149,8 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
- 	case MSR_IA32_VMX_BASIC ... MSR_IA32_VMX_VMFUNC:
- 		return false;
- 	case MSR_IA32_SMBASE:
-+		if (!IS_ENABLED(CONFIG_KVM_SMM))
-+			return false;
- 		/* SEV-ES guests do not support SMM, so report false */
- 		if (kvm && sev_es_guest(kvm))
- 			return false;
-@@ -4409,6 +4411,8 @@ bool svm_smi_blocked(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
- 
-+	WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM));
-+
- 	/* Per APM Vol.2 15.22.2 "Response to SMI" */
- 	if (!gif_set(svm))
- 		return true;
-@@ -4438,6 +4442,9 @@ static int svm_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
- 	struct kvm_host_map map_save;
- 	int ret;
- 
-+	if (WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM)))
-+		return 0;
-+
- 	if (!is_guest_mode(vcpu))
- 		return 0;
- 
-@@ -4487,6 +4494,9 @@ static int svm_leave_smm(struct kvm_vcpu *vcpu, const char *smstate)
- 	struct vmcb *vmcb12;
- 	int ret;
- 
-+	if (WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM)))
-+		return 0;
-+
- 	if (!guest_cpuid_has(vcpu, X86_FEATURE_LM))
- 		return 0;
- 
-@@ -4546,6 +4556,9 @@ static void svm_enable_smi_window(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
- 
-+	if (WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM)))
-+		return;
-+
- 	if (!gif_set(svm)) {
- 		if (vgif)
- 			svm_set_intercept(svm, INTERCEPT_STGI);
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 9dba04b6b019..c8d2c0d3bacf 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -6840,6 +6840,8 @@ static bool vmx_has_emulated_msr(struct kvm *kvm, u32 index)
- {
- 	switch (index) {
- 	case MSR_IA32_SMBASE:
-+		if (!IS_ENABLED(CONFIG_KVM_SMM))
-+			return false;
- 		/*
- 		 * We cannot do SMM unless we can run the guest in big
- 		 * real mode.
-@@ -7904,6 +7906,8 @@ static void vmx_setup_mce(struct kvm_vcpu *vcpu)
- 
- static int vmx_smi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
- {
-+	WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM));
-+
- 	/* we need a nested vmexit to enter SMM, postpone if run is pending */
- 	if (to_vmx(vcpu)->nested.nested_run_pending)
- 		return -EBUSY;
-@@ -7914,6 +7918,9 @@ static int vmx_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
- {
- 	struct vcpu_vmx *vmx = to_vmx(vcpu);
- 
-+	if (WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM)))
-+		return 0;
-+
- 	/*
- 	 * TODO: Implement custom flows for forcing the vCPU out/in of L2 on
- 	 * SMI and RSM.  Using the common VM-Exit + VM-Enter routines is wrong
-@@ -7936,6 +7943,9 @@ static int vmx_leave_smm(struct kvm_vcpu *vcpu, const char *smstate)
- 	struct vcpu_vmx *vmx = to_vmx(vcpu);
- 	int ret;
- 
-+	if (WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM)))
-+		return 0;
-+
- 	if (vmx->nested.smm.vmxon) {
- 		vmx->nested.vmxon = true;
- 		vmx->nested.smm.vmxon = false;
-@@ -7954,6 +7964,8 @@ static int vmx_leave_smm(struct kvm_vcpu *vcpu, const char *smstate)
- 
- static void vmx_enable_smi_window(struct kvm_vcpu *vcpu)
- {
-+	WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM));
-+
- 	/* RSM will cause a vmexit anyway.  */
- }
- 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index eb9d2c23fb04..90d82086a890 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3637,7 +3637,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		break;
- 	}
- 	case MSR_IA32_SMBASE:
--		if (!msr_info->host_initiated)
-+		if (!IS_ENABLED(CONFIG_KVM_SMM) || !msr_info->host_initiated)
- 			return 1;
- 		vcpu->arch.smbase = data;
- 		break;
-@@ -4053,7 +4053,7 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		msr_info->data = vcpu->arch.ia32_misc_enable_msr;
- 		break;
- 	case MSR_IA32_SMBASE:
--		if (!msr_info->host_initiated)
-+		if (!IS_ENABLED(CONFIG_KVM_SMM) || !msr_info->host_initiated)
- 			return 1;
- 		msr_info->data = vcpu->arch.smbase;
- 		break;
-@@ -4427,6 +4427,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 			r |= KVM_X86_DISABLE_EXITS_MWAIT;
- 		break;
- 	case KVM_CAP_X86_SMM:
-+		if (!IS_ENABLED(CONFIG_KVM_SMM))
-+			break;
-+
- 		/* SMBASE is usually relocated above 1M on modern chipsets,
- 		 * and SMM handlers might indeed rely on 4G segment limits,
- 		 * so do not report SMM to be available if real mode is
-@@ -4885,8 +4888,8 @@ static int kvm_vcpu_ioctl_nmi(struct kvm_vcpu *vcpu)
- 
- static int kvm_vcpu_ioctl_smi(struct kvm_vcpu *vcpu)
- {
--	kvm_make_request(KVM_REQ_SMI, vcpu);
--
-+	if (IS_ENABLED(CONFIG_KVM_SMM))
-+		kvm_make_request(KVM_REQ_SMI, vcpu);
- 	return 0;
- }
- 
-@@ -5186,6 +5189,12 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
- 		vcpu->arch.apic->sipi_vector = events->sipi_vector;
- 
- 	if (events->flags & KVM_VCPUEVENT_VALID_SMM) {
-+		if (!IS_ENABLED(CONFIG_KVM_SMM) &&
-+		    (events->smi.smm ||
-+		     events->smi.pending ||
-+		     events->smi.smm_inside_nmi))
-+			return -EINVAL;
-+
- 		if (!!(vcpu->arch.hflags & HF_SMM_MASK) != events->smi.smm) {
- 			kvm_x86_ops.nested_ops->leave_nested(vcpu);
- 			kvm_smm_changed(vcpu, events->smi.smm);
-@@ -8109,12 +8118,20 @@ static void emulator_exiting_smm(struct x86_emulate_ctxt *ctxt)
- {
- 	struct kvm_vcpu *vcpu = emul_to_vcpu(ctxt);
- 
-+	if (!IS_ENABLED(CONFIG_KVM_SMM)) {
-+		WARN_ON_ONCE(1);
-+		return;
-+	}
- 	kvm_smm_changed(vcpu, false);
- }
- 
- static int emulator_leave_smm(struct x86_emulate_ctxt *ctxt,
- 				  const char *smstate)
- {
-+	if (!IS_ENABLED(CONFIG_KVM_SMM)) {
-+		WARN_ON_ONCE(1);
-+		return 0;
-+	}
- 	return static_call(kvm_x86_leave_smm)(emul_to_vcpu(ctxt), smstate);
- }
- 
-@@ -10162,6 +10179,11 @@ static void enter_smm(struct kvm_vcpu *vcpu)
- 	unsigned long cr0;
- 	char buf[512];
- 
-+	if (!IS_ENABLED(CONFIG_KVM_SMM)) {
-+		WARN_ON_ONCE(1);
-+		return;
-+	}
-+
- 	memset(buf, 0, 512);
- #ifdef CONFIG_X86_64
- 	if (guest_cpuid_has(vcpu, X86_FEATURE_LM))
-@@ -10236,6 +10258,9 @@ static void enter_smm(struct kvm_vcpu *vcpu)
- 
- static void process_smi(struct kvm_vcpu *vcpu)
- {
-+	if (!IS_ENABLED(CONFIG_KVM_SMM))
-+		return;
-+
- 	vcpu->arch.smi_pending = true;
- 	kvm_make_request(KVM_REQ_EVENT, vcpu);
- }
-diff --git a/tools/testing/selftests/kvm/x86_64/smm_test.c b/tools/testing/selftests/kvm/x86_64/smm_test.c
-index 1f136a81858e..cb38a478e1f6 100644
---- a/tools/testing/selftests/kvm/x86_64/smm_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/smm_test.c
-@@ -137,6 +137,8 @@ int main(int argc, char *argv[])
- 	struct kvm_x86_state *state;
- 	int stage, stage_reported;
- 
-+	TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_SMM));
-+
- 	/* Create VM */
- 	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
- 
--- 
-2.31.1
 
+I tried it on system where cryptsetup testsuite almost immediately crashed in the integrity test.
+
+With the patch in https://lore.kernel.org/r/7f489b14-2fdc-3d91-c87e-6a802bd8592d@I-love.SAKURA.ne.jp
+it now iterates for some time without any problems, so I think it is fixed.
+
+Tested-by: Milan Broz <gmazyland@gmail.com>
+
+Thanks,
+Milan
