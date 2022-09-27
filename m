@@ -2,91 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2A05EBD13
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C4E5EBD16
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiI0ITp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 04:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
+        id S231487AbiI0IUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 04:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbiI0ITh (ORCPT
+        with ESMTP id S231431AbiI0ITx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 04:19:37 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B2AB481;
-        Tue, 27 Sep 2022 01:19:34 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so9430361pjl.0;
-        Tue, 27 Sep 2022 01:19:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=9U+Qwke6i9i5veqMmKRkGRTk17ZxOAfJ107jvmytI2o=;
-        b=Rx4P8Knj0NPbKfAvw12ndhmhaR87tzsHAoBOw9QlJzGjGqNh3l7v8odLyRgz/u0vjS
-         segkGFeEMhFXlSuYalUYD/xkSztwdAfLDqP64F/ScjeRh1q7Tqdz6mt3uKsQgpoHsLV4
-         +AncxOntrmIbac9hDreTgYXtD8RxmL5+04Z25IiP8qG8GRHX6bay/oZaMo7IZooXu8aG
-         J/hVqxE2xatkdQsfH1AHxPDr4HDiF3rq2uMnhQgj/FuN1NVc4tu6E5lCzZx6SsqljwNh
-         I1sxBmoYPyWFTSjTvhvhshLbtKlouY5TzZI40tSobpU+YfQjY9mZxqJYdsei7eQ6wZ+u
-         wuXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=9U+Qwke6i9i5veqMmKRkGRTk17ZxOAfJ107jvmytI2o=;
-        b=mFtIASolk3PlKehUGwSaswL0G19KCIjRU2/wAZlw+c+Swh4PR1syjs9QQN65I3eGfU
-         M1MvWhwIYPdtwLGeJlNrVHXwY30PKcHaXT8gY7mnOEBto7M535RfDVcenpmyEyAz/hOz
-         ch9oGYhU7whwSkmCOwI0Duc2/3G/+HAZCGnBuu6G+W+Y8oNKOHU/B/2NsNd59ayLEQtJ
-         Rc7YaN0hGnWwK24tKPtdOHcOREAqbom2W1KDiSCuBAJPRxd0p8tPvTxd7EfHKtVVbgqJ
-         S9x0vmI95R4s6iKrzFC+mJ0n0FXnrajvjNVbvQ/Ibt2f8NtkJlrFWd5AeHvMtiDVv3z8
-         mXtg==
-X-Gm-Message-State: ACrzQf22/xewddjP3967kbGlu8Ik1Ze0ncH8SXY2Im7QCBvdMow4WaHr
-        ziSyBeHbN8+oZrukr0jT+diqaOZD7Gs=
-X-Google-Smtp-Source: AMsMyM4hRHa0SrXblfbSs1dZTPP/1dvW/D+2EVB0KBZkQIgccgRP6GIZaG7Zbc5VjcXz4jTvLD52kA==
-X-Received: by 2002:a17:90b:4a85:b0:202:4f3f:1f65 with SMTP id lp5-20020a17090b4a8500b002024f3f1f65mr3181331pjb.241.1664266773606;
-        Tue, 27 Sep 2022 01:19:33 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-32.three.co.id. [116.206.12.32])
-        by smtp.gmail.com with ESMTPSA id bf1-20020a170902b90100b0017849a2b56asm870691plb.46.2022.09.27.01.19.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 01:19:32 -0700 (PDT)
-Message-ID: <dd89a30e-5403-8844-036c-9c9107cac888@gmail.com>
-Date:   Tue, 27 Sep 2022 15:19:29 +0700
+        Tue, 27 Sep 2022 04:19:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB2583238;
+        Tue, 27 Sep 2022 01:19:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78EDA6170A;
+        Tue, 27 Sep 2022 08:19:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF1CC4347C;
+        Tue, 27 Sep 2022 08:19:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664266787;
+        bh=lovric0Rnn0QU/YYYsAyUx0mEMy8QhcJ6J2E9j/iNVY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lh+mMtX8p7JV5UMx0n3fyFjuImriccxpXp6SXno4Qw0yMNBTzApz15D/jBxrE8iZz
+         OgAOR5oQY2I5PireFu2aCb1SQrq0BS7xxILUq/p0iDMYo5jcj7WGSOiaW+nKwv2s5+
+         my02LNYmnqoORtYtyVti9bFj4n5/rsaaKEGnk2Bw=
+Date:   Tue, 27 Sep 2022 10:19:45 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.19 000/207] 5.19.12-rc1 review
+Message-ID: <YzKyIfQUq9eRbomG@kroah.com>
+References: <20220926100806.522017616@linuxfoundation.org>
+ <CA+G9fYtxogp--B0Em6VCL0C3wwVFXa6xW-Rq2kQk3br+FPGLgg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH] Documentation/CoC: Reflect current CoC interpretation and
- practices
-Content-Language: en-US
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>,
-        linux-doc@vger.kernel.org, corbet@lwn.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-References: <20220926211149.2278214-1-kristen@linux.intel.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220926211149.2278214-1-kristen@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYtxogp--B0Em6VCL0C3wwVFXa6xW-Rq2kQk3br+FPGLgg@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 04:11, Kristen Carlson Accardi wrote:
-> The Code of Conduct interpretation does not reflect the current
-> practices of the CoC committee or the TAB. Update the documentation
-> to remove references to initial committees and boot strap periods
-> since it is past that time, and note that the this document
-> does serve as the documentation for the CoC committee processes.
+On Tue, Sep 27, 2022 at 01:25:52PM +0530, Naresh Kamboju wrote:
+> On Mon, 26 Sept 2022 at 16:13, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 5.19.12 release.
+> > There are 207 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.12-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
+> Results from Linaro's test farm.
+> No regressions on arm, x86_64, and i386.
+> Following deadlock warning noticed on arm64 with kselftests Kconfigs.
 
-When was the bootstrap period be concluded?
+Is this new?  If so, what commit causes it?
 
--- 
-An old man doll... just what I always wanted! - Clara
+thanks,
+
+greg k-h
