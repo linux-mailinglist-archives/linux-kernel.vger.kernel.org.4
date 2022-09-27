@@ -2,284 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5B85ECF6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA9D5ECF70
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbiI0VnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 17:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
+        id S231222AbiI0Von (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 17:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiI0VnO (ORCPT
+        with ESMTP id S230203AbiI0Vok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 17:43:14 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D19D10AB3D
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:43:13 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id bh13so10562962pgb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=rC06GjmhrHvd34k/0fcmKBaDkDTHh4ureNi4LBJEBWU=;
-        b=WJhQQJpmL0a0hLZl8y6AKS1ZFYQs5KJ0zYGkWRDN3LLQpoVImIy9r4P9zKtJU6piOi
-         SAKDqgtYF6oO5IoaKassayWfDdjFr3ImaNpToUkGVTrtGS5oPJoYM0DlgmIPaiRTkjU1
-         Ti5dony0C3FLKxernqzVgkbExA0C43iakJDXJBZgeEMQdLbMwI1JmgOifBGgUfFZWmjU
-         sUOOrJzM0NzUkmXUvO4XfGCAxXHqH56FVSBh/8zmZ9Foy0cluZwYnYZBekF6H0MrCe5J
-         bnSoQEMsZuGZfeHgEuZlee+D4GIsCP9haLLgRMb+qK5i6QiOsroHpyMO2Wo4SI1G/JfS
-         yxhQ==
+        Tue, 27 Sep 2022 17:44:40 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AC4B1CE
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:44:36 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id g1-20020a92cda1000000b002f612391d5bso8359733ild.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:44:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=rC06GjmhrHvd34k/0fcmKBaDkDTHh4ureNi4LBJEBWU=;
-        b=WBdzK7pD48sVk7mtCIuq/JcgbL+13q61U3rL3EVyG9IqgRXLKCAxgGKiAcM6Ik3nMa
-         S8KxD5qa8sfAhy6/PgZNz78wAzj79TeGFDDX7edtf7qCt7brDr0kanGLV4qW8wrtUrxn
-         /YbiVFiFv/wAb/e4oIJE4I7vPfx79U+KTR6ckVn9VdItup/44rosSFYkohvpyt3Kq/Yz
-         K14zd/QoVxt0aSioO2vtEXGqzPnggp5l1VwflwKH2tFu8yw5+AiuGNrs0DPIPMTahi7x
-         XLP+NgEiF0XJkMKvsvixz9KiIdhcbzc3dx1Poe98bzFmiOFjvfTJORgU7HAtUXuh1Tiy
-         c/SQ==
-X-Gm-Message-State: ACrzQf3d/d+0NJs4MQa73djk4a7FE1oBU5yQjwu3DJhEULJqPjB8hCyX
-        GzvC7tmNROX3PXzh2GM01JNeoQ==
-X-Google-Smtp-Source: AMsMyM5i1NQBXCucCmm5sYdgQMTiBhQuU2rZxyb3DdFYjUldg2vdCgzP7RYut2dT0vrxL1hPFiQWZg==
-X-Received: by 2002:a65:6e8c:0:b0:435:144e:445e with SMTP id bm12-20020a656e8c000000b00435144e445emr26953745pgb.96.1664314992602;
-        Tue, 27 Sep 2022 14:43:12 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 5-20020a170902c20500b00176d347e9a7sm2036036pll.233.2022.09.27.14.43.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 14:43:11 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 21:43:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, jon@nutanix.com,
-        kevin.tian@intel.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [RFC v2] KVM: x86/vmx: Suppress posted interrupt notification
- when CPU is in host
-Message-ID: <YzNubGQf0yvODjZC@google.com>
-References: <20220923085806.384344-1-chao.gao@intel.com>
- <YzHRKO1v5N/BIQl6@google.com>
- <YzKZExaU2k7qfcS9@gao-cwp>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=BF3XUngDcIBJnnbKFZBr9nsqTXYVSoA/orwVCnB+sGo=;
+        b=5RGGTJkF2pRSpkl1Jy5J5e41OzeS1yxUCJVtJlEMuP3rXrkj7ad0ncMBQ9mKaUSPgI
+         bdGp26Pe/gVdpSJ4N/6RQm0WKRkqtxo3P+F5P8ZzzXz6o2SBfEtbGPYR9bRvxh50e+qx
+         82qEdmBrw5Dx1vFMtfzmkGg5ynlLTYjA1gLcbhO7jd+Nz6B++1oiJU2aEVpPgU6hnPc9
+         UBsEcRE6l/x6rpCTfHUdHUJOC5dFBeY7jFeAHyppfnWY8Hs13eAu1IbhjIQQ/QPshG9X
+         QsJaQlAgPJ7Wril/ddYR/YrhBA1mG8o0zXkM461tNFZ1HTHj6ZyA1mTMrjKQcKBnlPlf
+         2IVg==
+X-Gm-Message-State: ACrzQf3VWlz9Q6E51ygbN8HP4JBbRlYwwmtmvyLLHnO2RSV5r8H8BOjX
+        W/VImlNdyYfXvRtYjqTIybZ6qgREcuDRDbmSptq/e9dj9HpT
+X-Google-Smtp-Source: AMsMyM7Svt6a95pqmdWaeYSt1Uck7z5F7aXg6SxHu2YVCkdM7dH7O99HEvh3K1hy1Iv0v5ezNcsRy12R6kSBtrF1VSahlpgthwnw
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzKZExaU2k7qfcS9@gao-cwp>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:144f:b0:35a:6828:680d with SMTP id
+ l15-20020a056638144f00b0035a6828680dmr16269987jad.286.1664315075567; Tue, 27
+ Sep 2022 14:44:35 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 14:44:35 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dfa4f105e9af8c54@google.com>
+Subject: [syzbot] linux-next boot error: WARNING in cpumask_next_wrap
+From:   syzbot <syzbot+21da700f3c9f0bc40150@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
+        jasowang@redhat.com, john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        mst@redhat.com, netdev@vger.kernel.org, pabeni@redhat.com,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022, Chao Gao wrote:
-> On Mon, Sep 26, 2022 at 04:19:52PM +0000, Sean Christopherson wrote:
-> >On Fri, Sep 23, 2022, Chao Gao wrote:
-> >> it is pointless to update PID.NV to wakeup vector since notification is
-> >> anyway suppressed. And since PID.SN should be already set for running
-> >> vCPUs, so, don't set it again for preempted vCPUs.
-> >
-> >I'm pretty sure this is wrong.  If the vCPU is preempted between prepare_to_rcuwait()
-> >and schedule(), then skipping pi_enable_wakeup_handler() will hang the guest if
-> >the wakeup event is a posted IRQ and the event arrives while the vCPU is preempted.
-> 
-> Thanks for pointing out this subtle case.
-> 
-> My understanding is finally there will be a call of vmx_vcpu_pi_put()
-> with preempted=false (I assume that preempted vCPUs will be scheduled
-> at some later point). In that case, pi_enable_wakeup_handler() can wake
-> up the vCPU by sending a self-ipi. Plus this patch checks PIR instead of
-> ON bit, I don't get why the guest will hang.
+Hello,
 
-Ah, I forgot about the addition of the pi_is_pir_empty() check.  I think I was
-hoping/assuming that check would go away when I wrote the above.
+syzbot found the following issue on:
 
-> >> When IPI virtualization is enabled, this patch increases "perf bench" [*]
-> >> by 6.56%, and PIN count in 1 second drops from tens of thousands to
-> >> hundreds. But cpuid loop test shows this patch causes 1.58% overhead in
-> >> VM-exit round-trip latency.
-> >
-> >The overhead is more than likely due to pi_is_pir_empty() in the VM-Entry path,
-> >i.e. should in theory go away if PID.SN is clear/set at IN_GUEST_MODE and
-> >OUTSIDE_GUEST_MODE
-> 
-> I will collect perf data after implementing what you suggested.
-> 
-> >
-> >> Also honour PID.SN bit in vmx_deliver_posted_interrupt().
-> >
-> >Why?
-> 
-> VT-d hardware doesn't set ON bit if SN bit is set.
-> 
-> Enforce the same rule in KVM can skip unnecessary work, like the
-> following pi_test_and_set_on() and kvm_vcpu_trigger_posted_interrupt().
+HEAD commit:    1bd8b75fe6ad Add linux-next specific files for 20220927
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=109d3404880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fab8618a7c989c9d
+dashboard link: https://syzkaller.appspot.com/bug?extid=21da700f3c9f0bc40150
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-But in all likelihood it's a net negative.  IMO, ideally posted interrupts would
-set ON=1 even if SN=1 (or have another "PI pending" bit if necessary).
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/b150a04debdc/disk-1bd8b75f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/2bf7d4b812bc/vmlinux-1bd8b75f.xz
 
-In the optimal case, where the vCPU is IN_GUEST_MODE, it's completely unnecessary.
-If IN_GUEST_MODE isn't set, then setting ON=1 is likely a net positive, because
-it will allow KVM to avoid checking all of PIR when clearing SN, i.e. KVM can
-optimize those paths to:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+21da700f3c9f0bc40150@syzkaller.appspotmail.com
 
-	if (!pi_test_on(&vmx->pi_desc) && !pi_is_pir_empty(&vmx->pi_desc))
-		pi_set_on(&vmx->pi_desc);
-	    
-> >> When IPI virtualization is enabled, this patch increases "perf bench" [*]
-> >> by 6.56%, and PIN count in 1 second drops from tens of thousands to
-> >> hundreds. But cpuid loop test shows this patch causes 1.58% overhead in
-> >> VM-exit round-trip latency.
-> >> 
-> >> [*] test cmd: perf bench sched pipe -T. Note that we change the source
-> >> code to pin two threads to two different vCPUs so that it can reproduce
-> >> stable results.
-> >> 
-> >> Signed-off-by: Chao Gao <chao.gao@intel.com>
-> >> ---
-> >> RFC: I am not sure whether the benefits outweighs the extra VM-exit cost.
-> >> 
-> >> Changes in v2 (addressed comments from Kevin):
-> >> - measure/estimate the impact to non-IPC-intensive cases
-> >> - don't tie PID.SN to vcpu->mode. Instead, clear PID.SN
-> >>   right before VM-entry and set it after VM-exit.
-> >
-> >Ah, sorry, missed v1.  Rather than key off of IN_GUEST_MODE in the sync path, add
-> >an explicit kvm_x86_ops hook to perform the transition.  I.e. make it explict.
-> 
-> It is ok to add a separate hook. But the question is how to coordinate clearing
-> SN with ->sync_pir_to_irr(). Clearing SN bit may put PIR in a state where ON/SN
-> are cleared but some outstanding IRQs left there. Current ->sync_pir_to_irr()
-> doesn't sync those IRQs to IRR in this case.
->
-> Here are two options to fix the problem:
-> 
-> 1) clear SN with the new hook, then set ON bit if there is any outstanding IRQ.
-> No change to ->sync_pir_to_irr() is needed.
-> 
-> 2) clear SN with the new hook, add a force mode to ->sync_pir_to_irr() where
-> PIR is synced to IRR regardless of ON/SN bits, inovke ->sync_pir_to_irr()
-> on VM-entry path with force_mode=true.
->
-> Both may lead to an extra check of PIR.
+ACPI: button: Sleep Button [SLPF]
+ACPI: \_SB_.LNKC: Enabled at IRQ 11
+virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKD: Enabled at IRQ 10
+virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKB: Enabled at IRQ 10
+virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
+virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
+N_HDLC line discipline registered with maxframe=4096
+Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
+00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
+Non-volatile memory driver v1.3
+Linux agpgart interface v0.103
+ACPI: bus type drm_connector registered
+[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
+[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
+Console: switching to colour frame buffer device 128x48
+platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
+usbcore: registered new interface driver udl
+brd: module loaded
+loop: module loaded
+zram: Added device: zram0
+null_blk: disk nullb0 created
+null_blk: module loaded
+Guest personality initialized and is inactive
+VMCI host device registered (name=vmci, major=10, minor=119)
+Initialized host personality
+usbcore: registered new interface driver rtsx_usb
+usbcore: registered new interface driver viperboard
+usbcore: registered new interface driver dln2
+usbcore: registered new interface driver pn533_usb
+nfcsim 0.2 initialized
+usbcore: registered new interface driver port100
+usbcore: registered new interface driver nfcmrvl
+Loading iSCSI transport class v2.0-870.
+scsi host0: Virtio SCSI HBA
+st: Version 20160209, fixed bufsize 32768, s/g segs 256
+Rounding down aligned max_sectors from 4294967295 to 4294967288
+db_root: cannot open: /etc/target
+slram: not enough parameters.
+ftl_cs: FTL header not found.
+wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
+MACsec IEEE 802.1AE
+tun: Universal TUN/TAP device driver, 1.6
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_check include/linux/cpumask.h:117 [inline]
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next include/linux/cpumask.h:178 [inline]
+WARNING: CPU: 0 PID: 1 at include/linux/cpumask.h:110 cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc7-next-20220927-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+RIP: 0010:cpu_max_bits_warn include/linux/cpumask.h:110 [inline]
+RIP: 0010:cpumask_check include/linux/cpumask.h:117 [inline]
+RIP: 0010:cpumask_next include/linux/cpumask.h:178 [inline]
+RIP: 0010:cpumask_next_wrap+0x139/0x1d0 lib/cpumask.c:27
+Code: df e8 1b 07 3e f8 39 eb 77 64 e8 c2 0a 3e f8 41 8d 6c 24 01 89 de 89 ef e8 04 07 3e f8 39 dd 0f 82 54 ff ff ff e8 a7 0a 3e f8 <0f> 0b e9 48 ff ff ff e8 9b 0a 3e f8 48 c7 c2 00 ae e1 8d 48 b8 00
+RSP: 0000:ffffc90000067920 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: ffff88813fe50000 RSI: ffffffff893e3c59 RDI: 0000000000000004
+RBP: 0000000000000002 R08: 0000000000000004 R09: 0000000000000002
+R10: 0000000000000002 R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000000 R14: 0000000000000002 R15: ffffffff8de1ac10
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ virtnet_set_affinity+0x35a/0x750 drivers/net/virtio_net.c:2300
+ init_vqs drivers/net/virtio_net.c:3578 [inline]
+ init_vqs drivers/net/virtio_net.c:3564 [inline]
+ virtnet_probe+0x110f/0x2ea0 drivers/net/virtio_net.c:3868
+ virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
+ call_driver_probe drivers/base/dd.c:560 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:639
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:778
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:808
+ __driver_attach+0x1d0/0x550 drivers/base/dd.c:1190
+ bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
+ bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
+ driver_register+0x220/0x3a0 drivers/base/driver.c:246
+ virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4074
+ do_one_initcall+0x13d/0x780 init/main.c:1306
+ do_initcall_level init/main.c:1381 [inline]
+ do_initcalls init/main.c:1397 [inline]
+ do_basic_setup init/main.c:1416 [inline]
+ kernel_init_freeable+0x6ff/0x788 init/main.c:1636
+ kernel_init+0x1a/0x1d0 init/main.c:1524
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
 
-  3) Unconditionally set ON when clearing SN in the VM-Enter path.
 
-#3 it's a little gross, but it would avoid the "extra" pi_is_pir_empty().
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-I don't like #2 because it bleeds the logic into common x86, whereas #1 and #3
-keep everything in the PI code.
-
-My vote would be #1, and only do #3 if the overhead of #1 is really truly necessary
-for performance reasons.  #1 effectively optimizes for not having a pending posted
-IRQ, while #3 optimizes for having a pending posted IRQ _without ON=1.  And #1 can
-be optimized to scrub the PIR if and only if ON=0.
-
-More importantly, if we go with #1, then we can use the same hook for the
-->vcpu_blocking() hook.  More below.
-
-> >> @@ -101,11 +95,16 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
-> >>  		new.control = old.control;
-> >>  
-> >>  		/*
-> >> -		 * Clear SN (as above) and refresh the destination APIC ID to
-> >> -		 * handle task migration (@cpu != vcpu->cpu).
-> >> +		 * Set SN and refresh the destination APIC ID to handle
-> >> +		 * task migration (@cpu != vcpu->cpu).
-> >> +		 *
-> >> +		 * SN is cleared when a vCPU goes to blocked state so that
-> >> +		 * the blocked vCPU can be waken up on receiving a
-> >> +		 * notification. For a running/runnable vCPU, such
-> >> +		 * notifications are useless. Set SN bit to suppress them.
-> >>  		 */
-> >>  		new.ndst = dest;
-> >> -		new.sn = 0;
-> >> +		new.sn = 1;
-> >
-> >To handle the preempted case, I believe the correct behavior is to leave SN
-> >as-is, although that would require setting SN=1 during vCPU creation.  Arguably
-> >KVM should do that anyways when APICv is enabled.
-> >
-> >Hmm, or alternatively this should do the same?
-> >
-> >		new.sn = !kvm_vcpu_is_blocking();
-> 
-> I don't get this. Probably I am misunderstanding something about vCPU preemption.
-
-Ignore the this, I was deep down a path of stuff that I'm pretty sure ends up being
-irrelevant.
-
-> >> @@ -172,8 +160,10 @@ static void pi_enable_wakeup_handler(struct kvm_vcpu *vcpu)
-> >>  	 * enabled until it is safe to call try_to_wake_up() on the task being
-> >>  	 * scheduled out).
-> >>  	 */
-> >> -	if (pi_test_on(&new))
-> >> +	if (!pi_is_pir_empty(pi_desc)) {
-> >> +		pi_set_on(pi_desc);
-> >
-> >As much as I wish we could get rid of kvm_arch_vcpu_blocking(), I actually think
-> >this would be a good application of that hook.  If PID.SN is cleared during
-> >kvm_arch_vcpu_blocking() and set during kvm_arch_vcpu_unblocking(), then I believe
-> >there's no need to manually check the PIR here, as any IRQ that isn't detected by
-> >kvm_vcpu_check_block() is guaranteed to set PID.ON=1.
-> 
-> Using kvm_arch_vcpu_blocking() has the same problem as using a new hook
-> for the VM-entry path: we need a force mode for ->sync_pir_to_irr() or
-> set ON bit if there is any outstanding IRQ right after clearing SN
->
-> The former may help performance a little but since the call of
-> ->sync_pir_to_irr() in kvm_vcpu_check_block() is so far away from the
-> place where SN is cleared, I think this would be a source of bugs.
-> 
-> The latter has no benefit compared to what this patch does here.
-
-The benefits I see are:
-
-  1. The code is very explicit.  When clearing SN, check PIR and set ON=1 to
-     ensure IRQs aren't ignored.
-
-  2. pi_enable_wakeup_handler() is only responsible for changing the vector,
-     i.e. there's no clearing of SN "hidden" in the CMPXCHG loop.
-
-  3. Same for vmx_vcpu_pi_load(), it's only responsible for updating the pCPU
-     and the vector, it doesn't touch SN.
-
-  4. The logic is common to all paths that clear SN, i.e. the same helper can
-     be used for both VM-Enter and vCPU blocking.
-
-E.g. the VMX hook for both VM-Enter and vCPU blocking could be:
-
-  static void vmx_no_idea_what_to_call_this(struct kvm_vcpu *vcpu)
-  {
-	pi_clear_sn(&vmx->pi_desc);
-
-	/*
-	 * Clear SN before reading the bitmap.  The VT-d firmware writes the
-	 * bitmap and reads SN atomically (5.2.3 in the spec), so it doesn't
-	 * really have a memory barrier that pairs with this, but we cannot do
-	 * that and we need one.
-	 */
-	smp_mb__after_atomic();
-
-	/* blah blah blah */
-	if (!pi_test_on(&vmx->pi_desc) && !pi_is_pir_empty(&vmx->pi_desc))
-		pi_set_on(&vmx->pi_desc);
-  }
-
-One related thought thing I want to capture:
-
-The proposed approach is having vmx_sync_pir_to_irr() check PIR if ON=1 || SN=1
-is effectively _required_ to avoid breaking halt-polling.  I was thinking we could
-keep that path optimized to check only ON=1, but with that approach, KVM won't detect
-the pending IRQ until it actually starts to block the vCPU, i.e. until it clears SN
-and manually checks the PIR.  Clearing SN in kvm_arch_vcpu_pending() would be better
-than waiting until the vCPU is "put", but even that is too late from a halt-polling
-perspective.
-
-A comment in vmx_sync_pir_to_irr() is likely needed to capture that.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
