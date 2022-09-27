@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371AF5EC8E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53FBC5EC8EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbiI0QCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
+        id S232960AbiI0QCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbiI0QBl (ORCPT
+        with ESMTP id S232311AbiI0QBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:01:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813721BB236
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:01:39 -0700 (PDT)
+        Tue, 27 Sep 2022 12:01:44 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0889B856
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:01:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFCF361AA0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 16:01:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCC71C433D6;
-        Tue, 27 Sep 2022 16:01:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0515ACE189A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 16:01:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60485C433C1;
+        Tue, 27 Sep 2022 16:01:39 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1odD2n-00G2vD-10;
+        id 1odD2n-00G2vl-2h;
         Tue, 27 Sep 2022 12:02:49 -0400
-Message-ID: <20220927160248.807986897@goodmis.org>
+Message-ID: <20220927160249.405813022@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 27 Sep 2022 12:02:30 -0400
+Date:   Tue, 27 Sep 2022 12:02:31 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Nico Pache <npache@redhat.com>
-Subject: [for-next][PATCH 14/20] tracing/osnoise: Fix possible recursive locking in
- stop_per_cpu_kthreads
+        Xiu Jianfeng <xiujianfeng@huawei.com>
+Subject: [for-next][PATCH 15/20] rv/monitor: Add __init/__exit annotations to module init/exit funcs
 References: <20220927160216.349640304@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,71 +46,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nico Pache <npache@redhat.com>
+From: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-There is a recursive lock on the cpu_hotplug_lock.
+Add missing __init/__exit annotations to module init/exit funcs.
 
-In kernel/trace/trace_osnoise.c:<start/stop>_per_cpu_kthreads:
-    - start_per_cpu_kthreads calls cpus_read_lock() and if
-	start_kthreads returns a error it will call stop_per_cpu_kthreads.
-    - stop_per_cpu_kthreads then calls cpus_read_lock() again causing
-      deadlock.
+Link: https://lkml.kernel.org/r/20220922103208.162869-1-xiujianfeng@huawei.com
 
-Fix this by calling cpus_read_unlock() before calling
-stop_per_cpu_kthreads. This behavior can also be seen in commit
-f46b16520a08 ("trace/hwlat: Implement the per-cpu mode").
-
-This error was noticed during the LTP ftrace-stress-test:
-
-WARNING: possible recursive locking detected
---------------------------------------------
-sh/275006 is trying to acquire lock:
-ffffffffb02f5400 (cpu_hotplug_lock){++++}-{0:0}, at: stop_per_cpu_kthreads
-
-but task is already holding lock:
-ffffffffb02f5400 (cpu_hotplug_lock){++++}-{0:0}, at: start_per_cpu_kthreads
-
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-      CPU0
-      ----
- lock(cpu_hotplug_lock);
- lock(cpu_hotplug_lock);
-
- *** DEADLOCK ***
-
-May be due to missing lock nesting notation
-
-3 locks held by sh/275006:
- #0: ffff8881023f0470 (sb_writers#24){.+.+}-{0:0}, at: ksys_write
- #1: ffffffffb084f430 (trace_types_lock){+.+.}-{3:3}, at: rb_simple_write
- #2: ffffffffb02f5400 (cpu_hotplug_lock){++++}-{0:0}, at: start_per_cpu_kthreads
-
-Link: https://lkml.kernel.org/r/20220919144932.3064014-1-npache@redhat.com
-
-Fixes: c8895e271f79 ("trace/osnoise: Support hotplug operations")
-Signed-off-by: Nico Pache <npache@redhat.com>
+Fixes: 24bce201d798 ("tools/rv: Add dot2k")
+Fixes: 8812d21219b9 ("rv/monitor: Add the wip monitor skeleton created by dot2k")
+Fixes: ccc319dcb450 ("rv/monitor: Add the wwnr monitor")
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_osnoise.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/trace/rv/monitors/wip/wip.c                      | 4 ++--
+ kernel/trace/rv/monitors/wwnr/wwnr.c                    | 4 ++--
+ tools/verification/dot2/dot2k_templates/main_global.c   | 4 ++--
+ tools/verification/dot2/dot2k_templates/main_per_cpu.c  | 4 ++--
+ tools/verification/dot2/dot2k_templates/main_per_task.c | 4 ++--
+ 5 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index 313439920a8c..78d536d3ff3d 100644
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -1786,8 +1786,9 @@ static int start_per_cpu_kthreads(void)
- 	for_each_cpu(cpu, current_mask) {
- 		retval = start_kthread(cpu);
- 		if (retval) {
-+			cpus_read_unlock();
- 			stop_per_cpu_kthreads();
--			break;
-+			return retval;
- 		}
- 	}
+diff --git a/kernel/trace/rv/monitors/wip/wip.c b/kernel/trace/rv/monitors/wip/wip.c
+index 1a989bc142f3..b2b49a27e886 100644
+--- a/kernel/trace/rv/monitors/wip/wip.c
++++ b/kernel/trace/rv/monitors/wip/wip.c
+@@ -69,13 +69,13 @@ static struct rv_monitor rv_wip = {
+ 	.enabled = 0,
+ };
  
+-static int register_wip(void)
++static int __init register_wip(void)
+ {
+ 	rv_register_monitor(&rv_wip);
+ 	return 0;
+ }
+ 
+-static void unregister_wip(void)
++static void __exit unregister_wip(void)
+ {
+ 	rv_unregister_monitor(&rv_wip);
+ }
+diff --git a/kernel/trace/rv/monitors/wwnr/wwnr.c b/kernel/trace/rv/monitors/wwnr/wwnr.c
+index a063b93c6a1d..0e43dd2db685 100644
+--- a/kernel/trace/rv/monitors/wwnr/wwnr.c
++++ b/kernel/trace/rv/monitors/wwnr/wwnr.c
+@@ -68,13 +68,13 @@ static struct rv_monitor rv_wwnr = {
+ 	.enabled = 0,
+ };
+ 
+-static int register_wwnr(void)
++static int __init register_wwnr(void)
+ {
+ 	rv_register_monitor(&rv_wwnr);
+ 	return 0;
+ }
+ 
+-static void unregister_wwnr(void)
++static void __exit unregister_wwnr(void)
+ {
+ 	rv_unregister_monitor(&rv_wwnr);
+ }
+diff --git a/tools/verification/dot2/dot2k_templates/main_global.c b/tools/verification/dot2/dot2k_templates/main_global.c
+index dcd1162dced8..a5658bfb9044 100644
+--- a/tools/verification/dot2/dot2k_templates/main_global.c
++++ b/tools/verification/dot2/dot2k_templates/main_global.c
+@@ -72,13 +72,13 @@ static struct rv_monitor rv_MODEL_NAME = {
+ 	.enabled = 0,
+ };
+ 
+-static int register_MODEL_NAME(void)
++static int __init register_MODEL_NAME(void)
+ {
+ 	rv_register_monitor(&rv_MODEL_NAME);
+ 	return 0;
+ }
+ 
+-static void unregister_MODEL_NAME(void)
++static void __exit unregister_MODEL_NAME(void)
+ {
+ 	rv_unregister_monitor(&rv_MODEL_NAME);
+ }
+diff --git a/tools/verification/dot2/dot2k_templates/main_per_cpu.c b/tools/verification/dot2/dot2k_templates/main_per_cpu.c
+index 8f877e86a22f..03539a97633f 100644
+--- a/tools/verification/dot2/dot2k_templates/main_per_cpu.c
++++ b/tools/verification/dot2/dot2k_templates/main_per_cpu.c
+@@ -72,13 +72,13 @@ static struct rv_monitor rv_MODEL_NAME = {
+ 	.enabled = 0,
+ };
+ 
+-static int register_MODEL_NAME(void)
++static int __init register_MODEL_NAME(void)
+ {
+ 	rv_register_monitor(&rv_MODEL_NAME);
+ 	return 0;
+ }
+ 
+-static void unregister_MODEL_NAME(void)
++static void __exit unregister_MODEL_NAME(void)
+ {
+ 	rv_unregister_monitor(&rv_MODEL_NAME);
+ }
+diff --git a/tools/verification/dot2/dot2k_templates/main_per_task.c b/tools/verification/dot2/dot2k_templates/main_per_task.c
+index 8c2fdb824634..ffd92af87a86 100644
+--- a/tools/verification/dot2/dot2k_templates/main_per_task.c
++++ b/tools/verification/dot2/dot2k_templates/main_per_task.c
+@@ -72,13 +72,13 @@ static struct rv_monitor rv_MODEL_NAME = {
+ 	.enabled = 0,
+ };
+ 
+-static int register_MODEL_NAME(void)
++static int __init register_MODEL_NAME(void)
+ {
+ 	rv_register_monitor(&rv_MODEL_NAME);
+ 	return 0;
+ }
+ 
+-static void unregister_MODEL_NAME(void)
++static void __exit unregister_MODEL_NAME(void)
+ {
+ 	rv_unregister_monitor(&rv_MODEL_NAME);
+ }
 -- 
 2.35.1
