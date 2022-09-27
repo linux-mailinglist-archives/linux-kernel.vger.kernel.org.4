@@ -2,118 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C895EBF38
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAB15EBF45
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiI0KGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 06:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60464 "EHLO
+        id S231670AbiI0KKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 06:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbiI0KGI (ORCPT
+        with ESMTP id S229584AbiI0KKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 06:06:08 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078031260F
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 03:06:03 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id z6so14225321wrq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 03:06:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=H8px/3R8axL8NB0kuXo1mcNAvKHcBV0IekUSt7wwGf8=;
-        b=XrFe9HeFFNGQqRpyv4ubHMSMLmmbzPvx+XoWDo0GaQ+g/PxGvL77wBGHZBMrVwIu9b
-         YzizqPkX/5IjZaALDbJSsJdJajY9Zk00UVN51RS0peAIOmiXlmC2ZpnuQMVCeNPmtMNZ
-         U/pR3HBz7KLP0NT48xBtwxYjCBKK3HaEWl2y8tQCKUUi1sXofTEV2o03Mp8e6bH19Bc6
-         e7b28lXcunAarB3S0hv1y+b6xH+f2+0lR/DnQWf67x+aXc9fthfnsXTtLQZb+cY6ajeW
-         gdQ13QWyu8bwhCO4Ur6uppLvXLu/PG/wvD+0AlJ+5q8z2NmtbQf6T1TpgKCPU8EeE9rf
-         +A3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=H8px/3R8axL8NB0kuXo1mcNAvKHcBV0IekUSt7wwGf8=;
-        b=D3zM/VDJHL04Zr2GoARGjYq6AByAP2bIGRaECxbG2Z24ems8LQ/q1O8//4yrx8FfUq
-         p+Yic0ghKfNqaFzayoKSCN3qwIKEL4oc9uth6U1QSOY7dwXQNRelA1mVnToRFAJ72EyI
-         HJuq516nEnHrGnTU3umkYh0c+1ErtuTSMjxJDQT1N3ocYRHpHM878mdNoXC84uRZArBO
-         QyDNY9orxEYKfyrcEu1j6pw8L3D74KSsp06mH+deJfh1X0CFiVLovoViyMLCC7KWYsj5
-         ZKEbRaKr378hwy4E9T4vsgUupyeXKABoJpRfOYnZg4T6vPgeR6ZujUXSiOV9Dv6WMszf
-         gRTA==
-X-Gm-Message-State: ACrzQf1xm10ijOSsZmoZBFE/PDrq6alKXlp6rB+5vE/DWTfCRpLsC9Ru
-        BQmGfXKEmKf0iNsBGETlolexQw==
-X-Google-Smtp-Source: AMsMyM4xQbnfXIwIVJQbjZDDqmsHA+3Kk+4mFM5jJvQ2uyyHHHtWlstRmrJ06NepvzY8X6LSzd9iYA==
-X-Received: by 2002:a5d:628e:0:b0:228:6961:aa6f with SMTP id k14-20020a5d628e000000b002286961aa6fmr17073090wru.36.1664273161423;
-        Tue, 27 Sep 2022 03:06:01 -0700 (PDT)
-Received: from google.com (65.0.187.35.bc.googleusercontent.com. [35.187.0.65])
-        by smtp.gmail.com with ESMTPSA id g11-20020a05600c310b00b003b4fe03c881sm14225109wmo.48.2022.09.27.03.06.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 03:06:00 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 11:05:56 +0100
-From:   Vincent Donnefort <vdonnefort@google.com>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
-        vschneid@redhat.com, kernel-team@android.com,
-        Derek Dolney <z23@posteo.net>, peterz@infradead.org
-Subject: Re: [PATCH v5] cpu/hotplug: Do not bail-out in DYING/STARTING
- sections
-Message-ID: <YzLLBBRiwuQnD2zc@google.com>
-References: <20220725095952.206884-1-vdonnefort@google.com>
- <b5c5b02d-85ca-9d3b-2b3d-8892ab6d22a7@leemhuis.info>
- <42237005-5a6e-9462-bfdd-f1ba0c725c72@leemhuis.info>
+        Tue, 27 Sep 2022 06:10:05 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2043.outbound.protection.outlook.com [40.107.220.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217B273923;
+        Tue, 27 Sep 2022 03:10:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=doV8ZI9io0rF7IS1kt7VlvmPNmtySuDra2XVMGiXRq9LgrgqLcRmmIhiXwpnUzn798h0N9ZGdevIIavvlXXkqctuSBX10D8lp9ZkuCXSQRuFX+DzQMtI2kBcEd8+MpBswttaFkhK0QTYdzsCwKVWUWhfBdzSyI+thHbDNaPaM959XJlK/QyWskBl0BYQXV4eW2pLtidwJKaRsrCUOu7hA2/xjJ/YCoNkelpXLSyNttGdlMn1/RjRNuHdc4F7XYXKfJlYcvyU9bdXoYO6ngQIJhaLnlLqgpuLVB7SOSxwTQ/uWuvKvGpLIpUwDqKri0pfNPkme2T/02FWpTXpdNyhsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Yt2SFqLcav+hZ/lBpn/7PhfyM9sb1S7Ki7Fjfdb/ozI=;
+ b=IaNjVUO1fvGnD274bMhKUw/Dxm9bX09ATbczdNgso9lWmBSq19oMVIBydnZTF8gsvpAGnet2pII1Iyp/Q5BiGoqhx3AHy/aQPmQlDue+KmosAe7obktB0Rg8oJr2+UPtbTcD7EZyUuQzLyg7+mIAEd08dAbeyfQjErCS/Sb+TLbUVCTDp++D4nE6W3ngfWOvrErSNObovaDeXermtGVVeKAyVxDd+Q7oXGSHdnXFbrVCm782hHpmwBZjhwnB1fnezWRW5ScoWmPCQMVr7eW5L2MgjV8ToUIiLvrAigldNm27kDg6YE0CyC5Rt1GAvxh0cIaO80hSNWqsFQgdgx/m/g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Yt2SFqLcav+hZ/lBpn/7PhfyM9sb1S7Ki7Fjfdb/ozI=;
+ b=Z6Vl7+B4BjgSpsK5nX0YGsB2Nv8/qYd+z7BoJAGRCZs2eq9T2zpag9ImfBY/21VCrMRPxkiRzyf5s7gqAm/3Qly4ttGdzxPDnhmazSvb1kDqxqfThp90in7TewOSa2OzoAnqVRwj+NtdsOjvcfWrP8XnYQTmHCtehaU+6QdoxMz3+Lp37wvTXQe4XpVDwy30K052oOiSVWvjcXaJSMGgm+Ftb1pHYfeMxwb4qnYPiNp0Sum1eKq6AO9LR0lVw2AgUClKrs3c7ntcgqne1l24LEbGerTVYvTPWZDlO2fXRQUdsbesXQtcoKM8HiIh+diiPh9aEokxiDJg7bk49wPkQQ==
+Received: from BN9PR03CA0619.namprd03.prod.outlook.com (2603:10b6:408:106::24)
+ by CO6PR12MB5393.namprd12.prod.outlook.com (2603:10b6:5:356::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.15; Tue, 27 Sep
+ 2022 10:10:02 +0000
+Received: from BN8NAM11FT101.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:106:cafe::ce) by BN9PR03CA0619.outlook.office365.com
+ (2603:10b6:408:106::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26 via Frontend
+ Transport; Tue, 27 Sep 2022 10:10:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT101.mail.protection.outlook.com (10.13.177.126) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5654.14 via Frontend Transport; Tue, 27 Sep 2022 10:10:01 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 27 Sep
+ 2022 03:09:51 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 27 Sep
+ 2022 03:09:51 -0700
+Received: from pshete-ubuntu.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Tue, 27 Sep 2022 03:09:47 -0700
+From:   Prathamesh Shete <pshete@nvidia.com>
+To:     <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <p.zabel@pengutronix.de>, <linux-mmc@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <anrao@nvidia.com>, <smangipudi@nvidia.com>, <pshete@nvidia.com>,
+        <kyarlagadda@nvidia.com>
+Subject: [PATCH v4 1/4] mmc: sdhci-tegra: Separate Tegra194 and Tegra234 SoC data
+Date:   Tue, 27 Sep 2022 15:39:43 +0530
+Message-ID: <20220927100946.19482-1-pshete@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <91f09a39-57fa-06a9-6e9e-b3e768d9e26a@intel.com>
+References: <91f09a39-57fa-06a9-6e9e-b3e768d9e26a@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <42237005-5a6e-9462-bfdd-f1ba0c725c72@leemhuis.info>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT101:EE_|CO6PR12MB5393:EE_
+X-MS-Office365-Filtering-Correlation-Id: dd910862-3b6e-4d48-ce03-08daa07070c8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MAxrQC4egdmcMKjDqCDpOxRW1GVduWDSgxNSuDyfgz7WIG1dqJYAbHneDBhkBvDk7iTW6iD7wQnK1GGYIG7XsUHtDMOoMCaqzmquVcHqBl7sBQpM4JNKiOt6q0VvuYMCq4fZzt1nT3963ste6CkkapF+F+dqzwxm42hrLatXbXUw76zSjaiSYyigMBY14OoITOJukLYEKWvHC9TchLO1hIODbzaFxZktaAzpp1Tyr/ZPFWD5rLsU+AWD2LvnKBGxDMXn0LvuptyTSpo68iJ2ZhbiAVKZJklcAum728TdE0fIPtC5+wkQAwkgw+tKSlw6bkfIzyXJw1aFPyYhmtWFGeCfFNV16LRs3zNQVLSwsudLJxkV02LBlM0awccB6c2RjsvyYpy9jmWjvTnEoNlLNgY5CkKwqZ10evPzYhYuRzkVLtQgt7X0Yh8tMTiieXj39+1pGPEzqUbe2RTysTq1/NqCycHqOiDeTxS6GDeiZVSYuL5awICHx3L5ZUn40NplBuML2EOIvK2VfoEzJRsNnGCMQdMGDdq5PtXb0pvxbqP70RfneLejcURkNhIP2mULhwuD9oKwGyNYiGOiLwGy4giHTN4g3CsROm0JXgOQ6gzWEUAjDvtQmid1+UR33ZUz9/rzjpvD2mpXuAEWW7rlU9+U4fAx26CxaV4/d6+hbIi2HTtImS+jlMbNWTbm/2ovjovHXzbae4AFQbBlxz5tD6vs/8dkX47HJ+Y6rIaSg2EfNxl6GG5H46X7+6YTUOSUedJsKc55oqLZL9Z/6hCN+A==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(39860400002)(396003)(451199015)(36840700001)(40470700004)(46966006)(36860700001)(5660300002)(47076005)(426003)(7696005)(8936002)(83380400001)(70586007)(70206006)(110136005)(4326008)(8676002)(54906003)(40460700003)(478600001)(316002)(86362001)(40480700001)(107886003)(36756003)(6666004)(356005)(82310400005)(41300700001)(82740400003)(7636003)(1076003)(186003)(26005)(2616005)(2906002)(336012);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 10:10:01.3148
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dd910862-3b6e-4d48-ce03-08daa07070c8
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT101.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5393
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 11:59:06AM +0200, Thorsten Leemhuis wrote:
-> On 17.08.22 11:46, Thorsten Leemhuis wrote:
-> > 
-> > Hi, this is your Linux kernel regression tracker.
-> > 
-> > On 25.07.22 11:59, Vincent Donnefort wrote:
-> >> The DYING/STARTING callbacks are not expected to fail. However, as reported
-> >> by Derek, drivers such as tboot are still free to return errors within
-> >> those sections, which halts the hot(un)plug and leaves the CPU in an
-> >> unrecoverable state.
-> >>
-> >> No rollback being possible there, let's only log the failures and proceed
-> >> with the following steps. This restores the hotplug behaviour prior to
-> >> commit 453e41085183 ("cpu/hotplug: Add cpuhp_invoke_callback_range()")
-> >>
-> >> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215867
-> >> Fixes: 453e41085183 ("cpu/hotplug: Add cpuhp_invoke_callback_range()")
-> >> Reported-by: Derek Dolney <z23@posteo.net>
-> >> Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
-> >> Tested-by: Derek Dolney <z23@posteo.net>
-> > 
-> > What's the status here? Did that patch to fixing a regression fall
-> > through the cracks? It looks like nothing happened for 3 weeks now,
-> > that's why I wondered, but maybe I missed something.
-> 
-> Hmm, Vincent seems to be MIA, at least I see no recent messages from him
-> on lore. Odd. But well, it's still a fix for a regression and it's up to
-> v5 already; Valentin already added his Reviewed-by, too. Would be a
-> shame to waste this.
-> 
-> Thomas, could you maybe take a look at the patch?  Maybe we're lucky and
-> the patch is already good to go...
-> 
-> Ciao, Thorsten
-> 
-> #regzbot poke
+Create new SoC data structure for Tegra234 platforms.
+Additional features, tap value configurations are added/
+updated for Tegra234 platform hence separate Tegra194 and
+Tegra234 SoC data.
 
-Hi Thorsten,
+Signed-off-by: Aniruddha Tvs Rao <anrao@nvidia.com>
+Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+---
+ drivers/mmc/host/sdhci-tegra.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-AFAIK, this patch is still valid. I don't think I do have any further action on
-that though.
+diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
+index 2d2d8260c681..a6c5bbae77b4 100644
+--- a/drivers/mmc/host/sdhci-tegra.c
++++ b/drivers/mmc/host/sdhci-tegra.c
+@@ -1556,7 +1556,21 @@ static const struct sdhci_tegra_soc_data soc_data_tegra194 = {
+ 	.max_tap_delay = 139,
+ };
+ 
++static const struct sdhci_tegra_soc_data soc_data_tegra234 = {
++	.pdata = &sdhci_tegra186_pdata,
++	.dma_mask = DMA_BIT_MASK(39),
++	.nvquirks = NVQUIRK_NEEDS_PAD_CONTROL |
++		    NVQUIRK_HAS_PADCALIB |
++		    NVQUIRK_DIS_CARD_CLK_CONFIG_TAP |
++		    NVQUIRK_ENABLE_SDR50 |
++		    NVQUIRK_ENABLE_SDR104 |
++		    NVQUIRK_HAS_TMCLK,
++	.min_tap_delay = 95,
++	.max_tap_delay = 111,
++};
++
+ static const struct of_device_id sdhci_tegra_dt_match[] = {
++	{ .compatible = "nvidia,tegra234-sdhci", .data = &soc_data_tegra234 },
+ 	{ .compatible = "nvidia,tegra194-sdhci", .data = &soc_data_tegra194 },
+ 	{ .compatible = "nvidia,tegra186-sdhci", .data = &soc_data_tegra186 },
+ 	{ .compatible = "nvidia,tegra210-sdhci", .data = &soc_data_tegra210 },
+-- 
+2.17.1
 
-[...]
