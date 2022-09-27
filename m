@@ -2,145 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202A05EBEB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D66665EBEC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbiI0Jfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 05:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        id S231359AbiI0JgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 05:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbiI0Jfp (ORCPT
+        with ESMTP id S230238AbiI0JgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 05:35:45 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F6C979FB
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:35:43 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id t14so14050576wrx.8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:35:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=bYDduPOYUHGL+haj1p8TyQkIszmepMQqlkeaZAG58xQ=;
-        b=pqxCY9Jcv96qIg0b1ZjiLbxmNwVLM6AKPHt/eLZ4X/++56Du72O4kXt2u4iJ//B8Kw
-         rE9ypTLDUKI4bioBu0TYYob4rbd4ztUedOfjpc2CbDQlcGKzIRy+8q45jzxPI5MKiIL9
-         /Pw9DBKJhJeEW5W6iPOiSj8+ZzHVbRiRRuYwtOkPFs7pUH7d00/POKAfoW6eyTovU1pM
-         JGrxLHCmstOb+yqRFsgSMh0NXDddRqGfZ2iqJ0jYHQLbrYImFfVTxKRYu5QRDzoTKhiA
-         uWC/d8tBim6PMeCRRF4WuW4Nu/lmzmRh1r3+bDxQhdGyR1xh2XXMtPrM0al/e232KRfD
-         H+Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=bYDduPOYUHGL+haj1p8TyQkIszmepMQqlkeaZAG58xQ=;
-        b=LrO9bISqmx4n2oRn+ogWs9aPzM4j0J8Ts/luimKRQChb74yPd+S51orihnZufAwFOH
-         HLxgEvH2D/rHk2hblxKkdL0PpAQXIze9+P+ZGpZIgB6cwEiNsmfrNoh1Ncxl4ZJxLeqt
-         jKBCNdjt3Dt05H05z5id2Lr6Q8r+yn2cZQ2QncxKc6QIOdScwrfjg18I4Z00iom/S6Sm
-         PViLYE4+ck+fK2rjtEHCn7iuuWC1TLzhKs3/IkQ/j+gRdny4xe9WqJXoah8pSYuLmpwh
-         HR057GjZlDWxbDRw1HUxGUX0SyY1W33KI4Aeh6+zrONHRPsORWtV+6EdZc9WUpdI9q+o
-         +SLQ==
-X-Gm-Message-State: ACrzQf3Rr6J6ORBi1tzxEavgfhZCtFQ5q4p++IPMygcqvuuf7COjWpsI
-        /zQXbmVZFVWMFGFR457HxNz+aQ==
-X-Google-Smtp-Source: AMsMyM5hLEsgw/sMl4xl47SSdL796TJP4p8NX1zAeCjjbSox0gvaWDZaX7FcMrbeGpH36FlEmAJwSQ==
-X-Received: by 2002:a5d:5887:0:b0:22b:107e:7e39 with SMTP id n7-20020a5d5887000000b0022b107e7e39mr16606742wrf.694.1664271342352;
-        Tue, 27 Sep 2022 02:35:42 -0700 (PDT)
-Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.gmail.com with ESMTPSA id m17-20020a05600c461100b003a5fa79007fsm1181762wmo.7.2022.09.27.02.35.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 02:35:41 -0700 (PDT)
-Message-ID: <b37e9ada-79d9-685f-7b74-06f0d32ba271@baylibre.com>
-Date:   Tue, 27 Sep 2022 11:35:40 +0200
+        Tue, 27 Sep 2022 05:36:17 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C92D96749;
+        Tue, 27 Sep 2022 02:36:14 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C7D6410000B;
+        Tue, 27 Sep 2022 09:36:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1664271373;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lztctaXpuBh23+RJMFSBb8KRhYG7OptTx91tvx4/3kk=;
+        b=iXC2/jH+tpxbpJ3YGexQykGVbYGfOQ1qtFA8gzE8O6LntvgnmBum8FmgxImkSNDCME4ME/
+        LhB4PXeGlQ6T0Dv67wBbuU1JyTAEVIZK9+6dwUeaXizW2pMJYRA46xh3a1BknMPl7e1/CE
+        tss8HJBzyax0/dJCQk0Djk3bYXyX5UDHu4oxn04t1gdtNgFrU8GmzJy46K7YhjKXe7PGoR
+        N8hZFQwixvw5fDmwoZL83zvkvj0am66kV92BOVUv68j7ek3iFN+8bm8dBvCAK0pPvrL1kH
+        AbDoDnEyAJBkAz/IG69ULOhioern06HvZjAr4nzFoNMe6v945CUHjrrUmhsVcA==
+Date:   Tue, 27 Sep 2022 11:36:02 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 1/8] dt-bindings: sun6i-a31-mipi-dphy: Add the interrupts
+ property
+Message-ID: <YzLEApjzpGaDxKni@aptenodytes>
+References: <20220812075603.59375-1-samuel@sholland.org>
+ <20220812075603.59375-2-samuel@sholland.org>
+ <c85ec3a3-fa6e-aa71-a847-22062b9683e9@linaro.org>
+ <0d2bf232-8aa6-2dc1-121d-f0439bfd7b54@sholland.org>
+ <YzFwst0GpdRBx/9l@aptenodytes>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add
- pinctrl names for SPI signal states
-Content-Language: en-US
-To:     neil.armstrong@linaro.org, broonie@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        narmstrong@baylibre.com, Da Xue <da@libre.computer>
-References: <20220809172017.215412-1-aouledameur@baylibre.com>
- <20220809172017.215412-2-aouledameur@baylibre.com>
- <f9bf3f7e-e949-3e77-a74c-74c0eecd77c0@linaro.org>
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-In-Reply-To: <f9bf3f7e-e949-3e77-a74c-74c0eecd77c0@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="PiLFU6KiWb8KPWLq"
+Content-Disposition: inline
+In-Reply-To: <YzFwst0GpdRBx/9l@aptenodytes>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil
 
-On 9/27/22 10:29, Neil Armstrong wrote:
-> Hi,
->
-> On 09/08/2022 19:20, Amjad Ouled-Ameur wrote:
->> SPI pins of the SPICC Controller in Meson-GX needs to be controlled by
->> pin biais when idle. Therefore define three pinctrl names:
->> - default: SPI pins are controlled by spi function.
->> - idle-high: SCLK pin is pulled-up, but MOSI/MISO are still controlled
->> by spi function.
->> - idle-low: SCLK pin is pulled-down, but MOSI/MISO are still controlled
->> by spi function.
->>
->> Reported-by: Da Xue <da@libre.computer>
->> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
->> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->
-> Don't forget to CC devicetree@vger.kernel.org otherwise it won't be 
-> reviewed.
+--PiLFU6KiWb8KPWLq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sure, will do in V2.
+Hi,
 
-Regards,
+On Mon 26 Sep 22, 11:28, Paul Kocialkowski wrote:
+> Hi Samuel,
+>=20
+> On Fri 12 Aug 22, 17:19, Samuel Holland wrote:
+> > On 8/12/22 5:45 AM, Krzysztof Kozlowski wrote:
+> > > On 12/08/2022 10:55, Samuel Holland wrote:
+> > >> The sun6i DPHY can generate several interrupts, mostly for reporting
+> > >> error conditions, but also for detecting BTA and UPLS sequences.
+> > >> Document this capability in order to accurately describe the hardwar=
+e.
+> > >>
+> > >> The DPHY has no interrupt number provided in the vendor documentation
+> > >> because its interrupt line is shared with the DSI controller.
+> > >>
+> > >> Fixes: c25b84c00826 ("dt-bindings: display: Convert Allwinner DSI to=
+ a schema")
+> > >=20
+> > > I don't understand what is being fixed in that commit. That commit did
+> > > not have interrupts in D-PHY, so what was broken by it?
+> > >=20
+> > > The Fixes tag annotates the commit which introduced a bug.
+> >=20
+> > The binding had a bug because it did not accurately describe the hardwa=
+re.
+>=20
+> [...]
+>=20
+> Coming back to this series, I don't really get the point of introducing t=
+he
+> interrupt in the bindings and the device-tree sources if the interrupt is=
+ not
+> required for normal operation. I would just drop it.
+>=20
+> I recall I was in the same situation for the MIPI CSI-2 controllers, whic=
+h also
+> have a dedicated interrupt but only useful for debugging/error reporting.
+> I was asked not to introduce it back then, so I suppose the same should a=
+pply.
 
-Amjad
+Coming back to this, my memories were wrong and the interrupt was in fact a=
+dded
+to the binding and the dt description.
 
->
->
->> ---
->>   .../bindings/spi/amlogic,meson-gx-spicc.yaml      | 15 +++++++++++++++
->>   1 file changed, 15 insertions(+)
->>
->> diff --git 
->> a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml 
->> b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
->> index 50de0da42c13..10707a8216f5 100644
->> --- a/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
->> +++ b/Documentation/devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml
->> @@ -43,6 +43,14 @@ properties:
->>       minItems: 1
->>       maxItems: 2
->>   +  pinctrl-0:
->> +    minItems: 1
->> +
->> +  pinctrl-1:
->> +    maxItems: 1
->> +
->> +  pinctrl-names: true
->> +
->>   if:
->>     properties:
->>       compatible:
->> @@ -69,6 +77,13 @@ else:
->>         items:
->>           - const: core
->>   +    pinctrl-names:
->> +      minItems: 1
->> +      items:
->> +        - const: default
->> +        - const: idle-high
->> +        - const: idle-low
->> +
->>   required:
->>     - compatible
->>     - reg
+Nevermind my previous comment, I guess it does make sense to have it in the=
+ dt
+hardware description even if the driver does not use it.
+
+Sorry for the noise,
+
+Paul
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--PiLFU6KiWb8KPWLq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmMyxAIACgkQ3cLmz3+f
+v9HwAgf/duJh5AF/wrOPWoxEDWSWSf/54+O5EtPf1cpHo1tW2RMzwVgVNSiFXlUW
+Wef8LOxHWLSYdC+Aq7EmPa8t/3PW0t3j2leA4FPIUY6LArocr2HUFzoh90ivZxJE
+r8VR1P1ZbubureBZQJwFhDflDqR67qnUwEM9be++4LcBUM0RWZzYKhD1YmR6GxbV
+OVn+VWkeDSdb3fK4Prmh3ogRivMorGs7GvyFM3QJFv+arKCDBSG9/NVmVIbzgr1k
+Xa+M/cWNMfxvSuyTltrI0kAeQPpqjEDnaL6unrG/le9MZsducKOSOyGOlxPDYHqm
+lu1MFlBQGEhhcv/hIQFmJhI2e8JkTA==
+=3Zbu
+-----END PGP SIGNATURE-----
+
+--PiLFU6KiWb8KPWLq--
