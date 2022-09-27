@@ -2,81 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185645EC099
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073065EC0A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbiI0LJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
+        id S231643AbiI0LK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbiI0LJG (ORCPT
+        with ESMTP id S231532AbiI0LKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:09:06 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5529124143;
-        Tue, 27 Sep 2022 04:06:32 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 912AE6601F41;
-        Tue, 27 Sep 2022 12:06:30 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664276791;
-        bh=Eiys2MQDxTttwOrfkp9JGhDhEdlH5ShtSAZhdpDDjb8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Z+v41NJC1P5ioKnnPVBdfziVIZ74LVXXqKuXbLH7UDQWo40GSo73D3OI6hTvP8M+c
-         KLOltGJCX/jITZeLuoSxfexmVgNVoX11SYuHIz9ivKNkk8SWTD7S4ZYGO8lVeiLoqE
-         iXvOBmfpd/ENZtiU9Rl5tEvCreh04WIsdocSV7KMRJ+B6T1Vifl/6GqiPkwPlLR1OE
-         DQ6IVlRY9qZQYQ6de9RmFz89DmurtMyUEWPsQO7y8BEThAMLxwmX8AVHB6XjyXwYAz
-         4p23fSDsAnBkLa8VCBg/UX7POhpfhrSo0p6PsfREZptpukw5viC+unUfNa/Qw+GkcQ
-         mei/F7kqzHhFw==
-Message-ID: <a565ee30-bd23-beef-0c66-a60eb396e7a5@collabora.com>
-Date:   Tue, 27 Sep 2022 13:06:28 +0200
+        Tue, 27 Sep 2022 07:10:03 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAF215FCF;
+        Tue, 27 Sep 2022 04:07:43 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id i203-20020a1c3bd4000000b003b3df9a5ecbso9217288wma.1;
+        Tue, 27 Sep 2022 04:07:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=smELam+C1mHa7hXQtmvCHgerOjDPN5Eu1MdsEogTVL4=;
+        b=WHDHOLUskSYxI6OtHna6WkG4ZsdiPMZgoHWW59vhUGVMc9Sok7d6w9my6meROtWTDU
+         SobXOG5fvDTv7PLHWrBi2bpNm7FlKmg5i1RZp1W8QKqRy8sx0LIUn0JUzOIEBURLHGrP
+         YL4dxfEHVcWmxGHCnLtXlI9aejMl0IsoK0I3wiB6+BkxNnAxJTa4MshBlEQxEeTm/Z6S
+         /9sqGoA10ystdaQFUrm4BNmf+jIaxVPutFSPmIaf0pMypufpLQRHMdeAz8VuXR66kYw7
+         Z6CTGH82iDgsn5dS80w+aM2GCptRXZc3yQDj1TeIgpygSrB0wx3FmJF0XKzbHkJ++pVe
+         xNvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=smELam+C1mHa7hXQtmvCHgerOjDPN5Eu1MdsEogTVL4=;
+        b=EWAf8E0koK/IgQj0tK8WEcbnA6CSHoZAnkKeQNfSMR8O9kS0zgSphP1MQgn5CJLnEY
+         ZoCYQY7ZQcAlb35NaUiT+XLhnKjysYAHTRFeEOjPCh5Ljvxi7q0e6aE6OX7E141YaUaS
+         JQzf+YL6FvKCVPSdGMtF7SFhwlgD25VAncrG/2TVa7BgtrZQbdToL2paBGvSjQwgRpZH
+         WLc8Xr3qdv22uW+IGVHFhdKoKsKzFGmSTO9w6eBEPBuMcPOPx+Iqg3iUJKP6lWAsEYsF
+         NGz+TeIDmJxHTtCeoh3laVgqDScTLx+T6aKqF+4Rifze6w2I1kD2Bih3WlPeQ41hag7y
+         LpyQ==
+X-Gm-Message-State: ACrzQf3CywYLjMniDJ1EmSye44meRxcqLdtTsY3FkGxQa63gl4Q6584t
+        040nIk9Dxhangpy+hUPF9nQ=
+X-Google-Smtp-Source: AMsMyM5OBk64pwJp/ay/FZteOoCbSMmNC50uCmQwIsZclwfLnXD16ZJck6Rm1g+X7MY2WuvO60PGew==
+X-Received: by 2002:a05:600c:4f07:b0:3b4:a5d1:1fea with SMTP id l7-20020a05600c4f0700b003b4a5d11feamr2230885wmq.103.1664276861911;
+        Tue, 27 Sep 2022 04:07:41 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id b13-20020a5d40cd000000b00226f39d1a3esm1513849wrq.73.2022.09.27.04.07.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 04:07:41 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 12:07:39 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.19 000/207] 5.19.12-rc1 review
+Message-ID: <YzLZe5ECd0E4xJKa@debian>
+References: <20220926100806.522017616@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 11/11] remoteproc: mediatek: Refine ipi handler error
- message
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-References: <20220927025606.26673-1-tinghan.shen@mediatek.com>
- <20220927025606.26673-12-tinghan.shen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220927025606.26673-12-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/09/22 04:56, Tinghan Shen ha scritto:
-> The error message doesn't accurately reflect the cause of
-> the error. The error is due to a handler not being found,
-> not an invalid IPI ID.
+Hi Greg,
+
+On Mon, Sep 26, 2022 at 12:09:49PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.12 release.
+> There are 207 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
+> Anything received after that time might be too late.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Build test (gcc version 12.2.1 20220925):
+mips: 59 configs -> no failure
+arm: 99 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
 
+[1]. https://openqa.qa.codethink.co.uk/tests/1907
+[2]. https://openqa.qa.codethink.co.uk/tests/1912
+[3]. https://openqa.qa.codethink.co.uk/tests/1914
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
