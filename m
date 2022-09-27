@@ -2,208 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FDF5ECA62
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 285045ECA66
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbiI0RCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 13:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
+        id S231579AbiI0REH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 13:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232091AbiI0RCX (ORCPT
+        with ESMTP id S230169AbiI0REE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 13:02:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67599EC56F;
-        Tue, 27 Sep 2022 10:02:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA1B660691;
-        Tue, 27 Sep 2022 17:02:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01FBC433C1;
-        Tue, 27 Sep 2022 17:02:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664298140;
-        bh=JCOanzPCr3oWRV3li2/XhhZZdBH07whiMGtrcocbS5o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uuH2xvOc9JWfUDgIUBwiaABl73mOIi6AvtG60UI6YKqHCQJfFb1wxD7GxK+zze9Jk
-         mvFlDwCz5/g2/Vu4Fe2vbEncyC79edGp8rKRkYcnHx33yoPixlLjQIXYpq1seZ498q
-         D7CiA1SWGGh+k8Rpoesm96GFOZlva74hSPq8pI1flI0ZV90Iuq9/CXANJjn/Bnuk7c
-         OZKVgb7+rtF22rHRFugwziCsvQk2Kpn3sdcDNeySgsFOz8GpoaI1DlbHAN95MiPDqt
-         jRXw+RzN3Jjnv+/SWxqwTgVf3SrByEH/7eDPI3BTl0BksdWKwHx7Kx5H5d02/n/vax
-         fJkhLb0RvqyFw==
-Date:   Tue, 27 Sep 2022 10:02:17 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Zeng Heng <zengheng4@huawei.com>, masahiroy@kernel.org,
-        michal.lkml@markovi.net, akpm@linux-foundation.org,
-        peterz@infradead.org, keescook@chromium.org, davidgow@google.com,
-        jpoimboe@kernel.org, dan.j.williams@intel.com, ojeda@kernel.org,
-        isabbasso@riseup.net, dmitrii.bundin.a@gmail.com, vbabka@suse.cz,
-        linux@rasmusvillemoes.dk, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liwei391@huawei.com,
-        weiyongjun1@huawei.com, clang-built-linux <llvm@lists.linux.dev>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH -next] Makefile: add implicit enum-conversion check for
- compile build
-Message-ID: <YzMsmYTzX2Ni5zGP@dev-arch.thelio-3990X>
-References: <20220927153125.811911-1-zengheng4@huawei.com>
- <CAKwvOdm2r_PPogCecGL4TMeYLq3qNkCbt7zqYTLmQf-PAQMGMg@mail.gmail.com>
+        Tue, 27 Sep 2022 13:04:04 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52F6F685A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:04:03 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id l9-20020a17090a4d4900b00205e295400eso1323693pjh.4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:04:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=QmJLfS9I7/XuHeCFFZi2uIbypQ74PjFxFiPtGwFHQJ8=;
+        b=BxjMcXoLXoNYNUPdzcbi/78Oibd6uaYGwAlT8y0Nl0Hyq3vNOU9bMt4uF9NcUiv9Xg
+         Lo2IUTtZg9tGzwyhsReuYpMV0kcB+8smOYpUn+VTYvnertSyaknGZxR/2u4aHVc8T752
+         sGdNueCTpO5Fw0Zkvv3aVb0IesMI+RGjx09QW5+YqY0iaQueORggUv5/R7GmR+kmFfzW
+         9wUwEJwK2HJNIS7wEEjf+EWxRjlWGDdSc+BdqjzyQRDiIBPDZ3E8a1V3z199kRTBZdWp
+         xm5SC0ITCZYd0EKOZKej5BzisjHpu0ECjWRPBR4fXKFex6Ypwlux617XNqq1x1055oxM
+         MkNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=QmJLfS9I7/XuHeCFFZi2uIbypQ74PjFxFiPtGwFHQJ8=;
+        b=4ufBTG+n2oVz4Wt0pCAnRU2bJbrQMEQ1qtUD/mWxXKuqGHnAlLlnr+5DxhE1KlLZQ/
+         iQyjh5uqsoj2AHzNcviKBuWZLLbEye7MVNRqaVgaTSy4GWaiM+0uo7ZGZBDvROvV8ALZ
+         KaTJu+vJkKNSY+oKxyeX/gN45gnSF74cH/8f3TaZUWD8eWXHggl6fyieA6omOlA0TIyW
+         R32rivGW0pUqNIb3B/jlB9J/q3Q8vYv31eSq+4tDCNToemDBEc/tdRtzKuNKUF/EB16B
+         f37EsGpCo8uIFMJFS4cPPpxOvETRY0xSe/bQPrtGFS2bw/VG/8zXs+VC/hAPkwtcSNpd
+         xC5g==
+X-Gm-Message-State: ACrzQf1phD0kLJn9WIafRK5LFQhS3/o2tdkUQWDaP6H2+p1t/1k2UvYL
+        6T4FAGSt0LsyQGiZWmXSK5LnBPLod5fycCmoynulgQ==
+X-Google-Smtp-Source: AMsMyM6kYnpRlYHqWr7mBolKj7FIiU8kpVyQAGsF9gNj5/CQn5NeSQV/ko0g0gQ0HfgDCJcO4YZNzhyC/icWPmYVRyo=
+X-Received: by 2002:a17:90a:74c4:b0:203:336d:dd36 with SMTP id
+ p4-20020a17090a74c400b00203336ddd36mr5470661pjl.107.1664298243152; Tue, 27
+ Sep 2022 10:04:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdm2r_PPogCecGL4TMeYLq3qNkCbt7zqYTLmQf-PAQMGMg@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220923170218.1188423-1-ndesaulniers@google.com>
+ <CAHk-=wiAwEA5KekL4+t+v6qAdKLSOQvBkGbumvk+Rxhaay8aFg@mail.gmail.com>
+ <CAKwvOd=r+9X6JkikpuTvjdTn7DXusevoJBFjXtGQ1SZYCZ6f6g@mail.gmail.com> <CAHk-=whknQuJCqbzjtBrkjGOPrZPX6fjv8HSms2p0kw-NTdMZA@mail.gmail.com>
+In-Reply-To: <CAHk-=whknQuJCqbzjtBrkjGOPrZPX6fjv8HSms2p0kw-NTdMZA@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 27 Sep 2022 10:03:51 -0700
+Message-ID: <CAKwvOd=a+0VNP-d=mHnbM4ujdtPrujru4dxHtfDo+EEM+b6deg@mail.gmail.com>
+Subject: Re: [PATCH] x86, mem: move memmove to out of line assembler
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Andy Lutomirski <luto@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 09:45:17AM -0700, Nick Desaulniers wrote:
-> On Tue, Sep 27, 2022 at 8:15 AM Zeng Heng <zengheng4@huawei.com> wrote:
-> >
-> > Provide implicit enum-conversion warning option
-> > in general build. When it set enabled, it can
-> > detect implicit enum type conversion and find
-> > potential conversion errors like below
-> > (use "allmodconfig"):
-> >
-> > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.c:3904:46:
-> > error: implicit conversion from ‘enum <anonymous>’ to ‘enum odm_combine_mode’ [-Werror=enum-conversion]
-> >  3904 |       locals->ODMCombineEnablePerState[i][k] = true;
-> >       |                                              ^
-> >
-> > The '-Wenum-conversion' could be regarded as
-> > effective check on compile runtime and
-> > call attention on potential mistakes.
-> >
-> > Anothor practical example could be referred to:
-> > https://lore.kernel.org/all/CADnq5_OE0yZvEYGu82QJHL9wvVcTFZrmeTgX7URgh7FVA=jqYg@mail.gmail.com
-> >
-> > "-Wenum-conversion" was firstly introduced from
-> > GNU gcc-10.
-> 
-> What about clang? ;)
-> 
-> >
-> > Although "-Wenum-conversion" could be enabled
-> > by "-Wextra" when compiling with 'W=1' option,
-> > there are many warnings generated by '-Wextra'
-> > that cause too much noise in a build.
-> 
-> With clang, I believe that -Wenum-conversion is part of -Wall or
-> -Wextra; so enabling this explicitly is only necessary for GCC.  I
-> wonder why it's not part of -Wall or -Wextra for GCC?  Perhaps worth a
-> bug report/feature request?
+Oh, yeah my patch essentially _is_
+commit 9599ec0471de ("x86-64, mem: Convert memmove() to assembly file
+and fix return value bug")
+but for 32b (and no return value bug).  I should probably amend a
+reference to that in the commit message for this patch.
 
-With clang, -Wenum-conversion is just default enabled, not even behind
--Wall:
+Also, I'm missing an EXPORT_SYMBOL in my v1, so modules that reference
+memmove will fail to build during modpost. v2 is required.
 
-$ cat test.c
-enum enum1 { A = 1 };
-enum enum2 { B = 2 };
+On Fri, Sep 23, 2022 at 11:06 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> But I'm looking at that x86-64 memcpy_orig, and I think it looks
+> fairly good as a template for doing the same on x86-32. And we could
+> get rid of the duplication on the x86-64 side.
 
-enum enum1 foo(enum enum2 bar)
-{
-    return bar;
-}
+Is the suggestion that 64b memcpy_orig could be replaced with __memmove?
 
-$ clang -fsyntax-only test.c
-test.c:11:9: warning: implicit conversion from enumeration type 'enum enum2' to different enumeration type 'enum enum1' [-Wenum-conversion]
-        return bar;
-        ~~~~~~ ^~~
-1 warning generated.
+Sorry, I'm not sure I follow either suggestions for code reuse opportunities.
 
-On the other hand, GCC does have it under -Wextra:
+Also, any ideas which machines for QEMU don't have ERMS for testing
+these non-ERMS implementations?
 
-$ gcc -fsyntax-only test.c
+>
+> That said, your patch looks fine too, as a "minimal changes" thing.
+>
+>                 Linus
 
-$ gcc -Wextra -fsyntax-only test.c
-test.c: In function ‘foo’:
-test.c:6:16: warning: implicit conversion from ‘enum enum2’ to ‘enum enum1’ [-Wenum-conversion]
-    6 |         return bar;
-      |                ^~~
-
-But the kernel does not build with -Wextra aside from W=[123], hence
-this warning has to be explicitly requested for GCC.
-
-> >
-> > Seeing the details from the following link:
-> > https://gcc.gnu.org/onlinedocs/gcc-11.3.0/gcc/Warning-Options.html
-> >
-> > Because there are still some concerned warnings
-> > exist, the patch marks the option disabled in default
-> > for avoiding compile failed like using "allmodconfig".
-
-But there is no dependency to avoid this getting enabled by allmodconfig
-(such as 'depends on !COMPILE_TEST') so I don't see the point in the
-current form; 'default n' does nothing to prevent it. Regardless, I
-agree with Nick's sentiment below.
-
-> > Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-> > ---
-> >  Makefile          | 5 +++++
-> >  lib/Kconfig.debug | 7 +++++++
-> >  2 files changed, 12 insertions(+)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index ebd48fc956a3..1790a3624358 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -880,6 +880,11 @@ endif
-> >  KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
-> >  KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
-> >
-> > +# check implicit enum conversion
-> > +ifdef CONFIG_ENUM_CONVERSION
-> > +KBUILD_CFLAGS += -Wenum-conversion
-> > +endif
-> 
-> Having a kconfig for this is overkill.  cc-option with a comment about
-> the compiler default versions is the way to go.
-
-Agreed. If there is some reason -Wenum-conversion cannot be enabled for
-GCC right now (such as existing warnings, which the commit message
-appears to alude to), they should be cleaned up first then
--Wenum-conversion should just be unconditionally enabled for all
-compilers that support it via cc-option, not half enabled via Kconfig so
-that maybe people will clean up the warnings. That is not how enabling
-warnings works:
-
-https://lore.kernel.org/CAHk-=wg-mH-_GYpkhz_psjBWG6ZcjKnPo83fg7YMj_by+-LRTQ@mail.gmail.com/
-
-> > +
-> >  # These result in bogus false positives
-> >  KBUILD_CFLAGS += $(call cc-disable-warning, dangling-pointer)
-> >
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index 4f2b81229a2f..a64e06a747d8 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -417,6 +417,13 @@ config FRAME_WARN
-> >           Setting this too low will cause a lot of warnings.
-> >           Setting it to 0 disables the warning.
-> >
-> > +config ENUM_CONVERSION
-> > +       bool "Warn for implicit enum conversion"
-> > +       depends on GCC_VERSION >= 100300
-> > +       default n
-> > +       help
-> > +         Tell gcc to warn at build time for implicit enum conversion.
-> > +
-> >  config STRIP_ASM_SYMS
-> >         bool "Strip assembler-generated symbols during link"
-> >         default n
-> > --
-> > 2.25.1
-> >
-> 
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
-> 
+--
+Thanks,
+~Nick Desaulniers
