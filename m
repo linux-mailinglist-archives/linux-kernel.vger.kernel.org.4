@@ -2,148 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0255EC8C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94895EC8C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbiI0P4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
+        id S230495AbiI0P6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiI0P4a (ORCPT
+        with ESMTP id S229867AbiI0P6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:56:30 -0400
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D1379ED6
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:56:00 -0700 (PDT)
-Received: by mail-qk1-f176.google.com with SMTP id 3so6286918qka.5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:56:00 -0700 (PDT)
+        Tue, 27 Sep 2022 11:58:12 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86DAA830A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:58:10 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id t3so9496302ply.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:58:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=jrwNWtFQrS+SFRGxYgfJ0In16ZNx6vr730nWo1dXS+k=;
+        b=PMSBRJODEfyxz9PFbDzA6uW5Nxf4dQM2ZSXh/E/1IE5Xs8EJnf+zPT3kZOy0UpIKUO
+         +l919jEdE8NQbGbAumQ0b3HYvw2uSxCgQFR+vGzbNxpmvpD4vaQ1tbiunb1AfMAAcN+G
+         Kcnq1t0ub4kynQzZmtin+Ql/LTZaD+nXj8kF0mp5sAW3XJLBfLuBjVmpXzVl7VmfPcp4
+         FGf35BgmSqIIc/yjVeAOiamXOis/PztD74lb5PuG79bU5CgIYa+9yyg2CKNzPPSmZMVe
+         zH/USGIE/0WpF3m5F9+ZKOJSZ1aIqRIetH71mPXHtx9wFKP8QGI8xa3+hJhre4B2yUVq
+         TS1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6/fNwUZTk6ef7XasN0kmfa44jw+IlnUA/jmMgGdEMSE=;
-        b=D12f0zROjnqvNnWmRi0rI9ImkEfp41uIlczqI2LG/6Y4UgltIAqF9hRWoEjF43k34D
-         v0AB2D1XHot7Hl3t7y8WOf9Wo7WEx9RE9RHvmADxUiAGTJtEgh1sX8lKHKTgXItY1z5n
-         qkZFzRO27WrI4XgPtwqEAUNrEuflfBfi9CnJigTbWmAl0q17pcWsMa5NzQ7FvSyWrz9t
-         Aq8ybrykoOhHy4D+0OoR/gFpNdVOrI/xArPGh5XuEB1fiRsB5Z9vFZDKcGMYm8dbk5/r
-         ahysNnAGwIhqGSy+8XYRzWhYAXNT2kb6vx79tK91ID5MohCnrpFyiSJCul/t7FQ1Fw3T
-         KWnA==
-X-Gm-Message-State: ACrzQf3+dViWlyz+VP6o+N3YT/TCDEKoDvfeS4GXAMH+GCdTp2e4wNT3
-        sMyCDzepNl3yoWvZ+HJ3jqYCpGl8KiGOqQ==
-X-Google-Smtp-Source: AMsMyM49rMDFwfNXmMRYsylYe0ILhEhRha7CzIGA5jY146c9by102NIURF5PBa56Kl9ovJbb4pHDLg==
-X-Received: by 2002:a05:620a:248f:b0:6ce:a3c7:abfb with SMTP id i15-20020a05620a248f00b006cea3c7abfbmr18336593qkn.112.1664294159362;
-        Tue, 27 Sep 2022 08:55:59 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id z80-20020a376553000000b006b953a7929csm1197362qkb.73.2022.09.27.08.55.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 08:55:58 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-345528ceb87so104567697b3.11
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:55:58 -0700 (PDT)
-X-Received: by 2002:a81:1691:0:b0:345:17df:4fc6 with SMTP id
- 139-20020a811691000000b0034517df4fc6mr25239963yww.502.1664294157901; Tue, 27
- Sep 2022 08:55:57 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=jrwNWtFQrS+SFRGxYgfJ0In16ZNx6vr730nWo1dXS+k=;
+        b=LSEO39ItKIccFmYrcuGtYZcrLvxW4ZVAenidKEeJXE2trs07sLm4TDOM+7BZXprDoU
+         trYrdpwb8n3kal5P7CdGKcLtlNji8Tyk7oSp7Q5bVtv/iR1JaJIZ93Zd7OAGqmaqIcWJ
+         dpF9fCvll7fpvrLcR1bJxsu/Cq90EwxVOqxfkPwPk7v334LPE1glKEsR1kpv3q1/UCdz
+         4ukq6dctEkwXGdBC9R0kaMZ34RPaZGOkgZOKKTrGNUfNXdZSk9E9sBBezLgElKPImn9C
+         yy+KfCdYrIfNSK577zWKXlauGL2M9SRDnHacyn33BmCH7LhfY8oKHYexxUF85VwmEqxl
+         54Sw==
+X-Gm-Message-State: ACrzQf2yeA2BdQMrZiyX4gQebKa8qOhkS7Uo1XGg/ZRcxz2bhI9jx4XI
+        lR0mOs1xeiHAW/rhaQkxn73zDw==
+X-Google-Smtp-Source: AMsMyM5qmyFavzxd05YKdOBTrlpDBTVFF2cPxTziTIL/3Be9pEGwJFuVDLfrY4Ppd7ywyVTCl7Wp2g==
+X-Received: by 2002:a17:903:22d0:b0:177:f919:9259 with SMTP id y16-20020a17090322d000b00177f9199259mr27629325plg.71.1664294290165;
+        Tue, 27 Sep 2022 08:58:10 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id w187-20020a6262c4000000b005546fe4b127sm1928534pfb.78.2022.09.27.08.58.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 08:58:09 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 15:58:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Like Xu <like.xu.linux@gmail.com>
+Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
+Message-ID: <YzMdjSkKaJ8HyWXh@google.com>
+References: <YxtOEgJhe4EcAJsE@google.com>
+ <5f0345d2-d4d1-f4fe-86ba-6e22561cb6bd@redhat.com>
+ <37b3162e-7b3a-919f-80e2-f96eca7d4b4c@redhat.com>
+ <dfcbdf1d-b078-ec6c-7706-6af578f79ec2@redhat.com>
+ <55d7f0bd-ace1-506b-ea5b-105a86290114@redhat.com>
+ <f753391e-7bdc-bada-856a-87344e75bd74@redhat.com>
+ <111a46c1-7082-62e3-4f3a-860a95cd560a@redhat.com>
+ <14d5b8f2-7cb6-ce24-c7a7-32aa9117c953@redhat.com>
+ <YzIZhn47brWBfQah@google.com>
+ <3b04db9d-0177-7e6e-a54c-a28ada8b1d36@redhat.com>
 MIME-Version: 1.0
-References: <b0981cb5a97452af73b9dd0dd0eb03c5002f7af4.1664285626.git.geert+renesas@glider.be>
- <fe2b1f48-e18a-b1d9-0c62-ddddf9e6515f@arm.com> <CAMuHMdVFAwqVtrRFf-_jSODWeJuGAzbpoyk65HDOqj9h6AUt2A@mail.gmail.com>
- <9db42ab0-da49-95fd-3fea-eb505af0867e@arm.com> <CAMuHMdW1KQ5TTftYuTT4_b6mmCT5Y+_jpSKau46-g8siDKWjGQ@mail.gmail.com>
- <76a84590-995a-f958-0135-a344762bffe1@arm.com>
-In-Reply-To: <76a84590-995a-f958-0135-a344762bffe1@arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 27 Sep 2022 17:55:46 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV-MbjyoyVM4_aAYs18L4i+2XbeQvRoMChzvsapX+1TKQ@mail.gmail.com>
-Message-ID: <CAMuHMdV-MbjyoyVM4_aAYs18L4i+2XbeQvRoMChzvsapX+1TKQ@mail.gmail.com>
-Subject: Re: [PATCH] iommu/io-pgtable: Make IOMMU_IO_PGTABLE_DART invisible
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Sven Peter <sven@svenpeter.dev>, Janne Grunau <j@jannau.net>,
-        Hector Martin <marcan@marcan.st>, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3b04db9d-0177-7e6e-a54c-a28ada8b1d36@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+On Tue, Sep 27, 2022, Emanuele Giuseppe Esposito wrote:
+> 
+> Am 26/09/2022 um 23:28 schrieb Sean Christopherson:
+> > On Mon, Sep 26, 2022, David Hildenbrand wrote:
+> >> As Sean said "This is an awful lot of a complexity to take on for something
+> >> that appears to be solvable in userspace."
+> > 
+> > And if the userspace solution is unpalatable for whatever reason, I'd like to
+> > understand exactly what KVM behavior is problematic for userspace.  E.g. the
+> > above RHBZ bug should no longer be an issue as the buggy commit has since been
+> > reverted.
+> 
+> It still is because I can reproduce the bug, as also pointed out in
+> multiple comments below.
 
-On Tue, Sep 27, 2022 at 5:50 PM Robin Murphy <robin.murphy@arm.com> wrote:
-> On 2022-09-27 16:29, Geert Uytterhoeven wrote:
-> > On Tue, Sep 27, 2022 at 5:09 PM Robin Murphy <robin.murphy@arm.com> wrote:
-> >> On 2022-09-27 15:48, Geert Uytterhoeven wrote:
-> >>> On Tue, Sep 27, 2022 at 4:15 PM Robin Murphy <robin.murphy@arm.com> wrote:
-> >>>> On 2022-09-27 14:36, Geert Uytterhoeven wrote:
-> >>>>> There is no point in asking the user about both "Apple DART Formats" and
-> >>>>> "Apple DART IOMMU Support", as the former is useless without the latter,
-> >>>>> and the latter auto-selects the former.
-> >>>>>
-> >>>>> Fixes: 745ef1092bcfcf3b ("iommu/io-pgtable: Move Apple DART support to its own file")
-> >>>>> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> >>>>> ---
-> >>>>> Should IOMMU_IO_PGTABLE_LPAE and IOMMU_IO_PGTABLE_ARMV7S be made
-> >>>>> invisible, too?
-> >>>>> Are there users that do not select them?
-> >>>>
-> >>>> The aim was for formats to be independently selectable for COMPILE_TEST
-> >>>> coverage. The Arm formats are manually selectable for the sake of their
-> >>>> runtime self-tests, which are self-contained, but since DART format
-> >>>> doesn't do anything by itself I'd agree there's no need to prompt when
-> >>>> !COMPILE_TEST here.
-> >>>
-> >>> IOMMU_IO_PGTABLE_LPAE and IOMMU_IO_PGTABLE_ARMV7S are
-> >>> selected by other symbols that can be enabled when compile-testing, so
-> >>> the tests can still be enabled in those cases, too
-> >>
-> >> Sure, but when you want to compile-test a thing, what would you rather
-> >> do: enable the thing, or go hunting to find some other thing that
-> >> happens to select the thing you actually want, then potentially have to
-> >> figure out *that* thing's dependencies, and so on?
-> >
-> > Agreed.
-> >
-> >> Coverage isn't solely about whether it's technically possible to ever
-> >> reach somewhere at all, it's just as much about how easily and/or often
-> >> you can get there in practice. I don't see who benefits from making
-> >> COMPILE_TEST harder to use :/
-> >
-> > So perhaps the visibility of IOMMU_IO_PGTABLE_LPAE and
-> > IOMMU_IO_PGTABLE_ARMV7S should depend on COMPILE_TEST?
-> > Normal users would still get it through select when needed.
->
-> As I say those still offer functionality beyond compile-testing, but now
-> you've got me suspecting that it's already suboptimal that one has to
-> enable the format to make the self-test option appear... Perhaps what we
+You can reproduce _a_ bug, but it's obviously not the original bug, because the
+last comment says:
 
-IMHO that's the only sensible thing to do: you want to have the option
-to enable (preferably modular) tests for the functionality you have
-enabled in your product, so you can run the tests when needed.
+  Second, indeed the patch was reverted and somehow accepted without generating
+  too much noise:
 
-> want is a separate master option to enable io-pgtable self-tests in
-> general, then rejig the rest around that.
+  ...
 
-IMHO you do not want a master test option that suddenly enables
-lots of functionality you do not need in your product.
+  The underlying issue of course as we both know is still there.
 
-> Of course the self-tests would be even more useful if the harness was at
-> the level of the core io-pgtable API so it could cover new formats
-> automatically as long as they provide the configuration parameters, but
-> that's a separate matter for someone with sufficient free time and
-> enthusiasm :)
+  You might have luck reproducing it with this bug
 
-OK, I will shut up ;-)
+  https://bugzilla.redhat.com/show_bug.cgi?id=1855298
 
-Gr{oetje,eeting}s,
+  But for me it looks like it is 'working' as well, so you might have
+  to write a unit test to trigger the issue.
 
-                        Geert
+> > If the issue is KVM doing something nonsensical on a code fetch to MMIO, then I'd
+> > much rather fix _that_ bug and improve KVM's user exit ABI to let userspace handle
+> > the race _if_ userspace chooses not to pause vCPUs.
+> > 
+> 
+> Also on the BZ they all seem (Paolo included) to agree that the issue is
+> non-atomic memslots update.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Yes, non-atomic memslot likely results in the guest fetching from a GPA without a
+memslot.  I'm asking for an explanation of exactly what happens when that occurs,
+because it should be possible to adjust KVM and/or QEMU to play nice with the
+fetch, e.g. to resume the guest until the new memslot is installed, in which case
+an atomic update isn't needed.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+I assume the issue is that KVM exits with KVM_EXIT_INTERNAL_ERROR because the
+guest is running at CPL=0, and QEMU kills the guest in response.  If that's correct,
+then that problem can be solved by exiting to userspace with KVM_EXIT_MMIO instead
+of KVM_EXIT_INTERNAL_ERROR so that userspace can do something sane in response to
+the MMIO code fetch.
+
+I'm pretty sure this patch will Just Work for QEMU, because QEMU simply resumes
+the vCPU if mmio.len==0.  It's a bit of a hack, but I don't think it violates KVM's
+ABI in any way, and it can even become "official" behavior since KVM x86 doesn't
+otherwise exit with mmio.len==0.
+
+Compile tested only...
+
+---
+From: Sean Christopherson <seanjc@google.com>
+Date: Tue, 27 Sep 2022 08:16:03 -0700
+Subject: [PATCH] KVM: x86: Exit to userspace with zero-length MMIO "read" on
+ MMIO fetch
+
+Exit to userspace with KVM_EXIT_MMIO if emulation fails due to not being
+able to fetch instruction bytes, e.g. if the resolved GPA isn't backed by
+a memslot.  If userspace is manipulating memslots without pausing vCPUs,
+e.g. to emulate BIOS relocation, then a vCPU may fetch while there is no
+valid memslot installed.  Depending on guest context, KVM will either
+exit to userspace with KVM_EXIT_INTERNAL_ERROR (L1, CPL=0) or simply
+resume the guest (L2 or CPL>0), neither of which is desirable as exiting
+with "emulation error" effectively kills the VM, and resuming the guest
+doesn't provide userspace an opportunity to react the to fetch.
+
+Use "mmio.len == 0" to indicate "fetch".  This is a bit of a hack, but
+there is no other way to communicate "fetch" to userspace without
+defining an entirely new exit reason, e.g. "mmio.is_write" is a boolean
+and not a flag, and there is no known use case for actually supporting
+code fetches from MMIO, i.e. there's no need to allow userspace to fill
+in the instruction bytes.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/emulate.c     | 2 ++
+ arch/x86/kvm/kvm_emulate.h | 1 +
+ arch/x86/kvm/x86.c         | 9 ++++++++-
+ 3 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index f092c54d1a2f..e141238d93b0 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -5353,6 +5353,8 @@ int x86_decode_insn(struct x86_emulate_ctxt *ctxt, void *insn, int insn_len, int
+ done:
+ 	if (rc == X86EMUL_PROPAGATE_FAULT)
+ 		ctxt->have_exception = true;
++	if (rc == X86EMUL_IO_NEEDED)
++		return EMULATION_IO_FETCH;
+ 	return (rc != X86EMUL_CONTINUE) ? EMULATION_FAILED : EMULATION_OK;
+ }
+ 
+diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
+index 89246446d6aa..3cb2e321fcd2 100644
+--- a/arch/x86/kvm/kvm_emulate.h
++++ b/arch/x86/kvm/kvm_emulate.h
+@@ -516,6 +516,7 @@ bool x86_page_table_writing_insn(struct x86_emulate_ctxt *ctxt);
+ #define EMULATION_OK 0
+ #define EMULATION_RESTART 1
+ #define EMULATION_INTERCEPTED 2
++#define EMULATION_IO_FETCH 3
+ void init_decode_cache(struct x86_emulate_ctxt *ctxt);
+ int x86_emulate_insn(struct x86_emulate_ctxt *ctxt);
+ int emulator_task_switch(struct x86_emulate_ctxt *ctxt,
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index aa5ab0c620de..7eb72694c601 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -7129,8 +7129,13 @@ static int kvm_fetch_guest_virt(struct x86_emulate_ctxt *ctxt,
+ 		bytes = (unsigned)PAGE_SIZE - offset;
+ 	ret = kvm_vcpu_read_guest_page(vcpu, gpa >> PAGE_SHIFT, val,
+ 				       offset, bytes);
+-	if (unlikely(ret < 0))
++	if (unlikely(ret < 0)) {
++		vcpu->run->mmio.phys_addr = gpa;
++		vcpu->run->mmio.len = 0;
++		vcpu->run->mmio.is_write = 0;
++		vcpu->run->exit_reason = KVM_EXIT_MMIO;
+ 		return X86EMUL_IO_NEEDED;
++	}
+ 
+ 	return X86EMUL_CONTINUE;
+ }
+@@ -8665,6 +8670,8 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+ 		r = x86_decode_emulated_instruction(vcpu, emulation_type,
+ 						    insn, insn_len);
+ 		if (r != EMULATION_OK)  {
++			if (r == EMULATION_IO_FETCH)
++				return 0;
+ 			if ((emulation_type & EMULTYPE_TRAP_UD) ||
+ 			    (emulation_type & EMULTYPE_TRAP_UD_FORCED)) {
+ 				kvm_queue_exception(vcpu, UD_VECTOR);
+
+base-commit: 39d9b48cc777bdf6d67d01ed24f1f89b13f5fbb2
+-- 
+
