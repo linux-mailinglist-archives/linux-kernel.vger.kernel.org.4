@@ -2,331 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687785EBE2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FF95EBE53
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiI0JQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 05:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
+        id S231710AbiI0JUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 05:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiI0JQg (ORCPT
+        with ESMTP id S231679AbiI0JTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 05:16:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AA1B089C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fVt9SBxMubuJsK6285/X6ye0apMEGBc2pWjgWDYGOmU=; b=PyblJSgjtFsfgawJh9QtIS0RM2
-        aFo/0gR8yRHSkU5NDr809AchK6U6LqecFBJ7mSwTwKJ+jcCybAoAsIExvjXJs4EICwkdsa6t8I/g6
-        YSfGjdjfGW1p5//+wSMDLyjnrQCJalIryNCjCwWvix2RjcQIBWFqh4kjB+Lg2ZDzW9WVxDCbPAReW
-        efEqEUMb0mF8sMszt3eXXnPRSpTkGbP26tcLinCUu1xcr99deSHkHh7obvy6BOgSBjmrvYyQ0KfqE
-        8BVhWRC3qHF2FfLJeTx5cDMlD+Gn06czMTAxRozIp2TcIIuyhzvqcboBeg6XqYc/ngo4xFalgMjdr
-        CKnExe7w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1od6gx-00BIXl-Ao; Tue, 27 Sep 2022 09:15:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 39C1630007E;
-        Tue, 27 Sep 2022 11:15:46 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1753220424F71; Tue, 27 Sep 2022 11:15:46 +0200 (CEST)
-Date:   Tue, 27 Sep 2022 11:15:46 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 08/23] sched/fair: Compute task-class performance
- scores for load balancing
-Message-ID: <YzK/QisKmix6hrKG@hirez.programming.kicks-ass.net>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-9-ricardo.neri-calderon@linux.intel.com>
+        Tue, 27 Sep 2022 05:19:52 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6EAFAC5D;
+        Tue, 27 Sep 2022 02:18:51 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28R87JBn028401;
+        Tue, 27 Sep 2022 09:18:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=8APO/siT1zdwfmAtvpSBTK7h9cWLIQIJMMQjTfQi7bY=;
+ b=euQ0IGtx7GfCIZtFVzqDJWH4YTOWxd4KorpMtED0FWPkqyOQjlwpQK/SXitn3tg3a3nS
+ mraYCZM7dmcd4i9MFszX8in78YlU8bji1smdoBeJza2dzye3oLbV3Yu8x/HRwiCUILB8
+ wR0N21r+o5xDldDsZSl7OYa87o6znhRwZPpvnZeDs08nO/z1/ci+M+MqBGofPGLUl/OH
+ MNT9Kl7W5Bcc+/TGZgchZ1xTzHObvUAvXiXMqP/Rlr2pZNH78+Uz9X2mBip3NUHyY+aa
+ c1nL35JAqTj644cA6FuIVujtIM+MH8lkUdL7iuSNXZBS2dfaWmRmyW6707Mxyac9bETh MA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3juvv2338n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 09:18:24 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28R8gb7x015680;
+        Tue, 27 Sep 2022 09:18:23 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3juvv2337b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 09:18:23 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28R95XiJ031350;
+        Tue, 27 Sep 2022 09:18:21 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3jss5j3m0y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 09:18:21 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28R9IIqu53936568
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 27 Sep 2022 09:18:18 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B0E9E42041;
+        Tue, 27 Sep 2022 09:18:18 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 903BF4203F;
+        Tue, 27 Sep 2022 09:18:16 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.61.44])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 27 Sep 2022 09:18:16 +0000 (GMT)
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>
+Cc:     Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, rookxu <brookxu.cn@gmail.com>
+Subject: [RFC v2 0/8] ext4: Convert inode preallocation list to an rbtree
+Date:   Tue, 27 Sep 2022 14:46:40 +0530
+Message-Id: <cover.1664269665.git.ojaswin@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: qt3gFon_j7ZSsH4zAzt7eTZ49R-FOoVg
+X-Proofpoint-GUID: OhPoUcWMgYabb9sGVfRDXHS9RGmF-RbJ
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909231205.14009-9-ricardo.neri-calderon@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-27_02,2022-09-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ spamscore=0 clxscore=1015 adultscore=0 mlxlogscore=911 malwarescore=0
+ impostorscore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209270053
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 04:11:50PM -0700, Ricardo Neri wrote:
+This patch series aim to improve the performance and scalability of
+inode preallocation by changing inode preallocation linked list to an
+rbtree. I've ran xfstests quick on this series and plan to run auto group
+as well to confirm we have no regressions.
 
-> +static void compute_ilb_sg_task_class_scores(struct sg_lb_task_class_stats *class_sgs,
-> +					     struct sg_lb_stats *sgs,
-> +					     int dst_cpu)
-> +{
-> +	int group_score, group_score_without, score_on_dst_cpu;
-> +	int busy_cpus = sgs->group_weight - sgs->idle_cpus;
-> +
-> +	if (!sched_task_classes_enabled())
-> +		return;
-> +
-> +	/* No busy CPUs in the group. No tasks to move. */
-> +	if (!busy_cpus)
-> +		return;
-> +
-> +	score_on_dst_cpu = arch_get_task_class_score(class_sgs->p_min_score->class,
-> +						     dst_cpu);
-> +
-> +	/*
-> +	 * The simpest case. The single busy CPU in the current group will
-> +	 * become idle after pulling its current task. The destination CPU is
-> +	 * idle.
-> +	 */
-> +	if (busy_cpus == 1) {
-> +		sgs->task_class_score_before = class_sgs->sum_score;
-> +		sgs->task_class_score_after = score_on_dst_cpu;
-> +		return;
-> +	}
-> +
-> +	/*
-> +	 * Now compute the group score with and without the task with the
-> +	 * lowest score. We assume that the tasks that remain in the group share
-> +	 * the CPU resources equally.
-> +	 */
-> +	group_score = class_sgs->sum_score / busy_cpus;
-> +
-> +	group_score_without =  (class_sgs->sum_score - class_sgs->min_score) /
-> +			       (busy_cpus - 1);
-> +
-> +	sgs->task_class_score_after = group_score_without + score_on_dst_cpu;
-> +	sgs->task_class_score_before = group_score;
-> +}
+** Shortcomings of existing implementation **
 
-That's just plain broken; also lots of cleanups done...
+Right now, we add all the inode preallocations(PAs) to a per inode linked
+list ei->i_prealloc_list. To prevent the list from growing infinitely
+during heavy sparse workloads, the lenght of this list was capped at 512
+and a trimming logic was added to trim the list whenever it grew over
+this threshold, in patch 27bc446e2. This was discussed in detail in the
+following lore thread [1].
 
----
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -8405,12 +8405,14 @@ struct sg_lb_stats {
- 	enum group_type group_type;
- 	unsigned int group_asym_packing; /* Tasks should be moved to preferred CPU */
- 	unsigned long group_misfit_task_load; /* A CPU has a task too big for its capacity */
--	long task_class_score_after; /* Prospective task-class score after load balancing */
--	long task_class_score_before; /* Task-class score before load balancing */
- #ifdef CONFIG_NUMA_BALANCING
- 	unsigned int nr_numa_running;
- 	unsigned int nr_preferred_running;
- #endif
-+#ifdef CONFIG_SCHED_TASK_CLASSES
-+	long task_class_score_after;  /* Prospective task-class score after load balancing */
-+	long task_class_score_before; /* Task-class score before load balancing */
-+#endif
- };
- 
- /*
-@@ -8689,58 +8691,54 @@ group_type group_classify(unsigned int i
- }
- 
- struct sg_lb_task_class_stats {
--	/*
--	 * Score of the task with lowest score among the current tasks (i.e.,
--	 * runqueue::curr) of all runqueues in the scheduling group.
--	 */
--	int min_score;
--	/*
--	 * Sum of the scores of the current tasks of all runqueues in the
--	 * scheduling group.
--	 */
--	long sum_score;
--	/* The task with score equal to @min_score */
--	struct task_struct *p_min_score;
-+	int min_score;                   /* Min(rq->curr->score) */
-+	int min_class;
-+	long sum_score;                  /* Sum(rq->curr->score) */
- };
- 
- #ifdef CONFIG_SCHED_TASK_CLASSES
--static void init_rq_task_classes_stats(struct sg_lb_task_class_stats *class_sgs)
-+static void init_sg_lb_task_class_stats(struct sg_lb_task_class_stats *sgcs)
- {
--	class_sgs->min_score = INT_MAX;
--	class_sgs->sum_score = 0;
--	class_sgs->p_min_score = NULL;
-+	*sgcs = (struct sg_lb_task_class_stats){
-+		.min_score = INT_MAX,
-+	};
- }
- 
- /** Called only if cpu_of(@rq) is not idle and has tasks running. */
--static void update_rq_task_classes_stats(struct sg_lb_task_class_stats *class_sgs,
--					 struct rq *rq)
-+static void update_sg_lb_task_class_stats(struct sg_lb_task_class_stats *sgcs,
-+					  struct rq *rq)
- {
--	int score;
-+	struct task_struct *curr;
-+	int class, score;
- 
- 	if (!sched_task_classes_enabled())
- 		return;
- 
-+	curr = rcu_dereference(rq->curr);
-+	if (!curr || (curr->flags & PF_EXITING) || is_idle_task(curr))
-+		return;
-+
- 	/*
- 	 * TODO: if nr_running > 1 we may want go through all the tasks behind
- 	 * rq->curr.
- 	 */
--	score = arch_get_task_class_score(rq->curr->class, cpu_of(rq));
--
--	class_sgs->sum_score += score;
-+	class = curr->class;
-+	score = arch_get_task_class_score(class, cpu_of(rq));
- 
--	if (score >= class_sgs->min_score)
--		return;
-+	sgcs->sum_score += score;
- 
--	class_sgs->min_score = score;
--	class_sgs->p_min_score = rq->curr;
-+	if (score < sgcs->min_score) {
-+		sgcs->min_score = score;
-+		sgcs->min_class = class;
-+	}
- }
- 
--static void compute_ilb_sg_task_class_scores(struct sg_lb_task_class_stats *class_sgs,
--					     struct sg_lb_stats *sgs,
--					     int dst_cpu)
-+static void update_sg_lb_stats_scores(struct sg_lb_task_class_stats *sgcs,
-+				      struct sg_lb_stats *sgs,
-+				      int dst_cpu)
- {
--	int group_score, group_score_without, score_on_dst_cpu;
- 	int busy_cpus = sgs->group_weight - sgs->idle_cpus;
-+	long before, after;
- 
- 	if (!sched_task_classes_enabled())
- 		return;
-@@ -8749,32 +8747,18 @@ static void compute_ilb_sg_task_class_sc
- 	if (!busy_cpus)
- 		return;
- 
--	score_on_dst_cpu = arch_get_task_class_score(class_sgs->p_min_score->class,
--						     dst_cpu);
-+	score_on_dst_cpu = arch_get_task_class_score(sgcs->min_class, dst_cpu);
- 
--	/*
--	 * The simpest case. The single busy CPU in the current group will
--	 * become idle after pulling its current task. The destination CPU is
--	 * idle.
--	 */
--	if (busy_cpus == 1) {
--		sgs->task_class_score_before = class_sgs->sum_score;
--		sgs->task_class_score_after = score_on_dst_cpu;
--		return;
--	}
-+	before = sgcs->sum_score
-+	after  = before - sgcs->min_score + score_on_dst_cpu;
- 
--	/*
--	 * Now compute the group score with and without the task with the
--	 * lowest score. We assume that the tasks that remain in the group share
--	 * the CPU resources equally.
--	 */
--	group_score = class_sgs->sum_score / busy_cpus;
--
--	group_score_without =  (class_sgs->sum_score - class_sgs->min_score) /
--			       (busy_cpus - 1);
-+	if (busy_cpus > 1) {
-+		before /= busy_cpus;
-+		after  /= busy_cpus;
-+	}
- 
--	sgs->task_class_score_after = group_score_without + score_on_dst_cpu;
--	sgs->task_class_score_before = group_score;
-+	sgs->task_class_score_before = before;
-+	sgs->task_class_score_after  = after;
- }
- 
- /**
-@@ -8832,18 +8816,19 @@ static bool sched_asym_class_pick(struct
- }
- 
- #else /* CONFIG_SCHED_TASK_CLASSES */
--static void update_rq_task_classes_stats(struct sg_lb_task_class_stats *class_sgs,
--					 struct rq *rq)
-+
-+static void init_sg_lb_task_class_stats(struct sg_lb_task_class_stats *sgcs)
- {
- }
- 
--static void init_rq_task_classes_stats(struct sg_lb_task_class_stats *class_sgs)
-+static void update_sg_lb_task_class_stats(struct sg_lb_task_class_stats *sgcs,
-+					  struct rq *rq)
- {
- }
- 
--static void compute_ilb_sg_task_class_scores(struct sg_lb_task_class_stats *class_sgs,
--					     struct sg_lb_stats *sgs,
--					     int dst_cpu)
-+static void update_sg_lb_stats_scores(struct sg_lb_task_class_stats *sgcs,
-+				      struct sg_lb_stats *sgs,
-+				      int dst_cpu)
- {
- }
- 
-@@ -8854,7 +8839,6 @@ static bool sched_asym_class_pick(struct
- {
- 	return false;
- }
--
- #endif /* CONFIG_SCHED_TASK_CLASSES */
- 
- /**
-@@ -8979,11 +8963,11 @@ static inline void update_sg_lb_stats(st
- 				      struct sg_lb_stats *sgs,
- 				      int *sg_status)
- {
--	struct sg_lb_task_class_stats class_stats;
-+	struct sg_lb_task_class_stats sgcs;
- 	int i, nr_running, local_group;
- 
- 	memset(sgs, 0, sizeof(*sgs));
--	init_rq_task_classes_stats(&class_stats);
-+	init_sg_lb_task_class_stats(&sgcs);
- 
- 	local_group = group == sds->local;
- 
-@@ -9034,7 +9018,7 @@ static inline void update_sg_lb_stats(st
- 				sgs->group_misfit_task_load = load;
- 		}
- 
--		update_rq_task_classes_stats(&class_stats, rq);
-+		update_sg_lb_task_class_stats(&sgcs, rq);
- 	}
- 
- 	sgs->group_capacity = group->sgc->capacity;
-@@ -9045,7 +9029,7 @@ static inline void update_sg_lb_stats(st
- 	if (!local_group && env->sd->flags & SD_ASYM_PACKING &&
- 	    env->idle != CPU_NOT_IDLE && sgs->sum_h_nr_running &&
- 	    sched_asym(env, sds, sgs, group)) {
--		compute_ilb_sg_task_class_scores(&class_stats, sgs, env->dst_cpu);
-+		update_sg_lb_stats_scores(&sgcs, sgs, env->dst_cpu);
- 		sgs->group_asym_packing = 1;
- 	}
- 
+[1] https://lore.kernel.org/all/d7a98178-056b-6db5-6bce-4ead23f4a257@gmail.com/
+
+But from our testing, we noticed that the current implementation still
+had issues with scalability as the performance degraded when the PAs
+stored in the list grew. Most of the degradation was seen in
+ext4_mb_normalize_request() and ext4_mb_use_preallocated() functions as
+they iterated the inode PA list.
+
+** Improvements in this patchset **
+
+To counter the above shortcomings, this patch series modifies the inode
+PA list to an rbtree, which:
+
+- improves the performance of functions discussed above due to the
+  improved lookup speed.
+  
+- improves scalability by changing lookup complexity from O(n) to
+  O(logn). We no longer need the trimming logic as well.
+
+As a result, the RCU implementation was needed to be changed since
+lockless lookups of rbtrees do have some issues like skipping
+subtrees. Hence, RCU was replaced with read write locks for inode
+PAs. More information can be found in Patch 7 (that has the core
+changes).
+
+** Performance Numbers **
+
+Performance numbers were collected with and without these patches, using an
+nvme device. Details of tests/benchmarks used are as follows:
+
+Test 1: 200,000 1KiB sparse writes using (fio)
+Test 2: Fill 5GiB w/ random writes, 1KiB burst size using (fio)
+Test 3: Test 2, but do 4 sequential writes before jumping to random
+        offset (fio)
+Test 4: Fill 8GB FS w/ 2KiB files, 64 threads in parallel (fsmark)
+
++──────────+──────────────────+────────────────+──────────────────+──────────────────+
+|          |            nodelalloc             |              delalloc               |
++──────────+──────────────────+────────────────+──────────────────+──────────────────+
+|          | Unpatched        | Patched        | Unpatched        | Patched          |
++──────────+──────────────────+────────────────+──────────────────+──────────────────+
+| Test 1   | 11.8 MB/s        | 23.3 MB/s      | 27.2 MB/s        | 63.7 MB/s        |
+| Test 2   | 1617 MB/s        | 1740 MB/s      | 2223 MB/s        | 2208 MB/s        |
+| Test 3   | 1715 MB/s        | 1823 MB/s      | 2346 MB/s        | 2364 MB/s        |
+| Test 4   | 14284 files/sec  | 14347 files/s  | 13762 files/sec  | 13882 files/sec  |
++──────────+──────────────────+────────────────+──────────────────+──────────────────+
+
+In test 1, we almost see 100 to 200% increase in performance due to the high number
+of sparse writes highlighting the bottleneck in the unpatched kernel. Further, on running
+"perf diff patched.data unpatched.data" for test 1, we see something as follows:
+
+     2.83%    +29.67%  [kernel.vmlinux]          [k] _raw_spin_lock
+												...
+               +3.33%  [ext4]                    [k] ext4_mb_normalize_request.constprop.30
+     0.25%     +2.81%  [ext4]                    [k] ext4_mb_use_preallocated
+
+Here we can see that the biggest different is in the _raw_spin_lock() function
+of unpatched kernel, that is called from `ext4_mb_normalize_request()` as seen
+here:
+
+    32.47%  fio              [kernel.vmlinux]            [k] _raw_spin_lock
+            |
+            ---_raw_spin_lock
+               |          
+                --32.22%--ext4_mb_normalize_request.constprop.30
+
+This is comming from the spin_lock(&pa->pa_lock) that is called for
+each PA that we iterate over, in ext4_mb_normalize_request(). Since in rbtrees,
+we lookup log(n) PAs rather than n PAs, this spin lock is taken less frequently,
+as evident in the perf. 
+
+Furthermore, we see some improvements in other tests however since they don't
+exercise the PA traversal path as much as test 1, the improvements are relatively
+smaller. 
+
+** Summary of patches **
+
+- Patch 1-5: Abstractions/Minor optimizations
+- Patch 6: Split common inode & locality group specific fields to a union
+- Patch 7: Core changes to move inode PA logic from list to rbtree
+- Patch 8: Remove the trim logic as it is not needed
+
+** Changes since v2 **
+- Added a function definition that was deleted during v2 rebase
+
+** Changes since v1 **
+
+- Rebased over ext4 dev branch which includes Jan's patchset [1]
+  that changed some code in mballoc.c
+
+[1] https://lore.kernel.org/all/20220908091301.147-1-jack@suse.cz/
+
+Ojaswin Mujoo (8):
+  ext4: Stop searching if PA doesn't satisfy non-extent file
+  ext4: Refactor code related to freeing PAs
+  ext4: Refactor code in ext4_mb_normalize_request() and
+    ext4_mb_use_preallocated()
+  ext4: Move overlap assert logic into a separate function
+  ext4: Abstract out overlap fix/check logic in
+    ext4_mb_normalize_request()
+  ext4: Convert pa->pa_inode_list and pa->pa_obj_lock into a union
+  ext4: Use rbtrees to manage PAs instead of inode i_prealloc_list
+  ext4: Remove the logic to trim inode PAs
+
+ Documentation/admin-guide/ext4.rst |   3 -
+ fs/ext4/ext4.h                     |   5 +-
+ fs/ext4/mballoc.c                  | 437 ++++++++++++++++++-----------
+ fs/ext4/mballoc.h                  |  17 +-
+ fs/ext4/super.c                    |   4 +-
+ fs/ext4/sysfs.c                    |   2 -
+ 6 files changed, 293 insertions(+), 175 deletions(-)
+
+-- 
+2.31.1
+
