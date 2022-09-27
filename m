@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504765EC313
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC0E5EC31B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbiI0Mlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
+        id S231557AbiI0Mml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbiI0Ml2 (ORCPT
+        with ESMTP id S230394AbiI0Mmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:41:28 -0400
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3E6D70D3;
-        Tue, 27 Sep 2022 05:41:12 -0700 (PDT)
+        Tue, 27 Sep 2022 08:42:35 -0400
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D18D4314;
+        Tue, 27 Sep 2022 05:42:33 -0700 (PDT)
 Received: from [192.168.1.101] (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 821E33F5A3;
-        Tue, 27 Sep 2022 14:41:10 +0200 (CEST)
-Message-ID: <149af8eb-cfa9-c2f1-1aa6-6057df3aa03d@somainline.org>
-Date:   Tue, 27 Sep 2022 14:41:10 +0200
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C840C3EBA2;
+        Tue, 27 Sep 2022 14:42:31 +0200 (CEST)
+Message-ID: <b70db7b0-42a7-5d89-1b9b-26416a82e719@somainline.org>
+Date:   Tue, 27 Sep 2022 14:42:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH 11/15] dt-bindings: pinctrl: qcom,sm8250: add
- gpio-reserved-ranges and gpio-line-names
+Subject: Re: [PATCH 1/2] ARM: dts: qcom: fix msm8974 tsens compatible
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220925110608.145728-1-krzysztof.kozlowski@linaro.org>
- <20220925110608.145728-12-krzysztof.kozlowski@linaro.org>
+References: <20220925161317.76356-1-luca@z3ntu.xyz>
 From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220925110608.145728-12-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220925161317.76356-1-luca@z3ntu.xyz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -54,35 +51,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 25.09.2022 13:06, Krzysztof Kozlowski wrote:
-> Document common GPIO properties (gpio-reserved-ranges and
-> gpio-line-names), already used on qrb5165-rb5 board.
+On 25.09.2022 18:13, Luca Weiss wrote:
+> Bindings mandate the use of the fallback compatible qcom,tsens-v0_1 for
+> msm8974. Add it to fix the warning.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 > ---
->  .../devicetree/bindings/pinctrl/qcom,sm8250-pinctrl.yaml   | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm8250-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm8250-pinctrl.yaml
-> index c44d02d28bc9..d7d8e5d3b659 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sm8250-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm8250-pinctrl.yaml
-> @@ -49,6 +49,13 @@ properties:
->    gpio-ranges:
->      maxItems: 1
->  
-> +  gpio-reserved-ranges:
-> +    minItems: 1
-Not sure about this.. However, this will apply to 99.9% of boards, so:
-
 Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
 Konrad
-> +    maxItems: 90
-> +
-> +  gpio-line-names:
-> +    maxItems: 180
-> +
->    wakeup-parent: true
+>  arch/arm/boot/dts/qcom-apq8084.dtsi | 2 +-
+>  arch/arm/boot/dts/qcom-msm8974.dtsi | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom-apq8084.dtsi
+> index f2fb7c975af8..defc0602d750 100644
+> --- a/arch/arm/boot/dts/qcom-apq8084.dtsi
+> +++ b/arch/arm/boot/dts/qcom-apq8084.dtsi
+> @@ -258,7 +258,7 @@ tsens_backup: backup@440 {
+>  		};
 >  
->  #PIN CONFIGURATION NODES
+>  		tsens: thermal-sensor@fc4a8000 {
+> -			compatible = "qcom,msm8974-tsens";
+> +			compatible = "qcom,msm8974-tsens", "qcom,tsens-v0_1";
+>  			reg = <0xfc4a9000 0x1000>, /* TM */
+>  			      <0xfc4a8000 0x1000>; /* SROT */
+>  			nvmem-cells = <&tsens_calib>, <&tsens_backup>;
+> diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
+> index 7a9be0acf3f5..cf8af99a4864 100644
+> --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+> @@ -1116,7 +1116,7 @@ cnoc: interconnect@fc480000 {
+>  		};
+>  
+>  		tsens: thermal-sensor@fc4a9000 {
+> -			compatible = "qcom,msm8974-tsens";
+> +			compatible = "qcom,msm8974-tsens", "qcom,tsens-v0_1";
+>  			reg = <0xfc4a9000 0x1000>, /* TM */
+>  			      <0xfc4a8000 0x1000>; /* SROT */
+>  			nvmem-cells = <&tsens_calib>, <&tsens_backup>;
