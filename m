@@ -2,104 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6CD5ECF89
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7FF5ECF8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbiI0VuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 17:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        id S232334AbiI0Vux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 17:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231986AbiI0VuA (ORCPT
+        with ESMTP id S232225AbiI0Vuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 17:50:00 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A674662E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:49:55 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id 5-20020a5d9c05000000b006a44709a638so6677879ioe.11
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:49:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=t7n6NgdEt64WMJHmFOGwpy0sdeA+FQhPjaVwhNj/KWY=;
-        b=482z/uzaZrcCvs0rMtOCZqK5EqygWrfNgJtCgSFRhjOFDvWqEzOA+HdEi9e9opE9l6
-         CJdP9xSyeYnUHS6WPXYQ0npTIJLymk47mP9daqfkIJmCl7AkkTUFGEuKlQuT9fIzeOxv
-         2Hox2bJrfUsNW1ANIuzI1rcRJ+AsjuI8R5RC6kKpXWtyoSRbCo0PqTGGGM8Pp7dfkqat
-         wWno71vkr+skV+dk+RKNN4CGt67IasFHeIYwSqXc3FqOHG9H14zprxNQ2n7HjiOyTA0H
-         dBo+z+KReznSSfRcbMIV/2X9pWQs8lMdWboeld6VajhtotUxL2G74Sbs2w/vn5qZwv0E
-         wfrg==
-X-Gm-Message-State: ACrzQf2nD0NJvFfcwyWCgzUbx1gsEGJAKIgF5HptD+Gv0AmCApu9gG4G
-        ZR06TtCE9ioXcvKvT2FLdLC7Av87RxJrvKiYo6KZa+EaBwcg
-X-Google-Smtp-Source: AMsMyM4f9kGwLOhUyympIIOPzw9J6bJHDrpBTm/O9FCy4D1dN2Nabi9vn8dZ8NKXq4AIlu4YP6ovf1xIiQ+dxwMlSI1WG0GbyRbL
+        Tue, 27 Sep 2022 17:50:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0980588A1A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:50:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 004A561B44
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 21:50:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 822C5C433C1;
+        Tue, 27 Sep 2022 21:50:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664315422;
+        bh=qbvpUk19U724n7Xo8id1wbrWsOfHAtzZ0isQheQURRc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y6M1c8A3o+WZ8ddyhtgnEpVB2sxw25nYO3RSed9jYEgsI7firVHAkfkGbIPDHy0Rf
+         /VLyV0eXe3brc5TTletZAz8pxO7RHuSAVyvylymekgqGk31mnQeIfG1g8hH8O0hW6C
+         YrkqhigigiwJD67co9RbzVNZa1X49kjgFNsyfUSWABwxUHXogP8iE8Ns6sJljiaH3e
+         DEzVfBx+hxXptO0L2Z3xprTgZ3phTfqhwtgAA2wPOLOL+d5NIWYcnkLDw6rnVGV1gz
+         SMUEdeDk0ryUgs+iMEaxM+Eg47a3Y7ymM7YunStyelXpOFgdmM03aygNKZ/WK0l9bN
+         lxxyARnRdKW/Q==
+Date:   Tue, 27 Sep 2022 14:50:19 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Li Zetao <lizetao1@huawei.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kirill.shutemov@linux.intel.com, akpm@linux-foundation.org,
+        ndesaulniers@google.com, masahiroy@kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, michael.roth@amd.com,
+        brijesh.singh@amd.com, venu.busireddy@oracle.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next v2 0/2] Remove unused variables in x86/boot
+Message-ID: <YzNwG3iWz+qfNCC9@dev-arch.thelio-3990X>
+References: <20220927081512.2456624-1-lizetao1@huawei.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:b788:0:b0:356:7430:fd30 with SMTP id
- f8-20020a02b788000000b003567430fd30mr15693521jam.27.1664315395104; Tue, 27
- Sep 2022 14:49:55 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 14:49:55 -0700
-In-Reply-To: <000000000000df57ee05e9978cce@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000eb6db305e9af9f59@google.com>
-Subject: Re: [syzbot] UBSAN: shift-out-of-bounds in jfs_open
-From:   syzbot <syzbot+027aa1f5f8487ba60a97@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927081512.2456624-1-lizetao1@huawei.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi Li,
 
-HEAD commit:    3800a713b607 Merge tag 'mm-hotfixes-stable-2022-09-26' of ..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1073ecd4880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
-dashboard link: https://syzkaller.appspot.com/bug?extid=027aa1f5f8487ba60a97
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=103ceaa8880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=125bd024880000
+On Tue, Sep 27, 2022 at 08:15:10AM +0000, Li Zetao wrote:
+> This patch set removes some unused variables in x86/boot, and add the
+> "-Wall" flag to Makefile, which is the old problem of x86 not sharing
+> makefiles.
+> 
+> Changes since v1:
+> - Add "-Wall" flag to x86/boot/compressed/Makefile
+> - Remove unused variables "et" in efi_get_system_table() and "ret" in
+>   efi_get_conf_table()
+> - Remove unused variables "ret" in __efi_get_rsdp_addr() and 
+>   "nr_tables" in efi_get_rsdp_addr()
+> 
+> v1 at:
+> https://lore.kernel.org/all/20220923113209.3046960-1-lizetao1@huawei.com/
+> 
+> Li Zetao (2):
+>   x86/boot/compressed: Add "-Wall" flag to Makefile
+>   x86/boot: Remove unused variables
+> 
+>  arch/x86/boot/compressed/Makefile | 2 +-
+>  arch/x86/boot/compressed/acpi.c   | 2 --
+>  arch/x86/boot/compressed/efi.c    | 2 --
+>  arch/x86/boot/compressed/sev.c    | 1 -
+>  4 files changed, 1 insertion(+), 6 deletions(-)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+027aa1f5f8487ba60a97@syzkaller.appspotmail.com
+I took this series for a spin with clang and found a few extra warnings.
 
-================================================================================
-UBSAN: shift-out-of-bounds in fs/jfs/file.c:65:20
-shift exponent 8205 is too large for 64-bit type '__u64' (aka 'unsigned long long')
-CPU: 1 PID: 3690 Comm: syz-executor342 Not tainted 6.0.0-rc7-syzkaller-00029-g3800a713b607 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_shift_out_of_bounds+0x33d/0x3b0 lib/ubsan.c:322
- jfs_open+0x3a2/0x3d0 fs/jfs/file.c:65
- do_dentry_open+0x777/0x1180 fs/open.c:880
- do_open fs/namei.c:3557 [inline]
- path_openat+0x25fc/0x2df0 fs/namei.c:3691
- do_filp_open+0x264/0x4f0 fs/namei.c:3718
- do_sys_openat2+0x124/0x4e0 fs/open.c:1313
- do_sys_open fs/open.c:1329 [inline]
- __do_sys_openat fs/open.c:1345 [inline]
- __se_sys_openat fs/open.c:1340 [inline]
- __x64_sys_openat+0x243/0x290 fs/open.c:1340
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f2044cd6ed9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f2044c4c278 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00007f2044d624b0 RCX: 00007f2044cd6ed9
-RDX: 0000000000161842 RSI: 000000002000c380 RDI: 00000000ffffff9c
-RBP: 00007f2044d2de4c R08: 00007f2044c4c700 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f2044d29108
-R13: 0030656c69662f2e R14: 00007f2044c4c400 R15: 00007f2044d624b8
- </TASK>
-================================================================================
+1.
 
+  In file included from arch/x86/boot/compressed/misc.c:15:
+  In file included from arch/x86/boot/compressed/misc.h:24:
+  In file included from ./include/linux/elf.h:6:
+  In file included from ./arch/x86/include/asm/elf.h:8:
+  In file included from ./include/linux/thread_info.h:60:
+  ./arch/x86/include/asm/thread_info.h:175:13: warning: calling '__builtin_frame_address' with a nonzero argument is unsafe [-Wframe-address]
+          oldframe = __builtin_frame_address(1);
+                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+  ./arch/x86/include/asm/thread_info.h:177:11: warning: calling '__builtin_frame_address' with a nonzero argument is unsafe [-Wframe-address]
+                  frame = __builtin_frame_address(2);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This warning is disabled in the main Makefile for this reason so we
+should just be able to disable it:
+
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 10abb7c45d04..3f004567f3d5 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -43,6 +43,7 @@ KBUILD_CFLAGS += -mno-mmx -mno-sse
+ KBUILD_CFLAGS += -ffreestanding -fshort-wchar
+ KBUILD_CFLAGS += -fno-stack-protector
+ KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member)
++KBUILD_CFLAGS += $(call cc-disable-warning, frame-address)
+ KBUILD_CFLAGS += $(call cc-disable-warning, gnu)
+ KBUILD_CFLAGS += -Wno-pointer-sign
+ KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
+
+2.
+
+  arch/x86/boot/compressed/kaslr.c:627:6: warning: unused variable 'i' [-Wunused-variable]
+          int i;
+              ^
+
+This happens when CONFIG_MEMORY_HOTREMOVE or CONFIG_ACPI are 'n'. I
+think it can just be fixed by aligning arch/x86/boot/compressed with the
+rest of the kernel and explicitly compiling with '-std=gnu11', which
+will allow us to declare the variable within the for loop, like so.
+
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 3f004567f3d5..6c7e366a437b 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -34,7 +34,7 @@ targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
+ # be valid.
+ KBUILD_CFLAGS := -m$(BITS) -O2 $(CLANG_FLAGS)
+ KBUILD_CFLAGS += -fno-strict-aliasing -fPIE
+-KBUILD_CFLAGS += -Wundef -Wall
++KBUILD_CFLAGS += -Wundef -Wall -std=gnu11
+ KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
+ cflags-$(CONFIG_X86_32) := -march=i386
+ cflags-$(CONFIG_X86_64) := -mcmodel=small -mno-red-zone
+diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
+index 4a3f223973f4..be859c7e7f6b 100644
+--- a/arch/x86/boot/compressed/kaslr.c
++++ b/arch/x86/boot/compressed/kaslr.c
+@@ -624,7 +624,6 @@ static bool process_mem_region(struct mem_vector *region,
+ 			       unsigned long minimum,
+ 			       unsigned long image_size)
+ {
+-	int i;
+ 	/*
+ 	 * If no immovable memory found, or MEMORY_HOTREMOVE disabled,
+ 	 * use @region directly.
+@@ -644,7 +643,7 @@ static bool process_mem_region(struct mem_vector *region,
+ 	 * If immovable memory found, filter the intersection between
+ 	 * immovable memory and @region.
+ 	 */
+-	for (i = 0; i < num_immovable_mem; i++) {
++	for (int i = 0; i < num_immovable_mem; i++) {
+ 		u64 start, end, entry_end, region_end;
+ 		struct mem_vector entry;
+ 
+
+Additionally, I think these two patches should be reordered so that the
+warnings are fixed before they are enabled.
+
+With those comments addressed, consider the series:
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+Cheers,
+Nathan
