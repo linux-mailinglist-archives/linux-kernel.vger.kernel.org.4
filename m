@@ -2,68 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADDA5EC244
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791445EC26B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiI0MRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
+        id S231810AbiI0MUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbiI0MRH (ORCPT
+        with ESMTP id S232310AbiI0MTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:17:07 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EAA97EF7;
-        Tue, 27 Sep 2022 05:17:03 -0700 (PDT)
+        Tue, 27 Sep 2022 08:19:51 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB0812FF07;
+        Tue, 27 Sep 2022 05:18:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664281024; x=1695817024;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=QXo6V+qO8Ns2LyPwemxbLMvrNu4V0W0g1GllJpDy0co=;
-  b=CVHtrza+MEI7GAbbPvJVuuNTGK7p5JAzoRa7j/tbfQOm8fuPfdoUFk9m
-   u5oidpc3jBQboZX9Hh6N/mrhNPaH6jO5dj20M5xkAD38+VK4nfxebHHJF
-   1EenqRglvAfxHzbfiTmDO1aBmbPV+4FqJ/S9EYmrUDOrRqTWIcPNENpFL
-   GyX9nZsc3yk495FpniUjG8Fl69ZsuqVxs93781qefd3KAIcD62dHstMho
-   SN0c3o6ib5FBd2+T6qu/UeBJYApxOw7MKrqwN7ZMy3mRSGPiW3sNIyGv4
-   yDIwu0HvV6DN31jmXevKRCaSba/ViliYsZLm5IVcgpTbOal3TT9rZRY5R
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="281021131"
+  t=1664281126; x=1695817126;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OFIxxBkiaCDaU7hdmWCgva7sjv3x1WGTNlqGM1oQtNQ=;
+  b=QjkNRJ9JABpK5KuGM6vW13ifDgF1zvv2NkXQaswwpopi4XOrqXvNEW0a
+   zpn3E9p4vm/ehX8quUW0x0BcZv29fvHaAW/CgJ7m0T7qXQe0amKRrEDAS
+   EzB9PNHcvJpz0v5O31ewC6zMNtvXzKqa8GeDCBYoV0lCNy6b/2IZB1DBT
+   Id0ypUSxa2I1GHDoKY+PdTwG9seHh2aJKRcz1VEVKBPDv0rkhfFI2ij6M
+   HzvJcvXyiqAF0KmEO1wuXT7fF/4llRwNNO0kHo3UcyfJOgYiuwzhcscEj
+   KvJSp43ftV8CWZlWWf9OWIxVC5CY0jzHRUjgnkJrYa+TZkir+NeUE9ezV
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="302782109"
 X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="281021131"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:17:03 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="689973135"
+   d="scan'208";a="302782109"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:18:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="599160114"
 X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="689973135"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:17:02 -0700
-Date:   Tue, 27 Sep 2022 05:17:14 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        tianfei.zhang@intel.com, corbet@lwn.net,
+   d="scan'208";a="599160114"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 27 Sep 2022 05:18:06 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1od9XD-008RHv-1p;
+        Tue, 27 Sep 2022 15:17:59 +0300
+Date:   Tue, 27 Sep 2022 15:17:59 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     Olof Johansson <olof@lixom.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH v2 4/6] fpga: dfl: add generic support for MSIX
- interrupts
-In-Reply-To: <609e122-f6a0-c0c2-4168-4025dd96a1ac@linux.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2209270516220.2164321@rhweight-WRK1>
-References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com> <20220923121745.129167-5-matthew.gerlach@linux.intel.com> <a602677-78ac-23a0-1a63-96b325595998@linux.intel.com> <alpine.DEB.2.22.394.2209260734490.363733@rhweight-WRK1>
- <609e122-f6a0-c0c2-4168-4025dd96a1ac@linux.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pali Rohar <pali@kernel.org>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] Fix console probe delay when stdout-path isn't set
+Message-ID: <YzLp9yXgoJmy5YU8@smile.fi.intel.com>
+References: <20220701012647.2007122-1-saravanak@google.com>
+ <YwS5J3effuHQJRZ5@kroah.com>
+ <CAOesGMivJ5Q-jdeGKw32yhjmNiYctHjpEAnoMMRghYqWD2m2tw@mail.gmail.com>
+ <YygsEtxKz8dsEstc@kroah.com>
+ <CAOesGMh5GHCONTQ9M1Ro7zW-hkL_1F7Xt=xRV0vYSfPY=7LYkQ@mail.gmail.com>
+ <CAL_JsqK7auA8coB3DCqSDKw1ept_yQihVs-Me3bvU923os23xg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1124427466-1664281041=:2164321"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqK7auA8coB3DCqSDKw1ept_yQihVs-Me3bvU923os23xg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,140 +168,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Mon, Sep 26, 2022 at 01:25:05PM -0500, Rob Herring wrote:
+> On Mon, Sep 19, 2022 at 5:56 PM Olof Johansson <olof@lixom.net> wrote:
+> >
+> > On Mon, Sep 19, 2022 at 1:44 AM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Sun, Sep 18, 2022 at 08:44:27PM -0700, Olof Johansson wrote:
+> > > > On Tue, Aug 23, 2022 at 8:37 AM Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org> wrote:
+> > > > >
+> > > > > On Thu, Jun 30, 2022 at 06:26:38PM -0700, Saravana Kannan wrote:
+> > > > > > These patches are on top of driver-core-next.
+> > > > > >
+> > > > > > Even if stdout-path isn't set in DT, this patch should take console
+> > > > > > probe times back to how they were before the deferred_probe_timeout
+> > > > > > clean up series[1].
+> > > > >
+> > > > > Now dropped from my queue due to lack of a response to other reviewer's
+> > > > > questions.
+> > > >
+> > > > What happened to this patch? I have a 10 second timeout on console
+> > > > probe on my SiFive Unmatched, and I don't see this flag being set for
+> > > > the serial driver. In fact, I don't see it anywhere in-tree. I can't
+> > > > seem to locate another patchset from Saravana around this though, so
+> > > > I'm not sure where to look for a missing piece for the sifive serial
+> > > > driver.
+> > > >
+> > > > This is the second boot time regression (this one not fatal, unlike
+> > > > the Layerscape PCIe one) from the fw_devlink patchset.
+> > > >
+> > > > Greg, can you revert the whole set for 6.0, please? It's obviously
+> > > > nowhere near tested enough to go in and I expect we'll see a bunch of
+> > > > -stable fixups due to this if we let it remain in.
+> > >
+> > > What exactly is "the whole set"?  I have the default option fix queued
+> > > up and will send that to Linus later this week (am traveling back from
+> > > Plumbers still), but have not heard any problems about any other issues
+> > > at all other than your report.
+> >
+> > I stand corrected in this case, the issue on the Hifive Unmatched was
+> > a regression due to a PWM clock change -- I just sent a patch for that
+> > (serial driver fix).
+> >
+> > So it seems like as long as the fw_devlink.strict=1 patch is reverted,
+> > things are back to a working state here.
+> >
+> > I still struggle with how the fw_devlink patchset is expected to work
+> > though, since DT is expected to describe the hardware configuration,
+> > and it has no knowledge of whether there are drivers that will be
+> > bound to any referenced supplier devnodes. It's not going to work well
+> > to assume that they will always be bound, and to add 10 second
+> > timeouts for those cases isn't a good solution. Seems like the number
+> > of special cases will keep adding up.
+> 
+> Since the introduction of deferred probe, the kernel has always
+> assumed if there is a device described, then there is or will be a
+> driver for it. The result is you can't use new DTs (if they add
+> providers) with older kernels.
+> 
+> We've ended up with a timeout because no one has come up with a better
+> way to handle it. What the kernel needs is userspace saying "I'm done
+> loading modules", but it's debatable whether that's a good solution
+> too.
 
---8323328-1124427466-1664281041=:2164321
-Content-Type: text/plain; charset=ISO-8859-15; format=flowed
-Content-Transfer-Encoding: 8BIT
+In my opinion the deferred probe is a big hack and that is the root
+cause of the issues we have here and there. It has to be redesigned
+to be mathematically robust. It was an attempt by Andrzej Hajda to
+solve this [1].
 
+[1]: https://events19.linuxfoundation.org/wp-content/uploads/2017/12/Deferred-Problem-Issues-With-Complex-Dependencies-Between-Devices-in-Linux-Kernel-Andrzej-Hajda-Samsung.pdf
 
-
-On Tue, 27 Sep 2022, Ilpo Järvinen wrote:
-
-> On Mon, 26 Sep 2022, matthew.gerlach@linux.intel.com wrote:
->
->>
->>
->> On Fri, 23 Sep 2022, Ilpo Järvinen wrote:
->>
->>> On Fri, 23 Sep 2022, matthew.gerlach@linux.intel.com wrote:
->>>
->>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>>
->>>> Define and use a DFHv1 parameter to add generic support for MSIX
->>>> interrupts for DFL devices.
->>>>
->>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>> ---
->>>> v2: fix kernel doc
->>>>     clarify use of DFH_VERSION field
->>>> ---
->>>>  drivers/fpga/dfl.c  | 60 +++++++++++++++++++++++++++++++++++++++++----
->>>>  include/linux/dfl.h | 14 +++++++++++
->>>>  2 files changed, 69 insertions(+), 5 deletions(-)
->>>>
->>>> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
->>>> index 1132f3c10440..dfd3f563c92d 100644
->>>> --- a/drivers/fpga/dfl.c
->>>> +++ b/drivers/fpga/dfl.c
->>>> @@ -941,23 +941,22 @@ static int parse_feature_irqs(struct
->>>> build_feature_devs_info *binfo,
->>>>  	void __iomem *base = binfo->ioaddr + ofst;
->>>>  	unsigned int i, ibase, inr = 0;
->>>>  	enum dfl_id_type type;
->>>> -	int virq;
->>>> +	int virq, off;
->>>>  	u64 v;
->>>>
->>>>  	type = feature_dev_id_type(binfo->feature_dev);
->>>>
->>>>  	/*
->>>>  	 * Ideally DFL framework should only read info from DFL header, but
->>>> -	 * current version DFL only provides mmio resources information for
->>>> +	 * current version, DFHv0, only provides mmio resources information
->>>> for
->>>>  	 * each feature in DFL Header, no field for interrupt resources.
->>>>  	 * Interrupt resource information is provided by specific mmio
->>>>  	 * registers of each private feature which supports interrupt. So in
->>>>  	 * order to parse and assign irq resources, DFL framework has to look
->>>>  	 * into specific capability registers of these private features.
->>>>  	 *
->>>> -	 * Once future DFL version supports generic interrupt resource
->>>> -	 * information in common DFL headers, the generic interrupt parsing
->>>> -	 * code will be added. But in order to be compatible to old version
->>>> +	 * DFHv1 supports generic interrupt resource information in DFHv1
->>>> +	 * parameter blocks. But in order to be compatible to old version
->>>>  	 * DFL, the driver may still fall back to these quirks.
->>>>  	 */
->>>>  	if (type == PORT_ID) {
->>>> @@ -981,6 +980,36 @@ static int parse_feature_irqs(struct
->>>> build_feature_devs_info *binfo,
->>>>  		}
->>>>  	}
->>>>
->>>> +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
->>>> +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
->>>> +
->>>> +		v = FIELD_GET(DFH_VERSION, readq(base));
->>>
->>> I'd call this variable version (or ver) if you want to store it but it
->>> would also fit to switch () line so that no extra variable is needed.
->>
->> I will change the v to dfh_ver to be clearer.  I want to store the value
->> because it is used in the default case in the error message.  The error
->> message helps to debug broken FPGA images.
->
-> Right, I missed that (or didn't think it too much and all being called
-> "v" didn't help either :-)).
->
->>>> +			if (FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
->>>> +				off = dfl_find_param(base + DFHv1_PARAM_HDR,
->>>> ofst,
->>>> +						     DFHv1_PARAM_ID_MSIX);
->>>> +				if (off >= 0) {
->>>
->>> I'd reverse these 2 conditions and break when there's nothing to do.
->>
->> I'm not sure what you mean by reversing these conditions because a DFHv1 may
->> or may not have parameters (the first condition), and a DFHv1 may have
->> parameters but may not have a MSI-X parameter (the second condition).
->
-> This is what I meant:
->
-> 		if (!FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v))
-> 			break;
->
-> 		off = dfl_find_param(...);
-> 		if (off < 0)
-> 			break;
->
-> 		ibase = ...
-
-I understand now.  This is a good suggestion because the resulting 
-indentation is better.
-
-Thanks,
-Matthew
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
->
->
-> -- 
-> i.
->
->
->>>> +					ibase = readl(base + DFHv1_PARAM_HDR +
->>>> +						      off +
->>>> DFHv1_PARAM_MSIX_STARTV);
->>>> +					inr = readl(base + DFHv1_PARAM_HDR +
->>>> +						    off +
->>>> DFHv1_PARAM_MSIX_NUMV);
->>>> +					dev_dbg(binfo->dev, "start %d num %d
->>>> fid 0x%x\n",
->>>> +						ibase, inr, fid);
->>>> +				}
->>>> +			}
->>>> +			break;
->
---8323328-1124427466-1664281041=:2164321--
