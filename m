@@ -2,111 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48DB35EC196
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0F65EC197
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbiI0LhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
+        id S231982AbiI0Lh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbiI0LhQ (ORCPT
+        with ESMTP id S232002AbiI0LhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:37:16 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461CF147680
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:37:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4IM+jE9VLx0+P1Re745K602t8IJeLzHdS8BKzt/l1dY=; b=TING0qbybUhPnrUM2MhI4PBEYL
-        k3CBkSTsiGn/WrQL5c0absw1BRtnQxbQRtJ2MK/Jm3snInmCaGDAofUb7d8kTvbbAa+qvWB369sc+
-        QP1aGjKOGYANdV+y+z6c3CrvkuZS/m6AlGR5jYUseJGwIYTVBYrDCHPG5odBA6y+vQiVJTpKHl3pY
-        LGCW2xGNcvyv8x45FcONVDJ7c29lLr7KVoh6BPuAODw94iQ6S9m+ru+4OhdP+O1vZv9zgRnO4e5bb
-        QGIB1wKV4nqBF2f339d2LsbVxD60qMSsUeOSSaRT2rAEtYohMOcMrTGlP46pivT/u/EicEpNNYmoD
-        6734lDaA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1od8tV-00BO04-G3; Tue, 27 Sep 2022 11:36:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2411430024D;
-        Tue, 27 Sep 2022 13:36:54 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 012E62BDDB534; Tue, 27 Sep 2022 13:36:53 +0200 (CEST)
-Date:   Tue, 27 Sep 2022 13:36:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 12/23] thermal: intel: hfi: Convert table_lock to use
- flags-handling variants
-Message-ID: <YzLgVckjbAAfC7jg@hirez.programming.kicks-ass.net>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-13-ricardo.neri-calderon@linux.intel.com>
- <YzLfr49woc1PMOxO@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzLfr49woc1PMOxO@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Sep 2022 07:37:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C6E14D30A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:37:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83EF0B81B83
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 11:37:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BF0EC433D6;
+        Tue, 27 Sep 2022 11:37:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664278630;
+        bh=3PBR6jtbh1qTflhCYVgBgGTgrWQZjL8THBuMEWqh6Ls=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=u9TwBkciHvLbhWtRjmeA9Gi9qYfDxSP8WqasYHlU6mxqB7RpbKwOIdpCu0NObXB7u
+         VNJeLyZMUKsnu9kJUo0xkzCxkX/l3PWB/1EbU1qLbjwYmCDahHNjzyBwaAgBBiVt9V
+         Mz0aedshjFhtf4dpFLEj2jzRso/96UNQ1LDaMYN/QGq+/YS92zDYyW3a0kN+koxuzl
+         dJHvyKP09mcPtRFbwZduf+j0hgjEu9NbEYfueIpRidG/pwbmLKZTPNy3I055+ySzqh
+         xATTTo0EqIlOt7eGM8o48R5Hz25WXtsZT0Q53FVRhO9Tpwh/HRIuqilCJAmASYsOQs
+         +rwK4MujNu4/Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1od8tf-00Cy3R-TZ;
+        Tue, 27 Sep 2022 12:37:08 +0100
+Date:   Tue, 27 Sep 2022 07:37:07 -0400
+Message-ID: <86tu4t6obg.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Arnd Bergmann" <arnd@arndb.de>
+Cc:     "Huacai Chen" <chenhuacai@loongson.cn>,
+        "Thomas Gleixner" <tglx@linutronix.de>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, "Xuefeng Li" <lixuefeng@loongson.cn>,
+        "Huacai Chen" <chenhuacai@gmail.com>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH] irqchip: Make irqchip_init() usable on pure ACPI systems
+In-Reply-To: <e0efb8a9-b4b0-47bf-ab84-ea71c3630f9d@www.fastmail.com>
+References: <20220927045514.2762299-1-chenhuacai@loongson.cn>
+        <e0efb8a9-b4b0-47bf-ab84-ea71c3630f9d@www.fastmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: arnd@arndb.de, chenhuacai@loongson.cn, tglx@linutronix.de, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, chenhuacai@gmail.com, jiaxun.yang@flygoat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 01:34:07PM +0200, Peter Zijlstra wrote:
-> On Fri, Sep 09, 2022 at 04:11:54PM -0700, Ricardo Neri wrote:
+On Tue, 27 Sep 2022 03:51:04 -0400,
+"Arnd Bergmann" <arnd@arndb.de> wrote:
 > 
-> > --- a/drivers/thermal/intel/intel_hfi.c
-> > +++ b/drivers/thermal/intel/intel_hfi.c
-> > @@ -175,9 +175,10 @@ static struct workqueue_struct *hfi_updates_wq;
-> >  static void get_hfi_caps(struct hfi_instance *hfi_instance,
-> >  			 struct thermal_genl_cpu_caps *cpu_caps)
+> On Tue, Sep 27, 2022, at 6:55 AM, Huacai Chen wrote:
+> 
+> > @@ -28,7 +28,9 @@ extern struct of_device_id __irqchip_of_table[];
+> > 
+> >  void __init irqchip_init(void)
 > >  {
-> > +	unsigned long flags;
-> >  	int cpu, i = 0;
-> >  
-> > -	raw_spin_lock_irq(&hfi_instance->table_lock);
-> > +	raw_spin_lock_irqsave(&hfi_instance->table_lock, flags);
-> >  	for_each_cpu(cpu, hfi_instance->cpus) {
-> >  		struct hfi_cpu_data *caps;
-> >  		s16 index;
+> > +#ifdef CONFIG_OF_IRQ
+> >  	of_irq_init(__irqchip_of_table);
+> > +#endif
+> >  	acpi_probe_device_table(irqchip);
+> >  }
 > 
-> ^^^^ Anti-pattern alert!
-> 
-> Now your IRQ latency depends on nr_cpus -- which is a fair fail. The
-> existing code is already pretty crap in that it has the preemption
-> latency depend on nr_cpus.
-> 
-> While I'm here looking at the HFI stuff, did they fix that HFI interrupt
-> broadcast mess already? Sending an interrupt to *all* CPUs is quite
-> insane.
+> I think that #ifdef should be in the include/linux/of_irq.h
+> header, with an empty inline function in the #else path.
 
-Anyway; given the existence of this here loop; why not have something
-like:
+Agreed. Please keep the C code free of #ifdefs if at all possible.
 
-DEFINE_PER_CPU(int, hfi_ipc_class);
+Thanks,
 
-	class = // extract from HFI mess
-	WRITE_ONCE(per_cpu(hfi_ipc_class, cpu), class);
+	M.
 
-And then have the tick use this_cpu_read(hfi_ipc_class)? No extra
-locking required.
+-- 
+Without deviation from the norm, progress is not possible.
