@@ -2,160 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BFB5EBAE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 08:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D72E5EBAEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 08:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiI0GqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 02:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
+        id S230032AbiI0Gqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 02:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiI0GqK (ORCPT
+        with ESMTP id S229538AbiI0Gqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 02:46:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4FF9F757
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 23:46:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A00EB819D2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:46:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 829A8C433D7;
-        Tue, 27 Sep 2022 06:46:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664261165;
-        bh=eEUvxBZsi9LqCvOrkkoLXt0oGQK0hSltb52/gNuFgZc=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=lI+CwghMpzN++0ZUnThnzTvbWp/kmLG3EKJnSz2lqlMmF5N41snJ24ZJd3KOO8Q2i
-         kC19a2HtXl3Wc5T8/FA0EOecRsTNEDRiaTBYueezXngaNLK5kDQ62TH1j7TdWKPDO9
-         Aw4bbd4E+bJFtmVrZ7fPjI15Vp81XO9/TdKClb0hufGU1cYEv5UEMky8iZ7pPPsHfQ
-         ctKj+NxHpm3kJ1poWIkH6Tx7AK7lh88jJI9pFj7WdvSDCjJni/L4riZ3wYQvUQ68V7
-         6Mxf/Z2icQjUnSVyTKl1UpbKOVNmmWGf/3OKKqs12b/ckuROsEKmMbMS6AbM/I3OLV
-         rhFVDPKWrSe+g==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 5057227C0054;
-        Tue, 27 Sep 2022 02:46:04 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 27 Sep 2022 02:46:04 -0400
-X-ME-Sender: <xms:K5wyY55LdtqzTFfDLKVhyXYrIJ0cTmxpm90Lu7DUY7-nij1MOkfKqw>
-    <xme:K5wyY25C7E2eG40bp4EjuLLQWoAVbiMahSdIvObFuCS-adsU8r36Yt4wxtuGbNROb
-    Ab6ZsWuNyLnbXQiszs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegfedgudduhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpeelvefgudeiheefledttedthfffgfekudegkeelffdtiedvgfevieet
-    teekheffveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhguodhmvghsmhhtphgruhht
-    hhhpvghrshhonhgrlhhithihqdduvdekhedujedtvdegqddvkeejtddtvdeigedqrghrnh
-    gupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:K5wyYwd1DwpulFvQpVuWiRUtcw38-qebHa5Ze62tCAfgwH5X1zJXbg>
-    <xmx:K5wyYyKKEGXvXsznp6_nNRSW2EGNR6NSSIpo7fW9pMDAxH9Yicqq4w>
-    <xmx:K5wyY9IgwfMahZkMIE7MAebKidgM1Az-LQpJhh2MDT5Kzbd_VeWsAw>
-    <xmx:LJwyYyBRqF04xYz6Yfv4-jni5HaTT-P3xGg-v0IhvH6D9IhEZgbYjMr4BjW5YPzC>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 81704B60089; Tue, 27 Sep 2022 02:46:03 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-968-g04df58079d-fm-20220921.001-g04df5807
-Mime-Version: 1.0
-Message-Id: <854247e0-6276-4f3b-b4e9-b408e151a6b3@www.fastmail.com>
-In-Reply-To: <202209261405.619441AC2F@keescook>
-References: <20220926191109.1803094-1-keescook@chromium.org>
- <CAKwvOdmCjAQpaF40VStbFNf1ZqmTxTTZzy2v4TwSF0LVO08GYw@mail.gmail.com>
- <202209261405.619441AC2F@keescook>
-Date:   Tue, 27 Sep 2022 08:45:43 +0200
-From:   "Arnd Bergmann" <arnd@kernel.org>
-To:     "Kees Cook" <keescook@chromium.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>
-Cc:     "Gwan-gyeong Mun" <gwan-gyeong.mun@intel.com>,
-        "Luc Van Oostenryck" <luc.vanoostenryck@gmail.com>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Tom Rix" <trix@redhat.com>,
-        "Daniel Latypov" <dlatypov@google.com>,
-        "Vitor Massaru Iha" <vitor@massaru.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-        "Jani Nikula" <jani.nikula@linux.intel.com>,
-        "Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>,
-        "Rodrigo Vivi" <rodrigo.vivi@intel.com>,
-        "Tvrtko Ursulin" <tvrtko.ursulin@linux.intel.com>,
-        "David Airlie" <airlied@linux.ie>,
-        "Daniel Vetter" <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-sparse@vger.kernel.org
-Subject: Re: [PATCH v2] overflow: Introduce overflows_type() and castable_to_type()
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Sep 2022 02:46:43 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21546A00E2;
+        Mon, 26 Sep 2022 23:46:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664261202; x=1695797202;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=UYSRZj7T7ZxjpirfOn+GZ9jSLsE+bkyXb8Mh75XWUEA=;
+  b=bhGRdeaPHQZJaEVHiAHvnjRXKHdFH13zP3itfJ3ZSTRY6wDJBQvqd1Kr
+   dNv7hscvM0IdOgsvZmpz59BRq4J6SLyIeVROSJNsaV3L7ruQkpjSRIWvQ
+   p9XbGaE+thiEhW0HK1s98O7Aufe/BT3NTnhnsKcCFGBGYVNGectnGPR9m
+   g0Xu/+abFfiPJOeQjmZeVlaiSlG66Ds13kZ0An4ZG2GrUoCmJV0Q6laM4
+   +PhX7cVfVHqsmPb9TiDYFXuTJ1SUQO+uYIHCnmblkaiVXQZ+/I/09uVym
+   lHMFkWfCjodJ4CaMxzs60Z8fXvCrFUrbvoGApDbmPj9F58tQhh6uNWcX1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="365280456"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="365280456"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 23:46:41 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="689882103"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="689882103"
+Received: from aksaxena-mobl2.ger.corp.intel.com ([10.252.60.19])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 23:46:36 -0700
+Date:   Tue, 27 Sep 2022 09:46:32 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
+        macro@orcam.me.uk, johan@kernel.org, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH v2 4/6] fpga: dfl: add generic support for MSIX
+ interrupts
+In-Reply-To: <alpine.DEB.2.22.394.2209260734490.363733@rhweight-WRK1>
+Message-ID: <609e122-f6a0-c0c2-4168-4025dd96a1ac@linux.intel.com>
+References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com> <20220923121745.129167-5-matthew.gerlach@linux.intel.com> <a602677-78ac-23a0-1a63-96b325595998@linux.intel.com> <alpine.DEB.2.22.394.2209260734490.363733@rhweight-WRK1>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="8323329-529190930-1664261202=:2334"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022, at 11:07 PM, Kees Cook wrote:
-> On Mon, Sep 26, 2022 at 01:17:18PM -0700, Nick Desaulniers wrote:
->> + Arnd
->> 
->> On Mon, Sep 26, 2022 at 12:11 PM Kees Cook <keescook@chromium.org> wrote:
->> > ---
->> > v2:
->> >  - fix comment typo
->> >  - wrap clang pragma to avoid GCC warnings
->> >  - style nit cleanups
->> >  - rename __castable_to_type() to castable_to_type()
->> >  - remove prior overflows_type() definition
->> > v1: https://lore.kernel.org/lkml/20220926003743.409911-1-keescook@chromium.org
->> > diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
->> > index f385ca652b74..fffc3f86181d 100644
->> > --- a/lib/overflow_kunit.c
->> > +++ b/lib/overflow_kunit.c
->> > @@ -16,6 +16,11 @@
->> >  #include <linux/types.h>
->> >  #include <linux/vmalloc.h>
->> >
->> > +/* We're expecting to do a lot of "always true" or "always false" tests. */
->> > +#ifdef CONFIG_CC_IS_CLANG
->> > +#pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare"
->> > +#endif
->> 
->> Any chance we can reuse parts of __diag_ignore or __diag_clang from
->> include/linux/compiler_types.h or include/linux/compiler-clang.h
->> respectively?
->
-> Hm, I'm not sure how those are supposed to be used. Those defines don't
-> seem to be used externally?
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-We use them in a couple of places. When I originally introduced
-them, the idea was to add more infrastructure around these
-to replace the various -Wno-... flags in local makefiles with
-more targetted annotations, and then have a way to control
-the warning levels (W=1 W=2 E=1 etc) per directory and per file,
-but I never completed the work to add the interesting bits.
+--8323329-529190930-1664261202=:2334
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
->> Those are needed for pragmas within preprocessor macros, which we
->> don't have here, but I suspect they may be more concise to use here.
->
-> Yeah, I was surprised when I had to wrap it in #ifdef given "clang" is
-> part of the string.
->
->> 
->> > +#define TEST_SAME_TYPE(t1, t2, same)                   do {    \
->> > +       typeof(t1) __t1h = type_max(t1);                        \
->> > +       typeof(t1) __t1l = type_min(t1);                        \
->> > +       typeof(t2) __t2h = type_max(t2);                        \
->> > +       typeof(t2) __t2l = type_min(t2);                        \
->> 
->> Can we use __auto_type here rather than typeof(macro expansion)?
->
-> I'd rather it stay explicit -- otherwise we start to wander into "oops,
-> we got lucky" territory for what should be a really distinct test case.
+On Mon, 26 Sep 2022, matthew.gerlach@linux.intel.com wrote:
 
-The idea  of __auto_type is to avoid the more deeply nested macros.
-If the preprocessed file turns into an absolute mess, adding a temporary
-variable may help. Not sure if that applies here.
+> 
+> 
+> On Fri, 23 Sep 2022, Ilpo Järvinen wrote:
+> 
+> > On Fri, 23 Sep 2022, matthew.gerlach@linux.intel.com wrote:
+> > 
+> > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > > 
+> > > Define and use a DFHv1 parameter to add generic support for MSIX
+> > > interrupts for DFL devices.
+> > > 
+> > > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > > ---
+> > > v2: fix kernel doc
+> > >     clarify use of DFH_VERSION field
+> > > ---
+> > >  drivers/fpga/dfl.c  | 60 +++++++++++++++++++++++++++++++++++++++++----
+> > >  include/linux/dfl.h | 14 +++++++++++
+> > >  2 files changed, 69 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+> > > index 1132f3c10440..dfd3f563c92d 100644
+> > > --- a/drivers/fpga/dfl.c
+> > > +++ b/drivers/fpga/dfl.c
+> > > @@ -941,23 +941,22 @@ static int parse_feature_irqs(struct
+> > > build_feature_devs_info *binfo,
+> > >  	void __iomem *base = binfo->ioaddr + ofst;
+> > >  	unsigned int i, ibase, inr = 0;
+> > >  	enum dfl_id_type type;
+> > > -	int virq;
+> > > +	int virq, off;
+> > >  	u64 v;
+> > > 
+> > >  	type = feature_dev_id_type(binfo->feature_dev);
+> > > 
+> > >  	/*
+> > >  	 * Ideally DFL framework should only read info from DFL header, but
+> > > -	 * current version DFL only provides mmio resources information for
+> > > +	 * current version, DFHv0, only provides mmio resources information
+> > > for
+> > >  	 * each feature in DFL Header, no field for interrupt resources.
+> > >  	 * Interrupt resource information is provided by specific mmio
+> > >  	 * registers of each private feature which supports interrupt. So in
+> > >  	 * order to parse and assign irq resources, DFL framework has to look
+> > >  	 * into specific capability registers of these private features.
+> > >  	 *
+> > > -	 * Once future DFL version supports generic interrupt resource
+> > > -	 * information in common DFL headers, the generic interrupt parsing
+> > > -	 * code will be added. But in order to be compatible to old version
+> > > +	 * DFHv1 supports generic interrupt resource information in DFHv1
+> > > +	 * parameter blocks. But in order to be compatible to old version
+> > >  	 * DFL, the driver may still fall back to these quirks.
+> > >  	 */
+> > >  	if (type == PORT_ID) {
+> > > @@ -981,6 +980,36 @@ static int parse_feature_irqs(struct
+> > > build_feature_devs_info *binfo,
+> > >  		}
+> > >  	}
+> > > 
+> > > +	if (fid != FEATURE_ID_AFU && fid != PORT_FEATURE_ID_ERROR &&
+> > > +	    fid != PORT_FEATURE_ID_UINT && fid != FME_FEATURE_ID_GLOBAL_ERR) {
+> > > +
+> > > +		v = FIELD_GET(DFH_VERSION, readq(base));
+> > 
+> > I'd call this variable version (or ver) if you want to store it but it
+> > would also fit to switch () line so that no extra variable is needed.
+> 
+> I will change the v to dfh_ver to be clearer.  I want to store the value
+> because it is used in the default case in the error message.  The error
+> message helps to debug broken FPGA images.
 
-     Arnd
+Right, I missed that (or didn't think it too much and all being called 
+"v" didn't help either :-)).
+
+> > > +			if (FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v)) {
+> > > +				off = dfl_find_param(base + DFHv1_PARAM_HDR,
+> > > ofst,
+> > > +						     DFHv1_PARAM_ID_MSIX);
+> > > +				if (off >= 0) {
+> > 
+> > I'd reverse these 2 conditions and break when there's nothing to do.
+> 
+> I'm not sure what you mean by reversing these conditions because a DFHv1 may
+> or may not have parameters (the first condition), and a DFHv1 may have
+> parameters but may not have a MSI-X parameter (the second condition).
+
+This is what I meant:
+
+		if (!FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS, v))
+			break;
+
+		off = dfl_find_param(...);
+		if (off < 0)
+			break;
+
+		ibase = ...
+
+
+-- 
+ i.
+
+
+> > > +					ibase = readl(base + DFHv1_PARAM_HDR +
+> > > +						      off +
+> > > DFHv1_PARAM_MSIX_STARTV);
+> > > +					inr = readl(base + DFHv1_PARAM_HDR +
+> > > +						    off +
+> > > DFHv1_PARAM_MSIX_NUMV);
+> > > +					dev_dbg(binfo->dev, "start %d num %d
+> > > fid 0x%x\n",
+> > > +						ibase, inr, fid);
+> > > +				}
+> > > +			}
+> > > +			break;
+
+--8323329-529190930-1664261202=:2334--
