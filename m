@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4785ECA88
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCA65ECA8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbiI0RKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 13:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
+        id S231818AbiI0RLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 13:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbiI0RJ7 (ORCPT
+        with ESMTP id S231802AbiI0RK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 13:09:59 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CF43FA2A
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:09:52 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id i3so6437868qkl.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:09:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=v8DRSrWjsVtOzpUcdyfjM/wUO+MHVSat9Cgl6y+qF6k=;
-        b=dNquM4AtuPl7/Uu3LuNhxvUr5tLLsPm7z/b+Zbiyg23gPLNcoqdk5MA5HaRDpm7LFf
-         PeQ9kX05+tjqnCXZSjP7eu5usjRdwN7sZh2EM9FWORXUlpyjtWE3JbS8JWN6S558jVmJ
-         DLBpjmBLUY5AS4ucZAIOWr7sKtMIyKlnSsqP8ZzxoNmJHXORCD7nT51gqBXGA7ZjpgTz
-         qcs+V4qjmK3pc/YPbKiftfuxxDDqVGIIybSkQwS4GWD+MiFvhMmCaLEDqCK+9cnKJFZB
-         AEBx6c5hv0CqkDPIhXxcVabevLDgPORgxWXNOYtVm1iK/XCmKXd33j0gZ40lR241CXFw
-         xm8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=v8DRSrWjsVtOzpUcdyfjM/wUO+MHVSat9Cgl6y+qF6k=;
-        b=pIKlO8d4tPSHTLfq22Se37nURYcGxGBGU7i2I53GUAD+aV721Zg/OCmyxlCj5bApuR
-         0FchU25UtbSXMD7yKX5HMwd+vmH0VloWNX+yzuUWhRXpaHGHtampk8Rbr7wwr6WW6yBj
-         aSqFllHjTj9Ld1sC7qOuJo/84jzm5aO+ZP2JU0XTq6XKVuORQCLfgEXTISfK+MSP1YLs
-         bRQvoGqCrFSPRY5xthkD0LaBSkw4DBUUZ126LvLiuptm8Dp/EJbsUdyyBUhoNp4NcDIX
-         SWKhcpVNL8KNJBMQCFpXLb4Ban3fgEgK7/YiAIRRW+y9cImt/7RIZsG5eflr5FFlOtSH
-         T0ew==
-X-Gm-Message-State: ACrzQf0JTy7jqnv1fbzDcBVcoZnpojCNXJZTiAAS+mByUBmCpHfbbjFX
-        NZKYuDSuOpeFZaSG0TayQ3P5oYfYH8Oa8R/xN2Q=
-X-Google-Smtp-Source: AMsMyM4PiPzezyIgX+qbqcaSBwDl9QF0Nvb/atfUs+eaajxoY1Og1PbL+Mib/oJ3+HWzIvHsZ8OX1cVfXgS3e+ZlCoI=
-X-Received: by 2002:a37:aac4:0:b0:6cb:d070:7842 with SMTP id
- t187-20020a37aac4000000b006cbd0707842mr18700315qke.386.1664298591243; Tue, 27
- Sep 2022 10:09:51 -0700 (PDT)
+        Tue, 27 Sep 2022 13:10:58 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B20DFB32E
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:10:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664298656; x=1695834656;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=r8qgJjScy6RDWKbO5ZguVDjydkbLQqYVIQpzxlqrb7g=;
+  b=VEISxDmmVXIIa1aOmjH5bXKwGJfXktHinokr4mvdXqQ1/aezSHaMMiss
+   h8UlX5FQlrV/7FB1NBuGFogu8EdhoXCJ6e+37h1GXMicnl7xfJWwlkhez
+   5TkutaRSe3UQt07o6Nl+/QnacM+MMcXe672iXNF9Y5eb1OPUyaK3cSBcU
+   2140TlmT2Muduo5FkekcdlIOXKWiYy/OdGGrvW/gV5weQTFRxQfybxOww
+   GQIUmETg6SFTXzDc5KFLbU/VnxhX87xv7A6ZnaRtKCPU4gE6Y6AFyFRsc
+   MWOYsKZTBy9+fopS0iEQ5bFLpj1KyXeUXKW0JDFffgdQtCE2Lm8CuzkG6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="302853943"
+X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
+   d="scan'208";a="302853943"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 10:10:56 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="616903090"
+X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
+   d="scan'208";a="616903090"
+Received: from mgateho-mobl1.amr.corp.intel.com (HELO [10.255.229.33]) ([10.255.229.33])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 10:10:55 -0700
+Message-ID: <51eeb843-204f-5b9d-9f7f-9bf3c22d2c00@intel.com>
+Date:   Tue, 27 Sep 2022 10:10:54 -0700
 MIME-Version: 1.0
-References: <653d43e9a6d9aad2ae148a941dab048cb8e765a8.1664044241.git.andreyknvl@google.com>
- <YzL29buAUPzOa9CG@elver.google.com>
-In-Reply-To: <YzL29buAUPzOa9CG@elver.google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 27 Sep 2022 19:09:40 +0200
-Message-ID: <CA+fCnZfus5WL9_-DQ8+jraQ79bE93VvGpd9iKRWcb6+rGv_mOQ@mail.gmail.com>
-Subject: Re: [PATCH mm 1/3] kasan: switch kunit tests to console tracepoints
-To:     Marco Elver <elver@google.com>
-Cc:     andrey.konovalov@linux.dev,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 1/6] x86/sev: Fix calculation of end address based on
+ number of pages
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <cover.1664298261.git.thomas.lendacky@amd.com>
+ <afd222473c7b18ea942e754a6c4df26ed74eedee.1664298261.git.thomas.lendacky@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <afd222473c7b18ea942e754a6c4df26ed74eedee.1664298261.git.thomas.lendacky@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,11 +74,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 3:13 PM Marco Elver <elver@google.com> wrote:
->
-> > -static struct kunit_resource resource;
-> > -static struct kunit_kasan_status test_status;
->
-> Also remove this struct from kasan.h?
+On 9/27/22 10:04, Tom Lendacky wrote:
+> --- a/arch/x86/kernel/sev.c
+> +++ b/arch/x86/kernel/sev.c
+> @@ -649,7 +649,7 @@ static void pvalidate_pages(unsigned long vaddr, unsigned int npages, bool valid
+>  	int rc;
+>  
+>  	vaddr = vaddr & PAGE_MASK;
+> -	vaddr_end = vaddr + (npages << PAGE_SHIFT);
+> +	vaddr_end = vaddr + ((unsigned long)npages << PAGE_SHIFT);
 
-Done in v2. Thank you, Marco!
+Could we please just fix the fragile typing that cascaded down to this
+point?
+
+Shouldn't 'npages' in this interface be a long?
+
+> struct x86_guest {
+>         void (*enc_status_change_prepare)(unsigned long vaddr, int npages, bool enc);
+>         bool (*enc_status_change_finish)(unsigned long vaddr, int npages, bool enc);
+>         bool (*enc_tlb_flush_required)(bool enc);
+>         bool (*enc_cache_flush_required)(void);
+> };
