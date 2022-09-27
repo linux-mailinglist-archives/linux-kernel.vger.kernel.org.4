@@ -2,121 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEE15EC117
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F515EC00E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232133AbiI0LVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
+        id S231451AbiI0Kp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 06:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbiI0LUb (ORCPT
+        with ESMTP id S231167AbiI0Kpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:20:31 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649DC100;
-        Tue, 27 Sep 2022 04:20:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664277629; x=1695813629;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OsVWWpeogVW5hrrvPLEhshKbrhrTon0FHGytPjPWSr8=;
-  b=dEcxhhbvBTcxgWbxlXb5mZJQCDGqrIpXr6zgUnRHnYSMXdq965Ty2h7k
-   mnzLDk5iHa/YDHa5GLm8neUI2Z/YiI7jwieMo33nzfK9z/YtlYfrG7efg
-   jB4vnSuQMbKtHpqGsmL675zNQRYFXbEbHs94Rzh1/BW8oVsCzDbD/tK0r
-   DMRQ3nZqJnPwN1XJwXhTu9uvR0FMS4uC+onKHwOAgQzC4WRw4c4/JWQIq
-   csOY5qNED+EH1eUG3CNAUsQAzLHJEiC8S310N0KEJitlFiKaHwhbBlVFQ
-   SS0WG5bGShoyW5lwEm8gzDPxWzq+DXDSYDBdqNN03xke0yfXSRm/R2ee0
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="192655951"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Sep 2022 04:20:28 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+        Tue, 27 Sep 2022 06:45:53 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2953A59BB;
+        Tue, 27 Sep 2022 03:45:51 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4McGQ71VzSz1P6p6;
+        Tue, 27 Sep 2022 18:41:35 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 27 Sep 2022 04:20:28 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Tue, 27 Sep 2022 04:20:26 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Shravan Chippa <shravan.chippa@microchip.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cyril Jean <Cyril.Jean@microchip.com>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        Vattipalli Praveen <praveen.kumar@microchip.com>,
-        Wolfgang Grandegger <wg@aries-embedded.de>,
-        Hugh Breslin <hugh.breslin@microchip.com>,
-        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 11/11] riscv: dts: microchip: update memory configuration for v2022.10
-Date:   Tue, 27 Sep 2022 12:19:23 +0100
-Message-ID: <20220927111922.3602838-12-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220927111922.3602838-1-conor.dooley@microchip.com>
-References: <20220927111922.3602838-1-conor.dooley@microchip.com>
+ 15.1.2375.31; Tue, 27 Sep 2022 18:45:49 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 27 Sep
+ 2022 18:45:49 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Jakub Kicinski <kuba@kernel.org>, Felix Fietkau <nbd@nbd.name>,
+        "John Crispin" <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>
+CC:     <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Liu Shixin" <liushixin2@huawei.com>
+Subject: [PATCH net-next v2] net: ethernet: mtk_eth_soc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+Date:   Tue, 27 Sep 2022 19:19:25 +0800
+Message-ID: <20220927111925.2424100-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the v2022.10 reference design, the seg registers are going to be
-changed, resulting in a required change to the memory map in Linux.
-A small 4M reservation is made at the end of 32-bit DDR to provide some
-memory for the HSS to use, so that it can cache its payload.bin between
-reboots of a specific context.
+Use DEFINE_SHOW_ATTRIBUTE helper macro to simplify the code.
+No functional change.
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 ---
- arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
-index 42d350fe6c6b..31f88cb4d5e5 100644
---- a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
-+++ b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
-@@ -33,15 +33,26 @@ cpus {
+v1->v2: Rebase on net-next.
+
+ .../net/ethernet/mediatek/mtk_ppe_debugfs.c   | 36 ++++---------------
+ 1 file changed, 6 insertions(+), 30 deletions(-)
+
+diff --git a/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c b/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c
+index ec49829ab32d..391b071bcff3 100644
+--- a/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c
++++ b/drivers/net/ethernet/mediatek/mtk_ppe_debugfs.c
+@@ -162,52 +162,28 @@ mtk_ppe_debugfs_foe_show(struct seq_file *m, void *private, bool bind)
+ }
  
- 	ddrc_cache_lo: memory@80000000 {
- 		device_type = "memory";
--		reg = <0x0 0x80000000 0x0 0x2e000000>;
-+		reg = <0x0 0x80000000 0x0 0x40000000>;
- 		status = "okay";
- 	};
+ static int
+-mtk_ppe_debugfs_foe_show_all(struct seq_file *m, void *private)
++mtk_ppe_debugfs_foe_all_show(struct seq_file *m, void *private)
+ {
+ 	return mtk_ppe_debugfs_foe_show(m, private, false);
+ }
++DEFINE_SHOW_ATTRIBUTE(mtk_ppe_debugfs_foe_all);
  
- 	ddrc_cache_hi: memory@1000000000 {
- 		device_type = "memory";
--		reg = <0x10 0x0 0x0 0x40000000>;
-+		reg = <0x10 0x40000000 0x0 0x40000000>;
- 		status = "okay";
- 	};
-+
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		hss_payload: region@BFC00000 {
-+			reg = <0x0 0xBFC00000 0x0 0x400000>;
-+			no-map;
-+		};
-+	};
- };
+ static int
+-mtk_ppe_debugfs_foe_show_bind(struct seq_file *m, void *private)
++mtk_ppe_debugfs_foe_bind_show(struct seq_file *m, void *private)
+ {
+ 	return mtk_ppe_debugfs_foe_show(m, private, true);
+ }
+-
+-static int
+-mtk_ppe_debugfs_foe_open_all(struct inode *inode, struct file *file)
+-{
+-	return single_open(file, mtk_ppe_debugfs_foe_show_all,
+-			   inode->i_private);
+-}
+-
+-static int
+-mtk_ppe_debugfs_foe_open_bind(struct inode *inode, struct file *file)
+-{
+-	return single_open(file, mtk_ppe_debugfs_foe_show_bind,
+-			   inode->i_private);
+-}
++DEFINE_SHOW_ATTRIBUTE(mtk_ppe_debugfs_foe_bind);
  
- &core_pwm0 {
+ int mtk_ppe_debugfs_init(struct mtk_ppe *ppe, int index)
+ {
+-	static const struct file_operations fops_all = {
+-		.open = mtk_ppe_debugfs_foe_open_all,
+-		.read = seq_read,
+-		.llseek = seq_lseek,
+-		.release = single_release,
+-	};
+-	static const struct file_operations fops_bind = {
+-		.open = mtk_ppe_debugfs_foe_open_bind,
+-		.read = seq_read,
+-		.llseek = seq_lseek,
+-		.release = single_release,
+-	};
+ 	struct dentry *root;
+ 
+ 	snprintf(ppe->dirname, sizeof(ppe->dirname), "ppe%d", index);
+ 
+ 	root = debugfs_create_dir(ppe->dirname, NULL);
+-	debugfs_create_file("entries", S_IRUGO, root, ppe, &fops_all);
+-	debugfs_create_file("bind", S_IRUGO, root, ppe, &fops_bind);
++	debugfs_create_file("entries", S_IRUGO, root, ppe, &mtk_ppe_debugfs_foe_all_fops);
++	debugfs_create_file("bind", S_IRUGO, root, ppe, &mtk_ppe_debugfs_foe_bind_fops);
+ 
+ 	return 0;
+ }
 -- 
-2.37.3
+2.25.1
 
