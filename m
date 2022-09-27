@@ -2,107 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EAD5EC19B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E33145EC1A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbiI0Li0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
+        id S232076AbiI0LjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231756AbiI0LiT (ORCPT
+        with ESMTP id S230169AbiI0LjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:38:19 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC411449D3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:38:15 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id j16so15302934lfg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:38:15 -0700 (PDT)
+        Tue, 27 Sep 2022 07:39:04 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6ED1449D3;
+        Tue, 27 Sep 2022 04:39:03 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id b5so9153537pgb.6;
+        Tue, 27 Sep 2022 04:39:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=cnbtuJqShkVt4h95QD+zLCK0/9qnRVCyBaJyOk7itxQ=;
-        b=BoAMliHmsbF4Ku7NnbL7OW3mQQYB8xD7LrE7WarQXJAOVAI9/5re2/JhelWnR2MNul
-         5KLK3YkxOxzgtbwOVB02VLBhhDjjvX535XM8AfC5DnSPUsw7RURMy8bjzfxiTX55pfsX
-         +ZM/1ftZR5YegIX9wQSsva4BGegIDY7plf0J0OdgDMOPMFcOiP/fNuDaFjmLMCQBxZfp
-         uu1OMmydUn/8jxuE/wI7EG1RFl83JuxzdpL/AFgNX1MktXDhiT77sZ2OZC+tm9gsjXIO
-         yFobNsPFm30QK0tTDySDdQKY7mDMTDwGh2OsyoLXhbZ7Yih89841L2T6y8PCl3hm+9WX
-         oS8Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Za2InhZkbyYKnD28W32y98g/AVSxLF4A9r63BGgksLE=;
+        b=JUUR6JaExhRepcLumPfEHU7gwLXOU8uyIF3TEk3AezJswqYXqfGqc4tiKMuYgx4aFW
+         e9aa8S5qmiL1j/mc44Wq6K67E8FvwmEtKKlTb1KAVFJFta12uuV0dFB+OnbNZvN3lap5
+         6Sj7j4xDLHynLQ8Q0krx2e5OChz5PsKBGJik6yyAHPAhdXt5QHsUfaJ47+B/cU1L7Vo0
+         9fToh3Re+MICaIcpV0VcfTk9/nkwOZ/N1zu6ARYeY6CaIlwACPbvde9zn9LOzqns9DsK
+         rF63imbnMI0qFRKjHwWjYwx2YGrKfhlxbmYHwskLHAkMVC2/RzIfmAshNcamvgrSWfCt
+         QMmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=cnbtuJqShkVt4h95QD+zLCK0/9qnRVCyBaJyOk7itxQ=;
-        b=NkkwUDUUEG20HXuMynp9Tr3LPspW/gMivr6PqvPbVII01Bt1n5cgy1vJwqYCnz14Km
-         cVqd81hLQWRUdnJIhABapmUyyz+2O7MzfSs3AQu/FvuVWFMqx4p9IihHX6t6xB6Q7pdA
-         yhuC2SGy3k1gfb9Bi6ZNUdMpHEI+i5SrkLvWMRoau+J+TYs6IrD+AbTLU1b2uxn/CkU3
-         bvyI77m/pSPO3b6WIITk0StG5KeoVmW9t1kCTaAQXR4MNkpDeVYDR4rQ2EpkREZACCXf
-         ZIB7NmtoBOp3zmvHPzabaDofE4ehd3hn3EToQlrCItORgBLcx587H0DJLvTeJ8Ukc9O7
-         XnkA==
-X-Gm-Message-State: ACrzQf1R1YDKDwcAb8MK8bn0KT0CxyqZpVnWuDVNSxxD5Ad2J9PkLiJ0
-        f/wqdJ9tnvGXLaIVW566Uu5OAQ==
-X-Google-Smtp-Source: AMsMyM7Yt1EsHtR3BT1w9tuWa1xA6Dn+i3G8IKdV5ZWjYKrBkxnA28FFVwKIJuHCq/kO9ypNZxHINA==
-X-Received: by 2002:ac2:4c8d:0:b0:4a0:559c:d40e with SMTP id d13-20020ac24c8d000000b004a0559cd40emr8181899lfl.508.1664278693650;
-        Tue, 27 Sep 2022 04:38:13 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g24-20020a2ea4b8000000b0025ebaef9570sm141559ljm.40.2022.09.27.04.38.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 04:38:12 -0700 (PDT)
-Message-ID: <c3ff6ace-3e58-0b0d-920e-e53a451206a2@linaro.org>
-Date:   Tue, 27 Sep 2022 13:38:11 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Za2InhZkbyYKnD28W32y98g/AVSxLF4A9r63BGgksLE=;
+        b=7yWSAwu96AOGmoTqawI5FZIBNDuzFvtMCTyHs8f+nesH5/0Zxtt9DNyk5wnH3PYI7W
+         1m5WfiDSsmrmxkb7vnkC1/0bgZUwKpM3+60ecfAs5i3g8yTeSiQ5o2VcfBvbyxdysHq5
+         +cUYX3AALgXVxuJ4nfhNPsFL7hKZvAiViu+J9aYwsy8E9s4Aftx5+s1C2D4pFugHhZb6
+         hin4Jw9aiGHYLu7GFtgyYU75TGmwgYlXOcWQK/K3zB1G01Gx1BVH+eI4rC06pzjcKmBk
+         MPLh6FfvJzHDDkWKj/CU5y9ktCjN95UpxgQh4k9riYzMTOxdnNX5/BbUR+1tJVtJ5nxH
+         cMYg==
+X-Gm-Message-State: ACrzQf0HyJWMTGoITqJEKh82UUIRapevk2GXhtb53PyQ1VxZb/Gnm5sE
+        UUri4iULwSSaj0hvAf/q0nuIUZPrVaKZu7eU
+X-Google-Smtp-Source: AMsMyM6hEvLPVMu+HdNNHrsWOMsl4Urq4ho7/eCbDspcDtyEw0ARkXXED3a8E3QOa7EReZkDya1x7A==
+X-Received: by 2002:a63:ff50:0:b0:439:ae51:503c with SMTP id s16-20020a63ff50000000b00439ae51503cmr24597571pgk.158.1664278742595;
+        Tue, 27 Sep 2022 04:39:02 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id k60-20020a17090a4cc200b002006f15ad4fsm8241431pjh.10.2022.09.27.04.39.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 04:39:02 -0700 (PDT)
+From:   zhangsongyi.cgel@gmail.com
+X-Google-Original-From: zhang.songyi@zte.com.cn
+To:     freude@linux.ibm.com
+Cc:     hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhang songyi <zhang.songyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] s390/ap: Convert to use sysfs_emit() APIs
+Date:   Tue, 27 Sep 2022 11:38:57 +0000
+Message-Id: <20220927113857.259596-1-zhang.songyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 25/32] dt-bindings: pinctrl: qcom,qcm2290: do not require
- function on non-GPIOs
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sricharan R <sricharan@codeaurora.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220924080459.13084-1-krzysztof.kozlowski@linaro.org>
- <20220924080459.13084-26-krzysztof.kozlowski@linaro.org>
- <20220926231505.GA3149014-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220926231505.GA3149014-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/09/2022 01:15, Rob Herring wrote:
->>      properties:
->>        pins:
->> @@ -116,6 +115,16 @@ patternProperties:
->>      required:
->>        - pins
->>  
->> +    allOf:
->> +      - $ref: "qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state"
-> 
-> You can drop the quotes here.
-> 
+From: zhang songyi <zhang.songyi@zte.com.cn>
 
-Ack.
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the value
+to be returned to user space.
 
-Best regards,
-Krzysztof
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
+---
+ drivers/s390/crypto/ap_bus.c | 37 ++++++++++++++++++------------------
+ 1 file changed, 18 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/s390/crypto/ap_bus.c b/drivers/s390/crypto/ap_bus.c
+index 59ac98f2bd27..0f7f0d179289 100644
+--- a/drivers/s390/crypto/ap_bus.c
++++ b/drivers/s390/crypto/ap_bus.c
+@@ -1165,7 +1165,7 @@ EXPORT_SYMBOL(ap_parse_mask_str);
+ 
+ static ssize_t ap_domain_show(struct bus_type *bus, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", ap_domain_index);
++	return sysfs_emit(buf, "%d\n", ap_domain_index);
+ }
+ 
+ static ssize_t ap_domain_store(struct bus_type *bus,
+@@ -1193,9 +1193,9 @@ static BUS_ATTR_RW(ap_domain);
+ static ssize_t ap_control_domain_mask_show(struct bus_type *bus, char *buf)
+ {
+ 	if (!ap_qci_info)	/* QCI not supported */
+-		return scnprintf(buf, PAGE_SIZE, "not supported\n");
++		return sysfs_emit(buf, "not supported\n");
+ 
+-	return scnprintf(buf, PAGE_SIZE,
++	return sysfs_emit(buf,
+ 			 "0x%08x%08x%08x%08x%08x%08x%08x%08x\n",
+ 			 ap_qci_info->adm[0], ap_qci_info->adm[1],
+ 			 ap_qci_info->adm[2], ap_qci_info->adm[3],
+@@ -1208,9 +1208,9 @@ static BUS_ATTR_RO(ap_control_domain_mask);
+ static ssize_t ap_usage_domain_mask_show(struct bus_type *bus, char *buf)
+ {
+ 	if (!ap_qci_info)	/* QCI not supported */
+-		return scnprintf(buf, PAGE_SIZE, "not supported\n");
++		return sysfs_emit(buf, "not supported\n");
+ 
+-	return scnprintf(buf, PAGE_SIZE,
++	return sysfs_emit(buf,
+ 			 "0x%08x%08x%08x%08x%08x%08x%08x%08x\n",
+ 			 ap_qci_info->aqm[0], ap_qci_info->aqm[1],
+ 			 ap_qci_info->aqm[2], ap_qci_info->aqm[3],
+@@ -1223,9 +1223,9 @@ static BUS_ATTR_RO(ap_usage_domain_mask);
+ static ssize_t ap_adapter_mask_show(struct bus_type *bus, char *buf)
+ {
+ 	if (!ap_qci_info)	/* QCI not supported */
+-		return scnprintf(buf, PAGE_SIZE, "not supported\n");
++		return sysfs_emit(buf, "not supported\n");
+ 
+-	return scnprintf(buf, PAGE_SIZE,
++	return sysfs_emit(buf,
+ 			 "0x%08x%08x%08x%08x%08x%08x%08x%08x\n",
+ 			 ap_qci_info->apm[0], ap_qci_info->apm[1],
+ 			 ap_qci_info->apm[2], ap_qci_info->apm[3],
+@@ -1237,15 +1237,14 @@ static BUS_ATTR_RO(ap_adapter_mask);
+ 
+ static ssize_t ap_interrupts_show(struct bus_type *bus, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%d\n",
+-			 ap_irq_flag ? 1 : 0);
++	return sysfs_emit(buf, "%d\n", ap_irq_flag ? 1 : 0);
+ }
+ 
+ static BUS_ATTR_RO(ap_interrupts);
+ 
+ static ssize_t config_time_show(struct bus_type *bus, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", ap_config_time);
++	return sysfs_emit(buf, "%d\n", ap_config_time);
+ }
+ 
+ static ssize_t config_time_store(struct bus_type *bus,
+@@ -1264,7 +1263,7 @@ static BUS_ATTR_RW(config_time);
+ 
+ static ssize_t poll_thread_show(struct bus_type *bus, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", ap_poll_kthread ? 1 : 0);
++	return sysfs_emit(buf, "%d\n", ap_poll_kthread ? 1 : 0);
+ }
+ 
+ static ssize_t poll_thread_store(struct bus_type *bus,
+@@ -1288,7 +1287,7 @@ static BUS_ATTR_RW(poll_thread);
+ 
+ static ssize_t poll_timeout_show(struct bus_type *bus, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%llu\n", poll_timeout);
++	return sysfs_emit(buf, "%llu\n", poll_timeout);
+ }
+ 
+ static ssize_t poll_timeout_store(struct bus_type *bus, const char *buf,
+@@ -1317,14 +1316,14 @@ static BUS_ATTR_RW(poll_timeout);
+ 
+ static ssize_t ap_max_domain_id_show(struct bus_type *bus, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", ap_max_domain_id);
++	return sysfs_emit(buf, "%d\n", ap_max_domain_id);
+ }
+ 
+ static BUS_ATTR_RO(ap_max_domain_id);
+ 
+ static ssize_t ap_max_adapter_id_show(struct bus_type *bus, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", ap_max_adapter_id);
++	return sysfs_emit(buf, "%d\n", ap_max_adapter_id);
+ }
+ 
+ static BUS_ATTR_RO(ap_max_adapter_id);
+@@ -1335,7 +1334,7 @@ static ssize_t apmask_show(struct bus_type *bus, char *buf)
+ 
+ 	if (mutex_lock_interruptible(&ap_perms_mutex))
+ 		return -ERESTARTSYS;
+-	rc = scnprintf(buf, PAGE_SIZE,
++	rc = sysfs_emit(buf,
+ 		       "0x%016lx%016lx%016lx%016lx\n",
+ 		       ap_perms.apm[0], ap_perms.apm[1],
+ 		       ap_perms.apm[2], ap_perms.apm[3]);
+@@ -1428,7 +1427,7 @@ static ssize_t aqmask_show(struct bus_type *bus, char *buf)
+ 
+ 	if (mutex_lock_interruptible(&ap_perms_mutex))
+ 		return -ERESTARTSYS;
+-	rc = scnprintf(buf, PAGE_SIZE,
++	rc = sysfs_emit(buf,
+ 		       "0x%016lx%016lx%016lx%016lx\n",
+ 		       ap_perms.aqm[0], ap_perms.aqm[1],
+ 		       ap_perms.aqm[2], ap_perms.aqm[3]);
+@@ -1517,7 +1516,7 @@ static BUS_ATTR_RW(aqmask);
+ 
+ static ssize_t scans_show(struct bus_type *bus, char *buf)
+ {
+-	return scnprintf(buf, PAGE_SIZE, "%llu\n",
++	return sysfs_emit(buf, "%llu\n",
+ 			 atomic64_read(&ap_scan_bus_count));
+ }
+ 
+@@ -1540,9 +1539,9 @@ static ssize_t bindings_show(struct bus_type *bus, char *buf)
+ 
+ 	ap_calc_bound_apqns(&apqns, &n);
+ 	if (atomic64_read(&ap_scan_bus_count) >= 1 && n == apqns)
+-		rc = scnprintf(buf, PAGE_SIZE, "%u/%u (complete)\n", n, apqns);
++		rc = sysfs_emit(buf, "%u/%u (complete)\n", n, apqns);
+ 	else
+-		rc = scnprintf(buf, PAGE_SIZE, "%u/%u\n", n, apqns);
++		rc = sysfs_emit(buf, "%u/%u\n", n, apqns);
+ 
+ 	return rc;
+ }
+-- 
+2.25.1
+
 
