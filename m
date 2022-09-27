@@ -2,192 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCAA5EC358
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 918425EC35B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbiI0Myh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
+        id S231690AbiI0MzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231727AbiI0My1 (ORCPT
+        with ESMTP id S231322AbiI0MzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:54:27 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABB8E118D;
-        Tue, 27 Sep 2022 05:54:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664283266; x=1695819266;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Flh/QIQI4J2i9KB5PdCsdOmNeR/PhgABr6J+CVo/0qg=;
-  b=chr/NFCRW2I0L0NnBbfPuwcHpkdg9QyBCVcpTrzdM2HvzL2RtUC6lFc0
-   dRNiaYfl2U1/XiDsx85JEfFADlG+w+VZZcTMq20ol8A+25YgPmt3dzhDp
-   /F1dgA1Obb36s5W6IdwOSc7vAbfk72uB+Bhpjau3HpK5mA3fJVzAY0hXC
-   VlEKKTjopmvmmkvwGhrDoJ5hWlEvkFNeqzrkjERFmYiPP7TutKTYwlS75
-   yW3m5wTZC1IeDHk6phbmxyzBPPKhspsSkzXLPelncEeIG9Mip30zcA1Ul
-   cZGj0xt/lljbX3fTMxOERHFnlzk5/0WqNCye/sDcz98uQ4dBWsEajQTkX
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="284433545"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="284433545"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:54:25 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="866558230"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="866558230"
-Received: from aksaxena-mobl2.ger.corp.intel.com ([10.252.60.19])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:54:18 -0700
-Date:   Tue, 27 Sep 2022 15:54:16 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        niklas.soderlund+renesas@ragnatech.se, phil.edworthy@renesas.com,
-        macro@orcam.me.uk, johan@kernel.org, Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH v2 1/6] Documentation: fpga: dfl: Add documentation for
- DFHv1
-In-Reply-To: <alpine.DEB.2.22.394.2209270535320.2165158@rhweight-WRK1>
-Message-ID: <f411fef5-1aa4-4cf-6037-cddf6f1e3d0@linux.intel.com>
-References: <20220923121745.129167-1-matthew.gerlach@linux.intel.com> <20220923121745.129167-2-matthew.gerlach@linux.intel.com> <40e867ec-c7-66f-9db9-94f6132d587e@linux.intel.com> <alpine.DEB.2.22.394.2209270535320.2165158@rhweight-WRK1>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-962032008-1664283266=:2334"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Sep 2022 08:55:19 -0400
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827A11684DE
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1664283309;
+        bh=42xfWSmhmYjq+twL20Yxs1MCHTnMRhNYnQ9ldZwy/Rs=;
+        h=From:To:Cc:Subject:Date;
+        b=xMO2xKkAHQKFEvZzbi+vWLWtiDB7TcPE4jc9eWNLetHKk5mBMnFh8sqxm6MorknHt
+         v2cl65Bfrk920xLR1lBxEM4nonhx48r16kzvFtVaK2ZI8IFIuGbX1ymDJq58T7nXae
+         k+L1JQPy2aRCYUdH0x9t1bCFQiCT4bwodJwut3kg=
+X-QQ-FEAT: oHWrrGTW1dDJ34LybywUcSCPpAkOV9c4
+X-QQ-SSF: 00000000000000F0000000000000
+X-QQ-XMAILINFO: OZiGlmjmGvyhz+Fl1v8DirpiVJ32lMdcI4u69eni3+5I4OSUoCGndESeQL4cH9
+         xcB47NT2lW6qO8+x/ooIhmqFNE2WDENG9Jdg/kqJ6DWe01nKutKgw25lqQvxFqG7sjxQTZMUoG3KT
+         oj9q3YmbX2i5/8dItlAcKgWteQZTPFbUNQ49YavH1OAMIHGT74x4NsmkEyP5sgjROU4VXUx1CsnWQ
+         FypB4bAVRtEY5kP6LMcwp31z82tawu309+UvmmpSw4tpINSVbOla2n1dCVeG8Ra8ccz82EDTvm10g
+         AaXRqAZF6WqVX+PRTHzC7QVN85FWrIN8gU4VWoqYKG9krSsMMzenyt15q4zTjqwKmQLmWwvTbKkCl
+         g00rVAL3ZZlzzArC/kPHhyCCY8lscAsilzb6vUkWcQA3aQ6FbkrsDtfRFVVF5CTvnPMFKDNe6wtxd
+         JNXj1LZ7hckvB/kK+09I7eudYQBNrPJuQOt7arKKzniYWRP8KOhTMN/2OYjc71TWQyYEWwFuVHEj3
+         rBbh7Yrp6GCsgAnS/M9IqgbxgrOt83XoJj/kGGKF9j8VGeML4tp448/NqP9cRc88rhbZfDcUljcCv
+         8KgiDvH9FARtPZxWEC7jo78QxjjH9t6MQeOJ8k0AMy54I143rQsVVyKKG0td3bquGJBPJW10AT06i
+         TGcDQ56zvdiQ2wOp0TyiUimanrNOKrcnBgrYeXhtEidaKR2pSWz9OkYQM9Xr75gUjp/7KBKdQlsY1
+         SQhi3aPmJa3I0MujBjNI0MQUkyXevvH+uknqvq56e3HHtyQBLXbuMcfc1gV0vfJ54Evfr1RnMDmpf
+         YS0BOVaoUtBQfEWAXxn/bt7BeNcklG+7hsbC92U8+hZqgfnxKXTf9sWoybUp/AZQZ8sIHBBbxWVu8
+         uqzRA/WPiOBCq7HhqzqdPk0T4TjHwg0jQynq1KSR12qA908dM/obgydk2ESkjgAumKXMK0Be+1EqF
+         4hndg/xGI44w3/4MMt
+X-HAS-ATTACH: no
+X-QQ-BUSINESS-ORIGIN: 2
+X-Originating-IP: 111.47.122.156
+X-QQ-STYLE: 
+X-QQ-mid: webmail740t1664283308t8147702
+From:   "=?ISO-8859-1?B?WGlhb2tlIFdhbmc=?=" <xkernel.wang@foxmail.com>
+To:     "=?ISO-8859-1?B?RGFuIENhcnBlbnRlcg==?=" <dan.carpenter@oracle.com>
+Cc:     "=?ISO-8859-1?B?TGFycnkuRmluZ2Vy?=" <Larry.Finger@lwfinger.net>,
+        "=?ISO-8859-1?B?Zmxvcmlhbi5jLnNjaGlsaGFiZWw=?=" 
+        <florian.c.schilhabel@googlemail.com>,
+        "=?ISO-8859-1?B?Z3JlZ2to?=" <gregkh@linuxfoundation.org>,
+        "=?ISO-8859-1?B?bGludXgtc3RhZ2luZw==?=" 
+        <linux-staging@lists.linux.dev>,
+        "=?ISO-8859-1?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] staging: rtl8712: fix potential memory leak in _r8712_init_xmit_priv()
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="ISO-8859-1"
+Content-Transfer-Encoding: base64
+Date:   Tue, 27 Sep 2022 20:55:08 +0800
+X-Priority: 3
+Message-ID: <tencent_FACCCAB91E1C6F141FE1CA4AC1FF2420DA08@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_EXCESS_BASE64,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-962032008-1664283266=:2334
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Tue, 27 Sep 2022, matthew.gerlach@linux.intel.com wrote:
-
-> 
-> 
-> On Fri, 23 Sep 2022, Ilpo Järvinen wrote:
-> 
-> > On Fri, 23 Sep 2022, matthew.gerlach@linux.intel.com wrote:
-> > 
-> > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > 
-> > > Add documentation describing the extensions provided by Version
-> > > 1 of the Device Feature Header (DFHv1).
-> > > 
-> > > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > ---
-> > > v2: s/GUILD/GUID/
-> > >     add picture
-> > > ---
-> > >  Documentation/fpga/dfl.rst | 49 ++++++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 49 insertions(+)
-> > > 
-> > > diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> > > index 15b670926084..7c786b75b498 100644
-> > > --- a/Documentation/fpga/dfl.rst
-> > > +++ b/Documentation/fpga/dfl.rst
-> > > @@ -561,6 +561,55 @@ new DFL feature via UIO direct access, its feature id
-> > > should be added to the
-> > >  driver's id_table.
-> > > 
-> > > 
-> > > +Extending the Device Feature Header - DFHv1
-> > > +===========================================
-> > > +The current 8 bytes of the Device Feature Header, hereafter referred to
-> > > as
-> > > +to DFHv0, provide very little opportunity for the hardware to describe
-> > > itself
-> > > +to software. Version 1 of the Device Feature Header (DFHv1) is being
-> > > introduced
-> > > +to provide increased flexibility and extensibility to hardware designs
-> > > using
-> > > +Device Feature Lists.  The list below describes some of the goals behind
-> > > the
-> > > +changes in DFHv1:
-> > > +
-> > > +* Provide a standardized mechanism for features to describe
-> > > +  parameters/capabilities to software.
-> > > +* Standardize the use of a GUID for all DFHv1 types.
-> > > +* Decouple the location of the DFH from the register space of the feature
-> > > itself.
-> > > +
-> > > +Modeled after PCI Capabilities, DFHv1 Parameters provide a mechanism to
-> > > associate
-> > > +a list of parameter values to a particular feature.
-> > > +
-> > > +With DFHv0, not all features types contained a GUID.  DFHv1 makes the
-> > > GUID standard
-> > > +across all types.
-> > > +
-> > > +With DFHv0, the register map of a given feature is located immediately
-> > > following
-> > > +the DFHv0 in the memory space.  With DFHv1, the location of the feature
-> > > register
-> > > +map can be specified as an offset to the DFHv1 or as an absolute address.
-> > > The DFHv1
-> > > +structure is shown below:
-> > > +
-> > > +
-> > > +-----------------------------------------------------------------------+
-> > > +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11
-> > > ID 0|
-> > > +
-> > > +-----------------------------------------------------------------------+
-> > > +    |63                                 GUID_L
-> > > 0|
-> > > +
-> > > +-----------------------------------------------------------------------+
-> > > +    |63                                 GUID_H
-> > > 0|
-> > > +
-> > > +-----------------------------------------------------------------------+
-> > > +    |63                 Address/Offset                            1|  Rel
-> > > 0|
-> > > +
-> > > +-----------------------------------------------------------------------+
-> > 
-> > Is something missing here given the layout is claimed (in 2/6) to be:
-> > 
-> > "DFHv1 Register Offset definitons
-> > In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA"
-> > 
-> > ?
-> 
-> 
-> I was hesitant to have a picture because the description would then be in two
-> places.  I suspect my picture is not clear, but it does line up with the
-> offset definitions:
-> 
-> DFH offset 0x0
-> GUID offsets 0x8 and 0x10
-> CSR_START offset 0x18
-> CSR_SIZE offset 0x20
-> First PARAM_HDR, if it exists, is 0x28,
-> First PARAM_DATA, if it exists, is 0x30.
-
-I already noted in the other email I figured it out. It was thanks to 
-the offsets in the header how I found out where I had misintepreted 
-things. I initially had thought PARAM_DATA would be the parameters, both 
-headers and param data, but then realized that it's PARAM_HDR+PARAM_DATA 
-which is repeated n times.
-
-I don't think there's need to fix anything in here.
-
--- 
- i.
-
---8323329-962032008-1664283266=:2334--
+T24gVHVlLCBTZXAgMjcsIDIwMjIgMDM6NTcgUE0sIGRhbi5jYXJwZW50ZXJAb3JhY2xlLmNv
+bSB3cm90ZToKJmd0OyBPbiBNb24sIFNlcCAyNiwgMjAyMiBhdCAwMzowNjowNVBNICswODAw
+LCB4a2VybmVsLndhbmdAZm94bWFpbC5jb20gd3JvdGU6CiZndDsmZ3Q7IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL3N0YWdpbmcvcnRsODcxMi9ydGw4NzF4X3htaXQuYyBiL2RyaXZlcnMvc3Rh
+Z2luZy9ydGw4NzEyL3J0bDg3MXhfeG1pdC5jCiZndDsmZ3Q7IGluZGV4IDA5MDM0NWIuLmRj
+ZjNmNzYgMTAwNjQ0CiZndDsmZ3Q7IC0tLSBhL2RyaXZlcnMvc3RhZ2luZy9ydGw4NzEyL3J0
+bDg3MXhfeG1pdC5jCiZndDsmZ3Q7ICsrKyBiL2RyaXZlcnMvc3RhZ2luZy9ydGw4NzEyL3J0
+bDg3MXhfeG1pdC5jCiZndDsmZ3Q7IEBAIC0xMTcsMTEgKzExNyw4IEBAIGludCBfcjg3MTJf
+aW5pdF94bWl0X3ByaXYoc3RydWN0IHhtaXRfcHJpdiAqcHhtaXRwcml2LAomZ3Q7Jmd0OyBf
+aW5pdF9xdWV1ZSgmYW1wO3B4bWl0cHJpdi0mZ3Q7cGVuZGluZ194bWl0YnVmX3F1ZXVlKTsK
+Jmd0OyZndDsgcHhtaXRwcml2LSZndDtwYWxsb2NhdGVkX3htaXRidWYgPQomZ3Q7Jmd0OyAg
+a21hbGxvYyhOUl9YTUlUQlVGRiAqIHNpemVvZihzdHJ1Y3QgeG1pdF9idWYpICsgNCwgR0ZQ
+X0FUT01JQyk7CiZndDsmZ3Q7IC0gaWYgKCFweG1pdHByaXYtJmd0O3BhbGxvY2F0ZWRfeG1p
+dGJ1ZikgewomZ3Q7Jmd0OyAta2ZyZWUocHhtaXRwcml2LSZndDtwYWxsb2NhdGVkX2ZyYW1l
+X2J1Zik7CiZndDsmZ3Q7IC1weG1pdHByaXYtJmd0O3BhbGxvY2F0ZWRfZnJhbWVfYnVmID0g
+TlVMTDsKJmd0OyZndDsgLXJldHVybiAtRU5PTUVNOwomZ3Q7Jmd0OyAtIH0KJmd0OyZndDsg
+KyBpZiAoIXB4bWl0cHJpdi0mZ3Q7cGFsbG9jYXRlZF94bWl0YnVmKQomZ3Q7Jmd0OyArZ290
+byBmcmVlX2ZyYW1lX2J1ZjsKCk5vdGUgaGVyZTogbWF5IGhhdmUgdGhlIHNhbWUgY29uY2Vy
+bi4KCiZndDsmZ3Q7IHB4bWl0cHJpdi0mZ3Q7cHhtaXRidWYgPSBweG1pdHByaXYtJmd0O3Bh
+bGxvY2F0ZWRfeG1pdGJ1ZiArIDQgLQomZ3Q7Jmd0OyAgICAgICAoKGFkZHJfdCkocHhtaXRw
+cml2LSZndDtwYWxsb2NhdGVkX3htaXRidWYpICZhbXA7IDMpOwomZ3Q7Jmd0OyBweG1pdGJ1
+ZiA9IChzdHJ1Y3QgeG1pdF9idWYgKilweG1pdHByaXYtJmd0O3B4bWl0YnVmOwomZ3Q7Jmd0
+OyBAQCAtMTMwLDEyICsxMjcsMTQgQEAgaW50IF9yODcxMl9pbml0X3htaXRfcHJpdihzdHJ1
+Y3QgeG1pdF9wcml2ICpweG1pdHByaXYsCiZndDsmZ3Q7ICBweG1pdGJ1Zi0mZ3Q7cGFsbG9j
+YXRlZF9idWYgPQomZ3Q7Jmd0OyBrbWFsbG9jKE1BWF9YTUlUQlVGX1NaICsgWE1JVEJVRl9B
+TElHTl9TWiwgR0ZQX0FUT01JQyk7CiZndDsmZ3Q7ICBpZiAoIXB4bWl0YnVmLSZndDtwYWxs
+b2NhdGVkX2J1ZikKJmd0OyZndDsgLSByZXR1cm4gLUVOT01FTTsKJmd0OyZndDsgKyBnb3Rv
+IGZyZWVfeG1pdGJ1ZjsKJmd0OyZndDsgIHB4bWl0YnVmLSZndDtwYnVmID0gcHhtaXRidWYt
+Jmd0O3BhbGxvY2F0ZWRfYnVmICsgWE1JVEJVRl9BTElHTl9TWiAtCiZndDsmZ3Q7ICgoYWRk
+cl90KSAocHhtaXRidWYtJmd0O3BhbGxvY2F0ZWRfYnVmKSAmYW1wOwomZ3Q7Jmd0OyAoWE1J
+VEJVRl9BTElHTl9TWiAtIDEpKTsKJmd0OyZndDsgLWlmIChyODcxMl94bWl0X3Jlc291cmNl
+X2FsbG9jKHBhZGFwdGVyLCBweG1pdGJ1ZikpCiZndDsmZ3Q7IC0gcmV0dXJuIC1FTk9NRU07
+CiZndDsmZ3Q7ICtpZiAocjg3MTJfeG1pdF9yZXNvdXJjZV9hbGxvYyhwYWRhcHRlciwgcHht
+aXRidWYpKSB7CiZndDsmZ3Q7ICsga2ZyZWUocHhtaXRidWYtJmd0O3BhbGxvY2F0ZWRfYnVm
+KTsKJmd0OyZndDsgKyBnb3RvIGZyZWVfeG1pdGJ1ZjsKJmd0OyZndDsgK30KJmd0OyZndDsg
+IGxpc3RfYWRkX3RhaWwoJmFtcDtweG1pdGJ1Zi0mZ3Q7bGlzdCwKJmd0OyZndDsgJmFtcDso
+cHhtaXRwcml2LSZndDtmcmVlX3htaXRidWZfcXVldWUucXVldWUpKTsKJmd0OwomZ3Q7CiZn
+dDsgcHhtaXRidWYgcG9pbnRzIHRvIHNvbWV3aGVyZSBpbiB0aGUgbWlkZGxlIG9mIHB4bWl0
+cHJpdi0mZ3Q7cGFsbG9jYXRlZF94bWl0YnVmLgomZ3Q7IFdlIGFkZCBpdCB0byB0aGUgbGlz
+dCBoZXJlLgomZ3Q7CiZndDsmZ3Q7ICBweG1pdGJ1ZisrOwomZ3Q7Jmd0OyBAQCAtMTQ2LDYg
+KzE0NSwxOCBAQCBpbnQgX3I4NzEyX2luaXRfeG1pdF9wcml2KHN0cnVjdCB4bWl0X3ByaXYg
+KnB4bWl0cHJpdiwKJmd0OyZndDsgaW5pdF9od3htaXRzKHB4bWl0cHJpdi0mZ3Q7aHd4bWl0
+cywgcHhtaXRwcml2LSZndDtod3htaXRfZW50cnkpOwomZ3Q7Jmd0OyB0YXNrbGV0X3NldHVw
+KCZhbXA7cHhtaXRwcml2LSZndDt4bWl0X3Rhc2tsZXQsIHI4NzEyX3htaXRfYmgpOwomZ3Q7
+Jmd0OyByZXR1cm4gMDsKJmd0OyZndDsgKwomZ3Q7Jmd0OyArZnJlZV94bWl0YnVmOgomZ3Q7
+Jmd0OyArIHB4bWl0YnVmID0gKHN0cnVjdCB4bWl0X2J1ZiAqKXB4bWl0cHJpdi0mZ3Q7cHht
+aXRidWY7CiZndDsmZ3Q7ICsgd2hpbGUgKGktLSkgewomZ3Q7Jmd0OyArcjg3MTJfeG1pdF9y
+ZXNvdXJjZV9mcmVlKHBhZGFwdGVyLCBweG1pdGJ1Zik7CiZndDsmZ3Q7ICtrZnJlZShweG1p
+dGJ1Zi0mZ3Q7cGFsbG9jYXRlZF9idWYpOwomZ3Q7Jmd0OyArcHhtaXRidWYrKzsKJmd0OyZn
+dDsgKyB9CiZndDsmZ3Q7ICsga2ZyZWUocHhtaXRwcml2LSZndDtwYWxsb2NhdGVkX3htaXRi
+dWYpOwomZ3Q7CiZndDsgQnV0IHRoZW4gd2UgZnJlZSBweG1pdHByaXYtJmd0O3BhbGxvY2F0
+ZWRfeG1pdGJ1ZiBoZXJlIGJ1dCBpdCB0aGUgbWVtb3J5CiZndDsgaXMgc3RpbGwgb24gdGhl
+IGxpc3QuICBTbyB0aGF0IG1lYW5zIHRoZXJlIHdpbGwgYmUgYSB1c2UgYWZ0ZXIgZnJlZQom
+Z3Q7IGV2ZW50dWFsbHkuCgpZZXMsIHRoZSBtZW1vcnkgYWRkcmVzcyBpcyBzdGlsbCBvbiB0
+aGUgbGlzdCwgYW5kIGF0IHRoZSBhYm92ZSBwb3NpdGlvbiBvZgpgTm90ZWAsIHRoZSBhZGRy
+ZXNzIG9mIGBweG1pdHByaXYtJmd0O3BhbGxvY2F0ZWRfZnJhbWVfYnVmYCBpcyBhbHNvIGxl
+ZnQgb24gYQpsaXN0IG5hbWVkIGBweG1pdHByaXYtJmd0O2ZyZWVfeG1pdF9xdWV1ZWAuCkhv
+d2V2ZXIsIHRoZXNlIGxpc3RzIGFyZSBpbiBgcHhtaXRwcml2YCBhbmQgdGhpcyBmdW5jdGlv
+biBpcyBmb3IKaW5pdGlhbGl6aW5nIGBweG1pdHByaXZgLiBXaGVuIHRoaXMgZnVuY3Rpb24g
+ZmFpbHMsIHRoZSBwcm9iZSBmdW5jdGlvbiBvZgp0aGlzIGRyaXZlciB3aWxsIGZpbmFsbHkg
+ZmFpbC4gU28gSSBndWVzcyB0aGUgbGlzdCBpbiBgcHhtaXRwcml2YCB3aWxsIG5vdApiZSBh
+Y2Nlc3NlZC4KClBsZWFzZSBsZXQgbWUga25vdyBpZiB5b3Ugc3RpbGwgaG9sZCBzdWNoIGNv
+bmNlcm5zLCBJIGFtIGdsYWQgdG8gZmluZCBhCnRpbWUgKGluIDIgd2Vla3MgSSBndWVzcykg
+dG8gYWRkIGBsaXN0X2RlbF9pbml0KClgIG9uIHRoZSBlcnJvciBwYXRocwp0byBjbGVhciBh
+bGwgdGhlIGltcHJvcGVyIHBvaW50aW5nIHJlY29yZHMuCgpSZWdhcmRzLApYaWFva2UgV2Fu
+Zw==
+ÿÿÿÿI
