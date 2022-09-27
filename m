@@ -2,176 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C70C5ECA1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1ECB5ECA2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233256AbiI0Qvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
+        id S230028AbiI0Qyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbiI0QuU (ORCPT
+        with ESMTP id S233065AbiI0QyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:50:20 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3907D1F2CD
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:50:18 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3321c2a8d4cso106154737b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:50:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=vESNePe9n7uejPFfs1w+utJ1cwyq3VqYeQvjK+K3YTk=;
-        b=aU3mY4mPAPL8Y2DkTOPUbIiQVySXBNqOsUTLmktA49l3UNs9/YlO2TV60ZgYj3vPXZ
-         LUGZiSASvDb4yvODdmRKdB+QR/4fxv4qGnjLDH8pPMvHwX+7R+0OGDzUxQkYLgnRIMTA
-         s6vBuGVmKpH2zduXU0kTUJmobtmghsBvRVEvcc3GVDwwY1ndmksJk0uGCYaGhIsS3OzW
-         owBLL5/oNHuHgwYyJzghsb4sqQGRaJOSwkP3qQDaZUBLaMj3Tlcx5lUQDwb5itDbRZXp
-         GqQi0FsJiZbiSsARlgbB0/xIorzd2ftsumw6B0mGhOfJ3OrYzLTvL9KRbSgjImhU2afu
-         knNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=vESNePe9n7uejPFfs1w+utJ1cwyq3VqYeQvjK+K3YTk=;
-        b=s/MXeSDUsdWNxySsuRZWVurgHa+c3hTgNkUMO+9diS8I7jldaKOfVR+CdOsEPHugxK
-         MF0HREi24K61dsxJ104FoPbIyYF3nL2JpGMiislu23raAI0wlJwSFUjDAEVWThhDflOv
-         XWogIrrkZGs/Y4bPJ5SIibH+E/LUyQa2RMCHviTvROa8mrdPStVHB0dSruXqr3M40UDb
-         spQHO2NcFAdOXe4vCMAk9qUcMVHqAAcN4/7BxmlYtTrc1LmH/dAbDOV6jQ6rsnfokFfM
-         Worw2ytnFXVRHgU3XGtd9J4+Ll6CdMJILcMrqn1tQboHrEf8zs71jI2KKWocqoBAUyFZ
-         oKTQ==
-X-Gm-Message-State: ACrzQf0/kAIgjZF8mCLc63H6rm5sB5SRuVAvNVhq5Ig/8JmTYTu1HntG
-        R20pUJ3V7DdEErHZk4p5te8UYZr5SfPB7BERc47bCg==
-X-Google-Smtp-Source: AMsMyM4CKKRtW+2RFnlNvNc6W+CBVYvfJ2xFQmhBp0HkkEjyqcmvPFQrarolp2eVeL6aIuHNXWImPeCeiR9ci7eeMNc=
-X-Received: by 2002:a0d:d508:0:b0:352:43a6:7ddc with SMTP id
- x8-20020a0dd508000000b0035243a67ddcmr2574418ywd.55.1664297416738; Tue, 27 Sep
- 2022 09:50:16 -0700 (PDT)
+        Tue, 27 Sep 2022 12:54:21 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7153F1B86BD;
+        Tue, 27 Sep 2022 09:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664297577; x=1695833577;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=5EohTMYLQrkXaT2jLZUdyETCAEaqtVx4zyPwhafHKa0=;
+  b=a5mJxHmR3wr6zzQiTcRVdKWaQYwc1zofj8QrK2TgnQrbrpQZ6AysN+Rm
+   CaqVIme/3FFE7S1wkFDNWfUjLe/YbwJXk1ZyyUjd8MwlC0iAvecyY63/Z
+   yoXEHCaMIrVn41/wD58laQSuUQVdXceZYUDFKi6JPM2h4cIqJTHsrv93M
+   Q1Q9c3Bo98ORZOi4VJgZHwe78bJhikAFJwOJG6j2sy7e8JALytsFlT7E/
+   vTJspsR37zLAo65FQz1es0bf2cjEAazyMwiOImCwCDMNqFBtRZZvTpgeW
+   xAL16DZB735i2UFJ5hK4d89CuqvOxaF7DIL19dRjJwj4i8C7ECN9jV64i
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="302278841"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="302278841"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 09:52:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="572713090"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="572713090"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga003.jf.intel.com with ESMTP; 27 Sep 2022 09:52:40 -0700
+Received: from [10.252.215.51] (kliang2-mobl1.ccr.corp.intel.com [10.252.215.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id AE3615808F0;
+        Tue, 27 Sep 2022 09:52:38 -0700 (PDT)
+Message-ID: <83db7a22-3cf8-9f5c-5530-894c663ee1fb@linux.intel.com>
+Date:   Tue, 27 Sep 2022 12:52:37 -0400
 MIME-Version: 1.0
-References: <20220927161209.32939-1-kuniyu@amazon.com> <20220927161209.32939-4-kuniyu@amazon.com>
-In-Reply-To: <20220927161209.32939-4-kuniyu@amazon.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 27 Sep 2022 09:50:04 -0700
-Message-ID: <CANn89iKguA1pAc7wUuWVwuSLJ7+dDRLscY0CEJXNPpg8gphJbg@mail.gmail.com>
-Subject: Re: [PATCH v1 net 3/5] tcp/udp: Call inet6_destroy_sock() in IPv4 sk_prot->destroy().
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        netdev <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vladislav Yasevich <vyasevic@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US
+To:     "Wang, Wei W" <wei.w.wang@intel.com>,
+        Jim Mattson <jmattson@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Li, Xiaoyao" <xiaoyao.li@intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+References: <20220921164521.2858932-1-xiaoyao.li@intel.com>
+ <20220921164521.2858932-3-xiaoyao.li@intel.com>
+ <175b518c-d202-644e-a3a7-67e877852548@linux.intel.com>
+ <DS0PR11MB6373C84139621DC447D3F466DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <Yyxke/IO+AP4EWwT@hirez.programming.kicks-ass.net>
+ <DS0PR11MB637346E9F224C5330CDEF3BFDC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <YyxsnAFYMLn2U9BT@hirez.programming.kicks-ass.net>
+ <DS0PR11MB63730A85E00683AB7F6F3E26DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <62d4bec1-a0c3-3b01-61bb-f284eede6378@linux.intel.com>
+ <CALMp9eTG7EbRv_fnQpDMQ3YUjYANgu=6QwVj_ACgHnK-Mhk39Q@mail.gmail.com>
+ <e1327377-8e82-56a2-25e5-2ba91f2eec42@linux.intel.com>
+ <DS0PR11MB63730CE4DAE000E338F092A0DC559@DS0PR11MB6373.namprd11.prod.outlook.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+Subject: Re: [RFC PATCH v2 2/3] perf/x86/intel/pt: Introduce and export
+ pt_get_curr_event()
+In-Reply-To: <DS0PR11MB63730CE4DAE000E338F092A0DC559@DS0PR11MB6373.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 9:13 AM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
->
-> Originally, inet6_sk(sk)->XXX were changed under lock_sock(), so we were
-> able to clean them up by calling inet6_destroy_sock() during the IPv6 ->
-> IPv4 conversion by IPV6_ADDRFORM.  However, commit 03485f2adcde ("udpv6:
-> Add lockless sendmsg() support") added a lockless memory allocation path,
-> which could cause a memory leak:
->
-> setsockopt(IPV6_ADDRFORM)                 sendmsg()
-> +-----------------------+                 +-------+
-> - do_ipv6_setsockopt(sk, ...)             - udpv6_sendmsg(sk, ...)
->   - lock_sock(sk)                           ^._ called via udpv6_prot
->   - WRITE_ONCE(sk->sk_prot, &tcp_prot)          before WRITE_ONCE()
->   - inet6_destroy_sock()
->   - release_sock(sk)                        - ip6_make_skb(sk, ...)
->                                               ^._ lockless fast path for
->                                                   the non-corking case
->
->                                               - __ip6_append_data(sk, ...)
->                                                 - ipv6_local_rxpmtu(sk, ...)
->                                                   - xchg(&np->rxpmtu, skb)
->                                                     ^._ rxpmtu is never freed.
->
->                                             - lock_sock(sk)
->
-> For now, rxpmtu is only the case, but let's call inet6_destroy_sock()
-> in both TCP/UDP v4 destroy functions not to miss the future change.
->
-> We can consolidate TCP/UDP v4/v6 destroy functions, but such changes
-> are too invasive to backport to stable.  So, they can be posted as a
-> follow-up later for net-next.
->
-> Fixes: 03485f2adcde ("udpv6: Add lockless sendmsg() support")
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-> ---
-> Cc: Vladislav Yasevich <vyasevic@redhat.com>
-> ---
->  net/ipv4/tcp_ipv4.c | 5 +++++
->  net/ipv4/udp.c      | 6 ++++++
->  net/ipv6/tcp_ipv6.c | 1 -
->  3 files changed, 11 insertions(+), 1 deletion(-)
->
-> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-> index 5b019ba2b9d2..035b6c52a243 100644
-> --- a/net/ipv4/tcp_ipv4.c
-> +++ b/net/ipv4/tcp_ipv4.c
-> @@ -2263,6 +2263,11 @@ void tcp_v4_destroy_sock(struct sock *sk)
->         tcp_saved_syn_free(tp);
->
->         sk_sockets_allocated_dec(sk);
-> +
-> +#if IS_ENABLED(CONFIG_IPV6)
-> +       if (sk->sk_prot_creator == &tcpv6_prot)
-> +               inet6_destroy_sock(sk);
-> +#endif
->  }
-
-This is ugly, and will not compile with CONFIG_IPV6=m, right ?
 
 
->  EXPORT_SYMBOL(tcp_v4_destroy_sock);
->
-> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> index 560d9eadeaa5..cdf131c0a819 100644
-> --- a/net/ipv4/udp.c
-> +++ b/net/ipv4/udp.c
-> @@ -115,6 +115,7 @@
->  #include <net/udp_tunnel.h>
->  #if IS_ENABLED(CONFIG_IPV6)
->  #include <net/ipv6_stubs.h>
-> +#include <net/transp_v6.h>
->  #endif
->
->  struct udp_table udp_table __read_mostly;
-> @@ -2666,6 +2667,11 @@ void udp_destroy_sock(struct sock *sk)
->                 if (up->encap_enabled)
->                         static_branch_dec(&udp_encap_needed_key);
->         }
-> +
-> +#if IS_ENABLED(CONFIG_IPV6)
-> +       if (sk->sk_prot_creator == &udpv6_prot)
-> +               inet6_destroy_sock(sk);
-> +#endif
->  }
->
->  /*
-> diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-> index e54eee80ce5f..1ff6a92f7774 100644
-> --- a/net/ipv6/tcp_ipv6.c
-> +++ b/net/ipv6/tcp_ipv6.c
-> @@ -1945,7 +1945,6 @@ static int tcp_v6_init_sock(struct sock *sk)
->  static void tcp_v6_destroy_sock(struct sock *sk)
->  {
->         tcp_v4_destroy_sock(sk);
-> -       inet6_destroy_sock(sk);
->  }
->
->  #ifdef CONFIG_PROC_FS
-> --
-> 2.30.2
->
+On 2022-09-27 10:27 a.m., Wang, Wei W wrote:
+> On Tuesday, September 27, 2022 2:09 AM, Liang, Kan wrote:
+>> From my understanding of the host-guest mode, the host PT event never
+>> traces the guest no matter whether the guest enables PT. So when VM-entry,
+>> there is only a guest PT event or no event. If so, I think the perf tool should
+>> warn the user if they try to create a host event with !exclude_guest, since the
+>> host event never traces a guest.
+> 
+> Probably not from the perf side. It's actually an issue of the KVM's pt_mode:
+> How can KVM prevent host from profiling the guest when in host-guest mode?
+
+I don't think it's KVM's job to prevent host from profiling the guest.
+However, the current KVM implementation implicitly disables the guest
+profiling from the host. If I understand correct, this patch series just
+change it to an explicit way (Just for kernel. Perf tool still doesn't
+know about it.). There is no substantial change.
+
+I think it should be PT driver who decide which event should be
+scheduled. So the first step is to let the PT driver understand the
+host-guest mode. Then if a perf user in the host tries to profile with
+!exclude_guest with the host-guest mode, the pt driver can deny the
+request. The perf tool than throw a warning, e.g., "The VMM is running
+with host-guest mode. Perf cannot profile guest. Please remove the guest
+profiling setting or switch to the host-only mode.".
+
+> Just a warning from the perf side wouldn't be enough. I think that's a wrong
+> assumption from KVM side. I had a plan to fix this one. Exposing the host event
+> can tell KVM if the host is profiling the guest or not (i.e. host-guest is allowed).
+
+I don't think KVM should know such information.
+
+Thanks,
+Kan
