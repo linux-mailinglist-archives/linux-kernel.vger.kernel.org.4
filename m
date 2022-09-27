@@ -2,250 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B835ECCC6
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B003D5ECCCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiI0TXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 15:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        id S231661AbiI0TYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 15:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiI0TXV (ORCPT
+        with ESMTP id S230305AbiI0TYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 15:23:21 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7ADD74E7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:23:21 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id iw17so10000263plb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:23:21 -0700 (PDT)
+        Tue, 27 Sep 2022 15:24:00 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF5BD8E23
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:23:59 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id q35-20020a17090a752600b002038d8a68fbso16498585pjk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:23:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=irMbtd8FZdiIboGibKNEwpTqt4Jj4yNLbVUI1gMwaPk=;
-        b=e0FQ6dEVHGBnnI6HqwHOLFzljuzwHYhz+8RFJ0db4risESGFamZ+UkWBPp8hD8O4qr
-         4VyJSyWkkMh8iRaCxLOZFA2R3V/It7lko9Ic4CYQYVi6wHUO7A/zCpLRexsMrFULSCH4
-         L5cbdNFEbn0q08Zv5vq4ZRaNt90B4qavACQ1ZEfTAbMExzqvrr6rSJH7AKHC6r5R+Tyy
-         77E9rONRP2Lk3ZVQrDVzqJgInQVokonQBKLs2S0uum07//G6kgoCBoSoe9R4QFxmI89K
-         vSQcEtob0Rgd9W21dmpmg+3xKF56nL/WTSwkOajK+Edlm+bkLNz/y5P/1M2xjSHHcI1z
-         2ogQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Bys+g6AU0hW4pKg0x/ecVxR/rYZ0Qg+jTvtx/DxcQwE=;
+        b=KnoGxcgKb0VeWxeXkDIYTarKak1vYNSDO7qW5/R04eljpGIg/0e8HjBIbg7FNDIKx2
+         FRZthD0ou89mxOMItkYaYta0w9DjGI6LsKaVx7i7pHQ1DkDO/LnuyzffLYiZg56S9CiE
+         msmmC8h3oOhfbjnulnroI1vY6CniOtCxwpcJQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=irMbtd8FZdiIboGibKNEwpTqt4Jj4yNLbVUI1gMwaPk=;
-        b=vYu9y0tcy4pTID22Fyqm5OwjdWOS6rFjk09mfrwYBii98icd78TUK2T8xNj6JQaBjJ
-         YOhZK63c3HppXYr/1PcNWeciiceavKG2y1rGLJl37sqP6qAV+N1+0t0OzpYV98Pz5jVb
-         TrsdmEMMmhirNSi2Jcj6s28TUVk+M7Lor+RVsmLr71lWDRO9YbCD2l2ORs2vXS+t+KIj
-         VlGCjKEL67YCEPDKMmytjnzeBmLU1nH88rPwuWsinRZqbha+eDxZIiL5ESllhTkkFoxO
-         e+nzVpj6CLzv0bE0/AV1cahJ1HRFMN2UiE9lBQ2SBV0PeF8b9bjBtrMsUGUIt7ZTykNF
-         /UZQ==
-X-Gm-Message-State: ACrzQf209q2BSFa4Z/7sosoeKNi+NyWipQ7x7W2bxoGm9Jo61MNsJuNl
-        eptYtOI+ohGEp6znyCEma6o=
-X-Google-Smtp-Source: AMsMyM4skroVhGNnqPKoINwdTfOGZ9HFN/FSTUS/QRpvxcQlBjxJf3Qj5fSFlWtyuniJaTLMZgkAcA==
-X-Received: by 2002:a17:903:509:b0:179:ffcf:d275 with SMTP id jn9-20020a170903050900b00179ffcfd275mr333187plb.150.1664306600434;
-        Tue, 27 Sep 2022 12:23:20 -0700 (PDT)
-Received: from strix-laptop (2001-b011-20e0-1b32-d148-19d6-82fa-6094.dynamic-ip6.hinet.net. [2001:b011:20e0:1b32:d148:19d6:82fa:6094])
-        by smtp.gmail.com with ESMTPSA id p3-20020a1709026b8300b0016d773aae60sm1949566plk.19.2022.09.27.12.23.15
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Bys+g6AU0hW4pKg0x/ecVxR/rYZ0Qg+jTvtx/DxcQwE=;
+        b=rc9484Pcofl7zIrusGyBG2/70zCX1/38Vx8BfOCjImI+ucD+XsBN47ebuugTLct7tQ
+         gN+RoHtIMqlYeJ7O7BJmdkqlAxrzw7NHKinvsJiq6thFjFrZ2d5VaiqpWYvFmhEPubAW
+         9EQGyyOZhhWhPffXQDRwQQwqHPBTwOhG2qduhtVE0iDj9HTmWiAV0AUeHm9c3CQ2vSxy
+         DAH0JxH0Q6LawQZcqLKHU7wN/4w2We5KduAw+foCeAHfvw2iabJP0nNXS88WC6FyWf0K
+         Ar6jazchpsFXNyQZa+Wqga9OvSLSmxvMTqKMPHFiU9vYWF8gOZq+4Ri3zn6zngOjkR6w
+         utUw==
+X-Gm-Message-State: ACrzQf1CUED54chvi9NHzWzR/S5+4XcJqhj1azW6pDuZ//hXhysFWVNk
+        fAyYGU6v+7WM0lrJ8VRVXl1Agg==
+X-Google-Smtp-Source: AMsMyM48SUc01nsTvTfZe/V6mOSf+RhShyC4BKrqoxRditRR7MK3A+ALMZ+Nz9C2YnpLtacseLIJIw==
+X-Received: by 2002:a17:90a:fe90:b0:202:a345:b7a6 with SMTP id co16-20020a17090afe9000b00202a345b7a6mr6103501pjb.14.1664306639240;
+        Tue, 27 Sep 2022 12:23:59 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q7-20020a17090311c700b001754fa42065sm2009217plh.143.2022.09.27.12.23.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 12:23:19 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 03:23:13 +0800
-From:   Chih-En Lin <shiyn.lin@gmail.com>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Xu <peterx@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Li kunyu <kunyu@nfschina.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <shy828301@gmail.com>, Song Liu <song@kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dinglan Peng <peng301@purdue.edu>,
-        Pedro Fonseca <pfonseca@purdue.edu>,
-        Jim Huang <jserv@ccns.ncku.edu.tw>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>
-Subject: Re: [RFC PATCH v2 7/9] mm: Add the break COW PTE handler
-Message-ID: <YzNNoWfTDHNWDLa0@strix-laptop>
-References: <20220927162957.270460-1-shiyn.lin@gmail.com>
- <20220927162957.270460-8-shiyn.lin@gmail.com>
- <8F98262B-206B-434C-88B9-9F3A6919782D@vmware.com>
+        Tue, 27 Sep 2022 12:23:58 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 12:23:57 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        llvm@lists.linux.dev, Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH v2] x86, mem: move memmove to out of line assembler
+Message-ID: <202209271143.7B7D15D@keescook>
+References: <CAKwvOd=a+0VNP-d=mHnbM4ujdtPrujru4dxHtfDo+EEM+b6deg@mail.gmail.com>
+ <20220927172839.3708280-1-ndesaulniers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8F98262B-206B-434C-88B9-9F3A6919782D@vmware.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220927172839.3708280-1-ndesaulniers@google.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 06:15:34PM +0000, Nadav Amit wrote:
-> On Sep 27, 2022, at 9:29 AM, Chih-En Lin <shiyn.lin@gmail.com> wrote:
-> 
-> > To handle the COW PTE with write fault, introduce the helper function
-> > handle_cow_pte(). The function provides two behaviors. One is breaking
-> > COW by decreasing the refcount, pgables_bytes, and RSS. Another is
-> > copying all the information in the shared PTE table by using
-> > copy_pte_page() with a wrapper.
-> > 
-> > Also, add the wrapper functions to help us find out the COWed or
-> > COW-available PTE table.
-> > 
-> 
-> [ snip ]
-> 
-> > +static inline int copy_cow_pte_range(struct vm_area_struct *vma,
-> > +				     pmd_t *dst_pmd, pmd_t *src_pmd,
-> > +				     unsigned long start, unsigned long end)
-> > +{
-> > +	struct mm_struct *mm = vma->vm_mm;
-> > +	struct mmu_notifier_range range;
-> > +	int ret;
-> > +	bool is_cow;
-> > +
-> > +	is_cow = is_cow_mapping(vma->vm_flags);
-> > +	if (is_cow) {
-> > +		mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_PAGE,
-> > +					0, vma, mm, start, end);
-> > +		mmu_notifier_invalidate_range_start(&range);
-> > +		mmap_assert_write_locked(mm);
-> > +		raw_write_seqcount_begin(&mm->write_protect_seq);
-> > +	}
-> > +
-> > +	ret = copy_pte_range(vma, vma, dst_pmd, src_pmd, start, end);
-> > +
-> > +	if (is_cow) {
-> > +		raw_write_seqcount_end(&mm->write_protect_seq);
-> > +		mmu_notifier_invalidate_range_end(&range);
-> 
-> Usually, I would expect mmu-notifiers and TLB flushes to be initiated at the
-> same point in the code. Presumably you changed protection, so you do need a
-> TLB flush, right? Is it done elsewhere?
+On Tue, Sep 27, 2022 at 10:28:39AM -0700, Nick Desaulniers wrote:
+> In addition to having complex constraints that can't always be resolved,
+> the clobber list seems to be missing %bx and %dx, and possibly %cl. By
+> using numbered operands rather than symbolic operands, the constraints
+> are quite obnoxious to refactor.
+> [...]
+> -		/*
+> -		 * Move data from 2 bytes to 3 bytes.
+> -		 */
+> -		".p2align 4\n\t"
+> -		"9:\n\t"
+> -		"cmp $2, %0\n\t"
+> -		"jb 10f\n\t"
+> -		"movw 0*2(%1), %%dx\n\t"
+> -		"movw -1*2(%1, %0), %%bx\n\t"
+> -		"movw %%dx, 0*2(%2)\n\t"
+> -		"movw %%bx, -1*2(%2, %0)\n\t"
+> -		"jmp 11f\n\t"
+> [...]
+> +.set tmp0, %edi
+> [...]
+> +	/*
+> +	 * Move data from 2 bytes to 3 bytes.
+> +	 */
+> +.p2align 4
+> +.L4_byteswap:
+> +	cmpl	$2, n
+> +	jb	.Lbyteswap
+> +	movw	0*2(src), %di
+> +	movw	-1*2(src, n), %bx
+> +	movw	%dx, 0*2(dest)
+> +	movw	%bx, -1*2(dest, n)
+> +	jmp	.Ldone
 
-You're right.
-I will add TLB flushes here.
-Thanks.
+Found it (need to use %di instead of %dx). With this changed, the kunit
+test passes again:
 
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +/*
-> > + * Break COW PTE, two state here:
-> > + *   - After fork :   [parent, rss=1, ref=2, write=NO , owner=parent]
-> > + *                 to [parent, rss=1, ref=1, write=YES, owner=NULL  ]
-> > + *                    COW PTE become [ref=1, write=NO , owner=NULL  ]
-> > + *                    [child , rss=0, ref=2, write=NO , owner=parent]
-> > + *                 to [child , rss=1, ref=1, write=YES, owner=NULL  ]
-> > + *                    COW PTE become [ref=1, write=NO , owner=parent]
-> > + *   NOTE
-> > + *     - Copy the COW PTE to new PTE.
-> > + *     - Clear the owner of COW PTE and set PMD entry writable when it is owner.
-> > + *     - Increase RSS if it is not owner.
-> > + */
-> > +static int break_cow_pte(struct vm_area_struct *vma, pmd_t *pmd,
-> > +			 unsigned long addr)
-> > +{
-> > +	struct mm_struct *mm = vma->vm_mm;
-> > +	unsigned long pte_start, pte_end;
-> > +	unsigned long start, end;
-> > +	struct vm_area_struct *prev = vma->vm_prev;
-> > +	struct vm_area_struct *next = vma->vm_next;
-> > +	pmd_t cowed_entry = *pmd;
-> > +
-> > +	if (cow_pte_count(&cowed_entry) == 1) {
-> > +		cow_pte_fallback(vma, pmd, addr);
-> > +		return 1;
-> > +	}
-> > +
-> > +	pte_start = start = addr & PMD_MASK;
-> > +	pte_end = end = (addr + PMD_SIZE) & PMD_MASK;
-> > +
-> > +	pmd_clear(pmd);
-> > +	/*
-> > +	 * If the vma does not cover the entire address range of the PTE table,
-> > +	 * it should check the previous and next.
-> > +	 */
-> > +	if (start < vma->vm_start && prev) {
-> > +		/* The part of address range is covered by previous. */
-> > +		if (start < prev->vm_end)
-> > +			copy_cow_pte_range(prev, pmd, &cowed_entry,
-> > +					   start, prev->vm_end);
-> > +		start = vma->vm_start;
-> > +	}
-> > +	if (end > vma->vm_end && next) {
-> > +		/* The part of address range is covered by next. */
-> > +		if (end > next->vm_start)
-> > +			copy_cow_pte_range(next, pmd, &cowed_entry,
-> > +					   next->vm_start, end);
-> > +		end = vma->vm_end;
-> > +	}
-> > +	if (copy_cow_pte_range(vma, pmd, &cowed_entry, start, end))
-> > +		return -ENOMEM;
-> > +
-> > +	/*
-> > +	 * Here, it is the owner, so clear the ownership. To keep RSS state and
-> > +	 * page table bytes correct, it needs to decrease them.
-> > +	 * Also, handle the address range issue here.
-> > +	 */
-> > +	if (cow_pte_owner_is_same(&cowed_entry, pmd)) {
-> > +		set_cow_pte_owner(&cowed_entry, NULL);
-> 
-> Presumably there is some assumption on atomicity here. Otherwise, two
-> threads can run the following code, which is wrong, no? Yet, I do not see
-> anything that provides such atomicity.
+diff --git a/arch/x86/lib/memmove_32.S b/arch/x86/lib/memmove_32.S
+index 73314a391a72..9e33c9a1c595 100644
+--- a/arch/x86/lib/memmove_32.S
++++ b/arch/x86/lib/memmove_32.S
+@@ -179,7 +179,7 @@ SYM_FUNC_START(memmove)
+ 	jb	.Lbyteswap
+ 	movw	0*2(src), %di
+ 	movw	-1*2(src, n), %bx
+-	movw	%dx, 0*2(dest)
++	movw	%di, 0*2(dest)
+ 	movw	%bx, -1*2(dest, n)
+ 	jmp	.Ldone
 
-I may have multiple process access here. But for the thread, I assume
-that they need to hold the mmap_lock. Maybe I need to add the assert
-here too.
+-Kees
 
-> 
-> > +		if (pte_start < vma->vm_start && prev &&
-> > +		    pte_start < prev->vm_end)
-> > +			cow_pte_rss(mm, vma->vm_prev, pmd,
-> > +				    pte_start, prev->vm_end, false /* dec */);
-> > +		if (pte_end > vma->vm_end && next &&
-> > +		    pte_end > next->vm_start)
-> > +			cow_pte_rss(mm, vma->vm_next, pmd,
-> > +				    next->vm_start, pte_end, false /* dec */);
-> > +		cow_pte_rss(mm, vma, pmd, start, end, false /* dec */);
-> > +		mm_dec_nr_ptes(mm);
-> > +	}
-> > +
-> > +	/* Already handled it, don't reuse cowed table. */
-> > +	pmd_put_pte(vma, &cowed_entry, addr, false);
-> > +
-> > +	VM_BUG_ON(cow_pte_count(pmd) != 1);
-> 
-> Don’t use VM_BUG_ON().
-
-Sure. I will change it to VM_WARN_ON().
-
-Thanks,
-Chih-En Lin
+-- 
+Kees Cook
