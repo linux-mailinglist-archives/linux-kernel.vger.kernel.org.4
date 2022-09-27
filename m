@@ -2,101 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8685EBB94
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 134575EBBA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbiI0HfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 03:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
+        id S230414AbiI0Hgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 03:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbiI0HfH (ORCPT
+        with ESMTP id S230321AbiI0HgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 03:35:07 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F75140E4;
-        Tue, 27 Sep 2022 00:35:04 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id d15so5540628qka.9;
-        Tue, 27 Sep 2022 00:35:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=Iva8djnsoEGavqO2e35Aa/Y4zh21Iw1HIh/3kt9CYVw=;
-        b=TqWrNqA08yJ1QmcRmdAjVd7FE4fa1mA4kDfqKxNNf5QdtIUMQFScby3w3BRkDs9230
-         +hELU8sRtnGMLIbvgPQEmcDCwxv8I/4spFbACL9Mn9V8QGF1hLxJdQfJspwB0NAfXT11
-         +8HnU04htn7BvZpH3iiLxjdVgMASUQsxa0D2pt+vxHaHW1mFY9Y4MV7vG/fGOZbGoqCB
-         ySe02NNKpcnAzw599IMTf/5FM8lJVxc2+x9ygsfpKJ78t8M7b64I8virWuMUM+dvkNLV
-         kUUEv8FtdzsnfUAwubhVboOilZ7luwjT/4X01isILYB69/BhtQFIwizqIBvKw9Eqxg8y
-         xEmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Iva8djnsoEGavqO2e35Aa/Y4zh21Iw1HIh/3kt9CYVw=;
-        b=yrD0RYcx+9WniDbt1u6D5hMthLxmLhO7ZMKTzuKbktt4jDS0/77fBt0dLK3gIuO3tS
-         iw3KXmMAj+ZU4l1LPb9AWJeU4Lf7UzzYSgx8eLoUwQ5dEFAAiEiYUMLDMZIysHEXsnkh
-         7CIhNEJ8bmyllbq1YwkJ8JOMTTzFbaT0lFWyQOFNZlP0jQfZ7tf0jo2Q8StcNuqbvY0F
-         qRZPyBgQzqpky3nblA46RnGpl8Iajpy4hg4ToZHZVTN4CnHv6Zryb1Jmie6ENR9j6Und
-         lVMT4jklhtzyUbt2ekqa6xdwu/V60cKRQ57NXuiuxz2Gn9z3pp6vzaabYrwIXlDUvLkj
-         kLZg==
-X-Gm-Message-State: ACrzQf2gRT2fge4bgudoTYbwxnedQX0wO/DBRdiveIWkpBvgfQkXFmF3
-        YTcLYB18W5jojDJiHUtO9g8d5GwCGoysJm4Ovfo=
-X-Google-Smtp-Source: AMsMyM4wpdGeMMvg71oY+a/6SCIsiBEsaXv1cet+JHT87uV9K6xp3/eJdWBy5o7ltRI14xFiPCr7keF82xgoPKzTqLw=
-X-Received: by 2002:ae9:ed44:0:b0:6ce:19bb:7780 with SMTP id
- c65-20020ae9ed44000000b006ce19bb7780mr17046769qkg.25.1664264103481; Tue, 27
- Sep 2022 00:35:03 -0700 (PDT)
+        Tue, 27 Sep 2022 03:36:08 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83323491C6;
+        Tue, 27 Sep 2022 00:36:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664264165; x=1695800165;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nWRhK5+WAsVRbdRrm7e6YA/MoeAuFkRulWcszj149yU=;
+  b=Asnb0cl4o5+6rXrOuTvHK+fNCUAytw6ie47d6Imos5Cc3ThcozkFQwrO
+   0cbTtsSYMMUwLMneAXPiBc9OkLLs9cJGr04Ux21roBVLEoDuVRjJwUfbl
+   JrNEgFfIYl6iiEocHV4a+gCENMgyX4HWNsh/FX50a2Z6q9pRp4SD6PH0E
+   NnnHk21Gy4v4sO9YPlb/91mgxtT2zCXKa8/R6L7gDbkge5scnQl6sK3Cv
+   nRwB53xQe+lRweYLXIx5Vjg/TlkF0jQ96HkAwJj3HV7o4aGJw2LJphoqv
+   ZBIL7DFXEUAb5jYV1NCHnuVAEpB94NY7VUSIVCAcnpg0HQ12lZnZTH/hx
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="302728047"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="302728047"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 00:35:47 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="572558720"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="572558720"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.249.206]) ([10.99.249.206])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 00:35:43 -0700
+Message-ID: <4d7caa50-9271-b062-2e0d-ad200b8a95f7@linux.intel.com>
+Date:   Tue, 27 Sep 2022 09:35:41 +0200
 MIME-Version: 1.0
-References: <20220818220245.338396-1-robimarko@gmail.com> <20220818220245.338396-2-robimarko@gmail.com>
- <1efe2f7d-05e2-6207-f4df-5b597d00c862@linaro.org>
-In-Reply-To: <1efe2f7d-05e2-6207-f4df-5b597d00c862@linaro.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Tue, 27 Sep 2022 09:34:52 +0200
-Message-ID: <CAOX2RU4vDC5emP=SA6cNmxyj=zBF+uWXSm9tNVytOhV16k--Dw@mail.gmail.com>
-Subject: Re: [PATCH v7 2/5] drivers: thermal: tsens: Add support for combined interrupt
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        rafael@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH][next] ASoC: Intel: Skylake: Replace zero-length arrays
+ with DECLARE_FLEX_ARRAY() helper
+Content-Language: en-US
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YzIuiUul2CwPlkKh@work>
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <YzIuiUul2CwPlkKh@work>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 at 00:49, Daniel Lezcano <daniel.lezcano@linaro.org> wr=
-ote:
->
-> On 19/08/2022 00:02, Robert Marko wrote:
-> > Despite using tsens v2.3 IP, IPQ8074 and IPQ6018 only have one IRQ for
-> > signaling both up/low and critical trips.
-> >
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
->
-> I'll pick the patches 1-4 as soon as Bjorn gives its blessing for this on=
-e
+On 9/27/2022 12:58 AM, Gustavo A. R. Silva wrote:
+> Zero-length arrays are deprecated and we are moving towards adopting
+> C99 flexible-array members, instead. So, replace zero-length arrays
+> declarations in anonymous union with the new DECLARE_FLEX_ARRAY()
+> helper macro.
+> 
+> This helper allows for flexible-array members in unions.
+> 
+> Link: https://github.com/KSPP/linux/issues/193
+> Link: https://github.com/KSPP/linux/issues/226
+> Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>   sound/soc/intel/skylake/skl-topology.h | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/sound/soc/intel/skylake/skl-topology.h b/sound/soc/intel/skylake/skl-topology.h
+> index a5bccf2fcd88..017ac0ef324d 100644
+> --- a/sound/soc/intel/skylake/skl-topology.h
+> +++ b/sound/soc/intel/skylake/skl-topology.h
+> @@ -233,8 +233,8 @@ struct skl_uuid_inst_map {
+>   struct skl_kpb_params {
+>   	u32 num_modules;
+>   	union {
+> -		struct skl_mod_inst_map map[0];
+> -		struct skl_uuid_inst_map map_uuid[0];
+> +		DECLARE_FLEX_ARRAY(struct skl_mod_inst_map, map);
+> +		DECLARE_FLEX_ARRAY(struct skl_uuid_inst_map, map_uuid);
+>   	} u;
+>   };
+>   
 
-Sounds good to me,
-
-Bjorn can you please take a look?
-
-Regards,
-Robert
->
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+Reviewed-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
