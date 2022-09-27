@@ -2,136 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C135ECF4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2625ECF51
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiI0Vcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 17:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
+        id S231201AbiI0VdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 17:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiI0Vca (ORCPT
+        with ESMTP id S229779AbiI0VdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 17:32:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91417105D50;
-        Tue, 27 Sep 2022 14:32:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C2E1B81DC7;
-        Tue, 27 Sep 2022 21:32:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDC7CC433C1;
-        Tue, 27 Sep 2022 21:32:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664314347;
-        bh=SpTVVg5bGfdD6TuPshyPPNiG6lr2nJAW7ejy5Z1c2Bk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Zb61xfmNPQSQfdjxY6G76uJnWeb9UbUaS1qNNS8VFqPcyJm5bwXourkXKiuXfWpp0
-         Zk7hKkRDYvNWvskN2fzMgaVa8siV/D63dC1rFIYPTD0iGQ0TXfg4e5qNrv8U0z22df
-         WnBdN5l4fe+ivAy3MNxH7hvoSOMQlWi4nYhkr4RIfcyT2cP9jbZxv8sWedDwqxg2B9
-         hz7SC7I3fxXxVChdUGLkMcvn81POtfqYq3hC7Mh5LqugdYbVjys0IFq6Ung8uCH0V/
-         vea8h4Ap2qpjBcfsk/+TaQfPDAk/20AtZG5UtkI9J//91OHbwYArD74vK3sW9kde8v
-         6UAQjGt1rpXAQ==
-Date:   Tue, 27 Sep 2022 14:32:25 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Rui Sousa <rui.sousa@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Richie Pearn <richard.pearn@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 01/12] net/sched: taprio: allow user input
- of per-tc max SDU
-Message-ID: <20220927143225.546ba2b8@kernel.org>
-In-Reply-To: <20220927212319.pc75hlhsw7s6es6p@skbuf>
-References: <20220923163310.3192733-1-vladimir.oltean@nxp.com>
-        <20220923163310.3192733-2-vladimir.oltean@nxp.com>
-        <20220926133829.6bb62b8a@kernel.org>
-        <20220927150921.ffjdliwljccusxad@skbuf>
-        <20220927112710.5fc7720f@kernel.org>
-        <20220927212319.pc75hlhsw7s6es6p@skbuf>
+        Tue, 27 Sep 2022 17:33:23 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CAC105D5E;
+        Tue, 27 Sep 2022 14:33:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=H7YtPOYhV29gP4WdkjcppH5vTdIvl+SSSIWTHEeQBx4=; b=4BVQpJgnjA+og9uC0hy0fjpk3y
+        1OlXuoXdUF+e/x47FLLo6Zzsy7FEnaSk3t3LrhyeOr3ZYarIOHcR9T3X54KTUwBIf4HfxFfhb6EeY
+        vbTRwOMGm1OnA7tyDObWHiufHqMLwI4MCAUIv1nH2+SJuLmGPFcsw0xFjWfmDGa6gWNfll6W2brfs
+        iM4xlX6OdiYO4ARFGAA/momuSmCr+gJGbmnmel63sDH5x/Mf1eA3Tr4UWC16CA//6tNswNfkekn/n
+        GtNoMnYhp8X9aXzd9MBHVB6WRiMXrs6EpS34oTGU9QRDgVUgqn/3TIAUZ8XtsDVP7xjWiK0E8eQMa
+        GV0fcXBw==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1odICe-00CjXe-VF; Tue, 27 Sep 2022 21:33:21 +0000
+Message-ID: <1d54d4ff-c8a3-145a-7ec5-f32107eda21e@infradead.org>
+Date:   Tue, 27 Sep 2022 14:33:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: linux-next: Tree for Sep 27 (uml 64-bit or 32-bit: tinyconfig)
+Content-Language: en-US
+To:     paulmck@kernel.org
+Cc:     broonie@kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>
+References: <20220927201053.518736-1-broonie@kernel.org>
+ <f1b22431-074d-32f1-b67a-34c51e4d072a@infradead.org>
+ <20220927212821.GX4196@paulmck-ThinkPad-P17-Gen-1>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220927212821.GX4196@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Sep 2022 21:23:19 +0000 Vladimir Oltean wrote:
-> On Tue, Sep 27, 2022 at 11:27:10AM -0700, Jakub Kicinski wrote:
-> > I know, that's what I expected you'd say :(
-> > You'd need a reverse parser which is a PITA to do unless you have
-> > clearly specified bindings.  
+
+
+On 9/27/22 14:28, Paul E. McKenney wrote:
+> On Tue, Sep 27, 2022 at 02:13:29PM -0700, Randy Dunlap wrote:
+>>
+>>
+>> On 9/27/22 13:10, broonie@kernel.org wrote:
+>>> Hi all,
+>>>
+>>> Changes since 20220923:
+>>>
+>>
+>> In file included from ../include/linux/notifier.h:16,
+>>                  from ../include/linux/memory_hotplug.h:7,
+>>                  from ../include/linux/mmzone.h:1244,
+>>                  from ../include/linux/gfp.h:7,
+>>                  from ../include/linux/slab.h:15,
+>>                  from ../include/linux/crypto.h:20,
+>>                  from ../arch/x86/um/shared/sysdep/kernel-offsets.h:5,
+>>                  from ../arch/um/kernel/asm-offsets.c:1:
+>> ../include/linux/srcu.h: In function ‘srcu_read_lock_nmisafe’:
+>> ../include/linux/srcu.h:181:26: error: implicit declaration of function ‘__srcu_read_lock_nmisafe’; did you mean ‘srcu_read_lock_nmisafe’? [-Werror=implicit-function-declaration]
+>>   181 |                 retval = __srcu_read_lock_nmisafe(ssp, true);
+>>       |                          ^~~~~~~~~~~~~~~~~~~~~~~~
+>>       |                          srcu_read_lock_nmisafe
+>> ../include/linux/srcu.h: In function ‘srcu_read_unlock_nmisafe’:
+>> ../include/linux/srcu.h:226:17: error: implicit declaration of function ‘__srcu_read_unlock_nmisafe’; did you mean ‘srcu_read_unlock_nmisafe’? [-Werror=implicit-function-declaration]
+>>   226 |                 __srcu_read_unlock_nmisafe(ssp, idx, true);
+>>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>>       |                 srcu_read_unlock_nmisafe
 > 
-> I think you're underestimating the problem, it's worse than PITA. My A
-> still hurts and yet I couldn't find any way in which reverse parsing the
-> bad netlink attribute is in any way practical in iproute2, other than
-> doing it to prove a point that it's possible.
+> Could you please send your .config or tell me how you generated it?
 
-Yup, iproute2 does not have policy tables, so it's hard.
 
-Once you have tables like this:
+For x86_64 SUBARCH, ARCH=um:
 
-https://github.com/kuba-moo/ynl/blob/main/tools/net/ynl/generated/ethtool-user.c#L22
+mkdir UML64
+make ARCH=um SUBARCH=x86_64 O=UML64 tinyconfig
+make ARCH=um SUBARCH=x86_64 O=UML64 all
 
-all linking up the types, it's fairly easy to reverse parse:
 
-https://github.com/kuba-moo/ynl/blob/main/tools/net/ynl/lib/ynl.c#L75
-
-Admittedly I haven't added parsing of the bounds yet so it'd just say
-"invalid argument .bla.something" not "argument out of range
-.bla.something (is: X, range N-M)" but that's just typing.
-
-> > I'd rather you kept the code as is than make precedent for adding both
-> > string and machine readable. If we do that people will try to stay on
-> > the safe side and always add both.
-> >
-> > The machine readable format is carries all the information you need.  
-> 
-> Nope, the question "What range?" still isn't answered via the machine
-> readable format. Just "What integer?".
-
-Hm, doesn't NLMSGERR_ATTR_POLICY contain the bounds?
-
-> > It's just the user space is not clever enough to read it which is,
-> > well, solvable.  
-> 
-> You should come work at NXP, we love people who keep a healthy dose of
-> unnecessary complexity in things :)
-
-Ha! :D
-
-> Sometimes, "not clever enough" is just fine.
-
-Yup, go ahead with just the strings. "We'll get there" for the machine
-readable parsing, hopefully, once my YAML descriptions come...
+-- 
+~Randy
