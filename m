@@ -2,121 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D905EBEC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F8E5EBEC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiI0Jg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 05:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
+        id S231256AbiI0JhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 05:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiI0JgV (ORCPT
+        with ESMTP id S230411AbiI0Jgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 05:36:21 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45E3AF0D3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:36:19 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id n10so14023411wrw.12
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:36:19 -0700 (PDT)
+        Tue, 27 Sep 2022 05:36:53 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5334AA7216
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:36:52 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id v28so1237613wrd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 02:36:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=/PlTLjGPSzswYlkSsTRBa4iX8iTXJTu7JK2WCLTfMVI=;
-        b=zwOCiH829H9W0MajrUip+/i4V00nILbmKLrgsGXRXIs/H3acOnp1T8Retrgw/XuQnk
-         WGAUlUaNiAHW0q1vdy31YzcqavfVoEH4yRocF2uitfJcL3lHXsl6m5keoyqFr3wFIYKb
-         4quqBuNZGY8cNnRoPJLx9VgOXPvXosnH/zEQSyQpsXODFOaqfIKqOZRdKXqbZBmyEG4R
-         PqeXHMNqDpdjlWJN9tKSDwfcpXT1A9b4mzMpHEdDyTVoVAGBHlc0ILCKTdSQ9yapXD2f
-         mTdkn6fVZZcWCWX1hhr0I6Xz6EaaADoMqimQJNW+VoZvzJ0xZyBtnNKYnpeAddTHF2ct
-         jplg==
+        bh=o2YL47wkdNCtbQ/cDyQshFBYktZxHSBc3e+Im99MsKQ=;
+        b=VOp1y0rIEFjW9MzzuluhjxgZIEMdat46QCY8sGRhrgJzo1NMRmb4BMl8L0wXZors0S
+         f3lzBllNMQZ309rJbWYY7Q2sK+PCUb+zRbQIQPfjWbn5iaLGTrlAlnspt5fQYqeck1Fx
+         AMgqE3gykkMsA1ME1JLAEXAPO0zchz3q2OOSBSMciSEGgTC6D5YkVb/L8pimqSzohK8P
+         ZNlyOQTO4iy3bLeidV3Rck5y8OgieLRlnEt5P6NUlH2hpdR8noLM4XsIWA+l3S7++ik8
+         +g/n0YQGwqGiCuopypTiKRT0Sdl2CS5XPCLZ6aL60IQVr4qhGlTupyp77QZR5V5TqAOO
+         CLGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=/PlTLjGPSzswYlkSsTRBa4iX8iTXJTu7JK2WCLTfMVI=;
-        b=ota4RYASAsmnx7mhWIxkqQaDXFJW8d+cYKEC8jn2Nr370ivEsXd8B0Uf+Jyhv66m6t
-         WeLHTJ0Omtd5dC+wlad0E8+DlqMsAEcQw/MZ/XugHwd0YVpY9SKq45EUbD/HIRrmlMr3
-         7tK45WFave4x8YWE/+vd9tHhA71/74p0LST0s8rRi9WfgUzf8d53aaaqh4EEx3FDcNGM
-         jWHBLPy/zn9wDbPytjP+tJb6lDDOp0z4s2HCqfYw7CfF7k0y9hXLQ4dhCSxz47DPp+Yx
-         bWEyj/JXxuzFx96HTa+MA/Ip15vNwFdrddicm/8ravhww2X+cLBNXseRXOnQ8tQ4W1uI
-         Dg3Q==
-X-Gm-Message-State: ACrzQf2foj8WNBZqyI+BWPXxpLXUH2zqrpujUAuabrsI7UlWKIipDzfA
-        RwUPmb7DyPJrsxq0NsQQCi7eMg==
-X-Google-Smtp-Source: AMsMyM7Sbp3KGS9RYk/ygpLZfdjsNmCuCMpLpfCLcKHXR7Gpm06yHTH40B2WCmC9hs7behpb1hhprA==
-X-Received: by 2002:adf:de11:0:b0:22c:b5f0:272e with SMTP id b17-20020adfde11000000b0022cb5f0272emr2003308wrm.224.1664271377909;
-        Tue, 27 Sep 2022 02:36:17 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 14-20020a05600c028e00b003b3307fb98fsm1180132wmk.24.2022.09.27.02.36.16
+        bh=o2YL47wkdNCtbQ/cDyQshFBYktZxHSBc3e+Im99MsKQ=;
+        b=KTJwmm/efCuh3+JHhxSChvWb8iapTv4JqktxkPgZxp/+NO9WM6T4RwJg6YBLRa4+pH
+         /HvX52soehwgEBHcbTCf9dxilBgzl4Fon4GztY7XGcFtgaOIu0fxJI3MWaQUn75X/YVj
+         8kj0GckNrRLLZip3/oGcjFXTjXUSVhUoa/HLsLYNYLjRKTNYE+XMtZ71J9vyl7WxbEiC
+         R6S1svJ1QQ0xFM2SZtX7KKJJHDALywWXosjgfsFwld/V+U+yGVTGvkYLstGp6OpzHhQ1
+         1xybCAvdpT014gTEbBUI1j5IVWR9uOlI2Bmucpk6QGSY1lIIdSk2t6h4sYYEocq8utFo
+         AD8A==
+X-Gm-Message-State: ACrzQf1FHY9Lb045CwG+smFHOjGnqHOY4BUTJU0AFUtjuX9IJ7ODnf0I
+        9E0AfHQ2iA3oRGUk0h34ymD7Ww==
+X-Google-Smtp-Source: AMsMyM7Z6EJ4pOi9kImED9VR+cCZ/gatMSptyvxq7YIinwEiZ7IsL4xOVqZV9NhmTQrkuyrlZwqg0Q==
+X-Received: by 2002:adf:e309:0:b0:22c:c332:9af7 with SMTP id b9-20020adfe309000000b0022cc3329af7mr157623wrj.217.1664271410890;
+        Tue, 27 Sep 2022 02:36:50 -0700 (PDT)
+Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
+        by smtp.gmail.com with ESMTPSA id g2-20020adff402000000b0022860e8ae7csm1314875wro.77.2022.09.27.02.36.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 02:36:17 -0700 (PDT)
-Message-ID: <29cc25fb-0196-d80d-e3c7-b6aa22d32b1b@linaro.org>
-Date:   Tue, 27 Sep 2022 11:36:16 +0200
+        Tue, 27 Sep 2022 02:36:50 -0700 (PDT)
+Message-ID: <d1039404-b8db-c32c-d508-32a77a348744@baylibre.com>
+Date:   Tue, 27 Sep 2022 11:36:49 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH -next] thermal/intel/int340x: Initialized ret in error
- path in int340x_thermal_zone_add()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 0/2] spi: amlogic: meson-spicc: Use pinctrl to drive CLK
+ line when idle
 Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        "kernelci.org bot" <bot@kernelci.org>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-References: <20220923152009.1721739-1-nathan@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220923152009.1721739-1-nathan@kernel.org>
+To:     neil.armstrong@linaro.org, broonie@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        narmstrong@baylibre.com
+References: <20220809172017.215412-1-aouledameur@baylibre.com>
+ <09081275-be9c-9d0c-856b-ed2df8fc0b13@linaro.org>
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+In-Reply-To: <09081275-be9c-9d0c-856b-ed2df8fc0b13@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/09/2022 17:20, Nathan Chancellor wrote:
-> Clang warns:
-> 
->    drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->            if (!int34x_thermal_zone->ops)
->                ^~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:279:17: note: uninitialized use occurs here
->            return ERR_PTR(ret);
->                          ^~~
->    drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:2: note: remove the 'if' if its condition is always false
->            if (!int34x_thermal_zone->ops)
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:211:9: note: initialize the variable 'ret' to silence this warning
->            int ret;
->                  ^
->                    = 0
->    1 error generated.
-> 
-> If kmemdup() fails, -ENOMEM should be returned.
-> 
-> Fixes: f6f6f9a01374 ("thermal/intel/int340x: Replace parameter to simplify")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1717
-> Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
+Hi Neil,
 
-I've folded this patch with the changes introducing the issue
+On 9/27/22 10:30, Neil Armstrong wrote:
+> Hi Amjad,
+>
+> On 09/08/2022 19:20, Amjad Ouled-Ameur wrote:
+>> Between SPI transactions, all SPI pins are in HiZ state. When using 
+>> the SS
+>> signal from the SPICC controller it's not an issue because when the
+>> transaction resumes all pins come back to the right state at the same 
+>> time
+>> as SS.
+>>
+>> The problem is when we use CS as a GPIO. In fact, between the GPIO CS
+>> state change and SPI pins state change from idle, you can have a 
+>> missing or
+>> spurious clock transition.
+>>
+>> Set a bias on the clock depending on the clock polarity requested 
+>> before CS
+>> goes active, by passing a special "idle-low" and "idle-high" pinctrl 
+>> state
+>> and setting the right state at a start of a message.
+>>
+>> Amjad Ouled-Ameur (2):
+>>    spi: dt-bindings: amlogic, meson-gx-spicc: Add pinctrl names for SPI
+>>      signal states
+>>    spi: meson-spicc: Use pinctrl to drive CLK line when idle
+>>
+>>   .../bindings/spi/amlogic,meson-gx-spicc.yaml  | 15 +++++++
+>>   arch/arm64/boot/dts/amlogic/meson-gxl.dtsi    | 14 +++++++
+>>   drivers/spi/spi-meson-spicc.c                 | 39 ++++++++++++++++++-
+>>   3 files changed, 67 insertions(+), 1 deletion(-)
+>>
+>
+> Will you send a v2 with comments adresses ?
 
-Thanks for the fix
+Planning to send it soon, thank you for the review.
 
+Regards,
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Amjad
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
