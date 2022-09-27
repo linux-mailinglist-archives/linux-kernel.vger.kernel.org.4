@@ -2,111 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E585ECEE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25C45ECEEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbiI0UrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 16:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
+        id S232408AbiI0UrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 16:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233247AbiI0Uqm (ORCPT
+        with ESMTP id S232213AbiI0Uq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 16:46:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D5110250F;
-        Tue, 27 Sep 2022 13:46:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AFAE61BA0;
-        Tue, 27 Sep 2022 20:46:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E2F5C433D6;
-        Tue, 27 Sep 2022 20:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664311583;
-        bh=Sf7VqaaR4EHHX4vlNDI8Uh3V4OoviqEGs4OJjkuPMvE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KEZNNzr3KpkbCjZX/ZJvREb7swZiFyJmXl/NY8R03swHRszivrMyt8UXetSuBhtXd
-         5oTFBlMOpoM0xPzKElfZiZ9HqsDOEdXMaH58puZj0ftn0AH1999qKgdglrfiMjpme6
-         OlsOQXgXmF1Fgk9j/Uc81h8vjUF1GEEYgOC/jQGh6dulYlyL8D9WfRinK06JqPkSlB
-         7RSlS+UXGulwqb/XN3WfsCluvdhhkx06VP3KejufHndo5WGag9Hg0Usn6FALCWBgtr
-         xCt5qZaraQDWoDHrHh671GeaD5i0Uiq8rwG1rc8BtPTKfa80o0mpStizA7VaRy0iCK
-         uBHYh5WuJ9KBA==
-Date:   Tue, 27 Sep 2022 13:46:21 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        linux-hyperv@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] Drivers: hv: vmbus: Split memcpy of flex-array
-Message-ID: <YzNhHZOLB0T8iqHE@dev-arch.thelio-3990X>
-References: <20220924030741.3345349-1-keescook@chromium.org>
+        Tue, 27 Sep 2022 16:46:59 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C36D10D661
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 13:46:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=wfbFlT7Fnw4rxLDLwyq17dXmR0gJ
+        5Qam1ux0R1lQHWc=; b=MIczD5cJT39tZ9klkaFPGmkFWRtPRbLdqC1B0jE3X4cr
+        UJXn4FxraA5YYt3iQ/ms8B42g3v9Ty0VpDEUZjXZzvvI12mbfx5GkWXcpNZxabUx
+        3w6lKWBM46Gn2y8dovBBGn4XGAHfqSGG1P/YfC6mqKsHS1T6NSvGvyR2fomiygw=
+Received: (qmail 3715985 invoked from network); 27 Sep 2022 22:46:53 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Sep 2022 22:46:53 +0200
+X-UD-Smtp-Session: l3s3148p1@SoqBvq7padUucrEr
+Date:   Tue, 27 Sep 2022 22:46:52 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Khalil Blaiech <kblaiech@nvidia.com>
+Subject: Re: [PATCH v7 1/2] i2c: mlxbf: support BlueField-3 SoC
+Message-ID: <YzNhPL0lUeqjCymv@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Khalil Blaiech <kblaiech@nvidia.com>
+References: <20220927203924.22644-1-asmaa@nvidia.com>
+ <20220927203924.22644-2-asmaa@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qVngq7oWP5SexGFa"
 Content-Disposition: inline
-In-Reply-To: <20220924030741.3345349-1-keescook@chromium.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220927203924.22644-2-asmaa@nvidia.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 08:07:41PM -0700, Kees Cook wrote:
-> To work around a misbehavior of the compiler's ability to see into
-> composite flexible array structs (as detailed in the coming memcpy()
-> hardening series[1]), split the memcpy() of the header and the payload
-> so no false positive run-time overflow warning will be generated. As it
-> turns out, this appears to actually reduce the text size:
-> 
-> $ size drivers/hv/vmbus_drv.o.before drivers/hv/vmbus_drv.o
->    text    data     bss     dec     hex filename
->   22968    5239     232   28439    6f17 drivers/hv/vmbus_drv.o.before
->   23032    5239     232   28503    6f57 drivers/hv/vmbus_drv.o
-> 
-> [1] https://lore.kernel.org/linux-hardening/20220901065914.1417829-2-keescook@chromium.org/
-> 
-> Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-> Cc: Haiyang Zhang <haiyangz@microsoft.com>
-> Cc: Stephen Hemminger <sthemmin@microsoft.com>
-> Cc: Wei Liu <wei.liu@kernel.org>
-> Cc: Dexuan Cui <decui@microsoft.com>
-> Cc: linux-hyperv@vger.kernel.org
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Reported-by: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-I was waiting for another -next update to test this in WSL2; now that
-said update has happened, I can see that this does resolve the runtime
-warning that I saw.
+--qVngq7oWP5SexGFa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+On Tue, Sep 27, 2022 at 04:39:23PM -0400, Asmaa Mnebhi wrote:
+> BlueField-3 SoC has the same I2C IP logic as previous
+> BlueField-1 and 2 SoCs but it has different registers' addresses.
+> This is an effort to keep this driver generic accross all
+> BlueField generations.
+> This patch breaks down the "smbus" resource into 3 separate
+> resources to enable us to use common registers' offsets for all
+> BlueField SoCs:
+> struct mlxbf_i2c_resource *timer;
+> struct mlxbf_i2c_resource *mst;
+> struct mlxbf_i2c_resource *slv;
+>=20
+> Of course, all offsets had to be adjusted accordingly, and we took
+> this chance to reorganize the macros depending on the register block
+> they target.
+>=20
+> There are only 2 registers' offsets that do not fit within this
+> schema so their offsets are passed as SoC-specific parameters:
+> smbus_master_rs_bytes_off
+> smbus_master_fsm_off
+>=20
+> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
+> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
 
-> ---
->  drivers/hv/vmbus_drv.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> index 23c680d1a0f5..9b111a8262e3 100644
-> --- a/drivers/hv/vmbus_drv.c
-> +++ b/drivers/hv/vmbus_drv.c
-> @@ -1131,7 +1131,8 @@ void vmbus_on_msg_dpc(unsigned long data)
->  			return;
->  
->  		INIT_WORK(&ctx->work, vmbus_onmessage_work);
-> -		memcpy(&ctx->msg, &msg_copy, sizeof(msg->header) + payload_size);
-> +		ctx->msg.header = msg_copy.header;
-> +		memcpy(&ctx->msg.payload, msg_copy.u.payload, payload_size);
->  
->  		/*
->  		 * The host can generate a rescind message while we
-> -- 
-> 2.34.1
-> 
-> 
+Applied to for-next, thanks!
+
+
+--qVngq7oWP5SexGFa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMzYTwACgkQFA3kzBSg
+KbaqWw//YiVATDdKJKtgq28rIlc01pCVSOtVA5ytf+MSSmE/FCScYbjwEWIdq4nW
+4IQRbWU4u41FQUVyjMmX6PZUl7mFL86jqLzZjtyVu0I0oMF+Tk3pK6G8tlazuU/1
+YZ1dtJG+A8Ooo84sh2pykPKAG3ONlat8zzWBu3Vvliki2owcLFPN+27ZyyJp0iqn
+IftCw5D20BCix5nPWj+PgabZacGl51U/3J9CHxs87Q8LvaVF54DlGCgtZ11oXJG5
+rohxVtpItFzjJfANWiY79XMVFqyoCLWr0UXq1V5W5lgr7XFtvZRTyUBLYhXt1w+R
+8vfTTz+v+WqAsZuGZnbHjImC+nssLYA6ddSnKniPEsD/O0scQWPBgVyXEPzYhVam
+sdqOAa4fuHXMw8FcbLbq86n7FMOyiS5AgDneJFUDp8y/JvML6bP1rkLFi4az+/kc
+m4VaSN8ROJ/m0vR8YXBRXZ0LLya4CKAL/vZ6MbAF9fnbnjZSEiuEvahSnKzvDOOr
+Fl0pNJ8Y5EdjVeojuHWXd5x/f+8mw7g5c8iH2phcZNzIrKYrfvqhuv3ueF7EqwyR
+2STFyJNzT5kk0NRv7DQJtD0Y9bLovCE51lY3Gro0WsAiogr+jOUiKyXE7KtfJXjR
+3i79ubMCJ8KpprPluemEgNd0a7Mg6qAHnmr3F4FVHTSMhhF0xrg=
+=9tLB
+-----END PGP SIGNATURE-----
+
+--qVngq7oWP5SexGFa--
