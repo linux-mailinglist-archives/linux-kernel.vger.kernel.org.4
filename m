@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BDA5EC12B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A299E5EC123
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiI0LYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
+        id S229875AbiI0LXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232035AbiI0LXM (ORCPT
+        with ESMTP id S231393AbiI0LXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:23:12 -0400
+        Tue, 27 Sep 2022 07:23:03 -0400
 Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EF412DEEC;
-        Tue, 27 Sep 2022 04:21:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C5613A951;
+        Tue, 27 Sep 2022 04:21:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1664277718;
-  x=1695813718;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1664277702;
+  x=1695813702;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hzApWBA3xTSZ1v8riDwMfzZx6pC2MkanA6btQmoyo+8=;
-  b=dOMu+tMOOmvqqaVKoHdkBirhl/BpFE/xTb0qx9wJ3kItP7ZiHMMDZ7uN
-   C5d9Aqv/BGne+2rvmUTLNRLWPANDWah/YxDRUCsKg6vDzDFKyqA6tyNyp
-   pQzubNezNmCE9GD5hjEPyeb83LZP4+KoGDGHkORoeequpO/5jegPSyNZX
-   l8NwT3szcVAUYQS4wY1SRT62dycXSTMTXXwilfmxtvpFyOgLtz5suKJtk
-   r7XLEKuPxMZQf+436+UjLqxpcP/79o2leQnhOa+cOpnFbnnNScObypfrg
-   AHgUw72RwVTSDrQFvLxlrTbyrL+UpBeTnMvso+O8k37LREDsA2Tug7+FZ
+  bh=TrQtsuqQ4EnLgm0F7EqTy/mbaX8OOSSxYGg4dteSuwI=;
+  b=EX9w+PF1n6PQ+dm4r/EnyxJBqxrgQ9yW6ZOWwDXUAjaJ5fkO/ipDbNNV
+   /Pj6D67jGqBgeDpjKjOeuu4OqfmvFKmjp226snUg7TjDDSC8GoVwwxOGs
+   bk8pEabpSBP5kK8DeRCjbwGsDPo7K7QWOblViIrqz3/tvTzSdHrsbxFVL
+   6b6wDMTXFNSt2iv5fvg0v6G8LPkmrVQm5eKuHEn+/N+TjDyatfhviLbQ6
+   MsrCFJvwgl66q1RpU8aoNmayrFW0ZnH9k+GDqRqpC07/MqblQY+yXg4JI
+   HAbuApAwGbeae8ToB3pn8ZtRr7GBQZBxj5lIWHYvrdLe6R4gDWdNq5MKG
    A==;
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
 To:     <broonie@kernel.org>, <krzysztof.kozlowski@linaro.org>,
@@ -37,9 +37,9 @@ CC:     <kernel@axis.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-samsung-soc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v2 3/4] spi: Split transfers larger than max size
-Date:   Tue, 27 Sep 2022 13:21:16 +0200
-Message-ID: <20220927112117.77599-4-vincent.whitchurch@axis.com>
+Subject: [PATCH v2 4/4] spi: s3c64xx: Fix large transfers with DMA
+Date:   Tue, 27 Sep 2022 13:21:17 +0200
+Message-ID: <20220927112117.77599-5-vincent.whitchurch@axis.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220927112117.77599-1-vincent.whitchurch@axis.com>
 References: <20220927112117.77599-1-vincent.whitchurch@axis.com>
@@ -55,36 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A couple of drivers call spi_split_transfers_maxsize() from their
-->prepare_message() callbacks to split transfers which are too big for
-them to handle.  Add support in the core to do this based on
-->max_transfer_size() to avoid code duplication.
+The COUNT_VALUE in the PACKET_CNT register is 16-bit so the maximum
+value is 65535.  Asking the driver to transfer a larger size currently
+leads to the DMA transfer timing out.  Implement ->max_transfer_size()
+and have the core split the transfer as needed.
 
+Fixes: 230d42d422e7 ("spi: Add s3c64xx SPI Controller driver")
 Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 ---
- drivers/spi/spi.c | 9 +++++++++
+ drivers/spi/spi-s3c64xx.c | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index f41a8c2752b8..44e4352d948b 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1649,6 +1649,15 @@ static int __spi_pump_transfer_message(struct spi_controller *ctlr,
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index 651c35dd9124..71d324ec9a70 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -84,6 +84,7 @@
+ #define S3C64XX_SPI_ST_TX_FIFORDY		(1<<0)
  
- 	trace_spi_message_start(msg);
+ #define S3C64XX_SPI_PACKET_CNT_EN		(1<<16)
++#define S3C64XX_SPI_PACKET_CNT_MASK		GENMASK(15, 0)
  
-+	ret = spi_split_transfers_maxsize(ctlr, msg,
-+					  spi_max_transfer_size(msg->spi),
-+					  GFP_KERNEL | GFP_DMA);
-+	if (ret) {
-+		msg->status = ret;
-+		spi_finalize_current_message(ctlr);
-+		return ret;
-+	}
+ #define S3C64XX_SPI_PND_TX_UNDERRUN_CLR		(1<<4)
+ #define S3C64XX_SPI_PND_TX_OVERRUN_CLR		(1<<3)
+@@ -711,6 +712,13 @@ static int s3c64xx_spi_prepare_message(struct spi_master *master,
+ 	return 0;
+ }
+ 
++static size_t s3c64xx_spi_max_transfer_size(struct spi_device *spi)
++{
++	struct spi_controller *ctlr = spi->controller;
 +
- 	if (ctlr->prepare_message) {
- 		ret = ctlr->prepare_message(ctlr, msg);
- 		if (ret) {
++	return ctlr->can_dma ? S3C64XX_SPI_PACKET_CNT_MASK : SIZE_MAX;
++}
++
+ static int s3c64xx_spi_transfer_one(struct spi_master *master,
+ 				    struct spi_device *spi,
+ 				    struct spi_transfer *xfer)
+@@ -1152,6 +1160,7 @@ static int s3c64xx_spi_probe(struct platform_device *pdev)
+ 	master->unprepare_transfer_hardware = s3c64xx_spi_unprepare_transfer;
+ 	master->prepare_message = s3c64xx_spi_prepare_message;
+ 	master->transfer_one = s3c64xx_spi_transfer_one;
++	master->max_transfer_size = s3c64xx_spi_max_transfer_size;
+ 	master->num_chipselect = sci->num_cs;
+ 	master->use_gpio_descriptors = true;
+ 	master->dma_alignment = 8;
 -- 
 2.34.1
 
