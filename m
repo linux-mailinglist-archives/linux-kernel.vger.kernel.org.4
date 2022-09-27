@@ -2,127 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FA75EB800
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31EA65EB804
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiI0C61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 22:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        id S230498AbiI0C7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 22:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiI0C5w (ORCPT
+        with ESMTP id S231185AbiI0C6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 22:57:52 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00F54DB4C;
-        Mon, 26 Sep 2022 19:53:42 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so8813528pjk.2;
-        Mon, 26 Sep 2022 19:53:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=uVSDX283H5TLgkOzDymE7tG05Kgkflu8UK7iAbsdboU=;
-        b=c/RqcdJoO27QwlNbfMvLMb7gmXT6fAo6t6bl6Cqlh3sxssmDGtvTt4s3LqkqX0A/0o
-         S1bUEfXxTjLpMUP3t3mIUcXXSTx66VoJYOrTHgle0H54/o1XEawTJHPS2q86SuFghjV2
-         hatIXXP5uZoF1ug5+MykghIUKvlDsZDOqqewiICSfGvhUQVG8POWyZO3Plu5AS+x/3zC
-         qOgwQlFez/RDeRiRdnDe7JNReOG3fGui4OXmHMJiCHTvS5sUWjyidlrG7fHaSWb17UNv
-         Zbm5sFuMwVEd8giDvACuHAlw4rmUyMDP45piY66CsrUcaXqu3W3ybS9stpISvfxAu6qF
-         0mrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=uVSDX283H5TLgkOzDymE7tG05Kgkflu8UK7iAbsdboU=;
-        b=hwNGErtK1MupCXkADcyT9LRzQHW9puK9FIju7ltnaXoHS6d+mGWY5tqolN5P/swcDb
-         olq1nycCcOTo/eRbl6LKFA7FppFlAcGUhp11VNYy/hF4pvlkr0DY0408kTPBmUnL2GNF
-         4dkV4CIZh6wGHkXeL39XoxcKB7fQC4k8bdnU+t7+3D0T8peRqV/0I+BJgSQIYvjR50Rn
-         Xl/pkDG96f4kj0qzXub4pMX4MVE/67cYoCYRWyQXKtpBXaqKlOV3HO3JLCZkPAveI1/X
-         dDX/uUPN21ZhVZ4CW22JyW9bV8PqFieOs9KrnwNDXk34FfnleG9yvdc7Gpi4gPAa+X1m
-         cIwQ==
-X-Gm-Message-State: ACrzQf0f8iDGmQa2jWM0ep4jOADZu7kT+UsxB2LUn6GhXLwEIbBpg6Ht
-        iqhV2eGc4s+ZBFn2kbx7uS8=
-X-Google-Smtp-Source: AMsMyM6urwfUhEEHFDBjIwyD6Xpc4CWvA1/+3nhlQv60PYzbz4oIT0y+KCAWsdNda0o5nwFE9Q2S5w==
-X-Received: by 2002:a17:90b:1e01:b0:202:ee2b:c856 with SMTP id pg1-20020a17090b1e0100b00202ee2bc856mr2005411pjb.29.1664247222263;
-        Mon, 26 Sep 2022 19:53:42 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id a4-20020a1709027e4400b00173cfaed233sm189404pln.62.2022.09.26.19.53.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 19:53:41 -0700 (PDT)
-Message-ID: <ada70afe-64d5-ccab-242e-9a3c3c85e6c4@gmail.com>
-Date:   Tue, 27 Sep 2022 11:53:38 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] overflow: Fix kern-doc markup for functions
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220926194713.1806917-1-keescook@chromium.org>
- <YzIUS/+H2YA7RBvA@casper.infradead.org> <202209261408.59F78C0D@keescook>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <202209261408.59F78C0D@keescook>
-Content-Type: text/plain; charset=UTF-8
+        Mon, 26 Sep 2022 22:58:01 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06FB10FC78;
+        Mon, 26 Sep 2022 19:54:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664247255; x=1695783255;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=aQZv0sjJ9JD/eWiZDar+fsNgpNgixsIy5MTQe/nz+tI=;
+  b=i3DBuEkp2pWyyhs+Mud47H2OdAduekvpsCbBF3IQOoYOpXyHT9ZepmUT
+   CkqPr35aeffq6OJi/vk+jEpfTbXLXWDUBhSGXOuD3znwe9snADD84SWp5
+   qiqzdNTq3rX6TTZmnaE/2q8Dvyjzod/lfHbA9MtiwlNp0LUJ+OIxU/vXY
+   eZS//K/F95N/YYfwn0DZQHeIEhyWesSX2jqlpYnNwGruIgc/QijSTxBZ0
+   513aV3uS9/r4U+wwUL0Bfeml1R2RQeb7pVjhQdFCOE14rNpNv6qMuj9PT
+   gLO5+IZXChpArXQDJqMIXhToFWGfxj/BET8peNjLnCbrh0JVup8+Vyob2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="302673339"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="302673339"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 19:54:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="683805487"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="683805487"
+Received: from sqa-gate.sh.intel.com (HELO robert-ivt.tsp.org) ([10.239.48.212])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Sep 2022 19:54:10 -0700
+Message-ID: <d55ccf1c085d4adadc8dbbbae6443059a94eaf90.camel@linux.intel.com>
+Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: Fix wrong gfn range of tlb
+ flushing in validate_direct_spte()
+From:   Robert Hoo <robert.hu@linux.intel.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Lan Tianyu <Tianyu.Lan@microsoft.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Tue, 27 Sep 2022 10:54:10 +0800
+In-Reply-To: <CALzav=f=y7-2uOnXUi---hvCTa2otDBPsY1VoUtDWnS7+0QX=w@mail.gmail.com>
+References: <cover.1661331396.git.houwenlong.hwl@antgroup.com>
+         <c0ee12e44f2d218a0857a5e05628d05462b32bf9.1661331396.git.houwenlong.hwl@antgroup.com>
+         <f6fd8ccff13f9f48cbca06f0a5278654198d0d06.camel@linux.intel.com>
+         <YyoHNMz3CH4SnJwJ@google.com>
+         <CALzav=f=y7-2uOnXUi---hvCTa2otDBPsY1VoUtDWnS7+0QX=w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, 2022-09-20 at 11:44 -0700, David Matlack wrote:
+> On Tue, Sep 20, 2022 at 11:32 AM David Matlack <dmatlack@google.com>
+> wrote:
+> > 
+> > On Sun, Sep 18, 2022 at 09:11:00PM +0800, Robert Hoo wrote:
+> > > On Wed, 2022-08-24 at 17:29 +0800, Hou Wenlong wrote:
+> > > > The spte pointing to the children SP is dropped, so the
+> > > > whole gfn range covered by the children SP should be flushed.
+> > > > Although, Hyper-V may treat a 1-page flush the same if the
+> > > > address points to a huge page, it still would be better
+> > > > to use the correct size of huge page. Also introduce
+> > > > a helper function to do range-based flushing when a direct
+> > > > SP is dropped, which would help prevent future buggy use
+> > > > of kvm_flush_remote_tlbs_with_address() in such case.
+> > > > 
+> > > > Fixes: c3134ce240eed ("KVM: Replace old tlb flush function with
+> > > > new
+> > > > one to flush a specified range.")
+> > > > Suggested-by: David Matlack <dmatlack@google.com>
+> > > > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> > > > ---
+> > > >  arch/x86/kvm/mmu/mmu.c | 10 +++++++++-
+> > > >  1 file changed, 9 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > > index e418ef3ecfcb..a3578abd8bbc 100644
+> > > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > > @@ -260,6 +260,14 @@ void
+> > > > kvm_flush_remote_tlbs_with_address(struct
+> > > > kvm *kvm,
+> > > >     kvm_flush_remote_tlbs_with_range(kvm, &range);
+> > > >  }
+> > > > 
+> > > > +/* Flush all memory mapped by the given direct SP. */
+> > > > +static void kvm_flush_remote_tlbs_direct_sp(struct kvm *kvm,
+> > > > struct
+> > > > kvm_mmu_page *sp)
+> > > > +{
+> > > > +   WARN_ON_ONCE(!sp->role.direct);
+> > > 
+> > > What if !sp->role.direct? Below flushing sp->gfn isn't expected?
+> > > but
+> > > still to do it. Is this operation harmless?
+> > 
+> > Flushing TLBs is always harmless because KVM cannot ever assume an
+> > entry is
+> > in the TLB. However, *not* (properly) flushing TLBs can be harmful.
+> > If KVM ever
+> > calls kvm_flush_remote_tlbs_direct_sp() with an indirect SP, that
+> > is a bug in
+> > KVM. The TLB flush here won't be harmful, as I explained, but KVM
+> > will miss a
+> > TLB flush.
+> > 
+Yes, agree, not harmful, a cost of TLB miss, thanks.
 
-Somehow Kees added me in Cc:, so let me comment.  :-)
-
-On Mon, 26 Sep 2022 14:09:10 -0700, Kees Cook wrote:
-> On Mon, Sep 26, 2022 at 10:06:19PM +0100, Matthew Wilcox wrote:
->> On Mon, Sep 26, 2022 at 12:47:13PM -0700, Kees Cook wrote:
->>> -/** check_add_overflow() - Calculate addition with overflow checking
->>> +/**
->>> + * check_add_overflow - Calculate addition with overflow checking
->>>   *
->>>   * @a: first addend
->>>   * @b: second addend
->>
->> Why did you remove the ()?  And why didn't you delete the blank line?
->> According to our documentation, the canonical form is:
->>
->>   /**
->>    * function_name() - Brief description of function.
->>    * @arg1: Describe the first argument.
->>    * @arg2: Describe the second argument.
->>    *        One can provide multiple line descriptions
->>    *        for arguments.
-
-Matthew, you call it the "canonical form", my take is more of a "template
-that is known to work".
-
->>
->> I don't usually complain about people getting that wrong, but when
->> people correct it to be wrong ...
-
-I'd say "wrong" if "./scripts/kernel-doc -v -none include/linux/overflow.h"
-complained or the resulting reST doc didn't rendered properly, but that's
-not the case here.
-
+> > That being said, I don't think any changes here are necessary.
+> > kvm_flush_remote_tlbs_direct_sp() only has one caller,
+> > validate_direct_spte(),
+> > which only operates on direct SPs. The name of the function also
+> > makes it
+> > obvious this should only be called with a direct SP. And if we ever
+> > mess this
+> > up in the future, we'll see the WARN_ON().
 > 
-> Hunh, everywhere I'd looked didn't have the "()" (which seems
-> redundant). The blank line was entirely aesthetics for me. If it's
-> supposed to be without a blank, I can fix it up everwhere.
+> That being said, we might as well replace the WARN_ON_ONCE() with
+> KVM_BUG_ON(). That will still do a WARN_ON_ONCE() but has the added
+> benefit of terminating the VM.
 
-So, I think this is more of a territory of preference or consistency
-rather than that of correctness.  Those extra blank lines can be confusing
-as most people expect it in front of description part.
+Yeah, here was my point, WARN_ON_ONCE() might not be warning obviously
+enough, as it usually for recoverable cases. But terminating VM is also
+over action I think. Just my 2 cents, the whole patch is good.
 
-get_maintainer.pl says Kees is the sole maintainer of overflow.h, so
-it's his call, I guess.
 
-        Thanks, Akira
-> 
