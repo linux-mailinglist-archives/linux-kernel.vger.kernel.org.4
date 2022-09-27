@@ -2,202 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80AC85EB61E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167F35EB620
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbiI0AKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 20:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
+        id S230351AbiI0AMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 20:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiI0AKt (ORCPT
+        with ESMTP id S229542AbiI0AMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 20:10:49 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD169A1D2F;
-        Mon, 26 Sep 2022 17:10:47 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id d42so13432217lfv.0;
-        Mon, 26 Sep 2022 17:10:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=IUJ883vXpIy8HsSMOZN5r8Aa/v8we/1OUC9VvaE/vgg=;
-        b=kdKOfVJjqcfbjmysbn8RvscGiIHxfnNSdIs/2eWi+aYJZeiV14hDxAtKmUV9CUTIn5
-         Y+pImzu5BSsDPFmCaB2u/67WiDF58Hi/te8MS2eWoxZIZj2tafwR7ZBH8I3dJZ0iGger
-         Cock4M9KkcCk7UhfsmKTfNOMXbs5YbAL4xmsbZTEfF1wi3GJS3BKTEaVSupek2epMyNR
-         3MGPPPRpCQSeUoDWBs4cOQNTPezP2FgvvgPK0ncL2pqaINu80v748yDhogEkH8I5ntBl
-         axRAW4zXq4+YWV1ici67mjtAQXxnp8OWFDJ7a3a13N0tcRYtwIZiZyufXYpZJ+CeD1sb
-         T+mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=IUJ883vXpIy8HsSMOZN5r8Aa/v8we/1OUC9VvaE/vgg=;
-        b=zk2Kn8f4iOFJXOKDX+cEuTn/JfLyGhU/hS8UJwPP2dYhFUzub3vtjAti6rjDWjl3+p
-         e3KMgFEltBqOXj1DkooChNF/BiewLxdSBoZJEhm8LLDgDyyeHMMAl6nru0lbhI4xMpHP
-         mtQYU8bUL9IylND1Xt7zjeKnUNvmpIs00BwxVG4qgsJ3m8kQ2G9jNW2SOgTgKV/ba3SQ
-         gOITxExqbkNT0YrTzbJQNzQbLbB76yDFXxvqW/UtC+2EZBiKxKeZQGQXy6auRcHOK5ex
-         yVqloiRbMB2RgcktwC+PmO+sMau8BFqHtlbW+sL5YtbbSi1EILqUqx7/quT6W/dm1/U9
-         O5jQ==
-X-Gm-Message-State: ACrzQf3qQtuhoveLD2wy50/XnM28aD1tPBxRjAID/0hvsf04V8FtaAff
-        Kt9XJkZsysZAklhtjcoM8bykbLjzRL/ae/eijn8=
-X-Google-Smtp-Source: AMsMyM5t2yMQz8YtpKBdLJnPDLccM1eNIwYgD1UwuR8cz1Q6SJGukjwtllwx6Lx4SuqcfIbmuGo049BDiixWKIsTf14=
-X-Received: by 2002:a05:6512:b97:b0:497:5c43:2d61 with SMTP id
- b23-20020a0565120b9700b004975c432d61mr9093348lfv.251.1664237445949; Mon, 26
- Sep 2022 17:10:45 -0700 (PDT)
+        Mon, 26 Sep 2022 20:12:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28A2A2617;
+        Mon, 26 Sep 2022 17:12:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 299B0CE11EA;
+        Tue, 27 Sep 2022 00:12:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04C95C433C1;
+        Tue, 27 Sep 2022 00:12:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664237537;
+        bh=yJTEwalXAj1ZcOxSPqdSxW64r1dUrfta6pJjhKY+Tq0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CHx5HL8v/5bO/aYAEsadexy7YLwfs42LwiBLPiYy4rMXI1FglqRvP3XDVGG0M6TWh
+         osDik7ZxzeRdkhNBED8VJl4n9wzfGm/05vTJCAS4+0gmWCd6vMairWnKW35IAc/PL8
+         HzwM9l6NXbRJC475duQPJ5qN1WaYLRqhys5i+DOVlDDL7Yt51G8LPMTYiiu7rvC2l4
+         /gy6GyNH8pTbJA9NXQcA85Hf/bx+YrgGCcr9oacZC9BjEPPDCuaNAKePkahcst3ptX
+         ue0nS3pG06A3YvRDcax+oj8NbYDmCLwxTO/RtPV1bk1LVdjrkb/N0U64G4iUIp1zxS
+         KCmNxPgQRC8bw==
+Date:   Tue, 27 Sep 2022 01:12:12 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>,
+        Greg KH <greg@kroah.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Manfred Spraul <manfred.spraul@de.bosch.com>
+Subject: Re: linux-next: manual merge of the driver-core tree with the
+ jc_docs tree
+Message-ID: <YzI/3MjHgbXFHoHG@sirena.org.uk>
+References: <20220926210631.657728-1-broonie@kernel.org>
+ <20220926224621.47llaskp6mihi4dd@tarta.nabijaczleweli.xyz>
+ <878rm5rbka.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <20220926164358.v2.1.Ic8eabc8ed89a07c3d52726dd017539069faac6c4@changeid>
-In-Reply-To: <20220926164358.v2.1.Ic8eabc8ed89a07c3d52726dd017539069faac6c4@changeid>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 26 Sep 2022 17:10:34 -0700
-Message-ID: <CABBYNZJNrnmw6uUwQekqz1zQnG++kAHDqGfHJOxO082g+1Y1kw@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: Call shutdown for HCI_USER_CHANNEL
-To:     Abhishek Pandit-Subedi <abhishekpandit@google.com>
-Cc:     linux-bluetooth@vger.kernel.org,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2xIGPcpkILOvyfyN"
+Content-Disposition: inline
+In-Reply-To: <878rm5rbka.fsf@meer.lwn.net>
+X-Cookie: You may be recognized soon.  Hide.
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Abhishek,
 
-On Mon, Sep 26, 2022 at 4:44 PM Abhishek Pandit-Subedi
-<abhishekpandit@google.com> wrote:
->
-> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->
-> Some drivers depend on shutdown being called for proper operation.
-> Unset HCI_USER_CHANNEL and call the full close routine since shutdown is
-> complementary to setup.
->
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> ---
->
-> Using hci_qca, we can get the controller into a bad state simply by
-> trying to bind to userchannel twice (open+bind+close, then open+bind).
-> Without running the shutdown routine, the device seems to get into a bad
-> state. A similar bug also occurs with btmtksdio (using MT7921).
->
-> This change properly runs the shutdown routine, which should be
-> complementary to setup. The reason it unsets the HCI_USER_CHANNEL flag
-> is that some drivers have complex operations in their shutdown routine
-> (including sending hci packets) and we need to support the normal data
-> path for them (including cmd_timeout + recovery mechanisms).
->
-> Note for v2: I've gotten a chance to test this on more devices
-> and figure out why it wasn't working before in v1. I found two problems:
-> I had a signal pending (SIGTERM) that was messing things up in the
-> socket release function and the HCI_USER_CHANNEL flag was preventing
-> hci_sync from operating properly during shutdown on Intel chipsets
-> (which use the sync functions to send a reset command + other commands
-> sometimes).
->
-> This was tested with hci_qca (QCA6174-A-3), btmtksdio (MT7921-SDIO)
-> and btusb (with AX200).
->
->
-> Changes in v2:
-> - Clear HCI_USER_CHANNEL flag at start of close and restore at end.
-> - Add comment explaning why we need to clear flag and run shutdown.
->
->  net/bluetooth/hci_sync.c | 19 ++++++++++++++++---
->  1 file changed, 16 insertions(+), 3 deletions(-)
->
-> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> index 422f7c6911d9..f9591fcefb8d 100644
-> --- a/net/bluetooth/hci_sync.c
-> +++ b/net/bluetooth/hci_sync.c
-> @@ -4731,9 +4731,18 @@ int hci_dev_close_sync(struct hci_dev *hdev)
->  {
->         bool auto_off;
->         int err = 0;
-> +       bool was_userchannel;
->
->         bt_dev_dbg(hdev, "");
->
-> +       /* Similar to how we first do setup and then set the exclusive access
-> +        * bit for userspace, we must first unset userchannel and then clean up.
-> +        * Otherwise, the kernel can't properly use the hci channel to clean up
-> +        * the controller (some shutdown routines require sending additional
-> +        * commands to the controller for example).
-> +        */
-> +       was_userchannel = hci_dev_test_and_clear_flag(hdev, HCI_USER_CHANNEL);
-> +
->         cancel_delayed_work(&hdev->power_off);
->         cancel_delayed_work(&hdev->ncmd_timer);
->         cancel_delayed_work(&hdev->le_scan_disable);
-> @@ -4747,7 +4756,6 @@ int hci_dev_close_sync(struct hci_dev *hdev)
->         }
->
->         if (!hci_dev_test_flag(hdev, HCI_UNREGISTER) &&
-> -           !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
->             test_bit(HCI_UP, &hdev->flags)) {
->                 /* Execute vendor specific shutdown routine */
->                 if (hdev->shutdown)
+--2xIGPcpkILOvyfyN
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I guess the idea here is that shutdown can be run without the
-HCI_USER_CHANNEL flag since the hdev is closing we don't expect any
-traffic from socket/user channel? In that case I'd probably suggest
-having this on its own function e.g. hci_dev_shutdown which can have
-the logic of resetting the flag and restoring at the end. Also it is
-probably a good idea to have some test mimicking this behavior on
-userchan-tester so we do not accidentally break it.
+On Mon, Sep 26, 2022 at 04:54:45PM -0600, Jonathan Corbet wrote:
+> =D0=BD=D0=B0=D0=B1 <nabijaczleweli@nabijaczleweli.xyz> writes:
 
-> @@ -4756,6 +4764,8 @@ int hci_dev_close_sync(struct hci_dev *hdev)
->
->         if (!test_and_clear_bit(HCI_UP, &hdev->flags)) {
->                 cancel_delayed_work_sync(&hdev->cmd_timer);
-> +               if (was_userchannel)
-> +                       hci_dev_set_flag(hdev, HCI_USER_CHANNEL);
->                 return err;
->         }
->
-> @@ -4795,7 +4805,7 @@ int hci_dev_close_sync(struct hci_dev *hdev)
->         auto_off = hci_dev_test_and_clear_flag(hdev, HCI_AUTO_OFF);
->
->         if (!auto_off && hdev->dev_type == HCI_PRIMARY &&
-> -           !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
-> +           !was_userchannel &&
->             hci_dev_test_flag(hdev, HCI_MGMT))
->                 __mgmt_power_off(hdev);
->
-> @@ -4808,7 +4818,7 @@ int hci_dev_close_sync(struct hci_dev *hdev)
->
->         hci_sock_dev_event(hdev, HCI_DEV_DOWN);
->
-> -       if (!hci_dev_test_flag(hdev, HCI_USER_CHANNEL)) {
-> +       if (!was_userchannel)
->                 aosp_do_close(hdev);
->                 msft_do_close(hdev);
->         }
-> @@ -4858,6 +4868,9 @@ int hci_dev_close_sync(struct hci_dev *hdev)
->         memset(hdev->dev_class, 0, sizeof(hdev->dev_class));
->         bacpy(&hdev->random_addr, BDADDR_ANY);
->
-> +       if (was_userchannel)
-> +               hci_dev_set_flag(hdev, HCI_USER_CHANNEL);
-> +
->         hci_dev_put(hdev);
->         return err;
->  }
-> --
-> 2.37.3.998.g577e59143f-goog
->
+> > This also reveals that I missed NBD_REQUEST_MAGIC
+> > (needs to go, same reason as NBD_REPLY_MAGIC)
+> > in the first pass, but that's unrelated here.
 
+> I've been trying to make sense of that merge myself.  Is the right
+> solution that I should just drop 32ba63d4b2e1a ?  Manfred, thoughts on
+> that?
 
--- 
-Luiz Augusto von Dentz
+That'd certainly be a viable option too.
+
+--2xIGPcpkILOvyfyN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMyP9sACgkQJNaLcl1U
+h9Dqfwf8DrT/gFo1CSOWg6xhBl30XSPHqZqYYSQ4lSxI4MdyrMaMzPd71vChA+RF
+4iKb3kJmWMXLiojv20iWmNlp14K4uPpxjnoTym8EEy6wLhL3hYbQBM6rmnr3E7oW
+uG5iLpWwfLLPNCcnbVos4gk4Oi0j/6iI8ABNYLHnTntM7ImifoofFGjgoN3/bdn6
+XXHM6DjAAfNmYFk6gjxn8b+1N9vQhaQW6bVL2bxLUHeSV977ekXzYle5AJfvpTXL
+F6hyHvBNo8QvDIbiVn2RvJ7P0+uiB/Bx9MLlV5csupKdoqP0Zb0Gb2Nxfkhl81OY
+lKzT4b7jqZRnd3ndMmwrnJP31DGtFA==
+=+UIy
+-----END PGP SIGNATURE-----
+
+--2xIGPcpkILOvyfyN--
