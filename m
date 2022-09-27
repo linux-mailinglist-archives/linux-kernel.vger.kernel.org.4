@@ -2,236 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B135EC61D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78BDB5EC61C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbiI0Oa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
+        id S232490AbiI0Oar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbiI0OaT (ORCPT
+        with ESMTP id S232494AbiI0OaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:30:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A7B31EDA
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664289008;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3uRuuRVYQPLT+MslzRnqQghQMFwXG1xwpNvF+0tAnoc=;
-        b=Kq0lvtAzHCAHxe9DlJgfaZdXeNzouJh9DKCojCksbRIrmLKMRuZ56WWlRh3Ms5QtsNYFco
-        cky9QbfRTdYN6yJMbToJcyUo1BzKZNotdyGrw6PwTlNXZ/Nh+QI6HCLD8aw1NF7oQ8OcUY
-        gN9OY6rZK2eGVwk02IL5v0L9NGUosIU=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-607-noEFTLh-OXG-3-Sw_gbbdA-1; Tue, 27 Sep 2022 10:29:59 -0400
-X-MC-Unique: noEFTLh-OXG-3-Sw_gbbdA-1
-Received: by mail-ed1-f72.google.com with SMTP id i17-20020a05640242d100b0044f18a5379aso8071611edc.21
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:29:59 -0700 (PDT)
+        Tue, 27 Sep 2022 10:30:15 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AABA36873
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:30:04 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id s9so6114022qkg.4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:30:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Z6TzuOXNZK0hMsa8KZwRf5U0o4cEyzDOh5m1QZJUd3g=;
+        b=ZCktAMffsa9FQFsYAvekkGLDV50Ws8HHCA4OZDDt7OqOFb7I+Wj20CB2ZeI7bG0iM6
+         xePf3ymWYLdbWnmvhsDumu98V9TQZL/SeKzta6Q7xaPZy8LYWqVPdfArwIjcbNv0dKdB
+         QCyGIfHJwCMRsen0eKi0w81M7orlAKChUl2Us=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=3uRuuRVYQPLT+MslzRnqQghQMFwXG1xwpNvF+0tAnoc=;
-        b=Hf4lZ3XGXRQsDCpF7abCXIS/hC1CWYdaYcuoeMvFzZxFCZLc95VQ0qMthdaRkAcI2B
-         GuQjjPbjBSzIPjz2T3SmFZWNAaptCn7ZbLiTpMrmoDcTvn76KPjMaz3yxk/I2P1AW/yo
-         wCRS15PtZYasyNiLZ6GKnj45i6sahSeV+KzM3itoSf92DwPpKdEWP1F3nZDZW+4Pc/7P
-         c9RIbSwkn75qhFmJ865aAcWgHI+3Dva3HpGoHl9Nna7WDlcxbKR4AAqJvp5OvjP/V/4F
-         W8xnY9SubJds4A4rYn8RFTcMNTJN7LcTpDT/mr65yD4ct0Zxew9tC762GWWYEz21oKd1
-         XZBA==
-X-Gm-Message-State: ACrzQf1d0dxbqYfH6Q7IdG9WxVduzfrEDpWcU0Ix3aauZejWGHXQGtVs
-        gCXRQszN/7VLHQr6rqq7DP/kHG+VcjdsyGop5G/xbwkuvH6mkw2cqypLnbxKHBN2IJx2SDEhHZH
-        ZP17Rp2U9RyX0uWkM2bldjaou
-X-Received: by 2002:a17:907:1dcc:b0:77a:c5f3:708b with SMTP id og12-20020a1709071dcc00b0077ac5f3708bmr23278267ejc.331.1664288998233;
-        Tue, 27 Sep 2022 07:29:58 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7oaN+oJNzgoKfTucQ5HgkrI0cpFFC7w+y2x3V1IlKbboxXQKgc1ZkJCZioVwRKc/L5CwFSIw==
-X-Received: by 2002:a17:907:1dcc:b0:77a:c5f3:708b with SMTP id og12-20020a1709071dcc00b0077ac5f3708bmr23278245ejc.331.1664288998021;
-        Tue, 27 Sep 2022 07:29:58 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id r17-20020a17090609d100b00781d411a63csm854954eje.151.2022.09.27.07.29.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 07:29:57 -0700 (PDT)
-Message-ID: <471449b3-cced-d75d-e349-6bec950b0bc1@redhat.com>
-Date:   Tue, 27 Sep 2022 16:29:56 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Z6TzuOXNZK0hMsa8KZwRf5U0o4cEyzDOh5m1QZJUd3g=;
+        b=vureOoq5kZY34EG7FFpGHZZihXYGe1Kf8GKYWgHxcHvKL3nlmR3Z/0Rbpg2qEOU7yV
+         l+4Noz524Lmf2EgZAk1qUSmVXleEp58zvNoWQ8lTlE8EcrR8QOkqBxOnb6KnosCaUxD1
+         9J1ALjwM9dAOGzZh7gm19eTbVsVj1h6rcDdkuwZe6STQ9oYXvkWNrgO0rVcfPxH+qHcP
+         4Xk/pRzpTBar1OsPXdxybyed6M0P0bhzck7inrm3YZdN1nyGR+tn08Ogq4uN3nsQwqxQ
+         UwEaCduZMvCoezyFfXqSScTXbaq9K5tJnEGPzTfLVFcZg9TwdQ9p9lWzt+N5l/VT731s
+         0VLg==
+X-Gm-Message-State: ACrzQf3mzBLMp8rn0A5R9ENhkrYHiSag3feXKaHmg7/Oo6nRslUQIUEe
+        esVXKTpfAvxOMSXSNoYF8390mg==
+X-Google-Smtp-Source: AMsMyM4D4vTUTIOxXNa5cY9CjzGDinmyKlMioWobt/sAukeeT5HZuZi1Sqf7ykvf29IUoJDZoijpsg==
+X-Received: by 2002:a05:620a:1721:b0:6ce:78a7:daca with SMTP id az33-20020a05620a172100b006ce78a7dacamr18588709qkb.487.1664289003775;
+        Tue, 27 Sep 2022 07:30:03 -0700 (PDT)
+Received: from localhost (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
+        by smtp.gmail.com with ESMTPSA id h18-20020a05620a245200b006ced196a73fsm1065548qkn.135.2022.09.27.07.30.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 07:30:03 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 14:30:03 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, neeraj.iitr10@gmail.com,
+        frederic@kernel.org, paulmck@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Message-ID: <YzMI68pbXXVWWKEN@google.com>
+References: <20220922220104.2446868-1-joel@joelfernandes.org>
+ <20220922220104.2446868-2-joel@joelfernandes.org>
+ <YzAX5kOwjrZzoed6@pc636>
+ <YzCUDXn3htWbqM4f@google.com>
+ <YzH/646RHxhHBy6+@pc636>
+ <YzIRg2u2JYXN9bnK@google.com>
+ <YzMD0pdR6rvGSZ/o@pc636>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 1/5] ACPI: battery: Do not unload battery hooks on single
- error
-Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Mark Gross <markgross@kernel.org>, Len Brown <lenb@kernel.org>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        Matan Ziv-Av <matan@svgalib.org>,
-        Corentin Chary <corentin.chary@gmail.com>,
-        Jeremy Soller <jeremy@system76.com>, productdev@system76.com,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220912125342.7395-1-W_Armin@gmx.de>
- <20220912125342.7395-2-W_Armin@gmx.de>
- <f8fa6d10-6eb1-7fa7-80eb-ea190d29ba4a@redhat.com>
- <CAJZ5v0jWVMMTjc+KtBRS86f8kYpbPcDCH9JV2ZgeN4f-MSO8rQ@mail.gmail.com>
- <f2af5d01-a2cd-ae96-24c7-d61f5f0d0bc3@gmx.de>
- <f0b17ba6-3d3c-cbc1-ec0d-ec59c73f06f6@gmx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <f0b17ba6-3d3c-cbc1-ec0d-ec59c73f06f6@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzMD0pdR6rvGSZ/o@pc636>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 9/19/22 22:35, Armin Wolf wrote:
-> Am 19.09.22 um 21:12 schrieb Armin Wolf:
+On Tue, Sep 27, 2022 at 04:08:18PM +0200, Uladzislau Rezki wrote:
+> On Mon, Sep 26, 2022 at 08:54:27PM +0000, Joel Fernandes wrote:
+> > Hi Vlad,
+> > 
+> > On Mon, Sep 26, 2022 at 09:39:23PM +0200, Uladzislau Rezki wrote:
+> > [...]
+> > > > > On my KVM machine the boot time is affected:
+> > > > > 
+> > > > > <snip>
+> > > > > [    2.273406] e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network Connection
+> > > > > [   11.945283] e1000 0000:00:03.0 ens3: renamed from eth0
+> > > > > [   22.165198] sr 1:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
+> > > > > [   22.165206] cdrom: Uniform CD-ROM driver Revision: 3.20
+> > > > > [   32.406981] sr 1:0:0:0: Attached scsi CD-ROM sr0
+> > > > > [  104.115418] process '/usr/bin/fstype' started with executable stack
+> > > > > [  104.170142] EXT4-fs (sda1): mounted filesystem with ordered data mode. Quota mode: none.
+> > > > > [  104.340125] systemd[1]: systemd 241 running in system mode. (+PAM +AUDIT +SELINUX +IMA +APPARMOR +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 +IDN -PCRE2 default-hierarchy=hybrid)
+> > > > > [  104.340193] systemd[1]: Detected virtualization kvm.
+> > > > > [  104.340196] systemd[1]: Detected architecture x86-64.
+> > > > > [  104.359032] systemd[1]: Set hostname to <pc638>.
+> > > > > [  105.740109] random: crng init done
+> > > > > [  105.741267] systemd[1]: Reached target Remote File Systems.
+> > > > > <snip>
+> > > > > 
+> > > > > 2 - 11 and second delay is between 32 - 104. So there are still users which must
+> > > > > be waiting for "RCU" in a sync way.
+> > > > 
+> > > > I was wondering if you can compare boot logs and see which timestamp does the
+> > > > slow down start from. That way, we can narrow down the callback. Also another
+> > > > idea is, add "trace_event=rcu:rcu_callback,rcu:rcu_invoke_callback
+> > > > ftrace_dump_on_oops" to the boot params, and then manually call
+> > > > "tracing_off(); panic();" from the code at the first printk that seems off in
+> > > > your comparison of good vs bad. For example, if "crng init done" timestamp is
+> > > > off, put the "tracing_off(); panic();" there. Then grab the serial console
+> > > > output to see what were the last callbacks that was queued/invoked.
+> > 
+> > Would you be willing to try these steps? Meanwhile I will try on my side as
+> > well with the .config you sent me in another email.
+> >
+> Not exactly those steps. But see below:
 > 
->> Am 19.09.22 um 18:27 schrieb Rafael J. Wysocki:
->>
->>> On Mon, Sep 19, 2022 at 12:42 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>>> Hi,
->>>>
->>>> On 9/12/22 13:53, Armin Wolf wrote:
->>>>> Currently, battery hooks are being unloaded if they return
->>>>> an error when adding a single battery.
->>>>> This however also causes the removal of successfully added
->>>>> hooks if they return -ENODEV for a single unsupported
->>>>> battery.
->>>>>
->>>>> Do not unload battery hooks in such cases since the hook
->>>>> handles any cleanup actions.
->>>>>
->>>>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->>>> Maybe instead of removing all error checking, allow -ENODEV
->>>> and behave as before when the error is not -ENODEV ?
->>>>
->>>> Otherwise we should probably make the add / remove callbacks
->>>> void to indicate that any errors are ignored.
->>>>
->>>> Rafael, do you have any opinion on this?
->>> IMV this is not a completely safe change, because things may simply
->>> not work in the cases in which an error is returned.
->>>
->>> It would be somewhat better to use a special error code to indicate
->>> "no support" (eg. -ENOTSUPP) and ignore that one only.
->>
->> I would favor -ENODEV then, since it is already used by quiet a few drivers
->> to indicate a unsupported battery.
->>
->> Armin Wolf
->>
-> While checking all instances where the battery hook mechanism is currently used,
-> i found out that all but a single battery hook return -ENODEV for all errors they
-> encounter, the exception being the huawei-wmi driver.
-
-Right, so this means that using -ENODEV to not automatically unload the
-extension on error will result in a behavior change for those drivers,
-with possibly unwanted side-effects.
-
-As such I believe that using -ENOTSUP for the case where the extension
-does not work for 1 battery but should still be used for the other
-batter{y|ies} would be better as this preserves the existing behavior
-for existing drivers.
-
-> I do not know the reason for this, but i fear unloading the extension on for
-> example -ENOTSUP will result in similar behavior by hooks wanting to avoid being
-> unloaded on harmless errors.
-
-I am not sure what you are trying to say here. The whole idea is
-to add new behavior for -ENOTSUP to allow drivers to opt out of
-getting their extension unregistered when they return this.
-
-Although I wonder why not just have extensions return 0 when
-they don't want to register any sysfs attr and that not considered
-an error. If it is not considered an error the hook can just
-return 0, which would not require any ACPI battery code changes
-at all. So maybe just returning 0 is the easiest (which is
-also often the best) answer here?
-
-> However, i agree that when ignoring all errors, battery extensions which provide
-> similar attributes may currently delete each others attributes.
-
-AFAIK there are no cases where more then 1 extension driver gets loaded,
-since all the extension drivers are tied to a specific vendor's interfaces
-so we won't e.g. see the thinkpad_acpi driver load on the same laptop as
-where toshiba_acpi also loads.
-
-IOW I think you are trying to solve a problem which does not exist here.
-
-Regards,
-
-Hans
-
-
-
-
+> <snip>
+> [    2.291319] e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network Connection
+> [   17.302946] e1000 0000:00:03.0 ens3: renamed from eth0
+> <snip>
 > 
-> Any idea on how to solve this?
+> 15 seconds delay between two prints. I have logged all call_rcu() users
+> between those two prints:
 > 
-> Armin Wolf
+> <snip>
+> # tracer: nop
+> #
+> # entries-in-buffer/entries-written: 166/166   #P:64
+> #
+> #                                _-----=> irqs-off/BH-disabled
+> #                               / _----=> need-resched
+> #                              | / _---=> hardirq/softirq
+> #                              || / _--=> preempt-depth
+> #                              ||| / _-=> migrate-disable
+> #                              |||| /     delay
+> #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> #              | |         |   |||||     |         |
+>    systemd-udevd-669     [002] .....     2.338739: e1000_probe: Intel(R) PRO/1000 Network Connection
+>    systemd-udevd-665     [061] .....     2.338952: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....     2.338962: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-665     [061] .....     2.338965: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-645     [053] .....     2.338968: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-665     [061] .....     2.338987: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-645     [053] .....     2.338989: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-645     [053] .....     2.338999: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-645     [053] .....     2.339002: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-645     [053] .....     2.339024: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>      kworker/0:3-546     [000] d..1.     6.329516: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70effe40a0
+>          rcuop/0-17      [000] b....     6.337320: __call_rcu_common: -> 0x0: exit_creds+0x63/0x70 <- 0x0
+>     kworker/38:1-744     [038] d..1.     6.841479: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f97e40a0
+>            <...>-739     [035] d..1.     6.841479: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f8be40a0
+>            <...>-732     [021] d..1.     6.841486: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f53e40a0
+>     kworker/36:1-740     [036] d..1.     6.841487: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f8fe40a0
+>         rcuop/21-170     [023] b....     6.849276: __call_rcu_common: -> 0x0: exit_creds+0x63/0x70 <- 0x0
+>         rcuop/38-291     [052] b....     6.849950: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/38-291     [052] b....     6.849957: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>      kworker/5:1-712     [005] d..1.     7.097392: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f13e40a0
+>     kworker/19:1-727     [019] d..1.     7.097392: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f4be40a0
+>            <...>-719     [007] d..1.     7.097392: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f1be40a0
+>     kworker/13:1-721     [013] d..1.     7.097392: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f33e40a0
+>     kworker/52:1-756     [052] d..1.     7.097395: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fcfe40a0
+>     kworker/29:1-611     [029] d..1.     7.097395: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f73e40a0
+>            <...>-754     [049] d..1.     7.097405: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fc3e40a0
+>     kworker/12:1-726     [012] d..1.     7.097405: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f2fe40a0
+>     kworker/53:1-710     [053] d..1.     7.097405: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fd3e40a0
+>            <...>-762     [061] d..1.     7.097405: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70ff3e40a0
+>            <...>-757     [054] d..1.     7.097408: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fd7e40a0
+>     kworker/25:1-537     [025] d..1.     7.097408: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f63e40a0
+>            <...>-714     [004] d..1.     7.097408: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f0fe40a0
+>            <...>-749     [044] d..1.     7.097413: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fafe40a0
+>     kworker/51:1-755     [051] d..1.     7.097413: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fcbe40a0
+>            <...>-764     [063] d..1.     7.097415: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70ffbe40a0
+>            <...>-753     [045] d..1.     7.097416: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fb3e40a0
+>     kworker/43:1-748     [043] d..1.     7.097416: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fabe40a0
+>     kworker/41:1-747     [041] d..1.     7.097416: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fa3e40a0
+>     kworker/57:1-760     [057] d..1.     7.097416: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fe3e40a0
+>            <...>-720     [008] d..1.     7.097418: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f1fe40a0
+>     kworker/58:1-759     [058] d..1.     7.097421: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fe7e40a0
+>     kworker/16:1-728     [016] d..1.     7.097424: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f3fe40a0
+>            <...>-722     [010] d..1.     7.097427: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f27e40a0
+>     kworker/22:1-733     [022] d..1.     7.097432: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f57e40a0
+>            <...>-731     [026] d..1.     7.097432: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f67e40a0
+>            <...>-752     [048] d..1.     7.097437: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fbfe40a0
+>     kworker/18:0-147     [018] d..1.     7.097437: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f47e40a0
+>     kworker/39:1-745     [039] d..1.     7.097437: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f9be40a0
+>            <...>-716     [003] d..1.     7.097437: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f0be40a0
+>            <...>-703     [050] d..1.     7.097437: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fc7e40a0
+>     kworker/42:1-746     [042] d..1.     7.097444: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fa7e40a0
+>         rcuop/13-113     [013] b....     7.105592: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/13-113     [013] b....     7.105595: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/10-92      [040] b....     7.105608: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/10-92      [040] b....     7.105610: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/16-135     [023] b....     7.105613: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>          rcuop/8-78      [039] b....     7.105636: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>          rcuop/8-78      [039] b....     7.105640: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/12-106     [040] b....     7.105651: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/12-106     [040] b....     7.105652: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/19-156     [000] b....     7.105727: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/19-156     [000] b....     7.105730: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>          rcuop/5-56      [058] b....     7.105808: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>          rcuop/5-56      [058] b....     7.105814: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/20-163     [023] b....    17.345648: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/20-163     [023] b....    17.345655: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/14-120     [013] b....    17.345675: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/14-120     [013] b....    17.345681: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>          rcuop/6-63      [013] b....    17.345714: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>          rcuop/6-63      [013] b....    17.345715: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>          rcuop/9-85      [000] b....    17.345753: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>          rcuop/9-85      [000] b....    17.345758: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/17-142     [000] b....    17.345775: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/17-142     [000] b....    17.345776: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/17-142     [000] b....    17.345777: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/11-99      [000] b....    17.345810: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/11-99      [000] b....    17.345811: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/15-127     [013] b....    17.345832: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/15-127     [013] b....    17.345834: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>          rcuop/1-28      [000] b....    17.345834: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>          rcuop/1-28      [000] b....    17.345835: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/15-127     [013] b....    17.345835: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>         rcuop/15-127     [013] b....    17.345837: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>    systemd-udevd-633     [035] .....    17.346591: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-633     [035] .....    17.346609: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-633     [035] .....    17.346659: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-633     [035] .....    17.346666: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-669     [002] .....    17.347573: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>      kworker/2:2-769     [002] .....    17.347659: __call_rcu_common: -> 0x0: __wait_rcu_gp+0xff/0x120 <- 0x0
+>    systemd-udevd-675     [012] .....    17.347981: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-675     [012] .....    17.348002: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-675     [012] .....    17.348037: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348098: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348117: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-665     [061] .....    17.348120: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348156: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348166: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348176: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-642     [050] .....    17.348179: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348186: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348197: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348200: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348231: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348240: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348250: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348259: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348262: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348305: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348317: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348332: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348336: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348394: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348403: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348406: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-645     [053] .....    17.348503: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-645     [053] .....    17.348531: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-645     [053] .....    17.348535: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348536: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-645     [053] .....    17.348563: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-665     [061] .....    17.348575: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348628: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348704: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348828: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348884: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348904: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348954: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348983: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.348993: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349002: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349014: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349024: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349026: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349119: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349182: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349243: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349430: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349462: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349472: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349483: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349486: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349583: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349632: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349666: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349699: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-645     [053] .....    17.349727: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349733: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-645     [053] .....    17.349739: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-645     [053] .....    17.349742: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349765: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-645     [053] .....    17.349766: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-642     [050] .....    17.349780: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-665     [061] .....    17.349800: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-642     [050] .....    17.349815: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-642     [050] .....    17.349829: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-642     [050] .....    17.349832: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349834: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-675     [012] .....    17.349835: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-675     [012] .....    17.349853: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-642     [050] .....    17.349861: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>    systemd-udevd-675     [012] .....    17.349873: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.349879: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.350007: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.350011: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.350080: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.350175: __call_rcu_common: -> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
+>    systemd-udevd-665     [061] .....    17.350362: dev_change_name: --> renamed from eth0
+> <snip>
 > 
->>>>> ---
->>>>>   drivers/acpi/battery.c | 24 +++---------------------
->>>>>   1 file changed, 3 insertions(+), 21 deletions(-)
->>>>>
->>>>> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
->>>>> index 306513fec1e1..e59c261c7c59 100644
->>>>> --- a/drivers/acpi/battery.c
->>>>> +++ b/drivers/acpi/battery.c
->>>>> @@ -724,20 +724,10 @@ void battery_hook_register(struct acpi_battery_hook *hook)
->>>>>         * its attributes.
->>>>>         */
->>>>>        list_for_each_entry(battery, &acpi_battery_list, list) {
->>>>> -             if (hook->add_battery(battery->bat)) {
->>>>> -                     /*
->>>>> -                      * If a add-battery returns non-zero,
->>>>> -                      * the registration of the extension has failed,
->>>>> -                      * and we will not add it to the list of loaded
->>>>> -                      * hooks.
->>>>> -                      */
->>>>> -                     pr_err("extension failed to load: %s", hook->name);
->>>>> -                     __battery_hook_unregister(hook, 0);
->>>>> -                     goto end;
->>>>> -             }
->>>>> +             hook->add_battery(battery->bat);
->>>>>        }
->>>>>        pr_info("new extension: %s\n", hook->name);
->>>>> -end:
->>>>> +
->>>>>        mutex_unlock(&hook_mutex);
->>>>>   }
->>>>>   EXPORT_SYMBOL_GPL(battery_hook_register);
->>>>> @@ -762,15 +752,7 @@ static void battery_hook_add_battery(struct acpi_battery *battery)
->>>>>         * during the battery module initialization.
->>>>>         */
->>>>>        list_for_each_entry_safe(hook_node, tmp, &battery_hook_list, list) {
->>>>> -             if (hook_node->add_battery(battery->bat)) {
->>>>> -                     /*
->>>>> -                      * The notification of the extensions has failed, to
->>>>> -                      * prevent further errors we will unload the extension.
->>>>> -                      */
->>>>> -                     pr_err("error in extension, unloading: %s",
->>>>> -                                     hook_node->name);
->>>>> -                     __battery_hook_unregister(hook_node, 0);
->>>>> -             }
->>>>> +             hook_node->add_battery(battery->bat);
->>>>>        }
->>>>>        mutex_unlock(&hook_mutex);
->>>>>   }
->>>>> -- 
->>>>> 2.30.2
->>>>>
+> First delay:
+> 
+> <snip>
+> systemd-udevd-645     [053] .....     2.339024: __call_rcu_common: -> 0x0: __dentry_kill+0x140/0x180 <- 0x2
+>   kworker/0:3-546     [000] d..1.     6.329516: __call_rcu_common: -> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70effe40a0
+> <snip>
+> 
+> __dentry_kill() function and after 4 seconds there is another one queue_rcu_work().
+> I have checked the __dentry_kill() if it can do any sync talk with RCU but from the
+> first glance i do not see anything critical. But more attention is required.
+
+Can you log rcu_barrier() as well? It could be that the print is just a side
+effect of something else that is not being printed.
+
+If you follow the steps I shared, we should be able to get a full log of RCU
+traces.
+
+> Second delay:
+> 
+> <snip>
+>   rcuop/5-56      [058] b....     7.105814: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+>  rcuop/20-163     [023] b....    17.345648: __call_rcu_common: -> 0x0: file_free_rcu+0x32/0x50 <- 0x0
+> <snip>
+> 
+> 10 seconds. But please note that it could be that there were not any callbacks queued
+> during 10 seconds.
+
+True, there are things other than call_rcu() like rcu_barrier() that can
+slow down the boot path. We fixed that and it is not an issue over here, but
+I am not sure if you are triggering it some how.
+
+thanks,
+
+ - Joel
 
