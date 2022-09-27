@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3585ECF2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B93955ECF2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbiI0VO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 17:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
+        id S230296AbiI0VRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 17:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiI0VO0 (ORCPT
+        with ESMTP id S229610AbiI0VRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 17:14:26 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1971E0C5C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:14:24 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id s206so10516010pgs.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:14:24 -0700 (PDT)
+        Tue, 27 Sep 2022 17:17:40 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326F7EC55F
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:17:39 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id 9so10754049pfz.12
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:17:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=vr5U1/Tp0dWjc28cdfWtq8kpHUXGkwFcQBACPTsH4qM=;
-        b=PxytvV3E8ptfSPFZPgiDl5QehMVxAMIkZegdERh6kOaI0UcS0sOA2IlLFuPxidDKQr
-         B7nBcywswUREageYf5cMRc4WBMPRiWFUykq3qs6K8+W593r915ttr6+i0ifQ9NmIKFwZ
-         z38MOvHH/UAkk16a1I0Gi5JIPxWxYaNAd1uoY=
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=cydRrAXNrnz2QJt3HhI/oDQUhvWbTptDnL6JHpq2qQc=;
+        b=ia988LVuGHoaQOtrO3JTaarvPES0PVZQjF+yQ0nipRZxbfbJTvS2jxkCM0uJRn8tse
+         AWhfuK6TaHGGqhM3FAR+1X1SUdV2RZu9KrbGFgepq4nqS9AITiMA5bj1DWqnEkHoZx8U
+         Cj/lsQb1q/QCjS2znmx56BNCoxBs60er3f7ZE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=vr5U1/Tp0dWjc28cdfWtq8kpHUXGkwFcQBACPTsH4qM=;
-        b=2SjbNOSiCIvVWe7PWkpXsl+R7RbZ52dJ3v/sFqRPgog08nJnH0+PpWAKHTI4NTa9fC
-         8r8hhRWnA4P6z1Fnqj4RJzf1Ij/o2VHIW7XsUS88QIY66nH+zOSBaB04h3UpzYsBngk+
-         RwI8jrelxp9cBYyJj6lpFhlwXf8MlcrWWZ5RBBVkkU/JaW8R28h6FQTBSq8jssv3a0Ak
-         ob4F8U80pqwXxRadTz5lbzsTdu74vd1vd2w642GyNj258lIXb3uyf3xWXKAbug4SjBT5
-         SmzNw54OsCqJ0JAFzjDPDDHd6+xN9qaLzPEv1kFl6aCKyUlLneogY6DxHr+C45hVweiY
-         VL+Q==
-X-Gm-Message-State: ACrzQf1qNFyDysPNHcR+L/n9Hh+C7iCRG1DgTaauztun9Vm124KQPXYK
-        SL2Z72F/7WjNyjacjUVSsm9xeQ==
-X-Google-Smtp-Source: AMsMyM7G84JWu4fHxWchj8R6lVupO6711unh8QcM5a4TLwAgLSyywVnLEuq4FNDU5VXhgb7WM8Koeg==
-X-Received: by 2002:a63:6b83:0:b0:43c:17e8:c2a5 with SMTP id g125-20020a636b83000000b0043c17e8c2a5mr25080332pgc.457.1664313264405;
-        Tue, 27 Sep 2022 14:14:24 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=cydRrAXNrnz2QJt3HhI/oDQUhvWbTptDnL6JHpq2qQc=;
+        b=fY+FOfMRW7vl0hZTz3SqtncOu559YZ5+r8Wk+aR4NznyQwukGUF5+iWhHJTbAvu0Q4
+         cu0CdgyiOBVTCxyR4GKhLqEt9X+XRaSoQ/FPU0QqglvfPNL1mgDTKNwbUVToWaJLjucd
+         P6RW77CG4yH2J5GgCiPvu47TBZyLtTSYaU0DyZwGjWO6Ts096Rj8bnr8FszjnivoVA1H
+         ii9lFSegJma6ojp5rfK1cfKY3+bgsbrsA9S28GlwmKaxg220gthVzGYDj7i2QbCILyFb
+         6TiK7FM6OlkDfM1JLIAXPBPiCaZJCsUJaUSTq/IGdLifBsTic//5De7YtnH9zf2NJO2x
+         urlA==
+X-Gm-Message-State: ACrzQf2Z1R//pKm+U13db6IdwX/VaMNZpY2+BvIfKOJF2y5Y8Dy6vozV
+        17cRzw7IBbgHIiZwazASjP7//g==
+X-Google-Smtp-Source: AMsMyM6UvPDq6Az5WzE85o+8nP76tiSk8VyDwK6qO6HPO4jdxKcY04RZzjmJdVhjJK1k+dJQbkHrJQ==
+X-Received: by 2002:a63:fd41:0:b0:438:7670:589a with SMTP id m1-20020a63fd41000000b004387670589amr25879313pgj.148.1664313458698;
+        Tue, 27 Sep 2022 14:17:38 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w3-20020a170902ca0300b00172751a2fa4sm2019681pld.80.2022.09.27.14.14.23
+        by smtp.gmail.com with ESMTPSA id q13-20020a170902dacd00b001782580ce9csm1983194plx.249.2022.09.27.14.17.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 14:14:23 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 14:14:22 -0700
+        Tue, 27 Sep 2022 14:17:38 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        llvm@lists.linux.dev, Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH v3] x86, mem: move memmove to out of line assembler
-Message-ID: <202209271413.314FCFC3@keescook>
-References: <202209271333.10AE3E1D@keescook>
- <20220927210248.3950201-1-ndesaulniers@google.com>
+To:     "K. Y. Srinivasan" <kys@microsoft.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        linux-hyperv@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2] Drivers: hv: vmbus: Split memcpy of flex-array
+Date:   Tue, 27 Sep 2022 14:17:36 -0700
+Message-Id: <20220927211736.3241175-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927210248.3950201-1-ndesaulniers@google.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2152; h=from:subject; bh=XiqD42BdKyYFPsQFvFZgiN4gYsXqcM5zpVjMzTZBEGw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjM2hvQmM6bsQ+jbJ33l/yJApmN3Z4lyCdAL8/RqG6 TtquvhqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYzNobwAKCRCJcvTf3G3AJtW1D/ 43JvAeQ5s9E1h+J9RViO3kPVtz/NCuYZdH/+J81jrc2/5zhmshQDgYYYhr7G9/KORTKAN5d3sm+77V BbMU9kLgdyBKQdmSwajxah8jCQii28sDcMqXTPA3HWUf6/Z20m1JFvH4BY7szJgBy7qpOmwwFhlPs5 7cAkt1+u/2vz00NUZhUDY5uPS+Ane1qWS5OKDAvN59kJBVjxmlmB3xDUDIakJ7DGhA2UF6TKjlhbwg gTtpbFjHsAyjkL/hiWFM0OXr8uM+OQXGUbO3Yh9i2Na6U5YaxUsVdP7rMu8ctGztG2jFhXtV4fhCzS BRab8/In/tmLZBqJRODltAVxuUBzMHv20lR3h0P58zG4dlPHkFrnfuZ/m1nzIl8DqERgs6/QJGI6LC YKkLz6HeYlmSfX1BOK4+RXFwU3Tio3XUtvFX/M76RvFkYaRyIiC/X6jKbau8yTg8PRlzb4JvklRR+F JHx9mz06A1VlP5O+0DAjR01n33fPrARIYCIJSVv0urfp4O3TxU2Z72kgrCpAD38/ghYeHFQY2IiTRY ihlxCoAWRx4Qvk3sDy3Bts7ObIr/uipTCDjPQW+9kBZexc9+9bbaVhJKXGzp3dPfGu7W5USpjNetNr Qvgs7TIquSl/3q0c8FDzaD83BI9/muflLEx53YAfnXitnHrOPbf9wVWhDCgQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -73,26 +72,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 02:02:48PM -0700, Nick Desaulniers wrote:
-> [...]
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
-> Changes v2 -> v3:
-> * Fix bug I introduced in v1 when I changed one of temp register
->   operands for one of the two instructions performing a mem to mem swap,
->   but not the other instruction's operand, and discovered by Kees.
->   Verified KUnit memcpy tests are passing via:
->   $ ./tools/testing/kunit/kunit.py run --arch=i386 --make_options LLVM=1
->   $ ./tools/testing/kunit/kunit.py run --arch=i386
->   Fixed by using symbolic identifiers rather than open coded registers
->   for the less-than-word-size temporary registers.
-> * Expand the comment about callee saved registers on i386 with a
->   reference to the psABI.
+To work around a misbehavior of the compiler's ability to see into
+composite flexible array structs (as detailed in the coming memcpy()
+hardening series[1]), split the memcpy() of the header and the payload
+so no false positive run-time overflow warning will be generated. This
+results in the already inlined memcpy getting unrolled a little more,
+which very slightly increases text size:
 
-Thanks! This looks good.
+$ size drivers/hv/vmbus_drv.o.before drivers/hv/vmbus_drv.o
+   text    data     bss     dec     hex filename
+  22968    5239     232   28439    6f17 drivers/hv/vmbus_drv.o.before
+  23032    5239     232   28503    6f57 drivers/hv/vmbus_drv.o
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Tested-by: Kees Cook <keescook@chromium.org>
+Avoids the run-time false-positive warning:
 
+  memcpy: detected field-spanning write (size 212) of single field "&ctx->msg" at drivers/hv/vmbus_drv.c:1133 (size 16)
+
+[1] https://lore.kernel.org/linux-hardening/20220901065914.1417829-2-keescook@chromium.org/
+
+Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+Cc: Haiyang Zhang <haiyangz@microsoft.com>
+Cc: Stephen Hemminger <sthemmin@microsoft.com>
+Cc: Wei Liu <wei.liu@kernel.org>
+Cc: Dexuan Cui <decui@microsoft.com>
+Cc: linux-hyperv@vger.kernel.org
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v2: - fix commit log, add tags and exact warning test from Nathan
+v1: https://lore.kernel.org/lkml/20220924030741.3345349-1-keescook@chromium.org
+---
+ drivers/hv/vmbus_drv.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 23c680d1a0f5..9b111a8262e3 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -1131,7 +1131,8 @@ void vmbus_on_msg_dpc(unsigned long data)
+ 			return;
+ 
+ 		INIT_WORK(&ctx->work, vmbus_onmessage_work);
+-		memcpy(&ctx->msg, &msg_copy, sizeof(msg->header) + payload_size);
++		ctx->msg.header = msg_copy.header;
++		memcpy(&ctx->msg.payload, msg_copy.u.payload, payload_size);
+ 
+ 		/*
+ 		 * The host can generate a rescind message while we
 -- 
-Kees Cook
+2.34.1
+
