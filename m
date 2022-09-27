@@ -2,105 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E965EC79D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5B55EC7A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbiI0PZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
+        id S231814AbiI0P0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbiI0PZc (ORCPT
+        with ESMTP id S231464AbiI0P0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:25:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2235E177366
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:25:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664292327;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BBDRtoB/dEneF79wl4krhB0Xujy0funBbXMMGjHbRXs=;
-        b=ef0Sl3hx/swoXPsIJ60EFnxmScvg7JSjLncqPsFBihYJMMU2ADG1HXwVKlyde1duVz4lIl
-        VBmSpiwvUNbP/zXMds/GjsQWy2WtHTMpVnHQT5w3s5jbF7eTSLrVjXZpru4QTJbuPGzBwn
-        LpSGOoGDpuw+2hblXrHDRPUvMCSHPU0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-290-Ywwtm20xNxGBEbDHEK2liQ-1; Tue, 27 Sep 2022 11:25:24 -0400
-X-MC-Unique: Ywwtm20xNxGBEbDHEK2liQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9EF518027ED;
-        Tue, 27 Sep 2022 15:25:23 +0000 (UTC)
-Received: from [10.22.9.237] (unknown [10.22.9.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 64B6F40C6EC2;
-        Tue, 27 Sep 2022 15:25:23 +0000 (UTC)
-Message-ID: <40d0decc-0565-1e13-3c12-ac963ebed429@redhat.com>
-Date:   Tue, 27 Sep 2022 11:25:22 -0400
+        Tue, 27 Sep 2022 11:26:33 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DFCE512B;
+        Tue, 27 Sep 2022 08:26:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664292392; x=1695828392;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Z8FgthVjK3HQZ0A3apHAWKG6Ji7sJozTBBg/+WlDrgA=;
+  b=KSuzBwLWAOtrolABnWp89VLoJdQW9oWAPI5kBvQEZ7D3phByQLSxgjDe
+   4IeiHjy8uGwuvTF8A3VoPoEf4J7xVFZ9PMnNZG561R+Wx67Bvm4maQgNv
+   xapH4LOdxAhT8LTPt6KTBxn7w/JEMd/oS/bH+n9ai++cW0r9O+sxevI0F
+   I2M8AUednhyQLnTamhoouFl15Xmty4uJOhH1iIQ+2R5P9Noi2mC1oT06L
+   QpC2uYDNLQbHnf+I/bRoI52HUbYIvl2y9McGGmI2SmhysdVj4ktCX3lCc
+   6hTra/8P1nbZJGDgxU00S9nmaVL72K1ONdaGMPs2zA6KviSWE7RmESTk3
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="327703861"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="327703861"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 08:26:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="652317491"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="652317491"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 27 Sep 2022 08:26:30 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1odCTc-008VUt-2k;
+        Tue, 27 Sep 2022 18:26:28 +0300
+Date:   Tue, 27 Sep 2022 18:26:28 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH v3 4/8] pwm: lpss: Include headers we are direct user of
+Message-ID: <YzMWJFmeMAvn0e1c@smile.fi.intel.com>
+References: <20220927144723.9655-1-andriy.shevchenko@linux.intel.com>
+ <20220927144723.9655-5-andriy.shevchenko@linux.intel.com>
+ <20220927151053.7eh63stoganpgawr@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: locking/rwsem: RT throttling issue due to RT task hogging the cpu
-Content-Language: en-US
-To:     Mukesh Ojha <quic_mojha@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
-        will@kernel.org
-Cc:     linux-kernel@vger.kernel.org, "<boqun.feng"@gmail.com
-References: <e1cb435a-4471-ac3a-344f-04448f167c9f@quicinc.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <e1cb435a-4471-ac3a-344f-04448f167c9f@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220927151053.7eh63stoganpgawr@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 27, 2022 at 05:10:53PM +0200, Uwe Kleine-K�nig wrote:
+> On Tue, Sep 27, 2022 at 05:47:19PM +0300, Andy Shevchenko wrote:
+> > For the sake of integrity, include headers we are direct user of.
+> > 
+> > While at it, add missed struct pwm_lpss_boardinfo one and replace
+> > device.h with a forward declaration. The latter improves compile
+> > time due to reducing overhead of device.h parsing with entire train
+> > of dependencies.
+> 
+> Hm, I copied the cmdline for the compiler from a V=1 build and only run
+> the compiler on drivers/pwm/pwm-lpss-pci.c.
+> 
+> With #include <device.h> I got:
+> 
+> 	real	0m0.421s
+> 	user	0m0.354s
+> 	sys	0m0.066s
+> 
+> With struct device; I got:
+> 
+> 	real	0m0.431s
+> 	user	0m0.378s
+> 	sys	0m0.052s
+> 
+> Are the numbers for you considerably different?
 
-On 9/20/22 12:19, Mukesh Ojha wrote:
-> Hi,
->
-> We are observing one issue where, sem->owner is not set and 
-> sem->count=6 [1] which means both RWSEM_FLAG_WAITERS and 
-> RWSEM_FLAG_HANDOFF bits are set. And if unfold the sem->wait_list we 
-> see the following order of process waiting [2] where [a] is waiting 
-> for write, while [b],[c] are waiting for read and [d] is the RT task 
-> for which waiter.handoff_set=true and it is continuously running on 
-> cpu7 and not letting the first write waiter [a] on cpu7.
->
-> [1]
->
->   sem = 0xFFFFFFD57DDC6680 -> (
->     count = (counter = 6),
->     owner = (counter = 0),
->
-> [2]
->
-> [a] kworker/7:0 pid: 32516 ==> [b] iptables-restor pid: 18625 ==> 
-> [c]HwBinder:1544_3  pid: 2024 ==> [d] RenderEngine pid: 2032 cpu: 7 
-> prio:97 (RT task)
->
->
-> Sometime back, Waiman has suggested this which could help in RT task
-> leaving the cpu.
->
-> https://lore.kernel.org/all/8c33f989-8870-08c6-db12-521de634b34e@redhat.com/ 
->
->
-Sorry for the late reply. There is now an alternative way of dealing 
-with this RT task hogging issue with the commit 48dfb5d2560d 
-("locking/rwsem: Disable preemption while trying for rwsem lock"). Could 
-you try it to see if it can address your problem?
+Why Ingo created thousands of patches to do something similar? Because for
+a single user you won't see a big difference, but when amount of small pieces
+are gathered together, you definitely will.
 
-Thanks,
-Longman
+> > +struct device;
+
+...
+
+> > +struct pwm_lpss_boardinfo;
+> 
+> Hmm, I wonder why there is no compiler warning without that declaration.
+> At least in my builds. Do you see a warning? IMHO it's better to fix
+> that be swapping the order of struct pwm_lpss_chip and struct
+> pwm_lpss_boardinfo.
+
+Have I told about warning? It's a proper C programming style.
+You don't have a warning because all pointers are considered to be the same,
+but it is better style to explicitly point that out.
+
+OTOH you may go and clean all the forward declarations of the data structures
+in the kernel, but I believe the work wouldn't be appreciated much.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
