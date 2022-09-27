@@ -2,98 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F335ECBDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 20:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157CA5ECBEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 20:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232777AbiI0SGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 14:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        id S232289AbiI0SMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 14:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232462AbiI0SGJ (ORCPT
+        with ESMTP id S231706AbiI0SMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 14:06:09 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CF4AA349
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 11:06:08 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id l65so10361254pfl.8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 11:06:08 -0700 (PDT)
+        Tue, 27 Sep 2022 14:12:06 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C1BD2D6B
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 11:12:05 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id s18so6555326qtx.6
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 11:12:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=gldTMiGdSSy+s/mX5olbpKniS/LLCTAFW6jQieMpGNc=;
-        b=O4RQnE+kP++cKx/K7Aw550wsJ4fY1C8HC+psA7CQHnY7faIr8roalHlx4b2Ak+Qp/4
-         hTTHWqFGCOhM8E7PHekmTZVU2krdXaxiPtW5AbbugelKKlVku0oaSW4HJg27/b33l8rW
-         2wFKlszRjdyPQZPoAVEfJYPkeO05TT2yyXLDUVoNNPg6LAKbIEe6WgdqmBJ6c3Vq/nQF
-         B0kc9DXK7ArVbcjrkCtI6sph3lGljpXrfFrcZL+4PMeLEv1uo1ioWx7ubdunt4s3qsd5
-         DBpRbqWSmWmyY6TYfM9yiH6Rh/xMSZURWoYos9ABnEGH0xRYj/HvK/jChSE17bTHyckW
-         +ikQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=UA0/tgSQ2gUroOfJyqI9Qe+9Q/6Wy5CUcMkTK6avI5s=;
+        b=K12nEPM8F0lgndPwXjzWtjjUHLXRkzGGm7YreNDb9cU7sRdcCGk1VZY5yLxog8SU4p
+         v0KzQi9pgNmyHRcXTWic5twgnByy/uYMzKiUEhRuoz0uQkyeTkVaaXzS0/Ao2yi6Qet5
+         RNLKFpT00gGfwwJuRIwCBVx5APecf0+d6pa/R/mqVWaCCPOX1BguZowGkdyQVKnIO8oM
+         t2PlyL+5KvMPikt1mHIi1GJ4lwUJvqZjNS7htUUCF+Cju3c4F+imdFG3PX5jWe4ZzV6p
+         ge52dg8xWZIm/OdLad+k1I/RHh8QIFn+levh0p/fePpyl773UgW/rAWUlDNDrxqWRlpN
+         wGWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=gldTMiGdSSy+s/mX5olbpKniS/LLCTAFW6jQieMpGNc=;
-        b=LkhpiXo28Mfvu7lEgg+Q1gmSCyOBJzFhGaqM8FIY+CC2xCEY9tzumLqyUI7BCMX002
-         T+pZF2gqmXf6knQ+EUo7PLH7gxefX7Vmidd7kRf4ejVaS+TwMQZk+IDA1JI+h72Eb5UM
-         scj5Y6maWUZIjPsddv0lQuVhrRbDsqBGQowpVkDcKPHAj9VaOg+6CZU5vG97Xfs+qFQ8
-         pvnKTyK7roL0oUP6muNlyj45o+FPm3nuu03//1yTENP2J+CsXuP1QAaAXruHuhwHTTOb
-         +ocQplltfbVinOqEImSOofWsOA2LLrsYnY3gIn4696Cmw9UuAil/VGnkovKVmnpEkLlu
-         B2OQ==
-X-Gm-Message-State: ACrzQf195Q+YaAM7mz9XP9rKz84xpgLTOchlT/8wAz54/uehby8ZLehF
-        QXU5qQ2ugf+bU/8yyjZid20=
-X-Google-Smtp-Source: AMsMyM67D5l6eCrRorHIp+FxVnOs/2rE6yCoLSkUXLEQ7zNt+/Db1rh6BF5lqhVRxJRmE/Hguv4dPw==
-X-Received: by 2002:a63:1546:0:b0:42c:50dc:2115 with SMTP id 6-20020a631546000000b0042c50dc2115mr25819826pgv.613.1664301967508;
-        Tue, 27 Sep 2022 11:06:07 -0700 (PDT)
-Received: from strix-laptop (2001-b011-20e0-1b32-d148-19d6-82fa-6094.dynamic-ip6.hinet.net. [2001:b011:20e0:1b32:d148:19d6:82fa:6094])
-        by smtp.gmail.com with ESMTPSA id i8-20020a655b88000000b00434651f9a96sm1821908pgr.15.2022.09.27.11.06.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 11:06:06 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 02:05:59 +0800
-From:   Chih-En Lin <shiyn.lin@gmail.com>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Xu <peterx@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Li kunyu <kunyu@nfschina.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <shy828301@gmail.com>, Song Liu <song@kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dinglan Peng <peng301@purdue.edu>,
-        Pedro Fonseca <pfonseca@purdue.edu>,
-        Jim Huang <jserv@ccns.ncku.edu.tw>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>
-Subject: Re: [RFC PATCH v2 2/9] mm: pgtable: Add sysctl to enable COW PTE
-Message-ID: <YzM7hxmfCQWxM0aZ@strix-laptop>
-References: <20220927162957.270460-1-shiyn.lin@gmail.com>
- <20220927162957.270460-3-shiyn.lin@gmail.com>
- <8632896B-35D1-4B8F-8A7F-275DEEBCB962@vmware.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=UA0/tgSQ2gUroOfJyqI9Qe+9Q/6Wy5CUcMkTK6avI5s=;
+        b=jPndUOG0TKcueBC/ENMKC/6GW2DL86tGLlqwpOxBchUGwKTKmaXuOMJdxDNahfKBsa
+         GR24zF09kS6TQuUb2B7Xr8nd+UQCZZ02mlFFNZTOBQuL0FItx0MgMrdxfv48C/uzv4VW
+         n0OECTgoEIjiUNxuXqkwHnm8HuorAkqTlVfPuLfLulLDLdQBnfVH9es1lvW6fHaJo4UU
+         Ce8i4blYMNQRKAAWBqLMMl1XeFDtu/G3J89Bo2QmW86HDQDPgkCIsWGnG3DXl88urhwy
+         wvdetIzeJ8f1la9+z2eGEvhed1Za/1k2KuGiKUcMRPadZED9sF+Yf7Yw0TL6qdminkVm
+         +UMQ==
+X-Gm-Message-State: ACrzQf1zwLdmIdOlqr99G+OBxa6IYV33GfbKNIZoernggzJV/cJfRtf9
+        OBiaOoU47OjN1YUTmvzPHnlg5HhLw9xvSSa/Vko=
+X-Google-Smtp-Source: AMsMyM5ZOeeUKMHQ0xGnJOQeu2mfzRUzLtqJy5/G9o3E7Orvg1JLirCa6XZ2k6OyesnQhKBJMms9c/KuhHHcM4HPApw=
+X-Received: by 2002:a05:622a:11cf:b0:35b:a369:cc3 with SMTP id
+ n15-20020a05622a11cf00b0035ba3690cc3mr23563179qtk.11.1664302323892; Tue, 27
+ Sep 2022 11:12:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8632896B-35D1-4B8F-8A7F-275DEEBCB962@vmware.com>
+References: <9345acdd11e953b207b0ed4724ff780e63afeb36.1664298455.git.andreyknvl@google.com>
+ <CANpmjNM3EYpq_qaN8yzt6eVzK59YCPeBdoFMjLRBqoTy2p=HuQ@mail.gmail.com>
+In-Reply-To: <CANpmjNM3EYpq_qaN8yzt6eVzK59YCPeBdoFMjLRBqoTy2p=HuQ@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Tue, 27 Sep 2022 20:11:53 +0200
+Message-ID: <CA+fCnZeoaVHudERNTKFK1kNcOp9TY40kPxbCMM5zO75CDfHfuw@mail.gmail.com>
+Subject: Re: [PATCH mm v2 1/3] kasan: switch kunit tests to console tracepoints
+To:     Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     andrey.konovalov@linux.dev,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -104,39 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 05:27:45PM +0000, Nadav Amit wrote:
-> On Sep 27, 2022, at 9:29 AM, Chih-En Lin <shiyn.lin@gmail.com> wrote:
-> 
-> > Add a new sysctl vm.cow_pte to set MMF_COW_PTE_READY flag for enabling
-> > copy-on-write (COW) to the PTE page table during the next time of fork.
-> > 
-> > Since it has a time gap between using the sysctl to enable the COW PTE
-> > and doing the fork, we use two states to determine the task that wants
-> > to do COW PTE or already doing it.
-> 
-> I don’t get why it is needed in general and certainly why sysctl controls
-> this behavior.
-> 
-> IIUC, it sounds that you want prctl and not sysctl for such control. But
-> clearly you think that this control is needed because there is a tradeoff.
-> Please explain the tradeoff and how users are expected to make a decision
-> whether to turn the flag or not.
-> 
+On Tue, Sep 27, 2022 at 7:12 PM Marco Elver <elver@google.com> wrote:
+>
+> On Tue, 27 Sept 2022 at 19:09, <andrey.konovalov@linux.dev> wrote:
+> >
+> > From: Andrey Konovalov <andreyknvl@google.com>
+> >
+> > Switch KUnit-compatible KASAN tests from using per-task KUnit resources
+> > to console tracepoints.
+> >
+> > This allows for two things:
+> >
+> > 1. Migrating tests that trigger a KASAN report in the context of a task
+> >    other than current to KUnit framework.
+> >    This is implemented in the patches that follow.
+> >
+> > 2. Parsing and matching the contents of KASAN reports.
+> >    This is not yet implemented.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+>
+> Reviewed-by: Marco Elver <elver@google.com>
 
-If applying COW to the page table, it will has a significantly change
-to kernel, this is why I think it uses the sysctl at first.
-But, prctl might be better a choice.
+Thanks, Marco!
 
-For the tradeoff. Since, in some cases (like executing the command in
-the terminal), enabling COW to page table only will increase the
-overhead due to the page fault (break COW). It doesn't have any benefit
-from the COW mechanism. So, we let the users decide which process will
-enable COW page table.
-
-The expected user usually will be the process that requires a lot of
-memory and want to create a new process for an isolated environment.
-(e.g., fuzzer, container, etc) So, expand COW to page table may
-improves the startup time and memory usage (on-demand allocate memory).
-
-Thanks,
-Chih-En Lin
+Andrew, could you consider picking up this series into mm? Thank you!
