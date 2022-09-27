@@ -2,70 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E20E5EB891
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D77905EB89A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbiI0DRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 23:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
+        id S231300AbiI0DWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 23:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbiI0DQg (ORCPT
+        with ESMTP id S231447AbiI0DVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 23:16:36 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0C881694
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 20:16:18 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id i6so4340001pfb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 20:16:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=cQ6zVkpqugLa9891w98RVMCjnbNxIhz4C6HrHMJZK8I=;
-        b=Ys70lYwi0UuItAyKdztaa/QvN/zNeHvK+DYTxNBDjsJxCxH44M11cP9jPnxzHQPNjb
-         igvguKL8YyFJNtFEBrZ5W6daU3oui1F9DXIVaw4aE/szAfv+15cUzVL5WS2GxWMW7Yt8
-         IPCeEYWTOOuxdVg8giuH8nTC6Yhi4Ev8pRtpc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=cQ6zVkpqugLa9891w98RVMCjnbNxIhz4C6HrHMJZK8I=;
-        b=S/bfxngHAwExva7zfVhpAJlpclMqO51rWm8zjT2UF++MMfv4+w76VO/BFLzEpcybPZ
-         5QDvKtlLQQWXYhV0stzr9R5Gp91056x9wDALyaPnsMzPwa1QPFHRj9mDDNMqZcLfhFct
-         UFrbDc4gsSpOq0D8fWdQNa5jkwJHisqRuclwKXAZfM1dNm95pu7gGpY355ylccWK/ABO
-         XdLzTbaVx84vlPOQNme95YjObpcNOuDS5aG9JloupHX3BiRzYG1VWeTPAJ89cnRBu7RG
-         nHUXOZC+rvOrFzXZ7Mx6q4eGcdEoH2ojoHCG6NEg8wI4LbRgfvzUzkuP1TUS72bPbInw
-         5YqQ==
-X-Gm-Message-State: ACrzQf1k6qCGPaJyOy1RKAO+l0T4nmTcn6Q/HBuMAr4aqihUqrjiJWWq
-        BwgMzM7DjVQ1TTUIFvAC8Yz48BVvH9pxOw==
-X-Google-Smtp-Source: AMsMyM4aPQZJmufIlgB90yFaVfoE50JmAVMSvaBvUb81fg56HsalOTyKUNoRqQO6/X3VOyQ7j9y52w==
-X-Received: by 2002:a05:6a00:c89:b0:543:edb9:9dbc with SMTP id a9-20020a056a000c8900b00543edb99dbcmr27379913pfv.50.1664248577744;
-        Mon, 26 Sep 2022 20:16:17 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 82-20020a621955000000b0053812f35a41sm269573pfz.194.2022.09.26.20.16.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 20:16:17 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 20:16:16 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] ASoC: SOF: control.h: Replace zero-length array
- with DECLARE_FLEX_ARRAY() helper
-Message-ID: <202209262009.D1377D0C3@keescook>
-References: <YzIcZ11k8RiQtS2T@work>
- <YzIj6tdtDe9YrX+I@sirena.org.uk>
- <81af0106-a732-ce45-bb1c-c45db9e1aeb9@embeddedor.com>
- <YzIqNqhTIuaWZrOl@sirena.org.uk>
+        Mon, 26 Sep 2022 23:21:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766326CF7A;
+        Mon, 26 Sep 2022 20:20:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4901B81904;
+        Tue, 27 Sep 2022 03:20:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77104C433C1;
+        Tue, 27 Sep 2022 03:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664248821;
+        bh=Ia9r1cC20xjlRYjYtn/YrO85OhxRUaYR0SqK8rn+nVE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=TwSSFGWy8ou6RUmQ2z5qrPujRluplVj8B9yebO1zCiQk3OgciY6Thr8p58LqXZEnG
+         lAf6AYrczAkidamJSAte9Yu6GredeO/RQsoVxOyfeVvWtL2KKt9V/F7W+C1KSK+kgG
+         SUvbt79UpIWXAPeztnlQ2GBAoROzIqNrFNgVNhUxWsfhT1pf5IDh67vSwnXMqvCS4R
+         qsNMqWcpOAmT3zJGmJ4ocuem4Z+sahlU8R3wjuxnq8GXl5Ar3r0g8ai6ZY5yTL9gcA
+         MxzIeiNa0GWeLjKiR/Ewgt0U9r2tvr9H9F+OJgyU9LcuLtJZyQzQQgSSoUWPSsLRXX
+         Je0UUONKxTkZg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 0C1BA5C0B39; Mon, 26 Sep 2022 20:20:21 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 20:20:21 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Message-ID: <20220927032021.GF4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220926223534.GY4196@paulmck-ThinkPad-P17-Gen-1>
+ <BE2B629D-B5D2-4ED0-944E-2F13E846047E@joelfernandes.org>
+ <20220926235755.GD4196@paulmck-ThinkPad-P17-Gen-1>
+ <YzJO58HXH6YYxmND@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YzIqNqhTIuaWZrOl@sirena.org.uk>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YzJO58HXH6YYxmND@google.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,63 +61,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 11:39:50PM +0100, Mark Brown wrote:
-> On Mon, Sep 26, 2022 at 05:27:41PM -0500, Gustavo A. R. Silva wrote:
-> > On 9/26/22 17:12, Mark Brown wrote:
-> > > On Mon, Sep 26, 2022 at 04:40:55PM -0500, Gustavo A. R. Silva wrote:
-> 
-> > > As documented in submitting-patches.rst please send patches to the
-> > > maintainers for the code you would like to change.  The normal kernel
-> > > workflow is that people apply patches from their inboxes, if they aren't
-> > > copied they are likely to not see the patch at all and it is much more
-> > > difficult to apply patches.
-> 
-> > That's exactly what I intended to do:
+On Tue, Sep 27, 2022 at 01:16:23AM +0000, Joel Fernandes wrote:
+> On Mon, Sep 26, 2022 at 04:57:55PM -0700, Paul E. McKenney wrote:
+> [..]
+> > > >>>>>> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> > > >>>>>> index 08605ce7379d..40ae36904825 100644
+> > > >>>>>> --- a/include/linux/rcupdate.h
+> > > >>>>>> +++ b/include/linux/rcupdate.h
+> > > >>>>>> @@ -108,6 +108,13 @@ static inline int rcu_preempt_depth(void)
+> > > >>>>>> 
+> > > >>>>>> #endif /* #else #ifdef CONFIG_PREEMPT_RCU */
+> > > >>>>>> 
+> > > >>>>>> +#ifdef CONFIG_RCU_LAZY
+> > > >>>>>> +void call_rcu_flush(struct rcu_head *head, rcu_callback_t func);
+> > > >>>>>> +#else
+> > > >>>>>> +static inline void call_rcu_flush(struct rcu_head *head,
+> > > >>>>>> +        rcu_callback_t func) {  call_rcu(head, func); }
+> > > >>>>>> +#endif
+> > > >>>>>> +
+> > > >>>>>> /* Internal to kernel */
+> > > >>>>>> void rcu_init(void);
+> > > >>>>>> extern int rcu_scheduler_active;
+> > > >>>>>> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+> > > >>>>>> index f53ad63b2bc6..edd632e68497 100644
+> > > >>>>>> --- a/kernel/rcu/Kconfig
+> > > >>>>>> +++ b/kernel/rcu/Kconfig
+> > > >>>>>> @@ -314,4 +314,12 @@ config TASKS_TRACE_RCU_READ_MB
+> > > >>>>>>      Say N here if you hate read-side memory barriers.
+> > > >>>>>>      Take the default if you are unsure.
+> > > >>>>>> 
+> > > >>>>>> +config RCU_LAZY
+> > > >>>>>> +    bool "RCU callback lazy invocation functionality"
+> > > >>>>>> +    depends on RCU_NOCB_CPU
+> > > >>>>>> +    default n
+> > > >>>>>> +    help
+> > > >>>>>> +      To save power, batch RCU callbacks and flush after delay, memory
+> > > >>>>>> +      pressure or callback list growing too big.
+> > > >>>>>> +
+> > > >>>>>> 
+> > > >>>>> Do you think you need this kernel option? Can we just consider and make
+> > > >>>>> it a run-time configurable? For example much more users will give it a try,
+> > > >>>>> so it will increase a coverage. By default it can be off.
+> > > >>>>> 
+> > > >>>>> Also you do not need to do:
+> > > >>>>> 
+> > > >>>>> #ifdef LAZY
+> > > >>>> 
+> > > >>>> How does the "LAZY" macro end up being runtime-configurable? That's static /
+> > > >>>> compile time. Did I miss something?
+> > > >>>> 
+> > > >>> I am talking about removing if:
+> > > >>> 
+> > > >>> config RCU_LAZY
+> > > >>> 
+> > > >>> we might run into issues related to run-time switching though.
+> > > >> 
+> > > >> When we started off, Paul said he wanted it kernel CONFIGurable. I will defer
+> > > >> to Paul on a decision for that. I prefer kernel CONFIG so people don't forget
+> > > >> to pass a boot param.
+> > > > 
+> > > > I am fine with a kernel boot parameter for this one.  You guys were the
+> > > > ones preferring Kconfig options.  ;-)
+> > > 
+> > > Yes I still prefer that.. ;-)
+> > > 
+> > > > But in that case, the CONFIG_RCU_NOCB_CPU would come into play to handle
+> > > > the case where there is no bypass.
+> > > 
+> > > If you don’t mind, let’s do both like we did for NOCB_CPU_ALL. In which
+> > > case, Vlad since this was your suggestion, would you be so kind to send a
+> > > patch adding a boot parameter on top of the series? ;-). I’ll include it
+> > > in the next version. I’d suggest keep the boot param default off and add
+> > > a CONFIG option that forces the boot param to be turned on.
 > > 
-> > $ scripts/get_maintainer.pl --nokeywords --nogit --nogit-fallback include/sound/sof/control.h
-> > Jaroslav Kysela <perex@perex.cz> (maintainer:SOUND)
-> > Takashi Iwai <tiwai@suse.com> (maintainer:SOUND)
-> > alsa-devel@alsa-project.org (moderated list:SOUND)
-> > linux-kernel@vger.kernel.org (open list)
-> > 
-> > Did you see anything wrong with this or something...?
+> > NOCB_CPU_ALL?  If you are thinking in terms of laziness/flushing being
+> > done on a per-CPU basis among the rcu_nocbs CPUs, that sounds like
+> > something for later.
 > 
-> Yes, you should've also included me and the SOF maintainers.  It looks
-> like the MAINTAINERS patterns aren't entirely up to date there
-> unfortunately.  Though that said given that you'd picked up on the
-> subject line I'd have expected the signoffs on the commits to also be
-> pointing at the right tree as well.
+> Oh, no, I was just trying to bring that up as an example of making boot
+> parameters and CONFIG options for the same thing.
+> 
+> > Are you thinking in terms of Kconfig options that allow: (1) No laziness.
+> > (2) Laziness on all rcu_nocbs CPUs, but only if specified by a boot
+> > parameter.  (3) Laziness on all rcu_nocbs CPUs regardless of boot
+> > parameter.  I could get behind that.
+> 
+> Sure agreed, or we could just make it CONFIG_RCU_LAZY_DEFAULT=y and if boot
+> param is specified, override the CONFIG. That will be the simplest and least
+> confusing IMO.
 
-Subject line heuristics look at X-many commits, but it looks like
-get_maintainers stops looking at git history by default after 1 year,
-which seems kind of odd. I had to work at it to get it to emit your
-name. :)
+If CONFIG_RCU_LAZY_DEFAULT=n, what (if anything) does the boot parameter do?
 
-scripts/get_maintainer.pl --git --git-since=3-years-ago
+Not criticizing, not yet, anyway.  ;-)
 
-Seems like it's worth getting the MAINTAINERS regex updated? Is this
-right?
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a34ec41fbf7a..2560dded0e3e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19261,6 +19261,7 @@ F:	Documentation/devicetree/bindings/sound/
- F:	Documentation/sound/soc/
- F:	include/dt-bindings/sound/
- F:	include/sound/soc*
-+F:	include/sound/sof/
- F:	sound/soc/
- 
- SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS
-@@ -19275,6 +19276,7 @@ L:	sound-open-firmware@alsa-project.org (moderated for non-subscribers)
- S:	Supported
- W:	https://github.com/thesofproject/linux/
- F:	sound/soc/sof/
-+F:	include/sound/sof/
- 
- SOUNDWIRE SUBSYSTEM
- M:	Vinod Koul <vkoul@kernel.org>
-
--- 
-Kees Cook
+							Thanx, Paul
