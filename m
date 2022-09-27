@@ -2,181 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774635ECE9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A275ECEA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbiI0UfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 16:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
+        id S233080AbiI0Uft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 16:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233011AbiI0UfL (ORCPT
+        with ESMTP id S233088AbiI0Ufm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 16:35:11 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2085.outbound.protection.outlook.com [40.107.220.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632EA51A0C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 13:35:02 -0700 (PDT)
+        Tue, 27 Sep 2022 16:35:42 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0971675CC3;
+        Tue, 27 Sep 2022 13:35:39 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HxGY4IJ3Wlhv9e0EY66AgKAaCBQ/EoOzzPo1ASYvxx45aEVI92Lq2TTxU4+p+kq/Zg7USXVY9vw6vdEgVoPmcdHUTPP6Ep1iaHKnUOlDh4O/S3GElYHL2keCSjsvI229ylygXXlkfWrGLa+X2QBeRbxUj4A2k6BiyT7/XCA+/3TA1+t4F4l3HjxuDuzuEH6FdSZHvqfYtbbCvGezVYBQUYfjYBF2lORBmIMpHXjOU/coYkUuneak8FNoKqch3B6BADC4RvBNZQdmJbSCmNCcP5w53T/HmeLE7TCArCmnw/Owh0bBNotb+HkG7r/gDd3xsKL9iUCNT0Ws/WP/faVo1Q==
+ b=JEaCCAO4XpBsVGW3iqGVlUiarmz8D0pJR5xA9bP6V9qI9Yf0RTyYFwsIU094Igs1nyIT8BWgEAnvMxpCIxnwBC9NjBvwTAKSTP+wJSk3hnyzzjmDNibfGurpCFgtiip0sh6Fz1JQ+n55EV7ZwXf5P6+LxtqBieRyBkFp3cULSRIg9zvCX4rbXZwN8VTW9xpCYKfOlymkjuyr5RFO3HYB7aRaYP32owP7Wu8RJmohbLFAh+zjqxhtqo8QinMZE5BM4K6uYC9plyUgtDCszvaTCkMt5xLPQAloQaIija1y11/SCsmTSzQon6y08J7/ZMNV72TNUUUJxESplJLoBly+JQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M/1vIa1uyfJ7kSF454yycziVoVCK4oyv9NwzT/aKcFc=;
- b=OuFpY8pyMvAqVAIbl5Nl23uw2+Q9TOZ0/lIm+WtlM2KFuUH5BQM8U4ynElsLMJgKwF6kHrimy0zO9+CuHtvA/yfqgdWMe45rEW+AOuBG9X7IvIG1hsVCj15G74tZ0K2wG68txZomvvt3pi737SWHMSNyNSPIlFWrfmj6qE3k3VVMI/ZS9uRaYS7JUz1kGbdTT7ACo0hD4pNbCqRUlFc5vQfPMRkNMmEIlXORkpj44IkL7CtV01DnJqwFQJbc0M1alXp3pcaLTU1RvnXKrzic0MiJrIngFbFWrohxAEXMQHRhfGqPXwxWNUOiZyO9kkafYy2G7LTnlRP3fNTv9ckFiA==
+ bh=hK6ziGEFD2JaZaoZBh+/PtTNDnHsRlrBMC70cohUWSU=;
+ b=S+DiJgoHhpCS3QFolneyxQ1EEvssDh/GCBt0GkSQEzVAZVBO7MMLPE9X9H6Re3kXhmdu8V9T19CyRrdKdaY845i7El8qClhvOu1iWlQmZyi+kygtI8Lkf23hiwABn5gHNRPd3kDYk0ZK+wkOd/KAoVMmtp+tUs+zFZyaq4+TbGlLwB3iQQ+KOe/aR6Ih54H+tfFvCDmgXgZ73GIIy6YT2Wa7XPW8qvRzlwu+pkU1s1osoC5pEzAu8+9fG4xJxkOzOtHrxo5xn+M0oBoczF9/dejKqJT3l42LqTIQMMMof7fwSe0f4xS/zVnuLSHblMy1Y4Xn3wYvMYphAMYdJmwfRg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M/1vIa1uyfJ7kSF454yycziVoVCK4oyv9NwzT/aKcFc=;
- b=fmWwouHJyZFYP1BwG53wx9duyqZPxOeH5o/zBYExmp20uuoVjDW+pwEy6ucYGtNNAHS0hBwmG16jUI09SVMydNXNpaCoE9DriIM7yAOL8x0yCGDYs0BIxlhHtqVh8fcNjnGQqsSyUTM7dOrd8nTZXehrSAWSRnNtb84MrecvMnBSjkX4paVDSLHDZ+Vj2LBn9we+xsZgmnc75wrFozBhVzgQIucv8Cp9x8jeu4W+nCHC/OxHymWetGThPV1+ZFQ5J4FixxmgRTPqXAcwbEPixe6oyDGdcyjuHJGni3OI1N3pVAPq7KDLYgf3OB1iBmLfG31jNR3KbNriS6yXOpNkaw==
+ bh=hK6ziGEFD2JaZaoZBh+/PtTNDnHsRlrBMC70cohUWSU=;
+ b=4eqP4IMTiWi5L84dp52IiWhAe1oX+J10HKWfcqgV0IN8g/C0KY/tgmtmc6h1Lg0uuR/0XeP1gf7QWM3COy3Iwkp1ZjCmc5QEZ8o6ZzNs2N8szlWLdYniAkEOMr2FVJ5TEbXRUOrrsfXizaJixveFH9kMpAbzV0azcTxFAqpC3ME=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by DM6PR12MB4137.namprd12.prod.outlook.com (2603:10b6:5:218::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Tue, 27 Sep
- 2022 20:35:00 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::51d9:c02b:e5a1:254b]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::51d9:c02b:e5a1:254b%5]) with mapi id 15.20.5676.017; Tue, 27 Sep 2022
- 20:35:00 +0000
-Message-ID: <46807002-c42c-1232-0938-5b48050171ee@nvidia.com>
-Date:   Tue, 27 Sep 2022 13:34:58 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC 2/6] mm/migrate_pages: split unmap_and_move() to _unmap()
- and _move()
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
+ DM4PR12MB5817.namprd12.prod.outlook.com (2603:10b6:8:60::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5654.26; Tue, 27 Sep 2022 20:35:37 +0000
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::25cf:e07f:d3b6:af7b]) by DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::25cf:e07f:d3b6:af7b%6]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
+ 20:35:37 +0000
+Message-ID: <735b709a-7e3a-4517-1f9b-6022b18be99d@amd.com>
+Date:   Tue, 27 Sep 2022 15:35:32 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] KVM: x86: Un-inhibit APICv/AVIC when switching to x2APIC
+ mode
 Content-Language: en-US
-To:     "Huang, Ying" <ying.huang@intel.com>,
-        Alistair Popple <apopple@nvidia.com>
-Cc:     Yang Shi <shy828301@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20220921060616.73086-1-ying.huang@intel.com>
- <20220921060616.73086-3-ying.huang@intel.com>
- <87o7v2lbn4.fsf@nvdebian.thelocal>
- <CAHbLzkpPNbggD+AaT7wFQXkKqCS2cXnq=Xv3m4WuHLMBWGTmpQ@mail.gmail.com>
- <87fsgdllmb.fsf@nvdebian.thelocal>
- <87ill937qe.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <87ill937qe.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        pbonzini@redhat.com, jon.grimm@amd.com
+References: <20220909195442.7660-1-suravee.suthikulpanit@amd.com>
+ <YyUOb5X8yO4BbYSf@google.com>
+ <93df5f91adc31138640e3e7c5ab037b73b8af5ff.camel@redhat.com>
+From:   "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
+In-Reply-To: <93df5f91adc31138640e3e7c5ab037b73b8af5ff.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0101.namprd03.prod.outlook.com
- (2603:10b6:a03:333::16) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+X-ClientProxiedBy: BL0PR02CA0009.namprd02.prod.outlook.com
+ (2603:10b6:207:3c::22) To DM8PR12MB5445.namprd12.prod.outlook.com
+ (2603:10b6:8:24::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|DM6PR12MB4137:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4e5d891c-b062-44f8-0784-08daa0c7bfcf
+X-MS-TrafficTypeDiagnostic: DM8PR12MB5445:EE_|DM4PR12MB5817:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0b6f40e8-3392-4f3c-990f-08daa0c7d575
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WXzigm03ABfcBjFdnOpoZzW8Mw/zg+dbTZ8xbBOCGlH3A40+Zw8PEDAje1UiZEn5IyoDrUFU+eGKAdmQYkwjXLjxvZP50J92qFiWyLxG9hth7OAod29cForcB/M06ewzR4Xoa+KaUO/v4Y51eOxRIoXRddl2lZuUSJYYrMihfHZoadqqFBPEe8w3CNodosMwJ7iBoF+YvSUa23O9kKkvKs6stEl3pPt53gO5b22KgNpqmHA64Vrzdyq+GZ8ipW1VqHNJAYu8uwmrwW3OCdPa05+IOkV3ojtcla77ATh3IrzBYw6MH+Hf8l3HbdMJ38e3frWwWGyxNq2oS8KXQsa1AT0TSiCzLjny7Yw6JiI55tBsy2GotIdsOSdB8JRIul0paXup+raGzOcUyaJQii0QDQEb5r1XaHw53xNNNSbKBC5hZaSWV+0nM+V7CyZqfga4OwOnYiQJz4dVkfgCgGXOiRiDVkJImbSM2Vl2XbsEkNxbvh20iEUqdV/mbH4j5ljm0eE2c01QbxTzMamhSCyb5tic2w3jVIA8u4a3mYOfQjVbqh9rPZ7vJglEYZ3J9V3b8/AROuR1SG7ei/oXTxUHwgamhA5nyDBM1RnG+nuf6u8Gv6PnXjpwyYGshvfZAO9eEXXTs4SQ2S0GrL2e0D/3kF46kNOrG00wIz3qClgKvP1ymCs2uGzX1vmnI/3wS0r6xzPMYMlb+6jGpm17zJ31lutlunKSfS5zOBULNBIabeX/DQdkTsgmlfpTcnHhWOg2KOc4ckxafb85gr+M+8XgTCgALf+d5CK9YoTgUviQ7OmuRA7UHDapHNRkaITaKlPNnOlFnZoUyjV1HkGk40c+vmwhqxvnau3N/n8si1B8LZfiJnozUQdsCMFEaQyN2IGB
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(366004)(346002)(376002)(451199015)(54906003)(110136005)(478600001)(5660300002)(26005)(6512007)(316002)(66946007)(6486002)(31686004)(6636002)(8936002)(6506007)(41300700001)(53546011)(66899015)(2906002)(66476007)(83380400001)(38100700002)(31696002)(966005)(186003)(86362001)(36756003)(66556008)(8676002)(4326008)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: GUFXKzzOTBUHB1lwbayi0gnowGCVdpUxATocMY4HN8IjsdQyHV3t2459Dq/pTA1wFHY48I9H/bbDd/h5amQus5k0XwlrxdzonGe42UuGbmJJ6V3xcc+RUf9gOulAplWGak2wxUJUxph0ycC4sRKmWfnbFRcIv0A3GM7MRklcRJMYmezm/nDfUzkkwYKJzkDRfr4awpXeaHJZ6phis6WsSMmuSF7rJW43Ajxq7Vh9cq1UwtQbZGXHjBU0VmucW8ETE7kPV721mj6uMIP15D4cWVKKrnsHhao6gRFqb8Ipwi0I1S0yqYBaFF29cmA28SshbcJQIAfvlyWpPkkOD3acob5FC7i6XWJAV0+SKXR6pHSrX60nOEnzO6S93H1P+evoyLH7GljghinlFLAehSZzlZtWAyminU41XH5mI6Qpme3P39bSkSUOxbe591oUAYI9zAnLBBVjh+9cmJuZ35IlTJ7aFjCAu0SSXBEI9HhEJW5e8nfTRZmnfRPcaLMVuPE/NRgmvZPaDCiWjekPiN0nkcx6v0GYybzZ1x9U/Mb75g/orun0HKfA3cxCQIoeFE5HyikLcPnnLy5se7J68zgXECZObBrk1Uj3GdKLD3dVOvWkcuK7cRZ7Rrrv96ye4UNF0+DsHTeF715qLbCK/mNkPvp0i79sNj7yVYKZeNszs+XLkOMgaEQps2/Wg6WiHtwxQ+Ih4+gdz8kGqym7GqFvP/AuUwXXb7d/KEgglHJrOYj52M8dZj32C8jz43VdpOCWlqS7PGoU9LyHnPWaeTrUDvjk3qnJMKbvxwrzlbb8XDQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(366004)(376002)(396003)(39860400002)(451199015)(8936002)(5660300002)(86362001)(31696002)(2906002)(6506007)(6486002)(83380400001)(26005)(53546011)(6512007)(6666004)(478600001)(110136005)(2616005)(41300700001)(4326008)(8676002)(66556008)(66476007)(186003)(66946007)(316002)(38100700002)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UTFOWTlEWTY1ZjR1Y3p3V013NWgwd01ZZnhlVXU0aWdPQUc1eDhvSnlQaUQ0?=
- =?utf-8?B?K0ozaHl6V3B4VTkwUEFScVJBbnhWdHBBNjZoVlB3MlhmSXNxZzlaN3Y0Z1Yw?=
- =?utf-8?B?a1V4NXlsM3Fyb1NkZ2R2MjI5LzZuWlpaN2RCNzV4Tkh2U3FnY0Z1eG5PVUxp?=
- =?utf-8?B?THRmeEY4Vm1lcnlTODRQMThuZjhFMkxnVFNld0oxaHJaZ1BnOE1ERE5pRys2?=
- =?utf-8?B?WEg5QklOM0NVTUEzdDlwR0ZJVDVybVVnUFBOdGRnSEhhekJtdFR6R2JMeUlZ?=
- =?utf-8?B?Q1F0VnpIZVBtbXBMWjhrUUNEWUliT1pBQnRGb1lRTEpld2dzRVd1d2dmMjN4?=
- =?utf-8?B?NXo5S05iVTBuUmlQQTRSZmxKQ3hSK1dYSE5zdXREY2VDeDAwVWFUMmxad3Ft?=
- =?utf-8?B?QlJEalliczByYkQ3REwxalVoYW40b0NXL0tyZHp0YWp0TmtCa0NabENGcnZ4?=
- =?utf-8?B?MzJ6am5QM0hXZlhVcDd0M1lzR0c5dk0yVW1LSVRXeHlWV0RaZWVWODdoNkpn?=
- =?utf-8?B?UzR0UXdZZjdSa21uVzlrZS9nWlB3UEJWaWs4K09OU09xQkJFbFhJdUY3ZmZD?=
- =?utf-8?B?d0pkVkhlZXNxSFRhUTVYRlY4ODd3SkFRKy9ud3lDckdvMFVHdFQydVJmN0lp?=
- =?utf-8?B?UC8rTVYrSXZVL2twMGJYdE5FNTRQUHJ2ajA5UThNT0laWW43dFRmUHVsdnky?=
- =?utf-8?B?SHlPNVVyTUpka3Ivd3RSVzBMYk9GK3FqYUlwOWNkbU40Myt1SFpvVzU2dkRT?=
- =?utf-8?B?aE9neTR6eEIvcnplN3dkendUZVdKVHZXQSsyMmREYS9TR3pUT0lFR0IxU2tp?=
- =?utf-8?B?V0NyMnVqQWYvTUt4emRFNkVOWDZuUThGc3ZLK1hobW14TStmNXp1eWIrMGpo?=
- =?utf-8?B?aHd0Z3A1V0ZlR3lNMXBFSFdjQ0l2emVtRFdVeFc4bTU4c1RsZk9rQVlUL0F5?=
- =?utf-8?B?K0I3WVlGWTZ3dHV1c2IzQnpOeUd0SlNwTThMR3NEVXZrNU5iT2pDaStiSFUy?=
- =?utf-8?B?UW52QzhKUUtYeW5tZlZ0N0VJNDBQOFh1SURsT01ldE1jRHR5cUVUUHRvVThQ?=
- =?utf-8?B?cWRIMGh5LzFUbWNZbDlOMnNNS3k3SDlncEhPNWlBRzdDRmlBK0o3a3NCOFla?=
- =?utf-8?B?ZmxMZUdKeThycWszMk5pRlNpZi9DMGdvQ1loUnZpb1hWRjN5alZEbVN4ZHNr?=
- =?utf-8?B?YjYwTlVTWW1lNmg5SEF0bnNPWFZ4M2RESmV6aVBlenRwK2dZRXJ1U3pYakls?=
- =?utf-8?B?Y2hFVitmakxKcUNDSHlaRDFQVjFPb01SM2RPMzAvelBiY05pNUFVSnBwMjRn?=
- =?utf-8?B?SGtRN0VhUG1XSHNPNXRsZEtMS3N6Z3BGNzMzZUc4dlcrNGdjRytvcnpTaFlL?=
- =?utf-8?B?enhZUzhwZUprMHJ6VTdrbm9hYlp5c1lHcTlXK2UvU0c2Tm5PR2ptbUVUVGhl?=
- =?utf-8?B?Yld0MGxmZ1R2TnlGVjR1cEc0bnAreHI5QWN4b2QvdmVYdGEvOElaY2tHV0lQ?=
- =?utf-8?B?YzNYSUhJV1RzOTMvUkcwYWs0ZEhuWG9uUUtUVmhpS25udHhDWWpUZnVobzhW?=
- =?utf-8?B?NWo4MzZlWUhqNzNuV1NaL0gxMkVHUjlEeEpxYXorMUVGbTRtT29YYWhJVUdD?=
- =?utf-8?B?c3NYeXBibjVlcHVtZm03aWVncjZyVGJhR1ZMNXpsMHBlbGpmSk5qTUhiaTBj?=
- =?utf-8?B?czU4TFBnVzF6MUpqSE5hcTltSHI4WFl3ZU91enFFVlNFZ2NFN3FsQlpyMlQ4?=
- =?utf-8?B?aUhRbUE4OTJlNjdyNFBPb1hudnc3Zk53U0w3Zm14MWhSdlNhWWl6OGh2UzNS?=
- =?utf-8?B?SGRqVGtLSWFhN015MUpvaGpyVGJVMVpncHIvTVZCTzNNL2dmUGdLVVlVZDEw?=
- =?utf-8?B?L0w0NXV4UDN1RTJ2Q215ZDVjczdtWXM3dm04MWxBczg3WkhkZThWSHo3M3Zy?=
- =?utf-8?B?OHQ3ZDhnWlk0RWpTUVhPSWRyOWVJTVFneFlsZHA3OXhYZTVncG9JVUx4QjF5?=
- =?utf-8?B?eFgxenZzSnFZSnhGc2dxcUtXZjlwWUkrU2RxOCtlNkR2K0RZNENGQVMrbm5z?=
- =?utf-8?B?eEcyWHBvYU5BM0sxeS9XSzA2UWhSalVYZnk3d21PODFFZ3FXcjFqakVEaG8v?=
- =?utf-8?Q?8hm+axEkCbVPHu0V95cqyvdWA?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e5d891c-b062-44f8-0784-08daa0c7bfcf
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?anEzd2tpWVlNeW51d0dkUEs1MmZIOHpwVUxwNEpMQTdqcHJZcTN6N3JxVm5t?=
+ =?utf-8?B?UjFyYzE0TmxMcjFldlRIVVljTTBlekQ1am41QU9aamdXQlpPR0ZGS0pySnd6?=
+ =?utf-8?B?TVdETytSVEZib3FJMk0rTUZGN0xlLzRUd2tydHdRcEh3OWZkbWpHV0x5US83?=
+ =?utf-8?B?TGRHc0xqWkhNZ085Z2FNbGR4YWtDNUNrR2lYcWowVkVEaVdRZE1aNWt4YWtl?=
+ =?utf-8?B?dFR2ejhZeWRZYVpuTXRtbGwxU1NRWWFyTUExaTVzTkhMN2VSZzltaUNkNHdO?=
+ =?utf-8?B?UURhWFhkamdaZUtRMkRPaGhBLy9tc3NtWndWa0JQeTZoekJOcGprN1M5bGly?=
+ =?utf-8?B?MTd0cEJSSjRCVTh4VnFycWhZRTVRMUFLSEZRNm55NlJMNW8rcDRlRis5d252?=
+ =?utf-8?B?bnY1RWtQaWV2SDZZQzk0bGpZcFVNdXNGYWN3TlpRUXFUb2FaSEhSc3pPRmpE?=
+ =?utf-8?B?QWk3ZWp3ZURrRWZ0aTltZlk3S3JyMW5YbVBxTUlDWGEwK3pkakxzcEV3d0hQ?=
+ =?utf-8?B?Q1BjT0hHYjNZSTdOUGxOZTNCRG9YcWY0NWtTdGRWU0ZETDFYQXg3SDNpdUpi?=
+ =?utf-8?B?OGVWdGhTYnlnMWp3ajFRR1hJdUpWZUliSEhJUU80eXgzb0Q5RWZkcHpPblBp?=
+ =?utf-8?B?UU90QURzMmlvS3NEK3BZU2NpZjA0UXkvRGc4VGNIVUFqZ3ZMTlRUZHFGV0Iv?=
+ =?utf-8?B?eDZFTFJKTFQvWWFRZk5rRHZJeVVrRFF6aXB4TUF6Tm9WRldlV0xzU0JZb1VM?=
+ =?utf-8?B?N2M0Tm9XSDRtbVF3aXByNzJoV1VPY290SXVLaWtmVEJPRFROVUNMdXJOVXdw?=
+ =?utf-8?B?ZXlMZm8zcExFNFpGRU9rdTMvK3dFcjJhSzZYSmZKS1B1TGttYVJlSVBTM2Vs?=
+ =?utf-8?B?ejluK0txVHJ5NHZKK3JzQWVpNXBKR0NvbldyTUhuSFdtQklKanZEcG9hcFF1?=
+ =?utf-8?B?VXJITEVzalhHRFhCRWg1cXREbWlDTlp5MTZKMi96YVljZ1prVDkxdnFqYllO?=
+ =?utf-8?B?V2QwbSttUWh6ZG1rZW5BQi9yczhsWmhuTS8wTXBRMFo3aVNERkltZ3NXQTB3?=
+ =?utf-8?B?Tm40WTA3YjUydnFTRWRKdjR5MXpEU2JXWENLWHBOMFozSnBoUmNURmkxbE9C?=
+ =?utf-8?B?ZFd2bEtZS2doQ2ppYTRMYU5NdldTcWxud2R0d0xtVUtUNkd2UVE2RWZ0b2o1?=
+ =?utf-8?B?Y2tHYnRyVkd5blI2U0NoSXZqUnpuNzVsYy8zRDBEVFVJdEhhQnN2MitwSVpa?=
+ =?utf-8?B?Yk9aWC9rVVQxbFEwdlVZSXV6SnFTKzdMay9jS1lHcjVjSWVncWp2NWtJbDNJ?=
+ =?utf-8?B?bm9rRTNiMFNmSnhSV3kyK3VvVGIxL3FXNkZCaGt4RDJwRXVTVHV4ODg4WEY4?=
+ =?utf-8?B?MFMyQld6L3Y5VExiWWd5UndCL0NsS3J1emFCWk8rU1I4Q25uNFA0MXhkT1Zi?=
+ =?utf-8?B?eTBORmNOUCtOZk1tS1JpdDViV3RKckUxZjVaV0JzS2xZc1licmZieWpjVkZ0?=
+ =?utf-8?B?bWVaTEIycE8wNXU3ZUlPM2lIV1FlUXFrVEtQZ2J6c2RDV0p2T3pDV3NDZDdE?=
+ =?utf-8?B?TGtpUlhzQUlYTUZ2REppR3UvT3FjTDJKQ0FyMzljY1hpQmFnZVpuS3k0WHFV?=
+ =?utf-8?B?OGxacU15Y3R4bEV2Y1dZWENscTBTVmlGa20vams2RStablZibXF4LzRUZ2t6?=
+ =?utf-8?B?VFk5djdDd3h3Z1E2Wll0eW0zTDNuNndrblBZUXV3MnNkZWVkSzFsYzFaVWxE?=
+ =?utf-8?B?dzMrMnZtMTdvV3drNnBMQVpDSmJ6MGl5eU0yM0NTaGd0UHpRZ3p1M1BYSDRJ?=
+ =?utf-8?B?MGZpeDBiNlN2TjBNNCtXci9DMjhqeVJlcjB1Tmx0c0RVdklUT0dBZVBUTE02?=
+ =?utf-8?B?Ni9SR2dBTVYxV2tLK2IyL21pS0FONkR5S1A2aEtqZVFXR0lqM21WRzNPU05M?=
+ =?utf-8?B?b0VtcGtWL1VnQnFkeG9JQ2t2TjlLb2p1UU5pNFF4d0IzV1BodlFvcFk4b1g4?=
+ =?utf-8?B?bnBmWUN4eW95RVl0MDV0dEVCbDNKMFJ0SzFNTS80WUFVNkNnRDV5cG9CN1Mv?=
+ =?utf-8?B?NEdCTjZZbGhXRGM2ODBTSUE0OHh2WVVwNFRwM0JWZ0Y4SnFodWdnUTlpR1lX?=
+ =?utf-8?Q?ugaONSRXySymPHgYxdPpUp/RH?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b6f40e8-3392-4f3c-990f-08daa0c7d575
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 20:35:00.4695
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 20:35:36.8723
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OC5SBiu1Gx6uAJiD+hpkksf0KcYLtfvgSq41VI+yU0eCUzuEzjUswY48ZE/fn+s6VwzSsaObG3sNRbRBVRJ8GQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4137
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: qqZbTtq13aHu4Dq2EE3RP4fgjpgbEeHu8M7mKXnGyyBt+HPw5uRt/MFmmf/ADpmdMhgpw5RNNAxBvnLp6zcQfA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5817
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/26/22 18:51, Huang, Ying wrote:
->>> But there might be other cases which may incur deadlock, for example,
->>> filesystem writeback IIUC. Some filesystems may lock a bunch of pages
->>> then write them back in a batch. The same pages may be on the
->>> migration list and they are also dirty and seen by writeback. I'm not
->>> sure whether I miss something that could prevent such a deadlock from
->>> happening.
+Sean / Maxim,
+
+On 9/19/2022 2:32 AM, Maxim Levitsky wrote:
+> On Sat, 2022-09-17 at 00:01 +0000, Sean Christopherson wrote:
+>> On Fri, Sep 09, 2022, Suravee Suthikulpanit wrote:
+>>> Currently, kvm_lapic_xapic_id_updated() checks if the xAPIC ID in
+>>> the APIC_ID register differs from the vcpu ID. If so it inhibits
+>>> APICv/AVIC.
+>>>
+>>> However, for vcpu 256 and above, the 8-bit xAPIC ID field in the APIC_ID
+>>> register cannot support 32-bit x2APIC ID causing the kvm_xapic_id()
+>>> to return invalid ID and fail the comparison with the vcpu ID.
+>>> This causes APICv/AVIC inhibition for VM with more than 256 vcpus
+>>> due to APIVC_INHIBIT_REASON_APIC_ID_MODIFIED.
+>>>
+>>> In this case, when guest switch to x2APIC mode, KVM needs to clear
+>>> APIVC_INHIBIT_REASON_APIC_ID_MODIFIED.
+>>>
+>>> Fixes: 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base")
+>>> Cc: Maxim Levitsky <mlevitsk@redhat.com>
+>>> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+>>> ---
+>>>   arch/x86/kvm/lapic.c | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+>>> index 9dda989a1cf0..750d385b770e 100644
+>>> --- a/arch/x86/kvm/lapic.c
+>>> +++ b/arch/x86/kvm/lapic.c
+>>> @@ -374,6 +374,7 @@ static inline void kvm_apic_set_x2apic_id(struct kvm_lapic *apic, u32 id)
+>>>   	kvm_lapic_set_reg(apic, APIC_ID, id);
+>>>   	kvm_lapic_set_reg(apic, APIC_LDR, ldr);
+>>>   	atomic_set_release(&apic->vcpu->kvm->arch.apic_map_dirty, DIRTY);
+>>> +	kvm_clear_apicv_inhibit(apic->vcpu->kvm, APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
 >>
->> I'm not overly familiar with that area but I would assume any filesystem
->> code doing this would already have to deal with deadlock potential.
+>> This isn't safe as it assumes the guest will switch _all_ vCPUs to x2APIC, e.g.
+>> if one vCPU switches to x2APIC before the others then weird things will happen.
+>> Part of me just wants to throw in the towel, but I think we have an easy out.
+>>
+>> The other funky thing to consider is KVM's x2APIC hotplug hack, where KVM
+>> deliberately (and architecturally incorrectly) does not honor the aliasing behavior
+>> that results when an x2APIC ID gets truncated to an xAPIC ID.  When the hack is
+>> effectively enabled, KVM can actually ignore truncation because the resulting KVM
+>> behavior of IPIs only getting sent to the "first" vCPU is the same as APICv/AVIC
+>> behavior.  On the plus side, the existence of that godawful hack means it's extremely
+>> unlikely the aliasing will break anything that anyones cares about.
+>>
+>> To restore APICv support for stable kernels on systems with >255 CPUs, which people
+>> do care about, it probably makes sense to split the fix into two patches.  An
+>> incomplete patch to ignore the truncation case that is easy to backport, and then
+>> a fix for the fix to inhibit APICv/AVIC when there is unwanted aliasing (piggybacking
+>> off my patch "KVM: x86: Honor architectural behavior for aliased 8-bit APIC IDs").
+>> We can even get clever and fixup the Fixes: tag when doing the final application
+>> so that there's a paper trail if someone wants to backport the full fix.
+>>
+>> Compile tested only at this point and lacks changelogs, but my thought is to do:
+>>
+>> From: Sean Christopherson <seanjc@google.com>
+>> Date: Fri, 16 Sep 2022 16:48:03 -0700
+>> Subject: [PATCH] KVM: x86: Don't inhibit APICv/AVIC if xAPIC ID mismatch is
+>>   due to 32-bit ID
+>>
+>> Fixes: 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base")
+>> Reported-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+>> Cc: Maxim Levitsky <mlevitsk@redhat.com>
+>> Signed-off-by: Sean Christopherson <seanjc@google.com>
+>> ---
+>>   arch/x86/kvm/lapic.c | 7 ++++++-
+>>   1 file changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+>> index adac6ca9b7dc..a02defa3f7b5 100644
+>> --- a/arch/x86/kvm/lapic.c
+>> +++ b/arch/x86/kvm/lapic.c
+>> @@ -2075,7 +2075,12 @@ static void kvm_lapic_xapic_id_updated(struct kvm_lapic *apic)
+>>   	if (KVM_BUG_ON(apic_x2apic_mode(apic), kvm))
+>>   		return;
+>>   
+>> -	if (kvm_xapic_id(apic) == apic->vcpu->vcpu_id)
+>> +	/*
+>> +	 * Deliberately truncate the vCPU ID when detecting a modified APIC ID
+>> +	 * to avoid false positives if the vCPU ID, i.e. x2APIC ID, is a 32-bit
+>> +	 * value.
+>> +	 */
+>> +	if (kvm_xapic_id(apic) == (u8)apic->vcpu->vcpu_id)
+>>   		return;
 > 
-> Thank you very much for pointing this out.  I think the deadlock is a
-> real issue.  Anyway, we shouldn't forbid other places in kernel to lock
-> 2 pages at the same time.
+> This is the fix I had in mind for this issue, I kept it on the backlog for too much time.
+> I also vote to do it this way.
 > 
-
-I also agree that we cannot make any rules such as "do not lock > 1 page
-at the same time, elsewhere in the kernel", because it is already
-happening, for example in page-writeback.c, which locks PAGEVEC_SIZE
-(15) pages per batch [1].
-
-The only deadlock prevention convention that I see is the convention of
-locking the pages in order of ascending address. That only helps if
-everything does it that way, and migrate code definitely does not.
-However...I thought that up until now, at least, the migrate code relied
-on trylock (which can fail, and so migration can fail, too), to avoid
-deadlock. Is that changing somehow, I didn't see it?
-
-
-[1] https://elixir.bootlin.com/linux/latest/source/mm/page-writeback.c#L2296
-
-thanks,
-
--- 
-John Hubbard
-NVIDIA
-
-> The simplest solution is to batch page migration only if mode ==
-> MIGRATE_ASYNC.  Then we may consider to fall back to non-batch mode if
-> mode != MIGRATE_ASYNC and trylock page fails.
+> Best regards,
+> 	Maxim Levitsky
 > 
+> 
+>>   
+>>   	kvm_set_apicv_inhibit(apic->vcpu->kvm, APICV_INHIBIT_REASON_APIC_ID_MODIFIED);
+>>
+>> base-commit: 59afc619c353e67d087dc741bd828019985ffac6
+>> -- 
+>>
+>> followed up by this later in the series:
+>>
+>> From: Sean Christopherson <seanjc@google.com>
+>> Date: Fri, 16 Sep 2022 16:54:14 -0700
+>> Subject: [PATCH] KVM: x86: Inhibit APICv/AVIC if the optimized physical map is
+>>   disabled
+>>
+>> Fixes: TDB
+>> Signed-off-by: Sean Christopherson <seanjc@google.com>
+>> ---
+>>   arch/x86/include/asm/kvm_host.h |  6 ++++++
+>>   arch/x86/kvm/lapic.c            | 13 ++++++++++++-
+>>   arch/x86/kvm/svm/avic.c         |  1 +
+>>   arch/x86/kvm/vmx/vmx.c          |  1 +
+>>   4 files changed, 20 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+>> index 13dadc96d9ac..6953d1a61357 100644
+>> --- a/arch/x86/include/asm/kvm_host.h
+>> +++ b/arch/x86/include/asm/kvm_host.h
+>> @@ -1097,6 +1097,12 @@ enum kvm_apicv_inhibit {
+>>   	 */
+>>   	APICV_INHIBIT_REASON_BLOCKIRQ,
+>>   
+>> +	/*
+>> +	 * APICv is disabled because not all vCPUs have a 1:1 mapping between
+>> +	 * APIC ID and vCPU, _and_ KVM is not applying its x2APIC hotplug hack.
+>> +	 */
+>> +	APICV_INHIBIT_REASON_PHYSICAL_ID_ALIASED,
+>> +
+>>   	/*
+>>   	 * For simplicity, the APIC acceleration is inhibited
+>>   	 * first time either APIC ID or APIC base are changed by the guest
+>> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+>> index 00c89ff740e5..e9ba17aa0710 100644
+>> --- a/arch/x86/kvm/lapic.c
+>> +++ b/arch/x86/kvm/lapic.c
+>> @@ -381,6 +381,16 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+>>   		cluster[ldr] = apic;
+>>   	}
+>>   out:
+>> +	/*
+>> +	 * The optimized map is effectively KVM's internal version of APICv,
+>> +	 * and all unwanted aliasing that results in disabling the optimized
+>> +	 * map also applies to APICv.
+>> +	 */
+>> +	if (!new)
+>> +		kvm_set_apicv_inhibit(kvm, APICV_INHIBIT_REASON_PHYSICAL_ID_ALIASED);
+>> +	else
+>> +		kvm_clear_apicv_inhibit(kvm, APICV_INHIBIT_REASON_PHYSICAL_ID_ALIASED);
+>> +
+>>   	old = rcu_dereference_protected(kvm->arch.apic_map,
+>>   			lockdep_is_held(&kvm->arch.apic_map_lock));
+>>   	rcu_assign_pointer(kvm->arch.apic_map, new);
+>> @@ -2150,7 +2160,8 @@ static void kvm_lapic_xapic_id_updated(struct kvm_lapic *apic)
+>>   	/*
+>>   	 * Deliberately truncate the vCPU ID when detecting a modified APIC ID
+>>   	 * to avoid false positives if the vCPU ID, i.e. x2APIC ID, is a 32-bit
+>> -	 * value.
+>> +	 * value.  If the wrap/truncation results in unwatned aliasing, APICv
+>> +	 * will be inhibited as part of updating KVM's optimized APIC maps.
+>>   	 */
+>>   	if (kvm_xapic_id(apic) == (u8)apic->vcpu->vcpu_id)
+>>   		return;
+>> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+>> index 3400046ad0b4..a1eb4e9ed3eb 100644
+>> --- a/arch/x86/kvm/svm/avic.c
+>> +++ b/arch/x86/kvm/svm/avic.c
+>> @@ -992,6 +992,7 @@ bool avic_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason)
+>>   			  BIT(APICV_INHIBIT_REASON_PIT_REINJ) |
+>>   			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
+>>   			  BIT(APICV_INHIBIT_REASON_SEV)      |
+>> +			  BIT(APICV_INHIBIT_REASON_PHYSICAL_ID_ALIASED) |
+>>   			  BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED) |
+>>   			  BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED) |
+>>   			  BIT(APICV_INHIBIT_REASON_X2APIC);
+>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+>> index c9b49a09e6b5..414485d03ee7 100644
+>> --- a/arch/x86/kvm/vmx/vmx.c
+>> +++ b/arch/x86/kvm/vmx/vmx.c
+>> @@ -7996,6 +7996,7 @@ static bool vmx_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason)
+>>   			  BIT(APICV_INHIBIT_REASON_ABSENT) |
+>>   			  BIT(APICV_INHIBIT_REASON_HYPERV) |
+>>   			  BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
+>> +			  BIT(APICV_INHIBIT_REASON_PHYSICAL_ID_ALIASED) |
+>>   			  BIT(APICV_INHIBIT_REASON_APIC_ID_MODIFIED) |
+>>   			  BIT(APICV_INHIBIT_REASON_APIC_BASE_MODIFIED);
+>>   
+>>
+>> base-commit: c8ecd2ebbc283d377188ee6c94cf3f811a4ff501
 
+Sorry for taking a while to test this patch. This is working now w/ 
+x2AVIC w/ 512 vCPUs.
 
+Thanks,
+Suravee
