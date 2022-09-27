@@ -2,174 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B825EB8C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D425EB8BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiI0DZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 23:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
+        id S229506AbiI0DY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 23:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbiI0DX6 (ORCPT
+        with ESMTP id S230248AbiI0DXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 23:23:58 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6093B959
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 20:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664249004; x=1695785004;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mxPqXP0fACxHvoonGfK2OL3d4Ykc4jWit0P4PKYD5oQ=;
-  b=lflKFoeABJqOJFtLGRgH5v38duYKIZEAIy1U4k8PFG1+hjS7dGy0Gb9A
-   DLeR/CSTorJ6iIFznCBmi5vx1E6cT12piK+LRAyfrOuJyVjeX04AKeI6b
-   buxhoxe2g3oc4II1qJkEen9TeRjlmysD+wZyBqsNLQi/pLTC/ULU0+I4l
-   RwQUQyG7LV2S6VDxq2UavQRyDOZ1ZXubiKLigEvZ88+MCdE2UzTDf+LaU
-   JUgoFCyJs4vF6RL6R4rVFp7JjfXk5NIBlyApjf1nQxKz9LHizBxTG9YNI
-   dGBcaGCpgRfjxc2dUwrK9zGu6VHFasZTUJhpBSpy6QDTZvdB6/Jahv2r9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="288347868"
-X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
-   d="scan'208";a="288347868"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 20:23:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="689828820"
-X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
-   d="scan'208";a="689828820"
-Received: from lkp-server02.sh.intel.com (HELO dfa2c9fcd321) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 26 Sep 2022 20:23:22 -0700
-Received: from kbuild by dfa2c9fcd321 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1od1Bq-0000Ya-0C;
-        Tue, 27 Sep 2022 03:23:22 +0000
-Date:   Tue, 27 Sep 2022 11:22:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cleanups] BUILD SUCCESS
- 30ea703a38ef76ca119673cd8bdd05c6e068e2ac
-Message-ID: <63326c86.pa1q7H2O/k39yqYz%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 26 Sep 2022 23:23:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9440EE02B;
+        Mon, 26 Sep 2022 20:23:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50D24B80D9D;
+        Tue, 27 Sep 2022 03:23:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20B3AC433C1;
+        Tue, 27 Sep 2022 03:23:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664248986;
+        bh=+WAqlaESI/TBL/hp0OKeXlB44156QT7krk6MvuFccXY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=P8GXRK8/k1qvBCOfPnC3z4J/Q9OcuTlsKtkkeOLrM/pCqGZewEiC5/qWO/2dXZUXS
+         SlzIHNqTe/IpoyDeBhQBryTr7Jbsii75iA62BihoTUuMNXVUAG/gHsp2NMHTabZanb
+         4Nf73/rVt3x3iH/DeAiruVuqSdhhZqYQne+E7wlT+iNzoJNiRrVwk02UcE4S8qfU+m
+         25kutHFfkXofvgmGpsy4+iDWkRsTr6iXETs0vCHZkrNmPEeLMw9Drg+zTbAVqY6/vW
+         RUO9UYiTBK61AZQ/+iiLKDqAIIrmSb7vn+t4GPHwUGyP04jNKz8iD1JgZuCaADOhm2
+         59QE4T7I1DRew==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     a39.skl@gmail.com
+Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, linux-clk@vger.kernel.org,
+        mturquette@baylibre.com, krzysztof.kozlowski+dt@linaro.org,
+        phone-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sboyd@kernel.org, linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] Add DISPCC driver for SM6115
+Date:   Mon, 26 Sep 2022 22:22:57 -0500
+Message-Id: <166424897976.1766486.17695490545987558939.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220911164635.182973-1-a39.skl@gmail.com>
+References: <20220911164635.182973-1-a39.skl@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
-branch HEAD: 30ea703a38ef76ca119673cd8bdd05c6e068e2ac  x86/cpu: Include the header of init_ia32_feat_ctl()'s prototype
+On Sun, 11 Sep 2022 18:46:17 +0200, Adam Skladowski wrote:
+> This patch series introduce support for SM6115 display clock controller,
+> this driver is based on QCM2290 one.
+> 
+> Changes since v1
+> ================
+> 1. Changed bindings file names to Vendor,SoC-IP format.
+> 2. Changed include in dispcc-sm6115 to reflect name change of bindings.
+> 
+> [...]
 
-elapsed time: 720m
+Applied, thanks!
 
-configs tested: 90
-configs skipped: 78
+[1/2] dt-bindings: clock: add QCOM SM6115 display clock bindings
+      commit: 38557c6fc0771be5791e16837342db581daa6379
+[2/2] clk: qcom: Add display clock controller driver for SM6115
+      commit: 9b518788631cf7bc2b10d3967fd2343d1c88d65c
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-x86_64                              defconfig
-x86_64                          rhel-8.3-func
-x86_64                               rhel-8.3
-x86_64                    rhel-8.3-kselftests
-i386                                defconfig
-x86_64                           allyesconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-i386                 randconfig-a001-20220926
-i386                 randconfig-a004-20220926
-i386                 randconfig-a002-20220926
-i386                 randconfig-a003-20220926
-i386                 randconfig-a005-20220926
-i386                 randconfig-a006-20220926
-x86_64               randconfig-a002-20220926
-x86_64               randconfig-a001-20220926
-x86_64               randconfig-a003-20220926
-x86_64               randconfig-a004-20220926
-x86_64               randconfig-a006-20220926
-x86_64               randconfig-a005-20220926
-i386                             allyesconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-s390                          debug_defconfig
-i386                          randconfig-c001
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-powerpc                     mpc83xx_defconfig
-sh                               alldefconfig
-arm                         vf610m4_defconfig
-openrisc                    or1ksim_defconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220925
-nios2                            allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-
-clang tested configs:
-i386                 randconfig-a011-20220926
-i386                 randconfig-a013-20220926
-i386                 randconfig-a012-20220926
-i386                 randconfig-a014-20220926
-i386                 randconfig-a016-20220926
-i386                 randconfig-a015-20220926
-x86_64                        randconfig-k001
-x86_64               randconfig-a016-20220926
-x86_64               randconfig-a012-20220926
-x86_64               randconfig-a014-20220926
-x86_64               randconfig-a013-20220926
-x86_64               randconfig-a011-20220926
-x86_64               randconfig-a015-20220926
-powerpc                      katmai_defconfig
-powerpc                      ppc44x_defconfig
-hexagon              randconfig-r041-20220925
-hexagon              randconfig-r041-20220926
-hexagon              randconfig-r045-20220925
-hexagon              randconfig-r045-20220926
-riscv                randconfig-r042-20220926
-s390                 randconfig-r044-20220926
-powerpc                          allmodconfig
-arm                          collie_defconfig
-mips                           mtx1_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-powerpc                   microwatt_defconfig
-mips                          ath25_defconfig
-arm                     davinci_all_defconfig
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Bjorn Andersson <andersson@kernel.org>
