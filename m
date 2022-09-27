@@ -2,134 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6AF5EC379
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 427155EC380
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232097AbiI0NCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
+        id S232154AbiI0NDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbiI0NCW (ORCPT
+        with ESMTP id S232008AbiI0NDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:02:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D42AB18C;
-        Tue, 27 Sep 2022 06:02:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 27 Sep 2022 09:03:13 -0400
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F0017AC81
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:03:12 -0700 (PDT)
+Received: from [192.168.1.101] (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C79AB81BE1;
-        Tue, 27 Sep 2022 13:02:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291BCC433D6;
-        Tue, 27 Sep 2022 13:02:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664283739;
-        bh=xvoJ+OW9l4BhVywumi/8ss3JCeIzNvyx47l4j80wEpY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hu/ZGjZUx+YKxna8QJPq9YEtENFVjxiyumA+BXZQ34qJyuIThGup+w9noHq4TNd+k
-         7bcOWKNbRFlH9bKbSWtakhRbWWU9IhoE80gikToBJa8/cj4kJhMlNolOihdlycBJ24
-         bWlrleSmKmG8lk3H8/qZ5sR4ZsrvglHzdqesgunxKt7pKRZZywDEvAl4/t+Rv9NWva
-         wO7PAP+VOY3oIvuOUWHOhLRveJL3aqhGCcc1WjeRCNC6PjsxzBipM9mqTOOs20Y8lt
-         7H+FPTbvogYL1mXMLRnd17upd8wui/YMEL50MNnKKURoNzuTXulqxrzV6xZTRvl0N6
-         qBLtBkPNVMRaA==
-From:   broonie@kernel.org
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Subject: linux-next: manual merge of the net-next tree with the i2c tree
-Date:   Tue, 27 Sep 2022 14:02:06 +0100
-Message-Id: <20220927130206.368099-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 39C9D3F335;
+        Tue, 27 Sep 2022 15:03:10 +0200 (CEST)
+Message-ID: <335f759a-3279-4ab3-10c0-55daa313e669@somainline.org>
+Date:   Tue, 27 Sep 2022 15:03:09 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 1/2] ARM: dts: qcom: pm8941: fix vadc channel node names
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220925161821.78030-1-luca@z3ntu.xyz>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220925161821.78030-1-luca@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
 
-Today's linux-next merge of the net-next tree got conflicts in:
 
-  drivers/net/dsa/lan9303_i2c.c
-  drivers/net/dsa/microchip/ksz9477_i2c.c
-  drivers/net/dsa/xrs700x/xrs700x_i2c.c
+On 25.09.2022 18:18, Luca Weiss wrote:
+> Node names for the channel are supposed to be adc-chan@REG.
+> 
+> Use this format and at the same time sort the nodes by reg value.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-between commit:
-
-  ed5c2f5fd10dd ("i2c: Make remove callback return void")
-
-from the i2c tree and commits:
-
-  db5d451c4640a ("net: dsa: lan9303: remove unnecessary i2c_set_clientdata()")
-  008971adb95d3 ("net: dsa: microchip: ksz9477: remove unnecessary i2c_set_clientdata()")
-  6387bf7c390a1 ("net: dsa: xrs700x: remove unnecessary i2c_set_clientdata()")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc drivers/net/dsa/lan9303_i2c.c
-index b25e91b26d991,79be5fc044bd4..0000000000000
---- a/drivers/net/dsa/lan9303_i2c.c
-+++ b/drivers/net/dsa/lan9303_i2c.c
-@@@ -70,11 -70,11 +70,9 @@@ static void lan9303_i2c_remove(struct i
-  	struct lan9303_i2c *sw_dev = i2c_get_clientdata(client);
-  
-  	if (!sw_dev)
- -		return 0;
- +		return;
-  
-  	lan9303_remove(&sw_dev->chip);
---
-- 	i2c_set_clientdata(client, NULL);
- -	return 0;
-  }
-  
-  static void lan9303_i2c_shutdown(struct i2c_client *client)
-diff --cc drivers/net/dsa/microchip/ksz9477_i2c.c
-index 4a719ab8aa89c,e111756f64735..0000000000000
---- a/drivers/net/dsa/microchip/ksz9477_i2c.c
-+++ b/drivers/net/dsa/microchip/ksz9477_i2c.c
-@@@ -58,8 -58,8 +58,6 @@@ static void ksz9477_i2c_remove(struct i
-  
-  	if (dev)
-  		ksz_switch_remove(dev);
---
-- 	i2c_set_clientdata(i2c, NULL);
- -	return 0;
-  }
-  
-  static void ksz9477_i2c_shutdown(struct i2c_client *i2c)
-diff --cc drivers/net/dsa/xrs700x/xrs700x_i2c.c
-index bbaf5a3fbf000,cd533b9e17eca..0000000000000
---- a/drivers/net/dsa/xrs700x/xrs700x_i2c.c
-+++ b/drivers/net/dsa/xrs700x/xrs700x_i2c.c
-@@@ -110,11 -110,11 +110,9 @@@ static void xrs700x_i2c_remove(struct i
-  	struct xrs700x *priv = i2c_get_clientdata(i2c);
-  
-  	if (!priv)
- -		return 0;
- +		return;
-  
-  	xrs700x_switch_remove(priv);
---
-- 	i2c_set_clientdata(i2c, NULL);
- -	return 0;
-  }
-  
-  static void xrs700x_i2c_shutdown(struct i2c_client *i2c)
+Konrad
+>  arch/arm/boot/dts/qcom-pm8941.dtsi | 25 ++++++++++++++++---------
+>  1 file changed, 16 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-pm8941.dtsi b/arch/arm/boot/dts/qcom-pm8941.dtsi
+> index 9cd49deb9fa7..3c15eecf2f21 100644
+> --- a/arch/arm/boot/dts/qcom-pm8941.dtsi
+> +++ b/arch/arm/boot/dts/qcom-pm8941.dtsi
+> @@ -101,26 +101,33 @@ pm8941_vadc: adc@3100 {
+>  			#size-cells = <0>;
+>  			#io-channel-cells = <1>;
+>  
+> -			bat_temp {
+> -				reg = <VADC_LR_MUX1_BAT_THERM>;
+> +
+> +			adc-chan@6 {
+> +				reg = <VADC_VBAT_SNS>;
+>  			};
+> -			die_temp {
+> +
+> +			adc-chan@8 {
+>  				reg = <VADC_DIE_TEMP>;
+>  			};
+> -			ref_625mv {
+> +
+> +			adc-chan@9 {
+>  				reg = <VADC_REF_625MV>;
+>  			};
+> -			ref_1250v {
+> +
+> +			adc-chan@10 {
+>  				reg = <VADC_REF_1250MV>;
+>  			};
+> -			ref_gnd {
+> +
+> +			adc-chan@14 {
+>  				reg = <VADC_GND_REF>;
+>  			};
+> -			ref_vdd {
+> +
+> +			adc-chan@15 {
+>  				reg = <VADC_VDD_VADC>;
+>  			};
+> -			vbat_sns {
+> -				reg = <VADC_VBAT_SNS>;
+> +
+> +			adc-chan@48 {
+> +				reg = <VADC_LR_MUX1_BAT_THERM>;
+>  			};
+>  		};
+>  
