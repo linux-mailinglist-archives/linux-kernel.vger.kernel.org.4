@@ -2,112 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073065EC0A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B4B5EC0A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbiI0LK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
+        id S231891AbiI0LKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbiI0LKD (ORCPT
+        with ESMTP id S231582AbiI0LKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Sep 2022 07:10:03 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAF215FCF;
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50518E00D;
         Tue, 27 Sep 2022 04:07:43 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id i203-20020a1c3bd4000000b003b3df9a5ecbso9217288wma.1;
-        Tue, 27 Sep 2022 04:07:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=smELam+C1mHa7hXQtmvCHgerOjDPN5Eu1MdsEogTVL4=;
-        b=WHDHOLUskSYxI6OtHna6WkG4ZsdiPMZgoHWW59vhUGVMc9Sok7d6w9my6meROtWTDU
-         SobXOG5fvDTv7PLHWrBi2bpNm7FlKmg5i1RZp1W8QKqRy8sx0LIUn0JUzOIEBURLHGrP
-         YL4dxfEHVcWmxGHCnLtXlI9aejMl0IsoK0I3wiB6+BkxNnAxJTa4MshBlEQxEeTm/Z6S
-         /9sqGoA10ystdaQFUrm4BNmf+jIaxVPutFSPmIaf0pMypufpLQRHMdeAz8VuXR66kYw7
-         Z6CTGH82iDgsn5dS80w+aM2GCptRXZc3yQDj1TeIgpygSrB0wx3FmJF0XKzbHkJ++pVe
-         xNvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=smELam+C1mHa7hXQtmvCHgerOjDPN5Eu1MdsEogTVL4=;
-        b=EWAf8E0koK/IgQj0tK8WEcbnA6CSHoZAnkKeQNfSMR8O9kS0zgSphP1MQgn5CJLnEY
-         ZoCYQY7ZQcAlb35NaUiT+XLhnKjysYAHTRFeEOjPCh5Ljvxi7q0e6aE6OX7E141YaUaS
-         JQzf+YL6FvKCVPSdGMtF7SFhwlgD25VAncrG/2TVa7BgtrZQbdToL2paBGvSjQwgRpZH
-         WLc8Xr3qdv22uW+IGVHFhdKoKsKzFGmSTO9w6eBEPBuMcPOPx+Iqg3iUJKP6lWAsEYsF
-         NGz+TeIDmJxHTtCeoh3laVgqDScTLx+T6aKqF+4Rifze6w2I1kD2Bih3WlPeQ41hag7y
-         LpyQ==
-X-Gm-Message-State: ACrzQf3CywYLjMniDJ1EmSye44meRxcqLdtTsY3FkGxQa63gl4Q6584t
-        040nIk9Dxhangpy+hUPF9nQ=
-X-Google-Smtp-Source: AMsMyM5OBk64pwJp/ay/FZteOoCbSMmNC50uCmQwIsZclwfLnXD16ZJck6Rm1g+X7MY2WuvO60PGew==
-X-Received: by 2002:a05:600c:4f07:b0:3b4:a5d1:1fea with SMTP id l7-20020a05600c4f0700b003b4a5d11feamr2230885wmq.103.1664276861911;
-        Tue, 27 Sep 2022 04:07:41 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id b13-20020a5d40cd000000b00226f39d1a3esm1513849wrq.73.2022.09.27.04.07.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 04:07:41 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 12:07:39 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 000/207] 5.19.12-rc1 review
-Message-ID: <YzLZe5ECd0E4xJKa@debian>
-References: <20220926100806.522017616@linuxfoundation.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664276863; x=1695812863;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=tcwqTKkmjuY0nwfev1EP+2kk/8CrTWcsgrN1s3ucsAs=;
+  b=nMi6+/wulWnlj7ZFgfi3cEc6PJ1L/xCuCzXY62zUY4f3JFewddFIiapB
+   5j96ezViTnTOe81YkLI1xKVvVBZDHOW2no3REfBLBfSXvMHMwdFTs5lYF
+   J8cA2mkXmtdz/fDZC9J46xsP9Gzr53erg/yJwLLqJE2o3shJGaQwT8oqt
+   dj0gqhNiMbZ3/T8N8NzaL7imI1dxuqve5Jp1mZpmUUl0+gmfMlmyBkeYM
+   Jy2H6raW2lrYdIplEUmMGfloueM6XzaFvd7nCXWwir1IDioEZ+2kkYFJ3
+   D8QGO914O0IS0//zU3ItRkj7OU7k+mMO5aAVtERpMFERKwZveD1d2Hy51
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="281657026"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="281657026"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 04:07:42 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="747006266"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="747006266"
+Received: from aksaxena-mobl2.ger.corp.intel.com ([10.252.60.19])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 04:07:40 -0700
+Date:   Tue, 27 Sep 2022 14:07:39 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v2] serial: Convert serial_rs485 to kernel doc
+In-Reply-To: <d571f4ec-494e-d9fd-70c4-ab96a21abf03@kernel.org>
+Message-ID: <958bf61e-6d85-4843-128-2f76e632b920@linux.intel.com>
+References: <1c401476-8f4d-827c-f8e1-b4853988e2@linux.intel.com> <d571f4ec-494e-d9fd-70c4-ab96a21abf03@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-509239014-1664276364=:2334"
+Content-ID: <2dda4b1a-6fd6-108d-4395-d68696feb6d@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On Mon, Sep 26, 2022 at 12:09:49PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.12 release.
-> There are 207 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+--8323329-509239014-1664276364=:2334
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <e5e8c65-1812-12ff-b4b-b029407aec6d@linux.intel.com>
+
+On Tue, 27 Sep 2022, Jiri Slaby wrote:
+
+> On 27. 09. 22, 12:47, Ilpo Järvinen wrote:
+> > For reasons unknown to me, the formatting in the flags doesn't produce the
+> > effect promised by kerneldoc's documentation:
+> > 
+> >    https://www.kernel.org/doc/html/latest/doc-guide/kernel-doc.html#return-values
 > 
-> Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
-> Anything received after that time might be too late.
+> Returns are special.
 
-Build test (gcc version 12.2.1 20220925):
-mips: 59 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Might be but I understood that formatting thing to be more general.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+> >    * Serial interface for controlling RS485 settings on chips with suitable
+> >    * support. Set with TIOCSRS485 and get with TIOCGRS485 if supported by
+> > your
+> >    * platform. The set function returns the new state, with any unsupported
+> > bits
+> >    * reverted appropriately.
+> > + *
+> > + * serial_rs485::flags bits are:
+> 
+> Put one more \n here.
+> 
+> > + * * %SER_RS485_ENABLED		- RS485 enabled.
+> > + * * %SER_RS485_RTS_ON_SEND	- Logical level for RTS pin when sending.
+> > + * * %SER_RS485_RTS_AFTER_SEND	- Logical level for RTS pin after
+> > sent.
+> > + * * %SER_RS485_RX_DURING_TX	- Full-duplex RS485 line.
+> > + * * %SER_RS485_TERMINATE_BUS	- Enable bus termination (if
+> > supported).
+> > + * * %SER_RS485_ADDRB		- Enable RS485 addressing mode.
+> > + * * %SER_RS485_ADDR_RECV	- Receive address filter (enables @addr_recv).
+> > + * *				  Requires %SER_RS485_ADDRB.
+> 
+> And perhaps remove the second * here?
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1907
-[2]. https://openqa.qa.codethink.co.uk/tests/1912
-[3]. https://openqa.qa.codethink.co.uk/tests/1914
+It gave me error earlier but now when I added also that newline above you 
+suggested, it seems to no longer triggers the error. Thus, I ended up 
+making both of the changes you suggested.
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
---
-Regards
-Sudip
+-- 
+ i.
+--8323329-509239014-1664276364=:2334--
