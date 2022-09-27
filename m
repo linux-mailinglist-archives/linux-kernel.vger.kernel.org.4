@@ -2,129 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D648B5ECD57
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2DD5ECD5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbiI0T5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 15:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S232277AbiI0T5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 15:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232234AbiI0T5Y (ORCPT
+        with ESMTP id S232234AbiI0T5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 15:57:24 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2045.outbound.protection.outlook.com [40.107.244.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B2A7285C;
-        Tue, 27 Sep 2022 12:57:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZtpxdMPHt7RAq8gEKeKWwtUHhG2jFtIWgZKBwmRc1q3/zcD0047BFfQoM42yYDRfKnFHSzirRIxXX3I25/0TVEDvGx+EK6puR3iSmBr38bT/KJ4cqHXBTFLBhYxvFC21qC8/+4Pv70uzFhcfY04TChXzyxAtTUxw3VdH4MwLUe87Y8F7VrjPgcxYwpFV3rJH8oTBnyP/xbA5NBbihVGjijPkKEUR4Rvsz18ht6uEPpWOuZTuPBAIhCM9pt83/MOBxlyhOjHYQxqHWl/ZSZzJ6QUSeXFPhaJzkUJo85Z6CYTNRUH0dTalX5iN1FRwHOm0luTiqQJRywk7GhQY6Hgnpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VuyUlG2qa5XL6a7CPJoZEoRJuJSfE8Yw0EtVxkvHpQE=;
- b=ilTojE2XtuJJ5Ou6zBI64jz/w6DdVYMCFNqCuIHBF+P9Uieu/4xOyGjd+pb9VUlVPTCArGBFMcFjHqzBwwxpwNnGRxhY9m8SQM1xIbiMQJct0/9Df5A0Dwhm5+QwmmEPHvE+FTtEwaUR61t0ty8qcJTFE94qHS9Km/VWFKLeitwzCkUF5CnDupzpr3BN9J2xAyNhP7Xv5wTHW/mNUnRF0KNPYrh45oc81C7ZE6Jmq65pEgW6THUrrH8zLbHsrrSDUYvWVFILhrOEE5ULShXWFMT5BlQ7FPDS19YNCVwXNtoZgmnB+uU8d7pKWvUmx5q+rbrSP5vmrZVYx/4c5BqBaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VuyUlG2qa5XL6a7CPJoZEoRJuJSfE8Yw0EtVxkvHpQE=;
- b=tPDAYtAQenGA4DHZHLeSQe1A4qipW3Y1de6T5Bz4nQBVZWYGTn3MnRWsun6gImY4TBVfsxE6boS3PmrWaMe7iJ10QL7/KmUZuBNbQa00YYP0NLmRfjNcltaBsYUI2Lg5xOJSV3ZT/wQi0lVv02e+kxJuME05dG8/FVWtFNmIfOxDmCXTW4yUBw5L5OKY3so2LcT4UWd2ZOE1DPiY7PiQwqMco5+fsG6ZX76RON4WsoOm2zcL5Y9QTJQl7YwrLQ7q/pZZG4/D4xAmT3cdCn5CIGVNgoKoZS+u5pIDq72ECequRVZyPK1VsmMWOsUlN4EDiX733ZyAM1PRBIVYDu6DGQ==
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com (2603:10b6:610:2a::13)
- by IA1PR12MB7662.namprd12.prod.outlook.com (2603:10b6:208:425::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
- 2022 19:57:19 +0000
-Received: from CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::7129:e05:131a:b109]) by CH2PR12MB3895.namprd12.prod.outlook.com
- ([fe80::7129:e05:131a:b109%5]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
- 19:57:19 +0000
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v6 5/5] i2c: i2c-mlxbf.c: remove device tree support
-Thread-Topic: [PATCH v6 5/5] i2c: i2c-mlxbf.c: remove device tree support
-Thread-Index: AQHY0eCNwayZ0lmw/kiDVDWY55ZHdq3zshwAgAAAvyA=
-Date:   Tue, 27 Sep 2022 19:57:19 +0000
-Message-ID: <CH2PR12MB389563774D95C5B0B9518CD0D7559@CH2PR12MB3895.namprd12.prod.outlook.com>
-References: <20220926194507.24786-1-asmaa@nvidia.com>
- <20220926194507.24786-6-asmaa@nvidia.com> <YzNU7L9CWI+mTxRZ@shikoro>
-In-Reply-To: <YzNU7L9CWI+mTxRZ@shikoro>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB3895:EE_|IA1PR12MB7662:EE_
-x-ms-office365-filtering-correlation-id: 34c6f4b4-a6c5-4e72-ce6c-08daa0c27c6e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +T8RguT8X+EWGl5D7Twwik5MC9JxTA34/UHy2HcJ+JE/Mh9YqNQpJ4InYz9ipQdnkNnUNdeG4j0u9HLjiX5ucou5CUyeS6IQ4Kg+5Qc6f27Ulepm+I5/5Xtj7H3q3kjnR3D7ATug+tewjMXL73xdHsOOPwTNMN3NL2sAuxgDgSUANrTmC5hGNCkvBo1lKPF5dezzq/kOMp4a5bdQMTUftUmQW7jNd3uf56rJcTmXuqFA8EQoRnnPmyD1h77Vpcb4k/vsXgOBxeFn9YqIbQ0ygSUAhDyv0WzT6TfET+Blh/P/WkXrM7pMYhfFnupjBsuqm+O97aVETfVflIHqGbFCZrO6WhDihuGq0oQM03jyqpmaY7qNSIpbTajY9j+5yssJZ5dxSCx9emkopM9Z/tF6Cev2sKZN5zorYYpvXGr4yZ1UQ9T5RBvApWbyDH+g3RlRId9DtoOBjghe0umfgDMjpjaRR8v8TCLPre/n3hs5FPqDDQ0BoReY48LecmbPGfBwK/5GmlzlxE0ApF891K9642kcn/AD7XjDqgKe36jxoRTHbyN4fZS1SOvIIh7vRSPHZiOBNxb3JBeuS/GvOELIi2lszxnpfwXm0nNBG2jPbo0moI4Khjy7CsKOqc0Zm3++B+kmrK8G6nPOhUEf4ua4hk/ALku6ZqC7v/ZqIufDigDxg25YAVntloUcQDboChsOSZAXXX++bTYdJCQsZBh6COrMnFxrlOFUyGr4p2//QN9jPt1Tk7qUpmI6KRwCk32eXvkGh8KCaaxGYI//wfrbsA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3895.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(376002)(366004)(39860400002)(396003)(451199015)(33656002)(54906003)(86362001)(66946007)(5660300002)(83380400001)(122000001)(186003)(38100700002)(76116006)(9686003)(26005)(41300700001)(478600001)(316002)(6506007)(66476007)(7696005)(64756008)(71200400001)(66446008)(4326008)(8676002)(55016003)(38070700005)(8936002)(52536014)(2906002)(66556008)(4744005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?a603pBjQkANbDPvq4PNm6k2rPovlx32vk27gaGAfL+zJyRQbl7CBYR3Cmnsv?=
- =?us-ascii?Q?tGUwJk90k43f5gXXZx7m6bHJ6m4E/4tkxzZOH6rmID+lzJim3FnWbhhD8mwF?=
- =?us-ascii?Q?armt+BZ4akx/7igJ7h25znhV0D9F4aBxDf8QdM1wJYSyZvHQ0tD4L1eQNijF?=
- =?us-ascii?Q?IIKVxo5HRC8n3VOLKiABGYCffxMqR3r/lUMd/iZlhwd2S2Ttxwcz4YQ72zxk?=
- =?us-ascii?Q?9iOhckXoY5EipCI/9HybtC8VEq9XXdZpDc3Wm3MxNz2A+lGUeM7Ogv23QYoR?=
- =?us-ascii?Q?VsXh9fNZE4gL45zVr0Z1mlxP3x5KjWuRcMU7Jvstipx6EXiSJEzk5b3hCAL8?=
- =?us-ascii?Q?UpTxRw3a9eZxsUErU7ayoGiFKA5C7di3Ol1eshNM6kERIgOLJaFOIisUd3jl?=
- =?us-ascii?Q?IiDVCShGV9597bO7x8kFcUO3n+hK6uljenXQlIhsScFU/lqlT404/+0cOsUV?=
- =?us-ascii?Q?o6CjvEMG4ArtxlfN9hpyuSuMJnFTkbCuzCM8t5qUK9C3SWNDpo7+txN0vCfm?=
- =?us-ascii?Q?FcdJegB6UXBk5WX8VnkAsMBikmxiiXT2SPpDwHgdTYhAvColSZG7EAw+BHBT?=
- =?us-ascii?Q?6jE5PTyUBtMi9ywZD+g37NC5MGSd000Zia098weWh9sJn+WJ495MDl6IH+Qb?=
- =?us-ascii?Q?Rfa0qFPk/O/NWLYgGOJdgESPVzRDEE91VgVPPcl6auHuSlHh8u0xcgSYU6ea?=
- =?us-ascii?Q?1PNjCasWDFBl5bSWGXymesExegUN3GlEWvsEpubzDEZAnFBradiWTt8Cxkq1?=
- =?us-ascii?Q?NeVhpSatNCfdA+iDJbEqARD1CiY1vb9fdWKYbNVe2yOWZJLeWG31iQ1InUBp?=
- =?us-ascii?Q?kDknlvupVwtPsTniZuDkgB0hmonTJaNaoamV1z8VBcNw+8LxGDYUtJITGZI2?=
- =?us-ascii?Q?ds+ONrgCtQ9PIlqAZRuEFPNIUAvXkbYhacMG2LmwUupZfFfFo+IVzUhGY6al?=
- =?us-ascii?Q?wOkxX03/0jzqM9iZzRgoOoSgB4AFJF+dOhg9Ffhieiqysw5ifsYcPuNkGiEv?=
- =?us-ascii?Q?+h6xZxWP/C6a8QYiKmHEz/wAjvEsmOe054LXGGKxeZ4sHsw4Hfw6iWwLO5f0?=
- =?us-ascii?Q?sTeVBTU+2VvS8K+pJH86yYFOlUxxMVmKvl41P4gFHowBd/1jzVuTzw5eYTzt?=
- =?us-ascii?Q?cR4WE28ZyNWgRiaA+Bt6EgZBuFH/at8mWmgx1YEC+bz8wx7S8S+hjubvR6o+?=
- =?us-ascii?Q?PkQDLt+piN0Eif9THLvND6JBxFU1iuk41DZnGGRBrB99HzgPSfAE7kQFNMji?=
- =?us-ascii?Q?mXhyvT+pksgDRPi/6Lc4oYYHdiAWeGYdWaWvCGFAivtobQwkL4FjGgtivk8O?=
- =?us-ascii?Q?taJsHqxyEDbLuT84qzD0/zQDOo5bJh/fdhTA+TcD00kMbSxz14i7YHvlm59Y?=
- =?us-ascii?Q?w9+opwFpuwaVbrnDmE9c+zY512o4YumrDc/4bha64Y/pGBdIDBOjm8agx0o4?=
- =?us-ascii?Q?qqf4tM0V6ktU26hPUY6HAztEOE5a/Jv4gJNb0wdI+fCPm3AypmY7ENG3YhPe?=
- =?us-ascii?Q?Tr6rlO6QeR038AcxfNobF8pC0HYh0ya/F6gu532rZMBSDSidqI6nW0n5gnQ7?=
- =?us-ascii?Q?DA7OeodjmOW7iu4twYs=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 27 Sep 2022 15:57:40 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73828F1D77;
+        Tue, 27 Sep 2022 12:57:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664308658; x=1695844658;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YJq7VoMFPOHGklVVnPw2e/A3qO2QBSWiCy9Vm7kXyOA=;
+  b=kc+6MqeSUcCbwQre76dRB4iXuPYFl/szaOQZ7kQelqxQ/dXWjU+7MVPF
+   lGAtWbgHBPXGypclPn69APBAfkq2vnuVkEvTfMdCQQy5rua1QgzE0DXZh
+   Z0mLRQcXtQI5U4FYFHENAcuIm/bKhQDn2pky1Cc0o87BwNnfSKUdIMkfn
+   JkkLz/gBv3BSA1mDl3zKyOnblBBVhgs/XRSAh0E9uTNyEctJMP3xRCZPQ
+   DSBnI1nZDP+lSD3ymxEAxjAatevXdqdrpWbqigoJhS8j8mbDagaBsvoTf
+   E3rJ2mwdv4nPhdXehCjwbJ1f3aQtVsWY9w5tSzespD2HtfOyEVBVGiRCy
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="302328624"
+X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
+   d="scan'208";a="302328624"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 12:57:37 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="684116192"
+X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
+   d="scan'208";a="684116192"
+Received: from weimingg-mobl.amr.corp.intel.com (HELO [10.212.244.112]) ([10.212.244.112])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 12:57:35 -0700
+Message-ID: <14057120-a6d6-8726-80f1-8e60328fbf36@linux.intel.com>
+Date:   Tue, 27 Sep 2022 12:57:35 -0700
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3895.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 34c6f4b4-a6c5-4e72-ce6c-08daa0c27c6e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2022 19:57:19.7613
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ttBqP1MLBSz4hqxniAo6XZrmDSIM1QWvfR/OMRfxbNmcbLs+TRLYpQbV/ru0b+hUf8fn1ceekkKbM2xG0DfSZQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7662
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v2 4/9] scsi: lpfc: Change to use
+ pci_aer_clear_uncorrect_error_status()
+Content-Language: en-US
+To:     Zhuo Chen <chenzhuo.1@bytedance.com>, bhelgaas@google.com,
+        ruscur@russell.cc, oohall@gmail.com, fancer.lancer@gmail.com,
+        jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
+        james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ntb@lists.linux.dev,
+        linux-scsi@vger.kernel.org
+References: <20220927153524.49172-1-chenzhuo.1@bytedance.com>
+ <20220927153524.49172-5-chenzhuo.1@bytedance.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220927153524.49172-5-chenzhuo.1@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> BlueField customers have to use the the BlueField firmware with UEFI=20
-> ACPI tables so there is no need to have device tree support in the=20
-> i2c-mlxbf.c driver. Remove the device tree binding documentation as=20
-> well.
->=20
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
 
-As buildbot reported, you need to update the MAINTAINERS entry. Also, I thi=
-nk you can add an Ack from Khalil because he approved the change, or?
 
-Yes will do!
+On 9/27/22 8:35 AM, Zhuo Chen wrote:
+> Status bits for ERR_NONFATAL errors only are cleared in
+> pci_aer_clear_nonfatal_status(), but we want clear uncorrectable
+> error status in lpfc_aer_cleanup_state(), so we change to use
+> pci_aer_clear_uncorrect_error_status().
+
+I think you don't need to mention status bits here. Just use terms
+"fatal" and "non-fatal" errors.
+
+lpfc_aer_cleanup_state() requires clearing both fatal and non-fatal
+uncorrectable error status. But using  pci_aer_clear_nonfatal_status()
+will only clear non-fatal error status. To clear both fatal and non-fatal
+error status, use pci_aer_clear_uncorrect_error_status().
+
+> 
+> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+> ---
+>  drivers/scsi/lpfc/lpfc_attr.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
+> index 09cf2cd0ae60..d835cc0ba153 100644
+> --- a/drivers/scsi/lpfc/lpfc_attr.c
+> +++ b/drivers/scsi/lpfc/lpfc_attr.c
+> @@ -4689,7 +4689,7 @@ static DEVICE_ATTR_RW(lpfc_aer_support);
+>   * Description:
+>   * If the @buf contains 1 and the device currently has the AER support
+>   * enabled, then invokes the kernel AER helper routine
+> - * pci_aer_clear_nonfatal_status() to clean up the uncorrectable
+> + * pci_aer_clear_uncorrect_error_status() to clean up the uncorrectable
+>   * error status register.
+>   *
+>   * Notes:
+> @@ -4715,7 +4715,7 @@ lpfc_aer_cleanup_state(struct device *dev, struct device_attribute *attr,
+>  		return -EINVAL;
+>  
+>  	if (phba->hba_flag & HBA_AER_ENABLED)
+> -		rc = pci_aer_clear_nonfatal_status(phba->pcidev);
+> +		rc = pci_aer_clear_uncorrect_error_status(phba->pcidev);
+>  
+>  	if (rc == 0)
+>  		return strlen(buf);
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
