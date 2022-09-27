@@ -2,108 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE505ECD1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A795ECD23
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 21:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbiI0Tq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 15:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
+        id S232038AbiI0Tsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 15:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiI0Tqz (ORCPT
+        with ESMTP id S231668AbiI0Tsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 15:46:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253271B3490;
-        Tue, 27 Sep 2022 12:46:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5E0D61B1F;
-        Tue, 27 Sep 2022 19:46:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD93C433D6;
-        Tue, 27 Sep 2022 19:46:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664308013;
-        bh=e5aDBKk9NK4a1QWira1pG3Pp+doScKrC1ane/mpBN3I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vHR+DB5QsrizGiSsJZYLaH8Bt36twqWRizKrEcipq/mH5ylFlLP/JfyTbKjwRgEVU
-         Hv/hDy+wB1mer94r2Upk8FVHgZod9IzQwFKVVbvFWRDi80hl48GhsKe9YIyQHJFTWA
-         9+zMDPiHZ6G34TfdaemGQvHV1Jfu1dtKWV/Af+wXQYhWUyzYEiZXy0SePk60zjZEcM
-         JeHuJhLusgrvh7ZsixQzCv5BZdeOaywcpblMZcnMvkURpDrHKyItYu62lNMKtT2JRF
-         ueWbQnxnevo2BcnALQQc6N7HKhvw80xBt7lhrxhqkJUZnF2bDWY3F34gomxsv3MEb9
-         TGoZw9qT08oSQ==
-Date:   Tue, 27 Sep 2022 14:46:47 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] wifi: nl80211: Split memcpy() of struct
- nl80211_wowlan_tcp_data_token flexible array
-Message-ID: <YzNTJ4D8HyeIvSiR@work>
-References: <20220927022923.1956205-1-keescook@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927022923.1956205-1-keescook@chromium.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Sep 2022 15:48:42 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59E91B85CF
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:48:40 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id g15-20020aa7874f000000b0053e8b9630c7so6249201pfo.19
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:48:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=1YKVTBJ5EREw3IjhgTBaoep2hn4xpy2tYb5P/5IEaSg=;
+        b=A9RxIwk81YgJHOsL4/0dy0uw4sUTSyrvi14CwlVnD74mshSJZXXnbYCu9MYJ5BRVGf
+         ECvPFm/EFd/CNnlC8tjQs05W6XJNNMlNZydxHNqDMdMoTvxlCcPUdWZB6QsH5cnCxmvc
+         N8KCfLfiWC+cAdepoGW9toJkdc+LWIihGpJlkDpwTLplsNjV2VHstSC5lutyG9VSDtHe
+         5XaGX0Py3k5yppSHf0U8dNbLf1y9h9uEASHe1ysJWir+MS3+rr91mXp+Rc+y4K8X07Y0
+         /+Px97/CjtvDu8gyL00g5iOvtRxw6lnWQLITB3lCkRSZ5AWUvGdQFQhv6ZEme+entAAs
+         56BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=1YKVTBJ5EREw3IjhgTBaoep2hn4xpy2tYb5P/5IEaSg=;
+        b=eBz8RTst9M1xFax/UYAo7k35PbKLCDOYWLngTwP/fReWQ6GMhmm/hxI2kV7rBGG/Rj
+         ova0uiynYdBpoqBeUcAlNPrthw2ucS8NvaABb+1JpnT2K6NGu/U4qtrzrGXwY/HTL5Q7
+         pAIyxfnw7rKr9QFfNV1QroknDA6lWjjvu71jkdte6K6cK2mg805TZYoY7iKuACA0YWM1
+         b6xwffOW6bA84FU3i1dVwY0uyqF+nsq1cUC+UkFB/noFi5Fzt9BdKp5cyqnEb6ZnrxZh
+         kLCRdhndLdlipDmx4cpI3zQRoIKrpJTW4OJMFrWM7g61QTawaJaoNq2IlNhgYVmgIhsu
+         bddQ==
+X-Gm-Message-State: ACrzQf0N5cBWaFuehUL+St8Ugf2qXKc0t0LZzrcCELP7W5l0PsLmFpcU
+        ZLtxbT+oCeAVntFFK9rr8+x/6jRa111t6g==
+X-Google-Smtp-Source: AMsMyM6FOqkjrwLGTx3nQ1YTw9uNzKBLqc9pQTVz49CLZUbf6wWR0xTSGQvQXrFgCAWxm57G3OKeUEf6TAUgwQ==
+X-Received: from dmatlack-n2d-128.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1309])
+ (user=dmatlack job=sendgmr) by 2002:a17:90b:118f:b0:205:dbdd:c931 with SMTP
+ id gk15-20020a17090b118f00b00205dbddc931mr297844pjb.1.1664308119267; Tue, 27
+ Sep 2022 12:48:39 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 12:48:34 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+Message-ID: <20220927194834.992677-1-dmatlack@google.com>
+Subject: [PATCH v2] get_maintainer: Gracefully handle files with authors but
+ no signers
+From:   David Matlack <dmatlack@google.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 07:29:23PM -0700, Kees Cook wrote:
-> To work around a misbehavior of the compiler's ability to see into
-> composite flexible array structs (as detailed in the coming memcpy()
-> hardening series[1]), split the memcpy() of the header and the payload
-> so no false positive run-time overflow warning will be generated.
-> 
-> [1] https://lore.kernel.org/linux-hardening/20220901065914.1417829-2-keescook@chromium.org/
-> 
-> Cc: Johannes Berg <johannes@sipsolutions.net>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: linux-wireless@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+Gracefully handle the case where a file has no signers (e.g. has not
+been modified within the last year) but does have authors (e.g. because
+there are local commits that modifies the file without Signed-off-by
+tags). This scenario could happen for developers whose workflow is to
+add Signed-off-by tags as part of git-format-patch rather than as part
+of git-commit.
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Today this scenario results in the following non-sensical output from
+get_maintainer.pl:
 
-Thanks!
---
-Gustavo
+  Bad divisor in main::vcs_assign: 0
+  "GitAuthor: David Matlack" <dmatlack@google.com> (authored:1/1=100%,added_lines:9/9=100%,removed_lines:3/3=100%)
 
-> ---
-> v2: - fix typo leading "+" (Gustavo)
-> v1: https://lore.kernel.org/lkml/20220927003903.1941873-1-keescook@chromium.org
-> ---
->  net/wireless/nl80211.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
-> index 2705e3ee8fc4..169e3ec33466 100644
-> --- a/net/wireless/nl80211.c
-> +++ b/net/wireless/nl80211.c
-> @@ -13171,7 +13171,9 @@ static int nl80211_parse_wowlan_tcp(struct cfg80211_registered_device *rdev,
->  	       wake_mask_size);
->  	if (tok) {
->  		cfg->tokens_size = tokens_size;
-> -		memcpy(&cfg->payload_tok, tok, sizeof(*tok) + tokens_size);
-> +		cfg->payload_tok = *tok;
-> +		memcpy(cfg->payload_tok.token_stream, tok->token_stream,
-> +		       tokens_size);
->  	}
->  
->  	trig->tcp = cfg;
-> -- 
-> 2.34.1
-> 
+There are two issues with this output: the "Bad divisor" error and the
+garbled author name. Both stem from this line in vcs_find_signers():
+
+  return (0, \@signatures, \@authors, \@stats) if !@signatures;
+
+Returning 0 for the number of commits and a non-empty list for the
+authors results in the "Bad divisor". The garbled author name comes from
+the fact that @authors is the raw, unparsed, output line from git-log.
+Code later in vcs_find_signers() actually parses out the name and drops
+the "GitAuthor: " prefix.
+
+Fix this by returning an empty list instead of @authors and @stats to
+make them coherent with the fact that commits is 0.
+
+Signed-off-by: David Matlack <dmatlack@google.com>
+---
+v2:
+ - Return empty arrays by reference instead of by value [Joe]
+
+v1: https://lore.kernel.org/lkml/20220922230114.3556322-1-dmatlack@google.com/
+
+ scripts/get_maintainer.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
+index ab123b498fd9..5e888432475e 100755
+--- a/scripts/get_maintainer.pl
++++ b/scripts/get_maintainer.pl
+@@ -1605,7 +1605,7 @@ sub vcs_find_signers {
+ 
+ #    print("stats: <@stats>\n");
+ 
+-    return (0, \@signatures, \@authors, \@stats) if !@signatures;
++    return (0, \(), \(), \()) if !@signatures;
+ 
+     save_commits_by_author(@lines) if ($interactive);
+     save_commits_by_signer(@lines) if ($interactive);
+
+base-commit: 46452d3786a82bd732ba73fb308ae5cbe4e1e591
+-- 
+2.37.3.998.g577e59143f-goog
+
