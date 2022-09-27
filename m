@@ -2,139 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B830F5EB7BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1578B5EB7BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiI0CcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 22:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        id S229586AbiI0CdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 22:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiI0CcO (ORCPT
+        with ESMTP id S229543AbiI0CdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 22:32:14 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FE3E4DA9
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:32:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1664245932; x=1695781932;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uJlTkEEruO+4B+/IkDjfWJ48o9FBDv2KefDND1Ujq5g=;
-  b=ZEqebWDCPNFMk/W4GCU/CIXS6ABQHmuqhxLbu4Sqe5yt1iZTN9gWmxNr
-   +33LNjt/juIcy2vvSnIujsVyQM4DvQy6bS9XvIJQDLr6onFBULsle2zca
-   cBN/KXQRJOv62yAASy3HN4S1nrvz7+GwlgKp14brm+/0D1y3hjeW7krp/
-   0cOVHJQFJeY/NFWQG4PcJufGNqY0fsMRdeByJOxnby8+VTAuLWUuZ3Zdx
-   rnAqS0pSt05o2tge9DybwFwFqI3doNXxdFZ+yZDXMSE3hLyVLX2TGuiY1
-   kUL7va4xMaVK1Y2Ia4+WsJkifxpNqEQ8u2OcuD2U9gRTS2VS4ot1bz8TM
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,347,1654531200"; 
-   d="scan'208";a="210705105"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Sep 2022 10:32:08 +0800
-IronPort-SDR: UtbRCdRjQT1C8httVhxNtQeMQ9Z584IlD8WUIhJN1HPYE6i4ZCEV3V0m+euIJ7+0j2D2B5+3li
- XGqDRxadG28DV8n/eKe9CkatK9dxCnz6WXAt/quS6+C6OanZYdiicNiJujCSChMVQztp+OsKoy
- HY/SzfVDAlPOuHQNejhpjt+zFnZT1WNFT3txMjRhNdrTth517DRUoMyvXE+rogqFzRD/ZUzi++
- ZTbjXCu7sv2VZrac8YjNr8yzSOMaS9qdQnjO8Vas3hGJIOOQ9hgHniTcW38xEnGa4Yb+4G0Beq
- wSSDhUpA3XTmJbawxDuT496m
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Sep 2022 18:46:33 -0700
-IronPort-SDR: PC2h09zRyANGEJE0B0GzAQHUGy48EKe0lVkECi6KdjGQnBzRWcrpj2dIrpCC8kjxxcLV4ejHzS
- 6uDBhId6YRloepNZcUv/n/XlX/aCgFtxx05JudnaGtL4ragI8X4OD3M0JFD20iEjw/JhEi4VBs
- VMYfJs/Dy9X4iRAeq3dIRdG/IYMByVspbKHx6kMk8MYB423sg2Ekkw8WgQMKcYKIArWC1ZRDm3
- bo5VjTfErsoABWXJo+ttib/GNfJV1E1nOlnKPVwXgWQPArqm0qmzL12P/lOjtvgr5cr4TeLs5r
- 5mk=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Sep 2022 19:32:08 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mc3YM4fjHz1RwvT
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:32:07 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1664245926; x=1666837927; bh=uJlTkEEruO+4B+/IkDjfWJ48o9FBDv2KefD
-        ND1Ujq5g=; b=KVCh2SyQwM/mILMTWMFKyXTo4slhR6mNor1qTp/Zmwb9lIl1kJz
-        HEsmkivvZ4h3nu9xJSOOIoV+vQ7+EYjL0JRhP47DY592d3HGTPym2ctGv7i4ja5c
-        z5J/tRhJp4IAFGIrcGEPeIMKbG6nx6EtT4skz3IpD5tqRcmuiv5bRvISGYay9stZ
-        t/pQDnC3DiDkgwOESqjxO3fTpqSlA56+7ROdoVpah0oSunQIng+hXf7PdROIuRjM
-        U1S91gTUl+v7sWoFYy5S28quNWYWGjUsfhl8UfuF/Acy62aQjfCaU0cWgvjlUcHr
-        Cpb5Wrrc9OjtzKvvvyCJV/1+waLjqYqUBxw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id IyDpVQfW-Osh for <linux-kernel@vger.kernel.org>;
-        Mon, 26 Sep 2022 19:32:06 -0700 (PDT)
-Received: from [10.225.163.91] (unknown [10.225.163.91])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mc3YK35Vpz1RvLy;
-        Mon, 26 Sep 2022 19:32:05 -0700 (PDT)
-Message-ID: <654fe6d2-4556-8d15-bacc-b6ee1e927d91@opensource.wdc.com>
-Date:   Tue, 27 Sep 2022 11:32:04 +0900
+        Mon, 26 Sep 2022 22:33:13 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6543E5125
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:33:11 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 8-20020a17090a0b8800b00205d8564b11so386484pjr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=beHOJoLMzhtQvwqCVFQE08wvFbsVkqCmgSaQLkojE3Q=;
+        b=GgaqksQNT7cicjmr8VgOSy18SzVIWhA+3pfG4AqV2d7ivrbRQA9jxsvP1pfBShGzj/
+         OvNqU5NPFlK+0R9qj3ayrs9rJ3IpaxXlAFgu1tPwntOP5mXcOTCS+Eh7FGqrCC7D5LcR
+         2mrrZL+fahvKy6IbegfbZ4MQ1qtychGvEdPHo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=beHOJoLMzhtQvwqCVFQE08wvFbsVkqCmgSaQLkojE3Q=;
+        b=H80kGQBh1ZVVKqkmOKRPud4L+Z+qh87jYbO4tRN7MUUthF/kCY/xXfscWFuShLm7ql
+         BQ2IuI7puM0tLzsx7kgubJii/mH2wBnBefUA5U8YTlVUu6wXpvOGAwct2HEv5vtm9Qjx
+         RyRwWvQ2SH0bQwFiQMEbngCJa0H9mk1/Xa9gJ2mmoCEJy3V3kqLaAHzlxX2qlFd9EU0r
+         58U+MIQffPh/A3PkV4ZfEXxnEUXdqvszsIzwub1FiWp93cqxDHWSANNR2DNAyKf6g4Ts
+         KsgSgxPWV2eh5bh/xOcjaE5DwRwhAbAF4BWUDFpymL5xltgQtpgSxmQ2FM0ldFhCTimG
+         lmWQ==
+X-Gm-Message-State: ACrzQf216GOXRJ/lpq6NBFgDNelkLQII4eokvjG9UEKeR1KS9PHX8YO0
+        AKW2TBuEDk9hkWAZS4OaTYP1Sw==
+X-Google-Smtp-Source: AMsMyM5NGw1Q0GfafCgkdr3TRCr4jnFSRQlgeAjDLSIqENbtY3Pu0+GX+M5Sea67UDU9T9u8oKayRQ==
+X-Received: by 2002:a17:902:9006:b0:178:b494:c15a with SMTP id a6-20020a170902900600b00178b494c15amr25467224plp.37.1664245991191;
+        Mon, 26 Sep 2022 19:33:11 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f9-20020a170902f38900b001783f964fe3sm155268ple.113.2022.09.26.19.33.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 19:33:10 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 19:33:09 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] ASoC: uapi: Replace zero-length arrays with
+ __DECLARE_FLEX_ARRAY() helper
+Message-ID: <202209261932.F68BBD85@keescook>
+References: <YzIzUjUuJKf0mkKg@work>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v3 8/8] scsi: libsas: use sas_phy_match_port_addr()
- instead of open coded
-Content-Language: en-US
-To:     Jason Yan <yanaijie@huawei.com>, martin.petersen@oracle.com,
-        jejb@linux.ibm.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hare@suse.com, hch@lst.de, bvanassche@acm.org,
-        john.garry@huawei.com, jinpu.wang@cloud.ionos.com
-References: <20220927022941.4029476-1-yanaijie@huawei.com>
- <20220927022941.4029476-9-yanaijie@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220927022941.4029476-9-yanaijie@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzIzUjUuJKf0mkKg@work>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 11:29, Jason Yan wrote:
-> The sas address comparation of asd_sas_port and expander phy is open
-> coded. Now we can replace it with sas_phy_match_port_addr().
-
-Comparison typo again.
-
+On Mon, Sep 26, 2022 at 06:18:42PM -0500, Gustavo A. R. Silva wrote:
+> Zero-length arrays are deprecated and we are moving towards adopting
+> C99 flexible-array members, instead. So, replace zero-length arrays
+> declarations in anonymous union with the new __DECLARE_FLEX_ARRAY()
+> helper macro.
 > 
-> Signed-off-by: Jason Yan <yanaijie@huawei.com>
-
-With that fixed,
-
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
-> ---
->  drivers/scsi/libsas/sas_expander.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> This helper allows for flexible-array members in unions.
 > 
-> diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-> index f268291b7584..eabc56966f36 100644
-> --- a/drivers/scsi/libsas/sas_expander.c
-> +++ b/drivers/scsi/libsas/sas_expander.c
-> @@ -1005,8 +1005,7 @@ static int sas_ex_discover_dev(struct domain_device *dev, int phy_id)
->  	}
->  
->  	/* Parent and domain coherency */
-> -	if (!dev->parent && (SAS_ADDR(ex_phy->attached_sas_addr) ==
-> -			     SAS_ADDR(dev->port->sas_addr))) {
-> +	if (!dev->parent && sas_phy_match_port_addr(dev->port, ex_phy)) {
->  		sas_add_parent_port(dev, phy_id);
->  		return 0;
->  	}
+> Link: https://github.com/KSPP/linux/issues/193
+> Link: https://github.com/KSPP/linux/issues/227
+> Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Some day after the __element_count__ attribute exists, we might want to
+consider a __type_select__ attribute to tie union members to a variable
+outside the union (like the "type" member here).
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
-Damien Le Moal
-Western Digital Research
-
+Kees Cook
