@@ -2,177 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11B75EB93A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F755EB93C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiI0EbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 00:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
+        id S229675AbiI0Ece (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 00:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiI0Ea5 (ORCPT
+        with ESMTP id S229477AbiI0Ecb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 00:30:57 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9977B82746;
-        Mon, 26 Sep 2022 21:30:54 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R291e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VQq1JZ-_1664253048;
-Received: from 30.240.100.75(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VQq1JZ-_1664253048)
-          by smtp.aliyun-inc.com;
-          Tue, 27 Sep 2022 12:30:50 +0800
-Message-ID: <0d3188a0-3e6f-4999-9fe8-92509d7cf0d5@linux.alibaba.com>
-Date:   Tue, 27 Sep 2022 12:30:48 +0800
+        Tue, 27 Sep 2022 00:32:31 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0798FD57
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:32:30 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1280590722dso11896822fac.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:32:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date;
+        bh=FDQFIFZmEpESx0NkqzxjgqXPNxrdAestfMo8AUyrMOE=;
+        b=kULZoJlDicz0Mvl7mbueMpEQ5yYYEMcP3Z1fjIcQYDrqIP66UvDEW6JosIoYafCqDL
+         srhWW0XYZfRoFAA520ocChY69AvOV1Y+7Dk02s1Es0dLOD5HNoWIPI7OI863/2Wn709c
+         waqECJLYGI/dcCK48Mnr1b0kaLzsSjH60YXr9YVNhUhLTAAXC1Sbs5aYL3H+WqEi5o2e
+         DI/ZKWquZ/ZR0OrwQT7dZvIDy7rzvvH62f4L0SFNTVmkaggtNjViT1BbbifFbIi2fcnI
+         W4e4Op1Kn8NMW5XwhtTyKmH2LqEy823o4fhRAhy0kx8KE49Ei+ey4oi61uZ7HWvXGNoB
+         DPUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=FDQFIFZmEpESx0NkqzxjgqXPNxrdAestfMo8AUyrMOE=;
+        b=YLZnFTjQsYQNaIYRhUkO4TiroXkeV0b9i/LSS88ZI3V9j05Ddb8Cm4s8iNVv6iO95j
+         Ew4sKyJcboJwj7/jXcOdOJCQpXKE6fZSTM5PqkMkbwtz019TNtlt9KpkReLmI3piWvMS
+         ca4Vj8EoeDtUPDKlTUbqU00Ojm2fsRTfnnA4t/sLMDA28YRJpJHIbhPTESP1typERglL
+         AMSZeZUodOaRuRCmOTZzSv2P7O94YQhEYh5xYYeNntqKIbnzsUPtTitHsT/OXHuCP9NL
+         whpLLDWWQg+m0fcb5kb3MU52PSiv1AgCOdcCjhyMLIDCMCpHH5ioZRxJyeW227wAffwh
+         6JBQ==
+X-Gm-Message-State: ACrzQf33QXmaR1Hu4ny5QgwPG0drdnevLruz0dYvlTyJRj2GbyCH0ni0
+        jLkp2wFe6VoO5dCpDsXENicFyQ==
+X-Google-Smtp-Source: AMsMyM6cIE/LRH032XT9mtZiYlLXaS3kgkwA4uIfynJ/ZZ0iX27yHrL7c1y+I6nQ/GCBvjpf+QYogQ==
+X-Received: by 2002:a05:6870:529:b0:130:b1cd:f6f8 with SMTP id j41-20020a056870052900b00130b1cdf6f8mr1108784oao.55.1664253149830;
+        Mon, 26 Sep 2022 21:32:29 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id r5-20020acac105000000b0034ffacec0basm156663oif.15.2022.09.26.21.32.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 21:32:29 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 21:32:16 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Matthew Wilcox <willy@infradead.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        syzbot <syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com>,
+        Hugh Dickins <hughd@google.com>, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        songmuchun@bytedance.com, syzkaller-bugs@googlegroups.com,
+        trix@redhat.com, vishal.moola@gmail.com, peterx@redhat.com
+Subject: Re: [syzbot] general protection fault in PageHeadHuge
+In-Reply-To: <Yy988Jv7/28k8l5x@casper.infradead.org>
+Message-ID: <8bad8f70-b5a2-8f36-d7a-db78e4465820@google.com>
+References: <0000000000006c300705e95a59db@google.com> <Yy4g/BKpnJga1toG@monkey> <Yy988Jv7/28k8l5x@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH 16/16] crypto: arm64/sm4 - add ARMv9 SVE cryptography
- acceleration implementation
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Ard Biesheuvel <ardb@kernel.org>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20220926093620.99898-1-tianjia.zhang@linux.alibaba.com>
- <20220926093620.99898-17-tianjia.zhang@linux.alibaba.com>
- <CAMj1kXF8Fi9cG4p6udRYT4LbCAj0UBXQL12nmQBFEWvZsVX7Wg@mail.gmail.com>
- <YzHd/U9vvSwuhKsx@sirena.org.uk>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <YzHd/U9vvSwuhKsx@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Sat, 24 Sep 2022, Matthew Wilcox wrote:
+> On Fri, Sep 23, 2022 at 02:11:24PM -0700, Mike Kravetz wrote:
+> > On 09/23/22 09:05, syzbot wrote:
+> > > Hello,
+> > > 
+> > > syzbot found the following issue on:
+> > > 
+> > > HEAD commit:    483fed3b5dc8 Add linux-next specific files for 20220921
+> > > git tree:       linux-next
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=16f0a418880000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=849cb9f70f15b1ba
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=152d76c44ba142f8992b
+> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b97b64880000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11fb9040880000
+> > > 
+> > > Downloadable assets:
+> > > disk image: https://storage.googleapis.com/syzbot-assets/1cb3f4618323/disk-483fed3b.raw.xz
+> > > vmlinux: https://storage.googleapis.com/syzbot-assets/cc02cb30b495/vmlinux-483fed3b.xz
+> > > 
+> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > Reported-by: syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com
+> > > 
+> > > general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+> > > KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+> > > CPU: 1 PID: 3617 Comm: syz-executor722 Not tainted 6.0.0-rc6-next-20220921-syzkaller #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/16/2022
+> > > RIP: 0010:PagePoisoned include/linux/page-flags.h:304 [inline]
+> > > RIP: 0010:PageHead include/linux/page-flags.h:787 [inline]
+> > > RIP: 0010:PageHeadHuge+0x1d/0x200 mm/hugetlb.c:1892
+> > > Code: ff 66 66 2e 0f 1f 84 00 00 00 00 00 90 41 54 55 48 89 fd 53 e8 54 c9 b9 ff 48 89 ea 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 a2 01 00 00 48 8b 5d 00 48 c7 c7 ff ff ff ff 48
+> > > RSP: 0018:ffffc90003e7f5a0 EFLAGS: 00010246
+> > > RAX: dffffc0000000000 RBX: ffffc90003e7f788 RCX: 0000000000000000
+> > > RDX: 0000000000000000 RSI: ffffffff81c2cb2c RDI: 0000000000000000
+> > > RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
+> > > R10: 0000000000000000 R11: 0000000000000001 R12: ffffc90003e7f798
+> > > R13: 0000000000000000 R14: 0000000000000000 R15: 00000000000003f4
+> > > FS:  00007f5642262700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > CR2: 00000000203f4ef0 CR3: 000000007adcc000 CR4: 00000000003506e0
+> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > Call Trace:
+> > >  <TASK>
+> > >  folio_test_hugetlb include/linux/page-flags.h:831 [inline]
+> > >  folio_file_page include/linux/pagemap.h:683 [inline]
+> > >  shmem_fault+0x27c/0x8a0 mm/shmem.c:2130
+> > >  __do_fault+0x107/0x600 mm/memory.c:4191
+> > >  do_shared_fault mm/memory.c:4597 [inline]
+> > >  do_fault mm/memory.c:4675 [inline]
+> > >  handle_pte_fault mm/memory.c:4943 [inline]
+> > >  __handle_mm_fault+0x2200/0x3a40 mm/memory.c:5085
+> > >  handle_mm_fault+0x1c8/0x780 mm/memory.c:5206
+> > >  do_user_addr_fault+0x475/0x1210 arch/x86/mm/fault.c:1428
+> > >  handle_page_fault arch/x86/mm/fault.c:1519 [inline]
+> > >  exc_page_fault+0x94/0x170 arch/x86/mm/fault.c:1575
+> > >  asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+> > > RIP: 0010:__put_user_nocheck_4+0x3/0x11
+> > > Code: 00 00 48 39 d9 73 54 0f 01 cb 66 89 01 31 c9 0f 01 ca c3 0f 1f 44 00 00 48 bb fd ef ff ff ff 7f 00 00 48 39 d9 73 34 0f 01 cb <89> 01 31 c9 0f 01 ca c3 66 0f 1f 44 00 00 48 bb f9 ef ff ff ff 7f
+> > > RSP: 0018:ffffc90003e7fa00 EFLAGS: 00050293
+> > > RAX: 0000000000000000 RBX: ffffc90003e7fdf4 RCX: 00000000203f4ef0
+> > > RDX: ffff888020c51d40 RSI: ffffffff8726d52f RDI: 0000000000000005
+> > > RBP: ffffc90003e7fdb0 R08: 0000000000000005 R09: 0000000000000000
+> > > R10: 0000000000000002 R11: 0000000000000001 R12: 0000000000000000
+> > > R13: 0000000000000002 R14: 00000000203f4ef0 R15: 0000000000000000
+> > >  ____sys_recvmsg+0x3ba/0x610 net/socket.c:2714
+> > >  ___sys_recvmsg+0xf2/0x180 net/socket.c:2743
+> > >  do_recvmmsg+0x25e/0x6e0 net/socket.c:2837
+> > >  __sys_recvmmsg net/socket.c:2916 [inline]
+> > >  __do_sys_recvmmsg net/socket.c:2939 [inline]
+> > >  __se_sys_recvmmsg net/socket.c:2932 [inline]
+> > >  __x64_sys_recvmmsg+0x20b/0x260 net/socket.c:2932
+> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > RIP: 0033:0x7f56422dabb9
+> > > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 91 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > > RSP: 002b:00007f5642262208 EFLAGS: 00000246 ORIG_RAX: 000000000000012b
+> > > RAX: ffffffffffffffda RBX: 00007f564235c4b8 RCX: 00007f56422dabb9
+> > > RDX: 0000000000010106 RSI: 00000000200000c0 RDI: 0000000000000003
+> > > RBP: 00007f564235c4b0 R08: 0000000000000000 R09: 0000000000000000
+> > > R10: 0000000000000002 R11: 0000000000000246 R12: 00007f564235c4bc
+> > > R13: 00007fffbde3618f R14: 00007f5642262300 R15: 0000000000022000
+> > >  </TASK>
+> > > Modules linked in:
+> > > ---[ end trace 0000000000000000 ]---
+> > 
+> > While it is true that the addressing exception is happening in the hugetlb
+> > routine PageHeadHuge(), the reason is because it is passed a NULL page
+> > pointer.  This is via the call to folio_file_page() at the end of shmem_fault.
+> > 
+> > 	err = shmem_get_folio_gfp(inode, vmf->pgoff, &folio, SGP_CACHE,
+> > 				  gfp, vma, vmf, &ret);
+> > 	if (err)
+> > 		return vmf_error(err);
+> > 
+> > 	vmf->page = folio_file_page(folio, vmf->pgoff);
+> > 	return ret;
+> > 
+> > The code assumes that if a non-zero value is returned from shmem_get_folio_gfp,
+> > then folio pointer will be set to a folio.  However, it looks like there are
+> > a few places in shmem_get_folio_gfp where it will return zero and not set
+> > folio.
+> > 
+> > In this specific case, it is the code block:
+> > 
+> >         if (vma && userfaultfd_missing(vma)) {
+> >                 *fault_type = handle_userfault(vmf, VM_UFFD_MISSING);
+> >                 return 0;
+> >         }
+> > 
+> > I could try to sort this out, but I believe Matthew has the most context as
+> > he has been changing this code recently.
+> 
+> Vishal sent me a patch a few days ago, but I was on holiday so haven't
+> seen it until now.
+> 
+> From: "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+> To: willy@infradead.org
+> Cc: "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+> Subject: [PATCH 1/1] Fix an issue in shmem_fault()
+> Date: Wed, 21 Sep 2022 17:38:56 -0700
+> Message-Id: <20220922003855.23411-2-vishal.moola@gmail.com>
+> X-Mailer: git-send-email 2.36.1
+> In-Reply-To: <20220922003855.23411-1-vishal.moola@gmail.com>
+> References: <20220922003855.23411-1-vishal.moola@gmail.com>
+> 
+> If shmem_get_folio_gfp returns 0 AND does not assign folio,
+> folio_file_page() runs into issues. Make sure to assign vmf->page only
+> if a folio is assigned, otherwise set it to NULL.
+> 
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
 
-On 9/27/22 1:14 AM, Mark Brown wrote:
-> On Mon, Sep 26, 2022 at 12:02:04PM +0200, Ard Biesheuvel wrote:
-> 
->> Given that we currently do not support the use of SVE in kernel mode,
->> this patch cannot be accepted at this time (but the rest of the series
->> looks reasonable to me, although I have only skimmed over the patches)
-> 
->> In view of the disappointing benchmark results below, I don't think
->> this is worth the hassle at the moment. If we can find a case where
->> using SVE in kernel mode truly makes a [favorable] difference, we can
->> revisit this, but not without a thorough analysis of the impact it
->> will have to support SVE in the kernel. Also, the fact that SVE may
-> 
-> The kernel code doesn't really distinguish between FPSIMD and SVE in
-> terms of state management, and with the sharing of the V and Z registers
-> the architecture is very similar too so it shouldn't be too much hassle,
-> the only thing we should need is some management for the VL when
-> starting kernel mode SVE (probably just setting the maximum VL as a
-> first pass).
-> 
-> The current code should *work* and on a system with only a single VL
-> supported it'd be equivalent since setting the VL is a noop, it'd just
-> mean that any kernel mode SVE would end up using whatever the last VL
-> set on the PE happened to be in which could result in inconsistent
-> performance.
-> 
->> also cover cryptographic extensions does not necessarily imply that a
->> micro-architecture will perform those crypto transformations in
->> parallel and so the performance may be the same even if VL > 128.
-> 
-> Indeed, though so long as the performance is comparable I guess it
-> doesn't really hurt - if we run into situations where for some
-> implementations SVE performs worse then we'd need to do something more
-> complicated than just using SVE if it's available but...
-> 
->> In summary, please drop this patch for now, and once there are more
->> encouraging performance numbers, please resubmit it as part of a
->> series that explicitly enables SVE in kernel mode on arm64, and
->> documents the requirements and constraints.
-> 
-> ...in any case as you say until there are cases where SVE does better
-> for some in kernel use case we probably just shouldn't merge things.
-> 
-> Having said that I have been tempted to put together a branch which has
-> a kernel_sve_begin() implementation and collects proposed algorithm
-> implementations so they're there for people to experiment with as new
-> hardware becomes available.  There's clearly interest in trying to use
-> SVE in kernel and it makes sense to try to avoid common pitfalls and
-> reduce duplication of effort.
-> 
+Acked-by: Hugh Dickins <hughd@google.com>
 
-Your reply helped me a lot, I did encounter problems when using qemu VL
-larger than 128-bit environment, but I also tested it with the pure
-user-mode library libgcrypt, it seems to be normal, maybe in 128-bit
-It's just a coincidence that it works fine in the physical machine.
+Peter, thank you for reviewing and advising and testing mine, and
+Andrew, thank you for taking it into mm-unstable.  But I think that
+since Vishal sent his first, thank you, it is his that should go in.
 
-I am looking forward to your experimental branch, and I believe that
-there will be breakthroughs in hardware in the near future.
+Me, I tend to avoid an "else", but that's not a very good reason to
+prefer mine.  If, in my ignorance, I'd been right about userfaultfd
+setting vmf->page, then mine would have been the right patch; but
+Peter showed I was wrong on that, so Vishal's seems slightly the better.
 
-> A couple of very minor comments on the patch:
+Matthew, please send Vishal's with your signoff on to Andrew;
+or I can do so (mutatis mutandis) if you prefer.
+
+Thanks,
+Hugh
+
+> ---
+>  mm/shmem.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
->>> +config CRYPTO_SM4_ARM64_SVE_CE_BLK
->>> +       tristate "Ciphers: SM4, modes: ECB/CBC/CFB/CTR (ARMv9 cryptography
->> +acceleration with SVE2)"
->>> +       depends on KERNEL_MODE_NEON
->>> +       select CRYPTO_SKCIPHER
->>> +       select CRYPTO_SM4
->>> +       select CRYPTO_SM4_ARM64_CE_BLK
->>> +       help
-> 
-> Our current baseline binutils version requirement predates SVE support
-> so we'd either need to manually encode all SVE instructions used or add
-> suitable dependency.  The dependency seems a lot more reasonable here,
-> and we could require a new enough version to avoid the manual encoding
-> that is done in the patch (though I've not checked how new a version
-> that'd end up requiring, it might be unreasonable so perhaps just
-> depending on binutils having basic SVE support and continuing with the
-> manual encoding might be more helpful).
-> 
->>> +.macro sm4e, vd, vn
->>> +       .inst 0xcec08400 | (.L\vn << 5) | .L\vd
->>> +.endm
-> 
-> For any manual encodings that do get left it'd be good to note the
-> binutils and LLVM versions which support the instruction so we can
-> hopefully at some point switch to assembling them normally.
-> 
->>> +static int __init sm4_sve_ce_init(void)
->>> +{
->>> +       if (sm4_sve_get_vl() <= 16)
->>> +               return -ENODEV;
-> 
-> I'm not clear what this check is attempting to guard against - what's
-> the issue with larger VLs?
-
-Since there is no physical environment, this check is based on my naive
-assumption that the performance when VL is 256-bit should theoretically
-be twice that of 128-bit, because SVE needs to handle more complex data
-shifting operations and CTR incrementing operations, so When VL is
-greater than or equal to 256 bits, the use of SVE will bring performance
-improvement, otherwise it is a suitable choice to degenerate to CE.
-
-Now it seems that this assumption itself is not valid, I will drop
-this patch first.
-
-> 
-> If it is needed then we already have a sve_get_vl() in the core kernel
-> which we should probably be making available to modules rather than
-> having them open code something (eg, making it a static inline rather
-> than putting it in asm).
-
-Yes, I agree, exporting sve_get_vl() to the module is the more
-appropriate approach.
-
-Best regards,
-Tianjia
-
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index d6921b8e2cb5..986c07362eab 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -2060,7 +2060,7 @@ static vm_fault_t shmem_fault(struct vm_fault *vmf)
+>  	struct vm_area_struct *vma = vmf->vma;
+>  	struct inode *inode = file_inode(vma->vm_file);
+>  	gfp_t gfp = mapping_gfp_mask(inode->i_mapping);
+> -	struct folio *folio;
+> +	struct folio *folio = NULL;
+>  	int err;
+>  	vm_fault_t ret = VM_FAULT_LOCKED;
+>  
+> @@ -2127,7 +2127,10 @@ static vm_fault_t shmem_fault(struct vm_fault *vmf)
+>  				  gfp, vma, vmf, &ret);
+>  	if (err)
+>  		return vmf_error(err);
+> -	vmf->page = folio_file_page(folio, vmf->pgoff);
+> +	if (folio)
+> +		vmf->page = folio_file_page(folio, vmf->pgoff);
+> +	else
+> +		vmf->page = NULL;
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.36.1
