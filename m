@@ -2,143 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E124D5EC286
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 047985EC288
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbiI0MWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36936 "EHLO
+        id S232327AbiI0MWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiI0MWG (ORCPT
+        with ESMTP id S232320AbiI0MWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:22:06 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8A85725A;
-        Tue, 27 Sep 2022 05:21:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664281310; x=1695817310;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XpkDDEEchrcj3F5SD5RBgWCP709u3VmyVEynWHWmfZE=;
-  b=Ut1Blr3b8nJp5q9DiiV17rKU+3B1SphfJIahvWX4W5622+57RDgaRTQA
-   UCbRG7gv5oc0/XjhbxUyznya5HqMKQoq/kv5y39TtUfu5HyCIhxm6bA8g
-   vNlgB1LTIif45EDmptfaFzGJnACePMNTu+MB/kqg7cY1bBZ4y9NGMvKlB
-   F8VbWcYpZyStdZmrDgrJmpUrRlA1q9LO6E4QmwTjRID2FFwO6TSVYwzET
-   kEeEtbItNvGhmhxPZ7dERi8AID8dsL1wZUqKDdyi4+p9mgJWqPrTvR5mZ
-   8SNYrUXCbdgeWh1+ODzb1itimgUQ+qNMeLVEQwpb3aobDCm55wBX25rWt
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="288452433"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="288452433"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:21:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="725492545"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="725492545"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 27 Sep 2022 05:21:47 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1od9ar-008RLy-1N;
-        Tue, 27 Sep 2022 15:21:45 +0300
-Date:   Tue, 27 Sep 2022 15:21:45 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     Ferry Toth <fntoth@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <thinhn@synopsys.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: Re: [PATCH v4] usb: dwc3: Don't switch OTG -> peripheral if extcon
- is present
-Message-ID: <YzLq2WJD78sjiBZg@smile.fi.intel.com>
-References: <Yyw0K/hcTZ02UP+A@smile.fi.intel.com>
- <691c3073-5105-9a2b-e6f2-ea0a4b8aaea8@gmail.com>
- <CAHQ1cqGFFJ0gRbdN+DH0iJhcKc=eee8uNoDyfHEy00-CMgstiw@mail.gmail.com>
- <Yy3iAHLlS2emAmWn@smile.fi.intel.com>
- <CAHQ1cqHWZeVHp6QmsDw5bjVq=nknRVG5iETB0n4fMMLWginbLg@mail.gmail.com>
- <966ef528-455c-5180-fc63-ea77cb933af1@gmail.com>
- <331b5644-e204-8915-cd08-bd4fabbfcb49@gmail.com>
- <CAHQ1cqGrfTO9JLgD-k0Akg7+hXNT+WevfjH_YpsVi8wQt6_iBw@mail.gmail.com>
- <YzF8l7kiS7m496YE@smile.fi.intel.com>
- <CAHQ1cqEVXwMiUxp+QGRkHMea-74DxS1Obvc2xwhy=ySwfxhu7w@mail.gmail.com>
+        Tue, 27 Sep 2022 08:22:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77E7E62E5;
+        Tue, 27 Sep 2022 05:22:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F62260EF1;
+        Tue, 27 Sep 2022 12:22:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 776C0C433C1;
+        Tue, 27 Sep 2022 12:22:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664281320;
+        bh=Md92oNwZ1hiITnrlHo0gSdJQdkrFWI4DogYSf+Wdako=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YlQhtCcqTr3l7h9vi9ocIduv2pQzyo023UyA5cS/f3JgoRnYTHVNHBPVEtTnrCx+b
+         yrcWGgACJAy74FaMODlAL7n2/1qrwz6sEUHieQrUxKAmIvYFhQZ0eWE6foJsnsbbO2
+         r7UDjpkK3ks+TI5qbO2IUCdejkTaCcMldRiOrl+eNDdPuZBTeHoyTTUW03yQ/S1q32
+         bOSpHEGKygLVfiRFlNvAiojSfUO9kleTLy6g53PzVcmvysi5OhokWflbjIFS0c0zVt
+         SRSMeyTjUpRfWajGCF37CPKOaY4Yvw/KMGhZiWLDlgslF6H5WvkL0oNBHlqSOqAWDd
+         Kic23/HSk/vbA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3EB26403B0; Tue, 27 Sep 2022 13:21:58 +0100 (IST)
+Date:   Tue, 27 Sep 2022 13:21:58 +0100
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     peterz@infradead.org, mingo@redhat.com,
+        Jiri Olsa <olsajiri@gmail.com>, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
+        quentin@isovalent.com, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH 3/3] tools/build: Display logical OR of a feature flavors
+Message-ID: <YzLq5uar4dZlT1s6@kernel.org>
+References: <20220818120957.319995-1-roberto.sassu@huaweicloud.com>
+ <20220818120957.319995-3-roberto.sassu@huaweicloud.com>
+ <YwNhabqHEq3PfNM8@krava>
+ <64352c51c5dcbab389201a16733f3157a1ea591e.camel@huaweicloud.com>
+ <75986095d7ada2b24784ef356abc6ce17307575d.camel@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHQ1cqEVXwMiUxp+QGRkHMea-74DxS1Obvc2xwhy=ySwfxhu7w@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <75986095d7ada2b24784ef356abc6ce17307575d.camel@huaweicloud.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 11:31:58AM -0700, Andrey Smirnov wrote:
-> On Mon, Sep 26, 2022 at 3:19 AM Andy Shevchenko
-> <andriy.shevchenko@intel.com> wrote:
-> > On Sun, Sep 25, 2022 at 10:43:07PM -0700, Andrey Smirnov wrote:
-> > > On Sun, Sep 25, 2022 at 12:21 PM Ferry Toth <fntoth@gmail.com> wrote:
+Em Tue, Sep 27, 2022 at 09:14:34AM +0200, Roberto Sassu escreveu:
+> On Mon, 2022-08-22 at 13:24 +0200, Roberto Sassu wrote:
+> > On Mon, 2022-08-22 at 12:58 +0200, Jiri Olsa wrote:
+> > > On Thu, Aug 18, 2022 at 02:09:57PM +0200, 
+> > 
+> > [...]
+> > 
+> > > > In verbose mode, of if no group is defined for a feature, show
+> > > > the
+> > > > feature
+> > > > detection result as before.
+> > 
+> > Thanks Jiri.
+> > 
+> > 'or' instead of 'of', if the patch can be edited.
+> 
+> Hi Arnaldo
+> 
+> will you take these patches?
 
-...
+The tools/build one I have in my perf/core branch, for v6.1.
 
-> > > IMHO instead of trying to rush something in it be prudent to revert my
-> > > patch _and_ address the fact that above patch was lost during the
-> > > merge (Andy's revert needs to be updated)
-> >
-> > I'm not an expert in your fixes for DWC3, so please come up with
-> > the solution sooner than later, otherwise I will try to get my
-> > reverts into the final release, because they obviously fix the
-> > regression.
-> 
-> You don't need to be an expert here. All that's required is that your
-> revert get the code to look like it looks in
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.0-rc6&id=ab7aa2866d295438dc60522f85c5421c6b4f1507
-> 
-> so the last hunk in your patch instead of looking like:
-> 
-> @@ -538,6 +584,10 @@ int dwc3_drd_init(struct dwc3 *dwc)
->  {
->         int ret, irq;
-> 
-> +       dwc->edev = dwc3_get_extcon(dwc);
-> +       if (IS_ERR(dwc->edev))
-> +               return PTR_ERR(dwc->edev);
-> +
->         if (ROLE_SWITCH &&
->             device_property_read_bool(dwc->dev, "usb-role-switch"))
->                 return dwc3_setup_role_switch(dwc);
-> 
-> should look like
-> 
-> @@ -538,6 +584,10 @@ int dwc3_drd_init(struct dwc3 *dwc)
->  {
->         int ret, irq;
-> 
->         if (ROLE_SWITCH &&
->             device_property_read_bool(dwc->dev, "usb-role-switch"))
->                 return dwc3_setup_role_switch(dwc);
-> 
-> +       dwc->edev = dwc3_get_extcon(dwc);
-> +       if (IS_ERR(dwc->edev))
-> +               return PTR_ERR(dwc->edev);
-> +
-> 
-> Can you update your series accordingly or do you need me to do that? I
-> won't have the cycles until the end of the week (Sat).
+⬢[acme@toolbox perf]$ git log --oneline --author roberto.sassu@huawei.com tools/{build,perf,lib}
+924b0da1154fa814 tools build: Display logical OR of a feature flavors
+1903f4ac2f3a6d33 tools build: Increment room for feature name in feature detection output
+48ab65e0fec644b4 tools build: Fix feature detection output due to eval expansion
+5b245985a6de5ac1 tools build: Switch to new openssl API for test-libcrypto
+dd6775f986144a9e perf build: Remove FEATURE_CHECK_LDFLAGS-disassembler-{four-args,init-styled} setting
+629b98e2b1c6efcf tools, build: Retry detection of bfd-related features
+⬢[acme@toolbox perf]$
 
-Thanks for elaboration. I will do it (hopefully today).
+Quentin, may I pick the ones that touch bpftool?
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+- Arnaldo
