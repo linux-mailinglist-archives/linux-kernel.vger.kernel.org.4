@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EEF75EBADE
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 08:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E585EBAE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 08:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiI0Gmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 02:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
+        id S229531AbiI0Gnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 02:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiI0Gml (ORCPT
+        with ESMTP id S230017AbiI0Gnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 02:42:41 -0400
+        Tue, 27 Sep 2022 02:43:31 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DBE937AE;
-        Mon, 26 Sep 2022 23:42:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9CE937AE;
+        Mon, 26 Sep 2022 23:43:29 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4173121CE8;
-        Tue, 27 Sep 2022 06:42:39 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8696321E7D;
+        Tue, 27 Sep 2022 06:43:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664260959; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1664261008; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=taICh2K620crBvOq2OQxmJu+AbXgax7CZvW2EW4pf+s=;
-        b=IU7BfWaRijmTGYASznuCYJLpc1NtCgG2tFT9IOCpNutRPu1HT4Zzthbhl3gHNgV+yTaei0
-        mj1Unnm4ssGb484xY1hfoRukTumWTRbmSNs40tkyxn4Bl3uqXH3iKHaKvEPYhkgKepgGhG
-        +Dp8Rf1hbuK8FAGJri8fBg6alIpTrFw=
+        bh=5ZxpDsEb1+mKewCmEANaAdXtVhFN/dYIiQ5noUVg3Qw=;
+        b=zIpWWayTfGeFuEXjh5v0hmcstGcxFH4k8OaKlCZBICZZYJd/eD8AGXOS6pw4SK2HSF9FRK
+        Nf80KahTmA2d4Zz0fLBmaXUFF5vPIzt7nqiwzk2/l1EaEhl609ZPpbMgfujG/g0EIq3RfC
+        hgSjyYyyYTZXvAcOWDrV1S8y4nxRROM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664260959;
+        s=susede2_ed25519; t=1664261008;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=taICh2K620crBvOq2OQxmJu+AbXgax7CZvW2EW4pf+s=;
-        b=OBwv5Lstk9sf5/mbB4uxsLqcRxUt5hnuFREsiivm0XS84rnxlFPpaZKamzMYqKUGiJHOqA
-        NlG7vghYUM5UQ0AQ==
+        bh=5ZxpDsEb1+mKewCmEANaAdXtVhFN/dYIiQ5noUVg3Qw=;
+        b=4Dw8zTirRND7Dp24bd4PJfLEvriglIzrB8FK8WTdcXB3ho7QUE4nRR090otMfja6INH6M7
+        qkHdGni1iD+oZeDA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 14873139BE;
-        Tue, 27 Sep 2022 06:42:39 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 52949139BE;
+        Tue, 27 Sep 2022 06:43:28 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id STBCBF+bMmOYZQAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 27 Sep 2022 06:42:39 +0000
-Date:   Tue, 27 Sep 2022 08:42:38 +0200
-Message-ID: <87fsgdgvxd.wl-tiwai@suse.de>
+        id D0hmE5CbMmPgZQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 27 Sep 2022 06:43:28 +0000
+Date:   Tue, 27 Sep 2022 08:43:27 +0200
+Message-ID: <87edvxgvw0.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Clemens Ladisch <clemens@ladisch.de>,
-        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
         kernel-janitors@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH] headers: Remove some left-over license text in sound/firewire
-In-Reply-To: <2bfe76c7eeb0f5205a1427e280bf8d9da0354a62.1664110649.git.christophe.jaillet@wanadoo.fr>
-References: <2bfe76c7eeb0f5205a1427e280bf8d9da0354a62.1664110649.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] headers: Remove some left-over license text in include/uapi/sound/
+In-Reply-To: <203c1db92c470925f31e361f6e7d180812501f2e.1664112023.git.christophe.jaillet@wanadoo.fr>
+References: <203c1db92c470925f31e361f6e7d180812501f2e.1664112023.git.christophe.jaillet@wanadoo.fr>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -71,21 +69,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 25 Sep 2022 14:57:51 +0200,
+On Sun, 25 Sep 2022 15:20:46 +0200,
 Christophe JAILLET wrote:
 > 
-> There is alredy a SPDX-License-Identifier tag, so the corresponding license
-> text can be removed.
-> 
-> While at it, be more consistent and:
->   - add a missing .c (ff-protocol-latter)
->   - remove an empty line (motu-protocol-v1)
+> There is already a SPDX-License-Identifier tag, so the corresponding
+> license text can be removed.
 > 
 > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Note: include/uapi/sound/compress_params.h has a slight modification in the
+> wording.
 
-Applied with a correction of typo and subject prefix.
+Thanks, applied now (with the subject prefix change).
 
-
-thanks,
 
 Takashi
