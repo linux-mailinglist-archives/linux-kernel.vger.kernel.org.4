@@ -2,108 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12855EC9F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757AC5EC9F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbiI0QtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        id S232878AbiI0Qt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbiI0Qsw (ORCPT
+        with ESMTP id S233210AbiI0Qtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:48:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B37E33A12;
-        Tue, 27 Sep 2022 09:48:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA72F6126D;
-        Tue, 27 Sep 2022 16:48:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C955BC433D6;
-        Tue, 27 Sep 2022 16:48:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664297324;
-        bh=IOZcbjA9Lg63FB6UEPbdUOWfb/1T2ALWEz6B3RQsLe4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ObHVf+50D//o8xHkysOWtvykIZDiBU5zkzbdJHrNJAncaP9lJWia6AafdmwZVH8vQ
-         9VZRSQCd1wKHDv9w02lWOSp+ZDaJmUOlCXonLNm47RRLBVHgmTB8GJIyX9Mcr0itEJ
-         T3XFAr7ldvxWhyPmLuiq3hdhglnP8tMpRNYrJXmA=
-Date:   Tue, 27 Sep 2022 18:48:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rajat Khandelwal <rajat.khandelwal@intel.com>
-Cc:     mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Add wake on connect/disconnect on USB4 ports
-Message-ID: <YzMpaa1V492X52/J@kroah.com>
-References: <20220928130005.2048724-1-rajat.khandelwal@intel.com>
+        Tue, 27 Sep 2022 12:49:40 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EA025C2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:49:34 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id u12so1705699pjj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:49:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=CshlNIOejbfiYc9tiWv058BC6HJpHyki8VAbybm61uA=;
+        b=MucmUzS2nCcF+AhT93QZQrmD3Psbz+Enr8Z1TI7Cl88vuGDyx6aGFblYhF7ZvzNJ9P
+         oHqeDAjNu2VqHESkGQZT9EmNsJXCAY9WpWP5mBw31Vo3QbUQMzyXGuWxp9cHqOk5VguX
+         gOhSrowuXG+DHdSY0V2Tnnmr+AGJ8P6bdZRLc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=CshlNIOejbfiYc9tiWv058BC6HJpHyki8VAbybm61uA=;
+        b=j4rDZDyGBGpOaY6ezTuBjVGe4M4vanjM7TtTEcRdHseOdS5qjDH1+TuqzqX7gATTox
+         7L5r+X31m0FMaMO7RLDOreHt91Xxrx5+V0aW04qQE3GZHKGRE3bYgFpT2MhEBUDw49jw
+         X9B1cCW8uzsWwjsN1WlzCiHgJmEqd1dJZL0Uit+DHA/eBhdR4UvissrSHKxqTXtcSaU3
+         mVVVT317X4YD/a0p3muyXVK3DU4SghanchB5auEI47qnDyZ8G8FOb44UmF7jVAzb5hGp
+         XM7T6IlU755yfB7ajMaTj3ngBlCodnLruOH/FEcEODU184eLbOpGk0Uz4QgeLx9SA2Nt
+         A2tw==
+X-Gm-Message-State: ACrzQf1MIB04jFHWt9f0Hv+QKebWIeAGlPWavjUOpWVgL3h+LtEx3w9U
+        y6UYV5hE5qxMFcB3+YYRzj5r0LTxydH/gEcmnDo=
+X-Google-Smtp-Source: AMsMyM5nHrnaxrzhddnmL2v6Bi3s6QZogqG6G/cZkv7Zy3cQbem1uUeyfaGRak4dMeabdo6+o2ZdLQ==
+X-Received: by 2002:a17:90b:3ec1:b0:203:5eef:fe1e with SMTP id rm1-20020a17090b3ec100b002035eeffe1emr5441458pjb.143.1664297373237;
+        Tue, 27 Sep 2022 09:49:33 -0700 (PDT)
+Received: from evgreen-glaptop.lan ([73.231.74.141])
+        by smtp.gmail.com with ESMTPSA id p13-20020a63950d000000b00434272fe870sm1753509pgd.88.2022.09.27.09.49.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 09:49:32 -0700 (PDT)
+From:   Evan Green <evgreen@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-integrity@vger.kernel.org, apronin@chromium.org,
+        dlunev@google.com, jarkko@kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Ben Boeckel <me@benboeckel.net>, rjw@rjwysocki.net,
+        corbet@lwn.net, linux-pm@vger.kernel.org, zohar@linux.ibm.com,
+        Kees Cook <keescook@chromium.org>,
+        Eric Biggers <ebiggers@kernel.org>, jejb@linux.ibm.com,
+        gwendal@chromium.org, Matthew Garrett <mgarrett@aurora.tech>,
+        Evan Green <evgreen@chromium.org>,
+        David Howells <dhowells@redhat.com>,
+        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Len Brown <len.brown@intel.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
+        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v3 00/11] Encrypted Hibernation
+Date:   Tue, 27 Sep 2022 09:49:11 -0700
+Message-Id: <20220927164922.3383711-1-evgreen@chromium.org>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220928130005.2048724-1-rajat.khandelwal@intel.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 06:30:05PM +0530, Rajat Khandelwal wrote:
-> Wake on connect/disconnect is only supported while runtime suspend
-> for now, which is obviously necessary. Its also not inherently
-> desired for the system to wakeup on thunderbolt hot events.
-> However, we can still make user in control of waking up the system
-> in the events of hot plug/unplug.
-> This patch adds 'wakeup' attribute under 'usb4_portX/power' sysfs
-> attribute and only enables wakes on connect/disconnect to the
-> respective port when 'wakeup' is set to 'enabled'. The attribute
-> is set to 'disabled' by default.
-> 
-> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
+We are exploring enabling hibernation in some new scenarios. However,
+our security team has a few requirements, listed below:
+1. The hibernate image must be encrypted with protection derived from
+   both the platform (eg TPM) and user authentication data (eg
+   password).
+2. Hibernation must not be a vector by which a malicious userspace can
+   escalate to the kernel.
 
-Including the issue pointed out below by my bot, Intel has a "special"
-requirement that you are not meeting here in order to send out patches
-for review on a public mailing list in a subsystem like this (i.e. one
-that I and others review patches on.)
+Requirement #1 can be achieved solely with uswsusp, however requirement
+2 necessitates mechanisms in the kernel to guarantee integrity of the
+hibernate image. The kernel needs a way to authenticate that it generated
+the hibernate image being loaded, and that the image has not been tampered
+with. Adding support for in-kernel AEAD encryption with a TPM-sealed key
+allows us to achieve both requirements with a single computation pass.
 
-Please meet that requirement first before sending any future kernel
-patches out.
+Matthew Garrett published a series [1] that aligns closely with this
+goal. His series utilized the fact that PCR23 is a resettable PCR that
+can be blocked from access by usermode. The TPM can create a sealed key
+tied to PCR23 in two ways. First, the TPM can attest to the value of
+PCR23 when the key was created, which the kernel can use on resume to
+verify that the kernel must have created the key (since it is the only
+one capable of modifying PCR23). It can also create a policy that enforces
+PCR23 be set to a specific value as a condition of unsealing the key,
+preventing usermode from unsealing the key by talking directly to the
+TPM.
 
-> ---
-> 
->  drivers/thunderbolt/tb_regs.h   |  2 ++
->  drivers/thunderbolt/usb4.c      | 33 +++++++++++++++++++++++++--------
->  drivers/thunderbolt/usb4_port.c |  3 +++
->  3 files changed, 30 insertions(+), 8 deletions(-)
+This series adopts that primitive as a foundation, tweaking and building
+on it a bit. Where Matthew's series used the TPM-backed key to encrypt a
+hash of the image, this series uses the key directly as a gcm(aes)
+encryption key, which the kernel uses to encrypt and decrypt the
+hibernate image in chunks of 16 pages. This provides both encryption and
+integrity, which turns out to be a noticeable performance improvement over
+separate passes for encryption and hashing.
 
-> 
-Hi,
+The series also introduces the concept of mixing user key material into
+the encryption key. This allows usermode to introduce key material
+based on unspecified external authentication data (in our case derived
+from something like the user password or PIN), without requiring
+usermode to do a separate encryption pass.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Matthew also documented issues his series had [2] related to generating
+fake images by booting alternate kernels without the PCR23 limiting.
+With access to PCR23 on the same machine, usermode can create fake
+hibernate images that are indistinguishable to the new kernel from
+genuine ones. His post outlines a solution that involves adding more
+PCRs into the creation data and policy, with some gyrations to make this
+work well on a standard PC.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Our approach would be similar: on our machines PCR 0 indicates whether
+the system is booted in secure/verified mode or developer mode. By
+adding PCR0 to the policy, we can reject hibernate images made in
+developer mode while in verified mode (or vice versa).
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
+Additionally, mixing in the user authentication data limits both
+data exfiltration attacks (eg a stolen laptop) and forged hibernation
+image attacks to attackers that already know the authentication data (eg
+user's password). This, combined with our relatively sealed userspace
+(dm-verity on the rootfs), and some judicious clearing of the hibernate
+image (such as across an OS update) further reduce the risk of an online
+attack. The remaining attack space of a forgery from someone with
+physical access to the device and knowledge of the authentication data
+is out of scope for us, given that flipping to developer mode or
+reflashing RO firmware trivially achieves the same thing.
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+A couple of patches still need to be written on top of this series. The
+generalized functionality to OR in additional PCRs via Kconfig (like PCR
+0 or 5) still needs to be added. We'll also need a patch that disallows
+unencrypted forms of resume from hibernation, to fully close the door
+to malicious userspace. However, I wanted to get this series out first
+and get reactions from upstream before continuing to add to it.
 
-thanks,
+[1] https://patchwork.kernel.org/project/linux-pm/cover/20210220013255.1083202-1-matthewgarrett@google.com/
+[2] https://mjg59.dreamwidth.org/58077.html
 
-greg k-h's patch email bot
+Changes in v3:
+ - Unify tpm1/2_pcr_reset prototypes (Jarkko)
+ - Wait no, remove the TPM1 stuff altogether (Jarkko)
+ - Remove extra From tag and blank in commit msg (Jarkko).
+ - Split find_and_validate_cc() export to its own patch (Jarkko)
+ - Rename tpm_find_and_validate_cc() to tpm2_find_and_validate_cc().
+ - Fix up commit message (Jarkko)
+ - tpm2_find_and_validate_cc() was split (Jarkko)
+ - Simply fully restrict TPM1 since v2 failed to account for tunnelled
+   transport sessions (Stefan and Jarkko).
+ - Fix SoB and -- note ordering (Kees)
+ - Add comments describing the TPM2 spec type names for the new fields
+   in tpm2key.asn1 (Kees)
+ - Add len buffer checks in tpm2_key_encode() (Kees)
+ - Clarified creationpcrs documentation (Ben)
+ - Changed funky tag to suggested-by (Kees). Matthew, holler if you want
+   something different.
+ - ENCRYPTED_HIBERNATION needs TRUSTED_KEYS builtin for
+   key_type_trusted.
+ - Remove KEYS dependency since it's covered by TRUSTED_KEYS (Kees)
+ - Changed funky tag to Co-developed-by (Kees). Matthew, holler if you
+   want something different.
+ - Changed funky tag to Co-developed-by (Kees)
+
+Changes in v2:
+ - Fixed sparse warnings
+ - Adjust hash len by 2 due to new ASN.1 storage, and add underflow
+   check.
+ - Rework load/create_kernel_key() to eliminate a label (Andrey)
+ - Call put_device() needed from calling tpm_default_chip().
+ - Add missing static on snapshot_encrypted_byte_count()
+ - Fold in only the used kernel key bytes to the user key.
+ - Make the user key length 32 (Eric)
+ - Use CRYPTO_LIB_SHA256 for less boilerplate (Eric)
+ - Fixed some sparse warnings
+ - Use CRYPTO_LIB_SHA256 to get rid of sha256_data() (Eric)
+ - Adjusted offsets due to new ASN.1 format, and added a creation data
+   length check.
+ - Fix sparse warnings
+ - Fix session type comment (Andrey)
+ - Eliminate extra label in get/create_kernel_key() (Andrey)
+ - Call tpm_try_get_ops() before calling tpm2_flush_context().
+
+Evan Green (8):
+  tpm: Export and rename tpm2_find_and_validate_cc()
+  security: keys: trusted: Include TPM2 creation data
+  security: keys: trusted: Verify creation data
+  PM: hibernate: Add kernel-based encryption
+  PM: hibernate: Use TPM-backed keys to encrypt image
+  PM: hibernate: Mix user key in encrypted hibernate
+  PM: hibernate: Verify the digest encryption key
+  PM: hibernate: seal the encryption key with a PCR policy
+
+Matthew Garrett (3):
+  tpm: Add support for in-kernel resetting of PCRs
+  tpm: Allow PCR 23 to be restricted to kernel-only use
+  security: keys: trusted: Allow storage of PCR values in creation data
+
+ Documentation/power/userland-swsusp.rst       |    8 +
+ .../security/keys/trusted-encrypted.rst       |    6 +
+ drivers/char/tpm/Kconfig                      |   12 +
+ drivers/char/tpm/tpm-dev-common.c             |    8 +
+ drivers/char/tpm/tpm-interface.c              |   25 +
+ drivers/char/tpm/tpm.h                        |   23 +
+ drivers/char/tpm/tpm1-cmd.c                   |   13 +
+ drivers/char/tpm/tpm2-cmd.c                   |   58 +
+ drivers/char/tpm/tpm2-space.c                 |    8 +-
+ include/keys/trusted-type.h                   |    9 +
+ include/linux/tpm.h                           |   12 +
+ include/uapi/linux/suspend_ioctls.h           |   28 +-
+ kernel/power/Kconfig                          |   15 +
+ kernel/power/Makefile                         |    1 +
+ kernel/power/power.h                          |    1 +
+ kernel/power/snapenc.c                        | 1037 +++++++++++++++++
+ kernel/power/snapshot.c                       |    5 +
+ kernel/power/user.c                           |   44 +-
+ kernel/power/user.h                           |  114 ++
+ security/keys/trusted-keys/tpm2key.asn1       |   15 +-
+ security/keys/trusted-keys/trusted_tpm1.c     |    9 +
+ security/keys/trusted-keys/trusted_tpm2.c     |  318 ++++-
+ 22 files changed, 1724 insertions(+), 45 deletions(-)
+ create mode 100644 kernel/power/snapenc.c
+ create mode 100644 kernel/power/user.h
+
+-- 
+2.31.0
+
