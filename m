@@ -2,125 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9615EC332
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CE35EC337
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbiI0MrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
+        id S231720AbiI0Mrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiI0MrO (ORCPT
+        with ESMTP id S231664AbiI0Mrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:47:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7293146F9A
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:47:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4288B6179B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 12:47:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E222C433D6;
-        Tue, 27 Sep 2022 12:47:10 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2] irqchip: Make irqchip_init() usable on pure ACPI systems
-Date:   Tue, 27 Sep 2022 20:45:57 +0800
-Message-Id: <20220927124557.3246737-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
+        Tue, 27 Sep 2022 08:47:40 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E8214AD4E;
+        Tue, 27 Sep 2022 05:47:39 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id c24so8992947plo.3;
+        Tue, 27 Sep 2022 05:47:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=pBPln+b11pq6NascSrYAWIVzDopDTO1UFjPzgrUQKiU=;
+        b=dJYA1qVFTrls30OQhZaf3veaeALUiSfODWissTCXJezDmECLyxXfMoMtPTKL82hmDl
+         CrY6ytwy/jDetYrcOjo8oh2R4w87KPpX0S8ieGQrExm9deA8j2D84WHnBurDxagSQwTs
+         DoTYCFwcu7S/oSxPTBEGnBsmhapvcE0mFgFAyN9rjChRNfHXN/l6TuFOTiDMzABvepcv
+         hnWCabnHdS8vWVePDkd9KiopAEP8K4muZ57yMrWh5wI7MQHaC1tlRjZEiWv1hC4h+gVr
+         8WkVxsSWF/MhLffJvVt87uRNs0p91upP+ijU/v6xnNf6JSFPJbT/fBgIFHwZn+i3+osB
+         785w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=pBPln+b11pq6NascSrYAWIVzDopDTO1UFjPzgrUQKiU=;
+        b=A/KLWGoeuQnHi0FrLXyPBXYdbUYgVxPYOdwdU1M4a2mY1q/33twH5XnbwXxvapTrKf
+         k7H36Th8EYH8NV/d29+UrG02MU9PJZfPeunsMfxqe9d7hfViUGeA0PbVHaFyg3f34K9Y
+         jXACJVGY3evPUyG5ikhpGhf4Q8w4eViQRytV0tMYKIclBkgIdgFDKmQWgnLpnIFq8g1F
+         U9xj2UY3e+7lchJ+7QKpxKfFRSm8XnYw/vP+jSzTT3egcw5tFdcS8UjGWJQVrfuq60e2
+         sWkm9JGPvMpX9efEDN2FQ+qKTV4HuwKaRUf4SDGbMS8NBGOe4VBWM+if8ixHu9lqDp8R
+         I7zg==
+X-Gm-Message-State: ACrzQf2LKFQDR1QQ4ydDNqn7PrS1m48KVEaFGe9b7QxDrNvjgnxV8Knt
+        SkFiHHPQQcOi+ybF4lFAJcM=
+X-Google-Smtp-Source: AMsMyM45TDWdowkKlqaKWi3nqCyFhYbG6rzaPO2UM9Ls9eGYUdjA7maMKvPcHkNJGLNxBEqgd3oiSg==
+X-Received: by 2002:a17:902:e212:b0:178:5c:8248 with SMTP id u18-20020a170902e21200b00178005c8248mr27898484plb.102.1664282858901;
+        Tue, 27 Sep 2022 05:47:38 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-58.three.co.id. [116.206.12.58])
+        by smtp.gmail.com with ESMTPSA id h16-20020a17090aea9000b00200aff02e90sm1358102pjz.18.2022.09.27.05.47.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 05:47:38 -0700 (PDT)
+Message-ID: <8821ae25-eb20-b673-6d57-fb2cc03d9726@gmail.com>
+Date:   Tue, 27 Sep 2022 19:47:34 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH] of: device: fix repeated words in comments
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jilin Yuan <yuanjilin@cdjrlc.com>, frowand.list@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220918094915.19567-1-yuanjilin@cdjrlc.com>
+ <20220926185852.GA2581083-robh@kernel.org> <YzJaIolrTarQ4Qdn@debian.me>
+ <CAL_JsqKb595eUCL6k6yjGm=wn9AbcyvcKiD71jEw0M_y=+UVsA@mail.gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <CAL_JsqKb595eUCL6k6yjGm=wn9AbcyvcKiD71jEw0M_y=+UVsA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pure ACPI system (e.g., LoongArch) doesn't select OF and OF_IRQ, but it
-still need a non-empty irqchip_init(). So, change the IRQCHIP dependency
-from OF_IRQ to (OF_IRQ || ACPI_GENERIC_GSI), and then define an empty
-inline of_irq_init() in the !CONFIG_OF_IRQ case, so as to make the non-
-empty irqchip_init() be usable on pure ACPI systems.
+On 9/27/22 19:29, Rob Herring wrote:
+>> Hi Rob,
+>>
+>> Some reviewers sent comments for similar patches from @cdjrlc.com
+>> people (including myself at [1]), with some of them requesting changes.
+>> However, there are never any responses to these reviews from @cdjrlc.com
+>> people, just like ZTE developers sending through cgel.zte ignored
+>> review comments [2] (try searching `f:"cdjrlc.com" AND s:"Re:"`, it returns
+>> nothing for now).
+> 
+> I can't decide whether to fix it correctly myself or leave it to see
+> how many times I can get the same patch. :)
+> 
 
-Without this patch we get such errors:
+Hi Rob,
 
-[    0.000000] NR_IRQS: 576, nr_irqs: 576, preallocated irqs: 16
-[    0.000000] Kernel panic - not syncing: IPI IRQ mapping failed
-[    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0.0-rc6+ #2189
-[    0.000000] Hardware name: Loongson Loongson-3A5000-7A1000-1w-CRB/Loongson-LS3A5000-7A1000-1w-CRB, BIOS vUDK2018-LoongArch-V2.0.pre-beta8 08/18/2022
-[    0.000000] Stack : 0000000000000000 9000000000fa4388 900000000140c000 900000000140fb70
-[    0.000000]         0000000000000000 900000000140fb70 90000000012f4aa0 900000000140fa98
-[    0.000000]         900000000140fa0c 900000008140f9ff 0000000000000030 0000000000000005
-[    0.000000]         900000000578f708 0000000004750000 0000000000000000 00000000ffffdfff
-[    0.000000]         0000000000000000 0000000000000000 0000000000000030 000000000000002f
-[    0.000000]         900000000141f000 0000000004750000 9000000001427348 00000000000000b0
-[    0.000000]         90000000012f4aa0 0000000000000004 0000000000000000 9000000001020000
-[    0.000000]         9000000005781b80 9000000005781ba9 0000000000000000 9000000001315e30
-[    0.000000]         900000000129a3b0 9000000000222b64 0000000000000000 00000000000000b0
-[    0.000000]         0000000000000004 0000000000000000 0000000000070000 0000000000000800
-[    0.000000]         ...
-[    0.000000] Call Trace:
-[    0.000000] [<9000000000222b64>] show_stack+0x24/0x124
-[    0.000000] [<9000000000fa4388>] dump_stack_lvl+0x60/0x88
-[    0.000000] [<9000000000f9965c>] panic+0x130/0x2f8
-[    0.000000] [<9000000000fd4324>] init_IRQ+0xa8/0x240
-[    0.000000] [<9000000000fd0b38>] start_kernel+0x488/0x5f0
-[    0.000000] [<9000000000fb10c4>] kernel_entry+0xc4/0xc8
-[    0.000000]
-[    0.000000] ---[ end Kernel panic - not syncing: IPI IRQ mapping failed ]---
+I'm not talking about whether this patch should be picked up or not, but
+rather I'm pointing out the ignoring review behavior of @cdjrlc.com people.
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- drivers/irqchip/Kconfig   | 2 +-
- include/linux/of_irq.h    | 6 ++++--
- 3 files changed, 7 insertions(+), 3 deletions(-)
+Thanks.
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 66b9fa408bf2..93ad04d58f17 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -3,7 +3,7 @@ menu "IRQ chip support"
- 
- config IRQCHIP
- 	def_bool y
--	depends on OF_IRQ
-+	depends on (OF_IRQ || ACPI_GENERIC_GSI)
- 
- config ARM_GIC
- 	bool
-diff --git a/include/linux/of_irq.h b/include/linux/of_irq.h
-index 83fccd0c9bba..d6d3eae2f145 100644
---- a/include/linux/of_irq.h
-+++ b/include/linux/of_irq.h
-@@ -37,9 +37,8 @@ extern unsigned int irq_create_of_mapping(struct of_phandle_args *irq_data);
- extern int of_irq_to_resource(struct device_node *dev, int index,
- 			      struct resource *r);
- 
--extern void of_irq_init(const struct of_device_id *matches);
--
- #ifdef CONFIG_OF_IRQ
-+extern void of_irq_init(const struct of_device_id *matches);
- extern int of_irq_parse_one(struct device_node *device, int index,
- 			  struct of_phandle_args *out_irq);
- extern int of_irq_count(struct device_node *dev);
-@@ -57,6 +56,9 @@ extern struct irq_domain *of_msi_map_get_device_domain(struct device *dev,
- extern void of_msi_configure(struct device *dev, struct device_node *np);
- u32 of_msi_map_id(struct device *dev, struct device_node *msi_np, u32 id_in);
- #else
-+static inline void of_irq_init(const struct of_device_id *matches)
-+{
-+}
- static inline int of_irq_parse_one(struct device_node *device, int index,
- 				   struct of_phandle_args *out_irq)
- {
 -- 
-2.31.1
-
+An old man doll... just what I always wanted! - Clara
