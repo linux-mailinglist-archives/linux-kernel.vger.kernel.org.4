@@ -2,150 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D77EF5EC787
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB805EC78D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbiI0PWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48362 "EHLO
+        id S231322AbiI0PXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiI0PW3 (ORCPT
+        with ESMTP id S231126AbiI0PXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:22:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BC113D86F;
-        Tue, 27 Sep 2022 08:22:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 27 Sep 2022 11:23:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060E9161CE9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:22:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664292179;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+wxxaQvAmOhXqvbiroKphZbmEyl3ZzPK5pDgkODGqhg=;
+        b=DCq3uoIttzvCboLXAV0zP8p0icGKlbPPf+4/W0C+UC4v8hgrOx+dvmKAyNxEKKDj/4fm/1
+        GRH1OmpqVPQtP2DX8Iyi+SJSYBRZM4DG7DSYfD58r6LKpjsaBeZdoqwCMZ4yX4NUSavIav
+        0IHv6E2AEWP9K4J/kH5dTqJvyaZWfqA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-65-6kT8QB9CNNWEUYegk9Uxmg-1; Tue, 27 Sep 2022 11:22:42 -0400
+X-MC-Unique: 6kT8QB9CNNWEUYegk9Uxmg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 798D9B81C5B;
-        Tue, 27 Sep 2022 15:22:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE539C433D6;
-        Tue, 27 Sep 2022 15:22:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664292145;
-        bh=Rwu7lmP286mSyRCRHjUpHuXEGaRbO6W7Cm2TFtUPZyA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UsbjGzDIsdGgWkZcmVlfR+ysRYjobt9NaT34REsDbqk0MGHu166KLwVcoRzoBv9VA
-         6r9HNFHd9GrrrlYDUCS5AJMqGmjWX6lJCMqmsjUCnrsdIS61cpdTPV2zF2HwTRwL0E
-         9iTcMN/zkVR9b/LcDW2WkB8jpydi/2GoHFTKxaAQ=
-Date:   Tue, 27 Sep 2022 17:22:22 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Fox Chen <foxhlchen@gmail.com>,
-        Viktor Garske <viktor@v-gar.de>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        =?iso-8859-1?B?TOlv?= Lanteri Thauvin 
-        <leseulartichaut@gmail.com>, Niklas Mohrin <dev@niklasmohrin.de>,
-        Milan Landaverde <milan@mdaverde.com>,
-        Morgan Bartlett <mjmouse9999@gmail.com>,
-        Maciej Falkowski <m.falkowski@samsung.com>,
-        =?iso-8859-1?Q?N=E1ndor_Istv=E1n_Kr=E1cser?= <bonifaido@gmail.com>,
-        David Gow <davidgow@google.com>,
-        John Baublitz <john.m.baublitz@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
-Subject: Re: [PATCH v10 12/27] rust: add `kernel` crate
-Message-ID: <YzMVLkr3ZlbENMcG@kroah.com>
-References: <20220927131518.30000-1-ojeda@kernel.org>
- <20220927131518.30000-13-ojeda@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 13C3C185A7A8;
+        Tue, 27 Sep 2022 15:22:42 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E039E2166B2A;
+        Tue, 27 Sep 2022 15:22:41 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>
+Subject: [PATCH] KVM: allow compiling out SMM support
+Date:   Tue, 27 Sep 2022 11:22:41 -0400
+Message-Id: <20220927152241.194900-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927131518.30000-13-ojeda@kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 03:14:43PM +0200, Miguel Ojeda wrote:
-> +unsafe impl GlobalAlloc for KernelAllocator {
-> +    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-> +        // `krealloc()` is used instead of `kmalloc()` because the latter is
-> +        // an inline function and cannot be bound to as a result.
-> +        unsafe { bindings::krealloc(ptr::null(), layout.size(), bindings::GFP_KERNEL) as *mut u8 }
+Some users of KVM implement the UEFI variable store through a paravirtual device
+that does not require the "SMM lockbox" component of edk2; allow them to
+compile out system management mode, which is not a full implementation
+especially in how it interacts with nested virtualization.
 
-This feels "odd" to me.  Why not just use __kmalloc() instead of
-krealloc()?  I think that will get you the same kasan tracking, and
-should be a tiny bit faster (1-2 less function calls).
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+	The patch isn't pretty.  I could skip all the changes to add WARNs
+	to called functions, but the point of adding the config symbol is
+	to make sure that those functions, and all the baggage they bring,
+	are dead.
 
-I guess it probably doesn't matter right now, just curious, and not a
-big deal at all.
+ arch/x86/kvm/Kconfig                          | 11 +++++++
+ arch/x86/kvm/emulate.c                        |  3 +-
+ arch/x86/kvm/kvm_cache_regs.h                 |  2 +-
+ arch/x86/kvm/lapic.c                          |  2 ++
+ arch/x86/kvm/svm/svm.c                        | 13 ++++++++
+ arch/x86/kvm/vmx/vmx.c                        | 12 +++++++
+ arch/x86/kvm/x86.c                            | 33 ++++++++++++++++---
+ tools/testing/selftests/kvm/x86_64/smm_test.c |  2 ++
+ 8 files changed, 72 insertions(+), 6 deletions(-)
 
-Other minor comments:
+diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+index a107df22ffee..1679f9b4e96d 100644
+--- a/arch/x86/kvm/Kconfig
++++ b/arch/x86/kvm/Kconfig
+@@ -88,6 +88,17 @@ config KVM_INTEL
+ 	  To compile this as a module, choose M here: the module
+ 	  will be called kvm-intel.
+ 
++config KVM_SMM
++	bool "System Management Mode emulation"
++	default y
++	depends on KVM
++	help
++	  Provides support for KVM to emulate System Management Mode (SMM)
++	  in virtual machines.  This can be used by the virtual machine
++	  firmware to implement UEFI secure boot.
++
++	  If unsure, say Y.
++
+ config X86_SGX_KVM
+ 	bool "Software Guard eXtensions (SGX) Virtualization"
+ 	depends on X86_SGX && KVM_INTEL
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index b6180032dfd6..7c1f772ec69f 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -2557,7 +2557,8 @@ static int em_rsm(struct x86_emulate_ctxt *ctxt)
+ 	u64 smbase;
+ 	int ret;
+ 
+-	if ((ctxt->ops->get_hflags(ctxt) & X86EMUL_SMM_MASK) == 0)
++	if (!IS_ENABLED(CONFIG_KVM_SMM) ||
++	    (ctxt->ops->get_hflags(ctxt) & X86EMUL_SMM_MASK) == 0)
+ 		return emulate_ud(ctxt);
+ 
+ 	smbase = ctxt->ops->get_smbase(ctxt);
+diff --git a/arch/x86/kvm/kvm_cache_regs.h b/arch/x86/kvm/kvm_cache_regs.h
+index 3febc342360c..a9e46dcac4bb 100644
+--- a/arch/x86/kvm/kvm_cache_regs.h
++++ b/arch/x86/kvm/kvm_cache_regs.h
+@@ -202,7 +202,7 @@ static inline bool is_guest_mode(struct kvm_vcpu *vcpu)
+ 
+ static inline bool is_smm(struct kvm_vcpu *vcpu)
+ {
+-	return vcpu->arch.hflags & HF_SMM_MASK;
++	return IS_ENABLED(CONFIG_KVM_SMM) && (vcpu->arch.hflags & HF_SMM_MASK);
+ }
+ 
+ #endif
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index d7639d126e6c..d2d08a202b75 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -1171,8 +1171,10 @@ static int __apic_accept_irq(struct kvm_lapic *apic, int delivery_mode,
+ 
+ 	case APIC_DM_SMI:
+ 		result = 1;
++#ifdef CONFIG_KVM_SMM
+ 		kvm_make_request(KVM_REQ_SMI, vcpu);
+ 		kvm_vcpu_kick(vcpu);
++#endif
+ 		break;
+ 
+ 	case APIC_DM_NMI:
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 58f0077d9357..2b60a0123ae7 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -4149,6 +4149,8 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
+ 	case MSR_IA32_VMX_BASIC ... MSR_IA32_VMX_VMFUNC:
+ 		return false;
+ 	case MSR_IA32_SMBASE:
++		if (!IS_ENABLED(CONFIG_KVM_SMM))
++			return false;
+ 		/* SEV-ES guests do not support SMM, so report false */
+ 		if (kvm && sev_es_guest(kvm))
+ 			return false;
+@@ -4409,6 +4411,8 @@ bool svm_smi_blocked(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+ 
++	WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM));
++
+ 	/* Per APM Vol.2 15.22.2 "Response to SMI" */
+ 	if (!gif_set(svm))
+ 		return true;
+@@ -4438,6 +4442,9 @@ static int svm_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
+ 	struct kvm_host_map map_save;
+ 	int ret;
+ 
++	if (WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM)))
++		return 0;
++
+ 	if (!is_guest_mode(vcpu))
+ 		return 0;
+ 
+@@ -4487,6 +4494,9 @@ static int svm_leave_smm(struct kvm_vcpu *vcpu, const char *smstate)
+ 	struct vmcb *vmcb12;
+ 	int ret;
+ 
++	if (WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM)))
++		return 0;
++
+ 	if (!guest_cpuid_has(vcpu, X86_FEATURE_LM))
+ 		return 0;
+ 
+@@ -4546,6 +4556,9 @@ static void svm_enable_smi_window(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+ 
++	if (WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM)))
++		return;
++
+ 	if (!gif_set(svm)) {
+ 		if (vgif)
+ 			svm_set_intercept(svm, INTERCEPT_STGI);
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 9dba04b6b019..c8d2c0d3bacf 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -6840,6 +6840,8 @@ static bool vmx_has_emulated_msr(struct kvm *kvm, u32 index)
+ {
+ 	switch (index) {
+ 	case MSR_IA32_SMBASE:
++		if (!IS_ENABLED(CONFIG_KVM_SMM))
++			return false;
+ 		/*
+ 		 * We cannot do SMM unless we can run the guest in big
+ 		 * real mode.
+@@ -7904,6 +7906,8 @@ static void vmx_setup_mce(struct kvm_vcpu *vcpu)
+ 
+ static int vmx_smi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+ {
++	WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM));
++
+ 	/* we need a nested vmexit to enter SMM, postpone if run is pending */
+ 	if (to_vmx(vcpu)->nested.nested_run_pending)
+ 		return -EBUSY;
+@@ -7914,6 +7918,9 @@ static int vmx_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
+ {
+ 	struct vcpu_vmx *vmx = to_vmx(vcpu);
+ 
++	if (WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM)))
++		return 0;
++
+ 	/*
+ 	 * TODO: Implement custom flows for forcing the vCPU out/in of L2 on
+ 	 * SMI and RSM.  Using the common VM-Exit + VM-Enter routines is wrong
+@@ -7936,6 +7943,9 @@ static int vmx_leave_smm(struct kvm_vcpu *vcpu, const char *smstate)
+ 	struct vcpu_vmx *vmx = to_vmx(vcpu);
+ 	int ret;
+ 
++	if (WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM)))
++		return 0;
++
+ 	if (vmx->nested.smm.vmxon) {
+ 		vmx->nested.vmxon = true;
+ 		vmx->nested.smm.vmxon = false;
+@@ -7954,6 +7964,8 @@ static int vmx_leave_smm(struct kvm_vcpu *vcpu, const char *smstate)
+ 
+ static void vmx_enable_smi_window(struct kvm_vcpu *vcpu)
+ {
++	WARN_ON_ONCE(!IS_ENABLED(CONFIG_KVM_SMM));
++
+ 	/* RSM will cause a vmexit anyway.  */
+ }
+ 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index eb9d2c23fb04..90d82086a890 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3637,7 +3637,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		break;
+ 	}
+ 	case MSR_IA32_SMBASE:
+-		if (!msr_info->host_initiated)
++		if (!IS_ENABLED(CONFIG_KVM_SMM) || !msr_info->host_initiated)
+ 			return 1;
+ 		vcpu->arch.smbase = data;
+ 		break;
+@@ -4053,7 +4053,7 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		msr_info->data = vcpu->arch.ia32_misc_enable_msr;
+ 		break;
+ 	case MSR_IA32_SMBASE:
+-		if (!msr_info->host_initiated)
++		if (!IS_ENABLED(CONFIG_KVM_SMM) || !msr_info->host_initiated)
+ 			return 1;
+ 		msr_info->data = vcpu->arch.smbase;
+ 		break;
+@@ -4427,6 +4427,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 			r |= KVM_X86_DISABLE_EXITS_MWAIT;
+ 		break;
+ 	case KVM_CAP_X86_SMM:
++		if (!IS_ENABLED(CONFIG_KVM_SMM))
++			break;
++
+ 		/* SMBASE is usually relocated above 1M on modern chipsets,
+ 		 * and SMM handlers might indeed rely on 4G segment limits,
+ 		 * so do not report SMM to be available if real mode is
+@@ -4885,8 +4888,8 @@ static int kvm_vcpu_ioctl_nmi(struct kvm_vcpu *vcpu)
+ 
+ static int kvm_vcpu_ioctl_smi(struct kvm_vcpu *vcpu)
+ {
+-	kvm_make_request(KVM_REQ_SMI, vcpu);
+-
++	if (IS_ENABLED(CONFIG_KVM_SMM))
++		kvm_make_request(KVM_REQ_SMI, vcpu);
+ 	return 0;
+ }
+ 
+@@ -5186,6 +5189,12 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+ 		vcpu->arch.apic->sipi_vector = events->sipi_vector;
+ 
+ 	if (events->flags & KVM_VCPUEVENT_VALID_SMM) {
++		if (!IS_ENABLED(CONFIG_KVM_SMM) &&
++		    (events->smi.smm ||
++		     events->smi.pending ||
++		     events->smi.smm_inside_nmi))
++			return -EINVAL;
++
+ 		if (!!(vcpu->arch.hflags & HF_SMM_MASK) != events->smi.smm) {
+ 			kvm_x86_ops.nested_ops->leave_nested(vcpu);
+ 			kvm_smm_changed(vcpu, events->smi.smm);
+@@ -8109,12 +8118,20 @@ static void emulator_exiting_smm(struct x86_emulate_ctxt *ctxt)
+ {
+ 	struct kvm_vcpu *vcpu = emul_to_vcpu(ctxt);
+ 
++	if (!IS_ENABLED(CONFIG_KVM_SMM)) {
++		WARN_ON_ONCE(1);
++		return;
++	}
+ 	kvm_smm_changed(vcpu, false);
+ }
+ 
+ static int emulator_leave_smm(struct x86_emulate_ctxt *ctxt,
+ 				  const char *smstate)
+ {
++	if (!IS_ENABLED(CONFIG_KVM_SMM)) {
++		WARN_ON_ONCE(1);
++		return 0;
++	}
+ 	return static_call(kvm_x86_leave_smm)(emul_to_vcpu(ctxt), smstate);
+ }
+ 
+@@ -10162,6 +10179,11 @@ static void enter_smm(struct kvm_vcpu *vcpu)
+ 	unsigned long cr0;
+ 	char buf[512];
+ 
++	if (!IS_ENABLED(CONFIG_KVM_SMM)) {
++		WARN_ON_ONCE(1);
++		return;
++	}
++
+ 	memset(buf, 0, 512);
+ #ifdef CONFIG_X86_64
+ 	if (guest_cpuid_has(vcpu, X86_FEATURE_LM))
+@@ -10236,6 +10258,9 @@ static void enter_smm(struct kvm_vcpu *vcpu)
+ 
+ static void process_smi(struct kvm_vcpu *vcpu)
+ {
++	if (!IS_ENABLED(CONFIG_KVM_SMM))
++		return;
++
+ 	vcpu->arch.smi_pending = true;
+ 	kvm_make_request(KVM_REQ_EVENT, vcpu);
+ }
+diff --git a/tools/testing/selftests/kvm/x86_64/smm_test.c b/tools/testing/selftests/kvm/x86_64/smm_test.c
+index 1f136a81858e..cb38a478e1f6 100644
+--- a/tools/testing/selftests/kvm/x86_64/smm_test.c
++++ b/tools/testing/selftests/kvm/x86_64/smm_test.c
+@@ -137,6 +137,8 @@ int main(int argc, char *argv[])
+ 	struct kvm_x86_state *state;
+ 	int stage, stage_reported;
+ 
++	TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_SMM));
++
+ 	/* Create VM */
+ 	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+ 
+-- 
+2.31.1
 
-
-> +/// Contains the C-compatible error codes.
-> +pub mod code {
-> +    /// Out of memory.
-> +    pub const ENOMEM: super::Error = super::Error(-(crate::bindings::ENOMEM as i32));
-> +}
-
-You'll be adding other error values here over time, right?
-
-
-> +/// A [`Result`] with an [`Error`] error type.
-> +///
-> +/// To be used as the return type for functions that may fail.
-> +///
-> +/// # Error codes in C and Rust
-> +///
-> +/// In C, it is common that functions indicate success or failure through
-> +/// their return value; modifying or returning extra data through non-`const`
-> +/// pointer parameters. In particular, in the kernel, functions that may fail
-> +/// typically return an `int` that represents a generic error code. We model
-> +/// those as [`Error`].
-> +///
-> +/// In Rust, it is idiomatic to model functions that may fail as returning
-> +/// a [`Result`]. Since in the kernel many functions return an error code,
-> +/// [`Result`] is a type alias for a [`core::result::Result`] that uses
-> +/// [`Error`] as its error type.
-> +///
-> +/// Note that even if a function does not return anything when it succeeds,
-> +/// it should still be modeled as returning a `Result` rather than
-> +/// just an [`Error`].
-> +pub type Result<T = ()> = core::result::Result<T, Error>;
-
-What about functions that do have return functions of:
-	>= 0 number of bytes read/written/consumed/whatever
-	< 0  error code
-
-Would that use Result or Error as a type?  Or is it best just to not try
-to model that mess in Rust calls? :)
-
-> +macro_rules! pr_info (
-> +    ($($arg:tt)*) => (
-> +        $crate::print_macro!($crate::print::format_strings::INFO, $($arg)*)
-> +    )
-> +);
-
-In the long run, using "raw" print macros like this is usually not the
-thing to do.  Drivers always have a device to reference the message to,
-and other things like filesystems and subsystems have a prefix to use as
-well.
-
-Hopefully not many will use these as-is and we can wrap them properly
-later on.
-
-Then there's the whole dynamic debug stuff, but that's a different
-topic.
-
-Anyway, all looks sane to me, sorry for the noise:
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
