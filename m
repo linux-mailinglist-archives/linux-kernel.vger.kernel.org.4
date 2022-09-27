@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8725ECB05
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049EA5ECB0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232807AbiI0Rh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 13:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
+        id S232781AbiI0RiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 13:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232937AbiI0Rhn (ORCPT
+        with ESMTP id S232909AbiI0Rht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 13:37:43 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08271D6D22
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:37:40 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id h3so11767313lja.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:37:40 -0700 (PDT)
+        Tue, 27 Sep 2022 13:37:49 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09D01D88C2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:37:45 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id j16so16821029lfg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:37:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=S8p9f8npWVzLL+xxIGq+LPGJqP+UsFdvXgAaWjNbjvo=;
-        b=THDBHN6pIuGeaBEKD0wMoXARQ8F4m0R90VgUzZubmiheHf7gXmwYG/G96i2q6R1kQK
-         POqBssWpaUjaoMuLaJ33XOiThEnmBXWb8xbfATOR09R/Nb8TcbrbEst0Q//fw2SfJnZF
-         APYQ6Ar30IHmF7QB8rZKG0DB5U/Q+fD/bKs6HdBlm+XTVC9+7LGRgjsTBclNldGmf87s
-         bOgKXZZySYGGZyMAKKVVw5l6iSn2+uM5W1mM8MY9jA5TcVXyiSWkLH0kcBmB2tojX9Gg
-         zYhiMebsZ6bAAqB3om6AOZyo5mM5WYNYK1dL0NYeW1VfxkmW2SD2JIWKj6jWiHTPVfg6
-         aoVg==
+        bh=vNG4GFYOyMZYbc+jKx0tALJsbLNDTZON3pUsUF82eUM=;
+        b=wxf0tbLQ6jIwn/jH0ZxPwoIGk8LSN1w/QHYQjJpUfjUX6fx5eWSn9rtCl/Z2O26ayB
+         Xh5dENnTec8cxquS0p/u5B9/sQ3/ol+zFt25cWNHY9Gakafzb9iQsxFPAIRoGvgWxm+c
+         yY1jxSwarX0xpUKWUlDuhc4pK5wdJPo5zRc6UHNWG8nvnGr/qJnu4AfrV6g//j7v0i1J
+         WFVilfE8Nstw4MplqDTiP5uPD5rj1If2nGgJSKMGSU04Xd5GTqCxhMQ/h56jBykur71j
+         ju6qQ3Jr42Jesen+0ZzcFNLkpTLC8uTnx9DE7yLqTWGm6wS8txwY/dIc/x0Ds/IlnvK+
+         32FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=S8p9f8npWVzLL+xxIGq+LPGJqP+UsFdvXgAaWjNbjvo=;
-        b=h4RTgruds2i1u2DtetMWJ3jpOzAsMkAYK9tDwvtGvjBeOJrrjsnvHw8lXGCqwKQsLf
-         nfiNJ8C7KUDkWr3y0GKMUH/ejwRZkj/R8DG5NJ7x7KbZ9/+FIYoUoj8JN1BIi5tYZJ6C
-         I8bq/kJQL98NinaiXejlIM+SaRmFUxM1nVN6EoTTmxRDLdIkNPQnqUim9jtMREC3ki8c
-         wdvVtei4x03Y+rXVLEn3FjP/nqrHsBZ3Am5kJCDqTnZL/fCz/wvjkdVRVT+zKA8Q9VT9
-         bpZek0A96i1ycOamFbJHPrscvighIrgodrN44/+9HtBoXJy+26dWPQmVkTKduJ1lJjh+
-         ajfA==
-X-Gm-Message-State: ACrzQf1vBufAfGQCxcb3Jwea2VGITwy274geG2qcN6HOtBJ3vfXErZmW
-        2CntPpe6DZSz/RTArbtuvpqP8b38DWrp+Q==
-X-Google-Smtp-Source: AMsMyM48zPBDDyrGDHGqAZOF/HrESoIiPpO2ZN6iklFqu+FO0CZxRXGENxTkf9gXDtfmBHsrlkRj5A==
-X-Received: by 2002:a2e:bd12:0:b0:264:7373:3668 with SMTP id n18-20020a2ebd12000000b0026473733668mr9410022ljq.18.1664300260021;
-        Tue, 27 Sep 2022 10:37:40 -0700 (PDT)
+        bh=vNG4GFYOyMZYbc+jKx0tALJsbLNDTZON3pUsUF82eUM=;
+        b=Q4X/XcWM+GU9swFUZpKH+v/Ke38oOVumhgP7TdsFseWr3/4CESimGG7v1SdFVo65+W
+         Xmd5lC+E0ublQx7Pxrm1YEsjU8CxhWl9fwAjmx4m6PdJxuoKaAgfRdMDdOrXTrZotdmf
+         zJ/5EZeMr0GkRgIQg7Z7mFkDfxQZpOa+yZo4F5uMYxPRoiHvj149IvkkiDVTfiGy6tD8
+         d6fQREY4BC0lMMZzxS/CwcWyDh5EzAJ+Kg2kF0oCLwQJB6EpvCIZSr+PFWwo854sRwyV
+         DaDCOYEIyOAwldyyQns52W+4OV04aQxcoWj1CNCq7rJXtZdbBmvw42ydBG4CuTJPC3Q5
+         ojVQ==
+X-Gm-Message-State: ACrzQf0Zf9vB/FwvSap9STOBn/kP26+GSXT9JlHOmmKoo5mjbRSrsk23
+        dVk4oPbrX8l/1ZhA4tc61QOmNg==
+X-Google-Smtp-Source: AMsMyM7cSK0KTT3e52vosNnCkgmd3vFc1g8GePRWvtQ3WBE+YJxlZ1ES3MFXaGKHNwUQlFS93y2hNA==
+X-Received: by 2002:ac2:4c30:0:b0:49f:53dc:324d with SMTP id u16-20020ac24c30000000b0049f53dc324dmr11961235lfq.395.1664300265372;
+        Tue, 27 Sep 2022 10:37:45 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q12-20020ac246ec000000b00498f570aef2sm218879lfo.209.2022.09.27.10.37.29
+        by smtp.gmail.com with ESMTPSA id q12-20020ac246ec000000b00498f570aef2sm218879lfo.209.2022.09.27.10.37.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 10:37:35 -0700 (PDT)
+        Tue, 27 Sep 2022 10:37:42 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -64,9 +64,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 06/34] ARM: dts: qcom: msm8974: align TLMM pin configuration with DT schema
-Date:   Tue, 27 Sep 2022 19:36:34 +0200
-Message-Id: <20220927173702.5200-7-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 07/34] dt-bindings: pinctrl: qcom,tlmm-common: add common check for function
+Date:   Tue, 27 Sep 2022 19:36:35 +0200
+Message-Id: <20220927173702.5200-8-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220927173702.5200-1-krzysztof.kozlowski@linaro.org>
 References: <20220927173702.5200-1-krzysztof.kozlowski@linaro.org>
@@ -82,113 +82,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DT schema expects TLMM pin configuration nodes to be named with
-'-state' suffix and their optional children with '-pins' suffix.
+Certain pins, like SDcard related, do not have functions and such should
+not be required.  Add a check for this in common Qualcomm TLMM pin
+controller schema.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 ---
- .../qcom-msm8974-lge-nexus5-hammerhead.dts    | 30 +++++++++----------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ .../bindings/pinctrl/qcom,tlmm-common.yaml    | 20 +++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-index 6daceaa87802..8138f37233aa 100644
---- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-@@ -573,43 +573,43 @@ bcrmf@1 {
- };
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
+index c88c8dcb69d9..e1354f0c64f8 100644
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
+@@ -65,10 +65,6 @@ additionalProperties: true
  
- &tlmm {
--	sdc1_on: sdc1-on {
--		clk {
-+	sdc1_on: sdc1-on-state {
-+		clk-pins {
- 			pins = "sdc1_clk";
- 			drive-strength = <16>;
- 			bias-disable;
- 		};
+ $defs:
+   qcom-tlmm-state:
+-    allOf:
+-      - $ref: pincfg-node.yaml#
+-      - $ref: pinmux-node.yaml#
+-
+     properties:
+       drive-strength:
+         enum: [2, 4, 6, 8, 10, 12, 14, 16]
+@@ -82,5 +78,21 @@ $defs:
+       output-high: true
+       output-low: true
  
--		cmd-data {
-+		cmd-data-pins {
- 			pins = "sdc1_cmd", "sdc1_data";
- 			drive-strength = <10>;
- 			bias-pull-up;
- 		};
- 	};
- 
--	sdc2_on: sdc2-on {
--		clk {
-+	sdc2_on: sdc2-on-state {
-+		clk-pins {
- 			pins = "sdc2_clk";
- 			drive-strength = <6>;
- 			bias-disable;
- 		};
- 
--		cmd-data {
-+		cmd-data-pins {
- 			pins = "sdc2_cmd", "sdc2_data";
- 			drive-strength = <6>;
- 			bias-pull-up;
- 		};
- 	};
- 
--	mpu6515_pin: mpu6515 {
-+	mpu6515_pin: mpu6515-state {
- 		pins = "gpio73";
- 		function = "gpio";
- 		bias-disable;
- 		input-enable;
- 	};
- 
--	touch_pin: touch {
--		int {
-+	touch_pin: touch-state {
-+		int-pins {
- 			pins = "gpio5";
- 			function = "gpio";
- 
-@@ -618,7 +618,7 @@ int {
- 			input-enable;
- 		};
- 
--		reset {
-+		reset-pins {
- 			pins = "gpio8";
- 			function = "gpio";
- 
-@@ -627,25 +627,25 @@ reset {
- 		};
- 	};
- 
--	panel_pin: panel {
-+	panel_pin: panel-state {
- 		pins = "gpio12";
- 		function = "mdp_vsync";
- 		drive-strength = <2>;
- 		bias-disable;
- 	};
- 
--	bt_pin: bt {
--		hostwake {
-+	bt_pin: bt-state {
-+		hostwake-pins {
- 			pins = "gpio42";
- 			function = "gpio";
- 		};
- 
--		devwake {
-+		devwake-pins {
- 			pins = "gpio62";
- 			function = "gpio";
- 		};
- 
--		shutdown {
-+		shutdown-pins {
- 			pins = "gpio41";
- 			function = "gpio";
- 		};
++    allOf:
++      - $ref: pincfg-node.yaml#
++      - $ref: pinmux-node.yaml#
++
++      - if:
++          properties:
++            pins:
++              items:
++                pattern: "^gpio"
++        then:
++          required:
++            - function
++        else:
++          properties:
++            function: false
++
+     additionalProperties: true
+ ...
 -- 
 2.34.1
 
