@@ -2,90 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1ECB5ECA2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E84245ECBA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbiI0Qyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S233412AbiI0Ruf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 13:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233065AbiI0QyV (ORCPT
+        with ESMTP id S233281AbiI0RuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:54:21 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7153F1B86BD;
-        Tue, 27 Sep 2022 09:52:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664297577; x=1695833577;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=5EohTMYLQrkXaT2jLZUdyETCAEaqtVx4zyPwhafHKa0=;
-  b=a5mJxHmR3wr6zzQiTcRVdKWaQYwc1zofj8QrK2TgnQrbrpQZ6AysN+Rm
-   CaqVIme/3FFE7S1wkFDNWfUjLe/YbwJXk1ZyyUjd8MwlC0iAvecyY63/Z
-   yoXEHCaMIrVn41/wD58laQSuUQVdXceZYUDFKi6JPM2h4cIqJTHsrv93M
-   Q1Q9c3Bo98ORZOi4VJgZHwe78bJhikAFJwOJG6j2sy7e8JALytsFlT7E/
-   vTJspsR37zLAo65FQz1es0bf2cjEAazyMwiOImCwCDMNqFBtRZZvTpgeW
-   xAL16DZB735i2UFJ5hK4d89CuqvOxaF7DIL19dRjJwj4i8C7ECN9jV64i
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="302278841"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="302278841"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 09:52:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="572713090"
-X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="572713090"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga003.jf.intel.com with ESMTP; 27 Sep 2022 09:52:40 -0700
-Received: from [10.252.215.51] (kliang2-mobl1.ccr.corp.intel.com [10.252.215.51])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id AE3615808F0;
-        Tue, 27 Sep 2022 09:52:38 -0700 (PDT)
-Message-ID: <83db7a22-3cf8-9f5c-5530-894c663ee1fb@linux.intel.com>
-Date:   Tue, 27 Sep 2022 12:52:37 -0400
+        Tue, 27 Sep 2022 13:50:06 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463D5D8265;
+        Tue, 27 Sep 2022 10:49:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1664300955; x=1695836955;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=RPREyKVXMFwCt1bTh0W9wA+KknXBhzmp1n3kVnvwXc0=;
+  b=PiqSEKYsbrqJhiLx5uUdQChSJ3e/VCSnqx3joZybSm4vEK35P+CvZnMx
+   DE2xysdjLzAaNb1U9vhvpisLb23+AwKMEPtKSudoZaOFvrwIGfhrDBtoa
+   J7ZP+hWo0rD8TkaPdxs6dIKq83JvEct9qsn7mDnErOo67dQfWLKMje58b
+   w=;
+X-IronPort-AV: E=Sophos;i="5.93,350,1654560000"; 
+   d="scan'208";a="263752039"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-7d84505d.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 16:53:51 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-7d84505d.us-west-2.amazon.com (Postfix) with ESMTPS id 331E294917;
+        Tue, 27 Sep 2022 16:53:51 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Tue, 27 Sep 2022 16:53:50 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.160.124) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 27 Sep 2022 16:53:48 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <kuniyu@amazon.com>
+CC:     <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
+        <kuba@kernel.org>, <kuni1840@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: [PATCH v1 net 5/5] tcp: Fix data races around icsk->icsk_af_ops.
+Date:   Tue, 27 Sep 2022 09:53:40 -0700
+Message-ID: <20220927165340.36239-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220927164824.36027-1-kuniyu@amazon.com>
+References: <20220927164824.36027-1-kuniyu@amazon.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US
-To:     "Wang, Wei W" <wei.w.wang@intel.com>,
-        Jim Mattson <jmattson@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Li, Xiaoyao" <xiaoyao.li@intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-References: <20220921164521.2858932-1-xiaoyao.li@intel.com>
- <20220921164521.2858932-3-xiaoyao.li@intel.com>
- <175b518c-d202-644e-a3a7-67e877852548@linux.intel.com>
- <DS0PR11MB6373C84139621DC447D3F466DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
- <Yyxke/IO+AP4EWwT@hirez.programming.kicks-ass.net>
- <DS0PR11MB637346E9F224C5330CDEF3BFDC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
- <YyxsnAFYMLn2U9BT@hirez.programming.kicks-ass.net>
- <DS0PR11MB63730A85E00683AB7F6F3E26DC4E9@DS0PR11MB6373.namprd11.prod.outlook.com>
- <62d4bec1-a0c3-3b01-61bb-f284eede6378@linux.intel.com>
- <CALMp9eTG7EbRv_fnQpDMQ3YUjYANgu=6QwVj_ACgHnK-Mhk39Q@mail.gmail.com>
- <e1327377-8e82-56a2-25e5-2ba91f2eec42@linux.intel.com>
- <DS0PR11MB63730CE4DAE000E338F092A0DC559@DS0PR11MB6373.namprd11.prod.outlook.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-Subject: Re: [RFC PATCH v2 2/3] perf/x86/intel/pt: Introduce and export
- pt_get_curr_event()
-In-Reply-To: <DS0PR11MB63730CE4DAE000E338F092A0DC559@DS0PR11MB6373.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.160.124]
+X-ClientProxiedBy: EX13D23UWA002.ant.amazon.com (10.43.160.40) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,38 +67,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+Date:   Tue, 27 Sep 2022 09:48:24 -0700
+> From:   Eric Dumazet <edumazet@google.com>
+> Date:   Tue, 27 Sep 2022 09:39:37 -0700
+> > On Tue, Sep 27, 2022 at 9:33 AM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+> > >
+> > > IPV6_ADDRFORM changes icsk->icsk_af_ops under lock_sock(), but
+> > > tcp_(get|set)sockopt() read it locklessly.  To avoid load/store
+> > > tearing, we need to add READ_ONCE() and WRITE_ONCE() for the reads
+> > > and write.
+> > 
+> > I am pretty sure I have released a syzkaller bug recently with this issue.
+> > Have you seen this?
+> > If yes, please include the appropriate syzbot tag.
+
+Are you mentioning this commit ?
+
+086d49058cd8 ("ipv6: annotate some data-races around sk->sk_prot")
+
+Then, yes, I'll add syzbot tags to patch 4 and 5.
 
 
-On 2022-09-27 10:27 a.m., Wang, Wei W wrote:
-> On Tuesday, September 27, 2022 2:09 AM, Liang, Kan wrote:
->> From my understanding of the host-guest mode, the host PT event never
->> traces the guest no matter whether the guest enables PT. So when VM-entry,
->> there is only a guest PT event or no event. If so, I think the perf tool should
->> warn the user if they try to create a host event with !exclude_guest, since the
->> host event never traces a guest.
 > 
-> Probably not from the perf side. It's actually an issue of the KVM's pt_mode:
-> How can KVM prevent host from profiling the guest when in host-guest mode?
-
-I don't think it's KVM's job to prevent host from profiling the guest.
-However, the current KVM implementation implicitly disables the guest
-profiling from the host. If I understand correct, this patch series just
-change it to an explicit way (Just for kernel. Perf tool still doesn't
-know about it.). There is no substantial change.
-
-I think it should be PT driver who decide which event should be
-scheduled. So the first step is to let the PT driver understand the
-host-guest mode. Then if a perf user in the host tries to profile with
-!exclude_guest with the host-guest mode, the pt driver can deny the
-request. The perf tool than throw a warning, e.g., "The VMM is running
-with host-guest mode. Perf cannot profile guest. Please remove the guest
-profiling setting or switch to the host-only mode.".
-
-> Just a warning from the perf side wouldn't be enough. I think that's a wrong
-> assumption from KVM side. I had a plan to fix this one. Exposing the host event
-> can tell KVM if the host is profiling the guest or not (i.e. host-guest is allowed).
-
-I don't think KVM should know such information.
-
-Thanks,
-Kan
+> No, I haven't.
+> Could you provide the URL?
+> I'm happy to include the syzbot tag and KCSAN report in the changelog.
+> 
+> 
+> > > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> > > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > > ---
+> > >  net/ipv4/tcp.c           | 10 ++++++----
+> > >  net/ipv6/ipv6_sockglue.c |  3 ++-
+> > >  2 files changed, 8 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> > > index e373dde1f46f..c86dd0ccef5b 100644
+> > > --- a/net/ipv4/tcp.c
+> > > +++ b/net/ipv4/tcp.c
+> > > @@ -3795,8 +3795,9 @@ int tcp_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
+> > >         const struct inet_connection_sock *icsk = inet_csk(sk);
+> > >
+> > >         if (level != SOL_TCP)
+> > > -               return icsk->icsk_af_ops->setsockopt(sk, level, optname,
+> > > -                                                    optval, optlen);
+> > > +               /* IPV6_ADDRFORM can change icsk->icsk_af_ops under us. */
+> > > +               return READ_ONCE(icsk->icsk_af_ops)->setsockopt(sk, level, optname,
+> > > +                                                               optval, optlen);
+> > >         return do_tcp_setsockopt(sk, level, optname, optval, optlen);
+> > >  }
+> > >  EXPORT_SYMBOL(tcp_setsockopt);
+> > > @@ -4394,8 +4395,9 @@ int tcp_getsockopt(struct sock *sk, int level, int optname, char __user *optval,
+> > >         struct inet_connection_sock *icsk = inet_csk(sk);
+> > >
+> > >         if (level != SOL_TCP)
+> > > -               return icsk->icsk_af_ops->getsockopt(sk, level, optname,
+> > > -                                                    optval, optlen);
+> > > +               /* IPV6_ADDRFORM can change icsk->icsk_af_ops under us. */
+> > > +               return READ_ONCE(icsk->icsk_af_ops)->getsockopt(sk, level, optname,
+> > > +                                                               optval, optlen);
+> > >         return do_tcp_getsockopt(sk, level, optname, optval, optlen);
+> > >  }
+> > >  EXPORT_SYMBOL(tcp_getsockopt);
+> > > diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
+> > > index a89db5872dc3..726d95859898 100644
+> > > --- a/net/ipv6/ipv6_sockglue.c
+> > > +++ b/net/ipv6/ipv6_sockglue.c
+> > > @@ -479,7 +479,8 @@ static int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
+> > >
+> > >                                 /* Paired with READ_ONCE(sk->sk_prot) in inet6_stream_ops */
+> > >                                 WRITE_ONCE(sk->sk_prot, &tcp_prot);
+> > > -                               icsk->icsk_af_ops = &ipv4_specific;
+> > > +                               /* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
+> > > +                               WRITE_ONCE(icsk->icsk_af_ops, &ipv4_specific);
+> > >                                 sk->sk_socket->ops = &inet_stream_ops;
+> > >                                 sk->sk_family = PF_INET;
+> > >                                 tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
+> > > --
+> > > 2.30.2
+> > >
