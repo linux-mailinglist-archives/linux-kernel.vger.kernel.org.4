@@ -2,87 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4665EC8DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BFC5EC8F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232745AbiI0QCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
+        id S232708AbiI0QD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232218AbiI0QBh (ORCPT
+        with ESMTP id S232640AbiI0QDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:01:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC01918B4BE
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:01:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 493F961A85
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 16:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24407C433D6;
-        Tue, 27 Sep 2022 16:01:36 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1odD2k-00G2su-1n;
-        Tue, 27 Sep 2022 12:02:46 -0400
-Message-ID: <20220927160246.094153309@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Tue, 27 Sep 2022 12:02:26 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        <mingo@redhat.com>, <tglx@linutronix.de>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <mhiramat@kernel.org>, <peterz@infradead.org>, <ast@kernel.org>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>
-Subject: [for-next][PATCH 10/20] x86/ftrace: Remove unused modifying_ftrace_code declaration
-References: <20220927160216.349640304@goodmis.org>
+        Tue, 27 Sep 2022 12:03:18 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C691C4320;
+        Tue, 27 Sep 2022 09:02:07 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id b23so8120504iof.2;
+        Tue, 27 Sep 2022 09:02:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ct18v3QfbaOt7CsF6ErcYqFs3nH5VotKpLqZ78HARmQ=;
+        b=no1GeN48oclNXpvXOcJ3XM42s7G74QAfuxJUP2w9C5cuLEt1LA2InXaLu4/g7vE3Ah
+         S/Mc2c6zxeOHl3MQFolYrdx35TehZqB+m2XkqpnZHNqrwi5umGImsOgRLLDhEMmJ6ix5
+         qeuIUdoylQJ7AptS4+1rEN42XUXKncRc/qyo1TFhi6Q0KDwdAtuC5XFm02IRz9f+iAcx
+         sEw/LaTx83SSMgttZk7rB8ivAe4XALo445n5UqTrJu3tSHxpkqdJOl5W6Zc+DO1pRwIo
+         j2fZEMqxdCfiMO3AUliNZDWlSVzAxmAB9lJ4s9GqYvY0EH8pYHJ1JJ0Idmtjb+MQEjmv
+         /mhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ct18v3QfbaOt7CsF6ErcYqFs3nH5VotKpLqZ78HARmQ=;
+        b=z2UIMpPaueuEiTLuA1Ar10i85x2jLdjeMgTFceEvPQ3npAZB8XP3pL97HU9KJEy+yt
+         Xh8OVj72N+wCM46RnJ2whBWPuNdK3uKhMbe3CULbbvP4doP/j4Fmnoa+kKBmGXyf+XEl
+         p0+uiH387tDbLI2t6Sck1pZJvl60ngygq0dn6SLXujt8mNdwutj+d0SYOFjaYSLJgB0G
+         Vs483npUUhwhxjJ78J9L9H4LeiaLvJeKk/KEnSxTELv8NZrm29iGresOlo7J6JBbxXT3
+         TJk1blhFr6JKJFlG+hUWROF+gjwvd+HvINscI0bXxSas/JgwPMiRd12VGolvcG7g2qsA
+         6OLA==
+X-Gm-Message-State: ACrzQf1HUMDV6LMYmReMr0RiDHbPt48RKPAf16dH1NNYcyNB9T/8Z/FW
+        roG8bIMQ4VHYUaBopiXqYxPYSAhRmfLFyQ9iJAo=
+X-Google-Smtp-Source: AMsMyM5odjm/1/sK9Q4u52UeI71zmJgkTDOy0C5e+aZtCOyOTsfGQ3g+oQ5ZaDNDjzLaBsPSyP2gSi2I+7blmm5gF9c=
+X-Received: by 2002:a05:6638:218f:b0:35a:7f20:6a57 with SMTP id
+ s15-20020a056638218f00b0035a7f206a57mr14587401jaj.186.1664294526531; Tue, 27
+ Sep 2022 09:02:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220927131518.30000-1-ojeda@kernel.org> <20220927131518.30000-9-ojeda@kernel.org>
+ <YzL/9mlOHemaey2n@yadro.com> <CANiq72kDPMKd0qLAMVrd2A3n9aAWhh2ps5DvKos58L=_V2-XwQ@mail.gmail.com>
+ <YzMTH1v9yZQcujLa@yadro.com>
+In-Reply-To: <YzMTH1v9yZQcujLa@yadro.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 27 Sep 2022 18:01:55 +0200
+Message-ID: <CANiq72nkiOsAkr4oeBi-ohf12-JjvkQmb67s-G1L87pBS+FEWA@mail.gmail.com>
+Subject: Re: [PATCH v10 08/27] rust: adapt `alloc` crate to the kernel
+To:     Konstantin Shelekhin <k.shelekhin@yadro.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Matthew Bakhtiari <dev@mtbk.me>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gaosheng Cui <cuigaosheng1@huawei.com>
+On Tue, Sep 27, 2022 at 5:13 PM Konstantin Shelekhin
+<k.shelekhin@yadro.com> wrote:
+>
+> Sorry, my bad.
 
-All uses of modifying_ftrace_code have been removed by
-commit 768ae4406a5c ("x86/ftrace: Use text_poke()"),
-so remove the declaration, too.
+No apologies needed! Thanks for taking a look like in v8 and v9 :)
 
-Link: https://lkml.kernel.org/r/20220914110437.1436353-2-cuigaosheng1@huawei.com
-
-Cc: <mingo@redhat.com>
-Cc: <tglx@linutronix.de>
-Cc: <bp@alien8.de>
-Cc: <dave.hansen@linux.intel.com>
-Cc: <x86@kernel.org>
-Cc: <hpa@zytor.com>
-Cc: <mhiramat@kernel.org>
-Cc: <peterz@infradead.org>
-Cc: <ast@kernel.org>
-Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- arch/x86/include/asm/ftrace.h | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
-index b5ef474be858..908d99b127d3 100644
---- a/arch/x86/include/asm/ftrace.h
-+++ b/arch/x86/include/asm/ftrace.h
-@@ -23,7 +23,6 @@
- #define HAVE_FUNCTION_GRAPH_RET_ADDR_PTR
- 
- #ifndef __ASSEMBLY__
--extern atomic_t modifying_ftrace_code;
- extern void __fentry__(void);
- 
- static inline unsigned long ftrace_call_adjust(unsigned long addr)
--- 
-2.35.1
+Cheers,
+Miguel
