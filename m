@@ -2,155 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F037C5EBD86
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 482C05EBD87
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 10:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiI0IhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 04:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S231356AbiI0IhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 04:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbiI0IgL (ORCPT
+        with ESMTP id S231698AbiI0IgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 04:36:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEAD2125C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664267749;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AM7Ag3R1FhhmxAI1wRPUG0RaWTwM4UqjFY6j2yTgwJQ=;
-        b=JrUHYIPVk2MIpY8G3ZUnl5lMwHZmjtj1/79OJp2kLUnSh30ViSiDn807YlQ6FJELQY7Zwv
-        HA7PrgLnxaUEnfi4vbfQbykjdqQJ3TLNWT6YiLT8z6BcKaviuIsOfioI9WA7qkULL7K1Pc
-        t2Z3J4ViKEzgHMS/85JvOdArU3lF4as=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-226-QZHpahRqPdeFiVvdonorsA-1; Tue, 27 Sep 2022 04:35:48 -0400
-X-MC-Unique: QZHpahRqPdeFiVvdonorsA-1
-Received: by mail-qv1-f72.google.com with SMTP id m7-20020a0ce6e7000000b004ad69308f01so5336313qvn.9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 01:35:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=AM7Ag3R1FhhmxAI1wRPUG0RaWTwM4UqjFY6j2yTgwJQ=;
-        b=hanqlulHEaQSGVdAy6dRvomjC0/jLHahhqzvY3m8RcM5zPWta3krPdHX15y9Z+mEWz
-         91VtmvG/kB2Ja8xi/fl5kOoQM0CVa1iHKmJi7w5CB2J3cKnOHRH2sF9DRK8H+QP128ph
-         pEYtoMhzWQr6kNK+nvBIKoRNrJn/vbXpB6X+lkurQ8sISh3e31idqisj0dV9wha7HMIA
-         Gkz7lv59NuyigeoXgF2SuCrrdE/EnQo1m042Ti/n1HGYyIcr8RwiwAl2oDbmarze7j8z
-         07SjRKNXgLex7CfxmWwQqemaL3bhxL7Om22UFodrOUJ3M5MqdixH1RoZ6dJ2XktjGour
-         ioog==
-X-Gm-Message-State: ACrzQf2DHtNy4i5YailT8BSl5038wAOYT392M0tvsvxwqE7f7+Gm2nvB
-        wQpwAux2K4WSaEKQGQ7JRaiygAa7TE6w8lGWHHwolnRu//cI+i17njR52oV6bsPeXrt4HYU8EVV
-        ZO391SNqhJL3/qWp2Tu5Z0Uiq
-X-Received: by 2002:a05:620a:b51:b0:6cf:68b2:d86e with SMTP id x17-20020a05620a0b5100b006cf68b2d86emr16329431qkg.176.1664267747427;
-        Tue, 27 Sep 2022 01:35:47 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5MALcAfa3QgOA5vjMb3lzeNy2EAYRtu/tLCNJjqEezFwM7HOiQUF2wu8EvBKTjJ3BOkTmxCw==
-X-Received: by 2002:a05:620a:b51:b0:6cf:68b2:d86e with SMTP id x17-20020a05620a0b5100b006cf68b2d86emr16329418qkg.176.1664267747218;
-        Tue, 27 Sep 2022 01:35:47 -0700 (PDT)
-Received: from [192.168.149.123] (58.254.164.109.static.wline.lns.sme.cust.swisscom.ch. [109.164.254.58])
-        by smtp.gmail.com with ESMTPSA id f2-20020ac86ec2000000b0035d420c4ba7sm466320qtv.54.2022.09.27.01.35.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 01:35:46 -0700 (PDT)
-Message-ID: <07014070-5186-ca95-7028-82f77612dedd@redhat.com>
-Date:   Tue, 27 Sep 2022 10:35:42 +0200
+        Tue, 27 Sep 2022 04:36:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB31C101E0;
+        Tue, 27 Sep 2022 01:36:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DCCAB80DA6;
+        Tue, 27 Sep 2022 08:36:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2372AC433D6;
+        Tue, 27 Sep 2022 08:36:05 +0000 (UTC)
+Message-ID: <4566e72a-a2a0-fd1a-89a5-66e0331ab672@xs4all.nl>
+Date:   Tue, 27 Sep 2022 10:36:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC PATCH 9/9] kvm_main.c: handle atomic memslot update
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] media: dvb_vb2: fix possible out of bound access
 Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-References: <20220909104506.738478-1-eesposit@redhat.com>
- <20220909104506.738478-10-eesposit@redhat.com>
- <cde8be9d-64c0-80e5-7663-4302d075dcbc@redhat.com>
-From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
-In-Reply-To: <cde8be9d-64c0-80e5-7663-4302d075dcbc@redhat.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     Hangyu Hua <hbh25y@gmail.com>, mchehab@kernel.org,
+        senozhatsky@chromium.org, cai.huoqing@linux.dev,
+        sw0312.kim@samsung.com, satendra.t@samsung.com,
+        jh1009.sung@samsung.com, nenggun.kim@samsung.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220519021743.8295-1-hbh25y@gmail.com>
+ <b4b52911-e135-38b6-ab2e-4580e1ac0302@gmail.com>
+ <5dd713e1-0ad2-f9b3-6dd3-2ee87b329db8@xs4all.nl>
+In-Reply-To: <5dd713e1-0ad2-f9b3-6dd3-2ee87b329db8@xs4all.nl>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Hangyu,
 
-
-Am 27/09/2022 um 09:46 schrieb David Hildenbrand:
-> On 09.09.22 12:45, Emanuele Giuseppe Esposito wrote:
->> When kvm_vm_ioctl_set_memory_region_list() is invoked, we need
->> to make sure that all memslots are updated in the inactive list
->> and then swap (preferreably only once) the lists, so that all
->> changes are visible immediately.
+On 27/09/2022 10:10, Hans Verkuil wrote:
+> On 27/09/2022 04:01, Hangyu Hua wrote:
+>> On 19/5/2022 10:17, Hangyu Hua wrote:
+>>> vb2_core_qbuf and vb2_core_querybuf don't check the range of b->index
+>>> controlled by the user.
+>>>
+>>> Fix this by adding range checking code before using them.
+>>>
+>>> Fixes: 57868acc369a ("media: videobuf2: Add new uAPI for DVB streaming I/O")
+>>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+>>> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+>>> ---
+>>>
+>>> v2:
+>>> 1. fix inappropriate use of dprintk.
+>>> 2. add "fixes" tag
+>>>
+>>>   drivers/media/dvb-core/dvb_vb2.c | 11 +++++++++++
+>>>   1 file changed, 11 insertions(+)
+>>>
+>>> diff --git a/drivers/media/dvb-core/dvb_vb2.c b/drivers/media/dvb-core/dvb_vb2.c
+>>> index a1bd6d9c9223..909df82fed33 100644
+>>> --- a/drivers/media/dvb-core/dvb_vb2.c
+>>> +++ b/drivers/media/dvb-core/dvb_vb2.c
+>>> @@ -354,6 +354,12 @@ int dvb_vb2_reqbufs(struct dvb_vb2_ctx *ctx, struct dmx_requestbuffers *req)
+>>>     int dvb_vb2_querybuf(struct dvb_vb2_ctx *ctx, struct dmx_buffer *b)
+>>>   {
+>>> +    struct vb2_queue *q = &ctx->vb_q;
+>>> +
+>>> +    if (b->index >= q->num_buffers) {
+>>> +        dprintk(1, "[%s] buffer index out of range\n", ctx->name);
+>>> +        return -EINVAL;
+>>> +    }
+>>>       vb2_core_querybuf(&ctx->vb_q, b->index, b);
+>>>       dprintk(3, "[%s] index=%d\n", ctx->name, b->index);
+>>>       return 0;
+>>> @@ -378,8 +384,13 @@ int dvb_vb2_expbuf(struct dvb_vb2_ctx *ctx, struct dmx_exportbuffer *exp)
+>>>     int dvb_vb2_qbuf(struct dvb_vb2_ctx *ctx, struct dmx_buffer *b)
+>>>   {
+>>> +    struct vb2_queue *q = &ctx->vb_q;
+>>>       int ret;
+>>>   +    if (b->index >= q->num_buffers) {
+>>> +        dprintk(1, "[%s] buffer index out of range\n", ctx->name);
+>>> +        return -EINVAL;
+>>> +    }
+>>>       ret = vb2_core_qbuf(&ctx->vb_q, b->index, b, NULL);
+>>>       if (ret) {
+>>>           dprintk(1, "[%s] index=%d errno=%d\n", ctx->name,
 >>
->> The only issue is that DELETE and MOVE need to perform 2 swaps:
->> firstly replace old memslot with invalid, and then remove invalid.
+>> Hi guys,
 >>
+>> Looks like this patch was forgotten to to merge into master branch. This bug still in:
+>> https://git.linuxtv.org/media_tree.git/tree/drivers/media/dvb-core/dvb_vb2.c#n355
+>> and
+>> https://git.linuxtv.org/media_tree.git/tree/drivers/media/dvb-core/dvb_vb2.c#n379
+>>
+>> Thanks,
+>> Hangyu
 > 
-> I'm curious, how would a resize (grow/shrink) or a split be handled?
+> That's weird, it was part of this pull request:
 > 
+> https://patchwork.linuxtv.org/project/linux-media/patch/2eeaad13-091d-6547-cdeb-0a7a15dc5c3f@xs4all.nl/
+> 
+> But none of the patches in that PR ever made it to upstream. Something went very wrong
+> with that PR.
+> 
+> I'm preparing a new pull request.
+> 
+> Thank you very much for notifying me!
 
-There are only 4 operations possible in KVM: KVM_MR_{DELETE, MOVE,
-CREATE, FLAGS_ONLY}.
+Mauro discovered that a small number of patches were never pushed to our git trees,
+and so indeed got lost. They have now been merged. This patch has been really unlucky:
+it took a long time for the original patch to be reviewed, and then the PR itself
+fell through the cracks :-(
 
-A resize should be implemented in QEMU as DELETE+CREATE.
+Again, thank you very much for double checking this!
 
-Therefore a resize on memslot X will be implemented as:
-First pass on the userspace operations:
-	invalidate memslot X;
-	swap_memslot_list(); // NOW it is visible to the guest
+Regards,
 
-What guest sees: memslot X is invalid, so MMU keeps retrying the page fault
-
-Second pass:
-	create new memslot X
-	delete old memslot X
-
-
-What guest sees: memslot X is invalid, so MMU keeps retrying the page fault
-
-Third pass:
-	swap() // 1 for each address space affected
-
-What guest sees: new memslot replacing the old one
-
-
-
-A split is DELETE+CREATE+CREATE, so it's the same:
-
-First pass on the userspace operations:
-	invalidate memslot X;
-	swap_memslot_list(); // NOW it is visible to the guest
-
-What guest sees: memslot X is invalid, so MMU keeps retrying the page fault
-
-Second pass:
-	delete old memslot X
-	create new memslot X1
-	create new memslot X2
-
-What guest sees: memslot X is invalid, so MMU keeps retrying the page fault
-
-Third pass:
-	swap() // 1 for each address space affected
-
-What guest sees: two new memslots replacing the old one
-
+	Hans
