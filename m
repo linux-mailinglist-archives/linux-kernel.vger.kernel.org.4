@@ -2,156 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47E05EC4B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5565EC4B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231829AbiI0Nkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46104 "EHLO
+        id S232818AbiI0Nl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbiI0Nkt (ORCPT
+        with ESMTP id S230517AbiI0NlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:40:49 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB66639BA1;
-        Tue, 27 Sep 2022 06:40:47 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D23086602265;
-        Tue, 27 Sep 2022 14:40:44 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664286045;
-        bh=l0r0ZaX9YZdqDz2RvEUsZ5NEBzsjJi9GrROUQaXEGsQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PJE93JHEO7cWrmml9ztx3rkOfFWah/FwdZGzTfwUIQ2w7hQSt++Kt8QMso/okg+gJ
-         bU35vtHR0wFh8Lni+XwK8+VKqwEelaZex29NnvukvV3iTYn0XzguZq/v4LTKhyINVv
-         mQhq041uL42occFBaGzGJCm/sVnRhFmudSliD1DF0k0kig/AbPS6+3YZ5VE6iPdFO8
-         Msy4Fn8M2FAaAFa/lEV/aTzwJAPPwhDqfCDYoCsRE7i9HlDR96yiUSAvIpH4CqqDI4
-         4/xqVfOI0tHIgLreg0030IY4Em5y5iSM4KrBL19bylYxu4kLPNPGyhgh/shBIvP9YF
-         mT4XwODwKfkZg==
-Message-ID: <6f1deed3-87e5-6d73-74b7-f5123c7f4362@collabora.com>
-Date:   Tue, 27 Sep 2022 15:40:42 +0200
+        Tue, 27 Sep 2022 09:41:21 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F78B7EFC
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:41:18 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id v10-20020a17090a634a00b00205e48cf845so421781pjs.4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:41:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=4pzwYFff+/gp6imXGz+Xr/QW1tSB5Pck/AS91fsmU3k=;
+        b=LePq5aNygaRO4JwWo4786w9RJBPiOvEJaaocpUnMfXBoPwzGPk2aH8F8r0Y192UysC
+         /GVZyqPuEod63zVf/SLGKIbUrkaA1NHkdRx5Ihl8zSriN6TdOCVIqyAOEWdTeu9SEJRm
+         zVlJiU5ca/DSoQoraxCyph66is6b6yPPfVDrIOQX1R2GboUsqZXSN9giX+ystSq6zU+e
+         OpFstFBRjZX66JhUETQen00Nqpf2MnEK2uhahuwX5CrCMMekAjTst7VBZrvM2mOVNWPu
+         +cy5+6fA0vS8uG5yYR50nl8aenZjMrkYrvaFwhjmN9+DYFoG0v9UAN/K7Iu39dqeOnPp
+         SjZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=4pzwYFff+/gp6imXGz+Xr/QW1tSB5Pck/AS91fsmU3k=;
+        b=ebPvqo1kk1z/SPfommx9k9TzP/uPCFPKPtbLUTzYeE/5nzh3YFKCdnmyRl3+ZgtRRv
+         Dd4NCj5gVSDefDfcAIqzw7i0gqMRPaFOcJoujj7yhrByvBLTzPp0P0e2gUjMR865pm1l
+         TkWKPq6ePZOl0WUSKKLZuXRND8w68iFVb91sjMJmptcixJc1Mxh+kdqu4Gz8PFXtDvNH
+         bemU1obDKlhQEby3q610yfJGZrhPFXZ914k5MVZ8b1hlse+a+r+wdEYRrCvAfzDrggdp
+         aTiziwEzpsP48jt0Xzlx3XucoJYM1+rOPs3CLFaoimUOXb0qNdSgEn3+o2PqoCHQjiW1
+         wh4w==
+X-Gm-Message-State: ACrzQf19IdroKkxKampOZHwCYJK1Z0ke+BCG4Q/dN+1eWIjsmpYS1+XE
+        dyr4b6sec5BtXqIbEt/1fY12vQ==
+X-Google-Smtp-Source: AMsMyM77LunLFCmKosQx6Onu7WC4eGvOAvGGQe2jOricoTl6inaR33JtDw1CPTh3n9Pc1Mv0wYQf5g==
+X-Received: by 2002:a17:90a:3f89:b0:205:a54e:2db8 with SMTP id m9-20020a17090a3f8900b00205a54e2db8mr4622868pjc.36.1664286078324;
+        Tue, 27 Sep 2022 06:41:18 -0700 (PDT)
+Received: from [10.2.223.68] ([61.120.150.77])
+        by smtp.gmail.com with ESMTPSA id n16-20020a634d50000000b0042c0ffa0e62sm1516141pgl.47.2022.09.27.06.41.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 06:41:17 -0700 (PDT)
+Message-ID: <97ac6c82-81a0-2f63-7d8f-e56d702bc874@bytedance.com>
+Date:   Tue, 27 Sep 2022 21:41:09 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 3/5] arm64: dts: mt8186: Add IOMMU and SMI nodes
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.0
+Subject: Re: [External] Re: [PATCH 2/3] PCI/ERR: Clear fatal status in
+ pcie_do_recovery()
 Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Lee Jones <lee@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        hsinyi@chromium.org
-References: <20220923131148.6678-1-allen-kh.cheng@mediatek.com>
- <20220923131148.6678-4-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220923131148.6678-4-allen-kh.cheng@mediatek.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     allenbh@gmail.com, dave.jiang@intel.com,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        linux-pci@vger.kernel.org, jejb@linux.ibm.com, jdmason@kudzu.us,
+        james.smart@broadcom.com, fancer.lancer@gmail.com,
+        linux-kernel@vger.kernel.org, ntb@lists.linux.dev,
+        oohall@gmail.com, bhelgaas@google.com, dick.kennedy@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org
+References: <20220926180906.GA1609498@bhelgaas>
+From:   Zhuo Chen <chenzhuo.1@bytedance.com>
+In-Reply-To: <20220926180906.GA1609498@bhelgaas>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/09/22 15:11, Allen-KH Cheng ha scritto:
-> Add iommu and smi nodes for mt8186 SoC.
+
+
+On 9/27/22 2:09 AM, Bjorn Helgaas wrote:
+> On Mon, Sep 26, 2022 at 10:01:55PM +0800, Zhuo Chen wrote:
+>> On 9/23/22 5:08 AM, Bjorn Helgaas wrote:
+>>> On Fri, Sep 02, 2022 at 02:16:33AM +0800, Zhuo Chen wrote:
+>>>> When state is pci_channel_io_frozen in pcie_do_recovery(),
+>>>> the severity is fatal and fatal status should be cleared.
+>>>> So we add pci_aer_clear_fatal_status().
+>>>
+>>> Seems sensible to me.  Did you find this by code inspection or by
+>>> debugging a problem?  If the latter, it would be nice to mention the
+>>> symptoms of the problem in the commit log.
+>>
+>> I found this by code inspection so I may not enumerate what kind of problems
+>> this code will cause.
+>>>
+>>>> Since pcie_aer_is_native() in pci_aer_clear_fatal_status()
+>>>> and pci_aer_clear_nonfatal_status() contains the function of
+>>>> 'if (host->native_aer || pcie_ports_native)', so we move them
+>>>> out of it.
+>>>
+>>> Wrap commit log to fill 75 columns.
+>>>
+>>>> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+>>>> ---
+>>>>    drivers/pci/pcie/err.c | 8 ++++++--
+>>>>    1 file changed, 6 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
+>>>> index 0c5a143025af..e0a8ade4c3fe 100644
+>>>> --- a/drivers/pci/pcie/err.c
+>>>> +++ b/drivers/pci/pcie/err.c
+>>>> @@ -243,10 +243,14 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+>>>>    	 * it is responsible for clearing this status.  In that case, the
+>>>>    	 * signaling device may not even be visible to the OS.
+>>>>    	 */
+>>>> -	if (host->native_aer || pcie_ports_native) {
+>>>> +	if (host->native_aer || pcie_ports_native)
+>>>>    		pcie_clear_device_status(dev);
+>>>
+>>> pcie_clear_device_status() doesn't check for pcie_aer_is_native()
+>>> internally, but after 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status
+>>> errors only if OS owns AER") and aa344bc8b727 ("PCI/ERR: Clear AER
+>>> status only when we control AER"), both callers check before calling
+>>> it.
+>>>
+>>> I think we should move the check inside pcie_clear_device_status().
+>>> That could be a separate preliminary patch.
+>>>
+>>> There are a couple other places (aer_root_reset() and
+>>> get_port_device_capability()) that do the same check and could be
+>>> changed to use pcie_aer_is_native() instead.  That could be another
+>>> preliminary patch.
+>>>
+>> Good suggestion. But I have only one doubt. In aer_root_reset(), if we use
+>> "if (pcie_aer_is_native(dev) && aer)", when dev->aer_cap
+>> is NULL and root->aer_cap is not NULL, pcie_aer_is_native() will return
+>> false. It's different from just using "(host->native_aer ||
+>> pcie_ports_native)".
+>> Or if we can use "if (pcie_aer_is_native(root))", at this time a NULL
+>> pointer check should be added in pcie_aer_is_native() because root may be
+>> NULL.
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8186.dtsi | 173 +++++++++++++++++++++++
->   1 file changed, 173 insertions(+)
+> Good point.  In aer_root_reset(), we're updating Root Port registers,
+> so I think they should look like:
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> index 833e7037fe22..68f06bef88f3 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> @@ -7,6 +7,7 @@
->   #include <dt-bindings/clock/mt8186-clk.h>
->   #include <dt-bindings/interrupt-controller/arm-gic.h>
->   #include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/memory/mt8186-memory-port.h>
->   #include <dt-bindings/pinctrl/mt8186-pinfunc.h>
->   #include <dt-bindings/power/mt8186-power.h>
->   #include <dt-bindings/phy/phy.h>
-> @@ -944,24 +945,113 @@
->   			#reset-cells = <1>;
->   		};
->   
-> +		smi_common: smi@14002000 {
-> +			compatible = "mediatek,mt8186-smi-common";
-> +			reg = <0 0x14002000 0 0x1000>;
-> +			clocks = <&mmsys CLK_MM_SMI_COMMON>, <&mmsys CLK_MM_SMI_COMMON>,
-> +				 <&mmsys CLK_MM_SMI_GALS>, <&mmsys CLK_MM_SMI_GALS>;
-> +			clock-names = "apb", "smi", "gals0", "gals1";
-> +			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
-> +		};
-> +
-> +		larb0: smi@14003000 {
-> +			compatible = "mediatek,mt8186-smi-larb";
-> +			reg = <0 0x14003000 0 0x1000>;
-> +			mediatek,larb-id = <0>;
-> +			mediatek,smi = <&smi_common>;
+>    if (pcie_aer_is_native(root) && aer) {
+>      ...
+>    }
+> 
+> Does that seem safe and equivalent to you?
+> 
+> Bjorn
 
-Order by name after reg please...
-
-compatible
-reg
-clocks
-clock-names
-mediatek,larb-id
-mediatek,smi
-power-domains
-
-> +			clocks = <&mmsys CLK_MM_SMI_COMMON>,
-> +				 <&mmsys CLK_MM_SMI_COMMON>;
-> +			clock-names = "apb", "smi";
-> +			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
-> +		};
-> +
-> +		larb1: smi@14004000 {
-> +			compatible = "mediatek,mt8186-smi-larb";
-> +			reg = <0 0x14004000 0 0x1000>;
-> +			mediatek,larb-id = <1>;
-> +			mediatek,smi = <&smi_common>;
-> +			clocks = <&mmsys CLK_MM_SMI_COMMON>,
-> +				 <&mmsys CLK_MM_SMI_COMMON>;
-> +			clock-names = "apb", "smi";
-> +			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
-> +		};
-> +
-> +		iommu_mm: iommu@14016000 {
-> +			compatible = "mediatek,mt8186-iommu-mm";
-> +			reg = <0 0x14016000 0 0x1000>;
-> +			mediatek,larbs = <&larb0 &larb1 &larb2 &larb4
-> +					  &larb7 &larb8 &larb9 &larb11
-> +					  &larb13 &larb14 &larb16 &larb17
-> +					  &larb19 &larb20>;
-> +			interrupts = <GIC_SPI 313 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks = <&mmsys CLK_MM_SMI_IOMMU>;
-> +			clock-names = "bclk";
-
-clocks
-clock-names
-interrupts
-mediatek,larbs
-power-domains
-
-...etc :-)
-
-P.S.: Same comment for the other commits, too!
-
-Regards,
-Angelo
+I think ‘if (aer && pcie_aer_is_native(root))’ might be safer,
+because when root is NULL, 'aer' will be NUll as well, and the
+predicate will return false without entering pcie_aer_is_native(root).
 
 
+-- 
+Thanks,
+Zhuo Chen
