@@ -2,151 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E0C5EC04E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 797CB5EC050
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbiI0LCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
+        id S230243AbiI0LCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbiI0LBt (ORCPT
+        with ESMTP id S231860AbiI0LCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:01:49 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2025E642;
-        Tue, 27 Sep 2022 04:01:14 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 27 Sep 2022 07:02:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39B572ED2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:01:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664276489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3xgDb8D/3EHICRWKuyfoBAlGnicVQATCL19Alr25P2c=;
+        b=N2JjCpsbwMVdqxLgpGh5QveNw4DK0sWCZphk8G5c77P+A62rtyPjYqWWmNOwzubor19mm7
+        lPiEQ6KncO3bOi9Usv4fgalatxFsOWD4yguM9NSCIXE8mqaB1nOBgVoTglnP/9UVR3JnaF
+        IeXj/KKN0A4tV/ciUGh7LatujKGj3QI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-vgVRod4zOGm8GofJPuq0Hg-1; Tue, 27 Sep 2022 07:01:25 -0400
+X-MC-Unique: vgVRod4zOGm8GofJPuq0Hg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 043BA6601F41;
-        Tue, 27 Sep 2022 12:01:11 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664276472;
-        bh=RDWtY7wqaihCFtmoFWJVug40U4Jv115kYvwmjRDansY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gH87XogzsxK7TVCFj4qUFTrougqAFQMRPxlw9tr08UzMtOqb5qAkQs3VNiTHLPzTl
-         CXck085FzbMkt1n8p97aeHMkhILghLYnxGuqy4My1+mEg4R4TjfktwnPJadZQd96JN
-         S9VxJDQ3RaW7sovH/daruwR7wvcucICZRKBZJSluqda+sXCuW3NBY/RE5VLlkHXtmi
-         NehuyuOiri8hiw9Qbr206d1IiSRW6mlvFoTGY8HCMYfTblLb2IzVVwdwJNFTWLmoHe
-         XQrWPLwBZw3Gq5ZqNZRcymZ4uexQ1fx4yz8pbDSKTzfi082JGa983swS6+A9aQ2iD3
-         HfH2wshC9bung==
-Message-ID: <cbed65b6-bd7c-b750-ac8e-504fe143a804@collabora.com>
-Date:   Tue, 27 Sep 2022 13:01:09 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 583E0800186;
+        Tue, 27 Sep 2022 11:01:25 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.194.14])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F2D58C15BAB;
+        Tue, 27 Sep 2022 11:01:21 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mike Rapoport <rppt@kernel.org>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>
+Subject: [PATCH v1 0/7] selftests/vm: test COW handling of anonymous memory
+Date:   Tue, 27 Sep 2022 13:01:13 +0200
+Message-Id: <20220927110120.106906-1-david@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 03/11] arm64: dts: mt8195: Add SCP core 1 node
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-References: <20220927025606.26673-1-tinghan.shen@mediatek.com>
- <20220927025606.26673-4-tinghan.shen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220927025606.26673-4-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/09/22 04:55, Tinghan Shen ha scritto:
-> Add the 2nd core(core 1) of MT8195 dual-core SCP to devicetree file.
-> Reserve some SRAM spaces for the core 1 image.
-> 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 14 +++++++++++++-
->   1 file changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index 905d1a90b406..48d457bd39b8 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -760,12 +760,24 @@
->   
->   		scp: scp@10500000 {
->   			compatible = "mediatek,mt8195-scp";
-> -			reg = <0 0x10500000 0 0x100000>,
-> +			reg = <0 0x10500000 0 0xa0000>,
->   			      <0 0x10720000 0 0xe0000>,
->   			      <0 0x10700000 0 0x8000>;
->   			reg-names = "sram", "cfg", "l1tcm";
->   			interrupts = <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH 0>;
->   			status = "disabled";
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x105a0000 0 0x105a0000 0x20000>;
-> +
-> +			scp_c1: scp-c1@105a0000 {
-> +				compatible = "mediatek,mt8195-scp-core";
-> +				reg = <0x105a0000 0x20000>;
-> +				reg-names = "sram";
-> +				interrupts = <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH 0>;
-> +				status = "disabled";
-> +			};
+On top of mm-stable.
 
-I think that the best way of describing a dual-core SCP in devicetree would
-be either something like:
+This is my current set of tests for testing COW handling of anonymous
+memory, especially when interacting with GUP. I developed these tests
+while working on PageAnonExclusive and managed to clean them up just now.
 
-scp: scp@10500000 {
-	compatible = "mediatek,mt8195-scp";
-	reg = <0 0x10500000 0 0xa0000>, <0 0x105a0000 0 0x20000>,
-	      <0 0x10720000 0 0xe0000>, <0 0x10700000 0 0x8000>;
-	reg-names = "sram", "sram-c1", "cfg", "l1tcm";
-	interrupts = <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH 0>,
-		     <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH 0>;
-	status = "disabled";
-};
+On current upstream Linux, all tests pass except the hugetlb tests that
+rely on vmsplice -- these tests should pass as soon as vmsplice properly
+uses FOLL_PIN instead of FOLL_GET.
 
-...but that may pose an issue when trying to assign different (or more instances
-of the same) subnode(s) to each core... for which, I'd be more for something like:
+I'm working on additional tests for COW handling in private mappings,
+focusing on long-term R/O pinning e.g., of the shared zeropage, pagecache
+pages and KSM pages. These tests, however, will go into a different file.
+So this is everything I have regarding tests for anonymous memory.
 
-scp: scp@10500000 {
-	compatible = "mediatek,mt8195-scp";
-	reg = <0 0x10720000 0 0xe0000>, <0 0x10700000 0 0x8000>;
-	reg-names = "cfg", "l1tcm";
-	#address-cells = <1>;
-	#size-cells = <1>;
-	ranges = <0 0 0x10500000 0x100000>;
-	status = "disabled";
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Nadav Amit <namit@vmware.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Mike Rapoport <rppt@kernel.org>
+Cc: Christoph von Recklinghausen <crecklin@redhat.com>
+Cc: Don Dutile <ddutile@redhat.com>
 
-	scp_c0: scp-core@0 {
-		compatible = "mediatek,mt8195-scp-core";
-		reg = <0x0 0xa0000>;
-		reg-names = "sram";
-		interrupts = <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH 0>;
-	};
+David Hildenbrand (7):
+  selftests/vm: anon_cow: test COW handling of anonymous memory
+  selftests/vm: factor out pagemap_is_populated() into vm_util
+  selftests/vm: anon_cow: THP tests
+  selftests/vm: anon_cow: hugetlb tests
+  selftests/vm: anon_cow: add liburing test cases
+  mm/gup_test: start/stop/read functionality for PIN LONGTERM test
+  selftests/vm: anon_cow: add R/O longterm tests via gup_test
 
-	scp_c1: scp-core@a0000 {
-		compatible = "mediatek,mt8195-scp-core";
-		reg = <0xa0000 0x20000>;
-		reg-names = "sram";
-		interrupts = <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH 0>;
-	};
-};
+ mm/gup_test.c                              |  140 +++
+ mm/gup_test.h                              |   12 +
+ tools/testing/selftests/vm/.gitignore      |    1 +
+ tools/testing/selftests/vm/Makefile        |   25 +-
+ tools/testing/selftests/vm/anon_cow.c      | 1126 ++++++++++++++++++++
+ tools/testing/selftests/vm/check_config.sh |   31 +
+ tools/testing/selftests/vm/madv_populate.c |    8 -
+ tools/testing/selftests/vm/run_vmtests.sh  |    3 +
+ tools/testing/selftests/vm/vm_util.c       |   15 +
+ tools/testing/selftests/vm/vm_util.h       |    2 +
+ 10 files changed, 1353 insertions(+), 10 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/anon_cow.c
+ create mode 100644 tools/testing/selftests/vm/check_config.sh
 
-Regards,
-Angelo
-
+-- 
+2.37.3
 
