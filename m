@@ -2,118 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C645ECE0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E7D5ECE13
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbiI0UM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 16:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
+        id S233041AbiI0UNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 16:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232608AbiI0ULm (ORCPT
+        with ESMTP id S232589AbiI0UNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 16:11:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17251EAD44;
-        Tue, 27 Sep 2022 13:10:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89EFFB81D31;
-        Tue, 27 Sep 2022 20:10:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67611C433C1;
-        Tue, 27 Sep 2022 20:10:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664309457;
-        bh=GDU6ovrr2pSsr59p7jPLM3pt5taNbU6kNiIARZ8H3GQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XrvUqTAHKWkv4uZMt7yQqOkZwo4yiCI5mC4JZqBAy2Mesg0rtuT3ktMwdAaK21umZ
-         spLn1yRqYEkWBNlQ0BjpLUGgaw6MWEKutoNvDSoXYwmkHxZuNf31UXhrrZ+pAR/GCO
-         EesmMA8ezNMda/GO+fEZrouKsLnI+tlUV6UWaW6e7TTGv9FaxDpwIzbQ3L+REcOhj5
-         YhSJccu3RYB3CTCQYzJslcKe1pVwUHjlwObVfeP9RF5czmsy0iBVNoPUduUfLebyhl
-         Ht5Vl6rxRXb5mASjcA0j7A3Q9rSjy3GYhz6MhkDquTVFq25Co52VafgR2sERA3Vhqj
-         wb1z6DjP4/f8w==
-From:   broonie@kernel.org
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Sep 27
-Date:   Tue, 27 Sep 2022 21:10:53 +0100
-Message-Id: <20220927201053.518736-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 27 Sep 2022 16:13:13 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB181ED6E6;
+        Tue, 27 Sep 2022 13:12:23 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id y2so1202773ede.11;
+        Tue, 27 Sep 2022 13:12:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=ERvPP1DCVp4MiILdBHqOveoWvWBbcTJhOIDbP+BpDP4=;
+        b=fLLNDoKDfemMdsY0bCDH3C1zn23t6tFyKihHht7uqnk7c7dgxatgZ+tdjfiEdUvHzM
+         JoJSEKtlG/aeDzfyPWKEHR8SmcFGk8WjovljYGk6/MdGcV1Bxezr00B+KGJmE7c+5Vmt
+         cz7ZKjD/Fm8xquWRHh31MpPv0bRMGAT8KktiMDbNAKFTeGMp85CMaPS4JiJr8cCBLsXd
+         ibrSSGPuS1oxImWsnLOmpxdlZSBoyYXqdEyt5KS8vukZRXNc2qppchqkUaoCn/g0oS+w
+         J2bN3dELY4KmmZ7Jask+tDKdnKIst0rd21qQg09dqXHTgvf+jX0wHYE/Ih47FG9NWvzY
+         dGRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=ERvPP1DCVp4MiILdBHqOveoWvWBbcTJhOIDbP+BpDP4=;
+        b=KYSL3dKMMAb0qKRhQTH4vCaFdEYdk4kl7SpLinOXsI8NCJUM6iDvuZmC9towh/Bv27
+         DOIoDEde/6QV464TD/+HejARduF1/jea06enXIkY+gu1b+X8cXG3F+fS2l867IEYn3h1
+         u8Iiuqe82K3emiJxrKT+EeV372cdSgevF99Y+BuXofjFj00ySHfKWQ4m2fiusuyTwDn2
+         8r7mFGtXwzDUey2SzsmeL/aQLdk4XMEZo1ccbdnZ0hBJSYqm0nlNkj1eHWjhAcOM5Ncf
+         iFgzYp1r1tExKGutgUo5g3KCfc26pBV9ARiEjykbfZApDw5qaRyuIV1CvTmCn17aSP1o
+         QwSQ==
+X-Gm-Message-State: ACrzQf0E+OdbpweWyv1+wQJeA0JJd0s1BHvrXkxWTI6PEY0bCEXOm38X
+        Pfe1E08arhYBdo4N2bC1eQTUz9YpKQyFFw==
+X-Google-Smtp-Source: AMsMyM5Fkomjs+4IzUYdSSmWO16uQdRL8K9X35JYWpEtVfxAn5hNbbfgtp2q1Ns+0OABUGJG9STXLw==
+X-Received: by 2002:a05:6402:1e96:b0:451:129e:1a2c with SMTP id f22-20020a0564021e9600b00451129e1a2cmr29918017edf.60.1664309541475;
+        Tue, 27 Sep 2022 13:12:21 -0700 (PDT)
+Received: from fedora.. (dh207-96-59.xnet.hr. [88.207.96.59])
+        by smtp.googlemail.com with ESMTPSA id t7-20020a170906a10700b0074136cac2e7sm1267548ejy.81.2022.09.27.13.12.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 13:12:21 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH 1/2] arm64: dts: qcom: ipq6018: fix NAND node name
+Date:   Tue, 27 Sep 2022 22:12:17 +0200
+Message-Id: <20220927201218.1264506-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Per schema it should be nand-controller@79b0000 instead of nand@79b0000.
+Fix it to match nand-controller.yaml requirements.
 
-Changes since 20220923:
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The vfs tree gained a conflict with the ext3 tree.
+diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+index a7c7ca980a71..57978a8ab498 100644
+--- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+@@ -348,7 +348,7 @@ qpic_bam: dma-controller@7984000 {
+ 			status = "disabled";
+ 		};
+ 
+-		qpic_nand: nand@79b0000 {
++		qpic_nand: nand-controller@79b0000 {
+ 			compatible = "qcom,ipq6018-nand";
+ 			reg = <0x0 0x079b0000 0x0 0x10000>;
+ 			#address-cells = <1>;
+-- 
+2.37.3
 
-The bluetooth tree gained conflict with the net tree.
-
-The various DRM trees gained even more conflicts with each other.
-
-The drivers-misc tree gained a conflict against the jc_docs tree.
-
-The drivers-misc tree gained a conflict against the drm tree.
-
-The v4l tree gained a conflict with the v4l-dvb-fixes tree.
-
-The net-next tree gained a conflict against the i2c tree.
-
-The kspp tree gained a conflict against the arm64 tree.
-
-The kspp tree gained a conflict against the arm64-fixes tree.
-
-The kspp tree gained a conflict against the bpf-next tree.
-
-The mm-stable tree gained a conflict against the bitmap tree.
-
-Non-merge commits (relative to Linus' tree): 9849
- 10393 files changed, 558039 insertions(+), 213574 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386,
-arm64, sparc and sparc64 defconfig and htmldocs. And finally, a simple
-boot test of the powerpc pseries_le_defconfig kernel in qemu (with and
-without kvm enabled).
-
-Below is a summary of the state of the merge.
-
-I am currently merging 362 trees (counting Linus' and 100 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
