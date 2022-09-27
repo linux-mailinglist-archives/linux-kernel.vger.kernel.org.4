@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28BFB5ECB2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17805ECB68
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233329AbiI0Rjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 13:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
+        id S233363AbiI0Rlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 13:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233157AbiI0Rix (ORCPT
+        with ESMTP id S233311AbiI0Rko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 13:38:53 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4961F1E2747
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:38:35 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id b23so8341712iof.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:38:35 -0700 (PDT)
+        Tue, 27 Sep 2022 13:40:44 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45531EAD63
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:39:21 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id a3-20020aa795a3000000b0054b94ce7d12so6146266pfk.17
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:39:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=zwWYKbkkIMXnui5gCfkJ00LzKXpPlaBP/wjajc/qT2s=;
-        b=syVso9JR6664/0/8mv5Q0ETYytR/HniKXmKiH3T1jW5szdgBIeR6jrNwGL0FX2LiCm
-         F4PGCPVRtW9j/nghuwf+gEtj2HzOLg+ajhiadpCHFepcUySHBDw2v1zsD7VzKKvJxyo4
-         CL0j58elRqrDEmDWTSJecNQ6lX5TKYckWqFOa9PxrRmeg0dSBR+rT2vYjCYMUkI4txut
-         M0c/TqRHQG+mjav8eL5QgGwTx/qw47Uz3bLYSGQHC8RyeTK0oJq1VjBWksj3kJx9zPFL
-         IIt160iugt34uDrqxE1tX48P9LKN3c+EWbH/SIMBl1Vc4zDimqX1nWXB3R5IU8y84mDc
-         Gymg==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=cfW6P4xnGiNxspv7lrrMAvh03t//Xe+bE5jk10e/JJM=;
+        b=MSoTgMILPkGBRU07gf8JBEFKIFDLnaXWXtCN3H+WjQmKsYag5ts5hPQ2M0enqj/yQ2
+         8I7vvUSntSs9+XWQrzOl8CsjQrN67E5HUd8ML+4SGsEZv/9xZDtGT4yXiEzWkDHDnRDM
+         D3t7J9w3fIcnHnjeUyHEq4ajjzvFkaKzMR9Cc+eQFaxWXii05201jAuJvb6pvuStYRv8
+         HFXJ/IqU4iue+ohAJgzdxqMc6/4hVqXXEK6ym3ZAVDk89I+PMhBOY6QEngjLe1GQHJ9t
+         oq0reFdcRQAbjJUILrpHFQuWibGCFjyitjzaokBDcEZM5DZrn1+rH3JDFEVXUhHNCBNb
+         m8Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=zwWYKbkkIMXnui5gCfkJ00LzKXpPlaBP/wjajc/qT2s=;
-        b=oN4Agqs9aYFGgu2Jlpod71N7eOSiccWc1TfPKe9Wg0VQzdlpDfqAMh6Oc88QZhcKig
-         gVc/1v278HTfgf17nifKQBQ4xouWTHY3UuzWrEw2E+9yLZQLaZELN6Jevp0TeMYkHeAo
-         mJG36XzDu5bokRMF+gE/lijNNerol6IKBaR/v1JPbhf9E1NmkPN8aJ2xiNsUoJuR6ze2
-         fdP6yRYrKP7Lh2vft4OV6xwyvGBuQ2dYzLTWb0mGkk+Ibw7fLbRD68ioQcJJp6C8HXBI
-         NaUvi3oQlbgGnFiq41de84pDIJgDTBlz8l9spav2anyVqlLR632Vel4W9kzcb3mWkXow
-         itaQ==
-X-Gm-Message-State: ACrzQf3WSMozp3AcMOLg6XYXz6NbfoJT5Y8I6jJ+72dHvjFGom0OmEY9
-        1JoFGD2A1VCH7WpakEOEKgTICiRSfcNzMLnaxbCHDT5+YXA=
-X-Google-Smtp-Source: AMsMyM5MfXlfh9YEbgA+gtNnYv11bP83Vk62ySUseMBdKK5z9jeJJNAuT70mC5cTy94LiccSQm6HTh24Cbmndz+QGlU=
-X-Received: by 2002:a05:6638:4184:b0:35a:3eb4:f932 with SMTP id
- az4-20020a056638418400b0035a3eb4f932mr15108246jab.216.1664300314532; Tue, 27
- Sep 2022 10:38:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220927002715.2142353-1-mizhang@google.com> <CAAeT=FwqWkbhFLHvr12A2rYdzZuDJWBti=jKQRargvAb6bKtaA@mail.gmail.com>
-In-Reply-To: <CAAeT=FwqWkbhFLHvr12A2rYdzZuDJWBti=jKQRargvAb6bKtaA@mail.gmail.com>
-From:   Mingwei Zhang <mizhang@google.com>
-Date:   Tue, 27 Sep 2022 10:38:22 -0700
-Message-ID: <CAL715WJsp7zJ-p++TzjxAv5b0cWRKFH-2Tqws1SV34EO16Xp-g@mail.gmail.com>
-Subject: Re: [PATCH] KVM: arm64: Cleanup the __get_fault_info() to take out
- the code that validates HPFAR
-To:     Reiji Watanabe <reijiw@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=cfW6P4xnGiNxspv7lrrMAvh03t//Xe+bE5jk10e/JJM=;
+        b=riS87QrCObVx+Df5v6/eZFNOVTnPcaPQeeKbMRwK2eQ0MZ9mCDhnWRq/5yGJFbMukA
+         3fDdjO2gYmSmknBEOTdgPuNb2xMIgNJoD8wjxbFJn37c9xRff5+8FAoVbpyWza+eBN9c
+         dQFZ9IALnVTa+8SzAdjvk0QmMyxaoiBN5sIJ5rJYCaAT0ES5YpfFtb/G0alqjGF9VHZg
+         aprWt7C+U4ilo0wAiSwq7o2qTdmTwNJB9d6Ibu+TMb7VqsduPX28WaaDkOgrxkh4xWyV
+         P4D4CX53/JZC/qFjpMF41dhJleVrd5bCCE1jS4rDF8QlSqhzVvaGubSBiQdX7fMBw0AJ
+         7sXQ==
+X-Gm-Message-State: ACrzQf26UpdQTaqFCAN0xQWZLbmEgOKRgELHMci2Ib+ANIwkekXLfLUY
+        he1Tfp2gWi7OceQq0d+s6LRF1fDcFfML
+X-Google-Smtp-Source: AMsMyM5bTykP2riCIcy3AsjQ/14S0fAIi5hNV20tr64VRsRWujSKABbvICdiroXEzyOi0TUtcvRAU2+y3BFL
+X-Received: from sgzhang.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3d89])
+ (user=sgzhang job=sendgmr) by 2002:aa7:8d05:0:b0:557:f0c1:6413 with SMTP id
+ j5-20020aa78d05000000b00557f0c16413mr15214598pfe.19.1664300352650; Tue, 27
+ Sep 2022 10:39:12 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 17:38:43 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+Message-ID: <20220927173845.2293378-1-sgzhang@google.com>
+Subject: [PATCH v1 0/2] mtd: mtdoops: change log and erase functions
+From:   Ray Zhang <sgzhang@google.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ray Zhang <sgzhang@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,19 +68,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > +static inline bool __hpfar_is_valid(u64 esr)
->
-> Unlike what the name implies, this function returns true for some
-> cases that HPFAR is not valid (i.e. SEA).  I think the function
-> returns true when KVM doesn't need HPFAR, or when HPFAR is valid.
-> IMHO the name might be a bit misleading, although I don't have
-> a good name for this.  It would be nice to state that in the
-> comment at least.
->
-> Thank you,
-> Reiji
->
+In mtdoops driver, to comply with latest kernel code requirement, change
+printk() to counterpart pr_ functions. When panic function invokes mtdoops,
+call mtd erase function immediately when needed.
 
-Yeah, I agree with you Reiji that the name does not reflect the
-meaning of the function. So I was thinking about other names like
-__translate_hpfar_to_far_needed().
+Ray Zhang (2):
+  mtd: mtdoops: change printk() to counterpart pr_ functions
+  mtd: mtdoops: panic caused mtdoops to call mtd erase function
+    immediately
+
+ drivers/mtd/mtdoops.c | 108 ++++++++++++++++++++++++------------------
+ 1 file changed, 61 insertions(+), 47 deletions(-)
+
+-- 
+2.37.3.998.g577e59143f-goog
+
