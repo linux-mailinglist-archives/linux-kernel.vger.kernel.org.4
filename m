@@ -2,166 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988E85EC010
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 050355EC012
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbiI0KrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 06:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
+        id S230271AbiI0Kr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 06:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiI0KrF (ORCPT
+        with ESMTP id S229851AbiI0KrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 06:47:05 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2041.outbound.protection.outlook.com [40.107.94.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88810100385
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 03:47:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MW0A3w5z+FW97t6XIbWSKW666qWCf/mVigTvU3XkOemQ02xZUrPG/p8RhnIg5TOswPK5pb2xPEReCodUfrjLBzOYLvbcpSSV1pjH9UOIN+rAD2smYYttoZ2SBQ0zLt9lp1VpJMuveZgjITflLRmmi272r/U02BPxzkK1jARyLRgtXohEE/HsQAsqiKMAUWlx3tpfuhWUQf/TtN3V8y46r7KcloEdpLkGXUGQHEBpqvsTTYLntv2igm8635YjBp3kKkhtgBAZKj8jyZndSHvsuBw7OzMVjTkU/2wVuhGcuT6wfyXTxe5PjRjhrMJ3F6Ur3pKg7AmElnEyrvHuhvNTCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=amXKABr1Nd8PhtLNskmC/S5S7YnNmJ6FJ8nvzQH9sMA=;
- b=G8gXx2m7zTy+LPHgpkhWJ4JbHrWrEfQIK5sM0yFAbyGkivlOaOc+GGdZfOSGTJywVT7SuaHg91gW5bABUCrx3sA0XpG5mPFK66zsSJPuRWP/8cOKtU4JeSqHTelNL4yrsiGxK62RDUC1CE3HR8Bw0FVygjz2gc48W4GxjT65FR3tvoLG1rvCQR0OcVTZlLG9/EerC58YoEmGA4/z7Lsy4GMhudURvrrfLGfVelX9R6lemFFkUOXfkQI1CwRGTFOg/fg5AcJoIJYD49Ck7+kVPrEy5n7hCnp7G094k1CI7Ze2vzk1rxqXcdnDE0QH+Tec8B+QkN7cWoKT9U5o8/jwrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=amXKABr1Nd8PhtLNskmC/S5S7YnNmJ6FJ8nvzQH9sMA=;
- b=37H7Vj98eYUOLhlvQw9zN+j8wkY3OISx2lr13lwwdZA5ZvwaNRcp/c4A/o9F6YtPIuxdTNilDctVEYTlq4vZnI8+XFQKebFXfpBRk5bgh94JkltSa30wEI/96bM6mGeb+soZllI7fLVSfi3ZvA8UvMpaybDYXs2LoUqc6/txCys=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from IA1PR12MB6434.namprd12.prod.outlook.com (2603:10b6:208:3ae::10)
- by CH3PR12MB7620.namprd12.prod.outlook.com (2603:10b6:610:150::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.15; Tue, 27 Sep
- 2022 10:46:54 +0000
-Received: from IA1PR12MB6434.namprd12.prod.outlook.com
- ([fe80::9408:8ebe:726a:a001]) by IA1PR12MB6434.namprd12.prod.outlook.com
- ([fe80::9408:8ebe:726a:a001%7]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
- 10:46:54 +0000
-Message-ID: <b9fc8a52-74b5-2f78-fbf6-8b473c6a8a36@amd.com>
-Date:   Tue, 27 Sep 2022 16:16:42 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC 0/6] migrate_pages(): batch TLB flushing
-Content-Language: en-US
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20220921060616.73086-1-ying.huang@intel.com>
- <477e50ab-9045-0ca2-6979-e2dca71be263@amd.com>
- <87bkr6jzmz.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Bharata B Rao <bharata@amd.com>
-In-Reply-To: <87bkr6jzmz.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0052.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:22::27) To IA1PR12MB6434.namprd12.prod.outlook.com
- (2603:10b6:208:3ae::10)
+        Tue, 27 Sep 2022 06:47:24 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2EAAF499;
+        Tue, 27 Sep 2022 03:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664275643; x=1695811643;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hN5Bp4Ggb6Ex76+LvlvoDPaQw1VAn4H/N7W96oY8WEA=;
+  b=KRNWqNv2rufnl21ulUVfpmBTsxOlF9UY+jCy9wYit13EeNaA1Xr4Q3ia
+   5ce7X3wge6A8pUHrcUTG/0TuKklbH0HZYWZs/+YJ/PYk/gjZ65/QVorlm
+   z9uzfmCkwmrE7SKlrWi+8+/vC7W0aNvA20gUaluPLcInOsz62jR8PnUsp
+   mBUsLeCPizE4Kn+M3T1kxcMh8Z7rbpjK9RQvsGfKPDfMxdOtpFr9tCn2P
+   s1Pf3sWWD7t68z3yoCLmOSjKQaCIT2AIa/SfHLAPOdrJIjDuDFKSg/Ju9
+   1Qv3/U9DaEqJBT4J4HB9LIQw03ewpD7TEmlsGeiTUcewu3n9IlGqbEJJs
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="298880282"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="298880282"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 03:47:15 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="572607712"
+X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
+   d="scan'208";a="572607712"
+Received: from aksaxena-mobl2.ger.corp.intel.com ([10.252.60.19])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 03:47:13 -0700
+Date:   Tue, 27 Sep 2022 13:47:12 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>
+cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH v2] serial: Convert serial_rs485 to kernel doc
+Message-ID: <1c401476-8f4d-827c-f8e1-b4853988e2@linux.intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6434:EE_|CH3PR12MB7620:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8246bae2-56c6-4589-1574-08daa075974a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qyyDTWYqDysj+y42hue4VBOHvdhtuJ+/8RkrcbK4cobApSArKeh/7Oxc4+LWlNty6gmhz5jB7EAXDSKda1+6xY4tBDsKW7Wzb79Mjvx358FcLPgKNyE8kO0OtxbDIM3UuQqb3ux00gVRsLnKif7lT3Ui0YP9VAdHAOORre3UwSIhfpa9cCp9pz20wKcSQaPZXHdG7+sSo+ACX5XHk0sEmaXlhgW3zMx6mPXISw/gtveDe8ZmA2OrdyaYCm25UVTDcZ2jFeHl7JxztHP/Wq52zo4nyr75Q6B97NTQFsOoxQXJYR9n6NfkezUJsy8DRUj5CAMasCVk4qBVaYmo5zD5mWApeBYlzHRhqcD75eiBoKX8LKtx5x8TvzgMMtlvJ8G16h2p2tS4Rzu3k5D++4BtB/b5ch56RqaRY+DOZ52EVxlr7aU2ev38AzsUlJHdluxfJ8GYP/Vg3G776KZx2cJmuQgBykKfuB/7KNCC6iY4g1PVWx57IDm4rkRPnHigN0UbcLa893iyDqJKZ3Cj9K690NKX5oki7D+JOACyjUN75kSr9TucgbW7bZ2JAZaqdoduGNZyvp7PtxmwsJ9Y6Tzjk1q6rk2rjkKqUS18A4JmbBCg3CBHWfLSNq5XqBHOK9U7sPTT5mjBuLKg/zDjak289D4h8MMFr/dVoFwD4rYbFmFGVyRRjHQrXloMhjvApw6HSycUU1Rp7WghPt+CUfspOTsf2c2bh5gqqgZVH5Py4H+6MHz4RBjSC7C1yHzUwfgt5OFI2A90vduod6TQPXxGZD6OaY1nDMgB0NruIEc8oqk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6434.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(39860400002)(396003)(346002)(136003)(451199015)(38100700002)(478600001)(31696002)(6512007)(26005)(83380400001)(8936002)(86362001)(2616005)(6486002)(41300700001)(2906002)(5660300002)(36756003)(316002)(186003)(31686004)(54906003)(6916009)(53546011)(6666004)(66556008)(66476007)(4326008)(66946007)(8676002)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bmxMTzhoZFI3RW9JaXpIS2c0QmpoSWUwVHJhanR4ZGQydjNrRTA0YzF4cXZO?=
- =?utf-8?B?OERzNGJWbHdCS203Z3FJVXpySXF1UVIwMmtyT01CRkRPSndxYS9UREFFU0Nx?=
- =?utf-8?B?NXBBclc2aGpIM3VydGNhOS9YcmZTbWJpcHNua1dSNzJEbXU4SVYwSkhPRlBM?=
- =?utf-8?B?K2RsSlZpVjlRMzJhM1pOL21MbStwalVuNWNiNGgra3RnbGNVdXYwSm14TUR2?=
- =?utf-8?B?NGx6eU9xRGdYU1hScm12YVA2ZHlPMVozdHZNSGdybkJsRFI4VHBibzJZbGZP?=
- =?utf-8?B?ckVKWjN0STJUQTE1clRXRHlkR0RxVWFhL0RmM3ZTUmlROXhBYmZjNUs0Wisv?=
- =?utf-8?B?Z01oN1QwSndwUkFtRkR4M3lIWVM4ejFXcUZKZXdyN0dHaHRvQ2tTWitSaDFx?=
- =?utf-8?B?bW5Wd3FUdnpWV0JvZlJEdllrbm1wdWl6RHNMd01yY01oUVI2OGx1RzBMbEhS?=
- =?utf-8?B?OUlSc1RpQk9JMUkxNTNrY2g3Ujg5NUUzZmNRVFZSaTZEVUFxbmp6dzN2eGdP?=
- =?utf-8?B?WGtCRXB6TWk0SHkwcnh2cnVuMnpBdEUyK3pxWE53VCtZVTJTU2tqMGdhRUtq?=
- =?utf-8?B?T29VM2xQeGpUUkhvMGt2cEVhazMrUG9tM3ZkdFppUG1mdnFkdE5qOTNOaDc0?=
- =?utf-8?B?TS9yL0tVcDh0YjExRlZhb3RJeGFqaUI2ZEFqekhBRVI0YnlDMnA3UzZXbHdN?=
- =?utf-8?B?WlBjUGxKUDh1NXN4TFFyZVJEWklLWGkwcGw3eEZibmlvTmd2aW52YlFsa29F?=
- =?utf-8?B?a3FSN21nYVpPNVFwVE1lcU8rUXhhd0RrNVRiT3BKMWJ4ODQyNjVob2RLUTRC?=
- =?utf-8?B?Y0RvVGxSOWYvcUJST1VtbUQ2eDhncnRvZUFxaDVIeVdJUHVWVUxzK2QwbUtZ?=
- =?utf-8?B?MVROdllFYUNUemUwdldEMENYbFJ0UHlhYS9TV1ltV2lxWG9WREZLa1BGOCtX?=
- =?utf-8?B?TGVXZ2cyZ3BrQVY1ck02RWtsTXRiU0JKZU5Uc0RVVlRMWUFHRjkvbitKVzRK?=
- =?utf-8?B?bXg0cXh5N2UxcTkrYUpMZkU2Y2xzMDRKMlZySHk3WDhpVTVHMVZDcFRhQUhZ?=
- =?utf-8?B?US9uVXdBZXhJdUVXNGhIa3p3bk9JcUxiMUtEUjNtdGRpZmsvWkxsYTFlWGVo?=
- =?utf-8?B?bktvVGRBVXNLYlFyaUJKczlRUXFxK3pFRXNuZC9TVmw3RlMzTmh1RTNvRFRX?=
- =?utf-8?B?UFQ0U1NzU1BjMXFIbCt0U2c5dkg0VFZVeDhlb0dRS250a21XT0NJd1BCTm94?=
- =?utf-8?B?ank0dll3Qk4venQ2clRKMGJ0TzA3S2Z2YlBxNEoyQzc5NDZHcTY2cUJzTU9D?=
- =?utf-8?B?SmQxMWNTdVJMMDNXK0VyT05TRmdyY3JJK3pYZ3I1V2xva1c4RnEzdEFyS1JI?=
- =?utf-8?B?eGhjTU5qM3BOYW5TS3BEL3BFUFdSRzZaZ0VYMklKRUhZQWlrdzVzRWExUHBj?=
- =?utf-8?B?WVV0NXFzUUZMbFdyTExQclN2NVRuaDA1QkhRNy9NZnBsQ2RqSk5VTS9ETUJY?=
- =?utf-8?B?eDlDeTEwOXZEdEZoYmJjSkdyTTlkNlJ0Y0ZuL0M4Z0w1R05NU0liSDYyZS81?=
- =?utf-8?B?cXZ0N1RmaHNxVGNzWloyczNWSlJ4TENBcGo3S3F1VVNJRUx0ZitwbEdkUk52?=
- =?utf-8?B?UWdKblNJWGw0RDJpWFc2Znh5WDBaSkVqRHoxRWFqOFB5MXVwMWNEWHQ1d0dV?=
- =?utf-8?B?dTlXaitSYlhQNWZWelVRRSs4ck5lVVFRSjZoamtyTWdBT2VFbE9UWlNseEJP?=
- =?utf-8?B?YTVYWEpEMGRweXVZMml6aldpR2k2N21RVm1XMGswQVF2NEhRMHpsSGRCTkEr?=
- =?utf-8?B?RS8vUmJUaHNydVNqS2gvbGd4T0lTaFdnRTFKN280MVd3OThzV0Q5MWpsRE9h?=
- =?utf-8?B?VWtaeDBhRkhzV213b2NuT3h2WldleTltUTVQRmhCWkdVR3VTN05wUHQyamln?=
- =?utf-8?B?NlFYTjl1NVlVMEZuNHVwSFJJNUdUN3VERHpRSVl1dW5hMW5oRmtZbi9MbVpP?=
- =?utf-8?B?SmRNZVorbEQxN042UEVLT3BkNm9uK3RyeVFzYjYrMVBsL1RkRmhTUWM3ajRH?=
- =?utf-8?B?LzN1MVpaNVFzc3JLSWljVkpPQVN1M0lWSVJLQ084bW5kV0VwMmx6Vk15ay96?=
- =?utf-8?Q?gi+r6ceKGaDrVuR3w+DxFNb1k?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8246bae2-56c6-4589-1574-08daa075974a
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6434.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 10:46:53.9772
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9Q0pd8/Ier515usNJbF6VqytpTOF76rLKKWah89uUF1Dny7+ZERujVVG+szpTy6YGzKeDeA8zRTn+Ly2Yr+B1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7620
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-422374268-1664275636=:2334"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/23/2022 1:22 PM, Huang, Ying wrote:
-> Bharata B Rao <bharata@amd.com> writes:
->>
->> Thanks for the patchset. I find it hitting the following BUG() when
->> running mmtests/autonumabench:
->>
->> kernel BUG at mm/migrate.c:2432!
->>
->> This is BUG_ON(!list_empty(&migratepages)) in migrate_misplaced_page().
-> 
-> Thank you very much for reporting!  I haven't reproduced this yet.  But
-> I will pay special attention to this when develop the next version, even
-> if I cannot reproduce this finally.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-The following change fixes the above reported BUG_ON().
+--8323329-422374268-1664275636=:2334
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index a0de0d9b4d41..c11dd82245e5 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -1197,7 +1197,7 @@ static int migrate_page_unmap(new_page_t get_new_page, free_page_t put_new_page,
-         * references and be restored.
-         */
-        /* restore the page to right list. */
--       if (rc != -EAGAIN)
-+       if (rc == -EAGAIN)
-                 ret = NULL;
+Convert struct serial_rs485 comments to kernel doc format and include
+it into documentation.
+
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+---
+v2:
+- Include serial_rs485 into documentation
+- Add * to multi-line flag descriptions
+
+For reasons unknown to me, the formatting in the flags doesn't produce the
+effect promised by kerneldoc's documentation:
+
+  https://www.kernel.org/doc/html/latest/doc-guide/kernel-doc.html#return-values
+
+
+ Documentation/driver-api/serial/serial-rs485.rst | 13 ++---
+ include/uapi/linux/serial.h                      | 61 ++++++++++++++++--------
+ 2 files changed, 47 insertions(+), 27 deletions(-)
+
+diff --git a/Documentation/driver-api/serial/serial-rs485.rst b/Documentation/driver-api/serial/serial-rs485.rst
+index 6ebad75c74ed..3b3492a60ecc 100644
+--- a/Documentation/driver-api/serial/serial-rs485.rst
++++ b/Documentation/driver-api/serial/serial-rs485.rst
+@@ -29,11 +29,11 @@ RS485 Serial Communications
+ 3. Data Structures Already Available in the Kernel
+ ==================================================
  
-        migrate_page_undo_page(page, page_was_mapped, anon_vma, locked, ret);
+-   The Linux kernel provides the serial_rs485 structure (see [1]) to handle
+-   RS485 communications. This data structure is used to set and configure RS485
++   The Linux kernel provides the serial_rs485 structure to handle RS485
++   communications.  This data structure is used to set and configure RS485
+    parameters in the platform data and in ioctls.
+ 
+-   The device tree can also provide RS485 boot time parameters (see [2]
++   The device tree can also provide RS485 boot time parameters (see [1]
+    for bindings). The driver is in charge of filling this data structure from
+    the values given by the device tree.
+ 
+@@ -47,6 +47,9 @@ RS485 Serial Communications
+    for the uart_port. TIOCGRS485 ioctl can be used to read back the
+    serial_rs485 structure matching to the current configuration.
+ 
++.. kernel-doc:: include/uapi/linux/serial.h
++   :identifiers: serial_rs485
++
+ 4. Usage from user-level
+ ========================
+ 
+@@ -126,6 +129,4 @@ RS485 Serial Communications
+ 6. References
+ =============
+ 
+- [1]	include/uapi/linux/serial.h
+-
+- [2]	Documentation/devicetree/bindings/serial/rs485.txt
++ [1]	Documentation/devicetree/bindings/serial/rs485.txt
+diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
+index cea06924b295..47b09d8c2fe7 100644
+--- a/include/uapi/linux/serial.h
++++ b/include/uapi/linux/serial.h
+@@ -107,37 +107,56 @@ struct serial_icounter_struct {
+ 	int reserved[9];
+ };
+ 
+-/*
++/**
++ * struct serial_rs485 - serial interface for controlling RS485 settings.
++ * @flags:			RS485 feature flags.
++ * @delay_rts_before_send:	Delay before send (milliseconds).
++ * @delay_rts_after_send:	Delay after send (milliseconds).
++ * @addr_recv:			Receive filter for RS485 addressing mode
++ *				(used only when %SER_RS485_ADDR_RECV is set).
++ * @addr_dest:			Destination address for RS485 addressing mode
++ *				(used only when %SER_RS485_ADDR_DEST is set).
++ * @padding0:			Padding (set to zero).
++ * @padding1:			Padding (set to zero).
++ * @padding:			Deprecated, use @padding0 and @padding1 instead.
++ *				Do not use with @addr_recv and @addr_dest (due to
++ *				overlap).
++ *
+  * Serial interface for controlling RS485 settings on chips with suitable
+  * support. Set with TIOCSRS485 and get with TIOCGRS485 if supported by your
+  * platform. The set function returns the new state, with any unsupported bits
+  * reverted appropriately.
++ *
++ * serial_rs485::flags bits are:
++ * * %SER_RS485_ENABLED		- RS485 enabled.
++ * * %SER_RS485_RTS_ON_SEND	- Logical level for RTS pin when sending.
++ * * %SER_RS485_RTS_AFTER_SEND	- Logical level for RTS pin after sent.
++ * * %SER_RS485_RX_DURING_TX	- Full-duplex RS485 line.
++ * * %SER_RS485_TERMINATE_BUS	- Enable bus termination (if supported).
++ * * %SER_RS485_ADDRB		- Enable RS485 addressing mode.
++ * * %SER_RS485_ADDR_RECV	- Receive address filter (enables @addr_recv).
++ * *				  Requires %SER_RS485_ADDRB.
++ * * %SER_RS485_ADDR_DEST	- Destination address (enables @addr_dest).
++ * *				  Requires %SER_RS485_ADDRB.
+  */
+-
+ struct serial_rs485 {
+-	__u32	flags;			/* RS485 feature flags */
+-#define SER_RS485_ENABLED		(1 << 0)	/* If enabled */
+-#define SER_RS485_RTS_ON_SEND		(1 << 1)	/* Logical level for
+-							   RTS pin when
+-							   sending */
+-#define SER_RS485_RTS_AFTER_SEND	(1 << 2)	/* Logical level for
+-							   RTS pin after sent*/
++	__u32	flags;
++#define SER_RS485_ENABLED		(1 << 0)
++#define SER_RS485_RTS_ON_SEND		(1 << 1)
++#define SER_RS485_RTS_AFTER_SEND	(1 << 2)
+ #define SER_RS485_RX_DURING_TX		(1 << 4)
+-#define SER_RS485_TERMINATE_BUS		(1 << 5)	/* Enable bus
+-							   termination
+-							   (if supported) */
+-
+-/* RS-485 addressing mode */
+-#define SER_RS485_ADDRB			(1 << 6)	/* Enable addressing mode */
+-#define SER_RS485_ADDR_RECV		(1 << 7)	/* Receive address filter */
+-#define SER_RS485_ADDR_DEST		(1 << 8)	/* Destination address */
++#define SER_RS485_TERMINATE_BUS		(1 << 5)
++#define SER_RS485_ADDRB			(1 << 6)
++#define SER_RS485_ADDR_RECV		(1 << 7)
++#define SER_RS485_ADDR_DEST		(1 << 8)
+ 
+-	__u32	delay_rts_before_send;	/* Delay before send (milliseconds) */
+-	__u32	delay_rts_after_send;	/* Delay after send (milliseconds) */
++	__u32	delay_rts_before_send;
++	__u32	delay_rts_after_send;
+ 
+-	/* The fields below are defined by flags */
++	/* private: The fields below are defined by flags */
+ 	union {
+-		__u32	padding[5];		/* Memory is cheap, new structs are a pain */
++		/* private: Memory is cheap, new structs are a pain. */
++		__u32	padding[5];
+ 
+ 		struct {
+ 			__u8	addr_recv;
 
-The pages that returned from unmapping stage with -EAGAIN used to
-end up on "ret" list rather than continuing on the "from" list.
-
-Regards,
-Bharata.
+-- 
+tg: (2eb6f6da8b51..) rs485/kdoc (depends on: supported-fix/intro-kernel_serial_rs485_to_user_rs485)
+--8323329-422374268-1664275636=:2334--
