@@ -2,119 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6535ECC77
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 20:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 613ED5ECC7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 20:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiI0S4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 14:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
+        id S231391AbiI0S5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 14:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiI0S4O (ORCPT
+        with ESMTP id S229567AbiI0S5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 14:56:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC249108082;
-        Tue, 27 Sep 2022 11:56:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA5A0B81D16;
-        Tue, 27 Sep 2022 18:56:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B65ADC433D6;
-        Tue, 27 Sep 2022 18:56:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664304970;
-        bh=HGeVjbiYpPP4sCGDrfvtvA1zLFNV5aRj7HXgPohKZLQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QLXHqfTyq+MVxdikgquIhYXcjuRva7NE3ztgxneY+6gFqyBVHSNmEjDIhkVkWHh07
-         QQsdP32Egskccqe0JDCzhVBzxOPnbISCLDxGgBUSMHkK9FMqDmtF1dq8lh+5Iz8jFs
-         Cmu2jfHwbUWGDlDFWnMrm5ZRyQadXSFLgR2qgW4H02NAHP7e9HtuXMvjgGY3VYoItR
-         FJ8+eYlpRqoKP54kC9lkCKOfcOfdPDXkqRDn+akWi7AJVN22HFDnEQcI0eJ7KIWh09
-         poBJJwLrRwJr1LkxW/jMS8NR/pzRii5CxnUebOxevlbnCrfN6cPZWHE2QrAdUP9vUr
-         UeL4Y86vqb+3A==
-Date:   Tue, 27 Sep 2022 19:56:06 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the bitmap tree
-Message-ID: <YzNHRs2+qvLMOX6l@sirena.org.uk>
-References: <20220926235348.1269963-1-broonie@kernel.org>
- <YzJF2hx4O6vnkVKC@yury-laptop>
+        Tue, 27 Sep 2022 14:57:02 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18FA1D9803;
+        Tue, 27 Sep 2022 11:56:59 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id rk17so9438061ejb.1;
+        Tue, 27 Sep 2022 11:56:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=MyfOgzjgM4kQksNmvcWH+Y3ynMAV3S4ePc1g8EtpPzk=;
+        b=jgaGkL0O6TJs5mz4p53zCwy7II4xlgqPqL0oSg3NDL9bB93YF/f6ofWG0ynC4VJ7mU
+         U6g2TB/ukaDglcpG9+4uzuOR8lMidxKLBMHri4iuR/vOSbpreJeYXUKUFHv7PnB5olsi
+         hGDI1Cgmgiwi1ys0/LXIEm9YD3STH5XpgJ/jkXgyirbcFMkhdqGZNW1f/0FhmgtQwAOE
+         QweNBM/0eQJdFIDX1wPGwYP6aB3d369S7Lz1cPYm9iHdyZVxCbgI51gw0SuHle5Lj66A
+         YU7dGrGycZ3sMYspjEpSz2Ufdsray2IRC7biIDA5nVfYrzNrUVasA9EWm3x+kBNrFxId
+         2YYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=MyfOgzjgM4kQksNmvcWH+Y3ynMAV3S4ePc1g8EtpPzk=;
+        b=KVGvoBI/KzjDygUc6eZXHJYS+rEjFn6Myyn4FeYrv1xK1yrC9F6mjTZm46gXamGkLQ
+         CLimQfx2mPpD0QYChttBcS9GVCX9Q+FuC9UXRZFG+WG8FaG3g6THSYvxYktNbj6hpXgM
+         jMaU7jGuOjDCYCpHh3oyYyqx0wClElOer2eBnHiKVUtM5o3NKs1B2GwKNsLeZiyROG/J
+         A9RfAYWcX0TOGWIwuC66iC3X0R3Wv8L28Jsvp8TOtoWuhW0SoI9kJMmpiRWChN4kssnY
+         G4xtnkQXP4htqPhM7gBxhjT2W/a1QG9waXndgWr91epECQ55a/cNVpW0w+63fa/NBWM0
+         Vkhg==
+X-Gm-Message-State: ACrzQf0Ika2cXCyBo0pk4stzZUawLo6ebwEwtCSsaeZfQo/sD4hr8xyT
+        h2MN9j6dAqfPE7qIb8KfPy0=
+X-Google-Smtp-Source: AMsMyM4u8OBnajYmKR0Q3bVtaQUbS+exmU25ba+M/soqk5CGXI9jX4eqfs2Y7js/hMWQBNtEN10Xtw==
+X-Received: by 2002:a17:906:4fc3:b0:72e:eab4:d9d7 with SMTP id i3-20020a1709064fc300b0072eeab4d9d7mr24199414ejw.599.1664305018056;
+        Tue, 27 Sep 2022 11:56:58 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id k20-20020aa7d8d4000000b00457d9c16fb2sm304254eds.23.2022.09.27.11.56.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 11:56:57 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 21:56:54 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 net-next 08/14] net: dsa: felix: update init_regmap to
+ be string-based
+Message-ID: <20220927185654.vcgilhapjhprmu67@skbuf>
+References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
+ <20220926002928.2744638-9-colin.foster@in-advantage.com>
+ <20220927175353.mn5lpxopp2n2yegr@skbuf>
+ <YzNEYiXx6UoJLEdk@colin-ia-desktop>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2s8fUrKXh5fcqHWA"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzJF2hx4O6vnkVKC@yury-laptop>
-X-Cookie: Vote anarchist.
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YzNEYiXx6UoJLEdk@colin-ia-desktop>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 27, 2022 at 11:43:46AM -0700, Colin Foster wrote:
+> I see your point. The init_regmap(name) interface collides with the
+> *_io_res arrays. Changing the init_regmap() interface doesn't really
+> change the underlying issue - *_io_res[] is the thing that you're
+> suggesting to go.
+> 
+> I'm interested to see where this is going. I feel like it might be a
+> constant names[] array, then felix_vsc9959_init_regmap() where the
+> specific name <> resource mapping happens. Maybe a common
+> felix_match_resource_to_name(name, res, len)?
+> 
+> That would definitely remove the need for exporting the
+> vsc7512_*_io_res[] arrays, which I didn't understand from your v1
+> review.
 
---2s8fUrKXh5fcqHWA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, having an array of strings, meaning which targets are required by
+each driver, is what I wanted to see. Isn't that what I said in v1?
 
-On Mon, Sep 26, 2022 at 05:37:46PM -0700, Yury Norov wrote:
-> On Tue, Sep 27, 2022 at 12:53:48AM +0100, broonie@kernel.org wrote:
+> vsc9959_init_regmap(name)
+> {
+>     /* more logic for port_io_res, but you get the point */
+>     return felix_init_regmap(name, &vsc9959_target_io_res, TARGET_MAX);
+> }
 
-> > After merging the bitmap tree, today's linux-next build (x86
-> > allmodconfig) failed like this:
+Yeah, wait a minute, you'll see.
 
-> Hmm, this weird. I checked the next-20220923, and the drivers' code
-> mentioned in the log differs from what I see, and looks correct.
-> bitmap_weight() definition hasn't been changed in bitmap-for-next
-> patches.
+> > I am also sorry for the mess that the felix driver currently is in, and
+> > the fact that some things may have confused you.
+> 
+> Vladimir, you might be the last person on earth who owes me an apology.
 
-> Allmodconfig build looks good to me.
-
-> Check what I see in next-20220923 below.
-
-I'm seeing the same issue again today, the driver hasn't changed here -
-the=20
-
-> > /tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.=
-c:492:3: note: in expansion of macro 'dev_err'
-> >   492 |   dev_err(rvu->dev, "%s: No space in id bitmap (%lu)\n",
-> >       |   ^~~~~~~
-> > /tmp/next/build/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.=
-c:492:51: note: format string is defined here
-> >   492 |   dev_err(rvu->dev, "%s: No space in id bitmap (%lu)\n",
-> >       |                                                 ~~^
-> >       |                                                   |
-> >       |                                                   long unsigned=
- int
-> >       |                                                 %u
-
->                 dev_err(rvu->dev, "%s: No space in id bitmap (%d)\n",
->                         __func__, bitmap_weight(table->id_bmap, table->to=
-t_ids));
-
-This is coming from a patch Stephen had in his tree "fix up for
-bitmap_weight return value changing" which had been in -next, apparently
-fixing some other issue which had been in your tree.  With that removed
-things seem fine.
-
---2s8fUrKXh5fcqHWA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMzR0UACgkQJNaLcl1U
-h9CDpAf+JJss5+Ogh/R1JZDYOB9qss0vqzDdg64JTt/Cg0/l+uvIDaanrxrLHLYH
-P0d4YOGC6KSgiVNE3kA/sdalsUNs5rlOEvauv2k11EoNnPH5lddtArscIt6z/ql7
-4P8OkFFOYZLnNSX/mVHnjIGPH8SkBOxagFlCBD5qe3QaQQzSJYcvGvNcfHeq1vPA
-AaYU2PR1FNnmsiYopdnzMJGYrYk8zJddzUt/PRveHhk3o4e71yrx0SFp+2ZrcNWT
-+cdgw65nWaKOmW1MIUCdJ6KVzAb0cW4cdKY0w/1MeH5MLhz5apmpOIPJMxiC8Qb2
-MmBpjklaayaCWHTQV+/8vojjTjqYgg==
-=QM7F
------END PGP SIGNATURE-----
-
---2s8fUrKXh5fcqHWA--
+I have some more comments on the other patches. This driver looks weird
+not only because the hardware is complicated and all over the place, but
+also because you're working on a driver (felix) which was designed
+around NXP variations of Microchip hardware, and this really transpires
+especially around the probing and dt-bindings. The goal, otherwise,
+would be for you to have dt-bindings for vsc7512 that are identical to
+what Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml
+provides. It doesn't matter how the driver probes, that is to some
+extent independent from how the drivers look like. Anyway, I'm getting
+ahead of myself.
