@@ -2,140 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75E95EB89D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 260285EB89E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbiI0DW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 23:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
+        id S229957AbiI0DWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 23:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiI0DVU (ORCPT
+        with ESMTP id S230523AbiI0DVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 26 Sep 2022 23:21:20 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666B48C44A;
-        Mon, 26 Sep 2022 20:21:15 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mc4Y719FGz1P6sy;
-        Tue, 27 Sep 2022 11:16:59 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 27 Sep 2022 11:21:13 +0800
-Received: from [10.67.102.67] (10.67.102.67) by kwepemm600016.china.huawei.com
- (7.193.23.20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 27 Sep
- 2022 11:21:12 +0800
-Subject: Re: [PATCH net-next 00/14] redefine some macros of feature abilities
- judgement
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     Leon Romanovsky <leon@kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lipeng321@huawei.com>, <lanhao@huawei.com>
-References: <20220924023024.14219-1-huangguangbin2@huawei.com>
- <Yy7pjTX8VLLIiA0G@unreal> <77050062-93b5-7488-a427-815f4c631b32@huawei.com>
- <20220926101135.26382c0c@kernel.org>
-From:   "huangguangbin (A)" <huangguangbin2@huawei.com>
-Message-ID: <f3fedfe4-da32-8f56-000a-7f441a303ea0@huawei.com>
-Date:   Tue, 27 Sep 2022 11:21:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF2F8E456;
+        Mon, 26 Sep 2022 20:21:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7316CB80E6A;
+        Tue, 27 Sep 2022 03:21:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC8EC433C1;
+        Tue, 27 Sep 2022 03:21:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664248874;
+        bh=6XYNFkrplRbFLyJSdMCjNb0UU7P4Ja24ceZlacew0jk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=n/8+PjPu86sp+SVo5LCCh2IVeNKQeO/9tAt8OHcVwOC4cmEhwWhqwFF7R0nxidO2j
+         48amTzfBkta6FHVz6+K8TZMwMvg7KFOsnYDW0U+lZlCDRDukQWDn2+5lNWSnasV9hv
+         LqW1163ScyXyNkI8L9FfJnaiK14H/7HBoptgz31DwxG5HegIi78Hn7+3hSjLnS12Ve
+         EN33ahAOgLY91m3t8amAJPG9xDuKh50uvh3poRMSpqfXzRB0UaOnt9zsCj0CcGZqou
+         oH4cpkgK3jFAKruwNJG4E9mgTtMfpRL/pqwBSkBc2KyBr4lqPJ+iEKyIrjK+6jXJGB
+         DabsGft5FK3Xg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B55FA5C0B39; Mon, 26 Sep 2022 20:21:13 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 20:21:13 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, frederic@kernel.org,
+        linux-kernel@vger.kernel.org, neeraj.iitr10@gmail.com,
+        rcu@vger.kernel.org, rostedt@goodmis.org,
+        rushikesh.s.kadam@intel.com
+Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
+Message-ID: <20220927032113.GG4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220926223222.GX4196@paulmck-ThinkPad-P17-Gen-1>
+ <8344B0AB-608E-44DA-8FEE-3FE56EDF9172@joelfernandes.org>
+ <20220926235944.GE4196@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YRpAjvmBPzRA-hRQpuaDuZUzfndLb3q+e3BUyWprg5wkQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220926101135.26382c0c@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.67]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEXW_YRpAjvmBPzRA-hRQpuaDuZUzfndLb3q+e3BUyWprg5wkQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Sep 26, 2022 at 08:03:43PM -0400, Joel Fernandes wrote:
+> On Mon, Sep 26, 2022 at 7:59 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> 
+> > On Mon, Sep 26, 2022 at 07:47:50PM -0400, Joel Fernandes wrote:
+> > >
+> > >
+> > > > On Sep 26, 2022, at 6:32 PM, Paul E. McKenney <paulmck@kernel.org>
+> > wrote:
+> > > >
+> > > > ﻿On Mon, Sep 26, 2022 at 09:02:21PM +0000, Joel Fernandes wrote:
+> > > >> On Mon, Sep 26, 2022 at 09:32:44PM +0200, Uladzislau Rezki wrote:
+> > > >> [...]
+> > > >>>>>> On my KVM machine the boot time is affected:
+> > > >>>>>>
+> > > >>>>>> <snip>
+> > > >>>>>> [    2.273406] e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network
+> > Connection
+> > > >>>>>> [   11.945283] e1000 0000:00:03.0 ens3: renamed from eth0
+> > > >>>>>> [   22.165198] sr 1:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw
+> > xa/form2 tray
+> > > >>>>>> [   22.165206] cdrom: Uniform CD-ROM driver Revision: 3.20
+> > > >>>>>> [   32.406981] sr 1:0:0:0: Attached scsi CD-ROM sr0
+> > > >>>>>> [  104.115418] process '/usr/bin/fstype' started with executable
+> > stack
+> > > >>>>>> [  104.170142] EXT4-fs (sda1): mounted filesystem with ordered
+> > data mode. Quota mode: none.
+> > > >>>>>> [  104.340125] systemd[1]: systemd 241 running in system mode.
+> > (+PAM +AUDIT +SELINUX +IMA +APPARMOR +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP
+> > +GCRYPT +GNUTLS +ACL +XZ +LZ4 +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 +IDN
+> > -PCRE2 default-hierarchy=hybrid)
+> > > >>>>>> [  104.340193] systemd[1]: Detected virtualization kvm.
+> > > >>>>>> [  104.340196] systemd[1]: Detected architecture x86-64.
+> > > >>>>>> [  104.359032] systemd[1]: Set hostname to <pc638>.
+> > > >>>>>> [  105.740109] random: crng init done
+> > > >>>>>> [  105.741267] systemd[1]: Reached target Remote File Systems.
+> > > >>>>>> <snip>
+> > > >>>>>>
+> > > >>>>>> 2 - 11 and second delay is between 32 - 104. So there are still
+> > users which must
+> > > >>>>>> be waiting for "RCU" in a sync way.
+> > > >>>>>
+> > > >>>>> I was wondering if you can compare boot logs and see which
+> > timestamp does the
+> > > >>>>> slow down start from. That way, we can narrow down the callback.
+> > Also another
+> > > >>>>> idea is, add "trace_event=rcu:rcu_callback,rcu:rcu_invoke_callback
+> > > >>>>> ftrace_dump_on_oops" to the boot params, and then manually call
+> > > >>>>> "tracing_off(); panic();" from the code at the first printk that
+> > seems off in
+> > > >>>>> your comparison of good vs bad. For example, if "crng init done"
+> > timestamp is
+> > > >>>>> off, put the "tracing_off(); panic();" there. Then grab the serial
+> > console
+> > > >>>>> output to see what were the last callbacks that was queued/invoked.
+> > > >>>>
+> > > >>>> We do seem to be in need of some way to quickly and easily locate
+> > the
+> > > >>>> callback that needed to be _flush() due to a wakeup.
+> > > >>>>
+> > > >>> <snip>
+> > > >>> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> > > >>> index aeea9731ef80..fe1146d97f1a 100644
+> > > >>> --- a/kernel/workqueue.c
+> > > >>> +++ b/kernel/workqueue.c
+> > > >>> @@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct
+> > *wq, struct rcu_work *rwork)
+> > > >>>
+> > > >>>        if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT,
+> > work_data_bits(work))) {
+> > > >>>                rwork->wq = wq;
+> > > >>> -               call_rcu(&rwork->rcu, rcu_work_rcufn);
+> > > >>> +               call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
+> > > >>>                return true;
+> > > >>>        }
+> > > >>>
+> > > >>> <snip>
+> > > >>>
+> > > >>> ?
+> > > >>>
+> > > >>> But it does not fully solve my boot-up issue. Will debug tomorrow
+> > further.
+> > > >>
+> > > >> Ah, but at least its progress, thanks. Could you send me a patch to
+> > include
+> > > >> in the next revision with details of this?
+> > > >>
+> > > >>>> Might one more proactive approach be to use Coccinelle to locate
+> > such
+> > > >>>> callback functions?  We might not want -all- callbacks that do
+> > wakeups
+> > > >>>> to use call_rcu_flush(), but knowing which are which should speed up
+> > > >>>> slow-boot debugging by quite a bit.
+> > > >>>>
+> > > >>>> Or is there a better way to do this?
+> > > >>>>
+> > > >>> I am not sure what Coccinelle is. If we had something automated that
+> > measures
+> > > >>> a boot time and if needed does some profiling it would be good.
+> > Otherwise it
+> > > >>> is a manual debugging mainly, IMHO.
+> > > >>
+> > > >> Paul, What about using a default-off kernel CONFIG that splats on all
+> > lazy
+> > > >> call_rcu() callbacks that do a wake up. We could use the trace hooks
+> > to do it
+> > > >> in kernel I think. I can talk to Steve to get ideas on how to do that
+> > but I
+> > > >> think it can be done purely from trace events (we might need a new
+> > > >> trace_end_invoke_callback to fire after the callback is invoked).
+> > Thoughts?
+> > > >
+> > > > Could you look for wakeups invoked between trace_rcu_batch_start() and
+> > > > trace_rcu_batch_end() that are not from interrupt context?  This would
+> > > > of course need to be associated with a task rather than a CPU.
+> > >
+> > > Yes this sounds good, but we also need to know if the callbacks are lazy
+> > or not since wake-up is ok from a non lazy one. I think I’ll need a table
+> > to track that at queuing time.
+> >
+> > Agreed.
+> >
+> > > > Note that you would need to check for wakeups from interrupt handlers
+> > > > even with the extra trace_end_invoke_callback().  The window where an
+> > > > interrupt handler could do a wakeup would be reduced, but not
+> > eliminated.
+> > >
+> > > True! Since this is a  debugging option, can we not just disable
+> > interrupts across callback invocation?
+> >
+> > Not without terminally annoying lockdep, at least for any RCU callbacks
+> > doing things like spin_lock_bh().
+> 
+> The easy fix for that is adding “depends on !LOCKDEP” to the Kconfig ;-)
+> just kidding. Hmm I think I can just look at the preempt flags and
+> determine if wake up happened in hard Irq context, and ignore those
+> instances.
 
+Or instrument/trace a few carefully chosen context-tracking functions.
 
-On 2022/9/27 1:11, Jakub Kicinski wrote:
-> On Mon, 26 Sep 2022 20:56:26 +0800 huangguangbin (A) wrote:
->> On 2022/9/24 19:27, Leon Romanovsky wrote:
->>> On Sat, Sep 24, 2022 at 10:30:10AM +0800, Guangbin Huang wrote:
->>>> The macros hnae3_dev_XXX_supported just can be used in hclge layer, but
->>>> hns3_enet layer may need to use, so this serial redefine these macros.
->>>
->>> IMHO, you shouldn't add new obfuscated code, but delete it.
->>>
->>> Jakub,
->>>
->>> The more drivers authors will obfuscate in-kernel primitives and reinvent
->>> their own names, macros e.t.c, the less external reviewers you will be able
->>> to attract.
->>>
->>> IMHO, netdev should have more active position do not allow obfuscated code.
->>>
->>> Thanks
->>>    
->>
->> Hi, Leon
->> I'm sorry, I can not get your point. Can you explain in more detail?
->> Do you mean the name "macro" should not be used?
-> 
-> He is saying that you should try to remove those macros rather than
-> touch them up. The macros may seem obvious to people working on the
-> driver but to upstream reviewers any local conventions obfuscate the
-> code and require looking up definitions.
-> 
-> For example the first patch is better off as:
-> 
-> diff --git a/drivers/net/ethernet/hisilicon/hns3/hnae3.h b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-> index 0179fc288f5f..449d496b824b 100644
-> --- a/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-> +++ b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-> @@ -107,9 +107,6 @@ enum HNAE3_DEV_CAP_BITS {
->   #define hnae3_ae_dev_gro_supported(ae_dev) \
->   		test_bit(HNAE3_DEV_SUPPORT_GRO_B, (ae_dev)->caps)
->   
-> -#define hnae3_dev_fec_supported(hdev) \
-> -	test_bit(HNAE3_DEV_SUPPORT_FEC_B, (hdev)->ae_dev->caps)
-> -
->   #define hnae3_dev_udp_gso_supported(hdev) \
->   	test_bit(HNAE3_DEV_SUPPORT_UDP_GSO_B, (hdev)->ae_dev->caps)
->   
-> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-> index 6962a9d69cf8..ded92f7dbd79 100644
-> --- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-> @@ -1179,7 +1179,7 @@ static void hclge_parse_fiber_link_mode(struct hclge_dev *hdev,
->   	hclge_convert_setting_sr(speed_ability, mac->supported);
->   	hclge_convert_setting_lr(speed_ability, mac->supported);
->   	hclge_convert_setting_cr(speed_ability, mac->supported);
-> -	if (hnae3_dev_fec_supported(hdev))
-> +	if (test_bit(HNAE3_DEV_SUPPORT_FEC_B, hdev->caps))
->   		hclge_convert_setting_fec(mac);
->   
->   	if (hnae3_dev_pause_supported(hdev))
-> @@ -1195,7 +1195,7 @@ static void hclge_parse_backplane_link_mode(struct hclge_dev *hdev,
->   	struct hclge_mac *mac = &hdev->hw.mac;
->   
->   	hclge_convert_setting_kr(speed_ability, mac->supported);
-> -	if (hnae3_dev_fec_supported(hdev))
-> +	if (test_bit(HNAE3_DEV_SUPPORT_FEC_B, hdev->caps))
->   		hclge_convert_setting_fec(mac);
->   
->   	if (hnae3_dev_pause_supported(hdev))
-> @@ -3232,7 +3232,7 @@ static void hclge_update_advertising(struct hclge_dev *hdev)
->   static void hclge_update_port_capability(struct hclge_dev *hdev,
->   					 struct hclge_mac *mac)
->   {
-> -	if (hnae3_dev_fec_supported(hdev))
-> +	if (test_bit(HNAE3_DEV_SUPPORT_FEC_B, hdev->caps))
->   		hclge_convert_setting_fec(mac);
->   
->   	/* firmware can not identify back plane type, the media type
-> .
-> 
-Ok, I see, thanks!
+							Thanx, Paul
