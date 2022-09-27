@@ -2,390 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD555EB703
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 03:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0499B5EB735
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 03:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiI0BkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 21:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
+        id S229887AbiI0BwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 21:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiI0BkO (ORCPT
+        with ESMTP id S229777AbiI0BwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 21:40:14 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 235D0AE71;
-        Mon, 26 Sep 2022 18:40:11 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxT+BqVDJjmYUiAA--.64486S4;
-        Tue, 27 Sep 2022 09:40:01 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v3 3/3] thermal: loongson2: add thermal management support
-Date:   Tue, 27 Sep 2022 09:39:51 +0800
-Message-Id: <20220927013951.12833-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220927013951.12833-1-zhuyinbo@loongson.cn>
-References: <20220927013951.12833-1-zhuyinbo@loongson.cn>
+        Mon, 26 Sep 2022 21:52:02 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2078.outbound.protection.outlook.com [40.107.96.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D33E71706
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 18:52:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YB4zD8bZ+9Kdno9B0MaYZXmq8x+1hCuq/lo0wYvOHnwgTDFfvrOwb6DpO0RAQ4Wlywu4xPJwX0b5upnRhwQTJaChy90k9U8VwussptC+wqtlWd1yePWftemU4q5vSiO/oq4YGlvIBVNlx8FeDFnRC42pUNRxDSs5A/V/ZDKLEIjGOFXadrftxgpT0RUgdDvJlzwgIRRNHqclbiyjzaUVGkmJRxAMeI3xTM0e/zzllJflsSlsxwPzhqIjESe7oM81axNZYLUVNouMb2JULmR2HqvpLPzdy8GlkEbJ8WQB/kkXpk9EgFARTmFs3fg0ddcfBR0+2xGxR7DKup6OrLXL7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7/E4dQx6G1ofnK3ejPAEat8fUgvWAnZY4HtRoSKYH6Q=;
+ b=XNKiYJhi+34V0Mo88q2drDXveyxfJmCsQ96ZQPK6em6izpBvEHX1lmXzbVQrrSO17yPgMQU5eZmUy/Kh3NBS4LucDWUq7SoPrGCCpxjuSOtzV84smldzgGv3h7E7QaNj3TuTDhj63PDG5IthQIo5KT4qdDPiu+U1leH3O3CKVdVpBBJflR3VjcufS5yQBTy5AUPn+WH3cgnQNtlD5N3iKUunlCjkyj8nj1hOsB3Q/aBZ1zoStQPKaaeZZA4lfjeF5SPCwVSLNgea9L0uvl26m3eLw87Vc96Sy5sdq2qxdHeynS/OX8mjLa3hTXwUnHT8ztjRxHC1rw91RtHaCwzcvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7/E4dQx6G1ofnK3ejPAEat8fUgvWAnZY4HtRoSKYH6Q=;
+ b=LVjtIQtAlI3GXepLLoeW4mMDwKcPOR/1C5UhSctYumxtck2bmxU22LvXLXiwg0vQFxHWbHZKdB10Y6TybwHppnjj4lyfj8+J0vOBTgSepXd+52KHjt/vgb+ntjL1PCn2tV5gBkGae+4Q32X+2bEpiFqOxEQVxOBLL8WWAB3McGnk6uNXm7YUdWTyYvDrBrbshw6GdZVfG5J6NEB2aBttD1aRk8TrKI4lIdatCsg3D7njBYwFxZAHJhaxA/ZH05z02q1vBXfTKg48o2NgiVl4ut6yuWsO1tbbKsQjc5HTZpRpE4dD8j4pNAy+l5ICFS1y1/YX0V1BmFuuXZr4UI9Teg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by DM4PR12MB5770.namprd12.prod.outlook.com (2603:10b6:8:61::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
+ 2022 01:51:59 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::4064:6c13:72e5:a936]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::4064:6c13:72e5:a936%5]) with mapi id 15.20.5654.026; Tue, 27 Sep 2022
+ 01:51:59 +0000
+References: <cover.f15b25597fc3afd45b144df863eeca3b2c13f9f4.1664171943.git-series.apopple@nvidia.com>
+ <072e1ce590fe101a4cdbd5e91b1702efebb6d0fd.1664171943.git-series.apopple@nvidia.com>
+ <881735bda9b1ba0ecf3648af201840233508f206.camel@redhat.com>
+ <7ca6ec0c-7e5e-3b24-8f8d-650df357130c@amd.com>
+User-agent: mu4e 1.6.9; emacs 27.1
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Felix Kuehling <felix.kuehling@amd.com>
+Cc:     Lyude Paul <lyude@redhat.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Alex Sierra <alex.sierra@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, Jason Gunthorpe <jgg@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH 6/7] nouveau/dmem: Evict device private memory during
+ release
+Date:   Tue, 27 Sep 2022 11:39:57 +1000
+In-reply-to: <7ca6ec0c-7e5e-3b24-8f8d-650df357130c@amd.com>
+Message-ID: <87bkr1lh3a.fsf@nvdebian.thelocal>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: SY6PR01CA0010.ausprd01.prod.outlook.com
+ (2603:10c6:10:e8::15) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxT+BqVDJjmYUiAA--.64486S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ww4UCrWUGrWUWryftw1kKrg_yoWfuFWDpF
-        W3J3y5GrsrGFsrZwnrAr1UCFs0vwnIyFy3ZFZ7Gw1S9rZ3J343Wry8JFy8ZrWSkryDCF15
-        ZrZ8KFWUCFWDX3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPC14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWx
-        Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2I
-        x0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8
-        JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2
-        ka0xkIwI1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
-        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
-        AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
-        80aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI
-        43ZEXa7VUbdOz7UUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|DM4PR12MB5770:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7606eb1e-b1a9-440f-a44c-08daa02add84
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qnDweu8Ko5XIHx9viJGSpFwtl3pWkdRzfeV/IV0ul1q02pgZL4wM8zopUju/cmgo6MUrvvfaA+HC9COlAnBlW5sCjVWCpVqRvUrpYuTpmQLngjB1th//pVs1v7IbuwC0E+R5d2+F4WDWasZdgtVu5YbnfM4Ye02AKyOQG/PA5hgYFV+oh5hpTfuax03xTPIgqkYVn1Mbie2jV+UG6ZiwSbR1rMxvGv9n0eugWfSmwcMmqiKyGWuy0jDsu6n+pyY8beAzzPIl/a6inK42gqvoFLLE2DG4MViKW5HJD9bw5imGj6qkIS7Ln1r1nWmrOtYJY6r2rOyu8W71XCeF5qFM9T4xfU5ZWnHUdwFEDILuOKjQ9cj4LiUsKc4t9w9vq+a4TaWADRlTTxFXcYoTB9S8lqa9udKQEsOBPRmYPk1h7W6K6ZFPmBEqCu9U1NIFuNeun3zACJu11KJ6bIjRh9Y5oSvgEMTJ0Dhf4DZhSntjwjl4MtKiDkT46qMGww0VLg0IjdTBNeruqjdxHjW3iITczmGaX++UnKdVfKlW1Ligat6NnTnMtq2ghU/AEtZxrhqlRduQM95y6QCgCFjt9hG1IAZ/2JH5eeOTcy3ByvwhdKKU9Yi8RLYru0KUAvx552QS3v4nrqNWarTYzmHaHd6YILbb50iQzhSQc4e+t9uXi6m7rHJNYQkct/FzwI1z38ktK4fZUYVeeVgDJ+U5WtaDWA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(366004)(136003)(396003)(39860400002)(451199015)(38100700002)(86362001)(966005)(2906002)(7416002)(186003)(5660300002)(9686003)(478600001)(41300700001)(6486002)(6506007)(53546011)(26005)(6512007)(83380400001)(54906003)(6916009)(316002)(8676002)(4326008)(8936002)(66476007)(66946007)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dGszaUVuSmdwZzRhTTFZRDl2cUhKU0p6Y2lrS3hTalVlWHQ4clRQNEFmcXRy?=
+ =?utf-8?B?NHRsQTlLUENFNlhDRFBaWFFtNSsyNDkyWktxK0p3UHF6TGJKWHRIQzJ5RjBq?=
+ =?utf-8?B?eTNLOGNoQ1BaWTRWdURvT0VST1RYVWt6VXh6bSt1VWhYcWErdDhNRkdiRnJz?=
+ =?utf-8?B?U3dzMjZMTDFLY3hjQmtvUkJ2K2tXZWNkQk5MVUpVRU5YUlNrUFpBZHZjY01E?=
+ =?utf-8?B?RCtLVmtpS1RVU0RWZDhGSUdjWGJaUEczRUpJeFk0Zm5WckVUT2s0cEREY0hO?=
+ =?utf-8?B?NmZ0bjZxanBTTUN5cERVSmVsV2lzWnpjOTFuZG9QZEpGeTNTZkRNL0x5NUFk?=
+ =?utf-8?B?RndjaG5tR3ZKeHRpZTAwdW8ycU5JVjh4bXZOTUdRK2lSdisxN3Zua0krRVF6?=
+ =?utf-8?B?eDVBNTdWSFl4QVNDU1hNS2hCL21PYjhPdlJWSisvZFdZYW43cXk4Y211R0ov?=
+ =?utf-8?B?eVlQQUlOOC9nSEk2Rkp2dTFCYmJUMUREQ1JWc1dnbEorejk2ZXJSUm93Tlhn?=
+ =?utf-8?B?d0xwZHY2cm84bmZYOVc5ZTNGSkJzRzU2WUxXYmpOdnBsZHJiWlhRK1NiSlA0?=
+ =?utf-8?B?TFE5dDY4RGpWeUkzNXJCUnRZdURtZ0FyeHIyYTNMQWhXeUJXbHRIZXVUM0pT?=
+ =?utf-8?B?RUxSNGJZNi9nUzNkMDh0elozV0JxcFpWVktKall2RUtabzNxNWI1c2VyU09M?=
+ =?utf-8?B?d2NGeEJyc0drcWZJeTAyWmVhbTZxVWFjMjVXbENNTnUxK2Q0dzZjckswaWkz?=
+ =?utf-8?B?THBlU0tCOUVSbGp2NitrVHlKOHd2bXFCbjFvZ0NVVEd5VmpETDRWY0s5Q3NM?=
+ =?utf-8?B?aXEwMmQ3ZEtNOXpRTUMyRlpCYXpBcWhHN0VuS3g3QnRWdmUyaWhLblU5cHdS?=
+ =?utf-8?B?VzNKOGpjWUtMMjR1bWIrNTU3SWtkeWtNUUVEdXBnU3lYQS9qWjNiTzZrMXZx?=
+ =?utf-8?B?K0tVMTdUOGRRZGJwczl4c3BIV2h2UjM5b01CbU5xRTI2OFI4MGtnWjlMNGxx?=
+ =?utf-8?B?OThRcXBYdng4MTJhblBYeWhNSjF6TmJBWW5jQm1vSVpUOEVLekRKN0tpTHdX?=
+ =?utf-8?B?Qm1Uc05CV29lUFJrVU5qRzNmVFd2cEFJMFV2Vk1GZUNOQUF2MytJM3dDUk1v?=
+ =?utf-8?B?Zk5QYzBoYVpoTFhSM1NjS3VTb0MzYWF1WThCaGNRNEdJMUQ0THF6SUpNT0lT?=
+ =?utf-8?B?VkwxWkdKSmUvMU9LUTJJWTN5dFg3VDZFSXNyVTZoRXBHSS9HdlpLQjNYOGtO?=
+ =?utf-8?B?bXlZTmN0d1B3Y1VXQURPTVV2ZE9zUXBmZVhUUHJiZmtneWFxM1huZ0lqM0xj?=
+ =?utf-8?B?cnRnZW9EazlzU05QVVVocFVTVDdnemtQVXZURlJBbytveEwxSmJ6ZW94cC9N?=
+ =?utf-8?B?ZzliSGVUNE8zcXhFYllBUUpwTUJUbElBQ2RWdDhhcWNwQUhvQ0FXYS9EaDcz?=
+ =?utf-8?B?dmRYckRQUkNkaENuYzhBWWxDaThxSGV3cFhJZUpHbk5IMDdBTG4rSEp4MFd3?=
+ =?utf-8?B?Wlc5S0E5ZUR3bjNFVUNGcDJMWUgxcHZNalh6RTV0YzEyVmlkdXBCSzBRdDRF?=
+ =?utf-8?B?QzB5RktvQmZCamsrTC9ZSGdEUVd6MG43a0JVTjY4TXM3bXVIRGZRY2Qrb1A2?=
+ =?utf-8?B?NjBtUklqa012ZzFXMWRXNTlla0pZcVAvVXVxUjBVRHNQeHZxbFZsVm12Rkxz?=
+ =?utf-8?B?bUVPMTZ4cFpzTU1ZQkltNDJBS2hnakV1N29Ma2tpUE5PRTFpU3BlTUY1MzNK?=
+ =?utf-8?B?b1NNWmZPUG1veGJoZEtxQU9sK1RrbnRhTU5lWWZFVnlrQXgwQXBTVEx1amF3?=
+ =?utf-8?B?U3hEazdaS0Z1L0J4U2IrRUxSeFBoS0h1SVZScUpiRm1qM3RDWHJodVJpRTdQ?=
+ =?utf-8?B?YTJ5RzA3dnpuWDQ2WWxYckxHK20rbzA4UEc3dVNrTzduT1FoQUcyd0RvNjhy?=
+ =?utf-8?B?YTNmMWNxT3p6ZjJ4eWU1Y2gwNUM0ODlkcnBsOXgwWG1IS2ZKZHExeUorYkR6?=
+ =?utf-8?B?R2NFSlRaQ1k5SE5VSDJLS0NtU0JqK2VEbEdHWEtOcnpOSkRTMWp2dm9tbXZ2?=
+ =?utf-8?B?ZllmT3BUMzJOYm15UnVDeGVsWGRReWhxVVlmTS82c0t0MmFzc1V2L2UxRjNG?=
+ =?utf-8?Q?q9Txd7frg3mLY0NSj/rcwqeVZ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7606eb1e-b1a9-440f-a44c-08daa02add84
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 01:51:59.3436
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8qSC/x+rOJGIGPPSI+4/vc2oahHYORWstd+eLrY1HPgV5J6JMfJUyHdBe40sCo8R03hn4nxGpJZrFy6/5NNVPw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5770
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the support for loongson2 thermal sensor controller,
-which can support maximum 4 sensors.
 
-It's based on thermal of framework:
- - Trip points defined in device tree.
- - Cpufreq as cooling device registered in loongson2 cpufreq driver.
- - Pwm fan as cooling device registered in hwmon pwm-fan driver.
+Felix Kuehling <felix.kuehling@amd.com> writes:
 
-Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
-Change in v3:
-		1. Add a function to gain sensor id an remove dts id.
+> On 2022-09-26 17:35, Lyude Paul wrote:
+>> On Mon, 2022-09-26 at 16:03 +1000, Alistair Popple wrote:
+>>> When the module is unloaded or a GPU is unbound from the module it is
+>>> possible for device private pages to be left mapped in currently runnin=
+g
+>>> processes. This leads to a kernel crash when the pages are either freed
+>>> or accessed from the CPU because the GPU and associated data structures
+>>> and callbacks have all been freed.
+>>>
+>>> Fix this by migrating any mappings back to normal CPU memory prior to
+>>> freeing the GPU memory chunks and associated device private pages.
+>>>
+>>> Signed-off-by: Alistair Popple <apopple@nvidia.com>
+>>>
+>>> ---
+>>>
+>>> I assume the AMD driver might have a similar issue. However I can't see
+>>> where device private (or coherent) pages actually get unmapped/freed
+>>> during teardown as I couldn't find any relevant calls to
+>>> devm_memunmap(), memunmap(), devm_release_mem_region() or
+>>> release_mem_region(). So it appears that ZONE_DEVICE pages are not bein=
+g
+>>> properly freed during module unload, unless I'm missing something?
+>> I've got no idea, will poke Ben to see if they know the answer to this
+>
+> I guess we're relying on devm to release the region. Isn't the whole poin=
+t of
+> using devm_request_free_mem_region that we don't have to remember to expl=
+icitly
+> release it when the device gets destroyed? I believe we had an explicit f=
+ree
+> call at some point by mistake, and that caused a double-free during modul=
+e
+> unload. See this commit for reference:
 
- drivers/thermal/Kconfig             |  10 ++
- drivers/thermal/Makefile            |   1 +
- drivers/thermal/loongson2_thermal.c | 268 ++++++++++++++++++++++++++++
- 3 files changed, 279 insertions(+)
- create mode 100644 drivers/thermal/loongson2_thermal.c
+Argh, thanks for that pointer. I was not so familiar with
+devm_request_free_mem_region()/devm_memremap_pages() as currently
+Nouveau explicitly manages that itself.
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index e052dae614eb..6b60397e96a1 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
- 	  If you say yes here you get support for the FAN controlled
- 	  by the Microcontroller found on the Khadas VIM boards.
- 
-+config LOONGSON2_THERMAL
-+	tristate "Loongson2 SOC series thermal driver"
-+	depends on OF
-+	default y
-+	help
-+	  Support for Thermal driver found on Loongson2 SOC series platforms.
-+	  It supports one critical trip point and one passive trip point. The
-+	  cpufreq and the pwm fan is used as the cooling device to throttle
-+	  CPUs when the passive trip is crossed.
-+
- endif
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index def8e1a0399c..e99f839126fa 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
- obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
- obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
- obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
-+obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
-diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
-new file mode 100644
-index 000000000000..c59ab9d6f2fc
---- /dev/null
-+++ b/drivers/thermal/loongson2_thermal.c
-@@ -0,0 +1,268 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Author: zhanghongchen <zhanghongchen@loongson.cn>
-+ *         Yinbo Zhu <zhuyinbo@loongson.cn>
-+ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
-+ */
-+
-+#include <linux/cpufreq.h>
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/io.h>
-+#include <linux/of_device.h>
-+#include <linux/thermal.h>
-+#include "thermal_hwmon.h"
-+
-+#define LOONGSON2_SOC_MAX_SENSOR_NUM			4
-+
-+#define LOONGSON2_TSENSOR_CTRL_HI			0x0
-+#define LOONGSON2_TSENSOR_CTRL_LO			0x8
-+#define LOONGSON2_TSENSOR_STATUS			0x10
-+#define LOONGSON2_TSENSOR_OUT				0x14
-+
-+struct loongson2_thermal_data {
-+	struct thermal_zone_device *tzd;
-+	int irq;
-+	int id;
-+	void __iomem *regs;
-+	struct platform_device *pdev;
-+	u16 ctrl_low_val;
-+	u16 ctrl_hi_val;
-+};
-+
-+/**
-+ * @low : temperature in degree
-+ * @high: temperature in degree
-+ */
-+static int loongson2_thermal_set(struct loongson2_thermal_data *data,
-+					int low, int high, bool enable)
-+{
-+	u64 reg_ctrl = 0;
-+	int reg_off = data->id * 2;
-+
-+	if (low > high)
-+		return -EINVAL;
-+
-+	low = low < -100 ? -100 : low;
-+	high = high > 155 ? 155 : high;
-+
-+	low += 100;
-+	high += 100;
-+
-+	reg_ctrl |= low;
-+	reg_ctrl |= enable ? 0x100 : 0;
-+	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+
-+	reg_ctrl = 0;
-+	reg_ctrl |= high;
-+	reg_ctrl |= enable ? 0x100 : 0;
-+	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static int loongson2_thermal_get_temp(void *__data, int *temp)
-+{
-+	struct loongson2_thermal_data *data = __data;
-+	u32 reg_val;
-+
-+	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
-+	*temp = ((reg_val & 0xff) - 100) * 1000;
-+
-+	return 0;
-+}
-+
-+static int loongson2_thermal_get_sensor_id(void)
-+{
-+	int ret, id;
-+	struct of_phandle_args sensor_specs;
-+	struct device_node *np, *sensor_np;
-+
-+	np = of_find_node_by_name(NULL, "thermal-zones");
-+	if (!np)
-+		return -ENODEV;
-+
-+	sensor_np = of_get_next_child(np, NULL);
-+	ret = of_parse_phandle_with_args(sensor_np, "thermal-sensors",
-+			"#thermal-sensor-cells",
-+			0, &sensor_specs);
-+	if (ret) {
-+		of_node_put(np);
-+		of_node_put(sensor_np);
-+		return ret;
-+	}
-+
-+	if (sensor_specs.args_count >= 1) {
-+		id = sensor_specs.args[0];
-+		WARN(sensor_specs.args_count > 1,
-+				"%s: too many cells in sensor specifier %d\n",
-+				sensor_specs.np->name, sensor_specs.args_count);
-+	} else {
-+		id = 0;
-+	}
-+
-+	of_node_put(np);
-+	of_node_put(sensor_np);
-+
-+	return id;
-+}
-+
-+static irqreturn_t loongson2_thermal_alarm_irq(int irq, void *dev)
-+{
-+	struct loongson2_thermal_data *data = dev;
-+
-+	/* clear interrupt */
-+	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
-+
-+	disable_irq_nosync(irq);
-+
-+	return IRQ_WAKE_THREAD;
-+}
-+
-+static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
-+{
-+	struct loongson2_thermal_data *data = dev;
-+
-+	thermal_zone_device_update(data->tzd,
-+				   THERMAL_EVENT_UNSPECIFIED);
-+	enable_irq(data->irq);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int loongson2_thermal_set_trips(void *data, int low, int high)
-+{
-+	return loongson2_thermal_set(data, low/1000, high/1000, true);
-+}
-+
-+static const struct thermal_zone_of_device_ops loongson2_of_thermal_ops = {
-+	.get_temp = loongson2_thermal_get_temp,
-+	.set_trips = loongson2_thermal_set_trips,
-+};
-+
-+static int loongson2_thermal_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct resource *res;
-+	struct loongson2_thermal_data *data;
-+	int ret;
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->pdev = pdev;
-+	platform_set_drvdata(pdev, data);
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	data->regs = devm_ioremap(dev, res->start, resource_size(res));
-+	if (IS_ERR(data->regs))
-+		return PTR_ERR(data->regs);
-+
-+	/* get irq */
-+	data->irq = platform_get_irq(pdev, 0);
-+	if (data->irq < 0)
-+		return data->irq;
-+
-+	/* get id */
-+	data->id = loongson2_thermal_get_sensor_id();
-+	if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
-+		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
-+				LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
-+		return -EINVAL;
-+	}
-+
-+	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
-+
-+	loongson2_thermal_set(data, 0, 0, false);
-+
-+	data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
-+							   data->id, data,
-+							   &loongson2_of_thermal_ops);
-+	if (IS_ERR(data->tzd)) {
-+		ret = PTR_ERR(data->tzd);
-+		data->tzd = NULL;
-+		dev_err(&pdev->dev, "failed to register %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = devm_request_threaded_irq(dev, data->irq,
-+			loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
-+			IRQF_ONESHOT, "loongson2_thermal", data);
-+	if (ret < 0) {
-+		dev_err(dev, "failed to request alarm irq: %d\n", ret);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Thermal_zone doesn't enable hwmon as default,
-+	 * enable it here
-+	 */
-+	data->tzd->tzp->no_hwmon = false;
-+	ret = thermal_add_hwmon_sysfs(data->tzd);
-+	if (ret) {
-+		dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int loongson2_thermal_remove(struct platform_device *pdev)
-+{
-+	struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
-+	int reg_off = data->id * 2;
-+
-+	/* disable interrupt */
-+	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id of_loongson2_thermal_match[] = {
-+	{ .compatible = "loongson,loongson2-thermal",},
-+	{ /* end */ }
-+};
-+MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
-+
-+static int __maybe_unused loongson2_thermal_suspend(struct device *dev)
-+{
-+	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
-+	int reg_off = data->id * 2;
-+
-+	data->ctrl_low_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+	data->ctrl_hi_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused loongson2_thermal_resume(struct device *dev)
-+{
-+	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
-+	int reg_off = data->id * 2;
-+
-+	writew(data->ctrl_low_val, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+	writew(data->ctrl_hi_val, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(loongson2_thermal_pm_ops,
-+			 loongson2_thermal_suspend, loongson2_thermal_resume);
-+
-+static struct platform_driver loongson2_thermal_driver = {
-+	.driver = {
-+		.name		= "loongson2_thermal",
-+		.pm = &loongson2_thermal_pm_ops,
-+		.of_match_table = of_loongson2_thermal_match,
-+	},
-+	.probe	= loongson2_thermal_probe,
-+	.remove	= loongson2_thermal_remove,
-+};
-+module_platform_driver(loongson2_thermal_driver);
--- 
-2.31.1
+> commit 22f4f4faf337d5fb2d2750aff13215726814273e
+> Author: Philip Yang <Philip.Yang@amd.com>
+> Date:   Mon Sep 20 17:25:52 2021 -0400
+>
+>     drm/amdkfd: fix svm_migrate_fini warning
+>          Device manager releases device-specific resources when a driver
+>     disconnects from a device, devm_memunmap_pages and
+>     devm_release_mem_region calls in svm_migrate_fini are redundant.
+>          It causes below warning trace after patch "drm/amdgpu: Split
+>     amdgpu_device_fini into early and late", so remove function
+>     svm_migrate_fini.
+>          BUG: https://gitlab.freedesktop.org/drm/amd/-/issues/1718
+>          WARNING: CPU: 1 PID: 3646 at drivers/base/devres.c:795
+>     devm_release_action+0x51/0x60
+>     Call Trace:
+>         ? memunmap_pages+0x360/0x360
+>         svm_migrate_fini+0x2d/0x60 [amdgpu]
+>         kgd2kfd_device_exit+0x23/0xa0 [amdgpu]
+>         amdgpu_amdkfd_device_fini_sw+0x1d/0x30 [amdgpu]
+>         amdgpu_device_fini_sw+0x45/0x290 [amdgpu]
+>         amdgpu_driver_release_kms+0x12/0x30 [amdgpu]
+>         drm_dev_release+0x20/0x40 [drm]
+>         release_nodes+0x196/0x1e0
+>         device_release_driver_internal+0x104/0x1d0
+>         driver_detach+0x47/0x90
+>         bus_remove_driver+0x7a/0xd0
+>         pci_unregister_driver+0x3d/0x90
+>         amdgpu_exit+0x11/0x20 [amdgpu]
+>          Signed-off-by: Philip Yang <Philip.Yang@amd.com>
+>     Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+>     Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+>
+> Furthermore, I guess we are assuming that nobody is using the GPU when th=
+e
+> module is unloaded. As long as any processes have /dev/kfd open, you won'=
+t be
+> able to unload the module (except by force-unload). I suppose with ZONE_D=
+EVICE
+> memory, we can have references to device memory pages even when user mode=
+ has
+> closed /dev/kfd. We do have a cleanup handler that runs in an MMU-free-no=
+tifier.
+> In theory that should run after all the pages in the mm_struct have been =
+freed.
+> It releases all sorts of other device resources and needs the driver to s=
+till be
+> there. I'm not sure if there is anything preventing a module unload befor=
+e the
+> free-notifier runs. I'll look into that.
 
+Right - module unload (or device unbind) is one of the other ways we can
+hit this issue in Nouveau at least. You can end up with ZONE_DEVICE
+pages mapped in a running process after the module has unloaded.
+Although now you mention it that seems a bit wrong - the pgmap refcount
+should provide some protection against that. Will have to look into
+that too.
+
+> Regards,
+> =C2=A0 Felix
+>
+>
+>>
+>>> ---
+>>>   drivers/gpu/drm/nouveau/nouveau_dmem.c | 48 +++++++++++++++++++++++++=
+++-
+>>>   1 file changed, 48 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/nouveau/nouveau_dmem.c b/drivers/gpu/drm/n=
+ouveau/nouveau_dmem.c
+>>> index 66ebbd4..3b247b8 100644
+>>> --- a/drivers/gpu/drm/nouveau/nouveau_dmem.c
+>>> +++ b/drivers/gpu/drm/nouveau/nouveau_dmem.c
+>>> @@ -369,6 +369,52 @@ nouveau_dmem_suspend(struct nouveau_drm *drm)
+>>>   	mutex_unlock(&drm->dmem->mutex);
+>>>   }
+>>>   +/*
+>>> + * Evict all pages mapping a chunk.
+>>> + */
+>>> +void
+>>> +nouveau_dmem_evict_chunk(struct nouveau_dmem_chunk *chunk)
+>>> +{
+>>> +	unsigned long i, npages =3D range_len(&chunk->pagemap.range) >> PAGE_=
+SHIFT;
+>>> +	unsigned long *src_pfns, *dst_pfns;
+>>> +	dma_addr_t *dma_addrs;
+>>> +	struct nouveau_fence *fence;
+>>> +
+>>> +	src_pfns =3D kcalloc(npages, sizeof(*src_pfns), GFP_KERNEL);
+>>> +	dst_pfns =3D kcalloc(npages, sizeof(*dst_pfns), GFP_KERNEL);
+>>> +	dma_addrs =3D kcalloc(npages, sizeof(*dma_addrs), GFP_KERNEL);
+>>> +
+>>> +	migrate_device_range(src_pfns, chunk->pagemap.range.start >> PAGE_SHI=
+FT,
+>>> +			npages);
+>>> +
+>>> +	for (i =3D 0; i < npages; i++) {
+>>> +		if (src_pfns[i] & MIGRATE_PFN_MIGRATE) {
+>>> +			struct page *dpage;
+>>> +
+>>> +			/*
+>>> +			 * _GFP_NOFAIL because the GPU is going away and there
+>>> +			 * is nothing sensible we can do if we can't copy the
+>>> +			 * data back.
+>>> +			 */
+>> You'll have to excuse me for a moment since this area of nouveau isn't o=
+ne of
+>> my strongpoints, but are we sure about this? IIRC __GFP_NOFAIL means inf=
+inite
+>> retry, in the case of a GPU hotplug event I would assume we would rather=
+ just
+>> stop trying to migrate things to the GPU and just drop the data instead =
+of
+>> hanging on infinite retries.
+>>
+>>> +			dpage =3D alloc_page(GFP_HIGHUSER | __GFP_NOFAIL);
+>>> +			dst_pfns[i] =3D migrate_pfn(page_to_pfn(dpage));
+>>> +			nouveau_dmem_copy_one(chunk->drm,
+>>> +					migrate_pfn_to_page(src_pfns[i]), dpage,
+>>> +					&dma_addrs[i]);
+>>> +		}
+>>> +	}
+>>> +
+>>> +	nouveau_fence_new(chunk->drm->dmem->migrate.chan, false, &fence);
+>>> +	migrate_device_pages(src_pfns, dst_pfns, npages);
+>>> +	nouveau_dmem_fence_done(&fence);
+>>> +	migrate_device_finalize(src_pfns, dst_pfns, npages);
+>>> +	kfree(src_pfns);
+>>> +	kfree(dst_pfns);
+>>> +	for (i =3D 0; i < npages; i++)
+>>> +		dma_unmap_page(chunk->drm->dev->dev, dma_addrs[i], PAGE_SIZE, DMA_BI=
+DIRECTIONAL);
+>>> +	kfree(dma_addrs);
+>>> +}
+>>> +
+>>>   void
+>>>   nouveau_dmem_fini(struct nouveau_drm *drm)
+>>>   {
+>>> @@ -380,8 +426,10 @@ nouveau_dmem_fini(struct nouveau_drm *drm)
+>>>   	mutex_lock(&drm->dmem->mutex);
+>>>     	list_for_each_entry_safe(chunk, tmp, &drm->dmem->chunks, list) {
+>>> +		nouveau_dmem_evict_chunk(chunk);
+>>>   		nouveau_bo_unpin(chunk->bo);
+>>>   		nouveau_bo_ref(NULL, &chunk->bo);
+>>> +		WARN_ON(chunk->callocated);
+>>>   		list_del(&chunk->list);
+>>>   		memunmap_pages(&chunk->pagemap);
+>>>   		release_mem_region(chunk->pagemap.range.start,
