@@ -2,225 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0646F5EC436
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92F45EC44C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbiI0NUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        id S232804AbiI0NWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232499AbiI0NTM (ORCPT
+        with ESMTP id S232806AbiI0NU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:19:12 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577C41A81C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:17:35 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id f20so13154895edf.6
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:17:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=In1vsB/Xjfh9ZnfNvqM8dWCAty6NwecZWkJggwcWzrI=;
-        b=MPWNC1rEjW7iV+yNpMgr+SzEHDVYyrzeSE/RS9EgXzVVBXCdqcy9R2rn7oMTdIv5kW
-         9t8PCuiUQ6MZ6NdTKOIpVMTdkq4MaHiSsrCvHsfoaUwLYTfW7hSAPWTz7SLkL0SF4W6i
-         5hasBut3NxwqG7HNMPfj/d1P2zT2pg5JVg0cdYPyokTTZ9VHIJ/ZuZdr3L00Y9hKiatJ
-         rOZ9lk7HlOUHhPvXYNZB0uHX3uHMtZo+KQKWGPwEAsSKqdsotTE/sfWDJ1Uv65cFJKso
-         kw4h/iMz5kr5xoi0l2bwMUGpj+3MgZGceQZve1+G1pnyEmwoBO84TTOuUzNdOt8H5x9M
-         /9GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=In1vsB/Xjfh9ZnfNvqM8dWCAty6NwecZWkJggwcWzrI=;
-        b=r8m//PyLiL9whpVjeWBcbIGnkXXxfbnIMmhc+SEugco73hJI270YmyMkpbe6YWug0/
-         ITzILlFqSUnuv5OyP2F0kI97/SFWb5MqSinsYB6AO9B5U9RoiWOdoq8ZqA3TQF+WAUKV
-         Z2rgAiJySnvOtScSXjezHOJ/8T+e+SBYDQOlr8yeIx45xDTnuMYw02r4yuH6DPeLHg4S
-         ZZQ55ysimIZFRv7n3cpgFr5hyH8xJFD+EjnMks6G1bAErDaKJaJtrYUnKzMqceWDh5WV
-         bVWKYre9tWmmE/x3C2sThjFGvVL2iVjAKrSNd0L7zYC2KrxOZ8gnb8yS7fiNc1DVYj7d
-         4BAw==
-X-Gm-Message-State: ACrzQf3eQXqsWgPoOLLkcD2dtcwcUzKc8rwvR3dTlLD7VYlXQ/hAbOgy
-        fQBl1M/kvoHmabJPPlIDlYvozw==
-X-Google-Smtp-Source: AMsMyM70B36DrxzZchpp1McX0IFVOUt/Lxru8O6Pu+f9ZlH/RHOKYouT7tKEvgOLgcC3fVCCwkzY6A==
-X-Received: by 2002:aa7:cc8a:0:b0:446:7668:2969 with SMTP id p10-20020aa7cc8a000000b0044676682969mr27808864edt.206.1664284638152;
-        Tue, 27 Sep 2022 06:17:18 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:9c:201:693c:15a1:a531:bb4e])
-        by smtp.gmail.com with ESMTPSA id 22-20020a170906311600b0077fbef08212sm100359ejx.22.2022.09.27.06.17.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 06:17:17 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 15:17:10 +0200
-From:   Marco Elver <elver@google.com>
-To:     andrey.konovalov@linux.dev
-Cc:     Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: Re: [PATCH mm 3/3] kasan: migrate workqueue_uaf test to kunit
-Message-ID: <YzL31u9qOOPRVVHM@elver.google.com>
-References: <653d43e9a6d9aad2ae148a941dab048cb8e765a8.1664044241.git.andreyknvl@google.com>
- <2815073f2be37e554f7f0fd7b1d10e9742be6ce3.1664044241.git.andreyknvl@google.com>
+        Tue, 27 Sep 2022 09:20:29 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4067D1B0523;
+        Tue, 27 Sep 2022 06:18:25 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RCJ4IE027643;
+        Tue, 27 Sep 2022 13:17:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=2ugG1wqh0mcPHt0D5iUYUmWqFQHrAwQwMveAg8lQ6Yo=;
+ b=enucRki3c+6aYJ82BUUbw8RiYAea7BGk2yp5c6Fmy5ZVofe9QEoiOY9hMJVyYqd3r1UJ
+ lbxjIJK86jlhmrLg2trf+CANfVb7fHNDvMPiOuohzbo5T+bGUfbacV4qT7xeOhQzLPe3
+ ezCPrWhFuL+BAY8Q/dH0YrYkiDPT/xf8P+qvu1mxuSXnVvj8OjIoSoF2cCn9wqc1pWLg
+ bh3jZJ44yYxmgphtqs++H5vEt48A5k8RiZv10i1aYJAnwcljADfq7oPqTTV5LERHkZYS
+ oxRCn4qzumJK/9doMo1hZbtnri9y2bnmUrdMnernPQJG/Hx/myYDYO1l+fs3Gdf0vJ+5 4A== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3juw51gsnh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 13:17:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28RDHdS0031144
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 13:17:39 GMT
+Received: from [10.216.22.231] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 27 Sep
+ 2022 06:17:34 -0700
+Message-ID: <de6dd293-b6c8-afd9-f93b-46a70c2f01ef@quicinc.com>
+Date:   Tue, 27 Sep 2022 18:47:31 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2815073f2be37e554f7f0fd7b1d10e9742be6ce3.1664044241.git.andreyknvl@google.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v8 1/7] dt-bindings: remoteproc: qcom: Add SC7280 ADSP
+ support
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
+References: <1663938340-24345-1-git-send-email-quic_srivasam@quicinc.com>
+ <1663938340-24345-2-git-send-email-quic_srivasam@quicinc.com>
+ <7d001153-e1f2-7ae6-2821-4b3547ccf034@linaro.org>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <7d001153-e1f2-7ae6-2821-4b3547ccf034@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: O9ChhlkF6bRIFxfImIymolDJnp4oyvqp
+X-Proofpoint-GUID: O9ChhlkF6bRIFxfImIymolDJnp4oyvqp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-27_05,2022-09-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
+ impostorscore=0 adultscore=0 suspectscore=0 bulkscore=0 spamscore=0
+ phishscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2209270081
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 08:31PM +0200, andrey.konovalov@linux.dev wrote:
-> From: Andrey Konovalov <andreyknvl@google.com>
-> 
-> Migrate the workqueue_uaf test to the KUnit framework.
-> 
-> Initially, this test was intended to check that Generic KASAN prints
-> auxiliary stack traces for workqueues. Nevertheless, the test is enabled
-> for all modes to make that KASAN reports bad accesses in the tested
-> scenario.
-> 
-> The presence of auxiliary stack traces for the Generic mode needs to be
-> inspected manually.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-Reviewed-by: Marco Elver <elver@google.com>
-
-> ---
->  mm/kasan/kasan_test.c        | 40 +++++++++++++++++++++++++++++-------
->  mm/kasan/kasan_test_module.c | 30 ---------------------------
->  2 files changed, 33 insertions(+), 37 deletions(-)
-> 
-> diff --git a/mm/kasan/kasan_test.c b/mm/kasan/kasan_test.c
-> index 005776325e20..71cb402c404f 100644
-> --- a/mm/kasan/kasan_test.c
-> +++ b/mm/kasan/kasan_test.c
-> @@ -1134,6 +1134,14 @@ static void kmalloc_double_kzfree(struct kunit *test)
->  	KUNIT_EXPECT_KASAN_FAIL(test, kfree_sensitive(ptr));
->  }
->  
-> +/*
-> + * The two tests below check that Generic KASAN prints auxiliary stack traces
-> + * for RCU callbacks and workqueues. The reports need to be inspected manually.
-> + *
-> + * These tests are still enabled for other KASAN modes to make sure that all
-> + * modes report bad accesses in tested scenarios.
-> + */
-> +
->  static struct kasan_rcu_info {
->  	int i;
->  	struct rcu_head rcu;
-> @@ -1148,13 +1156,6 @@ static void rcu_uaf_reclaim(struct rcu_head *rp)
->  	((volatile struct kasan_rcu_info *)fp)->i;
->  }
->  
-> -/*
-> - * Check that Generic KASAN prints auxiliary stack traces for RCU callbacks.
-> - * The report needs to be inspected manually.
-> - *
-> - * This test is still enabled for other KASAN modes to make sure that all modes
-> - * report bad accesses in tested scenarios.
-> - */
->  static void rcu_uaf(struct kunit *test)
->  {
->  	struct kasan_rcu_info *ptr;
-> @@ -1170,6 +1171,30 @@ static void rcu_uaf(struct kunit *test)
->  		rcu_barrier());
->  }
->  
-> +static void workqueue_uaf_work(struct work_struct *work)
-> +{
-> +	kfree(work);
-> +}
-> +
-> +static void workqueue_uaf(struct kunit *test)
-> +{
-> +	struct workqueue_struct *workqueue;
-> +	struct work_struct *work;
-> +
-> +	workqueue = create_workqueue("kasan_workqueue_test");
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, workqueue);
-> +
-> +	work = kmalloc(sizeof(struct work_struct), GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, work);
-> +
-> +	INIT_WORK(work, workqueue_uaf_work);
-> +	queue_work(workqueue, work);
-> +	destroy_workqueue(workqueue);
-> +
-> +	KUNIT_EXPECT_KASAN_FAIL(test,
-> +		((volatile struct work_struct *)work)->data);
-> +}
-> +
->  static void vmalloc_helpers_tags(struct kunit *test)
->  {
->  	void *ptr;
-> @@ -1502,6 +1527,7 @@ static struct kunit_case kasan_kunit_test_cases[] = {
->  	KUNIT_CASE(kasan_bitops_tags),
->  	KUNIT_CASE(kmalloc_double_kzfree),
->  	KUNIT_CASE(rcu_uaf),
-> +	KUNIT_CASE(workqueue_uaf),
->  	KUNIT_CASE(vmalloc_helpers_tags),
->  	KUNIT_CASE(vmalloc_oob),
->  	KUNIT_CASE(vmap_tags),
-> diff --git a/mm/kasan/kasan_test_module.c b/mm/kasan/kasan_test_module.c
-> index 4688cbcd722d..7be7bed456ef 100644
-> --- a/mm/kasan/kasan_test_module.c
-> +++ b/mm/kasan/kasan_test_module.c
-> @@ -62,35 +62,6 @@ static noinline void __init copy_user_test(void)
->  	kfree(kmem);
->  }
->  
-> -static noinline void __init kasan_workqueue_work(struct work_struct *work)
-> -{
-> -	kfree(work);
-> -}
-> -
-> -static noinline void __init kasan_workqueue_uaf(void)
-> -{
-> -	struct workqueue_struct *workqueue;
-> -	struct work_struct *work;
-> -
-> -	workqueue = create_workqueue("kasan_wq_test");
-> -	if (!workqueue) {
-> -		pr_err("Allocation failed\n");
-> -		return;
-> -	}
-> -	work = kmalloc(sizeof(struct work_struct), GFP_KERNEL);
-> -	if (!work) {
-> -		pr_err("Allocation failed\n");
-> -		return;
-> -	}
-> -
-> -	INIT_WORK(work, kasan_workqueue_work);
-> -	queue_work(workqueue, work);
-> -	destroy_workqueue(workqueue);
-> -
-> -	pr_info("use-after-free on workqueue\n");
-> -	((volatile struct work_struct *)work)->data;
-> -}
-> -
->  static int __init test_kasan_module_init(void)
->  {
->  	/*
-> @@ -101,7 +72,6 @@ static int __init test_kasan_module_init(void)
->  	bool multishot = kasan_save_enable_multi_shot();
->  
->  	copy_user_test();
-> -	kasan_workqueue_uaf();
->  
->  	kasan_restore_multi_shot(multishot);
->  	return -EAGAIN;
-> -- 
-> 2.25.1
+On 9/23/2022 10:53 PM, Krzysztof Kozlowski wrote:
+Thanks for Your time Krzyszto!!!
+> On 23/09/2022 15:05, Srinivasa Rao Mandadapu wrote:
+>> Add ADSP PIL loading support for SC7280 SoCs.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+>> ---
+>> Changes since V7:
+>> 	-- Remove redundant clocks in dt bindings.
+>> 	-- Fix dt compilation error in dt bindings.
+>> Changes since V6:
+>> 	-- Update glink-edge property.
+>> 	-- Add qcom,qmp property.
+>> Changes since V5:
+>> 	-- Remove qcom,adsp-memory-regions property.
+>> Changes since V4:
+>> 	-- Update halt registers description in dt bindings.
+>>
+>>   .../bindings/remoteproc/qcom,sc7280-adsp-pil.yaml  | 207 +++++++++++++++++++++
+>>   1 file changed, 207 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
+>> new file mode 100644
+>> index 0000000..79ef3c0
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
+>> @@ -0,0 +1,207 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/remoteproc/qcom,sc7280-adsp-pil.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm SC7280 ADSP Peripheral Image Loader
+>> +
+>> +maintainers:
+>> +  - Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> +
+>> +description:
+>> +  This document describes the hardware for a component that loads and boots firmware
+>> +  on the Qualcomm Technology Inc. ADSP.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - qcom,sc7280-adsp-pil
+>> +
+>> +  reg:
+>> +    minItems: 1
+>> +    items:
+>> +      - description: qdsp6ss register
+>> +      - description: efuse q6ss register
+> Why second IO address space is optional?
+Yeah, both are required for SC7280. will remove minItems.
+>
+>> +
+>> +  interrupts:
+>> +    items:
+>> +      - description: Watchdog interrupt
+>> +      - description: Fatal interrupt
+>> +      - description: Ready interrupt
+>> +      - description: Handover interrupt
+>> +      - description: Stop acknowledge interrupt
+>> +      - description: Shutdown acknowledge interrupt
+>> +
+>> +  interrupt-names:
+>> +    items:
+>> +      - const: wdog
+>> +      - const: fatal
+>> +      - const: ready
+>> +      - const: handover
+>> +      - const: stop-ack
+>> +      - const: shutdown-ack
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: XO clock
+>> +      - description: GCC CFG NOC LPASS clock
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: xo
+>> +      - const: gcc_cfg_noc_lpass
+>> +
+>> +  power-domains:
+>> +    items:
+>> +      - description: LCX power domain
+>> +
+>> +  resets:
+>> +    items:
+>> +      - description: PDC AUDIO SYNC RESET
+>> +      - description: CC LPASS restart
+>> +
+>> +  reset-names:
+>> +    items:
+>> +      - const: pdc_sync
+>> +      - const: cc_lpass
+>> +
+>> +  memory-region:
+>> +    maxItems: 1
+>> +    description: Reference to the reserved-memory for the Hexagon core
+>> +
+>> +  qcom,halt-regs:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +    description:
+>> +      Phandle reference to a syscon representing TCSR followed by the
+>> +      four offsets within syscon for q6, CE, AXI and qv6 halt registers.
+>> +    items:
+>> +      items:
+> This has to be strictly defined, IOW, the second items must be already
+> an item of previous list. Look at the other mss-pil.
+Okay. Will modify as per mss-pil.
+>
+>> +        - description: phandle to TCSR MUTEX
+>> +        - description: offset to q6 halt registers
+>> +        - description: offset to CE halt registers
+>> +        - description: offset to AXI halt registers
+>> +        - description: offset to qv6 halt registers
+>> +
+>> +  qcom,smem-states:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +    description: States used by the AP to signal the Hexagon core
+>> +    items:
+>> +      - description: Stop the modem
+>> +
+>> +  qcom,smem-state-names:
+>> +    description: The names of the state bits used for SMP2P output
+>> +    const: stop
+>> +
+>> +  qcom,qmp:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description: Reference to the AOSS side-channel message RAM.
+>> +
+>> +  glink-edge:
+>> +    type: object
+> Missing ref to glink-edge and unevaluatedProperties:false. Please take a
+> look at recent
+> Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
+Okay. Will add reference to glink-edge.
+>
+>> +    description: |
+>> +      Qualcomm G-Link subnode which represents communication edge, channels
+>> +      and devices related to the ADSP.
+>> +
+>> +    properties:
+>> +      interrupts:
+>> +        items:
+>> +          - description: IRQ from ADSP to GLINK
+> Skip interrupts and mboxes - both are coming from glink-edge.
+Okay. Will remove it. But Same is followed in mss-pil
+>
+>> +
+>> +      mboxes:
+>> +        items:
+>> +          - description: Mailbox for communication between APPS and ADSP
+>> +
+>> +      label:
+>> +        description: The names of the state bits used for SMP2P output
+> Skip description
+Okay.
+>
+>> +        items:
+>> +          - const: lpass
+> No items, just const: lpass
+Okay.
+>
+>> +
+>> +      qcom,remote-pid:
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +        description: ID of the shared memory used by GLINK for communication with ADSP
+> This can be dropped.
+Okay. Will remove qcom,remote-pid.
+>
+>> +
+>> +      gpr: true
+>> +      apr: false
+>> +      fastrpc: false
+>
+> BTW, all these three do not make sense without ref to glink-edge. After
+> adding ref, these seem reasonable.
+Okay. will add glink-edge reference.
+>
+>> +
+>> +    required:
+>> +      - interrupts
+>> +      - mboxes
+>> +      - label
+>> +      - qcom,remote-pid
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - interrupt-names
+>> +  - clocks
+>> +  - clock-names
+>> +  - power-domains
+>> +  - resets
+>> +  - reset-names
+>> +  - qcom,halt-regs
+>> +  - memory-region
+>> +  - qcom,smem-states
+>> +  - qcom,smem-state-names
+>> +  - qcom,qmp
+>> +
+>> +additionalProperties: false
+> Best regards,
+> Krzysztof
+>
