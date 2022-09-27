@@ -2,111 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C51B5EC5E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B9D5EC5FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbiI0OWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
+        id S230153AbiI0O16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231583AbiI0OV3 (ORCPT
+        with ESMTP id S231964AbiI0O1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:21:29 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DDFF1606
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:21:28 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id u69so9566528pgd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=gQXzOLwGmO1I9pRRmLyUgJGlaUsyPlUGTQU3NVybLL0=;
-        b=bNtC1TfMH2+cAv7Euw3nzYRDnmQOZRc3adBLCBjxHaQ2ZY5rhPwXfbAwqqo8ZWCrqb
-         IZBnoqzcm+OcLDaBpTsVUqWjfi+2I8ytmMuoa03gPv7a1n8LS3QywDVvHn9G7bnyB7a1
-         pXQmpycGDSBRDCG3adiC7zHKC9qVkBhS4U3YY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=gQXzOLwGmO1I9pRRmLyUgJGlaUsyPlUGTQU3NVybLL0=;
-        b=lYE47mpDxUHpDIs7bIfhq3WBHoIDmzkTbKR2T0Y+u1OHJzQnprhGA9TXDqGWzTf5Od
-         qNYdohKeLmjOkee3N/Ip9v8OH7tw/tieWxQsNt0ONw8yH7lkOElujZQ83ikGz+2pLRz6
-         g4+P4ezkKW7JYM3Gy5Xu8gBS9pyNk0ri9yRK9nNPI4RRMmWdq2wm1+E+tuhd4B0jW2o+
-         QNqZ7GNclH7xEyG2C1W0XqXQNIt4/kDN3NLQvwJyx3QcBolZOwpKAZq6Fo3vTWG5cnsd
-         ckOIXnIC3AM3enWH4OYDgSKmpnswvnyVomXnkNlE8HaMlgbnpzx/rYKknbatr1T5Kign
-         0bMw==
-X-Gm-Message-State: ACrzQf0x1U2HJA+wyvEcCAUQzW/Z279h8e6sKZet2Y/+v/fb1p7z41Mz
-        HpArnlNtbum8pgFWuEHHFVdiHnPx37ksUg==
-X-Google-Smtp-Source: AMsMyM73XMgV1Do/e1WlYdtJReSLR3vkVg8q1kwNQyYvR+63k4h7qUAuxztbvazlfBRFjC+dY+//Cw==
-X-Received: by 2002:a63:8b4c:0:b0:43c:bf35:1c7e with SMTP id j73-20020a638b4c000000b0043cbf351c7emr7683458pge.475.1664288488356;
-        Tue, 27 Sep 2022 07:21:28 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k11-20020a63ff0b000000b0043ab80adf63sm1571117pgi.36.2022.09.27.07.21.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 07:21:27 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 07:21:26 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: Re: [PATCH] sethostname: dump new hostname into RNG
-Message-ID: <202209270720.4CEAC77@keescook>
-References: <20220927094039.1563219-1-Jason@zx2c4.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927094039.1563219-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Sep 2022 10:27:42 -0400
+X-Greylist: delayed 301 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 27 Sep 2022 07:27:36 PDT
+Received: from abi149hd125.arn1.oracleemaildelivery.com (abi149hd125.arn1.oracleemaildelivery.com [129.149.84.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DFCF3110
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:27:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=oci-arn1-20220924;
+ d=augustwikerfors.se;
+ h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
+ bh=Jvhm/TIuEM3MbFSywD/lO6kvNC6ioA9KTEm2/WvlxWs=;
+ b=pcu+k1UxuiKBY/ANP/l+Gu8iNx9ZLD8kVnwP8goJOpuBNh7Sr1ZEaM1gsEzTQi5YqH5sCCzYghpf
+   VVg2Zzy3I7M/bNqJgM0xu0rsbDR2ber41bVJpRDRz80Wlpxg0Z/liqqXZxel4WJGEcmJ8H0wdZEy
+   xFHFCl/ER/dDsqWWa2LxdVrdL2cxCSGJrpdFPupUARbplkLEZR56MtZfPhqCEpXL1y8W9jBe09AJ
+   wEdEln618ml5XQFMVrpS7ibsMd6xGyh31i902j0A2D1KNujhxQzTkRzlHzmdsG/DI7DuPCR/D6a8
+   ah821mFTSwpUcDmvTTBEK7L3PMtsDV15zDpq1A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=prod-arn-20211201;
+ d=arn1.rp.oracleemaildelivery.com;
+ h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
+ bh=Jvhm/TIuEM3MbFSywD/lO6kvNC6ioA9KTEm2/WvlxWs=;
+ b=AHSIWBhGeYU2pbHx153qgw7wjk6FZxw+OmB/8N/tZlWharKw7JgrKAxBDZQ9x8zf44LZcP52H8Sq
+   DIiM9Yv1JCBJOvS6T+u9N27bCqSOFUxGCW1AfCeUu1CK1e8Y0sd1SsTsfV3Ls+M3uF2E/lyvXgzV
+   LNuEfcL+WYzdqJrKllLXCA6dGuVTCCXtzz3Qq/j4Qo/jodhbZFTFD4fGmDgflK8lB6tzr6iaqoj2
+   CZ5xb9mx2BqFiXDcX7mJM70k/ubaoYtYSQoSUBgFiyyqU8HODnrQlsuVwt60NUvXy/jRLUk8rfOt
+   BL9iOltwi0ucdxw/wgXpNz/RSFTJ3Xxiu+n9Yw==
+Received: by omta-ad1-fd1-101-eu-stockholm-1.omtaad1.vcndparn.oraclevcn.com
+ (Oracle Communications Messaging Server 8.1.0.1.20220914 64bit (built Sep 14
+ 2022))
+ with ESMTPS id <0RIV00NRMH9KG0B0@omta-ad1-fd1-101-eu-stockholm-1.omtaad1.vcndparn.oraclevcn.com>
+ for linux-kernel@vger.kernel.org; Tue, 27 Sep 2022 14:22:32 +0000 (GMT)
+Message-id: <f84e4956-293f-801d-6b9f-df4226df87d2@augustwikerfors.se>
+Date:   Tue, 27 Sep 2022 16:22:28 +0200
+MIME-version: 1.0
+Subject: Re: [REGRESSION] Graphical issues on Lenovo Yoga 7 14ARB7 laptop since
+ v6.0-rc1 (bisected)
+Content-language: en-US
+To:     Leo Li <sunpeng.li@amd.com>, Alex Deucher <alexdeucher@gmail.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        regressions@lists.linux.dev
+References: <c1f8886a-5624-8f49-31b1-e42b6d20dcf5@augustwikerfors.se>
+ <eee82fb8-0fc5-98cb-e630-f86891574f21@leemhuis.info>
+ <CADnq5_PRP3ekHPLhdXALxt9GL3aHHZQUw5TNAwm4t+ggimUq7g@mail.gmail.com>
+ <33cf5071-3157-a3c2-3252-3a8ab926c60d@augustwikerfors.se>
+ <f4818fc3-7015-29ed-95c5-ab6a18da33d7@amd.com>
+ <ea1f1d81-650b-768a-30ab-c9d7d9f9fa54@augustwikerfors.se>
+ <3ba218a3-8b6b-c0da-873b-53e1a8a082ae@amd.com>
+From:   August Wikerfors <git@augustwikerfors.se>
+In-reply-to: <3ba218a3-8b6b-c0da-873b-53e1a8a082ae@amd.com>
+Content-type: text/plain; charset=UTF-8; format=flowed
+Content-transfer-encoding: 7bit
+Reporting-Meta: AAGbJpr3NyLqWZHM6uELfmvsuJMi5ZNZQypbrRlArwbCKCICd6gU/Yml3uJOgk9C
+ zSaCWCHXTdOH4I2OUeF/PgO1sCOokynEZbKMb6KcBELateo1A0z8dXCWT4SIa+xb
+ OQZ/sC0izMHGGP3BRxsByBUoEbq9rDunxzLsk1tAh7G6dZ+WUCq2fsJaeiLehn2z
+ v29Z0IBoBqnw0RfU7/HLqGXVlH0truW/1K2DKY6GJolnSGDuTCC8Vf8Rp69Kofhg
+ rN0all19/cWCwLr0rnbyOp4xkM2m2Y0NnfwvxcsEiMnUyPsdRBdk0L685fhQTxyZ
+ EjtM/GYtliSFLzYknmKfPYPi7Tjb8E7g3JpRMNskRazeBqGXwwzezw6q4mSoGNR7
+ EmCkFmBBYk5I823yh+GMvjtaoMvEpagVHNqmcWkaEh+OjKCrIaVfEU6Bvvc+9uqh bO1EPw==
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 11:40:39AM +0200, Jason A. Donenfeld wrote:
-> On some small machines with little entropy, a quasi-unique hostname is
-> sometimes a relevant factor. I've seen, for example, 8 character
-> alpha-numeric serial numbers. In addition, the time at which the hostname
-> is set is usually a decent measurement of how long early boot took. So,
-> call add_device_randomness() on new hostnames, which feeds its arguments
-> to the RNG in addition to a fresh cycle counter.
-> 
-> Low cost hooks like this never hurt and can only ever help, and since
-> this costs basically nothing for an operation that is never a fast path,
-> this is an overall easy win.
+Hi Leo,
 
-Seems reasonable!
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
+On 2022-09-27 00:29, Leo Li wrote:
 > 
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  kernel/sys.c | 1 +
->  1 file changed, 1 insertion(+)
+> Hi August, thanks for the log.
 > 
-> diff --git a/kernel/sys.c b/kernel/sys.c
-> index b911fa6d81ab..7b7f973ea585 100644
-> --- a/kernel/sys.c
-> +++ b/kernel/sys.c
-> @@ -1366,6 +1366,7 @@ SYSCALL_DEFINE2(sethostname, char __user *, name, int, len)
->  	if (!copy_from_user(tmp, name, len)) {
->  		struct new_utsname *u;
->  
-> +		add_device_randomness(tmp, len);
->  		down_write(&uts_sem);
->  		u = utsname();
->  		memcpy(u->nodename, tmp, len);
-> -- 
-> 2.37.3
+> It seems the eDP panel does not fully satisfy the amdgpu requirements
+> for enabling PSR SU, but we're enabling it anyways.
 > 
+> I suspect it may be due to the "DP_FORCE_PSRSU_CAPABILITY" bit being set
+> in it's DPCD registers, I'm checking with some devs to see if that is
+> expected.
+> 
+> In the meantime, can you give these two hacks a spin? Let me know if
+> this helps with the glitches and system hangs:
+> https://gitlab.freedesktop.org/-/snippets/7076
+Yes, the issues do not happen with those patches applied.
 
--- 
-Kees Cook
+> Also the dmesg, in particular this line:
+>> [drm] PSR support 1, DC PSR ver 1, sink PSR ver 3 DPCD caps 
+>> 0x70su_y_granularity 4 force_psrsu_cap **X**
+Here is that line:
+> [   12.085196] [drm] PSR support 1, DC PSR ver 1, sink PSR ver 3 DPCD caps 0x7b su_y_granularity 4 force_psrsu_cap 1
+
+Regards,
+August Wikerfors
