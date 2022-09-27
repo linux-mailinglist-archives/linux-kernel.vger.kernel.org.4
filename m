@@ -2,180 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3205EC029
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C09CD5EC02E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbiI0KxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 06:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        id S231247AbiI0Kzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 06:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbiI0Kwu (ORCPT
+        with ESMTP id S231420AbiI0Kzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 06:52:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49A81181D1;
-        Tue, 27 Sep 2022 03:52:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9C3DB81AF4;
-        Tue, 27 Sep 2022 10:52:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D10C43470;
-        Tue, 27 Sep 2022 10:52:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664275964;
-        bh=V1TaW2oROCwNK3rv/VU134+Cp/5eURuaoMDkbCIgTrE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ViDwanKy4AJR6Y9SER9j+FeVMJGc8JtQfUsByJ+rjVDVECjcnWcVibkjpWu1JZ2of
-         1jWQj+jQAXbzpKj0djfkWwmabv/p7RmElfxnc8n0s9K4lFpJluI2zyCjxsZA/OVZ4n
-         AMXhdh/9g2SaV2UdIM5uIVaDAFBwLNB4HRNCUByWujOlPf7qfKSch+IMlCds+jJsvZ
-         JUntHSCXXyWkfQcfK7MfEIXmW+cDP557GdN4J4wEliuNyGiI8r89ALu3YoFD8RbBGX
-         aG9iz4olkv93+VZAdR3kBNnJE4xLdGkWxXzcqOMr//1E/JwOMKQWHDqHooCuXwCiS3
-         CJ+IFJK/2SvTg==
-Date:   Tue, 27 Sep 2022 13:52:40 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Christian Langrock <christian.langrock@secunet.com>
-Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] xfrm: replay: Fix ESN wrap around for GSO
-Message-ID: <YzLV+AntI0xpN6Aq@unreal>
-References: <ebe29739-7027-a95f-160f-8f9d6522a09d@secunet.com>
+        Tue, 27 Sep 2022 06:55:38 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5388D1408E;
+        Tue, 27 Sep 2022 03:55:37 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id u59-20020a17090a51c100b00205d3c44162so2023839pjh.2;
+        Tue, 27 Sep 2022 03:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=ZmmRG6YrZ8hXcye3u5h381H4Djt0FAmwEpe9Y1+zhM0=;
+        b=U1u1CvnPZ8uVG534OU/ZOMVlJ5uXseG4UXgCMJt1zuWy4ew3W22D0mYanJ146fF/3M
+         Qw39QdCLOXr6hYtZ765c3MHzRGY0KF0fTU8bxqdOZxyVbj+TdfD6Z5YLDsU5R2mZkUpl
+         0u6koXreVCQaqFG1YQu7iE3DiwhfQxDFVLiyz0CNZru69NnK/nIB4USCGRFR0HHoW2cl
+         PuFjAwBip41LMz1BCNKQ82C35k5e90Iy6uKsz7npF8MFWGPiOaOtm+jHcJFa/dRSCV55
+         zvUn3WKP7LWkGbeeOvr+pNWdqhwNj3mAS9a+rtfBCiDpQ27wQixdX4L971GKxc1bFOuP
+         /e1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZmmRG6YrZ8hXcye3u5h381H4Djt0FAmwEpe9Y1+zhM0=;
+        b=Q+6C0dt9bk2NsntF9czBiRlFadlwscC3CWSReMxts5zeL5CZ0mWrKKn1qqi+knj93P
+         dbhKk0wn9oSz1llZlMyhDZMISSLcUopfoCa6rDgC880SObfugWDR3PL9Qv/QSor/GEPz
+         0lcrh67NNpio1A5NYbo558jl3WWmR+tbgOrbSI7TKryG10+yfg2k5YW2Qd/AIp4G7zDJ
+         ZNEIz2HtDdBxBTR9s3gWczLRquL6Wdb4Zixvxb+MFlpZ6Nr7HJkWme3LrQcd8ea+x1AQ
+         u2CFVhJhKvR1spl4Tru2NAMEOOiTnerDzZVNKZ4pt2r9kDY82PZCnGmj3mUaXFmWMTXb
+         l0zg==
+X-Gm-Message-State: ACrzQf2szVNQlmje/R0q3NDaCicXlOUFW/86mvfSPrGOfS73b94mejzC
+        1ApNyMslj9s/WU0rcnSv7qk=
+X-Google-Smtp-Source: AMsMyM4vcP/N7bKJubPwbDWnQCwhIR+2O9kSQCkO5h1QunWWNhyPjWEbWS68EqXMAFlkgZG2Dkukgw==
+X-Received: by 2002:a17:90b:350d:b0:202:ff91:a0bd with SMTP id ls13-20020a17090b350d00b00202ff91a0bdmr3971878pjb.46.1664276136771;
+        Tue, 27 Sep 2022 03:55:36 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170903234a00b00177e5d83d3dsm1220916plh.170.2022.09.27.03.55.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 03:55:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b308e474-505d-0e53-ff13-fc53f1afa46b@roeck-us.net>
+Date:   Tue, 27 Sep 2022 03:55:32 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ebe29739-7027-a95f-160f-8f9d6522a09d@secunet.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/4] watchdog: twl4030_wdt: add missing of.h include
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-iio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220927052217.2784593-1-dmitry.torokhov@gmail.com>
+ <20220927052217.2784593-2-dmitry.torokhov@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220927052217.2784593-2-dmitry.torokhov@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 11:28:08AM +0200, Christian Langrock wrote:
-> When using GSO it can happen that the wrong seq_hi is used for the last
-> packets before the wrap around. To avoid this, we should serialize this
-> last GSO packet.
+On 9/26/22 22:22, Dmitry Torokhov wrote:
+> The driver is using of_device_id and therefore needs to include
+> of.h header. We used to get this definition indirectly via inclusion
+> of matrix_keypad.h from twl.h, but we are cleaning up matrix_keypad.h
+> from unnecessary includes.
 > 
-> Fixes: d7dbefc45cf55 ("xfrm: Add xfrm_replay_overflow functions for
-> offloading")
-> 
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-Please remove extra line between Fixes and SOB.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> Signed-off-by: Christian Langrock <christian.langrock@secunet.com>
 > ---
->  include/net/xfrm.h     |  1 +
->  net/xfrm/xfrm_output.c |  2 +-
->  net/xfrm/xfrm_replay.c | 36 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 38 insertions(+), 1 deletion(-)
+>   drivers/watchdog/twl4030_wdt.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/include/net/xfrm.h b/include/net/xfrm.h
-> index 6e8fa98f786f..49d6d974f493 100644
-> --- a/include/net/xfrm.h
-> +++ b/include/net/xfrm.h
-> @@ -1749,6 +1749,7 @@ void xfrm_replay_advance(struct xfrm_state *x,
-> __be32 net_seq);
->  int xfrm_replay_check(struct xfrm_state *x, struct sk_buff *skb, __be32
-> net_seq);
->  void xfrm_replay_notify(struct xfrm_state *x, int event);
->  int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb);
-> +int xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb);
->  int xfrm_replay_recheck(struct xfrm_state *x, struct sk_buff *skb,
-> __be32 net_seq);
-> 
->  static inline int xfrm_aevent_is_on(struct net *net)
-> diff --git a/net/xfrm/xfrm_output.c b/net/xfrm/xfrm_output.c
-> index 9a5e79a38c67..c470a68d9c88 100644
-> --- a/net/xfrm/xfrm_output.c
-> +++ b/net/xfrm/xfrm_output.c
-> @@ -738,7 +738,7 @@ int xfrm_output(struct sock *sk, struct sk_buff *skb)
->  		skb->encapsulation = 1;
-> 
->  		if (skb_is_gso(skb)) {
-> -			if (skb->inner_protocol)
-> +			if (skb->inner_protocol || xfrm_replay_overflow_check(x, skb))
+> diff --git a/drivers/watchdog/twl4030_wdt.c b/drivers/watchdog/twl4030_wdt.c
+> index 355e428c0b99..e715ac1369a0 100644
+> --- a/drivers/watchdog/twl4030_wdt.c
+> +++ b/drivers/watchdog/twl4030_wdt.c
+> @@ -9,6 +9,7 @@
+>   #include <linux/types.h>
+>   #include <linux/slab.h>
+>   #include <linux/kernel.h>
+> +#include <linux/of.h>
+>   #include <linux/watchdog.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/mfd/twl.h>
 
-Maybe it is perfectly fine to call xfrm_output_gso(), but your commit
-message doesn't explain what is wrong with standard flow.
-
->  				return xfrm_output_gso(net, sk, skb);
-> 
->  			skb_shinfo(skb)->gso_type |= SKB_GSO_ESP;
-> diff --git a/net/xfrm/xfrm_replay.c b/net/xfrm/xfrm_replay.c
-> index 9277d81b344c..6c696b6c0a22 100644
-> --- a/net/xfrm/xfrm_replay.c
-> +++ b/net/xfrm/xfrm_replay.c
-> @@ -750,6 +750,37 @@ int xfrm_replay_overflow(struct xfrm_state *x,
-> struct sk_buff *skb)
-> 
->  	return xfrm_replay_overflow_offload(x, skb);
->  }
-> +
-> +static int xfrm_replay_overflow_check_offload_esn(struct xfrm_state *x,
-> struct sk_buff *skb)
-> +{
-
-The function returns true or false and better to have "static bool ..."
-as a prototype.
-
-> +	int ret = 0;
-> +	struct xfrm_offload *xo = xfrm_offload(skb);
-> +	struct xfrm_replay_state_esn *replay_esn = x->replay_esn;
-> +	__u32 oseq = replay_esn->oseq;
-
-Reversed Christmas tree.
-
-> +
-> +	if (xo && x->type->flags & XFRM_TYPE_REPLAY_PROT) {
-> +		if (skb_is_gso(skb)) {
-
-You already checked this. Maybe it is more future proof to write like
-this, but it is not optimal from performance POV as you perform same
-checks in datapath.
-
-> +			oseq = oseq + 1 + skb_shinfo(skb)->gso_segs;
-> +			if (unlikely(oseq < replay_esn->oseq)) {
-> +				ret = 1;
-> +			}
-> +		}
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +int xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb)
-
-This function doesn't do much except call to another function.
-
-> +{
-> +	switch (x->repl_mode) {
-> +	case XFRM_REPLAY_MODE_ESN:
-> +		return xfrm_replay_overflow_check_offload_esn(x, skb);
-> +	}
-> +
-> +	return 0;
-> +
-> +}
-> +
->  #else
->  int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb)
->  {
-> @@ -764,6 +795,11 @@ int xfrm_replay_overflow(struct xfrm_state *x,
-> struct sk_buff *skb)
-> 
->  	return __xfrm_replay_overflow(x, skb);
->  }
-> +
-> +int xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb)
-> +{
-> +	return 0;
-> +}
->  #endif
-> 
->  int xfrm_init_replay(struct xfrm_state *x)
-> -- 
-> 2.37.1.223.g6a475b71f8
