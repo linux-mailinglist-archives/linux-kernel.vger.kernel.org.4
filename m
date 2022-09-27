@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3D65EB98D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 07:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70505EB994
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 07:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiI0FWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 01:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S229994AbiI0FW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 01:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiI0FWW (ORCPT
+        with ESMTP id S229760AbiI0FWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 01:22:22 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71A8A4B0A;
-        Mon, 26 Sep 2022 22:22:21 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id x1so8121299plv.5;
-        Mon, 26 Sep 2022 22:22:21 -0700 (PDT)
+        Tue, 27 Sep 2022 01:22:23 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7D4A4B07;
+        Mon, 26 Sep 2022 22:22:22 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id go6so8225031pjb.2;
+        Mon, 26 Sep 2022 22:22:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=3j4b92DwpvdfhyOymI2HB+rSceuQTEyqD3p3cMeax1o=;
-        b=bKtEh9h966Ux12iNBMJD5poe0ZpPevjIxqJhSC/44cLliPzoE96Up+5TRcKnnbnCB3
-         H7LlFH3yHXpDs5soKmw1B/VhePDT5i/MIZ05W+GjJBcsso3xBod06hB0ERmSUrXJaHM4
-         jj/GhkQZak5Sr2scydVMSPNRbWvU75OUS1y/MuCpivhYLK6BhZHs+Pb5QlBJgUVfWsjm
-         AlQhAIRQfF1DgLyauS/NOFB8IJ6MnO0ISEKYexvFpQwZJghXfIJ4WhwZ2xfKhipiwocB
-         0DGydJQ9/rgSxH9QTUA8lrQfb5EZfDDKAfnDV6YdvUu+OrtmxTvG1E+4aNdbpm2M9Mwj
-         8+cQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=Ikb+u+hcNEgSjT1UG2HdGjiof/wZmdaALLeEUmBnt2Q=;
+        b=DeO6Uo76+XxzrGEW2XqDhD8UNWqaXCVCi7mx/T7CF/eUUWIYHHeMhgfmLByzpgM9s9
+         jR8sSBBediVx/MVqJffnSbQtlvbz8wTyow3n8FjNGe3L659FHRhkUAEKno88d8kb0JIw
+         ZJPTK12GWAHuNcYuMBwkQTsIXCcIGfO87QxSO32jA56Z2rfeAfqeCJ/RLSEiytha6wHa
+         J9LNQfpg8f3NJZoswRlW5AtEajZCmlX8K+8SdSWoYxBU6txin4jFVSSv4dAONCYHC/n9
+         ZUcyJU5YYh9oVtrrg+fKSZ9fwogiWn7oCCv6lRl+kZcsHokmmUYxv9g0ssqCBPy+tMvi
+         TMRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=3j4b92DwpvdfhyOymI2HB+rSceuQTEyqD3p3cMeax1o=;
-        b=kzRYwq7uaw6wA5y0SQsP7BQ0QowudHfokCIl4ak2MwuSJ7jJ6/9ajWnkUy6e9+e6HD
-         vlT0UrDooiGhX7c644kxE+8HkwwaXZUvOvJu5QNWIQKVArDzfi4flRyzu2to12ZNUUTQ
-         38UwU6OF3BzX88Bp47XLftV1Jufz+SL1wKUmWRputZQuhzthEbA1XwwndM/j5LR0HNwb
-         MijMFl8B8+2aWOxIhma+4D0yUl6kmRp2+8iprj4T9a63ycgDjOXP7Jh/xAYD1rSbP24r
-         p7Y/Dw+SfRjgaKUOFQGCyUyMvxHrkRmgCRzNqiC315mF1NKjtZE/HRDXvizKAQYTM9Oj
-         3SMg==
-X-Gm-Message-State: ACrzQf2qLVxlAK2GNBq2wutvwlGVEcXKekzdPcmkHrD4W6RQJsGJuCxL
-        8u45VkbaIKm1MFuq5gpRsQY=
-X-Google-Smtp-Source: AMsMyM7KBmgBiY4SRNO72W9M6fcFVHhJVjzQgvc5o1f/Wn7uFyvKTa5IRBj/EIb2epK2dG2MG8jlLA==
-X-Received: by 2002:a17:902:e848:b0:176:c746:1f69 with SMTP id t8-20020a170902e84800b00176c7461f69mr25640509plg.125.1664256140876;
-        Mon, 26 Sep 2022 22:22:20 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Ikb+u+hcNEgSjT1UG2HdGjiof/wZmdaALLeEUmBnt2Q=;
+        b=8J7QE3ekXyOi3psosCUK9n7GGrtacXPCjjeZM9dBbd1j9JmFogki+2P8oIvNLjtZwm
+         TzGeWUsto/kpRIh1R+D6yGgB4N5TLgKzqV4uJePV9i8JA/GILpMvZpfmpPpyiLu+ylYT
+         kb8aILdvKowIFnzwvc9zajTOYIVI84YMUgGAkoseP98p3Iuo4tmdJGyeL6kVmZ5jQ/tl
+         kPrARisENWU8Rp8ODKOVrdx2mB9pHS0HvuLZ6GhY2sXMf+nIPuvLxJs1Kil/NVRjz6uT
+         jJ47YH9ZqAGlziD3DpCn3wJwHRzsgdMUE0YxSLGmNGrr5dnpRt1nZSKw1LrRRh2/jStQ
+         u8jQ==
+X-Gm-Message-State: ACrzQf33c+XPzc6bWxINZr81qPC0Wwc222qrqC2ZQpDmhN/7FKBINtcx
+        aAE9ma/QGFXpLAwiiZwLi9E=
+X-Google-Smtp-Source: AMsMyM52PGyX+Z9dkOce1+DJ69CRfFK4uMH2Dwjn2IdNW9x03X69EKYAXyMro1HCA2kpRvBB4BiDPw==
+X-Received: by 2002:a17:90b:3e87:b0:203:19a9:e534 with SMTP id rj7-20020a17090b3e8700b0020319a9e534mr2535111pjb.222.1664256142126;
+        Mon, 26 Sep 2022 22:22:22 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:9739:ab49:3830:2cbb])
-        by smtp.gmail.com with ESMTPSA id z187-20020a6265c4000000b005367c28fd32sm504811pfb.185.2022.09.26.22.22.19
+        by smtp.gmail.com with ESMTPSA id z187-20020a6265c4000000b005367c28fd32sm504811pfb.185.2022.09.26.22.22.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 22:22:20 -0700 (PDT)
+        Mon, 26 Sep 2022 22:22:21 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -57,10 +58,12 @@ Cc:     Lars-Peter Clausen <lars@metafoo.de>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-iio@vger.kernel.org, linux-watchdog@vger.kernel.org,
         linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] Input: twl4030-pwrbutton - add missing of.h include
-Date:   Mon, 26 Sep 2022 22:22:13 -0700
-Message-Id: <20220927052217.2784593-1-dmitry.torokhov@gmail.com>
+Subject: [PATCH 2/4] watchdog: twl4030_wdt: add missing of.h include
+Date:   Mon, 26 Sep 2022 22:22:14 -0700
+Message-Id: <20220927052217.2784593-2-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+In-Reply-To: <20220927052217.2784593-1-dmitry.torokhov@gmail.com>
+References: <20220927052217.2784593-1-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,26 +76,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver is using of_match_ptr() and therefore needs to include
-of.h header.
+The driver is using of_device_id and therefore needs to include
+of.h header. We used to get this definition indirectly via inclusion
+of matrix_keypad.h from twl.h, but we are cleaning up matrix_keypad.h
+from unnecessary includes.
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- drivers/input/misc/twl4030-pwrbutton.c | 1 +
+ drivers/watchdog/twl4030_wdt.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/input/misc/twl4030-pwrbutton.c b/drivers/input/misc/twl4030-pwrbutton.c
-index b307cca17022..e3ee0638ffba 100644
---- a/drivers/input/misc/twl4030-pwrbutton.c
-+++ b/drivers/input/misc/twl4030-pwrbutton.c
-@@ -26,6 +26,7 @@
- #include <linux/errno.h>
- #include <linux/input.h>
- #include <linux/interrupt.h>
+diff --git a/drivers/watchdog/twl4030_wdt.c b/drivers/watchdog/twl4030_wdt.c
+index 355e428c0b99..e715ac1369a0 100644
+--- a/drivers/watchdog/twl4030_wdt.c
++++ b/drivers/watchdog/twl4030_wdt.c
+@@ -9,6 +9,7 @@
+ #include <linux/types.h>
+ #include <linux/slab.h>
+ #include <linux/kernel.h>
 +#include <linux/of.h>
+ #include <linux/watchdog.h>
  #include <linux/platform_device.h>
  #include <linux/mfd/twl.h>
- 
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
