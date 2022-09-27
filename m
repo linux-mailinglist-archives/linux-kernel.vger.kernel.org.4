@@ -2,61 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582BB5EB670
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B4F5EB676
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiI0ArE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 20:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S229524AbiI0AuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 20:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiI0ArB (ORCPT
+        with ESMTP id S229512AbiI0AuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 20:47:01 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F92DDE84;
-        Mon, 26 Sep 2022 17:47:00 -0700 (PDT)
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 81AA5AE4;
-        Tue, 27 Sep 2022 02:46:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202205; t=1664239578;
-        bh=wSCmoahme/wBO9azmqpH+7KdgABDfd0O10sTNVFQMxs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dpc2wT+V6SjuHtqfoU5ZFjexa5Aahr35WX0+p7fRP5umzpZ5FzBVPQocDisMDSdC2
-         w1t7ng3+S1p/pWKu0j4fyag/Npjoz8eZcUqZihyN3rxfgR98PtgFWnMYZOZRS492ZV
-         shDVeT7LfYTMqO8Efj4XJCGvj438D1ugoKy9g2E4gUsHZT185i67hDAiC/Km9fH4Zn
-         zMYDrJC2LltYfWolndN79lZST9A17523To/LAbsov0JlrTgZlYSMxv+74FzncUsUAo
-         rhaiIKYVofjoAE0NbijnBdlhrM7KWDICYzsjL1gqEdho1r6Hau5R0QO48fP7miNyBp
-         f2JCK0mdezpPuq1LzHunB99KFnf6JtM4uN099zqzd2cPcF1DrbMRSz6TKJviiPhjMH
-         qoRzqRy+n7a92SfTp+oQeUVJVPe4a5QRSZ+sn00wd8kHYUD+Fn1TECGRNdqsOyzpFq
-         zrTJ0xwneOOKZyGYhWou1+2exwau/r2eODcncszB2QjBQ1ADZogsDznlVPCtd9ig8K
-         24XORnKXUnQ3OVdmXoJcYwkeZ6BvlfBik4TwnmW8fXLEvk/1LnO6OX3eIRmUWb3D9Z
-         YHAIGw3Xw1hJFE2tjxrinhTppHnPr5aWqnNdYk20zlHdAS9eXSYciLiH8p7dBg+3VM
-         oDzqlpvTYYC2GG7sFnqKIMI0=
-Date:   Tue, 27 Sep 2022 02:46:17 +0200
-From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Greg KH <greg@kroah.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Manfred Spraul <manfred.spraul@de.bosch.com>
-Subject: Re: linux-next: manual merge of the driver-core tree with the
- jc_docs tree
-Message-ID: <20220927004617.xwlicwiwekxp2dna@tarta.nabijaczleweli.xyz>
-References: <20220926210631.657728-1-broonie@kernel.org>
- <20220926224621.47llaskp6mihi4dd@tarta.nabijaczleweli.xyz>
- <YzI5SmGq9sK4gnFT@sirena.org.uk>
+        Mon, 26 Sep 2022 20:50:02 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F61020182;
+        Mon, 26 Sep 2022 17:50:01 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso8561193pjd.4;
+        Mon, 26 Sep 2022 17:50:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=anOfjEKm49o/rbXtkTtCMIqjAWrFaD+tdksXbREFKb4=;
+        b=Zg8ohBnyKsIgxhxGL39sNzgFwPjnmHwuABBZxWwKb2v491mAMO2h45I7t3mODFvXBx
+         5mFMNFVd6Xi5XKsrWVSY0ABYH5pkRumTx+Tya8nXA4wBXZW8fBCcD22u3W5ZA/LNsK1T
+         SAI0mFAqmpFCDPVQy4Mp8PDwxSqHs2X4sEJuW2EYtjWWMUhd7NjrhRkWJ7fqujPW9wvv
+         RwFr8j6laOaU+ERCvcM3qq4dG1qevc/tGAhx9D/vXoYJ2HUbYLydgF5G/VRm5jNVGw9J
+         pFfbrv+d2eOhd5PgGG2C+bAhHrG4iioDKB0dVCsJiRoTbL+b8b93ak4gzAdgvl7RXUiD
+         aVYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=anOfjEKm49o/rbXtkTtCMIqjAWrFaD+tdksXbREFKb4=;
+        b=gULNBWVA3vmlmWby5rVWEDvoiuvq3G5e7FZV129bRvTZFeP924PbePwIGVEeSC5CQQ
+         r5+ylWBP1t/ErzbqBQDLF2EqrlJLRmznrlqrvwb4mko6GtYru+w/4p89XuvH4+Nf+SAF
+         rTEql8fyskqDNFK8WJRFIkM9dvnrlwSZ6UBykgFO0FqfmKX12efuAn+7VReEGq1mHvsy
+         R3KxzpEe6MDQbuwfTjbxgVW6JQXj91vzV+8o3BiCfmrWr0iRkiVmZCIXRxqV+Bc+uytn
+         CS+Lijeelesu7sy4s9Jd8/pI5Di+bEi+JgG4XUOclTqNG8Fy9yH7SWSPfYIKwBOSlR10
+         PwnA==
+X-Gm-Message-State: ACrzQf16hy+WtpRXd0Hl0KHWTrpf7kMku3p8Fvq/NkwduYoYF3nRwWDl
+        f2t4O4aXq5Hoku7YhzhuhF4=
+X-Google-Smtp-Source: AMsMyM5xGeW0V0jX7yPgbGYUjz8ZBfPA4vZGsY8Qlgx6EbUzcb8RIoU+1i+yhG8zxvc/ni0paQIcXA==
+X-Received: by 2002:a17:90b:4c8a:b0:202:b3cd:f960 with SMTP id my10-20020a17090b4c8a00b00202b3cdf960mr1534138pjb.129.1664239800615;
+        Mon, 26 Sep 2022 17:50:00 -0700 (PDT)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id w16-20020aa79a10000000b0053639773ad8sm134914pfj.119.2022.09.26.17.49.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 17:49:59 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 09:49:52 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
+        Kees Cook <keescook@chromium.org>,
+        Roman Gushchin <guro@fb.com>, Jann Horn <jannh@google.com>,
+        Vijayanand Jitta <vjitta@codeaurora.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v2] mm: Make failslab writable again
+Message-ID: <YzJIsFZQoCEYntvR@hyeyoo>
+References: <20220920121111.1792905-1-alexander.atanasov@virtuozzo.com>
+ <Yyr1xONdw8dBgsKr@hyeyoo>
+ <30063d97-69f0-bea2-9d59-108140995bfc@virtuozzo.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="okozqc7em33lbxec"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzI5SmGq9sK4gnFT@sirena.org.uk>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=no
+In-Reply-To: <30063d97-69f0-bea2-9d59-108140995bfc@virtuozzo.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,69 +82,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---okozqc7em33lbxec
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Sep 27, 2022 at 12:44:10AM +0100, Mark Brown wrote:
-> On Tue, Sep 27, 2022 at 12:46:21AM +0200, =D0=BD=D0=B0=D0=B1 wrote:
->=20
-> > If I'm reading the merge right (very much not a given!),
-> > it seems that the NBD_REPLY_MAGIC (and LO_MAGIC?) constant(s) survived:
-> > they both need to go for reasons listed in
-> >   bd5926220ffe0: LO_MAGIC doesn't exist
-> >   82805818898dd: NBD_REPLY_MAGIC is part of the line protocol,
-> >                  not a magic number=20
->=20
-> > This also reveals that I missed NBD_REQUEST_MAGIC
-> > (needs to go, same reason as NBD_REPLY_MAGIC)
-> > in the first pass, but that's unrelated here.
->=20
-> I preserved NBD_REPLY_MAGIC since the conflict was due to it being
-> updated by the NBD maintainer, I went with their logic instead.  IIRC
-> they'd also moved it within the file which might make the resolution
-> harder to read.  LO_MAGIC is gone.
->=20
-> It's not at all clear from what's in the file that your logic about not
-> including magic numbers defined elsewhere means we shouldn't include
-> them in the table here, though the commit messages are rather brief so
-> perhaps there is more to it.  It's certainly a very strong definition of
-> need as far as I can tell.
+On Fri, Sep 23, 2022 at 10:34:28AM +0300, Alexander Atanasov wrote:
+> Hello,
+> 
+> On 21.09.22 14:30, Hyeonggon Yoo wrote:
+> > On Tue, Sep 20, 2022 at 03:11:11PM +0300, Alexander Atanasov wrote:
+> > > In (060807f841ac mm, slub: make remaining slub_debug related attributes
+> > > read-only) failslab was made read-only.
+> > > I think it became a collateral victim to the two other options for which
+> > > the reasons are perfectly valid.
+> > > Here is why:
+> > >   - sanity_checks and trace are slab internal debug options,
+> > >     failslab is used for fault injection.
+> > >   - for fault injections, which by presumption are random, it
+> > >     does not matter if it is not set atomically. And you need to
+> > >     set atleast one more option to trigger fault injection.
+> > >   - in a testing scenario you may need to change it at runtime
+> > >     example: module loading - you test all allocations limited
+> > >     by the space option. Then you move to test only your module's
+> > >     own slabs.
+> > >   - when set by command line flags it effectively disables all
+> > >     cache merges.
+> > 
+> > Maybe we can make failslab= boot parameter to consider cache filtering?
+> > 
+> > With that, just pass something like this:
+> > 	failslab=X,X,X,X,cache_filter slub_debug=A,<cache-name>>
+> 
+> > Users should pass slub_debug=A,<cache-name> anyway to prevent cache merging.
 >
-> > (or, indeed, if it does include... the conflict markers?
-> >  because it does appear to introduce them
-> >  (or, at least, if I leave in the conflict markers and commit a merge,
-> >   it sure looks like what's represented below)?),
-> > so idk.
->=20
-> I skipped out on resolving the conflicts in the translated copies of the
-> file but messed up on resetting the to the base state.
+> It will be good to have this in case you want to test cache that is used
+> early. But why push something to command line option only when it can be
+> changed at runtime?
 
-It seems I've overestimated the degree to which this matters
-in this case, my b. Put me down as "don't care".
+Hmm okay. I'm not against changing it writable. (it looks okay to me.)
+Just wanted to understand your use case!
 
-=D0=BD=D0=B0=D0=B1
+Can you please elaborate why booting with slub_debug=A,<your cache name>
+and enabling cache_filter after boot does not work?
 
---okozqc7em33lbxec
-Content-Type: application/pgp-signature; name="signature.asc"
+Or is it trying to changnig these steps,
 
------BEGIN PGP SIGNATURE-----
+FROM
+	1. booting with slub_debug=A,<cache name>
+	2. write to cache_filter to enable cache filtering
+	3. setup probability, interval, times, size
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmMyR9kACgkQvP0LAY0m
-WPG28Q//cxas1ROh5VTtMbi01t/T1Qsa3qWSvN4sIUI3AcRJaoEGqMsnMguXz7LR
-3DjQ5tZbc6lYjuU0vGrCtsVzdYDitH1FkNpovpUJ5GEq6E5qtbJCj8wYyAEdd4cl
-JqCD+W7WgMM9FYiHIKTpsS7yYhdbjBp2a+8SNXqFZlf/99CeGMmYEW07V8slZFMq
-Sl7KUZHuw9VsgjE703z3gpD3dL6AFQd9iEClUscyUeiUek+OipI2gTXsGVXQCoH4
-A8FgYqHxKV0vbBSeVverMI8lTwOU4J4uYZpNORyc1o2QlzyXgji2Wh1ThAEkrPbt
-HMnB3919YUj7zBYZOoRbhanqdRhH0SaP7hAq2R+4z5TH/wrXsS6vGps00U9gJ9ej
-YHmjSCj35R0gDJ70Kg+2YqYVS8/OhrKnLU/sOVXHb+SegCR4tW7WWWhwkDeI+09g
-4B4RYIC6/bec/RBIqstfjxBsHoo1LMzM7kqDMPOj2ZNqEgKQjMC6jzHtWi10ISm/
-kqKw5OnA8H31LFERYP7QxmCSQOrusgicFan2j4DWW8f4WMNycjqrnBIht5ZrIqSI
-EQ09I6ZugKHatpWhAIHPLrYkyvO1XFsDrKgqpuuhyhURWWvR0P36kBR3NC/Ng1aC
-2EewTL9obhBmN8viZSFbc6GV7aqlFSvDXGMb5GPTLhQutwy3Gw0=
-=3Zoq
------END PGP SIGNATURE-----
+TO
 
---okozqc7em33lbxec--
+	1. write to failslab attribute of <cache name> (may fail it has alias)
+	2. write to cache_filter to enable cache filtering
+	3. setup probability, interval, times, size
+?
+
+as you may know, SLAB_FAILSLAB does nothing when
+cache_filter is disabled, and you should pass slub_debug=A,<cache name> anyway
+to prevent doing cache merging with <cache name>.
+
+-- 
+Thanks,
+Hyeonggon
