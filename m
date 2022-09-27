@@ -2,90 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFD15EC7C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC425EC7C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbiI0PbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
+        id S231864AbiI0Pa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232114AbiI0PbH (ORCPT
+        with ESMTP id S231500AbiI0Paz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:31:07 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BF91BBEC1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:31:02 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RF7bKT005442;
-        Tue, 27 Sep 2022 15:30:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=pteMmzmFE/0rlHtcgr3tgcSqCyUL+eWf8CyEh/Zv6Ac=;
- b=c4HYvdkfEONe9tlUf5StGz/pZSSpy+uBysXwEGVeW72NsmoYR21Bs18tSpgqk3Yl27xL
- lz4j68e+sHAK7LTMWpW3hmbMniCNuraZ3TRUT382j84zmcGpp0WjICBSaoKelHlKBcZN
- Bh+dmXI/m8XLBpGBnOcKA+IQnhLYKsYbK4Ie+cOhue9jAjUnzzWkLZe+cVLxCb6GvnTh
- cpOfZKyDetqdqlxxXqfShYwAX7RytpmBzXHuBseY6CAXhslPRJ57NITkVuHcFrsQmDJj
- k7cIEvlO5bPAlbhabFKoWwU7UH91/ayM/foN/s+vuZ/jfMA9DSlN7KYhbHDRAwtYRCJB lw== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3juwru1h6q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 15:30:55 +0000
-Received: from pps.filterd (NASANPPMTA04.qualcomm.com [127.0.0.1])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28RFUsPa026051;
-        Tue, 27 Sep 2022 15:30:54 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NASANPPMTA04.qualcomm.com (PPS) with ESMTPS id 3jv2t08r56-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 15:30:54 +0000
-Received: from NASANPPMTA04.qualcomm.com (NASANPPMTA04.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28RFUsOE026045;
-        Tue, 27 Sep 2022 15:30:54 GMT
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA04.qualcomm.com (PPS) with ESMTPS id 28RFUsnF026044
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 15:30:54 +0000
-Received: from [10.216.13.72] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 27 Sep
- 2022 08:30:51 -0700
-Message-ID: <9ae90959-4d7c-bc3c-4710-5867a0cd4573@quicinc.com>
-Date:   Tue, 27 Sep 2022 21:00:47 +0530
+        Tue, 27 Sep 2022 11:30:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51310A7ABE;
+        Tue, 27 Sep 2022 08:30:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A103B81C5C;
+        Tue, 27 Sep 2022 15:30:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40656C433D6;
+        Tue, 27 Sep 2022 15:30:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664292651;
+        bh=KkONLbw354gmM11QpeIodg4A6ac2eweBJJjS1Gdelbg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M0OG5AB4B++z0w2kxIKqmRVr/IDEaSEIyw4LjNzqXRFmy/sst6+MLtL3WFIwHcpZ7
+         ApLzhyYZ5Lq0R6GEVVJP/TisYm6KB6o6/Ezofob6Q+BRB8WVksv3eo4vupUTLZoGuS
+         Rsn1kwWHlzoOQ7R52pCIabivWdIvAnaOk5Wmeqls=
+Date:   Tue, 27 Sep 2022 17:30:48 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Douglas Su <d0u9.su@outlook.com>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v10 23/27] Kbuild: add Rust support
+Message-ID: <YzMXKOa3It5mcmR3@kroah.com>
+References: <20220927131518.30000-1-ojeda@kernel.org>
+ <20220927131518.30000-24-ojeda@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: locking/rwsem: RT throttling issue due to RT task hogging the cpu
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, <mingo@redhat.com>,
-        <will@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <"<boqun.feng"@gmail.com>
-References: <e1cb435a-4471-ac3a-344f-04448f167c9f@quicinc.com>
- <40d0decc-0565-1e13-3c12-ac963ebed429@redhat.com>
- <be87a130-62ba-e0a7-1c5b-c48f1e5548e1@redhat.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <be87a130-62ba-e0a7-1c5b-c48f1e5548e1@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: bcAgR1Nbe2tWAqo4d4WwBrncP_6gHSUw
-X-Proofpoint-ORIG-GUID: bcAgR1Nbe2tWAqo4d4WwBrncP_6gHSUw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-27_06,2022-09-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- priorityscore=1501 malwarescore=0 clxscore=1015 phishscore=0
- lowpriorityscore=0 mlxlogscore=914 mlxscore=0 bulkscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209270095
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+In-Reply-To: <20220927131518.30000-24-ojeda@kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,59 +74,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Waiman,
-
-Thanks for the reply.
-
-On 9/27/2022 8:56 PM, Waiman Long wrote:
-> On 9/27/22 11:25, Waiman Long wrote:
->>
->> On 9/20/22 12:19, Mukesh Ojha wrote:
->>> Hi,
->>>
->>> We are observing one issue where, sem->owner is not set and 
->>> sem->count=6 [1] which means both RWSEM_FLAG_WAITERS and 
->>> RWSEM_FLAG_HANDOFF bits are set. And if unfold the sem->wait_list we 
->>> see the following order of process waiting [2] where [a] is waiting 
->>> for write, while [b],[c] are waiting for read and [d] is the RT task 
->>> for which waiter.handoff_set=true and it is continuously running on 
->>> cpu7 and not letting the first write waiter [a] on cpu7.
->>>
->>> [1]
->>>
->>>   sem = 0xFFFFFFD57DDC6680 -> (
->>>     count = (counter = 6),
->>>     owner = (counter = 0),
->>>
->>> [2]
->>>
->>> [a] kworker/7:0 pid: 32516 ==> [b] iptables-restor pid: 18625 ==> 
->>> [c]HwBinder:1544_3  pid: 2024 ==> [d] RenderEngine pid: 2032 cpu: 7 
->>> prio:97 (RT task)
->>>
->>>
->>> Sometime back, Waiman has suggested this which could help in RT task
->>> leaving the cpu.
->>>
->>> https://lore.kernel.org/all/8c33f989-8870-08c6-db12-521de634b34e@redhat.com/ 
->>>
->>>
->> Sorry for the late reply. There is now an alternative way of dealing 
->> with this RT task hogging issue with the commit 48dfb5d2560d 
->> ("locking/rwsem: Disable preemption while trying for rwsem lock"). 
->> Could you try it to see if it can address your problem?
+On Tue, Sep 27, 2022 at 03:14:54PM +0200, Miguel Ojeda wrote:
+> Having most of the new files in place, we now enable Rust support
+> in the build system, including `Kconfig` entries related to Rust,
+> the Rust configuration printer and a few other bits.
 > 
-> FYI, this commit is in the tip tree. It is not in the mainline yet.
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Co-developed-by: Finn Behrens <me@kloenk.de>
+> Signed-off-by: Finn Behrens <me@kloenk.de>
+> Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Co-developed-by: Michael Ellerman <mpe@ellerman.id.au>
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
+> Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
+> Co-developed-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> Co-developed-by: Boris-Chengbiao Zhou <bobo1239@web.de>
+> Signed-off-by: Boris-Chengbiao Zhou <bobo1239@web.de>
+> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Co-developed-by: Douglas Su <d0u9.su@outlook.com>
+> Signed-off-by: Douglas Su <d0u9.su@outlook.com>
+> Co-developed-by: Dariusz Sosnowski <dsosnowski@dsosnowski.pl>
+> Signed-off-by: Dariusz Sosnowski <dsosnowski@dsosnowski.pl>
+> Co-developed-by: Antonio Terceiro <antonio.terceiro@linaro.org>
+> Signed-off-by: Antonio Terceiro <antonio.terceiro@linaro.org>
+> Co-developed-by: Daniel Xu <dxu@dxuuu.xyz>
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> Co-developed-by: Bj�rn Roy Baron <bjorn3_gh@protonmail.com>
+> Signed-off-by: Bj�rn Roy Baron <bjorn3_gh@protonmail.com>
+> Co-developed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  .gitignore                     |   2 +
+>  Makefile                       | 172 ++++++++++++++-
+>  arch/Kconfig                   |   6 +
+>  include/linux/compiler_types.h |   6 +-
+>  init/Kconfig                   |  46 +++-
+>  kernel/configs/rust.config     |   1 +
+>  lib/Kconfig.debug              |  34 +++
+>  rust/.gitignore                |   8 +
+>  rust/Makefile                  | 381 +++++++++++++++++++++++++++++++++
+>  rust/bindgen_parameters        |  21 ++
+>  scripts/Kconfig.include        |   6 +-
+>  scripts/Makefile               |   3 +
+>  scripts/Makefile.build         |  60 ++++++
+>  scripts/Makefile.debug         |   8 +
+>  scripts/Makefile.host          |  34 ++-
+>  scripts/Makefile.lib           |  12 ++
+>  scripts/Makefile.modfinal      |   8 +-
+>  scripts/cc-version.sh          |  12 +-
+>  scripts/kconfig/confdata.c     |  75 +++++++
+>  19 files changed, 869 insertions(+), 26 deletions(-)
+>  create mode 100644 kernel/configs/rust.config
+>  create mode 100644 rust/.gitignore
+>  create mode 100644 rust/Makefile
+>  create mode 100644 rust/bindgen_parameters
 
-
-I only posted that patch so, i am aware about it. In that issue 
-sem->count was 7 and here it is 6 and current issue occurs after fix
-48dfb5d2560d ("locking/rwsem: Disable preemption while trying for rwsem 
-lock").
-
--Mukesh
-
-> 
-> Cheers,
-> Longman
-> 
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
