@@ -2,147 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC255EB63B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD715EB63D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiI0AXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 20:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
+        id S229626AbiI0AYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 20:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiI0AW5 (ORCPT
+        with ESMTP id S229571AbiI0AYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 20:22:57 -0400
-Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50069.outbound.protection.outlook.com [40.107.5.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C472EA570A;
-        Mon, 26 Sep 2022 17:22:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q/AozpzGjqGCqPiw5y/7Hzp0wu/bcp9rneCX/2eXTS3sBzimhg25VS+6So6yW+42VKnJN/2IPY6Otv59kmUzzPp1vCS0nHCg8804XT7Tond0Q+tJCjwQDaKjXKgmloSukCt4Bw11tZW65fRzPic7Dq4YIkHl42r8Sl6CgOWdtaKI+r7oUmZvgoAl3ALJeLcaRv04IQ9WK776/gzUj3jGjlXV+oLed2GJCOurDveuN9cxI7JMbwIWjo00yMQEMxGBC9Ug4rv/QWRas6YHVA0bCv+J/cmLgScs4Fd0PHFfNje4MG8bFQG6NMlPeRGIQnyHLIc8o8Bw/K+GDfP38+WekA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lRLDxIgdkM3W0Gn8gBe2VWX5Hs5dLJjFS8Pw+r3aAmE=;
- b=N8b+DZYNXzj4EvR3rVTri03uhC7sSLks7gq0DDWAIj5T6ZeYA+btZ8DjVQO0WUxtuxeVhETO04c5QIlqLXcTwTT6dP32YnB4+G19/qSbusdTzPK1Ws1c0wdoxIQS+KzG4ysMHLF7KokMCMC0f9+I0aVvPfkQAnk7fKWPvQERINaHIxRrKWq25smpmIdtAvIYBDcFX1/RQ0GT8iSlhnOnNTv8B6Odr3gzouTKDSQ8ASCC9ds6aSd46rW6nSvv3JGNQgdq3jItXDG9SLeX3ix/OiTYFqYLdOOoBUDTWpYtyxAqAj4So3mYJ+4XsdEsWJAiMA7nItTtkAy9R0kKHV1ulA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lRLDxIgdkM3W0Gn8gBe2VWX5Hs5dLJjFS8Pw+r3aAmE=;
- b=LbbRVDZqhDCMCG+8/hcdJVJBi6MV9MZkOrzf38U/Vq0+JZmf45hQEjOIPShwbWNygBuG8D/2VX0eNDQOkZWAp9JPttORoWx7r/vq/PR20FeP0Ig7a8CP1FZhRui/YutqI3FTeirfph+XpiQjd6px/CDzL/U9XZBX8/PY4UbNCMQ=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by PA4PR04MB9390.eurprd04.prod.outlook.com (2603:10a6:102:2a9::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
- 2022 00:22:53 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::a67a:849c:aeff:cad1]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::a67a:849c:aeff:cad1%7]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
- 00:22:53 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     Vladimir Oltean <olteanv@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Rui Sousa <rui.sousa@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Richie Pearn <richard.pearn@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 02/12] tsnep: deny tc-taprio changes to per-tc
- max SDU
-Thread-Topic: [PATCH v2 net-next 02/12] tsnep: deny tc-taprio changes to
- per-tc max SDU
-Thread-Index: AQHYz2o2kMm9MIsgNk2AWROGsQgg9q3yMZSAgAATq4CAABuYAIAADuQA
-Date:   Tue, 27 Sep 2022 00:22:53 +0000
-Message-ID: <20220927002252.mwrxp3wicew3vz6p@skbuf>
-References: <20220923163310.3192733-1-vladimir.oltean@nxp.com>
- <20220923163310.3192733-3-vladimir.oltean@nxp.com>
- <20220926134025.5c438a76@kernel.org> <20220926215049.ndvn4ocfvkskzel4@skbuf>
- <20220926162934.58bf38a6@kernel.org>
-In-Reply-To: <20220926162934.58bf38a6@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1PR04MB5136:EE_|PA4PR04MB9390:EE_
-x-ms-office365-filtering-correlation-id: 412d391a-d7a7-491e-745a-08daa01e6b33
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xrxhPa5Mtff9tWGEbofovBvPJoz+MECi6KeLolSS1LhZxL/1wWpoYpB+bGQzKSPqu1AMfEsakhFAu+zBNRLx9R6xvBrTs/WYP1DFaQL2ckeIh2YLjsIuw4Ub1mkk7fqZ+i/Ss4ej/eWz1txP5mmveEneyHdjTTYB8At8qG++iMivLsmldg5HsfbSqzoCbNGIDUwvTr3n97PrkDlPpMze4nrXN3b3qh3SjfJWDvkqorioHshqMldzUGXj7a9L2TaRa+0tsAVOG0zzmt6+YWESv7HdHdCcCMjgh1EBKXxIctSFqKCNdcGYsQn2FSckgXGa8xGmhJm0FzTdTe88T1vYMfZZlIKR4GHUgwFUM14XaVf6nC90bT0Y9ABVh5OwOt4nXsJXoRGmd+YTQfU15dErShX3cJta+h5kTTREtBphAwR0FUZObkd8gDI3pkiqRS8Bsz2Bv78tmKJhteHmSw8CRR1Xkq4pGm0PUpp9tQym2cBKIlT4JYrc1hza3QNpYITh+kKTvif4Yo+DzMSPJNdg6KCqSt4vB7YjnPt4VEEnizd+zR+VwXu11ek3XwO4yPa50LRN1Pf7pYi7kCdpc2LE9YpJMGbCuHhyG8QgJQjtZzYPPk2rG37z18pI9uDTDUNANmQJLScpbCtCmODzTzzG/gh990QeHHWuWDkJ9ewpgwwyTgnghXOqU5noa8IG6tE06llXZ3PcluJWysmPlsoaYbSMFCvoxZs6iyJk29vJXLfciHsT0++NH7ZxbYjQijyB
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(39860400002)(366004)(136003)(376002)(396003)(346002)(451199015)(122000001)(2906002)(7416002)(66946007)(83380400001)(6506007)(41300700001)(91956017)(76116006)(6512007)(9686003)(478600001)(5660300002)(44832011)(38100700002)(8936002)(71200400001)(6486002)(26005)(38070700005)(186003)(1076003)(6916009)(54906003)(86362001)(66556008)(64756008)(8676002)(66476007)(4326008)(66446008)(33716001)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?f8chh9IJWiEHNA5CFbr8Rv0X/YAZ++7lUHYTMWs2DYIuRjORz9uCjohKZd+d?=
- =?us-ascii?Q?JI4KSaTOsJsr3azyKknKxbHSZuAp1PcnHsL8GMdhBi4qCGF0Ut25j7/LOI4p?=
- =?us-ascii?Q?ht4V/HItuf4IyebDnNVm0Q94HwkpQdutK6FTO/MJWN4CbFyU0V0Hzis2nEIt?=
- =?us-ascii?Q?zta8raBAeTni1YO9NE8DcIwm1J8iVqSLg4LLJqUwb9Sj8zr12ocRPX7fpThN?=
- =?us-ascii?Q?QnjnKslvTgtrBbJWvtE+Ecau+fuiMVFrviMDZx81fP8bBBnEpPqWrG7t7EeW?=
- =?us-ascii?Q?vaL6SUpbU0IFWxjL4pHv+WmR/xF3KdaxT2y7OEXZtqHLPx8SSw0staERegzX?=
- =?us-ascii?Q?qal/GR/zvP1Yi1DD7sUGIeya4mbPcGXV7By1PE0FAr+0iPpfuq7YObR7HB/9?=
- =?us-ascii?Q?r+uteQ8nCNvkwGH12RRkLskMXxsO+h8OdJXKVIrW2ina2NFYN6KQ6WxM7pPl?=
- =?us-ascii?Q?ENMc5z244td6GihkRAMdQx1AhdweOyWhTnd5URhDldPlCvmM7BgjTTULK0VH?=
- =?us-ascii?Q?G0ml2tG5kofVAAa1UamfLhi16SesUKKU3RB82YION01+UdNT8VEbGil9xvQ/?=
- =?us-ascii?Q?va5VWBIYPcBDjgorql9F6vPXWRTN5UoYnAWt2YNylKCTLXeMHfilaLBb1WvR?=
- =?us-ascii?Q?YKnhzDC0SyLISIVh1xIxSUKKcvIHS59I5WvqrJdmk9gGwkbQefzgRcA83sAY?=
- =?us-ascii?Q?vBcjmIbm7Rnyeyz2lzCE7FueLrFQ6Tx0nPJ5XpiOKoNcSVXhJbbeT8K2HJlC?=
- =?us-ascii?Q?C7nmD7w5a1rnbA1v5g++tEkO/fGhsuJlyK7bXXJ5rQzBjt+jihlYZQ6C2v4P?=
- =?us-ascii?Q?bL8ztDo6BMG0BFn1h58WJzA1qB1r7VCyq3aVSJMr/dHxbmRRg240CrCoSlVe?=
- =?us-ascii?Q?Hw0w7VQ+F11twByjvpUnfW9hO81ceREY0amjcqTJWWhc2jvsDYByQ5q7I68Y?=
- =?us-ascii?Q?UsmybwKkL2EEWnn+9OSmZd0aqpsm78DeuqO9kzf91LcKlPQDSPfC926c2g8J?=
- =?us-ascii?Q?kmazfBZUC0ZM6lDr6cBeoW5D9XTooxtv6s0fTQwzUHrJU3mXh2Ll6Y2smE/m?=
- =?us-ascii?Q?GTmhQHap6ZWAjxoTg21W9Wz9iKwBqiAzdNlitdrmHagVw7c/FMe5bhrXJ3kq?=
- =?us-ascii?Q?AxU+b+rpct0woufKcCuFCwKCETVXT8wT77dF7ZeJ09Zv6rd+3OrKTtBBnsq0?=
- =?us-ascii?Q?pxz1ZODd4t6J75Ba3iEERjNVEfX8QRtKaSQvNIo9npH44Z8ojAVqbA07owb6?=
- =?us-ascii?Q?tcDuPc5XTfseIFCSSyYkZkHHKYzPa3f2ACmub2zGi7ofKqWk8/iFfIt6YbWC?=
- =?us-ascii?Q?lgqiIRsjLnNNJKD3tvIFDorVcUZGXgnvpRre/PNtZnvZkY/HNKBVoYlAOMMl?=
- =?us-ascii?Q?+EapafxS03Z4nb68gfNj2M93Lfqh2P/eP2NRR2b4AGgwuqwfqxrEfwW44XeF?=
- =?us-ascii?Q?Ria+14FI1vS7fyuTyGnwdDubGTeQ9d8p65277PQh6p0rlhrUHCOr85yXkaO4?=
- =?us-ascii?Q?m4z5nzIjGS8Ni4lw7hq7Cdpg0C/1+MIT5c09YbfXLTME+Zu/mfbgApBwcMIH?=
- =?us-ascii?Q?vXDK1KxmnxT95lxrBPaccy77hGy2Syaqz3X6GONn1NgpCp239z9D8dTss69Y?=
- =?us-ascii?Q?Ig=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <7EF9E1C2E0EB1048BB9860DF7E06A975@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Mon, 26 Sep 2022 20:24:49 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E7430C
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 17:24:46 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id u59-20020a17090a51c100b00205d3c44162so909752pjh.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 17:24:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=FVHGtYud7j+TinhRk0Oj0kpaihso/Zh2+gft6elVZaA=;
+        b=nR9lKmiMiqGKmEqlY1OFRY5wvSYDGQ+IGHwkuNkZ5uOh7ueyfl1qnsWHsEncw0THtU
+         ttt698wZDhzNdXiDyV0FES6OZdwSdcEVCK0CpvN8qBJA9jCOPaHSh7cP+GxLbnK5TQNz
+         tJpiwJsN2nIHWT7I3ibmhTj/Eild+zjAgu9Q92bB4959PEaCsmQYU0rpy/04LjL8jbki
+         AYfHL5ixBItqm0MnI3fNetBC1sLNEzNS1E5r2bUTttnEKOYIrXDPUZrmlS6f8oQ3MtoD
+         l3zpZvhWqmUk20eMUxI5Lbz5prYL5LOZfbKmCkZtDpP3feAGouzjKuuB0HpMVk5j7K0b
+         RLMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=FVHGtYud7j+TinhRk0Oj0kpaihso/Zh2+gft6elVZaA=;
+        b=o2dj3j5JuDvvz1A2NGlcC361DIymkno7vE0MMYCVhkacn+pCMd8u5PlqKn4GeN0O1y
+         BKTalEavBQC6f+bdCZowTtYHSdYJv/uUzWa7Ygo+edXjyaYB6EyWbrCrMraDO7mwQxnM
+         o2b/p2K9FPxWKWzfO4+W1xtCEDyNcuwJDyU0Jj1iuDj03robjJNWroNp03ssTesMfzCy
+         P4XxbSGgmXVBOSFYUVcQLRzL8fd9mz35xfmtxp/U+lg0J2O+q0M3KCRXCB3qEdTGj/86
+         8VoKMucjImbKbb/NZ1heObvzs0DzAOvzbcgw2FDEJnGx5IrYBQQeF0msZXLJ8pR7+GLK
+         NRfg==
+X-Gm-Message-State: ACrzQf2SuXwVhhxs2oh1BHodzSXANDybYvipAr8W1/6n05v7e9nWuQXF
+        FMX2WaSDEWS1dbzeExZQBFOniQ==
+X-Google-Smtp-Source: AMsMyM4EFvGoGl0C+uHpbpm80WZcxdN1g3sT9qDpjgtEf10wN95IrszxCieJx2Kffs0/DNo+BC1pYg==
+X-Received: by 2002:a17:902:f548:b0:178:44b:4ea9 with SMTP id h8-20020a170902f54800b00178044b4ea9mr24614393plf.77.1664238285344;
+        Mon, 26 Sep 2022 17:24:45 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id t15-20020a63534f000000b00439c1e13112sm73737pgl.22.2022.09.26.17.24.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 17:24:44 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 00:24:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Jann Horn <jannh@google.com>, Will Deacon <will@kernel.org>,
+        Joerg Roedel <jroedel@suse.de>, jean-philippe.brucker@arm.com,
+        Linux-MM <linux-mm@kvack.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux.dev
+Subject: Re: some likely bugs in IOMMUv2 (in tlb_finish_mmu() nested flush
+ and mremap())
+Message-ID: <YzJCyTD4kBSt3VlU@google.com>
+References: <CAG48ez2NQKVbv=yG_fq_jtZjf8Q=+Wy54FxcFrK_OujFg5BwSQ@mail.gmail.com>
+ <Yy3skVk/DvwVnPXD@nvidia.com>
+ <YzIHzIxknGNba6CC@google.com>
+ <YzI2jzvc8D9lYU6G@nvidia.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 412d391a-d7a7-491e-745a-08daa01e6b33
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2022 00:22:53.4187
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VZ5kSprkjraWusVcq8qi0OM1Mu1bLzLsKWk0DWAJo1aVV62e29sU23WCIZDic2SQYqwBEMjpEQcAW8JbjwgrtA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9390
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzI2jzvc8D9lYU6G@nvidia.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -150,68 +78,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 04:29:34PM -0700, Jakub Kicinski wrote:
-> I usually put a capability field into the ops themselves.
+On Mon, Sep 26, 2022, Jason Gunthorpe wrote:
+> On Mon, Sep 26, 2022 at 08:13:00PM +0000, Sean Christopherson wrote:
+> 
+> > > AFAIK if we are flushing the CPU tlb then we really must also flush
+> > > the CPU tlb that KVM controls, and that is primarily what
+> > > invalidate_range() is used for.
+> > 
+> > As above, for its actual secondary MMU, KVM invalidates and flushes at
+> > invalidate_range_start(), and then prevents vCPUs from creating new entries for
+> > the range until invalidate_range_start_end().
+> 
+> Was it always like this? Why did we add this invalidate_range thing if
+> nothing really needed it?
 
-Do you also have an example for the 'usual' manner?
+No, the invalidate_range() hook was added by commit 1897bdc4d331 ("mmu_notifier:
+add mmu_notifier_invalidate_range()") for IOMMUs.  From that changelog, the key
+issue is stalling hardware while the start+end pair is ongoing runs afoul of GPUs
+that don't play nice with re-faulting "indefinitely.
 
-> But since tc offloads don't have real ops (heh) we need to do the
-> command callback thing. This is my knee-jerk coding of something:
->=20
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index 9f42fc871c3b..2d043def76d8 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -960,6 +960,11 @@ enum tc_setup_type {
->  	TC_SETUP_QDISC_FIFO,
->  	TC_SETUP_QDISC_HTB,
->  	TC_SETUP_ACT,
-> +	TC_QUERY_CAPS,
-> +};
-> +
-> +struct tc_query_caps {
-> +	u32 cmd;
+    The page-fault handler in the AMD IOMMUv2 driver doesn't handle the fault
+    if an invalidate_range_start/end pair is active, it just reports back
+    SUCCESS to the device and let it refault the page.  But existing hardware
+    (newer Radeon GPUs) that makes use of this feature don't re-fault
+    indefinitly, after a certain number of faults for the same address the
+    device enters a failure state and needs to be resetted.
+    
+    To avoid the GPUs entering a failure state we need to get rid of the
+    empty-page-table workaround and use the mmu_notifier_invalidate_range()
+    function introduced with this patch.
 
-actually s/u32/enum tc_setup_type/
+> That means iommu is really the only place using it as a proper
+> synchronous shadow TLB flush.
 
-inception....
+More or less. There's also an "OpenCAPI coherent accelerator support" driver,
+drivers/misc/ocxl, that appears use invalidate_range() the same way the IOMMU does.
+No idea how relevant that is these days.
 
->  };
+I much prefer KVM's (and the old IOMMU's) approach of re-faulting in hardware until
+the entire sequence completes.   It _might_ be less performant, but I find it so
+much easier to reason about.  I actually had typed out a "can we just kill off
+mmu_notifier_invalidate_range() and force users to refault hardware" question
+before seeing the above changelog.
 
-> Right, but that's what's in the tree _now_. Experience teaches that
-> people may have out of tree code which implements TAPRIO and may send
-> it for upstream review without as much as testing it against net-next :(
-> As time passes and our memories fade the chances we'd catch such code
-> when posted upstream go down, perhaps from high to medium but still,
-> the explicit opt-in is more foolproof.
+> > > Which makes me wonder if the invalidate_range() hidden inside
+> > > invalidate_end() is a bad idea in general - when is this need and
+> > > would be correct? Isn't it better to put the invalidates near the TLB
+> > > invalidates and leave start/end as purely a bracketing API, which by
+> > > definition, cannot have an end that is 'too late'?
+> > 
+> > Documentation/mm/mmu_notifier.rst explains this, although even that is quite subtle.
+> > The argument is that if the change is purely to downgrade protections, then
+> > deferring invalidate_range() is ok because the only requirement is that secondary
+> > MMUs invalidate before the "end" of the sequence.
+> > 
+> >   When changing a pte to write protect or to point to a new write protected page  
+> >   with same content (KSM) it is fine to delay the mmu_notifier_invalidate_range   
+> >   call to mmu_notifier_invalidate_range_end() outside the page table lock. This   
+> 
+> And then if KVM never needed it why on earth did we micro-optimize it
+> in such an obscure and opaque way?
 
-You also need to see the flip side. You're making code more self-maintainab=
-le
-by adding bureaucracy to the run time itself. Whereas things could have
-been sorted out between the qdisc and the driver in just one ndo_setup_tc()
-call via the straightforward approach (every driver rejects what it
-doesn't like), now you need two calls for the normal case when the
-driver will accept a valid configuration.
+I don't know.  I found the series that introduced the behavior[*], but there are
+no numbers provided and I haven't been able to dredge up why this was even looked
+into in the first place.  From the cover letter:
 
-I get the point and I think this won't probably make a big difference
-for a slow path like qdisc offload (at least it won't for me), but from
-an API perspective, once the mechanism will go in, it will become quite
-ossified, so it's best to ask some questions about it now.
+  It should improve performances but i am lacking hardware and benchmarks
+  which might show an improvement. Maybe folks in cc can help here.
 
-Like for example you're funneling the caps through ndo_setup_tc(), which
-has these comments in its description:
+[*] https://lore.kernel.org/all/20171017031003.7481-1-jglisse@redhat.com
 
- * int (*ndo_setup_tc)(struct net_device *dev, enum tc_setup_type type,
- *		       void *type_data);
- *	Called to setup any 'tc' scheduler, classifier or action on @dev.
- *	This is always called from the stack with the rtnl lock held and netif
- *	tx queues stopped. This allows the netdevice to perform queue
- *	management safely.
+> >   is true even if the thread doing the page table update is preempted right after 
+> >   releasing page table lock but before call mmu_notifier_invalidate_range_end().
+> 
+> That feels like it is getting dangerously close to the CVE Jan pointed
+> at.. We have a write protected page, installed in the PTEs, PTLs
+> unlocked and other things can sense the PTE and see that it is write
+> protected - is it really true nothing acts on that - especially now
+> that DavidH has gone and changed all that logic?
+> 
+> IMHO if we had logic that required the CPU TLB to be flushed under a
+> certain lock I find it to be a very, very, difficult conceptual leap
+> that a shadow TLB is OK to flush later.  If the shadow TLB is OK then
+> lets move the CPU TLB out of the lock as well :)
+> 
+> > That said, I also dislike hiding invalidate_range() inside end(), I constantly
+> > forget about that behavior.  To address that, what about renaming
+> > mmu_notifier_invalidate_range_end() to make it more explicit, e.g.
+> > mmu_notifier_invalidate_range_and_end().
+> 
+> The name for the special case should really capture that hidden point
+> above 'invalidate_range_delayed_write_protect_end' or something else
+> long and horrible. Because it really is special, it is really is only
+> allowed in that one special case (assuming the logic still holds) and
+> every other possible case should catch the invalidate through the tlb
+> flusher.
 
-Do we need to offer guarantees of rtnl lock and stopped TX queues to a
-function which just queries capabilities (and likely doesn't need them),
-or would it be better to devise a new ndo? Generally, when you have a
-separate method to query caps vs to actually do the work, different
-calling contexts is generally the justification to do that, as opposed
-to piggy-backing the caps that the driver acted upon through the same
-struct tc_taprio_qopt_offload.=
+If I had a vote to cast, I would vote to always do invalidate_range() at the same
+time the primary TLBs are flushed.  That seems completely logical and much harder
+to screw up.  I might be a little biased though since KVM doesn't benefit from the
+current shenanigans :-)
