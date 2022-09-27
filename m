@@ -2,109 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C745EC7A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4215EC7A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbiI0P0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
+        id S232040AbiI0P1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbiI0P0e (ORCPT
+        with ESMTP id S231981AbiI0P1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:26:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4C3D589B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:26:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664292392;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DVAGjlc/ZsFlfgcuWgjlGuybatae8DkqOq+/0/8Qj3E=;
-        b=cUTqPDt4Kt746e+mDvv1nGPmSSThiOqopRF3PjFOB7uAKa6Z656ZfdmjnW6cAsBmII3pPd
-        U+XRlUtw+4JtgSUqJE2yAX4sSilNxiB5BLeTFeQZp6HDSaQ5L0iAxeoy2znLLHBjRBiEg/
-        UTmlYAiVxAme1anmZoog91hMvlhHe+g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-674-gVlJzQJ8Peu3EQ4SuO_U8A-1; Tue, 27 Sep 2022 11:26:31 -0400
-X-MC-Unique: gVlJzQJ8Peu3EQ4SuO_U8A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1360085A583;
-        Tue, 27 Sep 2022 15:26:31 +0000 (UTC)
-Received: from [10.22.9.237] (unknown [10.22.9.237])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C35152166B26;
-        Tue, 27 Sep 2022 15:26:30 +0000 (UTC)
-Message-ID: <be87a130-62ba-e0a7-1c5b-c48f1e5548e1@redhat.com>
-Date:   Tue, 27 Sep 2022 11:26:30 -0400
+        Tue, 27 Sep 2022 11:27:12 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DFB18D0CC
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:27:10 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id z2so13724673edi.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:27:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=kankTRCISUIsAfog0Ofr/wisbx67a2Kvj+VX7g1I/LI=;
+        b=fzlkqVQyXabwlDt2N0VtOlZfwq/BadBHEJVad/oL8TIoAObPV8J8nucnuONTqoz6pL
+         rGORO7KYTtsOa56o+iY0kBZMd2rY2rhb4ZJQhJLZq/4i6iThyDiQJASbCbTuiZHaRetW
+         lLsOxX2O89w45itZoNoHky2l2m93ECHjj6dHo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=kankTRCISUIsAfog0Ofr/wisbx67a2Kvj+VX7g1I/LI=;
+        b=XS5nPZiL2U+XgTnyx2X3ZfYE1+W6hVyH5xrJlt761WTuhA+CnWoIP+N6xzfmv3mPup
+         /11dh8hvzvH2+GIfx0XDNcA4dwwEjlxJBO6IMwR02u39J6WAFSN0FVmwKzU74pvc/H6x
+         glOW2Vg+9+eCrJe7v0lXxsT35h45ZoqWjzOHWRU28cQtOkksrIvhOjxvbik49gc5kxwY
+         2IsKpLTt+mnFI2pyDD22TvczecS+Zw1DYrFXuLFZzV73FPcF3j/bg4jky8CTdDYWbV1Z
+         HRKmyMmOiC1JsYW0e8ST7j8dh67sPvm1SHncf86M22MomFx0ERVu3GY3ANiAMvRXcZXx
+         FV1Q==
+X-Gm-Message-State: ACrzQf3T7LWo9KeQ9vIGz7h8+e2HPIZGkJUhV4Wfn0/uv5Z+3elqEIVv
+        Rlgbf5YBRgsNjw+P5cWSrNXc9nnPzIFjYnLc
+X-Google-Smtp-Source: AMsMyM7dO6BkIekiDNPNQqtgkwmM0nLmr1cd8peUdlPm89dLIbM6hweVsdcJgnNg5j26aekWcRn7mg==
+X-Received: by 2002:a05:6402:22fb:b0:457:537b:b628 with SMTP id dn27-20020a05640222fb00b00457537bb628mr9363949edb.313.1664292429367;
+        Tue, 27 Sep 2022 08:27:09 -0700 (PDT)
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
+        by smtp.gmail.com with ESMTPSA id i5-20020a1709064ec500b00782ee6b34f2sm923256ejv.183.2022.09.27.08.27.07
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 08:27:08 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id ay36so6793420wmb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:27:07 -0700 (PDT)
+X-Received: by 2002:a05:600c:19cf:b0:3b4:c8b6:15c6 with SMTP id
+ u15-20020a05600c19cf00b003b4c8b615c6mr3232537wmq.85.1664292427539; Tue, 27
+ Sep 2022 08:27:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: locking/rwsem: RT throttling issue due to RT task hogging the cpu
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
-        will@kernel.org
-Cc:     linux-kernel@vger.kernel.org, "<boqun.feng"@gmail.com
-References: <e1cb435a-4471-ac3a-344f-04448f167c9f@quicinc.com>
- <40d0decc-0565-1e13-3c12-ac963ebed429@redhat.com>
-In-Reply-To: <40d0decc-0565-1e13-3c12-ac963ebed429@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220927063524.493591-1-sean.hong@quanta.corp-partner.google.com>
+In-Reply-To: <20220927063524.493591-1-sean.hong@quanta.corp-partner.google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 27 Sep 2022 08:26:54 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WQXOTJu-YUWyBjdoq4wPrwQYoo68FCJBF7EJfdf+9SrA@mail.gmail.com>
+Message-ID: <CAD=FV=WQXOTJu-YUWyBjdoq4wPrwQYoo68FCJBF7EJfdf+9SrA@mail.gmail.com>
+Subject: Re: [PATCH] drm/panel-edp: Add BOE NT116WHM-N4C (HW: V8.1)
+To:     Sean Hong <sean.hong@quanta.corp-partner.google.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 11:25, Waiman Long wrote:
+Hi,
+
+On Mon, Sep 26, 2022 at 11:35 PM Sean Hong
+<sean.hong@quanta.corp-partner.google.com> wrote:
 >
-> On 9/20/22 12:19, Mukesh Ojha wrote:
->> Hi,
->>
->> We are observing one issue where, sem->owner is not set and 
->> sem->count=6 [1] which means both RWSEM_FLAG_WAITERS and 
->> RWSEM_FLAG_HANDOFF bits are set. And if unfold the sem->wait_list we 
->> see the following order of process waiting [2] where [a] is waiting 
->> for write, while [b],[c] are waiting for read and [d] is the RT task 
->> for which waiter.handoff_set=true and it is continuously running on 
->> cpu7 and not letting the first write waiter [a] on cpu7.
->>
->> [1]
->>
->>   sem = 0xFFFFFFD57DDC6680 -> (
->>     count = (counter = 6),
->>     owner = (counter = 0),
->>
->> [2]
->>
->> [a] kworker/7:0 pid: 32516 ==> [b] iptables-restor pid: 18625 ==> 
->> [c]HwBinder:1544_3  pid: 2024 ==> [d] RenderEngine pid: 2032 cpu: 7 
->> prio:97 (RT task)
->>
->>
->> Sometime back, Waiman has suggested this which could help in RT task
->> leaving the cpu.
->>
->> https://lore.kernel.org/all/8c33f989-8870-08c6-db12-521de634b34e@redhat.com/ 
->>
->>
-> Sorry for the late reply. There is now an alternative way of dealing 
-> with this RT task hogging issue with the commit 48dfb5d2560d 
-> ("locking/rwsem: Disable preemption while trying for rwsem lock"). 
-> Could you try it to see if it can address your problem?
+> Add support for the BOE - NT116WHM-N4C (HW: V8.1) panel.
+>
+> Signed-off-by: Sean Hong <sean.hong@quanta.corp-partner.google.com>
+> ---
+>  drivers/gpu/drm/panel/panel-edp.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-FYI, this commit is in the tip tree. It is not in the mainline yet.
+Wow, another panel?!?
 
-Cheers,
-Longman
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
+Pushed to drm-misc:
+
+2f24fe8c54cc drm/panel-edp: Add BOE NT116WHM-N4C (HW: V8.1)
