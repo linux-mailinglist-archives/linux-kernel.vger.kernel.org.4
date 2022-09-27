@@ -2,94 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8457E5ECE98
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAC65ECE99
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233022AbiI0UdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 16:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
+        id S233079AbiI0Ud6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 16:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232972AbiI0UdI (ORCPT
+        with ESMTP id S230509AbiI0Udz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 16:33:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DF98995D;
-        Tue, 27 Sep 2022 13:33:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3D3AB81C17;
-        Tue, 27 Sep 2022 20:33:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC978C433C1;
-        Tue, 27 Sep 2022 20:33:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664310785;
-        bh=aL7SicLvUw5LvgT/E6i/KGRP14jD0cSAYV7ECGaRcWs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jo1mHKcFMOonQxXgNyU5EPNG66pvJKVik4VmKMpxlxkj6AtYcGtpL8X0cZSWR9EbQ
-         tZxSJsPVSjOPScWRfB5zhoP3jGrHuf4Np3Dg2z+Wwi6vbID9dLX7I7VBi7cQDFeavs
-         3qqstOLAG4Y23DogiCUKwoCsE+g3He47M1drXnE4RFrDL62yCDoOgkLHEQrRC4o3OS
-         mYYCp+SLAEAHlb+F8mH3b6hlDE3XMnFhx9XBZ04bNGOOynFBIUHckwVU1NQ0H0uBg3
-         1U8FRTQ3YNYFKR9l+gHq28tj94qw9WxG+MUhp8gaSMcD924DE0BQjZdEBAqlAgSPe1
-         i0NWy9WDIKrrg==
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>, bpf@vger.kernel.org,
-        Song Liu <songliubraving@fb.com>, Daniel Xu <dxu@dxuuu.xyz>
-Subject: [PATCH -tip] bpf: Check flags for branch stack in bpf_read_branch_records helper
-Date:   Tue, 27 Sep 2022 22:32:59 +0200
-Message-Id: <20220927203259.590950-1-jolsa@kernel.org>
-X-Mailer: git-send-email 2.37.3
+        Tue, 27 Sep 2022 16:33:55 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD3CB2CDF
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 13:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664310834; x=1695846834;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=psQUvekD0UFhkXqvpEfv0S+bNH7n4mkxbyLouyQNObw=;
+  b=idIy3Ti92+K5BY3gQJRKjuwGnCuvJlIFvRNwvHfgdWugH93qZBtnQPuy
+   XCXI1AXM/Ga/Fx3/g2aIi7enr7PW4RyPzcja/YjBQ03deIxGQSRYgMvvC
+   lDAuZ6K5qMIbijbB7ZYkt566fx/6M6Fz7SYh52XgSypnLdtx/qakewOh9
+   /8i84jWaqbYvfzFJkt/hJPHl+2BTmbhz8472V05vMxt3b5m3qo2B1XTO1
+   BJDDg97p+NDSFNaHqysMAwwELMz+PXHKNFEBZ1q7x4yXU+UDnhH4Ir9o1
+   hGAyDosuqNhvb7O/hmRYVK33YWL/WXT29DC7YfV6TqyF2sDKPyOWtyvHp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="387710463"
+X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
+   d="scan'208";a="387710463"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 13:33:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="652418606"
+X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
+   d="scan'208";a="652418606"
+Received: from lkp-server02.sh.intel.com (HELO dfa2c9fcd321) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 27 Sep 2022 13:33:52 -0700
+Received: from kbuild by dfa2c9fcd321 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1odHH6-0001YG-0i;
+        Tue, 27 Sep 2022 20:33:52 +0000
+Date:   Wed, 28 Sep 2022 04:33:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ b4d0dcbca84a68ac7094f697b3ceef938bf0f755
+Message-ID: <63335e2d.AdsWT5qts5FY/goE%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recent commit [1] changed branch stack data indication from
-br_stack pointer to sample_flags in perf_sample_data struct.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: b4d0dcbca84a68ac7094f697b3ceef938bf0f755  Merge branch into tip/master: 'x86/cleanups'
 
-We need to check sample_flags for PERF_SAMPLE_BRANCH_STACK
-bit for valid branch stack data.
+elapsed time: 789m
 
-[1] a9a931e26668 ("perf: Use sample_flags for branch stack")
+configs tested: 63
+configs skipped: 2
 
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Fixes: a9a931e26668 ("perf: Use sample_flags for branch stack")
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
-NOTE sending on top of tip/master because [1] is not
-     merged in bpf-next/master yet
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
- kernel/trace/bpf_trace.c | 3 +++
- 1 file changed, 3 insertions(+)
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+powerpc                           allnoconfig
+alpha                               defconfig
+sh                               allmodconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+arc                  randconfig-r043-20220925
+riscv                randconfig-r042-20220925
+x86_64                           rhel-8.3-syz
+x86_64                              defconfig
+arc                  randconfig-r043-20220926
+x86_64                           rhel-8.3-kvm
+s390                 randconfig-r044-20220925
+s390                                defconfig
+x86_64                         rhel-8.3-kunit
+s390                             allmodconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+i386                 randconfig-a001-20220926
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+i386                 randconfig-a004-20220926
+x86_64               randconfig-a002-20220926
+i386                 randconfig-a005-20220926
+x86_64               randconfig-a004-20220926
+i386                 randconfig-a006-20220926
+x86_64               randconfig-a001-20220926
+i386                 randconfig-a002-20220926
+s390                             allyesconfig
+i386                 randconfig-a003-20220926
+x86_64               randconfig-a003-20220926
+x86_64               randconfig-a005-20220926
+x86_64               randconfig-a006-20220926
+i386                                defconfig
+arm                                 defconfig
+m68k                             allyesconfig
+i386                             allyesconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 68e5cdd24cef..1fcd1234607e 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1507,6 +1507,9 @@ BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
- 	if (unlikely(flags & ~BPF_F_GET_BRANCH_RECORDS_SIZE))
- 		return -EINVAL;
- 
-+	if (unlikely(!(ctx->data->sample_flags & PERF_SAMPLE_BRANCH_STACK)))
-+		return -ENOENT;
-+
- 	if (unlikely(!br_stack))
- 		return -ENOENT;
- 
+clang tested configs:
+hexagon              randconfig-r045-20220925
+hexagon              randconfig-r041-20220926
+hexagon              randconfig-r045-20220926
+hexagon              randconfig-r041-20220925
+riscv                randconfig-r042-20220926
+s390                 randconfig-r044-20220926
+i386                 randconfig-a011-20220926
+i386                 randconfig-a014-20220926
+i386                 randconfig-a013-20220926
+i386                 randconfig-a012-20220926
+i386                 randconfig-a015-20220926
+i386                 randconfig-a016-20220926
+x86_64               randconfig-a012-20220926
+x86_64               randconfig-a014-20220926
+x86_64               randconfig-a013-20220926
+x86_64               randconfig-a011-20220926
+x86_64               randconfig-a015-20220926
+x86_64               randconfig-a016-20220926
+
 -- 
-2.37.3
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
