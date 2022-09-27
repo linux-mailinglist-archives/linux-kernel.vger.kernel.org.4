@@ -2,273 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475FC5ED0E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 01:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5149E5ED0F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 01:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbiI0XRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 19:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
+        id S232324AbiI0XTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 19:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbiI0XRC (ORCPT
+        with ESMTP id S231627AbiI0XTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 19:17:02 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009471129CC
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 16:17:00 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7ee329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ee:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 732D21EC0426;
-        Wed, 28 Sep 2022 01:16:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1664320615;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=BsS2yAAp8a7eteydGjz/1IIbcCWf8fm6O9bJHVnMIgE=;
-        b=MDAqIYvETvvwwVfPadefvCT9E+d7+i9sxLo6dDkj6g/t1gln+Ku8fF14E8fBM8W7T/0vla
-        3AR8k+QlxFLx1Uf0QzANuyU5aIlg8QG0tkFNTzBqUsWwqwERemmu96QmVorvJr3SDA8XHU
-        b4cizwfQvMC9A+15M/lhgR8yDrnvnbI=
-Date:   Wed, 28 Sep 2022 01:16:50 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
- mtrr_aps_delayed_init
-Message-ID: <YzOEYsqM0UEsiFuS@zn.tnic>
-References: <20220908084914.21703-1-jgross@suse.com>
- <20220908084914.21703-9-jgross@suse.com>
- <YzIVfj/lvzQrK15Y@zn.tnic>
- <ce8cb1d3-a7d2-7484-26eb-60d3e29fa369@suse.com>
- <YzLMKk4OK9FtjjKQ@zn.tnic>
- <c0872933-e046-0c5e-b63f-861d2d343794@suse.com>
- <YzLcSOS6ZLIoPwBl@zn.tnic>
- <d3cd5c50-24e7-ffba-de2d-cf00400f6e38@suse.com>
- <YzLo9IFDYW1T8BVZ@zn.tnic>
- <314e3bd3-3405-c0c3-225c-646d88cbfb1a@suse.com>
+        Tue, 27 Sep 2022 19:19:03 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2048.outbound.protection.outlook.com [40.107.92.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1461129F0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 16:19:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ALkaOCDnQnZPqDqx7X4SGlDyT/LCYr9AMgXM9YH0j5TMVX9/ilqzs1iz6/Xl05P3cweZh4cK1ZIQ2vSe5Lmo8O7L75wnon1kybeT9+8SM8yfzj78+L/7TIoXv+acEi54KYtBLpvORRSZrV3Y3ECj7mDhrV8O9ubXOD4xsAxNY7vp11J/TY4GHw+KVOlFkbWhW5LjSWZRUWnyayHZhVFwwHPuLNpPTTqXKfNVv25Fj7QXuT5ZgQJZXNhbs8I1udJ7QhM9xk4JGzLHnMj1/brSk8k8LSs3CHi2ufNmShLLTGSwdlmJ+MVZA4EnudG0F349MhD9whSI7HhZ5/wuovDauw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JoC0urk5WC0W3I64kQgESX76jLvac7UpKl0yN3aBeuc=;
+ b=XTjGcPNKICEDhQTbfOQwk6dhKZgQ4yvTI/tHPG09btHIzRcoTm5DvSqTC+6SXOKBP6GFXREwD679JzGLXS8LuoV0IBqNiv4zcpmm8iVNRhqXM3iTV2S92CWJpvK+xlHRqQpUbOm5SdMYMrl30FO+Hic7+IggHVXBzyFJL0N0CEtfc3x8tYkh1k0AEwdYM6ROWrbm99CpcTuGgJD1M4uuAqC0Vdj0JT+9ojIElGpgvBue3Si8x0+TyrtP+HshAzevgEkBhK4hdaWEDKCHCGdEscd56N/pOa6LlynAjd3gwZiDHyzUi3PeC0pYF8XxaNAjF0RlqDhj3XJXNhzx6rFIgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JoC0urk5WC0W3I64kQgESX76jLvac7UpKl0yN3aBeuc=;
+ b=TY+TojnCKXV5SzIA1OPsnnRmqSKGNyUHX6c+xw3AIBvPdzpnJ8THzq+F6O8fRlM4IRwNd8kojVGAcvtQ/lpmtvIuFBd/Jj/jfA/WSqRl+9+GadF9/kkMnalRKMoUn8nsd/I3uGkOyzN7QxzGfQLw/Dz35QpJzjazS6cBFkBXIdo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5311.namprd12.prod.outlook.com (2603:10b6:5:39f::7) by
+ PH7PR12MB5733.namprd12.prod.outlook.com (2603:10b6:510:1e0::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.24; Tue, 27 Sep
+ 2022 23:18:59 +0000
+Received: from DM4PR12MB5311.namprd12.prod.outlook.com
+ ([fe80::fc54:e514:e096:b243]) by DM4PR12MB5311.namprd12.prod.outlook.com
+ ([fe80::fc54:e514:e096:b243%3]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
+ 23:18:59 +0000
+Message-ID: <179b3e55-695a-d145-0b3b-2b67fbb54097@amd.com>
+Date:   Tue, 27 Sep 2022 19:18:55 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [REGRESSION] Graphical issues on Lenovo Yoga 7 14ARB7 laptop
+ since v6.0-rc1 (bisected)
+Content-Language: en-US
+To:     August Wikerfors <git@augustwikerfors.se>,
+        Alex Deucher <alexdeucher@gmail.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        regressions@lists.linux.dev
+References: <c1f8886a-5624-8f49-31b1-e42b6d20dcf5@augustwikerfors.se>
+ <eee82fb8-0fc5-98cb-e630-f86891574f21@leemhuis.info>
+ <CADnq5_PRP3ekHPLhdXALxt9GL3aHHZQUw5TNAwm4t+ggimUq7g@mail.gmail.com>
+ <33cf5071-3157-a3c2-3252-3a8ab926c60d@augustwikerfors.se>
+ <f4818fc3-7015-29ed-95c5-ab6a18da33d7@amd.com>
+ <ea1f1d81-650b-768a-30ab-c9d7d9f9fa54@augustwikerfors.se>
+ <3ba218a3-8b6b-c0da-873b-53e1a8a082ae@amd.com>
+ <f84e4956-293f-801d-6b9f-df4226df87d2@augustwikerfors.se>
+From:   Leo Li <sunpeng.li@amd.com>
+In-Reply-To: <f84e4956-293f-801d-6b9f-df4226df87d2@augustwikerfors.se>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH2PR14CA0054.namprd14.prod.outlook.com
+ (2603:10b6:610:56::34) To DM4PR12MB5311.namprd12.prod.outlook.com
+ (2603:10b6:5:39f::7)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <314e3bd3-3405-c0c3-225c-646d88cbfb1a@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5311:EE_|PH7PR12MB5733:EE_
+X-MS-Office365-Filtering-Correlation-Id: b9cd68d4-c671-4259-3305-08daa0dea80a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: P1A08/O0HBq0EEdgOF9xReualOcCijzzvOdNivr7ntKfLy9felo1XSfYNcuviAbG0ytt8AY5gowGFsB7nqJM0OMA6RJGXRpif5s461TSjoguM6dNEk1kfM0mg5s4sNjlxsBJVcE4/gwb2/3rIAeaCiABibxNQbYHaJleqqJ2GoUEZNFZyDDTjtLPgwUHZFm/SuLoHwNX56NSFH0mt2ANcgnLq7keRqT5JlacyYJ/aAHu4NdGvGR7LaqafRNnEniDrP4cMNi82JiFfJMxN2k4z8Xds99GeL/2Ewy67iJxoBo7/x/Y4gxO7dP8DI2peKdjiF0ExFvJ9CFO5L1YX2jwf76gBDsr+6PNVewEOpY87H9LLkWZwmpRrF8Apd4JvhMagMh+B0BCZ4d3+6eGxMKxdKwSHefvyH0GWmulgCOiUVHR8CkDNOPQoS7aFc3pg5e1YZCXw4xpYiFl+E4bv3ECEtef8CGeaf7XrohZBQhv70uREtZo8KtQ5MuGe8cMErn0kNYZGJZRSAVqxmteDVdJpAnrgdg6tVI4VxRJthgDtpeU+0udPARTRBvxLW4ENIQAOZrltGbbllhkR0jqoXtBH2wRZHPt6sgVHS529B7zzMc6CO5ZosSPz+ggdChOTjpKPdelITi2DsAe3I/jU3LinRATKBrz8xv36DCn+nNUNtEJ2W+bUCVlCdE1Tkte+XJZYw1rUAyfWtHFcGutpoZhSJ5BXPLSkdC7Fe7Zw4b+9uo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5311.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(39860400002)(366004)(136003)(451199015)(316002)(110136005)(6512007)(26005)(31696002)(186003)(8936002)(4326008)(54906003)(66946007)(86362001)(66476007)(66556008)(2906002)(8676002)(2616005)(6666004)(5660300002)(6506007)(41300700001)(53546011)(36756003)(6486002)(966005)(66899015)(31686004)(45080400002)(38100700002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?REsrUEdibFA3UzRTODEyekwwdEh3cmt6citkVDgzSWNSYjlFYXdFNXVaUEVq?=
+ =?utf-8?B?Z0dtdmtDMWduU2lTS1RGd05BL21YUXlzT05UMzliQ3F6Qy9vc1FSc21IWWU4?=
+ =?utf-8?B?RFdVd1R0d2N3Rk9UdXkxOVp4SXp0aFBrSEhXaFAvSm1Gd0lSMkJJUEFsV0J4?=
+ =?utf-8?B?dHNieml0ZmlxY0QreGR3S3RIZmhNa3NhMHdwVURFKzdqaS9PRXVWR3ovcmNC?=
+ =?utf-8?B?cS81QjhaSHhidlFybFU5bmdnTzVtaXl1bnduSDJEaytoZUJsckhlbzZlSWtY?=
+ =?utf-8?B?UkFmY2FSTzZmYi9seHNONmJOSU1naDgxOXZGeTlOSHpZQWdLanlnTTdJcmFj?=
+ =?utf-8?B?SkZIUkt4WFJROU81Y1JXaHM1aExtWVB1cDBYcHdwdWM3bVJwOHZJTEFQdG8v?=
+ =?utf-8?B?QXYxK2JxMmV6bFcvbmxmZ1V5WHZkN2tBN0xOTXVlRnRRSU5ZTXYxMVdBU3pr?=
+ =?utf-8?B?SVAvYlBKSzNYckhtejdqbkZ0dmd0cVZwRmVqbWtUUzZ0UG50WmNsakZPNVFq?=
+ =?utf-8?B?ZjBqTmQ2UEJyaStWa2tCT21PUjJkMm02TXhZK2ZXNUxMeHp4Vm5haXpqQ2h6?=
+ =?utf-8?B?K3BnbThYNmd6K2gxYUpNdFhONERveVNsNGhITkhIL29wbWpRY3NzZWVLRnJ2?=
+ =?utf-8?B?NEU2TUUzVDJSRzJqemhGMUltV20wUTJYVDdqOG1mWkIzTWNDYkFsYVMzLy9m?=
+ =?utf-8?B?QVJyR3hDSTBKY1pMS2V3L003VkF0K3JRRUxDYjdxMlpUUjZ4MUxMbFZrdytO?=
+ =?utf-8?B?cGJjejJxL3RLdUJSNU50bzJwaCs3aDdENjF1dmRpME1sRVFUNEYza1VJdXhB?=
+ =?utf-8?B?NS94VmZrOXRSYXcwUDc4SVhxNGtMSytQMjFTeXJGTEJWMzlpb0YwL0JEeVcw?=
+ =?utf-8?B?clpabTNqaHJGTFE0WUZIdXJUdTd2L1FpdkJYWlgrTUxRZWhRaEs0K3FyU0dq?=
+ =?utf-8?B?Q21tZy95WnJ6M3lsNGVtWDNFT1lFMSs2bFNpWFE0ZmVvM2VPelpHSE1kYTVk?=
+ =?utf-8?B?dTRDUXBMOUZOeTNDcmROUVZoeXRFM0NlUEVya2hpa0NoK1k4aEZMN0docGdn?=
+ =?utf-8?B?V1c3T2VUNGRoeE5XZUlvRkxVRHhYdDFJdlNYV3BqYXN6dlh6Z1lBNVZMb3RL?=
+ =?utf-8?B?TklzdlpnNmc0eTdRMHRuZWRqb3d1TmhvV21xUS8yRTN1cHIzZGVtK1kwaTMy?=
+ =?utf-8?B?MUtnRDZJU2c3YWJlUnV3V1U4VTNPNHV6K1ZTUUZvdUVrMDFtTXZXUy9YeURT?=
+ =?utf-8?B?WWU4cWFrYldmUXM2R1hFdkJjczZnbHIxcW0vd1hYOGxlNE9xa213Vk1UdW1T?=
+ =?utf-8?B?S3RKVGJDWDFGVE4wUFg0RDRBRWZXa0JETTVhWFl2NTBBejFTQnpBYUZzT0Vo?=
+ =?utf-8?B?NjIyZ0pxd0VKSVFDbUluTlRVOFRkdTNtNlFRRnNsMng5WE0wZVhwQmhWMWN1?=
+ =?utf-8?B?em8yQWRxd21MQUw4U2Zxd3NRbDVBNXU1bU5EUkYzUEIyOUpqVW44SXRNRjhl?=
+ =?utf-8?B?Ri9hUktlaUhPOE44QkFNV3hCL01ZcUhOaUNrblA5ZjYzWmhEeDRZTUFTc1k5?=
+ =?utf-8?B?NFMwcTRxS2dVeGhaYTNvTGVkVk50RkNKaDJxbkJFMTA0WHhUTlA3SlJubVJp?=
+ =?utf-8?B?Y3g2SUM2OUtSOXQ3aWZ5bHZndU5ZMFF2WGdmbjlqak9NRkZJQ21ZVmlwUWlX?=
+ =?utf-8?B?OVUxejJjVHg4SmdiSUdoWmg0WHA5Q1lPbFNITHk4c082TGJEMVZZK2tWd0tY?=
+ =?utf-8?B?Y095bkY2aWlWMmhDekZBYTNRMGR0MWVrWmdweTJYS09xMHJtdytDb0g3Vmlw?=
+ =?utf-8?B?VnVSWVJYZUVTVUpJa05NMzIvbUlrTnR6bWxMVDgvRmpxZXNtSmt5alRPNUIz?=
+ =?utf-8?B?enU1MTQ1VjVybFU5RWo5SXJaRExNc2FBK3UvcFhsQmhBV0MzdmJBSlR4K3NW?=
+ =?utf-8?B?NlVwQkN5TmpUYkg0NjN5WFNGRTNvbHNvMnNxMGFFUEo4bUFzTEpYeW9WSk55?=
+ =?utf-8?B?V3NSaHJxNUorZHgyTmo4WHhRWEVCdzZzT1VoY0xFWG8vZTNsbXlPNUJaYi94?=
+ =?utf-8?B?OXhmTUJST3JqVnJDWG9ScmpnaEJ3OGdySmdGQzlnaks3UDhtUGlxU09WTjJF?=
+ =?utf-8?Q?Vt10=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b9cd68d4-c671-4259-3305-08daa0dea80a
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5311.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 23:18:59.0333
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0VDeogs+UIyxM7NsCEy38e/G8wuigl/piV0xGUxLpTUXHHO9ZIg1SP2R0FRcKCty
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5733
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 02:21:17PM +0200, Juergen Gross wrote:
-> So replacing the bool with "(system_state != SYSTEM_RUNNING)" is fine
-> with you right now? We can later switch that to the "more elegant"
-> solution when it shows up.
 
-Ok, I think I have something. And it was staring me straight in the
-face but I didn't see it: the MTRR code needs a hotplug notifier. In
-that notifier it can do the immediate, i.e., non-delayed init while the
-delayed init becomes the default, see below.
+Hi August,
 
-And ignore the pr_info debugging gunk pls.
+I've sent a fix here: https://patchwork.freedesktop.org/patch/504993/
 
-mtrr_ap_init() becomes the notifier callback. It doesn't need to be
-called in identify_secondary_cpu() anymore as in the init case that
-function doesn't do anything - delayed=true - and in the hotplug case
-the notifier runs.
+It's not the most ideal fix, but it should address the regression. Let 
+me know it works for you.
 
-mtrr_aps_init() - "aps" in plural - does the delayed init after all CPUs
-have been brought online after the box has booted. That might need some
-renaming.
+Thanks!
+Leo
 
-And yes, there's a lot more to cleanup after this. This code has grown
-wart after wart over the years...
-
-Fun.
-
----
-diff --git a/arch/x86/include/asm/mtrr.h b/arch/x86/include/asm/mtrr.h
-index 76d726074c16..1a3dad244bba 100644
---- a/arch/x86/include/asm/mtrr.h
-+++ b/arch/x86/include/asm/mtrr.h
-@@ -42,8 +42,6 @@ extern int mtrr_add_page(unsigned long base, unsigned long size,
- extern int mtrr_del(int reg, unsigned long base, unsigned long size);
- extern int mtrr_del_page(int reg, unsigned long base, unsigned long size);
- extern void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi);
--extern void mtrr_ap_init(void);
--extern void set_mtrr_aps_delayed_init(void);
- extern void mtrr_aps_init(void);
- extern void mtrr_bp_restore(void);
- extern int mtrr_trim_uncached_memory(unsigned long end_pfn);
-@@ -83,8 +81,6 @@ static inline int mtrr_trim_uncached_memory(unsigned long end_pfn)
- static inline void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi)
- {
- }
--#define mtrr_ap_init() do {} while (0)
--#define set_mtrr_aps_delayed_init() do {} while (0)
- #define mtrr_aps_init() do {} while (0)
- #define mtrr_bp_restore() do {} while (0)
- #  endif
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 3e508f239098..deef1b5b27cc 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1948,7 +1948,6 @@ void identify_secondary_cpu(struct cpuinfo_x86 *c)
- #ifdef CONFIG_X86_32
- 	enable_sep_cpu();
- #endif
--	mtrr_ap_init();
- 	validate_apic_and_package_id(c);
- 	x86_spec_ctrl_setup_ap();
- 	update_srbds_msr();
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index 2746cac9d8a9..abbf7cb8a430 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.c
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -69,7 +69,6 @@ unsigned int mtrr_usage_table[MTRR_MAX_VAR_RANGES];
- static DEFINE_MUTEX(mtrr_mutex);
- 
- u64 size_or_mask, size_and_mask;
--static bool mtrr_aps_delayed_init;
- 
- static const struct mtrr_ops *mtrr_ops[X86_VENDOR_NUM] __ro_after_init;
- 
-@@ -176,7 +175,7 @@ static int mtrr_rendezvous_handler(void *info)
- 	if (data->smp_reg != ~0U) {
- 		mtrr_if->set(data->smp_reg, data->smp_base,
- 			     data->smp_size, data->smp_type);
--	} else if (mtrr_aps_delayed_init || !cpu_online(smp_processor_id())) {
-+	} else if (!cpu_online(smp_processor_id())) {
- 		mtrr_if->set_all();
- 	}
- 	return 0;
-@@ -784,13 +783,16 @@ void __init mtrr_bp_init(void)
- 	}
- }
- 
--void mtrr_ap_init(void)
-+static int mtrr_ap_init(unsigned int cpu)
- {
-+	pr_info("%s: single AP entry, use_intel: %d, mtrr_enabled: %d, mtrr_aps_delayed_init\n",
-+		__func__, use_intel(), mtrr_enabled());
-+
- 	if (!mtrr_enabled())
--		return;
-+		return 1;
- 
--	if (!use_intel() || mtrr_aps_delayed_init)
--		return;
-+	if (!use_intel())
-+		return 1;
- 
- 	/*
- 	 * Ideally we should hold mtrr_mutex here to avoid mtrr entries
-@@ -806,6 +808,8 @@ void mtrr_ap_init(void)
- 	 *      lock to prevent mtrr entry changes
- 	 */
- 	set_mtrr_from_inactive_cpu(~0U, 0, 0, 0);
-+
-+	return 0;
- }
- 
- /**
-@@ -820,37 +824,24 @@ void mtrr_save_state(void)
- 		return;
- 
- 	first_cpu = cpumask_first(cpu_online_mask);
--	smp_call_function_single(first_cpu, mtrr_save_fixed_ranges, NULL, 1);
--}
- 
--void set_mtrr_aps_delayed_init(void)
--{
--	if (!mtrr_enabled())
--		return;
--	if (!use_intel())
--		return;
-+	pr_info("%s: first_cpu: %d\n", __func__, first_cpu);
- 
--	mtrr_aps_delayed_init = true;
-+	smp_call_function_single(first_cpu, mtrr_save_fixed_ranges, NULL, 1);
- }
- 
- /*
-- * Delayed MTRR initialization for all AP's
-+ * Delayed MTRR initialization for all APs
-  */
- void mtrr_aps_init(void)
- {
--	if (!use_intel() || !mtrr_enabled())
--		return;
-+	pr_info("%s: entry, use_intel: %d, mtrr_enabled: %d, mtrr_aps_delayed_init\n",
-+		__func__, use_intel(), mtrr_enabled());
- 
--	/*
--	 * Check if someone has requested the delay of AP MTRR initialization,
--	 * by doing set_mtrr_aps_delayed_init(), prior to this point. If not,
--	 * then we are done.
--	 */
--	if (!mtrr_aps_delayed_init)
-+	if (!use_intel() || !mtrr_enabled())
- 		return;
- 
- 	set_mtrr(~0U, 0, 0, 0);
--	mtrr_aps_delayed_init = false;
- }
- 
- void mtrr_bp_restore(void)
-@@ -869,6 +860,10 @@ static int __init mtrr_init_finialize(void)
- 	if (use_intel()) {
- 		if (!changed_by_mtrr_cleanup)
- 			mtrr_state_warn();
-+
-+		cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN, "x86/mtrr:online",
-+				  mtrr_ap_init, NULL);
-+
- 		return 0;
- 	}
- 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index f24227bc3220..171acef35201 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1428,7 +1428,7 @@ void __init native_smp_prepare_cpus(unsigned int max_cpus)
- 
- 	uv_system_init();
- 
--	set_mtrr_aps_delayed_init();
-+	pr_info("%s: set_mtrr_aps_delayed_init\n", __func__);
- 
- 	smp_quirk_init_udelay();
- 
-@@ -1439,7 +1439,7 @@ void __init native_smp_prepare_cpus(unsigned int max_cpus)
- 
- void arch_thaw_secondary_cpus_begin(void)
- {
--	set_mtrr_aps_delayed_init();
-+	pr_info("%s: set_mtrr_aps_delayed_init\n", __func__);
- }
- 
- void arch_thaw_secondary_cpus_end(void)
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index bbad5e375d3b..fc14601b908c 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -591,6 +591,8 @@ static int bringup_cpu(unsigned int cpu)
- 	struct task_struct *idle = idle_thread_get(cpu);
- 	int ret;
- 
-+	pr_info("%s: CPU%d\n", __func__, cpu);
-+
- 	/*
- 	 * Reset stale stack state from the last time this CPU was online.
- 	 */
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+On 2022-09-27 10:22, August Wikerfors wrote:
+> Hi Leo,
+> 
+> On 2022-09-27 00:29, Leo Li wrote:
+>>
+>> Hi August, thanks for the log.
+>>
+>> It seems the eDP panel does not fully satisfy the amdgpu requirements
+>> for enabling PSR SU, but we're enabling it anyways.
+>>
+>> I suspect it may be due to the "DP_FORCE_PSRSU_CAPABILITY" bit being set
+>> in it's DPCD registers, I'm checking with some devs to see if that is
+>> expected.
+>>
+>> In the meantime, can you give these two hacks a spin? Let me know if
+>> this helps with the glitches and system hangs:
+>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgitlab.freedesktop.org%2F-%2Fsnippets%2F7076&amp;data=05%7C01%7Csunpeng.li%40amd.com%7Ca5864225840b4bbbd04c08daa093bb26%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637998853607058272%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=cNAK%2FMhWCGwXySpITTTvKtzXQ7WCEQL4DYSrPKzWSkY%3D&amp;reserved=0
+> Yes, the issues do not happen with those patches applied.
+> 
+>> Also the dmesg, in particular this line:
+>>> [drm] PSR support 1, DC PSR ver 1, sink PSR ver 3 DPCD caps 
+>>> 0x70su_y_granularity 4 force_psrsu_cap **X**
+> Here is that line:
+>> [   12.085196] [drm] PSR support 1, DC PSR ver 1, sink PSR ver 3 DPCD 
+>> caps 0x7b su_y_granularity 4 force_psrsu_cap 1
+> 
+> Regards,
+> August Wikerfors
