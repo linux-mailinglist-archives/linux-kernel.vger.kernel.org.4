@@ -2,158 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423BE5EBF23
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B395EBF2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 12:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbiI0KCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 06:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
+        id S231638AbiI0KCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 06:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbiI0KCF (ORCPT
+        with ESMTP id S231604AbiI0KCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 06:02:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E20915F5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 03:02:03 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1od7PL-0008JS-DY; Tue, 27 Sep 2022 12:01:43 +0200
-Message-ID: <69b833f3e386018999f258b27bef0baeb27fb256.camel@pengutronix.de>
-Subject: Re: [PATCH] headers: Remove some left-over license text in
- include/uapi/drm/
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-samsung-soc@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org
-Date:   Tue, 27 Sep 2022 12:01:39 +0200
-In-Reply-To: <e5cacd121ddb2a595cede602036b1bdfbee020d5.1664113376.git.christophe.jaillet@wanadoo.fr>
-References: <e5cacd121ddb2a595cede602036b1bdfbee020d5.1664113376.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Tue, 27 Sep 2022 06:02:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55076956AF;
+        Tue, 27 Sep 2022 03:02:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5C1861793;
+        Tue, 27 Sep 2022 10:02:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 407F0C433D6;
+        Tue, 27 Sep 2022 10:02:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664272948;
+        bh=dlgt8sTUOCFvaKMGVG7jt6xOPr5SYmh1UhVPSKkYzV8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SzSGGrMbrYCeDjltNrgrL3VG2omylsDXXWGmFRuKYPFnG2Xtt63azHAsuGowYidFD
+         vuXsb1OH/s/KwBRrtO4U7PShzKeRUQ6r0e13xxx6bq+NTHfByi71P4P6tQvc7Z8p1W
+         QQu/R2CHgWE0QRLqrRl6ANwMMZJClkApkeRIMNC7efj90M4T9lKE5uoFewIOEQmM/3
+         Y6fCSR/7GnG+tEUZB8N1wSz/PUN49XvesX2YiFyZr2dYXU2ZRmA2geaiWFJLkpAPQk
+         H1I6zN0LGrV0YwBi4275HtG2my1Kuu0KK1SzWnQ3lUfAapmKTlFxrXh+RWDZrb4ars
+         KrO+qSy8Z1aVA==
+Message-ID: <54078150-3c22-3563-7731-5c7fda85987d@kernel.org>
+Date:   Tue, 27 Sep 2022 12:02:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] Revert "net: set proper memcg for net_init hooks
+ allocations"
+Content-Language: en-US
+To:     Shakeel Butt <shakeelb@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Anatoly Pugachev <matorola@gmail.com>,
+        Vasily Averin <vvs@openvz.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        sparclinux@vger.kernel.org, regressions@lists.linux.dev
+References: <20220926195931.2497968-1-shakeelb@google.com>
+From:   "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+In-Reply-To: <20220926195931.2497968-1-shakeelb@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, dem 25.09.2022 um 15:43 +0200 schrieb Christophe JAILLET:
-> There is already a SPDX-License-Identifier tag, so the corresponding
-> license text can be removed.
+On 9/26/22 21:59, Shakeel Butt wrote:
+> This reverts commit 1d0403d20f6c281cb3d14c5f1db5317caeec48e9.
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Anatoly Pugachev reported that the commit 1d0403d20f6c ("net: set proper
+> memcg for net_init hooks allocations") is somehow causing the sparc64
+> VMs failed to boot and the VMs boot fine with that patch reverted. So,
+> revert the patch for now and later we can debug the issue.
+> 
 
-For the etnaviv part:
-Acked-by: Lucas Stach <l.stach@pengutronix.de>
+Link: https://lore.kernel.org/all/20220918092849.GA10314@u164.east.ru/
 
-Regards,
-Lucas
+(mainly for regzbot reading this thread but should be valid usage for
+the report anyway)
 
+Fixes: 1d0403d20f6c ("net: set proper memcg for net_init hooks allocations")
+
+> Reported-by: Anatoly Pugachev <matorola@gmail.com>
+> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> Cc: Vasily Averin <vvs@openvz.org>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Michal Koutný <mkoutny@suse.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: cgroups@vger.kernel.org
+> Cc: sparclinux@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
 > ---
->  include/uapi/drm/armada_drm.h  |  4 ----
->  include/uapi/drm/etnaviv_drm.h | 12 ------------
->  include/uapi/drm/exynos_drm.h  |  5 -----
->  include/uapi/drm/omap_drm.h    | 12 ------------
->  4 files changed, 33 deletions(-)
+>  include/linux/memcontrol.h | 45 --------------------------------------
+>  net/core/net_namespace.c   |  7 ------
+>  2 files changed, 52 deletions(-)
 > 
-> diff --git a/include/uapi/drm/armada_drm.h b/include/uapi/drm/armada_drm.h
-> index af1c14c837c5..f711e63a9758 100644
-> --- a/include/uapi/drm/armada_drm.h
-> +++ b/include/uapi/drm/armada_drm.h
-> @@ -2,10 +2,6 @@
->  /*
->   * Copyright (C) 2012 Russell King
->   *  With inspiration from the i915 driver
-> - *
-> - * This program is free software; you can redistribute it and/or modify
-> - * it under the terms of the GNU General Public License version 2 as
-> - * published by the Free Software Foundation.
->   */
->  #ifndef DRM_ARMADA_IOCTL_H
->  #define DRM_ARMADA_IOCTL_H
-> diff --git a/include/uapi/drm/etnaviv_drm.h b/include/uapi/drm/etnaviv_drm.h
-> index af024d90453d..13dd1d1a9d41 100644
-> --- a/include/uapi/drm/etnaviv_drm.h
-> +++ b/include/uapi/drm/etnaviv_drm.h
-> @@ -1,18 +1,6 @@
->  /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
->  /*
->   * Copyright (C) 2015 Etnaviv Project
-> - *
-> - * This program is free software; you can redistribute it and/or modify it
-> - * under the terms of the GNU General Public License version 2 as published by
-> - * the Free Software Foundation.
-> - *
-> - * This program is distributed in the hope that it will be useful, but WITHOUT
-> - * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-> - * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-> - * more details.
-> - *
-> - * You should have received a copy of the GNU General Public License along with
-> - * this program.  If not, see <http://www.gnu.org/licenses/>.
->   */
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index ef479e554253..e1644a24009c 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -1787,42 +1787,6 @@ static inline void count_objcg_event(struct obj_cgroup *objcg,
+>  	rcu_read_unlock();
+>  }
 >  
->  #ifndef __ETNAVIV_DRM_H__
-> diff --git a/include/uapi/drm/exynos_drm.h b/include/uapi/drm/exynos_drm.h
-> index a51aa1c618c1..a96fa566433c 100644
-> --- a/include/uapi/drm/exynos_drm.h
-> +++ b/include/uapi/drm/exynos_drm.h
-> @@ -6,11 +6,6 @@
->   *	Inki Dae <inki.dae@samsung.com>
->   *	Joonyoung Shim <jy0922.shim@samsung.com>
->   *	Seung-Woo Kim <sw0312.kim@samsung.com>
+> -/**
+> - * get_mem_cgroup_from_obj - get a memcg associated with passed kernel object.
+> - * @p: pointer to object from which memcg should be extracted. It can be NULL.
 > - *
-> - * This program is free software; you can redistribute  it and/or modify it
-> - * under  the terms of  the GNU General  Public License as published by the
-> - * Free Software Foundation;  either version 2 of the  License, or (at your
-> - * option) any later version.
->   */
+> - * Retrieves the memory group into which the memory of the pointed kernel
+> - * object is accounted. If memcg is found, its reference is taken.
+> - * If a passed kernel object is uncharged, or if proper memcg cannot be found,
+> - * as well as if mem_cgroup is disabled, NULL is returned.
+> - *
+> - * Return: valid memcg pointer with taken reference or NULL.
+> - */
+> -static inline struct mem_cgroup *get_mem_cgroup_from_obj(void *p)
+> -{
+> -	struct mem_cgroup *memcg;
+> -
+> -	rcu_read_lock();
+> -	do {
+> -		memcg = mem_cgroup_from_obj(p);
+> -	} while (memcg && !css_tryget(&memcg->css));
+> -	rcu_read_unlock();
+> -	return memcg;
+> -}
+> -
+> -/**
+> - * mem_cgroup_or_root - always returns a pointer to a valid memory cgroup.
+> - * @memcg: pointer to a valid memory cgroup or NULL.
+> - *
+> - * If passed argument is not NULL, returns it without any additional checks
+> - * and changes. Otherwise, root_mem_cgroup is returned.
+> - *
+> - * NOTE: root_mem_cgroup can be NULL during early boot.
+> - */
+> -static inline struct mem_cgroup *mem_cgroup_or_root(struct mem_cgroup *memcg)
+> -{
+> -	return memcg ? memcg : root_mem_cgroup;
+> -}
+>  #else
+>  static inline bool mem_cgroup_kmem_disabled(void)
+>  {
+> @@ -1879,15 +1843,6 @@ static inline void count_objcg_event(struct obj_cgroup *objcg,
+>  {
+>  }
 >  
->  #ifndef _UAPI_EXYNOS_DRM_H_
-> diff --git a/include/uapi/drm/omap_drm.h b/include/uapi/drm/omap_drm.h
-> index 5a142fad473c..b51dad32122d 100644
-> --- a/include/uapi/drm/omap_drm.h
-> +++ b/include/uapi/drm/omap_drm.h
-> @@ -4,18 +4,6 @@
->   *
->   * Copyright (C) 2011 Texas Instruments
->   * Author: Rob Clark <rob@ti.com>
-> - *
-> - * This program is free software; you can redistribute it and/or modify it
-> - * under the terms of the GNU General Public License version 2 as published by
-> - * the Free Software Foundation.
-> - *
-> - * This program is distributed in the hope that it will be useful, but WITHOUT
-> - * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-> - * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-> - * more details.
-> - *
-> - * You should have received a copy of the GNU General Public License along with
-> - * this program.  If not, see <http://www.gnu.org/licenses/>.
->   */
+> -static inline struct mem_cgroup *get_mem_cgroup_from_obj(void *p)
+> -{
+> -	return NULL;
+> -}
+> -
+> -static inline struct mem_cgroup *mem_cgroup_or_root(struct mem_cgroup *memcg)
+> -{
+> -	return NULL;
+> -}
+>  #endif /* CONFIG_MEMCG_KMEM */
 >  
->  #ifndef __OMAP_DRM_H__
-
+>  #if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+> diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
+> index 6b9f19122ec1..0ec2f5906a27 100644
+> --- a/net/core/net_namespace.c
+> +++ b/net/core/net_namespace.c
+> @@ -18,7 +18,6 @@
+>  #include <linux/user_namespace.h>
+>  #include <linux/net_namespace.h>
+>  #include <linux/sched/task.h>
+> -#include <linux/sched/mm.h>
+>  #include <linux/uidgid.h>
+>  #include <linux/cookie.h>
+>  
+> @@ -1144,13 +1143,7 @@ static int __register_pernet_operations(struct list_head *list,
+>  		 * setup_net() and cleanup_net() are not possible.
+>  		 */
+>  		for_each_net(net) {
+> -			struct mem_cgroup *old, *memcg;
+> -
+> -			memcg = mem_cgroup_or_root(get_mem_cgroup_from_obj(net));
+> -			old = set_active_memcg(memcg);
+>  			error = ops_init(ops, net);
+> -			set_active_memcg(old);
+> -			mem_cgroup_put(memcg);
+>  			if (error)
+>  				goto out_undo;
+>  			list_add_tail(&net->exit_list, &net_exit_list);
 
