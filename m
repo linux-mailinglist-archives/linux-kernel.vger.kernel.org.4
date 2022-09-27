@@ -2,259 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E492E5EB911
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1786A5EB913
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbiI0EBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 00:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
+        id S229488AbiI0ECB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 00:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiI0EBU (ORCPT
+        with ESMTP id S229768AbiI0EBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 00:01:20 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EF75A148
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:01:16 -0700 (PDT)
-X-UUID: a42d3377a78b475f81c0fce5315a1c7e-20220927
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=SzXqMwnMUYUrvjoSVir0fP8kScyKsUlvqWallfPjjWE=;
-        b=PtGfUx2Y/hPnfD4BhubB6uUjJq/2LO68yI5v5cGIvkW6xNbNlFaxms2S/D0dSj9CPvUay3MxF2kvVt4gmTUc4Ugi+5kSET4Zw7fsx/rxUWpNcA4UgPwjlF+kLtBiuXRemvcdMmzTYX6saH+Ox4bz7MLtV7rWplWhUwCIKKYmAog=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:cad49a7e-1611-41ef-88d1-6efeff3eb82e,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:100
-X-CID-INFO: VERSION:1.1.11,REQID:cad49a7e-1611-41ef-88d1-6efeff3eb82e,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:100
-X-CID-META: VersionHash:39a5ff1,CLOUDID:f0ce1f07-1cee-4c38-b21b-a45f9682fdc0,B
-        ulkID:2209271201119CD1CMNL,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|823|
-        824,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:n
-        il,COL:0
-X-UUID: a42d3377a78b475f81c0fce5315a1c7e-20220927
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <yongqiang.niu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 429035312; Tue, 27 Sep 2022 12:01:09 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 27 Sep 2022 12:01:07 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 27 Sep 2022 12:01:06 +0800
-From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>
-CC:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>
-Subject: [PATCH v4] mailbox: mtk-cmdq: fix gce timeout issue
-Date:   Tue, 27 Sep 2022 12:01:05 +0800
-Message-ID: <20220927040105.21494-1-yongqiang.niu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 27 Sep 2022 00:01:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0AF753AC
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664251309;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7lIjUt+hfufCzcxQtRQ7Q4/F8PQSEKvpahXtOM1zAs0=;
+        b=Fw4jrLKJTnTz4XvLFd9pcdsM96W02UtQ0H6TsPfBVNE9ms8x4fcEqKxbTCXxgHgfQJ3+nH
+        wepeseVpgFJ7u48veuf9yOqBrOPmDoNhwpZa6/wwKa9QZDghvprwQevkWtuWjF+DtFfzfg
+        bYeJFfvIdS4iRyjJjTxZeLyGTgdd8Jc=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-410-VG41BaDbN2OyoUeME1VVOw-1; Tue, 27 Sep 2022 00:01:42 -0400
+X-MC-Unique: VG41BaDbN2OyoUeME1VVOw-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-12777f2df6aso3096201fac.14
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 21:01:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=7lIjUt+hfufCzcxQtRQ7Q4/F8PQSEKvpahXtOM1zAs0=;
+        b=NPtTVdK/taFvic3C3LUq4B7YhD9InxUPO8hQediIMaBxqmlIBbUjDairALC2eNgoBg
+         eycIH9IH4wqGt9JTwWQezzAO0tXmIcklUty0+iY3iSvo5p1Hus1qBPbUymUJ09Ng169l
+         Uz1qyC0K3HbgEdW0VYdblacWI+qYVJwgwPs9+VR60YXH6iGyUaqUyszWXM+bonSJRSAL
+         D+/Zr/9FNmfcsPRzrtok1s6jRJbuRk78mfkHsgeOYo8iNBwV2QhNWJlh/phtv2XCmqvR
+         Ug2e2IQ6SDdOsuvjMNBU5vYOR+O/Ejoyf+8ofHZ+senuJYeQ7FGfRgM8WwvuDPEXItc5
+         o3ng==
+X-Gm-Message-State: ACrzQf2SLKCGUFXkYyqRwXhKHhv8q3LLferAJNCyh4coPQ2GRHdJQlPO
+        CoPA/PTgZqasIgsYeP54dEVZ1oPvhU/P7yg/vkucOygAtx/Z75tI9ZOpGPujHBZvL9ITl+4S+go
+        mXigNQHH4S50xXT8tojJiFtYINO/IJqJO/CadPTpL
+X-Received: by 2002:a05:6870:e409:b0:127:d330:c941 with SMTP id n9-20020a056870e40900b00127d330c941mr1049110oag.280.1664251301505;
+        Mon, 26 Sep 2022 21:01:41 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM70F8Ybkw+ftIjAd0V0ZxtTyRfkCtq71sY1UXmniwDHvOisWowtKgZkzq9L+wAcLMvQbmN4FB4GulJ4+Dx5uA0=
+X-Received: by 2002:a05:6870:e409:b0:127:d330:c941 with SMTP id
+ n9-20020a056870e40900b00127d330c941mr1049102oag.280.1664251301353; Mon, 26
+ Sep 2022 21:01:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220926102946.3097-1-wangdeming@inspur.com>
+In-Reply-To: <20220926102946.3097-1-wangdeming@inspur.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 27 Sep 2022 12:01:30 +0800
+Message-ID: <CACGkMEtnsBEu6nm0oFCJyQwwf5PzdMRAsbzZZPZZ1TS9vRg1RQ@mail.gmail.com>
+Subject: Re: [PATCH] virtio_ring: Drop unnecessary initialization of detach_buf_packed
+To:     Deming Wang <wangdeming@inspur.com>
+Cc:     mst <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. enable gce ddr enable(gce reigster offset 0x48, bit 16 to 18) when gce work,
-and disable gce ddr enable when gce work job done
-2. add cmdq ddr enable/disable api, and control gce ddr enable/disable
-to make sure it could protect when cmdq is multiple used by display and mdp
+On Mon, Sep 26, 2022 at 7:15 PM Deming Wang <wangdeming@inspur.com> wrote:
+>
+> The variable is initialized but it is only used after its assignment.
+>
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
 
-this is only for some SOC which has flag "gce_ddr_en".
-for this kind of gce, there is a handshake flow between gce and ddr
-hardware,
-if not set ddr enable flag of gce, ddr will fall into idle mode,
-then gce instructions will not process done.
-we need set this flag of gce to tell ddr when gce is idle or busy
-controlled by software flow.
+Acked-by: Jason Wang <jasowang@redhat.com>
 
-ddr problem is a special case.
-when test suspend/resume case, gce sometimes will pull ddr, and ddr can
-not go to suspend.
-if we set gce register 0x48 to 0x7, will fix this gce pull ddr issue,
-as you have referred [1] and [2] (8192 and 8195)
-but for mt8186, the gce is more special, except setting of [1] and [2],
-we need add more setting set gce register 0x48 to (0x7 << 16 | 0x7)
-when gce working to make sure gce could process all instructions ok.
-this case just need normal bootup, if we not set this, display cmdq
-task will timeout, and chrome homescreen will always black screen.
-
-and with this patch, we have done these test on mt8186:
-1.suspend/resume
-2.boot up to home screen
-3.playback video with youtube.
-
-suspend issue is special gce hardware issue, gce client  driver
-command already process done, but gce still pull ddr.
-
-Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
-
----
-change since v3:
-split cmdq_sw_ddr_enable/cmdq_sw_ddr_disable into single api to
-control mt8186 gce ddr enable flow
----
-
----
- drivers/mailbox/mtk-cmdq-mailbox.c | 61 ++++++++++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
-
-diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-index 9465f9081515..650a1ed1a579 100644
---- a/drivers/mailbox/mtk-cmdq-mailbox.c
-+++ b/drivers/mailbox/mtk-cmdq-mailbox.c
-@@ -38,6 +38,8 @@
- #define CMDQ_THR_PRIORITY		0x40
- 
- #define GCE_GCTL_VALUE			0x48
-+#define GCE_CTRL_BY_SW				GENMASK(18, 16)
-+#define GCE_DDR_EN				GENMASK(2, 0)
- 
- #define CMDQ_THR_ACTIVE_SLOT_CYCLES	0x3200
- #define CMDQ_THR_ENABLED		0x1
-@@ -80,16 +82,51 @@ struct cmdq {
- 	bool			suspended;
- 	u8			shift_pa;
- 	bool			control_by_sw;
-+	bool			sw_ddr_en;
- 	u32			gce_num;
-+	atomic_t		usage;
-+	spinlock_t		lock;
- };
- 
- struct gce_plat {
- 	u32 thread_nr;
- 	u8 shift;
- 	bool control_by_sw;
-+	bool sw_ddr_en;
- 	u32 gce_num;
- };
- 
-+static void cmdq_sw_ddr_enable(struct cmdq *cmdq)
-+{
-+	s32 usage;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&cmdq->lock, flags);
-+
-+	usage = atomic_inc_return(&cmdq->usage);
-+
-+	if (usage <= 0)
-+		dev_err(cmdq->mbox.dev, "ref count %d suspend %d\n",
-+			usage, cmdq->suspended);
-+	else if (usage == 1)
-+		writel(GCE_DDR_EN + GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
-+
-+	spin_unlock_irqrestore(&cmdq->lock, flags);
-+}
-+
-+static void cmdq_sw_ddr_disable(struct cmdq *cmdq)
-+{
-+	s32 usage;
-+
-+	usage = atomic_dec_return(&cmdq->usage);
-+
-+	if (usage < 0)
-+		dev_err(cmdq->mbox.dev, "ref count %d suspend %d\n",
-+			usage, cmdq->suspended);
-+	else if (usage == 0)
-+		writel(GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
-+}
-+
- u8 cmdq_get_shift_pa(struct mbox_chan *chan)
- {
- 	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
-@@ -266,6 +303,10 @@ static void cmdq_thread_irq_handler(struct cmdq *cmdq,
- 
- 	if (list_empty(&thread->task_busy_list)) {
- 		cmdq_thread_disable(cmdq, thread);
-+
-+		if (cmdq->sw_ddr_en)
-+			cmdq_sw_ddr_disable(cmdq);
-+
- 		clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
- 	}
- }
-@@ -357,6 +398,8 @@ static int cmdq_mbox_send_data(struct mbox_chan *chan, void *data)
- 	if (list_empty(&thread->task_busy_list)) {
- 		WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
- 
-+		if (cmdq->sw_ddr_en)
-+			cmdq_sw_ddr_enable(cmdq);
- 		/*
- 		 * The thread reset will clear thread related register to 0,
- 		 * including pc, end, priority, irq, suspend and enable. Thus
-@@ -427,6 +470,9 @@ static void cmdq_mbox_shutdown(struct mbox_chan *chan)
- 		kfree(task);
- 	}
- 
-+	if (cmdq->sw_ddr_en)
-+		cmdq_sw_ddr_disable(cmdq);
-+
- 	cmdq_thread_disable(cmdq, thread);
- 	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
- 
-@@ -468,6 +514,10 @@ static int cmdq_mbox_flush(struct mbox_chan *chan, unsigned long timeout)
- 
- 	cmdq_thread_resume(thread);
- 	cmdq_thread_disable(cmdq, thread);
-+
-+	if (cmdq->sw_ddr_en)
-+		cmdq_sw_ddr_disable(cmdq);
-+
- 	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
- 
- out:
-@@ -543,6 +593,7 @@ static int cmdq_probe(struct platform_device *pdev)
- 	cmdq->thread_nr = plat_data->thread_nr;
- 	cmdq->shift_pa = plat_data->shift;
- 	cmdq->control_by_sw = plat_data->control_by_sw;
-+	cmdq->sw_ddr_en = plat_data->sw_ddr_en;
- 	cmdq->gce_num = plat_data->gce_num;
- 	cmdq->irq_mask = GENMASK(cmdq->thread_nr - 1, 0);
- 	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
-@@ -615,6 +666,7 @@ static int cmdq_probe(struct platform_device *pdev)
- 
- 	WARN_ON(clk_bulk_prepare(cmdq->gce_num, cmdq->clocks));
- 
-+	spin_lock_init(&cmdq->lock);
- 	cmdq_init(cmdq);
- 
- 	return 0;
-@@ -660,9 +712,18 @@ static const struct gce_plat gce_plat_v6 = {
- 	.gce_num = 2
- };
- 
-+static const struct gce_plat gce_plat_v7 = {
-+	.thread_nr = 24,
-+	.shift = 3,
-+	.control_by_sw = true,
-+	.sw_ddr_en = true,
-+	.gce_num = 1
-+};
-+
- static const struct of_device_id cmdq_of_ids[] = {
- 	{.compatible = "mediatek,mt8173-gce", .data = (void *)&gce_plat_v2},
- 	{.compatible = "mediatek,mt8183-gce", .data = (void *)&gce_plat_v3},
-+	{.compatible = "mediatek,mt8186-gce", .data = (void *)&gce_plat_v7},
- 	{.compatible = "mediatek,mt6779-gce", .data = (void *)&gce_plat_v4},
- 	{.compatible = "mediatek,mt8192-gce", .data = (void *)&gce_plat_v5},
- 	{.compatible = "mediatek,mt8195-gce", .data = (void *)&gce_plat_v6},
--- 
-2.25.1
+> ---
+>  drivers/virtio/virtio_ring.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 8974c34b40fd..abac0a3de440 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -1544,7 +1544,7 @@ static bool virtqueue_kick_prepare_packed(struct virtqueue *_vq)
+>  static void detach_buf_packed(struct vring_virtqueue *vq,
+>                               unsigned int id, void **ctx)
+>  {
+> -       struct vring_desc_state_packed *state = NULL;
+> +       struct vring_desc_state_packed *state;
+>         struct vring_packed_desc *desc;
+>         unsigned int i, curr;
+>
+> --
+> 2.27.0
+>
 
