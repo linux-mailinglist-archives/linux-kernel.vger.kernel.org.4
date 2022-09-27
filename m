@@ -2,150 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CCF55EB966
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 06:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D58C5EB969
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 07:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiI0E7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 00:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S229807AbiI0FDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 01:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiI0E7G (ORCPT
+        with ESMTP id S229437AbiI0FDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 00:59:06 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6603109501;
-        Mon, 26 Sep 2022 21:59:04 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id v4so8382901pgi.10;
-        Mon, 26 Sep 2022 21:59:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=SAJkGU+79dW4f6vbvdxoH4HOSpZWnjzUc2txpj5o7k8=;
-        b=i0JLo6YAgNP9aIA5APS8sn9FG+ZEaQMdYG4Cr9A3MxLan8b268kyX6Ie/pphVrJUFX
-         0GPKzHhxOqaXA3zOFZpP1B6CZRdAkHk55RX3atYMYwOI1f+oOXXjnjpl1C+a0aXYUDUU
-         t+37Meaqq5Uzy9T4ySMwxBhYqZSXSiya/qV7ltKNi+qJY1oH0Uw5awLORdVKq5cOFK9k
-         H2/5XBstu0d54XJ8Z7r3hVzBv4wawLDCSwoZOn1PGovsnKVSR+ESJN+ISiQ1qitoGTXa
-         IVIKucCS+bqns3qUX+O0umbK1IhRg0MuD088fxWMWEqMOM82NOqQrocZ3WW8MXesqtCU
-         lJRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=SAJkGU+79dW4f6vbvdxoH4HOSpZWnjzUc2txpj5o7k8=;
-        b=ZgUbvfaaNkV/YQbWAcwVwqAu7S9Xp8iatA128zxxyc51S7l7mhCuBFwKiEwaNf5ukb
-         GfCGZWXczOgRk7DamLuxvPD2iWedHFcBx6AP5sOUyuN1JNlqCxjmGi0se/dWVeG02B1X
-         kDrnkqjAmZvzEwGIgDpaK3gahcfVP+u39VVlGUo8zQH9S4NUoKbkFZdDRw6eFC6dvXLu
-         8a4HwTuoKwdirALmyLTUjBDtCuZ5Qs5GFSO8iFLIL1qW4PPjP6gIawe4ctlNNPDuohgS
-         KhqzqXc5ODl1scaM8pipkRtcXk6F6fWiM+VbhlSNUHzNaz4XQ7lS8czE8eaJ6D1OpNhq
-         X9sg==
-X-Gm-Message-State: ACrzQf2WLBLiadn60Y9o4yDfwMqCBdAmCvJSatbEmmazOwaBhLQOhdZy
-        SIAOoy36xRyy0rPLwPPNMQsG8pf01hI=
-X-Google-Smtp-Source: AMsMyM7JNRqUydIyZ2ktPnUYLLn1ZxKkSEd9FYS7ZVAy7YuI69bFCMaK0PbaXPBqPPu47RNNGpHmdQ==
-X-Received: by 2002:a63:1a12:0:b0:43d:286e:35ad with SMTP id a18-20020a631a12000000b0043d286e35admr2005806pga.512.1664254743814;
-        Mon, 26 Sep 2022 21:59:03 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:9739:ab49:3830:2cbb])
-        by smtp.gmail.com with ESMTPSA id y129-20020a626487000000b0053640880313sm475867pfb.46.2022.09.26.21.59.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 21:59:03 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 21:59:00 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC/PATCH v2] MIPS: pci: lantiq: switch to using gpiod API
-Message-ID: <YzKDFCq3M2gxlJ2e@google.com>
-References: <YzE9E+Esv/rqO0MA@google.com>
+        Tue, 27 Sep 2022 01:03:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06298A4B36
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 22:03:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84D2BB8160E
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:03:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46B9AC433C1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 05:03:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664254994;
+        bh=Jt1l+ur8owCZNiwKZzkzl+bfr1wPLucqAu5BcgfoKHg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VqooohJpWsmp9T0yAMgRfKNhQgNMildZLFNzSZBMp8sEoU/+P10eS8Z+WYpwOG6Xu
+         lAYOt3ftHPLlTN1aF8Ja/ZBf5GXjnX9dV0JhA/RalpeoiFItESPgb13sbnvo0467C1
+         Mhnkv7d+u8EOsTMIeg2bYRax0Qb5l3RXUHhzw044GxTomY8rGqvq7Z/seOEiaKDMN+
+         5Vi5KN/8MuAxqWU0zRct+I2Ocyrq8r1KwBwGr4HKU0y9r4IPIgZvaafSaHDtpUbElu
+         N8xSaXRtZyHe6/n+GTLaEe/NuN8/dlRVw+hrXSNeikoL/YTYa7/k4zkmw6FOol++R7
+         KrDV0LggSs1kw==
+Received: by mail-vs1-f41.google.com with SMTP id k2so8596515vsk.8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 22:03:14 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2NcbHRIAwRPs9NBBXHmY9795MLxESMiKdTF4o3kXrvsHBCL3WJ
+        vGJOMFDOY2NM4HPEg/kUTXxrCQXnLkdwz7hwuYU=
+X-Google-Smtp-Source: AMsMyM5z4O33bMpiughscS5oPJRSCkVN84Wq4J5UOo9i92KMKuSDDYODXKgEp4DQ3Y5fibeF3nGDbQ+54+F/JRh8t7I=
+X-Received: by 2002:a05:6102:1481:b0:39a:67f5:3096 with SMTP id
+ d1-20020a056102148100b0039a67f53096mr9795505vsv.70.1664254993281; Mon, 26 Sep
+ 2022 22:03:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzE9E+Esv/rqO0MA@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220926122727.2310118-1-yijun@loongson.cn> <CAJF2gTQR804AwU0up2-FyTciQZJY2M9xQ7JbiqjwMbkD=aLhCQ@mail.gmail.com>
+ <5bf565a4-5bc4-42f8-59c0-8b908a9c2ab6@loongson.cn>
+In-Reply-To: <5bf565a4-5bc4-42f8-59c0-8b908a9c2ab6@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 27 Sep 2022 13:03:01 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5oVTpGiW6T8dMSiGVe8KtAtUt2Q2sb5nEwc9PUJyqUnw@mail.gmail.com>
+Message-ID: <CAAhV-H5oVTpGiW6T8dMSiGVe8KtAtUt2Q2sb5nEwc9PUJyqUnw@mail.gmail.com>
+Subject: Re: [PATCH v3] LoongArch: Fixup do_ri csr_era
+To:     Jun Yi <yijun@loongson.cn>
+Cc:     Guo Ren <guoren@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        Mao Bibo <maobibo@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch switches the driver from legacy gpio API to the newer
-gpiod API.
+Hi, all,
 
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
-v2 - actually compiles.
+I clean up do_ri() further based on this patch [1], thanks.
 
- arch/mips/pci/pci-lantiq.c | 27 ++++++++++++---------------
- 1 file changed, 12 insertions(+), 15 deletions(-)
+[1] https://lore.kernel.org/loongarch/20220927045820.2770062-1-chenhuacai@loongson.cn/T/#u
 
-diff --git a/arch/mips/pci/pci-lantiq.c b/arch/mips/pci/pci-lantiq.c
-index 1ca42f482130..377b4a2577e1 100644
---- a/arch/mips/pci/pci-lantiq.c
-+++ b/arch/mips/pci/pci-lantiq.c
-@@ -9,11 +9,11 @@
- #include <linux/kernel.h>
- #include <linux/init.h>
- #include <linux/delay.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/mm.h>
- #include <linux/vmalloc.h>
- #include <linux/clk.h>
- #include <linux/of_platform.h>
--#include <linux/of_gpio.h>
- #include <linux/of_irq.h>
- #include <linux/of_pci.h>
- 
-@@ -62,7 +62,7 @@
- __iomem void *ltq_pci_mapped_cfg;
- static __iomem void *ltq_pci_membase;
- 
--static int reset_gpio;
-+static gpio_desc *reset_gpio;
- static struct clk *clk_pci, *clk_external;
- static struct resource pci_io_resource;
- static struct resource pci_mem_resource;
-@@ -123,17 +123,14 @@ static int ltq_pci_startup(struct platform_device *pdev)
- 		clk_disable(clk_external);
- 
- 	/* setup reset gpio used by pci */
--	reset_gpio = of_get_named_gpio(node, "gpio-reset", 0);
--	if (gpio_is_valid(reset_gpio)) {
--		int ret = devm_gpio_request(&pdev->dev,
--						reset_gpio, "pci-reset");
--		if (ret) {
--			dev_err(&pdev->dev,
--				"failed to request gpio %d\n", reset_gpio);
--			return ret;
--		}
--		gpio_direction_output(reset_gpio, 1);
-+	reset_gpio = devm_gpiod_get_optional(&pdev->dev, "reset",
-+					     GPIOD_OUT_LOW);
-+	ret = PTR_ERR_OR_ZERO(reset_gpio);
-+	if (ret) {
-+		dev_err(&pdev->dev, "failed to request gpio: %d\n", ret);
-+		return ret;
- 	}
-+	gpiod_set_consumer_name(reset_gpio, "pci_reset");
- 
- 	/* enable auto-switching between PCI and EBU */
- 	ltq_pci_w32(0xa, PCI_CR_CLK_CTRL);
-@@ -195,11 +192,11 @@ static int ltq_pci_startup(struct platform_device *pdev)
- 	ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_IEN) | 0x10, LTQ_EBU_PCC_IEN);
- 
- 	/* toggle reset pin */
--	if (gpio_is_valid(reset_gpio)) {
--		__gpio_set_value(reset_gpio, 0);
-+	if (reset_gpio) {
-+		gpiod_set_value_cansleep(reset_gpio, 1);
- 		wmb();
- 		mdelay(1);
--		__gpio_set_value(reset_gpio, 1);
-+		gpiod_set_value_cansleep(reset_gpio, 0);
- 	}
- 	return 0;
- }
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
 
+On Tue, Sep 27, 2022 at 11:10 AM Jun Yi <yijun@loongson.cn> wrote:
+>
+> do_ri is porting from mips, mipsr6 use do_ri to emulate some fp
+> instructions, but Loongarch do not need to emulate these instructions.
+>
+> And the regs->csr_era be always recovered to ths old_era =
+> regs->csr_era, so the compute_return_era is useless.
+>
+> On 9/27/22 07:41, Guo Ren wrote:
+> > On Mon, Sep 26, 2022 at 8:27 PM Jun Yi <yijun@loongson.cn> wrote:
+> >>
+> >> csr_era of pt_regs in do_ri should not add 4 to point to the
+> >> next instruction.
+> > The comment does not make sense. I think it wants to skip some
+> > instructions, but your patch broke that.
+> >
+> >>
+> >> Signed-off-by: Jun Yi <yijun@loongson.cn>
+> >> ---
+> >>   arch/loongarch/kernel/traps.c | 2 --
+> >>   1 file changed, 2 deletions(-)
+> >>
+> >> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+> >> index aa1c95aaf595..ec888eda3d45 100644
+> >> --- a/arch/loongarch/kernel/traps.c
+> >> +++ b/arch/loongarch/kernel/traps.c
+> >> @@ -477,8 +477,6 @@ asmlinkage void noinstr do_ri(struct pt_regs *regs)
+> >>
+> >>          die_if_kernel("Reserved instruction in kernel code", regs);
+> >>
+> >> -       compute_return_era(regs);
+> >> -
+> >>          if (unlikely(get_user(opcode, era) < 0)) {
+> >>                  status = SIGSEGV;
+> >>                  current->thread.error_code = 1;
+> >> --
+> >> 2.31.1
+> >>
+> >
+> >
+>
