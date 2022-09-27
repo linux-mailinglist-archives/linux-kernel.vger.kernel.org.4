@@ -2,288 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BD35ECF18
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203565ECF1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 23:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbiI0VE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 17:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
+        id S232908AbiI0VI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 17:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbiI0VEV (ORCPT
+        with ESMTP id S232488AbiI0VIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 17:04:21 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EAA1ED21E;
-        Tue, 27 Sep 2022 14:04:17 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id rk17so10049356ejb.1;
-        Tue, 27 Sep 2022 14:04:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=dwJjSyJsER8fu8KaFJu/+9H/JRzimbvYtz7bUiJaAMg=;
-        b=LNjkyGy1QJ6wRsWRW9atYqfNX2O5mrLw2YUI0juyHo/Jvf+yMD2xERny2vjwNkUzNQ
-         7/S1Eugns/jTgZQp8KvEHNHG7tcL82D3ZEndC4Fv5pcVWMPZl85aAbllnF6zpjhAwGw7
-         aq6sL5jJsYFo+Y1QreFAtfDj4tJ45G/vhLn84Ml4wi+v+lPBK4lkiqo21tdhbHkgbjcv
-         DjFK7rHfvjajMLuBABPywmc19ftokTM4vFdIefEnI2I7tCyFhRHrk6tBoEcEdj50hgbt
-         fXO4uEfkPAMxGD6JQYkoaI2wqP5jePTN0sqqDKOKDeRUTAcQjfMmr1Gf/JAfcjFrThc/
-         nHKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=dwJjSyJsER8fu8KaFJu/+9H/JRzimbvYtz7bUiJaAMg=;
-        b=DqZLWL7XrcfWivHgyYuLpeGli8FunzFhakS8clvXqJkaxS2Qf8OsTtG6ueLSzah6oA
-         xjWcWC+Mjj60J0nJVtNVwjVaFsjpR2ClCawzBepYHV+sFSULMQeOFZRKhwen15W78Llp
-         qvekYIVdrRmeT0HG3RRCFZTomfkgDSNbc3K/Fo6ST55tpYUtR6dG2LdZu8Oe7ts2cWp6
-         YN6RkDwiJGVJDSni6KMWgaNCH156tewBr4yeq3B4IbNVUlD1ZV7hbsNlTA1joDwiD09m
-         K7DSMuT8MUTyWK2W0Q+kqpeOe3vIs83UFTBMR7ySQtOA5l/gVHN0s7gkLx8Iba9U8wok
-         4kTg==
-X-Gm-Message-State: ACrzQf1GapyMYz/s2xOQOsnDQyCjxJPd6Gbe9ypATiYmHQsvNK7kd56i
-        E5xdmB0nefE+2RO2MYRwtDWLc9xDPrFdnrJI
-X-Google-Smtp-Source: AMsMyM6i6nNNyLuaK2nxSVMc5/lwEZzu06kWlB9WJ0eeM1NNO6aPdH4Eev68mCA6/c4inVvaCFUkJQ==
-X-Received: by 2002:a17:907:3e02:b0:782:1267:f2c8 with SMTP id hp2-20020a1709073e0200b007821267f2c8mr24098245ejc.585.1664312655552;
-        Tue, 27 Sep 2022 14:04:15 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id r19-20020a05640251d300b0044f21c69608sm2044515edd.10.2022.09.27.14.04.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 14:04:14 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 00:04:11 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v3 net-next 11/14] mfd: ocelot: add regmaps for ocelot_ext
-Message-ID: <20220927210411.6oc3aphlyp4imgsq@skbuf>
-References: <20220926002928.2744638-1-colin.foster@in-advantage.com>
- <20220926002928.2744638-12-colin.foster@in-advantage.com>
+        Tue, 27 Sep 2022 17:08:53 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-eastus2azon11021025.outbound.protection.outlook.com [52.101.57.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5101C26DD;
+        Tue, 27 Sep 2022 14:08:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AHSH+CVFpSWqtB70BGQpYjS8apw/r9RdiC51GT2W9zN/sJ/aJ5KusSJWtSnf3xmlX8StqUz85aGw3osZ/rY0V9tqqRlbJqpMYK89kB47pFqO97x89iJFHp0hixqyL6CZFvDH7kuJO1p+SieXn9Ll1FmEaChHTP5D1TbnSYpfmHpbT83XWP4ovtbG5kifIz6u3xLStgTyURglXpJtqgPDsmWAMrlmwarbR0pBA5ZdQUsvMWTbDX2V7opbRl8hmrOchju8XA893NWSPVDk1qBC28o35iHqvM0Zh7PsSP09DJH5F2xXhUsR1ccAPfqbOMyNtp9pPmKm0yxJgDvNq/2x7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z6EOQVtueklmSwhWxMvdhmB07wQWZwzUhHz/egqRJWk=;
+ b=jnyBvQnMZjqCDWaSk27w7oU3QULxSB6MVCDpJv31brU7/7N0/NtOWvX+uygAHZOBcqiQHDmcDRCgE3BY5PXfLurYpNtq2JN2yKzGGQy2Ug9+gONcdtP17lySwJTA9SxqYmXcfMZneu2k8V9+AaCkzxIfLQiDp3WtA3xmC+gnw36pIjQQrr+B/RG/SWtAFNVBjq7OBLA+98mHHGSp6HV/ipMeVXNvSLHaK7QXt65vyVmHvvqo9MqVuN+2ClpDPbeTRXNzTOpNJdOsAvdoW968CItyA11xLA6lMjdgJmgrtrhgWbmjnprTCBW9OozDENi3AdmWM78fWnDGICx2MEjvpg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z6EOQVtueklmSwhWxMvdhmB07wQWZwzUhHz/egqRJWk=;
+ b=KPrXdlSs4RJSLkI3mwIQuw+lx4HAJQ+Cnuqt5Q+W6O257I87TtiY7awgrZyZdvBW7un8vmHFsQQOaxjf2XRGkcywrLQgq85w32urgjuQCpGUOV8DKlhPw1mZ4BrPjTspDaycurYfJFtKzMVjau3xP+0XRFx2uRqAZg0P19v11JA=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by BY5PR21MB1428.namprd21.prod.outlook.com (2603:10b6:a03:21d::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.0; Tue, 27 Sep
+ 2022 21:08:49 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::17f5:70e:721f:df7e]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::17f5:70e:721f:df7e%4]) with mapi id 15.20.5709.000; Tue, 27 Sep 2022
+ 21:08:49 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Li kunyu <kunyu@nfschina.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "arnd@arndb.de" <arnd@arndb.de>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: RE: [PATCH v5] hyperv: simplify and rename generate_guest_id
+Thread-Topic: [PATCH v5] hyperv: simplify and rename generate_guest_id
+Thread-Index: AQHY0kU6yw6DQGKJiECLriNBOOmP7a3zxQzA
+Date:   Tue, 27 Sep 2022 21:08:48 +0000
+Message-ID: <BYAPR21MB1688ABC8562E0AC0830237C9D7559@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20220927074550.3347-1-kunyu@nfschina.com>
+In-Reply-To: <20220927074550.3347-1-kunyu@nfschina.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=9d09b948-d7ca-499d-92ab-41aa1cba3f18;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-09-27T21:04:56Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|BY5PR21MB1428:EE_
+x-ms-office365-filtering-correlation-id: c804d620-a0f0-457f-5e4a-08daa0cc7901
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: CcU8R6slQSKldmAOL1UDes/b7Vw7nymRPGJAJyRXD+BBjAQS3U1ffM9GF7yD17Z2e3ImmgA9FamuOzyWp669lxz/9/wNr0mOpEhYSSiQF/NLiLCWz3JXEcmPAUjLHuaYEh3NFsp8C1IR10ziBjwka6AhqXH7XSMPg3ggjO+Cs/uubnRLJLH6lKG/sUtIcxJkMwtuqZufPqZxMJr30WUuRKvv4PivYdrCbh6XK3pti9kKEJ4KsQua/PsNoM+Z9x9sFchPnC3PLpWq+DIbD2W4zFnylK5+efGYa8eyFhsLfsebAYBijr66d76Aa0Tifk5LR6Uqdp7Ymzyhtgmp0Oyzoihm+oTcIQr3L+nFnokaL634HSpCdJ/04c4D1fj9pINU9SLcFUGWn6Sdim16bCIPw90bTts6pFvfTvMRHyspyRGHEVrN9Iv6VAl7V4gcAKCWZD1KwC9UGD+bKj9pqs+0tgRFbEFDI7H0T5s9Nt4WqRr7X2eEK0uCB4OptnaqLVOR1XUxDHtEVF4nFPzkxOW1SxxWeOyAah8jA3jlTYxRHBbNVh69NHvDhND6pGrmMzp+vZ4hPRZuHQmkdVMg61sHgzvx7nSr1ENSt08BTC+VuQxLCdV3YYhhDfxmkFX7D4m3yN/FBZWck0REXta7bPTjgSoTvRPkLJj2aO5451DjsHd9Nuk/0BXRpSIj2YTCcBEMW3iz8hhv3PJlmPtcEmPnz3ES5YEgll1IjEzhsWHCvg4fSTSQUVoZbhLSlm/VrAn+FbrY0bYzHS6J+esjdx2ewU5BRUIFNR/u4ByQQkt4YJiSAO6baTuJ3osyykfBPlctPxJnG/twt2R4fQYo32CJuQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(346002)(396003)(39860400002)(136003)(451199015)(83380400001)(9686003)(71200400001)(186003)(38100700002)(82960400001)(82950400001)(2906002)(7416002)(38070700005)(921005)(122000001)(478600001)(6506007)(7696005)(41300700001)(5660300002)(8990500004)(52536014)(55016003)(10290500003)(8936002)(66946007)(66556008)(26005)(66446008)(8676002)(4326008)(76116006)(66476007)(64756008)(54906003)(316002)(33656002)(110136005)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?S6zm/O5lxbxPIDOVzNyqR8tsUrSRlqTuqfOwfVWwRf+QZUsMithUqyvb0VPH?=
+ =?us-ascii?Q?V7zT0KaGYeP723OvxoAR9gz2VRoRCv9Ve9XRpzthIzb40V9EUQo7MLGeowLF?=
+ =?us-ascii?Q?fmieb5OrKDTW38u95dc2GxFdCaJQWqOJ4FiIOS5oxf4sXIYphdaNojAoR2Y8?=
+ =?us-ascii?Q?s55St3Fr0AXo8jRK4tT4OoWzRwCd0hyVEVbEPbfk7Yo6hcxT4hXxQNbTGb7E?=
+ =?us-ascii?Q?2FTitq/3LmccphErPESU+EPvAvzeeQcEJIITtZauVrzSsN1QH7YWg9p8T8JP?=
+ =?us-ascii?Q?AjZnwW/+kf5saW16EpiXaZApNgALifamYty0PhOUXpMFpwddoBs8MVEFCaG/?=
+ =?us-ascii?Q?bx1MP6nTN6QZm/tMGoSdGppzbQlImZnRGNdG17TCvmg++WFhoKbeaPZRGV+J?=
+ =?us-ascii?Q?OY3ygNQ7sxO5nyzhLNtsJ6zoI62P1dtYVor1QaZ+XYzS9YMPAzXs1DRq1uYv?=
+ =?us-ascii?Q?9uQZs7IBtn9Li4ubh3bMQFmsQKN6FO0lg/h+ebjqXqDE8pl9dRrhq+SblGH7?=
+ =?us-ascii?Q?iF3zPxUIxBtB4jPWsdXl+4IpFdGddH4uaG6w602N7fb3IQZT2fQVNEd4VOsY?=
+ =?us-ascii?Q?tHxy6DTDCPeN64NgTOPr82XTYn/EeClWTwb65gH9a2SK+A82pryM+ATd9L1H?=
+ =?us-ascii?Q?wRZNUb1UVHoyWG0DHXt1YsoH4lG+/WUM4/+HMCgLq/RN2MqvdYEZRQXkq7u0?=
+ =?us-ascii?Q?jbIEmUeRt8IsnB0qaT+Dg8FNEwEb41NuUVegTCqGaqglpWlbgA70s29lJbpx?=
+ =?us-ascii?Q?OIgpTw99EW0kJ2G5vFMLT5BsU+dv9GEm+japLkgnVnKu3aqnyO91yVGveVaV?=
+ =?us-ascii?Q?rU3GBNfIsA7eXBVal8CkUXnE0PJ0WMme37/1DZ09nrx/+jfRZG2gWvQdiYgU?=
+ =?us-ascii?Q?R9ZApUEoAX/qHZAYC8oUxgmEahs+R8XkptsTe6SXHOhSzP25t6k6EnuTVmUn?=
+ =?us-ascii?Q?4VagxIFn3gsn5WjrXRyZmtJDX2J7Dp3eXyfP9TziVXI9Xb/UJGt7G1O0fpvu?=
+ =?us-ascii?Q?3Qf4p2Iwzw16oVCuqKXn9LPhIh/REnCeEZizgzJflDjABkgil5qlmrwy0QCd?=
+ =?us-ascii?Q?aMcnkjMDXuynv0W/Z7RZRPCGCv0q+P4eIdLXjnM354R6x00bgwUGIfo9BLl5?=
+ =?us-ascii?Q?ZnvaZWdU2V47BZxsezYyGn2n0tz4F0eiNB3TRCrEIuPL+ElfcJnTY/v/aSWR?=
+ =?us-ascii?Q?eUAE6rMFp9YrAC6AQSLzDOg9eP2X8buOWEmMn9SEMxRLoD54ykezpnPUYyPv?=
+ =?us-ascii?Q?q+5ctyCt9Ajnslx4s3R0S8jCQouyYSQtrlYe4koLbvb11x8nFmv6CB1P7Mbo?=
+ =?us-ascii?Q?DacfuBYHBQ6xkMan8wq1JRDTZyduFti2dfSQ8W/9qvaS9L7cK5NGp4YgqGyh?=
+ =?us-ascii?Q?kNcQyABfeyUZs62YYaB9U7nQ/TGNuZ3jbgFeQ+GJ5qH816KoS9O3fk8VEpoF?=
+ =?us-ascii?Q?QncTCmjhAmHCue7v5WdNrBU8ID47EBBK24TNG16/JVgQtMHYzKmlf2jYGQeo?=
+ =?us-ascii?Q?3VNqFzyrGmuUfBj/N1VYHhvg5z67yz1OnZlI73bq2zCah11Q/CC1QMQj3nO9?=
+ =?us-ascii?Q?5zR1rMu4LtQuecbwNcRHP2qKzu3qqVaFiBa+7kl/P4rgkTfJ1Rx6+O7WDu4M?=
+ =?us-ascii?Q?sQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926002928.2744638-12-colin.foster@in-advantage.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c804d620-a0f0-457f-5e4a-08daa0cc7901
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2022 21:08:48.9939
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +2y1x2EictKhPvgZI2NPLEPSVdRrEQDJpYtH+QXdudITLNZDZ5W+1pUNjzmGgxOf+HbPlOZ5rCqVVT/GqYGpCokGcdsln+64DQCGjk20odI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR21MB1428
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Sep 25, 2022 at 05:29:25PM -0700, Colin Foster wrote:
-> The Ocelot switch core driver relies heavily on a fixed array of resources
-> for both ports and peripherals. This is in contrast to existing peripherals
-> - pinctrl for example - which have a one-to-one mapping of driver <>
-> resource. As such, these regmaps must be created differently so that
-> enumeration-based offsets are preserved.
-> 
-> Register the regmaps to the core MFD device unconditionally so they can be
-> referenced by the Ocelot switch / Felix DSA systems.
-> 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+From: Li kunyu <kunyu@nfschina.com> Sent: Tuesday, September 27, 2022 12:46=
+ AM
+>=20
+> The generate_guest_id function is more suitable for use after the
+> following modifications.
+> 1. Modify the type of the guest_id variable to u64, which is compatible
+> with the caller.
+> 2. Remove all parameters from the function, and write the parameter
+> (LINUX_VERSION_CODE) passed in by the actual call into the function
+> implementation.
+
+The above statement is no longer true.
+
+> 3. Rename the function to make it clearly a Hyper-V related function,
+> and modify it to hv_generate_guest_id.
+>=20
+> Signed-off-by: Li kunyu <kunyu@nfschina.com>
+>=20
+> --------
+>  v2: Fix generate_guest_id to hv_generate_guest_id.
+>  v3: Fix [PATCH v2] asm-generic: Remove the ... to [PATCH v3] hyperv: sim=
+p
+>      lify ... and remove extra spaces
+>  v4: Remove #include <linux/version.h> in the calling file, and add #incl=
+u
+>      de <linux/version.h> in the function implementation file
+>  v5: <linux/version.h> is changed to the definition position before v4, a=
+n
+>      d the LINUX_VERSION_CODE macro is passed in the function call
 > ---
-> 
-> v3
->     * No change
-> 
-> v2
->     * Alignment of variables broken out to a separate patch
->     * Structs now correctly use EXPORT_SYMBOL*
->     * Logic moved and comments added to clear up conditionals around
->       vsc7512_target_io_res[i].start
-> 
-> v1 from previous RFC:
->     * New patch
-> 
-> ---
->  drivers/mfd/ocelot-core.c  | 87 ++++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/ocelot.h |  5 +++
->  2 files changed, 92 insertions(+)
-> 
-> diff --git a/drivers/mfd/ocelot-core.c b/drivers/mfd/ocelot-core.c
-> index 013e83173062..702555fbdcc5 100644
-> --- a/drivers/mfd/ocelot-core.c
-> +++ b/drivers/mfd/ocelot-core.c
-> @@ -45,6 +45,45 @@
->  #define VSC7512_SIO_CTRL_RES_START	0x710700f8
->  #define VSC7512_SIO_CTRL_RES_SIZE	0x00000100
->  
-> +#define VSC7512_HSIO_RES_START		0x710d0000
-> +#define VSC7512_HSIO_RES_SIZE		0x00000128
-
-I don't think you should give the HSIO resource to the switching driver.
-In drivers/net/ethernet/mscc/ocelot_vsc7514.c, there is this comment:
-
-static void ocelot_pll5_init(struct ocelot *ocelot)
-{
-	/* Configure PLL5. This will need a proper CCF driver
-	 * The values are coming from the VTSS API for Ocelot
-	 */
-
-I believe CCF stands for Common Clock Framework.
-
-> +
-> +#define VSC7512_ANA_RES_START		0x71880000
-> +#define VSC7512_ANA_RES_SIZE		0x00010000
-> +
-> +#define VSC7512_QS_RES_START		0x71080000
-> +#define VSC7512_QS_RES_SIZE		0x00000100
-> +
-> +#define VSC7512_QSYS_RES_START		0x71800000
-> +#define VSC7512_QSYS_RES_SIZE		0x00200000
-> +
-> +#define VSC7512_REW_RES_START		0x71030000
-> +#define VSC7512_REW_RES_SIZE		0x00010000
-> +
-> +#define VSC7512_SYS_RES_START		0x71010000
-> +#define VSC7512_SYS_RES_SIZE		0x00010000
-> +
-> +#define VSC7512_S0_RES_START		0x71040000
-> +#define VSC7512_S1_RES_START		0x71050000
-> +#define VSC7512_S2_RES_START		0x71060000
-> +#define VSC7512_S_RES_SIZE		0x00000400
-
-VCAP_RES_SIZE?
-
-> +
-> +#define VSC7512_GCB_RES_START		0x71070000
-> +#define VSC7512_GCB_RES_SIZE		0x0000022c
-
-Again, I don't think devcpu_gcb should be given to a switching-only
-driver. There's nothing switching-related about it.
-
-> +#define VSC7512_PORT_0_RES_START	0x711e0000
-> +#define VSC7512_PORT_1_RES_START	0x711f0000
-> +#define VSC7512_PORT_2_RES_START	0x71200000
-> +#define VSC7512_PORT_3_RES_START	0x71210000
-> +#define VSC7512_PORT_4_RES_START	0x71220000
-> +#define VSC7512_PORT_5_RES_START	0x71230000
-> +#define VSC7512_PORT_6_RES_START	0x71240000
-> +#define VSC7512_PORT_7_RES_START	0x71250000
-> +#define VSC7512_PORT_8_RES_START	0x71260000
-> +#define VSC7512_PORT_9_RES_START	0x71270000
-> +#define VSC7512_PORT_10_RES_START	0x71280000
-> +#define VSC7512_PORT_RES_SIZE		0x00010000
-> +
->  #define VSC7512_GCB_RST_SLEEP_US	100
->  #define VSC7512_GCB_RST_TIMEOUT_US	100000
->  
-> @@ -96,6 +135,36 @@ static const struct resource vsc7512_sgpio_resources[] = {
->  	DEFINE_RES_REG_NAMED(VSC7512_SIO_CTRL_RES_START, VSC7512_SIO_CTRL_RES_SIZE, "gcb_sio"),
->  };
->  
-> +const struct resource vsc7512_target_io_res[TARGET_MAX] = {
-> +	[ANA] = DEFINE_RES_REG_NAMED(VSC7512_ANA_RES_START, VSC7512_ANA_RES_SIZE, "ana"),
-> +	[QS] = DEFINE_RES_REG_NAMED(VSC7512_QS_RES_START, VSC7512_QS_RES_SIZE, "qs"),
-> +	[QSYS] = DEFINE_RES_REG_NAMED(VSC7512_QSYS_RES_START, VSC7512_QSYS_RES_SIZE, "qsys"),
-> +	[REW] = DEFINE_RES_REG_NAMED(VSC7512_REW_RES_START, VSC7512_REW_RES_SIZE, "rew"),
-> +	[SYS] = DEFINE_RES_REG_NAMED(VSC7512_SYS_RES_START, VSC7512_SYS_RES_SIZE, "sys"),
-> +	[S0] = DEFINE_RES_REG_NAMED(VSC7512_S0_RES_START, VSC7512_S_RES_SIZE, "s0"),
-> +	[S1] = DEFINE_RES_REG_NAMED(VSC7512_S1_RES_START, VSC7512_S_RES_SIZE, "s1"),
-> +	[S2] = DEFINE_RES_REG_NAMED(VSC7512_S2_RES_START, VSC7512_S_RES_SIZE, "s2"),
-> +	[GCB] = DEFINE_RES_REG_NAMED(VSC7512_GCB_RES_START, VSC7512_GCB_RES_SIZE, "devcpu_gcb"),
-> +	[HSIO] = DEFINE_RES_REG_NAMED(VSC7512_HSIO_RES_START, VSC7512_HSIO_RES_SIZE, "hsio"),
-> +};
-> +EXPORT_SYMBOL_NS(vsc7512_target_io_res, MFD_OCELOT);
-> +
-> +const struct resource vsc7512_port_io_res[] = {
-
-I hope you will merge these 2 arrays now.
-
-> +	DEFINE_RES_REG_NAMED(VSC7512_PORT_0_RES_START, VSC7512_PORT_RES_SIZE, "port0"),
-> +	DEFINE_RES_REG_NAMED(VSC7512_PORT_1_RES_START, VSC7512_PORT_RES_SIZE, "port1"),
-> +	DEFINE_RES_REG_NAMED(VSC7512_PORT_2_RES_START, VSC7512_PORT_RES_SIZE, "port2"),
-> +	DEFINE_RES_REG_NAMED(VSC7512_PORT_3_RES_START, VSC7512_PORT_RES_SIZE, "port3"),
-> +	DEFINE_RES_REG_NAMED(VSC7512_PORT_4_RES_START, VSC7512_PORT_RES_SIZE, "port4"),
-> +	DEFINE_RES_REG_NAMED(VSC7512_PORT_5_RES_START, VSC7512_PORT_RES_SIZE, "port5"),
-> +	DEFINE_RES_REG_NAMED(VSC7512_PORT_6_RES_START, VSC7512_PORT_RES_SIZE, "port6"),
-> +	DEFINE_RES_REG_NAMED(VSC7512_PORT_7_RES_START, VSC7512_PORT_RES_SIZE, "port7"),
-> +	DEFINE_RES_REG_NAMED(VSC7512_PORT_8_RES_START, VSC7512_PORT_RES_SIZE, "port8"),
-> +	DEFINE_RES_REG_NAMED(VSC7512_PORT_9_RES_START, VSC7512_PORT_RES_SIZE, "port9"),
-> +	DEFINE_RES_REG_NAMED(VSC7512_PORT_10_RES_START, VSC7512_PORT_RES_SIZE, "port10"),
-> +	{}
-> +};
-> +EXPORT_SYMBOL_NS(vsc7512_port_io_res, MFD_OCELOT);
-> +
->  static const struct mfd_cell vsc7512_devs[] = {
->  	{
->  		.name = "ocelot-pinctrl",
-> @@ -144,6 +213,7 @@ static void ocelot_core_try_add_regmaps(struct device *dev,
->  
->  int ocelot_core_init(struct device *dev)
->  {
-> +	const struct resource *port_res;
->  	int i, ndevs;
->  
->  	ndevs = ARRAY_SIZE(vsc7512_devs);
-> @@ -151,6 +221,23 @@ int ocelot_core_init(struct device *dev)
->  	for (i = 0; i < ndevs; i++)
->  		ocelot_core_try_add_regmaps(dev, &vsc7512_devs[i]);
->  
-> +	/*
-> +	 * Both the target_io_res and the port_io_res structs need to be referenced directly by
-> +	 * the ocelot_ext driver, so they can't be attached to the dev directly and referenced by
-> +	 * offset like the rest of the drivers. Instead, create these regmaps always and allow any
-> +	 * children look these up by name.
-> +	 */
-> +	for (i = 0; i < TARGET_MAX; i++)
-> +		/*
-> +		 * The target_io_res array is sparsely populated. Use .start as an indication that
-> +		 * the entry isn't defined
-> +		 */
-> +		if (vsc7512_target_io_res[i].start)
-> +			ocelot_core_try_add_regmap(dev, &vsc7512_target_io_res[i]);
-> +
-> +	for (port_res = vsc7512_port_io_res; port_res->start; port_res++)
-> +		ocelot_core_try_add_regmap(dev, port_res);
-> +
-
-Will need to be updated.
-
->  	return devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, vsc7512_devs, ndevs, NULL, 0, NULL);
+>  arch/arm64/hyperv/mshyperv.c   | 2 +-
+>  arch/x86/hyperv/hv_init.c      | 2 +-
+>  include/asm-generic/mshyperv.h | 9 +++------
+>  3 files changed, 5 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+> index bbbe351e9045..a406454578f0 100644
+> --- a/arch/arm64/hyperv/mshyperv.c
+> +++ b/arch/arm64/hyperv/mshyperv.c
+> @@ -38,7 +38,7 @@ static int __init hyperv_init(void)
+>  		return 0;
+>=20
+>  	/* Setup the guest ID */
+> -	guest_id =3D generate_guest_id(0, LINUX_VERSION_CODE, 0);
+> +	guest_id =3D hv_generate_guest_id(LINUX_VERSION_CODE);
+>  	hv_set_vpreg(HV_REGISTER_GUEST_OSID, guest_id);
+>=20
+>  	/* Get the features and hints from Hyper-V */
+> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> index 3de6d8b53367..032d85ac33fa 100644
+> --- a/arch/x86/hyperv/hv_init.c
+> +++ b/arch/x86/hyperv/hv_init.c
+> @@ -426,7 +426,7 @@ void __init hyperv_init(void)
+>  	 * 1. Register the guest ID
+>  	 * 2. Enable the hypercall and register the hypercall page
+>  	 */
+> -	guest_id =3D generate_guest_id(0, LINUX_VERSION_CODE, 0);
+> +	guest_id =3D hv_generate_guest_id(LINUX_VERSION_CODE);
+>  	wrmsrl(HV_X64_MSR_GUEST_OS_ID, guest_id);
+>=20
+>  	/* Hyper-V requires to write guest os id via ghcb in SNP IVM. */
+> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
+v.h
+> index c05d2ce9b6cd..bfb9eb9d7215 100644
+> --- a/include/asm-generic/mshyperv.h
+> +++ b/include/asm-generic/mshyperv.h
+> @@ -105,15 +105,12 @@ static inline u64 hv_do_rep_hypercall(u16 code, u16
+> rep_count, u16 varhead_size,
 >  }
->  EXPORT_SYMBOL_NS(ocelot_core_init, MFD_OCELOT);
-> diff --git a/include/linux/mfd/ocelot.h b/include/linux/mfd/ocelot.h
-> index dd72073d2d4f..439ff5256cf0 100644
-> --- a/include/linux/mfd/ocelot.h
-> +++ b/include/linux/mfd/ocelot.h
-> @@ -11,8 +11,13 @@
->  #include <linux/regmap.h>
->  #include <linux/types.h>
->  
-> +#include <soc/mscc/ocelot.h>
-> +
+>=20
+>  /* Generate the guest OS identifier as described in the Hyper-V TLFS */
+> -static inline  __u64 generate_guest_id(__u64 d_info1, __u64 kernel_versi=
+on,
+> -				       __u64 d_info2)
+> +static inline u64 hv_generate_guest_id(u64 kernel_version)
+>  {
+> -	__u64 guest_id =3D 0;
+> +	u64 guest_id;
+>=20
+> -	guest_id =3D (((__u64)HV_LINUX_VENDOR_ID) << 48);
+> -	guest_id |=3D (d_info1 << 48);
+> +	guest_id =3D (((u64)HV_LINUX_VENDOR_ID) << 48);
+>  	guest_id |=3D (kernel_version << 16);
+> -	guest_id |=3D d_info2;
+>=20
+>  	return guest_id;
+>  }
+> --
+> 2.18.2
 
-Is this the problematic include that makes it necessary to have the
-pinctrl hack? Can we drop the #undef REG now?
+I'm good with the code.  Thanks for taking into the account the input
+from Olaf Hering.  But per my comment above, the commit message
+needs to be updated to reflect this last change.
 
->  struct resource;
->  
-> +extern const struct resource vsc7512_target_io_res[TARGET_MAX];
-> +extern const struct resource vsc7512_port_io_res[];
-> +
+Michael
 
-Will need to be removed.
-
->  static inline struct regmap *
->  ocelot_regmap_from_resource_optional(struct platform_device *pdev,
->  				     unsigned int index,
-> -- 
-> 2.25.1
-> 
