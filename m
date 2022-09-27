@@ -2,193 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D365EB8AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B825EB8C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbiI0DYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 23:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
+        id S230115AbiI0DZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 23:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiI0DXv (ORCPT
+        with ESMTP id S231205AbiI0DX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 23:23:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BC1A6ACB;
-        Mon, 26 Sep 2022 20:22:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D569AB80D31;
-        Tue, 27 Sep 2022 03:22:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66658C433D6;
-        Tue, 27 Sep 2022 03:22:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664248967;
-        bh=HQEb/Oidt7dRB+kCBME6ip2wUHKCWzwM5kwmGdGckcs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=KtiXKt7Na1finD2MEee92tdnWpmnz2jSppx4euCslelpO13u2lCEvB9E/Phw5/XqO
-         j5MNBmwmQrHl2oIzPoZnmZJjNZPpY+DPRZyRQluZlULt2O/GB3iBSYmfw9ig7pV4pe
-         /aQo6qvqHCz/O8sd680Ho5xkUwa9Zcz0FToB0R8rX2Jy8wVRsrHWLG/m8DgW///6m3
-         GXcV7XGGtaGISWE4mOeOOQtqNCbxEKHayQ0bzFokPc4RPgaLP87ZuxcXVfBEe+XFyT
-         uX9mfTeE2ZeyZXf/1HN4Ja4J4yUnAHYqH/gm2zbUTCFuL8JRG9+h9QdoJTv3gsEWh8
-         fYIrZiYHgpu9Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 009C55C0B39; Mon, 26 Sep 2022 20:22:46 -0700 (PDT)
-Date:   Mon, 26 Sep 2022 20:22:46 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
-Message-ID: <20220927032246.GH4196@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220926223222.GX4196@paulmck-ThinkPad-P17-Gen-1>
- <8344B0AB-608E-44DA-8FEE-3FE56EDF9172@joelfernandes.org>
- <20220926235944.GE4196@paulmck-ThinkPad-P17-Gen-1>
- <YzJWoRui7mUEDtox@google.com>
+        Mon, 26 Sep 2022 23:23:58 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6093B959
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 20:23:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664249004; x=1695785004;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mxPqXP0fACxHvoonGfK2OL3d4Ykc4jWit0P4PKYD5oQ=;
+  b=lflKFoeABJqOJFtLGRgH5v38duYKIZEAIy1U4k8PFG1+hjS7dGy0Gb9A
+   DLeR/CSTorJ6iIFznCBmi5vx1E6cT12piK+LRAyfrOuJyVjeX04AKeI6b
+   buxhoxe2g3oc4II1qJkEen9TeRjlmysD+wZyBqsNLQi/pLTC/ULU0+I4l
+   RwQUQyG7LV2S6VDxq2UavQRyDOZ1ZXubiKLigEvZ88+MCdE2UzTDf+LaU
+   JUgoFCyJs4vF6RL6R4rVFp7JjfXk5NIBlyApjf1nQxKz9LHizBxTG9YNI
+   dGBcaGCpgRfjxc2dUwrK9zGu6VHFasZTUJhpBSpy6QDTZvdB6/Jahv2r9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="288347868"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="288347868"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 20:23:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="689828820"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="689828820"
+Received: from lkp-server02.sh.intel.com (HELO dfa2c9fcd321) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 26 Sep 2022 20:23:22 -0700
+Received: from kbuild by dfa2c9fcd321 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1od1Bq-0000Ya-0C;
+        Tue, 27 Sep 2022 03:23:22 +0000
+Date:   Tue, 27 Sep 2022 11:22:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cleanups] BUILD SUCCESS
+ 30ea703a38ef76ca119673cd8bdd05c6e068e2ac
+Message-ID: <63326c86.pa1q7H2O/k39yqYz%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YzJWoRui7mUEDtox@google.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 01:49:21AM +0000, Joel Fernandes wrote:
-> On Mon, Sep 26, 2022 at 04:59:44PM -0700, Paul E. McKenney wrote:
-> > On Mon, Sep 26, 2022 at 07:47:50PM -0400, Joel Fernandes wrote:
-> > > 
-> > > 
-> > > > On Sep 26, 2022, at 6:32 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > 
-> > > > ﻿On Mon, Sep 26, 2022 at 09:02:21PM +0000, Joel Fernandes wrote:
-> > > >> On Mon, Sep 26, 2022 at 09:32:44PM +0200, Uladzislau Rezki wrote:
-> > > >> [...]
-> > > >>>>>> On my KVM machine the boot time is affected:
-> > > >>>>>> 
-> > > >>>>>> <snip>
-> > > >>>>>> [    2.273406] e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network Connection
-> > > >>>>>> [   11.945283] e1000 0000:00:03.0 ens3: renamed from eth0
-> > > >>>>>> [   22.165198] sr 1:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
-> > > >>>>>> [   22.165206] cdrom: Uniform CD-ROM driver Revision: 3.20
-> > > >>>>>> [   32.406981] sr 1:0:0:0: Attached scsi CD-ROM sr0
-> > > >>>>>> [  104.115418] process '/usr/bin/fstype' started with executable stack
-> > > >>>>>> [  104.170142] EXT4-fs (sda1): mounted filesystem with ordered data mode. Quota mode: none.
-> > > >>>>>> [  104.340125] systemd[1]: systemd 241 running in system mode. (+PAM +AUDIT +SELINUX +IMA +APPARMOR +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 +IDN -PCRE2 default-hierarchy=hybrid)
-> > > >>>>>> [  104.340193] systemd[1]: Detected virtualization kvm.
-> > > >>>>>> [  104.340196] systemd[1]: Detected architecture x86-64.
-> > > >>>>>> [  104.359032] systemd[1]: Set hostname to <pc638>.
-> > > >>>>>> [  105.740109] random: crng init done
-> > > >>>>>> [  105.741267] systemd[1]: Reached target Remote File Systems.
-> > > >>>>>> <snip>
-> > > >>>>>> 
-> > > >>>>>> 2 - 11 and second delay is between 32 - 104. So there are still users which must
-> > > >>>>>> be waiting for "RCU" in a sync way.
-> > > >>>>> 
-> > > >>>>> I was wondering if you can compare boot logs and see which timestamp does the
-> > > >>>>> slow down start from. That way, we can narrow down the callback. Also another
-> > > >>>>> idea is, add "trace_event=rcu:rcu_callback,rcu:rcu_invoke_callback
-> > > >>>>> ftrace_dump_on_oops" to the boot params, and then manually call
-> > > >>>>> "tracing_off(); panic();" from the code at the first printk that seems off in
-> > > >>>>> your comparison of good vs bad. For example, if "crng init done" timestamp is
-> > > >>>>> off, put the "tracing_off(); panic();" there. Then grab the serial console
-> > > >>>>> output to see what were the last callbacks that was queued/invoked.
-> > > >>>> 
-> > > >>>> We do seem to be in need of some way to quickly and easily locate the
-> > > >>>> callback that needed to be _flush() due to a wakeup.
-> > > >>>> 
-> > > >>> <snip>
-> > > >>> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-> > > >>> index aeea9731ef80..fe1146d97f1a 100644
-> > > >>> --- a/kernel/workqueue.c
-> > > >>> +++ b/kernel/workqueue.c
-> > > >>> @@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork)
-> > > >>> 
-> > > >>>        if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
-> > > >>>                rwork->wq = wq;
-> > > >>> -               call_rcu(&rwork->rcu, rcu_work_rcufn);
-> > > >>> +               call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
-> > > >>>                return true;
-> > > >>>        }
-> > > >>> 
-> > > >>> <snip>
-> > > >>> 
-> > > >>> ?
-> > > >>> 
-> > > >>> But it does not fully solve my boot-up issue. Will debug tomorrow further.
-> > > >> 
-> > > >> Ah, but at least its progress, thanks. Could you send me a patch to include
-> > > >> in the next revision with details of this?
-> > > >> 
-> > > >>>> Might one more proactive approach be to use Coccinelle to locate such
-> > > >>>> callback functions?  We might not want -all- callbacks that do wakeups
-> > > >>>> to use call_rcu_flush(), but knowing which are which should speed up
-> > > >>>> slow-boot debugging by quite a bit.
-> > > >>>> 
-> > > >>>> Or is there a better way to do this?
-> > > >>>> 
-> > > >>> I am not sure what Coccinelle is. If we had something automated that measures
-> > > >>> a boot time and if needed does some profiling it would be good. Otherwise it
-> > > >>> is a manual debugging mainly, IMHO.
-> > > >> 
-> > > >> Paul, What about using a default-off kernel CONFIG that splats on all lazy
-> > > >> call_rcu() callbacks that do a wake up. We could use the trace hooks to do it
-> > > >> in kernel I think. I can talk to Steve to get ideas on how to do that but I
-> > > >> think it can be done purely from trace events (we might need a new
-> > > >> trace_end_invoke_callback to fire after the callback is invoked). Thoughts?
-> > > > 
-> > > > Could you look for wakeups invoked between trace_rcu_batch_start() and
-> > > > trace_rcu_batch_end() that are not from interrupt context?  This would
-> > > > of course need to be associated with a task rather than a CPU.
-> > > 
-> > > Yes this sounds good, but we also need to know if the callbacks are lazy or not since wake-up is ok from a non lazy one. I think I’ll need a table to track that at queuing time.
-> > 
-> > Agreed.
-> > 
-> > > > Note that you would need to check for wakeups from interrupt handlers
-> > > > even with the extra trace_end_invoke_callback().  The window where an
-> > > > interrupt handler could do a wakeup would be reduced, but not eliminated.
-> > > 
-> > > True! Since this is a  debugging option, can we not just disable interrupts across callback invocation?
-> > 
-> > Not without terminally annoying lockdep, at least for any RCU callbacks
-> > doing things like spin_lock_bh().
-> > 
-> 
-> Sorry if my last email bounced. Looks like my iPhone betrayed me this once ;)
-> 
-> I was thinking something like this:
-> 1. Put a flag in rcu_head to mark CBs as lazy.
-> 2. Add a trace_rcu_invoke_callback_end() trace point.
-> 
-> Both #1 and #2 can be a debug CONFIG option. #2 can be a tracepoint and not
-> exposed if needed.
-> 
-> 3. Put an in-kernel probe on both trace_rcu_invoke_callback_start() and
-> trace_rcu_invoke_callback_end(). In the start probe, set a per-task flag if
-> the current CB is lazy. In the end probe, clear it.
-> 
-> 4. Put an in-kernel probe on trace_rcu_sched_wakeup().
-> 
-> Splat in the wake up probe if:
-> 1. Hard IRQs are on.
-> 2. The per-cpu flag is set.
-> 
-> #3 actually does not even need probes if we can directly call the functions
-> from the rcu_do_batch() function.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
+branch HEAD: 30ea703a38ef76ca119673cd8bdd05c6e068e2ac  x86/cpu: Include the header of init_ia32_feat_ctl()'s prototype
 
-This is fine for an experiment or a debugging session, but a solution
-based totally on instrumentation would be better for production use.
+elapsed time: 720m
 
-> I'll work on it in the morning and also look into Vlad's config.
+configs tested: 90
+configs skipped: 78
 
-Sounds good!
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-							Thanx, Paul
+gcc tested configs:
+x86_64                              defconfig
+x86_64                          rhel-8.3-func
+x86_64                               rhel-8.3
+x86_64                    rhel-8.3-kselftests
+i386                                defconfig
+x86_64                           allyesconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+i386                 randconfig-a001-20220926
+i386                 randconfig-a004-20220926
+i386                 randconfig-a002-20220926
+i386                 randconfig-a003-20220926
+i386                 randconfig-a005-20220926
+i386                 randconfig-a006-20220926
+x86_64               randconfig-a002-20220926
+x86_64               randconfig-a001-20220926
+x86_64               randconfig-a003-20220926
+x86_64               randconfig-a004-20220926
+x86_64               randconfig-a006-20220926
+x86_64               randconfig-a005-20220926
+i386                             allyesconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+s390                          debug_defconfig
+i386                          randconfig-c001
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+powerpc                     mpc83xx_defconfig
+sh                               alldefconfig
+arm                         vf610m4_defconfig
+openrisc                    or1ksim_defconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220925
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+
+clang tested configs:
+i386                 randconfig-a011-20220926
+i386                 randconfig-a013-20220926
+i386                 randconfig-a012-20220926
+i386                 randconfig-a014-20220926
+i386                 randconfig-a016-20220926
+i386                 randconfig-a015-20220926
+x86_64                        randconfig-k001
+x86_64               randconfig-a016-20220926
+x86_64               randconfig-a012-20220926
+x86_64               randconfig-a014-20220926
+x86_64               randconfig-a013-20220926
+x86_64               randconfig-a011-20220926
+x86_64               randconfig-a015-20220926
+powerpc                      katmai_defconfig
+powerpc                      ppc44x_defconfig
+hexagon              randconfig-r041-20220925
+hexagon              randconfig-r041-20220926
+hexagon              randconfig-r045-20220925
+hexagon              randconfig-r045-20220926
+riscv                randconfig-r042-20220926
+s390                 randconfig-r044-20220926
+powerpc                          allmodconfig
+arm                          collie_defconfig
+mips                           mtx1_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+powerpc                   microwatt_defconfig
+mips                          ath25_defconfig
+arm                     davinci_all_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
