@@ -2,87 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BFC5EC8F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1800F5EC8E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbiI0QD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
+        id S232852AbiI0QCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232640AbiI0QDS (ORCPT
+        with ESMTP id S232395AbiI0QBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:03:18 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C691C4320;
-        Tue, 27 Sep 2022 09:02:07 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id b23so8120504iof.2;
-        Tue, 27 Sep 2022 09:02:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ct18v3QfbaOt7CsF6ErcYqFs3nH5VotKpLqZ78HARmQ=;
-        b=no1GeN48oclNXpvXOcJ3XM42s7G74QAfuxJUP2w9C5cuLEt1LA2InXaLu4/g7vE3Ah
-         S/Mc2c6zxeOHl3MQFolYrdx35TehZqB+m2XkqpnZHNqrwi5umGImsOgRLLDhEMmJ6ix5
-         qeuIUdoylQJ7AptS4+1rEN42XUXKncRc/qyo1TFhi6Q0KDwdAtuC5XFm02IRz9f+iAcx
-         sEw/LaTx83SSMgttZk7rB8ivAe4XALo445n5UqTrJu3tSHxpkqdJOl5W6Zc+DO1pRwIo
-         j2fZEMqxdCfiMO3AUliNZDWlSVzAxmAB9lJ4s9GqYvY0EH8pYHJ1JJ0Idmtjb+MQEjmv
-         /mhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ct18v3QfbaOt7CsF6ErcYqFs3nH5VotKpLqZ78HARmQ=;
-        b=z2UIMpPaueuEiTLuA1Ar10i85x2jLdjeMgTFceEvPQ3npAZB8XP3pL97HU9KJEy+yt
-         Xh8OVj72N+wCM46RnJ2whBWPuNdK3uKhMbe3CULbbvP4doP/j4Fmnoa+kKBmGXyf+XEl
-         p0+uiH387tDbLI2t6Sck1pZJvl60ngygq0dn6SLXujt8mNdwutj+d0SYOFjaYSLJgB0G
-         Vs483npUUhwhxjJ78J9L9H4LeiaLvJeKk/KEnSxTELv8NZrm29iGresOlo7J6JBbxXT3
-         TJk1blhFr6JKJFlG+hUWROF+gjwvd+HvINscI0bXxSas/JgwPMiRd12VGolvcG7g2qsA
-         6OLA==
-X-Gm-Message-State: ACrzQf1HUMDV6LMYmReMr0RiDHbPt48RKPAf16dH1NNYcyNB9T/8Z/FW
-        roG8bIMQ4VHYUaBopiXqYxPYSAhRmfLFyQ9iJAo=
-X-Google-Smtp-Source: AMsMyM5odjm/1/sK9Q4u52UeI71zmJgkTDOy0C5e+aZtCOyOTsfGQ3g+oQ5ZaDNDjzLaBsPSyP2gSi2I+7blmm5gF9c=
-X-Received: by 2002:a05:6638:218f:b0:35a:7f20:6a57 with SMTP id
- s15-20020a056638218f00b0035a7f206a57mr14587401jaj.186.1664294526531; Tue, 27
- Sep 2022 09:02:06 -0700 (PDT)
+        Tue, 27 Sep 2022 12:01:40 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A42779A41
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:01:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 56B84CE189A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 16:01:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F5BC433C1;
+        Tue, 27 Sep 2022 16:01:33 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.96)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1odD2h-00G2pv-26;
+        Tue, 27 Sep 2022 12:02:43 -0400
+Message-ID: <20220927160243.204183194@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Tue, 27 Sep 2022 12:02:21 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: [for-next][PATCH 05/20] tracing: Add numeric delta time to the trace event benchmark
+References: <20220927160216.349640304@goodmis.org>
 MIME-Version: 1.0
-References: <20220927131518.30000-1-ojeda@kernel.org> <20220927131518.30000-9-ojeda@kernel.org>
- <YzL/9mlOHemaey2n@yadro.com> <CANiq72kDPMKd0qLAMVrd2A3n9aAWhh2ps5DvKos58L=_V2-XwQ@mail.gmail.com>
- <YzMTH1v9yZQcujLa@yadro.com>
-In-Reply-To: <YzMTH1v9yZQcujLa@yadro.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 27 Sep 2022 18:01:55 +0200
-Message-ID: <CANiq72nkiOsAkr4oeBi-ohf12-JjvkQmb67s-G1L87pBS+FEWA@mail.gmail.com>
-Subject: Re: [PATCH v10 08/27] rust: adapt `alloc` crate to the kernel
-To:     Konstantin Shelekhin <k.shelekhin@yadro.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Matthew Bakhtiari <dev@mtbk.me>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 5:13 PM Konstantin Shelekhin
-<k.shelekhin@yadro.com> wrote:
->
-> Sorry, my bad.
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-No apologies needed! Thanks for taking a look like in v8 and v9 :)
+In order to testing filtering and histograms via the trace event
+benchmark, record the delta time of the last event as a numeric value
+(currently, it just saves it within the string) so that filters and
+histograms can use it.
 
-Cheers,
-Miguel
+Link: https://lkml.kernel.org/r/20220906225529.213677569@goodmis.org
+
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Tom Zanussi <zanussi@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/trace_benchmark.c | 2 +-
+ kernel/trace/trace_benchmark.h | 8 +++++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/trace/trace_benchmark.c b/kernel/trace/trace_benchmark.c
+index 801c2a7f7605..54d5fa35c90a 100644
+--- a/kernel/trace/trace_benchmark.c
++++ b/kernel/trace/trace_benchmark.c
+@@ -51,7 +51,7 @@ static void trace_do_benchmark(void)
+ 
+ 	local_irq_disable();
+ 	start = trace_clock_local();
+-	trace_benchmark_event(bm_str);
++	trace_benchmark_event(bm_str, bm_last);
+ 	stop = trace_clock_local();
+ 	local_irq_enable();
+ 
+diff --git a/kernel/trace/trace_benchmark.h b/kernel/trace/trace_benchmark.h
+index 79e6fbe5b365..c3e91060dc94 100644
+--- a/kernel/trace/trace_benchmark.h
++++ b/kernel/trace/trace_benchmark.h
+@@ -14,19 +14,21 @@ extern void trace_benchmark_unreg(void);
+ 
+ TRACE_EVENT_FN(benchmark_event,
+ 
+-	TP_PROTO(const char *str),
++	TP_PROTO(const char *str, u64 delta),
+ 
+-	TP_ARGS(str),
++	TP_ARGS(str, delta),
+ 
+ 	TP_STRUCT__entry(
+ 		__array(	char,	str,	BENCHMARK_EVENT_STRLEN	)
++		__field(	u64,	delta)
+ 	),
+ 
+ 	TP_fast_assign(
+ 		memcpy(__entry->str, str, BENCHMARK_EVENT_STRLEN);
++		__entry->delta = delta;
+ 	),
+ 
+-	TP_printk("%s", __entry->str),
++	TP_printk("%s delta=%llu", __entry->str, __entry->delta),
+ 
+ 	trace_benchmark_reg, trace_benchmark_unreg
+ );
+-- 
+2.35.1
