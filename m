@@ -2,125 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA2B5EC489
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F815EC48E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232920AbiI0Ndg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
+        id S232934AbiI0Nd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232889AbiI0NdI (ORCPT
+        with ESMTP id S232007AbiI0NdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:33:08 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82FB7A765
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:31:39 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id cj27so5968100qtb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:31:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1CKcN6D6aMgyt4bAsIiGzyFXkbzqcxXEoHRgk38I1OE=;
-        b=2CTelejSNyAc63K7peeK8HqKubhTE4ocxydSrD3sgKjjboKqmQUMGPPNcJICofOxum
-         A+RJ9dFaTQ2DoIKHzTqGHr7/GJyXrej7KG6c5tWPlW5SqFXSdvqlZIvm02HKy5ud7QWs
-         S48HvOiTefzGRijGgD/Wh34XtEr0HpKvOZFc+JAx3tHUYnrBVey5fhJImVwolWrjehjh
-         Mw8Njj45/OU34uzlw9+dEaHFmJsTU9zshaFEEkr2ibJWA0Nh0CeH3zc1Eiltlxvt6n5t
-         AXG0Ey1BV8dFgpBS4pQulsCSOSW1QWXt7C3OiNXgZmVY6xYhVPC3fzGZY4YXDl2kdhnm
-         KEbg==
-X-Gm-Message-State: ACrzQf2In6wmZS0tqq7cEQMiY6QQ5ItLCzIxDGut3TQu/7k9DPRbhRQM
-        N6uLXAqmmNfMrsj1wbGBKKsGXYxTr5gK1A==
-X-Google-Smtp-Source: AMsMyM4ujb9lO/KCRTaBGrlncylN5yuHfgY/q1//Gon7dPVHgr1aYFcQmuZBhjuATqgY9qCZvhkbXQ==
-X-Received: by 2002:ac8:7d92:0:b0:35c:be77:5e2b with SMTP id c18-20020ac87d92000000b0035cbe775e2bmr22004043qtd.505.1664285498288;
-        Tue, 27 Sep 2022 06:31:38 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id c27-20020ac86e9b000000b00346414a0ca1sm843141qtv.1.2022.09.27.06.31.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 06:31:37 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id f189so12184044yba.12
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:31:37 -0700 (PDT)
-X-Received: by 2002:a5b:104:0:b0:6b0:429:3fe9 with SMTP id 4-20020a5b0104000000b006b004293fe9mr25214619ybx.543.1664285497039;
- Tue, 27 Sep 2022 06:31:37 -0700 (PDT)
+        Tue, 27 Sep 2022 09:33:25 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB3929CB2;
+        Tue, 27 Sep 2022 06:32:03 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RC7MK7021419;
+        Tue, 27 Sep 2022 13:31:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=MdCRng429X186D9J5471uKUeBpf1L3mUsZeSHfDOuuo=;
+ b=Ea++vmzat+1IfdSk5AE8yUJBcop1GbKcnP2NoXbX/dbGGYA9QRi9t7/kwgfnN8xIIfaL
+ ggq5fz5qhSr2SSScuUd8DxhEzavE23skcgkzrLFTnZU0ceiFXTsIpTAssbbXEOrW/epZ
+ EqfP5OMXXosSPMJkwk4zR2/GxKxl1L8lwy5oiYiP4YYslzHH7ycs7K9wchAVC/J9tj2V
+ I+qPKnzogVaBILi2/4xNhUg3r5a/Qt10bH0/BqvQreC7ysYW6Rxy39WkiZyfzYnxtKCJ
+ pTFaQY/djLGnmjUF9SIinb6C9jU0apkHWuSkafNwlZmv8JVcz6DNbJsb6ibeUnYBrSPV JA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3juwmn0x1h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 13:31:54 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28RC7woq023440;
+        Tue, 27 Sep 2022 13:31:54 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3juwmn0wyy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 13:31:54 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28RDQB7l007072;
+        Tue, 27 Sep 2022 13:31:51 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3jss5j3w2g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 13:31:51 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28RDVmtU5374536
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 27 Sep 2022 13:31:48 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8808642041;
+        Tue, 27 Sep 2022 13:31:48 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 401AF42042;
+        Tue, 27 Sep 2022 13:31:48 +0000 (GMT)
+Received: from [9.152.224.236] (unknown [9.152.224.236])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 27 Sep 2022 13:31:48 +0000 (GMT)
+Message-ID: <03ac1fb3-ea5d-d5b8-1d7e-92c13fba339d@linux.ibm.com>
+Date:   Tue, 27 Sep 2022 15:31:47 +0200
 MIME-Version: 1.0
-References: <20220818145616.3156379-1-arnd@kernel.org> <20220818145616.3156379-6-arnd@kernel.org>
-In-Reply-To: <20220818145616.3156379-6-arnd@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 27 Sep 2022 15:31:24 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVL8TZ8vfdQT_9DA=JLX3O7YrP0v9AK87ALjmsvryZptw@mail.gmail.com>
-Message-ID: <CAMuHMdVL8TZ8vfdQT_9DA=JLX3O7YrP0v9AK87ALjmsvryZptw@mail.gmail.com>
-Subject: Re: [PATCH 5/5] ARM: make ARCH_MULTIPLATFORM user-visible
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [PATCH 3/7] s390/qeth: Convert snprintf() to scnprintf()
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Jules Irenge <jbi.octave@gmail.com>
+Cc:     borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, agordeev@linux.ibm.com
+References: <YzHyniCyf+G/2xI8@fedora> <20220926173312.7a735619@kernel.org>
+From:   Alexandra Winter <wintera@linux.ibm.com>
+In-Reply-To: <20220926173312.7a735619@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: M714Eh_pQXytoOwcg4b1iSr1bFrEZ10w
+X-Proofpoint-ORIG-GUID: LrFxKqbuAeCJmJhsbHQj367zWD2JyA2_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-27_05,2022-09-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ bulkscore=0 mlxscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0
+ mlxlogscore=819 spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209270080
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
 
-On Thu, Aug 18, 2022 at 4:56 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> Some options like CONFIG_DEBUG_UNCOMPRESS and CONFIG_CMDLINE_FORCE are
-> fundamentally incompatible with portable kernels but are currently allowed
-> in all configurations. Other options like XIP_KERNEL are essentially
-> useless after the completion of the multiplatform conversion.
->
-> Repurpose the existing CONFIG_ARCH_MULTIPLATFORM option to decide
-> whether the resulting kernel image is meant to be portable or not,
-> and using this to guard all of the known incompatible options.
->
-> This is similar to how the RISC-V kernel handles the CONFIG_NONPORTABLE
-> option (with the opposite polarity).
->
-> A few references to CONFIG_ARCH_MULTIPLATFORM were left behind by
-> earlier clanups and have to be removed now up.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Thanks for your patch!
+On 27.09.22 02:33, Jakub Kicinski wrote:
+> On Mon, 26 Sep 2022 19:42:38 +0100 Jules Irenge wrote:
+>> Coccinnelle reports a warning
+>> Warning: Use scnprintf or sprintf
+>> Adding to that, there has been a slow migration from snprintf to scnprintf.
+>> This LWN article explains the rationale for this change
+>> https: //lwn.net/Articles/69419/
+>> Ie. snprintf() returns what *would* be the resulting length,
+>> while scnprintf() returns the actual length.
+>>
+>> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+> 
+> Looks legit but please repost this separately.
+> We only see patch 3 of the series.
+When you repost, you can add
+Reviewed-by: Alexandra Winter <wintera@linux.ibm.com>
 
-> --- a/arch/arm/Kconfig.debug
-> +++ b/arch/arm/Kconfig.debug
-> @@ -1904,6 +1904,7 @@ config DEBUG_UART_8250_PALMCHIP
->
->  config DEBUG_UNCOMPRESS
->         bool "Enable decompressor debugging via DEBUG_LL output"
-> +       depends on !ARCH_MULTIPLATFORM
-
-Shouldn't DEBUG_LL itself depend on !ARCH_MULTIPLATFORM instead?
-
->         depends on !(ARCH_FOOTBRIDGE || ARCH_RPC || ARCH_SA1100)
->         depends on DEBUG_LL && !DEBUG_OMAP2PLUS_UART && \
->                      (!DEBUG_TEGRA_UART || !ZBOOT_ROM) && \
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thank you
+Alexandra
