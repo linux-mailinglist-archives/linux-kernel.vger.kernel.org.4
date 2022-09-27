@@ -2,94 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6F95EC899
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C22C5EC89C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiI0PxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
+        id S229687AbiI0PxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiI0Pwo (ORCPT
+        with ESMTP id S232043AbiI0Pwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:52:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A65FCA7A;
-        Tue, 27 Sep 2022 08:52:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 27 Sep 2022 11:52:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DD81B95DA
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:52:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664293937;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9HbUsAnSTFpWIUWO67davxdvJkT/DXbETtHsJcmgx/8=;
+        b=VK24PFNxR6UskbTccvzXlo7R4gUUlU1Bvt6pVfjt7MTs6A+pKJStD8/f0FYZmuwoV7Xsi0
+        EznJt0N/DqR2ip8jxRCpQUsUWwO5vP25g2I4Ke+kNKk0uHlG15x49EWxAJn7bg2D2207p7
+        XActmLrXy85jKPx5tJgsMfOStjZ0TnE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-350-Oh9FDbYFMiGTinosL2HO8g-1; Tue, 27 Sep 2022 11:52:15 -0400
+X-MC-Unique: Oh9FDbYFMiGTinosL2HO8g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A093B81C1C;
-        Tue, 27 Sep 2022 15:52:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29308C433C1;
-        Tue, 27 Sep 2022 15:52:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664293925;
-        bh=N20eC4gWH4sdDQ47K8ZbDdPNZFirAY4KQ+8EeKm1Oz4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=pxiKef03WxpUB2KccnVelFMzxPE+2S5sQTWY0Qz1U+N3mN7Vgz4KlAEA+PcFsReW4
-         Bzh9kdkLr2Ab8KY4Atpdh53NbwPlemaqjgkwoVBPAtSXGl2fkNh3PFvWz/HMGqrRm5
-         yxll688FWuv4B9HR4qVSYgava1ODa4wNFysHRwsJhgWboyPvJg7sESUU7z/lJz0rJe
-         a8jnb8en9VlTytozymwRw/ZcEeh3U3chgMbaDONGbNjy/gKwlkYBsS9lb5BGqEg3xZ
-         QEWK/Nk6ePfLdK4gsyhXkrNYLQVJaHtn2iwuT1Q9DMG6h8ZKK70CeFf9zyiTdcPiMl
-         txa2StHZKMTPw==
-Date:   Tue, 27 Sep 2022 10:52:03 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Xiaochun XC17 Li <lixc17@lenovo.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Xiaochun Lee <lixiaochun.2888@163.com>,
-        "nirmal.patel@linux.intel.com" <nirmal.patel@linux.intel.com>,
-        "jonathan.derrick@linux.dev" <jonathan.derrick@linux.dev>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [External] Re: [PATCH v1] PCI: Set no io resource for bridges
- that behind VMD controller
-Message-ID: <20220927155203.GA1704003@bhelgaas>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ECF9D185A79C;
+        Tue, 27 Sep 2022 15:52:14 +0000 (UTC)
+Received: from [10.22.9.237] (unknown [10.22.9.237])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B120340C6EC3;
+        Tue, 27 Sep 2022 15:52:14 +0000 (UTC)
+Message-ID: <5f16511c-1cb7-e40f-e9aa-87ee97d5a266@redhat.com>
+Date:   Tue, 27 Sep 2022 11:52:14 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SEYPR03MB6877EF05F0F1320B6EE0B9F9BC559@SEYPR03MB6877.apcprd03.prod.outlook.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: locking/rwsem: RT throttling issue due to RT task hogging the cpu
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>,
+        Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
+        will@kernel.org
+Cc:     linux-kernel@vger.kernel.org, "<boqun.feng"@gmail.com
+References: <e1cb435a-4471-ac3a-344f-04448f167c9f@quicinc.com>
+ <40d0decc-0565-1e13-3c12-ac963ebed429@redhat.com>
+ <be87a130-62ba-e0a7-1c5b-c48f1e5548e1@redhat.com>
+ <9ae90959-4d7c-bc3c-4710-5867a0cd4573@quicinc.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <9ae90959-4d7c-bc3c-4710-5867a0cd4573@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 02:40:39AM +0000, Xiaochun XC17 Li wrote:
-> On Sun, Sep 25, 2022 at 8:57 PM +0800, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Sun, Sep 25, 2022 at 09:52:21AM +0000, Xiaochun XC17 Li wrote:
-> > > > -----Original Message-----
-> > > > From: kernel test robot <lkp@intel.com>
-> > > > Sent: Friday, September 23, 2022 11:21 PM
-> > > > To: Xiaochun Lee <lixiaochun.2888@163.com>;
-> > > > nirmal.patel@linux.intel.com; jonathan.derrick@linux.dev
-> > > > Cc: kbuild-all@lists.01.org; lpieralisi@kernel.org; robh@kernel.org;
-> > > > kw@linux.com; bhelgaas@google.com; linux-pci@vger.kernel.org;
-> > linux-
-> > > > kernel@vger.kernel.org; Xiaochun XC17 Li <lixc17@lenovo.com>
-> > > > Subject: [External] Re: [PATCH v1] PCI: Set no io resource for
-> > > > bridges that behind VMD controller
+On 9/27/22 11:30, Mukesh Ojha wrote:
+> Hi Waiman,
+>
+> Thanks for the reply.
+>
+> On 9/27/2022 8:56 PM, Waiman Long wrote:
+>> On 9/27/22 11:25, Waiman Long wrote:
+>>>
+>>> On 9/20/22 12:19, Mukesh Ojha wrote:
+>>>> Hi,
+>>>>
+>>>> We are observing one issue where, sem->owner is not set and 
+>>>> sem->count=6 [1] which means both RWSEM_FLAG_WAITERS and 
+>>>> RWSEM_FLAG_HANDOFF bits are set. And if unfold the sem->wait_list 
+>>>> we see the following order of process waiting [2] where [a] is 
+>>>> waiting for write, while [b],[c] are waiting for read and [d] is 
+>>>> the RT task for which waiter.handoff_set=true and it is 
+>>>> continuously running on cpu7 and not letting the first write waiter 
+>>>> [a] on cpu7.
+>>>>
+>>>> [1]
+>>>>
+>>>>   sem = 0xFFFFFFD57DDC6680 -> (
+>>>>     count = (counter = 6),
+>>>>     owner = (counter = 0),
+>>>>
+>>>> [2]
+>>>>
+>>>> [a] kworker/7:0 pid: 32516 ==> [b] iptables-restor pid: 18625 ==> 
+>>>> [c]HwBinder:1544_3  pid: 2024 ==> [d] RenderEngine pid: 2032 cpu: 7 
+>>>> prio:97 (RT task)
+>>>>
+>>>>
+>>>> Sometime back, Waiman has suggested this which could help in RT task
+>>>> leaving the cpu.
+>>>>
+>>>> https://lore.kernel.org/all/8c33f989-8870-08c6-db12-521de634b34e@redhat.com/ 
+>>>>
+>>>>
+>>> Sorry for the late reply. There is now an alternative way of dealing 
+>>> with this RT task hogging issue with the commit 48dfb5d2560d 
+>>> ("locking/rwsem: Disable preemption while trying for rwsem lock"). 
+>>> Could you try it to see if it can address your problem?
+>>
+>> FYI, this commit is in the tip tree. It is not in the mainline yet.
+>
+>
+> I only posted that patch so, i am aware about it. In that issue 
+> sem->count was 7 and here it is 6 and current issue occurs after fix
+> 48dfb5d2560d ("locking/rwsem: Disable preemption while trying for 
+> rwsem lock").
 
-> > ...
-> > For future reference, your email reply doesn't follow the usual Linux
-> > mailing list style, so it is unnecessarily hard to read.  In particular, it lacks
-> > the line that shows what you're responding to.
-> > It would look something like this:
-> > 
-> >   On Fri, Sep 23, 2022 at 11:21PM +0800, kernel test robot wrote:
-> 
-> OK, thanks! 
-> I did a test just now, it seems to meet the format requirements.
-> I sent emails via outlook, and I've tried to set the reply format, 
-> unfortunately, the time zone and date time  are not resolved correctly.
+Thanks for the quick reply. So it doesn't completely fix this RT hogging 
+issue. It is harder than I thought. Will look further into this.
 
-Much better, thanks!  It's much easier to read without all the
-redundant headers.
+Cheers,
+Longman
 
-Bjorn
