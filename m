@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5ECA5EC1C8
+	by mail.lfdr.de (Postfix) with ESMTP id 8993B5EC1C7
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbiI0LqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
+        id S231994AbiI0LqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231727AbiI0Lp6 (ORCPT
+        with ESMTP id S231787AbiI0Lp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Sep 2022 07:45:58 -0400
 Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA1D870B0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:45:56 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id i13-20020a056e02152d00b002f58aea654fso7383593ilu.20
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:45:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA3F96FC1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:45:57 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id h9-20020a056e021b8900b002f19c2a1836so7347021ili.23
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:45:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date;
-        bh=h+iHkPEp4LDNj1sNMEpHHrPze+HZAs8SDQcDer8eELE=;
-        b=Yaf3WPg4szpXmBSNm2Gi4/17s4XwHK9VcdOHAgD1AeJFsoe1xcN5FBc81ARHRZtVet
-         9xPkDIUa9eJtA9bPJsCxw3hk6kqqegVIWK5AUpasfpsHylKv4EZLrwX6Y6vflmv2RLmC
-         8om4sPrxMvJ/GCWcsMQLpxDwPVEU9oyHQ7HolKmfs/cXAhvRpa34/q+bX7U6AGCwX1JR
-         ibrP5ZoiPrkGuuoBit7JYJEN8O25x5IY4ixs28BddCF6LFy5vwHcU55lWm/zX+qi6bpZ
-         ZzmhWhA3wV082LUFCfVHVibjLsz0mdXCFvtBZelJx1raoTiRw7qEwLi3ChA+BQFUWyR8
-         QLkw==
-X-Gm-Message-State: ACrzQf0loLzV/KoS3PxqYeKC/+1Asqpan4MfusWg/mtyAoSsw17QJe3x
-        nGxuFH0ggBil93FCpckieV/tt/lXF8gfl3yXqo9KgyW7SrRj
-X-Google-Smtp-Source: AMsMyM4T4WPi+R0+KzCVz6PRWCEJLTjr0gy8kdSIelisdHPpfOlqiE/pVmsODa650VtW+YVJogDgJHbZXKA+eBK1KQtbGMNOCDuS
+        bh=Y2eyFs2gf59OAWxQZbFbHTprkTJOtZrJl7Ob4nZ0PJ8=;
+        b=MHE86qKyuStVxShAU7eje4FqBnAP4PS4jmHy3oI1hptarYpXfbvNrrSd5ow8GOfYW5
+         m4QNeLBdH25zyM6hvDgFEWGTIoMBSYeyHR9+6CZjYSV+dj3+c7x9jTUItzH+ELGE//0t
+         3vMB4FGwyBILT7qhpqRwgXuCD5psdC2wJB0d7RbVtivE6UIrcRelTqmTrd+Z6PKR6Ug3
+         7qj0qc1JUpbK5rmsixqsxJH5Xrw6ehThD64kGMWgPDtRSQd3PPvLGt1Zxy43oAPSYnli
+         JhTJl/Zqeibn6wLaHj4eBwZVIPkyEJqxKmepTk1jWlK7V88U5aqywOu+ZgrKyHzLVYEj
+         5GSA==
+X-Gm-Message-State: ACrzQf1i3rDSGT5+it5l+dhkTAe8Ua7kdHyXLWIlpnzSfcNwGF98Iiw4
+        I1kfBbqj3lmZBn96hX7Y+AqKmr2XiGo9JhJMsZs2vTFNFGhq
+X-Google-Smtp-Source: AMsMyM79r4WB+EuZiuqGtiyp5m2far53bxUFnPfjt/+PkWFbQhB/zFP5g/ea3tZDsRq/7jEqr2kBKBPQIdSOqakEX68NQpmxAIMy
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:26d2:b0:6a3:f044:a942 with SMTP id
- g18-20020a05660226d200b006a3f044a942mr11137420ioo.50.1664279156077; Tue, 27
+X-Received: by 2002:a92:cdae:0:b0:2f5:8aea:654d with SMTP id
+ g14-20020a92cdae000000b002f58aea654dmr12637038ild.135.1664279156726; Tue, 27
  Sep 2022 04:45:56 -0700 (PDT)
 Date:   Tue, 27 Sep 2022 04:45:56 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e7bc4505e9a72fab@google.com>
-Subject: [syzbot] UBSAN: array-index-out-of-bounds in diAlloc
-From:   syzbot <syzbot+79d792676d8ac050949f@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000f1a26f05e9a72f57@google.com>
+Subject: [syzbot] WARNING in brelse
+From:   syzbot <syzbot+2a0fbd1cb355de983130@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -59,53 +59,66 @@ syzbot found the following issue on:
 
 HEAD commit:    f76349cf4145 Linux 6.0-rc7
 git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=11b538a8880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=135e956c880000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
-dashboard link: https://syzkaller.appspot.com/bug?extid=79d792676d8ac050949f
+dashboard link: https://syzkaller.appspot.com/bug?extid=2a0fbd1cb355de983130
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15fcb718880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b6f84c880000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1702ee9c880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15ee7d40880000
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+79d792676d8ac050949f@syzkaller.appspotmail.com
+Reported-by: syzbot+2a0fbd1cb355de983130@syzkaller.appspotmail.com
 
-loop0: detected capacity change from 0 to 65535
-================================================================================
-UBSAN: array-index-out-of-bounds in fs/jfs/jfs_imap.c:1359:19
-index -1 is out of range for type 'atomic_t [128]'
-CPU: 1 PID: 3614 Comm: syz-executor361 Not tainted 6.0.0-rc7-syzkaller #0
+------------[ cut here ]------------
+VFS: brelse: Trying to free free buffer
+WARNING: CPU: 1 PID: 3609 at fs/buffer.c:1145 __brelse fs/buffer.c:1145 [inline]
+WARNING: CPU: 1 PID: 3609 at fs/buffer.c:1145 brelse+0x78/0xa0 include/linux/buffer_head.h:327
+Modules linked in:
+CPU: 1 PID: 3609 Comm: udevd Not tainted 6.0.0-rc7-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+RIP: 0010:__brelse fs/buffer.c:1145 [inline]
+RIP: 0010:brelse+0x78/0xa0 include/linux/buffer_head.h:327
+Code: df be 04 00 00 00 e8 b7 18 e1 ff f0 ff 0b eb 1c e8 8d 2a 8e ff eb 15 e8 86 2a 8e ff 48 c7 c7 a0 99 9d 8a 31 c0 e8 58 b7 56 ff <0f> 0b 5b 5d c3 89 d9 80 e1 07 80 c1 03 38 c1 7c af 48 89 df e8 bf
+RSP: 0018:ffffc90003a5fac8 EFLAGS: 00010046
+RAX: 78e8d475b9f8e400 RBX: ffff888073d6bee0 RCX: ffff88801c409d80
+RDX: 0000000000000000 RSI: 0000000080000002 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff816bd40d R09: ffffed1017364f14
+R10: ffffed1017364f14 R11: 1ffff11017364f13 R12: ffff8880b9b3acc0
+R13: 0000000000000002 R14: ffff8880b9b35cf8 R15: dffffc0000000000
+FS:  00007f6829c96840(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f23cc13e0a8 CR3: 000000001e07f000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_out_of_bounds+0xdb/0x130 lib/ubsan.c:283
- diAlloc+0x1434/0x1700 fs/jfs/jfs_imap.c:1359
- ialloc+0x8c/0xa80 fs/jfs/jfs_inode.c:56
- jfs_create+0x13a/0xb10 fs/jfs/namei.c:92
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x12d0/0x2df0 fs/namei.c:3688
- do_filp_open+0x264/0x4f0 fs/namei.c:3718
- do_sys_openat2+0x124/0x4e0 fs/open.c:1313
- do_sys_open fs/open.c:1329 [inline]
- __do_sys_open fs/open.c:1337 [inline]
- __se_sys_open fs/open.c:1333 [inline]
- __x64_sys_open+0x221/0x270 fs/open.c:1333
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ __invalidate_bh_lrus+0x37/0x3c0 fs/buffer.c:1391
+ invalidate_bh_lru+0x66/0xb0 fs/buffer.c:1404
+ smp_call_function_many_cond+0xe88/0x16a0 kernel/smp.c:979
+ on_each_cpu_cond_mask+0x3b/0x80 kernel/smp.c:1154
+ kill_bdev block/bdev.c:74 [inline]
+ blkdev_flush_mapping+0x149/0x2c0 block/bdev.c:661
+ blkdev_put_whole block/bdev.c:692 [inline]
+ blkdev_put+0x4a5/0x730 block/bdev.c:952
+ blkdev_close+0x55/0x80 block/fops.c:499
+ __fput+0x3b9/0x820 fs/file_table.c:320
+ task_work_run+0x146/0x1c0 kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:169
+ exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc66ba13fc9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffda59a6f18 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc66ba13fc9
-RDX: 0000000000000000 RSI: 00000000000000f0 RDI: 0000000020000140
-RBP: 00007fc66b9d3790 R08: 0000000000000000 R09: 0000000000000000
-R10: 00007ffda59a6de0 R11: 0000000000000246 R12: 00000000f8008000
-R13: 0000000000000000 R14: 00083878000000f8 R15: 0000000000000000
+RIP: 0033:0x7f6829925fc3
+Code: 48 ff ff ff b8 ff ff ff ff e9 3e ff ff ff 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8
+RSP: 002b:00007ffd3b4cbbd8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 00007f6829c966a8 RCX: 00007f6829925fc3
+RDX: 000000000000001c RSI: 00007ffd3b4cb3d8 RDI: 0000000000000008
+RBP: 000055da4dfde0b0 R08: 0000000000000007 R09: 000055da4dfefc00
+R10: 00007f68299b4fc0 R11: 0000000000000246 R12: 0000000000000002
+R13: 000055da4dfd8740 R14: 0000000000000008 R15: 000055da4dfb5910
  </TASK>
-================================================================================
 
 
 ---
