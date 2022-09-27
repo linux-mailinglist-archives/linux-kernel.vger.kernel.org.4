@@ -2,50 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5C15EBB3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650C85EBB1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 09:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiI0HM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 03:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
+        id S230018AbiI0HGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 03:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiI0HMH (ORCPT
+        with ESMTP id S229548AbiI0HGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 03:12:07 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1311AA8971;
-        Tue, 27 Sep 2022 00:11:53 -0700 (PDT)
-Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mc9kl1xwxz685Yk;
-        Tue, 27 Sep 2022 15:10:39 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 27 Sep 2022 09:11:51 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 27 Sep 2022 08:11:48 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <jinpu.wang@cloud.ionos.com>, <damien.lemoal@opensource.wdc.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
-        <yanaijie@huawei.com>, "John Garry" <john.garry@huawei.com>
-Subject: [PATCH v5 7/7] scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
-Date:   Tue, 27 Sep 2022 15:04:58 +0800
-Message-ID: <1664262298-239952-8-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1664262298-239952-1-git-send-email-john.garry@huawei.com>
-References: <1664262298-239952-1-git-send-email-john.garry@huawei.com>
+        Tue, 27 Sep 2022 03:06:52 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8DC26113;
+        Tue, 27 Sep 2022 00:06:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664262409; x=1695798409;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aU7ZmPFpMvOZO9aZbJWV7cyRwyIHAiDg2p8jcvSemII=;
+  b=ghRZ7I9PJpxcOW/6Yke9hUQ4KVOeiwQXcuxdxlqVQRi/7s2VWqZaS8l1
+   DFq2+rJpY404PzCDsKJPnKAmVoB3E6Jak/Cb4zpz2M7qtGZ+fGLyn3ZoQ
+   3pXCJzNXX/SQoYHuXJGjSkhEi6HWBEXv+RnB0g/8CjD3EdFgwfayLC0PL
+   IyfUO2bOfoFa8SFRgRfWW+a8D3M5CoGCJmnNFCuGbNde/zek9M9/daPJt
+   fyGx+yl+lC0jEtyTnvyXM7CiZOdUOTPIzSt98bWlEiVTAmwCsBgP+YOUH
+   feQrd/YELkR8cLX2632dWkdc5aNNFqpXp9MeWYfFv5MoGIp5NA5MIL7du
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="281611891"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="281611891"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 00:06:49 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="623654582"
+X-IronPort-AV: E=Sophos;i="5.93,348,1654585200"; 
+   d="scan'208";a="623654582"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.35.200])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 00:06:47 -0700
+Message-ID: <d901f8c8-0dda-8f34-f963-09cf56d4924e@intel.com>
+Date:   Tue, 27 Sep 2022 10:06:42 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 2/5] libperf: Propagate maps only if necessary
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>
+References: <20220924165737.956428-1-namhyung@kernel.org>
+ <20220924165737.956428-3-namhyung@kernel.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220924165737.956428-3-namhyung@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,76 +73,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have no users outside libsas any longer, so make sas_alloc_task(),
-sas_alloc_slow_task(), and sas_free_task() private.
+On 24/09/22 19:57, Namhyung Kim wrote:
+> The current code propagate evsel's cpu map settings to evlist when it's
+> added to an evlist.  But the evlist->all_cpus and each evsel's cpus will
+> be updated in perf_evlist__set_maps() later.  No need to do it before
+> evlist's cpus are set actually.
+> 
+> Actually we discarded this intermediate all_cpus maps at the beginning
+> of perf_evlist__set_maps().  Let's not do this.  It's only needed when
+> an evsel is added after the evlist cpu maps are set.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
-Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Reviewed-by: Jason Yan <yanaijie@huawei.com>
----
- drivers/scsi/libsas/sas_init.c     | 3 ---
- drivers/scsi/libsas/sas_internal.h | 4 ++++
- include/scsi/libsas.h              | 4 ----
- 3 files changed, 4 insertions(+), 7 deletions(-)
+That might not be true.  Consider evlist__fix_hybrid_cpus() which fiddles
+with evsel->core.cpus and evsel->core.own_cpus after the evsel has been
+added to the evlist.  It can also remove an evsel from the evlist.
 
-diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-index e4f77072a58d..f2c05ebeb72f 100644
---- a/drivers/scsi/libsas/sas_init.c
-+++ b/drivers/scsi/libsas/sas_init.c
-@@ -35,7 +35,6 @@ struct sas_task *sas_alloc_task(gfp_t flags)
- 
- 	return task;
- }
--EXPORT_SYMBOL_GPL(sas_alloc_task);
- 
- struct sas_task *sas_alloc_slow_task(gfp_t flags)
- {
-@@ -56,7 +55,6 @@ struct sas_task *sas_alloc_slow_task(gfp_t flags)
- 
- 	return task;
- }
--EXPORT_SYMBOL_GPL(sas_alloc_slow_task);
- 
- void sas_free_task(struct sas_task *task)
- {
-@@ -65,7 +63,6 @@ void sas_free_task(struct sas_task *task)
- 		kmem_cache_free(sas_task_cache, task);
- 	}
- }
--EXPORT_SYMBOL_GPL(sas_free_task);
- 
- /*------------ SAS addr hash -----------*/
- void sas_hash_addr(u8 *hashed, const u8 *sas_addr)
-diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
-index 8d0ad3abc7b5..b54bcf3c9a9d 100644
---- a/drivers/scsi/libsas/sas_internal.h
-+++ b/drivers/scsi/libsas/sas_internal.h
-@@ -52,6 +52,10 @@ void sas_unregister_phys(struct sas_ha_struct *sas_ha);
- struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy, gfp_t gfp_flags);
- void sas_free_event(struct asd_sas_event *event);
- 
-+struct sas_task *sas_alloc_task(gfp_t flags);
-+struct sas_task *sas_alloc_slow_task(gfp_t flags);
-+void sas_free_task(struct sas_task *task);
-+
- int  sas_register_ports(struct sas_ha_struct *sas_ha);
- void sas_unregister_ports(struct sas_ha_struct *sas_ha);
- 
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index 2dbead74a2af..f86b56bf7833 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -639,10 +639,6 @@ struct sas_task_slow {
- #define SAS_TASK_STATE_ABORTED      4
- #define SAS_TASK_NEED_DEV_RESET     8
- 
--extern struct sas_task *sas_alloc_task(gfp_t flags);
--extern struct sas_task *sas_alloc_slow_task(gfp_t flags);
--extern void sas_free_task(struct sas_task *task);
--
- static inline bool sas_is_internal_abort(struct sas_task *task)
- {
- 	return task->task_proto == SAS_PROTOCOL_INTERNAL_ABORT;
--- 
-2.35.3
+There might be other cases like that, but that was just one that stuck
+out.
+
+> 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/lib/perf/evlist.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
+> index 187129652ab6..cc070c3a134d 100644
+> --- a/tools/lib/perf/evlist.c
+> +++ b/tools/lib/perf/evlist.c
+> @@ -67,10 +67,6 @@ static void perf_evlist__propagate_maps(struct perf_evlist *evlist)
+>  {
+>  	struct perf_evsel *evsel;
+>  
+> -	/* Recomputing all_cpus, so start with a blank slate. */
+> -	perf_cpu_map__put(evlist->all_cpus);
+> -	evlist->all_cpus = NULL;
+> -
+>  	perf_evlist__for_each_evsel(evlist, evsel)
+>  		__perf_evlist__propagate_maps(evlist, evsel);
+>  }
+> @@ -81,7 +77,9 @@ void perf_evlist__add(struct perf_evlist *evlist,
+>  	evsel->idx = evlist->nr_entries;
+>  	list_add_tail(&evsel->node, &evlist->entries);
+>  	evlist->nr_entries += 1;
+> -	__perf_evlist__propagate_maps(evlist, evsel);
+> +
+> +	if (evlist->all_cpus)
+> +		__perf_evlist__propagate_maps(evlist, evsel);
+>  }
+>  
+>  void perf_evlist__remove(struct perf_evlist *evlist,
 
