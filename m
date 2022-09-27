@@ -2,110 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707F65EC894
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF6F95EC899
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiI0PwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
+        id S230269AbiI0PxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiI0Pvi (ORCPT
+        with ESMTP id S230201AbiI0Pwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:51:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E33B5B057
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:50:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A6711063;
-        Tue, 27 Sep 2022 08:50:17 -0700 (PDT)
-Received: from [10.57.65.170] (unknown [10.57.65.170])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 023C13F73B;
-        Tue, 27 Sep 2022 08:50:08 -0700 (PDT)
-Message-ID: <76a84590-995a-f958-0135-a344762bffe1@arm.com>
-Date:   Tue, 27 Sep 2022 16:50:03 +0100
+        Tue, 27 Sep 2022 11:52:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A65FCA7A;
+        Tue, 27 Sep 2022 08:52:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A093B81C1C;
+        Tue, 27 Sep 2022 15:52:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29308C433C1;
+        Tue, 27 Sep 2022 15:52:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664293925;
+        bh=N20eC4gWH4sdDQ47K8ZbDdPNZFirAY4KQ+8EeKm1Oz4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=pxiKef03WxpUB2KccnVelFMzxPE+2S5sQTWY0Qz1U+N3mN7Vgz4KlAEA+PcFsReW4
+         Bzh9kdkLr2Ab8KY4Atpdh53NbwPlemaqjgkwoVBPAtSXGl2fkNh3PFvWz/HMGqrRm5
+         yxll688FWuv4B9HR4qVSYgava1ODa4wNFysHRwsJhgWboyPvJg7sESUU7z/lJz0rJe
+         a8jnb8en9VlTytozymwRw/ZcEeh3U3chgMbaDONGbNjy/gKwlkYBsS9lb5BGqEg3xZ
+         QEWK/Nk6ePfLdK4gsyhXkrNYLQVJaHtn2iwuT1Q9DMG6h8ZKK70CeFf9zyiTdcPiMl
+         txa2StHZKMTPw==
+Date:   Tue, 27 Sep 2022 10:52:03 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Xiaochun XC17 Li <lixc17@lenovo.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Xiaochun Lee <lixiaochun.2888@163.com>,
+        "nirmal.patel@linux.intel.com" <nirmal.patel@linux.intel.com>,
+        "jonathan.derrick@linux.dev" <jonathan.derrick@linux.dev>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [External] Re: [PATCH v1] PCI: Set no io resource for bridges
+ that behind VMD controller
+Message-ID: <20220927155203.GA1704003@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] iommu/io-pgtable: Make IOMMU_IO_PGTABLE_DART invisible
-Content-Language: en-GB
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Sven Peter <sven@svenpeter.dev>, Janne Grunau <j@jannau.net>,
-        Hector Martin <marcan@marcan.st>, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <b0981cb5a97452af73b9dd0dd0eb03c5002f7af4.1664285626.git.geert+renesas@glider.be>
- <fe2b1f48-e18a-b1d9-0c62-ddddf9e6515f@arm.com>
- <CAMuHMdVFAwqVtrRFf-_jSODWeJuGAzbpoyk65HDOqj9h6AUt2A@mail.gmail.com>
- <9db42ab0-da49-95fd-3fea-eb505af0867e@arm.com>
- <CAMuHMdW1KQ5TTftYuTT4_b6mmCT5Y+_jpSKau46-g8siDKWjGQ@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAMuHMdW1KQ5TTftYuTT4_b6mmCT5Y+_jpSKau46-g8siDKWjGQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SEYPR03MB6877EF05F0F1320B6EE0B9F9BC559@SEYPR03MB6877.apcprd03.prod.outlook.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-27 16:29, Geert Uytterhoeven wrote:
-> Hi Robin,
-> 
-> On Tue, Sep 27, 2022 at 5:09 PM Robin Murphy <robin.murphy@arm.com> wrote:
->> On 2022-09-27 15:48, Geert Uytterhoeven wrote:
->>> On Tue, Sep 27, 2022 at 4:15 PM Robin Murphy <robin.murphy@arm.com> wrote:
->>>> On 2022-09-27 14:36, Geert Uytterhoeven wrote:
->>>>> There is no point in asking the user about both "Apple DART Formats" and
->>>>> "Apple DART IOMMU Support", as the former is useless without the latter,
->>>>> and the latter auto-selects the former.
->>>>>
->>>>> Fixes: 745ef1092bcfcf3b ("iommu/io-pgtable: Move Apple DART support to its own file")
->>>>> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
->>>>> ---
->>>>> Should IOMMU_IO_PGTABLE_LPAE and IOMMU_IO_PGTABLE_ARMV7S be made
->>>>> invisible, too?
->>>>> Are there users that do not select them?
->>>>
->>>> The aim was for formats to be independently selectable for COMPILE_TEST
->>>> coverage. The Arm formats are manually selectable for the sake of their
->>>> runtime self-tests, which are self-contained, but since DART format
->>>> doesn't do anything by itself I'd agree there's no need to prompt when
->>>> !COMPILE_TEST here.
->>>
->>> IOMMU_IO_PGTABLE_LPAE and IOMMU_IO_PGTABLE_ARMV7S are
->>> selected by other symbols that can be enabled when compile-testing, so
->>> the tests can still be enabled in those cases, too
->>
->> Sure, but when you want to compile-test a thing, what would you rather
->> do: enable the thing, or go hunting to find some other thing that
->> happens to select the thing you actually want, then potentially have to
->> figure out *that* thing's dependencies, and so on?
-> 
-> Agreed.
-> 
->> Coverage isn't solely about whether it's technically possible to ever
->> reach somewhere at all, it's just as much about how easily and/or often
->> you can get there in practice. I don't see who benefits from making
->> COMPILE_TEST harder to use :/
-> 
-> So perhaps the visibility of IOMMU_IO_PGTABLE_LPAE and
-> IOMMU_IO_PGTABLE_ARMV7S should depend on COMPILE_TEST?
-> Normal users would still get it through select when needed.
+On Tue, Sep 27, 2022 at 02:40:39AM +0000, Xiaochun XC17 Li wrote:
+> On Sun, Sep 25, 2022 at 8:57 PM +0800, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Sun, Sep 25, 2022 at 09:52:21AM +0000, Xiaochun XC17 Li wrote:
+> > > > -----Original Message-----
+> > > > From: kernel test robot <lkp@intel.com>
+> > > > Sent: Friday, September 23, 2022 11:21 PM
+> > > > To: Xiaochun Lee <lixiaochun.2888@163.com>;
+> > > > nirmal.patel@linux.intel.com; jonathan.derrick@linux.dev
+> > > > Cc: kbuild-all@lists.01.org; lpieralisi@kernel.org; robh@kernel.org;
+> > > > kw@linux.com; bhelgaas@google.com; linux-pci@vger.kernel.org;
+> > linux-
+> > > > kernel@vger.kernel.org; Xiaochun XC17 Li <lixc17@lenovo.com>
+> > > > Subject: [External] Re: [PATCH v1] PCI: Set no io resource for
+> > > > bridges that behind VMD controller
 
-As I say those still offer functionality beyond compile-testing, but now 
-you've got me suspecting that it's already suboptimal that one has to 
-enable the format to make the self-test option appear... Perhaps what we 
-want is a separate master option to enable io-pgtable self-tests in 
-general, then rejig the rest around that.
+> > ...
+> > For future reference, your email reply doesn't follow the usual Linux
+> > mailing list style, so it is unnecessarily hard to read.  In particular, it lacks
+> > the line that shows what you're responding to.
+> > It would look something like this:
+> > 
+> >   On Fri, Sep 23, 2022 at 11:21PM +0800, kernel test robot wrote:
+> 
+> OK, thanks! 
+> I did a test just now, it seems to meet the format requirements.
+> I sent emails via outlook, and I've tried to set the reply format, 
+> unfortunately, the time zone and date time  are not resolved correctly.
 
-Of course the self-tests would be even more useful if the harness was at 
-the level of the core io-pgtable API so it could cover new formats 
-automatically as long as they provide the configuration parameters, but 
-that's a separate matter for someone with sufficient free time and 
-enthusiasm :)
+Much better, thanks!  It's much easier to read without all the
+redundant headers.
 
-Cheers,
-Robin.
+Bjorn
