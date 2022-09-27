@@ -2,145 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A241D5ECA36
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3455ECA3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231947AbiI0Q5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
+        id S232384AbiI0Q62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbiI0Q5G (ORCPT
+        with ESMTP id S232103AbiI0Q6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:57:06 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2041.outbound.protection.outlook.com [40.107.244.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DDD17D41C;
-        Tue, 27 Sep 2022 09:56:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gDD5oAtkeNW+gnbFBc3DtI+/C9ybly2FhX7Yxs0I1/I00ED0Qf0ABqdCsQR+ZlTIvg+1lmc+tSBv6tSlz4dCqvXBdtAuMRgpmM6ghwkWxbel7yvrnEzIgis7GDCh3S34YGEcRWcidOd3+FdJ0MocQoGGO9By2G9i7WwYhJaLCSJLGaU3zrJwr0bQgr69eZFR6LIQEDPn7GkFLWaow63W0JWsVw3xSiGPnzyh8DGgP2xSWeEtPXEPPSZpAPjvmiCBGN+1lpgG6rvV/IgaNgz28rLHksuXGPLp10xmYwPz+fkRt0CJbYNC4/ZSds/zbyF40Bv1mfkAWVzQ29+pNmnvLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=awn968TBW5wYnEZYy3h9IKK38whAfpegAScWmTVFlDU=;
- b=dsnVdWtu0Je+IVK4j1rs7f5pDiQW8soZGOzBr/silxlr+wP5QUDgVtbU+ibNaQAwlp+ISMhSAI94g3z2m+HEXBFUj++MjQn2GNiI5zuumuHZRip5gWtdPeqCBYWYyDhUvPXVEyRRdOMu/Z5pD+kgL7lSOkNTuJiwdbaVejQfbSUR2BlD+cSDKiqKVAaz6k3zNP282Qst0mcrHnvtGpMDZmzNAP+iY+pTsBRaYSGlLaGSwlgM9Qk3aTIIwfB98S7vrfJs66RufXARsKrlYc/5ieDp98wWg8Ss5EOsAqJgRs0SKq0PBKett8u1Z8ti3r3q7gS944tMoDpf4pXJ1x20yw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=awn968TBW5wYnEZYy3h9IKK38whAfpegAScWmTVFlDU=;
- b=KBnPH+ZJ2YGk8IIsX5KS5wf8O2ov+vb+/uucpRHXkJuuiWFCdCyIqcmewByuJm/KSw0Ar2+R1/P7e32fV7f1YQFhdqp2o+9CoQHowqvRPq1dR1VNX9Fy1aya4CmSbV5qCMb1syEfcZwMFItwJIRDFwBIA6CJUDAePtYJ1eFTmc2AXkp7MBW1Ymys8FLY7vTyS7zl+Vey2Ih0PYQ8tyRCZYMpZA04NTyJwVFLWQXAQcC37xB26B0Y4ppHHx1Ih5Ik/SJehdgIaKMrmErb3tqu43d4ZOgrLYGc1Ff0SsSl9ZrYiAPFhv7B36NodV4mG40sgSVl3fGx9ecDI7aC9K0cVA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by PH8PR12MB7160.namprd12.prod.outlook.com (2603:10b6:510:228::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
- 2022 16:56:41 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5%8]) with mapi id 15.20.5654.026; Tue, 27 Sep 2022
- 16:56:41 +0000
-Date:   Tue, 27 Sep 2022 13:56:40 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        robin.murphy@arm.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] iommu/s390: Fix duplicate domain attachments
-Message-ID: <YzMrSIGMPSgJ94sG@nvidia.com>
-References: <20220922095239.2115309-1-schnelle@linux.ibm.com>
- <20220922095239.2115309-2-schnelle@linux.ibm.com>
- <YyxyMtKXyvgHt3Kp@nvidia.com>
- <81463119aeadd55465cfac1f5bc6a8b79f0c9738.camel@linux.ibm.com>
- <YzGtQY+uw4ZzZoSH@nvidia.com>
- <1a10b5baedafb56335231ccbd585412bbb3a108c.camel@linux.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1a10b5baedafb56335231ccbd585412bbb3a108c.camel@linux.ibm.com>
-X-ClientProxiedBy: BL1PR13CA0360.namprd13.prod.outlook.com
- (2603:10b6:208:2c6::35) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Tue, 27 Sep 2022 12:58:11 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338D44D4F9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:58:08 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id p69so13046830yba.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:58:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hhPOXB2wUeVzrfwDIvjzSR+8s1AqVlymI8mOISdLzEA=;
+        b=Y6xHZxZgsxyrqP3X8kz+D8ze0RGAKFaf+lt0KNHOnSnydl+N90Lwbfn0pyB1sJuTHO
+         ewXtDpnnYZqpcDT5ZvbwVFRl/WfOjRhfGzK+CPwaYBaCSSk48wXtC1XygXcZBBJ3MgSq
+         IIl6pN2QONANpaX2DRCba8xFFcIn1RfiL08qzGDcCvnJg/w6hdZv9DSMuDLuQjLE4ErY
+         AmisKSl9J4tUn7IOErfwPTOuRxlUN02jbTRIILRoWVxiS7ZAUh3aPnolwtUqYP5sN/R8
+         w5hh0WD55XBV1VBLwrLCM4zR9Tg5+wj01h2PvWMF2NKrat7ve8CLTDxnaKz4OVxEg3C1
+         vWPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hhPOXB2wUeVzrfwDIvjzSR+8s1AqVlymI8mOISdLzEA=;
+        b=tECOK88JTWcl90zBqPC6ufYzaR40l4Yv5XvPR06TglqQm8udX7JwwNwMfjE0ha4QPG
+         +sXSlAhSMU6TEV/+IsQg1dzawkymrX05+E6bsbzqKh7/nJ8B58GoFB8qK+DW+yocWTsK
+         rp5Y4GU1k1d2mfqRmLWAKs9MjmB2yMnKu5MyVOTnW4WHsAUjX8+/sw6IN5OCVB/mLIjW
+         sYN6KDcRLxiaWNF45g6wE0hRfw2RaytSxtLhbwlXp/u84Urjqrcd8oAnU06L+/hGp9wA
+         WapbsKvQhxOrHETIXkYRRPne6gi0oDHsL7/5b6G6QcwzY8SMF8AnARhKMZSKxZGlnfm2
+         DASA==
+X-Gm-Message-State: ACrzQf3R2PujpZvIrcU8WMdiyl2VdLGc2V/CiN6BWekV5RVWphkxxN8X
+        rQ7YwjODEC08q92kF46zWQ5fD1oXf8N9Jv9ZtAmFI+Q787A=
+X-Google-Smtp-Source: AMsMyM5o9Y1WlP4ufaXkQ6Fg40phomt1+mFOC8cncKiiBFcRtlkzsLAvxmELfCA4tfjDFN/LCaOoFUKFbUgIeej8c4A=
+X-Received: by 2002:a25:e6d5:0:b0:6bc:8d4:d76f with SMTP id
+ d204-20020a25e6d5000000b006bc08d4d76fmr5285690ybh.582.1664297887948; Tue, 27
+ Sep 2022 09:58:07 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4192:EE_|PH8PR12MB7160:EE_
-X-MS-Office365-Filtering-Correlation-Id: cca024c5-b2d6-4d4f-bf73-08daa0a9405f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WG6P19L7/IYxY8sCM2ME0sx+VS2WMqAguc7eSkSZAGtRDkWrVnvQTudaQt34ccO+KGfna+fjWq19SeblzbkB3rxo20FO22BHw3oA+Rqf3C+UdU21/1ibQeZX44xrfHGq9OTbYMedCjHP0hR8dc+7mDiYJh7pN+dKIxZd5sr6lToGTZoAzUApxdaZvw3V3LepW/sKO6ZDDQrlUEJ6JOStNYHBJgwLTkegWgkgrJoaBfaUE0FtiodCr/zh5Q9Lp8b3vXSsSyMMlHqe/ZK/0p8XfmZtLAGYvnl3ZvAVHEJfkvabkgmxSC0xVZbLOrD+ci901+8CCia33sZig5KdNcGkWsYdpa7wn4IF+Klwp4hEGP85TOLv507c97zI/g3lSPbFj2qoRkhpxORNB1NK1aKlb7mJQ+gUDAX4FA6TLb8aXb0W6mWuQ99/xNLWYZnVGeTDA4dqY3ntzpvwwWGttnkcMPGPg98Vq05HrUg7eJsBIrGMcmtbO+2WMf5MyxMWob1Ii3vQniGwKAcSoQBmxJgTAigLgSTFS6zz1mjBsvsn02SUK1PWUoPne3s0HZPVELwWIPQnlOKo/zZ38k1GON6HCa0mnO5u3Awehcv93evCchlnBle+dDMv4xSEfMOlrLuQpBe1XJfuZc5I0keNoKxv2g+yT5HlrrTEMXnph8KtYrEQDVtVdEKgiKIYEvxX+20jJxMFIFsiY94/s1z7vigg7Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(366004)(346002)(396003)(376002)(451199015)(83380400001)(86362001)(38100700002)(66476007)(36756003)(66556008)(2906002)(4744005)(6512007)(8936002)(7416002)(66946007)(5660300002)(4326008)(8676002)(6506007)(316002)(2616005)(26005)(41300700001)(6916009)(54906003)(186003)(6486002)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pUxPZH/s6hRfFD/ZkHg87h4EyKAonW+iDej/h3ji4wWcy1R05atvTTG6+t2u?=
- =?us-ascii?Q?pGmYTlV3cGTHm52xdW6S3/myezQMQD1ZqgyYyHlZn0fLCgIZIVhDp9E2jSlc?=
- =?us-ascii?Q?SocjfXX3Gv6lCpF18iUgmhVaWGBXfwJuwH7Jkyu3z2CmBk6uDH7CU/0WJjvd?=
- =?us-ascii?Q?U0i+Jhi0zheB47QP/ZiIruNE/wl0lkaGxiYeVYrgf+WUij9WusN51Ak34Y+I?=
- =?us-ascii?Q?MrH4Vb0EWrEf2SSoyjNaytV2RasJP5kB8if8jh7qg5PDsx3lHXkqM1TLZNb5?=
- =?us-ascii?Q?UfMfE2W5/ZAAhbkchRjiN+g3CMWNCDIoOJ3nfbBnhEVZna+fN9Ue4hcbzQ9e?=
- =?us-ascii?Q?12Czobe5jfJnjtxko0I4PtVOVUJSjn8zOfWxB91m21Oz6tKJ3EZTPbjbXPO2?=
- =?us-ascii?Q?jusWTrjIL6LkjN57/pema1EQupSwXGHR4IhQtuxE/y1hAQGlLyUnCI/A1xeb?=
- =?us-ascii?Q?vpbZeTDeGuH2L1aO4VYBBYU+BlgS65XS7ssEk3erpbyHVRv6R4Y8S5sOP5T9?=
- =?us-ascii?Q?s9rHRCm6Ch5R+uaUa5QiYPdeNen6cYsBPpIbSrhA4FvuJuArAAWTsX9srBy2?=
- =?us-ascii?Q?AL4NFS3FtEjVyQJbn+IlYYdkQ6VHkM5Rz4xcrQOMMu6AQUCDPgrv6duz84L3?=
- =?us-ascii?Q?203BF7GEsxHBvxQyrxSTaYpuupyv+UC/Ocu0erQHv0bqrfx0fgxt8cB/dfwH?=
- =?us-ascii?Q?j4patEKJJVjFErbMX5/Ui8KUovbeFxuFj4clDXC47lnm5GEgsjneouZ+6hCu?=
- =?us-ascii?Q?dgxLKL5xmlfYXxiqttZpz21BNcc6frB/qvRnOugse2PeECq3pndg7tuPUY3A?=
- =?us-ascii?Q?De7IqX+Cxa6uGlywBHv6mHei+BILPuikXzALkMAYXhKED+n/unb7SrR8gX/k?=
- =?us-ascii?Q?Wjq9l9BUaPjcbJP+M1ca4rKC+Y+c1Ts1qdEhzoQsrO4WHlFrBdiZVB9pO2eb?=
- =?us-ascii?Q?ylTGUDzAU7CjrD3b2WMYtWB/FpD4Fa36BJ+5aAguDkZLEfsoMe7cJIrg3ke8?=
- =?us-ascii?Q?zFst2rnvOMKl8HTrRQcxOvu0A31RzbkNq1OnQi0uFcRgmdcog1JCEwWWeZEY?=
- =?us-ascii?Q?hATS9CKgvEkOLjMuQJaLox9uHmbORHZc9h/FTGMHmesqCWq10uDb/seyxN/V?=
- =?us-ascii?Q?YgVDKTjTAvYduTcVol+wKXrcYFjlerdmt+hfz957UoEhAiwPY0oEge6fwo9E?=
- =?us-ascii?Q?DNqXsvmpcRG7ZvAba4wdhdfjDDhD5AUWZtNq3S5p47bxBbxJIOaZrDPVb+h3?=
- =?us-ascii?Q?HpMuPzzHsi5/rMV+Vr3gNmkLj//Y9JK4mx6X07NOaMP6V0Tnr+QK6dURbodF?=
- =?us-ascii?Q?mbuRO1DeSs5h8GT+0tKwF60tg96KWW4TFj8P+0MK/oMvZfVIyOO3H4SdGGiW?=
- =?us-ascii?Q?HzVJ7EH29vg2BPZQJYiLCPnK8OYy5z8GbxHCJH8Fm5FsR39KF/uCsYM8dcSY?=
- =?us-ascii?Q?0MiVSU2NVNtK5gdAwv8zKR9eYByU/MqtAw+cuxr5bc64sby5B10fkoSe0KcF?=
- =?us-ascii?Q?clh/PGcSonCAXmF+9i3J8oqcCpVExjwLagOKKAZEtj8FCjJaF2ztUcEbpwk3?=
- =?us-ascii?Q?YPT4ffy8djEE3dWIs2Y=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cca024c5-b2d6-4d4f-bf73-08daa0a9405f
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 16:56:41.7374
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KSQ0lNlvaUTW8LU5p9LbepNLLKWAjGzZ772Jx5dNcsURYfwtlhENSQivIhY4HLLu
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7160
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220922230114.3556322-1-dmatlack@google.com> <8d657bcf45b23dc634e8c6fc693c166360e6539e.camel@perches.com>
+In-Reply-To: <8d657bcf45b23dc634e8c6fc693c166360e6539e.camel@perches.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Tue, 27 Sep 2022 09:57:42 -0700
+Message-ID: <CALzav=fmkeE_QvasYTkzFrequ25ZVK97Um39JQc=s=xyoCnJtA@mail.gmail.com>
+Subject: Re: [PATCH] get_maintainer: Gracefully handle files with authors but
+ no signers
+To:     Joe Perches <joe@perches.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 06:33:48PM +0200, Niklas Schnelle wrote:
- 
-> Not sure what the non-MSI reservation is for? It does seem like x86_64
-> also uses this for quite large ranges.
+On Thu, Sep 22, 2022 at 4:43 PM Joe Perches <joe@perches.com> wrote:
+>
+> On Thu, 2022-09-22 at 16:01 -0700, David Matlack wrote:
+> > Gracefully handle the case where a file has no signers (e.g. has not
+> > been modified within the last year) but does have authors (e.g. because
+> > there are local commits that modifies the file without Signed-off-by
+> > tags). This scenario could happen for developers whose workflow is to
+> > add Signed-off-by tags as part of git-format-patch rather than as part
+> > of git-commit.
+>
+> I think that's a poor process.
 
-There are lots of things that are unsuitable for DMA on x86 platforms,
-unfortunately.. But yeah, I'm not sure either.
+I don't disagree, and personally I have changed my own workflow to add
+sign-offs at commit time.
 
-> This is because I'm getting a map request for an IOVA in the reserved
-> region.
+>
+> > Today this scenario results in the following non-sensical output from
+> > get_maintainer.pl:
+> >
+> >   Bad divisor in main::vcs_assign: 0
+> >   "GitAuthor: David Matlack" <dmatlack@google.com> (authored:1/1=100%,added_lines:9/9=100%,removed_lines:3/3=100%)
+>
+> Interesting...
+>
+> > There are two issues with this output: the "Bad divisor" error and the
+> > garbled author name. Both stem from this line in vcs_find_signers():
+> >
+> >   return (0, \@signatures, \@authors, \@stats) if !@signatures;
+> []
+> > Returning 0 for the number of commits and a non-empty list for the
+> > authors results in the "Bad divisor". The garbled author name comes from
+> > the fact that @authors is the raw, unparsed, output line from git-log.
+> > Code later in vcs_find_signers() actually parses out the name and drops
+> > the "GitAuthor: " prefix.
+> >
+> > Fix this by returning an empty list instead of @authors and @stats to
+> > make them coherent with the fact that commits is 0.
+> []
+> > diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
+> []
+> > @@ -1605,7 +1605,7 @@ sub vcs_find_signers {
+> >
+> >  #    print("stats: <@stats>\n");
+> >
+> > -    return (0, \@signatures, \@authors, \@stats) if !@signatures;
+> > +    return (0, (), (), ()) if !@signatures;
+>
+> There's probably some better mechanism, not sure what it is though
+> as I don't have equivalent commits in the actual tree.
+>
+> And I think you need \() and not () as what's returned is a reference
+> to an array and not an array or maybe use undef.
 
-How come? iova_reserve_iommu_regions() reads the reserved regions and
-loads them as reserved into the iovad which should cause
-iommu_dma_alloc_iova() and alloc_iova_fast() to not return values in
-those ranges.
+Ack, will do in v2.
 
-It all looks like it is supposed to work
-
-Did something go wrong in the initialization order perhaps?
-
-Jason
+>
+> >      save_commits_by_author(@lines) if ($interactive);
+> >      save_commits_by_signer(@lines) if ($interactive);
+>
