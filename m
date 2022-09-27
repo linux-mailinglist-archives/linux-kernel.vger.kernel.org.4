@@ -2,89 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88875EB75A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFE75EB78D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 04:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbiI0CFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 22:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39230 "EHLO
+        id S230077AbiI0CVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 22:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiI0CFE (ORCPT
+        with ESMTP id S230075AbiI0CVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 22:05:04 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3377436DF0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:05:03 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28R1rR6M002045;
-        Tue, 27 Sep 2022 02:04:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=mteTxWy2DX4fGvrPRRg76+sWQTfaA0qxlYjysZsF9WE=;
- b=HWm3zT6/eVCaozc9fj+5nOMmePyvjtEc0vsbWvakLrvKZ8wA3Feu1xiJVw7EI1yJq/jw
- K+U0W2Rmbhba9ujoX3yFYENrU4x1bFsKZTxZGybOq53sYuVHUTdyvxLQ+Xfam5zXz/Gp
- jbDUcXj/NIMJ56jnhKldnv2ZPhweso2K5BfYVBlG28igMcQaD9FF4IvmrgVnhRmo2zjY
- phQ5CUFEQq3mHujXgJonDJ5OssgGbBdi2nMNYe1l3lZJXSttMrk62lozMW5nlxH9Kpr0
- MqQHDORqyQ5NLwI2yfjx+81b6eRd2BNaK8ZEsNyvYWY1jdzfOkx2CiUVk9C9M7Q5ClPZ gw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jua2ut92p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 02:04:42 +0000
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28R24fLj030200;
-        Tue, 27 Sep 2022 02:04:41 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3jstykghst-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 02:04:41 +0000
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28R24fFO030192;
-        Tue, 27 Sep 2022 02:04:41 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 28R24fEV030191
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Sep 2022 02:04:41 +0000
-Received: from [10.232.65.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 26 Sep
- 2022 19:04:39 -0700
-Message-ID: <b1dd577d-b153-0cfd-6ab6-e7c973c0955e@quicinc.com>
-Date:   Tue, 27 Sep 2022 10:04:37 +0800
+        Mon, 26 Sep 2022 22:21:31 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2079.outbound.protection.outlook.com [40.107.243.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D713AC66
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Sep 2022 19:20:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iAy0loKVbnta/nmEIJHJ3r0a7+V8AGvCaTi3BS0wf9tH8oh6AEq+da/mDjdeH1IrWNEIS8A2/S0IUfgnDQVynfu809SQFzzUJkyVrrkmRWk3tvIpabDzAHItuA69m7cVJL4/32AMVE/C+A2rlB45fqRT6TyfT2fdVCc0MNB0JiPTHSrWjrx0K1xHGhy2tmmlF1IZsJHmGLuDRlGRPeFKJCndoVRa8muSmVG6D5fWSJuK824J+O3XiYz/Qfzgyci1lDwBR586dkghsfUte0efWITUWPwIhjr6NZA1vgJIh9BIg5OHpiaeGhySUAekeRX4s2dw9ci1x9iQNfWiicjXfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/0fNFP1t6ElIZwUU3+jJl9kcQFnQvMD2kRwfBjGRoTQ=;
+ b=imSdVc57U0HKg8hFOc3M7sSyfdwqOZdDky5UiaxAIxGBmJsPV4yUXG2HX3Qkb7EcE/bbnXvC6c6FMBRVngOvObsNe4JV5vrciGmgWXfnnUfJcbSFy8SlllSu0+/piFsJ7AbBaIktQPtnn1N34zgdJLXf7YhW5ljtYpUAnC+y4rHl3TeDks9cYDKD2iLhYyVB7PtcHRGz08Noz/C5C06sdNhE98pgZbJm5/DFa6jDM0RoK58bvQEAFhlDh048GX/cxpQMtFzPXOpwzrkEB2KUOFPPdyUXddDtx9MFVVeIUrlfPdczNXw010Vyl9XFIFFs7SPPhgb8AtevVVdLZbAYsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/0fNFP1t6ElIZwUU3+jJl9kcQFnQvMD2kRwfBjGRoTQ=;
+ b=KgODYrgcPLCPHRc4HfIuzi/HWoEkGsX0Fd/VqPGxaiGPf+01qyzQDZaWXdBG0Zr93CIEYD7MLCmE48hRKlUjTTdeyw11KCy8A/jkxZmPNOX+qilCO71/HVSRdAA3ansOSnaVRIxbpJzT9fjOkl2KU1+qGXdJuJ4+CEcnBoTTBLJQKzSujRYnj9d6H5miUrx3raVc0w2XErofU7Kin3K4/XsoADp/F1PIr7kvk2TZrrUwiloxorZzoymU+XLkWs5rdoapGuS8wP8GVK4u6gLT58VlnqslhRuSo1QrYDMNzjIEzj2gS8q+WmveFdn8nSiok9iRRQ4hbQpPPjLkSYpgTQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by BL1PR12MB5994.namprd12.prod.outlook.com (2603:10b6:208:39a::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Tue, 27 Sep
+ 2022 02:20:35 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::4064:6c13:72e5:a936]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::4064:6c13:72e5:a936%5]) with mapi id 15.20.5654.026; Tue, 27 Sep 2022
+ 02:20:35 +0000
+References: <cover.f15b25597fc3afd45b144df863eeca3b2c13f9f4.1664171943.git-series.apopple@nvidia.com>
+ <3d74bb439723c7e46cbe47d1711795308aee4ae3.1664171943.git-series.apopple@nvidia.com>
+ <YzG42766BJSxro0R@nvidia.com>
+User-agent: mu4e 1.6.9; emacs 27.1
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Alex Sierra <alex.sierra@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH 2/7] mm: Free device private pages have zero refcount
+Date:   Tue, 27 Sep 2022 12:06:24 +1000
+In-reply-to: <YzG42766BJSxro0R@nvidia.com>
+Message-ID: <877d1plfrm.fsf@nvdebian.thelocal>
+Content-Type: text/plain
+X-ClientProxiedBy: SYXPR01CA0124.ausprd01.prod.outlook.com
+ (2603:10c6:0:2d::33) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Subject: Re: [PATCH] kernel/hung_task: add option to ignore task
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <quic_namajain@quicinc.com>
-References: <20220923085335.19593-1-quic_yingangl@quicinc.com>
- <Yy2S16jOPVzDZSBe@hirez.programming.kicks-ass.net>
-Content-Language: en-US
-From:   Kassey Li <quic_yingangl@quicinc.com>
-In-Reply-To: <Yy2S16jOPVzDZSBe@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fodyxmSy_67XO7uIf8-Y6zhRQfPw7PFe
-X-Proofpoint-ORIG-GUID: fodyxmSy_67XO7uIf8-Y6zhRQfPw7PFe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-26_11,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=845 clxscore=1015
- malwarescore=0 phishscore=0 priorityscore=1501 suspectscore=0 bulkscore=0
- mlxscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2209270011
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|BL1PR12MB5994:EE_
+X-MS-Office365-Filtering-Correlation-Id: a38e010b-54fa-419f-962e-08daa02edc3e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FuZxz3pjuBqeq09mPlJcg3ApcX7R+crmtv9/yFmOIAq5cDifyAaE8Pb3pEONMo8wxzw9Fk1ytNr0Q3gkHkEPb2W/hmWaOmwjn/4tK8oYt0v2io9xYcN3XHdQ2q2bjoFLbjH4Lz7uZN0GgUyVq65Q0vpNuLbB0JNfNUtlM3CRVTURYLea+KSIl/TSeHK7noqIv8TJ2KyiVICMY3qR6qS5nF/YBddk4t+9kuxeLEatcO5fk9huG0asttelUmwZ9L5ukj+EydUPO/VmKJGdqmmtWRoDjuvo8HAXMeQytwX8Hk3aY/ts25jIbJz+QWWBzNLdkjRNJa1DbGOAukhvP2BaGyEfdjwh3UlDZZunqpWAFsAfSYUQ5Dir2EXZ4zL13Dvo6In/a73jYzEtNQ/ywjm9j9jM9fepWRxcz1F3wi+7e+P2uZZPyOF5N/q9uLCjrCH/offlIRXOyfxm4fHEP4sbFvW/bxrNKzqz+HmJOpaQK3sIdntccc+k/rB/ndnbsPgS3UwqUdogrk9/vrljqUqlUSKfp8oVEygoq1gwmkvdT3Qpq5LVWsIPmsFinklzEKxtoF/HyOmPXISm5qe1zsaGqJg9iyjTv50/29cZx4M1+Fmr+6VqJEvL4uFPmTjxKQmF4iTjaHHkzSn1O+zhpbVyi5syBKTko2PhBOiY3wd1CeNjbmZ132N8r14GY8u1PSznqh+vSsvj35URULfRKkLhTQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(376002)(39860400002)(366004)(346002)(451199015)(86362001)(38100700002)(2906002)(7416002)(186003)(6666004)(9686003)(5660300002)(6486002)(41300700001)(6506007)(26005)(83380400001)(478600001)(6512007)(316002)(6636002)(54906003)(66556008)(8676002)(6862004)(4326008)(8936002)(66946007)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nvLEt30MP1i0pkcCWXovXrYkCFXY+DWN1bNo+BNGrjO/AeVGADHaYoRcBHFg?=
+ =?us-ascii?Q?pljoy5XPHPwYP8lE9Mh2LJgso5ZTKT/Nblo5UpvGzVej2IkWE89WAhdSE7UG?=
+ =?us-ascii?Q?LXkT+zvucjNivw8JGKx80j/EKsQ1yXp0o1mGMNsRZOx+oYytRYk54YabO8Nk?=
+ =?us-ascii?Q?9gaspqHtQkBfz2Ob6+Iq9yz8ifpwpUcqaumBztUQ1CUtXc2jZ/YwK3Qwao7A?=
+ =?us-ascii?Q?J7TeDvjGT52RZmjmXwabxUaHu8+/qmDCwhBG3GNVl3cgAUvJF2Nv4cmrBK88?=
+ =?us-ascii?Q?285Ji5lIPJ52JircKGW1gd7McT8KaBsA4OSNxISPQJBgJz2uJW/txcRJDrSX?=
+ =?us-ascii?Q?lnzcAZcodQ2zyP5Kiy+ucyPMDBeSkMXvqZEh+d0hKnojax3YBvcik4VlIxml?=
+ =?us-ascii?Q?iO3hieOI+Yg9ZbZNkLfQVVUAvndXgUFCPw87xl2JvgNIG2Aeewe6lRy6RmYl?=
+ =?us-ascii?Q?PQ72BWtdSJm5kUkQ208+2EgW3WjYUogFU+tYtJfqX9azJmnBkaI4a2K9wXjG?=
+ =?us-ascii?Q?DipMl2D3AsnLm7xtjZiqM5kUvp8/aAkn83U9E63HXv9aDuIQzCm9KME9ptnk?=
+ =?us-ascii?Q?2jYmACPqkrtsq18NM8a+kNrySvISr41NxxMmF/Q4SSZRgtn9dVloDeODk8LT?=
+ =?us-ascii?Q?LHKeptRHmz/sr5RQ5JWZUng8u90Tk75LLSt+1iUekiYmSaF4XJSlut3AnWpF?=
+ =?us-ascii?Q?rygrBo5SiAA5/0uGlorqvwFVbKM/dstTqvfJtaBYp30/K8odVz9cwSxTDtLk?=
+ =?us-ascii?Q?gCs8NYnq5xGnotFLj/udkUCd06SCehMg7eg64r8Cbo6Tr/4xikKGtv2PXl7O?=
+ =?us-ascii?Q?rfQiYtJblUwHfl1wakhmxwlG/Crpqjfp0sk54XshOZPTC+Zic703bchiT8rf?=
+ =?us-ascii?Q?PsmwKuC/LVaFqoy67snaKYpcMbEtj+9qQDtX5vT3p2by1TSvKFO3JSp+EyeC?=
+ =?us-ascii?Q?b/+adB/sTxsJfOtZi8NBjgVm0ev3dNN82UNkEC9/IE0+sBEF1xr8493vN3CW?=
+ =?us-ascii?Q?+sibQEaOOlEXFgEMOhS1VSbaA2UlzwvWY331RiNhLajH0E5JV+pFextvYt5N?=
+ =?us-ascii?Q?Lyo+fzmp/jF0iM8aHkjMSEe2VwuCzLjy4ek/u0epZxL1g/SPrcTj1Sz3ctNP?=
+ =?us-ascii?Q?b8AFBhBrzNBuk3G+ianVwT8WzjGm5fuqUlwsPeDhhX8AE7sKPQAvEnt4NKfj?=
+ =?us-ascii?Q?+u/Zrg7gQn59481EMJfEG34nB5i1Lwa6F4KVRqSLGqBbgi4EicrH20o3lMW2?=
+ =?us-ascii?Q?21pN3HpGEwauckU7xYOZBdukA+GsQYdcVtg14IKrua0i0L/rVXB6vnyUYPOP?=
+ =?us-ascii?Q?139LAqXxnG53F6W/oBBWotZy7w3Ye2XPICcwmB0F7zzw/ujLOnlf0+R2iSRu?=
+ =?us-ascii?Q?jqquEd9MSi60kcYjvKUATk28F26LVhmGHfukB+FR72+hvzLLCf7lMeTqaU2h?=
+ =?us-ascii?Q?Xd0AC/my2h06BHpRk8W35XzZFMwUIN8wpvk3mmE7O8fdZz9v9fddqHsfry9m?=
+ =?us-ascii?Q?vtnO+al574qSUhmsdkqMh2fQhs3HCMWbHgGu+CtqK4ugiPb3NvVoVHUyKm3J?=
+ =?us-ascii?Q?ZGCs9Pm+hFTXsNWUm6U8LhSIrlitbSx9FMngkRcg?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a38e010b-54fa-419f-962e-08daa02edc3e
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 02:20:35.1625
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d9HgsWVPSBNfUn4iByaqyzDIT/EN0tRXfmKhDQlIc36I2iwjG4sCVHHzAmJzsR0GHWsbdNeZiX8CD94p4CGZgA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5994
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,24 +134,45 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Jason Gunthorpe <jgg@nvidia.com> writes:
 
-On 9/23/2022 7:04 PM, Peter Zijlstra wrote:
-> On Fri, Sep 23, 2022 at 04:53:35PM +0800, Kassey Li wrote:
->> By default, hung_task will iterate the tasklist and check
->> state in TASK_UNINTERRUPTIBLE with a given timeout value.
+> On Mon, Sep 26, 2022 at 04:03:06PM +1000, Alistair Popple wrote:
+>> Since 27674ef6c73f ("mm: remove the extra ZONE_DEVICE struct page
+>> refcount") device private pages have no longer had an extra reference
+>> count when the page is in use. However before handing them back to the
+>> owning device driver we add an extra reference count such that free
+>> pages have a reference count of one.
 >>
->> Some tasks may in this state as expected but reported by hung_task.
-> 
-> Please explain..
-I want to set timout value as 60s, 20s, 10s,  or even 5s to more 
-aggressive to detect my VIP tasks "init", "surfaceflinger", 
-"system_server" for example as debug.
+>> This makes it difficult to tell if a page is free or not because both
+>> free and in use pages will have a non-zero refcount. Instead we should
+>> return pages to the drivers page allocator with a zero reference count.
+>> Kernel code can then safely use kernel functions such as
+>> get_page_unless_zero().
+>>
+>> Signed-off-by: Alistair Popple <apopple@nvidia.com>
+>> ---
+>>  arch/powerpc/kvm/book3s_hv_uvmem.c       | 1 +
+>>  drivers/gpu/drm/amd/amdkfd/kfd_migrate.c | 1 +
+>>  drivers/gpu/drm/nouveau/nouveau_dmem.c   | 1 +
+>>  lib/test_hmm.c                           | 1 +
+>>  mm/memremap.c                            | 5 -----
+>>  mm/page_alloc.c                          | 6 ++++++
+>>  6 files changed, 10 insertions(+), 5 deletions(-)
+>
+> I think this is a great idea, but I'm surprised no dax stuff is
+> touched here?
 
-many other tasks wait for IO, mutex, delayed timer ...
-will hit this while we want to ignore.
+free_zone_device_page() shouldn't be called for pgmap->type ==
+MEMORY_DEVICE_FS_DAX so I don't think we should have to worry about DAX
+there. Except that the folio code looks like it might have introduced a
+bug. AFAICT put_page() always calls
+put_devmap_managed_page(&folio->page) but folio_put() does not (although
+folios_put() does!). So it seems folio_put() won't end up calling
+__put_devmap_managed_page_refs() as I think it should.
 
+I think you're right about the change to __init_zone_device_page() - I
+should limit it to DEVICE_PRIVATE/COHERENT pages only. But I need to
+look at Dan's patch series more closely as I suspect it might be better
+to rebase this patch on top of that.
 
-
-
-
-
+> Jason
