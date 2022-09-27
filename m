@@ -2,143 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B4F5EB676
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6055B5EB679
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 02:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbiI0AuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 20:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
+        id S229558AbiI0AuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 20:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiI0AuC (ORCPT
+        with ESMTP id S229601AbiI0AuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 20:50:02 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F61020182;
-        Mon, 26 Sep 2022 17:50:01 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso8561193pjd.4;
-        Mon, 26 Sep 2022 17:50:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=anOfjEKm49o/rbXtkTtCMIqjAWrFaD+tdksXbREFKb4=;
-        b=Zg8ohBnyKsIgxhxGL39sNzgFwPjnmHwuABBZxWwKb2v491mAMO2h45I7t3mODFvXBx
-         5mFMNFVd6Xi5XKsrWVSY0ABYH5pkRumTx+Tya8nXA4wBXZW8fBCcD22u3W5ZA/LNsK1T
-         SAI0mFAqmpFCDPVQy4Mp8PDwxSqHs2X4sEJuW2EYtjWWMUhd7NjrhRkWJ7fqujPW9wvv
-         RwFr8j6laOaU+ERCvcM3qq4dG1qevc/tGAhx9D/vXoYJ2HUbYLydgF5G/VRm5jNVGw9J
-         pFfbrv+d2eOhd5PgGG2C+bAhHrG4iioDKB0dVCsJiRoTbL+b8b93ak4gzAdgvl7RXUiD
-         aVYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=anOfjEKm49o/rbXtkTtCMIqjAWrFaD+tdksXbREFKb4=;
-        b=gULNBWVA3vmlmWby5rVWEDvoiuvq3G5e7FZV129bRvTZFeP924PbePwIGVEeSC5CQQ
-         r5+ylWBP1t/ErzbqBQDLF2EqrlJLRmznrlqrvwb4mko6GtYru+w/4p89XuvH4+Nf+SAF
-         rTEql8fyskqDNFK8WJRFIkM9dvnrlwSZ6UBykgFO0FqfmKX12efuAn+7VReEGq1mHvsy
-         R3KxzpEe6MDQbuwfTjbxgVW6JQXj91vzV+8o3BiCfmrWr0iRkiVmZCIXRxqV+Bc+uytn
-         CS+Lijeelesu7sy4s9Jd8/pI5Di+bEi+JgG4XUOclTqNG8Fy9yH7SWSPfYIKwBOSlR10
-         PwnA==
-X-Gm-Message-State: ACrzQf16hy+WtpRXd0Hl0KHWTrpf7kMku3p8Fvq/NkwduYoYF3nRwWDl
-        f2t4O4aXq5Hoku7YhzhuhF4=
-X-Google-Smtp-Source: AMsMyM5xGeW0V0jX7yPgbGYUjz8ZBfPA4vZGsY8Qlgx6EbUzcb8RIoU+1i+yhG8zxvc/ni0paQIcXA==
-X-Received: by 2002:a17:90b:4c8a:b0:202:b3cd:f960 with SMTP id my10-20020a17090b4c8a00b00202b3cdf960mr1534138pjb.129.1664239800615;
-        Mon, 26 Sep 2022 17:50:00 -0700 (PDT)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id w16-20020aa79a10000000b0053639773ad8sm134914pfj.119.2022.09.26.17.49.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 17:49:59 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 09:49:52 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
-        Kees Cook <keescook@chromium.org>,
-        Roman Gushchin <guro@fb.com>, Jann Horn <jannh@google.com>,
-        Vijayanand Jitta <vjitta@codeaurora.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v2] mm: Make failslab writable again
-Message-ID: <YzJIsFZQoCEYntvR@hyeyoo>
-References: <20220920121111.1792905-1-alexander.atanasov@virtuozzo.com>
- <Yyr1xONdw8dBgsKr@hyeyoo>
- <30063d97-69f0-bea2-9d59-108140995bfc@virtuozzo.com>
+        Mon, 26 Sep 2022 20:50:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F42357DF;
+        Mon, 26 Sep 2022 17:50:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3F0561509;
+        Tue, 27 Sep 2022 00:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 24098C433D7;
+        Tue, 27 Sep 2022 00:50:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664239818;
+        bh=gA6xK8jQhdoyfhLelrqWDu28pRfxAf7wlOMy80cRlw0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=eydX4WFxsYKFIgLjgJSLyTvHaf+v/P7hxg7TdawGEGutphmcbQYKEoL5x4OWNhVMS
+         M85tk5lj+PzazIFv1dnyAzABGvKBSFnj7CnfwljtAweyDVLEruxk0JEpOLqECA3pd/
+         a3m2uqgGPZCp9bz7i71v5U5vNBNy9B6zUTnZew6Zvv55h9S7iD+H5Tkr03zUeZBju8
+         5cMcukKEv7rjqm3/s6VTOLVdSLihPy/v5fLOeTPLMxiKXLf/HjpQf4tEHiPbVLO+XG
+         M6p6rcE4S9LqbvC/WCvUZOM8J7U74dNFwBPCakHvEdu5SBBtq7Qdsf3KhIL2Dd/ndB
+         nXbFXgocV060g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 01AA4C04E59;
+        Tue, 27 Sep 2022 00:50:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <30063d97-69f0-bea2-9d59-108140995bfc@virtuozzo.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 00/13] net: sunhme: Cleanups and logging
+ improvements
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166423981800.26881.7010083147710284911.git-patchwork-notify@kernel.org>
+Date:   Tue, 27 Sep 2022 00:50:18 +0000
+References: <20220924015339.1816744-1-seanga2@gmail.com>
+In-Reply-To: <20220924015339.1816744-1-seanga2@gmail.com>
+To:     Sean Anderson <seanga2@gmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org, nbowler@draconx.ca,
+        eike-kernel@sf-tec.de, zheyuma97@gmail.com,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 10:34:28AM +0300, Alexander Atanasov wrote:
-> Hello,
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Fri, 23 Sep 2022 21:53:26 -0400 you wrote:
+> This series is a continuation of [1] with a focus on logging improvements (in
+> the style of commit b11e5f6a3a5c ("net: sunhme: output link status with a single
+> print.")). I have included several of Rolf's patches in the series where
+> appropriate (with slight modifications). After this series is applied, many more
+> messages from this driver will come with driver/device information.
+> Additionally, most messages (especially debug messages) have been condensed onto
+> one line (as KERN_CONT messages get split).
 > 
-> On 21.09.22 14:30, Hyeonggon Yoo wrote:
-> > On Tue, Sep 20, 2022 at 03:11:11PM +0300, Alexander Atanasov wrote:
-> > > In (060807f841ac mm, slub: make remaining slub_debug related attributes
-> > > read-only) failslab was made read-only.
-> > > I think it became a collateral victim to the two other options for which
-> > > the reasons are perfectly valid.
-> > > Here is why:
-> > >   - sanity_checks and trace are slab internal debug options,
-> > >     failslab is used for fault injection.
-> > >   - for fault injections, which by presumption are random, it
-> > >     does not matter if it is not set atomically. And you need to
-> > >     set atleast one more option to trigger fault injection.
-> > >   - in a testing scenario you may need to change it at runtime
-> > >     example: module loading - you test all allocations limited
-> > >     by the space option. Then you move to test only your module's
-> > >     own slabs.
-> > >   - when set by command line flags it effectively disables all
-> > >     cache merges.
-> > 
-> > Maybe we can make failslab= boot parameter to consider cache filtering?
-> > 
-> > With that, just pass something like this:
-> > 	failslab=X,X,X,X,cache_filter slub_debug=A,<cache-name>>
-> 
-> > Users should pass slub_debug=A,<cache-name> anyway to prevent cache merging.
->
-> It will be good to have this in case you want to test cache that is used
-> early. But why push something to command line option only when it can be
-> changed at runtime?
+> [...]
 
-Hmm okay. I'm not against changing it writable. (it looks okay to me.)
-Just wanted to understand your use case!
+Here is the summary with links:
+  - [net-next,v2,01/13] sunhme: remove unused tx_dump_ring()
+    https://git.kernel.org/netdev/net-next/c/8247ab50c2ad
+  - [net-next,v2,02/13] sunhme: Remove version
+    https://git.kernel.org/netdev/net-next/c/6478c6e99455
+  - [net-next,v2,03/13] sunhme: forward the error code from pci_enable_device()
+    https://git.kernel.org/netdev/net-next/c/acb3f35f920b
+  - [net-next,v2,04/13] sunhme: Return an ERR_PTR from quattro_pci_find
+    https://git.kernel.org/netdev/net-next/c/d6f1e89bdbb8
+  - [net-next,v2,05/13] sunhme: Regularize probe errors
+    https://git.kernel.org/netdev/net-next/c/5b3dc6dda6b1
+  - [net-next,v2,06/13] sunhme: switch to devres
+    https://git.kernel.org/netdev/net-next/c/914d9b2711dd
+  - [net-next,v2,07/13] sunhme: Convert FOO((...)) to FOO(...)
+    https://git.kernel.org/netdev/net-next/c/03290907a5d1
+  - [net-next,v2,08/13] sunhme: Clean up debug infrastructure
+    https://git.kernel.org/netdev/net-next/c/30931367ba80
+  - [net-next,v2,09/13] sunhme: Convert printk(KERN_FOO ...) to pr_foo(...)
+    https://git.kernel.org/netdev/net-next/c/0bc1f45410ea
+  - [net-next,v2,10/13] sunhme: Use (net)dev_foo wherever possible
+    https://git.kernel.org/netdev/net-next/c/8acf878f29d0
+  - [net-next,v2,11/13] sunhme: Combine continued messages
+    https://git.kernel.org/netdev/net-next/c/24cddbc3ef11
+  - [net-next,v2,12/13] sunhme: Use vdbg for spam-y prints
+    https://git.kernel.org/netdev/net-next/c/26657c70b91c
+  - [net-next,v2,13/13] sunhme: Add myself as a maintainer
+    https://git.kernel.org/netdev/net-next/c/77ceb3731e12
 
-Can you please elaborate why booting with slub_debug=A,<your cache name>
-and enabling cache_filter after boot does not work?
-
-Or is it trying to changnig these steps,
-
-FROM
-	1. booting with slub_debug=A,<cache name>
-	2. write to cache_filter to enable cache filtering
-	3. setup probability, interval, times, size
-
-TO
-
-	1. write to failslab attribute of <cache name> (may fail it has alias)
-	2. write to cache_filter to enable cache filtering
-	3. setup probability, interval, times, size
-?
-
-as you may know, SLAB_FAILSLAB does nothing when
-cache_filter is disabled, and you should pass slub_debug=A,<cache name> anyway
-to prevent doing cache merging with <cache name>.
-
+You are awesome, thank you!
 -- 
-Thanks,
-Hyeonggon
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
