@@ -2,98 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D985EC185
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEA35EC17B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbiI0Lez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S231522AbiI0Le3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiI0Ler (ORCPT
+        with ESMTP id S231269AbiI0Le1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:34:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934F74BD24
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:34:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zW6i4/KDt/L5ZSg8SCVrQyvw0UbCm3JHb9boUSO439E=; b=PYzMO0clRYHSdrkM1Ta1v9oSzb
-        fjyj4vDguDz5rGfbxg/G5G3aLHHJs2wJg4Hc6RAvg9YHdcDxOMmFEjGnavk1Q7Vx7g958bghCXlwg
-        ni4N0zhmxN4klyxaYjlV/pWFjqcUSD/1Lk2NOp7wra6YViNg18YDu0OJtAbiha7s29XANtewn28AC
-        9VWpTwKociCBodlBUtAoOhp1BFAi528YTLSVgT4XbXVjhOLq2bHM18h4nLpuQC56GRSN1ku0dbymR
-        EtV57YuiRyUrCBbIh5UXGuhPRtzc4OPGcpGmNolvVGp2Hru3YS9AWy6cFKgPMOjQIKbFtwjZG8Q1A
-        ps+OYf8g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1od8qp-00BNqK-Ue; Tue, 27 Sep 2022 11:34:12 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2AC54300205;
-        Tue, 27 Sep 2022 13:34:08 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DE0292BDDB52B; Tue, 27 Sep 2022 13:34:07 +0200 (CEST)
-Date:   Tue, 27 Sep 2022 13:34:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH 12/23] thermal: intel: hfi: Convert table_lock to use
- flags-handling variants
-Message-ID: <YzLfr49woc1PMOxO@hirez.programming.kicks-ass.net>
-References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
- <20220909231205.14009-13-ricardo.neri-calderon@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220909231205.14009-13-ricardo.neri-calderon@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Sep 2022 07:34:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0B412DEF8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:34:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD7FF615DC
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 11:34:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19BFFC433C1;
+        Tue, 27 Sep 2022 11:34:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664278465;
+        bh=ThO+Ce1BIAm6K0Fo/ghA2s+T1EG0jC7QGSI+fPBwfJo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OAeFbOlyinPuHm9s1bTMjhBbvGGyImwjzVN7dR4BMSa0FCEvf6paGDDzbbcvOiOQh
+         aJCUbhiGsrPMANndxhUao99cJjIpX3KuxX4MhhPP46WJE5FXfkOHw7JxNS8VZgLaSc
+         asFWkr45rj6CKn6B7pwUHb33+Pb7GqlztJgfvDfyQtSRlxOkC1H0b9kPLA3wxNmlgE
+         cOoUseX/xwHwy+8PSY+O5cQGaTbyLg8VbQYTA5FNribzKP528aqLk0vrgcFO7ANK7M
+         NRIXe/nYHiXtHU5g+EhDSvC8lfZoLSyr7PDzehdc3ZtC/m//WdIB6Q7vMXAf2QivUs
+         e/BELvMlaTBWw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1od8r0-00CxxK-W3;
+        Tue, 27 Sep 2022 12:34:23 +0100
+Date:   Tue, 27 Sep 2022 07:34:22 -0400
+Message-ID: <86v8p96og1.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v2] KVM: arm64: Limit stage2_apply_range() batch size to 1GB
+In-Reply-To: <20220926222146.661633-1-oliver.upton@linux.dev>
+References: <20220926222146.661633-1-oliver.upton@linux.dev>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, ricarkol@google.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 04:11:54PM -0700, Ricardo Neri wrote:
-
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -175,9 +175,10 @@ static struct workqueue_struct *hfi_updates_wq;
->  static void get_hfi_caps(struct hfi_instance *hfi_instance,
->  			 struct thermal_genl_cpu_caps *cpu_caps)
->  {
-> +	unsigned long flags;
->  	int cpu, i = 0;
+On Mon, 26 Sep 2022 18:21:45 -0400,
+Oliver Upton <oliver.upton@linux.dev> wrote:
+> 
+> Presently stage2_apply_range() works on a batch of memory addressed by a
+> stage 2 root table entry for the VM. Depending on the IPA limit of the
+> VM and PAGE_SIZE of the host, this could address a massive range of
+> memory. Some examples:
+> 
+>   4 level, 4K paging -> 512 GB batch size
+> 
+>   3 level, 64K paging -> 4TB batch size
+> 
+> Unsurprisingly, working on such a large range of memory can lead to soft
+> lockups. When running dirty_log_perf_test:
+> 
+>   ./dirty_log_perf_test -m -2 -s anonymous_thp -b 4G -v 48
+> 
+>   watchdog: BUG: soft lockup - CPU#0 stuck for 45s! [dirty_log_perf_:16703]
+>   Modules linked in: vfat fat cdc_ether usbnet mii xhci_pci xhci_hcd sha3_generic gq(O)
+>   CPU: 0 PID: 16703 Comm: dirty_log_perf_ Tainted: G           O       6.0.0-smp-DEV #1
+>   pstate: 80400009 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>   pc : dcache_clean_inval_poc+0x24/0x38
+>   lr : clean_dcache_guest_page+0x28/0x4c
+>   sp : ffff800021763990
+>   pmr_save: 000000e0
+>   x29: ffff800021763990 x28: 0000000000000005 x27: 0000000000000de0
+>   x26: 0000000000000001 x25: 00400830b13bc77f x24: ffffad4f91ead9c0
+>   x23: 0000000000000000 x22: ffff8000082ad9c8 x21: 0000fffafa7bc000
+>   x20: ffffad4f9066ce50 x19: 0000000000000003 x18: ffffad4f92402000
+>   x17: 000000000000011b x16: 000000000000011b x15: 0000000000000124
+>   x14: ffff07ff8301d280 x13: 0000000000000000 x12: 00000000ffffffff
+>   x11: 0000000000010001 x10: fffffc0000000000 x9 : ffffad4f9069e580
+>   x8 : 000000000000000c x7 : 0000000000000000 x6 : 000000000000003f
+>   x5 : ffff07ffa2076980 x4 : 0000000000000001 x3 : 000000000000003f
+>   x2 : 0000000000000040 x1 : ffff0830313bd000 x0 : ffff0830313bcc40
+>   Call trace:
+>    dcache_clean_inval_poc+0x24/0x38
+>    stage2_unmap_walker+0x138/0x1ec
+>    __kvm_pgtable_walk+0x130/0x1d4
+>    __kvm_pgtable_walk+0x170/0x1d4
+>    __kvm_pgtable_walk+0x170/0x1d4
+>    __kvm_pgtable_walk+0x170/0x1d4
+>    kvm_pgtable_stage2_unmap+0xc4/0xf8
+>    kvm_arch_flush_shadow_memslot+0xa4/0x10c
+>    kvm_set_memslot+0xb8/0x454
+>    __kvm_set_memory_region+0x194/0x244
+>    kvm_vm_ioctl_set_memory_region+0x58/0x7c
+>    kvm_vm_ioctl+0x49c/0x560
+>    __arm64_sys_ioctl+0x9c/0xd4
+>    invoke_syscall+0x4c/0x124
+>    el0_svc_common+0xc8/0x194
+>    do_el0_svc+0x38/0xc0
+>    el0_svc+0x2c/0xa4
+>    el0t_64_sync_handler+0x84/0xf0
+>    el0t_64_sync+0x1a0/0x1a4
+> 
+> Given the various paging configurations used by KVM at stage 2 there
+> isn't a sensible page table level to use as the batch size. Use 1GB as
+> the batch size instead, as it is evenly divisible by all supported
+> hugepage sizes across 4K, 16K, and 64K paging.
+> 
+> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> ---
+> 
+> Applies to 6.0-rc3. Tested with 4K, 16K, and 64K pages with the above
+> dirty_log_perf_test command and noticed no more soft lockups.
+> 
+> v1: https://lore.kernel.org/kvmarm/20220920183630.3376939-1-oliver.upton@linux.dev/
+> 
+> v1 -> v2:
+>  - Align down to the next 1GB boundary (Ricardo)
+> 
+>  arch/arm64/include/asm/stage2_pgtable.h | 20 --------------------
+>  arch/arm64/kvm/mmu.c                    |  8 +++++++-
+>  2 files changed, 7 insertions(+), 21 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/stage2_pgtable.h b/arch/arm64/include/asm/stage2_pgtable.h
+> index fe341a6578c3..c8dca8ae359c 100644
+> --- a/arch/arm64/include/asm/stage2_pgtable.h
+> +++ b/arch/arm64/include/asm/stage2_pgtable.h
+> @@ -10,13 +10,6 @@
 >  
-> -	raw_spin_lock_irq(&hfi_instance->table_lock);
-> +	raw_spin_lock_irqsave(&hfi_instance->table_lock, flags);
->  	for_each_cpu(cpu, hfi_instance->cpus) {
->  		struct hfi_cpu_data *caps;
->  		s16 index;
+>  #include <linux/pgtable.h>
+>  
+> -/*
+> - * PGDIR_SHIFT determines the size a top-level page table entry can map
+> - * and depends on the number of levels in the page table. Compute the
+> - * PGDIR_SHIFT for a given number of levels.
+> - */
+> -#define pt_levels_pgdir_shift(lvls)	ARM64_HW_PGTABLE_LEVEL_SHIFT(4 - (lvls))
+> -
+>  /*
+>   * The hardware supports concatenation of up to 16 tables at stage2 entry
+>   * level and we use the feature whenever possible, which means we resolve 4
+> @@ -30,11 +23,6 @@
+>  #define stage2_pgtable_levels(ipa)	ARM64_HW_PGTABLE_LEVELS((ipa) - 4)
+>  #define kvm_stage2_levels(kvm)		VTCR_EL2_LVLS(kvm->arch.vtcr)
+>  
+> -/* stage2_pgdir_shift() is the size mapped by top-level stage2 entry for the VM */
+> -#define stage2_pgdir_shift(kvm)		pt_levels_pgdir_shift(kvm_stage2_levels(kvm))
+> -#define stage2_pgdir_size(kvm)		(1ULL << stage2_pgdir_shift(kvm))
+> -#define stage2_pgdir_mask(kvm)		~(stage2_pgdir_size(kvm) - 1)
+> -
+>  /*
+>   * kvm_mmmu_cache_min_pages() is the number of pages required to install
+>   * a stage-2 translation. We pre-allocate the entry level page table at
+> @@ -42,12 +30,4 @@
+>   */
+>  #define kvm_mmu_cache_min_pages(kvm)	(kvm_stage2_levels(kvm) - 1)
+>  
+> -static inline phys_addr_t
+> -stage2_pgd_addr_end(struct kvm *kvm, phys_addr_t addr, phys_addr_t end)
+> -{
+> -	phys_addr_t boundary = (addr + stage2_pgdir_size(kvm)) & stage2_pgdir_mask(kvm);
+> -
+> -	return (boundary - 1 < end - 1) ? boundary : end;
+> -}
+> -
+>  #endif	/* __ARM64_S2_PGTABLE_H_ */
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index c9a13e487187..5d05bb92e129 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -31,6 +31,12 @@ static phys_addr_t hyp_idmap_vector;
+>  
+>  static unsigned long io_map_base;
+>  
+> +static inline phys_addr_t stage2_apply_range_next(phys_addr_t addr, phys_addr_t end)
 
-^^^^ Anti-pattern alert!
+Please drop the inline. I'm sure the compiler will perform its
+magic.
 
-Now your IRQ latency depends on nr_cpus -- which is a fair fail. The
-existing code is already pretty crap in that it has the preemption
-latency depend on nr_cpus.
+Can I also bikeshed a bit about the name? This doesn't "apply"
+anything, nor does it return the next range. It really computes the
+end of the current one.
 
-While I'm here looking at the HFI stuff, did they fix that HFI interrupt
-broadcast mess already? Sending an interrupt to *all* CPUs is quite
-insane.
+Something like stage2_range_addr_end() would at least be consistent
+with the rest of the arm64 code (grep for _addr_end ...).
+
+> +{
+> +	phys_addr_t boundary = round_down(addr + SZ_1G, SZ_1G);
+
+nit: the rest of the code is using ALIGN_DOWN(). Any reason why this
+can't be used here?
+
+> +
+> +	return (boundary - 1 < end - 1) ? boundary : end;
+> +}
+>  
+>  /*
+>   * Release kvm_mmu_lock periodically if the memory region is large. Otherwise,
+> @@ -52,7 +58,7 @@ static int stage2_apply_range(struct kvm *kvm, phys_addr_t addr,
+>  		if (!pgt)
+>  			return -EINVAL;
+>  
+> -		next = stage2_pgd_addr_end(kvm, addr, end);
+> +		next = stage2_apply_range_next(addr, end);
+>  		ret = fn(pgt, addr, next - addr);
+>  		if (ret)
+>  			break;
+> 
+
+The main problem I see with this is that some entries now get visited
+multiple times if they cover more than a single 1GB entry (like a
+512GB level-0 entry with 4k pages and 48bit IPA) . As long as this
+isn't destructive (CMOs, for example), this is probably OK. For
+operations that are not idempotent (such as stage2_unmap_walker), this
+is a significant change in behaviour.
+
+My concern is that we have on one side a walker that is strictly
+driven by the page-table sizes, and we now get an arbitrary value that
+doesn't necessarily a multiple of block sizes. Yes, this works right
+now because you can't create a block mapping larger than 1GB with any
+of the supported page size.
+
+But with 52bit VA/PA support, this changes: we can have 512GB (4k),
+64GB (16k) and 4TB (64k) block mappings at S2. We don't support this
+yet at S2, but when this hits, we'll be in potential trouble.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
