@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B875EBE05
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15215EBE09
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 11:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbiI0JJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 05:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
+        id S231308AbiI0JKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 05:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiI0JJx (ORCPT
+        with ESMTP id S230402AbiI0JKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 05:09:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84BE5B7B5;
-        Tue, 27 Sep 2022 02:09:51 -0700 (PDT)
+        Tue, 27 Sep 2022 05:10:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E796E6D9DB;
+        Tue, 27 Sep 2022 02:10:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F97A61765;
-        Tue, 27 Sep 2022 09:09:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 570AAC433D6;
-        Tue, 27 Sep 2022 09:09:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 842FB61765;
+        Tue, 27 Sep 2022 09:10:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DE02EC433D7;
+        Tue, 27 Sep 2022 09:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664269790;
-        bh=EWbMZHKTMYken4F8JD7i0ndrYShdQA5tQ02UkQ9AlcI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LvxP901oWdRcaSwbyeje69HYrPiaB8QNyeisvqQijkau7Hk0bHHQpHjkEFHBzEZOU
-         rwp1V2aN/TvlijSWwLu0A2FjF5z39Qe5+otZs+4fcHTDKRYSmoC9K0XwJbleJY6qDJ
-         4zfj0TRtNueGVqH3KLqgAGkrIbpltR7DRh4rIfRs6oVp6U4z5M3ZwgFEDkjT868TEF
-         m86uGcwVE3qMrs8TbkeRBy11+8lqmNvpLUzhXCSwuxwKBTPDwsmig75PLqlyMAdKYa
-         6mREcILldx/s2ktJb9awGWsz+IFz1Z/C15m2WaeSjM8bmMBTSx424wTaKLHnTYvYtp
-         GUufzqu39/r1A==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH 0/3] PCI: Introduce new PCI_CONF1_ADDRESS() and PCI_CONF1_EXT_ADDRESS() macros
-Date:   Tue, 27 Sep 2022 11:09:45 +0200
-Message-Id: <166426977267.72332.7243947648115345777.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220924092404.31776-1-pali@kernel.org>
-References: <20220924092404.31776-1-pali@kernel.org>
-MIME-Version: 1.0
+        s=k20201202; t=1664269813;
+        bh=HrqAsjtCCTfOpqKuvarQVRgA4LgzPa5pLIthBQL0w4k=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=eqz95eD0M413YvOzO6hwpWmdEDNsg9EQJFGafeFrB8Ie+qphV/94yic/FDdawLRbA
+         Nc+STwFUYilAeiw19IavixMKuDB7dOLxqr8M5RaadJDge/Q7S0ZWVYScDG2L8gJH2n
+         3Pxx35Vqk9u7MbUuMPVvVklRsV89iN+IL7L6dsjqCGlbpR6dBMAkhTXlLYoV8bZCWX
+         V+Kiq9+Wyh7DHrO4DS3nmU9d0kiZOjgmUweTMEoforSRZ9J+H7kkxkuVCqhIgcY19P
+         mzlkmEZ+91HSi8ZLLohe/bfFj1FOL7da4FPKig8zMqmTzsuI2p3eamxrWCW8UH2iyl
+         +lM4Ly4WU7/NQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C2925C04E59;
+        Tue, 27 Sep 2022 09:10:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [net-next v2] selftests: Fix the if conditions of in
+ test_extra_filter()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166426981379.9788.6307412483003792088.git-patchwork-notify@kernel.org>
+Date:   Tue, 27 Sep 2022 09:10:13 +0000
+References: <1663916557-10730-1-git-send-email-wangyufen@huawei.com>
+In-Reply-To: <1663916557-10730-1-git-send-email-wangyufen@huawei.com>
+To:     Wang Yufen <wangyufen@huawei.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,24 +59,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 24 Sep 2022 11:24:01 +0200, Pali Rohár wrote:
-> PCI controllers and lot of non-ECAM compliant PCIe controllers still use
-> Intel PCI Configuration Mechanism #1 for accessing PCI config space.
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Fri, 23 Sep 2022 15:02:37 +0800 you wrote:
+> The socket 2 bind the addr in use, bind should fail with EADDRINUSE. So
+> if bind success or errno != EADDRINUSE, testcase should be failed.
 > 
-> Native PCIe controller drivers invents its own macros which implements
-> config space address calculation and in lof of cases it is just
-> duplication of the same code.
-> 
-> [...]
+> Fixes: 3ca8e4029969 ("soreuseport: BPF selection functional test")
+> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> ---
+> v1 -> v2: add a Fixes tag
+>  tools/testing/selftests/net/reuseport_bpf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to pci/misc, thanks!
+Here is the summary with links:
+  - [net-next,v2] selftests: Fix the if conditions of in test_extra_filter()
+    https://git.kernel.org/netdev/net/c/bc7a31984489
 
-[1/3] PCI: Add standard PCI Config Address macros
-      https://git.kernel.org/lpieralisi/pci/c/8a9b7ef74369
-[2/3] PCI: ftpci100: Use PCI_CONF1_ADDRESS() macro
-      https://git.kernel.org/lpieralisi/pci/c/f75a27dc6c07
-[3/3] PCI: mt7621: Use PCI_CONF1_EXT_ADDRESS() macro
-      https://git.kernel.org/lpieralisi/pci/c/2301a3e1a566
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thanks,
-Lorenzo
+
