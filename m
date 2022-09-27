@@ -2,141 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC425EC7C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BABB55EC7C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbiI0Pa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
+        id S232167AbiI0PbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbiI0Paz (ORCPT
+        with ESMTP id S232146AbiI0PbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:30:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51310A7ABE;
-        Tue, 27 Sep 2022 08:30:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A103B81C5C;
-        Tue, 27 Sep 2022 15:30:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40656C433D6;
-        Tue, 27 Sep 2022 15:30:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664292651;
-        bh=KkONLbw354gmM11QpeIodg4A6ac2eweBJJjS1Gdelbg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M0OG5AB4B++z0w2kxIKqmRVr/IDEaSEIyw4LjNzqXRFmy/sst6+MLtL3WFIwHcpZ7
-         ApLzhyYZ5Lq0R6GEVVJP/TisYm6KB6o6/Ezofob6Q+BRB8WVksv3eo4vupUTLZoGuS
-         Rsn1kwWHlzoOQ7R52pCIabivWdIvAnaOk5Wmeqls=
-Date:   Tue, 27 Sep 2022 17:30:48 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Douglas Su <d0u9.su@outlook.com>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v10 23/27] Kbuild: add Rust support
-Message-ID: <YzMXKOa3It5mcmR3@kroah.com>
-References: <20220927131518.30000-1-ojeda@kernel.org>
- <20220927131518.30000-24-ojeda@kernel.org>
+        Tue, 27 Sep 2022 11:31:13 -0400
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6911A1BB6E3;
+        Tue, 27 Sep 2022 08:31:10 -0700 (PDT)
+Received: from [192.168.4.25] (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id 245014FF60;
+        Tue, 27 Sep 2022 17:31:08 +0200 (CEST)
+Message-ID: <a2b5c35d-ced2-ff83-c550-4bbf29973b80@gpxsee.org>
+Date:   Tue, 27 Sep 2022 17:31:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220927131518.30000-24-ojeda@kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH V4 XDMA 2/2] dmaengine: xilinx: xdma: Add user logic
+ interrupt support
+To:     Lizhi Hou <lizhi.hou@amd.com>, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trix@redhat.com
+Cc:     max.zhen@amd.com, sonal.santan@amd.com, larry.liu@amd.com,
+        brian.xu@amd.com
+References: <1663871905-60498-1-git-send-email-lizhi.hou@amd.com>
+ <1663871905-60498-3-git-send-email-lizhi.hou@amd.com>
+Content-Language: en-US
+From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
+In-Reply-To: <1663871905-60498-3-git-send-email-lizhi.hou@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 03:14:54PM +0200, Miguel Ojeda wrote:
-> Having most of the new files in place, we now enable Rust support
-> in the build system, including `Kconfig` entries related to Rust,
-> the Rust configuration printer and a few other bits.
+On 22. 09. 22 20:38, Lizhi Hou wrote:
+> The Xilinx DMA/Bridge Subsystem for PCIe (XDMA) provides up to 16 user
+> interrupt wires to user logic that generate interrupts to the host.
+> This patch adds APIs to register/unregister interrupt handler for a given
+> interrupt wire index.
 > 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Finn Behrens <me@kloenk.de>
-> Signed-off-by: Finn Behrens <me@kloenk.de>
-> Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
-> Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Co-developed-by: Michael Ellerman <mpe@ellerman.id.au>
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-> Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
-> Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Co-developed-by: Boris-Chengbiao Zhou <bobo1239@web.de>
-> Signed-off-by: Boris-Chengbiao Zhou <bobo1239@web.de>
-> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> Co-developed-by: Douglas Su <d0u9.su@outlook.com>
-> Signed-off-by: Douglas Su <d0u9.su@outlook.com>
-> Co-developed-by: Dariusz Sosnowski <dsosnowski@dsosnowski.pl>
-> Signed-off-by: Dariusz Sosnowski <dsosnowski@dsosnowski.pl>
-> Co-developed-by: Antonio Terceiro <antonio.terceiro@linaro.org>
-> Signed-off-by: Antonio Terceiro <antonio.terceiro@linaro.org>
-> Co-developed-by: Daniel Xu <dxu@dxuuu.xyz>
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> Co-developed-by: Björn Roy Baron <bjorn3_gh@protonmail.com>
-> Signed-off-by: Björn Roy Baron <bjorn3_gh@protonmail.com>
-> Co-developed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-> Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+> Signed-off-by: Sonal Santan <sonal.santan@amd.com>
+> Signed-off-by: Max Zhen <max.zhen@amd.com>
+> Signed-off-by: Brian Xu <brian.xu@amd.com>
 > ---
->  .gitignore                     |   2 +
->  Makefile                       | 172 ++++++++++++++-
->  arch/Kconfig                   |   6 +
->  include/linux/compiler_types.h |   6 +-
->  init/Kconfig                   |  46 +++-
->  kernel/configs/rust.config     |   1 +
->  lib/Kconfig.debug              |  34 +++
->  rust/.gitignore                |   8 +
->  rust/Makefile                  | 381 +++++++++++++++++++++++++++++++++
->  rust/bindgen_parameters        |  21 ++
->  scripts/Kconfig.include        |   6 +-
->  scripts/Makefile               |   3 +
->  scripts/Makefile.build         |  60 ++++++
->  scripts/Makefile.debug         |   8 +
->  scripts/Makefile.host          |  34 ++-
->  scripts/Makefile.lib           |  12 ++
->  scripts/Makefile.modfinal      |   8 +-
->  scripts/cc-version.sh          |  12 +-
->  scripts/kconfig/confdata.c     |  75 +++++++
->  19 files changed, 869 insertions(+), 26 deletions(-)
->  create mode 100644 kernel/configs/rust.config
->  create mode 100644 rust/.gitignore
->  create mode 100644 rust/Makefile
->  create mode 100644 rust/bindgen_parameters
+>   MAINTAINERS                  |  1 +
+>   drivers/dma/xilinx/xdma.c    | 80 ++++++++++++++++++++++++++++++++++++
+>   include/linux/dma/amd_xdma.h | 17 ++++++++
+>   3 files changed, 98 insertions(+)
+>   create mode 100644 include/linux/dma/amd_xdma.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c1be0b2e378a..019d84b2b086 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21691,6 +21691,7 @@ L:	dmaengine@vger.kernel.org
+>   S:	Supported
+>   F:	drivers/dma/xilinx/xdma-regs.h
+>   F:	drivers/dma/xilinx/xdma.c
+> +F:	include/linux/dma/amd_xdma.h
+>   F:	include/linux/platform_data/amd_xdma.h
+>   
+>   XILINX ZYNQMP DPDMA DRIVER
+> diff --git a/drivers/dma/xilinx/xdma.c b/drivers/dma/xilinx/xdma.c
+> index 58a57e03bef5..884942cd2a37 100644
+> --- a/drivers/dma/xilinx/xdma.c
+> +++ b/drivers/dma/xilinx/xdma.c
+> @@ -25,6 +25,7 @@
+>   #include <linux/dmapool.h>
+>   #include <linux/regmap.h>
+>   #include <linux/dmaengine.h>
+> +#include <linux/dma/amd_xdma.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/platform_data/amd_xdma.h>
+>   #include <linux/dma-mapping.h>
+> @@ -736,6 +737,7 @@ static int xdma_set_vector_reg(struct xdma_device *xdev, u32 vec_tbl_start,
+>   static int xdma_irq_init(struct xdma_device *xdev)
+>   {
+>   	u32 irq = xdev->irq_start;
+> +	u32 user_irq_start;
+>   	int i, j, ret;
+>   
+>   	/* return failure if there are not enough IRQs */
+> @@ -786,6 +788,18 @@ static int xdma_irq_init(struct xdma_device *xdev)
+>   		goto failed;
+>   	}
+>   
+> +	/* config user IRQ registers if needed */
+> +	user_irq_start = xdev->h2c_chan_num + xdev->c2h_chan_num;
+> +	if (xdev->irq_num > user_irq_start) {
+> +		ret = xdma_set_vector_reg(xdev, XDMA_IRQ_USER_VEC_NUM,
+> +					  user_irq_start,
+> +					  xdev->irq_num - user_irq_start);
+> +		if (ret) {
+> +			xdma_err(xdev, "failed to set user vectors: %d", ret);
+> +			goto failed;
+> +		}
+> +	}
+> +
+>   	/* enable interrupt */
+>   	ret = xdma_enable_intr(xdev);
+>   	if (ret) {
+> @@ -816,6 +830,72 @@ static bool xdma_filter_fn(struct dma_chan *chan, void *param)
+>   	return true;
+>   }
+>   
+> +/**
+> + * xdma_free_user_irq - Free user interrupt
+> + * @pdev: Pointer to the platform_device structure
+> + * @user_irq_index: User IRQ index
+> + * @arg: User interrupt cookie
+> + */
+> +void xdma_free_user_irq(struct platform_device *pdev, u32 user_irq_index,
+> +			void *arg)
+> +{
+> +	struct xdma_device *xdev = platform_get_drvdata(pdev);
+> +	u32 user_irq;
+> +
+> +	user_irq = xdev->h2c_chan_num + xdev->c2h_chan_num + user_irq_index;
+> +	if (user_irq >= xdev->irq_num) {
+> +		xdma_err(xdev, "invalid user irq index");
+> +		return;
+> +	}
+> +	user_irq += xdev->irq_start;
+> +
+> +	xdma_write_reg(xdev, XDMA_IRQ_BASE, XDMA_IRQ_USER_INT_EN_W1C,
+> +		       (1 << user_irq_index));
+> +
+> +	free_irq(user_irq, arg);
+> +}
+> +EXPORT_SYMBOL(xdma_free_user_irq);
+> +
+> +/**
+> + * xdma_request_user_irq - Register user interrupt
+> + * @pdev: Pointer to the platform_device structure
+> + * @user_irq_index: User IRQ index
+> + * @flags: Handling flags
+> + * @handler: User interrupt handler
+> + * @arg: User interrupt cookie
+> + */
+> +int xdma_request_user_irq(struct platform_device *pdev, u32 user_irq_index,
+> +			  irq_handler_t handler, void *arg, ulong flags)
+> +{
+> +	struct xdma_device *xdev = platform_get_drvdata(pdev);
+> +	u32 user_irq;
+> +	int ret;
+> +
+> +	user_irq = xdev->h2c_chan_num + xdev->c2h_chan_num + user_irq_index;
+> +	if (user_irq >= xdev->irq_num) {
+> +		xdma_err(xdev, "invalid user irq index");
+> +		return -EINVAL;
+> +	}
+> +	user_irq += xdev->irq_start;
+> +
+> +	ret = request_irq(user_irq, handler, flags, "xdma-user", arg);
+> +	if (ret) {
+> +		xdma_err(xdev, "request irq failed, %d", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = xdma_write_reg(xdev, XDMA_IRQ_BASE, XDMA_IRQ_USER_INT_EN_W1S,
+> +			     (1 << user_irq_index));
+> +	if (ret) {
+> +		xdma_err(xdev, "set user irq mask failed, %d", ret);
+> +		free_irq(user_irq, arg);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(xdma_request_user_irq);
+> +
+>   /**
+>    * xdma_remove - Driver remove function
+>    * @pdev: Pointer to the platform_device structure
+> diff --git a/include/linux/dma/amd_xdma.h b/include/linux/dma/amd_xdma.h
+> new file mode 100644
+> index 000000000000..b70486121ca6
+> --- /dev/null
+> +++ b/include/linux/dma/amd_xdma.h
+> @@ -0,0 +1,17 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +/*
+> + * Copyright (C) 2022, Advanced Micro Devices, Inc.
+> + */
+> +
+> +#ifndef _DMAENGINE_AMD_XDMA_H
+> +#define _DMAENGINE_AMD_XDMA_H
+> +
+> +#include <linux/interrupt.h>
+> +#include <linux/platform_device.h>
+> +
+> +int xdma_request_user_irq(struct platform_device *pdev, u32 user_irq_index,
+> +			  irq_handler_t handler, void *arg, ulong flags);
+> +void xdma_free_user_irq(struct platform_device *pdev, u32 user_irq_index,
+> +			void *arg);
+> +
+> +#endif /* _DMAENGINE_AMD_XDMA_H */
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hi,
+The user IRQ logic is unusable, if you have other IP cores with linux 
+drivers (eg. spi or i2c) connected to that IRQs like we (and many other 
+users as well) have on our PCIe card. You can't use the already existing
+xiic or xilinx-spi drivers with your xdma driver!
+
+You must split the "IRQ enable" and "IRQ request" operations for your 
+driver to be usable with the other platform drivers in linux. Instead of
+"xdma_request_user_irq" there must be something like 
+"xdma_enable_user_irq" that only enables the IRQ in the IP block, but 
+does not "eat" the IRQ so you can pass it to the initialization of
+the platform driver of xiic or xilinx-spi.
+
+M.
