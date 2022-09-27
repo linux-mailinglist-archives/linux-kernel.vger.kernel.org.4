@@ -2,365 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123415ECA22
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C70C5ECA1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 18:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbiI0QwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 12:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
+        id S233256AbiI0Qvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 12:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbiI0Quu (ORCPT
+        with ESMTP id S233271AbiI0QuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:50:50 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D0C760F6
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:50:33 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d11so9598921pll.8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:50:33 -0700 (PDT)
+        Tue, 27 Sep 2022 12:50:20 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3907D1F2CD
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:50:18 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3321c2a8d4cso106154737b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 09:50:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=8xPJVfvtY0Vre6T8sLQpiwo/TlsYOEXjgjjpEdLGd7I=;
-        b=KA0zxwE8oLsIjjdK+yd3bCQrz+rXCwKQmChZKj4lWWOBeWoRUo7Cm1kPq0ETEDzw4W
-         tXW6Bm3NST4bV3q3lvqSYkqkCwnpBN21Mehv/pCI/dEBNQJLI+sashVrkSABqP5Kj6WA
-         WH9LZP05vL/A70Hb44WnlY1KlSRudbiwr8MDI=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=vESNePe9n7uejPFfs1w+utJ1cwyq3VqYeQvjK+K3YTk=;
+        b=aU3mY4mPAPL8Y2DkTOPUbIiQVySXBNqOsUTLmktA49l3UNs9/YlO2TV60ZgYj3vPXZ
+         LUGZiSASvDb4yvODdmRKdB+QR/4fxv4qGnjLDH8pPMvHwX+7R+0OGDzUxQkYLgnRIMTA
+         s6vBuGVmKpH2zduXU0kTUJmobtmghsBvRVEvcc3GVDwwY1ndmksJk0uGCYaGhIsS3OzW
+         owBLL5/oNHuHgwYyJzghsb4sqQGRaJOSwkP3qQDaZUBLaMj3Tlcx5lUQDwb5itDbRZXp
+         GqQi0FsJiZbiSsARlgbB0/xIorzd2ftsumw6B0mGhOfJ3OrYzLTvL9KRbSgjImhU2afu
+         knNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=8xPJVfvtY0Vre6T8sLQpiwo/TlsYOEXjgjjpEdLGd7I=;
-        b=dtd24NmGiql3kTW4F9oG5wMOHpasZN9ByZyidPF15dJbvhoV17Qe4MxnL5zMnJJxeE
-         Jh/VVeg7p2TTvLtxE1aaUp4Wmqzo8oCWmm4o5IphQt9zt+SctpyUqSNYtRRkMRCoEn00
-         mwym0CszF8wWP76Aa8gEaevEPuixM6E3XoCyKRqkh0QPPTxELEgTILAUqfvkh5QdcpEZ
-         08A4yvbbPuPG5Ud3UAVN4Zfi0aNTQhJcVlNqsQyXa12fi/BPB3f7IaYZSnpzQRnFNWvj
-         nnJ7ZCbxq3lq26eetoDrFnccrrjlsqL3fkx+Mk33wz5MyGn/H2NwzpCdzpeAv20/jWXR
-         Ln1A==
-X-Gm-Message-State: ACrzQf0LeWL0GSYEWNj4O92NP4iLp5eqiW2lTaXdC7C0j7t7om1SEG+v
-        b+FrRRB1cbUCUE2wNgsc9Q4XBC68UUXg+6nRrEw=
-X-Google-Smtp-Source: AMsMyM4NqrOOxy13OgvGUoNidvS0w8+pqdYG34NUyozHh6ucQibSAG19SaC9hyz+wDmf+bBHGnR6aw==
-X-Received: by 2002:a17:902:ccc2:b0:178:29f9:5c5c with SMTP id z2-20020a170902ccc200b0017829f95c5cmr27498261ple.19.1664297433127;
-        Tue, 27 Sep 2022 09:50:33 -0700 (PDT)
-Received: from evgreen-glaptop.lan ([73.231.74.141])
-        by smtp.gmail.com with ESMTPSA id p13-20020a63950d000000b00434272fe870sm1753509pgd.88.2022.09.27.09.50.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 09:50:32 -0700 (PDT)
-From:   Evan Green <evgreen@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-integrity@vger.kernel.org, apronin@chromium.org,
-        dlunev@google.com, jarkko@kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Ben Boeckel <me@benboeckel.net>, rjw@rjwysocki.net,
-        corbet@lwn.net, linux-pm@vger.kernel.org, zohar@linux.ibm.com,
-        Kees Cook <keescook@chromium.org>,
-        Eric Biggers <ebiggers@kernel.org>, jejb@linux.ibm.com,
-        gwendal@chromium.org, Matthew Garrett <mgarrett@aurora.tech>,
-        Evan Green <evgreen@chromium.org>,
-        Matthew Garrett <mjg59@google.com>, Hao Wu <hao.wu@rubrik.com>,
-        Len Brown <len.brown@intel.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, axelj <axelj@axis.com>
-Subject: [PATCH v3 11/11] PM: hibernate: seal the encryption key with a PCR policy
-Date:   Tue, 27 Sep 2022 09:49:22 -0700
-Message-Id: <20220927094559.v3.11.Ifce072ae1ef1ce39bd681fff55af13a054045d9f@changeid>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220927164922.3383711-1-evgreen@chromium.org>
-References: <20220927164922.3383711-1-evgreen@chromium.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=vESNePe9n7uejPFfs1w+utJ1cwyq3VqYeQvjK+K3YTk=;
+        b=s/MXeSDUsdWNxySsuRZWVurgHa+c3hTgNkUMO+9diS8I7jldaKOfVR+CdOsEPHugxK
+         MF0HREi24K61dsxJ104FoPbIyYF3nL2JpGMiislu23raAI0wlJwSFUjDAEVWThhDflOv
+         XWogIrrkZGs/Y4bPJ5SIibH+E/LUyQa2RMCHviTvROa8mrdPStVHB0dSruXqr3M40UDb
+         spQHO2NcFAdOXe4vCMAk9qUcMVHqAAcN4/7BxmlYtTrc1LmH/dAbDOV6jQ6rsnfokFfM
+         Worw2ytnFXVRHgU3XGtd9J4+Ll6CdMJILcMrqn1tQboHrEf8zs71jI2KKWocqoBAUyFZ
+         oKTQ==
+X-Gm-Message-State: ACrzQf0/kAIgjZF8mCLc63H6rm5sB5SRuVAvNVhq5Ig/8JmTYTu1HntG
+        R20pUJ3V7DdEErHZk4p5te8UYZr5SfPB7BERc47bCg==
+X-Google-Smtp-Source: AMsMyM4CKKRtW+2RFnlNvNc6W+CBVYvfJ2xFQmhBp0HkkEjyqcmvPFQrarolp2eVeL6aIuHNXWImPeCeiR9ci7eeMNc=
+X-Received: by 2002:a0d:d508:0:b0:352:43a6:7ddc with SMTP id
+ x8-20020a0dd508000000b0035243a67ddcmr2574418ywd.55.1664297416738; Tue, 27 Sep
+ 2022 09:50:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220927161209.32939-1-kuniyu@amazon.com> <20220927161209.32939-4-kuniyu@amazon.com>
+In-Reply-To: <20220927161209.32939-4-kuniyu@amazon.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 27 Sep 2022 09:50:04 -0700
+Message-ID: <CANn89iKguA1pAc7wUuWVwuSLJ7+dDRLscY0CEJXNPpg8gphJbg@mail.gmail.com>
+Subject: Re: [PATCH v1 net 3/5] tcp/udp: Call inet6_destroy_sock() in IPv4 sk_prot->destroy().
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>,
+        netdev <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vladislav Yasevich <vyasevic@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The key blob is not secret, and by default the TPM will happily unseal
-it regardless of system state. We can protect against that by sealing
-the secret with a PCR policy - if the current PCR state doesn't match,
-the TPM will refuse to release the secret. For now let's just seal it to
-PCR 23. In the long term we may want a more flexible policy around this,
-such as including PCR 7 for PCs or 0 for Chrome OS.
+On Tue, Sep 27, 2022 at 9:13 AM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+>
+> Originally, inet6_sk(sk)->XXX were changed under lock_sock(), so we were
+> able to clean them up by calling inet6_destroy_sock() during the IPv6 ->
+> IPv4 conversion by IPV6_ADDRFORM.  However, commit 03485f2adcde ("udpv6:
+> Add lockless sendmsg() support") added a lockless memory allocation path,
+> which could cause a memory leak:
+>
+> setsockopt(IPV6_ADDRFORM)                 sendmsg()
+> +-----------------------+                 +-------+
+> - do_ipv6_setsockopt(sk, ...)             - udpv6_sendmsg(sk, ...)
+>   - lock_sock(sk)                           ^._ called via udpv6_prot
+>   - WRITE_ONCE(sk->sk_prot, &tcp_prot)          before WRITE_ONCE()
+>   - inet6_destroy_sock()
+>   - release_sock(sk)                        - ip6_make_skb(sk, ...)
+>                                               ^._ lockless fast path for
+>                                                   the non-corking case
+>
+>                                               - __ip6_append_data(sk, ...)
+>                                                 - ipv6_local_rxpmtu(sk, ...)
+>                                                   - xchg(&np->rxpmtu, skb)
+>                                                     ^._ rxpmtu is never freed.
+>
+>                                             - lock_sock(sk)
+>
+> For now, rxpmtu is only the case, but let's call inet6_destroy_sock()
+> in both TCP/UDP v4 destroy functions not to miss the future change.
+>
+> We can consolidate TCP/UDP v4/v6 destroy functions, but such changes
+> are too invasive to backport to stable.  So, they can be posted as a
+> follow-up later for net-next.
+>
+> Fixes: 03485f2adcde ("udpv6: Add lockless sendmsg() support")
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> ---
+> Cc: Vladislav Yasevich <vyasevic@redhat.com>
+> ---
+>  net/ipv4/tcp_ipv4.c | 5 +++++
+>  net/ipv4/udp.c      | 6 ++++++
+>  net/ipv6/tcp_ipv6.c | 1 -
+>  3 files changed, 11 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> index 5b019ba2b9d2..035b6c52a243 100644
+> --- a/net/ipv4/tcp_ipv4.c
+> +++ b/net/ipv4/tcp_ipv4.c
+> @@ -2263,6 +2263,11 @@ void tcp_v4_destroy_sock(struct sock *sk)
+>         tcp_saved_syn_free(tp);
+>
+>         sk_sockets_allocated_dec(sk);
+> +
+> +#if IS_ENABLED(CONFIG_IPV6)
+> +       if (sk->sk_prot_creator == &tcpv6_prot)
+> +               inet6_destroy_sock(sk);
+> +#endif
+>  }
 
-Link: https://lore.kernel.org/all/20210220013255.1083202-10-matthewgarrett@google.com/
-Co-developed-by: Matthew Garrett <mjg59@google.com>
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-Signed-off-by: Evan Green <evgreen@chromium.org>
+This is ugly, and will not compile with CONFIG_IPV6=m, right ?
 
----
 
-Changes in v3:
- - Changed funky tag to Co-developed-by (Kees)
-
-Changes in v2:
- - Fix sparse warnings
- - Fix session type comment (Andrey)
- - Eliminate extra label in get/create_kernel_key() (Andrey)
- - Call tpm_try_get_ops() before calling tpm2_flush_context().
-
- include/linux/tpm.h    |   4 +
- kernel/power/snapenc.c | 164 ++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 164 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 438f8bc0a50582..cd520efc515bca 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -233,18 +233,22 @@ enum tpm2_command_codes {
- 	TPM2_CC_CONTEXT_LOAD	        = 0x0161,
- 	TPM2_CC_CONTEXT_SAVE	        = 0x0162,
- 	TPM2_CC_FLUSH_CONTEXT	        = 0x0165,
-+	TPM2_CC_START_AUTH_SESSION      = 0x0176,
- 	TPM2_CC_VERIFY_SIGNATURE        = 0x0177,
- 	TPM2_CC_GET_CAPABILITY	        = 0x017A,
- 	TPM2_CC_GET_RANDOM	        = 0x017B,
- 	TPM2_CC_PCR_READ	        = 0x017E,
-+	TPM2_CC_POLICY_PCR              = 0x017F,
- 	TPM2_CC_PCR_EXTEND	        = 0x0182,
- 	TPM2_CC_EVENT_SEQUENCE_COMPLETE = 0x0185,
- 	TPM2_CC_HASH_SEQUENCE_START     = 0x0186,
-+	TPM2_CC_POLICY_GET_DIGEST       = 0x0189,
- 	TPM2_CC_CREATE_LOADED           = 0x0191,
- 	TPM2_CC_LAST		        = 0x0193, /* Spec 1.36 */
- };
- 
- enum tpm2_permanent_handles {
-+	TPM2_RH_NULL		= 0x40000007,
- 	TPM2_RS_PW		= 0x40000009,
- };
- 
-diff --git a/kernel/power/snapenc.c b/kernel/power/snapenc.c
-index 1f08942450775a..02d25f9500cb7f 100644
---- a/kernel/power/snapenc.c
-+++ b/kernel/power/snapenc.c
-@@ -433,6 +433,111 @@ void snapshot_teardown_encryption(struct snapshot_data *data)
- 	memset(data->user_key, 0, sizeof(data->user_key));
- }
- 
-+static int tpm_setup_policy(struct tpm_chip *chip, int *session_handle)
-+{
-+	struct tpm_header *head;
-+	struct tpm_buf buf;
-+	char nonce[32] = {0x00};
-+	int rc;
-+
-+	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS,
-+			  TPM2_CC_START_AUTH_SESSION);
-+	if (rc)
-+		return rc;
-+
-+	/* Decrypt key */
-+	tpm_buf_append_u32(&buf, TPM2_RH_NULL);
-+
-+	/* Auth entity */
-+	tpm_buf_append_u32(&buf, TPM2_RH_NULL);
-+
-+	/* Nonce - blank is fine here */
-+	tpm_buf_append_u16(&buf, sizeof(nonce));
-+	tpm_buf_append(&buf, nonce, sizeof(nonce));
-+
-+	/* Encrypted secret - empty */
-+	tpm_buf_append_u16(&buf, 0);
-+
-+	/* Session type - policy */
-+	tpm_buf_append_u8(&buf, 0x01);
-+
-+	/* Encryption type - NULL */
-+	tpm_buf_append_u16(&buf, TPM_ALG_NULL);
-+
-+	/* Hash type - SHA256 */
-+	tpm_buf_append_u16(&buf, TPM_ALG_SHA256);
-+
-+	rc = tpm_send(chip, buf.data, tpm_buf_length(&buf));
-+	if (rc)
-+		goto out;
-+
-+	head = (struct tpm_header *)buf.data;
-+	if (be32_to_cpu(head->length) != sizeof(struct tpm_header) +
-+	    sizeof(u32) + sizeof(u16) + sizeof(nonce)) {
-+		rc = -EINVAL;
-+		goto out;
-+	}
-+
-+	*session_handle = be32_to_cpu(*(__be32 *)&buf.data[10]);
-+	memcpy(nonce, &buf.data[16], sizeof(nonce));
-+	tpm_buf_destroy(&buf);
-+	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_POLICY_PCR);
-+	if (rc)
-+		return rc;
-+
-+	tpm_buf_append_u32(&buf, *session_handle);
-+
-+	/* PCR digest - read from the PCR, we'll verify creation data later */
-+	tpm_buf_append_u16(&buf, 0);
-+
-+	/* One PCR */
-+	tpm_buf_append_u32(&buf, 1);
-+
-+	/* SHA256 banks */
-+	tpm_buf_append_u16(&buf, TPM_ALG_SHA256);
-+
-+	/* Select PCR 23 */
-+	tpm_buf_append_u32(&buf, 0x03000080);
-+	rc = tpm_send(chip, buf.data, tpm_buf_length(&buf));
-+	if (rc)
-+		goto out;
-+
-+out:
-+	tpm_buf_destroy(&buf);
-+	return rc;
-+}
-+
-+static int tpm_policy_get_digest(struct tpm_chip *chip, int handle,
-+				 char *digest)
-+{
-+	struct tpm_header *head;
-+	struct tpm_buf buf;
-+	int rc;
-+
-+	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_POLICY_GET_DIGEST);
-+	if (rc)
-+		return rc;
-+
-+	tpm_buf_append_u32(&buf, handle);
-+	rc = tpm_send(chip, buf.data, tpm_buf_length(&buf));
-+
-+	if (rc)
-+		goto out;
-+
-+	head = (struct tpm_header *)buf.data;
-+	if (be32_to_cpu(head->length) != sizeof(struct tpm_header) +
-+	    sizeof(u16) + SHA256_DIGEST_SIZE) {
-+		rc = -EINVAL;
-+		goto out;
-+	}
-+
-+	memcpy(digest, &buf.data[12], SHA256_DIGEST_SIZE);
-+
-+out:
-+	tpm_buf_destroy(&buf);
-+	return rc;
-+}
-+
- static int snapshot_setup_encryption_common(struct snapshot_data *data)
- {
- 	int i, rc;
-@@ -492,7 +597,12 @@ static int snapshot_create_kernel_key(struct snapshot_data *data)
- 	struct key *key = NULL;
- 	int ret, i;
- 	/* Create a key sealed by the SRK. */
--	char *keyinfo = "new\t32\tkeyhandle=0x81000000\tcreationpcrs=0x00800000";
-+	char *keyinfo = NULL;
-+	const char *keytemplate =
-+		"new\t32\tkeyhandle=0x81000000\tcreationpcrs=0x00800000\tpolicydigest=%s";
-+	char policy[SHA256_DIGEST_SIZE];
-+	char *policydigest = NULL;
-+	int session_handle = -1;
- 
- 	chip = tpm_default_chip();
- 	if (!chip)
-@@ -524,6 +634,28 @@ static int snapshot_create_kernel_key(struct snapshot_data *data)
- 	if (ret != 0)
- 		goto out;
- 
-+	policydigest = kmalloc(SHA256_DIGEST_SIZE * 2 + 1, GFP_KERNEL);
-+	if (!policydigest) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	ret = tpm_setup_policy(chip, &session_handle);
-+	if (ret != 0)
-+		goto out;
-+
-+	ret = tpm_policy_get_digest(chip, session_handle, policy);
-+	if (ret != 0)
-+		goto out;
-+
-+	bin2hex(policydigest, policy, SHA256_DIGEST_SIZE);
-+	policydigest[SHA256_DIGEST_SIZE * 2] = '\0';
-+	keyinfo = kasprintf(GFP_KERNEL, keytemplate, policydigest);
-+	if (!keyinfo) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
- 	key = key_alloc(&key_type_trusted, "swsusp", GLOBAL_ROOT_UID,
- 			GLOBAL_ROOT_GID, cred, 0, KEY_ALLOC_NOT_IN_QUOTA,
- 			NULL);
-@@ -548,7 +680,16 @@ static int snapshot_create_kernel_key(struct snapshot_data *data)
- 		key_put(key);
- 	}
- 
-+	if (session_handle != -1) {
-+		if (tpm_try_get_ops(chip) == 0) {
-+			tpm2_flush_context(chip, session_handle);
-+			tpm_put_ops(chip);
-+		}
-+	}
-+
- 	kfree(digests);
-+	kfree(keyinfo);
-+	kfree(policydigest);
- 	tpm_pcr_reset(chip, 23);
- 
- out_dev:
-@@ -613,13 +754,14 @@ static int snapshot_load_kernel_key(struct snapshot_data *data,
- 
- 	char certhash[SHA256_DIGEST_SIZE];
- 	const struct cred *cred = current_cred();
--	char *keytemplate = "load\t%s\tkeyhandle=0x81000000";
-+	char *keytemplate = "load\t%s\tkeyhandle=0x81000000\tpolicyhandle=0x%x";
- 	struct tpm_digest *digests = NULL;
- 	char *blobstring = NULL;
- 	char *keyinfo = NULL;
- 	struct tpm_chip *chip;
- 	struct key *key = NULL;
- 	struct trusted_key_payload *payload;
-+	int session_handle = -1;
- 	int i, ret;
- 
- 	chip = tpm_default_chip();
-@@ -652,14 +794,21 @@ static int snapshot_load_kernel_key(struct snapshot_data *data,
- 	if (ret != 0)
- 		goto out;
- 
--	blobstring = kmalloc(blob->blob_len * 2, GFP_KERNEL);
-+	ret = tpm_setup_policy(chip, &session_handle);
-+	if (ret != 0)
-+		goto out;
-+
-+	blobstring = kmalloc(blob->blob_len * 2 + 1, GFP_KERNEL);
- 	if (!blobstring) {
- 		ret = -ENOMEM;
- 		goto out;
- 	}
- 
- 	bin2hex(blobstring, blob->blob, blob->blob_len);
--	keyinfo = kasprintf(GFP_KERNEL, keytemplate, blobstring);
-+	blobstring[blob->blob_len * 2] = '\0';
-+	keyinfo = kasprintf(GFP_KERNEL, keytemplate, blobstring,
-+			    session_handle);
-+
- 	if (!keyinfo) {
- 		ret = -ENOMEM;
- 		goto out;
-@@ -742,6 +891,13 @@ static int snapshot_load_kernel_key(struct snapshot_data *data,
- 		key_put(key);
- 	}
- 
-+	if (session_handle != -1) {
-+		if (tpm_try_get_ops(chip) == 0) {
-+			tpm2_flush_context(chip, session_handle);
-+			tpm_put_ops(chip);
-+		}
-+	}
-+
- 	kfree(keyinfo);
- 	kfree(blobstring);
- 	kfree(digests);
--- 
-2.31.0
-
+>  EXPORT_SYMBOL(tcp_v4_destroy_sock);
+>
+> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> index 560d9eadeaa5..cdf131c0a819 100644
+> --- a/net/ipv4/udp.c
+> +++ b/net/ipv4/udp.c
+> @@ -115,6 +115,7 @@
+>  #include <net/udp_tunnel.h>
+>  #if IS_ENABLED(CONFIG_IPV6)
+>  #include <net/ipv6_stubs.h>
+> +#include <net/transp_v6.h>
+>  #endif
+>
+>  struct udp_table udp_table __read_mostly;
+> @@ -2666,6 +2667,11 @@ void udp_destroy_sock(struct sock *sk)
+>                 if (up->encap_enabled)
+>                         static_branch_dec(&udp_encap_needed_key);
+>         }
+> +
+> +#if IS_ENABLED(CONFIG_IPV6)
+> +       if (sk->sk_prot_creator == &udpv6_prot)
+> +               inet6_destroy_sock(sk);
+> +#endif
+>  }
+>
+>  /*
+> diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+> index e54eee80ce5f..1ff6a92f7774 100644
+> --- a/net/ipv6/tcp_ipv6.c
+> +++ b/net/ipv6/tcp_ipv6.c
+> @@ -1945,7 +1945,6 @@ static int tcp_v6_init_sock(struct sock *sk)
+>  static void tcp_v6_destroy_sock(struct sock *sk)
+>  {
+>         tcp_v4_destroy_sock(sk);
+> -       inet6_destroy_sock(sk);
+>  }
+>
+>  #ifdef CONFIG_PROC_FS
+> --
+> 2.30.2
+>
