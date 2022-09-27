@@ -2,103 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D0E5EC076
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA26C5EC078
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbiI0LFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
+        id S231675AbiI0LFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbiI0LEt (ORCPT
+        with ESMTP id S231785AbiI0LEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:04:49 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2089.outbound.protection.outlook.com [40.107.220.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21E3883EF;
-        Tue, 27 Sep 2022 04:04:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iwcdpGVj22IqJHK2jT/4cfH35o42Y8e+gd8uE+MBJvFpTUkNFC7KcnAjJpfPjL1uWCh4DOt22tYC4rCNfTACGErlenvDhilrnAr7AeVpUvZmte8uXu4RjUjD2Q49X1GR6IEN3hVyivUfZ+eqlejTVN0GPkfwxcQ7gbDjzgFETiqF2xFf/YBm07j9cR5upDy3KgeVu79TxOaFeYjB2sOK5GPlgYrTPFEs85omFir2sq3YLYsUI5cPyeF59eKu8OnbqMnUEFxBuZMnDwOA8iXh3n3/Y+sBTwjBurKhqRR7Ydp6wgpLoz0IbzRTxjxIGpnd/Seb0CIfURkv51lvRY81Hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z+Fgv61ZntO2i1SF5cSqfajeQcxczsEL7y6Ae0F//pc=;
- b=CIIeNOEWRhsS4f2m4/ag8tw7URQUD0cU2kU+/8T/vpa4Dk6FjDHS01gAKvZa0FinuQrrG53AGSCCJzDiMnK65DU5j8lYQp1oRZtX0WFzdxzTjj0M1/F4EsFmAsVO5CxGeObfa7YRDlijQf6XZGVuKwC7npjWDUmDnpqWkpxpxZYl7R+/9ZJMX+whW6kGmqGvmsU1mQL4Jb0IkUtnVIoB/iaYqfHmSw8J/7q3dArIS6AaacnKV3RkZaQ4XbwKD9MB1Le+4A4IyblDJG58stEpVH8A4qcfXN19OcWwHnw0Y49oKBU/FPYCG0g/wykLDE9C9+Ga7XYL3qBoXvdqtR7fkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux-watchdog.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z+Fgv61ZntO2i1SF5cSqfajeQcxczsEL7y6Ae0F//pc=;
- b=KSc+HcrjYdFaLngnYKAaOqNhbfrhhRY9eXVPVBP3BbGZAg2sckPSPSwwbibRUJnE5MNBIsYD+GzkLVGVXEJVW9uFBmwKc3ls2tg7QUdhcCu4OeyquZOmEqD7pq7uKt/k663wwQQroeb6ROqABnwvEAGU9Yr6OUICKmCCH4ZJqcw=
-Received: from BN9PR03CA0429.namprd03.prod.outlook.com (2603:10b6:408:113::14)
- by MN2PR12MB4080.namprd12.prod.outlook.com (2603:10b6:208:1d9::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Tue, 27 Sep
- 2022 11:03:39 +0000
-Received: from BN8NAM11FT047.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:113:cafe::d2) by BN9PR03CA0429.outlook.office365.com
- (2603:10b6:408:113::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17 via Frontend
- Transport; Tue, 27 Sep 2022 11:03:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT047.mail.protection.outlook.com (10.13.177.220) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5654.14 via Frontend Transport; Tue, 27 Sep 2022 11:03:38 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 27 Sep
- 2022 06:03:38 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 27 Sep
- 2022 06:03:37 -0500
-Received: from xhdsneeli40u.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Tue, 27 Sep 2022 06:03:34 -0500
-From:   Srinivas Neeli <srinivas.neeli@amd.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <srinivas.neeli@amd.com>, <shubhrajyoti.datta@amd.com>,
-        <michal.simek@amd.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <git@amd.com>
-Subject: [PATCH 3/3] MAINTAINERS: Add fragment for Xilinx watchdog drivers
-Date:   Tue, 27 Sep 2022 16:32:57 +0530
-Message-ID: <20220927110257.41963-4-srinivas.neeli@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220927110257.41963-1-srinivas.neeli@amd.com>
-References: <20220927110257.41963-1-srinivas.neeli@amd.com>
+        Tue, 27 Sep 2022 07:04:52 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA371181D1;
+        Tue, 27 Sep 2022 04:04:11 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id n10so14366741wrw.12;
+        Tue, 27 Sep 2022 04:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=SlT4G31LyDkVE9RdTsAk0Xmm8HNoPPrCQMm+8arXy7Y=;
+        b=amNOsRyjYkO8XdkwO5ztHyAatXtUJ36hjyxKkXEp3GgfvBS93ZUhV7PFm7XbuBD7w7
+         rOWbqj1TkUbjJTMQHbuGHe3CQU0/KlImGAFa/qoEtHtMFIGvzjEXFrarJI7O1+Bk4/4R
+         4bogzwrj888Io3h6iNtywyiCWp/xBt/PLgfEf7wRlTCsE/kaiQ0Hf9CkOm2+Yg97VzvC
+         fUyc8fBNQEZgXYRSiLAGzAVkGSt0n7R0PmhlhQjpBrYfnah9DzdK0S6nLHyA4VdS644j
+         xx4EUDkR+PPSHBQRR5883yxCFAzWSCF10C1xj3BHDYspPmLSTkhqGlA23ny1pYBCcj4A
+         lrlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=SlT4G31LyDkVE9RdTsAk0Xmm8HNoPPrCQMm+8arXy7Y=;
+        b=SIC5xh2qR/kUD6M+4IDsT3+kWsGPefQ8pfYayY7lSt4BRYPhx8A/iXPHax7skZKLQF
+         6ZGugOCYENVJNPJ96RDP7eNJk2flQiSdXn5+nGTsN7fX0a6UvGpbcT4GwIyZAPMEcdaj
+         EFLakFCtheBzv4mI3loS7XGRJL4c67P6q1CAs2r2AxYsoOBKifXoZeTqQ+ZSgvBh01w3
+         NplIW/OSkwIC4YFk9U42cO4NeGfDMj7ZrV4lPTRsOZf38mhtKsLD7TvyTSJ8gHHbSPhi
+         En9+/4Lrb6I4FioiF0RQ5NdYGvTtZg7u4Duqh/IXTN7T08UUi2cTZLy9HowKyIPb+bxz
+         QLEQ==
+X-Gm-Message-State: ACrzQf3gaKglZpOWEyBjfbRxqQw4EQ6B+WemXTitqv4G+ZftVPjBlDNc
+        miC3KxKMdkap2f3SlvhjIyQ=
+X-Google-Smtp-Source: AMsMyM4Q05QpyOpNqR1iTDEuA5m9s5fEBIkXTQnTLe2W0fa3aFmyX5AiLtGP62/VPgs7EIZUTz1oXg==
+X-Received: by 2002:a5d:5351:0:b0:22c:be67:9542 with SMTP id t17-20020a5d5351000000b0022cbe679542mr1320397wrv.203.1664276623800;
+        Tue, 27 Sep 2022 04:03:43 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id j3-20020a05600c488300b003a844885f88sm1359328wmp.22.2022.09.27.04.03.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 04:03:43 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 12:03:41 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/138] 5.10.146-rc2 review
+Message-ID: <YzLYjXJWQF+0xqY8@debian>
+References: <20220926163550.904900693@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT047:EE_|MN2PR12MB4080:EE_
-X-MS-Office365-Filtering-Correlation-Id: da7a8fd8-7aee-4237-e671-08daa077ee6f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: p3QlUlQpHeCMwfVmrOIE4mYciMsm2eSAwuw92aj5J8l3M8R+OgXP8yGgxVBF9EYM+ro6RF7blWpRotyQZTL/7jfsv+IUht5dzocP4OUHoddm3ZP9hTeOkZj+fddpTBmojFYzGb0yzgdpZhBiF7bBXDvIFb4IYlw0iUsp17HACjKpS/mxPkcpLDkcsf1me2VyAT2re+7O5hknjfh426/VpHZHqEwwRfLmw9lcOmWy6XtpBUttdyCukTt9FIfzjevI6ao633cJjrQOnNFB0IDADT0IRlk5VWiOTNesSnbxjR3n/GWpA30aeL7a40hLgsv6ay4fCpVwANv6rmBprrPvxnBFJWePL7XjzRAk+CypeTXGW6GoDGAX7yBdusCU7mo+MnKoZpdvcYOEs+ZVAoUicYwXA2zZyV2/X4ZyBc+22uEKYmH60/gsD6Pe3xMDfcidwEv/AO/MJXozJrkybWNwv2aoIbZ1Bio+UQPNJPqwtz77f/lrbHFdHYQj/1R9tS7hvbz72bItNkO17Pd434yb3QA4gHPVoSgLIexkaOHwpKGG+Sx5Z1ytVFWwAo44Hx1LckSgv9aspOTmxSAVV/63fMaKruJw7YVNvM2GIpIAd6oggjYLdTbKkBOF5nQt+j3uiqrF7tHR8JkehQeB3/73Ed959BTJrsOr2wlJzaDrKz68ttEmzdOCnPs9JLIHXsSID/0/5m1nI0rfxsSGrwg36FTPUwhrh/3kDZrZCyDEuwiuY4VaMUa2JDze7bit8E5leAW7udvjzqwfk9VC25k67lyTJMl7QPxW6r/iztbmi+Q=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(376002)(346002)(136003)(451199015)(40470700004)(46966006)(36840700001)(81166007)(356005)(336012)(186003)(36860700001)(426003)(2616005)(82740400003)(1076003)(26005)(478600001)(41300700001)(8936002)(6666004)(47076005)(70206006)(4326008)(70586007)(8676002)(5660300002)(2906002)(82310400005)(40460700003)(44832011)(4744005)(110136005)(40480700001)(316002)(54906003)(36756003)(86362001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 11:03:38.7584
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: da7a8fd8-7aee-4237-e671-08daa077ee6f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT047.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4080
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220926163550.904900693@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,34 +73,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added entry for Xilinx WATCHDOG drivers.
+Hi Greg,
 
-Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
----
- MAINTAINERS | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+On Mon, Sep 26, 2022 at 06:36:58PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.146 release.
+> There are 138 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 28 Sep 2022 16:35:25 +0000.
+> Anything received after that time might be too late.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a34ec41fbf7a..b9771287276e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22548,6 +22548,16 @@ F:	Documentation/devicetree/bindings/media/xilinx/
- F:	drivers/media/platform/xilinx/
- F:	include/uapi/linux/xilinx-v4l2-controls.h
- 
-+XILINX WATCHDOG DRIVER
-+M:	Srinivas Neeli <srinivas.neeli@amd.com>
-+R:	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-+R:	Michal Simek <michal.simek@amd.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
-+F:	Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
-+F:	drivers/watchdog/of_xilinx_wdt.c
-+F:	drivers/watchdog/xilinx_wwdt.c
-+
- XILINX ZYNQMP DPDMA DRIVER
- M:	Hyun Kwon <hyun.kwon@xilinx.com>
- M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
--- 
-2.17.1
+Build test (gcc version 11.3.1 20220925):
+mips: 63 configs -> no failure
+arm: 104 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/1905
+[2]. https://openqa.qa.codethink.co.uk/tests/1908
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
