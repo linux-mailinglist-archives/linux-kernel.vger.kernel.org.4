@@ -2,203 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FDC45EC348
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9635EC34B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiI0Mt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
+        id S231890AbiI0Mtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbiI0MtT (ORCPT
+        with ESMTP id S231672AbiI0Mtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:49:19 -0400
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CC4167066;
-        Tue, 27 Sep 2022 05:49:17 -0700 (PDT)
-Received: by mail-qk1-f175.google.com with SMTP id x18so5911004qkn.6;
-        Tue, 27 Sep 2022 05:49:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=kxKNS5DDyDVwQYf8SSh+Z282XSXl8OO2BaUjOfJxTOs=;
-        b=xb6AyPT0DL1frZJ//0cOhbZdCmM8J0lIRf1W6Pmx9QR/wzkQOLYzooofyE033sdQT4
-         BVhg9ssWXT74uSFLT0DM+441DkrbYQJIigzv9desA8Poa3mDemECt//lO0IJGHgpA0Cq
-         V57BkUfYvtC8vIfogrIvouNHfZch3XwNYKM5jRoq1EYvbSGe9PPcfCYehdRQnZIfQViH
-         J/xMC2dAHAapwcBxP9KrV/0CKaXCkpsLIeVMGMiGT9+ex7qXXVogKizDA5HZryJPa0sq
-         i8/A03XLyzBvMIwMGW2CBuH9I0IgPEjUUoKUK3G1bZNDGypbgsh7M8guQdinP969h/J9
-         SZ6Q==
-X-Gm-Message-State: ACrzQf3rQ0d/VHEdO7GWNciJu+Az6WGZGnJeAkUJFId1thvI8UEsOBmi
-        /UPL+gM79Ns3/SPmDvi2lNIoEH5hWr5JUQ==
-X-Google-Smtp-Source: AMsMyM4CyBLabq0ZbBgwCR3Gqlzbn0bg99UnLwPevLhtmzH5TJDJkERMQLybGBIbqSfb1g5ZxmyyPA==
-X-Received: by 2002:a37:852:0:b0:6cf:7510:3c91 with SMTP id 79-20020a370852000000b006cf75103c91mr14259370qki.657.1664282956686;
-        Tue, 27 Sep 2022 05:49:16 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id c25-20020a05620a269900b006cea2984c9bsm939654qkp.100.2022.09.27.05.49.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 05:49:16 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 4so3923511ybe.2;
-        Tue, 27 Sep 2022 05:49:15 -0700 (PDT)
-X-Received: by 2002:a25:8e84:0:b0:696:466c:baa with SMTP id
- q4-20020a258e84000000b00696466c0baamr24148017ybl.604.1664282955514; Tue, 27
- Sep 2022 05:49:15 -0700 (PDT)
+        Tue, 27 Sep 2022 08:49:39 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C916958B;
+        Tue, 27 Sep 2022 05:49:32 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VQs4TXf_1664282967;
+Received: from 30.240.121.51(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VQs4TXf_1664282967)
+          by smtp.aliyun-inc.com;
+          Tue, 27 Sep 2022 20:49:28 +0800
+Message-ID: <2085a695-7fa2-b560-3164-c62cb17dd5f7@linux.alibaba.com>
+Date:   Tue, 27 Sep 2022 20:49:26 +0800
 MIME-Version: 1.0
-References: <20220609150851.23084-1-max.oss.09@gmail.com> <CACRpkdZ0=8poNcFaCYSmMyg1GBfkHLAr3QvvzFKweLPr3UM2vg@mail.gmail.com>
- <CAEHkU3Wya0nRhaBDisAQBm5kf=2YcdJYzz2jKiL___mZQzL_Sw@mail.gmail.com>
- <CAPDyKFrEYCx3L94gz27Pk_=HdwA4GNGE9Lvz+HGUW0P7Qt-mBw@mail.gmail.com>
- <20220726160337.GA41736@francesco-nb.int.toradex.com> <CAPDyKFqGFjywJ-Vmmn9=-NOzJX=24mH9A03H9djS=nJotKWK8A@mail.gmail.com>
- <20220728112146.GA97654@francesco-nb.int.toradex.com> <CAPDyKFqtCxrjALeCmhuqQ2VmmUHhi-DjXO30uHChTPFeDbp+JQ@mail.gmail.com>
- <20220909142247.GA238001@francesco-nb.int.toradex.com> <CAPDyKFrwpz=gi3iY5YsO6k4o33eLQRp-wXvBx3nQ0q=G9YrqHA@mail.gmail.com>
- <70ee4f8e-7529-307e-656c-2a65d0187af6@linaro.org> <CAPDyKFoyNWZvT+QPdX4sQuS3DL8mepfnLraHLusMi9K8MOfLgg@mail.gmail.com>
- <d19ffd93-bbb3-ac61-0ec3-58fd48443eb2@linaro.org> <CAPDyKFrDFAif3DnvPoLrgJ2+fv+aB9GyOoG_O3q-1m=2Y5eT5w@mail.gmail.com>
-In-Reply-To: <CAPDyKFrDFAif3DnvPoLrgJ2+fv+aB9GyOoG_O3q-1m=2Y5eT5w@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 27 Sep 2022 14:49:02 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVteS1va320fAAx445eFQ75XnapQbeGWEkg2aagnjN6Jg@mail.gmail.com>
-Message-ID: <CAMuHMdVteS1va320fAAx445eFQ75XnapQbeGWEkg2aagnjN6Jg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
- which controls
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Max Krummenacher <max.oss.09@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v1 2/3] drivers/perf: add DesignWare PCIe PMU driver
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        rdunlap@infradead.org, mark.rutland@arm.com,
+        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
+        linux-pci@vger.kernel.org
+References: <20220926171857.GA1609097@bhelgaas>
+ <7502d496-9ec1-1ca4-c643-376ec2aa662e@linux.alibaba.com>
+ <20220927110435.00005b4d@huawei.com>
+ <5372edb4-5717-42a0-142e-91657a9b18c3@arm.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <5372edb4-5717-42a0-142e-91657a9b18c3@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ulf,
 
-On Tue, Sep 27, 2022 at 11:49 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > >>>> The main concern that was raised on this topic was that we have to
-> > >>>> somehow link the power-domain to the specific peripherals (the power
-> > >>>> domain consumer) in the device tree.
-> > >>>
-> > >>> Yes, that is needed. Although, I don't see how that is a concern?
-> > >>>
-> > >>> We already have the valid bindings to use for this, see more below.
-> > >>>
-> > >>>>
-> > >>>> Adding the power-domain property there will trigger validation errors
-> > >>>> unless we do explicitly add the power-domains to the schema for each
-> > >>>> peripheral we need this. To me this does not really work, but maybe I'm
-> > >>>> not understanding something.
-> > >>>>
-> > >>>> This is what Rob wrote on the topic [1]:
-> > >>>>   > No. For 'power-domains' bindings have to define how many there are and
-> > >>>>   > what each one is.
-> > >>>>
-> > >>>> Just as an example from patch [2]:
-> > >>>>
-> > >>>>   can1: can@0 {
-> > >>>>     compatible = "microchip,mcp251xfd";
-> > >>>>     power-domains = <&pd_sleep_moci>;
-> > >>>>   };
-> > >>>>
-> > >>>> leads to:
-> > >>>>
-> > >>>>   imx8mm-verdin-nonwifi-dahlia.dtb: can@0: 'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
-> > >>>>           From schema: .../bindings/net/can/microchip,mcp251xfd.yaml
-> > >>>
-> > >>> I think it should be fine to just add the below line to the DT
-> > >>> bindings, for each peripheral device to fix the above problem.
-> > >>>
-> > >>> power-domains: true
-> > >>
-> > >> Again, as Rob said, no, because it must be strictly defined. So for
-> > >> example: "maxItems: 1" for simple cases. But what if device is then part
-> > >> of two power domains?
-> > >>
-> > >>>
-> > >>> That should be okay, right?
-> > >>
-> > >> Adding it to each peripheral scales poorly. Especially that literally
-> > >> any device can be part of such power domain.
-> > >
-> > > Right.
-> > >
-> > >>
-> > >> If we are going with power domain approach, then it should be applicable
-> > >> basically to every device or to every device of some class (e.g. I2C,
-> > >> SPI). This means it should be added to respective core schema in
-> > >> dtschema repo, in a way it does not interfere with other power-domains
-> > >> properties (existing ones).
-> > >
-> > > Isn't that already taken care of [1]?
-> >
-> > No, because it does not define the items (what are the power domains and
-> > how many). This binding expects that any device has maxItems restricting it.
->
-> Right, apologize for my ignorance.
->
-> >
-> > >
-> > > If there is more than one power domain per device, perhaps we may need
-> > > to extend it with a more strict binding? But, that doesn't seem to be
-> > > the case here - and if it turns out to be needed later on, we can
-> > > always extend the bindings, no?
-> > >
-> > > Note also that we already have DT bindings specifying "power-domains:
-> > > true" to deal with the above. Isn't that what we want?
-> >
-> > You mentioned it before and both me and Rob already responded - no,
-> > because it does not restrict the number of items.
->
-> Okay, so maxItems need to be specified for each peripheral. It's not a
-> big deal, right?
->
-> Of course, it would be even easier if the core schema would use a
-> default "maxItems: 1" for power domain consumers, which of course must
-> be possible to be overridden for those consumers that need something
-> else. But perhaps it's not that simple. :-)
++ Jonathan
 
-It's not that simple: being part of a PM Domain is not a property of the
-device being described, but a property of the integration into the SoC.
+在 2022/9/27 PM6:14, Robin Murphy 写道:
+> On 2022-09-27 11:04, Jonathan Cameron wrote:
+>> On Tue, 27 Sep 2022 13:13:29 +0800
+>> Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+>>
+>>> 在 2022/9/27 AM1:18, Bjorn Helgaas 写道:
+>>>> On Mon, Sep 26, 2022 at 09:31:34PM +0800, Shuai Xue wrote:
+>>>>> 在 2022/9/23 PM11:54, Jonathan Cameron 写道:
+>>>>>>> I found a similar definition in arch/ia64/pci/pci.c .
+>>>>>>>
+>>>>>>>     #define PCI_SAL_ADDRESS(seg, bus, devfn, reg)        \
+>>>>>>>     (((u64) seg << 24) | (bus << 16) | (devfn << 8) | (reg))
+>>>>>>>
+>>>>>>> Should we move it into a common header first?
+>>>>>>
+>>>>>> Maybe. The bus, devfn, reg part is standard bdf, but I don't think
+>>>>>> the PCI 6.0 spec defined a version with the seg in the upper bits.
+>>>>>> I'm not sure if we want to adopt that in LInux.
+>>>>>
+>>>>> I found lots of code use seg,bus,devfn,reg with format "%04x:%02x:%02x.%x",
+>>>>> I am not quite familiar with PCIe spec. What do you think about it, Bjorn?
+>>>>
+>>>> The PCIe spec defines an address encoding for bus/device/function/reg
+>>>> for the purposes of ECAM (PCIe r6.0, sec 7.2.2), but as far as I know,
+>>>> it doesn't define anything similar that includes the segment.  The
+>>>> segment is really outside the scope of PCIe because each segment is a
+>>>> completely separate PCIe hierarchy.
+>>>
+>>> Thank you for your explanation.
+>>>
+>>>>
+>>>> So I probably wouldn't make this a generic definition.  But if/when
+>>>> you print things like this out, please do use the format spec you
+>>>> mentioned above so it matches the style used elsewhere.
+>>>>    
+>>>
+>>> Agree. The print format of bus/device/function/reg is "%04x:%02x:%02x.%x",
+>>> so I named the PMU as the same format. Then the usage flow would be:
+>>>
+>>> - lspci to get the device root port in format seg/bus/device/function/reg.
+>>>     10:00.0 PCI bridge: Device 1ded:8000 (rev 01)
+>>> - select its PMU name pcie_bdf_100000.
+>>> - monitor with perf:
+>>>     perf stat -a -e pcie_bdf_100000/Rx_PCIe_TLP_Data_Payload/
+>>
+>> I think you probably want something in there to indicate it's an RP
+>> and the bdf part may be redundant...
+> 
+> Indeed that seems horribly unclear; personally I reckon something like "dw_pcie_200" would be more appropriate. The address is just a disambiguator between multiple instances so doesn't need any further emphasis, but what is crucial to the user is exactly what kind of PMU it is (especially if there's potential for other unrelated PCIe functions to start exposing their own different PMUs).
 
-All synchronous hardware needs power (single/multiple), clock(s), and
-reset(s).  But the granularity of control over power(s), clocks, and resets
-depends on the integration.  So the related properties can appear
-anywhere.
+I see your point. The current prefix `pcie_bdf` is not appropriate,
 
-Gr{oetje,eeting}s,
+- it does not indicate it is for a root point as Jonathan mentioned.
+- its prefix is not `dwc`
 
-                        Geert
+Is dwc_rootport_100000 more appropriate?
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+- `dwc` indicates the PMU is for Synopsys DesignWare Cores PCIe controller IP
+- `rootport` indicates the PMU is for a root port device
+- `100000` indicates the device address
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+Thank you.
+
+Best Regards,
+Shuai
+
+
+
