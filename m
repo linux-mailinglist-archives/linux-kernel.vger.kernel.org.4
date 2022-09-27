@@ -2,129 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3705EC51C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6225EC523
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 15:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbiI0N5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 09:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
+        id S230264AbiI0N5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 09:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbiI0N5S (ORCPT
+        with ESMTP id S232833AbiI0N5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 09:57:18 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F8D146F91
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:57:13 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id j16so15877359lfg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 06:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ev3n3HXsdxmctruPXinckwm0/GHt4MhpPRr9m0oOsZc=;
-        b=Bg3/vWwxHWbjWj+yyqdJTk09hhh/aL9pHflbIUI6Lnhex/jdIXnWo97O4rpLarE4k/
-         YnO54AwZUehrw1kGbcEYJNIhJJDKW8XAM8TSOgpnq2YCbDQctFYJQyJDVT2a+aquyQFF
-         SbXR1A8jHGrzXakcSYBebs6Howdb3o/VWjoPLt9TBqg5QIV9p2O0mxJlzlTWVND7GEwk
-         m1RDnZNEeLkLzoDgHyxN4tuxoxt0MUqaxDuepIm1GzBXdSSkjBspxvoDen3ydYRi9Vuo
-         MWq64ggmaStqY3MpKxYl2xhwwWV5kwhjBX73w8d+heu5r1Mth2kObEPHol9+GksUioYu
-         UN8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ev3n3HXsdxmctruPXinckwm0/GHt4MhpPRr9m0oOsZc=;
-        b=leKEVB9vYg7kv0ERdVVKGsukQ9LurV2uxVjMeEBHqYSxWpMI5f15z8dNETZaHZxbpy
-         TOHZqz9b7qyxWyFXOTC47ewVsfIrTQ04s9YcoQxs+6k6sxD/fVMUXlKLY7SKecpDhkUx
-         wsGtqC/cBPHaFAFEjzJzm6KRKsJHSRwerMbFcfx0UDJIRQlxiQiLpwFDtNUnpun3Y1AA
-         kuBuQxIU4C3ycQ+KLy7xgaIEpcbvETO85e58pMGB59kJLl5gXiIZZdTEuX3FD3i7oE84
-         In3PxbK64G3kVN3UfbdyLujwnOzfOv6AvBKnDxAJjxa4DuNf84Ut5HhPYDuYzX+VWvdT
-         vAww==
-X-Gm-Message-State: ACrzQf1j9LbSn8mfVBoQx2ITHkBbkbBGVhfkFkpyOwNqkdV+ngPsAosS
-        TqkLDnzgUk9egQESzrpMba3Aaw==
-X-Google-Smtp-Source: AMsMyM6M47O8+8lVhBzSBboPo/7X+DVhNqB4VwbBpU1UI/8S5RUtO9VL4jj56EPB413fC/SuD5EwBA==
-X-Received: by 2002:ac2:464b:0:b0:49e:b29c:2b04 with SMTP id s11-20020ac2464b000000b0049eb29c2b04mr10772069lfo.127.1664287031342;
-        Tue, 27 Sep 2022 06:57:11 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id i18-20020a056512007200b004a1e592837esm170924lfo.140.2022.09.27.06.57.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 06:57:09 -0700 (PDT)
-Message-ID: <1029e512-02f0-8d08-2994-6440fa9c033d@linaro.org>
-Date:   Tue, 27 Sep 2022 15:57:08 +0200
+        Tue, 27 Sep 2022 09:57:33 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E392714C041;
+        Tue, 27 Sep 2022 06:57:24 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RDMXAp029438;
+        Tue, 27 Sep 2022 13:57:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=YTNldlmgui/QlWqHWQNcU+pyYSg6pkhk49atqSSD1lo=;
+ b=n88goIsASEoRHD/uNnyhOJK0er60k3Q3SM0dLftfFd5GznXw9GkPgWsLSbGJ8VxYbtQG
+ +u1VnOgEkVi+6MwkVRqnTAM03oY/PtDKPHLD+I7tHubgC/T02ojO52ZIBLceJntVK/o9
+ VMjfopVECbilW6cphEAvl9Qnj+gQHtB3VWbMSL6/DQeglEfT14+HgssSooz8hinjXYIj
+ n5L6qIXklUkUb4BkYk8wuyioyfiSlk7SykxAPJw4nWtMy2Mo/V28VHAr2jxOGxrq++Y3
+ SU/9tClWIX3Eaqujx17shVSnZFv6hFe0oCA0Zqv25GamWDzpkBUj6sZ8W7KVJwGXWZrP Mg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3juw260t9q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 13:57:14 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28RDvDjc032324
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 13:57:13 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 27 Sep
+ 2022 06:57:12 -0700
+Message-ID: <6e5a8bb0-f659-fd6c-a45c-4bcfa537fc5b@quicinc.com>
+Date:   Tue, 27 Sep 2022 07:57:11 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 25/32] dt-bindings: pinctrl: qcom,qcm2290: do not require
- function on non-GPIOs
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] bus: mhi: host: Use mhi_soc_reset() API in place of
+ register write
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sricharan R <sricharan@codeaurora.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220924080459.13084-1-krzysztof.kozlowski@linaro.org>
- <20220924080459.13084-26-krzysztof.kozlowski@linaro.org>
- <CAA8EJppxWu86+t=nejrqe_TnhoMLjtvWcvAaQA1awx3qW0t=fw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAA8EJppxWu86+t=nejrqe_TnhoMLjtvWcvAaQA1awx3qW0t=fw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Qiang Yu <quic_qianyu@quicinc.com>, <mani@kernel.org>,
+        <quic_hemantk@quicinc.com>, <loic.poulain@linaro.org>
+CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_cang@quicinc.com>,
+        <mrana@quicinc.com>
+References: <1664272126-82706-1-git-send-email-quic_qianyu@quicinc.com>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <1664272126-82706-1-git-send-email-quic_qianyu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: H38ixZaWndpGTN84bCpkPFmmbsYnYMk9
+X-Proofpoint-ORIG-GUID: H38ixZaWndpGTN84bCpkPFmmbsYnYMk9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-27_05,2022-09-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 mlxlogscore=894 mlxscore=0 spamscore=0 impostorscore=0
+ phishscore=0 clxscore=1011 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209270085
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/09/2022 13:42, Dmitry Baryshkov wrote:
-> On Sat, 24 Sept 2022 at 11:07, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> Certain pins, like SDcard related, do not have functions and such should
->> not be required.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  .../bindings/pinctrl/qcom,qcm2290-pinctrl.yaml        | 11 ++++++++++-
->>  1 file changed, 10 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-pinctrl.yaml
->> index 5324b61eb4f7..89453cb60c12 100644
->> --- a/Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-pinctrl.yaml
->> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-pinctrl.yaml
->> @@ -60,7 +60,6 @@ patternProperties:
->>      description:
->>        Pinctrl node's client devices use subnodes for desired pin configuration.
->>        Client device subnodes use below standard properties.
->> -    $ref: "qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state"
->>
->>      properties:
->>        pins:
->> @@ -116,6 +115,16 @@ patternProperties:
->>      required:
->>        - pins
->>
->> +    allOf:
+On 9/27/2022 3:48 AM, Qiang Yu wrote:
+> Currently, a direct register write is used when ramdump collection
+> in panic path occurs. Replace that with new mhi_soc_reset() API
+> such that a controller defined reset() function is exercised if
+> one is present and the regular SOC reset is done if it is not.
 > 
-> Nit: I think you can drop allOf here and move the $ref up a few lines.
-> 
+> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
+> ---
 
-It's anyway different in v2 - there is no if:then.
-
-Best regards,
-Krzysztof
-
+Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
