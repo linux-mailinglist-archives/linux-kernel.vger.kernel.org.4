@@ -2,45 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B19505EC7D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5F25EC7D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 17:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232254AbiI0Pdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 11:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47750 "EHLO
+        id S232258AbiI0PeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 11:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbiI0Pdu (ORCPT
+        with ESMTP id S232171AbiI0PeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:33:50 -0400
-Received: from mail-m118206.qiye.163.com (mail-m118206.qiye.163.com [115.236.118.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D9481C430A
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 08:33:46 -0700 (PDT)
-Received: from lyc-workstation.. (unknown [221.212.176.62])
-        by mail-m118206.qiye.163.com (HMail) with ESMTPA id A789EBE0C0F;
-        Tue, 27 Sep 2022 23:33:43 +0800 (CST)
-From:   YingChi Long <me@inclyc.cn>
-To:     me@inclyc.cn
-Cc:     bp@alien8.de, chang.seok.bae@intel.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        ndesaulniers@google.com, pbonzini@redhat.com, tglx@linutronix.de,
-        x86@kernel.org
-Subject: [PATCH v2] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
-Date:   Tue, 27 Sep 2022 23:33:38 +0800
-Message-Id: <20220927153338.4177854-1-me@inclyc.cn>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220925153151.2467884-1-me@inclyc.cn>
-References: <20220925153151.2467884-1-me@inclyc.cn>
+        Tue, 27 Sep 2022 11:34:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7671C5C81;
+        Tue, 27 Sep 2022 08:34:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D6AA61A32;
+        Tue, 27 Sep 2022 15:34:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2968FC433D6;
+        Tue, 27 Sep 2022 15:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664292858;
+        bh=2+4zgQfkieFPcHub7KcQFOTs+GhxkxbMDSCzrasoAoo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hS0hnWVNwbQH8CMggx/FnG3TE+EQG1YDcvQNPw2F2zf4K0nZFL1Hai/4ugvIm/7wt
+         mLY/enrJatJcNvQxPtJw+SypA0krsBZo2N0AweMIml+l7HTnkgJF+39vnJcVnF/qvD
+         Yf4/RC8YRSfBnqebIF6GvB/pdYzMOCdWoZZS/hNA=
+Date:   Tue, 27 Sep 2022 17:34:15 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Geert Stappers <stappers@stappers.nl>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Subject: Re: [PATCH v10 27/27] MAINTAINERS: Rust
+Message-ID: <YzMX91Kq6FzOL9g/@kroah.com>
+References: <20220927131518.30000-1-ojeda@kernel.org>
+ <20220927131518.30000-28-ojeda@kernel.org>
+ <20220927141137.iovhhjufqdqcs6qn@gpm.stappers.nl>
+ <202209270818.5BA5AA62@keescook>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFPN1dZLVlBSVdZDwkaFQgSH1lBWUNISEtWGUpPGh1MSENJSkJLVQIWExYaEhckFA4PWV
-        dZGBILWUFZSUlKVUlKSVVKTE1VTUlZV1kWGg8SFR0UWUFZT0tIVUpKS0hNSlVKS0tVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NT46Dgw4TTkDLzcyQ1FNFAFM
-        USwKCSNVSlVKTU1PSUJJQ0lPTkJCVTMWGhIXVRYeOxIVGBcCGFUYFUVZV1kSC1lBWUlJSlVJSklV
-        SkxNVU1JWVdZCAFZQUhNTk03Bg++
-X-HM-Tid: 0a837f95247a2d28kusna789ebe0c0f
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <202209270818.5BA5AA62@keescook>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,69 +60,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WG14 N2350 made very clear that it is an UB having type definitions with
-in "offsetof". This patch change the implementation of macro
-"TYPE_ALIGN" to builtin "_Alignof" to avoid undefined behavior.
+On Tue, Sep 27, 2022 at 08:19:44AM -0700, Kees Cook wrote:
+> On Tue, Sep 27, 2022 at 04:11:38PM +0200, Geert Stappers wrote:
+> > On Tue, Sep 27, 2022 at 03:14:58PM +0200, Miguel Ojeda wrote:
+> > > Miguel, Alex and Wedson will be maintaining the Rust support.
+> > >
+> > > Boqun, Gary and Björn will be reviewers.
+> > >
+> > > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > > Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> > > Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> > > Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> > > Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> > > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> > > ---
+> > >  MAINTAINERS | 18 ++++++++++++++++++
+> > >  1 file changed, 18 insertions(+)
+> > >
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index f5ca4aefd184..944dc265b64d 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -17758,6 +17758,24 @@ F:	include/rv/
+> > >  F:	kernel/trace/rv/
+> > >  F:	tools/verification/
+> > >
+> > > +RUST
+> > > +M:	Miguel Ojeda <ojeda@kernel.org>
+> > > +M:	Alex Gaynor <alex.gaynor@gmail.com>
+> > > +M:	Wedson Almeida Filho <wedsonaf@google.com>
+> > <screenshot from="response of a reply-to-all that I just did">
+> >   ** Address not found **
+> > 
+> >   Your message wasn't delivered to wedsonaf@google.com because the
+> >   address couldn't be found, or is unable to receive mail.
+> > 
+> >   Learn more here: https://support.google.com/mail/answer/6596
+> > 
+> >   The response was:
+> > 
+> >     The email account that you tried to reach does not exist. Please try
+> >     double-checking the recipient's email address for typos or unnecessary
+> >     spaces. Learn more at https://support.google.com/mail/answer/6596
+> > </screenshot>
+> 
+> Wedson, can you send (or Ack) the following patch? :)
+> 
+> diff --git a/.mailmap b/.mailmap
+> index d175777af078..3a7fe4ee56fb 100644
+> --- a/.mailmap
+> +++ b/.mailmap
+> @@ -433,6 +433,7 @@ Vlad Dogaru <ddvlad@gmail.com> <vlad.dogaru@intel.com>
+>  Vladimir Davydov <vdavydov.dev@gmail.com> <vdavydov@parallels.com>
+>  Vladimir Davydov <vdavydov.dev@gmail.com> <vdavydov@virtuozzo.com>
+>  WeiXiong Liao <gmpy.liaowx@gmail.com> <liaoweixiong@allwinnertech.com>
+> +Wedson Almeida Filho <wedsonaf@gmail.com> <wedsonaf@google.com>
 
-I've grepped all source files to find any type definitions within
-"offsetof".
+How about just fixing up the emails in these patches, which will keep us
+from having bouncing ones for those of us who do not use the .mailmap
+file.
 
-    offsetof\(struct .*\{ .*,
+thanks,
 
-This implementation of macro "TYPE_ALIGN" seemes to be the only case of
-type definitions within offsetof in the kernel codebase.
-
-I've made a clang patch that rejects any definitions within
-__builtin_offsetof (usually #defined with "offsetof"), and tested
-compiling with this patch, there is no error if this patch is applied.
-
-In PATCH v1 "TYPE_ALIGN" was substituted with "__alignof__" which is a
-GCC extension, which returns the *preferred alignment*, that is
-different from C11 "_Alignof" returning *ABI alignment*. For example, on
-i386 __alignof__(long long) evaluates to 8 but _Alignof(long long)
-evaluates to 4. See godbolt links below.
-
-In this patch, I'd like to use "__alignof__" to "_Alignof" to preserve
-the behavior here.
-
-Signed-off-by: YingChi Long <me@inclyc.cn>
-Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
-Link: https://godbolt.org/z/13xTYYd11
-Link: https://godbolt.org/z/T749MfM9o
-Link: https://gcc.gnu.org/onlinedocs/gcc/Alignment.html
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=10360
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52023
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69560
-Link: https://reviews.llvm.org/D133574
----
- arch/x86/kernel/fpu/init.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
-index 621f4b6cac4a..de96c11e1fe9 100644
---- a/arch/x86/kernel/fpu/init.c
-+++ b/arch/x86/kernel/fpu/init.c
-@@ -133,9 +133,6 @@ static void __init fpu__init_system_generic(void)
- 	fpu__init_system_mxcsr();
- }
-
--/* Get alignment of the TYPE. */
--#define TYPE_ALIGN(TYPE) offsetof(struct { char x; TYPE test; }, test)
--
- /*
-  * Enforce that 'MEMBER' is the last field of 'TYPE'.
-  *
-@@ -143,8 +140,8 @@ static void __init fpu__init_system_generic(void)
-  * because that's how C aligns structs.
-  */
- #define CHECK_MEMBER_AT_END_OF(TYPE, MEMBER) \
--	BUILD_BUG_ON(sizeof(TYPE) != ALIGN(offsetofend(TYPE, MEMBER), \
--					   TYPE_ALIGN(TYPE)))
-+	BUILD_BUG_ON(sizeof(TYPE) !=         \
-+		     ALIGN(offsetofend(TYPE, MEMBER), _Alignof(TYPE)))
-
- /*
-  * We append the 'struct fpu' to the task_struct:
---
-2.35.1
-
+greg k-h
