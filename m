@@ -2,87 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5FB5EC0D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F215EC0B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbiI0LPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
+        id S230251AbiI0LNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbiI0LPC (ORCPT
+        with ESMTP id S231820AbiI0LND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:15:02 -0400
+        Tue, 27 Sep 2022 07:13:03 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3EC4BA56;
-        Tue, 27 Sep 2022 04:14:58 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4McH5G0hhVzpSxj;
-        Tue, 27 Sep 2022 19:12:02 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02EC356FC
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 04:13:00 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4McH1R6hHbzlX4k;
+        Tue, 27 Sep 2022 19:08:43 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 27 Sep 2022 19:14:57 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ 15.1.2375.31; Tue, 27 Sep 2022 19:12:59 +0800
+Received: from [10.174.179.24] (10.174.179.24) by
+ dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 27 Sep 2022 19:14:56 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <edumazet@google.com>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <huangguangbin2@huawei.com>, <shenjian15@huawei.com>,
-        <lanhao@huawei.com>
-Subject: [PATCH net-next 4/4] net: hns3: delete unnecessary vf value judgement when get vport id
-Date:   Tue, 27 Sep 2022 19:12:05 +0800
-Message-ID: <20220927111205.18060-5-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220927111205.18060-1-huangguangbin2@huawei.com>
-References: <20220927111205.18060-1-huangguangbin2@huawei.com>
+ 15.1.2375.31; Tue, 27 Sep 2022 19:12:58 +0800
+Subject: Re: [PATCH v5 2/5] Revert "frontswap: simplify
+ frontswap_register_ops"
+To:     Christoph Hellwig <hch@lst.de>
+References: <20220915035003.3347466-1-liushixin2@huawei.com>
+ <20220915035003.3347466-3-liushixin2@huawei.com>
+ <20220920121305.GA4237@lst.de>
+ <2b469a5c-7960-ca6a-9360-c7d3aa26e8ae@huawei.com>
+ <20220927072754.GB16710@lst.de>
+CC:     Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+From:   Liu Shixin <liushixin2@huawei.com>
+Message-ID: <986efc9f-0deb-f705-dff1-f4d5992c2b8d@huawei.com>
+Date:   Tue, 27 Sep 2022 19:12:58 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600016.china.huawei.com (7.193.23.20)
+In-Reply-To: <20220927072754.GB16710@lst.de>
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.24]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hdev->vport->vport_id is equal to hdev->vport[0].vport_id, so
-delete unnecessary vf value judgement.
 
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
----
- drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-index 6962a9d69cf8..b566c0d782ad 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-@@ -6487,8 +6487,6 @@ static bool hclge_is_cls_flower_active(struct hnae3_handle *handle)
- static int hclge_fd_parse_ring_cookie(struct hclge_dev *hdev, u64 ring_cookie,
- 				      u16 *vport_id, u8 *action, u16 *queue_id)
- {
--	struct hclge_vport *vport = hdev->vport;
--
- 	if (ring_cookie == RX_CLS_FLOW_DISC) {
- 		*action = HCLGE_FD_ACTION_DROP_PACKET;
- 	} else {
-@@ -6506,7 +6504,7 @@ static int hclge_fd_parse_ring_cookie(struct hclge_dev *hdev, u64 ring_cookie,
- 			return -EINVAL;
- 		}
- 
--		*vport_id = vf ? hdev->vport[vf].vport_id : vport->vport_id;
-+		*vport_id = hdev->vport[vf].vport_id;
- 		tqps = hdev->vport[vf].nic.kinfo.num_tqps;
- 
- 		if (ring >= tqps) {
--- 
-2.33.0
+On 2022/9/27 15:27, Christoph Hellwig wrote:
+> On Wed, Sep 21, 2022 at 09:42:41AM +0800, Liu Shixin wrote:
+>> This revert makes code complicated, but I think it's necessary. When
+>> enable zswap, I expect it to work for all swap devices as much as
+>> possible.
+> But why would expect something to work on a device that has been
+> swapped on before?  That's not usually how things work.
+>
+> .
+If not do this, while some user enable swap device first and then enable zswap,
+zswap will not take effect. The user need to re-enable the swap device which is
+inconvenient.
+>
 
