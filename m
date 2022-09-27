@@ -2,106 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3CA5ECE3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031A45ECE43
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 22:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232853AbiI0UST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 16:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
+        id S233092AbiI0USi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 16:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232891AbiI0URx (ORCPT
+        with ESMTP id S229453AbiI0UR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 16:17:53 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2075.outbound.protection.outlook.com [40.107.220.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957D15F121;
-        Tue, 27 Sep 2022 13:16:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WHglu0nbuGV+4PQkSQcIrs7d+aGMoW8kpaqDQcl4Olj1KsFC4vy+y8ap6fPQ9nxkCmqNcnlef7+knVXg0cZJAIJAlauFOhqSXtAgX77omQPjy6m6T8Mq2wYD7B/nXrVaVYUwQ/V+gfTCQ6SmQw/gvJxEnxmbRo+6b0yJZ+z52rqEkfgBCcyAULOFbVG2acQ75n9eX7WdzpsjRVyLYwrleiHSozcFY51TBCMLiEzriZN1sdba8jrxrsijHTDkHRSxjgTK42f0ckIHxsxAWzZJcbbo7ml10dc/EU5eAqHtjNESaUuRla9QTdqhMtBxxQfD6Z1cofI8vwrXz5p75rY4+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OnZyjY2iz3SEE1fazeNr75wrVT0PCH031AvjHUIVYcE=;
- b=LD78VBWe02iYbZoFLUtCpSWaymIoTfqRGNkmjaO1meBcUhsE2+TVfxJB1qbkD3HZ6kqMSp/YxbmCrFTbsaV33lfFq5EkQrsk8HI0Vu7Q/z5vqXKIa1fq3AyHsqRfLqCzMON8pEFlGYobs6RjmsxCnM0Oo9PoPgGrmIbSn1tSSB6CoXbra6nfhca8arsWlqnLxgc0ZvXFXlVbzm3Y/05s3OFr1WJmnX2bsd4gP27RXLwSwl9tmDrlONqHW+yeCFL5VNXPMlRW5OQbEJd9JBki36hNMAAjDaMNiRt4QKBNLwHs5ZUMDVbFJlpANNORkimfzSjUqExzIQfjjtJa+9wEgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OnZyjY2iz3SEE1fazeNr75wrVT0PCH031AvjHUIVYcE=;
- b=zD1133XBppKUs3sI0oORbzjzvKy1jR0BiErtvN1FrBe6kYE4uVLyVl4hn7xKv4XvUB4UB3tS3ZtaHtukXX3es8bmWDz8lKHwVLMGahcLndt0qNwF64bhecrmvajgW8pl6/hnnqN3OF+op1Hp2OJbT63Uz6cRjzdW+4wwPKtoFY0=
-Received: from DM6PR01CA0011.prod.exchangelabs.com (2603:10b6:5:296::16) by
- DM6PR12MB4202.namprd12.prod.outlook.com (2603:10b6:5:219::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5654.25; Tue, 27 Sep 2022 20:16:32 +0000
-Received: from DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:296:cafe::3d) by DM6PR01CA0011.outlook.office365.com
- (2603:10b6:5:296::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.18 via Frontend
- Transport; Tue, 27 Sep 2022 20:16:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT049.mail.protection.outlook.com (10.13.172.188) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5676.17 via Frontend Transport; Tue, 27 Sep 2022 20:16:32 +0000
-Received: from [127.0.1.1] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 27 Sep
- 2022 15:16:30 -0500
-Subject: [PATCH v5 1/2] x86/resctrl: Fix min_cbm_bits for AMD
-From:   Babu Moger <babu.moger@amd.com>
-To:     <corbet@lwn.net>, <reinette.chatre@intel.com>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>
-CC:     <fenghua.yu@intel.com>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <hpa@zytor.com>, <paulmck@kernel.org>,
-        <akpm@linux-foundation.org>, <quic_neeraju@quicinc.com>,
-        <rdunlap@infradead.org>, <damien.lemoal@opensource.wdc.com>,
-        <songmuchun@bytedance.com>, <peterz@infradead.org>,
-        <jpoimboe@kernel.org>, <pbonzini@redhat.com>, <babu.moger@amd.com>,
-        <chang.seok.bae@intel.com>, <pawan.kumar.gupta@linux.intel.com>,
-        <jmattson@google.com>, <daniel.sneddon@linux.intel.com>,
-        <sandipan.das@amd.com>, <tony.luck@intel.com>,
-        <james.morse@arm.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bagasdotme@gmail.com>,
-        <eranian@google.com>
-Date:   Tue, 27 Sep 2022 15:16:29 -0500
-Message-ID: <166430978944.372014.15309570958318893913.stgit@bmoger-ubuntu>
-In-Reply-To: <166430959655.372014.14294247239089851375.stgit@bmoger-ubuntu>
-References: <166430959655.372014.14294247239089851375.stgit@bmoger-ubuntu>
-User-Agent: StGit/1.1.dev103+g5369f4c
+        Tue, 27 Sep 2022 16:17:59 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C632611A02;
+        Tue, 27 Sep 2022 13:17:00 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id l18so4679781wrw.9;
+        Tue, 27 Sep 2022 13:17:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Fe4GQNVB1A7iFCJKJMseiaTdxx0FAnIQydpGRM+fpi8=;
+        b=BSlMaw0ZEOh6wFueEoPzRFbYPReMLXZin82DHQYl7nUbSNv0NA/cRuh7l8RMDYtUG7
+         orPv2I8b2b+ZlhXqoWJzhAn+WuDxqFeJZyCz7iTHBrneqFw4u27cJtNj0cXCXd6XUPLx
+         +7UQtnAMgPoqf4WHkF+Jm86DdmJo+A6MtjePRgcClSaogljlfwU2LIQLWo/OoM9P219Z
+         JGJdhEz1vMk1dniCwmqSXgopX+rSe4APnfiJ8CUrIu+8s933NImPqMRkdYZeIzJ6yNXK
+         qnaIhvSzooyV9ZwkL+ss9PZ3b7nLv1Vazrl/6VENJ1YnO4j1IPf24NrTpwDQtUEPakDD
+         0hgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Fe4GQNVB1A7iFCJKJMseiaTdxx0FAnIQydpGRM+fpi8=;
+        b=WnYjsBkdv4R835a85lJ07IHE4uBq5KyIdtYvgNPI0vkii77+t2jelPAixPVHmJXKEE
+         xDUqq08vnAOiw+x0yXlwBUyQV0H9lyau7HLC0uCiPH4jjcLkEQcQnsm1SeQfbyJ4lkBg
+         0AvdE5Wo0bJJnWxZmjMCxbuN2y8Oo44foqlzwAgzdNuD9XgIbQlB8ZZZ0EA4wM0bSSit
+         3FQeNHhz2KP9h3wp+LY1CknNjfmuVkwt02UcErg2fwUvSCC8sZxpgM18bfGuMG7nWbAZ
+         qjGhTEB/BAXvgUDtt2ZI7cEpVR/XQlFHLoTcs7oL/aHKWMA+jlCk812clnXIqxtjfz8R
+         gY7w==
+X-Gm-Message-State: ACrzQf0Q9IcxLP59YZZej91FThbF2v9UbFOMpriRRZ2z2hYyU87BKk5W
+        GdYJCSIJZ9Gs6sYObV+Au1NZZ9p62rzRcw==
+X-Google-Smtp-Source: AMsMyM6mQvNxv9RYj9Awfl+1STZPbAy1PdTu4TWr/tE7KkwlyKu2nXLm8bN6vPosGPSATzyTK/2Dlw==
+X-Received: by 2002:adf:e4cc:0:b0:22a:d755:aaf7 with SMTP id v12-20020adfe4cc000000b0022ad755aaf7mr18190753wrm.692.1664309819209;
+        Tue, 27 Sep 2022 13:16:59 -0700 (PDT)
+Received: from prasmi.home ([2a00:23c8:2501:c701:c6a:3c62:baf6:511c])
+        by smtp.gmail.com with ESMTPSA id r4-20020a05600c320400b003b4de550e34sm2453162wmp.40.2022.09.27.13.16.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 13:16:58 -0700 (PDT)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] media: i2c: ov5645: Use runtime PM
+Date:   Tue, 27 Sep 2022 21:16:34 +0100
+Message-Id: <20220927201634.750141-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT049:EE_|DM6PR12MB4202:EE_
-X-MS-Office365-Filtering-Correlation-Id: 37189237-c124-4da3-b2bb-08daa0c52b50
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D5Uuz2GDu0Ae3bvUJEYzXmqIMQVa6jQMveXNOBogPFrnWcZsJQ0Ch54txIq9P9UqVeR6nsGxeNXN3uwBsG2/Ycvsr8rfJ5CN91lheWXMmDjdxJ/S8AzuyIBdmAsaZWWfzrv7CrxQyJLM+OqYW8V9Pj4SUBIpxCmkuokKXH/oh0OnXNCiyGztS495LK1Xfv9lR+MP/ZMrAtIPEeyPDd6W8I4ACeGCZOrTz7fHCPj3cNC4TPvvM5LnUqJjGf/lYqxbp+PBgHD3a2QfjOED7Bwb490Nj0qFg1P5M1+zcfBGjnahjNWOYFxQl3m0tNRac/Nn3k6+0Gfr+k9VBXB/KFGjZmVirN/KbfVfxRuUimzB3XOdMlIweVIFIX+bm4pQKZUhHGa4E+k80Q5sPtVxL3meGYmwxCWJPu+15OVbDq2sjCwByrvAfxCvOr0RwmHPSTYgxPwFS0Iljohv+CYbF62RrU88xc6VW47OA17SsWTSKcJ8SgUaWq9I3watdSmyMakoEtYQlzRCSg46kHCkmJLfqrn7i5nMQf3onR89v9Q6KShtedChE3HGo66c7/zze47Jq5XcBVWmT3c0DEZN7ZamB3VhjdwlMnF4/xBAD1RRjnwBMrN1mOuTyH9tTyWfcfSMuk0lJH2N1YUp+hHc1x0/q0r5LmaPdSylT8BTbklM1LkKfG8orAJkuExHAqvuadxhEktEsQvTujzL/XIvQUUzXhv+dYnF4BRGyLJHgdJQwzN03aQacH4ezkbYtVSH4ua/R6on+ix93ilXrXINgApkMbQiBbXeXYaM4VpAXgDaOCph719P5QRd++dOgQHMYmJR8yY3exEwK4M1kdeB+FYa95uyslvWp0JuZ2dopc7/qQ4=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(7916004)(4636009)(346002)(396003)(136003)(376002)(39860400002)(451199015)(46966006)(40470700004)(36840700001)(47076005)(103116003)(40460700003)(2906002)(44832011)(356005)(81166007)(86362001)(70206006)(70586007)(82740400003)(7416002)(5660300002)(8936002)(4326008)(9686003)(83380400001)(426003)(110136005)(40480700001)(316002)(82310400005)(966005)(36860700001)(54906003)(16576012)(478600001)(41300700001)(8676002)(336012)(186003)(16526019)(33716001)(26005)(71626007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 20:16:32.0963
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37189237-c124-4da3-b2bb-08daa0c52b50
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4202
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,96 +78,326 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AMD systems support zero CBM (capacity bit mask) for cache allocation.=0A=
-That is reflected in rdt_init_res_defs_amd() by:=0A=
-=0A=
-        r->cache.arch_has_empty_bitmaps =3D true;=0A=
-=0A=
-However given the unified code in cbm_validate(), checking for:=0A=
-        val =3D=3D 0 && !arch_has_empty_bitmaps=0A=
-=0A=
-is not enough because of another check in cbm_validate():=0A=
-=0A=
-        if ((zero_bit - first_bit) < r->cache.min_cbm_bits)=0A=
-=0A=
-The default value of r->cache.min_cbm_bits =3D 1.=0A=
-=0A=
-Leading to:=0A=
-=0A=
-        $ cd /sys/fs/resctrl=0A=
-        $ mkdir foo=0A=
-        $ cd foo=0A=
-        $ echo L3:0=3D0 > schemata=0A=
-          -bash: echo: write error: Invalid argument=0A=
-        $ cat /sys/fs/resctrl/info/last_cmd_status=0A=
-          Need at least 1 bits in the mask=0A=
-=0A=
-Fix the issue by initializing the min_cbm_bits to 0 for AMD.=0A=
-Also, remove the default setting of min_cbm_bits and initialize it=0A=
-separately.=0A=
-=0A=
-After the fix=0A=
-        $ cd /sys/fs/resctrl=0A=
-        $ mkdir foo=0A=
-        $ cd foo=0A=
-        $ echo L3:0=3D0 > schemata=0A=
-        $ cat /sys/fs/resctrl/info/last_cmd_status=0A=
-          ok=0A=
-=0A=
-Link: https://lore.kernel.org/lkml/20220517001234.3137157-1-eranian@google.=
-com/=0A=
-Fixes: 316e7f901f5a ("x86/resctrl: Add struct rdt_cache::arch_has_{sparse, =
-empty}_bitmaps")=0A=
-Co-developed-by: Stephane Eranian <eranian@google.com>=0A=
-Signed-off-by: Stephane Eranian <eranian@google.com>=0A=
-Signed-off-by: Babu Moger <babu.moger@amd.com>=0A=
-Reviewed-by: Ingo Molnar <mingo@kernel.org>=0A=
-Reviewed-by: James Morse <james.morse@arm.com>=0A=
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>=0A=
----=0A=
- arch/x86/kernel/cpu/resctrl/core.c |    8 ++------=0A=
- 1 file changed, 2 insertions(+), 6 deletions(-)=0A=
-=0A=
-diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resct=
-rl/core.c=0A=
-index bb1c3f5f60c8..a5c51a14fbce 100644=0A=
---- a/arch/x86/kernel/cpu/resctrl/core.c=0A=
-+++ b/arch/x86/kernel/cpu/resctrl/core.c=0A=
-@@ -66,9 +66,6 @@ struct rdt_hw_resource rdt_resources_all[] =3D {=0A=
- 			.rid			=3D RDT_RESOURCE_L3,=0A=
- 			.name			=3D "L3",=0A=
- 			.cache_level		=3D 3,=0A=
--			.cache =3D {=0A=
--				.min_cbm_bits	=3D 1,=0A=
--			},=0A=
- 			.domains		=3D domain_init(RDT_RESOURCE_L3),=0A=
- 			.parse_ctrlval		=3D parse_cbm,=0A=
- 			.format_str		=3D "%d=3D%0*x",=0A=
-@@ -83,9 +80,6 @@ struct rdt_hw_resource rdt_resources_all[] =3D {=0A=
- 			.rid			=3D RDT_RESOURCE_L2,=0A=
- 			.name			=3D "L2",=0A=
- 			.cache_level		=3D 2,=0A=
--			.cache =3D {=0A=
--				.min_cbm_bits	=3D 1,=0A=
--			},=0A=
- 			.domains		=3D domain_init(RDT_RESOURCE_L2),=0A=
- 			.parse_ctrlval		=3D parse_cbm,=0A=
- 			.format_str		=3D "%d=3D%0*x",=0A=
-@@ -877,6 +871,7 @@ static __init void rdt_init_res_defs_intel(void)=0A=
- 			r->cache.arch_has_sparse_bitmaps =3D false;=0A=
- 			r->cache.arch_has_empty_bitmaps =3D false;=0A=
- 			r->cache.arch_has_per_cpu_cfg =3D false;=0A=
-+			r->cache.min_cbm_bits =3D 1;=0A=
- 		} else if (r->rid =3D=3D RDT_RESOURCE_MBA) {=0A=
- 			hw_res->msr_base =3D MSR_IA32_MBA_THRTL_BASE;=0A=
- 			hw_res->msr_update =3D mba_wrmsr_intel;=0A=
-@@ -897,6 +892,7 @@ static __init void rdt_init_res_defs_amd(void)=0A=
- 			r->cache.arch_has_sparse_bitmaps =3D true;=0A=
- 			r->cache.arch_has_empty_bitmaps =3D true;=0A=
- 			r->cache.arch_has_per_cpu_cfg =3D true;=0A=
-+			r->cache.min_cbm_bits =3D 0;=0A=
- 		} else if (r->rid =3D=3D RDT_RESOURCE_MBA) {=0A=
- 			hw_res->msr_base =3D MSR_IA32_MBA_BW_BASE;=0A=
- 			hw_res->msr_update =3D mba_wrmsr_amd;=0A=
-=0A=
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+
+Switch to using runtime PM for power management.
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/media/i2c/Kconfig  |   2 +-
+ drivers/media/i2c/ov5645.c | 135 +++++++++++++++++++------------------
+ 2 files changed, 69 insertions(+), 68 deletions(-)
+
+diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+index 7806d4b81716..c0edd1017fe8 100644
+--- a/drivers/media/i2c/Kconfig
++++ b/drivers/media/i2c/Kconfig
+@@ -459,7 +459,7 @@ config VIDEO_OV5640
+ config VIDEO_OV5645
+ 	tristate "OmniVision OV5645 sensor support"
+ 	depends on OF
+-	depends on I2C && VIDEO_DEV
++	depends on I2C && PM && VIDEO_DEV
+ 	select MEDIA_CONTROLLER
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	select V4L2_FWNODE
+diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
+index 81e4e87e1821..3c3b30338328 100644
+--- a/drivers/media/i2c/ov5645.c
++++ b/drivers/media/i2c/ov5645.c
+@@ -27,6 +27,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_graph.h>
++#include <linux/pm_runtime.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
+@@ -108,7 +109,6 @@ struct ov5645 {
+ 	u8 timing_tc_reg21;
+ 
+ 	struct mutex power_lock; /* lock to protect power state */
+-	int power_count;
+ 
+ 	struct gpio_desc *enable_gpio;
+ 	struct gpio_desc *rst_gpio;
+@@ -635,8 +635,24 @@ static int ov5645_set_register_array(struct ov5645 *ov5645,
+ 	return 0;
+ }
+ 
+-static int ov5645_set_power_on(struct ov5645 *ov5645)
++static int ov5645_set_power_off(struct device *dev)
+ {
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
++	struct ov5645 *ov5645 = to_ov5645(sd);
++
++	ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x58);
++	gpiod_set_value_cansleep(ov5645->rst_gpio, 1);
++	gpiod_set_value_cansleep(ov5645->enable_gpio, 0);
++	clk_disable_unprepare(ov5645->xclk);
++	regulator_bulk_disable(OV5645_NUM_SUPPLIES, ov5645->supplies);
++
++	return 0;
++}
++
++static int ov5645_set_power_on(struct device *dev)
++{
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
++	struct ov5645 *ov5645 = to_ov5645(sd);
+ 	int ret;
+ 
+ 	ret = regulator_bulk_enable(OV5645_NUM_SUPPLIES, ov5645->supplies);
+@@ -658,57 +674,19 @@ static int ov5645_set_power_on(struct ov5645 *ov5645)
+ 
+ 	msleep(20);
+ 
+-	return 0;
+-}
+-
+-static void ov5645_set_power_off(struct ov5645 *ov5645)
+-{
+-	gpiod_set_value_cansleep(ov5645->rst_gpio, 1);
+-	gpiod_set_value_cansleep(ov5645->enable_gpio, 0);
+-	clk_disable_unprepare(ov5645->xclk);
+-	regulator_bulk_disable(OV5645_NUM_SUPPLIES, ov5645->supplies);
+-}
+-
+-static int ov5645_s_power(struct v4l2_subdev *sd, int on)
+-{
+-	struct ov5645 *ov5645 = to_ov5645(sd);
+-	int ret = 0;
+-
+-	mutex_lock(&ov5645->power_lock);
+-
+-	/* If the power count is modified from 0 to != 0 or from != 0 to 0,
+-	 * update the power state.
+-	 */
+-	if (ov5645->power_count == !on) {
+-		if (on) {
+-			ret = ov5645_set_power_on(ov5645);
+-			if (ret < 0)
+-				goto exit;
+-
+-			ret = ov5645_set_register_array(ov5645,
+-					ov5645_global_init_setting,
++	ret = ov5645_set_register_array(ov5645, ov5645_global_init_setting,
+ 					ARRAY_SIZE(ov5645_global_init_setting));
+-			if (ret < 0) {
+-				dev_err(ov5645->dev,
+-					"could not set init registers\n");
+-				ov5645_set_power_off(ov5645);
+-				goto exit;
+-			}
+-
+-			usleep_range(500, 1000);
+-		} else {
+-			ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x58);
+-			ov5645_set_power_off(ov5645);
+-		}
++	if (ret < 0) {
++		dev_err(ov5645->dev, "could not set init registers\n");
++		goto exit;
+ 	}
+ 
+-	/* Update the power count. */
+-	ov5645->power_count += on ? 1 : -1;
+-	WARN_ON(ov5645->power_count < 0);
++	usleep_range(500, 1000);
+ 
+-exit:
+-	mutex_unlock(&ov5645->power_lock);
++	return 0;
+ 
++exit:
++	ov5645_set_power_off(dev);
+ 	return ret;
+ }
+ 
+@@ -795,7 +773,7 @@ static int ov5645_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	int ret;
+ 
+ 	mutex_lock(&ov5645->power_lock);
+-	if (!ov5645->power_count) {
++	if (!pm_runtime_get_if_in_use(ov5645->dev)) {
+ 		mutex_unlock(&ov5645->power_lock);
+ 		return 0;
+ 	}
+@@ -827,6 +805,7 @@ static int ov5645_s_ctrl(struct v4l2_ctrl *ctrl)
+ 		break;
+ 	}
+ 
++	pm_runtime_put_autosuspend(ov5645->dev);
+ 	mutex_unlock(&ov5645->power_lock);
+ 
+ 	return ret;
+@@ -991,6 +970,10 @@ static int ov5645_s_stream(struct v4l2_subdev *subdev, int enable)
+ 	int ret;
+ 
+ 	if (enable) {
++		ret = pm_runtime_resume_and_get(ov5645->dev);
++		if (ret < 0)
++			return ret;
++
+ 		ret = ov5645_set_register_array(ov5645,
+ 					ov5645->current_mode->data,
+ 					ov5645->current_mode->data_size);
+@@ -998,22 +981,22 @@ static int ov5645_s_stream(struct v4l2_subdev *subdev, int enable)
+ 			dev_err(ov5645->dev, "could not set mode %dx%d\n",
+ 				ov5645->current_mode->width,
+ 				ov5645->current_mode->height);
+-			return ret;
++			goto err_rpm_put;
+ 		}
+ 		ret = v4l2_ctrl_handler_setup(&ov5645->ctrls);
+ 		if (ret < 0) {
+ 			dev_err(ov5645->dev, "could not sync v4l2 controls\n");
+-			return ret;
++			goto err_rpm_put;
+ 		}
+ 
+ 		ret = ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x45);
+ 		if (ret < 0)
+-			return ret;
++			goto err_rpm_put;
+ 
+ 		ret = ov5645_write_reg(ov5645, OV5645_SYSTEM_CTRL0,
+ 				       OV5645_SYSTEM_CTRL0_START);
+ 		if (ret < 0)
+-			return ret;
++			goto err_rpm_put;
+ 	} else {
+ 		ret = ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x40);
+ 		if (ret < 0)
+@@ -1023,14 +1006,15 @@ static int ov5645_s_stream(struct v4l2_subdev *subdev, int enable)
+ 				       OV5645_SYSTEM_CTRL0_STOP);
+ 		if (ret < 0)
+ 			return ret;
++		pm_runtime_put(ov5645->dev);
+ 	}
+ 
+ 	return 0;
+-}
+ 
+-static const struct v4l2_subdev_core_ops ov5645_core_ops = {
+-	.s_power = ov5645_s_power,
+-};
++err_rpm_put:
++	pm_runtime_put(ov5645->dev);
++	return ret;
++}
+ 
+ static const struct v4l2_subdev_video_ops ov5645_video_ops = {
+ 	.s_stream = ov5645_s_stream,
+@@ -1046,7 +1030,6 @@ static const struct v4l2_subdev_pad_ops ov5645_subdev_pad_ops = {
+ };
+ 
+ static const struct v4l2_subdev_ops ov5645_subdev_ops = {
+-	.core = &ov5645_core_ops,
+ 	.video = &ov5645_video_ops,
+ 	.pad = &ov5645_subdev_pad_ops,
+ };
+@@ -1188,11 +1171,9 @@ static int ov5645_probe(struct i2c_client *client)
+ 		goto free_ctrl;
+ 	}
+ 
+-	ret = ov5645_s_power(&ov5645->sd, true);
+-	if (ret < 0) {
+-		dev_err(dev, "could not power up OV5645\n");
++	ret = ov5645_set_power_on(dev);
++	if (ret)
+ 		goto free_entity;
+-	}
+ 
+ 	ret = ov5645_read_reg(ov5645, OV5645_CHIP_ID_HIGH, &chip_id_high);
+ 	if (ret < 0 || chip_id_high != OV5645_CHIP_ID_HIGH_BYTE) {
+@@ -1209,12 +1190,16 @@ static int ov5645_probe(struct i2c_client *client)
+ 
+ 	dev_info(dev, "OV5645 detected at address 0x%02x\n", client->addr);
+ 
++	pm_runtime_set_active(dev);
++	pm_runtime_get_noresume(dev);
++	pm_runtime_enable(dev);
++
+ 	ret = ov5645_read_reg(ov5645, OV5645_AEC_PK_MANUAL,
+ 			      &ov5645->aec_pk_manual);
+ 	if (ret < 0) {
+ 		dev_err(dev, "could not read AEC/AGC mode\n");
+ 		ret = -ENODEV;
+-		goto power_down;
++		goto err_pm_runtime;
+ 	}
+ 
+ 	ret = ov5645_read_reg(ov5645, OV5645_TIMING_TC_REG20,
+@@ -1222,7 +1207,7 @@ static int ov5645_probe(struct i2c_client *client)
+ 	if (ret < 0) {
+ 		dev_err(dev, "could not read vflip value\n");
+ 		ret = -ENODEV;
+-		goto power_down;
++		goto err_pm_runtime;
+ 	}
+ 
+ 	ret = ov5645_read_reg(ov5645, OV5645_TIMING_TC_REG21,
+@@ -1230,14 +1215,18 @@ static int ov5645_probe(struct i2c_client *client)
+ 	if (ret < 0) {
+ 		dev_err(dev, "could not read hflip value\n");
+ 		ret = -ENODEV;
+-		goto power_down;
++		goto err_pm_runtime;
+ 	}
+ 
+-	ov5645_s_power(&ov5645->sd, false);
++	pm_runtime_set_autosuspend_delay(dev, 1000);
++	pm_runtime_use_autosuspend(dev);
++	pm_runtime_put_autosuspend(dev);
+ 
+ 	ret = v4l2_async_register_subdev(&ov5645->sd);
+ 	if (ret < 0) {
+ 		dev_err(dev, "could not register v4l2 device\n");
++		pm_runtime_disable(dev);
++		pm_runtime_set_suspended(dev);
+ 		goto free_entity;
+ 	}
+ 
+@@ -1245,8 +1234,11 @@ static int ov5645_probe(struct i2c_client *client)
+ 
+ 	return 0;
+ 
++err_pm_runtime:
++	pm_runtime_disable(dev);
++	pm_runtime_put_noidle(dev);
+ power_down:
+-	ov5645_s_power(&ov5645->sd, false);
++	ov5645_set_power_off(dev);
+ free_entity:
+ 	media_entity_cleanup(&ov5645->sd.entity);
+ free_ctrl:
+@@ -1264,6 +1256,10 @@ static void ov5645_remove(struct i2c_client *client)
+ 	v4l2_async_unregister_subdev(&ov5645->sd);
+ 	media_entity_cleanup(&ov5645->sd.entity);
+ 	v4l2_ctrl_handler_free(&ov5645->ctrls);
++	pm_runtime_disable(ov5645->dev);
++	if (!pm_runtime_status_suspended(ov5645->dev))
++		ov5645_set_power_off(ov5645->dev);
++	pm_runtime_set_suspended(ov5645->dev);
+ 	mutex_destroy(&ov5645->power_lock);
+ }
+ 
+@@ -1279,10 +1275,15 @@ static const struct of_device_id ov5645_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, ov5645_of_match);
+ 
++static const struct dev_pm_ops ov5645_pm_ops = {
++	SET_RUNTIME_PM_OPS(ov5645_set_power_off, ov5645_set_power_on, NULL)
++};
++
+ static struct i2c_driver ov5645_i2c_driver = {
+ 	.driver = {
+ 		.of_match_table = ov5645_of_match,
+ 		.name  = "ov5645",
++		.pm = &ov5645_pm_ops,
+ 	},
+ 	.probe_new = ov5645_probe,
+ 	.remove = ov5645_remove,
+-- 
+2.25.1
 
