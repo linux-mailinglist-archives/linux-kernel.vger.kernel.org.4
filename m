@@ -2,110 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA26C5EC078
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9225EC07D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 13:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbiI0LFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 07:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
+        id S231764AbiI0LFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 07:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbiI0LEw (ORCPT
+        with ESMTP id S231381AbiI0LE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:04:52 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA371181D1;
-        Tue, 27 Sep 2022 04:04:11 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id n10so14366741wrw.12;
-        Tue, 27 Sep 2022 04:04:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=SlT4G31LyDkVE9RdTsAk0Xmm8HNoPPrCQMm+8arXy7Y=;
-        b=amNOsRyjYkO8XdkwO5ztHyAatXtUJ36hjyxKkXEp3GgfvBS93ZUhV7PFm7XbuBD7w7
-         rOWbqj1TkUbjJTMQHbuGHe3CQU0/KlImGAFa/qoEtHtMFIGvzjEXFrarJI7O1+Bk4/4R
-         4bogzwrj888Io3h6iNtywyiCWp/xBt/PLgfEf7wRlTCsE/kaiQ0Hf9CkOm2+Yg97VzvC
-         fUyc8fBNQEZgXYRSiLAGzAVkGSt0n7R0PmhlhQjpBrYfnah9DzdK0S6nLHyA4VdS644j
-         xx4EUDkR+PPSHBQRR5883yxCFAzWSCF10C1xj3BHDYspPmLSTkhqGlA23ny1pYBCcj4A
-         lrlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=SlT4G31LyDkVE9RdTsAk0Xmm8HNoPPrCQMm+8arXy7Y=;
-        b=SIC5xh2qR/kUD6M+4IDsT3+kWsGPefQ8pfYayY7lSt4BRYPhx8A/iXPHax7skZKLQF
-         6ZGugOCYENVJNPJ96RDP7eNJk2flQiSdXn5+nGTsN7fX0a6UvGpbcT4GwIyZAPMEcdaj
-         EFLakFCtheBzv4mI3loS7XGRJL4c67P6q1CAs2r2AxYsoOBKifXoZeTqQ+ZSgvBh01w3
-         NplIW/OSkwIC4YFk9U42cO4NeGfDMj7ZrV4lPTRsOZf38mhtKsLD7TvyTSJ8gHHbSPhi
-         En9+/4Lrb6I4FioiF0RQ5NdYGvTtZg7u4Duqh/IXTN7T08UUi2cTZLy9HowKyIPb+bxz
-         QLEQ==
-X-Gm-Message-State: ACrzQf3gaKglZpOWEyBjfbRxqQw4EQ6B+WemXTitqv4G+ZftVPjBlDNc
-        miC3KxKMdkap2f3SlvhjIyQ=
-X-Google-Smtp-Source: AMsMyM4Q05QpyOpNqR1iTDEuA5m9s5fEBIkXTQnTLe2W0fa3aFmyX5AiLtGP62/VPgs7EIZUTz1oXg==
-X-Received: by 2002:a5d:5351:0:b0:22c:be67:9542 with SMTP id t17-20020a5d5351000000b0022cbe679542mr1320397wrv.203.1664276623800;
-        Tue, 27 Sep 2022 04:03:43 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id j3-20020a05600c488300b003a844885f88sm1359328wmp.22.2022.09.27.04.03.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 04:03:43 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 12:03:41 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 000/138] 5.10.146-rc2 review
-Message-ID: <YzLYjXJWQF+0xqY8@debian>
-References: <20220926163550.904900693@linuxfoundation.org>
+        Tue, 27 Sep 2022 07:04:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED332122601;
+        Tue, 27 Sep 2022 04:04:14 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0B73E6601F41;
+        Tue, 27 Sep 2022 12:03:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664276637;
+        bh=bOuC85Nc2LJl1a5+ZAIvCRp5wCwoRyVkfdHqWvXVydM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=lTL5YDBSzKgOt3xax0YnEmYId5JmVtx7muiUUyRAWCECGJyr7Af2AF6uj2AC6AtCq
+         gr4ZxW9l4Q8eSH2tk4n6m+39XfZz+yeERWaJw8IUI60T1YLdMSuu32nWx2PBmtBlNU
+         TsBAAgqy0xYWsQEQOzia6t6e6mGZ4VzxSwPyBRz8SNZNmR/q84iUctxxC8sdAsVbfs
+         EBO+bnmfZrcpTZ96s+bVk/v91ZcbmFVPqkubj/e0mT1YqJOpcnzGLvP6ojA3hDCNw4
+         KTh4lqrYPlNnFAKMy41gvrUnB6w79c2pP4tcSF9tnHrYDHKbBI5GD4Kan0AHe7MTu4
+         VgMVfVyVqyZGg==
+Message-ID: <da5dcffc-746f-207f-eee7-f47e2550eab0@collabora.com>
+Date:   Tue, 27 Sep 2022 13:03:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926163550.904900693@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v3 04/11] remoteproc: mediatek: Remove redundant
+ rproc_boot
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+References: <20220927025606.26673-1-tinghan.shen@mediatek.com>
+ <20220927025606.26673-5-tinghan.shen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220927025606.26673-5-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Mon, Sep 26, 2022 at 06:36:58PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.146 release.
-> There are 138 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Il 27/09/22 04:55, Tinghan Shen ha scritto:
+> The video codec doesn't need to explicitly boot SCP in its flow
+> because the SCP remote processor enables auto boot.
 > 
-> Responses should be made by Wed, 28 Sep 2022 16:35:25 +0000.
-> Anything received after that time might be too late.
+> The redundant usage of rproc_boot increases the number of rproc.power
+> over 1 and prevents successfully shutting down SCP by rproc_shutdown.
+> 
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
 
-Build test (gcc version 11.3.1 20220925):
-mips: 63 configs -> no failure
-arm: 104 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+You should Cc stable on this commit, as it's a quite important fix.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+Regards,
+Angelo
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1905
-[2]. https://openqa.qa.codethink.co.uk/tests/1908
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
