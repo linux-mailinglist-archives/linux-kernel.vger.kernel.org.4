@@ -2,87 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F12A5EC6AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0042E5EC6B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 16:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbiI0Oj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 10:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
+        id S232137AbiI0Olw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 10:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233079AbiI0Oj1 (ORCPT
+        with ESMTP id S231897AbiI0Ol2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 10:39:27 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E8B659E5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:35:32 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 27 Sep 2022 10:41:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3911C770A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 07:37:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4McMby15FRz4x3w;
-        Wed, 28 Sep 2022 00:35:26 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1664289327;
-        bh=UWxzGMQ9wLrUZe/HWPNAFfpFCGdiaXy8kMeH+LApu/c=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=MOtxzu3QNT9wNQFnE2dLYzyNrc+qt2UT7wT3HSspcZg29VNc/5GMr315CeNUXxBlQ
-         Lu2vGDxYToXvbHP/8E+bCJv+hYnDHhfic4uyK7nBvlziKQiceNTGsel7/sOcRs/ejJ
-         WaZWTtxw8DXRESZyDEHToeo8fQ8YEXG+iGHiqOVaYtx/7eJFAwykeAm4V9uNJ9TEgA
-         VV9OpL4qMyhyBCwOeip5NEkQ/QcwSdi6iArsH01EEybM2SCf24MzmpKPU91UKcliS1
-         PNqRZEtVMMw/P352iSbN8OHZ4DgYQcTa8aHYrohOtQHIHqmbA7ifkslU/kpzIibnA+
-         FSwQPgn5YX71A==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     cgel.zte@gmail.com, benh@kernel.crashing.org
-Cc:     paulus@samba.org, maz@kernel.org, jgg@ziepe.ca, tglx@linutronix.de,
-        lv.ruyi@zte.com.cn, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] powerpc/fsl_msi: fix return error value in error
- handing path
-In-Reply-To: <20220425024149.3437751-1-lv.ruyi@zte.com.cn>
-References: <20220425024149.3437751-1-lv.ruyi@zte.com.cn>
-Date:   Wed, 28 Sep 2022 00:35:25 +1000
-Message-ID: <87edvwzxzm.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8687B81AD7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 14:37:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E561C433C1;
+        Tue, 27 Sep 2022 14:37:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664289424;
+        bh=jQQR5S3NFeN5udTX8flDsKgHoNCgPjncDfZPbucpLYY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=dkgaUyDUgXFbVF8HrG2AcQF+TRH0sTstityCqjZTh6rc0BFF9ORXweKtlPCPnpCwh
+         Pv7ZsvDkodHXdeBMnkFAVVQmk4q3XmaIT6hXpQhLJJmJFVj8qlGq3X9eRL+VohBnAT
+         sNj0Bjj4oSCf/eeuJ6y0UslaDEc962sPDLZufXZr6l7te8uZqwQ/ljFpGO4P7qxdhi
+         RO6j5TDuq4PJDtMRrHXKyVP2NdBI8kKBU/3LAT/+8GRQF/ieMTSHL+3+4InB+iB5gH
+         VVgEUz6MA0eeEv2E8ZhyxdBje2zdRKPqPoOpA9P7Y+BAkFXFGvuHSSLcw9zYxGXK0n
+         +TNR2rPyZ0QuQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 89934E21EC1;
+        Tue, 27 Sep 2022 14:37:04 +0000 (UTC)
+Subject: Re: [GIT PULL] sound fixes for 6.0-rc8 or final
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <87zgelfcdz.wl-tiwai@suse.de>
+References: <87zgelfcdz.wl-tiwai@suse.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <87zgelfcdz.wl-tiwai@suse.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.0-rc8
+X-PR-Tracked-Commit-Id: c35fbea48659ec99a4f532c9ee9e8692405afdd0
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 46452d3786a82bd732ba73fb308ae5cbe4e1e591
+Message-Id: <166428942455.13436.281055190392989930.pr-tracker-bot@kernel.org>
+Date:   Tue, 27 Sep 2022 14:37:04 +0000
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cgel.zte@gmail.com writes:
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
->
-> This function fsl_msi_setup_hwirq() seems to return zero on success and
-> non-zero on failure, but it returns zero in error handing path.
+The pull request you sent on Tue, 27 Sep 2022 10:30:00 +0200:
 
-I agree it seems wrong, but I can't be sure the current code is wrong,
-so unless you're able to test this on actual hardware (or qemu), I'll
-drop this patch.
+> git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.0-rc8
 
-cheers
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/46452d3786a82bd732ba73fb308ae5cbe4e1e591
 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-> ---
->  arch/powerpc/sysdev/fsl_msi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/powerpc/sysdev/fsl_msi.c b/arch/powerpc/sysdev/fsl_msi.c
-> index b3475ae9f236..10f974cfa2f3 100644
-> --- a/arch/powerpc/sysdev/fsl_msi.c
-> +++ b/arch/powerpc/sysdev/fsl_msi.c
-> @@ -353,7 +353,7 @@ static int fsl_msi_setup_hwirq(struct fsl_msi *msi, struct platform_device *dev,
->  	if (!virt_msir) {
->  		dev_err(&dev->dev, "%s: Cannot translate IRQ index %d\n",
->  			__func__, irq_index);
-> -		return 0;
-> +		return -EINVAL;
->  	}
->  
->  	cascade_data = kzalloc(sizeof(struct fsl_msi_cascade_data), GFP_KERNEL);
-> -- 
-> 2.25.1
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
