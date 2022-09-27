@@ -2,110 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E615ECAA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6485ECAAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 19:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232288AbiI0RTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 13:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
+        id S231860AbiI0RUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 13:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232252AbiI0RTK (ORCPT
+        with ESMTP id S230326AbiI0RUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 13:19:10 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EBB1CEDF7;
-        Tue, 27 Sep 2022 10:19:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664299149; x=1695835149;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aMgoRaBq0TVWiNPoZWHgQ65c42ADW1s3CpwVh5+pSQM=;
-  b=Bf1V405jOYEon5Lcvlbq1PBerbHbboZH30Og1AA2Sme+XvseLY/ILCKY
-   M/2b9VsYoX4v2P4h3dbZXDNQ+Ub3E+6x8JC2Lr+Rx0zq3r2P9S04NxbRc
-   nN/tyXPXEDMItnBtP0U4Bmm9pquRHOFtXFzaIZf2uASOdJ72AJMft6Yog
-   tR+y3dd8fQVSuXpYjF5GVeuIl0w94SvL1kmNBid6Rkbp3EkGFLAlb75DX
-   86bcKxca9fu1AtlNH6DTXOAa3qEdvg9WjhvI4g29rUlwS4xln+67AWPoq
-   i1r9zC/gWleDv6+Sbzh8O0n1f4T5UPvFyIl+IpVNzx0Kg/2Y6rnPUeeoE
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="301354942"
-X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
-   d="scan'208";a="301354942"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 10:19:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="690071539"
-X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
-   d="scan'208";a="690071539"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Sep 2022 10:19:07 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 421707C; Tue, 27 Sep 2022 20:19:25 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] usb: typec: Replace custom implementation of device_match_fwnode()
-Date:   Tue, 27 Sep 2022 20:19:24 +0300
-Message-Id: <20220927171924.61908-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Sep 2022 13:20:51 -0400
+Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7555AEEE86
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:20:49 -0700 (PDT)
+Received: by mail-ed1-x54a.google.com with SMTP id z2-20020a056402274200b004516734e755so8265965edd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 10:20:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=xrimbA31oh12GrLjVo2B/hMpsltLczwvj4VfTLXOv0M=;
+        b=OMULmYEIDkxRB7ENeb/uPGSUQ/EgKtqJfimZkvES7SP7Ltpiyr6iMf2rYJ/dQhl9he
+         coiTT+OW7F8lFzNCnGgdwu5UwagfywnIiEyVoRcGQWlgoiTWZ4vO1fO049HmAt3CZrDy
+         2DJsHAEhaWJXPTKd85/2FpQtiXDEOB1fRgMLGpV7NiSw0acPbNGYRZnzuQbb7X1sPj56
+         rRsrbWFHxStB08zMuxe95EAr3Ym7aZ9iE4Y5l6UKgqKfWp1hXqGHVVJKHZB5mzhosmoP
+         t2TbThc4MsAN5J73pZjoiCIbEFQRn867vj92luYVJYzkyuaMR/+gKSFWJfgmr0ZQK/7l
+         PhHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=xrimbA31oh12GrLjVo2B/hMpsltLczwvj4VfTLXOv0M=;
+        b=GMGBIOLT8JITdUTHBeI+X+T6USonl3Ffmm35iPolchQErxZ+pDwy9qZNgcDRxgfnih
+         ViCwd8dcEI6y38tNVmqPC4RdmEzan4F5M4jS96zRogFCpKHnYObex5BgNib9ROX5hU6k
+         GihHeJfjapt5BwLf8JONwhtMkbmB6f4oadZfbE+7SAXFb8EhrLk8dHxev4pvgRq06ROC
+         uGRI8mOIYw9zqO+AwytVReazChZZMMO8Ourzsuc9VIaJE+4uO3L/5Gt3hYPmbi3L0npI
+         AugaEI6JP320ayP5eWY1avzbwYG5I05heFK+taUfLtVXgMNUf4xEXIjqogtYJuusMb9Z
+         8Pvg==
+X-Gm-Message-State: ACrzQf02dRAhiGlruprYJzKxbMOFkpFSRm4ukoGVdqhgyfk7Kc5w8yBX
+        1+q5YB2dOZnwI6JaiIzRh6zpxkNTww==
+X-Google-Smtp-Source: AMsMyM6uYt0ZRUQWY1DWH18dz7dRb1NqJyLGAtrCnkwcNrvtTOz8ZQ4UdY9DmOFNcbdL/E3JVVvd5Zzptg==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:693c:15a1:a531:bb4e])
+ (user=elver job=sendgmr) by 2002:a05:6402:d5a:b0:457:b705:3280 with SMTP id
+ ec26-20020a0564020d5a00b00457b7053280mr3560695edb.201.1664299247897; Tue, 27
+ Sep 2022 10:20:47 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 19:20:25 +0200
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+Message-ID: <20220927172025.1636995-1-elver@google.com>
+Subject: [PATCH -tip] perf, hw_breakpoint: Fix use-after-free if
+ perf_event_open() fails
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
+        syzkaller <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace custom implementation of the device_match_fwnode().
+Local testing revealed that we can trigger a use-after-free during
+rhashtable lookup as follows:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+ | BUG: KASAN: use-after-free in memcmp lib/string.c:757
+ | Read of size 8 at addr ffff888107544dc0 by task perf-rhltable-n/1293
+ |
+ | CPU: 0 PID: 1293 Comm: perf-rhltable-n Not tainted 6.0.0-rc3-00014-g85260862789c #46
+ | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+ | Call Trace:
+ |  <TASK>
+ |  memcmp			lib/string.c:757
+ |  rhashtable_compare		include/linux/rhashtable.h:577 [inline]
+ |  __rhashtable_lookup		include/linux/rhashtable.h:602 [inline]
+ |  rhltable_lookup		include/linux/rhashtable.h:688 [inline]
+ |  task_bp_pinned		kernel/events/hw_breakpoint.c:324
+ |  toggle_bp_slot		kernel/events/hw_breakpoint.c:462
+ |  __release_bp_slot		kernel/events/hw_breakpoint.c:631 [inline]
+ |  release_bp_slot		kernel/events/hw_breakpoint.c:639
+ |  register_perf_hw_breakpoint	kernel/events/hw_breakpoint.c:742
+ |  hw_breakpoint_event_init	kernel/events/hw_breakpoint.c:976
+ |  perf_try_init_event		kernel/events/core.c:11261
+ |  perf_init_event		kernel/events/core.c:11325 [inline]
+ |  perf_event_alloc		kernel/events/core.c:11619
+ |  __do_sys_perf_event_open	kernel/events/core.c:12157
+ |  do_syscall_x64 		arch/x86/entry/common.c:50 [inline]
+ |  do_syscall_64		arch/x86/entry/common.c:80
+ |  entry_SYSCALL_64_after_hwframe
+ |  </TASK>
+ |
+ | Allocated by task 1292:
+ |  perf_event_alloc		kernel/events/core.c:11505
+ |  __do_sys_perf_event_open	kernel/events/core.c:12157
+ |  do_syscall_x64		arch/x86/entry/common.c:50 [inline]
+ |  do_syscall_64		arch/x86/entry/common.c:80
+ |  entry_SYSCALL_64_after_hwframe
+ |
+ | Freed by task 1292:
+ |  perf_event_alloc		kernel/events/core.c:11716
+ |  __do_sys_perf_event_open	kernel/events/core.c:12157
+ |  do_syscall_x64		arch/x86/entry/common.c:50 [inline]
+ |  do_syscall_64		arch/x86/entry/common.c:80
+ |  entry_SYSCALL_64_after_hwframe
+ |
+ | The buggy address belongs to the object at ffff888107544c00
+ |  which belongs to the cache perf_event of size 1352
+ | The buggy address is located 448 bytes inside of
+ |  1352-byte region [ffff888107544c00, ffff888107545148)
+
+This happens because the first perf_event_open() managed to reserve a HW
+breakpoint slot, however, later fails for other reasons and returns. The
+second perf_event_open() runs concurrently, and during rhltable_lookup()
+looks up an entry which is being freed: since rhltable_lookup() may run
+concurrently (under the RCU read lock) with rhltable_remove(), we may
+end up with a stale entry, for which memory may also have already been
+freed when being accessed.
+
+To fix, only free the failed perf_event after an RCU grace period. This
+allows subsystems that store references to an event to always access it
+concurrently under the RCU read lock, even if initialization will fail.
+
+Given failure is unlikely and a slow-path, turning the immediate free
+into a call_rcu()-wrapped free does not affect performance elsewhere.
+
+Fixes: 0370dc314df3 ("perf/hw_breakpoint: Optimize list of per-task breakpoints")
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Marco Elver <elver@google.com>
 ---
- drivers/usb/typec/mux.c     | 4 ++--
- drivers/usb/typec/retimer.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ kernel/events/core.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-index f81ea26ab389..c7177ddd4f12 100644
---- a/drivers/usb/typec/mux.c
-+++ b/drivers/usb/typec/mux.c
-@@ -29,7 +29,7 @@ static int switch_fwnode_match(struct device *dev, const void *fwnode)
- 	if (!is_typec_switch_dev(dev))
- 		return 0;
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index df90777262bf..007a87c1599c 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -11776,11 +11776,9 @@ perf_event_alloc(struct perf_event_attr *attr, int cpu,
+ 		event->destroy(event);
+ 	module_put(pmu->module);
+ err_ns:
+-	if (event->ns)
+-		put_pid_ns(event->ns);
+ 	if (event->hw.target)
+ 		put_task_struct(event->hw.target);
+-	kmem_cache_free(perf_event_cache, event);
++	call_rcu(&event->rcu_head, free_event_rcu);
  
--	return dev_fwnode(dev) == fwnode;
-+	return device_match_fwnode(dev, fwnode);
+ 	return ERR_PTR(err);
  }
- 
- static void *typec_switch_match(const struct fwnode_handle *fwnode,
-@@ -259,7 +259,7 @@ static int mux_fwnode_match(struct device *dev, const void *fwnode)
- 	if (!is_typec_mux_dev(dev))
- 		return 0;
- 
--	return dev_fwnode(dev) == fwnode;
-+	return device_match_fwnode(dev, fwnode);
- }
- 
- static void *typec_mux_match(const struct fwnode_handle *fwnode,
-diff --git a/drivers/usb/typec/retimer.c b/drivers/usb/typec/retimer.c
-index 8edfdc709a28..8e1055783fe2 100644
---- a/drivers/usb/typec/retimer.c
-+++ b/drivers/usb/typec/retimer.c
-@@ -31,7 +31,7 @@ static bool dev_name_ends_with(struct device *dev, const char *suffix)
- 
- static int retimer_fwnode_match(struct device *dev, const void *fwnode)
- {
--	return dev_fwnode(dev) == fwnode && dev_name_ends_with(dev, "-retimer");
-+	return device_match_fwnode(dev, fwnode) && dev_name_ends_with(dev, "-retimer");
- }
- 
- static void *typec_retimer_match(const struct fwnode_handle *fwnode, const char *id, void *data)
 -- 
-2.35.1
+2.37.3.998.g577e59143f-goog
 
