@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6905EC295
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C735EC29A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 14:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbiI0MYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 08:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54436 "EHLO
+        id S231586AbiI0MZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 08:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiI0MYd (ORCPT
+        with ESMTP id S230337AbiI0MY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:24:33 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C816B21D;
-        Tue, 27 Sep 2022 05:24:30 -0700 (PDT)
+        Tue, 27 Sep 2022 08:24:56 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA574D4E9;
+        Tue, 27 Sep 2022 05:24:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664281470; x=1695817470;
+  t=1664281495; x=1695817495;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=RzS58wpNpgGiE+RZfkfthTAXrOpy+eSWd/O1iWhfu9I=;
-  b=eqXzkNlyYL3YJejgTPObIAVZzq5GqB4MuZGcUHN1xHr0gKTj6bTUccNA
-   8pK/sBFunYyPKl8E4P2F6PFBdFnC81RJJZQUkpdTNbzQNgSGcvrRmXH2R
-   afcxJKtK3klvefOnsAW61pPPMSELRNjSUcPSCsyHyb9DD7kY6KltLdq+3
-   cdTg4Lt6AkMMjP0gTugclnNAidFcPNPMAUsl7eM4CebFvHpQLk4Lo84cP
-   4125LySTudSMPfiCNO8au6eQIbYGnPPOH7cuLwgkMCH9529mK4mH73FQY
-   TCvZ+GnXJ198JJcSsXsTXOmbYdTJCDvKMHMD4G/gOBOJu4Xzzu9joQRQ5
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="300022614"
+  bh=MLweA3n1o34G/rMU6/yH26LTPtCMNLw86EAP5UfzGq4=;
+  b=Tj2lDBCScqcrwIktDhlejDv1fKoGP/o5JXRdBxa6KPf+ibIBQZKHjF9d
+   r3xpb4jc3cCfrgH0T3Co3Qu64QIWUYQfDq+N/eg6yf5UAz8EWK0bXyvET
+   RaKDSfuKKtZXnOEgsx+3zMiyDIYJKmf4c9SWjrU2J3rVseZTIuPceIMms
+   eswR7el+t5LSHUL7LXgy8h8cupuGrlhuO25fVlK9sKc7cL3/shqnulq1u
+   GrpmfvLyn4Fa2/EeOt7nYJLQfA1BX952dj4VkgRLrE8kQK3kw3CHNzPnG
+   CWx4IiL7GhuPBTQdmuoQ9Is5xuplz//EAY+6IYM344ssJ7SlZfYR2025Y
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="387590388"
 X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="300022614"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:24:30 -0700
+   d="scan'208";a="387590388"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 05:24:53 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="710541880"
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="725493221"
 X-IronPort-AV: E=Sophos;i="5.93,349,1654585200"; 
-   d="scan'208";a="710541880"
+   d="scan'208";a="725493221"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Sep 2022 05:24:28 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 27 Sep 2022 05:24:51 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1od9dS-008RPU-0V;
-        Tue, 27 Sep 2022 15:24:26 +0300
-Date:   Tue, 27 Sep 2022 15:24:25 +0300
+        id 1od9dp-008RQR-2B;
+        Tue, 27 Sep 2022 15:24:49 +0300
+Date:   Tue, 27 Sep 2022 15:24:49 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Cc:     Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>,
@@ -53,14 +53,13 @@ Cc:     Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>,
         Tony Lindgren <tony@atomide.com>, linux-iio@vger.kernel.org,
         linux-watchdog@vger.kernel.org, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] iio: adc: twl4030-madc: add missing of.h include
-Message-ID: <YzLreedzM3/+2gBh@smile.fi.intel.com>
+Subject: Re: [PATCH 1/4] Input: twl4030-pwrbutton - add missing of.h include
+Message-ID: <YzLrkSwngUwlyTGZ@smile.fi.intel.com>
 References: <20220927052217.2784593-1-dmitry.torokhov@gmail.com>
- <20220927052217.2784593-4-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220927052217.2784593-4-dmitry.torokhov@gmail.com>
+In-Reply-To: <20220927052217.2784593-1-dmitry.torokhov@gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -71,15 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 10:22:16PM -0700, Dmitry Torokhov wrote:
-> The driver is using of_device_id and therefore needs to include
+On Mon, Sep 26, 2022 at 10:22:13PM -0700, Dmitry Torokhov wrote:
+> The driver is using of_match_ptr() and therefore needs to include
 > of.h header.
 
-As per patch 2 comment, mod_devicetable.h is needed for that.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> We used to get this definition indirectly via inclusion
-> of matrix_keypad.h from twl.h, but we are cleaning up matrix_keypad.h
-> from unnecessary includes.
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+>  drivers/input/misc/twl4030-pwrbutton.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/input/misc/twl4030-pwrbutton.c b/drivers/input/misc/twl4030-pwrbutton.c
+> index b307cca17022..e3ee0638ffba 100644
+> --- a/drivers/input/misc/twl4030-pwrbutton.c
+> +++ b/drivers/input/misc/twl4030-pwrbutton.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/errno.h>
+>  #include <linux/input.h>
+>  #include <linux/interrupt.h>
+> +#include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/mfd/twl.h>
+>  
+> -- 
+> 2.38.0.rc1.362.ged0d419d3c-goog
+> 
 
 -- 
 With Best Regards,
