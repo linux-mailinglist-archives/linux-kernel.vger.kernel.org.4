@@ -2,588 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F16835ED046
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 00:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1E95ED04C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 00:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiI0W3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 18:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
+        id S230227AbiI0Wcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 18:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbiI0W3c (ORCPT
+        with ESMTP id S229515AbiI0Wcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 18:29:32 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52F11E769B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 15:29:29 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id s18so6973122qtx.6
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 15:29:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date;
-        bh=v/CsDKRSsXkh/bfG0mxRUF6FBaIhYxo8Xl+0nAfOACg=;
-        b=FhHNiNaQnnR1oq6bjQG22UmPq20IUaJTGTK66LlO8eRM9tuU3o6ZZH3Sb26EEPZ3qN
-         uBYOEbv3OP34wc/5MqoZjqtO2tOCAhELXbkX2oFA024gjeUnpvwO+3+gTC/2i0YTWbKW
-         HsCTvQuqv/7++Wp2VS+HaNaNjIyoubEOGnw4U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=v/CsDKRSsXkh/bfG0mxRUF6FBaIhYxo8Xl+0nAfOACg=;
-        b=yxsvDR1x8Zi94bo3QYl533uQU4m2s8mxgCzrL3CSjcHWRn40dFd3eYdc4qIaH0wHWF
-         DtIE4U0CnSvyVEVfMvNp3uS85Lu9RIZ87GUCpwyOPG0okcib2vpAj6IABxU2JrhNL4Nv
-         0DMj3OY+S+8feDqmS5atoQb1Bs0wgsaH2XTw7HIBtXNSnoj46I00VIeswjFm4QUrUyCr
-         lhYclavG66ZSxxP01Gx4jRt+1OJBSwikAGnF/ECXTTxBv2yToyZd6dkAUkOEPIH92tz9
-         6wddGaInyAwKfVtjtkClnKOpu87oAUjqTy/Qj62PaJfIad6ffmbGTwHAuymx3d0N0xj5
-         KE7g==
-X-Gm-Message-State: ACrzQf2inBy2Zek6a47jpJgxGNmcQQpZxbEbc6GB2ko2BfzaQNCzjPL5
-        wu2zEYhzrIYGq06MAnznOT32PyLML4dmFQ==
-X-Google-Smtp-Source: AMsMyM7Hnfe1Seb3cXf9Bz3VpWNRv2lw1zX15xOX5c7f4H2z4PIhWm3YTspuyWAFGOiOf5Ey5dOW1w==
-X-Received: by 2002:a05:622a:a:b0:35d:4dba:eda1 with SMTP id x10-20020a05622a000a00b0035d4dbaeda1mr3966251qtw.43.1664317768288;
-        Tue, 27 Sep 2022 15:29:28 -0700 (PDT)
-Received: from smtpclient.apple ([2600:1003:b116:b844:d431:b5b1:ec77:48cc])
-        by smtp.gmail.com with ESMTPSA id az40-20020a05620a172800b006b919c6749esm1682918qkb.91.2022.09.27.15.29.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 15:29:27 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v6 1/4] rcu: Make call_rcu() lazy to save power
-Date:   Tue, 27 Sep 2022 18:29:26 -0400
-Message-Id: <9E3CFF3C-8956-4C44-8072-1CCD5E84CC4C@joelfernandes.org>
-References: <3F5B20A5-6E48-4603-ACBA-0A7947A9C457@joelfernandes.org>
-Cc:     paulmck@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org
-In-Reply-To: <3F5B20A5-6E48-4603-ACBA-0A7947A9C457@joelfernandes.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-X-Mailer: iPhone Mail (19G82)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 27 Sep 2022 18:32:31 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301D51E8035;
+        Tue, 27 Sep 2022 15:32:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664317950; x=1695853950;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=nnvZ9bvFllboDECaEYNE8R/zoBnoRGUHF/4x+LaD3rY=;
+  b=n8l6/1tgpqZ//navBEQKlAtWnulYPTexqkdX4GftGqmKRsYB8NyBo1hv
+   1IqWVUy93AgbMJJ4gm5QSighr6JPt+YOeohJpLTJ6s1GUUJyjF2RFPnbn
+   8LpgmfnbsPGzndxJQaN+vj+WJsVgA9MwOD0CCkZsb9UTAapANJ/1m5y2C
+   MXPjujci1sa8F9wPxw84hKRsFAGTJOS500fnZr6Pza58005AMUryDCBBE
+   WLjbbFTgY9ce5BrE6aQULFBr2eZdRwx1zQ1+BtFu9esk2wpnc8gE6U42I
+   ZLObOm5WBEcoJ+EDLVwcfIXr2L1hl7wr3UedwUQKMdHbQhF3Je5nz/dFV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="387732233"
+X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
+   d="scan'208";a="387732233"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 15:32:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="654890571"
+X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
+   d="scan'208";a="654890571"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga001.jf.intel.com with ESMTP; 27 Sep 2022 15:32:29 -0700
+Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 15:32:27 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 27 Sep 2022 15:32:27 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.104)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 27 Sep 2022 15:32:27 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TN0gxCjPPCSqIJ5s05c3GEDil2slTaXotm58GtI9CI2LSCOwTWpePl6L1xY0twtYijAZ3sIzmidtcnjzXTeA4n9c9aSJmQkBNO+vLt0veGKUHCk6tvqWzYpBA7gJ5G/wg9Vmz7nHWIkn4PKY1//8/a4B6U682WxA7AuzABOpRsKGssWe198C20V2jmg9d4Pd+hKrX4rE+bDyA4jUh65pKWUVIkzITqZsg4i1jTCK7SqYqBNa1v1dqbMLu22kQUC72RSg3m1BhB2Cw6/F/Z58Fmm57afVQiNyFX+QvdfRC1M/4bdJ4budzpFfOAPNlIS4A65ngr6eyHY4Y7HnrxWwuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nnvZ9bvFllboDECaEYNE8R/zoBnoRGUHF/4x+LaD3rY=;
+ b=loFwtGqu1LYDSnrdFGbdkMEcQOOKffxcOH5EHPQr8qUFZpM2UHvzKW+WVvpgfMdzxGw+VtlfdpgMbVcT4EqobLBWW15s6xM85x+zhjR/jNd03qHFpB1MqLJUMj+emETDmWI0IR/bqxe+gzN5eI1YtdlFiBijov9GcO0ZZ0oGig7sR0qiFROobSczd6TpC7YnTU3wWu+1Vwrib032YuZPEWZ7bZVTZV3jej4N5gtoeDokrdJ8L0clKgnbYWz9JnYnEc9M2JQD53ILiA8pphVNQvPo7pYizf98WW0BymyhSW0Z2Mil2PinyN6a+ArSNUh2B4MxWnbHvG9QYsGvV/hmlA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com (2603:10b6:208:3d7::17)
+ by CO1PR11MB5169.namprd11.prod.outlook.com (2603:10b6:303:95::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Tue, 27 Sep
+ 2022 22:32:19 +0000
+Received: from IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::d145:9195:77f:8911]) by IA1PR11MB6097.namprd11.prod.outlook.com
+ ([fe80::d145:9195:77f:8911%7]) with mapi id 15.20.5654.025; Tue, 27 Sep 2022
+ 22:32:18 +0000
+From:   "Yu, Fenghua" <fenghua.yu@intel.com>
+To:     Babu Moger <babu.moger@amd.com>, "corbet@lwn.net" <corbet@lwn.net>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>
+CC:     "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Bae, Chang Seok" <chang.seok.bae@intel.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "sandipan.das@amd.com" <sandipan.das@amd.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: RE: [PATCH v5 09/12] x86/resctrl: Add sysfs interface to write
+ mbm_total_bytes event configuration
+Thread-Topic: [PATCH v5 09/12] x86/resctrl: Add sysfs interface to write
+ mbm_total_bytes event configuration
+Thread-Index: AQHY0q96nFKX1Z/fS0iuDCz8lBf3QK3z28Zw
+Date:   Tue, 27 Sep 2022 22:32:18 +0000
+Message-ID: <IA1PR11MB6097F93E6975B4FAAE3BA1599B559@IA1PR11MB6097.namprd11.prod.outlook.com>
+References: <166431016617.373387.1968875281081252467.stgit@bmoger-ubuntu>
+ <166431039972.373387.17483031820875867626.stgit@bmoger-ubuntu>
+In-Reply-To: <166431039972.373387.17483031820875867626.stgit@bmoger-ubuntu>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.500.17
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA1PR11MB6097:EE_|CO1PR11MB5169:EE_
+x-ms-office365-filtering-correlation-id: 6e150eac-b1ba-4c86-8d69-08daa0d82319
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RHp8rS+W+e9dptjrmHbA07cujc9MqhIl1oLI0D4RDtfsEc4fxMQYQ1eHyKnPM71ZGzHjZ6WZfnK65sCpb84b+OVH6QNhwoE19AArEdEbqdeB3AZddC+0OA78Eln9TWi+/IRUjLDThf87+1gj+Wr8lHfhbHD8nq6Eapep5gO898w39Ou5G21X5Ul7X0XBKNtGziopWEjO4NuEqnnw39aOp1l9VqV2Nz0z6hgw7D2vN34fkIGGC190IS7HqUBeJco/uSQC+Aj/+0+Ft6KlscMygabdq8bi52jiWqmsxrQFtd5OXkXK86FW3OwRhooGTAssDzrtKzm4Zrn0bCW/SfBdghs8pUtqu3V1qQ4jOH212bgJWkzpw3GkkBV+iIm6eLdaz1F2joDNR0+ZSjD11T2aWd5jqIOWBo4/e834J3Kq7si5WMhATyoSUuGfB6DOrb2f7ocLRKf8RtAZiIEExBe7wI4MlBxFNoZKkK/gGQiecIBNZhl3YBDjY/YqS3f6MGhQAUwkvq+0HnVn7wt6buH2VEn+CdmxmYE4Prygt4rwdKS0H/Nh43nVxXiTgbSXUKriPjs0oK15pocLxD/EzNOOWNlqq8l4N7o89nCaFE5AZIzMCWzuyZFTXjuojyXZFj4JTSt8i3SET2GbhpBDewrfGq/DErPbymC6V3pawxlYAT8Rg9KLflEzO3BIHtBA1RZ7yfbV8d7vvaZoG6A+cZJYR8gRZ/kt3UATzRvg2R8xbmQa4QQJdLFxBdWDaZSfMLwPp64cHJswZTdaZ9Kq9whdMw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6097.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(346002)(376002)(396003)(39860400002)(451199015)(5660300002)(66946007)(8936002)(122000001)(83380400001)(38100700002)(2906002)(110136005)(71200400001)(316002)(82960400001)(54906003)(33656002)(26005)(86362001)(38070700005)(7696005)(9686003)(4326008)(55016003)(186003)(52536014)(6506007)(41300700001)(66556008)(7416002)(64756008)(66446008)(478600001)(8676002)(66476007)(76116006);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eXhyc0hwSDdQUGtOKzZmbld5L3FGKzBMZ1VFRVZPdUE1TWVMaExxbUg1YWl0?=
+ =?utf-8?B?YWs3OVB2UU92QkZnc3gxVDlBbXdvQ09nUmVia1ZkRnhXSVZXTlVXMk1NNlhT?=
+ =?utf-8?B?SWRYd2FlTE1YczFmM2V1Sml1ZmpMbHNYNTVML21TZnpNQ1JMY3B6WjZiMUVu?=
+ =?utf-8?B?d3lvRkxldE5jTWI5YTdENDcrZ2xSSi9XdW1kTFRlS0hMTFVGWkJ5OHMxb2NY?=
+ =?utf-8?B?RWhvcTBZUlhlRDIxSHF3YUVqYW5xK093T1VzTVJYajVZVm1UWk9uOWMvVVNt?=
+ =?utf-8?B?R2ZaYlB1UHpXdkZMYm5FbzV0dmFiTXpLSHc1WXVYSHRmcS93bi8wZUF2LzFL?=
+ =?utf-8?B?TUdZMTNKODBtTE5zclQrRVdWbm1DMWFvaytSdUk2K1IvdWtBWWxHUmZhVVRB?=
+ =?utf-8?B?cGdoTUJvNFZ4aTdKTGVCU3ZsTlUvQjM1ZVRxd0ZicUhXUHNHNy9qdTgrQXFn?=
+ =?utf-8?B?NUFyVHNMcDFCdU1HVEF0U1NuL2J2aDFGZExLUUx0NStmU1FWWjNiczBMbXhZ?=
+ =?utf-8?B?UXhYbno5UzczaWhTTGJnajEwb0xtTkJ2c0VBWE1QNWsxbjMxOFg5dGY0NjVT?=
+ =?utf-8?B?VGMvM3ptdVZvbXRUNzZaMlJnTTcxUThkYlZjYUhXT3ZpOTJDOEhrOHNHWXJ5?=
+ =?utf-8?B?RlhPN0ZvOG9GU0tqRXZoN2MrbnJ4QTFJZVQ5c1FuSHUzWkk1TDBvTFVUMTl4?=
+ =?utf-8?B?ci8zWlVwMUtvdnh5NkJpQ0V6MVhhcGFIdWNCRUpVdlZkZTlkUUxiNmU1dGNq?=
+ =?utf-8?B?OGZXNTcxYUxwRzZ4K3NUS3NWUHg1ZG5lVWkzVUh0MENQcGRzMTZkOXh6WmIy?=
+ =?utf-8?B?NWdnZFEzc3NkNXVSanl3ajZUZzFpYUVLa2l4MzB0L0YvVmc2TEhRTVJUbWtt?=
+ =?utf-8?B?dCsxNCswSkxDMDJWRmRBZjdUbml1U2sra1drTnUyZlpGM1dmZXl6ZjYzWFNM?=
+ =?utf-8?B?VHVzTkw0c0hEMUptdjUwTDlJbDNtU3k1T3ZWTXM5UTBFd1B0UlRtZStYYnRk?=
+ =?utf-8?B?NGN0WHNMNmM1YVRrclNBVmFxTCt3cjBqTk9JbEZNaGxMM2FPNkhQdHpZYWJM?=
+ =?utf-8?B?MlVZRXRhZUE4cWpCT3JVNElwOEEzdWJUZ1hyc2QrZElDU1c1WGlpNkdzazFY?=
+ =?utf-8?B?ZEZuSnN3Tkh3Q21DQzdGMVp3M0FxdXBJOVJEeHlGbmRJOGtvY1paZHJ3emM0?=
+ =?utf-8?B?a0syZlZuQWFQaHNmWmtpczNyMm9SdlAvUWNnOW9FNXo0TldZS1Z1MnNNdFU5?=
+ =?utf-8?B?KzM3dE5OUUoycFp6NEY5eWZpMFBuVzQ4cXFidDJ5VnFicUJkdFA3UVk2UFNq?=
+ =?utf-8?B?TWhyV3lhZytzZ3pWZkt5VFNqVlFXRDVFQVV6S3ZkV2JVYzJwNVM2WUF4OEhl?=
+ =?utf-8?B?cFdjOHFsdUdtNE5rK3ZUVEdqcW5KaVluMnloNzh3b3pLNGRFK2licVovQmRn?=
+ =?utf-8?B?cGpOQWtsaC9FcWEzSFFjayt1b1dvdWtkcVB1VUllMk12NjdBVnBiYzk3MW5q?=
+ =?utf-8?B?amZIMWtFMkJiUW9JMm9PT2VtU1l5UlZpRG8raFc0Tm1LQmJ3dlRlS2pCTitj?=
+ =?utf-8?B?d0t1NkI5Y3pVcWNHZlA4S2VtMTNVWjltVE1nWlBSMEF4VmVxYlQzb2lUUTdY?=
+ =?utf-8?B?QmtPWkhpUEorcVJ1K1FBM2QrUE00bjBjbXVmeTdKSXJQOTB4TlJhemFNUTFz?=
+ =?utf-8?B?ZUsxQ1A5d3dtQ0pXTGtJNXlVK1NyM2x1ck9OZUpOaWN3endvZzNSZXZJRGpq?=
+ =?utf-8?B?UnNxMVJ3c0MwOUh2Tk5iRVNXSnBVUXdCM2F5Wng5M2lDclhKTjJua1QwSFZs?=
+ =?utf-8?B?VVlObGMxRWRySmlweUhEcFQzek1Fb0NrM29uM05TbWhsRGRCMnQxMVpYL2Fy?=
+ =?utf-8?B?eVBKcjRRdHZyKzZQTFNkQmRIYjNHMHZmbm1YNXJDaEZqYXZEYkFMcmkyU2dH?=
+ =?utf-8?B?bUkwRzZRNVVFNUR1T1NaQnVFcnBHa2lRcHNCaXVuZWtlaUJ1STZzV1NXdm5N?=
+ =?utf-8?B?R3U5SUxjckZIbzN1VUIyNnpIT09ESEZ5QXVzZVNpRDV4TXVFbU1tMkR4RkVX?=
+ =?utf-8?B?UnpROENEampZbElBVS9oRkRkRXlOWTQ2cCtqZmg2ckQ0eGEzR3lONWtBNWJZ?=
+ =?utf-8?Q?EXtnMKugEmOCdVKJnVCrzzzbv?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6097.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e150eac-b1ba-4c86-8d69-08daa0d82319
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2022 22:32:18.8135
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4sEClD213ZkrsJ9dOBhiHaJq5YphQhemWt3Mum7PLmjsdnHBrzqhkpsOIx6qgg71UOY+k7OhvmcFhQ70d3aowQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5169
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> On Sep 27, 2022, at 6:05 PM, Joel Fernandes <joel@joelfernandes.org> wrote=
-:
->=20
-> =EF=BB=BF
->=20
->> On Sep 27, 2022, at 5:31 PM, Uladzislau Rezki <urezki@gmail.com> wrote:
->>=20
->> =EF=BB=BFOn Tue, Sep 27, 2022 at 05:13:34PM +0200, Uladzislau Rezki wrote=
-:
->>>> On Tue, Sep 27, 2022 at 04:59:44PM +0200, Uladzislau Rezki wrote:
->>>> On Tue, Sep 27, 2022 at 02:30:03PM +0000, Joel Fernandes wrote:
->>>>> On Tue, Sep 27, 2022 at 04:08:18PM +0200, Uladzislau Rezki wrote:
->>>>>> On Mon, Sep 26, 2022 at 08:54:27PM +0000, Joel Fernandes wrote:
->>>>>>> Hi Vlad,
->>>>>>>=20
->>>>>>> On Mon, Sep 26, 2022 at 09:39:23PM +0200, Uladzislau Rezki wrote:
->>>>>>> [...]
->>>>>>>>>> On my KVM machine the boot time is affected:
->>>>>>>>>>=20
->>>>>>>>>> <snip>
->>>>>>>>>> [    2.273406] e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network=
- Connection
->>>>>>>>>> [   11.945283] e1000 0000:00:03.0 ens3: renamed from eth0
->>>>>>>>>> [   22.165198] sr 1:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/=
-form2 tray
->>>>>>>>>> [   22.165206] cdrom: Uniform CD-ROM driver Revision: 3.20
->>>>>>>>>> [   32.406981] sr 1:0:0:0: Attached scsi CD-ROM sr0
->>>>>>>>>> [  104.115418] process '/usr/bin/fstype' started with executable s=
-tack
->>>>>>>>>> [  104.170142] EXT4-fs (sda1): mounted filesystem with ordered da=
-ta mode. Quota mode: none.
->>>>>>>>>> [  104.340125] systemd[1]: systemd 241 running in system mode. (+=
-PAM +AUDIT +SELINUX +IMA +APPARMOR +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GC=
-RYPT +GNUTLS +ACL +XZ +LZ4 +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 +IDN -PCRE2=
- default-hierarchy=3Dhybrid)
->>>>>>>>>> [  104.340193] systemd[1]: Detected virtualization kvm.
->>>>>>>>>> [  104.340196] systemd[1]: Detected architecture x86-64.
->>>>>>>>>> [  104.359032] systemd[1]: Set hostname to <pc638>.
->>>>>>>>>> [  105.740109] random: crng init done
->>>>>>>>>> [  105.741267] systemd[1]: Reached target Remote File Systems.
->>>>>>>>>> <snip>
->>>>>>>>>>=20
->>>>>>>>>> 2 - 11 and second delay is between 32 - 104. So there are still u=
-sers which must
->>>>>>>>>> be waiting for "RCU" in a sync way.
->>>>>>>>>=20
->>>>>>>>> I was wondering if you can compare boot logs and see which timesta=
-mp does the
->>>>>>>>> slow down start from. That way, we can narrow down the callback. A=
-lso another
->>>>>>>>> idea is, add "trace_event=3Drcu:rcu_callback,rcu:rcu_invoke_callba=
-ck
->>>>>>>>> ftrace_dump_on_oops" to the boot params, and then manually call
->>>>>>>>> "tracing_off(); panic();" from the code at the first printk that s=
-eems off in
->>>>>>>>> your comparison of good vs bad. For example, if "crng init done" t=
-imestamp is
->>>>>>>>> off, put the "tracing_off(); panic();" there. Then grab the serial=
- console
->>>>>>>>> output to see what were the last callbacks that was queued/invoked=
-.
->>>>>>>=20
->>>>>>> Would you be willing to try these steps? Meanwhile I will try on my s=
-ide as
->>>>>>> well with the .config you sent me in another email.
->>>>>>>=20
->>>>>> Not exactly those steps. But see below:
->>>>>>=20
->>>>>> <snip>
->>>>>> [    2.291319] e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network Con=
-nection
->>>>>> [   17.302946] e1000 0000:00:03.0 ens3: renamed from eth0
->>>>>> <snip>
->>>>>>=20
->>>>>> 15 seconds delay between two prints. I have logged all call_rcu() use=
-rs
->>>>>> between those two prints:
->>>>>>=20
->>>>>> <snip>
->>>>>> # tracer: nop
->>>>>> #
->>>>>> # entries-in-buffer/entries-written: 166/166   #P:64
->>>>>> #
->>>>>> #                                _-----=3D> irqs-off/BH-disabled
->>>>>> #                               / _----=3D> need-resched
->>>>>> #                              | / _---=3D> hardirq/softirq
->>>>>> #                              || / _--=3D> preempt-depth
->>>>>> #                              ||| / _-=3D> migrate-disable
->>>>>> #                              |||| /     delay
->>>>>> #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
->>>>>> #              | |         |   |||||     |         |
->>>>>>  systemd-udevd-669     [002] .....     2.338739: e1000_probe: Intel(R=
-) PRO/1000 Network Connection
->>>>>>  systemd-udevd-665     [061] .....     2.338952: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....     2.338962: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-665     [061] .....     2.338965: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-645     [053] .....     2.338968: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-665     [061] .....     2.338987: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-645     [053] .....     2.338989: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-645     [053] .....     2.338999: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-645     [053] .....     2.339002: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-645     [053] .....     2.339024: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>    kworker/0:3-546     [000] d..1.     6.329516: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70effe40a0
->>>>>>        rcuop/0-17      [000] b....     6.337320: __call_rcu_common: -=
-> 0x0: exit_creds+0x63/0x70 <- 0x0
->>>>>>   kworker/38:1-744     [038] d..1.     6.841479: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f97e40a0
->>>>>>          <...>-739     [035] d..1.     6.841479: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f8be40a0
->>>>>>          <...>-732     [021] d..1.     6.841486: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f53e40a0
->>>>>>   kworker/36:1-740     [036] d..1.     6.841487: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f8fe40a0
->>>>>>       rcuop/21-170     [023] b....     6.849276: __call_rcu_common: -=
-> 0x0: exit_creds+0x63/0x70 <- 0x0
->>>>>>       rcuop/38-291     [052] b....     6.849950: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/38-291     [052] b....     6.849957: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>    kworker/5:1-712     [005] d..1.     7.097392: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f13e40a0
->>>>>>   kworker/19:1-727     [019] d..1.     7.097392: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f4be40a0
->>>>>>          <...>-719     [007] d..1.     7.097392: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f1be40a0
->>>>>>   kworker/13:1-721     [013] d..1.     7.097392: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f33e40a0
->>>>>>   kworker/52:1-756     [052] d..1.     7.097395: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fcfe40a0
->>>>>>   kworker/29:1-611     [029] d..1.     7.097395: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f73e40a0
->>>>>>          <...>-754     [049] d..1.     7.097405: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fc3e40a0
->>>>>>   kworker/12:1-726     [012] d..1.     7.097405: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f2fe40a0
->>>>>>   kworker/53:1-710     [053] d..1.     7.097405: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fd3e40a0
->>>>>>          <...>-762     [061] d..1.     7.097405: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70ff3e40a0
->>>>>>          <...>-757     [054] d..1.     7.097408: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fd7e40a0
->>>>>>   kworker/25:1-537     [025] d..1.     7.097408: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f63e40a0
->>>>>>          <...>-714     [004] d..1.     7.097408: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f0fe40a0
->>>>>>          <...>-749     [044] d..1.     7.097413: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fafe40a0
->>>>>>   kworker/51:1-755     [051] d..1.     7.097413: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fcbe40a0
->>>>>>          <...>-764     [063] d..1.     7.097415: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70ffbe40a0
->>>>>>          <...>-753     [045] d..1.     7.097416: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fb3e40a0
->>>>>>   kworker/43:1-748     [043] d..1.     7.097416: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fabe40a0
->>>>>>   kworker/41:1-747     [041] d..1.     7.097416: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fa3e40a0
->>>>>>   kworker/57:1-760     [057] d..1.     7.097416: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fe3e40a0
->>>>>>          <...>-720     [008] d..1.     7.097418: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f1fe40a0
->>>>>>   kworker/58:1-759     [058] d..1.     7.097421: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fe7e40a0
->>>>>>   kworker/16:1-728     [016] d..1.     7.097424: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f3fe40a0
->>>>>>          <...>-722     [010] d..1.     7.097427: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f27e40a0
->>>>>>   kworker/22:1-733     [022] d..1.     7.097432: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f57e40a0
->>>>>>          <...>-731     [026] d..1.     7.097432: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f67e40a0
->>>>>>          <...>-752     [048] d..1.     7.097437: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fbfe40a0
->>>>>>   kworker/18:0-147     [018] d..1.     7.097437: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f47e40a0
->>>>>>   kworker/39:1-745     [039] d..1.     7.097437: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f9be40a0
->>>>>>          <...>-716     [003] d..1.     7.097437: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70f0be40a0
->>>>>>          <...>-703     [050] d..1.     7.097437: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fc7e40a0
->>>>>>   kworker/42:1-746     [042] d..1.     7.097444: __call_rcu_common: -=
-> 0x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70fa7e40a0
->>>>>>       rcuop/13-113     [013] b....     7.105592: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/13-113     [013] b....     7.105595: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/10-92      [040] b....     7.105608: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/10-92      [040] b....     7.105610: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/16-135     [023] b....     7.105613: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>        rcuop/8-78      [039] b....     7.105636: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>        rcuop/8-78      [039] b....     7.105640: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/12-106     [040] b....     7.105651: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/12-106     [040] b....     7.105652: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/19-156     [000] b....     7.105727: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/19-156     [000] b....     7.105730: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>        rcuop/5-56      [058] b....     7.105808: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>        rcuop/5-56      [058] b....     7.105814: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/20-163     [023] b....    17.345648: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/20-163     [023] b....    17.345655: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/14-120     [013] b....    17.345675: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/14-120     [013] b....    17.345681: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>        rcuop/6-63      [013] b....    17.345714: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>        rcuop/6-63      [013] b....    17.345715: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>        rcuop/9-85      [000] b....    17.345753: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>        rcuop/9-85      [000] b....    17.345758: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/17-142     [000] b....    17.345775: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/17-142     [000] b....    17.345776: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/17-142     [000] b....    17.345777: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/11-99      [000] b....    17.345810: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/11-99      [000] b....    17.345811: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/15-127     [013] b....    17.345832: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/15-127     [013] b....    17.345834: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>        rcuop/1-28      [000] b....    17.345834: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>        rcuop/1-28      [000] b....    17.345835: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/15-127     [013] b....    17.345835: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>       rcuop/15-127     [013] b....    17.345837: __call_rcu_common: -=
-> 0x0: file_free_rcu+0x32/0x50 <- 0x0
->>>>>>  systemd-udevd-633     [035] .....    17.346591: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-633     [035] .....    17.346609: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-633     [035] .....    17.346659: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-633     [035] .....    17.346666: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-669     [002] .....    17.347573: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>    kworker/2:2-769     [002] .....    17.347659: __call_rcu_common: -=
-> 0x0: __wait_rcu_gp+0xff/0x120 <- 0x0
->>>>>>  systemd-udevd-675     [012] .....    17.347981: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-675     [012] .....    17.348002: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-675     [012] .....    17.348037: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348098: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348117: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-665     [061] .....    17.348120: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348156: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348166: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348176: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-642     [050] .....    17.348179: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348186: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348197: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348200: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348231: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348240: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348250: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348259: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348262: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348305: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348317: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348332: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348336: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348394: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348403: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348406: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-645     [053] .....    17.348503: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-645     [053] .....    17.348531: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-645     [053] .....    17.348535: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348536: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-645     [053] .....    17.348563: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-665     [061] .....    17.348575: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348628: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348704: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348828: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348884: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348904: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348954: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348983: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.348993: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349002: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349014: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349024: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349026: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349119: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349182: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349243: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349430: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349462: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349472: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349483: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349486: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349583: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349632: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349666: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349699: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-645     [053] .....    17.349727: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349733: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-645     [053] .....    17.349739: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-645     [053] .....    17.349742: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349765: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-645     [053] .....    17.349766: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-642     [050] .....    17.349780: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-665     [061] .....    17.349800: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-642     [050] .....    17.349815: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-642     [050] .....    17.349829: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-642     [050] .....    17.349832: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349834: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-675     [012] .....    17.349835: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-675     [012] .....    17.349853: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-642     [050] .....    17.349861: __call_rcu_common: -=
-> 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>>  systemd-udevd-675     [012] .....    17.349873: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.349879: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.350007: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.350011: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.350080: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.350175: __call_rcu_common: -=
-> ____fput+0x0/0x10: task_work_run+0x5c/0x90 <- 0x0
->>>>>>  systemd-udevd-665     [061] .....    17.350362: dev_change_name: -->=
- renamed from eth0
->>>>>> <snip>
->>>>>>=20
->>>>>> First delay:
->>>>>>=20
->>>>>> <snip>
->>>>>> systemd-udevd-645     [053] .....     2.339024: __call_rcu_common: ->=
- 0x0: __dentry_kill+0x140/0x180 <- 0x2
->>>>>> kworker/0:3-546     [000] d..1.     6.329516: __call_rcu_common: -> 0=
-x0: queue_rcu_work+0x2b/0x40 <- 0xffff8c70effe40a0
->>>>>> <snip>
->>>>>>=20
->>>>>> __dentry_kill() function and after 4 seconds there is another one que=
-ue_rcu_work().
->>>>>> I have checked the __dentry_kill() if it can do any sync talk with RC=
-U but from the
->>>>>> first glance i do not see anything critical. But more attention is re=
-quired.
->>>>>=20
->>>>> Can you log rcu_barrier() as well? It could be that the print is just a=
- side
->>>>> effect of something else that is not being printed.
->>>>>=20
->>>> It has nothing to do with rcu_barrier() in my case. Also i have checked=
-
->>>> the synchronize_rcu() it also works as expected, i.e. it is not a
->>>> blocking reason.
->>>>=20
->>>> Have you tried my config?
->>>>=20
->>>> --
->>>> Uladzislau Rezki
->>> OK. Seems one place i have spot:
->>>=20
->>> <snip>
->>> [    7.074847] calling  init_sr+0x0/0x1000 [sr_mod] @ 668
->>> [   22.422808] sr 1:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 t=
-ray
->>> [   22.422815] cdrom: Uniform CD-ROM driver Revision: 3.20
->>> [   32.664590] sr 1:0:0:0: Attached scsi CD-ROM sr0
->>> [   32.664642] initcall init_sr+0x0/0x1000 [sr_mod] returned 0 after 255=
-89786 usecs
->>> <snip>
->>>=20
->>> --
->>> Uladzislau Rezki
->>=20
->> OK. Found the boot up issue. In my case i had 120 seconds delay:
->=20
-> Wow, nice work.
->=20
->> <snip>
->> diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
->> index 448748e3fba5..a56cfd612e3a 100644
->> --- a/drivers/scsi/scsi_error.c
->> +++ b/drivers/scsi/scsi_error.c
->> @@ -312,7 +312,7 @@ void scsi_eh_scmd_add(struct scsi_cmnd *scmd)
->>        * Ensure that all tasks observe the host state change before the
->>        * host_failed change.
->>        */
->> -       call_rcu(&scmd->rcu, scsi_eh_inc_host_failed);
->> +       call_rcu_flush(&scmd->rcu, scsi_eh_inc_host_failed);
->=20
-> Great! Thanks. I=E2=80=99ll include this and the other one you converted i=
-n the next revision.
-
-By the way, any chance you could check android as well, just to rule out any=
- trouble markers? ChromeOS and your Linux distro are doing well on boot so t=
-hat=E2=80=99s a good sign.
-
-(Also let=E2=80=99s start trimming emails before Steven starts sending out n=
-astygrams ;-)).
-
- Thanks,
-
- - Joel
-
-
-
->=20
-> Thanks,
->=20
->  - Joel=20
->=20
->> }
->>=20
->> /**
->> <snip>
->>=20
->> After this change the boot-up time settles back to normal 4 seconds.
->>=20
->> --
->> Uladzislau Rezki
+SGksIEJhYnUsDQoNCj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9jcHUvcmVzY3RybC9y
+ZHRncm91cC5jDQo+IGIvYXJjaC94ODYva2VybmVsL2NwdS9yZXNjdHJsL3JkdGdyb3VwLmMNCj4g
+aW5kZXggMjdiZjZhZGUwZGJmLi5jMWQ0M2QwMzg0NmEgMTAwNjQ0DQo+IC0tLSBhL2FyY2gveDg2
+L2tlcm5lbC9jcHUvcmVzY3RybC9yZHRncm91cC5jDQo+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9j
+cHUvcmVzY3RybC9yZHRncm91cC5jDQo+IEBAIC0xNDkxLDYgKzE0OTEsMTQ0IEBAIHN0YXRpYyBp
+bnQgbWJtX2xvY2FsX2NvbmZpZ19zaG93KHN0cnVjdA0KPiBrZXJuZnNfb3Blbl9maWxlICpvZiwN
+Cj4gIAlyZXR1cm4gMDsNCj4gIH0NCj4gDQo+ICt2b2lkIG1vbl9ldmVudF9jb25maWdfd3JpdGUo
+dm9pZCAqaW5mbykgew0KDQpTaG91bGQgdGhpcyBmdW5jdGlvbiBiZSBzdGF0aWM/DQoNCj4gKwlz
+dHJ1Y3QgbW9uX2NvbmZpZ19pbmZvICptb25faW5mbyA9IGluZm87DQo+ICsJdTMyIG1zcl9pbmRl
+eDsNCj4gKw0KPiArCXN3aXRjaCAobW9uX2luZm8tPmV2dGlkKSB7DQo+ICsJY2FzZSBRT1NfTDNf
+TUJNX1RPVEFMX0VWRU5UX0lEOg0KPiArCQltc3JfaW5kZXggPSAwOw0KPiArCQlicmVhazsNCj4g
+KwljYXNlIFFPU19MM19NQk1fTE9DQUxfRVZFTlRfSUQ6DQo+ICsJCW1zcl9pbmRleCA9IDE7DQo+
+ICsJCWJyZWFrOw0KPiArCWRlZmF1bHQ6DQo+ICsJCS8qIE5vdCBleHBlY3RlZCB0byBjb21lIGhl
+cmUgKi8NCj4gKwkJcmV0dXJuOw0KPiArCX0NCj4gKw0KPiArCXdybXNyKE1TUl9JQTMyX0VWVF9D
+RkdfQkFTRSArIG1zcl9pbmRleCwgbW9uX2luZm8tPm1vbl9jb25maWcsDQo+IDApOyB9DQo+ICsN
+Cj4gK2ludCBtYm1fY29uZmlnX3dyaXRlKHN0cnVjdCByZHRfcmVzb3VyY2UgKnIsIHN0cnVjdCBy
+ZHRfZG9tYWluICpkLA0KPiArCQkgICAgIHUzMiBldnRpZCwgdTMyIHZhbCkNCj4gK3sNCj4gKwlz
+dHJ1Y3QgbW9uX2NvbmZpZ19pbmZvIG1vbl9pbmZvID0gezB9Ow0KPiArCWNwdW1hc2tfdmFyX3Qg
+Y3B1X21hc2s7DQo+ICsJaW50IHJldCA9IDAsIGNwdTsNCj4gKw0KPiArCXJkdF9sYXN0X2NtZF9j
+bGVhcigpOw0KPiArDQo+ICsJLyogbW9uX2NvbmZpZyBjYW5ub3QgYmUgbW9yZSB0aGFuIHRoZSBz
+dXBwb3J0ZWQgc2V0IG9mIGV2ZW50cyAqLw0KPiArCWlmICh2YWwgPiBNQVhfRVZUX0NPTkZJR19C
+SVRTKSB7DQo+ICsJCXJkdF9sYXN0X2NtZF9wdXRzKCJJbnZhbGlkIGV2ZW50IGNvbmZpZ3VyYXRp
+b25cbiIpOw0KPiArCQlyZXR1cm4gLUVJTlZBTDsNCj4gKwl9DQo+ICsNCj4gKwljcHVzX3JlYWRf
+bG9jaygpOw0KPiArDQo+ICsJaWYgKCF6YWxsb2NfY3B1bWFza192YXIoJmNwdV9tYXNrLCBHRlBf
+S0VSTkVMKSkgew0KPiArCQlyZHRfbGFzdF9jbWRfcHV0cygiY3B1X21hc2sgYWxsb2NhdGlvbiBm
+YWlsZWRcbiIpOw0KPiArCQlyZXQgPSAtRU5PTUVNOw0KPiArCQlnb3RvIGVfdW5sb2NrOw0KPiAr
+CX0NCj4gKw0KPiArCS8qDQo+ICsJICogUmVhZCB0aGUgY3VycmVudCBjb25maWcgdmFsdWUgZmly
+c3QuIElmIGJvdGggYXJlIHNhbWUgdGhlbg0KPiArCSAqIHdlIGRvbnQgbmVlZCB0byB3cml0ZSBp
+dCBhZ2Fpbi4NCj4gKwkgKi8NCj4gKwltb25faW5mby5ldnRpZCA9IGV2dGlkOw0KPiArCW1vbmRh
+dGFfY29uZmlnX3JlYWQoZCwgJm1vbl9pbmZvKTsNCj4gKwlpZiAobW9uX2luZm8ubW9uX2NvbmZp
+ZyA9PSB2YWwpDQo+ICsJCWdvdG8gZV9jcHVtYXNrOw0KPiArDQo+ICsJbW9uX2luZm8ubW9uX2Nv
+bmZpZyA9IHZhbDsNCj4gKw0KPiArCS8qIFBpY2sgYWxsIHRoZSBDUFVzIGluIHRoZSBkb21haW4g
+aW5zdGFuY2UgKi8NCj4gKwlmb3JfZWFjaF9jcHUoY3B1LCAmZC0+Y3B1X21hc2spDQo+ICsJCWNw
+dW1hc2tfc2V0X2NwdShjcHUsIGNwdV9tYXNrKTsNCj4gKw0KPiArCS8qIFVwZGF0ZSBNU1JfSUEz
+Ml9FVlRfQ0ZHX0JBU0UgTVNSIG9uIGFsbCB0aGUgQ1BVcyBpbiBjcHVfbWFzaw0KPiAqLw0KPiAr
+CW9uX2VhY2hfY3B1X21hc2soY3B1X21hc2ssIG1vbl9ldmVudF9jb25maWdfd3JpdGUsICZtb25f
+aW5mbywNCj4gMSk7DQo+ICsNCj4gKwkvKg0KPiArCSAqIFdoZW4gYW4gRXZlbnQgQ29uZmlndXJh
+dGlvbiBpcyBjaGFuZ2VkLCB0aGUgYmFuZHdpZHRoIGNvdW50ZXJzDQo+ICsJICogZm9yIGFsbCBS
+TUlEcyBhbmQgRXZlbnRzIHdpbGwgYmUgY2xlYXJlZCBieSB0aGUgaGFyZHdhcmUuIFRoZQ0KPiAr
+CSAqIGhhcmR3YXJlIGFsc28gc2V0cyBNU1JfSUEzMl9RTV9DVFIuVW5hdmFpbGFibGUgKGJpdCA2
+MikgZm9yDQo+ICsJICogZXZlcnkgUk1JRCBvbiB0aGUgbmV4dCByZWFkIHRvIGFueSBldmVudCBm
+b3IgZXZlcnkgUk1JRC4NCj4gKwkgKiBTdWJzZXF1ZW50IHJlYWRzIHdpbGwgaGF2ZSBNU1JfSUEz
+Ml9RTV9DVFIuVW5hdmFpbGFibGUgKGJpdCA2MikNCj4gKwkgKiBjbGVhcmVkIHdoaWxlIGl0IGlz
+IHRyYWNrZWQgYnkgdGhlIGhhcmR3YXJlLiBDbGVhciB0aGUNCj4gKwkgKiBtYm1fbG9jYWwgYW5k
+IG1ibV90b3RhbCBjb3VudHMgZm9yIGFsbCB0aGUgUk1JRHMuDQo+ICsJICovDQo+ICsJbWVtc2V0
+KGQtPm1ibV9sb2NhbCwgMCwgc2l6ZW9mKHN0cnVjdCBtYm1fc3RhdGUpICogci0+bnVtX3JtaWQp
+Ow0KPiArCW1lbXNldChkLT5tYm1fdG90YWwsIDAsIHNpemVvZihzdHJ1Y3QgbWJtX3N0YXRlKSAq
+IHItPm51bV9ybWlkKTsNCj4gKw0KPiArZV9jcHVtYXNrOg0KPiArCWZyZWVfY3B1bWFza192YXIo
+Y3B1X21hc2spOw0KPiArDQo+ICtlX3VubG9jazoNCj4gKwljcHVzX3JlYWRfdW5sb2NrKCk7DQo+
+ICsNCj4gKwlyZXR1cm4gcmV0Ow0KPiArfQ0KPiArDQo+ICt1bnNpZ25lZCBpbnQgbW9uX2NvbmZp
+Z19wYXJzZShzdHJ1Y3QgcmR0X3Jlc291cmNlICpyLCBjaGFyICp0b2ssIHUzMg0KPiArZXZ0aWQp
+IHsNCg0KU2hvdWxkIHRoaXMgZnVuY3Rpb24gYmUgc3RhdGljPw0KDQo+ICsJY2hhciAqZG9tX3N0
+ciA9IE5VTEwsICppZF9zdHI7DQo+ICsJc3RydWN0IHJkdF9kb21haW4gKmQ7DQo+ICsJdW5zaWdu
+ZWQgbG9uZyBkb21faWQsIHZhbDsNCj4gKwlpbnQgcmV0ID0gMDsNCj4gKw0KPiArbmV4dDoNCj4g
+KwlpZiAoIXRvayB8fCB0b2tbMF0gPT0gJ1wwJykNCj4gKwkJcmV0dXJuIDA7DQo+ICsNCj4gKwkv
+KiBTdGFydCBwcm9jZXNzaW5nIHRoZSBzdHJpbmdzIGZvciBlYWNoIGRvbWFpbiAqLw0KPiArCWRv
+bV9zdHIgPSBzdHJpbShzdHJzZXAoJnRvaywgIjsiKSk7DQo+ICsJaWRfc3RyID0gc3Ryc2VwKCZk
+b21fc3RyLCAiPSIpOw0KPiArDQo+ICsJaWYgKCFkb21fc3RyIHx8IGtzdHJ0b3VsKGlkX3N0ciwg
+MTAsICZkb21faWQpKSB7DQo+ICsJCXJkdF9sYXN0X2NtZF9wdXRzKCJNaXNzaW5nICc9JyBvciBu
+b24tbnVtZXJpYyBkb21haW4gaWRcbiIpOw0KPiArCQlyZXR1cm4gLUVJTlZBTDsNCj4gKwl9DQo+
+ICsNCj4gKwlpZiAoIWRvbV9zdHIgfHwga3N0cnRvdWwoZG9tX3N0ciwgMTYsICZ2YWwpKSB7DQo+
+ICsJCXJkdF9sYXN0X2NtZF9wdXRzKCJNaXNzaW5nICc9JyBvciBub24tbnVtZXJpYyBldmVudA0K
+PiBjb25maWd1cmF0aW9uIHZhbHVlXG4iKTsNCj4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+ICsJfQ0K
+PiArDQo+ICsJbGlzdF9mb3JfZWFjaF9lbnRyeShkLCAmci0+ZG9tYWlucywgbGlzdCkgew0KPiAr
+CQlpZiAoZC0+aWQgPT0gZG9tX2lkKSB7DQo+ICsJCQlyZXQgPSBtYm1fY29uZmlnX3dyaXRlKHIs
+IGQsIGV2dGlkLCB2YWwpOw0KPiArCQkJaWYgKHJldCkNCj4gKwkJCQlyZXR1cm4gLUVJTlZBTDsN
+Cj4gKwkJCWdvdG8gbmV4dDsNCj4gKwkJfQ0KPiArCX0NCj4gKw0KPiArCXJldHVybiAtRUlOVkFM
+Ow0KPiArfQ0KPiArDQo+ICtzdGF0aWMgc3NpemVfdCBtYm1fdG90YWxfY29uZmlnX3dyaXRlKHN0
+cnVjdCBrZXJuZnNfb3Blbl9maWxlICpvZiwNCj4gKwkJCQkgICAgICBjaGFyICpidWYsIHNpemVf
+dCBuYnl0ZXMsIGxvZmZfdCBvZmYpIHsNCj4gKwlzdHJ1Y3QgcmR0X3Jlc291cmNlICpyID0gb2Yt
+PmtuLT5wYXJlbnQtPnByaXY7DQo+ICsJaW50IHJldDsNCj4gKw0KPiArCS8qIFZhbGlkIGlucHV0
+IHJlcXVpcmVzIGEgdHJhaWxpbmcgbmV3bGluZSAqLw0KPiArCWlmIChuYnl0ZXMgPT0gMCB8fCBi
+dWZbbmJ5dGVzIC0gMV0gIT0gJ1xuJykNCj4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+ICsNCj4gKwly
+ZHRfbGFzdF9jbWRfY2xlYXIoKTsNCj4gKw0KPiArCWJ1ZltuYnl0ZXMgLSAxXSA9ICdcMCc7DQo+
+ICsNCj4gKwlyZXQgPSBtb25fY29uZmlnX3BhcnNlKHIsIGJ1ZiwgUU9TX0wzX01CTV9UT1RBTF9F
+VkVOVF9JRCk7DQo+ICsNCj4gKwlyZXR1cm4gcmV0ID86IG5ieXRlczsNCj4gK30NCj4gKw0KPiAg
+LyogcmR0Z3JvdXAgaW5mb3JtYXRpb24gZmlsZXMgZm9yIG9uZSBjYWNoZSByZXNvdXJjZS4gKi8g
+IHN0YXRpYyBzdHJ1Y3QgcmZ0eXBlDQo+IHJlc19jb21tb25fZmlsZXNbXSA9IHsNCj4gIAl7DQo+
+IEBAIC0xNTk0LDYgKzE3MzIsNyBAQCBzdGF0aWMgc3RydWN0IHJmdHlwZSByZXNfY29tbW9uX2Zp
+bGVzW10gPSB7DQo+ICAJCS5tb2RlCQk9IDA2NDQsDQo+ICAJCS5rZl9vcHMJCT0gJnJkdGdyb3Vw
+X2tmX3NpbmdsZV9vcHMsDQo+ICAJCS5zZXFfc2hvdwk9IG1ibV90b3RhbF9jb25maWdfc2hvdywN
+Cj4gKwkJLndyaXRlCQk9IG1ibV90b3RhbF9jb25maWdfd3JpdGUsDQo+ICAJfSwNCj4gIAl7DQo+
+ICAJCS5uYW1lCQk9ICJtYm1fbG9jYWxfY29uZmlnIiwNCj4gDQoNClRoYW5rcy4NCg0KLUZlbmdo
+dWENCg==
