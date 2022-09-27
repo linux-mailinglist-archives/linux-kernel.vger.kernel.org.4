@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970CC5EB87A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CB85EB87B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Sep 2022 05:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbiI0DQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Sep 2022 23:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
+        id S231343AbiI0DQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Sep 2022 23:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbiI0DPq (ORCPT
+        with ESMTP id S231331AbiI0DPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Sep 2022 23:15:46 -0400
+        Mon, 26 Sep 2022 23:15:47 -0400
 Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2062.outbound.protection.outlook.com [40.107.105.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3050AD995;
-        Mon, 26 Sep 2022 20:13:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6E080BE3;
+        Mon, 26 Sep 2022 20:13:50 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bC5bjBl6UWwuoCC9IzjjHScvFMBOKigEVDifyRoGyDAh382r5CQj+VJWR8bqIqilejCEfL9R1Z6rSu77s0Gh2TIexCaz5BfGbXcByMGxVsNIP2St3lQUVbi159emS2Dk/bUtqjW2T8bKv4zMN0ByUMqeiuMjH/hsNshICnb4leXGoJYqupQfdUji43+5cCPUpijpXM+ww3lEEUjnBNZyxYvnBI7izGcU/XCYB66hWQUkuY3y+3nzULwSbEgEPm5F+EwJG/p68k0jR8qZwJzWVq0elPaENi7emqe7Rne8czPNox4zmPSwwus6AIEPFQ35EoTv0xhUkJRo4yRG3zKcZQ==
+ b=k61pmgt4e2plWBuQlepX349FPYixzKB0HUPnU1Uz/GIusUPnLpzKi7XEfyFe5Wa3uyc/Fz10sTxQCh5hgMzW1tNziMJnhjkUICiFsOv0aolPwqPApdhCDHR+q9UyePWAVsxK23yecHgx+aPQ+zMNAu09WbMyVtKTv5IdfbKvDCBCVWNx2x6uCENWba0tlIPQZU1c69l8DV6GUgAJnJjNXfk22owLvzpLbTIdXPnW0fQzduwRZ5RALlPZsnPCx+U29UMDGK/zrXO9SjGKBdyjMgEv9XVD1VrXaOmamK4e4eHiOX5NS8LrhWl6VcMZfgKl0zrdDiX9PkzHv9za2fG2AQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zqzZ8eo+NYfjKPl2QjVNGSsa+gs+Pm1SG8PuslkOlq0=;
- b=eAF4XEug35BZ+irbE8gQlmq4Khobo4P9X5nZ5nTUCI3E/DZGNfltThQfF2fuAlsG7kpjqQO2QH6oq5NzHh+ijLolgvliL2MviZRTOoJxA6Tr1bbK55av2RO0b+P5/pVYhFpq/C8M+oTL8Lh+Ndnnc6O6P58kYfQYygvvk/U1qQn/L0rELoLiz29x/ufP6j8DtKS0pDiYEM+8T9PFO/Zrff/C3jgu7po7yDfH/JwI4yLe0XDfWpDXWH5csfZpN07N/G7ZkCZ0jKLlm6mg1bGn8nyygBemtcHI2BLbnzmDyo5fGDkNQJydPRMOT2AjyuzWaqbSWamPtrbN0KIthAlbng==
+ bh=ps102yrqlNXLxI2O/R94nspxMn++BjdCaZZ9yT9xw/A=;
+ b=W/3reTO04BN01g3vUmVlVO2zMlYd6bF/YV1nvifPqb3/sZk3w18MdN2/EPGM8pH4/b2lZ3ojLZK0pOmYPyBf8DewlavDxdduQ30Z76XVW7Mbt7R2J9k6A+Apxo75EaD8U/wx8kGwDxWm9iMTzPPmm+wDdms4tmXO3Mj6poilVglab2dtPyxmFzDWrUErpm6Is7XW0LiOvagxJnVybIva2BhFTnp+EEIVQld5IqaWX9weKqm47ctWreBaq6u8VZ7cNjVGJwEbBxAYwI7DWMnxqzOqvBvxpXUl6gVV6k4AntSwV5FvOtiMw/06S90lktyCp/mndRMRPJIX6yUvfKB9/A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zqzZ8eo+NYfjKPl2QjVNGSsa+gs+Pm1SG8PuslkOlq0=;
- b=kLF4gUspVhbnOBCMWZjQyGb5/7J3BY6L6qRGFVcHaUdfaE+LsyqSSyVMPdvQw0YmW2NRQo92OU7TBZ+ZWo+VcCkMb6BhOdnHUyo7dqja461+rlrzV3rafUYLOhWxPayHocWt5TnLI0pBY75pPLKBqtwjphnKXxCX5EvhtkUnnq0=
+ bh=ps102yrqlNXLxI2O/R94nspxMn++BjdCaZZ9yT9xw/A=;
+ b=IV+DWf513rAEAS/Z+hr2Rc5sgNbDe0q6ekzj2qLEjpI7+KRKMJA0o/XWOVNthxGie31Kdg/3YMS+DCsdjYr14+WbS/S8S7zAnEZbX3F8q1VKmysa1o9fuaxJjbAGcCU3bgUAx23S+mbiMNDcyOli9QL2ApzwwG3D9HgXjANS0z4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
  by AM9PR04MB8811.eurprd04.prod.outlook.com (2603:10a6:20b:40a::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Tue, 27 Sep
- 2022 03:13:45 +0000
+ 2022 03:13:49 +0000
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::4550:e439:2389:be53]) by AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::4550:e439:2389:be53%5]) with mapi id 15.20.5654.026; Tue, 27 Sep 2022
- 03:13:45 +0000
+ 03:13:49 +0000
 From:   Ming Qian <ming.qian@nxp.com>
 To:     mchehab@kernel.org, mirela.rabulea@oss.nxp.com,
         hverkuil-cisco@xs4all.nl
@@ -47,9 +47,9 @@ Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 1/2] media: imx-jpeg: Implement g_selection and s_selection
-Date:   Tue, 27 Sep 2022 11:12:16 +0800
-Message-Id: <8a97ec549df3a8a6df7e52bf7174d91bdacb4ddc.1664247957.git.ming.qian@nxp.com>
+Subject: [PATCH v3 2/2] media: imx-jpeg: Support contiguous and non contiguous format
+Date:   Tue, 27 Sep 2022 11:12:17 +0800
+Message-Id: <c2192eecac2a63c6c24d1cd5d35ee9d6a3503ec6.1664247957.git.ming.qian@nxp.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <cover.1664247957.git.ming.qian@nxp.com>
 References: <cover.1664247957.git.ming.qian@nxp.com>
@@ -61,633 +61,576 @@ X-ClientProxiedBy: SI2PR01CA0035.apcprd01.prod.exchangelabs.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|AM9PR04MB8811:EE_
-X-MS-Office365-Filtering-Correlation-Id: f3a85095-7c70-403e-f6e1-08daa0364973
+X-MS-Office365-Filtering-Correlation-Id: 71d86511-b7ba-4cb4-d183-08daa0364bdf
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: beDmoIqsjUHuGsCyhQXbq5bbeCQSjDYQxz9HiKQUc1yn7cQ6rBdD55G83cbPoeccinipk1NubWZrbdNQM9lzbZLZWkaoifH8nJzwgVipK7eQ3NYf5b9cUkgSf8O7NPWj2WXTPmImjtNWyM/VHLUNj8xgYHkuzpc9uOwZZuBI3SHCuMy7esnmfY4bVth8Sh4SfCnnTMc4ujAEjIyJ02YtkX7Thv45nPrUWtGzZtWoHeRR2fnxjX0N9EzYUBOMNhJYPsdSv6Rilp4mmHFXzvZh5A1uoXH9d55sYExkMdjwIe4SWACmoGyGqp0FB43143qutcUaYr0Wf33i3NvqMLiqo6fJ4ERC8CxpDSbgnEfdHBjfLqyJH3r3gqtjTE8U7lfy5XxeSat7mEyiQDmWphG9/C37ovXep0EpwQI2+TLjZGrewfF6bNny1yJBmRBYHP47oqrUwki53IuBeSC5C3yFQ1RGeO4lclW0Mvjb/lOz9zBie5TWd0yWZnGRm49secZluxKOIlpYwOfYQATVybqbE79W/yh60mEKQOeBu1IDr4CzwuO6LbrpPTBwtOkXwiYAxZxCWnYxkD7OkBi7mmMIN066L00q0aN81Ov7CrM7UaKN3cVD61RXgSz3OE2wCwivbXmZ/fLU+L5mOBrEhEgbWQwNxQzopONrPV+9V25ASJX3TBXanDgM1RJHFsdlR0fdftebE+3GI2QgTcf4KlSBrHyouemU8Fg4mQTwY8eixxIlvtScJ9H8gWX7grj6bnHYCH8b4jIv5NQVC2a3s+tmRg==
+X-Microsoft-Antispam-Message-Info: Fdsd7s1YkGauT54+mmmKOSWXYJULqoCSjhSfHoy6AXAzx98iiOkDdLzc+cuPXVI3FoV+BW5howqFJdO2T4gYLpAG+aLR5jAtYP2VhGsKMl0sK/2/zq5+zApw1QlpE35PxHXLzr+J7FTTjFb4Ui+6ABpsdNhZMRLQS+dW+x6cPsbblc4G/d0u9Kk3x1knKIgTN60nCzk3wt2gEu7ZUoxk/6TvmWPmbiEcztwaKcSJBAZaBsWSkWQvmFmr3CtIKt3DbevQ4FR9DqnAv9UACx4S2xAvt+VJaOWqp8V7VwEopHBk8zKcliOK78eYq/zYLoz0EdnPxFhvOV+4AU/Dpq3+gkCehsm4lvkV/als7NPACtj8tIWQHb4x1W1jJ8tXkNfK6Z2xK+zOxiMWM61JEu2FXmrJAiz+kUUxXPhWWc3Bdc2EnyEwOk5AL8zR2jsJQwT/HFKKpH/sPE88Xn1ZGjNZyMDpa4oV7GPS8JvcFCTsCgYoKvZPQdCRom1tNKumJSZFhHfye67M19+THpML8PWUYGEQkDY/dZgaxwUW64kM4cQSqkTX0mb8W9tsyMKs8fdgRCZGj0FuwB6hdw8aFhQ7ioNbFN5TfREnsaHhSobRowptt6mkal3w6heT1eizrWW8x5GB69PESv9VR3VxXwFv3r58ZEATvx+wZ5/skv++1rCBG6c0zlif8WRUU340WcQr7X/DolrnP1LKJrHgcEN1owCzscBeAhSr1PlB/Qc2pn3L5pMgTcg8zeRmHSe/F50XuSJZ5iW6c4dayW1FHXlZsQ==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(451199015)(186003)(2616005)(83380400001)(38100700002)(38350700002)(86362001)(44832011)(30864003)(5660300002)(66476007)(66556008)(66946007)(8936002)(41300700001)(2906002)(7416002)(6666004)(478600001)(6506007)(8676002)(26005)(52116002)(4326008)(316002)(6512007)(6486002)(36756003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?arPaXVZk017QTcEuh0PBvpSeuK6KqWcBFUNSzt61EIfEeeUkyiNfOAZ+ppuc?=
- =?us-ascii?Q?3R61U+LHELoC709ESkoAWeGECa1HYzYT3q242t8rvQdOXuYo54I22CiZvi0z?=
- =?us-ascii?Q?GsqOh1HzQv/zvVFmfLXuD2DdvfxSlGIVukIqYUSNB0UufJXOZwOMQlfS1qdC?=
- =?us-ascii?Q?Efk/jUS2Zdm8G4gXa1spRE3ozgxN1oVzSCiNGVHPpPRof93p0SUaFBe6d+GP?=
- =?us-ascii?Q?FYMlhn3e5Gnif8ZijxNX9h6tPC/SL2khXRjQ0P7EvogN2www7vmc6kX7Fqn7?=
- =?us-ascii?Q?LihqXopiyDg4Me6I7eZ+bucN6SUzU9HWJj0gwYaoatwn0o9ZjcEtOeIUUv/d?=
- =?us-ascii?Q?mn8d48kAcC1D68W+nIZnQ3A91cPangzfXAolrwGsKs7S1lsLhhgRYEwUPDAX?=
- =?us-ascii?Q?+uqqGggP+Q5zbfSgXfwmzotY/+qpT3nHHnkPf1jM4FWlx1vyP6kZjAm87SCX?=
- =?us-ascii?Q?XwqCUXywC9ziSbCqU4iS0jNsLBVVtBMcrE5E8zoeosIAK56b0bOn2IrbG3J9?=
- =?us-ascii?Q?5TxfSsoV3MKeL1Gs2F9CITMBvtdkqIDPvPBmuIwtfcwH2ShASRNuVIVEJc0R?=
- =?us-ascii?Q?LjLWogY1Ywdt7zZMZIUK51BFLym4uPaQwWGhwVBRx9G2TXPUVi7TOCPuPkQl?=
- =?us-ascii?Q?FMeBWMOijP2B2rkfswk8kGZpnRn/BEf1BsOEbVGFZ8EPI1Ru3WCwTiY0R7YL?=
- =?us-ascii?Q?z1CySyDlVCnBwQQw42/PEaVqHVx6bxaoiwktkcPEo5W5w/eIoVgISKmYGn9c?=
- =?us-ascii?Q?xJRH8JQRlB4YZTGtv54Ms2JlienuVQhReBfH0Y8QcupKGo3W+T280TtEBMYn?=
- =?us-ascii?Q?eyQtoz8Y2evTyspHurdLkVuQf9+uSWe0eXXv3KMk9CVOzREsV4o5fENf+0qc?=
- =?us-ascii?Q?5+QzvfWAmyMKbkaa/wKLKpYWseViPhB36xEIEGUCBAQ3W9F6aNhWor30m7qq?=
- =?us-ascii?Q?6z2NxA5wuW5jlaRo2i1L9t42yoFr5F8/cnzyjhpx24RucToJYw7D7vu7Qya5?=
- =?us-ascii?Q?d5kynThgDO19KV25a5V6ZHLLPMzJv+YArxHjL4qmyCo7EWkCgOS9eGaEHIlv?=
- =?us-ascii?Q?4cASTbMizZOcYBkHgVbXePaldXNyGq/qLgQI06s+FHSvBYOmqPQ4V9LxGD6i?=
- =?us-ascii?Q?U6cH6VAGULzih2KsH17rMSrk7Go+/ISsp6mYPouC/XTRzVCQUfTKqBwL46HA?=
- =?us-ascii?Q?I0DqGHMmqTU1sBni5yrXuDu/DUtRxTH4ctbRjxA8S1bfbRwhmSbyso5rSF0a?=
- =?us-ascii?Q?Q/E9EY/uPt0EdQcF55xOvbWsb12XeHxPrz+DHYPrBbbkQaSIP2xpI1qiuecd?=
- =?us-ascii?Q?xbvuusLVYOsp7YshzdEmdIbMKDExhJiXsT7iagXosJ4kGTvEFyJ96JbGfVbP?=
- =?us-ascii?Q?LfS624YcPCVRCd18/Q51f2STcyw7n5whTc3KAuXQG3DCieNWAQfxLOmQzckE?=
- =?us-ascii?Q?dy87c4NROV00AuK+0c+5+ElCqIW0+FiD1xUyZsy66x2bLa2CUv/X7XhpYMGm?=
- =?us-ascii?Q?J6x8SCu+O19+d+rs/Vme/rQbKc7lHjgdBafyYcDedRRBHhbgJ1IQioEPSOMW?=
- =?us-ascii?Q?n9RB9BKlRjfA3gT0vObTIbOTThr5HpNidop6egBR?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fAjdjX7XwUtH7SPYYlizrL+NMLR91/X6TioO8ReGpRWZAe/ejbo2NjK4Fu/w?=
+ =?us-ascii?Q?A6kJnp6OaYOlOvZSIZCcNGp0YJXRqGlM+7JOczRDXMfBuQnUx4liFic/vGbJ?=
+ =?us-ascii?Q?n7ya0EmOlEJ73SCc8FzTjsba1HO1bPWxyW8VZNHcTed6XcalK6JV8+NuT3lC?=
+ =?us-ascii?Q?oJHFn2JgE4BoXNowcyFEjclcWXR+HR+/YvEBm/Y8orSXXtdDBJKZFowepf9Y?=
+ =?us-ascii?Q?FUD2IVivxU/6Nnas8kMIlKqhu9SyBDrBEc7poIz+Z4Q74u415wELTd0brCl0?=
+ =?us-ascii?Q?MzBvhCHsPaEpSkWGoiVOfy4irAo9Yz88kFxGE/whjL/OSAQbAPyawKgEqbj+?=
+ =?us-ascii?Q?hi1BL2LI00xPF5wyWSb++Zi7Ii/l3MkY21JzY3apyUQVMJESKMy3SYByeNCR?=
+ =?us-ascii?Q?gciEHSuW7zxIS+zVFm7lSt2tWXGaiHrDYB6rj5kVtToIHlLwSasPoN5t6NGT?=
+ =?us-ascii?Q?w6bQvG6wffbK4Kl8+365IEazqQ1ZFuFLorIfS0syEnaKalfyo5WnRW5ig5Vv?=
+ =?us-ascii?Q?Uz2Mr7+zeGVBuKGP8x1UV0RTtG5XSoUZ39tCWqCTYVSbTIuE5hxiW6WjK+QP?=
+ =?us-ascii?Q?ENYp8Ges+edRnQEWPuY8YpGotWQ1cnqiEjwIw/LsE5RqEgIzxxDRF+gJOW1e?=
+ =?us-ascii?Q?HcxtBtS8kj3uIs5LpLHmD0+KeZACIshx5vyxeconB7DilvOsQPMUipWOWA1s?=
+ =?us-ascii?Q?UV91V7WVt8lyRGoZNLwSZIehnthByVTmQZ6JVkOFUmi9Dn+Jqlq90pcko9bF?=
+ =?us-ascii?Q?Qp/9Qdjc17vWAGvRGkXCW+D1YJz1/jr3V/NH7pQQUrJy0UIQuKITpBl4MSMM?=
+ =?us-ascii?Q?NRJL7cPOWhmtPaVxUx9y8SuoJx49ldBUM6CnR05XnoRp5Wlvfl4hvO4mw4pq?=
+ =?us-ascii?Q?fZTo4H0EKura+7xSwNBMw4jzth3OnCMClRiOJ2j4XugJHLX8OPqs4bfCtguv?=
+ =?us-ascii?Q?baJo5gDcBGpf6si4jN3XcNH2iXsd8mTDvq2/0FK9QD4qCoKmXiHb7zvhpTMl?=
+ =?us-ascii?Q?hCijQXJO0t9Bry3AUWv8Saiuyzh2+XFnoJrSYemuBhiCe4nzbA+toThmXBBU?=
+ =?us-ascii?Q?vfXqRxSHB8O8FbD7xlS0XpHzQGejXZivxfm1Q0ywg9tGSot2irhw6/ceJE9t?=
+ =?us-ascii?Q?J68KdlCYBxl88gIT7/ntF9FpGIrrOh86Xg+9Vt2/qnyYupMaPDzd1JBZhji2?=
+ =?us-ascii?Q?1W8RXr2G0byqIjlSo6JTv8A+vlTFEk2ipeDYrh7VO51vLz4Q7UUAmwRyCBtH?=
+ =?us-ascii?Q?4xiSOJKwi4Vj8X7+qbkTtrQFH/09nESRDz0osAoZoxfiT1EzPmA66lb0WBT3?=
+ =?us-ascii?Q?CfA/hA9jB0aPC3rOkmmbyUHEzoXue2J5YFKqG9k6KgyzfPGtNqpwtV8f4+TJ?=
+ =?us-ascii?Q?+3nAcYJFEt3zt5N5FzCKzLPxYGH+mUzDgqLCgXq2qggY0dhbbWxwREQcxZ+5?=
+ =?us-ascii?Q?ApU1A4T7fOXNyoiepFZuZr3PuLnNqEcTO2jNCSJvQcXYrnzvrPlsuRX7Ubk6?=
+ =?us-ascii?Q?hVi9uzscdF2XNB8nkC/8Ym3elGpI4hRGViARl0ED3SWXusWNR8c22Tfgru1h?=
+ =?us-ascii?Q?bw37ZmQ0q7T0QOqR0Ib3h7F315zaZ/sEjtAqBKFc?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3a85095-7c70-403e-f6e1-08daa0364973
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71d86511-b7ba-4cb4-d183-08daa0364bdf
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 03:13:45.0486
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 03:13:49.0327
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 052/XbApEqSuaJvLwBSCevUlBM8VMfx67nQvWK4wt5vYy1otCGOiziu4e7ulCzXqqiaJPEzRNi+UXzJwI6qgcg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: /cj2GFxME+i4T1pOgr6nvw80lEuy4p2rX+n6RMJZ10LCGs4g/N4aCAp5eLoObqpnjVc3N8IergYqVU89Rlkaug==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8811
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_PDS_OTHER_BAD_TLD
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The codec can support any image size WxH,
-with arbitrary W (image width) and H (image height) dimensions.
+mxc-jpeg supports non contiguous format nv12m,
+and in order to compatible with the devices
+that only support contiguous format nv12,
+jpeg can support nv12 and nv12m in the same time.
 
-But it requires buffer alignment,
-so driver can report the aligned resolution through the g_fmt,
-and report the actual resolution through the g_selection.
-
-For encoder, it even support to encode a smaller jpeg
-than the original picture through s_selection api.
-
-For the decoder, we do not support cropping a portion smaller
-than the original picture, due to hardware limitations (wrapper side).
-
-Fixes: 9e7aa76cdb02 ("media: imx-jpeg: Align upwards buffer size")
 Signed-off-by: Ming Qian <ming.qian@nxp.com>
 ---
- .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 327 +++++++++++-------
- .../media/platform/nxp/imx-jpeg/mxc-jpeg.h    |   1 +
- 2 files changed, 208 insertions(+), 120 deletions(-)
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 226 ++++++++++++++----
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg.h    |   7 +-
+ 2 files changed, 185 insertions(+), 48 deletions(-)
 
 diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index ec13394bdddd..1bbf560a6341 100644
+index 1bbf560a6341..510d71a2b48f 100644
 --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
 +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -924,8 +924,8 @@ static void mxc_jpeg_config_enc_desc(struct vb2_buffer *out_buf,
- 	jpeg->slot_data[slot].cfg_stream_size =
- 			mxc_jpeg_setup_cfg_stream(cfg_stream_vaddr,
- 						  q_data->fmt->fourcc,
--						  q_data->w,
--						  q_data->h);
-+						  q_data->crop.width,
-+						  q_data->crop.height);
+@@ -69,7 +69,8 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
+ 		.fourcc		= V4L2_PIX_FMT_JPEG,
+ 		.subsampling	= -1,
+ 		.nc		= -1,
+-		.colplanes	= 1,
++		.mem_planes	= 1,
++		.comp_planes	= 1,
+ 		.flags		= MXC_JPEG_FMT_TYPE_ENC,
+ 	},
+ 	{
+@@ -78,11 +79,13 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
+ 		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_444,
+ 		.nc		= 3,
+ 		.depth		= 24,
+-		.colplanes	= 1,
++		.mem_planes	= 1,
++		.comp_planes	= 1,
+ 		.h_align	= 3,
+ 		.v_align	= 3,
+ 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
+ 		.precision	= 8,
++		.is_rgb		= 1,
+ 	},
+ 	{
+ 		.name		= "ABGR", /* ABGR packed format */
+@@ -90,11 +93,13 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
+ 		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_444,
+ 		.nc		= 4,
+ 		.depth		= 32,
+-		.colplanes	= 1,
++		.mem_planes	= 1,
++		.comp_planes	= 1,
+ 		.h_align	= 3,
+ 		.v_align	= 3,
+ 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
+ 		.precision	= 8,
++		.is_rgb		= 1,
+ 	},
+ 	{
+ 		.name		= "YUV420", /* 1st plane = Y, 2nd plane = UV */
+@@ -102,7 +107,21 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
+ 		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_420,
+ 		.nc		= 3,
+ 		.depth		= 12, /* 6 bytes (4Y + UV) for 4 pixels */
+-		.colplanes	= 2, /* 1 plane Y, 1 plane UV interleaved */
++		.mem_planes	= 2,
++		.comp_planes	= 2, /* 1 plane Y, 1 plane UV interleaved */
++		.h_align	= 4,
++		.v_align	= 4,
++		.flags		= MXC_JPEG_FMT_TYPE_RAW,
++		.precision	= 8,
++	},
++	{
++		.name		= "YUV420", /* 1st plane = Y, 2nd plane = UV */
++		.fourcc		= V4L2_PIX_FMT_NV12,
++		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_420,
++		.nc		= 3,
++		.depth		= 12, /* 6 bytes (4Y + UV) for 4 pixels */
++		.mem_planes	= 1,
++		.comp_planes	= 2, /* 1 plane Y, 1 plane UV interleaved */
+ 		.h_align	= 4,
+ 		.v_align	= 4,
+ 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
+@@ -114,7 +133,8 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
+ 		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_422,
+ 		.nc		= 3,
+ 		.depth		= 16,
+-		.colplanes	= 1,
++		.mem_planes	= 1,
++		.comp_planes	= 1,
+ 		.h_align	= 4,
+ 		.v_align	= 3,
+ 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
+@@ -126,7 +146,8 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
+ 		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_444,
+ 		.nc		= 3,
+ 		.depth		= 24,
+-		.colplanes	= 1,
++		.mem_planes	= 1,
++		.comp_planes	= 1,
+ 		.h_align	= 3,
+ 		.v_align	= 3,
+ 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
+@@ -138,7 +159,8 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
+ 		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_GRAY,
+ 		.nc		= 1,
+ 		.depth		= 8,
+-		.colplanes	= 1,
++		.mem_planes	= 1,
++		.comp_planes	= 1,
+ 		.h_align	= 3,
+ 		.v_align	= 3,
+ 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
+@@ -419,6 +441,7 @@ static enum mxc_jpeg_image_format mxc_jpeg_fourcc_to_imgfmt(u32 fourcc)
+ 		return MXC_JPEG_GRAY;
+ 	case V4L2_PIX_FMT_YUYV:
+ 		return MXC_JPEG_YUV422;
++	case V4L2_PIX_FMT_NV12:
+ 	case V4L2_PIX_FMT_NV12M:
+ 		return MXC_JPEG_YUV420;
+ 	case V4L2_PIX_FMT_YUV24:
+@@ -445,12 +468,17 @@ static void mxc_jpeg_addrs(struct mxc_jpeg_desc *desc,
+ 			   struct vb2_buffer *jpeg_buf, int offset)
+ {
+ 	int img_fmt = desc->stm_ctrl & STM_CTRL_IMAGE_FORMAT_MASK;
++	struct mxc_jpeg_ctx *ctx = vb2_get_drv_priv(raw_buf->vb2_queue);
++	struct mxc_jpeg_q_data *q_data;
  
- 	/* chain the config descriptor with the encoding descriptor */
- 	cfg_desc->next_descpt_ptr = desc_handle | MXC_NXT_DESCPT_EN;
-@@ -942,11 +942,13 @@ static void mxc_jpeg_config_enc_desc(struct vb2_buffer *out_buf,
- 	desc->next_descpt_ptr = 0; /* end of chain */
- 
- 	/* use adjusted resolution for CAST IP job */
--	w = q_data->w_adjusted;
--	h = q_data->h_adjusted;
-+	w = q_data->crop.width;
-+	h = q_data->crop.height;
-+	v4l_bound_align_image(&w, w, MXC_JPEG_MAX_WIDTH, q_data->fmt->h_align,
-+			      &h, h, MXC_JPEG_MAX_HEIGHT, q_data->fmt->v_align, 0);
- 	mxc_jpeg_set_res(desc, w, h);
--	mxc_jpeg_set_line_pitch(desc, w * (q_data->fmt->depth / 8));
--	mxc_jpeg_set_bufsize(desc, desc->line_pitch * h);
-+	mxc_jpeg_set_line_pitch(desc, q_data->bytesperline[0]);
-+	mxc_jpeg_set_bufsize(desc, ALIGN(vb2_plane_size(dst_buf, 0), 1024));
- 	img_fmt = mxc_jpeg_fourcc_to_imgfmt(q_data->fmt->fourcc);
- 	if (img_fmt == MXC_JPEG_INVALID)
- 		dev_err(jpeg->dev, "No valid image format detected\n");
-@@ -995,6 +997,10 @@ static bool mxc_jpeg_source_change(struct mxc_jpeg_ctx *ctx,
- 		q_data_cap->fmt = jpeg_src_buf->fmt;
- 		q_data_cap->w_adjusted = q_data_cap->w;
- 		q_data_cap->h_adjusted = q_data_cap->h;
-+		q_data_cap->crop.left = 0;
-+		q_data_cap->crop.top = 0;
-+		q_data_cap->crop.width = jpeg_src_buf->w;
-+		q_data_cap->crop.height = jpeg_src_buf->h;
- 
- 		/*
- 		 * align up the resolution for CAST IP,
-@@ -1007,7 +1013,7 @@ static bool mxc_jpeg_source_change(struct mxc_jpeg_ctx *ctx,
- 				      &q_data_cap->h_adjusted,
- 				      q_data_cap->h_adjusted, /* adjust up */
- 				      MXC_JPEG_MAX_HEIGHT,
--				      0,
-+				      q_data_cap->fmt->v_align,
- 				      0);
- 
- 		/* setup bytesperline/sizeimage for capture queue */
-@@ -1016,6 +1022,7 @@ static bool mxc_jpeg_source_change(struct mxc_jpeg_ctx *ctx,
- 		notify_src_chg(ctx);
- 		ctx->source_change = 1;
++	q_data = mxc_jpeg_get_q_data(ctx, raw_buf->type);
+ 	desc->buf_base0 = vb2_dma_contig_plane_dma_addr(raw_buf, 0);
+ 	desc->buf_base1 = 0;
+ 	if (img_fmt == STM_CTRL_IMAGE_FORMAT(MXC_JPEG_YUV420)) {
+-		WARN_ON(raw_buf->num_planes < 2);
+-		desc->buf_base1 = vb2_dma_contig_plane_dma_addr(raw_buf, 1);
++		if (raw_buf->num_planes == 2)
++			desc->buf_base1 = vb2_dma_contig_plane_dma_addr(raw_buf, 1);
++		else
++			desc->buf_base1 = desc->buf_base0 + q_data->sizeimage[0];
  	}
-+
- 	return ctx->source_change ? true : false;
+ 	desc->stm_bufbase = vb2_dma_contig_plane_dma_addr(jpeg_buf, 0) +
+ 		offset;
+@@ -594,6 +622,28 @@ static void mxc_jpeg_job_finish(struct mxc_jpeg_ctx *ctx, enum vb2_buffer_state
+ 		mxc_jpeg_sw_reset(reg);
  }
  
-@@ -1201,30 +1208,18 @@ static int mxc_jpeg_queue_setup(struct vb2_queue *q,
++static u32 mxc_jpeg_get_plane_size(struct mxc_jpeg_q_data *q_data, u32 plane_no)
++{
++	const struct mxc_jpeg_fmt *fmt = q_data->fmt;
++	u32 size;
++	int i;
++
++	if (plane_no >= fmt->mem_planes)
++		return 0;
++
++	if (fmt->mem_planes == fmt->comp_planes)
++		return q_data->sizeimage[plane_no];
++
++	if (plane_no < fmt->mem_planes - 1)
++		return q_data->sizeimage[plane_no];
++
++	size = q_data->sizeimage[fmt->mem_planes - 1];
++	for (i = fmt->mem_planes; i < fmt->comp_planes; i++)
++		size += q_data->sizeimage[i];
++
++	return size;
++}
++
+ static irqreturn_t mxc_jpeg_dec_irq(int irq, void *priv)
  {
- 	struct mxc_jpeg_ctx *ctx = vb2_get_drv_priv(q);
- 	struct mxc_jpeg_q_data *q_data = NULL;
--	struct mxc_jpeg_q_data tmp_q;
- 	int i;
+ 	struct mxc_jpeg_dev *jpeg = priv;
+@@ -673,11 +723,11 @@ static irqreturn_t mxc_jpeg_dec_irq(int irq, void *priv)
+ 			payload);
+ 	} else {
+ 		q_data = mxc_jpeg_get_q_data(ctx, cap_type);
+-		payload = q_data->sizeimage[0];
++		payload = mxc_jpeg_get_plane_size(q_data, 0);
+ 		vb2_set_plane_payload(&dst_buf->vb2_buf, 0, payload);
+ 		vb2_set_plane_payload(&dst_buf->vb2_buf, 1, 0);
+-		if (q_data->fmt->colplanes == 2) {
+-			payload = q_data->sizeimage[1];
++		if (q_data->fmt->mem_planes == 2) {
++			payload = mxc_jpeg_get_plane_size(q_data, 1);
+ 			vb2_set_plane_payload(&dst_buf->vb2_buf, 1, payload);
+ 		}
+ 		dev_dbg(dev, "Decoding finished, payload size: %ld + %ld\n",
+@@ -716,6 +766,7 @@ static int mxc_jpeg_fixup_sof(struct mxc_jpeg_sof *sof,
+ 	_bswap16(&sof->width);
  
- 	q_data = mxc_jpeg_get_q_data(ctx, q->type);
- 	if (!q_data)
- 		return -EINVAL;
+ 	switch (fourcc) {
++	case V4L2_PIX_FMT_NV12:
+ 	case V4L2_PIX_FMT_NV12M:
+ 		sof->components_no = 3;
+ 		sof->comp[0].v = 0x2;
+@@ -752,6 +803,7 @@ static int mxc_jpeg_fixup_sos(struct mxc_jpeg_sos *sos,
+ 	u8 *sof_u8 = (u8 *)sos;
  
--	tmp_q.fmt = q_data->fmt;
--	tmp_q.w = q_data->w_adjusted;
--	tmp_q.h = q_data->h_adjusted;
--	for (i = 0; i < MXC_JPEG_MAX_PLANES; i++) {
--		tmp_q.bytesperline[i] = q_data->bytesperline[i];
--		tmp_q.sizeimage[i] = q_data->sizeimage[i];
--	}
--	mxc_jpeg_sizeimage(&tmp_q);
--	for (i = 0; i < MXC_JPEG_MAX_PLANES; i++)
--		tmp_q.sizeimage[i] = max(tmp_q.sizeimage[i], q_data->sizeimage[i]);
--
+ 	switch (fourcc) {
++	case V4L2_PIX_FMT_NV12:
+ 	case V4L2_PIX_FMT_NV12M:
+ 		sos->components_no = 3;
+ 		break;
+@@ -967,6 +1019,32 @@ static void mxc_jpeg_config_enc_desc(struct vb2_buffer *out_buf,
+ 	mxc_jpeg_set_desc(cfg_desc_handle, reg, slot);
+ }
+ 
++static const struct mxc_jpeg_fmt *mxc_jpeg_get_sibling_format(const struct mxc_jpeg_fmt *fmt)
++{
++	int i;
++
++	for (i = 0; i < MXC_JPEG_NUM_FORMATS; i++) {
++		if (mxc_formats[i].subsampling == fmt->subsampling &&
++		    mxc_formats[i].nc == fmt->nc &&
++		    mxc_formats[i].precision == fmt->precision &&
++		    mxc_formats[i].is_rgb == fmt->is_rgb &&
++		    mxc_formats[i].fourcc != fmt->fourcc)
++			return &mxc_formats[i];
++	}
++
++	return NULL;
++}
++
++static bool mxc_jpeg_compare_format(const struct mxc_jpeg_fmt *fmt1,
++				    const struct mxc_jpeg_fmt *fmt2)
++{
++	if (fmt1 == fmt2)
++		return true;
++	if (mxc_jpeg_get_sibling_format(fmt1) == fmt2)
++		return true;
++	return false;
++}
++
+ static bool mxc_jpeg_source_change(struct mxc_jpeg_ctx *ctx,
+ 				   struct mxc_jpeg_src_buf *jpeg_src_buf)
+ {
+@@ -977,6 +1055,8 @@ static bool mxc_jpeg_source_change(struct mxc_jpeg_ctx *ctx,
+ 		return false;
+ 
+ 	q_data_cap = mxc_jpeg_get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
++	if (mxc_jpeg_compare_format(q_data_cap->fmt, jpeg_src_buf->fmt))
++		jpeg_src_buf->fmt = q_data_cap->fmt;
+ 	if (q_data_cap->fmt != jpeg_src_buf->fmt ||
+ 	    q_data_cap->w != jpeg_src_buf->w ||
+ 	    q_data_cap->h != jpeg_src_buf->h) {
+@@ -1081,9 +1161,9 @@ static void mxc_jpeg_device_run(void *priv)
+ 	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, true);
+ 
+ 	jpeg_src_buf = vb2_to_mxc_buf(&src_buf->vb2_buf);
+-	if (q_data_cap->fmt->colplanes != dst_buf->vb2_buf.num_planes) {
++	if (q_data_cap->fmt->mem_planes != dst_buf->vb2_buf.num_planes) {
+ 		dev_err(dev, "Capture format %s has %d planes, but capture buffer has %d planes\n",
+-			q_data_cap->fmt->name, q_data_cap->fmt->colplanes,
++			q_data_cap->fmt->name, q_data_cap->fmt->mem_planes,
+ 			dst_buf->vb2_buf.num_planes);
+ 		jpeg_src_buf->jpeg_parse_error = true;
+ 	}
+@@ -1216,19 +1296,19 @@ static int mxc_jpeg_queue_setup(struct vb2_queue *q,
+ 
  	/* Handle CREATE_BUFS situation - *nplanes != 0 */
  	if (*nplanes) {
- 		if (*nplanes != q_data->fmt->colplanes)
+-		if (*nplanes != q_data->fmt->colplanes)
++		if (*nplanes != q_data->fmt->mem_planes)
  			return -EINVAL;
  		for (i = 0; i < *nplanes; i++) {
--			if (sizes[i] < tmp_q.sizeimage[i])
-+			if (sizes[i] < q_data->sizeimage[i])
+-			if (sizes[i] < q_data->sizeimage[i])
++			if (sizes[i] < mxc_jpeg_get_plane_size(q_data, i))
  				return -EINVAL;
  		}
  		return 0;
-@@ -1233,7 +1228,7 @@ static int mxc_jpeg_queue_setup(struct vb2_queue *q,
+ 	}
+ 
  	/* Handle REQBUFS situation */
- 	*nplanes = q_data->fmt->colplanes;
+-	*nplanes = q_data->fmt->colplanes;
++	*nplanes = q_data->fmt->mem_planes;
  	for (i = 0; i < *nplanes; i++)
--		sizes[i] = tmp_q.sizeimage[i];
-+		sizes[i] = q_data->sizeimage[i];
+-		sizes[i] = q_data->sizeimage[i];
++		sizes[i] = mxc_jpeg_get_plane_size(q_data, i);
  
  	return 0;
  }
-@@ -1366,17 +1361,17 @@ static void mxc_jpeg_bytesperline(struct mxc_jpeg_q_data *q, u32 precision)
- 		 * applies to the first plane and is divided by the same factor
- 		 * as the width field for the other planes
- 		 */
--		q->bytesperline[0] = q->w * DIV_ROUND_UP(precision, 8);
-+		q->bytesperline[0] = q->w_adjusted * DIV_ROUND_UP(precision, 8);
- 		q->bytesperline[1] = q->bytesperline[0];
- 	} else if (q->fmt->subsampling == V4L2_JPEG_CHROMA_SUBSAMPLING_422) {
--		q->bytesperline[0] = q->w * DIV_ROUND_UP(precision, 8) * 2;
-+		q->bytesperline[0] = q->w_adjusted * DIV_ROUND_UP(precision, 8) * 2;
- 		q->bytesperline[1] = 0;
- 	} else if (q->fmt->subsampling == V4L2_JPEG_CHROMA_SUBSAMPLING_444) {
--		q->bytesperline[0] = q->w * DIV_ROUND_UP(precision, 8) * q->fmt->nc;
-+		q->bytesperline[0] = q->w_adjusted * DIV_ROUND_UP(precision, 8) * q->fmt->nc;
- 		q->bytesperline[1] = 0;
- 	} else {
- 		/* grayscale */
--		q->bytesperline[0] = q->w * DIV_ROUND_UP(precision, 8);
-+		q->bytesperline[0] = q->w_adjusted * DIV_ROUND_UP(precision, 8);
- 		q->bytesperline[1] = 0;
- 	}
- }
-@@ -1395,7 +1390,7 @@ static void mxc_jpeg_sizeimage(struct mxc_jpeg_q_data *q)
- 		/* jpeg stream size must be multiple of 1K */
- 		q->sizeimage[0] = ALIGN(q->sizeimage[0], 1024);
- 	} else {
--		q->sizeimage[0] = q->bytesperline[0] * q->h;
-+		q->sizeimage[0] = q->bytesperline[0] * q->h_adjusted;
- 		q->sizeimage[1] = 0;
- 		if (q->fmt->fourcc == V4L2_PIX_FMT_NV12M)
- 			q->sizeimage[1] = q->sizeimage[0] / 2;
-@@ -1619,6 +1614,10 @@ static void mxc_jpeg_set_default_params(struct mxc_jpeg_ctx *ctx)
- 		q[i]->h = MXC_JPEG_DEFAULT_HEIGHT;
- 		q[i]->w_adjusted = MXC_JPEG_DEFAULT_WIDTH;
- 		q[i]->h_adjusted = MXC_JPEG_DEFAULT_HEIGHT;
-+		q[i]->crop.left = 0;
-+		q[i]->crop.top = 0;
-+		q[i]->crop.width = MXC_JPEG_DEFAULT_WIDTH;
-+		q[i]->crop.height = MXC_JPEG_DEFAULT_HEIGHT;
- 		mxc_jpeg_bytesperline(q[i], q[i]->fmt->precision);
- 		mxc_jpeg_sizeimage(q[i]);
- 	}
-@@ -1786,55 +1785,84 @@ static int mxc_jpeg_enum_fmt_vid_out(struct file *file, void *priv,
- 	return 0;
+@@ -1313,19 +1393,40 @@ static int mxc_jpeg_valid_comp_id(struct device *dev,
+ 	return valid;
  }
  
--static int mxc_jpeg_try_fmt(struct v4l2_format *f, const struct mxc_jpeg_fmt *fmt,
--			    struct mxc_jpeg_ctx *ctx, int q_type)
-+static u32 mxc_jpeg_get_fmt_type(struct mxc_jpeg_ctx *ctx, u32 type)
++static bool mxc_jpeg_match_image_format(const struct mxc_jpeg_fmt *fmt,
++					const struct v4l2_jpeg_header *header)
 +{
-+	if (ctx->mxc_jpeg->mode == MXC_JPEG_DECODE)
-+		return V4L2_TYPE_IS_OUTPUT(type) ? MXC_JPEG_FMT_TYPE_ENC : MXC_JPEG_FMT_TYPE_RAW;
-+	else
-+		return V4L2_TYPE_IS_CAPTURE(type) ? MXC_JPEG_FMT_TYPE_ENC : MXC_JPEG_FMT_TYPE_RAW;
-+}
++	if (fmt->subsampling != header->frame.subsampling ||
++	    fmt->nc != header->frame.num_components ||
++	    fmt->precision != header->frame.precision)
++		return false;
 +
-+static u32 mxc_jpeg_get_default_fourcc(struct mxc_jpeg_ctx *ctx, u32 type)
- {
-+	if (ctx->mxc_jpeg->mode == MXC_JPEG_DECODE)
-+		return V4L2_TYPE_IS_OUTPUT(type) ? V4L2_PIX_FMT_JPEG : MXC_JPEG_DEFAULT_PFMT;
-+	else
-+		return V4L2_TYPE_IS_CAPTURE(type) ? V4L2_PIX_FMT_JPEG : MXC_JPEG_DEFAULT_PFMT;
-+}
++	/*
++	 * If the transform flag from APP14 marker is 0, images that are
++	 * encoded with 3 components have RGB colorspace, see Recommendation
++	 * ITU-T T.872 chapter 6.5.3 APP14 marker segment for colour encoding
++	 */
++	if (header->frame.subsampling == V4L2_JPEG_CHROMA_SUBSAMPLING_444) {
++		u8 is_rgb = header->app14_tf == V4L2_JPEG_APP14_TF_CMYK_RGB ? 1 : 0;
 +
-+static int mxc_jpeg_try_fmt(struct v4l2_format *f,
-+			    struct mxc_jpeg_ctx *ctx, struct mxc_jpeg_q_data *q_data)
-+{
-+	const struct mxc_jpeg_fmt *fmt;
- 	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
- 	struct v4l2_plane_pix_format *pfmt;
-+	u32 fourcc = f->fmt.pix_mp.pixelformat;
- 	u32 w = (pix_mp->width < MXC_JPEG_MAX_WIDTH) ?
- 		 pix_mp->width : MXC_JPEG_MAX_WIDTH;
- 	u32 h = (pix_mp->height < MXC_JPEG_MAX_HEIGHT) ?
- 		 pix_mp->height : MXC_JPEG_MAX_HEIGHT;
- 	int i;
--	struct mxc_jpeg_q_data tmp_q;
-+
-+	fmt = mxc_jpeg_find_format(ctx, fourcc);
-+	if (!fmt || fmt->flags != mxc_jpeg_get_fmt_type(ctx, f->type)) {
-+		dev_warn(ctx->mxc_jpeg->dev, "Format not supported: %c%c%c%c, use the default.\n",
-+			 (fourcc & 0xff),
-+			 (fourcc >>  8) & 0xff,
-+			 (fourcc >> 16) & 0xff,
-+			 (fourcc >> 24) & 0xff);
-+		fourcc = mxc_jpeg_get_default_fourcc(ctx, f->type);
-+		fmt = mxc_jpeg_find_format(ctx, fourcc);
-+		if (!fmt)
-+			return -EINVAL;
-+		f->fmt.pix_mp.pixelformat = fourcc;
++		if (is_rgb != fmt->is_rgb)
++			return false;
 +	}
-+	q_data->fmt = fmt;
++	return true;
++}
++
+ static u32 mxc_jpeg_get_image_format(struct device *dev,
+ 				     const struct v4l2_jpeg_header *header)
+ {
+ 	int i;
+ 	u32 fourcc = 0;
+ 
+-	for (i = 0; i < MXC_JPEG_NUM_FORMATS; i++)
+-		if (mxc_formats[i].subsampling == header->frame.subsampling &&
+-		    mxc_formats[i].nc == header->frame.num_components &&
+-		    mxc_formats[i].precision == header->frame.precision) {
++	for (i = 0; i < MXC_JPEG_NUM_FORMATS; i++) {
++		if (mxc_jpeg_match_image_format(&mxc_formats[i], header)) {
+ 			fourcc = mxc_formats[i].fourcc;
+ 			break;
+ 		}
++	}
+ 	if (fourcc == 0) {
+ 		dev_err(dev,
+ 			"Could not identify image format nc=%d, subsampling=%d, precision=%d\n",
+@@ -1334,17 +1435,6 @@ static u32 mxc_jpeg_get_image_format(struct device *dev,
+ 			header->frame.precision);
+ 		return fourcc;
+ 	}
+-	/*
+-	 * If the transform flag from APP14 marker is 0, images that are
+-	 * encoded with 3 components have RGB colorspace, see Recommendation
+-	 * ITU-T T.872 chapter 6.5.3 APP14 marker segment for colour encoding
+-	 */
+-	if (fourcc == V4L2_PIX_FMT_YUV24 || fourcc == V4L2_PIX_FMT_BGR24) {
+-		if (header->app14_tf == V4L2_JPEG_APP14_TF_CMYK_RGB)
+-			fourcc = V4L2_PIX_FMT_BGR24;
+-		else
+-			fourcc = V4L2_PIX_FMT_YUV24;
+-	}
+ 
+ 	return fourcc;
+ }
+@@ -1392,7 +1482,7 @@ static void mxc_jpeg_sizeimage(struct mxc_jpeg_q_data *q)
+ 	} else {
+ 		q->sizeimage[0] = q->bytesperline[0] * q->h_adjusted;
+ 		q->sizeimage[1] = 0;
+-		if (q->fmt->fourcc == V4L2_PIX_FMT_NV12M)
++		if (q->fmt->subsampling == V4L2_JPEG_CHROMA_SUBSAMPLING_420)
+ 			q->sizeimage[1] = q->sizeimage[0] / 2;
+ 	}
+ }
+@@ -1401,6 +1491,7 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
+ {
+ 	struct device *dev = ctx->mxc_jpeg->dev;
+ 	struct mxc_jpeg_q_data *q_data_out;
++	struct mxc_jpeg_q_data *q_data_cap;
+ 	u32 fourcc;
+ 	struct v4l2_jpeg_header header;
+ 	struct mxc_jpeg_sof *psof = NULL;
+@@ -1458,7 +1549,11 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
+ 	if (!mxc_jpeg_valid_comp_id(dev, psof, psos))
+ 		dev_warn(dev, "JPEG component ids should be 0-3 or 1-4");
+ 
+-	fourcc = mxc_jpeg_get_image_format(dev, &header);
++	q_data_cap = mxc_jpeg_get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
++	if (q_data_cap->fmt && mxc_jpeg_match_image_format(q_data_cap->fmt, &header))
++		fourcc = q_data_cap->fmt->fourcc;
++	else
++		fourcc = mxc_jpeg_get_image_format(dev, &header);
+ 	if (fourcc == 0)
+ 		return -EINVAL;
+ 
+@@ -1534,8 +1629,8 @@ static int mxc_jpeg_buf_prepare(struct vb2_buffer *vb)
+ 	q_data = mxc_jpeg_get_q_data(ctx, vb->vb2_queue->type);
+ 	if (!q_data)
+ 		return -EINVAL;
+-	for (i = 0; i < q_data->fmt->colplanes; i++) {
+-		sizeimage = q_data->sizeimage[i];
++	for (i = 0; i < q_data->fmt->mem_planes; i++) {
++		sizeimage = mxc_jpeg_get_plane_size(q_data, i);
+ 		if (vb2_plane_size(vb, i) < sizeimage) {
+ 			dev_err(dev, "plane %d too small (%lu < %lu)",
+ 				i, vb2_plane_size(vb, i), sizeimage);
+@@ -1762,10 +1857,25 @@ static int mxc_jpeg_enum_fmt_vid_cap(struct file *file, void *priv,
+ 		 * (more precisely what was propagated on capture queue
+ 		 * after jpeg parse on the output buffer)
+ 		 */
+-		if (f->index)
+-			return -EINVAL;
+-		f->pixelformat = q_data->fmt->fourcc;
+-		return 0;
++		int ret = -EINVAL;
++		const struct mxc_jpeg_fmt *sibling;
++
++		switch (f->index) {
++		case 0:
++			f->pixelformat = q_data->fmt->fourcc;
++			ret = 0;
++			break;
++		case 1:
++			sibling = mxc_jpeg_get_sibling_format(q_data->fmt);
++			if (sibling) {
++				f->pixelformat = sibling->fourcc;
++				ret = 0;
++			}
++			break;
++		default:
++			break;
++		}
++		return ret;
+ 	}
+ }
+ 
+@@ -1801,6 +1911,27 @@ static u32 mxc_jpeg_get_default_fourcc(struct mxc_jpeg_ctx *ctx, u32 type)
+ 		return V4L2_TYPE_IS_CAPTURE(type) ? V4L2_PIX_FMT_JPEG : MXC_JPEG_DEFAULT_PFMT;
+ }
+ 
++static u32 mxc_jpeg_try_fourcc(struct mxc_jpeg_ctx *ctx, u32 fourcc)
++{
++	const struct mxc_jpeg_fmt *sibling;
++	struct mxc_jpeg_q_data *q_data_cap;
++
++	if (ctx->mxc_jpeg->mode != MXC_JPEG_DECODE)
++		return fourcc;
++	if (!ctx->header_parsed)
++		return fourcc;
++
++	q_data_cap = &ctx->cap_q;
++	if (q_data_cap->fmt->fourcc == fourcc)
++		return fourcc;
++
++	sibling = mxc_jpeg_get_sibling_format(q_data_cap->fmt);
++	if (sibling && sibling->fourcc == fourcc)
++		return sibling->fourcc;
++
++	return q_data_cap->fmt->fourcc;
++}
++
+ static int mxc_jpeg_try_fmt(struct v4l2_format *f,
+ 			    struct mxc_jpeg_ctx *ctx, struct mxc_jpeg_q_data *q_data)
+ {
+@@ -1831,7 +1962,7 @@ static int mxc_jpeg_try_fmt(struct v4l2_format *f,
  
  	memset(pix_mp->reserved, 0, sizeof(pix_mp->reserved));
  	pix_mp->field = V4L2_FIELD_NONE;
- 	pix_mp->num_planes = fmt->colplanes;
+-	pix_mp->num_planes = fmt->colplanes;
++	pix_mp->num_planes = fmt->mem_planes;
  	pix_mp->pixelformat = fmt->fourcc;
  
--	pix_mp->width = w;
--	pix_mp->height = h;
--	v4l_bound_align_image(&w,
-+	q_data->w = w;
-+	q_data->h = h;
-+	q_data->w_adjusted = w;
-+	q_data->h_adjusted = h;
-+	v4l_bound_align_image(&q_data->w_adjusted,
- 			      w, /* adjust upwards*/
- 			      MXC_JPEG_MAX_WIDTH,
- 			      fmt->h_align,
--			      &h,
-+			      &q_data->h_adjusted,
- 			      h, /* adjust upwards*/
- 			      MXC_JPEG_MAX_HEIGHT,
--			      0,
-+			      fmt->v_align,
- 			      0);
--
--	/* get user input into the tmp_q */
--	tmp_q.w = w;
--	tmp_q.h = h;
--	tmp_q.fmt = fmt;
- 	for (i = 0; i < pix_mp->num_planes; i++) {
- 		pfmt = &pix_mp->plane_fmt[i];
--		tmp_q.bytesperline[i] = pfmt->bytesperline;
--		tmp_q.sizeimage[i] = pfmt->sizeimage;
-+		q_data->bytesperline[i] = pfmt->bytesperline;
-+		q_data->sizeimage[i] = pfmt->sizeimage;
- 	}
- 
--	/* calculate bytesperline & sizeimage into the tmp_q */
--	mxc_jpeg_bytesperline(&tmp_q, fmt->precision);
--	mxc_jpeg_sizeimage(&tmp_q);
-+	/* calculate bytesperline & sizeimage */
-+	mxc_jpeg_bytesperline(q_data, fmt->precision);
-+	mxc_jpeg_sizeimage(q_data);
- 
- 	/* adjust user format according to our calculations */
- 	for (i = 0; i < pix_mp->num_planes; i++) {
+ 	q_data->w = w;
+@@ -1862,7 +1993,7 @@ static int mxc_jpeg_try_fmt(struct v4l2_format *f,
  		pfmt = &pix_mp->plane_fmt[i];
  		memset(pfmt->reserved, 0, sizeof(pfmt->reserved));
--		pfmt->bytesperline = tmp_q.bytesperline[i];
--		pfmt->sizeimage = tmp_q.sizeimage[i];
-+		pfmt->bytesperline = q_data->bytesperline[i];
-+		pfmt->sizeimage = q_data->sizeimage[i];
+ 		pfmt->bytesperline = q_data->bytesperline[i];
+-		pfmt->sizeimage = q_data->sizeimage[i];
++		pfmt->sizeimage = mxc_jpeg_get_plane_size(q_data, i);
  	}
  
  	/* fix colorspace information to sRGB for both output & capture */
-@@ -1848,6 +1876,16 @@ static int mxc_jpeg_try_fmt(struct v4l2_format *f, const struct mxc_jpeg_fmt *fm
- 	 */
+@@ -1902,6 +2033,9 @@ static int mxc_jpeg_try_fmt_vid_cap(struct file *file, void *priv,
+ 		return -EINVAL;
+ 	}
+ 
++	if (ctx->mxc_jpeg->mode != MXC_JPEG_DECODE && V4L2_TYPE_IS_CAPTURE(f->type))
++		f->fmt.pix_mp.pixelformat = mxc_jpeg_try_fourcc(ctx, f->fmt.pix_mp.pixelformat);
++
+ 	return mxc_jpeg_try_fmt(f, ctx, &tmp_q);
+ }
+ 
+@@ -1932,7 +2066,7 @@ static void mxc_jpeg_s_parsed_fmt(struct mxc_jpeg_ctx *ctx, struct v4l2_format *
+ 		return;
+ 
+ 	q_data_cap = mxc_jpeg_get_q_data(ctx, f->type);
+-	pix_mp->pixelformat = q_data_cap->fmt->fourcc;
++	pix_mp->pixelformat = mxc_jpeg_try_fourcc(ctx, pix_mp->pixelformat);
+ 	pix_mp->width = q_data_cap->w;
+ 	pix_mp->height = q_data_cap->h;
+ }
+@@ -2029,10 +2163,10 @@ static int mxc_jpeg_g_fmt_vid(struct file *file, void *priv,
+ 	pix_mp->xfer_func = V4L2_XFER_FUNC_SRGB;
  	pix_mp->quantization = V4L2_QUANTIZATION_FULL_RANGE;
  
-+	if (fmt->flags == MXC_JPEG_FMT_TYPE_RAW) {
-+		q_data->crop.left = 0;
-+		q_data->crop.top = 0;
-+		q_data->crop.width = q_data->w;
-+		q_data->crop.height = q_data->h;
-+	}
-+
-+	pix_mp->width = q_data->w_adjusted;
-+	pix_mp->height = q_data->h_adjusted;
-+
+-	pix_mp->num_planes = q_data->fmt->colplanes;
++	pix_mp->num_planes = q_data->fmt->mem_planes;
+ 	for (i = 0; i < pix_mp->num_planes; i++) {
+ 		pix_mp->plane_fmt[i].bytesperline = q_data->bytesperline[i];
+-		pix_mp->plane_fmt[i].sizeimage = q_data->sizeimage[i];
++		pix_mp->plane_fmt[i].sizeimage = mxc_jpeg_get_plane_size(q_data, i);
+ 	}
+ 
  	return 0;
- }
- 
-@@ -1857,29 +1895,14 @@ static int mxc_jpeg_try_fmt_vid_cap(struct file *file, void *priv,
- 	struct mxc_jpeg_ctx *ctx = mxc_jpeg_fh_to_ctx(priv);
- 	struct mxc_jpeg_dev *jpeg = ctx->mxc_jpeg;
- 	struct device *dev = jpeg->dev;
--	const struct mxc_jpeg_fmt *fmt;
--	u32 fourcc = f->fmt.pix_mp.pixelformat;
--
--	int q_type = (jpeg->mode == MXC_JPEG_DECODE) ?
--		     MXC_JPEG_FMT_TYPE_RAW : MXC_JPEG_FMT_TYPE_ENC;
-+	struct mxc_jpeg_q_data tmp_q;
- 
- 	if (!V4L2_TYPE_IS_MULTIPLANAR(f->type)) {
- 		dev_err(dev, "TRY_FMT with Invalid type: %d\n", f->type);
- 		return -EINVAL;
- 	}
- 
--	fmt = mxc_jpeg_find_format(ctx, fourcc);
--	if (!fmt || fmt->flags != q_type) {
--		dev_warn(dev, "Format not supported: %c%c%c%c, use the default.\n",
--			 (fourcc & 0xff),
--			 (fourcc >>  8) & 0xff,
--			 (fourcc >> 16) & 0xff,
--			 (fourcc >> 24) & 0xff);
--		f->fmt.pix_mp.pixelformat = (jpeg->mode == MXC_JPEG_DECODE) ?
--				MXC_JPEG_DEFAULT_PFMT : V4L2_PIX_FMT_JPEG;
--		fmt = mxc_jpeg_find_format(ctx, f->fmt.pix_mp.pixelformat);
--	}
--	return mxc_jpeg_try_fmt(f, fmt, ctx, q_type);
-+	return mxc_jpeg_try_fmt(f, ctx, &tmp_q);
- }
- 
- static int mxc_jpeg_try_fmt_vid_out(struct file *file, void *priv,
-@@ -1888,88 +1911,55 @@ static int mxc_jpeg_try_fmt_vid_out(struct file *file, void *priv,
- 	struct mxc_jpeg_ctx *ctx = mxc_jpeg_fh_to_ctx(priv);
- 	struct mxc_jpeg_dev *jpeg = ctx->mxc_jpeg;
- 	struct device *dev = jpeg->dev;
--	const struct mxc_jpeg_fmt *fmt;
--	u32 fourcc = f->fmt.pix_mp.pixelformat;
--
--	int q_type = (jpeg->mode == MXC_JPEG_ENCODE) ?
--		     MXC_JPEG_FMT_TYPE_RAW : MXC_JPEG_FMT_TYPE_ENC;
-+	struct mxc_jpeg_q_data tmp_q;
- 
- 	if (!V4L2_TYPE_IS_MULTIPLANAR(f->type)) {
- 		dev_err(dev, "TRY_FMT with Invalid type: %d\n", f->type);
- 		return -EINVAL;
- 	}
- 
--	fmt = mxc_jpeg_find_format(ctx, fourcc);
--	if (!fmt || fmt->flags != q_type) {
--		dev_warn(dev, "Format not supported: %c%c%c%c, use the default.\n",
--			 (fourcc & 0xff),
--			 (fourcc >>  8) & 0xff,
--			 (fourcc >> 16) & 0xff,
--			 (fourcc >> 24) & 0xff);
--		f->fmt.pix_mp.pixelformat = (jpeg->mode == MXC_JPEG_ENCODE) ?
--				MXC_JPEG_DEFAULT_PFMT : V4L2_PIX_FMT_JPEG;
--		fmt = mxc_jpeg_find_format(ctx, f->fmt.pix_mp.pixelformat);
--	}
--	return mxc_jpeg_try_fmt(f, fmt, ctx, q_type);
-+	return mxc_jpeg_try_fmt(f, ctx, &tmp_q);
-+}
-+
-+static void mxc_jpeg_s_parsed_fmt(struct mxc_jpeg_ctx *ctx, struct v4l2_format *f)
-+{
-+	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
-+	struct mxc_jpeg_q_data *q_data_cap;
-+
-+	if (ctx->mxc_jpeg->mode != MXC_JPEG_DECODE || !V4L2_TYPE_IS_CAPTURE(f->type))
-+		return;
-+	if (!ctx->header_parsed)
-+		return;
-+
-+	q_data_cap = mxc_jpeg_get_q_data(ctx, f->type);
-+	pix_mp->pixelformat = q_data_cap->fmt->fourcc;
-+	pix_mp->width = q_data_cap->w;
-+	pix_mp->height = q_data_cap->h;
- }
- 
- static int mxc_jpeg_s_fmt(struct mxc_jpeg_ctx *ctx,
- 			  struct v4l2_format *f)
- {
- 	struct vb2_queue *vq;
--	struct mxc_jpeg_q_data *q_data = NULL;
--	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
- 	struct mxc_jpeg_dev *jpeg = ctx->mxc_jpeg;
--	int i;
- 
- 	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
- 	if (!vq)
- 		return -EINVAL;
- 
--	q_data = mxc_jpeg_get_q_data(ctx, f->type);
--
- 	if (vb2_is_busy(vq)) {
- 		v4l2_err(&jpeg->v4l2_dev, "queue busy\n");
- 		return -EBUSY;
- 	}
- 
--	q_data->fmt = mxc_jpeg_find_format(ctx, pix_mp->pixelformat);
--	q_data->w = pix_mp->width;
--	q_data->h = pix_mp->height;
--
--	q_data->w_adjusted = q_data->w;
--	q_data->h_adjusted = q_data->h;
--	/*
--	 * align up the resolution for CAST IP,
--	 * but leave the buffer resolution unchanged
--	 */
--	v4l_bound_align_image(&q_data->w_adjusted,
--			      q_data->w_adjusted,  /* adjust upwards */
--			      MXC_JPEG_MAX_WIDTH,
--			      q_data->fmt->h_align,
--			      &q_data->h_adjusted,
--			      q_data->h_adjusted, /* adjust upwards */
--			      MXC_JPEG_MAX_HEIGHT,
--			      q_data->fmt->v_align,
--			      0);
--
--	for (i = 0; i < pix_mp->num_planes; i++) {
--		q_data->bytesperline[i] = pix_mp->plane_fmt[i].bytesperline;
--		q_data->sizeimage[i] = pix_mp->plane_fmt[i].sizeimage;
--	}
-+	mxc_jpeg_s_parsed_fmt(ctx, f);
- 
--	return 0;
-+	return mxc_jpeg_try_fmt(f, ctx, mxc_jpeg_get_q_data(ctx, f->type));
- }
- 
- static int mxc_jpeg_s_fmt_vid_cap(struct file *file, void *priv,
- 				  struct v4l2_format *f)
- {
--	int ret;
--
--	ret = mxc_jpeg_try_fmt_vid_cap(file, priv, f);
--	if (ret)
--		return ret;
--
- 	return mxc_jpeg_s_fmt(mxc_jpeg_fh_to_ctx(priv), f);
- }
- 
-@@ -1983,10 +1973,6 @@ static int mxc_jpeg_s_fmt_vid_out(struct file *file, void *priv,
- 	enum v4l2_buf_type cap_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
- 	struct v4l2_format fc;
- 
--	ret = mxc_jpeg_try_fmt_vid_out(file, priv, f);
--	if (ret)
--		return ret;
--
- 	ret = mxc_jpeg_s_fmt(mxc_jpeg_fh_to_ctx(priv), f);
- 	if (ret)
- 		return ret;
-@@ -2032,6 +2018,10 @@ static int mxc_jpeg_g_fmt_vid(struct file *file, void *priv,
- 	pix_mp->width = q_data->w;
- 	pix_mp->height = q_data->h;
- 	pix_mp->field = V4L2_FIELD_NONE;
-+	if (q_data->fmt->flags == MXC_JPEG_FMT_TYPE_RAW) {
-+		pix_mp->width = q_data->w_adjusted;
-+		pix_mp->height = q_data->h_adjusted;
-+	}
- 
- 	/* fix colorspace information to sRGB for both output & capture */
- 	pix_mp->colorspace = V4L2_COLORSPACE_SRGB;
-@@ -2048,6 +2038,100 @@ static int mxc_jpeg_g_fmt_vid(struct file *file, void *priv,
- 	return 0;
- }
- 
-+static int mxc_jpeg_dec_g_selection(struct file *file, void *fh, struct v4l2_selection *s)
-+{
-+	struct mxc_jpeg_ctx *ctx = mxc_jpeg_fh_to_ctx(fh);
-+	struct mxc_jpeg_q_data *q_data_cap;
-+
-+	if (s->type != V4L2_BUF_TYPE_VIDEO_CAPTURE && s->type != V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
-+		return -EINVAL;
-+
-+	q_data_cap = mxc_jpeg_get_q_data(ctx, s->type);
-+
-+	switch (s->target) {
-+	case V4L2_SEL_TGT_COMPOSE:
-+	case V4L2_SEL_TGT_COMPOSE_DEFAULT:
-+		s->r = q_data_cap->crop;
-+		break;
-+	case V4L2_SEL_TGT_COMPOSE_PADDED:
-+	case V4L2_SEL_TGT_COMPOSE_BOUNDS:
-+		s->r.left = 0;
-+		s->r.top = 0;
-+		s->r.width = q_data_cap->w_adjusted;
-+		s->r.height = q_data_cap->h_adjusted;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mxc_jpeg_enc_g_selection(struct file *file, void *fh, struct v4l2_selection *s)
-+{
-+	struct mxc_jpeg_ctx *ctx = mxc_jpeg_fh_to_ctx(fh);
-+	struct mxc_jpeg_q_data *q_data_out;
-+
-+	if (s->type != V4L2_BUF_TYPE_VIDEO_OUTPUT && s->type != V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
-+		return -EINVAL;
-+
-+	q_data_out = mxc_jpeg_get_q_data(ctx, s->type);
-+
-+	switch (s->target) {
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		s->r.left = 0;
-+		s->r.top = 0;
-+		s->r.width = q_data_out->w;
-+		s->r.height = q_data_out->h;
-+		break;
-+	case V4L2_SEL_TGT_CROP:
-+		s->r = q_data_out->crop;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mxc_jpeg_g_selection(struct file *file, void *fh, struct v4l2_selection *s)
-+{
-+	struct mxc_jpeg_ctx *ctx = mxc_jpeg_fh_to_ctx(fh);
-+
-+	if (ctx->mxc_jpeg->mode == MXC_JPEG_DECODE)
-+		return mxc_jpeg_dec_g_selection(file, fh, s);
-+	else
-+		return mxc_jpeg_enc_g_selection(file, fh, s);
-+}
-+
-+static int mxc_jpeg_s_selection(struct file *file, void *fh, struct v4l2_selection *s)
-+{
-+	struct mxc_jpeg_ctx *ctx = mxc_jpeg_fh_to_ctx(fh);
-+	struct mxc_jpeg_q_data *q_data_out;
-+
-+	if (ctx->mxc_jpeg->mode != MXC_JPEG_ENCODE)
-+		return -ENOTTY;
-+
-+	if (s->type != V4L2_BUF_TYPE_VIDEO_OUTPUT && s->type != V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
-+		return -EINVAL;
-+	if (s->target != V4L2_SEL_TGT_CROP)
-+		return -EINVAL;
-+
-+	q_data_out = mxc_jpeg_get_q_data(ctx, s->type);
-+	if (s->r.left || s->r.top)
-+		return -EINVAL;
-+	if (s->r.width > q_data_out->w || s->r.height > q_data_out->h)
-+		return -EINVAL;
-+
-+	q_data_out->crop.left = 0;
-+	q_data_out->crop.top = 0;
-+	q_data_out->crop.width = s->r.width;
-+	q_data_out->crop.height = s->r.height;
-+
-+	return 0;
-+}
-+
- static int mxc_jpeg_subscribe_event(struct v4l2_fh *fh,
- 				    const struct v4l2_event_subscription *sub)
- {
-@@ -2077,6 +2161,9 @@ static const struct v4l2_ioctl_ops mxc_jpeg_ioctl_ops = {
- 	.vidioc_g_fmt_vid_cap_mplane	= mxc_jpeg_g_fmt_vid,
- 	.vidioc_g_fmt_vid_out_mplane	= mxc_jpeg_g_fmt_vid,
- 
-+	.vidioc_g_selection		= mxc_jpeg_g_selection,
-+	.vidioc_s_selection		= mxc_jpeg_s_selection,
-+
- 	.vidioc_subscribe_event		= mxc_jpeg_subscribe_event,
- 	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
- 
 diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
-index 8104ee4a3b7a..f75dfc89ff6d 100644
+index f75dfc89ff6d..660dcaca8658 100644
 --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
 +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
-@@ -84,6 +84,7 @@ struct mxc_jpeg_q_data {
- 	int				h;
- 	int				h_adjusted;
- 	unsigned int			sequence;
-+	struct v4l2_rect		crop;
+@@ -45,7 +45,8 @@ enum mxc_jpeg_mode {
+  * @subsampling: subsampling of jpeg components
+  * @nc:		number of color components
+  * @depth:	number of bits per pixel
+- * @colplanes:	number of color planes (1 for packed formats)
++ * @mem_planes:	number of memory planes (1 for packed formats)
++ * @comp_planes:number of component planes, which includes the alpha plane (1 to 4).
+  * @h_align:	horizontal alignment order (align to 2^h_align)
+  * @v_align:	vertical alignment order (align to 2^v_align)
+  * @flags:	flags describing format applicability
+@@ -57,11 +58,13 @@ struct mxc_jpeg_fmt {
+ 	enum v4l2_jpeg_chroma_subsampling	subsampling;
+ 	int					nc;
+ 	int					depth;
+-	int					colplanes;
++	int					mem_planes;
++	int					comp_planes;
+ 	int					h_align;
+ 	int					v_align;
+ 	u32					flags;
+ 	u8					precision;
++	u8					is_rgb;
  };
  
- struct mxc_jpeg_ctx {
+ struct mxc_jpeg_desc {
 -- 
 2.37.1
 
