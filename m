@@ -2,134 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1579B5EE6C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 22:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEA75EE6C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 22:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234191AbiI1UpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 16:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
+        id S234328AbiI1Upw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 16:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234134AbiI1Uov (ORCPT
+        with ESMTP id S234569AbiI1UpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 16:44:51 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833BB10E7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 13:44:48 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id v10-20020a17090a634a00b00205e48cf845so3861513pjs.4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 13:44:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Vdbd3ulUXBGBc17CxMn5J69DULA+Of7+9gUX+29F9hg=;
-        b=rRgYmA36A88TMq0xkAhH2g3RVfk7DGY20N2SAcxV76lx/Td1UXHyEj0WvIFdcrSVwO
-         qS3yRzGMyD+kkje1aIUlU3+mf8anLceaq8CC9Oa92Ub67hFzqpRFpfdUpiQj/J01t+Q8
-         P630ne57RF9w5e0sidUK3rBoFfAadHl0NX9NAkRIChI5x1iDfRooe/ullrP1wK/SfFo6
-         +vX+TkZ4yo2d9ESnik1Mb5jbCaWGxMBCkdPIfxSb6oegrgtCjHnVI2YeQbTNcAsMi5Mq
-         AJvIcEVPIf80ETgnDPNdpf9TfhZUUbjRS4aWpCGuhumkXJkEt1WCS3nHaLN2VBB3TN0J
-         3plA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Vdbd3ulUXBGBc17CxMn5J69DULA+Of7+9gUX+29F9hg=;
-        b=aKmDnJKhw6jJKGC81VQjp6dcU6+5Ub00feRITQxnmdfBKE5NSHnbW44jxfJicLt9hd
-         YEdqZZd6vfGHL7zf+s1xpSMPYiRyM1s8JDU58DnpOr8qSqyCfPlHBYNHghDPltIRHMW2
-         +PHgFEZlSsIa6eSveAbssiR2tVBGOcSj3PkWVmKieqgezfeFX2k/jFH+50oH8GFWnjvJ
-         K9k7SHY/JkRVR1LeQJpO5ncr/kf3lgg/B6LM/C+k4J62snNhqaL47TZchXuKhKxVuLlH
-         vWeKFI5QRQRfiMmgpd544TA6R1sAAeGPFI0HI8S8NsAILwCgn7M+yr8t+8+AZk+w0p5I
-         oeCg==
-X-Gm-Message-State: ACrzQf1PY721Mf2uoHjWUFaDD0oRt/dpAQeqhA8pSkt0wJ6cAsScK11T
-        SirajegLzvVdoI9BavHZjp2XrA==
-X-Google-Smtp-Source: AMsMyM4ivm1mIffq+6jbSHGX7GyxSYZ5r/9aMnzoa8fPG673WUexpILjoZ7Bo3Su0MuOfE2tDm8VQQ==
-X-Received: by 2002:a17:90a:2f43:b0:205:f4dc:a47b with SMTP id s61-20020a17090a2f4300b00205f4dca47bmr4555625pjd.62.1664397888386;
-        Wed, 28 Sep 2022 13:44:48 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id v11-20020a170902d68b00b0016ed8af2ec0sm1096143ply.29.2022.09.28.13.44.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 13:44:47 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 20:44:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Subject: Re: [PATCH v3 05/28] KVM: x86: Don't inhibit APICv/AVIC if xAPIC ID
- mismatch is due to 32-bit ID
-Message-ID: <YzSyPBjTeFVjxh3l@google.com>
-References: <20220920233134.940511-1-seanjc@google.com>
- <20220920233134.940511-6-seanjc@google.com>
- <d02d0b30-f29b-0ff6-98c7-89ddcd091c60@oracle.com>
- <e5d54876b233dc71a69249c3d02d649da5040a14.camel@redhat.com>
- <YzR7ezt67i1lH1/b@google.com>
- <1aea43e831cd7ed90c325b2c90bc6f3f9a1805b5.camel@redhat.com>
- <YzSMbSXQXyUY7M7G@google.com>
- <6fcec4adb331452c64adf255c367af86072bd9d3.camel@redhat.com>
+        Wed, 28 Sep 2022 16:45:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DDE65CB;
+        Wed, 28 Sep 2022 13:45:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9526B8216E;
+        Wed, 28 Sep 2022 20:45:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A01EC433C1;
+        Wed, 28 Sep 2022 20:45:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664397916;
+        bh=TUNfwWR1HJKegUyNHHt9zSljJ1tJhnGeXq9PyLq/f/4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FRS4YOgmIGbA0a2Oin8Y7efgYpOv/ySxdSQGwgck/sn+mYml4c0bqIYOprvM3TmrQ
+         vXPzYZ/PjKq65VgiM0AXU3FC+SLUjTzGXBOkp9GUr54cZ6f44Z7feBSwzMc7H3b93j
+         91QK40KRgO0WpYvf1goekKukYaG5FUB5vWuWvUvreN/l8v/nsktG8cfWwFR8KdC5by
+         euWuvg/vVZsb+w64TYIqzS4+MZaK8S0C7qE4xKjC+Tdk3sCLu+UaNNKbcW00Ioxuz4
+         BkLuVeHH0wkUdPO0i1M2+VQferEwq7Al4brv4QyuGtusnZHriTp6TGmD1tFHJHz+KC
+         vr+eBqzcjcb6Q==
+Date:   Wed, 28 Sep 2022 13:45:13 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     kernel test robot <yujie.liu@intel.com>, lkp@intel.com,
+        aik@ozlabs.ru, linux-kbuild@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>, chenzhongjin@huawei.com,
+        llvm@lists.linux.dev, npiggin@gmail.com,
+        linux-kernel@vger.kernel.org, lkp@lists.01.org, mingo@redhat.com,
+        Sathvika Vasireddy <sv@linux.ibm.com>, rostedt@goodmis.org,
+        jpoimboe@redhat.com, naveen.n.rao@linux.vnet.ibm.com,
+        mbenes@suse.cz, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [objtool] ca5e2b42c0: kernel_BUG_at_arch/x86/kernel/jump_label.c
+Message-ID: <YzSyWWGsC0lGriYA@dev-arch.thelio-3990X>
+References: <20220912082020.226755-12-sv@linux.ibm.com>
+ <202209280801.2d5eebb5-yujie.liu@intel.com>
+ <YzRr23Bn6qFDC7j0@dev-arch.thelio-3990X>
+ <20220928191353.yu2o7rhkhpi3n74z@treble>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6fcec4adb331452c64adf255c367af86072bd9d3.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220928191353.yu2o7rhkhpi3n74z@treble>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022, Maxim Levitsky wrote:
-> On Wed, 2022-09-28 at 18:03 +0000, Sean Christopherson wrote:
-> > On Wed, Sep 28, 2022, Maxim Levitsky wrote:
-> > > On Wed, 2022-09-28 at 16:51 +0000, Sean Christopherson wrote:
-> > > > > > It happens regardless of vCPU count (tested with 2, 32, 255, 380, and 
-> > > > > > 512 vCPUs). This state persists for all subsequent reboots, until the VM 
-> > > > > > is terminated. For vCPU counts < 256, when x2apic is disabled the 
-> > > > > > problem does not occur, and AVIC continues to work properly after reboots.
-> > > > 
-> > > > Bit of a shot in the dark, but does the below fix the issue?  There are two
-> > > > issues with calling kvm_lapic_xapic_id_updated() from kvm_apic_state_fixup():
-> > > > 
-> > > >   1. The xAPIC ID should only be refreshed on "set".
-> > > True - I didn't bother to fix it yet because it shouldn't cause harm, but
-> > > sure this needs to be fixed.
+On Wed, Sep 28, 2022 at 12:13:53PM -0700, Josh Poimboeuf wrote:
+> On Wed, Sep 28, 2022 at 08:44:27AM -0700, Nathan Chancellor wrote:
+> > This crash appears to just be a symptom of objtool erroring throughout
+> > the entire build, which means things like the jump label hacks do not
+> > get applied. I see a flood of
 > > 
-> > It's probably benign on its own, but with the missing "hardware enabled" check,
-> > it could be problematic if userspace does KVM_GET_LAPIC while the APIC is hardware
-> > disabled, after the APIC was previously in x2APIC mode.  I'm guessing QEMU does
-> > KVM_GET_LAPIC state when emulating reboot, hence the potential for being involved
-> > in the bug Alejandro is seeing.
+> >   error: objtool: --mnop requires --mcount
 > > 
-> > > >   2. The refresh needs to be noted after memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
-> > > Are you sure? The check is first because if it fails, then error is returned to userspace
-> > > and the KVM's state left unchanged.
-> > > 
-> > > I assume you are talking about 
-> > > 
-> > >         ....
-> > > 	r = kvm_apic_state_fixup(vcpu, s, true);
-> > > 	if (r) {
-> > > 		kvm_recalculate_apic_map(vcpu->kvm);
-> > > 		return r;
-> > > 	}
-> > > 	memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
+> > throughout the build because the configuration has
+> > CONFIG_HAVE_NOP_MCOUNT=y because CONFIG_HAVE_OBJTOOL_MCOUNT is
+> > unconditionally enabled for x86_64 due to CONFIG_HAVE_OBJTOOL but
+> > '--mcount' is only actually used when CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
+> > is enabled so '--mnop' gets passed in without '--mcount'. This should
+> > obviously be fixed somehow, perhaps by moving the '--mnop' addition into
+> > the '--mcount' if, even if that makes the line really long.
 > > 
-> > This isn't a failure path though, it's purely a "take note of the update", and
-> > KVM needs to do that processing _after_ the actual update.  Specifically,
-> > kvm_lapic_xapic_id_updated() consumes the internal APIC state:
+> > A secondary issue is that it seems like if objtool encounters a fatal
+> > error like this, it should completely fail the build to make it obvious
+> > that something is wrong, rather than allowing it to continue and
+> > generate a broken kernel, especially since x86_64 requires objtool to
+> > build a working kernel at this point.
 > 
-> Yes, I somehow blindly assumed that kvm_apic_state_fixup actually checks
-> the new state and not the existing state.
+> Grrr... I really dislike that objtool is capable of bricking the kernel
+> like this.  We just saw something similar in RHEL.
 > 
-> Probably because my original code did that, I think it just checked the 'id'
-> variable.. Oh well.
-> Thanks for catching this bug!
+> IMO, we should just get rid of this "short JMP" feature in the jump
+> label code, those saved three bytes aren't worth the pain.
+> 
+> But yes, we do need to fix that config issue.
 
-This was indeed the bug Alejandro hit.  QEMU does KVM_SET_LAPIC and KVM checks
-the stale vAPIC state.  Because the vCPU was in x2APIC mode, the 32-bit ID is
-in bits 31:0, not bit 31:24, and so kvm_xapic_id() returned '0' instead of the
-correct ID.
+Right, I actually see that the report I was CC'd on was a part of a
+larger thread, where Naveen already suggested the fix for this problem,
+which is not clang specific it seems:
+
+https://lore.kernel.org/1663223588.wppdx3129x.naveen@linux.ibm.com/
+
+> And yes, maybe fatal objtool warnings should cause a build failure.  We
+> used to do that, but it brought a different sort of pain.  But if
+> objtool is going to be in the kernel's critical boot path then I guess
+> we have to do that.
+
+Right, that was
+
+  644592d32837 ("objtool: Fail the kernel build on fatal errors")
+
+which was reverted in
+
+  655cf86548a3 ("objtool: Don't fail the kernel build on fatal errors")
+
+objtool should not error on warnings but it seems like it should error
+for invalid option combinations and other misconfiguration problems? Did
+this regress with commit b51277eb9775 ("objtool: Ditch subcommands")? I
+can see that the return code of the subcommands would be passed back via
+exit() (?) so objtool could fail the build if there was a true problem
+but after that change, objtool_run() does not have its return code
+checked so any errors that happen don't get passed back up. Perhaps just
+the following diff would resolve this? I assume we would need to look at
+all the different return values to know if this is safe though.
+
+Cheers,
+Nathan
+
+diff --git a/tools/objtool/objtool.c b/tools/objtool/objtool.c
+index a7ecc32e3512..cda649644e32 100644
+--- a/tools/objtool/objtool.c
++++ b/tools/objtool/objtool.c
+@@ -146,7 +146,5 @@ int main(int argc, const char **argv)
+ 	exec_cmd_init("objtool", UNUSED, UNUSED, UNUSED);
+ 	pager_init(UNUSED);
+ 
+-	objtool_run(argc, argv);
+-
+-	return 0;
++	return objtool_run(argc, argv);
+ }
