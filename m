@@ -2,100 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D0C5ED79D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA575ED7A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233416AbiI1IXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
+        id S233536AbiI1IYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233296AbiI1IXp (ORCPT
+        with ESMTP id S233507AbiI1IYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:23:45 -0400
-Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [5.144.164.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6DA7E31C
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:23:44 -0700 (PDT)
-Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id CF5EB1F52C;
-        Wed, 28 Sep 2022 10:23:41 +0200 (CEST)
-Date:   Wed, 28 Sep 2022 10:23:40 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] dt-bindings: mfd: qcom-spmi-pmic: Add pm6125
- compatible
-Message-ID: <20220928082340.mkn23ersrtzb5oth@SoMainline.org>
-References: <20220926190148.283805-1-marijn.suijten@somainline.org>
- <20220926190148.283805-2-marijn.suijten@somainline.org>
- <052630d0-299e-e468-b2dd-266d371e2b0f@linaro.org>
- <20220928081055.p66huqct2wnrsrdx@SoMainline.org>
- <3f2e62f5-a6e4-7011-3f5b-29a6657eae79@linaro.org>
+        Wed, 28 Sep 2022 04:24:40 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289D526DE;
+        Wed, 28 Sep 2022 01:24:38 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28S81EL7018633;
+        Wed, 28 Sep 2022 08:24:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=mI+gFKOJAA7q2PrHJEp9qUHuwPBApdzVA7c154AlUmY=;
+ b=Tp9CaJWAvUaBgtgg1bZDYx9VYszd5nzW7UTL4zDxLS8J2QNL/YacLWavhbS+hKe7gE5r
+ qSMABX7TMHzD3QVPcn6IRiwVlP7/aoj3alEC4TYLKMACuy3kg+Dg84KkldY+TqC1omUN
+ ZwYxtqMaWtbAR7p0qvyt7OH913SzQjqxzLnopdorfTzX4xXvpuQUPldJD84sf+8sxamr
+ cManjfIhSLGFfh7jkpxJ6sy6Wo46OREjKzioFBN/L7mwa7+Bmec2hKfKBidcxUJ/8kcg
+ mNW0nK4PL4wzAXKo6rkrmsCGm+GRlcfwqgKOc6INKbNnRYl7fLqMoDGHW++w4pYN9dIq jA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jvjd0rprt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 08:24:36 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28S8F2b9016954;
+        Wed, 28 Sep 2022 08:24:35 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jvjd0rpr8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 08:24:35 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28S8L0RE003738;
+        Wed, 28 Sep 2022 08:24:33 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3jssh93pwr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 08:24:33 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28S8Owpj52953404
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Sep 2022 08:24:58 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0E40911C052;
+        Wed, 28 Sep 2022 08:24:30 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ABD7B11C04A;
+        Wed, 28 Sep 2022 08:24:29 +0000 (GMT)
+Received: from [9.145.184.40] (unknown [9.145.184.40])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Sep 2022 08:24:29 +0000 (GMT)
+Message-ID: <cfcc8d22-8efd-8b0b-d24f-cb734f9ef927@linux.ibm.com>
+Date:   Wed, 28 Sep 2022 10:24:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f2e62f5-a6e4-7011-3f5b-29a6657eae79@linaro.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [PATCH 3/7] s390/qeth: Convert snprintf() to scnprintf()
+Content-Language: en-US
+To:     Joe Perches <joe@perches.com>, Jules Irenge <jbi.octave@gmail.com>,
+        borntraeger@linux.ibm.com
+Cc:     svens@linux.ibm.com, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        agordeev@linux.ibm.com
+References: <YzHyniCyf+G/2xI8@fedora>
+ <5138b5a347b79a5f35b75d0babf5f41dbace879a.camel@perches.com>
+From:   Alexandra Winter <wintera@linux.ibm.com>
+In-Reply-To: <5138b5a347b79a5f35b75d0babf5f41dbace879a.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: WJUU4QSdAVgwLmyEbefhVoMAyFdUVnZR
+X-Proofpoint-GUID: -rKPFWaD7l21EQy1DW8f_nJI7wJ6Tx7a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-28_03,2022-09-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ suspectscore=0 mlxscore=0 clxscore=1011 impostorscore=0 malwarescore=0
+ spamscore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209280048
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-28 10:14:05, Krzysztof Kozlowski wrote:
-> On 28/09/2022 10:10, Marijn Suijten wrote:
-> > On 2022-09-28 09:35:40, Krzysztof Kozlowski wrote:
-> >> On 26/09/2022 21:01, Marijn Suijten wrote:
-> >>> Document support for the pm6125, typically paired with the sm6125 SoC.
-> >>>
-> >>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> >>> ---
-> >>>  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 1 +
-> >>>  1 file changed, 1 insertion(+)
-> >>
-> >>
-> >> Please add Acked-by/Reviewed-by tags when posting new versions. However,
-> >> there's no need to repost patches *only* to add the tags. The upstream
-> >> maintainer will do that for acks received on the version they apply.
-> >>
-> >> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-> >>
-> >> If a tag was not added on purpose, please state why and what changed.
-> >>
-> >>
-> >> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > 
-> > https://lore.kernel.org/linux-arm-msm/0ec65132-7d7a-2f8d-cc16-cb76efc343d6@linaro.org/
-> > 
-> > Thanks, I thought of it this morning while browsing lore, but only got
-> > to a screen just now so you beat me to it by ~30 minutes.
-> > 
-> > No need to lecture me on the rules, but I can't promise this won't
-> > happen again.
-> 
-> 
-> This is a automated message, don't get it too personal. A lot of people
-> are not aware they have to do it, so I just one, same reply. I don't
-> know whether you are aware of the process and just forgot to include it.
-> If that's the case, just ignore the message.
 
-That's useful, what software are you using for this?  Perhaps I can run
-it as well, both to preempt myself and others.
-(Side-note: I should get accustomed to `b4 shazam` to automatically pick
- this up from the list, instead of rebasing / re-applying local patches)
 
-- Marijn
+On 27.09.22 16:27, Joe Perches wrote:
+> On Mon, 2022-09-26 at 19:42 +0100, Jules Irenge wrote:
+>> Coccinnelle reports a warning
+>> Warning: Use scnprintf or sprintf
+>> Adding to that, there has been a slow migration from snprintf to scnprintf.
+>> This LWN article explains the rationale for this change
+>> https: //lwn.net/Articles/69419/
+>> Ie. snprintf() returns what *would* be the resulting length,
+>> while scnprintf() returns the actual length.
+> []
+>> diff --git a/drivers/s390/net/qeth_core_sys.c b/drivers/s390/net/qeth_core_sys.c
+> []
+>> @@ -500,9 +500,9 @@ static ssize_t qeth_hw_trap_show(struct device *dev,
+>>  	struct qeth_card *card = dev_get_drvdata(dev);
+>>  
+>>  	if (card->info.hwtrap)
+>> -		return snprintf(buf, 5, "arm\n");
+>> +		return scnprintf(buf, 5, "arm\n");
+>>  	else
+>> -		return snprintf(buf, 8, "disarm\n");
+>> +		return scnprintf(buf, 8, "disarm\n");
+>>  }
+> 
+> Use sysfs_emit instead.
+> 
+
+Thank you Joe, that sounds like the best way to handle this. 
+I propose that I take this onto my ToDo list and test it in the s390 environment.
+I will add 
+Reported-by: Jules Irenge <jbi.octave@gmail.com>
+Suggested-by: Joe Perches <joe@perches.com>
+
