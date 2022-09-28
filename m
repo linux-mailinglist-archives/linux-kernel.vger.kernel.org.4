@@ -2,158 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CB85EDE73
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563BF5EDE74
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbiI1OIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
+        id S233000AbiI1OJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbiI1OIo (ORCPT
+        with ESMTP id S234205AbiI1OJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:08:44 -0400
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8414564C2;
-        Wed, 28 Sep 2022 07:08:43 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so2348079wmr.1;
-        Wed, 28 Sep 2022 07:08:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=/ybRaGWU0laVlDOhJoQj+bu5dznyAXvrYdYe0lJBF/0=;
-        b=j0wJ98yPWa9EhlX4Sa+nbR8q7ZymjDBoAQRFqbsO1yenXW1XEtB2XE+OQ6Bjt1jiCY
-         sBUvgy/YVaahsWoZzhDjaA5qVH64HfROwVq1X0Om57p+d3pbFfLrDkfKFkOplW1aIZQj
-         nXbUt86Nu7MsaUHG+zphQw4LsDwBGUpd7BQpwAhUT2mrPYzj5IIO2upSI8aqWk55xMOM
-         xM+fHNcuQG5AygfxXUlFASqpo38nQHLeYXWFGK8W2NM2ehkoedI5x+viqse+qXT6vswp
-         a0L8lbMwm3ad+Jc4nGl7dExsc2Iy6pf3lZjRDg/mRx77UjaR4a/cPi5MBbnVCT5sUjh/
-         deig==
-X-Gm-Message-State: ACrzQf3xm11123xCkyAIDiFTlFoL6yUrtf1YUvn9kjruf3WuHOBYXkVY
-        1hmQ4RSGp0dB0StbPPkjOkE=
-X-Google-Smtp-Source: AMsMyM4QaHTDYYaKwURnBwFp4DowrK3i0/ypshg4DfKuQlPNQJNP0MImc6rerj2aNEPsinvO1p9bGw==
-X-Received: by 2002:a7b:cc85:0:b0:3b4:9fc7:cd4d with SMTP id p5-20020a7bcc85000000b003b49fc7cd4dmr6815217wma.68.1664374122332;
-        Wed, 28 Sep 2022 07:08:42 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id t15-20020a5d42cf000000b00228c483128dsm5081927wrr.90.2022.09.28.07.08.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 07:08:42 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 14:08:40 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Zhao Liu <zhao1.liu@linux.intel.com>
-Cc:     "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH] x86/hyperv: Replace kmap() with kmap_local_page()
-Message-ID: <YzRVaJA0EyfcVisW@liuwe-devbox-debian-v2>
-References: <20220928095640.626350-1-zhao1.liu@linux.intel.com>
+        Wed, 28 Sep 2022 10:09:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71F009E0C5
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 07:08:59 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E5AA1595;
+        Wed, 28 Sep 2022 07:09:05 -0700 (PDT)
+Received: from [10.1.197.78] (eglon.cambridge.arm.com [10.1.197.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 84C543F73D;
+        Wed, 28 Sep 2022 07:08:57 -0700 (PDT)
+Message-ID: <7728c846-0077-a34d-7fdc-bab9743edc4f@arm.com>
+Date:   Wed, 28 Sep 2022 15:08:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220928095640.626350-1-zhao1.liu@linux.intel.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] x86/resctrl: Clear the staged configs when destroying
+ schemata list
+Content-Language: en-GB
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Shawn Wang <shawnwang@linux.alibaba.com>, fenghua.yu@intel.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+References: <1664247269-41295-1-git-send-email-shawnwang@linux.alibaba.com>
+ <80d6238b-223c-e60a-6930-24a981d9dd0c@arm.com>
+ <2728c354-ac75-be4c-66ad-86ebd9c50248@intel.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <2728c354-ac75-be4c-66ad-86ebd9c50248@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 05:56:40PM +0800, Zhao Liu wrote:
-> From: Zhao Liu <zhao1.liu@intel.com>
-> 
-> kmap() is being deprecated in favor of kmap_local_page()[1].
-> 
-> There are two main problems with kmap(): (1) It comes with an overhead as
-> mapping space is restricted and protected by a global lock for
-> synchronization and (2) it also requires global TLB invalidation when the
-> kmap's pool wraps and it might block when the mapping space is fully
-> utilized until a slot becomes available.
-> 
-> With kmap_local_page() the mappings are per thread, CPU local, can take
-> page faults, and can be called from any context (including interrupts).
-> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-> the tasks can be preempted and, when they are scheduled to run again, the
-> kernel virtual addresses are restored and are still valid.
-> 
-> In the fuction hyperv_init() of hyperv/hv_init.c, the mapping is used in a
-> single thread and is short live. So, in this case, it's safe to simply use
-> kmap_local_page() to create mapping, and this avoids the wasted cost of
-> kmap() for global synchronization.
-> 
+Hi Reinette,
 
-The kmap call in that function is not performance critical in any way,
-and at this point in the initialization process I don't expect there to
-be any contention, so the downside of kmap is not really a concern here.
+On 27/09/2022 22:21, Reinette Chatre wrote:
+> On 9/27/2022 6:06 AM, James Morse wrote:
+>> On 27/09/2022 03:54, Shawn Wang wrote:
 
-That being said, kmap getting deprecated is a good enough reason to
-switch to kmap_local_page. And I appreciate this well-written,
-well-reasoned commit message.
+>>> The problem can be reproduced by the following commands:
+>>>     # A system with 16 usable closids and mba disabled
+>>>     mount -t resctrl resctrl -o cdp /sys/fs/resctrl
+>>>     mkdir /sys/fs/resctrl/p{1..7}
+>>>     umount /sys/fs/resctrl/
+>>>     mount -t resctrl resctrl /sys/fs/resctrl
+>>>     mkdir /sys/fs/resctrl/p{1..8}
+>>
+>> Thanks for the reproducer - but I don't see what could set have_new_ctrl in this sequence.
+>> You can't call apply_config() to set CPUs in the mask without that being set.
+>>
+>> Creating a new control group, (your mkdir step) shouldn't touch the hardware at all, as it
+>> should be left in its reset state from the last umount(), or setup.
+> 
+> There is an attempt to configure the hardware in the mkdir path:
+> rdtgroup_mkdir()->rdtgroup_mkdir_ctrl_mon()->rdtgroup_init_alloc()->resctrl_arch_update_domains()
 
-I will apply it to hyperv-next later -- I doubt people will object to
-this change, but just in case.
+Aha! I'm not sure why my grepping around didn't find this.
+
+This is a path that doesn't memset() the staged config first, so that explains it.
+
+[..]
+
+> What do you think about clearing the staged config within resctrl_arch_update_domains()
+> after the configuration is complete and there is no more need for it? That may reduce
+> complexity where each caller no longer need to remember to do so.
+> I see "staged_config" as a temporary storage and it my help to understand the code better
+> if it is treated as such. 
+
+Yup, that would it with the idea of the value being consumed by
+resctrl_arch_update_domains(), which is how I think of it.
+
 
 Thanks,
-Wei.
 
-> In addtion, the fuction hyperv_init() checks if kmap() fails by BUG_ON().
-> From the original discussion[2], the BUG_ON() here is just used to
-> explicitly panic NULL pointer. So still keep the BUG_ON() in place to check
-> if kmap_local_page() fails. Based on this consideration, memcpy_to_page()
-> is not selected here but only kmap_local_page() is used.
-> 
-> Therefore, replace kmap() with kmap_local_page() in hyperv/hv_init.c.
-> 
-> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
-> [2]: https://lore.kernel.org/lkml/20200915103710.cqmdvzh5lys4wsqo@liuwe-devbox-debian-v2/
-> 
-> Suggested-by: Dave Hansen <dave.hansen@intel.com>
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
-> 
-> ---
-> Suggested by credits.
-> 	Dave: Referred to his comments about whether kmap() can fail and the
-> 	      suggestion to keep BUG_ON() in place.
-> 	Ira: Referred to his task documentation and review comments about
-> 	     keeping BUG_ON() for kmap_local_page().
-> 	Fabio: Stole some of his boiler plate commit message.
-> ---
->  arch/x86/hyperv/hv_init.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index 3de6d8b53367..72fe46eb183f 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -459,13 +459,13 @@ void __init hyperv_init(void)
->  		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
->  
->  		pg = vmalloc_to_page(hv_hypercall_pg);
-> -		dst = kmap(pg);
-> +		dst = kmap_local_page(pg);
->  		src = memremap(hypercall_msr.guest_physical_address << PAGE_SHIFT, PAGE_SIZE,
->  				MEMREMAP_WB);
->  		BUG_ON(!(src && dst));
->  		memcpy(dst, src, HV_HYP_PAGE_SIZE);
->  		memunmap(src);
-> -		kunmap(pg);
-> +		kunmap_local(dst);
->  	} else {
->  		hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
->  		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> -- 
-> 2.34.1
-> 
+James
