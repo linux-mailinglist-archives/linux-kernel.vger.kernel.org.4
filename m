@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BDAF5ED17C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 02:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3DA5ED182
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 02:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbiI1AQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 20:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S232046AbiI1AQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 20:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiI1APy (ORCPT
+        with ESMTP id S231627AbiI1AQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 20:15:54 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBABEEB43;
-        Tue, 27 Sep 2022 17:15:53 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-13189cd5789so3637290fac.11;
-        Tue, 27 Sep 2022 17:15:53 -0700 (PDT)
+        Tue, 27 Sep 2022 20:16:35 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331E9F5097;
+        Tue, 27 Sep 2022 17:16:31 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so7292996otu.7;
+        Tue, 27 Sep 2022 17:16:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=kRo13wpMLJOzS3jqPig2M6HHXDz6HFbiXe3zyizsBp4=;
-        b=Qritu37bu7vUcQJ7oyGxEbBpSMflU/hFkYBz8U5ftftXIEg9ObyDtFsTqUcC9//EbT
-         Iet5e7HUD/tti7SznD2Nqab6Q1XCil5WiPBxHmKy1FJBA6m5bhe06e/Bkf/nsDfLnUjt
-         W0s+Uc+IDFIdyXuKsDQp6QCFi2ttxUv3zA61/7h0UM+kL1AVM4q3+QM2JWpFeBXeUTxU
-         PUU1VjMxGa5to0o5V5+gNS5hqYGvOvLi9dcAwXjV6uU9DZxU4E8YEkDoyQ+h/ce4xdlO
-         gd05IyMv7UlfU9P6XkplqSJp95wZs5azO8OITjkbDZETyi8HtxMFUZ/XUd70GkZxn36v
-         Cb5A==
-X-Gm-Message-State: ACrzQf29EruX1lgosOTEKIdgUAOyDLLcGGCaaQd6Hav2LUoiE2hmTcSq
-        EzSJty9VkdP1ziq5wyn+eQ==
-X-Google-Smtp-Source: AMsMyM41JupW+/MsHGatWUd6mELxlzIr+bCVHnyn0CZXWct3hcKmXU/EBbJ1kOe+feoW1ywwQhX8kw==
-X-Received: by 2002:a05:6870:64a2:b0:12b:7db:b8e1 with SMTP id cz34-20020a05687064a200b0012b07dbb8e1mr3742030oab.212.1664324152397;
-        Tue, 27 Sep 2022 17:15:52 -0700 (PDT)
+        bh=1mCp/Ns0Hn89bqrz261N9ygEfbNFKh9BUfOIu5Gor8k=;
+        b=G8vOnydUnV1SOh17PEhNEE6EoYfSplhFg9bCEmvf+YLfNnP8QRcTJooD8oCKdWBLeC
+         Um1XcFtDp3PeH/Tes7VkxCucslDGJP72b8Ko7DNWzhLu4fUvbCNwz+EZaBDeUUeiwcVF
+         CQxyiMXSYhtYSCLJDDnkqTp8vMavLwsQnKekRw02kSvhiKZ8eTXls5BmdC5JyngTGV9Z
+         3I7Wqrbh6KwuV7nICHfHLvLPLy2c6+qma7NbcJnkvRobqwxLXJy+KB6b0vLd03Eh4BzW
+         Vok8y4cE/LYhpKM592L5zaEEpG1YwpglHLpbDKU2Icx0QGr2vngrREXPB13so9jc12oc
+         jPWA==
+X-Gm-Message-State: ACrzQf0qtZqUEfPJBZFJpLllzXhrx67CqS8BdY2nC4sKjdEUmfPI+Zmd
+        WqZCwvPC3mxxSLXGI+lbEPaRvq/b2g==
+X-Google-Smtp-Source: AMsMyM6w2ghHHtmpR6oBsbI/bXYCIf4KieHoWK4xIPPM3hNVnKPgIA2PMx9NIXuGAwtKUX92YxWocQ==
+X-Received: by 2002:a05:6830:1083:b0:65b:ca18:f1c1 with SMTP id y3-20020a056830108300b0065bca18f1c1mr13614220oto.314.1664324191217;
+        Tue, 27 Sep 2022 17:16:31 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i6-20020a05683033e600b0065bf42c967fsm1349027otu.19.2022.09.27.17.15.51
+        by smtp.gmail.com with ESMTPSA id bp8-20020a056808238800b003502783c454sm1263748oib.0.2022.09.27.17.16.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 17:15:51 -0700 (PDT)
-Received: (nullmailer pid 2654350 invoked by uid 1000);
-        Wed, 28 Sep 2022 00:15:50 -0000
-Date:   Tue, 27 Sep 2022 19:15:50 -0500
+        Tue, 27 Sep 2022 17:16:30 -0700 (PDT)
+Received: (nullmailer pid 2657759 invoked by uid 1000);
+        Wed, 28 Sep 2022 00:16:29 -0000
+Date:   Tue, 27 Sep 2022 19:16:29 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Stephan Gerhold <stephan@gerhold.net>, linux-gpio@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        devicetree@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-kernel@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>,
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
         Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
-        Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH v3 08/34] dt-bindings: pinctrl: qcom,ipq6018: add
- qpic_pad function
-Message-ID: <20220928001550.GA2654250-robh@kernel.org>
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-gpio@vger.kernel.org,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH v3 09/34] dt-bindings: pinctrl: qcom,ipq6018: correct
+ BLSP6->BLSP0 functions
+Message-ID: <20220928001629.GA2657664-robh@kernel.org>
 References: <20220927173702.5200-1-krzysztof.kozlowski@linaro.org>
- <20220927173702.5200-9-krzysztof.kozlowski@linaro.org>
+ <20220927173702.5200-10-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220927173702.5200-9-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+In-Reply-To: <20220927173702.5200-10-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Sep 2022 19:36:36 +0200, Krzysztof Kozlowski wrote:
-> The IPQ6018 pinctrl driver supports qpic_pad and DTS already uses it:
+On Tue, 27 Sep 2022 19:36:37 +0200, Krzysztof Kozlowski wrote:
+> The pin controller driver has BLSP functions from 0 to 5, not 1 to 6.
+> Add missing blsp0_i2c, blsp0_spi (already used in ipq6018-cp01-c1) and
+> blsp0_uart.  Drop blsp6_i2c and blsp6_spi.
 > 
->   'qpic_pad' is not one of ['adsp_ext', 'alsp_int', 'atest_bbrx0', ...
+> This fixes dtbs_check warning:
+> 
+>   ipq6018-cp01-c1.dtb: pinctrl@1000000: spi-0-state: 'oneOf' conditional failed, one must be fixed:
+>     'bias-pull-down', 'drive-strength', 'function', 'pins' do not match any of the regexes: '-pins$', 'pinctrl-[0-9]+'
+>     'blsp0_spi' is not one of ['adsp_ext', 'alsp_int', .....
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+> 
+> ---
+> 
+> Changes since v2:
+> 1. New patch
 > ---
 >  .../devicetree/bindings/pinctrl/qcom,ipq6018-pinctrl.yaml   | 6 +++---
 >  1 file changed, 3 insertions(+), 3 deletions(-)
