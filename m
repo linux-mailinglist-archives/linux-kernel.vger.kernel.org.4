@@ -2,113 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240455EDBCB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADA55EDBD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbiI1Lbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
+        id S233301AbiI1LdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 07:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232256AbiI1Lb1 (ORCPT
+        with ESMTP id S229951AbiI1LdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:31:27 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AA47FE62
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:31:25 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id s6so19879551lfo.7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:31:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=DNyd7Dp30Sf0SODKJSMM/lNDwtYbEH3SyllMKtKT77c=;
-        b=KpajDYCMGJ8vWnzB3LaNGSoHuAgM+XXgZAmX8AP20Oq7pT3oB2eVSDz2fHceIN8qMR
-         MCLtER4Zf/Gh6+SaqCUd5kbu1BVfHf+GCWMqF6zNmdJH1Nq+ENkR6ExMFPyMASuLL4aP
-         IZCKjNME4+XpcpNjdDtrPSBKs3k2PaSaz8s/tm3+77Dn3vreQLyyHL8gDpQnb/qqeHTJ
-         Eul/sNBm45v3nb79uSfd9mcv92nu1OteVTpOSwjZ6UndCcZL15VByYry+UjrYFm25FaA
-         Ib0Z5JH85SFYDf91dIXNBfSJyJnl83OkQSjWTyx6tTlQ4TYKvB5V3j+HWGwY6uEYdc7h
-         SVYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=DNyd7Dp30Sf0SODKJSMM/lNDwtYbEH3SyllMKtKT77c=;
-        b=4mrAfEQLvm3dJs+gYbX3fv1jgTRP+8QEYy7fSuzb+ZH3hsRH2KYGeYg89/7AbsorRw
-         v7E7LnUZaIaEQx93yCC9if9mwtLmlOP9mIGF3FUWx/MoM6Un54aIJ89pQV4iWwyz91dp
-         wm83DdwooesRbZGwiMT5gQ2NlVutghQz2DUd6RyxQNS+URS1sp4xL8WKIb7T7SPgW1eF
-         6ptEZSYZQS81IHZB37eawVgsSyJB/0R03LdaQRf/JOzAknxKNWebKC78dnOua4O6/PLi
-         EEtdatmlKhEsn1l/loZtgKVoF2JB2FSENUbZKr6jDFihb8jd2uxP8YupYUZYlW2Kt2WM
-         rW1A==
-X-Gm-Message-State: ACrzQf14ZswOWfcWKUYkdGZ0Iqrp+XX9PKxYQZGYB2LQxjdG1xgQTiAH
-        kx5sNQaYd5jk1HSSp19O8XYvMBN8lZctBw==
-X-Google-Smtp-Source: AMsMyM5kCJeiDB/X7LyzOhLlRdLOEAIYdVt+sl12dtCLxDbBitQujSCBF9Cg1v1vNCzCKkEoTUx1zw==
-X-Received: by 2002:a05:6512:3da2:b0:499:d70a:e6bc with SMTP id k34-20020a0565123da200b00499d70ae6bcmr13914197lfv.191.1664364684179;
-        Wed, 28 Sep 2022 04:31:24 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o22-20020ac25e36000000b004946c99e78asm448119lfg.277.2022.09.28.04.31.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 04:31:23 -0700 (PDT)
-Message-ID: <fca2b97c-9d4f-d372-ef2a-aae8b367bbe5@linaro.org>
-Date:   Wed, 28 Sep 2022 13:31:22 +0200
+        Wed, 28 Sep 2022 07:33:20 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980DC82878;
+        Wed, 28 Sep 2022 04:33:19 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5CD631F9A5;
+        Wed, 28 Sep 2022 11:33:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664364798; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M2mgymyLYQSEBITlSU1B1GuO4Bx/FQHXI8TQ8CJx3tk=;
+        b=bN1H8DRBbqY2qZfqYkrDVdsihILQFlH7+D1I6FyL/1qnGLAhzw2Oe3+4jqpCw1uUCBn9b/
+        ZceXP1aSUUHTD9cSy4Z5hS8xyPJL8JrN3fZb94Bt5FBYPfm6JbJHAT1jXui1/CJcpq2Xwg
+        HvUMNYFdpSLsyG7RVbQDWUaW0a+Imkk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 30B0F13677;
+        Wed, 28 Sep 2022 11:33:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ac6jCv4wNGOQJgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 28 Sep 2022 11:33:18 +0000
+Date:   Wed, 28 Sep 2022 13:33:16 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH v2] cgroup: Reorganize css_set_lock and kernfs path processing
+Message-ID: <YzQw/EvH9Sb58Au2@blackbook>
+References: <20220905170944.23071-1-mkoutny@suse.com>
+ <Yxd/sUQ/NB3NlC6f@slm.duckdns.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 1/3] dt-bindings: gpio: Conver Unisoc GPIO controller
- binding to yaml
-Content-Language: en-US
-To:     Chunyan Zhang <zhang.lyra@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220928092937.27120-1-zhang.lyra@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220928092937.27120-1-zhang.lyra@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yxd/sUQ/NB3NlC6f@slm.duckdns.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 11:29, Chunyan Zhang wrote:
-> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> 
-> Convert the Unisoc gpio controller binding to DT schema format.
-> 
+The commit 74e4b956eb1c incorrectly wrapped kernfs_walk_and_get
+(might_sleep) under css_set_lock (spinlock). css_set_lock is needed by
+__cset_cgroup_from_root to ensure stable cset->cgrp_links but not for
+kernfs_walk_and_get.
 
+We only need to make sure that the returned root_cgrp won't be freed
+under us. This is given in the case of global root because it is static
+(cgrp_dfl_root.cgrp). When the root_cgrp is lower in the hierarchy, it
+is pinned by cgroup_ns->root_cset (and `current` task cannot switch
+namespace asynchronously so ns_proxy pins cgroup_ns).
 
-Thank you for your patch. There is something to discuss/improve.
+(Note this reasoning won't hold for root cgroups in v1 hierarchies but
+the path resolution works only with the default hierarchy.)
 
-> diff --git a/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
-> new file mode 100644
-> index 000000000000..c0cd1ed9809b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
-> @@ -0,0 +1,70 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright 2022 Unisoc Inc.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gpio/sprd,gpio.yaml#
+Fixes: 74e4b956eb1c: ("cgroup: Honor caller's cgroup NS when resolving path")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+---
+ kernel/cgroup/cgroup.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Use compatible as filename, so sprd,sc9860-gpio.yaml
+Hello.
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Unisoc GPIO controller
-> +
+v2: dropped changes around kernfs_path_from_node(), reworded commit
+    message
 
-Best regards,
-Krzysztof
+I realized the pinning with reference taking won't really work
+generally. The code would get the reference within RCU read section, so
+it'd have to be cgroup_get_live() and if that fails there's not much to
+do.
+
+So, instead of generalization, I only post special-cased patch that
+fixes the introduced bug and doesn't touch the rest.
+
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index c37b8265c0a3..ac71af8ef65c 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -1392,11 +1392,16 @@ static void cgroup_destroy_root(struct cgroup_root *root)
+ 	cgroup_free_root(root);
+ }
+ 
++/*
++ * Returned cgroup is without refcount but it's valid as long as cset pins it.
++ */
+ static inline struct cgroup *__cset_cgroup_from_root(struct css_set *cset,
+ 					    struct cgroup_root *root)
+ {
+ 	struct cgroup *res_cgroup = NULL;
+ 
++	lockdep_assert_held(&css_set_lock);
++
+ 	if (cset == &init_css_set) {
+ 		res_cgroup = &root->cgrp;
+ 	} else if (root == &cgrp_dfl_root) {
+@@ -6673,8 +6678,8 @@ struct cgroup *cgroup_get_from_path(const char *path)
+ 
+ 	spin_lock_irq(&css_set_lock);
+ 	root_cgrp = current_cgns_cgroup_from_root(&cgrp_dfl_root);
+-	kn = kernfs_walk_and_get(root_cgrp->kn, path);
+ 	spin_unlock_irq(&css_set_lock);
++	kn = kernfs_walk_and_get(root_cgrp->kn, path);
+ 	if (!kn)
+ 		goto out;
+ 
+-- 
+2.37.3
 
