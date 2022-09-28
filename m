@@ -2,114 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E0A5EDDA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 710565EDDAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233299AbiI1N1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 09:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
+        id S233039AbiI1NbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 09:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiI1N1r (ORCPT
+        with ESMTP id S233333AbiI1NbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 09:27:47 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CACA1D12
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 06:27:46 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id z13-20020a7bc7cd000000b003b5054c6f9bso1246456wmk.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 06:27:46 -0700 (PDT)
+        Wed, 28 Sep 2022 09:31:21 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7405A1D73
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 06:31:19 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id l14so27151982eja.7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 06:31:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=DnC6S+K0/VbM17qCQCLucty5V6KtRHnqqwh3CWVJLG4=;
-        b=VgcMn06bI5M98yNrpL0TQVb9EzjLek7ha7a+Xn4CExuufd+xsLy4u0Ae7WB6SPKJbU
-         /8EcZXSeAGlwUCY9/n/VtrAkOarb9SjMys9CbRnlnnLg0RiwgMnpcDoOeN769Bz8f86z
-         hbyi0ueXOz7rNxSMxIRm1b25/VTjb2XSbTfhGBIJWVcO82mQBsmhDW/jU+szDpO/fWUX
-         JzD6jvkbDTaR511965Vh256Ae1jmkvhXADxIZphpxYXfiRvc4KoyWK8F9D69L8M/WqzS
-         qLMpWJfW30PlU/qB0ZsRWE6R4QkaVMMcBJKN3WBJqLCSjD30V6GJXC8dzNUVDuKDen3z
-         wFyA==
+        d=fairphone.com; s=fair;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=n3qQR+aqK3MBkpPhhE7yG0JzICbbOFyRcGevTT/H8DY=;
+        b=MVeVzTtAnaZhe+EoVGaEnkpifnw/hFsnyVLN58MUI492PeZ58ECotTixHYDryoIQys
+         22MSjzFXpNbc1k11Kg2gvhhGDfJTw09+oD5vaM+h2mlpSm1vvGTKIKlid4s5jqhKWGQp
+         v3miQP7Cbf5oXutuuQBo27dxTIL7HWjlw5KvBMeyt+qsEoS9hICqhvxxR/RBc7VPIFlA
+         Igo27gSvRFshssr2bdp0DMbJ1hS8V3R7XLYGvSusgCyH6EVoWi5A+nF8mavYal9YT3SB
+         VjlSj/P8u7x45vl4S3k659wLSvFqYg2bSMEW5ne6pT7LHP+wH+RB1aQWh91EsH92B7Oc
+         N4lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=DnC6S+K0/VbM17qCQCLucty5V6KtRHnqqwh3CWVJLG4=;
-        b=PAyq0dB8ExN9jO7+bE8glbLt9MeM1kFL+FctLc2KcDw8tunmmJypBj605Fjup7WXhO
-         pzYmliGy5reKRsUR9asYPcNQNRKkXBzOAe8VN7mvawgLzQfUBYiF/9sZ6HtlIRRtxy35
-         z61zqRrDjyPenHjrfGSurItyyC3rBBf8W2eSp5staS4T344loVU6Bf+vG9AE0SO3cgEP
-         GRdUyF9EipiYhHV2kAvJsHb/ivdtSz+oLGLOTXIQ4c11WQ/4rttj3X9Zk3v+xXyeKFBU
-         W7kwCH+TPuNoKeqGOh9tTKnc9EGsJIk8bOraUYl2FiUy/JiICKqJa8BQ456qseNEpYyP
-         MDhg==
-X-Gm-Message-State: ACrzQf0a27aaHk260FU8T7HySjwThpZ2NzhXbDzaLBPfhT2RngKEIeK2
-        VfbRiBFTEkRR3XjnGz9zEA==
-X-Google-Smtp-Source: AMsMyM6i5LpgBXWSgN5aE+33p9R/Rg/1HjqqOk8XPidBE9cE6KC1cysyGt6oVShkDGkILocsZMc7pg==
-X-Received: by 2002:a05:600c:a04:b0:3b4:f20e:63f4 with SMTP id z4-20020a05600c0a0400b003b4f20e63f4mr6854132wmp.201.1664371664906;
-        Wed, 28 Sep 2022 06:27:44 -0700 (PDT)
-Received: from octinomon ([2a00:23c8:2f02:3b01:3ea1:40:8650:189])
-        by smtp.gmail.com with ESMTPSA id e11-20020a5d4e8b000000b00228de58ae2bsm4221093wru.12.2022.09.28.06.27.44
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=n3qQR+aqK3MBkpPhhE7yG0JzICbbOFyRcGevTT/H8DY=;
+        b=X+r0ZWLR+1cC12YcvEjfRpdHxrFiCPXnTrcZkPbQygFDOtd5BdPv+g8hgSVahY1VuG
+         UFzmF0IH24NDXFcKHo3VL59PXXl8sq/fORlLYyf9PUoh8GUHjMDAkm3pOCuvTJhpGLgj
+         Tbtn+0R37HdRrwc3agW/A/c4G6YvLDkyAjP/ZYt5QORec/P2WxQn/Sw3PJOntodwhN9n
+         58AGaNDhr8oL6FTX8dop6Wes4UPZ0NQazv1GdzMf5HaW2fJnppZuofC5vQwUl0FqOl+Y
+         F6ZTv9EpH2Ezbyu3MltEzNpu6w3QRLkev+OIM6G/0HOHnCHGNPfIIfmkndjHy0JaFJW1
+         hkEw==
+X-Gm-Message-State: ACrzQf1NSQqO+eA5iAGnKcuzYDQGb7evDwaxeQGZy/L7NBGTiD+SqK/7
+        pyGVDH2Ldum29VZ/2gl3od3vtWb9+hgKeg==
+X-Google-Smtp-Source: AMsMyM6cihZ44FvcUe0BRre7FY4VoB3qwNPZoBjybGrc2Xnj5NprI+bSfV7OA1i9lnIJidtBUAxA9Q==
+X-Received: by 2002:a17:907:72c4:b0:783:4fe0:daca with SMTP id du4-20020a17090772c400b007834fe0dacamr14835994ejc.455.1664371878293;
+        Wed, 28 Sep 2022 06:31:18 -0700 (PDT)
+Received: from otso.. (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id q1-20020a50cc81000000b00457618d3409sm3366096edi.68.2022.09.28.06.31.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 06:27:44 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 14:27:42 +0100
-From:   Jules Irenge <jbi.octave@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     abbotti@mev.co.uk, hsweeten@visionengravers.com,
+        Wed, 28 Sep 2022 06:31:17 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] comedi: Convert snprintf() to scnprintf()
-Message-ID: <YzRLzkltH1nwroNc@octinomon>
-References: <YzHxcb5VzWeSNKo0@fedora>
- <YzKS/3z2cQsFFfxD@kroah.com>
+Subject: [PATCH] clk: qcom: gcc-sm6350: Update the .pwrsts for usb gdscs
+Date:   Wed, 28 Sep 2022 15:28:54 +0200
+Message-Id: <20220928132853.179425-1-luca.weiss@fairphone.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzKS/3z2cQsFFfxD@kroah.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 08:06:55AM +0200, Greg KH wrote:
-> On Mon, Sep 26, 2022 at 07:37:37PM +0100, Jules Irenge wrote:
-> > Coccinnelle reports a warning
-> > Warning: Use scnprintf or sprintf
-> > Adding to that, there has been a slow migration from snprintf to scnprintf.
-> > This LWN article explains the rationale for this change
-> > https: //lwn.net/Articles/69419/
-> > Ie. snprintf() returns what *would* be the resulting length,
-> > while scnprintf() returns the actual length.
-> > 
-> > Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
-> > ---
-> >  drivers/comedi/comedi_fops.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/comedi/comedi_fops.c b/drivers/comedi/comedi_fops.c
-> > index 55a0cae04b8d..e8a0142d5894 100644
-> > --- a/drivers/comedi/comedi_fops.c
-> > +++ b/drivers/comedi/comedi_fops.c
-> > @@ -396,7 +396,7 @@ static ssize_t max_read_buffer_kb_show(struct device *csdev,
-> >  	mutex_unlock(&dev->mutex);
-> >  
-> >  	comedi_dev_put(dev);
-> > -	return snprintf(buf, PAGE_SIZE, "%u\n", size);
-> > +	return scnprintf(buf, PAGE_SIZE, "%u\n", size);
-> 
-> Ick, no, you should use sysfs_emit() if you really want to change these
-> functions to "do the right thing".
-> 
-> thanks,
-> 
-> greg k-h
+The USB controllers on sm6350 do not retain the state when
+the system goes into low power state and the GDSCs are
+turned off.
 
-Thanks for feedback. 
+This can be observed by the USB connection not coming back alive after
+putting the device into suspend, essentially breaking USB.
 
-I just sent a different version.
+Fix this by updating the .pwrsts for the USB GDSCs so they only
+transition to retention state in low power.
 
-I will appreciate any more feedback.
+Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+Similar to sc7180 & sc7280 patches that have been applied recently:
+https://lore.kernel.org/linux-arm-msm/20220927170516.zrkzn3xl7oedzi4l@builder.lan/T/
 
-Thanks,
+@Rajendra Nayak: Maybe you know a bit more about the internals of
+sm6350&sm7225. As described in the commit message USB just stops working
+after suspend, with this it comes back after wakeup from suspend and
+continues working. If any details in the commit message are somehow
+wrong or I can add something, please let me know!
+Thanks for fixing this on sc7180&sc7280!
 
-Jules
+ drivers/clk/qcom/gcc-sm6350.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/qcom/gcc-sm6350.c b/drivers/clk/qcom/gcc-sm6350.c
+index 69412400efa4..9b4e4bb05963 100644
+--- a/drivers/clk/qcom/gcc-sm6350.c
++++ b/drivers/clk/qcom/gcc-sm6350.c
+@@ -2316,7 +2316,7 @@ static struct gdsc usb30_prim_gdsc = {
+ 	.pd = {
+ 		.name = "usb30_prim_gdsc",
+ 	},
+-	.pwrsts = PWRSTS_OFF_ON,
++	.pwrsts = PWRSTS_RET_ON,
+ };
+ 
+ static struct gdsc ufs_phy_gdsc = {
+-- 
+2.37.3
+
