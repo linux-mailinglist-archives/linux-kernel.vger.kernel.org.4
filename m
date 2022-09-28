@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DAA5ED5AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456835ED5AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbiI1HHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
+        id S233201AbiI1HII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiI1HG4 (ORCPT
+        with ESMTP id S229951AbiI1HIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:06:56 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE91C889B;
-        Wed, 28 Sep 2022 00:06:55 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id dv25so25108301ejb.12;
-        Wed, 28 Sep 2022 00:06:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=A5+YMGtWjt1zsaH64sHGQzeK7M+r0C7weghd3as6lXU=;
-        b=Vc0C+i0nGDBMb7MkXWuP2yrI6k9/Q9tnTA3e3II7+F5BR5g5s5X9Idt1xXd6LU0wOZ
-         Jn2wzv/fBppQYTtH3W6gUD+Z4zpspK836By8xK8e+Sc6J8lhB8pGsz0RHCRrzhMLOqCU
-         GBoPSX/kXDKJxtX2t3AMwqMxSHRCb/vtLusKowXI720np4r0dAhl/bYKsmVFetHzEA7n
-         K5r0oD0hAFjKIQgRzXRflzRRfzUkyL529QrzOD8uMOm1wZYX0ZyD8Gz/r0Ub/8K4cCKh
-         0p8i5aXYq7UUwZJSMbU2ksbHs6/l6MIEct42gbIe7XGslXkClURPgAhxxy27OTsBWXFL
-         9cHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=A5+YMGtWjt1zsaH64sHGQzeK7M+r0C7weghd3as6lXU=;
-        b=0F6ryZRdr5AolQY/3VNEZN/4Po7vsFqG9MXlfsEAMI4SwoGKzJQ1g3qK8Qt8nsZlnl
-         C6jO/pSWbUxZVl38ZQ3QTN7wms/Brb+Q7KK+IA2vBJGfXdJixbe5ervFgATO8goxWYIg
-         w5KXbjm/VNg976kgSeeOEJDZfV92fTYYmgqOLccsI5hSH/ASdzKoGiZFfWHZN7ju+QHj
-         rZJtsToRKLgxlX27o+GJ5fF8fw0SrDB9NyNGmeoL2gXxGN/QdUX5HRyzKEGGud8m/rYO
-         wXQX1Pzcu4LYG51tfF4L9UrciPrfendLJgKR70U0wqhYfmf29m7PRrwjaUaGZc48/pEk
-         eFfg==
-X-Gm-Message-State: ACrzQf3bcWYRiY5cLqUlX3GtiQTdluY4K1dGxH9F98GK/bjGlrTfsLSB
-        unN6P6/PJ4lDgh8TMXEF96jAkt0hJi3ic27Dp0FaEXswhHanLNQO
-X-Google-Smtp-Source: AMsMyM48aac9VIKFH2aErX6RmHEzKyUQp7TSRvM5RRdNK9u9u3Kd47K7f1tvTTZvIUypplQcmCDXj8qu7/LrtLa7l/k=
-X-Received: by 2002:a17:906:8a6b:b0:780:ab37:b63 with SMTP id
- hy11-20020a1709068a6b00b00780ab370b63mr25821330ejc.365.1664348814125; Wed, 28
- Sep 2022 00:06:54 -0700 (PDT)
+        Wed, 28 Sep 2022 03:08:04 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEBEDB94B
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:07:58 -0700 (PDT)
+X-UUID: df875b12b93d41ecb29a565b6e5e535c-20220928
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=z93vs5MNpoShVM3NXCv352HhKZSF+mhz1gZ7jjrNYU0=;
+        b=hbAjAo+YWwMpfyaSToJNHCbscGpWxM2yC/CA9PlRL2u5gohNBD5zWFk1Pcqg2kjuCC1qxXdB5zbBMWdRlGTjcPl3bShMUxARIk55lVKRbs3W6O8Lj+FFCKhqgd4EjufuyK8aGAVhx3KeiD/exJ39TVoGhFGREXvFaNmUOR+AEXg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:ce1bf6c3-9ded-48e3-8a47-fe8f1a4947f3,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:3c1556a3-dc04-435c-b19b-71e131a5fc35,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: df875b12b93d41ecb29a565b6e5e535c-20220928
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 303319835; Wed, 28 Sep 2022 15:07:54 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 28 Sep 2022 15:07:52 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 28 Sep 2022 15:07:52 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH next v2] phy: mediatek: fix build warning of FIELD_PREP()
+Date:   Wed, 28 Sep 2022 15:07:46 +0800
+Message-ID: <20220928070746.5393-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220926135922.24541-1-dzm91@hust.edu.cn> <8db6ca9c-6ceb-001e-3427-c7e320111d80@kernel.org>
-In-Reply-To: <8db6ca9c-6ceb-001e-3427-c7e320111d80@kernel.org>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Wed, 28 Sep 2022 15:04:55 +0800
-Message-ID: <CAD-N9QWXPf0_d=mEJ3c6NNfw1V9kdTm66+-jUT9heD4Z+L6kHQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: cdns3: remove dead code
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,54 +66,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 2:50 PM Roger Quadros <rogerq@kernel.org> wrote:
->
->
->
-> On 26/09/2022 16:59, Dongliang Mu wrote:
-> > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> >
-> > Smatch reports the following error:
-> >
-> > drivers/usb/cdns3/cdns3-plat.c:113 cdns3_plat_probe() warn:
-> > platform_get_irq() does not return zero
-> >
-> > From the document, platform_get_irq_byname_optional only returns
-> > non-zero value, and negative value on failure.
-> >
-> > Fix this by removing the zero value checking.
-> >
-> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
->
-> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+Change the inline function mtk_phy_update_field() into a macro to
+avoid check warning of FIELD_PREP() with compiler parameter
+-Wtautological-constant-out-of-range-compare
 
-Hi Roger,
+the warning is caused by mask check:
+"BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \"
 
-By simply checking the usage of API - platform_get_irq_byname_optional,
-there are several issues in other code sites.
+Fixes: 29c07477556e ("phy: mediatek: add a new helper to update bitfield")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v2: v1 will cause merge conflict, change comment, s/should/shall
+---
+ drivers/phy/mediatek/phy-mtk-io.h | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-However, some code sites are related to semantics. I will analyze all
-of them and submit patches later.
+diff --git a/drivers/phy/mediatek/phy-mtk-io.h b/drivers/phy/mediatek/phy-mtk-io.h
+index a723d4afc9b4..d20ad5e5be81 100644
+--- a/drivers/phy/mediatek/phy-mtk-io.h
++++ b/drivers/phy/mediatek/phy-mtk-io.h
+@@ -36,10 +36,11 @@ static inline void mtk_phy_update_bits(void __iomem *reg, u32 mask, u32 val)
+ 	writel(tmp, reg);
+ }
+ 
+-/* field @mask should be constant and continuous */
+-static inline void mtk_phy_update_field(void __iomem *reg, u32 mask, u32 val)
+-{
+-	mtk_phy_update_bits(reg, mask, FIELD_PREP(mask, val));
+-}
++/* field @mask shall be constant and continuous */
++#define mtk_phy_update_field(reg, mask, val) \
++({ \
++	typeof(mask) mask_ = (mask);	\
++	mtk_phy_update_bits(reg, mask_, FIELD_PREP(mask_, val)); \
++})
+ 
+ #endif
+-- 
+2.18.0
 
->
-> > ---
-> >  drivers/usb/cdns3/cdns3-plat.c | 2 --
-> >  1 file changed, 2 deletions(-)
-> >
-> > diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
-> > index dc068e940ed5..2bc5d094548b 100644
-> > --- a/drivers/usb/cdns3/cdns3-plat.c
-> > +++ b/drivers/usb/cdns3/cdns3-plat.c
-> > @@ -110,8 +110,6 @@ static int cdns3_plat_probe(struct platform_device *pdev)
-> >       cdns->wakeup_irq = platform_get_irq_byname_optional(pdev, "wakeup");
-> >       if (cdns->wakeup_irq == -EPROBE_DEFER)
-> >               return cdns->wakeup_irq;
-> > -     else if (cdns->wakeup_irq == 0)
-> > -             return -EINVAL;
-> >
-> >       if (cdns->wakeup_irq < 0) {
-> >               dev_dbg(dev, "couldn't get wakeup irq\n");
->
->
-> cheers,
-> -roger
