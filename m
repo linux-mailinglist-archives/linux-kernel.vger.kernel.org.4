@@ -2,108 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187545EEA3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27105EEA42
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234061AbiI1Xkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 19:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39716 "EHLO
+        id S234254AbiI1Xlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 19:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233803AbiI1XkJ (ORCPT
+        with ESMTP id S233963AbiI1Xlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 19:40:09 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDA411DFE5;
-        Wed, 28 Sep 2022 16:39:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=GtZBVoojZglRKf15s4Lbuh/hiw3mYqJL//9snIz2hts=; b=qdJXfw9HLJYQm7iBXKg1buwUGM
-        6U60rkI6EecBHtwAihCIasRxlVYvmfrnxjNivPY8DM9uiDvgb7cOj9HdbKAraknS15wN6Zc3wYS7Z
-        Lwp520IWLcQc1wBL2bfl65cuG3M3GgjSiqM1qb3clItiuAqwmXpAXUhS7G16REb0GYGCVuZM6YVZW
-        mUJgV1wb7y4WdbMz1eQPEBBeqhmHkOkXbuwvIXxGckwjlysE369nBXL53t+64zsK1CvSuaEHOkFvQ
-        RXj36Fcnw26ulGFrlZ9zM+XVmkLj8Md1F8m713xWj55sQF7R3O3KuxQBJfIwy2DS+t9R48a/Xhzaf
-        1Dfrzo6g==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1odgeA-000fNc-1j; Wed, 28 Sep 2022 23:39:22 +0000
-Message-ID: <574f63b0-5d34-617b-2b9d-b3b282fafd9e@infradead.org>
-Date:   Wed, 28 Sep 2022 16:39:21 -0700
+        Wed, 28 Sep 2022 19:41:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F264D8E4C7;
+        Wed, 28 Sep 2022 16:41:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B14BBB82236;
+        Wed, 28 Sep 2022 23:41:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71ACEC433D6;
+        Wed, 28 Sep 2022 23:41:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664408497;
+        bh=pj5nMrrdP/CRvouu8xZ7JSZ+bE3JyQ8euMvOq+SIUpw=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=odpcpGuDxTWmIJsaqNucsIg/IQB1LyehnFP1iQ2FAME3oxULTMA5TuBOGc8YAG3Cw
+         KzHtLbBWidzofr4rw7gLBGFtmqa4St5H3tvBvieQXpEBLZQgSOgWynm8rWHqJiKJ4I
+         USmlaJlCw+mQgXp1c9z1xQGf4egMrAWC31Gi62bGlnyFlHHHHkFSyHV2nqq+iFu8MA
+         /vTZNeBEITW9gNSI3kEEqz7Uzk8N77XDvelWG3CwThq3X5Vx8xvm7L7TxKrZ2bTBvr
+         yPttoiG0SwE7x3GIrkewyzEU4aCbTHkbcdKt8QP/AHAxbM310ImmXnviFp3/573Upy
+         wQwnUGqb8aM/Q==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [External] Re: [RFC] proc: Add a new isolated /proc/pid/mempolicy
- type.
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>,
-        Zhongkun He <hezhongkun.hzk@bytedance.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        wuyun.abel@bytedance.com
-References: <20220926091033.340-1-hezhongkun.hzk@bytedance.com>
- <YzF3aaLvEvFhTQa3@dhcp22.suse.cz>
- <24b20953-eca9-eef7-8e60-301080a17d2d@bytedance.com>
- <YzGya2Q3iuWS2WdM@dhcp22.suse.cz>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <YzGya2Q3iuWS2WdM@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_SBL_A autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <5a037955-4832-e42a-eb58-719ed4672395@renesas.com>
+References: <20220923205251.1387-1-alexander.helms.jy@renesas.com> <20220923205251.1387-2-alexander.helms.jy@renesas.com> <20220926230438.GA3128861-robh@kernel.org> <cbe89899-7f56-c43a-f8c9-887825fbe4a6@amd.com> <CAMuHMdUuzrdf4rmD3n_-S9ujrfmY5Y6VOsNapiLRR5MG9bKAjw@mail.gmail.com> <5a037955-4832-e42a-eb58-719ed4672395@renesas.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add bindings for Renesas ProXO
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        mturquette@baylibre.com, geert+renesas@glider.be
+To:     Alex Helms <alexander.helms.jy@renesas.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <michal.simek@amd.com>
+Date:   Wed, 28 Sep 2022 16:41:34 -0700
+User-Agent: alot/0.10
+Message-Id: <20220928234137.71ACEC433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+Quoting Alex Helms (2022-09-28 16:16:04)
+> On 9/27/2022 7:51 AM, Geert Uytterhoeven wrote:
+> > Hi Michal,
+> >=20
+> > On Tue, Sep 27, 2022 at 4:10 PM Michal Simek <michal.simek@amd.com> wro=
+te:
+> >> On 9/27/22 01:04, Rob Herring wrote:
+> >>> On Fri, Sep 23, 2022 at 01:52:50PM -0700, Alex Helms wrote:
+> >>>> Add dt bindings for the Renesas ProXO oscillator.
+> >>>>
+> >>>> Signed-off-by: Alex Helms <alexander.helms.jy@renesas.com>
+> >=20
+> >>>> --- /dev/null
+> >>>> +++ b/Documentation/devicetree/bindings/clock/renesas,proxo.yaml
+> >=20
+> >> Driver is also using clock-output-names which is not listed here.
+> >=20
+> > ... which is deprecated, and thus should not be used by the driver
+> > at all.
+>=20
+> Can you point me to somewhere showing it is deprecated? It is in the
+> current dt clock documentation.
+>=20
 
-On 9/26/22 07:08, Michal Hocko wrote:
-> On Mon 26-09-22 20:53:19, Zhongkun He wrote:
->>> [Cc linux-api - please do so for any patches making/updating
->>> kernel<->user interfaces]
->>>
->>>
->>> On Mon 26-09-22 17:10:33, hezhongkun wrote:
->>>> From: Zhongkun He <hezhongkun.hzk@bytedance.com>
->>>>
->>>> /proc/pid/mempolicy can be used to check and adjust the userspace task's
->>>> mempolicy dynamically.In many case, the application and the control plane
->>>> are two separate systems. When the application is created, it doesn't know
->>>> how to use memory, and it doesn't care. The control plane will decide the
->>>> memory usage policy based on different reasons.In that case, we can
->>>> dynamically adjust the mempolicy using /proc/pid/mempolicy interface.
->>>
->>> Is there any reason to make it procfs interface rather than pidfd one?
->>
->> Hi michal,  thanks for your reply.
->>
->> I just think that it is easy to display and adjust the mempolicy using
->> procfs. But it may not be suitable, I will send a pidfd_set_mempolicy patch
->> later.
-> 
-> proc interface has many usability issues. That is why pidfd has been
-> introduced. So I would rather go with the pidfd interface than repeating
-> old proc API mistakes.
-
-Sorry, I'm not familiar with the pidfd interface and I can't find any
-documentation on it. Is there some?
-
-Can I 'cat' or 'grep' in the pidfd interface?
-
->> Btw.in order to add per-thread-group mempolicy, is it possible to add
->> mempolicy in mm_struct?
-> 
-> I dunno. This would make the mempolicy interface even more confusing.
-> Per mm behavior makes a lot of sense but we already do have per-thread
-> semantic so I would stick to it rather than introducing a new semantic.
-> 
-> Why is this really important?
-
-Thanks.
-
--- 
-~Randy
+I wouldn't say it is deprecated. Instead, it isn't useful if you're able
+to use struct clk_parent_data and auto-generated clk names.
