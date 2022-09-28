@@ -2,96 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4A65EE2CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 593E55EE2D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234678AbiI1ROO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
+        id S234657AbiI1RPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234488AbiI1RNp (ORCPT
+        with ESMTP id S234453AbiI1RPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:13:45 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D1EF1856
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:13:15 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id h8-20020a17090a054800b00205ccbae31eso3159006pjf.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:13:15 -0700 (PDT)
+        Wed, 28 Sep 2022 13:15:07 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0051F088D
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:14:18 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id a2so21345542lfb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:14:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=d6n7vVcWWAUhY50nx1oX+SjTLgFqeY1Yq8iTalyfqd0=;
-        b=lIRHIZiWHITqRmakxRZHSG2SU2bpWinoR3Swar+fPYJBmT1qOO/MT6WnWN5yBDlhGu
-         /lQXgjvlz0O4V2+hnYy+98Yh09p4wB3YUjZ22bnBWEa9dMSwUm7gVI6Ae5kXcacwBn8L
-         BoOjiPYblWsCdJGhH6goLGXzHmU5/JoB80oyI=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=P1v2Hc7pW0Y9IexF7yr50NijeQQED1eZuGgU1x8TnQY=;
+        b=IB9dPB4sZqz6rhwZI5qErRQZEO79YqDmhucVn5PJ9QcHyTn11lSxL7+SltqKmogfew
+         gMlaT5fGLPALgbiAfgqQTyxZxQjYd+QIzpvmncOJTyYw/VQKfti3pQ+WtDv+a9BJOrs7
+         h5uz0Ymh4mMX6jHX9O9k7JhA5jqlBtqVjAXn/mDc1oLOltStMLr+r5sXpVPAo+VYuEpb
+         /CDLXB5Tkm5OHGZxn+lTww3qG2CPsh3Ke4W6Jhzp9AojjmyehqRD/PWFwIXKKi/1ROlB
+         cHj1cdk3ny9EoaNn+alic2oHPCrvdHoGTG0GRWoKCdZgnbzVj7/FENeg43xTajU6LAYZ
+         yd8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=d6n7vVcWWAUhY50nx1oX+SjTLgFqeY1Yq8iTalyfqd0=;
-        b=c614Q7tnAkRUtbTujMVAYmbsI+JEK523oo4s59lMCvI1EKWK20AWL5Vo5pLcmsXGgg
-         ic4UQhEYYEdREMvsNWXa1pbBdtxpwXPMiO3KAQ1RykjWsGfLy0la4f7Myl6gyf/2lSne
-         9Fw0eRpkevm21siavoLJLgzcL8V56eYCJVcraLBwgOHTAKN4N/R7+pnlZU4JexqLsKru
-         kNsEKwU1IB75yHMrv81IztcWTVWHz16TeS2t/S17KmeXHEG8o6QO+uzTV1DI2YdIx/U8
-         uxQ4w+pWETwTohy6sWNP7ReFYjvdsdZMFsqWv5bpuo1XmGYXYhJV6jAykxU9W3iW6Ym5
-         NXZw==
-X-Gm-Message-State: ACrzQf295qD2aFW8R/r9y/iZvINmwCi9FYL0g/s5o1f2yHifQrDjHID5
-        Zr8RPmmJADDPjwJoBPuGRjaCMw==
-X-Google-Smtp-Source: AMsMyM6sCBBdOCLg/ekAp2unP2+2il2GSYEdTvWU2WPyIonTKW/L3Ua/pLmu7ZGbcH4WrqStMgqaPQ==
-X-Received: by 2002:a17:902:db08:b0:176:d40e:4b57 with SMTP id m8-20020a170902db0800b00176d40e4b57mr799977plx.172.1664385194575;
-        Wed, 28 Sep 2022 10:13:14 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q3-20020a170902dac300b00177faf558b5sm4082449plx.250.2022.09.28.10.13.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 10:13:13 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 10:13:12 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Marco Elver <elver@google.com>, linux-mm@kvack.org,
-        "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alex Elder <elder@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Miguel Ojeda <ojeda@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        dev@openvswitch.org, x86@kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 01/16] slab: Remove __malloc attribute from realloc
- functions
-Message-ID: <202209281011.66DD717D@keescook>
-References: <20220923202822.2667581-1-keescook@chromium.org>
- <20220923202822.2667581-2-keescook@chromium.org>
- <CAMuHMdXK+UN1YVZm9DenuXAM8hZRUZJwp=SXsueP7sWiVU3a9A@mail.gmail.com>
+        bh=P1v2Hc7pW0Y9IexF7yr50NijeQQED1eZuGgU1x8TnQY=;
+        b=Sh8nkH+UwzB0tGypcDN2YvLtSrHwI9wVxql8jSyP2ji6nsmRhXvTgjxxQd/wx6jxt6
+         08UC3elojqcLah58KMuFlBHmMaAL41hSH+6H6RfAczTrGUhqNBdrPt5eUpwGCf/WQgLe
+         HLt8ZrVuVriX/sDzM2JEPR4Gq+vk5Ns3kExw/fpAkji1zoEllmoQWjXKl4Z7LaVMMwvg
+         Lu/XzgMYh6mERcWLwGxDjks0M2aHHTIfXmxX2NXkENQNii8TBoJ4oilMVtPCMqxUyPG+
+         hJzhE8firc21i8zpBfa020Urq9OprYELuxbeJaAfqFmwDTqsDpeBcHIjNaVfmxgSG+1I
+         L/Xg==
+X-Gm-Message-State: ACrzQf1ebVwdChiwV9dpr3ZviNhOQuBVYX8p6XicYMm4KIuU6dZq7GBW
+        unvOSI5wsYGEiBgZ/rxA+DxVRA==
+X-Google-Smtp-Source: AMsMyM698J9L0Z8aQ1TqBaoWfxdcCnrZtxZPwG+mSs0pGWscSl1ohKfoWWsMn/ZeV8NeqMI+FnKP5g==
+X-Received: by 2002:a05:6512:3b9b:b0:499:b2b7:c3c1 with SMTP id g27-20020a0565123b9b00b00499b2b7c3c1mr13473178lfv.54.1664385256925;
+        Wed, 28 Sep 2022 10:14:16 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id l17-20020a2ea311000000b0026bfadf87e3sm490505lje.20.2022.09.28.10.14.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 10:14:15 -0700 (PDT)
+Message-ID: <0de46fcf-198e-14da-3594-c01f9c717202@linaro.org>
+Date:   Wed, 28 Sep 2022 19:14:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdXK+UN1YVZm9DenuXAM8hZRUZJwp=SXsueP7sWiVU3a9A@mail.gmail.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 2/5] arm64: dts: qcom: msm8916-samsung-j5: Drop from
+ Makefile
+Content-Language: en-US
+To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
+        devicetree@vger.kernel.org
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>,
+        Julian Ribbeck <julian.ribbeck@gmx.de>,
+        Josef W Menad <JosefWMenad@protonmail.ch>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20220928164806.179314-1-linmengbo0689@protonmail.com>
+ <20220928165909.181028-1-linmengbo0689@protonmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220928165909.181028-1-linmengbo0689@protonmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -100,56 +88,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 09:26:15AM +0200, Geert Uytterhoeven wrote:
-> Hi Kees,
+On 28/09/2022 19:00, Lin, Meng-Bo wrote:
+> Before moving msm8916-samsung-j5.dts to msm8916-samsung-j5-common.dtsi,
+> drop it from Makefile temporarily to avoid errors.
 > 
-> On Fri, Sep 23, 2022 at 10:35 PM Kees Cook <keescook@chromium.org> wrote:
-> > The __malloc attribute should not be applied to "realloc" functions, as
-> > the returned pointer may alias the storage of the prior pointer. Instead
-> > of splitting __malloc from __alloc_size, which would be a huge amount of
-> > churn, just create __realloc_size for the few cases where it is needed.
-> >
-> > Additionally removes the conditional test for __alloc_size__, which is
-> > always defined now.
-> >
-> > Cc: Christoph Lameter <cl@linux.com>
-> > Cc: Pekka Enberg <penberg@kernel.org>
-> > Cc: David Rientjes <rientjes@google.com>
-> > Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Vlastimil Babka <vbabka@suse.cz>
-> > Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> > Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> > Cc: Marco Elver <elver@google.com>
-> > Cc: linux-mm@kvack.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> 
-> Thanks for your patch, which is now commit 63caa04ec60583b1 ("slab:
-> Remove __malloc attribute from realloc functions") in next-20220927.
-> 
-> Noreply@ellerman.id.au reported all gcc8-based builds to fail
-> (e.g. [1], more at [2]):
-> 
->     In file included from <command-line>:
->     ./include/linux/percpu.h: In function ‘__alloc_reserved_percpu’:
->     ././include/linux/compiler_types.h:279:30: error: expected
-> declaration specifiers before ‘__alloc_size__’
->      #define __alloc_size(x, ...) __alloc_size__(x, ## __VA_ARGS__) __malloc
->                                   ^~~~~~~~~~~~~~
->     ./include/linux/percpu.h:120:74: note: in expansion of macro ‘__alloc_size’
->     [...]
-> 
-> It's building fine with e.g. gcc-9 (which is my usual m68k cross-compiler).
-> Reverting this commit on next-20220927 fixes the issue.
-> 
-> [1] http://kisskb.ellerman.id.au/kisskb/buildresult/14803908/
-> [2] http://kisskb.ellerman.id.au/kisskb/head/1bd8b75fe6adeaa89d02968bdd811ffe708cf839/
+> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
 
-Eek! Thanks for letting me know. I'm confused about this --
-__alloc_size__ wasn't optional in compiler_attributes.h -- but obviously
-I broke something! I'll go figure this out.
+This change does not make any sense. Rename of DTS into DTSI must be
+together with adding back that DTS.
 
--Kees
+Best regards,
+Krzysztof
 
--- 
-Kees Cook
