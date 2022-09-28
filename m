@@ -2,178 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57AD5EE249
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE6C5EE280
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233225AbiI1QvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
+        id S233978AbiI1RDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234423AbiI1QvN (ORCPT
+        with ESMTP id S230076AbiI1RDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:51:13 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D8FE7E34
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:51:12 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id y136so13053835pfb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=h0/015q9L2PTjIc0Q6cg/qKsJjdE+BVvbhky4mrZGZM=;
-        b=PMsN7p0cKAT4VWUKKy/cQ5tldNzUKfl8S/iKkTeJd2YgRdYeuJp+T5PUfCv+fHny+d
-         hqnF0i1t43QpVhk6oUsPKh3o8uGSWVEn7Vf8ngPTvhmR6R4Bz8UtguBd+nlIiNUSiN/5
-         pHzNa2j6eGOH2COHhtWC71kdLHGPo0teUkL0IyAblnYmo3DPb2XaivaHU6ia0G6w5fBg
-         WRqrZfMSFPs71USTIU21Zzfjv0PGrOsXfaCHZ31OmS7Xt5Nm4pAoANf34lbGcM6Z2gBN
-         EK2Bn5+0ChzxYBRq9pBBOzxbP+1doa6IHmGaJ/0lS1RaPf1/XGlOzBCQX9FPYwisqp85
-         m7Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=h0/015q9L2PTjIc0Q6cg/qKsJjdE+BVvbhky4mrZGZM=;
-        b=Ox35pBbHIPtBiROXN5nRaPkxZKYg4VR+valUOz7c/IqfoH3oMKVXzQWhmO0JFZC37H
-         N3ecQ0D9JR1EGwxnp+XgoZIuFWDuEE9syHMo4oRgHn7/Olz45sRHE3fF5vV1FKyY3Dur
-         CuDzP5fLMG30jzCj+auxi+6um1gthHEBnL0uBnjFILLnztUlskKmx4LjKGQw5hhnlwGF
-         Ok+bjSPFUKfICfZDYPb2LFyEotExz2Z5RjwS5O6qr3UjLQU1muI5QKCIBC17lB6zo0b9
-         5e7En8DnGcLBYqXwTinwvSRxkMrO+IoD9UJBbxQGBM5qVyJs4+EzJEAavyljjEmA81Iv
-         HbhA==
-X-Gm-Message-State: ACrzQf3NRtTfRjBha88H34Z1JkMgI/Wuh/J2V+UrK8DXxiA0qA1SXP5S
-        Sqn2xdAn1REoDaVbs/suztlqGA==
-X-Google-Smtp-Source: AMsMyM5vVHEoIsYqOLkieF1u6g8g4gr3wk24/aXYtDofpThSTalf0iOgDSoFGIk5R3jqzqOF3L5cHA==
-X-Received: by 2002:a63:50e:0:b0:438:d16d:e8c1 with SMTP id 14-20020a63050e000000b00438d16de8c1mr28317051pgf.505.1664383871552;
-        Wed, 28 Sep 2022 09:51:11 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170903230200b00176677a893bsm617874plh.82.2022.09.28.09.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 09:51:10 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 16:51:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Subject: Re: [PATCH v3 05/28] KVM: x86: Don't inhibit APICv/AVIC if xAPIC ID
- mismatch is due to 32-bit ID
-Message-ID: <YzR7ezt67i1lH1/b@google.com>
-References: <20220920233134.940511-1-seanjc@google.com>
- <20220920233134.940511-6-seanjc@google.com>
- <d02d0b30-f29b-0ff6-98c7-89ddcd091c60@oracle.com>
- <e5d54876b233dc71a69249c3d02d649da5040a14.camel@redhat.com>
+        Wed, 28 Sep 2022 13:03:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D875EBD42
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:03:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0773F61F35
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 17:03:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8938BC433D6;
+        Wed, 28 Sep 2022 17:03:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664384626;
+        bh=i61YhGkKwsV9Tssg75wgUN9ZGXdvkG3vHSk/TFi5Emk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Oe3jMFLTKSgTqhuc9UDWC+r8HEkNIJt+FwMgcdX5Sne2QGqszsfulahqlp5iBrQWl
+         ZFdvSyCGBdM2tZgGfz8GXbJQ3G0UmYTeoE7B3hEq+3B+UO4cjN5rmYRfvSVMtU+cAu
+         60sbowpu9gpy+EgFsB5zxrGKbjqel/06vfY6PKpDykIHms9Ki1kuDsH/aV7EZuqt4x
+         wWX2s4HCZfj8u8GwHlapyLkDjqkMtYS/voeokcGCOCmrAix4J6vNXNfi7s5MKY2egZ
+         e3THszk37xiMpeNvEpd/+x03qFukzNxQ/JW+jey0Whr4j1hY02hpoOM2z6GUCfCOVt
+         /9Y50/j6tbvPw==
+Date:   Thu, 29 Sep 2022 00:54:17 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Guo Ren <guoren@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v2 3/4] riscv: fix race when vmap stack overflow and
+ remove shadow_stack
+Message-ID: <YzR8OUFuV+R1i1Y6@xhacker>
+References: <20220928162007.3791-1-jszhang@kernel.org>
+ <20220928162007.3791-4-jszhang@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e5d54876b233dc71a69249c3d02d649da5040a14.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220928162007.3791-4-jszhang@kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022, Maxim Levitsky wrote:
-> On Tue, 2022-09-27 at 23:15 -0400, Alejandro Jimenez wrote:
-> > 
-> > On 9/20/2022 7:31 PM, Sean Christopherson wrote:
-> > > Truncate the vcpu_id, a.k.a. x2APIC ID, to an 8-bit value when comparing
-> > > it against the xAPIC ID to avoid false positives (sort of) on systems
-> > > with >255 CPUs, i.e. with IDs that don't fit into a u8.  The intent of
-> > > APIC_ID_MODIFIED is to inhibit APICv/AVIC when the xAPIC is changed from
-> > > it's original value,
-> > > 
-> > > The mismatch isn't technically a false positive, as architecturally the
-> > > xAPIC IDs do end up being aliased in this scenario, and neither APICv
-> > > nor AVIC correctly handles IPI virtualization when there is aliasing.
-> > > However, KVM already deliberately does not honor the aliasing behavior
-> > > that results when an x2APIC ID gets truncated to an xAPIC ID.  I.e. the
-> > > resulting APICv/AVIC behavior is aligned with KVM's existing behavior
-> > > when KVM's x2APIC hotplug hack is effectively enabled.
-> > > 
-> > > If/when KVM provides a way to disable the hotplug hack, APICv/AVIC can
-> > > piggyback whatever logic disables the optimized APIC map (which is what
-> > > provides the hotplug hack), i.e. so that KVM's optimized map and APIC
-> > > virtualization yield the same behavior.
-> > > 
-> > > For now, fix the immediate problem of APIC virtualization being disabled
-> > > for large VMs, which is a much more pressing issue than ensuring KVM
-> > > honors architectural behavior for APIC ID aliasing.
-> > 
-> > I built a host kernel with this entire series on top of mainline 
-> > v6.0-rc6, and booting a guest with AVIC enabled works as expected on the 
-> > initial boot. The issue is that during the first reboot AVIC is 
-> > inhibited due to APICV_INHIBIT_REASON_APIC_ID_MODIFIED, and I see 
-> > constant inhibition events due to APICV_INHIBIT_REASON_IRQWIN as seen in 
+On Thu, Sep 29, 2022 at 12:20:06AM +0800, Jisheng Zhang wrote:
+> Currently, when detecting vmap stack overflow, riscv firstly switches
+> to the so called shadow stack, then use this shadow stack to call the
+> get_overflow_stack() to get the overflow stack. However, there's
+> a race here if two or more harts use the same shadow stack at the same
+> time.
 > 
+> To solve this race, we rely on two facts:
+> 1. the content of kernel thread pointer I.E "tp" register can still
+> be gotten from the the CSR_SCRATCH register, thus we can clobber tp
+> under the condtion that we restore tp from CSR_SCRATCH later.
 > 
-> APICV_INHIBIT_REASON_IRQWIN is OK, because that happens about every time
-> the good old PIT timer fires which happens on reboot.
+> 2. Once vmap stack overflow happen, panic is comming soon, no
+> performance concern at all, so we don't need to define the overflow
+> stack as percpu var, we can simplify it into a pointer array which
+> points to allocated pages.
 > 
-> APICV_INHIBIT_REASON_APIC_ID_MODIFIED should not happen as you noted,
-> this needs investigation.
+> Thus we can use tp as a tmp register to get the cpu id to calculate
+> the offset of overflow stack pointer array for each cpu w/o shadow
+> stack any more. Thus the race condition is removed as a side effect.
+> 
+> NOTE: we can use similar mechanism to let each cpu use different shadow
+> stack to fix the race codition, but if we can remove shadow stack usage
+> totally, why not.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
+> ---
+>  arch/riscv/include/asm/asm-prototypes.h |  1 -
+>  arch/riscv/include/asm/thread_info.h    |  4 +-
+>  arch/riscv/kernel/asm-offsets.c         |  1 +
+>  arch/riscv/kernel/entry.S               | 56 ++++---------------------
+>  arch/riscv/kernel/traps.c               | 31 ++++++++------
+>  5 files changed, 29 insertions(+), 64 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/include/asm/asm-prototypes.h
+> index ef386fcf3939..4a06fa0f6493 100644
+> --- a/arch/riscv/include/asm/asm-prototypes.h
+> +++ b/arch/riscv/include/asm/asm-prototypes.h
+> @@ -25,7 +25,6 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
+>  DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
+>  DECLARE_DO_ERROR_INFO(do_trap_break);
+>  
+> -asmlinkage unsigned long get_overflow_stack(void);
+>  asmlinkage void handle_bad_stack(struct pt_regs *regs);
+>  
+>  #endif /* _ASM_RISCV_PROTOTYPES_H */
+> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+> index c970d41dc4c6..c604a5212a73 100644
+> --- a/arch/riscv/include/asm/thread_info.h
+> +++ b/arch/riscv/include/asm/thread_info.h
+> @@ -28,14 +28,12 @@
+>  
+>  #define THREAD_SHIFT            (PAGE_SHIFT + THREAD_SIZE_ORDER)
+>  #define OVERFLOW_STACK_SIZE     SZ_4K
+> -#define SHADOW_OVERFLOW_STACK_SIZE (1024)
+> +#define OVERFLOW_STACK_SHIFT	12
 
-Ya, I'll take a look.
+oops, this should be removed, will update it in a newer version after
+collecting review comments.
 
-> > It happens regardless of vCPU count (tested with 2, 32, 255, 380, and 
-> > 512 vCPUs). This state persists for all subsequent reboots, until the VM 
-> > is terminated. For vCPU counts < 256, when x2apic is disabled the 
-> > problem does not occur, and AVIC continues to work properly after reboots.
+>  
+>  #define IRQ_STACK_SIZE		THREAD_SIZE
+>  
+>  #ifndef __ASSEMBLY__
+>  
+> -extern long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE / sizeof(long)];
+> -
+>  #include <asm/processor.h>
+>  #include <asm/csr.h>
+>  
+> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> index df9444397908..62bf3bacc322 100644
+> --- a/arch/riscv/kernel/asm-offsets.c
+> +++ b/arch/riscv/kernel/asm-offsets.c
+> @@ -37,6 +37,7 @@ void asm_offsets(void)
+>  	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
+>  	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+>  	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
+> +	OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
+>  
+>  	OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
+>  	OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index a3e1ed2fa2ac..5a6171a90d81 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -223,54 +223,16 @@ END(ret_from_exception)
+>  
+>  #ifdef CONFIG_VMAP_STACK
+>  ENTRY(handle_kernel_stack_overflow)
+> -	la sp, shadow_stack
+> -	addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
+> -
+> -	//save caller register to shadow stack
+> -	addi sp, sp, -(PT_SIZE_ON_STACK)
+> -	REG_S x1,  PT_RA(sp)
+> -	REG_S x5,  PT_T0(sp)
+> -	REG_S x6,  PT_T1(sp)
+> -	REG_S x7,  PT_T2(sp)
+> -	REG_S x10, PT_A0(sp)
+> -	REG_S x11, PT_A1(sp)
+> -	REG_S x12, PT_A2(sp)
+> -	REG_S x13, PT_A3(sp)
+> -	REG_S x14, PT_A4(sp)
+> -	REG_S x15, PT_A5(sp)
+> -	REG_S x16, PT_A6(sp)
+> -	REG_S x17, PT_A7(sp)
+> -	REG_S x28, PT_T3(sp)
+> -	REG_S x29, PT_T4(sp)
+> -	REG_S x30, PT_T5(sp)
+> -	REG_S x31, PT_T6(sp)
+> -
+> -	la ra, restore_caller_reg
+> -	tail get_overflow_stack
+> -
+> -restore_caller_reg:
+> -	//save per-cpu overflow stack
+> -	REG_S a0, -8(sp)
+> -	//restore caller register from shadow_stack
+> -	REG_L x1,  PT_RA(sp)
+> -	REG_L x5,  PT_T0(sp)
+> -	REG_L x6,  PT_T1(sp)
+> -	REG_L x7,  PT_T2(sp)
+> -	REG_L x10, PT_A0(sp)
+> -	REG_L x11, PT_A1(sp)
+> -	REG_L x12, PT_A2(sp)
+> -	REG_L x13, PT_A3(sp)
+> -	REG_L x14, PT_A4(sp)
+> -	REG_L x15, PT_A5(sp)
+> -	REG_L x16, PT_A6(sp)
+> -	REG_L x17, PT_A7(sp)
+> -	REG_L x28, PT_T3(sp)
+> -	REG_L x29, PT_T4(sp)
+> -	REG_L x30, PT_T5(sp)
+> -	REG_L x31, PT_T6(sp)
+> +	la sp, overflow_stack
+> +	/* use tp as tmp register since we can restore it from CSR_SCRATCH */
+> +	REG_L tp, TASK_TI_CPU(tp)
+> +	slli tp, tp, RISCV_LGPTR
+> +	add tp, sp, tp
+> +	REG_L sp, 0(tp)
+> +
+> +	/* restore tp */
+> +	csrr tp, CSR_SCRATCH
+>  
+> -	//load per-cpu overflow stack
+> -	REG_L sp, -8(sp)
+>  	addi sp, sp, -(PT_SIZE_ON_STACK)
+>  
+>  	//save context to overflow stack
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index 73f06cd149d9..b6c64f0fb70f 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -216,23 +216,12 @@ int is_valid_bugaddr(unsigned long pc)
+>  #endif /* CONFIG_GENERIC_BUG */
+>  
+>  #ifdef CONFIG_VMAP_STACK
+> -static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
+> -		overflow_stack)__aligned(16);
+> -/*
+> - * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
+> - * to get per-cpu overflow stack(get_overflow_stack).
+> - */
+> -long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
+> -asmlinkage unsigned long get_overflow_stack(void)
+> -{
+> -	return (unsigned long)this_cpu_ptr(overflow_stack) +
+> -		OVERFLOW_STACK_SIZE;
+> -}
+> +void *overflow_stack[NR_CPUS] __ro_after_init __aligned(16);
+>  
+>  asmlinkage void handle_bad_stack(struct pt_regs *regs)
+>  {
+>  	unsigned long tsk_stk = (unsigned long)current->stack;
+> -	unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
+> +	unsigned long ovf_stk = (unsigned long)overflow_stack[raw_smp_processor_id()];
+>  
+>  	console_verbose();
+>  
+> @@ -248,4 +237,20 @@ asmlinkage void handle_bad_stack(struct pt_regs *regs)
+>  	for (;;)
+>  		wait_for_interrupt();
+>  }
+> +
+> +static int __init alloc_overflow_stacks(void)
+> +{
+> +	u8 *s;
+> +	int cpu;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		s = (u8 *)__get_free_pages(GFP_KERNEL, get_order(OVERFLOW_STACK_SIZE));
+> +		if (WARN_ON(!s))
+> +			return -ENOMEM;
+> +		overflow_stack[cpu] = &s[OVERFLOW_STACK_SIZE];
 
-Bit of a shot in the dark, but does the below fix the issue?  There are two
-issues with calling kvm_lapic_xapic_id_updated() from kvm_apic_state_fixup():
+Since overflow_stack[cpu] points to the top of the slack, we need to
+update the ovf_stack dumping in handle_bad_stack(). will take care
+this in newer version.
 
-  1. The xAPIC ID should only be refreshed on "set".
+> +		printk("%px\n", overflow_stack[cpu]);
 
-  2. The refresh needs to be noted after memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
-
-and a third bug in the helper itself, as changes to the ID should be ignored if
-the APIC is hardward disabled since the ID is reset to the vcpu_id when the APIC
-is hardware enabled (architecturally behavior).
-
----
- arch/x86/kvm/lapic.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 804d529d9bfb..b8b2faf5abc7 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2159,6 +2159,9 @@ static void kvm_lapic_xapic_id_updated(struct kvm_lapic *apic)
- {
- 	struct kvm *kvm = apic->vcpu->kvm;
- 
-+	if (!kvm_apic_hw_enabled(apic))
-+		return;
-+
- 	if (KVM_BUG_ON(apic_x2apic_mode(apic), kvm))
- 		return;
- 
-@@ -2875,8 +2878,6 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
- 			icr = __kvm_lapic_get_reg64(s->regs, APIC_ICR);
- 			__kvm_lapic_set_reg(s->regs, APIC_ICR2, icr >> 32);
- 		}
--	} else {
--		kvm_lapic_xapic_id_updated(vcpu->arch.apic);
- 	}
- 
- 	return 0;
-@@ -2912,6 +2913,9 @@ int kvm_apic_set_state(struct kvm_vcpu *vcpu, struct kvm_lapic_state *s)
- 	}
- 	memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
- 
-+	if (!apic_x2apic_mode(vcpu->arch.apic))
-+		kvm_lapic_xapic_id_updated(vcpu->arch.apic);
-+
- 	atomic_set_release(&apic->vcpu->kvm->arch.apic_map_dirty, DIRTY);
- 	kvm_recalculate_apic_map(vcpu->kvm);
- 	kvm_apic_set_version(vcpu);
-
-base-commit: 0b502152c0b8523f399bdb53096e2d620c5795b5
--- 
-
+forget to remove this printk :(
