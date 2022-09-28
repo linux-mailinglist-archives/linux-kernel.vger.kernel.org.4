@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A165ED584
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42A65ED588
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbiI1G54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 02:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S231292AbiI1G6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 02:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbiI1G53 (ORCPT
+        with ESMTP id S233302AbiI1G53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Sep 2022 02:57:29 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7957FE7E;
-        Tue, 27 Sep 2022 23:57:23 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 06:57:20 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BF8861DA;
+        Tue, 27 Sep 2022 23:57:24 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 06:57:21 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664348241;
+        s=2020; t=1664348242;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oZxjcfgGuoo6ocC/hZrG5mJbTTF5Bue+mmgkM6CdPos=;
-        b=UJJIg6G57fcDmOWa1ZchMdgSepzUqwaUKhy+98Y+UvujfSZCC4PRSaXhS/9OiPzpNryjB3
-        Yvijoe5kHCkUfjwb32x2TkrVQzefTwHRg9TYi/oBi3kYgcztrlkCHyV4AnQaGCl50tABKC
-        5uMhMb0TXVn6sAS6/5K8gr+8zJsrfJpVQzH4CZQPkpalOTztU3FzBnPsgluIoXl5VsP2fl
-        JyitEJ8Vzgw/eeepDVp9W5IH8vxNJ6asBifgP4S8GqOUALgpZevweQK3veqEuTBI9o6/bB
-        em+2ZmPuxSG3cayRWgvYOANlbywdurV38Di5B3YUoL3sT8e75KvhNR77xyTlpw==
+        bh=YFu7nnk8kMBWwPl8IqyP7zFs+hVguPmywV5EeUtNqpw=;
+        b=4K2MfT1u5yqhpnlmZGdVIKOfHvpX0dVlS5F56tzzK4sOjgLqV8WZ8nXRUUbMLc9H5Sarv2
+        0CgMtD6SJJ9/EV8J8GpNto7MCE3QuPiIylp7vCXTcSOIPuugsEEsK+9FPuct40kBHcCqai
+        ESItFhhd5KmmzIPhTxSE3/p6WlxR6w0GryG+uc4O3SsTtgUvox2SfalxNMT/dl83PW5HOo
+        3EPfcpmSlhBt2hlwxKrVhj0Og31wF2UoxtgN5iJQyYR3Ygyhl9ylN7ln07BP4G3HQBhA63
+        i/dONP5USHwZ7qWoSlUiOKpSjlqq1lDzTWXkTsvHIOgoOWnvnAeyLe6rmdraWA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664348241;
+        s=2020e; t=1664348242;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oZxjcfgGuoo6ocC/hZrG5mJbTTF5Bue+mmgkM6CdPos=;
-        b=9sfqQi2ZGGLUybuifA2k1ZRKbi6NwTFfEXKjnbaXqZtfe5XE9KbUfVnk6Nuj2HhD2iSaiB
-        Qnaf13jeKUOPAkAA==
-From:   "tip-bot2 for Marco Elver" <tip-bot2@linutronix.de>
+        bh=YFu7nnk8kMBWwPl8IqyP7zFs+hVguPmywV5EeUtNqpw=;
+        b=/f6kngUCsOvIdxGMSVM//dmP1l1Dfc+L6jRu4mBGIHb9IM5gvv3Mkz/svwhFtoCchv3LTs
+        xmkwruj7Br2XrvAQ==
+From:   "tip-bot2 for Namhyung Kim" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf, hw_breakpoint: Fix use-after-free if
- perf_event_open() fails
-Cc:     syzkaller <syzkaller@googlegroups.com>,
-        Marco Elver <elver@google.com>,
+Subject: [tip: perf/core] perf: Use sample_flags for raw_data
+Cc:     Namhyung Kim <namhyung@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220927172025.1636995-1-elver@google.com>
-References: <20220927172025.1636995-1-elver@google.com>
+In-Reply-To: <20220921220032.2858517-2-namhyung@kernel.org>
+References: <20220921220032.2858517-2-namhyung@kernel.org>
 MIME-Version: 1.0
-Message-ID: <166434824041.401.2424383909686511412.tip-bot2@tip-bot2>
+Message-ID: <166434824149.401.4361243714612738808.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,101 +66,117 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     4674ffe2fcad45a9b164401cc0794115702326cf
-Gitweb:        https://git.kernel.org/tip/4674ffe2fcad45a9b164401cc0794115702326cf
-Author:        Marco Elver <elver@google.com>
-AuthorDate:    Tue, 27 Sep 2022 19:20:25 +02:00
+Commit-ID:     838d9bb62d132ec3baf1b5aba2e95ef9a7a9a3cd
+Gitweb:        https://git.kernel.org/tip/838d9bb62d132ec3baf1b5aba2e95ef9a7a9a3cd
+Author:        Namhyung Kim <namhyung@kernel.org>
+AuthorDate:    Wed, 21 Sep 2022 15:00:32 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 27 Sep 2022 22:50:24 +02:00
 
-perf, hw_breakpoint: Fix use-after-free if perf_event_open() fails
+perf: Use sample_flags for raw_data
 
-Local testing revealed that we can trigger a use-after-free during
-rhashtable lookup as follows:
+Use the new sample_flags to indicate whether the raw data field is
+filled by the PMU driver.  Although it could check with the NULL,
+follow the same rule with other fields.
 
- | BUG: KASAN: use-after-free in memcmp lib/string.c:757
- | Read of size 8 at addr ffff888107544dc0 by task perf-rhltable-n/1293
- |
- | CPU: 0 PID: 1293 Comm: perf-rhltable-n Not tainted 6.0.0-rc3-00014-g85260862789c #46
- | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
- | Call Trace:
- |  <TASK>
- |  memcmp			lib/string.c:757
- |  rhashtable_compare		include/linux/rhashtable.h:577 [inline]
- |  __rhashtable_lookup		include/linux/rhashtable.h:602 [inline]
- |  rhltable_lookup		include/linux/rhashtable.h:688 [inline]
- |  task_bp_pinned		kernel/events/hw_breakpoint.c:324
- |  toggle_bp_slot		kernel/events/hw_breakpoint.c:462
- |  __release_bp_slot		kernel/events/hw_breakpoint.c:631 [inline]
- |  release_bp_slot		kernel/events/hw_breakpoint.c:639
- |  register_perf_hw_breakpoint	kernel/events/hw_breakpoint.c:742
- |  hw_breakpoint_event_init	kernel/events/hw_breakpoint.c:976
- |  perf_try_init_event		kernel/events/core.c:11261
- |  perf_init_event		kernel/events/core.c:11325 [inline]
- |  perf_event_alloc		kernel/events/core.c:11619
- |  __do_sys_perf_event_open	kernel/events/core.c:12157
- |  do_syscall_x64 		arch/x86/entry/common.c:50 [inline]
- |  do_syscall_64		arch/x86/entry/common.c:80
- |  entry_SYSCALL_64_after_hwframe
- |  </TASK>
- |
- | Allocated by task 1292:
- |  perf_event_alloc		kernel/events/core.c:11505
- |  __do_sys_perf_event_open	kernel/events/core.c:12157
- |  do_syscall_x64		arch/x86/entry/common.c:50 [inline]
- |  do_syscall_64		arch/x86/entry/common.c:80
- |  entry_SYSCALL_64_after_hwframe
- |
- | Freed by task 1292:
- |  perf_event_alloc		kernel/events/core.c:11716
- |  __do_sys_perf_event_open	kernel/events/core.c:12157
- |  do_syscall_x64		arch/x86/entry/common.c:50 [inline]
- |  do_syscall_64		arch/x86/entry/common.c:80
- |  entry_SYSCALL_64_after_hwframe
- |
- | The buggy address belongs to the object at ffff888107544c00
- |  which belongs to the cache perf_event of size 1352
- | The buggy address is located 448 bytes inside of
- |  1352-byte region [ffff888107544c00, ffff888107545148)
+Remove the raw field from the perf_sample_data_init() to minimize
+the number of cache lines touched.
 
-This happens because the first perf_event_open() managed to reserve a HW
-breakpoint slot, however, later fails for other reasons and returns. The
-second perf_event_open() runs concurrently, and during rhltable_lookup()
-looks up an entry which is being freed: since rhltable_lookup() may run
-concurrently (under the RCU read lock) with rhltable_remove(), we may
-end up with a stale entry, for which memory may also have already been
-freed when being accessed.
-
-To fix, only free the failed perf_event after an RCU grace period. This
-allows subsystems that store references to an event to always access it
-concurrently under the RCU read lock, even if initialization will fail.
-
-Given failure is unlikely and a slow-path, turning the immediate free
-into a call_rcu()-wrapped free does not affect performance elsewhere.
-
-Fixes: 0370dc314df3 ("perf/hw_breakpoint: Optimize list of per-task breakpoints")
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Marco Elver <elver@google.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220927172025.1636995-1-elver@google.com
+Link: https://lkml.kernel.org/r/20220921220032.2858517-2-namhyung@kernel.org
 ---
- kernel/events/core.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ arch/s390/kernel/perf_cpum_cf.c    | 1 +
+ arch/s390/kernel/perf_pai_crypto.c | 1 +
+ arch/x86/events/amd/ibs.c          | 1 +
+ include/linux/perf_event.h         | 5 ++---
+ kernel/events/core.c               | 3 ++-
+ 5 files changed, 7 insertions(+), 4 deletions(-)
 
+diff --git a/arch/s390/kernel/perf_cpum_cf.c b/arch/s390/kernel/perf_cpum_cf.c
+index f7dd3c8..f043a7f 100644
+--- a/arch/s390/kernel/perf_cpum_cf.c
++++ b/arch/s390/kernel/perf_cpum_cf.c
+@@ -664,6 +664,7 @@ static int cfdiag_push_sample(struct perf_event *event,
+ 		raw.frag.data = cpuhw->stop;
+ 		raw.size = raw.frag.size;
+ 		data.raw = &raw;
++		data.sample_flags |= PERF_SAMPLE_RAW;
+ 	}
+ 
+ 	overflow = perf_event_overflow(event, &data, &regs);
+diff --git a/arch/s390/kernel/perf_pai_crypto.c b/arch/s390/kernel/perf_pai_crypto.c
+index b38b4ae..6826e2a 100644
+--- a/arch/s390/kernel/perf_pai_crypto.c
++++ b/arch/s390/kernel/perf_pai_crypto.c
+@@ -366,6 +366,7 @@ static int paicrypt_push_sample(void)
+ 		raw.frag.data = cpump->save;
+ 		raw.size = raw.frag.size;
+ 		data.raw = &raw;
++		data.sample_flags |= PERF_SAMPLE_RAW;
+ 	}
+ 
+ 	overflow = perf_event_overflow(event, &data, &regs);
+diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+index ce5720b..c29a006 100644
+--- a/arch/x86/events/amd/ibs.c
++++ b/arch/x86/events/amd/ibs.c
+@@ -781,6 +781,7 @@ fail:
+ 			},
+ 		};
+ 		data.raw = &raw;
++		data.sample_flags |= PERF_SAMPLE_RAW;
+ 	}
+ 
+ 	/*
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index f4a1357..e9b151c 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1028,7 +1028,6 @@ struct perf_sample_data {
+ 	 * minimize the cachelines touched.
+ 	 */
+ 	u64				sample_flags;
+-	struct perf_raw_record		*raw;
+ 	u64				period;
+ 
+ 	/*
+@@ -1040,6 +1039,7 @@ struct perf_sample_data {
+ 	union  perf_mem_data_src	data_src;
+ 	u64				txn;
+ 	u64				addr;
++	struct perf_raw_record		*raw;
+ 
+ 	u64				type;
+ 	u64				ip;
+@@ -1078,8 +1078,7 @@ static inline void perf_sample_data_init(struct perf_sample_data *data,
+ 					 u64 addr, u64 period)
+ {
+ 	/* remaining struct members initialized in perf_prepare_sample() */
+-	data->sample_flags = 0;
+-	data->raw  = NULL;
++	data->sample_flags = PERF_SAMPLE_PERIOD;
+ 	data->period = period;
+ 
+ 	if (addr) {
 diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 04e19a8..e1ffdb8 100644
+index a91f74d..04e19a8 100644
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -11734,11 +11734,9 @@ err_pmu:
- 		event->destroy(event);
- 	module_put(pmu->module);
- err_ns:
--	if (event->ns)
--		put_pid_ns(event->ns);
- 	if (event->hw.target)
- 		put_task_struct(event->hw.target);
--	kmem_cache_free(perf_event_cache, event);
-+	call_rcu(&event->rcu_head, free_event_rcu);
+@@ -7332,7 +7332,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 		struct perf_raw_record *raw = data->raw;
+ 		int size;
  
- 	return ERR_PTR(err);
- }
+-		if (raw) {
++		if (raw && (data->sample_flags & PERF_SAMPLE_RAW)) {
+ 			struct perf_raw_frag *frag = &raw->frag;
+ 			u32 sum = 0;
+ 
+@@ -7348,6 +7348,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 			frag->pad = raw->size - sum;
+ 		} else {
+ 			size = sizeof(u64);
++			data->raw = NULL;
+ 		}
+ 
+ 		header->size += size;
