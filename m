@@ -2,106 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCA25ED1C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 02:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7605ED1BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 02:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbiI1AV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 20:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
+        id S232822AbiI1AVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 20:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbiI1AVd (ORCPT
+        with ESMTP id S232770AbiI1AVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 20:21:33 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C95D10E5E8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 17:21:26 -0700 (PDT)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxnmtpkzNj0_8iAA--.50977S3;
-        Wed, 28 Sep 2022 08:20:57 +0800 (CST)
-Subject: Re: [PATCH V2] irqchip: Make irqchip_init() usable on pure ACPI
- systems
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-References: <20220927124557.3246737-1-chenhuacai@loongson.cn>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <01b9d198-929a-45ea-2e94-3d0956aee2b7@loongson.cn>
-Date:   Wed, 28 Sep 2022 08:20:57 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 27 Sep 2022 20:21:02 -0400
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4449F10AB3B;
+        Tue, 27 Sep 2022 17:21:00 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1319573379eso2562281fac.0;
+        Tue, 27 Sep 2022 17:21:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=zWXIIgX0B71nDqgAu7Wm0OvyS5OfsJfgyZ+1oWd116g=;
+        b=Z4cpFYwSekPG4+bv5+yvhD2qwOdXhY5bZPz1nvmmandj+JLpW3F38JnwX++5B6twmA
+         uyrQhPU4H/S8EyvAuYm9JlWj9VGsKEw56hgDvQ7R3DuAvuca5lBkR/sFFEwi7odRG0p6
+         Y2VDC1ZXoNwquH2Q6ID94kLfZAm8ZNsQqDMfI4AKGaAzyNy7aHnj9tkrf/YUPoCgGqa5
+         6/IchFps7CApyzmyqgYL3+xnBJNMpXnleEjMJ2S84Tbty+eg+GNxng2TFxkH/7ylvDm6
+         sVT/3vFlmBY3I6cjjmT7CXDJAVDrz8cUq7gf9YJbpV6XP1L7A8dAQ4t6r0Yqssju1f+t
+         DWIQ==
+X-Gm-Message-State: ACrzQf1/gwbD86ldJRYWg3C7Z3wYVCpuTadNHicF2oqTan3z8SSrvYfs
+        EO4ct0zbB+emACD/xZa/+Q==
+X-Google-Smtp-Source: AMsMyM74Uup6JCWzKAhoGNL1IKlQJCDS5jC94A8A5MxgAO/kdqr6L7W6hk8QJxB+ahua9oGYWIa9zg==
+X-Received: by 2002:a05:6870:33aa:b0:131:6112:69eb with SMTP id w42-20020a05687033aa00b00131611269ebmr3999969oae.74.1664324459301;
+        Tue, 27 Sep 2022 17:20:59 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z20-20020a05687041d400b00127ebb410a4sm1733703oac.11.2022.09.27.17.20.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 17:20:58 -0700 (PDT)
+Received: (nullmailer pid 2686070 invoked by uid 1000);
+        Wed, 28 Sep 2022 00:20:57 -0000
+Date:   Tue, 27 Sep 2022 19:20:57 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
+        linux-arm-msm@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 23/34] dt-bindings: pinctrl: qcom,msm8953: fix
+ indentation in example
+Message-ID: <20220928002057.GA2685991-robh@kernel.org>
+References: <20220927173702.5200-1-krzysztof.kozlowski@linaro.org>
+ <20220927173702.5200-24-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20220927124557.3246737-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8BxnmtpkzNj0_8iAA--.50977S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ar4xtr18ZFyDJry5tFyrWFg_yoW8Kw17pF
-        yUXr10gr48Jr1UJr1UAF17Jr1DJw4DCF18Jr17Jr17Jw1UXr1DAr1UJr4UGFy5Aw45Jr1U
-        Jr48tr1Dtr15Jw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvq14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
-        bIxvr21lc2xSY4AK67AK6w1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0x
-        ZFpf9x0JUTxRDUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927173702.5200-24-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 27 Sep 2022 19:36:51 +0200, Krzysztof Kozlowski wrote:
+> Bindings example should be indented with 4-spaces.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+> ---
+>  .../pinctrl/qcom,msm8953-pinctrl.yaml         | 34 +++++++++----------
+>  1 file changed, 17 insertions(+), 17 deletions(-)
+> 
 
-
-On 09/27/2022 08:45 PM, Huacai Chen wrote:
-> Pure ACPI system (e.g., LoongArch) doesn't select OF and OF_IRQ, but it
-> still need a non-empty irqchip_init(). So, change the IRQCHIP dependency
-> from OF_IRQ to (OF_IRQ || ACPI_GENERIC_GSI), and then define an empty
-> inline of_irq_init() in the !CONFIG_OF_IRQ case, so as to make the non-
-> empty irqchip_init() be usable on pure ACPI systems.
->
-> Without this patch we get such errors:
->
-> [    0.000000] NR_IRQS: 576, nr_irqs: 576, preallocated irqs: 16
-> [    0.000000] Kernel panic - not syncing: IPI IRQ mapping failed
-> [    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0.0-rc6+ #2189
-> [    0.000000] Hardware name: Loongson Loongson-3A5000-7A1000-1w-CRB/Loongson-LS3A5000-7A1000-1w-CRB, BIOS vUDK2018-LoongArch-V2.0.pre-beta8 08/18/2022
-> [    0.000000] Stack : 0000000000000000 9000000000fa4388 900000000140c000 900000000140fb70
-> [    0.000000]         0000000000000000 900000000140fb70 90000000012f4aa0 900000000140fa98
-> [    0.000000]         900000000140fa0c 900000008140f9ff 0000000000000030 0000000000000005
-> [    0.000000]         900000000578f708 0000000004750000 0000000000000000 00000000ffffdfff
-> [    0.000000]         0000000000000000 0000000000000000 0000000000000030 000000000000002f
-> [    0.000000]         900000000141f000 0000000004750000 9000000001427348 00000000000000b0
-> [    0.000000]         90000000012f4aa0 0000000000000004 0000000000000000 9000000001020000
-> [    0.000000]         9000000005781b80 9000000005781ba9 0000000000000000 9000000001315e30
-> [    0.000000]         900000000129a3b0 9000000000222b64 0000000000000000 00000000000000b0
-> [    0.000000]         0000000000000004 0000000000000000 0000000000070000 0000000000000800
-> [    0.000000]         ...
-> [    0.000000] Call Trace:
-> [    0.000000] [<9000000000222b64>] show_stack+0x24/0x124
-> [    0.000000] [<9000000000fa4388>] dump_stack_lvl+0x60/0x88
-> [    0.000000] [<9000000000f9965c>] panic+0x130/0x2f8
-> [    0.000000] [<9000000000fd4324>] init_IRQ+0xa8/0x240
-> [    0.000000] [<9000000000fd0b38>] start_kernel+0x488/0x5f0
-> [    0.000000] [<9000000000fb10c4>] kernel_entry+0xc4/0xc8
-> [    0.000000]
-> [    0.000000] ---[ end Kernel panic - not syncing: IPI IRQ mapping failed ]---
->
-
-I am also experiencing the same problem with the latest kernel
-on LoongArch, it works well with this patch.
-
-Tested-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-
+Reviewed-by: Rob Herring <robh@kernel.org>
