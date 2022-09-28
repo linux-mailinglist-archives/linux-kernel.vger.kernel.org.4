@@ -2,149 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3510B5ED7C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCAD95ED7C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233595AbiI1I3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
+        id S233615AbiI1IaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiI1I32 (ORCPT
+        with ESMTP id S233455AbiI1IaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:29:28 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6867374CD5;
-        Wed, 28 Sep 2022 01:29:27 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id c30so15130828edn.2;
-        Wed, 28 Sep 2022 01:29:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=w0oCFVbsIR+JjV/gDmNe5Qcxa+IyfAvzzy/EcJvtCNY=;
-        b=Q/SsPmY7B+fAJUl+Spw8ngVH+HuKsYlaXXQTdegB+igN/r94LsiM/6mQE32R40FIct
-         JfqDSrAT2I2alnLfwF4qM3Y+5HawHPeRGtlK0TOmJR+P63nFjws5yvrrnkxGcd24/iDM
-         SlrfOpYcNE2kGttZnpI1pyslhFWlaZqMfYY63kSpZc7s3wop9F/g8teD8rYq4iYUDS/l
-         LseP+Dh7v/DCOeRdptNvvXChaE+PI5y27se663CNTYVBUa9p2YER5FgJGa5FbNSuFmNJ
-         TiuHDYKSUDCoaBw2Jp/E+cI9qzoGPv8ZzOXx92KWwnhdkeBezQ0ObZAW6vYyTwksaR37
-         t86Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=w0oCFVbsIR+JjV/gDmNe5Qcxa+IyfAvzzy/EcJvtCNY=;
-        b=JwNs3uIUh7g5FvX4Aj8gDIBaBB7vdZa4CEUbmyRwuBAIQJLSa/nGQgwRao6ywMVd/U
-         4I4G0mXl8/PLQTVsNUzdhOrcVUpXscTLHJzMjj1yXvQbFO6LsLJmJcna8hVXEL5/lf6M
-         9zjSa5FyCkG86OLTun0Z8zIQ5Z0hroQ2YsWd9PxKnWdUr3IsikN+HqQy2W4WeB+NINT1
-         6J4XQ5KtKkUHJzOFKJ7XcWl6fCOkypXDBOnQZ/XmP4uNZHxc1T7yh5WUrW4B59eQaZcN
-         lW6yg6hRFotUIPr3yjVPevYA0IwaemXcHa5TmqMjRwkODwbdtSwnX/fkzuV4RPBMwDpG
-         32zg==
-X-Gm-Message-State: ACrzQf11XVEbjRo2aZjL6HWuIe+XpO9dm+TCfxgYgYw41vbNUJaR+6xu
-        6Jmd9mywVjIg5lHN04OFw+phU4QIMmlgqZK3lQw=
-X-Google-Smtp-Source: AMsMyM50ywTBWlF6n2lFkeDW3bZoGqCI0vlDBC8k5yxSEE6k8OR+XTIPbCbhj953UkRHKUvxG7OzMO25Qu9Xg1MZjZc=
-X-Received: by 2002:a05:6402:50d1:b0:452:899e:77c with SMTP id
- h17-20020a05640250d100b00452899e077cmr32098451edb.0.1664353765894; Wed, 28
- Sep 2022 01:29:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220927203044.751611-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220927203044.751611-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <OS0PR01MB5922BE73295E3562DC3FBA6E86549@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922BE73295E3562DC3FBA6E86549@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 28 Sep 2022 09:28:58 +0100
-Message-ID: <CA+V-a8s=wqGpfWBv7+=tG1pu6fZCL7EtRoTEmo-wjK5CGZyLnQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] clk: renesas: rzg2l: Don't assume all CPG_MOD
- clocks support PM
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Wed, 28 Sep 2022 04:30:01 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80D86566;
+        Wed, 28 Sep 2022 01:29:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664353797; x=1695889797;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=z7wLRn7r5/0pnDdu9VeNCRlzFpkvaYZ+4Rl+niVuEtE=;
+  b=PkyQ1CdKDxsmYdLqJkXxpr/LSgrBUtcglvxTOaOKVVJXE5tuKni/1mnd
+   vuLCW0dH41nins8OE2sqF+dpfUmh9fzONpxcU0oI7G5ICh9ApHSIWhuZn
+   armX3oH3cAd5W8+3JDux6CGa3RCmuDq1EhNvrI7f9X4bSJmvnasbDI6hB
+   WVsgqq26wSywsyOaFD3F+fQfJm8oG4yFuKHBsQyH4wP/OU9GWJnlNzcoS
+   TqtXNIaz4+Tb5bxby0aGGWDDUowYpafDs3/JamVPqC+eD2MV3xuzmxsI3
+   7CC9gcYuKG0kOX2waQrc2D5bHM3gH/Y3LzhOUiU5rTXL798Bq71z3ww4N
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="327907121"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="327907121"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 01:29:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="599494301"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="599494301"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga006.jf.intel.com with ESMTP; 28 Sep 2022 01:29:57 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 01:29:57 -0700
+Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 01:29:56 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 28 Sep 2022 01:29:56 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.176)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 28 Sep 2022 01:29:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YN4F9UnV5bnWVyhd6wJ28QdKFM0BXXE6GZ2MWKCBbpPj+W+rgf5qrhLB1arS92eqZwXuIR1SrorncZ5pwVDlMLAgFBz7LCJtwiql2OHmukP5Z9aAVQ7NrHkBTrgBOumdrK/b9MLfPHoLfvTZ2xGQ9hbIB1U/pgyZaY+RdY1mLX8VNvA6jxxB1S/l3QoMwHD27CmO+8vGSGPCefaGfcGMqKW++Ix77H494ivr77Ot9RUKKAQt8YPYRCfAKfQusYFbnaaZvcWhj2jJsn1A0ptI7wPm/g8hoC++2ibSZVSWpYeb9rjAaPLGn1G8lXfYAkz+LEGF+ZM0q6tMfXMBk8i9kw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RuDlCnSXfVPc35gG2j8b/ERgKktYVdFnlmziT03haZo=;
+ b=W9ZfdlX/IllRnwjaJOzEseu/TmugwzeNJzQJOPraWRxfLRtxwVqWG/I5Lbuua33JZ9zqGUYlGkSGHrZ9VjckyZOc6Rm1q4hxN5mzV3HPArkHtOfOt4sYPQ1EvttzRrXQpk37PfCKS/Kmg4NZKHP99S8q6/TLdBgvt7Igjca/avszNExphuJsCJ6kfBfbPXblkAKUnwJN1P4VfG+B4+ETNGryQyitPNo//cb/8My1SIDemdoeD/dxHtnVMfyVPS90FgopUbrGwbaoSLNu5hbbqh0d/ULxVxamJIcZmL5MSzTngQe8rxe2ivxSbTNzVZqdlu0+1r1pCf4NQIkfJ3+cjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5271.namprd11.prod.outlook.com (2603:10b6:208:31a::21)
+ by PH8PR11MB7046.namprd11.prod.outlook.com (2603:10b6:510:216::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.24; Wed, 28 Sep
+ 2022 08:29:48 +0000
+Received: from BL1PR11MB5271.namprd11.prod.outlook.com
+ ([fe80::816:37d:6cee:cc35]) by BL1PR11MB5271.namprd11.prod.outlook.com
+ ([fe80::816:37d:6cee:cc35%3]) with mapi id 15.20.5676.017; Wed, 28 Sep 2022
+ 08:29:48 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     "Gao, Chao" <chao.gao@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        "Kohler, Jon" <jon@nutanix.com>
+CC:     "Christopherson,, Sean" <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
+Subject: RE: [RFC v2] KVM: x86/vmx: Suppress posted interrupt notification
+ when CPU is in host
+Thread-Topic: [RFC v2] KVM: x86/vmx: Suppress posted interrupt notification
+ when CPU is in host
+Thread-Index: AQHYzyqiVAqlk3tAREG5c6Y0U9+i2630iVbQ
+Date:   Wed, 28 Sep 2022 08:29:48 +0000
+Message-ID: <BL1PR11MB52712631CBBED273F5E4E1828C549@BL1PR11MB5271.namprd11.prod.outlook.com>
+References: <20220923085806.384344-1-chao.gao@intel.com>
+In-Reply-To: <20220923085806.384344-1-chao.gao@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5271:EE_|PH8PR11MB7046:EE_
+x-ms-office365-filtering-correlation-id: ee44e2b3-e190-469d-68d1-08daa12b9af1
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NzH261jQ/NKlKF+2ZtYmenazrYgCpkIPjn8XeE8JRxAC9hzFFEOdLEMMHN8dZYN5U8ejnxctHYmhj2HPNK2H9KMy+74LKaKQI6RF2iegrNP0CPDyBm4XBJ+UNoFq9GDRiqfM+7/3SrArUl06H+P3NSJ956GQXzz+AdqXmazMtCt08HlxLB5vWiQP6jRvELMhgMxZgardzIMWL3OwRI0IR4QvKld3Sx/DsPkCk9gP2d6MVPVao2T1y808VniCF/nGIIqe70fjV2sRHhp28ic2NXuqZAI7LumwKNxAPT7QDwCUghEH5F8BhD600wus7+FY4SpmAig+6HpaxKUw+xfD6BPKnMeew6oIMbk1vmtS48eY+24vf9CGIe6uXKkxOMGqra1sz5ZmXj7nlgPnJxgGH+C7pn6D2pt30duwug09wdwabNXgiY7fpAE9musSOoZic4v+2U0JG9VjtPSOsQJwOEkgqHxdjY9x6djr6b/9i/CgzdAQCMp40/cAPTo1mMoa0634soI0zaZdywreYFTCWg5H6TYagAq41KULk1hwEXuiijLTItdMiqwazMXbZaJrKfAMZKol88rT8aKqyp23uuHxMMOw8a76aza5uKT1W/IMEphF3OhKRsjFHKEx4/qRx8PzSHnIjVzVkMR7o4zm/mgsP/SyC55HOU71KxtBAgItuLXNtrWquKOtRpqHfN2YnS21tj3vQOD/L6FCCsFQ05hBNW7n6EjDlqDlVydiewFtEYv3VBEXtf1UeFYZcGfYky49uwkStKwyAvzvKPsK9PEIK5EG2T542y5X62o9Qn8=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5271.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(346002)(366004)(39860400002)(396003)(451199015)(66946007)(86362001)(38100700002)(15650500001)(82960400001)(2906002)(7696005)(9686003)(122000001)(966005)(66446008)(478600001)(55016003)(54906003)(110136005)(38070700005)(52536014)(71200400001)(8936002)(26005)(7416002)(5660300002)(41300700001)(66476007)(64756008)(33656002)(45080400002)(83380400001)(4326008)(186003)(6506007)(76116006)(66556008)(8676002)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hIhzpIQuElRboCB//6q+OZo3oachgNGvVf0/9+bLf6TfMSkrSe0V2mYBhgQY?=
+ =?us-ascii?Q?07Kcd+DKcEV0fFLHC0FOPg/d/s+8h07x7Tk2Jj2kFLHfL5J1eSU3UNoENtZi?=
+ =?us-ascii?Q?+LnpVoQRLiQZxVcJx4qbNBAjzdKM5S2Fe1K3mlTlcMrhwG54biXW7g8BlFRn?=
+ =?us-ascii?Q?LM4hDcxtyTg8kxd2URKOum2UoUrTLq5aheu+xaYxlaDEsB9AQgWSqIjreqgx?=
+ =?us-ascii?Q?WYIhZHbmvHc24GE/XeibIB4B5pobvaCDXnQt6oJcaA7254uxH5qeN9quOadw?=
+ =?us-ascii?Q?wjDJ+195z56ZDUT3N+4rODLBJ/nPuRfCxCdP4IoTd1LmUGQ6FBanBkIzeCZk?=
+ =?us-ascii?Q?PElHkY0SBlAjGo3fohnltGa9U7UEO//4EzYXYrRNCcB1XylzDsHmZ5q6I9F0?=
+ =?us-ascii?Q?DWl7l6pDLIIryodK5F/ln4zt+ul0exEA8gPujbDC6X6VrRwaQVhmwSNHmTRl?=
+ =?us-ascii?Q?QEjZb3Tk4VVYVUBpqhm+K0vm+6xSdZCXS5TAR+M+SUIGf5/DQWfTgycDFoVj?=
+ =?us-ascii?Q?n7HxTdrtUrRKwWH1VkTGB1jeqQK/zvhZ6gftnCm0R1Dnhg1IptQHMpOrfjuh?=
+ =?us-ascii?Q?YkhTgJZfNSK0kiQJdd6gviIUKsEElaUrOZT7CUDGkroDRFPqa7wuQUJ6XmJG?=
+ =?us-ascii?Q?BLl+60h6oDcBHQzgqxPeX8Rc9ib9ZLaz6DySEmYm3XNZmYPiTAxWY4LDXjVY?=
+ =?us-ascii?Q?8Etdg4Fyj/rEAcHXTri8yycpLoPQ01DYs2x5O0bf65KHmdoVR9JrO5OuoKoS?=
+ =?us-ascii?Q?wgeH7GgxdFO1m+JVvKqcANmWVkk2hsueQopEydhOUMZIp3qnBFg4nuVNX+5b?=
+ =?us-ascii?Q?LDHwIgyNCDoPLexhXtwlAHIHYhMG6OIcFoTN5pnhN561r7OSeMtLggPnqh+o?=
+ =?us-ascii?Q?WPY5nh0FcfAMCs3bhR1B6jzD3loaucCV2x84CRSrSFXj3y57rtxCu6G8Kkcw?=
+ =?us-ascii?Q?/WC/HQ20xpYmjBcb7ctkIGl59252pYAa24yYhxRBOsalpz98oEXUevvxulfy?=
+ =?us-ascii?Q?x/9Ds26herqCKupnnvuyuBq+yUrkRHHfyiiwNzkbDhANajdwFXjMxAUPpwyw?=
+ =?us-ascii?Q?yE1F6jMWjItbkZ1Rspjdz5zNzfzZlygJcH04y+EDVj7MjgWVJ2KJir61jvRe?=
+ =?us-ascii?Q?wBcsp0ivP6kGOuY/QY2xqwWP/1SwiX1GkXmlJnS5pyK544YZDvD4YD6Z8Uhm?=
+ =?us-ascii?Q?zoof+6Fo8gtDDhXOGlHiri+LjP+kEjJgebi6oqoC8FZ2a0jxHIOWcSL30WGX?=
+ =?us-ascii?Q?OOAzQKngSE1ISlX5PCrk6KCkiszC0pPLs8+QEi6xSIz58QlbL9VdGDmiq7Io?=
+ =?us-ascii?Q?D4ZYfPrCOpmavnWOluXQBpN0PJYMOerBfCHyqTAiT6yRkbqc0DgfvSME92fp?=
+ =?us-ascii?Q?BGztJ5DrR26z0WAx3lnCtn5oG9Za6hiTG7cCdRYENjJeE5FSpCVRLZv9Zwzb?=
+ =?us-ascii?Q?6dmkZ9OXGKlSkrz3oX4gt59T01l63ij0uZzTo/a5W7ZROrmEUqo8GjquF0Uh?=
+ =?us-ascii?Q?9AT3uNW/DPubkwA3A0hwRMKpMhcnuuZbdkIead3SJjSnsvPKX08PKCP+cb0v?=
+ =?us-ascii?Q?9H/v6AIB2PbYtHSWMCwwvK0YNDwiotCHRhjfzIdQ?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5271.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee44e2b3-e190-469d-68d1-08daa12b9af1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2022 08:29:48.1212
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eIZBJndAY3WeIsiBaOIg/V15qwH3UZmWJHwFck00fMB3bzpKFp6JDhsn20fH+vD4ipDHSJa5aMToq3mAKN6juA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB7046
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Biju,
+> From: Gao, Chao <chao.gao@intel.com>
+> Sent: Friday, September 23, 2022 4:58 PM
+>=20
+> PIN (Posted interrupt notification) is useless to host as KVM always sync=
+s
+> pending guest interrupts in PID to guest's vAPIC before each VM entry. In
+> fact, Sending PINs to a CPU running in host will lead to additional
+> overhead due to interrupt handling.
+>=20
+> Currently, software path, vmx_deliver_posted_interrupt(), is optimized to
+> issue PINs only if target vCPU is in IN_GUEST_MODE. But hardware paths
+> (VT-d and Intel IPI virtualization) aren't optimized.
+>=20
+> Set PID.SN right after VM exits and clear it before VM entry to minimize
+> the chance of hardware issuing PINs to a CPU when it's in host.
+>=20
+> Also honour PID.SN bit in vmx_deliver_posted_interrupt().
+>=20
+> Opportunistically clean up vmx_vcpu_pi_put(); when a vCPU is preempted,
+> it is pointless to update PID.NV to wakeup vector since notification is
+> anyway suppressed. And since PID.SN should be already set for running
+> vCPUs, so, don't set it again for preempted vCPUs.
+>=20
+> When IPI virtualization is enabled, this patch increases "perf bench" [*]
+> by 6.56%, and PIN count in 1 second drops from tens of thousands to
+> hundreds. But cpuid loop test shows this patch causes 1.58% overhead in
+> VM-exit round-trip latency.
+>=20
+> [*] test cmd: perf bench sched pipe -T. Note that we change the source
+> code to pin two threads to two different vCPUs so that it can reproduce
+> stable results.
+>=20
+> Signed-off-by: Chao Gao <chao.gao@intel.com>
+> ---
+> RFC: I am not sure whether the benefits outweighs the extra VM-exit cost.
+>=20
+> Changes in v2 (addressed comments from Kevin):
+> - measure/estimate the impact to non-IPC-intensive cases
+> - don't tie PID.SN to vcpu->mode. Instead, clear PID.SN
+>   right before VM-entry and set it after VM-exit.
 
-Thank you for the review.
+One correction here. My comment in v1 [1] was actually close to Sean's
+suggestion, i.e. opposite to above description:
 
-On Wed, Sep 28, 2022 at 8:02 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
->
-> Hi Prabhakar,
->
-> > Subject: [RFC PATCH 1/2] clk: renesas: rzg2l: Don't assume all CPG_MOD
-> > clocks support PM
-> >
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > There are cases where not all CPG_MOD clocks should be assumed to
-> > support PM. For example on the CRU block there is a particular
-> > sequence that needs to be followed to initialize the CSI-2 D-PHY in
-> > which individual clocks need to be turned ON/OFF, due to which Runtime
-> > PM support wasn't used by the CRU CSI-2 driver.
-> >
-> > This patch adds support to allow indicating if PM is supported by the
-> > CPG_MOD clocks. A new macro is DEF_NO_PM() is added which sets the
-> > no_pm flag in struct rzg2l_mod_clk and when the driver uses Runtime PM
-> > support no_pm flag is checked to see if the clk needs to included as
-> > part of Runtime PM.
-> >
-> > CPG_MOD clocks with no_pm flag set need to be individually turned
-> > ON/OFF depending on the requirement of the driver.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  drivers/clk/renesas/rzg2l-cpg.c | 35 +++++++++++++++++++++++++++++---
-> > -  drivers/clk/renesas/rzg2l-cpg.h | 12 ++++++++---
-> >  2 files changed, 40 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/clk/renesas/rzg2l-cpg.c
-> > b/drivers/clk/renesas/rzg2l-cpg.c index 3ff6ecd61756..d275324909e7
-> > 100644
-> > --- a/drivers/clk/renesas/rzg2l-cpg.c
-> > +++ b/drivers/clk/renesas/rzg2l-cpg.c
-> > @@ -114,6 +114,8 @@ struct rzg2l_cpg_priv {
-> >       struct rzg2l_pll5_mux_dsi_div_param mux_dsi_div_params;  };
-> >
-> > +static struct rzg2l_cpg_priv *rzg2l_cpg_priv;
-> > +
-> >  static void rzg2l_cpg_del_clk_provider(void *data)  {
-> >       of_clk_del_provider(data);
-> > @@ -1223,18 +1225,42 @@ static int
-> > rzg2l_cpg_reset_controller_register(struct rzg2l_cpg_priv *priv)
-> >       return devm_reset_controller_register(priv->dev, &priv->rcdev);
-> > }
-> >
-> > +static inline const struct rzg2l_mod_clk *rzg2l_get_mod_clk(const
-> > +struct rzg2l_cpg_info *info, int id) {
-> > +     unsigned int i;
-> > +
-> > +     id += info->num_total_core_clks;
-> > +     for (i = 0; i < info->num_mod_clks; i++) {
-> > +             if (info->mod_clks[i].id == id)
-> > +                     return &info->mod_clks[i];
-> > +     }
->
-> May be as an optimization add ID and clk to a separate list
-> and traverse that smaller list for DEF_NO_PM case.
->
-> case CPG_MOD:
->         return rzg2l_cpg_is_pm_mod(clkspec->args[1]);
->
-Are you suggesting adding no_pm_mod_clks and no_pm_mod_clks or
-building an internal structure in struct rzg2l_cpg_priv while calling
-rzg2l_cpg_register_mod_clk() for each mod clock?
+--
+  I wonder whether it makes more sense to have 'sn' closely sync-ed
+  with vcpu->mode, e.g. having a kvm_x86_set_vcpu_mode() ops
+  to translate vcpu->mode into vmx/svm specific hardware bits like
+  'sn' here. Then call it in common place when vcpu->mode is changed.
+--
 
-Cheers,
-Prabhakar
+[1] https://lore.kernel.org/lkml/BN9PR11MB52766B74ADFBAEC0AA205E298CB39@BN9=
+PR11MB5276.namprd11.prod.outlook.com/
