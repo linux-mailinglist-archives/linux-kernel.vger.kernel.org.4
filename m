@@ -2,239 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FCF5EE23F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6F25EE209
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234237AbiI1Qtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
+        id S233856AbiI1QlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234000AbiI1Qtr (ORCPT
+        with ESMTP id S232879AbiI1QlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:49:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71FC2F018
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:49:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96D2061F26
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:49:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33033C433C1;
-        Wed, 28 Sep 2022 16:49:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664383784;
-        bh=vOLhBgQt+vaLJlNqqnT8uoBI6MeRvvklPMg+hiBKrBs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r6jg3+OunAJ34WgPJe/zZ5zX7r4wF5VJEQH/lJaurg+GqP4NM7qn0evjeOZ7c2n6x
-         Q+M/LoNhAGoDapUfiKvj0qMGV8Tno7tV3HT/vrzifWObbBjfQPF6gIeEV4yUHY2p+e
-         2z4FFBnICv0Gt6fSZuY8f9l+p3Y+1aamAFNvC19UCXC2koUzeGuCRoKmgXsBAF/upB
-         fIXPGl0m64PBrec6nHcsGqYTefCikLpQhaSVfwY6QtP/1Lz7v6s1Lgaz/hj+QKbXC6
-         G8mrPU0wYraowqyH8frolZRGZ7P0UER13BP4+3PKbm29iH/hs9e7N6vshi0WM0qvfw
-         xQm5UaD/ffzWg==
-Date:   Thu, 29 Sep 2022 00:40:15 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 2/4] riscv: consolidate ret_from_kernel_thread into
- ret_from_fork
-Message-ID: <YzR471Zo4LbSCJoX@xhacker>
-References: <20220925175356.681-1-jszhang@kernel.org>
- <20220925175356.681-3-jszhang@kernel.org>
- <CAJF2gTTqup62EM9LZQ-9daKk11O0geax9Z3HmTMOxYy2mAwm=w@mail.gmail.com>
- <YzHNr13U+SdwJHo1@xhacker>
- <CAJF2gTRbvvMcdm7ZrAeow=Dm7=HXx59+4g-3mBqb2-SN5mOpZg@mail.gmail.com>
+        Wed, 28 Sep 2022 12:41:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C383BD4306
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:41:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664383266;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w7yvyDDhwOplvoLz2+l06fL345Nn5UtPbR9Hw95aATs=;
+        b=alvt6ZYIsY9C8PdFqakYkMitvWiVn2f9KxXiXQV0JRSkEQhkI86VJhpRcDgwTolcH3rZCD
+        b4TjRy0iP103WFIfp3zUL2DGVjJgKA9OAWAErEsqmAD5jOkTC/DzmJlFVZ272T3tpHEv4l
+        ZiTtgnV0nEYJcFFd1ddxZM3IqqMo/7M=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-380-lZfj6OfbMjuxfsDdo84bcA-1; Wed, 28 Sep 2022 12:41:04 -0400
+X-MC-Unique: lZfj6OfbMjuxfsDdo84bcA-1
+Received: by mail-ej1-f72.google.com with SMTP id xh12-20020a170906da8c00b007413144e87fso5757941ejb.14
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:41:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=w7yvyDDhwOplvoLz2+l06fL345Nn5UtPbR9Hw95aATs=;
+        b=ANCGxe+xn2X2Nu0ntKxcNOrjVWvpuo7wK4rDkaorzT+LXOvEtfXLnTdz6FhLJyd++T
+         FvjG+0oG+ZkulqZuvf29+XGqpleAMTe7n7DjAhd5YvU5HFUjqI4mYHkPMA18BmuyPVhV
+         GLlKIvvRzxt5ZLO+LW9ru3danngFclbUKYRnZjMSzemYLFoNUuVdJ0/epAjxvkm1I45r
+         25t9yxK0JzaNZSz9lPJVpanWlVk1CT4c0mjNmx/XM9G8YpohHMhA6odd0h975b57+NR2
+         NFPl03AaOQeT1nCniFZBDCH4zIgzvATsEBpil+YtWRcvnvlEO401TGlN2+4Ebm0x4R2z
+         cLQw==
+X-Gm-Message-State: ACrzQf3WY0NAlFLUhPhza33J2UpTj1niZS2tZaMzwq45Ij87ypY2wz6B
+        fcD/WScg+8FfLZlPtNVS0L9lz2S1w+Q8K6gZucocibbr3KvKL8GngccmhvNkRmPrjfnZxOjzkQF
+        bpLBZorEgTsxeUoJtEjKQO3wU
+X-Received: by 2002:a17:907:6d08:b0:787:9027:cb8d with SMTP id sa8-20020a1709076d0800b007879027cb8dmr3401977ejc.396.1664383263306;
+        Wed, 28 Sep 2022 09:41:03 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7Jcx7MPqyjKrpHwcNInTTEPHhpMUmanQgJUCBtx3WSFeMZShooq5VirFuKXWAC719U1JKwrg==
+X-Received: by 2002:a17:907:6d08:b0:787:9027:cb8d with SMTP id sa8-20020a1709076d0800b007879027cb8dmr3401954ejc.396.1664383263072;
+        Wed, 28 Sep 2022 09:41:03 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:2f4b:62da:3159:e077? ([2001:b07:6468:f312:2f4b:62da:3159:e077])
+        by smtp.googlemail.com with ESMTPSA id t15-20020a1709067c0f00b00772b5835c12sm2624370ejo.23.2022.09.28.09.41.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 09:41:02 -0700 (PDT)
+Message-ID: <46bc34f2-2a3d-8f38-a9f5-85bb9494285f@redhat.com>
+Date:   Wed, 28 Sep 2022 18:41:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTRbvvMcdm7ZrAeow=Dm7=HXx59+4g-3mBqb2-SN5mOpZg@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [RFC PATCH 1/9] kvm_main.c: move slot check in
+ kvm_set_memory_region
+Content-Language: en-US
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+References: <20220909104506.738478-1-eesposit@redhat.com>
+ <20220909104506.738478-2-eesposit@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220909104506.738478-2-eesposit@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 07:55:27AM +0800, Guo Ren wrote:
-> On Tue, Sep 27, 2022 at 12:14 AM Jisheng Zhang <jszhang@kernel.org> wrote:
-> >
-> > On Mon, Sep 26, 2022 at 07:25:30AM +0800, Guo Ren wrote:
-> > > On Mon, Sep 26, 2022 at 2:03 AM Jisheng Zhang <jszhang@kernel.org> wrote:
-> > > >
-> > > > The ret_from_kernel_thread() behaves similarly with ret_from_fork(),
-> > > > the only difference is whether call the fn(arg) or not, this can be
-> > > > acchieved by testing fn is NULL or not, I.E s0 is 0 or not.
-> > > >
-> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > > ---
-> > > >  arch/riscv/kernel/entry.S   | 11 +++--------
-> > > >  arch/riscv/kernel/process.c |  5 ++---
-> > > >  2 files changed, 5 insertions(+), 11 deletions(-)
-> > > >
-> > > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > > > index 2207cf44a3bc..a3e1ed2fa2ac 100644
-> > > > --- a/arch/riscv/kernel/entry.S
-> > > > +++ b/arch/riscv/kernel/entry.S
-> > > > @@ -323,20 +323,15 @@ END(handle_kernel_stack_overflow)
-> > > >
-> > > >  ENTRY(ret_from_fork)
-> > > >         call schedule_tail
-> > > > -       move a0, sp /* pt_regs */
-> > > > -       la ra, ret_from_exception
-> > > > -       tail syscall_exit_to_user_mode
-> > > > -ENDPROC(ret_from_fork)
-> > > > -
-> > > > -ENTRY(ret_from_kernel_thread)
-> > > > -       call schedule_tail
-> > > > +       beqz s0, 1f     /* not from kernel thread */
-> >
-> > Hi Guo,
-> >
-> > > We can't use s0 as condition for ret_from_fork/ret_from_kernel_thread.
-> > > The s0=0 is also okay for ret_from_fork.
-> >
-> > IIUC, in ret_from_fork, the s0 comes p->thread.s[0] rather than s0 in
-> > pt_regs.
-> Yes, you are correct.
+On 9/9/22 12:44, Emanuele Giuseppe Esposito wrote:
+> And make kvm_set_memory_region static, since it is not used outside
+> kvm_main.c
 > 
-> >
-> > >
-> > >         /* p->thread holds context to be restored by __switch_to() */
-> > >         if (unlikely(args->fn)) {
-> > >                 /* Kernel thread */
-> > >                 memset(childregs, 0, sizeof(struct pt_regs));
-> > >                 childregs->gp = gp_in_global;
-> > >                 /* Supervisor/Machine, irqs on: */
-> > >                 childregs->status = SR_PP | SR_PIE;
-> > >
-> > >                 p->thread.ra = (unsigned long)ret_from_kernel_thread;
-> > >                 p->thread.s[0] = (unsigned long)args->fn;
-> > >                 p->thread.s[1] = (unsigned long)args->fn_arg;
-> > >         } else {
-> > >                 *childregs = *(current_pt_regs());
-> > >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> Oh, I'm wrong, It's switch_to_restore -> exception_restore.
+> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+> ---
+>   include/linux/kvm_host.h |  2 --
+>   virt/kvm/kvm_main.c      | 11 +++++------
+>   2 files changed, 5 insertions(+), 8 deletions(-)
 > 
-> > >                 if (usp) /* User fork */
-> > >                         childregs->sp = usp;
-> > >                 if (clone_flags & CLONE_SETTLS)
-> > >                         childregs->tp = tls;
-> > >                 childregs->a0 = 0; /* Return value of fork() */
-> > >                 p->thread.ra = (unsigned long)ret_from_fork;
-> > >         }
-> > >         p->thread.sp = (unsigned long)childregs; /* kernel sp */
-> > >
-> >
-> > <snip>
-> >
-> > > > @@ -182,8 +180,9 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
-> > > >                 if (clone_flags & CLONE_SETTLS)
-> > > >                         childregs->tp = tls;
-> > > >                 childregs->a0 = 0; /* Return value of fork() */
-> > > > -               p->thread.ra = (unsigned long)ret_from_fork;
-> > > > +               p->thread.s[0] = 0;
-> >
-> > Here we assign 0 to p->thread.s[0]
-> I missed that.
-> 
-> Merge thread & fork is not a good idea, and using fp as the flag is so implicit.
-> 
-> ➜  linux git:(rv64sv32) grep ret_from_fork arch -r | grep entry.S
-> arch/arc/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/arc/kernel/entry.S:END(ret_from_fork)
-> arch/csky/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/x86/kernel/process_32.c: * the task-switch, and shows up in
-> ret_from_fork in entry.S,
-> arch/alpha/kernel/entry.S:      .globl  ret_from_fork
-> arch/alpha/kernel/entry.S:      .ent    ret_from_fork
-> arch/alpha/kernel/entry.S:ret_from_fork:
-> arch/alpha/kernel/entry.S:.end ret_from_fork
-> arch/loongarch/kernel/entry.S:SYM_CODE_START(ret_from_fork)
-> arch/loongarch/kernel/entry.S:SYM_CODE_END(ret_from_fork)
-> arch/hexagon/kernel/vm_entry.S: .globl ret_from_fork
-> arch/hexagon/kernel/vm_entry.S:ret_from_fork:
-> arch/microblaze/kernel/entry.S:   (copy_thread makes ret_from_fork the
-> return address in each new thread's
-> arch/microblaze/kernel/entry.S:C_ENTRY(ret_from_fork):
-> arch/m68k/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/arm64/kernel/entry.S:SYM_CODE_START(ret_from_fork)
-> arch/arm64/kernel/entry.S:SYM_CODE_END(ret_from_fork)
-> arch/arm64/kernel/entry.S:NOKPROBE(ret_from_fork)
-> arch/riscv/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/riscv/kernel/entry.S:ENDPROC(ret_from_fork)
-> arch/s390/kernel/entry.S:# a new process exits the kernel with ret_from_fork
-> arch/s390/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/s390/kernel/entry.S:       brasl   %r14,__ret_from_fork
-> arch/s390/kernel/entry.S:ENDPROC(ret_from_fork)
-> arch/mips/kernel/entry.S:FEXPORT(ret_from_fork)
-> arch/openrisc/kernel/entry.S:   /* All syscalls return here... just
-> pay attention to ret_from_fork
-> arch/openrisc/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/openrisc/kernel/entry.S:    * that may be either schedule(),
-> ret_from_fork(), or
-> arch/nios2/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/xtensa/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/xtensa/kernel/entry.S:ENDPROC(ret_from_fork)
-> arch/sparc/kernel/entry.S:      .globl  ret_from_fork
-> arch/sparc/kernel/entry.S:ret_from_fork:
-> ➜  linux git:(rv64sv32) grep ret_from_kernel_thread arch -r | grep entry.S
-> arch/csky/kernel/entry.S:ENTRY(ret_from_kernel_thread)
-> arch/alpha/kernel/entry.S:      .globl  ret_from_kernel_thread
-> arch/alpha/kernel/entry.S:      .ent    ret_from_kernel_thread
-> arch/alpha/kernel/entry.S:ret_from_kernel_thread:
-> arch/alpha/kernel/entry.S:.end ret_from_kernel_thread
-> arch/parisc/kernel/entry.S:ENTRY(ret_from_kernel_thread)
-> arch/parisc/kernel/entry.S:END(ret_from_kernel_thread)
-> arch/loongarch/kernel/entry.S:SYM_CODE_START(ret_from_kernel_thread)
-> arch/loongarch/kernel/entry.S:SYM_CODE_END(ret_from_kernel_thread)
-> arch/microblaze/kernel/entry.S:C_ENTRY(ret_from_kernel_thread):
-> arch/m68k/kernel/entry.S:ENTRY(ret_from_kernel_thread)
-> arch/riscv/kernel/entry.S:ENTRY(ret_from_kernel_thread)
-> arch/riscv/kernel/entry.S:ENDPROC(ret_from_kernel_thread)
-> arch/mips/kernel/entry.S:FEXPORT(ret_from_kernel_thread)
-> arch/openrisc/kernel/entry.S:    * ret_from_kernel_thread().  If we
-> are returning to a new thread,
-> arch/nios2/kernel/entry.S:ENTRY(ret_from_kernel_thread)
-> arch/xtensa/kernel/entry.S:ENTRY(ret_from_kernel_thread)
-> arch/xtensa/kernel/entry.S:ENDPROC(ret_from_kernel_thread)
-> arch/sparc/kernel/entry.S:      .globl  ret_from_kernel_thread
-> arch/sparc/kernel/entry.S:ret_from_kernel_thread:
-> 
-> Many architectures use a similar style. If you want to continue the
-> patch, I think you should first rename ret_from_fork properly, and
-> give an explicit flag definition, not just setting fp = 0.
-> 
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 3b40f8d68fbb..1c5b7b2e35dd 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1108,8 +1108,6 @@ enum kvm_mr_change {
+>   	KVM_MR_FLAGS_ONLY,
+>   };
+>   
+> -int kvm_set_memory_region(struct kvm *kvm,
+> -			  const struct kvm_userspace_memory_region *mem);
+>   int __kvm_set_memory_region(struct kvm *kvm,
+>   			    const struct kvm_userspace_memory_region *mem);
+>   void kvm_arch_free_memslot(struct kvm *kvm, struct kvm_memory_slot *slot);
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index da263c370d00..339de0ed4557 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -2007,24 +2007,23 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>   }
+>   EXPORT_SYMBOL_GPL(__kvm_set_memory_region);
+>   
+> -int kvm_set_memory_region(struct kvm *kvm,
+> -			  const struct kvm_userspace_memory_region *mem)
+> +static int kvm_set_memory_region(struct kvm *kvm,
+> +				 const struct kvm_userspace_memory_region *mem)
+>   {
+>   	int r;
+>   
+> +	if ((u16)mem->slot >= KVM_USER_MEM_SLOTS)
+> +		return -EINVAL;
+> +
+>   	mutex_lock(&kvm->slots_lock);
+>   	r = __kvm_set_memory_region(kvm, mem);
+>   	mutex_unlock(&kvm->slots_lock);
+>   	return r;
+>   }
+> -EXPORT_SYMBOL_GPL(kvm_set_memory_region);
+>   
+>   static int kvm_vm_ioctl_set_memory_region(struct kvm *kvm,
+>   					  struct kvm_userspace_memory_region *mem)
+>   {
+> -	if ((u16)mem->slot >= KVM_USER_MEM_SLOTS)
+> -		return -EINVAL;
+> -
+>   	return kvm_set_memory_region(kvm, mem);
+>   }
+>   
 
-Above list also shows many architectures don't have a
-ret_from_kernel_thread, I think the reason is simple it behaves
-similarly as ret_from_fork.
-As for flag, IMHO, we may missed something as clearing the s[12]
-array in thread_struct when user fork, because s[12] may contain
-random kernel memory content, which may be finally leaked to
-userspace. This is a security hole.
+The idea here was that kvm_set_memory_region could be used to set 
+private memory slots while not taking kvm->slots_lock.
 
-A trivial patch of memset(0) can fix it, after this fix, checking the
-s[0] is straightforward.
+So, I would instead:
 
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index 67e7cd123ceb..50a0f7e4327c 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -174,6 +174,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
-                p->thread.s[0] = (unsigned long)args->fn;
-                p->thread.s[1] = (unsigned long)args->fn_arg;
-        } else {
-+               memset(&p->thread.s, 0, sizeof(p->thread.s));
-                *childregs = *(current_pt_regs());
-                if (usp) /* User fork */
-                        childregs->sp = usp;
+1) rename __kvm_set_memory_region to kvm_set_memory_region;
+
+2) inline the old kvm_set_memory_region into kvm_vm_ioctl_set_memory_region.
+
+3) replace the comment "Must be called holding kvm->slots_lock for 
+write." with a proper lockdep_assert_held() now that the function 
+doesn't have the __ warning sign in front of it.
+
+Paolo
 
