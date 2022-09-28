@@ -2,171 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C575EE9CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4C15EE9D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234629AbiI1XAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 19:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
+        id S232518AbiI1XEP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 28 Sep 2022 19:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiI1XA2 (ORCPT
+        with ESMTP id S229486AbiI1XEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 19:00:28 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655A2876BD
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:00:24 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id h8-20020a17090a054800b00205ccbae31eso4186193pjf.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=xyqBAfgMbKsG1bS9uEwWZcTc5tk+jlmU9fHypf3OEa8=;
-        b=qMlo9j6pwVeIXEkAqDxCLVfOQMlsJyt9JqKdiPj4tVyYOukDxmo7KPJTVSOVb3Ct5/
-         b9SeT7Tkpj0kN2nTqKhl9LXmHDkh+dzst1c39jqqISYEncYKk4kcsEAuhYkfKu4lqz9T
-         uQNxzE6MCKbyitvpyqhtAYC3XcitXtuaU3YnXt6aPFn9vrT+ayQlcavjLD+BAwCk30aW
-         Des3aeC/VmClpav5U1vm3DGda5wrtA8EGIIwZ+HTSc2bMIJvzOr2hJwb9TjFKYd833eN
-         gBhkvevEiaww9GmFBM9EhdUNWEL3Bail3KjZ6YTkmIWBruhQwmnN4dD7+ZuwzO9qiOr1
-         m6yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=xyqBAfgMbKsG1bS9uEwWZcTc5tk+jlmU9fHypf3OEa8=;
-        b=tTnJ6wYKDjzm2Q3pjZi3FagwqCfgjTONmTx6WclzT9zX9dGfUA1LKAZ8bpVXvVJUuN
-         RU8PPmq9aIzMl0WeEdgxXNhPxp4/w2i1SKHIIEPDwwKfe8Wd6kVXrf660kvh5Z4nf3jo
-         AOccZZESKF+pppGZsUGQraF6iHXfnq0jwpK2U8QJ8jpjVwUDVqk72zZO9aL8dUFP/2EN
-         bRJsKRIorFt85/rKwptVcoU1v3QSq0vQlrWS8R1fUrqFpdU3tFmkXxIRimDmUY6A2YP8
-         JmuMb5lHAMiV0csp16G4RgwOQHqm+LToJ4H1vbL7G0QlZRhxFlhWnEaGxk3vHtN2heyW
-         bjiw==
-X-Gm-Message-State: ACrzQf2msZBp7lRUs00SBJXRuRg0b5cIIzBSwVssJcBRpi1SSOvSSv/R
-        8f0v2DNbJxvqz+TPWoYK5I0=
-X-Google-Smtp-Source: AMsMyM4K00C1K9/RwNv26xbu6eFrQCL0UdWQJ9PWWJc0wRHtpsPsuIVgcMdBqNA7IUd7lckZty0ebA==
-X-Received: by 2002:a17:90b:3ec2:b0:202:b123:29cc with SMTP id rm2-20020a17090b3ec200b00202b12329ccmr13094369pjb.167.1664406023559;
-        Wed, 28 Sep 2022 16:00:23 -0700 (PDT)
-Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:1a91:59b8:faf:7b4f])
-        by smtp.gmail.com with ESMTPSA id 195-20020a6216cc000000b0055a9c9cfc63sm2737309pfw.201.2022.09.28.16.00.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 16:00:23 -0700 (PDT)
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>
-Cc:     Vladimir Zapolskiy <vz@mleia.com>, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] mtd: rawnand: lpc32xx_slc: switch to using gpiod API
-Date:   Wed, 28 Sep 2022 16:00:19 -0700
-Message-Id: <20220928230019.2140896-2-dmitry.torokhov@gmail.com>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-In-Reply-To: <20220928230019.2140896-1-dmitry.torokhov@gmail.com>
-References: <20220928230019.2140896-1-dmitry.torokhov@gmail.com>
+        Wed, 28 Sep 2022 19:04:12 -0400
+X-Greylist: delayed 243 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Sep 2022 16:04:12 PDT
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C82F857C8;
+        Wed, 28 Sep 2022 16:04:11 -0700 (PDT)
+Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay09.hostedemail.com (Postfix) with ESMTP id 42F1F810C9;
+        Wed, 28 Sep 2022 23:04:10 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf15.hostedemail.com (Postfix) with ESMTPA id C450B1A;
+        Wed, 28 Sep 2022 23:04:01 +0000 (UTC)
+Message-ID: <46a600465f08edbda7d413f6dd0b1b1edd57cfa4.camel@perches.com>
+Subject: Re: [PATCH 3/7] s390/qeth: Convert snprintf() to scnprintf()
+From:   Joe Perches <joe@perches.com>
+To:     Alexandra Winter <wintera@linux.ibm.com>,
+        Jules Irenge <jbi.octave@gmail.com>, borntraeger@linux.ibm.com
+Cc:     svens@linux.ibm.com, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        agordeev@linux.ibm.com
+Date:   Wed, 28 Sep 2022 16:04:07 -0700
+In-Reply-To: <cfcc8d22-8efd-8b0b-d24f-cb734f9ef927@linux.ibm.com>
+References: <YzHyniCyf+G/2xI8@fedora>
+         <5138b5a347b79a5f35b75d0babf5f41dbace879a.camel@perches.com>
+         <cfcc8d22-8efd-8b0b-d24f-cb734f9ef927@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Stat-Signature: 77c4p56xgruk3p35i1uacr4yaetb35qj
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: C450B1A
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18eEEanHqR4OnqcwMowgOsKUxuaq/Kzxbo=
+X-HE-Tag: 1664406241-228711
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This switches the driver from legacy gpio API to a newer gpiod API.
+On Wed, 2022-09-28 at 10:24 +0200, Alexandra Winter wrote:
+> On 27.09.22 16:27, Joe Perches wrote:
+> > On Mon, 2022-09-26 at 19:42 +0100, Jules Irenge wrote:
+> > > Coccinnelle reports a warning
+> > > Warning: Use scnprintf or sprintf
+> > > Adding to that, there has been a slow migration from snprintf to scnprintf.
+> > > This LWN article explains the rationale for this change
+> > > https: //lwn.net/Articles/69419/
+> > > Ie. snprintf() returns what *would* be the resulting length,
+> > > while scnprintf() returns the actual length.
+> > []
+> > > diff --git a/drivers/s390/net/qeth_core_sys.c b/drivers/s390/net/qeth_core_sys.c
+> > []
+> > > @@ -500,9 +500,9 @@ static ssize_t qeth_hw_trap_show(struct device *dev,
+> > >  	struct qeth_card *card = dev_get_drvdata(dev);
+> > >  
+> > >  	if (card->info.hwtrap)
+> > > -		return snprintf(buf, 5, "arm\n");
+> > > +		return scnprintf(buf, 5, "arm\n");
+> > >  	else
+> > > -		return snprintf(buf, 8, "disarm\n");
+> > > +		return scnprintf(buf, 8, "disarm\n");
+> > >  }
+> > 
+> > Use sysfs_emit instead.
+> > 
+> 
+> Thank you Joe, that sounds like the best way to handle this. 
+> I propose that I take this onto my ToDo list and test it in the s390 environment.
+> I will add 
+> Reported-by: Jules Irenge <jbi.octave@gmail.com>
+> Suggested-by: Joe Perches <joe@perches.com>
+> 
 
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
- drivers/mtd/nand/raw/lpc32xx_slc.c | 33 +++++++++++++++---------------
- 1 file changed, 17 insertions(+), 16 deletions(-)
+Thanks.
 
-diff --git a/drivers/mtd/nand/raw/lpc32xx_slc.c b/drivers/mtd/nand/raw/lpc32xx_slc.c
-index 6b7269cfb7d8..4702577f74e5 100644
---- a/drivers/mtd/nand/raw/lpc32xx_slc.c
-+++ b/drivers/mtd/nand/raw/lpc32xx_slc.c
-@@ -23,9 +23,8 @@
- #include <linux/mm.h>
- #include <linux/dma-mapping.h>
- #include <linux/dmaengine.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/of.h>
--#include <linux/of_gpio.h>
- #include <linux/mtd/lpc32xx_slc.h>
- 
- #define LPC32XX_MODNAME		"lpc32xx-nand"
-@@ -208,7 +207,6 @@ struct lpc32xx_nand_cfg_slc {
- 	uint32_t rwidth;
- 	uint32_t rhold;
- 	uint32_t rsetup;
--	int wp_gpio;
- 	struct mtd_partition *parts;
- 	unsigned num_parts;
- };
-@@ -217,6 +215,7 @@ struct lpc32xx_nand_host {
- 	struct nand_chip	nand_chip;
- 	struct lpc32xx_slc_platform_data *pdata;
- 	struct clk		*clk;
-+	struct gpio_desc	*wp_gpio;
- 	void __iomem		*io_base;
- 	struct lpc32xx_nand_cfg_slc *ncfg;
- 
-@@ -309,8 +308,8 @@ static int lpc32xx_nand_device_ready(struct nand_chip *chip)
-  */
- static void lpc32xx_wp_enable(struct lpc32xx_nand_host *host)
- {
--	if (gpio_is_valid(host->ncfg->wp_gpio))
--		gpio_set_value(host->ncfg->wp_gpio, 0);
-+	if (host->wp_gpio)
-+		gpiod_set_value_cansleep(host->wp_gpio, 1);
- }
- 
- /*
-@@ -318,8 +317,8 @@ static void lpc32xx_wp_enable(struct lpc32xx_nand_host *host)
-  */
- static void lpc32xx_wp_disable(struct lpc32xx_nand_host *host)
- {
--	if (gpio_is_valid(host->ncfg->wp_gpio))
--		gpio_set_value(host->ncfg->wp_gpio, 1);
-+	if (host->wp_gpio)
-+		gpiod_set_value_cansleep(host->wp_gpio, 0);
- }
- 
- /*
-@@ -764,8 +763,6 @@ static struct lpc32xx_nand_cfg_slc *lpc32xx_parse_dt(struct device *dev)
- 		return NULL;
- 	}
- 
--	ncfg->wp_gpio = of_get_named_gpio(np, "gpios", 0);
--
- 	return ncfg;
- }
- 
-@@ -852,14 +849,18 @@ static int lpc32xx_nand_probe(struct platform_device *pdev)
- 			"Missing or bad NAND config from device tree\n");
- 		return -ENOENT;
- 	}
--	if (host->ncfg->wp_gpio == -EPROBE_DEFER)
--		return -EPROBE_DEFER;
--	if (gpio_is_valid(host->ncfg->wp_gpio) && devm_gpio_request(&pdev->dev,
--			host->ncfg->wp_gpio, "NAND WP")) {
--		dev_err(&pdev->dev, "GPIO not available\n");
--		return -EBUSY;
-+
-+	/* Start with WP disabled, if available */
-+	host->wp_gpio = gpiod_get_optional(&pdev->dev, NULL, GPIOD_OUT_LOW);
-+	res = PTR_ERR_OR_ZERO(host->wp_gpio);
-+	if (res) {
-+		if (res != -EPROBE_DEFER)
-+			dev_err(&pdev->dev, "WP GPIO is not available: %d\n",
-+				res);
-+		return res;
- 	}
--	lpc32xx_wp_disable(host);
-+
-+	gpiod_set_consumer_name(host->wp_gpio, "NAND WP");
- 
- 	host->pdata = dev_get_platdata(&pdev->dev);
- 
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+btw: I was careless when I wrote one section of the proposed patch.
+
+In this patch block,
+
+@@ -467,28 +478,31 @@ static ssize_t qeth_dev_switch_attrs_show(struct device *dev,
+
+The last line
+
++	return sysfs_emit_at(buf, len, "\n");
+
+is not correct
+
+It needs to be changed to:
+
+	len += sysfs_emit_at(buf, len, "\n");
+
+	return len;
 
