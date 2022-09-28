@@ -2,72 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D22EE5EDAED
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208385EDB05
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234081AbiI1LBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
+        id S234169AbiI1LCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 07:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiI1LAt (ORCPT
+        with ESMTP id S233904AbiI1LBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:00:49 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92819816A3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:00:07 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d11so11464383pll.8
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:00:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=/lUorqWHVGRnAT88EYIdYelQLnJZ6JU0rZvIuXw4R/I=;
-        b=eFgcRFG8rZyt+ZzLjBVqt80mtlecZJilGFgBqp58JU1Th4+tjpU45u+gTrJURz6bU5
-         PZAKAIfYGUPeGJVCZmJg3vuzIfVwjnpOKC5ZUeOa4l5p7zXBugRQL+YNsLY/0707Lyn9
-         +qi4Uy0poKd8Sa4di3uUH+bWu2LaE4sKFOthWF/BkPiaa60pme+zM70DdJ8bi5BHQRrd
-         zTgZFxfVJ1KS7X/LARzkICgCaD/+fH3z7w2NTbKIQJuAcpKztxzFV3FqhvJxhvv9Ztsp
-         m+we2ILuvR+mw7GbnzjEDY/mut4/9s5b7+B54gO+wZHygWoM1S92vyJYtTH4k9+Pr7DT
-         h49g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=/lUorqWHVGRnAT88EYIdYelQLnJZ6JU0rZvIuXw4R/I=;
-        b=G8mvN0Xy4bBe9N2Vo5lyx8s+rLEWEnWpCHZrWNfpU/7iU1tkE5idE7Z7DILotQAkIA
-         3bPeqn8sN1atLB8gQargnOmToUHuZejMDnCTXfazZqw4w+2E8a4/F03BbIE0NoVZwARo
-         jI1Yomdo35Zw6K3HPBPXjm+X52/Y77ARHWf8D+9Vrs1TK4PJxEpAJ9RAzIzyqcBYG5qs
-         1KtTdXYWrJP/J3f4ge6oA3CKi2/nIrL49m2PBll8woYO9BpbYcg2cpE4mImYCgbjxZWQ
-         t68Ev9ob+24FU626hnq6BJ5V2hGjac3vOIlEn8MxUyL27nfCidd1mJf4Sx8VDB+E/U7G
-         IjLQ==
-X-Gm-Message-State: ACrzQf2I5InQMt6HFKJEsTRJ3tyt+4HItbJYguUcVImIjh7QBryRhj0X
-        2xrQez9hGffem19SwCRc+leAGQ==
-X-Google-Smtp-Source: AMsMyM7nBvyxUePl2eO0BDL+QbLpFrILFxB/8WP0FtnmYokq9Cgk3HqUDyZWcIKuWIYPint1G/hLIg==
-X-Received: by 2002:a17:902:e154:b0:17a:606:6431 with SMTP id d20-20020a170902e15400b0017a06066431mr1417596pla.107.1664362806820;
-        Wed, 28 Sep 2022 04:00:06 -0700 (PDT)
-Received: from C02F63J9MD6R.bytedance.net ([61.120.150.77])
-        by smtp.gmail.com with ESMTPSA id b13-20020a170902d50d00b00177efb56475sm1539524plg.85.2022.09.28.04.00.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 28 Sep 2022 04:00:06 -0700 (PDT)
-From:   Zhuo Chen <chenzhuo.1@bytedance.com>
-To:     sathyanarayanan.kuppuswamy@linux.intel.com, bhelgaas@google.com,
-        ruscur@russell.cc, oohall@gmail.com, fancer.lancer@gmail.com,
-        jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
-        james.smart@broadcom.com, dick.kennedy@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     chenzhuo.1@bytedance.com, linuxppc-dev@lists.ozlabs.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntb@lists.linux.dev, linux-scsi@vger.kernel.org
-Subject: [PATCH v3 1/9] PCI/AER: Add pci_aer_clear_uncorrect_error_status() to PCI core
-Date:   Wed, 28 Sep 2022 18:59:38 +0800
-Message-Id: <20220928105946.12469-2-chenzhuo.1@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20220928105946.12469-1-chenzhuo.1@bytedance.com>
-References: <20220928105946.12469-1-chenzhuo.1@bytedance.com>
+        Wed, 28 Sep 2022 07:01:08 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2081.outbound.protection.outlook.com [40.107.95.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E9AF2F;
+        Wed, 28 Sep 2022 04:00:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cCbVow0FWR8Nx4pU/bnMht8olmGE8qkA1WdPvOXavU/1ggl3hfphi71ttrg6j4R/WXgvESPTy9pv9w0bQc7JTgMJxQjyfqRfIwKFYt4rxR+W/K29X0zGIdjY5fnHoBYB6NLx/QrCbVovyOgbRZ4b8pnQv/vTxaUKZMfnm6D5arzRd66BnplY0Z/qrnuAaJaTy1qtU+aL2jVJrSLcjijc3JMbElonKaEJDGSPe5eYer3/84nzkSy468uPDEBYj5xsg0sjn2+mSH4LwXoME4UxJ3raZBnpujJXV6/aiVFVOzECmSuWurI+ssoOABd19Ar78QJf+Tt1KqKWXzxxsEMoTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ym4tP4OTWM1et2CoqxxHLdozNIqkG3Dhs/54p+MIUAA=;
+ b=OkwPlCzahOJcJVhxS1azmw2xr3A/UFhE6f+hyCfidkpDJXA1fGAFFxjWAOczzZ9xHmtee+ZfPmVgQeeBuV8Lm8+hXn1I/gpMaSe4Prp3jdLA2zEouhaE65Iq76/Dy4nriEYyIpqVqN3AzgqlK5IiGTNzLCNxkyK6HY6GwPmGx7EILudWHWcA/wjiPe7WBeFcCDcxbLeliWuF0KRF2OGhD+SQvqzM7jc7cmbaS7urA8I3TjOQzz4AWiSTtM5q5Gfeujoge0PRGl8mZ18nKcFWxC8gvpjFfFefrJBMXFcsJwZaPnGQ+B0OjRJYZxtHkC9kQJ5uJ4rRvPld1BGP24wBxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ym4tP4OTWM1et2CoqxxHLdozNIqkG3Dhs/54p+MIUAA=;
+ b=YAOMaI06ubTHaQIhfIVyL3M8U5lb41HCVe4yeYr8MO5L1zTJR8dKU61kbXIP9s2+Hrz9MlxlcS6a51kUn/gnJilYw5ejDpPvI5RjlwwgWJhKYv/NYtQxgjWH5hwNVRi59SgxjCoPA+CKI4P+p37z8xm0AjhVkauNdevYW4UKdCE=
+Received: from DM6PR13CA0059.namprd13.prod.outlook.com (2603:10b6:5:134::36)
+ by BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Wed, 28 Sep
+ 2022 11:00:53 +0000
+Received: from DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:134:cafe::9c) by DM6PR13CA0059.outlook.office365.com
+ (2603:10b6:5:134::36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.14 via Frontend
+ Transport; Wed, 28 Sep 2022 11:00:53 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT022.mail.protection.outlook.com (10.13.172.210) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5676.17 via Frontend Transport; Wed, 28 Sep 2022 11:00:53 +0000
+Received: from sindhu.amdval.net (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 28 Sep
+ 2022 06:00:47 -0500
+From:   Sandipan Das <sandipan.das@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <x86@kernel.org>
+CC:     <peterz@infradead.org>, <bp@alien8.de>, <acme@kernel.org>,
+        <namhyung@kernel.org>, <jolsa@kernel.org>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>,
+        <dave.hansen@linux.intel.com>, <like.xu.linux@gmail.com>,
+        <eranian@google.com>, <ananth.narayan@amd.com>,
+        <ravi.bangoria@amd.com>, <santosh.shukla@amd.com>,
+        <sandipan.das@amd.com>
+Subject: [PATCH v2 2/3] perf script: Show branch speculation info
+Date:   Wed, 28 Sep 2022 16:29:39 +0530
+Message-ID: <e6abd45ef59027fddec53ac818df430acfccc936.1664356751.git.sandipan.das@amd.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1664356751.git.sandipan.das@amd.com>
+References: <cover.1664356751.git.sandipan.das@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT022:EE_|BL1PR12MB5157:EE_
+X-MS-Office365-Filtering-Correlation-Id: fd97fa07-8c3c-435c-7ec6-08daa140b64e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LzndABBawJgX341RYX2OVLYD8lHz1uaGkl7u3KVyOuX8k9Y7l5Ip/pCxc/uN5OSVs5THWvcifRnic80Dune3OOtvL5WYx/uT2McZuGkNnoYVtV95gsS584Ze+yWwjNj/FUUvZVBUPNqomTvg961l1Sreq99g06l3QfKyhknDB3Z+q5tLW+RN1NUgdLdRoQVB+oauGyViF1uI3HX7XxkDxpkmQ3ZZG3/hoLm2CFtMzAxLqQH3FEbpvxZ0POtVQH7p+dVwowlhl94marM/dENAe0b0YRAqVU/aTjRC43isj+eJDmTjfZmletDGWHFgpKxqjvhVx72Nbi9YfIt1ePOv1av0JOjCbjsni3eRHRrzc0sjoA+rnIBV/VEjyQIUnSObNUXwoncp95ZHI9gzx0ew6uoEUt44/0sQywVDCrmTs1QojdlfG5BpGqcyjcSJtS6RilClbknRB0g2tBV57FLEDat8Je9KBYueNXtotzaD/+muaip2ZzgZ5l7hThFripu/FLjqtq4RedkRsuLRhKrtbqmTuf1e9TmSLkUtMt+3lL4wqjiE732nBsYRldVq7qQjonqcjBijYupb8bBFYLjsvYl4dnhJZ9uDJbcm27vHcNo6TFiqzdPWS+WJmWZ+X+gfxaFxVIWVKTByQmDjklUyogEmWHx8nbIQve0UCE0BQYsVYdFLivDbCHn1ElP5FnZWP0c19/GSa8Ee9xoHXosAPZQEdCHtMcqmvopxYTz1X7gDjcqQJ6MYxNvs2i/KPBwfmDZDOfNTlHfvFD8xfZ3jNcy3PfPrktVqqi2rBrq+8zA8Uf/mu5hfflINLlxP2fyR
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(39860400002)(396003)(451199015)(36840700001)(46966006)(40470700004)(47076005)(356005)(82310400005)(426003)(2616005)(81166007)(478600001)(316002)(70586007)(70206006)(336012)(16526019)(8676002)(4326008)(40460700003)(44832011)(2906002)(36756003)(36860700001)(110136005)(41300700001)(82740400003)(6666004)(8936002)(7416002)(5660300002)(83380400001)(186003)(26005)(86362001)(54906003)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 11:00:53.2891
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fd97fa07-8c3c-435c-7ec6-08daa140b64e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5157
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,69 +106,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In lpfc_aer_cleanup_state(), uncorrectable error status needs to be
-cleared, which can be done by calling pci_aer_clear_nonfatal_status()
-and pci_aer_clear_fatal_status(). Meanwhile they can be combined in
-one function (the same in dpc_process_error). So add
-pci_aer_clear_uncorrect_error_status() function to PCI core and
-export symbol to other modules which wants to use it.
+Show the branch speculation info if provided by the branch recording
+hardware feature. This can be useful for optimizing code further.
 
-Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+The speculation info is appended to the end of the list of fields so any
+existing tools that use "/" as a delimiter for access fields via an index
+remain unaffected. Also show "-" instead of "N/A" when speculation info
+is unavailable because "/" is used as the field separator.
+
+E.g.
+
+  $ perf record -j any,u,save_type ./test_branch
+  $ perf script --fields brstacksym
+
+Before:
+
+  [...]
+  check_match+0x60/strcmp+0x0/P/-/-/0/CALL
+  do_lookup_x+0x3c5/check_match+0x0/P/-/-/0/CALL
+  [...]
+
+After:
+
+  [...]
+  check_match+0x60/strcmp+0x0/P/-/-/0/CALL/NON_SPEC_CORRECT_PATH
+  do_lookup_x+0x3c5/check_match+0x0/P/-/-/0/CALL/NON_SPEC_CORRECT_PATH
+  [...]
+
+Signed-off-by: Sandipan Das <sandipan.das@amd.com>
 ---
- drivers/pci/pcie/aer.c | 16 ++++++++++++++++
- include/linux/aer.h    |  5 +++++
- 2 files changed, 21 insertions(+)
+ tools/perf/builtin-script.c |  5 +++--
+ tools/perf/util/branch.c    | 15 +++++++++++++++
+ tools/perf/util/branch.h    |  5 ++++-
+ tools/perf/util/evsel.c     | 15 ++++++++++++---
+ 4 files changed, 34 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index e2d8a74f83c3..4e637121be23 100644
---- a/drivers/pci/pcie/aer.c
-+++ b/drivers/pci/pcie/aer.c
-@@ -286,6 +286,22 @@ void pci_aer_clear_fatal_status(struct pci_dev *dev)
- 		pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, status);
+diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+index 886f53cfa257..5b337f47a4be 100644
+--- a/tools/perf/builtin-script.c
++++ b/tools/perf/builtin-script.c
+@@ -877,12 +877,13 @@ mispred_str(struct branch_entry *br)
+ 
+ static int print_bstack_flags(FILE *fp, struct branch_entry *br)
+ {
+-	return fprintf(fp, "/%c/%c/%c/%d/%s ",
++	return fprintf(fp, "/%c/%c/%c/%d/%s/%s ",
+ 		       mispred_str(br),
+ 		       br->flags.in_tx ? 'X' : '-',
+ 		       br->flags.abort ? 'A' : '-',
+ 		       br->flags.cycles,
+-		       get_branch_type(br));
++		       get_branch_type(br),
++		       br->flags.spec ? branch_spec_desc(br->flags.spec) : "-");
  }
  
-+int pci_aer_clear_uncorrect_error_status(struct pci_dev *dev)
-+{
-+	int aer = dev->aer_cap;
-+	u32 status;
-+
-+	if (!pcie_aer_is_native(dev))
-+		return -EIO;
-+
-+	pci_read_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, &status);
-+	if (status)
-+		pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, status);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(pci_aer_clear_uncorrect_error_status);
-+
- /**
-  * pci_aer_raw_clear_status - Clear AER error registers.
-  * @dev: the PCI device
-diff --git a/include/linux/aer.h b/include/linux/aer.h
-index 97f64ba1b34a..154690c278cb 100644
---- a/include/linux/aer.h
-+++ b/include/linux/aer.h
-@@ -45,6 +45,7 @@ struct aer_capability_regs {
- int pci_enable_pcie_error_reporting(struct pci_dev *dev);
- int pci_disable_pcie_error_reporting(struct pci_dev *dev);
- int pci_aer_clear_nonfatal_status(struct pci_dev *dev);
-+int pci_aer_clear_uncorrect_error_status(struct pci_dev *dev);
- void pci_save_aer_state(struct pci_dev *dev);
- void pci_restore_aer_state(struct pci_dev *dev);
- #else
-@@ -60,6 +61,10 @@ static inline int pci_aer_clear_nonfatal_status(struct pci_dev *dev)
- {
- 	return -EINVAL;
+ static int perf_sample__fprintf_brstack(struct perf_sample *sample,
+diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
+index 6d38238481d3..378f16a24751 100644
+--- a/tools/perf/util/branch.c
++++ b/tools/perf/util/branch.c
+@@ -212,3 +212,18 @@ int branch_type_str(struct branch_type_stat *st, char *bf, int size)
+ 
+ 	return printed;
  }
-+static inline int pci_aer_clear_uncorrect_error_status(struct pci_dev *dev)
++
++const char *branch_spec_desc(int spec)
 +{
-+	return -EINVAL;
++	const char *branch_spec_outcomes[PERF_BR_SPEC_MAX] = {
++		"N/A",
++		"SPEC_WRONG_PATH",
++		"NON_SPEC_CORRECT_PATH",
++		"SPEC_CORRECT_PATH",
++	};
++
++	if (spec >= 0 && spec < PERF_BR_SPEC_MAX)
++		return branch_spec_outcomes[spec];
++
++	return NULL;
 +}
- static inline void pci_save_aer_state(struct pci_dev *dev) {}
- static inline void pci_restore_aer_state(struct pci_dev *dev) {}
- #endif
+diff --git a/tools/perf/util/branch.h b/tools/perf/util/branch.h
+index f838b23db180..264817c96560 100644
+--- a/tools/perf/util/branch.h
++++ b/tools/perf/util/branch.h
+@@ -24,9 +24,10 @@ struct branch_flags {
+ 			u64 abort:1;
+ 			u64 cycles:16;
+ 			u64 type:4;
++			u64 spec:2;
+ 			u64 new_type:4;
+ 			u64 priv:3;
+-			u64 reserved:33;
++			u64 reserved:31;
+ 		};
+ 	};
+ };
+@@ -90,4 +91,6 @@ const char *get_branch_type(struct branch_entry *e);
+ void branch_type_stat_display(FILE *fp, struct branch_type_stat *st);
+ int branch_type_str(struct branch_type_stat *st, char *bf, int bfsize);
+ 
++const char *branch_spec_desc(int spec);
++
+ #endif /* _PERF_BRANCH_H */
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 5776bfa70f11..0266e885acb6 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -2326,7 +2326,10 @@ u64 evsel__bitfield_swap_branch_flags(u64 value)
+ 	 * 		abort:1		//transaction abort
+ 	 * 		cycles:16	//cycle count to last branch
+ 	 * 		type:4		//branch type
+-	 * 		reserved:40
++	 * 		spec:2		//branch speculation info
++	 * 		new_type:4	//additional branch type
++	 * 		priv:3		//privilege level
++	 * 		reserved:31
+ 	 * 	}
+ 	 * }
+ 	 *
+@@ -2345,7 +2348,10 @@ u64 evsel__bitfield_swap_branch_flags(u64 value)
+ 		new_val |= bitfield_swap(value, 3, 1);
+ 		new_val |= bitfield_swap(value, 4, 16);
+ 		new_val |= bitfield_swap(value, 20, 4);
+-		new_val |= bitfield_swap(value, 24, 40);
++		new_val |= bitfield_swap(value, 24, 2);
++		new_val |= bitfield_swap(value, 26, 4);
++		new_val |= bitfield_swap(value, 30, 3);
++		new_val |= bitfield_swap(value, 33, 31);
+ 	} else {
+ 		new_val = bitfield_swap(value, 63, 1);
+ 		new_val |= bitfield_swap(value, 62, 1);
+@@ -2353,7 +2359,10 @@ u64 evsel__bitfield_swap_branch_flags(u64 value)
+ 		new_val |= bitfield_swap(value, 60, 1);
+ 		new_val |= bitfield_swap(value, 44, 16);
+ 		new_val |= bitfield_swap(value, 40, 4);
+-		new_val |= bitfield_swap(value, 0, 40);
++		new_val |= bitfield_swap(value, 38, 2);
++		new_val |= bitfield_swap(value, 34, 4);
++		new_val |= bitfield_swap(value, 31, 3);
++		new_val |= bitfield_swap(value, 0, 31);
+ 	}
+ 
+ 	return new_val;
 -- 
-2.30.1 (Apple Git-130)
+2.34.1
 
