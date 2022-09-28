@@ -2,127 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674A45EE68D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 22:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2785EE68C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 22:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234528AbiI1UUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 16:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59848 "EHLO
+        id S234504AbiI1UT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 16:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234345AbiI1UTr (ORCPT
+        with ESMTP id S234346AbiI1UTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Sep 2022 16:19:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460162DD7;
-        Wed, 28 Sep 2022 13:19:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6439B821BC;
-        Wed, 28 Sep 2022 20:19:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08D5FC433C1;
-        Wed, 28 Sep 2022 20:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664396373;
-        bh=ebQnjLYFYN8w5ZtbeBDwH2D+lWjENaVVH7SS/7ucfec=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DoHRgmj3cGoFFCjxMVKp/SOAkLuEBfXoidm6NHmbibMeRFS94utwF9nJ9gMvIO8gv
-         fZU5/d3PX7WHyBKr6YKWXaYHVZnqgNHT9Rqt3NByzlp6vv8OS9APEx3JuFKmg8LhW7
-         uW+v12iCkMvAfjzukPwC8WLfvPzLjn3huBIT+nXizLehulHxch+K9Ek0DlKpHLOZAA
-         GtpLgBM5C96uQkkbnt4H8465IGXX8xU7ZjU9eGHWPbtj5J/s9B9rJJzqXrHL/pr8js
-         9/nn9G5L+BBWDqren5qKMXpourbCo6I8bMzBzeC+9In6HPOQBK19dztfkTR6vb6u2T
-         vrgWOB7jGOfRg==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] usb: gadget: uvc: Fix argument to sizeof() in uvc_register_video()
-Date:   Wed, 28 Sep 2022 13:19:21 -0700
-Message-Id: <20220928201921.3152163-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.3
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA5F2AE8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 13:19:35 -0700 (PDT)
+Received: by mail-qk1-f180.google.com with SMTP id g2so8625474qkk.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 13:19:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Q7UihWS8ORDR1BxKnz81VzSp5IRI1MlAxyRbPq+5h9k=;
+        b=jDfWZqdNXNst4wyv1ZtPvnOSEjvuH+SyUxzkTFRHkiTZSDhtnjUmY7CJmecXQlJD6v
+         f1yFJK5jan8JBKC0j8sNeIrHzHyqbZB7zAixx9lL0t6Zwa7J/UNtF/YcYkQOS03I8gKF
+         RJnkXtybzz7Wz0unkyAfGFPdB0yPZyMm4mGw2onASpx6M1x4b6S+fIPwJ4KfNYmSMHEN
+         i6at9D6Nw03D9+FPWngbo/i48pGfb80p9dtSvH27uhbLUNLRoTeHG5Wkubpx8Ymme/EE
+         ejOeDqbXR3G02MZWvpl+jcOjWqd356sBt2bJASaTh/hHBOGM6cRYuFPUJACmihU5O1aZ
+         +Tqg==
+X-Gm-Message-State: ACrzQf1bgaI1u1ruSMCXJP/juYsHjgMeE6grXSMZYuELFSjvw7BT2gDn
+        kO73F0ogSrq0jjbD/vNzxW+JJXxNOho1yg==
+X-Google-Smtp-Source: AMsMyM6CwS3+I4ZWcRsJrnyCO2433C+8pPdtVpv3qcLtgXTtwFZC+ryy7C4RLD6Ef6gmA6x77txCcQ==
+X-Received: by 2002:a37:ad12:0:b0:6cf:8235:a2a2 with SMTP id f18-20020a37ad12000000b006cf8235a2a2mr17551041qkm.189.1664396374622;
+        Wed, 28 Sep 2022 13:19:34 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id z25-20020ac81019000000b0035d432f5ba3sm3604590qti.17.2022.09.28.13.19.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 13:19:34 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 135so17295319ybl.9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 13:19:34 -0700 (PDT)
+X-Received: by 2002:a5b:506:0:b0:6af:ffac:4459 with SMTP id
+ o6-20020a5b0506000000b006afffac4459mr30086528ybp.365.1664396373995; Wed, 28
+ Sep 2022 13:19:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220927130835.1629806-1-Jason@zx2c4.com>
+In-Reply-To: <20220927130835.1629806-1-Jason@zx2c4.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 28 Sep 2022 22:19:22 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUeE-2+aAoNSMtySt6YSbbJB=OpdKD_LmuL9bDAYZgBew@mail.gmail.com>
+Message-ID: <CAMuHMdUeE-2+aAoNSMtySt6YSbbJB=OpdKD_LmuL9bDAYZgBew@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] m68k: process bootinfo records before saving them
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building s390 allmodconfig after commit 9b91a6523078 ("usb: gadget:
-uvc: increase worker prio to WQ_HIGHPRI"), the following error occurs:
+On Tue, Sep 27, 2022 at 3:09 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> The RNG seed boot record is memzeroed after processing, in order to
+> preserve forward secrecy. By saving the bootinfo for procfs prior to
+> that, forward secrecy is violated, since it becomes possible to recover
+> past states. So, save the bootinfo block only after first processing
+> them.
+>
+> Fixes: a1ee38ab1a75 ("m68k: virt: Use RNG seed from bootinfo block")
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-  In file included from ../include/linux/string.h:253,
-                   from ../include/linux/bitmap.h:11,
-                   from ../include/linux/cpumask.h:12,
-                   from ../include/linux/smp.h:13,
-                   from ../include/linux/lockdep.h:14,
-                   from ../include/linux/rcupdate.h:29,
-                   from ../include/linux/rculist.h:11,
-                   from ../include/linux/pid.h:5,
-                   from ../include/linux/sched.h:14,
-                   from ../include/linux/ratelimit.h:6,
-                   from ../include/linux/dev_printk.h:16,
-                   from ../include/linux/device.h:15,
-                   from ../drivers/usb/gadget/function/f_uvc.c:9:
-  In function ‘fortify_memset_chk’,
-      inlined from ‘uvc_register_video’ at ../drivers/usb/gadget/function/f_uvc.c:424:2:
-  ../include/linux/fortify-string.h:301:25: error: call to ‘__write_overflow_field’ declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
-    301 |                         __write_overflow_field(p_size_field, size);
-        |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+i.e. will queue in the m68k for-v6.1 branch.
 
-This points to the memset() in uvc_register_video(). It is clear that
-the argument to sizeof() is incorrect, as uvc->vdev (a 'struct
-video_device') is being zeroed out but the size of uvc->video (a 'struct
-uvc_video') is being used as the third arugment to memset().
+Gr{oetje,eeting}s,
 
-pahole shows that prior to commit 9b91a6523078 ("usb: gadget: uvc:
-increase worker prio to WQ_HIGHPRI"), 'struct video_device' and
-'struct ucv_video' had the same size, meaning that the argument to
-sizeof() is incorrect semantically but there is no visible issue:
+                        Geert
 
-  $ pahole -s build/drivers/usb/gadget/function/f_uvc.o | grep -E "(uvc_video|video_device)\s+"
-  video_device    1400    4
-  uvc_video       1400    3
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-After that change, uvc_video becomes slightly larger, meaning that the
-memset() will overwrite by 8 bytes:
-
-  $ pahole -s build/drivers/usb/gadget/function/f_uvc.o | grep -E "(uvc_video|video_device)\s+"
-  video_device    1400    4
-  uvc_video       1408    3
-
-Fix the arugment to sizeof() so that there is no overwrite.
-
-Cc: stable@vger.kernel.org
-Fixes: e4ce9ed835bc ("usb: gadget: uvc: ensure the vdev is unset")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/usb/gadget/function/f_uvc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 71669e0e4d00..86bb0098fb66 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -421,7 +421,7 @@ uvc_register_video(struct uvc_device *uvc)
- 	int ret;
- 
- 	/* TODO reference counting. */
--	memset(&uvc->vdev, 0, sizeof(uvc->video));
-+	memset(&uvc->vdev, 0, sizeof(uvc->vdev));
- 	uvc->vdev.v4l2_dev = &uvc->v4l2_dev;
- 	uvc->vdev.v4l2_dev->dev = &cdev->gadget->dev;
- 	uvc->vdev.fops = &uvc_v4l2_fops;
-
-base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
--- 
-2.37.3
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
