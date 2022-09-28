@@ -2,118 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9395ED5A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DAA5ED5AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbiI1HEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
+        id S232996AbiI1HHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231587AbiI1HET (ORCPT
+        with ESMTP id S229951AbiI1HG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:04:19 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01E3895D5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:04:18 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id b6so13301635ljr.10
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:04:18 -0700 (PDT)
+        Wed, 28 Sep 2022 03:06:56 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE91C889B;
+        Wed, 28 Sep 2022 00:06:55 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id dv25so25108301ejb.12;
+        Wed, 28 Sep 2022 00:06:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=mwAW3kmbmDfR1+nb7qnTndxnvmh/2aETOKBevREMWrQ=;
-        b=CNGqXtAcaIeBmAxYAJ0byEsnryDhT1j8LXtNEZC89v3C3ZmEx11TlPNXbVbeJLQ0Lb
-         xIhneEaU10oxpfk88fXbYcTwQe3hGzB2EYECN/HuP8YBaU1jQWFORx5CmmNBDFkjqEV7
-         5XspajX2oseOSGwGSJ5ZnZYOYJ7ABUV+EY7pyV0Chs9zaQVW5Vgb6ICcnGz0LDvqdMKQ
-         5TL57IW5VFaGQOXb9yYZ5Ii5MMxWvCQU8BO6TymtTtCOeoZbC3PtqQ/iRQSRcg4ROyc5
-         nGphflzOkRin+guhTtojX9Qw2rh42O2/AhWywFWGZi4MY1si46O+oHF25YBAnfHshgJn
-         5muw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=A5+YMGtWjt1zsaH64sHGQzeK7M+r0C7weghd3as6lXU=;
+        b=Vc0C+i0nGDBMb7MkXWuP2yrI6k9/Q9tnTA3e3II7+F5BR5g5s5X9Idt1xXd6LU0wOZ
+         Jn2wzv/fBppQYTtH3W6gUD+Z4zpspK836By8xK8e+Sc6J8lhB8pGsz0RHCRrzhMLOqCU
+         GBoPSX/kXDKJxtX2t3AMwqMxSHRCb/vtLusKowXI720np4r0dAhl/bYKsmVFetHzEA7n
+         K5r0oD0hAFjKIQgRzXRflzRRfzUkyL529QrzOD8uMOm1wZYX0ZyD8Gz/r0Ub/8K4cCKh
+         0p8i5aXYq7UUwZJSMbU2ksbHs6/l6MIEct42gbIe7XGslXkClURPgAhxxy27OTsBWXFL
+         9cHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=mwAW3kmbmDfR1+nb7qnTndxnvmh/2aETOKBevREMWrQ=;
-        b=NGXuWBZBlmB34byAGDWbocvt2oSTj+Yhtpy8jdg/fhU9JG9xHXQGqOmzP3BVJJ/k/U
-         HeabD1vHuUbVr3Kv8jfVutoDHeJP1g60sQ2b0uqrBLMcIcWm/MuNrj+HJPKvO1G1rPHR
-         q8Yu8vVMnoOlmF5pI4fZBDZ9NwPD0k4DmK8Ra0TofuODlmMlcESxKZ1W2tmRG6VS0FJu
-         ZDXGGvXvBmHdOdVKHUUwlmxt8OyNF2krWSwX2IypNs5W90D2hURxOz2LwWYy881U3xmC
-         KFMg15Rh6Wp4GLm3w/BLESwz0GxzZ40OVAOJlHUr7mOHKMl9OYHuHIMc4B/QvbJwQ7JA
-         CLZA==
-X-Gm-Message-State: ACrzQf1FzLCq+4HUPoPuixOaDeB5Dy8P6B0r8nAtcZxn7312gY0gN/PR
-        LYdQQglt4TfMTqPZ3a7Xkts9NQ==
-X-Google-Smtp-Source: AMsMyM7Iz+rfJ70a9QQjtzGMPQ27BPaw9Y+gbWPCPlqtyf14Xpi5T4/g+Oohx5FDgMEJ/lkDqJM73w==
-X-Received: by 2002:a2e:a7cf:0:b0:26c:541a:e04c with SMTP id x15-20020a2ea7cf000000b0026c541ae04cmr10820108ljp.425.1664348657257;
-        Wed, 28 Sep 2022 00:04:17 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id be12-20020a056512250c00b00492ea54beeasm385297lfb.306.2022.09.28.00.04.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 00:04:16 -0700 (PDT)
-Message-ID: <172e10ee-22fd-ccec-1a5a-7bd0a29dbfc4@linaro.org>
-Date:   Wed, 28 Sep 2022 09:04:15 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=A5+YMGtWjt1zsaH64sHGQzeK7M+r0C7weghd3as6lXU=;
+        b=0F6ryZRdr5AolQY/3VNEZN/4Po7vsFqG9MXlfsEAMI4SwoGKzJQ1g3qK8Qt8nsZlnl
+         C6jO/pSWbUxZVl38ZQ3QTN7wms/Brb+Q7KK+IA2vBJGfXdJixbe5ervFgATO8goxWYIg
+         w5KXbjm/VNg976kgSeeOEJDZfV92fTYYmgqOLccsI5hSH/ASdzKoGiZFfWHZN7ju+QHj
+         rZJtsToRKLgxlX27o+GJ5fF8fw0SrDB9NyNGmeoL2gXxGN/QdUX5HRyzKEGGud8m/rYO
+         wXQX1Pzcu4LYG51tfF4L9UrciPrfendLJgKR70U0wqhYfmf29m7PRrwjaUaGZc48/pEk
+         eFfg==
+X-Gm-Message-State: ACrzQf3bcWYRiY5cLqUlX3GtiQTdluY4K1dGxH9F98GK/bjGlrTfsLSB
+        unN6P6/PJ4lDgh8TMXEF96jAkt0hJi3ic27Dp0FaEXswhHanLNQO
+X-Google-Smtp-Source: AMsMyM48aac9VIKFH2aErX6RmHEzKyUQp7TSRvM5RRdNK9u9u3Kd47K7f1tvTTZvIUypplQcmCDXj8qu7/LrtLa7l/k=
+X-Received: by 2002:a17:906:8a6b:b0:780:ab37:b63 with SMTP id
+ hy11-20020a1709068a6b00b00780ab370b63mr25821330ejc.365.1664348814125; Wed, 28
+ Sep 2022 00:06:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2] arm64: dts: mt8192: Add vcodec lat and core nodes
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
-        <Allen-KH.Cheng@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20220926105047.19419-1-allen-kh.cheng@mediatek.com>
- <4d1e8600-f73d-8d2b-2e7a-1b75be7624bd@collabora.com>
- <d71334b63427df73d01ff1b9fa4d2dec94ad9c95.camel@mediatek.com>
- <05ed341b-2db3-620f-7a70-dcebfaa66f1a@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <05ed341b-2db3-620f-7a70-dcebfaa66f1a@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220926135922.24541-1-dzm91@hust.edu.cn> <8db6ca9c-6ceb-001e-3427-c7e320111d80@kernel.org>
+In-Reply-To: <8db6ca9c-6ceb-001e-3427-c7e320111d80@kernel.org>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Wed, 28 Sep 2022 15:04:55 +0800
+Message-ID: <CAD-N9QWXPf0_d=mEJ3c6NNfw1V9kdTm66+-jUT9heD4Z+L6kHQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: cdns3: remove dead code
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/09/2022 12:17, AngeloGioacchino Del Regno wrote:
->>>
->>
->> Sorry, my bad. I alsways run `make dtbs_check` to confirm dtb with
->> bindings. I just think we didn't limit node names in mtk-vodec
->> bindings. I will pay attention next time.
->>
->>
->> Since currently the vcodec lat and core nodes are absent from the mtk
->> dts, do you think the child node name should be changed to something
->> more general (ex: video-codec) in mediatek,vcodec-subdev-decoder
->> bindings?
-> 
-> The video codec is mt8192-vcodec-dec, while the other nodes are describing
-> the VPU instances (and/or vpu cores)... I'm not sure.
-> 
-> Krzysztof, please, can you give your opinion on that?
-> 
+On Wed, Sep 28, 2022 at 2:50 PM Roger Quadros <rogerq@kernel.org> wrote:
+>
+>
+>
+> On 26/09/2022 16:59, Dongliang Mu wrote:
+> > From: Dongliang Mu <mudongliangabcd@gmail.com>
+> >
+> > Smatch reports the following error:
+> >
+> > drivers/usb/cdns3/cdns3-plat.c:113 cdns3_plat_probe() warn:
+> > platform_get_irq() does not return zero
+> >
+> > From the document, platform_get_irq_byname_optional only returns
+> > non-zero value, and negative value on failure.
+> >
+> > Fix this by removing the zero value checking.
+> >
+> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+>
+> Reviewed-by: Roger Quadros <rogerq@kernel.org>
 
-What's the difference between them? I understand parent device is entire
-block of consisting of multiple processing units? If so, video-codec
-actually could fit in both places. But feel free to call it a bit
-different (video-codec-core, video-codec-lat, processing-unit, even
-something less generic). Sometimes it's tricky to find nice name, so I
-wouldn't worry too much in that case. Just not "mt8192-vcodec" :)
+Hi Roger,
 
-Best regards,
-Krzysztof
+By simply checking the usage of API - platform_get_irq_byname_optional,
+there are several issues in other code sites.
 
+However, some code sites are related to semantics. I will analyze all
+of them and submit patches later.
+
+>
+> > ---
+> >  drivers/usb/cdns3/cdns3-plat.c | 2 --
+> >  1 file changed, 2 deletions(-)
+> >
+> > diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
+> > index dc068e940ed5..2bc5d094548b 100644
+> > --- a/drivers/usb/cdns3/cdns3-plat.c
+> > +++ b/drivers/usb/cdns3/cdns3-plat.c
+> > @@ -110,8 +110,6 @@ static int cdns3_plat_probe(struct platform_device *pdev)
+> >       cdns->wakeup_irq = platform_get_irq_byname_optional(pdev, "wakeup");
+> >       if (cdns->wakeup_irq == -EPROBE_DEFER)
+> >               return cdns->wakeup_irq;
+> > -     else if (cdns->wakeup_irq == 0)
+> > -             return -EINVAL;
+> >
+> >       if (cdns->wakeup_irq < 0) {
+> >               dev_dbg(dev, "couldn't get wakeup irq\n");
+>
+>
+> cheers,
+> -roger
