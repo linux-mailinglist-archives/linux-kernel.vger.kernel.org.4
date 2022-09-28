@@ -2,153 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446BE5EE1B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E784E5EE1B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234412AbiI1QWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S234123AbiI1QVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234508AbiI1QV5 (ORCPT
+        with ESMTP id S233631AbiI1QVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:21:57 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C96E11FA
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:21:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 82CD21F937;
-        Wed, 28 Sep 2022 16:21:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1664382110; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=43X+KK3JJPqkxR+LhduWBK5VY3wiG0HooZmEudcIgj4=;
-        b=qPU89nQdXX3oafDIBnk8awWx9vjQ/A3F9pXlioAcH/WyBkIy8S9YiP8pSoEoh5fyZUZNPj
-        /r/OV4+EVluZIrSEthhDBOE+E0E+vm8kVyJTDKMR7TM/Knw/szcvPlifyUer7/5CZC+GZE
-        u5+o5oMXeLHxpUIZQM88fJ0mei3OOvo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1664382110;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=43X+KK3JJPqkxR+LhduWBK5VY3wiG0HooZmEudcIgj4=;
-        b=+tiijjSt5OXUnWz/QMo4mnNcRi8i3lCOwaebCFIkfu5DHYYsjEJXjX5nSQGQ2HK01Z3HlZ
-        KfQ2AGFyvUUY53DQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4404A13677;
-        Wed, 28 Sep 2022 16:21:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id oiXUD550NGMyJwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 28 Sep 2022 16:21:50 +0000
-Message-ID: <35502bdd-1a78-dea1-6ac3-6ff1bcc073fa@suse.cz>
-Date:   Wed, 28 Sep 2022 18:20:10 +0200
+        Wed, 28 Sep 2022 12:21:13 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596B42E9C2;
+        Wed, 28 Sep 2022 09:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664382072; x=1695918072;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sbiNaRFjNY6cqTyWmKgrWc9nZINoDnXdDFJWNkIE2P8=;
+  b=fF75+6Y66dbjR3bPQEeCB6xeQ6SYYlbYZYbjalXbsYBwpZCZ4V90ez17
+   sU+1TMPVWuLu7XXCjWze2ThJpmdMqPWd3jrPaT6OQe6CI+ghb+Eels6+7
+   YKC//o9rD8fOEZWmbVump6UNggARgMEVOLQdvYKneRGdNXRYAYEJKSRTl
+   DqCTLeoAOpl6y6xnyS2rIMaD9VVcG8jdko39a5Sg9B9zgBEjkjh0FmrrI
+   mahZX7XWyrXeRxDXRXozrqxQsLeCHCUyy9pd10kW6ZYbFNu1Zdq7X/5FS
+   qZgySXU6LK1qNJY6741ZQ/d+BMAR2/6a+KQVP4QqJoMMmXYUlRNooO2+L
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="288805364"
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="288805364"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 09:21:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="599634413"
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="599634413"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 28 Sep 2022 09:21:02 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C0C5E235; Wed, 28 Sep 2022 19:21:20 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>
+Subject: [PATCH v1 1/2] i2c: designware-pci: Group AMD NAVI quirk parts together
+Date:   Wed, 28 Sep 2022 19:21:15 +0300
+Message-Id: <20220928162116.66724-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: amusing SLUB compaction bug when CC_OPTIMIZE_FOR_SIZE
-To:     Joel Fernandes <joel@joelfernandes.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <ea96c78c-e1dc-1364-e91-51909f82388b@google.com>
- <YzPgTtFzpKEfwPbK@hyeyoo> <YzRQvoVsnJzsauwb@google.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <YzRQvoVsnJzsauwb@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/28/22 15:48, Joel Fernandes wrote:
-> On Wed, Sep 28, 2022 at 02:49:02PM +0900, Hyeonggon Yoo wrote:
->> On Tue, Sep 27, 2022 at 10:16:35PM -0700, Hugh Dickins wrote:
->>> It's a bug in linux-next, but taking me too long to identify which
->>> commit is "to blame", so let me throw it over to you without more
->>> delay: I think __PageMovable() now needs to check !PageSlab().
+The code is ogranazed in a way that all related parts to
+the certain platform quirk go toghether. This is not the
+case for AMD NAVI. Shuffle code to make it happen.
 
-When I tried that, the result wasn't really nice:
+While at it, drop the frequency definition and use
+hard coded value as it's done for other platforms and
+add a comment to the PCI ID list.
 
-https://lore.kernel.org/all/aec59f53-0e53-1736-5932-25407125d4d4@suse.cz/
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-designware-pcidrv.c | 30 +++++++++++-----------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-And what if there's another conflicting page "type" later. Or the 
-debugging variant of rcu_head in struct page itself. The __PageMovable() 
-is just too fragile.
-
->>> I had made a small experimental change somewhere, rebuilt and rebooted,
->>> was not surprised to crash once swapping and compaction came in,
->>> but was surprised to find the crash in isolate_movable_page(),
->>> called by compaction's isolate_migratepages_block().
->>>
->>> page->mapping was ffffffff811303aa, which qualifies as __PageMovable(),
->>> which expects struct movable_operations at page->mapping minus low bits.
->>> But ffffffff811303aa was the address of SLUB's rcu_free_slab(): I have
->>> CONFIG_CC_OPTIMIZE_FOR_SIZE=y, so function addresses may have low bits set.
->>>
->>> Over to you! Thanks,
->>> Hugh
->>
->> Wow, didn't expect this.
->> Thank you for report!
->>
->> That should be due to commit 65505d1f2338e7
->> ("mm/sl[au]b: rearrange struct slab fields to allow larger rcu_head")
->> as now rcu_head can use some bits that shares with mapping.
->>
->> Hmm IMO we have two choices...
->>
->> 1. simply drop the commit as it's only for debugging (RCU folks may not like [1])
-> 
-> Yeah definitely don't like this option as patches are out that depend on
-> this (not yet merged though). :-)
-
-But we'll have to do that for now and postpone to 6.2 I'm afraid as 
-merge window for 6.1 is too close to have confidence in any solution 
-that we came up this moment.
-
->> 2. make __PageMovable() to use true page flag, with approach [2])
-> 
-> What are the drawbacks of making it a true flag?
-
-Even if we free PageSlab, I'm sure there will be better uses of a free 
-page flag than __PageMovable.
-
-3. With frozen page allocation
-https://lore.kernel.org/all/20220809171854.3725722-1-willy@infradead.org/
-
-slab pages will have refcount 0 and compaction will skip them for that 
-reason. But it had other unresolved issues with page isolation code IIRC.
-
-> thanks,
-> 
->   - Joel
-> 
-> 
-> 
-> 
->> [1] https://lore.kernel.org/all/85afd876-d8bb-0804-b2c5-48ed3055e702@joelfernandes.org/
->> [2] https://lore.kernel.org/linux-mm/20220919125708.276864-1-42.hyeyoo@gmail.com/
->>
->> Thanks!
->>
->> -- 
->> Thanks,
->> Hyeonggon
+diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+index c001719209be..6e8a9d26563a 100644
+--- a/drivers/i2c/busses/i2c-designware-pcidrv.c
++++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+@@ -27,7 +27,6 @@
+ #include "i2c-ccgx-ucsi.h"
+ 
+ #define DRIVER_NAME "i2c-designware-pci"
+-#define AMD_CLK_RATE_HZ	100000
+ 
+ enum dw_pci_ctl_id_t {
+ 	medfield,
+@@ -100,11 +99,6 @@ static u32 mfld_get_clk_rate_khz(struct dw_i2c_dev *dev)
+ 	return 25000;
+ }
+ 
+-static u32 navi_amd_get_clk_rate_khz(struct dw_i2c_dev *dev)
+-{
+-	return AMD_CLK_RATE_HZ;
+-}
+-
+ static int mfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
+ {
+ 	struct dw_i2c_dev *dev = dev_get_drvdata(&pdev->dev);
+@@ -126,15 +120,6 @@ static int mfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
+ 	return -ENODEV;
+ }
+ 
+-static int navi_amd_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
+-{
+-	struct dw_i2c_dev *dev = dev_get_drvdata(&pdev->dev);
+-
+-	dev->flags |= MODEL_AMD_NAVI_GPU;
+-	dev->timings.bus_freq_hz = I2C_MAX_STANDARD_MODE_FREQ;
+-	return 0;
+-}
+-
+ static int mrfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
+ {
+ 	/*
+@@ -159,6 +144,20 @@ static u32 ehl_get_clk_rate_khz(struct dw_i2c_dev *dev)
+ 	return 100000;
+ }
+ 
++static u32 navi_amd_get_clk_rate_khz(struct dw_i2c_dev *dev)
++{
++	return 100000;
++}
++
++static int navi_amd_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
++{
++	struct dw_i2c_dev *dev = dev_get_drvdata(&pdev->dev);
++
++	dev->flags |= MODEL_AMD_NAVI_GPU;
++	dev->timings.bus_freq_hz = I2C_MAX_STANDARD_MODE_FREQ;
++	return 0;
++}
++
+ static struct dw_pci_controller dw_pci_controllers[] = {
+ 	[medfield] = {
+ 		.bus_num = -1,
+@@ -392,6 +391,7 @@ static const struct pci_device_id i2_designware_pci_ids[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x4bbe), elkhartlake },
+ 	{ PCI_VDEVICE(INTEL, 0x4bbf), elkhartlake },
+ 	{ PCI_VDEVICE(INTEL, 0x4bc0), elkhartlake },
++	/* AMD NAVI */
+ 	{ PCI_VDEVICE(ATI,  0x7314), navi_amd },
+ 	{ PCI_VDEVICE(ATI,  0x73a4), navi_amd },
+ 	{ PCI_VDEVICE(ATI,  0x73e4), navi_amd },
+-- 
+2.35.1
 
