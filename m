@@ -2,93 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6185ED902
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76DFB5ED906
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbiI1Jby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
+        id S233127AbiI1Jc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233860AbiI1Jbb (ORCPT
+        with ESMTP id S233778AbiI1JcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:31:31 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B47D33EE;
-        Wed, 28 Sep 2022 02:31:29 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28S9VEo9115810;
-        Wed, 28 Sep 2022 04:31:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1664357474;
-        bh=bamV10jgSCholN4PmlvQuQ/l4nJvgo3gp0ydKye83mQ=;
-        h=From:To:CC:Subject:Date;
-        b=saYZB4wbOeT8hn7A/mGHXvDCYMooWyRu4C7WjW3bCXQyO/nsenqpLLLGQH159AY5S
-         XQ2J027m7FQpeSKAs8Kg5l9ZUIsK50HW707pe15NnjRNYMMEU4o07p5YetPdqNpU3w
-         AoeAX7qxwgrRZCLCffj4dKkBGa8csl6jDuKYd+mE=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28S9VELk064227
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 28 Sep 2022 04:31:14 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 28
- Sep 2022 04:31:13 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 28 Sep 2022 04:31:13 -0500
-Received: from a0393678ub.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28S9VAei045260;
-        Wed, 28 Sep 2022 04:31:10 -0500
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-CC:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-omap@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Subject: [PATCH v2] MAINTAINERS: Add Vignesh Raghavendra as maintainer of TI DRA7XX/J721E PCI driver
-Date:   Wed, 28 Sep 2022 15:01:05 +0530
-Message-ID: <20220928093105.23073-1-kishon@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 28 Sep 2022 05:32:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35784558E3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:32:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664357526;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RKWhiaA5Wv0V2eMraFNdl4jrLjbjCkjEq9//t8SsrB0=;
+        b=MaqAMnuJ8BfdaGqo8ndBWNxw78+hQCQsiFgmXxAwYLNRzWcOb98N3WmgvpkE2Qme3jPDO0
+        giPzci2pXqJUzJHL2Hrm1Cd7vuN03XxS7lzDoQ0+925+ZJtfqjSMMVb3aDcuids1gTrI77
+        vX2lb0r2fdkyy6l//LBoa8/JB49EdAA=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-222-Rq_wVGY8NwmPu9TayD2SCw-1; Wed, 28 Sep 2022 05:32:05 -0400
+X-MC-Unique: Rq_wVGY8NwmPu9TayD2SCw-1
+Received: by mail-wr1-f72.google.com with SMTP id r22-20020adfa156000000b0022cc3018fbaso917356wrr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:32:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=RKWhiaA5Wv0V2eMraFNdl4jrLjbjCkjEq9//t8SsrB0=;
+        b=TKvgkayO/vS5lxAWi7EgQj2IQvdTtMbhMW6A56CdqXHUOsPc1AQskIAFA0YYr5LNG0
+         oWNWYSEm2DMgfoZwBA5+8OknKp5QjHawRztZgFBEna4IaYfit8Uhs5Vd2DIcsI9RlPpQ
+         xWSgRG5UMJhws7rC9xdqnIlL8t1uYjnOgU+q4EZ4Sbn34QxI56yLZvnnROpGbBPGIDZU
+         sJw3CXCj0aVaFdaTezc2WlpsNvzizqaErXlwR2AXSKno4JQrqb6DsbULscXGYCmFlQNx
+         PIWTO+FQev8LTFG0qWjMm668SCrJp8qtA5FKOlkN07KWJbPfJyOP4dTv0UaO0QrXwOp4
+         725Q==
+X-Gm-Message-State: ACrzQf1YKMcD64HSGtmH8EWsOHgL6YEPoBrKDcmSXp9NDQigtGQ+uMk+
+        hjoRQb8nhv4854KeLolwQJILD1fX4KVUxvHIDxE9XtDGSZdJEqYIEzU2kNvq7/xnsEMSZqDuZbg
+        SxNjLDN7L6VQfVRzrcHtAWg9H
+X-Received: by 2002:adf:ec09:0:b0:22c:c81b:b76a with SMTP id x9-20020adfec09000000b0022cc81bb76amr1504082wrn.302.1664357522968;
+        Wed, 28 Sep 2022 02:32:02 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7kxutijrNlyBi7mEzPyu48cri6KyE/47cghTsg07CI6Bc2dECrlSlgkIO63V29kUYGSktS1g==
+X-Received: by 2002:adf:ec09:0:b0:22c:c81b:b76a with SMTP id x9-20020adfec09000000b0022cc81bb76amr1504062wrn.302.1664357522722;
+        Wed, 28 Sep 2022 02:32:02 -0700 (PDT)
+Received: from redhat.com ([2.55.47.213])
+        by smtp.gmail.com with ESMTPSA id l13-20020a5d410d000000b0022cbcfa8447sm3829691wrp.87.2022.09.28.02.32.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 02:32:02 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 05:31:58 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Junichi Uekawa <uekawa@chromium.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Bobby Eshleman <bobby.eshleman@gmail.com>
+Subject: Re: [PATCH] vhost/vsock: Use kvmalloc/kvfree for larger packets.
+Message-ID: <20220928052738-mutt-send-email-mst@kernel.org>
+References: <20220928064538.667678-1-uekawa@chromium.org>
+ <20220928082823.wyxplop5wtpuurwo@sgarzare-redhat>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928082823.wyxplop5wtpuurwo@sgarzare-redhat>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Vignesh Raghavendra as maintainer of TI DRA7XX/J721E PCI driver.
+On Wed, Sep 28, 2022 at 10:28:23AM +0200, Stefano Garzarella wrote:
+> On Wed, Sep 28, 2022 at 03:45:38PM +0900, Junichi Uekawa wrote:
+> > When copying a large file over sftp over vsock, data size is usually 32kB,
+> > and kmalloc seems to fail to try to allocate 32 32kB regions.
+> > 
+> > Call Trace:
+> >  [<ffffffffb6a0df64>] dump_stack+0x97/0xdb
+> >  [<ffffffffb68d6aed>] warn_alloc_failed+0x10f/0x138
+> >  [<ffffffffb68d868a>] ? __alloc_pages_direct_compact+0x38/0xc8
+> >  [<ffffffffb664619f>] __alloc_pages_nodemask+0x84c/0x90d
+> >  [<ffffffffb6646e56>] alloc_kmem_pages+0x17/0x19
+> >  [<ffffffffb6653a26>] kmalloc_order_trace+0x2b/0xdb
+> >  [<ffffffffb66682f3>] __kmalloc+0x177/0x1f7
+> >  [<ffffffffb66e0d94>] ? copy_from_iter+0x8d/0x31d
+> >  [<ffffffffc0689ab7>] vhost_vsock_handle_tx_kick+0x1fa/0x301 [vhost_vsock]
+> >  [<ffffffffc06828d9>] vhost_worker+0xf7/0x157 [vhost]
+> >  [<ffffffffb683ddce>] kthread+0xfd/0x105
+> >  [<ffffffffc06827e2>] ? vhost_dev_set_owner+0x22e/0x22e [vhost]
+> >  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
+> >  [<ffffffffb6eb332e>] ret_from_fork+0x4e/0x80
+> >  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
+> > 
+> > Work around by doing kvmalloc instead.
+> > 
+> > Signed-off-by: Junichi Uekawa <uekawa@chromium.org>
 
-Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
----
-Change from v1:
-Added "PCI" in the subject and commit log.
+My worry here is that this in more of a work around.
+It would be better to not allocate memory so aggressively:
+if we are so short on memory we should probably process
+packets one at a time. Is that very hard to implement?
 
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index aef4632f4e87..ffad3f1dfe9c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15667,7 +15667,7 @@ F:	Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
- F:	drivers/pci/controller/dwc/*designware*
- 
- PCI DRIVER FOR TI DRA7XX/J721E
--M:	Kishon Vijay Abraham I <kishon@ti.com>
-+M:	Vignesh Raghavendra <vigneshr@ti.com>
- L:	linux-omap@vger.kernel.org
- L:	linux-pci@vger.kernel.org
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--- 
-2.17.1
+
+> > ---
+> > 
+> > drivers/vhost/vsock.c                   | 2 +-
+> > net/vmw_vsock/virtio_transport_common.c | 2 +-
+> > 2 files changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+> > index 368330417bde..5703775af129 100644
+> > --- a/drivers/vhost/vsock.c
+> > +++ b/drivers/vhost/vsock.c
+> > @@ -393,7 +393,7 @@ vhost_vsock_alloc_pkt(struct vhost_virtqueue *vq,
+> > 		return NULL;
+> > 	}
+> > 
+> > -	pkt->buf = kmalloc(pkt->len, GFP_KERNEL);
+> > +	pkt->buf = kvmalloc(pkt->len, GFP_KERNEL);
+> > 	if (!pkt->buf) {
+> > 		kfree(pkt);
+> > 		return NULL;
+> > diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+> > index ec2c2afbf0d0..3a12aee33e92 100644
+> > --- a/net/vmw_vsock/virtio_transport_common.c
+> > +++ b/net/vmw_vsock/virtio_transport_common.c
+> > @@ -1342,7 +1342,7 @@ EXPORT_SYMBOL_GPL(virtio_transport_recv_pkt);
+> > 
+> > void virtio_transport_free_pkt(struct virtio_vsock_pkt *pkt)
+> > {
+> > -	kfree(pkt->buf);
+> > +	kvfree(pkt->buf);
+> 
+> virtio_transport_free_pkt() is used also in virtio_transport.c and
+> vsock_loopback.c where pkt->buf is allocated with kmalloc(), but IIUC
+> kvfree() can be used with that memory, so this should be fine.
+> 
+> > 	kfree(pkt);
+> > }
+> > EXPORT_SYMBOL_GPL(virtio_transport_free_pkt);
+> > -- 
+> > 2.37.3.998.g577e59143f-goog
+> > 
+> 
+> This issue should go away with the Bobby's work about introducing sk_buff
+> [1], but we can queue this for now.
+> 
+> I'm not sure if we should do the same also in the virtio-vsock driver
+> (virtio_transport.c). Here in vhost-vsock the buf allocated is only used in
+> the host, while in the virtio-vsock driver the buffer is exposed to the
+> device emulated in the host, so it should be physically contiguous (if not,
+> maybe we need to adjust virtio_vsock_rx_fill()).
+
+More importantly it needs to support DMA API which IIUC kvmalloc
+memory does not.
+
+> So for now I think is fine to use kvmalloc only on vhost-vsock (eventually
+> we can use it also in vsock_loopback), since the Bobby's patch should rework
+> this code:
+> 
+> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+> 
+> [1] https://lore.kernel.org/lkml/65d117ddc530d12a6d47fcc45b38891465a90d9f.1660362668.git.bobby.eshleman@bytedance.com/
+> 
+> Thanks,
+> Stefano
 
