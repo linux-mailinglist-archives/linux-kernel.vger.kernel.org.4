@@ -2,209 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530765ED5CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A85DA5ED5D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbiI1HRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
+        id S233311AbiI1HTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233341AbiI1HRo (ORCPT
+        with ESMTP id S232753AbiI1HTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:17:44 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562DE85FBA;
-        Wed, 28 Sep 2022 00:17:40 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mcnlc1w6RzWgtp;
-        Wed, 28 Sep 2022 15:13:32 +0800 (CST)
-Received: from [10.174.179.163] (10.174.179.163) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 28 Sep 2022 15:17:37 +0800
-Message-ID: <27399204-e9c7-57f0-23dd-1eb420cc59dd@huawei.com>
-Date:   Wed, 28 Sep 2022 15:17:36 +0800
+        Wed, 28 Sep 2022 03:19:33 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CF986827;
+        Wed, 28 Sep 2022 00:19:29 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28S7Abku028860;
+        Wed, 28 Sep 2022 07:19:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=O9hgHb8+fOlzcHV44iEHkJrs6lWrqSeu/CKj2wc7fcg=;
+ b=fIOEXwLmTNI2xexclZB7uaKHV8Ipr7ACYcjL5+5aPmZiBATi9H6E48OIJ9fusFxjMAAQ
+ oACv5vHv7NCwQ7WK4EbZI9JjERE5n7krTkXZSREmcYvRcliQXwVMNx8rNYmoVdzdaent
+ 5/LoWAL9wRIjLcYsfh9MYH4jYvZMMpnbg1pxa8+ZiwCeLArIgsdEgz+4mPyO1FlDDgUF
+ F49lvpDcAdNs+EW8/Wzp2WmkY4Mp5iGmNDWh70ybrIgMJ0brurEgekAFtclesRtqhq19
+ cZvk6wI8Nm0A3JU7wPOoBDLrLQ9474CxUzHaXONHlkhxLw7vxP/Tx/oC0UihK1PNpt73 2w== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jvbf0gs3v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 07:19:24 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28S7JNoq010629
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 07:19:23 GMT
+Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 28 Sep 2022 00:19:18 -0700
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>
+CC:     Jonathan Marek <jonathan@marek.ca>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] drm/msm/a6xx: Replace kcalloc() with kvzalloc()
+Date:   Wed, 28 Sep 2022 12:48:59 +0530
+Message-ID: <20220928124830.1.I8ea24a8d586b4978823b848adde000f92f74d5c2@changeid>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH -next] Makefile: add implicit enum-conversion check for
- compile build
-Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-CC:     <masahiroy@kernel.org>, <michal.lkml@markovi.net>,
-        <akpm@linux-foundation.org>, <peterz@infradead.org>,
-        <keescook@chromium.org>, <davidgow@google.com>,
-        <jpoimboe@kernel.org>, <dan.j.williams@intel.com>,
-        <ojeda@kernel.org>, <isabbasso@riseup.net>,
-        <dmitrii.bundin.a@gmail.com>, <vbabka@suse.cz>,
-        <linux@rasmusvillemoes.dk>, <linux-kbuild@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <liwei391@huawei.com>,
-        <weiyongjun1@huawei.com>, clang-built-linux <llvm@lists.linux.dev>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-References: <20220927153125.811911-1-zengheng4@huawei.com>
- <CAKwvOdm2r_PPogCecGL4TMeYLq3qNkCbt7zqYTLmQf-PAQMGMg@mail.gmail.com>
- <YzMsmYTzX2Ni5zGP@dev-arch.thelio-3990X>
-From:   Zeng Heng <zengheng4@huawei.com>
-In-Reply-To: <YzMsmYTzX2Ni5zGP@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.163]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500022.china.huawei.com (7.185.36.162)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 7hPNQeTt59QRMJ-ilRfg0CsJzF7oGOHo
+X-Proofpoint-ORIG-GUID: 7hPNQeTt59QRMJ-ilRfg0CsJzF7oGOHo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-28_02,2022-09-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ mlxscore=0 priorityscore=1501 phishscore=0 impostorscore=0
+ lowpriorityscore=0 mlxlogscore=999 adultscore=0 clxscore=1011 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209280043
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In order to reduce chance of allocation failure while capturing a6xx
+gpu state, use kvzalloc() instead of kcalloc() in state_kcalloc().
 
-On 2022/9/28 1:02, Nathan Chancellor wrote:
-> On Tue, Sep 27, 2022 at 09:45:17AM -0700, Nick Desaulniers wrote:
->> On Tue, Sep 27, 2022 at 8:15 AM Zeng Heng <zengheng4@huawei.com> wrote:
->>> Provide implicit enum-conversion warning option
->>> in general build. When it set enabled, it can
->>> detect implicit enum type conversion and find
->>> potential conversion errors like below
->>> (use "allmodconfig"):
->>>
->>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.c:3904:46:
->>> error: implicit conversion from ‘enum <anonymous>’ to ‘enum odm_combine_mode’ [-Werror=enum-conversion]
->>>   3904 |       locals->ODMCombineEnablePerState[i][k] = true;
->>>        |                                              ^
->>>
->>> The '-Wenum-conversion' could be regarded as
->>> effective check on compile runtime and
->>> call attention on potential mistakes.
->>>
->>> Anothor practical example could be referred to:
->>> https://lore.kernel.org/all/CADnq5_OE0yZvEYGu82QJHL9wvVcTFZrmeTgX7URgh7FVA=jqYg@mail.gmail.com
->>>
->>> "-Wenum-conversion" was firstly introduced from
->>> GNU gcc-10.
->> What about clang? ;)
->>
->>> Although "-Wenum-conversion" could be enabled
->>> by "-Wextra" when compiling with 'W=1' option,
->>> there are many warnings generated by '-Wextra'
->>> that cause too much noise in a build.
->> With clang, I believe that -Wenum-conversion is part of -Wall or
->> -Wextra; so enabling this explicitly is only necessary for GCC.  I
->> wonder why it's not part of -Wall or -Wextra for GCC?  Perhaps worth a
->> bug report/feature request?
-> With clang, -Wenum-conversion is just default enabled, not even behind
-> -Wall:
->
-> $ cat test.c
-> enum enum1 { A = 1 };
-> enum enum2 { B = 2 };
->
-> enum enum1 foo(enum enum2 bar)
-> {
->      return bar;
-> }
->
-> $ clang -fsyntax-only test.c
-> test.c:11:9: warning: implicit conversion from enumeration type 'enum enum2' to different enumeration type 'enum enum1' [-Wenum-conversion]
->          return bar;
->          ~~~~~~ ^~~
-> 1 warning generated.
->
-> On the other hand, GCC does have it under -Wextra:
->
-> $ gcc -fsyntax-only test.c
->
-> $ gcc -Wextra -fsyntax-only test.c
-> test.c: In function ‘foo’:
-> test.c:6:16: warning: implicit conversion from ‘enum enum2’ to ‘enum enum1’ [-Wenum-conversion]
->      6 |         return bar;
->        |                ^~~
->
-> But the kernel does not build with -Wextra aside from W=[123], hence
-> this warning has to be explicitly requested for GCC.
+Indirectly, this patch helps to fix leaking memory allocated for
+gmu_debug object.
 
-Thanks to your replenish about clang.
+Fixes: b859f9b009b (drm/msm/gpu: Snapshot GMU debug buffer)
+Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+---
 
+ drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
->>> Seeing the details from the following link:
->>> https://gcc.gnu.org/onlinedocs/gcc-11.3.0/gcc/Warning-Options.html
->>>
->>> Because there are still some concerned warnings
->>> exist, the patch marks the option disabled in default
->>> for avoiding compile failed like using "allmodconfig".
-> But there is no dependency to avoid this getting enabled by allmodconfig
-> (such as 'depends on !COMPILE_TEST') so I don't see the point in the
-> current form; 'default n' does nothing to prevent it. Regardless, I
-> agree with Nick's sentiment below.
->
->>> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
->>> ---
->>>   Makefile          | 5 +++++
->>>   lib/Kconfig.debug | 7 +++++++
->>>   2 files changed, 12 insertions(+)
->>>
->>> diff --git a/Makefile b/Makefile
->>> index ebd48fc956a3..1790a3624358 100644
->>> --- a/Makefile
->>> +++ b/Makefile
->>> @@ -880,6 +880,11 @@ endif
->>>   KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
->>>   KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
->>>
->>> +# check implicit enum conversion
->>> +ifdef CONFIG_ENUM_CONVERSION
->>> +KBUILD_CFLAGS += -Wenum-conversion
->>> +endif
->> Having a kconfig for this is overkill.  cc-option with a comment about
->> the compiler default versions is the way to go.
-Got it.
-> Agreed. If there is some reason -Wenum-conversion cannot be enabled for
-> GCC right now (such as existing warnings, which the commit message
-> appears to alude to), they should be cleaned up first then
-> -Wenum-conversion should just be unconditionally enabled for all
-> compilers that support it via cc-option, not half enabled via Kconfig so
-> that maybe people will clean up the warnings. That is not how enabling
-> warnings works:
->
-> https://lore.kernel.org/CAHk-=wg-mH-_GYpkhz_psjBWG6ZcjKnPo83fg7YMj_by+-LRTQ@mail.gmail.com/
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
+index 55f4433..3c112a6 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
+@@ -91,7 +91,7 @@ struct a6xx_state_memobj {
+ static void *state_kcalloc(struct a6xx_gpu_state *a6xx_state, int nr, size_t objsize)
+ {
+ 	struct a6xx_state_memobj *obj =
+-		kzalloc((nr * objsize) + sizeof(*obj), GFP_KERNEL);
++		kvzalloc((nr * objsize) + sizeof(*obj), GFP_KERNEL);
+ 
+ 	if (!obj)
+ 		return NULL;
+@@ -819,7 +819,7 @@ static struct msm_gpu_state_bo *a6xx_snapshot_gmu_bo(
+ 
+ 	snapshot->iova = bo->iova;
+ 	snapshot->size = bo->size;
+-	snapshot->data = kvzalloc(snapshot->size, GFP_KERNEL);
++	snapshot->data = state_kcalloc(a6xx_state, 1, snapshot->size);
+ 	if (!snapshot->data)
+ 		return NULL;
+ 
+@@ -1034,14 +1034,8 @@ static void a6xx_gpu_state_destroy(struct kref *kref)
+ 	struct a6xx_gpu_state *a6xx_state = container_of(state,
+ 			struct a6xx_gpu_state, base);
+ 
+-	if (a6xx_state->gmu_log)
+-		kvfree(a6xx_state->gmu_log->data);
+-
+-	if (a6xx_state->gmu_hfi)
+-		kvfree(a6xx_state->gmu_hfi->data);
+-
+ 	list_for_each_entry_safe(obj, tmp, &a6xx_state->objs, node)
+-		kfree(obj);
++		kvfree(obj);
+ 
+ 	adreno_gpu_state_destroy(state);
+ 	kfree(a6xx_state);
+-- 
+2.7.4
 
-Have sent the patches to fix the involving warnings.
-
-If all the concerned warnings were repaired, I would send the v2 again.
-
-Thanks all.
-
->>> +
->>>   # These result in bogus false positives
->>>   KBUILD_CFLAGS += $(call cc-disable-warning, dangling-pointer)
->>>
->>> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
->>> index 4f2b81229a2f..a64e06a747d8 100644
->>> --- a/lib/Kconfig.debug
->>> +++ b/lib/Kconfig.debug
->>> @@ -417,6 +417,13 @@ config FRAME_WARN
->>>            Setting this too low will cause a lot of warnings.
->>>            Setting it to 0 disables the warning.
->>>
->>> +config ENUM_CONVERSION
->>> +       bool "Warn for implicit enum conversion"
->>> +       depends on GCC_VERSION >= 100300
->>> +       default n
->>> +       help
->>> +         Tell gcc to warn at build time for implicit enum conversion.
->>> +
->>>   config STRIP_ASM_SYMS
->>>          bool "Strip assembler-generated symbols during link"
->>>          default n
->>> --
->>> 2.25.1
->>>
->>
->> -- 
->> Thanks,
->> ~Nick Desaulniers
->>
