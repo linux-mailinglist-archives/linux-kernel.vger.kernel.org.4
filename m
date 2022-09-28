@@ -2,114 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15175ED864
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6985ED88A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbiI1JD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
+        id S233285AbiI1JL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbiI1JD1 (ORCPT
+        with ESMTP id S230140AbiI1JLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:03:27 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCC8DF6BC;
-        Wed, 28 Sep 2022 02:03:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664355807; x=1695891807;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Mul5fKbvrZirdXc2DPavwIBXeg0wFX60axpkVvIhWvw=;
-  b=G0UWz0qa0Ikj5qwlsTRDHfZjogHW9Mfk1pvjTRyXgETgPAPBJX78dN0I
-   JdjZtvM/iHmPwbnu2jnh3VeSO+jwIpE9T+PA3KFR5YE+N4xWjjiGPf+hq
-   xOHUdinVk04AwrBKjfrpNZB7k5MBVHhA3YvvUXKRogt8gVvvqIiXtP1TX
-   fYyP7V3UNws+TlU5y6i+jhzTymnzslWog32BZ9qznKbSiYLDRaV0V8jN4
-   e8HBurQ2uiHNMb1+lld258tkAZNF1vDYUl3mkLzKOvH+HyNja0PLt//vf
-   cetf6L0WBY3/rASyrbS6hmYf+m8AL8MpUVHi+4lBwuYKIdBYToY0Zg/DQ
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="182292739"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Sep 2022 02:03:27 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 28 Sep 2022 02:03:25 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 28 Sep 2022 02:03:22 -0700
-From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-To:     <netdev@vger.kernel.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
-        <edumazet@google.com>, <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>, <Ian.Saturley@microchip.com>
-Subject: [PATCH net V4] eth: lan743x: reject extts for non-pci11x1x devices
-Date:   Wed, 28 Sep 2022 14:33:11 +0530
-Message-ID: <20220928090311.93361-1-Raju.Lakkaraju@microchip.com>
+        Wed, 28 Sep 2022 05:11:18 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6521F5FF42;
+        Wed, 28 Sep 2022 02:11:11 -0700 (PDT)
+X-UUID: e624599bd10e49e7a1f6bee25eb90c5c-20220928
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=6EbUE9eXICSrLDk/g7xuI/oop7XTueJZWuVc89h51mU=;
+        b=prPVIhzbDU88s18OPlw9HRbyyvGMvOc0FMgzvnkrWu8rHU4VgWR3LEHtEST4NAbwff0QebA/BnWQvdEL3ZnW5MMZE4YS5qP6vUHCNcYJHLT8/i6Ymp/ZSXg6ukF14BUw4Fm7+GQ/L7mdybzXQ7kMEZMhs2RgVHkDKl7QgzCclxc=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:a180078f-3e6c-4d4b-b2bd-15599b4e9003,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:90
+X-CID-INFO: VERSION:1.1.11,REQID:a180078f-3e6c-4d4b-b2bd-15599b4e9003,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:90
+X-CID-META: VersionHash:39a5ff1,CLOUDID:81b34d07-1cee-4c38-b21b-a45f9682fdc0,B
+        ulkID:220928171106D7S31BD0,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|823|
+        824,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,
+        COL:0
+X-UUID: e624599bd10e49e7a1f6bee25eb90c5c-20220928
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <jianguo.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 232848167; Wed, 28 Sep 2022 17:11:03 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 28 Sep 2022 17:11:02 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 28 Sep 2022 17:11:00 +0800
+From:   Jianguo Zhang <jianguo.zhang@mediatek.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Jianguo Zhang <jianguo.zhang@mediatek.com>
+Subject: [PATCH v6 0/4]  Mediatek ethernet patches for mt8188
+Date:   Wed, 28 Sep 2022 17:10:48 +0800
+Message-ID: <20220928091052.18490-1-jianguo.zhang@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove PTP_PF_EXTTS support for non-PCI11x1x devices since they do not support
-the PTP-IO Input event triggered timestamping mechanisms added
+Changes in v6:
 
-Fixes: 60942c397af6 ("Add support for PTP-IO Event Input External  Timestamp (extts)")
+v6:
+1) Update commit message of patch 'dt-bindings: net: snps,dwmac: add new property snps,clk-csr'
+2) Add a parse for new property 'snps,clk-csr' in patch
+'net: stmmac: add a parse for new property 'snps,clk-csr''
 
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+v5:
+1) Rename the property 'clk_csr' as 'snps,clk-csr' in binding
+file as Krzysztof Kozlowski'comment.
+2) Add DTS patch 'arm64: dts: mediatek: mt2712e: Update the name of property 'clk_csr''
+as Krzysztof Kozlowski'comment.
+3) Add driver patch 'net: stmmac: Update the name of property 'clk_csr''
+as Krzysztof Kozlowski'comment.
 
-Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
----
-Changes:
-========
-V3 -> V4:
-  - Fix the Fixes tag line split
+v4:
+1) Update the commit message of patch 'dt-bindings: net: snps,dwmac: add clk_csr property'
+as Krzysztof Kozlowski'comment.
 
-V2 -> V3:
- - Correct the Fixes tag
+v3:
+1) List the names of SoCs mt8188 and mt8195 in correct order as
+AngeloGioacchino Del Regno's comment.
+2) Add patch version info as Krzysztof Kozlowski'comment.
 
-V1 -> V2:
- - Repost against net with a Fixes tag
+v2:
+1) Delete patch 'stmmac: dwmac-mediatek: add support for mt8188' as
+Krzysztof Kozlowski's comment.
+2) Update patch 'dt-bindings: net: mediatek-dwmac: add support for
+mt8188' as Krzysztof Kozlowski's comment.
+3) Add clk_csr property to fix warning ('clk_csr' was unexpected) when
+runnig 'make dtbs_check'.
 
- drivers/net/ethernet/microchip/lan743x_ptp.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+v1:
+1) Add ethernet driver entry for mt8188.
+2) Add binding document for ethernet on mt8188.
 
-diff --git a/drivers/net/ethernet/microchip/lan743x_ptp.c b/drivers/net/ethernet/microchip/lan743x_ptp.c
-index 6a11e2ceb013..da3ea905adbb 100644
---- a/drivers/net/ethernet/microchip/lan743x_ptp.c
-+++ b/drivers/net/ethernet/microchip/lan743x_ptp.c
-@@ -1049,6 +1049,10 @@ static int lan743x_ptpci_verify_pin_config(struct ptp_clock_info *ptp,
- 					   enum ptp_pin_function func,
- 					   unsigned int chan)
- {
-+	struct lan743x_ptp *lan_ptp =
-+		container_of(ptp, struct lan743x_ptp, ptp_clock_info);
-+	struct lan743x_adapter *adapter =
-+		container_of(lan_ptp, struct lan743x_adapter, ptp);
- 	int result = 0;
- 
- 	/* Confirm the requested function is supported. Parameter
-@@ -1057,7 +1061,10 @@ static int lan743x_ptpci_verify_pin_config(struct ptp_clock_info *ptp,
- 	switch (func) {
- 	case PTP_PF_NONE:
- 	case PTP_PF_PEROUT:
-+		break;
- 	case PTP_PF_EXTTS:
-+		if (!adapter->is_pci11x1x)
-+			result = -1;
- 		break;
- 	case PTP_PF_PHYSYNC:
- 	default:
--- 
-2.25.1
+Jianguo Zhang (4):
+  dt-bindings: net: mediatek-dwmac: add support for mt8188
+  dt-bindings: net: snps,dwmac: add new property snps,clk-csr
+  arm64: dts: mediatek: mt2712e: Update the name of property 'clk_csr'
+  net: stmmac: add a parse for new property 'snps,clk-csr'
+
+ .../devicetree/bindings/net/mediatek-dwmac.yaml        | 10 ++++++++--
+ Documentation/devicetree/bindings/net/snps,dwmac.yaml  |  5 +++++
+ arch/arm64/boot/dts/mediatek/mt2712e.dtsi              |  2 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c  |  4 +++-
+ 4 files changed, 17 insertions(+), 4 deletions(-)
+
 
