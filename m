@@ -2,217 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BC55ED419
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 07:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B545B5ED41E
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 07:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231981AbiI1FHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 01:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S231512AbiI1FHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 01:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiI1FG4 (ORCPT
+        with ESMTP id S231848AbiI1FHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 01:06:56 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED6EE9CDA;
-        Tue, 27 Sep 2022 22:06:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664341615; x=1695877615;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=dYR0UQknZj5gBkFxpcgbsnDzg2OoYiuGoY/nj1/K2QE=;
-  b=T/AGf/zjdAwadQnJ5Xtny7a7ArkBkrxXqlUiSP6D+PoWJ8Tu3FkAgKXv
-   MG8GA7eziKFNvWve1AKhD7V1bksr+Gc5PJpx9wwE398FlEGdJbIF9A+iU
-   JE621J89Os0wHDMLPi/RUCorm7hFAfORJJFxah20JHJtW+c2ExUZc6geQ
-   HdJdkb/mdy4iNaFfDK2Kv6gmmK6rC8rwPCKwGoBITZBjOuWDubcMye0ga
-   bVYE0aB2ftkD+CAwyO7M9Fsm9S6esJNUCXoglOBSDb/UqqzpFKSqbNEBy
-   ZoZfAKCEKohz60aT7qzVkWhgfrxvppi5GgXfOd0pgAgWlZxveTgA++o04
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="115752959"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Sep 2022 22:06:53 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 27 Sep 2022 22:06:51 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 27 Sep 2022 22:06:51 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CenHkCONtdPUgs7jSgS8bwKHgd8HlbMiwirgF4oiqp5zYQ95U90/2dKzffylnMDH6rx5OeLHpDpLXDaG23vT+2+786vChBudxpAVKv+orGJW1JEcNgrB7S0+JNzJ56S39cXzaGk2rwlCM4h9HGg2/vLzn/zuzjJdCjCgnm80HlwVGwzSarhF0Ca3Aan//Mi7V1CduxBNun7TWweQltbGQH7sSGTdYWDuQTxMa1vowIEMGqcjgAojffuX/PXugYn5LEPySKf9lOUNXvhxmXee+yhjrz0R+aXV/yipjc6sxs1Ab6tTFUpocsfqT/UFu6unZRf/J+9GsQRTK5+CHuahHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OaLOJZ69vqsne36wvghge1uUNqOmIMlFr8b6hJvpuFU=;
- b=nDIWDvT55pxkwUN7uZNkMbPQ1q6a4QSsX6CYhhGGiyPqQcGzCr4MyiEkOh8WLtRYjJSS8qH9+TmL+fS/QGsPEuxdOSZ3fJsuevYPQvDuCqk8BO86/iw8ashNMOe1xxVIrz/ZBz23QwadIet5nEyNmgk0Q6s7bk0/s93FOZxlBFdBamu8Mqk5okCL06JhdCEg8GreqFFlCUeTrUPRZT2ZQ9bBiiSeoIlUoseMkFhqeJcpF49MiCjbIKb/b97yUZM7BjvDb64pOONSQ9O0k4fVjgf6cjM108ua6yFXt6zCT4CnccyiUvZgXxguONZGmmZme2Qeq+PQ2pnSPjH3rH1NJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Wed, 28 Sep 2022 01:07:39 -0400
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2B21191B0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 22:07:38 -0700 (PDT)
+Received: by mail-ua1-x930.google.com with SMTP id i17so4253719uaq.9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 22:07:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OaLOJZ69vqsne36wvghge1uUNqOmIMlFr8b6hJvpuFU=;
- b=LcsI28K9d7BoE1hlAGBFUTQbUXrJFdaN9I5Us3Gib/DDDkTwDsxx78OZbt7pJaLsckmWk729pwJ69bNuS+h+iHBemFMcA6P2yFuBfY3DcSXNifCxhdr6p8An6SbjpWMif85uWI6kgsXt9+lBOYwsS0cwvUsMjOk6cnBOGeTuxOI=
-Received: from BYAPR11MB3366.namprd11.prod.outlook.com (2603:10b6:a03:7f::20)
- by DM4PR11MB5994.namprd11.prod.outlook.com (2603:10b6:8:5d::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.22; Wed, 28 Sep
- 2022 05:06:50 +0000
-Received: from BYAPR11MB3366.namprd11.prod.outlook.com
- ([fe80::48dd:cc88:c68d:9481]) by BYAPR11MB3366.namprd11.prod.outlook.com
- ([fe80::48dd:cc88:c68d:9481%5]) with mapi id 15.20.5654.026; Wed, 28 Sep 2022
- 05:06:49 +0000
-From:   <Raju.Lakkaraju@microchip.com>
-To:     <netdev@vger.kernel.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <Bryan.Whitehead@microchip.com>,
-        <edumazet@google.com>, <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>
-Subject: RE: [PATCH net V3] eth: lan743x: reject extts for non-pci11x1x
- devices
-Thread-Topic: [PATCH net V3] eth: lan743x: reject extts for non-pci11x1x
- devices
-Thread-Index: AQHY0ugp3CL9QYg8yk27N/OV0GDHoa30SaiA
-Date:   Wed, 28 Sep 2022 05:06:49 +0000
-Message-ID: <BYAPR11MB336659F1711CCC21DF9076629F549@BYAPR11MB3366.namprd11.prod.outlook.com>
-References: <20220928031128.123926-1-Raju.Lakkaraju@microchip.com>
-In-Reply-To: <20220928031128.123926-1-Raju.Lakkaraju@microchip.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR11MB3366:EE_|DM4PR11MB5994:EE_
-x-ms-office365-filtering-correlation-id: de242fd5-901a-45af-1b02-08daa10f4021
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2N8qzbb/wc8y66jqA+SepdUf6mNQJdaVmaoC/JQeaYfpPHw4CwF3F92NimgyX5fYmGeHUFxeWUqQRjvBa9tHwLsD5uBFzkFbNhOVm/ouEMTYLA8JREVacHLSr18BAL4GglZXpfL2JxWilqapjlXW18QgBVbhetsVoMjEkLjbJXHfWAwqy86PZWyaKpFsIQL4tQOkTPkRkwzpEkJQziq0elEahUyarJeJahj0HnRp5zXTIQ2YP1XhPkJ7XBeAd5M8I8MElCtSZuuuzCFVFR/ComrbkGGKG0jU31pQ5z7WPhkZgoh4BJJj43Pv/6VO0QDRYM7EF04Y7hbUKdGo/BtNUbVAGfV0HTV0tthyWxrrdb49YzcVIxEskEAzMNg754Th2Om/7vpqTcgVp3mVZNkYYD6/+ZsoXuHGniXoc8eCajRlUsEPrZ5jOjiyIplm3fVZmUptTImitWnQi1ZmzNMXw6XQWFWcDKlrCxDikMU5sAh+c9c763X/VY+AOj43abtIQQugDAEnR7oOGqLV9VeMEUadd0xvo+hPplWFtlpT7CICU7pvV7oWrUdvTa3Y9wVjzHKV5LNDWG2Sa6s0C+s4RpeqlhqCy5RMuI/WLk8qXK3q+h5PN2mcX3Ou8oOSd1RxlbaXN23tbl7rUt19uNdzaCjWyQ0g/zW4ajhak8UmC7ehsxe3zh5MNWFwIHkoGbB0m75ULbAqBIpVXDDUG9Ajxf8ISNvvFWcO6BaRPwPPLx24zTFAHzabvND2lWRMBxvXKfHxD5BBFlja1Eby5qc+Bw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3366.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(136003)(376002)(396003)(39860400002)(451199015)(66476007)(66446008)(316002)(55016003)(52536014)(66556008)(8936002)(41300700001)(64756008)(4326008)(5660300002)(107886003)(66946007)(53546011)(478600001)(71200400001)(9686003)(86362001)(7696005)(54906003)(6506007)(26005)(83380400001)(186003)(76116006)(6916009)(8676002)(33656002)(38100700002)(38070700005)(122000001)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fCm2vlt83TwgI2wotiPnqan/Vt6IKfDEUDtJ1CRHGl7m/S9Lwt6Ifg2CNClE?=
- =?us-ascii?Q?lYs7AmFb4mTotOGrw2RH+BRhlHHOl9D/DGxSAvyrA+fU1x+F5ipeMYoa/E+0?=
- =?us-ascii?Q?SgZhvcBZ3gXgACxKwVA5CL3Ae4SyXBz3mbFXHOhQsqcOwss7VOY3mv8+Ch9w?=
- =?us-ascii?Q?armQmMBZwPvA2DzHYTG3PRfvDkaT8+9YZmUB3aq2SdiHnO4JzD/HLqDRVbKH?=
- =?us-ascii?Q?eRvBH+G6Tu0CDCgO0Of3bXxYOS5NEbHhB6PYYEkxiygZHgIBWhLKUQZgYCNe?=
- =?us-ascii?Q?O/fmKmKGFPiJcLrHN3c/EbHqgZzZHMBqf8BLeIzDqkzGt4cfAXJlokwAeudM?=
- =?us-ascii?Q?Ypmc7WXL3HafyTTW/AdGAP8YyBoowiNEBwsr5ozfJfUSv5hHsFq6yJ8NGCLI?=
- =?us-ascii?Q?CbpSvt9iuJVDKH7mKRyJavnG+gPk4Aaono1nRSFApcvjW3abByN1U0P3PxI4?=
- =?us-ascii?Q?V9YR/S0dUlYBwQtiZ8/z/6jAvUpoC348+1k7SYjxPiHGQPf/MAo94SHnzhTL?=
- =?us-ascii?Q?sCZsviyjjBg86cFFQ5woYPNUfIHkrwDJjwrPy4kGRy6bHHXLH8VuBQJw8c3X?=
- =?us-ascii?Q?D8mviL+BcvpdzaYSlua4VztGdVL1+d7u2eaTIeSH75AIwKQE0wwytQVvNnPf?=
- =?us-ascii?Q?v0B8KcUuWA9pjj04wSV/lTuiWNOwT7ZejOSC06qWJstIt3bUg5myyLNeCAfO?=
- =?us-ascii?Q?feXlwLyt0sNaYkJegCosYZZhIgsgNok4R3vuIhLL6X9PtRV5BAhwA8BN9Os5?=
- =?us-ascii?Q?2x4wJQw5PaK4A1qBnOPdr3bHFXUVb9kMTaFCKaCGVqRA/2yns/Suvd6L0qf0?=
- =?us-ascii?Q?igqfmd0Dsx8C8CCrIqaY8vpn5/d/x7GcWu5g2/A/oBhw9dv1hKHyn6YA9Zig?=
- =?us-ascii?Q?UgWuZ/DEroHMd+XkHFI6v1YUREKEO0uzuPefiXER+texkGWRxSrTkwTjEULv?=
- =?us-ascii?Q?4DfGlsRVqSySJSHEamD0fudhTrgVIQDJSrwS9lar2tV+6toLGQEV6Sfjlo4+?=
- =?us-ascii?Q?eLmHEjjm+AntjlE16pS0KOippnSeAOook6nJ884s7e3h5O0l82B2GPAwpOJo?=
- =?us-ascii?Q?w3ZvUlqEmc7puwuEUTOc/cNxiMCnNGrRCoJgRB6L8AK2rqkAu/EPz3e0OEn5?=
- =?us-ascii?Q?PI23bOUYrOnBMo592oTPWFP49Egw7vjHDsxEm4RART4w0oRNBlA15ZqufhbT?=
- =?us-ascii?Q?11ZyZd6DyZjoo8eKke1RcXF5Yb1q11NvffogyG4djLzZnM2j+SbGphJGjR14?=
- =?us-ascii?Q?+vHTTUJAWWK61xPXIOysI211+JKTiKSGesQOW+wdnjWgeTiAEUN+bqwsjDXK?=
- =?us-ascii?Q?dt0iSCRDUiLZo2KgAd9DynZlIQ15nrW3vGR1xk33C+4I+w8cbOFkF+RMBoFt?=
- =?us-ascii?Q?fvkQYs0M+3jpukSdTl7ytYBLIHBIyNscVcO/KXhyj7TisyPVcBM79D/5K7ui?=
- =?us-ascii?Q?vNHDxD+h+3jY5v45iCackig72qftlfNtVKpSu4O4cbM5k4XdVsOydbfqzt6P?=
- =?us-ascii?Q?8x8skvXuSCakGu+VGcYaCAUM1vk98F8LBb9zdhLss4KzsBqjH69VDbWTexRX?=
- =?us-ascii?Q?5MkW+S49+5MFFr2r2/8Mj6mV7yXK6yrgmqOpPZTRaNBJUnSGBNOe9d/e9iX2?=
- =?us-ascii?Q?Tg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ErZDse3sguqUpUw6XzgHpiTQQNzhuXNPkKhtVfnhZzQ=;
+        b=cJoCqi7OhhrFteCkAl3QOi+diI9ocxp4BGJryNt+NU+k5kWgt0od7HFzIO4aQXkyM5
+         par1fQjmM6sZfZFG5ZyJdpOLD2gcEnIa81XbuYjTodPjgmmqRnzXGmApyQZFDpopJbiw
+         g5G5sukzgqfnZziXnJiWlUQJiLP2Rsfw3+n1jo9Ufc0qI1A4TReCP40CEULmJiqSiJiX
+         HEUVK3h9z08aLeb+jSQu1IZbjNJMGn20+sdscz/m9QnyWiEYGYfP21G4pK/m2zOPzNQV
+         RdG4DEHaZJzT8Vl1EYlhNOfaL7ASzerbUmZk6Rzk1ydP+Qn9aUyZP32m90rhKCnePZDL
+         7tLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ErZDse3sguqUpUw6XzgHpiTQQNzhuXNPkKhtVfnhZzQ=;
+        b=P07ao1b/UjRqb5j+FCutsHA2d3JKYNglUgAzGsd6vFUgVqmzn/YHopW3OayXjOQ51h
+         +I4dbUobSz9Dhr/oS7ffHAzkL2xyVrMRkXNeS2LmWgan5IWA42pQivRWVs1mFW7tyWVH
+         32YPgZHkJnK3Fy7iHPVU3eIakRAOgEnHKM9YFP+0wG+OIkfWU25Ql9sELOib7tE2i22C
+         DLHzw/Z4GDzA40OmGRa6Vw34OF9kpNokPHfnXSXol4VDwiBD4TB1j4ndsQTtwRuXQker
+         qXW1rtQEG71IZrRDys+uYy6cNegarLZuP1BHjWLnmgZPcInbnLl3kitBHfOoA/3i0I1u
+         AtGQ==
+X-Gm-Message-State: ACrzQf3GK2TlSmRydAhcU3jNLoStg50Wo9lqIGM+Zkubove2jVIKE0NR
+        D9BkxofijuRvL1caaEsZTDAp5DZfOLBPtUvflWoUlQ==
+X-Google-Smtp-Source: AMsMyM6yixgpzCvngqJxON6nnQhrKkEWCafoj3zuW5xGZVvP6vf4PkG32geboQC2adDTJPLNE12e1T2OoI/GhlTx8Nc=
+X-Received: by 2002:ab0:7412:0:b0:3d1:c2f7:3250 with SMTP id
+ r18-20020ab07412000000b003d1c2f73250mr2949564uap.21.1664341657124; Tue, 27
+ Sep 2022 22:07:37 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3366.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de242fd5-901a-45af-1b02-08daa10f4021
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2022 05:06:49.8526
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ak6IKY3/L8uJ5uQ1ppei1amQUvUszG5rQCNEkc9m+Zz0IwZndXkr9Ltw/QqCI0jV8kqPQsCfM+QDA4nx8cQjm0SidrzO+ok4IQdnn1xZAVM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5994
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220928040058.37422-1-khalid.masum.92@gmail.com>
+In-Reply-To: <20220928040058.37422-1-khalid.masum.92@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 28 Sep 2022 13:07:26 +0800
+Message-ID: <CABVgOSmiO9f6DdXCfg91714WBJkJ4Cdm5FewCtscxMa_Cv+8Bw@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: Kunit: Use full path to .kunitconfig
+To:     Khalid Masum <khalid.masum.92@gmail.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sadiya Kazi <sadiyakazi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Generate the patch on "net-next" branch
-Please ignore this patch.
++CC Sadiya
 
-Thanks,
-Raju
+On Wed, Sep 28, 2022 at 12:01 PM Khalid Masum <khalid.masum.92@gmail.com> wrote:
+>
+> The numbered list contains full path to every files that need to be
+> modified or created in order to implement misc-example kunit test.
+> Except for .kunitconfig. Which might make a newcommer confused about
 
------Original Message-----
-From: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>=20
-Sent: 28 September 2022 08:41 AM
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net; kuba@kernel.org; linux-kernel@vger.kernel.org; Bry=
-an Whitehead - C21958 <Bryan.Whitehead@microchip.com>; edumazet@google.com;=
- pabeni@redhat.com; UNGLinuxDriver <UNGLinuxDriver@microchip.com>
-Subject: [PATCH net V3] eth: lan743x: reject extts for non-pci11x1x devices
+Nit: Spelling of "newcomer".
 
-Remove PTP_PF_EXTTS support for non-PCI11x1x devices since they do not supp=
-ort the PTP-IO Input event triggered timestamping mechanisms added
+(I wouldn't bother sending out a new version just for this typo in the
+commit description. If you need to do another version for another
+reason, though, please fix it then.)
 
-Fixes: 60942c397af6 ("Add support for PTP-IO Event Input External  Timestam=
-p
- (extts)")
+> where the file exists. Since there are multiple .kunitconfig files.
+>
+> Fix this by using the full path to .kunitconfig.
+>
+> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+> ---
 
-Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
----
-Changes:                                                                   =
-    =20
-=3D=3D=3D=3D=3D=3D=3D=3D                                                   =
-                    =20
-V2 -> V3:
- - Correct the Fixes tag
+Thanks very much for your patch. This seems sensible to me.
 
-V1 -> V2:                                                                  =
-    =20
- - Repost against net with a Fixes tag=20
+Reviewed-by: David Gow <davidgow@google.com>
 
- drivers/net/ethernet/microchip/lan743x_ptp.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Cheers,
+-- David
 
-diff --git a/drivers/net/ethernet/microchip/lan743x_ptp.c b/drivers/net/eth=
-ernet/microchip/lan743x_ptp.c
-index 6a11e2ceb013..da3ea905adbb 100644
---- a/drivers/net/ethernet/microchip/lan743x_ptp.c
-+++ b/drivers/net/ethernet/microchip/lan743x_ptp.c
-@@ -1049,6 +1049,10 @@ static int lan743x_ptpci_verify_pin_config(struct pt=
-p_clock_info *ptp,
- 					   enum ptp_pin_function func,
- 					   unsigned int chan)
- {
-+	struct lan743x_ptp *lan_ptp =3D
-+		container_of(ptp, struct lan743x_ptp, ptp_clock_info);
-+	struct lan743x_adapter *adapter =3D
-+		container_of(lan_ptp, struct lan743x_adapter, ptp);
- 	int result =3D 0;
-=20
- 	/* Confirm the requested function is supported. Parameter @@ -1057,7 +106=
-1,10 @@ static int lan743x_ptpci_verify_pin_config(struct ptp_clock_info *p=
-tp,
- 	switch (func) {
- 	case PTP_PF_NONE:
- 	case PTP_PF_PEROUT:
-+		break;
- 	case PTP_PF_EXTTS:
-+		if (!adapter->is_pci11x1x)
-+			result =3D -1;
- 		break;
- 	case PTP_PF_PHYSYNC:
- 	default:
---
-2.25.1
-
+>  Documentation/dev-tools/kunit/start.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+> index 867a4bba6bf6..69361065cda6 100644
+> --- a/Documentation/dev-tools/kunit/start.rst
+> +++ b/Documentation/dev-tools/kunit/start.rst
+> @@ -217,7 +217,7 @@ Now we are ready to write the test cases.
+>
+>         obj-$(CONFIG_MISC_EXAMPLE_TEST) += example_test.o
+>
+> -4. Add the following lines to ``.kunitconfig``:
+> +4. Add the following lines to ``.kunit/.kunitconfig``:
+>
+>  .. code-block:: none
+>
+> --
+> 2.37.3
+>
