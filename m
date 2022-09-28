@@ -2,74 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2435EE1FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E6E5EE201
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233468AbiI1Qjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        id S233653AbiI1QkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233448AbiI1Qjj (ORCPT
+        with ESMTP id S232691AbiI1QkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:39:39 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA436101E7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:39:35 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7ee329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ee:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6D4441EC058B;
-        Wed, 28 Sep 2022 18:39:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1664383174;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=U0T8poAiUhpJC4gqL7M9xRcvJAMONfU1pvzFe2Yg4b8=;
-        b=IaRofyiUD3AvVceqV3qQ+fznUI78NT4nzg25pR3wS2PP2oLISMEoeE8whqRsM0+Hj4Sour
-        I7xVvHjDlxRnDCo/pJuBMB7KPsJWrm6c70nxqqGmGmmHzxLRcQ8cIh/ylZszMcG7XiyxZq
-        2jZwzLJ8dPGSXJ1vr5MetVkLcL4TlvA=
-Date:   Wed, 28 Sep 2022 18:39:34 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
- mtrr_aps_delayed_init
-Message-ID: <YzR4xvU+AQtPbLp2@zn.tnic>
-References: <314e3bd3-3405-c0c3-225c-646d88cbfb1a@suse.com>
- <YzOEYsqM0UEsiFuS@zn.tnic>
- <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
- <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com>
- <YzQmeh50ne8dyR2P@zn.tnic>
- <f8da6988-afa3-1e85-b47d-d91fc4113803@suse.com>
- <YzQui+rOGrM6otzp@zn.tnic>
- <c67d3887-498b-6e4d-857d-1cef7835421d@suse.com>
- <YzRyaLRqWd6YSgeJ@zn.tnic>
- <6d37c273-423c-fdce-c140-e5b90d723b9e@suse.com>
+        Wed, 28 Sep 2022 12:40:02 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595665BC1A
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:39:59 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id l65so12989514pfl.8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=o0ZtcGWZNzFvp0wcIHSx/qDwHK3W4cVWO2PGHB1LS1c=;
+        b=XZti6DE6WlXyQVPePUhXRgoWOS/rerz9MsFfOVbPOLEEBzIyws5QOPAWcdDUeGhDGE
+         u31jUF/c5MBBrGHl4oKgKG4wvvd2rEIOiVIe1k+98ZReRU44SqZqoYlQ2Id6uB089lbj
+         HvdnwKrn9UOt8dkrWlxYRLS+g3gwAqz7cK5GR9OtJf60AwnHBf6zTocLO19jgu3J7vo9
+         AXRif6rmCyWprHQo6n4mThPtrzEvHBkzEeWV7TF8ci3U2f0dFjjDryn2eHu2+ycXe5D/
+         ZfGrsUi9XDUx5x5Lnr02fExY0tVj2w8RJN4ML0c25k2FLxwLyEug4LsvCjLikEmSV+/8
+         pjmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=o0ZtcGWZNzFvp0wcIHSx/qDwHK3W4cVWO2PGHB1LS1c=;
+        b=GHnCIcT2EVBvMq6ov3u5PEpy5T0AWKvsALN1GV7HFYYwggmlayVRiEn715mGs/S6bR
+         hd010zMc7RN4BEECTXlJr2LbQWD3LeDav5F+TGANuSanVxAeWR2VD1TlQZmjpWa7UWHI
+         tb9nZXYOlDlBlLc/GtyUSiEFMP1oWLbuU/KlxhBcfYAYEktvanHKqXVC/P/7OtQEVHoz
+         +pZzLVdV+PPWYT/IloUuLUqeI/n1gw8X3+4SJVBbclMLHPAAX8pIFZth9004cvowl9fc
+         kd8ydUJcqtBcoXmPMJykzjtBGSB5BDo3mbS1p7dYuIiSYqJcffXYGeBvh88aJ4JBgwIT
+         USKw==
+X-Gm-Message-State: ACrzQf0GokBcz3vmwWk6Snf0bBmaMJmZN/gP7k3nSu9XLGY+KhEkfQFG
+        F8rewujvQCAP3ZxoyyyzUsNOd4wRX/uX2roYPicyGg==
+X-Google-Smtp-Source: AMsMyM6AUXk3l6t7gbTaADsa4xDkK4u+S0bN6AiVVAyB3own/m+Jg36aXqTk6IV6sma1lp9qsIaxjytl2gLCvI9BDNQ=
+X-Received: by 2002:a62:1ad5:0:b0:540:4830:7df6 with SMTP id
+ a204-20020a621ad5000000b0054048307df6mr34720102pfa.37.1664383198614; Wed, 28
+ Sep 2022 09:39:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6d37c273-423c-fdce-c140-e5b90d723b9e@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAKwvOdnQ4tb7auWqUoF_Mm-F9hiJotaQnP75ZDd6oPJ_1Z4qXg@mail.gmail.com>
+ <20220927222851.37550-1-ndesaulniers@google.com> <YzN6rH6wOiC8a8sN@shell.armlinux.org.uk>
+In-Reply-To: <YzN6rH6wOiC8a8sN@shell.armlinux.org.uk>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 28 Sep 2022 09:39:46 -0700
+Message-ID: <CAKwvOdkg5FccDAKMnBfX9uEw5YoEDpBvSYoBO4Y1dJT+hkGVVA@mail.gmail.com>
+Subject: Re: [PATCH v2] ARM: kprobes: move __kretprobe_trampoline to out of
+ line assembler
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Logan Chien <loganchien@google.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        sparkhuang <huangshaobo6@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 06:32:20PM +0200, Juergen Gross wrote:
-> I can do that.
+On Tue, Sep 27, 2022 at 3:35 PM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Tue, Sep 27, 2022 at 03:28:51PM -0700, Nick Desaulniers wrote:
+> > commit 1069c1dd20a3 ("ARM: 9231/1: Recover kretprobes return address for
+> > EABI stack unwinder")
+> > tickled a bug in clang's integrated assembler where the .save and .pad
+> > directives must have corresponding .fnstart directives. The integrated
+> > assembler is unaware that the compiler will be generating the .fnstart
+> > directive.
+>
+> Has it been confirmed that gcc does generate a .fnstart for naked
+> functions?
 
-Thx!
+From what I can tell, the presence of __attribute__((naked)) makes no
+difference with regards to the emission of the .fnstart directive for
+GCC.
 
--- 
-Regards/Gruss,
-    Boris.
+One thing I did notice though: https://godbolt.org/z/Mv5GEobc8
+GCC will emit .fnstart directives when -fasynchronous-unwind-tables is
+specified for C (omitting the directive otherwise), or regardless of
+-fasynchronous-unwind-tables/-fno-asynchronous-unwind-tables for C++.
+Clang will unconditionally emit .fnstart directives regardless of language mode.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+I don't see -fasynchronous-unwind-tables being specified under
+arch/arm/. But there are many instances of
+UNWIND(.fnstart)
+in various .S files under arch/arm/.
+
+https://sourceware.org/binutils/docs/as/ARM-Unwinding-Tutorial.html
+https://sourceware.org/binutils/docs/as/ARM-Directives.html#arm_005ffnstart
+
+
+>
+> --
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+
+
+
+--
+Thanks,
+~Nick Desaulniers
