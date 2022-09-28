@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D0A5EDEA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D805EDEB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234342AbiI1OVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
+        id S233430AbiI1OWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232117AbiI1OVc (ORCPT
+        with ESMTP id S232735AbiI1OW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:21:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E836CF44
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 07:21:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664374890;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ABN18yfHanO7kyNSoPzHC6Sw/2197qbN8zEEWo7VMtY=;
-        b=MxjKE2FcPFZ99MEADDR6QfYq9xpR2GmHqia6IYia5bq/P8MN8D8Na9YZW+LIbU//pzwLvT
-        in3Ez8khRzT8ursyUIx0oBg9rYXCNNghxzK2YiVdhG8qs9dBc2N5nv6BRJ1O9WRMqeVD8k
-        yMJcjwvXAJQJacXUbZAzxhzJwSTZtzE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-385-4Po2m4T6M3iV_tN-4SPZ_A-1; Wed, 28 Sep 2022 10:21:28 -0400
-X-MC-Unique: 4Po2m4T6M3iV_tN-4SPZ_A-1
-Received: by mail-wr1-f70.google.com with SMTP id p7-20020adfba87000000b0022cc6f805b1so651764wrg.21
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 07:21:28 -0700 (PDT)
+        Wed, 28 Sep 2022 10:22:26 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F130A9C0D;
+        Wed, 28 Sep 2022 07:22:22 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id v4so172118edd.5;
+        Wed, 28 Sep 2022 07:22:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=u9wjJZq8CD5pBr6UtH3ZtDZ879VTn9XWKV0kd+JEUus=;
+        b=iofXj1F6FPGbTGmrxH6dlWVAWtfsAS9xmIjuHCQsSos0wZpFieko4foPh/XdqoLefl
+         ObrAVmAlLBzm9Qyde2rDaLx1SjZbSnqVjFPiw2roXU51kvJrGD9lUVMP8T9NdeqkebXL
+         cfgh1sQoIFm+hh/i4CkPw7qxZnEZQawDJ3GIlQVLJc1+RQA41ZL6e7te6KptpAqcdB4p
+         /EJ2PFv2J+FqQaYnLZNkT406GkP3eNdDozI1wtvSggmnsDI9hL2y7cbsskaiFV1N3WAC
+         CIiHU6/BjueVTF4SczO9rYXtXX17cma9wl6cYW0VDyQVYBIHFJAnblgfPiE7kW4ORt1e
+         bTMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=ABN18yfHanO7kyNSoPzHC6Sw/2197qbN8zEEWo7VMtY=;
-        b=BLAMEERUe3bReGfgHIffhNfRUZONjeM9tAJWHmvIi47L1udtNQ7ENpH71li4zlKvxQ
-         5zK28aDk9yHuJRtGC2zK5Zo3WQjYqwcdOi6fHnOOnjLjnNXx01yKFTGwV7EouvRoWBV8
-         4JbqMWqHWJ4sDLLdbbQbanbHe57Ahk2mqyTPZV5wgUBzjvOQ88Xa4o2jgG7G9L1QADL/
-         rKXS8/qN+APAq6yp43jvOcfBK9rHMGETL2Sglt6XvubaqnfUA7yCt8dYCg2y0tYDGKnw
-         ARcB48QV/7xra+drL13bVxMGZ9tYAJI9IgrYesZGdihqoQiCM3YYqhhNcmP4c8RfQONH
-         oGWQ==
-X-Gm-Message-State: ACrzQf33epbeC/8+NmD90rQQ+S4LvEQxFFmM6wD5iszht2AbzQBlNn20
-        /h2ZqcK76yv2sp0YVdgX0QdG5OIfoFPzPMaYB0QUeFGk62wpxK4vGt8xYffa+CcTb0BBB4joHQ6
-        9DtlwcijsmHFZ/SDQSmgnZsYC
-X-Received: by 2002:a05:6000:15c5:b0:22a:49be:8000 with SMTP id y5-20020a05600015c500b0022a49be8000mr20744029wry.664.1664374886297;
-        Wed, 28 Sep 2022 07:21:26 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4tIcpuiIyedOneJ1v6hq/Mzp3X1zKbADLxiYOcp0L2BRdElXCAhDOsv8YxCZ/j66uq4QtC2w==
-X-Received: by 2002:a05:6000:15c5:b0:22a:49be:8000 with SMTP id y5-20020a05600015c500b0022a49be8000mr20744010wry.664.1664374885974;
-        Wed, 28 Sep 2022 07:21:25 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:1100:add9:5f61:6b94:7540? (p200300cbc7041100add95f616b947540.dip0.t-ipconnect.de. [2003:cb:c704:1100:add9:5f61:6b94:7540])
-        by smtp.gmail.com with ESMTPSA id bg14-20020a05600c3c8e00b003b341a2cfadsm1860497wmb.17.2022.09.28.07.21.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 07:21:25 -0700 (PDT)
-Message-ID: <c4462af8-80a5-6cb6-8bfc-0e7ff1da6856@redhat.com>
-Date:   Wed, 28 Sep 2022 16:21:23 +0200
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=u9wjJZq8CD5pBr6UtH3ZtDZ879VTn9XWKV0kd+JEUus=;
+        b=yhxrjePy2Xc4ycj9wwD5xB8XAMifmoP+WuBVDqi5aiFz39H1D3jwNGjQR7Cs+VLlXX
+         CNwuqs04W1JVrXoxdZnvmNu2ST0EE7R0OgmnWbqYFA4n05AuHA71XrNsjbfNvwji7j5i
+         T5Q+nvW+SYCaqitMEWmfj/d+5aeL2eJMzAKgLdKnrRGOE8tVJ1dpMFAZNk04bmuQbcdg
+         YFu9gn0QpaxbSgXGwTay8cjxgXUwZR9kCsSq24avqN7mS7WAumtYj/gdXIJi0yjboQxt
+         pVfTtdeZwnykE26Izw5RwZs2S38E7dG43UFxmuQ8smIzQkcULjBGG1vowpIoCk/1qyhy
+         SzwQ==
+X-Gm-Message-State: ACrzQf0Gz7XtayfhnwPmy5TaPHIgHKV924ENDs7zcURhhW8xni9SHR+E
+        O9jOn8Spy0o3gwWiSzNNASo=
+X-Google-Smtp-Source: AMsMyM7RU95I1QairBTe4wyvRGXj4daJnqV/Hp5fSP2BNlGtXOew99QbPC13N5rLHRtLtLDixFPzWw==
+X-Received: by 2002:a05:6402:27ca:b0:451:7b58:1b01 with SMTP id c10-20020a05640227ca00b004517b581b01mr34300686ede.61.1664374940628;
+        Wed, 28 Sep 2022 07:22:20 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id n2-20020a17090695c200b0073cf6ec3276sm2395824ejy.207.2022.09.28.07.22.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 07:22:19 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 16:22:18 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/7] pwm: lpss: Clean up and convert to a pure library
+Message-ID: <YzRYmtcsdW6iSC0L@orome>
+References: <20220927162421.11052-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 0/3] THP Shrinker
-Content-Language: en-US
-To:     alexlzhu@fb.com, linux-mm@kvack.org
-Cc:     willy@infradead.org, akpm@linux-foundation.org, riel@surriel.com,
-        hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-References: <cover.1664347167.git.alexlzhu@fb.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <cover.1664347167.git.alexlzhu@fb.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="FBdDYJFlTkO+Z7cq"
+Content-Disposition: inline
+In-Reply-To: <20220927162421.11052-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,69 +75,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.09.22 08:44, alexlzhu@fb.com wrote:
-> From: Alexander Zhu <alexlzhu@fb.com>
-> 
-> Transparent Hugepages use a larger page size of 2MB in comparison to
-> normal sized pages that are 4kb. A larger page size allows for fewer TLB
-> cache misses and thus more efficient use of the CPU. Using a larger page
-> size also results in more memory waste, which can hurt performance in some
-> use cases. THPs are currently enabled in the Linux Kernel by applications
-> in limited virtual address ranges via the madvise system call.  The THP
-> shrinker tries to find a balance between increased use of THPs, and
-> increased use of memory. It shrinks the size of memory by removing the
-> underutilized THPs that are identified by the thp_utilization scanner.
-> 
-> In our experiments we have noticed that the least utilized THPs are almost
-> entirely unutilized.
-> 
-> Sample Output:
-> 
-> Utilized[0-50]: 1331 680884
-> Utilized[51-101]: 9 3983
-> Utilized[102-152]: 3 1187
-> Utilized[153-203]: 0 0
-> Utilized[204-255]: 2 539
-> Utilized[256-306]: 5 1135
-> Utilized[307-357]: 1 192
-> Utilized[358-408]: 0 0
-> Utilized[409-459]: 1 57
-> Utilized[460-512]: 400 13
-> Last Scan Time: 223.98s
-> Last Scan Duration: 70.65s
-> 
-> Above is a sample obtained from one of our test machines when THP is always
-> enabled. Of the 1331 THPs in this thp_utilization sample that have from
-> 0-50 utilized subpages, we see that there are 680884 free pages. This
-> comes out to 680884 / (512 * 1331) = 99.91% zero pages in the least
-> utilized bucket. This represents 680884 * 4KB = 2.7GB memory waste.
-> 
-> Also note that the vast majority of pages are either in the least utilized
-> [0-50] or most utilized [460-512] buckets. The least utilized THPs are
-> responsible for almost all of the memory waste when THP is always
-> enabled. Thus by clearing out THPs in the lowest utilization bucket
-> we extract most of the improvement in CPU efficiency. We have seen
-> similar results on our production hosts.
-> 
-> This patchset introduces the THP shrinker we have developed to identify
-> and split the least utilized THPs. It includes the thp_utilization
-> changes that groups anonymous THPs into buckets, the split_huge_page()
-> changes that identify and zap zero 4KB pages within THPs and the shrinker
-> changes. It should be noted that the split_huge_page() changes are based
-> off previous work done by Yu Zhao.
-> 
-> In the future, we intend to allow additional tuning to the shrinker
-> based on workload depending on CPU/IO/Memory pressure and the
-> amount of anonymous memory. The long term goal is to eventually always
-> enable THP for all applications and deprecate madvise entirely.
-> 
-> In production we thus far have observed 2-3% reduction in overall cpu
-> usage on stateless web servers when THP is always enabled.
 
-What's the diff to the RFC?
+--FBdDYJFlTkO+Z7cq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Thanks,
+On Tue, Sep 27, 2022 at 07:24:14PM +0300, Andy Shevchenko wrote:
+> First of all, a set of cleanups and code deduplications (for better
+> maintenance) to the PWM LPSS driver.
+>=20
+> Second, we may (re-)use the core part as a library in the future in
+> the devices that combine the same PWM IP in their address space. So
+> convert the core file to be a pure library which doesn't require any
+> special resource handling or alike.
+>=20
+> Changelog v4:
+> - dropped the forward declaration use patch, seems too many questions to =
+it
+>=20
+> Changelog v3:
+> - postponed last patch until we have a new user
+> - added tags (Uwe, Hans)
+> - expanded commit message on why forward declarations are preferred over
+>   full header inclusions
+>=20
+> Changelog v2:
+> - replace patch 1 by Uwe's version (Uwe)
+> - update NS patch to have a default namespace defined (Uwe)
+> - describe all changes done in patch 4 (Uwe)
+>=20
+>=20
+> Andy Shevchenko (6):
+>   pwm: lpss: Move exported symbols to PWM_LPSS namespace
+>   pwm: lpss: Move resource mapping to the glue drivers
+>   pwm: lpss: Use device_get_match_data to get device data
+>   pwm: lpss: Use DEFINE_RUNTIME_DEV_PM_OPS() and pm_ptr() macros
+>   pwm: lpss: Make use of bits.h macros for all masks
+>   pwm: lpss: Add a comment to the bypass field
+>=20
+> Uwe Kleine-K=C3=B6nig (1):
+>   pwm: lpss: Deduplicate board info data structures
+>=20
+>  drivers/pwm/pwm-lpss-pci.c      | 48 ++++++++-------------------------
+>  drivers/pwm/pwm-lpss-platform.c | 40 +++++++--------------------
+>  drivers/pwm/pwm-lpss.c          | 46 ++++++++++++++++++++++++++-----
+>  drivers/pwm/pwm-lpss.h          | 12 ++++++++-
+>  4 files changed, 72 insertions(+), 74 deletions(-)
 
-David / dhildenb
+Series applied, thanks.
 
+Thierry
+
+--FBdDYJFlTkO+Z7cq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmM0WJoACgkQ3SOs138+
+s6EJ3Q//cLMA4RgbfX+R58GsagonQvGhb7SDUFrl/kp20S5R4/7pAM29N1PI6VUh
+W3QEp9vDdvoE1QH1Ibvn9hYXP9TQ9N17EpQpyt002y053kDERsNafzbuetIUwrff
+RHM0OH/wybnTDrGXGxSVVwkJx7jNt4AcQeKIdQxHZa3W3HN1I3g9xc1Sa1wS1q34
+42Sit5MKKBROWaodkNsVY+XJyL0cW7W6dhDQ4EnAHnckH3+WQaby4SZA/KaR+E2T
+IQfmrxczWtRSk8mXjhzq59Ct/MBpggJU8dsQLTwVcMnDHtIigSRv6CqNxt73jaFm
+Sidwx6yJFQ6ANVf1VoGqBQv2ZwnMZl7E0Yxzv9plWy9sLBoA2NUY4czEFu1RTOJE
+cs4f8YpiC8TMJ1z/LdOM1cOwKDIIrXZJCnmUYHlr0S+aSdXa1lPtf+MOxAiwuoSe
+kmcIEGIn7W/2ZmO0Vn8imS45q6lwceVtFYirSSJzbO9D7hluePWQbCKn2zXKI+1Z
+2/trDTaMV1N2roFSReffwHh4RbpJkh/1E4+FDkmRwVlkJiSc4Vz8KmBGtYPu0Zxp
+blH0JPpt0pK9bZ38Gypy9AWpRqTcPJlUKBkXUFrFkHYxkzDpIT21h3XsvNoKOu0S
+Vm4FP5ZASLWwt8AyWhWQx/jzdsuCf5e9v6RoFTP6OaD9fUqtuho=
+=tzQF
+-----END PGP SIGNATURE-----
+
+--FBdDYJFlTkO+Z7cq--
