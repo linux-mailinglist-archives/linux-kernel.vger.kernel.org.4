@@ -2,433 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6685EE65A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 22:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 483795EE654
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 22:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiI1UBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 16:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
+        id S234763AbiI1UAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 16:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234504AbiI1UAX (ORCPT
+        with ESMTP id S234734AbiI1UAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 16:00:23 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C981F620;
-        Wed, 28 Sep 2022 12:59:45 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.49.177]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MwwqB-1pT0TL06W3-00yP2d; Wed, 28 Sep 2022 21:59:20 +0200
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id 9FB173C184;
-        Wed, 28 Sep 2022 21:59:18 +0200 (CEST)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 4051E41C6; Wed, 28 Sep 2022 21:59:16 +0200 (CEST)
-Date:   Wed, 28 Sep 2022 21:59:16 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH v3 5/7] kbuild: unify two modpost invocations
-Message-ID: <YzSnlIChHmKdKFt8@bergen.fjasle.eu>
-References: <20220924181915.3251186-1-masahiroy@kernel.org>
- <20220924181915.3251186-6-masahiroy@kernel.org>
+        Wed, 28 Sep 2022 16:00:17 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501E36548
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 12:59:37 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id 63so13793000vse.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 12:59:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=bNBXUpwCRetsQx/CjiQ5MTNGvBxI62ICWnIfR5fYVR0=;
+        b=eHI2GPhZ9atU/jeBAlDY6MuX29HnlkE9quVBBquGvhaei7UJchFOKrBCPJlYOoylhI
+         zd8/nX5IxU+ouRrpUSd1N5611DIlhjTKMOMZ0uzYqYMBV4Hl7TRn2gK41ug2QM14PANb
+         +HFAsYAtwuHkV3mADALm8oWvfsMFqRBohUzvA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=bNBXUpwCRetsQx/CjiQ5MTNGvBxI62ICWnIfR5fYVR0=;
+        b=I73mfkj0eoLESQHvY36APS1V+5qi6ndrdX/fUj1dpJzd3iCVcS3xD2YcKlhCLISJQw
+         0bPIb4r2fs/TQ/14QTxOWuwwdV/9IBBlocIwiXV8laGRhQbBliMucfmrnJLzEN8xe/Cj
+         lojVb2pvfGwDsgXmq99+dGPd1Z7NM/Wl/cuWmyld763cNx0NiFT0yNiHOSTn7XGV4taw
+         13VzV8FJlv8Wfmv+gwsUhlIqSeXTnTvvQMWVRdSXNpQN3kp0b8yQX0qDzqwhM8I4qy0+
+         x5vILPzOUKgPOFgiFpO2QDPs4YT90pkXs5Y/LpNld0ex/FvdJPEcmBO1IR1syKELWfTq
+         Ku/g==
+X-Gm-Message-State: ACrzQf2Hz8IBzCCZupZD6cBAFd6Y5TRw/8CUXziAsxGkqw7ClSoVUKZ0
+        B53Quuf9yRjphGkbylZ1r9gPWQ3s+EuWX3X3YfOmdw==
+X-Google-Smtp-Source: AMsMyM7CwsMqBDd2htVHjt/BZGCtRYEbmzNGzqhElJUdvo5jBqDvSxFTwHmEDgahK9EitIvJEnRhK05TJq158k7gfZE=
+X-Received: by 2002:a67:fdd0:0:b0:397:c028:db6a with SMTP id
+ l16-20020a67fdd0000000b00397c028db6amr15431274vsq.58.1664395175754; Wed, 28
+ Sep 2022 12:59:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="EILb05vUvebWtUkL"
-Content-Disposition: inline
-In-Reply-To: <20220924181915.3251186-6-masahiroy@kernel.org>
-Jabber-ID: nicolas@jabber.no
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:UcXuaPHvMOy396OYrCATBxzmBf4xnt5u4U4lYvYEyKiFKcIjiE1
- Zx3t6HG2Zvm/LfawJhneucj2AT91CEPvWwzyt4PmBiwNu4u6ImtaT+Qd1fDJD8shn8WHDUk
- Y1JwWKECS8si+UUukWwqp6TxRnEbuaU8u3lWrF9TH46BlmuJkJKYVp1VO3GqJXgb+Mpoyjq
- Bbnw/PEfZIERQmf+MfGlg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0I95jDAw2sk=:W1GZFxJ1oVO6ksGn0Glr5z
- vaAB2VQwAYZS3DAAbzzN5M09B5dsQGQtRd7/2bXLxkkxPc+5JjPKdx/lyVmWP1xBYoLDV1jQN
- dE45Kd7Rx/eDh/xlAwvHIgbmxAAcusRBvdodDo+11t8I5fSYm9e3Qymxj60ARiQITjcRMNKU5
- x4kDCYJauoJdUSm21/xe9/yVQ4Lsa90qDBq4BmmT/e7fyfWzjof/T76RK5vbR3Qddb/Tye6ro
- KeFlF8WcVXNdsfE1x7Q9UxGmkQljVBGeH73DtGaxWF6hQVKdkWdgYELDKx8yGXZEdOU/QSnzC
- Bs6dgPXK7WTGzjismuCx3YHKGfA5pSUeotGOmqIxWmSd82gzGWcWGZxYzsHXom+xIR8otUMtN
- OVrFZXapgauNnfeCn8UQJcjAy9oJvoxRXMTxrjpGmhCXNnxOl3IiHQSfa90uis6Zl6FO8YLRL
- f9CNEMTzjU54hj/7K7AOsPBK1GeJ2JTU9Eqm5NbaF4z6BUIDHIAuPJ/oeIZo1nvXmBKojym2a
- RxOlb/fElYz4TOwGJ7hUaI5OsIAqs29KM6Om8aLtMQsb50S7ngheG2wYt7E0F0TVVTFPGRmZg
- XuuLqIC8fJXXODK03Hy/ZH0j6p5R3JV/IlqjpvsFZgLed2cd5pnsT9NeiEnzAH4UR4t+lPiXz
- 7yKcOjkh/iMLSbrOZFDgWiP5DO0XeOBSyjwjjLmmzYBIDyltt3ktEPiPHTrH7+eCfKKVyp225
- frd0JCSeRY30XDv2hsoDzHybuUc8uEeaCwIBrnwyFFer8yrrRdZVWlpzmvrpxsKbam9hhHeE0
- PMt/QjX
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220927095813.v2.1.Ia168b651a69b253059f2bbaa60b98083e619545c@changeid>
+ <CABBYNZJkzQfWu_xhtubn=030fi+XLGSx9wMamEMUg8Ly2jpPGg@mail.gmail.com>
+In-Reply-To: <CABBYNZJkzQfWu_xhtubn=030fi+XLGSx9wMamEMUg8Ly2jpPGg@mail.gmail.com>
+From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date:   Wed, 28 Sep 2022 12:59:23 -0700
+Message-ID: <CANFp7mX_nfzs0YLEs1HJx=W6UQovKvPmRAy6AyftgC8eWrLQqA@mail.gmail.com>
+Subject: Re: [PATCH v2] Bluetooth: Prevent double register of suspend
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Abhishek Pandit-Subedi <abhishekpandit@google.com>,
+        linux-bluetooth@vger.kernel.org,
+        syzbot <syzkaller@googlegroups.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Sure, resending with a v3.
 
---EILb05vUvebWtUkL
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sun, 25 Sep 2022 03:19:13 +0900 Masahiro Yamada wrote:
-> Currently, modpost is executed twice; first for vmlinux, second
-> for modules.
->=20
-> This commit merges them.
->=20
-> Current build flow
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->=20
->   1) build obj-y and obj-m objects
->     2) link vmlinux.o
->       3) modpost for vmlinux
->         4) link vmlinux
->           5) modpost for modules
->             6) link modules (*.ko)
->=20
-> The build steps 1) through 6) are serialized, that is, modules are
-> built after vmlinux. You do not get benefits of parallel builds when
-> scripts/link-vmlinux.sh is being run.
->=20
-> New build flow
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->=20
->   1) build obj-y and obj-m objects
->     2) link vmlinux.o
->       3) modpost for vmlinux and modules
->         4a) link vmlinux
->         4b) link modules (*.ko)
->=20
-> In the new build flow, modpost is invoked just once.
->=20
-> vmlinux and modules are built in parallel. One exception is
-> CONFIG_DEBUG_INFO_BTF_MODULES=3Dy, where modules depend on vmlinux.
->=20
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->=20
-> (no changes since v1)
->=20
->  Makefile                  | 30 ++++++++++---
->  scripts/Makefile.modfinal |  2 +-
->  scripts/Makefile.modpost  | 93 ++++++++++++---------------------------
->  scripts/link-vmlinux.sh   |  3 --
->  4 files changed, 53 insertions(+), 75 deletions(-)
->=20
-> diff --git a/Makefile b/Makefile
-> index b5dfb54b1993..cf9d7b1d8c14 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1152,7 +1152,7 @@ cmd_link-vmlinux =3D                               =
-                  \
->  	$(CONFIG_SHELL) $< "$(LD)" "$(KBUILD_LDFLAGS)" "$(LDFLAGS_vmlinux)";   =
- \
->  	$(if $(ARCH_POSTLINK), $(MAKE) -f $(ARCH_POSTLINK) $@, true)
-> =20
-> -vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) FORCE
-> +vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) modpost FORCE
->  	+$(call if_changed_dep,link-vmlinux)
-> =20
->  targets :=3D vmlinux
-> @@ -1428,7 +1428,13 @@ endif
->  # Build modules
->  #
-> =20
-> -modules: $(if $(KBUILD_BUILTIN),vmlinux) modules_prepare
-> +# *.ko are usually independent of vmlinux, but CONFIG_DEBUG_INFOBTF_MODU=
-LES
-> +# is an exception.
-> +ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> +modules: vmlinux
-> +endif
-> +
-> +modules: modules_prepare
-> =20
->  # Target to prepare building external modules
->  modules_prepare: prepare
-> @@ -1741,8 +1747,12 @@ ifdef CONFIG_MODULES
->  $(MODORDER): $(build-dir)
->  	@:
-> =20
-> -modules: modules_check
-> -	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
-> +# KBUILD_MODPOST_NOFINAL can be set to skip the final link of modules.
-> +# This is solely useful to speed up test compiles.
-> +modules: modpost
-> +ifneq ($(KBUILD_MODPOST_NOFINAL),1)
-> +	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
-> +endif
-> =20
->  PHONY +=3D modules_check
->  modules_check: $(MODORDER)
-> @@ -1773,6 +1783,11 @@ KBUILD_MODULES :=3D
-> =20
->  endif # CONFIG_MODULES
-> =20
-> +PHONY +=3D modpost
-> +modpost: $(if $(single-build),, $(if $(KBUILD_BUILTIN), vmlinux.o)) \
-> +	 $(if $(KBUILD_MODULES), modules_check)
-> +	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
-> +
->  # Single targets
->  # ----------------------------------------------------------------------=
------
->  # To build individual files in subdirectories, you can do like this:
-> @@ -1792,16 +1807,19 @@ single-ko :=3D $(sort $(filter %.ko, $(MAKECMDGOA=
-LS)))
->  single-no-ko :=3D $(filter-out $(single-ko), $(MAKECMDGOALS)) \
->  		$(foreach x, o mod, $(patsubst %.ko, %.$x, $(single-ko)))
-> =20
-> -$(single-ko): single_modpost
-> +$(single-ko): single_modules
->  	@:
->  $(single-no-ko): $(build-dir)
->  	@:
-> =20
->  # Remove MODORDER when done because it is not the real one.
->  PHONY +=3D single_modpost
-
-PHONY +=3D single_modules
-
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-
-> -single_modpost: $(single-no-ko) modules_prepare
-> +single_modules: $(single-no-ko) modules_prepare
->  	$(Q){ $(foreach m, $(single-ko), echo $(extmod_prefix)$m;) } > $(MODORD=
-ER)
->  	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
-> +ifneq ($(KBUILD_MODPOST_NOFINAL),1)
-> +	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
-> +endif
->  	$(Q)rm -f $(MODORDER)
-> =20
->  single-goals :=3D $(addprefix $(build-dir)/, $(single-no-ko))
-> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> index 35100e981f4a..a3cf9e3647c9 100644
-> --- a/scripts/Makefile.modfinal
-> +++ b/scripts/Makefile.modfinal
-> @@ -55,7 +55,7 @@ if_changed_except =3D $(if $(call newer_prereqs_except,=
-$(2))$(cmd-check),      \
->  	printf '%s\n' 'cmd_$@ :=3D $(make-cmd)' > $(dot-target).cmd, @:)
-> =20
->  # Re-generate module BTFs if either module's .ko or vmlinux changed
-> -$(modules): %.ko: %.o %.mod.o scripts/module.lds $(if $(KBUILD_BUILTIN),=
-vmlinux) FORCE
-> +$(modules): %.ko: %.o %.mod.o scripts/module.lds $(and $(CONFIG_DEBUG_IN=
-FO_BTF_MODULES),$(KBUILD_BUILTIN),vmlinux) FORCE
->  	+$(call if_changed_except,ld_ko_o,vmlinux)
->  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
->  	+$(if $(newer-prereqs),$(call cmd,btf_ko))
-> diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-> index 04ad00917b2f..2daf760eeb25 100644
-> --- a/scripts/Makefile.modpost
-> +++ b/scripts/Makefile.modpost
-> @@ -32,9 +32,6 @@
->  # Step 4 is solely used to allow module versioning in external modules,
->  # where the CRC of each module is retrieved from the Module.symvers file.
-> =20
-> -# KBUILD_MODPOST_NOFINAL can be set to skip the final link of modules.
-> -# This is solely useful to speed up test compiles
-> -
->  PHONY :=3D __modpost
->  __modpost:
-> =20
-> @@ -45,24 +42,23 @@ MODPOST =3D scripts/mod/modpost								\
->  	$(if $(CONFIG_MODVERSIONS),-m)							\
->  	$(if $(CONFIG_MODULE_SRCVERSION_ALL),-a)					\
->  	$(if $(CONFIG_SECTION_MISMATCH_WARN_ONLY),,-E)					\
-> +	$(if $(KBUILD_NSDEPS),-d $(MODULES_NSDEPS))					\
-> +	$(if $(CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS)$(KBUILD_NSDEPS),-=
-N)	\
->  	-o $@
-> =20
-> -ifdef MODPOST_VMLINUX
-> -
-> -quiet_cmd_modpost =3D MODPOST $@
-> -      cmd_modpost =3D $(MODPOST) $<
-> -
-> -vmlinux.symvers: vmlinux.o
-> -	$(call cmd,modpost)
-> +# 'make -i -k' ignores compile errors, and builds as many modules as pos=
-sible.
-> +ifneq ($(findstring i,$(filter-out --%,$(MAKEFLAGS))),)
-> +MODPOST +=3D -n
-> +endif
-> =20
-> -__modpost: vmlinux.symvers
-> +ifeq ($(KBUILD_EXTMOD),)
-> =20
->  # Generate the list of in-tree objects in vmlinux
->  # ----------------------------------------------------------------------=
------
-> =20
->  # This is used to retrieve symbol versions generated by genksyms.
->  ifdef CONFIG_MODVERSIONS
-> -vmlinux.symvers: .vmlinux.objs
-> +vmlinux.symvers Module.symvers: .vmlinux.objs
->  endif
-> =20
->  # Ignore libgcc.a
-> @@ -83,24 +79,12 @@ targets +=3D .vmlinux.objs
->  .vmlinux.objs: $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
->  	$(call if_changed,vmlinux_objs)
-> =20
-> -else
-> -
-> -ifeq ($(KBUILD_EXTMOD),)
-> -
-> -input-symdump :=3D vmlinux.symvers
-> -output-symdump :=3D modules-only.symvers
-> -
-> -quiet_cmd_cat =3D GEN     $@
-> -      cmd_cat =3D cat $(real-prereqs) > $@
-> -
-> -ifneq ($(wildcard vmlinux.symvers),)
-> -
-> -__modpost: Module.symvers
-> -Module.symvers: vmlinux.symvers modules-only.symvers FORCE
-> -	$(call if_changed,cat)
-> -
-> -targets +=3D Module.symvers
-> +vmlinux.o-if-present :=3D $(wildcard vmlinux.o)
-> +output-symdump :=3D vmlinux.symvers
-> =20
-> +ifdef KBUILD_MODULES
-> +output-symdump :=3D $(if $(vmlinux.o-if-present), Module.symvers, module=
-s-only.symvers)
-> +missing-input :=3D $(filter-out $(vmlinux.o-if-present),vmlinux.o)
->  endif
-> =20
->  else
-> @@ -112,56 +96,35 @@ src :=3D $(obj)
->  # Include the module's Makefile to find KBUILD_EXTRA_SYMBOLS
->  include $(or $(wildcard $(src)/Kbuild), $(src)/Makefile)
-> =20
-> -# modpost option for external modules
-> -MODPOST +=3D -e
-> -
-> -input-symdump :=3D Module.symvers $(KBUILD_EXTRA_SYMBOLS)
-> +module.symvers-if-present :=3D $(wildcard Module.symvers)
->  output-symdump :=3D $(KBUILD_EXTMOD)/Module.symvers
-> +missing-input :=3D $(filter-out $(module.symvers-if-present), Module.sym=
-vers)
-> =20
-> -endif
-> -
-> -existing-input-symdump :=3D $(wildcard $(input-symdump))
-> -
-> -# modpost options for modules (both in-kernel and external)
-> -MODPOST +=3D \
-> -	$(addprefix -i ,$(existing-input-symdump)) \
-> -	$(if $(KBUILD_NSDEPS),-d $(MODULES_NSDEPS)) \
-> -	$(if $(CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS)$(KBUILD_NSDEPS),-=
-N)
-> -
-> -# 'make -i -k' ignores compile errors, and builds as many modules as pos=
-sible.
-> -ifneq ($(findstring i,$(filter-out --%,$(MAKEFLAGS))),)
-> -MODPOST +=3D -n
-> -endif
-> +MODPOST +=3D -e $(addprefix -i ,$(module.symvers-if-present) $(KBUILD_EX=
-TRA_SYMBOLS))
-> =20
-> -# Clear VPATH to not search for *.symvers in $(srctree). Check only $(ob=
-jtree).
-> -VPATH :=3D
-> -$(input-symdump):
-> -	@echo >&2 'WARNING: Symbol version dump "$@" is missing.'
-> -	@echo >&2 '         Modules may not have dependencies or modversions.'
-> -	@echo >&2 '         You may get many unresolved symbol warnings.'
-> +endif # ($(KBUILD_EXTMOD),)
-> =20
-> -# KBUILD_MODPOST_WARN can be set to avoid error out in case of undefined=
- symbols
-> -ifneq ($(KBUILD_MODPOST_WARN)$(filter-out $(existing-input-symdump), $(i=
-nput-symdump)),)
-> +ifneq ($(KBUILD_MODPOST_WARN)$(missing-input),)
->  MODPOST +=3D -w
->  endif
-> =20
-> +modorder-if-needed :=3D $(if $(KBUILD_MODULES), $(MODORDER))
-> +
->  # Read out modules.order to pass in modpost.
->  # Otherwise, allmodconfig would fail with "Argument list too long".
->  quiet_cmd_modpost =3D MODPOST $@
-> -      cmd_modpost =3D sed 's/ko$$/o/' $< | $(MODPOST) -T -
-> -
-> -$(output-symdump): $(MODORDER) $(input-symdump) FORCE
-> -	$(call if_changed,modpost)
-> +      cmd_modpost =3D \
-> +	$(if $(missing-input), \
-> +		echo >&2 "WARNING: $(missing-input) is missing."; \
-> +		echo >&2 "         Modules may not have dependencies or modversions.";=
- \
-> +		echo >&2 "         You may get many unresolved symbol warnings.";) \
-> +	sed 's/ko$$/o/' $(or $(modorder-if-needed), /dev/null) | $(MODPOST) $(v=
-mlinux.o-if-present) -T -
-> =20
->  targets +=3D $(output-symdump)
-> +$(output-symdump): $(modorder-if-needed) $(vmlinux.o-if-present) $(moudl=
-e.symvers-if-present) FORCE
-> +	$(call if_changed,modpost)
-> =20
->  __modpost: $(output-symdump)
-> -ifneq ($(KBUILD_MODPOST_NOFINAL),1)
-> -	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
-> -endif
-> -
-> -endif
-> -
->  PHONY +=3D FORCE
->  FORCE:
-> =20
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index 07486f90d5e2..6a197d8a88ac 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -214,9 +214,6 @@ if [ "$1" =3D "clean" ]; then
->  	exit 0
->  fi
-> =20
-> -# modpost vmlinux.o to check for section mismatches
-> -${MAKE} -f "${srctree}/scripts/Makefile.modpost" MODPOST_VMLINUX=3D1
-> -
->  info MODINFO modules.builtin.modinfo
->  ${OBJCOPY} -j .modinfo -O binary vmlinux.o modules.builtin.modinfo
->  info GEN modules.builtin
-> --=20
-> 2.34.1
-
---=20
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
-
---EILb05vUvebWtUkL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmM0p44ACgkQB1IKcBYm
-EmmJYhAArH4TmGCzpTNlS7pfLHE1VH/++XXiwYjhzHtCdybjnHbhkuVpZESGM69C
-2669XuWTJDH2JpbEIF29rqvZTvgl9Z4ZFXhZWUJVXmuxLSsg0y6qvz57lpmAoRkh
-DnybSgrHBPtuctcc+9rktIbhb5QwI8OCUEwrz4WYZHy8V5Qr+RYuKxFbvehV4sNp
-9hD9HO08tX+uTF9W8kzDU++MbcjK1uLdfSisuia9+HMVR3LyDWqIoiGFKsyOOTA0
-4fH/RtvZn76ZBm21X1BZxxTG1cmMYZga2VSWg29wqgwCeFkz3hbS57myLZOuHU3F
-c+sha8SlRW/WwISdAOhNYVF8UC6iIq6VO2zvUAAMgpQ2Xri77/t+lzXAlt8HaXY7
-EJqm+KEQSyND96WpoxndVf3FsNqgmGoAuqIckldi8/MPD7E0wKtj4pcSjhs/dhSh
-ua1Ok9rJWcbxrYunJbXVZKuoUeeGZoJLsiNEsAEiQmLielRYJ7o9BraiYC8RMtSF
-ID+aNvl2mxuTLcu7ioPySAdtS5gOuZD5iCtzUWl1DMgtbGQgkOBb/9sHnK0fXWgd
-669PnNwtdXO5L4+vgs+Mu536gnf7F/6xz3OdaQDLL+SfFrTnSMCTlY6jnbWAFq6P
-C+PkIJC053o0jBgC46HxS+hgn2p1YM6QR4lCO3+02cbEJoZQqZw=
-=SSrz
------END PGP SIGNATURE-----
-
---EILb05vUvebWtUkL--
+On Wed, Sep 28, 2022 at 12:32 PM Luiz Augusto von Dentz
+<luiz.dentz@gmail.com> wrote:
+>
+> Hi Abhishek,
+>
+> On Tue, Sep 27, 2022 at 9:58 AM Abhishek Pandit-Subedi
+> <abhishekpandit@google.com> wrote:
+> >
+> > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> >
+> > Suspend notifier should only be registered and unregistered once per
+> > hdev. Simplify this by only registering during driver registration and
+> > simply exiting early when HCI_USER_CHANNEL is set.
+> >
+> > Reported-by: syzbot <syzkaller@googlegroups.com>
+> > Fixes: 359ee4f834f5 (Bluetooth: Unregister suspend with userchannel)
+> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > ---
+> > This is fixing a syzbot reported warning. Tested in the following ways:
+> > * Normal start-up of driver with bluez.
+> > * Start/stop loop using HCI_USER_CHANNEL (sock path).
+> > * USB reset triggering hci_dev_unregister (driver path).
+> >
+> > ------------[ cut here ]------------
+> > double register detected
+> > WARNING: CPU: 0 PID: 2657 at kernel/notifier.c:27
+> > notifier_chain_register kernel/notifier.c:27 [inline]
+> > WARNING: CPU: 0 PID: 2657 at kernel/notifier.c:27
+> > notifier_chain_register+0x5c/0x124 kernel/notifier.c:22
+> > Modules linked in:
+> > CPU: 0 PID: 2657 Comm: syz-executor212 Not tainted
+> > 5.10.136-syzkaller-19376-g6f46a5fe0124 #0
+> >     8f0771607702f5ef7184d2ee33bd0acd70219fc4
+> >     Hardware name: Google Google Compute Engine/Google Compute Engine,
+> >     BIOS Google 07/22/2022
+> >     RIP: 0010:notifier_chain_register kernel/notifier.c:27 [inline]
+> >     RIP: 0010:notifier_chain_register+0x5c/0x124 kernel/notifier.c:22
+> >     Code: 6a 41 00 4c 8b 23 4d 85 e4 0f 84 88 00 00 00 e8 c2 1e 19 00 49
+> >     39 ec 75 18 e8 b8 1e 19 00 48 c7 c7 80 6d ca 84 e8 2c 68 48 03 <0f> 0b
+> >         e9 af 00 00 00 e8 a0 1e 19 00 48 8d 7d 10 48 89 f8 48 c1 e8
+> >         RSP: 0018:ffffc900009d7da8 EFLAGS: 00010286
+> >         RAX: 0000000000000000 RBX: ffff8881076fd1d8 RCX: 0000000000000000
+> >         RDX: 0000001810895100 RSI: ffff888110895100 RDI: fffff5200013afa7
+> >         RBP: ffff88811a4191d0 R08: ffffffff813b8ca1 R09: 0000000080000000
+> >         R10: 0000000000000000 R11: 0000000000000005 R12: ffff88811a4191d0
+> >         R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
+> >         FS: 00005555571f5300(0000) GS:ffff8881f6c00000(0000)
+> >         knlGS:0000000000000000
+> >         CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >         CR2: 000078e3857f3075 CR3: 000000010d668000 CR4: 00000000003506f0
+> >         DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> >         DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >         Call Trace:
+> >         blocking_notifier_chain_register+0x8c/0xa6 kernel/notifier.c:254
+> >         hci_register_suspend_notifier net/bluetooth/hci_core.c:2733
+> >         [inline]
+> >         hci_register_suspend_notifier+0x6b/0x7c
+> >         net/bluetooth/hci_core.c:2727
+> >         hci_sock_release+0x270/0x3cf net/bluetooth/hci_sock.c:889
+> >         __sock_release+0xcd/0x1de net/socket.c:597
+> >         sock_close+0x18/0x1c net/socket.c:1267
+> >         __fput+0x418/0x729 fs/file_table.c:281
+> >         task_work_run+0x12b/0x15b kernel/task_work.c:151
+> >         tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+> >         exit_to_user_mode_loop kernel/entry/common.c:165 [inline]
+> >         exit_to_user_mode_prepare+0x8f/0x130 kernel/entry/common.c:192
+> >         syscall_exit_to_user_mode+0x172/0x1b2 kernel/entry/common.c:268
+> >         entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> >         RIP: 0033:0x78e38575e1db
+> >         Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89
+> >         7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05
+> >         <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+> >         RSP: 002b:00007ffffc20a0b0 EFLAGS: 00000293 ORIG_RAX:
+> >         0000000000000003
+> >         RAX: 0000000000000000 RBX: 0000000000000006 RCX: 000078e38575e1db
+> >         RDX: ffffffffffffffb8 RSI: 0000000020000000 RDI: 0000000000000005
+> >         RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000150
+> >         R10: 0000000000000000 R11: 0000000000000293 R12: 000000000000e155
+> >         R13: 00007ffffc20a140 R14: 00007ffffc20a130 R15: 00007ffffc20a0e8
+> >
+> > Changes in v2:
+> > - Removed suspend registration from hci_sock.
+> > - Exit hci_suspend_notifier early if user channel.
+> >
+> >  net/bluetooth/hci_core.c | 4 ++++
+> >  net/bluetooth/hci_sock.c | 3 ---
+> >  2 files changed, 4 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> > index 66c7cdba0d32..86ce2dd1c7fb 100644
+> > --- a/net/bluetooth/hci_core.c
+> > +++ b/net/bluetooth/hci_core.c
+> > @@ -2406,6 +2406,10 @@ static int hci_suspend_notifier(struct notifier_block *nb, unsigned long action,
+> >                 container_of(nb, struct hci_dev, suspend_notifier);
+> >         int ret = 0;
+> >
+> > +       /* Userspace has full control of this device. Do nothing. */
+> > +       if (hci_dev_test_flag(hdev, HCI_USER_CHANNEL))
+> > +               return NOTIFY_DONE;
+> > +
+> >         if (action == PM_SUSPEND_PREPARE)
+> >                 ret = hci_suspend_dev(hdev);
+> >         else if (action == PM_POST_SUSPEND)
+> > diff --git a/net/bluetooth/hci_sock.c b/net/bluetooth/hci_sock.c
+> > index b2a33a05c93e..06581223238c 100644
+> > --- a/net/bluetooth/hci_sock.c
+> > +++ b/net/bluetooth/hci_sock.c
+> > @@ -887,7 +887,6 @@ static int hci_sock_release(struct socket *sock)
+> >                          */
+> >                         hci_dev_do_close(hdev);
+> >                         hci_dev_clear_flag(hdev, HCI_USER_CHANNEL);
+> > -                       hci_register_suspend_notifier(hdev);
+> >                         mgmt_index_added(hdev);
+> >                 }
+> >
+> > @@ -1216,7 +1215,6 @@ static int hci_sock_bind(struct socket *sock, struct sockaddr *addr,
+> >                 }
+> >
+> >                 mgmt_index_removed(hdev);
+> > -               hci_unregister_suspend_notifier(hdev);
+> >
+> >                 err = hci_dev_open(hdev->id);
+> >                 if (err) {
+> > @@ -1231,7 +1229,6 @@ static int hci_sock_bind(struct socket *sock, struct sockaddr *addr,
+> >                                 err = 0;
+> >                         } else {
+> >                                 hci_dev_clear_flag(hdev, HCI_USER_CHANNEL);
+> > -                               hci_register_suspend_notifier(hdev);
+> >                                 mgmt_index_added(hdev);
+> >                                 hci_dev_put(hdev);
+> >                                 goto done;
+> > --
+> > 2.37.3.998.g577e59143f-goog
+> >
+>
+> Looks like our CI got stuck for some reason, do you mind sending a v3
+> just to confirm nothing breaks with these changes?
+>
+> --
+> Luiz Augusto von Dentz
