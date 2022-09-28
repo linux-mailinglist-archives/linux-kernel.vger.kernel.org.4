@@ -2,76 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D6E5ED599
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 622A55ED4F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbiI1HBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
+        id S232367AbiI1Gje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 02:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233291AbiI1HBJ (ORCPT
+        with ESMTP id S229907AbiI1Gja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:01:09 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9CB65245
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:01:09 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 09:01:06 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664348467;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YVQQlU3/HsnQBwSPRWGk8rWCPw+RBoaolgbO3+3ZBW4=;
-        b=DEmWg1M4qZQLsDqq1e6m6+4z3BgbVq6VG+AwQNte4MpdvPLR4TPsQFTIVzs71OBQMBtMAX
-        g4aug6lzuuh3ra4M+gm5ZVhNLL+jpA4/umC4CaDZPSuc0eAcR6TpAFywej0VLzb2/VeEqL
-        dnbKzSFCqlr/sVJ/DIYz7+/goDqucxSldRQF/zGUoJ+X6byj4So5r4FSPHOwNaUxtcU79k
-        VQw3XZ1zORm+/lzbVmSEzjkl+lhWP4oNekO7yEjNhcGHlALuDVm1ZezBxL0p9iUPc1HI4w
-        rHD9DGIjh2Oc4bta4gk1WBX68OwIayJyH+v52d+ahDirwfuYB/FqKNEuWgmzKA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664348467;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YVQQlU3/HsnQBwSPRWGk8rWCPw+RBoaolgbO3+3ZBW4=;
-        b=s94B8mybI5gDrSAm5mJQIyJv0LJRBXS9lBChzj2Q/wk+Af3zK7XyZup0cd1WVXVm+AD+qP
-        98JKZ3v8iTAHoBCw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Ren Zhijie <renzhijie2@huawei.com>
-Cc:     akpm@linux-foundation.org, ndesaulniers@google.com,
-        nathan@kernel.org, vbabka@suse.cz, masahiroy@kernel.org,
-        arnd@arndb.de, seanjc@google.com, hannes@cmpxchg.org,
-        ojeda@kernel.org, mhiramat@kernel.org, dmitry.torokhov@gmail.com,
-        atomlin@redhat.com, ddiss@suse.de, christophe.leroy@csgroup.eu,
-        lukas.bulwahn@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] init/Kconfig: fix unmet direct dependencies
-Message-ID: <YzPxMvjdjVEK1/b1@linutronix.de>
-References: <20220928064934.70867-1-renzhijie2@huawei.com>
+        Wed, 28 Sep 2022 02:39:30 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F43B1EC9AA;
+        Tue, 27 Sep 2022 23:39:29 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4McmvM55SMz1P6nY;
+        Wed, 28 Sep 2022 14:35:11 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 28 Sep
+ 2022 14:39:27 +0800
+From:   Jason Yan <yanaijie@huawei.com>
+To:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
+        <john.garry@huawei.com>, <jinpu.wang@cloud.ionos.com>,
+        <damien.lemoal@opensource.wdc.com>, Jason Yan <yanaijie@huawei.com>
+Subject: [PATCH v6 0/8] scsi: libsas: sas address comparison refactor
+Date:   Wed, 28 Sep 2022 15:01:22 +0800
+Message-ID: <20220928070130.3657183-1-yanaijie@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220928064934.70867-1-renzhijie2@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-28 06:49:34 [+0000], Ren Zhijie wrote:
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -1273,6 +1273,7 @@ endif # NAMESPACES
->  
->  config CHECKPOINT_RESTORE
->  	bool "Checkpoint/restore support"
-> +	select PROC_FS
+Sas address conversion and comparison is widely used in libsas and
+drivers. However they are all opencoded and to avoid the line spill over
+80 columns, are mostly split into multi-lines.
 
-Couldn't this become a depends?
+To make the code easier to read, introduce some helpers with clearer
+semantics and replace the opencoded segments with them.
 
->  	select PROC_CHILDREN
->  	select KCMP
->  	default n
+v5->v6:
+  Return error coding style update suggested by Damien.
 
-Sebastian
+v4->v5:
+  Rename sas_find_attached_phy() to sas_find_attached_phy_id().
+  Return error code from sas_find_attached_phy_id() directly.
+  Add review tags from John and Damien.
+
+v3->v4:
+  Fix comparison typo.
+  Fix test condition error in sas_check_parent_topology() of patch #6.
+
+v2->v3:
+  Rename sas_phy_addr_same() to sas_phy_addr_match().
+  Rearrange patches, move patch #6 to #1 and directly use the helper
+  	sas_phy_match_dev_addr() in sas_find_attached_phy().
+  Add some review tags from Jack Wang.
+
+v1->v2:
+  First factor out sas_find_attached_phy() and replace LLDDs's code
+  	with it.
+  Remove three too simple helpers.
+  Rename the helpers with 'sas_' prefix.
+
+Jason Yan (8):
+  scsi: libsas: introduce sas address comparison helpers
+  scsi: libsas: introduce sas_find_attached_phy_id() helper
+  scsi: pm8001: use sas_find_attached_phy_id() instead of open coded
+  scsi: mvsas: use sas_find_attached_phy_id() instead of open coded
+  scsi: hisi_sas: use sas_find_attathed_phy_id() instead of open coded
+  scsi: libsas: use sas_phy_match_dev_addr() instead of open coded
+  scsi: libsas: use sas_phy_addr_match() instead of open coded
+  scsi: libsas: use sas_phy_match_port_addr() instead of open coded
+
+ drivers/scsi/hisi_sas/hisi_sas_main.c | 14 ++--------
+ drivers/scsi/libsas/sas_expander.c    | 40 ++++++++++++++++-----------
+ drivers/scsi/libsas/sas_internal.h    | 17 ++++++++++++
+ drivers/scsi/mvsas/mv_sas.c           | 17 ++++--------
+ drivers/scsi/pm8001/pm8001_sas.c      | 18 ++++--------
+ include/scsi/libsas.h                 |  2 ++
+ 6 files changed, 57 insertions(+), 51 deletions(-)
+
+-- 
+2.31.1
+
