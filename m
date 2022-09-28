@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2465EE4C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 21:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC205EE4D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 21:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbiI1TG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 15:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
+        id S233421AbiI1TKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 15:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiI1TG5 (ORCPT
+        with ESMTP id S232170AbiI1TKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 15:06:57 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BF26DFA9
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 12:06:55 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id cv6so3086666pjb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 12:06:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=W3ASQ/4BEnMmDHF1uq/+A5cnEmR5wykxy9kK3sptaxY=;
-        b=o6gF0BIPfROOsR+RzwsAhXruWNZRLqgFj0clWAglKOSG6A8mI2OJ11R071Ajl+7I7x
-         eRlCM2OxVKD9YP5SfA5jG3+3W6vrq3FX40SSBJbOsDjO+D7hY9/gxYfJw3kLztM6VHCn
-         gO0EFxeVBI+TOuMG0StvdWRvdYIVzNnRTpkW3B0/YK6PMcrJtWFQkD0HhaHDWHSV+Jf7
-         AYtjmiMK+pWWigbCORaJMc7qdvSWiJrNOZfbojVi8in8DTf/0OUbT4sMKkPbiCcCQrHX
-         bokGF1KrfBdaQpETmNlr8zMoGV04aSDGAxhP3RAfuSeRi3hbRd35wqn2VMhN5L15xVra
-         Fp7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=W3ASQ/4BEnMmDHF1uq/+A5cnEmR5wykxy9kK3sptaxY=;
-        b=dpw/Xb85xzhJq3sEETVcoFjiq0nnyYYZxojOdCLobrrOKqZlcSPFB/GEwjRKSnma7b
-         b29X2cOzwtWe0hgak0wNLKwgPeEp+u+M7Z700rXR8vmYqIsrG8af07sqWLAMjTLiw5Sf
-         r8wn2aQtABPhJsD+BH3DzTgGTyqKdm8rFr92FMIVVuU4y/7HTnLYVWKhi8ZwZG02Dplb
-         1neeAb4xiGNvSs6Oa2L3+AVYAtnIa7YX1phmxI6GRctEPf7xpCRmgINtF2MlTC0NaVTL
-         P3ZI0BFOTKJDPeQFFgvmfp034/sCSE9UPnkJB8vesXVDxaXsDEtKJgjP43299VwVyesP
-         okjQ==
-X-Gm-Message-State: ACrzQf3t/z3H7isSZjufOcwqYb1CpXlwxR6MJUze4gmCwsMIElvMxH4r
-        xJbkkqD9aizn0KGIqfuR9m5x4AYscVm+CCMrCmfCsQ==
-X-Google-Smtp-Source: AMsMyM4fP4mGUPlpcS8f4HUJXSMvxbW2E37cAr05PH8PpgKS1vmQtjs+RLpeNam1jtgkpIf0o2JRQaLDbTXGtUcjDvs=
-X-Received: by 2002:a17:90b:33c9:b0:200:a0ca:e6c8 with SMTP id
- lk9-20020a17090b33c900b00200a0cae6c8mr11977762pjb.147.1664392014929; Wed, 28
- Sep 2022 12:06:54 -0700 (PDT)
+        Wed, 28 Sep 2022 15:10:32 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66976A4A9;
+        Wed, 28 Sep 2022 12:10:25 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.49.177]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1Mow06-1p18ZR3rKg-00qSZY; Wed, 28 Sep 2022 21:09:56 +0200
+Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by leknes.fjasle.eu (Postfix) with ESMTPS id 303523C004;
+        Wed, 28 Sep 2022 21:09:54 +0200 (CEST)
+Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+        id 7FCC2B4D; Wed, 28 Sep 2022 21:09:53 +0200 (CEST)
+Date:   Wed, 28 Sep 2022 21:09:53 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH v3 1/7] kbuild: hard-code KBUILD_ALLDIRS in
+ scripts/Makefile.package
+Message-ID: <YzScAYUStPbp9o0i@bergen.fjasle.eu>
+References: <20220924181915.3251186-1-masahiroy@kernel.org>
+ <20220924181915.3251186-2-masahiroy@kernel.org>
 MIME-Version: 1.0
-References: <202209271333.10AE3E1D@keescook> <20220927210248.3950201-1-ndesaulniers@google.com>
- <a753c608-813a-f880-67ca-f16fe503b152@rasmusvillemoes.dk>
-In-Reply-To: <a753c608-813a-f880-67ca-f16fe503b152@rasmusvillemoes.dk>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 28 Sep 2022 12:06:43 -0700
-Message-ID: <CAKwvOd=C=yhC5-fBVxD18GSWOibPpSJ1G4bfM=X0bw+LpTsfgg@mail.gmail.com>
-Subject: Re: [PATCH v3] x86, mem: move memmove to out of line assembler
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        llvm@lists.linux.dev, Andy Lutomirski <luto@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="yisc45JTu+esueRF"
+Content-Disposition: inline
+In-Reply-To: <20220924181915.3251186-2-masahiroy@kernel.org>
+Jabber-ID: nicolas@jabber.no
+X-Operating-System: Debian GNU/Linux bookworm/sid
+X-Provags-ID: V03:K1:KLB40yBRNF3j4INUsUj1VHniQuyqvKGqpeRCIP/Jt6wnFKpl7Fj
+ 2kka9RLgLaW3Aq0aan4q/Df+dqzcczGxzTLXa9dvjDhcNEdj132kD9vkq20USnCIeRZwqEA
+ SZi3S03gz803ihnUUASf56Vdzf5uH+SYVdIt1GDWtBvcJ/DOlMSb+iW5kzTi+MDw6//ZqHI
+ F27fQ6w606K7PnQPAyt8A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xWfgeOQ8fzU=:kekw7fS0mmwRT0uLAvOpvL
+ fiHDPT/P2tQAvs4bKPQOG7FjzTX2SEpW95McmIWCKS6OGolTVD2ZdJlU3G+I2bAjeDBO5FoNp
+ 0n2G52F24ajgjvQUDxKnxe1x8Xib+vu2ozk3Y2ihB4GJ/91tHW7mMOuwct0Ce0vkPJqLN5Uso
+ umkKigxQyqw9cWAhkR+PcOFvk7CYWWy0+tFZ7GF96gfqtXtAJAxQpVIuJDEu5zGiqJee4Ogew
+ 8mNbwcCX47RR3AeQS3ZaisoMxJayEZWyG/680XRcO+CWfJf/ZbDqepImml/VZfdvzt6tbdI17
+ Jyo0E3dawOdck8kJ2Zq+cxVhDEWOQ7FWNlQ6TuPTU0sQMCkQXET+EgcSlk3SiiCZpjlsJavCB
+ IrakeZPvoDy4C2O5Tn1kiR087oZ+DKA/2Yet5FTtfvVr31hMKYV3p103LaDqzkFYAUUjoWv1B
+ 8SiacZycDpSdI0DzPtbxUN+bGPIiP5IMdHKfdnn0o6hg1S/oPRTO0VgRQHVgZa2UxXwFnL1SG
+ Wdz3gBXDHlghyy5UvRcZgDSBDEl+u+59D+LsQNUGZmA/orOpR6zG8stJju48GHAkIPKPThASp
+ xRIb/eOoiIOOEMq/c/FIeLV1SF8n0MydbBuEPmfnPFkfrAbFvNmBJ9Mgwq3WakguG8+kpiSMR
+ t0xhnGnDxScPFtCLH2AzFH4ezoIyv+1pAk83Do+wjB4EfO2qBvtCoKXEPMIA3WX13RSe4t7BP
+ uAfD0BOP74DRCWw8346xlwPrbEmtTPYYxm7dpz2IQ5sqMqqzq1oAlhDCKngu05mkX95QVG38k
+ jW7Wkc8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,107 +72,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 12:24 AM Rasmus Villemoes
-<linux@rasmusvillemoes.dk> wrote:
->
-> On 27/09/2022 23.02, Nick Desaulniers wrote:
->
-> > +     /* Decide forward/backward copy mode */
-> > +     cmpl    dest, src
-> > +     jb      .Lbackwards_header
->
-> I know you're mostly just moving existing code, but for my own education
-> I'd like to understand this.
->
-> > +     /*
-> > +      * movs instruction have many startup latency
-> > +      * so we handle small size by general register.
-> > +      */
-> > +     cmpl    $680, n
-> > +     jb      .Ltoo_small_forwards
->
-> OK, this I get, there's some overhead, and hence we need _some_ cutoff
-> value; 680 is probably chosen by some trial-and-error, but the exact
-> value likely doesn't matter too much.
 
-__memmove in arch/x86/lib/memmove_64.S uses the same value.
-But I assume this is precisely why FSRM was created.
-https://www.phoronix.com/news/Intel-5.6-FSRM-Memmove
-commit f444a5ff95dc ("x86/cpufeatures: Add support for fast short REP; MOVSB")
+--yisc45JTu+esueRF
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> > +     /*
-> > +      * movs instruction is only good for aligned case.
-> > +      */
-> > +     movl    src, tmp0
-> > +     xorl    dest, tmp0
-> > +     andl    $0xff, tmp0
-> > +     jz      .Lforward_movs
->
-> But this part I don't understand at all. This checks that the src and
-> dest have the same %256 value, which is a rather odd thing, and very
-> unlikely to ever be hit in practice. I could understand if it checked
-> that they were both 4 or 8 or 16-byte aligned (i.e., (src|dest)&FOO)),
-> or if it checked that they had the same offset within a cacheline [say
-> (src^dest)&0x3f].
->
-> Any idea where that comes from? Or am I just incapable of reading x86 asm?
+On Sun, 25 Sep 2022 03:19:09 +0900 Masahiro Yamada wrote:
+> My plan is to list subdirectories in ./Kbuild. Once it occurs,
+> $(vmlinux-alldirs) will not contain all subdirectories.
+>=20
+> Let's hard-code the directory list until I get around to implementing
+> a more sophisticated way for generating a source tarball.
+>=20
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-So I think the above is roughly:
-if ((src ^ dest) & 0xff == 0)
-  goto .Lforward_movs;
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
-So if src or dest don't have the same bottom byte value, don't use movs?
+> Changes in v3:
+>   - New patch
+>=20
+>  Makefile                 | 2 --
+>  scripts/Makefile.package | 5 ++++-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/Makefile b/Makefile
+> index 57cf4a5bea6d..eb4bbbc898d0 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1129,8 +1129,6 @@ KBUILD_VMLINUX_OBJS +=3D $(patsubst %/,%/built-in.a=
+, $(drivers-y))
+> =20
+>  export KBUILD_VMLINUX_OBJS KBUILD_VMLINUX_LIBS
+>  export KBUILD_LDS          :=3D arch/$(SRCARCH)/kernel/vmlinux.lds
+> -# used by scripts/Makefile.package
+> -export KBUILD_ALLDIRS :=3D $(sort $(filter-out arch/%,$(vmlinux-alldirs)=
+) LICENSES arch include scripts tools)
+> =20
+>  vmlinux-deps :=3D $(KBUILD_LDS) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_=
+LIBS)
+> =20
+> diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+> index 5017f6b2da80..8bbcced67c22 100644
+> --- a/scripts/Makefile.package
+> +++ b/scripts/Makefile.package
+> @@ -29,7 +29,10 @@ KDEB_SOURCENAME ?=3D linux-upstream
+>  KBUILD_PKG_ROOTCMD ?=3D"fakeroot -u"
+>  export KDEB_SOURCENAME
+>  # Include only those top-level files that are needed by make, plus the G=
+PL copy
+> -TAR_CONTENT :=3D $(KBUILD_ALLDIRS) .config .scmversion Makefile \
+> +TAR_CONTENT :=3D Documentation LICENSES arch block certs crypto drivers =
+fs \
+> +               include init io_uring ipc kernel lib mm net samples scrip=
+ts \
+> +               security sound tools usr virt \
+> +               .config .scmversion Makefile \
+>                 Kbuild Kconfig COPYING $(wildcard localversion*)
+>  MKSPEC     :=3D $(srctree)/scripts/package/mkspec
+> =20
+> --=20
+> 2.34.1
 
->
-> > +.Ltoo_small_forwards:
-> > +     subl    $0x10, n
-> > +
-> > +     /*
-> > +      * We gobble 16 bytes forward in each loop.
-> > +      */
-> > +.L16_byteswap_forwards_loop:
-> > +     subl    $0x10, n
-> > +     movl    0*4(src), tmp0
-> > +     movl    1*4(src), tmp1
-> > +     movl    tmp0, 0*4(dest)
-> > +     movl    tmp1, 1*4(dest)
-> > +     movl    2*4(src), tmp0
-> > +     movl    3*4(src), tmp1
-> > +     movl    tmp0, 2*4(dest)
-> > +     movl    tmp1, 3*4(dest)
-> > +     leal    0x10(src), src
-> > +     leal    0x10(dest), dest
-> > +     jae     .L16_byteswap_forwards_loop
-> > +     addl    $0x10, n
-> > +     jmp     .L16_byteswap
-> > +
-> > +     /*
-> > +      * Handle data forward by movs.
-> > +      */
-> > +.p2align 4
-> > +.Lforward_movs:
-> > +     movl    -4(src, n), tmp0
-> > +     leal    -4(dest, n), tmp1
-> > +     shrl    $2, n
-> > +     rep     movsl
-> > +     movl    tmp0, (tmp1)
-> > +     jmp     .Ldone
->
-> So in the original code, %1 was forced to be %esi and %2 was forced to
-> be %edi and they were initialized by src and dest. But here I fail to
-> see how those registers have been properly set up before the rep movs;
-> your names for those are tmp0 and tmp2. You have just loaded the last
-> word of the source to %edi, and AFAICT %esi aka tmp2 is entirely
-> uninitialized at this point (the only use is in L16_byteswap).
->
-> I must be missing something. Please enlighten me.
+--=20
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
 
-No, you're right.  It looks like rep movsl needs src in %esi and dest
-needs to be in %edi, so I can't reuse the input registers from
--mregparm=3; a pair of movs is required.  A v4 is required.
+--yisc45JTu+esueRF
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Probably should write a test for memcpy where n > magic constant 680.
--- 
-Thanks,
-~Nick Desaulniers
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmM0m/gACgkQB1IKcBYm
+Emmz6A/9GudZhGDEuiScPxyeaDy8UnaNrQ46o6QWmCK7meL9JifsDg33A+C/w2E5
+4wTarbibMH1Z2NUx5R8KYUiNFdKHvQmj5tGb5bvUBeEfbBXKFPnINEPRLy5pZd4M
+MI0AI/bEmfJBRh9p32D1PpmIQaytKbb+0z8VoVV5rluWWXl8d/QFxxn8sTO3s+21
+MYCXrSRP8Jj4qbdZ27uCkCvLHBaKoBLZpzMx7vJSpgmDjIy0rOsbCtNLmilI1bOt
+uMOh8ND3sSRQ96Olg7VPsanP3axjpP9DN1FmY8DRAjA2//115mN884P2+hIlEu6j
+LiXZXhcyIqyR6nUqC6fhqRKWCaB3FcYBFTT2QE1UJwJcwLAA9TvXkC2nYr8Bn8+B
+gDWykOU/s/mws4GBnVSqO85DQkT/9PW1JgD0Xam4gxT+Sl5ETHCWkf8s0w397+vN
+jLHyvY9VKUGsqLe0WmKEfScohzVaNV4eKAqCP0jndr8mSpGFQ2ONuYHUPo3NwTGY
+rbhjzvE6UEnS0JVaX/BXZtE/tg14MK0jq/lPVbcmEQdFXoRPZdelMGC8i2nuaeeL
+sgZ42vXFLJs1qYU5JMB2QxUKlMi3k5KLHZ9i5IEGCFXSdOvDZ6Wx3A1pO1JiimaL
+5tD0/FWrjjA3baDGLEDqS/TWQLEoCDmxlDguSl710B6sjYNXfe0=
+=RsJ9
+-----END PGP SIGNATURE-----
+
+--yisc45JTu+esueRF--
