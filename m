@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E205F5EE65D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 22:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8A95EE661
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 22:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234480AbiI1UBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 16:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46972 "EHLO
+        id S234185AbiI1UCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 16:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234556AbiI1UAh (ORCPT
+        with ESMTP id S234783AbiI1UCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 16:00:37 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C7D5851F
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 13:00:35 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id fa8-20020a17090af0c800b00202dd39c035so5491770pjb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 13:00:35 -0700 (PDT)
+        Wed, 28 Sep 2022 16:02:21 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3AB84E7A;
+        Wed, 28 Sep 2022 13:01:39 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id b2so6482676eja.6;
+        Wed, 28 Sep 2022 13:01:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=1XVt61fwIRlQnnx05UC8Uhtil1RjW5oskZubiQ8RtxQ=;
-        b=oFaWlZs8gKJiEIfk+o453v9kpADovk4Tl19/w9FnTR8HnIZSTGWy+izcUYkK+HgQhu
-         YLMOGCrXm5DCbjOqIRQ2paAJSAugBFlIKrV10/HLwBtcVB5G7EL3cvu5Ql4NuCbH1Z61
-         KivuPF0yZKr0VHAM9gQanpeIIlhbKyLZMmtee+6Ob16kes6rdlxrtyYKo7E0xTJHSy3B
-         glQDgPeAOPdOY/kuHfeRAAb4eQFDRx8tplPwD2Rl3WMvGyGWOKC//B7zqpIKdFmTSocP
-         con/y4kt34eVVG1Mo0T6FbBl08j+QnRRH86tCjnVq/a3xomL1NODJGuFbNIuv2HVoyje
-         PF1Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=FQdphxTZ66QYAOnofKNGBcQ+Caq9QNc6A+A5EnAfs9Y=;
+        b=SM+pQmHMUu1Vdwr3vzMUhNyVQ9jB8MnLgDbQ/hRsO7FdT4yxGbemcSVjmdYT2u/ZGE
+         lNbO88owrJ2OnaThIlKlUxYJfAU9fA64pGyCEKoM288TgzJeWwHqEMedl2T6EncQ2S/m
+         7v/kFCOJrN6Guw4DRF3G26IaXbA5dae8ufGFE01fGWOZqnxDgmfQ3Xkt/CKpcyokB5WK
+         zjRoMku6hV9fYptQD318/1iiKewLG4MK8yDAmwNIU2Pxu/Q4k5GwHCUpOGv9eVc6cJXZ
+         k5koN4qVNzWhiYUI4vAHYxpyAUFNdYqxOly19A7ygtdhUeeAKLnXVM4qr+Dg0C5Wtg9W
+         1XXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=1XVt61fwIRlQnnx05UC8Uhtil1RjW5oskZubiQ8RtxQ=;
-        b=6nMEeEpl/LpRPBMvkT/Xqv155qTukXXFgTxXZOIAifsYtuWoq9BaT7jrwCLXzfMbQY
-         34j4djLRVnv/nk6I00pHY7RkzRmqUX9Do81tCxSdJzD9sBOrHgvMZhI9VM+KjCmUoc30
-         hUkVz7k47uFOIi7xHqLCJ8705TS5SFow5Z9kwbpU+xArKw1iz3puqnlt5EMpiT0L/MDD
-         QVRFEx/VGOxx56x7Oq2y/tsmw4nMCnQJLje5PEF5S8gNXVVfbNOo5TcCNwKhD6bzxYVL
-         WCfkpFYi234QsR4D1CnAhu3kjGSSEXnPpsB1pY08MKxzXPi/BK/LHA+eKQad/H8uKIiW
-         tsZA==
-X-Gm-Message-State: ACrzQf2wBcqedGm79JTRwDvGIPZQ/M4bHwRjTViHIXUCxjpc4G98vDiD
-        11ITKvsv3okoXxxlVMtdbY+nu3KnoWIoU2NI0ORh6A==
-X-Google-Smtp-Source: AMsMyM66OTYEOPk5/tM9yOusnPXyXw1ZTHDWmB46rYttITZeSTJH1s7mvNHy+/ZV/4g8YVMb/yM6uP6J/OGB4lnsM4EiUw==
-X-Received: from abps.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:9b4])
- (user=abhishekpandit job=sendgmr) by 2002:aa7:95a2:0:b0:541:123f:bcac with
- SMTP id a2-20020aa795a2000000b00541123fbcacmr36814510pfk.52.1664395234518;
- Wed, 28 Sep 2022 13:00:34 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 13:00:30 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20220928130027.v3.1.Ia168b651a69b253059f2bbaa60b98083e619545c@changeid>
-Subject: [PATCH v3] Bluetooth: Prevent double register of suspend
-From:   Abhishek Pandit-Subedi <abhishekpandit@google.com>
-To:     linux-bluetooth@vger.kernel.org
-Cc:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        syzbot <syzkaller@googlegroups.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=FQdphxTZ66QYAOnofKNGBcQ+Caq9QNc6A+A5EnAfs9Y=;
+        b=s8AEcA1Ob5QhXTFU2xpfAD+we4V4++pNhYJ6vv4/hxHdpiIDBdALI4TFAfoys9Jain
+         8PH1THpqd7RuEKBxqZlWDUXad1ulpcc0HuPs9J1il0byUh/5IMZE0j+CMfN8/xTW9X84
+         BGZgndHmIFP2pw6LhBFwQ8UCKmE/r6KR0JQSIHrrSwZzA/KNHPIBkLyUpRUgiSp/f2fO
+         ZPXwYRpGy+fBW/v+ieCbineUZquF6grxdkfwsj5TUHV50KuZkGOV1hnHR4UIetCkx6Rs
+         BoaNHhONxLGhueywVhL1E98T+U1e/XBPYQkfnbdR6J4HZV3XrDwO0ku3dyoYC4IMomu+
+         qAAQ==
+X-Gm-Message-State: ACrzQf3ARyLNsV1MhunfsKBVUZAiEQzaAf1R2QfhqC3uQdqsdILylRjq
+        wrDV7Kqif72fmp9kruhpyM8=
+X-Google-Smtp-Source: AMsMyM7/ltV50qoXxcf2RzeCPuJDZ5lLR05PmqL0JITzHOT79EBbmXSaWJFFFNsWKyP31DkaBFZ7Eg==
+X-Received: by 2002:a17:907:74e:b0:74f:83d4:cf58 with SMTP id xc14-20020a170907074e00b0074f83d4cf58mr29389544ejb.178.1664395297439;
+        Wed, 28 Sep 2022 13:01:37 -0700 (PDT)
+Received: from kista.localdomain (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id n25-20020a05640204d900b00457cdb5cf76sm3015769edw.50.2022.09.28.13.01.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 13:01:36 -0700 (PDT)
+From:   Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     wens@csie.org, samuel@sholland.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, r.stratiienko@gmail.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH] clk: sunxi-ng: h6: Fix default PLL GPU rate
+Date:   Wed, 28 Sep 2022 22:01:22 +0200
+Message-Id: <20220928200122.3963509-1-jernej.skrabec@gmail.com>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,132 +70,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+In commit 4167ac8a657e ("clk: sunxi-ng: sun50i: h6: Modify GPU clock
+configuration to support DFS") divider M0 was forced to be 1 in order to
+support DFS. However, that left N as it is, at high value of 36. On
+boards without devfreq enabled (all of them in kernel 6.0), this
+effectively sets GPU frequency to 864 MHz. This is about 100 MHz above
+maximum supported frequency.
 
-Suspend notifier should only be registered and unregistered once per
-hdev. Simplify this by only registering during driver registration and
-simply exiting early when HCI_USER_CHANNEL is set.
+In order to fix this, let's set N to 18 (register value 17). That way
+default frequency of 432 MHz is preserved.
 
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Fixes: 359ee4f834f5 (Bluetooth: Unregister suspend with userchannel)
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Fixes: 4167ac8a657e ("clk: sunxi-ng: sun50i: h6: Modify GPU clock configuration to support DFS")
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
-This is fixing a syzbot reported warning. Tested in the following ways:
-* Normal start-up of driver with bluez.
-* Start/stop loop using HCI_USER_CHANNEL (sock path).
-* USB reset triggering hci_dev_unregister (driver path).
+ drivers/clk/sunxi-ng/ccu-sun50i-h6.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-------------[ cut here ]------------
-double register detected
-WARNING: CPU: 0 PID: 2657 at kernel/notifier.c:27
-notifier_chain_register kernel/notifier.c:27 [inline]
-WARNING: CPU: 0 PID: 2657 at kernel/notifier.c:27
-notifier_chain_register+0x5c/0x124 kernel/notifier.c:22
-Modules linked in:
-CPU: 0 PID: 2657 Comm: syz-executor212 Not tainted
-5.10.136-syzkaller-19376-g6f46a5fe0124 #0
-    8f0771607702f5ef7184d2ee33bd0acd70219fc4
-    Hardware name: Google Google Compute Engine/Google Compute Engine,
-    BIOS Google 07/22/2022
-    RIP: 0010:notifier_chain_register kernel/notifier.c:27 [inline]
-    RIP: 0010:notifier_chain_register+0x5c/0x124 kernel/notifier.c:22
-    Code: 6a 41 00 4c 8b 23 4d 85 e4 0f 84 88 00 00 00 e8 c2 1e 19 00 49
-    39 ec 75 18 e8 b8 1e 19 00 48 c7 c7 80 6d ca 84 e8 2c 68 48 03 <0f> 0b
-        e9 af 00 00 00 e8 a0 1e 19 00 48 8d 7d 10 48 89 f8 48 c1 e8
-        RSP: 0018:ffffc900009d7da8 EFLAGS: 00010286
-        RAX: 0000000000000000 RBX: ffff8881076fd1d8 RCX: 0000000000000000
-        RDX: 0000001810895100 RSI: ffff888110895100 RDI: fffff5200013afa7
-        RBP: ffff88811a4191d0 R08: ffffffff813b8ca1 R09: 0000000080000000
-        R10: 0000000000000000 R11: 0000000000000005 R12: ffff88811a4191d0
-        R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-        FS: 00005555571f5300(0000) GS:ffff8881f6c00000(0000)
-        knlGS:0000000000000000
-        CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-        CR2: 000078e3857f3075 CR3: 000000010d668000 CR4: 00000000003506f0
-        DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-        DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-        Call Trace:
-        blocking_notifier_chain_register+0x8c/0xa6 kernel/notifier.c:254
-        hci_register_suspend_notifier net/bluetooth/hci_core.c:2733
-        [inline]
-        hci_register_suspend_notifier+0x6b/0x7c
-        net/bluetooth/hci_core.c:2727
-        hci_sock_release+0x270/0x3cf net/bluetooth/hci_sock.c:889
-        __sock_release+0xcd/0x1de net/socket.c:597
-        sock_close+0x18/0x1c net/socket.c:1267
-        __fput+0x418/0x729 fs/file_table.c:281
-        task_work_run+0x12b/0x15b kernel/task_work.c:151
-        tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-        exit_to_user_mode_loop kernel/entry/common.c:165 [inline]
-        exit_to_user_mode_prepare+0x8f/0x130 kernel/entry/common.c:192
-        syscall_exit_to_user_mode+0x172/0x1b2 kernel/entry/common.c:268
-        entry_SYSCALL_64_after_hwframe+0x61/0xc6
-        RIP: 0033:0x78e38575e1db
-        Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89
-        7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05
-        <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-        RSP: 002b:00007ffffc20a0b0 EFLAGS: 00000293 ORIG_RAX:
-        0000000000000003
-        RAX: 0000000000000000 RBX: 0000000000000006 RCX: 000078e38575e1db
-        RDX: ffffffffffffffb8 RSI: 0000000020000000 RDI: 0000000000000005
-        RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000150
-        R10: 0000000000000000 R11: 0000000000000293 R12: 000000000000e155
-        R13: 00007ffffc20a140 R14: 00007ffffc20a130 R15: 00007ffffc20a0e8
-
-Changes in v3:
-- No changes.
-
-Changes in v2:
-- Removed suspend registration from hci_sock.
-- Exit hci_suspend_notifier early if user channel.
-
- net/bluetooth/hci_core.c | 4 ++++
- net/bluetooth/hci_sock.c | 3 ---
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 66c7cdba0d32..86ce2dd1c7fb 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -2406,6 +2406,10 @@ static int hci_suspend_notifier(struct notifier_block *nb, unsigned long action,
- 		container_of(nb, struct hci_dev, suspend_notifier);
- 	int ret = 0;
+diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+index 30056da3e0af..42568c616181 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
++++ b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+@@ -1191,9 +1191,13 @@ static int sun50i_h6_ccu_probe(struct platform_device *pdev)
+ 	if (IS_ERR(reg))
+ 		return PTR_ERR(reg);
  
-+	/* Userspace has full control of this device. Do nothing. */
-+	if (hci_dev_test_flag(hdev, HCI_USER_CHANNEL))
-+		return NOTIFY_DONE;
-+
- 	if (action == PM_SUSPEND_PREPARE)
- 		ret = hci_suspend_dev(hdev);
- 	else if (action == PM_POST_SUSPEND)
-diff --git a/net/bluetooth/hci_sock.c b/net/bluetooth/hci_sock.c
-index b2a33a05c93e..06581223238c 100644
---- a/net/bluetooth/hci_sock.c
-+++ b/net/bluetooth/hci_sock.c
-@@ -887,7 +887,6 @@ static int hci_sock_release(struct socket *sock)
- 			 */
- 			hci_dev_do_close(hdev);
- 			hci_dev_clear_flag(hdev, HCI_USER_CHANNEL);
--			hci_register_suspend_notifier(hdev);
- 			mgmt_index_added(hdev);
- 		}
+-	/* Force PLL_GPU output divider bits to 0 */
++	/*
++	 * Force PLL_GPU output divider bits to 0 and adjust
++	 * multiplier to sensible default value of 432 MHz.
++	 */
+ 	val = readl(reg + SUN50I_H6_PLL_GPU_REG);
+-	val &= ~BIT(0);
++	val &= ~(GENMASK(15, 8) | BIT(0));
++	val |= 17 << 8;
+ 	writel(val, reg + SUN50I_H6_PLL_GPU_REG);
  
-@@ -1216,7 +1215,6 @@ static int hci_sock_bind(struct socket *sock, struct sockaddr *addr,
- 		}
- 
- 		mgmt_index_removed(hdev);
--		hci_unregister_suspend_notifier(hdev);
- 
- 		err = hci_dev_open(hdev->id);
- 		if (err) {
-@@ -1231,7 +1229,6 @@ static int hci_sock_bind(struct socket *sock, struct sockaddr *addr,
- 				err = 0;
- 			} else {
- 				hci_dev_clear_flag(hdev, HCI_USER_CHANNEL);
--				hci_register_suspend_notifier(hdev);
- 				mgmt_index_added(hdev);
- 				hci_dev_put(hdev);
- 				goto done;
+ 	/* Force GPU_CLK divider bits to 0 */
 -- 
-2.38.0.rc1.362.ged0d419d3c-goog
+2.37.3
 
