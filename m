@@ -2,127 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C0D5EE3CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE54C5EE3CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234368AbiI1SDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 14:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S234369AbiI1SDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 14:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234331AbiI1SDb (ORCPT
+        with ESMTP id S234434AbiI1SDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 14:03:31 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1858EFE659
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:03:30 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id e68so13224618pfe.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:03:30 -0700 (PDT)
+        Wed, 28 Sep 2022 14:03:50 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCA51003A4
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:03:49 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id a3so21493946lfk.9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:03:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=6XAUjyy8dM+memUfQW8WuFfjcJaprUOz9KHY1fZCoGw=;
-        b=P53UuYSAwxYFHB9LgLaojInB13oBd+shR1QK8QLrkhdso+QUkcvjVqDWM2vJ4I63kw
-         KlCzcL9FiEhkuBJBlwC5PJlL9NJ34wFLMuQTnDxwUThgzhPimvSVcnI2rpqOb0hCLKhd
-         viB50mL+V/HuT13gD0dJc/Pi0j5DCwUUH+qEBhzfY6h/Cjg0rRA6+jFK6bnveqS0rNDO
-         lHsQ4KZqzindpP+UZjeeiz2+fKswe/2zJNN5BTZsphgu/FUDjADeIkiOE7ICBKwO/31j
-         +8UoENl/RTohakihwLsm0RBwwn++jrGrmTGREk6RWUrUdyze6btBvJeXL6HSD+26vNEv
-         p04A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=HXE9oeDQQV+iTI2ox/bIzi3jVXRhY6aBz1RqBKzY3QY=;
+        b=Z3OhQW19A9BvFqqeeIvsTAbFQpLLBUrCM1V8Y6PI9Q7V94Pi0X+PZCXWN0Nhhre8bU
+         hz7uzP3jWC6bSxtfSeuseK0g39FKCat0IIMZJYNrLnJljEu96rAS0+dnraeTATVLPZGA
+         EareENKypzkQC6aS3KVjBWqBM1Pll8x1c2htmVzuv54xb64kgsmTnB+Hgxe0uAu8D7vx
+         uPc7BcgpRxoRVHM/Le2C0NmD56f/rrSLRC8UUDWNmUMlhCy/YvJkQ08kcz2FoZoPZFcl
+         3WdOm5uVBMGZvcrhEp9bWq8bWDd/H28qnD7V5GyPybYYW13j0DIs4cWrerF9eSrkDhxP
+         o2Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=6XAUjyy8dM+memUfQW8WuFfjcJaprUOz9KHY1fZCoGw=;
-        b=LaCCVetFB71ZEjAGbRC5RFiXtwHikdg0Y0czDsHflscqLSUTBCZS5BIv0LLwPDsvNx
-         5vmpvlSegUM8ORXHuhARIvfsokOGIO42I0jiTcbLogDNT7O6IXGj9CpttspyG6f1Fo48
-         vqKzgoa/EbXpdE8J/cA2d8moOXVyIKZBgxkZ8XRTNwEEu6lUjvXuCIP04kt46I5lerY2
-         nKLQJ11LVejEqxxuZf9MclLAhV1rcJjSFSN6runICsVN4+O82QSls4st0iga2tYC9rnp
-         hWC5kmpOXECfwd9ZbehigeS6pyfsVaG9xsaD0hPPcjtmxleOrC0LTBVQTzRlonug5/c7
-         mg5w==
-X-Gm-Message-State: ACrzQf31wCRwKCopRFu93TrzH2bBy3m+Hl1bH5v+zzRMqnt7C98D34TB
-        MlDLC9LYBfcwM8Mm3eue9ovGew==
-X-Google-Smtp-Source: AMsMyM7JqeZAVXgNGynCXgynjXwAyFE7hjSnnBDGmaNtLpXl6XjEgEHwd4IDXyVuMlRfZxPvwlNagg==
-X-Received: by 2002:a63:1606:0:b0:43c:b5e1:5c52 with SMTP id w6-20020a631606000000b0043cb5e15c52mr15584384pgl.250.1664388209513;
-        Wed, 28 Sep 2022 11:03:29 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j3-20020a63ec03000000b0043057fe66c0sm3864080pgh.48.2022.09.28.11.03.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 11:03:28 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 18:03:25 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Subject: Re: [PATCH v3 05/28] KVM: x86: Don't inhibit APICv/AVIC if xAPIC ID
- mismatch is due to 32-bit ID
-Message-ID: <YzSMbSXQXyUY7M7G@google.com>
-References: <20220920233134.940511-1-seanjc@google.com>
- <20220920233134.940511-6-seanjc@google.com>
- <d02d0b30-f29b-0ff6-98c7-89ddcd091c60@oracle.com>
- <e5d54876b233dc71a69249c3d02d649da5040a14.camel@redhat.com>
- <YzR7ezt67i1lH1/b@google.com>
- <1aea43e831cd7ed90c325b2c90bc6f3f9a1805b5.camel@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=HXE9oeDQQV+iTI2ox/bIzi3jVXRhY6aBz1RqBKzY3QY=;
+        b=0XgyvRaNfXtIZDqWSt7DulLT7zaerLzcsgQXfyjrlCTEz5rX/xp709cFuMF7LcmXbL
+         FMhM2XASyQ0Gfot6+ibcZJ5XwYWmuX03ECZxLyao+3aUkJbczqeKp7JLHj6MomqJx4+k
+         EbDGR+pPOj63zU43CK99i1CpNFr9Y6TdiSuxRnWIJ6e+kRLHFKztCzVRqoZI27i5byRH
+         poL2Z89uMLFJ0arZuDz8bwvzISvgfVFxEcx/MyrEnyldTtdBI1m9UXyTr84eGGDvxvWy
+         H1QxDcl+ymlpkN+72lhAryGbMkzotwKlmQLW7g7HXb8X6iM59eLL9MHbd1uNqQf/qJru
+         bmNg==
+X-Gm-Message-State: ACrzQf2ip9HV9kCh/P7UVeEkvSzQt0JntsogY7YET58Qq8SYcrV5D0QW
+        BDTbbvnnYFC2Ok5Vh8wTLQGgQQ==
+X-Google-Smtp-Source: AMsMyM5LFG5uTcG/mvcymrW1/P8HiYSn5bhpc/dM9E4AjvP9rptnd1GgJLYkj2f14njBNO+kHWPlKA==
+X-Received: by 2002:a05:6512:1305:b0:4a1:d80d:95d with SMTP id x5-20020a056512130500b004a1d80d095dmr6564493lfu.324.1664388227440;
+        Wed, 28 Sep 2022 11:03:47 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id s10-20020a056512214a00b00497c3fdf995sm535795lfr.152.2022.09.28.11.03.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 11:03:47 -0700 (PDT)
+Message-ID: <0636d53f-508f-8a86-0973-2641c9020622@linaro.org>
+Date:   Wed, 28 Sep 2022 20:03:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1aea43e831cd7ed90c325b2c90bc6f3f9a1805b5.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v1 5/7] arm: dts: qcom: mdm9615: remove invalid pmic
+ subnodes compatibles
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v1-5-b6e63a7df1e8@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v1-5-b6e63a7df1e8@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022, Maxim Levitsky wrote:
-> On Wed, 2022-09-28 at 16:51 +0000, Sean Christopherson wrote:
-> > > > It happens regardless of vCPU count (tested with 2, 32, 255, 380, and 
-> > > > 512 vCPUs). This state persists for all subsequent reboots, until the VM 
-> > > > is terminated. For vCPU counts < 256, when x2apic is disabled the 
-> > > > problem does not occur, and AVIC continues to work properly after reboots.
-> > 
-> > Bit of a shot in the dark, but does the below fix the issue?  There are two
-> > issues with calling kvm_lapic_xapic_id_updated() from kvm_apic_state_fixup():
-> > 
-> >   1. The xAPIC ID should only be refreshed on "set".
-> True - I didn't bother to fix it yet because it shouldn't cause harm, but
-> sure this needs to be fixed.
+On 28/09/2022 11:14, Neil Armstrong wrote:
+> The PMIC is an PM8018, but was compatible with the PM8921. Both compatibles
+> was left but it makes no sense anymore the leave both.
 
-It's probably benign on its own, but with the missing "hardware enabled" check,
-it could be problematic if userspace does KVM_GET_LAPIC while the APIC is hardware
-disabled, after the APIC was previously in x2APIC mode.  I'm guessing QEMU does
-KVM_GET_LAPIC state when emulating reboot, hence the potential for being involved
-in the bug Alejandro is seeing.
+Why? It makes sense for backwards compatibility. If you think it does
+not make sense, please say why.
 
-> >   2. The refresh needs to be noted after memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
-> Are you sure? The check is first because if it fails, then error is returned to userspace
-> and the KVM's state left unchanged.
 > 
-> I assume you are talking about 
+> The pwrkey compatible is left to PM8921, unlike the others because
+> the interface is stricly compatible with the PM9821 pwrkey.
+
+typo: strictly
+typo: PM8921
+
+Again, why? The old code looked correct. In all three places.
+
 > 
->         ....
-> 	r = kvm_apic_state_fixup(vcpu, s, true);
-> 	if (r) {
-> 		kvm_recalculate_apic_map(vcpu->kvm);
-> 		return r;
-> 	}
-> 	memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> 
 
-This isn't a failure path though, it's purely a "take note of the update", and
-KVM needs to do that processing _after_ the actual update.  Specifically,
-kvm_lapic_xapic_id_updated() consumes the internal APIC state:
+Best regards,
+Krzysztof
 
-	if (kvm_xapic_id(apic) == apic->vcpu->vcpu_id)
-		return;
-
-Calling that before the internal state has been set with the incoming state from
-userspace is simply wrong.
-
-The check that the x2APIC ID is "correct" stays where it is, this is purely the
-"is the xAPIC ID different" path.
