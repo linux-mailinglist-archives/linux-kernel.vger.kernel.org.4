@@ -2,74 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6715ED328
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 04:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43F85ED32D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 04:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232851AbiI1CvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 22:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
+        id S232919AbiI1Cy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 22:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiI1CvX (ORCPT
+        with ESMTP id S229610AbiI1CyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 22:51:23 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5078A1191B9;
-        Tue, 27 Sep 2022 19:51:23 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id iw17so10722687plb.0;
-        Tue, 27 Sep 2022 19:51:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date;
-        bh=+40eESmYOvjZMnFgnPsqVau+djoaI2s0Id1GNYZnG9I=;
-        b=kiu55Cn3QjxHheLqLLQ3AzG0MraH60AOhWJ2FaWSef2GyrfbY+Me8kZN30AoBMFd9R
-         2ypClmIgnoNHA1smu9TuM5F82QHb/oJnfhX1K8zcI/FSarW5hfwlmHK9F+7luJ34n0KC
-         3hmek/KdZEtSbT7SZJea4dhGVSoxv4u/oe624JgWlio4ShOrd5iRdgzYFVIrViVMMsJ9
-         sL7+Gg8bvdT2rVXNClXSBzxoJZY2vKCvpDwAPf37Gw7DiWbV7nAsx1KoFzWK4yoFFSBM
-         sFRtkx9c5Y8IFI7PbyX4UqU/vfcDHcTH4liPI5al+bz/fCKOIlplvCL4D7mrzf2fNCrb
-         XfvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=+40eESmYOvjZMnFgnPsqVau+djoaI2s0Id1GNYZnG9I=;
-        b=0qdXwWpjq319XbhPNnuj/yJzVBEu60IPzhw+iXihIAyb1W3qYC1tFc/Myz+rLvoiFW
-         NuHGWLlFd4t1WVOS07qDGE/LJN+Jd5+P/VdSxIptWrlM30bzqRVRJgV4RoXpeSewwpyf
-         FvdtZPww0M0SLqfhB4VBZPGvVROmFeu7Bh5BC7d/maJqPmdHj47vB5pIxmrQmVK9Yzpy
-         89EFnTEiM/4m85/f/LgHIFV+Ipk6Sg7Knx2MJpyo2kdPq4GmXPzJrLA6MYQ9W8Wk4ord
-         S+PEIovTgk9O4kOC3vjN4igEHHtuEUkOIA7AnCHPS4PnvodtWkqa6w45hhTOujWZirhl
-         djRw==
-X-Gm-Message-State: ACrzQf01UlNy+Of3t9ZBUg7fE9EAkwLfeoG9AyDxQkyVacZaAEjrQkvM
-        3+x+8yg9cWXfH2q01atG2Z0=
-X-Google-Smtp-Source: AMsMyM4YSEEIuewM2BVTwLmiOMcH6j8zf/3xRUbLFvaXslf1ctP+VXvADSEQibqOc/qPTJIkexYBCw==
-X-Received: by 2002:a17:90b:3804:b0:205:e70c:43fc with SMTP id mq4-20020a17090b380400b00205e70c43fcmr3655055pjb.2.1664333482824;
-        Tue, 27 Sep 2022 19:51:22 -0700 (PDT)
-Received: from localhost (193-116-92-8.tpgi.com.au. [193.116.92.8])
-        by smtp.gmail.com with ESMTPSA id b10-20020a170903228a00b00177ef3246absm2371820plh.103.2022.09.27.19.51.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 19:51:21 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 28 Sep 2022 12:51:14 +1000
-Message-Id: <CN7OZ6TMLLFS.2HER50Q3SO480@bobo>
-Cc:     <mpe@ellerman.id.au>, <christophe.leroy@csgroup.eu>,
-        <atrajeev@linux.vnet.ibm.com>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-kernel@vger.kernel.org>, <lance@osuosl.org>,
-        <paulmck@kernel.org>, <rcu@vger.kernel.org>
-Subject: Re: [PATCH linux-next][RFC] powerpc: avoid lockdep when we are
- offline
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Zhouyi Zhou" <zhouzhouyi@gmail.com>
-X-Mailer: aerc 0.11.0
-References: <20220927014823.11439-1-zhouzhouyi@gmail.com>
- <CN6WCMKCWHOG.LT2QV3910UJ2@bobo>
- <CAABZP2wYcNXkTo=tgX-ARziwgD2rng+-wCZ-qfQ6M30+vmLEug@mail.gmail.com>
-In-Reply-To: <CAABZP2wYcNXkTo=tgX-ARziwgD2rng+-wCZ-qfQ6M30+vmLEug@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 27 Sep 2022 22:54:25 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB921BA3A3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 19:54:23 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mcgvd6hNwz1P6r6;
+        Wed, 28 Sep 2022 10:50:05 +0800 (CST)
+Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 10:54:21 +0800
+Received: from [10.67.109.54] (10.67.109.54) by kwepemm600005.china.huawei.com
+ (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 28 Sep
+ 2022 10:54:20 +0800
+Subject: Re: [PATCH] mm/hwpoison: fix build error without
+ CONFIG_MEMORY_FAILURE
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+References: <20220927102946.98622-1-tanghui20@huawei.com>
+ <20220927125350.GA500539@u2004.lan>
+CC:     <naoya.horiguchi@nec.com>, <linmiaohe@huawei.com>,
+        <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+From:   Hui Tang <tanghui20@huawei.com>
+Message-ID: <c7b234ae-db3a-ef9e-714d-a911d37a272a@huawei.com>
+Date:   Wed, 28 Sep 2022 10:54:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
+MIME-Version: 1.0
+In-Reply-To: <20220927125350.GA500539@u2004.lan>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.109.54]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,60 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed Sep 28, 2022 at 11:48 AM AEST, Zhouyi Zhou wrote:
-> Thank Nick for reviewing my patch
+
+
+On 2022/9/27 20:53, Naoya Horiguchi wrote:
+> On Tue, Sep 27, 2022 at 06:29:46PM +0800, Hui Tang wrote:
+>> Building without CONFIG_MEMORY_FAILURE will fail:
+>>
+>> mm/memory-failure.o: In function `action_result':
+>> memory-failure.c: undefined reference to `memblk_nr_poison_inc'
+>> mm/memory-failure.o: In function `page_handle_poison':
+>> memory-failure.c: undefined reference to `memblk_nr_poison_inc'
+>> mm/memory-failure.o: In function `__get_huge_page_for_hwpoison':
+>> memory-failure.c: undefined reference to `memblk_nr_poison_inc'
+>> mm/memory-failure.o: In function `unpoison_memory':
+>> memory-failure.c: undefined reference to `memblk_nr_poison_sub'
+>> mm/memory-failure.o: In function `num_poisoned_pages_inc':
+>> memory-failure.c: undefined reference to `memblk_nr_poison_inc'
+>>
+>> Add CONFIG_MEMORY_FAILURE wrapper for invoking memblk_nr_poison_{inc|sub}.
+>>
+>> Fixes: 69b496f03bb4 ("mm/hwpoison: introduce per-memory_block hwpoison counter")
+>> Signed-off-by: Hui Tang <tanghui20@huawei.com>
 >
-> On Tue, Sep 27, 2022 at 12:25 PM Nicholas Piggin <npiggin@gmail.com> wrot=
-e:
-> >
-> > On Tue Sep 27, 2022 at 11:48 AM AEST, Zhouyi Zhou wrote:
-> > > This is second version of my fix to PPC's  "WARNING: suspicious RCU u=
-sage",
-> > > I improved my fix under Paul E. McKenney's guidance:
-> > > Link: https://lore.kernel.org/lkml/20220914021528.15946-1-zhouzhouyi@=
-gmail.com/T/
-> > >
-> > > During the cpu offlining, the sub functions of xive_teardown_cpu will
-> > > call __lock_acquire when CONFIG_LOCKDEP=3Dy. The latter function will
-> > > travel RCU protected list, so "WARNING: suspicious RCU usage" will be
-> > > triggered.
-> > >
-> > > Avoid lockdep when we are offline.
-> >
-> > I don't see how this is safe. If RCU is no longer watching the CPU then
-> > the memory it is accessing here could be concurrently freed. I think th=
-e
-> > warning is valid.
-> Agree
-> >
-> > powerpc's problem is that cpuhp_report_idle_dead() is called before
-> > arch_cpu_idle_dead(), so it must not rely on any RCU protection there.
-> > I would say xive cleanup just needs to be done earlier. I wonder why it
-> > is not done in __cpu_disable or thereabouts, that's where the interrupt
-> > controller is supposed to be stopped.
-> Yes, I learn flowing events sequence from kgdb debugging
-> __cpu_disable -> pseries_cpu_disable -> set_cpu_online(cpu, false)  =3D
-> leads to =3D>  do_idle: if (cpu_is_offline(cpu) -> arch_cpu_idle_dead
-> so xive cleanup should be done in pseries_cpu_disable.
+> Thank you for the patch.  I have a question.
+> If you disables CONFIG_MEMORY_FAILURE, mm/memory-failure.c should
+> not be compiled, so I wonder why you saw the compile error.
+> Could you share your .config file?
+>
+> Acutally I saw the similar report a few days ago
+> https://lore.kernel.org/lkml/20220923095013.1151252-1-michael@walle.cc/
+> , where the build error happened in aarch64,  so I likely missed some arch
+> dependency.  I responded to the report by updating the patch by applying
+> "#if defined(CONFIG_MEMORY_FAILURE) && defined(CONFIG_MEMORY_HOTPLUG)"
+> to the definition of memblk_nr_poison_{inc,sub}.
+> https://lore.kernel.org/lkml/20220923141204.GA1484969@ik1-406-35019.vs.sakura.ne.jp/
+>
+> I did not confirm that this fix is really right, because I can't reproduced
+> the build error in my environment.  So could you check that v5 patch fixes
+> the build error you're seeing?  (The current version in mm-unstable is v4,
+> so that should be replaced with v5.)
 
-It's a good catch and a reasonable approach to the problem.
+   Yes, when appling the latest patch, this build error is gone, thanks.
 
-> But as a beginner, I afraid that I am incompetent to do above
-> sophisticated work without error although I am very like to,
-> Could any expert do this for us?
-
-This will be difficult for anybody, it's tricky code. I'm not an
-expert at it.
-
-It looks like the interrupt controller disable split has been there
-since long before xive. I would try just move them together than see
-if that works.
-
-Documentation/core-api/cpu_hotplug.rst says that __cpu_disable should
-shut down the interrupt handler. So if there is a complication it
-would probably be from powerpc-specific CPU hotplug  or interrupt
-code.
-
-Thanks,
-Nick
-
+>
+>> ---
+>>  mm/memory-failure.c | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index 03479895086d..5bb9d2d20234 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -77,14 +77,18 @@ static bool hw_memory_failure __read_mostly = false;
+>>  void num_poisoned_pages_inc(unsigned long pfn)
+>>  {
+>>  	atomic_long_inc(&num_poisoned_pages);
+>> +#ifdef CONFIG_MEMORY_FAILURE
+>>  	memblk_nr_poison_inc(pfn);
+>> +#endif
+>>  }
+>>
+>>  static inline void num_poisoned_pages_sub(unsigned long pfn, long i)
+>>  {
+>>  	atomic_long_sub(i, &num_poisoned_pages);
+>> +#ifdef CONFIG_MEMORY_FAILURE
+>>  	if (pfn != -1UL)
+>>  		memblk_nr_poison_sub(pfn, i);
+>> +#endif
+>>  }
+>>
+>>  /*
+>> --
+>> 2.17.1
+>>
+>>
+>>
+> .
+>
