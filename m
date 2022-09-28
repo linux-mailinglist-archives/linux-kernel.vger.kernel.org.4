@@ -2,353 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57285EE1B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952835EE1B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234303AbiI1QVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
+        id S234327AbiI1QWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234324AbiI1QVi (ORCPT
+        with ESMTP id S234225AbiI1QV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:21:38 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CC5E21C5;
-        Wed, 28 Sep 2022 09:21:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664382092; x=1695918092;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VFLlzbowANTEuTplVjxC4dIg9DEzjoClVyh1LPKwaoA=;
-  b=al0WrVlMYggAJMWUhnU8VCe65KKM6X5juciE44z3vYtpdO0TPj9xenMx
-   deRXyBXtW7uu2LQJt2PiKvNINVEJ7Z3APTiEzPDH+XpnXhkSX1tyQhlwQ
-   DMJ0pzlCZAReCbyf2O8GahOfvMPqe6K96FWiOCLzKcnAc8R0lItmaRT7n
-   bQV3aFowvQYlrvjy5B5Hlzpb3V4kypAIbMlNc7+Cya1dLOk4n4kDxBif2
-   FT+7fpuF/BJbv5tmEKjLfq4Lg2lsZL4MoaZwXM/JIl/fWqbA7CzxAEbtG
-   xdSxuONqlqI2Fkqxax+MlV2UDsqPGuQOytndIJCbPYC+gMMmfz95jP7Bj
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="182355220"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Sep 2022 09:21:30 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 28 Sep 2022 09:21:29 -0700
-Received: from ATX-DK-C33025.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 28 Sep 2022 09:21:28 -0700
-From:   Jerry Ray <jerry.ray@microchip.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jerry Ray <jerry.ray@microchip.com>
-Subject: [net-next][PATCH v3] dt-bindings: dsa: lan9303: Add lan9303 yaml
-Date:   Wed, 28 Sep 2022 11:21:28 -0500
-Message-ID: <20220928162128.802-1-jerry.ray@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 28 Sep 2022 12:21:57 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BCEE21E5
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:21:50 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id lh5so28236572ejb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=E6GAxNGwAZ9+d2NCHkyVR7P/hkQZgRQ6SAVfz32XrwI=;
+        b=EmIBVHvrGf6bx61bpNzm6C32On6+8uIKSqf4cy3kyG8fpjs024mfwUn/fU63eb4ipS
+         /WKNYFnJcrdqH1OC4MDrEAAL7wA6gwjXI8R2LUFob1Yd9IouzjIslzRpV0FgWAZfnshE
+         xnhEf/sGVN3VxXC8xOL8dfKd5P8szDvlv5HAbO144aCDZrhZDZQ+jG8kr6WCFzh4fL0i
+         9ZonhyfyauiGdKGr3DRzPaAVufQSBzQtdiS2K3Gt4GztdLrTTyR7OTT2NZQ3ngXOMIKQ
+         WADr6vOKtBGmvLKH58Giz7P+KHSLWb2mHkYi8Km6fN/Pm/wkCQf/ZGJ/xB/KnItZvOmF
+         F19g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=E6GAxNGwAZ9+d2NCHkyVR7P/hkQZgRQ6SAVfz32XrwI=;
+        b=yDMaZfnCFLqgnGcnXovAUT7UZuRF7cI1y0QB8r6Vx5YIbJFGxiwqnhzJ/EUKd6k7pR
+         t9PKh5Xh6e5V6p9kQAsdsWw8gLoJ6ldxwn/BsU6DPO69if4uwyy1so+jb0a9Mo4oB5bv
+         lZwavcUJR8m/jAiMbBC1kafbdDipJotbyH8/jCxcwFi5FTKFMIJ6BCzxSlpSSRjhhPYO
+         cdF1ORnSmzqXFADD2f3NDbNWjjsTWORF/ghh7yldl3xk22syjVXP319ta6ZO6IzYLSf7
+         GM/TRDAzVScNaP8pd5F3i9XwfGBKan+Puu64842vSpLL8Nn/CbtjFA4bsocIeJ9CYdUS
+         Fo/w==
+X-Gm-Message-State: ACrzQf2syMHNQ/UZHqf6j1ABq+UlPi0D7vZQAm5nvtkblavi20GELRea
+        ib6G7zHnHRGJzFDO56hN02MMXr+Dt+U=
+X-Google-Smtp-Source: AMsMyM4GoAj0LMnlX8ofQsn9ceCLf5DecAlT3bxmhHfrNQUoDWyx3jboM00TPktzP0jGeegmoRkNzA==
+X-Received: by 2002:a17:907:d15:b0:781:e347:723 with SMTP id gn21-20020a1709070d1500b00781e3470723mr27635524ejc.723.1664382109465;
+        Wed, 28 Sep 2022 09:21:49 -0700 (PDT)
+Received: from [192.168.1.100] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id h15-20020a170906260f00b0077e6be40e4asm2694019ejc.175.2022.09.28.09.21.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 09:21:49 -0700 (PDT)
+Message-ID: <93142822-2ad0-338b-4cfd-887e2dbd94fd@gmail.com>
+Date:   Wed, 28 Sep 2022 18:21:48 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/4] staging: r8188eu: remove enum HAL_STATUS
+Content-Language: en-US
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220928144323.13164-1-straube.linux@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20220928144323.13164-1-straube.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding the dt binding yaml for the lan9303 3-port ethernet switch.
-The microchip lan9354 3-port ethernet switch will also use the
-same binding.
+On 9/28/22 16:43, Michael Straube wrote:
+> This series converts four functions from return type 'enum HAL_STATUS'
+> to 'int' and finally removes enum HAL_STATUS.
+> 
+> Tested on x86_64 with Inter-Tech DMG-02.
+> 
+> Michael Straube (4):
+>    staging: r8188eu: convert ODM_ReadAndConfig_MAC_REG_8188E() to int
+>    staging: r8188eu: convert ODM_ReadAndConfig_RadioA_1T_8188E() to int
+>    staging: r8188eu: convert ODM_ReadAndConfig_PHY_REG_1T_8188E() to int
+>    staging: r8188eu: convert ODM_ReadAndConfig_AGC_TAB_1T_8188E() to int
+> 
+>   drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c | 18 ++++++++----------
+>   .../staging/r8188eu/hal/HalHWImg8188E_MAC.c    |  9 ++++-----
+>   drivers/staging/r8188eu/hal/HalHWImg8188E_RF.c |  9 ++++-----
+>   drivers/staging/r8188eu/hal/rtl8188e_phycfg.c  |  6 +++---
+>   drivers/staging/r8188eu/hal/rtl8188e_rf6052.c  |  2 +-
+>   .../staging/r8188eu/include/HalHWImg8188E_BB.h |  4 ++--
+>   .../r8188eu/include/HalHWImg8188E_MAC.h        |  3 +--
+>   .../staging/r8188eu/include/HalHWImg8188E_RF.h |  2 +-
+>   drivers/staging/r8188eu/include/odm_types.h    |  5 -----
+>   9 files changed, 24 insertions(+), 34 deletions(-)
+> 
 
-Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
----
-v2->v3:
- - removed cpu labels
- - now patching against latest net-next
-v1->v2:
- - fixed dt_binding_check warning
- - added max-speed setting on the switches 10/100 ports.
----
- .../devicetree/bindings/net/dsa/lan9303.txt   |  99 +-------------
- .../bindings/net/dsa/microchip,lan9303.yaml   | 129 ++++++++++++++++++
- MAINTAINERS                                   |   8 ++
- 3 files changed, 139 insertions(+), 97 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
-
-diff --git a/Documentation/devicetree/bindings/net/dsa/lan9303.txt b/Documentation/devicetree/bindings/net/dsa/lan9303.txt
-index 46a732087f5c..8c8fedd1f00e 100644
---- a/Documentation/devicetree/bindings/net/dsa/lan9303.txt
-+++ b/Documentation/devicetree/bindings/net/dsa/lan9303.txt
-@@ -1,100 +1,5 @@
- SMSC/MicroChip LAN9303 three port ethernet switch
- -------------------------------------------------
- 
--Required properties:
--
--- compatible: should be
--  - "smsc,lan9303-i2c" for I2C managed mode
--    or
--  - "smsc,lan9303-mdio" for mdio managed mode
--
--Optional properties:
--
--- reset-gpios: GPIO to be used to reset the whole device
--- reset-duration: reset duration in milliseconds, defaults to 200 ms
--
--Subnodes:
--
--The integrated switch subnode should be specified according to the binding
--described in dsa/dsa.txt. The CPU port of this switch is always port 0.
--
--Note: always use 'reg = <0/1/2>;' for the three DSA ports, even if the device is
--configured to use 1/2/3 instead. This hardware configuration will be
--auto-detected and mapped accordingly.
--
--Example:
--
--I2C managed mode:
--
--	master: masterdevice@X {
--
--		fixed-link { /* RMII fixed link to LAN9303 */
--			speed = <100>;
--			full-duplex;
--		};
--	};
--
--	switch: switch@a {
--		compatible = "smsc,lan9303-i2c";
--		reg = <0xa>;
--		reset-gpios = <&gpio7 6 GPIO_ACTIVE_LOW>;
--		reset-duration = <200>;
--
--		ports {
--			#address-cells = <1>;
--			#size-cells = <0>;
--
--			port@0 { /* RMII fixed link to master */
--				reg = <0>;
--				ethernet = <&master>;
--			};
--
--			port@1 { /* external port 1 */
--				reg = <1>;
--				label = "lan1";
--			};
--
--			port@2 { /* external port 2 */
--				reg = <2>;
--				label = "lan2";
--			};
--		};
--	};
--
--MDIO managed mode:
--
--	master: masterdevice@X {
--		phy-handle = <&switch>;
--
--		mdio {
--			#address-cells = <1>;
--			#size-cells = <0>;
--
--			switch: switch-phy@0 {
--				compatible = "smsc,lan9303-mdio";
--				reg = <0>;
--				reset-gpios = <&gpio7 6 GPIO_ACTIVE_LOW>;
--				reset-duration = <100>;
--
--				ports {
--					#address-cells = <1>;
--					#size-cells = <0>;
--
--					port@0 {
--						reg = <0>;
--						ethernet = <&master>;
--					};
--
--					port@1 { /* external port 1 */
--						reg = <1>;
--						label = "lan1";
--					};
--
--					port@2 { /* external port 2 */
--						reg = <2>;
--						label = "lan2";
--					};
--				};
--			};
--		};
--	};
-+See Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml for the
-+device tree documentation covering the LAN9303 and LAN9354 devices.
-diff --git a/Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml b/Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
-new file mode 100644
-index 000000000000..818770092a2c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
-@@ -0,0 +1,129 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/dsa/microchip,lan9303.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: LAN9303 Ethernet Switch Series Tree Bindings
-+
-+allOf:
-+  - $ref: "dsa.yaml#"
-+
-+maintainers:
-+  - UNGLinuxDriver@microchip.com
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - smsc,lan9303-mdio
-+          - microchip,lan9354-mdio
-+      - enum:
-+          - smsc,lan9303-i2c
-+
-+  reg:
-+    maxItems: 1
-+
-+  reset-gpios:
-+    description: Optional gpio specifier for a reset line
-+    maxItems: 1
-+
-+  reset-duration:
-+    description: Reset duration in milliseconds, defaults to 200 ms
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    //Ethernet switch connected via mdio to the host
-+    ethernet0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        phy-handle = <&lan9303switch>;
-+        phy-mode = "rmii";
-+        fixed-link {
-+            speed = <100>;
-+            full-duplex;
-+        };
-+        mdio {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            lan9303switch: switch@0 {
-+                compatible = "smsc,lan9303-mdio";
-+                dsa,member = <0 0>;
-+                reg = <0>;
-+                ethernet-ports {
-+                    #address-cells = <1>;
-+                    #size-cells = <0>;
-+                        port@0 {
-+                            reg = <0>;
-+                            phy-mode = "rmii";
-+                            ethernet = <&ethernet>;
-+                            fixed-link {
-+                                speed = <100>;
-+                                full-duplex;
-+                            };
-+                        };
-+                        port@1 {
-+                            reg = <1>;
-+                            max-speed = <100>;
-+                            label = "lan1";
-+                        };
-+                        port@2 {
-+                            reg = <2>;
-+                            max-speed = <100>;
-+                            label = "lan2";
-+                        };
-+                    };
-+                };
-+            };
-+        };
-+
-+    //Ethernet switch connected via i2c to the host
-+    ethernet1 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        phy-mode = "rmii";
-+        fixed-link {
-+            speed = <100>;
-+            full-duplex;
-+        };
-+    };
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        lan9303: switch@1a {
-+            compatible = "smsc,lan9303-i2c";
-+            reg = <0x1a>;
-+            ethernet-ports {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                port@0 {
-+                    reg = <0>;
-+                    phy-mode = "rmii";
-+                    ethernet = <&ethernet1>;
-+                    fixed-link {
-+                        speed = <100>;
-+                        full-duplex;
-+                    };
-+                };
-+                port@1 {
-+                    reg = <1>;
-+                    max-speed = <100>;
-+                    label = "lan1";
-+                };
-+                port@2 {
-+                    reg = <2>;
-+                    max-speed = <100>;
-+                    label = "lan2";
-+                };
-+            };
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5d58b55c5ae5..89055ff2838a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13386,6 +13386,14 @@ L:	netdev@vger.kernel.org
- S:	Maintained
- F:	drivers/net/ethernet/microchip/lan743x_*
- 
-+MICROCHIP LAN9303/LAN9354 ETHERNET SWITCH DRIVER
-+M:	Jerry Ray <jerry.ray@microchip.com>
-+M:	UNGLinuxDriver@microchip.com
-+L:	netdev@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
-+F:	drivers/net/dsa/lan9303*
-+
- MICROCHIP LAN966X ETHERNET DRIVER
- M:	Horatiu Vultur <horatiu.vultur@microchip.com>
- M:	UNGLinuxDriver@microchip.com
--- 
-2.25.1
-
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
