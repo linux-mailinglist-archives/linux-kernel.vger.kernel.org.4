@@ -2,96 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663615ED295
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E095ED298
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiI1BUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 21:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
+        id S232366AbiI1BUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 21:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbiI1BUP (ORCPT
+        with ESMTP id S232343AbiI1BUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 21:20:15 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E848C84E55;
-        Tue, 27 Sep 2022 18:20:14 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 129so9472624pgc.5;
-        Tue, 27 Sep 2022 18:20:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=EfjcykYysmrMrcVMHc34lacAx9ujj9xY+RuwiF9DCOs=;
-        b=V5mpTSUDsMgCua2csoE33irCKMmdwH9BZDlF15Nlng/FPORLrgOQqTJ2yGjeagUOOm
-         w8ERDU5oMa1s8H1lDayETwttCW1hH8vT7w8hgcQkfr4ACTt8yNjOuUmwfK4z/BTbkFpu
-         VrmWCL1ULxttrof4Jct2fa+vpNWYlmDiaBwq2mxCpswVqvPzGKYF84k3EFEAlWPFhvdz
-         BP0ikI9KE/Yfo4TrDtzeE6o9zrWFnpH7xyxCvJpffLogFr3qfpCMNhZsZmolzN8wa5QD
-         LADrEYiCjBG6PsnC0miclmvRTQr4/JE4Rhux44HfjQh8DJQMmLQxSuHFKi5ieC8Fa6tv
-         q46w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=EfjcykYysmrMrcVMHc34lacAx9ujj9xY+RuwiF9DCOs=;
-        b=gAo0Uz4Y4cki/BU/wHmkWZbqNnFGf4YKjqGc5s+E02MSZY6Csi7feg0UW0SR7uYpE+
-         S1lEcDuCJCjHjA++e5n/dFJxeiIV4kd/n8jM+KB3KnDTQ27h9LXvAtj7Hz9UPE9LRLE1
-         BtI0t95VjVsFeipkJVE8msd3adRHGSaNMigxczLGdkzzVQwrtiAnwNK9w6OjGv7hi58f
-         k0UdeDJAmLUAULy5cp2GQsxsoLV507hI67tcFPwfferEYKs3n47pJVzXHyaoz1wLSxUf
-         FTbYtd3aKfE1GCCMtPLJDpLNBmY1AuJiDxo6WDH0FnKcWZ+wvbOmP1Tcm5euPgXS2HTi
-         NHWQ==
-X-Gm-Message-State: ACrzQf37GqxkXPYCATHBaRHij/iXunSM9/sv+ET1sA/pdwvH7w/JD0ZH
-        qShZdPiM8Br7m5G0J2K4RGw=
-X-Google-Smtp-Source: AMsMyM6T5Auel/zMhPw6tcRQIVVXg8LzmbmFYM2CDXoTSmxhm7Ts5gSJ5tkwO95ygB4yWgUlLLy4Mw==
-X-Received: by 2002:a63:fb09:0:b0:43c:b1c6:b335 with SMTP id o9-20020a63fb09000000b0043cb1c6b335mr12582112pgh.276.1664328014095;
-        Tue, 27 Sep 2022 18:20:14 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o13-20020a62cd0d000000b0053e439c08c1sm2509442pfg.74.2022.09.27.18.20.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 18:20:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 27 Sep 2022 18:20:12 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 000/138] 5.10.146-rc2 review
-Message-ID: <20220928012012.GE1700196@roeck-us.net>
-References: <20220926163550.904900693@linuxfoundation.org>
+        Tue, 27 Sep 2022 21:20:48 -0400
+Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAE1DDD9D;
+        Tue, 27 Sep 2022 18:20:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1664328040;
+        bh=wWKds1Wm5hrS7eILqqlAVIO9n3JyGKz1gUBbmMwiXPI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=clsKaC0H8Auw665q3Q/3nstTewuQ8wyfTmpLK+PRRgVCYneTvBMRNDx/+LYRs0Y6J
+         KCy+lBI0kazsy+h5m/ITYLS5QZm/ECef94b1Wq+bsGu5mV91z7qCMHYhLw6oJHLwul
+         WMnZ5VLWcs5pajyAaVUOUgNVWDsKqwv87o95TltY=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrszc10.qq.com (NewEsmtp) with SMTP
+        id 5239D4B0; Wed, 28 Sep 2022 09:20:35 +0800
+X-QQ-mid: xmsmtpt1664328035tx3kfulac
+Message-ID: <tencent_3E405BA837ABEC725605F1B5629402D1CF05@qq.com>
+X-QQ-XMAILINFO: NC/J3CrDtaBbpTzcYCt9hDvIg8K4+5edsxjK9Y+G2yNKufvIaQKyiqv5DTYb/v
+         wmI/uCEOcHh8jPwxa08MxSp2nikcJe2UXWKoeWb2xrXQxDfSiy4c7hlVxy33usrbOQFEY2nC7MPU
+         Y/aenZQMio8i8qbE8OPg+ZL9ri99MVfATHn3kfFmXq5yqTcs6hgJr+882XBNCfvhIKi+C5G+GqWu
+         csmK0nNBzz5V+B8WmvzRvwLAYa9U2+isdcvBd9tSyK/IOGrZsFE77DWhndONjwQMSq8LchlIKA/s
+         PRegUiqBuQR1PSzeJ3VmzztqwWfB7vqKC1hLyRmNNxxR1BnnKFmdbtob20WrflEJiA3ShrN2yRYi
+         bRcxwMA8yhzOT6Duy/8D6gI1q/2EbHOZ+Hsl+qa7JXHDCbwFogjkXfYIMgVASsp+d0jNPnfplqKT
+         j5VmgRYvLw+0t2k05r7xkyUQNxMN2CMAG/NPq9KQu9gkygEHq4JidvHd3zgBG1nYMx1S007cXogE
+         kf0Q7o5m0BuLID2kjhP2/X6wPGYuMPtevlX1LX2UmwPchE+vAa7jF3ri6ywU32D4TCaj7vxqSHbS
+         K4pDs9OOkYg3kD5ozhvcWuhZuQE1C9D8X7lR0/kYRThGoQyfwpUVhGOKHmxuPDU0PeWiJoirvhyq
+         pcE/voKbZAupsou9ZO6mdB9bW5nKPCG2B5hNrDaRMQWMKepS4yO4MiGaAfX2J7bAOuFfVpJC+QvV
+         UNa9v9GwzzMuMMhv6oaqlJKVJ/tMLnET7f52tpLIG7Pwk9ptO2HlsYv1pmajVDPk5YvqIlDKkeVq
+         n0wgHRHj1u2AxIXbfKtckjoZdp3QWqCzHF6ZL/Zx66FivdHGcdQwc8N2ptC9RppxALAsw11srqP6
+         i2XXf5iZ5uZvvnX3aPiwxHv/qvtZNGSvKX0rrdjxp5mba1+AG/dt2VkTm+Cg+iaQ0euRMVwXSU7n
+         B9T6hRd89svr3scKTXhREQmqEqSBV0
+From:   Rong Tao <rtoax@foxmail.com>
+To:     martin.lau@linux.dev
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        rongtao@cestc.cn, rtoax@foxmail.com, sdf@google.com,
+        song@kernel.org, yhs@fb.com
+Subject: Re: [PATCH bpf-next] samples/bpf: offwaketime: pretty print
+Date:   Wed, 28 Sep 2022 09:20:32 +0800
+X-OQ-MSGID: <20220928012032.4564-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <1d2c81e7-b9d8-c153-608b-6464a10949d8@linux.dev>
+References: <1d2c81e7-b9d8-c153-608b-6464a10949d8@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926163550.904900693@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 06:36:58PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.146 release.
-> There are 138 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 28 Sep 2022 16:35:25 +0000.
-> Anything received after that time might be too late.
-> 
+From: Rong Tao <rongtao@cestc.cn>
 
-Build results:
-	total: 163 pass: 163 fail: 0
-Qemu test results:
-	total: 475 pass: 475 fail: 0
+Thank you very much for your reply, next time I will know all before
+submitting.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+-- 
