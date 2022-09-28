@@ -2,120 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660B65EDE6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8DA5EDE70
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233669AbiI1OGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        id S233688AbiI1OHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232196AbiI1OGw (ORCPT
+        with ESMTP id S234000AbiI1OHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:06:52 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E247952829;
-        Wed, 28 Sep 2022 07:06:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664374010; x=1695910010;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I/pDTZWoio171lecPqnLxeIbxprX6qX01McJBcMLCRU=;
-  b=UrZVbhXVVCN492Yh0D3yl0wAIjXTs5dsyft+r1h2TWLOP7GcmhgS3BY3
-   2WIVPjF2J3iYDIxS1l5Nf6Eo22QaWW25Q1R9W7Z9vrPWqjinD8C7xG+ZW
-   SRgpl0yH0UzMKDrD8HHnSKuAKb1uCVw9dtxozmx7ngGRi2AjMgjBSx6sM
-   EQ1iPP0qRtRTiQvIR8I0i29js3SnBB6M3Q5tndjxXDbklSyngTw9Tobm3
-   0r88Z0Zr2JPAZqzfjbiTuJcUOUv+2ZctS7OGYeyjfekjaaX6Cjmj0x9/E
-   ChWz9H0OLGRnB49yYtkICgZofryFvLj8jI4Hjaq1heGaJNBMk+hnaxq7P
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="363449995"
-X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="363449995"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 07:06:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="573047545"
-X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="573047545"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 28 Sep 2022 07:06:47 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1odXi1-008xWy-24;
-        Wed, 28 Sep 2022 17:06:45 +0300
-Date:   Wed, 28 Sep 2022 17:06:45 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>,
-        "Haikola, Heikki" <Heikki.Haikola@fi.rohmeurope.com>
-Subject: Re: [RFC PATCH 4/5] iio: accel: Support Kionix/ROHM KX022A
- accelerometer
-Message-ID: <YzRU9aRNReonSqbg@smile.fi.intel.com>
-References: <cover.1663760018.git.mazziesaccount@gmail.com>
- <fe1088cebb0de70bcb99af517004c1816b696825.1663760018.git.mazziesaccount@gmail.com>
- <20220922180339.30138141@jic23-huawei>
- <3eea7954-3faf-3fc9-7507-c318488c5524@gmail.com>
+        Wed, 28 Sep 2022 10:07:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931EC564C9;
+        Wed, 28 Sep 2022 07:07:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 123F461D22;
+        Wed, 28 Sep 2022 14:07:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24842C433C1;
+        Wed, 28 Sep 2022 14:07:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664374055;
+        bh=u2tPNgJtSHupgVed5hRLkf1bBRL8Ie9mRQkYuMTG0Ww=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=exSTlDIdFOIgpXrz+0201sQl+VGVKRV1aFE3DFbvUnoJECFfwuU6uYSAgq8P6b9of
+         UCvn7VD+kaljO/czl4d6BmWwh7VJkvobCCsb3BckbrT51yJwmTvlThRIX+W96mW/U9
+         T7nELCcIKUT0+Sh73vKY1LBozEhFw2Vp1Ks3QMlpBbIlm1ogTdIVXfyw6KWs9DsGcK
+         bShjKJ/Dx5EdvIJyLOzWAF+F3fMffmPmzLbtL8BHRp732RL1HYIuS6JJVJ6+Z+WIhq
+         nTkr84kvUH8PbaR4G6Km+AZmAgJDmboz/zZBC+qFAk+x5x0qiieE0WP//qJ4KOd16f
+         hnKNTk1xtHhRA==
+Date:   Wed, 28 Sep 2022 07:07:34 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ruan Jinjie <ruanjinjie@huawei.com>
+Cc:     <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <linmq006@gmail.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next] net: i82596: Add __init/__exit annotations to
+ module init/exit funcs
+Message-ID: <20220928070734.7a519e18@kernel.org>
+In-Reply-To: <987b807d-9f10-414a-524c-40e3d9f69e72@huawei.com>
+References: <20220926115456.1331889-1-ruanjinjie@huawei.com>
+        <20220927075257.11594332@kernel.org>
+        <987b807d-9f10-414a-524c-40e3d9f69e72@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3eea7954-3faf-3fc9-7507-c318488c5524@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 02:14:14PM +0300, Matti Vaittinen wrote:
-> On 9/22/22 20:03, Jonathan Cameron wrote:
-> > On Wed, 21 Sep 2022 14:45:35 +0300
-
-...
-
-> > > +		dev_err(dev, "no regmap\n");
+On Wed, 28 Sep 2022 11:13:24 +0800 Ruan Jinjie wrote:
+> On 2022/9/27 22:52, Jakub Kicinski wrote:
+> > On Mon, 26 Sep 2022 19:54:56 +0800 ruanjinjie wrote:  
+> >> Add missing __init/__exit annotations to module init/exit funcs  
 > > 
-> > Use dev_err_probe() for all dev_err() stuff in probe paths.
-> > It ends up cleaner and we don't care about the tiny overhead
-> > of checking for deferred.
+> > How many of these do you have? Do you use a tool to find the cases 
+> > where the annotations can be used?
+> >   
+> I think Linux kernel drivers have many of these problems.I use grep
+> command to compare all the driver C files and find where the annotations
+> can be used.
 > 
-> This one bothers me a bit. It just does not feel correct to pass -EINVAL for
-> the dev_err_probe() so the dev_err_probe() can check if -EINVAL !=
-> -EPROBE_DEFER. I do understand perfectly well the consistent use of
-> dev_err_probe() for all cases where we get an error-code from a function and
-> return it - but using dev_err_probe() when we hard-code the return value in
-> code calling the dev_err_probe() does not feel like "the right thing to do"
-> (tm).
+> > Please read Documentation/process/researcher-guidelines.rst
+> > and make sure you comply with what is expected in the commit message.  
 > 
-> Eg, I agree that
-> return dev_err_probe(dev, ret, "bar");
-> is nice even if we know the function that gave us the "ret" never requests
-> defer (as that can change some day).
-> 
-> However, I don't like issuing:
-> return dev_err_probe(dev, -EINVAL, "bar");
+> Thank you very much! Some key information is missing from the commit
+> message. Should I update the commit message and resubmit the patch?
 
-This case specifically was added into documentation by 7065f92255bb ("driver
-core: Clarify that dev_err_probe() is OK even w/out -EPROBE_DEFER").
-
-> Well, please let me know if you think the dev_err_probe() should be used
-> even in cases where we hard code the return to something...
-
-And this should be, of course, maintainer's decision.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+TBH I don't think this is worth fixing. The functions which will be
+discarded are tiny.
