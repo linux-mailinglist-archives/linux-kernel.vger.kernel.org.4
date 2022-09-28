@@ -2,126 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5145EE8C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 23:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C49B5EE8CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 23:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233247AbiI1V6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 17:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
+        id S233613AbiI1V6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 17:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiI1V6K (ORCPT
+        with ESMTP id S234100AbiI1V6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 17:58:10 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A1390190
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 14:58:09 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 55E07C01A; Wed, 28 Sep 2022 23:58:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1664402287; bh=Xms6OhcaZEPNuIqUCXLPQE9kG90emaV6twlho5yTI74=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XTY3wRxaUDIhe38PxByPCNAAUQUE6P7HVlJE6U1HEfyUlWlPOTwpj6eCv1diEzL0Y
-         e+YojKW38ZnNXsqsaMbr6bma3ullio5lO1yZxMdV5Vp9gqjCqhwOtHEkUwOny5aZzQ
-         nAv6bh2y3gbI/nPZOnBziCPokVNeUZ1NH46JgcPjScz1x9JSYhv9HDiU6K9OhoqLO6
-         WJEdrOPTiaBAqGYCRVDgnQoPW0XqrVmHL5oMXsviZUrO1WfG6gU4LZtJVkBTBFir6T
-         L+VcXGbl0XNBQK6udUzvEsST+jG/KYvLByNip6sMLaBgRTCdkxuiqtjszG5mHqioin
-         DjNOuQLO+SIDg==
+        Wed, 28 Sep 2022 17:58:31 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26B0AF0D8;
+        Wed, 28 Sep 2022 14:58:30 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id x18so21777401wrm.7;
+        Wed, 28 Sep 2022 14:58:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=1ZM1xivpgRrEvA+BtygIUXZXEYNOT83pkKY0ZX950F0=;
+        b=D/mZDxTrHQm1U498H52oaCkB6vHmG09pTcmIXtz4Yc4y+OL4JiOeVIS19CDNB+z72F
+         ENnAsuths80YMGX2pgfV7QN4sHZ+8isL4UtFj0/WZqbxur0Bj+J3ciFtieCA5rph3yKM
+         gpIWYbXq5aLriNpo7gYU6OlBtdQOQ45zAqJllvjNjctNezhGs+i7NkVDOF0Q/Jy2hg2E
+         kZA4RMNsN/Ta5VfcC9uJ3MGuO85spB96V1eigomQki+laqYozmlCSN/aV6OcrOEAFLyc
+         1oIvVsBX5eHmMZr5kp36rBuqWLLQRLFmqwtbwxsxTuJYgdMw3MXuHdhW5OquHMWKPr0b
+         BqJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=1ZM1xivpgRrEvA+BtygIUXZXEYNOT83pkKY0ZX950F0=;
+        b=Pbkcy/I0gSoXyg+P7ToFNDRX7aAy7bU24XGIAlnt7zFK8iWws7xDzfbXWZ/xS76pQ3
+         /ipK0PQ9BcwdPjohfcBdcsEV8UiwRuzctG/Cd3UXIa7c2FzJO8THkwOGEjI1vEV2pYrw
+         uROmHxdPLTjedj2DWJRQOoojm71Z8ra1q1CgUb6rZBuR95luyhK0JBCOvOsoO/m6gO16
+         7AilUFCF+/K55EFRhKL/ps58fDh45tzUq5C+wbPLBWLqHbgJmkRox7HZGi55/VFqX8Gz
+         us9B4kR8u9WijLde3xwLJ/Y68/cuvB3AZ6Tj4e+vKfBq9BNkndqI/rc2KuS/2rX0VK5D
+         VC9Q==
+X-Gm-Message-State: ACrzQf2wGKUXI/I4/9YePKjPDWGXdLNQlAosLv4EfPo6IRmzJaR65HNH
+        LgjR5B8lFDcR2lHORx3ouGk=
+X-Google-Smtp-Source: AMsMyM6UfiR5TxXOe/PqBn+GlHxQWrQNdmh5uRki3ac6QqVLyvtRj09mmiy9/wBlzhx0jIrBQJZpHA==
+X-Received: by 2002:a05:6000:144b:b0:22c:9161:76b4 with SMTP id v11-20020a056000144b00b0022c916176b4mr15335724wrx.145.1664402309256;
+        Wed, 28 Sep 2022 14:58:29 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id d22-20020a05600c34d600b003b49ab8ff53sm2790158wmq.8.2022.09.28.14.58.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 14:58:28 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] tracing: Fix spelling mistake "preapre" -> "prepare"
+Date:   Wed, 28 Sep 2022 22:58:28 +0100
+Message-Id: <20220928215828.66325-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 44333C009;
-        Wed, 28 Sep 2022 23:58:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1664402286; bh=Xms6OhcaZEPNuIqUCXLPQE9kG90emaV6twlho5yTI74=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FcNNyH5VJD3MWqo305PALLdeO9RvzGf3OesebRR3BBOb3ZOrYjYg2sVJhWTIXd154
-         jZ7p065pdWNCO6/0jWVd8JcaOxhjku3TaO1Fp2xPtgsy8ISp/fiuHNS8Aqx8OgiO6u
-         2lQbktiDFTd9Tdn8fq60Vnk/6UM+IzXS0uKRnUn0bKCVOr8L7uftIpPY2OgIe30L7/
-         X7TDVZZ8uOC/gmcfE7k8eMlaIR2Tw4XajPC0U0imVaR9A4X1rEzVfyfLGD37BhLDP4
-         FCU+YwZocIpZ2HtS7UAvXg9vHjACMm8cvZ8mjTCQuyFUYE/ZPSvdBic9B6RN5m6KMv
-         odQ4cgMzlzFlw==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 90872eb6;
-        Wed, 28 Sep 2022 21:58:02 +0000 (UTC)
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     v9fs-developer@lists.sourceforge.net
-Cc:     Leon Romanovsky <leon@kernel.org>, linux_oss@crudebyte.com,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com
-Subject: [PATCH 1/2 v2] 9p: client_create/destroy: only call trans_mod->close after create
-Date:   Thu, 29 Sep 2022 06:58:00 +0900
-Message-Id: <20220928215800.1749929-1-asmadeus@codewreck.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220928214417.1749609-1-asmadeus@codewreck.org>
-References: <20220928214417.1749609-1-asmadeus@codewreck.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-destroy code would incorrectly call close() if trans_mod exists after some
-hasty code cleanup: we need to make sure we only call close after create
+There is a spelling mistake in the trace text. Fix it.
 
-Link: https://lkml.kernel.org/r/00000000000015ac7905e97ebaed@google.com
-Reported-by: syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com
-Reported-by: Leon Romanovsky <leon@kernel.org>
-Fixes: 3ff51294a055 ("9p: p9_client_create: use p9_client_destroy on failure")
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
+ kernel/trace/trace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-As pointed out in later mail, rdma actually does set trans->priv then
-fails, so we also need to reset clnt->trans on create errors.
-
-That's getting uglier than I wish it'd be, but the cleanup code I just
-trashed away really isn't pretty either so I guess it'll have to do...
-At least close() should now really never be called on create failures.
-
- net/9p/client.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/net/9p/client.c b/net/9p/client.c
-index bfa80f01992e..8cf952f2de68 100644
---- a/net/9p/client.c
-+++ b/net/9p/client.c
-@@ -971,6 +971,7 @@ struct p9_client *p9_client_create(const char *dev_name, char *options)
- 	spin_lock_init(&clnt->lock);
- 	idr_init(&clnt->fids);
- 	idr_init(&clnt->reqs);
-+	clnt->trans = ERR_PTR(-EINVAL);
- 
- 	err = parse_opts(options, clnt);
- 	if (err < 0)
-@@ -990,8 +991,14 @@ struct p9_client *p9_client_create(const char *dev_name, char *options)
- 		 clnt, clnt->trans_mod, clnt->msize, clnt->proto_version);
- 
- 	err = clnt->trans_mod->create(clnt, dev_name, options);
--	if (err)
-+	// ensure clnt->trans is initialized to call close() on destroy
-+	// if and only if create succeeded
-+	if (err < 0) {
-+		clnt->trans = PTR_ERR(err);
- 		goto out;
-+	}
-+	if (IS_ERR(clnt->trans))
-+		clnt->trans = NULL;
- 
- 	if (clnt->msize > clnt->trans_mod->maxsize) {
- 		clnt->msize = clnt->trans_mod->maxsize;
-@@ -1036,7 +1043,7 @@ void p9_client_destroy(struct p9_client *clnt)
- 
- 	p9_debug(P9_DEBUG_MUX, "clnt %p\n", clnt);
- 
--	if (clnt->trans_mod)
-+	if (clnt->trans_mod && !IS_ERR(client->trans))
- 		clnt->trans_mod->close(clnt);
- 
- 	v9fs_put_trans(clnt->trans_mod);
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index d3005279165d..623c5691ab21 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -10091,7 +10091,7 @@ __init static int tracer_alloc_buffers(void)
+ 	 * buffer. The memory will be removed once the "instance" is removed.
+ 	 */
+ 	ret = cpuhp_setup_state_multi(CPUHP_TRACE_RB_PREPARE,
+-				      "trace/RB:preapre", trace_rb_cpu_prepare,
++				      "trace/RB:prepare", trace_rb_cpu_prepare,
+ 				      NULL);
+ 	if (ret < 0)
+ 		goto out_free_cpumask;
 -- 
-2.35.1
+2.37.1
 
