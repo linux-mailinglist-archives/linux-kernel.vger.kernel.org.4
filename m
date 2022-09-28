@@ -2,132 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548535EDB82
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2755EDB85
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233982AbiI1LOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
+        id S233017AbiI1LPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 07:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233301AbiI1LOR (ORCPT
+        with ESMTP id S232218AbiI1LOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:14:17 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88C41117C
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:13:02 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id j24so13945693lja.4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:13:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=F99mTczSxOdNAN6W4JqadV98hAJQX4pGEisajQkbFpU=;
-        b=wrotcg3/HeGgo3IHOLG+qLERYGRLjzhDBFippdTXUXJIzm0FXqnm0xt4PA+09J11Ta
-         PjNi5F8i7zulKsFmjj6H9MJvisUm5lW5NsSNbgU9LCjXtwyiyd98oNrKH3xsYLVKbX4V
-         Iqv9pwreSrZ2I0TIGoKfT4tTcLbn3zvZXJO//SAquS7WKUl90T28EcVt8/7xMFAexgBW
-         PYK2nBIJ3Lu/EPvHpn2BChVbSFcwW8cCGAGRaZykjphHywFxRR9EuFda2OFwuYCAZSld
-         GxtZ03xOwTXSsM1cc4wevT0h2kInApMJNzRIIBhkWp9O1hxkGg2zpk++V5hQ8Dix8W3P
-         9shQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=F99mTczSxOdNAN6W4JqadV98hAJQX4pGEisajQkbFpU=;
-        b=7pUipXuk+NdV++d2OnScMVwb7bd//h3/CdGZSWBVYJ0CYmip0euFF1/+wWHEMm542Z
-         OEWE7paV2O4aoyO7d7D8vCaE87jQIyDOui2CTKKcvLBWRVPIBY+YXMF8Ox4W4NErdGW6
-         D11rWEj1W5QBq2DEBeWOskO1Gpx5xdnt9Eh/DsMMRph4kUG5sj+XSHG9tdB335Na+nHr
-         8Yvw3+I0xm/AGjTflpUtTVwTo4IY7l7AIFO5wZq+sGNYaFI644lDX+qZsnFYJe+xGkwd
-         Y0XuRyKz+LTXNxwq19Vr33l1rIJONQkBs3U/AYDE3u4E5CQKNxy3gwP0Pb+JuvyVhgtb
-         krEg==
-X-Gm-Message-State: ACrzQf2Y/RIb8GY0buthh7+WUNGHnajxsrqejzVuNG5pfk9cDWH4o1pH
-        GE3aZ7DKKC5husA7qOvm5pyEzw==
-X-Google-Smtp-Source: AMsMyM6qVX4OKTkuH0HP9YpXpMKG2FaKhkTj8gjxJVRcBU6NdRZ3PzpuAGruLVSgf0MhE0x6RomTOw==
-X-Received: by 2002:a2e:a54d:0:b0:26c:64ae:236a with SMTP id e13-20020a2ea54d000000b0026c64ae236amr12359061ljn.207.1664363581102;
-        Wed, 28 Sep 2022 04:13:01 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05651c118c00b00261d6f45c2csm409600ljo.124.2022.09.28.04.13.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 04:13:00 -0700 (PDT)
-Message-ID: <2f9f0b2f-4380-a155-f6ac-3ce1be3bcf91@linaro.org>
-Date:   Wed, 28 Sep 2022 13:12:59 +0200
+        Wed, 28 Sep 2022 07:14:40 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8D713D78
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:14:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 395891F8A3;
+        Wed, 28 Sep 2022 11:14:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664363652; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tqwjTNsNpcERWjDz1fPON8xYqOIAIB1dbYDmCmw5vcU=;
+        b=s2j/BTUEXoHigtOP0NP3smq+bX7JycHyjAEsT+lU7PpRhL8PPylsgDsoJpJ++tEcayuQXf
+        qT4vNrvVothrRH/ywshInHHLUq2JenK90tk4X6tTSTboDFsBPfBTtvYe9y/K2+0m250bh2
+        kFuVBWdui+aJHO7Y5DWTvVujYQwPkx0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F080D13677;
+        Wed, 28 Sep 2022 11:14:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RA1iOYMsNGOPHQAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 28 Sep 2022 11:14:11 +0000
+Message-ID: <f8da6988-afa3-1e85-b47d-d91fc4113803@suse.com>
+Date:   Wed, 28 Sep 2022 13:14:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: arm: add xiaomi,sagit board based on
- msm8998 chip
+ Thunderbird/102.2.2
 Content-Language: en-US
-To:     Dzmitry Sankouski <dsankouski@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220928103319.621698-1-dsankouski@gmail.com>
- <20220928103319.621698-3-dsankouski@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220928103319.621698-3-dsankouski@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <ce8cb1d3-a7d2-7484-26eb-60d3e29fa369@suse.com>
+ <YzLMKk4OK9FtjjKQ@zn.tnic> <c0872933-e046-0c5e-b63f-861d2d343794@suse.com>
+ <YzLcSOS6ZLIoPwBl@zn.tnic> <d3cd5c50-24e7-ffba-de2d-cf00400f6e38@suse.com>
+ <YzLo9IFDYW1T8BVZ@zn.tnic> <314e3bd3-3405-c0c3-225c-646d88cbfb1a@suse.com>
+ <YzOEYsqM0UEsiFuS@zn.tnic> <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
+ <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com> <YzQmeh50ne8dyR2P@zn.tnic>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
+ mtrr_aps_delayed_init
+In-Reply-To: <YzQmeh50ne8dyR2P@zn.tnic>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------ETT5g0gHWN2exwGxTbC4Uq0u"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 12:33, Dzmitry Sankouski wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------ETT5g0gHWN2exwGxTbC4Uq0u
+Content-Type: multipart/mixed; boundary="------------C3cZWpcpO0cpAejN1RTVDpfh";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: xen-devel@lists.xenproject.org, x86@kernel.org,
+ linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <f8da6988-afa3-1e85-b47d-d91fc4113803@suse.com>
+Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
+ mtrr_aps_delayed_init
+References: <ce8cb1d3-a7d2-7484-26eb-60d3e29fa369@suse.com>
+ <YzLMKk4OK9FtjjKQ@zn.tnic> <c0872933-e046-0c5e-b63f-861d2d343794@suse.com>
+ <YzLcSOS6ZLIoPwBl@zn.tnic> <d3cd5c50-24e7-ffba-de2d-cf00400f6e38@suse.com>
+ <YzLo9IFDYW1T8BVZ@zn.tnic> <314e3bd3-3405-c0c3-225c-646d88cbfb1a@suse.com>
+ <YzOEYsqM0UEsiFuS@zn.tnic> <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
+ <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com> <YzQmeh50ne8dyR2P@zn.tnic>
+In-Reply-To: <YzQmeh50ne8dyR2P@zn.tnic>
 
-Missing commit msg.
+--------------C3cZWpcpO0cpAejN1RTVDpfh
+Content-Type: multipart/mixed; boundary="------------pkOBvL0jXdBhxRtMG2wraaA9"
 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> To: linux-kernel@vger.kernel.org
-> CC: Andy Gross <agross@kernel.org> (maintainer:ARM/QUALCOMM SUPPORT)
-> CC: Bjorn Andersson <bjorn.andersson@linaro.org> (maintainer:ARM/QUALCOMM SUPPORT)
-> CC: Konrad Dybcio <konrad.dybcio@somainline.org> (reviewer:ARM/QUALCOMM SUPPORT)
-> CC: Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-> CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-> CC: linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT)
-> CC: devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+--------------pkOBvL0jXdBhxRtMG2wraaA9
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-None of these go to commit msg. Remove leaving only your SoB.
+T24gMjguMDkuMjIgMTI6NDgsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gV2VkLCBT
+ZXAgMjgsIDIwMjIgYXQgMDg6MTY6NTNBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+PiBBcmUgc3VyZSB0aGUgaG90cGx1ZyBub3RpZmllciBkb2Vzbid0IGdldCBjYWxsZWQg
+aW4gdGhlIGJvb3QgYW5kIGluIHRoZQ0KPiANCj4gSXQgZG9lc24ndCBiZWNhdXNlIGl0IGdl
+dHMgcmVnaXN0ZXJlZCBhZnRlciBzbXBfaW5pdCgpLi4uDQo+IA0KPj4+IHJlc3VtZSBjYXNl
+cz8NCj4gDQo+IC4uLiBidXQgaXQgZ2V0cyBjYWxsZWQgZHVyaW5nIHJlc3VtZSBiZWNhdXNl
+IGJ5IHRoYXQgdGltZSB0aGUgbm90aWZpZXINCj4gaGFzIGJlZW4gcmVnaXN0ZXJlZCBhbHJl
+YWR5LiBTZWUgbXkgbm90ZXMgYXQgdGhlIGVuZCBvZiB0aGlzIG1haWwgb2YNCj4gd2hhdCB0
+aGUgY29kZSBkb2VzIGN1cnJlbnRseS4NCj4gDQo+PiBJbiBjYXNlIG15IHN1c3BpY2lvbiBp
+cyBjb3JyZWN0OiB0aGlzIGNhbiBzdGlsbCBiZSBzb2x2ZWQgYnkgYWRkaW5nIHRoZQ0KPj4g
+aG90cGx1ZyBub3RpZmllciBvbmx5IGluIG10cnJfYXBzX2luaXQoKSwgYW5kIHJlbW92aW5n
+IGl0IGFnYWluIGluDQo+PiBhcmNoX3RoYXdfc2Vjb25kYXJ5X2NwdXNfYmVnaW4oKS4NCj4g
+DQo+IFByZXR0eSBtdWNoLiBZZWFoLCB3ZSBzdGlsbCBuZWVkIGEgYm9vbC4gOy0oDQoNCk5v
+LCB3ZSBkb24ndC4NCg0KVXNpbmcgYmFzaWNhbGx5IHlvdXIgcGF0Y2gsIGJ1dCB3aXRoDQoN
+CisJbXRycl9vbmxpbmUgPSBjcHVocF9zZXR1cF9zdGF0ZV9ub2NhbGxzKENQVUhQX0FQX09O
+TElORV9EWU4sDQorCQkJCQkJIng4Ni9tdHJyOm9ubGluZSIsDQorCQkJCQkJbXRycl9hcF9p
+bml0LCBOVUxMKTsNCg0KbW92ZWQgdG8gdGhlIGVuZCBvZiBtdHJyX2Fwc19pbml0KCksIGFu
+ZDoNCg0KK3ZvaWQgbXRycl9hcHNfdGhhdyh2b2lkKQ0KK3sNCisJY3B1aHBfcmVtb3ZlX3N0
+YXRlX25vY2FsbHMobXRycl9vbmxpbmUpOw0KK30NCg0KDQpKdWVyZ2VuDQo=
+--------------pkOBvL0jXdBhxRtMG2wraaA9
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-> 
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index fb1d00bcc847..00e51d22aeb1 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -76,6 +76,7 @@ description: |
->          mtp
->          qrd
->          sbc
-> +        sagit
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-You do not use this way of compatibles, so don't extend it.
+--------------pkOBvL0jXdBhxRtMG2wraaA9--
 
->  
->    The 'soc_version' and 'board_version' elements take the form of v<Major>.<Minor>
->    where the minor number may be omitted when it's zero, i.e.  v1.0 is the same
-> @@ -239,6 +240,7 @@ properties:
->                - sony,xperia-lilac
->                - sony,xperia-maple
->                - sony,xperia-poplar
-> +              - xiaomi,sagit
->            - const: qcom,msm8998
->  
->        - items:
+--------------C3cZWpcpO0cpAejN1RTVDpfh--
 
-Best regards,
-Krzysztof
+--------------ETT5g0gHWN2exwGxTbC4Uq0u
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmM0LIMFAwAAAAAACgkQsN6d1ii/Ey/j
+Owf/RL1w9WJzcN+awH6cnj7SpHSu0q93P9keOjhDUnshuEl0+Are4SqCEePlZ1H7d0H7DJ8OOUl5
++GrIz88AXcTDeU+lWlzFmqB9+sPqBZH5GEMUV2mHTZsXwR9yuaoutabP7RKSxZW6XHZvQfnvZUkQ
+XwRiSD5fY7OIt0h9Qx5uFNA5dJipZrLNadCF+UgKD8bgOy4ah09dLoCJotottqyvhQQYaNgffsRF
+8JAF7v8/0STXdpErNLyRIPdVFycKQBSh8saWyAAdkPkO2widm2gpquRmBdc4GZ2TC/iKEp/XzkYO
+pa97GtsV27M4g7jwdE59veoizcv166dIKA2of2PC7A==
+=YBSE
+-----END PGP SIGNATURE-----
+
+--------------ETT5g0gHWN2exwGxTbC4Uq0u--
