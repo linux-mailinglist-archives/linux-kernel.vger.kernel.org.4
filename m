@@ -2,136 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDD75ED753
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D245B5ED75E
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234031AbiI1IOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
+        id S232679AbiI1IOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234026AbiI1IOO (ORCPT
+        with ESMTP id S233983AbiI1IOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:14:14 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F671F0CCA
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:14:01 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 1235258056D;
-        Wed, 28 Sep 2022 04:13:58 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 28 Sep 2022 04:13:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1664352838; x=1664356438; bh=69l6dClFNG
-        YJQL2+FpzgbpwS8TN7vzu1Wwoan5cO2Vg=; b=s9deY4mnSD9sLDPQ6SVYkT7T6J
-        KxZh7vBlPjNtd1O01t/pK9ZrFQswFvuppcf7aWgykVwg+Ubs6LIO+3YFdU9ir9n3
-        n68WJj0O/dsBJXl0KNnQePofGtcMKXwsPutokk53vKpxFI/1ajhwFv3DbY/O4Y1i
-        gvmpo0GYf/NXyzX+1LgtiGdUD8ARC/XvgSawFnOFLeypZNE/vj2iBfwn52shvUo7
-        jCDrzpE5vtNkUrht8HbMXmi5DuK3H9rcaKRN5ScmX7LgKgsDCbxaJ+3QzQa6AUf6
-        FYdKXQF7RcEHYHZkbUz9PXp6HkSqqIeA/1LsCGN6zubu8DI8imOJZ8M40/tw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664352838; x=1664356438; bh=69l6dClFNGYJQL2+FpzgbpwS8TN7
-        vzu1Wwoan5cO2Vg=; b=Fwl28Mwh7WDopymckhfcGMQG/B0m3LF5CKLBEbU5hpnK
-        HwSdA3r4XCnP/ww1aCn+67DGFasrhUW4OZPkBE/lBb4yYspEhAFeddWjdt6QVGfW
-        AbVB5Wb2FFdOnZKIA7XFDvTZ5H1YE0Xt67QRrHfaI7b88er/3JPjwumd1rS8xwm7
-        miYqUvdanUkzjdG46tOwMbVAkh+3cs1YgHwEzfaNxBszQJX3GqiA8Aki4uzD7jJH
-        he1E8gP4hXQKtVD9Ujerg9jl6YcHPSZkDhayIasRplptNQcQnivr5z8GsDtyxzkU
-        LckpSualbyjU+IYGaA7KMy/GIBUGxEnHSkViVoBkow==
-X-ME-Sender: <xms:RAI0Y4-90ILBpRQZ49-EyEFgsTs1MTTE-rY-G6fsVXv2jXbdt-_QqQ>
-    <xme:RAI0YwtM-UaSueZpKEdZ_op_ht6Q3UuI4PTUkURx44rYCprg1M9BK_7tSrAzDrWq5
-    JxmBzMKf3XzWIWuXMk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegkedgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:RAI0Y-Ca-82KeQnQkz6uxl5-OmDyKgnheb7i7xLwvJLihEQcA68rkw>
-    <xmx:RAI0Y4edqQyPDbC0-pqXDGD56MbaS3xfFpoq53ki-yQ1Vr7p8PXevg>
-    <xmx:RAI0Y9Mgd04aUXW8KgsakL-YoV9HNYUSdaBpy-7JB9aVwaJ1ps63Rg>
-    <xmx:RQI0Y0mOQbjvMjTm2U7zSvBQ1hFaVVHFKU1yT6LfEN0pajggUc8iag>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 665DDB60086; Wed, 28 Sep 2022 04:13:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-968-g04df58079d-fm-20220921.001-g04df5807
-Mime-Version: 1.0
-Message-Id: <ab221e9a-e504-443f-9713-9a7cc23c66e9@www.fastmail.com>
-In-Reply-To: <CAMuHMdWR61CJJ-J==3S6x9MX-i1maaJbjG5jS=vo6h_4Sr-45Q@mail.gmail.com>
-References: <20220818145616.3156379-1-arnd@kernel.org>
- <20220818145616.3156379-6-arnd@kernel.org>
- <CAMuHMdVL8TZ8vfdQT_9DA=JLX3O7YrP0v9AK87ALjmsvryZptw@mail.gmail.com>
- <0c368c7d-3130-46e6-8185-7270f58161a3@www.fastmail.com>
- <CAMuHMdWR61CJJ-J==3S6x9MX-i1maaJbjG5jS=vo6h_4Sr-45Q@mail.gmail.com>
-Date:   Wed, 28 Sep 2022 10:13:35 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc:     "Arnd Bergmann" <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Ard Biesheuvel" <ardb@kernel.org>, "Sekhar Nori" <nsekhar@ti.com>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        "Shawn Guo" <shawnguo@kernel.org>,
-        "Sascha Hauer" <s.hauer@pengutronix.de>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        "Andrew Lunn" <andrew@lunn.ch>,
-        "Gregory Clement" <gregory.clement@bootlin.com>,
-        "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>
-Subject: Re: [PATCH 5/5] ARM: make ARCH_MULTIPLATFORM user-visible
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 04:14:17 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5541F0CF4
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:14:09 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id x29so13527506ljq.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:14:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=v6QaMWdAPR76v9HKIzdz7EMFyf/2GU9QkgN/UVKiV6Q=;
+        b=I6xwj2Uyc+woJUUx4zW40ZhrmpDSAgr4vg6n8b7SUfm+v6acq72a1R64wx/wyS0Y62
+         nrJamq6SzWCkHQrbKHIGj9z36l1YPZd6tKFltdfErXyq69X3tC3oBlEbsUrE+D2RNn6n
+         MMeoYP8Yu4NcdUJATBJhyKooqZIasb/iuVE3T345gzFG7y8coT2XuwV8g6rf3GA9xAID
+         ffg/s3HOgaZIqYt8nW4cz/ulGKmWCl7uli+K1Q+/HF0hBw6ukc0P0i8qeTasJKe7mb/L
+         1Wj1WHBB03SdXYS95QqIuOeFQmO7oWRLhdDVnRRqndCog/0JUV4T9jGQuUCpcyy7bMwn
+         E3JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=v6QaMWdAPR76v9HKIzdz7EMFyf/2GU9QkgN/UVKiV6Q=;
+        b=JEO0H5vRaR80AopbsvMzdVoXEEp4nWXnHneQJbTrzTe88u554i5JtPKA0aciqoldP7
+         tIV540S0y8lj3paXC+GnV4+vuReNo1K9f3NBJXsTrHIPHLpzLSllM7kJOHt1Ix70hJE7
+         49tOaYlP3kTxvF4TUbiWTLR1wnb5UxBAYH5CEGFvc2bdkdYdwiC6hxetHr4JU8tydDJZ
+         a6/6OX/+1fyPWKgbuPsnfZKpNZZFB+2CB9Aq2emi5Ogl/RMvq1Lfl37EWZYbw8Pum1nX
+         EnEdKSvvj8Kj0n6NQj+6ePukqz6d/w9sZqwUPWZ/vFE0sXfSxFC6cm+Rudf75UNoJYuC
+         Z5hg==
+X-Gm-Message-State: ACrzQf3tpQulpMeV/DYezW14QXuUx8DE4x23CmYlV+LyYF4zR/KDxkwm
+        mLf/BTIaoWk4N0wTpSuih4sjqw==
+X-Google-Smtp-Source: AMsMyM7bQUgTnb422ZgN8i6D2p6VsWOyHwAGMhtHP7q1rzVeQubNK4LIf3LBDQYeOTfBOWZXFTxO4g==
+X-Received: by 2002:a05:651c:1111:b0:26c:7178:ac4f with SMTP id e17-20020a05651c111100b0026c7178ac4fmr10510926ljo.461.1664352847551;
+        Wed, 28 Sep 2022 01:14:07 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id k7-20020a2eb747000000b0026c5bc6ed1asm361749ljo.69.2022.09.28.01.14.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 01:14:06 -0700 (PDT)
+Message-ID: <3f2e62f5-a6e4-7011-3f5b-29a6657eae79@linaro.org>
+Date:   Wed, 28 Sep 2022 10:14:05 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v4 1/5] dt-bindings: mfd: qcom-spmi-pmic: Add pm6125
+ compatible
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220926190148.283805-1-marijn.suijten@somainline.org>
+ <20220926190148.283805-2-marijn.suijten@somainline.org>
+ <052630d0-299e-e468-b2dd-266d371e2b0f@linaro.org>
+ <20220928081055.p66huqct2wnrsrdx@SoMainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220928081055.p66huqct2wnrsrdx@SoMainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022, at 8:48 AM, Geert Uytterhoeven wrote:
-> On Tue, Sep 27, 2022 at 10:19 PM Arnd Bergmann <arnd@arndb.de> wrote:
->> On Tue, Sep 27, 2022, at 3:31 PM, Geert Uytterhoeven wrote:
->> > On Thu, Aug 18, 2022 at 4:56 PM Arnd Bergmann <arnd@kernel.org> wrote:
->> >> --- a/arch/arm/Kconfig.debug
->> >> +++ b/arch/arm/Kconfig.debug
->> >> @@ -1904,6 +1904,7 @@ config DEBUG_UART_8250_PALMCHIP
->> >>
->> >>  config DEBUG_UNCOMPRESS
->> >>         bool "Enable decompressor debugging via DEBUG_LL output"
->> >> +       depends on !ARCH_MULTIPLATFORM
->> >
->> > Shouldn't DEBUG_LL itself depend on !ARCH_MULTIPLATFORM instead?
+On 28/09/2022 10:10, Marijn Suijten wrote:
+> On 2022-09-28 09:35:40, Krzysztof Kozlowski wrote:
+>> On 26/09/2022 21:01, Marijn Suijten wrote:
+>>> Document support for the pm6125, typically paired with the sm6125 SoC.
+>>>
+>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>> ---
+>>>  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 1 +
+>>>  1 file changed, 1 insertion(+)
 >>
->> That would also be possible, but I prefer to keep limiting only
->> the DEBUG_UNCOMPRESS. The idea of DEBUG_LL is that while it's
->> hardwired to a particular hardware address, it does not actually
->> access this address unless you specify the 'earlyprintk'
->> argument on the command line.
->
-> ... or unless something goes really wrong, and the kernel tries to
-> inform the user using early_print()?
+>>
+>> Please add Acked-by/Reviewed-by tags when posting new versions. However,
+>> there's no need to repost patches *only* to add the tags. The upstream
+>> maintainer will do that for acks received on the version they apply.
+>>
+>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+>>
+>> If a tag was not added on purpose, please state why and what changed.
+>>
+>>
+>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> https://lore.kernel.org/linux-arm-msm/0ec65132-7d7a-2f8d-cc16-cb76efc343d6@linaro.org/
+> 
+> Thanks, I thought of it this morning while browsing lore, but only got
+> to a screen just now so you beat me to it by ~30 minutes.
+> 
+> No need to lecture me on the rules, but I can't promise this won't
+> happen again.
 
-I don't think this matters either: without DEBUG_LL, you get a non-booting
-kernel and no diagnostics, while with DEBUG_LL, you might get some
-diagnostic if you have configured the right debug address, and otherwise
-the user gets the same as before: a crash without any output ;-)
 
-> Note that the I/O region for the debug serial port is mapped regardless.
-> Any chance this can cause conflicts?
+This is a automated message, don't get it too personal. A lot of people
+are not aware they have to do it, so I just one, same reply. I don't
+know whether you are aware of the process and just forgot to include it.
+If that's the case, just ignore the message.
 
-Not sure. The early debug mapping should only be used in for
-the earlyprintk output, but if a platform has a conflicting mapping
-at the same address, it just never gets used before it gets replaced.
+Best regards,
+Krzysztof
 
-     Arnd
