@@ -2,221 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850245EDCAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0310E5EDC93
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233923AbiI1MaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 08:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
+        id S233726AbiI1M26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 08:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233840AbiI1M3r (ORCPT
+        with ESMTP id S233737AbiI1M2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 08:29:47 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFF62EF01;
-        Wed, 28 Sep 2022 05:29:42 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28SA6B06000601;
-        Wed, 28 Sep 2022 12:29:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=80Zx/fpfN738Afn5maYFKuP5UtNBBeyq0CUNs+Odxys=;
- b=QHK8rumMQb5qUKP8tXjHfDAhVwJsl2tb788lqrsymvhLgslRIjUAW4mjyty5wqadvPPG
- eQPkmDexnmxZFEJmuA3RHEXQpofangA1XZ/RNki0fTVxf92BDKGQAmSrqaYOha2sHllp
- nsTmikxdGmJDEyYPy4LvdY6gNr9Np5mVBd/7V+unLsYVHkeGKRKUwprCWDpMI+FCk5gh
- gp0wcNWGScdqCoy3Scy8DLtic5ePxTNxGlcjein1fADBp1g3cti4Mzal4736UmYil1/A
- WL2S5lUscaMeIFcpRMozhVctd+b3VqYLXBV4hw1kEEZB+6CPgWJXF8F8ssvy8VHpo8bV jA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jvep6sdg2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 12:29:00 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28SCT0k0028720
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 12:29:00 GMT
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 28 Sep 2022 05:28:54 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>,
-        <krzysztof.kozlowski@linaro.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v10 7/7] remoteproc: qcom: Add support for memory sandbox
-Date:   Wed, 28 Sep 2022 17:57:53 +0530
-Message-ID: <1664368073-13659-8-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1664368073-13659-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1664368073-13659-1-git-send-email-quic_srivasam@quicinc.com>
+        Wed, 28 Sep 2022 08:28:49 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC0691DB0;
+        Wed, 28 Sep 2022 05:28:46 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a26so26817585ejc.4;
+        Wed, 28 Sep 2022 05:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=k95LTZNFDtS0ffvFY2N275h31giGKkkoYxr9XDNiAyc=;
+        b=an7jTc2scuDUkFYzai7CZ3gcDF1uATCda1dVKDKAyLtR1WegLnGgsNGL7plDlD0Kj+
+         3p2qDDF0n31GljpgOYeYgBQLEcAnxGgF0FlyyG/ukt+bQzy00e/AoN9NqMBx26M1Vxjk
+         LEwAXjZlgqq1vEdbKvSUzZBYxgTgLr1TO3Hq8NozA3rpJiyk44g/8V+7CrODmufv4wmp
+         0gyXSOQpQSe6OcGUW3lWdMX6fiera2L3qdH0warvnImY3CwOOXW1htZ5JP06OM7wjv71
+         833iEcbruuUQx6wYNtGw7Y0pvTKI9Vt443hFBSIVTo9PvCRUwJ4j29bJTRcPd/+m3yI8
+         /M6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=k95LTZNFDtS0ffvFY2N275h31giGKkkoYxr9XDNiAyc=;
+        b=5twTeufzj1237YvYcoGiS2bEB0taZj9+f/J6LzWlrX8AsTmvuixZN5tfpNPRWw2hkL
+         Isps0VfykRixv8z8UsmPqd4Hihvo5+7IeRbFZ4cS978KHnkcJ3teZUM9QGTNx2wkChGA
+         WsSqQYeedFzxm37mLCkDVs12BDuw/wlPiEaohbSmlbscZyA6vPOO1CfWI2vDlwI8Z3QM
+         J+z/7VZRinqbNSPjrB9kBoiZIL9gHgm2Rd0ndBU2HOXWuHjSZFI2sxHW5bkiE8wkjzei
+         3OIgvinEvWtrYS27vzrVz5gbxL6LNpBiKSArf1APK1E6k0ATf4hkRmghdhdJJMqmDxLt
+         Bh3w==
+X-Gm-Message-State: ACrzQf0T8BnqDDbcwBwP42+udJoD/QG2T5+0Ynq+ss9aXW/tM2S+FfvD
+        LQne1jXa1/sJfZgxQjNoZnw=
+X-Google-Smtp-Source: AMsMyM6Zvs/canb36/21+jVObf635cTOnU0H+5kIaF+xN7YuG1giRqGL6Synzzs5HhMlzf6eRELaqg==
+X-Received: by 2002:a17:907:75e2:b0:77b:4445:a850 with SMTP id jz2-20020a17090775e200b0077b4445a850mr26726033ejc.587.1664368124412;
+        Wed, 28 Sep 2022 05:28:44 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id j2-20020a17090623e200b0078015cebd8csm2342168ejg.117.2022.09.28.05.28.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 05:28:43 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 14:28:41 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v2 3/4] pwm: sysfs: Replace sprintf() with sysfs_emit()
+Message-ID: <YzQ9+Wzhfnila1s3@orome>
+References: <20220826170716.6886-1-andriy.shevchenko@linux.intel.com>
+ <20220826170716.6886-3-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: zpRcH8S1zFwzgjIhWxRYP_UvGPvMMhWW
-X-Proofpoint-ORIG-GUID: zpRcH8S1zFwzgjIhWxRYP_UvGPvMMhWW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-28_05,2022-09-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=999 mlxscore=0 spamscore=0 clxscore=1015 impostorscore=0
- phishscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209280077
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3R2fcm2GkPhc+EdA"
+Content-Disposition: inline
+In-Reply-To: <20220826170716.6886-3-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update pil driver with SMMU mapping for allowing authorised
-memory access to ADSP firmware, by carveout reserved adsp memory
-region from device tree file.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
----
-Changes since V6:
-	-- Update smmu map and unmap function names.
-	-- Revert adsp_ops const change.
-	-- Move iommu check to within smmu map/unmap functions.
-Changes since V5:
-	-- Remove adsp_rproc_unmap_smmu, adsp_of_unmap_smmu, adsp_of_map_smmu and 
-	   adsp_rproc_map_smmu functions.
-	-- Remove find_loaded_rsc_table call back initialization.
-	-- Rename adsp_sandbox_needed to has_iommu.
-Changes since V4:
-	-- Split the code and add appropriate APIs for resource allocation and free.
-	-- Update adsp_unmap_smmu with missing free ops call.
-	-- Update normalizing length value in adsp_of_unmap_smmu.
-Changes since V3:
-	-- Rename is_adsp_sb_needed to adsp_sandbox_needed.
-	-- Add smmu unmapping in error case and in adsp stop.
-Changes since V2:
-	-- Replace platform_bus_type with adsp->dev->bus.
-	-- Use API of_parse_phandle_with_args() instead of of_parse_phandle_with_fixed_args().
-	-- Replace adsp->is_wpss with adsp->is_adsp.
-	-- Update error handling in adsp_start().
+--3R2fcm2GkPhc+EdA
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- drivers/remoteproc/qcom_q6v5_adsp.c | 56 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 55 insertions(+), 1 deletion(-)
+On Fri, Aug 26, 2022 at 08:07:15PM +0300, Andy Shevchenko wrote:
+> For sysfs outputs, it's safer to use a new helper, sysfs_emit(),
+> instead of the raw sprintf() & co. This patch replaces such a
+> sprintf() call straightforwardly with the new helper.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
+> v2: added tag (Uwe)
+>  drivers/pwm/sysfs.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
-index 4e70e76..2dc850f 100644
---- a/drivers/remoteproc/qcom_q6v5_adsp.c
-+++ b/drivers/remoteproc/qcom_q6v5_adsp.c
-@@ -9,6 +9,7 @@
- #include <linux/firmware.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-+#include <linux/iommu.h>
- #include <linux/iopoll.h>
- #include <linux/kernel.h>
- #include <linux/mfd/syscon.h>
-@@ -48,6 +49,8 @@
- #define LPASS_PWR_ON_REG		0x10
- #define LPASS_HALTREQ_REG		0x0
- 
-+#define SID_MASK_DEFAULT        0xF
-+
- #define QDSP6SS_XO_CBCR		0x38
- #define QDSP6SS_CORE_CBCR	0x20
- #define QDSP6SS_SLEEP_CBCR	0x3c
-@@ -332,6 +335,47 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
- 	return 0;
- }
- 
-+static void adsp_unmap_carveout(struct rproc *rproc)
-+{
-+	struct qcom_adsp *adsp = rproc->priv;
-+
-+	if (adsp->has_iommu)
-+		iommu_unmap(rproc->domain, adsp->mem_phys, adsp->mem_size);
-+}
-+
-+static int adsp_map_carveout(struct rproc *rproc)
-+{
-+	struct qcom_adsp *adsp = rproc->priv;
-+	struct of_phandle_args args;
-+	long long sid;
-+	unsigned long iova;
-+	int ret;
-+
-+	if (!adsp->has_iommu)
-+		return 0;
-+
-+	if (!rproc->domain)
-+		return -EINVAL;
-+
-+	ret = of_parse_phandle_with_args(adsp->dev->of_node, "iommus", "#iommu-cells", 0, &args);
-+	if (ret < 0)
-+		return ret;
-+
-+	sid = args.args[0] & SID_MASK_DEFAULT;
-+
-+	/* Add SID configuration for ADSP Firmware to SMMU */
-+	iova =  adsp->mem_phys | (sid << 32);
-+
-+	ret = iommu_map(rproc->domain, iova, adsp->mem_phys,
-+			adsp->mem_size,	IOMMU_READ | IOMMU_WRITE);
-+	if (ret) {
-+		dev_err(adsp->dev, "Unable to map ADSP Physical Memory\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int adsp_start(struct rproc *rproc)
- {
- 	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
-@@ -342,9 +386,15 @@ static int adsp_start(struct rproc *rproc)
- 	if (ret)
- 		return ret;
- 
-+	ret = adsp_map_carveout(rproc);
-+	if (ret) {
-+		dev_err(adsp->dev, "ADSP smmu mapping failed\n");
-+		goto disable_irqs;
-+	}
-+
- 	ret = clk_prepare_enable(adsp->xo);
- 	if (ret)
--		goto disable_irqs;
-+		goto adsp_smmu_unmap;
- 
- 	ret = qcom_rproc_pds_enable(adsp, adsp->proxy_pds,
- 				    adsp->proxy_pd_count);
-@@ -400,6 +450,8 @@ static int adsp_start(struct rproc *rproc)
- 	qcom_rproc_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
- disable_xo_clk:
- 	clk_disable_unprepare(adsp->xo);
-+adsp_smmu_unmap:
-+	adsp_unmap_carveout(rproc);
- disable_irqs:
- 	qcom_q6v5_unprepare(&adsp->q6v5);
- 
-@@ -428,6 +480,8 @@ static int adsp_stop(struct rproc *rproc)
- 	if (ret)
- 		dev_err(adsp->dev, "failed to shutdown: %d\n", ret);
- 
-+	adsp_unmap_carveout(rproc);
-+
- 	handover = qcom_q6v5_unprepare(&adsp->q6v5);
- 	if (handover)
- 		qcom_adsp_pil_handover(&adsp->q6v5);
--- 
-2.7.4
+How exactly is sysfs_emit() safer here? In all of these cases, the
+values that sprintf() writes are the only values that are written into
+the buffer and we know that none of them exceed PAGE_SIZE. So the
+additional checks that sysfs_emit() performs are useless.
 
+Thierry
+
+--3R2fcm2GkPhc+EdA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmM0PfcACgkQ3SOs138+
+s6GORA//UHjBaGJ9AAAWN8hus0tfzt64SLQk+/kTOLO/EMT7rG0gLXKjQ32X3ECj
+yvn5rWvNF5BfVrswxyzKZOb8p5yIoeJgkEJKPYKv2WtHMT01anCD7pAiH0UuwgSc
+QqY6LmPV7tsCKqq6JkRkE8R1l40j7W4a93t3kcNsHl5X9UYELvg6sIHdc1/tQ9Ia
+T/KyHqyUN3b9h7tf5GVulqGuyA20Ug7ZhASRSsCGfHx9EHRxm4SVM4pYKH9T4vJK
+xGUZ4PZJnpATn7/ErmWY5xjOzv7QI8wh0l7c9cZ//QIRoSPibDOYkvxXbuQSGUaM
+azvr7g2p+bhEIVZ6lrYx0RJ9UyGCqUVafW+tPtarn00qwcFeW2UtnlpvQzCCzN3w
+mDZ8fjhzPRG08lx0XVBoNFTBObQVwfQXwygcy0xgJDbOT8zQr+MOy8b4AYnVnC8f
+PUWkJUbAnwsCmFPpKEigy+oI1yoH29LHZsEH8iL35j8r9anxzqxy/mTf2DXx3TPj
+PG8QlW1GqDOasU5thRQut+08ZDtnMk9zSknjT8KaakH9ZCtnim9UIsySqcablgqT
+8shSuOexKMyQZf6FiLTzvlNqZt+wgyv69Td8nsoI/1cVxMhToa+zZcjEschDyfHG
+ysIf/K6O1zBXlTNJXGVo1GLaaPb55hzjN+nZDxDbYOgsmVuMMzQ=
+=UDGs
+-----END PGP SIGNATURE-----
+
+--3R2fcm2GkPhc+EdA--
