@@ -2,98 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D7E5ED837
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43825ED839
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233371AbiI1IuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
+        id S233403AbiI1IuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233375AbiI1Ita (ORCPT
+        with ESMTP id S233454AbiI1Itc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:49:30 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EE63D597;
-        Wed, 28 Sep 2022 01:49:19 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id v4so11607931pgi.10;
-        Wed, 28 Sep 2022 01:49:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=HsRiuLBSIZ4AJTyP6taQh47+3anujKo8VwqSthOZMus=;
-        b=aLaGroi0OkO9MdK6+JBr2wA9wTPUulYbYWxZ3aq09VWOOOkrwZKAhW33DrNu8wzCA6
-         rScwT/lr6caIO4so6LtAcoTFam8XGizxrj5x/rxJBeqIEzZPsRb0VBLRso3fYAE+S6F4
-         Csg+VsVwAbSi/hp4sq0RbTa9RetyFiJOCd9dqqoBsoXNfmQfqr6sFHDkhGpuTQT2gBA1
-         2PVLkgAW+xEQ4tzwNF5DDJnvTRzAtwDQzW7UMKttbMWdD+XnOGI7blXo6brdAwJZL+OB
-         lkUZOhCSE/HmcXRSkIMcvnTdMckzhjmZqXvfK9DOxyJiVaSrYcfkbq34cWwDfunVCTVX
-         vTHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=HsRiuLBSIZ4AJTyP6taQh47+3anujKo8VwqSthOZMus=;
-        b=29UQejwpxe+Yqtd2iHD8XEOO5gLokX333vkGUBSDpOfJOuMWEj1lf7mmdkZmFuiWKO
-         QtG54tjfRvTSBUy7eE2D2Eh+uVabGB0eT0xmL3LLT2ePSidPQXNPIkV7oxceYXS8z6Xk
-         Boaojl6Gax2lIUkwibog1cTVa8VSVVD6jSr2wol19gUv3IxaBCyhZnaztH6/horRkTvd
-         EGbeKzUIcz8gUFfr54hCAA0akJAyvbw2khDKS60XZ4KJme0EKTbz6fL0EQBUOeLCpn4s
-         comNHynAl18yvCrNNtgKYfYz/EMUpj+yqAr/Js37b6RKEMaR8QIArNuiPcUD9w8dvqyC
-         tktw==
-X-Gm-Message-State: ACrzQf3mzW12nRtPsIhGVva1yds/0nNa8JGzkXsUvhIHKv3gE+K2p3IW
-        5qb0izXG+8wEyDHe5Mq4K5FJdj/fb6o=
-X-Google-Smtp-Source: AMsMyM7apwGfFRDIHu9LfviuQI9Bhpfrol/qPqqes0Gvr/UmBXIYeJpXJ2YFQtshaaIoNnrCoIlxiA==
-X-Received: by 2002:a05:6a00:1493:b0:546:2856:6d08 with SMTP id v19-20020a056a00149300b0054628566d08mr33617512pfu.84.1664354958891;
-        Wed, 28 Sep 2022 01:49:18 -0700 (PDT)
-Received: from localhost.localdomain (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id t1-20020a17090a024100b00200461cfa99sm780456pje.11.2022.09.28.01.49.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 01:49:18 -0700 (PDT)
-From:   Potin Lai <potin.lai.pt@gmail.com>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai@quantatw.com>,
-        Potin Lai <potin.lai.pt@gmail.com>
-Subject: [PATCH 1/1] leds: pca955x: fix return value checking of smbus block read
-Date:   Wed, 28 Sep 2022 16:47:09 +0800
-Message-Id: <20220928084709.1822312-1-potin.lai.pt@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 28 Sep 2022 04:49:32 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E709923EE
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:49:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664354969; x=1695890969;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=qKQIq21NKAdBYO/NiB/2nQyRgzRAJfVSm/FkW9deYnM=;
+  b=Fj6tWnUQ1azOeFnGE2TCSb30lXjvvC+i2BA/WsZzmCjW0jq3x1dfwdmc
+   s7V5aTfBb4v6135CS4KFUNcabmk2JFiR0hyFqqPwOZjYGyvw+pT7ss6Dp
+   yOxbKPdAwMnStepxY8rJ73gpTCElQc4y7Okj+eBZ+nYzwip12ZGI1Ue95
+   JU1Q3yqRLyOrxmyweI7qWkJ1EwIOgzmgFAwxOJ3PP6L/CHl/7oq4oVmOc
+   ec54fkYDy+bBBLjqBkE8H173UgGbgjL/r7N0FjANzfRraQvPTSzsXAnC1
+   Ov6XAQTq+jd/8ZAnj9VTzh11n9V3ahGTtJ6L0BKCO0nqK5ZOPM2TY1Z9T
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="302457560"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="302457560"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 01:49:29 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="655051213"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="655051213"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 01:49:27 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     <alexlzhu@fb.com>
+Cc:     <linux-mm@kvack.org>, <willy@infradead.org>,
+        <akpm@linux-foundation.org>, <riel@surriel.com>,
+        <hannes@cmpxchg.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-team@fb.com>
+Subject: Re: [PATCH 2/3] mm: changes to split_huge_page() to free zero
+ filled tail pages
+References: <cover.1664347167.git.alexlzhu@fb.com>
+        <94de34378bb748196e7709205a75331569d1d28e.1664347167.git.alexlzhu@fb.com>
+Date:   Wed, 28 Sep 2022 16:48:40 +0800
+In-Reply-To: <94de34378bb748196e7709205a75331569d1d28e.1664347167.git.alexlzhu@fb.com>
+        (alexlzhu@fb.com's message of "Tue, 27 Sep 2022 23:44:12 -0700")
+Message-ID: <87v8p728bb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In i2c_smbus_read_i2c_block_data(), it returns negtive value for error
-code, otherwise returns data length of reading.
-Change the if statement to "if (err < 0)" to indicate the real error
-returned by i2c_smbus_read_i2c_block_data().
+<alexlzhu@fb.com> writes:
 
-Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
----
- drivers/leds/leds-pca955x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> From: Alexander Zhu <alexlzhu@fb.com>
+>
+> Currently, when /sys/kernel/mm/transparent_hugepage/enabled=always is set
+> there are a large number of transparent hugepages that are almost entirely
+> zero filled.  This is mentioned in a number of previous patchsets
+> including:
+> https://lore.kernel.org/all/20210731063938.1391602-1-yuzhao@google.com/
+> https://lore.kernel.org/all/
+> 1635422215-99394-1-git-send-email-ningzhang@linux.alibaba.com/
+>
+> Currently, split_huge_page() does not have a way to identify zero filled
+> pages within the THP. Thus these zero pages get remapped and continue to
+> create memory waste. In this patch, we identify and free tail pages that
+> are zero filled in split_huge_page(). In this way, we avoid mapping these
+> pages back into page table entries and can free up unused memory within
+> THPs. This is based off the previously mentioned patchset by Yu Zhao.
+> However, we chose to free anonymous zero tail pages whenever they are
+> encountered instead of only on reclaim or migration.
+>
+> We also add self tests to verify the RssAnon value to make sure zero
+> pages are not remapped except in the case of userfaultfd. In the case
+> of userfaultfd we remap to the shared zero page, similar to what is
+> done by KSM.
+>
+> Signed-off-by: Alexander Zhu <alexlzhu@fb.com>
+> ---
+>  include/linux/rmap.h                          |   2 +-
+>  include/linux/vm_event_item.h                 |   3 +
+>  mm/huge_memory.c                              |  44 ++++++-
+>  mm/migrate.c                                  |  72 +++++++++--
+>  mm/migrate_device.c                           |   4 +-
+>  mm/vmstat.c                                   |   3 +
+>  .../selftests/vm/split_huge_page_test.c       | 113 +++++++++++++++++-
+>  tools/testing/selftests/vm/vm_util.c          |  23 ++++
+>  tools/testing/selftests/vm/vm_util.h          |   1 +
+>  9 files changed, 250 insertions(+), 15 deletions(-)
+>
+> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+> index b89b4b86951f..f7d5d5639dea 100644
+> --- a/include/linux/rmap.h
+> +++ b/include/linux/rmap.h
+> @@ -372,7 +372,7 @@ int folio_mkclean(struct folio *);
+>  int pfn_mkclean_range(unsigned long pfn, unsigned long nr_pages, pgoff_t pgoff,
+>  		      struct vm_area_struct *vma);
+>  
+> -void remove_migration_ptes(struct folio *src, struct folio *dst, bool locked);
+> +void remove_migration_ptes(struct folio *src, struct folio *dst, bool locked, bool unmap_clean);
 
-diff --git a/drivers/leds/leds-pca955x.c b/drivers/leds/leds-pca955x.c
-index cf0a9fe20086a..cba9876b11872 100644
---- a/drivers/leds/leds-pca955x.c
-+++ b/drivers/leds/leds-pca955x.c
-@@ -689,7 +689,7 @@ static int pca955x_probe(struct i2c_client *client)
- 	err = i2c_smbus_read_i2c_block_data(client,
- 					    0x10 | (pca955x_num_input_regs(chip->bits) + 4), nls,
- 					    ls1);
--	if (err)
-+	if (err < 0)
- 		return err;
- 
- 	for (i = 0; i < nls; ++i)
--- 
-2.31.1
+There are 2 bool parameters now.  How about use "flags" style
+parameters?  IMHO, well defined constants are more readable than a set
+of true/false.
 
+Best Regards,
+Huang, Ying
+
+[snip]
