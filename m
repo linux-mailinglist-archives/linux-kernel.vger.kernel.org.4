@@ -2,92 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59655EE0EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C638F5EE0EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234058AbiI1Px7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
+        id S231920AbiI1PyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiI1Pxz (ORCPT
+        with ESMTP id S233247AbiI1PyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:53:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837B9D4318;
-        Wed, 28 Sep 2022 08:53:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E67061F0E;
-        Wed, 28 Sep 2022 15:53:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FBAFC433C1;
-        Wed, 28 Sep 2022 15:53:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664380432;
-        bh=nBPunl5TlQZD8jgaoQw53yxRscbk/pyS0FZr8ut3NwU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BkP2ThbW79wrrZlsNPqDWK6C5y0ON+cYFY7t1veHGr+vAuwHnB2g5G2fM0ur9yVma
-         TNyzihtbiLsBAdUAPDNvmf5Qe7IVktW+eqecxOIkhGnjrlMu1632Hu5qB4UQBP/xVk
-         h91daEoeyxbLJKDBU6BcYTqPUtYRnJSJ9yKawAFi6F7d31AkRyInHo2nWtaonYhfHo
-         Cq2i9WqXVDeuZwG19toxnPU7xbZxFE3voxOcDOOSMeMBbGmjEMLNcOqpYndfT6TXrQ
-         9O9q85rkhlv/W9ry9/maKNZDzGtcIGylq2cCYTwErBs766kPdBUJxAAv1b45K6pJtI
-         CH6BY1C7LqMeQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1odZNe-00DK8u-4K;
-        Wed, 28 Sep 2022 16:53:50 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RESEND PATCH] KVM: selftests: Update top-of-file comment in psci_test
-Date:   Wed, 28 Sep 2022 16:53:46 +0100
-Message-Id: <166438042059.3795682.3522181061739798083.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220819162100.213854-1-oliver.upton@linux.dev>
-References: <20220819162100.213854-1-oliver.upton@linux.dev>
+        Wed, 28 Sep 2022 11:54:14 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B857DCEA6
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:54:12 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id b5so12586943pgb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:54:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=QSAEb2hPZjK1ev/lBZ3te+y9kjBYl6H9pPRLwr+M8HM=;
+        b=zVPtZAzw49EHbsqZqHSTXnYA4fCJVgV0ehiFbcHyaUHvs7WCLafoa7uK8ML2BgDos4
+         U3FTz1fzfHSRaG2aOZCd8/5mNO7Axa7rX0KW2D5mLDTSbLVEtkUQOx6vb/WyEcOgh4Uz
+         G3MWAF5BUbXqgxQMBe6juX25LkAKPlRyvo63Wzt+Yv3rhBiZNaVmN2vC4IinqkH8thMI
+         fcW+q5fTcp+dYGYs/mLBTunIT/PtRbJH+KvZjES40kJqik7SN1sR/JSsLEQ/r4w+dY53
+         yZdvlKWU6xrLQVlPNbzhwy4LOQyi9Q3bXls/2CE0MyPKoxajKOawzKhM6WGhLzi7H/dw
+         P2bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=QSAEb2hPZjK1ev/lBZ3te+y9kjBYl6H9pPRLwr+M8HM=;
+        b=XuY7Bmvqy0hQ6AGaocElXtJXO2mY/QGjOZHNZXpEu60Bf+9jiQrUO7gIFNEcosEbqq
+         jbtStWaBbMEKq1AfStuuvXfqOHFzI1TjWssI7O9TJkG17VNQRxKk+OSOe488TzDul8au
+         QaH5m8Xm0GisQSOfT7esQZFNefLqkAaKA6i5rLjJCyRMJ9SK6SG23/0QF5b6v1yRJEll
+         rz3o0AXaKDEmPvHtxIxhbE0IMByQSXPtWZR+63BGlYafS88lwrH3j5UA1Q4jDEb2cak3
+         oJIi7FzT8l5zwYBwbvf054Fhe/kHp3DIIUQey/sB//r1P4AnlshMWKuABok2kYRbEVIU
+         HHkg==
+X-Gm-Message-State: ACrzQf15pteBTH8GmxS/f63MVBr64kLZTMaZtuftlmXAysr2vV5P1Asz
+        ZPtDyJesLOSSNYBjXJxy9WnKQA==
+X-Google-Smtp-Source: AMsMyM7wU01xLNnTTslW5qPcH9U0d3210mJJyOX0dSh6iYjiDoTkBczR8AGldIXcdzIutrYwjwxMXw==
+X-Received: by 2002:a63:5c07:0:b0:43f:6af:7590 with SMTP id q7-20020a635c07000000b0043f06af7590mr7563656pgb.272.1664380451650;
+        Wed, 28 Sep 2022 08:54:11 -0700 (PDT)
+Received: from [10.2.223.68] ([61.120.150.77])
+        by smtp.gmail.com with ESMTPSA id i28-20020a056a00005c00b0053e72ed5252sm4231499pfk.42.2022.09.28.08.54.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 08:54:11 -0700 (PDT)
+Message-ID: <eade28ce-97eb-ff96-e8cb-7e1c2127f77b@bytedance.com>
+Date:   Wed, 28 Sep 2022 23:54:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, alexandru.elisei@arm.com, shuah@kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.0
+Subject: Re: [External] Re: [PATCH v3 0/9] PCI/AER: Fix and optimize usage of
+ status clearing api
+Content-Language: en-US
+To:     Serge Semin <fancer.lancer@gmail.com>, bhelgaas@google.com,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     ruscur@russell.cc, oohall@gmail.com, jdmason@kudzu.us,
+        dave.jiang@intel.com, allenbh@gmail.com, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linuxppc-dev@lists.ozlabs.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntb@lists.linux.dev, linux-scsi@vger.kernel.org
+References: <20220928105946.12469-1-chenzhuo.1@bytedance.com>
+ <20220928110623.b3vocoubasrshyzk@mobilestation>
+From:   Zhuo Chen <chenzhuo.1@bytedance.com>
+In-Reply-To: <20220928110623.b3vocoubasrshyzk@mobilestation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 16:21:00 +0000, Oliver Upton wrote:
-> Fix the comment to accurately describe the test and recently added
-> SYSTEM_SUSPEND test case.
+
+
+On 9/28/22 7:06 PM, Serge Semin wrote:
+> On Wed, Sep 28, 2022 at 06:59:37PM +0800, Zhuo Chen wrote:
+>> Hello.
+>>
+>> Here comes patch v3, which contains some fixes and optimizations of
+>> aer api usage. The v1 and v2 can be found on the mailing list.
+>>
+>> v3:
+>> - Modifications to comments proposed by Sathyanarayanan.
 > 
-> What was once psci_cpu_on_test was renamed and extended to squeeze in a
-> test case for PSCI SYSTEM_SUSPEND. Nonetheless, the author of those
-> changes (whoever they may be...) failed to update the file comment to
-> reflect what had changed.
+>> Remove
+>>    pci_aer_clear_nonfatal_status() call in NTB and improve commit log.
+> 
+> Failed to see who has requested that...
+> 
+> -Sergey
+> 
+Hi, Sergey
 
-Applied to next, thanks!
+Currently other vendor drivers do not clear error status in their own 
+init code, I don't exactly know what is special reason for clearing 
+error status during init code in ntb driver.
 
-[1/1] KVM: selftests: Update top-of-file comment in psci_test
-      commit: 448e711693e48d03f7933ab3673334701b0c3f41
+An evidence is in pci_aer_init(), PCI core driver has do 
+pci_aer_clear_status() and pci_enable_pcie_error_reporting() in common 
+process. So vendor drivers don't need to do again.
 
-Cheers,
+But I don't know the reason why many vendor drivers reserve 
+pci_enable_pcie_error_reporting() after commit f26e58bf6f54 ("PCI/AER: 
+Enable error reporting when AER is native"). Do they need to be removed?
+Could Bjorn and Sathyanarayanan help look into it, thanks a lot.
 
-	M.
+Thanks.
+>>
+>> v2:
+>> - Modifications to comments proposed by Bjorn. Split patch into more
+>>    obvious parts.
+>>
+>> Zhuo Chen (9):
+>>    PCI/AER: Add pci_aer_clear_uncorrect_error_status() to PCI core
+>>    PCI/DPC: Use pci_aer_clear_uncorrect_error_status() to clear
+>>      uncorrectable error status
+>>    NTB: Remove pci_aer_clear_nonfatal_status() call
+>>    scsi: lpfc: Change to use pci_aer_clear_uncorrect_error_status()
+>>    PCI/AER: Unexport pci_aer_clear_nonfatal_status()
+>>    PCI/AER: Move check inside pcie_clear_device_status().
+>>    PCI/AER: Use pcie_aer_is_native() to judge whether OS owns AER
+>>    PCI/ERR: Clear fatal error status when pci_channel_io_frozen
+>>    PCI/AER: Refine status clearing process with api
+>>
+>>   drivers/ntb/hw/idt/ntb_hw_idt.c |  2 --
+>>   drivers/pci/pci.c               |  7 +++--
+>>   drivers/pci/pci.h               |  2 ++
+>>   drivers/pci/pcie/aer.c          | 45 +++++++++++++++++++--------------
+>>   drivers/pci/pcie/dpc.c          |  3 +--
+>>   drivers/pci/pcie/err.c          | 15 ++++-------
+>>   drivers/pci/pcie/portdrv_core.c |  3 +--
+>>   drivers/scsi/lpfc/lpfc_attr.c   |  4 +--
+>>   include/linux/aer.h             |  4 +--
+>>   9 files changed, 44 insertions(+), 41 deletions(-)
+>>
+>> -- 
+>> 2.30.1 (Apple Git-130)
+>>
+
 -- 
-Without deviation from the norm, progress is not possible.
-
-
+Zhuo Chen
