@@ -2,123 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D72A5EDF31
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1248B5EDF34
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234561AbiI1Oui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
+        id S234576AbiI1Oum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234486AbiI1OuJ (ORCPT
+        with ESMTP id S234559AbiI1OuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:50:09 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E0595E77;
-        Wed, 28 Sep 2022 07:50:01 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id bj12so27605947ejb.13;
-        Wed, 28 Sep 2022 07:50:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=cKWO9+JfzL2fzwwzI1VgJVcxOTRPCNulp/5l/O+wGWs=;
-        b=cfG0rNL3i1oY1EJm2ZgBBCmigLLtk6wzMHtiiWZzXw7pWoAIiQpEgrj5Y8YaqKrsPM
-         V2H4iIvCrglIUGx0BPw3PuorNMrC0dekdpeChlYVw8dfPFPYxUR3y44truQfDBzq4um7
-         QaQf2+G/DvleUX4dJGJ2e2Z5gxOccKUCE86C4WBZq318n4VK6rTZww2qfm0uC/mwvvmN
-         fV9XAGqBCCNzrgYd/aKSQvhou8zt9ASXE7omy3w0dIuTcsFTsp9Xzgogp7pBA423Wn59
-         5Ylu/N9oWa/mva70zA+1swJtM1XZUNM0F0nMjV0n3efyy46as3ApfQR2fdZPjuy9ot2k
-         3CPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=cKWO9+JfzL2fzwwzI1VgJVcxOTRPCNulp/5l/O+wGWs=;
-        b=iIDRTJ48U/GyN1afYe4wAd/gwGGC49zKXtmMBF15tXfb+qKBm87ctcdGZw9SC+OQcy
-         hyLclODttFX25VSE0UKyUdCP3LtBY0q2+K1lpLoqJCIjnDA5IBTnSjqNDR8kARMzzDsJ
-         Gt29FnhfRRbe5G+q3WcZfSpyykqYK2OLd9O847l/013aSpvGxTUE5pfJ3akPyz/yq6Uf
-         mwz43IEkuNiTnMg0WmMHNCFZOSgxVJwLILKMIFR3tHPbpS6cgr+XceE1dbhPIIwNbNLB
-         k9plMHmVJROVuqDr3u2+RuQVMiqIBajm/lkoQDzkubmEF8zpTHxT6etZxopsSqlRDFTN
-         e0aA==
-X-Gm-Message-State: ACrzQf30lTjTSBJf4F91MLDZ+8UDIx+RintAylVVkDw21oLzMlGw8Kle
-        6GB99wZQiMJys5Hcwb+4nG0=
-X-Google-Smtp-Source: AMsMyM5q4Jb1gflu02dHE290aKNhEsUhWN3orEUliz3hq7XGsv2+zQB2JJi2ujEoI+tWKLEzyx8SFA==
-X-Received: by 2002:a17:907:8a13:b0:782:5146:dffa with SMTP id sc19-20020a1709078a1300b007825146dffamr26998139ejc.538.1664376599852;
-        Wed, 28 Sep 2022 07:49:59 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id k22-20020a1709063fd600b00782cd82db09sm2470286ejj.106.2022.09.28.07.49.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 07:49:59 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 16:49:57 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 6/7] pwm: lpss: Make use of bits.h macros for all masks
-Message-ID: <YzRfFVdZ5XsStnFq@orome>
-References: <20220927162421.11052-1-andriy.shevchenko@linux.intel.com>
- <20220927162421.11052-7-andriy.shevchenko@linux.intel.com>
- <YzRYPvzWFBXijIBQ@orome>
- <YzRde5PuFnL5KbrC@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+v1CZxweel0L0gXY"
-Content-Disposition: inline
-In-Reply-To: <YzRde5PuFnL5KbrC@smile.fi.intel.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 10:50:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD00B979E9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 07:50:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02EBBB820EE
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 14:50:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2BDCC433D7;
+        Wed, 28 Sep 2022 14:50:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664376601;
+        bh=1ApNXRAYpYsFNwE2ZXPPNcYpR2EmXWDzlK6PWb6HTxo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MEpBajuCUYk2zsQpE/PI6T8zCVUUahQ5yStyIEuRdaHkEpSP65qo0LH4cemxhsUg+
+         zumrHPRqV+b6TIkNU0E5NfGR7THJdGICdwUk2Pih1cG0P9NH9v76csl04dMLcFUbDo
+         bsWdUvgf3uj3kByiabdLNtA5OPzeod698Tlo7BdC5696AbY+UA4alBs16So3qSGXTV
+         H5d6Dz8SNnNthhafUHJrxya/pIECWEDYrXGaCURaem23zKkcC+fM1KiKq95xu3+K1D
+         Isy2DkJabfOtg7gs4JHVBf9oqpl/HUWg2rGjs1nqxrwtU+sE7uhym7CV7ZRCbUtHvJ
+         DudNevhM9df6A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1odYNr-00DJCa-8U;
+        Wed, 28 Sep 2022 15:49:59 +0100
+Date:   Wed, 28 Sep 2022 10:49:59 -0400
+Message-ID: <86leq37duw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V1 1/2] irqchip/loongson-pch-pic: Support to set irq type for ACPI path
+In-Reply-To: <1660615291-35409-2-git-send-email-lvjianmin@loongson.cn>
+References: <1660615291-35409-1-git-send-email-lvjianmin@loongson.cn>
+        <1660615291-35409-2-git-send-email-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 15 Aug 2022 22:01:30 -0400,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> 
+> For ACPI path, the translate callback used IRQ_TYPE_NONE and ignored
+> the irq type in fwspec->param[1]. For supporting to set type for
+> irqs of the irqdomain, fwspec->param[1] should be used to get irq
+> type.
+> 
+> On Loongson platform, the irq trigger type of PCI devices is
+> high level, so high level triggered type is inputed to acpi_register_gsi
+> when create irq mapping for PCI devices.
+> 
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> ---
+>  drivers/acpi/pci_irq.c                 |  3 ++-
+>  drivers/irqchip/irq-loongson-pch-pic.c | 10 ++++++----
+>  2 files changed, 8 insertions(+), 5 deletions(-)
 
---+v1CZxweel0L0gXY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+$ ./scripts/get_maintainer.pl drivers/acpi/pci_irq.c 
+Bjorn Helgaas <bhelgaas@google.com> (supporter:PCI SUBSYSTEM)
+"Rafael J. Wysocki" <rafael@kernel.org> (supporter:ACPI)
+Len Brown <lenb@kernel.org> (reviewer:ACPI)
+linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM)
+linux-acpi@vger.kernel.org (open list:ACPI)
+linux-kernel@vger.kernel.org (open list)
 
-On Wed, Sep 28, 2022 at 05:43:07PM +0300, Andy Shevchenko wrote:
-> On Wed, Sep 28, 2022 at 04:20:46PM +0200, Thierry Reding wrote:
-> > On Tue, Sep 27, 2022 at 07:24:20PM +0300, Andy Shevchenko wrote:
-> > > Make use of the GENMASK() (far less error-prone, far more concise).
-> >=20
-> > Very subjective.
->=20
-> See an example why not: 0a90ed8d0cfa ("platform/x86: pmc_atom: Fix SLP_TY=
-Px
-> bitfield mask").
+How about you start Cc-ing some of the relevant people?
 
-Hardly comparable to this particular case. And really this is stuff
-that's getting on my nerves. People constantly replacing perfectly fine
-code with something equivalent just for the sake of it.
+>
+> diff --git a/drivers/acpi/pci_irq.c b/drivers/acpi/pci_irq.c
+> index 08e1577..34483b3 100644
+> --- a/drivers/acpi/pci_irq.c
+> +++ b/drivers/acpi/pci_irq.c
+> @@ -393,7 +393,8 @@ int acpi_pci_irq_enable(struct pci_dev *dev)
+>  	 * controller and must therefore be considered active high
+>  	 * as default.
+>  	 */
+> -	int polarity = acpi_irq_model == ACPI_IRQ_MODEL_GIC ?
+> +	int polarity = acpi_irq_model == ACPI_IRQ_MODEL_GIC ||
+> +		       acpi_irq_model == ACPI_IRQ_MODEL_LPIC ?
+>  				      ACPI_ACTIVE_HIGH : ACPI_ACTIVE_LOW;
 
-Thierry
+The comment just above this only talks about ARM. Should it be
+updated? Is this a limitation of the underlying interrupt controller?
 
---+v1CZxweel0L0gXY
-Content-Type: application/pgp-signature; name="signature.asc"
+>  	char *link = NULL;
+>  	char link_desc[16];
+> diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
+> index b6f1392..5067010 100644
+> --- a/drivers/irqchip/irq-loongson-pch-pic.c
+> +++ b/drivers/irqchip/irq-loongson-pch-pic.c
+> @@ -177,13 +177,15 @@ static int pch_pic_domain_translate(struct irq_domain *d,
+>  	if (fwspec->param_count < 1)
+>  		return -EINVAL;
+>  
+> -	if (of_node) {
+> +	if (of_node)
+>  		*hwirq = fwspec->param[0] + priv->ht_vec_base;
+> -		*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
+> -	} else {
+> +	else
+>  		*hwirq = fwspec->param[0] - priv->gsi_base;
+> +
+> +	if (fwspec->param_count > 1)
+> +		*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
+> +	else
+>  		*type = IRQ_TYPE_NONE;
 
------BEGIN PGP SIGNATURE-----
+Isn't that a change in behaviour if of_node is non-NULL and
+param_count==1?
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmM0XxUACgkQ3SOs138+
-s6GWbw/+PT/IqxUtpkvtS8FDWP7Q3tbJu/lU9b0EEuQpkJQFJZV3lAdL52Ir3hc5
-H1OWcn048rPj24btlM/U0RciJW0gj05sAw+ixHtTtLU7KrhovdfRm/P2aUJNnlUN
-99H7ktODgZjDkPcd/4PeO0jGYlvlN/egut5Cp/Rf2d3vJW8nu48+vXdVLydLZjof
-N1vHDs+p2Tx+C+HAmaDS+aWIM78/9JkmzpLfv7DQsv0cawPw1Ca+IJ6xumvITjx5
-0D8ZV55qMuVd1fb7DqRstKHbL2W/HwX0H90fGeRau1GKu1BFSSb0ub6bSG8QXbW7
-ED4L3MeZrB7l/daWp4RtE8iwNlTaimRBC6fJqkQELdj7BXjQymwaJBoJj7IMJv3k
-vnDJi+0uhZbaYwGqOX1nsVGBBuEjLlSFtFVDSLvinnKTs0wqEg4vvD0iEJFO4Icu
-d/1aQQhnLt4c9uLSHWfzriV9dtexNajABfoCCRCEVu8JuQgc6t3Zr++89eKfHhta
-N5cSZ4mWd7i29vqyJIwZ4UEcF7FlI2lJGRM5JTJoaHNkqsPLznwpGSs0PypFI+Qc
-S6e+DAnrlcYGZqGfzmYLKi0I/xvg45n3EYgDecnhBX4edFz2vnQxgQipM+GwO3Ii
-YIlOBUj9kVgcL4DUg4sr2VxYO+6VI/JCEz7xmzBFC/K01+FGeF8=
-=fmm5
------END PGP SIGNATURE-----
+> -	}
+>  
+>  	return 0;
+>  }
 
---+v1CZxweel0L0gXY--
+This irqchip change should probably be a separate patch.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
