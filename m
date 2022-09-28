@@ -2,129 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E44E5ED54D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC5F5ED55A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233310AbiI1Gs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 02:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S232730AbiI1GtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 02:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233308AbiI1Grr (ORCPT
+        with ESMTP id S233263AbiI1GsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 02:47:47 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8852CD2D4F
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:45:43 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id lx7so4853214pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:45:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=3oi+SDB8187tzA+ckFvB0jb9wA6Rb4ijKO33wMIa3kM=;
-        b=HiSxXIOHuPkQ3xrIKJ5Z6SZRWTXyIafydST8v7WI2ilz914qeGnYOHeWoS5ywVxQoh
-         jMCcB22d95dWnK522xTJ2MF296aNbYi9UoXj7T+ke7gG1dvd4OrSsxU8edRpVODg99xy
-         mfIMxF5uvvIl6Lq+COZ9rGpIQav6gZE4nSgZo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=3oi+SDB8187tzA+ckFvB0jb9wA6Rb4ijKO33wMIa3kM=;
-        b=pLodAHl+A5I+bY/QLFx9iBeF+XIQaB0k3K2j4ngn75+rZqblnJsOWhZCrMDdNdxhvM
-         ogkZctnBIubAdtXShoRsqUTcsTEJUG7S7kvEPv72k0hgoZtGyfIySrebsvJdw9qfyXq8
-         HP2P/2dr3KQjtXdzlHJJHIDpS+LzN8YjsSX/tTb7hy/FmmfTEHR6QPsarIkXzGGH7KQ7
-         b14xsvCKoOKdYs0Pw/6JhgX5y7t3vmFRQYNML4xSL9Bf+6C0JL6ZvnyvQ9b3gYd2+ckG
-         iWmHbQHE2gGt/2XUMh+aWQurzHk7XoZecIglx0PpRpWTykS5C8CIl3oE5OPm+Qd5ok3D
-         F7uQ==
-X-Gm-Message-State: ACrzQf0EoEJXvDA/fuAAalRYgFtdg53qD90aqowRqroapUlcXZZ/4hZi
-        4RImy9t2VEBJZgrU3sdRGUXmHA==
-X-Google-Smtp-Source: AMsMyM6WS7BEaumrqQGACwZzKkPH3LAw4ZdRXJeMcZ4rU1pyupbOPHSROeHptmy3p/OepWGlNZ8eZQ==
-X-Received: by 2002:a17:90b:4c8a:b0:202:b3cd:f960 with SMTP id my10-20020a17090b4c8a00b00202b3cdf960mr8881218pjb.129.1664347543006;
-        Tue, 27 Sep 2022 23:45:43 -0700 (PDT)
-Received: from localhost (82.181.189.35.bc.googleusercontent.com. [35.189.181.82])
-        by smtp.gmail.com with UTF8SMTPSA id w16-20020aa79a10000000b0053639773ad8sm3053640pfj.119.2022.09.27.23.45.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 23:45:42 -0700 (PDT)
-From:   Junichi Uekawa <uekawa@chromium.org>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        mst@redhat.com, Paolo Abeni <pabeni@redhat.com>,
-        linux-kernel@vger.kernel.org, Junichi Uekawa <uekawa@chromium.org>
-Subject: [PATCH] vhost/vsock: Use kvmalloc/kvfree for larger packets.
-Date:   Wed, 28 Sep 2022 15:45:38 +0900
-Message-Id: <20220928064538.667678-1-uekawa@chromium.org>
-X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+        Wed, 28 Sep 2022 02:48:00 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E022CE21;
+        Tue, 27 Sep 2022 23:46:24 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28S16lQ6005109;
+        Wed, 28 Sep 2022 08:45:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=x2KOSmp7c+h6kDDP0gJFixqvBxl8YXw+GY/uBoC7bq0=;
+ b=knKiSwyL5i1WME9cxxEqxBm8SVz+IwsaVqvFtzoMkd3F9DmxnonTvYt8FpyDwQwqXdPr
+ ZZZeFXSxnv9WpYP1O9j9/7z3EhI7U2oWhs4yqyG3wFBfdl/5ry8v6KWZSgXYSQtIssyu
+ eoQ6++JDWI9kqEph2V5+b8R4g1oON8UYv0phOQKbs8xH9EBu96p257UMwRFOzIhwQ3td
+ 5ON6GpoZZqWKb/so1JMnJIKcefC6gPFI5boLh6nKpM1v4CO0t4u/v47ibv0zwqmbTd8p
+ L+xZIPFMTOK6ybT3MQyzEEKIA8PNTHacu5uI+UoY1/Rfpx0e4fHOGhfjFp9ciaSc/z4U ow== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jsrsjpyk0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 08:45:59 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6DA1F10002A;
+        Wed, 28 Sep 2022 08:45:55 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5A25E211F23;
+        Wed, 28 Sep 2022 08:45:55 +0200 (CEST)
+Received: from [10.201.21.72] (10.75.127.120) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Wed, 28 Sep
+ 2022 08:45:54 +0200
+Message-ID: <552281f4-dc8c-7cd7-32af-fa48de5aa414@foss.st.com>
+Date:   Wed, 28 Sep 2022 08:45:54 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] usb: dwc3: st: Fix node's child name
+Content-Language: en-US
+To:     Felipe Balbi <felipe@balbi.sh>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jerome Audu <jerome.audu@st.com>
+References: <20220926124359.304770-1-patrice.chotard@foss.st.com>
+ <87o7v0g860.fsf@balbi.sh>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <87o7v0g860.fsf@balbi.sh>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.120]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-28_02,2022-09-27_01,2022-06-22_01
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When copying a large file over sftp over vsock, data size is usually 32kB,
-and kmalloc seems to fail to try to allocate 32 32kB regions.
+Hi Felipe, Krzysztof
 
- Call Trace:
-  [<ffffffffb6a0df64>] dump_stack+0x97/0xdb
-  [<ffffffffb68d6aed>] warn_alloc_failed+0x10f/0x138
-  [<ffffffffb68d868a>] ? __alloc_pages_direct_compact+0x38/0xc8
-  [<ffffffffb664619f>] __alloc_pages_nodemask+0x84c/0x90d
-  [<ffffffffb6646e56>] alloc_kmem_pages+0x17/0x19
-  [<ffffffffb6653a26>] kmalloc_order_trace+0x2b/0xdb
-  [<ffffffffb66682f3>] __kmalloc+0x177/0x1f7
-  [<ffffffffb66e0d94>] ? copy_from_iter+0x8d/0x31d
-  [<ffffffffc0689ab7>] vhost_vsock_handle_tx_kick+0x1fa/0x301 [vhost_vsock]
-  [<ffffffffc06828d9>] vhost_worker+0xf7/0x157 [vhost]
-  [<ffffffffb683ddce>] kthread+0xfd/0x105
-  [<ffffffffc06827e2>] ? vhost_dev_set_owner+0x22e/0x22e [vhost]
-  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
-  [<ffffffffb6eb332e>] ret_from_fork+0x4e/0x80
-  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
+On 9/27/22 17:15, Felipe Balbi wrote:
+> 
+> <patrice.chotard@foss.st.com> writes:
+> 
+>> From: Patrice Chotard <patrice.chotard@foss.st.com>
+>>
+>> Update node's child name from "dwc3" to "usb", this fixes
+>> the following issue:
+>>
+>> [3.773852] usb-st-dwc3 8f94000.dwc3: failed to find dwc3 core node
+>>
+>> Fixes: 3120910a099b ("ARM: dts: stih407-family: Harmonize DWC USB3 DT nodes name")
+>>
+>> Reported-by: Jerome Audu <jerome.audu@st.com>
+>> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+>> ---
+>>  drivers/usb/dwc3/dwc3-st.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
+>> index 166b5bde45cb..6c14a79279f9 100644
+>> --- a/drivers/usb/dwc3/dwc3-st.c
+>> +++ b/drivers/usb/dwc3/dwc3-st.c
+>> @@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
+>>  	/* Manage SoftReset */
+>>  	reset_control_deassert(dwc3_data->rstc_rst);
+>>  
+>> -	child = of_get_child_by_name(node, "dwc3");
+>> +	child = of_get_child_by_name(node, "usb");
+> 
+> there could be DTBs in the wild which have `dwc3' as the child name. It
+> seems to me that you should try both names, instead.
+> 
 
-Work around by doing kvmalloc instead.
+As this patch is already merged, i will submit an additional patch which will 
+rely on child's compatible string instead of child's node name, as done in other
+dwc3 driver.
 
-Signed-off-by: Junichi Uekawa <uekawa@chromium.org>
----
-
- drivers/vhost/vsock.c                   | 2 +-
- net/vmw_vsock/virtio_transport_common.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
-index 368330417bde..5703775af129 100644
---- a/drivers/vhost/vsock.c
-+++ b/drivers/vhost/vsock.c
-@@ -393,7 +393,7 @@ vhost_vsock_alloc_pkt(struct vhost_virtqueue *vq,
- 		return NULL;
- 	}
- 
--	pkt->buf = kmalloc(pkt->len, GFP_KERNEL);
-+	pkt->buf = kvmalloc(pkt->len, GFP_KERNEL);
- 	if (!pkt->buf) {
- 		kfree(pkt);
- 		return NULL;
-diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-index ec2c2afbf0d0..3a12aee33e92 100644
---- a/net/vmw_vsock/virtio_transport_common.c
-+++ b/net/vmw_vsock/virtio_transport_common.c
-@@ -1342,7 +1342,7 @@ EXPORT_SYMBOL_GPL(virtio_transport_recv_pkt);
- 
- void virtio_transport_free_pkt(struct virtio_vsock_pkt *pkt)
- {
--	kfree(pkt->buf);
-+	kvfree(pkt->buf);
- 	kfree(pkt);
- }
- EXPORT_SYMBOL_GPL(virtio_transport_free_pkt);
--- 
-2.37.3.998.g577e59143f-goog
-
+Thanks
+Patrice
