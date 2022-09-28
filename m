@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1F65EE06A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46505EE060
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234242AbiI1P3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S233953AbiI1P27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234440AbiI1P2k (ORCPT
+        with ESMTP id S234350AbiI1P2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:28:40 -0400
+        Wed, 28 Sep 2022 11:28:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6269606BA;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B104647C4;
         Wed, 28 Sep 2022 08:28:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22E9B61F0C;
-        Wed, 28 Sep 2022 15:28:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E2CC43147;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9865761F03;
+        Wed, 28 Sep 2022 15:28:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E77D0C43140;
         Wed, 28 Sep 2022 15:28:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1664378916;
-        bh=5I4DtEaOnP9RLKggdi6cYXbRFkIvn8agB7/xzNQlNKc=;
+        bh=eQzKq/JPEfw2X1Sdx9ak4sUQJdquDr6vcVCbsZTFJ9g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nbaX8t8QpdHdZC4HUM3EA2Ykb68F3ti3weWpv3QWZqM2kGoBg9K4RsNP3aAbV9WbU
-         8alkKWiDosyK/gRCJd+E12e2ArA5bkZM1li6ukxy6jv+3H4Xu13Hoah7BgguhTOgFc
-         X9ptOwuEQDej0aChB0T8ayhdZRcjFp1m/K/He+fd8FFt8auxkPcfrg8eXcq8LjFa9L
-         Qb3NUjuBaO6zBTogvUhTGnf8yLjHTIwhCR1IeHh6FbNO4Q/6D2qO+ftqwKfrJpJcg4
-         0FcO/hXUQ6BwkGAVf1LJhGsWIMHabHpV0FmoD8cJdkpAXKdqosYBReRQ9Zq1fDhkwg
-         VN0iuHA3eMO8A==
+        b=rtJTvgev4jgCkemzBTZrtmCD3kjIODHSGH35FGUHHntNizfguReY0BVRqY40Co/TL
+         Zcr0Z+nqL/xHvcAZRaqAImJOMiQ4pqZo7e6rwd0A07iX9SqU5adI/s9/mehbsflYr2
+         dawC7NVcZhVd25n+joVRS3le9q6aZbv0DHyLwZLSXXWSNVzesLnbHYgyw4h+Ry8MJq
+         ZWCSI0EQ6/RJO6njrm1SuVkU1nXAT2Og4ySSjKtrtgodQPNgghIUFbSIsaDDq84It8
+         GP8F/gmYaJRwgiaGUTaRMja+Fz6L7fkID7xiFkCNIVObiqywDiC/XZEetz8IkZZCos
+         Qm2r83DWypu/Q==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1odYzK-0007zr-R2; Wed, 28 Sep 2022 17:28:42 +0200
+        id 1odYzK-0007zt-Ty; Wed, 28 Sep 2022 17:28:42 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 07/13] phy: qcom-qmp-pcie: clean up power-down handling
-Date:   Wed, 28 Sep 2022 17:28:16 +0200
-Message-Id: <20220928152822.30687-8-johan+linaro@kernel.org>
+Subject: [PATCH 08/13] phy: qcom-qmp-pcie: move power-down update
+Date:   Wed, 28 Sep 2022 17:28:17 +0200
+Message-Id: <20220928152822.30687-9-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220928152822.30687-1-johan+linaro@kernel.org>
 References: <20220928152822.30687-1-johan+linaro@kernel.org>
@@ -62,65 +62,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Always define the POWER_DOWN_CONTROL register instead of falling back to
-the v2 offset during power on and power off.
+Move the power-down-control register update that powers on the PHY to
+the power-on handler so that it matches the power-off handler.
+
+Note that the power-on handler is currently always called directly
+after init.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 20 ++++++--------------
- 1 file changed, 6 insertions(+), 14 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index eea66c24cf7e..47cdb9ed80cd 100644
+index 47cdb9ed80cd..150dc58147ce 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -90,12 +90,14 @@ static const unsigned int pciephy_regs_layout[QPHY_LAYOUT_SIZE] = {
- 	[QPHY_SW_RESET]			= 0x00,
- 	[QPHY_START_CTRL]		= 0x08,
- 	[QPHY_PCS_STATUS]		= 0x174,
-+	[QPHY_PCS_POWER_DOWN_CONTROL]	= 0x04,
- };
+@@ -1848,7 +1848,6 @@ static int qmp_pcie_init(struct phy *phy)
+ 	struct qmp_phy *qphy = phy_get_drvdata(phy);
+ 	struct qcom_qmp *qmp = qphy->qmp;
+ 	const struct qmp_phy_cfg *cfg = qphy->cfg;
+-	void __iomem *pcs = qphy->pcs;
+ 	int ret;
  
- static const unsigned int sdm845_qhp_pciephy_regs_layout[QPHY_LAYOUT_SIZE] = {
- 	[QPHY_SW_RESET]			= 0x00,
- 	[QPHY_START_CTRL]		= 0x08,
- 	[QPHY_PCS_STATUS]		= 0x2ac,
-+	[QPHY_PCS_POWER_DOWN_CONTROL]	= 0x04,
- };
- 
- static const unsigned int sm8250_pcie_regs_layout[QPHY_LAYOUT_SIZE] = {
-@@ -1872,13 +1874,8 @@ static int qmp_pcie_init(struct phy *phy)
+ 	/* turn on regulator supplies */
+@@ -1874,9 +1873,6 @@ static int qmp_pcie_init(struct phy *phy)
  	if (ret)
  		goto err_assert_reset;
  
--	if (cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL])
--		qphy_setbits(pcs,
--				cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
--				cfg->pwrdn_ctrl);
--	else
--		qphy_setbits(pcs, QPHY_V2_PCS_POWER_DOWN_CONTROL,
--				cfg->pwrdn_ctrl);
+-	qphy_setbits(pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
+-			cfg->pwrdn_ctrl);
+-
+ 	return 0;
+ 
+ err_assert_reset:
+@@ -1915,6 +1911,9 @@ static int qmp_pcie_power_on(struct phy *phy)
+ 	unsigned int mask, val, ready;
+ 	int ret;
+ 
 +	qphy_setbits(pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
 +			cfg->pwrdn_ctrl);
++
+ 	qmp_pcie_serdes_init(qphy);
  
- 	return 0;
- 
-@@ -1995,13 +1992,8 @@ static int qmp_pcie_power_off(struct phy *phy)
- 	qphy_clrbits(qphy->pcs, cfg->regs[QPHY_START_CTRL], cfg->start_ctrl);
- 
- 	/* Put PHY into POWER DOWN state: active low */
--	if (cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL]) {
--		qphy_clrbits(qphy->pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
--			     cfg->pwrdn_ctrl);
--	} else {
--		qphy_clrbits(qphy->pcs, QPHY_V2_PCS_POWER_DOWN_CONTROL,
--				cfg->pwrdn_ctrl);
--	}
-+	qphy_clrbits(qphy->pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
-+			cfg->pwrdn_ctrl);
- 
- 	return 0;
- }
+ 	ret = clk_prepare_enable(qphy->pipe_clk);
 -- 
 2.35.1
 
