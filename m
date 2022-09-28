@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978805ED5FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6998E5ED601
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233628AbiI1H0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S233640AbiI1H03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233582AbiI1HZE (ORCPT
+        with ESMTP id S233533AbiI1HZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:25:04 -0400
+        Wed, 28 Sep 2022 03:25:07 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20540DED5E
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:23:11 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id t6-20020a25b706000000b006b38040b6f7so10591115ybj.6
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:23:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258CBD432F
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:23:13 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id b18-20020a253412000000b006b0177978eeso10749784yba.21
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:23:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=content-transfer-encoding:cc:to:from:subject:references
          :mime-version:message-id:in-reply-to:date:from:to:cc:subject:date;
-        bh=ugnKDDis0+pyGyARMcOSlJwYcuHjjce7jJUE2ZWG3bs=;
-        b=YnNYe+gkBqumWOiTThIWDwEsAsOqlHHoZxlSnPi7E5rzxC24iquPqKcDFyKTAz7PxI
-         SUiGH9S+aVARjPGGLMGIWh5bmVoyOIMkOVYHosPSFXbt7N4HROJMy8W1mlqXLVLx2m+e
-         AxgW2uJ/H7x5Nw1kAJKPrl8nInWcKyqDUEWCso2s6qGjeHgn08er5iXP5uuYgs3JnPQZ
-         1LCwczAozUkuHENxneU6KVHixGDraNbx3Is1yW8T0/R7F+LwuneZmh/9DIMop3hF5Z/J
-         rs8pG9p+s5JuMMLjPsJST+de3mYaf9E2jD3OQP5CUmbu4103EUmD1ZSAKCIzuUl+KLIO
-         ONkw==
+        bh=O5ROf8stZr+TymWxqcEKmujX70BPAhW6lBlq+A3CJms=;
+        b=C1NHPfohahu0W/iB2N3Dgftv3RzLciJV+muoHW67Hgp4Y5OJUPG/8gDJ1lZBSpo8Ma
+         Sfn3AYCBYhfM5miL3jhRQm0VII5HHpH0/LDfWBK/l/FSjDjBKP7vlcDKuLHPqesEaDD7
+         Rzjybc9MMkXLTeHbaLKxhSaPiN7fou9u9Tt6H90i8TJUXzvGqip2MfjzpYmCVYUeVqr5
+         6tp/l0N9ARo7/+EPVxG1Dm8cQWPB7DO7C6FvxeWEXkkKZ/EKQyrKZbr4Zx9kz8SDPdIS
+         iQHc3lpeKi/zSWbYhMx5c+GnoN4EUly7oiTKCCND9RTlgJJy0Q6eIuT9wDnMkt3vinyc
+         QelQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:from:subject:references
          :mime-version:message-id:in-reply-to:date:x-gm-message-state:from:to
          :cc:subject:date;
-        bh=ugnKDDis0+pyGyARMcOSlJwYcuHjjce7jJUE2ZWG3bs=;
-        b=OkC5/+euA3JWocOpJiAfoOVkMY0IyKcF891yFV26u2PXmWBjl3YAg2iCjhiAydfsqE
-         VXe3SghbTGH00J/4CVmm0vZd+wo5W3PCDYsbj62bfZMHQYeXsHY/bby/MI91R0SLHdin
-         Fq/1pBHIM5aoRkXKviFk2fQ1o3QKPrpprfIUk3zCNULFgeIKeYIh7opKaQH+8cqBG5O+
-         s1zsQMuteD8jE0O3bYJCVuh7hOsQecDUPN5Y31T82bxAPQR08TBb4D3+8n8Ik1PxoqO1
-         fNZY5psBB/5bOLUV7Ko2Y+isV9+zjHaWRjv6RoIaIqBqCkzgr0TyBEq6ibxSC58YRBFz
-         5VBg==
-X-Gm-Message-State: ACrzQf3hmVjYtk/JuFap2nlRMCg9M+3EnYn5mdt5njEcv7hXjZ2RcFDo
-        2kFawdn0AEuQl60yVRiSGKdOlAtPT3x0
-X-Google-Smtp-Source: AMsMyM4zmVhnh37Z18rsCgy+cAmuSpq63JsXcnoZsY06pzzbNWA6r2WyZdN6vBWmF6LixUA0MB8nxp6KR8H/
+        bh=O5ROf8stZr+TymWxqcEKmujX70BPAhW6lBlq+A3CJms=;
+        b=0O5Six7Lk02fj9w9rz6jI3f/MhTyyD9YOc+xOwcmlrkJCw8e5U/gpF2W8bGzIi5DNP
+         /RBCNqR6VVbkkcv4Y8ubJhsT/tzLYtV+Ef6TUa18JuacB+IY6UHjZf8VhgjUh/+CxdwN
+         YK2ZB0LUt/F0iAwuiIz0fk0tuOVL3+TukV8k79mXjyJBdFr8iY0ghY5ifT+KJ+2WJJK4
+         j9ZzmRYVYUFzcnU/jCoERodpkCy92RskgAMc49/VDoRyq6DXqtD8oK8R/0+HOkjMYxY6
+         rW3/9y5aNzV5Vf3Zk2SpBv3zTAiCOrEO0jL8+BSeKytCFJcZpL0VPPETef2B6WIXXswX
+         bYHw==
+X-Gm-Message-State: ACrzQf0brJJZ5Naa+9UNZwueSv/TfU/YxM94OkP8vnoPVXZbUDBb/c8B
+        lXFLqyrcthCzdPCkpWve8LLP94hgfBu6
+X-Google-Smtp-Source: AMsMyM7Wk6Wk1b6bL5rCqGa5UWxMisRubqTNTmsV0UKPtDIBuUf6+Ii6dNIZxSgvuhK+eHfvql0M7MLIf7ZC
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:7099:1ccb:612a:5ad6])
- (user=irogers job=sendgmr) by 2002:a25:bc7:0:b0:6af:d9a3:d721 with SMTP id
- 190-20020a250bc7000000b006afd9a3d721mr29321419ybl.47.1664349771759; Wed, 28
- Sep 2022 00:22:51 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 00:21:58 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6902:120f:b0:676:aaa4:8434 with SMTP
+ id s15-20020a056902120f00b00676aaa48434mr31182052ybu.218.1664349774574; Wed,
+ 28 Sep 2022 00:22:54 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 00:21:59 -0700
 In-Reply-To: <20220928072204.1613330-1-irogers@google.com>
-Message-Id: <20220928072204.1613330-17-irogers@google.com>
+Message-Id: <20220928072204.1613330-18-irogers@google.com>
 Mime-Version: 1.0
 References: <20220928072204.1613330-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
-Subject: [PATCH v1 16/22] perf vendor events: Update Intel jaketown
+Subject: [PATCH v1 17/22] perf vendor events: Update Intel sandybridge
 From:   Ian Rogers <irogers@google.com>
 To:     Zhengjun Xing <zhengjun.xing@linux.intel.com>,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -80,7 +80,7 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,7 +88,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Events remain at v21, and the metrics are based on TMA 4.4 full.
+Events remain at v17, and the metrics are based on TMA 4.4 full.
 
 Use script at:
 https://github.com/intel/event-converter-for-linux-perf/blob/master/downloa=
@@ -118,14 +118,14 @@ Tested with 'perf test':
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../arch/x86/jaketown/jkt-metrics.json        | 291 +++++++++++++-----
- 1 file changed, 213 insertions(+), 78 deletions(-)
+ .../arch/x86/sandybridge/snb-metrics.json     | 279 +++++++++++++-----
+ 1 file changed, 207 insertions(+), 72 deletions(-)
 
-diff --git a/tools/perf/pmu-events/arch/x86/jaketown/jkt-metrics.json b/too=
-ls/perf/pmu-events/arch/x86/jaketown/jkt-metrics.json
-index c0fbb4f31241..f97072151e04 100644
---- a/tools/perf/pmu-events/arch/x86/jaketown/jkt-metrics.json
-+++ b/tools/perf/pmu-events/arch/x86/jaketown/jkt-metrics.json
+diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/snb-metrics.json b/=
+tools/perf/pmu-events/arch/x86/sandybridge/snb-metrics.json
+index ae7ed267b2a2..a86e11d1878d 100644
+--- a/tools/perf/pmu-events/arch/x86/sandybridge/snb-metrics.json
++++ b/tools/perf/pmu-events/arch/x86/sandybridge/snb-metrics.json
 @@ -1,64 +1,217 @@
  [
      {
@@ -425,8 +425,8 @@ cond-level TLB (STLB) as well as performing a hardware page walk on an STLB=
 +        "BriefDescription": "This metric estimates how often the CPU was s=
 talled due to loads accesses to L3 cache or contended with a sibling Core",
 +        "MetricExpr": "(MEM_LOAD_UOPS_RETIRED.LLC_HIT / (MEM_LOAD_UOPS_RET=
-IRED.LLC_HIT + 7 * MEM_LOAD_UOPS_RETIRED.LLC_MISS)) * CYCLE_ACTIVITY.STALLS=
-_L2_PENDING / CLKS",
+IRED.LLC_HIT + 7 * MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS)) * CYCLE_ACTIVITY.S=
+TALLS_L2_PENDING / CLKS",
 +        "MetricGroup": "CacheMisses;MemoryBound;TmaL3mem;TopdownL3;tma_mem=
 ory_bound_group",
 +        "MetricName": "tma_l3_bound",
@@ -439,8 +439,8 @@ d increase performance. Sample with: MEM_LOAD_UOPS_RETIRED.L3_HIT_PS"
 +        "BriefDescription": "This metric estimates how often the CPU was s=
 talled on accesses to external memory (DRAM) by loads",
 +        "MetricExpr": "(1 - (MEM_LOAD_UOPS_RETIRED.LLC_HIT / (MEM_LOAD_UOP=
-S_RETIRED.LLC_HIT + 7 * MEM_LOAD_UOPS_RETIRED.LLC_MISS))) * CYCLE_ACTIVITY.=
-STALLS_L2_PENDING / CLKS",
+S_RETIRED.LLC_HIT + 7 * MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS))) * CYCLE_ACTI=
+VITY.STALLS_L2_PENDING / CLKS",
 +        "MetricGroup": "MemoryBound;TmaL3mem;TopdownL3;tma_memory_bound_gr=
 oup",
 +        "MetricName": "tma_dram_bound",
@@ -570,26 +570,8 @@ d.  Maximizing Retiring typically increases the Instructions-per-cycle (see=
 de Assists are categorized under Retiring. They often indicate suboptimal p=
 erformance and can often be optimized or avoided.  Sample with: UOPS_RETIRE=
 D.RETIRE_SLOTS"
-     },
-     {
--        "BriefDescription": "This category represents fraction of slots ut=
-ilized by useful work i.e. issued uops that eventually get retired. SMT ver=
-sion; use when SMT is enabled and measuring per logical CPU.",
--        "MetricExpr": "UOPS_RETIRED.RETIRE_SLOTS / (4 * ( ( CPU_CLK_UNHALT=
-ED.THREAD / 2 ) * ( 1 + CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE / CPU_CLK_UNHALT=
-ED.REF_XCLK ) ))",
--        "MetricGroup": "TopdownL1_SMT",
--        "MetricName": "Retiring_SMT",
--        "PublicDescription": "This category represents fraction of slots u=
-tilized by useful work i.e. issued uops that eventually get retired. Ideall=
-y; all pipeline slots would be attributed to the Retiring category.  Retiri=
-ng of 100% would indicate the maximum Pipeline_Width throughput was achieve=
-d.  Maximizing Retiring typically increases the Instructions-per-cycle (see=
- IPC metric). Note that a high Retiring value does not necessary mean there=
- is no room for more performance.  For example; Heavy-operations or Microco=
-de Assists are categorized under Retiring. They often indicate suboptimal p=
-erformance and can often be optimized or avoided. SMT version; use when SMT=
- is enabled and measuring per logical CPU."
++    },
++    {
 +        "BriefDescription": "This metric represents fraction of slots wher=
 e the CPU was retiring light-weight operations -- instructions that require=
  no more than one uop (micro-operation)",
@@ -638,8 +620,26 @@ E.SSE_SCALAR_DOUBLE) / UOPS_DISPATCHED.THREAD",
 +        "PublicDescription": "This metric approximates arithmetic floating=
 -point (FP) scalar uops fraction the CPU has retired. May overcount due to =
 FMA double counting."
-+    },
-+    {
+     },
+     {
+-        "BriefDescription": "This category represents fraction of slots ut=
+ilized by useful work i.e. issued uops that eventually get retired. SMT ver=
+sion; use when SMT is enabled and measuring per logical CPU.",
+-        "MetricExpr": "UOPS_RETIRED.RETIRE_SLOTS / (4 * ( ( CPU_CLK_UNHALT=
+ED.THREAD / 2 ) * ( 1 + CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE / CPU_CLK_UNHALT=
+ED.REF_XCLK ) ))",
+-        "MetricGroup": "TopdownL1_SMT",
+-        "MetricName": "Retiring_SMT",
+-        "PublicDescription": "This category represents fraction of slots u=
+tilized by useful work i.e. issued uops that eventually get retired. Ideall=
+y; all pipeline slots would be attributed to the Retiring category.  Retiri=
+ng of 100% would indicate the maximum Pipeline_Width throughput was achieve=
+d.  Maximizing Retiring typically increases the Instructions-per-cycle (see=
+ IPC metric). Note that a high Retiring value does not necessary mean there=
+ is no room for more performance.  For example; Heavy-operations or Microco=
+de Assists are categorized under Retiring. They often indicate suboptimal p=
+erformance and can often be optimized or avoided. SMT version; use when SMT=
+ is enabled and measuring per logical CPU."
 +        "BriefDescription": "This metric approximates arithmetic floating-=
 point (FP) vector uops fraction the CPU has retired aggregated across all v=
 ector widths",
@@ -863,42 +863,13 @@ NHALTED.REF_XCLK_ANY / 2) if #SMT_on else 0",
      {
          "BriefDescription": "Average external Memory Bandwidth Use for rea=
 ds and writes [GB / sec]",
--        "MetricExpr": "( 64 * ( uncore_imc@cas_count_read@ + uncore_imc@ca=
-s_count_write@ ) / 1000000000 ) / duration_time",
-+        "MetricExpr": "(64 * (uncore_imc@cas_count_read@ + uncore_imc@cas_=
-count_write@) / 1000000000) / duration_time",
+-        "MetricExpr": "64 * ( arb@event\\=3D0x81\\,umask\\=3D0x1@ + arb@ev=
+ent\\=3D0x84\\,umask\\=3D0x1@ ) / 1000000 / duration_time / 1000",
++        "MetricExpr": "64 * (arb@event\\=3D0x81\\,umask\\=3D0x1@ + arb@eve=
+nt\\=3D0x84\\,umask\\=3D0x1@) / 1000000 / duration_time / 1000",
          "MetricGroup": "HPC;Mem;MemoryBW;SoC",
          "MetricName": "DRAM_BW_Use"
      },
-@@ -208,12 +343,6 @@
-         "MetricGroup": "SoC",
-         "MetricName": "Socket_CLKS"
-     },
--    {
--        "BriefDescription": "Uncore frequency per die [GHZ]",
--        "MetricExpr": "cbox_0@event\\=3D0x0@ / #num_dies / duration_time /=
- 1000000000",
--        "MetricGroup": "SoC",
--        "MetricName": "UNCORE_FREQ"
--    },
-     {
-         "BriefDescription": "Instructions per Far Branch ( Far Branches ap=
-ply upon transition from application to operating system, handling interrup=
-ts, exceptions) [lower number means higher occurrence rate]",
-         "MetricExpr": "INST_RETIRED.ANY / BR_INST_RETIRED.FAR_BRANCH:u",
-@@ -261,5 +390,11 @@
-         "MetricExpr": "(cstate_pkg@c7\\-residency@ / msr@tsc@) * 100",
-         "MetricGroup": "Power",
-         "MetricName": "C7_Pkg_Residency"
-+    },
-+    {
-+        "BriefDescription": "Uncore frequency per die [GHZ]",
-+        "MetricExpr": "Socket_CLKS / #num_dies / duration_time / 100000000=
-0",
-+        "MetricGroup": "SoC",
-+        "MetricName": "UNCORE_FREQ"
-     }
- ]
 --=20
 2.37.3.998.g577e59143f-goog
 
