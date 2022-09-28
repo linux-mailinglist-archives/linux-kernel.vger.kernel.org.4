@@ -2,85 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A655ED349
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 05:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C56E5ED346
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 05:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbiI1DHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 23:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S231755AbiI1DHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 23:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbiI1DG4 (ORCPT
+        with ESMTP id S231269AbiI1DGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 23:06:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98641CE914;
-        Tue, 27 Sep 2022 20:06:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09E7861CF8;
-        Wed, 28 Sep 2022 03:06:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EABAC43140;
-        Wed, 28 Sep 2022 03:06:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664334414;
-        bh=JSYL6zTmI1v/knH5ePUdorTCFFcn9txmwuF5JUvMOQU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LaLGV5KjmFnB3t5VgsUkcBNhy5oymIPKuAof5O/qx2Yo7HsQ12SfCWm2wg1KKd2EM
-         FyE4R1VEklBPBZ+8lVOr9Xm/znkuvtNIJelclX0qb+TY5yGagPedDxkfbMOw7ep4iI
-         GBBBCjKJUXOvp5PJowp9Nwd3fZf3kHChX0gwU2JkmOgc+/x2gSN5Jzxtqs7qE/mfv2
-         1p78d2k6HFzEHE4GkhJT3ifLnr93dbJ9NKhvNvZg2Or4MRFyoq2f/biUSA93qiUjnw
-         e/6/RR+dhvi4rHnorczf2sTHXt+MloByJRkkU05oNhgOdhA73lbXJ1RQ+Jg8Ne9pZ1
-         zvYp9V2EeXpLw==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     sboyd@kernel.org, konrad.dybcio@somainline.org, mka@chromium.org,
-        mturquette@baylibre.com, quic_rjendra@quicinc.com,
-        agross@kernel.org
-Cc:     johan+linaro@kernel.org, dianders@chromium.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_kriskura@quicinc.com,
-        angelogioacchino.delregno@collabora.com
-Subject: Re: (subset) [PATCH v3 1/3] clk: qcom: gdsc: Fix the handling of PWRSTS_RET support
-Date:   Tue, 27 Sep 2022 22:06:48 -0500
-Message-Id: <166433439998.1849007.9991122378265739432.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220920111517.10407-1-quic_rjendra@quicinc.com>
-References: <20220920111517.10407-1-quic_rjendra@quicinc.com>
+        Tue, 27 Sep 2022 23:06:53 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DA91CE915
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 20:06:51 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mch9Q3B31z9t6K;
+        Wed, 28 Sep 2022 11:02:02 +0800 (CST)
+Received: from [10.67.110.83] (10.67.110.83) by canpemm500006.china.huawei.com
+ (7.192.105.130) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 28 Sep
+ 2022 11:06:49 +0800
+Subject: Re: [PATCH v4 1/2] squashfs: add the mount parameter
+ theads=<single|multi|percpu>
+To:     Phillip Lougher <phillip@squashfs.org.uk>,
+        <linux-kernel@vger.kernel.org>
+CC:     <wangle6@huawei.com>, <yi.zhang@huawei.com>,
+        <wangbing6@huawei.com>, <zhongjubin@huawei.com>,
+        <chenjianguo3@huawei.com>
+References: <20220902094855.22666-1-nixiaoming@huawei.com>
+ <20220916083604.33408-1-nixiaoming@huawei.com>
+ <20220916083604.33408-2-nixiaoming@huawei.com>
+ <b3018490-b951-01f0-2b86-84049d9470a0@squashfs.org.uk>
+From:   Xiaoming Ni <nixiaoming@huawei.com>
+Message-ID: <336305b4-439c-edac-a21e-56e2604de127@huawei.com>
+Date:   Wed, 28 Sep 2022 11:06:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.0.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <b3018490-b951-01f0-2b86-84049d9470a0@squashfs.org.uk>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.110.83]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Sep 2022 16:45:15 +0530, Rajendra Nayak wrote:
-> GDSCs cannot be transitioned into a Retention state in SW.
-> When either the RETAIN_MEM bit, or both the RETAIN_MEM and
-> RETAIN_PERIPH bits are set, and the GDSC is left ON, the HW
-> takes care of retaining the memory/logic for the domain when
-> the parent domain transitions to power collapse/power off state.
+On 2022/9/28 10:20, Phillip Lougher wrote:
+> On 16/09/2022 09:36, Xiaoming Ni wrote:
+>> Squashfs supports three decompression concurrency modes:
+>>     Single-thread mode: concurrent reads are blocked and the memory
+>>         overhead is small.
+>>     Multi-thread mode/percpu mode: reduces concurrent read blocking but
+>>         increases memory overhead.
+>>
+>> The corresponding schema must be fixed at compile time. During mounting,
+>> the concurrent decompression mode cannot be adjusted based on file read
+>> blocking.
+>>
+>> The mount parameter theads=<single|multi|percpu> is added to select
+>> the concurrent decompression mode of a single SquashFS file system
+>> image.
+>>
+>> Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
+>> +#ifdef CONFIG_SQUASHFS_DECOMP_SINGLE
+>> +    opts->thread_ops = &squashfs_decompressor_single;
+>> +#elif CONFIG_SQUASHFS_DECOMP_MULTI
+>> +    opts->thread_ops = &squashfs_decompressor_multi;
+>> +#elif CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU
 > 
-> On some platforms where the parent domains lowest power state
-> itself is Retention, just leaving the GDSC in ON (without any
-> RETAIN_MEM/RETAIN_PERIPH bits being set) will also transition
-> it to Retention.
+> In my previous review I asked you to fix the above two #elif
+> lines.  You have done so in this patch series, but, only in the
+> second patch which seems perverse.
 > 
-> [...]
+> The reason why this isn't a good approach.  If you *only* apply this 
+> patch, with the following Squashfs configuration options
+> 
+I'm so sorry.
+I made a low-level mistake in patching.
+I will re-check the previous review comments and resend the patch.
 
-Applied, thanks!
+Thanks
 
-[1/3] clk: qcom: gdsc: Fix the handling of PWRSTS_RET support
-      commit: d399723950c45cd9507aef848771826afc3f69b0
-[2/3] clk: qcom: gcc-sc7180: Update the .pwrsts for usb gdsc
-      commit: d9fe9f3fefe74d15e280fce628bff1b6fc6d9675
-[3/3] clk: qcom: gcc-sc7280: Update the .pwrsts for usb gdscs
-      commit: e3ae3e899aa0322ff685fd7cf1322c6670da7db7
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+
+> phillip@phoenix:/external/stripe/linux$ grep SQUASHFS .config
+> CONFIG_SQUASHFS=y
+> # CONFIG_SQUASHFS_FILE_CACHE is not set
+> CONFIG_SQUASHFS_FILE_DIRECT=y
+> CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU=y
+> # CONFIG_SQUASHFS_CHOICE_DECOMP_BY_MOUNT is not set
+> # CONFIG_SQUASHFS_COMPILE_DECOMP_SINGLE is not set
+> # CONFIG_SQUASHFS_COMPILE_DECOMP_MULTI is not set
+> CONFIG_SQUASHFS_COMPILE_DECOMP_MULTI_PERCPU=y
+> CONFIG_SQUASHFS_XATTR=y
+> CONFIG_SQUASHFS_ZLIB=y
+> CONFIG_SQUASHFS_LZ4=y
+> CONFIG_SQUASHFS_LZO=y
+> CONFIG_SQUASHFS_XZ=y
+> CONFIG_SQUASHFS_ZSTD=y
+> # CONFIG_SQUASHFS_4K_DEVBLK_SIZE is not set
+> # CONFIG_SQUASHFS_EMBEDDED is not set
+> CONFIG_SQUASHFS_FRAGMENT_CACHE_SIZE=3
+> 
+> 
+> You will get the following build warning
+> 
+> phillip@phoenix:/external/stripe/linux$ make bzImage
+>    SYNC    include/config/auto.conf.cmd
+>    CALL    scripts/checksyscalls.sh
+>    CALL    scripts/atomic/check-atomics.sh
+>    DESCEND objtool
+>    CHK     include/generated/compile.h
+>    UPD     kernel/config_data
+>    GZIP    kernel/config_data.gz
+>    CC      kernel/configs.o
+>    AR      kernel/built-in.a
+>    CC      fs/squashfs/block.o
+>    CC      fs/squashfs/cache.o
+>    CC      fs/squashfs/dir.o
+>    CC      fs/squashfs/export.o
+>    CC      fs/squashfs/file.o
+>    CC      fs/squashfs/fragment.o
+>    CC      fs/squashfs/id.o
+>    CC      fs/squashfs/inode.o
+>    CC      fs/squashfs/namei.o
+>    CC      fs/squashfs/super.o
+> fs/squashfs/super.c: In function ‘squashfs_init_fs_context’:
+> fs/squashfs/super.c:492:7: warning: "CONFIG_SQUASHFS_DECOMP_MULTI" is 
+> not defined, evaluates to 0 [-Wundef]
+>    492 | #elif CONFIG_SQUASHFS_DECOMP_MULTI
+>        |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> This strictly breaks the git bisectability rule.  Every patch should
+> be compilable and not break the build or produce warnings.  If not
+> it makes git bisect difficult to use to find regressions.
+> 
+> This can be avoided by fixing the issue in *this* patch.  So
+> please do so.
+> 
+> Thanks
+> 
+> Phillip
+> 
+>> +    opts->thread_ops = &squashfs_decompressor_percpu;
+>> +#endif
+>>       fc->fs_private = opts;
+>>       fc->ops = &squashfs_context_ops;
+>>       return 0;
+>> @@ -478,7 +526,7 @@ static void squashfs_put_super(struct super_block 
+>> *sb)
+>>           squashfs_cache_delete(sbi->block_cache);
+>>           squashfs_cache_delete(sbi->fragment_cache);
+>>           squashfs_cache_delete(sbi->read_page);
+>> -        squashfs_decompressor_destroy(sbi);
+>> +        sbi->thread_ops->destroy(sbi);
+>>           kfree(sbi->id_table);
+>>           kfree(sbi->fragment_index);
+>>           kfree(sbi->meta_index);
+> 
+> 
+> .
+
