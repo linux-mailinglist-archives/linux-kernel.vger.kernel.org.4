@@ -2,388 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410CC5ED7F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556475ED7FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232024AbiI1Ihk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S233501AbiI1IiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiI1IhY (ORCPT
+        with ESMTP id S233364AbiI1Ih2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:37:24 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E441AA1A45;
-        Wed, 28 Sep 2022 01:37:14 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxbWuwBzRjdjMjAA--.18971S4;
-        Wed, 28 Sep 2022 16:37:11 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v5 3/3] thermal: loongson2: add thermal management support
-Date:   Wed, 28 Sep 2022 16:37:02 +0800
-Message-Id: <20220928083702.17309-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220928083702.17309-1-zhuyinbo@loongson.cn>
-References: <20220928083702.17309-1-zhuyinbo@loongson.cn>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxbWuwBzRjdjMjAA--.18971S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ww4UCrWUGrWxJr4ruFy5CFg_yoWfuryUpF
-        W3J3y5GrsrGFsrZwnrAr1UCFs0vwnIyFy3ZFZ7Gw1S9rZ3J343Wry8JFy8ZrWSkryDCF15
-        ZrZ8KFWUCFWDX3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
-        kIwI1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I
-        3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxV
-        WUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8I
-        cVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
-        pf9x0JUAGYLUUUUU=
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 04:37:28 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2079F8C7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:37:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 93BFA21B20;
+        Wed, 28 Sep 2022 08:37:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664354242; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mbYysNXVCBJWhv6YmmbS+6PjzVtkQs9oliOscbllxFE=;
+        b=eDMs515cKj3b9Ip9kxDDvhsUX0I76y1Fal1frs4KOBWrfk/O604+G+12HGfzk3nCiL9LIK
+        05kb9uTO4roUPdGzNd2uPJGxQlIyTuW4nZQHbZOWTCtdPOuSp5VD3L8MNDVxxqNOfw1e+R
+        zmjtciFKjXcJ0bPJJv3wocxxCDoBem4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664354242;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mbYysNXVCBJWhv6YmmbS+6PjzVtkQs9oliOscbllxFE=;
+        b=lviz9IDu4Ai/WKo0Pd4s7JmwQV3HANHJxat51OnnqMVn/AnE+Me/iFDP/+uyPPOgbOtPEQ
+        Dt005eoB2W7uAkBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F25D13A84;
+        Wed, 28 Sep 2022 08:37:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id inKPFsIHNGM0VwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 28 Sep 2022 08:37:22 +0000
+Date:   Wed, 28 Sep 2022 10:37:21 +0200
+Message-ID: <87y1u3evy6.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Lu, Brent" <brent.lu@intel.com>
+Cc:     "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "Jaroslav Kysela" <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mohan Kumar <mkumard@nvidia.com>,
+        Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>, "Zhi, Yong" <yong.zhi@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: hda/hdmi: run eld notify in delay work
+In-Reply-To: <871qrvgbsr.wl-tiwai@suse.de>
+References: <20220927135807.4097052-1-brent.lu@intel.com>
+        <87ill8gb5c.wl-tiwai@suse.de>
+        <CY5PR11MB6257CB33E1EDA90CE2B2F99D97549@CY5PR11MB6257.namprd11.prod.outlook.com>
+        <875yh8ezs9.wl-tiwai@suse.de>
+        <871qrvgbsr.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the support for loongson2 thermal sensor controller,
-which can support maximum 4 sensors.
+On Wed, 28 Sep 2022 10:09:40 +0200,
+Takashi Iwai wrote:
+> 
+> On Wed, 28 Sep 2022 09:14:30 +0200,
+> Takashi Iwai wrote:
+> > 
+> > On Wed, 28 Sep 2022 04:06:45 +0200,
+> > Lu, Brent wrote:
+> > > 
+> > > > >
+> > > > > During resolution change, display driver would disable HDMI audio then
+> > > > > enable it in a short time. There is possibility that eld notify for
+> > > > > HDMI audio enable is called when previous runtime suspend is still
+> > > > > running. In this case, the elf nofity just returns and not updating
+> > > > > the status of corresponding HDMI pin/port. Here we move the eld nofity
+> > > > > to a delay work so we don't lose it.
+> > > > >
+> > > > > Signed-off-by: Brent Lu <brent.lu@intel.com>
+> > > > 
+> > > > We have already a dedicated per-pin work for the delayed ELD check.
+> > > > Can we reuse it instead of inventing yet another work?
+> > > > More work needs more cares, and better to avoid unless really needed (e.g.
+> > > > you forgot cleanup at suspend/removal in this patch).
+> > > > 
+> > > > 
+> > > > thanks,
+> > > > 
+> > > > Takashi
+> > > 
+> > > Hi Takashi,
+> > > 
+> > > I've checked the hdmi_repoll_eld() and check_presence_and_report() function to see
+> > > if we can reuse the per-pin work. I've some questions about reusing the per-pin work:
+> > > 
+> > > 1. hdmi_repoll_eld() calls snd_hda_jack_tbl_get_mst() function while
+> > >    check_presence_and_report() doesn't. Is it ok? 
+> > 
+> > For the system with the audio component, there is no jack entry, hence
+> > this will be ignored.
+> > 
+> > > 2. snd_hdac_i915_set_bclk() is called in intel_pin_eld_notify() function. Since it's
+> > >    skipped, we need to call it in the per-pin work. Need to add a flag in hdmi_spec_per_pin
+> > >    to indicate this situation.
+> > 
+> > Yeah, I guess this was already a bug.  It implies that the set_bclk()
+> > call is missing in the suspend/resume case, too.  We need to call it
+> > more consistently.
+> > 
+> > > 3. We can schedule the per-pin work in intel_pin_eld_notify() when snd_hdac_is_in_pm()
+> > >    returns true but there is no guarantee the runtime suspend will finished when the per-pin
+> > >   work is schedule to run.
+> > 
+> > On the second thought, we may simply proceed the notification if it's
+> > in a valid context.  The only period to prohibit the update is during
+> > the suspend/resume until the ELD is updated by the resume itself.
+> > So, something like below may work instead.  Could you give it a try?
+> 
+> A correction in the patch, it still has to check in-pm state;
+> otherwise it won't be handled when runtime-suspended.
 
-It's based on thermal of framework:
- - Trip points defined in device tree.
- - Cpufreq as cooling device registered in loongson2 cpufreq driver.
- - Pwm fan as cooling device registered in hwmon pwm-fan driver.
+... and on the further consideration, I believe the best solution is
+to just get rid of the whole check.
 
-Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+It was introduced by the commit eb399d3c99d8 along with the
+8ae743e82f0b that checks the suspend state.  The latter is still
+meaningful (we should skip the bogus notification at suspend).
+However, the former -- the code path we're dealing with -- doesn't
+help much in the recent code.  That fix was required because the
+driver probed the ELD bits via HD-audio verb at the time of the fix
+commit; that is, the driver had to wake up the codec for updating the
+ELD.  OTOH, now ELD is read directly from the graphics chip without
+the codec wakeup.  So the skip makes little sense.
+
+The fix patch is below.
+
+
+Takashi
+
+-- 8< --
+From: Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH] ALSA: hda/hdmi: Don't skip notification handling during PM
+ operation
+
+The HDMI driver skips the notification handling from the graphics
+driver when the codec driver is being in the PM operation.  This
+behavior was introduced by the commit eb399d3c99d8 ("ALSA: hda - Skip
+ELD notification during PM process").  This skip may cause a problem,
+as we may miss the ELD update when the connection/disconnection
+happens right at the runtime-PM operation of the audio codec.
+
+Although this workaround was valid at that time, it's no longer true;
+the fix was required just because the ELD update procedure needed to
+wake up the audio codec, which had lead to a runtime-resume during a
+runtime-suspend.  Meanwhile, the ELD update procedure doesn't need a
+codec wake up any longer since the commit 788d441a164c ("ALSA: hda -
+Use component ops for i915 HDMI/DP audio jack handling"); i.e. there
+is no much reason for skipping the notification.
+
+Let's drop those checks for addressing the missing notification.
+
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- drivers/thermal/Kconfig             |  10 ++
- drivers/thermal/Makefile            |   1 +
- drivers/thermal/loongson2_thermal.c | 268 ++++++++++++++++++++++++++++
- 3 files changed, 279 insertions(+)
- create mode 100644 drivers/thermal/loongson2_thermal.c
+ sound/pci/hda/patch_hdmi.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index e052dae614eb..6b60397e96a1 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
- 	  If you say yes here you get support for the FAN controlled
- 	  by the Microcontroller found on the Khadas VIM boards.
+diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
+index c172640c8a41..21edf7a619f0 100644
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -2666,9 +2666,6 @@ static void generic_acomp_pin_eld_notify(void *audio_ptr, int port, int dev_id)
+ 	 */
+ 	if (codec->core.dev.power.power_state.event == PM_EVENT_SUSPEND)
+ 		return;
+-	/* ditto during suspend/resume process itself */
+-	if (snd_hdac_is_in_pm(&codec->core))
+-		return;
  
-+config LOONGSON2_THERMAL
-+	tristate "Loongson2 SOC series thermal driver"
-+	depends on OF
-+	default y
-+	help
-+	  Support for Thermal driver found on Loongson2 SOC series platforms.
-+	  It supports one critical trip point and one passive trip point. The
-+	  cpufreq and the pwm fan is used as the cooling device to throttle
-+	  CPUs when the passive trip is crossed.
-+
- endif
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index def8e1a0399c..e99f839126fa 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
- obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
- obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
- obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
-+obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
-diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
-new file mode 100644
-index 000000000000..0f9dadbd4a07
---- /dev/null
-+++ b/drivers/thermal/loongson2_thermal.c
-@@ -0,0 +1,268 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Author: zhanghongchen <zhanghongchen@loongson.cn>
-+ *         Yinbo Zhu <zhuyinbo@loongson.cn>
-+ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
-+ */
-+
-+#include <linux/cpufreq.h>
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/io.h>
-+#include <linux/of_device.h>
-+#include <linux/thermal.h>
-+#include "thermal_hwmon.h"
-+
-+#define LOONGSON2_SOC_MAX_SENSOR_NUM			4
-+
-+#define LOONGSON2_TSENSOR_CTRL_HI			0x0
-+#define LOONGSON2_TSENSOR_CTRL_LO			0x8
-+#define LOONGSON2_TSENSOR_STATUS			0x10
-+#define LOONGSON2_TSENSOR_OUT				0x14
-+
-+struct loongson2_thermal_data {
-+	struct thermal_zone_device *tzd;
-+	int irq;
-+	int id;
-+	void __iomem *regs;
-+	struct platform_device *pdev;
-+	u16 ctrl_low_val;
-+	u16 ctrl_hi_val;
-+};
-+
-+/**
-+ * @low : temperature in degree
-+ * @high: temperature in degree
-+ */
-+static int loongson2_thermal_set(struct loongson2_thermal_data *data,
-+					int low, int high, bool enable)
-+{
-+	u64 reg_ctrl = 0;
-+	int reg_off = data->id * 2;
-+
-+	if (low > high)
-+		return -EINVAL;
-+
-+	low = low < -100 ? -100 : low;
-+	high = high > 155 ? 155 : high;
-+
-+	low += 100;
-+	high += 100;
-+
-+	reg_ctrl |= low;
-+	reg_ctrl |= enable ? 0x100 : 0;
-+	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+
-+	reg_ctrl = 0;
-+	reg_ctrl |= high;
-+	reg_ctrl |= enable ? 0x100 : 0;
-+	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static int loongson2_thermal_get_temp(void *__data, int *temp)
-+{
-+	struct loongson2_thermal_data *data = __data;
-+	u32 reg_val;
-+
-+	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
-+	*temp = ((reg_val & 0xff) - 100) * 1000;
-+
-+	return 0;
-+}
-+
-+static int loongson2_thermal_get_sensor_id(void)
-+{
-+	int ret, id;
-+	struct of_phandle_args sensor_specs;
-+	struct device_node *np, *sensor_np;
-+
-+	np = of_find_node_by_name(NULL, "thermal-zones");
-+	if (!np)
-+		return -ENODEV;
-+
-+	sensor_np = of_get_next_child(np, NULL);
-+	ret = of_parse_phandle_with_args(sensor_np, "thermal-sensors",
-+			"#thermal-sensor-cells",
-+			0, &sensor_specs);
-+	if (ret) {
-+		of_node_put(np);
-+		of_node_put(sensor_np);
-+		return ret;
-+	}
-+
-+	if (sensor_specs.args_count >= 1) {
-+		id = sensor_specs.args[0];
-+		WARN(sensor_specs.args_count > 1,
-+				"%s: too many cells in sensor specifier %d\n",
-+				sensor_specs.np->name, sensor_specs.args_count);
-+	} else {
-+		id = 0;
-+	}
-+
-+	of_node_put(np);
-+	of_node_put(sensor_np);
-+
-+	return id;
-+}
-+
-+static irqreturn_t loongson2_thermal_alarm_irq(int irq, void *dev)
-+{
-+	struct loongson2_thermal_data *data = dev;
-+
-+	/* clear interrupt */
-+	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
-+
-+	disable_irq_nosync(irq);
-+
-+	return IRQ_WAKE_THREAD;
-+}
-+
-+static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
-+{
-+	struct loongson2_thermal_data *data = dev;
-+
-+	thermal_zone_device_update(data->tzd,
-+				   THERMAL_EVENT_UNSPECIFIED);
-+	enable_irq(data->irq);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int loongson2_thermal_set_trips(void *data, int low, int high)
-+{
-+	return loongson2_thermal_set(data, low/1000, high/1000, true);
-+}
-+
-+static const struct thermal_zone_of_device_ops loongson2_of_thermal_ops = {
-+	.get_temp = loongson2_thermal_get_temp,
-+	.set_trips = loongson2_thermal_set_trips,
-+};
-+
-+static int loongson2_thermal_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct resource *res;
-+	struct loongson2_thermal_data *data;
-+	int ret;
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->pdev = pdev;
-+	platform_set_drvdata(pdev, data);
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	data->regs = devm_ioremap(dev, res->start, resource_size(res));
-+	if (IS_ERR(data->regs))
-+		return PTR_ERR(data->regs);
-+
-+	/* get irq */
-+	data->irq = platform_get_irq(pdev, 0);
-+	if (data->irq < 0)
-+		return data->irq;
-+
-+	/* get id */
-+	data->id = loongson2_thermal_get_sensor_id();
-+	if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
-+		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
-+				LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
-+		return -EINVAL;
-+	}
-+
-+	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
-+
-+	loongson2_thermal_set(data, 0, 0, false);
-+
-+	data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
-+							   data->id, data,
-+							   &loongson2_of_thermal_ops);
-+	if (IS_ERR(data->tzd)) {
-+		ret = PTR_ERR(data->tzd);
-+		data->tzd = NULL;
-+		dev_err(&pdev->dev, "failed to register %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = devm_request_threaded_irq(dev, data->irq,
-+			loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
-+			IRQF_ONESHOT, "loongson2_thermal", data);
-+	if (ret < 0) {
-+		dev_err(dev, "failed to request alarm irq: %d\n", ret);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Thermal_zone doesn't enable hwmon as default,
-+	 * enable it here
-+	 */
-+	data->tzd->tzp->no_hwmon = false;
-+	ret = thermal_add_hwmon_sysfs(data->tzd);
-+	if (ret) {
-+		dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int loongson2_thermal_remove(struct platform_device *pdev)
-+{
-+	struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
-+	int reg_off = data->id * 2;
-+
-+	/* disable interrupt */
-+	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id of_loongson2_thermal_match[] = {
-+	{ .compatible = "loongson,ls2k-thermal",},
-+	{ /* end */ }
-+};
-+MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
-+
-+static int __maybe_unused loongson2_thermal_suspend(struct device *dev)
-+{
-+	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
-+	int reg_off = data->id * 2;
-+
-+	data->ctrl_low_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+	data->ctrl_hi_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused loongson2_thermal_resume(struct device *dev)
-+{
-+	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
-+	int reg_off = data->id * 2;
-+
-+	writew(data->ctrl_low_val, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-+	writew(data->ctrl_hi_val, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(loongson2_thermal_pm_ops,
-+			 loongson2_thermal_suspend, loongson2_thermal_resume);
-+
-+static struct platform_driver loongson2_thermal_driver = {
-+	.driver = {
-+		.name		= "loongson2_thermal",
-+		.pm = &loongson2_thermal_pm_ops,
-+		.of_match_table = of_loongson2_thermal_match,
-+	},
-+	.probe	= loongson2_thermal_probe,
-+	.remove	= loongson2_thermal_remove,
-+};
-+module_platform_driver(loongson2_thermal_driver);
+ 	check_presence_and_report(codec, pin_nid, dev_id);
+ }
+@@ -2852,9 +2849,6 @@ static void intel_pin_eld_notify(void *audio_ptr, int port, int pipe)
+ 	 */
+ 	if (codec->core.dev.power.power_state.event == PM_EVENT_SUSPEND)
+ 		return;
+-	/* ditto during suspend/resume process itself */
+-	if (snd_hdac_is_in_pm(&codec->core))
+-		return;
+ 
+ 	snd_hdac_i915_set_bclk(&codec->bus->core);
+ 	check_presence_and_report(codec, pin_nid, dev_id);
 -- 
-2.31.1
+2.35.3
 
