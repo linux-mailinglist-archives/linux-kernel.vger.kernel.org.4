@@ -2,100 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093EE5EDC10
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FC85EDC14
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233620AbiI1LyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        id S233671AbiI1L5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 07:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233582AbiI1LyN (ORCPT
+        with ESMTP id S233604AbiI1L5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:54:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0405E56F;
-        Wed, 28 Sep 2022 04:54:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E38FB82056;
-        Wed, 28 Sep 2022 11:54:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB66AC433C1;
-        Wed, 28 Sep 2022 11:54:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664366048;
-        bh=hulhezLqRBKK8E1gjp7vWO38O+DMT/KxUVnBXOBSOQs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ciZbc4xklNIJ97bZwBY5d7bmodICuHbMRWrgm8tempqdCWxWdya+TI6BcT5FCDlVb
-         83spigJLPisO/aER9kNRqrXLyGJY7q1tKoxORHltsXfb/JjO6EC/8zdQXRYUviXJhA
-         lKgb3UJjuBtBGGNb1mjDWlVU/co4yEAVssSepnumbGj5qYHzA172ZKI2iVtnvyHzd5
-         vlIAE0ginJ3c2F7mJ0ZTI/0CzkiwkIYSZfuGwDPZkS/eVMkd7Zq3Z1co8eP/egAzGd
-         dR8AubT7rWigPqSLxaxuwgjBP7IFL1z0eV9U2gF/VFYnk9ocCPk3uap3XbTCATHap0
-         ZdXVmuBB8RiuA==
-Date:   Wed, 28 Sep 2022 14:54:03 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     asmadeus@codewreck.org
-Cc:     syzbot <syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com>,
-        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net
-Subject: Re: [syzbot] KASAN: use-after-free Read in rdma_close
-Message-ID: <YzQ12+jtARpwS5bw@unreal>
-References: <00000000000015ac7905e97ebaed@google.com>
- <YzQc2yaDufjp+rHc@unreal>
- <YzQlWq9EOi9jpy46@codewreck.org>
- <YzQmr8LVTmUj9+zB@unreal>
- <YzQuoqyGsooyDfId@codewreck.org>
+        Wed, 28 Sep 2022 07:57:34 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB2F647D2;
+        Wed, 28 Sep 2022 04:57:33 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id a80so12326705pfa.4;
+        Wed, 28 Sep 2022 04:57:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=kTt78o8sw7DrI9PLxyN0n+3tUBa/gb1NqpPxWUB4KCg=;
+        b=KLxgcyg2qJUDAGD1546ocHb8zD2jWooEsH9eajCy1V5enFhJ0vDZDVHNomuFEj6HWh
+         IKIa43x1gFDU4UnbGndt1qlNHG5Om3aGTlAlbUtBWWMSukv2G3FCwzU+3uiX1S4Iv1Zi
+         cGyPGpGG7E/Uwvsua9q2jNYlymXI1NC7Rt66i+sODKVtVwiRBpYAIpALaUvGPClPvtqz
+         8bGNEV+YKROfTMty3Mpm4kZjr65dq4/Ufhu55wKYYBbM1y7sJKTEqAnYW8xkJcG/Kv4e
+         34O+WOA1GovKCD2U2VCu9l5eeH53JHhtp2xEnrvhD/S/5LQHOBgnpugNVMaCiZJ6uN0A
+         4DGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=kTt78o8sw7DrI9PLxyN0n+3tUBa/gb1NqpPxWUB4KCg=;
+        b=I0jC40UTEJodKbWplwr+dgsphetAcb3v7SRR7aqZSdStE5xdQO32O5a9MC1k3/irle
+         15jWV9VsC7aUAMWq67fqwPJ6yo1d/uNyO8LROJ/jFgwLFhtnpDYZ/VT+wZvsi/W7oqcW
+         Of3ZrwIZlKE4fVt5uxihdVzL5xY22qRWxdffCtV9SqpF5yDs18hXfHGUTDU9I1NbsoiF
+         2jN56ZGITLyftgtNQta2Zy19VhtO5l+QjETm6rPtWwhxkSPTpBeJIgiWQuKmbzs8+06e
+         aqaaJ5U2XN29v6BbwDfiTw4rRcMO1/xXPjDaxFKA0xF50YACinBWU/bNpVTSm9Xr0gi6
+         oBnA==
+X-Gm-Message-State: ACrzQf1XTxWUGX5a1DnQ+hCEwNm8WoCppTm7w9PGJEthkqzKiFa7g1GU
+        8X6Y33xPQ5t9TWSjFdAxUaoKloC5jtIbvl/hHkU=
+X-Google-Smtp-Source: AMsMyM4vgLDLNPomf1ilGGAQV/z0snFyjMbp1+L4a1xwnRIAKJuyvJL77nq2QWriD0JZ3CnNSzaD7wRe+e8Jm5At4tc=
+X-Received: by 2002:a05:6a00:3492:b0:540:b30d:8396 with SMTP id
+ cp18-20020a056a00349200b00540b30d8396mr34458408pfb.81.1664366252575; Wed, 28
+ Sep 2022 04:57:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzQuoqyGsooyDfId@codewreck.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220927131518.30000-1-ojeda@kernel.org> <20220927131518.30000-28-ojeda@kernel.org>
+ <20220927141137.iovhhjufqdqcs6qn@gpm.stappers.nl> <202209270818.5BA5AA62@keescook>
+ <YzMX91Kq6FzOL9g/@kroah.com> <CANiq72kyW-8Gzeex4UCMqQPCrYyPQni=8ZrRO1dQsUwDmAPedw@mail.gmail.com>
+ <202209271710.6DD4B44C@keescook>
+In-Reply-To: <202209271710.6DD4B44C@keescook>
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+Date:   Wed, 28 Sep 2022 12:57:21 +0100
+Message-ID: <CANeycqo3O3yh2ms6vpHkzBLtT7QuCYWeweLq_z9SVygsot43YA@mail.gmail.com>
+Subject: Re: [PATCH v10 27/27] MAINTAINERS: Rust
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Geert Stappers <stappers@stappers.nl>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Maciej Falkowski <maciej.falkowski9@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 08:23:14PM +0900, asmadeus@codewreck.org wrote:
-> Leon Romanovsky wrote on Wed, Sep 28, 2022 at 01:49:19PM +0300:
-> > > But I agree I did get that wrong: trans_mod->close() wasn't called if
-> > > create failed.
-> > > We do want the idr_for_each_entry() that is in p9_client_destroy so
-> > > rather than revert the commit (fix a bug, create a new one..) I'd rather
-> > > split it out in an internal function that takes a 'bool close' or
-> > > something to not duplicate the rest.
-> > > (Bit of a nitpick, sure)
-> > 
-> > Please do proper unwind without extra variable.
-> > 
-> > Proper unwind means that you will call to symmetrical functions in
-> > destroy as you used in create:
-> > alloc -> free
-> > create -> close
-> > e.t.c
-> > 
-> > When you use some global function like you did, there is huge chance
-> > to see unwind bugs.
-> 
-> No.
+On Wed, 28 Sept 2022 at 01:11, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Tue, Sep 27, 2022 at 05:53:12PM +0200, Miguel Ojeda wrote:
+> > On Tue, Sep 27, 2022 at 5:34 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > How about just fixing up the emails in these patches, which will keep=
+ us
+> > > from having bouncing ones for those of us who do not use the .mailmap
+> > > file.
+> >
+> > Sorry about that...
+> >
+> > One question: if somebody wants to keep the Signed-off-bys and/or Git
+> > authorship information using the old email for the patches (except the
+> > `MAINTAINERS` entry), is that OK? (e.g. maybe because they did most of
+> > the work in their previous company).
+>
+> IMO, the S-o-b's should stand since they're historical, but fixing
+> MAINTAINERS to be up-to-date makes sense.
 
-Let's agree to disagree.
+Our intent wasn't to have a known-invalid email in MAINTAINERS, it was
+just my mistake: after leaving Google I updated my email in a lot of
+places but missed this one. Apologies for that.
 
-> 
-> Duplicating complicated cleanup code leads to leaks like we used to
-> have; that destroy function already frees up things in the right order.
+The patch below fixes this:
 
-It is pretty straightforward code, nothing complex there.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f4e31512bab8..e082270dd285 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17913,7 +17913,7 @@ F:      tools/verification/
+ RUST
+ M:     Miguel Ojeda <ojeda@kernel.org>
+ M:     Alex Gaynor <alex.gaynor@gmail.com>
+-M:     Wedson Almeida Filho <wedsonaf@google.com>
++M:     Wedson Almeida Filho <wedsonaf@gmail.com>
+ R:     Boqun Feng <boqun.feng@gmail.com>
+ R:     Gary Guo <gary@garyguo.net>
+ R:     Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
 
-Just pause for a minute, and ask yourself how totally random guy who
-looked on this syzbot bug just because RDMA name in it, found the issue
-so quickly.
-
-I will give a hint, I saw not symmetrical error unwind in call trace.
-
-Thanks
+Thanks,
+-Wedson
