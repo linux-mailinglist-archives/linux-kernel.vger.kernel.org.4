@@ -2,122 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB325ED6E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A0A5ED6E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbiI1Hyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
+        id S233597AbiI1HzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233672AbiI1HyA (ORCPT
+        with ESMTP id S233752AbiI1Hy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:54:00 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2255A205F6;
-        Wed, 28 Sep 2022 00:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664351638; x=1695887638;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6/r0fEdXYo7Wp0TYVKLQb7eKXTHsEoV4NAAQ4RlX2ww=;
-  b=LftScvklC9DZ8b09SgsEMPGeNgcmr53rYHVlyRCfnZYE5PLtizVwsGq7
-   MAnrPwg8cwyVvKWKqDGPNSS+LUhV25brU6KbJsPaOLaPuY0sRVU79Ue5c
-   w4L11G+D6qjN+T/+HAl33/ydmJf0Z8yuYpvWnQY3vG48ZNHJ+M5J9KOtG
-   EAoKHki61SuS8abb7YaVT1n15gcJhj4oACAt4w526wfr1pMNno0H40QB3
-   NO1nkVTqwqpwnMgZ6ZeSNyTw+/dX1XYpo7M2iOFUMkBQQ28ZcqWpRWH3x
-   b9VDNz91hT5DtO5iOElY5qPkeaCSqOnxAWuTSDqXANAox/dMtIovJRRPQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="303019094"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="303019094"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 00:53:57 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="950603445"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="950603445"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.61.24])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 00:53:54 -0700
-Message-ID: <ae609590-7d85-ee4b-3525-8eaa46ed240c@intel.com>
-Date:   Wed, 28 Sep 2022 10:53:49 +0300
+        Wed, 28 Sep 2022 03:54:56 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6E2D7D;
+        Wed, 28 Sep 2022 00:54:39 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1odRts-0007n0-5Z; Wed, 28 Sep 2022 09:54:36 +0200
+Message-ID: <a66880d7-fc2e-4fa7-0711-5d93b4304607@leemhuis.info>
+Date:   Wed, 28 Sep 2022 09:54:35 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH 2/5] libperf: Propagate maps only if necessary
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>
-References: <20220924165737.956428-1-namhyung@kernel.org>
- <20220924165737.956428-3-namhyung@kernel.org>
- <d901f8c8-0dda-8f34-f963-09cf56d4924e@intel.com>
- <CAM9d7ciGFqSRO=J6FZmz=enML7eCyvRMQB+bm=nZ07GmozJwbw@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAM9d7ciGFqSRO=J6FZmz=enML7eCyvRMQB+bm=nZ07GmozJwbw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US, de-DE
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        Anatoly Pugachev <matorola@gmail.com>,
+        Vasily Averin <vvs@openvz.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, cgroups@vger.kernel.org,
+        sparclinux@vger.kernel.org, regressions@lists.linux.dev
+References: <6b362c6e-9c80-4344-9430-b831f9871a3c@openvz.org>
+ <f9394752-e272-9bf9-645f-a18c56d1c4ec@openvz.org>
+ <20220918092849.GA10314@u164.east.ru>
+ <eca7d9b3-9831-5d04-1f39-8976765df87a@suse.cz>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: [sparc64] fails to boot, (was: Re: [PATCH memcg v6] net: set
+ proper memcg for net_init hooks allocations)
+In-Reply-To: <eca7d9b3-9831-5d04-1f39-8976765df87a@suse.cz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1664351679;1649a21f;
+X-HE-SMSGID: 1odRts-0007n0-5Z
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/09/22 20:28, Namhyung Kim wrote:
-> Hi Adrian,
-> 
-> On Tue, Sep 27, 2022 at 12:06 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+On 27.09.22 11:54, Vlastimil Babka wrote:
+> On 9/18/22 11:28, Anatoly Pugachev wrote:
+>> On Fri, Jun 03, 2022 at 07:19:43AM +0300, Vasily Averin wrote:
+>>> __register_pernet_operations() executes init hook of registered
+>>> pernet_operation structure in all existing net namespaces.
+>> [...]
+>> I'm unable to boot my sparc64 VM anymore (5.19 still boots, 6.0-rc1 does not),
+>> bisected up to this patch,
 >>
->> On 24/09/22 19:57, Namhyung Kim wrote:
->>> The current code propagate evsel's cpu map settings to evlist when it's
->>> added to an evlist.  But the evlist->all_cpus and each evsel's cpus will
->>> be updated in perf_evlist__set_maps() later.  No need to do it before
->>> evlist's cpus are set actually.
->>>
->>> Actually we discarded this intermediate all_cpus maps at the beginning
->>> of perf_evlist__set_maps().  Let's not do this.  It's only needed when
->>> an evsel is added after the evlist cpu maps are set.
->>
->> That might not be true.  Consider evlist__fix_hybrid_cpus() which fiddles
->> with evsel->core.cpus and evsel->core.own_cpus after the evsel has been
->> added to the evlist.  It can also remove an evsel from the evlist.
+>> mator@ttip:~/linux-2.6$ git bisect bad
+>> 1d0403d20f6c281cb3d14c5f1db5317caeec48e9 is the first bad commit
+>> commit 1d0403d20f6c281cb3d14c5f1db5317caeec48e9
+>> [...]
 > 
-> Thanks for your review.  I think it's fine to change evsel cpus or to remove
-> an evsel from evlist before calling evlist__create_maps().  The function
-> will take care of setting evlist's all_cpus from the evsels in the evlist.
-> So previous changes in evsel/cpus wouldn't be any special.
-> 
-> After this point, adding a new evsel needs to update evlist all cpus by
-> propagating cpu maps.  So I think hybrid cpus should be fine.
-> Did I miss something?
+> #regzbot introduced: 1d0403d20f6c
 
-I wondered how it might play out if evlist__fix_hybrid_cpus() reduced the
-cpus from the target->cpu_list (using perf record -C) , since after this
-patch all_cpus always starts with the target->cpu_list instead of an empty
-list.  But then, in the hybrid case, it puts a dummy event that uses the
-target cpu list anyway, so the result is the same.
+Thx for getting this regression tracked using regzbot. FWIW, that went
+sideways (as your already noticed and mentioned on IRC), as that made
+regzbot treat *your* mail as the report of the regressions. In cases
+like this you need "#regzbot ^introduced 1d0403d20f6c" (since recently
+"#regzbot introduced 1d0403d20f6c ^" works, too), as then regzbot will
+consider the *parent* mail the report (and then regzbot will look out
+for patches that link to them using a Link: tag).
 
-I don't know if there are any cases where all_cpus would actually need to
-exclude some of the cpus from target->cpu_list.
+No worries, I did the same mistake a few time already :-D I send a mail
+with that command now, so let's resolve this subthread by marking it invalid
 
-> 
->>
->> There might be other cases like that, but that was just one that stuck
->> out.
-> 
-> Thanks for sharing your concern.  Please let me know if you could
-> come up with another.
-> 
-> Namhyung
+#regzbot invalid: mis-used regzbot command, now properly tracked
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
 
