@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 402A05ED3B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 06:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA055ED3BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 06:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbiI1EAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 00:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
+        id S230506AbiI1EAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 00:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiI1D76 (ORCPT
+        with ESMTP id S230038AbiI1EAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 23:59:58 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229C8167068
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 20:59:50 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id q10so6522695oib.5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 20:59:50 -0700 (PDT)
+        Wed, 28 Sep 2022 00:00:41 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDC22AF1;
+        Tue, 27 Sep 2022 21:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date;
-        bh=cKg3c7GVCjfn7CupnMnZ/SCSyFG5IPfos7eN/2zVwG8=;
-        b=sHFs1Cooi2y5xXA0BL/6+6Waz0HuHk9jIF06Fx4P4A7WWhuUj2ptbrYtbHwJVVY1cR
-         /tORdisbPuPUtriRGPRjua2G3N4xnV37aFT/NiJJxIfdXGfqG5akb9S/dv8ujedArwvI
-         JM0sp6LLNhtI/knTj97Y3ecT4q63XITO/Gx0CdTV27UtsxCLYMm/WmgEDj31LfMTRSpk
-         R3wg0M6pZmvZxz+LDkifiG6on/W1b2wH6VC0Colf/cENGwsYXP6msXL4azPjLA3p8Z1G
-         r1lXbcFgk8HrPDyrreXOE2zKNgENl+2v2ddp56Lyey5RaqIUlq2cC8ihHusuJg8lwYus
-         ABjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=cKg3c7GVCjfn7CupnMnZ/SCSyFG5IPfos7eN/2zVwG8=;
-        b=PWZDvAE0AqPlrWTqvyvAFeLQIZnOU3vDmMCZFBTdNik7XZ0bQcsDo+4FVht4QZgWL6
-         zf47nNjP8PVOcIE2TsOPckMdg4rwqQV41z/dtDjghi9bgMqKOxpJGliCRdZddji+RzI9
-         nqfYOipf1FXNgDTA5C4eOfHG149ONhgOzS+rPmmI1fcrQSCDk1kieciDoYLxk0j9T3GP
-         LibTQx68slPIF6VM20+JOeZGc5wTS1hEeMoon3cK3nmkqqdSTMxmcHAwIyzlkmFSlgzd
-         fEEHUQBYPya3gus75GH8f1SkeDx/8AgscbDP9fkjMZnzfnCNRkFmH04Fx3p8JLKBvwDk
-         sCKQ==
-X-Gm-Message-State: ACrzQf0MDWXz93PIJrZM2SZUoxiob47FK9IQdVYpHIbIFvUn1vIlDsYC
-        wx5xbTmLp1wYMrAsGeAbgqoOAw==
-X-Google-Smtp-Source: AMsMyM6Oiw0ZdSUZmTEBtMh2zFrN+RYkMMdT/KyVolkNoP2lwZXhk7I8dpQCmCwu5He3YGRE67Z7dg==
-X-Received: by 2002:a05:6808:3007:b0:351:3de7:82f4 with SMTP id ay7-20020a056808300700b003513de782f4mr3211800oib.103.1664337589114;
-        Tue, 27 Sep 2022 20:59:49 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id q16-20020a9d6550000000b00636fd78dd57sm1628961otl.41.2022.09.27.20.59.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 20:59:48 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 20:59:47 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Jens Axboe <axbod@kernel.dk>
-cc:     Jan Kara <jack@suse.cz>, Keith Busch <kbusch@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Yu Kuai <yukuai1@huaweicloud.com>,
-        Liu Song <liusong@linux.alibaba.com>,
-        Hillf Danton <hdanton@sina.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH next v2] sbitmap: fix lockup while swapping
-In-Reply-To: <2b931ee7-1bc9-e389-9d9f-71eb778dcf1@google.com>
-Message-ID: <f975dddf-6ec-b3cb-3746-e91f61b22ea@google.com>
-References: <YyjdiKC0YYUkI+AI@kbusch-mbp> <f2d130d2-f3af-d09d-6fd7-10da28d26ba9@google.com> <20220921164012.s7lvklp2qk6occcg@quack3> <20220923144303.fywkmgnkg6eken4x@quack3> <d83885c9-2635-ef45-2ccc-a7e06421e1cc@google.com> <Yy4D54kPpenBkjHz@kbusch-mbp.dhcp.thefacebook.com>
- <391b1763-7146-857-e3b6-dc2a8e797162@google.com> <929a3aba-72b0-5e-5b80-824a2b7f5dc7@google.com> <20220926114416.t7t65u66ze76aiz7@quack3> <4539e48-417-edae-d42-9ef84602af0@google.com> <20220927103123.cvjbdx6lqv7jxa2w@quack3>
- <2b931ee7-1bc9-e389-9d9f-71eb778dcf1@google.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1664337640; x=1695873640;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=cH9DSO15A/GB38Vjdcq45IGeRo3cxOGiz91GY/0LOCs=;
+  b=nlq2QhIC7dwG40AzGcFldhdOXA9aydHLmQXyoiB/xsELK+WcvyyPyYS8
+   lYIW6TbOXHkfmNcmdoFPLpWzF/v5n9LS2JjCv2nkQ8qArst2lnAYVOv8W
+   FmsYKBItte4jwvltSHmZ2pHxyUm+WcKpNXF4+29jf49/9DDPFZXlMlPiO
+   E=;
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-718d0906.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 04:00:27 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-718d0906.us-west-2.amazon.com (Postfix) with ESMTPS id E4BA03E00DE;
+        Wed, 28 Sep 2022 04:00:25 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Wed, 28 Sep 2022 04:00:25 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.162.32) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Wed, 28 Sep 2022 04:00:22 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <edumazet@google.com>
+CC:     <davem@davemloft.net>, <dsahern@kernel.org>, <kuba@kernel.org>,
+        <kuni1840@gmail.com>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: [PATCH v2 net 3/5] tcp/udp: Call inet6_destroy_sock() in IPv6 sk->sk_destruct().
+Date:   Tue, 27 Sep 2022 21:00:14 -0700
+Message-ID: <20220928040014.76884-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <CANn89iL00_Gz+jiczvmHPCV9nO7Lzctq_JLyp1V-0obuPWBanQ@mail.gmail.com>
+References: <CANn89iL00_Gz+jiczvmHPCV9nO7Lzctq_JLyp1V-0obuPWBanQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.32]
+X-ClientProxiedBy: EX13D21UWA004.ant.amazon.com (10.43.160.252) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,63 +65,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 4acb83417cad ("sbitmap: fix batched wait_cnt accounting")
-is a big improvement: without it, I had to revert to before commit
-040b83fcecfb ("sbitmap: fix possible io hung due to lost wakeup")
-to avoid the high system time and freezes which that had introduced.
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 27 Sep 2022 20:43:51 -0700
+> On Tue, Sep 27, 2022 at 5:29 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+> >
+> > Originally, inet6_sk(sk)->XXX were changed under lock_sock(), so we were
+> > able to clean them up by calling inet6_destroy_sock() during the IPv6 ->
+> > IPv4 conversion by IPV6_ADDRFORM.  However, commit 03485f2adcde ("udpv6:
+> > Add lockless sendmsg() support") added a lockless memory allocation path,
+> > which could cause a memory leak:
+> >
+> > setsockopt(IPV6_ADDRFORM)                 sendmsg()
+> > +-----------------------+                 +-------+
+> > - do_ipv6_setsockopt(sk, ...)             - udpv6_sendmsg(sk, ...)
+> >   - lock_sock(sk)                           ^._ called via udpv6_prot
+> >   - WRITE_ONCE(sk->sk_prot, &tcp_prot)          before WRITE_ONCE()
+> >   - inet6_destroy_sock()
+> >   - release_sock(sk)                        - ip6_make_skb(sk, ...)
+> >                                               ^._ lockless fast path for
+> >                                                   the non-corking case
+> >
+> >                                               - __ip6_append_data(sk, ...)
+> >                                                 - ipv6_local_rxpmtu(sk, ...)
+> >                                                   - xchg(&np->rxpmtu, skb)
+> >                                                     ^._ rxpmtu is never freed.
+> >
+> >                                             - lock_sock(sk)
+> >
+> > For now, rxpmtu is only the case, but let's call inet6_destroy_sock()
+> > in IPv6 sk->sk_destruct() not to miss the future change and a similar
+> > bug fixed in commit e27326009a3d ("net: ping6: Fix memleak in
+> > ipv6_renew_options().")
+> 
+> I do not see how your patches prevent rxpmtu to be created at the time
+> of IPV6_ADDRFROM ?
+> 
+> There seem to be races.
+> 
+> lockless UDP sendmsg() is a disaster really.
 
-Now okay on the NVME laptop, but 4acb83417cad is a disaster for heavy
-swapping (kernel builds in low memory) on another: soon locking up in
-sbitmap_queue_wake_up() (into which __sbq_wake_up() is inlined), cycling
-around with waitqueue_active() but wait_cnt 0 .  Here is a backtrace,
-showing the common pattern of outer sbitmap_queue_wake_up() interrupted
-before setting wait_cnt 0 back to wake_batch (in some cases other CPUs
-are idle, in other cases they're spinning for a lock in dd_bio_merge()):
+I think we are never able to prevent it and races exist unless we remove
+the lockless path itself, so the patch makes sure to free rxpmtu at least
+when we close() the socket.  Currently, we can not even free it.
 
-sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
-__blk_mq_free_request < blk_mq_free_request < __blk_mq_end_request <
-scsi_end_request < scsi_io_completion < scsi_finish_command <
-scsi_complete < blk_complete_reqs < blk_done_softirq < __do_softirq <
-__irq_exit_rcu < irq_exit_rcu < common_interrupt < asm_common_interrupt <
-_raw_spin_unlock_irqrestore < __wake_up_common_lock < __wake_up <
-sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
-__blk_mq_free_request < blk_mq_free_request < dd_bio_merge <
-blk_mq_sched_bio_merge < blk_mq_attempt_bio_merge < blk_mq_submit_bio <
-__submit_bio < submit_bio_noacct_nocheck < submit_bio_noacct <
-submit_bio < __swap_writepage < swap_writepage < pageout <
-shrink_folio_list < evict_folios < lru_gen_shrink_lruvec <
-shrink_lruvec < shrink_node < do_try_to_free_pages < try_to_free_pages <
-__alloc_pages_slowpath < __alloc_pages < folio_alloc < vma_alloc_folio <
-do_anonymous_page < __handle_mm_fault < handle_mm_fault <
-do_user_addr_fault < exc_page_fault < asm_exc_page_fault
 
-See how the process-context sbitmap_queue_wake_up() has been interrupted,
-after bringing wait_cnt down to 0 (and in this example, after doing its
-wakeups), before advancing wake_index and refilling wake_cnt: an
-interrupt-context sbitmap_queue_wake_up() of the same sbq gets stuck.
-
-I have almost no grasp of all the possible sbitmap races, and their
-consequences: but __sbq_wake_up() can do nothing useful while wait_cnt 0,
-so it is better if sbq_wake_ptr() skips on to the next ws in that case:
-which fixes the lockup and shows no adverse consequence for me.
-
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
-v2: - v1 to __sbq_wake_up() broke out when this happens, but
-      v2 to sbq_wake_ptr() does better by skipping on to the next.
-    - added more comment and deleted dubious Fixes attribution.
-
- lib/sbitmap.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/lib/sbitmap.c
-+++ b/lib/sbitmap.c
-@@ -587,7 +587,7 @@ static struct sbq_wait_state *sbq_wake_p
- 	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
- 		struct sbq_wait_state *ws = &sbq->ws[wake_index];
- 
--		if (waitqueue_active(&ws->wait)) {
-+		if (waitqueue_active(&ws->wait) && atomic_read(&ws->wait_cnt)) {
- 			if (wake_index != atomic_read(&sbq->wake_index))
- 				atomic_set(&sbq->wake_index, wake_index);
- 			return ws;
+> > We can now remove all inet6_destroy_sock() calls from IPv6 protocol
+> > specific ->destroy() functions, but such changes are invasive to
+> > backport.  So they can be posted as a follow-up later for net-next.
+> >
+> > Fixes: 03485f2adcde ("udpv6: Add lockless sendmsg() support")
+> > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > ---
+> >  include/net/ipv6.h  |  1 +
+> >  include/net/udp.h   |  2 +-
+> >  net/ipv4/udp.c      |  8 ++++++--
+> >  net/ipv6/af_inet6.c |  9 ++++++++-
+> >  net/ipv6/udp.c      | 15 ++++++++++++++-
+> >  5 files changed, 30 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/include/net/ipv6.h b/include/net/ipv6.h
+> > index de9dcc5652c4..11f1a9a8b066 100644
+> > --- a/include/net/ipv6.h
+> > +++ b/include/net/ipv6.h
+> > @@ -1178,6 +1178,7 @@ void ipv6_icmp_error(struct sock *sk, struct sk_buff *skb, int err, __be16 port,
+> >  void ipv6_local_error(struct sock *sk, int err, struct flowi6 *fl6, u32 info);
+> >  void ipv6_local_rxpmtu(struct sock *sk, struct flowi6 *fl6, u32 mtu);
+> >
+> > +void inet6_sock_destruct(struct sock *sk);
+> >  int inet6_release(struct socket *sock);
+> >  int inet6_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len);
+> >  int inet6_getname(struct socket *sock, struct sockaddr *uaddr,
+> > diff --git a/include/net/udp.h b/include/net/udp.h
+> > index 5ee88ddf79c3..fee053bcd17c 100644
+> > --- a/include/net/udp.h
+> > +++ b/include/net/udp.h
+> > @@ -247,7 +247,7 @@ static inline bool udp_sk_bound_dev_eq(struct net *net, int bound_dev_if,
+> >  }
+> >
+> >  /* net/ipv4/udp.c */
+> > -void udp_destruct_sock(struct sock *sk);
+> > +void udp_destruct_common(struct sock *sk);
+> >  void skb_consume_udp(struct sock *sk, struct sk_buff *skb, int len);
+> >  int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb);
+> >  void udp_skb_destructor(struct sock *sk, struct sk_buff *skb);
+> > diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> > index 560d9eadeaa5..a84ae44db7e2 100644
+> > --- a/net/ipv4/udp.c
+> > +++ b/net/ipv4/udp.c
+> > @@ -1598,7 +1598,7 @@ int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb)
+> >  }
+> >  EXPORT_SYMBOL_GPL(__udp_enqueue_schedule_skb);
+> >
+> > -void udp_destruct_sock(struct sock *sk)
+> > +void udp_destruct_common(struct sock *sk)
+> >  {
+> >         /* reclaim completely the forward allocated memory */
+> >         struct udp_sock *up = udp_sk(sk);
+> > @@ -1611,10 +1611,14 @@ void udp_destruct_sock(struct sock *sk)
+> >                 kfree_skb(skb);
+> >         }
+> >         udp_rmem_release(sk, total, 0, true);
+> > +}
+> > +EXPORT_SYMBOL_GPL(udp_destruct_common);
+> >
+> > +static void udp_destruct_sock(struct sock *sk)
+> > +{
+> > +       udp_destruct_common(sk);
+> >         inet_sock_destruct(sk);
+> >  }
+> > -EXPORT_SYMBOL_GPL(udp_destruct_sock);
+> >
+> >  int udp_init_sock(struct sock *sk)
+> >  {
+> > diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+> > index dbb1430d6cc2..0774cff62f2d 100644
+> > --- a/net/ipv6/af_inet6.c
+> > +++ b/net/ipv6/af_inet6.c
+> > @@ -109,6 +109,13 @@ static __inline__ struct ipv6_pinfo *inet6_sk_generic(struct sock *sk)
+> >         return (struct ipv6_pinfo *)(((u8 *)sk) + offset);
+> >  }
+> >
+> > +void inet6_sock_destruct(struct sock *sk)
+> > +{
+> > +       inet6_destroy_sock(sk);
+> > +       inet_sock_destruct(sk);
+> > +}
+> > +EXPORT_SYMBOL_GPL(inet6_sock_destruct);
+> > +
+> >  static int inet6_create(struct net *net, struct socket *sock, int protocol,
+> >                         int kern)
+> >  {
+> > @@ -201,7 +208,7 @@ static int inet6_create(struct net *net, struct socket *sock, int protocol,
+> >                         inet->hdrincl = 1;
+> >         }
+> >
+> > -       sk->sk_destruct         = inet_sock_destruct;
+> > +       sk->sk_destruct         = inet6_sock_destruct;
+> >         sk->sk_family           = PF_INET6;
+> >         sk->sk_protocol         = protocol;
+> >
+> > diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+> > index 3366d6a77ff2..a5256f7184ab 100644
+> > --- a/net/ipv6/udp.c
+> > +++ b/net/ipv6/udp.c
+> > @@ -56,6 +56,19 @@
+> >  #include <trace/events/skb.h>
+> >  #include "udp_impl.h"
+> >
+> > +static void udpv6_destruct_sock(struct sock *sk)
+> > +{
+> > +       udp_destruct_common(sk);
+> > +       inet6_sock_destruct(sk);
+> > +}
+> > +
+> > +static int udpv6_init_sock(struct sock *sk)
+> > +{
+> > +       skb_queue_head_init(&udp_sk(sk)->reader_queue);
+> > +       sk->sk_destruct = udpv6_destruct_sock;
+> > +       return 0;
+> > +}
+> > +
+> >  static u32 udp6_ehashfn(const struct net *net,
+> >                         const struct in6_addr *laddr,
+> >                         const u16 lport,
+> > @@ -1723,7 +1736,7 @@ struct proto udpv6_prot = {
+> >         .connect                = ip6_datagram_connect,
+> >         .disconnect             = udp_disconnect,
+> >         .ioctl                  = udp_ioctl,
+> > -       .init                   = udp_init_sock,
+> > +       .init                   = udpv6_init_sock,
+> >         .destroy                = udpv6_destroy_sock,
+> >         .setsockopt             = udpv6_setsockopt,
+> >         .getsockopt             = udpv6_getsockopt,
+> > --
+> > 2.30.2
