@@ -2,62 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A445ED24B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 02:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4A25ED254
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 02:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiI1Az5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 20:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
+        id S232033AbiI1A7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 20:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiI1Azx (ORCPT
+        with ESMTP id S229870AbiI1A67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 20:55:53 -0400
+        Tue, 27 Sep 2022 20:58:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA0AB6002;
-        Tue, 27 Sep 2022 17:55:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D050115F7F;
+        Tue, 27 Sep 2022 17:58:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B2F061CD5;
-        Wed, 28 Sep 2022 00:55:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C74ABC433D6;
-        Wed, 28 Sep 2022 00:55:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1FC661CCB;
+        Wed, 28 Sep 2022 00:58:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B613C433D6;
+        Wed, 28 Sep 2022 00:58:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664326550;
-        bh=zhby2WkIY+2vrCBlQlJB7Z8ZYK63F+z7AimfqPfjWLE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=to5ua9epoOC+ymk9knNoNS4MY4yEPYove5Pzd3K3o8PT9BbZdfp7LLQrRlRiKPlJH
-         ux4BX346zXOZi9V3bXwDlfvvyFcjim3ns5uMp5TX8ZNIxLOKHDmtPoHxEgt0ztNJao
-         lE8PfKVJqpu6UbVx2ZvFMX/8feDO37p5Yvt9i2Gv8ZZqmPZbcYtjKOhWLI3d1/NQ1y
-         cGCdGj24TqhSarzL2E3Ypy7ogZmk+zZdxUDInYzeQrXjlGrUc0/AkqgdjYq2vWb9tq
-         2Nj+Ky5nRFnaqysA/ZmTCyT0CBLMWa9r6muHcyd/mlGIUvRO9EKO+EkSTVLSQyARvj
-         TTmuG2NePkuOA==
-Date:   Tue, 27 Sep 2022 17:55:48 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Jander <david@protonic.nl>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v7 4/7] net: mdiobus: search for PSE nodes by
- parsing PHY nodes.
-Message-ID: <20220927175548.331d9bae@kernel.org>
-In-Reply-To: <20220926112500.990705-5-o.rempel@pengutronix.de>
-References: <20220926112500.990705-1-o.rempel@pengutronix.de>
-        <20220926112500.990705-5-o.rempel@pengutronix.de>
+        s=k20201202; t=1664326737;
+        bh=3DddTk1dXHvfN9c0by+e0pAk5XXBE1VCE00TpTF6dDo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MXBk7YjOssZ1oz4ySvSwgAylDmV/tM3q/ouIILxsXh8biS0IeZdydPSm8s7EIC3VU
+         UeqQ4FxM6/AEFbgc4PYZLNQf0iF/HNrUDXEskMUEr/80QzYrvMbdPPUaSvbNDBSy00
+         Zum9+kb1QuI0O/Lwi1ert60ES0o8CvQaV6884f0zGn/eu7K5p7P64iu7ryya+0OkTb
+         Btg5E78O2Rh1tlqwCdcwT2g21tHuCfl6vd49TITALzK4gNar7mU5MfMgCjO9O8APPv
+         8AXg2GQcdCilr+yKVXPNUzNqICzHGCYUySCoDdfd/G9EvfGi4vpHicAQr3Gj7hfF/i
+         4ga6IAIVInyJA==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [GIT PULL] linux-tpmdd updates for v6.0-rc1
+Date:   Wed, 28 Sep 2022 03:58:52 +0300
+Message-Id: <20220928005852.10729-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,32 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sep 2022 13:24:57 +0200 Oleksij Rempel wrote:
-> +static struct pse_control *
-> +fwnode_find_pse_control(struct fwnode_handle *fwnode)
-> +{
-> +	struct pse_control *psec;
-> +	struct device_node *np;
-> +
-> +	np = to_of_node(fwnode);
-> +	if (!np)
-> +		return NULL;
-> +
-> +	psec = of_pse_control_get(np);
+Hi,
 
-This will fail with ENOTSUPP if PSE is not built. Won't that make all
-fwnode_mdiobus_register_phy() calls fail?
+Just some bug fixes.
 
-static inline struct pse_control *of_pse_control_get(struct device_node *node)
-{
-	return ERR_PTR(-ENOTSUPP);
-}
+BR, Jarkko
 
-Actually let me take a closer look at patch 2 :S
+The following changes since commit f76349cf41451c5c42a99f18a9163377e4b364ff:
 
-> +	if (PTR_ERR(psec) == -ENOENT)
-> +		return NULL;
-> +
-> +	return psec;
-> +}
+  Linux 6.0-rc7 (2022-09-25 14:01:02 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v6.0-rc1
+
+for you to fetch changes up to 603fd3d42e144ca36e8340c81b0144c5e7f8b9c2:
+
+  selftest: tpm2: Add Client.__del__() to close /dev/tpm* handle (2022-09-28 03:53:47 +0300)
+
+----------------------------------------------------------------
+tpmdd updates for Linux v6.0-rc1
+
+----------------------------------------------------------------
+Stefan Berger (1):
+      selftest: tpm2: Add Client.__del__() to close /dev/tpm* handle
+
+Vincenzo Frascino (1):
+      security/keys: Remove inconsistent __user annotation
+
+Wolfram Sang (1):
+      char: move from strlcpy with unused retval to strscpy
+
+ drivers/char/tpm/tpm_ppi.c           | 2 +-
+ security/keys/keyring.c              | 2 +-
+ tools/testing/selftests/tpm2/tpm2.py | 4 ++++
+ 3 files changed, 6 insertions(+), 2 deletions(-)
