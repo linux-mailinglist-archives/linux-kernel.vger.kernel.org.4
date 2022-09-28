@@ -2,168 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759675EE330
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A445EE332
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234040AbiI1Rbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
+        id S234152AbiI1Rcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233252AbiI1Rbr (ORCPT
+        with ESMTP id S233252AbiI1Rcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:31:47 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2065.outbound.protection.outlook.com [40.107.92.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16C95725E;
-        Wed, 28 Sep 2022 10:31:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RhxQ3LnJ9Irnoc67zsDnxdd5PqKpOVCUbDfxUAOFQ+EMBAuwCgHpIRwX2Fr08ZXO13IP3gr+MrzOPOF/ia1P1WMb2NOx8YSOrRIZ2e+4rxafD1WyAxVJN9co60Y+nxW0X9sFWDTLk1QTCwIPfNjYvJQ3q2j29vXsRpceHfnLoPIdbRnIudFcWJxXVit02SRSUE4N3s1yVGikNlLx0P6cUFpGVrbXnIr3mxx7dOM8alFbpoBCQhWFB7+x64mGUZPybk0hOxsq566FVRkDR2+WwcD4pVTe/Nz72T1e+wazveMTYX2z1nwKDjpglQ39SX+z7nbrenFmrYQEc4nKzbThNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d+AAUhTEJS9+0uqL4pLU1Jj7/9anhujllFzYXTHlRpM=;
- b=DadLdKuJXN60ODL22s54oZbZj/QbINKS1Egs+rBVTToqwDCx36dweW1CGVRkw/1Yhe5m5NC8JZJbbeIdDnJKT20OJzLfsRkqB2YgDDg75ZqWmSwKpOpb96nEUmKheuZafGNOXmJA2hWlpgWM2I8N7HkSjYNIn8sED+H77PhNXVtnyELDJirj14gcCSZD+85pZRTdT2xWF3PHeB+RzM48T8YiHTtlAiIXozLN8w5J3sA4Vmvf0y4hfTnpW6fFc2P2aUwo3Q8hWdRJA2EUru+CyXzxiKHNdlmigIwZiC7awk2xPU6HFDtPPdDSOLfls0FT/Q7bRuOrX9PY2DYUVh4Jqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d+AAUhTEJS9+0uqL4pLU1Jj7/9anhujllFzYXTHlRpM=;
- b=3zUvJwQPhfkbhlIvJfEUzFksr5v8a0zGaNNsFUq7X+/E4r2ySXLxldz5M1EMf5D9QyVRaewRr6h61P/UXyednSuvlkyDG4WVxJGmgz8T1Oz04BNzS0WC67u8ofDAqR01fOvZgh9WdxSteiCFMRlVxJWSGswwkMcmOm0lm0mS//A=
-Received: from DS7PR03CA0231.namprd03.prod.outlook.com (2603:10b6:5:3ba::26)
- by DM6PR12MB4354.namprd12.prod.outlook.com (2603:10b6:5:28f::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Wed, 28 Sep
- 2022 17:31:43 +0000
-Received: from DM6NAM11FT041.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3ba:cafe::4c) by DS7PR03CA0231.outlook.office365.com
- (2603:10b6:5:3ba::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25 via Frontend
- Transport; Wed, 28 Sep 2022 17:31:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT041.mail.protection.outlook.com (10.13.172.98) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5676.17 via Frontend Transport; Wed, 28 Sep 2022 17:31:43 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 28 Sep
- 2022 12:31:43 -0500
-Received: from ethanolx1adehost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Wed, 28 Sep 2022 12:31:42 -0500
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-To:     <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <wanpengli@tencent.com>, <jmattson@google.com>, <joro@8bytes.org>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <bilbao@vt.edu>
-CC:     Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: [PATCH] KVM: SEV: Fix a few small typos
-Date:   Wed, 28 Sep 2022 17:31:42 +0000
-Message-ID: <20220928173142.2935674-1-carlos.bilbao@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 28 Sep 2022 13:32:47 -0400
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A49F2747;
+        Wed, 28 Sep 2022 10:32:45 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id w9so2731781qvn.11;
+        Wed, 28 Sep 2022 10:32:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=pRt77Yv0TW/yrDpM6cdb1Rr9JxxUCZ2+soWA4PDhyTg=;
+        b=CzYXRbXgkvPvuqxPHJCHgz4Qoiqzfc4i9z38Pmakbnb2wpUCEYcVUOuzPJpUhht4XE
+         idKdC0mdVLjfl9uDYCUTgUMKtpSolGBnyJyG/Jfb3UPGVHkZMLr2RLTXMjnOzeDXJmkK
+         nlBCmkYslSSDwJUT0TjT0EgfehxuP7LXP6KLmKgUHjxqSyZSWtnm/TZAy9AV1ZRJpS4m
+         IK7jmES8cpl7E2FB1HZnfYKpphmUqCooD7CjhAVN4a79ppiwVroe4jgPfwAA6hr8/E4C
+         Vg5fO2H3qBZSUaCsI4geM+w0jRNrTjEv0aCNakv2snzKkpiNvfIbFILXrc0cEU14okSV
+         08+A==
+X-Gm-Message-State: ACrzQf011OnMUnKD4+99R+omxQpOYGzC4mcwNR2Eapjw+sbrEpwLi2R/
+        Bj4NwqhlGYAaS2oFuC4nTzA=
+X-Google-Smtp-Source: AMsMyM4u0a2O7FQXAYsIIbe/2pcw2pWXpm+RFSVtjr2qr0wEEY5m4FoZzwlUyqzYHsF5ZrbQUnKK/g==
+X-Received: by 2002:a05:6214:2584:b0:4ac:7f6b:e258 with SMTP id fq4-20020a056214258400b004ac7f6be258mr26882551qvb.114.1664386364705;
+        Wed, 28 Sep 2022 10:32:44 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::13c6])
+        by smtp.gmail.com with ESMTPSA id x22-20020a05620a0b5600b006b61b2cb1d2sm3405811qkg.46.2022.09.28.10.32.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 10:32:44 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, haoluo@google.com, sdf@google.com,
+        jolsa@kernel.org, memxor@gmail.com, tj@kernel.org
+Subject: [PATCH] selftests/bpf: Update map_kptr examples to reflect real use-cases
+Date:   Wed, 28 Sep 2022 12:32:46 -0500
+Message-Id: <20220928173246.2094177-1-void@manifault.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT041:EE_|DM6PR12MB4354:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7bfe8a46-c07c-43d2-8b6e-08daa1774f92
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ew5o00R0RzotH3uBYNlIfcjg2qGR/g8xZF7dRKzn1sGDL1JydKTPl1N2Mvs16UJdc9CdtRDgDwQ9JcQVod5lwaSapQ0cGaFC4jvkimx3tZymPnY7/Nl2YSCFKxfV91484i9U/ksNPNCusOh0Yfu1UPMKPOi4y4RXtJvNYgLJ+J/K8Vjh8s4jHl3zus3m2ZAeuP9Fha7fazNDWdR5GmIJo/k+61E3wAkgznaFQcTjRD+zdhy0PAt0L89my17+wek5G8uURvPTK/5l7XlXF8G5Sm3YRabTN3oM6J47JRpt+XaynvFDO4SEvn9lQMR23OcS5FtsgNHUpKi9TBqIatqobjqBVVJyxWwpmb/aElnY8ki+LPQguXr6QhKe0aEOVlQ5kmuZSIqnVPW6qo+gDbb5KXgUNFXhlAbURwx+dkt32IImV1vv7VFdwLwfU7vKbdWdM7I5kuqpmojwd9vCZY5cVgH49yIAQ5UBwbkcz2djEkNasocG9I+MJT5jS6DzBj7+pMK5lzxH1CF8wZU1dlhpEuYu4ZEYlRpnHXBu2aQPShxUYNtHf0XhfwpzSfZGEbvrBWBjBBW7MXbHbFvxgqU1y8AiNqqlvPaPz1LjkY/FqC6oOziyAyfHKvyVp9DYLF5o9U6aokfEVSmW1L6Wqb+xWoosCrLk/drVwP9AqSQGJ1dvzBSrOa/ENdh97RehFqDnhtQbLGKczvZoGyk78C85c4YUixU1c6sJC62J4Uk8gtDtr9oHmVv0iULVvUkJhUe8L/Xfl7E9KVvw0/Q0DYiTNpp6Iz/a9sXn8Ql21w93PO6J/rAsQ4GLwmn20y+7Hot+
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(136003)(376002)(451199015)(46966006)(36840700001)(40470700004)(7696005)(70586007)(44832011)(2906002)(40460700003)(336012)(316002)(478600001)(110136005)(186003)(1076003)(41300700001)(82740400003)(36756003)(26005)(81166007)(2616005)(5660300002)(40480700001)(86362001)(36860700001)(426003)(70206006)(356005)(82310400005)(47076005)(8676002)(8936002)(83380400001)(4326008)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 17:31:43.3593
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bfe8a46-c07c-43d2-8b6e-08daa1774f92
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT041.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4354
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix some typos in file arch/x86/kvm/svm/sev.c.
+In the map_kptr selftest, the bpf_kfunc_call_test_kptr_get() kfunc is used
+to verify and illustrate a typical use case of kptrs wherein an additional
+reference is taken on a referenced kptr that is already stored in a map.
+This would be useful for programs that, for example, want to pass the
+referenced kptr to a kfunc without removing it from the map.
 
-Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+Unfortunately, the implementation of bpf_kfunc_call_test_kptr_get() isn't
+representative of a real kfunc that needs to guard against possible
+refcounting races by BPF program callers. bpf_kfunc_call_test_kptr_get()
+does a READ_ONCE() on the struct prog_test_ref_kfunc **pp passed by the
+user and then calls refcount_inc() if the pointer is nonzero, but this
+can race with another callback in the same program that removes the kptr
+from the map  and frees it:
+
+1. A BPF program with a referenced kptr in a map passes the kptr to
+   bpf_kfunc_call_test_kptr_get() as:
+
+   p = bpf_kfunc_call_test_kptr_get(&v->ref_ptr, 0, 0);
+
+   from CPU 0.
+
+2. bpf_kfunc_call_test_kptr_get() does READ_ONCE(), and sees that the
+   struct prog_test_ref_kfunc **pp contains a non-NULL pointer.
+
+3. Another BPF handler on CPU 1 then invokes bpf_kptr_xchg() to remove
+   the kptr from the map, and frees it with a call to
+   bpf_kfunc_call_test_release(). This drops the final refcount on the
+   kptr.
+
+4. CPU 0 then issues refcount_inc() on the kptr with refcount 0, causing
+   a use-after-free.
+
+In the map_kptr selftest, this doesn't cause a use-after-free because
+the structure being refcounted is statically allocated, and the
+refcounts aren't actually used to control the object lifecycle. In a
+kfunc supporting a real use case, the refcount going to 0 would likely
+cause the object to be freed, as it does for e.g. struct task_struct.
+
+A more realistic use-case would use something like RCU in the kfunc
+handler to ensure that the kptr object can be safely accessed, and then
+issuing a refcount_inc_not_zero() to acquire a refcount on the object.
+This patch updates the map_kptr selftest to do this.
+
+Signed-off-by: David Vernet <void@manifault.com>
 ---
- arch/x86/kvm/svm/sev.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ net/bpf/test_run.c                            | 168 ++++++++++--------
+ .../selftests/bpf/prog_tests/map_kptr.c       |   4 +-
+ 2 files changed, 99 insertions(+), 73 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index f7fe0008bfd1..107fa0f442b2 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -668,7 +668,7 @@ static int sev_es_sync_vmsa(struct vcpu_svm *svm)
- 	 */
- 	memcpy(save, &svm->vmcb->save, sizeof(svm->vmcb->save));
- 
--	/* Sync registgers */
-+	/* Sync registers */
- 	save->rax = svm->vcpu.arch.regs[VCPU_REGS_RAX];
- 	save->rbx = svm->vcpu.arch.regs[VCPU_REGS_RBX];
- 	save->rcx = svm->vcpu.arch.regs[VCPU_REGS_RCX];
-@@ -2585,7 +2585,7 @@ void sev_free_vcpu(struct kvm_vcpu *vcpu)
- 
- 	/*
- 	 * If its an SNP guest, then VMSA was added in the RMP entry as
--	 * a guest owned page. Transition the page to hyperivosr state
-+	 * a guest owned page. Transition the page to hypervisor state
- 	 * before releasing it back to the system.
- 	 */
- 	if (sev_snp_guest(vcpu->kvm) &&
-@@ -3150,7 +3150,7 @@ static int __snp_handle_page_state_change(struct kvm_vcpu *vcpu, enum psc_op op,
- 				return PSC_UNDEF_ERR;
- 
- 			/*
--			 * Mark the userspace range unmerable before adding the pages
-+			 * Mark the userspace range unmergable before adding the pages
- 			 * in the RMP table.
- 			 */
- 			mmap_write_lock(kvm->mm);
-@@ -3510,7 +3510,7 @@ bool sev_snp_init_protected_guest_state(struct kvm_vcpu *vcpu)
- 
- 	ret = __sev_snp_update_protected_guest_state(vcpu);
- 	if (ret)
--		vcpu_unimpl(vcpu, "snp: AP state update on init failed\n");
-+		vcpu_unimpl(vcpu, "SNP: AP state update on init failed\n");
- 
- unlock:
- 	mutex_unlock(&svm->snp_vmsa_mutex);
-@@ -4170,7 +4170,7 @@ void sev_es_prepare_guest_switch(struct vcpu_svm *svm, unsigned int cpu)
- 	/* PKRU is restored on VMEXIT, save the current host value */
- 	hostsa->pkru = read_pkru();
- 
--	/* MSR_IA32_XSS is restored on VMEXIT, save the currnet host value */
-+	/* MSR_IA32_XSS is restored on VMEXIT, save the current host value */
- 	hostsa->xss = host_xss;
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 13d578ce2a09..23e3414b5898 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -410,73 +410,6 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
+ 	return ret;
  }
  
-@@ -4223,7 +4223,7 @@ struct page *snp_safe_alloc_page(struct kvm_vcpu *vcpu)
- 	 * Allocate an SNP safe page to workaround the SNP erratum where
- 	 * the CPU will incorrectly signal an RMP violation  #PF if a
- 	 * hugepage (2mb or 1gb) collides with the RMP entry of VMCB, VMSA
--	 * or AVIC backing page. The recommeded workaround is to not use the
-+	 * or AVIC backing page. The recommended workaround is to not use the
- 	 * hugepage.
- 	 *
- 	 * Allocate one extra page, use a page which is not 2mb aligned
+-static int bpf_test_finish(const union bpf_attr *kattr,
+-			   union bpf_attr __user *uattr, const void *data,
+-			   struct skb_shared_info *sinfo, u32 size,
+-			   u32 retval, u32 duration)
+-{
+-	void __user *data_out = u64_to_user_ptr(kattr->test.data_out);
+-	int err = -EFAULT;
+-	u32 copy_size = size;
+-
+-	/* Clamp copy if the user has provided a size hint, but copy the full
+-	 * buffer if not to retain old behaviour.
+-	 */
+-	if (kattr->test.data_size_out &&
+-	    copy_size > kattr->test.data_size_out) {
+-		copy_size = kattr->test.data_size_out;
+-		err = -ENOSPC;
+-	}
+-
+-	if (data_out) {
+-		int len = sinfo ? copy_size - sinfo->xdp_frags_size : copy_size;
+-
+-		if (len < 0) {
+-			err = -ENOSPC;
+-			goto out;
+-		}
+-
+-		if (copy_to_user(data_out, data, len))
+-			goto out;
+-
+-		if (sinfo) {
+-			int i, offset = len;
+-			u32 data_len;
+-
+-			for (i = 0; i < sinfo->nr_frags; i++) {
+-				skb_frag_t *frag = &sinfo->frags[i];
+-
+-				if (offset >= copy_size) {
+-					err = -ENOSPC;
+-					break;
+-				}
+-
+-				data_len = min_t(u32, copy_size - offset,
+-						 skb_frag_size(frag));
+-
+-				if (copy_to_user(data_out + offset,
+-						 skb_frag_address(frag),
+-						 data_len))
+-					goto out;
+-
+-				offset += data_len;
+-			}
+-		}
+-	}
+-
+-	if (copy_to_user(&uattr->test.data_size_out, &size, sizeof(size)))
+-		goto out;
+-	if (copy_to_user(&uattr->test.retval, &retval, sizeof(retval)))
+-		goto out;
+-	if (copy_to_user(&uattr->test.duration, &duration, sizeof(duration)))
+-		goto out;
+-	if (err != -ENOSPC)
+-		err = 0;
+-out:
+-	trace_bpf_test_finish(&err);
+-	return err;
+-}
+-
+ /* Integer types of various sizes and pointer combinations cover variety of
+  * architecture dependent calling conventions. 7+ can be supported in the
+  * future.
+@@ -565,6 +498,8 @@ struct prog_test_ref_kfunc {
+ 	int b;
+ 	struct prog_test_member memb;
+ 	struct prog_test_ref_kfunc *next;
++	struct rcu_head rcu;
++	atomic_t destroyed;
+ 	refcount_t cnt;
+ };
+ 
+@@ -572,12 +507,14 @@ static struct prog_test_ref_kfunc prog_test_struct = {
+ 	.a = 42,
+ 	.b = 108,
+ 	.next = &prog_test_struct,
++	.destroyed = ATOMIC_INIT(0),
+ 	.cnt = REFCOUNT_INIT(1),
+ };
+ 
+ noinline struct prog_test_ref_kfunc *
+ bpf_kfunc_call_test_acquire(unsigned long *scalar_ptr)
+ {
++	WARN_ON_ONCE(atomic_read(&prog_test_struct.destroyed));
+ 	refcount_inc(&prog_test_struct.cnt);
+ 	return &prog_test_struct;
+ }
+@@ -589,12 +526,22 @@ bpf_kfunc_call_memb_acquire(void)
+ 	return NULL;
+ }
+ 
++static void delayed_destroy_test_ref_struct(struct rcu_head *rhp)
++{
++	struct prog_test_ref_kfunc *p = container_of(rhp, struct prog_test_ref_kfunc, rcu);
++
++	WARN_ON_ONCE(refcount_read(&p->cnt) > 0);
++	atomic_set(&p->destroyed, true);
++}
++
+ noinline void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p)
+ {
+ 	if (!p)
+ 		return;
+ 
+-	refcount_dec(&p->cnt);
++	WARN_ON_ONCE(atomic_read(&p->destroyed));
++	if (refcount_dec_and_test(&p->cnt))
++		call_rcu(&p->rcu, delayed_destroy_test_ref_struct);
+ }
+ 
+ noinline void bpf_kfunc_call_memb_release(struct prog_test_member *p)
+@@ -641,11 +588,20 @@ noinline void bpf_kfunc_call_int_mem_release(int *p)
+ noinline struct prog_test_ref_kfunc *
+ bpf_kfunc_call_test_kptr_get(struct prog_test_ref_kfunc **pp, int a, int b)
+ {
+-	struct prog_test_ref_kfunc *p = READ_ONCE(*pp);
++	struct prog_test_ref_kfunc *p;
+ 
+-	if (!p)
++	rcu_read_lock();
++	p = READ_ONCE(*pp);
++	if (!p) {
++		rcu_read_unlock();
+ 		return NULL;
+-	refcount_inc(&p->cnt);
++	}
++
++	WARN_ON_ONCE(atomic_read(&p->destroyed));
++	if (!refcount_inc_not_zero(&p->cnt))
++		p = NULL;
++	rcu_read_unlock();
++
+ 	return p;
+ }
+ 
+@@ -783,9 +739,79 @@ static void *bpf_test_init(const union bpf_attr *kattr, u32 user_size,
+ 		return ERR_PTR(-EFAULT);
+ 	}
+ 
++	init_rcu_head(&prog_test_struct.rcu);
++
+ 	return data;
+ }
+ 
++static int bpf_test_finish(const union bpf_attr *kattr,
++			   union bpf_attr __user *uattr, const void *data,
++			   struct skb_shared_info *sinfo, u32 size,
++			   u32 retval, u32 duration)
++{
++	void __user *data_out = u64_to_user_ptr(kattr->test.data_out);
++	int err = -EFAULT;
++	u32 copy_size = size;
++
++	/* Clamp copy if the user has provided a size hint, but copy the full
++	 * buffer if not to retain old behaviour.
++	 */
++	if (kattr->test.data_size_out &&
++	    copy_size > kattr->test.data_size_out) {
++		copy_size = kattr->test.data_size_out;
++		err = -ENOSPC;
++	}
++
++	if (data_out) {
++		int len = sinfo ? copy_size - sinfo->xdp_frags_size : copy_size;
++
++		if (len < 0) {
++			err = -ENOSPC;
++			goto out;
++		}
++
++		if (copy_to_user(data_out, data, len))
++			goto out;
++
++		if (sinfo) {
++			int i, offset = len;
++			u32 data_len;
++
++			for (i = 0; i < sinfo->nr_frags; i++) {
++				skb_frag_t *frag = &sinfo->frags[i];
++
++				if (offset >= copy_size) {
++					err = -ENOSPC;
++					break;
++				}
++
++				data_len = min_t(u32, copy_size - offset,
++						 skb_frag_size(frag));
++
++				if (copy_to_user(data_out + offset,
++						 skb_frag_address(frag),
++						 data_len))
++					goto out;
++
++				offset += data_len;
++			}
++		}
++	}
++
++	if (copy_to_user(&uattr->test.data_size_out, &size, sizeof(size)))
++		goto out;
++	if (copy_to_user(&uattr->test.retval, &retval, sizeof(retval)))
++		goto out;
++	if (copy_to_user(&uattr->test.duration, &duration, sizeof(duration)))
++		goto out;
++	if (err != -ENOSPC)
++		err = 0;
++out:
++	destroy_rcu_head(&prog_test_struct.rcu);
++	trace_bpf_test_finish(&err);
++	return err;
++}
++
+ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
+ 			      const union bpf_attr *kattr,
+ 			      union bpf_attr __user *uattr)
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_kptr.c b/tools/testing/selftests/bpf/prog_tests/map_kptr.c
+index fdcea7a61491..1efeec146d8e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/map_kptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/map_kptr.c
+@@ -16,10 +16,10 @@ struct {
+ 	{ "non_const_var_off_kptr_xchg", "R1 doesn't have constant offset. kptr has to be" },
+ 	{ "misaligned_access_write", "kptr access misaligned expected=8 off=7" },
+ 	{ "misaligned_access_read", "kptr access misaligned expected=8 off=1" },
+-	{ "reject_var_off_store", "variable untrusted_ptr_ access var_off=(0x0; 0x1e0)" },
++	{ "reject_var_off_store", "variable untrusted_ptr_ access var_off=(0x0; 0x3f0)" },
+ 	{ "reject_bad_type_match", "invalid kptr access, R1 type=untrusted_ptr_prog_test_ref_kfunc" },
+ 	{ "marked_as_untrusted_or_null", "R1 type=untrusted_ptr_or_null_ expected=percpu_ptr_" },
+-	{ "correct_btf_id_check_size", "access beyond struct prog_test_ref_kfunc at off 32 size 4" },
++	{ "correct_btf_id_check_size", "access beyond struct prog_test_ref_kfunc at off 48 size 4" },
+ 	{ "inherit_untrusted_on_walk", "R1 type=untrusted_ptr_ expected=percpu_ptr_" },
+ 	{ "reject_kptr_xchg_on_unref", "off=8 kptr isn't referenced kptr" },
+ 	{ "reject_kptr_get_no_map_val", "arg#0 expected pointer to map value" },
 -- 
-2.34.1
+2.37.3
 
