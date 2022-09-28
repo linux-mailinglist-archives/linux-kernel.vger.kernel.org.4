@@ -2,143 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9005ED3ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 06:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3A35ED3EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 06:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbiI1EeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 00:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
+        id S232473AbiI1EfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 00:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232020AbiI1EeJ (ORCPT
+        with ESMTP id S229567AbiI1EfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 00:34:09 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19C0F8C2F
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 21:34:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664339648; x=1695875648;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XBf1OJAEQCXrpN+dmbGuJvECsb2rwRN/HMmFQYTcU/Y=;
-  b=MvuWVNqhwKTAuoEiJiKol1K+p3U7cdgKmYr/3psEjJqd19lpC+0PpAIy
-   pv38Hgb5/rldfb4NpFtUpjJZM7F+EPNntLtoP3ZOi4PRkoFaGMGe7Orxe
-   D/dsgy1XmRbFecXsY+PGKLT1wO81FP2qKwYIijZSJ/P8J19KlqABVB4r6
-   AdLMpsESrs6SSzKJVxJoEOOTPWBEpIzh1yrSociAll0PHQoFVB7479GKn
-   iNc1cUr1KE0i5Gv+QuEKFm7KNC8yfo60XQlB3kj12TRZT0vWTLU//YH5+
-   y38RGpNDdrP6aRi/nHinuG/taTM62txlRYUkC06VpnxbZf9cL/kiJCD7e
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="288658657"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="288658657"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 21:34:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="710817321"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="710817321"
-Received: from lkp-server02.sh.intel.com (HELO dfa2c9fcd321) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Sep 2022 21:34:06 -0700
-Received: from kbuild by dfa2c9fcd321 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1odOlq-0001yd-07;
-        Wed, 28 Sep 2022 04:34:06 +0000
-Date:   Wed, 28 Sep 2022 12:33:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:irq/urgent] BUILD SUCCESS
- c0cca6a66458a0daa627774de7ca2b678a6bb3d8
-Message-ID: <6333ce91.3yGgWIK4clPMdQEC%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 28 Sep 2022 00:35:06 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D774CA11;
+        Tue, 27 Sep 2022 21:35:02 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1odOmh-0001yO-F7; Wed, 28 Sep 2022 06:34:59 +0200
+Message-ID: <9df735b7-2963-9fca-aa7e-6ae993e8b948@leemhuis.info>
+Date:   Wed, 28 Sep 2022 06:34:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US, de-DE
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, corbet@lwn.net,
+        konstantin@linuxfoundation.org, krzysztof.kozlowski@linaro.org,
+        linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220928003006.230103-1-bryan.odonoghue@linaro.org>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH] Documentation/process: Add text to indicate supporters
+ should be mailed
+In-Reply-To: <20220928003006.230103-1-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664339703;3afc7d27;
+X-HE-SMSGID: 1odOmh-0001yO-F7
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
-branch HEAD: c0cca6a66458a0daa627774de7ca2b678a6bb3d8  Merge tag 'irqchip-fixes-6.0-2' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent
+On 28.09.22 02:30, Bryan O'Donoghue wrote:
+> Recently when submitting a yaml change I found that I had omitted the
+> maintainer whose tree the change needed to go through.
+> 
+> The reason for that is the path in MAINTAINERS is marked as Supported not
+> Maintained. Reading MAINTAINERS we see quote:
+> 
+>            Supported:   Someone is actually paid to look after this.
+>            Maintained:  Someone actually looks after it.
+> 
+> The current submitting-patches.rst only says to mail maintainers though not
+> supporters. When we run scripts/get_maintainer.pl anybody who is denoted a
+> paid maintainer will appear as a supporter.
+> 
+> Let's add some text to the submitting-patches.rst to indicate that
+> supporters should similarly be mailed so that you can't do as I did and
+> mail every maintainer get_maintainer.pl tells you to, without actually
+> mailing the one supporter you need to.
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-elapsed time: 878m
+Looks good to me, but while at it, one quick question: Would
+Documentation/process/5.Posting.rst (which sadly covers exactly the same
+topic) benefit from a similar clarification, even if it doesn't mention
+get_maintainers explicitly?
 
-configs tested: 60
-configs skipped: 2
+Which leads to two other question: Are there any other places that might
+benefit from such a clarification? Or would it be even make sense to
+change the format of MAINTAINERS to avoid the problem in the first
+place? Maybe something like "Maintained(v)" (Someone volunteered to look
+after it in spare hours.) and "Maintained(p)" (Someone is actually paid
+to look after this.). Ahh, no, that doesn't look good. But you get the idea.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+> index be49d8f2601b4..5f97379da41da 100644
+> --- a/Documentation/process/submitting-patches.rst
+> +++ b/Documentation/process/submitting-patches.rst
+> @@ -227,9 +227,11 @@ You should always copy the appropriate subsystem maintainer(s) on any patch
+>  to code that they maintain; look through the MAINTAINERS file and the
+>  source code revision history to see who those maintainers are.  The
+>  script scripts/get_maintainer.pl can be very useful at this step (pass paths to
+> -your patches as arguments to scripts/get_maintainer.pl).  If you cannot find a
+> -maintainer for the subsystem you are working on, Andrew Morton
+> -(akpm@linux-foundation.org) serves as a maintainer of last resort.
+> +your patches as arguments to scripts/get_maintainer.pl).  You should mail
+> +everyone who appears as "maintainer" or "supporter" in the
+> +scripts/get_maintainer.pl output.
 
-gcc tested configs:
-arc                                 defconfig
-alpha                               defconfig
-s390                             allmodconfig
-s390                                defconfig
-s390                             allyesconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-m68k                             allmodconfig
-x86_64                           rhel-8.3-kvm
-x86_64                              defconfig
-sh                               allmodconfig
-alpha                            allyesconfig
-powerpc                          allmodconfig
-arc                              allyesconfig
-i386                 randconfig-a001-20220926
-x86_64                               rhel-8.3
-mips                             allyesconfig
-x86_64               randconfig-a002-20220926
-x86_64                           allyesconfig
-m68k                             allyesconfig
-i386                 randconfig-a002-20220926
-x86_64               randconfig-a005-20220926
-i386                 randconfig-a003-20220926
-arc                  randconfig-r043-20220926
-x86_64               randconfig-a004-20220926
-i386                 randconfig-a004-20220926
-x86_64               randconfig-a006-20220926
-x86_64               randconfig-a001-20220926
-i386                 randconfig-a005-20220926
-x86_64               randconfig-a003-20220926
-i386                 randconfig-a006-20220926
-arm                                 defconfig
-i386                                defconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-arm                              allyesconfig
-i386                             allyesconfig
-arm64                            allyesconfig
-x86_64                        randconfig-a015
-ia64                             allmodconfig
+Side note and bikeshedding: Not sure, I wonder if the 'in the
+scripts/get_maintainer.pl output' can be dropped to make things shorter.
+Or maybe even shorter along the lines of 'Mail everyone listed as
+"maintainer" or "supporter"'?
 
-clang tested configs:
-hexagon              randconfig-r045-20220926
-riscv                randconfig-r042-20220926
-s390                 randconfig-r044-20220926
-hexagon              randconfig-r041-20220926
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-x86_64                        randconfig-a014
-i386                 randconfig-a011-20220926
-i386                 randconfig-a014-20220926
-i386                 randconfig-a013-20220926
-i386                 randconfig-a012-20220926
-i386                 randconfig-a015-20220926
-i386                 randconfig-a016-20220926
-hexagon              randconfig-r041-20220925
-hexagon              randconfig-r045-20220925
+Whatever, not that important.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>  If you cannot find a maintainer for the
+> +subsystem you are working on, Andrew Morton (akpm@linux-foundation.org) serves
+> +as a maintainer of last resort.
+>  
+>  You should also normally choose at least one mailing list to receive a copy
+>  of your patch set.  linux-kernel@vger.kernel.org should be used by default
+
+Ciao, Thorsten
