@@ -2,103 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752C65EDC6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840CB5EDC6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232936AbiI1MTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 08:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
+        id S233272AbiI1MTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 08:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232246AbiI1MTj (ORCPT
+        with ESMTP id S232256AbiI1MTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 08:19:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807E72BE0;
-        Wed, 28 Sep 2022 05:19:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2D39B82059;
-        Wed, 28 Sep 2022 12:19:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E5BFC433D6;
-        Wed, 28 Sep 2022 12:19:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664367575;
-        bh=Jtumyjp2ICK4bd1zx6iKqMwGUcwEnrzrlITtkI9G878=;
-        h=From:To:Cc:Subject:Date:From;
-        b=c72d9gmNSaUFWhD/p8v2ZkHevVeXX8dLQGqrm/YXkgtZI7hjg9Jwcl27ALdFyOwk2
-         TFlX90wu++cFYHL4ebBhgV4amoWrU8bVnFADvpDU65O+2/kn4dEosM2SdUrMQDpT1P
-         sic31pyQ8KC80fEvZRxK/04lvzLn3aba2JLox2fh1JwZ2QPER7T3qc82dDuZ6G2zcu
-         reSebueM6xxFLgeaUrGArX994Y4QUgYtWfs9T1DALKM5JXFHS9u6MlpCkyOHTzi3yU
-         GvuFv29GPjem5YrddqIj9td4tMtqkQxnD6W5mtz2POxaJqtUSdVyAnM2KqjwuRJlBk
-         DEDZ3aip+QQPg==
-Received: by pali.im (Postfix)
-        id 520917DE; Wed, 28 Sep 2022 14:19:32 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-tegra@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] PCI: tegra: Use PCI_CONF1_EXT_ADDRESS() macro
-Date:   Wed, 28 Sep 2022 14:19:11 +0200
-Message-Id: <20220928121911.14994-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        Wed, 28 Sep 2022 08:19:42 -0400
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E78D165AB
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 05:19:39 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 12:19:20 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1664367570; x=1664626770;
+        bh=s8C0TYHfhUf3KmBKMQrBy9S29tBacAy7W0VHIRyHmAs=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=gpNgeBec26jHCHT3zsF68kEchO0kRt1iOof2m1F4J47k2JrPWWb9L451cDyvsvRN0
+         m2KlejcCWUbN+dEqRDBoh/JcNjcn9ZweBfHCX8zNNd1CLhAiNeSbgjeoFUCb/63lEw
+         64dH5zvrTYxX06rMd9+FAeTSUF8MBiDQyjE78drYYx0QIWFeLNsXMFeBZeosJeEeVO
+         61KHLHScBcVfajitvTWhp+xFZATpryK1VPd/X3Y434EBwFBarS/x1i3eTK/+z6+yUH
+         5HJMPMpIJvSkzL9l2Zm53HeGVbIfxWZMFqVOhPLVhBT5OCPt8z10D3Wg0QuI5gGzWq
+         L/KZUX8ZsKtpQ==
+To:     devicetree@vger.kernel.org
+From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Julian Ribbeck <julian.ribbeck@gmx.de>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>,
+        Josef W Menad <JosefWMenad@protonmail.ch>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: [PATCH v2 0/4] arm64: dts: qcom: msm8916-samsung-j5: Use common device tree
+Message-ID: <20220928121717.102402-1-linmengbo0689@protonmail.com>
+In-Reply-To: <20220928110049.96047-1-linmengbo0689@protonmail.com>
+References: <20220928110049.96047-1-linmengbo0689@protonmail.com>
+Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify pci-tegra.c driver code and use new PCI_CONF1_EXT_ADDRESS() macro
-for accessing PCI config space.
+v2: Reword and resend. Split common dtsi patch.
+Add missing suffix state in pinctrl.
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
-Please look also at this related patch:
-https://patchwork.kernel.org/project/linux-pci/patch/20220911113216.14892-1-pali@kernel.org/
----
- drivers/pci/controller/pci-tegra.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+The smartphones below are using the MSM8916 SoC,
+which are released in 2015-2016:
 
-diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
-index 5df90d183526..c9924e75e597 100644
---- a/drivers/pci/controller/pci-tegra.c
-+++ b/drivers/pci/controller/pci-tegra.c
-@@ -417,13 +417,6 @@ static inline u32 pads_readl(struct tegra_pcie *pcie, unsigned long offset)
-  * address (access to which generates correct config transaction) falls in
-  * this 4 KiB region.
-  */
--static unsigned int tegra_pcie_conf_offset(u8 bus, unsigned int devfn,
--					   unsigned int where)
--{
--	return ((where & 0xf00) << 16) | (bus << 16) | (PCI_SLOT(devfn) << 11) |
--	       (PCI_FUNC(devfn) << 8) | (where & 0xff);
--}
--
- static void __iomem *tegra_pcie_map_bus(struct pci_bus *bus,
- 					unsigned int devfn,
- 					int where)
-@@ -445,7 +438,9 @@ static void __iomem *tegra_pcie_map_bus(struct pci_bus *bus,
- 		unsigned int offset;
- 		u32 base;
- 
--		offset = tegra_pcie_conf_offset(bus->number, devfn, where);
-+		offset = PCI_CONF1_EXT_ADDRESS(bus->number, PCI_SLOT(devfn),
-+					       PCI_FUNC(devfn), where) &
-+			 ~PCI_CONF1_ENABLE;
- 
- 		/* move 4 KiB window to offset within the FPCI region */
- 		base = 0xfe100000 + ((offset & ~(SZ_4K - 1)) >> 8);
--- 
-2.20.1
+Samsung Galaxy J5 2015 (SM-J500*)
+Samsung Galaxy J5 2016 (SM-J510*)
+Samsung Galaxy J3 2016
+- SM-J3109/SM-J320Y/SM-J320YZ
+- SM-J320N0/SM-J320ZN
+- SM-J320P/SM-J320R4/SM-J320V/SM-S320VL
+
+Add a common device tree for with initial support for:
+
+- GPIO keys
+- SDHCI (internal and external storage)
+- USB Device Mode
+- UART (on USB connector via the SM5703 MUIC)
+- WCNSS (WiFi/BT)
+- Regulators
+
+The three devices (some varints of J3, all other variants of J5 released
+in 2015 and J5X released in 2016) are very similar, with some differences
+in display and GPIO pins. The common parts are shared in
+msm8916-samsung-j5-common.dtsi to reduce duplication.
 
