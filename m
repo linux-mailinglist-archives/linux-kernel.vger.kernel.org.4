@@ -2,118 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA455ED966
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D0C5ED96F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232979AbiI1Jq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
+        id S232802AbiI1Jtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233149AbiI1Jqs (ORCPT
+        with ESMTP id S229885AbiI1Jtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:46:48 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6C497B0C
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:46:48 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id u59-20020a17090a51c100b00205d3c44162so1545520pjh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=/yZhQPLRoOB6Baar4RdCbGBqXHnPQnUNWE0ihB3eDb0=;
-        b=cmDu50QFMZzWZBo+w7l4ylCm6/O+6n/mk5ubUDLUuFpj0623cTqaTjW6weXqGeOr73
-         ZPU+jVRvBBSlMmtTTf7iuJRmFMLKCE1is7cQwqZCth5yz/TlDYU5KeCixpfqIZDDCqPa
-         Do718Uq/dYcuJWLAYoEOJklzKs7lbDpnI/aP0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=/yZhQPLRoOB6Baar4RdCbGBqXHnPQnUNWE0ihB3eDb0=;
-        b=k26c8X2unTe4IUExCg50CAXOf3n5Qw1n39dD1S/TOT5C+U3q2XyON+POvsq1Pn7hoV
-         XGRQKia4QLmx4J5rnDLCVs4HzfCsVGuwvA4UkRrqzyzTWB5mrmLUc4XKqYJ9d/3RqdjL
-         54uDNAcUlQXYmzkAyO/Molby+MSrFOs3Qt8QNRPO8FehbtQc2/kFAAVfXiVPVmfFUzGZ
-         PX1dOLJpOnJ36uQf8c2pIo21PvG21s44Uw1e+NYuxCuSAy96hvdEnJ2uxRD50nmNylz0
-         Kr9UlFQA+EJYnv7tj/UAT+RteZh0xDOQoBgD5zbRmvkL7LtCCJdDKD4C85g+4I4JRadC
-         sYVg==
-X-Gm-Message-State: ACrzQf3HP/sGhemcUAZySksTibxyVRiAHjW97jHH5YvtN/uyAQGuFYx3
-        SuxX4IlZptBzJOLqZ1zQDAr1LA==
-X-Google-Smtp-Source: AMsMyM6nrZxa/mrrwduRLYUWIo9Pp2JgRWOt8f765hEPZ/W2vRtskcnuWI/qEa19tJyumaGYFAe8jA==
-X-Received: by 2002:a17:902:d4ce:b0:177:fe49:19d2 with SMTP id o14-20020a170902d4ce00b00177fe4919d2mr31779922plg.4.1664358407636;
-        Wed, 28 Sep 2022 02:46:47 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:d8e5:5ceb:cc0c:18ad])
-        by smtp.gmail.com with ESMTPSA id lx7-20020a17090b4b0700b0020263b7177csm6784198pjb.3.2022.09.28.02.46.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 02:46:47 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 18:46:42 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Wed, 28 Sep 2022 05:49:39 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0E33C8EA;
+        Wed, 28 Sep 2022 02:49:38 -0700 (PDT)
+Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4McsCb5Xmcz687t9;
+        Wed, 28 Sep 2022 17:49:31 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 11:49:36 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 28 Sep
+ 2022 10:49:35 +0100
+Date:   Wed, 28 Sep 2022 10:49:34 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+CC:     "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Schofield, Alison" <alison.schofield@intel.com>,
+        "Verma, Vishal L" <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk 06/18] printk: Protect [un]register_console() with
- a mutex
-Message-ID: <YzQYArVKyyxxidxn@google.com>
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
- <20220924000454.3319186-7-john.ogness@linutronix.de>
- <YzMT27FVllY3u05k@alley>
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>
+Subject: Re: [RFC PATCH 7/9] cxl/test: Add generic mock events
+Message-ID: <20220928104934.00000f6a@huawei.com>
+In-Reply-To: <YzMhRh276QxjdZM4@iweiny-desk3>
+References: <20220813053243.757363-1-ira.weiny@intel.com>
+        <20220813053243.757363-8-ira.weiny@intel.com>
+        <20220825123119.00000705@huawei.com>
+        <YyN0qY5yaXwTwLDF@iweiny-desk3>
+        <20220920171748.00001260@huawei.com>
+        <YzIcKFSRtXHiuG0+@iweiny-desk3>
+        <20220927145623.0000040d@huawei.com>
+        <YzMhRh276QxjdZM4@iweiny-desk3>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzMT27FVllY3u05k@alley>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/09/27 17:16), Petr Mladek wrote:
-[..]
-> > +static int console_unregister_locked(struct console *console);
-> > +
-> >  /*
-> >   * The console driver calls this routine during kernel initialization
-> >   * to register the console printing procedure with printk() and to
-> > @@ -3107,13 +3148,14 @@ void register_console(struct console *newcon)
-> >  	bool realcon_enabled = false;
-> >  	int err;
-> >  
-> > -	for_each_console(con) {
-> > +	console_list_lock();
+On Tue, 27 Sep 2022 09:13:58 -0700
+Ira Weiny <ira.weiny@intel.com> wrote:
+
+> On Tue, Sep 27, 2022 at 02:56:23PM +0100, Jonathan Cameron wrote:
+> > On Mon, 26 Sep 2022 14:39:52 -0700
+> > Ira Weiny <ira.weiny@intel.com> wrote:
+> >   
+> > > On Tue, Sep 20, 2022 at 09:17:48AM -0700, Jonathan Cameron wrote:  
+> > > > On Thu, 15 Sep 2022 11:53:29 -0700
+> > > > Ira Weiny <ira.weiny@intel.com> wrote:
+> > > >     
+> > > > > On Thu, Aug 25, 2022 at 12:31:19PM +0100, Jonathan Cameron wrote:    
+> > > > > > On Fri, 12 Aug 2022 22:32:41 -0700
+> > > > > > ira.weiny@intel.com wrote:
+> > > > > >       
+> > > > > > > From: Ira Weiny <ira.weiny@intel.com>
+> > > > > > > 
+> > > > > > > Facilitate testing basic Get/Clear Event functionality by creating
+> > > > > > > multiple logs and generic events with made up UUID's.
+> > > > > > > 
+> > > > > > > Data is completely made up with data patterns which should be easy to
+> > > > > > > spot in trace output.      
+> > > > > > Hi Ira,
+> > > > > > 
+> > > > > > I'm tempted to hack the QEMU emulation for this in with appropriately
+> > > > > > complex interface to inject all the record types...      
+> > > > > 
+> > > > > Every time I look at the QEMU code it makes my head spin.  :-(    
+> > > > 
+> > > > You get used to it ;)`    
+> > > 
+> > > I'm trying...  :-/
+> > > 
+> > > Question though:
+> > > 
+> > > Is there a call in qemu which is equivalent to cpu_to_leXX()?  The
+> > > exec/cpu-all.h is having compilation issues for me because the
+> > > TARGET_BIG_ENDIAN is not defined (it is defined in a meson generated header).
+> > > 
+> > > So I'm afraid that the tswapXX() calls are not what I'm supposed to use.  Is
+> > > this true?  Are those some sort of internal call?  
+> > I'm confused.  There is cpu_to_le16 in "qemu/bswap.h"  
 > 
-> Hmm, the new mutex is really nasty. It has very strange semantic.
-> It makes the locking even more complicated.
-
-[..]
-
-I fully agree with everything you said. This lock nesting made me
-scratch my head wondering was it previous CPU hotplug code that had
-multiple nested locks or was it something else?
-
-> Anyway, I would like to avoid adding console_mutex. From my POV,
-> it is a hack that complicates the code. Taking console_lock()
-> should be enough. Using rcu walk would be good enough.
+> <sigh> I don't know how I missed it.  Sorry.
 > 
-> Do I miss something, please?
+> > 
+> > I suspect we've played a bit fast and loose with endianness in a few places in
+> > current qemu code and should probably check all that sometime.  
+>  
+> Yea nothing in hw/cxl seems to use any swapping.  I suppose only little endian
+> hosts have been used thus far?
+
+Exactly and I'm not sure when we'll see any big endian emulated hosts.  We should fix that,
+but lots of other things on todo list, so it's not particularly high on the list
++ getting a test environment up is going to be non trivial.
+
+J
 > 
-> Or is this part of some strategy to remove console_sem later, please?
+> I greped for 'ENDIAN' and found the tswap* calls.  I guess I should have
+> grepped for 'cpu_to'!  That found it right away!  :-/  :-D
+> 
+> Sorry for the distraction,
+> Ira
+> 
+> > Jonathan
+> > 
+> > 
+> >   
+> > > 
+> > > Ira  
+> >   
 
-So I can only explain what potential I saw in list lock: the idea
-that third party that iterates over consoles lists does not stop
-entire console output machinery, and, moreover, that third party
-does not flush pending messages once it's done with the business
-it had to do under console_sem. E.g. it can be a systemd or any
-other user-space process doing something with /dev/tty, which can
-suddenly stop all consoles output (console_lock()) and then also
-has to flush pending kernel messages (console_unlock()). Was this
-goal, however, fully achieved - no, a third party that wants to
-->flags &= ~CON_ENABLED a particular console still stops the entire
-console output (and flushes pending messages, unless handover-ed).
-
-I like what you suggested with srcu.
