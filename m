@@ -2,107 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5E05ED6F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432565ED6F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233204AbiI1H5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60852 "EHLO
+        id S232648AbiI1H60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbiI1H5v (ORCPT
+        with ESMTP id S233549AbiI1H6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:57:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD3A63E5;
-        Wed, 28 Sep 2022 00:57:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 28 Sep 2022 03:58:24 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D76B4454E;
+        Wed, 28 Sep 2022 00:58:23 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07E74B81F61;
-        Wed, 28 Sep 2022 07:57:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59E25C433D6;
-        Wed, 28 Sep 2022 07:57:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664351864;
-        bh=ruZ2DsK+gMbfErHsem/PLXeWS8YS24c8thncWAIJF0o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kq3wd8OCFk4Zi3saIY7Rw52ujF8gD0yuF244x2GtPfaKk7H4ppKQq9bG2lF/dm41p
-         Z39aqnoN86n28V6QEZP7v0dhyUVCe5kZrISQoSOKK/1eSEqcgppl2btoyH6dpmRqZc
-         Cno6e2jk2lAaA/6zglYnl7q9hg/YRmp1iv8pB6JPvBxXDrjX0BiFWTSzrP6PLtTnl7
-         RdfLpk6AqaXuYY/HLBo3MquICqha9k0o3tsZ5MqNCYnen1Jn5Zpqm+X/QOYx3PbMPS
-         +5E9ZfAvQENXlQy8NneD4stO2UvDL+ngWSIMvvZ4dH02yF8yk7ZQXvO77pa7GBRkl2
-         hx2dxvLbNxTjA==
-Date:   Wed, 28 Sep 2022 10:57:29 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Vernon Yang <vernon2gm@gmail.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, bobwxc@email.cn,
-        hughd@google.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation/mm: modify page_referenced to
- folio_referenced
-Message-ID: <YzP+aZsR6Lov7zi6@kernel.org>
-References: <20220926152032.74621-1-vernon2gm@gmail.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3A9136601EB5;
+        Wed, 28 Sep 2022 08:58:21 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664351902;
+        bh=e/mPVgGURMWxGYEIW4p02kZFhXBi5nXgg4F5k0bpy54=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TYk/3bPREZ0ETnF9mVPkIiNQOTPa+nZHbNZ9uVIoH3AMlqd4wowy7Cq6bygwyXOEh
+         Jffp9pu0jq7qJ4MUQb/0MUQTYYrMcxuFiwio7uXbmueISdOytGiLHcJeKm97yGNQv9
+         o5Qp5bgILa/SPkA3eQJRxIBMu+hIrHi8rClVnLbm2fq8CJB7tsCnwnJ5xmgj8ET4DQ
+         npVFafytKPtTkcC0C6H3uDcPzpXkFpepY5O58WOI1qQ6aGC6WSvZKbCuU5D63wMtCH
+         VJHLUZK+nuOT+S5aTH05Q2HyNxu7MWCMoxAjDYbGrzBaWnSZpBi9QPuiu3RZcaJ759
+         iptJdJSKqXaRA==
+Message-ID: <68e1c8b0-04cf-acf8-b6b6-97d9eb8a7c4a@collabora.com>
+Date:   Wed, 28 Sep 2022 09:58:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220926152032.74621-1-vernon2gm@gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2] arm64: dts: mt8192: Add vcodec lat and core nodes
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        =?UTF-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
+        <Allen-KH.Cheng@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20220926105047.19419-1-allen-kh.cheng@mediatek.com>
+ <4d1e8600-f73d-8d2b-2e7a-1b75be7624bd@collabora.com>
+ <d71334b63427df73d01ff1b9fa4d2dec94ad9c95.camel@mediatek.com>
+ <05ed341b-2db3-620f-7a70-dcebfaa66f1a@collabora.com>
+ <172e10ee-22fd-ccec-1a5a-7bd0a29dbfc4@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <172e10ee-22fd-ccec-1a5a-7bd0a29dbfc4@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 11:20:32PM +0800, Vernon Yang wrote:
-> Since commit b3ac04132c4b ("mm/rmap: Turn page_referenced() into
-> folio_referenced()") the page_referenced function name was modified,
-> so fix it up to use the correct one.
+Il 28/09/22 09:04, Krzysztof Kozlowski ha scritto:
+> On 27/09/2022 12:17, AngeloGioacchino Del Regno wrote:
+>>>>
+>>>
+>>> Sorry, my bad. I alsways run `make dtbs_check` to confirm dtb with
+>>> bindings. I just think we didn't limit node names in mtk-vodec
+>>> bindings. I will pay attention next time.
+>>>
+>>>
+>>> Since currently the vcodec lat and core nodes are absent from the mtk
+>>> dts, do you think the child node name should be changed to something
+>>> more general (ex: video-codec) in mediatek,vcodec-subdev-decoder
+>>> bindings?
+>>
+>> The video codec is mt8192-vcodec-dec, while the other nodes are describing
+>> the VPU instances (and/or vpu cores)... I'm not sure.
+>>
+>> Krzysztof, please, can you give your opinion on that?
+>>
 > 
-> Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
-
-Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
-
-> ---
->  Documentation/mm/unevictable-lru.rst | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/mm/unevictable-lru.rst b/Documentation/mm/unevictable-lru.rst
-> index b280367d6a44..4a0e158aa9ce 100644
-> --- a/Documentation/mm/unevictable-lru.rst
-> +++ b/Documentation/mm/unevictable-lru.rst
-> @@ -197,7 +197,7 @@ unevictable list for the memory cgroup and node being scanned.
->  There may be situations where a page is mapped into a VM_LOCKED VMA, but the
->  page is not marked as PG_mlocked.  Such pages will make it all the way to
->  shrink_active_list() or shrink_page_list() where they will be detected when
-> -vmscan walks the reverse map in page_referenced() or try_to_unmap().  The page
-> +vmscan walks the reverse map in folio_referenced() or try_to_unmap().  The page
->  is culled to the unevictable list when it is released by the shrinker.
->  
->  To "cull" an unevictable page, vmscan simply puts the page back on the LRU list
-> @@ -267,7 +267,7 @@ the LRU.  Such pages can be "noticed" by memory management in several places:
->   (4) in the fault path and when a VM_LOCKED stack segment is expanded; or
->  
->   (5) as mentioned above, in vmscan:shrink_page_list() when attempting to
-> -     reclaim a page in a VM_LOCKED VMA by page_referenced() or try_to_unmap().
-> +     reclaim a page in a VM_LOCKED VMA by folio_referenced() or try_to_unmap().
->  
->  mlocked pages become unlocked and rescued from the unevictable list when:
->  
-> @@ -547,7 +547,7 @@ vmscan's shrink_inactive_list() and shrink_page_list() also divert obviously
->  unevictable pages found on the inactive lists to the appropriate memory cgroup
->  and node unevictable list.
->  
-> -rmap's page_referenced_one(), called via vmscan's shrink_active_list() or
-> +rmap's folio_referenced_one(), called via vmscan's shrink_active_list() or
->  shrink_page_list(), and rmap's try_to_unmap_one() called via shrink_page_list(),
->  check for (3) pages still mapped into VM_LOCKED VMAs, and call mlock_vma_page()
->  to correct them.  Such pages are culled to the unevictable list when released
-> -- 
-> 2.25.1
+> What's the difference between them? I understand parent device is entire
+> block of consisting of multiple processing units? If so, video-codec
+> actually could fit in both places. But feel free to call it a bit
+> different (video-codec-core, video-codec-lat, processing-unit, even
+> something less generic). Sometimes it's tricky to find nice name, so I
+> wouldn't worry too much in that case. Just not "mt8192-vcodec" :)
 > 
 
--- 
-Sincerely yours,
-Mike.
+The parent device is the entire block consisting of multiple processing units
+and has "global" control registers; children are LAT(s) and processing cores.
+
+ From my understanding, the processing cores are physical cores of one big VPU
+and, depending on the actual (current gen) SoC, the VPU may have one or two
+cores.
+
+Right now, the bindings want vcodec-latX@addr, vcodec-coreX@addr (where X is
+a number, like vcodec-core0, vcodec-core1) but, in my opinion, changing that
+to video-codec-lat@addr and video-codec-core@addr would be more descriptive.
+
+...Or should we simply leave the bindings as they are and just go with the
+abbreviated "vcodec-(hwtype)" names?
+
+Regards,
+Angelo
