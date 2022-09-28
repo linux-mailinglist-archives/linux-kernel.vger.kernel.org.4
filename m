@@ -2,92 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3705EE03D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACD05EE049
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234329AbiI1PZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
+        id S234487AbiI1PZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234255AbiI1PYg (ORCPT
+        with ESMTP id S234328AbiI1PZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:24:36 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F97CBADF;
-        Wed, 28 Sep 2022 08:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664378618; x=1695914618;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xo6XKYqI3oPo+JJpKrktAR7Ec7OSHFgLsMM1Nyu1Bpg=;
-  b=ekkimzVcJ4y1kFMT6KWeK7WuEnEFTKHvOH0vjx6/nNXPARahjqp/x5PA
-   aUnwwgGlg7FcFwjfzKXnJEuxct9TU1gO1BWlt+YTM/Xl18OAbGRrEHXHX
-   y//apaf0zQ53i71hmlpWz4kunjNdGD5oYIvFGaUoWBHlcQyutR3pCm1sU
-   hh51M3J3IlGmvgkgOhYUHn/lJsFt9UOncYOaBbFaCrLiJM+GefFxWLUcs
-   I43UgKZk4jjIQnTx7eOhuK62amPsvnsxvrY2wQ3SLc6otsWznHZrePIcU
-   +J6Xo9+mFnDxSxghk02SerCddpjXboUAzQt6Q+oXk+cAdBOBibg3GIr69
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="281346483"
-X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="281346483"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 08:23:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="573074617"
-X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="573074617"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga003.jf.intel.com with ESMTP; 28 Sep 2022 08:23:33 -0700
-Message-ID: <c1d537ad-5a2d-24b1-bfc3-165deebbbfa7@linux.intel.com>
-Date:   Wed, 28 Sep 2022 18:24:57 +0300
+        Wed, 28 Sep 2022 11:25:28 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAA25A884
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:25:08 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id i26so20885478lfp.11
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=/CE0pZsSoimzvz4KYprSdOM9XaT+5J4lkqToFLa8ZJg=;
+        b=qYmooQpRI8RRzuGx+1tn5Z/QaCNWthTjBNWlnxyCtfNmqyjWOZnznR3Dfz5cjgqPZt
+         4cW/6o+dWQ0CrXfgax+WB9gMMoiPBBehS6YJS0PvDK9uYaiBolIWKFME8mgNgtBkLDbf
+         sLxLAptotu12FasL/ZcAXPFG7hxPY0+xPTorIVz/1HQtWTLCamDmiBWwRt+BL+9zyg0C
+         JoZvA6OFspAsRg8OgNfYnuQnNFvshVIsgls4omoxOFS1uthMQ2lavketYz0LD8I5DzBd
+         jJMEFvIx9frzRCJZXEbYSVKXFHnmxi3AgSZFcMae9ApDpjw10H33lcvVjI72iwdEvkOd
+         LwXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=/CE0pZsSoimzvz4KYprSdOM9XaT+5J4lkqToFLa8ZJg=;
+        b=nMaPYxgil2RVLittQeDwN7QPB3yWSR9On6gEq43NjXT1eBnPpJk1qRVhk1SWyc66BL
+         fNw7YZNbCKbW1CRjMLCDnF+K+Fl1mISXZpQsO4AaNwQT/rP6IVT09JKp2OhwC0POZxEu
+         XClqamK6RpAVjGiW/b3Cn3pO1NSmvFyWVAnezTG1LTrej/frOwyge25jgCgFfWYZ+2Tx
+         faxDOw07HH8CpdDrBHOQAQ7LNchFaZnoNsfIuZe9MO66YXc6/+Vr3T4p+gucHkSVN87i
+         0cDT4DOyAvd0uGtu1C6d3LnT/Xaq3ad9At3im035w/y3jRUFNvxPDqW8VCaVZL3cYQGt
+         m9GA==
+X-Gm-Message-State: ACrzQf0uxeTBkGDvrl+SSX2SMxrHeW95NtmxGyb1aMbNxoZvn36If03e
+        gaI0fbKhFfN4+7vKTqkniF5nGg==
+X-Google-Smtp-Source: AMsMyM7H7+3obbpIiE1Ya/K0YY1X88ZwWtJmVZUqICyXSy5P099rpnXdLeVCHjUZsVLsmNNuro/XUQ==
+X-Received: by 2002:ac2:4e09:0:b0:499:1e3a:54ab with SMTP id e9-20020ac24e09000000b004991e3a54abmr13173263lfr.170.1664378706601;
+        Wed, 28 Sep 2022 08:25:06 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id o3-20020ac24e83000000b00492d064e8f8sm499679lfr.263.2022.09.28.08.25.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 08:25:05 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>
+Subject: [PATCH v6] dt-bindings: qcom: document preferred compatible naming
+Date:   Wed, 28 Sep 2022 17:25:01 +0200
+Message-Id: <20220928152501.490840-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3] usb: xhci: add XHCI_SPURIOUS_SUCCESS to ASM1042
- despite being a V0.96 controller
-Content-Language: en-US
-To:     Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
-        mathias.nyman@intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stern@rowland.harvard.edu
-References: <20220926193140.607172-1-jens.glathe@oldschoolsolutions.biz>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20220926193140.607172-1-jens.glathe@oldschoolsolutions.biz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.9.2022 22.31, Jens Glathe wrote:
-> This appears to fix the error:
-> "xhci_hcd <address>; ERROR Transfer event TRB DMA ptr not part of
-> current TD ep_index 2 comp_code 13" that appear spuriously (or pretty
-> often) when using a r8152 USB3 ethernet adapter with integrated hub.
-> 
-> ASM1042 reports as a 0.96 controller, but appears to behave more like 1.0
-> 
-> Inspred by this email thread: https://markmail.org/thread/7vzqbe7t6du6qsw3
-> 
-> Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
+Compatibles can come in two formats.  Either "vendor,ip-soc" or
+"vendor,soc-ip".  Qualcomm bindings were mixing both of usages, so add a
+DT schema file documenting preferred policy and enforcing it for all new
+compatibles, except few existing patterns.
 
-Adding this to queue
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 
-> ---
+---
 
-In the future, As Alan also pointed out, please list the changes since last version here.
+Changes since v5:
+1. Correct Bjorn's email.
+2. Add tags.
 
-Something like:
+Changes since v4:
+1. Add qcm.
+2. Add more qcom,ipq806x exceptions.
+3. Add Rob's tag.
 
-changes since v2
-  - add subsystem to subject line
-  - removed host 0.96 version check
+Changes since v3:
+1. Add qcom,kpss-wdt-xxx to pattern for exceptions.
+2. Add ipq806x entries to list of exceptions.
 
-Thanks
--Mathias
+Changes since v2:
+1. Narrow the expected pattern to be followed by dash '-' after model
+   number (msm8996-) or by two letters and a dash (sc8280xp-).
+2. Add qcom,apss-wdt-xxx to list of exceptions.
+3. Use comment instead of description in the oneOf list.
+
+Changes since v1:
+1. Add schema instead of readme (Rob).
+
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Alex Elder <elder@linaro.org>
+Cc: Robert Foss <robert.foss@linaro.org>
+Cc: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+ .../devicetree/bindings/arm/qcom-soc.yaml     | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom-soc.yaml
+
+diff --git a/Documentation/devicetree/bindings/arm/qcom-soc.yaml b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+new file mode 100644
+index 000000000000..889fbfacf226
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/qcom-soc.yaml
+@@ -0,0 +1,65 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/qcom-soc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm SoC compatibles naming convention
++
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
++
++description: |
++  Guidelines for new compatibles for SoC blocks/components.
++  When adding new compatibles in new bindings, use the format::
++    qcom,SoC-IP
++
++  For example::
++   qcom,sdm845-llcc-bwmon
++
++  When adding new compatibles to existing bindings, use the format in the
++  existing binding, even if it contradicts the above.
++
++select:
++  properties:
++    compatible:
++      pattern: "^qcom,.*(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++  required:
++    - compatible
++
++properties:
++  compatible:
++    oneOf:
++      # Preferred naming style for compatibles of SoC components:
++      - pattern: "^qcom,(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+-.*$"
++      - pattern: "^qcom,(sa|sc)8[0-9]+[a-z][a-z]?-.*$"
++
++      # Legacy namings - variations of existing patterns/compatibles are OK,
++      # but do not add completely new entries to these:
++      - pattern: "^qcom,[ak]pss-wdt-(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,gcc-(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,mmcc-(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,pcie-(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,rpm-(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - pattern: "^qcom,scm-(apq|ipq|mdm|msm|qcm|qcs|sa|sc|sdm|sdx|sm)[0-9]+.*$"
++      - enum:
++          - qcom,gpucc-sdm630
++          - qcom,gpucc-sdm660
++          - qcom,lcc-apq8064
++          - qcom,lcc-ipq8064
++          - qcom,lcc-mdm9615
++          - qcom,lcc-msm8960
++          - qcom,lpass-cpu-apq8016
++          - qcom,usb-ss-ipq4019-phy
++          - qcom,usb-hs-ipq4019-phy
++          - qcom,vqmmc-ipq4019-regulator
++
++      # Legacy compatibles with wild-cards - list cannot grow with new bindings:
++      - enum:
++          - qcom,ipq806x-gmac
++          - qcom,ipq806x-nand
++          - qcom,ipq806x-sata-phy
++          - qcom,ipq806x-usb-phy-ss
++          - qcom,ipq806x-usb-phy-hs
++
++additionalProperties: true
+-- 
+2.34.1
+
