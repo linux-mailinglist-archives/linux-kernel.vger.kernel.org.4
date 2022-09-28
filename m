@@ -2,149 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5AAB5EEA14
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502455EEA1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231577AbiI1XUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 19:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
+        id S233244AbiI1Xce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 19:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiI1XUk (ORCPT
+        with ESMTP id S229901AbiI1Xcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 19:20:40 -0400
-Received: from mail-pj1-x1062.google.com (mail-pj1-x1062.google.com [IPv6:2607:f8b0:4864:20::1062])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCEF28718
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:20:36 -0700 (PDT)
-Received: by mail-pj1-x1062.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so4422805pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:20:36 -0700 (PDT)
+        Wed, 28 Sep 2022 19:32:31 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64690DF3BB
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:32:30 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id bj12so30128466ejb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:32:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=uF9IrSBXhJ+NafdWEMQpitf+4MrXaPHD4le+kTGx+O4=;
+        b=k/egANteamWGvHzZM6mSJU1J5xWS4JtZDELXcUYdNowutMFA1UGF/zdvxudAvPaQjE
+         rIL3SCaxtxnYeK5c3aFB85eyNiwCBjCMjCE3iFvwyGzUxqznkaept8L4E3FW+/MbfoKA
+         U4oH7wwnSNsLQ8/UgPcwe2Ww31SwjsY9bpQRI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:references:message-id:subject:cc:to
-         :from:date:dkim-signature:x-gm-message-state:from:to:cc:subject:date;
-        bh=P+xjXaurwhtJmqmMf0PJEzjAO1MMXyc/q6GQ8sS6wLs=;
-        b=IdZXp152gThz8VgSGp+PGWhipLw7ECFgb/mibfrc7X2VYLYoW2xDvtgRvrWDoT9fby
-         sPnnhAuSRZmjyQWgxv3h0/94OfIVjXJ6NaltaLSAC5Hvyf+1824sWCxmpmHu1CDepUU3
-         D/h/oErTJqfuFKQZ84Wk4A3Tul6WibTNu6IAuYs1eQZ/F7wt5dBVQPg9keew0BUJOgaJ
-         25JWH2ZjsRCf5RrjvZOtOuzOo8p3D4I9snov2i86IwDPTIFCJ0pUdrfSutQ/6IF6MRzh
-         P0HLF5NEpQ1Lfp60oThOsbW0SD4KfqzIjHnqsKN8pR9MTKLgS3B+krpLnElRbR5HsrM6
-         EFyA==
-X-Gm-Message-State: ACrzQf2y04qhyZzDjLaC6z9+e7SvJ5ruC17Ol1qNhhpvfrgSU9DtXZyd
-        YePLDlTT1sKGNBTF3H45dZQlT971mKDo/W3E4nHzrTs27N+m
-X-Google-Smtp-Source: AMsMyM4Psc2ub1XLhg771C+RWiqbj5BvQWHnC6aLQRGXvnUrNmcInm+SYK4mMjkHMWwToI5/HHnXGWMgS48Z
-X-Received: by 2002:a17:903:11cf:b0:178:a8f4:d511 with SMTP id q15-20020a17090311cf00b00178a8f4d511mr410333plh.72.1664407235579;
-        Wed, 28 Sep 2022 16:20:35 -0700 (PDT)
-Received: from smtp.aristanetworks.com (smtp.aristanetworks.com. [54.193.82.35])
-        by smtp-relay.gmail.com with ESMTPS id u11-20020a170902714b00b0016ee647ca85sm223889plm.93.2022.09.28.16.20.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 28 Sep 2022 16:20:35 -0700 (PDT)
-X-Relaying-Domain: arista.com
-Received: from chmeee (unknown [10.95.71.70])
-        by smtp.aristanetworks.com (Postfix) with ESMTPS id 23A60301BD94;
-        Wed, 28 Sep 2022 16:20:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
-        s=Arista-B; t=1664407235;
-        bh=P+xjXaurwhtJmqmMf0PJEzjAO1MMXyc/q6GQ8sS6wLs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EKAGIolPTBrjq14fjU+yv8WHtOnQNJEyyjVWQRvq230g1uiLby3q4VxaAWbqI31jP
-         np9Jthr79J0qp/NGRmhzcT7gBnApItlwuM+igi7XdudHhMYVFqa7NWHMxAYYhAzPH7
-         04jcvxWW0K/W7AHNaqgn8WEMnNO5C+gXumZQ19Ic=
-Received: from kevmitch by chmeee with local (Exim 4.96)
-        (envelope-from <kevmitch@arista.com>)
-        id 1odgLx-000WEQ-2s;
-        Wed, 28 Sep 2022 16:20:33 -0700
-Date:   Wed, 28 Sep 2022 16:20:33 -0700
-From:   Kevin Mitchell <kevmitch@arista.com>
-To:     Antoine Tenart <atenart@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: new warning caused by ("net-sysfs: update the queue counts in
- the unregistration path")
-Message-ID: <YzTWwf/FyzBKGaww@chmeee>
-References: <YzOjEqBMtF+Ib72v@chmeee>
- <166435838013.3919.14607521178984182789@kwain>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166435838013.3919.14607521178984182789@kwain>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=uF9IrSBXhJ+NafdWEMQpitf+4MrXaPHD4le+kTGx+O4=;
+        b=5lbjkuxvFXyKYcrHZvmDEZ/oMOj9nfRzh0pilWKzDyxadhJR2adM9a7L+RGD1uPuRl
+         nUDwZFpwrHneLHbbo8XmSWrI6yPUhlfdoEN1OEczO8BqCe5NkZsqC4IOgSl4fwgFeZTs
+         e7Y5JqjLj7FlP4OLlkUui6PjBxCtbAoBKJ7P8ouyWomqqdoZd/FFMEOJjJlvCiCEE0hz
+         TJkYbsqnKjOBEzMQa69SvcFFtI5cWz+InXqJ90Mf6FqRilwX3lV2sT5L3F0X+UVHzJk4
+         oMf3vlUB9XyFZSw6RYvRIcB4epnLgTtt45iGG7GqCF2dOXBgLGn4TRbFrQ43QQo5wrwg
+         SYuw==
+X-Gm-Message-State: ACrzQf2rFCi2pEEzuF3YK55aKMCpu1kqMDaTdkas1b2UbxqIAJIkwl+n
+        P/Xp6Ey5iROlrdS2k/B4FymBHoDPMW1qhOM1
+X-Google-Smtp-Source: AMsMyM7tpq6pVo1OGlIjFa21puqDnvAfFlop2xcumekwJBeWQC+1FUvNHLL8oB1D1mblMSlp7Ev/Fg==
+X-Received: by 2002:a17:907:a0e:b0:780:72bb:5ce4 with SMTP id bb14-20020a1709070a0e00b0078072bb5ce4mr290175ejc.234.1664407948734;
+        Wed, 28 Sep 2022 16:32:28 -0700 (PDT)
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
+        by smtp.gmail.com with ESMTPSA id hf5-20020a1709072c4500b00738467f743dsm2989496ejc.5.2022.09.28.16.32.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 16:32:27 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so1815465wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:32:26 -0700 (PDT)
+X-Received: by 2002:a05:600c:1e18:b0:3b3:b9f8:2186 with SMTP id
+ ay24-20020a05600c1e1800b003b3b9f82186mr255936wmb.151.1664407946407; Wed, 28
+ Sep 2022 16:32:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220924000454.3319186-1-john.ogness@linutronix.de> <20220924000454.3319186-11-john.ogness@linutronix.de>
+In-Reply-To: <20220924000454.3319186-11-john.ogness@linutronix.de>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 28 Sep 2022 16:32:15 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=U3m_mVLpWna3pgi4=b7OCzUxmKh666g62zPNaB+6QHUA@mail.gmail.com>
+Message-ID: <CAD=FV=U3m_mVLpWna3pgi4=b7OCzUxmKh666g62zPNaB+6QHUA@mail.gmail.com>
+Subject: Re: [PATCH printk 10/18] kgbd: Pretend that console list walk is safe
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 11:46:20AM +0200, Antoine Tenart wrote:
-> Quoting Kevin Mitchell (2022-09-28 03:27:46)
-> > With the inclusion of d7dac083414e ("net-sysfs: update the queue counts in the
-> > unregistration path"), we have started see the following message during one of
-> > our stress tests that brings an interface up and down while continuously
-> > trying to send out packets on it:
-> >
-> > et3_11_1 selects TX queue 0, but real number of TX queues is 0
-> >
-> > It seems that this is a result of a race between remove_queue_kobjects() and
-> > netdev_cap_txqueue() for the last packets before setting dev->flags &= ~IFF_UP
-> > in __dev_close_many(). When this message is displayed, netdev_cap_txqueue()
-> > selects queue 0 anyway (the noop queue at this point). As it did before the
-> > above commit, that queue (which I guess is still around due to reference
-> > counting) proceeds to drop the packet and return NET_XMIT_CN. So there doesn't
-> > appear to be a functional change. However, the warning message seems to be
-> > spurious if not slightly confusing.
+Hi,
+
+On Fri, Sep 23, 2022 at 5:05 PM John Ogness <john.ogness@linutronix.de> wrote:
 >
-> Do you know the call traces leading to this? Also I'm not 100% sure to
-> follow as remove_queue_kobjects is called in the unregistration path
-> while the test is setting the iface up & down. What driver is used?
-
-Sorry, my language was imprecise. The device is being unregistered and
-re-registered. The driver is out of tree for our front panel ports. I don't
-think this is specific to the driver, but I'd be happy to be convinced
-otherwise.
-
-The call trace to the queue removal is
-
-[  628.165565]  dump_stack+0x74/0x90
-(remove_queue_kobject)
-[  628.165569]  netdev_unregister_kobject+0x7a/0xb3
-[  628.165572]  rollback_registered_many+0x560/0x5c4
-[  628.165576]  unregister_netdevice_queue+0xa3/0xfc
-[  628.165578]  unregister_netdev+0x1e/0x25
-[  628.165589]  fdev_free+0x26e/0x29d [strata_dma_drv]
-
-The call trace to the warning message is
-
-[ 1094.355489]  dump_stack+0x74/0x90
-(netdev_cap_txqueue)
-[ 1094.355495]  netdev_core_pick_tx+0x91/0xaf
-[ 1094.355500]  __dev_queue_xmit+0x249/0x602
-[ 1094.355503]  ? printk+0x58/0x6f
-[ 1094.355510]  dev_queue_xmit+0x10/0x12
-[ 1094.355518]  packet_sendmsg+0xe88/0xeee
-[ 1094.355524]  ? update_curr+0x6b/0x15d
-[ 1094.355530]  sock_sendmsg_nosec+0x12/0x1d
-[ 1094.355533]  sock_write_iter+0x8a/0xb6
-[ 1094.355539]  new_sync_write+0x7c/0xb4
-[ 1094.355543]  vfs_write+0xfe/0x12a
-[ 1094.355547]  ksys_write+0x6e/0xb9
-[ 1094.355552]  ? exit_to_user_mode_prepare+0xd3/0xf0
-[ 1094.355555]  __x64_sys_write+0x1a/0x1c
-[ 1094.355559]  do_syscall_64+0x31/0x40
-[ 1094.355564]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
+> From: Thomas Gleixner <tglx@linutronix.de>
 >
-> As you said and looking around queue 0 is somewhat special and used as a
-> fallback. My suggestion would be to 1) check if the above race is
-> expected 2) if yes, a possible solution would be not to warn when
-> real_num_tx_queues == 0 as in such cases selecting queue 0 would be the
-> expected fallback (and you might want to check places like [1]).
-
-Yes this is exactly where this is happening and that sounds like a good idea to
-me. As far as I can tell, the message is completely innocuous. If there really
-are no cases where it is useful to have this warning for real_num_tx_queues ==
-0, I could submit a patch to not emit it in that case.
-
+> Provide a special list iterator macro for KGDB to allow unprotected list
+> walks and add a few comments to explain the hope based approach.
 >
-> Thanks,
-> Antoine
+> Preperatory change for changing the console list to hlist and adding
+
+s/Preperatory/Preparatory
+
+> lockdep asserts to regular list walks.
 >
-> [1] https://elixir.bootlin.com/linux/latest/source/net/core/dev.c#L4126
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> ---
+>  drivers/tty/serial/kgdboc.c |  5 ++++-
+>  include/linux/console.h     | 10 ++++++++++
+>  kernel/debug/kdb/kdb_io.c   |  7 ++++++-
+>  3 files changed, 20 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
+> index af2aa76bae15..57a5fd27dffe 100644
+> --- a/drivers/tty/serial/kgdboc.c
+> +++ b/drivers/tty/serial/kgdboc.c
+> @@ -462,10 +462,13 @@ static void kgdboc_earlycon_pre_exp_handler(void)
+>          * we have no other choice so we keep using it.  Since not all
+>          * serial drivers might be OK with this, print a warning once per
+>          * boot if we detect this case.
+> +        *
+> +        * Pretend that walking the console list is safe...
+
+To be fair, this is not quite as unsafe as your comment makes it
+sound. kgdb is a "stop the world" debugger and when this function is
+executing then all of the other CPUs in the system should have been
+rounded up and idle (or, perhaps, busy looping). Essentially as long
+as console list manipulation is always made in a way that each
+instruction keeps the list in a reasonable state then what kgdb is
+doing is actually "safe". Said another way: we could drop into the
+debugger at any point when a task is manipulating the console list,
+but once we're in the debugger and are executing the "pre_exp_handler"
+then all the other CPUs have been frozen in time.
+
+
+>          */
+> -       for_each_console(con)
+> +       for_each_console_kgdb(con) {
+>                 if (con == kgdboc_earlycon_io_ops.cons)
+>                         return;
+> +       }
+>
+>         already_warned = true;
+>         pr_warn("kgdboc_earlycon is still using bootconsole\n");
+> diff --git a/include/linux/console.h b/include/linux/console.h
+> index 24344f9b0bc1..86a6125512b9 100644
+> --- a/include/linux/console.h
+> +++ b/include/linux/console.h
+> @@ -187,6 +187,16 @@ extern void console_list_unlock(void) __releases(console_mutex);
+>  #define for_each_console(con)                                          \
+>         for (con = console_drivers; con != NULL; con = con->next)
+>
+> +/**
+> + * for_each_console_kgdb() - Iterator over registered consoles for KGDB
+> + * @con:       struct console pointer used as loop cursor
+> + *
+> + * Has no serialization requirements and KGDB pretends that this is safe.
+> + * Don't use outside of the KGDB fairy tale land!
+> + */
+> +#define for_each_console_kgdb(con)                                     \
+> +       for (con = console_drivers; con != NULL; con = con->next)
+> +
+>  extern int console_set_on_cmdline;
+>  extern struct console *early_console;
+>
+> diff --git a/kernel/debug/kdb/kdb_io.c b/kernel/debug/kdb/kdb_io.c
+> index 67d3c48a1522..fb3775e61a3b 100644
+> --- a/kernel/debug/kdb/kdb_io.c
+> +++ b/kernel/debug/kdb/kdb_io.c
+> @@ -558,7 +558,12 @@ static void kdb_msg_write(const char *msg, int msg_len)
+>                 cp++;
+>         }
+>
+> -       for_each_console(c) {
+> +       /*
+> +        * This is a completely unprotected list walk designed by the
+> +        * wishful thinking department. See the oops_in_progress comment
+> +        * below - especially the encourage section...
+
+The reality is also a little less dire here than the comment suggests.
+IMO this is actually not the same as the "oops_in_progress" case that
+the comment refers to.
+
+Specifically, the "oops_in_progress" is referring to the fact that
+it's not uncommon to drop into the debugger when a serial driver (the
+same one you're using for kgdb) is holding its lock. Possibly it's
+printing something to the tty running on the UART dumping stuff out
+from the kernel's console. That's not great and I won't pretend that
+the kgdb design is amazing here, but...
+
+Just like above, I don't feel like iterating through the console list
+here without holding the lock is necessarily unsafe. Just like above,
+all the rest of the CPUs in the system are in a holding pattern and
+aren't actively executing any code. While we may have interrupted them
+at any given instruction, they won't execute any more instruction
+until we leave kgdb and resume running.
