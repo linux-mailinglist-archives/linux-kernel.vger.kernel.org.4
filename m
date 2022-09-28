@@ -2,32 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2E65EE22C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7395EE236
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234349AbiI1Qns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
+        id S233632AbiI1QqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234353AbiI1QnP (ORCPT
+        with ESMTP id S234153AbiI1Qpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:43:15 -0400
-X-Greylist: delayed 14595 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Sep 2022 09:43:14 PDT
-Received: from mail-4324.protonmail.ch (mail-4324.protonmail.ch [185.70.43.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8593CE7C30;
-        Wed, 28 Sep 2022 09:43:14 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 16:42:58 +0000
+        Wed, 28 Sep 2022 12:45:34 -0400
+Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C233C8DA;
+        Wed, 28 Sep 2022 09:44:48 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 16:44:35 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1664383392; x=1664642592;
+        s=protonmail3; t=1664383486; x=1664642686;
         bh=o11CrCXx0Cb6C3dCffIEI1V7Knf/291iZPlpw60/k7s=;
         h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
          Subject:Reply-To:Feedback-ID:Message-ID;
-        b=ND23sbLU5butRIwTVoikUa3Do09MRayFc/fZy7pOzj6blGZpLrAi+l0RdLDt/Tfg3
-         ZtC0BTVOi6HFR9+lGHvI89FZHbxUaBdr1e8QVkuuwMKLBviG8wqdL9EQRipnCK3pOT
-         Fddlv1pQ8vX01hH3JNrZGvRffOEoED7GCAgYrQjpM77tE6fDg2+mAumE+6H5ZUs8Cv
-         b6xDdIFkXvbX8TIAONXVHUkYiyg2rsjVQXPbW5WrK4CxcDdoT5LIbw3X7mf8YmlLAo
-         jW9SJvtbULhGgM5jHteaN0uWo8Sw9DJYc6qzhIp/P4sust8ooYioLHcD0gDoOCY7pe
-         P5nim3cXZgqfQ==
+        b=II4PFDatDgvVCAc5JpwIoJeo0c6RfoQ/A64+1axy28EsmTCGy3tr1leeMjjzjzFhk
+         HlGjrqEX3DMn37lrTPHD9jIiWc4Nb7McgxfTELycQdnYXsiRU3zMRTT8nQWnMsCJHh
+         2JQQfA9VAKCR5SaqInad3H3dYtmCM5BHZxLjSq+B3ICMjbqaazWNhMU+GimDYDWUG7
+         1tkZeaPqizUHUKpem8Fi4tYWUU6f2v0qnOrs/xodI+4S8kArs+TJ49SshZTRN/iy18
+         O9uyx0wL+8j1Ww1laS3/1tQmLrToy7D3Twbk8f+/CQWjTOUtOeuN6/i//s2nTntY+2
+         tECKquGX0Qz9w==
 To:     devicetree@vger.kernel.org
 From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
 Cc:     Stephan Gerhold <stephan@gerhold.net>,
@@ -36,8 +35,8 @@ Cc:     Stephan Gerhold <stephan@gerhold.net>,
         Markuss Broks <markuss.broks@gmail.com>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v2 0/4] arm64: dts: qcom: msm8916-samsung-j5: Use common device tree
-Message-ID: <20220928164243.178777-1-linmengbo0689@protonmail.com>
+Subject: [PATCH v3 0/5] arm64: dts: qcom: msm8916-samsung-j5: Use common device tree
+Message-ID: <20220928164427.178837-1-linmengbo0689@protonmail.com>
 Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
