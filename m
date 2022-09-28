@@ -2,92 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454375EE0CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8285EE0CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbiI1PqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
+        id S233765AbiI1Prh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233391AbiI1Pp7 (ORCPT
+        with ESMTP id S229640AbiI1Prb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:45:59 -0400
-Received: from smtp120.iad3b.emailsrvr.com (smtp120.iad3b.emailsrvr.com [146.20.161.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E6152450
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:45:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
-        s=20190130-41we5z8j; t=1664379954;
-        bh=cx1KiCPdhE7cEd0dCaeLcbQpUa9d0MElYOPJrTQ8KKo=;
-        h=Date:Subject:To:From:From;
-        b=erOED7hHCjEkkIlXyRcZvENhQrxFc3qQXa7Eey+KzQyH3HbIdKM7uGBWXkYV0BlRA
-         jiAlSmXrtNePWrUUOfcxzTD4VBAg5CtiFyynwKxxuBUitrNQEC3jp1Ff1Lo5BZrDN4
-         N/EkSSvEjO7ohe9OB5oDJ98pnHdcSbD7Ep2aijuc=
-X-Auth-ID: abbotti@mev.co.uk
-Received: by smtp24.relay.iad3b.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id DA102401A5;
-        Wed, 28 Sep 2022 11:45:53 -0400 (EDT)
-Message-ID: <041a4643-decf-55fe-90a4-4728fc029220@mev.co.uk>
-Date:   Wed, 28 Sep 2022 16:45:53 +0100
+        Wed, 28 Sep 2022 11:47:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49C81D825C
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:47:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B4161063;
+        Wed, 28 Sep 2022 08:47:35 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.80.218])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 373523F73D;
+        Wed, 28 Sep 2022 08:47:27 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 16:47:21 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 1/1] arm_pmu: acpi: Pre-allocate pmu structures
+Message-ID: <YzRsibv4Iqw2Kk0T@FVFF77S0Q05N>
+References: <20220912155105.1443303-1-pierre.gondois@arm.com>
+ <20220912155105.1443303-2-pierre.gondois@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 1/7] comedi: Convert snprintf() to scnprintf()
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jules Irenge <jbi.octave@gmail.com>
-Cc:     hsweeten@visionengravers.com, linux-kernel@vger.kernel.org
-References: <YzHxcb5VzWeSNKo0@fedora> <YzKS/3z2cQsFFfxD@kroah.com>
-Content-Language: en-GB
-From:   Ian Abbott <abbotti@mev.co.uk>
-Organization: MEV Ltd.
-In-Reply-To: <YzKS/3z2cQsFFfxD@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Classification-ID: 233e4c96-ebf3-4f29-912e-a7fa774859fe-1-1
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220912155105.1443303-2-pierre.gondois@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/09/2022 07:06, Greg KH wrote:
-> On Mon, Sep 26, 2022 at 07:37:37PM +0100, Jules Irenge wrote:
->> Coccinnelle reports a warning
->> Warning: Use scnprintf or sprintf
->> Adding to that, there has been a slow migration from snprintf to scnprintf.
->> This LWN article explains the rationale for this change
->> https: //lwn.net/Articles/69419/
->> Ie. snprintf() returns what *would* be the resulting length,
->> while scnprintf() returns the actual length.
->>
->> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
->> ---
->>   drivers/comedi/comedi_fops.c | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/comedi/comedi_fops.c b/drivers/comedi/comedi_fops.c
->> index 55a0cae04b8d..e8a0142d5894 100644
->> --- a/drivers/comedi/comedi_fops.c
->> +++ b/drivers/comedi/comedi_fops.c
->> @@ -396,7 +396,7 @@ static ssize_t max_read_buffer_kb_show(struct device *csdev,
->>   	mutex_unlock(&dev->mutex);
->>   
->>   	comedi_dev_put(dev);
->> -	return snprintf(buf, PAGE_SIZE, "%u\n", size);
->> +	return scnprintf(buf, PAGE_SIZE, "%u\n", size);
+Hi Pierre,
+
+Thanks for this, and sorry for the delayed reply.
+
+On Mon, Sep 12, 2022 at 05:51:04PM +0200, Pierre Gondois wrote:
+> On an Ampere Altra,
+> Running a preemp_rt kernel based on v5.19-rc3-rt4 on an Ampere Altra
+> triggers:
+> [   12.642389] BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+> [   12.642402] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 24, name: cpuhp/0
+> [   12.642406] preempt_count: 0, expected: 0
+> [   12.642409] RCU nest depth: 0, expected: 0
+> [   12.642411] 3 locks held by cpuhp/0/24:
+> [   12.642414] #0: ffffd8a22c8870d0 (cpu_hotplug_lock){++++}-{0:0}, at: cpuhp_thread_fun (linux/kernel/cpu.c:754)
+> [   12.642429] #1: ffffd8a22c887120 (cpuhp_state-up){+.+.}-{0:0}, at: cpuhp_thread_fun (linux/kernel/cpu.c:754)
+> [   12.642436] #2: ffff083e7f0d97b8 ((&c->lock)){+.+.}-{3:3}, at: ___slab_alloc (linux/mm/slub.c:2954)
+> [   12.642458] irq event stamp: 42
+> [   12.642460] hardirqs last enabled at (41): finish_task_switch (linux/./arch/arm64/include/asm/irqflags.h:35)
+> [   12.642471] hardirqs last disabled at (42): cpuhp_thread_fun (linux/kernel/cpu.c:776 (discriminator 1))
+> [   12.642476] softirqs last enabled at (0): copy_process (linux/./include/linux/lockdep.h:191)
+> [   12.642484] softirqs last disabled at (0): 0x0
+> [   12.642495] CPU: 0 PID: 24 Comm: cpuhp/0 Tainted: G        W         5.19.0-rc3-rt4-custom-piegon01-rt_0 #142
+> [   12.642500] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+> [   12.642506] Call trace:
+> [   12.642508] dump_backtrace (linux/arch/arm64/kernel/stacktrace.c:200)
+> [   12.642514] show_stack (linux/arch/arm64/kernel/stacktrace.c:207)
+> [   12.642517] dump_stack_lvl (linux/lib/dump_stack.c:107)
+> [   12.642523] dump_stack (linux/lib/dump_stack.c:114)
+> [   12.642527] __might_resched (linux/kernel/sched/core.c:9929)
+> [   12.642531] rt_spin_lock (linux/kernel/locking/rtmutex.c:1732 (discriminator 4))
+> [   12.642536] ___slab_alloc (linux/mm/slub.c:2954)
+> [   12.642539] __slab_alloc.isra.0 (linux/mm/slub.c:3116)
+> [   12.642543] kmem_cache_alloc_trace (linux/mm/slub.c:3207)
+> [   12.642549] __armpmu_alloc (linux/./include/linux/slab.h:600)
+> [   12.642558] armpmu_alloc_atomic (linux/drivers/perf/arm_pmu.c:927)
+> [   12.642562] arm_pmu_acpi_cpu_starting (linux/drivers/perf/arm_pmu_acpi.c:204)
+> [   12.642568] cpuhp_invoke_callback (linux/kernel/cpu.c:192)
+> [   12.642571] cpuhp_thread_fun (linux/kernel/cpu.c:777 (discriminator 3))
+> [   12.642573] smpboot_thread_fn (linux/kernel/smpboot.c:164 (discriminator 3))
+> [   12.642580] kthread (linux/kernel/kthread.c:376)
+> [   12.642584] ret_from_fork (linux/arch/arm64/kernel/entry.S:868)
 > 
-> Ick, no, you should use sysfs_emit() if you really want to change these
-> functions to "do the right thing".
+> arm_pmu_acpi_cpu_starting() is called in the STARTING hotplug section,
+> which runs with interrupts disabled. To avoid allocating memory and
+> sleeping in this function, the pmu structures must be pre-allocated.
+> 
+> On ACPI systems, the count of PMUs is unknown until CPUs are
+> hotplugged, cf:
+> commit 0dc1a1851af1 ("arm_pmu: add armpmu_alloc_atomic()")
+> 
+> At most #PMU_IRQs pmu structures will be used and thus need to be
+> pre-allocated.
+> In arm_pmu_acpi_cpu_starting() subcalls, after checking the cpuid,
+> decide to use or re-use a pre-allocated pmu structure. Thus the
+> pre-allocated pmu struct can be seen as a pool.
+> When probing, search and free unused pmu structures.
 
-There was a patch to do that by Xuezhi Zhang.  It got to PATCH v4.  I 
-should have replied with a "Reviewed-By" tag, but I'd already done that 
-for the earlier versions.
+I think in retrospect I was trying to be too clever with
+arm_pmu_acpi_cpu_starting() handling boot-time CPUs and late hotplug, and we
+can make this simpler by handling the boot-time probing synchronously within 
+arm_pmu_acpi_probe(), removing a bunch of state.
 
-https://lore.kernel.org/lkml/20220901013423.418464-1-zhangxuezhi3@gmail.com/
+I had a go at that, and in testing (in a QEMU TCG VM) atop arm64/for-next/core,
+that seems to work (even with a faked-up heterogenous config). I've pushed that
+to my `arm_pmu/acpi/rework` branch at:
 
--- 
--=( Ian Abbott <abbotti@mev.co.uk> || MEV Ltd. is a company  )=-
--=( registered in England & Wales.  Regd. number: 02862268.  )=-
--=( Regd. addr.: S11 & 12 Building 67, Europa Business Park, )=-
--=( Bird Hall Lane, STOCKPORT, SK3 0XA, UK. || www.mev.co.uk )=-
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm_pmu/acpi/rework
+  git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm_pmu/acpi/rework
+
+... does that work for you?
+
+Thanks,
+Mark.
+
+> 
+> Platforms used to test this patch:
+> - Juno-r2 (2 clusters: 2 big and 4 little CPUs) with 2 PMUs and
+>   one interrupt for each CPU
+> - Ampere Altra with 1 PMU and one interrupt for the 160 CPUs
+> 
+> Link: https://lore.kernel.org/all/20210810134127.1394269-2-valentin.schneider@arm.com
+> Reported-by: Valentin Schneider <vschneid@redhat.com>
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> ---
+>  drivers/perf/arm_pmu.c       |  17 +-----
+>  drivers/perf/arm_pmu_acpi.c  | 114 ++++++++++++++++++++++++++++++-----
+>  include/linux/perf/arm_pmu.h |   1 -
+>  3 files changed, 103 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+> index 59d3980b8ca2..731e793dfef5 100644
+> --- a/drivers/perf/arm_pmu.c
+> +++ b/drivers/perf/arm_pmu.c
+> @@ -861,16 +861,16 @@ static void cpu_pmu_destroy(struct arm_pmu *cpu_pmu)
+>  					    &cpu_pmu->node);
+>  }
+>  
+> -static struct arm_pmu *__armpmu_alloc(gfp_t flags)
+> +struct arm_pmu *armpmu_alloc(void)
+>  {
+>  	struct arm_pmu *pmu;
+>  	int cpu;
+>  
+> -	pmu = kzalloc(sizeof(*pmu), flags);
+> +	pmu = kzalloc(sizeof(*pmu), GFP_KERNEL);
+>  	if (!pmu)
+>  		goto out;
+>  
+> -	pmu->hw_events = alloc_percpu_gfp(struct pmu_hw_events, flags);
+> +	pmu->hw_events = alloc_percpu_gfp(struct pmu_hw_events, GFP_KERNEL);
+>  	if (!pmu->hw_events) {
+>  		pr_info("failed to allocate per-cpu PMU data.\n");
+>  		goto out_free_pmu;
+> @@ -916,17 +916,6 @@ static struct arm_pmu *__armpmu_alloc(gfp_t flags)
+>  	return NULL;
+>  }
+>  
+> -struct arm_pmu *armpmu_alloc(void)
+> -{
+> -	return __armpmu_alloc(GFP_KERNEL);
+> -}
+> -
+> -struct arm_pmu *armpmu_alloc_atomic(void)
+> -{
+> -	return __armpmu_alloc(GFP_ATOMIC);
+> -}
+> -
+> -
+>  void armpmu_free(struct arm_pmu *pmu)
+>  {
+>  	free_percpu(pmu->hw_events);
+> diff --git a/drivers/perf/arm_pmu_acpi.c b/drivers/perf/arm_pmu_acpi.c
+> index 96ffadd654ff..599d8be78950 100644
+> --- a/drivers/perf/arm_pmu_acpi.c
+> +++ b/drivers/perf/arm_pmu_acpi.c
+> @@ -17,6 +17,8 @@
+>  
+>  static DEFINE_PER_CPU(struct arm_pmu *, probed_pmus);
+>  static DEFINE_PER_CPU(int, pmu_irqs);
+> +static unsigned int preallocated_pmus_count;
+> +static struct arm_pmu **preallocated_pmus;
+>  
+>  static int arm_pmu_acpi_register_irq(int cpu)
+>  {
+> @@ -187,30 +189,108 @@ static int arm_pmu_acpi_parse_irqs(void)
+>  	return err;
+>  }
+>  
+> +/* Count the number of different PMU IRQs for the input PMU. */
+> +static int count_pmu_irqs(struct arm_pmu *pmu)
+> +{
+> +	struct pmu_hw_events __percpu *hw_events = pmu->hw_events;
+> +	unsigned int num_irqs = 0;
+> +	int cpu, probed_cpu, irq;
+> +
+> +	for_each_cpu(cpu, &pmu->supported_cpus) {
+> +		irq = per_cpu(hw_events->irq, cpu);
+> +		for_each_cpu(probed_cpu, &pmu->supported_cpus) {
+> +			if (irq == per_cpu(hw_events->irq, probed_cpu)) {
+> +				if (probed_cpu == cpu)
+> +					num_irqs++;
+> +				break;
+> +			}
+> +		}
+> +	}
+> +
+> +	return num_irqs;
+> +}
+> +
+> +/*
+> + * Count the number of different PMU IRQs across all the PMUs of the system
+> + * to get an upper bound of the number of struct arm_pmu to pre-allocate.
+> + */
+> +static int count_all_pmu_irqs(void)
+> +{
+> +	unsigned int num_irqs = 0;
+> +	int cpu, probed_cpu, irq;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		irq = per_cpu(pmu_irqs, cpu);
+> +		for_each_possible_cpu(probed_cpu) {
+> +			if (irq == per_cpu(pmu_irqs, probed_cpu)) {
+> +				if (probed_cpu == cpu)
+> +					num_irqs++;
+> +				break;
+> +			}
+> +		}
+> +	}
+> +
+> +	return num_irqs;
+> +}
+> +
+> +static unsigned int pmu_preallocate(void)
+> +{
+> +	unsigned int i, num_irqs = count_all_pmu_irqs();
+> +
+> +	preallocated_pmus = kcalloc(num_irqs, sizeof(*preallocated_pmus),
+> +					GFP_KERNEL);
+> +	if (!preallocated_pmus) {
+> +		pr_err("Failed to pre-allocate %d pmu struct\n", num_irqs);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	for (i = 0; i < num_irqs; i++) {
+> +		preallocated_pmus[i] = armpmu_alloc();
+> +		if (!preallocated_pmus[i])
+> +			return -ENOMEM;
+> +	}
+> +
+> +	preallocated_pmus_count = num_irqs;
+> +	return 0;
+> +}
+> +
+>  static struct arm_pmu *arm_pmu_acpi_find_alloc_pmu(void)
+>  {
+>  	unsigned long cpuid = read_cpuid_id();
+>  	struct arm_pmu *pmu;
+> -	int cpu;
+> +	unsigned int i;
+>  
+> -	for_each_possible_cpu(cpu) {
+> -		pmu = per_cpu(probed_pmus, cpu);
+> -		if (!pmu || pmu->acpi_cpuid != cpuid)
+> -			continue;
+> +	for (i = 0; i < preallocated_pmus_count; i++) {
+> +		pmu = preallocated_pmus[i];
+>  
+> -		return pmu;
+> +		if (!pmu->acpi_cpuid) {
+> +			pmu->acpi_cpuid = cpuid;
+> +			return pmu;
+> +		} else if (pmu->acpi_cpuid == cpuid)
+> +			return pmu;
+>  	}
+>  
+> -	pmu = armpmu_alloc_atomic();
+> -	if (!pmu) {
+> -		pr_warn("Unable to allocate PMU for CPU%d\n",
+> -			smp_processor_id());
+> -		return NULL;
+> -	}
+> +	pr_err("Unable to find pre-allocated PMU for CPU%d\n",
+> +		smp_processor_id());
+> +	return NULL;
+> +}
+>  
+> -	pmu->acpi_cpuid = cpuid;
+> +static void pmu_free_unused_preallocated(struct arm_pmu *pmu)
+> +{
+> +	int i, unused_num_irqs = count_pmu_irqs(pmu);
+>  
+> -	return pmu;
+> +	if (unused_num_irqs <= 1)
+> +		return;
+> +	else if (unused_num_irqs >= preallocated_pmus_count) {
+> +		pr_err("Trying to free %d pmu struct when %d are allocated\n",
+> +				unused_num_irqs, preallocated_pmus_count);
+> +		return;
+> +	}
+> +
+> +	unused_num_irqs--;
+> +	for (i = 0; i < unused_num_irqs; i++)
+> +		armpmu_free(preallocated_pmus[preallocated_pmus_count - i - 1]);
+> +	preallocated_pmus_count -= unused_num_irqs;
+>  }
+>  
+>  /*
+> @@ -311,6 +391,8 @@ int arm_pmu_acpi_probe(armpmu_init_fn init_fn)
+>  		if (!pmu || pmu->name)
+>  			continue;
+>  
+> +		pmu_free_unused_preallocated(pmu);
+> +
+>  		ret = init_fn(pmu);
+>  		if (ret == -ENODEV) {
+>  			/* PMU not handled by this driver, or not present */
+> @@ -351,6 +433,10 @@ static int arm_pmu_acpi_init(void)
+>  	if (ret)
+>  		return ret;
+>  
+> +	ret = pmu_preallocate();
+> +	if (ret)
+> +		return ret;
+> +
+>  	ret = cpuhp_setup_state(CPUHP_AP_PERF_ARM_ACPI_STARTING,
+>  				"perf/arm/pmu_acpi:starting",
+>  				arm_pmu_acpi_cpu_starting, NULL);
+> diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
+> index 0407a38b470a..049908af3595 100644
+> --- a/include/linux/perf/arm_pmu.h
+> +++ b/include/linux/perf/arm_pmu.h
+> @@ -173,7 +173,6 @@ void kvm_host_pmu_init(struct arm_pmu *pmu);
+>  
+>  /* Internal functions only for core arm_pmu code */
+>  struct arm_pmu *armpmu_alloc(void);
+> -struct arm_pmu *armpmu_alloc_atomic(void);
+>  void armpmu_free(struct arm_pmu *pmu);
+>  int armpmu_register(struct arm_pmu *pmu);
+>  int armpmu_request_irq(int irq, int cpu);
+> -- 
+> 2.25.1
+> 
