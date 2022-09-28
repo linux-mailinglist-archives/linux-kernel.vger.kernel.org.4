@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 740E25EDEA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0FB5EDEA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234330AbiI1OUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
+        id S233466AbiI1OU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233313AbiI1OUs (ORCPT
+        with ESMTP id S233313AbiI1OUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:20:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC416B14F;
+        Wed, 28 Sep 2022 10:20:52 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB5F6BCFC;
+        Wed, 28 Sep 2022 07:20:50 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id l14so27467171eja.7;
+        Wed, 28 Sep 2022 07:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=dO6EU/sCZoP8P76kIzTpKEObyY6TokbzHiI0Sd9UPo8=;
+        b=fJFVH3EOPpW9ZmVTmUfKrArrjpLd7w5+9P9LjdxcJniF5nsxOrJ5rHHs4L6s0FQYSj
+         nUj5x4BHFjhQovfO1mHQ2JWBKZTQplm+pvqJzRJxz7iSUyO6bFenasugZ4RNuOzffgCh
+         jT4UzjhiM4e/kpAxFJeBtMPTHzFU2tKLEeU/H/agFGI1Jg2iTRgOEf523eCJ8OYiUqW2
+         5A9tXhxs/SPNUthR0vJ42UBB66rQvte9iEpExrtbRCXjSdSTqjdsHIwAiilLElvOI4BT
+         RtouUxNW5zfdXBXexgvAsyn8i7A7mvaUaMDPw1SnzCqMCMQhfJ89BSgiPNkpc87IpXex
+         qDFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=dO6EU/sCZoP8P76kIzTpKEObyY6TokbzHiI0Sd9UPo8=;
+        b=EbMyQ1oo8L4Zrjg2iWYLmF+UOSuszIit5JqxUe3ohB1t5fkRwJVJW4oXtx2r71AXmJ
+         ov7Lk0tRdE12udvgVud3tXMHeiz1O9q+U/SsaAct9t+CjjwV4c3w+w9XRQvXt3hsjxW+
+         BpxuNmHg735mntL763TMiM7FiDOGU0t/vI38WS6GnDOrN1jrpopN6JKBwLWEwcpNupwu
+         kWCpnT1wUI2PkF/pMGdVXo1Fc+bXJgZdwSQtmRRZLOMyPxTzxSNiThwWXBqtIhGXO+Yt
+         9kcIKTycXPkkIAxaR4Mzu+1KsjwF1xGZKFfztbNilbP7GFQwGZC5Lbl3IW/GBVVEoC2f
+         7hRA==
+X-Gm-Message-State: ACrzQf344V6yX1wRMfLHP13xKWjGXTZGSv6DeCRunaH5+UxCipnWrT76
+        5Sv/n7+GhbIQB9Kpgy/vyvo=
+X-Google-Smtp-Source: AMsMyM4WfWjOTlzntsU5LvFaX6LEn4hxjfg1SM0DKoA8Slw+LeUiGfs+TjyrkWj4eVc2OzGxZtbaDg==
+X-Received: by 2002:a17:907:ea6:b0:782:1ace:9d5b with SMTP id ho38-20020a1709070ea600b007821ace9d5bmr26050189ejc.770.1664374848982;
+        Wed, 28 Sep 2022 07:20:48 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id u16-20020a170906409000b0077a1dd3e7b7sm2463087ejj.102.2022.09.28.07.20.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 28 Sep 2022 07:20:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B488061EC2;
-        Wed, 28 Sep 2022 14:20:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8FF9C433D6;
-        Wed, 28 Sep 2022 14:20:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664374846;
-        bh=nCu7bxg7O17gscxvIVxhHY3v0ktqpxPeHl8mMAEm1MA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p3GpYlh+sV4Gbc3PQY9YhEY+Ijeb7mMsW4CjT5GRqkpAG0Tlp+SX8N7VDwzEfbdDf
-         DRQJcQ47vClvh62ZJjJCe21d2PDJIeCt7ahGxIrltFOkXggQTFgAk+h7LgpIkBLWdt
-         AfutSZA1v/sE8/+y/DPqD4mUQfblrbGVgV0nWAwY9z5lAclZGye+MksphOD3ct8dbU
-         2J+EDkOVCazPQHDbOuZpJgHwPYrzorM//2pAO6bCIOEoaYrukHwXGyMO3h1KucC0CW
-         mZ6JnNFQ1HFEVXjx7GzTu1UozvQNXZkFjgtGRNXF9H4k3ObGqkERbQ4j1jxrS4nitz
-         Qpk/YbfAj7TOg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 717B2405F0; Wed, 28 Sep 2022 11:20:43 -0300 (-03)
-Date:   Wed, 28 Sep 2022 11:20:43 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Ali Saidi <alisaidi@amazon.com>, renyu.zj@linux.alibaba.com,
-        alexander.shishkin@linux.intel.com, german.gomez@arm.com,
-        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        mike.leach@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, timothy.hayes@arm.com, will@kernel.org,
-        xueshuai@linux.alibaba.com, zhuo.song@linux.alibaba.com
-Subject: Re: [PATCH] perf arm-spe: augment the data source type with
- neoverse_spe list
-Message-ID: <YzRYO9aJxI4twVVj@kernel.org>
-References: <1664197396-42672-1-git-send-email-renyu.zj@linux.alibaba.com>
- <20220926141032.30734-1-alisaidi@amazon.com>
- <YzG+goZySC4K8S4Z@leoy-huanghe.lan>
+Date:   Wed, 28 Sep 2022 16:20:46 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 6/7] pwm: lpss: Make use of bits.h macros for all masks
+Message-ID: <YzRYPvzWFBXijIBQ@orome>
+References: <20220927162421.11052-1-andriy.shevchenko@linux.intel.com>
+ <20220927162421.11052-7-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Of0utHWYLxmGvNA0"
 Content-Disposition: inline
-In-Reply-To: <YzG+goZySC4K8S4Z@leoy-huanghe.lan>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220927162421.11052-7-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Sep 26, 2022 at 11:00:31PM +0800, Leo Yan escreveu:
-> On Mon, Sep 26, 2022 at 02:10:32PM +0000, Ali Saidi wrote:
-> > > When synthesizing event with SPE data source, commit 4e6430cbb1a9("perf
-> > > arm-spe: Use SPE data source for neoverse cores") augment the type with
-> > > source information by MIDR. However, is_midr_in_range only compares the
-> > > first entry in neoverse_spe.
-> > > 
-> > > Change is_midr_in_range to is_midr_in_range_list to traverse the
-> > > neoverse_spe array so that all neoverse cores synthesize event with data
-> > > source packet.
-> > > 
-> > > Fixes: 4e6430cbb1a9("perf arm-spe: Use SPE data source for neoverse cores")
-> > > Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
-> > 
-> > Thanks for catching this, you're absolutely right.
-> > 
-> > Reviewed-by: Ali Saidi <alisaidi@amazon.com>
-> 
-> It's also good for me:
-> Reviewed-by: Leo Yan <leo.yan@linaro.org>
 
-Thanks, applied.
+--Of0utHWYLxmGvNA0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-- Arnaldo
+On Tue, Sep 27, 2022 at 07:24:20PM +0300, Andy Shevchenko wrote:
+> Make use of the GENMASK() (far less error-prone, far more concise).
 
+Very subjective.
+
+Thierry
+
+--Of0utHWYLxmGvNA0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmM0WDsACgkQ3SOs138+
+s6HSDBAApQJpRvhMyjfrK1Opz91jbffoEgFz5yCY3DcMStc4BJFsj47bvmzaDDL8
+IBvEVPbYlkELWwjgNgt5FICgPNuwao3yoSiwSMXYPahq+eBkGCuWYemOq7gjNwLr
+IpMWR+pyy2NBrijq+dswlrcpLgcEcF5PJMTgjo8FOo0pFxWZGQ/HnWRY0xPlV9oX
+zmlgkPmA9zCWLR+b6MwZyZzXZEqPQi2GBL5u3/irXOPJBriGVnOhYfu19O7+INjW
+1Wyu+oStQfgf5KlcemCN/yyTpQfOONc2MRS0vwbxtvLBerlQTP+GmH+robdB1cmP
+F8zDPwqWr3aLdJneTqAyV3h9faCduJi/bwb0in0OYaHF0xGtoLOrCbxwu3Or0uO6
++sir5QGU8b6hJRz43HyH2boEtGYpC29rQq2F54tNpK/ZwkoX37wlzE8bmhpRgRBP
+nsPYqblZEw2VsxNY8IAc9fRWmWZ8+dLnE2tj6sntxI6w/wme0JJfEZx5SNEj4lpy
+UDx4oosL3BO4ynsN5BISX/IRymUMa6ZvZRuD2xhjB9t0FSAERrm4utZqF6aecIrt
+gtT1NkHgCrRmokXZDXR+igLedAtMYsdl+A3wk64YZBMuE4gitgh+vrrLcBJV0oL7
+dcFM0nX5Pk+MzJixLP48iPJ9aukVrvTDJiwXvYnTdV5XV/x9pLg=
+=0EUc
+-----END PGP SIGNATURE-----
+
+--Of0utHWYLxmGvNA0--
