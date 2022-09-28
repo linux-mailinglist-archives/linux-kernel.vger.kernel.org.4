@@ -2,318 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873345ED56B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E73E25ED568
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232554AbiI1Gw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 02:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S232444AbiI1Gwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 02:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233349AbiI1Gw3 (ORCPT
+        with ESMTP id S233231AbiI1Gv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 02:52:29 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140043.outbound.protection.outlook.com [40.107.14.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29CE48E96;
-        Tue, 27 Sep 2022 23:50:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BZIEt1B2M0izQMxGgXy5HviycwVe5RIdcMOFvNW0HhbB7dKm2ULNOrx6LKVzEuu/av3XmTRnWECAPOmsUFF1k9RH0o+BF8yMDOqTn22+9PXiLufkMZFYgwFkf8hLooJUY6muCYxNqbmXSkHLko2zyoP8tntKYg0zPYkz1LPROMtkYKI/+92nVrPUYcdGIzW58Z1tmlGJkDoIrP6eEnN2zxYI9MjiABtkf44dGTcqlNUbeeLwFZ0FfpUL0FwoaZavWXegtSJdmd0yBftPtuM5GYkeqyAeuusFJGZFvSBupzCwX0QQ7utaAiYcTgZA+SN6DQhxx3p02gaJROcYKWmoVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XzCGSg7WHskMIZWexZjRHkHNDGnM8fdzryLyFcL0mtQ=;
- b=RGImwpghj01mFv1bOGOFCFGMgTXT3fzHn6UCDgdAG/WWicbU2GUnaNUrG64WMtI47+OXrEZVfpv98iFMQTMQXY07Q8NWFe89QZbsmv80wlpj46UzW0KQlv3swNqSGPO5Umz9wbjBzne3iw8fWho7pceyXTI9n3t5iLiqBtH5O5WbjXp0eZ/SrFbKISAj2P5DVZ8PxpV8PyDhjH3OFzgJL4LwUsVDzGkeSi/4mV/E5j9nLVLErDggObbOdTXULzk1/Pp4W56AOo8uW6DuGS/LbLVOTAmU4Ni+2oi3wiZ2R1667l+joo9MeXLw+DNnOt5o59+KZAPGhesl8BMqbxEjdA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XzCGSg7WHskMIZWexZjRHkHNDGnM8fdzryLyFcL0mtQ=;
- b=Q5e3jjHESiWYPDDMNMcrOgw0P/XcqvZYZQHOKciaPyx/woWjrsAoOQ+Y86UwQNiZHESM8rdO+mdBCdH+1xyriW5L8VHir8RzKUdaysxmpx8Wcq1N+j6JPXWdpZF0z+Bh/YQrCvEjqo9hWVzFYHdTuSGSdJXL+ygBCNiBJCL0LhQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by PAXPR04MB8927.eurprd04.prod.outlook.com (2603:10a6:102:20e::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Wed, 28 Sep
- 2022 06:49:54 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1eb:dcf:8fd7:867]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1eb:dcf:8fd7:867%5]) with mapi id 15.20.5654.025; Wed, 28 Sep 2022
- 06:49:54 +0000
-Message-ID: <c61c5eae-105b-2a79-c1c0-57cd5bfea4f9@oss.nxp.com>
-Date:   Wed, 28 Sep 2022 14:49:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH V7 2/2] remoteproc: support attach recovery after rproc
- crash
-Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Cc:     Peng Fan <peng.fan@nxp.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220705011527.2849057-1-peng.fan@oss.nxp.com>
- <20220705011527.2849057-3-peng.fan@oss.nxp.com>
- <20220926220610.GA2817947@p14s>
- <DU0PR04MB941767AEDD07DBA7E7FF9B6E88559@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <6aae3d16-0570-793d-4bf8-0a0fddb00be9@foss.st.com>
- <20220927174438.GA2883698@p14s>
-From:   Peng Fan <peng.fan@oss.nxp.com>
-In-Reply-To: <20220927174438.GA2883698@p14s>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0020.apcprd02.prod.outlook.com
- (2603:1096:3:17::32) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Wed, 28 Sep 2022 02:51:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40424A830
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664347801;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+wC/JlSTVfuFg2D8xSQgtQz9V5uV1YgBXHNCywsshxw=;
+        b=EMG49HKlKnSirm+UDeYRcSzjoah1532TRY3zbRogOE/HrW47U9SEQciY3jmf0ZsaB/O2BR
+        Ex2M6/Fs3P2oFnS8b3UVowu3QdKwCBhz1Lj3L9dVncMJgLCnWFfeCUSra/8oTcGBSdHJAA
+        KLLPJa0+49gRhCxr1d94lvcLIRH+Yhs=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-205-XHBj-jr2MLC9o8WIdfsbFw-1; Wed, 28 Sep 2022 02:50:00 -0400
+X-MC-Unique: XHBj-jr2MLC9o8WIdfsbFw-1
+Received: by mail-qk1-f200.google.com with SMTP id w10-20020a05620a444a00b006ce9917ea1fso8904087qkp.16
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:50:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=+wC/JlSTVfuFg2D8xSQgtQz9V5uV1YgBXHNCywsshxw=;
+        b=hiEdPnlKUae5hIdJbM7sGuuKempqp9+WJp4F1Zh7m2kHopJPYrL3c+dfawFsYScV7o
+         5g1IXaaRHrvBl+jAwV938wzQMiRuvpLO1JF+Di1V246REY+CxESEHcLnsbu35tG3BeUw
+         iPEMYaDqACPkS/5giHsqthj67HrmdZnmKPqbYqY/dmV9AZxV+DhsGHIV9bEZ9RvEVlzq
+         uxmvOYgncs4OBgqXJxKSFGRWj7qUM8x/n57ShrMOl6sFs3FL4oPYzOUhFTV8onHEtC4T
+         AedTT+gCbUJ/3S5YJC0+Shi5PLynCG6dHjFwRM3nsnFRNLQViyYzJy6hnvaX3RjIsPIz
+         gz3A==
+X-Gm-Message-State: ACrzQf1FLsv8ctBD2Q9DLABQQl+mls/stMN7+vESsbfgBPO2yucBBqdZ
+        UU5j2/17VM7TjWkAmvhrMV5YUKWZwLDqgGGrplo77+k+um171Gsbd6W4MNt7wKC5ihesYCLheuS
+        m4ObhqteLJ5bSOvjMzdfkdn0nrTYTTjx30DQAUncT
+X-Received: by 2002:a05:622a:1793:b0:35b:af87:4f22 with SMTP id s19-20020a05622a179300b0035baf874f22mr25694273qtk.673.1664347799186;
+        Tue, 27 Sep 2022 23:49:59 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM66RyqdG8mKQYHhisZRyG7dnXcjWSPOqzBYAPvA1nPQJP77AYnhyykk0L4m0/h+0PQJXS2EyhW6YKQV6rAK9SY=
+X-Received: by 2002:a05:622a:1793:b0:35b:af87:4f22 with SMTP id
+ s19-20020a05622a179300b0035baf874f22mr25694247qtk.673.1664347798865; Tue, 27
+ Sep 2022 23:49:58 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|PAXPR04MB8927:EE_
-X-MS-Office365-Filtering-Correlation-Id: 874701cd-1814-4890-9147-08daa11da633
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KoHaJYNUd4qJJI5BxwiH0ilJE/NQsiXGbi2vOkVoNng73ahYc+X/ORH3dvM9KhbIozg2U0mlUbHNkG0SVunxP1AoaT+66CtNyDC2yiceuUlPftZ1NbVwbZXCbANTUY3468ujVUDgIWL5VMUL60cg4RWF3D/0trjAlZ+XKY1MJvqBsal1tzO+z74R9EXoaxhaEu9ZYuqDR1jAP1INQfOmyYcZM1OaIxrEo47NN60OYu7ELbLedPl5cOOw+rs28t3QSqjX4VXixaST/dc1s/txav4tpYjKVSh/+HXAUCcc8uht54bzPsgu5lXYIrH7rnC9O5Y7SfQGDsLOLgYYf9hj65jAexwG72JaFEi2DStqsLJkhD0MIrits7GQJNb0e6Onb3saNsMAQzI2zTG0TCq/scG7eHPiPyohVc8WbFacNcx5dbmQ87+toLybySUF1JSL1ttVe7/siKz29jNknaM/hnJy5WTUL+0jAkFjSmt77ZyLtoQ3UXjm6ox1gilyGeDaSl2G8KhMFhJLuiUpNp+G9Huo5900AXt1lEecOtKxvZko4/6sDvL3V91IVwQF+vCt1APYAolu0hzQFisZIv1S4ZMCFmvrNPIpzOImGO0nwHPhfKQ3H2fjynoN40nGMqrxvNgqRMhkYe4uxBQ3I22R7cMLVujrf4wo0VysZB3AJQsBiiuSH/BJzm/8Q16m8umqhM9WB6Q9E85Mh8u0QgxhV2muufuyDAVhyjbiKN1K6BWaNMwWLh6ulhFke87pMGWRj41ItYH0JvS5K7YSmPebkM5lXk5FdcDZfyZ3vqwH0E4OVg6xg+HN/UeHwwn1Bv0a
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(376002)(39860400002)(396003)(346002)(451199015)(478600001)(41300700001)(52116002)(53546011)(4326008)(8676002)(66556008)(66476007)(66946007)(83380400001)(6666004)(6506007)(38100700002)(38350700002)(8936002)(5660300002)(54906003)(110136005)(6486002)(2906002)(31696002)(44832011)(316002)(86362001)(186003)(31686004)(66899015)(2616005)(6512007)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ck43dzNNTlhJY2R2ZjA0NWE2R2l5bWJzaHZHNmN0QUZKeGd1UGhTNnF4ZmdU?=
- =?utf-8?B?VzkycmQxZGhia1hGQW83U05TWnp3N1A2TnV0eTBJVWZHM3VVMXVtRElXQjNU?=
- =?utf-8?B?RVNsaWpxOEFHR3hKdTdMWWFuQmdlVkpSR3dSM05aM0FVRnpCL2Q3NGYrazJL?=
- =?utf-8?B?M0NNQkQ4NmlXVUpGNitQSEc1QUxzL3hQc0xqcXhqRkw0dkszUzgvWU5zZ1JS?=
- =?utf-8?B?YnFGZU42eFZPQ1RyZjRJcVUxdnhTbXJYeEFNc3RQNDM5SnVRbkFXNFk0UWJK?=
- =?utf-8?B?blB6V1JCbHViM2dNOFNrblF2bHo5L1g4RU0vcEwyV2F3WUZDTUN2d0M0ME5i?=
- =?utf-8?B?TVJFY09OUmZLVTd0SGtSOFFTd3h5TWJUdkY1TlN5YmU0TGFQck1QYlRoT1ZD?=
- =?utf-8?B?WDBTb2VIdUI0ckpDN0FMUURlMk56bXdaOTV3S3FsZlpBK09xRGUrMmlXUW9U?=
- =?utf-8?B?MlUrVGQwdE1HRVROSjFZZFdycW1nNG9icmk5MU5uRmRLQjhrVjhBK2VSbXln?=
- =?utf-8?B?S3hrRTBXMERBSURuTCs5TVlYNFZoSFpEYWlVNkR4WGlkdVNzakJidFNoZ2oy?=
- =?utf-8?B?TXA5ejFQM05ubDI3STZDSnZRVVE1Q25VZ2FWZ1pBREUvbUtsTDNmQ0RhazJo?=
- =?utf-8?B?T2xHL0M5RGFHblBoMTBwWmJrbnNHazE0YVJtNDFwRHV0TXRVSGFZTlpSV2pt?=
- =?utf-8?B?a1JKS3lPcUp4NENiZ0ZxN3RJS0hWTHc3U0NVNmNMVW15Y2FPTFRBbFdOM0tB?=
- =?utf-8?B?ZGF3cFpUUFkxcStBM2VXaXViYm1aS2ZPakpHOWt3a2NBZHhFS2ZkVGdnVDJI?=
- =?utf-8?B?SnpSTGFhQ0lFQnRoU0ZkZ1FDRlNQeHVxM0JycFdoSFRUSWZOcFJxQWpLaW1H?=
- =?utf-8?B?R1hrTEp1YVFMQ08zYlZzcEE4SzcxNko2U2twdkYydll1ZzJUdWxCdEJ5ZTlk?=
- =?utf-8?B?S21EUFVJQW5XYU1VYitrZEpuSm1NcE1CZmdqR1luZkl0MGFnck1OdkJpb2FS?=
- =?utf-8?B?WkNDakdRN3ZqWnJ6OHBKRGRPRFpJcmV6N0tMbTdVRGx0ODhvTFYvQnZWWVpn?=
- =?utf-8?B?Q21LbzJybjhBY0xUeTNUQlRicVNlU2VvdldjUU5vZmFqNDNzS2VnK3QrZEpL?=
- =?utf-8?B?M2t3QklUZ3ZCSkZXTlJtc0lZK3UvZmhqems1cVhiTSt1NVJLSThJRTdHRDNn?=
- =?utf-8?B?TDZrTjVETzc5T1EzK1hhUDJ5RndDTnhqRVR4NThNQnozYWVZbHVrQTZMRDRJ?=
- =?utf-8?B?NU8vRmJmRkE1dkxjOTJ2SDczWm5ySU1CdjYxS2Iyd3YvR000MG0yVFJzb0kz?=
- =?utf-8?B?ajlyaDJPWFFDUC9HS3FEMng1SERvVTIzYzFCLzZLUy9MZUxnU3dFMy9Xd1BD?=
- =?utf-8?B?ajZ3NjJIeXJKRnZCSVJRS2REeHgzY2lOL3Y3R01kZzFXY29CbHcxWktIZ2FQ?=
- =?utf-8?B?cnpJcVk1VXNNUHdUSExmR2NWREFuaXVMc0FLQ2RQNTJwbElQNjlNNHR0L2k4?=
- =?utf-8?B?bC9tVUZrRHNjRU5hQjVmMlJCL1VkU2gvN0haekxHellON09xMG9sTXIwQTF5?=
- =?utf-8?B?NE9JMk9FeTIrLzFaa3UwU2xQb3dFN3ZQN3RoaWV3aW82WHhkZEFwRXdRcHNm?=
- =?utf-8?B?N1BqU3EwRHpEOGJRalJGN0U2WHVDODZEbEhYRGpXNWdlK0FXOUVEQkNNZ1Ja?=
- =?utf-8?B?c1FldWh3RmVHcUFhQldLZWZOTHZxRXlXV2ZNOGhBNUJyVStmZjhLMVR2VERQ?=
- =?utf-8?B?NlFxV1UrTW5LQWlPL1JMSGxrekNsU0w3cGtMc25qcndTK3BLb3RFMVdnQVQv?=
- =?utf-8?B?TVIyamVQeUFQVjR6L3doTHJ5T0tTLzJLYU1FZmdJL3h1UWlGZkdjYkJjaFoy?=
- =?utf-8?B?Z3ZGN2thMWdVN2h2NFpmU0lsazlHelV0a1Q0UEpWNW5Za2FoZDVYckU4Nngv?=
- =?utf-8?B?Q0tFbjk1dGFLVGtVck8reFZWZ2pRak9xMHYxRDNKQWFOdTlFUHZ5dm5MVzU5?=
- =?utf-8?B?SGQ5cEdPalNhL2I3NVEyZDNXU3ZHQ3NzdnRoWTZod2srNjhUZDMxSDZDeEEr?=
- =?utf-8?B?WklYUndJU1Z5MmZKUkhZNTNhN1lubnB6Q0krZCtxbnlVRERvMCtJeXpTVzJH?=
- =?utf-8?Q?F+Na9duXrHpqHqWyLZlkAuwA2?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 874701cd-1814-4890-9147-08daa11da633
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 06:49:54.2467
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VytRUVYnV9DiUuMC34ZYKqX5e3eEpRJQqTo//jv0j2+4BWtYjNt4BFDI+IbPCr0as0E9DlNKWV9Ic6rOhXQXEA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8927
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1664288166-7432-1-git-send-email-lixiaochun.2888@163.com> <20220927184817.GA1719151@bhelgaas>
+In-Reply-To: <20220927184817.GA1719151@bhelgaas>
+From:   Xiaochun Li <xiaocli@redhat.com>
+Date:   Wed, 28 Sep 2022 14:49:47 +0800
+Message-ID: <CAA1RLiRkAqp+qXoi7-e6NbRoHoGLmV5F9R5wbR1xcsy8O0SWKQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] PCI: Set no io resource for bridges that behind
+ VMD controller
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Xiaochun Lee <lixiaochun.2888@163.com>,
+        nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lkp@intel.com,
+        Xiaochun Lee <lixc17@lenovo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Sep 28, 2022 at 2:57 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Tue, Sep 27, 2022 at 10:16:06PM +0800, Xiaochun Lee wrote:
+> > From: Xiaochun Lee <lixc17@lenovo.com>
+> >
+> > When enable VMDs on Intel CPUs, VMD controllers(8086:28c0) be
+> > recognized by VMD driver and there are many failed messages of
+> > BAR 13 when scan the bridges and assign IO resource behind it
+> > as listed below, the bridge wants to get 0x6000 as its IO
+> > resource, but there is no IO resources on the host bridge.
+> >
+> > VMD host bridge resources:
+> > vmd 0000:e2:00.5: PCI host bridge to bus 10001:00
+> > pci_bus 10001:00: root bus resource [bus 00-1f]
+> > pci_bus 10001:00: root bus resource [mem 0xf4000000-0xf5ffffff]
+> > pci_bus 10001:00: root bus resource [mem 0x29ffff02010-0x29fffffffff 64=
+bit]
+> > pci_bus 10001:00: scanning bus
+> >
+> > Read bridge IO resource:
+> > pci 10001:00:02.0: PCI bridge to [bus 01]
+> > pci 10001:00:02.0:   bridge window [io  0x1000-0x6fff]
+> > pci 10001:00:03.0: PCI bridge to [bus 02]
+> > pci 10001:00:03.0:   bridge window [io  0x1000-0x6fff]
+> >
+> > Failed messages of BAR#13:
+> > pci 10001:00:02.0: BAR 13: no space for [io  size 0x6000]
+> > pci 10001:00:02.0: BAR 13: failed to assign [io  size 0x6000]
+> > pci 10001:00:03.0: BAR 13: no space for [io  size 0x6000]
+> > pci 10001:00:03.0: BAR 13: failed to assign [io  size 0x6000]
+> >
+> > VMD-enabled root ports use
+> > Enhanced Configuration Access Mechanism (ECAM) access
+> > PCI Express configuration space, and offer VMD_CFGBAR as
+> > base of PCI Express configuration space for the bridges
+> > behind it. The configuration space includes IO resources,
+>
+> I don't quite understand this part.  ECAM is an MMIO method, so it
+> uses memory space, not I/O port space.
+
+VMD read PCI IO base has a special callback function "vmd_pci_read",
+The call stack list as below:
+
+pci_read_bridge_windows()
+        pci_read_config_word(bridge, PCI_IO_BASE, &io) # read BAR 13
+                pci_bus_read_config_word()
+                        bus->ops->read()
+                                vmd_pci_read() # for VMD bus
+                                        vmd_cfg_addr()
+                                                offset =3D
+PCIE_ECAM_OFFSET(busnr_ecam, devfn, reg);
+                                                return vmd->cfgbar +
+offset; #base vmd->cfgbar
+                                        readw(addr) # read value out
+
+And vmd->cfgbar points to  an iomap for VMD_CFGBAR as listed below.
+vmd->cfgbar =3D pcim_iomap(dev, VMD_CFGBAR, 0);
+
+Intel spec Sapphire Rapids Server Processor,EDS volume two,Revision 0.9
+Chapter 9 Volume Management Device (VMD) Registers
+Section 9.1.9 VMD Configuration Base Address show CFGBAR is offset 0x10.
+
+dmesg list as following:
+[    2.091800] pci 0000:64:00.5: [8086:28c0] type 00 class 0x010400
+[    2.091810] pci 0000:64:00.5: reg 0x10: [mem
+0x24ffc000000-0x24ffdffffff 64bit pref]
+[    2.091816] pci 0000:64:00.5: reg 0x18: [mem 0xe0000000-0xe1ffffff]
+[    2.091827] pci 0000:64:00.5: reg 0x20: [mem
+0x24ffff00000-0x24fffffffff 64bit]
+
+Commad "lspci -vvv -s 64:00.5" shown as below:
+0000:64:00.5 RAID bus controller: Intel Corporation Volume Management
+Device NVMe RAID Controller (rev 04)
+        DeviceName: Intel RAID Controller CPU1
+        Subsystem: Lenovo Device 010f
+        Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop-
+ParErr- Stepping- SERR- FastB2B- DisINTx-
+        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=3Dfast >TAbort-
+<TAbort- <MAbort- >SERR- <PERR- INTx-
+        Latency: 0, Cache Line Size: 64 bytes
+        NUMA node: 0
+        Region 0: Memory at 24ffc000000 (64-bit, prefetchable) [size=3D32M]
+        Region 2: Memory at e0000000 (32-bit, non-prefetchable) [size=3D32M=
+]
+        Region 4: Memory at 24ffff00000 (64-bit, non-prefetchable) [size=3D=
+1M]
+
+So for VMD, actually the bridges configuration IO base and IO limit of
+BAR#13 are read from VMD host bridge BAR0(offset 0x10), not like the normal
+bridges on x86 read Configuration via IO port(0cf8-0cff : PCI conf1)
+
+And refer spec PCI Express=C2=AE Base Specification Revision 5.0 Version 1.=
+0
+Section 7.2 PCI Express Configuration Mechanisms
+subsection 7.2.2 PCI Express Enhanced Configuration Access Mechanism (ECAM)
+has a description as below.
+The ECAM utilizes a flat memory-mapped address space to access device
+configuration registers. In this case, the memory address determines the
+configuration register accessed and the memory data updates (for a write)
+or returns the contents of (for a read) the addressed register.
+
+>
+> > but these IO resources are not actually used on X86,
+> > it can result in BAR#13 assign IO resource failed.
+> > Therefor,clear IO resources by setting an IO base value
+> > greater than limit to these bridges here, so in this case,
+> > we can leverage kernel parameter "pci=3Dhpiosize=3D0KB" to
+> > avoid this failed messages show up.
+>
+> Is the only purpose of this patch to avoid the "no space" and "failed
+> to assign" messages?  Or is there something that actually doesn't
+> work?
+
+Yes, only to avoid the failed messages showing up, we don't find any functi=
+on
+impact so far. Our customers extremely care about these failed messages,
+They keep complaining about it. For that non-vmd hot plug bridges,
+append kernel parameter "pci=3Dhpiosize=3D0KB" can avoid them show up, but =
+for
+bridges behind VMD, it couldn't work, there isn't any workaround so far.
+
+>
+> I don't think it's worth making a quirk just to avoid the message.
+> There are several systems where I/O port space is not available, and
+> it *would* be nice to have a generic approach that handles that
+> better.
+
+The bridge IO base and limit of BAR#13 read from their host bridge
+BAR0(offset 0x10),it might be an uncorrected value set by the VROC driver i=
+n
+UEFI.Hence, it seems the firmware could fix it. But it is really hard to pu=
+sh
+them to enhance it, so I prepare a quirk for the corresponding bridges here=
+.
+If making a generic approach to avoid the failed message for assigning IO
+resource of BAR#13, where do you prefer adding it?
+Do you have any recommendations? Thanks!
+And would you please share with me which systems have an unavailable
+IO port space too, appreciate it.
+
+>
+> > Signed-off-by: Xiaochun Lee <lixc17@lenovo.com>
+> > ---
+> >  drivers/pci/quirks.c | 60 ++++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 60 insertions(+)
+> >
+> > diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> > index 4944798e75b5..efecf12e8059 100644
+> > --- a/drivers/pci/quirks.c
+> > +++ b/drivers/pci/quirks.c
+> > @@ -5956,3 +5956,63 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x=
+56b1, aspm_l1_acceptable_latency
+> >  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c0, aspm_l1_acceptab=
+le_latency);
+> >  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c1, aspm_l1_acceptab=
+le_latency);
+> >  #endif
+> > +
+> > +#if defined(CONFIG_X86_64) || defined(CONFIG_X86)
+> > +
+> > +#ifdef CONFIG_UML_X86
+> > +#define is_vmd(bus)             false
+> > +#endif /* CONFIG_UML_X86 */
+> > +
+> > +/*
+> > + * VMD-enabled root ports use Enhanced Configuration Access Mechanism =
+(ECAM)
+> > + * access PCI Express configuration space, and offer VMD_CFGBAR as the
+> > + * base of PCI Express configuration space for the bridges behind it.
+> > + * The configuration space includes IO resources, but these IO
+> > + * resources are not actually used on X86, and it can result
+> > + * in BAR#13 assign IO resource failed. Therefor, clear IO resources
+> > + * by setting an IO base value greater than limit to these bridges her=
+e,
+> > + * so in this case, append kernel parameter "pci=3Dhpiosize=3D0KB" can=
+ avoid
+> > + * the BAR#13 failed messages show up.
+> > + */
+> > +static void quirk_vmd_no_iosize(struct pci_dev *bridge)
+> > +{
+> > +     u8 io_base_lo, io_limit_lo;
+> > +     u16 io_low;
+> > +     u32 io_upper16;
+> > +     unsigned long io_mask,  base, limit;
+> > +
+> > +     io_mask =3D PCI_IO_RANGE_MASK;
+> > +     if (bridge->io_window_1k)
+> > +             io_mask =3D PCI_IO_1K_RANGE_MASK;
+> > +
+> > +     /* VMD Domain */
+> > +     if (is_vmd(bridge->bus) && bridge->is_hotplug_bridge) {
+> > +             pci_read_config_byte(bridge, PCI_IO_BASE, &io_base_lo);
+> > +             pci_read_config_byte(bridge, PCI_IO_LIMIT, &io_limit_lo);
+> > +             base =3D (io_base_lo & io_mask) << 8;
+> > +             limit =3D (io_limit_lo & io_mask) << 8;
+> > +             /* if there are defined io ports behind the bridge on x86=
+,
+> > +              * we clear it, since there is only 64KB IO resource on i=
+t,
+> > +              * beyond that, hotplug io bridges don't needs IO port re=
+source,
+> > +              * such as NVMes attach on it. So the corresponding range=
+ must be
+> > +              * turned off by writing base value greater than limit to=
+ the
+> > +              * bridge's base/limit registers.
+> > +              */
+> > +             if (limit >=3D base) {
+> > +                     /* Clear upper 16 bits of I/O base/limit */
+> > +                     io_upper16 =3D 0;
+> > +                     /* set base value greater than limit */
+> > +                     io_low =3D 0x00f0;
+> > +
+> > +                     /* Temporarily disable the I/O range before updat=
+ing PCI_IO_BASE */
+> > +                     pci_write_config_dword(bridge, PCI_IO_BASE_UPPER1=
+6, 0x0000ffff);
+> > +                     /* Update lower 16 bits of I/O base/limit */
+> > +                     pci_write_config_word(bridge, PCI_IO_BASE, io_low=
+);
+> > +                     /* Update upper 16 bits of I/O base/limit */
+> > +                     pci_write_config_dword(bridge, PCI_IO_BASE_UPPER1=
+6, io_upper16);
+> > +             }
+> > +     }
+> > +}
+> > +DECLARE_PCI_FIXUP_CLASS_HEADER(PCI_ANY_ID, PCI_ANY_ID,
+> > +             PCI_CLASS_BRIDGE_PCI, 8, quirk_vmd_no_iosize);
+> > +#endif
+> > --
+> > 2.37.3
+> >
+>
 
 
-On 9/28/2022 1:44 AM, Mathieu Poirier wrote:
-> On Tue, Sep 27, 2022 at 10:10:31AM +0200, Arnaud POULIQUEN wrote:
->> Hi,
->>
->> On 9/27/22 05:03, Peng Fan wrote:
->>> Hi Mathieu,
->>>
->>>> Subject: Re: [PATCH V7 2/2] remoteproc: support attach recovery after rproc
->>>> crash
->>>>
->>>> On Tue, Jul 05, 2022 at 09:15:27AM +0800, Peng Fan (OSS) wrote:
->>>>> From: Peng Fan <peng.fan@nxp.com>
->>>>>
->>>>> Current logic only support main processor to stop/start the remote
->>>>> processor after crash. However to SoC, such as i.MX8QM/QXP, the remote
->>>>> processor could do attach recovery after crash and trigger watchdog to
->>>>> reboot itself. It does not need main processor to load image, or
->>>>> stop/start remote processor.
->>>>>
->>>>> Introduce two functions: rproc_attach_recovery, rproc_boot_recovery
->>>>> for the two cases. Boot recovery is as before, let main processor to
->>>>> help recovery, while attach recovery is to recover itself without help.
->>>>> To attach recovery, we only do detach and attach.
->>>>>
->>>>> Acked-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
->>>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->>>>> ---
->>>>>   drivers/remoteproc/remoteproc_core.c | 62
->>>>> +++++++++++++++++++---------
->>>>>   1 file changed, 43 insertions(+), 19 deletions(-)
->>>>>
->>>>> diff --git a/drivers/remoteproc/remoteproc_core.c
->>>>> b/drivers/remoteproc/remoteproc_core.c
->>>>> index ed374c8bf14a..ef5b9310bc83 100644
->>>>> --- a/drivers/remoteproc/remoteproc_core.c
->>>>> +++ b/drivers/remoteproc/remoteproc_core.c
->>>>> @@ -1884,6 +1884,45 @@ static int __rproc_detach(struct rproc *rproc)
->>>>>   	return 0;
->>>>>   }
->>>>>
->>>>> +static int rproc_attach_recovery(struct rproc *rproc) {
->>>>> +	int ret;
->>>>> +
->>>>> +	ret = __rproc_detach(rproc);
->>>>> +	if (ret)
->>>>> +		return ret;
->>>>
->>>> I thought there was a specific reason to _not_ call rproc->ops->coredump()
->>>> for processors that have been attached to but looking at the STM32 and
->>>> IMX_DSP now, it would seem logical to do so.  Am I missing something?
->>>
->>> ATTACH RECOVERY is to support recovery without help from Linux,
->>>
->>> STM32 and IMX_DSP, both require linux to load image and start remote
->>> core. So the two cases should not enable feature:
->>> RPROC_FEAT_ATTACH_ON_RECOVERY
->>>
->>> Also considering the recovery is out of linux control, actually when linux
->>> start dump, remote core may already recovered.
->>
->> I asked myself the same question. Indeed how to manage a core dump if the
->> remote processor restarts autonomously.
->> The answer doesn't seem obvious because it seems to be platform specific.
->>
->> For time being on STM32 we consider that the remoteproc memory can be corrupted
->> so we don't plan to enable the feature by default even if the hardware allows it.
->>
->> If we implement it, I would see 2 use cases:
->> - no core dump, the remote processor restart autonomously (need to manage the
->> VIRTIO_CONFIG_S_NEEDS_RESET in resource table vdev for resynchronization)
->> - core dump and the Linux stm32 driver handle the reset of the remote
->> processor core to be able to perform the core dump (no firmware loading)
->>
->> What about dealing with the coredump in a separate thread, based on a concrete
->> use case/need?
-> 
-> Definitely, we can deal with that later.
-> 
-> Peng - please send me a rebase as quickly as possible.
+--=20
+Best Regards,
+Xiaochun Li (Xavier) (Mr.)
+RedHat Onsite engineer
+Lenovo Linux Kernel Engineer
+Lenovo Infrastructure Solutions Group (ISG)/China Standard Time Zone(CST)
 
-Mathieu,
-
-Just send out V8 rebased on linux-next/master tag: next-20220927
-
-Thanks,
-Peng.
-> 
->>
->> Regards,
->> Arnaud
->>   
->>>
->>>>
->>>> And this set will need a rebase.
->>>
->>> I'll do the rebase and send V8 if the upper explanation could eliminate
->>> your concern.
->>>
->>> Thanks,
->>> Peng.
->>>
->>>>
->>>> Thanks,
->>>> Mathieu
->>>>
->>>>> +
->>>>> +	return __rproc_attach(rproc);
->>>>> +}
->>>>> +
->>>>> +static int rproc_boot_recovery(struct rproc *rproc) {
->>>>> +	const struct firmware *firmware_p;
->>>>> +	struct device *dev = &rproc->dev;
->>>>> +	int ret;
->>>>> +
->>>>> +	ret = rproc_stop(rproc, true);
->>>>> +	if (ret)
->>>>> +		return ret;
->>>>> +
->>>>> +	/* generate coredump */
->>>>> +	rproc->ops->coredump(rproc);
->>>>> +
->>>>> +	/* load firmware */
->>>>> +	ret = request_firmware(&firmware_p, rproc->firmware, dev);
->>>>> +	if (ret < 0) {
->>>>> +		dev_err(dev, "request_firmware failed: %d\n", ret);
->>>>> +		return ret;
->>>>> +	}
->>>>> +
->>>>> +	/* boot the remote processor up again */
->>>>> +	ret = rproc_start(rproc, firmware_p);
->>>>> +
->>>>> +	release_firmware(firmware_p);
->>>>> +
->>>>> +	return ret;
->>>>> +}
->>>>> +
->>>>>   /**
->>>>>    * rproc_trigger_recovery() - recover a remoteproc
->>>>>    * @rproc: the remote processor
->>>>> @@ -1898,7 +1937,6 @@ static int __rproc_detach(struct rproc *rproc)
->>>>>    */
->>>>>   int rproc_trigger_recovery(struct rproc *rproc)  {
->>>>> -	const struct firmware *firmware_p;
->>>>>   	struct device *dev = &rproc->dev;
->>>>>   	int ret;
->>>>>
->>>>> @@ -1912,24 +1950,10 @@ int rproc_trigger_recovery(struct rproc
->>>>> *rproc)
->>>>>
->>>>>   	dev_err(dev, "recovering %s\n", rproc->name);
->>>>>
->>>>> -	ret = rproc_stop(rproc, true);
->>>>> -	if (ret)
->>>>> -		goto unlock_mutex;
->>>>> -
->>>>> -	/* generate coredump */
->>>>> -	rproc->ops->coredump(rproc);
->>>>> -
->>>>> -	/* load firmware */
->>>>> -	ret = request_firmware(&firmware_p, rproc->firmware, dev);
->>>>> -	if (ret < 0) {
->>>>> -		dev_err(dev, "request_firmware failed: %d\n", ret);
->>>>> -		goto unlock_mutex;
->>>>> -	}
->>>>> -
->>>>> -	/* boot the remote processor up again */
->>>>> -	ret = rproc_start(rproc, firmware_p);
->>>>> -
->>>>> -	release_firmware(firmware_p);
->>>>> +	if (rproc_has_feature(rproc, RPROC_FEAT_ATTACH_ON_RECOVERY))
->>>>> +		ret = rproc_attach_recovery(rproc);
->>>>> +	else
->>>>> +		ret = rproc_boot_recovery(rproc);
->>>>>
->>>>>   unlock_mutex:
->>>>>   	mutex_unlock(&rproc->lock);
->>>>> --
->>>>> 2.25.1
->>>>>
