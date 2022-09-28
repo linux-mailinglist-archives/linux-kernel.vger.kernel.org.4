@@ -2,73 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6355EDCC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4C55EDCE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233924AbiI1Mdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 08:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
+        id S233507AbiI1Mgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 08:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233733AbiI1Mdk (ORCPT
+        with ESMTP id S234106AbiI1MgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 08:33:40 -0400
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF5A419AB
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 05:33:39 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:5556:1b6:16f5:2874])
-        by baptiste.telenet-ops.be with bizsmtp
-        id RQZe2800V40fT9J01QZenk; Wed, 28 Sep 2022 14:33:39 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1odWFu-0006kG-EM; Wed, 28 Sep 2022 14:33:38 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1odWFt-0031f3-Fs; Wed, 28 Sep 2022 14:33:37 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] dt-bindings: irqchip: renesas,irqc: Add r8a779g0 support
-Date:   Wed, 28 Sep 2022 14:33:36 +0200
-Message-Id: <4fdb6ff47f62814aab3b06efd1d4c2d7de83b109.1664368373.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Wed, 28 Sep 2022 08:36:09 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850AA356CD;
+        Wed, 28 Sep 2022 05:35:43 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id e10-20020a05600c4e4a00b003b4eff4ab2cso1129415wmq.4;
+        Wed, 28 Sep 2022 05:35:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hDGLmeg/3H5e1OtBsmLFUKZd98FFvCcHEVJ0xsvxMhM=;
+        b=RVu0ef59fpgN3POkCew4+CPhjI2r/eU7f55jOv7S0H68+VbgnWPqOfbGELhS6Vlx8d
+         8ARCwXOOHGaGAG7AeavP0QVbHzCavzTtptch7u7fI/G331yBAk80JqSPt2EWIpBh7YuU
+         PMwjaklaBHAsype1SI4Kt3pl4lt1nZfgpJankk11I8aeCgdkX39StChW3jwSg2MUE0JP
+         fEQl5/6stF4PYpgt1Jfvcmz9+k20Bp92L8NehZN99/GK/eMy70O3UAOoQl9jcpEsQmq2
+         rw991OcohUDoGG2fHdyhHjb51NUMUQoZwLE0Sc4kKOSG8Z2OIH3lycZjHnJXkoEvxWsT
+         E1qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hDGLmeg/3H5e1OtBsmLFUKZd98FFvCcHEVJ0xsvxMhM=;
+        b=KuK6eWHbX1YwQvDST7EkzGun/wqCa/sBWNk2o7SfBxPTaiwofIL/3HRhIWieRhPNcz
+         fGXskpbqbWxd1xuHVkgtUBy/fp2Ytm8AVCaDqa/Qo2aSKo1Cplo40svj+N33Dfq+k8+Y
+         kp0njgyBPFTDiGOL1KQ6WCVl7DbhLqIsetFpNN01Sao4Kt7cHYQWvKy+N4J1jwTn7ykF
+         OvxZ3U556cMBfYWvGJQewnrZ9AmlsAH1viRru94stIXM9lPcxN80FGwyhCPO6dKTSlId
+         m2G74sw0XFL0v266MoeMi0PB+yD5/QhCL3E9e0WtOPVMvOAYs5WlMuxSPCzPZdVmK8Mx
+         xujg==
+X-Gm-Message-State: ACrzQf3c66e1Iv+3+Cry118CpxTDhxmSoN2zVGrGgsKYRNYsPrA5H39G
+        0HZKjgGvTiiu1Dji4eqKWff69GJgIg0DOOd1pYk=
+X-Google-Smtp-Source: AMsMyM4CJY3K9qndmYOtCN/qBSz/mzPUwHP0eq64RNnQhsHSii+iU5TB0IqzJw8H6hh526xY9VRzo5a+lXECJ1UdOck=
+X-Received: by 2002:a7b:c389:0:b0:3b4:a67a:2ef7 with SMTP id
+ s9-20020a7bc389000000b003b4a67a2ef7mr6602270wmj.180.1664368541230; Wed, 28
+ Sep 2022 05:35:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220926195931.2497968-1-shakeelb@google.com>
+In-Reply-To: <20220926195931.2497968-1-shakeelb@google.com>
+From:   Anatoly Pugachev <matorola@gmail.com>
+Date:   Wed, 28 Sep 2022 15:35:29 +0300
+Message-ID: <CADxRZqys7222fYUj-0--RsR+L4s0TyJr6Wa6EeoaXMBZcNkLeQ@mail.gmail.com>
+Subject: Re: [PATCH] Revert "net: set proper memcg for net_init hooks allocations"
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        cgroups@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
+        Linux Kernel list <linux-kernel@vger.kernel.org>,
+        Vasily Averin <vvs@openvz.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sparc kernel list <sparclinux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document support for the Interrupt Controller for External Devices
-(INT-EX) in the Renesas R-Car V4H (R8A779G0) SoC.
+On Mon, Sep 26, 2022 at 11:00 PM Shakeel Butt <shakeelb@google.com> wrote:
+>
+> This reverts commit 1d0403d20f6c281cb3d14c5f1db5317caeec48e9.
+>
+> Anatoly Pugachev reported that the commit 1d0403d20f6c ("net: set proper
+> memcg for net_init hooks allocations") is somehow causing the sparc64
+> VMs failed to boot and the VMs boot fine with that patch reverted. So,
+> revert the patch for now and later we can debug the issue.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- .../devicetree/bindings/interrupt-controller/renesas,irqc.yaml   | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/renesas,irqc.yaml b/Documentation/devicetree/bindings/interrupt-controller/renesas,irqc.yaml
-index 620f01775e429c3e..62fd47c88275d587 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/renesas,irqc.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,irqc.yaml
-@@ -37,6 +37,7 @@ properties:
-           - renesas,intc-ex-r8a77990    # R-Car E3
-           - renesas,intc-ex-r8a77995    # R-Car D3
-           - renesas,intc-ex-r8a779a0    # R-Car V3U
-+          - renesas,intc-ex-r8a779g0    # R-Car V4H
-       - const: renesas,irqc
- 
-   '#interrupt-cells':
--- 
-2.25.1
-
+Tested-by: Anatoly Pugachev <matorola@gmail.com>
