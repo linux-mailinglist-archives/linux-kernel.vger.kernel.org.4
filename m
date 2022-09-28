@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F7E5EE112
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEB05EE114
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233296AbiI1P6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
+        id S234307AbiI1P6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234395AbiI1P6N (ORCPT
+        with ESMTP id S234478AbiI1P6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:58:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591BCDF68A;
-        Wed, 28 Sep 2022 08:57:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D570061F0D;
-        Wed, 28 Sep 2022 15:57:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DE40C433D6;
-        Wed, 28 Sep 2022 15:57:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664380645;
-        bh=tjK6Iwi9Ql5KmK46x2ExPsr0zxrzgi8K1Jt3JCk5wG0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IAPMUszGIv2DzN4/h8aUlomn7hJkaXcbEvnq+G8MmPtvaiXjWPLFEpQw+L0tXj8mv
-         nSaXwxfw7KUH+zCsO5eeRCqfrqy8XD6usPAvTwWrke4CwDjCt4a+/ZsTF2rx75qBxF
-         gpCTcdLvPqxW2+SJqI+/lDxbhDcqnglftQdLbNxPDKuQbreUK7iNwpV7ghPIkCZzBx
-         XNbgdsuNq0LCORR/LB70/RUBeDfx47cC1JsnWK2uQkBXesAC9OWYHTy7JwEQ5ZiS2w
-         DNLX8L0Dq+FWd1EoA3LeTe7ub9tsZgCZ1J1KPoO+EEV8rcKvV27AGtoBXpLLHySD/a
-         sdVbUcOrIOylA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1odZRD-0005f9-N1; Wed, 28 Sep 2022 17:57:31 +0200
-Date:   Wed, 28 Sep 2022 17:57:31 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Steev Klimaszewski <steev@kali.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 09/10] drm/msm/dp: drop modeset sanity checks
-Message-ID: <YzRu64bdqjnhbjlc@hovoldconsulting.com>
-References: <20220913085320.8577-1-johan+linaro@kernel.org>
- <20220913085320.8577-10-johan+linaro@kernel.org>
- <d05290d8-7603-13b3-3cc4-d8509b03fc02@quicinc.com>
- <YzKi8XfV6V0p0TJi@hovoldconsulting.com>
- <d7688497-6229-40d4-3378-5036d699dfd7@quicinc.com>
- <YzQ9CPwxZXFJCQGG@hovoldconsulting.com>
- <3a5f006d-2735-5af5-48fa-4397bfb5e3ba@quicinc.com>
+        Wed, 28 Sep 2022 11:58:17 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B76D4DE9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:57:40 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 130-20020a1c0288000000b003b494ffc00bso1013986wmc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date;
+        bh=gr4NX9hKRksMUEvq5iTnWXuuqbt/cVaS54wl4qK2lz8=;
+        b=mdJ3llifS4oJUpDPAfPfMM/e0Rps1EgY/vfmcdeIeb1PTNfbiUzu74Rq35J8bTdz68
+         Ki4TAcYr2QXp+pVREY+gV6TixTC3BV5nGW6A1Uj1uFmC4tZPVuYoJE/zVbRRClGSr8a0
+         t8bA2ch1kfpMa4or71ORVt8H+6QD/00XeuiY3OHKh0kXm3f6Up+tVoRVkN+ieq2gEaiG
+         nNSerlekU1cbt/5nWaetLqJR5pdnGIIihnmjk6KGf4tjxDCtjX49MV7pl5TIkShAYKuf
+         BRnLcTfMXZJH891uiyW/cEIqPN1qSyRLvEqfV5s2Kbxm1ByCZ3/L2nlq/tL0m1V84Mrf
+         oWqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=gr4NX9hKRksMUEvq5iTnWXuuqbt/cVaS54wl4qK2lz8=;
+        b=GWiETZma/Qo2+gLxFhBRw+oNXiTLI9Q8BaD029V+Nj0ezbjnKiQARdRz3dDE00ebXw
+         om5EO5QfKNxSc4IEgx0srqcygTOttJgSoplZh683R5m6biZzxscdSwS/RufcyV/HXmAg
+         tOaVO09zRfwDkpRBYjiHsYTVqGtDQd6rhtwxJlf/7Hdf2TDLXBfHHj1n6NwWrYfWniSm
+         a0gPGkJ19AXqDnbLRGowqEU7IsKj9cbA9Tp3DjpJnvKdh1+PEfbVX0Sgovr/UxdEVP7Z
+         Hs0BreLnsVtAACcRf2UHaKFt6R/oo69KS/ZZIxx9eEJ+VsweUC5xL9vMfbrO1s12O7Tj
+         wFCQ==
+X-Gm-Message-State: ACrzQf3wAdGTnUssdc1zqcmhc9DLGy/u35jeb9hELrilWP8B3nFE10AS
+        H7x5yTIxRJCfIgLKKmX9sh1OAg==
+X-Google-Smtp-Source: AMsMyM52RP978MnDNTMt8hGiwehpzwFh2XZw41YvZzfZBT9JDhg3g2F+igKOAnGTDVkRxYzJwttHcA==
+X-Received: by 2002:a05:600c:3844:b0:3b4:becc:e43 with SMTP id s4-20020a05600c384400b003b4becc0e43mr7446114wmr.33.1664380657522;
+        Wed, 28 Sep 2022 08:57:37 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:11d4:7c71:accf:6521? ([2a01:e0a:982:cbb0:11d4:7c71:accf:6521])
+        by smtp.gmail.com with ESMTPSA id q16-20020a7bce90000000b003b492b30822sm2098621wmj.2.2022.09.28.08.57.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 08:57:37 -0700 (PDT)
+Message-ID: <85ce689b-4fea-49a4-2faf-eac15eb2ab6c@linaro.org>
+Date:   Wed, 28 Sep 2022 17:57:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3a5f006d-2735-5af5-48fa-4397bfb5e3ba@quicinc.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 04/13] phy: qcom-qmp-pcie: unify ipq registers
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220928152822.30687-1-johan+linaro@kernel.org>
+ <20220928152822.30687-5-johan+linaro@kernel.org>
+Reply-To: neil.armstrong@linaro.org
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20220928152822.30687-5-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,21 +83,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 08:33:52AM -0700, Abhinav Kumar wrote:
-> On 9/28/2022 5:24 AM, Johan Hovold wrote:
-> > On Tue, Sep 27, 2022 at 11:42:53AM -0700, Abhinav Kumar wrote:
-
-> >> Discussed with Rob on IRC, we will apply everything except the last two
-> >> patches of this series in the -fixes and take these two for the next
-> >> kernel rev push.
-> > 
-> > So the fixes go in 6.0 and the two follow-on cleanups in 6.1? Or did you
-> > mean 6.1 and 6.2?
-
-> The fixes will go in 6.1 first.
+On 28/09/2022 17:28, Johan Hovold wrote:
+> The IPQ register array is identical to sm8250_pcie_regs_layout so drop
+> the former.
 > 
-> The two follow-on cleanups in 6.2.
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 11 ++---------
+>   1 file changed, 2 insertions(+), 9 deletions(-)
+> 
 
-Ok, sounds good. Thanks.
+<snip>
 
-Johan
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
