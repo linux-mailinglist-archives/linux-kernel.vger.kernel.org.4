@@ -2,74 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85645EEA21
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 938705EEA23
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbiI1Xcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 19:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
+        id S233614AbiI1XdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 19:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbiI1Xcw (ORCPT
+        with ESMTP id S233585AbiI1XdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 19:32:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF46EEE84;
-        Wed, 28 Sep 2022 16:32:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10B2560C24;
-        Wed, 28 Sep 2022 23:32:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C096C433C1;
-        Wed, 28 Sep 2022 23:32:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664407970;
-        bh=MWoiXhLhJFZVdiOeuHhNkkStzztFn98ggkae+lCgZjU=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=l90/atfpJvrCbDjwGl3lXKhuh48AyX+7XJR06wBQeKoHurWepRx1wYK+JM6nols01
-         SMTDu35qUAo8AJxpLMWV1dHoUN3HU63Vxpm4T+gk/b+NocDFjZGxsv3Xz5Gm4bMo7o
-         EnllFqP+eP2sXSJcDMmowChcTcU2jI9XXHaOX/2IQuNJAuPr0wzLJAp36NhCNYMhCy
-         xZltDy31WDbMuRp8QsElJbbVKQOkQx6b5Akl717gPt46UllsG4lsBaTeese7TdMeWa
-         +o0s/H8gcbuQJ+DtDxbFEzHNGHrQyKLOlXwNU5AOSUNaTolO/3E4w3agBu3D/NoLKI
-         aj7HP3KxoFd2A==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 28 Sep 2022 19:33:08 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E12EF08C
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:33:07 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id l14so30179936eja.7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:33:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=q74yArMABpzeLkr74sIBfXXMxk7/EMgQ3hoGRYitxYU=;
+        b=U0Q8SQFHSkScbj4cM4pTg7Yzb04zm5WgomM/5gs7MQUTxOnAoEjVy5BjCW7Lo5/BUi
+         xVGQd3n/TGijftlrmbedS+TIFC4PIQ4GVxgHSTo1Hxqh7rav4zS5xPPOiO0U6zV/NMl4
+         5n8EmZnC9tTRHnX8rS/uqie8PD5M0KehiVHl4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=q74yArMABpzeLkr74sIBfXXMxk7/EMgQ3hoGRYitxYU=;
+        b=HHcKM2N26y1/LBA5bO31ggTNleaQWjM6xDwz+OUNSH3RBPvOFfnh4uhZoly/RuJ6NA
+         uWkhImOrZU+puBX2vS4QwqrbQjg1FzpZgGBYjcMONhhXTUzbK/PDQBpAnl5cZDJfGHaD
+         DOo9Nz4Z5j3CEZJnhpJdxeSdwNf2vPIXlJBZ2XBj6zw7CdAMF9gC2T9oRZrK1ZOCk6+G
+         kRT+rLqfDcTGQD55jf1H1lpuqOfZMIcP3osRtv4OoMmuwdNG+xf943gu4PWbak+D9kvj
+         vetHbBuji0DCfBrd+sj7CaF9iruUHe9wIkip4yPrDFGmOjvjblYaLh0lWHR3lZMCGJOv
+         FbGA==
+X-Gm-Message-State: ACrzQf1a92pTgBbQjtkeyg7BinM7Q2wkevCn8Ng2y3LRpYPTKJGEa3Zb
+        eFH2pzUnuUVXaogjT41UzJjTm3GVvuEZCApZ
+X-Google-Smtp-Source: AMsMyM469AUaa+mB2JIQZbVR8HV8iZwsYburPZr5MIxUjpb1o/msGJwlcBixgj18jYHZIDXKlvvITw==
+X-Received: by 2002:a17:907:7202:b0:783:1bed:c5db with SMTP id dr2-20020a170907720200b007831bedc5dbmr315200ejc.124.1664407985511;
+        Wed, 28 Sep 2022 16:33:05 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id kx9-20020a170907774900b0073dc8d0eabesm3023511ejc.15.2022.09.28.16.33.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 16:33:04 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id m4so7668113wrr.5
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:33:03 -0700 (PDT)
+X-Received: by 2002:a5d:522f:0:b0:228:dc7f:b9a8 with SMTP id
+ i15-20020a5d522f000000b00228dc7fb9a8mr145687wra.617.1664407983299; Wed, 28
+ Sep 2022 16:33:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220919102244.3537437-1-abel.vesa@linaro.org>
-References: <20220919102244.3537437-1-abel.vesa@linaro.org>
-Subject: Re: [GIT PULL] clk: imx: Updates for v6.1
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>
-Date:   Wed, 28 Sep 2022 16:32:48 -0700
-User-Agent: alot/0.10
-Message-Id: <20220928233250.5C096C433C1@smtp.kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220924000454.3319186-1-john.ogness@linutronix.de> <20220924000454.3319186-10-john.ogness@linutronix.de>
+In-Reply-To: <20220924000454.3319186-10-john.ogness@linutronix.de>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 28 Sep 2022 16:32:51 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=W5mnR6MH+KLK9VgUCvY0rsjkMdR7un=pHmtNBBup7w7g@mail.gmail.com>
+Message-ID: <CAD=FV=W5mnR6MH+KLK9VgUCvY0rsjkMdR7un=pHmtNBBup7w7g@mail.gmail.com>
+Subject: Re: [PATCH printk 09/18] serial: kgdboc: Lock console list in probe function
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Abel Vesa (2022-09-19 03:22:44)
-> The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b8=
-68:
->=20
->   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git/ tags/=
-clk-imx-6.1
->=20
-> for you to fetch changes up to 67e16ac1fec475e64dcb8238f471c6fd154ef806:
->=20
->   clk: imx93: add SAI IPG clk (2022-09-19 13:06:45 +0300)
->=20
-> ----------------------------------------------------------------
+Hi,
 
-Thanks. Pulled into clk-next
+On Fri, Sep 23, 2022 at 5:05 PM John Ogness <john.ogness@linutronix.de> wrote:
+>
+> From: Thomas Gleixner <tglx@linutronix.de>
+>
+> Unprotected list walks are not necessarily safe.
+>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> ---
+>  drivers/tty/serial/kgdboc.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
+> index 79b7db8580e0..af2aa76bae15 100644
+> --- a/drivers/tty/serial/kgdboc.c
+> +++ b/drivers/tty/serial/kgdboc.c
+> @@ -193,7 +193,8 @@ static int configure_kgdboc(void)
+>         if (!p)
+>                 goto noconfig;
+>
+> -       for_each_console(cons) {
+> +       console_list_lock();
+> +       for_each_registered_console(cons) {
+>                 int idx;
+>                 if (cons->device && cons->device(cons, &idx) == p &&
+>                     idx == tty_line) {
+> @@ -201,6 +202,7 @@ static int configure_kgdboc(void)
+>                         break;
+>                 }
+>         }
+> +       console_list_unlock();
+
+Seems right to me, thanks!
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
