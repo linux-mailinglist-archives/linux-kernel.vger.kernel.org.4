@@ -2,110 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD755EE919
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 00:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB235EE91A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 00:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233049AbiI1WDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 18:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
+        id S233194AbiI1WDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 18:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiI1WDV (ORCPT
+        with ESMTP id S229486AbiI1WDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 18:03:21 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B37917583
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 15:03:20 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id s125so16938566oie.4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 15:03:20 -0700 (PDT)
+        Wed, 28 Sep 2022 18:03:48 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA2E659DA
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 15:03:45 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id q9so13406328pgq.8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 15:03:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=tmCcbs8t+TQBW8BCIw+S4lYW0IEH6zSrzGu/chcwJpI=;
-        b=ViN6DS2PE0rE7/ZFHW24Z2RMpqYNwXkvYbP6FGXPP1wK1uVPUX/gKiyHqt5uPEEeww
-         rp6D8aLHWrI9CIuhmvFjwWlTzEgEQpFjrGULuOgMxe1w65ipmL1QgMSMi5vYUW5BM9ck
-         rpl/6X42uGtBQpd4mWPjuMeuJ0Sgmk+PzVf2B1M57OqMHIuOyN94ZmMstzKlEpfFA+mX
-         eWTQpWedYYdwJ3k31fMuSVAFmtnNJO7oZDguoqYkg7ea6zt2ug6SE1p5lBPfC/BvUo0c
-         TJKcPzLRVjTnN1RW3mvZBOg2Sn5pP5nZe/vLNeLvQRmUHdqRgvhRgDA8nqzW5Mg9cT0Z
-         3tRw==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=ERLuTlisgIR2n9tXC1fe0GP37JKycUgxAwJd1Ig7q9Q=;
+        b=DxAWIhOWGcHpcmmOwlPYx3KHgn35bBdjd63eqQb/+4KWhI74WgEDeYIWrdXpGU0bj5
+         hRhgnnLilYW3EAaA5y3NOPl4/XRJP9c72OiZVjNRml5lpRx3+jQcBi0aSfwOhLi9e/HX
+         l8oY4DBT7jivOUW62K516ODwZI2vEfEC8kI8c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=tmCcbs8t+TQBW8BCIw+S4lYW0IEH6zSrzGu/chcwJpI=;
-        b=0u1o47GOKUF1SVKuHAkkXoI/pC1gQV0zavjqpa+4Y3sorRrID2OceHZLtjEii3PGf9
-         frRAfCDL6dAdjdcGzN572UbyVFMT+FtmAGgEOqQl9oQ2hLdS3OrcFcZEP8pp5ESMSpVk
-         pPYPwWHo2YAFsNUOic3xV4XrFCbo84QUhGInsdbMnqStuoqnyte3Br6tFLYv1C/EOWAG
-         PKZ0XsrNhJWyNODhzL3h1Kao8QKlCFpkDbu4aNxFeBOWaPQRzho0DvkaFdWbAkPuiiQr
-         a7hZ8gP9UXPixnLv9MWOOovsybFIuI62XeG+Bv909D3xuX+hzK0dE0YoboOR7OFrWbNZ
-         /GJQ==
-X-Gm-Message-State: ACrzQf0d9E1UOORkXs1OBu+b/bi7GCfKhFqclDt2t5kchDJBF7Xg+yse
-        C9bQUALLC0czJ1HXPg/Zp+nOkNicA8jAS9WL1kK1
-X-Google-Smtp-Source: AMsMyM7yraCRKe46aRwmI9LtrdinymR7eUbk9FXRY518o7VvX+F9EPUgAsWp7aY4T3LbWqtLiDYplu5zlOe9jziyOnQ=
-X-Received: by 2002:a05:6808:144b:b0:350:a06a:f8cb with SMTP id
- x11-20020a056808144b00b00350a06af8cbmr5507250oiv.51.1664402599405; Wed, 28
- Sep 2022 15:03:19 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ERLuTlisgIR2n9tXC1fe0GP37JKycUgxAwJd1Ig7q9Q=;
+        b=6vsebedlhDMzndtza/9k2ovMl6JNWWXMS5HoG3I97+Dy/TzNiWKJNb8p00tA0OumeS
+         BeCKdI5KftF0PZ7vb+ujxZ0jIULyLzd4xucQ9ZUCjBy7cQjkwo8OqPYT5vQ9ZYxVKlrc
+         tCNqlqX5qYylVDAtGckJZfPNkCnVTILZBgteYLvncy/MQmrwo+Lt6SGGW5F2jr0lQQ67
+         MAu5wS1hcVGOIM6bmzjBJERuogFEOjkdsdSs5NIUoEem1qycn8MJFPm1VEdz+f00z5fg
+         lZ0H+cNhmCCqOQmlOq9O6QMwFf6f5sfeMGRHMVAirQlApUoilmRoBFpzfVvYaeVcRBuq
+         wHZw==
+X-Gm-Message-State: ACrzQf1R2nFilBqNXZrYhemzmRAN1lJWYIhKaK4NrkYvg1Z459uObfEp
+        33Lvs2zHMlyc2XAIVbKP1WZP2w==
+X-Google-Smtp-Source: AMsMyM4SBD1FlI/Uz4/bWjuAArTJ4XDxSG+Kh04joDyyUmbFtNP5JhczPQMy+VzxQT6s1FBs+mgQvw==
+X-Received: by 2002:a65:5886:0:b0:439:8dd3:18d4 with SMTP id d6-20020a655886000000b004398dd318d4mr30891351pgu.430.1664402625067;
+        Wed, 28 Sep 2022 15:03:45 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f22-20020a63f116000000b0042a713dd68csm4194606pgi.53.2022.09.28.15.03.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 15:03:44 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 15:03:43 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        llvm@lists.linux.dev, Andy Lutomirski <luto@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v4] x86, mem: move memmove to out of line assembler
+Message-ID: <202209281431.C5EF6C32A@keescook>
+References: <CAKwvOdkaKTa2aiA90VzFrChNQM6O_ro+b7VWs=op70jx-DKaXA@mail.gmail.com>
+ <20220928210512.642594-1-ndesaulniers@google.com>
 MIME-Version: 1.0
-References: <20220927225944.2254360-1-ankur.a.arora@oracle.com> <20220927225944.2254360-2-ankur.a.arora@oracle.com>
-In-Reply-To: <20220927225944.2254360-2-ankur.a.arora@oracle.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 28 Sep 2022 18:03:08 -0400
-Message-ID: <CAHC9VhRZzU5-+65AFOK826rA0xo-nbgRK_pP05Q_zjvAQvLnRw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] audit: cache ctx->major in audit_filter_syscall()
-To:     Ankur Arora <ankur.a.arora@oracle.com>
-Cc:     linux-audit@redhat.com, eparis@redhat.com,
-        linux-kernel@vger.kernel.org, boris.ostrovsky@oracle.com,
-        konrad.wilk@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928210512.642594-1-ndesaulniers@google.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 6:59 PM Ankur Arora <ankur.a.arora@oracle.com> wrote:
->
-> ctx->major contains the current syscall number. This is, of course, a
-> constant for the duration of the syscall. Unfortunately, GCC's alias
-> analysis cannot prove that it is not modified via a pointer in the
-> audit_filter_syscall() loop, and so always loads it from memory.
->
-> ...
->
-> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> ---
->  kernel/auditsc.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+On Wed, Sep 28, 2022 at 02:05:12PM -0700, Nick Desaulniers wrote:
+> When building ARCH=i386 with CONFIG_LTO_CLANG_FULL=y, it's possible
+> (depending on additional configs which I have not been able to isolate)
+> to observe a failure during register allocation:
+> 
+>   error: inline assembly requires more registers than available
+> 
+> when memmove is inlined into tcp_v4_fill_cb() or tcp_v6_fill_cb().
+> 
+> memmove is quite large and probably shouldn't be inlined due to size
+> alone. A noinline function attribute would be the simplest fix, but
+> there's a few things that stand out with the current definition:
+> 
+> In addition to having complex constraints that can't always be resolved,
+> the clobber list seems to be missing %bx and %dx, and possibly %cl. By
+> using numbered operands rather than symbolic operands, the constraints
+> are quite obnoxious to refactor.
+> 
+> Having a large function be 99% inline asm is a code smell that this
+> function should simply be written in stand-alone out-of-line assembler.
+> That gives the opportunity for other cleanups like fixing the
+> inconsistent use of tabs vs spaces and instruction suffixes, and the
+> label 3 appearing twice.  Symbolic operands and local labels would
+> provide this code with a fresh coat of paint.
+> 
+> Moving this to out of line assembler guarantees that the
+> compiler cannot inline calls to memmove.
+> 
+> This has been done previously for 64b:
+> commit 9599ec0471de ("x86-64, mem: Convert memmove() to assembly file
+> and fix return value bug")
+> 
+> Also, add a test that tickles the `rep movsl` implementation to test it
+> for correctness, since it has implicit operands.
 
-This looks pretty trivial to me, but it's too late in the current -rc
-cycle for this to be merged, I'll queue it up for after the upcoming
-merge window closes.  Thanks.
+Yeah, thanks for poking this in particular. I was bothered that the
+side-effect test caught a corner case and was planning to expand the
+memcpy tests even more; thank you for doing that! I've got some more
+coming and can confirm they tickled the same bug.
 
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index 79a5da1bc5bb..533b087c3c02 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -843,13 +843,14 @@ static void audit_filter_syscall(struct task_struct *tsk,
->  {
->         struct audit_entry *e;
->         enum audit_state state;
-> +       unsigned long major = ctx->major;
->
->         if (auditd_test_task(tsk))
->                 return;
->
->         rcu_read_lock();
->         list_for_each_entry_rcu(e, &audit_filter_list[AUDIT_FILTER_EXIT], list) {
-> -               if (audit_in_mask(&e->rule, ctx->major) &&
-> +               if (audit_in_mask(&e->rule, major) &&
->                     audit_filter_rules(tsk, &e->rule, ctx, NULL,
->                                        &state, false)) {
->                         rcu_read_unlock();
-> --
-> 2.31.1
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+
+This time I've looked at the binary differences between the functions
+generated by both GCC[1] and Clang[2]. GCC is a little more difficult to
+compare, since it does some register swaps, but the Clang output is same
+excepting the order of push/pop, and different nops.
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+Nick's tests pass, and my newly written tests also pass; I'll send those
+as a follow-up.
+
+Tested-by: Kees Cook <keescook@chromium.org>
+
+-Kees
+
+[1] https://paste.debian.net/hidden/b6298e62/
+[2] https://paste.debian.net/hidden/d8343143/
 
 -- 
-paul-moore.com
+Kees Cook
