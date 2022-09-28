@@ -2,224 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B385EE374
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E90E5EE371
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234693AbiI1Rsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
+        id S234155AbiI1Rst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbiI1Rsq (ORCPT
+        with ESMTP id S231301AbiI1Rso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:48:46 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53482F6862
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:48:45 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id g1so3876027lfu.12
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:48:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=+IT6jI/tA+QmLxNfkgpSt+mqEt8iuqK1LQzi3BmIPbM=;
-        b=R9b8iQDEllsyBMOQLZtP+YcGH+BbVQE+O7Fy/uLCYn1N+KgDPDN3RAi6JPINzEgRj4
-         j1W6ZlPiCYpwBKdnjoxFdNrRjJdF5DqCE1JSeX6FwaCWy/BHq43ZEvVAztIR6He8AHdk
-         RcyAtvhkwk5isE8VLmvcSlaOtlkUMKCpoJfcvQIbrPHpt5Cw0WzrhrruJmITMkx5M3he
-         6BYChg9o2VFLv5LqYFc39g0GfPNk4BP7k+ZVQjolNe4J3cyAh9gCz5I5rkxAOjqy46YP
-         p8+T6LEF32PkjwFCQnmA1VoR/53QUFULWbYvB4DjtkpuS/FU88xzsyKdCQ++7nXkoZAY
-         mG3w==
+        Wed, 28 Sep 2022 13:48:44 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E948F686E
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:48:43 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id f4-20020a056e020b4400b002f6681cca5bso10453198ilu.14
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:48:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=+IT6jI/tA+QmLxNfkgpSt+mqEt8iuqK1LQzi3BmIPbM=;
-        b=cXPa3ws2b4V7QiklPPaCa51GEqci2d1wYCAc1mlFihA5zzDIDthevcWU5SRZdhMEyf
-         Fb+ZVHgpPp3fnJVNDMiwkDpxrKbbGSqU7zEIHXQyGNiV3Kh7yExvx/Yt+hT6OpsyKuik
-         0k3NSdpcabnreJ3Tob/+Rt7ZiNHcbnMjhbo1Ottu6tG+ZE6EYtFANZ/qR6QLINZLWvG5
-         g4q9H07xi9s0qXTqFngOnyilvy/HMRKCaPqN1e+5IriY1GbFkVlZVj2xOv4ItMAlWttV
-         Qq5Qi1UmJVLisxErDxa3+kzIQJZjJLIECxHWhLDLkAplwuEnpsmYnc9c1M4EwfndaXdz
-         X4sw==
-X-Gm-Message-State: ACrzQf3IswnHaE4o+gOYpu3U+a1dCODXQJg8Gnao01bCXO7/lqxVH/R7
-        Fp9nEXcKw+X1fcKlo5iptG6HAg==
-X-Google-Smtp-Source: AMsMyM4vRL8hpAE9BCUWh0ZDlmMKBfh1OtC+I7+IB4GRvGBa8RJq1FWlKYBH+Gd3SIqbPQtfP1qprw==
-X-Received: by 2002:a19:2d5c:0:b0:498:3e16:b3fc with SMTP id t28-20020a192d5c000000b004983e16b3fcmr13494804lft.498.1664387323676;
-        Wed, 28 Sep 2022 10:48:43 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id p20-20020a2eba14000000b002682754293fsm504528lja.1.2022.09.28.10.48.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 10:48:43 -0700 (PDT)
-Message-ID: <6df35c78-0ab1-b471-4541-7e29ea26a6ca@linaro.org>
-Date:   Wed, 28 Sep 2022 19:48:42 +0200
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=G+xLYFXY+UMRqDxP9CiGhw1NgJOuVxDOMXTlIhOGD6w=;
+        b=p297PrYRAMMmBNpUCBiwZzINIz+qUl7LsjzjmBta4rs/qWy3QJi2BjTILHnn+u0TFj
+         jPmhl5C11vKnolp9keGtcC8VBWrjBh9vVPZsx0MBu/r6tGurTztQZGDqlty0VVh7zwS6
+         cY7eN1x8NmteRW9Wo5dYrEfyDH5stPxjRTI8kZzel/y+by9hcBaHdbEFILSNMEt501r+
+         /iXJOHGP9QqjGjPenhfykcgkhT/e60ICi/jV44+PK1iDaj2PkmX7H+CHzw8VuGqSOSiT
+         R7vhpPgzCUS8RZSoTlCK/IzG9imDvHQlr3yU9HWK3xKxqz5ZKdEjs7FpSkeAzvBNoMpV
+         xmZA==
+X-Gm-Message-State: ACrzQf2sgA04rMPqfv4RfX7+9+8uple9Cp+BWqy3pD4yvpZYBUskC+9/
+        YcvFPwK9QL0RKzaozxWfs1Ax006XBgz4AHK2d6nyb6qy1V4N
+X-Google-Smtp-Source: AMsMyM7vwpw7Qv2hL7XdbA6gpbFJxgv+tCbQD2U+57LFlCzK/qlBl7R9LykIlRwRsl0hd/0LmVAtbFVF6DwPdgRvarqoLt4LSdck
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v3 02/11] dt-bindings: remoteproc: mediatek: Support
- MT8195 dual-core SCP
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-References: <20220927025606.26673-1-tinghan.shen@mediatek.com>
- <20220927025606.26673-3-tinghan.shen@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220927025606.26673-3-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:140e:b0:35a:7a8e:86e5 with SMTP id
+ k14-20020a056638140e00b0035a7a8e86e5mr17781030jad.276.1664387322755; Wed, 28
+ Sep 2022 10:48:42 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 10:48:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000024407a05e9c05f3a@google.com>
+Subject: [syzbot] BUG: sleeping function called from invalid context in gsm_send
+From:   syzbot <syzbot+b687fe9bf10db0839715@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/09/2022 04:55, Tinghan Shen wrote:
-> The MT8195 SCP is a dual-core RISC-V MCU. Extend the yaml file
-> to describe the 2nd core as a subnode of the boot core.
-> 
-> The configuration register is shared by MT8195 SCP core 0
-> and core 1. The core 1 can retrieve the information of configuration
-> registers from parent node.
-> 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> ---
->  .../bindings/remoteproc/mtk,scp.yaml          | 97 ++++++++++++++++++-
->  1 file changed, 92 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-> index 786bed897916..c012265be4eb 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-> @@ -75,6 +75,83 @@ properties:
->      required:
->        - mediatek,rpmsg-name
->  
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 1
-> +
-> +  ranges: true
-> +
-> +patternProperties:
-> +  "^scp-c[0-9]+@[a-f0-9]+$":
+Hello,
 
-drop c[0-9]. Node names should be generic
+syzbot found the following issue on:
 
-> +    type: object
-> +    description:
-> +      The MediaTek SCP integrated to SoC might be a multi-core version.
-> +      The other cores are represented as child nodes of the boot core.
-> +      There are some integration differences for the IP like the usage of
-> +      address translator for translating SoC bus addresses into address space
-> +      for the processor.
-> +
-> +      Each SCP core has own cache memory. The SRAM and L1TCM are shared by
-> +      cores. The power of cache, SRAM and L1TCM power should be enabled
-> +      before booting SCP cores. The size of cache, SRAM, and L1TCM are varied
-> +      on differnt SoCs.
-> +
-> +      The SCP cores do not use an MMU, but has a set of registers to
-> +      control the translations between 32-bit CPU addresses into system bus
-> +      addresses. Cache and memory access settings are provided through a
-> +      Memory Protection Unit (MPU), programmable only from the SCP.
-> +
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - mediatek,mt8195-scp-core
-> +
-> +      reg:
-> +        description: The base address and size of SRAM.
-> +        maxItems: 1
-> +
-> +      reg-names:
-> +        const: sram
-> +
-> +      interrupts:
-> +        maxItems: 1
-> +
-> +      firmware-name:
-> +        $ref: /schemas/types.yaml#/definitions/string
-> +        description:
-> +          If present, name (or relative path) of the file within the
-> +          firmware search path containing the firmware image used when
-> +          initializing sub cores of multi-core SCP.
-> +
-> +      memory-region:
-> +        maxItems: 1
-> +
-> +      cros-ec-rpmsg:
-> +        type: object
-> +        description:
-> +          This subnode represents the rpmsg device. The namesof the devices
-> +          are not important. The properties of this node are defined by the
-> +          individual bindings for the rpmsg devices.
+HEAD commit:    1a61b828566f Merge tag 'char-misc-6.0-rc7' of git://git.ke..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14353c4c880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=122d7bd4fc8e0ecb
+dashboard link: https://syzkaller.appspot.com/bug?extid=b687fe9bf10db0839715
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16017360880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=140e75ef080000
 
-Same comments as with patch #1.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/367e34e7ff83/disk-1a61b828.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/91a2819fe451/vmlinux-1a61b828.xz
 
-> +
-> +        properties:
-> +          mediatek,rpmsg-name:
-> +            $ref: /schemas/types.yaml#/definitions/string-array
-> +            description:
-> +              Contains the name for the rpmsg device. Used to match
-> +              the subnode to rpmsg device announced by SCP.
-> +
-> +        required:
-> +          - mediatek,rpmsg-name
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-> +      - reg-names
-> +
-> +    additionalProperties: false
-> +
->  required:
->    - compatible
->    - reg
-> @@ -110,16 +187,26 @@ additionalProperties: false
->  
->  examples:
->    - |
-> -    #include <dt-bindings/clock/mt8192-clk.h>
-> -
->      scp@10500000 {
-> -        compatible = "mediatek,mt8192-scp";
-> +        compatible = "mediatek,mt8195-scp";
->          reg = <0x10500000 0x80000>,
->                <0x10700000 0x8000>,
->                <0x10720000 0xe0000>;
->          reg-names = "sram", "cfg", "l1tcm";
-> -        clocks = <&infracfg CLK_INFRA_SCPSYS>;
-> -        clock-names = "main";
-> +
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        ranges = <0x105a0000 0x105a0000 0x20000>;
-> +
-> +        scp-c1@105a0000 {
-> +                compatible = "mediatek,mt8195-scp-core";
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b687fe9bf10db0839715@syzkaller.appspotmail.com
 
-Messed indentation. Use 4 spaces for example indentation.
+BUG: sleeping function called from invalid context at kernel/locking/mutex.c:580
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3606, name: syz-executor269
+preempt_count: 101, expected: 0
+RCU nest depth: 0, expected: 0
+3 locks held by syz-executor269/3606:
+ #0: ffff8880250eb098 (&tty->ldisc_sem){++++}-{0:0}, at: __tty_ldisc_lock drivers/tty/tty_ldisc.c:290 [inline]
+ #0: ffff8880250eb098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:353 [inline]
+ #0: ffff8880250eb098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
+ #0: ffff8880250eb098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_release+0x79/0x2a0 drivers/tty/tty_ldisc.c:775
+ #1: ffff888017ac60b0 (&gsm->mutex){+.+.}-{3:3}, at: gsm_cleanup_mux+0xf5/0x800 drivers/tty/n_gsm.c:2446
+ #2: ffffc900001f0d70 ((&dlci->t1)){+.-.}-{0:0}, at: lockdep_copy_map include/linux/lockdep.h:31 [inline]
+ #2: ffffc900001f0d70 ((&dlci->t1)){+.-.}-{0:0}, at: call_timer_fn+0xd5/0x6b0 kernel/time/timer.c:1464
+Preemption disabled at:
+[<0000000000000000>] 0x0
+CPU: 1 PID: 3606 Comm: syz-executor269 Not tainted 6.0.0-rc6-syzkaller-00309-g1a61b828566f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __might_resched.cold+0x222/0x26b kernel/sched/core.c:9892
+ __mutex_lock_common kernel/locking/mutex.c:580 [inline]
+ __mutex_lock+0x9f/0x1350 kernel/locking/mutex.c:747
+ gsm_send.isra.0+0x3b5/0x7a0 drivers/tty/n_gsm.c:704
+ gsm_command drivers/tty/n_gsm.c:768 [inline]
+ gsm_dlci_begin_close+0x12e/0x210 drivers/tty/n_gsm.c:1892
+ gsm_dlci_t1+0x186/0x450 drivers/tty/n_gsm.c:1816
+ call_timer_fn+0x1a0/0x6b0 kernel/time/timer.c:1474
+ expire_timers kernel/time/timer.c:1519 [inline]
+ __run_timers.part.0+0x674/0xa80 kernel/time/timer.c:1790
+ __run_timers kernel/time/timer.c:1768 [inline]
+ run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1803
+ __do_softirq+0x1d3/0x9c6 kernel/softirq.c:571
+ invoke_softirq kernel/softirq.c:445 [inline]
+ __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
+ irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
+ sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1106
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:152 [inline]
+RIP: 0010:_raw_spin_unlock_irqrestore+0x38/0x70 kernel/locking/spinlock.c:194
+Code: 74 24 10 e8 fa 1d dc f7 48 89 ef e8 82 9f dc f7 81 e3 00 02 00 00 75 25 9c 58 f6 c4 02 75 2d 48 85 db 74 01 fb bf 01 00 00 00 <e8> 33 61 cf f7 65 8b 05 4c 17 7f 76 85 c0 74 0a 5b 5d c3 e8 50 28
+RSP: 0018:ffffc90003aef950 EFLAGS: 00000206
+RAX: 0000000000000006 RBX: 0000000000000200 RCX: 1ffffffff21265a6
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000001
+RBP: ffff888011bee148 R08: 0000000000000001 R09: ffffffff908e5a0f
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88801bc424c0
+R13: ffffc90003aef9e8 R14: ffff888011bee148 R15: 0000000000000000
+ spin_unlock_irqrestore include/linux/spinlock.h:404 [inline]
+ klist_next+0x288/0x510 lib/klist.c:401
+ class_dev_iter_next drivers/base/class.c:311 [inline]
+ class_find_device+0x174/0x2a0 drivers/base/class.c:415
+ class_find_device_by_devt include/linux/device/class.h:167 [inline]
+ device_destroy+0x79/0xd0 drivers/base/core.c:4299
+ tty_unregister_device+0x7e/0x1b0 drivers/tty/tty_io.c:3299
+ gsm_unregister_devices drivers/tty/n_gsm.c:564 [inline]
+ gsm_cleanup_mux+0x5c1/0x800 drivers/tty/n_gsm.c:2465
+ gsmld_close+0x41/0x210 drivers/tty/n_gsm.c:2907
+ tty_ldisc_close+0x110/0x190 drivers/tty/tty_ldisc.c:456
+ tty_ldisc_kill+0x94/0x150 drivers/tty/tty_ldisc.c:608
+ tty_ldisc_release+0x1ef/0x2a0 drivers/tty/tty_ldisc.c:776
+ tty_release_struct+0x20/0xe0 drivers/tty/tty_io.c:1694
+ tty_release+0xc70/0x1200 drivers/tty/tty_io.c:1865
+ __fput+0x277/0x9d0 fs/file_table.c:320
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xad5/0x29b0 kernel/exit.c:795
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:925
+ __do_sys_exit_group kernel/exit.c:936 [inline]
+ __se_sys_exit_group kernel/exit.c:934 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f642cb30f69
+Code: Unable to access opcode bytes at RIP 0x7f642cb30f3f.
+RSP: 002b:00007ffed5a9f4c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f642cba5330 RCX: 00007f642cb30f69
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000000
+R10: 000000000000000e R11: 0000000000000246 R12: 00007f642cba5330
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
+
+=============================
+[ BUG: Invalid wait context ]
+6.0.0-rc6-syzkaller-00309-g1a61b828566f #0 Tainted: G        W         
+-----------------------------
+syz-executor269/3606 is trying to lock:
+ffff888017ac6430 (&gsm->tx_mutex){+.+.}-{3:3}, at: gsm_send.isra.0+0x3b5/0x7a0 drivers/tty/n_gsm.c:704
+other info that might help us debug this:
+context-{2:2}
+3 locks held by syz-executor269/3606:
+ #0: ffff8880250eb098 (&tty->ldisc_sem){++++}-{0:0}, at: __tty_ldisc_lock drivers/tty/tty_ldisc.c:290 [inline]
+ #0: ffff8880250eb098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:353 [inline]
+ #0: ffff8880250eb098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
+ #0: ffff8880250eb098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_release+0x79/0x2a0 drivers/tty/tty_ldisc.c:775
+ #1: ffff888017ac60b0 (&gsm->mutex){+.+.}-{3:3}, at: gsm_cleanup_mux+0xf5/0x800 drivers/tty/n_gsm.c:2446
+ #2: ffffc900001f0d70 ((&dlci->t1)){+.-.}-{0:0}, at: lockdep_copy_map include/linux/lockdep.h:31 [inline]
+ #2: ffffc900001f0d70 ((&dlci->t1)){+.-.}-{0:0}, at: call_timer_fn+0xd5/0x6b0 kernel/time/timer.c:1464
+stack backtrace:
+CPU: 1 PID: 3606 Comm: syz-executor269 Tainted: G        W          6.0.0-rc6-syzkaller-00309-g1a61b828566f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_lock_invalid_wait_context kernel/locking/lockdep.c:4705 [inline]
+ check_wait_context kernel/locking/lockdep.c:4766 [inline]
+ __lock_acquire.cold+0x322/0x3a7 kernel/locking/lockdep.c:5003
+ lock_acquire kernel/locking/lockdep.c:5666 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+ __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+ __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+ gsm_send.isra.0+0x3b5/0x7a0 drivers/tty/n_gsm.c:704
+ gsm_command drivers/tty/n_gsm.c:768 [inline]
+ gsm_dlci_begin_close+0x12e/0x210 drivers/tty/n_gsm.c:1892
+ gsm_dlci_t1+0x186/0x450 drivers/tty/n_gsm.c:1816
+ call_timer_fn+0x1a0/0x6b0 kernel/time/timer.c:1474
+ expire_timers kernel/time/timer.c:1519 [inline]
+ __run_timers.part.0+0x674/0xa80 kernel/time/timer.c:1790
+ __run_timers kernel/time/timer.c:1768 [inline]
+ run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1803
+ __do_softirq+0x1d3/0x9c6 kernel/softirq.c:571
+ invoke_softirq kernel/softirq.c:445 [inline]
+ __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
+ irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
+ sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1106
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:152 [inline]
+RIP: 0010:_raw_spin_unlock_irqrestore+0x38/0x70 kernel/locking/spinlock.c:194
+Code: 74 24 10 e8 fa 1d dc f7 48 89 ef e8 82 9f dc f7 81 e3 00 02 00 00 75 25 9c 58 f6 c4 02 75 2d 48 85 db 74 01 fb bf 01 00 00 00 <e8> 33 61 cf f7 65 8b 05 4c 17 7f 76 85 c0 74 0a 5b 5d c3 e8 50 28
+RSP: 0018:ffffc90003aef950 EFLAGS: 00000206
+RAX: 0000000000000006 RBX: 0000000000000200 RCX: 1ffffffff21265a6
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000001
+RBP: ffff888011bee148 R08: 0000000000000001 R09: ffffffff908e5a0f
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88801bc424c0
+R13: ffffc90003aef9e8 R14: ffff888011bee148 R15: 0000000000000000
+ spin_unlock_irqrestore include/linux/spinlock.h:404 [inline]
+ klist_next+0x288/0x510 lib/klist.c:401
+ class_dev_iter_next drivers/base/class.c:311 [inline]
+ class_find_device+0x174/0x2a0 drivers/base/class.c:415
+ class_find_device_by_devt include/linux/device/class.h:167 [inline]
+ device_destroy+0x79/0xd0 drivers/base/core.c:4299
+ tty_unregister_device+0x7e/0x1b0 drivers/tty/tty_io.c:3299
+ gsm_unregister_devices drivers/tty/n_gsm.c:564 [inline]
+ gsm_cleanup_mux+0x5c1/0x800 drivers/tty/n_gsm.c:2465
+ gsmld_close+0x41/0x210 drivers/tty/n_gsm.c:2907
+ tty_ldisc_close+0x110/0x190 drivers/tty/tty_ldisc.c:456
+ tty_ldisc_kill+0x94/0x150 drivers/tty/tty_ldisc.c:608
+ tty_ldisc_release+0x1ef/0x2a0 drivers/tty/tty_ldisc.c:776
+ tty_release_struct+0x20/0xe0 drivers/tty/tty_io.c:1694
+ tty_release+0xc70/0x1200 drivers/tty/tty_io.c:1865
+ __fput+0x277/0x9d0 fs/file_table.c:320
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xad5/0x29b0 kernel/exit.c:795
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:925
+ __do_sys_exit_group kernel/exit.c:936 [inline]
+ __se_sys_exit_group kernel/exit.c:934 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f642cb30f69
+Code: Unable to access opcode bytes at RIP 0x7f642cb30f3f.
+RSP: 002b:00007ffed5a9f4c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f642cba5330 RCX: 00007f642cb30f69
+RDX: 000000
+----------------
+Code disassembly (best guess):
+   0:	74 24                	je     0x26
+   2:	10 e8                	adc    %ch,%al
+   4:	fa                   	cli
+   5:	1d dc f7 48 89       	sbb    $0x8948f7dc,%eax
+   a:	ef                   	out    %eax,(%dx)
+   b:	e8 82 9f dc f7       	callq  0xf7dc9f92
+  10:	81 e3 00 02 00 00    	and    $0x200,%ebx
+  16:	75 25                	jne    0x3d
+  18:	9c                   	pushfq
+  19:	58                   	pop    %rax
+  1a:	f6 c4 02             	test   $0x2,%ah
+  1d:	75 2d                	jne    0x4c
+  1f:	48 85 db             	test   %rbx,%rbx
+  22:	74 01                	je     0x25
+  24:	fb                   	sti
+  25:	bf 01 00 00 00       	mov    $0x1,%edi
+* 2a:	e8 33 61 cf f7       	callq  0xf7cf6162 <-- trapping instruction
+  2f:	65 8b 05 4c 17 7f 76 	mov    %gs:0x767f174c(%rip),%eax        # 0x767f1782
+  36:	85 c0                	test   %eax,%eax
+  38:	74 0a                	je     0x44
+  3a:	5b                   	pop    %rbx
+  3b:	5d                   	pop    %rbp
+  3c:	c3                   	retq
+  3d:	e8                   	.byte 0xe8
+  3e:	50                   	push   %rax
+  3f:	28                   	.byte 0x28
 
 
-Best regards,
-Krzysztof
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
