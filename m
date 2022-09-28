@@ -2,126 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75565EDECA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5434D5EDED2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234391AbiI1O33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
+        id S234392AbiI1OcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233134AbiI1O3Y (ORCPT
+        with ESMTP id S229940AbiI1OcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:29:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6F1ABD43;
-        Wed, 28 Sep 2022 07:29:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 557CD61EC2;
-        Wed, 28 Sep 2022 14:29:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E62EC433D6;
-        Wed, 28 Sep 2022 14:29:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664375362;
-        bh=8N85sFev7YCgQPdLgjEeuGjBZWjdzfA72EK7EuloGKs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=12Muq1MrTtMNT6hg5zb6EYGWNtXsDKCGA32rk4Gi4kKpk8pEbbzcEpt3zzo8jl8jp
-         1oza4YrKqOrUAET2u6L3OcPn8ibjhcf+DKKx0CayeI6bZgiZzQNpQPtJf4vNXHcn7k
-         r6bTAQD+1tancR9FZsEYomD1PriI7eUoPkdBoSN8=
-Date:   Wed, 28 Sep 2022 16:29:20 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wayne Chang <waynec@nvidia.com>
-Cc:     "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "Sanket.Goswami@amd.com" <Sanket.Goswami@amd.com>,
-        Sing-Han Chen <singhanc@nvidia.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] usb: typec: ucsi_ccg: Disable UCSI ALT support on
- Tegra
-Message-ID: <YzRaQEyByzqwt2y+@kroah.com>
-References: <20220928131615.3286936-1-waynec@nvidia.com>
- <YzRQBEeLorfC8KAL@kroah.com>
- <PH0PR12MB55004C29C12FA17B9767CE98AF549@PH0PR12MB5500.namprd12.prod.outlook.com>
+        Wed, 28 Sep 2022 10:32:06 -0400
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988447757D;
+        Wed, 28 Sep 2022 07:32:05 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id r6so2810950wru.8;
+        Wed, 28 Sep 2022 07:32:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=E7cXoL+OAINuYKkrN/dHEiq/+/562x8zxzlLQXZ+zL4=;
+        b=wESsnUC6lFN0dvhuLb/XjKh4Rb+BQD92nfHvHhoEyhXkXeqY6CJAT8/QrVqrR80F6h
+         Z2LlvoszS5cI2Z6UUr26u98B/4uha41/RJYY2M+yorwnjojb5OdkSZMdP63IInNdqKy8
+         OU9UKKON3H/MAQzLZ1J8cce6ketaQxHfLutdgEGx26IhoF9WnjFBxC00cTtPkeZNBPUn
+         3WPZtFCw4Ix0GTIjjUrW+YgwxJk9zVseWZIS2P+Vn+SgMYTyJ3/TPO/Hupf0kC9ND6bh
+         MGVJpY1q2zb6ASN5GbEksLGz/wE5spBYL9A3S17baTFcvLrpkcPS7MkadiTg/yVrz3zy
+         mg8A==
+X-Gm-Message-State: ACrzQf3HE+cbPBhfHm+uJt2J79vV+7Nri9RLCz3Q1CtN1rSSQpSYVW53
+        fBJbSHk67+DH2t3SWifKcaQ=
+X-Google-Smtp-Source: AMsMyM7SDIXEylyKoG9yE7AyA0r4afRknvFCOI0I0KfbpxFoJSX4zbK2LEhmLIh8dYTYfqEFEtDlNQ==
+X-Received: by 2002:a05:6000:681:b0:22a:3007:df45 with SMTP id bo1-20020a056000068100b0022a3007df45mr20145418wrb.149.1664375524035;
+        Wed, 28 Sep 2022 07:32:04 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id r7-20020adfda47000000b0021e51c039c5sm4337350wrl.80.2022.09.28.07.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 07:32:03 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 14:32:01 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        David Gow <davidgow@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH v10 25/27] x86: enable initial Rust support
+Message-ID: <YzRa4U9iFMm0FAVf@liuwe-devbox-debian-v2>
+References: <20220927131518.30000-1-ojeda@kernel.org>
+ <20220927131518.30000-26-ojeda@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR12MB55004C29C12FA17B9767CE98AF549@PH0PR12MB5500.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220927131518.30000-26-ojeda@kernel.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 02:11:36PM +0000, Wayne Chang wrote:
-> Hi Greg,
+On Tue, Sep 27, 2022 at 03:14:56PM +0200, Miguel Ojeda wrote:
+> Note that only x86_64 is covered and not all features nor mitigations
+> are handled, but it is enough as a starting point and showcases
+> the basics needed to add Rust support for a new architecture.
 > 
-> Thanks for the review.
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Co-developed-by: David Gow <davidgow@google.com>
+> Signed-off-by: David Gow <davidgow@google.com>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  Documentation/rust/arch-support.rst |  1 +
+>  arch/x86/Kconfig                    |  1 +
+>  arch/x86/Makefile                   | 10 ++++++++++
+>  scripts/generate_rust_target.rs     | 15 +++++++++++++--
+>  4 files changed, 25 insertions(+), 2 deletions(-)
 > 
-> On 9/28/22 21:45, Greg KH wrote:
-> > External email: Use caution opening links or attachments
-> > 
-> > 
-> > On Wed, Sep 28, 2022 at 09:16:15PM +0800, Wayne Chang wrote:
-> >> From: Sing-Han Chen <singhanc@nvidia.com>
-> >>
-> >> Firmware built for Tegra doesn't support UCSI ALT
-> >> command and has known issue of reporting wrong
-> >> capability info.
-> >>
-> >> This commit disables UCSI ALT support when reading
-> >> the capability on Tegra.
-> > 
-> > You have a full 72 columns to use, no need to make it shorter :)
-> Thanks. I'll update in the next patchset.
-> 
-> > 
-> >>
-> >> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-> >> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> >> ---
-> >>   drivers/usb/typec/ucsi/ucsi_ccg.c | 16 ++++++++++++++--
-> >>   1 file changed, 14 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >> index 5c0bf48be766..fde3da0605f5 100644
-> >> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >> @@ -122,9 +122,14 @@ struct version_format {
-> >>    * Firmware version 3.1.10 or earlier, built for NVIDIA has known issue
-> >>    * of missing interrupt when a device is connected for runtime resume
-> >>    */
-> >> -#define CCG_FW_BUILD_NVIDIA  (('n' << 8) | 'v')
-> >> +#define CCG_FW_BUILD_NVIDIA_RTX      (('n' << 8) | 'v')
-> > 
-> > Why change this here?  It's not needed, just add the new command
-> > instead.
-> 
-> The change here is to distinguish the FW built for NVIDIA RTX products 
-> and NVIDIA Tegra products.
-> 
-> #define CCG_FW_BUILD_NVIDIA_RTX      (('n' << 8) | 'v')
-> #define CCG_FW_BUILD_NVIDIA_TEGRA	(('g' << 8) | 'n')
-> 
-> I'll update the change if it is not needed to do so.
+> diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
+> index 1152e0fbdad0..6982b63775da 100644
+> --- a/Documentation/rust/arch-support.rst
+> +++ b/Documentation/rust/arch-support.rst
+> @@ -15,4 +15,5 @@ support corresponds to ``S`` values in the ``MAINTAINERS`` file.
+>  ============  ================  ==============================================
+>  Architecture  Level of support  Constraints
+>  ============  ================  ==============================================
+> +``x86``       Maintained        ``x86_64`` only.
+>  ============  ================  ==============================================
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index f9920f1341c8..3ca198742b10 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -257,6 +257,7 @@ config X86
+>  	select HAVE_STATIC_CALL_INLINE		if HAVE_OBJTOOL
+>  	select HAVE_PREEMPT_DYNAMIC_CALL
+>  	select HAVE_RSEQ
+> +	select HAVE_RUST			if X86_64
+>  	select HAVE_SYSCALL_TRACEPOINTS
+>  	select HAVE_UACCESS_VALIDATION		if HAVE_OBJTOOL
+>  	select HAVE_UNSTABLE_SCHED_CLOCK
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index bafbd905e6e7..2d7e640674c6 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -68,6 +68,7 @@ export BITS
+>  #    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53383
+>  #
+>  KBUILD_CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx
+> +KBUILD_RUSTFLAGS += -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2
 
-No need to make this change here, right?  Do so in a later commit if you
-really need to.
+I do wonder how many more things you will need to list here. As far as
+I can tell there is also other avx512* flags for the x86_64 target.
 
-> > And what commit id does this fix?  Is it needed for stable kernels?  If
-> > so, how far back?
-> We are now enabling the NVIDIA Tegra products on upstream kernel.
-> The change is to add the Cypress cypd 4226 support for NVIDA Tegra 
-> products including Xavier AGX, Xavier Orin and the upcoming products.
-> The Cypress cypd4226 is not enabled in current kernel codebase.
-> And thus, we shall not need it for stable kernels and backporting, do we?
+That said, if this works today ...
 
-Ok, that's fine, it was not obvious so you might want to say that in the
-changelog text.
-
-thanks,
-
-greg k-h
+Reviewed-by: Wei Liu <wei.liu@kernel.org>
