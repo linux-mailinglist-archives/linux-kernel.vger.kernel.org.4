@@ -2,129 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D510E5EE233
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51CD5EE20B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234590AbiI1QoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
+        id S233962AbiI1Qln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234474AbiI1Qnd (ORCPT
+        with ESMTP id S233850AbiI1Qlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:43:33 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69DEE99BC;
-        Wed, 28 Sep 2022 09:43:23 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28SGYIku027335;
-        Wed, 28 Sep 2022 18:42:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=Tvv4XSpFVhRAUHCiQIXFXmpFW58v1bKVTxE9iPBGlaM=;
- b=G7cqFUCeLV/D91pWfAawIbRcFtpiQOCGsL7LbRh1spG2BefD9Hmm/XuLs5cwATHBsDLc
- Tb/simSXC+GV5d2TFB3RgVMYuEsyvFmHEMrooIycRaYau1dAlKeqNSgs8VkcksN6Z+Ws
- /ZWfx+n/A4qO+NXsBMyrsmA+FCKYEMSD9hLcK1ia0OAvudSy0J6l/MjjUEjj8P98FaEe
- GYMouMQXpnhMt65PXwfs6GvNLdS3ObBCIEMiDdNGYtoy+xofwMgVlxakBEWdatc7qhXy
- Rvc/YEeKnYheBhSksl/D0GuAiILPJSVr+EC9/D0pZwSccxLp3QeYtMEm3EZqXxioCn76 9A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jss82hwd8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 18:42:58 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A0D5F100034;
-        Wed, 28 Sep 2022 18:42:56 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9C6EB23C6B5;
-        Wed, 28 Sep 2022 18:42:56 +0200 (CEST)
-Received: from localhost (10.75.127.45) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Wed, 28 Sep
- 2022 18:42:56 +0200
-From:   Olivier Moysan <olivier.moysan@foss.st.com>
-To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <nuno.sa@analog.com>, Olivier Moysan <olivier.moysan@foss.st.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Yannick Brosseau <yannick.brosseau@gmail.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH 8/8] ARM: dts: stm32: add adc support on stm32mp135f-dk
-Date:   Wed, 28 Sep 2022 18:41:14 +0200
-Message-ID: <20220928164114.48339-9-olivier.moysan@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220928164114.48339-1-olivier.moysan@foss.st.com>
-References: <20220928164114.48339-1-olivier.moysan@foss.st.com>
+        Wed, 28 Sep 2022 12:41:40 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCDFD6938
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:41:33 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so2546148wmr.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=qvhfEryHJEqIw5SG9tmPjUpJgca65hQC/5fM7raFR1c=;
+        b=Htj+QMFSMszwgpJNBXNKvBAmr0Eda/nIIhFbht76EXkcj+xBgStjzPza83YPo/xZ9x
+         t0d4OTsNobgLmMiZoM5nPDFTgIubYHA66Sp8NIKxfPpFqMML8K46zwhe1QSy8T/TXfDe
+         XK3j4T6IKqLWz39EclqsjskCKKY+gu76xvF6RihowVSLd8S/8adqpJbwFFG0oSE7E1Xw
+         3a/VV1TBUnssm7ik1fL99fA/a/+9dAVCT2AOJrotXFKQCImDkuHfA6WcXPP65462owdL
+         0Mm2yQmOKQBHXiM7wEiowyqw+U/5wN2s7Jm+5zAxSsqiz7IymNirdUqTEYBFc209UqAx
+         Ja1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=qvhfEryHJEqIw5SG9tmPjUpJgca65hQC/5fM7raFR1c=;
+        b=aPzdW9NB9u8BwIzRwWvlVSFqHTdD1fXkYLfhTZbvoL4VnFcCpPBVQ2VjRo3RVK+sDC
+         jAB+ciur+SlbgY/Y2dCARBdVWri8Hb1ZFnP62Apzmf6KSCroT0Ta2LSh9XJX/ucNpUWi
+         PbmuCH3yyZdSFm8oUhahyb7NF4ToP8666m7qQ0y4rS1U9PYocKts3fYcBcwCmn8lb84u
+         L8iZ/c6/DSL3SaeHee0TH21CZ9niieOjM1HCOi37RdkIwY2VNflZLSYe9IeiFIgJIsRJ
+         GdUBa8RjmACxhtseOQ06qfMHQUuZhqED65iOB3mMrcT4SG5brZhZZUMu4xeSEUvX5c67
+         0fBA==
+X-Gm-Message-State: ACrzQf223s+I2Ke86c+GBDg5aesgTk/PhncVQmAjDOgOCdS+aCI51hrb
+        vE114/2M+QKqNBzshfJwNkFj18l6Nkd4c8VJx6KgjA==
+X-Google-Smtp-Source: AMsMyM6AD+2QwbjsstSzuSDkUQJCCaJdNDXEHuz1LjIab47xS6pZLoM6o5OzSuygLSIvYqgIIEqpjAoIJdYsw5c+5I4=
+X-Received: by 2002:a05:600c:2181:b0:3b4:74e4:16f8 with SMTP id
+ e1-20020a05600c218100b003b474e416f8mr7326089wme.174.1664383291776; Wed, 28
+ Sep 2022 09:41:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-28_07,2022-09-28_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <YzR0n5QhsH9VyYB0@kernel.org>
+In-Reply-To: <YzR0n5QhsH9VyYB0@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 28 Sep 2022 09:41:16 -0700
+Message-ID: <CAP-5=fUbxhcATmqWBU8fDeuLB7qWhnrZH=kBP=pVBUrw_wTXgA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] perf tests record: Fail the test if the errs counter
+ is not zero
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Configure ADC support on stm32mp135f-dk. ADC can be used for
-USB Type-C CC1 & CC2 pins wired to in6 & in12.
+On Wed, Sep 28, 2022 at 9:22 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> We were just checking for the 'err' variable, when we should really see
+> if there was some of the many checked errors that don't stop the test
+> right away.
+>
+> Detected with clang 15.0.0:
+>
+>   44    75.23 fedora:37                     : FAIL clang version 15.0.0 (Fedora 15.0.0-2.fc37)
+>
+>     tests/perf-record.c:68:16: error: variable 'errs' set but not used [-Werror,-Wunused-but-set-variable]
+>             int err = -1, errs = 0, i, wakeups = 0;
+>                           ^
+>     1 error generated.
+>
+> The patch introducing this 'perf test' entry had that check:
+>
+>   +       return (err < 0 || errs > 0) ? -1 : 0;
+>
+> But at some point we lost that:
+>
+>   -       return (err < 0 || errs > 0) ? -1 : 0;
+>   +       if (err == -EACCES)
+>   +               return TEST_SKIP;
+>   +       if (err < 0)
+>   +               return TEST_FAIL;
+>   +       return TEST_OK
+>
+> Put it back.
+>
+> Fixes: 2cf88f4614c996e5 ("perf test: Use skip in PERF_RECORD_*")
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Ian Rogers <irogers@google.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
----
- arch/arm/boot/dts/stm32mp135f-dk.dts | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+Apologies for that.
 
-diff --git a/arch/arm/boot/dts/stm32mp135f-dk.dts b/arch/arm/boot/dts/stm32mp135f-dk.dts
-index 95068231ed57..5b7630a2452e 100644
---- a/arch/arm/boot/dts/stm32mp135f-dk.dts
-+++ b/arch/arm/boot/dts/stm32mp135f-dk.dts
-@@ -76,6 +76,32 @@ vdd_adc: vdd-adc {
- 	};
- };
- 
-+&adc_1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&adc1_usb_cc_pins_a>;
-+	vdda-supply = <&vdd_adc>;
-+	vref-supply = <&vdd_adc>;
-+	status = "okay";
-+
-+	adc1: adc@0 {
-+		status = "okay";
-+		/*
-+		 * Type-C USB_PWR_CC1 & USB_PWR_CC2 on in6 & in12.
-+		 * Use at least 5 * RC time, e.g. 5 * (Rp + Rd) * C:
-+		 * 5 * (5.1 + 47kOhms) * 5pF => 1.3us.
-+		 * Use arbitrary margin here (e.g. 5us).
-+		 */
-+		channel@6 {
-+			reg = <6>;
-+			st,min-sample-time-ns = <5000>;
-+		};
-+		channel@12 {
-+			reg = <12>;
-+			st,min-sample-time-ns = <5000>;
-+		};
-+	};
-+};
-+
- &iwdg2 {
- 	timeout-sec = <32>;
- 	status = "okay";
--- 
-2.25.1
+Acked-by: Ian Rogers <irogers@google.com>
 
+Thanks,
+Ian
+
+> ---
+>  tools/perf/tests/perf-record.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/tests/perf-record.c b/tools/perf/tests/perf-record.c
+> index 6a001fcfed68e517..4952abe716f318b0 100644
+> --- a/tools/perf/tests/perf-record.c
+> +++ b/tools/perf/tests/perf-record.c
+> @@ -332,7 +332,7 @@ static int test__PERF_RECORD(struct test_suite *test __maybe_unused, int subtest
+>  out:
+>         if (err == -EACCES)
+>                 return TEST_SKIP;
+> -       if (err < 0)
+> +       if (err < 0 || errs != 0)
+>                 return TEST_FAIL;
+>         return TEST_OK;
+>  }
+> --
+> 2.37.3
+>
+>
+> ----- End forwarded message -----
+>
+> --
+>
+> - Arnaldo
