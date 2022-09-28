@@ -2,137 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F394C5EDC34
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492585EDC45
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233876AbiI1MCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 08:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S233251AbiI1MFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 08:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233775AbiI1MCO (ORCPT
+        with ESMTP id S232140AbiI1MFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 08:02:14 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F566D9F2;
-        Wed, 28 Sep 2022 05:02:07 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1odVlL-0005C5-OC; Wed, 28 Sep 2022 14:02:03 +0200
-Message-ID: <ef8bd881-50aa-f317-981a-ef7e57a10b1b@leemhuis.info>
-Date:   Wed, 28 Sep 2022 14:02:03 +0200
+        Wed, 28 Sep 2022 08:05:17 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0EE6527A;
+        Wed, 28 Sep 2022 05:05:15 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id b6so14058684ljr.10;
+        Wed, 28 Sep 2022 05:05:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=JToMWnthxvbhGcGIaDx+3g0Iu1vuHY2x2/8hvbLhJ0Q=;
+        b=godYrL5Fo1TAyNwxflmfbhN0snuAFrPDr6bnkVI5KZEhY0YmCDxv6oEtoWChNX175H
+         eRjDNsPFAAwsBbMh9supSTSuurEU7plvCvwZTkYWRz/o0657iZnQUPqR+MdyR+QzwItl
+         bye0POIjglkhoOCcv7p/aL2ZsiykqMP7TIdvV0wmjo/H4XQbHPNFmxwPvu5MVYjPVcJ5
+         fR7yuASr8t8Ylc8AT8t9BAcNTXbxbTk267ma8I7/jqx/0bZttP6oSnIvzqr+GgWFj8WB
+         u05fGLerkGSjdllpjp4VoHdz0MVURiz1h/L5Xga7ct7vIJ5WR5G1hMbkRQBFTTCrpJ/T
+         qWRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=JToMWnthxvbhGcGIaDx+3g0Iu1vuHY2x2/8hvbLhJ0Q=;
+        b=ictunwnV5Nx3IER287qqOY3hIcTZt4IiizfC5E9QQGz6jCvAZCPliaSW5y1EV3/Xlg
+         dih2lqL0+cpdA9xKblgh3JQ89sgKA06ltCAsYNeY3ezJgUxNdQOsYxkEJMmn4rD0zMYN
+         FmCU1i4Y61ZuPdUSb9rM6Ab4v5CnMh2nXbjLl9qWM7l8uxg8QzYG0QUFz5mZR7vncWCl
+         LUac73u0XErCJ7PBuXkc0DexshufU7WXTZs24+r/ZG0olehIyHs8q5BG2KMCltO/B1dF
+         kpag4aodvfmDzm0lpGMsWHFyHD7iZ+MgXycTSbFAtqisN4060LhrmSkGm4h3UnrAqukB
+         epkw==
+X-Gm-Message-State: ACrzQf0iZVbF7jLKYxOk9oTZbdOi4OGOxvRGT4lTW4GV4fbhCjZTBQtq
+        17lHiMrD8ZktFFIaCWQxbbk=
+X-Google-Smtp-Source: AMsMyM7oMo9Q62NEWqImgptJTTsSlC3FXSRLeUHgLrrcfM9TVxyEZChulnEVJjVTNHbUZ4YLUgt7gg==
+X-Received: by 2002:a2e:a5c2:0:b0:261:d23a:2009 with SMTP id n2-20020a2ea5c2000000b00261d23a2009mr11123311ljp.303.1664366713609;
+        Wed, 28 Sep 2022 05:05:13 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id 2-20020ac25f42000000b0049aa7a56715sm459795lfz.267.2022.09.28.05.05.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 05:05:12 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 15:05:10 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Will McVicker <willmcvicker@google.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Robin Murphy <robin.murphy@arm.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v5 2/2] PCI: dwc: Add support for 64-bit MSI target
+ address
+Message-ID: <20220928120510.rkdlnczytxuioxcn@mobilestation>
+References: <20220825185026.3816331-1-willmcvicker@google.com>
+ <20220825185026.3816331-3-willmcvicker@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US, de-DE
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, corbet@lwn.net,
-        konstantin@linuxfoundation.org, krzysztof.kozlowski@linaro.org,
-        linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220928003006.230103-1-bryan.odonoghue@linaro.org>
- <9df735b7-2963-9fca-aa7e-6ae993e8b948@leemhuis.info>
- <9a321c25-32ba-6ea0-67a0-07617a1131b2@linaro.org>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH] Documentation/process: Add text to indicate supporters
- should be mailed
-In-Reply-To: <9a321c25-32ba-6ea0-67a0-07617a1131b2@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664366527;50ef800d;
-X-HE-SMSGID: 1odVlL-0005C5-OC
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825185026.3816331-3-willmcvicker@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.09.22 13:48, Bryan O'Donoghue wrote:
-> On 28/09/2022 05:34, Thorsten Leemhuis wrote:
->> On 28.09.22 02:30, Bryan O'Donoghue wrote:
->>> Recently when submitting a yaml change I found that I had omitted the
->>> maintainer whose tree the change needed to go through.
->>>
->>> The reason for that is the path in MAINTAINERS is marked as Supported
->>> not
->>> Maintained. Reading MAINTAINERS we see quote:
->>>
->>>             Supported:   Someone is actually paid to look after this.
->>>             Maintained:  Someone actually looks after it.
->>>
->>> The current submitting-patches.rst only says to mail maintainers
->>> though not
->>> supporters. When we run scripts/get_maintainer.pl anybody who is
->>> denoted a
->>> paid maintainer will appear as a supporter.
->>>
->>> Let's add some text to the submitting-patches.rst to indicate that
->>> supporters should similarly be mailed so that you can't do as I did and
->>> mail every maintainer get_maintainer.pl tells you to, without actually
->>> mailing the one supporter you need to.
-> [...]
->> Which leads to two other question: Are there any other places that might
->> benefit from such a clarification? Or would it be even make sense to
->> change the format of MAINTAINERS to avoid the problem in the first
->> place? Maybe something like "Maintained(v)" (Someone volunteered to look
->> after it in spare hours.) and "Maintained(p)" (Someone is actually paid
->> to look after this.). Ahh, no, that doesn't look good. But you get the
->> idea.
+On Thu, Aug 25, 2022 at 06:50:25PM +0000, Will McVicker wrote:
+> Since not all devices require a 32-bit MSI address, add support to the
+> PCIe host driver to allow setting the DMA mask to 64-bits if the 32-bit
+> allocation fails. This allows kernels to disable ZONE_DMA32 and bounce
+> buffering (swiotlb) without risking not being able to get a 32-bit address
+> during DMA allocation.
+
+What is a problem in having the ZONE_DMA32 enabled anyway?
+
 > 
-> We could update get_maintainer to print out something else
-> such as
-
-I really like the idea of just changing get_maintainer, but also...
-
-> scripts/get_maintainer.pl
-> Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+> Basically, in the slim chance that there are no 32-bit allocations
+> available, the current PCIe host driver will fail to allocate the msi_msg
+> page due to a DMA address overflow (seen in [1]). With this patch, the
+> PCIe host can retry the allocation with a 64-bit DMA mask if the current
+> PCIe device advertises 64-bit support via its MSI capabilities.
 > 
-> Andy Gross <agross@kernel.org> (maintainer:ARM/QUALCOMM SUPPORT)
-> Bjorn Andersson <bjorn.andersson@linaro.org> (maintainer:ARM/QUALCOMM
-> SUPPORT)
-> Konrad Dybcio <konrad.dybcio@somainline.org> (reviewer:ARM/QUALCOMM
-> SUPPORT)
-> Lee Jones <lee@kernel.org> (maintainer-supporter:MULTIFUNCTION DEVICES
-> (MFD))
+> [1] https://lore.kernel.org/all/Yo0soniFborDl7+C@google.com/
+
+Note the reported error isn't caused by the allocation procedure, but
+by the mapping procedure.
+
 > 
-> or say
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Will McVicker <willmcvicker@google.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Acked-by: Jingoo Han <jingoohan1@gmail.com>
+> ---
+>  .../pci/controller/dwc/pcie-designware-host.c | 38 ++++++++++++++-----
+>  drivers/pci/controller/dwc/pcie-designware.c  |  8 ++++
+>  drivers/pci/controller/dwc/pcie-designware.h  |  1 +
+>  3 files changed, 38 insertions(+), 9 deletions(-)
 > 
-> scripts/get_maintainer.pl
-> Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-> Andy Gross <agross@kernel.org> (maintainer:ARM/QUALCOMM SUPPORT)
-> Bjorn Andersson <bjorn.andersson@linaro.org> (maintainer:ARM/QUALCOMM
-> SUPPORT)
-> Konrad Dybcio <konrad.dybcio@somainline.org> (reviewer:ARM/QUALCOMM
-> SUPPORT)
-> Lee Jones <lee@kernel.org> (supporting-maintainer:MULTIFUNCTION DEVICES
-> (MFD))
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> index 39f3b37d4033..8928a9a29d58 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> @@ -330,6 +330,9 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+>  	u64 *msi_vaddr;
+>  	int ret;
+>  	u32 ctrl, num_ctrls;
+> +	bool msi_64bit = false;
+> +	bool retry_64bit = false;
+> +	u16 msi_capabilities;
+>  
+>  	for (ctrl = 0; ctrl < MAX_MSI_CTRLS; ctrl++)
+>  		pp->irq_mask[ctrl] = ~0;
+> @@ -367,16 +370,33 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+>  						    dw_chained_msi_isr, pp);
+>  	}
+>  
+> -	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+> -	if (ret)
+> -		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
+
+> +	msi_capabilities = dw_pcie_msi_capabilities(pci);
+> +	if (msi_capabilities & PCI_MSI_FLAGS_ENABLE)
+> +		msi_64bit = msi_capabilities & PCI_MSI_FLAGS_64BIT;
+
+Note this capability flag has nothing to do with the DW PCIe iMSI-RX
+engine, which is used here to detect and report MSI TLPs. By design
+iMSI-RX always support 64-bit addresses. If you imply having that flag
+set by the DW PCIe platform drivers on the platform-specific probe
+stage as an indication of MSI address range, then ok.
+
+>  
+> -	msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
+> -					GFP_KERNEL);
+> -	if (!msi_vaddr) {
+> -		dev_err(dev, "Failed to alloc and map MSI data\n");
+> -		dw_pcie_free_msi(pp);
+> -		return -ENOMEM;
+> +	while (true) {
+> +		dev_dbg(dev, "Setting MSI DMA mask to %s-bit.\n",
+> +			retry_64bit ? "64" : "32");
+
+> +		ret = dma_set_mask_and_coherent(dev, retry_64bit ?
+> +						DMA_BIT_MASK(64) :
+> +						DMA_BIT_MASK(32));
+
+I'd suggest to just drop this. No DMA actually performed on getting the
+MSI TLPs. So modifying the device DMA-mask due to something which
+doesn't cause DMA and based on the flag which doesn't indicates the
+device DMA-capability is at least inappropriate.
+
+> +		if (ret)
+> +			dev_warn(dev, "Failed to set DMA mask to %s-bit.\n",
+> +				 retry_64bit ? "64" : "32");
+> +
+
+> +		msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
+> +						GFP_KERNEL);
+
+As I noted earlier the DMA-coherent memory can be too expensive. So
+it's a waste of one allocating with no intent of usage. Instead of this
+just get back the alloc_page() method here and pass the flag GFP_DMA32
+to that function if MSI-capability reported the PCI_MSI_FLAGS_64BIT
+unset.
+
+-Sergey
+
+> +		if (!msi_vaddr) {
+> +			dev_err(dev, "Failed to alloc and map MSI data\n");
+> +			if (msi_64bit && !retry_64bit) {
+> +				retry_64bit = true;
+> +				continue;
+> +			}
+> +
+> +			dw_pcie_free_msi(pp);
+> +			return -ENOMEM;
+> +		}
+> +		break;
+>  	}
+>  
+>  	return 0;
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index c6725c519a47..650a7f22f9d0 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -82,6 +82,14 @@ u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap)
+>  }
+>  EXPORT_SYMBOL_GPL(dw_pcie_find_capability);
+>  
+> +u16 dw_pcie_msi_capabilities(struct dw_pcie *pci)
+> +{
+> +	u8 offset;
+> +
+> +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
+> +	return dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
+> +}
+> +
+>  static u16 dw_pcie_find_next_ext_capability(struct dw_pcie *pci, u16 start,
+>  					    u8 cap)
+>  {
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+> index a871ae7eb59e..45fcdfc8c035 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.h
+> +++ b/drivers/pci/controller/dwc/pcie-designware.h
+> @@ -332,6 +332,7 @@ void dw_pcie_version_detect(struct dw_pcie *pci);
+>  
+>  u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap);
+>  u16 dw_pcie_find_ext_capability(struct dw_pcie *pci, u8 cap);
+> +u16 dw_pcie_msi_capabilities(struct dw_pcie *pci);
+>  
+>  int dw_pcie_read(void __iomem *addr, int size, u32 *val);
+>  int dw_pcie_write(void __iomem *addr, int size, u32 val);
+> -- 
+> 2.37.2.672.g94769d06f0-goog
 > 
-> it would be less churn but, I still think we would need to update the
-> documentation to be very explicit that "supporting-maintainer or
-> maintainer" needs to be emailed with your patch so that sufficiently
-> talented idiots such as myself, know who to mail.
 > 
-> Although thinking about it we would be introducing yet another term
-> "supporting-maintainer" to which people would say "what is that"
-
-...agree with this.
-
-> Feels a little less confusing to me to leave supporter as-is and just
-> document expectations for patch submission better.
-
-Hmm, how about this:
-
-scripts/get_maintainer.pl
-Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-Lee Jones <lee@kernel.org> (maintainer[supported]:MULTIFUNCTION DEVICES
-(MFD))
-Andy Gross <agross@kernel.org> (maintainer[volunteer]:ARM/QUALCOMM SUPPORT)
-Bjorn Andersson <bjorn.andersson@linaro.org>
-(maintainer[volunteer]:ARM/QUALCOMM SUPPORT)
-Konrad Dybcio <konrad.dybcio@somainline.org> (reviewer:ARM/QUALCOMM SUPPORT)
-
-Not totally sure about this myself. And there is a risk that any such
-change might break scripts that rely on the current approach used by
-scripts/get_maintainer.pl :-/
-
-Ciao, Thorsten
