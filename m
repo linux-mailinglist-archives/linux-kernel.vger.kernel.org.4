@@ -2,116 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C25F5ED55F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D8C5ED55E
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233264AbiI1Gub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 02:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S233394AbiI1GuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 02:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233405AbiI1Gt4 (ORCPT
+        with ESMTP id S233399AbiI1Gtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 02:49:56 -0400
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E729F76E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:48:24 -0700 (PDT)
-Received: by mail-qv1-f48.google.com with SMTP id j8so7580361qvt.13
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:48:24 -0700 (PDT)
+        Wed, 28 Sep 2022 02:49:55 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3BA9F0E2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:48:22 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id z6so18254819wrq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date;
+        bh=Wd2il4hF1pzBZFrFvjsTW5saNk78apafDtYni0rMMhE=;
+        b=MDUkWtgyMrkStEdW4r7xq0XlV0ajeWxSRfd2onCbAaO6HrMhEJutjXjZ95hMJBz6o1
+         uGgrjhs9+HGTitEtbnQ2gEzrg7IoGnH8s2UpLZQ1gYIsuvIB5aYFM6Tr8oE7kC6aCBlr
+         JNPg9nt0XFfA2sI0sMSjRwdvaLozxDCjDpA0wsxHt5pslo2gCfVM4+EdIOOHikET/F0W
+         Szwdmd47MqwHc0ykCVf0u7A8s6yfZHo3DMOsIe0bmkekRSR4qMXMaDNjfsgtaF+mSqdf
+         SOd0mbv9JPyr+JW4jWUqldcw0buRjy4SPWQM9qpAMRsoWND0nzc7F/j/CkmU9L6isIoK
+         yE0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=qFJHGEbZ35EQDLsi52pANjw4oP+JX7MHEHKnoJo4Bm4=;
-        b=ZP9Jeq6ih3GNj5gTwbjg0JGj6LULNjEaXBEVqkAbJOIOF9AQgjVeWPmbCRT1VXuyPY
-         w730x3fU6/iCdzPZd6oVxzmLkFGzTblK2KHUWR4rdZcBk41P3Lcr+nWGZZtJpD9vIlEp
-         z4d9pg1mb1EhLy/yU2K46YCC1V1FX3SnQLYbGUyPjFr0sP3BR4KePwT2dUibYejQJiJb
-         R9q+CpuMCzhiLoiwVi2IehLpypfOeJegXSGxbC2JQ8Czs3sKyyfnn7dGjo77uBMt7DZO
-         gxk/Jl3xu24JbQustygzMgQ2N3zN3IW1tdRgSYuXuUMCwYK0pFfwcBAtG1iuttCX5wGK
-         47Bw==
-X-Gm-Message-State: ACrzQf2XbQFkuH+BuxvgZ7ZaAKbfRnY8nmbZ7++Y2i5Xhb6D139InOxf
-        sxRRpbxRVABHGFSKMIekAw7keVEYGpZi6Q==
-X-Google-Smtp-Source: AMsMyM6UVLykFOWyREa/2G+0WQg4rfoOX3REeRdfPBYZhtfItmv2TycR8AKE2OIPqwxGoY7hnq6brw==
-X-Received: by 2002:a0c:dd94:0:b0:4ad:4f0e:d660 with SMTP id v20-20020a0cdd94000000b004ad4f0ed660mr24103054qvk.118.1664347702591;
-        Tue, 27 Sep 2022 23:48:22 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id i10-20020ac8764a000000b0035cdd7a42d0sm2451819qtr.22.2022.09.27.23.48.21
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 23:48:22 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id f189so14800756yba.12
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:48:21 -0700 (PDT)
-X-Received: by 2002:a05:6902:45:b0:6ae:ce15:a08d with SMTP id
- m5-20020a056902004500b006aece15a08dmr28676369ybh.380.1664347701498; Tue, 27
- Sep 2022 23:48:21 -0700 (PDT)
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Wd2il4hF1pzBZFrFvjsTW5saNk78apafDtYni0rMMhE=;
+        b=UnFdZLM3opyobI0r9cPcm5zoQhjOZXf5Sa7B4FPBoQ+LqYLTb+RINcJP5Jl7ZHXGO/
+         +AqmVAETdUgdudbhRV/F/XFuZzFXnHyeRzQdh675M+ISLz0xVlYc8wICXnxPF186JIWn
+         MLUBafVAJgJnDJFVKMdmJARpGRpMKVIGJ4/nX3swZJBJqcpKa1vD+iI4VrWdyPWhBZXB
+         VgWYjvOA6M9K7zsSsWYbXT7elV1UcO2OYqFuZBxJWZzz6xW/DgG8MnJb+Kpk2GYFMUKy
+         Il86qeaZjXox6KRA/iG+uGBzQ62WqlXz/RPXZrokOQ+HCF3JFG6rlUrqRJwSNm9lZDLl
+         jJUg==
+X-Gm-Message-State: ACrzQf1xyUsuZQRGD/q5eLQNPQOQBpE1VMDNMcKyWJdR02FJMcGWq+Qy
+        lrxdJwQzEWA12eiqsOFudwKLmQ==
+X-Google-Smtp-Source: AMsMyM6Cq6V5sv4DrIS4+SKGT/Vi+FTJGPTDXxdu1lQbtH2CTZu9dl8wGvB2jhFPwca7f3cBDhZHWA==
+X-Received: by 2002:a05:6000:806:b0:22a:36df:2663 with SMTP id bt6-20020a056000080600b0022a36df2663mr18751807wrb.423.1664347700811;
+        Tue, 27 Sep 2022 23:48:20 -0700 (PDT)
+Received: from localhost ([2a01:cb19:85e6:1900:5f1e:d910:dd1e:5b09])
+        by smtp.gmail.com with ESMTPSA id t5-20020a0560001a4500b002286670bafasm3522714wry.48.2022.09.27.23.48.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 23:48:20 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-iio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] Input: twl4030-pwrbutton - add missing of.h include
+In-Reply-To: <20220927052217.2784593-1-dmitry.torokhov@gmail.com>
+References: <20220927052217.2784593-1-dmitry.torokhov@gmail.com>
+Date:   Wed, 28 Sep 2022 08:48:19 +0200
+Message-ID: <87y1u4f0zw.fsf@mkorpershoek-xps-13-9370.home>
 MIME-Version: 1.0
-References: <20220818145616.3156379-1-arnd@kernel.org> <20220818145616.3156379-6-arnd@kernel.org>
- <CAMuHMdVL8TZ8vfdQT_9DA=JLX3O7YrP0v9AK87ALjmsvryZptw@mail.gmail.com> <0c368c7d-3130-46e6-8185-7270f58161a3@www.fastmail.com>
-In-Reply-To: <0c368c7d-3130-46e6-8185-7270f58161a3@www.fastmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 28 Sep 2022 08:48:08 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWR61CJJ-J==3S6x9MX-i1maaJbjG5jS=vo6h_4Sr-45Q@mail.gmail.com>
-Message-ID: <CAMuHMdWR61CJJ-J==3S6x9MX-i1maaJbjG5jS=vo6h_4Sr-45Q@mail.gmail.com>
-Subject: Re: [PATCH 5/5] ARM: make ARCH_MULTIPLATFORM user-visible
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Mon, Sep 26, 2022 at 22:22, Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
 
-On Tue, Sep 27, 2022 at 10:19 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Tue, Sep 27, 2022, at 3:31 PM, Geert Uytterhoeven wrote:
-> > On Thu, Aug 18, 2022 at 4:56 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> >> --- a/arch/arm/Kconfig.debug
-> >> +++ b/arch/arm/Kconfig.debug
-> >> @@ -1904,6 +1904,7 @@ config DEBUG_UART_8250_PALMCHIP
-> >>
-> >>  config DEBUG_UNCOMPRESS
-> >>         bool "Enable decompressor debugging via DEBUG_LL output"
-> >> +       depends on !ARCH_MULTIPLATFORM
-> >
-> > Shouldn't DEBUG_LL itself depend on !ARCH_MULTIPLATFORM instead?
+> The driver is using of_match_ptr() and therefore needs to include
+> of.h header.
 >
-> That would also be possible, but I prefer to keep limiting only
-> the DEBUG_UNCOMPRESS. The idea of DEBUG_LL is that while it's
-> hardwired to a particular hardware address, it does not actually
-> access this address unless you specify the 'earlyprintk'
-> argument on the command line.
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-... or unless something goes really wrong, and the kernel tries to
-inform the user using early_print()?
+Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
-Note that the I/O region for the debug serial port is mapped regardless.
-Any chance this can cause conflicts?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+>  drivers/input/misc/twl4030-pwrbutton.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/input/misc/twl4030-pwrbutton.c b/drivers/input/misc/twl4030-pwrbutton.c
+> index b307cca17022..e3ee0638ffba 100644
+> --- a/drivers/input/misc/twl4030-pwrbutton.c
+> +++ b/drivers/input/misc/twl4030-pwrbutton.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/errno.h>
+>  #include <linux/input.h>
+>  #include <linux/interrupt.h>
+> +#include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/mfd/twl.h>
+>  
+> -- 
+> 2.38.0.rc1.362.ged0d419d3c-goog
