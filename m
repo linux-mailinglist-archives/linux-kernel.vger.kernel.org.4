@@ -2,83 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FD85EDD6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8AF5EDD73
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234108AbiI1NDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 09:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
+        id S234038AbiI1NEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 09:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234090AbiI1NDh (ORCPT
+        with ESMTP id S234123AbiI1NDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 09:03:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30737617D;
-        Wed, 28 Sep 2022 06:03:36 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1EBAD660036A;
-        Wed, 28 Sep 2022 14:03:34 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664370215;
-        bh=QTkmnZfDvZ/mxFD41uorhVv9pmaNcBMChA47HDWMmlo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HAf2xSvWQW3fkmlTPrU8uPmlSJSSUVgnE+d+UN8sojt/d1DU8XvFBrsMIBdpgecnv
-         94XCpGQYSixf9ikw17q1zdPkbKKoC6WOdQD79Mw1c+4WmHhHukIyJr9lmv040S5Ng+
-         ES1nYHjPebgmtItBZAzfgEu1LtFKugK2cply+Ilt080KifFfiHtDeXvxfAUTIuEN1z
-         bx3E5W+GdnHDDxP3HvKt7pkiKLSCrRDKYYHz5VT8O1D7s+EFpOPjoyxHsnKAYBasrB
-         1K/faNNPiEFH/N92O9Y9YlR4zkuhueXsZi4j/lbUehDgYjstUZA8mnqnpobtH0wZSx
-         uNwYBOALDdstw==
-Message-ID: <9d25bf35-dd88-70f1-6876-b8c99ae7b4a5@collabora.com>
-Date:   Wed, 28 Sep 2022 15:03:31 +0200
+        Wed, 28 Sep 2022 09:03:53 -0400
+Received: from mail.steuer-voss.de (mail.steuer-voss.de [85.183.69.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DBFA0278;
+        Wed, 28 Sep 2022 06:03:51 -0700 (PDT)
+X-Virus-Scanned: Debian amavisd-new at mail.steuer-voss.de
+Received: by mail.steuer-voss.de (Postfix, from userid 1000)
+        id D1393921; Wed, 28 Sep 2022 15:03:46 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.steuer-voss.de (Postfix) with ESMTP id CE12B8E3;
+        Wed, 28 Sep 2022 15:03:46 +0200 (CEST)
+Date:   Wed, 28 Sep 2022 15:03:46 +0200 (CEST)
+From:   Nikolaus Voss <nv@vosn.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Yael Tzur <yaelt@google.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KEYS: encrypted: fix key instantiation with user-provided
+ data
+In-Reply-To: <YytPFLsOHHmHEB5I@kernel.org>
+Message-ID: <c76ab6ed-f276-428d-2471-6d38bf5b51ab@vosn.de>
+References: <20220919072317.E41421357@mail.steuer-voss.de> <YylKR1UQZGhN0+UW@kernel.org> <372b91d-5ee6-ae24-2279-0dc7621489c@vosn.de> <YytPFLsOHHmHEB5I@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [resend PATCH v6 3/4] arm64: dts: mediatek: mt2712e: Update the
- name of property 'clk_csr'
-Content-Language: en-US
-To:     Jianguo Zhang <jianguo.zhang@mediatek.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220928092308.26019-1-jianguo.zhang@mediatek.com>
- <20220928092308.26019-4-jianguo.zhang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220928092308.26019-4-jianguo.zhang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/09/22 11:23, Jianguo Zhang ha scritto:
-> Update the name of property 'clk_csr' as 'snps,clk-csr' to align with
-> the property name in the binding file.
-> 
-> Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
+On Wed, 21 Sep 2022, Jarkko Sakkinen wrote:
+> On Tue, Sep 20, 2022 at 09:58:56AM +0200, Nikolaus Voss wrote:
+>> On Tue, 20 Sep 2022, Jarkko Sakkinen wrote:
+>>> On Fri, Sep 16, 2022 at 07:45:29AM +0200, Nikolaus Voss wrote:
+>>>> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
+>>>> decrypted data") added key instantiation with user provided decrypted data.
+>>>> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
+>>>> Fix this to use hex2bin instead.
+>>>>
+>>>> Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided decrypted data")
+>>>> Cc: stable <stable@kernel.org>
+>>>> Signed-off-by: Nikolaus Voss <nikolaus.voss@haag-streit.com>
+>>>> ---
+>>>>  security/keys/encrypted-keys/encrypted.c | 6 +++---
+>>>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
+>>>> index e05cfc2e49ae..1e313982af02 100644
+>>>> --- a/security/keys/encrypted-keys/encrypted.c
+>>>> +++ b/security/keys/encrypted-keys/encrypted.c
+>>>> @@ -627,7 +627,7 @@ static struct encrypted_key_payload *encrypted_key_alloc(struct key *key,
+>>>>  			pr_err("encrypted key: instantiation of keys using provided decrypted data is disabled since CONFIG_USER_DECRYPTED_DATA is set to false\n");
+>>>>  			return ERR_PTR(-EINVAL);
+>>>>  		}
+>>>> -		if (strlen(decrypted_data) != decrypted_datalen) {
+>>>> +		if (strlen(decrypted_data) != decrypted_datalen * 2) {
+>>>
+>>> This looks wrong. What does cap decrypted_data, and why strnlen()
+>>> is not used?
+>>
+>> This is a plausibility check to ensure the user-specified key length
+>> (decrypted_datalen) matches the length of the user specified key. strnlen()
+>> would not add any extra security here, the data has already been copied.
+>
+> I'd prefer unconditional use of strnlen() because it always
+> gives you at least some guarantees over deducing why strlen()
+> is fine in a particular code block.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I agree. Unfortunately, there is no blob size available in 
+encrypted_key_alloc(), so this would mean changing function signatures 
+and code to get this downstream.
 
+This would be well worth a patch on its own.
+
+>
+>
+>>>
+>>>>  			pr_err("encrypted key: decrypted data provided does not match decrypted data length provided\n");
+>>>
+>>> Using pr_err() is probably wrong here and has different prefix
+>>> than elsewhere in the file (also most of other uses of pr_err()
+>>> are wrong apparently). Nothing bad is really happening.
+>>
+>> It actually _is_ an error preventing key instatiation. User space keyctl
+>> cannot be verbose about the reason why instantiation failed so it makes
+>> sense to be verbose in kernel space. To me, this seems consistent with other
+>> occurrences of pr_err() in this file, maybe I misunderstood you?
+>
+> Then it should be pr_info(), or even pr_debug(), given that it is not a
+> kernel issue.
+>
+>> Btw, this patch changes neither string length checking nor log levels.
+>
+> I understand this. It has been my own mistake to ack that pr_err().
+>
+> However, does not fully apply to strlen() part. Since you are
+> changing that line anyway, it'd be better to replace strlen()
+> with strnlen(). This e.g. protects the code block changes in
+> the context where it is called.
+
+I'd love to do it if it was simple.
+
+Niko
 
