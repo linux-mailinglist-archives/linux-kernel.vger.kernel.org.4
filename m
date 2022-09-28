@@ -2,312 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC05A5EDEAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D0A5EDEA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbiI1OV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
+        id S234342AbiI1OVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233653AbiI1OV5 (ORCPT
+        with ESMTP id S232117AbiI1OVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:21:57 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0426BD5C
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 07:21:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=XEvER4Dj6WAB2dWKvMnit1Pc1koMKVwqLnQPNIQlq1E=; b=QHXtp3SAQIV83sIxU+KzGYIDOK
-        PIiXrbm46TvIqUQ3OP3ppjtNfU936P9IWwesk92ahiSCc/6zCINWGV9+vt2049UlUN+2pFby3R+JF
-        xalWEauJWP7rCN4wXTx/cIEjRsifhbkbwMVA8dXBcvv84+29dLy7kyWDtIzUOCagt7mjRrdKniTAu
-        Qc3+rHMVuoZG+g7Gy59m0sQzwYFQNzs39VysOplKqZIszRbBLXyvtCAg4fxZptfZxzrq/Db/i4fBq
-        tWBgbkJItUWNG7hQFFcUHKUt34QDjx7OIYYQ5wchN6vVGvEiyOGQPUnrs9TYhL2xIG1WlxEzSp25M
-        qF7SlZXA==;
-Received: from [179.232.144.59] (helo=localhost)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1odXwI-00Entz-WE; Wed, 28 Sep 2022 16:21:31 +0200
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     tony.luck@intel.com, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, luto@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Joshua Ashton <joshua@froggi.es>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Pavel Machek <pavel@denx.de>,
-        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
-        Melissa Wen <mwen@igalia.com>
-Subject: [PATCH] x86/split_lock: Restore warn mode (and add a new one) to avoid userspace regression
-Date:   Wed, 28 Sep 2022 11:21:09 -0300
-Message-Id: <20220928142109.150263-1-gpiccoli@igalia.com>
-X-Mailer: git-send-email 2.37.3
+        Wed, 28 Sep 2022 10:21:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E836CF44
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 07:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664374890;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ABN18yfHanO7kyNSoPzHC6Sw/2197qbN8zEEWo7VMtY=;
+        b=MxjKE2FcPFZ99MEADDR6QfYq9xpR2GmHqia6IYia5bq/P8MN8D8Na9YZW+LIbU//pzwLvT
+        in3Ez8khRzT8ursyUIx0oBg9rYXCNNghxzK2YiVdhG8qs9dBc2N5nv6BRJ1O9WRMqeVD8k
+        yMJcjwvXAJQJacXUbZAzxhzJwSTZtzE=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-385-4Po2m4T6M3iV_tN-4SPZ_A-1; Wed, 28 Sep 2022 10:21:28 -0400
+X-MC-Unique: 4Po2m4T6M3iV_tN-4SPZ_A-1
+Received: by mail-wr1-f70.google.com with SMTP id p7-20020adfba87000000b0022cc6f805b1so651764wrg.21
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 07:21:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=ABN18yfHanO7kyNSoPzHC6Sw/2197qbN8zEEWo7VMtY=;
+        b=BLAMEERUe3bReGfgHIffhNfRUZONjeM9tAJWHmvIi47L1udtNQ7ENpH71li4zlKvxQ
+         5zK28aDk9yHuJRtGC2zK5Zo3WQjYqwcdOi6fHnOOnjLjnNXx01yKFTGwV7EouvRoWBV8
+         4JbqMWqHWJ4sDLLdbbQbanbHe57Ahk2mqyTPZV5wgUBzjvOQ88Xa4o2jgG7G9L1QADL/
+         rKXS8/qN+APAq6yp43jvOcfBK9rHMGETL2Sglt6XvubaqnfUA7yCt8dYCg2y0tYDGKnw
+         ARcB48QV/7xra+drL13bVxMGZ9tYAJI9IgrYesZGdihqoQiCM3YYqhhNcmP4c8RfQONH
+         oGWQ==
+X-Gm-Message-State: ACrzQf33epbeC/8+NmD90rQQ+S4LvEQxFFmM6wD5iszht2AbzQBlNn20
+        /h2ZqcK76yv2sp0YVdgX0QdG5OIfoFPzPMaYB0QUeFGk62wpxK4vGt8xYffa+CcTb0BBB4joHQ6
+        9DtlwcijsmHFZ/SDQSmgnZsYC
+X-Received: by 2002:a05:6000:15c5:b0:22a:49be:8000 with SMTP id y5-20020a05600015c500b0022a49be8000mr20744029wry.664.1664374886297;
+        Wed, 28 Sep 2022 07:21:26 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4tIcpuiIyedOneJ1v6hq/Mzp3X1zKbADLxiYOcp0L2BRdElXCAhDOsv8YxCZ/j66uq4QtC2w==
+X-Received: by 2002:a05:6000:15c5:b0:22a:49be:8000 with SMTP id y5-20020a05600015c500b0022a49be8000mr20744010wry.664.1664374885974;
+        Wed, 28 Sep 2022 07:21:25 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:1100:add9:5f61:6b94:7540? (p200300cbc7041100add95f616b947540.dip0.t-ipconnect.de. [2003:cb:c704:1100:add9:5f61:6b94:7540])
+        by smtp.gmail.com with ESMTPSA id bg14-20020a05600c3c8e00b003b341a2cfadsm1860497wmb.17.2022.09.28.07.21.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 07:21:25 -0700 (PDT)
+Message-ID: <c4462af8-80a5-6cb6-8bfc-0e7ff1da6856@redhat.com>
+Date:   Wed, 28 Sep 2022 16:21:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 0/3] THP Shrinker
+Content-Language: en-US
+To:     alexlzhu@fb.com, linux-mm@kvack.org
+Cc:     willy@infradead.org, akpm@linux-foundation.org, riel@surriel.com,
+        hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+References: <cover.1664347167.git.alexlzhu@fb.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <cover.1664347167.git.alexlzhu@fb.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit b041b525dab9 ("x86/split_lock: Make life miserable for split lockers")
-changed the way the split lock detector works when in "warn" mode;
-basically, not only it shows the warn message, but also intentionally
-introduces a slowdown (through sleeping plus serialization mechanism)
-on such task. Based on discussions in [0], seems the warning alone
-wasn't enough motivation for userspace developers to fix their
-applications.
+On 28.09.22 08:44, alexlzhu@fb.com wrote:
+> From: Alexander Zhu <alexlzhu@fb.com>
+> 
+> Transparent Hugepages use a larger page size of 2MB in comparison to
+> normal sized pages that are 4kb. A larger page size allows for fewer TLB
+> cache misses and thus more efficient use of the CPU. Using a larger page
+> size also results in more memory waste, which can hurt performance in some
+> use cases. THPs are currently enabled in the Linux Kernel by applications
+> in limited virtual address ranges via the madvise system call.  The THP
+> shrinker tries to find a balance between increased use of THPs, and
+> increased use of memory. It shrinks the size of memory by removing the
+> underutilized THPs that are identified by the thp_utilization scanner.
+> 
+> In our experiments we have noticed that the least utilized THPs are almost
+> entirely unutilized.
+> 
+> Sample Output:
+> 
+> Utilized[0-50]: 1331 680884
+> Utilized[51-101]: 9 3983
+> Utilized[102-152]: 3 1187
+> Utilized[153-203]: 0 0
+> Utilized[204-255]: 2 539
+> Utilized[256-306]: 5 1135
+> Utilized[307-357]: 1 192
+> Utilized[358-408]: 0 0
+> Utilized[409-459]: 1 57
+> Utilized[460-512]: 400 13
+> Last Scan Time: 223.98s
+> Last Scan Duration: 70.65s
+> 
+> Above is a sample obtained from one of our test machines when THP is always
+> enabled. Of the 1331 THPs in this thp_utilization sample that have from
+> 0-50 utilized subpages, we see that there are 680884 free pages. This
+> comes out to 680884 / (512 * 1331) = 99.91% zero pages in the least
+> utilized bucket. This represents 680884 * 4KB = 2.7GB memory waste.
+> 
+> Also note that the vast majority of pages are either in the least utilized
+> [0-50] or most utilized [460-512] buckets. The least utilized THPs are
+> responsible for almost all of the memory waste when THP is always
+> enabled. Thus by clearing out THPs in the lowest utilization bucket
+> we extract most of the improvement in CPU efficiency. We have seen
+> similar results on our production hosts.
+> 
+> This patchset introduces the THP shrinker we have developed to identify
+> and split the least utilized THPs. It includes the thp_utilization
+> changes that groups anonymous THPs into buckets, the split_huge_page()
+> changes that identify and zap zero 4KB pages within THPs and the shrinker
+> changes. It should be noted that the split_huge_page() changes are based
+> off previous work done by Yu Zhao.
+> 
+> In the future, we intend to allow additional tuning to the shrinker
+> based on workload depending on CPU/IO/Memory pressure and the
+> amount of anonymous memory. The long term goal is to eventually always
+> enable THP for all applications and deprecate madvise entirely.
+> 
+> In production we thus far have observed 2-3% reduction in overall cpu
+> usage on stateless web servers when THP is always enabled.
 
-Happens that originally the proposal in [0] was to add a new mode
-which would warns + slowdown the "split locking" task, keeping the
-old warn mode untouched. In the end, that idea was discarded and
-the regular/default "warn" mode now slowdowns the applications. This
-is quite aggressive with regards proprietary/legacy programs that
-basically are unable to properly run in kernel with this change.
-While it is understandable that a malicious application could try
-a DoS by split locking, it seems unacceptable to regress old/proprietary
-userspace programs through a default configuration that previously
-worked. An example of such breakage was reported in [1].
+What's the diff to the RFC?
 
-So let's revamp the idea of having another option/mode for the split
-lock detector, which is hereby called "seq" (based on the original
-"sequential" naming in [0]). Also introduces a Kconfig option to give
-the option of Linux vendors have a choice what mode should be their
-default. While at it, fix/improve the documentation about bus locking.
-
-[0] https://lore.kernel.org/lkml/20220217012721.9694-1-tony.luck@intel.com/
-
-[1] https://github.com/doitsujin/dxvk/issues/2938
-
-Fixes: b041b525dab9 ("x86/split_lock: Make life miserable for split lockers")
-Cc: Fenghua Yu <fenghua.yu@intel.com>
-Cc: Joshua Ashton <joshua@froggi.es>
-Cc: Paul Gofman <pgofman@codeweavers.com>
-Cc: Pavel Machek <pavel@denx.de>
-Cc: Pierre-Loup Griffais <pgriffais@valvesoftware.com>
-Cc: Tony Luck <tony.luck@intel.com>
-Tested-by: Melissa Wen <mwen@igalia.com>
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
----
-
-
-Hi Tony / Thomas, it was reported that some games cannot run anymore
-due to the split lock detector change (as you can see above, in [1]).
-
-This really "flirts" with userspace breakage / policy enforcement
-from the kernel - I agree with the DoS point, but changing it to
-have a new default behavior preventing the execution of these
-applications with enough performance seems quite a hammer.
-
-The proposal here is to get back to the old idea from Tony, having
-another mode for the split lock detector, and a Kconfig to allow
-distros choose the policy they wanna take by default. I've set
-default in kernel to be the harmless old "warn" mode, we could
-discuss of course what should be kernel default. But I think it's
-important to give at least the choice for the distros that don't
-want to opt-in this aggressive behavior.
-
-Reviews / comments are very appreciated as usual!
-Thanks in advance,
-
-Guilherme
-
-
- .../admin-guide/kernel-parameters.txt         | 11 ++++++-
- Documentation/x86/buslock.rst                 | 19 +++++++++++
- arch/x86/Kconfig                              | 10 ++++++
- arch/x86/kernel/cpu/intel.c                   | 33 +++++++++++++------
- 4 files changed, 62 insertions(+), 11 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 426fa892d311..a00113629f8f 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5790,7 +5790,9 @@
- 			instructions that access data across cache line
- 			boundaries will result in an alignment check exception
- 			for split lock detection or a debug exception for
--			bus lock detection.
-+			bus lock detection. The default is set by the kernel
-+			config X86_SPLIT_LOCK_MODE; defconfig sets it to warn.
-+
- 
- 			off	- not enabled
- 
-@@ -5802,6 +5804,13 @@
- 				  behavior is by #AC if both features are
- 				  enabled in hardware.
- 
-+			seq	- kernel will emit the same rate-limited warns
-+				  than the "warn" mode, but will also introduce
-+				  an intentional delay (through serialization
-+				  and a small sleeping) in such processes, in
-+				  order to call the attention of users/devs to
-+				  properly fix their applications.
-+
- 			fatal	- the kernel will send SIGBUS to applications
- 				  that trigger the #AC exception or the #DB
- 				  exception. Default behavior is by #AC if
-diff --git a/Documentation/x86/buslock.rst b/Documentation/x86/buslock.rst
-index 7c051e714943..f3cf353d2028 100644
---- a/Documentation/x86/buslock.rst
-+++ b/Documentation/x86/buslock.rst
-@@ -58,6 +58,17 @@ parameter "split_lock_detect". Here is a summary of different options:
- |		   |When both features are	|			|
- |		   |supported, warn in #AC	|			|
- +------------------+----------------------------+-----------------------+
-+|seq		   |Kernel OOPs			|Warn once per task and |
-+|		   |Same output as the "warn"	|and continues to run.  |
-+|		   |option above, but also	|			|
-+|		   |intentionally introduce a	|			|
-+|		   |delay by serializing and	|			|
-+|		   |quickly sleeping - this	|			|
-+|		   |greatly affects application	|			|
-+|		   |performance but may improve	|			|
-+|		   |overall system perf in the	|			|
-+|		   |case of many split locks.	|			|
-++------------------+----------------------------+-----------------------+
- |fatal		   |Kernel OOPs			|Send SIGBUS to user.	|
- |		   |Send SIGBUS to user		|			|
- |		   |When both features are	|			|
-@@ -103,6 +114,14 @@ warn
- A warning is emitted when a bus lock is detected which allows to identify
- the offending application. This is the default behavior.
- 
-+seq
-+----
-+
-+A warning is emitted when a bus lock is detected which allows to identify
-+the offending application, but also introduces a delay by serializing and
-+quickly sleeping - this greatly affects application performance but might
-+improve overall system performance in case of many unligned accesses.
-+
- fatal
- -----
- 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f9920f1341c8..e44779756461 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -398,6 +398,16 @@ config CC_HAS_SANE_STACKPROTECTOR
- 	  the compiler produces broken code or if it does not let us control
- 	  the segment on 32-bit kernels.
- 
-+config X86_SPLIT_LOCK_MODE
-+	int "Default mode of split lock detector for supporting CPUs (0/off - 3/fatal)"
-+	range 0 3
-+	default 1
-+	help
-+	  Select the default mode for split lock detector on supporting CPUs.
-+	  Possible modes are: 0 ("off"), 1 ("warn"), 2 ("seq") and 3 ("fatal");
-+	  details are well described in the kernel parameters documentation.
-+	  Users can always override this using the cmdline "split_lock_detect=".
-+
- menu "Processor type and features"
- 
- config SMP
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 2d7ea5480ec3..9f6157afbb56 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -44,6 +44,7 @@
- enum split_lock_detect_state {
- 	sld_off = 0,
- 	sld_warn,
-+	sld_seq,
- 	sld_fatal,
- 	sld_ratelimit,
- };
-@@ -1028,6 +1029,7 @@ static const struct {
- } sld_options[] __initconst = {
- 	{ "off",	sld_off   },
- 	{ "warn",	sld_warn  },
-+	{ "seq",	sld_seq	},
- 	{ "fatal",	sld_fatal },
- 	{ "ratelimit:", sld_ratelimit },
- };
-@@ -1075,7 +1077,7 @@ static bool split_lock_verify_msr(bool on)
- 
- static void __init sld_state_setup(void)
- {
--	enum split_lock_detect_state state = sld_warn;
-+	enum split_lock_detect_state state = CONFIG_X86_SPLIT_LOCK_MODE;
- 	char arg[20];
- 	int i, ret;
- 
-@@ -1149,7 +1151,9 @@ static void split_lock_init(void)
- static void __split_lock_reenable(struct work_struct *work)
- {
- 	sld_update_msr(true);
--	up(&buslock_sem);
-+
-+	if (sld_state == sld_seq)
-+		up(&buslock_sem);
- }
- 
- /*
-@@ -1180,12 +1184,15 @@ static void split_lock_warn(unsigned long ip)
- 				    current->comm, current->pid, ip);
- 	current->reported_split_lock = 1;
- 
--	/* misery factor #1, sleep 10ms before trying to execute split lock */
--	if (msleep_interruptible(10) > 0)
--		return;
--	/* Misery factor #2, only allow one buslocked disabled core at a time */
--	if (down_interruptible(&buslock_sem) == -EINTR)
--		return;
-+	if (sld_state == sld_seq) {
-+		/* misery factor #1, sleep 10ms before trying to execute split lock */
-+		if (msleep_interruptible(10) > 0)
-+			return;
-+		/* Misery factor #2, only allow one buslocked disabled core at a time */
-+		if (down_interruptible(&buslock_sem) == -EINTR)
-+			return;
-+	}
-+
- 	cpu = get_cpu();
- 	schedule_delayed_work_on(cpu, &split_lock_reenable, 2);
- 
-@@ -1196,7 +1203,7 @@ static void split_lock_warn(unsigned long ip)
- 
- bool handle_guest_split_lock(unsigned long ip)
- {
--	if (sld_state == sld_warn) {
-+	if (sld_state == sld_warn || sld_state == sld_seq) {
- 		split_lock_warn(ip);
- 		return true;
- 	}
-@@ -1256,6 +1263,7 @@ void handle_bus_lock(struct pt_regs *regs)
- 		/* Warn on the bus lock. */
- 		fallthrough;
- 	case sld_warn:
-+	case sld_seq:
- 		pr_warn_ratelimited("#DB: %s/%d took a bus_lock trap at address: 0x%lx\n",
- 				    current->comm, current->pid, regs->ip);
- 		break;
-@@ -1335,8 +1343,13 @@ static void sld_state_show(void)
- 		pr_info("disabled\n");
- 		break;
- 	case sld_warn:
-+	case sld_seq:
- 		if (boot_cpu_has(X86_FEATURE_SPLIT_LOCK_DETECT)) {
--			pr_info("#AC: crashing the kernel on kernel split_locks and warning on user-space split_locks\n");
-+			if (sld_state == sld_warn)
-+				pr_info("#AC: crashing the kernel on kernel split_locks and warning on user-space split_locks\n");
-+			else
-+				pr_info("#AC: crashing the kernel on kernel split_locks and intentionally slowdown the task on user-space split_locks\n");
-+
- 			if (cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
- 					      "x86/splitlock", NULL, splitlock_cpu_offline) < 0)
- 				pr_warn("No splitlock CPU offline handler\n");
 -- 
-2.37.3
+Thanks,
+
+David / dhildenb
 
