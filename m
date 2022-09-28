@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3BE5ED710
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E9E5ED715
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233935AbiI1IED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47706 "EHLO
+        id S233892AbiI1IEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233920AbiI1ID7 (ORCPT
+        with ESMTP id S233937AbiI1IEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:03:59 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033AF1F0CF5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:03:56 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id c7so13420288ljm.12
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:03:56 -0700 (PDT)
+        Wed, 28 Sep 2022 04:04:05 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4446B1F0CEF
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:04:02 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id k10so19200459lfm.4
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:04:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=Q+qofBWz+0h5soM+cd3c8OecdVeByx6iP98hMMfm5A4=;
-        b=HhfGtaRfPvI7Dp1xpn3/+YngA18bQcoG3SFzdfeNjwcOJHDTBtAvjGhZr28Poy0tZA
-         Rct7Xu4/1NNPcm8splB+XjEIlqJMr4sEt1NKMAHv+ZkkxPUcrMMJaZFc04F1Vk77ZfqN
-         VkUd6rWMK4kdx6sn3H/U4+3wK/A6btmUBhy4rNKFbdndOtH3mjsD4vnFrZtbpvWt+Aww
-         q1nlC/zkiLLVEFzWfCKxt+fXK/ho+JHgikNCu6m6TzcThfD+sJFQ3AZTBWCyXItNjith
-         BU2Rgce8ukThlBdz0+Rp5/tcjDs5Q+YCrNbd5wBVM7qOnPGDv7H3GJ2isq4iCOimbDF5
-         z4SA==
+        bh=Ff2Af8wnvNaIb1kySsnmT6w66901VaPZOtaBt+Ba+mM=;
+        b=tkDy8FSZCKEACGMbv7TNH3//AgxXuPUehbKo2oEdC7czFQIZsXiR0OB1yGPI1xu7iO
+         OlEPCc8H12dHF5AZSpen+fhrCznTwgX8IoguDH4u2HC2YfJbjvIoIMDkCS3uHG0WDzA0
+         zkTLALGvnpX2M94zwy8EI+y9LO6tURmyHfkaYVKFaSKtlgucTUY1BjKAKP+sjHHKDWW0
+         gE0xTbfihCHSKDf7hS1x4AmewrY6VcTKQQHg9oVE5mtp6CMI3naJ0Cg4CIyUSpoOWMzG
+         6AnKbvvMmTXVAj/I9wopPRdTsTzuU9aLm4XsFxReQvz7ymq+ct9fkjpi9AniUWRBr92l
+         1MAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=Q+qofBWz+0h5soM+cd3c8OecdVeByx6iP98hMMfm5A4=;
-        b=qe1PStRXoia+bPGISMZVBgF0adnwXHSPbpV4uokM1jszI2AMPznYvXCf4eMYDzQC/M
-         9FP41F4dSJ9I4Q5CvXQb06/FuAiJnqkrW9TRnXi33P1qYMODYCmldPDR7jIF03x7Fz3r
-         qqNOqy7WTF1turBkIOlmqUF2Ld5pWyDWfP5R06u6tz+pHDZaVBCbLevG+19ZRQOlwN+6
-         eTkrrGw+PnexdmB02VufnZh+/MeY47BPC09shOC3L2sCgyytK2vXRVkAn6MsoAQac0dB
-         UdakVLt+PrJtZ5vuSSSo/xTjIMbBKgXSOo2810sLnLbE2lqyqxjRAXZ/4pLzhk1+uBsx
-         cgkg==
-X-Gm-Message-State: ACrzQf3kOkQLgGLX29ywtUAq/4V1IHyeqFUFCBIcOibcYUCfheE7HLVD
-        geDbuWDR7+ArzZ2rdq3aW4UjSw==
-X-Google-Smtp-Source: AMsMyM43muVNeouI1iLWWmLpqW44zuLJ5rJoFJcAuiE0Ujmpx6tu8yA3J+wdDcCX2zYO9CD60p2wEw==
-X-Received: by 2002:a2e:a602:0:b0:264:5132:f59 with SMTP id v2-20020a2ea602000000b0026451320f59mr11699153ljp.0.1664352235096;
-        Wed, 28 Sep 2022 01:03:55 -0700 (PDT)
+        bh=Ff2Af8wnvNaIb1kySsnmT6w66901VaPZOtaBt+Ba+mM=;
+        b=6KNOIa1edaf6BskoUkLTm1P8K1G+NCBj2hpNLqY/q7ijnxolL65+3LX9KZfuOSSbNd
+         FBlpuzq9Xcoid5wQJTFyc15ypoRRbZ2DEHwRpeSlNHZXApAs9YDb8F/rR4LKG05B1WDV
+         P4Vy1dVmpDux4zSypLdxz07z6BPUII0rKhEEtDBbwCXfhfo9GJh6vJ29OUqPpqIAOvFD
+         twNVpUFZBRa8WK1oawtHvgy7keBH7OxOUayKTrZWryNlZ1eMYG8uzoxcl4+dyMiQp3YN
+         G8Ap+UE1JxwkV9AXBTkDxTp+X+VEBk3SNcBanpmRpWBcNi03ju1cRS9yy1O9hM/9n07D
+         4K8w==
+X-Gm-Message-State: ACrzQf04ANcPAsPdnlrKFFaLAyIDar/XJUKFHT9DGkLrTD6HxAAq9ul5
+        wW9/vRagJeAXY/h8tRVwNa6YeA==
+X-Google-Smtp-Source: AMsMyM5rommvOYkkGtKyw4ykIU1WW2BqQpPqHrUuLl3CWZJ+QMgMkInkDSaF57srd731r7uRyEUUYw==
+X-Received: by 2002:a05:6512:12c8:b0:49b:8005:1d9d with SMTP id p8-20020a05651212c800b0049b80051d9dmr13437045lfg.489.1664352240358;
+        Wed, 28 Sep 2022 01:04:00 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o6-20020a05651238a600b004a100c21eaesm403424lft.97.2022.09.28.01.03.53
+        by smtp.gmail.com with ESMTPSA id j15-20020a056512344f00b00499f9aaa9desm400083lfr.179.2022.09.28.01.03.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 01:03:54 -0700 (PDT)
-Message-ID: <44bbb266-bb31-e036-ee37-ec52c33ef0a1@linaro.org>
-Date:   Wed, 28 Sep 2022 10:03:53 +0200
+        Wed, 28 Sep 2022 01:03:59 -0700 (PDT)
+Message-ID: <9cf8e03a-9ae1-8af9-f786-95931aa3fedb@linaro.org>
+Date:   Wed, 28 Sep 2022 10:03:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: cp01-c1: remove bootargs-append
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: cp01-c1: use "okay" instead of "ok"
 Content-Language: en-US
 To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
         andersson@kernel.org, konrad.dybcio@somainline.org,
@@ -63,8 +63,9 @@ To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220927201415.1265191-1-robimarko@gmail.com>
+ <20220927201415.1265191-2-robimarko@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220927201415.1265191-1-robimarko@gmail.com>
+In-Reply-To: <20220927201415.1265191-2-robimarko@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,8 +79,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 27/09/2022 22:14, Robert Marko wrote:
-> bootargs-append is a leftover from the vendor SDK, and does not exist
-> in the mainline kernel at all, so remove it.
+> Use "okay" instead of "ok" in USB nodes as "ok" is deprecated.
 > 
 > Signed-off-by: Robert Marko <robimarko@gmail.com>
 
