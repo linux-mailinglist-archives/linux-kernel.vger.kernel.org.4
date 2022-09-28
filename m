@@ -2,114 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D0C5EDD9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC385EDDA1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiI1NXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 09:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
+        id S233700AbiI1NZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 09:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233327AbiI1NXp (ORCPT
+        with ESMTP id S231419AbiI1NZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 09:23:45 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F3DA1A59
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 06:23:44 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id cc5so19793116wrb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 06:23:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date;
-        bh=7NfAh4IDJO5OpQPrNz1bZm64Hhig0ttigWq2pw/+PUY=;
-        b=p2x+JuRi6W3dWNl/F8DS5j+Pk/6DK2VoBJOUP8I/JodSe5kDHi8Avtamecz/8ow3sw
-         bYoOOVd1nLR8ZCKkiy+g+pkjstv0HZDhJxCWNNNZzIolgAed6MDAcIqb9YwAAQdxEvj6
-         F62ApYAwVdw5Wrm2BqnyOIfg6N0RaezZ9QfiLDvCDEroXnoGQ3eZDNczIZ4PpfF7ZdF2
-         6uhpmL9oTM8ZaMISGjxqQSL4vk4IeaurBhT8mBTcGrHOHZbb3m1yL+I+lKZ2Q9LDX7iC
-         85EEHl02gTse0A4S86dEi3GpM6RLv8eFHuc6fhoUy95pkYVFJ2/VhGKGj0I3Vg1mkAb7
-         JzTg==
+        Wed, 28 Sep 2022 09:25:07 -0400
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715477B1F3;
+        Wed, 28 Sep 2022 06:25:06 -0700 (PDT)
+Received: by mail-wm1-f42.google.com with SMTP id o5so8536217wms.1;
+        Wed, 28 Sep 2022 06:25:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=7NfAh4IDJO5OpQPrNz1bZm64Hhig0ttigWq2pw/+PUY=;
-        b=pNI5yWT8xcSfAKLrLngDWnjg2RPUcU1PwwKZJhKNfkdWh3qQurDEUElSsQXhAd04VN
-         WYbdfZXyxo3r6ujl4T/KN+KMAJeq1NAL9ePW/WNZdvv6XKAeIKL6/WZZnjb3Fd1IZQY7
-         IRHfor03PWmSJa3n1IWpIxaw2dV/O/XTA6TzGFQeKqVzN8xehk1uyFa+BMIR619sQFNy
-         bQrXfRDy+PTzwaMX7+yiEm3ECMUz9EiWpN+6YTkRYl/tSVoQwav2dIJlm49Hswmp9n3i
-         3AdQOXaThVRqmo09BuelEJ7OIlOHqgaC6PP39pUf88hCplHxXT2l+7QXsJl2+Dyz/AWa
-         iX1w==
-X-Gm-Message-State: ACrzQf14eEh8gVLXe2diZeF6Xryqj7T6NdyvfIrpro1e4ahyZBjhQF2U
-        COLuvbKOGY0U5T/ci5CSJkh1IeDFdA==
-X-Google-Smtp-Source: AMsMyM4b1Y91VhoOy7rWb9h/HEx+gSbss6rKalCIcO7obMzfFEeAL3kXPHkYqjZQ7ousNls9iJnsVg==
-X-Received: by 2002:a05:6000:547:b0:218:5f6a:f5db with SMTP id b7-20020a056000054700b002185f6af5dbmr21031288wrf.480.1664371423216;
-        Wed, 28 Sep 2022 06:23:43 -0700 (PDT)
-Received: from octinomon ([2a00:23c8:2f02:3b01:3ea1:40:8650:189])
-        by smtp.gmail.com with ESMTPSA id a5-20020a1cf005000000b003b4764442f0sm1739525wmb.11.2022.09.28.06.23.42
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=IJt6C3ywL4H7fQpqqRWXvtKK6PsYNMNNQ4fO0nq9AJ4=;
+        b=IIn2BEGScn/Qs6vCuUYilZ9C5bhgmkufQbB9RsbPWEYkMKKp0qBHo6eZnnE2xmIbJo
+         B0bpIrNbhjmI7/Qjg+GEnLPrncd4U09g16f+Uo0U5qEnPM8L8T7bDYTDmGA9SqgezNTA
+         zr9UI/UyzzxoI2HRa2GQ3w7rdppkmNvGfIMb2RL/NQJvli3npL21upiwuvI4qn2kpNC8
+         1aWIzR+DaRLdR2/sp8ncBhMMCcO+57k1/WXl4+pUgE/KblyvA04Z6x6Ikju5thmZRMvE
+         TiTXKfz8h/w4Ngt1zruVJuhof/bqqU9c4v13iw2Z0nos+zc7jqtk0sdwocyZI3GOFWX3
+         QHyQ==
+X-Gm-Message-State: ACrzQf3MHMO9p6K32WOm4GyzzAbmrXZVLrb93V9MRMtS8hTq0NJz5x7R
+        B/wwkaMqqbbDQWa3XwdxqnU=
+X-Google-Smtp-Source: AMsMyM6AumnF7V3dI88as74fkN1Yrz4/EoGIN9LEacdDnxSUEH1g/NPsz/23u0cUaO8JNLPh+Po1Hw==
+X-Received: by 2002:a05:600c:1d8f:b0:3b4:90c1:e23a with SMTP id p15-20020a05600c1d8f00b003b490c1e23amr6868640wms.122.1664371504885;
+        Wed, 28 Sep 2022 06:25:04 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id i6-20020adfefc6000000b0022ccbc7efb5sm423572wrp.73.2022.09.28.06.25.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 06:23:42 -0700 (PDT)
-From:   Jules Irenge <jbi.octave@gmail.com>
-X-Google-Original-From: Jules Irenge <jules.irenge@postgrad.manchester.ac.uk>
-Date:   Wed, 28 Sep 2022 14:23:41 +0100
-To:     gregkh@linuxfoundation.org
-Cc:     hsweeten@visionengravers.com, abbotti@mev.co.uk,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] comedi: Convert snprintf() to sysfs_emit()
-Message-ID: <YzRK3Ye3FKTe8p4y@octinomon>
+        Wed, 28 Sep 2022 06:25:04 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 13:25:02 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH v10 09/27] rust: add `compiler_builtins` crate
+Message-ID: <YzRLLrmYdMFX4LrB@liuwe-devbox-debian-v2>
+References: <20220927131518.30000-1-ojeda@kernel.org>
+ <20220927131518.30000-10-ojeda@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220927131518.30000-10-ojeda@kernel.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Coccinnelle reports a warning
-Warning: Use scnprintf or sprintf
+On Tue, Sep 27, 2022 at 03:14:40PM +0200, Miguel Ojeda wrote:
+> Rust provides `compiler_builtins` as a port of LLVM's `compiler-rt`.
+> Since we do not need the vast majority of them, we avoid the
+> dependency by providing our own crate.
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
+> Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
+> Co-developed-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Adding to that, there has been a slow migration from snprintf to scnprintf.
-This LWN article explains the rationale for this change
-
-https: //lwn.net/Articles/69419/
-ie. snprintf() returns what *would* be the resulting length,
- while scnprintf() returns the actual length.
-
-However following the advice on
-https://www.kernel.org/doc/html/latest/filesystems/sysfs.html
-
-For show(device *...) functions we should only use sysfs_emit() or sysfs_emit_at()
- especially when formatting the value to be returned to user space.
-
-Hence here
-We convert to sysfs_emit() that even does better and shorten the code
-using the same rationale of scnprintf()
-
-Signed-off-by: Jules Irenge <jules.irenge@postgrad.manchester.ac.uk>
----
-
-v2: Replace scnprintf() with sysfs_emit()
-
- drivers/comedi/comedi_fops.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/comedi/comedi_fops.c b/drivers/comedi/comedi_fops.c
-index 55a0cae04b8d..a6017fafcb2a 100644
---- a/drivers/comedi/comedi_fops.c
-+++ b/drivers/comedi/comedi_fops.c
-@@ -396,7 +396,7 @@ static ssize_t max_read_buffer_kb_show(struct device *csdev,
- 	mutex_unlock(&dev->mutex);
- 
- 	comedi_dev_put(dev);
--	return snprintf(buf, PAGE_SIZE, "%u\n", size);
-+	return sysfs_emit(buf, "%u\n", size);
- }
- 
- static ssize_t max_read_buffer_kb_store(struct device *csdev,
--- 
-2.37.3
-
+Reviewed-by: Wei Liu <wei.liu@kernel.org>
