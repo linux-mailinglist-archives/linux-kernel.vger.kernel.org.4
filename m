@@ -2,96 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A0A5ED6E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 578DC5ED6EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233597AbiI1HzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
+        id S233084AbiI1H5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233752AbiI1Hy4 (ORCPT
+        with ESMTP id S233846AbiI1H4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:54:56 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6E2D7D;
-        Wed, 28 Sep 2022 00:54:39 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1odRts-0007n0-5Z; Wed, 28 Sep 2022 09:54:36 +0200
-Message-ID: <a66880d7-fc2e-4fa7-0711-5d93b4304607@leemhuis.info>
-Date:   Wed, 28 Sep 2022 09:54:35 +0200
+        Wed, 28 Sep 2022 03:56:35 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDA0E5F85
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:56:33 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4McpcH4fRlz1P6mv;
+        Wed, 28 Sep 2022 15:52:15 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 15:56:31 +0800
+Subject: Re: [PATCH v3 2/4] mm/hwpoison: move definitions of
+ num_poisoned_pages_* to memory-failure.c
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+CC:     <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20220921091359.25889-1-naoya.horiguchi@linux.dev>
+ <20220921091359.25889-3-naoya.horiguchi@linux.dev>
+ <4b7c327a-547e-be8b-4568-745fabe74641@huawei.com>
+ <20220928020511.GB597297@u2004.lan>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <c714d385-ba78-b77b-1813-1f9cc4a78c1b@huawei.com>
+Date:   Wed, 28 Sep 2022 15:56:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US, de-DE
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        Anatoly Pugachev <matorola@gmail.com>,
-        Vasily Averin <vvs@openvz.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, cgroups@vger.kernel.org,
-        sparclinux@vger.kernel.org, regressions@lists.linux.dev
-References: <6b362c6e-9c80-4344-9430-b831f9871a3c@openvz.org>
- <f9394752-e272-9bf9-645f-a18c56d1c4ec@openvz.org>
- <20220918092849.GA10314@u164.east.ru>
- <eca7d9b3-9831-5d04-1f39-8976765df87a@suse.cz>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [sparc64] fails to boot, (was: Re: [PATCH memcg v6] net: set
- proper memcg for net_init hooks allocations)
-In-Reply-To: <eca7d9b3-9831-5d04-1f39-8976765df87a@suse.cz>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20220928020511.GB597297@u2004.lan>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1664351679;1649a21f;
-X-HE-SMSGID: 1odRts-0007n0-5Z
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.09.22 11:54, Vlastimil Babka wrote:
-> On 9/18/22 11:28, Anatoly Pugachev wrote:
->> On Fri, Jun 03, 2022 at 07:19:43AM +0300, Vasily Averin wrote:
->>> __register_pernet_operations() executes init hook of registered
->>> pernet_operation structure in all existing net namespaces.
->> [...]
->> I'm unable to boot my sparc64 VM anymore (5.19 still boots, 6.0-rc1 does not),
->> bisected up to this patch,
+On 2022/9/28 10:05, Naoya Horiguchi wrote:
+> On Sat, Sep 24, 2022 at 07:53:15PM +0800, Miaohe Lin wrote:
+>> On 2022/9/21 17:13, Naoya Horiguchi wrote:
+>>> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>>
+>>> These interfaces will be used by drivers/base/core.c by later patch, so as a
+>>> preparatory work move them to more common header file visible to the file.
+>>>
+>>> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>> ---
+>>> ChangeLog v2 -> v3:
+>>> - added declaration of num_poisoned_pages_inc() in #ifdef CONFIG_MEMORY_FAILURE
+>>> ---
+>>>  arch/parisc/kernel/pdt.c |  3 +--
+>>>  include/linux/mm.h       |  5 +++++
+>>>  include/linux/swapops.h  | 24 ++----------------------
+>>>  mm/memory-failure.c      | 10 ++++++++++
+>>>  4 files changed, 18 insertions(+), 24 deletions(-)
+>>>
+>>> diff --git a/arch/parisc/kernel/pdt.c b/arch/parisc/kernel/pdt.c
+>>> index e391b175f5ec..fdc880e2575a 100644
+>>> --- a/arch/parisc/kernel/pdt.c
+>>> +++ b/arch/parisc/kernel/pdt.c
+>>> @@ -18,8 +18,7 @@
+>>>  #include <linux/kthread.h>
+>>>  #include <linux/initrd.h>
+>>>  #include <linux/pgtable.h>
+>>> -#include <linux/swap.h>
 >>
->> mator@ttip:~/linux-2.6$ git bisect bad
->> 1d0403d20f6c281cb3d14c5f1db5317caeec48e9 is the first bad commit
->> commit 1d0403d20f6c281cb3d14c5f1db5317caeec48e9
->> [...]
+>> Is header file "linux/swap.h" already unneeded before the code change? It seems there's
+>> no code change in that file.
 > 
-> #regzbot introduced: 1d0403d20f6c
+> Maybe yes.  I updated this line too because it's introduced together
+> swapops.h by the following commit.
+> 
+>   commit 0e5a7ff6e36ad58933d076ddcac36ff14d014692
+>   Author: Helge Deller <deller@gmx.de>
+>   Date:   Fri Jul 24 19:17:52 2020 +0200
+>   
+>       parisc: Report bad pages as HardwareCorrupted
+> 
 
-Thx for getting this regression tracked using regzbot. FWIW, that went
-sideways (as your already noticed and mentioned on IRC), as that made
-regzbot treat *your* mail as the report of the regressions. In cases
-like this you need "#regzbot ^introduced 1d0403d20f6c" (since recently
-"#regzbot introduced 1d0403d20f6c ^" works, too), as then regzbot will
-consider the *parent* mail the report (and then regzbot will look out
-for patches that link to them using a Link: tag).
+I see. Many thanks for your explanation.
 
-No worries, I did the same mistake a few time already :-D I send a mail
-with that command now, so let's resolve this subthread by marking it invalid
+>>
+>>> -#include <linux/swapops.h>
+>>> +#include <linux/mm.h>
+>>>  
+>>>  #include <asm/pdc.h>
+>>>  #include <asm/pdcpat.h>
+>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>>> index c2277f5aba9e..80a2d800f272 100644
+>>> --- a/include/linux/mm.h
+>>> +++ b/include/linux/mm.h
+>>> @@ -3279,11 +3279,16 @@ extern atomic_long_t num_poisoned_pages __read_mostly;
+>>>  extern int soft_offline_page(unsigned long pfn, int flags);
+>>>  #ifdef CONFIG_MEMORY_FAILURE
+>>>  extern int __get_huge_page_for_hwpoison(unsigned long pfn, int flags);
+>>> +extern void num_poisoned_pages_inc(void);
+>>>  #else
+>>>  static inline int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
+>>>  {
+>>>  	return 0;
+>>>  }
+>>> +
+>>> +static inline void num_poisoned_pages_inc(void)
+>>> +{
+>>> +}
+>>>  #endif
+>>>  
+>>>  #ifndef arch_memory_failure
+>>> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+>>> index a91dd08e107b..3e58a812399a 100644
+>>> --- a/include/linux/swapops.h
+>>> +++ b/include/linux/swapops.h
+>>> @@ -581,8 +581,6 @@ static inline int is_pmd_migration_entry(pmd_t pmd)
+>>>  
+>>>  #ifdef CONFIG_MEMORY_FAILURE
+>>>  
+>>> -extern atomic_long_t num_poisoned_pages __read_mostly;
+>>> -
+>>>  /*
+>>>   * Support for hardware poisoned pages
+>>>   */
+>>> @@ -610,17 +608,7 @@ static inline struct page *hwpoison_entry_to_page(swp_entry_t entry)
+>>>  	return p;
+>>>  }
+>>>  
+>>> -static inline void num_poisoned_pages_inc(void)
+>>> -{
+>>> -	atomic_long_inc(&num_poisoned_pages);
+>>> -}
+>>> -
+>>> -static inline void num_poisoned_pages_sub(long i)
+>>> -{
+>>> -	atomic_long_sub(i, &num_poisoned_pages);
+>>> -}
+>>> -
+>>> -#else  /* CONFIG_MEMORY_FAILURE */
+>>> +#else
+>>>  
+>>>  static inline swp_entry_t make_hwpoison_entry(struct page *page)
+>>>  {
+>>> @@ -636,15 +624,7 @@ static inline struct page *hwpoison_entry_to_page(swp_entry_t entry)
+>>>  {
+>>>  	return NULL;
+>>>  }
+>>> -
+>>> -static inline void num_poisoned_pages_inc(void)
+>>> -{
+>>> -}
+>>> -
+>>> -static inline void num_poisoned_pages_sub(long i)
+>>> -{
+>>> -}
+>>> -#endif  /* CONFIG_MEMORY_FAILURE */
+>>> +#endif
+>>>  
+>>>  static inline int non_swap_entry(swp_entry_t entry)
+>>>  {
+>>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>>> index 5942e1c0407e..aa6ce685b863 100644
+>>> --- a/mm/memory-failure.c
+>>> +++ b/mm/memory-failure.c
+>>> @@ -74,6 +74,16 @@ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
+>>>  
+>>>  static bool hw_memory_failure __read_mostly = false;
+>>>  
+>>> +static inline void num_poisoned_pages_inc(void)
+>>
+>> This function is defined as "static inline" while it's "extern void num_poisoned_pages_inc(void)"
+>> in the header file. Is this expected?
+> 
+> No. 4/4 effectively fixes it, but I should've done this in this patch.
+> Thank you,
+> - Naoya Horiguchi
 
-#regzbot invalid: mis-used regzbot command, now properly tracked
+Then this patch looks good to me. Thanks.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+Thanks,
+Miaohe Lin
 
