@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C915ED7EF
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8D65ED7F0
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbiI1IhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
+        id S233110AbiI1IhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233137AbiI1Ig4 (ORCPT
+        with ESMTP id S230357AbiI1Ig4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Sep 2022 04:36:56 -0400
 Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E1A9E88D
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:36:52 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id u24so1613708edb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:36:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580E59F0ED
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:36:53 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id v2so15432452edc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:36:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=uXGCeCEAXm7WShuxFsGAnc4TEA0foi/qCDefq62rLtE=;
-        b=dfPmt210cXwB+x6AA22pSGoZuGSh4iWi+xj3hLrVytXB1xQzCGEJgtvWgxKdxNbU6m
-         uh1aNUAolvsFMm1BwZ/+NIMYHI2C8z7s8hyNsn/vX7XIVoAkSwEindW0qmgOfOKD/Gf1
-         aY8jfEWG1X2GEgvWoNn9es7ovNDpNScbsbwv2ltpQrMtEyW4uMBlYSkGHlUHtGE1DTWE
-         kuYGqXHGoUCeH/Qvg6t8ktkQCU3wOMgJHW8vzyjwtiaRNSFucc/DqToTka+uD5OXl8ao
-         smhdkTLHAxhJ0v2+2FJhL/+uuYvZF/kuiKdYbVS1SXHtO+leyme+Qw8SJvZBqEfqovYk
-         IfMA==
+        bh=MBektPIlMNaA94hBUX0CqK9rztppqrFQ5yZw6cU5GA0=;
+        b=nPowmBvi0n48oK8YdWwlNpwVqzUohZDIbZ6IeTiNfgHLlJ8NYAlh/4Pyluc7lIAa/L
+         16N1y+rHrLvENsNatjnSGhKwwvXZMs/i/qcAv9hRPCfDorku4qTRB0xoh/OwE4WpFVl+
+         5syX9koK47487SX4eughY8qYHorRRQykNPlusQrBoJhQTkSgo5Ws9Y4e/ek0gHCXfQ9f
+         UWl5dvf85g7MpHjezxrovZ/ktB/Un3GxYG/jYT3zgq8T9AgYpE7PLwmxr5/ofJF8joiF
+         NpMLrA6HnUVs/7RW87NzdUUfbfkekVaP1f+8Y/DC+jqu3WQwMc2KUa3y+PprukqCJcHU
+         8uRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=uXGCeCEAXm7WShuxFsGAnc4TEA0foi/qCDefq62rLtE=;
-        b=BJrOq/cVp3opwodrVIAK665+CHngn1b75VYq+F1zAbXiXR4rCIxgc190+X8HgQHbpP
-         AxhLZzVAf5uERV/16yVGA01ABhA0LUUwZGcR/uvjSIOMmNesTH0b8KszANM4GRwEIQQq
-         Hw43C9YWEl1WULU773aZhON1HegwnllSowlB8cJRH65KkxfqZ/6okseuVY7PVWd56YjO
-         DoUeec70GuJozKSjC1Cbwsk9tV5mzeuSRp4aTsDQJB9mfFlH1MPBAeOWGDz/1V3BqGcK
-         QQInvCwL26MkLuIt7/bFrxsQw2fBWEUEvFfnUk6jxEZMBR187XDAWHhGPGJK6Tx4mLa+
-         xT5A==
-X-Gm-Message-State: ACrzQf0nGQEO1mmtzMvJuZXRO0WsRKzGWcwMWjWPnqjCv/BOxSNgI1dV
-        PC0BogqL+4zrYQr0RN9AV9w=
-X-Google-Smtp-Source: AMsMyM61Zc1csNqRtaf/3/POuEYcEKQPL8bsZ4ixUbSYOVRgUX0R8MLfqa64HQ7Wp47QzgX5f3mFDQ==
-X-Received: by 2002:a05:6402:27ca:b0:451:7b58:1b01 with SMTP id c10-20020a05640227ca00b004517b581b01mr32830416ede.61.1664354211104;
+        bh=MBektPIlMNaA94hBUX0CqK9rztppqrFQ5yZw6cU5GA0=;
+        b=ByzpP9eucCW4aq9U0Jx+fnQprOACe5U9h3Mx+ECmx06PsS2EmrWgLiI07F+Ybwlhug
+         NkfcbcT/AziirxjABnbx7ED1lgnyMC9J5f9kzIzZz6s/hHOIbr4AQ/aSgiSHFf7zmU87
+         dUqR7svNcwXs3n2Lkw4AQR1/ey5OI7VGvPcOOuKi9UShf9NsaTdO4TfRHAcW9ru93wET
+         96vjIb+eyDTPsFIMc6pbxXEaFtsjPIgispDrxqN9qBjoozI1CmucfM8dR5cJtcA+nCtw
+         qDokRoKmbRedCDKKMK+y2u9eKd0dNuauJOEXmd66lpgkVAqWcP2adNQDtPrzSjjObqCw
+         xktw==
+X-Gm-Message-State: ACrzQf2z+daoqICJhE/PEDa+7tpYHeCNxpRWQI5+VMbmhOzpH2JIlYKW
+        umDsq9ilQWEmdxapLMTHxcU=
+X-Google-Smtp-Source: AMsMyM4twxMuvjaYsmnTWGMP/Jsa+DOULJ4IT+cCUr07gRi+SeVNi1RRVmEet7caj68BkC4mHllRSA==
+X-Received: by 2002:aa7:c6d6:0:b0:457:d8cd:abb5 with SMTP id b22-20020aa7c6d6000000b00457d8cdabb5mr3999708eds.382.1664354211697;
         Wed, 28 Sep 2022 01:36:51 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb59.dynamic.kabel-deutschland.de. [95.90.187.89])
-        by smtp.gmail.com with ESMTPSA id gy23-20020a170906f25700b00730b3bdd8d7sm2024526ejb.179.2022.09.28.01.36.50
+        by smtp.gmail.com with ESMTPSA id gy23-20020a170906f25700b00730b3bdd8d7sm2024526ejb.179.2022.09.28.01.36.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 01:36:50 -0700 (PDT)
+        Wed, 28 Sep 2022 01:36:51 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 1/2] staging: r8188eu: remove PHY_RF6052_Config8188E()
-Date:   Wed, 28 Sep 2022 10:36:40 +0200
-Message-Id: <20220928083641.8275-2-straube.linux@gmail.com>
+Subject: [PATCH 2/2] staging: r8188eu: remove PHY_RFConfig8188E()
+Date:   Wed, 28 Sep 2022 10:36:41 +0200
+Message-Id: <20220928083641.8275-3-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220928083641.8275-1-straube.linux@gmail.com>
 References: <20220928083641.8275-1-straube.linux@gmail.com>
@@ -72,70 +72,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function PHY_RF6052_Config8188E() is just a wrapper around
+The function PHY_RFConfig8188E() is just a wrapper around
 phy_RF6052_Config_ParaFile(). Remove the wrapper.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/hal/rtl8188e_phycfg.c |  2 +-
- drivers/staging/r8188eu/hal/rtl8188e_rf6052.c | 13 +------------
- drivers/staging/r8188eu/include/rtl8188e_rf.h |  2 +-
- 3 files changed, 3 insertions(+), 14 deletions(-)
+ drivers/staging/r8188eu/hal/rtl8188e_phycfg.c    | 9 ---------
+ drivers/staging/r8188eu/hal/usb_halinit.c        | 2 +-
+ drivers/staging/r8188eu/include/Hal8188EPhyCfg.h | 1 -
+ 3 files changed, 1 insertion(+), 11 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-index a435ec65d4b1..cb2788bc383b 100644
+index cb2788bc383b..731179635c54 100644
 --- a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
 +++ b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-@@ -512,7 +512,7 @@ int PHY_RFConfig8188E(struct adapter *Adapter)
- 	int		rtStatus = _SUCCESS;
- 
- 	/*  RF config */
--	rtStatus = PHY_RF6052_Config8188E(Adapter);
-+	rtStatus = phy_RF6052_Config_ParaFile(Adapter);
+@@ -507,15 +507,6 @@ PHY_BBConfig8188E(
  	return rtStatus;
  }
  
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c b/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
-index 237232432f37..0dc902b0abae 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
-@@ -366,7 +366,7 @@ rtl8188e_PHY_RF6052SetOFDMTxPower(
- 	}
- }
- 
--static int phy_RF6052_Config_ParaFile(struct adapter *Adapter)
-+int phy_RF6052_Config_ParaFile(struct adapter *Adapter)
- {
- 	struct bb_reg_def *pPhyReg;
- 	struct hal_data_8188e *pHalData = &Adapter->haldata;
-@@ -404,14 +404,3 @@ static int phy_RF6052_Config_ParaFile(struct adapter *Adapter)
- 
- 	return rtStatus;
- }
--
--int PHY_RF6052_Config8188E(struct adapter *Adapter)
+-int PHY_RFConfig8188E(struct adapter *Adapter)
 -{
--	int rtStatus = _SUCCESS;
+-	int		rtStatus = _SUCCESS;
 -
--	/*  */
--	/*  Config BB and RF */
--	/*  */
+-	/*  RF config */
 -	rtStatus = phy_RF6052_Config_ParaFile(Adapter);
 -	return rtStatus;
 -}
-diff --git a/drivers/staging/r8188eu/include/rtl8188e_rf.h b/drivers/staging/r8188eu/include/rtl8188e_rf.h
-index 04556496baad..63ac0acc68fd 100644
---- a/drivers/staging/r8188eu/include/rtl8188e_rf.h
-+++ b/drivers/staging/r8188eu/include/rtl8188e_rf.h
-@@ -8,7 +8,7 @@
- #define		RF6052_MAX_REG			0x3F
- #define		RF6052_MAX_PATH			2
+-
+ static void getTxPowerIndex88E(struct adapter *Adapter, u8 channel, u8 *cckPowerLevel,
+ 			       u8 *ofdmPowerLevel, u8 *BW20PowerLevel,
+ 			       u8 *BW40PowerLevel)
+diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
+index a478b83dcbf3..d28b4dc2a767 100644
+--- a/drivers/staging/r8188eu/hal/usb_halinit.c
++++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+@@ -611,7 +611,7 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
+ 	if (status == _FAIL)
+ 		goto exit;
  
--int	PHY_RF6052_Config8188E(struct adapter *Adapter);
-+int phy_RF6052_Config_ParaFile(struct adapter *Adapter);
- void rtl8188e_PHY_RF6052SetBandwidth(struct adapter *Adapter,
- 				     enum ht_channel_width Bandwidth);
- void	rtl8188e_PHY_RF6052SetCckTxPower(struct adapter *Adapter, u8 *level);
+-	status = PHY_RFConfig8188E(Adapter);
++	status = phy_RF6052_Config_ParaFile(Adapter);
+ 	if (status == _FAIL)
+ 		goto exit;
+ 
+diff --git a/drivers/staging/r8188eu/include/Hal8188EPhyCfg.h b/drivers/staging/r8188eu/include/Hal8188EPhyCfg.h
+index 9e6f2361b090..4a0b782c33be 100644
+--- a/drivers/staging/r8188eu/include/Hal8188EPhyCfg.h
++++ b/drivers/staging/r8188eu/include/Hal8188EPhyCfg.h
+@@ -80,7 +80,6 @@ void rtl8188e_PHY_SetRFReg(struct adapter *adapter, u32 regaddr, u32 mask, u32 d
+ /* MAC/BB/RF HAL config */
+ int PHY_MACConfig8188E(struct adapter *adapter);
+ int PHY_BBConfig8188E(struct adapter *adapter);
+-int PHY_RFConfig8188E(struct adapter *adapter);
+ 
+ /*  BB TX Power R/W */
+ void PHY_SetTxPowerLevel8188E(struct adapter *adapter, u8 channel);
 -- 
 2.37.3
 
