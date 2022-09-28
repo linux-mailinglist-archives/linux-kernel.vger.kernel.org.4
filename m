@@ -2,99 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3B85EE079
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EB45EE080
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234742AbiI1P3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
+        id S233898AbiI1Pbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234634AbiI1P2m (ORCPT
+        with ESMTP id S234328AbiI1PbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:28:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868F761D6F;
-        Wed, 28 Sep 2022 08:28:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3076BB820FA;
-        Wed, 28 Sep 2022 15:28:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC018C433C1;
-        Wed, 28 Sep 2022 15:28:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664378918;
-        bh=alOUuEhnRUZiQBgz0BxBl3gcJ5fFOe0ChoITh0h2imI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qqmCjb7bmm/MqBmSUeSNVyrUL9sThmkv1gFznet8qVrLgFSsrG8z9X5sgvpfIwbx/
-         6IRArMJD+JHMBufiLSRnS8STfGjwnWzXCcN1yZ29jm2Q3FVFmMBVBHRS+6IpR8+QVU
-         O0riOl/2nn3L4z+sAb7/1qoT90g+0g2IRCjLHGRIdwYNQJZpnWEQ9Kw5bELt0VdJIl
-         gZPS1gfEy5wLFCVtL8xByR2eDtkYbxXoJnhTvcslKD7LhF+lBdaZ3VIiQEHOAteA6+
-         WlqJVB6hDmB+ZtGAysLyC2ta8w5aPw2Ls7HxgHeZLKjmaXu2lfIutbihjuZl1Cchcq
-         AX18UMGG2gYVw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1odYzL-000808-CB; Wed, 28 Sep 2022 17:28:43 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 13/13] phy: qcom-qmp-pcie: clean up clock lists
-Date:   Wed, 28 Sep 2022 17:28:22 +0200
-Message-Id: <20220928152822.30687-14-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220928152822.30687-1-johan+linaro@kernel.org>
-References: <20220928152822.30687-1-johan+linaro@kernel.org>
+        Wed, 28 Sep 2022 11:31:10 -0400
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E965E665;
+        Wed, 28 Sep 2022 08:29:54 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id z6so20420542wrq.1;
+        Wed, 28 Sep 2022 08:29:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=U4dfxCOtpXm2iIv192KdpqzJp/F1yD6Pk1tXFLgpuUI=;
+        b=Z9CQjXskAc6LrZDIE2I9A4QZ8wXjAcCsltHUH2Drbj6M63Fc0ZXOa7t37ZJ30YThco
+         tOXNgsPRYaYPoV0u0t69ol3Q324MVNuRq3jArjvb+tLsXeZN0rhtG9CBjRG487IoKPs/
+         JQRdtgnOM2hEKnai66rIhDXyTXFFslUvSknYyyaTrtUbG6uWIUINteaj7lkehOjZflLs
+         ynIP4vQeMw9zkP5GrnOjTfK53Y/j/P5yT/QZ3ebihsZj6OY6ddrKri7ql2OZvrF701NU
+         JiK/JNqp5Q7o2YG9hBUwULhjESt/f3eugPJLGXemek1TOgAQUV6pnmUQCvRj9j0Hd6sf
+         Klqg==
+X-Gm-Message-State: ACrzQf2bgodYsJ/sPp9L2WRbfXBufejZPhnbXLLaSqg7gU8K/DKsVbBw
+        T0TeLdeCeC0UjRIg02HZGzI=
+X-Google-Smtp-Source: AMsMyM5OTNW6IKVdBtKnKaByGNB9jKdBhPhqyWANjliIhwqeqFJZczom9Bz3OlzRDDx7ON7PTYOFEQ==
+X-Received: by 2002:adf:f7c7:0:b0:22c:be66:dd6f with SMTP id a7-20020adff7c7000000b0022cbe66dd6fmr6155609wrq.144.1664378985754;
+        Wed, 28 Sep 2022 08:29:45 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id j19-20020a05600c1c1300b003a5ca627333sm2391110wms.8.2022.09.28.08.29.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 08:29:45 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 15:29:43 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>,
+        Gary Guo <gary@garyguo.net>, Matthew Bakhtiari <dev@mtbk.me>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH v10 10/27] rust: add `macros` crate
+Message-ID: <YzRoZwhxE4182cm2@liuwe-devbox-debian-v2>
+References: <20220927131518.30000-1-ojeda@kernel.org>
+ <20220927131518.30000-11-ojeda@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927131518.30000-11-ojeda@kernel.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Keep the clock lists together and sorted by symbol name.
+On Tue, Sep 27, 2022 at 03:14:41PM +0200, Miguel Ojeda wrote:
+> This crate contains all the procedural macros ("proc macros")
+> shared by all the kernel.
+> 
+> Procedural macros allow to create syntax extensions. They run at
+> compile-time and can consume as well as produce Rust syntax.
+> 
+> For instance, the `module!` macro that is used by Rust modules
+> is implemented here. It allows to easily declare the equivalent
+> information to the `MODULE_*` macros in C modules, e.g.:
+> 
+>     module! {
+>         type: RustMinimal,
+>         name: b"rust_minimal",
+>         author: b"Rust for Linux Contributors",
+>         description: b"Rust minimal sample",
+>         license: b"GPL",
+>     }
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+I don't use / know much of procedural macros, so I don't feel like I'm
+qualified to review this patch.
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index 150dc58147ce..0b048e32f39b 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -1409,6 +1409,10 @@ static inline void qphy_clrbits(void __iomem *base, u32 offset, u32 val)
- }
- 
- /* list of clocks required by phy */
-+static const char * const ipq8074_pciephy_clk_l[] = {
-+	"aux", "cfg_ahb",
-+};
-+
- static const char * const msm8996_phy_clk_l[] = {
- 	"aux", "cfg_ahb", "ref",
- };
-@@ -1423,10 +1427,6 @@ static const char * const qmp_phy_vreg_l[] = {
- 	"vdda-phy", "vdda-pll",
- };
- 
--static const char * const ipq8074_pciephy_clk_l[] = {
--	"aux", "cfg_ahb",
--};
--
- /* list of resets */
- static const char * const ipq8074_pciephy_reset_l[] = {
- 	"phy", "common",
--- 
-2.35.1
+Just a general question: what is the house rule for adding new proc
+macros? They are powerful tools. I can see their value in `module!`
+because writing all that boilerplate by hand is just painful. Yet they
+are not straightforward to understand. It is difficult, just by looking
+at the macro, to fully grasp what the final code looks like (though the
+rsi target will help). Is there a concern that proc macro gets abused?
 
+Thanks,
+Wei.
