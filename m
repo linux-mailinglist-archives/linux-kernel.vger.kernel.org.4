@@ -2,105 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1CB5EDF99
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EABD5EDF9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234609AbiI1PD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
+        id S234602AbiI1PEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiI1PD0 (ORCPT
+        with ESMTP id S233247AbiI1PEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:03:26 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B53A367A8;
-        Wed, 28 Sep 2022 08:03:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=j8dtOkI4/DbIj26pNqdisQlvlJxpcZ2xj3Pqld4MWOI=; b=HpLywNW0Z3W544AcYHbYLNQIwy
-        9YZdryN4uy9s6PPfiJF5bJN1fQJkAbuAO42Uys/VjQc8DO30QcxhJTJRrdtyk+J6p7zVcrk7KbC/8
-        AXKaStZW15/Y/KX2E3mblk49BOliLtFSxaa7eA2Z51b0oMfkW9ZbXCvN9JyO2yhMV/na1Bbht55r8
-        cvYsThs+6xNhBTAtI59F9X3+iUq2XrfXJbj85pOzp5Di8D4SDyCyQt6z38HvjX8xWTP//oVEaL52K
-        +DZeErui1JDRlpym3ZRUflYStJMeIHHp+twr/WD+6PwpHOceWQeg9PuwINRZhvx8FqWM+Bjewx4D2
-        J30Rf/yw==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1odYan-00GmQE-Di; Wed, 28 Sep 2022 15:03:21 +0000
-Message-ID: <14088654-189e-2983-fbdd-d2a28b0b13db@infradead.org>
-Date:   Wed, 28 Sep 2022 08:03:20 -0700
+        Wed, 28 Sep 2022 11:04:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BB088A1A;
+        Wed, 28 Sep 2022 08:04:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED1D4B81FA2;
+        Wed, 28 Sep 2022 15:04:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF0CC433C1;
+        Wed, 28 Sep 2022 15:03:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664377438;
+        bh=NRllYnWOmIZn9K9w86cX3L3Nj4a7CsqYqfE3TbG8jFo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EzDIqzwOpCcuTEMA4WbMpGj+/uVLnmZvjsbMne/ABCC1CMSvRTBy/48jWaf0Hg4KY
+         bgw7smjokwizE2hSdWQHQ+cTqWj0rH+KQEeu+Uyzn+lM3xCLLFdgJM89J7TYUHAeRo
+         PX8jGzmMpXwVWpUb47Qi6TDvbxzsP+Ijx8hVO+5DJvVSy6lMnyeN1XcwNChk2gy54W
+         4ZEvIoGNRKBP5M43zUg4/UajXWDeWR+nMBA/jGnAjLu6IV7GlYvUvvk1tLJPPMke4o
+         92YBTWMlPGFYjhuo+qJ3bjl2JKgm01hr4RuLriDn5HfIn5oqsEdk2XrUOdQ0TCAu12
+         RJBE6qFFNqwlA==
+Date:   Wed, 28 Sep 2022 16:03:51 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Sergiu Moga <sergiu.moga@microchip.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, radu_nicolae.pirea@upb.ro,
+        richard.genoud@gmail.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, kavyasree.kotagiri@microchip.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v5 1/9] dt-bindings: mfd: atmel,sama5d2-flexcom: Add SPI
+ child node ref binding
+Message-ID: <YzRiVwzJYXtat1O5@google.com>
+References: <20220922113347.144383-1-sergiu.moga@microchip.com>
+ <20220922113347.144383-2-sergiu.moga@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 7/7] docs: add a man-pages link to the front page
-Content-Language: en-US
-To:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joe Perches <joe@perches.com>,
-        David Vernet <void@manifault.com>
-References: <20220927160559.97154-1-corbet@lwn.net>
- <20220927160559.97154-8-corbet@lwn.net>
- <ff413763-6cac-576f-7671-2f883bb56c51@leemhuis.info>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <ff413763-6cac-576f-7671-2f883bb56c51@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220922113347.144383-2-sergiu.moga@microchip.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 22 Sep 2022, Sergiu Moga wrote:
 
+> Another functionality of FLEXCOM is that of SPI. In order for
+> the proper validation of the SPI children nodes through the binding
+> to occur, the proper binding for SPI must be referenced.
+> 
+> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> 
+> 
+> v1 -> v2:
+> - use full schema paths
+> 
+> 
+> v2 -> v3:
+> - Added Reviewed-by tag, previously this was [PATCH 3]
+> 
+> 
+> v3 -> v4:
+> - Nothing, previously this was [PATCH 5]
+> 
+> 
+> v4 -> v5:
+> - Nothing
+> 
+> 
+> 
+>  .../devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml       | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 
-On 9/27/22 23:21, Thorsten Leemhuis wrote:
-> 
-> 
-> On 27.09.22 18:05, Jonathan Corbet wrote:
->> Readers looking for user-oriented information may benefit from it.
->>
->> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
->> ---
->>  Documentation/index.rst | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/Documentation/index.rst b/Documentation/index.rst
->> index 5a700548ae82..85eab6e990ab 100644
->> --- a/Documentation/index.rst
->> +++ b/Documentation/index.rst
->> @@ -76,6 +76,8 @@ developers seeking information on the kernel's user-space APIs.
->>     User-space tools <tools/index>
->>     userspace-api/index
->>  
->> +See also: the `Linux man pages <https://www.kernel.org/doc/man-pages/>`_,
->> +which are kept separately from the kernel's own documentation.
-> 
-> People following that link might be inclined to click on the section 1
-> and then find a lot of stuff that has nothing or not much to do with the
-> kernel and then might feel lost. So how about a text like this instead:
-> 
-> ```
-> See also the `Linux man pages <https://www.kernel.org/doc/man-pages/>`_,
-> as that where some of the kernel's documentation is kept. Among it are
-> for example descriptions of Linux' `system calls
-> <https://man7.org/linux/man-pages/dir_section_2.html>`_ and `devices
-> <https://man7.org/linux/man-pages/dir_section_4.html>`_; the sections
-> `files <https://man7.org/linux/man-pages/dir_section_5.html>`_ and
-> `overviews, conventions, and miscellaneous
-> <https://man7.org/linux/man-pages/dir_section_7.html>`_ also contain
-> many documents dedicated to aspects of the kernel.
-> ```
-> 
-> The last section (e.g. everything after the semicolon) might not be
-> worth it.
+Not sure how these can be handled.
 
-I prefer the simple instead of the verbose.
+I guess I cannot take these until the other patches are applied.
+
+NB: The patch doesn't apply cleanly anyway, so will need to be rebased.
+
+> diff --git a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+> index 0c80f4e98c54..f283cfd84b2d 100644
+> --- a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+> @@ -78,10 +78,9 @@ patternProperties:
+>        of USART bindings.
+>  
+>    "^spi@[0-9a-f]+$":
+> -    type: object
+> +    $ref: /schemas/spi/atmel,at91rm9200-spi.yaml
+>      description:
+> -      Child node describing SPI. See ../spi/spi_atmel.txt for details
+> -      of SPI bindings.
+> +      Child node describing SPI.
+>  
+>    "^i2c@[0-9a-f]+$":
+>      $ref: /schemas/i2c/atmel,at91sam-i2c.yaml
 
 -- 
-~Randy
+Lee Jones [李琼斯]
