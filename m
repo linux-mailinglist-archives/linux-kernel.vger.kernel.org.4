@@ -2,76 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBDC5EDA3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 12:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21145EDA25
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 12:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233555AbiI1Ki7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 06:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S233368AbiI1Keq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 06:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232196AbiI1Kiz (ORCPT
+        with ESMTP id S233284AbiI1Kel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 06:38:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4365593515
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 03:38:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F79BB8201E
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:38:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57D19C433D6;
-        Wed, 28 Sep 2022 10:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664361532;
-        bh=B6NJe4aAWOz6+MDkLUXS9xLX6IDEdKvtpsCfh1WOick=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nckNkWnr1oV8lQfiyX9Q7sDEP6610nzipriJfXIGq1dnU7CtvyCAdmy+Yrstf3RIG
-         yqaMU0i8mEO+fVf8dnak07ih+peeZvEHZKeFbqMKWeSkAvzlMDxuVG3aK+DYsf0FBO
-         mI0AlNnBO1dqKfpIzZOWXpOBDuAhAbMS/99aEOx/kbx8TIxfQ00U+xBh5y6oAWT4Wc
-         VH1Y93qUXH2zPy+3EymaAmF29RZoUuXiBmRXYqcyoFSLXU0jRfed2tGjc1LFz6XCjl
-         Mi1bISSLJaTCAneu9UjBbuwVgsZJInVZTlbImekZK3LKrcN6tvosYIcm4XwdmNjcxh
-         0RvUYOONmGNKQ==
-Date:   Wed, 28 Sep 2022 11:38:47 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jens Hillenstedt <jens.hillenstedt@ise.de>
-Cc:     support.opensource@diasemi.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mfd: da9061: Fix Failed to set Two-Wire Bus Mode.
-Message-ID: <YzQkNy3D1vcqOH8B@google.com>
-References: <20220915092004.168744-1-jens.hillenstedt@ise.de>
+        Wed, 28 Sep 2022 06:34:41 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A78AB1D2;
+        Wed, 28 Sep 2022 03:34:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664361275; x=1695897275;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uUdZjM/O0ckF9ng08ULrkoN8fjainSglLhr4VF70z2k=;
+  b=X86z+BKnLOQh9w2s/1NQedWpZTtUICmJmnncwQLH94U+hvrRikS+tcdh
+   eY5LKyiSVR3vehfXwn2zss01S4jo0G6XfkP5O2+AdLSQngLPomjVYcB5F
+   veSvD/l4z46sid3OEkgf9FDDIhQyEPFHCvoJCj3r7X/j0Ml87Qo9smzhV
+   6FHmxudyxOkAuGBhZUVet0MZMpy8wCcFiN2YG0wFLSVgfFWQGzEP5i17t
+   LHh4QqtY0NDEER5rrkOixMaUFBfWTe3a/ZoPzA66TSGqt2xA902uGo1gm
+   aI4craCsrEhbE6rAZOmn5iF+lVWxA373Hb9snpo83kEWHKhaSVMZpR02M
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="175980659"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Sep 2022 03:34:34 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 28 Sep 2022 03:34:32 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Wed, 28 Sep 2022 03:34:32 -0700
+Date:   Wed, 28 Sep 2022 12:39:00 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>, <Ian.Saturley@microchip.com>
+Subject: Re: [PATCH net V4] eth: lan743x: reject extts for non-pci11x1x
+ devices
+Message-ID: <20220928103900.bwtbtmfhnyhr5cnz@soft-dev3-1.localhost>
+References: <20220928090311.93361-1-Raju.Lakkaraju@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220915092004.168744-1-jens.hillenstedt@ise.de>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220928090311.93361-1-Raju.Lakkaraju@microchip.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Sep 2022, Jens Hillenstedt wrote:
+The 09/28/2022 14:33, Raju Lakkaraju wrote:
 
-> In da9062_i2c_probe() regmap_clear_bits() tries to access CONFIG_J
-> register. As CONFIG_J is not present in da9061_aa_writeable_ranges[] probe
-> of da9061 fails:
+Hi Raju,
+
+I think there is a 24h waiting period before sending new patches for the
+same series, just to give time for other people to review it.
+
+> Remove PTP_PF_EXTTS support for non-PCI11x1x devices since they do not support
+> the PTP-IO Input event triggered timestamping mechanisms added
 > 
->   da9062 2-0058: Entering I2C mode!
->   da9062 2-0058: Failed to set Two-Wire Bus Mode.
->   da9062: probe of 2-0058 failed with error -5
+> Fixes: 60942c397af6 ("Add support for PTP-IO Event Input External  Timestamp (extts)")
+
+This still fails for 2 reasons:
+1. Empty lines around fixes tag
+2. The subject line is still wrong. It doesn't match the SHA.
+
+I would do something like:
+---
+Fixes: 60942c397af60 ("net: lan743x: Add support for PTP-IO Event Input External Timestamp (extts)")
+Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+---
+
+As you noticed I have skipped Jakub's reviewed-by tag because I can't find
+it where you get it. Because I can't see it that you received it in v2
+and you already added in v3.
+
 > 
-> Add CONFIG_J register to da9061_aa_writeable_ranges[].
+> Reviewed-by: Jakub Kicinski <kuba@kernel.org>
 > 
-> Fixes: 5c6f0f456351 ("mfd: da9062: Support SMBus and I2C mode")
-> Signed-off-by: Jens Hillenstedt <jens.hillenstedt@ise.de>
+> Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
 > ---
->  drivers/mfd/da9062-core.c | 1 +
->  1 file changed, 1 insertion(+)
-
-Applied, thanks.
+> Changes:
+> ========
+> V3 -> V4:
+>   - Fix the Fixes tag line split
+> 
+> V2 -> V3:
+>  - Correct the Fixes tag
+> 
+> V1 -> V2:
+>  - Repost against net with a Fixes tag
+> 
+>  drivers/net/ethernet/microchip/lan743x_ptp.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/microchip/lan743x_ptp.c b/drivers/net/ethernet/microchip/lan743x_ptp.c
+> index 6a11e2ceb013..da3ea905adbb 100644
+> --- a/drivers/net/ethernet/microchip/lan743x_ptp.c
+> +++ b/drivers/net/ethernet/microchip/lan743x_ptp.c
+> @@ -1049,6 +1049,10 @@ static int lan743x_ptpci_verify_pin_config(struct ptp_clock_info *ptp,
+>  					   enum ptp_pin_function func,
+>  					   unsigned int chan)
+>  {
+> +	struct lan743x_ptp *lan_ptp =
+> +		container_of(ptp, struct lan743x_ptp, ptp_clock_info);
+> +	struct lan743x_adapter *adapter =
+> +		container_of(lan_ptp, struct lan743x_adapter, ptp);
+>  	int result = 0;
+>  
+>  	/* Confirm the requested function is supported. Parameter
+> @@ -1057,7 +1061,10 @@ static int lan743x_ptpci_verify_pin_config(struct ptp_clock_info *ptp,
+>  	switch (func) {
+>  	case PTP_PF_NONE:
+>  	case PTP_PF_PEROUT:
+> +		break;
+>  	case PTP_PF_EXTTS:
+> +		if (!adapter->is_pci11x1x)
+> +			result = -1;
+>  		break;
+>  	case PTP_PF_PHYSYNC:
+>  	default:
+> -- 
+> 2.25.1
+> 
 
 -- 
-Lee Jones [李琼斯]
+/Horatiu
