@@ -2,118 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE0C5ED648
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4EB5ED649
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233756AbiI1Hg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
+        id S233759AbiI1HhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233761AbiI1HgS (ORCPT
+        with ESMTP id S233006AbiI1HgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:36:18 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3932B7EFFE
+        Wed, 28 Sep 2022 03:36:20 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9425D1075AF
         for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:35:49 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id b6so13373659ljr.10
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:35:48 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id g20so13388922ljg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:35:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=3j/OGBdohTxo+OrTq6NBOfxvszCK7ExkrQxW4O8b994=;
-        b=atm12eJwGt6KW1nvvfcySISnScimJj6UlzOjGboOpEYfiAJsQ2IiCXZkydoNNYKlND
-         RgR3x7ksKA9vBr2JFdMIUNXKq1r1CKQC4g/KRTVULzL2HLAAt9BUU0XVg1eHEju5FWit
-         WNujalZ1jjiZKrQHS71YdWZ0ABi0et6y1JVWXI1XCssx4v+reFoVdknOuhMJUoz7Unho
-         Ha/PYS2fXiAjtMxC+a0F40+oZcynizoyS4gPhMutKNmWk4qOI4kr5Rf2GRgkDKip0Cdd
-         2QC3yWdnAwp/l1FRGChKNmDySNQYA+1f99KM43gzgc0UjGucAQ+s8iLUEEnEpLdgwRQJ
-         1WsQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=60HbfXGFJSq6MviideHNDByyawzs0Eu0qQcu3vNmPOM=;
+        b=sQYW7f7s0Nt6yzJNxqkaTDr0cUlTAFn64ggsUvHstWE5DXsu7xjYzZCK9lWGZ3FclG
+         MEn6+cP1n2bRnBmVJLzeFikRQ7Uv2X25Ou/iK9i7AVjQS7Hqsf6B3O87ZLPz+TGT28Kp
+         KZ5C3zSlIRDEK45POewaLTHSthvIkfwq5rZGvz4BHz5HFFOgYzWiXHHmSg6qisYBRcYY
+         ijJqQd+eEAJuClnBm5Of2sWyDe86/ZUogQssXoiorPVLuQksLqCMmLBNm+0qypzw5hp3
+         nYZUSrTaZ2aNYaI/w8iYQOYD998gVSdCHtDoslWhYzJqP5Dg46ssCRLIGU1Gf1UT+FK0
+         gr/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=3j/OGBdohTxo+OrTq6NBOfxvszCK7ExkrQxW4O8b994=;
-        b=cWTVHVNez3joVYhiZWXZ9Li3qeCvfdFCviM0fLHL45B/uj2VeSb9jzBk+HW+EiVd3Z
-         dJVAVZk4eF3qQMTFoTJgW1+LdmOhwwwiYzKJFLP9RnlRs0f76sAbsGODlhA7HNg+6d3T
-         1RmWq2zSHUUgbClHE9LCitb2BJbjXOG2R4f5hE2Vtt05llkHrHf9/Qw3T3qvWSbAS4Tz
-         77P/6yCOE3fQRWN57+0i24rpvLzuQLNwbrO8edlJO/bNonTsyIvhKTe9/6mvyxLCJ8Fe
-         mECeuF5d6e7slbyYN03CgjoOzn5+0IbjsKVIAi8csEWbWFSOvkzPzSpcfCGeQV7C7p52
-         rzhA==
-X-Gm-Message-State: ACrzQf3sbGP9DcHE6jtrv/mOPl59+kg3HklWoYjossraDd/FVT/0nlfI
-        Jn55iDpNyWAsLo8eVkmz64UuIqSxxG/1bsHiR8l5WQ==
-X-Google-Smtp-Source: AMsMyM6l/7+jXva4+hFC7yDGhdP3H6/FMnH5Q58iBE8f6YGbet7quaIATUrYZbeLLLu3nh6c07fsoNHOSuCO/hPKJ3k=
-X-Received: by 2002:a2e:9f15:0:b0:26d:8a9c:60e7 with SMTP id
- u21-20020a2e9f15000000b0026d8a9c60e7mr6941360ljk.268.1664350541165; Wed, 28
- Sep 2022 00:35:41 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=60HbfXGFJSq6MviideHNDByyawzs0Eu0qQcu3vNmPOM=;
+        b=SSzQECZf+5RNHkoYuH3cpgis/fimBtQf6MEjJjZ7io3xW37pBcQMTZf8pt3ku3vllS
+         KRu1uCA/hq3mmbmpGIWh057R/x0QJnsVOHs4ECoeVT8Zy1VWb7symITbqlAYqergrx7U
+         kEpVA2yk4Vfe+DIdmm4J+t9nnWhju0NxVMsXq8ocjuyQDtF4NyCGAKhlKVAGDxpcmKzG
+         PHRAkcvjtUhq894Fhwdl4cpUOzZMH7hPpT7cX4WvdGLAWd+hYdY9YaksnPofzR94Go7c
+         ariBPJW+w5ReJo5Tq01fedgGldljSnN9F0uerdE67rkbY6JJw4vba8OEq2g0KQ1su5qH
+         dWEw==
+X-Gm-Message-State: ACrzQf2vJoh+HTecLh+GP4NqEimsUiiJ7omZIgwNkPUtX2xQEFaKrVib
+        46F30Lts0z+K1z7lnNqf4txmzw==
+X-Google-Smtp-Source: AMsMyM5FluMwKmSZsWwo+tEo05mSpr25PpnsouB4+c7Q6Ei197zM0GxTLRB+vlQT+ny70yPRvle/WQ==
+X-Received: by 2002:a2e:9b8a:0:b0:26c:3dde:6b2d with SMTP id z10-20020a2e9b8a000000b0026c3dde6b2dmr11410073lji.243.1664350547270;
+        Wed, 28 Sep 2022 00:35:47 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id bf34-20020a2eaa22000000b00261eb75fa5dsm370239ljb.41.2022.09.28.00.35.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 00:35:46 -0700 (PDT)
+Message-ID: <052630d0-299e-e468-b2dd-266d371e2b0f@linaro.org>
+Date:   Wed, 28 Sep 2022 09:35:40 +0200
 MIME-Version: 1.0
-References: <0000000000008af58705e9b32b1d@google.com>
-In-Reply-To: <0000000000008af58705e9b32b1d@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 28 Sep 2022 09:35:29 +0200
-Message-ID: <CACT4Y+aO-uckeUghahSJP+6VwwYCNRKCobhvb41n1RXL8Pxsiw@mail.gmail.com>
-Subject: Re: [syzbot] unexpected kernel reboot (8)
-To:     syzbot <syzbot+8346a1aeed52cb04c9ba@syzkaller.appspotmail.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v4 1/5] dt-bindings: mfd: qcom-spmi-pmic: Add pm6125
+ compatible
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220926190148.283805-1-marijn.suijten@somainline.org>
+ <20220926190148.283805-2-marijn.suijten@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220926190148.283805-2-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Sept 2022 at 04:03, syzbot
-<syzbot+8346a1aeed52cb04c9ba@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    1707c39ae309 Merge tag 'driver-core-6.0-rc7' of git://git=
-...
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D1732428888000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D122d7bd4fc8e0=
-ecb
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D8346a1aeed52cb0=
-4c9ba
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
-ls for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D15ca1f54880=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D155622df08000=
-0
->
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+8346a1aeed52cb04c9ba@syzkaller.appspotmail.com
->
-> fuseblk: Unknown parameter '                                             =
-                   Decompressing Linux... Parsing ELF... done.             =
-                                                                        Boo=
-ting the kernel.                                                           =
-                                                                           =
-                                                                           =
-                                            Decompressing Linux... Parsing =
-ELF... done.                                                               =
-                      Booting the kernel.
+On 26/09/2022 21:01, Marijn Suijten wrote:
+> Document support for the pm6125, typically paired with the sm6125 SoC.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-+fuse maintainers
 
-This one is somewhat funny. The fuzzer tricked the kernel into
-printing the rebooting message via normal logging. So on the console
-it looks like the kernel started rebooting.
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-But it looks like the kernel is reading/printing something it
-shouldn't. The reproducer doesn't pass the "Decompressing Linux"
-string in mount options. So the kernel is reading random memory
-out-of-bounds? a non-0-terminated string somewhere?
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+If a tag was not added on purpose, please state why and what changed.
+
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
