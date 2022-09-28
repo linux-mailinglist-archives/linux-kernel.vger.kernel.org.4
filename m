@@ -2,149 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321895EDA24
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 12:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D20B5EDA36
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 12:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233543AbiI1Ked (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 06:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
+        id S233564AbiI1Kgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 06:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbiI1Keb (ORCPT
+        with ESMTP id S233604AbiI1Kg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 06:34:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A36F82D09;
-        Wed, 28 Sep 2022 03:34:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3592B8201E;
-        Wed, 28 Sep 2022 10:34:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D943FC433D6;
-        Wed, 28 Sep 2022 10:34:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664361267;
-        bh=4LgcKsn8+MtAsKY2jQClP173ND1ry2xBaS3rhBDEoII=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=en/cO4Uvc+8haZ3id5aVmfM/F41Vi+kKuLHAWDZ9vK1iKlkWvhmb1tj/AEAJZfL50
-         496iYXPT5uE6XsNfI5wmq4TXCqyPWjNCeDsAm7Z2UtMD6A1j3eJnERithnutBU6LQ3
-         UOqFNOTgM0gxBi5dP1o5XjNM7BSzS/slt4LRpWOss4R31VL5olm/A4/0QOEOkypYY8
-         uwZgtWAmO/z5VGIgGrEE0Tg5/Raos6OOiYJCWcl+b3WuRIjspAClW8u4/CpeXqNqTO
-         iuDvgx4R54CvzFJC1A3ekuDZnMw+7/IvO8F20WpvlXV4HZRsYDv669ZWBMU/jA9lPh
-         mHTBtTyuHzbMA==
-Date:   Wed, 28 Sep 2022 13:34:22 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Guangbin Huang <huangguangbin2@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shenjian15@huawei.com,
-        lanhao@huawei.com
-Subject: Re: [PATCH net-next 3/4] net: hns3: replace magic numbers with macro
- for IPv4/v6
-Message-ID: <YzQjLu2jlEzm1lRo@unreal>
-References: <20220927111205.18060-1-huangguangbin2@huawei.com>
- <20220927111205.18060-4-huangguangbin2@huawei.com>
+        Wed, 28 Sep 2022 06:36:27 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE7566130;
+        Wed, 28 Sep 2022 03:36:26 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id bk15so11344861wrb.13;
+        Wed, 28 Sep 2022 03:36:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date;
+        bh=+IUuTOpUG9E3kEMkZMvCbwk8jBPBV1cYbzQF2o9+mRE=;
+        b=er1zGT1Py/2ZjBWJXMv2qtP14BtOd1BunBPwDKuPdyTlaEX0oOh57EfSfCVSp5qLFt
+         8cwXYMk6MkLCKauUfSOan4ARlPfdvFg2+a7N3biRj6HRs/tl+bjYSfMRRSwPkDIKqCl6
+         60W1oWUvYPDSaVAY3r0Ijhsryo97AxS8e7ooNS03/4PplRYSFBBCKj7+nSVfQtmKTiKN
+         JGIHLafOAEK47Fl+M0imCpCQW87JxVA/YdrivL9IJIGYGsORw+2DH0EpvsyvWeq8KJg/
+         5hB3rAHuj/tYpGQHGITEpBbVeB9pvLzTcd/Ahc156W57zD8XnvsbRtpSf5PGj5vaS1la
+         dH9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=+IUuTOpUG9E3kEMkZMvCbwk8jBPBV1cYbzQF2o9+mRE=;
+        b=I82cbHFfsaEEbgnMJLZL+Es6WuJHClcLrqkKRaQwho5Zi71jqAlcIM+o0c9E1tnFRa
+         aKE3gO5OfEo6TFxG+eOlVkh4spgNbzejdYGVDHA5uksciTCQXDe037jytzFf+Vt35gDh
+         VLQ2vA1RHAJD4P4JZ3X7R36/KXm1gZIqBxcC2sfRijTWsfHMLVgTXK6gwqtgg8lpRegm
+         IZWi+3dH7WukMWqKuKiwQXjkNgsfelSsSUD0/KeLiVe4YcHtREBOnvbYtFOnFeQRwtpG
+         KfzZEJcSKpgKJoD9Up1mb34r0H6tN810XX/MmUy1sla7uB1oOyuOupc6zKOP7L7k0rZt
+         WkHQ==
+X-Gm-Message-State: ACrzQf27U+jAsCrl4dgCenac8RVdQwJncS99RZynqGNjP3Cr/FUORO+y
+        4oAuMVkw3c4ZOH4UdVCISEc=
+X-Google-Smtp-Source: AMsMyM6iofkjO4eX8Dzsn0n5ooEJ3V5O8nlCEQ/m8d5q9ZAFcEqp62JvDgoMLCEnN/eDhYgbBL6BKg==
+X-Received: by 2002:a5d:6447:0:b0:22c:c621:ef73 with SMTP id d7-20020a5d6447000000b0022cc621ef73mr2639073wrw.636.1664361384286;
+        Wed, 28 Sep 2022 03:36:24 -0700 (PDT)
+Received: from [10.176.234.249] ([137.201.254.41])
+        by smtp.googlemail.com with ESMTPSA id l18-20020a05600c2cd200b003a63a3b55c3sm1439466wmc.14.2022.09.28.03.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 03:36:23 -0700 (PDT)
+Message-ID: <0e2334ebc4ba0ba137e83c60a090fde536be7f26.camel@gmail.com>
+Subject: Re: [PATCH] scsi: ufs-bsg: Remove ufs_bsg_get_query_desc_size
+ function
+From:   Bean Huo <huobean@gmail.com>
+To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Daniil Lunev <dlunev@chromium.org>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        Avi Shchislowski <Avi.Shchislowski@wdc.com>
+Date:   Wed, 28 Sep 2022 12:36:22 +0200
+In-Reply-To: <BY5PR04MB6327ED5C6D91CBD3A024F709ED549@BY5PR04MB6327.namprd04.prod.outlook.com>
+References: <1655727966-31584-1-git-send-email-Arthur.Simchaev@wdc.com>
+         <87e6fdb49d9d76c468712e1b42cbc130273b5635.camel@gmail.com>
+         <BY5PR04MB6327B8C5001E315009E3AC6EED4F9@BY5PR04MB6327.namprd04.prod.outlook.com>
+         <BY5PR04MB6327ED5C6D91CBD3A024F709ED549@BY5PR04MB6327.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927111205.18060-4-huangguangbin2@huawei.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 07:12:04PM +0800, Guangbin Huang wrote:
-> From: Hao Chen <chenhao418@huawei.com>
-> 
-> Replace 4/6 with IP_VERSION_V4/6 to improve code readability.
-> 
-> Signed-off-by: Hao Chen <chenhao418@huawei.com>
-> Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
-> ---
->  drivers/net/ethernet/hisilicon/hns3/hns3_enet.c | 12 ++++++------
->  drivers/net/ethernet/hisilicon/hns3/hns3_enet.h |  3 +++
->  2 files changed, 9 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-> index 39b75b68474c..bf573e0c0670 100644
-> --- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-> @@ -1180,7 +1180,7 @@ static int hns3_set_tso(struct sk_buff *skb, u32 *paylen_fdop_ol4cs,
->  	/* Software should clear the IPv4's checksum field when tso is
->  	 * needed.
->  	 */
-> -	if (l3.v4->version == 4)
-> +	if (l3.v4->version == IP_VERSION_IPV4)
->  		l3.v4->check = 0;
->  
->  	/* tunnel packet */
-> @@ -1195,7 +1195,7 @@ static int hns3_set_tso(struct sk_buff *skb, u32 *paylen_fdop_ol4cs,
->  		/* Software should clear the IPv4's checksum field when
->  		 * tso is needed.
->  		 */
-> -		if (l3.v4->version == 4)
-> +		if (l3.v4->version == IP_VERSION_IPV4)
->  			l3.v4->check = 0;
->  	}
->  
-> @@ -1270,13 +1270,13 @@ static int hns3_get_l4_protocol(struct sk_buff *skb, u8 *ol4_proto,
->  	l3.hdr = skb_inner_network_header(skb);
->  	l4_hdr = skb_inner_transport_header(skb);
->  
-> -	if (l3.v6->version == 6) {
-> +	if (l3.v6->version == IP_VERSION_IPV6) {
->  		exthdr = l3.hdr + sizeof(*l3.v6);
->  		l4_proto_tmp = l3.v6->nexthdr;
->  		if (l4_hdr != exthdr)
->  			ipv6_skip_exthdr(skb, exthdr - skb->data,
->  					 &l4_proto_tmp, &frag_off);
-> -	} else if (l3.v4->version == 4) {
-> +	} else if (l3.v4->version == IP_VERSION_IPV4) {
->  		l4_proto_tmp = l3.v4->protocol;
->  	}
->  
-> @@ -1364,7 +1364,7 @@ static void hns3_set_outer_l2l3l4(struct sk_buff *skb, u8 ol4_proto,
->  static void hns3_set_l3_type(struct sk_buff *skb, union l3_hdr_info l3,
->  			     u32 *type_cs_vlan_tso)
->  {
-> -	if (l3.v4->version == 4) {
-> +	if (l3.v4->version == IP_VERSION_IPV4) {
->  		hns3_set_field(*type_cs_vlan_tso, HNS3_TXD_L3T_S,
->  			       HNS3_L3T_IPV4);
->  
-> @@ -1373,7 +1373,7 @@ static void hns3_set_l3_type(struct sk_buff *skb, union l3_hdr_info l3,
->  		 */
->  		if (skb_is_gso(skb))
->  			hns3_set_field(*type_cs_vlan_tso, HNS3_TXD_L3CS_B, 1);
-> -	} else if (l3.v6->version == 6) {
-> +	} else if (l3.v6->version == IP_VERSION_IPV6) {
->  		hns3_set_field(*type_cs_vlan_tso, HNS3_TXD_L3T_S,
->  			       HNS3_L3T_IPV6);
->  	}
-> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.h b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.h
-> index 557a5fa70d0a..93041352ef19 100644
-> --- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.h
-> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.h
-> @@ -217,6 +217,9 @@ enum hns3_nic_state {
->  #define HNS3_CQ_MODE_EQE			1U
->  #define HNS3_CQ_MODE_CQE			0U
->  
-> +#define IP_VERSION_IPV4				0x4
-> +#define IP_VERSION_IPV6				0x6
+On Wed, 2022-09-28 at 08:33 +0000, Arthur Simchaev wrote:
+> Hi Bean
+>=20
+> In case you don't have any comments I will appreciate if you will add
+> "reviewed by" to the patch.
+>=20
+> Regards
+> Arthur
 
-The more traditional way is to use sa_family_t sa_family and AF_XXX instead
-of your .version variable.
 
-Thanks
+Hi Arthur,
 
-> +
->  enum hns3_pkt_l2t_type {
->  	HNS3_L2_TYPE_UNICAST,
->  	HNS3_L2_TYPE_MULTICAST,
-> -- 
-> 2.33.0
-> 
+I'm thinking we should remove the desc size check in ufshcd.c entirely.
+Just read any descriptor with a maximum size of QUERY_DESC_MAX_SIZE .
+For user space queries, ufs_bsg reads data of the maximum length and
+returns the requested length data. Thus can improve code readability
+and save CPU cycles, also can fix your concern.
+
+I don't know how about others' opinion?
+
+Kind regards,
+Bean
+
+
+
