@@ -2,122 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98175EDD07
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 295155EDD0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233860AbiI1Mlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 08:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
+        id S233582AbiI1Mmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 08:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234060AbiI1Ml2 (ORCPT
+        with ESMTP id S231703AbiI1Mmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 08:41:28 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971D682D1B
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 05:41:16 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id j16so20197824lfg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 05:41:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=Zd06RtS/Nrr3P0Lw0WJBnLGx6z/NA6eV+iimAqCF4Pk=;
-        b=L5pMtVVhH35O6FplZUIKnVB4to5VmyCNC5Cc0mTqmawGbjafKRBERWs0Hws3oxvd+8
-         oE9eNYYweSkxTsBzu2WVLV7DCXVzB4c5n0gXInXx8xQT1bQrEtRXCsLIqA6T4QJ6xQE2
-         8+0i6+7H+SAKY6jm1AVwgo57TvaNxrOJt+uKc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Zd06RtS/Nrr3P0Lw0WJBnLGx6z/NA6eV+iimAqCF4Pk=;
-        b=i5+sAAE5q96PxULkL2V3nB/OVJrMvLRjkB6X1EoZJY8Nrf4aFCPyBtVReBNv8QVVHu
-         6To0y95h6XO3w/xRAmvREdT55xKJzlkuidtDNI4zOikZMzc7zzvfnloCqZfOB3rq0biu
-         ds+1AS7nKLvDPr7+YA0opnXA27gdsFT3LJZ5HU0BPsr/C5z3pcPZlPDKpL6DJ5meNB4L
-         pwIF67qEi972DjWdhuuJLz6JKTkvLSWWZvKWiKqZ2fbfcHA3IebwHgynIjQx/WDReW3c
-         GHBrE9erMikSptsHCeHFSESV4k1pAia0q3Eq2oSGfZ53CrW4pYL/gjrz9jzyyqwJ6vOp
-         s02w==
-X-Gm-Message-State: ACrzQf2pqVEr3qt9kNh0E6h3f3RNvRGE4eXHkTFi4SOTl0fni/taZ1Tm
-        /MBC1iQ/PV3/Zp1PWGkzikMvRQ==
-X-Google-Smtp-Source: AMsMyM7Qf8SRtcyNBIQ1t4WtW2fyAZ7oKbZURcwJDSPs2npaQVfx80VVUldkD5mSzJ/Yg02Sxjp1Vg==
-X-Received: by 2002:a05:6512:b0d:b0:4a1:baad:8d7a with SMTP id w13-20020a0565120b0d00b004a1baad8d7amr8283472lfu.293.1664368874120;
-        Wed, 28 Sep 2022 05:41:14 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id e2-20020ac25462000000b0049b8c0571e5sm467396lfn.113.2022.09.28.05.41.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 05:41:13 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: [PATCH] clk: imx8mp: register driver at arch_initcall time
-Date:   Wed, 28 Sep 2022 14:41:08 +0200
-Message-Id: <20220928124108.500369-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
+        Wed, 28 Sep 2022 08:42:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC0682E691;
+        Wed, 28 Sep 2022 05:42:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4428A1063;
+        Wed, 28 Sep 2022 05:42:41 -0700 (PDT)
+Received: from e126311.manchester.arm.com (unknown [10.57.66.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 214A63F73D;
+        Wed, 28 Sep 2022 05:42:32 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 13:42:22 +0100
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     rafael@kernel.org
+Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/1] cpuidle: teo: Introduce optional util-awareness
+Message-ID: <YzRBLiHByw5xPaU3@e126311.manchester.arm.com>
+References: <20220915164411.2496380-1-kajetan.puchalski@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220915164411.2496380-1-kajetan.puchalski@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have an imx8mp-based board with an external gpio-triggered
-watchdog. Currently, we don't get to handle that in time before it
-resets the board.
+Hi Rafael,
 
-The probe of the watchdog device gets deferred because the SOC's GPIO
-controller is not yet ready, and the probe of that in turn gets deferred
-because its clock provider (namely, this driver) is not yet
-ready. Altogether, the watchdog does not get handled until the late
-initcall deferred_probe_initcall has made sure all leftover devices
-have been probed, and that's way too late.
+Just a gentle ping here. Could you please take a look at this
+discussion?
+I'd like to address some comments I received, especially on the subject
+of making it reduce the state by one as opposed to going all the way to
+0 to account for different hardware and how we can accomodate different
+architectures in the implementation of that mechanism.
 
-Aside from being necessary for our board, this also reduces total boot
-time because fewer device probes get deferred.
+Before I send a v2 it'd be great to know your opinions on this and
+whether I should still send it as a TEO patch or fork it into a separate
+governor and make the changes there as both Doug and I seem to prefer.
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
-It would probably be reasonable to do the same to the other imx8m* clk
-drivers, but I don't have any such hardware to test on.
+Thank you in advance for you time,
+Kajetan
 
- drivers/clk/imx/clk-imx8mp.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
-index e89db568f5a8..9ddd39a664cc 100644
---- a/drivers/clk/imx/clk-imx8mp.c
-+++ b/drivers/clk/imx/clk-imx8mp.c
-@@ -734,7 +734,19 @@ static struct platform_driver imx8mp_clk_driver = {
- 		.of_match_table = imx8mp_clk_of_match,
- 	},
- };
--module_platform_driver(imx8mp_clk_driver);
-+
-+static int __init imx8mp_clk_init(void)
-+{
-+	return platform_driver_register(&imx8mp_clk_driver);
-+}
-+arch_initcall(imx8mp_clk_init);
-+
-+static void __exit imx8mp_clk_exit(void)
-+{
-+	platform_driver_unregister(&imx8mp_clk_driver);
-+}
-+module_exit(imx8mp_clk_exit);
-+
- module_param(mcore_booted, bool, S_IRUGO);
- MODULE_PARM_DESC(mcore_booted, "See Cortex-M core is booted or not");
- 
--- 
-2.37.2
-
+On Thu, Sep 15, 2022 at 05:44:10PM +0100, Kajetan Puchalski wrote:
+> At the very least this approach seems promising so I wanted to discuss it in RFC form first.
+> Thank you for taking your time to read this!
+> 
+> [1] https://github.com/mrkajetanp/lisa-notebooks/blob/a2361a5b647629bfbfc676b942c8e6498fb9bd03/idle_util_aware.pdf
+> 
+> Kajetan Puchalski (1):
+>   cpuidle: teo: Introduce optional util-awareness
+> 
+>  drivers/cpuidle/Kconfig         | 12 +++++
+>  drivers/cpuidle/governors/teo.c | 86 +++++++++++++++++++++++++++++++++
+>  2 files changed, 98 insertions(+)
+> 
+> -- 
+> 2.37.1
+> 
