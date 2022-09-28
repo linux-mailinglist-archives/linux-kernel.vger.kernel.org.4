@@ -2,149 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7256A5EE97B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 00:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C62675EE984
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 00:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234750AbiI1WhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 18:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S234133AbiI1Wh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 18:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234428AbiI1Wgn (ORCPT
+        with ESMTP id S234758AbiI1Wha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 18:36:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F235FF64;
-        Wed, 28 Sep 2022 15:36:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEA4FB82146;
-        Wed, 28 Sep 2022 22:36:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50F51C433C1;
-        Wed, 28 Sep 2022 22:36:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664404565;
-        bh=3ZkYJjVGuAToHzBzl/eiZQGP9nl9Lz8aoqrcQ6zQ2uM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qtKvpq/MUwe5t3E4qnfpcWmZ+pcS4X4n2SsF/DqlSmrRrDWMnk/FLftXgyTKLbd3m
-         vf5onz4ySjHSRPWg90lJAptiotaelTd1i/CYikPGvR6S3fjnLg44rhwRDmZhL8vWft
-         8fgBaB/JZ0fJBXAIQAphj/RKrXXvh8tAme/Te94gYrUrSm+2/10sIdAi1sGA/GoFb+
-         w+E0XnEn4LevLs1JvLEaqDFEflvwhWNXQTRpQn++dtp5R3F4x8n3l6DyEkl79MWEOr
-         fcM/sZ3XXaO2EUoP/Kkt8FDn9nNMAUDD7J0uENSVy0/jAtD0M4sYt0aC3VwCNTKLHB
-         y8OuB2Bu+VdNw==
-Date:   Wed, 28 Sep 2022 15:36:02 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Matt Redfearn <matt.redfearn@mips.com>,
-        Petr =?utf-8?B?VmFuxJtr?= <arkamar@atlas.cz>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Justin Stitt <jstitt007@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Denys Vlasenko <dvlasenk@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>, mmayer@broadcom.com,
-        Khem Raj <raj.khem@gmail.com>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] include/uapi/linux/swab: Fix potentially missing
- __always_inline
-Message-ID: <YzTMUpd6HbHmZu8f@dev-arch.thelio-3990X>
-References: <20220927215256.528619-1-f.fainelli@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220927215256.528619-1-f.fainelli@gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 18:37:30 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA26FF3CB;
+        Wed, 28 Sep 2022 15:37:25 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id cm7-20020a056830650700b006587fe87d1aso9073563otb.10;
+        Wed, 28 Sep 2022 15:37:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=o9gZyjiSadqdv6mxfxQft+qOXfye+FPw5i97r+Tzn8A=;
+        b=anVPY9iSbIp6kplQjdn1U1/v8AticV+/uCjQt1tXDRu5RPCxiUXOdzGJtQPSbSkUaw
+         8Os3TPMRdhFHlbUXAz8xSGnLU6LnY5azg5e8wE0PsrVeNzs/0Rtk7AGoWR7v1VwDNgBy
+         QEWHDO+lFFLik8idUMfL6MUPU+2iNhkSuyzPnfHLJPEfEPVjgQf+cYwTGeImy1k2jEI4
+         ki7iIoc4j4YheysYR86qkY/JnTPqTvmQ7UyNFeClemouGklb7eWIWHuaQyBBSZ2H75Ib
+         FPv/I9Wp0aTq3LOLffYtTULtsP/wj8H9TlPd1f4EnbftUdez+m9JLulOuDebWiAyD5qh
+         7xbg==
+X-Gm-Message-State: ACrzQf1IuTG93o6gFAhMFIKdGx/EXv80xIWSr1zRcGH7F77xKJfLe60i
+        Fi+ejcYo0XjCpMSXO4zhkf6dF/hG4Q==
+X-Google-Smtp-Source: AMsMyM5H9jK6oqeqXok/cqzftUY221G7BgEdMfyoyL+nY6rOhKsS2nbUIDTFWV3cljSso/Od/TG9SA==
+X-Received: by 2002:a9d:394:0:b0:65c:3f7f:a6b7 with SMTP id f20-20020a9d0394000000b0065c3f7fa6b7mr28605otf.179.1664404644667;
+        Wed, 28 Sep 2022 15:37:24 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w7-20020a4aa987000000b0044b491ccf97sm2385428oom.25.2022.09.28.15.37.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 15:37:23 -0700 (PDT)
+Received: (nullmailer pid 87026 invoked by uid 1000);
+        Wed, 28 Sep 2022 22:37:22 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, jh80.chung@samsung.com,
+        linux-mmc@vger.kernel.org, ulf.hansson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org
+In-Reply-To: <20220928165420.1212284-1-dinguyen@kernel.org>
+References: <20220928165420.1212284-1-dinguyen@kernel.org>
+Subject: Re: [PATCHv4 1/3] dt-bindings: mmc: synopsys-dw-mshc: document "altr,sysmgr-syscon"
+Date:   Wed, 28 Sep 2022 17:37:22 -0500
+Message-Id: <1664404642.110424.87025.nullmailer@macbook.herring.priv>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
-
-On Tue, Sep 27, 2022 at 02:52:56PM -0700, Florian Fainelli wrote:
-> From: Matt Redfearn <matt.redfearn@mips.com>
+On Wed, 28 Sep 2022 11:54:18 -0500, Dinh Nguyen wrote:
+> Document the optional "altr,sysmgr-syscon" binding that is used to
+> access the System Manager register that controls the SDMMC clock
+> phase.
 > 
-> Commit bc27fb68aaad ("include/uapi/linux/byteorder, swab: force inlining
-> of some byteswap operations") added __always_inline to swab functions
-> and commit 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to
-> userspace headers") added a definition of __always_inline for use in
-> exported headers when the kernel's compiler.h is not available.
-> 
-> However, since swab.h does not include stddef.h, if the header soup does
-> not indirectly include it, the definition of __always_inline is missing,
-> resulting in a compilation failure, which was observed compiling the
-> perf tool using exported headers containing this commit:
-> 
-> In file included from /usr/include/linux/byteorder/little_endian.h:12:0,
->                  from /usr/include/asm/byteorder.h:14,
->                  from tools/include/uapi/linux/perf_event.h:20,
->                  from perf.h:8,
->                  from builtin-bench.c:18:
-> /usr/include/linux/swab.h:160:8: error: unknown type name `__always_inline'
->  static __always_inline __u16 __swab16p(const __u16 *p)
-> 
-> Fix this by replacing the inclusion of linux/compiler.h with
-> linux/stddef.h to ensure that we pick up that definition if required,
-> without relying on it's indirect inclusion. compiler.h is then included
-> indirectly, via stddef.h.
-> 
-> Fixes: 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to userspace headers")
-> Signed-off-by: Matt Redfearn <matt.redfearn@mips.com>
-> Reviewed-by: Petr Vaněk <arkamar@atlas.cz>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-
-I took this through my kernel build matrix and did not see any new
-issues.
-
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
-Cheers,
-Nathan
-
+> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 > ---
-> Apologies for the insanely long CC list. I encountered this problem
-> again while attempting to build perf with a LLVM 13 toolchain using
-> musl-libc. Not sure why it did not get picked up last time?
+> v4: add else statement
+> v3: document that the "altr,sysmgr-syscon" binding is only applicable to
+>     "altr,socfpga-dw-mshc"
+> v2: document "altr,sysmgr-syscon" in the MMC section
+> ---
+>  .../bindings/mmc/synopsys-dw-mshc.yaml        | 31 +++++++++++++++++--
+>  1 file changed, 28 insertions(+), 3 deletions(-)
 > 
-> Khem did submit an alternative patch a few years ago, too which also did
-> not get picked up:
-> 
-> https://lore.kernel.org/lkml/20180913005654.39976-1-raj.khem@gmail.com/
-> 
->  include/uapi/linux/swab.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/uapi/linux/swab.h b/include/uapi/linux/swab.h
-> index 0723a9cce747..01717181339e 100644
-> --- a/include/uapi/linux/swab.h
-> +++ b/include/uapi/linux/swab.h
-> @@ -3,7 +3,7 @@
->  #define _UAPI_LINUX_SWAB_H
->  
->  #include <linux/types.h>
-> -#include <linux/compiler.h>
-> +#include <linux/stddef.h>
->  #include <asm/bitsperlong.h>
->  #include <asm/swab.h>
->  
-> -- 
-> 2.25.1
-> 
-> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml: allOf:1:if:properties:compatible:contains:const: ['altr,socfpga-dw-mshc'] is not of type 'integer', 'string'
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml: ignoring, error in schema: allOf: 1: if: properties: compatible: contains: const
+Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.example.dtb:0:0: /example-0/mmc@12200000: failed to match any schema with compatible: ['snps,dw-mshc']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
