@@ -2,114 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6080F5EDBA9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F085EDBAB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbiI1LXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
+        id S233662AbiI1LXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 07:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233354AbiI1LXC (ORCPT
+        with ESMTP id S233625AbiI1LXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:23:02 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A9CDDD8D
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:23:00 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7ee329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ee:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 163261EC059D;
-        Wed, 28 Sep 2022 13:22:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1664364175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=H37L9qeZmmgh4Ob+dcO4c+wKevaFARZE41KleCoIqh0=;
-        b=Upn/lR31WevfgW+y3+vXEVtSERdEAVv/TI3lRbXaQBdP4yBNc507x/E5NXBTUD1mwJTAbQ
-        6zfe5r3uYXbWUJqZJiPVDGL5Dvj5kw89TVpkzyfSUWsk/fehuAYYHghSVpYZf/aLwUyx4E
-        9zruyDj1Sf7rvxpqHONY003jfJTdkpM=
-Date:   Wed, 28 Sep 2022 13:22:51 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
- mtrr_aps_delayed_init
-Message-ID: <YzQui+rOGrM6otzp@zn.tnic>
-References: <c0872933-e046-0c5e-b63f-861d2d343794@suse.com>
- <YzLcSOS6ZLIoPwBl@zn.tnic>
- <d3cd5c50-24e7-ffba-de2d-cf00400f6e38@suse.com>
- <YzLo9IFDYW1T8BVZ@zn.tnic>
- <314e3bd3-3405-c0c3-225c-646d88cbfb1a@suse.com>
- <YzOEYsqM0UEsiFuS@zn.tnic>
- <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
- <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com>
- <YzQmeh50ne8dyR2P@zn.tnic>
- <f8da6988-afa3-1e85-b47d-d91fc4113803@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f8da6988-afa3-1e85-b47d-d91fc4113803@suse.com>
+        Wed, 28 Sep 2022 07:23:42 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772D3DCEA6;
+        Wed, 28 Sep 2022 04:23:40 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id D110EC022; Wed, 28 Sep 2022 13:23:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1664364217; bh=R+tt35RwTcDp8NVFqyIj6r8e594PICPVfST0BDBn7xk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tjAURJkUG3o+n3RG+G2zkCPBfuw65v9S0a7AySU6xqJmFpCWu2vhro9Jpjx9b2urX
+         lvZBUko6OF1huj7hLxqAM5OqqgyQwx1SrjNXatZfsqiPlYiL1BQUho608ft8BevLJY
+         HJ7RTBA2T565CJU5ihWEOK5uV4XB9SjxmQjTRLtJTCnT8A6nNIDyZwvjgKRzOoEO74
+         qU9ynhEl2KZ49SM3hPrYocxX3dCKEIyaMgX3vx6WD984t/ECs5/4bR9TdfAOSKARdc
+         vrBpjJyv0m+dAcSonnZ9LMit8CCERuMvmWlTBnhfDSa6GVILNyN+S7F1eKw2wSq/mZ
+         pQKF97Jmu5A2Q==
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
+X-Spam-Level: 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id F011DC009;
+        Wed, 28 Sep 2022 13:23:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1664364216; bh=R+tt35RwTcDp8NVFqyIj6r8e594PICPVfST0BDBn7xk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EKIEJoDTJ7Yc9jBpEtFLr2sp/gEB8RrIEQoj8Lu7A8jxb4E9DzbWsBvtcaFP0UCo9
+         y13FjvUHpuzgm1XG9JZmoCene6H6DMzMntMQEUgzT3XWBY+fF2unGl/mciRmc6a+9r
+         Exqk4x/OnmD1aAGxYBEGqoBItPVkSvABteTh1c+2FCAKDw4jr3gq5GwCLeMlDt/0VO
+         jKkkBToQ1UGz9xVg4EPZnnkFpvitZYmkpNQtu9GsOlb8jAZG4D0KkfDIaxSiXKo0vW
+         P0ftQJe6r6qocm5Qhz4DQf4iu6wBtSMvlaE18HVVdb4Cuhh5bUj+ylVhrayIMu8tvq
+         YagPFpHIVaKkA==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id d4a4fd30;
+        Wed, 28 Sep 2022 11:23:29 +0000 (UTC)
+Date:   Wed, 28 Sep 2022 20:23:14 +0900
+From:   asmadeus@codewreck.org
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     syzbot <syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
+Subject: Re: [syzbot] KASAN: use-after-free Read in rdma_close
+Message-ID: <YzQuoqyGsooyDfId@codewreck.org>
+References: <00000000000015ac7905e97ebaed@google.com>
+ <YzQc2yaDufjp+rHc@unreal>
+ <YzQlWq9EOi9jpy46@codewreck.org>
+ <YzQmr8LVTmUj9+zB@unreal>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YzQmr8LVTmUj9+zB@unreal>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 01:14:11PM +0200, Juergen Gross wrote:
-> No, we don't.
+Leon Romanovsky wrote on Wed, Sep 28, 2022 at 01:49:19PM +0300:
+> > But I agree I did get that wrong: trans_mod->close() wasn't called if
+> > create failed.
+> > We do want the idr_for_each_entry() that is in p9_client_destroy so
+> > rather than revert the commit (fix a bug, create a new one..) I'd rather
+> > split it out in an internal function that takes a 'bool close' or
+> > something to not duplicate the rest.
+> > (Bit of a nitpick, sure)
 > 
-> Using basically your patch, but with
+> Please do proper unwind without extra variable.
 > 
-> +	mtrr_online = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-> +						"x86/mtrr:online",
-> +						mtrr_ap_init, NULL);
+> Proper unwind means that you will call to symmetrical functions in
+> destroy as you used in create:
+> alloc -> free
+> create -> close
+> e.t.c
 > 
-> moved to the end of mtrr_aps_init(), and:
-> 
-> +void mtrr_aps_thaw(void)
-> +{
-> +	cpuhp_remove_state_nocalls(mtrr_online);
-> +}
+> When you use some global function like you did, there is huge chance
+> to see unwind bugs.
 
-Yes, so you said. I'm not sure I like this toggling of notifier
-registration like that.
+No.
 
-Optimally, I'd like to be able to query the suspend code whether it is
-in the process of resuming.
+Duplicating complicated cleanup code leads to leaks like we used to
+have; that destroy function already frees up things in the right order.
 
-This here:
+And, well, frankly 9p is a mess anyway; the problem here is that
+trans_mod->create() doesn't leave any trace we can rely on in a common
+cleanup function, but the original "proper unwind" missed:
+ - p9_fid_destroy/tags cleanup for anything in the cache (because, yes,
+apparently fuzzers managed to use the client before it's fully
+initialized. I don't want to know.)
+ - fcall cache destory
+
+I'm not duplicating all this mess. This is the only place that can call
+destroy before trans_mod create has been called, I wish we'd have a
+pattern like "clnt->trans = clnt->trans_mod->create()" so we could just
+check if trans is null, but a destroy parameter will do.
+
+... Well, I guess it's not like there are out of tree trans, I could
+just change create() to do that if I had infinite time...
+
+--
+Dominique
 
 
-static int resume_target_kernel(bool platform_mode)
-{
-
-...
-
- Enable_irqs:
-        system_state = SYSTEM_RUNNING;
-        local_irq_enable();
- 
- Enable_cpus:
-        pm_sleep_enable_secondary_cpus();
-
-
-but being able to do:
-
-        pm_sleep_enable_secondary_cpus();
-	system_state = SYSTEM_RUNNING | SYSTEM_RUNNING_APS_UP;
-
-which can't work, obviously. But something like that.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
