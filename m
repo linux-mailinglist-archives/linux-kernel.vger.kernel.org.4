@@ -2,51 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F005EE3BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27415EE3C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234506AbiI1SAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 14:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
+        id S234115AbiI1SB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 14:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234727AbiI1R7u (ORCPT
+        with ESMTP id S233404AbiI1SBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:59:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4711F43E51
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:59:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A30FDB821B6
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 17:59:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE1BC433C1;
-        Wed, 28 Sep 2022 17:59:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664387984;
-        bh=TLuv2+Flbr7K2dwKymjv0q3q32sR+IjJMe9UMLxknVI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LhOOLkhWjeMVXx7ej4XGMqO8PW4RLHb/cN0FYg2F1A1heIudnavrwpBEZ+lT8Y9+Y
-         p8rojsx9gJfyfCJOCkYKpQWw+N7fUo0Z8m1Ge7s9YzvxbDyLcPdrRrdw/0wpNdMtzr
-         Kj7f3fziu12uwFx645sL2TMz/+3iSrrA/3EJrcy2f1gu6ygKN7Uye9E8EBydRvkwpK
-         DxsQl1HIOrB/dfp6OWIe22UldtK1ubjToWQe5GlcksHiXlxOfG2fMAGSFBxB3tO3IE
-         tPfGPtSzhTH79ApmeDL/OBG2N+WjlJozWTIAh7wJGh/H8wxdPcIgxxJWXsUvSUARz3
-         FCmrgVWc7KOJg==
-From:   SeongJae Park <sj@kernel.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     damon@lists.linux.dev, linux-damon@amazon.com,
-        linux-damon-trial@amazon.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: DAMON Beer/Coffee/Tea chat series
-Date:   Wed, 28 Sep 2022 17:59:42 +0000
-Message-Id: <20220928175942.168657-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220810225102.124459-1-sj@kernel.org>
-References: 
+        Wed, 28 Sep 2022 14:01:54 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4B5100AA4
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:01:52 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id a29so13203435pfk.5
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=JdaNct/G2JycPe4ErZLD0bdcxF7sV3x5ZSzi26f0LVc=;
+        b=g/UF8+sjAIowCdq+SbQGgr58qUNEKqBINYp4gqmYRYyPJljH+zWtiS21cPbYkdN8t9
+         aYtwiPIvqEad/zl6L8HgmGt1e7rIECz71QbIFeC+3JrKeNwmiec4liXTlqqnVUfUoFYt
+         EMF4+V7VxUx8Ss7MtYo0k8hUOUMHmOU3bN6Pw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=JdaNct/G2JycPe4ErZLD0bdcxF7sV3x5ZSzi26f0LVc=;
+        b=eoIZs1n40ahmk+LTn6EyA9Vb0L11iITcBNMMC1f+fy6hjNBo+VXYxrMNmZGl/Zj58G
+         13K1DBNqPBzJO3l6BhlOP4Jk/xEDCXvNPFUxNJijojVmyIQzktORZPCwxmIZ/nKeVuho
+         S+QMUBEXEoMzwHcOfOTx/61K9zzM04KduGaTjJYkqH/bIHj4InGBSd6DA/tpomFo3xWA
+         HtmTgc9ycqxMizdAJ2+0tmH819rKrKiqBHi1yhACpnOXDVtSDTS5zmDE3xXO0iJ3OxuB
+         PVStLBI6t2ngyOSzkELNmGpoA/D5bn6Kmv228eqMwRDFjp+XLR0k/K+q/qs8fTLRk0wE
+         FQpw==
+X-Gm-Message-State: ACrzQf0j4hYuzyqY5AwVCpjMZM8uOr40EFIUWg41Vc6SlgO/qHWO/KS4
+        HZQnPyQRKlB9cv2Y0NhvBkYY2w==
+X-Google-Smtp-Source: AMsMyM6F0wUKd7/8qdqNwZVIIaRh5M4pwKa8t+qDZ9gM0fXutw7SwWVeHX0LkCx4/OjjgR/QVrS9YA==
+X-Received: by 2002:a63:2bcc:0:b0:434:eb77:28a with SMTP id r195-20020a632bcc000000b00434eb77028amr29658693pgr.168.1664388112280;
+        Wed, 28 Sep 2022 11:01:52 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c3-20020a170903234300b001732a019dddsm1822508plh.174.2022.09.28.11.01.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 11:01:51 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 11:01:50 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        John Crispin <john@phrozen.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <n.schier@avm.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, anand.gore@broadcom.com,
+        william.zhang@broadcom.com
+Subject: Re: [PATCH] ARM: ubsan: select ARCH_HAS_UBSAN_SANITIZE_ALL
+Message-ID: <202209281100.5311EE081B@keescook>
+References: <20220928174739.802806-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928174739.802806-1-f.fainelli@gmail.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,29 +80,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Wed, 10 Aug 2022 22:51:02 +0000 SeongJae Park <sj@kernel.org> wrote:
-
-> Hello,
+On Wed, Sep 28, 2022 at 10:47:39AM -0700, Florian Fainelli wrote:
+> From: Seung-Woo Kim <sw0312.kim@samsung.com>
 > 
+> To enable UBSAN on ARM, this patch enables ARCH_HAS_UBSAN_SANITIZE_ALL
+> from arm confiuration. Basic kernel bootup test is passed on arm with
+> CONFIG_UBSAN_SANITIZE_ALL enabled.
 > 
-> In short, I'd like to start an open, regular, and informal virtual bi-weekly
-> meeting series for DAMON community.
+> Signed-off-by: Seung-Woo Kim <sw0312.kim@samsung.com>
+> [florian: rebased against v6.0-rc7]
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-The next instance of the series was scheduled to 2022-10-04 (Tue) 09:00 PDT
-(https://meet.google.com/ndx-evoc-gbu), but I now reschedule it 30 minutes
-after, due to a conflict.  So, the next instance will be:
+Ah-ha, thanks for testing this. What devices did you check this on? I
+know boot-up on arm32 can be very device-specific.
 
-    2022-10-04 (Tue) 09:30 PDT (https://meet.google.com/ndx-evoc-gbu)
+Which UBSAN configs did you try?
 
-I also updated the Google Doc for the agendas:
-https://docs.google.com/document/d/1v43Kcj3ly4CYqmAkMaZzLiM2GEnWfgdGbZAH3mi2vpM/edit?usp=sharing
+Thanks!
 
-Looking forward to meet you!
+-Kees
 
-
-Thanks,
-SJ
-
-[...]
+-- 
+Kees Cook
