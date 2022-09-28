@@ -2,182 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AA85EDDF7
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0F35EDE00
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbiI1NmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 09:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
+        id S234190AbiI1NnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 09:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbiI1NmI (ORCPT
+        with ESMTP id S233287AbiI1NnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 09:42:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204F16E2F4;
-        Wed, 28 Sep 2022 06:42:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 28 Sep 2022 09:43:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD6295ACF;
+        Wed, 28 Sep 2022 06:43:14 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F8F761EB1;
-        Wed, 28 Sep 2022 13:42:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB686C433D6;
-        Wed, 28 Sep 2022 13:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664372524;
-        bh=PDniZhspoAjFGFPMZfaZ8GgB4DLLy5mz44zztNU7B+8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DqtgQ/m//i1BdMXDYXkHNALzJc+Fb2CkxwupnjD5iFoPUOy+RjGzDkBw6u16woact
-         Ek+6D4V044/DHPxZTiHl8kuYrAVeeMg2TUGzyu9mlJpBrkxFJqDxhyeySNUTWPuyDE
-         hkbGAN5/XfCvtPpm39Zv+BugYwMfdEX6eE42uDuYEIIMtghXn56j8tNz+CdNoTpYGY
-         oLA0DJOske77HfN24JeefL9hG37cIs4JMzuBMxszwi1t7W9Jgu94CxlxxpRk9x88qB
-         1bv9fv5W8vrBkEn3A2+rUfg9FkuebF8rP6DNdglXtFDEV9ehvhMRQoF+tvVevKpvLP
-         8XuQDoIktoBXA==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
-        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
-        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
-        bfields@fieldses.org, brauner@kernel.org, fweimer@redhat.com,
-        linux-man@vger.kernel.org
-Cc:     linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org
-Subject: [man-pages RFC PATCH v6] statx, inode: document the new STATX_VERSION field
-Date:   Wed, 28 Sep 2022 09:42:00 -0400
-Message-Id: <20220928134200.28741-1-jlayton@kernel.org>
-X-Mailer: git-send-email 2.37.3
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7AEC86601FFC;
+        Wed, 28 Sep 2022 14:43:12 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664372593;
+        bh=Av/PH6kVhiIAtYUMsFAbHa4P+77I27U8HuG+9Mk9/bw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=d9tOE73f5N7QYoN5O7LrOr8s52r3Xlx1RhKU80LLOuMfdeu8KhnI8UCrMBL4j7p3o
+         r50UPhG+kkdyKoHINKIplmXyqlOXi9bjgdBoR6N3EjdNjMRq4X3PuuM8D/IO36hyQ+
+         Rd9SmKPXBYK7KO4BJjafKztwOndX8j8fY8l6YEij1lOmrORxrYuS5Ffvd/Ovhn6N7L
+         ve1/nUgSYHNKIsEI9zFOrY/+s6/KJd+iqoADU4sg8PYO4c83swVIlnEInAb6VahFF8
+         9U/mtbW/FpK6uiUUDGosUF3cth3GsopyztXtkWySH1VfceclPI4R9BOK9t4Th4suyy
+         Nt0VgoGJiKcUA==
+Message-ID: <6d312360-55b7-ebd5-be86-14f6943e273f@collabora.com>
+Date:   Wed, 28 Sep 2022 15:43:09 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 1/2] usb: mtu3: fix ep0's stall of out data stage
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Min Guo <min.guo@mediatek.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Stable@vger.kernel.org
+References: <20220928091721.26112-1-chunfeng.yun@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220928091721.26112-1-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm proposing to expose the inode change attribute via statx [1]. Document
-what this value means and what an observer can infer from it changing.
+Il 28/09/22 11:17, Chunfeng Yun ha scritto:
+> It happens when enable uvc function, the flow as below:
+> the controller switch to data stage, then call
+>      -> foward_to_driver() -> composite_setup() -> uvc_function_setup(),
+> it send out an event to user layer to notify it call
+>      -> ioctl() -> uvc_send_response() -> usb_ep_queue(),
+> but before the user call ioctl to queue ep0's buffer, the host already send
+> out data, but the controller find that no buffer is queued to receive data,
+> it send out STALL handshake.
+> 
+> To fix the issue, don't send out ACK of setup stage to switch to out data
+> stage until the buffer is available.
+> 
+> Cc: <Stable@vger.kernel.org>
+> Reported-by: Min Guo <min.guo@mediatek.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>   drivers/usb/mtu3/mtu3.h            |  4 ++++
+>   drivers/usb/mtu3/mtu3_gadget_ep0.c | 22 +++++++++++++++++++---
+>   2 files changed, 23 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/mtu3/mtu3.h b/drivers/usb/mtu3/mtu3.h
+> index 2d7b57e07eee..6b64ad17724d 100644
+> --- a/drivers/usb/mtu3/mtu3.h
+> +++ b/drivers/usb/mtu3/mtu3.h
+> @@ -318,6 +318,9 @@ static inline struct ssusb_mtk *dev_to_ssusb(struct device *dev)
+>    *		for GET_STATUS and SET_SEL
+>    * @setup_buf: ep0 response buffer for GET_STATUS and SET_SEL requests
+>    * @u3_capable: is capable of supporting USB3
+> + * @delayed_setup: delay the setup stage to avoid STALL handshake in
+> + *		out data stage due to the class driver doesn't queue buffer
+> + *		before the host send out data
+>    */
+>   struct mtu3 {
+>   	spinlock_t lock;
+> @@ -360,6 +363,7 @@ struct mtu3 {
+>   	unsigned connected:1;
+>   	unsigned async_callbacks:1;
+>   	unsigned separate_fifo:1;
+> +	unsigned delayed_setup:1;
+>   
+>   	u8 address;
+>   	u8 test_mode_nr;
+> diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> index e4fd1bb14a55..f7a71cc83e15 100644
+> --- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> +++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> @@ -162,6 +162,19 @@ static void ep0_do_status_stage(struct mtu3 *mtu)
+>   	mtu3_writel(mbase, U3D_EP0CSR, value | EP0_SETUPPKTRDY | EP0_DATAEND);
+>   }
+>   
+> +/* delay sending out ACK of setup stage to wait for OUT buffer queued */
+> +static void ep0_setup_stage_send_ack(struct mtu3 *mtu)
+> +{
+> +	void __iomem *mbase = mtu->mac_base;
+> +	u32 value;
+> +
+> +	if (mtu->delayed_setup) {
+> +		value = mtu3_readl(mbase, U3D_EP0CSR) & EP0_W1C_BITS;
+> +		mtu3_writel(mbase, U3D_EP0CSR, value | EP0_SETUPPKTRDY);
+> +		mtu->delayed_setup = 0;
+> +	}
+> +}
+> +
+>   static int ep0_queue(struct mtu3_ep *mep0, struct mtu3_request *mreq);
+>   
+>   static void ep0_dummy_complete(struct usb_ep *ep, struct usb_request *req)
+> @@ -628,8 +641,9 @@ static void ep0_read_setup(struct mtu3 *mtu, struct usb_ctrlrequest *setup)
+>   			csr | EP0_SETUPPKTRDY | EP0_DPHTX);
+>   		mtu->ep0_state = MU3D_EP0_STATE_TX;
+>   	} else {
+> -		mtu3_writel(mtu->mac_base, U3D_EP0CSR,
+> -			(csr | EP0_SETUPPKTRDY) & (~EP0_DPHTX));
+> +		mtu3_writel(mtu->mac_base, U3D_EP0CSR, csr & ~EP0_DPHTX);
+> +		/* send ACK when the buffer is queued */
+> +		mtu->delayed_setup = 1;
 
-NB: this will probably have conflicts with the STATX_DIOALIGN doc
-patches, but we should be able to resolve those before merging anything.
+I don't think that you need this variable: you're calling the function
+ep0_setup_stage_send_ack() only when ep0_state == MU3D_EP0_STATE_RX in
+ep0_queue()...
 
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
+..so you'll never get a call to ep0_setup_stage_send_ack() with delayed_setup == 0!
 
-[1]: https://lore.kernel.org/linux-nfs/20220826214703.134870-1-jlayton@kernel.org/T/#t
----
- man2/statx.2 | 13 +++++++++++++
- man7/inode.7 | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 49 insertions(+)
+Regards,
+Angelo
 
-v6: incorporate Neil's suggestions
-    clarify how well-behaved filesystems should order things
+>   		mtu->ep0_state = MU3D_EP0_STATE_RX;
+>   	}
+>   }
+> @@ -804,9 +818,11 @@ static int ep0_queue(struct mtu3_ep *mep, struct mtu3_request *mreq)
+>   
+>   	switch (mtu->ep0_state) {
+>   	case MU3D_EP0_STATE_SETUP:
+> -	case MU3D_EP0_STATE_RX:	/* control-OUT data */
+>   	case MU3D_EP0_STATE_TX:	/* control-IN data */
+>   		break;
+> +	case MU3D_EP0_STATE_RX:	/* control-OUT data */
+> +		ep0_setup_stage_send_ack(mtu);
+> +		break;
+>   	default:
+>   		dev_err(mtu->dev, "%s, error in ep0 state %s\n", __func__,
+>   			decode_ep0_state(mtu));
 
-diff --git a/man2/statx.2 b/man2/statx.2
-index 0d1b4591f74c..ee7005334a2f 100644
---- a/man2/statx.2
-+++ b/man2/statx.2
-@@ -62,6 +62,7 @@ struct statx {
-     __u32 stx_dev_major;   /* Major ID */
-     __u32 stx_dev_minor;   /* Minor ID */
-     __u64 stx_mnt_id;      /* Mount ID */
-+    __u64 stx_version;     /* Inode change attribute */
- };
- .EE
- .in
-@@ -247,6 +248,7 @@ STATX_BTIME	Want stx_btime
- STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
- 	It is deprecated and should not be used.
- STATX_MNT_ID	Want stx_mnt_id (since Linux 5.8)
-+STATX_VERSION	Want stx_version (DRAFT)
- .TE
- .in
- .PP
-@@ -407,10 +409,16 @@ This is the same number reported by
- .BR name_to_handle_at (2)
- and corresponds to the number in the first field in one of the records in
- .IR /proc/self/mountinfo .
-+.TP
-+.I stx_version
-+The inode version, also known as the inode change attribute. See
-+.BR inode (7)
-+for details.
- .PP
- For further information on the above fields, see
- .BR inode (7).
- .\"
-+.TP
- .SS File attributes
- The
- .I stx_attributes
-@@ -489,6 +497,11 @@ without an explicit
- See
- .BR mmap (2)
- for more information.
-+.TP
-+.BR STATX_ATTR_VERSION_MONOTONIC " (since Linux 6.?)"
-+The stx_version value monotonically increases over time and will never appear
-+to go backward, even in the event of a crash. This can allow an application to
-+make a better determination about ordering when viewing different versions.
- .SH RETURN VALUE
- On success, zero is returned.
- On error, \-1 is returned, and
-diff --git a/man7/inode.7 b/man7/inode.7
-index 9b255a890720..e8adb63b1f6a 100644
---- a/man7/inode.7
-+++ b/man7/inode.7
-@@ -184,6 +184,12 @@ Last status change timestamp (ctime)
- This is the file's last status change timestamp.
- It is changed by writing or by setting inode information
- (i.e., owner, group, link count, mode, etc.).
-+.TP
-+Inode version (version)
-+(not returned in the \fIstat\fP structure); \fIstatx.stx_version\fP
-+.IP
-+This is the inode change counter. See the discussion of
-+\fBthe inode version counter\fP, below.
- .PP
- The timestamp fields report time measured with a zero point at the
- .IR Epoch ,
-@@ -424,6 +430,36 @@ on a directory means that a file
- in that directory can be renamed or deleted only by the owner
- of the file, by the owner of the directory, and by a privileged
- process.
-+.SS The inode version counter
-+.PP
-+The \fIstatx.stx_version\fP field is the inode change counter. Any operation
-+that could result in a change to \fIstatx.stx_ctime\fP must result in an
-+increase to this value. Soon after a change has been made, an stx_version value
-+should appear to be larger than previous readings. This is the case even
-+when a ctime change is not evident due to coarse timestamp granularity.
-+.PP
-+An observer cannot infer anything from amount of increase about the
-+nature or magnitude of the change. In fact, a single increment can reflect
-+multiple discrete changes if the value was not checked while those changes
-+were being processed.
-+.PP
-+Changes to stx_version are not necessarily atomic with the change itself, but
-+well-behaved filesystems should increment stx_version after a change has been
-+made visible to observers rather than before. This is especially important for
-+read-caching algorithms which could be fooled into associating a newer
-+stx_version with an older version of data. Note that this does leave a window
-+of time where a change may be visible, but the old stx_version is still being
-+reported.
-+.PP
-+In the event of a system crash, this value can appear to go backward if it was
-+queried before ever being written to the backing store. Applications that
-+persist stx_version values across a reboot should take care to mitigate this.
-+If the filesystem reports \fISTATX_ATTR_VERSION_MONOTONIC\fP in
-+\fIstatx.stx_attributes\fP, then it is not subject to this problem.
-+.PP
-+The stx_version is a Linux extension and is not supported by all filesystems.
-+The application must verify that the \fISTATX_VERSION\fP bit is set in the
-+returned \fIstatx.stx_mask\fP before relying on this field.
- .SH STANDARDS
- If you need to obtain the definition of the
- .I blkcnt_t
--- 
-2.37.3
+
 
