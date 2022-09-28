@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9305EDBE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757425EDBEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233539AbiI1LiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
+        id S233530AbiI1Li5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 07:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233481AbiI1Lh5 (ORCPT
+        with ESMTP id S233448AbiI1Liz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:37:57 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6517BF28
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:37:55 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 13:37:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664365073;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 28 Sep 2022 07:38:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14189103;
+        Wed, 28 Sep 2022 04:38:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id ACAE81F8A3;
+        Wed, 28 Sep 2022 11:38:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664365133; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=gaIVD5wYN/yVh5b5eLakU9sgF+3mfkitytzDMroeUho=;
-        b=SP2BhMl+kG5yxiGkfAnEfHEuZ3CXqwOo4Y456IqUmj03Vd+hXdLczHaXe1w2RTmlQMa4/2
-        EEJiyNeDJAVIdzPa/wep6L5IxbsltHcIUAXoyRp3hQU9sFdmzj3JH/CUQ4EZyvsUeC8NAV
-        nypZay3VKPHKm1xq+nDFy4kUOsPfcQpz/vpYI37tmGlQ37T3f8Ew/76NAr+Tv5xgviW2mN
-        R2dVvlVd7SVJxg/k5vaPhdnGHc17KCtLLWa8aKToMUmq8gAmYUGmX4MIg72oTJsiaRGl8R
-        85QKUJoR2jqAJu/zRYMYdZRmM2nfMFI43+VY1LeG6yHEs+mZ5j/+JrZoCqy+7A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664365073;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gaIVD5wYN/yVh5b5eLakU9sgF+3mfkitytzDMroeUho=;
-        b=8zZkMfpcdKOLXk2RjZtHKxLMTv1aY6rKvJ1mZab8iRyg4Q3H3XRS4WlcIeHmeFGi15k+8h
-        tpKffSOemXY0HNCQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Sultan Alsawaf <sultan@kerneltoast.com>
-Subject: Re: [PATCH] random: avoid reading two cache lines on irq randomness
-Message-ID: <YzQyEFMNCcDmJMdX@linutronix.de>
-References: <20220923182849.4145148-1-Jason@zx2c4.com>
+        bh=pYWIjI2zG6qx8PsHipWo2k/Bj8E69alY2jmp4fMvkIs=;
+        b=eEu5aM3Q2HILLqqyiC30YRVrS5v1Z9lVjKfTJGXvx5Yt6gAGhiY0jYQMSLwApMmmUJ0ySe
+        QHjPXTkEuUkOd1aZWjW6bDk0hh0xkgbmy1FM7U59KznTpM34r7dvbAtrPayJoCOy4q6yvw
+        IaBQjeUZtHXa8cEXZ5xrDTEzuVPHF6Y=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 718ED13677;
+        Wed, 28 Sep 2022 11:38:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id nUF/Gk0yNGPlKAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 28 Sep 2022 11:38:53 +0000
+Date:   Wed, 28 Sep 2022 13:38:52 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Ming Lei <ming.lei@redhat.com>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, Marco Patalano <mpatalan@redhat.com>,
+        Muneendra <muneendra.kumar@broadcom.com>
+Subject: Re: [PATCH cgroup/for-6.1] cgroup: Make cgroup_get_from_id() prettier
+Message-ID: <YzQyTJVyG9LVUAp7@blackbook>
+References: <20220923115119.2035603-1-ming.lei@redhat.com>
+ <Yy3tEKSV+vg6swOd@slm.duckdns.org>
+ <Yy3tjvIGd2j4wnSw@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220923182849.4145148-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yy3tjvIGd2j4wnSw@slm.duckdns.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-23 20:28:49 [+0200], Jason A. Donenfeld wrote:
-> In order to avoid reading and dirtying two cache lines on every IRQ, move
-> the work_struct to the bottom of the fast_pool struct. add_interrupt_
-> randomness() always touches .pool and .count, which are currently split,
-> because .mix pushes everything down. Instead, move .mix to the bottom,
-> so that .pool and .count are always in the first cache line, since the
-> .mix is only accessed when the pool is full.
-> 
-> Fixes: 58340f8e952b ("random: defer fast pool mixing to worker")
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+On Fri, Sep 23, 2022 at 07:31:58AM -1000, Tejun Heo <tj@kernel.org> wrote:
+> Ming, Michal, you guys' changes to cgroup_get_from_id() combine to make
+> cgroup_get_from_id() a bit too ugly, so I applied the following patch to
+> cgroup/for-6.1. Please take a look and lemme know if I broke anything.
 
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+The cleanup looks good.
 
-Yup, makes sense.
+Just for the record, I understand the refernced fix is persisted as
+> df02452f3df0 ("cgroup: cgroup_get_from_id() must check the looked-up kn is a directory")
 
-Sebastian
+Regards,
+Michal
