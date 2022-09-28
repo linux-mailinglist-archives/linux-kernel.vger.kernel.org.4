@@ -2,149 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F58E5EE86D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 23:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF2F5EE87D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 23:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232879AbiI1Viw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 17:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
+        id S234132AbiI1Vk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 17:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiI1Vit (ORCPT
+        with ESMTP id S231949AbiI1Vky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 17:38:49 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC62395E59;
-        Wed, 28 Sep 2022 14:38:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=VOh9QcFEDE1YfzcxWIGp+1k7f+qP9ixR08UnNbWnKpc=; b=mOBFIK5m8mLy4ywi3FVTK4mL6V
-        oj75zw9aDB26C9Y6E3q3Zh+2OVl0EQqV4erRsyOn6/kj0Tt8zleEZbtbluaojd3dKCXarw1p0vw2N
-        Mjm+cJscVTFtRI6ZPBK1NMDtmJ37SkFDwrsyizQWmLDPIffvRJnH6j1msXmitMEuUo/Vnmp2R1D4p
-        3eeslAUPK9oaVUW/PBgxclT7nvMxXVf6RSS/t7hKvCFdGuk4mom65QCMpDVM/oB2p4534U7GPMsT2
-        IrYHvtiO2s/gVPnZi67xksWEgfLmwrPbCcD3YWEry/HYu/+x3cwqtiiEiJwyJj2kiqcaFXQ9u2+sd
-        n5FHDhcw==;
-Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1odelP-00D1s7-Da; Wed, 28 Sep 2022 15:38:44 -0600
-Message-ID: <a375f380-b153-bdfe-1822-c6d8b1668c64@deltatee.com>
-Date:   Wed, 28 Sep 2022 15:38:36 -0600
+        Wed, 28 Sep 2022 17:40:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38444AA367;
+        Wed, 28 Sep 2022 14:40:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 19CC21F45F;
+        Wed, 28 Sep 2022 21:40:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1664401248; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C18vkSCkEp0R0j/E8doyhXlqBRc6MmmoczHaFz5Tq/o=;
+        b=O8ZKN2zJZST2anqWW6kCZ7PFlJtkR+DhFF/E1xFtpBjfMisY/NEE2VUHIT0ctG6+BRKpcm
+        TFzItcWnIOwSwp96McUWnDjo0baCWUX3p/6aNYk16N1G1gVpmFAU0HxXjLM93Ltz5am9pC
+        6mcBPOCE9PClr4mk2WyQ3I6f95q7OjY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1664401248;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C18vkSCkEp0R0j/E8doyhXlqBRc6MmmoczHaFz5Tq/o=;
+        b=QuVwGzEY77p785Z+8T99wXOp96mLv9PVymdpRO3H5bysX/SgsIeBkJWmKXpwJqWMN6hRxn
+        P80vd3XHeULykLAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DA18F13A84;
+        Wed, 28 Sep 2022 21:40:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pwxsNF6/NGNaHwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 28 Sep 2022 21:40:46 +0000
+Message-ID: <d5cb63f4-b1f5-9862-c31c-c8c6c4cb41df@suse.cz>
+Date:   Wed, 28 Sep 2022 23:39:06 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 01/16] slab: Remove __malloc attribute from realloc
+ functions
 Content-Language: en-US
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+To:     Kees Cook <keescook@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Marco Elver <elver@google.com>, linux-mm@kvack.org,
+        "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alex Elder <elder@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
         =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Stephen Bates <sbates@raithlin.com>
-References: <Yy33LUqvDLSOqoKa@ziepe.ca>
- <64f8da81-7803-4db4-73da-a158295cbc9c@deltatee.com>
- <Yy4Ot5MoOhsgYLTQ@ziepe.ca>
- <2327d393-af5c-3f4c-b9b9-6852b9d72f90@deltatee.com>
- <Yy46KbD/PvhaHA6X@ziepe.ca>
- <3840c1c6-3a5c-2286-e577-949f0d4ea7a6@deltatee.com>
- <Yy48GPMdQS/pzNSa@ziepe.ca>
- <aa5d51dd-0b40-29c0-69af-e83043541d3e@deltatee.com>
- <Yy4/f+s1jOCm7dFo@ziepe.ca>
- <980899e1-532a-772b-2f6d-6fb017def50b@deltatee.com>
- <YzIuSsFpOC+VN1/P@ziepe.ca>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <YzIuSsFpOC+VN1/P@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.73.163.230
-X-SA-Exim-Rcpt-To: jgg@ziepe.ca, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, hch@lst.de, gregkh@linuxfoundation.org, dan.j.williams@intel.com, christian.koenig@amd.com, jhubbard@nvidia.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, dave.b.minturn@intel.com, jason@jlekstrand.net, dave.hansen@linux.intel.com, jianxin.xiong@intel.com, helgaas@kernel.org, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, rcampbell@nvidia.com, sbates@raithlin.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Daniel Micay <danielmicay@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Miguel Ojeda <ojeda@kernel.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        dev@openvswitch.org, x86@kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+References: <20220923202822.2667581-1-keescook@chromium.org>
+ <20220923202822.2667581-2-keescook@chromium.org>
+ <CAMuHMdXK+UN1YVZm9DenuXAM8hZRUZJwp=SXsueP7sWiVU3a9A@mail.gmail.com>
+ <202209281011.66DD717D@keescook>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <202209281011.66DD717D@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v10 1/8] mm: introduce FOLL_PCI_P2PDMA to gate getting PCI
- P2PDMA pages
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-09-26 16:57, Jason Gunthorpe wrote:
-> On Fri, Sep 23, 2022 at 05:51:49PM -0600, Logan Gunthorpe wrote:
->> Userspace code that's written for purpose can look at the EREMOTEIO error
->> and tell the user something useful, if we return the correct error.
->> If we return ENOMEM in this case, that is not possible because
->> lots of things might have caused that error.
+On 9/28/22 19:13, Kees Cook wrote:
+> On Wed, Sep 28, 2022 at 09:26:15AM +0200, Geert Uytterhoeven wrote:
+>> Hi Kees,
+>>
+>> On Fri, Sep 23, 2022 at 10:35 PM Kees Cook <keescook@chromium.org> wrote:
+>>> The __malloc attribute should not be applied to "realloc" functions, as
+>>> the returned pointer may alias the storage of the prior pointer. Instead
+>>> of splitting __malloc from __alloc_size, which would be a huge amount of
+>>> churn, just create __realloc_size for the few cases where it is needed.
+>>>
+>>> Additionally removes the conditional test for __alloc_size__, which is
+>>> always defined now.
+>>>
+>>> Cc: Christoph Lameter <cl@linux.com>
+>>> Cc: Pekka Enberg <penberg@kernel.org>
+>>> Cc: David Rientjes <rientjes@google.com>
+>>> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+>>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>>> Cc: Vlastimil Babka <vbabka@suse.cz>
+>>> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+>>> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+>>> Cc: Marco Elver <elver@google.com>
+>>> Cc: linux-mm@kvack.org
+>>> Signed-off-by: Kees Cook <keescook@chromium.org>
+>>
+>> Thanks for your patch, which is now commit 63caa04ec60583b1 ("slab:
+>> Remove __malloc attribute from realloc functions") in next-20220927.
+>>
+>> Noreply@ellerman.id.au reported all gcc8-based builds to fail
+>> (e.g. [1], more at [2]):
+>>
+>>      In file included from <command-line>:
+>>      ./include/linux/percpu.h: In function ‘__alloc_reserved_percpu’:
+>>      ././include/linux/compiler_types.h:279:30: error: expected
+>> declaration specifiers before ‘__alloc_size__’
+>>       #define __alloc_size(x, ...) __alloc_size__(x, ## __VA_ARGS__) __malloc
+>>                                    ^~~~~~~~~~~~~~
+>>      ./include/linux/percpu.h:120:74: note: in expansion of macro ‘__alloc_size’
+>>      [...]
+>>
+>> It's building fine with e.g. gcc-9 (which is my usual m68k cross-compiler).
+>> Reverting this commit on next-20220927 fixes the issue.
+>>
+>> [1] http://kisskb.ellerman.id.au/kisskb/buildresult/14803908/
+>> [2] http://kisskb.ellerman.id.au/kisskb/head/1bd8b75fe6adeaa89d02968bdd811ffe708cf839/
 > 
-> That is reasonable, but I'd still prefer to see it done more
-> centrally.
+> Eek! Thanks for letting me know. I'm confused about this --
+> __alloc_size__ wasn't optional in compiler_attributes.h -- but obviously
+> I broke something! I'll go figure this out.
+
+Even in latest next I can see at the end of include/linux/compiler-gcc.h
+
+/*
+  * Prior to 9.1, -Wno-alloc-size-larger-than (and therefore the "alloc_size"
+  * attribute) do not work, and must be disabled.
+  */
+#if GCC_VERSION < 90100
+#undef __alloc_size__
+#endif
+
+
+
+> -Kees
 > 
-> I mean the way the code is structured is at the top of the call chain
-> the PIN/GET/0 is decided and then the callchain is run. All the
-> callsites of try_grab_page() must be safe to call under FOLL_PIN
-> because their caller is making the decision what flag to use.
-
-Ok, so I've done some auditing here.
-
-I've convinced myself it's safe to access the page before incrementing
-the reference:
-
- * In the try_grab_page() case it must be safe as all call sites do seem
-to be called under the appropriate ptl or mmap_lock (though this is hard
-to audit). It's also true that it touches the page struct in the sense
-of the reference.
- * In the try_grab_folio() case there already is already a similar
-FOLL_LONGTERM check in that function *before* getting the reference and
-the page should be stable due to the existing gup fast guarantees.
-
-So we don't need to do the check after we have the reference and release
-it when it fails. This simplifies things.
-
-Moving the check into try_grab_x() should be possible with some cleanup.
-
-For try_grab_page(), there are a few call sites that WARN_ON if it
-fails, assuming it cannot fail seeing the page is stable.
-try_grab_page() already has a WARN_ON on failure so it appears fine to
-remove the second WARN_ON and add a new failure path that doesn't WARN.
-
-For try_grab_folio() there's one call site in follow_hugetlb_page() that
-assumes success and warns on failure; but this call site only applies to
-hugetlb pages which should never be P2PDMA pages (nor non-longterm pages
-which is another existing failure path). So I've added a note in the
-comment with a couple other conditions that should not be possible.
-
-I expect this work is way too late for the merge window now so I'll send
-v11 after the window. In the meantime, if you want to do a quick review
-on the first two patches, it would speed things up if there are obvious
-changes. You can see these patches on this git branch:
-
-  https://github.com/sbates130272/linux-p2pmem/  p2pdma_user_cmb_v11pre
-
-Thanks,
-
-Logan
-
-
 
