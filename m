@@ -2,180 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76DFB5ED906
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3375ED90B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233127AbiI1Jc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
+        id S231976AbiI1JdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233778AbiI1JcI (ORCPT
+        with ESMTP id S233859AbiI1Jcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:32:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35784558E3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:32:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664357526;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RKWhiaA5Wv0V2eMraFNdl4jrLjbjCkjEq9//t8SsrB0=;
-        b=MaqAMnuJ8BfdaGqo8ndBWNxw78+hQCQsiFgmXxAwYLNRzWcOb98N3WmgvpkE2Qme3jPDO0
-        giPzci2pXqJUzJHL2Hrm1Cd7vuN03XxS7lzDoQ0+925+ZJtfqjSMMVb3aDcuids1gTrI77
-        vX2lb0r2fdkyy6l//LBoa8/JB49EdAA=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-222-Rq_wVGY8NwmPu9TayD2SCw-1; Wed, 28 Sep 2022 05:32:05 -0400
-X-MC-Unique: Rq_wVGY8NwmPu9TayD2SCw-1
-Received: by mail-wr1-f72.google.com with SMTP id r22-20020adfa156000000b0022cc3018fbaso917356wrr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:32:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=RKWhiaA5Wv0V2eMraFNdl4jrLjbjCkjEq9//t8SsrB0=;
-        b=TKvgkayO/vS5lxAWi7EgQj2IQvdTtMbhMW6A56CdqXHUOsPc1AQskIAFA0YYr5LNG0
-         oWNWYSEm2DMgfoZwBA5+8OknKp5QjHawRztZgFBEna4IaYfit8Uhs5Vd2DIcsI9RlPpQ
-         xWSgRG5UMJhws7rC9xdqnIlL8t1uYjnOgU+q4EZ4Sbn34QxI56yLZvnnROpGbBPGIDZU
-         sJw3CXCj0aVaFdaTezc2WlpsNvzizqaErXlwR2AXSKno4JQrqb6DsbULscXGYCmFlQNx
-         PIWTO+FQev8LTFG0qWjMm668SCrJp8qtA5FKOlkN07KWJbPfJyOP4dTv0UaO0QrXwOp4
-         725Q==
-X-Gm-Message-State: ACrzQf1YKMcD64HSGtmH8EWsOHgL6YEPoBrKDcmSXp9NDQigtGQ+uMk+
-        hjoRQb8nhv4854KeLolwQJILD1fX4KVUxvHIDxE9XtDGSZdJEqYIEzU2kNvq7/xnsEMSZqDuZbg
-        SxNjLDN7L6VQfVRzrcHtAWg9H
-X-Received: by 2002:adf:ec09:0:b0:22c:c81b:b76a with SMTP id x9-20020adfec09000000b0022cc81bb76amr1504082wrn.302.1664357522968;
-        Wed, 28 Sep 2022 02:32:02 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7kxutijrNlyBi7mEzPyu48cri6KyE/47cghTsg07CI6Bc2dECrlSlgkIO63V29kUYGSktS1g==
-X-Received: by 2002:adf:ec09:0:b0:22c:c81b:b76a with SMTP id x9-20020adfec09000000b0022cc81bb76amr1504062wrn.302.1664357522722;
-        Wed, 28 Sep 2022 02:32:02 -0700 (PDT)
-Received: from redhat.com ([2.55.47.213])
-        by smtp.gmail.com with ESMTPSA id l13-20020a5d410d000000b0022cbcfa8447sm3829691wrp.87.2022.09.28.02.32.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 02:32:02 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 05:31:58 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Junichi Uekawa <uekawa@chromium.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Bobby Eshleman <bobby.eshleman@gmail.com>
-Subject: Re: [PATCH] vhost/vsock: Use kvmalloc/kvfree for larger packets.
-Message-ID: <20220928052738-mutt-send-email-mst@kernel.org>
-References: <20220928064538.667678-1-uekawa@chromium.org>
- <20220928082823.wyxplop5wtpuurwo@sgarzare-redhat>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220928082823.wyxplop5wtpuurwo@sgarzare-redhat>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 05:32:41 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23826DF3B2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:32:35 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 4AE84580557;
+        Wed, 28 Sep 2022 05:32:32 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 28 Sep 2022 05:32:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1664357552; x=
+        1664361152; bh=qzh7AjvEfcvhQkxA/UL1+bOv++GlorS+C7InU5cHRYU=; b=e
+        B8BGzXv0nkCdkoUNnYypgS+VcPJrxJZlDD69TK6oA40d+lqkDDeVzzkvSj27rucX
+        YK/O4BZEyHHCvnWTvdx29AklODN29AriSRv4KdP1NTV6TypIx5viX1LPiVS3Tljj
+        ZFVhTQhzUyYqesGf8QtYNXw77ddh/XEqfZzRjAofqbf5C7t8oVfGm7wZfmNuvKBu
+        ygPkoajcNWLCO76QOqHzCxBEZ8uDFwT/Dx98wtsi/YSY7PfqdotG4ErfJJDTY5a5
+        GNZT5kbOiDdUdGudGNA/0C7akZ3U6JpvRIKirOx1mgSSERKFJFFd9jwZ9FbGxKcE
+        i9gUOz3B3mQiDdUybxL+g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1664357552; x=
+        1664361152; bh=qzh7AjvEfcvhQkxA/UL1+bOv++GlorS+C7InU5cHRYU=; b=h
+        a1TYICxmBm0bfTbFtC7hs5EgZXCiMLAuMTgdwFRCbEpfDXGUEuM90b6rruOXB4wk
+        QNbe5lf+uX0CDQmHjEL7mca+cCQZhIABg+R0JFmza0hu9MSI5/U/Riz4j29BJJtN
+        Mep9d6r4lemXljn9mB+0VvS5Gd0fawz/V8XyWbIOADcPmmnHny+8LT/ikwRn9A18
+        ucGV/ZWGNI8jWu0+jdILSH5b7gIbWzeVJ3UbleCvKROy0lMHkVoxIN5ajSVt1g6t
+        kDM7STJtct4sEsSoqZoqGi0O+J0Q8aVK1EyjCYiFQIVTWG3OSsE5QykSLZ4bHuVe
+        rpws53yeZ1ZZAlNFkrMwQ==
+X-ME-Sender: <xms:rxQ0YzJXJkJ8kc2Ln-J76QyxXxocGx0_nhpUy3JGFsThuQW-bBTr1Q>
+    <xme:rxQ0Y3IouKL8i4oR4xo6h7gxLEQlzz8PAfNp9saqSzdhY-lgiNBB5UDJuauZwISmY
+    JD1O12F83D09RdlGK4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegkedgudejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:rxQ0Y7v8N9lghDLM5FfUJ4b3nsmtFZv5rua774dxh4zHyyxMoOyTqg>
+    <xmx:rxQ0Y8YJLjUoICAqXcnmD6Uz3imYZcvHIrGFAsQbQ4F2rNLh83VcXg>
+    <xmx:rxQ0Y6bRLfR7RQA4PZGyPkfc5Pl0YaWeChqe2415gPZnoRGHJIAU7A>
+    <xmx:sBQ0YwxguqRV244kTcp-IRLuFQghVxNyLb175DLuuFGG9oV8OPYIRQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 8646CB60086; Wed, 28 Sep 2022 05:32:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-968-g04df58079d-fm-20220921.001-g04df5807
+Mime-Version: 1.0
+Message-Id: <e33cc08b-612b-4786-9b68-262c43af5ccb@www.fastmail.com>
+In-Reply-To: <YzQQfW3h70OIiT14@linutronix.de>
+References: <20220928064934.70867-1-renzhijie2@huawei.com>
+ <YzPxMvjdjVEK1/b1@linutronix.de>
+ <CAKXUXMxGt9UGhw9Ap_M3U2AF1vw2dX7WpDO71=UwV0Be3t4sNw@mail.gmail.com>
+ <YzQQfW3h70OIiT14@linutronix.de>
+Date:   Wed, 28 Sep 2022 11:32:11 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+        "Lukas Bulwahn" <lukas.bulwahn@gmail.com>
+Cc:     "Ren Zhijie" <renzhijie2@huawei.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        "Masahiro Yamada" <masahiroy@kernel.org>, seanjc@google.com,
+        "Johannes Weiner" <hannes@cmpxchg.org>, ojeda@kernel.org,
+        "Masami Hiramatsu" <mhiramat@kernel.org>,
+        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>, atomlin@redhat.com,
+        ddiss@suse.de, "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] init/Kconfig: fix unmet direct dependencies
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 10:28:23AM +0200, Stefano Garzarella wrote:
-> On Wed, Sep 28, 2022 at 03:45:38PM +0900, Junichi Uekawa wrote:
-> > When copying a large file over sftp over vsock, data size is usually 32kB,
-> > and kmalloc seems to fail to try to allocate 32 32kB regions.
-> > 
-> > Call Trace:
-> >  [<ffffffffb6a0df64>] dump_stack+0x97/0xdb
-> >  [<ffffffffb68d6aed>] warn_alloc_failed+0x10f/0x138
-> >  [<ffffffffb68d868a>] ? __alloc_pages_direct_compact+0x38/0xc8
-> >  [<ffffffffb664619f>] __alloc_pages_nodemask+0x84c/0x90d
-> >  [<ffffffffb6646e56>] alloc_kmem_pages+0x17/0x19
-> >  [<ffffffffb6653a26>] kmalloc_order_trace+0x2b/0xdb
-> >  [<ffffffffb66682f3>] __kmalloc+0x177/0x1f7
-> >  [<ffffffffb66e0d94>] ? copy_from_iter+0x8d/0x31d
-> >  [<ffffffffc0689ab7>] vhost_vsock_handle_tx_kick+0x1fa/0x301 [vhost_vsock]
-> >  [<ffffffffc06828d9>] vhost_worker+0xf7/0x157 [vhost]
-> >  [<ffffffffb683ddce>] kthread+0xfd/0x105
-> >  [<ffffffffc06827e2>] ? vhost_dev_set_owner+0x22e/0x22e [vhost]
-> >  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
-> >  [<ffffffffb6eb332e>] ret_from_fork+0x4e/0x80
-> >  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
-> > 
-> > Work around by doing kvmalloc instead.
-> > 
-> > Signed-off-by: Junichi Uekawa <uekawa@chromium.org>
+On Wed, Sep 28, 2022, at 11:14 AM, Sebastian Andrzej Siewior wrote:
+> On 2022-09-28 09:20:42 [+0200], Lukas Bulwahn wrote:
+>> > Couldn't this become a depends?
+>> It could also be a depends (to resolve the warning).
+> =E2=80=A6
+>> It is just the question whether:
+>>=20
+>> When PROC_FS is not set, should the CHECKPOINT_RESTORE still be
+>> visible as a config option to add (and then automatically add
+>> PROC_FS)? Then select is right here.
+>
+> then CHECKPOINT_RESTORE is the only option selecting PROC_FS while
+> everyone else depends on it _or_ avoids using it in the absence of
+> PROC_FS.
 
-My worry here is that this in more of a work around.
-It would be better to not allocate memory so aggressively:
-if we are so short on memory we should probably process
-packets one at a time. Is that very hard to implement?
+Right, we should not mix 'select' and 'depends on' for the same
+symbol, as that leads to circular dependencies and general
+confusion.
 
+If there is no way to use CHECKPOINT_RESTORE without procfs,
+then the symbol should just not be visible (it will still show
+up with the dependency when one searches in menuconfig).
+Force-enabling a major subsystem like procfs from another
+symbol is not a good solution.
 
-
-> > ---
-> > 
-> > drivers/vhost/vsock.c                   | 2 +-
-> > net/vmw_vsock/virtio_transport_common.c | 2 +-
-> > 2 files changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
-> > index 368330417bde..5703775af129 100644
-> > --- a/drivers/vhost/vsock.c
-> > +++ b/drivers/vhost/vsock.c
-> > @@ -393,7 +393,7 @@ vhost_vsock_alloc_pkt(struct vhost_virtqueue *vq,
-> > 		return NULL;
-> > 	}
-> > 
-> > -	pkt->buf = kmalloc(pkt->len, GFP_KERNEL);
-> > +	pkt->buf = kvmalloc(pkt->len, GFP_KERNEL);
-> > 	if (!pkt->buf) {
-> > 		kfree(pkt);
-> > 		return NULL;
-> > diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-> > index ec2c2afbf0d0..3a12aee33e92 100644
-> > --- a/net/vmw_vsock/virtio_transport_common.c
-> > +++ b/net/vmw_vsock/virtio_transport_common.c
-> > @@ -1342,7 +1342,7 @@ EXPORT_SYMBOL_GPL(virtio_transport_recv_pkt);
-> > 
-> > void virtio_transport_free_pkt(struct virtio_vsock_pkt *pkt)
-> > {
-> > -	kfree(pkt->buf);
-> > +	kvfree(pkt->buf);
-> 
-> virtio_transport_free_pkt() is used also in virtio_transport.c and
-> vsock_loopback.c where pkt->buf is allocated with kmalloc(), but IIUC
-> kvfree() can be used with that memory, so this should be fine.
-> 
-> > 	kfree(pkt);
-> > }
-> > EXPORT_SYMBOL_GPL(virtio_transport_free_pkt);
-> > -- 
-> > 2.37.3.998.g577e59143f-goog
-> > 
-> 
-> This issue should go away with the Bobby's work about introducing sk_buff
-> [1], but we can queue this for now.
-> 
-> I'm not sure if we should do the same also in the virtio-vsock driver
-> (virtio_transport.c). Here in vhost-vsock the buf allocated is only used in
-> the host, while in the virtio-vsock driver the buffer is exposed to the
-> device emulated in the host, so it should be physically contiguous (if not,
-> maybe we need to adjust virtio_vsock_rx_fill()).
-
-More importantly it needs to support DMA API which IIUC kvmalloc
-memory does not.
-
-> So for now I think is fine to use kvmalloc only on vhost-vsock (eventually
-> we can use it also in vsock_loopback), since the Bobby's patch should rework
-> this code:
-> 
-> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-> 
-> [1] https://lore.kernel.org/lkml/65d117ddc530d12a6d47fcc45b38891465a90d9f.1660362668.git.bobby.eshleman@bytedance.com/
-> 
-> Thanks,
-> Stefano
-
+    Arnd
