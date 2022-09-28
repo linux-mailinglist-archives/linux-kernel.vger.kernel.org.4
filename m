@@ -2,268 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C3A5EE3BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F005EE3BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234448AbiI1R7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
+        id S234506AbiI1SAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 14:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234718AbiI1R7N (ORCPT
+        with ESMTP id S234727AbiI1R7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:59:13 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D14FFA6F
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:59:07 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id y136so13210317pfb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:59:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=9qZYwREuuJYY5yd2Irf+/+tpgSOwGSBaTZMhbCSXO0Q=;
-        b=DYk5gd+wqGWOoAPoxaxUg3ubtAPJ7dT+/jHyT8gXbyw8rRF5+z1SXG/UkiWl5GLCIn
-         k35ECh9LtucpMG6zF0IJyD5mL0Or9R1yXto+cKkEIUrl7E+O5IcMP/LFXpXfSZszJBbl
-         6pBbc9nGfDE4/hEM81NOvvyKHHrry/iE5ZVWnPpnxcT/tkH3YkrwVl8i4sWM3qzZV50I
-         AIpw673EdmmJcBNKt23NAsC3mp/cAjFeDdUX9oZrwDtxsVBb5uHXl41IZXQGIQDW4LYF
-         qDsXqVfB0w8nORaKDMxqY1P44zZFvZ8+nBXaQ7NcuhMpRFLTBxicQRJS/ZgFAejEyZW/
-         Ap1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=9qZYwREuuJYY5yd2Irf+/+tpgSOwGSBaTZMhbCSXO0Q=;
-        b=WOclc3nzhTZvTN69kIcNZOT4OlyU93J7k9JU25YuLee3SOvgCOKUr9fNqDUi5DabKF
-         kKdA2yTWNu6c6Nf+/+L427AeacW5sv4eb4j1Jrxq5wQqfF/fcCJoKbyquAMmqhMLp+rc
-         SYzPEz4n2H8RVVmxCDwOEOIc0fD86EuCZAHyppn2XxrpATU49bae/4B02cbe7wy9hkM8
-         v1fhTa/zqpM3afYqFIIpzbP9w/cC4SU5kI6Xx8ohl8Vk1Zl1VKvO4LK6+XN14w9S7hPV
-         fhvKWUqR81YvhoKIZAs9/flmqjSCOxYoYbowp+HA2k99IzfHJXLcqhO/gh4gtUVJcHE2
-         tB5g==
-X-Gm-Message-State: ACrzQf3HSlfIxQduqMLLDc7O46CKnTmBgPPcUEqdBamwYfH+RN/aKmGN
-        K0E+fxKVZOveZ5yOPTZgv8G8hQ==
-X-Google-Smtp-Source: AMsMyM40b8HV6k7mHKysQYhUbVnlADFZ4NRKNdyowcBSo/Y4u26K1/Drz7DzvOTXoLbj2VuFnWTKEw==
-X-Received: by 2002:a05:6a00:16d6:b0:53b:3e58:1c6f with SMTP id l22-20020a056a0016d600b0053b3e581c6fmr36222799pfc.7.1664387946812;
-        Wed, 28 Sep 2022 10:59:06 -0700 (PDT)
-Received: from google.com (201.215.168.34.bc.googleusercontent.com. [34.168.215.201])
-        by smtp.gmail.com with ESMTPSA id r33-20020a634421000000b0043c75884c19sm3932958pga.3.2022.09.28.10.59.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 10:59:06 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 17:59:02 +0000
-From:   William McVicker <willmcvicker@google.com>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        Wed, 28 Sep 2022 13:59:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4711F43E51
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:59:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A30FDB821B6
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 17:59:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE1BC433C1;
+        Wed, 28 Sep 2022 17:59:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664387984;
+        bh=TLuv2+Flbr7K2dwKymjv0q3q32sR+IjJMe9UMLxknVI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LhOOLkhWjeMVXx7ej4XGMqO8PW4RLHb/cN0FYg2F1A1heIudnavrwpBEZ+lT8Y9+Y
+         p8rojsx9gJfyfCJOCkYKpQWw+N7fUo0Z8m1Ge7s9YzvxbDyLcPdrRrdw/0wpNdMtzr
+         Kj7f3fziu12uwFx645sL2TMz/+3iSrrA/3EJrcy2f1gu6ygKN7Uye9E8EBydRvkwpK
+         DxsQl1HIOrB/dfp6OWIe22UldtK1ubjToWQe5GlcksHiXlxOfG2fMAGSFBxB3tO3IE
+         tPfGPtSzhTH79ApmeDL/OBG2N+WjlJozWTIAh7wJGh/H8wxdPcIgxxJWXsUvSUARz3
+         FCmrgVWc7KOJg==
+From:   SeongJae Park <sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     damon@lists.linux.dev, linux-damon@amazon.com,
+        linux-damon-trial@amazon.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 20/20] PCI: dwc: Add Baikal-T1 PCIe controller support
-Message-ID: <YzSLZp0bH4B9VG4A@google.com>
-References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
- <20220822184701.25246-21-Sergey.Semin@baikalelectronics.ru>
- <YwzbARMkb/69+l2d@lpieralisi>
- <20220912000211.ct6asuhhmnatje5e@mobilestation>
- <YzF8N/jzkWsjcgdD@lpieralisi>
- <20220926124924.4vodhncnuaorrlwj@mobilestation>
- <20220926143127.GB19031@lst.de>
- <20220926205333.qlhb5ojmx4sktzt5@mobilestation>
- <YzIw4pO03s3wO0tw@google.com>
- <20220928103624.gjhfaewpihhhscpd@mobilestation>
+Subject: Re: DAMON Beer/Coffee/Tea chat series
+Date:   Wed, 28 Sep 2022 17:59:42 +0000
+Message-Id: <20220928175942.168657-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220810225102.124459-1-sj@kernel.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220928103624.gjhfaewpihhhscpd@mobilestation>
-X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/28/2022, Serge Semin wrote:
-> On Mon, Sep 26, 2022 at 11:08:18PM +0000, William McVicker wrote:
-> > On 09/26/2022, Serge Semin wrote:
-> > > On Mon, Sep 26, 2022 at 04:31:28PM +0200, Christoph Hellwig wrote:
-> > > > On Mon, Sep 26, 2022 at 03:49:24PM +0300, Serge Semin wrote:
-> > > > > @Christoph, @Marek, @Bjorn, @Rob could you please join to the
-> > > > > DMA-mask related discussion. @Lorenzo can't decide which driver should
-> > > > > initialize the device DMA-mask.
-> > > > 
-> > > 
-> > > > The driver that does the actual DMA mapping or allocation functions
-> > > > need to set it.  But even with your comments on the questions I'm
-> > > > still confused what struct device you are even talking about.  Can
-> > > > you explain this a bit better?
-> > > 
-> > > We are talking about the DW PCIe Root Port controller with DW eDMA engine
-> > > embedded. It' simplified structure can be represented as follows:
-> > > 
-> > >          +---------------+     +--------+
-> > >          | System memory |     | CPU(s) |
-> > >          +---------------+     +--------+
-> > >                 ^  |              |  ^
-> > >                 | ... System bus ... |
-> > >                ... |              | ...
-> > >                 |  v              v  |
-> > >  +------------+------+--------+----------+------+
-> > >  | DW PCIe RP | AXI-m|        | AXI-s/DBI|      |
-> > >  |            +------+        +----------+      |
-> > >  |                ^              ^     |        |
-> > >  |         +------+----+         |    CSRs      |
-> > >  |         v           v         v              |
-> > >  |     +-------+  +---------+ +----------+      |
-> > >  |     | eDMA  |  | in-iATU | | out-iATU |      |
-> > >  |     +-------+  +---------+ +----------+      |
-> > >  |         ^           ^           ^            |
-> > >  |         +--------+--+---+-------+            |
-> > >  +------------------| PIPE |--------------------+
-> > >                     +------+
-> > >                       | ^
-> > >                       v |
-> > >                    PCIe bus
-> > > 
-> > > The DW PCIe controller device is instantiated as a platform device
-> > > defined in the system DT source file. The device is probed by the
-> > > DW PCIe low-level driver, which after the platform-specific setups
-> > > initiates the generic DW PCIe host-controller registration. On the way
-> > > of that procedure the DW PCIe core tries to auto-detect the DW eDMA
-> > > engine availability. If the engine is found, the DW eDMA probe method
-> > > is called in order to register the DMA-engine device. After that the
-> > > PCIe host bridge is registered. Both the PCIe host-bridge and
-> > > DMA-engine devices will have the DW PCIe platform device as parent.
-> > > 
-> > > Getting back to the sketch above. Here is a short description of the
-> > > content:
-> > > 1. DW eDMA is capable of performing the data transfers from/to System
-> > > memory to/from PCIe bus memory.
-> > > 2. in-iATU is the Inbound Address Translation Unit, which is
-> > > responsible for the PCIe bus peripheral devices to access the system
-> > > memory. The "dma-ranges" DT-property is used to initialize the
-> > > PCIe<->Sys memory mapping. (@William note the In-iATU setup doesn't
-> > > affect the eDMA transfers.)
-> > > 3. out-iATU is responsible for the CPU(s) to access the PCIe bus
-> > > peripheral devices memory/cfg-space.
-> > > 
-> > > So eDMA and in-iATU are using the same AXI-master interface to access
-> > > the system memory. Thus the DMAable memory capability is the same for
-> > > both of them (Though in-iATU may have some specific mapping based on
-> > > the "dma-ranges" DT-property setup). Neither DW eDMA nor DW PCIe Root
-> > > Port CSRs region have any register to auto-detect the AXI-m interface
-> > > address bus width. It's selected during the IP-core synthesize and is
-> > > platform-specific. The question is: "What driver/code is supposed to
-> > > set the DMA-mask of the DW PCIe platform device?" Seeing the parental
-> > > platform device is used to perform the memory-mapping for both DW eDMA
-> > > clients and PCIe-bus peripheral device drivers, and seeing the AXI-m
-> > > interface parameters aren't auto-detectable and are platform-specific,
-> > > the only place it should be done in is the DW PCIe low-level device
-> > > driver. I don't really see any alternative... What is your opinion?
-> > > 
-> > > -Sergey
-> > 
-> 
-> > I believe this eDMA implementation is new for an upstream DW PCIe device
-> > driver, right? If so, this will require some refactoring of the DMA mask code,
-> > but you need to also make sure you don't break the MSI target address use case
-> > that prompted this 32-bit DMA mask change -- [1].
-> 
-> As far as I can see the commit
-> https://lore.kernel.org/all/20201117165312.25847-1-vidyas@nvidia.com/
-> isn't marked as fixes or whatever. If so it gets to be pointless due to this
-> https://elixir.bootlin.com/linux/latest/source/drivers/of/platform.c#L183
-> and this
-> https://elixir.bootlin.com/linux/latest/source/drivers/base/platform.c#L529
-> and seeing none of the DW PCIe RP/EP platform drivers change the
-> device DMA-mask of the being probed platform device. So the mask must
-> have been of 32-bits anyway even without that commit.
-> 
-> Moreover as Rob already told you here
-> https://lore.kernel.org/all/CAL_JsqJh=d-B51b6yPBRq0tOwbChN=AFPr-a19U1QdQZAE7c1A@mail.gmail.com/
-> and I mentioned in my response here
-> https://lore.kernel.org/linux-pci/20220912000211.ct6asuhhmnatje5e@mobilestation/
-> DW PCie MSI TLPs never reach the system memory. The TLP PCIe-bus target
-> address is checked in the host bridge. If it matches to the one
-> initialized in the iMSI-RX engine CSRs the MSI IRQ will be raised.
-> None system memory IO will be actually performed. Thus changing the
-> device DMA-capability due to something which actually doesn't cause
-> any DMA at the very least inappropriate.
+Hello,
 
-Thanks for pointing out the DMA mask references during platform device
-allocation. I wasn't aware of that. However, I still have issues with using
-ZONE_DMA32. See comments on how we can address this here:
-https://lore.kernel.org/linux-pci/YzSJ2ioEeRhHC6zn@google.com/
+On Wed, 10 Aug 2022 22:51:02 +0000 SeongJae Park <sj@kernel.org> wrote:
 
+> Hello,
 > 
-> The last but not least changing the DMA-mask in the common code which
-> isn't aware of the device/platform capability is also at the very least
-> inappropriate.
 > 
-> > My changes were directly
-> > related to allowing the DW PCIe device driver to fallback to a 64-bit DMA mask
-> > for the MSI target address if there are no 32-bit allocations available. For
-> > that use-case, using a 32-bit mask doesn't have any perf impact here since
-> > there is no actual DMAs happening.
-> 
-> Regarding your changes. I'll give you my comments in that thread, but
-> here is a short summary. One more time. There is no actually DMA
-> performed on MSI due to the way the iMSI-RX works. So setting the
-> device DMA-mask based on that is inappropriate. Secondly the coherent
-> memory might be very expensive on some platforms
-> (see Documentation/core-api/dma-api.rst). And it's on MIPS32 for
-> instance. Thus using dma_alloc_coherent()
-> for something other than for real DMA is also inappropriate. What
-> should have been done instead:
-> 1. Drop any dma_set_mask*() invocations.
+> In short, I'd like to start an open, regular, and informal virtual bi-weekly
+> meeting series for DAMON community.
 
-I'm fine with this, but others will need to approve of that.
+The next instance of the series was scheduled to 2022-10-04 (Tue) 09:00 PDT
+(https://meet.google.com/ndx-evoc-gbu), but I now reschedule it 30 minutes
+after, due to a conflict.  So, the next instance will be:
 
-> 1. Preserve the alloc_page() method usage.
-> 2. Pass GFP_DMA32 to the alloc_page() function only if
-> PCI_MSI_FLAGS_64BIT is set.
-> 
-> The suggestion above is the best choice seeing we can't reserve some
-> part of the PCI-bus memory without allocating the real system memory
-> behind as @Robin noted here in the last paragraph:
-> https://lore.kernel.org/linux-pci/1e63a581-14ae-b4b5-a5bf-ca8f09c33af6@arm.com/
+    2022-10-04 (Tue) 09:30 PDT (https://meet.google.com/ndx-evoc-gbu)
 
-I'm not okay with this as it re-introduces the dependency on ZONE_DMA32.
-I responded with more details here with regards to why and how we can work
-around the ARCH issues with dma_alloc_coherent():
-https://lore.kernel.org/linux-pci/YzSJ2ioEeRhHC6zn@google.com/
+I also updated the Google Doc for the agendas:
+https://docs.google.com/document/d/1v43Kcj3ly4CYqmAkMaZzLiM2GEnWfgdGbZAH3mi2vpM/edit?usp=sharing
+
+Looking forward to meet you!
+
 
 Thanks,
-Will
+SJ
 
-> 
-> -Sergey
-> 
-> > 
-> > Would it be possible for the DW PCIe device driver to set a capabilities flag
-> > that the PCIe host controller can read and set the mask accordingly. This way
-> > you don't need to go fix up any drivers that require a 32-bit DMA'able address
-> > for the MSI target address. For example, I see several of the PCI capability
-> > features have 64-bit flags, e.g. PCI_MSI_FLAGS_64BIT and PCI_X_STATUS_64BIT. If
-> > not, then you're going to have to re-work the host controller driver and DW
-> > PCIe device drivers that require a 32-bit MSI target address.
-> > 
-> > [1] https://lore.kernel.org/all/20201117165312.25847-1-vidyas@nvidia.com/
-> > 
-> > Thanks,
-> > Will
-> > 
+[...]
