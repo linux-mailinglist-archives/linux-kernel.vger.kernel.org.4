@@ -2,565 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B1B5EE0B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCF15EE0A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234362AbiI1Pkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
+        id S232667AbiI1PgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234053AbiI1Pk1 (ORCPT
+        with ESMTP id S233277AbiI1Pf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:40:27 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA8F77541
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:40:22 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id z13-20020a7bc7cd000000b003b5054c6f9bso1523260wmk.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:40:22 -0700 (PDT)
+        Wed, 28 Sep 2022 11:35:59 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9EBA02C2;
+        Wed, 28 Sep 2022 08:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664379354; x=1695915354;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=MgX4sHuQA70sJOOPDbH/a+F8V6Rz2dms31iHGcTbs/o=;
+  b=Y4R0bK37+gvVAdTEZRi1Nl1p+PhKU9oHjBTJueacR39pp50N432tGkSG
+   QVSjDpq4EaqkFLAn1qNfHhgjTXplp4RYjqqpSRZlSu3t19oYJ5X/GiaVR
+   uROKVf0+dkeCg95lbJ5Jewrx8RVIQ+JsBV/47PYHJxO5ngY+csSFmET5s
+   zTxbmZkHS6zYj+dETerPzYEnEuucde5wwcCEr7IbOa5zb6EF2j4NWVgHS
+   fqzBqvWQEkI4UQObsmar3WHLBM46fh2Nj7tA4Vvuwd9rUu8VxeZKk60tv
+   mLAk7pUaHhoFIrKqAEHaHb97YzK9yE0l+JD077aehasJcgfP11jJSIBnT
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="179351145"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Sep 2022 08:35:53 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 28 Sep 2022 08:35:53 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 28 Sep 2022 08:35:53 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BS0Od5GOR/nYZXZaSPl9okzsBQkdZLTrPGvnW7GVpcEj9SDvtmP0SmRWOYgcfr6s48TCgavRKTaaDUe4OoY6YT/FN3Twi5Y8MAv4JXtFOpALu6CfPM8eONr/twgw19AtxHB3QVxo0igYpJWgE7/+ccE6oOmsYq1ppRIpXdgDBCy0/klqo5xM/mtsMcLmD5FD9P9Uzp8Z9D/8saYe9M84qBhPIZHE2v71c3F7rERGRAilgmjyG9kUnB2MkO68q/G7+nIEZqUA54VXUl3msUD7PNZa+5cTeouROyrsXnyJ45mRcAZ/LR2zRwJNfN47VHrhd9Qq1UkWzWwsmtbRenUetA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MgX4sHuQA70sJOOPDbH/a+F8V6Rz2dms31iHGcTbs/o=;
+ b=oe3jR+/HD8ODJzzdGgesc8GtQRWKXwYO2+8qF/0DdOgH116N0Rn4gqu/0/Wnb/XzxBI3Ex2jXcxYQIRucrXVeklh12m0k3rmtl1yqaVvQTEq6tBOt19p22YnvKHZzqU2cFP7KMMsMYrTGbuufWQHMitA+8hO56ryyjoPnUlXS3bYwjyoQPNpX3sqEIUt+RBLejE4oOAfOKoMc+QbwEG8SqdLDX7eeuV0IhvbQgeqCj4WiMVQSZEG8pPvipW5pOC42/g/Bg0ASI+SHThikIOUip6DKWIjEZCyuSv4ZtwOpyVr5JNV1rKKCwEfQoXcbeSjScbXaYk/Dq4Vqz3OANB78w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:to:from:user-agent:references:from:to:cc:subject:date;
-        bh=RlCJgVI6Z1kRKUu162lI1Q0Miy/QkoL2EOMUCru7JOg=;
-        b=nFYwD4inLbXHI2KI3mcZJFiCAmWWRnRLfk6INy0ajOoLv+9id23hJ709fq2nsT1ARY
-         JXTql75OGeEPIL2Bb1jdZsYCd2AVaXx7S7kPd/2Yc8pz2Yc/BZI4vthG2ASm0LGq/Ib6
-         BSi9hJcXlNuxxXKfd8iRtO7c4Ajq1lwgdffnBTkUY8FZ4up9BZR2PvlVAtp7bY7Pjg3H
-         ZqKEmZxKtFXXY/xdgK77zCiLh8DQz1/pL0F/rWsGsiLlxXAdpz51bQYfRspdG/UCL9zu
-         FHHsPSZX0dZeegJoC1SyEKjmpK0eQ4I1ZSVldL60QwJMhmPsNKCTs5Gm0oZS8pwMkCh1
-         9phg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:to:from:user-agent:references:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=RlCJgVI6Z1kRKUu162lI1Q0Miy/QkoL2EOMUCru7JOg=;
-        b=lDJyAOyRWq6/i+uvuYuPitTvyvpIZSUEWRWkb4VjjnwFM6Q2RZOm1G2UPK6eydFpC8
-         +PcY8NOmGPWQErHC8im2fNSAfeW0NUHEN/uGtHbJL8z92QHn9mrnFT2sIuy3XJb9jmwH
-         pUu0HPxvODcDL4H6Msygv4DI48T6DRIdkyEj/Z8kJep5+gtjqxIV6xBY6pri0yvgbCpq
-         O+kl290ojBwb+frg65DWqmGgCP/WgV8SLdQhUqQ7XV/A7ZdWtlBJ/Ap0xK9wudwDClpo
-         nuhdojSriS3KnOEhJ88znMR164cI7ijSkNY833W9zEP1uzAeHYjpq7aqyCmK/+fMYVgv
-         ZS0g==
-X-Gm-Message-State: ACrzQf0mkVcfpL30OdLhHUT2/x6GmY1iNLhTgCF8O/G4KWCCQcE1T/by
-        TXaCFvKMpvK7dws/A4bmLWP6xw==
-X-Google-Smtp-Source: AMsMyM77Xhhmn8GlOIfa6q5vVJalkBkY4ZS5/PYh6pUA6az+X2B6Y4rCsG6DO5E1t5DCYgZ8KQjH4Q==
-X-Received: by 2002:a05:600c:2191:b0:3b4:868a:aad3 with SMTP id e17-20020a05600c219100b003b4868aaad3mr7433148wme.112.1664379621319;
-        Wed, 28 Sep 2022 08:40:21 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id u16-20020a5d5150000000b0021f131de6aesm4254590wrt.34.2022.09.28.08.40.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 08:40:20 -0700 (PDT)
-References: <20220805085716.5635-1-yu.tu@amlogic.com>
- <20220805085716.5635-7-yu.tu@amlogic.com>
- <1jedxlzxyz.fsf@starbuckisacylon.baylibre.com>
- <8f40cb49-fdc5-20cd-343b-8ce50e5d6d97@amlogic.com>
- <1j7d2rte33.fsf@starbuckisacylon.baylibre.com>
- <2b6035f3-8cbe-ab75-bed9-5751b141d3d6@amlogic.com>
- <0b621dfa-4ecd-a9a6-8681-8ab8b00d7841@amlogic.com>
-User-agent: mu4e 1.8.7; emacs 28.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH V3 6/6] clk: meson: s4: add s4 SoC peripheral clock
- controller driver
-Date:   Wed, 28 Sep 2022 17:35:00 +0200
-In-reply-to: <0b621dfa-4ecd-a9a6-8681-8ab8b00d7841@amlogic.com>
-Message-ID: <1jtu4rzevv.fsf@starbuckisacylon.baylibre.com>
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MgX4sHuQA70sJOOPDbH/a+F8V6Rz2dms31iHGcTbs/o=;
+ b=tuC71ZuqLZxhV8OjJaOBjKmsmpmrW0Ic7s/djlxkYm8GzCeRG6hM4LM2rJ4vyp5a0HVlfp8wPE7ImidEI5sxztYwwCKtEp0UVyg+0r76kRao4vhS262Uy93Oby8b+5aMoQnw+eo7AOREua84UuHtN1Cgy7A57vQZG9AQ7tCjlcA=
+Received: from BYAPR11MB2758.namprd11.prod.outlook.com (2603:10b6:a02:c9::11)
+ by BN9PR11MB5497.namprd11.prod.outlook.com (2603:10b6:408:102::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Wed, 28 Sep
+ 2022 15:35:48 +0000
+Received: from BYAPR11MB2758.namprd11.prod.outlook.com
+ ([fe80::5d0a:7887:8de:b815]) by BYAPR11MB2758.namprd11.prod.outlook.com
+ ([fe80::5d0a:7887:8de:b815%7]) with mapi id 15.20.5676.017; Wed, 28 Sep 2022
+ 15:35:48 +0000
+From:   <Sergiu.Moga@microchip.com>
+To:     <lee@kernel.org>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <Claudiu.Beznea@microchip.com>, <radu_nicolae.pirea@upb.ro>,
+        <richard.genoud@gmail.com>, <gregkh@linuxfoundation.org>,
+        <jirislaby@kernel.org>, <Kavyasree.Kotagiri@microchip.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v5 1/9] dt-bindings: mfd: atmel,sama5d2-flexcom: Add SPI
+ child node ref binding
+Thread-Topic: [PATCH v5 1/9] dt-bindings: mfd: atmel,sama5d2-flexcom: Add SPI
+ child node ref binding
+Thread-Index: AQHYznhuMeoB1iibGk+mXpPSE0ii8q30+hiAgAABDYCAAASFgIAAA1sA
+Date:   Wed, 28 Sep 2022 15:35:48 +0000
+Message-ID: <1d61596b-876b-2eca-f72d-ed38cc36f1a8@microchip.com>
+References: <20220922113347.144383-1-sergiu.moga@microchip.com>
+ <20220922113347.144383-2-sergiu.moga@microchip.com>
+ <YzRiVwzJYXtat1O5@google.com>
+ <7a0c45e2-85fc-b5b0-d1de-a9e06a20bb42@microchip.com>
+ <YzRnAy0DrfBilz8d@google.com>
+In-Reply-To: <YzRnAy0DrfBilz8d@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR11MB2758:EE_|BN9PR11MB5497:EE_
+x-ms-office365-filtering-correlation-id: f376833e-4419-439e-d952-08daa1671ddc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: x/m1ojexbY5xnMivNOL0TVomtn/s4G3WH6zuOWsGgDCyKeZ3hiELZ2YFOl0HK6jNIIbGWl66zgiELC70QwEYS0qLxUVUXln+51R1hfzIwhEXM6+F6quIx3WJfgOAl4Wg2aBGoq0jYzFEdHl0tyfbcLKY9E1LD+69vBA0aZeLVgKj2V225ko8bDaNNJui68xo4zVJ+n6ozuOnJS6/BM7ZVuvgwIqx0FLKsQpmIUCAbyoSMHFIA5Zd71VZGSYHikphUDXYP8Jrl93K5NXQfp1Eel+DtAl4oMXb4hnflgRmQk09KslzXfqiL0bcZ+0pUYFHDpDZyeTfL6vNJiEwdCsnpobadR5U7NPoLW/cK1DgXk3Nz0wQL+PWTYYKQgMGCtypHswwOMfCTTX41sJv6w66HwAWvqndyPEdRfDG53pMZzDPzhNmrGM5NhUPUtG+XJQN/ZDLVPHD7bfrMW+mCbA9oAzD0TsYk70ggZ5/3xrnGBeZfa2ofQcOwzeO1H1x9wyCQNBJ+7v5F7CoLoRHAHEBdeI6G5yyW1btjNah/HaHQgWxq+SRY4C2IMccrlanx4iiu2o2NnoKjKRPl12xzcepNphDnbQosr9j0gda+zWZ/tYSl9sCE4z8m38loG7ViBliE7Grc61IYkl2pZ7KOsRyU7L80h7zLlPt67PZrzlQzp06gwGaNyQyuST89TFiai7FvE+aYHCbzEG1nQG82hgSDVXsZxP7o53tfeVL2CiYk2+OxKUmf7Fy3rsbp+yKySGSCzXhBoz72/2Z2etrSxqIoX0yTnF//oTm6YFJbPoAYrl/dIqneKJMvC5F8KUBMv1T2031xukVF448cnnqeskTQw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2758.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(39860400002)(136003)(366004)(376002)(346002)(451199015)(31686004)(2906002)(7416002)(5660300002)(4326008)(64756008)(66446008)(38100700002)(36756003)(316002)(8936002)(66556008)(66476007)(41300700001)(66946007)(76116006)(122000001)(8676002)(6486002)(54906003)(6916009)(38070700005)(71200400001)(91956017)(478600001)(2616005)(86362001)(6506007)(186003)(966005)(53546011)(31696002)(6512007)(26005)(83380400001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?azM4U1hxaVRwTjgyQTVoTCtMZUVIOG1XVnpvYm1yS2ZSNnprSmlra2s4cnVl?=
+ =?utf-8?B?N0Y3bWs4T3FsNXByNU5oS0N1bStmZjA2Yk5CYklZOWlOSHJFZmFQQ29DVGtJ?=
+ =?utf-8?B?WDlzVGlqSS80QTNsMUZUT1dPU0ZSQzZCd3F0cE5nNnphSHB6SW5RSUY4RGQ2?=
+ =?utf-8?B?bE9ldGhsd3lzbmZOK25lMU1seURKYURtQmxXbkY0Zk5OdFBscldrSWhKeEEr?=
+ =?utf-8?B?SFUyUFZNc3Zwa2V4QVkvR0g0K2lCNnlNaEMzVVlQYk1oUmh3MHkyME5DN0dO?=
+ =?utf-8?B?dnV4b2VvT1laeGJqZlFIaW5nYjJlaHFnajVIcTRDTTNqbHJQT1Zrb2tBdzFz?=
+ =?utf-8?B?N1daQWcvWnd2cHZCNG9CVC9odGJia2xyaDRWUjNNYlFhY0JFVHhjZzVpekNY?=
+ =?utf-8?B?SFFoNXp3eittM1puV0RPdXkvTEF2a25zZkxSOTdaRU1KYmRYWVVkMkp4WGdz?=
+ =?utf-8?B?Nk9pd0NmZGUzaWhXdnBQbXlPTGdsSVcyaG9Kb2hINjlJRlM4cHFpTWFMaEFv?=
+ =?utf-8?B?Z3RETWFPSHFmSTNuNWhRY2ZiVkRkY3lRbEQxM1F4K1ptbU00Z3RPS1ArMjRW?=
+ =?utf-8?B?Q2FubVJDUGtBTEdSeXR2UnhqS3ZvTDd3VldxZkZ4ZElEREhGNnM0K3NhYzdO?=
+ =?utf-8?B?UjFzdFIwa3NVT3Y2aUszZEt0VDBZcGhqVjQySTNuSEl2YjB5dy8rTDdKWFdz?=
+ =?utf-8?B?ZDFKbURObTB5cFlRUHNIVWF3TEtvc01xK3N1Slh5T2E4R3lTd2VCUzBUV05r?=
+ =?utf-8?B?L0R1SFpEakdlc1ArTzZQbGhQM0YrWU1KdDY3WFVlNUNpb2RiaTcwajArQUJJ?=
+ =?utf-8?B?eVFCMy9HWEdDUUViUTJQb3RJUFkwR2VUSXo1UGZheXlZUThvYzBYbkRmTWFE?=
+ =?utf-8?B?U0ZzYWdJTmVDZHBWQlB4WUFzam8yT0Z4dkJ4dDAvaDlkV3BKNW9mbitzYlJx?=
+ =?utf-8?B?TVpVVFdDaCt2WlpXN2t4MUM2VC9Day9JSnZUOEx3aUVIQUJJQis0aFJYRUJF?=
+ =?utf-8?B?ZHpHRE1XL0x2aGNwQzlmNU5SYkxESU1kMDd0VjRIay8vQkNZT3gvRTlKMXJF?=
+ =?utf-8?B?M0pocmw4TzBBajZKOGhrT0NLc2FyelliL0ZraHRGUjQxS1JEek1Tak5YSHBt?=
+ =?utf-8?B?bGxka0ZlcHpJUUoyTXJFK0sxcFR6WEhGN2lWUzNURW03UStUZDdmbHVSMUR0?=
+ =?utf-8?B?SFlCN04zdXFHTjZLekVlYXVQQkMzS3cwbkdyV0ZaYjNqbGY0WFExbWxBZlhr?=
+ =?utf-8?B?K3lZTEpxdEhQSURTZ2RMaGdRMlJncFNVeFUwNjJKVE8wQnE5eXFXMGZZa1Zx?=
+ =?utf-8?B?REI3TDFCT1FaYTlWNm5JdnJ5U0x1VWRtTzhHdjRBTDBKKzIxTWptWE9Xa2VB?=
+ =?utf-8?B?Z1NKZmhFdTNFcVQ0QlRJeFQvblN0MW1EdGNzaEh4b2lZcVRLWDNhUmFFYjVM?=
+ =?utf-8?B?Vnh0blM1TlM1ZjZkSC9mNEVCWTA4L05mUU5VZDNSM3R1eXB2SWcrTmx4ald5?=
+ =?utf-8?B?Q3dNOTNHZlNZWEJBWXptbnVQUzNQOWRMOGZoRG1MaW5OeVZKelppUHFFZUVr?=
+ =?utf-8?B?aHYwbXlZeElQRVJ6SHcrVFdEVW56enF3OFRtcE04UkJ2Y2ZFVXpHb3RUUUJD?=
+ =?utf-8?B?a1UzcVRPeUdSWE4vc0JOdHdaY1l1TTdsZDhZL3RvaFBISTdGanVKRUdyY0RE?=
+ =?utf-8?B?ZkZCTnZRcUZTOXAxNjg5MC8rRGR0WDJPV3I2ZXNITGNGTWhMNWx6Sko2YjlU?=
+ =?utf-8?B?YmN4OHFsUC9DdlliNVhmUEdTVHk0RlIyMm9iRVhNaE4yOW9oN01IdnNGK3Uw?=
+ =?utf-8?B?enYxVmozMDZxNXVmNEhWTExTMzJLaHgwNTE2N3hWQ0dpV0x2bXNYdEpKclh2?=
+ =?utf-8?B?Q0huSzRmaUJzeit4WkhJRjYxeUZRWWgxTFBjN29UL0w0U0txWEl3ZTZRYW54?=
+ =?utf-8?B?enRMSFdaT3Q1THZpUmY1SkRoZHZQK3RUTVBaOVRaVnBtL2h5ZGxZQjVqa2x6?=
+ =?utf-8?B?Ym5SN2N5MXB4eHZEWk9pWHF5YWZmU29RWmMxd3dxc1FkNTVhMjhxUzVkRkJ5?=
+ =?utf-8?B?Rmt0RnRObVBNb0xwMzFSejFVK2FSRjF0ZVM2MTZhYUFERjlhbFhQY1YwYzlz?=
+ =?utf-8?Q?+I9ty5VJ3dmB6cjFfP7XypDOd?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <88449E6A8D00E54ABFE7BB253028DBB6@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2758.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f376833e-4419-439e-d952-08daa1671ddc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2022 15:35:48.0594
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: I7n71reElSSpp/o5rfRKJYVX8pqBd/psh//SmZDLYEtvyNcEy2M5FRDXPHMGNVSVU19rgE9hF/LgCoMoKMWrd+5VO/juKarPOEjXLTiLKNw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5497
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed 21 Sep 2022 at 17:01, Yu Tu <yu.tu@amlogic.com> wrote:
-
-> Hi Jerome,
->
-> On 2022/8/30 16:20, Yu Tu wrote:
->> On 2022/8/29 20:19, Jerome Brunet wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>>
->>> On Tue 16 Aug 2022 at 20:00, Yu Tu <yu.tu@amlogic.com> wrote:
->>>
->>> Please trim your replies
->>>
->>>>>> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
->>>>>> index f4244edc7b28..ec6beb9284d3 100644
->>>>>> --- a/drivers/clk/meson/Kconfig
->>>>>> +++ b/drivers/clk/meson/Kconfig
->>>>>> @@ -127,4 +127,17 @@ config COMMON_CLK_S4_PLL
->>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Support for the pll=
- clock controller on Amlogic S805X2 and
->>>>>> S905Y4 devices,
->>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 aka s4. Amlogic S80=
-5X2 and S905Y4 devices include AQ222 and
->>>>>> AQ229.
->>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Say Y if you want p=
-eripherals and CPU frequency scaling to
->>>>>> work.
->>>>>> +
->>>>>> +config COMMON_CLK_S4
->>>>>> +=C2=A0=C2=A0=C2=A0 tristate "S4 SoC Peripherals clock controllers s=
-upport"
->>>>>> +=C2=A0=C2=A0=C2=A0 depends on ARM64
->>>>>> +=C2=A0=C2=A0=C2=A0 default y
->>>>>> +=C2=A0=C2=A0=C2=A0 select COMMON_CLK_MESON_REGMAP
->>>>>> +=C2=A0=C2=A0=C2=A0 select COMMON_CLK_MESON_DUALDIV
->>>>>> +=C2=A0=C2=A0=C2=A0 select COMMON_CLK_MESON_VID_PLL_DIV
->>>>>> +=C2=A0=C2=A0=C2=A0 select COMMON_CLK_S4_PLL
->>>>> Do you really this ? your driver does not even include the related
->>>>> header.
->>>> If the PLL driver is not turned on in DTS, will it not cause an error?
->>>>>
->>>
->>> I don't get the question.
->>> Kconfig list compile deps. S4 PLL is not a compile dep of the peripheral
->>> controller.
->>>
->>> If you really want to, you may use 'imply'.
->> V4 has been changed as you suggested.
->
-> The next edition is being changed according to your requirements. Please
-> give us your valuable opinions.
->
->>=20
->>>>>
->>>>>> +static const struct clk_parent_data sys_ab_clk_parent_data[] =3D {
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "xtal" },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div2" },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div3" },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div4" },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div5" },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div7" },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .hw =3D &s4_rtc_clk.hw }
->>>>>> +};
->>>>>> +
->>>>>> +static struct clk_regmap s4_sysclk_b_sel =3D {
->>>>>> +=C2=A0=C2=A0=C2=A0 .data =3D &(struct clk_regmap_mux_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .offset =3D CLKCTRL_SYS_=
-CLK_CTRL0,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .mask =3D 0x7,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .shift =3D 26,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .table =3D mux_table_sys=
-_ab_clk_sel,
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0 .hw.init =3D &(struct clk_init_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .name =3D "sysclk_b_sel",
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .ops =3D &clk_regmap_mux=
-_ro_ops,
->>>>> Why is this using the RO ops ?
->>>> Sys_clk is initialized during the Uboot phase and is fixed at
->>>> 166.666MHz. So I'm going to change it to ro.
->>>
->>> That really much depends on the bootloader and is a pretty weak design.
->>> The bootloader deps should be kept as minimal as possible.
->>>
->>> I see no reason for RO.
->>>
->>> You may cut rate propagation on the user if you need to and continue to
->>> whatever you want in your u-boot
->> I think I know what you mean. But we let the user be in control and not
->> set the frequency, which can be risky. If you insist, I will change it as
->> you suggest.
->
-> It has been changed as you requested.
->
->>=20
->>>
->>>>>
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .parent_data =3D sys_ab_=
-clk_parent_data,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .num_parents =3D ARRAY_S=
-IZE(sys_ab_clk_parent_data),
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>>> +};
->>>>>> +
->>>>>> +static struct clk_regmap s4_sysclk_b_div =3D {
->>>>>> +=C2=A0=C2=A0=C2=A0 .data =3D &(struct clk_regmap_div_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .offset =3D CLKCTRL_SYS_=
-CLK_CTRL0,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .shift =3D 16,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .width =3D 10,
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0 .hw.init =3D &(struct clk_init_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .name =3D "sysclk_b_div",
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .ops =3D &clk_regmap_div=
-ider_ro_ops,
->>>>> Same here and for the rest of the sys part
->>>> Same above.
->>>
->>> We can play that game for a while
->> Ah, you're so funny.
->>=20
->>>
->>>>>> +
->>>>>> +/* Video Clocks */
->>>>>> +static struct clk_regmap s4_vid_pll_div =3D {
->>>>>> +=C2=A0=C2=A0=C2=A0 .data =3D &(struct meson_vid_pll_div_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .val =3D {
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-.reg_off =3D CLKCTRL_VID_PLL_CLK_DIV,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-.shift=C2=A0=C2=A0 =3D 0,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-.width=C2=A0=C2=A0 =3D 15,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .sel =3D {
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-.reg_off =3D CLKCTRL_VID_PLL_CLK_DIV,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-.shift=C2=A0=C2=A0 =3D 16,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-.width=C2=A0=C2=A0 =3D 2,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0 .hw.init =3D &(struct clk_init_data) {
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .name =3D "vid_pll_div",
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .ops =3D &meson_vid_pll_=
-div_ro_ops,
->>>>> Why RO ? applies to the rest of the video part.
->>>> Because vid_pll_div parent is HDMI_PLL, and HDMI_PLL is a fixed
->>>> frequency. Flags is CLK_SET_RATE_PARENT. So we use RO.
->>>
->>> If the HDMI_PLL is fixed somehow, that is not reason for this clock to
->>> be RO
->>>
->>>> Can I remove RO and use CLK_SET_RATE_NO_REPARENT instead, which one do
->>>> you
->>>> think is more reasonable?
->>>
->>> Neither. CLK_SET_RATE_NO_REPARENT makes no sense, it is not mux
->>>
->> "drivers/clk/meson/vid-pll-div.c"
->> This file only provides ro_ops. Maybe the submission records will give us
->> the answer.
->> In fact, our hardware design is the same as the G12 series.
->
-> I don't know if you checked this commit, but there is only one "ro_ops"in
-> this place right now.
->
-> The S4 SoC is consistent with the G12A/B and GX series.
->
-
-I missed the vid_pll type, Ok then.
-
->>=20
->>>>
->>>>>
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .parent_data =3D (const =
-struct clk_parent_data []) {
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-{ .fw_name =3D "hdmi_pll", }
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .num_parents =3D 1,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .flags =3D CLK_SET_RATE_=
-PARENT,
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>>> +};
->>>>>> +
->>>>>> +static struct clk_regmap s4_vid_pll_sel =3D {
->>>>>> +=C2=A0=C2=A0=C2=A0 .data =3D &(struct clk_regmap_mux_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .offset =3D CLKCTRL_VID_=
-PLL_CLK_DIV,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .mask =3D 0x1,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .shift =3D 18,
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0 .hw.init =3D &(struct clk_init_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .name =3D "vid_pll_sel",
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .ops =3D &clk_regmap_mux=
-_ops,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * bit 18 selects f=
-rom 2 possible parents:
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * vid_pll_div or h=
-dmi_pll
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .parent_data =3D (const =
-struct clk_parent_data []) {
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-{ .hw =3D &s4_vid_pll_div.hw },
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-{ .fw_name =3D "hdmi_pll", }
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .num_parents =3D 2,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .flags =3D CLK_SET_RATE_=
-NO_REPARENT,
->>>>> Why ? are you planning to DT assigned clocks to statically set this ?
->>>> Because vid_pll_sel one parent is HDMI_PLL, and HDMI_PLL is a fixed
->>>> frequency. To prevent modification, use CLK_SET_RATE_NO_REPARENT.
->>>
->>> Again, this makes no sense.
->> Unfortunately you don't read V4, in fact I have corrected in V4.
->> ".flags =3D CLK_SET_RATE_PARENT," in V4. Is that okay with you?
->
-> I don't know what you think?
->
-
-ok
-
->>=20
->>>
->>>>>
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>>> +};
->>>>>> +
->>>>>> +static struct clk_regmap s4_vid_pll =3D {
->>>>>> +=C2=A0=C2=A0=C2=A0 .data =3D &(struct clk_regmap_gate_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .offset =3D CLKCTRL_VID_=
-PLL_CLK_DIV,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .bit_idx =3D 19,
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0 .hw.init =3D &(struct clk_init_data) {
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .name =3D "vid_pll",
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .ops =3D &clk_regmap_gat=
-e_ops,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .parent_hws =3D (const s=
-truct clk_hw *[]) {
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-&s4_vid_pll_sel.hw
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .num_parents =3D 1,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .flags =3D CLK_SET_RATE_=
-PARENT,
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>>> +};
->>>>>> +
->>>>>> +static const struct clk_parent_data s4_vclk_parent_data[] =3D {
->>>>>> +=C2=A0=C2=A0=C2=A0 { .hw =3D &s4_vid_pll.hw },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "gp0_pll", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "hifi_pll", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "mpll1", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div3", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div4", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div5", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div7", },
->>>>>> +};
->>>>>> +
->>>>>> +static struct clk_regmap s4_vclk_sel =3D {
->>>>>> +=C2=A0=C2=A0=C2=A0 .data =3D &(struct clk_regmap_mux_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .offset =3D CLKCTRL_VID_=
-CLK_CTRL,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .mask =3D 0x7,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .shift =3D 16,
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0 .hw.init =3D &(struct clk_init_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .name =3D "vclk_sel",
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .ops =3D &clk_regmap_mux=
-_ops,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .parent_data =3D s4_vclk=
-_parent_data,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .num_parents =3D ARRAY_S=
-IZE(s4_vclk_parent_data),
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .flags =3D CLK_SET_RATE_=
-NO_REPARENT,
->>>>> Same
->>>> Since fclk_div* is a fixed frequency value, mplL1 and hifi_pll and
->>>> gp0_pll
->>>> are used by other specialized modules, vid_pll has
->>>> CLK_SET_RATE_PARENT. The
->>>> parent of vid_pll is that vid_pll_sel uses CLK_SET_RATE_NO_REPARENT.
->>>
->>> Still not good.
->>>
->>> You don't have CLK_SET_RATE, propagation is stopped and parent clock
->>> will not changed. The best parent will be picked but not changed.
->>>
->>> If one parent MUST NOT be picked, just remove it from the list and add a
->>> explaining why
->>>
->>> [...]
->> Okay.
->
-> In the next edition I will change it to ".flags =3D CLK_SET_RATE_PARENT".
->
-
-If you clock rate propagation is ok, then OK
-
->>=20
->>>
->>>>>> +
->>>>>> +static struct clk_regmap s4_ts_clk_div =3D {
->>>>>> +=C2=A0=C2=A0=C2=A0 .data =3D &(struct clk_regmap_div_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .offset =3D CLKCTRL_TS_C=
-LK_CTRL,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .shift =3D 0,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .width =3D 8,
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0 .hw.init =3D &(struct clk_init_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .name =3D "ts_clk_div",
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .ops =3D &clk_regmap_div=
-ider_ops,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .parent_data =3D &(const=
- struct clk_parent_data) {
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-.fw_name =3D "xtal",
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .num_parents =3D 1,
->>>>> propagation stopped ?
->>>> Its parent is xtal, so I should use CLK_SET_RATE_NO_REPARENT.
->>>
->>> Still no. You seem to have problem with the meaning of
->>> CLK_SET_RATE_NO_REPARENT.
->>>
->>> * CLK_SET_RATE_NO_REPARENT: means the parent will no be changed, even if
->>> =C2=A0=C2=A0 selecting another parent would result in a closer rate to =
-the
->>> =C2=A0=C2=A0 request. It makes sense only if the clock has several pare=
-nts
->>>
->>> * CLK_SET_RATE_PARENT: means rate change may propagate the parent,
->>> =C2=A0=C2=A0 meaning the rate of the parent may change if it help the c=
-hild achieve
->>> =C2=A0=C2=A0 a closer rate to the request
->> Thank you for explaining.I got it.
->>=20
->>>
->>>>>
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>>> +};
->>>>>> +
->>>>>> +static struct clk_regmap s4_ts_clk_gate =3D {
->>>>>> +=C2=A0=C2=A0=C2=A0 .data =3D &(struct clk_regmap_gate_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .offset =3D CLKCTRL_TS_C=
-LK_CTRL,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .bit_idx =3D 8,
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0 .hw.init =3D &(struct clk_init_data){
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .name =3D "ts_clk",
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .ops =3D &clk_regmap_gat=
-e_ops,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .parent_hws =3D (const s=
-truct clk_hw *[]) {
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-&s4_ts_clk_div.hw
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 },
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .num_parents =3D 1,
->>>>>> +=C2=A0=C2=A0=C2=A0 },
->>>>> propagation stopped ?
->>>> I will add CLK_SET_RATE_PARENT.
->>>
->>> [...]
->>>
->>>>>> +/* EMMC/NAND clock */
->>>>>> +
->>>>>> +static const struct clk_parent_data s4_sd_emmc_clk0_parent_data[] =
-=3D {
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "xtal", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div2", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div3", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "hifi_pll", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div2p5", },
->>>>>> +=C2=A0=C2=A0=C2=A0 /*
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * Following these parent clocks, we should=
- also have had mpll2,
->>>>>> mpll3
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * and gp0_pll but these clocks are too pre=
-cious to be used
->>>>>> here. All
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * the necessary rates for MMC and NAND ope=
-ration can be
->>>>>> acheived using
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 * hifi_pll or fclk_div clocks
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0 */
->>>>> You don't want to list mplls but hifi_pll is fine ? seems dangerous.
->>>> hifi pll is for EMMC and NAND on this SoC.
->>>
->>> That deserve a better explanation.
->>> Why can't it use fdiv2 and xtal like the previous SoCs ?
->>>
->>> Which PLLs are you using for Audio then ?
->>> Typical operation on these SoCs usually require 3 PLLs to acheive all
->>> rates
->>>
->> I'll list all the clocks and let the driver itself select Parent as
->> needed.
->
-> I don't know what you think?
->
-
-ok
-
->>=20
->>>>>
->>>
->>>
->>>>>> +/*
->>>>>> + * gen clk is designed for debug/monitor some internal clock
->>>>>> quality. Some of the
->>>>>> + * corresponding clock sources are not described in the clock tree,
->>>>>> so they are skipped.
->>>>>> + */
->>>>> Still feels a bit light, don't you think ? Among all the clocks, can't
->>>>> you add a bit more parents here ? It would certainly help debug down
->>>>> the road
->>>> [16:12]=C2=A0=C2=A0=C2=A0 is gen_clk source select.All is:
->>>> 0: cts_oscin_clk
->>>> 1:cts_rtc_clk
->>>> 2:sys_pll_div16 (internal clock)
->>>> 3:ddr_pll_div32=C2=A0 (internal clock)
->>>> 4: vid_pll
->>>> 5: gp0_pll
->>>> 7: hifi_pll
->>>> 10:adc_dpll_clk_b3 (internal clock for debug)
->>>> 11:adc_dpll_intclk (internal clock for debug)
->>>> 12:clk_msr_src(select from all internal clock except PLLs);
->>>> 16: no used
->>>> 17: sys_cpu_clk_div16 (internal clock)
->>>> 19: fclk_div2
->>>> 20: fclk_div2p5
->>>> 21: fclk_div3
->>>> 22: fclk_div4
->>>> 23: fclk_div5
->>>> 24: fclk_div7
->>>> 25: mpll0
->>>> 26: mpll1
->>>> 27: mpll2
->>>> 28: mpll3
->>>> So i only added the clocks that will actually be used, and some
->>>> debugging
->>>> clock peripherals will not be used.
->>>
->>> you may at least add vid_pll
->> Okay.
->
-> It has been changed as you suggested.
->
->>=20
->>>
->>>>>
->>>>>> +static u32 s4_gen_clk_mux_table[] =3D { 0, 5, 7, 19, 21, 22,
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 23, 24, 25, 26=
-, 27, 28 };
->>>>>> +static const struct clk_parent_data s4_gen_clk_parent_data[] =3D {
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "xtal", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "gp0_pll", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "hifi_pll", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div2", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div3", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div4", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div5", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "fclk_div7", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "mpll0", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "mpll1", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "mpll2", },
->>>>>> +=C2=A0=C2=A0=C2=A0 { .fw_name =3D "mpll3", },
->>>>>> +};
->>>
->>> .
-
+T24gMjguMDkuMjAyMiAxODoyMywgTGVlIEpvbmVzIHdyb3RlOg0KPiBPbiBXZWQsIDI4IFNlcCAy
+MDIyLCBTZXJnaXUuTW9nYUBtaWNyb2NoaXAuY29tIHdyb3RlOg0KPiANCj4+IE9uIDI4LjA5LjIw
+MjIgMTg6MDMsIExlZSBKb25lcyB3cm90ZToNCj4+PiBPbiBUaHUsIDIyIFNlcCAyMDIyLCBTZXJn
+aXUgTW9nYSB3cm90ZToNCj4+Pg0KPj4+PiBBbm90aGVyIGZ1bmN0aW9uYWxpdHkgb2YgRkxFWENP
+TSBpcyB0aGF0IG9mIFNQSS4gSW4gb3JkZXIgZm9yDQo+Pj4+IHRoZSBwcm9wZXIgdmFsaWRhdGlv
+biBvZiB0aGUgU1BJIGNoaWxkcmVuIG5vZGVzIHRocm91Z2ggdGhlIGJpbmRpbmcNCj4+Pj4gdG8g
+b2NjdXIsIHRoZSBwcm9wZXIgYmluZGluZyBmb3IgU1BJIG11c3QgYmUgcmVmZXJlbmNlZC4NCj4+
+Pj4NCj4+Pj4gU2lnbmVkLW9mZi1ieTogU2VyZ2l1IE1vZ2EgPHNlcmdpdS5tb2dhQG1pY3JvY2hp
+cC5jb20+DQo+Pj4+IFJldmlld2VkLWJ5OiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5c3p0b2Yu
+a296bG93c2tpQGxpbmFyby5vcmc+DQo+Pj4+IC0tLQ0KPj4+Pg0KPj4+Pg0KPj4+PiB2MSAtPiB2
+MjoNCj4+Pj4gLSB1c2UgZnVsbCBzY2hlbWEgcGF0aHMNCj4+Pj4NCj4+Pj4NCj4+Pj4gdjIgLT4g
+djM6DQo+Pj4+IC0gQWRkZWQgUmV2aWV3ZWQtYnkgdGFnLCBwcmV2aW91c2x5IHRoaXMgd2FzIFtQ
+QVRDSCAzXQ0KPj4+Pg0KPj4+Pg0KPj4+PiB2MyAtPiB2NDoNCj4+Pj4gLSBOb3RoaW5nLCBwcmV2
+aW91c2x5IHRoaXMgd2FzIFtQQVRDSCA1XQ0KPj4+Pg0KPj4+Pg0KPj4+PiB2NCAtPiB2NToNCj4+
+Pj4gLSBOb3RoaW5nDQo+Pj4+DQo+Pj4+DQo+Pj4+DQo+Pj4+ICAgIC4uLi9kZXZpY2V0cmVlL2Jp
+bmRpbmdzL21mZC9hdG1lbCxzYW1hNWQyLWZsZXhjb20ueWFtbCAgICAgICB8IDUgKystLS0NCj4+
+Pj4gICAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4+
+Pg0KPj4+IE5vdCBzdXJlIGhvdyB0aGVzZSBjYW4gYmUgaGFuZGxlZC4NCj4+Pg0KPj4+IEkgZ3Vl
+c3MgSSBjYW5ub3QgdGFrZSB0aGVzZSB1bnRpbCB0aGUgb3RoZXIgcGF0Y2hlcyBhcmUgYXBwbGll
+ZC4NCj4+Pg0KPj4+IE5COiBUaGUgcGF0Y2ggZG9lc24ndCBhcHBseSBjbGVhbmx5IGFueXdheSwg
+c28gd2lsbCBuZWVkIHRvIGJlIHJlYmFzZWQuDQo+Pj4NCj4+DQo+Pg0KPj4gSGVsbG8sDQo+Pg0K
+Pj4gVGhlIHNhbWE1ZDItZmxleGNvbSBiaW5kaW5nIHJlbGF0ZWQgcGF0Y2hlcyBhcmUgZGVwZW5k
+ZW50IG9uOg0KPj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtYXJtLWtlcm5lbC8yMDIy
+MDkxNjA3NTc0NC4xODc5NDI4LTEta2F2eWFzcmVlLmtvdGFnaXJpQG1pY3JvY2hpcC5jb20vDQo+
+IA0KPiBJIHdvdWxkIGJlIHZlcnkgY2F1dGlvdXMgYWJvdXQgcmVseWluZyBvbiBjb21tZW50cyBt
+YWRlIGluIHRoZQ0KPiBjb3Zlci1sZXR0ZXIuICBCZXR0ZXIgdG8gbWFrZSB0aGlzIGEgaGFyZCBy
+ZXF1aXJlbWVudCBhbmQgcGxhY2UgdGhlbQ0KPiBpbiB0aGUgc2FtZSBwYXRjaC1zZXQuDQo+IA0K
+PiAtLQ0KPiBMZWUgSm9uZXMgW+adjueQvOaWr10NCg0KDQoNClVuZGVyc3Rvb2QsIG15IGFwb2xv
+Z2llcywgSSB3aWxsIGtlZXAgdGhpcyBpbiBtaW5kIHRoZSBuZXh0IHRpbWUgdGhpcyANCmhhcHBl
+bnMgOikuDQoNCk90aGVyd2lzZSwgYnkgYXBwbHlpbmcgdGhlIHBhdGNoIHNlcmllcyBsaW5rZWQg
+YWJvdmUsIG15IHNhbWE1ZDItZmxleGNvbSANCnBhdGNoZXMgc2hvdWxkIGFwcGx5IGNsZWFubHkg
+YWZ0ZXJ3YXJkcy4NCg0KVGhhbmtzLA0KCVNlcmdpdQ0K
