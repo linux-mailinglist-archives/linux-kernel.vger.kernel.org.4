@@ -2,81 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A79845EE29A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D96C5EE29E
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234298AbiI1RJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        id S234326AbiI1RKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiI1RJW (ORCPT
+        with ESMTP id S230431AbiI1RKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:09:22 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1374BAD9BC
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:09:22 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-13189cd5789so6318059fac.11
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=7vQ2L03NmZjTjKW7aYlNCJZqth3/yEDQLyW9BQRTAy8=;
-        b=A+bgUQTLuISMRGKf3gH1kVvGmP3b/AaIOap7gHgA/PD0nbgpIKholTwlPXLri1af0K
-         cnXmQYCXr6Teuy/PYE/inGfAxECxd/mCvZF/wqKa528cfQv970CHoLHSzLvnxIGoeg2I
-         Wt438dq+Wr6ck6v+tRyZuqUTQ439HqIxvfrIc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=7vQ2L03NmZjTjKW7aYlNCJZqth3/yEDQLyW9BQRTAy8=;
-        b=szSfPTbGYunguz2+i3UMihedyPzfl2QQm7YT8bJWzvlM/XqCrs/tZluMMC8YdGFEHG
-         9VXiLXEJXnaTGL12FXT7lGzb3N/qFtb5btqy0aw6R/FLc86PIGmPEj0dPgUWkDeFusBe
-         QCKq/VJH3MTEmzSvuUqbDam2/agL3xE1URc0oa1cZWU7h2JTAZVLNzcQmRC8K3pR3uAk
-         ooWbRf5azpruzQfhOCsdJw56eal7t/K0Dr7YJK4iPw5BA3d6JXhSo2d8MX4NKAbLJQhU
-         lvg/eYgcWtspIqGd7wwOLScfmC/b+xNnKx9+9fOnAvIgsyMpWPlXbYC+4u09tgtl4KZp
-         IBtQ==
-X-Gm-Message-State: ACrzQf1lpPIzibRyeb+P5VHVsLktpNyM2fl/oYe2rGKZI4h36fC92aFE
-        GakAqs8s0ywrOv8EQ9M3STQI/3/f2dxoZw==
-X-Google-Smtp-Source: AMsMyM6mgal0LybokQKeDPBzi+BwFO116xE2gDkhcQ/wZRA4qIVLhAU/nfWx54o9TcpqQv4whL0nvg==
-X-Received: by 2002:a05:6870:1d0:b0:131:86bc:3f8 with SMTP id n16-20020a05687001d000b0013186bc03f8mr5210517oad.98.1664384961221;
-        Wed, 28 Sep 2022 10:09:21 -0700 (PDT)
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com. [209.85.210.54])
-        by smtp.gmail.com with ESMTPSA id c22-20020a056808105600b0033b31480f38sm1944651oih.34.2022.09.28.10.09.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 10:09:21 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id w22-20020a056830061600b006546deda3f9so8590793oti.4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:09:20 -0700 (PDT)
-X-Received: by 2002:a9d:2de3:0:b0:638:e210:c9da with SMTP id
- g90-20020a9d2de3000000b00638e210c9damr14921820otb.69.1664384960424; Wed, 28
- Sep 2022 10:09:20 -0700 (PDT)
+        Wed, 28 Sep 2022 13:10:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33950915E4
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:10:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9EB0A143D;
+        Wed, 28 Sep 2022 10:10:08 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 170793F792;
+        Wed, 28 Sep 2022 10:09:59 -0700 (PDT)
+Message-ID: <ef5fcbf2-e018-9af2-48c3-9fea3109b27f@arm.com>
+Date:   Wed, 28 Sep 2022 19:09:40 +0200
 MIME-Version: 1.0
-References: <20220928081300.101516-1-gwan-gyeong.mun@intel.com> <20220928081300.101516-6-gwan-gyeong.mun@intel.com>
-In-Reply-To: <20220928081300.101516-6-gwan-gyeong.mun@intel.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 28 Sep 2022 10:09:04 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wivJwvVbMUKma8600F6qaVLZHT=BY90SEnjiHWw2ZUVEg@mail.gmail.com>
-Message-ID: <CAHk-=wivJwvVbMUKma8600F6qaVLZHT=BY90SEnjiHWw2ZUVEg@mail.gmail.com>
-Subject: Re: [PATCH v13 5/9] drm/i915: Check for integer truncation on
- scatterlist creation
-To:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, mchehab@kernel.org,
-        chris@chris-wilson.co.uk, matthew.auld@intel.com,
-        thomas.hellstrom@linux.intel.com, jani.nikula@intel.com,
-        nirmoy.das@intel.com, airlied@redhat.com, daniel@ffwll.ch,
-        andi.shyti@linux.intel.com, andrzej.hajda@intel.com,
-        keescook@chromium.org, mauro.chehab@linux.intel.com,
-        linux@rasmusvillemoes.dk, vitor@massaru.org, dlatypov@google.com,
-        ndesaulniers@google.com, trix@redhat.com, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org, linux-sparse@vger.kernel.org,
-        nathan@kernel.org, gustavoars@kernel.org,
-        luc.vanoostenryck@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
+Content-Language: en-US
+To:     Jian-Min Liu <jian-min.liu@mediatek.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>
+Cc:     Quentin Perret <qperret@google.com>,
+        Patrick Bellasi <patrick.bellasi@matbug.net>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Jonathan JMChen <jonathan.jmchen@mediatek.com>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>
+References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
+ <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,44 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 1:15 AM Gwan-gyeong Mun
-<gwan-gyeong.mun@intel.com> wrote:
->
-> +       if (check_assign(obj->base.size >> PAGE_SHIFT, &npages))
-> +               return -E2BIG;
++ Kajetan Puchalski <kajetan.puchalski@arm.com>
 
-I have to say, I find that new "check_assign()" macro use to be disgusting.
+On 20/09/2022 16:07, Jian-Min Liu wrote:
+> 
+> Update some test data in android phone to support switching PELT HL 
+> is helpful functionality.
+> 
+> We switch runtime PELT HL during runtime by difference scenario e.g.
+> pelt8 in playing game, pelt32 in camera video. Support runntime
+> switching PELT HL is flexible for different workloads.
+> 
+> the below table show performance & power data points: 
+> 
+> ---------------------------------------------------------------------
+> --|                      | PELT
+> halflife                                |
+> |                      |----------------------------------------------|
+> |                      |       32      |       16      |       8      |
+> |                      |----------------------------------------------|
+> |                      | avg  min  avg | avg  min  avg | avg  min  avg|
+> | Scenarios            | fps  fps  pwr | fps  fps  pwr | fps  fps  pwr|
+> |---------------------------------------------------------------------|
+> | HOK game 60fps       | 100  100  100 | 105 *134* 102 | 104 *152* 106|
+> | HOK game 90fps       | 100  100  100 | 101 *114* 101 | 103 *129* 105|
+> | HOK game 120fps      | 100  100  100 | 102 *124* 102 | 105 *134* 105|
+> | FHD video rec. 60fps | 100  100  100 | n/a  n/a  n/a | 100  100  103|
+> | Camera snapshot      | 100  100  100 | n/a  n/a  n/a | 100  100  102|
+> -----------------------------------------------------------------------
+> 
+> HOK ... Honour Of Kings, Video game
+> FHD ... Full High Definition
+> fps ... frame per second
+> pwr ... power consumption
+> 
+> table values are in %
 
-It's one thing to check for overflows.
+I assume that you are specifically interested in those higher min fps
+numbers which can be achieved with a tolerable energy consumption
+increase when running the game with 16ms or even 8ms PELT halflife.
 
-It's another thing entirely to just assign something to a local variable.
+We see a similar effect when running the UI performance benchmark
+Jankbench.
 
-This disgusting "let's check and assign" needs to die. It makes the
-code a completely unreadable mess. The "user" wersion is even worse.
+So you need this runtime-switchable PELT multiplier. Would this sched
+feature interface:
 
-If you worry about overflow, then use a mix of
+https://lkml.kernel.org/r/YwyOzgbbUbB+JmSH@hirez.programming.kicks-ass.net
 
- (a) use a sufficiently large type to begin with
+be sufficient for you? People don't like to support `changing PELT
+halflife` via an official sysctl.
 
- (b) check for value range separately
-
-and in this particular case, I also suspect that the whole range check
-should have been somewhere else entirely - at the original creation of
-that "obj" structure, not at one random end-point where it is used.
-
-In other words, THIS WHOLE PATCH is just end-points checking the size
-requirements of that "base.size" thing much too late, when it should
-have been checked originally for some "maximum acceptable base size"
-instead.
-
-And that "maximum acceptable base size" should *not* be about "this is
-the size of the variables we use". It should be a sanity check of
-"this value is sane and fits in sane use cases".
-
-Because "let's plug security checks" is most definitely not about
-picking random assignments and saying "let's check this one". It's
-about trying to catch things earlier than that.
-
-Kees, you need to reign in the craziness in overflow.h.
-
-                 Linus
+[...]
