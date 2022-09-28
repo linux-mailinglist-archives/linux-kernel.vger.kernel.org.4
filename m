@@ -2,55 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0774B5EE607
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 21:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D11145EE609
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 21:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233787AbiI1TwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 15:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
+        id S233320AbiI1TxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 15:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiI1TwM (ORCPT
+        with ESMTP id S229725AbiI1Tw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 15:52:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846455B046;
-        Wed, 28 Sep 2022 12:52:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B930B821DA;
-        Wed, 28 Sep 2022 19:52:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2354CC433D6;
-        Wed, 28 Sep 2022 19:52:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664394728;
-        bh=+OL0HwkPt60vRVtBHGWFCjrgOWI9WW012wo1ahfHcsg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ve4GuaGKgVyYIiDVmqu/n02Q7MouLynC0bMVG+cFQKh6kZ9kk57WBgGv6uw2zWZKY
-         +6YPKDs7Zl2K56CaBD0yJ6elE1xzT/ZyQU63U6yXdGPm1yEGJufPhRejLEWoDQDU08
-         OFTE+7PNHeydA5vCAz2QIBHiz5McycHCr5xN9Fx31sjbK4oU80y4Etj3cwrjETlN6q
-         3O+yIgxrSVxf7oJunP+nrruJYCJ0e71saPN1GoH58IAHIm78lPx8IeclEXfNDOVWTg
-         pEh+mQ/8+y9nW21whw0Iw3mWw4yfyxaj2jaCpqnBy16Ob1grn0wVMOUjYL8TPaOmGO
-         44mPpgNGNkKfA==
-Date:   Wed, 28 Sep 2022 21:52:04 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Weilong Chen <chenweilong@huawei.com>
-Cc:     yangyicong@hisilicon.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH next v3] i2c: hisi: Add support to get clock frequency
- from clock property
-Message-ID: <YzSl5Dm15ZDCxf15@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Weilong Chen <chenweilong@huawei.com>, yangyicong@hisilicon.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220926091503.199474-1-chenweilong@huawei.com>
+        Wed, 28 Sep 2022 15:52:56 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742F17C74E
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 12:52:55 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id a8so21905562lff.13
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 12:52:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=TmHquM/S838I0W3etX4ILh+MW3CKmq4SAxyvSg/zqqQ=;
+        b=WNn2CNANydh4/XvjrZU4pq+uN1MCM1mmEmEVJVpIRk03UtNVlkmBQCLDwuqkoy8DT5
+         iKzdxJLRZGDmKsnvwDLB4pV2UCwMHtNfuZiMEoJxG168LAo0H02/8Vr5Xj5T++3jUf6D
+         NuUafSzd4uoCH5YbnSMv757AcRg/aFlAVKNruq8/1L+fr7otk44ewBbVq6BPvZKaTDAc
+         fvz3jQ39pn7CsYrzq37aR15oP75WOJcJ2nlcit9oi3dseEmuJooTU+vLP+17ykkBnCrJ
+         EPLTaCHp1u4lsNPghYnAo7hUk+Jh40LtO2f0DAKy4U0Jq8xcX/IoJcGUrxf7QPNTMJAe
+         NDIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=TmHquM/S838I0W3etX4ILh+MW3CKmq4SAxyvSg/zqqQ=;
+        b=EFI8IKvPt95YGDqxXLgFcvmDghlLWfPHANG8+Z0JU8wwoRipcwcrv0JmCgggb5CwQw
+         mJAL+cZkfPlfXHxK+NwciiG58XR2Hr8t1SGNqiljoaY2ftNjmmqpbsXK/s6BCNPi6CT+
+         iT5fJHx9FDCKCsKAPRRPOsUas1kyVEBEeNEUcJeJIf2HdC2s4IN64Unq+UtTM98vU/6j
+         10JuLIp3B/dimVosAR3W8SJ85ou4OQs8opk4TOgcWdTxDwI54W0rOzWecMB4mTqYvSq2
+         LzMRR6NVfQmhukH+L1S5dxF3o6ytuQldv8TtgRa65HUD+78iZvdvDW658wspn9Iyyc7x
+         1MVQ==
+X-Gm-Message-State: ACrzQf0NsYkk6Wvotei/O/dekcA/AEOdfcvU6r3n68kC6EKXue8PoToQ
+        0HzUXiGNaQY8XwGlBz1WOZJ2Ow==
+X-Google-Smtp-Source: AMsMyM5Xy2LGiEAAHSyv+eyoHBGwNAg3gEpPQzXoDqwmf2+HceMc19AxWpGniC+CBQEWDpCG7dd+Qw==
+X-Received: by 2002:a05:6512:b97:b0:497:5c43:2d61 with SMTP id b23-20020a0565120b9700b004975c432d61mr12860680lfv.251.1664394773836;
+        Wed, 28 Sep 2022 12:52:53 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id b28-20020a05651c033c00b00261ccf566e3sm511392ljp.65.2022.09.28.12.52.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 12:52:53 -0700 (PDT)
+Message-ID: <d03c2b1f-6af1-ddb1-4324-cc5e77faf320@linaro.org>
+Date:   Wed, 28 Sep 2022 22:52:52 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="s/3WXlL7qU/MTWH0"
-Content-Disposition: inline
-In-Reply-To: <20220926091503.199474-1-chenweilong@huawei.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 09/13] phy: qcom-qmp-pcie-msm8996: clean up power-down
+ handling
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220928152822.30687-1-johan+linaro@kernel.org>
+ <20220928152822.30687-10-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220928152822.30687-10-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,42 +81,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28/09/2022 18:28, Johan Hovold wrote:
+> This driver uses v2 registers only so drop the unnecessary
+> POWER_DOWN_CONTROL override.
+> 
+> Note that this register is already hard-coded when powering on the PHY.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 10 ++--------
+>   1 file changed, 2 insertions(+), 8 deletions(-)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
---s/3WXlL7qU/MTWH0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+-- 
+With best wishes
+Dmitry
 
-On Mon, Sep 26, 2022 at 05:15:03PM +0800, Weilong Chen wrote:
-> Support the driver to obtain clock information by clk_rate or
-> clock property. Find clock first, if not, fall back to clk_rate.
-
-This commit message describes what the patch does. But it misses the
-explanation why this needs to be done. Could you add this information,
-please? Patch itself looks also good to me.
-
->=20
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-> Acked-by: Yicong Yang <yangyicong@hisilicon.com>
-
---s/3WXlL7qU/MTWH0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmM0peEACgkQFA3kzBSg
-KbZ+ORAAnNRdXp01dfBdAQgs8TNVhrNpXV2utaY+dGiGonIjruQi354t6hLr8276
-3myO5OIrHChb57/8BJeCUYA95RC/wOwGTOZ3/LnV8fTF2XrFJfdN0/Lr/Y3/taid
-koOYouyhzHZs6PT7+zTyzpMkwSvChKgDoDqiZdqBmUgcH6XtXJlGteimwsOf7r3K
-Yj8tcea5WaDSNjDaGNXCuWK/BwMNdwQL1A5jEcQIYrPEmRW8Kf2oc8n7ZPiecs6i
-DCo/Y6WrSYy1mTqZ99UNtxLpCBVzN4LIiVYE9Dqv2eGv9PoWj298BQYNezR0i74h
-7FD6Mlky18nGdBfdfYTo9eNuW1tWFWcwV4f/q3hFi7dUHDu/Mam72qTrnr28/60X
-6zvSimfadD38nglNSyeo3jpyhg4DRAUshkY2pMUPVriTsjM7xDyAknWZByawlU2k
-x2sfWx11BxXECME+Lm2kgqy6TAA54FfkeKVrDJbxg+g2jhkvvZ8XmwY4ogr7L2pP
-NbQ5ESig5ive6ipddcegPhpt3BX1+HikmV6ApHgyfgJ0s8wqcLEw7r8lkEM4zHxY
-dYpVc1vz0eupfxEwxD4blT4TXljifpDwxTVWnURi//W436JPkWW7RAFdsRT81Ape
-yj3F4m+TadrMQ9mGtfBXO9EV0TScWLXJxXbvYzvvyDTuBNU1EJM=
-=ljii
------END PGP SIGNATURE-----
-
---s/3WXlL7qU/MTWH0--
