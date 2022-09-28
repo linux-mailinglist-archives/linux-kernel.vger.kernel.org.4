@@ -2,100 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE3D5ED635
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE0C5ED648
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233732AbiI1Hfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
+        id S233756AbiI1Hg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233674AbiI1HfT (ORCPT
+        with ESMTP id S233761AbiI1HgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:35:19 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E22F3123
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:35:07 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id d42so19184371lfv.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:35:07 -0700 (PDT)
+        Wed, 28 Sep 2022 03:36:18 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3932B7EFFE
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:35:49 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id b6so13373659ljr.10
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:35:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=n4jnpdb4dLSy7UExnnmpIHxtyt/nMjkUaIB/M2U4YT4=;
-        b=k+Hmzx18WjUq3RZttCHCeIfDQ2BwCdr1TaGaGSjYIQhQ5DW0bD2jX+0khiBVTAOnM4
-         XwHYXHZlFIe4U8FYbsyO5dcG7S+FuTkKPPJxHhUxlb2CQDDZzRRv+HmKUCALLmUW69eq
-         FaxNNqP3dzaQs9THyzznnOUo/Cyo21e+RKKGrEo6zpDCDlPnPt9/NG9SdgiQ6CoweFmv
-         aYUHnxCIF/oWPOxqdRdrGX0PKRD8tDDi+vm9zc3XaRy2ze+Y7sZ9Lo3AUZf7dLI9nfm4
-         wY22pCkWyn96i7ze0AXj11oclQABXIk8nAfMev7AtitKAtAFMZ6VdLnXXp8kP62QP8kb
-         fjpQ==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=3j/OGBdohTxo+OrTq6NBOfxvszCK7ExkrQxW4O8b994=;
+        b=atm12eJwGt6KW1nvvfcySISnScimJj6UlzOjGboOpEYfiAJsQ2IiCXZkydoNNYKlND
+         RgR3x7ksKA9vBr2JFdMIUNXKq1r1CKQC4g/KRTVULzL2HLAAt9BUU0XVg1eHEju5FWit
+         WNujalZ1jjiZKrQHS71YdWZ0ABi0et6y1JVWXI1XCssx4v+reFoVdknOuhMJUoz7Unho
+         Ha/PYS2fXiAjtMxC+a0F40+oZcynizoyS4gPhMutKNmWk4qOI4kr5Rf2GRgkDKip0Cdd
+         2QC3yWdnAwp/l1FRGChKNmDySNQYA+1f99KM43gzgc0UjGucAQ+s8iLUEEnEpLdgwRQJ
+         1WsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=n4jnpdb4dLSy7UExnnmpIHxtyt/nMjkUaIB/M2U4YT4=;
-        b=AUmeO2poAKIzIXaUy4+XybDrHFywFhTH5XauELenuqlSsOuBHSK/prgGmxm0W2YLU4
-         1MiCetOtNOqCcZjRElQq4CjiJ1urvNilzKO9EhzRGBmn1ok0FcYd0+zYy2dVBPj6pHtc
-         d50u6/YfMQjUJ+rGEFFog4AjF75NkgB8sEhw87oot6UYp/eEoYKcK4dzM8VtrB+diOSM
-         kjpf7ImT9gEVe7UMrfKWI+0RB3ozJZH79VnfQkY7Zb4dUMeYsF9/eGVI1eJiBcJFE53W
-         A1V6uA02wrw99Fk7KUZ8jUi2qO8vI3rvN4JlGUacnwBrN5SXMh0VHvxMzt1UfsXfXYA+
-         hOvQ==
-X-Gm-Message-State: ACrzQf2t7Rwms3X982mBcyrF1yEPzIQZcNghcCPbtnbT1wbQQBEIqWJq
-        Xr3i56V47NnwaMCzAWukV1KPKA==
-X-Google-Smtp-Source: AMsMyM4vZBm/NzbFStl4PS4xXjJmr9t7TU1u2VA3RwodqI1RQNR6U5ltgGVh11/d5SXQ82dldG6kwQ==
-X-Received: by 2002:a05:6512:22d2:b0:498:f68b:6cab with SMTP id g18-20020a05651222d200b00498f68b6cabmr12619861lfu.548.1664350464533;
-        Wed, 28 Sep 2022 00:34:24 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q16-20020a194310000000b004946bb30469sm396465lfa.82.2022.09.28.00.34.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 00:34:23 -0700 (PDT)
-Message-ID: <1e2df247-c0ce-ab7e-3017-fadd963e1a8d@linaro.org>
-Date:   Wed, 28 Sep 2022 09:34:22 +0200
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=3j/OGBdohTxo+OrTq6NBOfxvszCK7ExkrQxW4O8b994=;
+        b=cWTVHVNez3joVYhiZWXZ9Li3qeCvfdFCviM0fLHL45B/uj2VeSb9jzBk+HW+EiVd3Z
+         dJVAVZk4eF3qQMTFoTJgW1+LdmOhwwwiYzKJFLP9RnlRs0f76sAbsGODlhA7HNg+6d3T
+         1RmWq2zSHUUgbClHE9LCitb2BJbjXOG2R4f5hE2Vtt05llkHrHf9/Qw3T3qvWSbAS4Tz
+         77P/6yCOE3fQRWN57+0i24rpvLzuQLNwbrO8edlJO/bNonTsyIvhKTe9/6mvyxLCJ8Fe
+         mECeuF5d6e7slbyYN03CgjoOzn5+0IbjsKVIAi8csEWbWFSOvkzPzSpcfCGeQV7C7p52
+         rzhA==
+X-Gm-Message-State: ACrzQf3sbGP9DcHE6jtrv/mOPl59+kg3HklWoYjossraDd/FVT/0nlfI
+        Jn55iDpNyWAsLo8eVkmz64UuIqSxxG/1bsHiR8l5WQ==
+X-Google-Smtp-Source: AMsMyM6l/7+jXva4+hFC7yDGhdP3H6/FMnH5Q58iBE8f6YGbet7quaIATUrYZbeLLLu3nh6c07fsoNHOSuCO/hPKJ3k=
+X-Received: by 2002:a2e:9f15:0:b0:26d:8a9c:60e7 with SMTP id
+ u21-20020a2e9f15000000b0026d8a9c60e7mr6941360ljk.268.1664350541165; Wed, 28
+ Sep 2022 00:35:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 01/13] dt-bindings: rockchip: Add Hardkernel ODROID-M1
- board
-Content-Language: en-US
-To:     Aurelien Jarno <aurelien@aurel32.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Dongjin Kim <tobetter@gmail.com>, Rob Herring <robh@kernel.org>
-References: <20220926183727.1893566-1-aurelien@aurel32.net>
- <20220926183727.1893566-2-aurelien@aurel32.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220926183727.1893566-2-aurelien@aurel32.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <0000000000008af58705e9b32b1d@google.com>
+In-Reply-To: <0000000000008af58705e9b32b1d@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 28 Sep 2022 09:35:29 +0200
+Message-ID: <CACT4Y+aO-uckeUghahSJP+6VwwYCNRKCobhvb41n1RXL8Pxsiw@mail.gmail.com>
+Subject: Re: [syzbot] unexpected kernel reboot (8)
+To:     syzbot <syzbot+8346a1aeed52cb04c9ba@syzkaller.appspotmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/09/2022 20:37, Aurelien Jarno wrote:
-> From: Dongjin Kim <tobetter@gmail.com>
-> 
-> Add device tree binding for Hardkernel ODROID-M1 board based on RK3568
-> SoC.
-> 
-> Signed-off-by: Dongjin Kim <tobetter@gmail.com>
-> Acked-by: Rob Herring <robh@kernel.org>
+On Wed, 28 Sept 2022 at 04:03, syzbot
+<syzbot+8346a1aeed52cb04c9ba@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    1707c39ae309 Merge tag 'driver-core-6.0-rc7' of git://git=
+...
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D1732428888000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D122d7bd4fc8e0=
+ecb
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D8346a1aeed52cb0=
+4c9ba
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
+ls for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D15ca1f54880=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D155622df08000=
+0
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+8346a1aeed52cb04c9ba@syzkaller.appspotmail.com
+>
+> fuseblk: Unknown parameter '                                             =
+                   Decompressing Linux... Parsing ELF... done.             =
+                                                                        Boo=
+ting the kernel.                                                           =
+                                                                           =
+                                                                           =
+                                            Decompressing Linux... Parsing =
+ELF... done.                                                               =
+                      Booting the kernel.
 
-And second issue - your SoB is missing here.
++fuse maintainers
 
-Best regards,
-Krzysztof
+This one is somewhat funny. The fuzzer tricked the kernel into
+printing the rebooting message via normal logging. So on the console
+it looks like the kernel started rebooting.
 
+But it looks like the kernel is reading/printing something it
+shouldn't. The reproducer doesn't pass the "Decompressing Linux"
+string in mount options. So the kernel is reading random memory
+out-of-bounds? a non-0-terminated string somewhere?
