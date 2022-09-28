@@ -2,111 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF90D5EE2E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4BC5EE2E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234546AbiI1RRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
+        id S234413AbiI1RRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234681AbiI1RQh (ORCPT
+        with ESMTP id S234559AbiI1RRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:16:37 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1819DEEB64
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:15:56 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id d42so21460513lfv.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:15:56 -0700 (PDT)
+        Wed, 28 Sep 2022 13:17:02 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4582718E22;
+        Wed, 28 Sep 2022 10:16:46 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id n192so9500953iod.3;
+        Wed, 28 Sep 2022 10:16:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=yvPLxoKxASU1oV0ydqT/WaUJJZ+f2nyTFfImwwyybhM=;
-        b=gZyEjk+n32pMC2gI++dHQxgG17ROlFc/Rvb3c+K/AU/nl1uoFy1H+qW8pkv5UpGjat
-         yRPMAize2tCACO120SCUKuMSbs91+q47z684UJUN+g7du2TnFk9W/GJrlxKFg5i7gavZ
-         qiIrM2WqXYGW4dJhFlcDFKrOzX1DyoV3Auae5yQUg+F/gYwv5bgnxnjCn5WEk4O595Wo
-         ft6MEtg6k0x2ScwiLtw269gdKeVxZkYWxChZnCKuP7JVU+lNz7gZD5zFdPP6oXMSguDb
-         uNsqKomugM/GpErZEuvJnUIKZWjI7md5ngpT9GaGkzSlZ/t1qSRNoOtOxejjFG3uo1Sj
-         Zv8Q==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=nWT0dY8CH6ZDhZEwG3/zxXxVza72yOSFN78+9HivIx8=;
+        b=o5lP24+OoGt0u1JvVmbs6pVe+VTt3V3io+TCieNxR4yRFDHB+h3mp762sRAFzfm8P2
+         Zdi4+vfp0a4BKzFsNjQ9wy1FGmveqFoq4pRuSX/65InDVeGf8HNznCJ2eG7dGmT3uGKB
+         Oc4UpQxSjJpNiFvsoYbbX2odnW9ctbHt0bZLFzgritGRvDaPF2kC76VJNVnj/y8s+m2/
+         JurPbn1fL84T7lk+31WK1HGYzXg2vM0dhfJV2aTOy0wj/0zhtiptP/rfFYcZKuUIrXO6
+         DvW4Z9I24dKz3DrOyy1tgNl1C3RS5dAIL3T+iFOuoEOt3M4sLzs/nZA/VWpSjJmFpLlU
+         mTcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=yvPLxoKxASU1oV0ydqT/WaUJJZ+f2nyTFfImwwyybhM=;
-        b=b5mDCvOw+qyUkOvOoWfSanfruWfEwY13OMAnx3//V+1RGyfRrucANSgamdeDuFRiZk
-         IwxW4x9+y5mb1f0L06mjEzqHsCTdRtIOiq1NzazYg0KoMSvHqSuQl5/x6G2cEtEuN6Uq
-         AYsptnL7jbrmgCr+GH6yvVzMaB686d3pAAw8xSbB5y8dhh4NikYTjMeF9LOlGCQZxH89
-         526PnfbtJELnQuZr72NrbneIIWbE8DxZbWvzMbNF12hkUKv6Rl+VuANyZ1VTiNK86yW9
-         VfYGTr+CwR0Jl4LP/oJ/5xV6zDQjR656EhZbuH9eajH10aTehJFr1OPtCHh/E8C0CkRt
-         RqCw==
-X-Gm-Message-State: ACrzQf28jRiMcKF65L7n57s2FyFYKjVhW5ZF8xym/H0spwBr2rLJS4bR
-        p7pAgIIO+2Yf8TdKa0++Brht7g==
-X-Google-Smtp-Source: AMsMyM6CMlioEhHvKg/S6bggNWBpvr4jWCPRIj3BoalVJONNliyV8cxuDdIf4DcvQdjpOTg7fZti5g==
-X-Received: by 2002:a05:6512:401f:b0:49e:ea65:cd49 with SMTP id br31-20020a056512401f00b0049eea65cd49mr13368705lfb.419.1664385353790;
-        Wed, 28 Sep 2022 10:15:53 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q6-20020a2eb4a6000000b00264b292232asm476672ljm.63.2022.09.28.10.15.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 10:15:52 -0700 (PDT)
-Message-ID: <ef396764-af53-8e5a-5203-f3e103bbb7a3@linaro.org>
-Date:   Wed, 28 Sep 2022 19:15:51 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=nWT0dY8CH6ZDhZEwG3/zxXxVza72yOSFN78+9HivIx8=;
+        b=POHFQW5Y9B7zarEvDPx2KNtJldA+mH5yj7pWNlTXBYI8/20Kj0RfMgg/ar9OffXs+O
+         PvPg9qtMGPFu8LndyC3SJeXjeagDmBzDVcfWWKvhUaFPLsDN8LQnHkw5vo1MrM/yIdCq
+         lv0z2zSth6fUfxor6BjoYr8NFbSOwuHHmc/2kCl++Lw2y8KiFGXsds2hOrnZiiihLcXM
+         azn9L4h9lvcU/l9Yr6TwJtlOeuR8YS4hvo4t3wnHSTn7Y/f8G1h8s3OyHbdTud6lWZB6
+         FbwfEoBPS12x8HqAN9lcW7jRp4NGMkhNP9wJuQzW5KzYbS0Ji4VXnFLm0APOJsKXXgLB
+         XHIg==
+X-Gm-Message-State: ACrzQf1SFZwpTooEIvMCooAC6niRbmEQ/xzfVNdi1hHnIi1P4pYGzlTm
+        bhb/u8jKk+6gCAC4hQ8GVSTIp3tGMVonBweag7o=
+X-Google-Smtp-Source: AMsMyM6a0LBYPMwSJMlznDm4+VAzXSEs+W4lpjj2ThGM0Q7tUeTU2/4r7NH0n+RWsv6q2iWYuipZAV7l8w4/Dd+64fk=
+X-Received: by 2002:a05:6638:218f:b0:35a:7f20:6a57 with SMTP id
+ s15-20020a056638218f00b0035a7f206a57mr17584932jaj.186.1664385405399; Wed, 28
+ Sep 2022 10:16:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCHv4 1/3] dt-bindings: mmc: synopsys-dw-mshc: document
- "altr,sysmgr-syscon"
-Content-Language: en-US
-To:     Dinh Nguyen <dinguyen@kernel.org>, jh80.chung@samsung.com
-Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220928165420.1212284-1-dinguyen@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220928165420.1212284-1-dinguyen@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220927181647.487727-1-broonie@kernel.org>
+In-Reply-To: <20220927181647.487727-1-broonie@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 28 Sep 2022 19:16:34 +0200
+Message-ID: <CANiq72=9ns5DU0C6eacxLnMkNUqZXa_gP_x3KLBKof8dR3HNYw@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the kbuild tree
+To:     broonie@kernel.org
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 18:54, Dinh Nguyen wrote:
-> Document the optional "altr,sysmgr-syscon" binding that is used to
-> access the System Manager register that controls the SDMMC clock
-> phase.
-> 
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-> ---
+On Tue, Sep 27, 2022 at 8:16 PM <broonie@kernel.org> wrote:
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
 
-Thank you for your patch. There is something to discuss/improve.
+Build-tested it -- works, thanks!
 
-> +
-> +allOf:
-> +  - $ref: "synopsys-dw-mshc-common.yaml#"
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const:
-> +              - altr,socfpga-dw-mshc
-
-It still should not be an array, even if there is no warning.
-
-> +    then:
-> +      required:
-> +        - altr,sysmgr-syscon
-> +    else:
-> +      properties:
-> +        altr,sysmgr-syscon: false
-
-Best regards,
-Krzysztof
-
+Cheers,
+Miguel
