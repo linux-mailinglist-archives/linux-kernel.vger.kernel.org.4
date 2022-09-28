@@ -2,173 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD385EE0DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E53C95EE0E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233948AbiI1PtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S233960AbiI1Pur convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 28 Sep 2022 11:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234012AbiI1PtH (ORCPT
+        with ESMTP id S229486AbiI1Puo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:49:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB7DDB972
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:49:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664380144;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t8iXSt8WzWBUtnBIXzMF8YQXU9I0wokZDuZdEFFhaww=;
-        b=Z7TOZjaSvr0EkY8tq4gsneH4g5g5TCFr4pgXpADhlq+uLvMN/vNb2kdVijFHqTmic5WjCc
-        7spZ4+3uNHfJZDmAcV71RtxajiDOWh0XYWRDpn+JH0Wahih6piDoH10ehhsR2B18Ko8egj
-        MtwXK2nxKhowUzlf8whYy/QUPBsztFU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-660-nwHbtGnTMD-JfeoH6EyjUA-1; Wed, 28 Sep 2022 11:49:00 -0400
-X-MC-Unique: nwHbtGnTMD-JfeoH6EyjUA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2A738382C965;
-        Wed, 28 Sep 2022 15:49:00 +0000 (UTC)
-Received: from cantor.redhat.com (unknown [10.2.17.155])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 89D33492B04;
-        Wed, 28 Sep 2022 15:48:59 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH v2 2/2] dmaengine: idxd: track enabled workqueues in bitmap
-Date:   Wed, 28 Sep 2022 08:48:56 -0700
-Message-Id: <20220928154856.623545-3-jsnitsel@redhat.com>
-In-Reply-To: <20220928154856.623545-1-jsnitsel@redhat.com>
-References: <20220928154856.623545-1-jsnitsel@redhat.com>
+        Wed, 28 Sep 2022 11:50:44 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA778262B
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:50:42 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-265-epL-6jk9N7WF2cxyMBC7Tg-1; Wed, 28 Sep 2022 16:50:40 +0100
+X-MC-Unique: epL-6jk9N7WF2cxyMBC7Tg-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Wed, 28 Sep
+ 2022 16:50:36 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Wed, 28 Sep 2022 16:50:36 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Michael Zaidman' <michael.zaidman@gmail.com>,
+        "jikos@kernel.org" <jikos@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "Guillaume Champagne" <champagne.guillaume.c@gmail.com>
+Subject: RE: [PATCH v2 2/7] HID: ft260: improve i2c write performance
+Thread-Topic: [PATCH v2 2/7] HID: ft260: improve i2c write performance
+Thread-Index: AQHY00mUw0Kqs3OAvUmX6aS0EWBX1630/Gwg
+Date:   Wed, 28 Sep 2022 15:50:36 +0000
+Message-ID: <f9be53a647cd4b698ed820a70b67b7d4@AcuMS.aculab.com>
+References: <20220928144854.5580-1-michael.zaidman@gmail.com>
+ <20220928144854.5580-3-michael.zaidman@gmail.com>
+In-Reply-To: <20220928144854.5580-3-michael.zaidman@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that idxd_wq_disable_cleanup() sets the workqueue state to
-IDXD_WQ_DISABLED, use a bitmap to track which workqueues have been
-enabled. This will then be used to determine which workqueues
-should be re-enabled when attempting a software reset to recover
-from a device halt state.
+From: Michael Zaidman
+> Sent: 28 September 2022 15:49
+> 
+> The patch improves i2c writing performance by about 30 percent by revising
+> the sleep time in the ft260_hid_output_report_check_status() in the
+> following ways:
 
-Cc: Fenghua Yu <fenghua.yu@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
-v2: Clear bit in case where idxd_wq_enable fails during re-init
+Spinning in kernel for several milliseconds isn't friendly at all.
 
- drivers/dma/idxd/device.c | 2 ++
- drivers/dma/idxd/idxd.h   | 2 ++
- drivers/dma/idxd/init.c   | 6 ++++++
- drivers/dma/idxd/irq.c    | 5 +++--
- drivers/dma/idxd/sysfs.c  | 1 +
- 5 files changed, 14 insertions(+), 2 deletions(-)
+	David
 
-diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
-index 31911e255ac1..f0c7d6d348e3 100644
---- a/drivers/dma/idxd/device.c
-+++ b/drivers/dma/idxd/device.c
-@@ -196,6 +196,7 @@ int idxd_wq_enable(struct idxd_wq *wq)
- 	}
- 
- 	wq->state = IDXD_WQ_ENABLED;
-+	set_bit(wq->id, idxd->wq_enable_map);
- 	dev_dbg(dev, "WQ %d enabled\n", wq->id);
- 	return 0;
- }
-@@ -223,6 +224,7 @@ int idxd_wq_disable(struct idxd_wq *wq, bool reset_config)
- 
- 	if (reset_config)
- 		idxd_wq_disable_cleanup(wq);
-+	clear_bit(wq->id, idxd->wq_enable_map);
- 	wq->state = IDXD_WQ_DISABLED;
- 	dev_dbg(dev, "WQ %d disabled\n", wq->id);
- 	return 0;
-diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
-index fed0dfc1eaa8..f527a7f88b92 100644
---- a/drivers/dma/idxd/idxd.h
-+++ b/drivers/dma/idxd/idxd.h
-@@ -11,6 +11,7 @@
- #include <linux/idr.h>
- #include <linux/pci.h>
- #include <linux/ioasid.h>
-+#include <linux/bitmap.h>
- #include <linux/perf_event.h>
- #include <uapi/linux/idxd.h>
- #include "registers.h"
-@@ -299,6 +300,7 @@ struct idxd_device {
- 	int rdbuf_limit;
- 	int nr_rdbufs;		/* non-reserved read buffers */
- 	unsigned int wqcfg_size;
-+	unsigned long *wq_enable_map;
- 
- 	union sw_err_reg sw_err;
- 	wait_queue_head_t cmd_waitq;
-diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
-index aa3478257ddb..7e27e69ff741 100644
---- a/drivers/dma/idxd/init.c
-+++ b/drivers/dma/idxd/init.c
-@@ -151,6 +151,12 @@ static int idxd_setup_wqs(struct idxd_device *idxd)
- 	if (!idxd->wqs)
- 		return -ENOMEM;
- 
-+	idxd->wq_enable_map = bitmap_zalloc_node(idxd->max_wqs, GFP_KERNEL, dev_to_node(dev));
-+	if (!idxd->wq_enable_map) {
-+		kfree(idxd->wqs);
-+		return -ENOMEM;
-+	}
-+
- 	for (i = 0; i < idxd->max_wqs; i++) {
- 		wq = kzalloc_node(sizeof(*wq), GFP_KERNEL, dev_to_node(dev));
- 		if (!wq) {
-diff --git a/drivers/dma/idxd/irq.c b/drivers/dma/idxd/irq.c
-index 743ead5ebc57..3fcfbb7bf6e3 100644
---- a/drivers/dma/idxd/irq.c
-+++ b/drivers/dma/idxd/irq.c
-@@ -49,11 +49,12 @@ static void idxd_device_reinit(struct work_struct *work)
- 		goto out;
- 
- 	for (i = 0; i < idxd->max_wqs; i++) {
--		struct idxd_wq *wq = idxd->wqs[i];
-+		if (test_bit(i, idxd->wq_enable_map)) {
-+			struct idxd_wq *wq = idxd->wqs[i];
- 
--		if (wq->state == IDXD_WQ_ENABLED) {
- 			rc = idxd_wq_enable(wq);
- 			if (rc < 0) {
-+				clear_bit(i, idxd->wq_enable_map);
- 				dev_warn(dev, "Unable to re-enable wq %s\n",
- 					 dev_name(wq_confdev(wq)));
- 			}
-diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
-index 3f262a57441b..3325b16ed959 100644
---- a/drivers/dma/idxd/sysfs.c
-+++ b/drivers/dma/idxd/sysfs.c
-@@ -1405,6 +1405,7 @@ static void idxd_conf_device_release(struct device *dev)
- 	struct idxd_device *idxd = confdev_to_idxd(dev);
- 
- 	kfree(idxd->groups);
-+	bitmap_free(idxd->wq_enable_map);
- 	kfree(idxd->wqs);
- 	kfree(idxd->engines);
- 	ida_free(&idxd_ida, idxd->id);
--- 
-2.37.2
+> 
+> 1. Reduce the sleep time and start to poll earlier:
+> 
+>   Before:
+>     $ sudo ./i2cperf -f 2 -o 2 -s 32 -r 0-0xff 13 0x51 -S
+> 
+>       Fill block with increment via i2ctransfer by chunks
+>       -------------------------------------------------------------------
+>       data rate(bps)  efficiency(%)  data size(B)  total IOs   IO size(B)
+>       -------------------------------------------------------------------
+>       40510           80             256           8           32
+> 
+>   After:
+>     $ sudo ./i2cperf -f 2 -o 2 -s 32 -r 0-0xff 13 0x51 -S
+> 
+>       Fill block with increment via i2ctransfer by chunks
+>       -------------------------------------------------------------------
+>       data rate(bps)  efficiency(%)  data size(B)  total IOs   IO size(B)
+>       -------------------------------------------------------------------
+>       52584           80             256           8           32
+> 
+> 2. Do not sleep when the calculated sleep time is below 2 ms:
+> 
+>   Before:
+>     $ sudo ./i2cperf -f 2 -o 2 -s 16 -r 0-0xff 13 0x51 -S
+> 
+>       Fill block with increment via i2ctransfer by chunks
+>       -------------------------------------------------------------------
+>       data rate(bps)  efficiency(%)  data size(B)  total IOs   IO size(B)
+>       -------------------------------------------------------------------
+>       26707           73             256           16          16
+> 
+>   After:
+>     $ sudo ./i2cperf -f 2 -o 2 -s 16 -r 0-0xff 13 0x51 -S
+> 
+>       Fill block with increment via i2ctransfer by chunks
+>       -------------------------------------------------------------------
+>       data rate(bps)  efficiency(%)  data size(B)  total IOs   IO size(B)
+>       -------------------------------------------------------------------
+>       37034           73             256           16          16
+> 
+> Link to the i2cperf - https://github.com/MichaelZaidman/i2cperf
+> 
+> Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
+> Tested-by: Guillaume Champagne <champagne.guillaume.c@gmail.com>
+> ---
+>  drivers/hid/hid-ft260.c | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
+> index a35201d68b15..44106cadd746 100644
+> --- a/drivers/hid/hid-ft260.c
+> +++ b/drivers/hid/hid-ft260.c
+> @@ -345,7 +345,7 @@ static int ft260_hid_output_report(struct hid_device *hdev, u8 *data,
+>  static int ft260_hid_output_report_check_status(struct ft260_device *dev,
+>  						u8 *data, int len)
+>  {
+> -	int ret, usec, try = 3;
+> +	int ret, usec, try = 100;
+>  	struct hid_device *hdev = dev->hdev;
+> 
+>  	ret = ft260_hid_output_report(hdev, data, len);
+> @@ -356,10 +356,14 @@ static int ft260_hid_output_report_check_status(struct ft260_device *dev,
+>  		return ret;
+>  	}
+> 
+> -	/* transfer time = 1 / clock(KHz) * 10 bits * bytes */
+> -	usec = 10000 / dev->clock * len;
+> -	usleep_range(usec, usec + 100);
+> -	ft260_dbg("wait %d usec, len %d\n", usec, len);
+> +	/* transfer time = 1 / clock(KHz) * 9 bits * bytes */
+> +	usec = len * 9000 / dev->clock;
+> +	if (usec > 2000) {
+> +		usec -= 1500;
+> +		usleep_range(usec, usec + 100);
+> +		ft260_dbg("wait %d usec, len %d\n", usec, len);
+> +	}
+> +
+>  	do {
+>  		ret = ft260_xfer_status(dev);
+>  		if (ret != -EAGAIN)
+> --
+> 2.34.1
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
