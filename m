@@ -2,151 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D27F5EE4E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 21:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCDF5EE52D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 21:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233581AbiI1TPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 15:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
+        id S234324AbiI1TSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 15:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233748AbiI1TPv (ORCPT
+        with ESMTP id S234137AbiI1TSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 15:15:51 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5E1CDCC9
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 12:15:49 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id k10so21825867lfm.4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 12:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=v9AUnRjO2I6miLavN2yEnEf1RGDOOvreZhD6/ZtXL0c=;
-        b=O5XQ8YaQgffej3awuvAT1+h+SmTlKX2PrkfOu3buOEqj9nkkAG496M4zpid4tF5yDu
-         g6vNQcL4RTvGoJKuvVnYBZhult/bGdv5lQG8/9vg5vJp/yiuMM0b0zhSZAbnR8oEpBLG
-         7mSLdkM2w9P1Ep1kVJDyLLM7gvDHyofBYnPvcWzXT0Gq2kx18IKcWmic8S4lioH/a6b3
-         VNvF0WPZPS7dARP+owjdaiRcfg3PnrV7bGpaidDR1agFqvaeTscCAGurM3CL4pxc3Zof
-         sBgd1Dbn9n1Sy97CU6hAB3PVZ5tyM9vK7xbPeY7i6wYL8ZMXTzKhijdO0IiTc1BfwyCV
-         H3Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=v9AUnRjO2I6miLavN2yEnEf1RGDOOvreZhD6/ZtXL0c=;
-        b=vHTAyKspIG3Ifh6UChdZBa3S8C3IE1jIxw3N72lQvKWlsq6EBuKRp+NZmGNsEZ3Y/b
-         0L4Q4L14oebUnWQTrVNYxzP2UxEBapgWNqRkPVQnJz4bA7s0FSC+34tqio0eDIchjcLD
-         FxMbKFeROf3BC0ugn17k6FrgqVr5LrttAeSrOQ5ikgwKi3+sbt4ZCwPG9ZcgPHApxrE8
-         o2B9JYopUMxd5kHcGnlhq9Dzf00p1KjDtuUgPS51MP+ajF1kigHhwOCq0ue+7NPdLlGK
-         FrxD3mcOeA3pKXyoK/J0gDjJobbWM4tVBvgoC8pSTltruGEYfCdiRIC5AvkunRtF1wm6
-         0c7w==
-X-Gm-Message-State: ACrzQf3EVGp5zE+HBvVMdKC4zAz2BbHmVnd1btcooB2wlXfo0UrMBzqr
-        UnQSdWCQ/kwKWKLKT3bY2Ac2qQ==
-X-Google-Smtp-Source: AMsMyM7uFp6b3scZvJgm5d/f0hHy6uDvB0ECqwfcwJQtQ5AKsRY1t945LjU8a/xIXxais1OIskGI7g==
-X-Received: by 2002:a05:6512:1151:b0:4a0:50f2:9509 with SMTP id m17-20020a056512115100b004a050f29509mr13049964lfg.297.1664392547558;
-        Wed, 28 Sep 2022 12:15:47 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id r11-20020a056512102b00b0049d0a98f73csm548977lfr.154.2022.09.28.12.15.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 12:15:47 -0700 (PDT)
-Message-ID: <c3d39c4e-2099-b09a-8486-8abae7336611@linaro.org>
-Date:   Wed, 28 Sep 2022 22:15:46 +0300
+        Wed, 28 Sep 2022 15:18:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE27EA20B;
+        Wed, 28 Sep 2022 12:17:51 -0700 (PDT)
+Received: from dimapc.. (unknown [109.252.125.248])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4CA5866022A5;
+        Wed, 28 Sep 2022 20:17:46 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664392669;
+        bh=3secHBjyjMQpoZrQKxguIhOKP495IyqhEAH64Kaz1ng=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jaavN6JWartrzJOAt6yoc6c9JrqowfXMZCHaH/OKwYQr10UjGhVD98HyXPtNUlXIS
+         w7SwcQ/HM9RKIyLfX2aEsf3DPUTj+guHAc26CwtzcPonmEIJh4oJ5/1mXvpQ/lHrdr
+         K/OZTOeRPEVxde79eRT+JuZz7+WNr/CmJl/T/No/AUZaRMpOopDYRF+UdUG022kDz6
+         13SA3by/pavASohHhkeSRtwiiGlc+ivx9t0C+GhlPFFe3yoMKEVeWCLOD2dY7V+E+F
+         +tZA1HM/bEQ3lhFU5elQIakAUG34ZX3RW7t+W7O9uBmZTnMv2dZkGW4tTMHG2Y+7d/
+         3I/vHAyixSAmQ==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas_os@shipmail.org>,
+        Qiang Yu <yuq825@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Ruhl Michael J <michael.j.ruhl@intel.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v6 08/21] drm/tegra: Prepare to dynamic dma-buf locking specification
+Date:   Wed, 28 Sep 2022 22:15:47 +0300
+Message-Id: <20220928191600.5874-9-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220928191600.5874-1-dmitry.osipenko@collabora.com>
+References: <20220928191600.5874-1-dmitry.osipenko@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 07/13] phy: qcom-qmp-pcie: clean up power-down handling
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220928152822.30687-1-johan+linaro@kernel.org>
- <20220928152822.30687-8-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220928152822.30687-8-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 18:28, Johan Hovold wrote:
-> Always define the POWER_DOWN_CONTROL register instead of falling back to
-> the v2 offset during power on and power off.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 20 ++++++--------------
->   1 file changed, 6 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> index eea66c24cf7e..47cdb9ed80cd 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> @@ -90,12 +90,14 @@ static const unsigned int pciephy_regs_layout[QPHY_LAYOUT_SIZE] = {
->   	[QPHY_SW_RESET]			= 0x00,
->   	[QPHY_START_CTRL]		= 0x08,
->   	[QPHY_PCS_STATUS]		= 0x174,
-> +	[QPHY_PCS_POWER_DOWN_CONTROL]	= 0x04,
->   };
+Prepare Tegra DRM driver to the common dynamic dma-buf locking convention
+by starting to use the unlocked versions of dma-buf API functions.
 
-Without symbolic names it's not obvious that 0x04 (and thus this 
-regs_layout) can be used for v2 and v3, but not for v4.
+Acked-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+---
+ drivers/gpu/drm/tegra/gem.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
->   
->   static const unsigned int sdm845_qhp_pciephy_regs_layout[QPHY_LAYOUT_SIZE] = {
->   	[QPHY_SW_RESET]			= 0x00,
->   	[QPHY_START_CTRL]		= 0x08,
->   	[QPHY_PCS_STATUS]		= 0x2ac,
-> +	[QPHY_PCS_POWER_DOWN_CONTROL]	= 0x04,
->   };
->   
->   static const unsigned int sm8250_pcie_regs_layout[QPHY_LAYOUT_SIZE] = {
-> @@ -1872,13 +1874,8 @@ static int qmp_pcie_init(struct phy *phy)
->   	if (ret)
->   		goto err_assert_reset;
->   
-> -	if (cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL])
-> -		qphy_setbits(pcs,
-> -				cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
-> -				cfg->pwrdn_ctrl);
-> -	else
-> -		qphy_setbits(pcs, QPHY_V2_PCS_POWER_DOWN_CONTROL,
-> -				cfg->pwrdn_ctrl);
-> +	qphy_setbits(pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
-> +			cfg->pwrdn_ctrl);
->   
->   	return 0;
->   
-> @@ -1995,13 +1992,8 @@ static int qmp_pcie_power_off(struct phy *phy)
->   	qphy_clrbits(qphy->pcs, cfg->regs[QPHY_START_CTRL], cfg->start_ctrl);
->   
->   	/* Put PHY into POWER DOWN state: active low */
-> -	if (cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL]) {
-> -		qphy_clrbits(qphy->pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
-> -			     cfg->pwrdn_ctrl);
-> -	} else {
-> -		qphy_clrbits(qphy->pcs, QPHY_V2_PCS_POWER_DOWN_CONTROL,
-> -				cfg->pwrdn_ctrl);
-> -	}
-> +	qphy_clrbits(qphy->pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
-> +			cfg->pwrdn_ctrl);
->   
->   	return 0;
->   }
-
+diff --git a/drivers/gpu/drm/tegra/gem.c b/drivers/gpu/drm/tegra/gem.c
+index 81991090adcc..b09b8ab40ae4 100644
+--- a/drivers/gpu/drm/tegra/gem.c
++++ b/drivers/gpu/drm/tegra/gem.c
+@@ -84,7 +84,7 @@ static struct host1x_bo_mapping *tegra_bo_pin(struct device *dev, struct host1x_
+ 			goto free;
+ 		}
+ 
+-		map->sgt = dma_buf_map_attachment(map->attach, direction);
++		map->sgt = dma_buf_map_attachment_unlocked(map->attach, direction);
+ 		if (IS_ERR(map->sgt)) {
+ 			dma_buf_detach(buf, map->attach);
+ 			err = PTR_ERR(map->sgt);
+@@ -160,7 +160,8 @@ static struct host1x_bo_mapping *tegra_bo_pin(struct device *dev, struct host1x_
+ static void tegra_bo_unpin(struct host1x_bo_mapping *map)
+ {
+ 	if (map->attach) {
+-		dma_buf_unmap_attachment(map->attach, map->sgt, map->direction);
++		dma_buf_unmap_attachment_unlocked(map->attach, map->sgt,
++						  map->direction);
+ 		dma_buf_detach(map->attach->dmabuf, map->attach);
+ 	} else {
+ 		dma_unmap_sgtable(map->dev, map->sgt, map->direction, 0);
+@@ -181,7 +182,7 @@ static void *tegra_bo_mmap(struct host1x_bo *bo)
+ 	if (obj->vaddr) {
+ 		return obj->vaddr;
+ 	} else if (obj->gem.import_attach) {
+-		ret = dma_buf_vmap(obj->gem.import_attach->dmabuf, &map);
++		ret = dma_buf_vmap_unlocked(obj->gem.import_attach->dmabuf, &map);
+ 		return ret ? NULL : map.vaddr;
+ 	} else {
+ 		return vmap(obj->pages, obj->num_pages, VM_MAP,
+@@ -197,7 +198,7 @@ static void tegra_bo_munmap(struct host1x_bo *bo, void *addr)
+ 	if (obj->vaddr)
+ 		return;
+ 	else if (obj->gem.import_attach)
+-		dma_buf_vunmap(obj->gem.import_attach->dmabuf, &map);
++		dma_buf_vunmap_unlocked(obj->gem.import_attach->dmabuf, &map);
+ 	else
+ 		vunmap(addr);
+ }
+@@ -461,7 +462,7 @@ static struct tegra_bo *tegra_bo_import(struct drm_device *drm,
+ 
+ 	get_dma_buf(buf);
+ 
+-	bo->sgt = dma_buf_map_attachment(attach, DMA_TO_DEVICE);
++	bo->sgt = dma_buf_map_attachment_unlocked(attach, DMA_TO_DEVICE);
+ 	if (IS_ERR(bo->sgt)) {
+ 		err = PTR_ERR(bo->sgt);
+ 		goto detach;
+@@ -479,7 +480,7 @@ static struct tegra_bo *tegra_bo_import(struct drm_device *drm,
+ 
+ detach:
+ 	if (!IS_ERR_OR_NULL(bo->sgt))
+-		dma_buf_unmap_attachment(attach, bo->sgt, DMA_TO_DEVICE);
++		dma_buf_unmap_attachment_unlocked(attach, bo->sgt, DMA_TO_DEVICE);
+ 
+ 	dma_buf_detach(buf, attach);
+ 	dma_buf_put(buf);
+@@ -508,8 +509,8 @@ void tegra_bo_free_object(struct drm_gem_object *gem)
+ 		tegra_bo_iommu_unmap(tegra, bo);
+ 
+ 	if (gem->import_attach) {
+-		dma_buf_unmap_attachment(gem->import_attach, bo->sgt,
+-					 DMA_TO_DEVICE);
++		dma_buf_unmap_attachment_unlocked(gem->import_attach, bo->sgt,
++						  DMA_TO_DEVICE);
+ 		drm_prime_gem_destroy(gem, NULL);
+ 	} else {
+ 		tegra_bo_free(gem->dev, bo);
 -- 
-With best wishes
-Dmitry
+2.37.3
 
