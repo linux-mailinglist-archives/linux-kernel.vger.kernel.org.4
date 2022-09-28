@@ -2,98 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C727C5EDB52
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F19F45EDB5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233646AbiI1LJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
+        id S233709AbiI1LJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 07:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234090AbiI1LIE (ORCPT
+        with ESMTP id S234058AbiI1LIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:08:04 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6A4BF54;
-        Wed, 28 Sep 2022 04:05:53 -0700 (PDT)
-X-UUID: f6e4e9334d8f442aaeb71328a2471598-20220928
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Z8AkCuVifU5zwCzq1TAZdFFy/YIu3ZJg8AhDMw4VC6U=;
-        b=ChKYJHQV4oDEJybKctphjvJcCaAyVTWJSEN1iZOTODh/HEPfFYEXyyZ/Ea3e+hvYDO3YfPjk/Igvk6dDNuKXqAkug9QZzTHpUVYUxaFmp+vFtIpEm6NjA6LCdvVoeQN1kT/lSjDqUX2kTUA69o1YVJxBajGqLy9WWoNvj6Ywq+Q=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:62b6f033-2518-4b95-888c-6e3ee9367554,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.11,REQID:62b6f033-2518-4b95-888c-6e3ee9367554,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:39a5ff1,CLOUDID:405f85e4-87f9-4bb0-97b6-34957dc0fbbe,B
-        ulkID:220928190550XLH4D6HR,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|823|
-        824,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,
-        COL:0
-X-UUID: f6e4e9334d8f442aaeb71328a2471598-20220928
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <jianhua.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 225644121; Wed, 28 Sep 2022 19:05:48 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 28 Sep 2022 19:05:47 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Wed, 28 Sep 2022 19:05:46 +0800
-From:   Jianhua Lin <jianhua.lin@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wed, 28 Sep 2022 07:08:02 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04D43B70C
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:05:46 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id o2so19771275lfc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:05:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=YUBENAqL9cz3x47ZkApm64Ghusef9pzCbzdp0VZZH0c=;
+        b=IGmumPyEliwITuR/gP7rn80KLyO2YWXwwhwnxpr8eUpxYshKAr611Zi54zL+sAhAr4
+         oFgys6wUlPInWIezyKTfQPQBTgAekvl8DJReYIc2rN6ogmQ/AVzvrOcQ/OZy78hJKU2a
+         gI6aQipju4L+lIz4VqaLJS/8FRfMKVOJ9/CvKx4dvX/++0Z7qN9P2CJzCg4tdMywktpO
+         14Se2RjVDtgsL4L1isxO92kRMS4SY5KPCTAM1c/u0rUeT3xFZ6i0vo8ksN/X8mxs4dZo
+         TyB7VP2XpjU+CNq0nhClbKxz/RQVFXbjkIztXipaW2tsCbR6gh5v/rcA69P0qvf9Bdk7
+         /OFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=YUBENAqL9cz3x47ZkApm64Ghusef9pzCbzdp0VZZH0c=;
+        b=BTF/sjcBjuZEUZKQBmADeD0psXQAjRLShZNDpQQN9MQuSgK6naWVYyAexWhgApKhNa
+         j4JEgWwcD5RXXIc/vABtGkVVK96lLeEap/glZ7Bw76BsP8nakZgsz/yL8u3LFf7r3tto
+         6caRSTj0/VueK4RTrP/Ou8VMrRxbNnB5B2RXck+NKYYGboFL5SY6oj6RVYOgyE8yeEJR
+         EdOv557opXvmzZvI+OI1kS72Ml1eo0WJhbKdoH5asgKO4RXyYe6COHx6J8i/pSfAY5zL
+         u9vVgNOGkTqW+ejFJPz13JjCoKAqR5C+3j24e7tlBm5wZOWSMS5rpA9nhmuZbxE8mrCI
+         rX1A==
+X-Gm-Message-State: ACrzQf2oFVtCfFbX4Hg3vFGq07pfDQR1R/JepRzFxR32QG7yFQ6reSDa
+        qcqv51CJm4Zvu/c3JTORsZzATQ==
+X-Google-Smtp-Source: AMsMyM40llb+tgJ8wO9eLpDRQXSEmVBBHTpF0DBjgb6yHbuGpMB0EPV1y/M5NpM2p1EFgKvbSJlqtw==
+X-Received: by 2002:a05:6512:3d1c:b0:49d:87fc:f63 with SMTP id d28-20020a0565123d1c00b0049d87fc0f63mr13177528lfv.327.1664363144742;
+        Wed, 28 Sep 2022 04:05:44 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id e11-20020ac2546b000000b004946c3cf53fsm246003lfn.59.2022.09.28.04.05.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 04:05:44 -0700 (PDT)
+Message-ID: <c93d5255-6b27-6bdb-3330-97a12e04ead5@linaro.org>
+Date:   Wed, 28 Sep 2022 13:05:34 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 3/3] dt-bindings: mfd: qcom,spmi-pmic: use generic node
+ name "gpio"
+Content-Language: en-US
+To:     Lee Jones <lee@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jianhua Lin <jianhua.lin@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2, 1/2] dt-bindings: media: mediatek-jpeg-decoder: Add MT8188 compatible string
-Date:   Wed, 28 Sep 2022 19:05:33 +0800
-Message-ID: <20220928110534.4756-2-jianhua.lin@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220928110534.4756-1-jianhua.lin@mediatek.com>
-References: <20220928110534.4756-1-jianhua.lin@mediatek.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220908080938.29199-1-krzysztof.kozlowski@linaro.org>
+ <20220908080938.29199-3-krzysztof.kozlowski@linaro.org>
+ <YzQWvEGeKNWKrsWh@google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YzQWvEGeKNWKrsWh@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible for MT8188 jpeg decoder.
+On 28/09/2022 11:41, Lee Jones wrote:
+> On Thu, 08 Sep 2022, Krzysztof Kozlowski wrote:
+> 
+>> GPIO controller nodes are named by convention just "gpio", not "gpios".
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> I guess I can't take this until the 2 arch/ patches are applied.
 
-Signed-off-by: Jianhua Lin <jianhua.lin@mediatek.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/media/mediatek-jpeg-decoder.yaml         | 1 +
- 1 file changed, 1 insertion(+)
+You can. It will warn when running dtbs_check, but that's not a big
+deal. Anyway DTS patches wait for quite a while, so there was enough of
+time for them to get to next.
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.yaml
-index 052e752157b4..3c77adfa320c 100644
---- a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.yaml
-+++ b/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.yaml
-@@ -22,6 +22,7 @@ properties:
-       - items:
-           - enum:
-               - mediatek,mt7623-jpgdec
-+              - mediatek,mt8188-jpgdec
-           - const: mediatek,mt2701-jpgdec
- 
-   reg:
--- 
-2.18.0
+Best regards,
+Krzysztof
 
