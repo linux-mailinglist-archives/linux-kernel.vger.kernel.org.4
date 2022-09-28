@@ -2,162 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A14E5EE0B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0005EE0A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234426AbiI1Pkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
+        id S234008AbiI1PjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233955AbiI1Pkc (ORCPT
+        with ESMTP id S229951AbiI1PjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:40:32 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534BF78216
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:40:30 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28SE4gbk020450;
-        Wed, 28 Sep 2022 15:38:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2022-7-12;
- bh=4gDtf1VTCSEbPZjaJfwdpJTT2vkmaPA/gXXZw6DdLQA=;
- b=S11zi76H9d6DoGjxQe69b7HIX8etHVwPQWajbkw1tcm1syco8VRFP9QjsdNB23wg1BV6
- ec1tsOqr3GZ3aZ0WqTSzEFHnv/lVAt076zWlsnU4m+2oERm2x0ye5xdwN8sMrd7t9tk0
- q2RB6ttrqye7jcrQcSDLvsBzXbt7sYzb9YPfvEP0wmaCCak0pvL7EfEGs2/ys8oxvclQ
- IZp5YV24wRfKbVp7wpNhQX9EzEYYHVS+gOfNGrnQgRvnwA8LoF99VJZU27Z6RUDxtNbP
- siPvIECGy2P2AMFIhBKoMjKSmPFBt9IFm41yDK8humndcRmkjphsGJSNKEgDqAHAKk5B BQ== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jssrwj94u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 28 Sep 2022 15:38:03 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28SDbA8x002239;
-        Wed, 28 Sep 2022 15:38:03 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jtps6e58b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 28 Sep 2022 15:38:03 +0000
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28SFc1nt022830;
-        Wed, 28 Sep 2022 15:38:02 GMT
-Received: from brm-x62-20.us.oracle.com (brm-x62-20.us.oracle.com [10.80.150.35])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3jtps6e576-2;
-        Wed, 28 Sep 2022 15:38:02 +0000
-From:   Thomas Tai <thomas.tai@oracle.com>
-To:     tony.luck@intel.com, dave.hansen@linux.intel.com,
-        jarkko@kernel.org, reinette.chatre@intel.co,
-        naoya.horiguchi@nec.com, linmiaohe@huawei.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, thomas.tai@oracle.com
-Subject: [PATCH V2 1/1] x86/sgx: Add code to inject hwpoison into SGX memory
-Date:   Wed, 28 Sep 2022 11:38:32 -0400
-Message-Id: <20220928153832.1032566-2-thomas.tai@oracle.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220928153832.1032566-1-thomas.tai@oracle.com>
-References: <20220928153832.1032566-1-thomas.tai@oracle.com>
+        Wed, 28 Sep 2022 11:39:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC389FAA0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:39:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3ECEB81FF7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 15:39:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D03DC433D7;
+        Wed, 28 Sep 2022 15:39:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664379549;
+        bh=LmZFLmKf+TBz/taw6MmN/uDum8XcFIbr43HYrWvm7+k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ueKglqYK5O8Kova6B+K910ThMmcAyvOz+gVPpmCtEmEkaobgodLEMX/p7flwwlKJ+
+         YDglBB0wAwlpgaaNa7D7hR8TeJ0TIZzjoiOS3QoO0wknb/We1FgV3MP9xPgXk/PWoZ
+         w4mRxq/aAQWKxztFtskz1qRaeSuL6iFu3depi5WMjXhfGmHEmlkP7zyDmctIv81lrd
+         jS0xdSdpTRrkGflDc7+zjzlqtGGIq6W6W1t1bgnoggWqlgUuxxe/fJQ3qFrGCjEZwO
+         37VBPudNq93w0ItrWsb4b7rr8BwiAWHDZwww5w4J3sm07s2pB0jv/wRaFf/PvIDYeq
+         ngTA4Nbvd6c9g==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH 1/3] f2fs: support recording stop_checkpoint reason into super_block
+Date:   Wed, 28 Sep 2022 23:38:53 +0800
+Message-Id: <20220928153855.4634-1-chao@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-28_07,2022-09-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
- suspectscore=0 adultscore=0 bulkscore=0 mlxlogscore=999 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2209280092
-X-Proofpoint-ORIG-GUID: 8o_tb834flok7Fk44DWrDJfgK_AKrSYz
-X-Proofpoint-GUID: 8o_tb834flok7Fk44DWrDJfgK_AKrSYz
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Inspired by commit c6acb1e7bf46 (x86/sgx: Add hook to error injection
-address validation), add a similar code in hwpoison_inject function to
-check if the address is located in SGX Memory. The error will then be
-handled by the arch_memory_failure function in the SGX driver.
+This patch supports to record stop_checkpoint error into
+f2fs_super_block.s_stop_reason[].
 
-Signed-off-by: Thomas Tai <thomas.tai@oracle.com>
+Signed-off-by: Chao Yu <chao@kernel.org>
 ---
- Documentation/mm/hwpoison.rst | 44 +++++++++++++++++++++++++++++++++++
- mm/hwpoison-inject.c          |  4 ++++
- 2 files changed, 48 insertions(+)
+ fs/f2fs/checkpoint.c    | 10 +++++++---
+ fs/f2fs/data.c          |  6 ++++--
+ fs/f2fs/f2fs.h          |  4 +++-
+ fs/f2fs/file.c          | 11 ++++++-----
+ fs/f2fs/gc.c            |  6 ++++--
+ fs/f2fs/inode.c         |  3 ++-
+ fs/f2fs/segment.c       |  5 +++--
+ fs/f2fs/super.c         | 20 ++++++++++++++++++++
+ include/linux/f2fs_fs.h | 17 ++++++++++++++++-
+ 9 files changed, 65 insertions(+), 17 deletions(-)
 
-diff --git a/Documentation/mm/hwpoison.rst b/Documentation/mm/hwpoison.rst
-index b9d5253c1305..8a542aca4744 100644
---- a/Documentation/mm/hwpoison.rst
-+++ b/Documentation/mm/hwpoison.rst
-@@ -162,6 +162,50 @@ Testing
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index 308b70812cbd..0c82dae082aa 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -26,12 +26,16 @@
+ static struct kmem_cache *ino_entry_slab;
+ struct kmem_cache *f2fs_inode_entry_slab;
  
-   Some portable hwpoison test programs in mce-test, see below.
+-void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io)
++void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io,
++						unsigned char reason)
+ {
+ 	f2fs_build_fault_attr(sbi, 0, 0);
+ 	set_ckpt_flags(sbi, CP_ERROR_FLAG);
+-	if (!end_io)
++	if (!end_io) {
+ 		f2fs_flush_merged_writes(sbi);
++
++		f2fs_handle_stop(sbi, reason);
++	}
+ }
  
-+* Special notes for injection into SGX enclaves
-+
-+  1) Determine physical address of enclave page
-+
-+	dmesg | grep "sgx: EPC"
-+
-+	sgx: EPC section 0x8000c00000-0x807f7fffff
-+	sgx: EPC section 0x10000c00000-0x1007fffffff
-+
-+  2) Convert the EPC address to page frame number.
-+
-+	For 4K page size, the page frame number for 0x8000c00000 is
-+	0x8000c00000 / 0x1000 = 0x8000c00.
-+
-+  3) Trace memory_failure
-+
-+	echo nop > /sys/kernel/tracing/current_tracer
-+	echo *memory_failure > /sys/kernel/tracing/set_ftrace_filter
-+	echo function > /sys/kernel/tracing/current_tracer
-+
-+  4) Inject a memory error
-+
-+	modprobe hwpoison-inject
-+	echo "0x8000c00" > /sys/kernel/debug/hwpoison/corrupt-pfn
-+
-+  5) Check the trace output
-+
-+	cat /sys/kernel/tracing/trace
-+
-+	# tracer: function
-+	#
-+	# entries-in-buffer/entries-written: 2/2   #P:128
-+	#
-+	#                            _-----=> irqs-off
-+	#                           / _----=> need-resched
-+	#                          | / _---=> hardirq/softirq
-+	#                          || / _--=> preempt-depth
-+	#                          ||| / _-=> migrate-disable
-+	#                          |||| /     delay
-+	#       TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+	#          | |         |   |||||     |         |
-+	        bash-12167   [002] .....   113.136808: memory_failure<-simple_attr_write
-+	        bash-12167   [002] .....   113.136810: arch_memory_failure<-memory_failure
-+
- References
- ==========
+ /*
+@@ -122,7 +126,7 @@ struct page *f2fs_get_meta_page_retry(struct f2fs_sb_info *sbi, pgoff_t index)
+ 		if (PTR_ERR(page) == -EIO &&
+ 				++count <= DEFAULT_RETRY_IO_COUNT)
+ 			goto retry;
+-		f2fs_stop_checkpoint(sbi, false);
++		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_META_PAGE);
+ 	}
+ 	return page;
+ }
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 4e5be2c1dab9..20c8d835a87b 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -333,7 +333,8 @@ static void f2fs_write_end_io(struct bio *bio)
+ 			mempool_free(page, sbi->write_io_dummy);
  
-diff --git a/mm/hwpoison-inject.c b/mm/hwpoison-inject.c
-index 65e242b5a432..bf83111c1d9b 100644
---- a/mm/hwpoison-inject.c
-+++ b/mm/hwpoison-inject.c
-@@ -21,6 +21,10 @@ static int hwpoison_inject(void *data, u64 val)
- 	if (!capable(CAP_SYS_ADMIN))
- 		return -EPERM;
+ 			if (unlikely(bio->bi_status))
+-				f2fs_stop_checkpoint(sbi, true);
++				f2fs_stop_checkpoint(sbi, true,
++						STOP_CP_REASON_WRITE_FAIL);
+ 			continue;
+ 		}
  
-+	/* Inject the error if the page is part of the processor reserved memory */
-+	if (arch_is_platform_page(pfn << PAGE_SHIFT))
-+		goto inject;
+@@ -349,7 +350,8 @@ static void f2fs_write_end_io(struct bio *bio)
+ 		if (unlikely(bio->bi_status)) {
+ 			mapping_set_error(page->mapping, -EIO);
+ 			if (type == F2FS_WB_CP_DATA)
+-				f2fs_stop_checkpoint(sbi, true);
++				f2fs_stop_checkpoint(sbi, true,
++						STOP_CP_REASON_WRITE_FAIL);
+ 		}
+ 
+ 		f2fs_bug_on(sbi, page->mapping == NODE_MAPPING(sbi) &&
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index d680a051cba4..30ddd77115e6 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -3559,6 +3559,7 @@ int f2fs_enable_quota_files(struct f2fs_sb_info *sbi, bool rdonly);
+ int f2fs_quota_sync(struct super_block *sb, int type);
+ loff_t max_file_blocks(struct inode *inode);
+ void f2fs_quota_off_umount(struct super_block *sb);
++void f2fs_handle_stop(struct f2fs_sb_info *sbi, unsigned char reason);
+ int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover);
+ int f2fs_sync_fs(struct super_block *sb, int sync);
+ int f2fs_sanity_check_ckpt(struct f2fs_sb_info *sbi);
+@@ -3718,7 +3719,8 @@ static inline bool f2fs_need_rand_seg(struct f2fs_sb_info *sbi)
+ /*
+  * checkpoint.c
+  */
+-void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io);
++void f2fs_stop_checkpoint(struct f2fs_sb_info *sbi, bool end_io,
++							unsigned char reason);
+ void f2fs_flush_ckpt_thread(struct f2fs_sb_info *sbi);
+ struct page *f2fs_grab_meta_page(struct f2fs_sb_info *sbi, pgoff_t index);
+ struct page *f2fs_get_meta_page(struct f2fs_sb_info *sbi, pgoff_t index);
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 2f9b387fef54..da45798d7fe5 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -2153,7 +2153,8 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
+ 		if (ret) {
+ 			if (ret == -EROFS) {
+ 				ret = 0;
+-				f2fs_stop_checkpoint(sbi, false);
++				f2fs_stop_checkpoint(sbi, false,
++						STOP_CP_REASON_SHUTDOWN);
+ 				set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+ 				trace_f2fs_shutdown(sbi, in, ret);
+ 			}
+@@ -2166,7 +2167,7 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
+ 		ret = freeze_bdev(sb->s_bdev);
+ 		if (ret)
+ 			goto out;
+-		f2fs_stop_checkpoint(sbi, false);
++		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+ 		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+ 		thaw_bdev(sb->s_bdev);
+ 		break;
+@@ -2175,16 +2176,16 @@ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
+ 		ret = f2fs_sync_fs(sb, 1);
+ 		if (ret)
+ 			goto out;
+-		f2fs_stop_checkpoint(sbi, false);
++		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+ 		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+ 		break;
+ 	case F2FS_GOING_DOWN_NOSYNC:
+-		f2fs_stop_checkpoint(sbi, false);
++		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+ 		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+ 		break;
+ 	case F2FS_GOING_DOWN_METAFLUSH:
+ 		f2fs_sync_meta_pages(sbi, META, LONG_MAX, FS_META_IO);
+-		f2fs_stop_checkpoint(sbi, false);
++		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_SHUTDOWN);
+ 		set_sbi_flag(sbi, SBI_IS_SHUTDOWN);
+ 		break;
+ 	case F2FS_GOING_DOWN_NEED_FSCK:
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index 3a820e5cdaee..6e42dad0ac2d 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -74,7 +74,8 @@ static int gc_thread_func(void *data)
+ 
+ 		if (time_to_inject(sbi, FAULT_CHECKPOINT)) {
+ 			f2fs_show_injection_info(sbi, FAULT_CHECKPOINT);
+-			f2fs_stop_checkpoint(sbi, false);
++			f2fs_stop_checkpoint(sbi, false,
++					STOP_CP_REASON_FAULT_INJECT);
+ 		}
+ 
+ 		if (!sb_start_write_trylock(sbi->sb)) {
+@@ -1712,7 +1713,8 @@ static int do_garbage_collect(struct f2fs_sb_info *sbi,
+ 			f2fs_err(sbi, "Inconsistent segment (%u) type [%d, %d] in SSA and SIT",
+ 				 segno, type, GET_SUM_TYPE((&sum->footer)));
+ 			set_sbi_flag(sbi, SBI_NEED_FSCK);
+-			f2fs_stop_checkpoint(sbi, false);
++			f2fs_stop_checkpoint(sbi, false,
++				STOP_CP_REASON_CORRUPTED_SUMMARY);
+ 			goto skip;
+ 		}
+ 
+diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+index f6cb8b78b5d5..7880596b51ee 100644
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -716,7 +716,8 @@ void f2fs_update_inode_page(struct inode *inode)
+ 			cond_resched();
+ 			goto retry;
+ 		} else if (err != -ENOENT) {
+-			f2fs_stop_checkpoint(sbi, false);
++			f2fs_stop_checkpoint(sbi, false,
++					STOP_CP_REASON_UPDATE_INODE);
+ 		}
+ 		return;
+ 	}
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index e35be4116767..4ed84510f195 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -390,7 +390,7 @@ void f2fs_balance_fs(struct f2fs_sb_info *sbi, bool need)
+ {
+ 	if (time_to_inject(sbi, FAULT_CHECKPOINT)) {
+ 		f2fs_show_injection_info(sbi, FAULT_CHECKPOINT);
+-		f2fs_stop_checkpoint(sbi, false);
++		f2fs_stop_checkpoint(sbi, false, STOP_CP_REASON_FAULT_INJECT);
+ 	}
+ 
+ 	/* balance_fs_bg is able to be pending */
+@@ -708,7 +708,8 @@ int f2fs_flush_device_cache(struct f2fs_sb_info *sbi)
+ 		} while (ret && --count);
+ 
+ 		if (ret) {
+-			f2fs_stop_checkpoint(sbi, false);
++			f2fs_stop_checkpoint(sbi, false,
++					STOP_CP_REASON_FLUSH_FAIL);
+ 			break;
+ 		}
+ 
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index b8e5fe244596..2533d309a924 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -3846,6 +3846,26 @@ int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover)
+ 	return err;
+ }
+ 
++void f2fs_handle_stop(struct f2fs_sb_info *sbi, unsigned char reason)
++{
++	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
++	int err;
 +
- 	if (!pfn_valid(pfn))
- 		return -ENXIO;
++	f2fs_bug_on(sbi, reason >= MAX_STOP_REASON);
++
++	f2fs_down_write(&sbi->sb_lock);
++
++	if (raw_super->s_stop_reason[reason] < ((1 << BITS_PER_BYTE) - 1))
++		raw_super->s_stop_reason[reason]++;
++
++	err = f2fs_commit_super(sbi, false);
++	if (err)
++		f2fs_err(sbi, "f2fs_commit_super fails to record reason:%u err:%d",
++								reason, err);
++
++	f2fs_up_write(&sbi->sb_lock);
++}
++
+ static int f2fs_scan_devices(struct f2fs_sb_info *sbi)
+ {
+ 	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
+diff --git a/include/linux/f2fs_fs.h b/include/linux/f2fs_fs.h
+index d445150c5350..5dd1e52b8997 100644
+--- a/include/linux/f2fs_fs.h
++++ b/include/linux/f2fs_fs.h
+@@ -73,6 +73,20 @@ struct f2fs_device {
+ 	__le32 total_segments;
+ } __packed;
+ 
++/* reason of stop_checkpoint */
++enum stop_cp_reason {
++	STOP_CP_REASON_SHUTDOWN,
++	STOP_CP_REASON_FAULT_INJECT,
++	STOP_CP_REASON_META_PAGE,
++	STOP_CP_REASON_WRITE_FAIL,
++	STOP_CP_REASON_CORRUPTED_SUMMARY,
++	STOP_CP_REASON_UPDATE_INODE,
++	STOP_CP_REASON_FLUSH_FAIL,
++	STOP_CP_REASON_MAX,
++};
++
++#define	MAX_STOP_REASON			32
++
+ struct f2fs_super_block {
+ 	__le32 magic;			/* Magic Number */
+ 	__le16 major_ver;		/* Major Version */
+@@ -116,7 +130,8 @@ struct f2fs_super_block {
+ 	__u8 hot_ext_count;		/* # of hot file extension */
+ 	__le16  s_encoding;		/* Filename charset encoding */
+ 	__le16  s_encoding_flags;	/* Filename charset encoding flags */
+-	__u8 reserved[306];		/* valid reserved region */
++	__u8 s_stop_reason[MAX_STOP_REASON];	/* stop checkpoint reason */
++	__u8 reserved[274];		/* valid reserved region */
+ 	__le32 crc;			/* checksum of superblock */
+ } __packed;
  
 -- 
-2.31.1
+2.36.1
 
