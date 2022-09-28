@@ -2,212 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C25E5EE212
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFBD5EE211
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234085AbiI1QmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
+        id S234028AbiI1QmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233798AbiI1QmK (ORCPT
+        with ESMTP id S233502AbiI1QmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:42:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A71EAD4DD4;
-        Wed, 28 Sep 2022 09:42:08 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B4B2D143D;
-        Wed, 28 Sep 2022 09:42:14 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.80.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E2F413F792;
-        Wed, 28 Sep 2022 09:42:03 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 17:42:01 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Xu Kuohai <xukuohai@huaweicloud.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Florent Revest <revest@chromium.org>,
-        Will Deacon <will@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
-Message-ID: <YzR5WSLux4mmFIXg@FVFF77S0Q05N>
-References: <20220913162732.163631-1-xukuohai@huaweicloud.com>
- <f1e14934-dc54-9bf7-501a-89affdb7371e@iogearbox.net>
- <YzG51Jyd5zhvygtK@arm.com>
- <YzHk1zRf1Dp8YTEe@FVFF77S0Q05N>
- <970a25e4-9b79-9e0c-b338-ed1a934f2770@huawei.com>
+        Wed, 28 Sep 2022 12:42:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB091D4DF3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:42:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664383328;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TnuxJM/ZwkodECcGRXyyBt7TlcJVtOiq1PshYO6uCqs=;
+        b=blTNi5scQUYwPnRaN6uO6VIn2tTgsA2TECEYWHHq4Rxf5XPoT5DyVDmPW51IJoJ7NOZpER
+        KDogZVMXxV4/G2kKCOJ89ZS3BRG4Nln95A5GTOUzT08y3im/YLPHU1Pa9hL1dE4yqhAmf9
+        Fu1ebKredeYUOfbVRVHjBh9z0UAcSWk=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-244-mFFpbHNSO369Fa4xjNjyJw-1; Wed, 28 Sep 2022 12:42:05 -0400
+X-MC-Unique: mFFpbHNSO369Fa4xjNjyJw-1
+Received: by mail-ed1-f72.google.com with SMTP id f18-20020a056402355200b0045115517911so10694060edd.14
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:42:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=TnuxJM/ZwkodECcGRXyyBt7TlcJVtOiq1PshYO6uCqs=;
+        b=ckFf5XENgCxd92ZQX6e4eLEd9aa4Zwf9JvB8/htApm2wDmA6uZDCdzSUTG4/78tWTI
+         jreJxLyM8mpsOiUfxtf2XdfqZXjN2UqP/rXZ0x31Y7Zw+2Orl1Phb5Pl5F6HbgcjX3dT
+         7q8i28d4a6EV4xtoj6tvj+C5R7TaOhhBcpBvJk/eIQiZGGJml0/CxlgXuO0W8RWiVYFK
+         b76Y6siCIxwxxJJcwhEk0clVelmvv7aWTwwHrRKd5s2sLZtoV5qcwBHysweeasOyvWqi
+         bBNkCuLIW4xDMgT0acCcgyRvkaEwpgmZ5PFL9l2S4sYGN5sk13KJGLJ4DKbs58apU6Nt
+         wO4Q==
+X-Gm-Message-State: ACrzQf2nAw564EmfNK7Ce2lphv8DVBK2knfvQDnIQlscJJosCD/ZoSI/
+        SV2HQU2tJE9YtyPgPS58jKXhocuwq5mi+cHAeYKfEkIefkJJju4Wk9DTHVafEy0ngbGs/OBzbcA
+        1NZg6QLvYq5AHtDBlqlhmXih7
+X-Received: by 2002:a17:907:7204:b0:783:e152:f1f1 with SMTP id dr4-20020a170907720400b00783e152f1f1mr10654457ejc.119.1664383324534;
+        Wed, 28 Sep 2022 09:42:04 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5eGcM6h9HE/CoQ6FfSmpE7Agb6ytD+BQYcT0Uc4nG4qcPwaw7CMsOy3vHVNR0VwzTi267SAQ==
+X-Received: by 2002:a17:907:7204:b0:783:e152:f1f1 with SMTP id dr4-20020a170907720400b00783e152f1f1mr10654427ejc.119.1664383324304;
+        Wed, 28 Sep 2022 09:42:04 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:2f4b:62da:3159:e077? ([2001:b07:6468:f312:2f4b:62da:3159:e077])
+        by smtp.googlemail.com with ESMTPSA id d21-20020a170906305500b00773c60c2129sm2653030ejd.141.2022.09.28.09.42.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 09:42:02 -0700 (PDT)
+Message-ID: <bb82895c-31bc-67af-d82d-c9342c665755@redhat.com>
+Date:   Wed, 28 Sep 2022 18:42:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <970a25e4-9b79-9e0c-b338-ed1a934f2770@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [RFC PATCH 2/9] kvm.h: introduce KVM_SET_USER_MEMORY_REGION_LIST
+ ioctl
+Content-Language: en-US
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+References: <20220909104506.738478-1-eesposit@redhat.com>
+ <20220909104506.738478-3-eesposit@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220909104506.738478-3-eesposit@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 12:49:58PM +0800, Xu Kuohai wrote:
-> On 9/27/2022 1:43 AM, Mark Rutland wrote:
-> > On Mon, Sep 26, 2022 at 03:40:20PM +0100, Catalin Marinas wrote:
-> > > On Thu, Sep 22, 2022 at 08:01:16PM +0200, Daniel Borkmann wrote:
-> > > > On 9/13/22 6:27 PM, Xu Kuohai wrote:
-> > > > > This series adds ftrace direct call for arm64, which is required to attach
-> > > > > bpf trampoline to fentry.
-> > > > > 
-> > > > > Although there is no agreement on how to support ftrace direct call on arm64,
-> > > > > no patch has been posted except the one I posted in [1], so this series
-> > > > > continues the work of [1] with the addition of long jump support. Now ftrace
-> > > > > direct call works regardless of the distance between the callsite and custom
-> > > > > trampoline.
-> > > > > 
-> > > > > [1] https://lore.kernel.org/bpf/20220518131638.3401509-2-xukuohai@huawei.com/
-> > > > > 
-> > > > > v2:
-> > > > > - Fix compile and runtime errors caused by ftrace_rec_arch_init
-> > > > > 
-> > > > > v1: https://lore.kernel.org/bpf/20220913063146.74750-1-xukuohai@huaweicloud.com/
-> > > > > 
-> > > > > Xu Kuohai (4):
-> > > > >     ftrace: Allow users to disable ftrace direct call
-> > > > >     arm64: ftrace: Support long jump for ftrace direct call
-> > > > >     arm64: ftrace: Add ftrace direct call support
-> > > > >     ftrace: Fix dead loop caused by direct call in ftrace selftest
-> > > > 
-> > > > Given there's just a tiny fraction touching BPF JIT and most are around core arm64,
-> > > > it probably makes sense that this series goes via Catalin/Will through arm64 tree
-> > > > instead of bpf-next if it looks good to them. Catalin/Will, thoughts (Ack + bpf-next
-> > > > could work too, but I'd presume this just results in merge conflicts)?
-> > > 
-> > > I think it makes sense for the series to go via the arm64 tree but I'd
-> > > like Mark to have a look at the ftrace changes first.
-> > 
-> > > From a quick scan, I still don't think this is quite right, and as it stands I
-> > believe this will break backtracing (as the instructions before the function
-> > entry point will not be symbolized correctly, getting in the way of
-> > RELIABLE_STACKTRACE). I think I was insufficiently clear with my earlier
-> > feedback there, as I have a mechanism in mind that wa a little simpler.
+On 9/9/22 12:44, Emanuele Giuseppe Esposito wrote:
+> This IOCTL enables atomic update of multiple memslots.
+> The userspace application provides a kvm_userspace_memory_region_list
+> containing a list of entries, each representing a modification to be
+> performed to a memslot.
 > 
-> Thanks for the review. I have some thoughts about reliable stacktrace.
+> Requests with invalidate_slot == 1 are pre-processed, because they
+> are ther DELETE or MOVE, and therefore the memslot must be first
+> replaced with a copy marked as KVM_MEMSLOT_INVALID, and then replaced.
 > 
-> If PC is not in the range of literal_call, stacktrace works as before without
-> changes.
+> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+> ---
+>   include/uapi/linux/kvm.h | 21 ++++++++++++++++++++-
+>   1 file changed, 20 insertions(+), 1 deletion(-)
 > 
-> If PC is in the range of literal_call, for example, interrupted by an
-> irq, I think there are 2 problems:
-> 
-> 1. Caller LR is not pushed to the stack yet, so caller's address and name
->    will be missing from the backtrace.
-> 
-> 2. Since PC is not in func's address range, no symbol name will be found, so
->    func name is also missing.
-> 
-> Problem 1 is not introduced by this patchset, but the occurring probability
-> may be increased by this patchset. I think this problem should be addressed by
-> a reliable stacktrace scheme, such as ORC on x86.
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index a36e78710382..673496b91a25 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -103,6 +103,24 @@ struct kvm_userspace_memory_region {
+>   	__u64 userspace_addr; /* start of the userspace allocated memory */
+>   };
+>   
+> +/* for KVM_SET_USER_MEMORY_REGION_LIST */
+> +struct kvm_userspace_memory_region_entry {
+> +	__u32 slot;
+> +	__u32 flags;
+> +	__u64 guest_phys_addr;
+> +	__u64 memory_size; /* bytes */
+> +	__u64 userspace_addr; /* start of the userspace allocated memory */
+> +	__u8 invalidate_slot;
+> +	__u8 padding[31];
+> +};
+> +
+> +/* for KVM_SET_USER_MEMORY_REGION_LIST */
+> +struct kvm_userspace_memory_region_list {
+> +	__u32 nent;
+> +	__u32 flags;
+> +	struct kvm_userspace_memory_region_entry entries[0];
+> +};
+> +
+>   /*
+>    * The bit 0 ~ bit 15 of kvm_memory_region::flags are visible for userspace,
+>    * other bits are reserved for kvm internal use which are defined in
+> @@ -1444,7 +1462,8 @@ struct kvm_vfio_spapr_tce {
+>   					struct kvm_userspace_memory_region)
+>   #define KVM_SET_TSS_ADDR          _IO(KVMIO,   0x47)
+>   #define KVM_SET_IDENTITY_MAP_ADDR _IOW(KVMIO,  0x48, __u64)
+> -
+> +#define KVM_SET_USER_MEMORY_REGION_LIST _IOW(KVMIO, 0x49, \
+> +					struct kvm_userspace_memory_region_list)
+>   /* enable ucontrol for s390 */
+>   struct kvm_s390_ucas_mapping {
+>   	__u64 user_addr;
 
-I agree problem 1 is not introduced by this patch set; I have plans fo how to
-address that for reliable stacktrace based on identifying the ftrace
-trampoline. This is one of the reasons I do not want direct calls, as
-identifying all direct call trampolines is going to be very painful and slow,
-whereas identifying a statically allocated ftrace trampoline is far simpler.
+Looks good; however, in the non-RFC I suggest adding documentation in 
+this patch already (so no Reviewed-by yet).
 
-> Problem 2 is indeed introduced by this patchset. I think there are at least 3
-> ways to deal with it:
+Paolo
 
-What I would like to do here, as mentioned previously in other threads, is to
-avoid direct calls, and implement "FTRACE_WITH_OPS", where we can associate
-each patch-site with a specific set of ops, and invoke that directly from the
-regular ftrace trampoline.
-
-With that, the patch site would look like:
-
-	pre_func_literal:
-		NOP		// Patched to a pointer to 
-		NOP		// ftrace_ops
-	func:
-		< optional BTI here >
-		NOP		// Patched to MOV X9, LR
-		NOP		// Patched to a BL to the ftrace trampoline
-
-... then in the ftrace trampoline we can recover the ops pointer at a negative
-offset from the LR based on the LR, and invoke the ops from there (passing a
-struct ftrace_regs with the saved regs).
-
-That way the patch-site is less significantly affected, and there's no impact
-to backtracing. That gets most of the benefit of the direct calls avoiding the
-ftrace ops list traversal, without having to do anything special at all. That
-should be much easier to maintain, too.
-
-I started implementing that before LPC (and you can find some branches on my
-kernel.org repo), but I haven't yet had the time to rebase those and sort out
-the remaining issues:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/per-callsite-ops
-
-Note that as a prerequisite for that I also want to reduce the set of registers
-we save/restore down to the set required by our calling convention, as the
-existing pt_regs is both large and generally unsound (since we can not and do
-not fill in many of the fields we only acquire at an exception boundary).
-That'll further reduce the ftrace overhead generally, and remove the needs for
-the two trampolines we currently have. I have a WIP at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/minimal-regs
-
-I intend to get back to both of those shortly (along with some related bits for
-kretprobes and stacktracing); I just haven't had much time recently due to
-other work and illness.
-
-> 1. Add a symbol name for literal_call.
-
-That'll require a number of invasive changes to make RELIABLE_STACKTRACE work,
-so I don't think we want to do that.
-
-> 2. Hack the backtrace routine, if no symbol name found for a PC during backtrace,
->    we can check if the PC is in literal_call, then adjust PC and try again.
-
-The problem is that the existing symbolization code doesn't know the length of
-the prior symbol, so it will find *some* symbol associated with the previous
-function rather than finding no symbol.
-
-To bodge around this we'dd need to special-case each patchable-function-entry
-site in symbolization, which is going to be painful and slow down unwinding
-unless we try to fix this up at boot-time or compile time.
-
-> 3. Move literal_call to the func's address range, for example:
-> 
->         a. Compile with -fpatchable-function-entry=7
->         func:
->                 BTI C
->                 NOP
->                 NOP
->                 NOP
->                 NOP
->                 NOP
->                 NOP
->                 NOP
-
-This is a non-starter. We are not going to add 7 NOPs at the start of every
-function.
-
-Thanks,
-Mark.
