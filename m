@@ -2,97 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0696E5EDDCB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7E65EDDD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233954AbiI1NgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 09:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
+        id S233993AbiI1NhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 09:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233889AbiI1NgM (ORCPT
+        with ESMTP id S233724AbiI1NhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 09:36:12 -0400
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9828F94F;
-        Wed, 28 Sep 2022 06:36:10 -0700 (PDT)
-Received: by mail-wm1-f43.google.com with SMTP id e18so8534611wmq.3;
-        Wed, 28 Sep 2022 06:36:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=+upmZyPR8pGaGWg3qGrftmKuUaoiKJ3WqmjmIjDKj5A=;
-        b=bxYWQhxUAA+cMpbiJJiaAzimhOrUQs9oQGvBQaN+HEPJ3+fOHZA7hDfC4M/srApOSW
-         +/5svgfd8WAgTqCm+d/IyK/W0x3P6A7cAVYlW1bjmpsXKAI3WYMU21T0Y4I6lWik4hdG
-         4XEQ+JNY40+RbljsjdGhXfZxMAQjPOG9O5pZpe+psvkVJkMZvaF2jsClbZQBVgbdYPS+
-         tGFMB8+fCvSrzauJTvDqZr9SuLq08vrLyy+MLJEN4PqOxp/ru+/ZlDiWZC/am4/iUuRd
-         tTE9wrPjVg3hQR+23X2MkEN0GIQFKHD91gjujIncmWebo11gM15vCkVvs3QjAGMG795E
-         rbyA==
-X-Gm-Message-State: ACrzQf0En1t4hwwhlbAO/twGl60acwXylO30bRo+EKDMsRIAxX/+uwLa
-        qOUXC7qVvY01t/AW3kgBJ/N+dNuFp6k=
-X-Google-Smtp-Source: AMsMyM5ovkU45Hb+UhdT9G4vPLHy2nketpUXDU/UlqlM/OAJFNTmeY50h/wIWr4zAo4geMlNy7Anyg==
-X-Received: by 2002:a05:600c:3c8a:b0:3b4:eff4:a94f with SMTP id bg10-20020a05600c3c8a00b003b4eff4a94fmr6698611wmb.105.1664372169187;
-        Wed, 28 Sep 2022 06:36:09 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id m11-20020a05600c4f4b00b003b31c560a0csm1818654wmq.12.2022.09.28.06.36.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 06:36:08 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 13:36:06 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        linux-hyperv@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] Drivers: hv: vmbus: Split memcpy of flex-array
-Message-ID: <YzRNxs6bVtNZdtNH@liuwe-devbox-debian-v2>
-References: <20220927211736.3241175-1-keescook@chromium.org>
+        Wed, 28 Sep 2022 09:37:21 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C41E8E4E7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 06:37:17 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 13:37:13 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1664372235;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vb2NAsuQMZeCWwgkNSMKDWzlnZ58auEKjch9Ob3ZsKQ=;
+        b=mc+lHD+wHsowi0+b8FOi7phFsrl5317KjpOYUeTmzULLPv99NDDrNYY5pBPasjyS4DrPPk
+        tSx56qouY0V8Y13tYIKipR9TyFH8vciJdNAUbp3CHV4bsYSnHBBHpmE+BfL/SSfQgJd4In
+        4CGn1hQul8AXD6NhM/mK2jpvMoDdy5nivt8ZWGUbsMW2ilZjqnczPC6kr+D7YW5tFU7gYW
+        AvSmPcD1wMoxMvHqVH2bFMCro2ves9Upo0tmNnHaRtVyvCHKW2Nxk1iD7MdLrrNI+0MhKl
+        jUSeEFc7fjLTn52Z0LbtV1BCmbC6Ejzx6/JdPzC+ntIx8680ZjyLbg1wDHulWA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1664372235;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vb2NAsuQMZeCWwgkNSMKDWzlnZ58auEKjch9Ob3ZsKQ=;
+        b=0orhfXPHcmet4WO31rOF1pvq8Z2AyLTZcmwljKEqtaHljQEKfVOPHKeLCySqHEtzoyB/Ai
+        zswAfi1M0gAAVdAw==
+From:   "irqchip-bot for Frank Li" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] dt-bindings: irqchip: Describe the IMX MU
+ block as a MSI controller
+Cc:     Rob Herring <robh@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220922161246.20586-5-Frank.Li@nxp.com>
+References: <20220922161246.20586-5-Frank.Li@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927211736.3241175-1-keescook@chromium.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <166437223395.401.8077585689879090034.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 02:17:36PM -0700, Kees Cook wrote:
-> To work around a misbehavior of the compiler's ability to see into
-> composite flexible array structs (as detailed in the coming memcpy()
-> hardening series[1]), split the memcpy() of the header and the payload
-> so no false positive run-time overflow warning will be generated. This
-> results in the already inlined memcpy getting unrolled a little more,
-> which very slightly increases text size:
-> 
-> $ size drivers/hv/vmbus_drv.o.before drivers/hv/vmbus_drv.o
->    text    data     bss     dec     hex filename
->   22968    5239     232   28439    6f17 drivers/hv/vmbus_drv.o.before
->   23032    5239     232   28503    6f57 drivers/hv/vmbus_drv.o
-> 
-> Avoids the run-time false-positive warning:
-> 
->   memcpy: detected field-spanning write (size 212) of single field "&ctx->msg" at drivers/hv/vmbus_drv.c:1133 (size 16)
-> 
-> [1] https://lore.kernel.org/linux-hardening/20220901065914.1417829-2-keescook@chromium.org/
-> 
-> Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-> Cc: Haiyang Zhang <haiyangz@microsoft.com>
-> Cc: Stephen Hemminger <sthemmin@microsoft.com>
-> Cc: Wei Liu <wei.liu@kernel.org>
-> Cc: Dexuan Cui <decui@microsoft.com>
-> Cc: linux-hyperv@vger.kernel.org
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Reported-by: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Applied to hyperv-next. Thanks.
+Commit-ID:     27c0141e094e45e875ccc1f299458db6433c1e55
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/27c0141e094e45e875ccc1f299458db6433c1e55
+Author:        Frank Li <Frank.Li@nxp.com>
+AuthorDate:    Thu, 22 Sep 2022 11:12:44 -05:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Wed, 28 Sep 2022 14:24:32 +01:00
+
+dt-bindings: irqchip: Describe the IMX MU block as a MSI controller
+
+I.MX MU supports generating IRQs by writing to a register.
+
+Describe its use as a MSI controller so that other blocks (such as a PCI EP)
+can use it directly.
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+[maz: commit message]
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220922161246.20586-5-Frank.Li@nxp.com
+---
+ Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml |  99 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 99 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml
+
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml b/Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml
+new file mode 100644
+index 0000000..799ae5c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml
+@@ -0,0 +1,99 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/fsl,mu-msi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Freescale/NXP i.MX Messaging Unit (MU) work as msi controller
++
++maintainers:
++  - Frank Li <Frank.Li@nxp.com>
++
++description: |
++  The Messaging Unit module enables two processors within the SoC to
++  communicate and coordinate by passing messages (e.g. data, status
++  and control) through the MU interface. The MU also provides the ability
++  for one processor (A side) to signal the other processor (B side) using
++  interrupts.
++
++  Because the MU manages the messaging between processors, the MU uses
++  different clocks (from each side of the different peripheral buses).
++  Therefore, the MU must synchronize the accesses from one side to the
++  other. The MU accomplishes synchronization using two sets of matching
++  registers (Processor A-side, Processor B-side).
++
++  MU can work as msi interrupt controller to do doorbell
++
++allOf:
++  - $ref: /schemas/interrupt-controller/msi-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - fsl,imx6sx-mu-msi
++      - fsl,imx7ulp-mu-msi
++      - fsl,imx8ulp-mu-msi
++      - fsl,imx8ulp-mu-msi-s4
++
++  reg:
++    items:
++      - description: a side register base address
++      - description: b side register base address
++
++  reg-names:
++    items:
++      - const: processor-a-side
++      - const: processor-b-side
++
++  interrupts:
++    description: a side interrupt number.
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  power-domains:
++    items:
++      - description: a side power domain
++      - description: b side power domain
++
++  power-domain-names:
++    items:
++      - const: processor-a-side
++      - const: processor-b-side
++
++  interrupt-controller: true
++
++  msi-controller: true
++
++  "#msi-cells":
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-controller
++  - msi-controller
++  - "#msi-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/firmware/imx/rsrc.h>
++
++    msi-controller@5d270000 {
++        compatible = "fsl,imx6sx-mu-msi";
++        msi-controller;
++        #msi-cells = <0>;
++        interrupt-controller;
++        reg = <0x5d270000 0x10000>,     /* A side */
++              <0x5d300000 0x10000>;     /* B side */
++        reg-names = "processor-a-side", "processor-b-side";
++        interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
++        power-domains = <&pd IMX_SC_R_MU_12A>,
++                        <&pd IMX_SC_R_MU_12B>;
++        power-domain-names = "processor-a-side", "processor-b-side";
++    };
