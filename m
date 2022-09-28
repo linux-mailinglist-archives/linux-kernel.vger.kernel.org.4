@@ -2,123 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522065EDD97
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D0C5EDD9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbiI1NU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 09:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
+        id S229885AbiI1NXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 09:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbiI1NUY (ORCPT
+        with ESMTP id S233327AbiI1NXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 09:20:24 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7146578585
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 06:20:22 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id a8so20303467lff.13
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 06:20:22 -0700 (PDT)
+        Wed, 28 Sep 2022 09:23:45 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F3DA1A59
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 06:23:44 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id cc5so19793116wrb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 06:23:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=U36NjhsAwog7/X0GNMxs2kFxhhnbeKSocGnUpytYWXI=;
-        b=fOYSihQMzyuZDyv4JUnGdl/v+/+kIk2FAZPwNqiSy2uDxtAaQzoYXK8MbFTp9pJyvt
-         p/sBRodRkv7xYW58vhqAkdZUkP02VVZjJ8QzNhhxfWBXrG3kBMtGQkaE+vI+lYjd3gSV
-         B/a5PqZPVllsDJwdAcv89FE88sFQc8VXV0DGMAwdiMm3L80vyHUDn/aadd4xAJoxAdJr
-         EPjNLMDaaRm1wDdy+PC/zVY0FtzOHZKuX/UksYVHjKBH0r52ZBifs4DCviYmRG6Fq0NO
-         97CCzK56A3Si7MgXcyGHP613wwSCQfYVtkVUk23zD40sc77RAbRlIYcYTssZOUIbQYEA
-         woCA==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date;
+        bh=7NfAh4IDJO5OpQPrNz1bZm64Hhig0ttigWq2pw/+PUY=;
+        b=p2x+JuRi6W3dWNl/F8DS5j+Pk/6DK2VoBJOUP8I/JodSe5kDHi8Avtamecz/8ow3sw
+         bYoOOVd1nLR8ZCKkiy+g+pkjstv0HZDhJxCWNNNZzIolgAed6MDAcIqb9YwAAQdxEvj6
+         F62ApYAwVdw5Wrm2BqnyOIfg6N0RaezZ9QfiLDvCDEroXnoGQ3eZDNczIZ4PpfF7ZdF2
+         6uhpmL9oTM8ZaMISGjxqQSL4vk4IeaurBhT8mBTcGrHOHZbb3m1yL+I+lKZ2Q9LDX7iC
+         85EEHl02gTse0A4S86dEi3GpM6RLv8eFHuc6fhoUy95pkYVFJ2/VhGKGj0I3Vg1mkAb7
+         JzTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=U36NjhsAwog7/X0GNMxs2kFxhhnbeKSocGnUpytYWXI=;
-        b=PKAu1jw72wQ1eH8TatVWHSffMhwe4A3uv8QNoHp2RDeV7/ks+E0FLQd06GQ3H4wwi6
-         jOcKvWNomApX8DrYjAGfjpKHY85Iu10MzukUVeosYYHa7EAHoEU9qxXiuMIrVYkQYThK
-         cInQaJP6HXQf4wf84c49yxbACKU9H+KtTeTA9CrB30oHYN3ceqOHIQhnsXGxOGkGpz6l
-         fxDFLpbDnbJLGVntg5pnfYB2I77f2ADn1aXCSGxO4VapblJND9Z81lQPQoKadsOuXWMi
-         kL2vDLhwTa/rJRkX05bnMoVaDFw8EyHm7NFxuAP6AqQsh/9ujopJWaUUqMcyvsWjRBH3
-         OLrg==
-X-Gm-Message-State: ACrzQf2pjZ1PHxcOpcOQi98rYl2Aeyq4v0LcevWltBqV9W6cjC3oIQl9
-        ClSin/WgYkeqXF99Bm+5L89jYQ==
-X-Google-Smtp-Source: AMsMyM7MhlrItXEwdt3Vv00VMHy5nJueDqpMgvsGytSWYaxV1mPq5Uux6Ggg9crZH7sLVRMRe8mroQ==
-X-Received: by 2002:a05:6512:3052:b0:49e:fcb2:c1e9 with SMTP id b18-20020a056512305200b0049efcb2c1e9mr12355824lfb.260.1664371220823;
-        Wed, 28 Sep 2022 06:20:20 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id p11-20020ac246cb000000b00497ad9ae486sm478484lfo.62.2022.09.28.06.20.19
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=7NfAh4IDJO5OpQPrNz1bZm64Hhig0ttigWq2pw/+PUY=;
+        b=pNI5yWT8xcSfAKLrLngDWnjg2RPUcU1PwwKZJhKNfkdWh3qQurDEUElSsQXhAd04VN
+         WYbdfZXyxo3r6ujl4T/KN+KMAJeq1NAL9ePW/WNZdvv6XKAeIKL6/WZZnjb3Fd1IZQY7
+         IRHfor03PWmSJa3n1IWpIxaw2dV/O/XTA6TzGFQeKqVzN8xehk1uyFa+BMIR619sQFNy
+         bQrXfRDy+PTzwaMX7+yiEm3ECMUz9EiWpN+6YTkRYl/tSVoQwav2dIJlm49Hswmp9n3i
+         3AdQOXaThVRqmo09BuelEJ7OIlOHqgaC6PP39pUf88hCplHxXT2l+7QXsJl2+Dyz/AWa
+         iX1w==
+X-Gm-Message-State: ACrzQf14eEh8gVLXe2diZeF6Xryqj7T6NdyvfIrpro1e4ahyZBjhQF2U
+        COLuvbKOGY0U5T/ci5CSJkh1IeDFdA==
+X-Google-Smtp-Source: AMsMyM4b1Y91VhoOy7rWb9h/HEx+gSbss6rKalCIcO7obMzfFEeAL3kXPHkYqjZQ7ousNls9iJnsVg==
+X-Received: by 2002:a05:6000:547:b0:218:5f6a:f5db with SMTP id b7-20020a056000054700b002185f6af5dbmr21031288wrf.480.1664371423216;
+        Wed, 28 Sep 2022 06:23:43 -0700 (PDT)
+Received: from octinomon ([2a00:23c8:2f02:3b01:3ea1:40:8650:189])
+        by smtp.gmail.com with ESMTPSA id a5-20020a1cf005000000b003b4764442f0sm1739525wmb.11.2022.09.28.06.23.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 06:20:20 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        Wed, 28 Sep 2022 06:23:42 -0700 (PDT)
+From:   Jules Irenge <jbi.octave@gmail.com>
+X-Google-Original-From: Jules Irenge <jules.irenge@postgrad.manchester.ac.uk>
+Date:   Wed, 28 Sep 2022 14:23:41 +0100
+To:     gregkh@linuxfoundation.org
+Cc:     hsweeten@visionengravers.com, abbotti@mev.co.uk,
         linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] slimbus: qcom-ngd-ctrl: drop PM runtime counter on transfer error paths
-Date:   Wed, 28 Sep 2022 15:20:11 +0200
-Message-Id: <20220928132011.455347-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220928132011.455347-1-krzysztof.kozlowski@linaro.org>
-References: <20220928132011.455347-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] comedi: Convert snprintf() to sysfs_emit()
+Message-ID: <YzRK3Ye3FKTe8p4y@octinomon>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If transfer in qcom_slim_ngd_xfer_msg_sync() fails, we need to drop the
-PM runtime usage counter to have it balanced.
+Coccinnelle reports a warning
+Warning: Use scnprintf or sprintf
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Adding to that, there has been a slow migration from snprintf to scnprintf.
+This LWN article explains the rationale for this change
+
+https: //lwn.net/Articles/69419/
+ie. snprintf() returns what *would* be the resulting length,
+ while scnprintf() returns the actual length.
+
+However following the advice on
+https://www.kernel.org/doc/html/latest/filesystems/sysfs.html
+
+For show(device *...) functions we should only use sysfs_emit() or sysfs_emit_at()
+ especially when formatting the value to be returned to user space.
+
+Hence here
+We convert to sysfs_emit() that even does better and shorten the code
+using the same rationale of scnprintf()
+
+Signed-off-by: Jules Irenge <jules.irenge@postgrad.manchester.ac.uk>
 ---
- drivers/slimbus/qcom-ngd-ctrl.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
-index ba36eb5c0de3..ac84fdc2822f 100644
---- a/drivers/slimbus/qcom-ngd-ctrl.c
-+++ b/drivers/slimbus/qcom-ngd-ctrl.c
-@@ -919,21 +919,29 @@ static int qcom_slim_ngd_xfer_msg_sync(struct slim_controller *ctrl,
- 	DECLARE_COMPLETION_ONSTACK(done);
- 	int ret, timeout;
+v2: Replace scnprintf() with sysfs_emit()
+
+ drivers/comedi/comedi_fops.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/comedi/comedi_fops.c b/drivers/comedi/comedi_fops.c
+index 55a0cae04b8d..a6017fafcb2a 100644
+--- a/drivers/comedi/comedi_fops.c
++++ b/drivers/comedi/comedi_fops.c
+@@ -396,7 +396,7 @@ static ssize_t max_read_buffer_kb_show(struct device *csdev,
+ 	mutex_unlock(&dev->mutex);
  
--	pm_runtime_get_sync(ctrl->dev);
-+	ret = pm_runtime_get_sync(ctrl->dev);
-+	if (ret < 0)
-+		goto pm_put;
- 
- 	txn->comp = &done;
- 
- 	ret = qcom_slim_ngd_xfer_msg(ctrl, txn);
- 	if (ret)
--		return ret;
-+		goto pm_put;
- 
- 	timeout = wait_for_completion_timeout(&done, HZ);
- 	if (!timeout) {
- 		dev_err(ctrl->dev, "TX timed out:MC:0x%x,mt:0x%x", txn->mc,
- 				txn->mt);
--		return -ETIMEDOUT;
-+		ret = -ETIMEDOUT;
-+		goto pm_put;
- 	}
- 	return 0;
-+
-+pm_put:
-+	pm_runtime_put(ctrl->dev);
-+
-+	return ret;
+ 	comedi_dev_put(dev);
+-	return snprintf(buf, PAGE_SIZE, "%u\n", size);
++	return sysfs_emit(buf, "%u\n", size);
  }
  
- static int qcom_slim_ngd_enable_stream(struct slim_stream_runtime *rt)
+ static ssize_t max_read_buffer_kb_store(struct device *csdev,
 -- 
-2.34.1
+2.37.3
 
