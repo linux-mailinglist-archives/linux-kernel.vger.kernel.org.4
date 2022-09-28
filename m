@@ -2,135 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027115ED7F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95665ED807
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbiI1Igb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        id S233221AbiI1Ijz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233062AbiI1IgZ (ORCPT
+        with ESMTP id S233134AbiI1IjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:36:25 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613A69DDB9
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:36:24 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id b5so11603653pgb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=uwSOve/81KIYjst9n3pRzNvaQgmpZogrRPtc/KOwrbY=;
-        b=fVdLIjCzXskYCPFBD7V4kHnhC3YY9gmFDy66aJl80T2WgiPe/7Hi+MfBtayhy+WqL3
-         Tzk/Edsy1ghw5D0K6w5Bzfqhh4ts9yfprsNZVdsbY45L9ai9CBbPnkucK3/tVkv5nFDN
-         AV3SeWrM90xe6swRhTSqLavbOG5qKsrT43fFBicfeEOlYV7PWtXZoZlGjQAltUXPMUEf
-         unDLtZ/cx3ni9i9gAOb/2Sg03j3oPSzefOpYvJSpyIalKoqINrdpHL9uqKnJj/sU8jtb
-         L06uoo5v5cjHcKGhj1OaUBg9FTpqzLmSpuDTWS25611Dl80jTfLLeGJSlSty1xgd9RWK
-         3qfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=uwSOve/81KIYjst9n3pRzNvaQgmpZogrRPtc/KOwrbY=;
-        b=kk4vW2Qnypc2kmDlW8K8F0uxpXBc7OzWvITzRN9EYJdUeEpBQQsyW5TQ8Sbz4bYlzg
-         wSYPuyK8SKfEuLyJVh49Goy/u1PMh1703SPEorhIndV3v5QR16mtg6SIT2yMMkLTm8gm
-         Ci+MXCci6KlIqhMXSt6OvZSWLPkH39+mkzXuMlc3jdWLSCMUpJdCkW7Pj5ggxpapfYL7
-         k2zR3shkU+NvPy5OJz2KCCxbOSeoSMQ9jiGUbhw1/LKnswUVBAFxdqO079GN63M/0E8P
-         4KmjVV9nycBiXVvfEKIY5l4YfyV6yzXCZ2gyN0zgH4fV5bA24O4YgYgdEyGlbxvz9sgl
-         71Uw==
-X-Gm-Message-State: ACrzQf1f4N+6ZVko8ksbckLsCdKrzehXwluybMFmwp/6qYawVNMiQwLT
-        uDkEdw3T7TJRnETNkp6RUqU=
-X-Google-Smtp-Source: AMsMyM4ZQHWSb1aqIiBySy0Xbx9HGL0uAAjV9wv/7Ewg+qbpNrsajGsi6IckX04ALplBhcmHudrfmg==
-X-Received: by 2002:a63:4a20:0:b0:43c:428d:1783 with SMTP id x32-20020a634a20000000b0043c428d1783mr23129554pga.189.1664354183850;
-        Wed, 28 Sep 2022 01:36:23 -0700 (PDT)
-Received: from strix-laptop (2001-b011-20e0-1b32-d148-19d6-82fa-6094.dynamic-ip6.hinet.net. [2001:b011:20e0:1b32:d148:19d6:82fa:6094])
-        by smtp.gmail.com with ESMTPSA id p17-20020a170902e75100b00179eaf275d5sm3067951plf.27.2022.09.28.01.36.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 01:36:23 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 16:36:15 +0800
-From:   Chih-En Lin <shiyn.lin@gmail.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Xu <peterx@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Li kunyu <kunyu@nfschina.com>, Nadav Amit <namit@vmware.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <shy828301@gmail.com>, Song Liu <song@kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dinglan Peng <peng301@purdue.edu>,
-        Pedro Fonseca <pfonseca@purdue.edu>,
-        Jim Huang <jserv@ccns.ncku.edu.tw>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>
-Subject: Re: [RFC PATCH v2 2/9] mm: pgtable: Add sysctl to enable COW PTE
-Message-ID: <YzQHf8DOogqejrlP@strix-laptop>
-References: <20220927162957.270460-1-shiyn.lin@gmail.com>
- <20220927162957.270460-3-shiyn.lin@gmail.com>
- <7db06e3d-5e00-2b8e-ea46-fbcdb82c4416@nvidia.com>
+        Wed, 28 Sep 2022 04:39:25 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72335A0279
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664354363; x=1695890363;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Nh8zVkI764C79JD/zOGUpjoTiHdV4xPlRb3vpHlIbd4=;
+  b=R3TMPCjr9CUyH3KBzXsdx19JE2bvGJaVMzFXGVY+oJ8EYO2C8ip0fmsD
+   S1j5dPhIOslbUe3HIGIdFFmff3rw2sc5PgN/76E6bJI/4j88pZHSZgbTM
+   wC6pf3aETcumgGbHhREC47ojiVIc9IB5qrbjqy4M4inXxOB1MphSY9ayY
+   yOo/d9jyKSQhUvQu57EUgK/4UkRk491IfRZSNA16uAeU5cpr9+aFZ9lTV
+   o+Dk4gsVJ+JzbPStVmRqUhusAB3xqf1X1ulQldsBvOwPIq8KBqVCGISUq
+   +suvpSxjYMmeDPrida7UkelU6W2CGvq2RLcoNhX96ILl6YOZwW76vw9O4
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="288701789"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="288701789"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 01:39:22 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="617131356"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="617131356"
+Received: from morank-mobl3.ger.corp.intel.com (HELO [10.251.211.7]) ([10.251.211.7])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 01:39:17 -0700
+Message-ID: <9cb844a7-6eac-0085-3c8c-32004a22c849@linux.intel.com>
+Date:   Wed, 28 Sep 2022 10:36:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7db06e3d-5e00-2b8e-ea46-fbcdb82c4416@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH] ASoC: soc-pcm: fix fe and be race when accessing
+ substream->runtime
+Content-Language: en-US
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     Yanmin Zhang <yanmin_zhang@linux.intel.com>,
+        alsa-devel@alsa-project.org,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>,
+        Jiada Wang <jiada_wang@mentor.com>,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Zhang Yanmin <yanmin.zhang@intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Ramesh Babu <ramesh.babu@intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Dean Jenkins <Dean_Jenkins@mentor.com>,
+        Mark Brown <broonie@kernel.org>,
+        Ramesh Babu B <ramesh.babu.b@intel.com>,
+        xiao jin <jin.xiao@intel.com>
+References: <1664210154-11552-1-git-send-email-erosca@de.adit-jv.com>
+ <bdf56f23-1019-b4c8-a11a-3934db432cf1@linux.intel.com>
+ <20220927123043.GB4547@lxhi-065>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220927123043.GB4547@lxhi-065>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 02:22:27PM -0700, John Hubbard wrote:
-> > +extern int sysctl_cow_pte_pid;
->
-> So are setting a global value, to a single pid?? Only one pid at a time
-> can be set up?
->
-> I think that tells you already that there is a huge API problem here.
->
-> As the other thread with Nadav said, this is not a sysctl. It wants to
-> be a prctl(), at least the way things look so far.
 
-I will change it to use the prctl().
-Probably it will be under PR_SET_MM or create a new option.
 
-> > +static void set_cow_pte_task(void)
-> > +{
-> > +   struct pid *pid;
-> > +   struct task_struct *task;
-> > +
-> > +   pid = find_get_pid(sysctl_cow_pte_pid);
->
-> This seems to be missing a corresponding call to put_pid().
+On 9/27/22 14:30, Eugeniu Rosca wrote:
+> Hi Pierre,
+> 
+> On Di, Sep 27, 2022 at 09:51:46 +0200, Pierre-Louis Bossart wrote:
+>> On 9/26/22 18:35, Eugeniu Rosca wrote:
+>>> From: xiao jin <jin.xiao@intel.com>
+>>>
+>>> After start of fe and be, fe might go to close without triggering
+>>> STOP, and substream->runtime is freed. However, be is still at
+>>> START state and its substream->runtime still points to the
+>>> freed runtime.
+>>>
+>>> Later on, FE is opened/started again, and triggers STOP.
+>>> snd_pcm_do_stop => dpcm_fe_dai_trigger
+>>>                 => dpcm_fe_dai_do_trigger
+>>>                 => dpcm_be_dai_trigger
+>>>                 => dpcm_do_trigger
+>>>                 => soc_pcm_trigger
+>>>                 => skl_platform_pcm_trigger
+>>> skl_platform_pcm_trigger accesses the freed old runtime data and
+>>> kernel panic.
+>>>
+>>> The patch fixes it by assigning be_substream->runtime in
+>>> dpcm_be_dai_startup when be's state is START.
+>>
+>> Can I ask on which kernel this patch was validated and on what platform?
+> 
+> As shared with Czarek in https://lore.kernel.org/alsa-devel/20220927110022.GA3802@lxhi-065/ ,
+> this patch was originally extracted from the out-of-tree Intel Apollo
+> Lake v4.1 KNL releases, hence it was validated on Intel ref.boards.
+> 
+> No re-testing/re-validation has been performed on the latest vanilla.
 
-Thanks.
+There's no way to predict how a patch for a kernel 4.1 - released 7
+years ago - would behave with a new kernel. If it's not tested it cannot
+be merged.
 
-> thanks,
->
-> --
-> John Hubbard
-> NVIDIA
->
+> One of the goals behind submitting the patch is getting in touch
+> with the original authors, as well as the members of alsa-devel,
+> to assess if the patch is still relevant.
 
-Best regards,
-Chih-En Lin
+The only thing we could do is have more clarity on the test case and try
+to reproduce it.
+
+>>
+>> We've done a lot of work since last year on DPCM states, 
+> 
+> Could you please feedback if the work on the DPCM states is
+> pre- or post-v5.10?
+
+It doesn't matter for this discussion on the upstream kernel. But yes
+it's post v5.10.
+
+> 
+>> and I wonder
+>> the problem mentioned above actually exists on recent kernels.
+>>
+>> Specifically, if the FE is closed, I don't get how the BE is not closed
+>> as well. And if this problem is found on a recent kernel, then it should
+>> be seen in the AVS driver as well, no?
+> 
+> It is totally conceivable (if not very likely) that the mainline
+> advancements in the sound subsystem make this patch obsolete.
+> 
+> I would be happy if that's the final outcome of our discussion
+> (since this will allow dropping the patch in our downstream kernel).
+> 
+> Best Regards,
+> Eugeniu
