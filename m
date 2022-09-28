@@ -2,125 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E72A5EE946
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 00:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 710975EE94C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 00:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbiI1WTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 18:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
+        id S234435AbiI1WV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 18:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232298AbiI1WTg (ORCPT
+        with ESMTP id S234264AbiI1WVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 18:19:36 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CA3B91
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 15:19:35 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 83004C01E; Thu, 29 Sep 2022 00:19:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1664403573; bh=s8v7euaD+Iw8Rlbt89l6wSiw8vlpRm5+S9b6T6Y34jM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bjKKgo02VyBfUDesqIscXbdMQ+WAfJkenJJ0PDjW3Qu9Uc0QwV4rnJCi1BC8XqqkB
-         wFC2LHZZ+Yr9NR6CkWrOISv2N26h9IDeRTjetCE7/c76ozRz+TtpAxFHDRe2sZWF48
-         t4KBaCuk6F81M4kOZDlFBX/+3sFje4SlrZK1XQHnUZBNjg4D0HpJeQpdSw/aeq2cqZ
-         SRupt5WBZQlH1v2VTrQMI+pI+BcbzRN2KaVYGih0cSsl/KPkGv4M8P+VRIwRjEZlzC
-         zKuBjPdthbH/9gUI0aSDdN7XL//OZUxBW72jbPn3CRwrFY8+3kuWEuBIxKmVDMG6XA
-         4hhR1IFVAqIAw==
+        Wed, 28 Sep 2022 18:21:21 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF60F185B;
+        Wed, 28 Sep 2022 15:21:18 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id e10-20020a05600c4e4a00b003b4eff4ab2cso2154579wmq.4;
+        Wed, 28 Sep 2022 15:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Wi426/C5OCiR5xNNz3hvTRVexYsTtTPGdXxj34f8Kp8=;
+        b=JiEggR/MF06JHR5dYMCJei+y1uf0Yd+FZSPdr2e+9UtML22r1XBe8igzZYuvp//D56
+         Bl5C3LVTW485F7h9pHFIugWD+8merXwEAu8+Vkl1DdEcME7JfuB9guoYx+o6/39NIgRl
+         BUHCnAjV3/ytFTZ6DqK8rW8yJo0z3RJBhr/wBLRTWUxAkR4tcfYqTZlVwn+x35ByIVdF
+         17MhGjQpDhbN74tmI8UyRs4W2IckugZw3J25sIgUhk3e6+e6FIWRX0XxLGe7mA3Rgw8/
+         EUDryQoTIuVIX3l96Q0um2zn4RsPk91A5FdZM5ICUxvdv2+N4Vlk/7u/kmF/kUXjqPg6
+         z5TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Wi426/C5OCiR5xNNz3hvTRVexYsTtTPGdXxj34f8Kp8=;
+        b=nGGU8x5bA6FH4KgxRzAZwzvrIG+db5rEOeWKdwKb4XkCj3oyF+A+OSGfi9I5TPkoFJ
+         1kjBkUxk9OZ7vNTqp8ohZrBoyTGqvCzutZT379rs9sasOe1QrCLF9P83xYBhmbDghNFx
+         S87R6F4tTyD4W6BwrgfG944es/J+F5zJDtmuNrd7MFA7Ak6TpDzveTy7kpOV1JsnCDA/
+         OLltr/HkYBD1qH1rLu6vrwx50aesqqfmPltPcPnIMncPuw0aOpJZowhxcViIrXMbhB8o
+         2ymuhOojq0ETu5Pas8Qqa7Mehm4MSMHcCxJW9+05KE2Ksh7qUSqXx07Eu54bKntitUxv
+         6BOw==
+X-Gm-Message-State: ACrzQf268FQgu9w3Mn7/K2QeKTRsW5G2FKIQBDicH+j5IYeW+Gthkxzr
+        ugTgb7iCUdyo9ztFNJftVlk=
+X-Google-Smtp-Source: AMsMyM7sjJNt8F/25DP65Qd9rESmJhYbPfew3piOcnzoKjMMnGPyN4Ylz7RtgSB7vCCj0qGJ69gByg==
+X-Received: by 2002:a7b:ca53:0:b0:3b4:90c4:e07 with SMTP id m19-20020a7bca53000000b003b490c40e07mr127772wml.150.1664403677213;
+        Wed, 28 Sep 2022 15:21:17 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id 2-20020a05600c228200b003a6a3595edasm2753094wmf.27.2022.09.28.15.21.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 15:21:16 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: lpfc: Fix spelling mistake "unsolicted" -> "unsolicited"
+Date:   Wed, 28 Sep 2022 23:21:16 +0100
+Message-Id: <20220928222116.68294-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id C38ADC009;
-        Thu, 29 Sep 2022 00:19:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1664403571; bh=s8v7euaD+Iw8Rlbt89l6wSiw8vlpRm5+S9b6T6Y34jM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ox6s95DptvlFBuo1ui9DuVQpX3L9L+dkPkIzGxN+NGTqYNDtz5QoiJ3lj26mZFcnH
-         aw/zkXbTd9oT/pJHr74ciAYbYjq76OprOEswHbjRmA+XBEfa/f7C7pRqXZ4oRwoOV2
-         5F56au5wAOMNejb05sim3xlzmyCrxP+NwB9T5KHs+fGmK0GLUuOhcNXiYSHIffQfb1
-         Ipj28OrzztVgxqFmv9j7CYg7+iHPwBCxDeBgjn8hLhJ98Pl2illvt+YhQMDHRHe8av
-         JXtELYFFphefvYYXqCZddXRDqJy6gmc3slOgUvHGJ4jpQUF6ZfA159DAkWGTa2aDj4
-         qvi1vADRqPFBg==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 8a009fd5;
-        Wed, 28 Sep 2022 22:19:27 +0000 (UTC)
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     v9fs-developer@lists.sourceforge.net
-Cc:     Leon Romanovsky <leon@kernel.org>, linux_oss@crudebyte.com,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com
-Subject: [PATCH v3] 9p: client_create/destroy: only call trans_mod->close after create
-Date:   Thu, 29 Sep 2022 07:19:23 +0900
-Message-Id: <20220928221923.1751130-1-asmadeus@codewreck.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220928215800.1749929-1-asmadeus@codewreck.org>
-References: <20220928215800.1749929-1-asmadeus@codewreck.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-destroy code would incorrectly call close() if trans_mod exists after some
-hasty code cleanup: we need to make sure we only call close after create
+There are spelling mistakes in a log message and two comments. Fix them.
 
-Link: https://lkml.kernel.org/r/20220928214417.1749609-1-asmadeus@codewreck.org
-Link: https://lkml.kernel.org/r/00000000000015ac7905e97ebaed@google.com
-Reported-by: syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com
-Reported-by: Leon Romanovsky <leon@kernel.org>
-Fixes: 3ff51294a055 ("9p: p9_client_create: use p9_client_destroy on failure")
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
-v1->v2: also reset trans on create error
-v2->v3: fix silly compile errors
+ drivers/scsi/lpfc/lpfc_bsg.c | 4 ++--
+ drivers/scsi/lpfc/lpfc_ct.c  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Sorry for the multiple mails, that's what I get for not even doing basic
-tests before talking...
-
- net/9p/client.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/net/9p/client.c b/net/9p/client.c
-index bfa80f01992e..41e825a8da7c 100644
---- a/net/9p/client.c
-+++ b/net/9p/client.c
-@@ -971,6 +971,7 @@ struct p9_client *p9_client_create(const char *dev_name, char *options)
- 	spin_lock_init(&clnt->lock);
- 	idr_init(&clnt->fids);
- 	idr_init(&clnt->reqs);
-+	clnt->trans = ERR_PTR(-EINVAL);
- 
- 	err = parse_opts(options, clnt);
- 	if (err < 0)
-@@ -990,8 +991,14 @@ struct p9_client *p9_client_create(const char *dev_name, char *options)
- 		 clnt, clnt->trans_mod, clnt->msize, clnt->proto_version);
- 
- 	err = clnt->trans_mod->create(clnt, dev_name, options);
--	if (err)
-+	// ensure clnt->trans is initialized to call close() on destroy
-+	// if and only if create succeeded
-+	if (err < 0) {
-+		clnt->trans = ERR_PTR(err);
- 		goto out;
-+	}
-+	if (IS_ERR(clnt->trans))
-+		clnt->trans = NULL;
- 
- 	if (clnt->msize > clnt->trans_mod->maxsize) {
- 		clnt->msize = clnt->trans_mod->maxsize;
-@@ -1036,7 +1043,7 @@ void p9_client_destroy(struct p9_client *clnt)
- 
- 	p9_debug(P9_DEBUG_MUX, "clnt %p\n", clnt);
- 
--	if (clnt->trans_mod)
-+	if (clnt->trans_mod && !IS_ERR(clnt->trans))
- 		clnt->trans_mod->close(clnt);
- 
- 	v9fs_put_trans(clnt->trans_mod);
+diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
+index ac0c7ccf2eae..852b025e2fec 100644
+--- a/drivers/scsi/lpfc/lpfc_bsg.c
++++ b/drivers/scsi/lpfc/lpfc_bsg.c
+@@ -2582,7 +2582,7 @@ static int lpfcdiag_loop_self_unreg(struct lpfc_hba *phba, uint16_t rpi)
+  *
+  * This function obtains the transmit and receive ids required to send
+  * an unsolicited ct command with a payload. A special lpfc FsType and CmdRsp
+- * flags are used to the unsolicted response handler is able to process
++ * flags are used to the unsolicited response handler is able to process
+  * the ct command sent on the same port.
+  **/
+ static int lpfcdiag_loop_get_xri(struct lpfc_hba *phba, uint16_t rpi,
+@@ -2874,7 +2874,7 @@ diag_cmd_data_alloc(struct lpfc_hba *phba,
+  * @len: Number of data bytes
+  *
+  * This function allocates and posts a data buffer of sufficient size to receive
+- * an unsolicted CT command.
++ * an unsolicited CT command.
+  **/
+ static int lpfcdiag_sli3_loop_post_rxbufs(struct lpfc_hba *phba, uint16_t rxxri,
+ 					  size_t len)
+diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
+index 75fd2bfc212b..e941a99aa965 100644
+--- a/drivers/scsi/lpfc/lpfc_ct.c
++++ b/drivers/scsi/lpfc/lpfc_ct.c
+@@ -90,7 +90,7 @@ lpfc_ct_ignore_hbq_buffer(struct lpfc_hba *phba, struct lpfc_iocbq *piocbq,
+ 				get_job_ulpstatus(phba, piocbq));
+ 	}
+ 	lpfc_printf_log(phba, KERN_INFO, LOG_ELS,
+-			"0145 Ignoring unsolicted CT HBQ Size:%d "
++			"0145 Ignoring unsolicited CT HBQ Size:%d "
+ 			"status = x%x\n",
+ 			size, get_job_ulpstatus(phba, piocbq));
+ }
 -- 
-2.35.1
+2.37.1
 
