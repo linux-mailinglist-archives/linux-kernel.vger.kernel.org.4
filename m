@@ -2,147 +2,900 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611035ED67E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE915ED674
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233794AbiI1Hk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S232862AbiI1HlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233713AbiI1Hj6 (ORCPT
+        with ESMTP id S231419AbiI1HkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:39:58 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34840110EE4;
-        Wed, 28 Sep 2022 00:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1664350691; x=1695886691;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=G8FZ0D3PP/OudJ5uuxCAz/C/vBHo8wESZoPwxTWqVEI=;
-  b=rpOi0Q2ALpGwzM/TFxK8texThSRml1GCO/xsNenobts9GiYBOrLawve7
-   Gc5dd1dU1baVDxraa91TxQEw/BAbsJDIJAxmnSrbNDAupxKwA/O60hAXs
-   IPMN/10MnH4BiqMfbyh1TnyERLb/6xohcSgi5mnoE1TB/P6Q6ZISSDEFL
-   Fl/cjt18zWbguVpqlhAkoeDcJK6BiEtE9phSD+zZ6z94QuqwysuS3/B8Y
-   fbkojoZqdqWyw1WpOh4Znctqu/2hRa6DmMYmyZj5uy3KWQxwnLSLNj1cV
-   4H+VJysofQ25/ftLJAnWhBht0a5y9Y2WO9kM/oEw/QYOD8aTgn9IYfQ/V
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,351,1654531200"; 
-   d="scan'208";a="210828496"
-Received: from mail-sn1anam02lp2048.outbound.protection.outlook.com (HELO NAM02-SN1-obe.outbound.protection.outlook.com) ([104.47.57.48])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Sep 2022 15:38:07 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m9wV5BpB5br1lpl7eBrDyI3K1SYcnmqnkJMzbyxxdROrNCRD5DfI6a+OcA6KpCUOFD7CYK7tAgHJa0ookxTKnnUOTZmJZVvUrh1Rnb+8N5A1nubt4qmGtXYVqxrIxPavLQSlZLWNRqYE8cMblWhgjYkvXi5zrGBzJw/NW7q+0pFpcuqLNVJMO6TAXkt98h5jt41EKOi98QfiaSYvyh6rrFMpsxBoGndhODsfMTVJsuhU1OYXBOU7a+LKXJPE2TkcxWnP+EPToGlVIV7YUE2ufborhuESeuI6ZjbHlx/vw/pZc7X3smAQyoh43UfKWNPUGyUXI79/m0yn5g+iJRLuyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G8FZ0D3PP/OudJ5uuxCAz/C/vBHo8wESZoPwxTWqVEI=;
- b=Es2CeZ0Mu488FYmrhlACYiIM9b5xVcv3Vd5FSVUCLyp05i9MrLc7+kicZSlxsnaaQ01vgdqoZ+mMi89xfLG6rhEaj0UJYz1AyN3ohWwnvMqht6+mg60+W6cYzJdp80/DULMAhgcao7ZgJzJZA4rVTFpnNXXNZsYecl+g4ll1cbI9JmiYVtwNFMiPbaffvhCZ/1ZtoCm+ts0Y1EVN/LyJIofYkVAi8UZDv9jf+TCr6HmBUD8iP2OL3/Zmvda118yGeW9QiNWNFVVQsVBB/GYtofp53+/5jr6YLOE9VM4yr7ilHYI2WLHOmANlbA5CRzg2KSw7S/b4B4OMMmcNviG+Lw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G8FZ0D3PP/OudJ5uuxCAz/C/vBHo8wESZoPwxTWqVEI=;
- b=PutPtMw5E/IS0Pjr/opngLvcmbU5ul9OMHjmqaEwuhPJxHCaBbu4uxx43YloNll+dB7Pngo15RKnTg/AkUOcA7Wi4rw6BkGnL6skDkW99NUTK5l2pOixFG2vpDefqquWxfkTWXE0Grl/Cnttuxc4dSvILPw+3Etya2jM9TozxmQ=
-Received: from PH0PR04MB7416.namprd04.prod.outlook.com (2603:10b6:510:12::17)
- by CH2PR04MB6726.namprd04.prod.outlook.com (2603:10b6:610:95::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Wed, 28 Sep
- 2022 07:38:04 +0000
-Received: from PH0PR04MB7416.namprd04.prod.outlook.com
- ([fe80::bc05:f34a:403b:745c]) by PH0PR04MB7416.namprd04.prod.outlook.com
- ([fe80::bc05:f34a:403b:745c%8]) with mapi id 15.20.5676.017; Wed, 28 Sep 2022
- 07:38:04 +0000
-From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
-To:     Jason Yan <yanaijie@huawei.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hare@suse.com" <hare@suse.com>, "hch@lst.de" <hch@lst.de>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "john.garry@huawei.com" <john.garry@huawei.com>,
-        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>,
-        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>
-Subject: Re: [PATCH v6 7/8] scsi: libsas: use sas_phy_addr_match() instead of
- open coded
-Thread-Topic: [PATCH v6 7/8] scsi: libsas: use sas_phy_addr_match() instead of
- open coded
-Thread-Index: AQHY0wUnAh0uUfeKjEiR0ss/3vkCVg==
-Date:   Wed, 28 Sep 2022 07:38:04 +0000
-Message-ID: <PH0PR04MB741671B26A068C3AC85E26BD9B549@PH0PR04MB7416.namprd04.prod.outlook.com>
-References: <20220928070130.3657183-1-yanaijie@huawei.com>
- <20220928070130.3657183-8-yanaijie@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR04MB7416:EE_|CH2PR04MB6726:EE_
-x-ms-office365-filtering-correlation-id: 84f414b5-5e9a-4e07-2b3b-08daa12460eb
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EctweuLpH8jKVZIDwnCxIqzedsVo+m/GzhNA+p/wto20Eqv1cCpGDqFhwzaxg2kgDKOcNoYtM6KBBvylD3RveanmyD8OQJLXmliVgVodAAfJbBBhUgILSDasC/R/iv5HzOrQixfkjClavPg35Orn62yxRkU5MXnce4+OL6v1j8CzugOcgJchb91MPeV1uZsZ8nAjJ81Toud6lAm3Fhm5zMV9OV5pu6KAvnQIv6bZX0BhyFSKsl7UckWV348d73uOLbUzwxDntdonGVuNlmztV/2X98DtA+hrGH0axi5pdAmaF9ZDKu7jdMqv0zeGQpJBHEhnxmVRgbGn0Pi6BavMIruCpONzbkGbHR90aHNYMY70NED1eAQVf6oD7LXuO7v/eOKl+8rpj0BWlUfWrjZvsZYHhbpZZbvcIBM8ONYOq/MphZqzg1LXm87cZsMuGHEl1UktQxDj6v3/ssyPmWSJokbyxIr6cZiorGLZStOz2KbNn7QmX99QujBjDoet9zQKYqiavO87CkZBlpkIciZyL0l1xnpbc9fRkPepaTAbm247XIjF8V57PABqFy16qvS/DjCrbvDExI2ZmCM6ljiwLzcG3vIFk+X9N3bBKji9T1vcQmiVENqV4FHNX5dSgwWshidpG+H4HErYrmlp4Zcf4ivTD1ccwJBl3OE+4fBKltRW2kuHr0I6lGAyaV6FQiOKHbgT4JeZK0VJqb50CC1FQEmWQkI/gfH0X1J/+iSHf1unLx0JsfWETRBumT4iQoIegG7lOToh7iszK4pe6AOt2Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR04MB7416.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(346002)(366004)(396003)(451199015)(5660300002)(9686003)(6506007)(52536014)(7696005)(19618925003)(8936002)(33656002)(71200400001)(41300700001)(558084003)(38100700002)(82960400001)(186003)(2906002)(4270600006)(38070700005)(122000001)(7416002)(86362001)(55016003)(54906003)(316002)(4326008)(91956017)(64756008)(76116006)(66946007)(478600001)(66446008)(66476007)(66556008)(110136005)(8676002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3KxXYjIC25TCYN2SkASba6h3/xUINQApqhZf79TxHMvyy/o1fym1+H4CsJnk?=
- =?us-ascii?Q?/h6xk9Z8vuedfsV3ICqdprvMVQP134/pJu5BcozRyiXb1Re+1xU8QF7+5cR0?=
- =?us-ascii?Q?JmFW+BlejJNIY3JERc0dlQBsN76vwoRwvt56OdjdOS5vm38VDvt/isWAftOK?=
- =?us-ascii?Q?Hh68izbHbAHiTc/grMtNF7ev0dReM44dgq0EzSTYTKcQDFF5udpFFCWavIRW?=
- =?us-ascii?Q?nkKmE3sfanw8r3rMNtFr63G+mmoaCZJ7XRUhht/U2VuCMQWLYGDTQwEjvyvX?=
- =?us-ascii?Q?+0V72h74nuImcPihmAe5tAGgAh/BptzvbEKmPOoUzqt5meeMNXpUuk0qdTwN?=
- =?us-ascii?Q?QXz5XMPVgL9cOguPxk/xY+xeSIP1zh2nH2VhSAXmLbu9U/slY2dU7QBnjUxW?=
- =?us-ascii?Q?eLsxJHELE/gXZDGH9TgpQtxl7E4Cx4pOlaSYIAUZ26UmD2O7u8ocbdXQEMJy?=
- =?us-ascii?Q?AElXSkB3hGUkNEeHUjDrX5PymAdZmAN85RjilsDQB4XtHdRXvuYdFqwcZn0Y?=
- =?us-ascii?Q?zgWWrxWJCp2aomDLA9x8DFkRKtwh1zZxH5b7cVsegKknIob05lh3R8e2imO9?=
- =?us-ascii?Q?qpLuKNX5lq+ZVJMtn2BIiKc8vM7Z4SzQbae7BMB5KYwrX87bRY7VT/hw0MS3?=
- =?us-ascii?Q?LC0h+8UGCxZpUSRlU4/rv+tBPDnC97ZdoPjS6r++i8wxAc3qcjOnUxOrGgxO?=
- =?us-ascii?Q?+m9EWZMxQ/vQIVPHZTWrpOiB4V9is5iX9PpbqMMnihpABUekiV2tZzYCgeiP?=
- =?us-ascii?Q?bx51SulmVXXcX+i6COFx1gb1chOVAgJ+RUzhriR2uMGXDw1c2oUMLwXRK9OW?=
- =?us-ascii?Q?kwdTAsy0fbh0N7mW4S37j81j/YLZpzeoQfzbViN4MG+5uiJNncnHF7amKB4U?=
- =?us-ascii?Q?ta8vuFF3iusddV0iG+kJGDQTfo7g5YhUrUG/lWmG4XG2EyBh4OphWZfjJwlo?=
- =?us-ascii?Q?/Z/WYgsgCssx782p5I2qUbII0C0O5ha4/s2VyiJqkbRXauqTmX28Q3NLmw1T?=
- =?us-ascii?Q?IjzhPeId/v23oznO9o1y+mYWdokH/eWFpkpr1jDR5mUjHogRpJmM17jkmLXr?=
- =?us-ascii?Q?FhSq19LzQvKmGRsEzPC8NBmeyd/OHJN0J/NoZSW6mHEZbE3Khe2FlWP82B+K?=
- =?us-ascii?Q?0SpXIBbBJkKd7ZD/rZailJahmuJrHVMDcgIWFDJCWG60hAdyRIun6W5/VjHB?=
- =?us-ascii?Q?OY10RADbjyk80A83RpFVvfiEXTJVRDX/y+N8dxet1rXItuOf3CFf5htm141M?=
- =?us-ascii?Q?nHHEEYM6K6GSS/tQJsItmC3dp0O6FSWA0prIrARYk5D0Gn+DXcVL6RAAOVPr?=
- =?us-ascii?Q?bpEHLRpG90d1bNf99t1/gOn2oaw3vYct/ITEGmeZmpEXovubLRFsbROAc81k?=
- =?us-ascii?Q?QNzL5UI2a3yAVb/Fk5LGO119Ok6UBg9BvuncTodQksODSJwYYDlrWg6GNWGq?=
- =?us-ascii?Q?U5DKjgKzxjlThG0PjC0AQGVVsFluSSM+LGXT52HiNK0K2a/Ukb12M7PIy+aj?=
- =?us-ascii?Q?TVvtSSk+uC0yd6llcIchgnXF00kqa2YpxzaEirNn+vmKHE21Vdws7PhWbgxs?=
- =?us-ascii?Q?bj2/bxitffb1jCBL4ynPNxl9yOVCEgHu2tZlDFwU62Jmi8R4mRSxquGELFaH?=
- =?us-ascii?Q?0DLSsFfRKdHNt753FiJBQScdnqrRlh5+PUaS0IxHyYvTdtx9Cdk6Yve8pMr9?=
- =?us-ascii?Q?KnIAVeo/WrTWARPbqiR4Sco2Ovs=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR04MB7416.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84f414b5-5e9a-4e07-2b3b-08daa12460eb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2022 07:38:04.2797
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9pH1oHwBVcxsO/rmNuXSq3MG5cihapYrQN0nsKha7XvJo2aN7BnsLZyfu9JGwzSzF63buN7VEXVeD2UFRmOIWXqyixn0SNBM9rzCZx9baIg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR04MB6726
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 03:40:11 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D02810B5BD;
+        Wed, 28 Sep 2022 00:38:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R601e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=guanjun@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VQv-CYf_1664350695;
+Received: from localhost(mailfrom:guanjun@linux.alibaba.com fp:SMTPD_---0VQv-CYf_1664350695)
+          by smtp.aliyun-inc.com;
+          Wed, 28 Sep 2022 15:38:16 +0800
+From:   'Guanjun' <guanjun@linux.alibaba.com>
+To:     herbert@gondor.apana.org.au, elliott@hpe.com
+Cc:     zelin.deng@linux.alibaba.com, guanjun@linux.alibaba.com,
+        xuchun.shang@linux.alibaba.com, artie.ding@linux.alibaba.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 7/9] crypto/ycc: Add rsa algorithm support
+Date:   Wed, 28 Sep 2022 15:38:05 +0800
+Message-Id: <1664350687-47330-8-git-send-email-guanjun@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1664350687-47330-1-git-send-email-guanjun@linux.alibaba.com>
+References: <1664350687-47330-1-git-send-email-guanjun@linux.alibaba.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good,=0A=
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>=0A=
+From: Guanjun <guanjun@linux.alibaba.com>
+
+Support rsa algorithm for ycc. That includes encryption\decryption
+and verification\signature
+
+Signed-off-by: Guanjun <guanjun@linux.alibaba.com>
+---
+ drivers/crypto/ycc/Makefile   |   2 +-
+ drivers/crypto/ycc/ycc_algs.h |  44 +++
+ drivers/crypto/ycc/ycc_drv.c  |   7 +
+ drivers/crypto/ycc/ycc_pke.c  | 696 ++++++++++++++++++++++++++++++++++++++++++
+ drivers/crypto/ycc/ycc_ring.h |  23 ++
+ 5 files changed, 771 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/crypto/ycc/ycc_pke.c
+
+diff --git a/drivers/crypto/ycc/Makefile b/drivers/crypto/ycc/Makefile
+index 279c8ca..25f5930 100644
+--- a/drivers/crypto/ycc/Makefile
++++ b/drivers/crypto/ycc/Makefile
+@@ -1,3 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-(CONFIG_CRYPTO_DEV_YCC) += ycc.o
+-ycc-objs := ycc_drv.o ycc_isr.o ycc_ring.o ycc_ske.o ycc_aead.o
++ycc-objs := ycc_drv.o ycc_isr.o ycc_ring.o ycc_ske.o ycc_aead.o ycc_pke.o
+diff --git a/drivers/crypto/ycc/ycc_algs.h b/drivers/crypto/ycc/ycc_algs.h
+index e3be83ec..6a13230a 100644
+--- a/drivers/crypto/ycc/ycc_algs.h
++++ b/drivers/crypto/ycc/ycc_algs.h
+@@ -76,6 +76,13 @@ enum ycc_cmd_id {
+ 	YCC_CMD_GCM_DEC,
+ 	YCC_CMD_CCM_ENC,
+ 	YCC_CMD_CCM_DEC, /* 0x28 */
++
++	YCC_CMD_RSA_ENC = 0x83,
++	YCC_CMD_RSA_DEC,
++	YCC_CMD_RSA_CRT_DEC,
++	YCC_CMD_RSA_CRT_SIGN,
++	YCC_CMD_RSA_SIGN,
++	YCC_CMD_RSA_VERIFY, /* 0x88 */
+ };
+ 
+ struct ycc_crypto_ctx {
+@@ -121,10 +128,47 @@ struct ycc_crypto_req {
+ 	};
+ };
+ 
++#define YCC_RSA_KEY_SZ_512	64
++#define YCC_RSA_KEY_SZ_1536	192
++#define YCC_RSA_CRT_PARAMS	5
++#define YCC_RSA_E_SZ_MAX	8
++#define YCC_CMD_DATA_ALIGN_SZ	64
++#define YCC_PIN_SZ		16
++
++struct ycc_pke_ctx {
++	struct rsa_key *rsa_key;
++
++	void *priv_key_vaddr;
++	dma_addr_t priv_key_paddr;
++	void *pub_key_vaddr;
++	dma_addr_t pub_key_paddr;
++
++	unsigned int key_len;
++	unsigned int e_len;
++	bool crt_mode;
++	struct ycc_ring *ring;
++	struct crypto_akcipher *soft_tfm;
++};
++
++struct ycc_pke_req {
++	void *src_vaddr;
++	dma_addr_t src_paddr;
++	void *dst_vaddr;
++	dma_addr_t dst_paddr;
++
++	struct ycc_cmd_desc desc;
++	union {
++		struct ycc_pke_ctx *ctx;
++	};
++	struct akcipher_request *req;
++};
++
+ #define YCC_DEV(ctx)		(&(ctx)->ring->ydev->pdev->dev)
+ 
+ int ycc_sym_register(void);
+ void ycc_sym_unregister(void);
+ int ycc_aead_register(void);
+ void ycc_aead_unregister(void);
++int ycc_pke_register(void);
++void ycc_pke_unregister(void);
+ #endif
+diff --git a/drivers/crypto/ycc/ycc_drv.c b/drivers/crypto/ycc/ycc_drv.c
+index cd583d7..4a4d5cb 100644
+--- a/drivers/crypto/ycc/ycc_drv.c
++++ b/drivers/crypto/ycc/ycc_drv.c
+@@ -98,8 +98,14 @@ int ycc_algorithm_register(void)
+ 	if (ret)
+ 		goto unregister_sym;
+ 
++	ret = ycc_pke_register();
++	if (ret)
++		goto unregister_aead;
++
+ 	return 0;
+ 
++unregister_aead:
++	ycc_aead_unregister();
+ unregister_sym:
+ 	ycc_sym_unregister();
+ err:
+@@ -115,6 +121,7 @@ void ycc_algorithm_unregister(void)
+ 	if (atomic_dec_return(&ycc_algs_refcnt))
+ 		return;
+ 
++	ycc_pke_unregister();
+ 	ycc_aead_unregister();
+ 	ycc_sym_unregister();
+ }
+diff --git a/drivers/crypto/ycc/ycc_pke.c b/drivers/crypto/ycc/ycc_pke.c
+new file mode 100644
+index 00000000..3debd80
+--- /dev/null
++++ b/drivers/crypto/ycc/ycc_pke.c
+@@ -0,0 +1,696 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define pr_fmt(fmt) "YCC: Crypto: " fmt
++
++#include <crypto/internal/akcipher.h>
++#include <crypto/internal/rsa.h>
++#include <crypto/scatterwalk.h>
++#include <linux/dma-mapping.h>
++#include <linux/crypto.h>
++#include <linux/mpi.h>
++#include "ycc_algs.h"
++
++static int ycc_rsa_done_callback(void *ptr, u16 state)
++{
++	struct ycc_pke_req *rsa_req = (struct ycc_pke_req *)ptr;
++	struct ycc_pke_ctx *ctx = rsa_req->ctx;
++	struct akcipher_request *req = rsa_req->req;
++	struct device *dev = YCC_DEV(ctx);
++	unsigned int dma_length = ctx->key_len;
++
++	if (rsa_req->desc.cmd.rsa_enc_cmd.cmd_id == YCC_CMD_RSA_VERIFY)
++		dma_length = ctx->key_len << 1;
++
++	/* For signature verify, dst is NULL */
++	if (rsa_req->dst_vaddr) {
++		sg_copy_from_buffer(req->dst, sg_nents_for_len(req->dst, req->dst_len),
++				    rsa_req->dst_vaddr, req->dst_len);
++		dma_free_coherent(dev, ALIGN(ctx->key_len, 64),
++				  rsa_req->dst_vaddr, rsa_req->dst_paddr);
++	}
++	dma_free_coherent(dev, ALIGN(dma_length, 64),
++			  rsa_req->src_vaddr, rsa_req->src_paddr);
++
++	if (req->base.complete)
++		req->base.complete(&req->base, state == CMD_SUCCESS ? 0 : -EBADMSG);
++
++	return 0;
++}
++
++static int ycc_prepare_dma_buf(struct ycc_pke_req *rsa_req, int is_src)
++{
++	struct ycc_pke_ctx *ctx = rsa_req->ctx;
++	struct akcipher_request *req = rsa_req->req;
++	struct device *dev = YCC_DEV(ctx);
++	unsigned int dma_length = ctx->key_len;
++	dma_addr_t tmp;
++	void *ptr;
++	int shift;
++
++	/*
++	 * Ycc requires 2 key_len blocks, the first block stores
++	 * message pre-padding with 0, the second block stores signature.
++	 * LCKF akcipher verify, the first sg contains signature and
++	 * the second contains message while src_len is signature
++	 * length, dst len is message length
++	 */
++	if (rsa_req->desc.cmd.rsa_enc_cmd.cmd_id == YCC_CMD_RSA_VERIFY) {
++		dma_length = ctx->key_len << 1;
++		shift = ctx->key_len - req->dst_len;
++	} else {
++		shift = ctx->key_len - req->src_len;
++	}
++
++	if (unlikely(shift < 0))
++		return -EINVAL;
++
++	ptr = dma_alloc_coherent(dev, ALIGN(dma_length, 64), &tmp, GFP_ATOMIC);
++	if (unlikely(!ptr)) {
++		pr_err("Failed to alloc dma for %s data\n", is_src ? "src" : "dst");
++		return -ENOMEM;
++	}
++
++	memset(ptr, 0, ALIGN(dma_length, 64));
++	if (is_src) {
++		if (rsa_req->desc.cmd.rsa_enc_cmd.cmd_id ==
++		    YCC_CMD_RSA_VERIFY) {
++			/* Copy msg first with prepadding 0 */
++			sg_copy_buffer(req->src, sg_nents(req->src), ptr + shift,
++				       req->dst_len, req->src_len, 1);
++			/* Copy signature */
++			sg_copy_buffer(req->src, sg_nents(req->src), ptr + ctx->key_len,
++				       req->src_len, 0, 1);
++		} else {
++			sg_copy_buffer(req->src, sg_nents(req->src), ptr + shift,
++				       req->src_len, 0, 1);
++		}
++		rsa_req->src_vaddr = ptr;
++		rsa_req->src_paddr = tmp;
++	} else {
++		rsa_req->dst_vaddr = ptr;
++		rsa_req->dst_paddr = tmp;
++	}
++
++	return 0;
++}
++
++/*
++ * Using public key to encrypt or verify
++ */
++static int ycc_rsa_submit_pub(struct akcipher_request *req, bool is_enc)
++{
++	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
++	struct ycc_pke_req *rsa_req = akcipher_request_ctx(req);
++	struct ycc_pke_ctx *ctx = akcipher_tfm_ctx(tfm);
++	struct ycc_rsa_enc_cmd *rsa_enc_cmd;
++	struct ycc_ring *ring = ctx->ring;
++	struct device *dev = YCC_DEV(ctx);
++	struct ycc_flags *aflags;
++	int ret = -ENOMEM;
++
++	if (req->dst_len > ctx->key_len || req->src_len > ctx->key_len)
++		return -EINVAL;
++
++	rsa_req->ctx = ctx;
++	rsa_req->req = req;
++
++	if (unlikely(!ctx->pub_key_vaddr))
++		return -EINVAL;
++
++	aflags = kzalloc(sizeof(struct ycc_flags), GFP_ATOMIC);
++	if (!aflags)
++		goto out;
++
++	aflags->ptr = (void *)rsa_req;
++	aflags->ycc_done_callback = ycc_rsa_done_callback;
++
++	memset(&rsa_req->desc, 0, sizeof(rsa_req->desc));
++	rsa_req->desc.private_ptr = (u64)(void *)aflags;
++
++	rsa_enc_cmd         = &rsa_req->desc.cmd.rsa_enc_cmd;
++	rsa_enc_cmd->cmd_id = is_enc ? YCC_CMD_RSA_ENC : YCC_CMD_RSA_VERIFY;
++	rsa_enc_cmd->keyptr = ctx->pub_key_paddr;
++	rsa_enc_cmd->elen   = ctx->e_len << 3;
++	rsa_enc_cmd->nlen   = ctx->key_len << 3;
++
++	ret = ycc_prepare_dma_buf(rsa_req, 1);
++	if (unlikely(ret))
++		goto free_aflags;
++
++	rsa_enc_cmd->sptr = rsa_req->src_paddr;
++	if (is_enc) {
++		ret = ycc_prepare_dma_buf(rsa_req, 0);
++		if (unlikely(ret))
++			goto free_src;
++
++		rsa_enc_cmd->dptr = rsa_req->dst_paddr;
++	} else {
++		rsa_req->dst_vaddr = NULL;
++	}
++
++	ret = ycc_enqueue(ring, (u8 *)&rsa_req->desc);
++	if (!ret)
++		return -EINPROGRESS;
++
++	if (rsa_req->dst_vaddr)
++		dma_free_coherent(dev, ALIGN(ctx->key_len, 64),
++				  rsa_req->dst_vaddr, rsa_req->dst_paddr);
++
++free_src:
++	dma_free_coherent(dev, ALIGN(is_enc ? ctx->key_len : ctx->key_len << 1, 64),
++			  rsa_req->src_vaddr, rsa_req->src_paddr);
++free_aflags:
++	kfree(aflags);
++out:
++	return ret;
++}
++
++/*
++ * Using private key to decrypt or signature
++ */
++static int ycc_rsa_submit_priv(struct akcipher_request *req, bool is_dec)
++{
++	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
++	struct ycc_pke_req *rsa_req = akcipher_request_ctx(req);
++	struct ycc_pke_ctx *ctx = akcipher_tfm_ctx(tfm);
++	struct ycc_rsa_dec_cmd *rsa_dec_cmd;
++	struct ycc_ring *ring = ctx->ring;
++	struct device *dev = YCC_DEV(ctx);
++	struct ycc_flags *aflags;
++	int ret = -ENOMEM;
++
++	if (req->dst_len > ctx->key_len || req->src_len > ctx->key_len)
++		return -EINVAL;
++
++	rsa_req->ctx = ctx;
++	rsa_req->req = req;
++
++	if (unlikely(!ctx->priv_key_vaddr))
++		return -EINVAL;
++
++	aflags = kzalloc(sizeof(struct ycc_flags), GFP_ATOMIC);
++	if (!aflags)
++		goto out;
++
++	aflags->ptr = (void *)rsa_req;
++	aflags->ycc_done_callback = ycc_rsa_done_callback;
++
++	memset(&rsa_req->desc, 0, sizeof(rsa_req->desc));
++	rsa_req->desc.private_ptr = (u64)(void *)aflags;
++
++	rsa_dec_cmd         = &rsa_req->desc.cmd.rsa_dec_cmd;
++	rsa_dec_cmd->keyptr = ctx->priv_key_paddr;
++	rsa_dec_cmd->elen   = ctx->e_len << 3;
++	rsa_dec_cmd->nlen   = ctx->key_len << 3;
++	if (ctx->crt_mode)
++		rsa_dec_cmd->cmd_id = is_dec ? YCC_CMD_RSA_CRT_DEC : YCC_CMD_RSA_CRT_SIGN;
++	else
++		rsa_dec_cmd->cmd_id = is_dec ? YCC_CMD_RSA_DEC : YCC_CMD_RSA_SIGN;
++
++	ret = ycc_prepare_dma_buf(rsa_req, 1);
++	if (unlikely(ret))
++		goto free_aflags;
++
++	ret = ycc_prepare_dma_buf(rsa_req, 0);
++	if (unlikely(ret))
++		goto free_src;
++
++	rsa_dec_cmd->sptr = rsa_req->src_paddr;
++	rsa_dec_cmd->dptr = rsa_req->dst_paddr;
++
++	ret = ycc_enqueue(ring, (u8 *)&rsa_req->desc);
++	if (!ret)
++		return -EINPROGRESS;
++
++	dma_free_coherent(dev, ALIGN(ctx->key_len, 64), rsa_req->dst_vaddr,
++			  rsa_req->dst_paddr);
++free_src:
++	dma_free_coherent(dev, ALIGN(ctx->key_len, 64), rsa_req->src_vaddr,
++			  rsa_req->src_paddr);
++free_aflags:
++	kfree(aflags);
++out:
++	return ret;
++}
++
++static inline bool ycc_rsa_do_soft(struct akcipher_request *req)
++{
++	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
++	struct ycc_pke_ctx *ctx = akcipher_tfm_ctx(tfm);
++	struct ycc_dev *ydev = ctx->ring->ydev;
++
++	if (ctx->key_len == YCC_RSA_KEY_SZ_512 ||
++	    ctx->key_len == YCC_RSA_KEY_SZ_1536 ||
++	    !test_bit(YDEV_STATUS_READY, &ydev->status))
++		return true;
++
++	return false;
++}
++
++enum rsa_ops {
++	RSA_ENC,
++	RSA_DEC,
++	RSA_SIGN,
++	RSA_VERIFY,
++};
++
++static inline int ycc_rsa_soft_fallback(struct akcipher_request *req, int ops)
++{
++	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
++	struct ycc_pke_ctx *ctx = akcipher_tfm_ctx(tfm);
++	int ret = -EINVAL;
++
++	akcipher_request_set_tfm(req, ctx->soft_tfm);
++
++	switch (ops) {
++	case RSA_ENC:
++		ret = crypto_akcipher_encrypt(req);
++		break;
++	case RSA_DEC:
++		ret = crypto_akcipher_decrypt(req);
++		break;
++	case RSA_SIGN:
++		ret = crypto_akcipher_sign(req);
++		break;
++	case RSA_VERIFY:
++		ret = crypto_akcipher_verify(req);
++		break;
++	default:
++		break;
++	}
++
++	akcipher_request_set_tfm(req, tfm);
++	return ret;
++}
++
++static int ycc_rsa_encrypt(struct akcipher_request *req)
++{
++	if (ycc_rsa_do_soft(req))
++		return ycc_rsa_soft_fallback(req, RSA_ENC);
++
++	return ycc_rsa_submit_pub(req, true);
++}
++
++static int ycc_rsa_decrypt(struct akcipher_request *req)
++{
++	if (ycc_rsa_do_soft(req))
++		return ycc_rsa_soft_fallback(req, RSA_DEC);
++
++	return ycc_rsa_submit_priv(req, true);
++}
++
++static int ycc_rsa_verify(struct akcipher_request *req)
++{
++	if (ycc_rsa_do_soft(req))
++		return ycc_rsa_soft_fallback(req, RSA_VERIFY);
++
++	return ycc_rsa_submit_pub(req, false);
++}
++
++static int ycc_rsa_sign(struct akcipher_request *req)
++{
++	if (ycc_rsa_do_soft(req))
++		return ycc_rsa_soft_fallback(req, RSA_SIGN);
++
++	return ycc_rsa_submit_priv(req, false);
++}
++
++static int ycc_rsa_validate_n(unsigned int len)
++{
++	unsigned int bitslen = len << 3;
++
++	switch (bitslen) {
++	case 512:
++	case 1024:
++	case 1536:
++	case 2048:
++	case 3072:
++	case 4096:
++		return 0;
++	default:
++		return -EINVAL;
++	}
++}
++
++static void __ycc_rsa_drop_leading_zeros(const u8 **ptr, size_t *len)
++{
++	if (!*ptr)
++		return;
++
++	while (!**ptr && *len) {
++		(*ptr)++;
++		(*len)--;
++	}
++}
++
++static int ycc_rsa_set_n(struct ycc_pke_ctx *ctx, const char *value,
++			 size_t value_len, bool private)
++{
++	const char *ptr = value;
++
++	/* e should be set before n as we need e_len */
++	if (!ctx->e_len || !value_len)
++		return -EINVAL;
++
++	if (!ctx->key_len)
++		ctx->key_len = value_len;
++
++	if (private && !ctx->crt_mode)
++		memcpy(ctx->priv_key_vaddr + ctx->e_len + YCC_PIN_SZ +
++		       ctx->rsa_key->d_sz, ptr, value_len);
++
++	memcpy(ctx->pub_key_vaddr + ctx->e_len, ptr, value_len);
++	return 0;
++}
++
++static int ycc_rsa_set_e(struct ycc_pke_ctx *ctx, const char *value,
++			 size_t value_len, bool private)
++{
++	const char *ptr = value;
++
++	if (!ctx->key_len || !value_len || value_len > YCC_RSA_E_SZ_MAX)
++		return -EINVAL;
++
++	ctx->e_len = value_len;
++	if (private)
++		memcpy(ctx->priv_key_vaddr, ptr, value_len);
++
++	memcpy(ctx->pub_key_vaddr, ptr, value_len);
++	return 0;
++}
++
++static int ycc_rsa_set_d(struct ycc_pke_ctx *ctx, const char *value,
++			 size_t value_len)
++{
++	const char *ptr = value;
++
++	if (!ctx->key_len || !value_len || value_len > ctx->key_len)
++		return -EINVAL;
++
++	memcpy(ctx->priv_key_vaddr + ctx->e_len + YCC_PIN_SZ, ptr, value_len);
++	return 0;
++}
++
++static int ycc_rsa_set_crt_param(char *param, size_t half_key_len,
++				 const char *value, size_t value_len)
++{
++	const char *ptr = value;
++	size_t len = value_len;
++
++	if (!len || len > half_key_len)
++		return -EINVAL;
++
++	memcpy(param, ptr, len);
++	return 0;
++}
++
++static int ycc_rsa_setkey_crt(struct ycc_pke_ctx *ctx, struct rsa_key *rsa_key)
++{
++	unsigned int half_key_len = ctx->key_len >> 1;
++	u8 *tmp = (u8 *)ctx->priv_key_vaddr;
++	int ret;
++
++	tmp += ctx->rsa_key->e_sz + 16;
++	/* TODO: rsa_key is better to be kept original */
++	ret = ycc_rsa_set_crt_param(tmp, half_key_len, rsa_key->p, rsa_key->p_sz);
++	if (ret)
++		goto err;
++
++	tmp += half_key_len;
++	ret = ycc_rsa_set_crt_param(tmp, half_key_len, rsa_key->q, rsa_key->q_sz);
++	if (ret)
++		goto err;
++
++	tmp += half_key_len;
++	ret = ycc_rsa_set_crt_param(tmp, half_key_len, rsa_key->dp, rsa_key->dp_sz);
++	if (ret)
++		goto err;
++
++	tmp += half_key_len;
++	ret = ycc_rsa_set_crt_param(tmp, half_key_len, rsa_key->dq, rsa_key->dq_sz);
++	if (ret)
++		goto err;
++
++	tmp += half_key_len;
++	ret = ycc_rsa_set_crt_param(tmp, half_key_len, rsa_key->qinv, rsa_key->qinv_sz);
++	if (ret)
++		goto err;
++
++	ctx->crt_mode = true;
++	return 0;
++
++err:
++	ctx->crt_mode = false;
++	return ret;
++}
++
++static void ycc_rsa_clear_ctx(struct ycc_pke_ctx *ctx)
++{
++	struct device *dev = YCC_DEV(ctx);
++	size_t size;
++
++	if (ctx->pub_key_vaddr) {
++		size = ALIGN(ctx->rsa_key->e_sz + ctx->key_len, YCC_CMD_DATA_ALIGN_SZ);
++		dma_free_coherent(dev, size, ctx->pub_key_vaddr, ctx->pub_key_paddr);
++		ctx->pub_key_vaddr = NULL;
++	}
++
++	if (ctx->priv_key_vaddr) {
++		size = ALIGN(ctx->rsa_key->e_sz + YCC_PIN_SZ + ctx->rsa_key->d_sz +
++			     ctx->key_len, YCC_CMD_DATA_ALIGN_SZ);
++		memzero_explicit(ctx->priv_key_vaddr, size);
++		dma_free_coherent(dev, size, ctx->priv_key_vaddr, ctx->priv_key_paddr);
++		ctx->priv_key_vaddr = NULL;
++	}
++
++	if (ctx->rsa_key) {
++		memzero_explicit(ctx->rsa_key, sizeof(struct rsa_key));
++		kfree(ctx->rsa_key);
++		ctx->rsa_key = NULL;
++	}
++
++	ctx->key_len = 0;
++	ctx->e_len = 0;
++	ctx->crt_mode = false;
++}
++
++static void ycc_rsa_drop_leading_zeros(struct rsa_key *rsa_key)
++{
++	__ycc_rsa_drop_leading_zeros(&rsa_key->n, &rsa_key->n_sz);
++	__ycc_rsa_drop_leading_zeros(&rsa_key->e, &rsa_key->e_sz);
++	__ycc_rsa_drop_leading_zeros(&rsa_key->d, &rsa_key->d_sz);
++	__ycc_rsa_drop_leading_zeros(&rsa_key->p, &rsa_key->p_sz);
++	__ycc_rsa_drop_leading_zeros(&rsa_key->q, &rsa_key->q_sz);
++	__ycc_rsa_drop_leading_zeros(&rsa_key->dp, &rsa_key->dp_sz);
++	__ycc_rsa_drop_leading_zeros(&rsa_key->dq, &rsa_key->dq_sz);
++	__ycc_rsa_drop_leading_zeros(&rsa_key->qinv, &rsa_key->qinv_sz);
++}
++
++static int ycc_rsa_alloc_key(struct ycc_pke_ctx *ctx, bool priv)
++{
++	struct device *dev = YCC_DEV(ctx);
++	struct rsa_key *rsa_key = ctx->rsa_key;
++	unsigned int half_key_len;
++	size_t size;
++	int ret;
++
++	ycc_rsa_drop_leading_zeros(rsa_key);
++	ctx->key_len = rsa_key->n_sz;
++
++	ret = ycc_rsa_validate_n(ctx->key_len);
++	if (ret) {
++		pr_err("Invalid n size:%d bits\n", ctx->key_len << 3);
++		goto out;
++	}
++
++	ret = -ENOMEM;
++	if (priv) {
++		if (!(rsa_key->p_sz + rsa_key->q_sz + rsa_key->dp_sz +
++		      rsa_key->dq_sz + rsa_key->qinv_sz)) {
++			size = ALIGN(rsa_key->e_sz + YCC_PIN_SZ + rsa_key->d_sz +
++				     ctx->key_len, YCC_CMD_DATA_ALIGN_SZ);
++		} else {
++			half_key_len = ctx->key_len >> 1;
++			size = ALIGN(rsa_key->e_sz + YCC_PIN_SZ + half_key_len *
++				     YCC_RSA_CRT_PARAMS, YCC_CMD_DATA_ALIGN_SZ);
++			ctx->crt_mode = true;
++		}
++		ctx->priv_key_vaddr = dma_alloc_coherent(dev, size,
++							 &ctx->priv_key_paddr,
++							 GFP_KERNEL);
++		if (!ctx->priv_key_vaddr)
++			goto out;
++		memset(ctx->priv_key_vaddr, 0, size);
++	}
++
++	if (!ctx->pub_key_vaddr) {
++		size = ALIGN(ctx->key_len + rsa_key->e_sz, YCC_CMD_DATA_ALIGN_SZ);
++		ctx->pub_key_vaddr = dma_alloc_coherent(dev, size,
++							&ctx->pub_key_paddr,
++							GFP_KERNEL);
++		if (!ctx->pub_key_vaddr)
++			goto out;
++		memset(ctx->pub_key_vaddr, 0, size);
++	}
++
++	ret = ycc_rsa_set_e(ctx, rsa_key->e, rsa_key->e_sz, priv);
++	if (ret) {
++		pr_err("Failed to set e for rsa %s key\n", priv ? "private" : "public");
++		goto out;
++	}
++
++	ret = ycc_rsa_set_n(ctx, rsa_key->n, rsa_key->n_sz, priv);
++	if (ret) {
++		pr_err("Failed to set n for rsa private key\n");
++		goto out;
++	}
++
++	if (priv) {
++		if (ctx->crt_mode) {
++			ret = ycc_rsa_setkey_crt(ctx, rsa_key);
++			if (ret) {
++				pr_err("Failed to set private key for rsa crt key\n");
++				goto out;
++			}
++		} else {
++			ret = ycc_rsa_set_d(ctx, rsa_key->d, rsa_key->d_sz);
++			if (ret) {
++				pr_err("Failed to set d for rsa private key\n");
++				goto out;
++			}
++		}
++	}
++
++	return 0;
++
++out:
++	ycc_rsa_clear_ctx(ctx);
++	return ret;
++}
++
++static int ycc_rsa_setkey(struct crypto_akcipher *tfm, const void *key,
++			  unsigned int keylen, bool priv)
++{
++	struct ycc_pke_ctx *ctx = akcipher_tfm_ctx(tfm);
++	struct rsa_key *rsa_key;
++	int ret;
++
++	if (priv)
++		ret = crypto_akcipher_set_priv_key(ctx->soft_tfm, key, keylen);
++	else
++		ret = crypto_akcipher_set_pub_key(ctx->soft_tfm, key, keylen);
++	if (ret)
++		return ret;
++
++	ycc_rsa_clear_ctx(ctx);
++
++	rsa_key = kzalloc(sizeof(struct rsa_key), GFP_KERNEL);
++	if (!rsa_key)
++		return -ENOMEM;
++
++	if (priv)
++		ret = rsa_parse_priv_key(rsa_key, key, keylen);
++	else if (!ctx->pub_key_vaddr)
++		ret = rsa_parse_pub_key(rsa_key, key, keylen);
++	if (ret) {
++		pr_err("Failed to parse %s key\n", priv ? "private" : "public");
++		kfree(rsa_key);
++		return ret;
++	}
++
++	ctx->rsa_key = rsa_key;
++	return ycc_rsa_alloc_key(ctx, priv);
++}
++
++static int ycc_rsa_setpubkey(struct crypto_akcipher *tfm, const void *key,
++			     unsigned int keylen)
++{
++	return ycc_rsa_setkey(tfm, key, keylen, false);
++}
++
++static int ycc_rsa_setprivkey(struct crypto_akcipher *tfm, const void *key,
++			      unsigned int keylen)
++{
++	return ycc_rsa_setkey(tfm, key, keylen, true);
++}
++
++static unsigned int ycc_rsa_max_size(struct crypto_akcipher *tfm)
++{
++	struct ycc_pke_ctx *ctx = akcipher_tfm_ctx(tfm);
++
++	/*
++	 * 512 and 1536 bits key size are not supported by YCC,
++	 * we use soft tfm instead
++	 */
++	if (ctx->key_len == YCC_RSA_KEY_SZ_512 ||
++	    ctx->key_len == YCC_RSA_KEY_SZ_1536)
++		return crypto_akcipher_maxsize(ctx->soft_tfm);
++
++	return ctx->rsa_key ? ctx->key_len : 0;
++}
++
++static int ycc_rsa_init(struct crypto_akcipher *tfm)
++{
++	struct ycc_pke_ctx *ctx = akcipher_tfm_ctx(tfm);
++	struct ycc_ring *ring;
++
++	ctx->soft_tfm = crypto_alloc_akcipher("rsa-generic", 0, 0);
++	if (IS_ERR(ctx->soft_tfm)) {
++		pr_err("Can not alloc_akcipher!\n");
++		return PTR_ERR(ctx->soft_tfm);
++	}
++
++	/* Reserve enough space if soft request reqires additional space */
++	akcipher_set_reqsize(tfm, sizeof(struct ycc_pke_req) +
++			     crypto_akcipher_alg(ctx->soft_tfm)->reqsize);
++
++	ring = ycc_crypto_get_ring();
++	if (!ring) {
++		crypto_free_akcipher(ctx->soft_tfm);
++		return -EINVAL;
++	}
++
++	ctx->ring = ring;
++	ctx->key_len = 0;
++	return 0;
++}
++
++static void ycc_rsa_exit(struct crypto_akcipher *tfm)
++{
++	struct ycc_pke_ctx *ctx = akcipher_tfm_ctx(tfm);
++
++	if (ctx->ring)
++		ycc_crypto_free_ring(ctx->ring);
++
++	ycc_rsa_clear_ctx(ctx);
++	crypto_free_akcipher(ctx->soft_tfm);
++}
++
++static struct akcipher_alg ycc_rsa = {
++	.base = {
++		.cra_name = "rsa",
++		.cra_driver_name = "rsa-ycc",
++		.cra_priority = 1000,
++		.cra_module = THIS_MODULE,
++		.cra_ctxsize = sizeof(struct ycc_pke_ctx),
++	},
++	.sign = ycc_rsa_sign,
++	.verify = ycc_rsa_verify,
++	.encrypt = ycc_rsa_encrypt,
++	.decrypt = ycc_rsa_decrypt,
++	.set_pub_key = ycc_rsa_setpubkey,
++	.set_priv_key = ycc_rsa_setprivkey,
++	.max_size = ycc_rsa_max_size,
++	.init = ycc_rsa_init,
++	.exit = ycc_rsa_exit,
++};
++
++int ycc_pke_register(void)
++{
++	return crypto_register_akcipher(&ycc_rsa);
++}
++
++void ycc_pke_unregister(void)
++{
++	crypto_unregister_akcipher(&ycc_rsa);
++}
+diff --git a/drivers/crypto/ycc/ycc_ring.h b/drivers/crypto/ycc/ycc_ring.h
+index 2caa9e0..c47fc18 100644
+--- a/drivers/crypto/ycc/ycc_ring.h
++++ b/drivers/crypto/ycc/ycc_ring.h
+@@ -100,9 +100,32 @@ struct ycc_aead_cmd {
+ 	u8 taglen;	/* authenc size */
+ } __packed;
+ 
++struct ycc_rsa_enc_cmd {
++	u8 cmd_id;
++	u64 sptr:48;
++	u16 key_id;
++	u64 keyptr:48;	/* public key e+n Bytes */
++	u16 elen;	/* bits not byte */
++	u16 nlen;
++	u64 dptr:48;
++} __packed;
++
++struct ycc_rsa_dec_cmd {
++	u8 cmd_id;
++	u64 sptr:48;
++	u16 key_id;
++	u16 kek_id;
++	u64 keyptr:48;	/* private key e + pin + d + n */
++	u16 elen;	/* bits not byte */
++	u16 nlen;
++	u64 dptr:48;
++} __packed;
++
+ union ycc_real_cmd {
+ 	struct ycc_skcipher_cmd ske_cmd;
+ 	struct ycc_aead_cmd aead_cmd;
++	struct ycc_rsa_enc_cmd rsa_enc_cmd;
++	struct ycc_rsa_dec_cmd rsa_dec_cmd;
+ 	u8 padding[32];
+ };
+ 
+-- 
+1.8.3.1
+
