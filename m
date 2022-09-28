@@ -2,101 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27FEF5ED862
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15175ED864
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233175AbiI1JD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
+        id S232994AbiI1JD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbiI1JDH (ORCPT
+        with ESMTP id S232524AbiI1JD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:03:07 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83EFE05DD
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:03:05 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id l12so13598835ljg.9
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:03:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Qivih7Ox0DdR7xAv+foWHqtTQqdqkALSOgUvdHP21xA=;
-        b=MK7CFQ9YcPNocb/BlU8K2dGG0Nrome6kA7nPy0n6rjndVEZaNPV7X8uN9Wbay3cDiF
-         2CaEcd90WMbW7h2S/umJ3fIPGAk4bYqI5uctxq/Xlq/PNhbWo5YlGwrYgJOoo3Qp9HnN
-         W+QY/AZb3BZuqMNSJ5NP5epnW6LSxvApRh9qFHh7OppqQ7RhvnD47a1m+on2zfJtoQ6u
-         pNk50zRulq86ttW1Mwcs93xK+BslCH1L0yAvrh7qjVcddCAxOEr8JyKX5WJaXfYYHm9X
-         hq7AFHJcanh+W0Q0JYGbgFH9a1WTP1REgHNldvwm2wwiGDFNrk113OXxiwN00c0O6v2Z
-         K7wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=Qivih7Ox0DdR7xAv+foWHqtTQqdqkALSOgUvdHP21xA=;
-        b=QLg5wiHuuiGsn+BVjDcQV+IKNlzBiz2n9I0JSSNgtIzZ3RGGOzNeDG/egOav3PU+oM
-         bpkdwQGc+mK2WNbmvEyYNeqmo95A2Nmr4j9GbggMOwAc1Ky4A1yICqztbcShrWCVTYRX
-         FMmqxx/dBir7JmO1m2IZ1Y6mlegFiUp/cVcDme3W7b9Wbnbt9t4znsTVQgru5NWG7t9y
-         JdhxxYrxx6hCEbd0Itj9R5Ko8J4pez1I04c/Ntb+sY8+JrKb1Fdd5/ccL6O7i0Vtgz+h
-         P9d4ELXzLGJ9wpfIG1J+jR3xQmSrpzHayLIgRHIQcJHUVNBxEXkGMs+k+IYt4/2QAaq/
-         QtLQ==
-X-Gm-Message-State: ACrzQf2j/gZkWzpHhIO08H/qB90qlxKtIGFXvS1pPa2BSE/taHQp24nv
-        8CAF4x/SbYIW79BuDkIVV764AA==
-X-Google-Smtp-Source: AMsMyM6kVPc1yWr8KuUU2EZPmo0ooqebRc+y5zFM1TknSI5X2qRgOQd12MT1RgPccoVXhFpIcchTwQ==
-X-Received: by 2002:a2e:9114:0:b0:26b:e3a2:3f89 with SMTP id m20-20020a2e9114000000b0026be3a23f89mr11902830ljg.132.1664355784273;
-        Wed, 28 Sep 2022 02:03:04 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id j6-20020a2ea906000000b0026c297a9e11sm377185ljq.133.2022.09.28.02.03.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 02:03:02 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     liushixin2@huawei.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] memory: tegra: Use DEFINE_SHOW_ATTRIBUTE to simplify code
-Date:   Wed, 28 Sep 2022 11:02:58 +0200
-Message-Id: <166435026500.12920.10508016012075575717.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220926130025.1061373-1-liushixin2@huawei.com>
-References: <20220926130025.1061373-1-liushixin2@huawei.com>
+        Wed, 28 Sep 2022 05:03:27 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCC8DF6BC;
+        Wed, 28 Sep 2022 02:03:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664355807; x=1695891807;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Mul5fKbvrZirdXc2DPavwIBXeg0wFX60axpkVvIhWvw=;
+  b=G0UWz0qa0Ikj5qwlsTRDHfZjogHW9Mfk1pvjTRyXgETgPAPBJX78dN0I
+   JdjZtvM/iHmPwbnu2jnh3VeSO+jwIpE9T+PA3KFR5YE+N4xWjjiGPf+hq
+   xOHUdinVk04AwrBKjfrpNZB7k5MBVHhA3YvvUXKRogt8gVvvqIiXtP1TX
+   fYyP7V3UNws+TlU5y6i+jhzTymnzslWog32BZ9qznKbSiYLDRaV0V8jN4
+   e8HBurQ2uiHNMb1+lld258tkAZNF1vDYUl3mkLzKOvH+HyNja0PLt//vf
+   cetf6L0WBY3/rASyrbS6hmYf+m8AL8MpUVHi+4lBwuYKIdBYToY0Zg/DQ
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="182292739"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Sep 2022 02:03:27 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 28 Sep 2022 02:03:25 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 28 Sep 2022 02:03:22 -0700
+From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+To:     <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>, <Ian.Saturley@microchip.com>
+Subject: [PATCH net V4] eth: lan743x: reject extts for non-pci11x1x devices
+Date:   Wed, 28 Sep 2022 14:33:11 +0530
+Message-ID: <20220928090311.93361-1-Raju.Lakkaraju@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sep 2022 21:00:21 +0800, Liu Shixin wrote:
-> Use DEFINE_SHOW_ATTRIBUTE helper macro to simplify the code.
-> No functional change.
-> 
-> v1->v2: remove duplicate blank lines.
-> 
-> Liu Shixin (4):
->   memory: tegra20-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
->   memory: tegra30-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
->   memory: tegra210-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
->   memory: tegra186-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-> 
-> [...]
+Remove PTP_PF_EXTTS support for non-PCI11x1x devices since they do not support
+the PTP-IO Input event triggered timestamping mechanisms added
 
-Applied, thanks!
+Fixes: 60942c397af6 ("Add support for PTP-IO Event Input External  Timestamp (extts)")
 
-[1/4] memory: tegra20-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-      https://git.kernel.org/krzk/linux-mem-ctrl/c/94a052d7d52a70d8681644bd88062c61b0f986ce
-[2/4] memory: tegra30-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-      https://git.kernel.org/krzk/linux-mem-ctrl/c/91fcc1dfa790d74b9a1dacfefdb023804dedd319
-[3/4] memory: tegra210-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-      https://git.kernel.org/krzk/linux-mem-ctrl/c/82710f9114a7857052f012599fdb688b93ee218c
-[4/4] memory: tegra186-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-      https://git.kernel.org/krzk/linux-mem-ctrl/c/56efd6435c6890a3a38a33d192a0f9d5c835a24b
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
 
-Best regards,
+Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+---
+Changes:
+========
+V3 -> V4:
+  - Fix the Fixes tag line split
+
+V2 -> V3:
+ - Correct the Fixes tag
+
+V1 -> V2:
+ - Repost against net with a Fixes tag
+
+ drivers/net/ethernet/microchip/lan743x_ptp.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/net/ethernet/microchip/lan743x_ptp.c b/drivers/net/ethernet/microchip/lan743x_ptp.c
+index 6a11e2ceb013..da3ea905adbb 100644
+--- a/drivers/net/ethernet/microchip/lan743x_ptp.c
++++ b/drivers/net/ethernet/microchip/lan743x_ptp.c
+@@ -1049,6 +1049,10 @@ static int lan743x_ptpci_verify_pin_config(struct ptp_clock_info *ptp,
+ 					   enum ptp_pin_function func,
+ 					   unsigned int chan)
+ {
++	struct lan743x_ptp *lan_ptp =
++		container_of(ptp, struct lan743x_ptp, ptp_clock_info);
++	struct lan743x_adapter *adapter =
++		container_of(lan_ptp, struct lan743x_adapter, ptp);
+ 	int result = 0;
+ 
+ 	/* Confirm the requested function is supported. Parameter
+@@ -1057,7 +1061,10 @@ static int lan743x_ptpci_verify_pin_config(struct ptp_clock_info *ptp,
+ 	switch (func) {
+ 	case PTP_PF_NONE:
+ 	case PTP_PF_PEROUT:
++		break;
+ 	case PTP_PF_EXTTS:
++		if (!adapter->is_pci11x1x)
++			result = -1;
+ 		break;
+ 	case PTP_PF_PHYSYNC:
+ 	default:
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+2.25.1
+
