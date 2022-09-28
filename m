@@ -2,48 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7395EE236
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009FB5EE23A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233632AbiI1QqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
+        id S234046AbiI1Qs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234153AbiI1Qpe (ORCPT
+        with ESMTP id S232439AbiI1QsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:45:34 -0400
-Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C233C8DA;
-        Wed, 28 Sep 2022 09:44:48 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 16:44:35 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1664383486; x=1664642686;
-        bh=o11CrCXx0Cb6C3dCffIEI1V7Knf/291iZPlpw60/k7s=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=II4PFDatDgvVCAc5JpwIoJeo0c6RfoQ/A64+1axy28EsmTCGy3tr1leeMjjzjzFhk
-         HlGjrqEX3DMn37lrTPHD9jIiWc4Nb7McgxfTELycQdnYXsiRU3zMRTT8nQWnMsCJHh
-         2JQQfA9VAKCR5SaqInad3H3dYtmCM5BHZxLjSq+B3ICMjbqaazWNhMU+GimDYDWUG7
-         1tkZeaPqizUHUKpem8Fi4tYWUU6f2v0qnOrs/xodI+4S8kArs+TJ49SshZTRN/iy18
-         O9uyx0wL+8j1Ww1laS3/1tQmLrToy7D3Twbk8f+/CQWjTOUtOeuN6/i//s2nTntY+2
-         tECKquGX0Qz9w==
-To:     devicetree@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>,
-        Josef W Menad <JosefWMenad@protonmail.ch>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v3 0/5] arm64: dts: qcom: msm8916-samsung-j5: Use common device tree
-Message-ID: <20220928164427.178837-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+        Wed, 28 Sep 2022 12:48:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B1672FDD
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664383702;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X5bl17BdmyDYyPUE/8jt72C/fktO9MW/fTZWFGHBrao=;
+        b=iXe4VjT87fBuwnU6Lupe7bRvuvUhYnuQKqpDdDsW9El/suM0MBO5Y53+UkxpCD1BU3bx1r
+        Krj+NhMm68DMb4J6JJa9BpQZRsWB15BA5hqZWNgWjX+Hkwjh3WvCxMI5jmM9KKPO5s0Kqn
+        z4vQiwxlqgl8qhwvKJhZBOj5rSVIaHk=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-480-yx0FZ-goPMeKohA1bbC2fA-1; Wed, 28 Sep 2022 12:48:20 -0400
+X-MC-Unique: yx0FZ-goPMeKohA1bbC2fA-1
+Received: by mail-ed1-f72.google.com with SMTP id c6-20020a05640227c600b004521382116dso10923983ede.22
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:48:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=X5bl17BdmyDYyPUE/8jt72C/fktO9MW/fTZWFGHBrao=;
+        b=MFvTAKBI45Vr5fjrAKsFu9I04jKGHu573pY/8q9qpLv8+uTmUIRUn9gAWCsmN8j+Hx
+         /nG+7ideQ91C6Ho00NX8RgwWvxDf1ISGj0YDj0S3iWOeP1HOYx38Vph/QVnIGjrWpIW5
+         8rwEZggZSs4js3liyserZBF7AsKkZ72ZEqxiUWH8+yKRiLHSXPdvMX+Dnpannqrhf7Zz
+         dLoOHUU7nMffhDYIJCgNfzrrkxi4T/w57rWBZzGV6dBvkJ+akS1SeQLKH7UG3dJFlPcG
+         ONtF51Z342u9FXGSzGQ0KU54ikRtsR3aWZJxNQ5NUwV/61m2Uvi4G8oXRrRiHcSCSxvk
+         MHvg==
+X-Gm-Message-State: ACrzQf2Jpc7pnDW51qmJXiG2GEN9PHaAVjLQnlb5UcPj5NGuLkXg/FsL
+        6GKNJMcRcUaJAXilzGH3iNk3ilT7v1cvJJ4IEiR6cSy0rc8eeFj6FT+E5m8ZYWCKrDjfZS5X1Rx
+        9jA4Y6jBh1zj4JA5BB+NJL/Qq
+X-Received: by 2002:a17:907:843:b0:73a:5b0e:8352 with SMTP id ww3-20020a170907084300b0073a5b0e8352mr28680280ejb.438.1664383699574;
+        Wed, 28 Sep 2022 09:48:19 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5fPF3wKkf0lsaEPNIQzhxlJkV/0dZuDzUJG0rJDL+7nhengYesZYeExDDLbx6Q+0UVcLHlbA==
+X-Received: by 2002:a17:907:843:b0:73a:5b0e:8352 with SMTP id ww3-20020a170907084300b0073a5b0e8352mr28680258ejb.438.1664383699375;
+        Wed, 28 Sep 2022 09:48:19 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:2f4b:62da:3159:e077? ([2001:b07:6468:f312:2f4b:62da:3159:e077])
+        by smtp.googlemail.com with ESMTPSA id e24-20020a170906375800b0077077b59085sm2603687ejc.184.2022.09.28.09.48.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 09:48:18 -0700 (PDT)
+Message-ID: <6dac022d-3ac1-bc47-a6ac-89a1f24f3bb8@redhat.com>
+Date:   Wed, 28 Sep 2022 18:48:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+References: <20220909104506.738478-1-eesposit@redhat.com>
+ <20220909104506.738478-4-eesposit@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [RFC PATCH 3/9] kvm_main.c: introduce
+ kvm_internal_memory_region_list
+In-Reply-To: <20220909104506.738478-4-eesposit@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,32 +93,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v3: Drop msm8916-samsung-j5.dts temporarily before moving it.
-Minor rewords.
-v2: Reword and resend. Split common dtsi patch.
-Add missing suffix state in pinctrl.
+On 9/9/22 12:45, Emanuele Giuseppe Esposito wrote:
+> +struct kvm_internal_memory_region_list {
+> +	/* Fields initialized in __kvm_set_memory_region() */
+> +	struct kvm_memory_slot *old;
+> +	struct kvm_memory_slot *new;
+> +	struct kvm_memory_slot *invalid;
+> +	enum kvm_mr_change change;
+> +};
+> +
 
-The smartphones below are using the MSM8916 SoC,
-which are released in 2015-2016:
+Alternative name: kvm_memslot_change
 
-Samsung Galaxy J5 2015 (SM-J500*)
-Samsung Galaxy J5 2016 (SM-J510*)
-Samsung Galaxy J3 2016
-- SM-J3109/SM-J320Y/SM-J320YZ
-- SM-J320N0/SM-J320ZN
-- SM-J320P/SM-J320R4/SM-J320V/SM-S320VL
+>  int __kvm_set_memory_region(struct kvm *kvm,
+> -			    const struct kvm_userspace_memory_region *mem);
+> +			    const struct kvm_userspace_memory_region *mem,
+> +			    struct kvm_internal_memory_region_list *batch);
 
-Add a common device tree for with initial support for:
+A bit weird to have this passed by the caller.  I'd rather have 
+__kvm_set_memory_region with the *batch argument (which I'd call instead 
+*change), and design kvm_set_memory_region so that, at the end of the 
+series, it is something like:
 
-- GPIO keys
-- SDHCI (internal and external storage)
-- USB Device Mode
-- UART (on USB connector via the SM5703 MUIC)
-- WCNSS (WiFi/BT)
-- Regulators
+int kvm_set_memory_region(struct kvm *kvm,
+			  const struct kvm_userspace_memory_region *mem)
+{
+	struct kvm_memslot_change change = {};
+	r = __kvm_set_memory_region(kvm, mem, &change);
+	if (r < 0)
+		return r;
+	r = invalidate_memslot_for_change(kvm, &change);
+	if (r < 0)
+		return r;
+	return commit_memslot_change(kvm, &change);
+}
 
-The three devices (some varints of J3, all other variants of J5 released
-in 2015 and J5X released in 2016) are very similar, with some differences
-in display and GPIO pins. The common parts are shared in
-msm8916-samsung-j5-common.dtsi to reduce duplication.
+Paolo
 
