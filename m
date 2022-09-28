@@ -2,209 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E185ED2E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 04:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BDAA5ED2E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 04:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbiI1CFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 22:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
+        id S232756AbiI1CGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 22:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232410AbiI1CF0 (ORCPT
+        with ESMTP id S232667AbiI1CG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 22:05:26 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C640A1A04C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 19:05:24 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 11:05:11 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1664330721;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c2MxatIKlnRgTMVHJ645nKU6WcLahTngruGJ8RFFSSI=;
-        b=saP9WBl20FekD59GxcSd000H9QjoPMKOzc16DBIxBa840PxpuwWzA2nIAixdfUzsiYpepf
-        Gc2gKjmkKqD6PySlCgyJYSbHO1at/g2r3Ki5byEuuTwhXP+RSRCxC5KwIP0G+31gluQFM5
-        myCVF9uMunvhFXlWlwPGIPst17HGyVc=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jane Chu <jane.chu@oracle.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] mm/hwpoison: move definitions of
- num_poisoned_pages_* to memory-failure.c
-Message-ID: <20220928020511.GB597297@u2004.lan>
-References: <20220921091359.25889-1-naoya.horiguchi@linux.dev>
- <20220921091359.25889-3-naoya.horiguchi@linux.dev>
- <4b7c327a-547e-be8b-4568-745fabe74641@huawei.com>
+        Tue, 27 Sep 2022 22:06:27 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB67F508A;
+        Tue, 27 Sep 2022 19:06:23 -0700 (PDT)
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 28S2614p026989;
+        Wed, 28 Sep 2022 11:06:01 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 28S2614p026989
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664330761;
+        bh=XeKuSPgnAvNWCpG2G8pV3A3pJK6QQf7sh1aj1viXMjo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Jw35+SYSAy/axTS2k4slHRA1Zrc62wXTc6WR7S/ZuLXoNSA+eVT0j2D+buoBB/PC4
+         S3lY2oSpJdml8cRbng5Y2BdX4ku7L3xaBk0vlg20slt+PsKEFCmdgqsITR46505PwJ
+         psruxj5qQADp09Awktq8vbPMccFLGFWwut7f+AJUXeCIGinRMvA6V/OmX4OqYoJrtX
+         mVWOQESdNkB7SbQ2+wdOtZn+BJCumrFcREJoTfzgJg0/pxdR4vgALNbJnjajn1GtPP
+         qkIsJ7rwBLatYMlJjKztOFZLZtxeTGhOraL6Yq1qR/0U/KT5HTFO1pngmtLP5Wk2z2
+         Va5NxY1LQWU9g==
+X-Nifty-SrcIP: [209.85.167.181]
+Received: by mail-oi1-f181.google.com with SMTP id w13so2041599oiw.8;
+        Tue, 27 Sep 2022 19:06:01 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0wW7prWSAP9Cv+p9AHYSs9aeRrF3EFcQ6f+azgnIBBjcv9npTn
+        +yrQEdOOSSXUOfHlBGKDlesfnzo7kGwduaam7Rc=
+X-Google-Smtp-Source: AMsMyM7D8msamuE8QgFk42iJpD0Bqfjug4yHUsohPP4e9k8H0TdewQ33sXwENDDQLtU4siIUo9U5AZBoe8puUIW/Db4=
+X-Received: by 2002:a54:400c:0:b0:34f:9913:262 with SMTP id
+ x12-20020a54400c000000b0034f99130262mr3145596oie.287.1664330760371; Tue, 27
+ Sep 2022 19:06:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4b7c327a-547e-be8b-4568-745fabe74641@huawei.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220922184525.3021522-1-zack@kde.org> <CAK7LNARRUbcZLNUOY-is=EVC7Ov8-0SHS=207=XbQkkjS59g4Q@mail.gmail.com>
+ <a96c0711f0e163e1de8362b32010dbac2f973ee6.camel@vmware.com>
+In-Reply-To: <a96c0711f0e163e1de8362b32010dbac2f973ee6.camel@vmware.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 28 Sep 2022 11:05:24 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASMysHU59QELsUDTjubxpva4fDZYFa_=Uj9sd4YnRqZQQ@mail.gmail.com>
+Message-ID: <CAK7LNASMysHU59QELsUDTjubxpva4fDZYFa_=Uj9sd4YnRqZQQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Add an option to skip vmlinux.bz2 in the rpm's
+To:     Zack Rusin <zackr@vmware.com>
+Cc:     "michal.lkml@markovi.net" <michal.lkml@markovi.net>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 07:53:15PM +0800, Miaohe Lin wrote:
-> On 2022/9/21 17:13, Naoya Horiguchi wrote:
-> > From: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> > 
-> > These interfaces will be used by drivers/base/core.c by later patch, so as a
-> > preparatory work move them to more common header file visible to the file.
-> > 
-> > Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> > ---
-> > ChangeLog v2 -> v3:
-> > - added declaration of num_poisoned_pages_inc() in #ifdef CONFIG_MEMORY_FAILURE
-> > ---
-> >  arch/parisc/kernel/pdt.c |  3 +--
-> >  include/linux/mm.h       |  5 +++++
-> >  include/linux/swapops.h  | 24 ++----------------------
-> >  mm/memory-failure.c      | 10 ++++++++++
-> >  4 files changed, 18 insertions(+), 24 deletions(-)
-> > 
-> > diff --git a/arch/parisc/kernel/pdt.c b/arch/parisc/kernel/pdt.c
-> > index e391b175f5ec..fdc880e2575a 100644
-> > --- a/arch/parisc/kernel/pdt.c
-> > +++ b/arch/parisc/kernel/pdt.c
-> > @@ -18,8 +18,7 @@
-> >  #include <linux/kthread.h>
-> >  #include <linux/initrd.h>
-> >  #include <linux/pgtable.h>
-> > -#include <linux/swap.h>
-> 
-> Is header file "linux/swap.h" already unneeded before the code change? It seems there's
-> no code change in that file.
+On Wed, Sep 28, 2022 at 10:09 AM Zack Rusin <zackr@vmware.com> wrote:
+>
+> On Tue, 2022-09-27 at 02:38 +0900, Masahiro Yamada wrote:
+> > =E2=9A=A0 External Email
+> >
+> > On Fri, Sep 23, 2022 at 3:45 AM Zack Rusin <zack@kde.org> wrote:
+> > >
+> > > From: Zack Rusin <zackr@vmware.com>
+> > >
+> > > The debug vmlinux takes up the vast majority of space in the built
+> > > rpm's. While having it enabled by default is a good idea because it
+> > > makes debugging easier, having an option to skip it is highly valuabl=
+e
+> > > for CI/CD systems where small packages are a lot easier to deal with
+> > > e.g. kernel rpm built using binrpm-pkg on Fedora 36 default 5.19.8 ke=
+rnel
+> > > config and localmodconfig goes from 255MB to 65MB which is an almost
+> > > 4x difference.
+> > >
+> > > To skip adding vmlinux.bz2 to the built rpm add SKIP_RPM_VMLINUX
+> > > environment variable which when set to "y", e.g. via
+> > > "SKIP_RPM_VMLINUX=3Dy make binrpm-pkg" won't include vmlinux.bz2 in t=
+he
+> > > built rpm.
+> > >
+> > > Signed-off-by: Zack Rusin <zackr@vmware.com>
+> > > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > > Cc: Michal Marek <michal.lkml@markovi.net>
+> > > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > > Cc: linux-kbuild@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > ---
+> > >  scripts/package/mkspec | 10 ++++++++--
+> > >  1 file changed, 8 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+> > > index 7c477ca7dc98..5a71fc0852b0 100755
+> > > --- a/scripts/package/mkspec
+> > > +++ b/scripts/package/mkspec
+> > > @@ -23,6 +23,12 @@ else
+> > >         M=3DDEL
+> > >  fi
+> > >
+> > > +if [ "$RPM_SKIP_VMLINUX" =3D y ]; then
+> > > +       D=3DDEL
+> > > +else
+> > > +       D=3D
+> > > +fi
+> > > +
+> > >  if grep -q CONFIG_DRM=3Dy .config; then
+> > >         PROVIDES=3Dkernel-drm
+> > >  fi
+> > > @@ -94,8 +100,8 @@ $M   $MAKE %{?_smp_mflags} INSTALL_MOD_PATH=3D%{bu=
+ildroot} modules_install
+> > >         $MAKE %{?_smp_mflags} INSTALL_HDR_PATH=3D%{buildroot}/usr hea=
+ders_install
+> > >         cp System.map %{buildroot}/boot/System.map-$KERNELRELEASE
+> > >         cp .config %{buildroot}/boot/config-$KERNELRELEASE
+> > > -       bzip2 -9 --keep vmlinux
+> > > -       mv vmlinux.bz2 %{buildroot}/boot/vmlinux-$KERNELRELEASE.bz2
+> > > +$D     bzip2 -9 --keep vmlinux
+> > > +$D     mv vmlinux.bz2 %{buildroot}/boot/vmlinux-$KERNELRELEASE.bz2
+> > >  $S$M   rm -f %{buildroot}/lib/modules/$KERNELRELEASE/build
+> > >  $S$M   rm -f %{buildroot}/lib/modules/$KERNELRELEASE/source
+> > >  $S$M   mkdir -p %{buildroot}/usr/src/kernels/$KERNELRELEASE
+> > > --
+> > > 2.34.1
+> > >
+> >
+> >
+> >
+> >
+> > This came from fc370ecfdb37b853bd8e2118c7ad9f99fa9ac5cd
+> > I do not know how useful or annoying it is.
+> > Presumably, it was a cheesy work, and rather annoying than useful.
+> >
+> >
+> > In debian (scripts/package/mkdebian), this kind of stuff is
+> > a separate debug package, and only built when CONFIG_DEBUG_INFO=3Dy.
+> >
+> >
+> > Take more time in case somebody may come up with a better idea.
+>
+> I'd be happy to rework it in whatever way would be more convenient. Becau=
+se rpm
+> builds already depend on environment vars due to RPMOPTS I thought this a=
+pproach was
+> fitting but I'm not particularly attached to it. The important thing is t=
+he the end
+> result of not including vmlinux.bz2 in the rpm itself.
+>
+> I think the other reasonable question to ask is: is anyone still using vm=
+linux.bz2
+> from rpms? Because maybe just removing that code completely is the better=
+ option
+> here.
 
-Maybe yes.  I updated this line too because it's introduced together
-swapops.h by the following commit.
 
-  commit 0e5a7ff6e36ad58933d076ddcac36ff14d014692
-  Author: Helge Deller <deller@gmx.de>
-  Date:   Fri Jul 24 19:17:52 2020 +0200
-  
-      parisc: Report bad pages as HardwareCorrupted
+Yes, I like it.
 
-> 
-> > -#include <linux/swapops.h>
-> > +#include <linux/mm.h>
-> >  
-> >  #include <asm/pdc.h>
-> >  #include <asm/pdcpat.h>
-> > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > index c2277f5aba9e..80a2d800f272 100644
-> > --- a/include/linux/mm.h
-> > +++ b/include/linux/mm.h
-> > @@ -3279,11 +3279,16 @@ extern atomic_long_t num_poisoned_pages __read_mostly;
-> >  extern int soft_offline_page(unsigned long pfn, int flags);
-> >  #ifdef CONFIG_MEMORY_FAILURE
-> >  extern int __get_huge_page_for_hwpoison(unsigned long pfn, int flags);
-> > +extern void num_poisoned_pages_inc(void);
-> >  #else
-> >  static inline int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
-> >  {
-> >  	return 0;
-> >  }
-> > +
-> > +static inline void num_poisoned_pages_inc(void)
-> > +{
-> > +}
-> >  #endif
-> >  
-> >  #ifndef arch_memory_failure
-> > diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-> > index a91dd08e107b..3e58a812399a 100644
-> > --- a/include/linux/swapops.h
-> > +++ b/include/linux/swapops.h
-> > @@ -581,8 +581,6 @@ static inline int is_pmd_migration_entry(pmd_t pmd)
-> >  
-> >  #ifdef CONFIG_MEMORY_FAILURE
-> >  
-> > -extern atomic_long_t num_poisoned_pages __read_mostly;
-> > -
-> >  /*
-> >   * Support for hardware poisoned pages
-> >   */
-> > @@ -610,17 +608,7 @@ static inline struct page *hwpoison_entry_to_page(swp_entry_t entry)
-> >  	return p;
-> >  }
-> >  
-> > -static inline void num_poisoned_pages_inc(void)
-> > -{
-> > -	atomic_long_inc(&num_poisoned_pages);
-> > -}
-> > -
-> > -static inline void num_poisoned_pages_sub(long i)
-> > -{
-> > -	atomic_long_sub(i, &num_poisoned_pages);
-> > -}
-> > -
-> > -#else  /* CONFIG_MEMORY_FAILURE */
-> > +#else
-> >  
-> >  static inline swp_entry_t make_hwpoison_entry(struct page *page)
-> >  {
-> > @@ -636,15 +624,7 @@ static inline struct page *hwpoison_entry_to_page(swp_entry_t entry)
-> >  {
-> >  	return NULL;
-> >  }
-> > -
-> > -static inline void num_poisoned_pages_inc(void)
-> > -{
-> > -}
-> > -
-> > -static inline void num_poisoned_pages_sub(long i)
-> > -{
-> > -}
-> > -#endif  /* CONFIG_MEMORY_FAILURE */
-> > +#endif
-> >  
-> >  static inline int non_swap_entry(swp_entry_t entry)
-> >  {
-> > diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> > index 5942e1c0407e..aa6ce685b863 100644
-> > --- a/mm/memory-failure.c
-> > +++ b/mm/memory-failure.c
-> > @@ -74,6 +74,16 @@ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
-> >  
-> >  static bool hw_memory_failure __read_mostly = false;
-> >  
-> > +static inline void num_poisoned_pages_inc(void)
-> 
-> This function is defined as "static inline" while it's "extern void num_poisoned_pages_inc(void)"
-> in the header file. Is this expected?
 
-No. 4/4 effectively fixes it, but I should've done this in this patch.
-Thank you,
-- Naoya Horiguchi
 
-> 
-> Thanks,
-> Miaohe Lin
-> 
-> > +{
-> > +	atomic_long_inc(&num_poisoned_pages);
-> > +}
-> > +
-> > +static inline void num_poisoned_pages_sub(long i)
-> > +{
-> > +	atomic_long_sub(i, &num_poisoned_pages);
-> > +}
-> > +
-> >  /*
-> >   * Return values:
-> >   *   1:   the page is dissolved (if needed) and taken off from buddy,
-> > 
-> 
+
+--=20
+Best Regards
+Masahiro Yamada
