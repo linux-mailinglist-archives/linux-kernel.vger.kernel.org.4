@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2A35ED345
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 05:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3B65ED347
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 05:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbiI1DHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 23:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S232477AbiI1DHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 23:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbiI1DGx (ORCPT
+        with ESMTP id S232156AbiI1DGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 23:06:53 -0400
+        Tue, 27 Sep 2022 23:06:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBC31CE91B;
-        Tue, 27 Sep 2022 20:06:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824681CE920;
+        Tue, 27 Sep 2022 20:06:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D090A61CFB;
-        Wed, 28 Sep 2022 03:06:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B7FC4347C;
-        Wed, 28 Sep 2022 03:06:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA1C361CFA;
+        Wed, 28 Sep 2022 03:06:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88291C43142;
+        Wed, 28 Sep 2022 03:06:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664334411;
-        bh=E2ZGBiLzDQ8mnNJYWNsiVZPK0S1Pay8r3W0mHB5xPsY=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=MJvoXsyCV1v8BgZ9JWIAs71JQkckWxOM9STSpr2AE2WK7tohpRWqFfDEwMwAopi1X
-         oIkil8ZRqbRsxbvTZyUzposZySqP83QnfBDvo6VS05S6Afl+MK6wZcA0TGnRKwcTO9
-         5tCRAhOErxhmH8MnLsUl7cO48nf0M2f1FtvXxzz1rOq2EetDcUvv8lqfnBqiXYyG95
-         53kjr2EX9xswYKvEhVGCes+ReZddBFvczC+GPUg18gujrtltMI9a/VKjikQ3vp9dR3
-         U7EWzLNuKpMx5PNHbGi0UA35THYcsux9DKFJROqxOccmteKfxPp2MVOr1H/m/vsVeI
-         Vh5eixYkD9P/A==
+        s=k20201202; t=1664334413;
+        bh=VMAzbGju3fZO1yAi48S5l4Q6uictYSwvEjvrd3Y5N1w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rwjykJ0xECTbJeXauNAF9KKIHuNFYoOhuNJv5qiVzb6RcK4btYDNqEQTTUnagUX/C
+         Ies3cenLmfSWjRRuou5m0MqxypX68AKd6ceCrRV0a4NVsNcyOAHgnWH9PZJzVkLwQU
+         VaeH2woPHHqjPOJWN9KMdPX57y6yJSbzIThC+rz/iAq++ucsNzF28x1Zgub5q38V7i
+         /CEChHalSTPgyYpibXXf5PSulkXSeGyw0e/T4+AQHF8fIZTM6BlsMKfHxxAfaYtT4Y
+         J1r10mEzzqU2e0+Es+bj7w+0YlhOoqn53sdPyWte5V3VWczjO1aZgPD7D6/fB34xpV
+         CuPPK90Lls3dg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     devicetree@vger.kernel.org, robh+dt@kernel.org, sboyd@kernel.org,
+To:     konrad.dybcio@somainline.org, mturquette@baylibre.com,
+        sboyd@kernel.org, quic_bjorande@quicinc.com
+Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, konrad.dybcio@somainline.org,
-        krzysztof.kozlowski@linaro.org, mturquette@baylibre.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org
-Subject: Re: [PATCH] dt-bindings: clock: qcom,a53pll: replace maintainer
-Date:   Tue, 27 Sep 2022 22:06:45 -0500
-Message-Id: <166433439994.1849007.1333877193310870502.b4-ty@kernel.org>
+        linux-clk@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
+Subject: Re: [PATCH v2 0/2] clk: qcom: Add SC8280XP GPU clock controller
+Date:   Tue, 27 Sep 2022 22:06:47 -0500
+Message-Id: <166433439996.1849007.6883466236437791919.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220924081329.15141-1-krzysztof.kozlowski@linaro.org>
-References: <20220924081329.15141-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220926173025.4747-1-quic_bjorande@quicinc.com>
+References: <20220926173025.4747-1-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,16 +56,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 24 Sep 2022 10:13:29 +0200, Krzysztof Kozlowski wrote:
-> Emails to codeaurora.org bounce ("Recipient address rejected:
-> undeliverable address: No such user here.").
+On Mon, 26 Sep 2022 10:30:23 -0700, Bjorn Andersson wrote:
+> What the subject says.
 > 
+> Bjorn Andersson (2):
+>   dt-bindings: clock: Add Qualcomm SC8280XP GPU binding
+>   clk: qcom: Add SC8280XP GPU clock controller
 > 
+> .../devicetree/bindings/clock/qcom,gpucc.yaml |   2 +
+>  drivers/clk/qcom/Kconfig                      |   8 +
+>  drivers/clk/qcom/Makefile                     |   1 +
+>  drivers/clk/qcom/gpucc-sc8280xp.c             | 461 ++++++++++++++++++
+>  .../dt-bindings/clock/qcom,gpucc-sc8280xp.h   |  35 ++
+>  5 files changed, 507 insertions(+)
+>  create mode 100644 drivers/clk/qcom/gpucc-sc8280xp.c
+>  create mode 100644 include/dt-bindings/clock/qcom,gpucc-sc8280xp.h
+> 
+> [...]
 
 Applied, thanks!
 
-[1/1] dt-bindings: clock: qcom,a53pll: replace maintainer
-      commit: 46e0962ff2825790fecfc689f6f1135eab5c6e45
+[1/2] dt-bindings: clock: Add Qualcomm SC8280XP GPU binding
+      commit: 9f60eb3ec02757ab9441f2463eceddf2c71ec5e3
+[2/2] clk: qcom: Add SC8280XP GPU clock controller
+      commit: e55d937d8cf391c1fb9afad296948b3697ad96f7
 
 Best regards,
 -- 
