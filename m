@@ -2,175 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758095ED422
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 07:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D425ED426
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 07:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiI1FKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 01:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
+        id S231787AbiI1FOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 01:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiI1FKk (ORCPT
+        with ESMTP id S229594AbiI1FOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 01:10:40 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DC911D0EE;
-        Tue, 27 Sep 2022 22:10:38 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id r6so643574wru.8;
-        Tue, 27 Sep 2022 22:10:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=fAgZ5tRHZZRRHERZLI7/VYVjT/NV9E6VbCAjwipHzgk=;
-        b=jyzgohuSp/UPukht3ZdHLxEs4mLcJJivttqHddKq7VS3qE9LduWwlHFnlJVuX5lufJ
-         WLn7sTXhzluTmtBmNGesJ8VAKiyovpjLRvKzxTkAIQ3s+QyuMA8ARdySwdkxocH2Y6Aw
-         md5IfY9BXKDv0eBdIByrW54+0idk67nSFYS6Q=
+        Wed, 28 Sep 2022 01:14:10 -0400
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D6A11E0D1;
+        Tue, 27 Sep 2022 22:14:09 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id e18so7794339wmq.3;
+        Tue, 27 Sep 2022 22:14:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=fAgZ5tRHZZRRHERZLI7/VYVjT/NV9E6VbCAjwipHzgk=;
-        b=GdevUA2J9t9uuB+/ZqRXtabYaAp6Q6yR1p8RMh+Xsgo9nMHS8nwMcQvd74mPI9AwPb
-         GoDD3Xb0GuLzox4wM2NUjthti0WmLOhlcCcupjlOIYQA8BDLC2ZAXcrcALQo/LqyVGOh
-         dOAPvrcrWeaA0i8MLRI9EMYBDvVq5FQ17PeDCiPc/WUdboSLZJoiU90MiLM/FC7Kmk/U
-         yvlgXHn19lC9HksDqHlnIDX9aw7VQza7DLgPj8RKPLEA9o0w1EXBRURqg6Qcwq9cj7eN
-         2gpQsOupnUHzC0+wUc52PPqJcFmrpFdcg4fG8aTbHFe6t1+k0Y/TILCtvAMpdOHohmH1
-         2bDg==
-X-Gm-Message-State: ACrzQf0CzA3dlZQgEA81Em6ZqWlVYzE+D3iAggZhii2DAokHILGCv2YS
-        z9OaL22JZQN3YgCyY2p1sUXIgTvdS9vxILjUOYnzd7DfGJWOpg==
-X-Google-Smtp-Source: AMsMyM4ZY/+ny8VzMnpfRJPd15YWX9Knuyrf35sLqo8Xz/xOY8VYV36VWkMmcx5pKaj3akTM4QjhjvI7WlwaQ6mul/U=
-X-Received: by 2002:a5d:52c9:0:b0:22c:c9e0:8547 with SMTP id
- r9-20020a5d52c9000000b0022cc9e08547mr165724wrv.3.1664341837285; Tue, 27 Sep
- 2022 22:10:37 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=OB38kRi227skB/6g1/JGH5vPB3HcOBtn9y8MKLJUtto=;
+        b=ce/1DvN4M81ygbm1WC5rYz+47y1vA2gqTg64Dx1LlEhLPP5DA1FpG/NRBOJTv7NoXi
+         TLjc0rSqWNEnL4Jez8yAetw2F0ak6YseUWxwiUGDc5XLpvJvGopKYBLZvz8gDu+iXJAl
+         BLewyuyVAUbfOWZbpY3leQFQ1oSQI6HDqCo2cGK0ahGMUXPq/5vo1OkcPys7c2ieCDdJ
+         /fXlrdJV8FhUqVJZl8SqRxhjLMpUmTYBjz+mFFLb+7ZC2a5y82KSPVRLTpcEJnOXNeCu
+         VpfqsALT1qxvJ7XZby4p/n8nzb0w7p20wlpHnCE8SbYraE+sCBw+8fF39oFLTFkOn14C
+         gw+w==
+X-Gm-Message-State: ACrzQf0kTlaMsVIAAs7dtw7rzvFh1L6WXEOnN+GGEbjabMU7LNX+76xQ
+        K/InssNyKJ7ERnzpLEwqYwWRKjLZ5DM=
+X-Google-Smtp-Source: AMsMyM60RriHaQCzJJtBlHBY2m8du/ksKmv2Hv/4I8TeCsLiIosweyMkso0U0f0by+2iBhaQRNRRSg==
+X-Received: by 2002:a05:600c:4f44:b0:3b4:c554:a5f4 with SMTP id m4-20020a05600c4f4400b003b4c554a5f4mr5073655wmq.107.1664342047837;
+        Tue, 27 Sep 2022 22:14:07 -0700 (PDT)
+Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id h9-20020a1c2109000000b003b4fac020c8sm661741wmh.16.2022.09.27.22.14.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 22:14:06 -0700 (PDT)
+Message-ID: <a223a99b-cbbe-aedb-cb08-7c79b9bcf7d0@kernel.org>
+Date:   Wed, 28 Sep 2022 07:14:05 +0200
 MIME-Version: 1.0
-References: <20220907164317.80617-1-eajames@linux.ibm.com> <Yxl8CJBZiROgqhd6@kernel.org>
- <1a20cd56-cc6f-d1c3-2e9d-c6b1fe278959@linux.ibm.com>
-In-Reply-To: <1a20cd56-cc6f-d1c3-2e9d-c6b1fe278959@linux.ibm.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 28 Sep 2022 05:10:25 +0000
-Message-ID: <CACPK8XfRC==6CmFV3LoTW9oF_KLxMXH2KZQD0WFfnYpgnBERXQ@mail.gmail.com>
-Subject: Re: [PATCH] tpm: Add flag to use default cancellation policy
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peterhuewe@gmx.de, jarkko@kernel.or, jgg@ziepe.ca,
-        Alexander.Steffen@infineon.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 5.19 000/207] 5.19.12-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220926100806.522017616@linuxfoundation.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Sept 2022 at 13:53, Eddie James <eajames@linux.ibm.com> wrote:
->
->
-> On 9/8/22 00:22, Jarkko Sakkinen wrote:
-> > On Wed, Sep 07, 2022 at 11:43:17AM -0500, Eddie James wrote:
-> >> The check for cancelled request depends on the VID of the chip, but
-> >> some chips share VID which shouldn't share their cancellation
-> >> behavior. This is the case for the Nuvoton NPCT75X, which should use
-> >> the default cancellation check, not the Winbond one.
-> >> To avoid changing the existing behavior, add a new flag to indicate
-> >> that the chip should use the default cancellation check and set it
-> >> for the I2C TPM2 TIS driver.
-> >>
-> >> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> >> ---
-> >>   drivers/char/tpm/tpm_tis_core.c | 18 ++++++++++--------
-> >>   drivers/char/tpm/tpm_tis_core.h |  1 +
-> >>   drivers/char/tpm/tpm_tis_i2c.c  |  1 +
-> >>   3 files changed, 12 insertions(+), 8 deletions(-)
-> >>
-> >> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> >> index 757623bacfd5..175e75337395 100644
-> >> --- a/drivers/char/tpm/tpm_tis_core.c
-> >> +++ b/drivers/char/tpm/tpm_tis_core.c
-> >> @@ -682,15 +682,17 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
-> >>   {
-> >>      struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> >>
-> >> -    switch (priv->manufacturer_id) {
-> >> -    case TPM_VID_WINBOND:
-> >> -            return ((status == TPM_STS_VALID) ||
-> >> -                    (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
-> >> -    case TPM_VID_STM:
-> >> -            return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
-> >> -    default:
-> >> -            return (status == TPM_STS_COMMAND_READY);
-> >> +    if (!test_bit(TPM_TIS_DEFAULT_CANCELLATION, &priv->flags)) {
-> >> +            switch (priv->manufacturer_id) {
-> >> +            case TPM_VID_WINBOND:
-> >> +                    return ((status == TPM_STS_VALID) ||
-> >> +                            (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
-> >> +            case TPM_VID_STM:
-> >> +                    return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
-> >> +            }
-> > Why there is no default: ?
->
->
-> Well I didn't want to duplicate the line "status ==
-> TPM_STS_COMMAND_READY" in the default case and for the flagged case. So
-> now the switch just falls through for default. I can add default: break
-> instead
+On 26. 09. 22, 12:09, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.12 release.
+> There are 207 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.12-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
 
-This code was in the original patch series submitted by Nuvoton:
+openSUSE configs¹⁾ all green. x86_64 runs fine.
 
-https://lore.kernel.org/r/20211104140211.6258-3-amirmizi6@gmail.com
+Tested-by: Jiri Slaby <jirislaby@kernel.org>
 
-Perhaps something like that would be better?
+¹⁾ armv6hl armv7hl arm64 i386 ppc64 ppc64le riscv64 s390x x86_64
 
->
->
-> >
-> >>      }
-> >> +
-> >> +    return status == TPM_STS_COMMAND_READY;
-> >>   }
-> >>
-> >>   static irqreturn_t tis_int_handler(int dummy, void *dev_id)
-> >> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-> >> index 66a5a13cd1df..b68479e0de10 100644
-> >> --- a/drivers/char/tpm/tpm_tis_core.h
-> >> +++ b/drivers/char/tpm/tpm_tis_core.h
-> >> @@ -86,6 +86,7 @@ enum tis_defaults {
-> >>   enum tpm_tis_flags {
-> >>      TPM_TIS_ITPM_WORKAROUND         = BIT(0),
-> >>      TPM_TIS_INVALID_STATUS          = BIT(1),
-> >> +    TPM_TIS_DEFAULT_CANCELLATION    = BIT(2),
-> >>   };
-> >>
-> >>   struct tpm_tis_data {
-> >> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
-> >> index 0692510dfcab..6722588e0217 100644
-> >> --- a/drivers/char/tpm/tpm_tis_i2c.c
-> >> +++ b/drivers/char/tpm/tpm_tis_i2c.c
-> >> @@ -329,6 +329,7 @@ static int tpm_tis_i2c_probe(struct i2c_client *dev,
-> >>      if (!phy->io_buf)
-> >>              return -ENOMEM;
-> >>
-> >> +    set_bit(TPM_TIS_DEFAULT_CANCELLATION, &phy->priv.flags);
-> > What if you just zeroed manufacturer ID?
->
->
-> It's already zero there, and gets set to the VID as part of the core
-> init function.
->
->
-> Thanks,
->
-> Eddie
->
->
-> >
-> >>      phy->i2c_client = dev;
-> >>
-> >>      /* must precede all communication with the tpm */
-> >> --
-> >> 2.31.1
-> >>
-> > BR, Jarkko
+-- 
+js
+suse labs
+
