@@ -2,212 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2385EE848
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 23:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76615EE850
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 23:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233675AbiI1VYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 17:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
+        id S233972AbiI1Vbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 17:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233533AbiI1VYp (ORCPT
+        with ESMTP id S233601AbiI1Vbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 17:24:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3843515813;
-        Wed, 28 Sep 2022 14:24:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8D58B821DA;
-        Wed, 28 Sep 2022 21:24:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67572C433C1;
-        Wed, 28 Sep 2022 21:24:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664400280;
-        bh=2tsvDWLXjCpSXx1+oUyz7uGKdlBt4GQ4EDst+XULMCw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=bmHoUFtootrIm0LTKeUm87bx+60c5m3zWVFiLeEOk7uVbCQwbOpB61HCSMCjVtfA4
-         a8qzkehPhyuMNZrtF01H54IQLumoZtZ3KUD+NISykk4i973RhMKY7e0r9SfKzTct6a
-         3VkGYvQU/h9/mb8/ZJsBXh4QUU8SFTCioBE0ue8aK8/h5Fgg/fXyaoNtrgZE9FeuWF
-         i7Wb+SCTZLa+xmNRJlAAg+mWrAFnmkdEJifjEUu5j1cHBkT8QzZUWWPbqlN9OwZfdz
-         qP/Lz+I6vT2LNBRxLbraJwYjTNu6LW4XE9wvPQZg5PclAxvCPZftjnRY7nXU8o340N
-         9swtcJP8RWQfg==
-Date:   Wed, 28 Sep 2022 16:24:38 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     bhelgaas@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, koba.ko@canonical.com,
-        Oliver O'Halloran <oohall@gmail.com>,
-        mika.westerberg@linux.intel.com
-Subject: Re: [PATCH 3/3] PCI/DPC: Disable DPC service on suspend when IRQ is
- shared with PME
-Message-ID: <20220928212438.GA1836272@bhelgaas>
+        Wed, 28 Sep 2022 17:31:44 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B42760FE;
+        Wed, 28 Sep 2022 14:31:41 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id k3-20020a05600c1c8300b003b4fa1a85f8so1688649wms.3;
+        Wed, 28 Sep 2022 14:31:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=kHtcM/ZhNIQfonSbRMlI/alAAHn24v5beci83RsPETQ=;
+        b=QcPgl9ROwUeqG6rw+McsRw+ZhRgG365ZnH4zH77hwFmLx7OXhRi2n0lCo1y2KUvo99
+         1RDlXGyiTTiei5sZYSByiYiNVgKwCiLA2oGzoZZGVUOTsIV+tdhJTjIopATrZdPUScv6
+         vTKhiPK9zzzeBKZds27pPLluyiugXqWNHBNxMBlt40c6brWNOytiw0MqbwEPnYpbjBLX
+         H2SrRN2SabMXgmokbp9OuQurISROaC9JU0MnJEeJ0vcXKLMB8WArmkcM7Gd8uIJRJFbz
+         JWVmKg1lsYzz/8qzXRWXcZ90/Ukj6uTFXve9qiW0QDAIQaAchtsflLGLc4q+aMFmH3YG
+         sejQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=kHtcM/ZhNIQfonSbRMlI/alAAHn24v5beci83RsPETQ=;
+        b=UdKla1kT0B4zKY/aD2yttXv6+iJh3CxZdzfGHd12CJSSRtxwAD8+CRwF53DIKDuF8Q
+         52K7eoDGrslp5cTjWJkfGM95Qww0PVXaIBuJNv6OcnVEGcjKT0TD//pljKSLf7ZkbXWX
+         DUAsDXqY88YRzpcnH/ZtAzHFoqfF9lwCR7q4Zm/XQ7/dUPWqwq8yaBfr/itSg/ceS+DD
+         4vVTBNvXSOH+gXTGc7LjNinF/q0sG6M2XXZMnbfc7y7ZcSHcTtlUEuvZ4TapFNRQBLgm
+         eMuNWTBO6q8u2Ru1UQ3Fo2mnVuvTMYN95sRc8Ut5mc8vLHcKNh4mOhAEvSgXqQnnrsmM
+         ZCMg==
+X-Gm-Message-State: ACrzQf0/RSre0JCi7HHHN77pq4iq4BQ0DheDfRR1ZffA5VEaSoBXfMyj
+        Ss5bLfHf0DpPvBNYaCMi+1I=
+X-Google-Smtp-Source: AMsMyM7aOjoYbO4hfmIPy5nzW+hPDOHiP9ssPu0Tsdkl4upfL/5kCoMwt7VCP+e4McZiUqr1nWMk2w==
+X-Received: by 2002:a05:600c:211a:b0:3b4:75ee:c63e with SMTP id u26-20020a05600c211a00b003b475eec63emr8581535wml.44.1664400700333;
+        Wed, 28 Sep 2022 14:31:40 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id d15-20020adffd8f000000b00228a6ce17b4sm5082891wrr.37.2022.09.28.14.31.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 14:31:39 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Christopher Ruehl <chris.ruehl@gtsys.com.hk>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] devicetree: hwmon: shtc1: Clean up spelling mistakes and grammar
+Date:   Wed, 28 Sep 2022 22:31:39 +0100
+Message-Id: <20220928213139.63819-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220727013255.269815-3-kai.heng.feng@canonical.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 09:32:52AM +0800, Kai-Heng Feng wrote:
-> PCIe service that shares IRQ with PME may cause spurious wakeup on
-> system suspend.
-> 
-> Since AER is conditionally disabled in previous patch, also apply the
-> same condition to disable DPC which depends on AER to work.
-> 
-> PCIe Base Spec 5.0, section 5.2 "Link State Power Management" states
-> that TLP and DLLP transmission is disabled for a Link in L2/L3 Ready
-> (D3hot), L2 (D3cold with aux power) and L3 (D3cold), so we don't lose
-> much here to disable DPC during system suspend.
-> 
-> This is very similar to previous attempts to suspend AER and DPC [1],
-> but with a different reason.
-> 
-> [1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.feng@canonical.com/
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216295
-> 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/pci/pcie/dpc.c | 52 +++++++++++++++++++++++++++++++++---------
->  1 file changed, 41 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
-> index 3e9afee02e8d1..542f282c43f75 100644
-> --- a/drivers/pci/pcie/dpc.c
-> +++ b/drivers/pci/pcie/dpc.c
-> @@ -343,13 +343,33 @@ void pci_dpc_init(struct pci_dev *pdev)
->  	}
->  }
->  
-> +static void dpc_enable(struct pcie_device *dev)
-> +{
-> +	struct pci_dev *pdev = dev->port;
-> +	u16 ctl;
-> +
-> +	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-> +	ctl = (ctl & 0xfff4) | PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN;
-> +	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-> +}
+The yaml text contains some minor spelling mistakes and grammar issues,
+clean these up.
 
-I guess the reason we need this is because we disable interupts in
-pci_pm_suspend() first, then we call pci_save_dpc_state() from
-pci_pm_suspend_noirq(), so we save the *disabled* control register.
-Then when we resume, we restore that disabled control register so we
-need to enable DPC again.  Right?
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ .../devicetree/bindings/hwmon/sensirion,shtc1.yaml        | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I think we should save a "dpc_enabled" bit in the pci_dev and
-conditionally set PCI_EXP_DPC_CTL_INT_EN here.  If we unconditionally
-set it here, we depend on portdrv *not* calling dpc_resume() if we
-didn't enable DPC at enumeration-time for some reason.
+diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+index 7d49478d9668..159238efa9ed 100644
+--- a/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
++++ b/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+@@ -10,7 +10,7 @@ maintainers:
+   - Christopher Ruehl chris.ruehl@gtsys.com.hk
+ 
+ description: |
+-  The SHTC1, SHTW1 and SHTC3 are digital humidity and temperature sensor
++  The SHTC1, SHTW1 and SHTC3 are digital humidity and temperature sensors
+   designed especially for battery-driven high-volume consumer electronics
+   applications.
+   For further information refere to Documentation/hwmon/shtc1.rst
+@@ -31,13 +31,13 @@ properties:
+   sensirion,blocking-io:
+     $ref: /schemas/types.yaml#/definitions/flag
+     description:
+-      If set, the driver hold the i2c bus until measurement is finished.
++      If set, the driver holds the i2c bus until the measurement is finished.
+ 
+   sensirion,low-precision:
+     $ref: /schemas/types.yaml#/definitions/flag
+     description:
+-      If set, the sensor aquire data with low precision (not recommended).
+-      The driver aquire data with high precision by default.
++      If set, the sensor acquires data with low precision (not recommended).
++      The driver acquires data with high precision by default.
+ 
+ required:
+   - compatible
+-- 
+2.37.1
 
-And I would leave PCI_EXP_DPC_CTL_EN_FATAL alone; see below.
-
-> +static void dpc_disable(struct pcie_device *dev)
-> +{
-> +	struct pci_dev *pdev = dev->port;
-> +	u16 ctl;
-> +
-> +	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-> +	ctl &= ~(PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN);
-> +	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-
-  #define  PCI_EXP_DPC_CTL_EN_FATAL       0x0001
-  #define  PCI_EXP_DPC_CTL_INT_EN         0x0008
-
-Clearing PCI_EXP_DPC_CTL_INT_EN makes sense to me, but I don't
-understand the PCI_EXP_DPC_CTL_EN_FATAL part.
-
-PCI_EXP_DPC_CTL_EN_FATAL is one of the four values of the two-bit DPC
-Trigger Enable, so clearing that bit leaves the field as either 00b
-(DPC is disabled) or 10b (DPC enabled and triggered when the port
-detects an uncorrectable error or receives an ERR_NONFATAL or
-ERR_FATAL message).
-
-I think we should only clear PCI_EXP_DPC_CTL_INT_EN.
-
-> +}
-> +
->  #define FLAG(x, y) (((x) & (y)) ? '+' : '-')
->  static int dpc_probe(struct pcie_device *dev)
->  {
->  	struct pci_dev *pdev = dev->port;
->  	struct device *device = &dev->device;
->  	int status;
-> -	u16 ctl, cap;
-> +	u16 cap;
->  
->  	if (!pcie_aer_is_native(pdev) && !pcie_ports_dpc_native)
->  		return -ENOTSUPP;
-> @@ -364,10 +384,7 @@ static int dpc_probe(struct pcie_device *dev)
->  	}
->  
->  	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CAP, &cap);
-> -	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-> -
-> -	ctl = (ctl & 0xfff4) | PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN;
-> -	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-
-I think we should keep the PCI_EXP_DPC_CTL_EN_FATAL part here. That
-just sets the desired trigger mode but AFAICT, has nothing to do with
-generating interrupts.
-
-> +	dpc_enable(dev);
-
-Then dpc_enable() could be called something like dpc_enable_irq(), and
-it would *only* control interupt generation.
-
->  	pci_info(pdev, "enabled with IRQ %d\n", dev->irq);
->  
->  	pci_info(pdev, "error containment capabilities: Int Msg #%d, RPExt%c PoisonedTLP%c SwTrigger%c RP PIO Log %d, DL_ActiveErr%c\n",
-> @@ -380,14 +397,25 @@ static int dpc_probe(struct pcie_device *dev)
->  	return status;
->  }
->  
-> -static void dpc_remove(struct pcie_device *dev)
-> +static int dpc_suspend(struct pcie_device *dev)
->  {
-> -	struct pci_dev *pdev = dev->port;
-> -	u16 ctl;
-> +	if (dev->shared_pme_irq)
-> +		dpc_disable(dev);
->  
-> -	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-> -	ctl &= ~(PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN);
-> -	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-> +	return 0;
-> +}
-> +
-> +static int dpc_resume(struct pcie_device *dev)
-> +{
-> +	if (dev->shared_pme_irq)
-> +		dpc_enable(dev);
-> +
-> +	return 0;
-> +}
-> +
-> +static void dpc_remove(struct pcie_device *dev)
-> +{
-> +	dpc_disable(dev);
->  }
->  
->  static struct pcie_port_service_driver dpcdriver = {
-> @@ -395,6 +423,8 @@ static struct pcie_port_service_driver dpcdriver = {
->  	.port_type	= PCIE_ANY_PORT,
->  	.service	= PCIE_PORT_SERVICE_DPC,
->  	.probe		= dpc_probe,
-> +	.suspend	= dpc_suspend,
-> +	.resume		= dpc_resume,
->  	.remove		= dpc_remove,
->  };
->  
-> -- 
-> 2.36.1
-> 
