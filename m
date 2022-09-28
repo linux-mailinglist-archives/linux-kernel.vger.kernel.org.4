@@ -2,88 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF995ED664
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929495ED65D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233714AbiI1Hj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52116 "EHLO
+        id S233453AbiI1Hj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233604AbiI1HjY (ORCPT
+        with ESMTP id S233687AbiI1HjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:39:24 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2893474FD;
-        Wed, 28 Sep 2022 00:37:44 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28S5tXa8017510;
-        Wed, 28 Sep 2022 07:37:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=bQwSbPWV9aAjDmT4q4/mNCIIU53Tgr6fPJA432P0lyw=;
- b=OEhgxZYQx9YO+fnXyZAWMPl2Ig0ip4bcHULQ9iplT6hsEXN6Ab1KHdg2r3Adgr+2xHqL
- OFKbT/WzmnP/dcZ5hD9EbK0RYS3ImRaeXZ7XjTjwoGd23XcE/fs22Kto5LBM79LqUKcE
- vDWFR3clmj6Gv2SyPJeK1vuMs6cuvkMDPlk/KludvvMrliz0RbTutBBtpinXzLjaUD6j
- TGdJBut8qVZGZ57SsgQrvGr4qRxt6dr1VsNp3sSx73DCMMFl+XKtvQrp5s6NliGeVRtw
- zW2yNif1cSGGo3EEO4fjripduQO2NI8e7PS2csG/FOkpNTEFnS8Y8BNPUTt8DKMh9s3b jA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jvbf0gtfm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 07:37:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28S7bM0L015786
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 07:37:22 GMT
-Received: from [10.204.67.102] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 28 Sep
- 2022 00:37:17 -0700
-Message-ID: <e4794dcb-8450-a1b5-244d-abff800d60f1@quicinc.com>
-Date:   Wed, 28 Sep 2022 13:07:14 +0530
+        Wed, 28 Sep 2022 03:39:04 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56CB1080BC
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:37:30 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id n10so18339536wrw.12
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:37:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:reply-to:from
+         :references:to:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=kFq/owo5gWxLx4y4U9Fe+fPvLJZVx8JY9zybO1v4ydg=;
+        b=ckxO9rYUBw3zTw7PSdGafId1ucZgdHlyLgsZ8jPjH2pxi7wEQNPNURrMeeunL7D6AP
+         T7NQbk/qn5v/vwiJdJVV8TiMr3zOuaekgPmHe9gsjBQeSbUX0LotbI3M9g/3s0gCuxJG
+         fuUgZKztpJy5RyKxDQ5BbovtplL0LKPyauzkZwygCAEP1+MLuC3okpAajlyywtU2SqBy
+         46wuNwRLrgGzRMytOFJkHi3pTCD2ADA3lQ7U0f/Rk1Agu92U9k7dgPLAfHFe9XbAsDBn
+         rUi8cSJd5V8SOAIxyIFBpoG3/00FC41KdP+X1QCrwjheq7iK8OF+kXTwCnMxBhi/zOk/
+         GYkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:reply-to:from
+         :references:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=kFq/owo5gWxLx4y4U9Fe+fPvLJZVx8JY9zybO1v4ydg=;
+        b=HFH3EO7yPVQw/kGmUI10px/rlmN1YWhrYdbo4nzn0/RSOlN01uLz+GSpDPwcki9peG
+         zo+wlKY/lVq1NsWwrCGcPlAEAeb5H9aHOsBwcGV05OKOWpwCN2XNCDOcYejrAZtk0yTU
+         Q5kDfR7OZrdprkz851DU4IVD/gwepflojmV3V8FDSUi9veevH1buies5l93q3OV6uthR
+         gFT6DIJtG9Yj+ZfLEwxiTx8LXLzNrSDL2cKDWE82ufzcT915y2yUf+OV3AKja7ydGU6/
+         KKBoMhhUDlmrk3xKFhyQygbOfL/fogygjcXVHO4JsHStefKhj1L4ci7zz7cRffvS8oyV
+         5V3A==
+X-Gm-Message-State: ACrzQf2J1cDigredVG1HZ4/ZwPZ9wgj1taksPAXYWMF8wNNfp46Gi02K
+        ej4+nlGt3ZXebFgKmuY/BlFGeQ==
+X-Google-Smtp-Source: AMsMyM4UCYKXfp+Vp5r77z7N9Wtr6ueFmRFzPoSCUj42eYXswXZPNVfdXkBELNrukknRDKnbPrzp2g==
+X-Received: by 2002:a5d:64e8:0:b0:22a:bb78:1e44 with SMTP id g8-20020a5d64e8000000b0022abb781e44mr21177746wri.378.1664350645933;
+        Wed, 28 Sep 2022 00:37:25 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:11d4:7c71:accf:6521? ([2a01:e0a:982:cbb0:11d4:7c71:accf:6521])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003a5c244fc13sm1014948wms.2.2022.09.28.00.37.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 00:37:25 -0700 (PDT)
+Message-ID: <1fdbf742-e325-9b14-b795-0178c21dcf20@linaro.org>
+Date:   Wed, 28 Sep 2022 09:37:24 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3 3/5] clk: qcom: gdsc: Add a reset op to poll gdsc
- collapse
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 01/12] arm64: dts: qcom: sc7280: drop clock-cells from
+ LPASS TLMM
 Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-CC:     freedreno <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        <krzysztof.kozlowski@linaro.org>, Andy Gross <agross@kernel.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1660853919-987-1-git-send-email-quic_akhilpo@quicinc.com>
- <20220819014758.v3.3.I162c4be55f230cd439f0643f1624527bdc8a9831@changeid>
- <20220927172626.cwxpmrqkb7zsuolx@builder.lan>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <20220927172626.cwxpmrqkb7zsuolx@builder.lan>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220927153429.55365-1-krzysztof.kozlowski@linaro.org>
+ <20220927153429.55365-2-krzysztof.kozlowski@linaro.org>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Organization: Linaro Developer Services
+In-Reply-To: <20220927153429.55365-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YTqevWIvWo1srfz329B86bAwax0Drikb
-X-Proofpoint-ORIG-GUID: YTqevWIvWo1srfz329B86bAwax0Drikb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-28_02,2022-09-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- mlxscore=0 priorityscore=1501 phishscore=0 impostorscore=0
- lowpriorityscore=0 mlxlogscore=999 adultscore=0 clxscore=1011 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209280045
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,152 +85,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/2022 10:56 PM, Bjorn Andersson wrote:
-> On Fri, Aug 19, 2022 at 01:48:37AM +0530, Akhil P Oommen wrote:
->> Add a reset op compatible function to poll for gdsc collapse.
->>
->> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
->> ---
->>
->> (no changes since v2)
->>
->> Changes in v2:
->> - Minor update to function prototype
->>
->>   drivers/clk/qcom/gdsc.c | 23 +++++++++++++++++++----
->>   drivers/clk/qcom/gdsc.h |  7 +++++++
->>   2 files changed, 26 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
->> index 44520ef..2d0f1d1 100644
->> --- a/drivers/clk/qcom/gdsc.c
->> +++ b/drivers/clk/qcom/gdsc.c
->> @@ -17,6 +17,7 @@
->>   #include <linux/reset-controller.h>
->>   #include <linux/slab.h>
->>   #include "gdsc.h"
->> +#include "reset.h"
->>   
->>   #define PWR_ON_MASK		BIT(31)
->>   #define EN_REST_WAIT_MASK	GENMASK_ULL(23, 20)
->> @@ -116,7 +117,8 @@ static int gdsc_hwctrl(struct gdsc *sc, bool en)
->>   	return regmap_update_bits(sc->regmap, sc->gdscr, HW_CONTROL_MASK, val);
->>   }
->>   
->> -static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status)
->> +static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status,
->> +		s64 timeout_us, unsigned int interval_ms)
->>   {
->>   	ktime_t start;
->>   
->> @@ -124,7 +126,9 @@ static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status)
->>   	do {
->>   		if (gdsc_check_status(sc, status))
->>   			return 0;
->> -	} while (ktime_us_delta(ktime_get(), start) < TIMEOUT_US);
->> +		if (interval_ms)
->> +			msleep(interval_ms);
-> You effectively msleep(5) here, for which you shouldn't use msleep() -
-> or more likely, this only happens in exceptional circumstances, so a
-> longer interval_ms seems reasonable.
-By reducing the overall polling time here, we can reduce any user 
-visible impact like missing frame/janks due to gpu hang/recovery. I kept 
-5ms here because in my local testing on sc7280 device I didn't see any 
-benefit beyond decreasing below 5ms. Msleep() here also helps to quickly 
-schedule other threads which holds pm_runtime refcount on cx_gdsc, which 
-indirectly helps to reduce overall polling time here significantly in my 
-testing.
+On 27/09/2022 17:34, Krzysztof Kozlowski wrote:
+> The LPASS pin-controller is not a clock provider:
+> 
+>    qcom/sc7280-herobrine-herobrine-r1.dtb: pinctrl@33c0000: '#clock-cells' does not match any of the regexes: '-state$', 'pinctrl-[0-9]+'
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 8d807b7bf66a..8823b75a6f1b 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -2432,8 +2432,6 @@ lpass_tlmm: pinctrl@33c0000 {
+>   			#gpio-cells = <2>;
+>   			gpio-ranges = <&lpass_tlmm 0 0 15>;
+>   
+> -			#clock-cells = <1>;
+> -
+>   			lpass_dmic01_clk: dmic01-clk {
+>   				pins = "gpio6";
+>   				function = "dmic1_clk";
 
->
->> +	} while (ktime_us_delta(ktime_get(), start) < timeout_us);
->>   
->>   	if (gdsc_check_status(sc, status))
->>   		return 0;
->> @@ -172,7 +176,7 @@ static int gdsc_toggle_logic(struct gdsc *sc, enum gdsc_status status)
->>   		udelay(1);
->>   	}
->>   
->> -	ret = gdsc_poll_status(sc, status);
->> +	ret = gdsc_poll_status(sc, status, TIMEOUT_US, 0);
->>   	WARN(ret, "%s status stuck at 'o%s'", sc->pd.name, status ? "ff" : "n");
->>   
->>   	if (!ret && status == GDSC_OFF && sc->rsupply) {
->> @@ -343,7 +347,7 @@ static int _gdsc_disable(struct gdsc *sc)
->>   		 */
->>   		udelay(1);
->>   
->> -		ret = gdsc_poll_status(sc, GDSC_ON);
->> +		ret = gdsc_poll_status(sc, GDSC_ON, TIMEOUT_US, 0);
->>   		if (ret)
->>   			return ret;
->>   	}
->> @@ -565,3 +569,14 @@ int gdsc_gx_do_nothing_enable(struct generic_pm_domain *domain)
->>   	return 0;
->>   }
->>   EXPORT_SYMBOL_GPL(gdsc_gx_do_nothing_enable);
->> +
->> +int gdsc_wait_for_collapse(void *priv)
->> +{
->> +	struct gdsc *sc = priv;
->> +	int ret;
->> +
->> +	ret = gdsc_poll_status(sc, GDSC_OFF, 500000, 5);
-> So I presume the GPU driver will put() the GDSC and then issue a reset,
-> which will wait up to 5 seconds for the GDSC to be turned off.
-Not exactly. GPU driver will put() its GDSC vote and will wait for 500ms 
-to allow other clients to drop their vote and the cx_gdsc to finally 
-collapse at hw. There is no hw interface to 'reset' entire GPU 
-subsystem. We have to pull the plug on gdsc to reset it.
->
-> So essentially, this logic is needed because we don't wait for VOTABLE
-> GDSCs to be turned off? And we have no way to do the put-with-wait for
-> this specific case.
->
-> I would like the commit message to capture this reasoning.
-Agree. Will post a new patchset once we have consensus on the rest of 
-the things here.
-
--Akhil.
->
-> Thanks,
-> Bjorn
->
->> +	WARN(ret, "%s status stuck at 'on'", sc->pd.name);
->> +	return ret;
->> +}
->> +EXPORT_SYMBOL_GPL(gdsc_wait_for_collapse);
->> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
->> index ad313d7..d484bdb 100644
->> --- a/drivers/clk/qcom/gdsc.h
->> +++ b/drivers/clk/qcom/gdsc.h
->> @@ -12,6 +12,7 @@
->>   struct regmap;
->>   struct regulator;
->>   struct reset_controller_dev;
->> +struct qcom_reset_map;
->>   
->>   /**
->>    * struct gdsc - Globally Distributed Switch Controller
->> @@ -79,6 +80,7 @@ int gdsc_register(struct gdsc_desc *desc, struct reset_controller_dev *,
->>   		  struct regmap *);
->>   void gdsc_unregister(struct gdsc_desc *desc);
->>   int gdsc_gx_do_nothing_enable(struct generic_pm_domain *domain);
->> +int gdsc_wait_for_collapse(void *priv);
->>   #else
->>   static inline int gdsc_register(struct gdsc_desc *desc,
->>   				struct reset_controller_dev *rcdev,
->> @@ -88,5 +90,10 @@ static inline int gdsc_register(struct gdsc_desc *desc,
->>   }
->>   
->>   static inline void gdsc_unregister(struct gdsc_desc *desc) {};
->> +
->> +static int gdsc_wait_for_collapse(void *priv)
->> +{
->> +	return  -ENOSYS;
->> +}
->>   #endif /* CONFIG_QCOM_GDSC */
->>   #endif /* __QCOM_GDSC_H__ */
->> -- 
->> 2.7.4
->>
-
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
