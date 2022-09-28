@@ -2,193 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67B25ED209
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 02:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7475ED20B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 02:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbiI1A3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 20:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        id S232929AbiI1Aa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 20:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232817AbiI1A3b (ORCPT
+        with ESMTP id S233036AbiI1AaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 20:29:31 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46270111DD6;
-        Tue, 27 Sep 2022 17:29:30 -0700 (PDT)
+        Tue, 27 Sep 2022 20:30:13 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924F11B14FA
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 17:30:11 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id r6so41513wru.8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 17:30:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1664324970; x=1695860970;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Di23evBkahKeOVuK/9bc1RLsAUaIIjqxoex4S/ZsBcE=;
-  b=K7qTwUFktV/Jhov1FVgKZR22C4zexXGp9RlcVLzriZ73rJBLerc6a6gE
-   /g5EwlSMP+ig3TsqC6K514t/LURss7FThW9SfVi+ppRjYY+GpiXnv9HDG
-   l2lDg+G96gizgWQNPT4nvJgfUaKl4czt6OTzu+qhmRXh9Vq94yrcFZ+E0
-   U=;
-X-IronPort-AV: E=Sophos;i="5.93,350,1654560000"; 
-   d="scan'208";a="1058688955"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-87b71607.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 00:29:12 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-87b71607.us-east-1.amazon.com (Postfix) with ESMTPS id 41887140FF4;
-        Wed, 28 Sep 2022 00:29:09 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Wed, 28 Sep 2022 00:29:08 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.43.161.58) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Wed, 28 Sep 2022 00:29:05 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>
-CC:     Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        <netdev@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, syzbot <syzkaller@googlegroups.com>
-Subject: [PATCH v2 net 5/5] tcp: Fix data races around icsk->icsk_af_ops.
-Date:   Tue, 27 Sep 2022 17:27:41 -0700
-Message-ID: <20220928002741.64237-6-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220928002741.64237-1-kuniyu@amazon.com>
-References: <20220928002741.64237-1-kuniyu@amazon.com>
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=0TVnztzgA/fHhw0MXWPFSGn//WSv6/nNHP9m1VIFhLY=;
+        b=MrqewpEuj9opcwzpnzknmGckUNvWLVCVT1qDO7idANPPys77KRN9VrWO1NDRp+4SAB
+         asLeMD9kvPy3ynTsbEVkcYDEV0KrhQzU2HX7+81jY15ZKixbGSDYf+jemEhlcUkwAmYu
+         B54WGN+Pu9yEqArF4vbuJv7bPSftFOsy+bfHptJyXXy0+/O2CRvczu0v+iusM1gLoiEn
+         vneix2NdpMQw8Kqxmr0naUzWXjXcOWRPqVqwFRVju5p4mImSQTof5pmxIl0dqOspzG09
+         a7S/ycp9CBulFM49oAEzfd07VFi8jCF9F1qS6tWHnTVjM+E4JE8nDpsfqGJ6iCsorT8T
+         kN9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=0TVnztzgA/fHhw0MXWPFSGn//WSv6/nNHP9m1VIFhLY=;
+        b=Nj8z4b4gzNn0XuO0yr/nGwOT7vtFqyK6ZsU9rFnOchXZF+4KztMdoe23AfRXGSDkEK
+         WGG7WWjoQNADzm2TRZj38AJ3RJi2LzzQQ1HDtDcwh67OcmdurMP0qLidUgcFlfoQ3K87
+         WpeKQovFRJydQp1R4q0jFr7VsJ3OWzbtAGK26/Wj6c3r9SLPVg5QT8k+M/j4QJ9E1Gl1
+         uMHXI04tYAAFFLcJsSmE77vwVFUYE5uT+4duX/jyD2mRM4Rrdin4kzHPLMvD7CZdbaGD
+         UyhgS2fg6e3B9hajXmynFg++Mvot3XPIuuUkA2qdnK734z5HGxb0d2bQ6THBsAPdnncL
+         b4Zg==
+X-Gm-Message-State: ACrzQf3FgFEK9/tzoBicLSIWG73ZUwjPFuOHuV+dpqsPI/bT1ECsc5C8
+        fPUY+Xv517voS6taiebYt37C8g==
+X-Google-Smtp-Source: AMsMyM6iSC03qDsPN9C0eK8ei5S3otrqjfcIOylT0h7NeQTK38pa4PSUvAkqOBtSwe+8AuPw1HMhiA==
+X-Received: by 2002:a05:6000:1e01:b0:22b:cee:e927 with SMTP id bj1-20020a0560001e0100b0022b0ceee927mr18739804wrb.133.1664325009892;
+        Tue, 27 Sep 2022 17:30:09 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id bk8-20020a0560001d8800b0022af865810esm2685892wrb.75.2022.09.27.17.30.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 17:30:09 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     corbet@lwn.net, linux@leemhuis.info,
+        konstantin@linuxfoundation.org, krzysztof.kozlowski@linaro.org,
+        linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: [PATCH] Documentation/process: Add text to indicate supporters should be mailed
+Date:   Wed, 28 Sep 2022 01:30:06 +0100
+Message-Id: <20220928003006.230103-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.58]
-X-ClientProxiedBy: EX13D13UWB004.ant.amazon.com (10.43.161.218) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-setsockopt(IPV6_ADDRFORM) and tcp_v6_connect() change icsk->icsk_af_ops
-under lock_sock(), but tcp_(get|set)sockopt() read it locklessly.  To
-avoid load/store tearing, we need to add READ_ONCE() and WRITE_ONCE()
-for the reads and writes.
+Recently when submitting a yaml change I found that I had omitted the
+maintainer whose tree the change needed to go through.
 
-Thanks to Eric Dumazet for providing the syzbot report:
+The reason for that is the path in MAINTAINERS is marked as Supported not
+Maintained. Reading MAINTAINERS we see quote:
 
-BUG: KCSAN: data-race in tcp_setsockopt / tcp_v6_connect
+           Supported:   Someone is actually paid to look after this.
+           Maintained:  Someone actually looks after it.
 
-write to 0xffff88813c624518 of 8 bytes by task 23936 on cpu 0:
-tcp_v6_connect+0x5b3/0xce0 net/ipv6/tcp_ipv6.c:240
-__inet_stream_connect+0x159/0x6d0 net/ipv4/af_inet.c:660
-inet_stream_connect+0x44/0x70 net/ipv4/af_inet.c:724
-__sys_connect_file net/socket.c:1976 [inline]
-__sys_connect+0x197/0x1b0 net/socket.c:1993
-__do_sys_connect net/socket.c:2003 [inline]
-__se_sys_connect net/socket.c:2000 [inline]
-__x64_sys_connect+0x3d/0x50 net/socket.c:2000
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
+The current submitting-patches.rst only says to mail maintainers though not
+supporters. When we run scripts/get_maintainer.pl anybody who is denoted a
+paid maintainer will appear as a supporter.
 
-read to 0xffff88813c624518 of 8 bytes by task 23937 on cpu 1:
-tcp_setsockopt+0x147/0x1c80 net/ipv4/tcp.c:3789
-sock_common_setsockopt+0x5d/0x70 net/core/sock.c:3585
-__sys_setsockopt+0x212/0x2b0 net/socket.c:2252
-__do_sys_setsockopt net/socket.c:2263 [inline]
-__se_sys_setsockopt net/socket.c:2260 [inline]
-__x64_sys_setsockopt+0x62/0x70 net/socket.c:2260
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Let's add some text to the submitting-patches.rst to indicate that
+supporters should similarly be mailed so that you can't do as I did and
+mail every maintainer get_maintainer.pl tells you to, without actually
+mailing the one supporter you need to.
 
-value changed: 0xffffffff8539af68 -> 0xffffffff8539aff8
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 23937 Comm: syz-executor.5 Not tainted
-6.0.0-rc4-syzkaller-00331-g4ed9c1e971b1-dirty #0
-
-Hardware name: Google Google Compute Engine/Google Compute Engine,
-BIOS Google 08/26/2022
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Reported-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- net/ipv4/tcp.c           | 10 ++++++----
- net/ipv6/ipv6_sockglue.c |  3 ++-
- net/ipv6/tcp_ipv6.c      |  6 ++++--
- 3 files changed, 12 insertions(+), 7 deletions(-)
+ Documentation/process/submitting-patches.rst | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index e373dde1f46f..76b80d81fd6a 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3795,8 +3795,9 @@ int tcp_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
- 	const struct inet_connection_sock *icsk = inet_csk(sk);
+diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+index be49d8f2601b4..5f97379da41da 100644
+--- a/Documentation/process/submitting-patches.rst
++++ b/Documentation/process/submitting-patches.rst
+@@ -227,9 +227,11 @@ You should always copy the appropriate subsystem maintainer(s) on any patch
+ to code that they maintain; look through the MAINTAINERS file and the
+ source code revision history to see who those maintainers are.  The
+ script scripts/get_maintainer.pl can be very useful at this step (pass paths to
+-your patches as arguments to scripts/get_maintainer.pl).  If you cannot find a
+-maintainer for the subsystem you are working on, Andrew Morton
+-(akpm@linux-foundation.org) serves as a maintainer of last resort.
++your patches as arguments to scripts/get_maintainer.pl).  You should mail
++everyone who appears as "maintainer" or "supporter" in the
++scripts/get_maintainer.pl output.  If you cannot find a maintainer for the
++subsystem you are working on, Andrew Morton (akpm@linux-foundation.org) serves
++as a maintainer of last resort.
  
- 	if (level != SOL_TCP)
--		return icsk->icsk_af_ops->setsockopt(sk, level, optname,
--						     optval, optlen);
-+		/* Paired with WRITE_ONCE() in do_ipv6_setsockopt() and tcp_v6_connect() */
-+		return READ_ONCE(icsk->icsk_af_ops)->setsockopt(sk, level, optname,
-+								optval, optlen);
- 	return do_tcp_setsockopt(sk, level, optname, optval, optlen);
- }
- EXPORT_SYMBOL(tcp_setsockopt);
-@@ -4394,8 +4395,9 @@ int tcp_getsockopt(struct sock *sk, int level, int optname, char __user *optval,
- 	struct inet_connection_sock *icsk = inet_csk(sk);
- 
- 	if (level != SOL_TCP)
--		return icsk->icsk_af_ops->getsockopt(sk, level, optname,
--						     optval, optlen);
-+		/* Paired with WRITE_ONCE() in do_ipv6_setsockopt() and tcp_v6_connect() */
-+		return READ_ONCE(icsk->icsk_af_ops)->getsockopt(sk, level, optname,
-+								optval, optlen);
- 	return do_tcp_getsockopt(sk, level, optname, optval, optlen);
- }
- EXPORT_SYMBOL(tcp_getsockopt);
-diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
-index a89db5872dc3..726d95859898 100644
---- a/net/ipv6/ipv6_sockglue.c
-+++ b/net/ipv6/ipv6_sockglue.c
-@@ -479,7 +479,8 @@ static int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
- 
- 				/* Paired with READ_ONCE(sk->sk_prot) in inet6_stream_ops */
- 				WRITE_ONCE(sk->sk_prot, &tcp_prot);
--				icsk->icsk_af_ops = &ipv4_specific;
-+				/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+				WRITE_ONCE(icsk->icsk_af_ops, &ipv4_specific);
- 				sk->sk_socket->ops = &inet_stream_ops;
- 				sk->sk_family = PF_INET;
- 				tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
-diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-index e54eee80ce5f..8680aa83f0b9 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -237,7 +237,8 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr *uaddr,
- 		sin.sin_port = usin->sin6_port;
- 		sin.sin_addr.s_addr = usin->sin6_addr.s6_addr32[3];
- 
--		icsk->icsk_af_ops = &ipv6_mapped;
-+		/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+		WRITE_ONCE(icsk->icsk_af_ops, &ipv6_mapped);
- 		if (sk_is_mptcp(sk))
- 			mptcpv6_handle_mapped(sk, true);
- 		sk->sk_backlog_rcv = tcp_v4_do_rcv;
-@@ -249,7 +250,8 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr *uaddr,
- 
- 		if (err) {
- 			icsk->icsk_ext_hdr_len = exthdrlen;
--			icsk->icsk_af_ops = &ipv6_specific;
-+			/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+			WRITE_ONCE(icsk->icsk_af_ops, &ipv6_specific);
- 			if (sk_is_mptcp(sk))
- 				mptcpv6_handle_mapped(sk, false);
- 			sk->sk_backlog_rcv = tcp_v6_do_rcv;
+ You should also normally choose at least one mailing list to receive a copy
+ of your patch set.  linux-kernel@vger.kernel.org should be used by default
 -- 
-2.30.2
+2.37.3
 
