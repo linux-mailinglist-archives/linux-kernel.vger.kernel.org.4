@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911495EE1BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8D65EE1BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234129AbiI1QWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
+        id S234642AbiI1QWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234466AbiI1QWF (ORCPT
+        with ESMTP id S234551AbiI1QWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:22:05 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798A55B7A4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:22:04 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id sd10so28279545ejc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=lENm89wgwM3xoTs9W6eQDhRaBLFqC31LaQKt70REfBE=;
-        b=GmMWpK5UmjBsdIU4aBLdxA63Wi21Vc1fPIntpDiMkUcmBtfzchz2XJg8tAdS40/NTB
-         JCrV2vDkdlM3295fXukHnynEK+GqXqRCDJYQiawIXqq7oB2en70LP8curTew0EXknv8k
-         Yx49TY7X89yIQXDGyeeyB5EVTxOC1mwZyRgAJJPtIxyl3r3t5owS81dj9J5SPjqMJ9Kl
-         3skiEJ4VgGwZOWYc8m1E/c3PitouBrMzJOs10rxZrRjdvG/qmKCNChxpnof5Lv8ZIMsM
-         2RqBe2AIkJDPo8kvE7oFfqVljF8cZRqVY2pgkggcHLToQDrRR5osowDThiiOYYuah3VF
-         S4BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=lENm89wgwM3xoTs9W6eQDhRaBLFqC31LaQKt70REfBE=;
-        b=B8O0pDhqlXL0ntT9IyQQP7DQb2IfywkGbghZpoRKMewzVAoF8WrldEN115kGdWuPhA
-         PmMS2reR+CfjmdqY0GK/dSCn1yzPajf7ufz7/o3VMkTX1hZHrv0SlS01vCUZN/ViYwBt
-         1kR8YlgywqDpAzs2VnOmOUXrTvtzE5ZW3TTUqHNVs3mrCslaUp4h5BzuVoAnojGHPvvy
-         AIrJEcyZTtoMQ02PfMqOivzIuYfxovwCOvakoSnJm01i4Y0AaUTrqDIH+n6HqxKqjDJ7
-         0WQ7/0YgKEeTbyb9BPooF6p0Y2hBo62HIReLF++4urRIVRoCBSq7e0C1RhvZ+qTH7sjU
-         mUvw==
-X-Gm-Message-State: ACrzQf2gMxVFbtBoDutvStHVdfi1Dx+4DmTdhxLYvwpVA5dxBn6Cw+mH
-        Yh5J/mGDTIxAiodvqxC0uQg=
-X-Google-Smtp-Source: AMsMyM6QsP6jYd4BfL3Y9iSMEW+zCkpaayFMCoXdCwmvHaqmhT5PJQxjaAdb6EviPWOOI11PuwsVHg==
-X-Received: by 2002:a17:907:75f7:b0:77b:4579:2aee with SMTP id jz23-20020a17090775f700b0077b45792aeemr27926657ejc.529.1664382122907;
-        Wed, 28 Sep 2022 09:22:02 -0700 (PDT)
-Received: from [192.168.1.100] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
-        by smtp.gmail.com with ESMTPSA id bd28-20020a056402207c00b00456f8a03250sm3660488edb.3.2022.09.28.09.22.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 09:22:02 -0700 (PDT)
-Message-ID: <66c1e69c-72ee-20e9-6dd5-84c5fa6a3e9f@gmail.com>
-Date:   Wed, 28 Sep 2022 18:22:01 +0200
+        Wed, 28 Sep 2022 12:22:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC989E109C;
+        Wed, 28 Sep 2022 09:22:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07A31B8216E;
+        Wed, 28 Sep 2022 16:22:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C1E1C433D6;
+        Wed, 28 Sep 2022 16:22:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664382145;
+        bh=AjT653v325TEXty7buZJL5j/SjnI/p1CDSEy5eYUGls=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cGI2I6ZSb/Zwbmeok9U4OSo6wilaIg8BP0LGvBjVAq8GSaShDKvWpcaE3juA5wE1/
+         uA2nR+Gu/6Vi8XRA3tx4/4APm4Mbrnhn2a1Dio/8za98R8cidMgNH++tlfDEe1p9yM
+         dvQln+PCfsW4Xk4YhIuEaVZ3egjThFIK9nlk/K4mR/s0Nzwxvz5Aac/eSkD4iodOIx
+         mhFu9sHXBoa7/jJ9ZJkvsJXWJLsMExbKxk6xqoe0lqWWAFIVfN2WLz+OxvpicEAoa8
+         xZZ6S2p0EPYC22tnhUWPKP4e0bO25iJHasIFUtStqxmUoZ+0RfPu5MF39BTaBUo+1y
+         xfOpLEkBvYaSg==
+Date:   Wed, 28 Sep 2022 12:22:24 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH 5.4 097/120] gpio: ixp4xx: Make irqchip immutable
+Message-ID: <YzR0wGFicmfmCKOs@sashalap>
+References: <20220926100750.519221159@linuxfoundation.org>
+ <20220926100754.551266309@linuxfoundation.org>
+ <86a66m8lml.wl-maz@kernel.org>
+ <YzHMOXeCyc1LTlhZ@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/2] staging: r8188eu: remove two wrappers
-Content-Language: en-US
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220928083641.8275-1-straube.linux@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20220928083641.8275-1-straube.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YzHMOXeCyc1LTlhZ@kroah.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/28/22 10:36, Michael Straube wrote:
-> This series removes two nested wrappers around the function
-> phy_RF6052_Config_ParaFile().
-> 
-> Tested on x86_64 with Inter-Tech DMG-02.
-> 
-> Michael Straube (2):
->    staging: r8188eu: remove PHY_RF6052_Config8188E()
->    staging: r8188eu: remove PHY_RFConfig8188E()
-> 
->   drivers/staging/r8188eu/hal/rtl8188e_phycfg.c    |  9 ---------
->   drivers/staging/r8188eu/hal/rtl8188e_rf6052.c    | 13 +------------
->   drivers/staging/r8188eu/hal/usb_halinit.c        |  2 +-
->   drivers/staging/r8188eu/include/Hal8188EPhyCfg.h |  1 -
->   drivers/staging/r8188eu/include/rtl8188e_rf.h    |  2 +-
->   5 files changed, 3 insertions(+), 24 deletions(-)
-> 
+On Mon, Sep 26, 2022 at 05:58:49PM +0200, Greg Kroah-Hartman wrote:
+>On Mon, Sep 26, 2022 at 06:40:02AM -0400, Marc Zyngier wrote:
+>> Greg,
+>>
+>> On Mon, 26 Sep 2022 06:12:10 -0400,
+>> Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+>> >
+>> > From: Linus Walleij <linus.walleij@linaro.org>
+>> >
+>> > [ Upstream commit 94e9bc73d85aa6ecfe249e985ff57abe0ab35f34 ]
+>> >
+>> > This turns the IXP4xx GPIO irqchip into an immutable
+>> > irqchip, a bit different from the standard template due
+>> > to being hierarchical.
+>> >
+>> > Tested on the IXP4xx which uses drivers/ata/pata_ixp4xx_cf.c
+>> > for a rootfs on compact flash with IRQs from this GPIO
+>> > block to the CF ATA controller.
+>> >
+>> > Cc: Marc Zyngier <maz@kernel.org>
+>> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+>> > Acked-by: Marc Zyngier <maz@kernel.org>
+>> > Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+>> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+>>
+>> We had that discussion[1], and concluded that none of these should be
+>> backported to a kernel earlier than 5.19. 5.4 doesn't currently
+>> contain the relevant infrastructure, nor should that infrastructure
+>> should be backported either.
+>>
+>> Can we *please* stop this?
+>>
+>> 	M.
+>>
+>> [1] https://lore.kernel.org/all/CAMRc=Md9JKdW8wmbun_0_1y2RQbck7q=vzOkdw6n+FBgpf0h8w@mail.gmail.com/
+>
+>Sasha, what went wrong here?
+>
+>Now dropped from all but 5.19.y, thanks.
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+Sorry about that, I misunderstood Bartosz's reply and went off based on
+that.
+
+-- 
+Thanks,
+Sasha
