@@ -2,78 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585EF5EDAA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 12:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A24F5EDA55
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 12:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233528AbiI1Kz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 06:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
+        id S233627AbiI1Kqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 06:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbiI1Kzc (ORCPT
+        with ESMTP id S231920AbiI1Kqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 06:55:32 -0400
-X-Greylist: delayed 475 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Sep 2022 03:53:53 PDT
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6873140F4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 03:53:53 -0700 (PDT)
-From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1664361955;
-        bh=4jcq0VaC/iDXcd4j2uJ4w0vNny9swybKQkCYoOfOC5k=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Qa9qhGRLkpREYaE4iLS0o/hjjWX1Wzj56X+39n6KNg7ShMYFrVzF8pjEQanUDQN6G
-         nEsK1vk4b/wpIHEGpsP0RUwqY3tZwKYK2NsszSf2Rkgg0KtQZRFsWaB0/26T4IfWmt
-         GcMAWT34lxZGkIJcdcufgZASwm73J8WloKwbbC94=
-To:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@amadeus.com>
-Subject: [PATCH] tmpfs: ensure O_LARGEFILE with generic_file_open()
-Date:   Wed, 28 Sep 2022 12:45:35 +0200
-Message-Id: <20220928104535.61186-1-linux@weissschuh.net>
-X-Mailer: git-send-email 2.37.3
+        Wed, 28 Sep 2022 06:46:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1903ABD43
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 03:46:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3897D143D;
+        Wed, 28 Sep 2022 03:46:39 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.80.218])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F85C3F792;
+        Wed, 28 Sep 2022 03:46:31 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 11:46:25 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Will Deacon <will@kernel.org>, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [GIT PULL] arm64 fixes for -rc7
+Message-ID: <YzQmAa+ni68jMPGK@FVFF77S0Q05N>
+References: <20220923182800.GA14450@willie-the-truck>
+ <CAHk-=wjRtRUm4fkqTed+MKgDanxbAH_eePR_gh6iWXJvAXSdNw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1664361931; l=887; i=linux@weissschuh.net; s=20211113; h=from:subject; bh=d66fuy49WyqPJLzFDKOViGXYieS8rDSH8RKJPKnQnVU=; b=a8GADzUi4rhImJ18q5ENvGnE0+4c+H6JL0fbYL7u3mDoLpE4BpFBjsL/oBthgtnwVGEBUnzCk44H 5YLhloXkC2HEYVLv9fvjqfeZgv0Hzkh9R/YXEfnk4E+VlUbnN1Ze
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjRtRUm4fkqTed+MKgDanxbAH_eePR_gh6iWXJvAXSdNw@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Weißschuh <thomas.weissschuh@amadeus.com>
+On Fri, Sep 23, 2022 at 03:43:05PM -0700, Linus Torvalds wrote:
+> On Fri, Sep 23, 2022 at 11:28 AM Will Deacon <will@kernel.org> wrote:
+> >
+> > Please pull these arm64 fixes for -rc7. They're all very simple and
+> > self-contained, although the CFI jump-table fix touches the generic
+> > linker script as that's where the problematic macro lives.
+> 
+> The commit message is a bit confusing. It talks about "hysterical
+> raisins on x86", but CONFIG_CFI_CLANG has always been arm64-only. No?
+> 
+> So I'm not seeing what the x86 comment is about?
 
-Without this check open() will open large files on tmpfs although
-O_LARGEFILE was not specified. This is inconsistent with other
-filesystems.
-Also it will later result in EOVERFLOW on stat() or EFBIG on write().
+It was a an accidental inclusion inthe ARM64 CFI series while x86 CFI support
+was being developed; in the thread in the LINK tage, Sami says:
 
-Link: https://lore.kernel.org/lkml/76bedae6-22ea-4abc-8c06-b424ceb39217@t-8ch.de/
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@amadeus.com>
----
- mm/shmem.c | 1 +
- 1 file changed, 1 insertion(+)
+| This was a leftover from an old x86 series, which was included here by
+| mistake. Will also asked me about this a couple of weeks ago, I think, and
+| said he'd send a patch to remove it.
 
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 42e5888bf84d..902c5550fabc 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -3876,6 +3876,7 @@ EXPORT_SYMBOL(shmem_aops);
- 
- static const struct file_operations shmem_file_operations = {
- 	.mmap		= shmem_mmap,
-+	.open		= generic_file_open,
- 	.get_unmapped_area = shmem_get_unmapped_area,
- #ifdef CONFIG_TMPFS
- 	.llseek		= shmem_file_llseek,
+The relevant message being:
 
-base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
--- 
-2.37.3
+  https://lore.kernel.org/all/CABCJKufrRCb84fafhsR8_fftBLv0_pvufL_ZZieUSTJfhdT+fw@mail.gmail.com/
 
+Thanks,
+Mark.
