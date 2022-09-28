@@ -2,110 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689C15ED6E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC75C5ED62D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbiI1Hzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
+        id S233654AbiI1Hev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233854AbiI1HzA (ORCPT
+        with ESMTP id S233674AbiI1Hei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:55:00 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7BD2DF0;
-        Wed, 28 Sep 2022 00:54:47 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Mcp6p0N5SzHqPY;
-        Wed, 28 Sep 2022 15:30:10 +0800 (CST)
-Received: from [10.174.178.165] (10.174.178.165) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 28 Sep 2022 15:32:26 +0800
-Subject: Re: [PATCH v2 1/3] genirq/irq_sim: Allow both one and two cell
- bindings
-To:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>
-CC:     Wei Yongjun <weiyongjun@huaweicloud.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220926084428.1792815-1-weiyongjun@huaweicloud.com>
- <20220926084428.1792815-2-weiyongjun@huaweicloud.com>
- <CAMRc=MfjB4QTf_zp5Rk3T_ndqDjCCjAW2HmGpJ9EF-i1epSLcw@mail.gmail.com>
- <865yha8fcs.wl-maz@kernel.org>
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-Message-ID: <e9dc5d57-6978-c491-1851-9ea6d4ecfcf5@huawei.com>
-Date:   Wed, 28 Sep 2022 15:32:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.1.1
+        Wed, 28 Sep 2022 03:34:38 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BFEFAC53
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:34:23 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id c7so13348177ljm.12
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:34:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Fnvc6r6j9p2Uw/maOlbdTsHQYeM4YFHUi6N23GCgfiE=;
+        b=Trxrl5FOcBfTyPyqjdwgGv1onqzcBiIgrzeFGhQANno1ZAMGpy9Rnvi+Qn+QmLpLi+
+         RB3E3B/Qrb9aE8NYowptIPSgui7tl/0Na0XhwjhnRa/YKqZKbbDinKZ90seqRCiGFLcC
+         1F1BlEqXorjYS0bxSpTdGbH4YigFAbS4LFp74iKR9IZi3AVuO+mRK3IJDTj/2733ZX1Z
+         AMca4V1uSeTuwPl592enNFfqTA22NtbZ5Sx3rNNXe6XOi2ox2yV8tjdN0/36VDUDLnyv
+         Cimfhn+UuCIpIofe0/hXlxifR5l1DQ+PD0VaNU4OKpqUCXIgi1SCxEGrE8W7roDS9Xv6
+         rZ7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Fnvc6r6j9p2Uw/maOlbdTsHQYeM4YFHUi6N23GCgfiE=;
+        b=Jj89Y5yWpTejV3NUReOs9uHfJ6BN/E0osoGZdy4992l+qmA4Dn0mG9ClTuTDMITS6a
+         C9h1AAB2CX+WTAoAx5oJpVocRbLDvA1tZ8tb+XaMepfUlaMbFytDEl060vAp/l7kdUUn
+         9lm/kF+N9XekDD27+6nFPVMx6UvaoZCOXVr4t3mBEB3bmm8pbnhsjZRXGEIHJHcPKhXC
+         XLzAlRNYzBJISWkYrg/WKoFNzALLYRZJZ5FYf3iEMicg698yXVCnYcxuAxPa/Mt2vwlx
+         lLYIFOZkG6AomRDQInV89tz2AgVSdMdg3hOHfhrYkww8kW51SmT8cAZJ0gxX9clT+fHX
+         Dogw==
+X-Gm-Message-State: ACrzQf0g5qtEDndV5RAa0/V807NGhOw93jj4rDlUnRTCwjXADo9DKGzx
+        p/oF20YGJbwkpmvb1tTrAAJM2A==
+X-Google-Smtp-Source: AMsMyM7Uc4iRNgLZGgIceGXd9cHAFSN8cYdcmMGhloG1FMIuZ7RUyiFPSHFJVcBvHdjHiefjvibdVQ==
+X-Received: by 2002:a05:651c:211:b0:26b:e743:b4b0 with SMTP id y17-20020a05651c021100b0026be743b4b0mr11252543ljn.527.1664350387148;
+        Wed, 28 Sep 2022 00:33:07 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id a5-20020ac25e65000000b00499b57032c1sm393141lfr.144.2022.09.28.00.33.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 00:33:06 -0700 (PDT)
+Message-ID: <61b52536-ddd9-bf2f-5a06-f083a39c34b3@linaro.org>
+Date:   Wed, 28 Sep 2022 09:33:04 +0200
 MIME-Version: 1.0
-In-Reply-To: <865yha8fcs.wl-maz@kernel.org>
-Content-Type: text/plain; charset="gbk"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 01/13] dt-bindings: rockchip: Add Hardkernel ODROID-M1
+ board
+Content-Language: en-US
+To:     Aurelien Jarno <aurelien@aurel32.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     Dongjin Kim <tobetter@gmail.com>, Rob Herring <robh@kernel.org>
+References: <20220926183727.1893566-1-aurelien@aurel32.net>
+ <20220926183727.1893566-2-aurelien@aurel32.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220926183727.1893566-2-aurelien@aurel32.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.165]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/9/26 20:55, Marc Zyngier wrote:
-> On Mon, 26 Sep 2022 07:24:48 -0400,
-> Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->>
->> On Mon, Sep 26, 2022 at 10:27 AM Wei Yongjun <weiyongjun@huaweicloud.com> wrote:
->>>
->>> From: Wei Yongjun <weiyongjun1@huawei.com>
->>>
->>> The IRQ simulator only support one cell binding now, this patch make it
->>> works with either one or two cell bindings, where the cell values map
->>> directly to the irq number and irq flags.
->>>
->>> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
->>> ---
->>>  kernel/irq/irq_sim.c | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/kernel/irq/irq_sim.c b/kernel/irq/irq_sim.c
->>> index dd76323ea3fd..73a90b7b6022 100644
->>> --- a/kernel/irq/irq_sim.c
->>> +++ b/kernel/irq/irq_sim.c
->>> @@ -149,6 +149,7 @@ static void irq_sim_domain_unmap(struct irq_domain *domain, unsigned int virq)
->>>  static const struct irq_domain_ops irq_sim_domain_ops = {
->>>         .map            = irq_sim_domain_map,
->>>         .unmap          = irq_sim_domain_unmap,
->>> +       .xlate          = irq_domain_xlate_onetwocell,
->>>  };
->>>
->>>  /**
->>> --
->>> 2.34.1
->>>
->>
->> You'll need Marc's (Cc'ed) Ack here.
-
-Hi Marc,
-
+On 26/09/2022 20:37, Aurelien Jarno wrote:
+> From: Dongjin Kim <tobetter@gmail.com>
 > 
-> The question is what will the simulator code do with this information.
-> Throw it away? What of 3/4/5 cell bindings? I'd rather see the
+> Add device tree binding for Hardkernel ODROID-M1 board based on RK3568
+> SoC.
+> 
+> Signed-off-by: Dongjin Kim <tobetter@gmail.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+> index 7811ba64149c..d25a8a0bb2b5 100644
+> --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
+> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+> @@ -688,6 +688,11 @@ properties:
+>            - const: rockchip,rk3568-bpi-r2pro
+>            - const: rockchip,rk3568
+>  
+> +      - description: Rockchip RK3568 Hardkernel ODROID-M1
 
-The 3/4/5 cell bindings is selience ignored currently.
+Description should be just "Hardkernel ODROID-M1" and then put in
+alphabetical order - before to other Rockchip boards.
 
-> simulator being extended to deal with arbitrary bindings instead of
-> trading a harcoded limit for another one. And also give some
-> semantics to the extra cells.
 
-Would you means we should allow the users to overwrite the xlate callback
-or overwrite the domain_ops?
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Regards,
-Wei Yongjun
+
+Best regards,
+Krzysztof
+
