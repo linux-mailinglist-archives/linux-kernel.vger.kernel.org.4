@@ -2,207 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E997C5ED48E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B90215ED490
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232726AbiI1GRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 02:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S232747AbiI1GR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 02:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiI1GQ4 (ORCPT
+        with ESMTP id S229630AbiI1GR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 02:16:56 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59B01114FB
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:16:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3A11D21E53;
-        Wed, 28 Sep 2022 06:16:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1664345814; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 28 Sep 2022 02:17:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFF3118DE6
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664345844;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=bre+DACPL2mKV+lMG7Cg7u1j2iWJJkOeH2RR1YE7xeg=;
-        b=DmXbcKp0Rggx7RChK7O6eERRyj7I7G1Qpg3ec/BUB6LVwPKqYSL+1W9eULnWrBiz3Y/b3Q
-        pIUlFyiM282BKpxKF56geLUZ3JkQRU+8rU4gkdmwsC+zu2JLcrPKAdgd8owFYayD8LDPMx
-        2fSiXEzfeoeizt/+R6n5j0PX2HZoBkw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=xmlSZkZxROIcPznagSrxrKVXTo8KbG8k1WiRu1ChMH8=;
+        b=c2MpoYfZftLMu4SFxXrZlKYO9nfpYT9nQBND/vSl1Fsaz3mTsJ4KdGAhH6dUw+IUO5sN0e
+        DJ8SwdJ5SPnfhHk1y43BbXW2hOvm0mXco6RjTf7pBN8P/nMFI/pxRlnBzrJLPvaFaeGxiZ
+        kM518ZuEPg++9VMS0+pmGZsx1Y+ByYs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-457-GvslDGmOOuO8jLmiubdULQ-1; Wed, 28 Sep 2022 02:17:20 -0400
+X-MC-Unique: GvslDGmOOuO8jLmiubdULQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 014C013A84;
-        Wed, 28 Sep 2022 06:16:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id D1a1OtXmM2NdHAAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 28 Sep 2022 06:16:53 +0000
-Message-ID: <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com>
-Date:   Wed, 28 Sep 2022 08:16:53 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C87F03C01D9E;
+        Wed, 28 Sep 2022 06:17:19 +0000 (UTC)
+Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 81DCD2027061;
+        Wed, 28 Sep 2022 06:17:11 +0000 (UTC)
+Date:   Wed, 28 Sep 2022 14:17:06 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Angus Chen <angus.chen@jaguarmicro.com>
+Cc:     jasowang@redhat.com, mst@redhat.com, pbonzini@redhat.com,
+        axboe@kernel.dk, virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liming Wu <liming.wu@jaguarmicro.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v1] virtio_blk: should not use IRQD_AFFINITY_MANAGED in
+ init_rq
+Message-ID: <YzPm4hCx4xBuR3o9@T590>
+References: <20220924034854.323-1-angus.chen@jaguarmicro.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
- mtrr_aps_delayed_init
-Content-Language: en-US
-From:   Juergen Gross <jgross@suse.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20220908084914.21703-1-jgross@suse.com>
- <20220908084914.21703-9-jgross@suse.com> <YzIVfj/lvzQrK15Y@zn.tnic>
- <ce8cb1d3-a7d2-7484-26eb-60d3e29fa369@suse.com> <YzLMKk4OK9FtjjKQ@zn.tnic>
- <c0872933-e046-0c5e-b63f-861d2d343794@suse.com> <YzLcSOS6ZLIoPwBl@zn.tnic>
- <d3cd5c50-24e7-ffba-de2d-cf00400f6e38@suse.com> <YzLo9IFDYW1T8BVZ@zn.tnic>
- <314e3bd3-3405-c0c3-225c-646d88cbfb1a@suse.com> <YzOEYsqM0UEsiFuS@zn.tnic>
- <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
-In-Reply-To: <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------OyiQnYzmXwBUQx7SGaqrZO6w"
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220924034854.323-1-angus.chen@jaguarmicro.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------OyiQnYzmXwBUQx7SGaqrZO6w
-Content-Type: multipart/mixed; boundary="------------HLeIqo78kA0MCawMBb4mVCdu";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: xen-devel@lists.xenproject.org, x86@kernel.org,
- linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com>
-Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
- mtrr_aps_delayed_init
-References: <20220908084914.21703-1-jgross@suse.com>
- <20220908084914.21703-9-jgross@suse.com> <YzIVfj/lvzQrK15Y@zn.tnic>
- <ce8cb1d3-a7d2-7484-26eb-60d3e29fa369@suse.com> <YzLMKk4OK9FtjjKQ@zn.tnic>
- <c0872933-e046-0c5e-b63f-861d2d343794@suse.com> <YzLcSOS6ZLIoPwBl@zn.tnic>
- <d3cd5c50-24e7-ffba-de2d-cf00400f6e38@suse.com> <YzLo9IFDYW1T8BVZ@zn.tnic>
- <314e3bd3-3405-c0c3-225c-646d88cbfb1a@suse.com> <YzOEYsqM0UEsiFuS@zn.tnic>
- <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
-In-Reply-To: <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
+On Sat, Sep 24, 2022 at 11:48:54AM +0800, Angus Chen wrote:
+> The background is that we use dpu in cloud computing,the arch is x86,80
+> cores.We will have a lots of virtio devices,like 512 or more.
+> When we probe about 200 virtio_blk devices,it will fail and
+> the stack is print as follows:
+> 
+> [25338.485128] virtio-pci 0000:b3:00.0: virtio_pci: leaving for legacy driver
+> [25338.496174] genirq: Flags mismatch irq 0. 00000080 (virtio418) vs. 00015a00 (timer)
+> [25338.503822] CPU: 20 PID: 5431 Comm: kworker/20:0 Kdump: loaded Tainted: G           OE    --------- -  - 4.18.0-305.30.1.el8.x86_64
+> [25338.516403] Hardware name: Inspur NF5280M5/YZMB-00882-10E, BIOS 4.1.21 08/25/2021
+> [25338.523881] Workqueue: events work_for_cpu_fn
+> [25338.528235] Call Trace:
+> [25338.530687]  dump_stack+0x5c/0x80
+> [25338.534000]  __setup_irq.cold.53+0x7c/0xd3
+> [25338.538098]  request_threaded_irq+0xf5/0x160
+> [25338.542371]  vp_find_vqs+0xc7/0x190
+> [25338.545866]  init_vq+0x17c/0x2e0 [virtio_blk]
+> [25338.550223]  ? ncpus_cmp_func+0x10/0x10
+> [25338.554061]  virtblk_probe+0xe6/0x8a0 [virtio_blk]
+> [25338.558846]  virtio_dev_probe+0x158/0x1f0
+> [25338.562861]  really_probe+0x255/0x4a0
+> [25338.566524]  ? __driver_attach_async_helper+0x90/0x90
+> [25338.571567]  driver_probe_device+0x49/0xc0
+> [25338.575660]  bus_for_each_drv+0x79/0xc0
+> [25338.579499]  __device_attach+0xdc/0x160
+> [25338.583337]  bus_probe_device+0x9d/0xb0
+> [25338.587167]  device_add+0x418/0x780
+> [25338.590654]  register_virtio_device+0x9e/0xe0
+> [25338.595011]  virtio_pci_probe+0xb3/0x140
+> [25338.598941]  local_pci_probe+0x41/0x90
+> [25338.602689]  work_for_cpu_fn+0x16/0x20
+> [25338.606443]  process_one_work+0x1a7/0x360
+> [25338.610456]  ? create_worker+0x1a0/0x1a0
+> [25338.614381]  worker_thread+0x1cf/0x390
+> [25338.618132]  ? create_worker+0x1a0/0x1a0
+> [25338.622051]  kthread+0x116/0x130
+> [25338.625283]  ? kthread_flush_work_fn+0x10/0x10
+> [25338.629731]  ret_from_fork+0x1f/0x40
+> [25338.633395] virtio_blk: probe of virtio418 failed with error -16
+> 
+> After I did some work of this stack,took stap and crash to get more
+> information,I found that the auto irq_affinity affect this.
+> When "vp_find_vqs" call "vp_find_vqs_msix" failed,it will be go back
+> to call vp_find_vqs_msix again with ctx be false, and when it failed again,
+> we will call vp_find_vqs_intx,if the vp_dev->pci_dev->irq is zero,
+> we will get a backtrace like above.
+> 
+> The log :
+> "genirq: Flags mismatch irq 0. 00000080 (virtio418) vs. 00015a00 (timer)"
+> was print because of the irq 0 is used by timer exclusive,and when
+> vp_find_vqs called vp_find_vqs_msix and return false twice,then it will
+> call vp_find_vqs_intx for the last try.
+> Because vp_dev->pci_dev->irq is zero,so it will be request irq 0 with
+> flag IRQF_SHARED.
+> 
+> without config CONFIG_GENERIC_IRQ_DEBUGFS,
+> I found that we called vp_find_vqs_msix failed twice because of
+> the irq resource was exhausted.
+> 
+> crash> irq_domain.name,parent 0xffff9bff87d4dec0
+>   name = 0xffff9bff87c1fd60 "INTEL-IR-MSI-1-2"
+>   parent = 0xffff9bff87400000
+> crash> irq_domain.name,parent 0xffff9bff87400000
+>   name = 0xffff9bff87c24300 "INTEL-IR-1"
+>   parent = 0xffff9bff87c6c900
+> crash> irq_domain.name,parent 0xffff9bff87c6c900
+>   name = 0xffff9bff87c3ecd0 "VECTOR"
+>   parent = 0x0----------------------the highest level
+> 
+> and stap irq_matrix_alloc_managed get return value -ENOSPC.
+> 
+> When no virtio_blk device probe,the vctor_matrix is:
+> crash>  p *vector_matrix
+> $1 = {
+>   matrix_bits = 256,
+>   alloc_start = 32,
+>   alloc_end = 236,
+>   alloc_size = 204,
+>   global_available = 15593,
+>   global_reserved = 149,
+>   systembits_inalloc = 3,
+>   total_allocated = 409,
+>   online_maps = 80,
+>   maps = 0x2ff20,
+>   scratch_map = {1161063342014463, 0, 1, 18446726481523507200,
+>  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+>  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+>   system_map = {1125904739729407, 0, 1, 18446726481523507200,
+>  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+>  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+> }
+> 
+> When the dump stack occur,the vector_matrix of system is exhausted.
+> crash> p *vector_matrix
+> $82 = {
+>   matrix_bits = 256,
+>   alloc_start = 32,
+>   alloc_end = 236,
+>   alloc_size = 204,
+>   global_available = 0,//caq:irq left
+>   global_reserved = 151,
+>   systembits_inalloc = 3,
+>   total_allocated = 1922,//caq:irq that allocated
+>   online_maps = 80,
+>   maps = 0x2ff20,
+>   scratch_map = {18446744069952503807, 18446744073709551615,
+>  18446744073709551615, 18446735277616529407, 0, 0, 0, 0, 0,
+>  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+>   system_map = {1125904739729407, 0, 1, 18446726481523507200,
+>  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+>  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+> }
+> 
+> And we tested the virtio_blk device which request irq success,
+> we found that in a system with 80 cores and two numa ,one
+> virtio_blk device with just two data queues consume 81 irqs capacity,
+> Although it just only three irqs in /proc/interrupt,80 irqs capacity 
+> is effected by function "irq_build_affinity_masks" with 2*40.
 
---------------HLeIqo78kA0MCawMBb4mVCdu
-Content-Type: multipart/mixed; boundary="------------TfV3sPvPUEdgVZGQjT3iXMvs"
+irq_build_affinity_masks() is just for spreading CPUs among the two
+vectors, nothing to do with your issue.
 
---------------TfV3sPvPUEdgVZGQjT3iXMvs
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Your issue should be related with irq matrix code, which manages effective
+cpu allocation for irq vector, nothing to do with irq_build_affinity_masks().
 
-T24gMjguMDkuMjIgMDc6MzAsIEp1ZXJnZW4gR3Jvc3Mgd3JvdGU6DQo+IE9uIDI4LjA5LjIy
-IDAxOjE2LCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6DQo+PiBPbiBUdWUsIFNlcCAyNywgMjAy
-MiBhdCAwMjoyMToxN1BNICswMjAwLCBKdWVyZ2VuIEdyb3NzIHdyb3RlOg0KPj4+IFNvIHJl
-cGxhY2luZyB0aGUgYm9vbCB3aXRoICIoc3lzdGVtX3N0YXRlICE9IFNZU1RFTV9SVU5OSU5H
-KSIgaXMgZmluZQ0KPj4+IHdpdGggeW91IHJpZ2h0IG5vdz8gV2UgY2FuIGxhdGVyIHN3aXRj
-aCB0aGF0IHRvIHRoZSAibW9yZSBlbGVnYW50Ig0KPj4+IHNvbHV0aW9uIHdoZW4gaXQgc2hv
-d3MgdXAuDQo+Pg0KPj4gT2ssIEkgdGhpbmsgSSBoYXZlIHNvbWV0aGluZy4gQW5kIGl0IHdh
-cyBzdGFyaW5nIG1lIHN0cmFpZ2h0IGluIHRoZQ0KPj4gZmFjZSBidXQgSSBkaWRuJ3Qgc2Vl
-IGl0OiB0aGUgTVRSUiBjb2RlIG5lZWRzIGEgaG90cGx1ZyBub3RpZmllci4gSW4NCj4+IHRo
-YXQgbm90aWZpZXIgaXQgY2FuIGRvIHRoZSBpbW1lZGlhdGUsIGkuZS4sIG5vbi1kZWxheWVk
-IGluaXQgd2hpbGUgdGhlDQo+PiBkZWxheWVkIGluaXQgYmVjb21lcyB0aGUgZGVmYXVsdCwg
-c2VlIGJlbG93Lg0KPj4NCj4+IEFuZCBpZ25vcmUgdGhlIHByX2luZm8gZGVidWdnaW5nIGd1
-bmsgcGxzLg0KPj4NCj4+IG10cnJfYXBfaW5pdCgpIGJlY29tZXMgdGhlIG5vdGlmaWVyIGNh
-bGxiYWNrLiBJdCBkb2Vzbid0IG5lZWQgdG8gYmUNCj4+IGNhbGxlZCBpbiBpZGVudGlmeV9z
-ZWNvbmRhcnlfY3B1KCkgYW55bW9yZSBhcyBpbiB0aGUgaW5pdCBjYXNlIHRoYXQNCj4+IGZ1
-bmN0aW9uIGRvZXNuJ3QgZG8gYW55dGhpbmcgLSBkZWxheWVkPXRydWUgLSBhbmQgaW4gdGhl
-IGhvdHBsdWcgY2FzZQ0KPj4gdGhlIG5vdGlmaWVyIHJ1bnMuDQo+IA0KPiBBcmUgc3VyZSB0
-aGUgaG90cGx1ZyBub3RpZmllciBkb2Vzbid0IGdldCBjYWxsZWQgaW4gdGhlIGJvb3QgYW5k
-IGluIHRoZQ0KPiByZXN1bWUgY2FzZXM/IEkgZG9uJ3Qgc2VlIGhvdyB0aG9zZSBjYWxscyBh
-cmUgYmVpbmcgbm90IGRvbmUgb3IgcmVzdWx0aW5nIGluDQo+IG5vdCBkb2luZyBhbnl0aGlu
-Zy4NCg0KSW4gY2FzZSBteSBzdXNwaWNpb24gaXMgY29ycmVjdDogdGhpcyBjYW4gc3RpbGwg
-YmUgc29sdmVkIGJ5IGFkZGluZyB0aGUNCmhvdHBsdWcgbm90aWZpZXIgb25seSBpbiBtdHJy
-X2Fwc19pbml0KCksIGFuZCByZW1vdmluZyBpdCBhZ2FpbiBpbg0KYXJjaF90aGF3X3NlY29u
-ZGFyeV9jcHVzX2JlZ2luKCkuDQoNCg0KSnVlcmdlbg0KDQo=
---------------TfV3sPvPUEdgVZGQjT3iXMvs
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Cc Thomas.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+> 
+> before one virtio_blk device hotplug out:
+> crash> p *vector_matrix
+> $2 = {
+>   matrix_bits = 256,
+>   alloc_start = 32,
+>   alloc_end = 236,
+>   alloc_size = 204,
+>   global_available = 15215,
+>   global_reserved = 150,
+>   systembits_inalloc = 3,
+>   total_allocated = 553,
+>   online_maps = 80,
+>   maps = 0x2ff20,
+>   scratch_map = {1179746449752063, 0, 1, 18446726481523507200, 0, 0, 0,
+>  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+>  0, 0, 0, 0, 0},
+>   system_map = {1125904739729407, 0, 1, 18446726481523507200, 0, 0, 0,
+>  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+>  0, 0, 0, 0, 0}
+> }
+> 
+> after one virtio_blk device hotplug out:
+> crash> p *vector_matrix
+> $3 = {
+>   matrix_bits = 256,
+>   alloc_start = 32,
+>   alloc_end = 236,
+>   alloc_size = 204,
+>   global_available = 15296,---it increase 81,include 1 config irq.
+>   global_reserved = 150,
+>   systembits_inalloc = 3,
+>   total_allocated = 550,------it just decrease 3.
+>   online_maps = 80,
+>   maps = 0x2ff20,
+>   scratch_map = {481036337152, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+>  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+>  0, 0, 0, 0},
+>   system_map = {1125904739729407, 0, 1, 18446726481523507200, 0, 0, 0,
+>  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+>  0, 0, 0, 0, 0}
+> }
+> 
+> We test the new kernel also,it occur the same result.
+> [Fri Sep 23 04:51:42 2022] genirq: Flags mismatch irq 0. 00000080 (virtio608) vs. 00015a00 (timer)
+> [Fri Sep 23 04:51:42 2022] CPU: 0 PID: 5749 Comm: kworker/0:0 Kdump: loaded Tainted: G        W  OE      6.0.0-rc6+ #5
+> [Fri Sep 23 04:51:42 2022] Hardware name: Inspur NF5280M5/YZMB-00882-10E, BIOS 4.1.19 06/16/2021
+> [Fri Sep 23 04:51:42 2022] Workqueue: events work_for_cpu_fn
+> [Fri Sep 23 04:51:42 2022] Call Trace:
+> [Fri Sep 23 04:51:42 2022]  <TASK>
+> [Fri Sep 23 04:51:42 2022]  dump_stack_lvl+0x33/0x46
+> [Fri Sep 23 04:51:42 2022]  __setup_irq+0x705/0x770
+> [Fri Sep 23 04:51:42 2022]  request_threaded_irq+0x109/0x170
+> [Fri Sep 23 04:51:42 2022]  vp_find_vqs+0xc4/0x190
+> [Fri Sep 23 04:51:42 2022]  init_vqs+0x348/0x580 [virtio_net]
+> [Fri Sep 23 04:51:42 2022]  virtnet_probe+0x54d/0xa80 [virtio_net]
+> [Fri Sep 23 04:51:42 2022]  virtio_dev_probe+0x19c/0x240
+> [Fri Sep 23 04:51:42 2022]  really_probe+0x106/0x3e0
+> [Fri Sep 23 04:51:42 2022]  ? pm_runtime_barrier+0x4f/0xa0
+> [Fri Sep 23 04:51:42 2022]  __driver_probe_device+0x79/0x170
+> [Fri Sep 23 04:51:42 2022]  driver_probe_device+0x1f/0xa0
+> [Fri Sep 23 04:51:42 2022]  __device_attach_driver+0x85/0x110
+> [Fri Sep 23 04:51:42 2022]  ? driver_allows_async_probing+0x60/0x60
+> [Fri Sep 23 04:51:42 2022]  ? driver_allows_async_probing+0x60/0x60
+> [Fri Sep 23 04:51:42 2022]  bus_for_each_drv+0x67/0xb0
+> [Fri Sep 23 04:51:42 2022]  __device_attach+0xe9/0x1b0
+> [Fri Sep 23 04:51:42 2022]  bus_probe_device+0x87/0xa0
+> [Fri Sep 23 04:51:42 2022]  device_add+0x59f/0x950
+> [Fri Sep 23 04:51:42 2022]  ? dev_set_name+0x4e/0x70
+> [Fri Sep 23 04:51:42 2022]  register_virtio_device+0xac/0xf0
+> [Fri Sep 23 04:51:42 2022]  virtio_pci_probe+0x101/0x170
+> [Fri Sep 23 04:51:42 2022]  local_pci_probe+0x42/0xa0
+> [Fri Sep 23 04:51:42 2022]  work_for_cpu_fn+0x13/0x20
+> [Fri Sep 23 04:51:42 2022]  process_one_work+0x1c2/0x3d0
+> [Fri Sep 23 04:51:42 2022]  ? process_one_work+0x3d0/0x3d0
+> [Fri Sep 23 04:51:42 2022]  worker_thread+0x1b9/0x360
+> [Fri Sep 23 04:51:42 2022]  ? process_one_work+0x3d0/0x3d0
+> [Fri Sep 23 04:51:42 2022]  kthread+0xe6/0x110
+> [Fri Sep 23 04:51:42 2022]  ? kthread_complete_and_exit+0x20/0x20
+> [Fri Sep 23 04:51:42 2022]  ret_from_fork+0x1f/0x30
+> [Fri Sep 23 04:51:42 2022]  </TASK>
+> [Fri Sep 23 04:51:43 2022] virtio_net: probe of virtio608 failed with error -16
+> 
+> Fixes: ad71473d9c43 ("virtio_blk: use virtio IRQ affinity")
+> Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
+> Tested-by: Liming Wu <liming.wu@jaguarmicro.com>
+> ---
+>  drivers/block/virtio_blk.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
+> index a8bcf3f664af..075de30a9bb4 100644
+> --- a/drivers/block/virtio_blk.c
+> +++ b/drivers/block/virtio_blk.c
+> @@ -513,7 +513,6 @@ static int init_vq(struct virtio_blk *vblk)
+>  	struct virtqueue **vqs;
+>  	unsigned short num_vqs;
+>  	struct virtio_device *vdev = vblk->vdev;
+> -	struct irq_affinity desc = { 0, };
+>  
+>  	err = virtio_cread_feature(vdev, VIRTIO_BLK_F_MQ,
+>  				   struct virtio_blk_config, num_queues,
+> @@ -548,7 +547,7 @@ static int init_vq(struct virtio_blk *vblk)
+>  	}
+>  
+>  	/* Discover virtqueues and write information to configuration.  */
+> -	err = virtio_find_vqs(vdev, num_vqs, vqs, callbacks, names, &desc);
+> +	err = virtio_find_vqs(vdev, num_vqs, vqs, callbacks, names, NULL);
+>  	if (err)
+>  		goto out;
 
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjri
-oyspZKOBycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2
-kaV2KL9650I1SJvedYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i
-1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/B
-BLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xqG7/377qptDmrk42GlSK
-N4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR3Jvc3Mg
-PGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsE
-FgIDAQIeAQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4F
-UGNQH2lvWAUy+dnyThpwdtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3Tye
-vpB0CA3dbBQp0OW0fgCetToGIQrg0MbD1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u
-+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbvoPHZ8SlM4KWm8rG+lIkGurq
-qu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v5QL+qHI3EIP
-tyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVy
-Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJ
-CAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4
-RF7HoZhPVPogNVbC4YA6lW7DrWf0teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz7
-8X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC/nuAFVGy+67q2DH8As3KPu0344T
-BDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0LhITTd9jLzdDad1pQ
-SToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLmXBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkM
-nQfvUewRz80hSnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMB
-AgAjBQJTjHDXAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/
-Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJnFOXgMLdBQgBlVPO3/D9R8LtF9DBAFPN
-hlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1jnDkfJZr6jrbjgyoZHi
-w/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0N51N5Jf
-VRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwP
-OoE+lotufe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK
-/1xMI3/+8jbO0tsn1tqSEUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1
-c2UuZGU+wsB5BBMBAgAjBQJTjHDrAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgEC
-F4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3g3OZUEBmDHVVbqMtzwlmNC4
-k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5dM7wRqzgJpJ
-wK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu
-5D+jLRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzB
-TNh30FVKK1EvmV2xAKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37Io
-N1EblHI//x/e2AaIHpzK5h88NEawQsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6
-AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpWnHIs98ndPUDpnoxWQugJ6MpMncr
-0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZRwgnBC5mVM6JjQ5x
-Dk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNVbVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mm
-we0icXKLkpEdIXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0I
-v3OOImwTEe4co3c1mwARAQABwsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMv
-Q/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEwTbe8YFsw2V/Buv6Z4Mysln3nQK5ZadD
-534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1vJzQ1fOU8lYFpZXTXIH
-b+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8VGiwXvT
-yJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqc
-suylWsviuGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5B
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+This patch isn't good since blk-mq's queue mapping depends on managed
+irq affinity, and this way breaks queue mapping.
 
---------------TfV3sPvPUEdgVZGQjT3iXMvs--
 
---------------HLeIqo78kA0MCawMBb4mVCdu--
+Thanks,
+Ming
 
---------------OyiQnYzmXwBUQx7SGaqrZO6w
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmMz5tUFAwAAAAAACgkQsN6d1ii/Ey82
-twgAhOoiZGhrh8PAUW4TmAIk4c94ArAo5sbdmO+5AeQ06eh9Kiq9lhx3W1gqc3Iq0/0JS1SuJ+6E
-5hjtM0CHeJnHIRmXEB3uQS1cickhWk2J8yj58aiHy7EszYQ2qEuQAEvzpPksboOgOwnOpwouR5Rn
-E9ISb0EXB6z3j0bUUBhk38VWI7lhUiZL3OQ+t5/aJJJlnX+pu+dsKxdfguEgRA6CBDidMWyC2Cf0
-mONXin+UMkQ/2oRpmer7UrehkWo9baabcOa4vizyfdXRf233N2ejVdB3QdqKHPFQHhSGZDZ7jdnN
-LerUx+0yZ/eiCehS19N+QulKR34lULiEzOIZihJWBw==
-=ZU6t
------END PGP SIGNATURE-----
-
---------------OyiQnYzmXwBUQx7SGaqrZO6w--
