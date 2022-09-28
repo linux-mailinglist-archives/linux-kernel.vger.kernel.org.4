@@ -2,168 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F165ED860
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FEF5ED862
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbiI1JCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
+        id S233175AbiI1JD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231702AbiI1JCW (ORCPT
+        with ESMTP id S233551AbiI1JDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:02:22 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544D8DF6B5;
-        Wed, 28 Sep 2022 02:02:21 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-131a7bce1acso1066092fac.7;
-        Wed, 28 Sep 2022 02:02:21 -0700 (PDT)
+        Wed, 28 Sep 2022 05:03:07 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83EFE05DD
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:03:05 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id l12so13598835ljg.9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:03:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=UD/bWW+0wk4E9lEqOO5K0o6p06TOy6G7+0fEDj4qYW0=;
-        b=qjE+g0WJ+O6OJPoUPIflSlEuB+MqVoceg7Ja+WcNRQUk7OHgS0AbOuQcpF/sNhWH3B
-         Lgnj8+2dA7AETcw1J1bB9rR58nnABnh6jaM2aq6/EksGdoiG9822CkeDcLGPipE3kSO7
-         YpSANJuKK3XWKV70xh8YlvQb1ZvH/q3iYKPxgyJfI5MOLvlMyNhODmVqTiwDpC82S1A1
-         AbU7uGYML+/gAh0oRf3aqAPUx6BI0qneafHJtGwj1IA8/WBapms3qsXHg9kL6XcL/MKG
-         4V3B7qNJ2l/f6XuK0tFjdHVx0UuKa1CIREe4XWyuZj9utwnljVvsWK2l6GCVsO4UdJF+
-         ByFA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=Qivih7Ox0DdR7xAv+foWHqtTQqdqkALSOgUvdHP21xA=;
+        b=MK7CFQ9YcPNocb/BlU8K2dGG0Nrome6kA7nPy0n6rjndVEZaNPV7X8uN9Wbay3cDiF
+         2CaEcd90WMbW7h2S/umJ3fIPGAk4bYqI5uctxq/Xlq/PNhbWo5YlGwrYgJOoo3Qp9HnN
+         W+QY/AZb3BZuqMNSJ5NP5epnW6LSxvApRh9qFHh7OppqQ7RhvnD47a1m+on2zfJtoQ6u
+         pNk50zRulq86ttW1Mwcs93xK+BslCH1L0yAvrh7qjVcddCAxOEr8JyKX5WJaXfYYHm9X
+         hq7AFHJcanh+W0Q0JYGbgFH9a1WTP1REgHNldvwm2wwiGDFNrk113OXxiwN00c0O6v2Z
+         K7wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=UD/bWW+0wk4E9lEqOO5K0o6p06TOy6G7+0fEDj4qYW0=;
-        b=ZthEPV0r+SJ9/oOMH15t9Nfp4nU+ovzFi/c0YeUY6Azk6FisjgToWhvxSh35UWgef9
-         MJ0CRdP+b4epLm9c6v6Ka7bWND9TSW3gtFrYy0DYt+FPZ0z97BiOOEolb1aWLt3BINyh
-         F/4gqWKHyDa6QPMT2GYFOT/y4oihCR4MJ+CC4bgzMXvXqB1OrS++ovK1z2VKp6Rfs/rv
-         V5kqqJ3jmkVN0Zz6tT/RpSsIv0eDUC86elcrk8TbRt1r2Iforxq5TMaBrgGtfDVPtNdH
-         r6nhkIAZk9fbJWyeqZ4Q8cAkP0qFVHeU+S6XWnJEkQuChMVBVFhHI+0gSpgdiq96NMAe
-         uNyg==
-X-Gm-Message-State: ACrzQf1SbKqeCOorrnGczkX7tk/2tg1rbKq5IbR6IuWB76HENyCfnkI6
-        MsVZwQCXzJX3gFi0IH0mJmaDyq5G1hiRPVt+o9I=
-X-Google-Smtp-Source: AMsMyM5ujk+Oc81+S+ewdw/Ez4+jZI0RZxdZDv4LAzGgfXYpMXmjOK0UXxMKyUnobDtlYUDZAdDMBEgl68vhlfn3Rgk=
-X-Received: by 2002:a05:6870:461a:b0:12a:e54e:c8a2 with SMTP id
- z26-20020a056870461a00b0012ae54ec8a2mr4780900oao.252.1664355740443; Wed, 28
- Sep 2022 02:02:20 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Qivih7Ox0DdR7xAv+foWHqtTQqdqkALSOgUvdHP21xA=;
+        b=QLg5wiHuuiGsn+BVjDcQV+IKNlzBiz2n9I0JSSNgtIzZ3RGGOzNeDG/egOav3PU+oM
+         bpkdwQGc+mK2WNbmvEyYNeqmo95A2Nmr4j9GbggMOwAc1Ky4A1yICqztbcShrWCVTYRX
+         FMmqxx/dBir7JmO1m2IZ1Y6mlegFiUp/cVcDme3W7b9Wbnbt9t4znsTVQgru5NWG7t9y
+         JdhxxYrxx6hCEbd0Itj9R5Ko8J4pez1I04c/Ntb+sY8+JrKb1Fdd5/ccL6O7i0Vtgz+h
+         P9d4ELXzLGJ9wpfIG1J+jR3xQmSrpzHayLIgRHIQcJHUVNBxEXkGMs+k+IYt4/2QAaq/
+         QtLQ==
+X-Gm-Message-State: ACrzQf2j/gZkWzpHhIO08H/qB90qlxKtIGFXvS1pPa2BSE/taHQp24nv
+        8CAF4x/SbYIW79BuDkIVV764AA==
+X-Google-Smtp-Source: AMsMyM6kVPc1yWr8KuUU2EZPmo0ooqebRc+y5zFM1TknSI5X2qRgOQd12MT1RgPccoVXhFpIcchTwQ==
+X-Received: by 2002:a2e:9114:0:b0:26b:e3a2:3f89 with SMTP id m20-20020a2e9114000000b0026be3a23f89mr11902830ljg.132.1664355784273;
+        Wed, 28 Sep 2022 02:03:04 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id j6-20020a2ea906000000b0026c297a9e11sm377185ljq.133.2022.09.28.02.03.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 02:03:02 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     liushixin2@huawei.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] memory: tegra: Use DEFINE_SHOW_ATTRIBUTE to simplify code
+Date:   Wed, 28 Sep 2022 11:02:58 +0200
+Message-Id: <166435026500.12920.10508016012075575717.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220926130025.1061373-1-liushixin2@huawei.com>
+References: <20220926130025.1061373-1-liushixin2@huawei.com>
 MIME-Version: 1.0
-References: <20220908215504.3686827-1-samitolvanen@google.com> <166421282763.1683223.5035885857817205401.b4-ty@chromium.org>
-In-Reply-To: <166421282763.1683223.5035885857817205401.b4-ty@chromium.org>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Wed, 28 Sep 2022 11:01:44 +0200
-Message-ID: <CA+icZUUjy7HFQVZ0iUDmGxfazobow1iwcagWX_Opht-7F+BRrg@mail.gmail.com>
-Subject: Re: [PATCH v5 00/22] KCFI support
-To:     Kees Cook <keescook@chromium.org>
-Cc:     samitolvanen@google.com, peterz@infradead.org,
-        ndesaulniers@google.com, linux-arm-kernel@lists.infradead.org,
-        will@kernel.org, joao@overdrivepizza.com, nathan@kernel.org,
-        llvm@lists.linux.dev, mark.rutland@arm.com,
-        linux-hardening@vger.kernel.org,
-        Josh Poimboeuf <jpoimboe@kernel.org>, catalin.marinas@arm.com,
-        rostedt@goodmis.org, x86@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 7:21 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, 8 Sep 2022 14:54:42 -0700, Sami Tolvanen wrote:
-> > KCFI is a forward-edge control-flow integrity scheme in the upcoming
-> > Clang 16 release, which is more suitable for kernel use than the
-> > existing CFI scheme used by CONFIG_CFI_CLANG. KCFI doesn't require
-> > LTO, doesn't alter function references to point to a jump table, and
-> > won't break function address equality.
-> >
-> > This series replaces the current arm64 CFI implementation with KCFI
-> > and adds support for x86_64.
-> >
-> > [...]
->
-> I assume that Peter's Ack means I should carry the tree, so, to that end:
->
-> Applied to for-next/kcfi, thanks!
->
+On Mon, 26 Sep 2022 21:00:21 +0800, Liu Shixin wrote:
+> Use DEFINE_SHOW_ATTRIBUTE helper macro to simplify the code.
+> No functional change.
+> 
+> v1->v2: remove duplicate blank lines.
+> 
+> Liu Shixin (4):
+>   memory: tegra20-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+>   memory: tegra30-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+>   memory: tegra210-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+>   memory: tegra186-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+> 
+> [...]
 
-Hi,
+Applied, thanks!
 
-I did regularly KCFI testing.
-
-1. Used Sami's samitolvanen.github#linux/kcfi Git on the Linux side.
-
-2. Used *not* LLVM-16 (including KCFI) but with LLVM-15 from
-samitolvanen.github#llvm-project/15.x/kcfi Git on the toolchain side.
-
-My last testing was with [1] (Linux v6.0-rc7 + KCFI) and [2] (LLVM
-v15.0.1 + KCFI) plus drm-i915-gt/KCFI for Linux v6.0-rc7 patch from
-Nathan (see [3]).
-Thanks Sami for updating 15.x/kcfi on LLVM side on my request.
-
-So, feel free to add my:
-
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-15 (with KCFI
-support) on x86-64
-
-Thanks to all involved people!
+[1/4] memory: tegra20-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/94a052d7d52a70d8681644bd88062c61b0f986ce
+[2/4] memory: tegra30-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/91fcc1dfa790d74b9a1dacfefdb023804dedd319
+[3/4] memory: tegra210-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/82710f9114a7857052f012599fdb688b93ee218c
+[4/4] memory: tegra186-emc: use DEFINE_SHOW_ATTRIBUTE to simplify code
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/56efd6435c6890a3a38a33d192a0f9d5c835a24b
 
 Best regards,
--Sedat-
-
-[1] https://github.com/samitolvanen/linux/commits/kcfi
-[2] https://github.com/samitolvanen/llvm-project/commits/15.x/kcfi
-[3] https://github.com/ClangBuiltLinux/linux/issues/1716#issuecomment-1257311327
-
-> [01/22] treewide: Filter out CC_FLAGS_CFI
->         https://git.kernel.org/kees/c/f143ff397a3f
-> [02/22] scripts/kallsyms: Ignore __kcfi_typeid_
->         https://git.kernel.org/kees/c/d0f9562ee43a
-> [03/22] cfi: Remove CONFIG_CFI_CLANG_SHADOW
->         https://git.kernel.org/kees/c/9fca7115827b
-> [04/22] cfi: Drop __CFI_ADDRESSABLE
->         https://git.kernel.org/kees/c/92efda8eb152
-> [05/22] cfi: Switch to -fsanitize=kcfi
->         https://git.kernel.org/kees/c/89245600941e
-> [06/22] cfi: Add type helper macros
->         https://git.kernel.org/kees/c/e84e008e7b02
-> [07/22] lkdtm: Emit an indirect call for CFI tests
->         https://git.kernel.org/kees/c/cf90d0383560
-> [08/22] psci: Fix the function type for psci_initcall_t
->         https://git.kernel.org/kees/c/44f665b69c67
-> [09/22] arm64: Add types to indirect called assembly functions
->         https://git.kernel.org/kees/c/c50d32859e70
-> [10/22] arm64: Add CFI error handling
->         https://git.kernel.org/kees/c/b26e484b8bb3
-> [11/22] arm64: Drop unneeded __nocfi attributes
->         https://git.kernel.org/kees/c/5f20997c194e
-> [12/22] init: Drop __nocfi from __init
->         https://git.kernel.org/kees/c/5dbbb3eaa2a7
-> [13/22] treewide: Drop function_nocfi
->         https://git.kernel.org/kees/c/607289a7cd7a
-> [14/22] treewide: Drop WARN_ON_FUNCTION_MISMATCH
->         https://git.kernel.org/kees/c/4b24356312fb
-> [15/22] treewide: Drop __cficanonical
->         https://git.kernel.org/kees/c/5659b598b4dc
-> [16/22] objtool: Preserve special st_shndx indexes in elf_update_symbol
->         https://git.kernel.org/kees/c/5141d3a06b2d
-> [17/22] objtool: Disable CFI warnings
->         https://git.kernel.org/kees/c/3c68a92d17ad
-> [18/22] kallsyms: Drop CONFIG_CFI_CLANG workarounds
->         https://git.kernel.org/kees/c/dfb352ab1162
-> [19/22] x86/tools/relocs: Ignore __kcfi_typeid_ relocations
->         https://git.kernel.org/kees/c/ca7e10bff196
-> [20/22] x86: Add types to indirectly called assembly functions
->         https://git.kernel.org/kees/c/ccace936eec7
-> [21/22] x86/purgatory: Disable CFI
->         https://git.kernel.org/kees/c/a4b7a12c5594
-> [22/22] x86: Add support for CONFIG_CFI_CLANG
->         https://git.kernel.org/kees/c/3c516f89e17e
->
-> --
-> Kees Cook
->
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
