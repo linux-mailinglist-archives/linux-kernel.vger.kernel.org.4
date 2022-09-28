@@ -2,257 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04455EDC1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89525EDC23
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233702AbiI1L7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
+        id S233682AbiI1MBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 08:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233677AbiI1L7a (ORCPT
+        with ESMTP id S233675AbiI1MBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:59:30 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A8F6555C;
-        Wed, 28 Sep 2022 04:59:29 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a26so26653753ejc.4;
-        Wed, 28 Sep 2022 04:59:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=WX1fGcDrRa8LUBuvI4gWJ/xa1ZpUTYVL+K0YkgByt8g=;
-        b=XYAN7/uZmVVhvxch5PURlfz9TnlYdYDQ6iNKya3QJZ1U5nWTMBi/azONQ/u8lrUUBb
-         NN2pxycnoOuiblKkFRbdvVriQmsW8VaCZa4hVQRE5RwLXfluBNq4BGRjKQcmEQufLTcy
-         vi146TBxLZmM6RWiRSfsab+7w+vBlawcRzq9+y0snvycnW3kydVMKtDEhMdyrVHI/uBX
-         7FF5P6CjaI2aNx2fDtVj9Hi80LEuuZiSSoiMx8TkJBUiPPihFel63FMhX0gfWJl2dFH5
-         Ee2z80GlO/DJYWMDvH4vOIHnQH10EOejXeocv3Ln4HyI76+XC9HcOHT5X5xolrc4T8f/
-         9ihg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=WX1fGcDrRa8LUBuvI4gWJ/xa1ZpUTYVL+K0YkgByt8g=;
-        b=px1xCuy5WKGW1LSdr/3v2lkyBmmFncMEQ4nFaPkfYfL6rJnGr6cVd67KEA/IYQujpJ
-         42WxiGrFZXvWxBE2rm2KlTkmUWNYgSydWG8F1AOEMYVuEDXsOnGqXX9Sk8tHFPHxT/Px
-         8hmkksW0rKcDErNBMnt9ajPzXsd60BIXAFIly0v6WJOazEUygN6SuOdE9shbLCDu2C/T
-         HUMVtvJ3hsD0q4Ph8QePOmhZGwdqNpQyuI8ETyRZEHGMc+GabX+VaLOVQhkHuLXRvt83
-         YZ1DohbnBuKDUU396zkeidfO3sxSaxRwW2qv8K+Sm7Q2zUJ/Q/LE2u8cWcUhstW1PpM2
-         6fgw==
-X-Gm-Message-State: ACrzQf34gd6Qj2lnVhlZDOSCCbIoMTE9e1FxGbFQB63SAuhgeVYu4VCr
-        0luKMtC/eW8Q6o2p/8xohrY=
-X-Google-Smtp-Source: AMsMyM4804Wv3dL9z7KIntSLwdAYgKLAjLvRcnZRK/+D28zGiFuNedfZJE6svXgWXDzao+/bFh0mwQ==
-X-Received: by 2002:a17:907:8a0b:b0:783:be41:40b4 with SMTP id sc11-20020a1709078a0b00b00783be4140b4mr10902923ejc.111.1664366367932;
-        Wed, 28 Sep 2022 04:59:27 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id y4-20020aa7d504000000b00456d2721d93sm3145234edq.64.2022.09.28.04.59.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 04:59:26 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 13:59:25 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, u.kleine-koenig@pengutronix.de,
-        linux-rockchip@lists.infradead.org, philipp.tomsich@vrull.eu,
-        linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-pwm@vger.kernel.org, kever.yang@rock-chips.com,
-        zhangqing@rock-chips.com, linux-kernel@vger.kernel.org,
-        heiko@sntech.de
-Subject: Re: [PATCH v1 03/11] dt-bindings: pwm: rockchip: add
- rockchip,rk3128-pwm
-Message-ID: <YzQ3He2wyD2bgxz1@orome>
-References: <20220909212543.17428-1-jbx6244@gmail.com>
- <f5dd0ee4-d97e-d878-ffde-c06e9b233e38@gmail.com>
- <1662821635.180247.34700.nullmailer@robh.at.kernel.org>
- <1c13181b-8421-69d8-21ee-9742dd5f55dd@gmail.com>
- <20220912162159.GA1397560-robh@kernel.org>
- <37fd8d4b-3a66-bc51-c2dc-76c9e756fed8@gmail.com>
+        Wed, 28 Sep 2022 08:01:40 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2052.outbound.protection.outlook.com [40.107.223.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AA46B14C
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 05:01:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VLxFvSKSD0id8acJ54cUN5MJn4nxq4pitzLhztWnxIdhO7qyKnBOcEQtJWfOh9ceHqnfp59SyAArcEJ/JHurcGRgViKgM6kZukhC3knpYaHFZK/j8wVwvRr818I75DmE7M0+1Em/ZvZxSoP87U56ZS7ZL92ytH+IKSXAFAdqWpia/T1PpywNLhYTBdQEvbaxGqJQjftFiNjN4Qqhx0O4Cu0YFZYYEWhWKN8e8CLsoe4oKibOGspYeiHcgxVB0yAmXTa54t/fHFwSsOLBzYU6lM7+8e6tQ97n/raDxytSrG+qVh3SXaT2t5jEanAynavMWXm1W0tMo0RX8mUZ1fOMgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tGnMifly1thb8m52sgwmDkmosPQv+vSp0P3aT9+aLdI=;
+ b=LWcQa0RKTarqnhajd5k+Q25yqreYZlMInEBAkHM50L5g1ac0u14+eioJyqePsJ9N4D7OJqNr5GLicVDYT7g4xwz/svYdAZHNT9ruXPyRbhDKO0Y8au9nN1W5w3b6J510vhefUKE0aaEmKChF94eccRnU91V5JzE5+gB3r8+/xfxYDOP889/JYY3EZ9OS/Qj0e/+zeEJyFketc3JsOLeSN+QFbL1jbcc/E0jldXoqvOt5FoNG+7NJ11VBBWv4+1XgiRjvmwfqGlYQA9gkbviOADdR2au/za2ssl2xjjtXpPqS2+toSpT246JDbzIkwZ5x48cyzpF2VOgmtegISWGnhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tGnMifly1thb8m52sgwmDkmosPQv+vSp0P3aT9+aLdI=;
+ b=t1ecQQ0KEbHmrArb9KyPf/k7VLSHm2vq3LQYpaq44HkKWVvK9bLQyMuDQQt7wRaLZlgyPAAGtE3z510zIzCZ31KAmlYdTAV8YEf8T6/AH8z64X2iugVzcu80vaBFLnZzPgc2qLhUPsGh5DqaU5LGWS166ZDPQM/gYW4j9SAjzvOGj5CEJLntHUwz+trWKwhg1/GOwKqxwiEuSzp7SQ1Mh9LoYgs2rnjPb/eJNsTFN7+zNYQwcWJ7s5wGtcPSTdys+qd8GO6z7d4JOPLPKz8zTzRhoCINe/fVqQUVPvEkcIZhCCJVeQt/SZcSEZAG1UfGXamu+WgfCPTkrHpseKw3YA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by DM6PR12MB4337.namprd12.prod.outlook.com (2603:10b6:5:2a9::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Wed, 28 Sep
+ 2022 12:01:37 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::4064:6c13:72e5:a936]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::4064:6c13:72e5:a936%5]) with mapi id 15.20.5654.026; Wed, 28 Sep 2022
+ 12:01:37 +0000
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     Alistair Popple <apopple@nvidia.com>, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v2 0/8] Fix several device private page reference counting issues
+Date:   Wed, 28 Sep 2022 22:01:14 +1000
+Message-Id: <cover.60659b549d8509ddecafad4f498ee7f03bb23c69.1664366292.git-series.apopple@nvidia.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SYBPR01CA0093.ausprd01.prod.outlook.com
+ (2603:10c6:10:3::33) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="znR/AMl6swXutvbU"
-Content-Disposition: inline
-In-Reply-To: <37fd8d4b-3a66-bc51-c2dc-76c9e756fed8@gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|DM6PR12MB4337:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c562cd0-c8b3-4a15-818d-08daa149323a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mcrrfz8bWphLYhzkb9o3HttdN2RaQIrRR/NkalLmlzHirUCi9yknwUFudRwvdWBRiXGOk70W1euO7JsMSbMrdKonSLUXLZ3CiPZpCL6bivvd3p9LqIDT+C4FzhwM/cOxViDGMfOUzf7NfDIzUvTWDuLZ4ePzQQ2S0K9sLXTS5uSMHOzSmEpWus1GATiOlqYo7BE3oncde/6bUKW0Qs386npylddWAxDoNu4P1jZpLnjEUfgLIdFY3/GV+Ga1ENcIyixkUz2/TcuMzXZzyUNh/MNVC730baxSvXn+jq0BGCqTtDBmvb4thWOuslFg70jp1gipyLOK4sWHMcO9SxDbwK7pVrqdgck6ZR0zkDvH0oX35CMnbyMR5rIT2WS88lS247Mn9RT3BHCM4WMBmH/0UokLAPtHEtu937Zvy1Dc7VM+oC5h+Md2vqoNj5YRZ40inUKr1A3jjjEhuoE2sUkXyvqagLnREgFzYtE69Mi0BkrViVQDJN/4gwt/aWZdTAsVypxo52uNJ1FVxIH2VlKoxyzjF//DYIKS1rQ88+kcEkLyWlLBpcjBBVEAEoAGUQh309wjYmGa1FlikyyLAPAXyKKdoCmjkAL88Wz0JPMSEApZv57+fvHNS+52aUnnJcyEmvz6apXvzuMn+luSxcUKMdfZU7+LY8zTOlhUh1ni31b1IyutHb9fePWr1nlkUVHMbcqr8h80kfbSO3Nbkw5WJg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(376002)(346002)(396003)(39860400002)(451199015)(86362001)(36756003)(2906002)(2616005)(6506007)(6666004)(6512007)(26005)(38100700002)(66899015)(83380400001)(316002)(186003)(8936002)(5660300002)(4326008)(66556008)(8676002)(66946007)(66476007)(6486002)(478600001)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PLWKoTvxOP1BJW9TQDgpUM5D6+LwxFnCdu39roXgbd+xShyg04r0+CP9rYfo?=
+ =?us-ascii?Q?fFLMvH7jJ+w4U+WEugMNirGEUQACZ422/xwsSs+/ptYE0kl8N9C6liYQ+mrM?=
+ =?us-ascii?Q?kS2IdXHVwKu68p4NcN3PcGAqYWhQVm6CaK0S7lcWKNDkdqHyTn66YF5g5Eg3?=
+ =?us-ascii?Q?cq+1bjdCRhXBUl7pSzAKID3HY8IOgROfkflHLuoHZ5vaIVBqVLzRiUxY78d0?=
+ =?us-ascii?Q?cj0EWSg/cKeNvrdVVREZrP89BxmjWGsHPIocdRZjt/XvJLdwMUisztumEg0h?=
+ =?us-ascii?Q?h6KLfswD/oj3D6Eooj2qo80MKAbmu3A13HYkiQsSpBI6LWGqJX1fbav2PfFF?=
+ =?us-ascii?Q?vcnhXCxLogt6RuALLTgt44sc9EpWz0OH6ChOggDqZuY/O06HB6o6mtToeDVd?=
+ =?us-ascii?Q?j17vH+kYBrxuNfTwvaSY/DMsH1PX3ZUb0puEnJJc932K+CAV5p4GhrqpAJbE?=
+ =?us-ascii?Q?hYoo6aMdwO3DC57qFInfkHZSBOMF7mYn6a06H/wPsD7vqkNQgUUILHjk5o4x?=
+ =?us-ascii?Q?KyQ9yGbocwYPH+LO10vmEChXIJYes+fZE1y9jhhnRmFt9O9PdqhG/eB1WIS6?=
+ =?us-ascii?Q?oiLFV11d2NHVdQsRxWr1m6qPRVtO1Lc1RKkF4EFehrbSv4sOrI2SkQ3t4b/2?=
+ =?us-ascii?Q?0WwCQ8YPB9c7p0PRwFvsCOvUsTvblmDVGDUGNjNzZljBX/xoqIRF+P2WwW0e?=
+ =?us-ascii?Q?4sT1bvJLQeYcuAYQW3O/5klnKJlUlwq2WoUX6pYy5hmQNoeyvU5GEyBC0rkN?=
+ =?us-ascii?Q?h9CS+UA8vmotYgrZVJILJlYycVtzOuXySmvMsurvkklmZqQlXUwLvS4JYtzp?=
+ =?us-ascii?Q?PqthrLMZoWO9LHICxs3G4tVVPdRgMAH4ACfG33HIoZ54go/5yBgQrIlszIDf?=
+ =?us-ascii?Q?RJjkOlPurPiA36We8Sv1Cf2Qg9arh+664YRkUozEEk766zk7hPbUy731x3ws?=
+ =?us-ascii?Q?7AWbfrCWjYYEQ/r9iabKWaSoerNw95zF7Ar25FFjplLdkF+KcLyf4HOO4+Qi?=
+ =?us-ascii?Q?bmagk/8r/mdB2+SveWEaLYUyyNO6sRVYT4fzOqkEWozs3qQqIL79PHdd3RPd?=
+ =?us-ascii?Q?MbZYW9g66axumQPocuSzoxb12oioTePg20Gd467mmHQnodmA5PUY80bXutIT?=
+ =?us-ascii?Q?6phRh8g1dPHTll7xDT62eLejFaXZKdWx3XDd/UkACDYhebikgq4Y1zA9yJG0?=
+ =?us-ascii?Q?+iY9bmrTFVKbbvTZj3XK8AWSZWXUk55iJx4k5biWZ1Kkf/jUD9fjw8x91egf?=
+ =?us-ascii?Q?Zw2QjkVLWIt9IsmvlQr1AbXeODtGA+JLjpTtc3qxKzLY1yqTvFVPFvn+rdPZ?=
+ =?us-ascii?Q?Vf3MJroFz0pVCQsEVIz1tVmUdo/rnF93E+sSIyIedavi6oTiMY1Nj72EnhvN?=
+ =?us-ascii?Q?VCuMn0LOqRXwUWB9Y7ZvbBEWzhsMfxEqw1+/ajX5gj+D9xUN0QS8KuOtsAGJ?=
+ =?us-ascii?Q?HpOp1plITH/m/+Qipjod/EQAtxQ+PHPcWFvKt22kAQ7dkYgFWB21AbhaprYj?=
+ =?us-ascii?Q?wCNfUk648lQDiwb6mOsoY1o9wE6JhRGS37EGRec/iBunAclZLRfh9wuevK6u?=
+ =?us-ascii?Q?cw+L6dE8iEJqjTLo//FHVpsMus/3Hn6xB/0m++ub?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c562cd0-c8b3-4a15-818d-08daa149323a
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 12:01:37.5132
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uZi/s1HjdWnW3zEUj7PsH8K8vgHTWSTlo/G+JAaJpNcYka6G/TBx0MIkos+rSdn3ycyVBY92ReeG97esEEOpbA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4337
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series aims to fix a number of page reference counting issues in
+drivers dealing with device private ZONE_DEVICE pages. These result in
+use-after-free type bugs, either from accessing a struct page which no
+longer exists because it has been removed or accessing fields within the
+struct page which are no longer valid because the page has been freed.
 
---znR/AMl6swXutvbU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+During normal usage it is unlikely these will cause any problems. However
+without these fixes it is possible to crash the kernel from userspace.
+These crashes can be triggered either by unloading the kernel module or
+unbinding the device from the driver prior to a userspace task exiting. In
+modules such as Nouveau it is also possible to trigger some of these issues
+by explicitly closing the device file-descriptor prior to the task exiting
+and then accessing device private memory.
 
-On Tue, Sep 13, 2022 at 04:38:32PM +0200, Johan Jonker wrote:
->=20
->=20
-> On 9/12/22 18:21, Rob Herring wrote:
-> > On Sat, Sep 10, 2022 at 09:48:04PM +0200, Johan Jonker wrote:
-> >> Reduced CC.
-> >>
-> >> Hi Rob,
-> >>
-> >=20
-> > Seemed like a simple enough warning to fix...
->=20
-> Some examples for comment.
-> Let us know what would be the better solution?
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
->=20
-> option1:
->=20
-> 	combpwm0: combpwm0 {
-> 		compatible =3D "rockchip,rv1108-combpwm";
-> 		interrupts =3D <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> 		#address-cells =3D <2>;
-> 		#size-cells =3D <2>;
->=20
-> 		pwm0: pwm@20040000 {
-> 			compatible =3D "rockchip,rv1108-pwm";
-> 			reg =3D <0x20040000 0x10>;
-> 		};
->=20
-> 		pwm1: pwm@20040010 {
-> 			compatible =3D "rockchip,rv1108-pwm";
-> 			reg =3D <0x20040010 0x10>;
-> 		};
->=20
-> 		pwm2: pwm@20040020 {
-> 			compatible =3D "rockchip,rv1108-pwm";
-> 			reg =3D <0x20040020 0x10>;
-> 		};
->=20
-> 		pwm3: pwm@20040030 {
-> 			compatible =3D "rockchip,rv1108-pwm";
-> 			reg =3D <0x20040030 0x10>;
-> 		};
-> 	};
->=20
-> PRO:
-> - Existing driver might still work.
-> CON:
-> - New compatible needed to service the combined interrupts.
-> - Driver change needed.
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> option 2:
->=20
-> 	combpwm0: pwm@10280000 {
-> 		compatible =3D "rockchip,rv1108-pwm";
-> 		reg =3D <0x10280000 0x40>;
-> 		interrupts =3D <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-> 		#address-cells =3D <1>;
-> 		#size-cells =3D <0>;
->=20
-> 		pwm4: pwm-4@0 {
-> 			reg =3D <0x0>;
-> 		};
->=20
-> 		pwm5: pwm-5@10 {
-> 			reg =3D <0x10>;
-> 		};
->=20
-> 		pwm6: pwm-6@20 {
-> 			reg =3D <0x20>;
-> 		};
->=20
-> 		pwm7: pwm-7@30 {
-> 			reg =3D <0x30>;
-> 		};
-> 	};
->=20
-> CON:
-> - Driver change needed.
-> - Not compatible with current drivers.
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
->=20
-> Current situation:
->=20
-> 	pwm0: pwm@20040000 {
-> 		compatible =3D "rockchip,rv1108-pwm", "rockchip,rk3288-pwm";
-> 		reg =3D <0x20040000 0x10>;
-> 		interrupts =3D <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> 	};
->=20
-> 	pwm1: pwm@20040010 {
-> 		compatible =3D "rockchip,rv1108-pwm", "rockchip,rk3288-pwm";
-> 		reg =3D <0x20040010 0x10>;
-> 		interrupts =3D <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> 	};
->=20
-> 	pwm2: pwm@20040020 {
-> 		compatible =3D "rockchip,rv1108-pwm", "rockchip,rk3288-pwm";
-> 		reg =3D <0x20040020 0x10>;
-> 		interrupts =3D <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> 	};
->=20
-> 	pwm3: pwm@20040030 {
-> 		compatible =3D "rockchip,rv1108-pwm", "rockchip,rk3288-pwm";
-> 		reg =3D <0x20040030 0x10>;
-> 		interrupts =3D <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> 	};
->=20
-> CON:
-> - The property "interrupts 39" can only be claimed ones by one probe func=
-tion at the time.
-> - Has a fall-back string for rk3288, but unknown identical behavior for i=
-nterrupts ???
+This involves some minor changes to both PowerPC and AMD GPU code.
+Unfortunately I lack hardware to test either of those so any help there
+would be appreciated. The changes mimic what is done in for both Nouveau
+and hmm-tests though so I doubt they will cause problems.
 
-To be honest, all three descriptions look wrong to me. From the above it
-looks like this is simply one PWM controller with four channels, so it
-should really be described as such, i.e.:
+To: Andrew Morton <akpm@linux-foundation.org>
+To: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Cc: amd-gfx@lists.freedesktop.org
+Cc: nouveau@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
 
-	pwm@20040030 {
-		compatible =3D "rockchip,rv1108-pwm";
-		reg =3D <0x20040030 0x40>;
-		interrupts =3D <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-	};
+Alistair Popple (8):
+  mm/memory.c: Fix race when faulting a device private page
+  mm: Free device private pages have zero refcount
+  mm/memremap.c: Take a pgmap reference on page allocation
+  mm/migrate_device.c: Refactor migrate_vma and migrate_deivce_coherent_page()
+  mm/migrate_device.c: Add migrate_device_range()
+  nouveau/dmem: Refactor nouveau_dmem_fault_copy_one()
+  nouveau/dmem: Evict device private memory during release
+  hmm-tests: Add test for migrate_device_range()
 
-Looking through existing Rockchip SoC DTSI files, though, it looks like
-this has been done the wrong way since the beginning, so not sure if you
-still want to fix it up.
+ arch/powerpc/kvm/book3s_hv_uvmem.c       |  17 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_migrate.c |  19 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_migrate.h |   2 +-
+ drivers/gpu/drm/amd/amdkfd/kfd_svm.c     |  11 +-
+ drivers/gpu/drm/nouveau/nouveau_dmem.c   | 108 +++++++----
+ include/linux/memremap.h                 |   1 +-
+ include/linux/migrate.h                  |  15 ++-
+ lib/test_hmm.c                           | 129 ++++++++++---
+ lib/test_hmm_uapi.h                      |   1 +-
+ mm/memory.c                              |  16 +-
+ mm/memremap.c                            |  30 ++-
+ mm/migrate.c                             |  34 +--
+ mm/migrate_device.c                      | 239 +++++++++++++++++-------
+ mm/page_alloc.c                          |   8 +-
+ tools/testing/selftests/vm/hmm-tests.c   |  49 +++++-
+ 15 files changed, 516 insertions(+), 163 deletions(-)
 
-This whole problem of dealing with a shared interrupt wouldn't be a
-problem if this was described properly.
-
-Thierry
-
---znR/AMl6swXutvbU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmM0NxoACgkQ3SOs138+
-s6F2DQ//SNItqjUD13hctOIu27Mgc1QlCOleIYcIh+Tvc1QSG838jZzQPNzG2+Ft
-ZuWfVO3UfsF3Ny3OA+GvfTEJTCj5bZAFKb/HkoDlmAXDeYqteLREoO/jo8eVDPYx
-Yyqs1l1UxpnJJIurdJtYWwyMVlzxXkVHH6+ZCidaf3oUvWCsrfFMbo/6V7YZmasU
-22bjdfqqWexG86xbVsML6y2WNzMLiBlWxGwRPBEkOXwyJ7AcEk0KV7RiENxOERs7
-zwI6rePM0V9CDUStIcO1mlhljgk/6h64v+yNFlTiDwgG3GjBSQGw5M0JyuvzYzWF
-dj+62s4HnAwYWWldLJpR0RooYiW3GMXUHizY+KnevRcaLhMRwe/D4PFmZyuxumzN
-ywnSDS6yIGN3DGKmz8/+YjvLLitmCvCzffNNlAMXnz29pz7RlirRhfCJylsPMs4R
-VxCZFX6P7saeLzJn0jNBbZck2KcMWFK+uZJQ7hezYt81Z1vdRahymS6SelDlbQEA
-fAkU1tudRbu062RNVnI9okSaLafrXVUdnhWdxuD+hCJWLv/2DYCKuEHmTXMTkCo5
-GLtjPULz1Cz/GyHYBAAcKPXp/VcTVMm3sUXwHYlaJ67YyxFpZgQGfLej5y1+oJfU
-cSFQu91Ek+ZogUFWckR/+oA0tq6VrZqG52O0tj8iMsS7JoB/Cz8=
-=s0oH
------END PGP SIGNATURE-----
-
---znR/AMl6swXutvbU--
+base-commit: 088b8aa537c2c767765f1c19b555f21ffe555786
+-- 
+git-series 0.9.1
