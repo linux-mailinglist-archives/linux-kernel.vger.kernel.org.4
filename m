@@ -2,190 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A235EDFC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 327995EDFCA
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234538AbiI1PIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        id S234087AbiI1PJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbiI1PIO (ORCPT
+        with ESMTP id S234584AbiI1PJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:08:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E709EA74CE
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664377666;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6YP0ksLfvQ+PHdWOYzdNqMtI78ExZh2H+cCK39U/zco=;
-        b=H8zRtIE2M7Kzmput2GF5hTSWluPQEbPEamFD21LB4Sz4IQfnQx3yz4qWTCaIbrrTl7vgo1
-        kXRA9GKJJXSThh+Mg7aZ5VB+aQWLP5JikTlReSwD6EDCW/Acvn1cA7QAKHWKEGm1LjPCZN
-        Ujhk7412ZR/z7JLEl3PpX5q9w2DKzlY=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-460-0xyizthZN1WjUsGcoBkXsw-1; Wed, 28 Sep 2022 11:07:45 -0400
-X-MC-Unique: 0xyizthZN1WjUsGcoBkXsw-1
-Received: by mail-ed1-f70.google.com with SMTP id c6-20020a05640227c600b004521382116dso10705402ede.22
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:07:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=6YP0ksLfvQ+PHdWOYzdNqMtI78ExZh2H+cCK39U/zco=;
-        b=BQ5DyNRDciomqG1iZS1ADrY9geEXacsi4EwuA+N03YYZoyUmtbH7zgN5q/6fcnAzOD
-         Pwfweaezyyjr1csmg10bEJIPXdFMwZD+7143PA2wwoYrIyGKOT51XTbfqbCBpQzxzPup
-         beH9r0JcpYu0TuJ5lKgJLE5mpsjRSCMy1wQfxaM1uIcNNhWYz8wRajvBGfMlSx6jE+5T
-         V4YNnGEGB/OIasD7YroKCyA5FYgk1AFNveItwjY+sU6cVZiReyq3XJ33h9BjJcqvoiSc
-         ptjmmfAuzrVZr/M54mxrfimcxkMrjWKBSvwA90Jv9ZrpnkqopybOWcQT8ElAP/ia9mfg
-         I86g==
-X-Gm-Message-State: ACrzQf2nPWi6l2CTIc9fjnV4H+KRccj32UGaw5anMaX1DhWWC+J2Fhtg
-        V1WVqql19SXtdZ07HHUSe6oH+sUAFL+ivvMRco243s5i74ah6NI0HzQhreBFGNJImu1LekhR9FV
-        KKBlEvY7eqDjDuLMkxwJQ559o
-X-Received: by 2002:a17:907:7fa0:b0:782:948b:e212 with SMTP id qk32-20020a1709077fa000b00782948be212mr24362661ejc.231.1664377662450;
-        Wed, 28 Sep 2022 08:07:42 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6kUGSsrq3rUkp5nnkMIueg6zqoEQxSsxDSib+LlbUfxmD2s8qfgik439YZnZVEJ2swO3ubBw==
-X-Received: by 2002:a17:907:7fa0:b0:782:948b:e212 with SMTP id qk32-20020a1709077fa000b00782948be212mr24362631ejc.231.1664377662140;
-        Wed, 28 Sep 2022 08:07:42 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:2f4b:62da:3159:e077? ([2001:b07:6468:f312:2f4b:62da:3159:e077])
-        by smtp.googlemail.com with ESMTPSA id d14-20020a056402078e00b00457160c3c77sm3517514edy.20.2022.09.28.08.07.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 08:07:41 -0700 (PDT)
-Message-ID: <dd6db8c9-80b1-b6c5-29b8-5eced48f1303@redhat.com>
-Date:   Wed, 28 Sep 2022 17:07:39 +0200
+        Wed, 28 Sep 2022 11:09:05 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2083.outbound.protection.outlook.com [40.107.102.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A6C240A6;
+        Wed, 28 Sep 2022 08:09:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K+sQizu4oh0a/whEB5MKaZJ2zRppjqhfkPIVhJku6W/TW8hWnkYTJkmPi6ZWoFnQYBksveyjKzlFHPoL0ONvIgdcjfYIy8CLBCjm2V1jXPSPnamas0lWIbhxgeaTuJlwO/ZMSi7DpqoHKqMXrZqCthu5QDyMJkCVX6ycthoHkfxBHMnj2Hv4ljdELn4oqzQd+YEsH4HlFZYkvL62H4CQDKjXhjlSMLDf2hLbYPAff8/J2C8Uv9YY9FJZVuCfwkoTBjsxOR1iiLxhkV6qfLB6bQUKYI+elwcuShZdfqz1Wc3PV9IdhBm4lOQJZOJMT7Qusy3HFYQQby6uBXioBnX+EQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Fxx5Htn+v5iOBVI4QyYJKGUBhv7T7MRyr/5pnrcfi4c=;
+ b=PB9IG+oNBeRhDHaxL9IgvZP547mpDKAnq5SOLEEqa5+YXR5bfgBNYiuk87OOMvxC8F+Scx92zWo5NniM13r3IMbKr2uZkmcsZYi2acvTvaVD88lnWZGoYVUSlRliDy8N1A6t7L/6X5gqFsubeD+r3mVfoYDKWjFhLVR3nXagwZoDB9Z1COVakGyBSo6e6gvaTbqGCurErHG1s0QfWqTME2OhyUXa6n5FmWWDcgHn0xNUMV2D4IyOLAef7grGgDL+fB5v7jZsrN2uoljWGdE621k7/felFv2nMl+3vByLLDDiyUM4OI2VAGVmIdntM8CyL8/v6pLvWt4HT5mnPkdbNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Fxx5Htn+v5iOBVI4QyYJKGUBhv7T7MRyr/5pnrcfi4c=;
+ b=LaYG8jqJIzrSlthVD+BqQu39zXUxulUFm1V5grJ/gtG0fPbOQGmqGiH4M0Pc/P18sK4tnDJv+VJ5vG8BaH++XrZRuLO+VSfOQA2SgHTWE9npNp49RoxM4Egl6rK1nPDZpDv89PQt6RXKTK61WafscPLtLVcHr+hzPX2CQq42IlIWQJ5OGaCD5vzqFMiGi983yQ9HeSfIdsMzLrkQoWHUwXRIX0E3WSUAVYyT0kJ+C53WhyoCC5CBvMKrhX5qP1obaaqMV4kawdpa3B+ioTbz6o9IqE3+wstlmXARMTENq6hH8dM0OTZxN+yS07mJVSjuyzDlZfCMnMOxA0v8Nmq9RA==
+Received: from MW4PR04CA0164.namprd04.prod.outlook.com (2603:10b6:303:85::19)
+ by DM4PR12MB6039.namprd12.prod.outlook.com (2603:10b6:8:aa::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Wed, 28 Sep
+ 2022 15:08:58 +0000
+Received: from CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:85:cafe::68) by MW4PR04CA0164.outlook.office365.com
+ (2603:10b6:303:85::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17 via Frontend
+ Transport; Wed, 28 Sep 2022 15:08:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT066.mail.protection.outlook.com (10.13.175.18) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5676.17 via Frontend Transport; Wed, 28 Sep 2022 15:08:58 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 28 Sep
+ 2022 08:08:43 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 28 Sep
+ 2022 08:08:43 -0700
+Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
+ mail.nvidia.com (10.129.68.8) with Microsoft SMTP Server id 15.2.986.29 via
+ Frontend Transport; Wed, 28 Sep 2022 08:08:42 -0700
+From:   Wayne Chang <waynec@nvidia.com>
+To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
+CC:     <waynec@nvidia.com>, <Sanket.Goswami@amd.com>,
+        <singhanc@nvidia.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 1/1] usb: typec: ucsi_ccg: Disable UCSI ALT support on Tegra
+Date:   Wed, 28 Sep 2022 23:08:40 +0800
+Message-ID: <20220928150840.3804313-1-waynec@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Like Xu <like.xu.linux@gmail.com>
-References: <YxtOEgJhe4EcAJsE@google.com>
- <5f0345d2-d4d1-f4fe-86ba-6e22561cb6bd@redhat.com>
- <37b3162e-7b3a-919f-80e2-f96eca7d4b4c@redhat.com>
- <dfcbdf1d-b078-ec6c-7706-6af578f79ec2@redhat.com>
- <55d7f0bd-ace1-506b-ea5b-105a86290114@redhat.com>
- <f753391e-7bdc-bada-856a-87344e75bd74@redhat.com>
- <111a46c1-7082-62e3-4f3a-860a95cd560a@redhat.com>
- <14d5b8f2-7cb6-ce24-c7a7-32aa9117c953@redhat.com>
- <YzIZhn47brWBfQah@google.com>
- <3b04db9d-0177-7e6e-a54c-a28ada8b1d36@redhat.com>
- <YzMdjSkKaJ8HyWXh@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
-In-Reply-To: <YzMdjSkKaJ8HyWXh@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT066:EE_|DM4PR12MB6039:EE_
+X-MS-Office365-Filtering-Correlation-Id: ae8e6422-6bd5-4306-7046-08daa1635e5a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 49Py5QasBoUm6dayaCwChb1Cs/TbZ+Tl95Do7GFbdtJkll+BTNBZr7UjHT4P3hYLQYUcZHFo0eK3CuPh41NjvxCRb9CZShoc7JUFPk/cFGys3PTtAyC6VzzRgIOSJxEWWbUAj63Ync6ue3xjzXMrcD6fYwm6l3jcL7ZxFMjRngcIAL+AgXABVdKpnUAa9RPcWePqNEYzTyNVutPx6qbn0a85AjoOprGpywk56196VxRh43Gb718TbfAJTA6IvYTs39iGuKjgqW/234F47fOh0hqXlmaH2TTQlPg3W0Ra601bKGbJc/qBS3PE41854pMZn41eLahp8nCTWSyjiHkjRqWs7zubZVtQBSbh9OKNxug9xzJNlbwA2duzL1kLjXIQBAw0/FeZ4ocLD69PEHg3ezX60fcrtQAeNHqW8TWuTb+xsDbMCMCzPdygKbFtNHApLhbl8x2ZyOmMkKwwgXvWgbFdPldxp1EtonzH1STj8xf41EuC2KjSeNjCwYrQJLlLaPd0ocBkuZR4QUU0u21sGaMKT/tP1jnu2Ci8frbdchzbTOVoDF2c19TWdxN4NaJNG1mTBU5QWoNngVdAmeQBqMaRMCtxFZTSuq0Xrg59eszVx/KX3pB0/l0+mv2wb5S0pI5osNQwdrZrOTuK2XeyMG98zI7/XIrbNUJl7lvUBgdeXvJquuFNrQ+j/sP2hFzRttsVCVg+tcEBEZzCyby9ef7Nh56h9wEdFD1HkNvPsu2rdZ0r7fw3dRVswDGCPiA9cK2iHph6T7768otO5gmQow==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(39860400002)(396003)(451199015)(40470700004)(46966006)(36840700001)(82310400005)(54906003)(36860700001)(7696005)(36756003)(2906002)(82740400003)(110136005)(40480700001)(41300700001)(8676002)(40460700003)(70586007)(70206006)(356005)(4326008)(86362001)(7636003)(316002)(26005)(478600001)(8936002)(5660300002)(426003)(83380400001)(336012)(1076003)(47076005)(2616005)(186003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 15:08:58.1603
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae8e6422-6bd5-4306-7046-08daa1635e5a
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6039
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 17:58, Sean Christopherson wrote:
-> On Tue, Sep 27, 2022, Emanuele Giuseppe Esposito wrote:
->>
->> Am 26/09/2022 um 23:28 schrieb Sean Christopherson:
->>> On Mon, Sep 26, 2022, David Hildenbrand wrote:
->>>> As Sean said "This is an awful lot of a complexity to take on for something
->>>> that appears to be solvable in userspace."
->>>
->>> And if the userspace solution is unpalatable for whatever reason, I'd like to
->>> understand exactly what KVM behavior is problematic for userspace.  E.g. the
->>> above RHBZ bug should no longer be an issue as the buggy commit has since been
->>> reverted.
->>
->> It still is because I can reproduce the bug, as also pointed out in
->> multiple comments below.
-> 
-> You can reproduce _a_ bug, but it's obviously not the original bug, because the
-> last comment says:
-> 
->    Second, indeed the patch was reverted and somehow accepted without generating
->    too much noise:
-> 
->    ...
-> 
->    The underlying issue of course as we both know is still there.
-> 
->    You might have luck reproducing it with this bug
-> 
->    https://bugzilla.redhat.com/show_bug.cgi?id=1855298
-> 
->    But for me it looks like it is 'working' as well, so you might have
->    to write a unit test to trigger the issue.
-> 
->>> If the issue is KVM doing something nonsensical on a code fetch to MMIO, then I'd
->>> much rather fix _that_ bug and improve KVM's user exit ABI to let userspace handle
->>> the race _if_ userspace chooses not to pause vCPUs.
->>>
->>
->> Also on the BZ they all seem (Paolo included) to agree that the issue is
->> non-atomic memslots update.
-> 
-> Yes, non-atomic memslot likely results in the guest fetching from a GPA without a
-> memslot.  I'm asking for an explanation of exactly what happens when that occurs,
-> because it should be possible to adjust KVM and/or QEMU to play nice with the
-> fetch, e.g. to resume the guest until the new memslot is installed, in which case
-> an atomic update isn't needed.
-> 
-> I assume the issue is that KVM exits with KVM_EXIT_INTERNAL_ERROR because the
-> guest is running at CPL=0, and QEMU kills the guest in response.  If that's correct,
-> then that problem can be solved by exiting to userspace with KVM_EXIT_MMIO instead
-> of KVM_EXIT_INTERNAL_ERROR so that userspace can do something sane in response to
-> the MMIO code fetch.
-> 
-> I'm pretty sure this patch will Just Work for QEMU, because QEMU simply resumes
-> the vCPU if mmio.len==0.  It's a bit of a hack, but I don't think it violates KVM's
-> ABI in any way, and it can even become "official" behavior since KVM x86 doesn't
-> otherwise exit with mmio.len==0.
+From: Sing-Han Chen <singhanc@nvidia.com>
 
-I think this patch is not a good idea for two reasons:
+Firmware built for Tegra doesn't support UCSI ALT command and has known
+issue of reporting wrong capability info.
 
-1) we don't know how userspace behaves if mmio.len is zero.  It is of 
-course reasonable to do nothing, but an assertion failure is also a 
-valid behavior
+This commit disables UCSI ALT support when reading the capability on
+Tegra.
 
-2) more important, there is no way to distinguish a failure due to the 
-guest going in the weeds (and then KVM_EXIT_INTERNAL_ERROR is fine) from 
-one due to the KVM_SET_USER_MEMORY_REGION race condition.  So this will 
-cause a guest that correctly caused an internal error to loop forever.
+Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
+Signed-off-by: Wayne Chang <waynec@nvidia.com>
+---
+V1 -> V2: updated the commit message and removed the unnecessary changes for RTX
+We are now enabling the NVIDIA Tegra products on upstream kernel.
+The change is to add the Cypress cypd 4226 support for NVIDA Tegra
+products including Xavier AGX, Xavier Orin and the upcoming products.
+The Cypress cypd4226 is not enabled in current kernel codebase.
+And thus, we shall not need it for stable kernels and backporting
 
-While the former could be handled in a "wait and see" manner, the latter 
-in particular is part of the KVM_RUN contract.  Of course it is possible 
-for a guest to just loop forever, but in general all of KVM, QEMU and 
-upper userspace layers want a crashed guest to be detected and stopped 
-forever.
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Yes, QEMU could loop only if memslot updates are in progress, but 
-honestly all the alternatives I have seen to atomic memslot updates are 
-really *awful*.  David's patches even invent a new kind of mutex for 
-which I have absolutely no idea what kind of deadlocks one should worry 
-about and why they should not exist; QEMU's locking is already pretty 
-crappy, it's certainly not on my wishlist to make it worse!
-
-This is clearly a deficiency in the KVM kernel API, and (thanks to SRCU) 
-the kernel is the only place where you can have a *good* fix.  It should 
-have been fixed years ago.
-
-Paolo
+diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+index 5c0bf48be766..cbd93f893e48 100644
+--- a/drivers/usb/typec/ucsi/ucsi_ccg.c
++++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+@@ -125,6 +125,11 @@ struct version_format {
+ #define CCG_FW_BUILD_NVIDIA	(('n' << 8) | 'v')
+ #define CCG_OLD_FW_VERSION	(CCG_VERSION(0x31) | CCG_VERSION_PATCH(10))
+ 
++/* Firmware for Tegra doesn't support UCSI ALT command, built
++ * for NVIDIA has known issue of reporting wrong capability info
++ */
++#define CCG_FW_BUILD_NVIDIA_TEGRA	(('g' << 8) | 'n')
++
+ /* Altmode offset for NVIDIA Function Test Board (FTB) */
+ #define NVIDIA_FTB_DP_OFFSET	(2)
+ #define NVIDIA_FTB_DBG_OFFSET	(3)
+@@ -513,6 +518,7 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
+ {
+ 	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
+ 	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
++	struct ucsi_capability *cap;
+ 	struct ucsi_altmode *alt;
+ 	int ret;
+ 
+@@ -536,6 +542,12 @@ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
+ 				ucsi_ccg_nvidia_altmode(uc, alt);
+ 		}
+ 		break;
++	case UCSI_GET_CAPABILITY:
++		if (uc->fw_build == CCG_FW_BUILD_NVIDIA_TEGRA) {
++			cap = val;
++			cap->features &= ~UCSI_CAP_ALT_MODE_DETAILS;
++		}
++		break;
+ 	default:
+ 		break;
+ 	}
+-- 
+2.25.1
 
