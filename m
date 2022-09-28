@@ -2,112 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A2D5EE2C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2163B5EE2A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234539AbiI1RN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        id S234395AbiI1RMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234533AbiI1RMl (ORCPT
+        with ESMTP id S234331AbiI1RMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:12:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5404EE665;
-        Wed, 28 Sep 2022 10:12:34 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28SA6G0A007835;
-        Wed, 28 Sep 2022 17:12:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=bTHb/iTIJ515U9ZD/ZdvnV3tGnX4kfcrHGl79HkwpXw=;
- b=LSAQ/Y50asWoBsSwgkz6QyBAy/7UJYDyUnUkO33vwKiZyeqPZYyRFtso89z/WBuXSnJd
- Th5QjDhnAI3CuOaVyoP5oHpXLNviDBdZ88a93yNTTHZ0zibxMU2fx+wNpu8qzWe6WwLD
- NHsbc0zsf9TBxEL/L/yn0dHE4XBp+vfiWSboMrZRK/nmb7hpupFMl000H5oCVuh7jHCj
- pxoMMpqUwcfzOZYAsBbP3vTxb8hghx0DXoF1lXmWRvyWSng17Vq4Jwi4MUCUfTfdRbP6
- VAAHc+Uh9ZOrtfiKaz8ZcQ8u+J6MvVn4VCOYgtD/xkOxStSnFEeR0l0pLLQEz61Vgfen +Q== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jv28a4xjc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 17:12:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28SHCR9Q013175
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 17:12:27 GMT
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 28 Sep 2022 10:12:23 -0700
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
-        "Krzysztof Kozlowski" <krzk@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>,
-        "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>
-Subject: [PATCH V14 7/7] arm64: dts: qcom: sdm845: Add Data Capture and Compare(DCC) support node
-Date:   Wed, 28 Sep 2022 22:41:17 +0530
-Message-ID: <d92bd73abfe93a4aec54de436281ef8eaf28216b.1664383851.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1664383851.git.quic_schowdhu@quicinc.com>
-References: <cover.1664383851.git.quic_schowdhu@quicinc.com>
+        Wed, 28 Sep 2022 13:12:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE64EBBFB
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:12:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664385124;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bP9+xy9pEpEEZfRNIBincGMZRHmli7unEWEFcnvOvfI=;
+        b=CWC8gTNxlpkS2nYfNja7SCV5oCroBb6d07jEZNXBT8I1vDKLa3d92cNDMoZzNwR1H3Gr7v
+        wOZN8CkcTuJK2tejKHK8EoSrQK2+009AVe6KcS8D1NAla2Iu/M700DT2aaQFHTRNeW+xO9
+        i5C8IVoiLiGKehTX3zH/EXeRrb22FlM=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-396-BY4MH5TEN-yeTreJRMnSoQ-1; Wed, 28 Sep 2022 13:12:03 -0400
+X-MC-Unique: BY4MH5TEN-yeTreJRMnSoQ-1
+Received: by mail-ed1-f72.google.com with SMTP id y1-20020a056402358100b00451b144e23eso10706776edc.18
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:12:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=bP9+xy9pEpEEZfRNIBincGMZRHmli7unEWEFcnvOvfI=;
+        b=ownrxPhYSDibN25AjI3VMW7g+wSLkMSxhqlT3HRK2WLoIGBGb0obwobVO44cO7CUCo
+         03MEKmvUNq1gW25fuOfaByODQazSoCh/qFX2cio+BeyTZYPBYBBPgwh1q6HY4Srgdyya
+         ztn+q6yVtCSWiJu9jTtuj9AipqFs2LEreyZyg6aR2ZsoJAcYGe9E29GekHxvzsxuFfSs
+         XGM5IyJtLrdPisnjp7b9+klt7BDYtlYzTOO8p1GAlumxBzKDD1hvTLHt8/ysbFhwJQF4
+         eYeI7f0iH4PT9TMLazK9Dqtlvax0L+6Rp+YOh8tXOVqHJ8BGvUGbzelETYqYOpAgyOYk
+         g3BQ==
+X-Gm-Message-State: ACrzQf2I+lXT8aejGdEWfR8F7+RIqz51+buDnWjrBUzZRki5QcPTkBjw
+        8gbQOBgv+bLl5cTjOA/fga3Is13BLJVAnvi8is2vP/64+SmvSVbovTZ0hjW0+VTRc1Ai7txq7U5
+        DEcgpxC4+zYcsWwqNjKnblouA
+X-Received: by 2002:a17:906:5d16:b0:787:a9ee:3c9c with SMTP id g22-20020a1709065d1600b00787a9ee3c9cmr1151650ejt.467.1664385121712;
+        Wed, 28 Sep 2022 10:12:01 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5oSbazWpUDSL6M39Ky2UKZNvGvgUNrSnGUmod/VQwxCYyZbqUNN75zpJYoa0XaARZHMtkh1A==
+X-Received: by 2002:a17:906:5d16:b0:787:a9ee:3c9c with SMTP id g22-20020a1709065d1600b00787a9ee3c9cmr1151621ejt.467.1664385121427;
+        Wed, 28 Sep 2022 10:12:01 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:2f4b:62da:3159:e077? ([2001:b07:6468:f312:2f4b:62da:3159:e077])
+        by smtp.googlemail.com with ESMTPSA id d8-20020a170906304800b0078167cb4536sm2642428ejd.118.2022.09.28.10.11.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 10:12:00 -0700 (PDT)
+Message-ID: <e4692910-489f-f824-104c-8ad5d99e8f08@redhat.com>
+Date:   Wed, 28 Sep 2022 19:11:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: HdLCAiY5dN0w8SBOIytt2AdCnSB8E-rj
-X-Proofpoint-GUID: HdLCAiY5dN0w8SBOIytt2AdCnSB8E-rj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-28_07,2022-09-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- suspectscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=815
- priorityscore=1501 malwarescore=0 clxscore=1015 adultscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2209280102
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+References: <20220909104506.738478-1-eesposit@redhat.com>
+ <20220909104506.738478-6-eesposit@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [RFC PATCH 5/9] kvm_main.c: split __kvm_set_memory_region logic
+ in kvm_check_mem and kvm_prepare_batch
+In-Reply-To: <20220909104506.738478-6-eesposit@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the DCC(Data Capture and Compare) device tree node entry along with
-the address of the register region.
+On 9/9/22 12:45, Emanuele Giuseppe Esposito wrote:
+> Just a function split. No functional change intended,
+> except for the fact that kvm_prepare_batch() does not
+> immediately call kvm_set_memslot() if batch->change is
+> KVM_MR_DELETE, but delegates the caller (__kvm_set_memory_region).
+> 
+> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+> ---
+>   virt/kvm/kvm_main.c | 120 +++++++++++++++++++++++++++++---------------
+>   1 file changed, 79 insertions(+), 41 deletions(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 17f07546d591..9d917af30593 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -1927,19 +1927,9 @@ static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
+>   	return false;
+>   }
+>   
+> -/*
+> - * Allocate some memory and give it an address in the guest physical address
+> - * space.
+> - *
+> - * Discontiguous memory is allowed, mostly for framebuffers.
+> - * This function takes also care of initializing batch->new/old/invalid/change
+> - * fields.
+> - *
+> - * Must be called holding kvm->slots_lock for write.
+> - */
+> -int __kvm_set_memory_region(struct kvm *kvm,
+> -			    const struct kvm_userspace_memory_region *mem,
+> -			    struct kvm_internal_memory_region_list *batch)
+> +static int kvm_prepare_batch(struct kvm *kvm,
+> +			     const struct kvm_userspace_memory_region *mem,
+> +			     struct kvm_internal_memory_region_list *batch)
+>   {
+>   	struct kvm_memory_slot *old, *new;
+>   	struct kvm_memslots *slots;
+> @@ -1947,34 +1937,10 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>   	unsigned long npages;
+>   	gfn_t base_gfn;
+>   	int as_id, id;
+> -	int r;
+> -
+> -	r = check_memory_region_flags(mem);
+> -	if (r)
+> -		return r;
+>   
+>   	as_id = mem->slot >> 16;
+>   	id = (u16)mem->slot;
+>   
+> -	/* General sanity checks */
+> -	if ((mem->memory_size & (PAGE_SIZE - 1)) ||
+> -	    (mem->memory_size != (unsigned long)mem->memory_size))
+> -		return -EINVAL;
+> -	if (mem->guest_phys_addr & (PAGE_SIZE - 1))
+> -		return -EINVAL;
+> -	/* We can read the guest memory with __xxx_user() later on. */
+> -	if ((mem->userspace_addr & (PAGE_SIZE - 1)) ||
+> -	    (mem->userspace_addr != untagged_addr(mem->userspace_addr)) ||
+> -	     !access_ok((void __user *)(unsigned long)mem->userspace_addr,
+> -			mem->memory_size))
+> -		return -EINVAL;
+> -	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
+> -		return -EINVAL;
+> -	if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
+> -		return -EINVAL;
+> -	if ((mem->memory_size >> PAGE_SHIFT) > KVM_MEM_MAX_NR_PAGES)
+> -		return -EINVAL;
+> -
+>   	slots = __kvm_memslots(kvm, as_id);
+>   
+>   	/*
+> @@ -1993,7 +1959,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>   
+>   		batch->change = KVM_MR_DELETE;
+>   		batch->new = NULL;
+> -		return kvm_set_memslot(kvm, batch);
+> +		return 0;
+>   	}
+>   
+>   	base_gfn = (mem->guest_phys_addr >> PAGE_SHIFT);
+> @@ -2020,7 +1986,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>   		else if (mem->flags != old->flags)
+>   			change = KVM_MR_FLAGS_ONLY;
+>   		else /* Nothing to change. */
+> -			return 0;
+> +			return 1;
+>   	}
+>   
+>   	if ((change == KVM_MR_CREATE || change == KVM_MR_MOVE) &&
+> @@ -2041,12 +2007,81 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>   
+>   	batch->new = new;
+>   	batch->change = change;
+> +	return 0;
+> +}
+> +
+> +static int kvm_check_mem(const struct kvm_userspace_memory_region *mem)
+> +{
+> +	int as_id, id;
+> +
+> +	as_id = mem->slot >> 16;
+> +	id = (u16)mem->slot;
+> +
+> +	/* General sanity checks */
+> +	if ((mem->memory_size & (PAGE_SIZE - 1)) ||
+> +	    (mem->memory_size != (unsigned long)mem->memory_size))
+> +		return -EINVAL;
+> +	if (mem->guest_phys_addr & (PAGE_SIZE - 1))
+> +		return -EINVAL;
+> +	/* We can read the guest memory with __xxx_user() later on. */
+> +	if ((mem->userspace_addr & (PAGE_SIZE - 1)) ||
+> +	    (mem->userspace_addr != untagged_addr(mem->userspace_addr)) ||
+> +	     !access_ok((void __user *)(unsigned long)mem->userspace_addr,
+> +			mem->memory_size))
+> +		return -EINVAL;
+> +	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
+> +		return -EINVAL;
+> +	if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
+> +		return -EINVAL;
+> +	if ((mem->memory_size >> PAGE_SHIFT) > KVM_MEM_MAX_NR_PAGES)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static int kvm_check_memory_region(struct kvm *kvm,
+> +				const struct kvm_userspace_memory_region *mem,
+> +				struct kvm_internal_memory_region_list *batch)
+> +{
+> +	int r;
+> +
+> +	r = check_memory_region_flags(mem);
+> +	if (r)
+> +		return r;
+>   
+> -	r = kvm_set_memslot(kvm, batch);
+> +	r = kvm_check_mem(mem);
+>   	if (r)
+> -		kfree(new);
+> +		return r;
+> +
+> +	r = kvm_prepare_batch(kvm, mem, batch);
+> +	if (r && batch->new)
+> +		kfree(batch->new);
+> +
+>   	return r;
+>   }
+> +
+> +/*
+> + * Allocate some memory and give it an address in the guest physical address
+> + * space.
+> + *
+> + * Discontiguous memory is allowed, mostly for framebuffers.
+> + * This function takes also care of initializing batch->new/old/invalid/change
+> + * fields.
+> + *
+> + * Must be called holding kvm->slots_lock for write.
+> + */
+> +int __kvm_set_memory_region(struct kvm *kvm,
+> +			    const struct kvm_userspace_memory_region *mem,
+> +			    struct kvm_internal_memory_region_list *batch)
+> +{
+> +	int r;
+> +
+> +	r = kvm_check_memory_region(kvm, mem, batch);
+> +	if (r)
+> +		return r;
+> +
+> +	return kvm_set_memslot(kvm, batch);
+> +}
+>   EXPORT_SYMBOL_GPL(__kvm_set_memory_region);
+>   
+>   static int kvm_set_memory_region(struct kvm *kvm,
+> @@ -2061,6 +2096,9 @@ static int kvm_set_memory_region(struct kvm *kvm,
+>   	mutex_lock(&kvm->slots_lock);
+>   	r = __kvm_set_memory_region(kvm, mem, batch);
+>   	mutex_unlock(&kvm->slots_lock);
+> +	/* r == 1 means empty request, nothing to do but no error */
+> +	if (r == 1)
+> +		r = 0;
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+This is weird...  I think you have the order of the split slightly 
+messed up.  Doing this check earlier, roughly at the same time as the 
+introduction of the new struct, is probably clearer.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index d761da4..7d476b2 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2137,6 +2137,12 @@
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		dma@10a2000 {
-+			compatible = "qcom,sdm845-dcc", "qcom,dcc";
-+			reg = <0x0 0x010a2000 0x0 0x1000>,
-+			      <0x0 0x010ae000 0x0 0x2000>;
-+		};
-+
- 		pmu@114a000 {
- 			compatible = "qcom,sdm845-llcc-bwmon";
- 			reg = <0 0x0114a000 0 0x1000>;
--- 
-2.7.4
+After having reviewed more of the code, I do think you should 
+disaggregate __kvm_set_memory_region() in separate functions (check, 
+build entry, prepare, commit) completely.  kvm_set_memory_region() calls 
+them  and __kvm_set_memory_region() disappears completely.
+
+Paolo
+
+>   	return r;
+>   }
+>   
 
