@@ -2,121 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8785ED5CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530765ED5CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233226AbiI1HRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
+        id S233356AbiI1HRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232565AbiI1HRg (ORCPT
+        with ESMTP id S233341AbiI1HRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:17:36 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F63680F68
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:17:34 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id b24so13336984ljk.6
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:17:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=TE4dxCPLnQRstcdplswZZPEWrYHTl04zyo0o16usTaA=;
-        b=As/0q82nUum+sJyLoPBd6GtuWJl33qN4O68taKfghJIh7FQcvreh6Gu11qEj8hvGul
-         fPEWOM4BF9GuUvQfEJS1gQH3PwuyGEpLTGcjHwHfxYZLsZL90hZftF/CWn0BT3CoMwOE
-         eIOtIlq4gnuT1G72keew31h6ZB5F/aKsknGcaK1NUYTiDaCmvRIQ5Kp7tUigCFD7s1Hk
-         6dVteyyPIfqTmkagSSXeufu097WmwCxuRI31twbg1vIReTe9XTK8scaDpsHHn+yJBqnP
-         JmJ1rQAmuBAf8mhBRcfvDXhHFr3Hq9662lsY5CG/NxErdutSRODVcQtyiOMRFAvvOQX3
-         +vfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=TE4dxCPLnQRstcdplswZZPEWrYHTl04zyo0o16usTaA=;
-        b=uf9rQnPRCNXFtnc6PlyUkhJeKUrc+jYa4E53wyKjG7jN37vsyU0Z/uDR6ryXsNzMMI
-         IDnlcJm49iBSvNkYCzLdNo9YSbC006C14ZKmiUgq0AVp093yPMivOa6gDQNkuloZIqOI
-         LEMMS92NAjvziJS79ZRB8BXvrsyEFy7EzJLkxtVJpvcJ+HnAKofqx9pFD+sZYmNtrbMD
-         jZ2+Q663l0gSEHqojSqEl2OpwCnqKvvUl6DoA/d7ZJ+SM1AgnO2dfIw4hW25fmu+uhDx
-         9T8V/76/8bjEanZ9RkEiI2y0FAOdAOHwOFs6832OweV9axVX07XHiP1D8JCrLEKZvPhM
-         mrcg==
-X-Gm-Message-State: ACrzQf3PEC3hrdAsEN4MOH1AD/sZigkS+cEoNHAX4+siDQROvqJ7gaGv
-        V5yHYH4ICjzoRvgasZCoAKhiwg==
-X-Google-Smtp-Source: AMsMyM6z76iK8/Qm0pj3jD1AipgrGpEdJt+xFjKYGD79qqx9g2bJoS6FRXYROgJD1rVI1r9QXVPtHA==
-X-Received: by 2002:a2e:9b14:0:b0:26c:7f8a:e740 with SMTP id u20-20020a2e9b14000000b0026c7f8ae740mr4578796lji.256.1664349452610;
-        Wed, 28 Sep 2022 00:17:32 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v18-20020a2e9612000000b0026c0158b87csm358913ljh.29.2022.09.28.00.17.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 00:17:32 -0700 (PDT)
-Message-ID: <ff577b86-44c8-3146-3388-78021bb7edb4@linaro.org>
-Date:   Wed, 28 Sep 2022 09:17:27 +0200
+        Wed, 28 Sep 2022 03:17:44 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562DE85FBA;
+        Wed, 28 Sep 2022 00:17:40 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mcnlc1w6RzWgtp;
+        Wed, 28 Sep 2022 15:13:32 +0800 (CST)
+Received: from [10.174.179.163] (10.174.179.163) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 15:17:37 +0800
+Message-ID: <27399204-e9c7-57f0-23dd-1eb420cc59dd@huawei.com>
+Date:   Wed, 28 Sep 2022 15:17:36 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v5 4/4] net: stmmac: Update the name of property 'clk_csr'
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH -next] Makefile: add implicit enum-conversion check for
+ compile build
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jianguo Zhang <jianguo.zhang@mediatek.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220923052828.16581-1-jianguo.zhang@mediatek.com>
- <20220923052828.16581-5-jianguo.zhang@mediatek.com>
- <e0fa3ddf-575d-9e25-73d8-e0858782b73f@collabora.com>
- <ac24dc0f-0038-5068-3ce6-bbace55c7027@linaro.org>
- <4f205f0d-420d-8f51-ad26-0c2475c0decd@linaro.org>
- <80c59c9462955037981a1eab6409ba69fc9b7c34.camel@mediatek.com>
- <888703a8-a8e5-e691-7a53-294f88ad7a4e@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <888703a8-a8e5-e691-7a53-294f88ad7a4e@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+CC:     <masahiroy@kernel.org>, <michal.lkml@markovi.net>,
+        <akpm@linux-foundation.org>, <peterz@infradead.org>,
+        <keescook@chromium.org>, <davidgow@google.com>,
+        <jpoimboe@kernel.org>, <dan.j.williams@intel.com>,
+        <ojeda@kernel.org>, <isabbasso@riseup.net>,
+        <dmitrii.bundin.a@gmail.com>, <vbabka@suse.cz>,
+        <linux@rasmusvillemoes.dk>, <linux-kbuild@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <liwei391@huawei.com>,
+        <weiyongjun1@huawei.com>, clang-built-linux <llvm@lists.linux.dev>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+References: <20220927153125.811911-1-zengheng4@huawei.com>
+ <CAKwvOdm2r_PPogCecGL4TMeYLq3qNkCbt7zqYTLmQf-PAQMGMg@mail.gmail.com>
+ <YzMsmYTzX2Ni5zGP@dev-arch.thelio-3990X>
+From:   Zeng Heng <zengheng4@huawei.com>
+In-Reply-To: <YzMsmYTzX2Ni5zGP@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.163]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500022.china.huawei.com (7.185.36.162)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/09/2022 12:44, AngeloGioacchino Del Regno wrote:
 
->>> OTOH, as Angelo pointed out, handling old and new properties is quite
->>> easy to achieve, so... :)
+On 2022/9/28 1:02, Nathan Chancellor wrote:
+> On Tue, Sep 27, 2022 at 09:45:17AM -0700, Nick Desaulniers wrote:
+>> On Tue, Sep 27, 2022 at 8:15 AM Zeng Heng <zengheng4@huawei.com> wrote:
+>>> Provide implicit enum-conversion warning option
+>>> in general build. When it set enabled, it can
+>>> detect implicit enum type conversion and find
+>>> potential conversion errors like below
+>>> (use "allmodconfig"):
 >>>
->> So, the conclusion is as following:
+>>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.c:3904:46:
+>>> error: implicit conversion from ‘enum <anonymous>’ to ‘enum odm_combine_mode’ [-Werror=enum-conversion]
+>>>   3904 |       locals->ODMCombineEnablePerState[i][k] = true;
+>>>        |                                              ^
+>>>
+>>> The '-Wenum-conversion' could be regarded as
+>>> effective check on compile runtime and
+>>> call attention on potential mistakes.
+>>>
+>>> Anothor practical example could be referred to:
+>>> https://lore.kernel.org/all/CADnq5_OE0yZvEYGu82QJHL9wvVcTFZrmeTgX7URgh7FVA=jqYg@mail.gmail.com
+>>>
+>>> "-Wenum-conversion" was firstly introduced from
+>>> GNU gcc-10.
+>> What about clang? ;)
 >>
->> 1. add new property 'snps,clk-csr' and document it in binding file.
->> 2. parse new property 'snps,clk-csr' firstly, if failed, fall back to
->> old property 'clk_csr' in driver.
+>>> Although "-Wenum-conversion" could be enabled
+>>> by "-Wextra" when compiling with 'W=1' option,
+>>> there are many warnings generated by '-Wextra'
+>>> that cause too much noise in a build.
+>> With clang, I believe that -Wenum-conversion is part of -Wall or
+>> -Wextra; so enabling this explicitly is only necessary for GCC.  I
+>> wonder why it's not part of -Wall or -Wextra for GCC?  Perhaps worth a
+>> bug report/feature request?
+> With clang, -Wenum-conversion is just default enabled, not even behind
+> -Wall:
+>
+> $ cat test.c
+> enum enum1 { A = 1 };
+> enum enum2 { B = 2 };
+>
+> enum enum1 foo(enum enum2 bar)
+> {
+>      return bar;
+> }
+>
+> $ clang -fsyntax-only test.c
+> test.c:11:9: warning: implicit conversion from enumeration type 'enum enum2' to different enumeration type 'enum enum1' [-Wenum-conversion]
+>          return bar;
+>          ~~~~~~ ^~~
+> 1 warning generated.
+>
+> On the other hand, GCC does have it under -Wextra:
+>
+> $ gcc -fsyntax-only test.c
+>
+> $ gcc -Wextra -fsyntax-only test.c
+> test.c: In function ‘foo’:
+> test.c:6:16: warning: implicit conversion from ‘enum enum2’ to ‘enum enum1’ [-Wenum-conversion]
+>      6 |         return bar;
+>        |                ^~~
+>
+> But the kernel does not build with -Wextra aside from W=[123], hence
+> this warning has to be explicitly requested for GCC.
+
+Thanks to your replenish about clang.
+
+
+>>> Seeing the details from the following link:
+>>> https://gcc.gnu.org/onlinedocs/gcc-11.3.0/gcc/Warning-Options.html
+>>>
+>>> Because there are still some concerned warnings
+>>> exist, the patch marks the option disabled in default
+>>> for avoiding compile failed like using "allmodconfig".
+> But there is no dependency to avoid this getting enabled by allmodconfig
+> (such as 'depends on !COMPILE_TEST') so I don't see the point in the
+> current form; 'default n' does nothing to prevent it. Regardless, I
+> agree with Nick's sentiment below.
+>
+>>> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+>>> ---
+>>>   Makefile          | 5 +++++
+>>>   lib/Kconfig.debug | 7 +++++++
+>>>   2 files changed, 12 insertions(+)
+>>>
+>>> diff --git a/Makefile b/Makefile
+>>> index ebd48fc956a3..1790a3624358 100644
+>>> --- a/Makefile
+>>> +++ b/Makefile
+>>> @@ -880,6 +880,11 @@ endif
+>>>   KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
+>>>   KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
+>>>
+>>> +# check implicit enum conversion
+>>> +ifdef CONFIG_ENUM_CONVERSION
+>>> +KBUILD_CFLAGS += -Wenum-conversion
+>>> +endif
+>> Having a kconfig for this is overkill.  cc-option with a comment about
+>> the compiler default versions is the way to go.
+Got it.
+> Agreed. If there is some reason -Wenum-conversion cannot be enabled for
+> GCC right now (such as existing warnings, which the commit message
+> appears to alude to), they should be cleaned up first then
+> -Wenum-conversion should just be unconditionally enabled for all
+> compilers that support it via cc-option, not half enabled via Kconfig so
+> that maybe people will clean up the warnings. That is not how enabling
+> warnings works:
+>
+> https://lore.kernel.org/CAHk-=wg-mH-_GYpkhz_psjBWG6ZcjKnPo83fg7YMj_by+-LRTQ@mail.gmail.com/
+
+Have sent the patches to fix the involving warnings.
+
+If all the concerned warnings were repaired, I would send the v2 again.
+
+Thanks all.
+
+>>> +
+>>>   # These result in bogus false positives
+>>>   KBUILD_CFLAGS += $(call cc-disable-warning, dangling-pointer)
+>>>
+>>> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+>>> index 4f2b81229a2f..a64e06a747d8 100644
+>>> --- a/lib/Kconfig.debug
+>>> +++ b/lib/Kconfig.debug
+>>> @@ -417,6 +417,13 @@ config FRAME_WARN
+>>>            Setting this too low will cause a lot of warnings.
+>>>            Setting it to 0 disables the warning.
+>>>
+>>> +config ENUM_CONVERSION
+>>> +       bool "Warn for implicit enum conversion"
+>>> +       depends on GCC_VERSION >= 100300
+>>> +       default n
+>>> +       help
+>>> +         Tell gcc to warn at build time for implicit enum conversion.
+>>> +
+>>>   config STRIP_ASM_SYMS
+>>>          bool "Strip assembler-generated symbols during link"
+>>>          default n
+>>> --
+>>> 2.25.1
+>>>
 >>
->> Is my understanding correct?
-> 
-> Yes, please.
-> 
-> I think that bindings should also get a 'clk_csr' with deprecated: true,
-> but that's Krzysztof's call.
-
-The property was never documented, so I think we can skip it as deprecated.
-
-Best regards,
-Krzysztof
-
+>> -- 
+>> Thanks,
+>> ~Nick Desaulniers
+>>
