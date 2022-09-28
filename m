@@ -2,125 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033C95ED697
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 908DA5ED6A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233112AbiI1HoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
+        id S233288AbiI1Hrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233847AbiI1HnR (ORCPT
+        with ESMTP id S233223AbiI1HrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:43:17 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F60911265A;
-        Wed, 28 Sep 2022 00:40:12 -0700 (PDT)
-X-UUID: eefd5cc0ca874c7787e6b04e87e2627d-20220928
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=twBFZvQndTAJep03Qp9HrLxape++Wqs0xYwSivoNI3Q=;
-        b=DIwcsLObG97GUH7hrj9xrg44qEOueuXU1Die6rl0wEQcHA5K+5lj/K5jty7CeCc0Ue/mgOV1fjJeahmCYWBOzEP5rp3UMNzmhRqXy+Pyap0u1ZTFfeTHGEolhKugoedDC5T9YYRklKkhVNor23vVGeOGeTPNzp3srtQIs+jy0u0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:e802330c-8d41-4808-be8b-4d6b26b37f10,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:42bd4907-1cee-4c38-b21b-a45f9682fdc0,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: eefd5cc0ca874c7787e6b04e87e2627d-20220928
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <jianguo.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2003581825; Wed, 28 Sep 2022 15:40:02 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 28 Sep 2022 15:40:01 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 28 Sep 2022 15:40:00 +0800
-Message-ID: <7c46b223e4ba5d1ceb587facf7dd060e6cab9f17.camel@mediatek.com>
-Subject: Re: [PATCH v5 4/4] net: stmmac: Update the name of property
- 'clk_csr'
-From:   Jianguo Zhang <jianguo.zhang@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@collabora.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-CC:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Wed, 28 Sep 2022 15:40:00 +0800
-In-Reply-To: <ff577b86-44c8-3146-3388-78021bb7edb4@linaro.org>
-References: <20220923052828.16581-1-jianguo.zhang@mediatek.com>
-         <20220923052828.16581-5-jianguo.zhang@mediatek.com>
-         <e0fa3ddf-575d-9e25-73d8-e0858782b73f@collabora.com>
-         <ac24dc0f-0038-5068-3ce6-bbace55c7027@linaro.org>
-         <4f205f0d-420d-8f51-ad26-0c2475c0decd@linaro.org>
-         <80c59c9462955037981a1eab6409ba69fc9b7c34.camel@mediatek.com>
-         <888703a8-a8e5-e691-7a53-294f88ad7a4e@collabora.com>
-         <ff577b86-44c8-3146-3388-78021bb7edb4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 28 Sep 2022 03:47:22 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD110105D54
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:43:51 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id r6so1110242wru.8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:to:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=65Wvo6fUB4eovhFkQS8BY9wfyTifWEnoxE+L5q9ZRjM=;
+        b=iJpvJ5ZaaU6Gp0rTF7h2UNkWGmsCW5sfLt0SBE5ITeb7I+Xyloi/xxljpcQxBgyNI5
+         iggT15DMH14XO7xYPSG3KL8q4TKz8je5phvJKaxG5978QRCfVBTnG8MyKxyY7ep/+kCY
+         i81wXL42fUWYIIWdItxC96fAVS7w2zJ+WtsNMNlQb5yhUecV55Xl+HSmKXJtzwwp6+Pc
+         MR9+S9tmQJWU2aimhFnlWDKRkQmcjhuL/yOpJ2wKn6oPVS3sqxtLhQ9YAoSMoGwOJj1J
+         9IZTdSJGBoZ01ti3hiMPoRkIWagzrRjGpvLj0D/jqWxwZv40EfHNIzqdkQikcFt9GAIy
+         s/LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=65Wvo6fUB4eovhFkQS8BY9wfyTifWEnoxE+L5q9ZRjM=;
+        b=1Or31BdGmZfASEQucDAv+RzwOhNggLbD7E9YX0AkAH2c8dVUoGdj/AYVTQjfmlWaQY
+         r/YHZf1gRc/ZhgqnG7v1VAlgJRdbwLXyJqdl3DpCj4BDMkZno+PRViIqn5a6GMvoQwah
+         yBI2WVyJSqREnZehIdfTHvCcbyPv9QV7+dES8M+4T6v2LCfGaDtx0vJw9JKF7JR+Gfcy
+         Ormj+mtxAaXIYlAMgWOqbjQ3zmXv+Jk74e5WAIcwEMrusrj+ddXH/3ZKONPmj67mVP27
+         rHHnfHG3wHRjJFoi/BsA/JeNmfBZHMHIl9UkxikmvhN9wxN3ij5yOOUtp3BPJTnaiw9e
+         3+UQ==
+X-Gm-Message-State: ACrzQf0A1V71+6kbEwOloSJ7fUfJczNPHDmAx25yMLB8W/ZWgGf83o6J
+        3Pzr8pvFp3ex/Rw85qwUgLiqeg==
+X-Google-Smtp-Source: AMsMyM5TROvIyynyp3uqJFk6ZH7yX05xevtIDRAOoDWQ8yow8DGRlSnNrQ8HDA3m0xo0jxKP/iahMQ==
+X-Received: by 2002:a5d:5b18:0:b0:22a:fb91:3d6b with SMTP id bx24-20020a5d5b18000000b0022afb913d6bmr20121220wrb.56.1664351008442;
+        Wed, 28 Sep 2022 00:43:28 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:11d4:7c71:accf:6521? ([2a01:e0a:982:cbb0:11d4:7c71:accf:6521])
+        by smtp.gmail.com with ESMTPSA id p11-20020a056000018b00b00226dba960b4sm373410wrx.3.2022.09.28.00.43.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 00:43:27 -0700 (PDT)
+Message-ID: <685e1625-ec7c-e1da-6ae9-7b4f927c6064@linaro.org>
+Date:   Wed, 28 Sep 2022 09:43:26 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: ipq6018: fix NAND node name
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220927201218.1264506-1-robimarko@gmail.com>
+Reply-To: neil.armstrong@linaro.org
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20220927201218.1264506-1-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY,URIBL_CSS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Krzysztof,
+On 27/09/2022 22:12, Robert Marko wrote:
+> Per schema it should be nand-controller@79b0000 instead of nand@79b0000.
+> Fix it to match nand-controller.yaml requirements.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+>   arch/arm64/boot/dts/qcom/ipq6018.dtsi | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> index a7c7ca980a71..57978a8ab498 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> @@ -348,7 +348,7 @@ qpic_bam: dma-controller@7984000 {
+>   			status = "disabled";
+>   		};
+>   
+> -		qpic_nand: nand@79b0000 {
+> +		qpic_nand: nand-controller@79b0000 {
+>   			compatible = "qcom,ipq6018-nand";
+>   			reg = <0x0 0x079b0000 0x0 0x10000>;
+>   			#address-cells = <1>;
 
-	Thanks for your comment.
-
-On Wed, 2022-09-28 at 09:17 +0200, Krzysztof Kozlowski wrote:
-> On 27/09/2022 12:44, AngeloGioacchino Del Regno wrote:
-> 
-> > > > OTOH, as Angelo pointed out, handling old and new properties is
-> > > > quite
-> > > > easy to achieve, so... :)
-> > > > 
-> > > 
-> > > So, the conclusion is as following:
-> > > 
-> > > 1. add new property 'snps,clk-csr' and document it in binding
-> > > file.
-> > > 2. parse new property 'snps,clk-csr' firstly, if failed, fall
-> > > back to
-> > > old property 'clk_csr' in driver.
-> > > 
-> > > Is my understanding correct?
-> > 
-> > Yes, please.
-> > 
-> > I think that bindings should also get a 'clk_csr' with deprecated:
-> > true,
-> > but that's Krzysztof's call.
-> 
-> The property was never documented, so I think we can skip it as
-> deprecated.
-> 
-We will send next version patches according to the conclusion.
-> Best regards,
-> Krzysztof
-> 
-BRS
-Jianguo
-
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
