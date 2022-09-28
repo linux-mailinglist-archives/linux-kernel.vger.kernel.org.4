@@ -2,76 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF555EE025
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A59F5EE027
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233863AbiI1PWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
+        id S234321AbiI1PWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbiI1PWN (ORCPT
+        with ESMTP id S233765AbiI1PW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:22:13 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D22B5171;
-        Wed, 28 Sep 2022 08:21:04 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id z2so17747155edi.1;
-        Wed, 28 Sep 2022 08:21:04 -0700 (PDT)
+        Wed, 28 Sep 2022 11:22:27 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F4CB7EF8;
+        Wed, 28 Sep 2022 08:21:20 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so2731011pjq.3;
+        Wed, 28 Sep 2022 08:21:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=OayWZ8u8+6BQTEtRBV9XmzzZMOd2fP+V5RF5BmFDxuQ=;
-        b=B/5+JfOF4kV5wfgFf+ggX7bAJAiMalon2tDKsn9vA4K4zUak9yJVyGsaOwSefMbuNb
-         101TrHwpqxd4wNYGta+C/iCGDkF4GyRBAqt83487Ob+oT+GLgRCTRwa7gXNngsnyTGt3
-         5pwFC4EvIdnMX1dWC6dgntyPCIQtJboIDhfSoYtns/I0MYdneEPSWNFjTb0jmkwfwNTn
-         PS30nMIf9fqlNAtak/VoDF1Tp7xzanmZhSedsPox5E79RDm/jfSEy+QIumGXuQG8aVkN
-         qm0M6N88/Ulv6YjYqbSCXP0elL9f0zzMha0/EKfNjIUOEvdhE8K81dTX4onU9mfjdwWK
-         pxrA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=+WEGG8bdhAe2IeIV7nqdCMLjsT+NYXr3vPeV8ohPUdo=;
+        b=NWQyIQIxOLBbO8SUWUFvnbiVWQh98VMz4aaF7yBvntNeo0lhVe58k8UbVlT21ceSy3
+         N73J25O0TqMb7/Thn4zweOWpAI5H0J0ntIKpBQEAuOKdh6FgK1uAI485b6iHqcWhI1Pl
+         bo4Rx9klC7pi4nz6dh5u3ntQhBZe+lpNuMRyBggNRNpyvKDUds8WsQLcy/KE+8aJLfWQ
+         iRlwAUj5xdkEv8czArv0Qq0NY/vLa4Ty7E6RWatQOK91Alq1xvljZFnjyb1DOCEtMwSs
+         2qMFu7mVUL95Ss/7LqKnn37AkHMHMy2RYH+POfMXUwH6+T16znqYpIEGsYIdmODza/xY
+         3F5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=OayWZ8u8+6BQTEtRBV9XmzzZMOd2fP+V5RF5BmFDxuQ=;
-        b=m5RzwqvlLgaoFhk8+iyFoGa8onFfAcUITAYAwsS6zQ+LROTTopGEyM9rI5OftsrEio
-         ybFmMpnO4a1kX2ypSBcZhb0hzVMO4NVfEfwtJS3u7wvlYd6W6eVcwTMbrWtf3ke5ZQ1G
-         emSIcykNjWSfWDuNPiavO2su3ez0AsokxzxWWT7kC5Q00wRwxOn481LBlb7muGKpe/9s
-         jzWWXc6WDMTd9BbswdfKozooBl969v8xL4bAQ/LYCZ36cFTb7srv/Fb0eUBPNYgNn/T+
-         d4WB8MwCTzNwJcOu7KOJdcbIrpL0Ra2lOOHymJLjmxL+cHYKI9lI0VfjW4wP9jGAB62M
-         SV6A==
-X-Gm-Message-State: ACrzQf3FrhtDJBqXyRil0pmTOdgF8wPMC3O+XsnelSGaEXjfrFJMTFLW
-        +Ka3tO9RmvGp4hgCnXDH4tI=
-X-Google-Smtp-Source: AMsMyM6Mg6zKySv/Z4l4ld7UrlOcwm8/1gYSLSuRjfkLzP5n019YYDZJIA7Aozqvr+S0c7mShTxJpA==
-X-Received: by 2002:a05:6402:2994:b0:453:4c5c:d31c with SMTP id eq20-20020a056402299400b004534c5cd31cmr33521570edb.412.1664378462989;
-        Wed, 28 Sep 2022 08:21:02 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id b12-20020a50cccc000000b00456988774c8sm3549487edj.57.2022.09.28.08.21.01
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=+WEGG8bdhAe2IeIV7nqdCMLjsT+NYXr3vPeV8ohPUdo=;
+        b=XwZSCfNUFHbU00EAu/hbFYy/iceQDNAJ47l1BriEZwO4zS0edl0FGdt+nFT1ZbZpcd
+         iIv3fRh7LNQsq9ePt310xOtV6B0FlqTZzw2JWE8avuMq/btG059JlddjYuZaOu65fmUI
+         bg4jYKRogW2L2j10clQ136flthH9PaXJAtm4rGF6SFxs9mvwNXDNmqi6Uc/T02f6jlwU
+         zvSTcp+TijAoF3+OThokN2Dg3GjUXByJSB6NL90t2BubtCQkcNwJU4MtMTrJ/lQQqwb3
+         xYVrVjNNly1T2UaG+yQ62T5XOl4Ev/Qnlkm0Qrst/Z+n5lmLYLltQo9H8Bu5YuMrtUVv
+         iIHQ==
+X-Gm-Message-State: ACrzQf3PBL5QLlV9KgFHSobglYrr9UlYRIQ1LLKCvBCL6jW2f9pgWEZ5
+        q0J1eC7Vw62C/wVGaqxwSE4=
+X-Google-Smtp-Source: AMsMyM5mMWhYz3X1436kKEvjTcv3eDyNmzU671ZYKCbUm/02hn0itjtfv1akLF+RCA7rJZzYyQPCdw==
+X-Received: by 2002:a17:90a:2fc9:b0:202:5605:65ae with SMTP id n9-20020a17090a2fc900b00202560565aemr11170445pjm.167.1664378479610;
+        Wed, 28 Sep 2022 08:21:19 -0700 (PDT)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id y2-20020a170902864200b0016c0c82e85csm3784367plt.75.2022.09.28.08.21.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 08:21:02 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 17:21:00 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH v2 3/4] pwm: sysfs: Replace sprintf() with sysfs_emit()
-Message-ID: <YzRmXAuJLnPLaTsp@orome>
-References: <20220826170716.6886-1-andriy.shevchenko@linux.intel.com>
- <20220826170716.6886-3-andriy.shevchenko@linux.intel.com>
- <YzQ9+Wzhfnila1s3@orome>
- <YzRO0xrzlrHAYdaI@smile.fi.intel.com>
- <YzRS+VIBK1AiysEN@smile.fi.intel.com>
- <YzRmJ3mBKf+cvy5T@orome>
+        Wed, 28 Sep 2022 08:21:17 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 00:21:10 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
+        Kees Cook <keescook@chromium.org>,
+        Roman Gushchin <guro@fb.com>, Jann Horn <jannh@google.com>,
+        Vijayanand Jitta <vjitta@codeaurora.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v2] mm: Make failslab writable again
+Message-ID: <YzRmZlJBFA9HIlSM@hyeyoo>
+References: <20220920121111.1792905-1-alexander.atanasov@virtuozzo.com>
+ <Yyr1xONdw8dBgsKr@hyeyoo>
+ <30063d97-69f0-bea2-9d59-108140995bfc@virtuozzo.com>
+ <YzJIsFZQoCEYntvR@hyeyoo>
+ <7640a2d9-a32d-2fd7-8f64-586edb9b781e@virtuozzo.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YS47aw7uj+zoxnlx"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzRmJ3mBKf+cvy5T@orome>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <7640a2d9-a32d-2fd7-8f64-586edb9b781e@virtuozzo.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,70 +84,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 27, 2022 at 10:44:20AM +0300, Alexander Atanasov wrote:
+> Hello,
+> 
+> On 27.09.22 3:49, Hyeonggon Yoo wrote:
+> > On Fri, Sep 23, 2022 at 10:34:28AM +0300, Alexander Atanasov wrote:
+> > > Hello,
+> > > 
+> > > On 21.09.22 14:30, Hyeonggon Yoo wrote:
+> > > > On Tue, Sep 20, 2022 at 03:11:11PM +0300, Alexander Atanasov wrote:
+> > > > > In (060807f841ac mm, slub: make remaining slub_debug related attributes
+> > > > > read-only) failslab was made read-only.
+> > > > > I think it became a collateral victim to the two other options for which
+> > > > > the reasons are perfectly valid.
+> > > > > Here is why:
+> > > > >    - sanity_checks and trace are slab internal debug options,
+> > > > >      failslab is used for fault injection.
+> > > > >    - for fault injections, which by presumption are random, it
+> > > > >      does not matter if it is not set atomically. And you need to
+> > > > >      set atleast one more option to trigger fault injection.
+> > > > >    - in a testing scenario you may need to change it at runtime
+> > > > >      example: module loading - you test all allocations limited
+> > > > >      by the space option. Then you move to test only your module's
+> > > > >      own slabs.
+> > > > >    - when set by command line flags it effectively disables all
+> > > > >      cache merges.
+> > > > 
+> > > > Maybe we can make failslab= boot parameter to consider cache filtering?
+> > > > 
+> > > > With that, just pass something like this:
+> > > > 	failslab=X,X,X,X,cache_filter slub_debug=A,<cache-name>>
+> > > 
+> > > > Users should pass slub_debug=A,<cache-name> anyway to prevent cache merging.
+> > > 
+> > > It will be good to have this in case you want to test cache that is used
+> > > early. But why push something to command line option only when it can be
+> > > changed at runtime?
+> > 
+> > Hmm okay. I'm not against changing it writable. (it looks okay to me.)
+> 
+> Okay. Good to know that.
+> 
+> > Just wanted to understand your use case!
+> > Can you please elaborate why booting with slub_debug=A,<your cache name>
+> > and enabling cache_filter after boot does not work?
+> 
+> I didn't say it does not work - it does work but requires reboot. You may
+> want to test variations of caches for example. Cache A, Cache B ... C and so
+> on one by one. Reboots might be fast these days with VMs but you may not be
+> able to test everything in a VM. And ... reboots used to be the signature
+> move of one Other OS.
 
---YS47aw7uj+zoxnlx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for elaboration!
+Makes sense.
 
-On Wed, Sep 28, 2022 at 05:20:07PM +0200, Thierry Reding wrote:
-> On Wed, Sep 28, 2022 at 04:58:17PM +0300, Andy Shevchenko wrote:
-> > On Wed, Sep 28, 2022 at 04:40:35PM +0300, Andy Shevchenko wrote:
-> > > On Wed, Sep 28, 2022 at 02:28:41PM +0200, Thierry Reding wrote:
-> > > > On Fri, Aug 26, 2022 at 08:07:15PM +0300, Andy Shevchenko wrote:
-> > > > > For sysfs outputs, it's safer to use a new helper, sysfs_emit(),
-> > > > > instead of the raw sprintf() & co. This patch replaces such a
-> > > > > sprintf() call straightforwardly with the new helper.
-> > >=20
-> > > > How exactly is sysfs_emit() safer here? In all of these cases, the
-> > > > values that sprintf() writes are the only values that are written i=
-nto
-> > > > the buffer and we know that none of them exceed PAGE_SIZE. So the
-> > > > additional checks that sysfs_emit() performs are useless.
-> > >=20
-> > > This is a recommended way to use sysfs_emit() mentioned in Documentat=
-ion.
-> > > Care to fix documentation?
-> >=20
-> > For your convenience, Documentation/filesystems/sysfs.rst says:
-> >=20
-> > - show() should only use sysfs_emit() or sysfs_emit_at() when formatting
-> >   the value to be returned to user space.
->=20
-> Took some digging to find enough information to convince me. Again, the
-> commit message says that sysfs_emit() is safer, but that's a bad reason
-> in this case because these cases are fine. The sprintf() calls that this
-> replaces aren't unbound and we're not appending to an existing seq_buf,
-> so nothing to worry on that front.
->=20
-> I think the better argument for broadly applying this is to specifically
-> distinguish the sysfs sprintf() calls from others so that they can be
-> auditioned better and perhaps help with the documentation[0].
->=20
-> Do you mind if I apply this with a reworded documentation?
+> 
+> > Or is it trying to changnig these steps,
+> > 
+> > FROM
+> > 	1. booting with slub_debug=A,<cache name>
+> > 	2. write to cache_filter to enable cache filtering
+> > 	3. setup probability, interval, times, size
+> > 
+> > TO
+> > 
+> > 	1. write to failslab attribute of <cache name> (may fail it has alias)
+> > 	2. write to cache_filter to enable cache filtering
+> > 	3. setup probability, interval, times, size
+> > ?
+> > 
+> > as you may know, SLAB_FAILSLAB does nothing whens
+> > cache_filter is disabled, and you should pass slub_debug=A,<cache name> anyway
+> 
+> Okay , i think there awaits another problem:
+> bool __should_failslab(struct kmem_cache *s, gfp_t gfpflags)
+> {
+> ...
+> 
+>         if (failslab.cache_filter && !(s->flags & SLAB_FAILSLAB))
+>                 return false;
+> ...
+> 	return should_fail(&failslab.attr, s->object_size);
+> }
+> 
+> So if you do not have cache_filter set ... you go to should_fail for all
+> slabs.
 
-I meant "commit message", not documentation.
+Yes.
 
-Thierry
+> I've been hit by that and spend a lot of time trying to understand why i got
+> crashes at random places. And the reason was that i read an old
+> documentation that said cache_filter is writable and i blindly wrote 1 to
+> it.
+>
+> If the intent is to only work with cache filter set - then i will update
+> the patch to do so.
 
---YS47aw7uj+zoxnlx
-Content-Type: application/pgp-signature; name="signature.asc"
+You mean to set cache_filter to true when writing to 'failslab',
+or when setting SLAB_FAILSLAB slab flag?
 
------BEGIN PGP SIGNATURE-----
+I'm not so confident for that because it's implicitly changing.
+Maybe more documentation would be proper?
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmM0ZlwACgkQ3SOs138+
-s6HZiw/9EmRTXIqd+CvDrDM5AjR4gzSRh/eytChBi/NAaedUSJFsldK17LG8qQy5
-l13v3LWdBJBJtMvIR4ybs60J5hA0liRiLt1dDqC3iVAOHJSQaJOvVJJtVBHrHFra
-EHBY6NQv7TkX7IbYGYteQaN6dWjPdoJ7ScKOx9U13WfCwNsphTgleew7B569B08C
-UVyuJ5QyR4Zlw61GSyB1Y3rL/ad2a+gz40HKF3V2BUxACj7MAFIbM5vukVMApAJR
-gaYjLhuB07nBc2byM/8RViF7ZBL/HbC7fH/z4pmYcapVsTOKONcrQi1l0YMICSi5
-6q+FvQULJi1FZrXqaVG56gV1fiXlLqcY3pNCvc6KmPr17b/CJwt6ocFUoSw/iCE1
-0Y93L0KePe6wy5muN+iQU1M6aIXlbTaxgpEi+T9h1+Zl3RsOPsNzCn5EQuPnETLx
-GNkHPKPWoNaY8M0BGAem+253c5wnRGaqZT0rY5jIKBvbnXBYwqb/ANUZF51LwAy9
-nDmSdx7/GyEA345KQT7v5wj2QPjbX4ZJzojs1Js1LYGZrExYoOGMsEaIUA6wd/BA
-7Eu/XMS59qzKGpBzIFCVQRWkta+0DAoLjtwi9t/G2APK4Tmq9zegN140DabVDaQZ
-kjANLINj7FYRtAE3I3OmqUgC2k5G6vxpwTtVlgUdTGvlZ4vg/+0=
-=JPGL
------END PGP SIGNATURE-----
+what do you think, Vlastimil?
 
---YS47aw7uj+zoxnlx--
+> This is the only place where SLAB_FAILSLAB is explicitly
+> tested, other places check it as part of SLAB_NEVER_MERGE.
+> 
+> But even for all caches it is kind of possible to test with size(space)
+> which is in turn useful because you need to figure out how you handle
+> failures from external caches - external to your code under test and you
+> don't want to keep track for all of them (same goes for too much options in
+> command line). 
+
+Yeah, we should be able to inject fault in all caches, or a specific
+cache(s).
+
+> > to prevent doing cache merging with <cache name>.
+> 
+> Or you can pass SLAB_FAILSLAB from your module when creating the cache to
+> prevent merge when under test.
+
+Right. I missed that.
+
+> 
+> 
+> -- 
+> Regards,
+> Alexander Atanasov
+> 
+
+-- 
+Thanks,
+Hyeonggon
