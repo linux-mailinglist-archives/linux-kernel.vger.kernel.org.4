@@ -2,163 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3535EE1F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F615EE1F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233542AbiI1Qdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
+        id S232096AbiI1QgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbiI1Qdu (ORCPT
+        with ESMTP id S232380AbiI1QgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:33:50 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7ABE24F0E;
-        Wed, 28 Sep 2022 09:33:48 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28SGWftt001897;
-        Wed, 28 Sep 2022 16:33:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=YxGK65bERyHGDZ0NikSMS6Pq247mdVcfcfK5VTcrENA=;
- b=lVYXE/nwpL2wNycJGv6Vp4n8wouzb9Gmx9x2Uuau434NIVBpYcCZFTfdZZnf1818nlPO
- HBgd2VlI8VKdj8CNiEsQRhO3aPZm1UF0bB3RkHF5FlGIPG//UHGy9nxzzQGgo1PBmbp7
- YKjsMSDi0NGc/3O4wvGml0qvM3z7TRpXjN7Feoz+WVQ050EV3FJN7aTti45tY+3DoIuS
- OTR3eH+UzZuDStT7R5AtZmC8ZtrcSPg69giyoMG6/RTkoMCQyHmLbqfNtJtRlptnshmq
- ukX+Nmst6qo/Z2UWAysgUPGiBNfB9AR3CQkCbKQstygzKYhxHentaQshn3hfvHjoBRV5 gw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jvqxp4ggu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 16:33:43 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28SEuxhE004743;
-        Wed, 28 Sep 2022 16:33:42 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jvqxp4ggc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 16:33:42 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28SGLFMt013293;
-        Wed, 28 Sep 2022 16:33:42 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma05wdc.us.ibm.com with ESMTP id 3jssh9v936-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 16:33:42 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com ([9.208.128.114])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28SGXfjb3474034
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 28 Sep 2022 16:33:41 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E0D1D5805C;
-        Wed, 28 Sep 2022 16:33:40 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B136D58059;
-        Wed, 28 Sep 2022 16:33:39 +0000 (GMT)
-Received: from sig-9-65-238-59.ibm.com (unknown [9.65.238.59])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 28 Sep 2022 16:33:39 +0000 (GMT)
-Message-ID: <42dbb8f6bc0a3e8339a5283bf26a50bd7bec3767.camel@linux.ibm.com>
-Subject: Re: [PATCH] KEYS: encrypted: fix key instantiation with
- user-provided data
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Nikolaus Voss <nv@vosn.de>
-Cc:     David Howells <dhowells@redhat.com>,
+        Wed, 28 Sep 2022 12:36:16 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22007A75C;
+        Wed, 28 Sep 2022 09:36:15 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id e205so10614579iof.1;
+        Wed, 28 Sep 2022 09:36:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=TzxuSkFY1lkU+KFzHI4Ik/1IQbyTkGI/h/ZDb60baw0=;
+        b=ghh0QCywbcq9KUctQSaKs+ZzF6e5x1tsi7CRIHXbI+VxyVjv28yERT2n9Bd2auhS3C
+         L0JLhdZq3yI6hteiem5oShET5qpTbX6vU0KLg/xR96SkCedgU0H1pR0H5cUP4DoVX8FQ
+         GAy+AQpq+uGZnnBfJoUmIPi2AIy+X7Sw1dqDjzFFt0IBxCOYbuE9InEdf5/v3vAv66t+
+         R/DEdTwIrqzbhpEjtT4nC5VEo8uyC24+gKTDYIbI7ws2j/rdgvg7bd/NZG0FUzSv/yhf
+         xP4fiPZoTQtQXWJJXAJJ7GNC2JXKan8kug1kSWuQgT8x37t6IYa2G5ECC0a1u+0tnZmk
+         9KUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=TzxuSkFY1lkU+KFzHI4Ik/1IQbyTkGI/h/ZDb60baw0=;
+        b=dyzM62BXObbUZqxl0ufv0zk98r4KgQjxbwe0yJemCXMGpo/MEBAZzqXAB/91L46V2c
+         Fi37aAVJPXG9lzlhftYet1ptspEJujc9QQSX7T848lOvwbD8G3n05bHwcydRQluA3XRN
+         Bw68FyZtghM/lX/gYa+CKyuXkfmDobCHQdnGjmTDdxWyky/0nQL8H2YmhlO18vYt5NOv
+         xYr5MIbXLybip88JT9bw6dTE8wSKrOYG37kUXbnj/dioMBunnjme4/LILMrs9UCiwwso
+         vpY6RLZrQt1JK+9iBtxRlK2jwLdPilwxy6Z0vvD+db0CJOoG8EXwQkvvz4lfzZMW2COE
+         kDIA==
+X-Gm-Message-State: ACrzQf1vZ3Uf5iMXvm32LPOcF/uze4Z9QJnQO7Jc4qlp2ZAs7ehvDXVa
+        nAPYTRqH5pi1U2rLlwl0dP18Fac79cicLIXUc+0=
+X-Google-Smtp-Source: AMsMyM7s7gTrjG5ymH3U15IUsSK/Ewsk3Nv/sC9qIh/OUwZPjVtqqFjgvJyAbTuiV9RabeXQphO5cy2c2GW3Yq+W2es=
+X-Received: by 2002:a05:6638:25cb:b0:35b:b1cd:c411 with SMTP id
+ u11-20020a05663825cb00b0035bb1cdc411mr395294jat.308.1664382975350; Wed, 28
+ Sep 2022 09:36:15 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220927131518.30000-1-ojeda@kernel.org> <20220927131518.30000-11-ojeda@kernel.org>
+ <YzRoZwhxE4182cm2@liuwe-devbox-debian-v2>
+In-Reply-To: <YzRoZwhxE4182cm2@liuwe-devbox-debian-v2>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 28 Sep 2022 18:36:04 +0200
+Message-ID: <CANiq72kXHQSbGjavdOKgDK4FnGYCeC3B4ZfgZDU5KD_ZLKn7RQ@mail.gmail.com>
+Subject: Re: [PATCH v10 10/27] rust: add `macros` crate
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
         Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yael Tzur <yaelt@google.com>
-Date:   Wed, 28 Sep 2022 12:33:39 -0400
-In-Reply-To: <2fe0144d-ee19-ec17-9566-16bce6386925@vosn.de>
-References: <20220919072317.E41421357@mail.steuer-voss.de>
-           <53730789a41358673b1715dd650706e9ffcb1199.camel@linux.ibm.com>
-           <35fd816-d755-967-5712-b5496875ac7a@vosn.de>
-          <2ee1e3e68d847001c4bf856d980a553e52de5023.camel@linux.ibm.com>
-          <439012d8-dd4-7fd2-3788-49cf72faa99@vosn.de>
-         <6b4229386dced275f745619f190f64a71b7c0aec.camel@linux.ibm.com>
-         <2fe0144d-ee19-ec17-9566-16bce6386925@vosn.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: hIywS9S9ebs2kWr8-Xst2qFiBsJQ_hsC
-X-Proofpoint-GUID: sh6o-FOlLD1aPHMsdoQc-1wtAeHSbW90
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-28_07,2022-09-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- mlxlogscore=999 impostorscore=0 mlxscore=0 suspectscore=0 spamscore=0
- priorityscore=1501 phishscore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209280099
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>,
+        Gary Guo <gary@garyguo.net>, Matthew Bakhtiari <dev@mtbk.me>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-28 at 14:08 +0200, Nikolaus Voss wrote:
-> On Wed, 21 Sep 2022, Mimi Zohar wrote:
-> > On Wed, 2022-09-21 at 09:24 +0200, Nikolaus Voss wrote:
-> >> On Tue, 20 Sep 2022, Mimi Zohar wrote:
-> >>> On Tue, 2022-09-20 at 18:23 +0200, Nikolaus Voss wrote:
-> >>>> On Tue, 20 Sep 2022, Mimi Zohar wrote:
-> >>>>> On Fri, 2022-09-16 at 07:45 +0200, Nikolaus Voss wrote:
-> >>>>>> Commit cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-provided
-> >>>>>> decrypted data") added key instantiation with user provided decrypted data.
-> >>>>>> The user data is hex-ascii-encoded but was just memcpy'ed to the binary buffer.
-> >>>>>> Fix this to use hex2bin instead.
-> >>>>>
-> >>>>> Thanks, Nikolaus.  We iterated a number of times over what would be the
-> >>>>> safest userspace input.  One of the last changes was that the key data
-> >>>>> should be hex-ascii-encoded.  Unfortunately, the LTP
-> >>>>> testcases/kernel/syscalls/keyctl09.c example isn't hex-ascii-encoded
-> >>>>> and the example in Documentation/security/keys/trusted-encrypted.rst
-> >>>>> just cat's a file.  Both expect the length to be the length of the
-> >>>>> userspace provided data.   With this patch, when hex2bin() fails, there
-> >>>>> is no explanation.
-> >>>>
-> >>>> That's true. But it's true for all occurrences of hex2bin() in this file.
-> >>>> I could pr_err() an explanation, improve the trusted-encrypted.rst example
-> >>>> and respin the patch. Should I, or do you have another suggestion?
-> >>>
-> >>>> I wasn't aware of keyctl09.c, but quickly looking into it, the user data
-> >>>> _is_ hex-ascii-encoded, only the length is "wrong": Imho, the specified
-> >>>> length should be the binary length as this is consistent with key-length
-> >>>> specs in other cases (e.g. when loading the key from a blob).
-> >>>> keyctl09.c could be easy to fix, if only the length is modified. Should
-> >>>> I propose a patch? What is the correct/appropriate workflow there?
-> >>>
-> >>> I'm concerned that this change breaks existing encrypted keys created
-> >>> with user-provided data.  Otherwise I'm fine with your suggestion.
-> >>
-> >> Ok, but this change does not touch the hex-ascii format of encrypted key
-> >> blobs?
-> >
-> > True, but any persistent data based on this key would be affected.
-> 
-> Persistent data is stored encypted with e.g. the master key in hex-ascii 
-> already and should not be affected. Only persistent data stored 
-> unencrypted is affected, but the encrypted-keys stuff is just about 
-> avoiding that. Or do I still misunderstand something?
+On Wed, Sep 28, 2022 at 5:29 PM Wei Liu <wei.liu@kernel.org> wrote:
+>
+> Just a general question: what is the house rule for adding new proc
+> macros? They are powerful tools. I can see their value in `module!`
+> because writing all that boilerplate by hand is just painful. Yet they
+> are not straightforward to understand. It is difficult, just by looking
+> at the macro, to fully grasp what the final code looks like (though the
+> rsi target will help). Is there a concern that proc macro gets abused?
 
-Perhaps an existing encrypted key usage example would help clarify what
-is meant by persistent data.  The two original encrypted key usages are
-the EVM HMAC key and ecryptfs.  The EVM key is an encrypted key used to
-calculate the EVM HMAC, which is stored in security.evm.  In that
-scenario, the persistent data would be the data stored in security.evm.
+The rule is "use them as last resort". That is, they are not banned,
+but they need to be justified: if there is an alternative that is not
+too bad (e.g. in terms of ergonomics or implementation), then the
+alternative should be used instead.
 
-Would this patch break existing kernel/application persistent data
-based on encrypted keys created with user-provided data?
+Nevertheless, sometimes they are very handy. Apart from `module!`
+here, we are currently using them in the full repo for vtables [1] and
+the Asahi M1 GPU driver is using them for versioning [2].
 
--- 
-thanks,
+It is also possible to make proc macros easier to handle, for instance
+if we end up deciding to allow utilities like the `syn` crate.
 
-Mimi
+[1] https://github.com/Rust-for-Linux/linux/blob/fcad53ca9071c7bf6a412640a82e679bad6d1cd4/rust/macros/lib.rs#L99-L148
+[2] https://github.com/AsahiLinux/linux/blob/3c8982e2c78c219bf96761445c8b73c2b3034fba/drivers/gpu/drm/asahi/fw/buffer.rs#L43-L56
 
+Cheers,
+Miguel
