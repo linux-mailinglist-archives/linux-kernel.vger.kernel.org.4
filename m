@@ -2,151 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79215ED8F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D28CE5ED8FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233767AbiI1JaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
+        id S232838AbiI1JbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233724AbiI1JaD (ORCPT
+        with ESMTP id S232333AbiI1JbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:30:03 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB732D1F3;
-        Wed, 28 Sep 2022 02:29:58 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id c24so11321522plo.3;
-        Wed, 28 Sep 2022 02:29:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=M1MQzP7nXhdAoOm+Dhk9FYAPvZN0O8P2I4Dh0xXzv94=;
-        b=Qw/TctgaljN0UbyGHGd1qOXRq1GZvQKoCWhbHHBEBdlUqyO9IZTvEf+CaX+dTg/xpV
-         2TfhMgrV8c64YvMLi1avwgho+W30WDcPB+NXS/r7pDl0zfENRD7zXL8NMcMZNe+43NYv
-         eigvsz93QDNJZnnz5kY0Pp9TT3uwXdI7VxA9NV6m341ifsvcmPuaUdV9xQutUyYp+8a2
-         I3G+KRvER2aesl/EQsSqoqefctD4ZSJt5X9lfi+3lqQPAPFQobHQpp+uX+9rbgZxj6zM
-         rBy2UlpZWKa63v0RUP/wx+d5LhOByeyGmU4Vyszxp42GpWMIQenbLTM9R9jQF1v5JRWo
-         Io4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=M1MQzP7nXhdAoOm+Dhk9FYAPvZN0O8P2I4Dh0xXzv94=;
-        b=wUVxzjls6pnoezECu2Ov+f+soRK6bcdIUTPyB7NR4v+BbU7CTXUK9Xi3q2EwBPRxRL
-         WT3S4IacS9zE02Y/F0KJF20kHSp/3lDenzDiOmfuZ+eks1DUB1ZbgBftn30EODbFScvQ
-         Wo2JF2o5rPKehSP68HdM22qC35GI2XJCKx1yiGjR3FI3x2PI+pYmxXTLv0Rh5knQ9cHY
-         hxbykNn8RtD9A6wxP3GbXHOqTlUJy0M64mflltyWweYO1CHIflCkSV2Ys1AXNfPDglS9
-         8lMnEVJcF/MPzxhs/IlUVBRIfiv5m098+FKAa36uUKgLVb2QsYPtm1yTVyUD1+lTp/Wb
-         Ii/Q==
-X-Gm-Message-State: ACrzQf2RBBXuy9VkD0KUGc4XSOhiMLBI3L2Vp2xIunwistg6Hulzhfep
-        xZGXjgyi9594Lug47j2jno6SzWBRwYCtjg==
-X-Google-Smtp-Source: AMsMyM5mHki8d2V2mQIYJfooJnScpyNWw5VYrXuKJ/DnrTGE5cMEaf1pchlRCD4OaFedeEKEt2JtBA==
-X-Received: by 2002:a17:902:ecc5:b0:178:3217:e464 with SMTP id a5-20020a170902ecc500b001783217e464mr31629482plh.75.1664357398142;
-        Wed, 28 Sep 2022 02:29:58 -0700 (PDT)
-Received: from xm06403pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id b22-20020a17090a101600b0020071acaecasm1026831pja.42.2022.09.28.02.29.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 02:29:57 -0700 (PDT)
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 3/3] dt-bindings: gpio: Add compatible string for Unisoc UMS512
-Date:   Wed, 28 Sep 2022 17:29:37 +0800
-Message-Id: <20220928092937.27120-3-zhang.lyra@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220928092937.27120-1-zhang.lyra@gmail.com>
-References: <20220928092937.27120-1-zhang.lyra@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 05:31:02 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784DD5F9A3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:31:00 -0700 (PDT)
+X-UUID: c24df524b8e84b8dbc3b0317ab715842-20220928
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=O8vIH2kadEUhPoMTZPZlhscWXQP7AB6L9rS3xyjI5Dk=;
+        b=qFl85M8eoOA9c9SPBIpIJf91m5m32kP8RTipfQXjAYlZ9dqOyS7mt9N2ZjEAfpNv/rrDWlMTlTo1bFgL+ToarKnT8DiwZC5rNkrSYNAnmgdnQvDRvJcR8x7IJa6B/zI5XMJJvTeqngfCedJF/25vo+3hHxSso95JNCYc/xI8cCE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:5d687d01-4c6a-4b42-bf3a-7635ca1c3ace,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:70d482e4-87f9-4bb0-97b6-34957dc0fbbe,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: c24df524b8e84b8dbc3b0317ab715842-20220928
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1011646754; Wed, 28 Sep 2022 17:30:54 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 28 Sep 2022 17:30:53 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 28 Sep 2022 17:30:52 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Tianping Fang <tianping.fang@mediatek.com>
+Subject: [PATCH 1/2] phy: core: add debugfs root
+Date:   Wed, 28 Sep 2022 17:30:40 +0800
+Message-ID: <20220928093041.31481-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+Add a debugfs root for phy class, then phy drivers can add debugfs files
+under this folder.
 
-UMS512 use the same GPIO and EIC controller with SC9860, so this
-patch adds compatible string for UMS512 directly.
-
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
- .../bindings/gpio/sprd,gpio-eic.yaml          | 33 +++++++++++++++----
- .../devicetree/bindings/gpio/sprd,gpio.yaml   |  7 +++-
- 2 files changed, 33 insertions(+), 7 deletions(-)
+ drivers/phy/phy-core.c  | 6 ++++++
+ include/linux/phy/phy.h | 2 ++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml b/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
-index e25ee1884c07..07f7d2b56da6 100644
---- a/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
-+++ b/Documentation/devicetree/bindings/gpio/sprd,gpio-eic.yaml
-@@ -42,12 +42,33 @@ description:
+diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+index d93ddf1262c5..2f9f69190519 100644
+--- a/drivers/phy/phy-core.c
++++ b/drivers/phy/phy-core.c
+@@ -11,6 +11,7 @@
+ #include <linux/export.h>
+ #include <linux/module.h>
+ #include <linux/err.h>
++#include <linux/debugfs.h>
+ #include <linux/device.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
+@@ -1204,6 +1205,9 @@ void devm_of_phy_provider_unregister(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(devm_of_phy_provider_unregister);
  
- properties:
-   compatible:
--    enum:
--      - sprd,sc9860-eic-debounce
--      - sprd,sc9860-eic-latch
--      - sprd,sc9860-eic-async
--      - sprd,sc9860-eic-sync
--      - sprd,sc2731-eic
-+    oneOf:
-+      - enum:
-+          - sprd,sc9860-eic-debounce
-+          - sprd,sc9860-eic-latch
-+          - sprd,sc9860-eic-async
-+          - sprd,sc9860-eic-sync
-+          - sprd,sc2731-eic
-+      - items:
-+          - enum:
-+              - sprd,ums512-eic-debounce
-+          - const: sprd,sc9860-eic-debounce
-+      - items:
-+          - enum:
-+              - sprd,ums512-eic-latch
-+          - const: sprd,sc9860-eic-latch
-+      - items:
-+          - enum:
-+              - sprd,ums512-eic-async
-+          - const: sprd,sc9860-eic-async
-+      - items:
-+          - enum:
-+              - sprd,ums512-eic-sync
-+          - const: sprd,sc9860-eic-sync
-+      - items:
-+          - enum:
-+              - sprd,sc2730-eic
-+          - const: sprd,sc2731-eic
++struct dentry *phy_debug_root;
++EXPORT_SYMBOL_GPL(phy_debug_root);
++
+ /**
+  * phy_release() - release the phy
+  * @dev: the dev member within phy
+@@ -1233,6 +1237,8 @@ static int __init phy_core_init(void)
  
-   reg:
-     minItems: 1
-diff --git a/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
-index c0cd1ed9809b..a1ecb2b96a76 100644
---- a/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
-+++ b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
-@@ -19,7 +19,12 @@ description:
+ 	phy_class->dev_release = phy_release;
  
- properties:
-   compatible:
--    const: sprd,sc9860-gpio
-+    oneOf:
-+      - const: sprd,sc9860-gpio
-+      - items:
-+          - enum:
-+              - sprd,ums512-gpio
-+          - const: sprd,sc9860-gpio
++	phy_debug_root = debugfs_create_dir("phy", NULL);
++
+ 	return 0;
+ }
+ device_initcall(phy_core_init);
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+index b1413757fcc3..c398749d49b9 100644
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -205,6 +205,8 @@ struct phy_lookup {
+ #define devm_of_phy_provider_register_full(dev, children, xlate) \
+ 	__devm_of_phy_provider_register(dev, children, THIS_MODULE, xlate)
  
-   reg:
-     maxItems: 1
++extern struct dentry *phy_debug_root;
++
+ static inline void phy_set_drvdata(struct phy *phy, void *data)
+ {
+ 	dev_set_drvdata(&phy->dev, data);
 -- 
-2.25.1
+2.18.0
 
