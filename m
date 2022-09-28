@@ -2,98 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846965EE119
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088F95EE11A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234552AbiI1P7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
+        id S234529AbiI1P72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233408AbiI1P64 (ORCPT
+        with ESMTP id S234496AbiI1P7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:58:56 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AB0E3EF4;
-        Wed, 28 Sep 2022 08:58:12 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E8DC747C;
-        Wed, 28 Sep 2022 17:58:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1664380690;
-        bh=d4aeRqyj8cvrUyW8hXIk3lH+fIMhuD/VGVgGbzpZaTw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=krVVM+TppDPUODjD6f+M70aOOt39hmoc530gGq6/v+KrOdJq6qzTwqISUNlbBNC1f
-         XAmWFo3bGVwE6Q2h3bNSLijZYBjyNeie6SBianNIKtOmD4/aBcvoWnJ2bsLSCGBbvl
-         ph+8yBzeM32SbaMyIVIe153yfjv0nVMcSylGoRDI=
-Date:   Wed, 28 Sep 2022 18:58:08 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        git@xilinx.com, saikrishna12468@gmail.com
-Subject: Re: [PATCH 0/4] pinctrl: pinctrl-zynqmp: Add tri-state configuration
- support
-Message-ID: <YzRvEPUWUXP4x7+h@pendragon.ideasonboard.com>
-References: <1655462819-28801-1-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
+        Wed, 28 Sep 2022 11:59:03 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52B1A1D13
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:58:46 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id u69so12619347pgd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=L3QchRnIwNtjYNnJS8opK3mIqahWmFCOi7dCIaQNGpQ=;
+        b=RaKb42er+MjS42RMxVXedUMDvhhxKAIdOGmh/mFTePqClPo9pGhZyQdD9An6qSCOUQ
+         HQ3EQJ4FYjKsdBIH0zKQVFKYyE/5rZThQKY0FT+1YnmmRBgIkGVjMh4WPBA0tbA+VNBu
+         HV3JMXYCGrT5FjEYJjxO1w2Qp+ACW/7KJQpJ8/YCUtlAKJcY5/pea/dmNbm9p7NY3Vjt
+         JxarsJ1pHxv5WyfTd7qvVuSOVhSKW13GDDJsA6E1GMAejclyTZp0PW5DSUhDtf9lIg2D
+         TYAlpTqriEplL8CmzvuqxaP0R7CIG4Mkv0a2pxzB9j4ETVM6kT3LdUwiqPwvtiXh9Lov
+         tduQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=L3QchRnIwNtjYNnJS8opK3mIqahWmFCOi7dCIaQNGpQ=;
+        b=MAxwilaobNOnfT6G+HyLLb5hI7IqnekYN7nCO2OaSb1CpFMNLAajMclgRxb8Sk8kcF
+         zCuNmRViRLIir+iN7n38m4/MLMdqHmUOECnOw9vSLNwKEi/wDOuvLmmIR3i5scoImPDT
+         7pg0BjRNl4j8V4v65Gsu8azohhFswwG8obQsc7sxF+HVlo4F7xmJCIiwK4n+wn20EbRo
+         ixsQCOtM1Dgh7AkMrViVSM3VZ5sEPZl9Enyeu3r+ZV36XmHoSpkv9HrYrB4wKXRFHrh1
+         +YAqTMsAP76uYKucbCDGLV+iqS1GXcCbujp93lx2Kbntca1mHjgKB3o5o9wMazDkztxW
+         WAIA==
+X-Gm-Message-State: ACrzQf2PWpzcd+BIteDhOX7+WlF3XYjAT63XWCiZWs/K+eXrrCIAk/Fd
+        0AuZgAK8sGqW7XP8yedZRtTCVg==
+X-Google-Smtp-Source: AMsMyM5SJmLnZCdCUJ8z8qBS6CbX5hvrwt1UHPHDFcOUfquiSbTmDTGbJJDQJKdCWHc/q7apaDcuAA==
+X-Received: by 2002:aa7:952f:0:b0:540:e8ee:a077 with SMTP id c15-20020aa7952f000000b00540e8eea077mr35369339pfp.34.1664380726165;
+        Wed, 28 Sep 2022 08:58:46 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id l2-20020a622502000000b00541206f9379sm4287727pfl.99.2022.09.28.08.58.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 08:58:45 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 15:58:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Like Xu <like.xu.linux@gmail.com>
+Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
+Message-ID: <YzRvMZDoukMbeaxR@google.com>
+References: <37b3162e-7b3a-919f-80e2-f96eca7d4b4c@redhat.com>
+ <dfcbdf1d-b078-ec6c-7706-6af578f79ec2@redhat.com>
+ <55d7f0bd-ace1-506b-ea5b-105a86290114@redhat.com>
+ <f753391e-7bdc-bada-856a-87344e75bd74@redhat.com>
+ <111a46c1-7082-62e3-4f3a-860a95cd560a@redhat.com>
+ <14d5b8f2-7cb6-ce24-c7a7-32aa9117c953@redhat.com>
+ <YzIZhn47brWBfQah@google.com>
+ <3b04db9d-0177-7e6e-a54c-a28ada8b1d36@redhat.com>
+ <YzMdjSkKaJ8HyWXh@google.com>
+ <dd6db8c9-80b1-b6c5-29b8-5eced48f1303@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1655462819-28801-1-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <dd6db8c9-80b1-b6c5-29b8-5eced48f1303@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sai,
-
-On Fri, Jun 17, 2022 at 04:16:55PM +0530, Sai Krishna Potthuri wrote:
-> This series update the Xilinx firmware, ZynqMP dt-binding and ZynqMP
-> pinctrl driver to handle 'output-enable' and 'bias-high-impedance'
-> configurations. As part of these configurations, ZynqMP pinctrl driver
-> takes care of pin tri-state setting.
-> Also fix the kernel doc warning in ZynqMP pinctrl driver.
-
-I'm afraid this causes a regression :-( With this series applied, boot
-breaks with the following message being printed to the serial console:
-
-Received exception
-MSR: 0x200, EAR: 0xFF180198, EDR: 0x0, ESR: 0x64
-
-I've traced that to the probe of the UART, when it calls into the
-firmware to set pin MIO18 to high impedance. According to v1.7 of the
-ZynqMP registers reference (UG1087), there is no register at address
-0xFF180198.
-
-I am using the VCU TRD 2021.1 for testing. Does this series require a
-firmware update ? If so backward compatibility needs to be preserved.
-It's very late in the v6.0-rc cycle for a fix, a revert may be best at
-this point, to give us time to fix the issue properly.
-
-> Note: Resending the series as i see this series didn't went out due
-> to some issue with my mail client. Please ignore if this series is 
-> already received.
+On Wed, Sep 28, 2022, Paolo Bonzini wrote:
+> On 9/27/22 17:58, Sean Christopherson wrote:
+> > I'm pretty sure this patch will Just Work for QEMU, because QEMU simply resumes
+> > the vCPU if mmio.len==0.  It's a bit of a hack, but I don't think it violates KVM's
+> > ABI in any way, and it can even become "official" behavior since KVM x86 doesn't
+> > otherwise exit with mmio.len==0.
 > 
-> Sai Krishna Potthuri (4):
->   firmware: xilinx: Add configuration values for tri-state
->   dt-bindings: pinctrl-zynqmp: Add output-enable configuration
->   pinctrl: pinctrl-zynqmp: Add support for output-enable and
->     bias-high-impedance
->   pinctrl: pinctrl-zynqmp: Fix kernel-doc warning
+> I think this patch is not a good idea for two reasons:
 > 
->  .../bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml         |  4 ++++
->  drivers/pinctrl/pinctrl-zynqmp.c                      | 11 +++++++++++
->  include/linux/firmware/xlnx-zynqmp.h                  |  5 +++++
->  3 files changed, 20 insertions(+)
+> 1) we don't know how userspace behaves if mmio.len is zero.  It is of course
+> reasonable to do nothing, but an assertion failure is also a valid behavior
 
--- 
-Regards,
+Except that KVM currently does neither.  If the fetch happens at CPL>0 and/or in
+L2, KVM injects #UD.  That's flat out architecturally invalid.  If it's a sticking
+point, the mmio.len==0 hack can be avoided by defining a new exit reason.
 
-Laurent Pinchart
+> 2) more important, there is no way to distinguish a failure due to the guest
+> going in the weeds (and then KVM_EXIT_INTERNAL_ERROR is fine) from one due
+> to the KVM_SET_USER_MEMORY_REGION race condition.  So this will cause a
+> guest that correctly caused an internal error to loop forever.
+
+Userspace has the GPA and absolutely should be able to detect if the MMIO may have
+been due to its memslot manipulation versus the guest jumping into the weeds.
+
+> While the former could be handled in a "wait and see" manner, the latter in
+> particular is part of the KVM_RUN contract.  Of course it is possible for a
+> guest to just loop forever, but in general all of KVM, QEMU and upper
+> userspace layers want a crashed guest to be detected and stopped forever.
+> 
+> Yes, QEMU could loop only if memslot updates are in progress, but honestly
+> all the alternatives I have seen to atomic memslot updates are really
+> *awful*.  David's patches even invent a new kind of mutex for which I have
+> absolutely no idea what kind of deadlocks one should worry about and why
+> they should not exist; QEMU's locking is already pretty crappy, it's
+> certainly not on my wishlist to make it worse!
+> 
+> This is clearly a deficiency in the KVM kernel API, and (thanks to SRCU) the
+> kernel is the only place where you can have a *good* fix.  It should have
+> been fixed years ago.
+
+I don't disagree that the memslots API is lacking, but IMO that is somewhat
+orthogonal to fixing KVM x86's "code fetch to MMIO" mess.  Such a massive new API
+should be viewed and prioritized as a new feature, not as a bug fix, e.g. I'd
+like to have the luxury of being able to explore ideas beyond "let userspace
+batch memslot updates", and I really don't want to feel pressured to get this
+code reviewed and merge.
+
+E.g. why do a batch update and not provide KVM_SET_ALL_USER_MEMORY_REGIONS to
+do wholesale replacement?  That seems like it would be vastly simpler to handle
+on KVM's end.  Or maybe there's a solution in the opposite direction, e.g. an
+API that allows 1->N or N->1 conversions but not arbitrary batching.
+
+And just because QEMU's locking is "already pretty crappy", that's not a good
+reason to drag KVM down into the mud.  E.g. taking a lock and conditionally
+releasing it...  I get that this is an RFC, but IMO anything that requires such
+shenanigans simply isn't acceptable.
+
+  /*
+   * Takes kvm->slots_arch_lock, and releases it only if
+   * invalid_slot allocation, kvm_prepare_memory_region failed
+   * or batch->is_move_delete is true.
+   */
+  static int kvm_prepare_memslot(struct kvm *kvm,
+			         struct kvm_internal_memory_region_list *batch)
