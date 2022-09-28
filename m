@@ -2,92 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6E55EDA06
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 12:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF855EDA08
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 12:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiI1KYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 06:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S233210AbiI1K03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 06:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbiI1KYo (ORCPT
+        with ESMTP id S232166AbiI1K00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 06:24:44 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FA513F49;
-        Wed, 28 Sep 2022 03:24:41 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28SAOaGO099816;
-        Wed, 28 Sep 2022 05:24:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1664360676;
-        bh=ck6rNhKL1X9AY2+RHr/dMv1FGjWx989F3Vfr8HMWRb8=;
-        h=From:To:CC:Subject:Date;
-        b=ULm62cHHQnQdKyDreMU0Eh53UD3MskCCrB5M9CDEjl10xHZ9V/h8oysJh7SI/R9Vj
-         kO0VkEqxS0hDk4aSf+EawRHnExE+iGmtjIn9n/6apPy/or99vTncPcrt4PZPlxH5Zt
-         aURFsk9QMsE0a3s4+2VWbMlvNKJIpuE+RNagtKWI=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28SAOa67090316
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 28 Sep 2022 05:24:36 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 28
- Sep 2022 05:24:35 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 28 Sep 2022 05:24:35 -0500
-Received: from a0393678ub.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28SAOWaC095050;
-        Wed, 28 Sep 2022 05:24:33 -0500
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-CC:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Subject: [PATCH] MAINTAINERS: Update Kishon's email address in PCI endpoint subsystem
-Date:   Wed, 28 Sep 2022 15:54:31 +0530
-Message-ID: <20220928102431.658-1-kishon@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 28 Sep 2022 06:26:26 -0400
+X-Greylist: delayed 68 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Sep 2022 03:26:23 PDT
+Received: from exchange.fintech.ru (e10edge.fintech.ru [195.54.195.159])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E1EB5A46;
+        Wed, 28 Sep 2022 03:26:23 -0700 (PDT)
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.169) with Microsoft SMTP Server (TLS) id 14.3.498.0; Wed, 28 Sep
+ 2022 13:25:06 +0300
+Received: from KANASHIN1.fintech.ru (10.0.253.125) by Ex16-01.fintech.ru
+ (10.0.10.18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Wed, 28 Sep
+ 2022 13:25:06 +0300
+From:   Natalia Petrova <n.petrova@fintech.ru>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+CC:     Natalia Petrova <n.petrova@fintech.ru>,
+        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ldv-project@linuxtesting.org>,
+        "Alexey Khoroshilov" <khoroshilov@ispras.ru>
+Subject: [PATCH] nitrox: avoid double free on error path in nitrox_sriov_init()
+Date:   Wed, 28 Sep 2022 13:25:05 +0300
+Message-ID: <20220928102505.39709-1-n.petrova@fintech.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.0.253.125]
+X-ClientProxiedBy: Ex16-01.fintech.ru (10.0.10.18) To Ex16-01.fintech.ru
+ (10.0.10.18)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update Kishon's email address in PCI endpoint subsystem maintainer
-entry and mark him as reviewer.
+If alloc_workqueue() fails in nitrox_mbox_init() it deallocates
+ndev->iov.vfdev and returns error code, but then nitrox_sriov_init()
+calls nitrox_sriov_cleanup() where ndev->iov.vfdev is deallocated
+again.
 
-Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+Fix this by nulling ndev->iov.vfdev after the first deallocation.
+
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Signed-off-by: Natalia Petrova <n.petrova@fintech.ru>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
 ---
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/crypto/cavium/nitrox/nitrox_mbx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ffad3f1dfe9c..9dc9a4aa2301 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15684,9 +15684,9 @@ F:	Documentation/devicetree/bindings/pci/v3-v360epc-pci.txt
- F:	drivers/pci/controller/pci-v3-semi.c
- 
- PCI ENDPOINT SUBSYSTEM
--M:	Kishon Vijay Abraham I <kishon@ti.com>
- M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
- R:	Krzysztof Wilczyński <kw@linux.com>
-+R:	Kishon Vijay Abraham I <kishon@kernel.org>
- L:	linux-pci@vger.kernel.org
- S:	Supported
- Q:	https://patchwork.kernel.org/project/linux-pci/list/
+diff --git a/drivers/crypto/cavium/nitrox/nitrox_mbx.c b/drivers/crypto/cavium/nitrox/nitrox_mbx.c
+index 9e7308e39b30..d4e06999af9b 100644
+--- a/drivers/crypto/cavium/nitrox/nitrox_mbx.c
++++ b/drivers/crypto/cavium/nitrox/nitrox_mbx.c
+@@ -195,6 +195,7 @@ int nitrox_mbox_init(struct nitrox_device *ndev)
+ 	ndev->iov.pf2vf_wq = alloc_workqueue("nitrox_pf2vf", 0, 0);
+ 	if (!ndev->iov.pf2vf_wq) {
+ 		kfree(ndev->iov.vfdev);
++		ndev->iov.vfdev = NULL;
+ 		return -ENOMEM;
+ 	}
+ 	/* enable pf2vf mailbox interrupts */
 -- 
-2.17.1
+2.34.1
 
