@@ -2,104 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707935ED802
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAE05ED809
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiI1Iio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52150 "EHLO
+        id S233316AbiI1Ij6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233473AbiI1IiC (ORCPT
+        with ESMTP id S229951AbiI1Ijf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:38:02 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF0EA3D71
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:37:53 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id b24so13528713ljk.6
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:37:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=62Eoklyt/D9YICCu7HqYVZqvNE1CJufCEW7h9Tv64so=;
-        b=vkpzReO0KQzEk/YOvT5M1oXJQW9u+9JQ+eEqmpGzLdU2fmYY+yW3eHLRVtQMjhDRdn
-         V6wt3ZR5FeGO+6TimfqDyyuKw0pIqrDhFXggf4SMgwqPoVLvAJVGVKX8KF5mLY5+FpUz
-         bP5f4IsKnBn8XTa2aPh3FdR8tE5RmllT7rS7iSc4akCTGzZIaDpjZ/JjucVv3J6pheIF
-         ELVJWnwzQAnVIbV5fr01Z0oldpNikPywadH+gPBOTP0Hr+F/ZY0gAWhSOyA1wduNa7tR
-         1sQsy74ff9fm6FhRG+a2pIZop1XVDZq0RFyn2Xpo56mhyrfbIBf/Ig/M3PioDg2G9hHj
-         sv4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=62Eoklyt/D9YICCu7HqYVZqvNE1CJufCEW7h9Tv64so=;
-        b=GaQD8R9apYhnDFBMHt5JH+ZFAoBFfncHSjTQV55/Osl6srqxOnJoYCjt8UeG2sBR60
-         r9YKDzFNksd+13DdXASU8xMGUdrESt0MpKgaqO/Lyz68AXBS7M0kzcMi41FhBlglanE1
-         DKpojDskwHidjt9WZtOAyQFbY9jDqy2LXmJBKja+cZY5cziiXrv4Y/n0jenAyXUetZcL
-         EeI76r9PEqisartVD70BOHyiGN+31JRB9hI1E3yBILN6vU6lxsi9gFNturlRAIwdIMR6
-         NYDTs34XCf48RX5/QwpHHof4eJnsGxaqpiQr2ttwu1t/mCX220BKUWtSF6tCvlryTg6i
-         FXiA==
-X-Gm-Message-State: ACrzQf0ZtNw6l4tZtqC19Uq2pLGEd2M7qLts6Vv6SbQX2/T4u4xvfYIr
-        jNiP3ToMWyb06T36SWGlNHLlwA==
-X-Google-Smtp-Source: AMsMyM7KmT+Blx4/udVJvmQmTtAk3QqtyL9qew6LvYoEkmqaGbUMoY64pgryHZ1fIouAZZ1S64YKKA==
-X-Received: by 2002:a2e:bc11:0:b0:26c:565:12f6 with SMTP id b17-20020a2ebc11000000b0026c056512f6mr10948162ljf.91.1664354271840;
-        Wed, 28 Sep 2022 01:37:51 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id 23-20020a2e0917000000b0026c35c4720esm375585ljj.24.2022.09.28.01.37.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 01:37:50 -0700 (PDT)
-Message-ID: <066b55cf-4a28-89a2-56ab-572590c97c30@linaro.org>
-Date:   Wed, 28 Sep 2022 10:37:49 +0200
+        Wed, 28 Sep 2022 04:39:35 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2A2A221D
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:39:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664354371; x=1695890371;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=V5ZHsDB6wcD9KRT2A0rLXsENvTTm9TvpXoN0E3+EoAs=;
+  b=JNi7XZ31VYgr285enypFj3IqaGVqbqN13gSg62aQ/Dw7WevnWkCy3EE7
+   1KD5U0xJ5wCI/+qGTc31eXK5n0Qqn0eyO9AoUDMJsFznfpb5KqVpFHckl
+   8jxGhoDpfK3MJaf68K1lkZiqI7Zpjj4ij/zkclumBmPRbeTvKfHLM4q6E
+   KmSaQj81zo4hk8IiuDXKWYn8znQ4bSVSG4AyTkDeacYPurRavr7ylxVd9
+   IwJ09FnkoEpydac4Mis/rwuRcgPMG3HYliMNG8bJN4xpyDtFgA2AUbt1X
+   kOPb9wVbfu/t3Nt+FdtjQ/YHUwNv7uH2BNX1Ys94bV3VyG/bVomYGJEIe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="301520876"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="301520876"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 01:39:30 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="617131390"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="617131390"
+Received: from morank-mobl3.ger.corp.intel.com (HELO [10.251.211.7]) ([10.251.211.7])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 01:39:25 -0700
+Message-ID: <d94a9abd-95ca-09ba-ab24-e4c38b832678@linux.intel.com>
+Date:   Wed, 28 Sep 2022 10:38:29 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v5 2/3] dt-bindings: thermal: add loongson2k thermal
- binding
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH] ASoC: Intel: sof_rt5682: remove
+ SOF_RT1015_SPEAKER_AMP_100FS flag
 Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
-References: <20220928083702.17309-1-zhuyinbo@loongson.cn>
- <20220928083702.17309-2-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220928083702.17309-2-zhuyinbo@loongson.cn>
+To:     "Lu, Brent" <brent.lu@intel.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+Cc:     "Rojewski, Cezary" <cezary.rojewski@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        "Chiang, Mac" <mac.chiang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Ajye Huang <ajye.huang@gmail.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        "Gopal, Vamshi Krishna" <vamshi.krishna.gopal@intel.com>,
+        "Zhi, Yong" <yong.zhi@intel.com>
+References: <20220913074906.926774-1-brent.lu@intel.com>
+ <2577e4db-8593-cf37-135b-aa51b6268cd7@linux.intel.com>
+ <CY5PR11MB6257A5CC3976FAEA2C713A4997559@CY5PR11MB6257.namprd11.prod.outlook.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <CY5PR11MB6257A5CC3976FAEA2C713A4997559@CY5PR11MB6257.namprd11.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 10:37, Yinbo Zhu wrote:
-> Add the loongson2k thermal binding with DT schema format using
-> json-schema.
+
+
+On 9/27/22 15:16, Lu, Brent wrote:
+>>> +		case SND_SOC_DAIFMT_DSP_A:
+>>> +		case SND_SOC_DAIFMT_DSP_B:
+>>> +			/* 4-slot TDM */
+>>> +			ret = snd_soc_dai_set_tdm_slot(codec_dai,
+>>> +						       rt1015_tdm_mask[i].tx,
+>>> +						       rt1015_tdm_mask[i].rx,
+>>> +						       4,
+>>> +						       params_width(params));
+>>
+>> The changes look ok, just wondering if we can avoid hard-coding those 4 values.
+>> Can we not get the number of TDM slots from topology and/or dailink
+>> configuration?
+>>
+>>
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> I think TDM slot number is possible but not TX/RX mask. What we have in topology
+> is union of tx/rx mask of all channels. We don't know the mask of specific channel in
+> DAI_CONFIG.
+> 
+> DAI_CONFIG(SSP, 0, BOARD_HP_BE_ID, SSP0-Codec,
+>         SSP_CONFIG(I2S, SSP_CLOCK(mclk, 19200000, codec_mclk_in),
+>                 SSP_CLOCK(bclk, 2400000, codec_slave),
+>                 SSP_CLOCK(fsync, 48000, codec_slave),
+>                 SSP_TDM(2, 25, 3, 3),
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+the 3 3 is precisely the channel mask!
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-If a tag was not added on purpose, please state why and what changed.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+>                 SSP_CONFIG_DATA(SSP, 0, 24, 0, 0, 0, SSP_CC_BCLK_ES)))')
+> 
+> Regards,
+> Brent
+> 
