@@ -2,634 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDBEA5ED536
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93AE55ED50B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbiI1GnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 02:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
+        id S233205AbiI1GmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 02:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbiI1Gl6 (ORCPT
+        with ESMTP id S233136AbiI1Gln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 02:41:58 -0400
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1E01D05E0;
-        Tue, 27 Sep 2022 23:41:54 -0700 (PDT)
-Received: from zoe.. (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 28S6e0G9004120;
-        Wed, 28 Sep 2022 15:40:08 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 28S6e0G9004120
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664347209;
-        bh=ZH9B9GLn1QpV0HvmQtr5Na/EeHUXAOG5jwJoV2sRUOk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LXREac42ecbunylv8eHPu7VSrlvxzMCNsrRxzXMEptfo32vPENb6qBHDr18EkPUbZ
-         jSvWaVeDVRTUXXxOAHtMRAowlCngyvAza5F/CdepHRWShBXlAkWF5UiS2xE+Ok/Iyt
-         Ko0YZ8ZSWf+ZVULZ/vZcNdIWziDTMoWNdtyO29z39e7/wGgCeYd5ia9tEJWHyvwzeJ
-         98OZjrHesd69F9shnQ3v2cxA/cGBYlCHQ1xTPDD2Y4HY1bxygvD0OWpK5nvSQFyqxM
-         dOl/nlZpqd8T6iHiqKlMmdxr4oDMLdoOTL88Gjy3TcpMkT+aIQC6BI/ycLD5nkvQhR
-         ry5tljC7FeEyg==
-X-Nifty-SrcIP: [133.32.182.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
-Subject: [PATCH v3 8/8] kbuild: implement CONFIG_TRIM_UNUSED_KSYMS without recursion
-Date:   Wed, 28 Sep 2022 15:39:47 +0900
-Message-Id: <20220928063947.299333-9-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220928063947.299333-1-masahiroy@kernel.org>
-References: <20220928063947.299333-1-masahiroy@kernel.org>
+        Wed, 28 Sep 2022 02:41:43 -0400
+Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9461B1F34BA;
+        Tue, 27 Sep 2022 23:40:40 -0700 (PDT)
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28RIkkVv019688;
+        Tue, 27 Sep 2022 23:40:07 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=jgWbInMcqJPuSkSZiGvIuBgqvVWayUXYnPtIhm51Tf8=;
+ b=cJM5fdI0AFobeM2kAW5fUXuzqFPGfgd9KwTdU1heDqT93qfVse+uRWIWPacukY5nnsk2
+ TtMBtnQbJRcX+3KWLtFyVlwNTQv4HUw/10u4gzKck3PtDGRKCQDjwdAMsU7NRnlFSvcr
+ 3VR0PTqyoOQ0qF95fvohzzpW0yHXIj5kIyW4K4IvbRdJEbefl8Dl2aUTgFmrE3+sLe3c
+ PgGaU14xhH8V9Xktrk2rxoTxuhY9BqMvS7+Pz0RjngbzQRUQAAtqJqErcJHqnLAAvtm/
+ ba4qjDM1xgEDq7oa4Be8SrDOA5ubx3kvS8GRNgNeV5rDaH7UDReywuCRZyDKFjJECkVq 4w== 
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
+        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3jswg1r2he-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Sep 2022 23:40:07 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PljRuEj7I3ipF++M0Q+m1QOjQrCYX9+fv7c1sj/mal9l5jgBzG33a9eRD2s3U5CyEY97/7sDYoUOhWEV5KjvG9jIZLiMl6ARZ5HOwAqse4L4EI3b/p4/byxbXrH9DWzPL1LHgy67BJfyChwK34ebie0uvfSD96pfBBR/qkvx3UDbG+ejcJRWr3TDE/M41uaF+bpKRmeuVylSHvrbulE7cKFkJOZLxogkgL6pu+p7GXqkVrjIniNx0tPzCM/bJYY+VyOYcyh52+4dQqpK8EqjLHuWye0vNLQ0n8Eh9EPdAyJ3MGY6365K15nMIiJwzSdN6VQfRp8jQ3mW8a9UW3EQJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jgWbInMcqJPuSkSZiGvIuBgqvVWayUXYnPtIhm51Tf8=;
+ b=YaV/3+AhYEwv5ARmUglQiubtyUbfqLZhFDUmm/gGUEE42RenZzCig6/hjtsBDMvgVz+wN1G7W9G6Cpxj9wleOdxYbT/mGND5bN8Uwd18gwBd1zc/bdqPeThZho3QxqwmFIqj/YM8UsLSWwOqgM95+MfNC7BaZJDqIdxCVDk1LFcyN2gwgS4j7HMihvZYyjxAJgmaJgVIWSx/6WZydLBeMGs+rpvCJ8xdZODf5Ch7QLYfisXblcv/9PLIQ0HeDUKLFyI3Wt7+Xj2VtAm9uRxFutHfH8AjB08meq6ekUFIGr9iPjYfB5DPd+lU/Zl5JJDBx5FHVzknXNnStsvXcjwo6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jgWbInMcqJPuSkSZiGvIuBgqvVWayUXYnPtIhm51Tf8=;
+ b=xTMITSAeYSicG9zzdghnnX2R00PK4VrK1cs91NeF4FG5JWIC1zW150mSirrVdnKHmztmjg7oRAjb72zH9Y/t7zC0pxsLSKRTO5RZcYu/XPvw5GasX8s05jnkgF7fQlFX1mKom3EnFqbNyfbdhIKDidMdzA5A3FsInbcCxr+YjzQ=
+Received: from BYAPR07MB5381.namprd07.prod.outlook.com (2603:10b6:a03:6d::24)
+ by SJ0PR07MB8693.namprd07.prod.outlook.com (2603:10b6:a03:376::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Wed, 28 Sep
+ 2022 06:40:04 +0000
+Received: from BYAPR07MB5381.namprd07.prod.outlook.com
+ ([fe80::c40d:f149:5438:4f75]) by BYAPR07MB5381.namprd07.prod.outlook.com
+ ([fe80::c40d:f149:5438:4f75%5]) with mapi id 15.20.5676.017; Wed, 28 Sep 2022
+ 06:40:04 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] usb: cdns3: remove dead code
+Thread-Topic: [PATCH] usb: cdns3: remove dead code
+Thread-Index: AQHY0bCHte+aLqZnNkqFcyKRL76j+q30ZqHQ
+Date:   Wed, 28 Sep 2022 06:40:04 +0000
+Message-ID: <BYAPR07MB5381FCC10ABD4F92E47CF6D9DD549@BYAPR07MB5381.namprd07.prod.outlook.com>
+References: <20220926135922.24541-1-dzm91@hust.edu.cn>
+In-Reply-To: <20220926135922.24541-1-dzm91@hust.edu.cn>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctNjE1MWY0YzMtM2VmOC0xMWVkLTg3YzgtYTQ0Y2M4MWIwYzU1XGFtZS10ZXN0XDYxNTFmNGM1LTNlZjgtMTFlZC04N2M4LWE0NGNjODFiMGM1NWJvZHkudHh0IiBzej0iMTQxOSIgdD0iMTMzMDg4MjA4MDM0MDY3MjkzIiBoPSJicDJOL1Z1UmFOQlBxNHpTZG1YaFBhb3d0TVU9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR07MB5381:EE_|SJ0PR07MB8693:EE_
+x-ms-office365-filtering-correlation-id: b2122460-3bea-4a88-9fae-08daa11c46ca
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: aD/FjcerbbC2OxL0mCuvjLfSCA3EIiWrhTUciF/tq6eFYEnApzsrd8U6QFyDuzoyUFmlRdrXakufZi1+x9zWsu8nX3Bf0hNPCFAt/Z9esp22leGAEnErv3w6Yo02zlZYRUpuoHnREi41J5GzZf2YhymJCewSo4e779i+/yBI/1f59K91OXXb0VyyojL8TVLRDUcakD97wikC756pst516Qca/7O51g6YdCDjl1T7p5IKPQKnbzEL3HzSCKu4LI1CXgyOpyph+AqTQRMJvo9AqBAJl/kuRMXdewsmhU6Unj+MAxhbbr0Jc+kJ0jE4GlliMc40N+3sUtaQKnqierkLcFfJ4MgZ9r6hxIE8iRldJgmw4Woxoxdk8Ex9pr2phidHopN4A2RsKhC8W/YT1oyzZOEvIO/BNkLT9L8FGnLC3NUT9BbfPNeA97ZtzmAKkUTmbVd182WvsCgI8AW4+pd1bYBdh/ZWSVAy5cNUgMCYBCC0PxSIH4v8bg711p+JvTTQu2BUg9lORk8OV9XNtiXNXLbiNCdNlzvdnbnhaOHPs8vv+ByxI5QhhpHNG6ex3llbqpPDQBs92+oIcF6zwZyzipvyYPLWtzSK/fMhH9mwZwu3s9xEnJ5zOzg0qv5bhKenn6aloiftEbTN4xAhebzaD98KsumiZAwuOHI7T2qGeBuqHAzyleiBYQqnGjeNOvMb7uFOops7favOoExmozwrYkVTZBa0r1glbu6IjsGVufcfnWm3/naYgNTFOdGYu4Dq0BSLpjiJJq+7LKbILbpohg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR07MB5381.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(136003)(39860400002)(376002)(346002)(36092001)(451199015)(86362001)(38100700002)(33656002)(122000001)(38070700005)(186003)(5660300002)(7696005)(55016003)(71200400001)(26005)(6506007)(478600001)(9686003)(83380400001)(41300700001)(8676002)(54906003)(2906002)(66476007)(316002)(66946007)(66446008)(110136005)(4326008)(8936002)(64756008)(76116006)(52536014)(66556008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?SD1OZI4sBuEXN4jCdi2m78U2O1ui3h6w98c8jcoTek6jCHhsTKU93FSoOYtv?=
+ =?us-ascii?Q?NK4HW2Vr5ybxClIRmHxbSl3E8jjwP63ELdfVrOdys255MMVUvCuSH+YZBzCU?=
+ =?us-ascii?Q?vF4vdCqUUfEt0LWUSiYiSLq51QvRfYLxMnGPxiEw1BKXtrmK2L3E4swxLQIU?=
+ =?us-ascii?Q?f7GL4DeAh1HmpDDsAVPzyYTz2OW3Nfh32nZuhAqy4ZUlYoyi/9uOj2pse2Gj?=
+ =?us-ascii?Q?/qnkOxXB2OBbXwcZPNk7EVIiaw3lC2AmvgGFtyzg/0d8mSMLERIXVl2AlIXp?=
+ =?us-ascii?Q?2aOiuvQIOG4U3xpz7/csu66eqjJjv98LkiALIBxzd3Xazdy4TFEMolz9n7ax?=
+ =?us-ascii?Q?o6OG7PKW59qg1ElxFpSo5BR7vF2uh0E8ykFCKF2IwON/t9fFiCwx0tds6uTV?=
+ =?us-ascii?Q?lSuDAeM//Qf0bYrDwgxEw1Kh6/4diXFPe4YbGwonaHxtFaQ56U4Tpdid7Pia?=
+ =?us-ascii?Q?lrNY1y0JDWR4LD55bn9oj+SwyaLXZiT6fMcRA+ePTHwdaHTPZWqUu5wfwFHZ?=
+ =?us-ascii?Q?6G+an3hjIyWmLPpBZewczj1Xy+iFUeGWOTYjfcQFhnlY8MXBYKFg79EBRzcN?=
+ =?us-ascii?Q?SX/TbWW7uWl7I0ZKZjzRH3Sq3QR3AfbaghrCLbI5iZGhtptuq0+ns5IBawVU?=
+ =?us-ascii?Q?4ZXwGEyzb1F0yWreFXf7EndaxZE651fdI8cnJcpu9MiRyuesCyw1jH18GlvB?=
+ =?us-ascii?Q?Mr3prSSEsRuYbO64JIGUAHz370bmpef2+8yDUKRlKkh1tJyqMvAcZLlByiHs?=
+ =?us-ascii?Q?l3Vrkb+PyVkxxp242kCfasjBdVYw7zNQDJofTgozYzg3G4YHKg48fMFXkNVi?=
+ =?us-ascii?Q?GypBwcDECa6E2ftJOaFaq4R03W+eqZFkVwvi1eZu0JD6hxjczY6BStWR7/Km?=
+ =?us-ascii?Q?xQon9j1Gs2WjudVcfOQuoMXQaQLeo+yBHbgqMH+vefdmvQFAUnDnlwVJSRlF?=
+ =?us-ascii?Q?aXZ8RGNxf869yoBBm7d8eoVoOjvFZ5QEOu49c7Gns7c3r0RpLVlKMAGxPf1F?=
+ =?us-ascii?Q?w2YGAnro8ytcfcUK7ELkdCFx9jviDN5f7aTzng25bT/9W4iW7PWMY9SNVgL5?=
+ =?us-ascii?Q?vYBNjZVsArZAVWrBBQRZSvGv6Od5+s48OYxvG4cELfu0c6+dWjtc0tItvOgt?=
+ =?us-ascii?Q?KEdDsh4bRTTwKxCPQqofdtsuwcSIdKaI7MPI53rSlrIflppWgi7VDAGJnFag?=
+ =?us-ascii?Q?rfCcr1vdQfLqw6PYabTyj8xxMSfqf0HBYn8cRKtPR+48cQI/V/oWM8Mfyqto?=
+ =?us-ascii?Q?FuholKLh2rf8OCE+qwoj1Qxv2h8v1h8LpY2F/Jt0fVjsuHuxS/DKNdUha5Oz?=
+ =?us-ascii?Q?oeC7fQbmg8JwM9gEDDZOujZl1+1zoj7nK2fothYR6/WxaCJnd3Of7qBrQeSG?=
+ =?us-ascii?Q?Yvyx5Me41hBCPliNpkcZBLhKNYSB7UV2ybtRzjMqSTE542vnjrytNnJMWUFq?=
+ =?us-ascii?Q?Caoh7UqP7L9D+tjv3/ZgB2T/LzXirfN52owt9pjoixxdGU3wI5jo0KYlB5jY?=
+ =?us-ascii?Q?zLxvIw/kn14v/XpAkbPmG2nUX+WckXK1YAqZQT5b7sD+yJLNslI5kHtgtxVG?=
+ =?us-ascii?Q?WHSDdlZ2FwSmX5HYM2EMyZqCD0d+edv95plrkYSabf8G7CaZ9Oj5VsHG8LtO?=
+ =?us-ascii?Q?Dg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR07MB5381.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2122460-3bea-4a88-9fae-08daa11c46ca
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2022 06:40:04.5030
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4kKxObFxHDhV+ga6ncigGiiquIi3lOgUb8JmCSQEstQQBTDbXqF4Ffz+F7t42JLODM9QYmIWQl2IS1FGRiVo9ZNw1lt1gSx2YO/gTQDK8vk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR07MB8693
+X-Proofpoint-ORIG-GUID: d2DMMSiQLQUb2VJkOHS5CzMByXqfkoK2
+X-Proofpoint-GUID: d2DMMSiQLQUb2VJkOHS5CzMByXqfkoK2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-28_02,2022-09-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ priorityscore=1501 phishscore=0 impostorscore=0 bulkscore=0 clxscore=1011
+ lowpriorityscore=0 mlxlogscore=770 malwarescore=0 mlxscore=0
+ suspectscore=0 spamscore=0 adultscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209280039
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_TRIM_UNUSED_KSYMS is enabled, Kbuild recursively traverses
-the directory tree to determine which EXPORT_SYMBOL to trim. If an
-EXPORT_SYMBOL turns out to be unused by anyone, Kbuild begins the
-second traverse, where some source files are recompiled with their
-EXPORT_SYMBOL() tuned into a no-op.
+>
+>From: Dongliang Mu <mudongliangabcd@gmail.com>
+>
+>Smatch reports the following error:
+>
+>drivers/usb/cdns3/cdns3-plat.c:113 cdns3_plat_probe() warn:
+>platform_get_irq() does not return zero
+>
+>From the document, platform_get_irq_byname_optional only returns
+>non-zero value, and negative value on failure.
+>
+>Fix this by removing the zero value checking.
+>
+>Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+>---
+> drivers/usb/cdns3/cdns3-plat.c | 2 --
+> 1 file changed, 2 deletions(-)
+>
+>diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat=
+.c
+>index dc068e940ed5..2bc5d094548b 100644
+>--- a/drivers/usb/cdns3/cdns3-plat.c
+>+++ b/drivers/usb/cdns3/cdns3-plat.c
+>@@ -110,8 +110,6 @@ static int cdns3_plat_probe(struct platform_device *pd=
+ev)
+> 	cdns->wakeup_irq =3D platform_get_irq_byname_optional(pdev, "wakeup");
+> 	if (cdns->wakeup_irq =3D=3D -EPROBE_DEFER)
+> 		return cdns->wakeup_irq;
+>-	else if (cdns->wakeup_irq =3D=3D 0)
+>-		return -EINVAL;
+>
+I think that here we should have:
+	else if (cdns->wakeup_irq =3D=3D -ENXIO)
+		return -EINVAL;
+ because of function:=20
+platform_get_irq_byname_optional -> __platform_get_irq_byname returns
+irq number (>0),  -EPROBE_DEFFER or -ENXIO
 
-Linus stated a negative opinion about this slowness in commits:
 
- - 5cf0fd591f2e ("Kbuild: disable TRIM_UNUSED_KSYMS option")
- - a555bdd0c58c ("Kbuild: enable TRIM_UNUSED_KSYMS again, with some guarding")
+thanks
+Pawel
 
-We can do this better now. The final data structures of EXPORT_SYMBOL
-are generated by the modpost stage, so modpost can selectively emit
-KSYMTAB entries that are really used by modules.
-
-Commit 2cce989f8461 ("kbuild: unify two modpost invocations") is another
-ground-work to do this in a one-pass algorithm. With the list of modules,
-modpost sets sym->used if it is used by a module. modpost emits KSYMTAB
-only for symbols with sym->used==true.
-
-BTW, Nicolas explained why the trimming was implemented with recursion:
-
-  https://lore.kernel.org/all/2o2rpn97-79nq-p7s2-nq5-8p83391473r@syhkavp.arg/
-
-Actually, we never achieved that level of optimization where the chain
-reaction of trimming comes into play because:
-
- - CONFIG_LTO_CLANG cannot remove any unused symbols
- - CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is enabled only for vmlinux,
-   but not modules
-
-If deeper trimming is required, we need to revisit this, but I guess
-that is unlikely to happen.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
-Changes in v3:
-  - Some cleanups
-
-Changes in v2:
-  - New patch
-
- .gitignore                  |  1 -
- Makefile                    | 19 +---------
- include/linux/export.h      | 41 ---------------------
- scripts/Makefile.build      |  7 ----
- scripts/Makefile.modpost    |  8 +++-
- scripts/adjust_autoksyms.sh | 73 -------------------------------------
- scripts/basic/fixdep.c      |  3 +-
- scripts/gen_autoksyms.sh    | 62 -------------------------------
- scripts/gen_ksymdeps.sh     | 30 ---------------
- scripts/mod/modpost.c       | 54 ++++++++++++++++++++++++---
- scripts/remove-stale-files  |  2 +
- 11 files changed, 61 insertions(+), 239 deletions(-)
- delete mode 100755 scripts/adjust_autoksyms.sh
- delete mode 100755 scripts/gen_autoksyms.sh
- delete mode 100755 scripts/gen_ksymdeps.sh
-
-diff --git a/.gitignore b/.gitignore
-index 265959544978..a9b44cd36066 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -103,7 +103,6 @@ modules.order
- #
- /include/config/
- /include/generated/
--/include/ksym/
- /arch/*/include/generated/
- 
- # stgit generated dirs
-diff --git a/Makefile b/Makefile
-index 79488f155fae..31dcde4c7fc5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1120,28 +1120,13 @@ endif
- export KBUILD_VMLINUX_LIBS
- export KBUILD_LDS          := arch/$(SRCARCH)/kernel/vmlinux.lds
- 
--# Recurse until adjust_autoksyms.sh is satisfied
--PHONY += autoksyms_recursive
- ifdef CONFIG_TRIM_UNUSED_KSYMS
- # For the kernel to actually contain only the needed exported symbols,
- # we have to build modules as well to determine what those symbols are.
- # (this can be evaluated only once include/config/auto.conf has been included)
- KBUILD_MODULES := 1
--
--autoksyms_recursive: $(build-dir) modules.order
--	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/adjust_autoksyms.sh \
--	  "$(MAKE) -f $(srctree)/Makefile autoksyms_recursive"
- endif
- 
--autoksyms_h := $(if $(CONFIG_TRIM_UNUSED_KSYMS), include/generated/autoksyms.h)
--
--quiet_cmd_autoksyms_h = GEN     $@
--      cmd_autoksyms_h = mkdir -p $(dir $@); \
--			$(CONFIG_SHELL) $(srctree)/scripts/gen_autoksyms.sh $@
--
--$(autoksyms_h):
--	$(call cmd,autoksyms_h)
--
- # '$(AR) mPi' needs 'T' to workaround the bug of llvm-ar <= 14
- quiet_cmd_ar_vmlinux.a = AR      $@
-       cmd_ar_vmlinux.a = \
-@@ -1154,7 +1139,7 @@ vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt FORCE
- 	$(call if_changed,ar_vmlinux.a)
- 
- PHONY += vmlinux_o
--vmlinux_o: autoksyms_recursive vmlinux.a $(KBUILD_VMLINUX_LIBS)
-+vmlinux_o: vmlinux.a $(KBUILD_VMLINUX_LIBS)
- 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux_o
- 
- vmlinux.o modules.builtin.modinfo modules.builtin: vmlinux_o
-@@ -1191,7 +1176,7 @@ scripts: scripts_basic scripts_dtc
- PHONY += prepare archprepare
- 
- archprepare: outputmakefile archheaders archscripts scripts include/config/kernel.release \
--	asm-generic $(version_h) $(autoksyms_h) include/generated/utsrelease.h \
-+	asm-generic $(version_h) include/generated/utsrelease.h \
- 	include/generated/compile.h include/generated/autoconf.h remove-stale-files
- 
- prepare0: archprepare
-diff --git a/include/linux/export.h b/include/linux/export.h
-index 0c71577cf8bb..d9fb1ebb535c 100644
---- a/include/linux/export.h
-+++ b/include/linux/export.h
-@@ -63,47 +63,6 @@ extern struct module __this_module;
-  */
- #define __EXPORT_SYMBOL(sym, sec, ns)
- 
--#elif defined(CONFIG_TRIM_UNUSED_KSYMS)
--
--#include <generated/autoksyms.h>
--
--/*
-- * For fine grained build dependencies, we want to tell the build system
-- * about each possible exported symbol even if they're not actually exported.
-- * We use a symbol pattern __ksym_marker_<symbol> that the build system filters
-- * from the $(NM) output (see scripts/gen_ksymdeps.sh). These symbols are
-- * discarded in the final link stage.
-- */
--
--#ifdef __ASSEMBLY__
--
--#define __ksym_marker(sym)					\
--	.section ".discard.ksym","a" ;				\
--__ksym_marker_##sym: ;						\
--	.previous
--
--#else
--
--#define __ksym_marker(sym)	\
--	static int __ksym_marker_##sym[0] __section(".discard.ksym") __used
--
--#endif
--
--#define __EXPORT_SYMBOL(sym, sec, ns)					\
--	__ksym_marker(sym);						\
--	__cond_export_sym(sym, sec, ns, __is_defined(__KSYM_##sym))
--#define __cond_export_sym(sym, sec, ns, conf)				\
--	___cond_export_sym(sym, sec, ns, conf)
--#define ___cond_export_sym(sym, sec, ns, enabled)			\
--	__cond_export_sym_##enabled(sym, sec, ns)
--#define __cond_export_sym_1(sym, sec, ns) ___EXPORT_SYMBOL(sym, sec, ns)
--
--#ifdef __GENKSYMS__
--#define __cond_export_sym_0(sym, sec, ns) __GENKSYMS_EXPORT_SYMBOL(sym)
--#else
--#define __cond_export_sym_0(sym, sec, ns) /* nothing */
--#endif
--
- #else
- 
- #define __EXPORT_SYMBOL(sym, sec, ns)	___EXPORT_SYMBOL(sym, sec, ns)
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 4c1d0bd1bc03..64f652b03d29 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -218,16 +218,10 @@ is-standard-object = $(if $(filter-out y%, $(OBJECT_FILES_NON_STANDARD_$(basetar
- 
- $(obj)/%.o: objtool-enabled = $(if $(is-standard-object),$(if $(delay-objtool),$(is-single-obj-m),y))
- 
--ifdef CONFIG_TRIM_UNUSED_KSYMS
--cmd_gen_ksymdeps = \
--	$(CONFIG_SHELL) $(srctree)/scripts/gen_ksymdeps.sh $@ >> $(dot-target).cmd
--endif
--
- cmd_check_local_export = $(srctree)/scripts/check-local-export $@
- 
- define rule_cc_o_c
- 	$(call cmd_and_fixdep,cc_o_c)
--	$(call cmd,gen_ksymdeps)
- 	$(call cmd,check_local_export)
- 	$(call cmd,checksrc)
- 	$(call cmd,checkdoc)
-@@ -238,7 +232,6 @@ endef
- 
- define rule_as_o_S
- 	$(call cmd_and_fixdep,as_o_S)
--	$(call cmd,gen_ksymdeps)
- 	$(call cmd,check_local_export)
- 	$(call cmd,gen_objtooldep)
- 	$(call cmd,gen_symversions_S)
-diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-index 7740ce3b29e8..555b9e741a01 100644
---- a/scripts/Makefile.modpost
-+++ b/scripts/Makefile.modpost
-@@ -86,6 +86,12 @@ output-symdump := $(if $(vmlinux.o-if-present), Module.symvers, modules-only.sym
- missing-input := $(filter-out $(vmlinux.o-if-present),vmlinux.o)
- endif
- 
-+ifdef CONFIG_TRIM_UNUSED_KSYMS
-+ksym-wl := $(CONFIG_UNUSED_KSYMS_WHITELIST)
-+ksym-wl := $(if $(filter-out /%, $(ksym-wl)),$(srctree)/)$(ksym-wl)
-+modpost-args += -t $(addprefix -W, $(ksym-wl))
-+endif
-+
- else
- 
- # set src + obj - they may be used in the modules's Makefile
-@@ -122,7 +128,7 @@ quiet_cmd_modpost = MODPOST $@
- 	sed 's/ko$$/o/' $(or $(modorder-if-needed), /dev/null) | $(MODPOST) $(modpost-args) $(vmlinux.o-if-present) -T -
- 
- targets += $(output-symdump)
--$(output-symdump): $(modorder-if-needed) $(vmlinux.o-if-present) $(moudle.symvers-if-present) $(MODPOST) FORCE
-+$(output-symdump): $(modorder-if-needed) $(vmlinux.o-if-present) $(moudle.symvers-if-present) $(MODPOST) $(ksym-wl) FORCE
- 	$(call if_changed,modpost)
- 
- __modpost: $(output-symdump)
-diff --git a/scripts/adjust_autoksyms.sh b/scripts/adjust_autoksyms.sh
-deleted file mode 100755
-index f1b5ac818411..000000000000
---- a/scripts/adjust_autoksyms.sh
-+++ /dev/null
-@@ -1,73 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0-only
--
--# Script to update include/generated/autoksyms.h and dependency files
--#
--# Copyright:	(C) 2016  Linaro Limited
--# Created by:	Nicolas Pitre, January 2016
--#
--
--# Update the include/generated/autoksyms.h file.
--#
--# For each symbol being added or removed, the corresponding dependency
--# file's timestamp is updated to force a rebuild of the affected source
--# file. All arguments passed to this script are assumed to be a command
--# to be exec'd to trigger a rebuild of those files.
--
--set -e
--
--cur_ksyms_file="include/generated/autoksyms.h"
--new_ksyms_file="include/generated/autoksyms.h.tmpnew"
--
--info() {
--	if [ "$quiet" != "silent_" ]; then
--		printf "  %-7s %s\n" "$1" "$2"
--	fi
--}
--
--info "CHK" "$cur_ksyms_file"
--
--# Use "make V=1" to debug this script.
--case "$KBUILD_VERBOSE" in
--*1*)
--	set -x
--	;;
--esac
--
--# Generate a new symbol list file
--$CONFIG_SHELL $srctree/scripts/gen_autoksyms.sh --modorder "$new_ksyms_file"
--
--# Extract changes between old and new list and touch corresponding
--# dependency files.
--changed=$(
--count=0
--sort "$cur_ksyms_file" "$new_ksyms_file" | uniq -u |
--sed -n 's/^#define __KSYM_\(.*\) 1/\1/p' |
--while read sympath; do
--	if [ -z "$sympath" ]; then continue; fi
--	depfile="include/ksym/${sympath}"
--	mkdir -p "$(dirname "$depfile")"
--	touch "$depfile"
--	# Filesystems with coarse time precision may create timestamps
--	# equal to the one from a file that was very recently built and that
--	# needs to be rebuild. Let's guard against that by making sure our
--	# dep files are always newer than the first file we created here.
--	while [ ! "$depfile" -nt "$new_ksyms_file" ]; do
--		touch "$depfile"
--	done
--	echo $((count += 1))
--done | tail -1 )
--changed=${changed:-0}
--
--if [ $changed -gt 0 ]; then
--	# Replace the old list with tne new one
--	old=$(grep -c "^#define __KSYM_" "$cur_ksyms_file" || true)
--	new=$(grep -c "^#define __KSYM_" "$new_ksyms_file" || true)
--	info "KSYMS" "symbols: before=$old, after=$new, changed=$changed"
--	info "UPD" "$cur_ksyms_file"
--	mv -f "$new_ksyms_file" "$cur_ksyms_file"
--	# Then trigger a rebuild of affected source files
--	exec $@
--else
--	rm -f "$new_ksyms_file"
--fi
-diff --git a/scripts/basic/fixdep.c b/scripts/basic/fixdep.c
-index 2328f9a641da..e7db12140d87 100644
---- a/scripts/basic/fixdep.c
-+++ b/scripts/basic/fixdep.c
-@@ -243,8 +243,7 @@ static void *read_file(const char *filename)
- /* Ignore certain dependencies */
- static int is_ignored_file(const char *s, int len)
- {
--	return str_ends_with(s, len, "include/generated/autoconf.h") ||
--	       str_ends_with(s, len, "include/generated/autoksyms.h");
-+	return str_ends_with(s, len, "include/generated/autoconf.h");
- }
- 
- /*
-diff --git a/scripts/gen_autoksyms.sh b/scripts/gen_autoksyms.sh
-deleted file mode 100755
-index 653fadbad302..000000000000
---- a/scripts/gen_autoksyms.sh
-+++ /dev/null
-@@ -1,62 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0-only
--
--# Create an autoksyms.h header file from the list of all module's needed symbols
--# as recorded in *.usyms files and the user-provided symbol whitelist.
--
--set -e
--
--# Use "make V=1" to debug this script.
--case "$KBUILD_VERBOSE" in
--*1*)
--	set -x
--	;;
--esac
--
--read_modorder=
--
--if [ "$1" = --modorder ]; then
--	shift
--	read_modorder=1
--fi
--
--output_file="$1"
--
--needed_symbols=
--
--# Special case for modversions (see modpost.c)
--if grep -q "^CONFIG_MODVERSIONS=y$" include/config/auto.conf; then
--	needed_symbols="$needed_symbols module_layout"
--fi
--
--ksym_wl=$(sed -n 's/^CONFIG_UNUSED_KSYMS_WHITELIST=\(.*\)$/\1/p' include/config/auto.conf)
--if [ -n "$ksym_wl" ]; then
--	[ "${ksym_wl}" != "${ksym_wl#/}" ] || ksym_wl="$abs_srctree/$ksym_wl"
--	if [ ! -f "$ksym_wl" ] || [ ! -r "$ksym_wl" ]; then
--		echo "ERROR: '$ksym_wl' whitelist file not found" >&2
--		exit 1
--	fi
--fi
--
--# Generate a new ksym list file with symbols needed by the current
--# set of modules.
--cat > "$output_file" << EOT
--/*
-- * Automatically generated file; DO NOT EDIT.
-- */
--
--EOT
--
--{
--	[ -n "${read_modorder}" ] && sed 's/ko$/usyms/' modules.order | xargs cat
--	echo "$needed_symbols"
--	[ -n "$ksym_wl" ] && cat "$ksym_wl"
--} | sed -e 's/ /\n/g' | sed -n -e '/^$/!p' |
--# Remove the dot prefix for ppc64; symbol names with a dot (.) hold entry
--# point addresses.
--sed -e 's/^\.//' |
--sort -u |
--# Ignore __this_module. It's not an exported symbol, and will be resolved
--# when the final .ko's are linked.
--grep -v '^__this_module$' |
--sed -e 's/\(.*\)/#define __KSYM_\1 1/' >> "$output_file"
-diff --git a/scripts/gen_ksymdeps.sh b/scripts/gen_ksymdeps.sh
-deleted file mode 100755
-index 8ee533f33659..000000000000
---- a/scripts/gen_ksymdeps.sh
-+++ /dev/null
-@@ -1,30 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0
--
--set -e
--
--# List of exported symbols
--#
--# If the object has no symbol, $NM warns 'no symbols'.
--# Suppress the stderr.
--# TODO:
--#   Use -q instead of 2>/dev/null when we upgrade the minimum version of
--#   binutils to 2.37, llvm to 13.0.0.
--ksyms=$($NM $1 2>/dev/null | sed -n 's/.*__ksym_marker_\(.*\)/\1/p')
--
--if [ -z "$ksyms" ]; then
--	exit 0
--fi
--
--echo
--echo "ksymdeps_$1 := \\"
--
--for s in $ksyms
--do
--	printf '    $(wildcard include/ksym/%s) \\\n' "$s"
--done
--
--echo
--echo "$1: \$(ksymdeps_$1)"
--echo
--echo "\$(ksymdeps_$1):"
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 90733664a602..1e9eba0a6cec 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -34,6 +34,9 @@ static bool warn_unresolved;
- 
- static int sec_mismatch_count;
- static bool sec_mismatch_warn_only = true;
-+/* Trim EXPORT_SYMBOLs that are unused by in-tree modules */
-+static bool trim_unused_exports;
-+
- /* ignore missing files */
- static bool ignore_missing_files;
- /* If set to 1, only warn (instead of error) about missing ns imports */
-@@ -216,6 +219,7 @@ struct symbol {
- 	bool weak;
- 	bool is_func;
- 	bool is_gpl_only;	/* exported by EXPORT_SYMBOL_GPL */
-+	bool used;		/* there exists a user of this symbol */
- 	char name[];
- };
- 
-@@ -1872,6 +1876,7 @@ static void check_exports(struct module *mod)
- 			continue;
- 		}
- 
-+		exp->used = true;
- 		s->module = exp->module;
- 		s->crc_valid = exp->crc_valid;
- 		s->crc = exp->crc;
-@@ -1895,6 +1900,23 @@ static void check_exports(struct module *mod)
- 	}
- }
- 
-+static void handle_white_list_exports(const char *white_list)
-+{
-+	char *buf, *p, *name;
-+
-+	buf = read_text_file(white_list);
-+	p = buf;
-+
-+	while ((name = strsep(&p, "\n"))) {
-+		struct symbol *sym = find_symbol(name);
-+
-+		if (sym)
-+			sym->used = true;
-+	}
-+
-+	free(buf);
-+}
-+
- static void check_modname_len(struct module *mod)
- {
- 	const char *mod_name;
-@@ -1965,10 +1987,14 @@ static void add_exported_symbols(struct buffer *buf, struct module *mod)
- 
- 	/* generate struct for exported symbols */
- 	buf_printf(buf, "\n");
--	list_for_each_entry(sym, &mod->exported_symbols, list)
-+	list_for_each_entry(sym, &mod->exported_symbols, list) {
-+		if (trim_unused_exports && !sym->used)
-+			continue;
-+
- 		buf_printf(buf, "KSYMTAB_%s(%s, \"%s\", \"%s\");\n",
- 			   sym->is_func ? "FUNC" : "DATA", sym->name,
- 			   sym->is_gpl_only ? "_gpl" : "", sym->namespace);
-+	}
- 
- 	if (!modversions)
- 		return;
-@@ -1976,6 +2002,9 @@ static void add_exported_symbols(struct buffer *buf, struct module *mod)
- 	/* record CRCs for exported symbols */
- 	buf_printf(buf, "\n");
- 	list_for_each_entry(sym, &mod->exported_symbols, list) {
-+		if (trim_unused_exports && !sym->used)
-+			continue;
-+
- 		if (!sym->crc_valid)
- 			warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
- 			     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
-@@ -2139,9 +2168,6 @@ static void write_mod_c_file(struct module *mod)
- 	char fname[PATH_MAX];
- 	int ret;
- 
--	check_modname_len(mod);
--	check_exports(mod);
--
- 	add_header(&buf, mod);
- 	add_exported_symbols(&buf, mod);
- 	add_versions(&buf, mod);
-@@ -2275,12 +2301,13 @@ int main(int argc, char **argv)
- {
- 	struct module *mod;
- 	char *missing_namespace_deps = NULL;
-+	char *unused_exports_white_list = NULL;
- 	char *dump_write = NULL, *files_source = NULL;
- 	int opt;
- 	LIST_HEAD(dump_lists);
- 	struct dump_list *dl, *dl2;
- 
--	while ((opt = getopt(argc, argv, "ei:mnT:o:awENd:")) != -1) {
-+	while ((opt = getopt(argc, argv, "ei:mntT:tW:o:awENd:")) != -1) {
- 		switch (opt) {
- 		case 'e':
- 			external_module = true;
-@@ -2305,6 +2332,12 @@ int main(int argc, char **argv)
- 		case 'T':
- 			files_source = optarg;
- 			break;
-+		case 't':
-+			trim_unused_exports = true;
-+			break;
-+		case 'W':
-+			unused_exports_white_list = optarg;
-+			break;
- 		case 'w':
- 			warn_unresolved = true;
- 			break;
-@@ -2334,6 +2367,17 @@ int main(int argc, char **argv)
- 	if (files_source)
- 		read_symbols_from_files(files_source);
- 
-+	list_for_each_entry(mod, &modules, list) {
-+		if (mod->from_dump || mod->is_vmlinux)
-+			continue;
-+
-+		check_modname_len(mod);
-+		check_exports(mod);
-+	}
-+
-+	if (unused_exports_white_list)
-+		handle_white_list_exports(unused_exports_white_list);
-+
- 	list_for_each_entry(mod, &modules, list) {
- 		if (mod->from_dump)
- 			continue;
-diff --git a/scripts/remove-stale-files b/scripts/remove-stale-files
-index ccadfa3afb2b..d2009eda270a 100755
---- a/scripts/remove-stale-files
-+++ b/scripts/remove-stale-files
-@@ -47,3 +47,5 @@ rm -f arch/riscv/purgatory/kexec-purgatory.c
- rm -f scripts/extract-cert
- 
- rm -f arch/x86/purgatory/kexec-purgatory.c
-+
-+rm -rf include/ksym
--- 
-2.34.1
+> 	if (cdns->wakeup_irq < 0) {
+> 		dev_dbg(dev, "couldn't get wakeup irq\n");
+>--
+>2.35.1
 
