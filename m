@@ -2,73 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C549C5EE434
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C82F5EE43B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234292AbiI1SSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 14:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        id S232989AbiI1SUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 14:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234433AbiI1SSW (ORCPT
+        with ESMTP id S232518AbiI1SUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 14:18:22 -0400
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5D410B5AA;
-        Wed, 28 Sep 2022 11:17:41 -0700 (PDT)
-Received: by mail-pg1-f178.google.com with SMTP id bh13so12936357pgb.4;
-        Wed, 28 Sep 2022 11:17:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=BwwaY79I9QcIrTb81yb3ikNlh+MhC+I08Q+Grdnb0GI=;
-        b=Hit7QaGhy3FkjeM9epr9YXAQFSpfqDEIo/05Xoby3EQUpIl3O+mfA9Ra1GS3a9oZ43
-         60hqxukRmJLHGyBF+697Ll/ohwcWX3qD3kHHA0GZnfgIAgoArfhrdRoIeBSeIhCe7fFJ
-         KCRo9v1/TMQFfsNzOXEI434VH7Ou12CwGiB4Xdf/y+/a0CwZCxsJtkGDNk42Dff4Ntwf
-         YNPgCiqnInyeZ2q5h2wgud5q+QQyRdyDe9pf7NuB1B2ZvYdpNbKBO4JQC/g9aZXofF9Y
-         SAybu3H53X7LL/Ik5iXnptJJ+WnsQJtqAtwCl2VsitX5s8mAPMfSQIGLM/H2GqPyrqn0
-         GT5g==
-X-Gm-Message-State: ACrzQf3HihdHaoeIgARhvERjC4Mx0a58cIE+mItyMLjEDlJxkwxwKRNd
-        CFHKheG21DSkOeJUoH4g2sQ=
-X-Google-Smtp-Source: AMsMyM5s8ZNMA/P6QTvoMBHJMPScb7WEDokxM2aeLSmDwrz3/Y9hlZPT64DFm4NVh6oHzcvmbZQuZg==
-X-Received: by 2002:a63:5f08:0:b0:434:c081:37eb with SMTP id t8-20020a635f08000000b00434c08137ebmr29927750pgb.40.1664389026723;
-        Wed, 28 Sep 2022 11:17:06 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:4cba:f1a9:6ef8:3759? ([2620:15c:211:201:4cba:f1a9:6ef8:3759])
-        by smtp.gmail.com with ESMTPSA id c5-20020a170902d48500b00178143a728esm3994552plg.275.2022.09.28.11.17.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 11:17:05 -0700 (PDT)
-Message-ID: <33ee1c3a-d37a-b81f-68be-d1901c7dd6e8@acm.org>
-Date:   Wed, 28 Sep 2022 11:17:02 -0700
+        Wed, 28 Sep 2022 14:20:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B41CB07D4;
+        Wed, 28 Sep 2022 11:20:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E614461F78;
+        Wed, 28 Sep 2022 18:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41880C433D6;
+        Wed, 28 Sep 2022 18:20:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664389237;
+        bh=tsUzsDLvNMrNl/WX8swyUROVgGbJNAP/UA66NR2AIis=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=JwMM6+/J4W+Yp4SjAIqo11CnhzBuYiAK6rdqc682IYFSA2lX8oNlh7Cb+QKRVGJ2G
+         cDcsh8RFmqczZp+ARE3sUbnsw2/lORF/e5ZnyUaDxqJri9n65Lc5Rd8wc3e3kru034
+         eaHHmAkWBlbJ8Lo6i+9RUt78dCJ59RIJq/o1yrJJrfjfvfuNNuLfoxVRdBSda5h2xe
+         CW5ptePlYsTC52ieKS40CNp9lU7o2iDwkUVv8n+p0ZsWWhMXD86E/kz41C6De+v1+S
+         bz5x1uyvUZkGjbG0qHIW5EZn9KKQjq+PDLumji2/xT6/IAsp7Z5KY02wN1XAADaoqr
+         MwlE4joexgKTg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
- exit code
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Tejun Heo <tj@kernel.org>
-References: <20220914225621.415631-1-bvanassche@acm.org>
- <20220914225621.415631-7-bvanassche@acm.org>
- <a4084b27-dd2d-10df-493c-35998eed664c@acm.org>
- <YzOPJHSQsPtc5o0Y@bombadil.infradead.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <YzOPJHSQsPtc5o0Y@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220915150959.3646702-1-han.xu@nxp.com>
+References: <20220915150959.3646702-1-han.xu@nxp.com>
+Subject: Re: [PATCH v2] clk: imx: imx6sx: remove the SET_RATE_PARENT flag for QSPI clocks
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     miquel.raynal@bootlin.com, linux-mtd@lists.infradead.org,
+        han.xu@nxp.com
+To:     Abel Vesa <abelvesa@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>, Han Xu <han.xu@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 28 Sep 2022 11:20:35 -0700
+User-Agent: alot/0.10
+Message-Id: <20220928182037.41880C433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,49 +62,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 17:02, Luis Chamberlain wrote:
-> On Tue, Sep 20, 2022 at 10:13:40AM -0700, Bart Van Assche wrote:
->> On 9/14/22 15:56, Bart Van Assche wrote:
->>> Some kernel modules call device_del() from their module exit code and
->>> schedule asynchronous work from inside the .release callback without waiting
->>> until that callback has finished. As an example, many SCSI LLD drivers call
->>> scsi_remove_host() from their module exit code. scsi_remove_host() may
->>> invoke scsi_device_dev_release_usercontext() asynchronously.
->>> scsi_device_dev_release_usercontext() uses the host template pointer and
->>> that pointer usually exists in static storage in the SCSI LLD. Support
->>> using the module reference count to keep the module around until
->>> asynchronous module exiting has completed by waiting in the delete_module()
->>> system call until the module reference count drops to zero.
->>
->> Hi Luis,
->>
->> I'd like to know your opinion about this patch since you are the maintainer
->> of the kernel module system.
-> 
-> See this patch which extends the documentation of try_module_get():
-> 
-> https://lkml.kernel.org/r/20211029184500.2821444-7-mcgrof@kernel.org
-> 
-> You can ignore discussion around the thread as sadly it is just
-> irrelevant stuff not about that patch. But the logic it spells out
-> is still true.
-> 
-> So, in short, using try_module_get() on exit is actually the wrong
-> thing to do and it is no surprise it would fail. I haven't gotten
-> yet around to reviewing Mauro's driver API which let's you unbind
-> drivers, but it sounds related so I CC'd you on that.
-> 
-> So I'd like to ask instead if an alternative to using try_module_get()
-> on exit would be better here and for the future.
+Quoting Han Xu (2022-09-15 08:09:59)
+> There is no dedicate parent clock for QSPI so SET_RATE_PARENT flag
+> should not be used. For instance, the default parent clock for QSPI is
+> pll2_bus, which is also the parent clock for quite a few modules, such
+> as MMDC, once GPMI NAND set clock rate for EDO5 mode can cause system
+> hang due to pll2_bus rate changed.
+>=20
+> Fixes: f1541e15e38e ("clk: imx6sx: Switch to clk_hw based API")
+> Signed-off-by: Han Xu <han.xu@nxp.com>
+>=20
+> ---
 
-Hi Luis,
-
-The extended documentation of try_module_get() is very helpful. But 
-please note that this patch is not related to try_module_get() at all. 
-See also patch 7/7 in this series 
-(https://lore.kernel.org/linux-scsi/20220914225621.415631-8-bvanassche@acm.org/).
-
-Thanks,
-
-Bart.
-
+Applied to clk-fixes
