@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC1C5ED571
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D17B5ED572
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbiI1Gyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 02:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
+        id S233293AbiI1GzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 02:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbiI1GyZ (ORCPT
+        with ESMTP id S233254AbiI1Gyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 02:54:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2793481E9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664347973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IlaSZc33GONrE9IArKtEWlpurS3hEknJV/JTkyz5RZ0=;
-        b=ei/q7ZTjNwzS5h/Cg9Nik5CkBJ+JayhfLmiGr1/6psnrxS6UxY/E/WVW0YdqRNLORY0FAs
-        6hMUxo5Q9BgYaZvgbmDFYG8eR2kXoJyu+S8PiGIg2abwutcewUXZUEj1EULBlqMZ5cgLEj
-        ky49N6QqOpc2Nux/aFAALwIq4X48I9Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-292-7yyPjbgSNVaEGE3qQ-_5FA-1; Wed, 28 Sep 2022 02:52:47 -0400
-X-MC-Unique: 7yyPjbgSNVaEGE3qQ-_5FA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C7FD185A79C;
-        Wed, 28 Sep 2022 06:52:47 +0000 (UTC)
-Received: from localhost (ovpn-13-211.pek2.redhat.com [10.72.13.211])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 772D5422A9;
-        Wed, 28 Sep 2022 06:52:45 +0000 (UTC)
-Date:   Wed, 28 Sep 2022 14:52:42 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Chen Lifu <chenlifu@huawei.com>
-Cc:     linux@armlinux.org.uk, akpm@linux-foundation.org, pmladek@suse.com,
-        kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] ARM: kexec: Make machine_crash_nonpanic_core()
- static
-Message-ID: <YzPvOjGWHxdcGUjh@MiWiFi-R3L-srv>
-References: <20220816074250.3991633-1-chenlifu@huawei.com>
+        Wed, 28 Sep 2022 02:54:41 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39DF5464F
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:53:09 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id u18so18930368lfo.8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:53:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Qu/VhJX92VKSX7l7z4v5PEDwp2MN2vUwxA8YDbW68bI=;
+        b=huE5HIYJVftNh0Ht149pZrcZeVpIRE7lwIVErV+J8poZ0DN6ypAtmdgke01Au2FIsM
+         V3lQMuxJwd6/tjGrUhFMPNu0xVPkjIWDDkzrX/NyjvCkVZ5f6nuGbBlILnLk5pMzRHlb
+         RDlmtN/FyP79gtSnkhf5uMbkaFXcOo0AhhbK7/YXVhdg6rcQy1sOvH3FFRdw4oUEdzTc
+         8KjDuJBjO9uCKLXvxbWnDrJF2Tm3Me6ZHXfc0FRo0SQ2GF3++ApWiTX1xcwcJWaBYwwi
+         Yz4DXEDYhxDsUkaegv4rY8awqArRT9xXXgIlTC7oNk6TF2vXVCBDOWl9wShz3houGgzQ
+         ddBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Qu/VhJX92VKSX7l7z4v5PEDwp2MN2vUwxA8YDbW68bI=;
+        b=VnBu0lDqu9PpeA+duP1yz4sZfA7eoh+NfKAOEjyezokW6xywSS2mHSlPep5k2GYcon
+         yG597w9EdkIvBEyCkhRHii82GNzDRB3J7rvEPkq7gnhFbEf4r+Pp6vZXXk+bCU6MIawB
+         457yKkzQpZRn7OgUdI3wJ4nk64BkCgxeNW9aqHhI2IEU5jaESjcytXCiCCAffYN9HinB
+         BRxLafoyS+sau1IFNkeEMMDm4kdZ5KqxQrTgsF7h8Jw0U+iQmcSczhWtSJMYEyA9WGy2
+         lsC6s5ucKf3/lknzqE82n1uqH7zD84njOp13X+LDuY/Hn3d05cM+Fi3l6vfp+7ANc1Tf
+         WTyw==
+X-Gm-Message-State: ACrzQf3g8lp/gMZ+BQvB5R2iDwc83zUrOGVZ9fr5G7kH5pIJpViB8FPa
+        qg1NaIuOlRp4eBrQKxM15lw6kQ==
+X-Google-Smtp-Source: AMsMyM5EQEAIm3/ZUzrpf8ztO/R91GxLCmyhIVlFSiK9YN6SkEdDDvuYoxqffnMejtH1y+ttQwmvXw==
+X-Received: by 2002:a05:6512:c0f:b0:49b:1e8c:59fd with SMTP id z15-20020a0565120c0f00b0049b1e8c59fdmr11920138lfu.426.1664347987465;
+        Tue, 27 Sep 2022 23:53:07 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q12-20020a2e84cc000000b0026c41574790sm358109ljh.30.2022.09.27.23.53.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 23:53:07 -0700 (PDT)
+Message-ID: <f74a9883-3a9b-8606-b20d-f046835fb827@linaro.org>
+Date:   Wed, 28 Sep 2022 08:53:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816074250.3991633-1-chenlifu@huawei.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] Documentation/process: Add text to indicate supporters
+ should be mailed
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, corbet@lwn.net,
+        linux@leemhuis.info, konstantin@linuxfoundation.org,
+        linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220928003006.230103-1-bryan.odonoghue@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220928003006.230103-1-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/16/22 at 03:42pm, Chen Lifu wrote:
-> This symbol is not used outside of the file, so mark it static.
-> 
-> Fixes the following warning:
-> 
-> arch/arm/kernel/machine_kexec.c:76:6: warning: symbol 'machine_crash_nonpanic_core' was not declared. Should it be static?
-> 
-> Signed-off-by: Chen Lifu <chenlifu@huawei.com>
+On 28/09/2022 02:30, Bryan O'Donoghue wrote:
+> Recently when submitting a yaml change I found that I had omitted the
+> maintainer whose tree the change needed to go through.
 
-LGTM,
+Thank you for your patch. There is something to discuss/improve.
 
-Acked-by: Baoquan He <bhe@redhat.com>
+> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+> index be49d8f2601b4..5f97379da41da 100644
+> --- a/Documentation/process/submitting-patches.rst
+> +++ b/Documentation/process/submitting-patches.rst
+> @@ -227,9 +227,11 @@ You should always copy the appropriate subsystem maintainer(s) on any patch
+>  to code that they maintain; look through the MAINTAINERS file and the
+>  source code revision history to see who those maintainers are.  The
+>  script scripts/get_maintainer.pl can be very useful at this step (pass paths to
+> -your patches as arguments to scripts/get_maintainer.pl).  If you cannot find a
+> -maintainer for the subsystem you are working on, Andrew Morton
+> -(akpm@linux-foundation.org) serves as a maintainer of last resort.
+> +your patches as arguments to scripts/get_maintainer.pl).  You should mail
+> +everyone who appears as "maintainer" or "supporter" in the
+> +scripts/get_maintainer.pl output.  If you cannot find a maintainer for the
+> +subsystem you are working on, Andrew Morton (akpm@linux-foundation.org) serves
+> +as a maintainer of last resort.
 
-> ---
->  arch/arm/kernel/machine_kexec.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/kernel/machine_kexec.c b/arch/arm/kernel/machine_kexec.c
-> index f567032a09c0..a2e9ac763a9f 100644
-> --- a/arch/arm/kernel/machine_kexec.c
-> +++ b/arch/arm/kernel/machine_kexec.c
-> @@ -71,11 +71,11 @@ int machine_kexec_prepare(struct kimage *image)
->  
->  void machine_kexec_cleanup(struct kimage *image)
->  {
->  }
->  
-> -void machine_crash_nonpanic_core(void *unused)
-> +static void machine_crash_nonpanic_core(void *unused)
->  {
->  	struct pt_regs regs;
->  
->  	crash_setup_regs(&regs, get_irq_regs());
->  	printk(KERN_DEBUG "CPU %u will stop doing anything useful since another CPU has crashed\n",
-> -- 
-> 2.37.1
-> 
-> 
-> _______________________________________________
-> kexec mailing list
-> kexec@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kexec
-> 
+That's still a bit misleading, because you should also send the patch to
+reviewers and mailing lists. :)
+
+Best regards,
+Krzysztof
 
