@@ -2,120 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938705EEA23
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029CD5EEA27
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbiI1XdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 19:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
+        id S233812AbiI1Xg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 19:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233585AbiI1XdI (ORCPT
+        with ESMTP id S233638AbiI1Xg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 19:33:08 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E12EF08C
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:33:07 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id l14so30179936eja.7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:33:07 -0700 (PDT)
+        Wed, 28 Sep 2022 19:36:56 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C945FEFF40
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:36:54 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id z16-20020a17090a015000b00205e74e7402so1638356pje.8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:36:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=q74yArMABpzeLkr74sIBfXXMxk7/EMgQ3hoGRYitxYU=;
-        b=U0Q8SQFHSkScbj4cM4pTg7Yzb04zm5WgomM/5gs7MQUTxOnAoEjVy5BjCW7Lo5/BUi
-         xVGQd3n/TGijftlrmbedS+TIFC4PIQ4GVxgHSTo1Hxqh7rav4zS5xPPOiO0U6zV/NMl4
-         5n8EmZnC9tTRHnX8rS/uqie8PD5M0KehiVHl4=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date;
+        bh=2pXCrSXWl1T4eX1bVR4OHLDGtpZ9ki0sWDT+FbUrrU8=;
+        b=b+9vn0zTKNR2FojgWlts3uoe/JXZN2JH1KJjrm0TZRBrRuIXf5FDv29xkQBUtG3n+j
+         XpP7L1IsksHQj6mCNmyYd4MmcvLYD4wgZfZt4ZzNWZpjOLu0lfD9h1eX5ifx7rVLlUOw
+         zqsURMqdQVsKTv0pkJdciO9ACPAcWhlvrHefVXME5RhIO1XgceAYz9ec7C+EFGiRBxlR
+         h26zbVdWE77aD9Mwy3sgUr3+ORSWMw2vLR+0duXGgAcbwSGTdpIzuOp0509LaEmurTB9
+         xyL7BfQxQ8CTuTXPh6RS29X1rsdDaSrolyGKDZam/H79Ct4omhtCF4am61ScSPVSBTBW
+         g2Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=q74yArMABpzeLkr74sIBfXXMxk7/EMgQ3hoGRYitxYU=;
-        b=HHcKM2N26y1/LBA5bO31ggTNleaQWjM6xDwz+OUNSH3RBPvOFfnh4uhZoly/RuJ6NA
-         uWkhImOrZU+puBX2vS4QwqrbQjg1FzpZgGBYjcMONhhXTUzbK/PDQBpAnl5cZDJfGHaD
-         DOo9Nz4Z5j3CEZJnhpJdxeSdwNf2vPIXlJBZ2XBj6zw7CdAMF9gC2T9oRZrK1ZOCk6+G
-         kRT+rLqfDcTGQD55jf1H1lpuqOfZMIcP3osRtv4OoMmuwdNG+xf943gu4PWbak+D9kvj
-         vetHbBuji0DCfBrd+sj7CaF9iruUHe9wIkip4yPrDFGmOjvjblYaLh0lWHR3lZMCGJOv
-         FbGA==
-X-Gm-Message-State: ACrzQf1a92pTgBbQjtkeyg7BinM7Q2wkevCn8Ng2y3LRpYPTKJGEa3Zb
-        eFH2pzUnuUVXaogjT41UzJjTm3GVvuEZCApZ
-X-Google-Smtp-Source: AMsMyM469AUaa+mB2JIQZbVR8HV8iZwsYburPZr5MIxUjpb1o/msGJwlcBixgj18jYHZIDXKlvvITw==
-X-Received: by 2002:a17:907:7202:b0:783:1bed:c5db with SMTP id dr2-20020a170907720200b007831bedc5dbmr315200ejc.124.1664407985511;
-        Wed, 28 Sep 2022 16:33:05 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id kx9-20020a170907774900b0073dc8d0eabesm3023511ejc.15.2022.09.28.16.33.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 16:33:04 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id m4so7668113wrr.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:33:03 -0700 (PDT)
-X-Received: by 2002:a5d:522f:0:b0:228:dc7f:b9a8 with SMTP id
- i15-20020a5d522f000000b00228dc7fb9a8mr145687wra.617.1664407983299; Wed, 28
- Sep 2022 16:33:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220924000454.3319186-1-john.ogness@linutronix.de> <20220924000454.3319186-10-john.ogness@linutronix.de>
-In-Reply-To: <20220924000454.3319186-10-john.ogness@linutronix.de>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 28 Sep 2022 16:32:51 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W5mnR6MH+KLK9VgUCvY0rsjkMdR7un=pHmtNBBup7w7g@mail.gmail.com>
-Message-ID: <CAD=FV=W5mnR6MH+KLK9VgUCvY0rsjkMdR7un=pHmtNBBup7w7g@mail.gmail.com>
-Subject: Re: [PATCH printk 09/18] serial: kgdboc: Lock console list in probe function
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=2pXCrSXWl1T4eX1bVR4OHLDGtpZ9ki0sWDT+FbUrrU8=;
+        b=GOc0n2fvs1tPjwPOGoLkLWRK36078lerV2j7S7TKVPYmLzA1DTYjd1vz8Y719rJWXE
+         zuKuf/d/sH2gSt9HG9C2pJW7JM+ZXeu6KJAVVsfuX13M5cSzGmvT29aJDdnnu2hrfeQq
+         eK97ZMwMhZ5rb7T1lrIY559Ku5H3z7p6fu4VvjCYTV3Wka+pEhs9RymjeLtXgMoGg4qk
+         WgHsDkaMABGaJRZVrIlFdI9tFcbUgGbKZCFAjnflAucsY0AWGU4rFUQQ+k2m7y//jzLN
+         MOodUEgVaBvBF7st05qgsF/PKr8h/j/zdHf2gqnTDcrmq3FVGUcjTyMfdLfmvvo2MBAh
+         guDw==
+X-Gm-Message-State: ACrzQf3V8YzAcqhik5AbtNlPAYKhwRCXvEuZDDVzL3QBxBTygF0B4S9b
+        W3MCjJBDHnbGwQP6xGZyKpGvJp+5vwE=
+X-Google-Smtp-Source: AMsMyM4m1kvBj79SpCMVIWeOzwVKAmDgr9al369YFf9ecOKFtWXFeDu5iqUC3jBWHQNYG2DKFWb3uPHkL7I=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:13a5:b0:542:4a6d:9a1e with SMTP id
+ t37-20020a056a0013a500b005424a6d9a1emr497304pfg.43.1664408214406; Wed, 28 Sep
+ 2022 16:36:54 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed, 28 Sep 2022 23:36:45 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+Message-ID: <20220928233652.783504-1-seanjc@google.com>
+Subject: [PATCH v2 0/7] KVM: selftests: Fix "fix hypercall test" build errors
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Jim Mattson <jmattson@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+After a toolchain upgrade, the x86 fix_hypercall_test started throwing
+warnings due to -Werror=array-bounds rightly complaining that the test is
+generating an out-of-bounds array access.
 
-On Fri, Sep 23, 2022 at 5:05 PM John Ogness <john.ogness@linutronix.de> wrote:
->
-> From: Thomas Gleixner <tglx@linutronix.de>
->
-> Unprotected list walks are not necessarily safe.
->
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
-> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> ---
->  drivers/tty/serial/kgdboc.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-> index 79b7db8580e0..af2aa76bae15 100644
-> --- a/drivers/tty/serial/kgdboc.c
-> +++ b/drivers/tty/serial/kgdboc.c
-> @@ -193,7 +193,8 @@ static int configure_kgdboc(void)
->         if (!p)
->                 goto noconfig;
->
-> -       for_each_console(cons) {
-> +       console_list_lock();
-> +       for_each_registered_console(cons) {
->                 int idx;
->                 if (cons->device && cons->device(cons, &idx) == p &&
->                     idx == tty_line) {
-> @@ -201,6 +202,7 @@ static int configure_kgdboc(void)
->                         break;
->                 }
->         }
-> +       console_list_unlock();
+The "obvious" fix is to replace the memcpy() with a memcmp() and compare
+only the exact size of the hypercall instruction.  That worked, until I
+fiddled with the code a bit more and suddenly the test started jumping into
+the weeds due to gcc generating a call to the external memcmp() through the
+PLT, which isn't supported in the selftests.
 
-Seems right to me, thanks!
+To fix that mess, which has been a pitfall for quite some time, provide
+implementations of memcmp(), memcpy(), and memset() to effectively override
+the compiler built-ins.  My thought is to start with the helpers that are
+most likely to be used in guest code, and then add more as needed.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+v2:
+ - Revert a patch that avoided memset(). [Jim]
+ - Collect reviews. [Oliver]
+ - Rename kvm_string.c => string_overrides.c. [David]
+ - Tweak the "fix hypercall" test to verify that the original opcode
+   is preserved exactly. [Oliver]
+ - Further dedup code in the "fix hypercall" test.
+
+v1: https://lore.kernel.org/all/20220908233134.3523339-1-seanjc@google.com
+
+Sean Christopherson (7):
+  KVM: selftests: Implement memcmp(), memcpy(), and memset() for guest
+    use
+  KVM: selftests: Compare insn opcodes directly in fix_hypercall_test
+  KVM: selftests: Remove unnecessary register shuffling in
+    fix_hypercall_test
+  KVM: selftests: Hardcode VMCALL/VMMCALL opcodes in "fix hypercall"
+    test
+  KVM: selftests: Explicitly verify KVM doesn't patch hypercall if
+    quirk==off
+  KVM: selftests: Dedup subtests of fix_hypercall_test
+  Revert "KVM: selftests: Fix nested SVM tests when built with clang"
+
+ tools/testing/selftests/kvm/Makefile          |  11 +-
+ .../selftests/kvm/lib/string_override.c       |  39 +++++
+ tools/testing/selftests/kvm/lib/x86_64/svm.c  |  14 +-
+ .../selftests/kvm/x86_64/fix_hypercall_test.c | 134 +++++++-----------
+ 4 files changed, 103 insertions(+), 95 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/lib/string_override.c
+
+
+base-commit: c59fb127583869350256656b7ed848c398bef879
+-- 
+2.37.3.998.g577e59143f-goog
+
