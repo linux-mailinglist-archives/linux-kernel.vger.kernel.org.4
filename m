@@ -2,88 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332995EE44C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F94F5EE442
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbiI1S0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 14:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
+        id S233338AbiI1SXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 14:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbiI1S0t (ORCPT
+        with ESMTP id S233776AbiI1SXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 14:26:49 -0400
-Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89BFF0884
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:26:47 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 18:26:36 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1664389605; x=1664648805;
-        bh=+Czl9vgobi2eN8vj4r6XQYDZN6y6dgqZUUlQ7ifNlFY=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=hhKIkoY4s9MMhZfONV8ICOIHao7XDfHX0my1PPy7QYvTwiWy4R5BW5UckE+tfj8Kf
-         jJyLCLxJ75EAvEHPsFqW5QEky5uP3/mfXgf7otpymrrg43JFvmuLvIbjZ2Z4SJ+etD
-         OuTTaNZCy43e7CFUHhhNe5g2MhxqkKbiZPpuSMDekQ56iBNDRmHI10Uo9V4eYg6tlz
-         0BuQkOw15ZabkxM7rVrYx0nUjqIjc6cLElRMSKtHqDt5uR9smKQ8jNwU0C9Z+zgL9x
-         VE/Qucmqt6TYjY11sJjpFkhepQokZjkEuwDLekqQkHRaQy1daNuBe55ydSyMi/Fmyf
-         ki3weCmrlZG7Q==
-To:     devicetree@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Julian Ribbeck <julian.ribbeck@gmx.de>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>,
-        Josef W Menad <JosefWMenad@protonmail.ch>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v4 0/4] arm64: dts: qcom: msm8916-samsung-j5: Use common device tree
-Message-ID: <20220928182435.186116-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+        Wed, 28 Sep 2022 14:23:43 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8665C101956;
+        Wed, 28 Sep 2022 11:23:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664389422; x=1695925422;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mafWaAJGdDQya+zyqgkZLQXkrmmI+H/d5whBuw3Clpc=;
+  b=ZPqP4ywHwEq1tnXQG1V70Zygp00jrgOz9gxGEzH8R/LIWxx5YzTJkMSp
+   9x3zyxVtwbXqUxrWHALG85jq0FLdfaVaiY5p1V+cpMn/2UZgrubmz3YDB
+   jN3NAs/TCcVbgEbI4eg4BXKOH/TYvIyTnrk6l+JAaLgdciSr6/wAdegFz
+   YSUXGvq1nVintWssTSVohHmhuDtPacYNl7JWkPMX5m1olwQT7Fmn+c2qB
+   /omNM/TGsOkH8lDq2clwXT3eXlQRnZ/Pqonm0F+KnG9j75q7hTaGqxdPc
+   eyeYLy7r0LD+tPOhQl6974tPka7bqEZ6v7ynnvFW9SgFd0n9M3rfwowPk
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="115880602"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Sep 2022 11:23:41 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 28 Sep 2022 11:23:39 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Wed, 28 Sep 2022 11:23:39 -0700
+Date:   Wed, 28 Sep 2022 20:28:08 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+CC:     <UNGLinuxDriver@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH][next] net: lan966x: Fix spelling mistake "tarffic" ->
+ "traffic"
+Message-ID: <20220928182808.gsfwyjlmunxl7k6z@soft-dev3-1.localhost>
+References: <20220928143618.34947-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20220928143618.34947-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v4: Try "git format-patch -B -C -M -D" to fix the patches.
-v3: Drop msm8916-samsung-j5.dts temporarily before moving it.
-Minor rewords.
-v2: Reword and resend. Split common dtsi patch.
-Add missing suffix state in pinctrl.
+The 09/28/2022 15:36, Colin Ian King wrote:
+> 
+> There is a spelling mistake in a netdev_err message. Fix it.
 
-The smartphones below are using the MSM8916 SoC,
-which are released in 2015-2016:
+Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-Samsung Galaxy J5 2015 (SM-J500*)
-Samsung Galaxy J5 2016 (SM-J510*)
-Samsung Galaxy J3 2016
-- SM-J3109/SM-J320Y/SM-J320YZ
-- SM-J320N0/SM-J320ZN
-- SM-J320P/SM-J320R4/SM-J320V/SM-S320VL
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c b/drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c
+> index 950ea4807eb6..7fa76e74f9e2 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c
+> @@ -7,7 +7,7 @@ int lan966x_mqprio_add(struct lan966x_port *port, u8 num_tc)
+>         u8 i;
+> 
+>         if (num_tc != NUM_PRIO_QUEUES) {
+> -               netdev_err(port->dev, "Only %d tarffic classes supported\n",
+> +               netdev_err(port->dev, "Only %d traffic classes supported\n",
+>                            NUM_PRIO_QUEUES);
+>                 return -EINVAL;
+>         }
+> --
+> 2.37.1
+> 
 
-Add a common device tree for with initial support for:
-
-- GPIO keys
-- SDHCI (internal and external storage)
-- USB Device Mode
-- UART (on USB connector via the SM5703 MUIC)
-- WCNSS (WiFi/BT)
-- Regulators
-
-The three devices (some varints of J3, all other variants of J5 released
-in 2015 and J5X released in 2016) are very similar, with some differences
-in display and GPIO pins. The common parts are shared in
-msm8916-samsung-j5-common.dtsi to reduce duplication.
-
+-- 
+/Horatiu
