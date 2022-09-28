@@ -2,102 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CEF5ED567
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319745ED56D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiI1GwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 02:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        id S231519AbiI1Gxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 02:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbiI1Gvx (ORCPT
+        with ESMTP id S233134AbiI1Gx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 02:51:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F7833A38;
-        Tue, 27 Sep 2022 23:50:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C90D2B81F0F;
-        Wed, 28 Sep 2022 06:50:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5B57C433C1;
-        Wed, 28 Sep 2022 06:50:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664347802;
-        bh=o+nRXqkkwdCJaeYY4UaIw9xe00VMoE3ss64Xo8fvh04=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=F2My4uoDUvyjqqbn3FHH4fLvaj3uNAF2UTVtsbk9sf6w71LInwqLU34TGzBOMdrLU
-         N9XyIUqej/J6wnfp8LKgOFgQfWOM7ypFV5gPJLOw/zDVvur6hsuQLBCVJpwj3epH5O
-         Tcvq4qps5/9KnrMAQOp+IfEBarnjwve4fRMqx3rvyCajUXKbsD4RRMHzf4ruffWUEi
-         EWWtNREXGB/A7Kb9rFkZrKiKjZ7OeMPp7tFBr9+26Yk4PaPwZX1yhTPsu1H6A89Xpv
-         S+pbwvUEdJMT9EmU0SBJIK0jepsAqqP0Buyuitod6aWVWbbHVbP4Y/3gnO4TP4RIeM
-         wnu+zW3g7JhSw==
-Message-ID: <8db6ca9c-6ceb-001e-3427-c7e320111d80@kernel.org>
-Date:   Wed, 28 Sep 2022 09:49:58 +0300
+        Wed, 28 Sep 2022 02:53:26 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C79E1F65C5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:51:26 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id nb11so25094125ejc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:51:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=VKS/VF0CIgvcZvBFOPg/1OgyZ/pIlJ2/81i9icexORw=;
+        b=iECOdZjKhncEnAw0CsNKmcZACs/WmHxH0eaQ4q0VbDy5j5wDGWw1csn5q7gxcz31md
+         iZAjgiUd+ID5VWXQiNCNSy7lGFEDGfpmxASWMziXMhFmITezAXVrpFIrKCROmDEJL12x
+         XAHO0OJxlXup8DfxacOU1eT4qWrUy+kfMxlSg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=VKS/VF0CIgvcZvBFOPg/1OgyZ/pIlJ2/81i9icexORw=;
+        b=HE9QfwwYuJAFNp9mXwyLo//zfgaDVBIk2uWgkDwlfeoanH2upvLcvSIUd6wtObafO3
+         QWDKYpbFiq2to2xPtChchST/NMSGEeqfRn3gygZX5eY6Fv1h6sBCR4STVejZEMLSVQzI
+         AeLyxIi7S4Ap+xZg4lCUaTWULBrWnGVCR6cemFkGhuVvAZBVWSiM5TPQsROexJNPML5c
+         aZ3dbxhSEHM4k6DVW0zg6Pl5yqnJJfXN3NL5KwkCcVeT5vk3yRKT/kT/PZLeh02Ov4ky
+         tTogbUQVn7d04Qq7QBIUhCYIC/MD5OpR22Tti31spMridCcPag7x4efrK1EC+vaK9o2/
+         vv7w==
+X-Gm-Message-State: ACrzQf1k5Lz+Ywi/iaEfevISyZMjrprvdxUdnyTChCoTb0yLgww6VQ7v
+        Xngi0h1wXx5eH5GMKgAjfS6wtImfcLwTqERdstM02w==
+X-Google-Smtp-Source: AMsMyM7+efvQsRLd4e2MqG4ydC0xN3YqsjPc8629mTw8VIsF31t+nnGUFKem/9nHVbG9M7i14vzEBfCkJSHU3A+JEyM=
+X-Received: by 2002:a17:907:7f93:b0:781:dbee:dece with SMTP id
+ qk19-20020a1709077f9300b00781dbeedecemr26105617ejc.323.1664347884849; Tue, 27
+ Sep 2022 23:51:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] usb: cdns3: remove dead code
-Content-Language: en-US
-To:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220926135922.24541-1-dzm91@hust.edu.cn>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20220926135922.24541-1-dzm91@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220926102523.2367530-1-wenst@chromium.org> <20220926102523.2367530-4-wenst@chromium.org>
+ <0a1618c4-b808-56bd-e89f-560b0423191d@collabora.com>
+In-Reply-To: <0a1618c4-b808-56bd-e89f-560b0423191d@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Wed, 28 Sep 2022 14:51:13 +0800
+Message-ID: <CAGXv+5E=RXd2u00-j98BFLpiXaei6JgHNbi21-R2nhqHn40x3Q@mail.gmail.com>
+Subject: Re: [PATCH 3/6] clk: mediatek: mt8192: Do not re-register
+ top_early_divs in probe function
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 27, 2022 at 6:39 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 26/09/22 12:25, Chen-Yu Tsai ha scritto:
+> > top_early_divs are registered in the CLK_OF_DECLARE_DRIVER() half of the
+> > topckgen clk driver. Don't try to register it again in the actual probe
+> > function. This gets rid of the "Trying to register duplicate clock ..."
+> > warning.
+> >
+> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+>
+> Can't we simply remove the CLK_OF_DECLARE_DRIVER() and top_init_early entirely,
+> and transfer TOP_CSW_F26M_D2 to top_divs[] instead?
+> I get that systimer concern and we have something similar in MT8195, where the
+> TOP_CLK26M_D2 is registered "late".
 
+That was what I initially wanted to do. However I asked MTK whether the
+system would work fully without systimer, and apparently it is used during
+suspend (presumably it is supposed to be running?), so making it not
+functional was a bit concerning.
 
-On 26/09/2022 16:59, Dongliang Mu wrote:
-> From: Dongliang Mu <mudongliangabcd@gmail.com>
-> 
-> Smatch reports the following error:
-> 
-> drivers/usb/cdns3/cdns3-plat.c:113 cdns3_plat_probe() warn:
-> platform_get_irq() does not return zero
-> 
-> From the document, platform_get_irq_byname_optional only returns
-> non-zero value, and negative value on failure.
-> 
-> Fix this by removing the zero value checking.
-> 
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+That said, I do plan to rework the systimer stuff. The /2 divider is
+actually internal to the systimer block, and should not have been modeled
+the way it is now. Notably, the divider is actually variable. It is
+only configured and locked by the bootloader.
 
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
+For this I think we have two options:
 
-> ---
->  drivers/usb/cdns3/cdns3-plat.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
-> index dc068e940ed5..2bc5d094548b 100644
-> --- a/drivers/usb/cdns3/cdns3-plat.c
-> +++ b/drivers/usb/cdns3/cdns3-plat.c
-> @@ -110,8 +110,6 @@ static int cdns3_plat_probe(struct platform_device *pdev)
->  	cdns->wakeup_irq = platform_get_irq_byname_optional(pdev, "wakeup");
->  	if (cdns->wakeup_irq == -EPROBE_DEFER)
->  		return cdns->wakeup_irq;
-> -	else if (cdns->wakeup_irq == 0)
-> -		return -EINVAL;
->  
->  	if (cdns->wakeup_irq < 0) {
->  		dev_dbg(dev, "couldn't get wakeup irq\n");
+a. Move the /2 fixed factor clock into a standalone device node, like
+   what was done for the MT8195
 
+b. Rework the systimer to internalize the divider, and thus moving the
+   systimer input clock to osc26M.
 
-cheers,
--roger
+Either one is outside the scope of this series. Option a. works especially
+well for MT8192, as the configurable divider was removed from the systimer
+block (only for this chip).
+
+> Getting back to MT8192, TOP_CSW_F26M_D2 seems to be used only for:
+> 1. systimer
+> 2. SPMI MST (registered "late").
+>
+> Being it a fixed factor clock, parented to another fixed clock, it doesn't
+> even have any ON/OFF switch, so I think it would be actually possible to go
+> for the proposed removal... which would further improve this cleanup.
+
+As mentioned above, I do have some plans to rework the stuff, but it is
+kind of beyond the scope of this series, as it changes the device tree
+binding and ABI.
+
+Regards
+ChenYu
