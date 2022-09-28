@@ -2,93 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFEE5EE405
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9125EE40A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234354AbiI1SNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 14:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S233943AbiI1SOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 14:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234436AbiI1SNc (ORCPT
+        with ESMTP id S233899AbiI1SOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 14:13:32 -0400
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A777ABF17;
-        Wed, 28 Sep 2022 11:13:32 -0700 (PDT)
-Received: by mail-pl1-f175.google.com with SMTP id d24so12420988pls.4;
-        Wed, 28 Sep 2022 11:13:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=SrqLT0kXpAlJD8TZzx8ujBa5nxZPe+zl7PnVUm+RbhE=;
-        b=TDLXY43fvsaoQNCtrwuijWEqsIG31bpFMUPXK8AfWOQtIg+Wkhva+/mjAdIi91bXKN
-         zldZjVnxPjCiuZx9giK81NVf0ivXssKU/wHZyJbFQpvLbRUZscWS7BU0MQCc/xIJqe+W
-         cPtFLYjHqLu/BlN2XDQARvkHtmJFVXzNM7GSedeuaxBaW/NepyEL2U6oQqTM8LKUutQW
-         4VCgja+rbWqp3nE/5IL9aS1bzdO5WhGw4YN1boE1bsHX0xvGC+GhjE6qiANXHE70oS6g
-         nw2+Sz6zb6ldua/wJmo37gQJ6X88UmBYOyhtLf7mXpOWW4SFRyB8vOE1o4F+kzvINnf3
-         q73A==
-X-Gm-Message-State: ACrzQf1P+VcKv9EYc4h7VWk/g98uogW38fmg8FQuLXyniiuHYKqhq5Ww
-        9/uzvZ/9XKv9NNveojQcv5ZM6AUWepASJQ==
-X-Google-Smtp-Source: AMsMyM5phyXRHDoV48KwWkEssjx6POVAM7KislIcpIimObHNjJBChVYQkrXS8krHgOsN/67JiWvhEA==
-X-Received: by 2002:a17:90a:4607:b0:202:e22d:4892 with SMTP id w7-20020a17090a460700b00202e22d4892mr11629503pjg.220.1664388811703;
-        Wed, 28 Sep 2022 11:13:31 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:4cba:f1a9:6ef8:3759? ([2620:15c:211:201:4cba:f1a9:6ef8:3759])
-        by smtp.gmail.com with ESMTPSA id p15-20020a1709027ecf00b0016f8e8032c4sm4014341plb.129.2022.09.28.11.13.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 11:13:31 -0700 (PDT)
-Message-ID: <d7004ae9-ad68-cb61-9ca8-0bf61efa0c21@acm.org>
-Date:   Wed, 28 Sep 2022 11:13:28 -0700
+        Wed, 28 Sep 2022 14:14:43 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5152613D1A;
+        Wed, 28 Sep 2022 11:14:36 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3A98021E2E;
+        Wed, 28 Sep 2022 18:14:35 +0000 (UTC)
+Received: from localhost (unknown [10.163.24.10])
+        by relay2.suse.de (Postfix) with ESMTP id 055962C173;
+        Wed, 28 Sep 2022 18:14:34 +0000 (UTC)
+Received: by localhost (Postfix, from userid 1000)
+        id 261D19F3AF; Wed, 28 Sep 2022 11:14:33 -0700 (PDT)
+From:   Lee Duncan <leeman.duncan@gmail.com>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Lee Duncan <lduncan@suse.com>, Martin Wilck <mwilck@suse.com>,
+        Hannes Reinecke <hare@suse.de>
+Subject: [PATCH] scsi: core: Add BLIST_NO_ASK_VPD_SIZE for some VDASD
+Date:   Wed, 28 Sep 2022 11:13:50 -0700
+Message-Id: <20220928181350.9948-1-leeman.duncan@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v15 11/13] dm: call dm_zone_endio after the target endio
- callback for zoned devices
-Content-Language: en-US
-To:     Pankaj Raghav <p.raghav@samsung.com>, snitzer@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, hch@lst.de,
-        damien.lemoal@opensource.wdc.com
-Cc:     jaegeuk@kernel.org, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, hare@suse.de,
-        matias.bjorling@wdc.com, Johannes.Thumshirn@wdc.com,
-        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-        pankydev8@gmail.com, dm-devel@redhat.com
-References: <20220923173618.6899-1-p.raghav@samsung.com>
- <CGME20220923173631eucas1p23cceb8438d6b8b9c3460192c0ad2472d@eucas1p2.samsung.com>
- <20220923173618.6899-12-p.raghav@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220923173618.6899-12-p.raghav@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/23/22 10:36, Pankaj Raghav wrote:
-> dm_zone_endio() updates the bi_sector of orig bio for zoned devices that
-> uses either native append or append emulation, and it is called before the
-> endio of the target. But target endio can still update the clone bio
-> after dm_zone_endio is called, thereby, the orig bio does not contain
-> the updated information anymore.
-> 
-> Currently, this is not a problem as the targets that support zoned devices
-> such as dm-zoned, dm-linear, and dm-crypt do not have an endio function,
-> and even if they do (such as dm-flakey), they don't modify the
-> bio->bi_iter.bi_sector of the cloned bio that is used to update the
-> orig_bio's bi_sector in dm_zone_endio function.
-> 
-> This is a prep patch for the new dm-po2zoned target as it modifies
-> bi_sector in the endio callback.
-> 
-> Call dm_zone_endio for zoned devices after calling the target's endio
-> function.
+From: Lee Duncan <lduncan@suse.com>
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Some storage, such as AIX VDASD (virtual storage) and IBM 2076
+(front end) do not like the recent commit:
+
+commit c92a6b5d6335 ("scsi: core: Query VPD size before getting full page")
+
+That commit changed getting SCSI VPD pages so that we now read
+just enough of the page to get the actual page size, then read
+the whole page in a second read. The problem is that the above
+mentioned hardware returns zero for the page size, because of
+a firmware error. In such cases, until the firmware is fixed,
+this new black flag says to revert to the original method of
+reading the VPD pages, i.e. try to read as a whole buffer's
+worth on the first try.
+
+Fixes: c92a6b5d6335 ("scsi: core: Query VPD size before getting full page")
+Reported-by: Martin Wilck <mwilck@suse.com>
+Suggested-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Lee Duncan <lduncan@suse.com>
+---
+ drivers/scsi/scsi.c         | 14 +++++++++++---
+ drivers/scsi/scsi_devinfo.c |  3 ++-
+ drivers/scsi/scsi_scan.c    |  3 +++
+ include/scsi/scsi_device.h  |  2 ++
+ include/scsi/scsi_devinfo.h |  6 +++---
+ 5 files changed, 21 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
+index c59eac7a32f2..f2db4b846190 100644
+--- a/drivers/scsi/scsi.c
++++ b/drivers/scsi/scsi.c
+@@ -321,11 +321,19 @@ static int scsi_vpd_inquiry(struct scsi_device *sdev, unsigned char *buffer,
+ 	return get_unaligned_be16(&buffer[2]) + 4;
+ }
+ 
+-static int scsi_get_vpd_size(struct scsi_device *sdev, u8 page)
++static int scsi_get_vpd_size(struct scsi_device *sdev, u8 page, int buf_len)
+ {
+ 	unsigned char vpd_header[SCSI_VPD_HEADER_SIZE] __aligned(4);
+ 	int result;
+ 
++	/*
++	 * if this hardware is blacklisted then don't bother asking
++	 * the page size, since it will repy with zero -- just assume it
++	 * is the buffer size
++	 */
++	if (sdev->no_ask_vpd_sz_first)
++		return buf_len;
++
+ 	/*
+ 	 * Fetch the VPD page header to find out how big the page
+ 	 * is. This is done to prevent problems on legacy devices
+@@ -367,7 +375,7 @@ int scsi_get_vpd_page(struct scsi_device *sdev, u8 page, unsigned char *buf,
+ 	if (!scsi_device_supports_vpd(sdev))
+ 		return -EINVAL;
+ 
+-	vpd_len = scsi_get_vpd_size(sdev, page);
++	vpd_len = scsi_get_vpd_size(sdev, page, buf_len);
+ 	if (vpd_len <= 0)
+ 		return -EINVAL;
+ 
+@@ -402,7 +410,7 @@ static struct scsi_vpd *scsi_get_vpd_buf(struct scsi_device *sdev, u8 page)
+ 	struct scsi_vpd *vpd_buf;
+ 	int vpd_len, result;
+ 
+-	vpd_len = scsi_get_vpd_size(sdev, page);
++	vpd_len = scsi_get_vpd_size(sdev, page, SCSI_VPD_PG_LEN);
+ 	if (vpd_len <= 0)
+ 		return NULL;
+ 
+diff --git a/drivers/scsi/scsi_devinfo.c b/drivers/scsi/scsi_devinfo.c
+index c7080454aea9..d2b2e841e570 100644
+--- a/drivers/scsi/scsi_devinfo.c
++++ b/drivers/scsi/scsi_devinfo.c
+@@ -134,7 +134,7 @@ static struct {
+ 	{"3PARdata", "VV", NULL, BLIST_REPORTLUN2},
+ 	{"ADAPTEC", "AACRAID", NULL, BLIST_FORCELUN},
+ 	{"ADAPTEC", "Adaptec 5400S", NULL, BLIST_FORCELUN},
+-	{"AIX", "VDASD", NULL, BLIST_TRY_VPD_PAGES},
++	{"AIX", "VDASD", NULL, BLIST_TRY_VPD_PAGES | BLIST_NO_ASK_VPD_SIZE},
+ 	{"AFT PRO", "-IX CF", "0.0>", BLIST_FORCELUN},
+ 	{"BELKIN", "USB 2 HS-CF", "1.95",  BLIST_FORCELUN | BLIST_INQUIRY_36},
+ 	{"BROWNIE", "1200U3P", NULL, BLIST_NOREPORTLUN},
+@@ -188,6 +188,7 @@ static struct {
+ 	{"HPE", "OPEN-", "*", BLIST_REPORTLUN2 | BLIST_TRY_VPD_PAGES},
+ 	{"IBM", "AuSaV1S2", NULL, BLIST_FORCELUN},
+ 	{"IBM", "ProFibre 4000R", "*", BLIST_SPARSELUN | BLIST_LARGELUN},
++	{"IBM", "2076", NULL, BLIST_NO_ASK_VPD_SIZE},
+ 	{"IBM", "2105", NULL, BLIST_RETRY_HWERROR},
+ 	{"iomega", "jaz 1GB", "J.86", BLIST_NOTQ | BLIST_NOLUN},
+ 	{"IOMEGA", "ZIP", NULL, BLIST_NOTQ | BLIST_NOLUN},
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index 5d27f5196de6..b67743e32089 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -1056,6 +1056,9 @@ static int scsi_add_lun(struct scsi_device *sdev, unsigned char *inq_result,
+ 	else if (*bflags & BLIST_SKIP_VPD_PAGES)
+ 		sdev->skip_vpd_pages = 1;
+ 
++	if (*bflags & BLIST_NO_ASK_VPD_SIZE)
++		sdev->no_ask_vpd_sz_first = 1;
++
+ 	transport_configure_device(&sdev->sdev_gendev);
+ 
+ 	if (sdev->host->hostt->slave_configure) {
+diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
+index 2493bd65351a..5d15784ccefc 100644
+--- a/include/scsi/scsi_device.h
++++ b/include/scsi/scsi_device.h
+@@ -145,6 +145,7 @@ struct scsi_device {
+ 	const char * model;		/* ... after scan; point to static string */
+ 	const char * rev;		/* ... "nullnullnullnull" before scan */
+ 
++#define SCSI_VPD_PG_LEN	255	/* default SCSI VPD page size (max) */
+ 	struct scsi_vpd __rcu *vpd_pg0;
+ 	struct scsi_vpd __rcu *vpd_pg83;
+ 	struct scsi_vpd __rcu *vpd_pg80;
+@@ -214,6 +215,7 @@ struct scsi_device {
+ 					 * creation time */
+ 	unsigned ignore_media_change:1; /* Ignore MEDIA CHANGE on resume */
+ 	unsigned silence_suspend:1;	/* Do not print runtime PM related messages */
++	unsigned no_ask_vpd_sz_first:1;	/* Do not ask for VPD size first */
+ 
+ 	unsigned int queue_stopped;	/* request queue is quiesced */
+ 	bool offline_already;		/* Device offline message logged */
+diff --git a/include/scsi/scsi_devinfo.h b/include/scsi/scsi_devinfo.h
+index 5d14adae21c7..ec12dbaff0e8 100644
+--- a/include/scsi/scsi_devinfo.h
++++ b/include/scsi/scsi_devinfo.h
+@@ -32,7 +32,8 @@
+ #define BLIST_IGN_MEDIA_CHANGE	((__force blist_flags_t)(1ULL << 11))
+ /* do not do automatic start on add */
+ #define BLIST_NOSTARTONADD	((__force blist_flags_t)(1ULL << 12))
+-#define __BLIST_UNUSED_13	((__force blist_flags_t)(1ULL << 13))
++/* do not ask for VPD page size first on some broken targets */
++#define BLIST_NO_ASK_VPD_SIZE	((__force blist_flags_t)(1ULL << 13))
+ #define __BLIST_UNUSED_14	((__force blist_flags_t)(1ULL << 14))
+ #define __BLIST_UNUSED_15	((__force blist_flags_t)(1ULL << 15))
+ #define __BLIST_UNUSED_16	((__force blist_flags_t)(1ULL << 16))
+@@ -74,8 +75,7 @@
+ #define __BLIST_HIGH_UNUSED (~(__BLIST_LAST_USED | \
+ 			       (__force blist_flags_t) \
+ 			       ((__force __u64)__BLIST_LAST_USED - 1ULL)))
+-#define __BLIST_UNUSED_MASK (__BLIST_UNUSED_13 | \
+-			     __BLIST_UNUSED_14 | \
++#define __BLIST_UNUSED_MASK (__BLIST_UNUSED_14 | \
+ 			     __BLIST_UNUSED_15 | \
+ 			     __BLIST_UNUSED_16 | \
+ 			     __BLIST_UNUSED_24 | \
+-- 
+2.37.3
 
