@@ -2,194 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42AB65EE380
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E58895EE388
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233526AbiI1Rvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47300 "EHLO
+        id S234476AbiI1Rwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbiI1Rvp (ORCPT
+        with ESMTP id S234333AbiI1Rwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:51:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17447F6F47
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:51:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664387503;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tqjowHi26bsESSLy5gRLnwl2mccAdSnDp5ecLzbfdZE=;
-        b=HYXSCBNtjDQtnxG/APcaoYC29aP7k8I/ui2I2NShFhnaWm/s/4rQBYhQ9iX+6ZQ58q/zRR
-        9zhxmKjx6yffOiuFhUclafIoTcaxLLjhYoW6AhLv5dThilfBVuH3I3u94ioDDsHsp791Db
-        KITvMkVZfovyO5yoqyNU1Mx9rlWhxgg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-424-jeKFmtqoNG-roxKtWUPHKw-1; Wed, 28 Sep 2022 13:51:39 -0400
-X-MC-Unique: jeKFmtqoNG-roxKtWUPHKw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C83B185A79C;
-        Wed, 28 Sep 2022 17:51:39 +0000 (UTC)
-Received: from starship (unknown [10.40.193.233])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6BDC6C15BA8;
-        Wed, 28 Sep 2022 17:51:37 +0000 (UTC)
-Message-ID: <1aea43e831cd7ed90c325b2c90bc6f3f9a1805b5.camel@redhat.com>
-Subject: Re: [PATCH v3 05/28] KVM: x86: Don't inhibit APICv/AVIC if xAPIC ID
- mismatch is due to 32-bit ID
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Date:   Wed, 28 Sep 2022 20:51:36 +0300
-In-Reply-To: <YzR7ezt67i1lH1/b@google.com>
-References: <20220920233134.940511-1-seanjc@google.com>
-         <20220920233134.940511-6-seanjc@google.com>
-         <d02d0b30-f29b-0ff6-98c7-89ddcd091c60@oracle.com>
-         <e5d54876b233dc71a69249c3d02d649da5040a14.camel@redhat.com>
-         <YzR7ezt67i1lH1/b@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 28 Sep 2022 13:52:50 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F794F8F80;
+        Wed, 28 Sep 2022 10:52:45 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28SHqPaf076937;
+        Wed, 28 Sep 2022 12:52:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1664387545;
+        bh=+nMkJVipOiVxem0Rt3I7+AhSsJ7p85+gzYWYe8Su7kw=;
+        h=From:To:CC:Subject:Date;
+        b=cxSPjhKeevtkcslAy9veL4QUcK9bKnvIALWhTlwhe3ca42N69ZXrgPWF/FUoFUHnG
+         e2GNAfe/zeJ47yrXZ8behrPXloZ1oxM9QLcsVgvAsPO4UNJxuTbrIUpeM76OyFqB/k
+         twmyC/OGksfFTuWf469gUpFYFKD6qp1a1grtos1w=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28SHqPOH029164
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 28 Sep 2022 12:52:25 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 28
+ Sep 2022 12:52:24 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Wed, 28 Sep 2022 12:52:24 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28SHqOMQ100880;
+        Wed, 28 Sep 2022 12:52:24 -0500
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+To:     Tomi Valkeinen <tomba@kernel.org>, Jyri Sarha <jyri.sarha@iki.fi>,
+        Rob Herring <robh+dt@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v5 0/6] Add DSS support for AM625 SoC
+Date:   Wed, 28 Sep 2022 23:22:17 +0530
+Message-ID: <20220928175223.15225-1-a-bhatia1@ti.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-28 at 16:51 +0000, Sean Christopherson wrote:
-> On Wed, Sep 28, 2022, Maxim Levitsky wrote:
-> > On Tue, 2022-09-27 at 23:15 -0400, Alejandro Jimenez wrote:
-> > > On 9/20/2022 7:31 PM, Sean Christopherson wrote:
-> > > > Truncate the vcpu_id, a.k.a. x2APIC ID, to an 8-bit value when comparing
-> > > > it against the xAPIC ID to avoid false positives (sort of) on systems
-> > > > with >255 CPUs, i.e. with IDs that don't fit into a u8.  The intent of
-> > > > APIC_ID_MODIFIED is to inhibit APICv/AVIC when the xAPIC is changed from
-> > > > it's original value,
-> > > > 
-> > > > The mismatch isn't technically a false positive, as architecturally the
-> > > > xAPIC IDs do end up being aliased in this scenario, and neither APICv
-> > > > nor AVIC correctly handles IPI virtualization when there is aliasing.
-> > > > However, KVM already deliberately does not honor the aliasing behavior
-> > > > that results when an x2APIC ID gets truncated to an xAPIC ID.  I.e. the
-> > > > resulting APICv/AVIC behavior is aligned with KVM's existing behavior
-> > > > when KVM's x2APIC hotplug hack is effectively enabled.
-> > > > 
-> > > > If/when KVM provides a way to disable the hotplug hack, APICv/AVIC can
-> > > > piggyback whatever logic disables the optimized APIC map (which is what
-> > > > provides the hotplug hack), i.e. so that KVM's optimized map and APIC
-> > > > virtualization yield the same behavior.
-> > > > 
-> > > > For now, fix the immediate problem of APIC virtualization being disabled
-> > > > for large VMs, which is a much more pressing issue than ensuring KVM
-> > > > honors architectural behavior for APIC ID aliasing.
-> > > 
-> > > I built a host kernel with this entire series on top of mainline 
-> > > v6.0-rc6, and booting a guest with AVIC enabled works as expected on the 
-> > > initial boot. The issue is that during the first reboot AVIC is 
-> > > inhibited due to APICV_INHIBIT_REASON_APIC_ID_MODIFIED, and I see 
-> > > constant inhibition events due to APICV_INHIBIT_REASON_IRQWIN as seen in 
-> > 
-> > APICV_INHIBIT_REASON_IRQWIN is OK, because that happens about every time
-> > the good old PIT timer fires which happens on reboot.
-> > 
-> > APICV_INHIBIT_REASON_APIC_ID_MODIFIED should not happen as you noted,
-> > this needs investigation.
-> 
-> Ya, I'll take a look.
-> 
-> > > It happens regardless of vCPU count (tested with 2, 32, 255, 380, and 
-> > > 512 vCPUs). This state persists for all subsequent reboots, until the VM 
-> > > is terminated. For vCPU counts < 256, when x2apic is disabled the 
-> > > problem does not occur, and AVIC continues to work properly after reboots.
-> 
-> Bit of a shot in the dark, but does the below fix the issue?  There are two
-> issues with calling kvm_lapic_xapic_id_updated() from kvm_apic_state_fixup():
-> 
->   1. The xAPIC ID should only be refreshed on "set".
-True - I didn't bother to fix it yet because it shouldn't cause harm, but
-sure this needs to be fixed.
+This patch series adds a new compatible for the Display SubSyetem
+controller on TI's AM625 SoC. It further adds the required support for
+the same in the tidss driver. The AM625-DSS is a newer version of the DSS
+from the AM65X version with the major change being the addition of
+another OLDI TX. With the help of 2 OLDI TXes, the AM625 DSS supports
+OLDI displays with a resolution of upto 2K.
 
-> 
->   2. The refresh needs to be noted after memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
-Are you sure? The check is first because if it fails, then error is returned to userspace
-and the KVM's state left unchanged.
+This patch set further adds support for the OLDI on AM625, and is, in
+essence, the second version of the following patch series:
+https://patchwork.kernel.org/project/dri-devel/list/?series=660970&state=%2A&archive=both
 
-I assume you are talking about 
+The changes in the above-mentioned series forced some re-works in this
+series, and are better reviewed as a single set.
 
-        ....
-	r = kvm_apic_state_fixup(vcpu, s, true);
-	if (r) {
-		kvm_recalculate_apic_map(vcpu->kvm);
-		return r;
-	}
-	memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
-        ....
+TODO:
+  - Support for OLDI Bridges that work on clone / dual-link modes is yet
+    to be added.
 
+  - The pixel clock for the OLDI VP passes through a clock divider, which
+    was being explicitly set in previous series, but that was not the
+    right way. That patch has been dropped and a newer implementation is
+    in works.
 
-> 
-> and a third bug in the helper itself, as changes to the ID should be ignored if
-> the APIC is hardward disabled since the ID is reset to the vcpu_id when the APIC
-> is hardware enabled (architecturally behavior).
+Note:
+  - Due to lack of hardware, only dual-link mode has been tested.
 
-That is true, and something I haven't thought about.
+Changelog:
+V5:
+  - Rebase for current merge window
+  - Add max DT ports in DSS features
+  - Combine the OLDI support series
 
-Best regards,
-	Maxim Levitsky
+(Changes from OLDI support series v1)
+  - Address Tomi Valkeinen's comments
+    1. Update the OLDI link detection approach
+    2. Add port #3 for 2nd OLDI TX
+    3. Configure 2 panel-bridges for cloned panels
+    4. Drop the OLDI clock set patch
+    5. Drop rgb565-to-888 patch
 
+V4:
+  - Rebase for current merge window
+  - Add acked and reviewed by tags
 
+V3:
+  - Change yaml enum in alphabetical order
+  - Correct a typo
 
-> 
-> ---
->  arch/x86/kvm/lapic.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 804d529d9bfb..b8b2faf5abc7 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -2159,6 +2159,9 @@ static void kvm_lapic_xapic_id_updated(struct kvm_lapic *apic)
->  {
->  	struct kvm *kvm = apic->vcpu->kvm;
->  
-> +	if (!kvm_apic_hw_enabled(apic))
-> +		return;
-> +
->  	if (KVM_BUG_ON(apic_x2apic_mode(apic), kvm))
->  		return;
->  
-> @@ -2875,8 +2878,6 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
->  			icr = __kvm_lapic_get_reg64(s->regs, APIC_ICR);
->  			__kvm_lapic_set_reg(s->regs, APIC_ICR2, icr >> 32);
->  		}
-> -	} else {
-> -		kvm_lapic_xapic_id_updated(vcpu->arch.apic);
->  	}
->  
->  	return 0;
-> @@ -2912,6 +2913,9 @@ int kvm_apic_set_state(struct kvm_vcpu *vcpu, struct kvm_lapic_state *s)
->  	}
->  	memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
->  
-> +	if (!apic_x2apic_mode(vcpu->arch.apic))
-> +		kvm_lapic_xapic_id_updated(vcpu->arch.apic);
-> +
->  	atomic_set_release(&apic->vcpu->kvm->arch.apic_map_dirty, DIRTY);
->  	kvm_recalculate_apic_map(vcpu->kvm);
->  	kvm_apic_set_version(vcpu);
-> 
-> base-commit: 0b502152c0b8523f399bdb53096e2d620c5795b5
+V2:
+  - Remove redundant regsiter array
 
+Aradhya Bhatia (6):
+  dt-bindings: display: ti,am65x-dss: Add am625 dss compatible
+  dt-bindings: display: ti: am65x-dss: Add new port for am625-dss
+  drm/tidss: Add support for AM625 DSS
+  drm/tidss: Add support to configure OLDI mode for am625-dss.
+  drm/tidss: Add IO CTRL and Power support for OLDI TX in am625
+  drm/tidss: Enable Dual and Duplicate Modes for OLDI
+
+ .../bindings/display/ti/ti,am65x-dss.yaml     |  22 ++-
+ drivers/gpu/drm/tidss/tidss_dispc.c           | 155 ++++++++++++++++--
+ drivers/gpu/drm/tidss/tidss_dispc.h           |  11 ++
+ drivers/gpu/drm/tidss/tidss_dispc_regs.h      |   6 +
+ drivers/gpu/drm/tidss/tidss_drv.c             |   1 +
+ drivers/gpu/drm/tidss/tidss_drv.h             |   3 +
+ drivers/gpu/drm/tidss/tidss_kms.c             | 146 ++++++++++++++---
+ 7 files changed, 304 insertions(+), 40 deletions(-)
+
+-- 
+2.37.0
 
