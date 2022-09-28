@@ -2,155 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3700A5EE3EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97BE5EE3F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233308AbiI1SJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 14:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
+        id S234698AbiI1SLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 14:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233137AbiI1SJx (ORCPT
+        with ESMTP id S234032AbiI1SK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 14:09:53 -0400
-X-Greylist: delayed 115 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Sep 2022 11:09:50 PDT
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB1F3640C;
-        Wed, 28 Sep 2022 11:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1664388585;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=CUA1rKZXJjH54FeXOtkdOiT6Q4YsuptFxBFMyFhbLR0=;
-    b=a7Wt+nCBJ5q2lfYoM/Rq6xPcAC/iYv+pjlRZ2vQnzMexLoEe1W2YEQLHjeNiuWTFpG
-    1jM6hSGi6+MyWbp7Wsy0hjzaXyzn0FxBgVXPZV1TaVsXDLBDs29pU9upz4rDIpiynH0e
-    xbXOEYUYSz3f4ZaUdXPzlxkpfBCjGcPBDmZmP5I0cb/PcWlAiFyM0v2NZJmJCvY0NTXG
-    40pqzWyQKJiWIYVvL0Y1CeeQv0tEBV9z8o26HoJ8hlfOooEec/qKAPxABXFRw0Uh4lDD
-    IYYNhhoZH+oApLR3TVkXgFx9Qzz4vsCZRURJuuyFgzuyArW9ovE66NDnSzLMYw5WmSd1
-    kdIA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrK88/6Y="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 48.1.3 AUTH)
-    with ESMTPSA id 06b848y8SI9j0kC
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 28 Sep 2022 20:09:45 +0200 (CEST)
-Date:   Wed, 28 Sep 2022 20:09:44 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 20/34] dt-bindings: pinctrl: qcom,msm8909-tlmm: fix
- indentation in example
-Message-ID: <YzSN6KsMZiq5gEza@gerhold.net>
-References: <20220927173702.5200-1-krzysztof.kozlowski@linaro.org>
- <20220927173702.5200-21-krzysztof.kozlowski@linaro.org>
+        Wed, 28 Sep 2022 14:10:57 -0400
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CF8A1D65;
+        Wed, 28 Sep 2022 11:10:56 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id l9-20020a17090a4d4900b00205e295400eso2371687pjh.4;
+        Wed, 28 Sep 2022 11:10:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=GKDnwlvt98AzYvx8t1Z5mBjBPM9OSikHPq+0SvL9Y6w=;
+        b=BqTMUUhvd8QcTzNSgoQK8zbz/nbzLRBX6JUblecqyrLJ9REVfXjV0piTiBAgkivKkV
+         YqHMlCDHnbe6VlOxOxy5YmAnIawkP9Yxe62A2oIzHn8nfyGlgdRm255mQ62hTzbs0OSJ
+         VcOkyEnfD2jkeVX9DYaaRCBMvCeIxziqS34nzPndrPTOrHIkldTF7XYcp2ei7Wv2taST
+         pcg0Aabsy7WLLorXh5egq/aZvfuF6MGv2e7IB75N1DM/6beSodOIJpo5UzDQgD7EgkCR
+         ADZLU17n5Evisrpprkf1FIOaZ7YMMVwferJyhSTk8s6UygGmhDP81GJDPRc21B9KsP9j
+         Eicw==
+X-Gm-Message-State: ACrzQf1orNs+KuorM9RIFth8PsjhUxepfVoxLHq+eidqOxwI3wTNLoZZ
+        uKMuKhpdHUFItoODviL8V5M=
+X-Google-Smtp-Source: AMsMyM6IxpfaBJs42tePmX0Cj6OVnmn2lb9A/fUs5CG7m7PAuLn3yEE2tGgbRAOQDk0DKNCAQZzakQ==
+X-Received: by 2002:a17:902:ea12:b0:178:8e76:c781 with SMTP id s18-20020a170902ea1200b001788e76c781mr1044864plg.136.1664388656275;
+        Wed, 28 Sep 2022 11:10:56 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:4cba:f1a9:6ef8:3759? ([2620:15c:211:201:4cba:f1a9:6ef8:3759])
+        by smtp.gmail.com with ESMTPSA id i132-20020a62878a000000b0053651308a1csm4352316pfe.195.2022.09.28.11.10.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 11:10:55 -0700 (PDT)
+Message-ID: <26566e80-bf67-8c9f-9aac-b636cfaf473c@acm.org>
+Date:   Wed, 28 Sep 2022 11:10:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927173702.5200-21-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v15 07/13] zonefs: allow non power of 2 zoned devices
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, snitzer@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, hch@lst.de,
+        damien.lemoal@opensource.wdc.com
+Cc:     jaegeuk@kernel.org, gost.dev@samsung.com,
+        linux-kernel@vger.kernel.org, hare@suse.de,
+        matias.bjorling@wdc.com, Johannes.Thumshirn@wdc.com,
+        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+        pankydev8@gmail.com, dm-devel@redhat.com,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>
+References: <20220923173618.6899-1-p.raghav@samsung.com>
+ <CGME20220923173627eucas1p2f134d9cb331e4a8f0fca8431eeb0f0b0@eucas1p2.samsung.com>
+ <20220923173618.6899-8-p.raghav@samsung.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220923173618.6899-8-p.raghav@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 07:36:48PM +0200, Krzysztof Kozlowski wrote:
-> Bindings example should be indented with 4-spaces.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+On 9/23/22 10:36, Pankaj Raghav wrote:
+> The zone size shift variable is useful only if the zone sizes are known
+> to be power of 2. Remove that variable and use generic helpers from
+> block layer to calculate zone index in zonefs.
 
-Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
-> ---
->  .../bindings/pinctrl/qcom,msm8909-tlmm.yaml   | 60 +++++++++----------
->  1 file changed, 30 insertions(+), 30 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml
-> index 08e2dd5cbebe..9c647e24fa9a 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,msm8909-tlmm.yaml
-> @@ -118,35 +118,35 @@ $defs:
->  
->  examples:
->    - |
-> -        #include <dt-bindings/interrupt-controller/arm-gic.h>
-> -
-> -        pinctrl@1000000 {
-> -                compatible = "qcom,msm8909-tlmm";
-> -                reg = <0x1000000 0x300000>;
-> -                interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-> -                gpio-controller;
-> -                #gpio-cells = <2>;
-> -                gpio-ranges = <&tlmm 0 0 117>;
-> -                interrupt-controller;
-> -                #interrupt-cells = <2>;
-> -
-> -                gpio-wo-subnode-state {
-> -                        pins = "gpio1";
-> -                        function = "gpio";
-> -                };
-> -
-> -                uart-w-subnodes-state {
-> -                        rx-pins {
-> -                                pins = "gpio4";
-> -                                function = "blsp_uart1";
-> -                                bias-pull-up;
-> -                        };
-> -
-> -                        tx-pins {
-> -                                pins = "gpio5";
-> -                                function = "blsp_uart1";
-> -                                bias-disable;
-> -                        };
-> -                };
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    pinctrl@1000000 {
-> +        compatible = "qcom,msm8909-tlmm";
-> +        reg = <0x1000000 0x300000>;
-> +        interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-> +        gpio-controller;
-> +        #gpio-cells = <2>;
-> +        gpio-ranges = <&tlmm 0 0 117>;
-> +        interrupt-controller;
-> +        #interrupt-cells = <2>;
-> +
-> +        gpio-wo-subnode-state {
-> +            pins = "gpio1";
-> +            function = "gpio";
->          };
-> +
-> +        uart-w-subnodes-state {
-> +            rx-pins {
-> +                pins = "gpio4";
-> +                function = "blsp_uart1";
-> +                bias-pull-up;
-> +            };
-> +
-> +            tx-pins {
-> +                pins = "gpio5";
-> +                function = "blsp_uart1";
-> +                bias-disable;
-> +            };
-> +        };
-> +    };
->  ...
-> -- 
-> 2.34.1
-> 
+
