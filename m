@@ -2,281 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082EA5EDC58
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA165EDC5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbiI1MLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 08:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
+        id S233477AbiI1MMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 08:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233137AbiI1MLj (ORCPT
+        with ESMTP id S230140AbiI1MMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 08:11:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9033F786EA
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 05:11:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BC1061E4C
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 12:11:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A17C433D6;
-        Wed, 28 Sep 2022 12:11:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664367097;
-        bh=a09IXIwweboPmvgU+cNETe/Z2hKXFBbxvIKxYkihaYY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c1A0tM0KNjvvmFHvE82Nepgc/zjhSVTGapjBbfWnFOVeJbayd8j8nibnni4A09T+W
-         WSGeHFQWna+dowOVru3EQs2+BCurIxi1y2lWqs51JbgOkM8TTJVvvWlTVTN8yFIQgC
-         i8LE+FeKCi390kvDg1nALl22FuDju6Z3mOvcjgsJNYQj8+V4zb7B1rEw+/pVH5qjZb
-         dnC7sVG1J+Y5gMZQnEAzP0Yr/OoZyrnwZvCtF5Lq6AdNXEAH6CQZEXxJ/+l53fxqc8
-         m6nDZQGqRhqlI2iDptO48nRkBIdGmaJCOxK1lGee+yEb7mrdH+jWPbIHm2fsKCpJdd
-         7MkkNYA9JEgfQ==
-Date:   Wed, 28 Sep 2022 14:11:34 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Zucheng Zheng <zhengzucheng@huawei.com>, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        hucool.lihua@huawei.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] sched/cputime: Fix the time backward issue about
- /proc/stat
-Message-ID: <20220928121134.GA233658@lothringen>
-References: <20220928033402.181530-1-zhengzucheng@huawei.com>
- <YzQB8afi2rCPvuC1@hirez.programming.kicks-ass.net>
+        Wed, 28 Sep 2022 08:12:20 -0400
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3C778BCB;
+        Wed, 28 Sep 2022 05:12:19 -0700 (PDT)
+Received: by mail-qk1-f174.google.com with SMTP id d17so7664832qko.13;
+        Wed, 28 Sep 2022 05:12:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=CIqGVzBaFaFFR5UclyBFi8HgM/GRxAdQUGRuC1Ped5c=;
+        b=5yTBRQUphVDe+1CBMpc2f8xetTJ695YWR1tbOU8N8EoP7b1LIRkzNc+PLo7gWKPiEn
+         eDM1aBW6gm6qo9MvqOQtMIKggJGX/RN513jSexOrTroDZ37G/VPWILYO+zkcH3qGz/Lj
+         SH/K9KJunU2VqpT2zmxO8/EyxlHk26bkvcLc4YFLWnDcYDZDNg7DSE7+o1+dpC/Z3ohX
+         s+wGrB3Q2ndvGPHXga3Ke53nacua82WQdUail7FWEFZLJQKWDN8+F3KvUqIOP3VHIemX
+         zmC3wiOQTeB6DS6YZa66QCHLXFaLxDX8ztp7O19pK698vCq5/ecZ3iGMU3M8tvrXBkv3
+         Yhpg==
+X-Gm-Message-State: ACrzQf3PqK+xpP6I7GY1i5yKurNSWwjdfbmfYF7idxpIbMgPp//PXkZo
+        P+/fvqBw+bYkE+muL4oUALBnzK/clSlz6e1s7dEMdZuJ/vY=
+X-Google-Smtp-Source: AMsMyM75tbp+YtjShb747Y5XEHihnf4/GsshmS5UZxr0V4F4sqiP8NbWSDqDgZDVRfCw80XTodVOFfu68VgvS8Y3Dt0=
+X-Received: by 2002:a05:620a:2988:b0:6ce:cc3f:73b9 with SMTP id
+ r8-20020a05620a298800b006cecc3f73b9mr21046124qkp.9.1664367138442; Wed, 28 Sep
+ 2022 05:12:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YzQB8afi2rCPvuC1@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220927142822.4095-1-andriy.shevchenko@linux.intel.com> <YzP5UkYKahQR7FtZ@kuha.fi.intel.com>
+In-Reply-To: <YzP5UkYKahQR7FtZ@kuha.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 28 Sep 2022 14:12:02 +0200
+Message-ID: <CAJZ5v0jwQsqRZRX_=9aB-iDMCvp1qx__5P-2jDH9ts-_a3KTnQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/5] device property: Keep dev_fwnode() and
+ dev_fwnode_const() separate
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>, Daniel Scally <djrscally@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 10:12:33AM +0200, Peter Zijlstra wrote:
-> On Wed, Sep 28, 2022 at 11:34:02AM +0800, Zucheng Zheng wrote:
-> > From: Zheng Zucheng <zhengzucheng@huawei.com>
-> > 
-> > The cputime of cpuN read from /proc/stat has an issue of cputime descent.
-> > For example, the phenomenon of cputime descent of user is as followed:
-> > 
-> > The value read first is 319, and the value read again is 318. As follows:
-> > first:
-> >  cat /proc/stat |  grep cpu1
-> >  cpu1    319    0    496    41665    0    0    0    0    0    0
-> > again:
-> >  cat /proc/stat |  grep cpu1
-> >  cpu1    318    0    497    41674    0    0    0    0    0    0
-> > 
-> > The value read from /proc/stat should be monotonically increasing. Otherwise
-> > user may get incorrect CPU usage.
-> > 
-> > The root cause of this problem is that, in the implementation of
-> > kcpustat_cpu_fetch_vtime, vtime->utime + delta is added to the stack variable
-> > cpustat instantaneously. If the task is switched between two times, the value
-> > added to cpustat for the second time may be smaller than that for the first time.
-> > 
-> > 				CPU0						CPU1
-> > First:
-> > show_stat()
-> >  ->kcpustat_cpu_fetch()
-> >   ->kcpustat_cpu_fetch_vtime()
-> >    ->cpustat[CPUTIME_USER] = kcpustat_cpu(cpu) + vtime->utime + delta       rq->curr is task A
-> >                                                                             A switch to B，and A->vtime->utime is less than 1 tick
-> > Then:
-> > show_stat()
-> >  ->kcpustat_cpu_fetch()
-> >   ->kcpustat_cpu_fetch_vtime()
-> >    ->cpustat[CPUTIME_USER] = kcpustat_cpu(cpu) + vtime->utime + delta;     rq->curr is task B
-> 
-> You're still not explaining where the time gets lost. And the patch is a
-> horrible band-aid.
-> 
-> What I think you're saying; after staring at this for a while, is that:
-> 
->   vtime_task_switch_generic()
->     __vtime_account_kernel(prev, vtime)
->       vtime_account_{guest,system}(tsk, vtime)
->         vtime->*time += get_vtime_delta()
-> 	if (vtime->*time >= TICK_NSEC)
-> 	  account_*_time()
-> 	    account_system_index_time()
-> 	      task_group_account_field()
-> 	        __this_cpu_add(kernel_cpustat.cpustat[index], tmp);        <---- here
-> 
-> is not folding time into kernel_cpustat when the task vtime isn't at
-> least a tick's worth. And then when we switch to another task, we leak
-> time.
+On Wed, Sep 28, 2022 at 9:36 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> On Tue, Sep 27, 2022 at 05:28:17PM +0300, Andy Shevchenko wrote:
+> > It's not fully correct to take a const parameter pointer to a struct
+> > and return a non-const pointer to a member of that struct.
+> >
+> > Instead, introduce a const version of the dev_fwnode() API which takes
+> > and returns const pointers and use it where it's applicable.
+> >
+> > Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Fixes: aade55c86033 ("device property: Add const qualifier to device_get_match_data() parameter")
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>
+> For the whole series:
+>
+> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>
+> > ---
+> >  drivers/base/property.c  | 11 +++++++++--
+> >  include/linux/property.h |  3 ++-
+> >  2 files changed, 11 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/base/property.c b/drivers/base/property.c
+> > index 4d6278a84868..699f1b115e0a 100644
+> > --- a/drivers/base/property.c
+> > +++ b/drivers/base/property.c
+> > @@ -17,13 +17,20 @@
+> >  #include <linux/property.h>
+> >  #include <linux/phy.h>
+> >
+> > -struct fwnode_handle *dev_fwnode(const struct device *dev)
+> > +struct fwnode_handle *dev_fwnode(struct device *dev)
+> >  {
+> >       return IS_ENABLED(CONFIG_OF) && dev->of_node ?
+> >               of_fwnode_handle(dev->of_node) : dev->fwnode;
+> >  }
+> >  EXPORT_SYMBOL_GPL(dev_fwnode);
+> >
+> > +const struct fwnode_handle *dev_fwnode_const(const struct device *dev)
+> > +{
+> > +     return IS_ENABLED(CONFIG_OF) && dev->of_node ?
+> > +             of_fwnode_handle(dev->of_node) : dev->fwnode;
+> > +}
+> > +EXPORT_SYMBOL_GPL(dev_fwnode_const);
+> > +
+> >  /**
+> >   * device_property_present - check if a property of a device is present
+> >   * @dev: Device whose property is being checked
+> > @@ -1202,7 +1209,7 @@ EXPORT_SYMBOL(fwnode_graph_parse_endpoint);
+> >
+> >  const void *device_get_match_data(const struct device *dev)
+> >  {
+> > -     return fwnode_call_ptr_op(dev_fwnode(dev), device_get_match_data, dev);
+> > +     return fwnode_call_ptr_op(dev_fwnode_const(dev), device_get_match_data, dev);
+> >  }
+> >  EXPORT_SYMBOL_GPL(device_get_match_data);
+> >
+> > diff --git a/include/linux/property.h b/include/linux/property.h
+> > index 117cc200c656..ae5d7f8eccf4 100644
+> > --- a/include/linux/property.h
+> > +++ b/include/linux/property.h
+> > @@ -32,7 +32,8 @@ enum dev_dma_attr {
+> >       DEV_DMA_COHERENT,
+> >  };
+> >
+> > -struct fwnode_handle *dev_fwnode(const struct device *dev);
+> > +struct fwnode_handle *dev_fwnode(struct device *dev);
+> > +const struct fwnode_handle *dev_fwnode_const(const struct device *dev);
+> >
+> >  bool device_property_present(struct device *dev, const char *propname);
+> >  int device_property_read_u8_array(struct device *dev, const char *propname,
+> > --
 
-Looks right. Last time the patch was posted I misunderstood the issue.
+So I would like all of you to see the response from Greg to the v2 of
+this patch and provide your input in that thread:
 
-> 
-> There's another problem here, vtime_task_switch_generic() should use a
-> single call to sched_clock() to compute the old vtime_delta and set the
-> new vtime->starttime, otherwise there's a time hole there as well.
-
-Right, but does it really matter? It's just a few nanosecs ignored
-between two tasks switching.
-
-> 
-> This is all quite the maze and it really wants cleaning up, not be made
-> worse.
-> 
-> So I think you want to do two things:
-> 
->  - pull kernel_cpustat updates out of task_group_account_field()
->    and put them into vtime_task_switch_generic() to be purely
->    vtime->starttime based.
-
-So you want to force the update on all context switches? We used that TICK_NSEC
-limit before updating in order to lower some overhead.
-
-There is also user <-> kernel involved.
-
-How about handling that from the read side? (below untested)
-
-diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-index 78a233d43757..f0f1af337e49 100644
---- a/kernel/sched/cputime.c
-+++ b/kernel/sched/cputime.c
-@@ -814,9 +814,9 @@ u64 task_gtime(struct task_struct *t)
- 	do {
- 		seq = read_seqcount_begin(&vtime->seqcount);
- 
--		gtime = t->gtime;
-+		gtime = t->gtime + vtime->gtime;
- 		if (vtime->state == VTIME_GUEST)
--			gtime += vtime->gtime + vtime_delta(vtime);
-+			gtime += vtime_delta(vtime);
- 
- 	} while (read_seqcount_retry(&vtime->seqcount, seq));
- 
-@@ -845,8 +845,8 @@ bool task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
- 		ret = false;
- 		seq = read_seqcount_begin(&vtime->seqcount);
- 
--		*utime = t->utime;
--		*stime = t->stime;
-+		*utime = t->utime + vtime->utime;
-+		*stime = t->stime + vtime->stime;
- 
- 		/* Task is sleeping or idle, nothing to add */
- 		if (vtime->state < VTIME_SYS)
-@@ -860,9 +860,9 @@ bool task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
- 		 * add pending nohz time to the right place.
- 		 */
- 		if (vtime->state == VTIME_SYS)
--			*stime += vtime->stime + delta;
-+			*stime += delta;
- 		else
--			*utime += vtime->utime + delta;
-+			*utime += delta;
- 	} while (read_seqcount_retry(&vtime->seqcount, seq));
- 
- 	return ret;
-@@ -896,11 +896,22 @@ static int vtime_state_fetch(struct vtime *vtime, int cpu)
- 
- static u64 kcpustat_user_vtime(struct vtime *vtime)
- {
--	if (vtime->state == VTIME_USER)
--		return vtime->utime + vtime_delta(vtime);
--	else if (vtime->state == VTIME_GUEST)
--		return vtime->gtime + vtime_delta(vtime);
--	return 0;
-+	u64 delta = vtime->utime + vtime->gtime;
-+
-+	if (vtime->state == VTIME_USER || vtime->state == VTIME_GUEST)
-+		delta += vtime_delta(vtime);
-+
-+	return delta;
-+}
-+
-+static u64 kcpustat_guest_vtime(struct vtime *vtime)
-+{
-+	u64 delta = vtime->gtime;
-+
-+	if (vtime->state == VTIME_GUEST)
-+		delta += vtime_delta(vtime);
-+
-+	return delta;
- }
- 
- static int kcpustat_field_vtime(u64 *cpustat,
-@@ -931,8 +942,9 @@ static int kcpustat_field_vtime(u64 *cpustat,
- 		 */
- 		switch (usage) {
- 		case CPUTIME_SYSTEM:
-+			*val += vtime->stime;
- 			if (state == VTIME_SYS)
--				*val += vtime->stime + vtime_delta(vtime);
-+				*val += vtime_delta(vtime);
- 			break;
- 		case CPUTIME_USER:
- 			if (task_nice(tsk) <= 0)
-@@ -943,12 +955,12 @@ static int kcpustat_field_vtime(u64 *cpustat,
- 				*val += kcpustat_user_vtime(vtime);
- 			break;
- 		case CPUTIME_GUEST:
--			if (state == VTIME_GUEST && task_nice(tsk) <= 0)
--				*val += vtime->gtime + vtime_delta(vtime);
-+			if (task_nice(tsk) <= 0)
-+				*val += kcpustat_guest_vtime(vtime);
- 			break;
- 		case CPUTIME_GUEST_NICE:
--			if (state == VTIME_GUEST && task_nice(tsk) > 0)
--				*val += vtime->gtime + vtime_delta(vtime);
-+			if (task_nice(tsk) > 0)
-+				*val += kcpustat_guest_vtime(vtime);
- 			break;
- 		default:
- 			break;
-@@ -1013,6 +1025,15 @@ static int kcpustat_cpu_fetch_vtime(struct kernel_cpustat *dst,
- 		*dst = *src;
- 		cpustat = dst->cpustat;
- 
-+		cpustat[CPUTIME_SYSTEM] += vtime->stime;
-+		if (task_nice(tsk) > 0) {
-+			cpustat[CPUTIME_NICE] += vtime->utime + vtime->gtime;
-+			cpustat[CPUTIME_GUEST_NICE] += vtime->gtime;
-+		} else {
-+			cpustat[CPUTIME_USER] += vtime->utime + vtime->gtime;
-+			cpustat[CPUTIME_GUEST] += vtime->gtime;
-+		}
-+
- 		/* Task is sleeping, dead or idle, nothing to add */
- 		if (state < VTIME_SYS)
- 			continue;
-@@ -1024,20 +1045,20 @@ static int kcpustat_cpu_fetch_vtime(struct kernel_cpustat *dst,
- 		 * add pending nohz time to the right place.
- 		 */
- 		if (state == VTIME_SYS) {
--			cpustat[CPUTIME_SYSTEM] += vtime->stime + delta;
-+			cpustat[CPUTIME_SYSTEM] += delta;
- 		} else if (state == VTIME_USER) {
- 			if (task_nice(tsk) > 0)
--				cpustat[CPUTIME_NICE] += vtime->utime + delta;
-+				cpustat[CPUTIME_NICE] += delta;
- 			else
--				cpustat[CPUTIME_USER] += vtime->utime + delta;
-+				cpustat[CPUTIME_USER] += delta;
- 		} else {
- 			WARN_ON_ONCE(state != VTIME_GUEST);
- 			if (task_nice(tsk) > 0) {
--				cpustat[CPUTIME_GUEST_NICE] += vtime->gtime + delta;
--				cpustat[CPUTIME_NICE] += vtime->gtime + delta;
-+				cpustat[CPUTIME_GUEST_NICE] += delta;
-+				cpustat[CPUTIME_NICE] += delta;
- 			} else {
--				cpustat[CPUTIME_GUEST] += vtime->gtime + delta;
--				cpustat[CPUTIME_USER] += vtime->gtime + delta;
-+				cpustat[CPUTIME_GUEST] += delta;
-+				cpustat[CPUTIME_USER] += delta;
- 			}
- 		}
- 	} while (read_seqcount_retry(&vtime->seqcount, seq));
+https://lore.kernel.org/linux-acpi/YzQqcFZtJn90URrJ@kroah.com/T/#u
