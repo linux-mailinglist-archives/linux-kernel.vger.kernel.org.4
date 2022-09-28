@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BABE25EDF33
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B28EC5EDF36
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234601AbiI1Oup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
+        id S234604AbiI1Ous (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234530AbiI1OuN (ORCPT
+        with ESMTP id S234535AbiI1OuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:50:13 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE63F97D7A;
-        Wed, 28 Sep 2022 07:50:06 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id r7so20219560wrm.2;
-        Wed, 28 Sep 2022 07:50:06 -0700 (PDT)
+        Wed, 28 Sep 2022 10:50:23 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE218689D;
+        Wed, 28 Sep 2022 07:50:11 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id c192-20020a1c35c9000000b003b51339d350so1407279wma.3;
+        Wed, 28 Sep 2022 07:50:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=VjzbsqyM1APsENn4Ek+I+pGVYJYx6nNdMM0neoVN9ZM=;
-        b=WPIKMykDY++bP0uYimAivAUijxifE++Ikj0sAqcd8xClKlDR0ADDj1xR1PwMHeurXm
-         cByqoA81MLdYsGmJ2rRu++dHE9ar+aawGjM5pOXwnfAmfmzeqiBTmHZajOKh/KyqaIxJ
-         IktEmBWX9kkD0p6aDYWk+iDbiEBSCsHL6xy/tqsjGZiGdVpMX2R1SdEN/toF/UtqUu3G
-         jbKObuVK5SdmEFiXENC6dl7+XLvuv+VILRgG0+vIw/Jnvk0n+wo8ghgYtA/5EzleuwDT
-         Ix+v2sKKuhsTUWbaPHsuophz6Rwxsnd8jqqwVirbHiUK2GjrhPlXeMXSA/+1VxubkT3G
-         Bz+w==
+        bh=TDlzEIb+M6CPHiaVMqXJZzEfCntRBIpPMm1M+NjSybU=;
+        b=deUaeO5m4FljkO6EVha8UK7BH08sIS6PEVcg2ZBKtOXW3VgnLFqnhHau0Xl7I1y1R+
+         7/ehszoBLYlt+iFh8j3tiBdQESTbwqTjgVoobn7rQUJyacz8tm9YUHg/8EbA9Ke7wCtZ
+         YH8BDFA5bt3S3WIr5obADRq7yxn1mYCd1Tb56rcIFpoAWorMuq3scnkMdcu9oZPb4J9f
+         l0vbfZS9hN5CDzNIKBbyq1C+e8OyR0Oz7jyA8f/VqfzF0dVf/Y4Rnrd5EjmDqzWl5JHv
+         3y2AKzgjUdOkioH5B/6/HlXZfkdLYbOK4KLpdUmVI30SQjchkakwJLJQDFt/Ts3XeWLA
+         rpPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=VjzbsqyM1APsENn4Ek+I+pGVYJYx6nNdMM0neoVN9ZM=;
-        b=pD+hjvAVNXQDZru3s157pmIgCUzQOIyJ1ud/3cfKtIEhM0zfcdDEUsis2YIy+n3hmR
-         XJjY8lDQ936jYRWdl7G6LpmEOhdQcfHL08jZLG9hml953jFy99ML65h8a7AwvA6QXExG
-         f/Wf4BeFbvHa1ThP8JRpBlYeE/Gl+N4JRaCMc6UOS8DBfxqpUIHxNEokT9iAnzevRdr4
-         ctZ3HwkIsvpK0YHZVlEu6ZaXxUSQvT6Iifigc58+wtIsoS2rjG7WtU5f1DdQ2liCSYQx
-         GRPhlN8ktch4FxUfkzif/rOJm8Q9mpbjC5xiF2arHCsTtRR2Fz4gHuPYUaSeaVOESNbk
-         HcTA==
-X-Gm-Message-State: ACrzQf3/BDdU/tpGZKyraxJCjFx3YBboKr8hTMJWXO8FOtQhzkW5+LRy
-        m2Uxq5XEPvTSMydb2S7fY1c=
-X-Google-Smtp-Source: AMsMyM5crwY2/LlXIa0Qudznuc7W2yW1rFQ1trCeM3LK1Uz5y7JltsJcBpgciPxzBrOXDk3XBnFBIQ==
-X-Received: by 2002:a05:6000:1864:b0:22a:e349:f031 with SMTP id d4-20020a056000186400b0022ae349f031mr21202406wri.476.1664376604914;
-        Wed, 28 Sep 2022 07:50:04 -0700 (PDT)
+        bh=TDlzEIb+M6CPHiaVMqXJZzEfCntRBIpPMm1M+NjSybU=;
+        b=38vxrQ0OuEeZetmB9vp5SRUtHescgXklzd5GE791D48VjtRULfUCh2YzFPivvhc8je
+         QW9oP3RL0vZ82/YqfYKOW+Wtja2+1//ZWkZ5O+fY7GJTPqw5COWK32o67krUpE7OHmz8
+         ub7cDOEk/qNpoTbGI3eqqi0ikmEW029Jhoatt138F6VMWUScNH4Z4fFG7g3PZ0DPyhPO
+         ho13i5mPhO2fybwRzVEyof+BfusBgUpQidLj62irgmW2dKLWkDlcjq250qbOZeh5WZWF
+         dPFc0EmJjJ+LU6qsEF3vSZ24pEWUZAJ/SxC5C+XDfOuIQ8gYTvZq6P3v0V2cM+O7tPW4
+         O3oQ==
+X-Gm-Message-State: ACrzQf1ByzOaebVPKopChJ7pGJfN2e2rrh3SDvRYupyj2ASI6EnQtqPP
+        CiGNcfcCHBXAvAxWpaAjzjQW55UKv/uS1g==
+X-Google-Smtp-Source: AMsMyM7ACX8BWjxAHcPlCJ9YL2XU3mdCk5XCu08iupdKaJjQ8LkE4RC8ADycFYpo/zLgdOasp+W2Mg==
+X-Received: by 2002:a7b:c404:0:b0:3b4:faca:cf50 with SMTP id k4-20020a7bc404000000b003b4facacf50mr7129617wmi.67.1664376609995;
+        Wed, 28 Sep 2022 07:50:09 -0700 (PDT)
 Received: from michael-VirtualBox.xsight.ent (89-139-44-91.bb.netvision.net.il. [89.139.44.91])
-        by smtp.googlemail.com with ESMTPSA id m35-20020a05600c3b2300b003b47b913901sm6977446wms.1.2022.09.28.07.50.04
+        by smtp.googlemail.com with ESMTPSA id m35-20020a05600c3b2300b003b47b913901sm6977446wms.1.2022.09.28.07.50.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 07:50:04 -0700 (PDT)
+        Wed, 28 Sep 2022 07:50:09 -0700 (PDT)
 From:   Michael Zaidman <michael.zaidman@gmail.com>
 To:     jikos@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         Michael Zaidman <michael.zaidman@gmail.com>,
-        Guillaume Champagne <champagne.guillaume.c@gmail.com>
-Subject: [PATCH v2 5/7] HID: ft260: improve i2c large reads performance
-Date:   Wed, 28 Sep 2022 17:48:52 +0300
-Message-Id: <20220928144854.5580-6-michael.zaidman@gmail.com>
+        Enrik Berkhan <Enrik.Berkhan@inka.de>
+Subject: [PATCH v2 6/7] HID: ft260: do not populate /dev/hidraw device
+Date:   Wed, 28 Sep 2022 17:48:53 +0300
+Message-Id: <20220928144854.5580-7-michael.zaidman@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220928144854.5580-1-michael.zaidman@gmail.com>
 References: <20220928144854.5580-1-michael.zaidman@gmail.com>
@@ -72,106 +72,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch increases the read buffer size to 128 bytes. It reduces the
-number of ft260_i2c_read calls by three and improves the large data
-chunks' read performance by about 10%.
+Do not populate the /dev/hidraw on ft260 interfaces when the hid-ft260
+driver is loaded.
 
-Before:
+$ sudo insmod hid-ft260.ko
+$ ls /dev/hidraw*
+/dev/hidraw0
 
-$ sudo ./i2cperf -d 2 -o 2 -s 128 -r 0-0xff 13 0x51 -S
+$ sudo rmmod hid-ft260.ko
+$ ls /dev/hidraw*
+/dev/hidraw0  /dev/hidraw1  /dev/hidraw2
 
-  Read block via i2ctransfer by chunks
-  -------------------------------------------------------------------
-  data rate(bps)  efficiency(%)  data size(B)  total IOs   IO size(B)
-  -------------------------------------------------------------------
-  43990           85             256           2           128
-
-Kernel log:
-
-[  +1.464346] ft260_i2c_write_read: off 0x0 rlen 128 wlen 2
-[  +0.000002] ft260_i2c_write: rep 0xd0 addr 0x51 off 0 len 2 wlen 2 flag 0x2 d[0] 0x0
-[  +0.001653] ft260_xfer_status: bus_status 0x41, clock 100
-[  +0.000188] ft260_xfer_status: bus_status 0x40, clock 100
-[  +0.000002] ft260_i2c_read: rep 0xc2 addr 0x51 len 128 rlen 60 flag 0x3
-[  +0.008609] ft260_raw_event: i2c resp: rep 0xde len 60
-[  +0.000157] ft260_xfer_status: bus_status 0x40, clock 100
-[  +0.000002] ft260_i2c_read: rep 0xc2 addr 0x51 len 68 rlen 60 flag 0x0
-[  +0.008840] ft260_raw_event: i2c resp: rep 0xde len 60
-[  +0.000203] ft260_xfer_status: bus_status 0x40, clock 100
-[  +0.000002] ft260_i2c_read: rep 0xc2 addr 0x51 len 8 rlen 8 flag 0x4
-[  +0.002794] ft260_raw_event: i2c resp: rep 0xd1 len 8
-[  +0.000201] ft260_xfer_status: bus_status 0x20, clock 100
-[  +0.015171] ft260_i2c_write_read: off 0x80 rlen 128 wlen 2
-[  +0.000002] ft260_i2c_write: rep 0xd0 addr 0x51 off 0 len 2 wlen 2 flag 0x2 d[0] 0x0
-[  +0.000764] ft260_xfer_status: bus_status 0x41, clock 100
-[  +0.000231] ft260_xfer_status: bus_status 0x41, clock 100
-[  +0.000148] ft260_xfer_status: bus_status 0x40, clock 100
-[  +0.000002] ft260_i2c_read: rep 0xc2 addr 0x51 len 128 rlen 60 flag 0x3
-[  +0.008488] ft260_raw_event: i2c resp: rep 0xde len 60
-[  +0.000205] ft260_xfer_status: bus_status 0x40, clock 100
-[  +0.000002] ft260_i2c_read: rep 0xc2 addr 0x51 len 68 rlen 60 flag 0x0
-[  +0.008795] ft260_raw_event: i2c resp: rep 0xde len 60
-[  +0.000176] ft260_xfer_status: bus_status 0x40, clock 100
-[  +0.000001] ft260_i2c_read: rep 0xc2 addr 0x51 len 8 rlen 8 flag 0x4
-[  +0.002819] ft260_raw_event: i2c resp: rep 0xd1 len 8
-[  +0.000167] ft260_xfer_status: bus_status 0x20, clock 100
-
-After:
-
-$ sudo ./i2cperf -d 2 -o 2 -s 128 -r 0-0xff 13 0x51 -S
-
-  Read block via i2ctransfer by chunks
-  -------------------------------------------------------------------
-  data rate(bps)  efficiency(%)  data size(B)  total IOs   IO size(B)
-  -------------------------------------------------------------------
-  49316           85             256           2           128
-
-Kernel log:
-
-[  +1.447360] ft260_i2c_write_read: off 0x0 rlen 128 wlen 2
-[  +0.000002] ft260_i2c_write: rep 0xd0 addr 0x51 off 0 len 2 wlen 2 flag 0x2 d[0] 0x0
-[  +0.001633] ft260_xfer_status: bus_status 0x41, clock 100
-[  +0.000190] ft260_xfer_status: bus_status 0x40, clock 100
-[  +0.000001] ft260_i2c_read: rep 0xc2 addr 0x51 len 128 rlen 128 flag 0x7
-[  +0.008617] ft260_raw_event: i2c resp: rep 0xde len 60
-[  +0.008033] ft260_raw_event: i2c resp: rep 0xde len 60
-[  +0.000954] ft260_raw_event: i2c resp: rep 0xd1 len 8
-[  +0.000208] ft260_xfer_status: bus_status 0x20, clock 100
-[  +0.015853] ft260_i2c_write_read: off 0x80 rlen 128 wlen 2
-[  +0.000002] ft260_i2c_write: rep 0xd0 addr 0x51 off 0 len 2 wlen 2 flag 0x2 d[0] 0x0
-[  +0.001182] ft260_xfer_status: bus_status 0x41, clock 100
-[  +0.000180] ft260_xfer_status: bus_status 0x40, clock 100
-[  +0.000001] ft260_i2c_read: rep 0xc2 addr 0x51 len 128 rlen 128 flag 0x7
-[  +0.008575] ft260_raw_event: i2c resp: rep 0xde len 60
-[  +0.008014] ft260_raw_event: i2c resp: rep 0xde len 60
-[  +0.001001] ft260_raw_event: i2c resp: rep 0xd1 len 8
-[  +0.000223] ft260_xfer_status: bus_status 0x20, clock 100
-
+Reported-by: Enrik Berkhan <Enrik.Berkhan@inka.de>
 Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
-Tested-by: Guillaume Champagne <champagne.guillaume.c@gmail.com>
 ---
- drivers/hid/hid-ft260.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/hid/hid-ft260.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
-index cb8f1782d1f0..c7c3a9d395a2 100644
+index c7c3a9d395a2..bb9f4e07c21d 100644
 --- a/drivers/hid/hid-ft260.c
 +++ b/drivers/hid/hid-ft260.c
-@@ -30,12 +30,8 @@ MODULE_PARM_DESC(debug, "Toggle FT260 debugging messages");
+@@ -938,7 +938,7 @@ static int ft260_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		return ret;
+ 	}
  
- #define FT260_REPORT_MAX_LENGTH (64)
- #define FT260_I2C_DATA_REPORT_ID(len) (FT260_I2C_REPORT_MIN + (len - 1) / 4)
--/*
-- * The input report format assigns 62 bytes for the data payload, but ft260
-- * returns 60 and 2 in two separate transactions. To minimize transfer time
-- * in reading chunks mode, set the maximum read payload length to 60 bytes.
-- */
--#define FT260_RD_DATA_MAX (60)
+-	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
++	ret = hid_hw_start(hdev, 0);
+ 	if (ret) {
+ 		hid_err(hdev, "failed to start HID HW\n");
+ 		return ret;
+@@ -965,6 +965,10 @@ static int ft260_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	if (ret <= 0)
+ 		goto err_hid_close;
+ 
++	hid_info(hdev, "USB HID v%x.%02x Device [%s] on %s\n",
++		hdev->version >> 8, hdev->version & 0xff, hdev->name,
++		hdev->phys);
 +
-+#define FT260_RD_DATA_MAX (128)
- #define FT260_WR_DATA_MAX (60)
+ 	hid_set_drvdata(hdev, dev);
+ 	dev->hdev = hdev;
+ 	dev->adap.owner = THIS_MODULE;
+@@ -973,8 +977,7 @@ static int ft260_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	dev->adap.quirks = &ft260_i2c_quirks;
+ 	dev->adap.dev.parent = &hdev->dev;
+ 	snprintf(dev->adap.name, sizeof(dev->adap.name),
+-		 "FT260 usb-i2c bridge on hidraw%d",
+-		 ((struct hidraw *)hdev->hidraw)->minor);
++		 "FT260 usb-i2c bridge");
  
- /*
+ 	mutex_init(&dev->lock);
+ 	init_completion(&dev->wait);
 -- 
 2.34.1
 
