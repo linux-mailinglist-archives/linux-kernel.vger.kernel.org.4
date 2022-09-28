@@ -2,218 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A59F5EE027
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:22:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A9F5EE02E
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbiI1PWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
+        id S234560AbiI1PXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233765AbiI1PW1 (ORCPT
+        with ESMTP id S234073AbiI1PXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:22:27 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F4CB7EF8;
-        Wed, 28 Sep 2022 08:21:20 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so2731011pjq.3;
-        Wed, 28 Sep 2022 08:21:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=+WEGG8bdhAe2IeIV7nqdCMLjsT+NYXr3vPeV8ohPUdo=;
-        b=NWQyIQIxOLBbO8SUWUFvnbiVWQh98VMz4aaF7yBvntNeo0lhVe58k8UbVlT21ceSy3
-         N73J25O0TqMb7/Thn4zweOWpAI5H0J0ntIKpBQEAuOKdh6FgK1uAI485b6iHqcWhI1Pl
-         bo4Rx9klC7pi4nz6dh5u3ntQhBZe+lpNuMRyBggNRNpyvKDUds8WsQLcy/KE+8aJLfWQ
-         iRlwAUj5xdkEv8czArv0Qq0NY/vLa4Ty7E6RWatQOK91Alq1xvljZFnjyb1DOCEtMwSs
-         2qMFu7mVUL95Ss/7LqKnn37AkHMHMy2RYH+POfMXUwH6+T16znqYpIEGsYIdmODza/xY
-         3F5w==
+        Wed, 28 Sep 2022 11:23:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C50CC8FA
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:21:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664378499;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xDmQ1DANCDaUuqhIrlX3xlqcUcfbmIgkqlY33q/Kj78=;
+        b=O8CnQkqr27I+aVBdxDI8iXf7Ts0Cjd/tQyAJHQwsOKp61BRfkB81GOFeLqNfna5oaJeSWZ
+        UhK+ZNJdcOo7iLoSDVPOVJ9JwVWJqbWewf2XKIwWuIMdbRmhq2/YVutJfPhnTeXwH0bX5+
+        HIadFpc/IbgSIRBYJN+RbQ+2F7o31kQ=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-549-2vddpuvWMBqekcPltCFdUA-1; Wed, 28 Sep 2022 11:21:23 -0400
+X-MC-Unique: 2vddpuvWMBqekcPltCFdUA-1
+Received: by mail-qt1-f197.google.com with SMTP id e22-20020ac84b56000000b0035bb64ad562so9139212qts.17
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:21:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=+WEGG8bdhAe2IeIV7nqdCMLjsT+NYXr3vPeV8ohPUdo=;
-        b=XwZSCfNUFHbU00EAu/hbFYy/iceQDNAJ47l1BriEZwO4zS0edl0FGdt+nFT1ZbZpcd
-         iIv3fRh7LNQsq9ePt310xOtV6B0FlqTZzw2JWE8avuMq/btG059JlddjYuZaOu65fmUI
-         bg4jYKRogW2L2j10clQ136flthH9PaXJAtm4rGF6SFxs9mvwNXDNmqi6Uc/T02f6jlwU
-         zvSTcp+TijAoF3+OThokN2Dg3GjUXByJSB6NL90t2BubtCQkcNwJU4MtMTrJ/lQQqwb3
-         xYVrVjNNly1T2UaG+yQ62T5XOl4Ev/Qnlkm0Qrst/Z+n5lmLYLltQo9H8Bu5YuMrtUVv
-         iIHQ==
-X-Gm-Message-State: ACrzQf3PBL5QLlV9KgFHSobglYrr9UlYRIQ1LLKCvBCL6jW2f9pgWEZ5
-        q0J1eC7Vw62C/wVGaqxwSE4=
-X-Google-Smtp-Source: AMsMyM5mMWhYz3X1436kKEvjTcv3eDyNmzU671ZYKCbUm/02hn0itjtfv1akLF+RCA7rJZzYyQPCdw==
-X-Received: by 2002:a17:90a:2fc9:b0:202:5605:65ae with SMTP id n9-20020a17090a2fc900b00202560565aemr11170445pjm.167.1664378479610;
-        Wed, 28 Sep 2022 08:21:19 -0700 (PDT)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id y2-20020a170902864200b0016c0c82e85csm3784367plt.75.2022.09.28.08.21.13
+        bh=xDmQ1DANCDaUuqhIrlX3xlqcUcfbmIgkqlY33q/Kj78=;
+        b=2QL5ss4q1fdAI4MAlQDxlC+mDaYwelZgy3DwuYHaJtpuCsXXvW/BnuH+8GjKcnqink
+         Ijn8d1f2qYOGLQif7cDOd8nfXgohKdhCnuCfeQfMngMwM2ZoiNJZ2+XlFsHamaaWZa8F
+         HkzSdfo5uGYsNGpP6ZdKpMMv/xZOkhEkPAIfAv5QvCVwwjBveQ9eordg14RX++9MZ5/Q
+         m9rSpHwUeixp45SyGDQXjn18uyp3vRAs4whK2vGeUue5rtoM+LaeQhjRYxryJ7WzH3R7
+         Vj/jOtYOAzyK3KlGmPIwNXa/Wk2vl3C+rdv2JieBm8ORH5S/6xovDyH3eKTL+z2XmHjV
+         1Esw==
+X-Gm-Message-State: ACrzQf1pyudorOFt3dnfflhErOpWrRUWm1sdsmapL3LHglOlBOb4aX+Q
+        IQsWg6Uj6IKwCH3Fw/VlXuqqWNbNchwrxKV64ESHehpCIXNWaxvLy5BCpdo9xqC6G7EgjuqzgH1
+        GbL6lOJ/hUXGetsZ7VVY50pRT0gJ2WRN/ojbiSmb5+QpGHjFwBJHGbMsaunv2uG+NXke4dV3YEE
+        Me
+X-Received: by 2002:a05:6214:1bcd:b0:4af:646a:9793 with SMTP id m13-20020a0562141bcd00b004af646a9793mr15914892qvc.94.1664378482433;
+        Wed, 28 Sep 2022 08:21:22 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM73nezA3iYhO9c31xv3DWn4iUg7lZDa1ELdpZgByCB9Ae6jn/htBUoq53tpR7IwUkbPk7tmyw==
+X-Received: by 2002:a05:6214:1bcd:b0:4af:646a:9793 with SMTP id m13-20020a0562141bcd00b004af646a9793mr15914858qvc.94.1664378482032;
+        Wed, 28 Sep 2022 08:21:22 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id m17-20020a05620a24d100b006cbcdc6efedsm3314206qkn.41.2022.09.28.08.21.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 08:21:17 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 00:21:10 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
-        Kees Cook <keescook@chromium.org>,
-        Roman Gushchin <guro@fb.com>, Jann Horn <jannh@google.com>,
-        Vijayanand Jitta <vjitta@codeaurora.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v2] mm: Make failslab writable again
-Message-ID: <YzRmZlJBFA9HIlSM@hyeyoo>
-References: <20220920121111.1792905-1-alexander.atanasov@virtuozzo.com>
- <Yyr1xONdw8dBgsKr@hyeyoo>
- <30063d97-69f0-bea2-9d59-108140995bfc@virtuozzo.com>
- <YzJIsFZQoCEYntvR@hyeyoo>
- <7640a2d9-a32d-2fd7-8f64-586edb9b781e@virtuozzo.com>
+        Wed, 28 Sep 2022 08:21:21 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 08:21:20 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: Re: [PATCH 2/2] dmaengine: idxd: track enabled workqueues in bitmap
+Message-ID: <20220928152120.3wsvc4iungzsmryn@cantor>
+References: <20220919215553.600246-1-jsnitsel@redhat.com>
+ <20220919215553.600246-3-jsnitsel@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7640a2d9-a32d-2fd7-8f64-586edb9b781e@virtuozzo.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220919215553.600246-3-jsnitsel@redhat.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 10:44:20AM +0300, Alexander Atanasov wrote:
-> Hello,
+On Mon, Sep 19, 2022 at 02:55:53PM -0700, Jerry Snitselaar wrote:
+> Now that idxd_wq_disable_cleanup() sets the workqueue state to
+> IDXD_WQ_DISABLED, use a bitmap to track which workqueues have been
+> enabled. This will then be used to determine which workqueues
+> should be re-enabled when attempting a software reset to recover
+> from a device halt state.
 > 
-> On 27.09.22 3:49, Hyeonggon Yoo wrote:
-> > On Fri, Sep 23, 2022 at 10:34:28AM +0300, Alexander Atanasov wrote:
-> > > Hello,
-> > > 
-> > > On 21.09.22 14:30, Hyeonggon Yoo wrote:
-> > > > On Tue, Sep 20, 2022 at 03:11:11PM +0300, Alexander Atanasov wrote:
-> > > > > In (060807f841ac mm, slub: make remaining slub_debug related attributes
-> > > > > read-only) failslab was made read-only.
-> > > > > I think it became a collateral victim to the two other options for which
-> > > > > the reasons are perfectly valid.
-> > > > > Here is why:
-> > > > >    - sanity_checks and trace are slab internal debug options,
-> > > > >      failslab is used for fault injection.
-> > > > >    - for fault injections, which by presumption are random, it
-> > > > >      does not matter if it is not set atomically. And you need to
-> > > > >      set atleast one more option to trigger fault injection.
-> > > > >    - in a testing scenario you may need to change it at runtime
-> > > > >      example: module loading - you test all allocations limited
-> > > > >      by the space option. Then you move to test only your module's
-> > > > >      own slabs.
-> > > > >    - when set by command line flags it effectively disables all
-> > > > >      cache merges.
-> > > > 
-> > > > Maybe we can make failslab= boot parameter to consider cache filtering?
-> > > > 
-> > > > With that, just pass something like this:
-> > > > 	failslab=X,X,X,X,cache_filter slub_debug=A,<cache-name>>
-> > > 
-> > > > Users should pass slub_debug=A,<cache-name> anyway to prevent cache merging.
-> > > 
-> > > It will be good to have this in case you want to test cache that is used
-> > > early. But why push something to command line option only when it can be
-> > > changed at runtime?
-> > 
-> > Hmm okay. I'm not against changing it writable. (it looks okay to me.)
+> Cc: Fenghua Yu <fenghua.yu@intel.com>
+> Cc: Dave Jiang <dave.jiang@intel.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> ---
+>  drivers/dma/idxd/device.c | 2 ++
+>  drivers/dma/idxd/idxd.h   | 2 ++
+>  drivers/dma/idxd/init.c   | 6 ++++++
+>  drivers/dma/idxd/irq.c    | 4 ++--
+>  drivers/dma/idxd/sysfs.c  | 1 +
+>  5 files changed, 13 insertions(+), 2 deletions(-)
 > 
-> Okay. Good to know that.
-> 
-> > Just wanted to understand your use case!
-> > Can you please elaborate why booting with slub_debug=A,<your cache name>
-> > and enabling cache_filter after boot does not work?
-> 
-> I didn't say it does not work - it does work but requires reboot. You may
-> want to test variations of caches for example. Cache A, Cache B ... C and so
-> on one by one. Reboots might be fast these days with VMs but you may not be
-> able to test everything in a VM. And ... reboots used to be the signature
-> move of one Other OS.
+> diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
+> index 31911e255ac1..f0c7d6d348e3 100644
+> --- a/drivers/dma/idxd/device.c
+> +++ b/drivers/dma/idxd/device.c
+> @@ -196,6 +196,7 @@ int idxd_wq_enable(struct idxd_wq *wq)
+>  	}
+>  
+>  	wq->state = IDXD_WQ_ENABLED;
+> +	set_bit(wq->id, idxd->wq_enable_map);
+>  	dev_dbg(dev, "WQ %d enabled\n", wq->id);
+>  	return 0;
+>  }
+> @@ -223,6 +224,7 @@ int idxd_wq_disable(struct idxd_wq *wq, bool reset_config)
+>  
+>  	if (reset_config)
+>  		idxd_wq_disable_cleanup(wq);
+> +	clear_bit(wq->id, idxd->wq_enable_map);
+>  	wq->state = IDXD_WQ_DISABLED;
+>  	dev_dbg(dev, "WQ %d disabled\n", wq->id);
+>  	return 0;
+> diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
+> index fed0dfc1eaa8..f527a7f88b92 100644
+> --- a/drivers/dma/idxd/idxd.h
+> +++ b/drivers/dma/idxd/idxd.h
+> @@ -11,6 +11,7 @@
+>  #include <linux/idr.h>
+>  #include <linux/pci.h>
+>  #include <linux/ioasid.h>
+> +#include <linux/bitmap.h>
+>  #include <linux/perf_event.h>
+>  #include <uapi/linux/idxd.h>
+>  #include "registers.h"
+> @@ -299,6 +300,7 @@ struct idxd_device {
+>  	int rdbuf_limit;
+>  	int nr_rdbufs;		/* non-reserved read buffers */
+>  	unsigned int wqcfg_size;
+> +	unsigned long *wq_enable_map;
+>  
+>  	union sw_err_reg sw_err;
+>  	wait_queue_head_t cmd_waitq;
+> diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
+> index aa3478257ddb..7e27e69ff741 100644
+> --- a/drivers/dma/idxd/init.c
+> +++ b/drivers/dma/idxd/init.c
+> @@ -151,6 +151,12 @@ static int idxd_setup_wqs(struct idxd_device *idxd)
+>  	if (!idxd->wqs)
+>  		return -ENOMEM;
+>  
+> +	idxd->wq_enable_map = bitmap_zalloc_node(idxd->max_wqs, GFP_KERNEL, dev_to_node(dev));
+> +	if (!idxd->wq_enable_map) {
+> +		kfree(idxd->wqs);
+> +		return -ENOMEM;
+> +	}
+> +
+>  	for (i = 0; i < idxd->max_wqs; i++) {
+>  		wq = kzalloc_node(sizeof(*wq), GFP_KERNEL, dev_to_node(dev));
+>  		if (!wq) {
+> diff --git a/drivers/dma/idxd/irq.c b/drivers/dma/idxd/irq.c
+> index 743ead5ebc57..8efaf137fc65 100644
+> --- a/drivers/dma/idxd/irq.c
+> +++ b/drivers/dma/idxd/irq.c
+> @@ -49,9 +49,9 @@ static void idxd_device_reinit(struct work_struct *work)
+>  		goto out;
+>  
+>  	for (i = 0; i < idxd->max_wqs; i++) {
+> -		struct idxd_wq *wq = idxd->wqs[i];
+> +		if (test_bit(i, idxd->wq_enable_map)) {
+> +			struct idxd_wq *wq = idxd->wqs[i];
+>  
+> -		if (wq->state == IDXD_WQ_ENABLED) {
+>  			rc = idxd_wq_enable(wq);
+>  			if (rc < 0) {
+>  				dev_warn(dev, "Unable to re-enable wq %s\n",
 
-Thank you for elaboration!
-Makes sense.
+Hi Dave and Fenghua,
 
-> 
-> > Or is it trying to changnig these steps,
-> > 
-> > FROM
-> > 	1. booting with slub_debug=A,<cache name>
-> > 	2. write to cache_filter to enable cache filtering
-> > 	3. setup probability, interval, times, size
-> > 
-> > TO
-> > 
-> > 	1. write to failslab attribute of <cache name> (may fail it has alias)
-> > 	2. write to cache_filter to enable cache filtering
-> > 	3. setup probability, interval, times, size
-> > ?
-> > 
-> > as you may know, SLAB_FAILSLAB does nothing whens
-> > cache_filter is disabled, and you should pass slub_debug=A,<cache name> anyway
-> 
-> Okay , i think there awaits another problem:
-> bool __should_failslab(struct kmem_cache *s, gfp_t gfpflags)
-> {
-> ...
-> 
->         if (failslab.cache_filter && !(s->flags & SLAB_FAILSLAB))
->                 return false;
-> ...
-> 	return should_fail(&failslab.attr, s->object_size);
-> }
-> 
-> So if you do not have cache_filter set ... you go to should_fail for all
-> slabs.
+Thinking about this last night, this should probably clear the bit here in
+the case where an error is returned from idxd_wq_enable here, yes? I can
+send a v2.
 
-Yes.
 
-> I've been hit by that and spend a lot of time trying to understand why i got
-> crashes at random places. And the reason was that i read an old
-> documentation that said cache_filter is writable and i blindly wrote 1 to
-> it.
->
-> If the intent is to only work with cache filter set - then i will update
-> the patch to do so.
-
-You mean to set cache_filter to true when writing to 'failslab',
-or when setting SLAB_FAILSLAB slab flag?
-
-I'm not so confident for that because it's implicitly changing.
-Maybe more documentation would be proper?
-
-what do you think, Vlastimil?
-
-> This is the only place where SLAB_FAILSLAB is explicitly
-> tested, other places check it as part of SLAB_NEVER_MERGE.
-> 
-> But even for all caches it is kind of possible to test with size(space)
-> which is in turn useful because you need to figure out how you handle
-> failures from external caches - external to your code under test and you
-> don't want to keep track for all of them (same goes for too much options in
-> command line). 
-
-Yeah, we should be able to inject fault in all caches, or a specific
-cache(s).
-
-> > to prevent doing cache merging with <cache name>.
-> 
-> Or you can pass SLAB_FAILSLAB from your module when creating the cache to
-> prevent merge when under test.
-
-Right. I missed that.
-
-> 
-> 
+> diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
+> index 3f262a57441b..3325b16ed959 100644
+> --- a/drivers/dma/idxd/sysfs.c
+> +++ b/drivers/dma/idxd/sysfs.c
+> @@ -1405,6 +1405,7 @@ static void idxd_conf_device_release(struct device *dev)
+>  	struct idxd_device *idxd = confdev_to_idxd(dev);
+>  
+>  	kfree(idxd->groups);
+> +	bitmap_free(idxd->wq_enable_map);
+>  	kfree(idxd->wqs);
+>  	kfree(idxd->engines);
+>  	ida_free(&idxd_ida, idxd->id);
 > -- 
-> Regards,
-> Alexander Atanasov
+> 2.37.2
 > 
 
--- 
-Thanks,
-Hyeonggon
