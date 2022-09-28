@@ -2,124 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0007C5ED8E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A245ED8C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbiI1JYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
+        id S233681AbiI1JW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbiI1JYZ (ORCPT
+        with ESMTP id S233644AbiI1JWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:24:25 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E53ED74DF;
-        Wed, 28 Sep 2022 02:23:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B01DACE1DF1;
-        Wed, 28 Sep 2022 09:23:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82805C433C1;
-        Wed, 28 Sep 2022 09:23:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664357030;
-        bh=9Y7blUAL5zN9+EQU3Z3W3p8hWMps5aDqv5Tab1GFLWw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bKKOYjthvdVJdkp/WgUPyyIY6j5diqFOr36p4LlYd98uxj1Y9e/lUHtbTqi98vgyQ
-         KbRS16fpU145hd3vMZQdmELdiDLMGpX8oUnpC6Y7HhKrvI+DAXOp1Tm9DK0N44XL80
-         mdFstae3oCw2JsYi4Sw3KJbhe3HwkElht+CJ4kpn9MhojQ2oiyppWZXSjQeRYlrQSX
-         BKyF327yD4FFDPGj+fuNVpeUQ4KPGVY5bXC1MfKLj2L6YNGIBOhJkk3hHOjFVVmLNb
-         qweGNfgGyDXDw0TL9Gsif0eqTs8PORFJji2tzGF6cr8+tGLT3NT8J+3GJZe5BvY+uS
-         EHNa/rwudrMgw==
-Date:   Wed, 28 Sep 2022 10:23:42 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        ChiaEn Wu <peterwu.pub@gmail.com>, pavel@ucw.cz,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        lars@metafoo.de, andriy.shevchenko@linux.intel.com,
-        chiaen_wu@richtek.com, alice_chen@richtek.com,
-        cy_huang@richtek.com, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, szunichen@gmail.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v12 3/5] iio: adc: mt6370: Add MediaTek MT6370 support
-Message-ID: <YzQSnuwPjzJIgsYq@google.com>
-References: <cover.1663926551.git.chiaen_wu@richtek.com>
- <9bf36f09bc5f002f2b09b7cc26edccf109516465.1663926551.git.chiaen_wu@richtek.com>
- <20220924155525.5663bed8@jic23-huawei>
- <YzFY5FI0PrZqdAiZ@google.com>
- <CAL_JsqKKJGtacbzGqCupFniSGha610L1cay2V+AK8vehTA=F=g@mail.gmail.com>
+        Wed, 28 Sep 2022 05:22:54 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EEF7AC39C;
+        Wed, 28 Sep 2022 02:22:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664356973; x=1695892973;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LboepUjmxKb4jCu41mnETf1wIRYGxkuhefbkTgfmYdc=;
+  b=KXyyB/rXIQAcDxEt2/PoNm8eb2xzIKs/hx/bugKwxKf0S0FNSQmkCoCX
+   TV6CfMmSKQvFhxVDCVZT/DPbiMX3BvONaRWfIsLvQZMTlAxhIFciV7osL
+   cYppHLEXnoPAZh0uu/jHqkdW05FXwKGrllDAhob8HpPCE7qxA0qM6WCNO
+   Xa+3lK8vx8sT7qXIWfI9XTF91zf6Il+suxgVEzbobfZ4DQA+Np1qoIeHk
+   E4x1Ry9+1u5Pg65GPwIK3WE8odV0lrX/W+hYfvQRACdbvCLh/2vSL6hdr
+   5+2kr4bot43s9xaUcKQT2LEILEtu3RytZOtZFteNzQYOi+VUwxSu+hiUE
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="284685090"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="284685090"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 02:22:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="572967241"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="572967241"
+Received: from liuzhao-optiplex-7080.sh.intel.com ([10.239.160.132])
+  by orsmga003.jf.intel.com with ESMTP; 28 Sep 2022 02:22:49 -0700
+From:   Zhao Liu <zhao1.liu@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Subject: [PATCH v2] KVM: SVM: Replace kmap_atomic() with kmap_local_page()
+Date:   Wed, 28 Sep 2022 17:27:48 +0800
+Message-Id: <20220928092748.463631-1-zhao1.liu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_JsqKKJGtacbzGqCupFniSGha610L1cay2V+AK8vehTA=F=g@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sep 2022, Rob Herring wrote:
+From: Zhao Liu <zhao1.liu@intel.com>
 
-> On Mon, Sep 26, 2022 at 2:46 AM Lee Jones <lee@kernel.org> wrote:
-> >
-> > On Sat, 24 Sep 2022, Jonathan Cameron wrote:
-> >
-> > > On Fri, 23 Sep 2022 10:51:24 +0800
-> > > ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> > >
-> > > > From: ChiaEn Wu <chiaen_wu@richtek.com>
-> > > >
-> > > > MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
-> > > > with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
-> > > > driver, display bias voltage supply, one general purpose LDO, and the
-> > > > USB Type-C & PD controller complies with the latest USB Type-C and PD
-> > > > standards.
-> > > >
-> > > > Add support for the MT6370 ADC driver for system monitoring, including
-> > > > charger current, voltage, and temperature.
-> > > >
-> > > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > > > Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> > >
-> > > This will have to either wait for next cycle, or go through mfd because
-> > > of the dt-bindings include which is in the mfd tree.
-> > >
-> > > Please make those dependencies clear in new versions.
-> >
-> > If the bindings come together in -next, then subsequently in Mainline,
-> > it shouldn't really matter.
-> 
-> Except that the bindings haven't come together and at this point may
-> not for 6.1. linux-next has been warning for weeks because the child
-> device schemas haven't been applied. I've said it before, all the
-> schemas for MFD devices need to be applied together. Or at least the
-> MFD schema needs to get applied last.
-> 
-> Furthermore, subsequent versions of this don't get tested and we end
-> up with more warnings[1].
-> 
-> It's only your IIO tree that the DT
-> > tooling with complain about, right?
-> 
-> And the MFD tree...
-> 
-> Please apply the LED bindings (patches 1 and 2) so we can get the
-> existing warnings fixed and address any new warnings.
+The use of kmap_atomic() is being deprecated in favor of
+kmap_local_page()[1].
 
-Who usually applies LED bindings?  Looks as though they're good to go.
+The main difference between kmap_atomic() and kmap_local_page() is the
+latter allows pagefaults and preemption.
 
+There're 2 reasons we can use kmap_local_page() here:
+1. SEV is 64-bit only and kmap_locla_page() doesn't disable migration in
+this case, but here the function clflush_cache_range() uses CLFLUSHOPT
+instruction to flush, and on x86 CLFLUSHOPT is not CPU-local and flushes
+the page out of the entire cache hierarchy on all CPUs (APM volume 3,
+chapter 3, CLFLUSHOPT). So there's no need to disable preemption to ensure
+CPU-local.
+2. clflush_cache_range() doesn't need to disable pagefault and the mapping
+is still valid even if sleeps. This is also true for sched out/in when
+preempted.
+
+In addition, though kmap_local_page() is a thin wrapper around
+page_address() on 64-bit, kmap_local_page() should still be used here in
+preference to page_address() since page_address() isn't suitable to be used
+in a generic function (like sev_clflush_pages()) where the page passed in
+is not easy to determine the source of allocation. Keeping the kmap* API in
+place means it can be used for things other than highmem mappings[2].
+
+Therefore, sev_clflush_pages() is a function that should use
+kmap_local_page() in place of kmap_atomic().
+
+Convert the calls of kmap_atomic() / kunmap_atomic() to kmap_local_page() /
+kunmap_local().
+
+[1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
+[2]: https://lore.kernel.org/lkml/5d667258-b58b-3d28-3609-e7914c99b31b@intel.com/
+
+Suggested-by: Dave Hansen <dave.hansen@intel.com>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
+---
+Suggested by credits:
+  Dave: Referred to his explanation about cache flush and usage of
+        page_address().
+  Ira: Referred to his task document, review comments and explanation about
+       cache flush.
+  Fabio: Referred to his boiler plate commit message.
+---
+Changes since v1:
+  * Add the explanation of global cache flush for sev_clflush_pages() in commit
+    message.
+  * Add the explanation why not use page_address() directly.
+---
+ arch/x86/kvm/svm/sev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 28064060413a..12747c7bda4e 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -465,9 +465,9 @@ static void sev_clflush_pages(struct page *pages[], unsigned long npages)
+ 		return;
+ 
+ 	for (i = 0; i < npages; i++) {
+-		page_virtual = kmap_atomic(pages[i]);
++		page_virtual = kmap_local_page(pages[i]);
+ 		clflush_cache_range(page_virtual, PAGE_SIZE);
+-		kunmap_atomic(page_virtual);
++		kunmap_local(page_virtual);
+ 		cond_resched();
+ 	}
+ }
 -- 
-Lee Jones [李琼斯]
+2.34.1
+
