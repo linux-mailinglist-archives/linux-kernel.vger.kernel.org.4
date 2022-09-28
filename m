@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCFAD5ED937
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B1A5ED943
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233885AbiI1JfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
+        id S233567AbiI1JiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233830AbiI1Jdd (ORCPT
+        with ESMTP id S229847AbiI1Jhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:33:33 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCDAD2D4A;
-        Wed, 28 Sep 2022 02:33:30 -0700 (PDT)
-X-UUID: 62e2c1efd678447d919ef64c7c412d23-20220928
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=05M3M7J7kDkTRDSeF5O8eaR0ZRr7az9EUbdWM6vT2FA=;
-        b=itPMrsUDXUtU3Q7m8MCrZ7VqddUkp8DWz94LfBT5QFOouuy7IJ6FMWnbvBZQJvzl7+OPLMopsiCwlO2rIDbGCZIDjvMQhl4pMubUf6D2w6++/nZsXgaQ8KL59aU5X7LD+X7xnc/ovtwza3NIyll7PBFu3ZWLX4XFfpSccvli4Hc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:cd1fc239-dcc6-4ef0-b912-5671ce23f34d,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.11,REQID:cd1fc239-dcc6-4ef0-b912-5671ce23f34d,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:39a5ff1,CLOUDID:48ee82e4-87f9-4bb0-97b6-34957dc0fbbe,B
-        ulkID:220928173328EQIXJVC4,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 62e2c1efd678447d919ef64c7c412d23-20220928
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1631360142; Wed, 28 Sep 2022 17:33:27 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 28 Sep 2022 17:33:25 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 28 Sep 2022 17:33:24 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Tzung-Bi Shih" <tzungbi@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>, <wenst@chromium.org>,
-        kyrie wu <kyrie.wu@mediatek.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
-        <maoguang.meng@mediatek.com>, irui wang <irui.wang@mediatek.com>
-Subject: [V16,15/15] mtk-jpegdec: add stop cmd interface for jpgdec
-Date:   Wed, 28 Sep 2022 17:32:58 +0800
-Message-ID: <20220928093258.32384-16-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220928093258.32384-1-irui.wang@mediatek.com>
-References: <20220928093258.32384-1-irui.wang@mediatek.com>
+        Wed, 28 Sep 2022 05:37:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7A38ED5FD
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:36:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29C851063;
+        Wed, 28 Sep 2022 02:35:54 -0700 (PDT)
+Received: from [10.57.33.30] (unknown [10.57.33.30])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6DC9C3F792;
+        Wed, 28 Sep 2022 02:35:46 -0700 (PDT)
+Message-ID: <c3dfa394-6feb-c62f-6591-98b2c06d7029@arm.com>
+Date:   Wed, 28 Sep 2022 10:35:44 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5/7] kernel/cpu: Convert snprintf() to scnprintf()
+Content-Language: en-GB
+To:     Jules Irenge <jbi.octave@gmail.com>, tglx@linutronix.de
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-kernel@vger.kernel.org, dave.hansen@linux.intel.com,
+        ak@linux.intel.com, Jason@zx2c4.com
+References: <YzH01+6fErqu2Roo@fedora>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <YzH01+6fErqu2Roo@fedora>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kyrie wu <kyrie.wu@mediatek.com>
+On 26/09/2022 19:52, Jules Irenge wrote:
+> Coccinnelle reports a warning
+> Warning: Use scnprintf or sprintf
+> Adding to that, there has been a slow migration from snprintf to scnprintf.
+> This LWN article explains the rationale for this change
+> https: //lwn.net/Articles/69419/
+> Ie. snprintf() returns what *would* be the resulting length,
+> while scnprintf() returns the actual length.
+> 
+> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
 
-Add stop cmd interface for jpgdec to stop stream
+Using sysfs_emit() would be even better in this case, although it's
+slightly different because it outputs a maximum of PAGE_SIZE rather than
+PAGE_SIZE - 2 bytes. But I can't see any reason for that "- 2" - it
+appears to have been added when the sysfs entry was added by Thomas
+Gleixner in commit 05736e4ac13c ("cpu/hotplug: Provide knobs to control
+SMT") but I don't see any justification for it.
 
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-Signed-off-by: irui wang <irui.wang@mediatek.com>
----
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 3 +++
- 1 file changed, 3 insertions(+)
+Steve
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 2fe0e2a1c127..79a8f1b1965c 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -667,6 +667,9 @@ static const struct v4l2_ioctl_ops mtk_jpeg_dec_ioctl_ops = {
- 	.vidioc_streamoff               = v4l2_m2m_ioctl_streamoff,
- 
- 	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
-+
-+	.vidioc_decoder_cmd = v4l2_m2m_ioctl_decoder_cmd,
-+	.vidioc_try_decoder_cmd = v4l2_m2m_ioctl_try_decoder_cmd,
- };
- 
- static int mtk_jpeg_queue_setup(struct vb2_queue *q,
--- 
-2.18.0
+> ---
+>  kernel/cpu.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/cpu.c b/kernel/cpu.c
+> index bbad5e375d3b..f358d89c9580 100644
+> --- a/kernel/cpu.c
+> +++ b/kernel/cpu.c
+> @@ -2512,7 +2512,7 @@ static ssize_t control_show(struct device *dev,
+>  {
+>  	const char *state = smt_states[cpu_smt_control];
+>  
+> -	return snprintf(buf, PAGE_SIZE - 2, "%s\n", state);
+> +	return scnprintf(buf, PAGE_SIZE - 2, "%s\n", state);
+>  }
+>  
+>  static ssize_t control_store(struct device *dev, struct device_attribute *attr,
+> @@ -2525,7 +2525,7 @@ static DEVICE_ATTR_RW(control);
+>  static ssize_t active_show(struct device *dev,
+>  			   struct device_attribute *attr, char *buf)
+>  {
+> -	return snprintf(buf, PAGE_SIZE - 2, "%d\n", sched_smt_active());
+> +	return scnprintf(buf, PAGE_SIZE - 2, "%d\n", sched_smt_active());
+>  }
+>  static DEVICE_ATTR_RO(active);
+>  
 
