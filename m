@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6029D5EDE55
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6E35EDE58
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 15:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233933AbiI1N7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 09:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S232348AbiI1N7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 09:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234208AbiI1N7F (ORCPT
+        with ESMTP id S229862AbiI1N7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 09:59:05 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8EEE6F24E
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 06:59:02 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id d15so7870901qka.9
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 06:59:02 -0700 (PDT)
+        Wed, 28 Sep 2022 09:59:49 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA65FD03;
+        Wed, 28 Sep 2022 06:59:45 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id b2so4443084eja.6;
+        Wed, 28 Sep 2022 06:59:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Xl3s6np3thQqV7b5PLy2sMzW5jKteWMBx5DZFvaLryE=;
-        b=JGOorsiYUNjvI8/WD7E2CgaiXHZQgB0JDGDdZb+8DhWqv7w5VxaqdmkMVPU3vKlnA4
-         hGfpg+dHdXAbwVeRNVK5yuL4XBBMjhpS9U6LcEIoXkhsRjeTo9XwC9RvddgpBIpcLM7E
-         oX/OcunbT/1d8V348Ux6/ZEPF+DnP1RUNhqMdE2pXckOJlyNmWEfwJmz9yz7ipVMyu3e
-         rfHcdl10jK5xZBtHvAfVTZS5FFEwY5A1u7/X82VuJ4xaNY1kHjDsV1BBsXLBsGezoCnl
-         8XuU1qyer25lMYkjlYc6Ty3UKKNY37O0cr+quxDXsiwIk2si9Mo0kkFvKE2WWqyl+3YR
-         QR5g==
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=lpfVHj+RDccjHYGjeoqa72Pm48ZvPePtdQJtt8JQZXk=;
+        b=k7Zv4LgRiDjyJBlii7p5vFZBJyFH+e44eYv5nzGTZE46tV5K3r7cHb+eBBoBvLO3lK
+         pl2jh6Ov24srBnGirRzzHwQlgFfyJSVa+OQ0F9nGec98lPOmtgD1O7qeGanfpiiadoG0
+         RYULKpM25+w14uMV1IBmh1BmpIWMDlSM7d5RCPMlt5qWGKCDYyFABRFFit8l4ocl3J8e
+         hihBXWhJriR0F7OpOeJT0VEO2PCGZr4FEGC+6E10GyX2uKwNwJdxiaL1kVQVL4DKaF9B
+         1fWkXvfqgaEhdqQS8fKhxfyF1n7qw0czLzsxTXDQe7B9HIkvxyEJ1OTM4V1nJME+fcAQ
+         MHcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Xl3s6np3thQqV7b5PLy2sMzW5jKteWMBx5DZFvaLryE=;
-        b=K5qAzdlp3rqOUWsHctQ2rg5yucv15YPM4gveemAM/A6+TYetdMuqQj0f/oeDfl11vd
-         7+uu4DpuZp8KNFt7hesmM4EEQpbzUejmGbggCBNkoBzdKNIwBFjJguPx6dJWB4qYEe9f
-         KT0Bn12b7dUm2GEu61uvxAF9f3AgES0RZ763IrnUkpwsVN2g3tZftGys6atNPj4ynP7h
-         uBrIGJSm1HnAKQzGvAMArA8rPb6Uyp/Rwb0DIaHVY7xqvePXLzG+jc1ITb80VxeaB8Cu
-         Br5LACldGu2I9jxLH7PqDrMXs65GFfiXRhOJardv4Pdeor7vmYPUFft/kF9tQ/Gf3ndw
-         eqeQ==
-X-Gm-Message-State: ACrzQf1e8xkik4A2xkXf4832JST2rm1nwuAL4NT8E4v1aePs5eQHOhUE
-        Q/RafbWLYI1zd6LfuPR5ukl5iklkZBISDAQLnzbN
-X-Google-Smtp-Source: AMsMyM4H+l18N+zAUfM6ee44zSsHUNaMWwjy7Dmkp444wZ/HV+lUoGmG6UBMyR5k3fA9S/QTZz1TipveiUtv2DF1SWw=
-X-Received: by 2002:a05:620a:29c9:b0:6ce:7681:19e9 with SMTP id
- s9-20020a05620a29c900b006ce768119e9mr21006494qkp.297.1664373541846; Wed, 28
- Sep 2022 06:59:01 -0700 (PDT)
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=lpfVHj+RDccjHYGjeoqa72Pm48ZvPePtdQJtt8JQZXk=;
+        b=7xifiPrX1Fo9afq5AFGPU9xyjjQ1V5EBomFa1NGnzn4cP6JCnsUA2kI5vG58qPB+2/
+         pPLKFwdkbWTT3YpjfpOzelIfQDX1NnSdEWEMGSp2H/P6RltUoogdaNCKD4VxB9KPIgza
+         eb6mRwLHpUE/dASQlMBozjGi2AuzJh7wk+XPcutbkGv30ZbuqolAjDqjyhNSo4tp55G3
+         mf0JwBXZy3gttYhOL2b15WXOseJcf6WVmc5hx2K79EhsDUk636XoumeyIdOOti8Zafrj
+         NmjO/9ozDRH63x/i34n5fN6Kq1DP3CZtG6P4AfuXQTuXit/ioec8Ocp8oS4RLs7UyC5o
+         YMYg==
+X-Gm-Message-State: ACrzQf3GQHvjekViHxqrQpyyajfD36EPWpslI1nMn3bfk2geaC8uSz4B
+        ZgxRLnnsX7x4OXLTHS28D3A=
+X-Google-Smtp-Source: AMsMyM5hBOvEKEWpHZgz3huI7BLk3tHM3vkbt2WoWDY6DRqLKZ5Fj/SdI+SaNpg7MlhI7XgiNtj4uw==
+X-Received: by 2002:a17:907:a04e:b0:770:79f4:f520 with SMTP id gz14-20020a170907a04e00b0077079f4f520mr27033245ejc.730.1664373583736;
+        Wed, 28 Sep 2022 06:59:43 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id cm17-20020a0564020c9100b0044838efb8f8sm3387858edb.25.2022.09.28.06.59.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 06:59:42 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 15:59:40 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     xinlei.lee@mediatek.com
+Cc:     u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        jitao.shi@mediatek.com, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@list.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH,v2] dt-bindings: pwm: Add compatible for Mediatek MT8188
+Message-ID: <YzRTTGPAstQTnJdZ@orome>
+References: <1663915394-30091-1-git-send-email-xinlei.lee@mediatek.com>
 MIME-Version: 1.0
-References: <20220823142456.3977086-1-joefradley@google.com> <10f97a94-ab35-fbc7-4dd7-98586a027c8b@gmail.com>
-In-Reply-To: <10f97a94-ab35-fbc7-4dd7-98586a027c8b@gmail.com>
-From:   Joe Fradley <joefradley@google.com>
-Date:   Wed, 28 Sep 2022 06:58:50 -0700
-Message-ID: <CAF-60z2huZ0scPzrV8mrZGzH0Ha6-c+iszOdcpVV7y020m4arw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] kunit: add boot time parameter to enable KUnit
-To:     Tales Aparecida <tales.aparecida@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="CmzLNmPwX482UbLD"
+Content-Disposition: inline
+In-Reply-To: <1663915394-30091-1-git-send-email-xinlei.lee@mediatek.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,89 +78,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 5:42 PM Tales Aparecida
-<tales.aparecida@gmail.com> wrote:
->
-> Hi,
->
->
-> This series is
-> Tested-by: Tales Aparecida <tales.aparecida@gmail.com>
->
-> 1. Tested using kunit_tool: running tests and showing output as expected.
->
-> 2. Tested further by running QEMU through virtme-run with:
->    $ ../virtme/virtme-run --show-command --kdir ../linux/.for-amd/ --mods=auto --kopt kunit.enable=1
->
-> 2.a. "KUNIT_DEFAULT_ENABLED" works as expected when "kunit.enable" is omitted
-> 2.b. kunit.enable=0 results in printing "kunit: disabled" on boot and on loading test modules, as expected
-> 3.c. kunit.enable=1 runs tests on boot and allows them to run when loading test modules
->
-> 3. Regarding taint
-> 3.a. /proc/sys/kernel/tainted is 0 when kunit.enable=0 and does not change when trying to load test modules.
-> 3.b. /proc/sys/kernel/tainted is 0 when kunit.enable=1 until the first test runs, then it becomes 262144 (2^18) as expected.
 
-Tales, thank you for doing this testing.
+--CmzLNmPwX482UbLD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
->
-> On other note, there's something I would like to delve into below.
->
->
-> On 23/08/2022 11:24, Joe Fradley wrote:
-> > v2:
-> >  - Added enable check in executor.c to prevent wrong error output from
-> >    kunit_tool.py when run against a KUnit disabled kernel
-> >  - kunit_tool.py now passes kunit.enable=1
-> >  - Flipped around logic of new config to KUNIT_DEFAULT_ENABLED
-> >  - Now load modules containing tests but not executing them
-> >  - Various message/description text clean up
-> >
-> > There are some use cases where the kernel binary is desired to be the same
-> > for both production and testing. This poses a problem for users of KUnit
-> > as built-in tests will automatically run at startup and test modules
-> > can still be loaded leaving the kernel in an unsafe state. There is a
-> > "test" taint flag that gets set if a test runs but nothing to prevent
-> > the execution.
->
-> Do you have any info on whether these use cases would have something against writing tests for static functions using the documented approach of including the tests into the actual runtime code?
-> https://docs.kernel.org/dev-tools/kunit/usage.html#testing-static-functions
->
-> Otherwise, would them agree to export the symbols that need to be tested?
->
-> I would really like to understand better what are these use cases :)
+On Fri, Sep 23, 2022 at 02:43:14PM +0800, xinlei.lee@mediatek.com wrote:
+> From: xinlei lee <xinlei.lee@mediatek.com>
+>=20
+> Add dt-binding documentation of pwm for MediaTek MT8188 SoC.
+>=20
+> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-I feel using the static functions as described in your link is a good
-alternative to
-modules with embedded KUnit tests. However, this is a different use case then
-I refer to, which is the ability to have the framework embedded in the
-kernel for
-both production and test with the control of test execution gated on a kernel
-command line parameter.
+Applied, thanks.
 
->
-> >
-> > This patch adds the kunit.enable module parameter that will need to be
-> > set to true in addition to KUNIT being enabled for KUnit tests to run.
-> > The default value is true giving backwards compatibility. However, for
-> > the production+testing use case the new config option KUNIT_DEFAULT_ENABLED
-> > can be set to N requiring the tester to opt-in by passing kunit.enable=1 to
-> > the kernel.
-> >
-> > Joe Fradley (2):
-> >   kunit: add kunit.enable to enable/disable KUnit test
-> >   kunit: no longer call module_info(test, "Y") for kunit modules
-> >
-> >  .../admin-guide/kernel-parameters.txt         |  6 +++++
-> >  include/kunit/test.h                          |  3 ++-
-> >  lib/kunit/Kconfig                             | 11 +++++++++
-> >  lib/kunit/executor.c                          |  4 ++++
-> >  lib/kunit/test.c                              | 24 +++++++++++++++++++
-> >  tools/testing/kunit/kunit_kernel.py           |  1 +
-> >  6 files changed, 48 insertions(+), 1 deletion(-)
-> >
->
-> Great work!
->
-> Kind regards,
-> Tales
+Thierry
+
+--CmzLNmPwX482UbLD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmM0U0wACgkQ3SOs138+
+s6EgCA/8Cln97n5y2+lTHYL2Vh12ctUxVaV7Fh2q63qXOofQ6M8htH+lKEC+g2fp
+ijRlTNFATbA5KZOyJa2MAYHfcdx/hL4fwaEJitMBQoOiusTTAcv204BfC+ag1L+3
+0CB3ayFrPF5mzEYqXvwq0vrQG2ohV86gDAF98O9kmHGMnqnzPEGMKcjz4m4bLGCA
+3bWAlYlBVFRxptoLgc4sQFY4UgYm29JMxvq2QF+wHBC9zzzc0Cnl17bps6gaRzmD
+HSojW19WJn0SJMzRNbZJE0AwX6lHmIQMO6cC2medls2UTiuWPneQDFsF9OdOw9Id
+n9e3gH2NJk4bRl8rrUDy2XnN6YmQM3iYkx7qQjzGaIyaUP9Z9xT5HkXD+atHrQHA
+aK98/D8DrfgM3lUor/3zE6OHdM/aU/pkUNEecWs7gURoQnlgIuwBADi81KZq0JHk
+mG4Dlp1ElDofdhhvqd0o1MZ7H7cRqQKj9iaceY5Z+1n/xo8L8W65jdwdKP7hry3J
+N3WMwlbHC/V/817fNNoEahE4MbwzSUbR/Ogh72Ye9F1Qw4dJ88xKGT/b6nqNZCus
+ZX3W7Ay1pg1jVz/8S9/OnkBmPM+XMDVzga82JuaGZ5Obl7Pqyr4IWgiJX6MTyaCA
+ILG4DBs/H4f6wlIYdek77xYg4Cb3KY3SCM43u8ucYTKW0/+MJHc=
+=ojFY
+-----END PGP SIGNATURE-----
+
+--CmzLNmPwX482UbLD--
