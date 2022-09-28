@@ -2,83 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2995ED3E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 06:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DD35ED3E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 06:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiI1EZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 00:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
+        id S231502AbiI1EbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 00:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiI1EZO (ORCPT
+        with ESMTP id S230169AbiI1Ea5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 00:25:14 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C6312084;
-        Tue, 27 Sep 2022 21:25:12 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 78so11144439pgb.13;
-        Tue, 27 Sep 2022 21:25:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=XhUT4j0pqr6hZnDdBBDPYyYRf9l0yrmcaBNtZ7thxqE=;
-        b=ZjGJC80iuwVAc68dbpXSUln7ojyBZF+sJr199paqV8fKNmcFL34/5Cw5KHMez97ZBD
-         9I4suPudAUlXf1gYoqUSYqo6zJdfi88poBmqzLbcJf4wDSBv1ErzdLMqpncV68ghJzQW
-         Qy8+Ca9nl/H8kHxq9TJvkKppj38lCrR+T44z45KIsTZFZIFVKR+lVTLJ41RtRmSY1f8Q
-         utuDPzCAHurp15NYGrlcVIYpSIUB+aNIqu6npZ+z2ryWiPyqVlqwNjQUVBBwDxnqL6Uh
-         SFmpkA3J9Q3ffGqHJzsdLfXoi4ikLHV/KhxjJA6mp9oHvgnsali4z4TcxYn1TNAxZAFK
-         Q6kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=XhUT4j0pqr6hZnDdBBDPYyYRf9l0yrmcaBNtZ7thxqE=;
-        b=wGbhV/5DWpXlWBaHqyZYnXcCEGqmG5tXCTuTwvDtz2+GM7ahscGpSUj3fbLR0iV4ax
-         LovSMIzzBgNZErIv3xI7xkcc8WqieAVWarMUkVJYk/0FHTHhVoETGx1QkAJOWxgsHIee
-         LvYcxCCa/RL+gVchhPTqSK46H+sX5gKOH97q0BfZQ+4Uxs4wgvG+Zy/uG6ZCkoaw86/M
-         pWQXD22bbogDShUOgJxOqViPPCLRFII3jIdhZ3YIRuWFu6Sb8icXo0srw3//sY+fchiD
-         6NAxk0Yagzs+HX2t8+xigonOAOcjvgcYQ/V6NJ8a81LZvV/HrI8k+waFGBSyh1pm6yAU
-         qJzw==
-X-Gm-Message-State: ACrzQf3sVBq95eIPdxWBwxSXEjBNyDBAbxmuduHtPQ/+yx9KSG5dLeKN
-        qtl2gwVLgkkCDcgn3O5l/0Y=
-X-Google-Smtp-Source: AMsMyM7/3d1+QVlMEKxPzEndz72bq/azP9JgMqYkmFyrABzOeHwHls2W75lowUkphsM5EyR6vPiQTA==
-X-Received: by 2002:a05:6a00:1390:b0:540:b6b6:e978 with SMTP id t16-20020a056a00139000b00540b6b6e978mr32533075pfg.8.1664339112050;
-        Tue, 27 Sep 2022 21:25:12 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-87.three.co.id. [180.214.233.87])
-        by smtp.gmail.com with ESMTPSA id ci8-20020a17090afc8800b001f8c532b93dsm409007pjb.15.2022.09.27.21.25.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 21:25:11 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id D89BB100053; Wed, 28 Sep 2022 11:25:06 +0700 (WIB)
-Date:   Wed, 28 Sep 2022 11:25:06 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Babu Moger <babu.moger@amd.com>
-Cc:     corbet@lwn.net, reinette.chatre@intel.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, fenghua.yu@intel.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        paulmck@kernel.org, akpm@linux-foundation.org,
-        quic_neeraju@quicinc.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
-        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
-        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
-        jmattson@google.com, daniel.sneddon@linux.intel.com,
-        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        eranian@google.com
-Subject: Re: [PATCH v5 12/12] Documentation/x86: Update resctrl_ui.rst for
- new features
-Message-ID: <YzPMorJQFKPY+n4d@debian.me>
-References: <166431016617.373387.1968875281081252467.stgit@bmoger-ubuntu>
- <166431042060.373387.8454967155095795574.stgit@bmoger-ubuntu>
+        Wed, 28 Sep 2022 00:30:57 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C951C9B871;
+        Tue, 27 Sep 2022 21:30:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664339453; x=1695875453;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dpjycpQPackQteLHBBGJE4Wm5YPd9EdeBKzweZPn9SA=;
+  b=maIrD6EPCXJ6n214ubE52k369f/QNALPQu5c1CjobKbvGnbGfZ7w2k/0
+   4itPhGeceouaDjFUb8yPT4ObpqMWnRJ8feJgIVUyHCgTn07Uwq6RrNBVR
+   fCCpgEv6AoQKn6tyQ7uj+oaLhAqoIEG/F5oW0/NOQdXud53xIUx9CTu/r
+   s1en1i5kW2Eptd/AZy6UYh68TFrAJ/90OIUfhv9Vt9BFAgjJ8O1zzN6IH
+   MtbKDXIkBYA0Ox+EGYZ9Go2ygd7GuVxavc9xv/hnWbcZwLsB4oC5T8GX/
+   oOC0M97P69fwcs4vr4lzpv2Ys0TNOCIt6TnjbIII2sPUbtNScLI+Lkh1m
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="300218824"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="300218824"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 21:30:51 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="684250788"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="684250788"
+Received: from weimingg-mobl.amr.corp.intel.com (HELO [10.212.244.112]) ([10.212.244.112])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 21:30:51 -0700
+Message-ID: <d3a5edb8-03cb-2ecb-b54c-9a2e05765805@linux.intel.com>
+Date:   Tue, 27 Sep 2022 21:30:50 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="JM0VvyzLnK2qTCNi"
-Content-Disposition: inline
-In-Reply-To: <166431042060.373387.8454967155095795574.stgit@bmoger-ubuntu>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [External] Re: [PATCH v2 3/9] NTB: Change to use
+ pci_aer_clear_uncorrect_error_status()
+Content-Language: en-US
+To:     Zhuo Chen <chenzhuo.1@bytedance.com>, bhelgaas@google.com,
+        ruscur@russell.cc, oohall@gmail.com, fancer.lancer@gmail.com,
+        jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
+        james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ntb@lists.linux.dev,
+        linux-scsi@vger.kernel.org
+References: <20220927153524.49172-1-chenzhuo.1@bytedance.com>
+ <20220927153524.49172-4-chenzhuo.1@bytedance.com>
+ <d8123aa3-a5e0-6131-bd0d-109f67923ff2@linux.intel.com>
+ <1d62d0ac-b47c-94b5-dd75-b7df71817d0d@bytedance.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <1d62d0ac-b47c-94b5-dd75-b7df71817d0d@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,162 +73,56 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---JM0VvyzLnK2qTCNi
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 27, 2022 at 03:27:00PM -0500, Babu Moger wrote:
-> +        Following are the types of events supported:
-> +
-> +        =3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +        Bits    Description
-> +        =3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +        6       Dirty Victims from the QOS domain to all types of memory
-> +        5       Reads to slow memory in the non-local NUMA domain
-> +        4       Reads to slow memory in the local NUMA domain
-> +        3       Non-temporal writes to non-local NUMA domain
-> +        2       Non-temporal writes to local NUMA domain
-> +        1       Reads to memory in the non-local NUMA domain
-> +        0       Reads to memory in the local NUMA domain
-> +        =3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +        By default, the mbm_total_bytes configuration is set to 0x7f to =
-count
-> +        all the event types and the mbm_local_bytes configuration is set=
- to
-> +        0x15 to count all the local memory events.
-> +
-> +        Example::
-> +
-> +            To view the current configuration, run the command.
-> +            # cat /sys/fs/resctrl/info/L3_MON/mbm_total_config
-> +            0:0x7f;1:0x7f;2:0x7f;3:0x7f
-> +
-> +            # cat /sys/fs/resctrl/info/L3_MON/mbm_local_config
-> +            0:0x15;1:0x15;3:0x15;4:0x15
-> +
-> +            To change the mbm_total_bytes to count only reads on domain =
-0,
-> +            run the command. The bits 0,1,4 and 5 needs to set.
-> +
-> +            # echo  "0:0x33" > /sys/fs/resctrl/info/L3_MON/mbm_total_con=
-fig
-> +
-> +            # cat /sys/fs/resctrl/info/L3_MON/mbm_total_config
-> +            0:0x33;1:0x7f;2:0x7f;3:0x7f
-> +
-> +            To change the mbm_local_bytes to count all the slow memory r=
-eads on
-> +            domain 1, run the command. The bits 4 and 5 needs to set.
-> +
-> +            # echo  "1:0x30" > /sys/fs/resctrl/info/L3_MON/mbm_local_con=
-fig
-> +
-> +            # cat /sys/fs/resctrl/info/L3_MON/mbm_local_config
-> +            0:0x15;1:0x30;3:0x15;4:0x15
-> =20
+On 9/27/22 9:20 PM, Zhuo Chen wrote:
+> 
+> 
+> On 9/28/22 3:39 AM, Sathyanarayanan Kuppuswamy wrote:
+>>
+>>
+>> On 9/27/22 8:35 AM, Zhuo Chen wrote:
+>>> Status bits for ERR_NONFATAL errors only are cleared in
+>>> pci_aer_clear_nonfatal_status(), but we want clear uncorrectable
+>>> error status in idt_init_pci(), so we change to use
+>>> pci_aer_clear_uncorrect_error_status().
+>>
+>> You mean currently driver does not clear fatal errors now, and it is
+>> a problem? Any error reported?
+>>
+> Hi Sathyanarayanan,
+> 
+> No error reports yet, I just changes the behavior back to what it was before commit e7b0b847de6d ("PCI/AER: Clear only ERR_NONFATAL bits during non-fatal recovery"), because this commit change the original function in commit bf2a952d31d2 ("NTB: Add IDT 89HPESxNTx PCIe-switches support").
+> 
 
-Hi Babu,
+Ok. Thanks for clarifying.
 
-The description text for each snippets above shouldn't in the code
-block. Also, split the block into three code blocks in the lists:
+>> Also, I am wondering why is it required to clear errors during init
+>> code. Is it a norm?
+>>
+> I think there is no need to clear errors during init code.
+>>>
+>>> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+>>> ---
+>>>   drivers/ntb/hw/idt/ntb_hw_idt.c | 4 ++--
+>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/ntb/hw/idt/ntb_hw_idt.c b/drivers/ntb/hw/idt/ntb_hw_idt.c
+>>> index 0ed6f809ff2e..d5f0aa87f817 100644
+>>> --- a/drivers/ntb/hw/idt/ntb_hw_idt.c
+>>> +++ b/drivers/ntb/hw/idt/ntb_hw_idt.c
+>>> @@ -2657,8 +2657,8 @@ static int idt_init_pci(struct idt_ntb_dev *ndev)
+>>>       ret = pci_enable_pcie_error_reporting(pdev);
+>>>       if (ret != 0)
+>>>           dev_warn(&pdev->dev, "PCIe AER capability disabled\n");
+>>> -    else /* Cleanup nonfatal error status before getting to init */
+>>> -        pci_aer_clear_nonfatal_status(pdev);
+>>> +    else /* Cleanup uncorrectable error status before getting to init */
+>>> +        pci_aer_clear_uncorrect_error_status(pdev);
+>>>         /* First enable the PCI device */
+>>>       ret = pcim_enable_device(pdev);
+>>
+> 
 
----- >8 ----
-diff --git a/Documentation/x86/resctrl.rst b/Documentation/x86/resctrl.rst
-index b4fe54f219b6f3..ec578b069276ce 100644
---- a/Documentation/x86/resctrl.rst
-+++ b/Documentation/x86/resctrl.rst
-@@ -206,25 +206,26 @@ with the following files:
-         all the event types and the mbm_local_bytes configuration is set to
-         0x15 to count all the local memory events.
-=20
--        Example::
-+        Examples:
-+
-+        * To view the current configuration::
-=20
--            To view the current configuration, run the command.
-             # cat /sys/fs/resctrl/info/L3_MON/mbm_total_config
-             0:0x7f;1:0x7f;2:0x7f;3:0x7f
-=20
-             # cat /sys/fs/resctrl/info/L3_MON/mbm_local_config
-             0:0x15;1:0x15;3:0x15;4:0x15
-=20
--            To change the mbm_total_bytes to count only reads on domain 0,
--            run the command. The bits 0,1,4 and 5 needs to set.
-+        * To change the mbm_total_bytes to count only reads on domain 0
-+          (the bits 0, 1, 4 and 5 needs to be set)::
-=20
-             # echo  "0:0x33" > /sys/fs/resctrl/info/L3_MON/mbm_total_config
-=20
-             # cat /sys/fs/resctrl/info/L3_MON/mbm_total_config
-             0:0x33;1:0x7f;2:0x7f;3:0x7f
-=20
--            To change the mbm_local_bytes to count all the slow memory rea=
-ds on
--            domain 1, run the command. The bits 4 and 5 needs to set.
-+        * To change the mbm_local_bytes to count all the slow memory reads=
- on
-+          domain 1 (the bits 4 and 5 needs to be set)::
-=20
-             # echo  "1:0x30" > /sys/fs/resctrl/info/L3_MON/mbm_local_config
-=20
-
-Also, there isn't description of mapping from bits from the supported events
-table to the bytes input for mbm_{total,local}_config.
-
-> +Slow Memory b/w domain is L3 cache.
-> +::
-> +
-> +	SMBA:<cache_id0>=3Dbandwidth0;<cache_id1>=3Dbandwidth1;...
-> +
-
-What b/w stands for in the context above?
-
->  Reading/writing the schemata file
->  ---------------------------------
->  Reading the schemata file will show the state of all resources
-> @@ -479,6 +567,44 @@ which you wish to change.  E.g.
->    L3DATA:0=3Dfffff;1=3Dfffff;2=3D3c0;3=3Dfffff
->    L3CODE:0=3Dfffff;1=3Dfffff;2=3Dfffff;3=3Dfffff
-> =20
-> +Reading/writing the schemata file (on AMD systems)
-> +--------------------------------------------------
-> +Reading the schemata file will show the state of all resources
-> +on all domains. When writing the memory bandwidth allocation you
-> +only need to specify those values in an absolute number expressed
-> +in 1/8 GB/s increments. To allocate bandwidth limit of 2GB, you
-> +need to specify the value 16 (16 * 1/8 =3D 2).  E.g.
-> <snipped>...
-> +Reading the schemata file will show the state of all resources
-> +on all domains. When writing the memory bandwidth allocation you
-> +only need to specify those values in an absolute number expressed
-> +in 1/8 GB/s increments. To allocate bandwidth limit of 8GB, you
-> +need to specify the value 64 (64 * 1/8 =3D 8).  E.g.
-
-s/E.g./For example:/
-
-Thanks.=20
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---JM0VvyzLnK2qTCNi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYzPMmwAKCRD2uYlJVVFO
-o6AMAQDE8F0f7NjBHpQMQ31FBpPpHWyjr4XHGQDiJ0BdzVIhGgEAlRDICmTkbc+2
-8NzCimpiiqoQ2xEanA9+ZBoNJSbT9ww=
-=tJF0
------END PGP SIGNATURE-----
-
---JM0VvyzLnK2qTCNi--
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
