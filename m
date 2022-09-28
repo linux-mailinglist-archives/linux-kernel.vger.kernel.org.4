@@ -2,98 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C7F5EE131
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6565EE134
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234016AbiI1QEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
+        id S234193AbiI1QGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234320AbiI1QEU (ORCPT
+        with ESMTP id S233742AbiI1QF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:04:20 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED55DF6A6
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:04:19 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so1284642wmb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:04:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date;
-        bh=jOsTRd2EGmvuWFFBgTAM5J+8IORBIqNu02CFYL1/QhU=;
-        b=v0TvX6YVV2oxrMyqkgUbiWYvHKF0YPUGRkJ2bA542N393ROnUqUkeVXPXYcOXN9Q5d
-         Ih2KClNyGxsOooOLpsoar0Hd/tAxCxh1emLvrBTQPy1OVpaxD4mCBRUjV0YwBL1H8qwj
-         ER131Zs02oFhe5tvDScL7Bs9Cp4toZCmgccOEq0piqSotTr6/nhdUmD87E5cIoQI1h3T
-         GB72yZh2hG0N2542jtepsDcJW0Myy/rfTjMQrImP0Kmk0+OlnPZarLk6sU5HJ3E2o+Zd
-         9mXADR1H3D926VZm6mkN2MhvI2vdnmOigHjATsjTNqh0Kxr5M0EYIP8hbAp74SxvKKb6
-         oPBw==
+        Wed, 28 Sep 2022 12:05:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDFD86FDA
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:05:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664381157;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rybUb/GfYlMSMT6cYU57AYfkSdd1kUKrcHY/UZNUSuw=;
+        b=YUX7hfqAfIWNhA6D7ACt42nmSeeL9SdZ/mHejMHbXDTIjKeXJ6zlKYKZu6nB8zZxanHL5n
+        qMH6Yc+LbJ5BSmdM675CuZ7oLPL4UCZjLSLI3dDIzjdk0dM42Scf4gyQxuZk0Pj9eRywt1
+        u7TfvPw/Y3h03bUnZhpeXCc3zG7z+mE=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-96-Q68Aj6khOl-sqsacH32BSw-1; Wed, 28 Sep 2022 12:05:55 -0400
+X-MC-Unique: Q68Aj6khOl-sqsacH32BSw-1
+Received: by mail-ed1-f71.google.com with SMTP id w20-20020a05640234d400b00450f24c8ca6so10590691edc.13
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:05:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=jOsTRd2EGmvuWFFBgTAM5J+8IORBIqNu02CFYL1/QhU=;
-        b=sV/b5YBAKVV9pr4gg3bMa6VWCXbP4iqJU/jntpCY0UAMQChzkskD8cRGDa3CePG49G
-         36at263FQtO71f7GJxrsetcd/CrT/ccdvm+rooCFEvkXgV9T0CYMyaNYbhEJGd7pdaOI
-         HsiuDGJMEaRqNsA4j7tkPtjzw/KpovPA/331JVVu4rrADve9LmLJ3mjVHXEKWvZCySvF
-         zdNSAMTvR55ZiVzeGLLVfZn7oICR+y2IvE1+dwL9lok2JLKqcsxHOcduXkYVcf8eRHci
-         MMFdYGelJNaxFpNv67R1ldMuy/y+7G/vn0a4OhCiYYSKwU3rQXOH+AfetSxw+UHAY77x
-         r5CA==
-X-Gm-Message-State: ACrzQf2W8RN2dh8PsE7Xc7I1HVq0aQcvmjsTIcf6lF5RxfF/DZvHSnEL
-        woviKOc16/iy4H3OeG+gWNN+Qw==
-X-Google-Smtp-Source: AMsMyM6XQU0NnnQU3dpJA72oWAbDU14QkBvfmbQ7fZQHWskZ5b1vNFSYwmdhtQKNW7UN/B9vZCq6hg==
-X-Received: by 2002:a1c:f002:0:b0:3b4:dda4:b58f with SMTP id a2-20020a1cf002000000b003b4dda4b58fmr7245404wmb.184.1664381058249;
-        Wed, 28 Sep 2022 09:04:18 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:11d4:7c71:accf:6521? ([2a01:e0a:982:cbb0:11d4:7c71:accf:6521])
-        by smtp.gmail.com with ESMTPSA id n16-20020adffe10000000b0022b014fb0b7sm4443398wrr.110.2022.09.28.09.04.17
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=rybUb/GfYlMSMT6cYU57AYfkSdd1kUKrcHY/UZNUSuw=;
+        b=XQSlLoomIsZVQPvu4hwXU26c/mdU4TGFvQSRY9zeqL2vgGwcSXOEOWnJuFgdgQtZXW
+         BevOKH88ogwMEaQ/mDqnkWEXJ9FYuHGyThKPQBxxgFqJxYVBeybb54m7mmENJ8b0BJeB
+         maEYj6VTAtRYA+3iQJdDY+iFJXImE8/wjOjEx8mE7G0nx4PfEOokXwCDUnZYpY1hphEn
+         UCH7ygSyc4bsEIYQTcGB/wLjq3DIQMZ3EqtQUADKatjZQmiYQFYstDfdHK33Isg3rJNN
+         0FJSN8+BcKZzAbhaht2lure4elDPcc4n0j6yi9+MT+fllMCyvoiTOAPFSHVUJfve87Lj
+         NFDw==
+X-Gm-Message-State: ACrzQf3V6iSrm4/NJv1B8fx1VC+BwXV4QnNWu41b7H8V9pydMEK/5Qu+
+        vUljIBMdrDrG1y2lvEayjIobocYuA4s1h/ZV4Ar2F5Jzyv+mA0oriFQSQud18DZSHXzhotzOkEU
+        UI2qpSKMvnwgMEzOiZ7w/NtKm
+X-Received: by 2002:a05:6402:5419:b0:457:c955:a40f with SMTP id ev25-20020a056402541900b00457c955a40fmr7638969edb.391.1664381154451;
+        Wed, 28 Sep 2022 09:05:54 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4nSyR86A+8QF3RzNshAjHdwAHrTQllA/f8QCPhHs3cLwtsxHAwUQ0y3NlZkR5XvuDiiH6wLA==
+X-Received: by 2002:a05:6402:5419:b0:457:c955:a40f with SMTP id ev25-20020a056402541900b00457c955a40fmr7638943edb.391.1664381154273;
+        Wed, 28 Sep 2022 09:05:54 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:2f4b:62da:3159:e077? ([2001:b07:6468:f312:2f4b:62da:3159:e077])
+        by smtp.googlemail.com with ESMTPSA id m17-20020a50c191000000b00456f569f31dsm3725792edf.75.2022.09.28.09.05.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 09:04:17 -0700 (PDT)
-Message-ID: <05603546-79df-c27d-7c39-57d6e5789cd6@linaro.org>
-Date:   Wed, 28 Sep 2022 18:04:16 +0200
+        Wed, 28 Sep 2022 09:05:53 -0700 (PDT)
+Message-ID: <3e56bba7-e1d3-7804-2d8f-307e81d88a9c@redhat.com>
+Date:   Wed, 28 Sep 2022 18:05:52 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 02/13] phy: qcom-qmp-combo: drop unused UFS reset
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] KVM: allow compiling out SMM support
 Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220928152822.30687-1-johan+linaro@kernel.org>
- <20220928152822.30687-3-johan+linaro@kernel.org>
-Reply-To: neil.armstrong@linaro.org
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20220928152822.30687-3-johan+linaro@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220927152241.194900-1-pbonzini@redhat.com>
+ <YzM55hqavzENQq7I@google.com>
+ <f708d769-5d93-351f-ea24-8fa7deb9f689@redhat.com>
+ <YzRhT6DzgDfGU7NC@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YzRhT6DzgDfGU7NC@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 17:28, Johan Hovold wrote:
-> Drop the unused UFS reset code which isn't used since the QMP driver
-> split.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 9 ---------
->   1 file changed, 9 deletions(-)
-> 
+On 9/28/22 16:59, Sean Christopherson wrote:
+> But with CONFIG_KVM_SMM=n, KVM is now reporting that KVM_CAP_X86_SMM
+> is unsupported,
 
-<snip>
+Yeah, you're right.  "default y" is what matters here the most.
 
+Paolo
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
