@@ -2,109 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE965EE812
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 23:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE825EE81B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 23:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233478AbiI1VOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 17:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
+        id S234732AbiI1VPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 17:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234494AbiI1VNQ (ORCPT
+        with ESMTP id S233512AbiI1VOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 17:13:16 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E040DE7C1F
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 14:07:53 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id b75so13570637pfb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 14:07:53 -0700 (PDT)
+        Wed, 28 Sep 2022 17:14:36 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8926386B7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 14:09:44 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id sd10so29717984ejc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 14:09:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=3wPW0+piPk2ft9dooMQAz6w02q2w62WYhl87gRVkcTk=;
-        b=tFiYW+OO4Yhq8CWdSEEMserzAGfUiLRpFoMuZe4H2LGXXlSfchoSBIXEMNt9ZHpXTR
-         djRYatUXy47bNPz2w2FLoS70Hn8RJHJlNw6a8w5720BeBoCn2qmw/p4leFZHYZQqYRDl
-         7hJHU/XgNhDu4v0dXEmqEGn7dNckdljIFsI6t3iVJrKs7DzGOntJ+QzPU9xG2rjjNZNz
-         myNl6WwWJa2OXJc1c+79dOSzL5NCrZ0QdVw2t4IJ6zA4Dpf68zz0XQwoorfxw2yWaxCH
-         7h4pNAf0H2tICxFSF7O9cG+inyqo7PDHGdq8wpfhtLjmrQ1Tpo2fReyQ2uxdfr+adoIf
-         iJeg==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=+ArxDvTuwZCqYAL4oxkzddYwope7pEyQh00wDZZmRZw=;
+        b=ZNuUawCKUbpDRAOEhyisqFnqgWkwjc6wcmEMGa8/n3L+N/G06/AMeYSykqhwwIPeFI
+         K8nXAS96Gf1KKd3jCQcu73EJUTgkaV85LMzxOeQa6iOxI87ymwLy6Mf741usdSDkozd4
+         hDAch4AgRMyEKZYovFzcUcVZvUgflsqK5e3BQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=3wPW0+piPk2ft9dooMQAz6w02q2w62WYhl87gRVkcTk=;
-        b=wKnxlRQcCi4DTgBl+leiDeLkPn6yU/p9b5oRNYdiWrWML/2trKaDcepafmz0PID25J
-         LPHlrdgz0GgIbhWyBD4s+wH5YTuvwp8V71gXgkfeGa5Kz48CjhjOtj38zbCD6HiDoqTt
-         rMoHqqvMZbW0ApWyeGj8kilpb0InmLsHp9q98KRHIb9jHf7sKZm12w+x/GNGrhv1cGYL
-         JmDVgvsr2gTBWuehsqk7PlkkoRejh7RUpkulkaC/MTEx8al11dS1mm05TodOjz0TvpEA
-         kKcr1nUhfgRfxfluBHO6SVZeI9wp0RuFogEnic7yGbedxDqT+5l1T3biswIDKd+AhK3x
-         AqnQ==
-X-Gm-Message-State: ACrzQf0UKliGHqqk5kSPPrt9ea7R3+/k43Cf0WbpdDfthYBYSu0VA055
-        gyu3tZeufYmRhcwkyYooN71EMQ0+9r+Y+g==
-X-Google-Smtp-Source: AMsMyM7LMkw20qPvTa56SDUcXFflMvnX8Lei8QyhuQ6kpz2mcN0LXeikDdVmf37JfFyB3Dar3TZsRQ==
-X-Received: by 2002:a63:85c3:0:b0:43a:4c05:c313 with SMTP id u186-20020a6385c3000000b0043a4c05c313mr31375133pgd.418.1664399181658;
-        Wed, 28 Sep 2022 14:06:21 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id mp3-20020a17090b190300b00200558540a3sm1983196pjb.53.2022.09.28.14.06.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 14:06:21 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 21:06:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, avagin@gmail.com
-Subject: Re: [PATCH v2 4/4] x86/fpu: Correct the legacy state offset and size
- information
-Message-ID: <YzS3SXVxJOrC/k5X@google.com>
-References: <20220922200034.23759-1-chang.seok.bae@intel.com>
- <20220922200034.23759-5-chang.seok.bae@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=+ArxDvTuwZCqYAL4oxkzddYwope7pEyQh00wDZZmRZw=;
+        b=Jx0v1THqjkw2DFehrXZrwfUE4zRzofmB/i4I+3DoaGHUCjQRnB0iYScO3978in9Mpz
+         8VJ+vWLq44guBcHZmx5vl/Q6KjEdteGw6u7wLtnhZG98smWbpw7R4jbU9NLHAHbfeLvp
+         JTmi79kbhwXgixBUk8jv1pqcdXPxR8t3CWqZnJz6yB2VmHsfAR7tFrc1Fd3RPbyjlc20
+         G64Qlm/q8G+oHEjxzJYn5kwky02gII3C3TBYnZjNjEyqG9g+yZ4fdYxlN76czPVhRiWk
+         uDlTknB47SYLF0ud83eeviIzpHboc0JWbEhvHzx4IgJWdA2prg/vHybenD9+zjSLEaO3
+         TAUg==
+X-Gm-Message-State: ACrzQf1gA0Kp0Iq+C35Tt56gPidvZW9MX1VRK++Jp7H6Dv4tllH17ULU
+        7E871TsY2LOmd2umbA/6MegJ82F9tOeJ+1fO
+X-Google-Smtp-Source: AMsMyM5D5v89kh82bH7kbM1lGLunTrzCdElYFAq6JdbkROu7rofHPzToiBrs7SQn09gNB++g54WktA==
+X-Received: by 2002:a17:906:fd86:b0:777:d739:1ede with SMTP id xa6-20020a170906fd8600b00777d7391edemr27321466ejb.576.1664399285569;
+        Wed, 28 Sep 2022 14:08:05 -0700 (PDT)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id ty27-20020a170907c71b00b0074ae59d85a4sm2804221ejc.20.2022.09.28.14.08.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 14:08:03 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id n10so21575130wrw.12
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 14:08:03 -0700 (PDT)
+X-Received: by 2002:a5d:522f:0:b0:228:dc7f:b9a8 with SMTP id
+ i15-20020a5d522f000000b00228dc7fb9a8mr22722202wra.617.1664399282903; Wed, 28
+ Sep 2022 14:08:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922200034.23759-5-chang.seok.bae@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220927112343.2700216-1-sheng-liang.pan@quanta.corp-partner.google.com>
+ <20220927192234.v4.2.I1454364ac3d8ecc64677884d6b7d2f3e334e4b4a@changeid> <CAD=FV=Vu-bZFeZVER+dP4pTD6UTTLFhpJX=ZxurBbkep=8uHyg@mail.gmail.com>
+In-Reply-To: <CAD=FV=Vu-bZFeZVER+dP4pTD6UTTLFhpJX=ZxurBbkep=8uHyg@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 28 Sep 2022 14:07:51 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Uv9R691LZP65ufh2oTQSKCdTdqqH1O7j99dT07svsdEw@mail.gmail.com>
+Message-ID: <CAD=FV=Uv9R691LZP65ufh2oTQSKCdTdqqH1O7j99dT07svsdEw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] arm64: dts: qcom: Add LTE SKU for sc7280-evoker family
+To:     Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022, Chang S. Bae wrote:
-> MXCSR is architecturally part of the SSE state. But, the kernel code
-> presumes it as part of the FP component. Adjust the offset and size for
-> these legacy states.
-> 
-> Notably, each legacy component area is not contiguous, unlike extended
-> components. Add a warning message when these offset and size are
-> referenced.
-> 
-> Fixes: ac73b27aea4e ("x86/fpu/xstate: Fix xstate_offsets, xstate_sizes for non-extended xstates")
-> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-> Cc: x86@kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
->  arch/x86/kernel/fpu/xstate.c | 21 +++++++++++++++------
->  1 file changed, 15 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> index a3f7045d1f8e..ac2ec5d6e7e4 100644
-> --- a/arch/x86/kernel/fpu/xstate.c
-> +++ b/arch/x86/kernel/fpu/xstate.c
-> @@ -143,8 +143,13 @@ static unsigned int xfeature_get_offset(u64 xcomp_bv, int xfeature)
->  	 * offsets.
->  	 */
->  	if (!cpu_feature_enabled(X86_FEATURE_XCOMPACTED) ||
-> -	    xfeature <= XFEATURE_SSE)
-> +	    xfeature <= XFEATURE_SSE) {
-> +		if (xfeature <= XFEATURE_SSE)
-> +			pr_warn("The legacy state (%d) is discontiguously located.\n",
-> +				xfeature);
+Hi,
 
-pr_warn() here isn't warranted.  copy_uabi_to_xstate() calls this with non-extended
-features, which is perfectly fine since it manually handles MXCSR.  And that helper
-is directly reachable by userspace, i.e. userspace can spam the pr_warn().
+On Wed, Sep 28, 2022 at 2:04 PM Doug Anderson <dianders@chromium.org> wrote:
+>
+> The above is an unrelated whitespace change and doesn't belong in this
+> patch. Ideally you'd send a v5 where you didn't have that.
+
+Actually you probably want to send a v5 anyway with Bjorn's proper
+email address. The fact that you have his old linaro address instead
+of his kernel.org address means you were probably need to update your
+git tree. Try something like:
+
+git remote add linux_qcom
+git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
+git fetch linux_qcom
+git checkout -b my_patch_series linux_qcom/for-next
+# then make your changes and post them up
+
+-Doug
