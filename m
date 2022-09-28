@@ -2,120 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256025EDB59
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9E25EDB53
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234234AbiI1LIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
+        id S234027AbiI1LJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 07:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234180AbiI1LH5 (ORCPT
+        with ESMTP id S234075AbiI1LIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:07:57 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77912F594;
-        Wed, 28 Sep 2022 04:05:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664363133; x=1695899133;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=SLyV2jVHkIQf5fwKu3f5DjAStMdYliqR3ajlaFDEgDc=;
-  b=dyO3Z0KdeXbUqjiXU4/SiZS4jc9tkc9N3s2ga8F77me+JR/Eg6n0GgZ1
-   VusrgH0xcLT2k2aVIwTKWSglGz9+TqGIzbAuhXQsKXxwf07XD03g4eOFP
-   /rynP45sDH++j56VLj2C5EN0wWtp3PpayBmcpOEiajXOfzfuIZQHHJEXQ
-   5qveXABu8W3x/1n2NEKOBDPci1Mdkpd3IDtqybfY6JOZKVNcCyrFdq2R7
-   t5pr8Jkqu5bOd4U23BACEQLLEIAezxnBhUfzmJoyDVHBT0z8FR333wjM9
-   EjCgRQkpEM25lup1FkZkFGvXg2Bc6z341GQRICFag8xDjy/P5uXo00HX2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="288729724"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="288729724"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 04:05:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="950662517"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="950662517"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Sep 2022 04:05:31 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2C1CC235; Wed, 28 Sep 2022 14:05:50 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH v2 1/1] Input: icn8505 - Utilize acpi_get_subsystem_id()
-Date:   Wed, 28 Sep 2022 14:05:48 +0300
-Message-Id: <20220928110548.43955-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 07:08:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C0FE010
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:05:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DA7F61E1A
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:05:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CE21C433C1;
+        Wed, 28 Sep 2022 11:05:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664363153;
+        bh=pIU8qt0C40AybVJ4/l4q1RuU2q+j8+ZhzCYxB17+NoI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aJQOP2MPYOsRcmrdpv18CgcCOgoZoCovHWakOuJ4yCA9S5yb/DH6xhWPX314g1u5D
+         anxmcEFVqvqnSvSKDS5GgxVH2goj7hY/ngTCsMVIbZhaqYh1gXCSlc0R2ccN53y7sR
+         bz8uJU4u4uGPUDhx0pvY9m1/SRkIypqxAqiGa9zWK1I5KCILZDU2pQqHchHaaajM7L
+         nXt3BcVnaPVPGfgXknlajSjqdnFLVFXUKj6XVyMpkZzPWb90b70x33rvwEL69L/EwM
+         jU/DYu1Ufcl8DQv1b8uSMyIP0dMblNzqe266I1pY/gyB9a5tFI3tS1d7P6nmOFkKxI
+         MJtL1Ys0sDd1Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1odUsx-00DFzW-4r;
+        Wed, 28 Sep 2022 12:05:51 +0100
+Date:   Wed, 28 Sep 2022 07:05:50 -0400
+Message-ID: <86o7uz7o8h.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, Quentin Perret <qperret@google.com>
+Subject: Re: [PATCH v2] KVM: arm64: Limit stage2_apply_range() batch size to 1GB
+In-Reply-To: <YzNSToqnQidglUg9@google.com>
+References: <20220926222146.661633-1-oliver.upton@linux.dev>
+        <86v8p96og1.wl-maz@kernel.org>
+        <YzNSToqnQidglUg9@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, ricarkol@google.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu, qperret@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace open coded variant of recently introduced acpi_get_subsystem_id().
+On Tue, 27 Sep 2022 15:43:10 -0400,
+Oliver Upton <oliver.upton@linux.dev> wrote:
+> 
+> Hi Marc,
+> 
+> On Tue, Sep 27, 2022 at 07:34:22AM -0400, Marc Zyngier wrote:
+> 
+> [...]
+> 
+> > > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > > index c9a13e487187..5d05bb92e129 100644
+> > > --- a/arch/arm64/kvm/mmu.c
+> > > +++ b/arch/arm64/kvm/mmu.c
+> > > @@ -31,6 +31,12 @@ static phys_addr_t hyp_idmap_vector;
+> > >  
+> > >  static unsigned long io_map_base;
+> > >  
+> > > +static inline phys_addr_t stage2_apply_range_next(phys_addr_t addr, phys_addr_t end)
+> > 
+> > Please drop the inline. I'm sure the compiler will perform its
+> > magic.
+> > 
+> > Can I also bikeshed a bit about the name? This doesn't "apply"
+> > anything, nor does it return the next range. It really computes the
+> > end of the current one.
+> > 
+> > Something like stage2_range_addr_end() would at least be consistent
+> > with the rest of the arm64 code (grep for _addr_end ...).
+> 
+> Bikeshed all you want :) But yeah, I like your suggestion.
+> 
+> > > +{
+> > > +	phys_addr_t boundary = round_down(addr + SZ_1G, SZ_1G);
+> > 
+> > nit: the rest of the code is using ALIGN_DOWN(). Any reason why this
+> > can't be used here?
+> 
+> Nope!
+> 
+> > > +
+> > > +	return (boundary - 1 < end - 1) ? boundary : end;
+> > > +}
+> > >  
+> > >  /*
+> > >   * Release kvm_mmu_lock periodically if the memory region is large. Otherwise,
+> > > @@ -52,7 +58,7 @@ static int stage2_apply_range(struct kvm *kvm, phys_addr_t addr,
+> > >  		if (!pgt)
+> > >  			return -EINVAL;
+> > >  
+> > > -		next = stage2_pgd_addr_end(kvm, addr, end);
+> > > +		next = stage2_apply_range_next(addr, end);
+> > >  		ret = fn(pgt, addr, next - addr);
+> > >  		if (ret)
+> > >  			break;
+> > > 
+> > 
+> > The main problem I see with this is that some entries now get visited
+> > multiple times if they cover more than a single 1GB entry (like a
+> > 512GB level-0 entry with 4k pages and 48bit IPA) . As long as this
+> > isn't destructive (CMOs, for example), this is probably OK. For
+> > operations that are not idempotent (such as stage2_unmap_walker), this
+> > is a significant change in behaviour.
+> > 
+> > My concern is that we have on one side a walker that is strictly
+> > driven by the page-table sizes, and we now get an arbitrary value that
+> > doesn't necessarily a multiple of block sizes. Yes, this works right
+> > now because you can't create a block mapping larger than 1GB with any
+> > of the supported page size.
+> > 
+> > But with 52bit VA/PA support, this changes: we can have 512GB (4k),
+> > 64GB (16k) and 4TB (64k) block mappings at S2. We don't support this
+> > yet at S2, but when this hits, we'll be in potential trouble.
+> 
+> Ah, I didn't fully capture the reasoning about the batch size. I had
+> thought about batching by operating on at most 1 block of the largest
+> supported granularity, but that felt like an inefficient walk restarting
+> from root every 32M (for 16K paging).
+> 
+> OTOH, if/when we add support for larger blocks in S2 we will run into
+> the same exact problem if we batch on the largest block size. If
+> dirty logging caused the large blocks to be shattered down to leaf
+> granularity then we will visit a crazy amount of PTEs before releasing
+> the lock.
+> 
+> I guess what I'm getting at is we need to detect lock contention and the
+> need to reschedule in the middle of the walk instead of at some
+> predetermined boundary, though that ventures into the territory of 'TDP
+> MMU' features...
+> 
+> So, seems to me we can crack this a few ways:
+> 
+>   1.Batch at the arbitrary 1GB since it works currently and produces a
+>     more efficient walk for all page sizes. I can rework some of the
+>     logic in kvm_level_supports_block_mapping() such that we can
+>     BUILD_BUG_ON() if the largest block size exceeds 1GB. Kicks the can
+>     down the road on a better implementation.
+> 
+>   2.Batch by the largest supported block mapping size. This will result
+>     in less efficient walks for !4K page sizes and likely produce soft
+>     lockups when we support even larger blocks. Nonetheless, the
+>     implementation will remain correct regardless of block size.
+> 
+>   3.Test for lock contention and need_resched() in the middle of the
+>     walk, rewalking from wherever we left off when scheduled again. TDP
+>     MMU already does this, so it could be a wasted effort adding support
+>     for it to the ARM MMU if we are to switch over at some point.
+> 
+> WDYT?
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: used PTR_ERR_OR_ZERO() amd twek the code accordingly (Dmitry)
- drivers/input/touchscreen/chipone_icn8505.c | 30 +++++++--------------
- 1 file changed, 9 insertions(+), 21 deletions(-)
+[+ Quentin, who is looking at this as well]
 
-diff --git a/drivers/input/touchscreen/chipone_icn8505.c b/drivers/input/touchscreen/chipone_icn8505.c
-index f9ca5502ac8c..c421f4be2700 100644
---- a/drivers/input/touchscreen/chipone_icn8505.c
-+++ b/drivers/input/touchscreen/chipone_icn8505.c
-@@ -364,32 +364,20 @@ static irqreturn_t icn8505_irq(int irq, void *dev_id)
- 
- static int icn8505_probe_acpi(struct icn8505_data *icn8505, struct device *dev)
- {
--	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
--	const char *subsys = "unknown";
--	struct acpi_device *adev;
--	union acpi_object *obj;
--	acpi_status status;
--
--	adev = ACPI_COMPANION(dev);
--	if (!adev)
--		return -ENODEV;
-+	const char *subsys;
-+	int error;
- 
--	status = acpi_evaluate_object(adev->handle, "_SUB", NULL, &buffer);
--	if (ACPI_SUCCESS(status)) {
--		obj = buffer.pointer;
--		if (obj->type == ACPI_TYPE_STRING)
--			subsys = obj->string.pointer;
--		else
--			dev_warn(dev, "Warning ACPI _SUB did not return a string\n");
--	} else {
--		dev_warn(dev, "Warning ACPI _SUB failed: %#x\n", status);
--		buffer.pointer = NULL;
--	}
-+	subsys = acpi_get_subsystem_id(ACPI_HANDLE(dev));
-+	error = PTR_ERR_OR_ZERO(subsys);
-+	if (error == -ENODATA)
-+		subsys = "unknown";
-+	else if (error)
-+		return error;
- 
- 	snprintf(icn8505->firmware_name, sizeof(icn8505->firmware_name),
- 		 "chipone/icn8505-%s.fw", subsys);
- 
--	kfree(buffer.pointer);
-+	kfree_const(subsys);
- 	return 0;
- }
- 
+At this stage, I'm more keen on option (2). It solves your immediate
+issue, and while it doesn't improve the humongous block mapping case,
+it doesn't change the behaviour of the existing walkers (you are
+guaranteed to visit a leaf only once per traversal).
+
+Option (3) is more of a long term goal, and I'd rather we improve
+things in now.
+
+Thanks,
+
+	M.
+
 -- 
-2.35.1
-
+Without deviation from the norm, progress is not possible.
