@@ -2,122 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E015ED7AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9CE5ED7B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233351AbiI1I0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
+        id S233390AbiI1I1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiI1I0p (ORCPT
+        with ESMTP id S233357AbiI1I1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:26:45 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A74B671BFF;
-        Wed, 28 Sep 2022 01:26:43 -0700 (PDT)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxYOI9BTRjKzIjAA--.1292S2;
-        Wed, 28 Sep 2022 16:26:37 +0800 (CST)
-Subject: Re: [PATCH v4 2/3] dt-bindings: thermal: add loongson2k thermal
- binding
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
-References: <20220928031628.6463-1-zhuyinbo@loongson.cn>
- <20220928031628.6463-2-zhuyinbo@loongson.cn>
- <1b2d1e4f-6b95-cf20-8c2d-f87a91ae599c@linaro.org>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <c6b15f31-06e1-81e8-9e4f-5a2b8a704096@loongson.cn>
-Date:   Wed, 28 Sep 2022 16:26:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 28 Sep 2022 04:27:13 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE28372FC1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:27:12 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id ay7-20020a05600c1e0700b003b49861bf48so2087014wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:27:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=lIZkVJj/+0M/778lpgTUWdNSZmlLsxXrL8AdvSaQ9uA=;
+        b=ctPKPM5Hp+aKGXd5b/qxoarEEZRc2m1B0LQIsoArSVt5/7H41uh661gxi/RDml0rYd
+         2r5BOIbXaMA3kX29XCKdaKjq+qXIsUhbWER32FXPcRD17gVj+FghNG53UZyxQEpFlD4Q
+         kVP6B2XVQA7RU6vjT2l3GCnPiCYCy5mF/v/NFHU0ThwaU7wdPrtJlSABrndONBoBgMao
+         TSb1o8jhHk9pHR1iolqzJMqxNe9kiGwyfGv8N4mTk5mCvrXtxFjs+b5mm9FmDKjtGKOe
+         1009NmbFv/t7L9YUIjhcR2kCOcuGZiIHRC6m5n9UvIip7Dk8KGnz21Ha8miWD9A5cJ25
+         Z+3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=lIZkVJj/+0M/778lpgTUWdNSZmlLsxXrL8AdvSaQ9uA=;
+        b=q+LisQyep2Dh84mZbnLEigctintz3PHPwXDj6vYd8GZpvc6bUfe0EuT+JYW6qsTpOq
+         x5aJvPqR4pYCir2bUUgXdARHH99RzQsiID9SC3DVEW39FeKhJ6A6ZwBW8QMqBpuHxnpg
+         ntUc2PaqmkQDtUSMZy+EJ5+Y9fR0JZMlJI/kKqhJCq6CyuQr0u3IienjSZOGPWWZVg5v
+         FRCAvmwfV3/ixeIZRmPgR+yxSNRJl9KUwu+NgVCgkePa/2ABEnplYGNYzd0igraU/RdN
+         i4jWCKxjUv9vzc+JQdDlfyxL5EhHtRlub5aW9eovaP5SOLenS32qn8lBuKEm5Qaf1M4O
+         xHew==
+X-Gm-Message-State: ACrzQf3hAkZ2gh6qiY6EyvO0H5QqVn04+X+FgX/LYjjr7X0McS/vudis
+        PrCFe+2MHl8jbyLFghGS1vnBAQ==
+X-Google-Smtp-Source: AMsMyM5WybFYGhvPIuGUG0NAbItu/BNNr4V3dn5K2Y44thiLh67dAhNGUZdbVuP/yWoFCFZh7xh5MQ==
+X-Received: by 2002:a1c:7c12:0:b0:3b4:73e1:bdd7 with SMTP id x18-20020a1c7c12000000b003b473e1bdd7mr5998070wmc.32.1664353631341;
+        Wed, 28 Sep 2022 01:27:11 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id t18-20020adfe452000000b00228cd9f6349sm3714776wrm.106.2022.09.28.01.27.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 01:27:10 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 09:27:08 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     yexingchen116@gmail.com
+Cc:     jingoohan1@gmail.com, lee@kernel.org, deller@gmx.de,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>
+Subject: Re: [PATCH linux-next v2] backlight: use sysfs_emit() to instead of
+ scnprintf()
+Message-ID: <YzQFXLD/G90+YEdo@maple.lan>
+References: <20220928014115.261470-1-ye.xingchen@zte.com.cn>
 MIME-Version: 1.0
-In-Reply-To: <1b2d1e4f-6b95-cf20-8c2d-f87a91ae599c@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxYOI9BTRjKzIjAA--.1292S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZF4kAry8ZrWrAF18Xw45trb_yoWkCrb_AF
-        129wn7Zwn7ArsIgwn3Zr1fK3s3Kay8Xw15JFWkt34xZ34FvayUuF10yr1SqayfJw4kCF43
-        CryrWw1Ykw4UWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb-AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928014115.261470-1-ye.xingchen@zte.com.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Sep 28, 2022 at 01:41:15AM +0000, yexingchen116@gmail.com wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>
+> Replace the open-code with sysfs_emit() to simplify the code.
+>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+> v1 -> v2
+> Add the rest of this fixes for this pattern in the 'drivers/video/backlight' directory.
+>  drivers/video/backlight/lm3533_bl.c | 10 +++++-----
+>  drivers/video/backlight/lp855x_bl.c |  4 ++--
+
+What happened to the lp8788 fixes?
 
 
-在 2022/9/28 下午4:01, Krzysztof Kozlowski 写道:
-> On 28/09/2022 05:16, Yinbo Zhu wrote:
->> Add the loongson2k thermal binding with DT schema format using
->> json-schema.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> 
-> Thank you for your patch. There is something to discuss/improve.
-> 
->> +$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Thermal sensors on loongson2k SoCs
->> +
->> +maintainers:
->> +  - zhanghongchen <zhanghongchen@loongson.cn>
->> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->> +
->> +properties:
->> +  compatible:
->> +    const: loongson,ls2k-thermal
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  "#thermal-sensor-cells":
-> 
-> Use same quotes in all places - either ' or "
-Thanks for reminding me, I will fix it.
-> 
->> +    const: 1> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +  - '#thermal-sensor-cells'
-> 
-> With quotes fixed:
-I will use "'" uniformly.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Best regards,
-> Krzysztof
-> 
+Daniel.
 
+
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/video/backlight/lm3533_bl.c b/drivers/video/backlight/lm3533_bl.c
+> index 1df1b6643c0b..5e2ce9285245 100644
+> --- a/drivers/video/backlight/lm3533_bl.c
+> +++ b/drivers/video/backlight/lm3533_bl.c
+> @@ -66,7 +66,7 @@ static ssize_t show_id(struct device *dev,
+>  {
+>  	struct lm3533_bl *bl = dev_get_drvdata(dev);
+>
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", bl->id);
+> +	return sysfs_emit(buf, "%d\n", bl->id);
+>  }
+>
+>  static ssize_t show_als_channel(struct device *dev,
+> @@ -75,7 +75,7 @@ static ssize_t show_als_channel(struct device *dev,
+>  	struct lm3533_bl *bl = dev_get_drvdata(dev);
+>  	unsigned channel = lm3533_bl_get_ctrlbank_id(bl);
+>
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", channel);
+> +	return sysfs_emit(buf, "%u\n", channel);
+>  }
+>
+>  static ssize_t show_als_en(struct device *dev,
+> @@ -95,7 +95,7 @@ static ssize_t show_als_en(struct device *dev,
+>  	mask = 1 << (2 * ctrlbank);
+>  	enable = val & mask;
+>
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", enable);
+> +	return sysfs_emit(buf, "%d\n", enable);
+>  }
+>
+>  static ssize_t store_als_en(struct device *dev,
+> @@ -147,7 +147,7 @@ static ssize_t show_linear(struct device *dev,
+>  	else
+>  		linear = 0;
+>
+> -	return scnprintf(buf, PAGE_SIZE, "%x\n", linear);
+> +	return sysfs_emit(buf, "%x\n", linear);
+>  }
+>
+>  static ssize_t store_linear(struct device *dev,
+> @@ -190,7 +190,7 @@ static ssize_t show_pwm(struct device *dev,
+>  	if (ret)
+>  		return ret;
+>
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
+> +	return sysfs_emit(buf, "%u\n", val);
+>  }
+>
+>  static ssize_t store_pwm(struct device *dev,
+> diff --git a/drivers/video/backlight/lp855x_bl.c b/drivers/video/backlight/lp855x_bl.c
+> index bd0bdeae23a4..fafc1a9e76ef 100644
+> --- a/drivers/video/backlight/lp855x_bl.c
+> +++ b/drivers/video/backlight/lp855x_bl.c
+> @@ -293,7 +293,7 @@ static ssize_t lp855x_get_chip_id(struct device *dev,
+>  {
+>  	struct lp855x *lp = dev_get_drvdata(dev);
+>
+> -	return scnprintf(buf, PAGE_SIZE, "%s\n", lp->chipname);
+> +	return sysfs_emit(buf, "%s\n", lp->chipname);
+>  }
+>
+>  static ssize_t lp855x_get_bl_ctl_mode(struct device *dev,
+> @@ -307,7 +307,7 @@ static ssize_t lp855x_get_bl_ctl_mode(struct device *dev,
+>  	else if (lp->mode == REGISTER_BASED)
+>  		strmode = "register based";
+>
+> -	return scnprintf(buf, PAGE_SIZE, "%s\n", strmode);
+> +	return sysfs_emit(buf, "%s\n", strmode);
+>  }
+>
+>  static DEVICE_ATTR(chip_id, S_IRUGO, lp855x_get_chip_id, NULL);
+> --
+> 2.25.1
+>
+>
