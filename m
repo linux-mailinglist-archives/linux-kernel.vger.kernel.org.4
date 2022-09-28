@@ -2,91 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA195ED2D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E265ED2E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 04:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbiI1By3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 21:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
+        id S232207AbiI1CDq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Sep 2022 22:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiI1By1 (ORCPT
+        with ESMTP id S230305AbiI1CDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 21:54:27 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D931F01B6
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 18:54:25 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4McfYr74rlzHtcy
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:49:36 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 28 Sep 2022 09:54:24 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <akinobu.mita@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <wangyufen@huawei.com>
-Subject: [-next RESEND] fault-injection: using debugfs_create_xul() instead of debugfs_create_xl()
-Date:   Wed, 28 Sep 2022 10:14:59 +0800
-Message-ID: <1664331299-4976-1-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        Tue, 27 Sep 2022 22:03:43 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF201D1A75
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 19:03:43 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id x3-20020a056e021ca300b002f855cd264cso6026798ill.7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 19:03:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:from:subject:message-id:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=oBCy6kzRsYubLyWzGyDCQWUmqeARuKauUsbqgDLRR1k=;
+        b=Bu84WYj1aFI0GWAQKOUHr+OCKQTgWDjrh1UrGiMX+mpXZXKdkEWDtNGZG/KOVDp6OW
+         eDewNg5kei6h4M1H2H/V/MX/K2BML1iPJquirirlpol4RFH0IofWCsY8qVWMreQWy3kk
+         XhUPGYviwMmDjLZW0v4BMiNlCM7aPcr8LKRTp18eB9Dt4N+vxHrBcsmag2tnClekVTKs
+         gYImprEIauyy1sCZZxPxf5IwJGWqHtOk+H6lGmElhHF053rkPymoWuz7z0/7y4/LvqKb
+         WSPFX7qUOUqOZcaewMeHvjT8H2n1KJAPSMg89oQxOavMq75HEocB8pZJlwq6r79ih6Dp
+         VMNA==
+X-Gm-Message-State: ACrzQf128ITk4tcc9uNz/TUXyWfZo+bY6URt8eVVQzhBas2AX+th6+/l
+        GraqcVRmDw7fFdVTOrfe65h0OMs9rRBaLiiNMoQ0QwAt+oPs
+X-Google-Smtp-Source: AMsMyM5LYxJggCQUB6xCMuaSFNWXB2kdrWHbl3B1IzHoXEyWLmkV57QRsoxOW9lnAy/BVj9Sr47ZtM5X4t8P9w+R38YgFQRGAv+0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1c8d:b0:2f8:a6a4:9b12 with SMTP id
+ w13-20020a056e021c8d00b002f8a6a49b12mr4228962ill.179.1664330622496; Tue, 27
+ Sep 2022 19:03:42 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 19:03:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008af58705e9b32b1d@google.com>
+Subject: [syzbot] unexpected kernel reboot (8)
+From:   syzbot <syzbot+8346a1aeed52cb04c9ba@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using debugfs_create_xul() instead of debugfs_create_xl(), and del the
-local define debugfs_create_xl().
+Hello,
 
-Suggested-by: Akinobu Mita <akinobu.mita@gmail.com>
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+syzbot found the following issue on:
+
+HEAD commit:    1707c39ae309 Merge tag 'driver-core-6.0-rc7' of git://git...
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=17324288880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=122d7bd4fc8e0ecb
+dashboard link: https://syzkaller.appspot.com/bug?extid=8346a1aeed52cb04c9ba
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15ca1f54880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=155622df080000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8346a1aeed52cb04c9ba@syzkaller.appspotmail.com
+
+fuseblk: Unknown parameter '                                                                Decompressing Linux... Parsing ELF... done.                                                                                     Booting the kernel.                                                                                                                                                                                                                                                             Decompressing Linux... Parsing ELF... done.                                                                                     Booting the kernel.                                                                                                                                                                                                                                                                                                                                              
+
+
 ---
- lib/fault-inject.c | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/lib/fault-inject.c b/lib/fault-inject.c
-index 9dd1dd1..dbb5409 100644
---- a/lib/fault-inject.c
-+++ b/lib/fault-inject.c
-@@ -185,14 +185,6 @@ static void debugfs_create_ul(const char *name, umode_t mode,
- 
- #ifdef CONFIG_FAULT_INJECTION_STACKTRACE_FILTER
- 
--DEFINE_SIMPLE_ATTRIBUTE(fops_xl, debugfs_ul_get, debugfs_ul_set, "0x%llx\n");
--
--static void debugfs_create_xl(const char *name, umode_t mode,
--			      struct dentry *parent, unsigned long *value)
--{
--	debugfs_create_file(name, mode, parent, value, &fops_xl);
--}
--
- static int debugfs_stacktrace_depth_set(void *data, u64 val)
- {
- 	*(unsigned long *)data =
-@@ -237,10 +229,10 @@ struct dentry *fault_create_debugfs_attr(const char *name,
- #ifdef CONFIG_FAULT_INJECTION_STACKTRACE_FILTER
- 	debugfs_create_stacktrace_depth("stacktrace-depth", mode, dir,
- 					&attr->stacktrace_depth);
--	debugfs_create_xl("require-start", mode, dir, &attr->require_start);
--	debugfs_create_xl("require-end", mode, dir, &attr->require_end);
--	debugfs_create_xl("reject-start", mode, dir, &attr->reject_start);
--	debugfs_create_xl("reject-end", mode, dir, &attr->reject_end);
-+	debugfs_create_xul("require-start", mode, dir, &attr->require_start);
-+	debugfs_create_xul("require-end", mode, dir, &attr->require_end);
-+	debugfs_create_xul("reject-start", mode, dir, &attr->reject_start);
-+	debugfs_create_xul("reject-end", mode, dir, &attr->reject_end);
- #endif /* CONFIG_FAULT_INJECTION_STACKTRACE_FILTER */
- 
- 	attr->dname = dget(dir);
--- 
-1.8.3.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
