@@ -2,98 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA43B5EDF23
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655795EDF27
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234162AbiI1Ot2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
+        id S234524AbiI1Otr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233695AbiI1OtY (ORCPT
+        with ESMTP id S234474AbiI1Oti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:49:24 -0400
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56938E462;
-        Wed, 28 Sep 2022 07:49:22 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so1163069wmb.0;
-        Wed, 28 Sep 2022 07:49:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=b++TaSXpJUvwsLorqpvjYCrKiWF0sRAAlUL/l9wAjnM=;
-        b=ks9jU2reZprjujw6DQf+Ec0FIgBM6wY72U2sjLNWyiIiGmwFyc/xocmTC5JnaIsv5r
-         C54GvNxK1fyJbqBgl/AouMbi7EE5a47p6ZpCNj/KEB/R3DpdALgWfqig6RBB9D99kzdI
-         qKhttrHYqCd6p5EZdUrUnAgV9YL7vX599ESKydeiMyhfQfxTDtb9WNWpk+NWiGRv8KNs
-         r8LmaV8Ud3zp1/GUMhjJpEDKYbrvZiMDRP+v/vWN/C9tyYUtRRy4J4tt13xeTKwc1hID
-         s7V05pJ+2o+zM0lOVMcxE7KbY39Y8uf1eeZLZIiUKQuNuWddhwulvUfF/XmvmitcpOxz
-         S7og==
-X-Gm-Message-State: ACrzQf3UMZyPZ7ubQDfRqa9FIRmQRFN/fz8IOdzZRTRNZSjyEz27n37L
-        LOXliYB1Hemt352ivQL33IE=
-X-Google-Smtp-Source: AMsMyM4BICEsTCiOwKDYNZM6kA80a/1z/SDCkkFsgQ5RHyVrv0H+SFEHVYvZEBLAVJfET0dprJibhw==
-X-Received: by 2002:a1c:7315:0:b0:3b4:e1b8:47b2 with SMTP id d21-20020a1c7315000000b003b4e1b847b2mr7119813wmb.165.1664376561208;
-        Wed, 28 Sep 2022 07:49:21 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id b8-20020a5d45c8000000b0022ca921dc67sm4325744wrs.88.2022.09.28.07.49.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 07:49:20 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 14:49:16 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Finn Behrens <me@kloenk.de>, Miguel Cano <macanroj@gmail.com>,
-        Tiago Lam <tiagolam@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH v10 20/27] scripts: add `rust_is_available.sh`
-Message-ID: <YzRe7NX4rRwor3QL@liuwe-devbox-debian-v2>
-References: <20220927131518.30000-1-ojeda@kernel.org>
- <20220927131518.30000-21-ojeda@kernel.org>
+        Wed, 28 Sep 2022 10:49:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DCFDDBA;
+        Wed, 28 Sep 2022 07:49:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69DD823A;
+        Wed, 28 Sep 2022 07:49:38 -0700 (PDT)
+Received: from [10.57.0.129] (unknown [10.57.0.129])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB8703F73D;
+        Wed, 28 Sep 2022 07:49:29 -0700 (PDT)
+Message-ID: <470e79ec-201b-6081-d31c-f5a9dee7a9ae@arm.com>
+Date:   Wed, 28 Sep 2022 15:49:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927131518.30000-21-ojeda@kernel.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/6] perf stat: Use thread map index for shadow stat
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+References: <20220926200757.1161448-1-namhyung@kernel.org>
+ <20220926200757.1161448-5-namhyung@kernel.org>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20220926200757.1161448-5-namhyung@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 03:14:51PM +0200, Miguel Ojeda wrote:
-> This script tests whether the Rust toolchain requirements are in place
-> to enable Rust support. It uses `min-tool-version.sh` to fetch
-> the version numbers.
-> 
-> The build system will call it to set `CONFIG_RUST_IS_AVAILABLE` in
-> a later patch.
-> 
-> It also has an option (`-v`) to explain what is missing, which is
-> useful to set up the development environment. This is used via
-> the `make rustavailable` target added in a later patch.
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Co-developed-by: Finn Behrens <me@kloenk.de>
-> Signed-off-by: Finn Behrens <me@kloenk.de>
-> Co-developed-by: Miguel Cano <macanroj@gmail.com>
-> Signed-off-by: Miguel Cano <macanroj@gmail.com>
-> Co-developed-by: Tiago Lam <tiagolam@gmail.com>
-> Signed-off-by: Tiago Lam <tiagolam@gmail.com>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Reviewed-by: Wei Liu <wei.liu@kernel.org>
+
+On 26/09/2022 21:07, Namhyung Kim wrote:
+> When AGGR_THREAD is active, it aggregates the values for each thread.
+> Previously it used cpu map index which is invalid for AGGR_THREAD so
+> it had to use separate runtime stats with index 0.
+> 
+> But it can just use the rt_stat with thread_map_index.  Rename the
+> first_shadow_map_idx() and make it return the thread index.
+> 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/util/stat-display.c | 20 +++++++++-----------
+>  tools/perf/util/stat.c         |  8 ++------
+>  2 files changed, 11 insertions(+), 17 deletions(-)
+
+Reviewed-by: James Clark <james.clark@arm.com>
+> 
+> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+> index 234491f43c36..570e2c04d47d 100644
+> --- a/tools/perf/util/stat-display.c
+> +++ b/tools/perf/util/stat-display.c
+> @@ -442,7 +442,7 @@ static void print_metric_header(struct perf_stat_config *config,
+>  		fprintf(os->fh, "%*s ", config->metric_only_len, unit);
+>  }
+>  
+> -static int first_shadow_cpu_map_idx(struct perf_stat_config *config,
+> +static int first_shadow_map_idx(struct perf_stat_config *config,
+>  				struct evsel *evsel, const struct aggr_cpu_id *id)
+>  {
+>  	struct perf_cpu_map *cpus = evsel__cpus(evsel);
+> @@ -452,6 +452,9 @@ static int first_shadow_cpu_map_idx(struct perf_stat_config *config,
+>  	if (config->aggr_mode == AGGR_NONE)
+>  		return perf_cpu_map__idx(cpus, id->cpu);
+>  
+> +	if (config->aggr_mode == AGGR_THREAD)
+> +		return id->thread;
+> +
+>  	if (!config->aggr_get_id)
+>  		return 0;
+>  
+> @@ -646,7 +649,7 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
+>  	}
+>  
+>  	perf_stat__print_shadow_stats(config, counter, uval,
+> -				first_shadow_cpu_map_idx(config, counter, &id),
+> +				first_shadow_map_idx(config, counter, &id),
+>  				&out, &config->metric_events, st);
+>  	if (!config->csv_output && !config->metric_only && !config->json_output) {
+>  		print_noise(config, counter, noise);
+> @@ -676,7 +679,7 @@ static void aggr_update_shadow(struct perf_stat_config *config,
+>  				val += perf_counts(counter->counts, idx, 0)->val;
+>  			}
+>  			perf_stat__update_shadow_stats(counter, val,
+> -					first_shadow_cpu_map_idx(config, counter, &id),
+> +					first_shadow_map_idx(config, counter, &id),
+>  					&rt_stat);
+>  		}
+>  	}
+> @@ -979,14 +982,9 @@ static void print_aggr_thread(struct perf_stat_config *config,
+>  			fprintf(output, "%s", prefix);
+>  
+>  		id = buf[thread].id;
+> -		if (config->stats)
+> -			printout(config, id, 0, buf[thread].counter, buf[thread].uval,
+> -				 prefix, buf[thread].run, buf[thread].ena, 1.0,
+> -				 &config->stats[id.thread]);
+> -		else
+> -			printout(config, id, 0, buf[thread].counter, buf[thread].uval,
+> -				 prefix, buf[thread].run, buf[thread].ena, 1.0,
+> -				 &rt_stat);
+> +		printout(config, id, 0, buf[thread].counter, buf[thread].uval,
+> +			 prefix, buf[thread].run, buf[thread].ena, 1.0,
+> +			 &rt_stat);
+>  		fputc('\n', output);
+>  	}
+>  
+> diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+> index e1d3152ce664..21137c9d5259 100644
+> --- a/tools/perf/util/stat.c
+> +++ b/tools/perf/util/stat.c
+> @@ -389,12 +389,8 @@ process_counter_values(struct perf_stat_config *config, struct evsel *evsel,
+>  		}
+>  
+>  		if (config->aggr_mode == AGGR_THREAD) {
+> -			if (config->stats)
+> -				perf_stat__update_shadow_stats(evsel,
+> -					count->val, 0, &config->stats[thread]);
+> -			else
+> -				perf_stat__update_shadow_stats(evsel,
+> -					count->val, 0, &rt_stat);
+> +			perf_stat__update_shadow_stats(evsel, count->val,
+> +						       thread, &rt_stat);
+>  		}
+>  		break;
+>  	case AGGR_GLOBAL:
