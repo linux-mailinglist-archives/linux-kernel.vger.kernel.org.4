@@ -2,107 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99135EE0F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A159F5EE0FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233952AbiI1PzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44554 "EHLO
+        id S234213AbiI1Pzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233247AbiI1Py7 (ORCPT
+        with ESMTP id S234167AbiI1Pze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:54:59 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C93D6CD35;
-        Wed, 28 Sep 2022 08:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664380497; x=1695916497;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9MKHF7JkWunOqxKkhskGg+gBY8oemgkga1v6mW2c5o4=;
-  b=cr11p44tKyjGKvgqbI3BkMN0P747c4rcV2YEvuJS4z7Sf/chrihurO4p
-   LzjkmSz6RjK8K3sXeEwNG1sOOuejC6othRLwd786DAeZjuL/syfVOb6EJ
-   sMWz8fNVPdE+0SXaKe4l1V3q57TlVuKJREei5+FRo0RXqAopcVggfQZQr
-   heVmJHqI/BVWJ404rNMxRgvOVwG/evVl9pi9hprk3/K1MgoWeHCOIMeHz
-   lMn8ChOBbOYHuUx/7F2ApV7CT2UV/Zs5hXk4ggidfvh4XBUdEMnWcqK9J
-   sRQMv+UQtQVaLBneyiJE/KLS8rkUQ3g3MBSRjztI17pkvCpM1ITBDSZC2
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="281354778"
-X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="281354778"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 08:54:55 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="573084272"
-X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="573084272"
-Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.108.153]) ([10.212.108.153])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 08:54:54 -0700
-Message-ID: <77b8714b-aa3f-3866-72a2-e706428d2657@intel.com>
-Date:   Wed, 28 Sep 2022 08:54:53 -0700
+        Wed, 28 Sep 2022 11:55:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4048E461
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:55:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 138A5B82114
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 15:55:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A339FC43146;
+        Wed, 28 Sep 2022 15:55:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664380527;
+        bh=RIn6sZf4k88Tnw5v3eTqACWbQ/KJxG3w+Kp9KpVeALg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bCY3qTb4/+dYc65wXDwqxgoTq77tM2XbIZQRImu59q9I62cckO9dRTEjEj6UD4hmE
+         wZyAoOcjXJzhmftW6Lz6yXZn43NBhnX9mdwFYKcBDjx9gJBL2Zj+i9cklfFFOmAj9T
+         z7mfUe+nEsVuEg45jVQnzNTM3BHoUcw7z5yXsmiWDLNWq4KbikSPO07vuo/h+xXI9M
+         Js39IvW3fVprP5SbBVTfdpbevt6LzayhsBHd8rNhHaR4RpwnYqFXSdX78pVg7vlWfN
+         oznf0AHJWiDYVmtvIG+5o/OwjOCNM+ak86TAQS1IkUzXCM/pqu7+rIy7NFDJmqDy4u
+         xS6IeGGAafKog==
+From:   matthias.bgg@kernel.org
+To:     roger.lu@mediatek.com, jia-wei.chang@mediatek.com
+Cc:     nfraprado@collabora.com, khilman@baylibre.com,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        angelogioacchino.delregno@collabora.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH 0/8] soc: mediatek: mtk-svs: refactor and cleanup the driver
+Date:   Wed, 28 Sep 2022 17:55:11 +0200
+Message-Id: <20220928155519.31977-1-matthias.bgg@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.3.0
-Subject: Re: [PATCH v2 1/2] dmaengine: idxd: Set wq state to disabled in
- idxd_wq_disable_cleanup()
-To:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, Vinod Koul <vkoul@kernel.org>
-References: <20220928154856.623545-1-jsnitsel@redhat.com>
- <20220928154856.623545-2-jsnitsel@redhat.com>
-Content-Language: en-US
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20220928154856.623545-2-jsnitsel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Matthias Brugger <matthias.bgg@gmail.com>
 
-On 9/28/2022 8:48 AM, Jerry Snitselaar wrote:
-> If we are calling idxd_wq_disable_cleanup(), the workqueue should be
-> in a disabled state. So set the workqueue state to IDXD_WQ_DISABLED so
-> that the state reflects that. Currently if there is a device failure,
-> and a software reset is attempted the workqueues will not be
-> re-enabled due to idxd_wq_enable() seeing that state as already being
-> IDXD_WQ_ENABLED.
->
-> Cc: Fenghua Yu <fenghua.yu@intel.com>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Mediatek SVS driver got accepted upstream but has coding style issues
+which were overseen in the review process. This series is a first step
+to clean up the driver. It basically cleans up the SoC specific probe.
+As next step we will need to clean up the 'struct svs_bank'.
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+This series should be a mere cleanup with no functional change. I'm
+happy to recieve tested-by tags to make sure it does not break anything.
 
 
-> ---
->   drivers/dma/idxd/device.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
-> index 5a8cc52c1abf..31911e255ac1 100644
-> --- a/drivers/dma/idxd/device.c
-> +++ b/drivers/dma/idxd/device.c
-> @@ -258,7 +258,6 @@ void idxd_wq_reset(struct idxd_wq *wq)
->   	operand = BIT(wq->id % 16) | ((wq->id / 16) << 16);
->   	idxd_cmd_exec(idxd, IDXD_CMD_RESET_WQ, operand, NULL);
->   	idxd_wq_disable_cleanup(wq);
-> -	wq->state = IDXD_WQ_DISABLED;
->   }
->   
->   int idxd_wq_map_portal(struct idxd_wq *wq)
-> @@ -378,6 +377,7 @@ static void idxd_wq_disable_cleanup(struct idxd_wq *wq)
->   	struct idxd_device *idxd = wq->idxd;
->   
->   	lockdep_assert_held(&wq->wq_lock);
-> +	wq->state = IDXD_WQ_DISABLED;
->   	memset(wq->wqcfg, 0, idxd->wqcfg_size);
->   	wq->type = IDXD_WQT_NONE;
->   	wq->threshold = 0;
+Matthias Brugger (8):
+  soc: mediatek: mtk-svs: clean up platform probing
+  soc: mediatek: mtk-svs: improve readability of platform_probe
+  soc: mediatek: mtk-svs: move svs_platform_probe into probe
+  soc: mediatek: mtk-svs: delete superfluous platform data entries
+  soc: mediatek: mtk-svs: Move SoC specific functions to new files
+  soc: mtk-svs: mt8183: Move thermal parsing in new function
+  soc: mtk-svs: mt8183: refactor o_slope calculation
+  soc: mtk-svs: mt8192: fix bank data
+
+ drivers/soc/mediatek/Makefile         |   3 +-
+ drivers/soc/mediatek/mt8183-svs.h     | 113 ++++
+ drivers/soc/mediatek/mt8192-svs.h     |  64 ++
+ drivers/soc/mediatek/mtk-svs-mt8183.c | 235 +++++++
+ drivers/soc/mediatek/mtk-svs-mt8192.c |  98 +++
+ drivers/soc/mediatek/mtk-svs.c        | 882 ++------------------------
+ drivers/soc/mediatek/mtk-svs.h        | 279 ++++++++
+ 7 files changed, 853 insertions(+), 821 deletions(-)
+ create mode 100644 drivers/soc/mediatek/mt8183-svs.h
+ create mode 100644 drivers/soc/mediatek/mt8192-svs.h
+ create mode 100644 drivers/soc/mediatek/mtk-svs-mt8183.c
+ create mode 100644 drivers/soc/mediatek/mtk-svs-mt8192.c
+ create mode 100644 drivers/soc/mediatek/mtk-svs.h
+
+-- 
+2.37.3
+
