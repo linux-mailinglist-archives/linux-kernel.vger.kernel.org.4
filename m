@@ -2,131 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9575ED42E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 07:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB1E5ED438
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 07:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbiI1FSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 01:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
+        id S232195AbiI1FZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 01:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232195AbiI1FSS (ORCPT
+        with ESMTP id S231278AbiI1FZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 01:18:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E105125DA4;
-        Tue, 27 Sep 2022 22:18:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B0A9B81F0A;
-        Wed, 28 Sep 2022 05:18:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD1DC433C1;
-        Wed, 28 Sep 2022 05:18:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664342294;
-        bh=5DT/64IMZuLUf3bLjAXjRk8ANx+zPNw/RU/6k9PgsEI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UnWv777f/Prr6ArHM7X0s8ysdAf6JtcyvjzTNeP6WF4/SeZgT0YqsZ2w3l/P305md
-         +9AYasjjE/nfGEunG1CZrHcDpWQ7Gn/bjD7entT4vflpqOC5Z+bwJpnIasI7WMPk2/
-         wrdBTjTiwF0KJSsoy0pGXtFY35n5jNJEj+XByytq2Frwxtbb7mo3DrgnBXAY+lJedx
-         Uzji/auSIaq2AIM96/Ayyaj5Zorx3k6ZdcWObG/XBZt8+1gtZn5QiaLu+DTSaGlkbx
-         1DbUzqASq0kxpSCmXs1QH43SiRMU8jAmfXV/P7Twydg0AG9jnrKlNqETRkAEadmDCe
-         l97ZflVsF7HEQ==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1280590722dso16006031fac.1;
-        Tue, 27 Sep 2022 22:18:14 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3t2niMTHZv4BuLf1UKbobu6tLiGRI0j7tQXbRkxUwVcz1V0LTf
-        cZv7125iZGH230cwO5oxCfOwnEokF932r1cb7eg=
-X-Google-Smtp-Source: AMsMyM5GSVNd2f83vHIh/hPg2DnFINuapn47E77DPLXPMrUPF4ddplCTXJHsTyIzOXryyZpiPMMe1L6pEq8/FDU8J9I=
-X-Received: by 2002:a05:6870:5803:b0:12c:c3e0:99dc with SMTP id
- r3-20020a056870580300b0012cc3e099dcmr4211405oap.19.1664342294051; Tue, 27 Sep
- 2022 22:18:14 -0700 (PDT)
+        Wed, 28 Sep 2022 01:25:51 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543901CD69E
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 22:25:49 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id a14so13120328ljj.8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 22:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=IPCLwIQ+UERHPm9w4nQGFYrwmlLzJ4AJ3JlVNkOLjfk=;
+        b=owmaWL8J0DjnByEMa+cLbTORIRrq8yp3lKV8crjvgMM/NkKnWeQIxzmI5VTzceEs3i
+         S3i46YmZL6hhUlOZgye5isjPYmsTL9s7ZQbh4KxfmQHhPEMfq8R8W01RbLcG9+VJVBK9
+         8fBxKiJNmH3HTgTCP9QbaG5As7Xex+3GS9vMzEkw0RXkyxtNit3zG4NH6cmFKNhRPLcJ
+         1wpCfkC3/obFIyVNyGRuEV+B6a4cqc/MfTeighQRcl1evlTq2RPNa22Fpm7esVybK8t9
+         XiN03BRQL3c+PNAEazrBabL0xPu6A+N1Pr1UnZe63PhoxCuf5jkappeLkxgBidmJu+mi
+         rgAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=IPCLwIQ+UERHPm9w4nQGFYrwmlLzJ4AJ3JlVNkOLjfk=;
+        b=pRa+/Lb2FevnYNPro6uPSJsF8MvD3Ilhc58kvcPOBqGf0d8AWh4M3P1qGpDlRmd7JQ
+         0U804/nKuiw3WyRm9VnLuzS9YzYRXM+uVYzX+K+06u0555I2mzSCHwdtPDEJVJi/HyRS
+         qsKLcmzH4hjiLVA9Ala60RYapcbhakI4wMCE/BEk12eSLvERvZMgRdx6pzJhdf/+EDDJ
+         ajy3QiScPjxIUgXxK7GHJ8sxyv/wrYUb4zZXLBbOfTfzw6GNAIVfTSF2IWH4pPXJw9xt
+         VGTLA/AwLqbtMM8+jFvctxGf1CAG5WavpqBJzTvQIO4HC9ZNPCama8RcVzfJ7dsKLiKz
+         vG1w==
+X-Gm-Message-State: ACrzQf1UZFhEth5jIcWpSO5/BkLIvRLpnBfIfFpunVZfm3fUfePBvZuy
+        SwLVrr1OwjhV6CJQ3YduL/drHW29NL3qaiRXNnfVVw==
+X-Google-Smtp-Source: AMsMyM7wMhHzCDPMFbCTrNC4bpJlQfmpId5OarS9R/571Zfneoaf+BQ5BEj/3dPyNZFm2pWs5O4V9tiCRmerzE31Li4=
+X-Received: by 2002:a2e:3909:0:b0:26c:2ea4:1a79 with SMTP id
+ g9-20020a2e3909000000b0026c2ea41a79mr10902755lja.401.1664342747490; Tue, 27
+ Sep 2022 22:25:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220925162400.1606-1-jszhang@kernel.org> <20220925162400.1606-2-jszhang@kernel.org>
-In-Reply-To: <20220925162400.1606-2-jszhang@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 28 Sep 2022 13:18:01 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRSb4f9rF_sTZ2hr9iOnvLYcQYu3CN7q8PCZQg4HvC_Gg@mail.gmail.com>
-Message-ID: <CAJF2gTRSb4f9rF_sTZ2hr9iOnvLYcQYu3CN7q8PCZQg4HvC_Gg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] RISC-V: KVM: Record number of signal exits as a
- vCPU stat
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+References: <20220830193701.1702962-1-maskray@google.com> <20220910075316.no72fdyqjvunomwm@google.com>
+In-Reply-To: <20220910075316.no72fdyqjvunomwm@google.com>
+From:   Fangrui Song <maskray@google.com>
+Date:   Tue, 27 Sep 2022 22:25:35 -0700
+Message-ID: <CAFP8O3+OwanSJdzd5V3oGJ_MOJOSVdbn+4iBJJKm2LCR8mCA0Q@mail.gmail.com>
+Subject: Re: [PATCH] vdso: Improve cmd_vdso_check to check all dynamic relocations
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUSPICIOUS_RECIPS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+On Sat, Sep 10, 2022 at 12:53 AM Fangrui Song <maskray@google.com> wrote:
+>
+> On 2022-08-30, Fangrui Song wrote:
+> >The actual intention is that no dynamic relocation exists. However, some
+> >GNU ld ports produce unneeded R_*_NONE. (If a port is not care enough to
+> >determine the exact .rel[a].dyn size, the trailing zeros become R_*_NONE
+> >relocations. E.g. powerpc64le ld as of 2.38 has the issue with
+> >defconfig.) R_*_NONE are generally no-op in the dynamic loaders. So just
+> >ignore them.
+> >
+> >With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_ABS is a
+> >bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT which are
+> >not called "absolute relocations". (The patch is motivated by the arm64
+> >port missing R_AARCH64_RELATIVE.)
+> >
+> >While here, replace "egrep" with "grep" as "egrep" is deprecated in GNU
+> >grep 3.7.
+> >
+> >Signed-off-by: Fangrui Song <maskray@google.com>
+> >---
+> >[...]
+> >
+>
+> Ping.
 
-=E2=9E=9C  linux git:(master) grep signal_exits arch/arm64 -r
-arch/arm64/kvm/guest.c: STATS_DESC_COUNTER(VCPU, signal_exits),
-arch/arm64/include/asm/kvm_host.h:      u64 signal_exits;
-
-By the way, do you know why arm64 is defined, but not used?
-
-
-On Mon, Sep 26, 2022 at 12:33 AM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> Record a statistic indicating the number of times a vCPU has exited
-> due to a pending signal.
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/include/asm/kvm_host.h | 1 +
->  arch/riscv/kvm/vcpu.c             | 2 ++
->  2 files changed, 3 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/k=
-vm_host.h
-> index 60c517e4d576..dbbf43d52623 100644
-> --- a/arch/riscv/include/asm/kvm_host.h
-> +++ b/arch/riscv/include/asm/kvm_host.h
-> @@ -67,6 +67,7 @@ struct kvm_vcpu_stat {
->         u64 mmio_exit_kernel;
->         u64 csr_exit_user;
->         u64 csr_exit_kernel;
-> +       u64 signal_exits;
->         u64 exits;
->  };
->
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index d0f08d5b4282..3da459fedc28 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -28,6 +28,7 @@ const struct _kvm_stats_desc kvm_vcpu_stats_desc[] =3D =
-{
->         STATS_DESC_COUNTER(VCPU, mmio_exit_kernel),
->         STATS_DESC_COUNTER(VCPU, csr_exit_user),
->         STATS_DESC_COUNTER(VCPU, csr_exit_kernel),
-> +       STATS_DESC_COUNTER(VCPU, signal_exits),
->         STATS_DESC_COUNTER(VCPU, exits)
->  };
->
-> @@ -973,6 +974,7 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
->                 if (signal_pending(current)) {
->                         ret =3D -EINTR;
->                         run->exit_reason =3D KVM_EXIT_INTR;
-> +                       ++vcpu->stat.signal_exits;
->                 }
->
->                 /*
-> --
-> 2.34.1
->
-
-
---
-Best Regards
- Guo Ren
+Ping^2 :)
