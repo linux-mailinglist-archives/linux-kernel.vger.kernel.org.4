@@ -2,182 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 534315EE30E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2395EE30C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbiI1R0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40462 "EHLO
+        id S233678AbiI1R00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234282AbiI1R0W (ORCPT
+        with ESMTP id S231167AbiI1R0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:26:22 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7948564FF;
-        Wed, 28 Sep 2022 10:26:20 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1319cf91d8aso4192649fac.5;
-        Wed, 28 Sep 2022 10:26:20 -0700 (PDT)
+        Wed, 28 Sep 2022 13:26:20 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4898B93222
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:26:19 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id a2so21390974lfb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:26:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date;
-        bh=PxNaDeF78j51lFfkEadsKMLXI6VN8WO63ACpoLyrqAc=;
-        b=BMH+foBeGZ0fT1YqRY6YhuE+yCJl0PVTMuhsDCZrdLLygiTQi+LziyJTd/8zgvDFwb
-         1DLKN627LNM33uU0L4iAwTJWeyYNUO9jUYEzJEcAOg+tQxaQMgUqsPlm9gvCnkzga7m7
-         yQQy3C1Pwo39TEsXD5LiIwdaCT+Tgv3gr3hg3A3nLNINcqoYpuP7eFWAPCt6+zfPfbp0
-         PE9Ce/mzWP0bpeCh0kjYTQl5xxM7skkOc7iX/qdQSgB5FLLV+lFw8PMgDk34pRRz0iGb
-         bDPEYPrc36hZgwnSlTt0ID4hvoZ/N2lSYymNA84/bJAggcSGKVw6OMBuFO8u1d+0TLj4
-         YGCg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=iaBM0F0vS4egIo+p/65Wr1pcDzd34fHYDBsYt35zuD8=;
+        b=Vm5/O2dA7LM9byhTgJjsTEWiTpq6cbx1A7BcdH2Ae3P/5/939CIAvevcFcAWx2icSy
+         6sYCxFBqORGn4L0pgWt9/FPWej0Om7OVd3JvMK5qJ/5+cqwxIi5+TFnstDTJ4hcDaOVA
+         8Ufz8DMelf4OICaUFMm010gmSIyEpIT9Yd7R63XTZhZ5arbfvpX3wDLscjse15LeVkzB
+         2HDjW7GG9p5boYj4CRRGcBvr3yD6qkKI70Zebvlm8O3wH6rrbfRZ8pwI0ueWhNPJmepx
+         X7kCeu7k2CMlj4PxYoPEFKCOHT6E5x1IVEV2/nC+W7hYCSP/oc6EfMLdgXaQ/LN5H+m6
+         hBcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=PxNaDeF78j51lFfkEadsKMLXI6VN8WO63ACpoLyrqAc=;
-        b=RMPmGJAWEnqyIOSaWDgL1SemppErHp6sP7ryJJ7GUPK5i40lYkcRb6xg4IN+zlyQH/
-         xViKIItA1udWJb8Kk/h8/IaPV4ey4MbWN0IyHXeWyG9idXQ2P65trhFB2MYyRhXbbN9s
-         gwU+HfDFP8ZQDPc/+VeBowEe4Kie2sRo1OqMdsN++rfSGohTYNooHxlhS/ksuXQxrKku
-         Zpq8gsVrp7JjNKPr1iAiJ9OGS/Hfr0Ifh9XIhynrWtj5OR+iDUr+uQr0FoccAN1gms7Y
-         rInQXyiXlGIiTi2deNl/h2cMhZWUqysIwF3YP2fbvijU2e4VrjSjbByHmSbdxoMi1O6x
-         vfFQ==
-X-Gm-Message-State: ACrzQf3daVKoB84J/QPct2x8x1BjGQSisGeFMFFFm/dtPczsaPkiwa53
-        fxk5lBFCx7pbMuDwiIU06Z2tMU8eMsHsR/pv
-X-Google-Smtp-Source: AMsMyM5zT85D/7aPruPMVZWLo1j6CLq62YJzQEB6Ux1aR2+YMtJUEDF5SmsBqDOMq1WaKNFizKNoxQ==
-X-Received: by 2002:a05:6870:eaa9:b0:131:65bc:e475 with SMTP id s41-20020a056870eaa900b0013165bce475mr5880425oap.15.1664385979703;
-        Wed, 28 Sep 2022 10:26:19 -0700 (PDT)
-Received: from ?IPV6:2804:14c:4c2:8202:7121:ae72:af3b:9956? ([2804:14c:4c2:8202:7121:ae72:af3b:9956])
-        by smtp.gmail.com with ESMTPSA id q42-20020a056871082a00b0012796e8033dsm2702795oap.57.2022.09.28.10.26.16
+        bh=iaBM0F0vS4egIo+p/65Wr1pcDzd34fHYDBsYt35zuD8=;
+        b=yRc+2YWgFaWdvarZXEUeKHidDQXqiCBOpwwNrMwApAM/EZKAzTZeWgsASksWn5s8kW
+         RS25ji6DQS12Zv4B/pi8sbEnjZdTXWEUPxQU0e0PzX2sIyUVbdyERiVIdXBoSySjYeG6
+         ABAZ85p2Wqbyk2EamWAgrcGJx2K1F3d0JhCdE0S9Uo6ik1H7F+Vqr93tdrdMdfH+kim/
+         DkuaiqFXSDJaE7JqbGjMV68DOA2itokmkX+F4WfonqNpyS81wQ8Zeu/Jl0HFfjpkjHyf
+         lM+3Kzi+Y0aGd1SMuS2ohT+9SUyIcuKNNJ/dZzhR23osbEF8cUJFyJWV7BvvjfDLYSxC
+         aunA==
+X-Gm-Message-State: ACrzQf2dCOgwOnVbdLXTzvJ2zTVHS8Fx3lRgS0JcRSrFfeBzp64JgLEE
+        yJB33iee2KHVJW9Ghl5W3QC62Q==
+X-Google-Smtp-Source: AMsMyM4DHKDdL4v9sepFSeuj5HbhsSN0dN9rFWUBcOnDLKUvgTtOG5lza4guiF8m6cN/mojNElNGkg==
+X-Received: by 2002:ac2:4c50:0:b0:49a:3768:da81 with SMTP id o16-20020ac24c50000000b0049a3768da81mr13102942lfk.247.1664385977386;
+        Wed, 28 Sep 2022 10:26:17 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id bg40-20020a05651c0ba800b00261e7e7b698sm494329ljb.123.2022.09.28.10.26.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 10:26:19 -0700 (PDT)
-Message-ID: <9024bdb2-4460-0424-42f4-b280983f3146@gmail.com>
-Date:   Wed, 28 Sep 2022 14:26:14 -0300
+        Wed, 28 Sep 2022 10:26:16 -0700 (PDT)
+Message-ID: <186bc17e-56d2-f125-aab9-f47bf3f45b79@linaro.org>
+Date:   Wed, 28 Sep 2022 19:26:16 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-From:   Tales Aparecida <tales.aparecida@gmail.com>
-Subject: Re: [PATCH v2 0/2] kunit: add boot time parameter to enable KUnit
-To:     Joe Fradley <joefradley@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-References: <20220823142456.3977086-1-joefradley@google.com>
- <10f97a94-ab35-fbc7-4dd7-98586a027c8b@gmail.com>
- <CAF-60z2huZ0scPzrV8mrZGzH0Ha6-c+iszOdcpVV7y020m4arw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2] arm64: dts: mt8192: Add vcodec lat and core nodes
 Content-Language: en-US
-In-Reply-To: <CAF-60z2huZ0scPzrV8mrZGzH0Ha6-c+iszOdcpVV7y020m4arw@mail.gmail.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
+        <Allen-KH.Cheng@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20220926105047.19419-1-allen-kh.cheng@mediatek.com>
+ <4d1e8600-f73d-8d2b-2e7a-1b75be7624bd@collabora.com>
+ <d71334b63427df73d01ff1b9fa4d2dec94ad9c95.camel@mediatek.com>
+ <05ed341b-2db3-620f-7a70-dcebfaa66f1a@collabora.com>
+ <172e10ee-22fd-ccec-1a5a-7bd0a29dbfc4@linaro.org>
+ <68e1c8b0-04cf-acf8-b6b6-97d9eb8a7c4a@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <68e1c8b0-04cf-acf8-b6b6-97d9eb8a7c4a@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 10:58, Joe Fradley wrote:
-> On Sat, Sep 24, 2022 at 5:42 PM Tales Aparecida
-> <tales.aparecida@gmail.com> wrote:
+On 28/09/2022 09:58, AngeloGioacchino Del Regno wrote:
+> Il 28/09/22 09:04, Krzysztof Kozlowski ha scritto:
+>> On 27/09/2022 12:17, AngeloGioacchino Del Regno wrote:
+>>>>>
+>>>>
+>>>> Sorry, my bad. I alsways run `make dtbs_check` to confirm dtb with
+>>>> bindings. I just think we didn't limit node names in mtk-vodec
+>>>> bindings. I will pay attention next time.
+>>>>
+>>>>
+>>>> Since currently the vcodec lat and core nodes are absent from the mtk
+>>>> dts, do you think the child node name should be changed to something
+>>>> more general (ex: video-codec) in mediatek,vcodec-subdev-decoder
+>>>> bindings?
+>>>
+>>> The video codec is mt8192-vcodec-dec, while the other nodes are describing
+>>> the VPU instances (and/or vpu cores)... I'm not sure.
+>>>
+>>> Krzysztof, please, can you give your opinion on that?
+>>>
 >>
->> Hi,
+>> What's the difference between them? I understand parent device is entire
+>> block of consisting of multiple processing units? If so, video-codec
+>> actually could fit in both places. But feel free to call it a bit
+>> different (video-codec-core, video-codec-lat, processing-unit, even
+>> something less generic). Sometimes it's tricky to find nice name, so I
+>> wouldn't worry too much in that case. Just not "mt8192-vcodec" :)
 >>
->>
->> This series is
->> Tested-by: Tales Aparecida <tales.aparecida@gmail.com>
->>
->> 1. Tested using kunit_tool: running tests and showing output as expected.
->>
->> 2. Tested further by running QEMU through virtme-run with:
->>    $ ../virtme/virtme-run --show-command --kdir ../linux/.for-amd/ --mods=auto --kopt kunit.enable=1
->>
->> 2.a. "KUNIT_DEFAULT_ENABLED" works as expected when "kunit.enable" is omitted
->> 2.b. kunit.enable=0 results in printing "kunit: disabled" on boot and on loading test modules, as expected
->> 3.c. kunit.enable=1 runs tests on boot and allows them to run when loading test modules
->>
->> 3. Regarding taint
->> 3.a. /proc/sys/kernel/tainted is 0 when kunit.enable=0 and does not change when trying to load test modules.
->> 3.b. /proc/sys/kernel/tainted is 0 when kunit.enable=1 until the first test runs, then it becomes 262144 (2^18) as expected.
 > 
-> Tales, thank you for doing this testing.
+> The parent device is the entire block consisting of multiple processing units
+> and has "global" control registers; children are LAT(s) and processing cores.
 > 
->>
->>
->> On other note, there's something I would like to delve into below.
->>
->>
->> On 23/08/2022 11:24, Joe Fradley wrote:
->>> v2:
->>>  - Added enable check in executor.c to prevent wrong error output from
->>>    kunit_tool.py when run against a KUnit disabled kernel
->>>  - kunit_tool.py now passes kunit.enable=1
->>>  - Flipped around logic of new config to KUNIT_DEFAULT_ENABLED
->>>  - Now load modules containing tests but not executing them
->>>  - Various message/description text clean up
->>>
->>> There are some use cases where the kernel binary is desired to be the same
->>> for both production and testing. This poses a problem for users of KUnit
->>> as built-in tests will automatically run at startup and test modules
->>> can still be loaded leaving the kernel in an unsafe state. There is a
->>> "test" taint flag that gets set if a test runs but nothing to prevent
->>> the execution.
->>
->> Do you have any info on whether these use cases would have something against writing tests for static functions using the documented approach of including the tests into the actual runtime code?
->> https://docs.kernel.org/dev-tools/kunit/usage.html#testing-static-functions
->>
->> Otherwise, would them agree to export the symbols that need to be tested?
->>
->> I would really like to understand better what are these use cases :)
+>  From my understanding, the processing cores are physical cores of one big VPU
+> and, depending on the actual (current gen) SoC, the VPU may have one or two
+> cores.
 > 
-> I feel using the static functions as described in your link is a good
-> alternative to
-> modules with embedded KUnit tests. However, this is a different use case then
-> I refer to, which is the ability to have the framework embedded in the
-> kernel for
-> both production and test with the control of test execution gated on a kernel
-> command line parameter.
+> Right now, the bindings want vcodec-latX@addr, vcodec-coreX@addr (where X is
+> a number, like vcodec-core0, vcodec-core1) but, in my opinion, changing that
+> to video-codec-lat@addr and video-codec-core@addr would be more descriptive.
 > 
+> ...Or should we simply leave the bindings as they are and just go with the
+> abbreviated "vcodec-(hwtype)" names?
 
-I have another question regarding the compilation in this use case.
+video-codec-lat sounds better, but I am not sure if it is worth the
+churn, so I am fine with both.
 
-Does it have a strict requirement to minimize the kernel size?
-That is, is there any requirement around built-in test modules
-and/or a plan to load test modules on demand when booting with
-kunit.enable=1?
+Best regards,
+Krzysztof
 
-
-I would also like to know whether the use case includes running
-unit tests for AMDGPU or DRM, just so we can be aware of it when
-writing more tests for static functions using the approach shown
-in that link. 
-
->>
->>>
->>> This patch adds the kunit.enable module parameter that will need to be
->>> set to true in addition to KUNIT being enabled for KUnit tests to run.
->>> The default value is true giving backwards compatibility. However, for
->>> the production+testing use case the new config option KUNIT_DEFAULT_ENABLED
->>> can be set to N requiring the tester to opt-in by passing kunit.enable=1 to
->>> the kernel.
->>>
->>> Joe Fradley (2):
->>>   kunit: add kunit.enable to enable/disable KUnit test
->>>   kunit: no longer call module_info(test, "Y") for kunit modules
->>>
->>>  .../admin-guide/kernel-parameters.txt         |  6 +++++
->>>  include/kunit/test.h                          |  3 ++-
->>>  lib/kunit/Kconfig                             | 11 +++++++++
->>>  lib/kunit/executor.c                          |  4 ++++
->>>  lib/kunit/test.c                              | 24 +++++++++++++++++++
->>>  tools/testing/kunit/kunit_kernel.py           |  1 +
->>>  6 files changed, 48 insertions(+), 1 deletion(-)
->>>
->>
->> Great work!
->>
->> Kind regards,
->> Tales
