@@ -2,163 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F245ED407
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 06:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3155ED411
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 07:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbiI1EyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 00:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
+        id S230040AbiI1FAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 01:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbiI1EyL (ORCPT
+        with ESMTP id S229477AbiI1FAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 00:54:11 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E71AE848
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 21:54:10 -0700 (PDT)
+        Wed, 28 Sep 2022 01:00:48 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8839EF6F45;
+        Tue, 27 Sep 2022 22:00:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664340850; x=1695876850;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=f9MN350BGqDDYUQsEVdG+13gHJrSzXi+S20DhSnJekw=;
-  b=P1Om4u7HFZRjbhmPBFzmeBgs/uYbqUAkfPQGYN3M1mxIw0HlttGRE8fk
-   bsq/pElLjII67GAQuToRPaxuaS/0I6NmsBeInD6nkmpvlN/SjOXDrsxWT
-   3TA5GrtBuQohjnjsfjAoEGP1wx8QIzm6zMaBf28fUAIvRYVbTZvFZNM2/
-   xbBIHwLNM/PDO0IXJyMsQfPLWISLs+GBvQTx8Yfit51zrXe7jt2TssccK
-   L0/jwJNTcLXlX6DXMyHxggz1gkm1Kxrzy9QE2s7+FQQGABPcWPdJoJvpr
-   s5sl8v79ZgmELwiQkU9Z6+K6qfIL3roheVXd0XOe1W7j4uCEtWoyrvxZn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="300221865"
+  t=1664341247; x=1695877247;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1/2zGoQgNymumNYm4rYvWOJ+xjwF2Dtxg4b9qhp4L5A=;
+  b=S1UMGYdZU0Xm2uRm/1qdWvZdrCYmzy+PSMcBhPNOqzl1SCKBG8xrrrSL
+   TjKdTJ9RmijKwpsQP20wJOJAbE7LYyPleKj0TC397WZHrOhaCoiQxRMpI
+   VJIMNR5OBRj6F2cDjQlm/1bPFysweMVdyQ74OHxDDTIOQOAiE+mQBvF87
+   bRHOaAGRGP2GCQHW+BbT0hskCvQAWyeVivLfaTTATBhFwIJXlvLRn31Od
+   z7Y/Z7L674phzhC3/M7VUiChAgV7h44QkkVqXGFZvr8wj4NDq6aUz9v6Y
+   SUtEDSBrQI1Y1ne9ERWbdOCJzGT/AihspyfOp8PKCEeONzdU+FaaIyBYO
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="327869349"
 X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="300221865"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 21:54:07 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="572895866"
+   d="scan'208";a="327869349"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 22:00:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="652538869"
 X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="572895866"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 21:54:04 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     haoxin <xhao@linux.alibaba.com>
-Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Oscar Salvador" <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        <yangyicong@hisilicon.com>, <v-songbaohua@oppo.com>,
-        <21cnbao@gmail.com>
-Subject: Re: [RFC 0/6] migrate_pages(): batch TLB flushing
-References: <20220921060616.73086-1-ying.huang@intel.com>
-        <393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com>
-        <874jws2r6o.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <02e9da8a-39af-f6bd-b7f3-c60b3f2a59fb@linux.alibaba.com>
-Date:   Wed, 28 Sep 2022 12:53:18 +0800
-In-Reply-To: <02e9da8a-39af-f6bd-b7f3-c60b3f2a59fb@linux.alibaba.com>
-        (haoxin's message of "Wed, 28 Sep 2022 11:33:13 +0800")
-Message-ID: <87zgek14n5.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+   d="scan'208";a="652538869"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 27 Sep 2022 22:00:45 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id AB2C586; Wed, 28 Sep 2022 08:01:03 +0300 (EEST)
+Date:   Wed, 28 Sep 2022 08:01:03 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Rajat Khandelwal <rajat.khandelwal@intel.com>,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Add wake on connect/disconnect on USB4 ports
+Message-ID: <YzPVDzI4K4cbG7Mk@black.fi.intel.com>
+References: <20220928130005.2048724-1-rajat.khandelwal@intel.com>
+ <YzMpaa1V492X52/J@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzMpaa1V492X52/J@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-haoxin <xhao@linux.alibaba.com> writes:
+Hi Greg,
 
-> ( 2022/9/28 H10:01, Huang, Ying S:
->> haoxin <xhao@linux.alibaba.com> writes:
->>
->>> Hi, Huang
->>>
->>> ( 2022/9/21 H2:06, Huang Ying S:
->>>> From: "Huang, Ying" <ying.huang@intel.com>
->>>>
->>>> Now, migrate_pages() migrate pages one by one, like the fake code as
->>>> follows,
->>>>
->>>>     for each page
->>>>       unmap
->>>>       flush TLB
->>>>       copy
->>>>       restore map
->>>>
->>>> If multiple pages are passed to migrate_pages(), there are
->>>> opportunities to batch the TLB flushing and copying.  That is, we can
->>>> change the code to something as follows,
->>>>
->>>>     for each page
->>>>       unmap
->>>>     for each page
->>>>       flush TLB
->>>>     for each page
->>>>       copy
->>>>     for each page
->>>>       restore map
->>>>
->>>> The total number of TLB flushing IPI can be reduced considerably.  And
->>>> we may use some hardware accelerator such as DSA to accelerate the
->>>> page copying.
->>>>
->>>> So in this patch, we refactor the migrate_pages() implementation and
->>>> implement the TLB flushing batching.  Base on this, hardware
->>>> accelerated page copying can be implemented.
->>>>
->>>> If too many pages are passed to migrate_pages(), in the naive batched
->>>> implementation, we may unmap too many pages at the same time.  The
->>>> possibility for a task to wait for the migrated pages to be mapped
->>>> again increases.  So the latency may be hurt.  To deal with this
->>>> issue, the max number of pages be unmapped in batch is restricted to
->>>> no more than HPAGE_PMD_NR.  That is, the influence is at the same
->>>> level of THP migration.
->>>>
->>>> We use the following test to measure the performance impact of the
->>>> patchset,
->>>>
->>>> On a 2-socket Intel server,
->>>>
->>>>    - Run pmbench memory accessing benchmark
->>>>
->>>>    - Run `migratepages` to migrate pages of pmbench between node 0 and
->>>>      node 1 back and forth.
->>>>
->>> As the pmbench can not run on arm64 machine, so i use lmbench instead.
->>> I test case like this:  (i am not sure whether it is reasonable, but it seems worked)
->>> ./bw_mem -N10000 10000m rd &
->>> time migratepages pid node0 node1
->>>
->>> o/patch      		w/patch
->>> real	0m0.035s  	real	0m0.024s
->>> user	0m0.000s  	user	0m0.000s
->>> sys	0m0.035s        sys	0m0.024s
->>>
->>> the migratepages time is reduced above 32%.
->>>
->>> But there has a problem, i see the batch flush is called by
->>> migrate_pages_batch
->>> 	try_to_unmap_flush
->>> 		arch_tlbbatch_flush(&tlb_ubc->arch); // there batch flush really work.
->>>
->>> But in arm64, the arch_tlbbatch_flush are not supported, becasue it not support CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH yet.
->>>
->>> So, the tlb batch flush means no any flush is did, it is a empty func.
->> Yes.  And should_defer_flush() will always return false too.  That is,
->> the TLB will still be flushed, but will not be batched.
-> Oh, yes, i ignore this, thank you.
->>
->>> Maybe this patch can help solve this problem.
->>> https://lore.kernel.org/linux-arm-kernel/20220921084302.43631-1-yangyicong@huawei.com/T/
->> Yes.  This will bring TLB flush batching to ARM64.
-> Next time, i will combine with this patch, and do some test again,
-> do you have any suggestion about benchmark ?
+On Tue, Sep 27, 2022 at 06:48:41PM +0200, Greg KH wrote:
+> On Wed, Sep 28, 2022 at 06:30:05PM +0530, Rajat Khandelwal wrote:
+> > Wake on connect/disconnect is only supported while runtime suspend
+> > for now, which is obviously necessary. Its also not inherently
+> > desired for the system to wakeup on thunderbolt hot events.
+> > However, we can still make user in control of waking up the system
+> > in the events of hot plug/unplug.
+> > This patch adds 'wakeup' attribute under 'usb4_portX/power' sysfs
+> > attribute and only enables wakes on connect/disconnect to the
+> > respective port when 'wakeup' is set to 'enabled'. The attribute
+> > is set to 'disabled' by default.
+> > 
+> > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
+> 
+> Including the issue pointed out below by my bot, Intel has a "special"
+> requirement that you are not meeting here in order to send out patches
+> for review on a public mailing list in a subsystem like this (i.e. one
+> that I and others review patches on.)
+> 
+> Please meet that requirement first before sending any future kernel
+> patches out.
 
-I think your benchmark should be OK.  If multiple threads are used, the
-effect of patchset will be better.
+I asked Khandelwal to send this patch upstream after we did an internal
+review for it (I think I also asked him to send this out after v6.1-rc1
+is released but whatever).
 
-Best Regards,
-Huang, Ying
+I think the bot noticed the v4 he sent earlier that was the same we
+reviewed internally.
+
+I was planning to pick this up after the merge window closes if there
+are no objections.
