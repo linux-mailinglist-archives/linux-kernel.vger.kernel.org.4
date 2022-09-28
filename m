@@ -2,134 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D485EDA21
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 12:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321895EDA24
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 12:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233476AbiI1KeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 06:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
+        id S233543AbiI1Ked (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 06:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiI1KeB (ORCPT
+        with ESMTP id S233070AbiI1Keb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 06:34:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 498277B2B1;
-        Wed, 28 Sep 2022 03:34:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B516D20E3;
-        Wed, 28 Sep 2022 03:34:06 -0700 (PDT)
-Received: from [10.57.0.129] (unknown [10.57.0.129])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4268C3F792;
-        Wed, 28 Sep 2022 03:33:58 -0700 (PDT)
-Message-ID: <55e74adc-0001-f08e-de10-913f36469da8@arm.com>
-Date:   Wed, 28 Sep 2022 11:33:56 +0100
+        Wed, 28 Sep 2022 06:34:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A36F82D09;
+        Wed, 28 Sep 2022 03:34:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3592B8201E;
+        Wed, 28 Sep 2022 10:34:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D943FC433D6;
+        Wed, 28 Sep 2022 10:34:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664361267;
+        bh=4LgcKsn8+MtAsKY2jQClP173ND1ry2xBaS3rhBDEoII=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=en/cO4Uvc+8haZ3id5aVmfM/F41Vi+kKuLHAWDZ9vK1iKlkWvhmb1tj/AEAJZfL50
+         496iYXPT5uE6XsNfI5wmq4TXCqyPWjNCeDsAm7Z2UtMD6A1j3eJnERithnutBU6LQ3
+         UOqFNOTgM0gxBi5dP1o5XjNM7BSzS/slt4LRpWOss4R31VL5olm/A4/0QOEOkypYY8
+         uwZgtWAmO/z5VGIgGrEE0Tg5/Raos6OOiYJCWcl+b3WuRIjspAClW8u4/CpeXqNqTO
+         iuDvgx4R54CvzFJC1A3ekuDZnMw+7/IvO8F20WpvlXV4HZRsYDv669ZWBMU/jA9lPh
+         mHTBtTyuHzbMA==
+Date:   Wed, 28 Sep 2022 13:34:22 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Guangbin Huang <huangguangbin2@huawei.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shenjian15@huawei.com,
+        lanhao@huawei.com
+Subject: Re: [PATCH net-next 3/4] net: hns3: replace magic numbers with macro
+ for IPv4/v6
+Message-ID: <YzQjLu2jlEzm1lRo@unreal>
+References: <20220927111205.18060-1-huangguangbin2@huawei.com>
+ <20220927111205.18060-4-huangguangbin2@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/6] perf stat: Convert perf_stat_evsel.res_stats array
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-References: <20220926200757.1161448-1-namhyung@kernel.org>
- <20220926200757.1161448-2-namhyung@kernel.org>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20220926200757.1161448-2-namhyung@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927111205.18060-4-huangguangbin2@huawei.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 26/09/2022 21:07, Namhyung Kim wrote:
-> It uses only one member, no need to have it as an array.
+On Tue, Sep 27, 2022 at 07:12:04PM +0800, Guangbin Huang wrote:
+> From: Hao Chen <chenhao418@huawei.com>
 > 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> Replace 4/6 with IP_VERSION_V4/6 to improve code readability.
+> 
+> Signed-off-by: Hao Chen <chenhao418@huawei.com>
+> Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
 > ---
->  tools/perf/util/stat-display.c |  2 +-
->  tools/perf/util/stat.c         | 10 +++-------
->  tools/perf/util/stat.h         |  2 +-
->  3 files changed, 5 insertions(+), 9 deletions(-)
+>  drivers/net/ethernet/hisilicon/hns3/hns3_enet.c | 12 ++++++------
+>  drivers/net/ethernet/hisilicon/hns3/hns3_enet.h |  3 +++
+>  2 files changed, 9 insertions(+), 6 deletions(-)
 > 
-
-Reviewed-by: James Clark <james.clark@arm.com>
-
-> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-> index b82844cb0ce7..234491f43c36 100644
-> --- a/tools/perf/util/stat-display.c
-> +++ b/tools/perf/util/stat-display.c
-> @@ -67,7 +67,7 @@ static void print_noise(struct perf_stat_config *config,
->  		return;
+> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+> index 39b75b68474c..bf573e0c0670 100644
+> --- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+> @@ -1180,7 +1180,7 @@ static int hns3_set_tso(struct sk_buff *skb, u32 *paylen_fdop_ol4cs,
+>  	/* Software should clear the IPv4's checksum field when tso is
+>  	 * needed.
+>  	 */
+> -	if (l3.v4->version == 4)
+> +	if (l3.v4->version == IP_VERSION_IPV4)
+>  		l3.v4->check = 0;
 >  
->  	ps = evsel->stats;
-> -	print_noise_pct(config, stddev_stats(&ps->res_stats[0]), avg);
-> +	print_noise_pct(config, stddev_stats(&ps->res_stats), avg);
->  }
+>  	/* tunnel packet */
+> @@ -1195,7 +1195,7 @@ static int hns3_set_tso(struct sk_buff *skb, u32 *paylen_fdop_ol4cs,
+>  		/* Software should clear the IPv4's checksum field when
+>  		 * tso is needed.
+>  		 */
+> -		if (l3.v4->version == 4)
+> +		if (l3.v4->version == IP_VERSION_IPV4)
+>  			l3.v4->check = 0;
+>  	}
 >  
->  static void print_cgroup(struct perf_stat_config *config, struct evsel *evsel)
-> diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
-> index ce5e9e372fc4..6bcd3dc32a71 100644
-> --- a/tools/perf/util/stat.c
-> +++ b/tools/perf/util/stat.c
-> @@ -132,12 +132,9 @@ static void perf_stat_evsel_id_init(struct evsel *evsel)
+> @@ -1270,13 +1270,13 @@ static int hns3_get_l4_protocol(struct sk_buff *skb, u8 *ol4_proto,
+>  	l3.hdr = skb_inner_network_header(skb);
+>  	l4_hdr = skb_inner_transport_header(skb);
 >  
->  static void evsel__reset_stat_priv(struct evsel *evsel)
+> -	if (l3.v6->version == 6) {
+> +	if (l3.v6->version == IP_VERSION_IPV6) {
+>  		exthdr = l3.hdr + sizeof(*l3.v6);
+>  		l4_proto_tmp = l3.v6->nexthdr;
+>  		if (l4_hdr != exthdr)
+>  			ipv6_skip_exthdr(skb, exthdr - skb->data,
+>  					 &l4_proto_tmp, &frag_off);
+> -	} else if (l3.v4->version == 4) {
+> +	} else if (l3.v4->version == IP_VERSION_IPV4) {
+>  		l4_proto_tmp = l3.v4->protocol;
+>  	}
+>  
+> @@ -1364,7 +1364,7 @@ static void hns3_set_outer_l2l3l4(struct sk_buff *skb, u8 ol4_proto,
+>  static void hns3_set_l3_type(struct sk_buff *skb, union l3_hdr_info l3,
+>  			     u32 *type_cs_vlan_tso)
 >  {
-> -	int i;
->  	struct perf_stat_evsel *ps = evsel->stats;
+> -	if (l3.v4->version == 4) {
+> +	if (l3.v4->version == IP_VERSION_IPV4) {
+>  		hns3_set_field(*type_cs_vlan_tso, HNS3_TXD_L3T_S,
+>  			       HNS3_L3T_IPV4);
 >  
-> -	for (i = 0; i < 3; i++)
-> -		init_stats(&ps->res_stats[i]);
-> -
-> +	init_stats(&ps->res_stats);
->  	perf_stat_evsel_id_init(evsel);
->  }
+> @@ -1373,7 +1373,7 @@ static void hns3_set_l3_type(struct sk_buff *skb, union l3_hdr_info l3,
+>  		 */
+>  		if (skb_is_gso(skb))
+>  			hns3_set_field(*type_cs_vlan_tso, HNS3_TXD_L3CS_B, 1);
+> -	} else if (l3.v6->version == 6) {
+> +	} else if (l3.v6->version == IP_VERSION_IPV6) {
+>  		hns3_set_field(*type_cs_vlan_tso, HNS3_TXD_L3T_S,
+>  			       HNS3_L3T_IPV6);
+>  	}
+> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.h b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.h
+> index 557a5fa70d0a..93041352ef19 100644
+> --- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.h
+> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.h
+> @@ -217,6 +217,9 @@ enum hns3_nic_state {
+>  #define HNS3_CQ_MODE_EQE			1U
+>  #define HNS3_CQ_MODE_CQE			0U
 >  
-> @@ -440,7 +437,7 @@ int perf_stat_process_counter(struct perf_stat_config *config,
->  	struct perf_counts_values *aggr = &counter->counts->aggr;
->  	struct perf_stat_evsel *ps = counter->stats;
->  	u64 *count = counter->counts->aggr.values;
-> -	int i, ret;
-> +	int ret;
->  
->  	aggr->val = aggr->ena = aggr->run = 0;
->  
-> @@ -458,8 +455,7 @@ int perf_stat_process_counter(struct perf_stat_config *config,
->  		evsel__compute_deltas(counter, -1, -1, aggr);
->  	perf_counts_values__scale(aggr, config->scale, &counter->counts->scaled);
->  
-> -	for (i = 0; i < 3; i++)
-> -		update_stats(&ps->res_stats[i], count[i]);
-> +	update_stats(&ps->res_stats, *count);
->  
->  	if (verbose > 0) {
->  		fprintf(config->output, "%s: %" PRIu64 " %" PRIu64 " %" PRIu64 "\n",
-> diff --git a/tools/perf/util/stat.h b/tools/perf/util/stat.h
-> index 72713b344b79..3eba38a1a149 100644
-> --- a/tools/perf/util/stat.h
-> +++ b/tools/perf/util/stat.h
-> @@ -43,7 +43,7 @@ enum perf_stat_evsel_id {
->  };
->  
->  struct perf_stat_evsel {
-> -	struct stats		 res_stats[3];
-> +	struct stats		 res_stats;
->  	enum perf_stat_evsel_id	 id;
->  	u64			*group_data;
->  };
+> +#define IP_VERSION_IPV4				0x4
+> +#define IP_VERSION_IPV6				0x6
+
+The more traditional way is to use sa_family_t sa_family and AF_XXX instead
+of your .version variable.
+
+Thanks
+
+> +
+>  enum hns3_pkt_l2t_type {
+>  	HNS3_L2_TYPE_UNICAST,
+>  	HNS3_L2_TYPE_MULTICAST,
+> -- 
+> 2.33.0
+> 
