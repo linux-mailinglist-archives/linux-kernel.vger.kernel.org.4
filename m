@@ -2,100 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738E65ED732
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094625ED72D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233966AbiI1ILP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
+        id S233946AbiI1ILK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233954AbiI1ILI (ORCPT
+        with ESMTP id S233945AbiI1ILG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:11:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9B163F3B;
-        Wed, 28 Sep 2022 01:11:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 28 Sep 2022 04:11:06 -0400
+X-Greylist: delayed 133736 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Sep 2022 01:11:01 PDT
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3472165838
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:11:00 -0700 (PDT)
+Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E70D2B81F4E;
-        Wed, 28 Sep 2022 08:11:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3063C433D6;
-        Wed, 28 Sep 2022 08:10:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664352659;
-        bh=ZOOO0MWPjQs3iC2W6p1C6FjEUQTUaQp8JdKtNdUAINk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EodwKMluZotcrJvTeRhAWXbLL5ieFuKvuvVjHsdScMLw3pD3aOzVqcdXnX9zBSesP
-         UGpS03Z/o/9vKInjrYZXpovGDgGCctadzq5YD8yvueUxy2CDPQ9SLL8butB3Sz/SuV
-         lFNZJflb0oZWIJJYwFBE52aafzLGLAkF8m0easwvQJeDXAosKQhVr77Bsp5I+E0fvA
-         qTjNGdy9eHr+UY4DKDusG8Ds9eV2A8ynYbDiiEdwsz1pORv4D6qZ03NQAO3BNfn/hv
-         2BtTiW/q2C0FHyzAa9s7VKIicMitNCDaEk8kyrvBR35Ke7550UDb/2cwZljj+ZdAlk
-         Uytwy7tGs+MXg==
-Date:   Wed, 28 Sep 2022 10:10:52 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 1A4171F97A;
+        Wed, 28 Sep 2022 10:10:57 +0200 (CEST)
+Date:   Wed, 28 Sep 2022 10:10:55 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v4 00/15] PCI: dwc: Add hw version and dma-ranges
- support
-Message-ID: <YzQBjHYI9REEaqeL@lpieralisi>
-References: <20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru>
- <20220729023645.GA423256@bhelgaas>
+Subject: Re: [PATCH v4 1/5] dt-bindings: mfd: qcom-spmi-pmic: Add pm6125
+ compatible
+Message-ID: <20220928081055.p66huqct2wnrsrdx@SoMainline.org>
+References: <20220926190148.283805-1-marijn.suijten@somainline.org>
+ <20220926190148.283805-2-marijn.suijten@somainline.org>
+ <052630d0-299e-e468-b2dd-266d371e2b0f@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220729023645.GA423256@bhelgaas>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <052630d0-299e-e468-b2dd-266d371e2b0f@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 09:36:45PM -0500, Bjorn Helgaas wrote:
-> On Fri, Jun 24, 2022 at 05:39:32PM +0300, Serge Semin wrote:
-> > This patchset is a second one in the series created in the framework of
-> > my Baikal-T1 PCIe/eDMA-related work:
+On 2022-09-28 09:35:40, Krzysztof Kozlowski wrote:
+> On 26/09/2022 21:01, Marijn Suijten wrote:
+> > Document support for the pm6125, typically paired with the sm6125 SoC.
+> > 
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > ---
+> >  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
 > 
-> > Serge Semin (15):
-> >   PCI: dwc: Add more verbose link-up message
-> >   PCI: dwc: Detect iATU settings after getting "addr_space" resource
-> >   PCI: dwc: Convert to using native IP-core versions representation
-> >   PCI: dwc: Add IP-core version detection procedure
-> >   PCI: dwc: Introduce Synopsys IP-core versions/types interface
-> >   PCI: intel-gw: Drop manual DW PCIe controller version setup
-> >   PCI: tegra194: Drop manual DW PCIe controller version setup
-> >   PCI: dwc: Add host de-initialization callback
-> >   PCI: dwc: Drop inbound iATU types enumeration - dw_pcie_as_type
-> >   PCI: dwc: Drop iATU regions enumeration - dw_pcie_region_type
-> >   PCI: dwc: Simplify in/outbound iATU setup methods
-> >   PCI: dwc: Add iATU regions size detection procedure
-> >   PCI: dwc: Verify in/out regions against iATU constraints
-> >   PCI: dwc: Check iATU in/outbound ranges setup methods status
 > 
-> I applied the above to pci/ctrl/dwc for v5.20, thanks!
+> Please add Acked-by/Reviewed-by tags when posting new versions. However,
+> there's no need to repost patches *only* to add the tags. The upstream
+> maintainer will do that for acks received on the version they apply.
 > 
-> >   PCI: dwc: Introduce dma-ranges property support for RC-host
+> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
 > 
-> I deferred this one for now because the current value isn't clear yet.
-> If we have a user for it, I'll be glad to add it.
+> If a tag was not added on purpose, please state why and what changed.
+> 
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-This one is still deferred and I agree with Bjorn it should be part of
-a series that actually requires it - it would also simplify the review.
+https://lore.kernel.org/linux-arm-msm/0ec65132-7d7a-2f8d-cc16-cb76efc343d6@linaro.org/
 
-Lorenzo
+Thanks, I thought of it this morning while browsing lore, but only got
+to a screen just now so you beat me to it by ~30 minutes.
+
+No need to lecture me on the rules, but I can't promise this won't
+happen again.
+
+- Marijn
