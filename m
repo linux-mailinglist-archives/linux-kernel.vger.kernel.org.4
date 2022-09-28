@@ -2,142 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A245ED8C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E91725ED8F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233681AbiI1JW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
+        id S233586AbiI1J3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbiI1JWy (ORCPT
+        with ESMTP id S229838AbiI1J3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:22:54 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EEF7AC39C;
-        Wed, 28 Sep 2022 02:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664356973; x=1695892973;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LboepUjmxKb4jCu41mnETf1wIRYGxkuhefbkTgfmYdc=;
-  b=KXyyB/rXIQAcDxEt2/PoNm8eb2xzIKs/hx/bugKwxKf0S0FNSQmkCoCX
-   TV6CfMmSKQvFhxVDCVZT/DPbiMX3BvONaRWfIsLvQZMTlAxhIFciV7osL
-   cYppHLEXnoPAZh0uu/jHqkdW05FXwKGrllDAhob8HpPCE7qxA0qM6WCNO
-   Xa+3lK8vx8sT7qXIWfI9XTF91zf6Il+suxgVEzbobfZ4DQA+Np1qoIeHk
-   E4x1Ry9+1u5Pg65GPwIK3WE8odV0lrX/W+hYfvQRACdbvCLh/2vSL6hdr
-   5+2kr4bot43s9xaUcKQT2LEILEtu3RytZOtZFteNzQYOi+VUwxSu+hiUE
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="284685090"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="284685090"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 02:22:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="572967241"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="572967241"
-Received: from liuzhao-optiplex-7080.sh.intel.com ([10.239.160.132])
-  by orsmga003.jf.intel.com with ESMTP; 28 Sep 2022 02:22:49 -0700
-From:   Zhao Liu <zhao1.liu@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Subject: [PATCH v2] KVM: SVM: Replace kmap_atomic() with kmap_local_page()
-Date:   Wed, 28 Sep 2022 17:27:48 +0800
-Message-Id: <20220928092748.463631-1-zhao1.liu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 05:29:53 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1D31D0C7;
+        Wed, 28 Sep 2022 02:29:50 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id e11-20020a17090a77cb00b00205edbfd646so1507146pjs.1;
+        Wed, 28 Sep 2022 02:29:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=tJu5+3r8ivCyAS03HPqEIU5aJjM4gwmSBQgnIQ+4SPM=;
+        b=VpOahVSjO5al4k6Oz8lZxxcglS9LeVuTHIsbp2xGQ34520KHaXfABa0Njr6IU1PPag
+         WPoNMLLsZY9ufUMAU10LOXwD4Wym1JEBS+K23MrfaqffgjrIVEvmnGsloVBP4bm07cPC
+         bhSl1vsFQISLsJAlkx9M19oFD/9vm/iPvSQTrlGCPBDSb3LsDf5gSJ9aoackzXY6BBU2
+         2VaXujWX+iSYrRuvhM6u9YKryf0IjYklZwpWTCwTDPgFw7rreWNCks7xz5LIdx1pncDo
+         iTwIJKbMQQi/dZpvDWIjMBvaLrDMIAR85sZtRHOzqyjNa3zddbRHSEt9zAmH6N7CoEEW
+         o7DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=tJu5+3r8ivCyAS03HPqEIU5aJjM4gwmSBQgnIQ+4SPM=;
+        b=UX9WmiVPKrEwJcK/ieUk0g6Qxt0DmhwbdkJeSflPUxbbUCimqH2LHzLF+7JJ391MRV
+         i33plDlzqzkGFnG8GFSzAysdiXoz6Q5kasvk+33mPOo1TPHmGddgqdtzWICvAKOjDb7n
+         m+kNm+ddqBs/yCKk7ph2V5lHdY39pSKGkIKwnsCLcERNajyfyjC5BHnGpn3JLevpc8xN
+         JfxIr5K2QP0NNra+egp5+NE6HBZuqX3X9KG5KFY36G4I1ib1OJuFjku1eY4D072kW0rC
+         EmZe0TAugZhbLDwA1eZRqvkOp7iznW6/hMIKVtkMDIJbKpYO/h0y6KkBiObI3FlOhXRk
+         SmjA==
+X-Gm-Message-State: ACrzQf1BaFRnlXbQ828m1GobL3gc443Q76ktSfO7lBt2mG/YkynRk/jT
+        jK0yAmOVVKXkv8cb9Nbcx0g=
+X-Google-Smtp-Source: AMsMyM7DMllFRiL1QIaYIiPsZis835Han9NNI9x7AIEa+c2olw+/cyVJ3z/YF7gR4IyhY3NNG/rEYQ==
+X-Received: by 2002:a17:90b:358e:b0:200:9d8a:7a70 with SMTP id mm14-20020a17090b358e00b002009d8a7a70mr9288152pjb.61.1664357389723;
+        Wed, 28 Sep 2022 02:29:49 -0700 (PDT)
+Received: from xm06403pcu.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id b22-20020a17090a101600b0020071acaecasm1026831pja.42.2022.09.28.02.29.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 02:29:49 -0700 (PDT)
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/3] dt-bindings: gpio: Conver Unisoc GPIO controller binding to yaml
+Date:   Wed, 28 Sep 2022 17:29:35 +0800
+Message-Id: <20220928092937.27120-1-zhang.lyra@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhao Liu <zhao1.liu@intel.com>
+From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-The use of kmap_atomic() is being deprecated in favor of
-kmap_local_page()[1].
+Convert the Unisoc gpio controller binding to DT schema format.
 
-The main difference between kmap_atomic() and kmap_local_page() is the
-latter allows pagefaults and preemption.
-
-There're 2 reasons we can use kmap_local_page() here:
-1. SEV is 64-bit only and kmap_locla_page() doesn't disable migration in
-this case, but here the function clflush_cache_range() uses CLFLUSHOPT
-instruction to flush, and on x86 CLFLUSHOPT is not CPU-local and flushes
-the page out of the entire cache hierarchy on all CPUs (APM volume 3,
-chapter 3, CLFLUSHOPT). So there's no need to disable preemption to ensure
-CPU-local.
-2. clflush_cache_range() doesn't need to disable pagefault and the mapping
-is still valid even if sleeps. This is also true for sched out/in when
-preempted.
-
-In addition, though kmap_local_page() is a thin wrapper around
-page_address() on 64-bit, kmap_local_page() should still be used here in
-preference to page_address() since page_address() isn't suitable to be used
-in a generic function (like sev_clflush_pages()) where the page passed in
-is not easy to determine the source of allocation. Keeping the kmap* API in
-place means it can be used for things other than highmem mappings[2].
-
-Therefore, sev_clflush_pages() is a function that should use
-kmap_local_page() in place of kmap_atomic().
-
-Convert the calls of kmap_atomic() / kunmap_atomic() to kmap_local_page() /
-kunmap_local().
-
-[1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
-[2]: https://lore.kernel.org/lkml/5d667258-b58b-3d28-3609-e7914c99b31b@intel.com/
-
-Suggested-by: Dave Hansen <dave.hansen@intel.com>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
+Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
 ---
-Suggested by credits:
-  Dave: Referred to his explanation about cache flush and usage of
-        page_address().
-  Ira: Referred to his task document, review comments and explanation about
-       cache flush.
-  Fabio: Referred to his boiler plate commit message.
----
-Changes since v1:
-  * Add the explanation of global cache flush for sev_clflush_pages() in commit
-    message.
-  * Add the explanation why not use page_address() directly.
----
- arch/x86/kvm/svm/sev.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/gpio/gpio-sprd.txt    | 28 --------
+ .../devicetree/bindings/gpio/sprd,gpio.yaml   | 70 +++++++++++++++++++
+ 2 files changed, 70 insertions(+), 28 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-sprd.txt
+ create mode 100644 Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 28064060413a..12747c7bda4e 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -465,9 +465,9 @@ static void sev_clflush_pages(struct page *pages[], unsigned long npages)
- 		return;
- 
- 	for (i = 0; i < npages; i++) {
--		page_virtual = kmap_atomic(pages[i]);
-+		page_virtual = kmap_local_page(pages[i]);
- 		clflush_cache_range(page_virtual, PAGE_SIZE);
--		kunmap_atomic(page_virtual);
-+		kunmap_local(page_virtual);
- 		cond_resched();
- 	}
- }
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-sprd.txt b/Documentation/devicetree/bindings/gpio/gpio-sprd.txt
+deleted file mode 100644
+index eca97d45388f..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio-sprd.txt
++++ /dev/null
+@@ -1,28 +0,0 @@
+-Spreadtrum GPIO controller bindings
+-
+-The controller's registers are organized as sets of sixteen 16-bit
+-registers with each set controlling a bank of up to 16 pins. A single
+-interrupt is shared for all of the banks handled by the controller.
+-
+-Required properties:
+-- compatible: Should be "sprd,sc9860-gpio".
+-- reg: Define the base and range of the I/O address space containing
+-the GPIO controller registers.
+-- gpio-controller: Marks the device node as a GPIO controller.
+-- #gpio-cells: Should be <2>. The first cell is the gpio number and
+-the second cell is used to specify optional parameters.
+-- interrupt-controller: Marks the device node as an interrupt controller.
+-- #interrupt-cells: Should be <2>. Specifies the number of cells needed
+-to encode interrupt source.
+-- interrupts: Should be the port interrupt shared by all the gpios.
+-
+-Example:
+-	ap_gpio: gpio@40280000 {
+-		compatible = "sprd,sc9860-gpio";
+-		reg = <0 0x40280000 0 0x1000>;
+-		gpio-controller;
+-		#gpio-cells = <2>;
+-		interrupt-controller;
+-		#interrupt-cells = <2>;
+-		interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
+-	};
+diff --git a/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
+new file mode 100644
+index 000000000000..c0cd1ed9809b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
+@@ -0,0 +1,70 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright 2022 Unisoc Inc.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/gpio/sprd,gpio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Unisoc GPIO controller
++
++maintainers:
++  - Orson Zhai <orsonzhai@gmail.com>
++  - Baolin Wang <baolin.wang7@gmail.com>
++  - Chunyan Zhang <zhang.lyra@gmail.com>
++
++description:
++  The controller's registers are organized as sets of sixteen 16-bit
++  registers with each set controlling a bank of up to 16 pins. A single
++  interrupt is shared for all of the banks handled by the controller.
++
++properties:
++  compatible:
++    const: sprd,sc9860-gpio
++
++  reg:
++    maxItems: 1
++
++  gpio-controller: true
++
++  "#gpio-cells":
++    const: 2
++
++  interrupt-controller: true
++
++  "#interrupt-cells":
++    const: 2
++
++  interrupts:
++    maxItems: 1
++    description: The interrupt shared by all GPIO lines for this controller.
++
++required:
++  - compatible
++  - reg
++  - gpio-controller
++  - "#gpio-cells"
++  - interrupt-controller
++  - "#interrupt-cells"
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        ap_gpio: gpio@40280000 {
++            compatible = "sprd,sc9860-gpio";
++            reg = <0 0x40280000 0 0x1000>;
++            gpio-controller;
++            #gpio-cells = <2>;
++            interrupt-controller;
++            #interrupt-cells = <2>;
++            interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
++        };
++    };
++...
 -- 
-2.34.1
+2.25.1
 
