@@ -2,104 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0474E5EDE71
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CB85EDE73
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233493AbiI1OIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
+        id S234056AbiI1OIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234281AbiI1OH7 (ORCPT
+        with ESMTP id S233000AbiI1OIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:07:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DE8901A2;
-        Wed, 28 Sep 2022 07:07:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32F3AB820D2;
-        Wed, 28 Sep 2022 14:07:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E01C433D6;
-        Wed, 28 Sep 2022 14:07:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664374075;
-        bh=OE89uXq223LS1VLMazZYaPzc1wXRR0cnJ5t0n1HEET4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tw8TOttcu+SjWnPYnVuwIzw0nQy5dwuJkVHpRcc55n/wGxBPaDYqCLaLM3iP2x/RD
-         8VY71zeDk6jVs9R6fr89WVRp4KmHcPh9aq+PiO0lvRF64cBEk8JVPMvlyRlrR0p+Nl
-         5fkJC7jseNKR+tKAm3Lsg73eJqeitiLb4YMdWeTrZsgpXV7B0T+iUS5NOg1sjvb2jl
-         +Oq2JPsbhX7MInPU1FxnAmYqcYGMSn2dcFCdAAL6W+TbWrHhDHJXPReN75bncmFuBP
-         gK36L+w+DYbpuP9Kw+SgtXCEzmQHm5oiYuHvacNYAw7x2dXehacbhSCyMj5O7ytdK4
-         lSHFF0mgSNTWg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id CAAC2405F0; Wed, 28 Sep 2022 11:07:52 -0300 (-03)
-Date:   Wed, 28 Sep 2022 11:07:52 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>, perry.taylor@intel.com,
-        caleb.biggers@intel.com, kshipra.bopardikar@intel.com,
-        samantha.alt@intel.com, ahmad.yasin@intel.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 05/22] perf vendor events: Update Intel alderlake
-Message-ID: <YzRVOD4u2SI0K29Y@kernel.org>
-References: <20220928072204.1613330-1-irogers@google.com>
- <20220928072204.1613330-6-irogers@google.com>
- <44f59d7c-ced7-2d74-edbc-f354047339fe@linux.intel.com>
+        Wed, 28 Sep 2022 10:08:44 -0400
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8414564C2;
+        Wed, 28 Sep 2022 07:08:43 -0700 (PDT)
+Received: by mail-wm1-f42.google.com with SMTP id n35-20020a05600c502300b003b4924c6868so2348079wmr.1;
+        Wed, 28 Sep 2022 07:08:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=/ybRaGWU0laVlDOhJoQj+bu5dznyAXvrYdYe0lJBF/0=;
+        b=j0wJ98yPWa9EhlX4Sa+nbR8q7ZymjDBoAQRFqbsO1yenXW1XEtB2XE+OQ6Bjt1jiCY
+         sBUvgy/YVaahsWoZzhDjaA5qVH64HfROwVq1X0Om57p+d3pbFfLrDkfKFkOplW1aIZQj
+         nXbUt86Nu7MsaUHG+zphQw4LsDwBGUpd7BQpwAhUT2mrPYzj5IIO2upSI8aqWk55xMOM
+         xM+fHNcuQG5AygfxXUlFASqpo38nQHLeYXWFGK8W2NM2ehkoedI5x+viqse+qXT6vswp
+         a0L8lbMwm3ad+Jc4nGl7dExsc2Iy6pf3lZjRDg/mRx77UjaR4a/cPi5MBbnVCT5sUjh/
+         deig==
+X-Gm-Message-State: ACrzQf3xm11123xCkyAIDiFTlFoL6yUrtf1YUvn9kjruf3WuHOBYXkVY
+        1hmQ4RSGp0dB0StbPPkjOkE=
+X-Google-Smtp-Source: AMsMyM4QaHTDYYaKwURnBwFp4DowrK3i0/ypshg4DfKuQlPNQJNP0MImc6rerj2aNEPsinvO1p9bGw==
+X-Received: by 2002:a7b:cc85:0:b0:3b4:9fc7:cd4d with SMTP id p5-20020a7bcc85000000b003b49fc7cd4dmr6815217wma.68.1664374122332;
+        Wed, 28 Sep 2022 07:08:42 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id t15-20020a5d42cf000000b00228c483128dsm5081927wrr.90.2022.09.28.07.08.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 07:08:42 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 14:08:40 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Zhao Liu <zhao1.liu@linux.intel.com>
+Cc:     "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M . De Francesco" <fmdefrancesco@gmail.com>,
+        Zhenyu Wang <zhenyu.z.wang@intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH] x86/hyperv: Replace kmap() with kmap_local_page()
+Message-ID: <YzRVaJA0EyfcVisW@liuwe-devbox-debian-v2>
+References: <20220928095640.626350-1-zhao1.liu@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <44f59d7c-ced7-2d74-edbc-f354047339fe@linux.intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220928095640.626350-1-zhao1.liu@linux.intel.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Sep 28, 2022 at 04:22:53PM +0800, Xing Zhengjun escreveu:
-> On 9/28/2022 3:21 PM, Ian Rogers wrote:
-> > diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
-> > index 7f2d777fd97f..594c6e96f0ce 100644
-> > --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
-> > +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-> > @@ -1,5 +1,5 @@
-> >   Family-model,Version,Filename,EventType
-> > -GenuineIntel-6-9[7A],v1.13,alderlake,core
-> > +GenuineIntel-6-(97|9A|B7|BA|BF),v1.15,alderlake,core
+On Wed, Sep 28, 2022 at 05:56:40PM +0800, Zhao Liu wrote:
+> From: Zhao Liu <zhao1.liu@intel.com>
 > 
-> The commit description should mention this change "Add more CPUID support
-> for ADL"
-
-I added this note, with that can I have your Reviewed-by or Acked-by?
-
-- Arnaldo
- 
-> >   GenuineIntel-6-(1C|26|27|35|36),v4,bonnell,core
-> >   GenuineIntel-6-(3D|47),v26,broadwell,core
-> >   GenuineIntel-6-56,v23,broadwellde,core
+> kmap() is being deprecated in favor of kmap_local_page()[1].
 > 
+> There are two main problems with kmap(): (1) It comes with an overhead as
+> mapping space is restricted and protected by a global lock for
+> synchronization and (2) it also requires global TLB invalidation when the
+> kmap's pool wraps and it might block when the mapping space is fully
+> utilized until a slot becomes available.
+> 
+> With kmap_local_page() the mappings are per thread, CPU local, can take
+> page faults, and can be called from any context (including interrupts).
+> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+> the tasks can be preempted and, when they are scheduled to run again, the
+> kernel virtual addresses are restored and are still valid.
+> 
+> In the fuction hyperv_init() of hyperv/hv_init.c, the mapping is used in a
+> single thread and is short live. So, in this case, it's safe to simply use
+> kmap_local_page() to create mapping, and this avoids the wasted cost of
+> kmap() for global synchronization.
+> 
+
+The kmap call in that function is not performance critical in any way,
+and at this point in the initialization process I don't expect there to
+be any contention, so the downside of kmap is not really a concern here.
+
+That being said, kmap getting deprecated is a good enough reason to
+switch to kmap_local_page. And I appreciate this well-written,
+well-reasoned commit message.
+
+I will apply it to hyperv-next later -- I doubt people will object to
+this change, but just in case.
+
+Thanks,
+Wei.
+
+> In addtion, the fuction hyperv_init() checks if kmap() fails by BUG_ON().
+> From the original discussion[2], the BUG_ON() here is just used to
+> explicitly panic NULL pointer. So still keep the BUG_ON() in place to check
+> if kmap_local_page() fails. Based on this consideration, memcpy_to_page()
+> is not selected here but only kmap_local_page() is used.
+> 
+> Therefore, replace kmap() with kmap_local_page() in hyperv/hv_init.c.
+> 
+> [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com
+> [2]: https://lore.kernel.org/lkml/20200915103710.cqmdvzh5lys4wsqo@liuwe-devbox-debian-v2/
+> 
+> Suggested-by: Dave Hansen <dave.hansen@intel.com>
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
+> 
+> ---
+> Suggested by credits.
+> 	Dave: Referred to his comments about whether kmap() can fail and the
+> 	      suggestion to keep BUG_ON() in place.
+> 	Ira: Referred to his task documentation and review comments about
+> 	     keeping BUG_ON() for kmap_local_page().
+> 	Fabio: Stole some of his boiler plate commit message.
+> ---
+>  arch/x86/hyperv/hv_init.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> index 3de6d8b53367..72fe46eb183f 100644
+> --- a/arch/x86/hyperv/hv_init.c
+> +++ b/arch/x86/hyperv/hv_init.c
+> @@ -459,13 +459,13 @@ void __init hyperv_init(void)
+>  		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+>  
+>  		pg = vmalloc_to_page(hv_hypercall_pg);
+> -		dst = kmap(pg);
+> +		dst = kmap_local_page(pg);
+>  		src = memremap(hypercall_msr.guest_physical_address << PAGE_SHIFT, PAGE_SIZE,
+>  				MEMREMAP_WB);
+>  		BUG_ON(!(src && dst));
+>  		memcpy(dst, src, HV_HYP_PAGE_SIZE);
+>  		memunmap(src);
+> -		kunmap(pg);
+> +		kunmap_local(dst);
+>  	} else {
+>  		hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
+>  		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
 > -- 
-> Zhengjun Xing
-
--- 
-
-- Arnaldo
+> 2.34.1
+> 
