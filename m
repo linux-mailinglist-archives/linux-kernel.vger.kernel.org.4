@@ -2,90 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4389A5ED5C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8255ED5C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233370AbiI1HPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
+        id S233145AbiI1HOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233315AbiI1HPD (ORCPT
+        with ESMTP id S232396AbiI1HOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:15:03 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B167C15734;
-        Wed, 28 Sep 2022 00:14:56 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28S7Ebg0065997;
-        Wed, 28 Sep 2022 02:14:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1664349277;
-        bh=F9c9kYNufz7ig/6Cx1Q4VpArre0AWDUO2cP2JP9tKi0=;
-        h=From:To:CC:Subject:Date;
-        b=WOHxHf2YWP+2ckGmEk3haCUCGVo3k3m+QlwsZ3ViUnDgkmSO3o5Yval+9ejC5hTyF
-         qeHZwA1oF9hboDY6uNHHlGtb13s2qau4Zds+acJajCcLcTueyjyCcoUF7KneFrmx7r
-         XisQ5h1YxKXNSe7TG+3oNXNsummdGLOOm+3O9sS0=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28S7EbQs114589
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 28 Sep 2022 02:14:37 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 28
- Sep 2022 02:14:37 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 28 Sep 2022 02:14:37 -0500
-Received: from a0393678ub.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28S7EX4c103835;
-        Wed, 28 Sep 2022 02:14:34 -0500
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-CC:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-omap@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Subject: [PATCH] MAINTAINERS: Add Vignesh Raghavendra as maintainer of TI DRA7XX/J721E driver
-Date:   Wed, 28 Sep 2022 12:44:18 +0530
-Message-ID: <20220928071418.30456-1-kishon@ti.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 03:14:35 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F01C3A0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:14:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1DAAB21B20;
+        Wed, 28 Sep 2022 07:14:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664349271; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1yCtZixpV6onXF1GBilOFs92gXFQP22w5hamvmLEPjc=;
+        b=uPKVUEz7eG5Khx6zvP0/lc4oxNAsP3mU5PB9QtTwmzeVplZrpGwrp/Xwj7mS0/+Y+99obB
+        UHnsV3OHrJtV/E15o6vxknyG4QXCij8pcH1TeJFaEHMRzZXT0RqLScriw/5PskE7qcTlrT
+        kWRSgjHgSCoMdVJ2w41Qt1D42DYQPqQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664349271;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1yCtZixpV6onXF1GBilOFs92gXFQP22w5hamvmLEPjc=;
+        b=svPb4dPJzVchJpw0uwl9Dv97hMXxwEw1xXfZJ5dammhVwbFBLWCqHY4t/iLUzAlxNy9PvF
+        8LK045xqMxsIKcBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D9D7713677;
+        Wed, 28 Sep 2022 07:14:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Fi9hNFb0M2PpMwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 28 Sep 2022 07:14:30 +0000
+Date:   Wed, 28 Sep 2022 09:14:30 +0200
+Message-ID: <875yh8ezs9.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Lu, Brent" <brent.lu@intel.com>
+Cc:     "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "Jaroslav Kysela" <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mohan Kumar <mkumard@nvidia.com>,
+        Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>, "Zhi, Yong" <yong.zhi@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: hda/hdmi: run eld notify in delay work
+In-Reply-To: <CY5PR11MB6257CB33E1EDA90CE2B2F99D97549@CY5PR11MB6257.namprd11.prod.outlook.com>
+References: <20220927135807.4097052-1-brent.lu@intel.com>
+        <87ill8gb5c.wl-tiwai@suse.de>
+        <CY5PR11MB6257CB33E1EDA90CE2B2F99D97549@CY5PR11MB6257.namprd11.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Vignesh Raghavendra as maintainer of TI DRA7XX/J721E driver.
+On Wed, 28 Sep 2022 04:06:45 +0200,
+Lu, Brent wrote:
+> 
+> > >
+> > > During resolution change, display driver would disable HDMI audio then
+> > > enable it in a short time. There is possibility that eld notify for
+> > > HDMI audio enable is called when previous runtime suspend is still
+> > > running. In this case, the elf nofity just returns and not updating
+> > > the status of corresponding HDMI pin/port. Here we move the eld nofity
+> > > to a delay work so we don't lose it.
+> > >
+> > > Signed-off-by: Brent Lu <brent.lu@intel.com>
+> > 
+> > We have already a dedicated per-pin work for the delayed ELD check.
+> > Can we reuse it instead of inventing yet another work?
+> > More work needs more cares, and better to avoid unless really needed (e.g.
+> > you forgot cleanup at suspend/removal in this patch).
+> > 
+> > 
+> > thanks,
+> > 
+> > Takashi
+> 
+> Hi Takashi,
+> 
+> I've checked the hdmi_repoll_eld() and check_presence_and_report() function to see
+> if we can reuse the per-pin work. I've some questions about reusing the per-pin work:
+> 
+> 1. hdmi_repoll_eld() calls snd_hda_jack_tbl_get_mst() function while
+>    check_presence_and_report() doesn't. Is it ok? 
 
-Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+For the system with the audio component, there is no jack entry, hence
+this will be ignored.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index efada49e2e2e..c368f5aa7429 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15667,7 +15667,7 @@ F:	Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
- F:	drivers/pci/controller/dwc/*designware*
+> 2. snd_hdac_i915_set_bclk() is called in intel_pin_eld_notify() function. Since it's
+>    skipped, we need to call it in the per-pin work. Need to add a flag in hdmi_spec_per_pin
+>    to indicate this situation.
+
+Yeah, I guess this was already a bug.  It implies that the set_bclk()
+call is missing in the suspend/resume case, too.  We need to call it
+more consistently.
+
+> 3. We can schedule the per-pin work in intel_pin_eld_notify() when snd_hdac_is_in_pm()
+>    returns true but there is no guarantee the runtime suspend will finished when the per-pin
+>   work is schedule to run.
+
+On the second thought, we may simply proceed the notification if it's
+in a valid context.  The only period to prohibit the update is during
+the suspend/resume until the ELD is updated by the resume itself.
+So, something like below may work instead.  Could you give it a try?
+
+
+Takashi
+
+-- 8< --
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -83,6 +83,7 @@ struct hdmi_spec_per_pin {
+ 	int pcm_idx; /* which pcm is attached. -1 means no pcm is attached */
+ 	int repoll_count;
+ 	bool setup; /* the stream has been set up by prepare callback */
++	bool eld_update_frozen;
+ 	bool silent_stream;
+ 	int channels; /* current number of channels */
+ 	bool non_pcm;
+@@ -788,16 +789,28 @@ static void hdmi_setup_audio_infoframe(struct hda_codec *codec,
  
- PCI DRIVER FOR TI DRA7XX/J721E
--M:	Kishon Vijay Abraham I <kishon@ti.com>
-+M:	Vignesh Raghavendra <vigneshr@ti.com>
- L:	linux-omap@vger.kernel.org
- L:	linux-pci@vger.kernel.org
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--- 
-2.17.1
-
+ static void hdmi_present_sense(struct hdmi_spec_per_pin *per_pin, int repoll);
+ 
+-static void check_presence_and_report(struct hda_codec *codec, hda_nid_t nid,
+-				      int dev_id)
++static struct hdmi_spec_per_pin *
++get_pin_from_nid(struct hda_codec *codec, hda_nid_t nid, int dev_id)
+ {
+ 	struct hdmi_spec *spec = codec->spec;
+ 	int pin_idx = pin_id_to_pin_index(codec, nid, dev_id);
+ 
+ 	if (pin_idx < 0)
++		return NULL;
++	return get_pin(spec, pin_idx);
++}
++
++static void check_presence_and_report(struct hda_codec *codec, hda_nid_t nid,
++				      int dev_id)
++{
++	struct hdmi_spec *spec = codec->spec;
++	struct hdmi_spec_per_pin *per_pin;
++
++	per_pin = get_pin_from_nid(codec, nid, dev_id);
++	if (!per_pin)
+ 		return;
+ 	mutex_lock(&spec->pcm_lock);
+-	hdmi_present_sense(get_pin(spec, pin_idx), 1);
++	hdmi_present_sense(per_pin, 1);
+ 	mutex_unlock(&spec->pcm_lock);
+ }
+ 
+@@ -1582,6 +1595,7 @@ static void update_eld(struct hda_codec *codec,
+ 		snd_jack_report(pcm_jack,
+ 				(eld->monitor_present && eld->eld_valid) ?
+ 				SND_JACK_AVOUT : 0);
++	per_pin->eld_update_frozen = false;
+ }
+ 
+ /* update ELD and jack state via HD-audio verbs */
+@@ -2494,6 +2508,7 @@ static int generic_hdmi_suspend(struct hda_codec *codec)
+ 	for (pin_idx = 0; pin_idx < spec->num_pins; pin_idx++) {
+ 		struct hdmi_spec_per_pin *per_pin = get_pin(spec, pin_idx);
+ 		cancel_delayed_work_sync(&per_pin->work);
++		per_pin->eld_update_frozen = true;
+ 	}
+ 	return 0;
+ }
+@@ -2656,6 +2671,7 @@ static void generic_acomp_pin_eld_notify(void *audio_ptr, int port, int dev_id)
+ 	struct hda_codec *codec = audio_ptr;
+ 	struct hdmi_spec *spec = codec->spec;
+ 	hda_nid_t pin_nid = spec->port2pin(codec, port);
++	struct hdmi_spec_per_pin *per_pin;
+ 
+ 	if (!pin_nid)
+ 		return;
+@@ -2667,7 +2683,8 @@ static void generic_acomp_pin_eld_notify(void *audio_ptr, int port, int dev_id)
+ 	if (codec->core.dev.power.power_state.event == PM_EVENT_SUSPEND)
+ 		return;
+ 	/* ditto during suspend/resume process itself */
+-	if (snd_hdac_is_in_pm(&codec->core))
++	per_pin = get_pin_from_nid(codec, pin_nid, dev_id);
++	if (!per_pin || per_pin->eld_update_frozen)
+ 		return;
+ 
+ 	check_presence_and_report(codec, pin_nid, dev_id);
+@@ -2841,6 +2858,7 @@ static int intel_port2pin(struct hda_codec *codec, int port)
+ static void intel_pin_eld_notify(void *audio_ptr, int port, int pipe)
+ {
+ 	struct hda_codec *codec = audio_ptr;
++	struct hdmi_spec_per_pin *per_pin;
+ 	int pin_nid;
+ 	int dev_id = pipe;
+ 
+@@ -2853,7 +2871,8 @@ static void intel_pin_eld_notify(void *audio_ptr, int port, int pipe)
+ 	if (codec->core.dev.power.power_state.event == PM_EVENT_SUSPEND)
+ 		return;
+ 	/* ditto during suspend/resume process itself */
+-	if (snd_hdac_is_in_pm(&codec->core))
++	per_pin = get_pin_from_nid(codec, pin_nid, dev_id);
++	if (!per_pin || per_pin->eld_update_frozen)
+ 		return;
+ 
+ 	snd_hdac_i915_set_bclk(&codec->bus->core);
