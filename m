@@ -2,85 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7605ED1BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 02:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9975ED1C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 02:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbiI1AVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 20:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        id S232913AbiI1AVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 20:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbiI1AVC (ORCPT
+        with ESMTP id S232756AbiI1AVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 20:21:02 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4449F10AB3B;
-        Tue, 27 Sep 2022 17:21:00 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1319573379eso2562281fac.0;
-        Tue, 27 Sep 2022 17:21:00 -0700 (PDT)
+        Tue, 27 Sep 2022 20:21:16 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B01FFA44;
+        Tue, 27 Sep 2022 17:21:15 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id j188so13769093oih.0;
+        Tue, 27 Sep 2022 17:21:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=zWXIIgX0B71nDqgAu7Wm0OvyS5OfsJfgyZ+1oWd116g=;
-        b=Z4cpFYwSekPG4+bv5+yvhD2qwOdXhY5bZPz1nvmmandj+JLpW3F38JnwX++5B6twmA
-         uyrQhPU4H/S8EyvAuYm9JlWj9VGsKEw56hgDvQ7R3DuAvuca5lBkR/sFFEwi7odRG0p6
-         Y2VDC1ZXoNwquH2Q6ID94kLfZAm8ZNsQqDMfI4AKGaAzyNy7aHnj9tkrf/YUPoCgGqa5
-         6/IchFps7CApyzmyqgYL3+xnBJNMpXnleEjMJ2S84Tbty+eg+GNxng2TFxkH/7ylvDm6
-         sVT/3vFlmBY3I6cjjmT7CXDJAVDrz8cUq7gf9YJbpV6XP1L7A8dAQ4t6r0Yqssju1f+t
-         DWIQ==
-X-Gm-Message-State: ACrzQf1/gwbD86ldJRYWg3C7Z3wYVCpuTadNHicF2oqTan3z8SSrvYfs
-        EO4ct0zbB+emACD/xZa/+Q==
-X-Google-Smtp-Source: AMsMyM74Uup6JCWzKAhoGNL1IKlQJCDS5jC94A8A5MxgAO/kdqr6L7W6hk8QJxB+ahua9oGYWIa9zg==
-X-Received: by 2002:a05:6870:33aa:b0:131:6112:69eb with SMTP id w42-20020a05687033aa00b00131611269ebmr3999969oae.74.1664324459301;
-        Tue, 27 Sep 2022 17:20:59 -0700 (PDT)
+        bh=LSsI1UmaEiwpWOuPRPNW0BPxQ9ZAZbmqM52Owl/qreY=;
+        b=hjchGnVAb9jEaVlWS4ic0wh+emsQM9bCtnEKO5j8itqSv5NoOE3p2FE+48RVeiLiiF
+         MLloQgg4QluSAVjlgOLw33+JwJuEBq0osXZ4wKbkZAPCsHDKzZbKrF1pzwDyxmhTH15l
+         1+1kZUWQlxX8gd7JyT4yduSqFnKockhtNa3ojTYPW8q5Ppdhp7eWT3p+AL801c3Mxul/
+         KaG0686CMT5gDy5rDUiB37+iglMzi0vvA7hEN+M0ejFWKw3TPlEDYJqNgsbV/9zZIb1I
+         f42rDTCxe5DEhZqKfsw/mtt1RtkVuMUd6GoJUqN9WZFAgpPpKoYoPeiTi+V24KmyWldm
+         CVrA==
+X-Gm-Message-State: ACrzQf3EDYczVxkx9fHYCJvAfAep9F6QchDS4oyfaV0DxEgDNndgvnYK
+        8FiFAJ5nn2hI+YyQ/kolNA==
+X-Google-Smtp-Source: AMsMyM5bsN/ft2HMu0c/dZL8o+CkzJS402pP0nPHvR88Qx+bmsvkGqWSoFiNsFMFLZhvYKhdeS4D6Q==
+X-Received: by 2002:aca:370b:0:b0:350:805e:9741 with SMTP id e11-20020aca370b000000b00350805e9741mr3105419oia.115.1664324474613;
+        Tue, 27 Sep 2022 17:21:14 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z20-20020a05687041d400b00127ebb410a4sm1733703oac.11.2022.09.27.17.20.58
+        by smtp.gmail.com with ESMTPSA id i19-20020a4adf13000000b004767df8f231sm1196760oou.39.2022.09.27.17.21.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 17:20:58 -0700 (PDT)
-Received: (nullmailer pid 2686070 invoked by uid 1000);
-        Wed, 28 Sep 2022 00:20:57 -0000
-Date:   Tue, 27 Sep 2022 19:20:57 -0500
+        Tue, 27 Sep 2022 17:21:14 -0700 (PDT)
+Received: (nullmailer pid 2687991 invoked by uid 1000);
+        Wed, 28 Sep 2022 00:21:13 -0000
+Date:   Tue, 27 Sep 2022 19:21:13 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
-        linux-arm-msm@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>,
+Cc:     Bjorn Andersson <andersson@kernel.org>, linux-gpio@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-kernel@vger.kernel.org,
         krishna Lanka <quic_vamslank@quicinc.com>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 23/34] dt-bindings: pinctrl: qcom,msm8953: fix
- indentation in example
-Message-ID: <20220928002057.GA2685991-robh@kernel.org>
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v3 24/34] dt-bindings: pinctrl: qcom,mdm9607: do not
+ require function on non-GPIOs
+Message-ID: <20220928002113.GA2687862-robh@kernel.org>
 References: <20220927173702.5200-1-krzysztof.kozlowski@linaro.org>
- <20220927173702.5200-24-krzysztof.kozlowski@linaro.org>
+ <20220927173702.5200-25-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220927173702.5200-24-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+In-Reply-To: <20220927173702.5200-25-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Sep 2022 19:36:51 +0200, Krzysztof Kozlowski wrote:
-> Bindings example should be indented with 4-spaces.
+On Tue, 27 Sep 2022 19:36:52 +0200, Krzysztof Kozlowski wrote:
+> Certain pins, like SDcard related, do not have functions and such should
+> not be required.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+> 
 > ---
->  .../pinctrl/qcom,msm8953-pinctrl.yaml         | 34 +++++++++----------
->  1 file changed, 17 insertions(+), 17 deletions(-)
+> 
+> v1 was reviewed by Rob, but patch was changed since that time, so not
+> adding Rob's tag.
+> ---
+>  .../devicetree/bindings/pinctrl/qcom,mdm9607-pinctrl.yaml        | 1 -
+>  1 file changed, 1 deletion(-)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
