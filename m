@@ -2,97 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F94F5EE442
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682B65EE456
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233338AbiI1SXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 14:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S233988AbiI1S27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 14:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233776AbiI1SXn (ORCPT
+        with ESMTP id S232518AbiI1S25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 14:23:43 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8665C101956;
-        Wed, 28 Sep 2022 11:23:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1664389422; x=1695925422;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mafWaAJGdDQya+zyqgkZLQXkrmmI+H/d5whBuw3Clpc=;
-  b=ZPqP4ywHwEq1tnXQG1V70Zygp00jrgOz9gxGEzH8R/LIWxx5YzTJkMSp
-   9x3zyxVtwbXqUxrWHALG85jq0FLdfaVaiY5p1V+cpMn/2UZgrubmz3YDB
-   jN3NAs/TCcVbgEbI4eg4BXKOH/TYvIyTnrk6l+JAaLgdciSr6/wAdegFz
-   YSUXGvq1nVintWssTSVohHmhuDtPacYNl7JWkPMX5m1olwQT7Fmn+c2qB
-   /omNM/TGsOkH8lDq2clwXT3eXlQRnZ/Pqonm0F+KnG9j75q7hTaGqxdPc
-   eyeYLy7r0LD+tPOhQl6974tPka7bqEZ6v7ynnvFW9SgFd0n9M3rfwowPk
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="115880602"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Sep 2022 11:23:41 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 28 Sep 2022 11:23:39 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Wed, 28 Sep 2022 11:23:39 -0700
-Date:   Wed, 28 Sep 2022 20:28:08 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-CC:     <UNGLinuxDriver@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH][next] net: lan966x: Fix spelling mistake "tarffic" ->
- "traffic"
-Message-ID: <20220928182808.gsfwyjlmunxl7k6z@soft-dev3-1.localhost>
-References: <20220928143618.34947-1-colin.i.king@gmail.com>
+        Wed, 28 Sep 2022 14:28:57 -0400
+Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27C0F08AE;
+        Wed, 28 Sep 2022 11:28:55 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 18:28:43 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1664389734; x=1664648934;
+        bh=bx6LkYA6tSEHnMC6YQRX0QPXJeIZTYibdxAR1z0B574=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=g2UWoWlTW6Ra6YvPKURH6rNzpnApaIBSupX1H5oDXWAzN9eeTfxq/k0gAtFW4Nmlg
+         dIM2g2I4GiFVYJ1UwpMFRuTdel8HFR99cM8bnvtesBGEfltVq6EAwGWMm7fOY/+EqJ
+         +S7e1O/CPNDRlP7bDUHmMv3CZj4AGZQfa+c8LS7VCvcS660O8rmbhqNYvol/g+0tu+
+         CdAhYt5hdh5O8r8i0IUF3NXpDfGpCHSBPteXMWVSvRSPCUXaKti70ysf2Mb3YyGSpF
+         XBwL1KHA77PXYPHYPiYoORFXaKpTizQwdmaIXRoZopqeLTKYjXUAVlnfJclsa3+t6L
+         e11EBnonykC/A==
+To:     devicetree@vger.kernel.org
+From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>,
+        Julian Ribbeck <julian.ribbeck@gmx.de>,
+        Josef W Menad <JosefWMenad@protonmail.ch>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: [PATCH v4 1/4] dt-bindings: qcom: Document bindings for new msm8916-samsung-j5 devices
+Message-ID: <20220928182710.186178-1-linmengbo0689@protonmail.com>
+In-Reply-To: <20220928182435.186116-1-linmengbo0689@protonmail.com>
+References: <20220928182435.186116-1-linmengbo0689@protonmail.com>
+Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20220928143618.34947-1-colin.i.king@gmail.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 09/28/2022 15:36, Colin Ian King wrote:
-> 
-> There is a spelling mistake in a netdev_err message. Fix it.
+Document the new samsung-j3/j5x device tree bindings used in their
+device trees.
 
-Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c b/drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c
-> index 950ea4807eb6..7fa76e74f9e2 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c
-> @@ -7,7 +7,7 @@ int lan966x_mqprio_add(struct lan966x_port *port, u8 num_tc)
->         u8 i;
-> 
->         if (num_tc != NUM_PRIO_QUEUES) {
-> -               netdev_err(port->dev, "Only %d tarffic classes supported\n",
-> +               netdev_err(port->dev, "Only %d traffic classes supported\n",
->                            NUM_PRIO_QUEUES);
->                 return -EINVAL;
->         }
-> --
-> 2.37.1
-> 
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentatio=
+n/devicetree/bindings/arm/qcom.yaml
+index fb1d00bcc847..b1c69d4d9a9a 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -176,7 +176,9 @@ properties:
+               - longcheer,l8910
+               - samsung,a3u-eur
+               - samsung,a5u-eur
++              - samsung,j3
+               - samsung,j5
++              - samsung,j5x
+               - samsung,serranove
+               - wingtech,wt88047
+           - const: qcom,msm8916
+--=20
+2.30.2
 
--- 
-/Horatiu
+
