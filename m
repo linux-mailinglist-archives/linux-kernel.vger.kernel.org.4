@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3B65ED347
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 05:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A655ED349
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 05:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbiI1DHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 23:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
+        id S232796AbiI1DHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 23:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbiI1DGz (ORCPT
+        with ESMTP id S232303AbiI1DG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 23:06:55 -0400
+        Tue, 27 Sep 2022 23:06:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824681CE920;
-        Tue, 27 Sep 2022 20:06:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98641CE914;
+        Tue, 27 Sep 2022 20:06:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA1C361CFA;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09E7861CF8;
+        Wed, 28 Sep 2022 03:06:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EABAC43140;
         Wed, 28 Sep 2022 03:06:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88291C43142;
-        Wed, 28 Sep 2022 03:06:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664334413;
-        bh=VMAzbGju3fZO1yAi48S5l4Q6uictYSwvEjvrd3Y5N1w=;
+        s=k20201202; t=1664334414;
+        bh=JSYL6zTmI1v/knH5ePUdorTCFFcn9txmwuF5JUvMOQU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rwjykJ0xECTbJeXauNAF9KKIHuNFYoOhuNJv5qiVzb6RcK4btYDNqEQTTUnagUX/C
-         Ies3cenLmfSWjRRuou5m0MqxypX68AKd6ceCrRV0a4NVsNcyOAHgnWH9PZJzVkLwQU
-         VaeH2woPHHqjPOJWN9KMdPX57y6yJSbzIThC+rz/iAq++ucsNzF28x1Zgub5q38V7i
-         /CEChHalSTPgyYpibXXf5PSulkXSeGyw0e/T4+AQHF8fIZTM6BlsMKfHxxAfaYtT4Y
-         J1r10mEzzqU2e0+Es+bj7w+0YlhOoqn53sdPyWte5V3VWczjO1aZgPD7D6/fB34xpV
-         CuPPK90Lls3dg==
+        b=LaLGV5KjmFnB3t5VgsUkcBNhy5oymIPKuAof5O/qx2Yo7HsQ12SfCWm2wg1KKd2EM
+         FyE4R1VEklBPBZ+8lVOr9Xm/znkuvtNIJelclX0qb+TY5yGagPedDxkfbMOw7ep4iI
+         GBBBCjKJUXOvp5PJowp9Nwd3fZf3kHChX0gwU2JkmOgc+/x2gSN5Jzxtqs7qE/mfv2
+         1p78d2k6HFzEHE4GkhJT3ifLnr93dbJ9NKhvNvZg2Or4MRFyoq2f/biUSA93qiUjnw
+         e/6/RR+dhvi4rHnorczf2sTHXt+MloByJRkkU05oNhgOdhA73lbXJ1RQ+Jg8Ne9pZ1
+         zvYp9V2EeXpLw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     konrad.dybcio@somainline.org, mturquette@baylibre.com,
-        sboyd@kernel.org, quic_bjorande@quicinc.com
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH v2 0/2] clk: qcom: Add SC8280XP GPU clock controller
-Date:   Tue, 27 Sep 2022 22:06:47 -0500
-Message-Id: <166433439996.1849007.6883466236437791919.b4-ty@kernel.org>
+To:     sboyd@kernel.org, konrad.dybcio@somainline.org, mka@chromium.org,
+        mturquette@baylibre.com, quic_rjendra@quicinc.com,
+        agross@kernel.org
+Cc:     johan+linaro@kernel.org, dianders@chromium.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_kriskura@quicinc.com,
+        angelogioacchino.delregno@collabora.com
+Subject: Re: (subset) [PATCH v3 1/3] clk: qcom: gdsc: Fix the handling of PWRSTS_RET support
+Date:   Tue, 27 Sep 2022 22:06:48 -0500
+Message-Id: <166433439998.1849007.9991122378265739432.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220926173025.4747-1-quic_bjorande@quicinc.com>
-References: <20220926173025.4747-1-quic_bjorande@quicinc.com>
+In-Reply-To: <20220920111517.10407-1-quic_rjendra@quicinc.com>
+References: <20220920111517.10407-1-quic_rjendra@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,30 +58,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sep 2022 10:30:23 -0700, Bjorn Andersson wrote:
-> What the subject says.
+On Tue, 20 Sep 2022 16:45:15 +0530, Rajendra Nayak wrote:
+> GDSCs cannot be transitioned into a Retention state in SW.
+> When either the RETAIN_MEM bit, or both the RETAIN_MEM and
+> RETAIN_PERIPH bits are set, and the GDSC is left ON, the HW
+> takes care of retaining the memory/logic for the domain when
+> the parent domain transitions to power collapse/power off state.
 > 
-> Bjorn Andersson (2):
->   dt-bindings: clock: Add Qualcomm SC8280XP GPU binding
->   clk: qcom: Add SC8280XP GPU clock controller
-> 
-> .../devicetree/bindings/clock/qcom,gpucc.yaml |   2 +
->  drivers/clk/qcom/Kconfig                      |   8 +
->  drivers/clk/qcom/Makefile                     |   1 +
->  drivers/clk/qcom/gpucc-sc8280xp.c             | 461 ++++++++++++++++++
->  .../dt-bindings/clock/qcom,gpucc-sc8280xp.h   |  35 ++
->  5 files changed, 507 insertions(+)
->  create mode 100644 drivers/clk/qcom/gpucc-sc8280xp.c
->  create mode 100644 include/dt-bindings/clock/qcom,gpucc-sc8280xp.h
+> On some platforms where the parent domains lowest power state
+> itself is Retention, just leaving the GDSC in ON (without any
+> RETAIN_MEM/RETAIN_PERIPH bits being set) will also transition
+> it to Retention.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] dt-bindings: clock: Add Qualcomm SC8280XP GPU binding
-      commit: 9f60eb3ec02757ab9441f2463eceddf2c71ec5e3
-[2/2] clk: qcom: Add SC8280XP GPU clock controller
-      commit: e55d937d8cf391c1fb9afad296948b3697ad96f7
+[1/3] clk: qcom: gdsc: Fix the handling of PWRSTS_RET support
+      commit: d399723950c45cd9507aef848771826afc3f69b0
+[2/3] clk: qcom: gcc-sc7180: Update the .pwrsts for usb gdsc
+      commit: d9fe9f3fefe74d15e280fce628bff1b6fc6d9675
+[3/3] clk: qcom: gcc-sc7280: Update the .pwrsts for usb gdscs
+      commit: e3ae3e899aa0322ff685fd7cf1322c6670da7db7
 
 Best regards,
 -- 
