@@ -2,73 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383705ED57B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38215ED581
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233330AbiI1G5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 02:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44358 "EHLO
+        id S232356AbiI1G5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 02:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232684AbiI1G4g (ORCPT
+        with ESMTP id S233317AbiI1G52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 02:56:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAE833A12;
-        Tue, 27 Sep 2022 23:56:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC600B81F11;
-        Wed, 28 Sep 2022 06:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FDE1C433D6;
-        Wed, 28 Sep 2022 06:56:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664348163;
-        bh=fDL4KM3SLbjnOHLuzZCPeLEILZAa8CkGK5raCV6cwVo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QY7S+3dxsyfaNKGc2yEwtrKOMR+9cyitVGs4/DAD//Or1MpCspCGVuah5qkZiDIDt
-         Oe9yTcP53mXb8zvVIU9q+i8PLqSdd5M2B31TckLqRZ3UbwXDZUnUV8vMUw2YEnwarG
-         j5/Z1zaO+ia6TRdoErxbEDrQF3wu8z2cy2pgJQAE=
-Date:   Wed, 28 Sep 2022 08:56:01 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ray Chi <raychi@google.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, mchehab+huawei@kernel.org,
-        Albert Wang <albertccwang@google.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Puma Hsu <pumahsu@google.com>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [Patch v3] usb: core: stop USB enumeration if too many retries
-Message-ID: <YzPwAcprHugj++RX@kroah.com>
-References: <20220908104019.3080989-1-raychi@google.com>
- <YyxP2/GLgyp5Cq66@kroah.com>
- <Yyx8BbxM97FeNwJ7@rowland.harvard.edu>
- <CAPBYUsA8gs82kk1b6Hee94P+hEut=RY9NQci4NTNTuOKOvVY+g@mail.gmail.com>
+        Wed, 28 Sep 2022 02:57:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED7263F10;
+        Tue, 27 Sep 2022 23:57:23 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 06:57:19 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1664348240;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JykWq5c8PgvO0Em9NwSaZy2eh5npciNbuq8edi2FoO4=;
+        b=SKbew54R+KbF1OIyE2bQ42y4t0gH16WCgKiU6bhOR8Rocg58UtJ6nd77wF4LYGj69aLyOu
+        gvJbQxdtZF8aO08fAqhyDX8PUZ7EUO2Nku+BdYVSN2YE/eddAHF91VT+2DyMnZZ/3hKpMI
+        P7MNf409spiqlkHFUKGEJDeFF0g52dINhZOrlf555LW1ixbBppxaMWn1s2rgts5uxA8lbp
+        UTSUbySS7ngel2iy2L6wl/fX1Gt88eh4IhJ8MKRyLr9/q/uJ654X/ZFLdB3jzsu/yyF+Kw
+        334lMxxsbkm64oXgQazu+oe0vthJ4T6M5Cl9NfWMQEh59YV2IZ7dA4zaZXkAcA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1664348240;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JykWq5c8PgvO0Em9NwSaZy2eh5npciNbuq8edi2FoO4=;
+        b=Idvj6+On7OylSMMxWz3i3oaDUQWIEAiKPb2jo1vtjQ21lfefNONL+J7i+AwrcrOOMGq9nL
+        iEDC2kMiPWteLhBQ==
+From:   "tip-bot2 for Jiri Olsa" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] bpf: Check flags for branch stack in
+ bpf_read_branch_records helper
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Kan Liang <kan.liang@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220927203259.590950-1-jolsa@kernel.org>
+References: <20220927203259.590950-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPBYUsA8gs82kk1b6Hee94P+hEut=RY9NQci4NTNTuOKOvVY+g@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166434823927.401.13847148343207516601.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 12:37:55AM +0800, Ray Chi wrote:
-> BTW, I found a new mail tree is created after the patch v4 is
-> uploaded, but the patch is downloaded by mbox.
+The following commit has been merged into the perf/core branch of tip:
 
-I do not understand what you mean by this.
+Commit-ID:     cce6a2d7e0e494c453ad73e1e78bd50684f20cca
+Gitweb:        https://git.kernel.org/tip/cce6a2d7e0e494c453ad73e1e78bd50684f20cca
+Author:        Jiri Olsa <jolsa@kernel.org>
+AuthorDate:    Tue, 27 Sep 2022 22:32:59 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 27 Sep 2022 22:50:25 +02:00
 
-> What do I do if I want to keep the original mail tree?
+bpf: Check flags for branch stack in bpf_read_branch_records helper
 
-Why would you want to do that?
+Recent commit [1] changed branch stack data indication from
+br_stack pointer to sample_flags in perf_sample_data struct.
 
-You can keep the threading if you use the correct option to
-git-send-email but you really don't want to do that.
+We need to check sample_flags for PERF_SAMPLE_BRANCH_STACK
+bit for valid branch stack data.
 
-thanks,
+[1] a9a931e26668 ("perf: Use sample_flags for branch stack")
 
-greg k-h
+Fixes: a9a931e26668 ("perf: Use sample_flags for branch stack")
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+Link: https://lore.kernel.org/r/20220927203259.590950-1-jolsa@kernel.org
+---
+ kernel/trace/bpf_trace.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 68e5cdd..1fcd123 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1507,6 +1507,9 @@ BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
+ 	if (unlikely(flags & ~BPF_F_GET_BRANCH_RECORDS_SIZE))
+ 		return -EINVAL;
+ 
++	if (unlikely(!(ctx->data->sample_flags & PERF_SAMPLE_BRANCH_STACK)))
++		return -ENOENT;
++
+ 	if (unlikely(!br_stack))
+ 		return -ENOENT;
+ 
