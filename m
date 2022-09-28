@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B40865ED84E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250385ED850
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233475AbiI1I5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S233463AbiI1I6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233373AbiI1I5d (ORCPT
+        with ESMTP id S233445AbiI1I6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:57:33 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210D11DF1A
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:57:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C89EF210E0;
-        Wed, 28 Sep 2022 08:57:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664355451; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=SZWpruz+4WZoQkcxldZTYQlcjavSCWBsF8sf6gY5NAY=;
-        b=2L7ihR92SXSwqQ0nO2YdSgUH4+PYHBHrK5ikSjupPDPuTHK+QU/wN2hjphfg/DJ7Yy66ld
-        IjA0q2dIMg6QlpbvJ+FSWKcPFpA3p/Jm8laiFwYdfvEEzFEy4C6yGZojFOybkuRnwiykRF
-        wZNT1ZsoTCFZ98GqEXXJWhZqRL7+Uww=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664355451;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=SZWpruz+4WZoQkcxldZTYQlcjavSCWBsF8sf6gY5NAY=;
-        b=Ef3FRFW7o/2Q5v5dG5DZZrQS7/VZEtpvAMKCX+XZmjpmmI6zMa/JjQ6hTlTw6ith1o9BDW
-        afCsjd+jlzfjSZCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BD96313A84;
-        Wed, 28 Sep 2022 08:57:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id QZs+LnsMNGOaYAAAMHmgww
-        (envelope-from <bp@suse.de>); Wed, 28 Sep 2022 08:57:31 +0000
-Date:   Wed, 28 Sep 2022 10:57:26 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Marc Zyngier <maz@kernel.org>, x86-ml <x86@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] irq/urgent for v6.0
-Message-ID: <YzQMdl0bf305slSv@zn.tnic>
+        Wed, 28 Sep 2022 04:58:04 -0400
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B223AD69DD;
+        Wed, 28 Sep 2022 01:58:00 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id e10-20020a05600c4e4a00b003b4eff4ab2cso741757wmq.4;
+        Wed, 28 Sep 2022 01:58:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=kj7qWhThnkCasW9E7g/Ax+n/vLHOH8UYoTEvBX7wULk=;
+        b=VScwN39OsRj+s93C5fFoqZR3Vj7LvbVp5ejEQsYxPd1a3INk8nRvJ+ywhJPMFfiXKc
+         0TbKUCUtTO0kLj/T8rMCMHDm1w0vTA21kW3U6gHauONUG6xxfacwi//fVYCt923mBt28
+         xqI6woeFXmHytCnTpzmjt/3phQmel8AQo/r4uC675qd+3E2HmxPgLqzjxBc+jyKIREEt
+         pKgrqTyCnkFTTWK2IJzPk200WBD4tp2zAgHDwJlVUAzRt0Ow5SkzsiBf/ApvO56Ch6TM
+         B1nqZXlpc+ocPH665dS7UGMlYtpcW6BLiAsMXkhzwxXkKcgKrvoz+4SMsXA2EKwk8HOb
+         +8Jg==
+X-Gm-Message-State: ACrzQf1g7I7Z4G/D+RBw+SwqmHm7TDE1iFXsyDNvPha0DE/QCcZw7SeL
+        RW8aWiMo9Zlnzms6YGFwl3M=
+X-Google-Smtp-Source: AMsMyM6NfOVLzED2+lsfXxN82a80KxyLIKK0KMf5GR22Ic/NQcb1qpXww4VNYKXRtVcKzFwdBXmA8w==
+X-Received: by 2002:a1c:721a:0:b0:3b4:641c:5d99 with SMTP id n26-20020a1c721a000000b003b4641c5d99mr6086058wmc.71.1664355479154;
+        Wed, 28 Sep 2022 01:57:59 -0700 (PDT)
+Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id l2-20020a1c7902000000b003b33943ce5esm1232750wme.32.2022.09.28.01.57.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 01:57:58 -0700 (PDT)
+Message-ID: <9b60d9c5-7d2c-a6ed-29d1-aa5dabee5426@kernel.org>
+Date:   Wed, 28 Sep 2022 10:57:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v6] ACPI: skip IRQ override on AMD Zen platforms
+From:   Jiri Slaby <jirislaby@kernel.org>
+To:     Chuanhong Guo <gch981213@gmail.com>, linux-acpi@vger.kernel.org
+Cc:     Tighe Donnelly <tighe.donnelly@protonmail.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220712020058.90374-1-gch981213@gmail.com>
+ <0450c7c0-4787-2aa2-de3e-c71522e467ce@kernel.org>
+ <498a9097-8ecf-0a47-abbb-8b64fb7ee2de@kernel.org>
+Content-Language: en-US
+In-Reply-To: <498a9097-8ecf-0a47-abbb-8b64fb7ee2de@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,61 +68,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 28. 09. 22, 10:31, Jiri Slaby wrote:
+> Something like the attached. It's:
+> 1) untested yet
+> 2) contains more debug messaging
+> 3) contains both cases for ACPI_ACTIVE_* as I don't know the original 
+> polarity
 
-please pull more urgent irq fixes for 6.0. Stuff got left hanging due to
-the whole Plumbers and vacations commotion.
+Now, I have DSDT which says for both of them:
+                 IRQ (Level, ActiveLow, ExclusiveAndWake, )
 
-Thx.
+So the patch should actually have:
+         { lenovo_laptop, 6, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, 
+true },
+         { lenovo_laptop, 10, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, 
+true },
 
----
-
-The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
-
-  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/irq_urgent_for_v6.0
-
-for you to fetch changes up to c0cca6a66458a0daa627774de7ca2b678a6bb3d8:
-
-  Merge tag 'irqchip-fixes-6.0-2' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent (2022-09-27 15:29:33 +0200)
-
-----------------------------------------------------------------
-Pull more irqchip fixes for 6.0 from Marc Zyngier:
-
-  - A couple of configuration fixes for the recently merged Loongarch drivers
-
-  - A fix to avoid dynamic allocation of a cpumask which was causing issues
-    with PREEMPT_RT and the GICv3 ITS
-
-  - A tightening of an error check in the stm32 exti driver
-
-----------------------------------------------------------------
-Antonio Borneo (1):
-      irqchip/stm32-exti: Remove check on always false condition
-
-Borislav Petkov (1):
-      Merge tag 'irqchip-fixes-6.0-2' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent
-
-Huacai Chen (1):
-      irqchip: Select downstream irqchip drivers for LoongArch CPU
-
-Jianmin Lv (1):
-      irqchip/loongson-pch-lpc: Add dependence on LoongArch
-
-Pierre Gondois (1):
-      irqchip/gic-v3-its: Remove cpumask_var_t allocation
-
- drivers/irqchip/Kconfig          |  8 +++++++-
- drivers/irqchip/irq-gic-v3-its.c | 14 ++++++++------
- drivers/irqchip/irq-stm32-exti.c |  2 +-
- 3 files changed, 16 insertions(+), 8 deletions(-)
+thanks,
 -- 
-Regards/Gruss,
-    Boris.
+js
 
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
