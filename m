@@ -2,132 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C545EE10B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF65E5EE10D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233648AbiI1P5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48548 "EHLO
+        id S234084AbiI1P6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234473AbiI1P5G (ORCPT
+        with ESMTP id S234529AbiI1P5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:57:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 852A2E10AB
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:56:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A00C81063;
-        Wed, 28 Sep 2022 08:56:29 -0700 (PDT)
-Received: from wubuntu (unknown [10.57.34.4])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 796763F73D;
-        Wed, 28 Sep 2022 08:56:20 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 16:56:18 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     John Stultz <jstultz@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Dias <joaodias@google.com>,
-        Connor O'Brien <connoro@google.com>,
-        Rick Yiu <rickyiu@google.com>, John Kacur <jkacur@redhat.com>,
-        Chris Redpath <chris.redpath@arm.com>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        "kernel-team@android.com" <kernel-team@android.com>
-Subject: Re: [RFC][PATCH v3 0/3] Softirq -rt Optimizations
-Message-ID: <20220928155618.ylyns4x4tog34zui@wubuntu>
-References: <20220921012550.3288570-1-jstultz@google.com>
- <20220928130043.d6ijyxbq43tfvqg7@wubuntu>
- <529cd76702b44678a4d4abe539105942@AcuMS.aculab.com>
+        Wed, 28 Sep 2022 11:57:30 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3C0DED51
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:56:53 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id iv17so8797391wmb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date;
+        bh=dDShWwrvhx0VR1icMwP79MrRYhMPzc7W3e5rekv8htg=;
+        b=t/SRZzjc+5jjgbhTwwdUCsFa3EU64WSIJ+bFwOqKGITlg+sfU0SgozLKTvFhuWxsDN
+         cRl7ynGZ6WtdmxLib3TSeaOP8PGpwpDZdm0pyw6SNs8WulacjvbRbXAJKQN0D4sN+ADQ
+         noe9yyrhD9j6tsrbdAsnpE6f6GaXW8UWt4aYiSY5bRmJxhx/O+YuGE4O/d+4rqPrMHdi
+         XJG16oEqWQo/CjTKbfyIoUV7liH7ArOAmJvd3mkrrINEuQprfBCVi1x7nbjCvFGWENMX
+         9WUDNiQIkgyqJbPl6+pu6yUzRWdaNjOVoyFeXNuFo+QbGpf3U2KnrqMuHJjvdJloW24L
+         zLMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=dDShWwrvhx0VR1icMwP79MrRYhMPzc7W3e5rekv8htg=;
+        b=eTNr/X2K3E9SHlfAFrv2jDJy2NV9qQ2s0F6xGECIpcsRRJvIsz4Tyo0KcILtFg1Ugr
+         w+aqFL8kKnekvM/Yeo7xgFrG1TVM68CwfJHJqeZDzA86fBds37J567T27w2wKVaBIvdl
+         /Wn4OjG9yP4quvBxjyeg24bCoCN87ivIU7c1twP/lGaHueaP+T/VHjIurVvNl+mDuS4m
+         rRTodt43jLSy0oZFqo6/o6E5T3BEZTIH1MWi1YnEXnjqWNQqEckuPUoal4gEhdALEest
+         2AmdfnTQ0w7YRZtvGr20eycC2UM+f8QQ14pmbi07MjQ/rTLdLmalFjO+ZaF4mW/6cMiJ
+         dckg==
+X-Gm-Message-State: ACrzQf2R5efbyMVet5YM0IRD5g2xTXHvnBInLZll3OFebMBlnx5S+V9V
+        3RQmKFGKNDpWL+BCF4KBltzang==
+X-Google-Smtp-Source: AMsMyM6N9kpPNaFjUA289IxvcNaZQDNnPPMbfwiV/i7ACz+D7197zZymQOiB8T2KkiqgSMUDJtLXlg==
+X-Received: by 2002:a05:600c:1d26:b0:3b4:a677:ccc9 with SMTP id l38-20020a05600c1d2600b003b4a677ccc9mr7349169wms.121.1664380598283;
+        Wed, 28 Sep 2022 08:56:38 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:11d4:7c71:accf:6521? ([2a01:e0a:982:cbb0:11d4:7c71:accf:6521])
+        by smtp.gmail.com with ESMTPSA id t3-20020a7bc3c3000000b003b4868eb6bbsm2373519wmj.23.2022.09.28.08.56.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 08:56:37 -0700 (PDT)
+Message-ID: <444c7905-6dfa-c4f4-f4b0-c92ee4a4a403@linaro.org>
+Date:   Wed, 28 Sep 2022 17:56:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <529cd76702b44678a4d4abe539105942@AcuMS.aculab.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 01/13] phy: qcom-qmp: fix obsolete lane comments
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220928152822.30687-1-johan+linaro@kernel.org>
+ <20220928152822.30687-2-johan+linaro@kernel.org>
+Reply-To: neil.armstrong@linaro.org
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20220928152822.30687-2-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/28/22 13:51, David Laight wrote:
-> From: Qais Yousef
-> > Sent: 28 September 2022 14:01
-> > 
-> > Hi John
-> > 
-> > On 09/21/22 01:25, John Stultz wrote:
-> > > Hey all,
-> > >
-> > > This series is a set of patches that optimize scheduler decisions around
-> > > realtime tasks and softirqs.  This series is a rebased and reworked set
-> > > of changes that have been shipping on Android devices for a number of
-> > > years, originally created to resolve audio glitches seen on devices
-> > > caused by softirqs for network or storage drivers.
-> > >
-> > > Long running softirqs cause issues because they aren’t currently taken
-> > > into account when a realtime task is woken up, but they will delay
-> > > realtime tasks from running if the realtime tasks are placed on a cpu
-> > > currently running a softirq.
-> > 
-> > Thanks a lot for sending this series. I've raised this problem in various
-> > venues in the past, but it seems it is hard to do something better than what
-> > you propose here.
-> > 
-> > Borrowing some behaviours from PREEMPT_RT (like threadedirqs) won't cut it
-> > outside PREEMPT_RT AFAIU.
-> > 
-> > Peter did suggest an alternative at one point in the past to be more aggressive
-> > in limiting softirqs [1] but I never managed to find the time to verify it
-> > - especially its impact on network throughput as this seems to be the tricky
-> > trade-of (and tricky thing to verify for me at least). I'm not sure if BLOCK
-> > softirqs are as sensitive.
+On 28/09/2022 17:28, Johan Hovold wrote:
+> All QMP drivers but the MSM8996 and combo ones handle exactly one PHY
+> and the corresponding memory resources are not per-lane, but per PHY.
 > 
-> I've had issues with the opposite problem.
-> Long running RT tasks stopping the softint code running.
+> Update the obsolete comments.
 > 
-> If an RT task is running, the softint will run in the context of the
-> RT task - so has priority over it.
-> If the RT task isn't running the softint stops the RT task being scheduled.
-> This is really just the same.
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c        | 2 +-
+>   drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 2 +-
+>   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c         | 2 +-
+>   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c          | 2 +-
+>   drivers/phy/qualcomm/phy-qcom-qmp-usb.c          | 2 +-
+>   5 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> If the softint defers back to thread context it won't be scheduled
-> until any RT task finishes. This is the opposite priority.
 
-If we can get a subset of threadedirqs (call it threadedsoftirqs) from
-PREEMPT_RT where softirqs can be converted into RT kthreads, that'll alleviate
-both sides of the problem IMO. But last I checked with Thomas this won't be
-possible. But things might have changed since then..
+<snip>
 
-> 
-> IIRC there is another strange case where the RT thread has been woken
-> but isn't yet running - can't remember the exact details.
-> 
-> I can (mostly) handle the RT task being delayed (there are a lot of RT
-> threads sharing the work) but it is paramount that the ethernet receive
-> code actually runs - I can't afford to drop packets (they contain audio
-> the RT threads are processing).
-> 
-> In my case threaded NAPI (mostly) fixes it - provided the NAPI thread are RT.
-
-There's a netdev_budget and netdev_bugdet_usecs params in procfs that control
-how long the NET_RX spends in the softirq. Maybe you need to tweak those too.
-In your case, you probably want to increase the budget.
-
-Note that in Android the BLOCK layer seems to cause similar problems which
-don't have these NET facilities. So NET is only one side of the problem.
-
-
-Thanks
-
---
-Qais Yousef
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
