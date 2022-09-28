@@ -2,96 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB0C5EE0C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E85D05EE0C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233481AbiI1Pow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
+        id S231567AbiI1PpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233383AbiI1Pot (ORCPT
+        with ESMTP id S233659AbiI1PpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:44:49 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C977732BBC
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:44:41 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id h28so8140846qka.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:44:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=5VOCWcgoIsE/Ai5qpSZYr71NDjI2Cp8fJOu50Q8l/5U=;
-        b=XutHlQR+0NPVe/vdY3DgPVuRIpUanyWgtQAVORqNe0Xz5VDNquT360t8jD613El0J8
-         hPe102ZNvG5YG3fLSJVMl21VbEOIgeisxG6eBImQqO/C+pVVUoGUxSrEX8/f9vGo0hxx
-         5w18vt4hGlpQ9wCtvDds5/2tGL8MiOt23CL40=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=5VOCWcgoIsE/Ai5qpSZYr71NDjI2Cp8fJOu50Q8l/5U=;
-        b=EsXWHCCj1zYCPzRodxMSv010f1OVGEcEISVHaBX+vA/pVgPWxTSBvgI2ftVaOJ9KYV
-         2XipZLArAZOHISW1DSx0L7T9G7Di1j5jbbc+Qog8JHcuCD7y4LnFsoJoPxNbqLlTjY7/
-         vM0yXF2TmIl09LQHnNyb8QlKLetf84zQ7cye60Yyk+SFh4jK5TDovfDfRs1MYpKu8kZP
-         CR2LWJaezYp3Zzqa8sIPufqdQWI+SoZHZCRNm6QCVxDCzAtGglVk/2UlxT/v9sWivZx0
-         WbBl3kIpZuTjAgv/SGrODlLgA0A9PmE5fqMLEmcw3aswEherCYYiLk8lSTi/BdqDLJlz
-         2XZg==
-X-Gm-Message-State: ACrzQf068WMkyStB+RP5eYUZtFSEC7zN++PxIK8o0gD0CCDe+/obcPrt
-        4jE2HEnCcYf/sqoak8uqU9/6awwb9WPsRg==
-X-Google-Smtp-Source: AMsMyM75sbeQKpLJRmaKGZvXkO+iZIio9WRSyymNmbzDHvF0X5OLH+JKbKG/mtRK99YHvJzKgZF8BQ==
-X-Received: by 2002:a05:620a:957:b0:6cd:ed32:ed2e with SMTP id w23-20020a05620a095700b006cded32ed2emr22041149qkw.48.1664379880623;
-        Wed, 28 Sep 2022 08:44:40 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-33-142-113-79-147.dsl.bell.ca. [142.113.79.147])
-        by smtp.gmail.com with ESMTPSA id h2-20020a05620a244200b006ccc96c78easm3249668qkn.134.2022.09.28.08.44.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 08:44:39 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 11:44:37 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] dt-bindings: mfd: qcom-spmi-pmic: Add pm6125
- compatible
-Message-ID: <20220928154437.if3x2zf5yozhy5kt@meerkat.local>
-References: <20220926190148.283805-1-marijn.suijten@somainline.org>
- <20220926190148.283805-2-marijn.suijten@somainline.org>
- <052630d0-299e-e468-b2dd-266d371e2b0f@linaro.org>
- <20220928081055.p66huqct2wnrsrdx@SoMainline.org>
- <3f2e62f5-a6e4-7011-3f5b-29a6657eae79@linaro.org>
- <20220928082340.mkn23ersrtzb5oth@SoMainline.org>
- <2bd60261-a977-3225-8d41-4987252e6abb@linaro.org>
+        Wed, 28 Sep 2022 11:45:11 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0FB7C1F5;
+        Wed, 28 Sep 2022 08:45:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664379908; x=1695915908;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=L+jkqIsexqlzrYFOaFhwPJa/Gp1nFns+DyV2+D9NJWI=;
+  b=JOWulIuBsr+J0ADIGh2uwt9gyC1Ia35lVwj6a9pOXfRYX0q7cV0zdoFb
+   xmBgp5H4DRpeMrMmp/3+aFqCQv+tG83HrqZcoRdg5F7okr5nuJbSWD7d1
+   5STNRuN1ovj8xyo0rs1yNWCwPBGiOMPiIXwi4Ruz0dLI8Qo/cmvdY5QyZ
+   7AOe71HM2wDN2yUIIjgPbo2XnO+2xBOoYfxMtywAyesoilDcQJx5f28Ul
+   RT3pZ1AoSviOKK9IfsotnI0hnUMYpvfl8hWqTX+oy+K0ZSBWqf+wYocf+
+   P3jOOocKbwJ/fnPsoR/JNa8pSmfgyu8zkqqqPAGXTJsEBIbcrm+SDIcIz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="284769708"
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="284769708"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 08:45:07 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="684454239"
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="684454239"
+Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.108.153]) ([10.212.108.153])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 08:45:05 -0700
+Message-ID: <c53c4b89-45a9-a5e0-c162-43dc0a6e8ed6@intel.com>
+Date:   Wed, 28 Sep 2022 08:45:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2bd60261-a977-3225-8d41-4987252e6abb@linaro.org>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.3.0
+Subject: Re: [PATCH v2] cxl: Replace HDM decoder granularity magic numbers
+Content-Language: en-US
+To:     Adam Manzanares <a.manzanares@samsung.com>,
+        "alison.schofield@intel.com" <alison.schofield@intel.com>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>
+Cc:     "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <CGME20220829220315uscas1p125d01bdd52a7aa6fd07c26bef7ead825@uscas1p1.samsung.com>
+ <20220829220249.243888-1-a.manzanares@samsung.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20220829220249.243888-1-a.manzanares@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 10:30:00AM +0200, Krzysztof Kozlowski wrote:
-> > (Side-note: I should get accustomed to `b4 shazam` to automatically pick
-> >  this up from the list, instead of rebasing / re-applying local patches)
-> 
-> Would be nice if b4 could update patches in current branch adding the
-> tags... but git reset --hard && b4 shazam should work as well.
 
-FYI, it can do just that using "b4 trailers -uF [msgid]". See:
-https://b4.docs.kernel.org/en/stable-0.10.y/contributor/trailers.html
+On 8/29/2022 3:03 PM, Adam Manzanares wrote:
+> When reviewing the CFMWS parsing code that deals with the HDM decoders,
+> I noticed a couple of magic numbers. This commit replaces these magic numbers
+> with constants defined by the CXL 3.0 specification.
+>
+> v2:
+>   - Change references to CXL 3.0 specification (David)
+>   - CXL_DECODER_MAX_GRANULARITY_ORDER -> CXL_DECODER_MAX_ENCODED_IG (Dan)
+>
+> Signed-off-by: Adam Manzanares <a.manzanares@samsung.com>
 
--K
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+
+
+> ---
+>   drivers/cxl/cxl.h | 11 +++++++----
+>   1 file changed, 7 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+> index f680450f0b16..3ab81ad9d2e5 100644
+> --- a/drivers/cxl/cxl.h
+> +++ b/drivers/cxl/cxl.h
+> @@ -61,6 +61,10 @@
+>   #define CXL_HDM_DECODER0_SKIP_LOW(i) CXL_HDM_DECODER0_TL_LOW(i)
+>   #define CXL_HDM_DECODER0_SKIP_HIGH(i) CXL_HDM_DECODER0_TL_HIGH(i)
+>   
+> +/* HDM decoder control register constants CXL 3.0 8.2.5.19.7 */
+> +#define CXL_DECODER_MIN_GRANULARITY 256
+> +#define CXL_DECODER_MAX_ENCODED_IG 6
+> +
+>   static inline int cxl_hdm_decoder_count(u32 cap_hdr)
+>   {
+>   	int val = FIELD_GET(CXL_HDM_DECODER_COUNT_MASK, cap_hdr);
+> @@ -71,9 +75,9 @@ static inline int cxl_hdm_decoder_count(u32 cap_hdr)
+>   /* Encode defined in CXL 2.0 8.2.5.12.7 HDM Decoder Control Register */
+>   static inline int cxl_to_granularity(u16 ig, unsigned int *val)
+>   {
+> -	if (ig > 6)
+> +	if (ig > CXL_DECODER_MAX_ENCODED_IG)
+>   		return -EINVAL;
+> -	*val = 256 << ig;
+> +	*val = CXL_DECODER_MIN_GRANULARITY << ig;
+>   	return 0;
+>   }
+>   
+> @@ -96,7 +100,7 @@ static inline int cxl_to_ways(u8 eniw, unsigned int *val)
+>   
+>   static inline int granularity_to_cxl(int g, u16 *ig)
+>   {
+> -	if (g > SZ_16K || g < 256 || !is_power_of_2(g))
+> +	if (g > SZ_16K || g < CXL_DECODER_MIN_GRANULARITY || !is_power_of_2(g))
+>   		return -EINVAL;
+>   	*ig = ilog2(g) - 8;
+>   	return 0;
+> @@ -248,7 +252,6 @@ enum cxl_decoder_type {
+>    */
+>   #define CXL_DECODER_MAX_INTERLEAVE 16
+>   
+> -#define CXL_DECODER_MIN_GRANULARITY 256
+>   
+>   /**
+>    * struct cxl_decoder - Common CXL HDM Decoder Attributes
