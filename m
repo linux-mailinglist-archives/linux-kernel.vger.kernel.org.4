@@ -2,87 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6AB05ED1FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 02:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03CF5ED1FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 02:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbiI1AZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 20:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
+        id S229577AbiI1A0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 20:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233042AbiI1AYo (ORCPT
+        with ESMTP id S229567AbiI1A0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 20:24:44 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696DC1EE772;
-        Tue, 27 Sep 2022 17:24:17 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1319573379eso2569085fac.0;
-        Tue, 27 Sep 2022 17:24:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=emvP3YSyBpP+FskRt08StkDM9pRDZiCrhQHQG+rB6FE=;
-        b=EhHggIDLqL80WrsFZKlV/oOO60fajlo8901b9RQ1j/t94fDaFmqudzPLRcGTNjqgaE
-         2hVNQ+oMGnHdyupjS1ehvuSVy7ammRVfbdO3N8dRdv+X6hAWMIfcAxDFw/CD8vQQ4Xdb
-         9+OJ0dZGUh6nrrOxiJxDPweS2lbnr1XZDNRM2L796AWDYQSvlp+thh2F2zuZvyqarrWN
-         4rwvt2Pj4/c/5hGc7R2MHIQWc3FquexOkO0Z+USUlp3oP4DjfRmQzoPhJt+wNWU7jcAd
-         wxFZSymDBH3ugblLckG04JNxCMrpoLwyAL6UixOALzS7OML1j3qM9/X38umjJKb24siz
-         mE2g==
-X-Gm-Message-State: ACrzQf1UYBAGYlDyT8fB0YCnA69AKeqZCVx/ab9FTE3gNo/9YT4Jxxhm
-        MBqOtS56oQKp0/0M2ZxPsVSI9MMl0w==
-X-Google-Smtp-Source: AMsMyM7eOVxfo8/++Dna9DjiLq5ihgEzlcXt3mZaOCPGIdA8MtwTkb0E0zydywZ0B8nz+65TCQ0hBA==
-X-Received: by 2002:a05:6870:4184:b0:131:55a3:2fef with SMTP id y4-20020a056870418400b0013155a32fefmr3751387oac.223.1664324652219;
-        Tue, 27 Sep 2022 17:24:12 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i42-20020a056870892a00b00127a6357bd5sm1690605oao.49.2022.09.27.17.24.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 17:24:11 -0700 (PDT)
-Received: (nullmailer pid 2708319 invoked by uid 1000);
-        Wed, 28 Sep 2022 00:24:11 -0000
-Date:   Tue, 27 Sep 2022 19:24:11 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 34/34] dt-bindings: pinctrl: qcom,sc8280xp: fix
- indentation in example (remaining piece)
-Message-ID: <20220928002411.GA2708263-robh@kernel.org>
-References: <20220927173702.5200-1-krzysztof.kozlowski@linaro.org>
- <20220927173702.5200-35-krzysztof.kozlowski@linaro.org>
+        Tue, 27 Sep 2022 20:26:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097F5D4AAE;
+        Tue, 27 Sep 2022 17:26:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A92CB81E3B;
+        Wed, 28 Sep 2022 00:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18053C433D6;
+        Wed, 28 Sep 2022 00:26:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664324779;
+        bh=jGniGtl3LSg2UQcTQAQhK2coEuaQhXHf8hbCfu07B4c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fEP2im6sdl2dYYrSH86YGCJEIh+7whof9wI0Hg7ln6oaJsq+cxtAMKX4vXc8uetHY
+         Hpepo9+BxVpVOagPPULpB+cQTNcx+8V30lGXkeedxiccGCzjGU69cbpZ3BKXlL3tNg
+         +LiekR2dFQF+ENi0BhFTaEmzlFhEhFuCRDQzn+K2RW5H9Hge8cluznZEbEvvaZHgZ1
+         xhg8nWPc7Eso4c5FVj5gzuUXUM6EJkCE+LykTpsvjAFCiJWZ+6s0IKbIpePI/9hPM7
+         N4InSs3TjSvNQ8fEMlPSjK/REY4NENNBXzCgu2/PXTi4e85RAAyeS7i2g0RUttD3Lj
+         obiFCiG4WP19A==
+Date:   Tue, 27 Sep 2022 17:26:18 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        isdn@linux-pingi.de
+Subject: Re: [PATCH V3] mISDN: fix use-after-free bugs in l1oip timer
+ handlers
+Message-ID: <20220927172618.58f238d6@kernel.org>
+In-Reply-To: <20220924021842.71754-1-duoming@zju.edu.cn>
+References: <20220924021842.71754-1-duoming@zju.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927173702.5200-35-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Sep 2022 19:37:02 +0200, Krzysztof Kozlowski wrote:
-> Bindings example should be indented with 4-spaces.  Previous adjustment
-> missefd one spot.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-> ---
->  .../devicetree/bindings/pinctrl/qcom,sc8280xp-pinctrl.yaml    | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
+On Sat, 24 Sep 2022 10:18:42 +0800 Duoming Zhou wrote:
+> +	del_timer_sync(&hc->keep_tl);
+> +	del_timer_sync(&hc->timeout_tl);
+> +	cancel_work_sync(&hc->workq);
+> +	del_timer_sync(&hc->keep_tl);
+>  	cancel_work_sync(&hc->workq);
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Why not add a bit which will indicate that the device is shutting 
+down and check it in places which schedule the timer?
+I think that's much easier to reason about and we won't need to do 
+this rep cancel procedure.
