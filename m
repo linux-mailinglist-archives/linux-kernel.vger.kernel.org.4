@@ -2,110 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83285ED883
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 024D25ED88F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233560AbiI1JLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
+        id S233706AbiI1JNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233157AbiI1JLU (ORCPT
+        with ESMTP id S233681AbiI1JM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:11:20 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6E26583E;
-        Wed, 28 Sep 2022 02:11:14 -0700 (PDT)
-X-UUID: 24d95711adb845d893db5c7773fbffa7-20220928
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=YsMjo12w8koHdR4QXO2+wONVhzxLBlLGOX92rbAP98k=;
-        b=l0ttKZPsYJlfnkIMDd6v4jSaW17mW5wup/EOd+iLZoeFLJnogzno8jYgjWj/L4boXTvEYyYVz+O3H09HUIbTpSZj3ke+Jtkn9MlKbVnF4qiVJw1E0qQsklk7zW7ZsWK6XG6xtw3iDvPC0GCAFOjt67BNR7zgnhuaDOnbdrLXVjQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:e184917f-0514-485e-b92b-608e3f54ff38,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.11,REQID:e184917f-0514-485e-b92b-608e3f54ff38,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:39a5ff1,CLOUDID:eb5b5ba3-dc04-435c-b19b-71e131a5fc35,B
-        ulkID:220928171109OUVC8NVB,BulkQuantity:1,Recheck:0,SF:38|28|17|19|48|823|
-        824,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,C
-        OL:0
-X-UUID: 24d95711adb845d893db5c7773fbffa7-20220928
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <jianguo.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 919894323; Wed, 28 Sep 2022 17:11:09 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 28 Sep 2022 17:11:07 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 28 Sep 2022 17:11:05 +0800
-From:   Jianguo Zhang <jianguo.zhang@mediatek.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
+        Wed, 28 Sep 2022 05:12:56 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B699AF8F
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:12:01 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id i6so7809911pfb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:12:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=friendlyarm-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=qM+lTkdECo0J0ZhhLpB7ro4uoQDn3iCVEdOBITAk3Q0=;
+        b=PbwktMuA9cnH6kD/2b60Shhox4vCiksy2RgnXF4n0N++WVeqtQP3uKJjbZXmPcWycd
+         /oOrdyUzEyfsEbeQXWxqe+8Qcei09CtiKMCcP9eXPz7kIwtNzzyJ92XwOdNA8e7RO/IU
+         nO31V7N4yRxU4RDblc7g7j2Vckq6+seN1l8M+CWIveGbZ551OBWVznR6gG8/wKGL4fm6
+         Adt2bo9/E+AXUlKIvvKIjquDcHVZVFrq9v4gRU9XY7psNT0JW79uq5LZ308VWMBXdnxY
+         GTNP+EgRsUCr1u64Z7YiPD8Rt5VQvg/UrJgLs1Kq6moVWKC8PukCWjHuy0S4bbZoEGJy
+         uJ5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=qM+lTkdECo0J0ZhhLpB7ro4uoQDn3iCVEdOBITAk3Q0=;
+        b=yWVGvumJLpcc0jCa0P4tg0jn4VQxoztJe7KFb69LID5caUjAnBno+zsRs/UR2ffL2T
+         5BQhZrj/P4uFFfytmH3xYj78mL64/aaD/cLqXFpaB4y8cbtxmRrSR9POsb1X8u4r6RJ4
+         dZvVWi7ObSlQgqK7HccfknNQ4TQCTkn9BzVRBmJ3QLB0Ymxi5S1XyyeBCxtKNDYpZwmy
+         JK96OTLJDNZQfCvAdeogBlLDbPv7qp9AHT4F/fdquNslta07qray+sNBnPQY0EKI0AIL
+         xlRW0wVjy8GPcSKANEZcuQ2IfXPIUc5gkgjyC6j3QBNhEqvuWyZBr9XO3V5Dn38avXv5
+         /D+Q==
+X-Gm-Message-State: ACrzQf0h9JCVYGTR2WqfkY+L70XgVDoS4X1XJ2sl1aDzBOTM9yO/Rgnm
+        e5vU87ZUf/DxFWAiU+zNRo2OsQ==
+X-Google-Smtp-Source: AMsMyM4PI1Uli3TKdfuQ/NqySpdQGk1FyZCpOIAFT1qcz3BBww3dRiGNvNHyp7fzs2YP9h4+dR8/zA==
+X-Received: by 2002:a05:6a00:2185:b0:520:7276:6570 with SMTP id h5-20020a056a00218500b0052072766570mr33609781pfi.84.1664356320877;
+        Wed, 28 Sep 2022 02:12:00 -0700 (PDT)
+Received: from jensen.next ([113.109.77.159])
+        by smtp.gmail.com with ESMTPSA id d4-20020a170902654400b00176b84eb29asm3112069pln.301.2022.09.28.02.11.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 02:12:00 -0700 (PDT)
+From:   Jensen Huang <jensenhuang@friendlyarm.com>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Jianguo Zhang <jianguo.zhang@mediatek.com>
-Subject: [PATCH v6 4/4] net: stmmac: add a parse for new property 'snps,clk-csr'
-Date:   Wed, 28 Sep 2022 17:10:52 +0800
-Message-ID: <20220928091052.18490-5-jianguo.zhang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220928091052.18490-1-jianguo.zhang@mediatek.com>
-References: <20220928091052.18490-1-jianguo.zhang@mediatek.com>
+        Heiko Stuebner <heiko@sntech.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Chris Ruehl <chris.ruehl@gtsys.com.hk>
+Cc:     Jensen Huang <jensenhuang@friendlyarm.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: rockchip: add enable-strobe-pulldown to emmc phy on nanopi4
+Date:   Wed, 28 Sep 2022 17:11:29 +0800
+Message-Id: <20220928091129.20597-1-jensenhuang@friendlyarm.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Parse new property 'snps,clk-csr' firstly because the new property
-is documented in binding file, if failed, fall back to old property
-'clk_csr' for out-of-tree case
+Internal pull-down for strobe line (GRF_EMMCPHY_CON2[9]) was disabled
+by commit 8b5c2b45b8f0, which causes I/O error in HS400 mode.
 
-Signed-off-by: Jianguo Zhang <jianguo.zhang@mediatek.com>
+Tested on NanoPC-T4.
+
+Fixes: 8b5c2b45b8f0 ("phy: rockchip: set pulldown for strobe line in dts")
+Signed-off-by: Jensen Huang <jensenhuang@friendlyarm.com>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-index 9f5cac4000da..4c60a89460c8 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-@@ -444,7 +444,9 @@ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
- 	 * or get clk_csr from device tree.
- 	 */
- 	plat->clk_csr = -1;
--	of_property_read_u32(np, "clk_csr", &plat->clk_csr);
-+	if (of_property_read_u32(np, "snps,clk-csr", &plat->clk_csr))
-+		of_property_read_u32(np, "clk_csr", &plat->clk_csr);
-+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
+index 278123b4f911..b6e082f1f6d9 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
+@@ -167,6 +167,7 @@ &cpu_l3 {
+ };
  
- 	/* "snps,phy-addr" is not a standard property. Mark it as deprecated
- 	 * and warn of its use. Remove this when phy node support is added.
+ &emmc_phy {
++	rockchip,enable-strobe-pulldown;
+ 	status = "okay";
+ };
+ 
 -- 
-2.25.1
+2.37.0
 
