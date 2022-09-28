@@ -2,196 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97275ED448
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 07:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289715ED44B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 07:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232438AbiI1Fgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 01:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
+        id S229950AbiI1Fiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 01:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbiI1Fga (ORCPT
+        with ESMTP id S229567AbiI1Fiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 01:36:30 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2048.outbound.protection.outlook.com [40.107.255.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE193118DD6
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 22:36:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ld2YLr11YIopsleAC3Z4npn/TGgTTvDFUqUCwPy/cIrjQhEBwQnJIlk/Qa4lcDs2f6h73tUY2S1M6lJ+Zyk1ubUPQdrnV9sHdRHGL443QJJO6mcnekIKtYVBNBXUS0JJjl9sykkcoZWLXJYy97Rl3/MQukUW0KCwKN1/3L0fI5D+IGTwFabbna1Hys8RSI5LLrknydgZMSkLfpcQEwPCyJJacwe12AHnkE98RvEPH8LaklBp6U5TK82mUFqHHb4E9bpeTU9WJ9+a9mpSwqnk5tM6VWdebEUB1wH6Z/huG5wjVMnoM8m5Ue2yEdeCSnj3R1/2A2WgiB3tK9i/QKLtTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XBDRrRic8NAI0snkOSzb6cLkNRamUCglgUPqsIpnc00=;
- b=kKQZepAgNbC6yWfEQo/G1Bf9PNo73m88Q64zziSyaNdT5V+LP8oX6kIOxR0kS14rQYGUKHzNyQR81LG/keAlKmVx3/pB67rbiBHiCQDnx/TuonDOSUE5iIY9kPjARpS38+oaAkdLEjbcDSG6T1WbW6dvkzisko4nT/px3YoExI0BokcCBT5q3Nsn6IdBmvLbl3pifX3jkDQa3jBxd7+fjNAG/GA4kWQUgl+ngt9rRQCJhYCTu1MpwpxXvn3AcBhrtQprfRwLXgK7lvkGWennW7dr6MC3z5YMnbgBpwdpl+uCTdN5LVksw0MD0W3wCqNlZK4RphPWpU9h0ewB8faGhw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=jaguarmicro.com; dmarc=pass action=none
- header.from=jaguarmicro.com; dkim=pass header.d=jaguarmicro.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jaguarmicro.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XBDRrRic8NAI0snkOSzb6cLkNRamUCglgUPqsIpnc00=;
- b=IWvMsKb5mCN41QOjKmkQtCDk8jTN6Q+nB5hQMx1Xf/eiYUC1Mz4T2LX6YCzZOIEkI/bkSz2Orb/U/ePyEP+/gyUsZdjhFf5ydEhwrJFDfGosFszE05MUiq1mAPCVsf5MgGv9VzTDM8ySAUk5G3npSx3iHDs0SmUpxCeFgqS63uKy8Jglkq3HcaUzI5+91rtSTQGEmsfxjG6MAnDcWEUWt3gqdEsWKG3HnxDRkwwpvVRwqJXOjN19fY9S5/+E+Q/a+qkvGvfsn1kpDw+Mk73iF6gC/FbG4V0BPlfHKBxbw55OQN/BHfmhOqZhYpMV5nOmjOJYAh0/tVtdxcd/7Ti/ow==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=jaguarmicro.com;
-Received: from TY2PR06MB3424.apcprd06.prod.outlook.com (2603:1096:404:104::19)
- by SI2PR06MB5243.apcprd06.prod.outlook.com (2603:1096:4:1e3::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Wed, 28 Sep
- 2022 05:36:23 +0000
-Received: from TY2PR06MB3424.apcprd06.prod.outlook.com
- ([fe80::aa83:33dc:435c:cb5d]) by TY2PR06MB3424.apcprd06.prod.outlook.com
- ([fe80::aa83:33dc:435c:cb5d%6]) with mapi id 15.20.5654.026; Wed, 28 Sep 2022
- 05:36:23 +0000
-From:   Angus Chen <angus.chen@jaguarmicro.com>
-To:     jasowang@redhat.com, mst@redhat.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Angus Chen <angus.chen@jaguarmicro.com>
-Subject: [PATCH v2] virtio_pci: avoid to request intx irq if pin is zero
-Date:   Wed, 28 Sep 2022 13:35:22 +0800
-Message-Id: <20220928053522.440-1-angus.chen@jaguarmicro.com>
-X-Mailer: git-send-email 2.33.0.windows.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0030.apcprd02.prod.outlook.com
- (2603:1096:4:1f4::8) To TY2PR06MB3424.apcprd06.prod.outlook.com
- (2603:1096:404:104::19)
+        Wed, 28 Sep 2022 01:38:52 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E20119185
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 22:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1664343531; x=1695879531;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dsGUSlKQY83yG8ByJzOzvwk4eDnzcHhajDUYsIpFHEE=;
+  b=NCYqqAkNsHGPQmE5p3XWXqtw28Ivik7s0iGnKV+7XCCXF5RwkhGNJ+jB
+   Qq6Dv/+mq5HR4OPfnkAUnuPrd0hnfKq3KzXMXOQVxUxh1+JKbD1mMfghI
+   VQRW47HAsPo09tG3Su9fSbczlwQWLf0ymYdEE2aO6iU7VoFdYg55xcjYC
+   99ga9o04GzC1s7ulrPddrZwjrGQuB1EIDmo/OfJ4KKJAPad9o5c4S468D
+   Fn/zOFWKhPECnDJcOypgBtJ7Nabrkhia26S3uA3nJESjTv3btUejUDyNm
+   FHmMbvjVo3+mt+0DBAh01WdDjTxoD35rzfIvGMcqn+xhpxs7eBTcCF2He
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,351,1654531200"; 
+   d="scan'208";a="212460816"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Sep 2022 13:38:51 +0800
+IronPort-SDR: Wf6GmzE4kD10Q9gmfCXL0Me37rOUv4okhH1ySdG59k4gcjXsMidWxdsHLPeKgiDXqvpiaeLvLH
+ vy67Vj0LXQFzDaJfd3elNKvHigRB3x+s8q6qRkNG/A5tNVzHsObQKbds0rjR3XdwQjzqdaxT35
+ V64ZzCRu2lYqcWdgb2pnzXMjpEiZbzlspH1nQuaaS/XTseqnL/OBudbDRefW+WwsM0yL5UbZyj
+ 3jJOdIFrgxTP4uZ5Uu/yAmFA/id/umCQGQkUu+tkbRAkSBqkmkOOAiiZfeMlTcOy2MMEWXp+Aq
+ OuTrwTRv2UKF5A8HwE2yWTaR
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Sep 2022 21:58:46 -0700
+IronPort-SDR: skwtK30HIL2ghUGMAeZxZ9isBSTR1xwVQ9EYSdM/YIKQH+1vnXDt8Rg8eh3IAFGSNFx3tH4P65
+ JaFgayA2oUzLKqP/PPcLraZYE2d9ZDbdpzaumtdSGW8C13VTZwCHSE8go3sMQcHUTdacsEApgs
+ WVoL9N01tCPXap8eo81omt+VyrL0UUEx2jZX4HLGQrh3Ebsr9lFLar/6C4CtdNWHS5YFMx/BjU
+ a26isBMx4hvY/CMCkepzfxhR86JamgTzoAS8ErKGX921VFmW7NAPkRoCisPkusDnVnHRgqNqTg
+ Kyo=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Sep 2022 22:38:51 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MclfL3kRrz1Rwrq
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 22:38:50 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1664343529; x=1666935530; bh=dsGUSlKQY83yG8ByJzOzvwk4eDnzcHhajDU
+        YsIpFHEE=; b=g6ywg/DZQJ/ytCHfq8Tt8rr36ttuTYuVlZu6WAw2PpV6QG6B2Yn
+        8t7SNSxY3ju3vz9LEPxOQd2XykEUaPN205Krk7jC+wFnnDBpp0M/jwSCNvvsjMcZ
+        bZ3la47t3mUo6MEiRJL4UkLsjNI8f9v/mz57V5mOYzGUc0QHYk390h7cv4grSbR6
+        DD/+lczqMBKJdjGg1hrUxWHrylE8KhMFfbt658ZVWHMCSRksWWNqar7uaSXNca69
+        16dYRkarCRbnOVCVNe3DkUg9pFLF9q4yhLdvVXN1Xy8ojRTSBvaVABTDfItVxlKs
+        nRq51NhWz0WKTQ17VHRTwE5lgPNS8s4bLiQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id jsqc8tSYUdUw for <linux-kernel@vger.kernel.org>;
+        Tue, 27 Sep 2022 22:38:49 -0700 (PDT)
+Received: from [10.225.163.91] (unknown [10.225.163.91])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MclfH6X7zz1RvLy;
+        Tue, 27 Sep 2022 22:38:47 -0700 (PDT)
+Message-ID: <b3bae3fd-a04c-3674-c4bf-9ddc6a0a9ad0@opensource.wdc.com>
+Date:   Wed, 28 Sep 2022 14:38:45 +0900
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY2PR06MB3424:EE_|SI2PR06MB5243:EE_
-X-MS-Office365-Filtering-Correlation-Id: e30123c4-620b-4e45-aabe-08daa11360ae
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FZmlIZRLRB0D4hPHI9YOHSnvBtbMVgXS7P98hZepzrHv8Qox7nEzsbA9SJK+kZNdFLlOq33xVtdfmux8expsIE75mxnwmJ9UREtYrIkqZhTUas2K/EgvIisgQ1XMIQyAo5WrSe1LS3PzhMBfebuuq7MXVpasYM3RqW0rpUREwUrB22YVEOgWK2G8eM6rxvgSMfH3H49UPgwlRFPrVfvQxBZlHC10zd6e5UifSu1REVBNfK2sh5mYjBUtU5dGfn+EDgL5A7Mg1PlZC3cGfJNbapaWsRjnnHhffDgVpfsXBKgkqMYRbmxkfLJko84yBnKI4fDHUwgrhSH9iwWZ7ggQpQ2Brr6Sj2GHcL57uEUVJ723u8o6vKWREjRdJCtX2UzcsGRYE2pi8E5E7JauPv5nc1vxbuyWoMQ+VXjKoh9/sbtVQSuXYINgNBU0IbqBhYiRHXzcLKwrI0hJh2GGUR3cBASOPEyPDsbCzGfPtN+CWthaA8Z9enAEZiEqZ5QowXJAzf7UzNiUwsknMfHqMZzVHI2ASaK91Bx1ubqmIO1dHs3vsn0tXdz6OCU7ihEe9CHvGm6F1U004SM94vOs6D5mnP4o5atghQUEqYs4A3XT2V/+Tj+Pj98YYIDDJU/xY3J2cbbHcuS+5cgZAJmNHBkmhRY0P1UWBakT2mCOJid29MRxxF5qBNBDx9JhvBv+iVxSftTrkKy2h5z6qw70ysNfeFylk7NmQC9gUqk8/g+1NfAaaaDAKhoE1xirHTEJjxOxVKbhIMK63sQdkK6Bld3sNwTpaZFb4wKFhAtr7CRnGSM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR06MB3424.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(376002)(346002)(396003)(39840400004)(451199015)(66556008)(2906002)(8936002)(66946007)(5660300002)(4326008)(8676002)(66476007)(38350700002)(6486002)(107886003)(6506007)(478600001)(38100700002)(6512007)(26005)(52116002)(2616005)(186003)(1076003)(41300700001)(316002)(44832011)(86362001)(83380400001)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WUJEZ7I4IhwZ4DZsF2z09VZ1FGgesOAuznIbYC85y1AeafW390WcFZbv+q+T?=
- =?us-ascii?Q?cLZWn6sk7neNh9fIYyjMHStWFw6F3t4a3tAHlPIzHsW4m0Gffk2zqBQS2Nt1?=
- =?us-ascii?Q?vh2UBByCnebACdDLm5RaKHXli85809G2vBDiXdwDRIroYmRJoBPwTStUU/CE?=
- =?us-ascii?Q?dtqXVqeY6NW9IXShBsKBBZegfgFXUV4N4ux7/EFmKAFMFk1yYp5GAT3gZTGp?=
- =?us-ascii?Q?T3z2qFopltRpokJDpdo7UDXx49Al6RdhvgRpjzGr7u1Mep2fM5Vd51Xzsdsb?=
- =?us-ascii?Q?lXzczAOaCknBjeNbh0M/VSSY3q0Y8eNT27hfhFLwQnbDL3qwCXD4QfSXNxEo?=
- =?us-ascii?Q?uxNXMPGEi3UGOgc11CbKQuZk3tjVRxx+pXZoJgsmLJudCMubHr22tstY6DuN?=
- =?us-ascii?Q?9M09GIJo8MscLqmsrJFgm5HacPBl+p2mqVyFVHS8qtKSWusleE1ps8hNVzZs?=
- =?us-ascii?Q?ZV+7OyHqKcG+OyBrnL9g3c/TiAcbTZj3dLYJRa7oGtFdNJcgk70quCd4znpK?=
- =?us-ascii?Q?Q3b3WOlmBkmQw9TewGP4pOkII2tbqK2WMcvGcicEy4NaQ5Qy9XqPjNvq0/52?=
- =?us-ascii?Q?zIHk9jO3VD341FiPtjB4DDDUOz94pj0IlXfE0AqjPO8LFDF5UNgXXHiuURr/?=
- =?us-ascii?Q?YF4ubaFCgxs3KbiEQOtt6TO+FgRbUJf79onKZzsUCUWhR8JCtziEbXZUzEoy?=
- =?us-ascii?Q?8jmICKLU7Jet5E5xZ5eaXywq6fJpc7WpiwZCsbrlgY0OOCOD6SssnNNJ7ujW?=
- =?us-ascii?Q?LE25pTnY8rRs3QRbtUfH5LzXv2NiuMH4gbJ5mySY4/YvsDk1i1NMEr2nREkW?=
- =?us-ascii?Q?TgSZrgunsVouuPe3h+KvGeC5Hi6JI0QtN6zx+KOyjEHdschRRuimhHHeu3Xx?=
- =?us-ascii?Q?KnoG2CyKwd8v6V0giiXxNHzuvx1i5jv3wh5eYHyIU8PrmIJMHJ7McUygqJq9?=
- =?us-ascii?Q?fE+zcsevMEc+n/4YQ8SpYn5aK19ncEP1IUtPkhZf1I/rz3lzIL70ONkVuwqU?=
- =?us-ascii?Q?oNC5zM3Y33++o7gxxzafN3S4pSwAJa69t7SE4IzNPZSc8p5M1ClH1OEOi4Ji?=
- =?us-ascii?Q?REmy4qVpp//0iepDi9G3u0Z40dXv+WlWpIc5ne6Qt7kkCbPHyawhvJDJLK41?=
- =?us-ascii?Q?vbm88sCS1j1v4D2i2e5Qr89MAqjt2UiJwu2EI8g+GpMA8VV9P+R4U/gMzvcz?=
- =?us-ascii?Q?AMpRrOxQ3i3LHy4moW9nVOVVt8iDyY37PeSOZpiLHRxatVPnx9A6JJXa4RsP?=
- =?us-ascii?Q?BVuvFrXoGw1lQnRaA0+9XwKuIfOJC8zpBLp6zEcs2A87A5cNdy52cOFGuP8F?=
- =?us-ascii?Q?DIUMATI2aFslYMltmWyDhXTnJLWX3cRjvim/ASMHfCclddWlfY9Y5Hu5bj+K?=
- =?us-ascii?Q?gKEuxab5Ba63MtgkLeFnWeYiBhQrhjzbFVwmdynJNco862eMGG8h4z748ZlI?=
- =?us-ascii?Q?wZ9jj+fL24DXzW5T2bLGxv88Ro5jDCul2aLpGOgQpxl23OV20EhnBiIaEnNL?=
- =?us-ascii?Q?H7g6u4l9fDV9MtWywbXDDTDAlnpT6zkJZALOQgFDJdJeQr4lrTV5wc7Y/vKQ?=
- =?us-ascii?Q?7NxqjUFQRBQEXAdnZopalEyO5e9TcCy1Cw+HRhU5+Hhy3tG2kuiV0rulF8oO?=
- =?us-ascii?Q?IQ=3D=3D?=
-X-OriginatorOrg: jaguarmicro.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e30123c4-620b-4e45-aabe-08daa11360ae
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR06MB3424.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 05:36:22.9387
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 1e45a5c2-d3e1-46b3-a0e6-c5ebf6d8ba7b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vbcCQT5uJQ+2y4rFiRow4UsVYf3ypOv24tYWfCF6fv8zyvZ4GY0RJ4/je3jGpZ5tVHYIuSy6lsRE7VRU0QH8JObAhSv++jE6l5pLGxpCioE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5243
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v5 3/8] scsi: pm8001: use sas_find_attached_phy_id()
+ instead of open coded
+Content-Language: en-US
+To:     Jason Yan <yanaijie@huawei.com>, martin.petersen@oracle.com,
+        jejb@linux.ibm.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hare@suse.com, hch@lst.de, bvanassche@acm.org,
+        john.garry@huawei.com, jinpu.wang@cloud.ionos.com,
+        Jack Wang <jinpu.wang@ionos.com>
+References: <20220927123926.953297-1-yanaijie@huawei.com>
+ <20220927123926.953297-4-yanaijie@huawei.com>
+ <caa8552b-3bb4-5824-aa99-82386d367479@opensource.wdc.com>
+ <b58846fa-5c1c-ad73-a363-68ddf99d4da5@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <b58846fa-5c1c-ad73-a363-68ddf99d4da5@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The background is that we use dpu in cloud computing,the arch is x86,80
-cores.We will have a lots of virtio devices,like 512 or more.
-When we probe about 200 virtio_blk devices,it will fail and
-the stack is print as follows:
+On 9/28/22 11:17, Jason Yan wrote:
+> 
+> On 2022/9/28 6:57, Damien Le Moal wrote:
+>> On 9/27/22 21:39, Jason Yan wrote:
+>>> The attached phy id finding is open coded. Now we can replace it with
+>>> sas_find_attached_phy_id(). To keep consistent, the return value of
+>>> pm8001_dev_found_notify() is also changed to -ENODEV after calling
+>>> sas_find_attathed_phy_id() failed.
+>>>
+>>> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+>>> Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+>>> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+>>> ---
+>>>   drivers/scsi/pm8001/pm8001_sas.c | 18 ++++++------------
+>>>   1 file changed, 6 insertions(+), 12 deletions(-)
+>>>
+>>> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+>>> index 8e3f2f9ddaac..042c0843de1a 100644
+>>> --- a/drivers/scsi/pm8001/pm8001_sas.c
+>>> +++ b/drivers/scsi/pm8001/pm8001_sas.c
+>>> @@ -645,22 +645,16 @@ static int pm8001_dev_found_notify(struct domain_device *dev)
+>>>   	pm8001_device->dcompletion = &completion;
+>>>   	if (parent_dev && dev_is_expander(parent_dev->dev_type)) {
+>>>   		int phy_id;
+>>> -		struct ex_phy *phy;
+>>> -		for (phy_id = 0; phy_id < parent_dev->ex_dev.num_phys;
+>>> -		phy_id++) {
+>>> -			phy = &parent_dev->ex_dev.ex_phy[phy_id];
+>>> -			if (SAS_ADDR(phy->attached_sas_addr)
+>>> -				== SAS_ADDR(dev->sas_addr)) {
+>>> -				pm8001_device->attached_phy = phy_id;
+>>> -				break;
+>>> -			}
+>>> -		}
+>>> -		if (phy_id == parent_dev->ex_dev.num_phys) {
+>>> +
+>>> +		phy_id = sas_find_attached_phy_id(&parent_dev->ex_dev, dev);
+>>> +		if (phy_id == -ENODEV) {
+>>>   			pm8001_dbg(pm8001_ha, FAIL,
+>>>   				   "Error: no attached dev:%016llx at ex:%016llx.\n",
+>>>   				   SAS_ADDR(dev->sas_addr),
+>>>   				   SAS_ADDR(parent_dev->sas_addr));
+>>> -			res = -1;
+>>> +			res = phy_id;
+>>
+>> Nit:
+>>
+>> res = -ENODEV would be a lot clearer.
+>> Or do:
+>>
+>> 		if (phy_id < 0) {
+>> 			...
+>> 			ret = phy_id;
+>> 		} ...
+>>
+> 
+> This boils down to personal preferences. I'd like to change to the 
+> latter one if no objections.
 
-[25338.485128] virtio-pci 0000:b3:00.0: virtio_pci: leaving for legacy driver
-[25338.496174] genirq: Flags mismatch irq 0. 00000080 (virtio418) vs. 00015a00 (timer)
-[25338.503822] CPU: 20 PID: 5431 Comm: kworker/20:0 Kdump: loaded Tainted: G           OE    --------- -  - 4.18.0-305.30.1.el8.x86_64
-[25338.516403] Hardware name: Inspur NF5280M5/YZMB-00882-10E, BIOS 4.1.21 08/25/2021
-[25338.523881] Workqueue: events work_for_cpu_fn
-[25338.528235] Call Trace:
-[25338.530687]  dump_stack+0x5c/0x80
-[25338.534000]  __setup_irq.cold.53+0x7c/0xd3
-[25338.538098]  request_threaded_irq+0xf5/0x160
-[25338.542371]  vp_find_vqs+0xc7/0x190
-[25338.545866]  init_vq+0x17c/0x2e0 [virtio_blk]
-[25338.550223]  ? ncpus_cmp_func+0x10/0x10
-[25338.554061]  virtblk_probe+0xe6/0x8a0 [virtio_blk]
-[25338.558846]  virtio_dev_probe+0x158/0x1f0
-[25338.562861]  really_probe+0x255/0x4a0
-[25338.566524]  ? __driver_attach_async_helper+0x90/0x90
-[25338.571567]  driver_probe_device+0x49/0xc0
-[25338.575660]  bus_for_each_drv+0x79/0xc0
-[25338.579499]  __device_attach+0xdc/0x160
-[25338.583337]  bus_probe_device+0x9d/0xb0
-[25338.587167]  device_add+0x418/0x780
-[25338.590654]  register_virtio_device+0x9e/0xe0
-[25338.595011]  virtio_pci_probe+0xb3/0x140
-[25338.598941]  local_pci_probe+0x41/0x90
-[25338.602689]  work_for_cpu_fn+0x16/0x20
-[25338.606443]  process_one_work+0x1a7/0x360
-[25338.610456]  ? create_worker+0x1a0/0x1a0
-[25338.614381]  worker_thread+0x1cf/0x390
-[25338.618132]  ? create_worker+0x1a0/0x1a0
-[25338.622051]  kthread+0x116/0x130
-[25338.625283]  ? kthread_flush_work_fn+0x10/0x10
-[25338.629731]  ret_from_fork+0x1f/0x40
-[25338.633395] virtio_blk: probe of virtio418 failed with error -16
+Either work for me. The point is to preferably have something consistent
+with the return value from sas_find_attached_phy_id() and not playing
+games with it. So yes, the second one is fine.
 
-The log :
-"genirq: Flags mismatch irq 0. 00000080 (virtio418) vs. 00015a00 (timer)"
-was print because of the irq 0 is used by timer exclusive,and when
-vp_find_vqs call vp_find_vqs_msix and return false twice for
-whatever reason,then it will call vp_find_vqs_intx for the last try.
-Because vp_dev->pci_dev->irq is zero,so it will be request irq 0 with
-flag IRQF_SHARED,we will get a backtrace like above.
+> 
+> Thanks,
+> Jason
+> 
+>> No ?
+>>
+>>> +		} else {
+>>> +			pm8001_device->attached_phy = phy_id;
+>>>   		}
+>>>   	} else {
+>>>   		if (dev->dev_type == SAS_SATA_DEV) {
+>>
 
-according to PCI spec , Devices (or device functions)
-that do not use an interrupt pin must put a 0 in this register.
-So if vp_dev->pci_dev->pin is zero, maybe we should not request legacy
-interrupt.
-
-Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
-Suggested-by: Michael S. Tsirkin <mst@redhat.com>
----
-v2:
-- Decide whether to request an intx interrupt by pin instead of irq
-- suggested by mst
-
-v1:https://lore.kernel.org/virtualization/20220928000228-mutt-send-email-mst@kernel.org/T/#u
-
- drivers/virtio/virtio_pci_common.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
-index ad258a9d3b9f..81225e503e69 100644
---- a/drivers/virtio/virtio_pci_common.c
-+++ b/drivers/virtio/virtio_pci_common.c
-@@ -362,6 +362,9 @@ static int vp_find_vqs_intx(struct virtio_device *vdev, unsigned int nvqs,
- 	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
- 	int i, err, queue_idx = 0;
- 
-+	if (vp_dev->pci_dev->pin == 0)
-+		return -EINVAL;
-+
- 	vp_dev->vqs = kcalloc(nvqs, sizeof(*vp_dev->vqs), GFP_KERNEL);
- 	if (!vp_dev->vqs)
- 		return -ENOMEM;
 -- 
-2.17.1
+Damien Le Moal
+Western Digital Research
 
