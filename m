@@ -2,74 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BF25ED269
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8C95ED270
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbiI1BC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 21:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        id S231248AbiI1BHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 21:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbiI1BCZ (ORCPT
+        with ESMTP id S229818AbiI1BHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 21:02:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584091DB57D;
-        Tue, 27 Sep 2022 18:02:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2796461BEF;
-        Wed, 28 Sep 2022 01:02:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7BC2C433D6;
-        Wed, 28 Sep 2022 01:02:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664326942;
-        bh=NF19G0GHakdi9PoRJpWc5n7cXcIUFzCnv9eq/h2pLEU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XevUr4e3FCNI6Sp7E0pMrDRbcCzXQs5gpptgPowQY1jDRZftEcieov9BbqUkVjR00
-         swzRcX+BniaJTQAvMHH07NjwGL2U1t7BtcgLlDKRNO61RBe5+Hmsamp/PArBkvmuh+
-         W6q7f0rZ9FqQT4pEYg7ZswAR2xd/0WFu9t3Dc8eib9sdU3JaApRTtxOiHFP28D4QCv
-         7gsDNKdM4EBgkARxgyYXoUbexiUq5p+lDh2mWdi5/gK99uR4+fI7JW3xAEiCL1U9Ck
-         4IvTxc7pRGlqlwGiLEacyyInl8bt6Ebc1FZjnd2G363ZVAXUj/inXYCIWsgWsXZJY4
-         0/i/cQ6tkybYg==
-Date:   Tue, 27 Sep 2022 18:02:20 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        kernel test robot <lkp@intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Jander <david@protonic.nl>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v7 5/7] ethtool: add interface to interact with
- Ethernet Power Equipment
-Message-ID: <20220927180220.2169ff2a@kernel.org>
-In-Reply-To: <20220926112500.990705-6-o.rempel@pengutronix.de>
-References: <20220926112500.990705-1-o.rempel@pengutronix.de>
-        <20220926112500.990705-6-o.rempel@pengutronix.de>
+        Tue, 27 Sep 2022 21:07:34 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73A3D491D9;
+        Tue, 27 Sep 2022 18:07:28 -0700 (PDT)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx9OEAnjNj5wMjAA--.64134S3;
+        Wed, 28 Sep 2022 09:06:09 +0800 (CST)
+Subject: Re: [PATCH 0/3] perf: Add more syscalls to benchmark
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+References: <1662433577-23266-1-git-send-email-yangtiezhu@loongson.cn>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <8eed7586-0f47-a576-195f-0180826a67f3@loongson.cn>
+Date:   Wed, 28 Sep 2022 09:06:03 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <1662433577-23266-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Cx9OEAnjNj5wMjAA--.64134S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrKrWUXrW5ur1Dtw13urWfKrg_yoW3GFg_Aa
+        1IkrWDtrWxAFnayFy7Cwn8ZFyUtFW5J3ykAF97G347Gw4UXr98JFn09rn5A3WrGF4kXrZx
+        Ga1UZr1rArWUKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbIkYjsxI4VWxJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+        C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJV
+        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG
+        8wCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UEsjbUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Sep 2022 13:24:58 +0200 Oleksij Rempel wrote:
-> +static int pse_get_pse_attributs(struct net_device *dev,
 
-nit: missing e in attributes
+
+On 09/06/2022 11:06 AM, Tiezhu Yang wrote:
+> Tiezhu Yang (3):
+>   perf bench syscall: Introduce bench_syscall_common()
+>   perf bench syscall: Add close syscall benchmark
+>   perf bench syscall: Add execve syscall benchmark
+>
+>  tools/perf/bench/bench.h   |  2 ++
+>  tools/perf/bench/syscall.c | 76 +++++++++++++++++++++++++++++++++++++++++++---
+>  tools/perf/builtin-bench.c |  2 ++
+>  3 files changed, 76 insertions(+), 4 deletions(-)
+>
+
+Hi all,
+
+Any more comments? Do you think this patch series [1] is useful?
+If yes, I will send v2 to fix the build error about undeclared
+__NR_getppid reported by kernel test robot.
+
+[1] 
+https://lore.kernel.org/lkml/1662433577-23266-1-git-send-email-yangtiezhu@loongson.cn/
+
+Thanks,
+Tiezhu
+
