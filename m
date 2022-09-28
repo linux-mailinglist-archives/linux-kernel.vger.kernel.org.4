@@ -2,80 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184E35EE0B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895745EE0B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233622AbiI1PkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
+        id S233793AbiI1Pk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233512AbiI1PkG (ORCPT
+        with ESMTP id S234347AbiI1PkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:40:06 -0400
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902336CF65;
-        Wed, 28 Sep 2022 08:40:05 -0700 (PDT)
-Received: by mail-wm1-f41.google.com with SMTP id o20-20020a05600c4fd400b003b4a516c479so1231622wmq.1;
-        Wed, 28 Sep 2022 08:40:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=HSBLIy2wOhHMm573WWPq9D1e9V4c0tZPrxVrvT9NSSE=;
-        b=IvUBwufrzJozmf5CVsD4L74Hj5QVaHocrxSpCxtIPubwMT+iAFTq3i6/kSwFg5mXfO
-         ZRx09QukJYLUlUR2bu05p4SxeydhGlk+3E3AijV0ESAqaxjOb4rrywfP0F1yUFWFLXnu
-         LKP9sMx3hYNdbDMK/mCTaGoAWoqKysneM9EX4t4YDvI10fyBrAljNlx+6asNtJpYZMy3
-         b+MfNuYp5O1k4wjHr3IX5dqWGTrqwy0o+AbafhNvz+yO/+LOMZGmOn8YWDtcBoXCO8e5
-         5LpJEA16Zc7C73U4LXr685p0O4gy7SgJtCTO5Dr9kAX7QhyH+K61Ocqk1P6pHrHgMeY+
-         Jx1w==
-X-Gm-Message-State: ACrzQf0DOKFJwKMHEYxjqE/5CLbXRlrLJWWfsQA3AWTwgQCn5vu19oEx
-        7K2yNvlv1o/o1J1fbaUOaAuk0YJukGA=
-X-Google-Smtp-Source: AMsMyM6Nti507HecckDJdH/30Vu0j/BfTGxBT7cEv75He4SA260GFty47XQmD/b/IgslxSb9dS8tGw==
-X-Received: by 2002:a05:600c:5014:b0:3b5:889:58a5 with SMTP id n20-20020a05600c501400b003b5088958a5mr7340624wmr.140.1664379604198;
-        Wed, 28 Sep 2022 08:40:04 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id ay22-20020a05600c1e1600b003b339438733sm2210557wmb.19.2022.09.28.08.40.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 08:40:03 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 15:40:01 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Wei Liu <wei.liu@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        live-patching@vger.kernel.org
-Subject: Re: [PATCH v10 00/27] Rust support
-Message-ID: <YzRq0Xz6yW+iwPaO@liuwe-devbox-debian-v2>
-References: <20220927131518.30000-1-ojeda@kernel.org>
- <YzRjEc9zQbHeWPFL@liuwe-devbox-debian-v2>
- <CANiq72kq4RR4suFjGUZeg6ua8X=KU5aBPKPgjRH29hOVmDiNLQ@mail.gmail.com>
+        Wed, 28 Sep 2022 11:40:24 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195337675E;
+        Wed, 28 Sep 2022 08:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664379621; x=1695915621;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BIRTashmeCAkOF6Z1LglIdqt0BwFvyi02lwGwZN6jaw=;
+  b=EXwcO76MiCA2u3pjlG5kjZcSiOarShuZyR08GLr5kkCWArm5f3JYlauG
+   fQfyXQHRgfppWqiKgO/sUBvVlQFcVX+McQ5rE8BY55V9qnhvVADOUh2im
+   wsHqVUmXGHqa4N+v6t+Zqzw9VsiMsMlLIX7efwzjfmmi5A6l5CdexVf/O
+   ABG7o2/hKEwbr8aY1PvuWj/+CvNR04MY18L1N88u33w8BroUaamYUJyA8
+   Z0JPXy/+WbzU+m52C/B0znjS+H+YaTwpslpmSE1FExMRSptC5T6eONFYf
+   mUkot57BxvLSpf44tfji4q9SvfyRwe9E6BMrYoQ7b3N8D3dmogs0NN7YI
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="299234936"
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="299234936"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 08:40:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="652724445"
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="652724445"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 28 Sep 2022 08:40:19 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1odZAX-0090As-2V;
+        Wed, 28 Sep 2022 18:40:17 +0300
+Date:   Wed, 28 Sep 2022 18:40:17 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] pwm: core: Replace custom implementation of
+ device_match_fwnode()
+Message-ID: <YzRq4fGcWACBi8WP@smile.fi.intel.com>
+References: <20220927172258.62418-1-andriy.shevchenko@linux.intel.com>
+ <YzRZp4e48XK6jAZD@orome>
+ <YzRfAE58ZMI/MC0K@smile.fi.intel.com>
+ <YzRg9cLVlfZfKhws@orome>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiq72kq4RR4suFjGUZeg6ua8X=KU5aBPKPgjRH29hOVmDiNLQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YzRg9cLVlfZfKhws@orome>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 05:34:39PM +0200, Miguel Ojeda wrote:
-> On Wed, Sep 28, 2022 at 5:07 PM Wei Liu <wei.liu@kernel.org> wrote:
-> >
-> > I cannot find this patch in my inbox. That's probably filtered out by
-> > the mailing list since it is too big.
+On Wed, Sep 28, 2022 at 04:57:57PM +0200, Thierry Reding wrote:
+> On Wed, Sep 28, 2022 at 05:49:36PM +0300, Andy Shevchenko wrote:
+> > On Wed, Sep 28, 2022 at 04:26:47PM +0200, Thierry Reding wrote:
+> > > On Tue, Sep 27, 2022 at 08:22:58PM +0300, Andy Shevchenko wrote:
+> > > > Replace custom implementation of the device_match_fwnode().
+> > 
+> > > I really don't see the point in having an exported symbol for this. It's
+> > > a simple comparison and the result is even longer than the original.
+> > 
+> > Longer doesn't always mean worse.
+> > 
+> > > The
+> > > *only* reason why this helper exists seems to be because it is getting
+> > > used in *_find_device() callbacks.
+> > 
+> > Yes and no. Initially for the purpose to be a callback it can be reused.
+> > The point is that it hides the dev_fwnode() machinery behind and taking
+> > into account ongoing discussion about constification of the dev_fwnode()
+> > we might need to touch this or similar places to avoid problems with
+> > compiler.
 > 
-> The patch reached lore in case you want to double-check:
-> 
->     https://lore.kernel.org/lkml/20220927131518.30000-8-ojeda@kernel.org/
-> 
+> Maybe next time use that argument in the commit message. That's much
+> more convincing than a useless "replace custom implementation" because
+> that just makes it look like you're doing this to pass the time or
+> something.
 
-I eyeballed it. Looks like it is the same one on GitHub.
+Noted.
+
+> Applied, with a slightly updated commit message, thanks.
+
+Thank you!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
