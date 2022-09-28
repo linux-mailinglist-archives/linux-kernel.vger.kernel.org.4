@@ -2,93 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D425ED426
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 07:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7517A5ED42B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 07:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbiI1FOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 01:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S229846AbiI1FQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 01:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiI1FOK (ORCPT
+        with ESMTP id S231642AbiI1FQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 01:14:10 -0400
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D6A11E0D1;
-        Tue, 27 Sep 2022 22:14:09 -0700 (PDT)
-Received: by mail-wm1-f51.google.com with SMTP id e18so7794339wmq.3;
-        Tue, 27 Sep 2022 22:14:09 -0700 (PDT)
+        Wed, 28 Sep 2022 01:16:46 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEBA127C9C
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 22:16:45 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-131a17bf7fdso1323637fac.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 22:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date;
+        bh=RRxMxuisd8lNkNGWBlf9ZKEk1omHCIF/OzgSnFJx1kM=;
+        b=rp3aMO0gAAhK0s2GVDrsTX/gwBmv9vZ3TFYoRHevkUoy9MkVX+I1yOVHL2U+wScbD3
+         a4Iu0r7SxbTXEQwzbBoZotEQ4SXYXNn9iUmyFlUxqyCmRZN4Kbm2xqd6f6dFNjiPuyB3
+         jdUvgYFtYBIDqfDNZgg4N/aFo2WUQzp96+1+1PTKz7p9Qa9H86j2OxuffAhEqyzPvh3J
+         I+BvstOwG6UAnBYqKE2CW9ZXw42ycTphdbRCqVp8/lewnvDIwfOHR1LyGlrrnA8Noqr7
+         KDmEIYBn6ZmUCKQBmbNp8Pczg76HqN9FdijVfr11GfCtPvQthYMEEnTlZ2ohWkIOiJ3C
+         OXmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=OB38kRi227skB/6g1/JGH5vPB3HcOBtn9y8MKLJUtto=;
-        b=ce/1DvN4M81ygbm1WC5rYz+47y1vA2gqTg64Dx1LlEhLPP5DA1FpG/NRBOJTv7NoXi
-         TLjc0rSqWNEnL4Jez8yAetw2F0ak6YseUWxwiUGDc5XLpvJvGopKYBLZvz8gDu+iXJAl
-         BLewyuyVAUbfOWZbpY3leQFQ1oSQI6HDqCo2cGK0ahGMUXPq/5vo1OkcPys7c2ieCDdJ
-         /fXlrdJV8FhUqVJZl8SqRxhjLMpUmTYBjz+mFFLb+7ZC2a5y82KSPVRLTpcEJnOXNeCu
-         VpfqsALT1qxvJ7XZby4p/n8nzb0w7p20wlpHnCE8SbYraE+sCBw+8fF39oFLTFkOn14C
-         gw+w==
-X-Gm-Message-State: ACrzQf0kTlaMsVIAAs7dtw7rzvFh1L6WXEOnN+GGEbjabMU7LNX+76xQ
-        K/InssNyKJ7ERnzpLEwqYwWRKjLZ5DM=
-X-Google-Smtp-Source: AMsMyM60RriHaQCzJJtBlHBY2m8du/ksKmv2Hv/4I8TeCsLiIosweyMkso0U0f0by+2iBhaQRNRRSg==
-X-Received: by 2002:a05:600c:4f44:b0:3b4:c554:a5f4 with SMTP id m4-20020a05600c4f4400b003b4c554a5f4mr5073655wmq.107.1664342047837;
-        Tue, 27 Sep 2022 22:14:07 -0700 (PDT)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id h9-20020a1c2109000000b003b4fac020c8sm661741wmh.16.2022.09.27.22.14.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 22:14:06 -0700 (PDT)
-Message-ID: <a223a99b-cbbe-aedb-cb08-7c79b9bcf7d0@kernel.org>
-Date:   Wed, 28 Sep 2022 07:14:05 +0200
+        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=RRxMxuisd8lNkNGWBlf9ZKEk1omHCIF/OzgSnFJx1kM=;
+        b=Z6mvlyzbEBwIeK/M18fFYDAKS+sbluaey2sDCM7a1WAxM9/p5xVRSfnvVuNx22kRIR
+         HlJ3a4pB0NTXgNHxnLZRtwhxMWVw3gZOV6EkWDFxwUkPQoPgEafh5TCUTCOCfumbQ9gN
+         jfPLNTtB/EnykUXKi/SxAyLPqFXhg7bigVooTy3JVm5Cs4TZ/T9OMVrvN0YnK2zS+yHz
+         9atYcYu8dQumzbEUaGubGSZFqyn2a3uyRmv4IGJoglLZdf1ioGFOSe3wkeEXktdbuN06
+         JFGmwtxpiy9dJyBBVGsBQ4XZ4cBfeEedEumKZuNdXQhgjCD1GB4qhkfxRy/F8k9HbFVX
+         t1qw==
+X-Gm-Message-State: ACrzQf3Mvl/RNGqdNTD49Ja1LIvb5+x8D+sqY7HOSh8vYn2aOLQ4peYq
+        DpA4WofFHLHhNErRNk4wqmZsj3sJcoC1Sw==
+X-Google-Smtp-Source: AMsMyM4PZ3D1UYkxS5n08OIECJI0ht8TLoWou8MHGKLjkqkXvqmfbdICMQDwIMHH775ucD9gOnhgSg==
+X-Received: by 2002:a05:6870:80d3:b0:126:1e6c:f01c with SMTP id r19-20020a05687080d300b001261e6cf01cmr4613620oab.17.1664342204582;
+        Tue, 27 Sep 2022 22:16:44 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id q5-20020acac005000000b0034fddfc5922sm1466958oif.36.2022.09.27.22.16.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 22:16:44 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 22:16:35 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: amusing SLUB compaction bug when CC_OPTIMIZE_FOR_SIZE
+Message-ID: <ea96c78c-e1dc-1364-e91-51909f82388b@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 5.19 000/207] 5.19.12-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220926100806.522017616@linuxfoundation.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220926100806.522017616@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26. 09. 22, 12:09, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.12 release.
-> There are 207 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.12-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
+It's a bug in linux-next, but taking me too long to identify which
+commit is "to blame", so let me throw it over to you without more
+delay: I think __PageMovable() now needs to check !PageSlab().
 
-openSUSE configs¹⁾ all green. x86_64 runs fine.
+I had made a small experimental change somewhere, rebuilt and rebooted,
+was not surprised to crash once swapping and compaction came in,
+but was surprised to find the crash in isolate_movable_page(),
+called by compaction's isolate_migratepages_block().
 
-Tested-by: Jiri Slaby <jirislaby@kernel.org>
+page->mapping was ffffffff811303aa, which qualifies as __PageMovable(),
+which expects struct movable_operations at page->mapping minus low bits.
+But ffffffff811303aa was the address of SLUB's rcu_free_slab(): I have
+CONFIG_CC_OPTIMIZE_FOR_SIZE=y, so function addresses may have low bits set.
 
-¹⁾ armv6hl armv7hl arm64 i386 ppc64 ppc64le riscv64 s390x x86_64
-
--- 
-js
-suse labs
-
+Over to you! Thanks,
+Hugh
