@@ -2,94 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1775EDC07
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093EE5EDC10
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233571AbiI1LwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
+        id S233620AbiI1LyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 07:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233083AbiI1LwH (ORCPT
+        with ESMTP id S233582AbiI1LyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:52:07 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004611BC;
-        Wed, 28 Sep 2022 04:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664365927; x=1695901927;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=JbPedr5Aug0M5rs26jYGMN7zaZdiXgsSQ4iu0gsMQUQ=;
-  b=gZJ7A2BMy8QZzt+PRwQRjwDg9zgpLVZZjvZih30akIU7Z5llXOZ2PqOR
-   rDf9Zhm4M7Tb1FCZVdu/l72k39/XgeZO2jAE/Cd0SVofMIQUvdYgfIHfx
-   kf7ooK4QS4osHh2M8cCOBwMp6M/EVuN4PIS3cxoNhDf1AgDlz5nol/JAR
-   SJq9nlOGcVJvT0pK0OUpx0FDqChgt+6WU1Oa78ACBR6btdOoszzfiOKDU
-   h8V8UzEATxjAEyHjw7EaMYR7gAt5CwngkIsYWw2M1vgzQUcNxCliCISLt
-   pMQE43VeQcMnctgF8afuBY16MwzrA5LK6oSMenjsFNfeweyShJ5Tmgsfb
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="303064158"
-X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="303064158"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 04:52:06 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="599549670"
-X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="599549670"
-Received: from kjurkiew-mobl.ger.corp.intel.com ([10.251.211.248])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 04:52:04 -0700
-Date:   Wed, 28 Sep 2022 14:52:02 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 3/4] Documentation: rs485: Mention
- uart_get_rs485_mode()
-In-Reply-To: <CAHp75Vd6OJ68BbaYt21hPpOpDbvT9pow6PSDhedGULjikGhoNg@mail.gmail.com>
-Message-ID: <c4df6e19-5390-3ce8-eb7f-8059115187d0@linux.intel.com>
-References: <20220928110509.13544-1-ilpo.jarvinen@linux.intel.com> <20220928110509.13544-4-ilpo.jarvinen@linux.intel.com> <CAHp75Vd6OJ68BbaYt21hPpOpDbvT9pow6PSDhedGULjikGhoNg@mail.gmail.com>
+        Wed, 28 Sep 2022 07:54:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0405E56F;
+        Wed, 28 Sep 2022 04:54:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E38FB82056;
+        Wed, 28 Sep 2022 11:54:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB66AC433C1;
+        Wed, 28 Sep 2022 11:54:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664366048;
+        bh=hulhezLqRBKK8E1gjp7vWO38O+DMT/KxUVnBXOBSOQs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ciZbc4xklNIJ97bZwBY5d7bmodICuHbMRWrgm8tempqdCWxWdya+TI6BcT5FCDlVb
+         83spigJLPisO/aER9kNRqrXLyGJY7q1tKoxORHltsXfb/JjO6EC/8zdQXRYUviXJhA
+         lKgb3UJjuBtBGGNb1mjDWlVU/co4yEAVssSepnumbGj5qYHzA172ZKI2iVtnvyHzd5
+         vlIAE0ginJ3c2F7mJ0ZTI/0CzkiwkIYSZfuGwDPZkS/eVMkd7Zq3Z1co8eP/egAzGd
+         dR8AubT7rWigPqSLxaxuwgjBP7IFL1z0eV9U2gF/VFYnk9ocCPk3uap3XbTCATHap0
+         ZdXVmuBB8RiuA==
+Date:   Wed, 28 Sep 2022 14:54:03 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     asmadeus@codewreck.org
+Cc:     syzbot <syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
+Subject: Re: [syzbot] KASAN: use-after-free Read in rdma_close
+Message-ID: <YzQ12+jtARpwS5bw@unreal>
+References: <00000000000015ac7905e97ebaed@google.com>
+ <YzQc2yaDufjp+rHc@unreal>
+ <YzQlWq9EOi9jpy46@codewreck.org>
+ <YzQmr8LVTmUj9+zB@unreal>
+ <YzQuoqyGsooyDfId@codewreck.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1426318885-1664365926=:1695"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzQuoqyGsooyDfId@codewreck.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1426318885-1664365926=:1695
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Wed, 28 Sep 2022, Andy Shevchenko wrote:
-
-> On Wed, Sep 28, 2022 at 2:05 PM Ilpo Järvinen
-> <ilpo.jarvinen@linux.intel.com> wrote:
+On Wed, Sep 28, 2022 at 08:23:14PM +0900, asmadeus@codewreck.org wrote:
+> Leon Romanovsky wrote on Wed, Sep 28, 2022 at 01:49:19PM +0300:
+> > > But I agree I did get that wrong: trans_mod->close() wasn't called if
+> > > create failed.
+> > > We do want the idr_for_each_entry() that is in p9_client_destroy so
+> > > rather than revert the commit (fix a bug, create a new one..) I'd rather
+> > > split it out in an internal function that takes a 'bool close' or
+> > > something to not duplicate the rest.
+> > > (Bit of a nitpick, sure)
+> > 
+> > Please do proper unwind without extra variable.
+> > 
+> > Proper unwind means that you will call to symmetrical functions in
+> > destroy as you used in create:
+> > alloc -> free
+> > create -> close
+> > e.t.c
+> > 
+> > When you use some global function like you did, there is huge chance
+> > to see unwind bugs.
 > 
-> >     The device tree can also provide RS485 boot time parameters
-> > -   [#DT-bindings]_. The driver is in charge of filling this data structure
-> > -   from the values given by the device tree.
-> > +   [#DT-bindings]_. The serial core fills the struct serial_rs485 from the
-> > +   values given by the device tree when driver calls uart_get_rs485_mode().
+> No.
+
+Let's agree to disagree.
+
 > 
-> the driver
-> 
-> Feels like this should be before the previous patch and actually have
-> a Fixes tag.
+> Duplicating complicated cleanup code leads to leaks like we used to
+> have; that destroy function already frees up things in the right order.
 
-I don't feel it would be an appropriate tag for this kind of cases 
-where documentation is simply lacking behind what the core code now 
-offers.
+It is pretty straightforward code, nothing complex there.
 
--- 
- i.
+Just pause for a minute, and ask yourself how totally random guy who
+looked on this syzbot bug just because RDMA name in it, found the issue
+so quickly.
 
---8323329-1426318885-1664365926=:1695--
+I will give a hint, I saw not symmetrical error unwind in call trace.
+
+Thanks
