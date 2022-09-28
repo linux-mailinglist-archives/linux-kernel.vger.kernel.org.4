@@ -2,164 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42405EE3A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E055EE3B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbiI1R5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
+        id S234204AbiI1R6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234109AbiI1R4w (ORCPT
+        with ESMTP id S234166AbiI1R6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:56:52 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B96FB33A
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:56:50 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id v4so12853496pgi.10
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=saNHm7XA+j5ek8JG01ePSb0qFtAx/myMwKal0d1qkOE=;
-        b=JR5z3zsj5qfxQDXXG7sZ8I+XslICivFkqVyGuijM9p3S9yvf2mcbAaPYzYnQmxhjZP
-         ziM7OlP8SmngBFVW/95vq8oUuliyIEfXeDHJNBiDhd7LUScYJc5gpexf+ZSP83zLOsAT
-         JX8mkj+zM96jcU3DFosFFdjntLlKGL+DA/2ShNrtbJ82cyuktNPqiaylcL2UMC16xWau
-         /hykJydX1MJx3aE4OQmPH3bnFJmNjIHejOahfDPwHyWLa7cAcvsD3lJnkq8gn9qk0X9B
-         Iqi2hawD2G5CBsyh7piPuzgL3OBQEUbLkG4mnfmWItL/EgtOvDc5AgqV9GxLoqAVcTF6
-         aXaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=saNHm7XA+j5ek8JG01ePSb0qFtAx/myMwKal0d1qkOE=;
-        b=nEKr/kLOKsDUfbYuH7naeqnwnvqMKkfxk3KLTd+cGD3PE+M4lyb1YtWduo8l25L0ng
-         g+BTyq0cCMwhv79GEUsYKjd3v/4lz+Ekxreo6hE3AuE9p1hcn56hBW0/vNHFoc2q9EXM
-         qs6X7bVFKvOj1Siz7n77N6BSneoYUTMcwIuF3dl6qMzULgns9i/mBHQuZdY9tp2olRyl
-         tMTa66HCVVOW4+eeIVlgbj9RjUKBXgJhJ1fv/no0tFr44wH4ab9IPZnire8QsLzEvIV1
-         pYEa7YlQek2xKvNalWhO7ZyHRWgp3qQUOVzVYW/ujhUij94Yqn8deLRfBxNgYT4Rlpla
-         oRZA==
-X-Gm-Message-State: ACrzQf2uBgWj1XIkJdsTQo6DKnsQI/wbLckK1yLQpSHTvHbWNJLFdjBX
-        bUQ3gZV3WGYzLbHfec/3eTut07iawER6jxA5lDk=
-X-Google-Smtp-Source: AMsMyM6vzk7vMFkioI9bgdejXIIQN+OaGxtFssZJ+Yh7sJ8cRox0ioktunoVeE7JVE64PFCnqwPrrQ==
-X-Received: by 2002:a05:6a00:158f:b0:546:b777:af17 with SMTP id u15-20020a056a00158f00b00546b777af17mr35552988pfk.51.1664387810335;
-        Wed, 28 Sep 2022 10:56:50 -0700 (PDT)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id s9-20020a170902ea0900b0016bb24f5d19sm4134281plg.209.2022.09.28.10.56.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 10:56:49 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 02:56:44 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Hugh Dickins <hughd@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: amusing SLUB compaction bug when CC_OPTIMIZE_FOR_SIZE
-Message-ID: <YzSK3LJst80JkP4q@hyeyoo>
-References: <ea96c78c-e1dc-1364-e91-51909f82388b@google.com>
- <YzPgTtFzpKEfwPbK@hyeyoo>
- <YzRQvoVsnJzsauwb@google.com>
- <35502bdd-1a78-dea1-6ac3-6ff1bcc073fa@suse.cz>
+        Wed, 28 Sep 2022 13:58:20 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CE9FADA8;
+        Wed, 28 Sep 2022 10:58:17 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:45168)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1odbK2-0004Db-Nm; Wed, 28 Sep 2022 11:58:14 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:55952 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1odbK1-00AF6g-J6; Wed, 28 Sep 2022 11:58:14 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <YzN+ZYLjK6HI1P1C@ZenIV>
+Date:   Wed, 28 Sep 2022 12:57:44 -0500
+In-Reply-To: <YzN+ZYLjK6HI1P1C@ZenIV> (Al Viro's message of "Tue, 27 Sep 2022
+        23:51:17 +0100")
+Message-ID: <87fsgb4c13.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <35502bdd-1a78-dea1-6ac3-6ff1bcc073fa@suse.cz>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1odbK1-00AF6g-J6;;;mid=<87fsgb4c13.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/4sCrkHe6NtBryOpeTbgSXlizmgvZTkYg=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *****;Al Viro <viro@zeniv.linux.org.uk>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 582 ms - load_scoreonly_sql: 0.21 (0.0%),
+        signal_user_changed: 11 (1.8%), b_tie_ro: 9 (1.5%), parse: 1.09 (0.2%),
+         extract_message_metadata: 19 (3.3%), get_uri_detail_list: 3.7 (0.6%),
+        tests_pri_-1000: 19 (3.3%), tests_pri_-950: 1.27 (0.2%),
+        tests_pri_-900: 1.04 (0.2%), tests_pri_-90: 94 (16.2%), check_bayes:
+        93 (15.9%), b_tokenize: 12 (2.0%), b_tok_get_all: 10 (1.6%),
+        b_comp_prob: 2.6 (0.4%), b_tok_touch_all: 65 (11.2%), b_finish: 0.95
+        (0.2%), tests_pri_0: 414 (71.1%), check_dkim_signature: 0.60 (0.1%),
+        check_dkim_adsp: 2.8 (0.5%), poll_dns_idle: 0.98 (0.2%), tests_pri_10:
+        2.7 (0.5%), tests_pri_500: 15 (2.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH][CFT] [coredump] don't use __kernel_write() on
+ kmap_local_page()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 06:20:10PM +0200, Vlastimil Babka wrote:
-> On 9/28/22 15:48, Joel Fernandes wrote:
-> > On Wed, Sep 28, 2022 at 02:49:02PM +0900, Hyeonggon Yoo wrote:
-> > > On Tue, Sep 27, 2022 at 10:16:35PM -0700, Hugh Dickins wrote:
-> > > > It's a bug in linux-next, but taking me too long to identify which
-> > > > commit is "to blame", so let me throw it over to you without more
-> > > > delay: I think __PageMovable() now needs to check !PageSlab().
-> 
-> When I tried that, the result wasn't really nice:
-> 
-> https://lore.kernel.org/all/aec59f53-0e53-1736-5932-25407125d4d4@suse.cz/
-> 
-> And what if there's another conflicting page "type" later. Or the debugging
-> variant of rcu_head in struct page itself. The __PageMovable() is just too
-> fragile.
-> 
-> > > > I had made a small experimental change somewhere, rebuilt and rebooted,
-> > > > was not surprised to crash once swapping and compaction came in,
-> > > > but was surprised to find the crash in isolate_movable_page(),
-> > > > called by compaction's isolate_migratepages_block().
-> > > > 
-> > > > page->mapping was ffffffff811303aa, which qualifies as __PageMovable(),
-> > > > which expects struct movable_operations at page->mapping minus low bits.
-> > > > But ffffffff811303aa was the address of SLUB's rcu_free_slab(): I have
-> > > > CONFIG_CC_OPTIMIZE_FOR_SIZE=y, so function addresses may have low bits set.
-> > > > 
-> > > > Over to you! Thanks,
-> > > > Hugh
-> > > 
-> > > Wow, didn't expect this.
-> > > Thank you for report!
-> > > 
-> > > That should be due to commit 65505d1f2338e7
-> > > ("mm/sl[au]b: rearrange struct slab fields to allow larger rcu_head")
-> > > as now rcu_head can use some bits that shares with mapping.
-> > > 
-> > > Hmm IMO we have two choices...
-> > > 
-> > > 1. simply drop the commit as it's only for debugging (RCU folks may not like [1])
-> > 
-> > Yeah definitely don't like this option as patches are out that depend on
-> > this (not yet merged though). :-)
-> 
-> But we'll have to do that for now and postpone to 6.2 I'm afraid as merge
-> window for 6.1 is too close to have confidence in any solution that we came
-> up this moment.
+Al Viro <viro@zeniv.linux.org.uk> writes:
 
-Agreed.
-
-> 
-> > > 2. make __PageMovable() to use true page flag, with approach [2])
-> > 
-> > What are the drawbacks of making it a true flag?
-> 
-> Even if we free PageSlab, I'm sure there will be better uses of a free page
-> flag than __PageMovable.
-> 
-> 3. With frozen page allocation
-> https://lore.kernel.org/all/20220809171854.3725722-1-willy@infradead.org/
-> 
-> slab pages will have refcount 0 and compaction will skip them for that
-> reason. But it had other unresolved issues with page isolation code IIRC.
+> [I'm going to send a pull request tomorrow if nobody yells;
+> please review and test - it seems to work fine here, but extra
+> eyes and extra testing would be very welcome]
 >
+> passing kmap_local_page() result to __kernel_write() is unsafe -
+> random ->write_iter() might (and 9p one does) get unhappy when
+> passed ITER_KVEC with pointer that came from kmap_local_page().
+>     
+> Fix by providing a variant of __kernel_write() that takes an iov_iter
+> from caller (__kernel_write() becomes a trivial wrapper) and adding
+> dump_emit_page() that parallels dump_emit(), except that instead of
+> __kernel_write() it uses __kernel_write_iter() with ITER_BVEC source.
 
-4. Always align function rcu_free_slab() with 'aligned' attribute
-[1] https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-aligned-function-attribute
-[2] __aligned in include/linux/compiler_attributes.h
-> > thanks,
-> > 
-> >   - Joel
-> > 
-> > 
-> > 
-> > 
-> > > [1] https://lore.kernel.org/all/85afd876-d8bb-0804-b2c5-48ed3055e702@joelfernandes.org/
-> > > [2] https://lore.kernel.org/linux-mm/20220919125708.276864-1-42.hyeyoo@gmail.com/
-> > > 
-> > > Thanks!
-> > > 
-> > > -- 
-> > > Thanks,
-> > > Hyeonggon
-> 
+Acked-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
--- 
-Thanks,
-Hyeonggon
+From a 10,000 foot view this makes sense.
+
+
+> Fixes: 3159ed57792b "fs/coredump: use kmap_local_page()"
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+> ---
+> diff --git a/fs/coredump.c b/fs/coredump.c
+> index 9f4aae202109..09dbc981ad5c 100644
+> --- a/fs/coredump.c
+> +++ b/fs/coredump.c
+> @@ -832,6 +832,38 @@ static int __dump_skip(struct coredump_params *cprm, size_t nr)
+>  	}
+>  }
+>  
+> +static int dump_emit_page(struct coredump_params *cprm, struct page *page)
+> +{
+> +	struct bio_vec bvec = {
+> +		.bv_page	= page,
+> +		.bv_offset	= 0,
+> +		.bv_len		= PAGE_SIZE,
+> +	};
+> +	struct iov_iter iter;
+> +	struct file *file = cprm->file;
+> +	loff_t pos = file->f_pos;
+> +	ssize_t n;
+> +
+> +	if (cprm->to_skip) {
+> +		if (!__dump_skip(cprm, cprm->to_skip))
+> +			return 0;
+> +		cprm->to_skip = 0;
+> +	}
+> +	if (cprm->written + PAGE_SIZE > cprm->limit)
+> +		return 0;
+> +	if (dump_interrupted())
+> +		return 0;
+> +	iov_iter_bvec(&iter, WRITE, &bvec, 1, PAGE_SIZE);
+> +	n = __kernel_write_iter(cprm->file, &iter, &pos);
+> +	if (n != PAGE_SIZE)
+> +		return 0;
+> +	file->f_pos = pos;
+> +	cprm->written += PAGE_SIZE;
+> +	cprm->pos += PAGE_SIZE;
+> +
+> +	return 1;
+> +}
+> +
+>  int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
+>  {
+>  	if (cprm->to_skip) {
+> @@ -863,7 +895,6 @@ int dump_user_range(struct coredump_params *cprm, unsigned long start,
+>  
+>  	for (addr = start; addr < start + len; addr += PAGE_SIZE) {
+>  		struct page *page;
+> -		int stop;
+>  
+>  		/*
+>  		 * To avoid having to allocate page tables for virtual address
+> @@ -874,12 +905,7 @@ int dump_user_range(struct coredump_params *cprm, unsigned long start,
+>  		 */
+>  		page = get_dump_page(addr);
+>  		if (page) {
+> -			void *kaddr = kmap_local_page(page);
+> -
+> -			stop = !dump_emit(cprm, kaddr, PAGE_SIZE);
+> -			kunmap_local(kaddr);
+> -			put_page(page);
+> -			if (stop)
+> +			if (!dump_emit_page(cprm, page))
+>  				return 0;
+>  		} else {
+>  			dump_skip(cprm, PAGE_SIZE);
+> diff --git a/fs/internal.h b/fs/internal.h
+> index 87e96b9024ce..3e206d3e317c 100644
+> --- a/fs/internal.h
+> +++ b/fs/internal.h
+> @@ -16,6 +16,7 @@ struct shrink_control;
+>  struct fs_context;
+>  struct user_namespace;
+>  struct pipe_inode_info;
+> +struct iov_iter;
+>  
+>  /*
+>   * block/bdev.c
+> @@ -221,3 +222,5 @@ ssize_t do_getxattr(struct user_namespace *mnt_userns,
+>  int setxattr_copy(const char __user *name, struct xattr_ctx *ctx);
+>  int do_setxattr(struct user_namespace *mnt_userns, struct dentry *dentry,
+>  		struct xattr_ctx *ctx);
+> +
+> +ssize_t __kernel_write_iter(struct file *file, struct iov_iter *from, loff_t *pos);
+> diff --git a/fs/read_write.c b/fs/read_write.c
+> index 1a261dcf1778..328ce8cf9a85 100644
+> --- a/fs/read_write.c
+> +++ b/fs/read_write.c
+> @@ -496,14 +496,9 @@ static ssize_t new_sync_write(struct file *filp, const char __user *buf, size_t
+>  }
+>  
+>  /* caller is responsible for file_start_write/file_end_write */
+> -ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t *pos)
+> +ssize_t __kernel_write_iter(struct file *file, struct iov_iter *from, loff_t *pos)
+>  {
+> -	struct kvec iov = {
+> -		.iov_base	= (void *)buf,
+> -		.iov_len	= min_t(size_t, count, MAX_RW_COUNT),
+> -	};
+>  	struct kiocb kiocb;
+> -	struct iov_iter iter;
+>  	ssize_t ret;
+>  
+>  	if (WARN_ON_ONCE(!(file->f_mode & FMODE_WRITE)))
+> @@ -519,8 +514,7 @@ ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t
+>  
+>  	init_sync_kiocb(&kiocb, file);
+>  	kiocb.ki_pos = pos ? *pos : 0;
+> -	iov_iter_kvec(&iter, WRITE, &iov, 1, iov.iov_len);
+> -	ret = file->f_op->write_iter(&kiocb, &iter);
+> +	ret = file->f_op->write_iter(&kiocb, from);
+>  	if (ret > 0) {
+>  		if (pos)
+>  			*pos = kiocb.ki_pos;
+> @@ -530,6 +524,18 @@ ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t
+>  	inc_syscw(current);
+>  	return ret;
+>  }
+> +
+> +/* caller is responsible for file_start_write/file_end_write */
+> +ssize_t __kernel_write(struct file *file, const void *buf, size_t count, loff_t *pos)
+> +{
+> +	struct kvec iov = {
+> +		.iov_base	= (void *)buf,
+> +		.iov_len	= min_t(size_t, count, MAX_RW_COUNT),
+> +	};
+> +	struct iov_iter iter;
+> +	iov_iter_kvec(&iter, WRITE, &iov, 1, iov.iov_len);
+> +	return __kernel_write_iter(file, &iter, pos);
+> +}
+>  /*
+>   * This "EXPORT_SYMBOL_GPL()" is more of a "EXPORT_SYMBOL_DONTUSE()",
+>   * but autofs is one of the few internal kernel users that actually
