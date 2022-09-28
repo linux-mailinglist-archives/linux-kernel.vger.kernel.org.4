@@ -2,176 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C215EE5A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 21:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353E25EE5B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 21:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233720AbiI1T1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 15:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
+        id S234171AbiI1Tai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 15:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232702AbiI1T1L (ORCPT
+        with ESMTP id S231933AbiI1Tae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 15:27:11 -0400
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58627D7A8;
-        Wed, 28 Sep 2022 12:27:10 -0700 (PDT)
-Received: by mail-pg1-f170.google.com with SMTP id s206so13101822pgs.3;
-        Wed, 28 Sep 2022 12:27:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=fi13tgaUqw4cLZkJIZHH5F/+Kj1zVWfq2Z8e4osB/qU=;
-        b=0zU2HIySj7frGQNyGeg8RTBZQzZvq6D8JnqIT5hMxoKXMd7F2eFp/tmsnANZvDGklX
-         lR/sQcDipyBkygoBsRBPPylk8ETmkEfPsCBQnRpKCnTFeidzvyNorFhN0Atr8CaBgjyK
-         Goopw0grWFJvIsiVoK5Vv1O5Evv/q29VxkcZfg1Seu7HY/dz1LmC/DRujKtCCveqaBxq
-         e4YkZstqLYMZ8wIIZJDdXtqAKfO9VfGgnGm72l2VxlySZFgqtZu9ly8uANq0ssAgO2Kp
-         cYALGmGM6DHFwX8e/Fu7Cn0UqX27nzJ/zAdTNmFvfcTwilv3GftU48/MIjD6GWJXfdEN
-         lIYA==
-X-Gm-Message-State: ACrzQf0lUP9bXtpTAOmrRuvO6NeYe2m4i3uyL3sMOUO3T5j+x7/jPx5x
-        b2gsNARySmIQG6WRRKeF67c=
-X-Google-Smtp-Source: AMsMyM4Wq/ODU6oLlycsV/TSsGP3st5KOplktf0lq4S7Inz58H2pIA8EPZXkLTHsTxDYidYXSbH0fA==
-X-Received: by 2002:a05:6a00:2314:b0:546:ce91:89a3 with SMTP id h20-20020a056a00231400b00546ce9189a3mr35734387pfh.77.1664393230024;
-        Wed, 28 Sep 2022 12:27:10 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:4cba:f1a9:6ef8:3759? ([2620:15c:211:201:4cba:f1a9:6ef8:3759])
-        by smtp.gmail.com with ESMTPSA id 5-20020a170902c20500b00176d347e9a7sm4090106pll.233.2022.09.28.12.27.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 12:27:09 -0700 (PDT)
-Message-ID: <2acc2220-65dc-4af5-ffd3-997f779d41c0@acm.org>
-Date:   Wed, 28 Sep 2022 12:27:07 -0700
+        Wed, 28 Sep 2022 15:30:34 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF758980F;
+        Wed, 28 Sep 2022 12:30:33 -0700 (PDT)
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 28SJUIZ0023087;
+        Thu, 29 Sep 2022 04:30:18 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28SJUIZ0023087
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664393419;
+        bh=P+mo1kAnSpuWBcJQBFI24YMS/Mo+9UYb3U5TZ6VU0KQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vCcZf2q3W/WQnJwbZP6Rt3Urp3Eaig7wqUKLSKcsoKbnyfGDC2bYNvYSEZNxdjYhj
+         B+5kdUfRebUSLi6j0ddJ/Fli9GMhE4lJ++Tg7wFRx82bcVJNFtEGuHz4YWwwwDWnbo
+         0u0GYZyz51QcefmEruDJCD7wIto90IDlmMgw+mICyJhAqp/sCvH7IWtmpu6HsPi5gF
+         lrn0w6t4mqFnFGagNXRd7bl0I8KFybo36u2pg1TsYA6OTVXo6c7ZWw1qe3MvjKXxvf
+         Tx5JnfIO1kEFWV9ttuftcWWl9QzWBLdXgcINF8s+KMZwQPh0K4vBQbW7Cd9EK0MCCj
+         RxfugBfJtQ6Cg==
+X-Nifty-SrcIP: [209.85.210.54]
+Received: by mail-ot1-f54.google.com with SMTP id cy15-20020a056830698f00b0065c530585afso1115795otb.2;
+        Wed, 28 Sep 2022 12:30:18 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0aJxqsGwBxJGxueWVz7HIyxLYIhLAFhBRxcpi22flbjbuu/kRq
+        w9Yk/ivgm1wCb+iWkISNf+RMPNtBZCNmfp9uKkY=
+X-Google-Smtp-Source: AMsMyM5gnuffA1b3nRhl0cvz2YH2ANAIyN8tapXvX58e7uoc6gKZycodp72r+5Den7g8RFUU7B7dKmeXxV/+HCes/4c=
+X-Received: by 2002:a05:6830:3115:b0:658:ea61:249c with SMTP id
+ b21-20020a056830311500b00658ea61249cmr15615036ots.225.1664393417324; Wed, 28
+ Sep 2022 12:30:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
- exit code
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Tejun Heo <tj@kernel.org>
-References: <20220914225621.415631-1-bvanassche@acm.org>
- <20220914225621.415631-7-bvanassche@acm.org> <YzOe3pYmn5qO9lFb@T590>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <YzOe3pYmn5qO9lFb@T590>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220928063947.299333-1-masahiroy@kernel.org> <20220928063947.299333-4-masahiroy@kernel.org>
+In-Reply-To: <20220928063947.299333-4-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 29 Sep 2022 04:29:41 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASLf0Jbyfu7HB1qLRbc6-3QeZiw3okb6O+c5YhHA-a_bA@mail.gmail.com>
+Message-ID: <CAK7LNASLf0Jbyfu7HB1qLRbc6-3QeZiw3okb6O+c5YhHA-a_bA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/8] kbuild: generate KSYMTAB entries by modpost
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 18:09, Ming Lei wrote:
-> On Wed, Sep 14, 2022 at 03:56:20PM -0700, Bart Van Assche wrote:
->> Some kernel modules call device_del() from their module exit code and
->> schedule asynchronous work from inside the .release callback without waiting
->> until that callback has finished. As an example, many SCSI LLD drivers call
-> 
-> It isn't only related with device, any kobject has such issue, or any
-> reference counter usage has similar potential risk, see previous discussion:
-> 
-> https://lore.kernel.org/lkml/YsZm7lSXYAHT14ui@T590/
-> 
-> IMO, it is one fundamental problem wrt. module vs. reference counting or
-> kobject uses at least, since the callback depends on module code
-> segment.
-> 
->> scsi_remove_host() from their module exit code. scsi_remove_host() may
->> invoke scsi_device_dev_release_usercontext() asynchronously.
->> scsi_device_dev_release_usercontext() uses the host template pointer and
->> that pointer usually exists in static storage in the SCSI LLD. Support
->> using the module reference count to keep the module around until
->> asynchronous module exiting has completed by waiting in the delete_module()
->> system call until the module reference count drops to zero.
-> 
-> The issue can't be addressed by the normal mod->refcnt, since user need
-> to unload module when the device isn't used.
+On Wed, Sep 28, 2022 at 3:41 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Commit 7b4537199a4a ("kbuild: link symbol CRCs at final link, removing
+> CONFIG_MODULE_REL_CRCS") made modpost output CRCs in the same way
+> whether the EXPORT_SYMBOL() is placed in *.c or *.S.
+>
+> This commit applies a similar approach to the entire data structure of
+> EXPORT_SYMBOL() for further cleanups. The EXPORT_SYMBOL() compilation
+> is split into two stages.
+>
+> When a source file is compiled, EXPORT_SYMBOL() is converted into a
+> dummy symbol in the .discard.export_symbol section.
+>
+> For example,
+>
+>     EXPORT_SYMBOL(foo);
+>     EXPORT_SYMBOL_NS_GPL(bar, BAR_NAMESPACE);
+>
+> will be encoded into the following assembly code:
+>
+>     .section .discard.export_symbol
+>     __export_symbol.foo:
+>             .asciz ""
+>     .previous
+>
+>     .section .discard.export_symbol
+>     __export_symbol_gpl.bar:
+>             .asciz "BAR_NAMESPACE"
+>     .previous
+>
+> They are just markers to tell modpost the name, license, and namespace
+> of the symbols. They will be dropped from the final vmlinux and modules
+> because the section name starts with ".discard.".
+>
+> Then, modpost extracts all the information about EXPORT_SYMBOL() from the
+> .discard.export_symbol section, and generates C code:
+>
+>     KSYMTAB_FUNC(foo, "", "");
+>     KSYMTAB_FUNC(bar, "_gpl", "BAR_NAMESPACE");
+>
+> KSYMTAB_FUNC() (or KSYMTAB_DATA() if it is data) is expanded to struct
+> kernel_symbol that will be linked to the vmlinux or a module.
+>
+> With this change, EXPORT_SYMBOL() works in the same way for *.c and *.S
+> files, providing the following benefits.
+>
+> [1] Deprecate EXPORT_DATA_SYMBOL()
+>
+> In the old days, EXPORT_SYMBOL() was only available in C files. To export
+> a symbol in *.S, EXPORT_SYMBOL() was placed in a separate *.c file.
+> arch/arm/kernel/armksyms.c is one example written in the classic manner.
+>
+> Commit 22823ab419d8 ("EXPORT_SYMBOL() for asm") removed this limitation.
+> Since then, EXPORT_SYMBOL() can be placed close to the symbol definition
+> in *.S files. It was a nice improvement.
+>
+> However, as that commit mentioned, you need to use EXPORT_DATA_SYMBOL()
+> for data objects on some architectures.
+>
+> In the new approach, modpost checks symbol's type (STT_FUNC or not),
+> and outputs KSYMTAB_FUNC() or KSYMTAB_DATA() accordingly.
+>
+> There are only two users of EXPORT_DATA_SYMBOL:
+>
+>   EXPORT_DATA_SYMBOL_GPL(empty_zero_page)    (arch/ia64/kernel/head.S)
+>   EXPORT_DATA_SYMBOL(ia64_ivt)               (arch/ia64/kernel/ivt.S)
+>
+> They are transformed as follows and output into .vmlinux.export.c
+>
+>   KSYMTAB_DATA(empty_zero_page, "_gpl", "");
+>   KSYMTAB_DATA(ia64_ivt, "", "");
+>
+> The other EXPORT_SYMBOL users in ia64 assembly are output as
+> KSYMTAB_FUNC().
+>
+> EXPORT_DATA_SYMBOL() is now deprecated.
+>
+> [2] merge <linux/export.h> and <asm-generic/export.h>
+>
+> There are two similar header implementations:
+>
+>   include/linux/export.h        for .c files
+>   include/asm-generic/export.h  for .S files
+>
+> Ideally, the functionality should be consistent between them, but they
+> tend to diverge.
+>
+> Commit 8651ec01daed ("module: add support for symbol namespaces.") did
+> not support the namespace for *.S files.
+>
+> This commit shifts the essential implementation part to C, which supports
+> EXPORT_SYMBOL_NS() for *.S files.
+>
+> <asm/export.h> and <asm-generic/export.h> will remain as a wrapper of
+> <linux/export.h> for a while.
+>
+> They will be removed after #include <asm/export.h> directives are all
+> replaced with #include <linux/export.h>.
+>
+> [3] Implement CONFIG_TRIM_UNUSED_KSYMS in one-pass algorithm (by a later commit)
+>
+> When CONFIG_TRIM_UNUSED_KSYMS is enabled, Kbuild recursively traverses
+> the directory tree to determine which EXPORT_SYMBOL to trim. If an
+> EXPORT_SYMBOL turns out to be unused by anyone, Kbuild begins the
+> second traverse, where some source files are recompiled with their
+> EXPORT_SYMBOL() tuned into a no-op.
+>
+> We can do this better now; modpost can selectively emit KSYMTAB entries
+> that are really used by modules.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Hi Ming,
 
-How about removing support for calling scsi_device_put() from atomic context
-as is done in the untested patch below?
 
-Thanks,
+After some more tests, I noticed this introduced
+false positive warnings:
 
-Bart.
+  ERROR: modpost: phy_init .init.text vmlinux: EXPORT_SYMBOL used for
+init symbol. Remove __init or EXPORT_SYMBOL.
+  ERROR: modpost: phy_exit .exit.text vmlinux: EXPORT_SYMBOL used for
+exit symbol. Remove __exit or EXPORT_SYMBOL.
 
-diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-index c59eac7a32f2..661753a10b47 100644
---- a/drivers/scsi/scsi.c
-+++ b/drivers/scsi/scsi.c
-@@ -561,6 +561,8 @@ EXPORT_SYMBOL(scsi_report_opcode);
-   */
-  int scsi_device_get(struct scsi_device *sdev)
-  {
-+	might_sleep();
-+
-  	if (sdev->sdev_state == SDEV_DEL || sdev->sdev_state == SDEV_CANCEL)
-  		goto fail;
-  	if (!get_device(&sdev->sdev_gendev))
-@@ -588,6 +590,7 @@ void scsi_device_put(struct scsi_device *sdev)
-  {
-  	struct module *mod = sdev->host->hostt->module;
 
-+	might_sleep();
-  	put_device(&sdev->sdev_gendev);
-  	module_put(mod);
-  }
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index a3aaafdeac1d..4cfc9317b4ad 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -441,7 +441,7 @@ static void scsi_device_cls_release(struct device *class_dev)
-  	put_device(&sdev->sdev_gendev);
-  }
+If I find how to fix it, I will send v4.
 
--static void scsi_device_dev_release_usercontext(struct work_struct *work)
-+static void scsi_device_dev_release(struct device *dev)
-  {
-  	struct scsi_device *sdev;
-  	struct device *parent;
-@@ -450,11 +450,8 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
-  	struct scsi_vpd *vpd_pg0 = NULL, *vpd_pg89 = NULL;
-  	struct scsi_vpd *vpd_pgb0 = NULL, *vpd_pgb1 = NULL, *vpd_pgb2 = NULL;
-  	unsigned long flags;
--	struct module *mod;
--
--	sdev = container_of(work, struct scsi_device, ew.work);
 
--	mod = sdev->host->hostt->module;
-+	sdev = to_scsi_device(dev);
 
-  	parent = sdev->sdev_gendev.parent;
 
-@@ -516,19 +513,6 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
 
-  	if (parent)
-  		put_device(parent);
--	module_put(mod);
--}
--
--static void scsi_device_dev_release(struct device *dev)
--{
--	struct scsi_device *sdp = to_scsi_device(dev);
--
--	/* Set module pointer as NULL in case of module unloading */
--	if (!try_module_get(sdp->host->hostt->module))
--		sdp->host->hostt->module = NULL;
--
--	execute_in_process_context(scsi_device_dev_release_usercontext,
--				   &sdp->ew);
-  }
-
-  static struct class sdev_class = {
+-- 
+Best Regards
+Masahiro Yamada
