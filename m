@@ -2,75 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC76C5ED735
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 924005ED738
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233964AbiI1IMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
+        id S233509AbiI1INO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233996AbiI1ILp (ORCPT
+        with ESMTP id S232770AbiI1INK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:11:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF1AB40F0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:11:42 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 660DC6601FE2;
-        Wed, 28 Sep 2022 09:11:40 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664352700;
-        bh=nnLUK+aN6Lt3FvJaNIA3WC4W8c8pNG0EQHNGq3Mu/Eg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=O3rsUcKN4/2DqQzIu/etACkLMGpcdqodkMhxuEPdRuji9Ulo/oURMEXpCsZlypIcL
-         mphHF3ZtniQUis/9JfVp1PCZtT1mJTt5Vc2PBcUxSuFL8FnuvB+alC5Sv5PclBNnwA
-         PsCaHE+IrViPcwWiT0zSSgPtP2tD1Su/qddiYf+HDrufIb8OnHPSSn5LM8eLbbAjSC
-         u8PpT7aSZGXT1b5622YetAgmKFHSn2vDgQD+5khKfrGy5mE83NOWNZNhUURhAUG1BI
-         UnNbipsBop4kwijBPWi3Gd/WGrFvr0pIlhRKVreQH1YcXRtPAi/wNdgYfHoLdm2qbc
-         gYqFK7NFeHTiQ==
-Message-ID: <ea20ff46-11fe-12c4-3e2a-5058f9065c60@collabora.com>
-Date:   Wed, 28 Sep 2022 10:11:37 +0200
+        Wed, 28 Sep 2022 04:13:10 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26947FFA8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:13:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=XNnABCsvKxKJzkVsEs2TPEbIu5GxpHrdIGjWeEL3pYI=; b=oRz8Xsor8waiodUIUaLEDA8lYK
+        K3jRP9TZz0yeclnvdQhf5yVYrOIHORIMu50IarZ4w1yOEWw/bvdMXdwSnDqGIe29oBeR8b4KIbYzI
+        BLupFmCSK01u7W4t2mDB7cqgRsE/EQ5/FuzCUAPUdYsS7ON+Wc3e4E+VMXNTq/5ok7nMmgdxG53hM
+        s6/Za5nTJAuXmmdDnIjasPcXMXfrrNjAUo+MBCrLz6JGsN3aBRKmAoYxmwGC4cWssUeripYySci8P
+        P9q23HbviblR7iQN5/SvFqR6fNPwCe2+SBpxCuVBgjFEFs9xq02eMdCFZPJZIIrUOCt3jCSK1cDOy
+        LjlOGFJw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1odSBI-00GXGI-Dc; Wed, 28 Sep 2022 08:12:36 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 477DA3001D7;
+        Wed, 28 Sep 2022 10:12:34 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id ED25B203B737C; Wed, 28 Sep 2022 10:12:33 +0200 (CEST)
+Date:   Wed, 28 Sep 2022 10:12:33 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Zucheng Zheng <zhengzucheng@huawei.com>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, frederic@kernel.org,
+        hucool.lihua@huawei.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] sched/cputime: Fix the time backward issue about
+ /proc/stat
+Message-ID: <YzQB8afi2rCPvuC1@hirez.programming.kicks-ass.net>
+References: <20220928033402.181530-1-zhengzucheng@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] ASoC: mediatek: mt8195: update audio tuner settings
-Content-Language: en-US
-To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
-        tiwai@suse.com, matthias.bgg@gmail.com
-Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220927151141.11846-1-trevor.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220927151141.11846-1-trevor.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220928033402.181530-1-zhengzucheng@huawei.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/09/22 17:11, Trevor Wu ha scritto:
-> Audio tuner is used to handle clock drift between 26M and APLL domain.
+On Wed, Sep 28, 2022 at 11:34:02AM +0800, Zucheng Zheng wrote:
+> From: Zheng Zucheng <zhengzucheng@huawei.com>
 > 
-> It's expected when abs(chg_cnt) equals to upper bound, tuner updates pcw
-> setting automatically, and then abs(chg_cnt) decreases.
-> In the stress test, we found abs(chg_cnt) possibly equals to 2 at the
-> unexpected timing. This results in wrong pcw updating.
-> Finally, abs(chg_cnt) will always be larger than upper bound,
+> The cputime of cpuN read from /proc/stat has an issue of cputime descent.
+> For example, the phenomenon of cputime descent of user is as followed:
 > 
-> As a result, we update the upper bound to 3 to handle the corner case.
+> The value read first is 319, and the value read again is 318. As follows:
+> first:
+>  cat /proc/stat |  grep cpu1
+>  cpu1    319    0    496    41665    0    0    0    0    0    0
+> again:
+>  cat /proc/stat |  grep cpu1
+>  cpu1    318    0    497    41674    0    0    0    0    0    0
 > 
-> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+> The value read from /proc/stat should be monotonically increasing. Otherwise
+> user may get incorrect CPU usage.
+> 
+> The root cause of this problem is that, in the implementation of
+> kcpustat_cpu_fetch_vtime, vtime->utime + delta is added to the stack variable
+> cpustat instantaneously. If the task is switched between two times, the value
+> added to cpustat for the second time may be smaller than that for the first time.
+> 
+> 				CPU0						CPU1
+> First:
+> show_stat()
+>  ->kcpustat_cpu_fetch()
+>   ->kcpustat_cpu_fetch_vtime()
+>    ->cpustat[CPUTIME_USER] = kcpustat_cpu(cpu) + vtime->utime + delta       rq->curr is task A
+>                                                                             A switch to B，and A->vtime->utime is less than 1 tick
+> Then:
+> show_stat()
+>  ->kcpustat_cpu_fetch()
+>   ->kcpustat_cpu_fetch_vtime()
+>    ->cpustat[CPUTIME_USER] = kcpustat_cpu(cpu) + vtime->utime + delta;     rq->curr is task B
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+You're still not explaining where the time gets lost. And the patch is a
+horrible band-aid.
 
+What I think you're saying; after staring at this for a while, is that:
 
+  vtime_task_switch_generic()
+    __vtime_account_kernel(prev, vtime)
+      vtime_account_{guest,system}(tsk, vtime)
+        vtime->*time += get_vtime_delta()
+	if (vtime->*time >= TICK_NSEC)
+	  account_*_time()
+	    account_system_index_time()
+	      task_group_account_field()
+	        __this_cpu_add(kernel_cpustat.cpustat[index], tmp);        <---- here
+
+is not folding time into kernel_cpustat when the task vtime isn't at
+least a tick's worth. And then when we switch to another task, we leak
+time.
+
+There's another problem here, vtime_task_switch_generic() should use a
+single call to sched_clock() to compute the old vtime_delta and set the
+new vtime->starttime, otherwise there's a time hole there as well.
+
+This is all quite the maze and it really wants cleaning up, not be made
+worse.
+
+So I think you want to do two things:
+
+ - pull kernel_cpustat updates out of task_group_account_field()
+   and put them into vtime_task_switch_generic() to be purely
+   vtime->starttime based.
+
+ - make vtime_task_switch_generic() use a single sched_clock() call.
+
+I did not audit all the flavours of cputime; there might be fallout, be
+sure to cross compile a lot.
+
+Frederic, you agree?
