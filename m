@@ -2,405 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FFA5EE427
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C0D5EE3CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234674AbiI1SQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 14:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
+        id S234368AbiI1SDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 14:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbiI1SPu (ORCPT
+        with ESMTP id S234331AbiI1SDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 14:15:50 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B49DCEA5;
-        Wed, 28 Sep 2022 11:15:44 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 42E951884BE5;
-        Wed, 28 Sep 2022 18:15:41 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 39ED02500709;
-        Wed, 28 Sep 2022 18:15:41 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 0)
-        id 269CF9EC000D; Wed, 28 Sep 2022 18:15:41 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 26EAA9120FED;
-        Wed, 28 Sep 2022 17:52:14 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org,
-        "Hans J. Schultz" <netdev@kapio-technology.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 net-next 9/9] selftests: forwarding: add test of MAC-Auth Bypass to locked port tests
-Date:   Wed, 28 Sep 2022 19:49:04 +0200
-Message-Id: <20220928174904.117131-1-netdev@kapio-technology.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 28 Sep 2022 14:03:31 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1858EFE659
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:03:30 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id e68so13224618pfe.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:03:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=6XAUjyy8dM+memUfQW8WuFfjcJaprUOz9KHY1fZCoGw=;
+        b=P53UuYSAwxYFHB9LgLaojInB13oBd+shR1QK8QLrkhdso+QUkcvjVqDWM2vJ4I63kw
+         KlCzcL9FiEhkuBJBlwC5PJlL9NJ34wFLMuQTnDxwUThgzhPimvSVcnI2rpqOb0hCLKhd
+         viB50mL+V/HuT13gD0dJc/Pi0j5DCwUUH+qEBhzfY6h/Cjg0rRA6+jFK6bnveqS0rNDO
+         lHsQ4KZqzindpP+UZjeeiz2+fKswe/2zJNN5BTZsphgu/FUDjADeIkiOE7ICBKwO/31j
+         +8UoENl/RTohakihwLsm0RBwwn++jrGrmTGREk6RWUrUdyze6btBvJeXL6HSD+26vNEv
+         p04A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=6XAUjyy8dM+memUfQW8WuFfjcJaprUOz9KHY1fZCoGw=;
+        b=LaCCVetFB71ZEjAGbRC5RFiXtwHikdg0Y0czDsHflscqLSUTBCZS5BIv0LLwPDsvNx
+         5vmpvlSegUM8ORXHuhARIvfsokOGIO42I0jiTcbLogDNT7O6IXGj9CpttspyG6f1Fo48
+         vqKzgoa/EbXpdE8J/cA2d8moOXVyIKZBgxkZ8XRTNwEEu6lUjvXuCIP04kt46I5lerY2
+         nKLQJ11LVejEqxxuZf9MclLAhV1rcJjSFSN6runICsVN4+O82QSls4st0iga2tYC9rnp
+         hWC5kmpOXECfwd9ZbehigeS6pyfsVaG9xsaD0hPPcjtmxleOrC0LTBVQTzRlonug5/c7
+         mg5w==
+X-Gm-Message-State: ACrzQf31wCRwKCopRFu93TrzH2bBy3m+Hl1bH5v+zzRMqnt7C98D34TB
+        MlDLC9LYBfcwM8Mm3eue9ovGew==
+X-Google-Smtp-Source: AMsMyM7JqeZAVXgNGynCXgynjXwAyFE7hjSnnBDGmaNtLpXl6XjEgEHwd4IDXyVuMlRfZxPvwlNagg==
+X-Received: by 2002:a63:1606:0:b0:43c:b5e1:5c52 with SMTP id w6-20020a631606000000b0043cb5e15c52mr15584384pgl.250.1664388209513;
+        Wed, 28 Sep 2022 11:03:29 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id j3-20020a63ec03000000b0043057fe66c0sm3864080pgh.48.2022.09.28.11.03.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 11:03:28 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 18:03:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Subject: Re: [PATCH v3 05/28] KVM: x86: Don't inhibit APICv/AVIC if xAPIC ID
+ mismatch is due to 32-bit ID
+Message-ID: <YzSMbSXQXyUY7M7G@google.com>
+References: <20220920233134.940511-1-seanjc@google.com>
+ <20220920233134.940511-6-seanjc@google.com>
+ <d02d0b30-f29b-0ff6-98c7-89ddcd091c60@oracle.com>
+ <e5d54876b233dc71a69249c3d02d649da5040a14.camel@redhat.com>
+ <YzR7ezt67i1lH1/b@google.com>
+ <1aea43e831cd7ed90c325b2c90bc6f3f9a1805b5.camel@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1aea43e831cd7ed90c325b2c90bc6f3f9a1805b5.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Hans J. Schultz" <netdev@kapio-technology.com>
+On Wed, Sep 28, 2022, Maxim Levitsky wrote:
+> On Wed, 2022-09-28 at 16:51 +0000, Sean Christopherson wrote:
+> > > > It happens regardless of vCPU count (tested with 2, 32, 255, 380, and 
+> > > > 512 vCPUs). This state persists for all subsequent reboots, until the VM 
+> > > > is terminated. For vCPU counts < 256, when x2apic is disabled the 
+> > > > problem does not occur, and AVIC continues to work properly after reboots.
+> > 
+> > Bit of a shot in the dark, but does the below fix the issue?  There are two
+> > issues with calling kvm_lapic_xapic_id_updated() from kvm_apic_state_fixup():
+> > 
+> >   1. The xAPIC ID should only be refreshed on "set".
+> True - I didn't bother to fix it yet because it shouldn't cause harm, but
+> sure this needs to be fixed.
 
-Verify that the MAC-Auth mechanism works by adding a FDB entry with the
-locked flag set, denying access until the FDB entry is replaced with a
-FDB entry without the locked flag set.
+It's probably benign on its own, but with the missing "hardware enabled" check,
+it could be problematic if userspace does KVM_GET_LAPIC while the APIC is hardware
+disabled, after the APIC was previously in x2APIC mode.  I'm guessing QEMU does
+KVM_GET_LAPIC state when emulating reboot, hence the potential for being involved
+in the bug Alejandro is seeing.
 
-Add test of blackhole fdb entries, verifying that there is no forwarding
-to a blackhole entry from any port, and that the blackhole entry can be
-replaced.
+> >   2. The refresh needs to be noted after memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
+> Are you sure? The check is first because if it fails, then error is returned to userspace
+> and the KVM's state left unchanged.
+> 
+> I assume you are talking about 
+> 
+>         ....
+> 	r = kvm_apic_state_fixup(vcpu, s, true);
+> 	if (r) {
+> 		kvm_recalculate_apic_map(vcpu->kvm);
+> 		return r;
+> 	}
+> 	memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
 
-Also add a test that verifies that sticky FDB entries cannot roam (this
-is not needed for now, but should in general be present anyhow for future
-applications).
+This isn't a failure path though, it's purely a "take note of the update", and
+KVM needs to do that processing _after_ the actual update.  Specifically,
+kvm_lapic_xapic_id_updated() consumes the internal APIC state:
 
-Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
----
- .../net/forwarding/bridge_blackhole_fdb.sh    | 102 +++++++++++++++++
- .../net/forwarding/bridge_locked_port.sh      | 106 +++++++++++++++++-
- .../net/forwarding/bridge_sticky_fdb.sh       |  21 +++-
- tools/testing/selftests/net/forwarding/lib.sh |  18 +++
- 4 files changed, 245 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/net/forwarding/bridge_blackhole_fdb.sh
+	if (kvm_xapic_id(apic) == apic->vcpu->vcpu_id)
+		return;
 
-diff --git a/tools/testing/selftests/net/forwarding/bridge_blackhole_fdb.sh b/tools/testing/selftests/net/forwarding/bridge_blackhole_fdb.sh
-new file mode 100755
-index 000000000000..54b1a51e1ed6
---- /dev/null
-+++ b/tools/testing/selftests/net/forwarding/bridge_blackhole_fdb.sh
-@@ -0,0 +1,102 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+ALL_TESTS="blackhole_fdb"
-+NUM_NETIFS=4
-+source lib.sh
-+
-+switch_create()
-+{
-+        ip link add dev br0 type bridge
-+
-+        ip link set dev $swp1 master br0
-+        ip link set dev $swp2 master br0
-+
-+        ip link set dev br0 up
-+        ip link set dev $h1 up
-+        ip link set dev $swp1 up
-+        ip link set dev $h2 up
-+        ip link set dev $swp2 up
-+
-+	tc qdisc add dev $swp2 clsact
-+}
-+
-+switch_destroy()
-+{
-+	tc qdisc del dev $swp2 clsact
-+
-+        ip link set dev $swp2 down
-+        ip link set dev $h2 down
-+        ip link set dev $swp1 down
-+        ip link set dev $h1 down
-+
-+        ip link del dev br0
-+}
-+
-+setup_prepare()
-+{
-+        h1=${NETIFS[p1]}
-+        swp1=${NETIFS[p2]}
-+        h2=${NETIFS[p3]}
-+        swp2=${NETIFS[p4]}
-+
-+        switch_create
-+}
-+
-+cleanup()
-+{
-+        pre_cleanup
-+        switch_destroy
-+}
-+
-+# Check that there is no egress with blackhole entry and that blackhole entries can be replaced
-+blackhole_fdb()
-+{
-+        RET=0
-+
-+	check_blackhole_fdb_support || return 0
-+
-+	tc filter add dev $swp2 egress protocol ip pref 1 handle 1 flower \
-+		dst_ip 192.0.2.2 ip_proto udp dst_port 12345 action pass
-+
-+	$MZ $h1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-+		-a own -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-+
-+	tc_check_packets "dev $swp2 egress" 1 1
-+	check_err $? "Packet not seen on egress before adding blackhole entry"
-+
-+	bridge fdb add `mac_get $h2` dev br0 blackhole
-+	bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
-+	check_err $? "Blackhole entry not found"
-+
-+	$MZ $h1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-+		-a own -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-+
-+	tc_check_packets "dev $swp2 egress" 1 1
-+	check_err $? "Packet seen on egress after adding blackhole entry"
-+
-+	# Check blackhole entries can be replaced.
-+	bridge fdb replace `mac_get $h2` dev $swp2 master static
-+	bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
-+	check_fail $? "Blackhole entry found after replacement"
-+
-+	$MZ $h1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-+		-a own -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-+
-+	tc_check_packets "dev $swp2 egress" 1 2
-+	check_err $? "Packet not seen on egress after replacing blackhole entry"
-+
-+	bridge fdb del `mac_get $h2` dev $swp2 master static
-+	tc filter del dev $swp2 egress protocol ip pref 1 handle 1 flower
-+
-+        log_test "Blackhole FDB entry"
-+}
-+
-+trap cleanup EXIT
-+
-+setup_prepare
-+setup_wait
-+
-+tests_run
-+
-+exit $EXIT_STATUS
-diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-index 5b02b6b60ce7..59b8b7666eab 100755
---- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-@@ -1,7 +1,15 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
--ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
-+ALL_TESTS="
-+	locked_port_ipv4
-+	locked_port_ipv6
-+	locked_port_vlan
-+	locked_port_mab
-+	locked_port_station_move
-+	locked_port_mab_station_move
-+"
-+
- NUM_NETIFS=4
- CHECK_TC="no"
- source lib.sh
-@@ -166,6 +174,102 @@ locked_port_ipv6()
- 	log_test "Locked port ipv6"
- }
- 
-+locked_port_mab()
-+{
-+	RET=0
-+	check_locked_port_support || return 0
-+
-+	ping_do $h1 192.0.2.2
-+	check_err $? "MAB: Ping did not work before locking port"
-+
-+	bridge link set dev $swp1 locked on
-+	check_port_mab_support $swp1 || return 0
-+
-+	ping_do $h1 192.0.2.2
-+	check_fail $? "MAB: Ping worked on locked port without FDB entry"
-+
-+	bridge fdb show | grep `mac_get $h1` | grep -q "locked"
-+	check_err $? "MAB: No locked fdb entry after ping on locked port"
-+
-+	bridge fdb replace `mac_get $h1` dev $swp1 master static
-+
-+	ping_do $h1 192.0.2.2
-+	check_err $? "MAB: Ping did not work with fdb entry without locked flag"
-+
-+	bridge fdb del `mac_get $h1` dev $swp1 master
-+	bridge link set dev $swp1 locked off mab off
-+
-+	log_test "Locked port MAB"
-+}
-+
-+# No roaming allowed to a simple locked port
-+locked_port_station_move()
-+{
-+	local mac=a0:b0:c0:c0:b0:a0
-+
-+	RET=0
-+	check_locked_port_support || return 0
-+
-+	bridge link set dev $swp1 locked on
-+
-+	$MZ $h1 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep -q "master br0"
-+	check_fail $? "Locked port station move: FDB entry on first injection"
-+
-+	$MZ $h2 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp2 | grep "$mac vlan 1" | grep -q "master br0"
-+	check_err $? "Locked port station move: Entry not found on unlocked port"
-+
-+	$MZ $h1 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep -q "master br0"
-+	check_fail $? "Locked port station move: entry roamed to locked port"
-+
-+	bridge link set dev $swp1 locked off
-+
-+	log_test "Locked port station move"
-+}
-+
-+# Roaming to and from a MAB enabled port should work if sticky flag is not set
-+locked_port_mab_station_move()
-+{
-+	local mac=10:20:30:30:20:10
-+
-+	RET=0
-+	check_locked_port_support || return 0
-+
-+	bridge link set dev $swp1 locked on
-+
-+	check_port_mab_support $swp1 || return 0
-+
-+	$MZ $h1 -q -t udp -a $mac -b rand
-+	if bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep -q "permanent"; then
-+		echo "SKIP: Roaming not possible with local flag, skipping test..."
-+		bridge link set dev $swp1 locked off mab off
-+		return $ksft_skip
-+	fi
-+
-+	bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep -q "locked"
-+	check_err $? "MAB station move: no locked entry on first injection"
-+
-+	$MZ $h2 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep -q "locked"
-+	check_fail $? "MAB station move: locked entry did not move"
-+
-+	bridge fdb show dev $swp2 | grep "$mac vlan 1" | grep -q "locked"
-+	check_fail $? "MAB station move: roamed entry to unlocked port had locked flag on"
-+
-+	bridge fdb show dev $swp2 | grep "$mac vlan 1" | grep -q "master br0"
-+	check_err $? "MAB station move: roamed entry not found"
-+
-+	$MZ $h1 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep "master br0" | grep -q "locked"
-+	check_fail $? "MAB station move: entry roamed back to locked port"
-+
-+	bridge link set dev $swp1 locked off mab off
-+
-+	log_test "Locked port MAB station move"
-+}
-+
- trap cleanup EXIT
- 
- setup_prepare
-diff --git a/tools/testing/selftests/net/forwarding/bridge_sticky_fdb.sh b/tools/testing/selftests/net/forwarding/bridge_sticky_fdb.sh
-index 1f8ef0eff862..bca77bc3fe09 100755
---- a/tools/testing/selftests/net/forwarding/bridge_sticky_fdb.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_sticky_fdb.sh
-@@ -1,7 +1,7 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
--ALL_TESTS="sticky"
-+ALL_TESTS="sticky sticky_no_roaming"
- NUM_NETIFS=4
- TEST_MAC=de:ad:be:ef:13:37
- source lib.sh
-@@ -59,6 +59,25 @@ sticky()
- 	log_test "Sticky fdb entry"
- }
- 
-+# No roaming allowed with the sticky flag set
-+sticky_no_roaming()
-+{
-+	local mac=a8:b4:c2:c2:b4:a8
-+
-+	RET=0
-+
-+	bridge link set dev $swp2 learning on
-+	bridge fdb add $mac dev $swp1 master static sticky
-+	bridge fdb show dev $swp1 | grep "$mac master br0" | grep -q sticky
-+	check_err $? "Sticky no roaming: No sticky FDB entry found after adding"
-+
-+	$MZ $h2 -q -t udp -c 10 -d 100msec -a $mac -b rand
-+	bridge fdb show dev $swp2 | grep "$mac master br0" | grep -q sticky
-+	check_fail $? "Sticky no roaming: Sticky entry roamed"
-+
-+	log_test "Sticky no roaming"
-+}
-+
- trap cleanup EXIT
- 
- setup_prepare
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 3ffb9d6c0950..642fbf217c20 100755
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -137,6 +137,24 @@ check_locked_port_support()
- 	fi
- }
- 
-+check_port_mab_support()
-+{
-+	local dev=$1;
-+
-+	if ! bridge link set dev $dev mab on 2>/dev/null; then
-+		echo "SKIP: iproute2 too old; MacAuth feature not supported."
-+		return $ksft_skip
-+	fi
-+}
-+
-+check_blackhole_fdb_support()
-+{
-+	if ! bridge fdb help | grep -q "blackhole"; then
-+		echo "SKIP: Blackhole fdb feature not supported."
-+		return $ksft_skip
-+	fi
-+}
-+
- if [[ "$(id -u)" -ne 0 ]]; then
- 	echo "SKIP: need root privileges"
- 	exit $ksft_skip
--- 
-2.34.1
+Calling that before the internal state has been set with the incoming state from
+userspace is simply wrong.
 
+The check that the x2APIC ID is "correct" stays where it is, this is purely the
+"is the xAPIC ID different" path.
