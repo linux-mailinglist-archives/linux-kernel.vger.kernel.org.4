@@ -2,196 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9F15ED332
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 04:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1885ED333
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 05:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbiI1C5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 22:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
+        id S229692AbiI1DAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 23:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiI1C5g (ORCPT
+        with ESMTP id S229630AbiI1DAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 22:57:36 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2052.outbound.protection.outlook.com [40.107.220.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9775A1C6A61
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 19:57:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TE4MvG6SSkA/2tB8UU+sPotiK2BB4vLtFTp5oGkcK6CV4O2tfl7wshzvj6x223uiMkbnQ3ZtrbCri+Z6debRfwhSRsD686/JMAKq+poXQceVQpH8lAVHlBKDQwm2H5gIr5CUy4r/NSgYS8lBBe50yOa1SWyxnTp3qNKNCO9P1FySPY2FgbBO8W9NzfQPbuT5K1o8TkdxbAp4TcAGFvXlv92+CuATKU2Lf/VoP9fmykIHEehAp84Upad374WzcRBAUpt5N03h1g+ajF826wc9pSTe5HmUzaS/zlot3F535IYCGmHUQ+mcJEEF1Iz4iYmTdh5hl3GkznbOS+q0xGn3CQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BVzVvj/VlHTJpS1BeB2KyhVMCWKW12jFCsCGHdyqW8Q=;
- b=XTq1xFMaCirdC7AzmXHm2rYa0rZ83+casZ77todtploSMcInW2yxPaP5HKV28WcD2/bv5zWymEe5eUrSpV8OizjOF77xeXKPxK9ladeOgwPI+O6YnoZ5YLke27eBB2LSdoymYjm9SVNneb1Of2FTvUy+4Iyrwj+2AlG8eA5zHrXHMfYaubfyycni0awn/6T+BdGMihZNzQ03MFYgeIke5Gec8Y2iOxDXGwQVv1ksjBzrEGYipuv3pEee4jfw8WES2IxmAe3IBB95J2/DpaONxrLRIG/qbgMT8OCXl550FnRMrmcD7UivQa0P+VBslhjL4I2/t7bPFprM5md13xKKPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BVzVvj/VlHTJpS1BeB2KyhVMCWKW12jFCsCGHdyqW8Q=;
- b=YFVRFpKLN64rOLosUqE0iEq5Ie9/pOyxgNGxRMXAHkSxxwlOf6phiDocp3sfp9W/4kEtbGn3zCi4940my8bbzhKoIDjLgqKX8MXMfLUyPhameb0jK1r92aIDgq1/ApsiN/MhxqOWkZAHDTzPrYccx0xk46SHsOQNAtjd5y7yGkAbtp7QjunGAxpZNGvKMaIoSVsT/VVIRAjEabWngbqRuR1PSImrbOEydxBcn+DflJdlotnvggdqtCwWd4TR5mSIi6jS15uCoEaY/AfdgHOHOox1xrGxIh+txNN3PNywo8yJ6FwVpWSN6En8wzENi4pb0DwneJnxXbEUiPewbJ6ctQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by IA1PR12MB7760.namprd12.prod.outlook.com (2603:10b6:208:422::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Wed, 28 Sep
- 2022 02:57:32 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::51d9:c02b:e5a1:254b]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::51d9:c02b:e5a1:254b%5]) with mapi id 15.20.5676.017; Wed, 28 Sep 2022
- 02:57:32 +0000
-Message-ID: <9d72f2ed-9a92-e67b-3af5-79050004a1a4@nvidia.com>
-Date:   Tue, 27 Sep 2022 19:57:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC 2/6] mm/migrate_pages: split unmap_and_move() to _unmap()
- and _move()
-Content-Language: en-US
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20220921060616.73086-1-ying.huang@intel.com>
- <20220921060616.73086-3-ying.huang@intel.com>
- <87o7v2lbn4.fsf@nvdebian.thelocal>
- <CAHbLzkpPNbggD+AaT7wFQXkKqCS2cXnq=Xv3m4WuHLMBWGTmpQ@mail.gmail.com>
- <87fsgdllmb.fsf@nvdebian.thelocal>
- <87ill937qe.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <46807002-c42c-1232-0938-5b48050171ee@nvidia.com>
- <CAHbLzkqRyav0fZ5gzaKbkTfGBxkQXTpu0NJz-A9j7UaHhVBxEQ@mail.gmail.com>
- <87pmfgjnpj.fsf@nvdebian.thelocal>
- <87czbg2s3b.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <240bbb01-1f26-71ee-233a-ad65313ac358@nvidia.com>
- <CAHbLzkpnCTD_c60QPu25hPymCYwLP6fYRMxp1EWmzX0SBF4g1w@mail.gmail.com>
- <4a44bf59-a984-8ac4-c613-a03d74dc6a5a@nvidia.com>
- <CAHbLzkoEDUauo-H=zYvnDTC8TX4uezPxA4nV=QVQK_qxyZ3wjQ@mail.gmail.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <CAHbLzkoEDUauo-H=zYvnDTC8TX4uezPxA4nV=QVQK_qxyZ3wjQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR05CA0053.namprd05.prod.outlook.com
- (2603:10b6:a03:39b::28) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        Tue, 27 Sep 2022 23:00:40 -0400
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9664014FE20
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 20:00:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=zekAf
+        ieWPgmea/AiVYND9DfsBqXhQTQmbFDx5CQVP3w=; b=XRdlKWbSA3yVWvyJsIDRN
+        FHgXyH2SUbbYp3axTvZ0k+97sqEJfnZvdp8AZG7TtYKm38K+Get+wunuMXPLa4C3
+        71ChWgv/jR+/gYFkAsb7QzBAS2T3dEPTsTI0hXC4ZBawm34rsoRYtYX4YBsI4yFb
+        tcRFTpzxEGwAl/M3bhhYcM=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by smtp4 (Coremail) with SMTP id HNxpCgCnS+uwuDNjJdmXgQ--.48998S2;
+        Wed, 28 Sep 2022 11:00:01 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     dimitri.sivanich@hpe.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        alex000young@gmail.com, security@kernel.org,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] misc: sgi-gru: fix use after free bugs in  gru_set_context_option, gru_fault and gru_handle_user_call_os
+Date:   Wed, 28 Sep 2022 10:59:57 +0800
+Message-Id: <20220928025957.1050698-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|IA1PR12MB7760:EE_
-X-MS-Office365-Filtering-Correlation-Id: 021efb63-1d2d-4bf4-7337-08daa0fd2fca
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: z4IJDsGv5fBXV2tS99VI2VLJnl2v7X9vFVq6mNwsQZ8PMer3+4kEdT1OeIneKgvj7QOu9wFvBMnSH5ZOj2khOyzHURzZLXCB7CfupE2UDPMXtFPvmwSRK+/yfz4XM4Xy5iwuIG5v0Pl/6W0PzlGbCsEuxQSfR7RnTuvtimYxNj/DTD4I8sSRHizP/uq1Q1KsvSSN74SFLKJBELFVOwsOYMdwsQDD+uFGqOBYmrXacPlD0XZBS/D0UL08VCULjmdDQc992T/6MKTems4aA68G7oLqS+/6Bc6ExG6mF0tNtSeXt8XTwWtFyrabt9yFVu+p7o4oFgk5zleDTgc46lbszN9BEhrCxUfXEPrH1tZia9hKhdFL4x6Hnunmw79+ZIUPxqM6RPj39PqbTh0+o42WQ1auH6N3DUOHj8bRhs9dQujnDD7h4vR86OeJwbheNldhdqKXx39Q4Fu9GSk43qEM3DVN8Q18e21Z3N3RYSlfVqb5Zp4Xe2ZI3RPGsxlF15YOXJdtXGG44JYfiaPLrAuk7G/1hSilTCG0SOmQEhCrEs+eU21L/OUO4BeXtXa5kI4yQzrPosXBo8en5QsMUS9Eoed/qduKnQcB3csEDzOBsQYo2rK/UkSo4KAgQwVt16Rt0q9Als7rASSPw/ghCeVONpxgHk/NG16sRS047/CFge6OhqmCnx/XN1r4d1nw/oaYIlj1Le2Zv6ELpw/i4SqCSxMCQ/NLmnJD9wz8aipIhMX2QM1Op9o2dEJPCg9hdMNO5qnmoe5B3V3c87fhg1dAcqit+lFYmlk1fZ8cK4DKAGo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(366004)(451199015)(478600001)(6486002)(36756003)(31686004)(6916009)(186003)(2616005)(31696002)(5660300002)(38100700002)(86362001)(41300700001)(66556008)(6506007)(6512007)(6666004)(54906003)(26005)(316002)(53546011)(66946007)(66476007)(4326008)(2906002)(8936002)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VGdQNUVHT2FPclZIUGxlUEkxSWhsWnVTOGU3ZGR6T21Xd3ljTWVQbXVjdVJU?=
- =?utf-8?B?MUlSWW1GdG5meGNTcms1Um9nUW1jWXF5QUdVWGFKZHp1cHQrekNKVEttQUtW?=
- =?utf-8?B?S1dXZllCZmNKck9udEUwVnVIZHlxWmFvRnFJb1ZmSmJNTW4vNENoamcrdTU3?=
- =?utf-8?B?cklxVWlIbnhXMHVBczNPd0N0Nmw0RklJUHJHRVIrNHp0aWJSTHp5YzZueFY5?=
- =?utf-8?B?Y24vM2kwTDhPQWRnOFBuV1R3RjhSMnhoeGhjWHRFWlBYRDhDc1gyeEFsWXpl?=
- =?utf-8?B?QmY2TXMwc2YwNTZUVEo4Q1ZJMS95Mm5sK3RYWXlFK3hwdDdlWmpxVkQ5NWVD?=
- =?utf-8?B?OU9INEJCOXZ1enZyNlBQZm1wTE9uTUVvWUZhTWo2VHJMZzEwWTVSZFhLM1Z0?=
- =?utf-8?B?UWhta2dXNExUTlhtMlFDUE8xb0t5MWgzd1c1NFlwZXlGbnpYZlVLZlE0NjIr?=
- =?utf-8?B?enF6RVcrTk1kM0JhMEx2NU9sRXFxRTNkM25tS2V6ZkNtSEVzZXcyQzdoSEFJ?=
- =?utf-8?B?SUpMeUFpYU15TWFuYnhpVjBNM1cwZC9UZHBhTlg5MzI5eEd1NlUvQWhZc3Fw?=
- =?utf-8?B?M2hnY2FWOE5GUTExOU5zSEVpS2xKNmg2bHhKNXZzT2NyK0YzNEpZRnlZM1hI?=
- =?utf-8?B?OFZidzF5Y3Vpam43bFlUUEpjbE1kMUFTT0RsbDBhYldmeUtSOElGN1Bsdjlz?=
- =?utf-8?B?eGJrbkRkMUczejBGSkxnai82NHZ4SHZwbGsvbU1oVEdlQ2EvUGFINGthTkUv?=
- =?utf-8?B?VkNwZ1dDUVZQR2l4d1JpUituVy9TWXB1alh5aUxieXdSUW1tQjFFRkh4KzRn?=
- =?utf-8?B?dTc4LzFZZGd0UnNnY2hoWnlGRXN4dVpKeXdSdVZWc2NhSSs2Vm5wZm1pZUdm?=
- =?utf-8?B?eWtNcW5hMHcreUREQjZxTVZGano5TmVKZ0RxWk9LYkJ2NmtVTXY5ektibEUz?=
- =?utf-8?B?KzlHYmpsS0ZzS29tdUNsTnBQUWVVU01SSHAvak5BaE5EUmdJZ0w4RW03WkEz?=
- =?utf-8?B?M3lZUGhiVEU4RmVkNVRQNVJVSUp3dDRURUpJcGxONkJiMVBETEtPQUVINktX?=
- =?utf-8?B?aThPa2xRZW4vTXdQcGR0Nkk2ckJmOHJzM2ZJM2dRUC80OTVQYWtRUTFmaXBJ?=
- =?utf-8?B?VjBDUG11RTVOQklFeFFPUTRrbzMzZ3RtRGlsc2x1dXlaYXNQTnBFeWtvcWV6?=
- =?utf-8?B?ZEVWbDg2ZHAvcHo2amd4Ri81eUNNMVU5aTh2WDNTOUJFbWlkS0I3VjV6TzV4?=
- =?utf-8?B?UDNJZENxU1F4c0V1eG1VWk9PZVFiQkVnTVBCK1p0V3hSWllIcXNKMzNnTy9K?=
- =?utf-8?B?N0hFVVE1RFdkVFVTbmhkOGdCc3lhTXpMYWNOcjVQUFBtd2ZNT3Yra0pjeFp3?=
- =?utf-8?B?RE00Mmp2V1BLcGtnbkp3VHRQeXQwZjljdHBRZnlpaXBvMDlGWnNCRzJhTjIv?=
- =?utf-8?B?VFFCc2pnRU1lVFhRYjlaQWNZTWRtSUs5NUpVd08rV3lmUXhra3dIaXp2dHRp?=
- =?utf-8?B?dGhSQUVzY1ZZb2NLT0s3WlJLK0MrcEpWUTU1VWxUOHYrY0xxWjVscE1mN1ZR?=
- =?utf-8?B?enMydWxZYXQrNlpMZDZoNHhrY1JpY254VEFLQ0VyUGl4eHoxTHJ0VGxYSHl3?=
- =?utf-8?B?M1FMMnk2RUcyTXFpMWhxbUxzdGdVa08yNGovMmFhcDlkTXFJWWdGQTFkNldu?=
- =?utf-8?B?V3VwYm1LS1owbTRYaW5abDRiRkNUTGFyWjdZYUpKamJKQ0FWOTRmS01FRTU3?=
- =?utf-8?B?eTdhek5id3IxOVI3TWQrUkdzY0doNytLZHg5eWVERk5GYUR5M1FqU3VuUjd6?=
- =?utf-8?B?aGVWMFYwcEhhQzFMWXduS1A2NFJac1gvYmJpTVQ5U3FOa0hxODg5ZzNqckc0?=
- =?utf-8?B?SzZGZUQwajVRQy90NGJaNFA2azNTNFZXSE1DOWt0SGE0WnBwVUhrWHhzNUFw?=
- =?utf-8?B?MGdraWFYNUdSYlM0TjljQWZzZ2Raekw2M2lEQ1M3QlF6S0htKzkxUzFQMzIr?=
- =?utf-8?B?eWtzYW1EMFhsQ2Z4NmZPbFRGZ0JpYjdoNUUzYk1YNDZOeUhlcXJ2QnFrZCtH?=
- =?utf-8?B?bTdZaTlkZWNCWXA0ODlhTzZBcW5OTWN4R1duYWhONEJhQ1Y3Ynpxbms3V3g2?=
- =?utf-8?Q?39o8UMSwn/+0hZbjbPT99sekC?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 021efb63-1d2d-4bf4-7337-08daa0fd2fca
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 02:57:31.9375
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AiaFkVPerqGQVVWS2qYaYroo9H10GmzXWswv3IDF423D7qmV4BVm8ZujACyPUR5vIZXlUaabYLEG24BWgl1uFA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7760
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HNxpCgCnS+uwuDNjJdmXgQ--.48998S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4xtF4UKw1fZr4DuFyfWFg_yoWrZr1Dpa
+        12g348ArW3XF4rurs7ta1kWFW3Ca48JFW5Gr9rtwnY9w4FyFs8GryDJas0qr4DurW0qr4a
+        yF4rtFnI9an0gaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaiiDUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXBGKU1Xl4T+VYgAAsN
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 19:14, Yang Shi wrote:
-> IIRC, the writeback may not call generic_writepages. On my ext4
-> filesystem, the writeback call stack looks like:
-> 
-> @[
->     ext4_writepages+1
->     do_writepages+191
->     __writeback_single_inode+65
->     writeback_sb_inodes+477
->     __writeback_inodes_wb+76
->     wb_writeback+457
->     wb_workfn+680
->     process_one_work+485
->     worker_thread+80
->     kthread+231
->     ret_from_fork+34
-> ]: 2
-> 
+Gts may be freed in gru_check_chiplet_assignment.
+The caller still use it after that, UAF happens.
 
-Sure, that's fine for ext4, in that particular case, but
+Fix it by introducing a return value to see if it's in error path or not. 
+Free the gts in caller if gru_check_chiplet_assignment check failed.
 
-a) not all filesystems have .writepages hooked up. That's why
-do_writepages() checks for .writepages(), and falls back to
-.writepage():
+Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
+Reported-by: Zheng Wang <hackerzheng666@gmail.com>
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 
-	if (mapping->a_ops->writepages)
-		ret = mapping->a_ops->writepages(mapping, wbc);
-	else
-		ret = generic_writepages(mapping, wbc);
+---
+ drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
+ drivers/misc/sgi-gru/grumain.c   | 17 +++++++++++++----
+ drivers/misc/sgi-gru/grutables.h |  2 +-
+ 3 files changed, 26 insertions(+), 7 deletions(-)
 
-, and
-
-b) there are also a lot of places and ways to invoke writebacks. There
-are periodic writebacks, and there are data integrity (WB_SYNC_ALL)
-writebacks, and other places where a page needs to be cleaned--so, a lot
-of call sites. Some of which will land on a .writepage() sometimes, even
-now.
-
-For just one example, I see migrate.c's writeout() function directly
-calling writepage():
-
-	rc = mapping->a_ops->writepage(&folio->page, &wbc);
-
-
-thanks,
-
+diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
+index d7ef61e602ed..2b5b049fbd38 100644
+--- a/drivers/misc/sgi-gru/grufault.c
++++ b/drivers/misc/sgi-gru/grufault.c
+@@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
+ 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
+ 		goto exit;
+ 
+-	gru_check_context_placement(gts);
++	ret = gru_check_context_placement(gts);
++	if (ret)
++		goto err;
+ 
+ 	/*
+ 	 * CCH may contain stale data if ts_force_cch_reload is set.
+@@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
+ exit:
+ 	gru_unlock_gts(gts);
+ 	return ret;
++err:
++	gru_unlock_gts(gts);
++	gru_unload_context(gts, 1);
++	return -EINVAL;
+ }
+ 
+ /*
+@@ -874,7 +880,7 @@ int gru_set_context_option(unsigned long arg)
+ 		} else {
+ 			gts->ts_user_blade_id = req.val1;
+ 			gts->ts_user_chiplet_id = req.val0;
+-			gru_check_context_placement(gts);
++			ret = gru_check_context_placement(gts);
+ 		}
+ 		break;
+ 	case sco_gseg_owner:
+@@ -889,6 +895,10 @@ int gru_set_context_option(unsigned long arg)
+ 		ret = -EINVAL;
+ 	}
+ 	gru_unlock_gts(gts);
++	if (ret) {
++		gru_unload_context(gts, 1);
++		ret = -EINVAL;
++	}
+ 
+ 	return ret;
+ }
+diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
+index 9afda47efbf2..79903cf7e706 100644
+--- a/drivers/misc/sgi-gru/grumain.c
++++ b/drivers/misc/sgi-gru/grumain.c
+@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
+  * chiplet. Misassignment can occur if the process migrates to a different
+  * blade or if the user changes the selected blade/chiplet.
+  */
+-void gru_check_context_placement(struct gru_thread_state *gts)
++int gru_check_context_placement(struct gru_thread_state *gts)
+ {
+ 	struct gru_state *gru;
++	int ret = 0;
+ 
+ 	/*
+ 	 * If the current task is the context owner, verify that the
+@@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_thread_state *gts)
+ 	 */
+ 	gru = gts->ts_gru;
+ 	if (!gru || gts->ts_tgid_owner != current->tgid)
+-		return;
++		return ret;
+ 
+ 	if (!gru_check_chiplet_assignment(gru, gts)) {
+ 		STAT(check_context_unload);
+-		gru_unload_context(gts, 1);
++		ret = -EINVAL;
+ 	} else if (gru_retarget_intr(gts)) {
+ 		STAT(check_context_retarget_intr);
+ 	}
++
++	return ret;
+ }
+ 
+ 
+@@ -919,6 +922,7 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+ 	struct gru_thread_state *gts;
+ 	unsigned long paddr, vaddr;
+ 	unsigned long expires;
++	int ret;
+ 
+ 	vaddr = vmf->address;
+ 	gru_dbg(grudev, "vma %p, vaddr 0x%lx (0x%lx)\n",
+@@ -934,7 +938,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+ 	mutex_lock(&gts->ts_ctxlock);
+ 	preempt_disable();
+ 
+-	gru_check_context_placement(gts);
++	ret = gru_check_context_placement(gts);
++	if (ret) {
++		mutex_unlock(&gts->ts_ctxlock);
++		gru_unload_context(gts, 1);
++		return ret;
++	}
+ 
+ 	if (!gts->ts_gru) {
+ 		STAT(load_user_context);
+diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
+index 5efc869fe59a..f4a5a787685f 100644
+--- a/drivers/misc/sgi-gru/grutables.h
++++ b/drivers/misc/sgi-gru/grutables.h
+@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
+ extern int gru_user_unload_context(unsigned long arg);
+ extern int gru_get_exception_detail(unsigned long arg);
+ extern int gru_set_context_option(unsigned long address);
+-extern void gru_check_context_placement(struct gru_thread_state *gts);
++extern int gru_check_context_placement(struct gru_thread_state *gts);
+ extern int gru_cpu_fault_map_id(void);
+ extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
+ extern void gru_flush_all_tlb(struct gru_state *gru);
 -- 
-John Hubbard
-NVIDIA
+2.25.1
+
 
