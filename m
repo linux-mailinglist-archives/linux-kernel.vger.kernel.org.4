@@ -2,105 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D249F5EEA43
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC335EEA46
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234066AbiI1Xmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 19:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
+        id S234325AbiI1XnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 19:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233803AbiI1Xmg (ORCPT
+        with ESMTP id S234259AbiI1XnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 19:42:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA94E91D1E
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:42:31 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664408549;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WTOgTFN3mrB5eF0ajXBTEQkEAN2ef2EKya8g7yeWxwI=;
-        b=S+5iEcmaNjMWAyM6QO3oelSgAraE7XZnuRaI5jqVrT3xxRKa/PTbPNkXEMh9NhWniKRf4T
-        S00/DKhwP2V/QfynC4ABbNCS1GtACBSKZ4dDc9Blk0mZWTr7Md8LaHtC0RUGkkhYYEvT7a
-        ksta9NYy9kh9/z1JHkpCWjOLzFBtCAhIuDnPiZCtSOS8rx5NFGBVSZ4bq9xI8KHvKy+WpZ
-        RDWY5FSmmNMtBG/24C6pcCR3HtSwZ04p04B8SXQLmhKnauwGjKddcUmEBkJU+kvATvrVXh
-        hAqTAPDSecxFEffxqxB4zCXJ22u6ljOsRbJCdxwoz+HXj36fWjVt9diZXQMK1g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664408549;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WTOgTFN3mrB5eF0ajXBTEQkEAN2ef2EKya8g7yeWxwI=;
-        b=jHD6encmVSt90l0i5Q3WdUnthRPC5LjIyJ7PfpZvdGIS6KMdsPjHanl2DJLsg5N8XMxT0C
-        QweR/5Vw/hs9SEDg==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk 06/18] printk: Protect [un]register_console()
- with a mutex
-In-Reply-To: <YzMT27FVllY3u05k@alley>
-References: <20220924000454.3319186-1-john.ogness@linutronix.de>
- <20220924000454.3319186-7-john.ogness@linutronix.de>
- <YzMT27FVllY3u05k@alley>
-Date:   Thu, 29 Sep 2022 01:48:29 +0206
-Message-ID: <87mtajkqvu.fsf@jogness.linutronix.de>
+        Wed, 28 Sep 2022 19:43:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF91F08AA;
+        Wed, 28 Sep 2022 16:43:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48FB5601B5;
+        Wed, 28 Sep 2022 23:43:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E92FC433C1;
+        Wed, 28 Sep 2022 23:42:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664408579;
+        bh=NaykREuRBBPpeJBtk+CLEf+97EYWNNqVH6121J8EZRU=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=icHtNeOeVcY5Yyr5KbjX9VLE0HNZ2i7DK6Dy+oxCiJ2djz0wE5TpZcuIY7aOjQ7Vi
+         pMB8yuEn76VpWmpoLW7YVtZ7N0QW2GDGC4+cOCDRzn18/ndV4dSGPTHZhm+EggPPG/
+         LYVjJVADbPIeoYq7MIhLaxMt0td+aiH2D/Wj61x05bdE8RMedtDf4cjVZiGNBSUrK7
+         nEcmb9blSuNfrUsaX9lK07fzijbgvihR981s9uVPC9UfLQBb4ZKAWRWpVnqC0LIN8E
+         Yns159I2ZDPy2qQrLrQcYI4kMFOJemittcoD7SmoPQVEGCDvHXR2siVjwDwvywypDa
+         QWqmgZJDL9YFw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220928200122.3963509-1-jernej.skrabec@gmail.com>
+References: <20220928200122.3963509-1-jernej.skrabec@gmail.com>
+Subject: Re: [PATCH] clk: sunxi-ng: h6: Fix default PLL GPU rate
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     mturquette@baylibre.com, r.stratiienko@gmail.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>, samuel@sholland.org,
+        wens@csie.org
+Date:   Wed, 28 Sep 2022 16:42:56 -0700
+User-Agent: alot/0.10
+Message-Id: <20220928234259.9E92FC433C1@smtp.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-27, Petr Mladek <pmladek@suse.com> wrote:
-> Hmm, the new mutex is really nasty. It has very strange semantic.
-> It makes the locking even more complicated.
+Quoting Jernej Skrabec (2022-09-28 13:01:22)
+> In commit 4167ac8a657e ("clk: sunxi-ng: sun50i: h6: Modify GPU clock
+> configuration to support DFS") divider M0 was forced to be 1 in order to
+> support DFS. However, that left N as it is, at high value of 36. On
+> boards without devfreq enabled (all of them in kernel 6.0), this
+> effectively sets GPU frequency to 864 MHz. This is about 100 MHz above
+> maximum supported frequency.
+>=20
+> In order to fix this, let's set N to 18 (register value 17). That way
+> default frequency of 432 MHz is preserved.
+>=20
+> Fixes: 4167ac8a657e ("clk: sunxi-ng: sun50i: h6: Modify GPU clock configu=
+ration to support DFS")
+> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> ---
 
-We are working to replace the BKL-console_lock with new separate clearly
-defined mechanisms.
-
-The new mutex provides full synchronization for list changes as well as
-changes to items of that list. (Really console->flags is the only change
-to items of the list.)
-
-For some places in the code it is very clear that the console_lock can
-be completely replaced (either with srcu or the new mutex). For other
-places, it is not yet clear why the console_lock is being used and so
-both console_lock and mutex are used.
-
-> The ideal solution would be take console_lock() here.
-
-We should be looking where we can remove console_lock, not identifying
-new locations to add it.
-
-> A good enough solution might be call this under the later added
-> srcu_read_lock(&console_srcu) and use for_each_console_srcu().
-
-@console_srcu does not allow safe reading of console->flags. It only
-provides safe list iteration and reading of immutable fields. The new
-mutex must be used for reading console->flags.
-
-Note that for the NOBKL consoles (not part of this series), a new atomic
-state variable is used so that console->flags is not needed. That means
-for NOBKL consoles the new mutex is further reduced in scope to provide
-only list synchronization.
-
-> Or is this part of some strategy to remove console_sem later, please?
-
-Yes! One of the main points of this final phase of the rework is to
-remove console_sem usage (for NOBKL consoles). If a system is running
-with only NOBKL consoles registered, ideally that system should never
-call console_lock()/console_trylock(). Once all drivers have converted
-over to the NOBKL interface, console_sem will serve no purpose for the
-printk and console frameworks, so it can be removed.
-
-John
+Applied to clk-fixes
