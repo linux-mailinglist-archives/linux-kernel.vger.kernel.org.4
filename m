@@ -2,249 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125155ED835
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE6F5ED83C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233510AbiI1IuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
+        id S233349AbiI1IvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233716AbiI1ItX (ORCPT
+        with ESMTP id S232684AbiI1IvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:49:23 -0400
-Received: from out28-3.mail.aliyun.com (out28-3.mail.aliyun.com [115.124.28.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599521BEB9
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:49:07 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436893|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.118326-0.0259815-0.855693;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.PQPBNkb_1664354942;
-Received: from SunxiBot.allwinnertech.com(mailfrom:victor@allwinnertech.com fp:SMTPD_---.PQPBNkb_1664354942)
-          by smtp.aliyun-inc.com;
-          Wed, 28 Sep 2022 16:49:03 +0800
-From:   Victor Hassan <victor@allwinnertech.com>
-To:     daniel.lezcano@linaro.org, tglx@linutronix.de, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: [RESEND] clocksource: sun4i: Fix the bug that tick_resume stucks
-Date:   Wed, 28 Sep 2022 16:48:57 +0800
-Message-Id: <20220928084857.49185-1-victor@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
+        Wed, 28 Sep 2022 04:51:11 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46027E28;
+        Wed, 28 Sep 2022 01:51:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664355070; x=1695891070;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=eltQSsd00+eTulXtPk3YMa9SYpcWVAR8VjdLyZ6mqho=;
+  b=g+PbDW6SKZlFByra2hY2STr3Dutu5gFwIa3DIE7xLwV/0xWpQwANVJl1
+   MOGF1ienEmCI0MaRg3kii0Y7hAac2FOZFYEdc+Ozso1bXsh8fkfCHzR1k
+   DuIzL5kqSS+fIBQwKCXpw2vFb7Ifx0kdBTXvJp8RDOMhDfCwC7oqDlZme
+   IfWaRz4rQTtQ1S5jPSlUOE6z62QGWEVFr+gcCcImh3vklp9MtsPitnBdt
+   KWa4S83H3uJcMa6R98SrAO//o/7Yq+42tlSW8lN55skq6JuMoiF7B7n7D
+   0tQmTjdY+byTqaj06CJUaDb3u5zllaMwaoeFIY3SEhfbYrBtKlK2pyuaS
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="365593509"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="365593509"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 01:51:09 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="866895387"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="866895387"
+Received: from novermar-mobl.ger.corp.intel.com (HELO localhost) ([10.252.61.30])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 01:51:03 -0700
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        intel-gfx@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        mchehab@kernel.org, chris@chris-wilson.co.uk,
+        matthew.auld@intel.com, thomas.hellstrom@linux.intel.com,
+        nirmoy.das@intel.com, airlied@redhat.com, daniel@ffwll.ch,
+        andi.shyti@linux.intel.com, andrzej.hajda@intel.com,
+        keescook@chromium.org, mauro.chehab@linux.intel.com,
+        linux@rasmusvillemoes.dk, vitor@massaru.org, dlatypov@google.com,
+        ndesaulniers@google.com, trix@redhat.com, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org, linux-sparse@vger.kernel.org,
+        nathan@kernel.org, gustavoars@kernel.org,
+        luc.vanoostenryck@gmail.com
+Subject: Re: [PATCH v13 5/9] drm/i915: Check for integer truncation on
+ scatterlist creation
+In-Reply-To: <20220928081300.101516-6-gwan-gyeong.mun@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220928081300.101516-1-gwan-gyeong.mun@intel.com>
+ <20220928081300.101516-6-gwan-gyeong.mun@intel.com>
+Date:   Wed, 28 Sep 2022 11:51:00 +0300
+Message-ID: <87edvvzxu3.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently syscore_resume() will stuck on tick_resume().
-Fix this by changing  `.tick_resume` from
-sun4i_clkevt_shutdown() to a new function sun4i_tick_resume().
+On Wed, 28 Sep 2022, Gwan-gyeong Mun <gwan-gyeong.mun@intel.com> wrote:
+> diff --git a/drivers/gpu/drm/i915/i915_scatterlist.h b/drivers/gpu/drm/i915/i915_scatterlist.h
+> index 9ddb3e743a3e..1d1802beb42b 100644
+> --- a/drivers/gpu/drm/i915/i915_scatterlist.h
+> +++ b/drivers/gpu/drm/i915/i915_scatterlist.h
+> @@ -220,4 +220,15 @@ struct i915_refct_sgt *i915_rsgt_from_buddy_resource(struct ttm_resource *res,
+>  						     u64 region_start,
+>  						     u32 page_alignment);
+>  
+> +/* Wrap scatterlist.h to sanity check for integer truncation */
+> +typedef unsigned int __sg_size_t; /* see linux/scatterlist.h */
+> +#define sg_alloc_table(sgt, nents, gfp) \
+> +	overflows_type(nents, __sg_size_t) ? -E2BIG \
+> +		: ((sg_alloc_table)(sgt, (__sg_size_t)(nents), gfp))
+> +
+> +#define sg_alloc_table_from_pages_segment(sgt, pages, npages, offset, size, max_segment, gfp) \
+> +	overflows_type(npages, __sg_size_t) ? -E2BIG \
+> +		: ((sg_alloc_table_from_pages_segment)(sgt, pages, (__sg_size_t)(npages), offset, \
+> +						       size, max_segment, gfp))
+> +
+>  #endif
 
-Signed-off-by: Victor Hassan <victor@allwinnertech.com>
----
- drivers/clocksource/timer-sun4i.c | 131 ++++++++++++++++++++++--------
- 1 file changed, 96 insertions(+), 35 deletions(-)
+No. I don't think we should shadow sg_alloc_table() and
+sg_alloc_table_from_pages_segment().
 
-diff --git a/drivers/clocksource/timer-sun4i.c b/drivers/clocksource/timer-sun4i.c
-index 94dc6e42e983..574398c35a22 100644
---- a/drivers/clocksource/timer-sun4i.c
-+++ b/drivers/clocksource/timer-sun4i.c
-@@ -38,6 +38,19 @@
- 
- #define TIMER_SYNC_TICKS	3
- 
-+/* Registers which needs to be saved and restored before and after sleeping */
-+static u32 sun4i_timer_regs_offset[] = {
-+	TIMER_IRQ_EN_REG,
-+	TIMER_CTL_REG(0),
-+	TIMER_INTVAL_REG(0),
-+	TIMER_CNTVAL_REG(0),
-+	TIMER_CTL_REG(1),
-+	TIMER_INTVAL_REG(1),
-+	TIMER_CNTVAL_REG(1),
-+};
-+
-+static void __iomem *sun4i_timer_sched_base __read_mostly;
-+
- /*
-  * When we disable a timer, we need to wait at least for 2 cycles of
-  * the timer source clock. We will use for that the clocksource timer
-@@ -79,10 +92,41 @@ static void sun4i_clkevt_time_start(void __iomem *base, u8 timer,
- 	       base + TIMER_CTL_REG(timer));
- }
- 
-+static inline void sun4i_timer_save_regs(struct timer_of *to)
-+{
-+	void __iomem *base = timer_of_base(to);
-+	int i;
-+	u32 *regs_backup = (u32 *)to->private_data;
-+
-+	for (i = 0; i < ARRAY_SIZE(sun4i_timer_regs_offset); i++)
-+		regs_backup[i] = readl(base + sun4i_timer_regs_offset[i]);
-+}
-+
-+static inline void sun4i_timer_restore_regs(struct timer_of *to)
-+{
-+	void __iomem *base = timer_of_base(to);
-+	int i;
-+	u32 *regs_backup = (u32 *)to->private_data;
-+
-+	for (i = 0; i < ARRAY_SIZE(sun4i_timer_regs_offset); i++)
-+		writel(regs_backup[i], base + sun4i_timer_regs_offset[i]);
-+}
-+
- static int sun4i_clkevt_shutdown(struct clock_event_device *evt)
- {
- 	struct timer_of *to = to_timer_of(evt);
- 
-+	sun4i_timer_save_regs(to);
-+	sun4i_clkevt_time_stop(timer_of_base(to), 0);
-+
-+	return 0;
-+}
-+
-+static int sun4i_tick_resume(struct clock_event_device *evt)
-+{
-+	struct timer_of *to = to_timer_of(evt);
-+
-+	sun4i_timer_restore_regs(to);
- 	sun4i_clkevt_time_stop(timer_of_base(to), 0);
- 
- 	return 0;
-@@ -137,45 +181,54 @@ static irqreturn_t sun4i_timer_interrupt(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
--static struct timer_of to = {
--	.flags = TIMER_OF_IRQ | TIMER_OF_CLOCK | TIMER_OF_BASE,
--
--	.clkevt = {
--		.name = "sun4i_tick",
--		.rating = 350,
--		.features = CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT,
--		.set_state_shutdown = sun4i_clkevt_shutdown,
--		.set_state_periodic = sun4i_clkevt_set_periodic,
--		.set_state_oneshot = sun4i_clkevt_set_oneshot,
--		.tick_resume = sun4i_clkevt_shutdown,
--		.set_next_event = sun4i_clkevt_next_event,
--		.cpumask = cpu_possible_mask,
--	},
--
--	.of_irq = {
--		.handler = sun4i_timer_interrupt,
--		.flags = IRQF_TIMER | IRQF_IRQPOLL,
--	},
--};
-+static void __init sun4i_clockevent_init(struct timer_of *to)
-+{
-+	to->clkevt.name = "sun4i_tick";
-+	to->clkevt.features = CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT;
-+	to->clkevt.set_state_shutdown = sun4i_clkevt_shutdown;
-+	to->clkevt.set_state_periodic = sun4i_clkevt_set_periodic;
-+	to->clkevt.set_state_oneshot = sun4i_clkevt_set_oneshot;
-+	to->clkevt.tick_resume = sun4i_tick_resume;
-+	to->clkevt.set_next_event = sun4i_clkevt_next_event;
-+	to->clkevt.cpumask = cpu_possible_mask;
-+	to->of_irq.flags = IRQF_TIMER | IRQF_IRQPOLL;
-+
-+	sun4i_timer_sched_base = timer_of_base(to) + TIMER_CNTVAL_REG(1);
-+}
- 
- static u64 notrace sun4i_timer_sched_read(void)
- {
--	return ~readl(timer_of_base(&to) + TIMER_CNTVAL_REG(1));
-+	return (u64)~readl(sun4i_timer_sched_base);
- }
- 
- static int __init sun4i_timer_init(struct device_node *node)
- {
-+	struct timer_of *to;
- 	int ret;
- 	u32 val;
- 
--	ret = timer_of_init(node, &to);
-+	to = kzalloc(sizeof(*to), GFP_KERNEL);
-+	if (!to)
-+		return -ENOMEM;
-+
-+	to->flags = TIMER_OF_IRQ | TIMER_OF_CLOCK | TIMER_OF_BASE;
-+	to->of_irq.handler = sun4i_timer_interrupt;
-+	ret = timer_of_init(node, to);
- 	if (ret)
--		return ret;
-+		goto err;
- 
--	writel(~0, timer_of_base(&to) + TIMER_INTVAL_REG(1));
-+	sun4i_clockevent_init(to);
-+
-+	to->private_data = kcalloc(ARRAY_SIZE(sun4i_timer_regs_offset), sizeof(u32), GFP_KERNEL);
-+	if (!to->private_data) {
-+		ret = -ENOMEM;
-+		goto err1;
-+	}
-+
-+	writel(~0, timer_of_base(to) + TIMER_INTVAL_REG(1));
- 	writel(TIMER_CTL_ENABLE | TIMER_CTL_RELOAD |
- 	       TIMER_CTL_CLK_SRC(TIMER_CTL_CLK_SRC_OSC24M),
--	       timer_of_base(&to) + TIMER_CTL_REG(1));
-+	       timer_of_base(to) + TIMER_CTL_REG(1));
- 
- 	/*
- 	 * sched_clock_register does not have priorities, and on sun6i and
-@@ -186,32 +239,40 @@ static int __init sun4i_timer_init(struct device_node *node)
- 	    of_machine_is_compatible("allwinner,sun5i-a10s") ||
- 	    of_machine_is_compatible("allwinner,suniv-f1c100s"))
- 		sched_clock_register(sun4i_timer_sched_read, 32,
--				     timer_of_rate(&to));
-+				     timer_of_rate(to));
- 
--	ret = clocksource_mmio_init(timer_of_base(&to) + TIMER_CNTVAL_REG(1),
--				    node->name, timer_of_rate(&to), 350, 32,
-+	ret = clocksource_mmio_init(timer_of_base(to) + TIMER_CNTVAL_REG(1),
-+				    node->name, timer_of_rate(to), 350, 32,
- 				    clocksource_mmio_readl_down);
- 	if (ret) {
- 		pr_err("Failed to register clocksource\n");
--		return ret;
-+		goto err2;
- 	}
- 
- 	writel(TIMER_CTL_CLK_SRC(TIMER_CTL_CLK_SRC_OSC24M),
--	       timer_of_base(&to) + TIMER_CTL_REG(0));
-+	       timer_of_base(to) + TIMER_CTL_REG(0));
- 
- 	/* Make sure timer is stopped before playing with interrupts */
--	sun4i_clkevt_time_stop(timer_of_base(&to), 0);
-+	sun4i_clkevt_time_stop(timer_of_base(to), 0);
- 
- 	/* clear timer0 interrupt */
--	sun4i_timer_clear_interrupt(timer_of_base(&to));
-+	sun4i_timer_clear_interrupt(timer_of_base(to));
- 
--	clockevents_config_and_register(&to.clkevt, timer_of_rate(&to),
-+	clockevents_config_and_register(&to->clkevt, timer_of_rate(to),
- 					TIMER_SYNC_TICKS, 0xffffffff);
- 
- 	/* Enable timer0 interrupt */
--	val = readl(timer_of_base(&to) + TIMER_IRQ_EN_REG);
--	writel(val | TIMER_IRQ_EN(0), timer_of_base(&to) + TIMER_IRQ_EN_REG);
-+	val = readl(timer_of_base(to) + TIMER_IRQ_EN_REG);
-+	writel(val | TIMER_IRQ_EN(0), timer_of_base(to) + TIMER_IRQ_EN_REG);
-+
-+	return ret;
- 
-+err2:
-+	kfree(to->private_data);
-+err1:
-+	timer_of_cleanup(to);
-+err:
-+	kfree(to);
- 	return ret;
- }
- TIMER_OF_DECLARE(sun4i, "allwinner,sun4i-a10-timer",
+Either get this in scatterlist.h (preferred) or prefix with i915_ or
+whatever to indicate it's our local thing.
+
+i915_scatterlist.h already has too much scatterlist "namespace" abuse
+that I'd rather see gone than violated more.
+
+
+BR,
+Jani.
+
+
+
 -- 
-2.29.0
-
+Jani Nikula, Intel Open Source Graphics Center
