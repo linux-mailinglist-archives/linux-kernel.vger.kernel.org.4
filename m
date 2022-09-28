@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF65E5EE10D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F7E5EE112
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234084AbiI1P6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
+        id S233296AbiI1P6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234529AbiI1P5a (ORCPT
+        with ESMTP id S234395AbiI1P6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:57:30 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3C0DED51
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:56:53 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id iv17so8797391wmb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date;
-        bh=dDShWwrvhx0VR1icMwP79MrRYhMPzc7W3e5rekv8htg=;
-        b=t/SRZzjc+5jjgbhTwwdUCsFa3EU64WSIJ+bFwOqKGITlg+sfU0SgozLKTvFhuWxsDN
-         cRl7ynGZ6WtdmxLib3TSeaOP8PGpwpDZdm0pyw6SNs8WulacjvbRbXAJKQN0D4sN+ADQ
-         noe9yyrhD9j6tsrbdAsnpE6f6GaXW8UWt4aYiSY5bRmJxhx/O+YuGE4O/d+4rqPrMHdi
-         XJG16oEqWQo/CjTKbfyIoUV7liH7ArOAmJvd3mkrrINEuQprfBCVi1x7nbjCvFGWENMX
-         9WUDNiQIkgyqJbPl6+pu6yUzRWdaNjOVoyFeXNuFo+QbGpf3U2KnrqMuHJjvdJloW24L
-         zLMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=dDShWwrvhx0VR1icMwP79MrRYhMPzc7W3e5rekv8htg=;
-        b=eTNr/X2K3E9SHlfAFrv2jDJy2NV9qQ2s0F6xGECIpcsRRJvIsz4Tyo0KcILtFg1Ugr
-         w+aqFL8kKnekvM/Yeo7xgFrG1TVM68CwfJHJqeZDzA86fBds37J567T27w2wKVaBIvdl
-         /Wn4OjG9yP4quvBxjyeg24bCoCN87ivIU7c1twP/lGaHueaP+T/VHjIurVvNl+mDuS4m
-         rRTodt43jLSy0oZFqo6/o6E5T3BEZTIH1MWi1YnEXnjqWNQqEckuPUoal4gEhdALEest
-         2AmdfnTQ0w7YRZtvGr20eycC2UM+f8QQ14pmbi07MjQ/rTLdLmalFjO+ZaF4mW/6cMiJ
-         dckg==
-X-Gm-Message-State: ACrzQf2R5efbyMVet5YM0IRD5g2xTXHvnBInLZll3OFebMBlnx5S+V9V
-        3RQmKFGKNDpWL+BCF4KBltzang==
-X-Google-Smtp-Source: AMsMyM6N9kpPNaFjUA289IxvcNaZQDNnPPMbfwiV/i7ACz+D7197zZymQOiB8T2KkiqgSMUDJtLXlg==
-X-Received: by 2002:a05:600c:1d26:b0:3b4:a677:ccc9 with SMTP id l38-20020a05600c1d2600b003b4a677ccc9mr7349169wms.121.1664380598283;
-        Wed, 28 Sep 2022 08:56:38 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:11d4:7c71:accf:6521? ([2a01:e0a:982:cbb0:11d4:7c71:accf:6521])
-        by smtp.gmail.com with ESMTPSA id t3-20020a7bc3c3000000b003b4868eb6bbsm2373519wmj.23.2022.09.28.08.56.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 08:56:37 -0700 (PDT)
-Message-ID: <444c7905-6dfa-c4f4-f4b0-c92ee4a4a403@linaro.org>
-Date:   Wed, 28 Sep 2022 17:56:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 01/13] phy: qcom-qmp: fix obsolete lane comments
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        Wed, 28 Sep 2022 11:58:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591BCDF68A;
+        Wed, 28 Sep 2022 08:57:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D570061F0D;
+        Wed, 28 Sep 2022 15:57:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DE40C433D6;
+        Wed, 28 Sep 2022 15:57:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664380645;
+        bh=tjK6Iwi9Ql5KmK46x2ExPsr0zxrzgi8K1Jt3JCk5wG0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IAPMUszGIv2DzN4/h8aUlomn7hJkaXcbEvnq+G8MmPtvaiXjWPLFEpQw+L0tXj8mv
+         nSaXwxfw7KUH+zCsO5eeRCqfrqy8XD6usPAvTwWrke4CwDjCt4a+/ZsTF2rx75qBxF
+         gpCTcdLvPqxW2+SJqI+/lDxbhDcqnglftQdLbNxPDKuQbreUK7iNwpV7ghPIkCZzBx
+         XNbgdsuNq0LCORR/LB70/RUBeDfx47cC1JsnWK2uQkBXesAC9OWYHTy7JwEQ5ZiS2w
+         DNLX8L0Dq+FWd1EoA3LeTe7ub9tsZgCZ1J1KPoO+EEV8rcKvV27AGtoBXpLLHySD/a
+         sdVbUcOrIOylA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1odZRD-0005f9-N1; Wed, 28 Sep 2022 17:57:31 +0200
+Date:   Wed, 28 Sep 2022 17:57:31 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220928152822.30687-1-johan+linaro@kernel.org>
- <20220928152822.30687-2-johan+linaro@kernel.org>
-Reply-To: neil.armstrong@linaro.org
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20220928152822.30687-2-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Rob Clark <robdclark@gmail.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Steev Klimaszewski <steev@kali.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 09/10] drm/msm/dp: drop modeset sanity checks
+Message-ID: <YzRu64bdqjnhbjlc@hovoldconsulting.com>
+References: <20220913085320.8577-1-johan+linaro@kernel.org>
+ <20220913085320.8577-10-johan+linaro@kernel.org>
+ <d05290d8-7603-13b3-3cc4-d8509b03fc02@quicinc.com>
+ <YzKi8XfV6V0p0TJi@hovoldconsulting.com>
+ <d7688497-6229-40d4-3378-5036d699dfd7@quicinc.com>
+ <YzQ9CPwxZXFJCQGG@hovoldconsulting.com>
+ <3a5f006d-2735-5af5-48fa-4397bfb5e3ba@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3a5f006d-2735-5af5-48fa-4397bfb5e3ba@quicinc.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,22 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 17:28, Johan Hovold wrote:
-> All QMP drivers but the MSM8996 and combo ones handle exactly one PHY
-> and the corresponding memory resources are not per-lane, but per PHY.
-> 
-> Update the obsolete comments.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-combo.c        | 2 +-
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 2 +-
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c         | 2 +-
->   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c          | 2 +-
->   drivers/phy/qualcomm/phy-qcom-qmp-usb.c          | 2 +-
->   5 files changed, 5 insertions(+), 5 deletions(-)
-> 
+On Wed, Sep 28, 2022 at 08:33:52AM -0700, Abhinav Kumar wrote:
+> On 9/28/2022 5:24 AM, Johan Hovold wrote:
+> > On Tue, Sep 27, 2022 at 11:42:53AM -0700, Abhinav Kumar wrote:
 
-<snip>
+> >> Discussed with Rob on IRC, we will apply everything except the last two
+> >> patches of this series in the -fixes and take these two for the next
+> >> kernel rev push.
+> > 
+> > So the fixes go in 6.0 and the two follow-on cleanups in 6.1? Or did you
+> > mean 6.1 and 6.2?
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> The fixes will go in 6.1 first.
+> 
+> The two follow-on cleanups in 6.2.
+
+Ok, sounds good. Thanks.
+
+Johan
