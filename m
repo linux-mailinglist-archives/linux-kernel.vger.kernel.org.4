@@ -2,103 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1E05EE3D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B5E5EE3DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234519AbiI1SFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 14:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        id S234335AbiI1SGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 14:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234550AbiI1SFl (ORCPT
+        with ESMTP id S234632AbiI1SGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 14:05:41 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE31CEBBCB
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:05:38 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id t16so11205760ljh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:05:38 -0700 (PDT)
+        Wed, 28 Sep 2022 14:06:11 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3399E10197A
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:06:10 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id 9so13170220pfz.12
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:06:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=avQKUOu4lw23cs6/x3clKxPoK1YDt7piZdaJ0NJGp/k=;
-        b=TjxUe8bDn3svsRCLEBMTTyN0VEWN1k0f2//DOPUg1nlcMcAYIXwpjPJfLHfHlz9ujG
-         lDi/HeCLa4pTnYZO9GaFm9rOFkc456VSFy043LG8CGGriYFQtBpixfGul7Jxmpi2XXsT
-         FMj9x6FCnIHaUCOioKf8i2Z4f78d/hwD0A40Fb3LuZrxegxNkfP0+OyY9gYzcEXAN08b
-         cSrD6RQPIUy9w0QAJYbKGqk63l6iglupgrvJshHafR+yB9UT7pYqn7/1X6VtJnXv//Zn
-         W2kFyjaLCSEGADdeKaZgNxOyTwaFyFLWO01S+MrKgFcjgaUH51UDY4VyMCNEULtUkezk
-         sI2A==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=lg8DJ4PVGf/UE/b9agj2E3jF0biYJ2TzSjDWoqo1nWk=;
+        b=kX6MiQJJ++GzWgnGDgSHhlrCPXkUnTfSWuw5a1vTXKi13Y13VyCmf0QKz9GO79Hl9h
+         lytSSUqbfN/S/Ah/mnF4XU0V59XNaRA/1kXJDF/OU4N76i45SgkcHk4RiaBdM3X11q3P
+         ngv3+AbyQkBAOyZ4Efs1UnxU8fMOnw5TwIofU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=avQKUOu4lw23cs6/x3clKxPoK1YDt7piZdaJ0NJGp/k=;
-        b=zeP8KmnLPL8gfw3HSiNJplRCSNjHWvQHhlHY332RsQ437SukEtSCm20laTSl7VlO3P
-         nra229Izi2OAspzD9fbcr5/FhmIAZGG2PhNopigx6QE++wrFmSXkWkmWwAIHQfjZ9bbU
-         XLRaGP2i4MPCrvt96YsnZ4+7vFfm9/X1WGo9DHl47EPRmDWaHKL1Au8L1Lo4DfIngfrG
-         otITqsDcCaSV4aD6bCWvX/eRLpLB0TDKyDrw+QbD/WOYVqVmdQ2VeBrbKGgOayg5q78j
-         Hsl3nKdi7d/9HDI6bM3OjFc5A+/1mBUHiB9OlQTYvoZl9Tfb4aW82Ey7BXK8MokW3yRj
-         UkFg==
-X-Gm-Message-State: ACrzQf1NxJQO/WV8s59EOfwYkyPyFB9BM8sFyV5I9+Rx6z7Dq43ZxGdd
-        82PJXYxAwWkwCcQfhCiuDuZ2DA==
-X-Google-Smtp-Source: AMsMyM4+buYUScbjJTuUsqd2b5ZcwP9zA8s+Us5xv5W/jZ8S/NjX7o/Sf546NPdx76G/1l5Dug51wA==
-X-Received: by 2002:a2e:a887:0:b0:26a:ba85:8fbe with SMTP id m7-20020a2ea887000000b0026aba858fbemr11599034ljq.14.1664388337086;
-        Wed, 28 Sep 2022 11:05:37 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a28-20020ac25e7c000000b0048a8c907fe9sm537098lfr.167.2022.09.28.11.05.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 11:05:36 -0700 (PDT)
-Message-ID: <1d859da3-89c6-d08f-bc10-e5f39c1cd2d4@linaro.org>
-Date:   Wed, 28 Sep 2022 20:05:36 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=lg8DJ4PVGf/UE/b9agj2E3jF0biYJ2TzSjDWoqo1nWk=;
+        b=uH7IuoMYBR+tbcSCOxYMx10rkrN61DyU2IM6Of7BE66Oa2g0kG/ZDB+fpIVJlHGOaR
+         YzyTPjS6FZ9+kqeXiUCTmkrUIrfQ41QYxglRzaNNtG34gYc6TXZpSXoyGF+8A3ngniZE
+         +NROx+ytJgr48gBYLM6MnIBFvGQJBoi24hs/rEnZh9Wx0MAQhGwjDvhR5z1iwVc6ICb+
+         x5Oq2MyobyqmClmKky6Bti2u7YPn9NYlhs9LYusKpSd6OMZzMirAmMtwyHbcA9BoSu8o
+         MEyKTi99AkC95RIpO6e4P7XkXkfgFHhXUcrexIXA2EtpKYSfSiQu0QtNYpF664QcH3t7
+         e+Vw==
+X-Gm-Message-State: ACrzQf29nF9CQXRJyJh4oy6+jscbmgY4smiEJrkvkFfVJBnYP84reEfm
+        J5apTHhkP/oIPxtbY98fQXjI7A==
+X-Google-Smtp-Source: AMsMyM5YqTL3LfyC56o9MrGg1TzPcXSkd4eESKCY3Dzo1hitrUn0UwkQLKFW1M9B3lIoMGRQbkcRdw==
+X-Received: by 2002:a65:4609:0:b0:434:8f0b:5d05 with SMTP id v9-20020a654609000000b004348f0b5d05mr29993911pgq.606.1664388369685;
+        Wed, 28 Sep 2022 11:06:09 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id mt10-20020a17090b230a00b00203059fc75bsm1706643pjb.5.2022.09.28.11.06.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 11:06:09 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 11:06:07 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mchehab@kernel.org,
+        chris@chris-wilson.co.uk, matthew.auld@intel.com,
+        thomas.hellstrom@linux.intel.com, jani.nikula@intel.com,
+        nirmoy.das@intel.com, airlied@redhat.com, daniel@ffwll.ch,
+        andi.shyti@linux.intel.com, andrzej.hajda@intel.com,
+        mauro.chehab@linux.intel.com, linux@rasmusvillemoes.dk,
+        vitor@massaru.org, dlatypov@google.com, ndesaulniers@google.com,
+        trix@redhat.com, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org, linux-sparse@vger.kernel.org,
+        nathan@kernel.org, gustavoars@kernel.org,
+        luc.vanoostenryck@gmail.com
+Subject: Re: [PATCH v13 5/9] drm/i915: Check for integer truncation on
+ scatterlist creation
+Message-ID: <202209281102.A86D736@keescook>
+References: <20220928081300.101516-1-gwan-gyeong.mun@intel.com>
+ <20220928081300.101516-6-gwan-gyeong.mun@intel.com>
+ <CAHk-=wivJwvVbMUKma8600F6qaVLZHT=BY90SEnjiHWw2ZUVEg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v1 7/7] arm: dts: qcom: mdm9615: remove useless amba
- subnode
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v1-7-b6e63a7df1e8@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v1-7-b6e63a7df1e8@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wivJwvVbMUKma8600F6qaVLZHT=BY90SEnjiHWw2ZUVEg@mail.gmail.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 11:14, Neil Armstrong wrote:
-> Since amba node type has been deprecated, remove this subnode and
+On Wed, Sep 28, 2022 at 10:09:04AM -0700, Linus Torvalds wrote:
+> Kees, you need to reign in the craziness in overflow.h.
 
-How device node can be deprecated? simple-bus is still supported, isn't it?
+Understood. I've been trying to help the drm folks walk a line between
+having a bunch of custom macros hidden away in the drm includes and
+building up generalized versions that are actually helpful beyond drm.
+But I can see that it doesn't help to have a "do two things at the same
+time" macro for the assignment checking.
 
-
-> move the mmc nodes in the main soc node.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-
-While reshuffling maybe move properties to match common style:
-1. compatible
-2. reg
-3. ...
-4. status (last)
-
-> 
-Best regards,
-Krzysztof
-
+-- 
+Kees Cook
