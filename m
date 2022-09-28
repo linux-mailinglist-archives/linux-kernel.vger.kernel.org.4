@@ -2,235 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B275ED585
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A385ED593
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233444AbiI1G6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 02:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
+        id S233435AbiI1HAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbiI1G5q (ORCPT
+        with ESMTP id S233344AbiI1HAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 02:57:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41610286DE;
-        Tue, 27 Sep 2022 23:57:45 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 06:57:42 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664348263;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cAbLj2cmoBH2YoxiIUdQhSd8CYVUvVf+fLKvzRhzKOM=;
-        b=Tw302BUHbD+4JDKYWV871VUUebAQigzdB3MBm0C1MvwRAZxQtOTFX8Yibuydz8eAPszmgk
-        SmIItDoChpil7i8snk0Y/L5/CPuQUN5Yj5W/rWhJs2B1jRvd+JKFXfLf175W6j37MJ7mvr
-        oM8TTKfp5jdBq7frSXHNzhLzFCWf8xk72RIKJVpyFXJXagnEUswfSkbAq5ElobMZ5BN1fQ
-        iEfUQJN6uXVkYF9X2Q1jhSGPdCdkRC14GeyVEeRmUF1lgKTUv+AaFtW52wiJ5VBANMJkFu
-        b89UaPMvGXoqq5rmZmUhC8rXiwyOLjZo2w6L01QVraTB6FlSIsKYOyLTzaabQQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664348263;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cAbLj2cmoBH2YoxiIUdQhSd8CYVUvVf+fLKvzRhzKOM=;
-        b=f2WngADDz+RnGYOD7sR5/EW8oAkAq9HCgcw1z2gpm2Hhp1BO5QyHvoNxOrJqozrSO4DYDd
-        iTvx0ytfdIzTDABg==
-From:   "tip-bot2 for Nadav Amit" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/alternative: Fix race in try_get_desc()
-Cc:     Nadav Amit <namit@vmware.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, stable@kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220920224743.3089-1-namit@vmware.com>
-References: <20220920224743.3089-1-namit@vmware.com>
+        Wed, 28 Sep 2022 03:00:00 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E980193FE;
+        Tue, 27 Sep 2022 23:59:56 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id dv25so25075552ejb.12;
+        Tue, 27 Sep 2022 23:59:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Fbzb3euA2ZAgHD+Nl9yGVh9jtokxf9nkdqdpwnlZ3QU=;
+        b=B11rtlM6SDYKPsEKmY2DwW3kIA+2ovSYbvLddlhv/z/ja0wQkw8PwMW7EJuDRAWWii
+         IFjzuhq+nY2ZKVDHhRfc934kveiegXro6YqiItHv+dq5fhjQnV2BpgCTl8ZjsBvPHRvm
+         J8NiKGElif4TR952g0hyWIwnyZNtGA4OahMTiLfGmgHujaDARL1LwtHcHx00MlaaTmfQ
+         e6379Vi4Tc8L2VNqGsdhnk59TIrsyFU9VcrRSvUpqpaCZ9RfYpRYvKSdqSlhm40xDsnr
+         EQdDPhEkOZWtmP71OUOAzRpgc0vrrwLhyczmSVkOl34LyjvKjc7y5ZHyYCnSjVtr1ZNi
+         g6dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Fbzb3euA2ZAgHD+Nl9yGVh9jtokxf9nkdqdpwnlZ3QU=;
+        b=gRmGO30F3/bADkV0T+UjOY05Q6uY7VNryxLpGMfe5wO1XU7uFSz2RiSpOXnC0LRzSB
+         seYtt0qyoJbq6J438F1j6AcKjxol98Z5z+3S2QOAFnwH9pmba9b+65AWUFb2zA0YfAlt
+         FUdxrStEBWGOyTOLxSkRZhReEOoTc2tkYJO28xbTNFC9eGOnBW4huGB3ixKEjkh24OCO
+         LkOM5glbPlDvqSq6ySjb1nJE5AZbK+ZozNbNlrn23KX2NiYwzbkpGq+sUkiQx15cPetS
+         FzYAFo8IMjA2jqpui6gXKZg2q/zfBt49++VAVmOyjJhr1ThEyKISvC3Fbzz4SIZP5bEw
+         c+5A==
+X-Gm-Message-State: ACrzQf2yJ8Ro2Ryq2TW9rRfdwoNWHJ1wYIOJlpHhZNKXwUvzHoZdgUmB
+        JZjmi6kBDQZ2vBD6lcx6ze9/jJ3ehGqM0e9FPWs=
+X-Google-Smtp-Source: AMsMyM54gHZJclG7o6G5xwYto5Dz/yoX/Rcbxpz7ICtcvcxGOzAfllv5KBLV20Tjy+6vTzoJ4qIF5ZLtPdiT3LYolY8=
+X-Received: by 2002:a17:907:c09:b0:781:ea21:3f69 with SMTP id
+ ga9-20020a1709070c0900b00781ea213f69mr24847183ejc.413.1664348394341; Tue, 27
+ Sep 2022 23:59:54 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <166434826272.401.13010999351429134109.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220926135922.24541-1-dzm91@hust.edu.cn> <BYAPR07MB5381FCC10ABD4F92E47CF6D9DD549@BYAPR07MB5381.namprd07.prod.outlook.com>
+ <cd5455e9-b9ea-9376-1440-3dbf790d4c24@kernel.org>
+In-Reply-To: <cd5455e9-b9ea-9376-1440-3dbf790d4c24@kernel.org>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Wed, 28 Sep 2022 14:57:56 +0800
+Message-ID: <CAD-N9QV0Y9eduWD2N3Fmkmt_CW-EwmQVvpQOWx9BozS8hX3t_w@mail.gmail.com>
+Subject: Re: [PATCH] usb: cdns3: remove dead code
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     Pawel Laszczak <pawell@cadence.com>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Peter Chen <peter.chen@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Wed, Sep 28, 2022 at 2:49 PM Roger Quadros <rogerq@kernel.org> wrote:
+>
+> Hello Pawel,
+>
+> On 28/09/2022 09:40, Pawel Laszczak wrote:
+> >>
+> >> From: Dongliang Mu <mudongliangabcd@gmail.com>
+> >>
+> >> Smatch reports the following error:
+> >>
+> >> drivers/usb/cdns3/cdns3-plat.c:113 cdns3_plat_probe() warn:
+> >> platform_get_irq() does not return zero
+> >>
+> >>From the document, platform_get_irq_byname_optional only returns
+> >> non-zero value, and negative value on failure.
+> >>
+> >> Fix this by removing the zero value checking.
+> >>
+> >> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> >> ---
+> >> drivers/usb/cdns3/cdns3-plat.c | 2 --
+> >> 1 file changed, 2 deletions(-)
+> >>
+> >> diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
+> >> index dc068e940ed5..2bc5d094548b 100644
+> >> --- a/drivers/usb/cdns3/cdns3-plat.c
+> >> +++ b/drivers/usb/cdns3/cdns3-plat.c
+> >> @@ -110,8 +110,6 @@ static int cdns3_plat_probe(struct platform_device *pdev)
+> >>      cdns->wakeup_irq = platform_get_irq_byname_optional(pdev, "wakeup");
+> >>      if (cdns->wakeup_irq == -EPROBE_DEFER)
+> >>              return cdns->wakeup_irq;
+> >> -    else if (cdns->wakeup_irq == 0)
+> >> -            return -EINVAL;
+> >>
+> > I think that here we should have:
+> >       else if (cdns->wakeup_irq == -ENXIO)
+> >               return -EINVAL;
+> >  because of function:
+> > platform_get_irq_byname_optional -> __platform_get_irq_byname returns
+> > irq number (>0),  -EPROBE_DEFFER or -ENXIO
+>
+> But this is changing functionality and should come as a new patch.
 
-Commit-ID:     efd608fa7403ba106412b437f873929e2c862e28
-Gitweb:        https://git.kernel.org/tip/efd608fa7403ba106412b437f873929e2c862e28
-Author:        Nadav Amit <namit@vmware.com>
-AuthorDate:    Wed, 21 Sep 2022 18:09:32 
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 27 Sep 2022 22:50:26 +02:00
+I agree. Pawel, you should submit a new patch. This satisfies the rule
+of kernel patching.
 
-x86/alternative: Fix race in try_get_desc()
-
-I encountered some occasional crashes of poke_int3_handler() when
-kprobes are set, while accessing desc->vec.
-
-The text poke mechanism claims to have an RCU-like behavior, but it
-does not appear that there is any quiescent state to ensure that
-nobody holds reference to desc. As a result, the following race
-appears to be possible, which can lead to memory corruption.
-
-  CPU0					CPU1
-  ----					----
-  text_poke_bp_batch()
-  -> smp_store_release(&bp_desc, &desc)
-
-  [ notice that desc is on
-    the stack			]
-
-					poke_int3_handler()
-
-					[ int3 might be kprobe's
-					  so sync events are do not
-					  help ]
-
-					-> try_get_desc(descp=&bp_desc)
-					   desc = __READ_ONCE(bp_desc)
-
-					   if (!desc) [false, success]
-  WRITE_ONCE(bp_desc, NULL);
-  atomic_dec_and_test(&desc.refs)
-
-  [ success, desc space on the stack
-    is being reused and might have
-    non-zero value. ]
-					arch_atomic_inc_not_zero(&desc->refs)
-
-					[ might succeed since desc points to
-					  stack memory that was freed and might
-					  be reused. ]
-
-Fix this issue with small backportable patch. Instead of trying to
-make RCU-like behavior for bp_desc, just eliminate the unnecessary
-level of indirection of bp_desc, and hold the whole descriptor as a
-global.  Anyhow, there is only a single descriptor at any given
-moment.
-
-Fixes: 1f676247f36a4 ("x86/alternatives: Implement a better poke_int3_handler() completion scheme")
-Signed-off-by: Nadav Amit <namit@vmware.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: stable@kernel.org
-Link: https://lkml.kernel.org/r/20220920224743.3089-1-namit@vmware.com
----
- arch/x86/kernel/alternative.c | 45 +++++++++++++++++-----------------
- 1 file changed, 23 insertions(+), 22 deletions(-)
-
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 62f6b8b..4f32043 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1319,22 +1319,23 @@ struct bp_patching_desc {
- 	atomic_t refs;
- };
- 
--static struct bp_patching_desc *bp_desc;
-+static struct bp_patching_desc bp_desc;
- 
- static __always_inline
--struct bp_patching_desc *try_get_desc(struct bp_patching_desc **descp)
-+struct bp_patching_desc *try_get_desc(void)
- {
--	/* rcu_dereference */
--	struct bp_patching_desc *desc = __READ_ONCE(*descp);
-+	struct bp_patching_desc *desc = &bp_desc;
- 
--	if (!desc || !arch_atomic_inc_not_zero(&desc->refs))
-+	if (!arch_atomic_inc_not_zero(&desc->refs))
- 		return NULL;
- 
- 	return desc;
- }
- 
--static __always_inline void put_desc(struct bp_patching_desc *desc)
-+static __always_inline void put_desc(void)
- {
-+	struct bp_patching_desc *desc = &bp_desc;
-+
- 	smp_mb__before_atomic();
- 	arch_atomic_dec(&desc->refs);
- }
-@@ -1367,15 +1368,15 @@ noinstr int poke_int3_handler(struct pt_regs *regs)
- 
- 	/*
- 	 * Having observed our INT3 instruction, we now must observe
--	 * bp_desc:
-+	 * bp_desc with non-zero refcount:
- 	 *
--	 *	bp_desc = desc			INT3
-+	 *	bp_desc.refs = 1		INT3
- 	 *	WMB				RMB
--	 *	write INT3			if (desc)
-+	 *	write INT3			if (bp_desc.refs != 0)
- 	 */
- 	smp_rmb();
- 
--	desc = try_get_desc(&bp_desc);
-+	desc = try_get_desc();
- 	if (!desc)
- 		return 0;
- 
-@@ -1429,7 +1430,7 @@ noinstr int poke_int3_handler(struct pt_regs *regs)
- 	ret = 1;
- 
- out_put:
--	put_desc(desc);
-+	put_desc();
- 	return ret;
- }
- 
-@@ -1460,18 +1461,20 @@ static int tp_vec_nr;
-  */
- static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries)
- {
--	struct bp_patching_desc desc = {
--		.vec = tp,
--		.nr_entries = nr_entries,
--		.refs = ATOMIC_INIT(1),
--	};
- 	unsigned char int3 = INT3_INSN_OPCODE;
- 	unsigned int i;
- 	int do_sync;
- 
- 	lockdep_assert_held(&text_mutex);
- 
--	smp_store_release(&bp_desc, &desc); /* rcu_assign_pointer */
-+	bp_desc.vec = tp;
-+	bp_desc.nr_entries = nr_entries;
-+
-+	/*
-+	 * Corresponds to the implicit memory barrier in try_get_desc() to
-+	 * ensure reading a non-zero refcount provides up to date bp_desc data.
-+	 */
-+	atomic_set_release(&bp_desc.refs, 1);
- 
- 	/*
- 	 * Corresponding read barrier in int3 notifier for making sure the
-@@ -1559,12 +1562,10 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 		text_poke_sync();
- 
- 	/*
--	 * Remove and synchronize_rcu(), except we have a very primitive
--	 * refcount based completion.
-+	 * Remove and wait for refs to be zero.
- 	 */
--	WRITE_ONCE(bp_desc, NULL); /* RCU_INIT_POINTER */
--	if (!atomic_dec_and_test(&desc.refs))
--		atomic_cond_read_acquire(&desc.refs, !VAL);
-+	if (!atomic_dec_and_test(&bp_desc.refs))
-+		atomic_cond_read_acquire(&bp_desc.refs, !VAL);
- }
- 
- static void text_poke_loc_init(struct text_poke_loc *tp, void *addr,
+>
+> The original patch is correct as it doesn't change existing code
+> functionality.
+>
+> >
+> >
+> > thanks
+> > Pawel
+> >
+> >>      if (cdns->wakeup_irq < 0) {
+> >>              dev_dbg(dev, "couldn't get wakeup irq\n");
+> >> --
+> >> 2.35.1
+> >
+>
+> cheers,
+> -roger
