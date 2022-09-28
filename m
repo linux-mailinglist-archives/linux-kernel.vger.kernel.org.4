@@ -2,842 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829385ED683
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611035ED67E
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbiI1HlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
+        id S233794AbiI1Hk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbiI1HkK (ORCPT
+        with ESMTP id S233713AbiI1Hj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:40:10 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3ADF373B;
-        Wed, 28 Sep 2022 00:38:18 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=guanjun@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VQv.eeH_1664350694;
-Received: from localhost(mailfrom:guanjun@linux.alibaba.com fp:SMTPD_---0VQv.eeH_1664350694)
-          by smtp.aliyun-inc.com;
-          Wed, 28 Sep 2022 15:38:15 +0800
-From:   'Guanjun' <guanjun@linux.alibaba.com>
-To:     herbert@gondor.apana.org.au, elliott@hpe.com
-Cc:     zelin.deng@linux.alibaba.com, guanjun@linux.alibaba.com,
-        xuchun.shang@linux.alibaba.com, artie.ding@linux.alibaba.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/9] crypto/ycc: Add aead algorithm support
-Date:   Wed, 28 Sep 2022 15:38:04 +0800
-Message-Id: <1664350687-47330-7-git-send-email-guanjun@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1664350687-47330-1-git-send-email-guanjun@linux.alibaba.com>
-References: <1664350687-47330-1-git-send-email-guanjun@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 28 Sep 2022 03:39:58 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34840110EE4;
+        Wed, 28 Sep 2022 00:38:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1664350691; x=1695886691;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=G8FZ0D3PP/OudJ5uuxCAz/C/vBHo8wESZoPwxTWqVEI=;
+  b=rpOi0Q2ALpGwzM/TFxK8texThSRml1GCO/xsNenobts9GiYBOrLawve7
+   Gc5dd1dU1baVDxraa91TxQEw/BAbsJDIJAxmnSrbNDAupxKwA/O60hAXs
+   IPMN/10MnH4BiqMfbyh1TnyERLb/6xohcSgi5mnoE1TB/P6Q6ZISSDEFL
+   Fl/cjt18zWbguVpqlhAkoeDcJK6BiEtE9phSD+zZ6z94QuqwysuS3/B8Y
+   fbkojoZqdqWyw1WpOh4Znctqu/2hRa6DmMYmyZj5uy3KWQxwnLSLNj1cV
+   4H+VJysofQ25/ftLJAnWhBht0a5y9Y2WO9kM/oEw/QYOD8aTgn9IYfQ/V
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,351,1654531200"; 
+   d="scan'208";a="210828496"
+Received: from mail-sn1anam02lp2048.outbound.protection.outlook.com (HELO NAM02-SN1-obe.outbound.protection.outlook.com) ([104.47.57.48])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Sep 2022 15:38:07 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=m9wV5BpB5br1lpl7eBrDyI3K1SYcnmqnkJMzbyxxdROrNCRD5DfI6a+OcA6KpCUOFD7CYK7tAgHJa0ookxTKnnUOTZmJZVvUrh1Rnb+8N5A1nubt4qmGtXYVqxrIxPavLQSlZLWNRqYE8cMblWhgjYkvXi5zrGBzJw/NW7q+0pFpcuqLNVJMO6TAXkt98h5jt41EKOi98QfiaSYvyh6rrFMpsxBoGndhODsfMTVJsuhU1OYXBOU7a+LKXJPE2TkcxWnP+EPToGlVIV7YUE2ufborhuESeuI6ZjbHlx/vw/pZc7X3smAQyoh43UfKWNPUGyUXI79/m0yn5g+iJRLuyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G8FZ0D3PP/OudJ5uuxCAz/C/vBHo8wESZoPwxTWqVEI=;
+ b=Es2CeZ0Mu488FYmrhlACYiIM9b5xVcv3Vd5FSVUCLyp05i9MrLc7+kicZSlxsnaaQ01vgdqoZ+mMi89xfLG6rhEaj0UJYz1AyN3ohWwnvMqht6+mg60+W6cYzJdp80/DULMAhgcao7ZgJzJZA4rVTFpnNXXNZsYecl+g4ll1cbI9JmiYVtwNFMiPbaffvhCZ/1ZtoCm+ts0Y1EVN/LyJIofYkVAi8UZDv9jf+TCr6HmBUD8iP2OL3/Zmvda118yGeW9QiNWNFVVQsVBB/GYtofp53+/5jr6YLOE9VM4yr7ilHYI2WLHOmANlbA5CRzg2KSw7S/b4B4OMMmcNviG+Lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G8FZ0D3PP/OudJ5uuxCAz/C/vBHo8wESZoPwxTWqVEI=;
+ b=PutPtMw5E/IS0Pjr/opngLvcmbU5ul9OMHjmqaEwuhPJxHCaBbu4uxx43YloNll+dB7Pngo15RKnTg/AkUOcA7Wi4rw6BkGnL6skDkW99NUTK5l2pOixFG2vpDefqquWxfkTWXE0Grl/Cnttuxc4dSvILPw+3Etya2jM9TozxmQ=
+Received: from PH0PR04MB7416.namprd04.prod.outlook.com (2603:10b6:510:12::17)
+ by CH2PR04MB6726.namprd04.prod.outlook.com (2603:10b6:610:95::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Wed, 28 Sep
+ 2022 07:38:04 +0000
+Received: from PH0PR04MB7416.namprd04.prod.outlook.com
+ ([fe80::bc05:f34a:403b:745c]) by PH0PR04MB7416.namprd04.prod.outlook.com
+ ([fe80::bc05:f34a:403b:745c%8]) with mapi id 15.20.5676.017; Wed, 28 Sep 2022
+ 07:38:04 +0000
+From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+To:     Jason Yan <yanaijie@huawei.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hare@suse.com" <hare@suse.com>, "hch@lst.de" <hch@lst.de>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "john.garry@huawei.com" <john.garry@huawei.com>,
+        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>
+Subject: Re: [PATCH v6 7/8] scsi: libsas: use sas_phy_addr_match() instead of
+ open coded
+Thread-Topic: [PATCH v6 7/8] scsi: libsas: use sas_phy_addr_match() instead of
+ open coded
+Thread-Index: AQHY0wUnAh0uUfeKjEiR0ss/3vkCVg==
+Date:   Wed, 28 Sep 2022 07:38:04 +0000
+Message-ID: <PH0PR04MB741671B26A068C3AC85E26BD9B549@PH0PR04MB7416.namprd04.prod.outlook.com>
+References: <20220928070130.3657183-1-yanaijie@huawei.com>
+ <20220928070130.3657183-8-yanaijie@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR04MB7416:EE_|CH2PR04MB6726:EE_
+x-ms-office365-filtering-correlation-id: 84f414b5-5e9a-4e07-2b3b-08daa12460eb
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: EctweuLpH8jKVZIDwnCxIqzedsVo+m/GzhNA+p/wto20Eqv1cCpGDqFhwzaxg2kgDKOcNoYtM6KBBvylD3RveanmyD8OQJLXmliVgVodAAfJbBBhUgILSDasC/R/iv5HzOrQixfkjClavPg35Orn62yxRkU5MXnce4+OL6v1j8CzugOcgJchb91MPeV1uZsZ8nAjJ81Toud6lAm3Fhm5zMV9OV5pu6KAvnQIv6bZX0BhyFSKsl7UckWV348d73uOLbUzwxDntdonGVuNlmztV/2X98DtA+hrGH0axi5pdAmaF9ZDKu7jdMqv0zeGQpJBHEhnxmVRgbGn0Pi6BavMIruCpONzbkGbHR90aHNYMY70NED1eAQVf6oD7LXuO7v/eOKl+8rpj0BWlUfWrjZvsZYHhbpZZbvcIBM8ONYOq/MphZqzg1LXm87cZsMuGHEl1UktQxDj6v3/ssyPmWSJokbyxIr6cZiorGLZStOz2KbNn7QmX99QujBjDoet9zQKYqiavO87CkZBlpkIciZyL0l1xnpbc9fRkPepaTAbm247XIjF8V57PABqFy16qvS/DjCrbvDExI2ZmCM6ljiwLzcG3vIFk+X9N3bBKji9T1vcQmiVENqV4FHNX5dSgwWshidpG+H4HErYrmlp4Zcf4ivTD1ccwJBl3OE+4fBKltRW2kuHr0I6lGAyaV6FQiOKHbgT4JeZK0VJqb50CC1FQEmWQkI/gfH0X1J/+iSHf1unLx0JsfWETRBumT4iQoIegG7lOToh7iszK4pe6AOt2Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR04MB7416.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(346002)(366004)(396003)(451199015)(5660300002)(9686003)(6506007)(52536014)(7696005)(19618925003)(8936002)(33656002)(71200400001)(41300700001)(558084003)(38100700002)(82960400001)(186003)(2906002)(4270600006)(38070700005)(122000001)(7416002)(86362001)(55016003)(54906003)(316002)(4326008)(91956017)(64756008)(76116006)(66946007)(478600001)(66446008)(66476007)(66556008)(110136005)(8676002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3KxXYjIC25TCYN2SkASba6h3/xUINQApqhZf79TxHMvyy/o1fym1+H4CsJnk?=
+ =?us-ascii?Q?/h6xk9Z8vuedfsV3ICqdprvMVQP134/pJu5BcozRyiXb1Re+1xU8QF7+5cR0?=
+ =?us-ascii?Q?JmFW+BlejJNIY3JERc0dlQBsN76vwoRwvt56OdjdOS5vm38VDvt/isWAftOK?=
+ =?us-ascii?Q?Hh68izbHbAHiTc/grMtNF7ev0dReM44dgq0EzSTYTKcQDFF5udpFFCWavIRW?=
+ =?us-ascii?Q?nkKmE3sfanw8r3rMNtFr63G+mmoaCZJ7XRUhht/U2VuCMQWLYGDTQwEjvyvX?=
+ =?us-ascii?Q?+0V72h74nuImcPihmAe5tAGgAh/BptzvbEKmPOoUzqt5meeMNXpUuk0qdTwN?=
+ =?us-ascii?Q?QXz5XMPVgL9cOguPxk/xY+xeSIP1zh2nH2VhSAXmLbu9U/slY2dU7QBnjUxW?=
+ =?us-ascii?Q?eLsxJHELE/gXZDGH9TgpQtxl7E4Cx4pOlaSYIAUZ26UmD2O7u8ocbdXQEMJy?=
+ =?us-ascii?Q?AElXSkB3hGUkNEeHUjDrX5PymAdZmAN85RjilsDQB4XtHdRXvuYdFqwcZn0Y?=
+ =?us-ascii?Q?zgWWrxWJCp2aomDLA9x8DFkRKtwh1zZxH5b7cVsegKknIob05lh3R8e2imO9?=
+ =?us-ascii?Q?qpLuKNX5lq+ZVJMtn2BIiKc8vM7Z4SzQbae7BMB5KYwrX87bRY7VT/hw0MS3?=
+ =?us-ascii?Q?LC0h+8UGCxZpUSRlU4/rv+tBPDnC97ZdoPjS6r++i8wxAc3qcjOnUxOrGgxO?=
+ =?us-ascii?Q?+m9EWZMxQ/vQIVPHZTWrpOiB4V9is5iX9PpbqMMnihpABUekiV2tZzYCgeiP?=
+ =?us-ascii?Q?bx51SulmVXXcX+i6COFx1gb1chOVAgJ+RUzhriR2uMGXDw1c2oUMLwXRK9OW?=
+ =?us-ascii?Q?kwdTAsy0fbh0N7mW4S37j81j/YLZpzeoQfzbViN4MG+5uiJNncnHF7amKB4U?=
+ =?us-ascii?Q?ta8vuFF3iusddV0iG+kJGDQTfo7g5YhUrUG/lWmG4XG2EyBh4OphWZfjJwlo?=
+ =?us-ascii?Q?/Z/WYgsgCssx782p5I2qUbII0C0O5ha4/s2VyiJqkbRXauqTmX28Q3NLmw1T?=
+ =?us-ascii?Q?IjzhPeId/v23oznO9o1y+mYWdokH/eWFpkpr1jDR5mUjHogRpJmM17jkmLXr?=
+ =?us-ascii?Q?FhSq19LzQvKmGRsEzPC8NBmeyd/OHJN0J/NoZSW6mHEZbE3Khe2FlWP82B+K?=
+ =?us-ascii?Q?0SpXIBbBJkKd7ZD/rZailJahmuJrHVMDcgIWFDJCWG60hAdyRIun6W5/VjHB?=
+ =?us-ascii?Q?OY10RADbjyk80A83RpFVvfiEXTJVRDX/y+N8dxet1rXItuOf3CFf5htm141M?=
+ =?us-ascii?Q?nHHEEYM6K6GSS/tQJsItmC3dp0O6FSWA0prIrARYk5D0Gn+DXcVL6RAAOVPr?=
+ =?us-ascii?Q?bpEHLRpG90d1bNf99t1/gOn2oaw3vYct/ITEGmeZmpEXovubLRFsbROAc81k?=
+ =?us-ascii?Q?QNzL5UI2a3yAVb/Fk5LGO119Ok6UBg9BvuncTodQksODSJwYYDlrWg6GNWGq?=
+ =?us-ascii?Q?U5DKjgKzxjlThG0PjC0AQGVVsFluSSM+LGXT52HiNK0K2a/Ukb12M7PIy+aj?=
+ =?us-ascii?Q?TVvtSSk+uC0yd6llcIchgnXF00kqa2YpxzaEirNn+vmKHE21Vdws7PhWbgxs?=
+ =?us-ascii?Q?bj2/bxitffb1jCBL4ynPNxl9yOVCEgHu2tZlDFwU62Jmi8R4mRSxquGELFaH?=
+ =?us-ascii?Q?0DLSsFfRKdHNt753FiJBQScdnqrRlh5+PUaS0IxHyYvTdtx9Cdk6Yve8pMr9?=
+ =?us-ascii?Q?KnIAVeo/WrTWARPbqiR4Sco2Ovs=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR04MB7416.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 84f414b5-5e9a-4e07-2b3b-08daa12460eb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2022 07:38:04.2797
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9pH1oHwBVcxsO/rmNuXSq3MG5cihapYrQN0nsKha7XvJo2aN7BnsLZyfu9JGwzSzF63buN7VEXVeD2UFRmOIWXqyixn0SNBM9rzCZx9baIg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR04MB6726
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guanjun <guanjun@linux.alibaba.com>
-
-Support aead algorithm.
-
-Signed-off-by: Guanjun <guanjun@linux.alibaba.com>
----
- drivers/crypto/ycc/Kconfig    |   1 +
- drivers/crypto/ycc/Makefile   |   2 +-
- drivers/crypto/ycc/ycc_aead.c | 646 ++++++++++++++++++++++++++++++++++++++++++
- drivers/crypto/ycc/ycc_algs.h |  20 +-
- drivers/crypto/ycc/ycc_drv.c  |   7 +
- drivers/crypto/ycc/ycc_ring.h |  14 +
- 6 files changed, 687 insertions(+), 3 deletions(-)
- create mode 100644 drivers/crypto/ycc/ycc_aead.c
-
-diff --git a/drivers/crypto/ycc/Kconfig b/drivers/crypto/ycc/Kconfig
-index 8dae75e..d2808c3 100644
---- a/drivers/crypto/ycc/Kconfig
-+++ b/drivers/crypto/ycc/Kconfig
-@@ -5,6 +5,7 @@ config CRYPTO_DEV_YCC
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_LIB_DES
- 	select CRYPTO_SM3_GENERIC
-+	select CRYPTO_AEAD
- 	select CRYPTO_AES
- 	select CRYPTO_CBC
- 	select CRYPTO_ECB
-diff --git a/drivers/crypto/ycc/Makefile b/drivers/crypto/ycc/Makefile
-index 8a23a72..279c8ca 100644
---- a/drivers/crypto/ycc/Makefile
-+++ b/drivers/crypto/ycc/Makefile
-@@ -1,3 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-(CONFIG_CRYPTO_DEV_YCC) += ycc.o
--ycc-objs := ycc_drv.o ycc_isr.o ycc_ring.o ycc_ske.o
-+ycc-objs := ycc_drv.o ycc_isr.o ycc_ring.o ycc_ske.o ycc_aead.o
-diff --git a/drivers/crypto/ycc/ycc_aead.c b/drivers/crypto/ycc/ycc_aead.c
-new file mode 100644
-index 00000000..8e9489e
---- /dev/null
-+++ b/drivers/crypto/ycc/ycc_aead.c
-@@ -0,0 +1,646 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define pr_fmt(fmt) "YCC: Crypto: " fmt
-+
-+#include <crypto/internal/aead.h>
-+#include <crypto/internal/des.h>
-+#include <crypto/scatterwalk.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/crypto.h>
-+#include <crypto/aes.h>
-+#include <crypto/gcm.h>
-+#include <crypto/sm4.h>
-+#include "ycc_algs.h"
-+
-+static int ycc_aead_init(struct crypto_aead *tfm)
-+{
-+	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
-+	struct ycc_ring *ring;
-+
-+	ctx->soft_tfm = crypto_alloc_aead(crypto_tfm_alg_name(crypto_aead_tfm(tfm)),
-+					  0,
-+					  CRYPTO_ALG_NEED_FALLBACK | CRYPTO_ALG_ASYNC);
-+	if (IS_ERR(ctx->soft_tfm)) {
-+		pr_warn("Failed to allocate soft tfm for:%s, software fallback is limited\n",
-+			crypto_tfm_alg_name(crypto_aead_tfm(tfm)));
-+		ctx->soft_tfm = NULL;
-+		crypto_aead_set_reqsize(tfm, sizeof(struct ycc_crypto_req));
-+	} else {
-+		/*
-+		 * If it's software fallback, store meta data of soft request.
-+		 */
-+		crypto_aead_set_reqsize(tfm, sizeof(struct ycc_crypto_req) +
-+					crypto_aead_reqsize(ctx->soft_tfm));
-+	}
-+
-+	ring = ycc_crypto_get_ring();
-+	if (!ring)
-+		return -ENOMEM;
-+
-+	ctx->ring = ring;
-+	return 0;
-+}
-+
-+static void ycc_aead_exit(struct crypto_aead *tfm)
-+{
-+	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
-+
-+	if (ctx->ring)
-+		ycc_crypto_free_ring(ctx->ring);
-+
-+	kfree(ctx->cipher_key);
-+
-+	if (ctx->soft_tfm)
-+		crypto_free_aead((struct crypto_aead *)ctx->soft_tfm);
-+}
-+
-+static int ycc_aead_setkey(struct crypto_aead *tfm, const u8 *key,
-+			   unsigned int key_size)
-+{
-+	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
-+	const char *alg_name = crypto_tfm_alg_name(&tfm->base);
-+
-+	if (!strncmp("gcm(sm4)", alg_name, strlen("gcm(sm4)"))) {
-+		if (key_size != SM4_KEY_SIZE)
-+			return -EINVAL;
-+		ctx->mode = YCC_SM4_GCM;
-+	} else if (!strncmp("ccm(sm4)", alg_name, strlen("ccm(sm4)"))) {
-+		ctx->mode = YCC_SM4_CCM;
-+	} else if (!strncmp("gcm(aes)", alg_name, strlen("gcm(aes)"))) {
-+		switch (key_size) {
-+		case AES_KEYSIZE_128:
-+			ctx->mode = YCC_AES_128_GCM;
-+			break;
-+		case AES_KEYSIZE_192:
-+			ctx->mode = YCC_AES_192_GCM;
-+			break;
-+		case AES_KEYSIZE_256:
-+			ctx->mode = YCC_AES_256_GCM;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+	} else if (!strncmp("ccm(aes)", alg_name, strlen("ccm(aes)"))) {
-+		switch (key_size) {
-+		case AES_KEYSIZE_128:
-+			ctx->mode = YCC_AES_128_CCM;
-+			break;
-+		case AES_KEYSIZE_192:
-+			ctx->mode = YCC_AES_192_CCM;
-+			break;
-+		case AES_KEYSIZE_256:
-+			ctx->mode = YCC_AES_256_CCM;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+	}
-+
-+	if (ctx->cipher_key) {
-+		memset(ctx->cipher_key, 0, ctx->keysize);
-+	} else {
-+		ctx->cipher_key = kzalloc(key_size, GFP_KERNEL);
-+		if (!ctx->cipher_key)
-+			return -ENOMEM;
-+	}
-+
-+	memcpy(ctx->cipher_key, key, key_size);
-+	ctx->keysize = key_size;
-+	if (ctx->soft_tfm)
-+		if (crypto_aead_setkey(ctx->soft_tfm, key, key_size))
-+			pr_warn("Failed to setkey for soft aead tfm\n");
-+
-+	return 0;
-+}
-+
-+static int ycc_aead_fill_key(struct ycc_crypto_req *req)
-+{
-+	struct ycc_crypto_ctx *ctx = req->ctx;
-+	struct device *dev = YCC_DEV(ctx);
-+	struct aead_request *aead_req = req->aead_req;
-+	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
-+	const char *alg_name = crypto_tfm_alg_name(&tfm->base);
-+	int iv_len = 12;
-+
-+	if (!strncmp("ccm", alg_name, strlen("ccm")))
-+		iv_len = 16;
-+
-+	if (!req->key_vaddr) {
-+		req->key_vaddr = dma_alloc_coherent(dev, 64, &req->key_paddr,
-+						    GFP_ATOMIC);
-+		if (!req->key_vaddr)
-+			return -ENOMEM;
-+	}
-+
-+	memset(req->key_vaddr, 0, 64);
-+	memcpy(req->key_vaddr + (32 - ctx->keysize), ctx->cipher_key, ctx->keysize);
-+	memcpy(req->key_vaddr + 32, req->aead_req->iv, iv_len);
-+	ctx->key_dma_size = 64;
-+	return 0;
-+}
-+
-+static int ycc_aead_sg_map(struct ycc_crypto_req *req)
-+{
-+	struct device *dev = YCC_DEV(req->ctx);
-+	int ret = -ENOMEM;
-+
-+	req->src_paddr = dma_map_single(dev, req->src_vaddr,
-+					ALIGN(req->in_len, 64), DMA_TO_DEVICE);
-+	if (dma_mapping_error(dev, req->src_paddr)) {
-+		pr_err("Failed to map src dma memory\n");
-+		goto out;
-+	}
-+
-+	req->dst_vaddr = dma_alloc_coherent(dev, ALIGN(req->out_len, 64),
-+					    &req->dst_paddr, GFP_ATOMIC);
-+	if (!req->dst_vaddr)
-+		goto unmap_src;
-+
-+	return 0;
-+unmap_src:
-+	dma_unmap_single(dev, req->src_paddr, ALIGN(req->in_len, 64), DMA_TO_DEVICE);
-+out:
-+	return ret;
-+}
-+
-+static void ycc_aead_sg_unmap(struct ycc_crypto_req *req)
-+{
-+	struct device *dev = YCC_DEV(req->ctx);
-+
-+	dma_unmap_single(dev, req->src_paddr, ALIGN(req->in_len, 64), DMA_TO_DEVICE);
-+	dma_free_coherent(dev, ALIGN(req->in_len, 64), req->dst_vaddr, req->dst_paddr);
-+}
-+
-+static inline void ycc_aead_unformat_data(struct ycc_crypto_req *req)
-+{
-+	kfree(req->src_vaddr);
-+}
-+
-+static int ycc_aead_callback(void *ptr, u16 state)
-+{
-+	struct ycc_crypto_req *req = (struct ycc_crypto_req *)ptr;
-+	struct aead_request *aead_req = req->aead_req;
-+	struct ycc_crypto_ctx *ctx = req->ctx;
-+	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
-+	int taglen = crypto_aead_authsize(tfm);
-+	struct device *dev = YCC_DEV(ctx);
-+
-+	/* TODO: workaround for GCM/CCM with junk bytes between ctext and tag */
-+	if ((req->desc.cmd.aead_cmd.cmd_id == YCC_CMD_GCM_ENC ||
-+	     req->desc.cmd.aead_cmd.cmd_id == YCC_CMD_CCM_ENC) &&
-+	     aead_req->cryptlen % 16 != 0)
-+		memcpy(req->dst_vaddr + aead_req->cryptlen,
-+		       req->dst_vaddr + ALIGN(aead_req->cryptlen, 16), taglen);
-+	scatterwalk_map_and_copy(req->src_vaddr + req->aad_offset, aead_req->dst, 0,
-+				 aead_req->assoclen, 1);
-+	if (req->desc.cmd.aead_cmd.cmd_id == YCC_CMD_GCM_ENC ||
-+	    req->desc.cmd.aead_cmd.cmd_id == YCC_CMD_CCM_ENC) {
-+		scatterwalk_map_and_copy(req->dst_vaddr, aead_req->dst,
-+					 aead_req->assoclen,
-+					 aead_req->cryptlen + taglen, 1);
-+	} else {
-+		scatterwalk_map_and_copy(req->dst_vaddr, aead_req->dst,
-+					 aead_req->assoclen,
-+					 aead_req->cryptlen - taglen, 1);
-+	}
-+
-+	ycc_aead_sg_unmap(req);
-+	ycc_aead_unformat_data(req);
-+	if (req->key_vaddr) {
-+		memset(req->key_vaddr, 0, 64);
-+		dma_free_coherent(dev, 64, req->key_vaddr, req->key_paddr);
-+		req->key_vaddr = NULL;
-+	}
-+
-+	if (aead_req->base.complete)
-+		aead_req->base.complete(&aead_req->base, state == CMD_SUCCESS ? 0 : -EBADMSG);
-+
-+	return 0;
-+}
-+
-+#define aead_blob_len(x, y, z)	ALIGN(((x) + (y) + (z)), 16)
-+
-+static void *__ycc_aead_format_data(struct ycc_crypto_req *req, u8 *b0, u8 *b1,
-+				    int alen, u8 cmd)
-+{
-+	struct aead_request *aead_req = req->aead_req;
-+	int aad_len = aead_req->assoclen;
-+	int cryptlen = aead_req->cryptlen;
-+	int taglen = crypto_aead_authsize(crypto_aead_reqtfm(aead_req));
-+	int src_len = cryptlen;
-+	int b0_len = 0;
-+	void *vaddr;
-+	int size;
-+
-+	/* b0 != NULL means ccm, b0 len is 16 bytes */
-+	if (b0)
-+		b0_len = 16;
-+
-+	size = aead_blob_len(b0_len, alen, aad_len);
-+	if (cmd == YCC_CMD_GCM_DEC || cmd == YCC_CMD_CCM_DEC) {
-+		/*
-+		 * LKCF format is not aligned |cipher_text|tag_text|
-+		 * while ycc request |16-align cipher_text|16-align tag_text|
-+		 */
-+		src_len = cryptlen - taglen;
-+		size += ALIGN(src_len, 16) + ALIGN(taglen, 16);
-+	} else {
-+		size += ALIGN(cryptlen, 16);
-+	}
-+
-+	vaddr = kzalloc(ALIGN(size, 64), GFP_ATOMIC);
-+	if (!vaddr)
-+		return NULL;
-+
-+	if (b0)
-+		memcpy(vaddr, b0, b0_len);
-+	if (b1)
-+		memcpy(vaddr + b0_len, b1, alen);
-+	scatterwalk_map_and_copy(vaddr + b0_len + alen, aead_req->src, 0,
-+				 aad_len, 0);
-+	scatterwalk_map_and_copy(vaddr + aead_blob_len(b0_len, alen, aad_len),
-+				 aead_req->src, aad_len,
-+				 src_len, 0);
-+	if (cmd == YCC_CMD_GCM_DEC || cmd == YCC_CMD_CCM_DEC)
-+		scatterwalk_map_and_copy(vaddr +
-+					 aead_blob_len(b0_len, alen, aad_len) +
-+					 ALIGN(src_len, 16),
-+					 aead_req->src, aad_len + cryptlen - taglen,
-+					 taglen, 0);
-+
-+	req->in_len = size;
-+	req->aad_offset = b0_len + alen;
-+	return vaddr;
-+}
-+
-+static void *ycc_aead_format_ccm_data(struct ycc_crypto_req *req,
-+				      u16 *new_aad_len, u8 cmd)
-+{
-+	struct aead_request *aead_req = req->aead_req;
-+	unsigned int taglen = crypto_aead_authsize(crypto_aead_reqtfm(aead_req));
-+	unsigned int aad_len = aead_req->assoclen;
-+	unsigned int cryptlen = aead_req->cryptlen;
-+	u8 b0[16] = {0};
-+	u8 b1[10] = {0}; /* Store encoded aad length */
-+	u8 alen = 0;
-+	int l;
-+	__be32 msglen;
-+
-+	/* 1. check iv value aead_req->iv[0] = L - 1 */
-+	if (aead_req->iv[0] < 1 || aead_req->iv[0] > 7) {
-+		pr_err("L value is not valid for CCM\n");
-+		return NULL;
-+	}
-+
-+	l = aead_req->iv[0] + 1;
-+
-+	/* 2. format control infomration and nonce */
-+	memcpy(b0, aead_req->iv, 16); /* iv max size is 15 - L */
-+	b0[0] |= (((taglen - 2) / 2) << 3);
-+	if (aad_len) {
-+		b0[0] |= (1 << 6);
-+		if (aad_len < 65280) {
-+			/* 2 bytes encode aad length */
-+			*(__be16 *)b1 = cpu_to_be16(aad_len);
-+			alen = 2;
-+		} else {
-+			*(__be16 *)b1 = cpu_to_be16(0xfffe);
-+			*(__be32 *)&b1[2] = cpu_to_be32(aad_len);
-+			alen = 6;
-+		}
-+		*new_aad_len = ALIGN((16 + alen + aad_len), 16);
-+	} else {
-+		*new_aad_len = 16;
-+	}
-+	b0[0] |= aead_req->iv[0];
-+
-+	/* 3. set msg length. L - 1 Bytes store msg length */
-+	if (l >= 4)
-+		l = 4;
-+	else if (cryptlen > (1 << (8 * l)))
-+		return NULL;
-+	if (cmd == YCC_CMD_CCM_DEC)
-+		msglen = cpu_to_be32(cryptlen - taglen);
-+	else
-+		msglen = cpu_to_be32(cryptlen);
-+	memcpy(&b0[16 - l], (u8 *)&msglen + 4 - l, l);
-+
-+	return __ycc_aead_format_data(req, b0, b1, alen, cmd);
-+}
-+
-+static void *ycc_aead_format_data(struct ycc_crypto_req *req, u16 *new_aad_len,
-+				  u32 *new_cryptlen, u8 cmd)
-+{
-+	struct aead_request *aead_req = req->aead_req;
-+	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
-+	int taglen = crypto_aead_authsize(tfm);
-+
-+	if (cmd == YCC_CMD_GCM_ENC || cmd == YCC_CMD_GCM_DEC) {
-+		/* CCM */
-+		*new_aad_len = aead_req->assoclen;
-+		*new_cryptlen = aead_req->cryptlen;
-+		req->out_len = *new_cryptlen + taglen;
-+		return __ycc_aead_format_data(req, NULL, NULL, 0, cmd);
-+	}
-+
-+	/* GCM */
-+	*new_cryptlen = ALIGN(aead_req->cryptlen, 16);
-+	req->out_len = *new_cryptlen + taglen;
-+	return ycc_aead_format_ccm_data(req, new_aad_len, cmd);
-+}
-+
-+/*
-+ * This is a workaround. If ycc output len is outlen % 64 == 16, it
-+ * might hang. taglen is 16 or 0
-+ */
-+static inline bool ycc_aead_do_soft(struct aead_request *aead_req, int taglen)
-+{
-+	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
-+	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
-+	struct ycc_dev *ydev = ctx->ring->ydev;
-+
-+	if ((ALIGN(aead_req->cryptlen, 64) + taglen) % 64 == 16 ||
-+	    !test_bit(YDEV_STATUS_READY, &ydev->status))
-+		return true;
-+
-+	return false;
-+}
-+
-+static int ycc_aead_submit_desc(struct aead_request *aead_req, u8 cmd)
-+{
-+	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
-+	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
-+	struct ycc_crypto_req *req = aead_request_ctx(aead_req);
-+	struct ycc_flags *aflags;
-+	int taglen = crypto_aead_authsize(tfm);
-+	u16 new_aad_len;
-+	u32 new_cryptlen;
-+	struct crypto_aes_ctx aes_ctx;
-+	u8 tag[16];
-+	u8 ziv[16] = {0};
-+	__be32 counter = cpu_to_be32(1);
-+	int ret = 0;
-+
-+	/*
-+	 * YCC hw does not support gcm zero length plaintext. According to spec
-+	 * if cryptlen is 0, just do aes_encrypt against IV
-+	 */
-+	if (aead_req->cryptlen == 0 && cmd == YCC_CMD_GCM_ENC) {
-+		ret = aes_expandkey(&aes_ctx, ctx->cipher_key, ctx->keysize);
-+		if (ret)
-+			return ret;
-+		memcpy(ziv, aead_req->iv, 12);
-+		memcpy(ziv + 12, &counter, 4);
-+		aes_encrypt(&aes_ctx, tag, ziv);
-+		sg_copy_from_buffer(aead_req->dst,
-+				    sg_nents_for_len(aead_req->dst, taglen),
-+				    tag, taglen);
-+		return 0;
-+	}
-+
-+	if (aead_req->cryptlen == taglen && cmd == YCC_CMD_GCM_DEC) {
-+		ret = aes_expandkey(&aes_ctx, ctx->cipher_key, ctx->keysize);
-+		if (ret)
-+			return ret;
-+		/* Skip aad */
-+		sg_copy_buffer(aead_req->src,
-+			       sg_nents_for_len(aead_req->src, taglen),
-+			       tag, taglen, aead_req->assoclen, 1);
-+		aes_decrypt(&aes_ctx, ziv, tag);
-+		sg_copy_from_buffer(aead_req->dst,
-+				    sg_nents_for_len(aead_req->dst, taglen),
-+				    ziv, taglen);
-+		return 0;
-+	}
-+
-+	memset(req, 0, sizeof(*req));
-+	req->ctx = ctx;
-+	req->aead_req = aead_req;
-+
-+	ret = ycc_aead_fill_key(req);
-+	if (ret)
-+		return ret;
-+
-+	req->src_vaddr = ycc_aead_format_data(req, &new_aad_len, &new_cryptlen, cmd);
-+	if (!req->src_vaddr)
-+		goto free_key;
-+
-+	ret = ycc_aead_sg_map(req);
-+	if (ret)
-+		goto unformat;
-+
-+	ret = -ENOMEM;
-+	aflags = kzalloc(sizeof(struct ycc_flags), GFP_ATOMIC);
-+	if (!aflags)
-+		goto sg_unmap;
-+
-+	memset(&req->desc.cmd, 0, sizeof(union ycc_real_cmd));
-+	aflags->ptr = (void *)req;
-+	aflags->ycc_done_callback = ycc_aead_callback;
-+	req->desc.private_ptr = (u64)aflags;
-+	req->desc.cmd.aead_cmd.cmd_id = cmd;
-+	req->desc.cmd.aead_cmd.mode = ctx->mode;
-+	req->desc.cmd.aead_cmd.sptr = req->src_paddr;
-+	req->desc.cmd.aead_cmd.dptr = req->dst_paddr;
-+	if (cmd == YCC_CMD_GCM_DEC || cmd == YCC_CMD_CCM_DEC)
-+		new_cryptlen = aead_req->cryptlen - taglen;
-+	req->desc.cmd.aead_cmd.dlen = new_cryptlen;
-+	req->desc.cmd.aead_cmd.keyptr = req->key_paddr;
-+	req->desc.cmd.aead_cmd.aadlen = new_aad_len;
-+	req->desc.cmd.aead_cmd.taglen = taglen;
-+
-+	/* 4. submit desc to cmd queue */
-+	ret = ycc_enqueue(ctx->ring, &req->desc);
-+	if (!ret)
-+		return -EINPROGRESS;
-+
-+	pr_err("Failed to submit desc to ring\n");
-+	kfree(aflags);
-+
-+sg_unmap:
-+	ycc_aead_sg_unmap(req);
-+unformat:
-+	ycc_aead_unformat_data(req);
-+free_key:
-+	memset(req->key_vaddr, 0, 64);
-+	dma_free_coherent(YCC_DEV(ctx), 64, req->key_vaddr, req->key_paddr);
-+	req->key_vaddr = NULL;
-+	return ret;
-+}
-+
-+static int ycc_aead_ccm_encrypt(struct aead_request *aead_req)
-+{
-+	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
-+	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
-+	struct aead_request *subreq =
-+		&((struct ycc_crypto_req *)aead_request_ctx(aead_req))->aead_subreq;
-+
-+	if (ycc_aead_do_soft(aead_req, 16)) {
-+		if (!ctx->soft_tfm)
-+			return -ENOENT;
-+		aead_request_set_tfm(subreq, ctx->soft_tfm);
-+		aead_request_set_callback(subreq, aead_req->base.flags,
-+					  aead_req->base.complete, aead_req->base.data);
-+		aead_request_set_crypt(subreq, aead_req->src, aead_req->dst,
-+				       aead_req->cryptlen, aead_req->iv);
-+		aead_request_set_ad(subreq, aead_req->assoclen);
-+		crypto_aead_setauthsize(ctx->soft_tfm, crypto_aead_authsize(tfm));
-+		return crypto_aead_encrypt(subreq);
-+	}
-+
-+	return ycc_aead_submit_desc(aead_req, YCC_CMD_CCM_ENC);
-+}
-+
-+static int ycc_aead_gcm_encrypt(struct aead_request *aead_req)
-+{
-+	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
-+	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
-+	struct aead_request *subreq =
-+			&((struct ycc_crypto_req *)aead_request_ctx(aead_req))->aead_subreq;
-+
-+	if (ycc_aead_do_soft(aead_req, 16)) {
-+		if (!ctx->soft_tfm)
-+			return -ENOENT;
-+		aead_request_set_tfm(subreq, ctx->soft_tfm);
-+		aead_request_set_callback(subreq, aead_req->base.flags,
-+					  aead_req->base.complete, aead_req->base.data);
-+		aead_request_set_crypt(subreq, aead_req->src, aead_req->dst,
-+				       aead_req->cryptlen, aead_req->iv);
-+		aead_request_set_ad(subreq, aead_req->assoclen);
-+		crypto_aead_setauthsize(ctx->soft_tfm, crypto_aead_authsize(tfm));
-+		return crypto_aead_encrypt(subreq);
-+	}
-+
-+	return ycc_aead_submit_desc(aead_req, YCC_CMD_GCM_ENC);
-+}
-+
-+static int ycc_aead_gcm_decrypt(struct aead_request *aead_req)
-+{
-+	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
-+	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
-+	struct aead_request *subreq =
-+		&((struct ycc_crypto_req *)aead_request_ctx(aead_req))->aead_subreq;
-+
-+	if (ycc_aead_do_soft(aead_req, 0)) {
-+		if (!ctx->soft_tfm)
-+			return -ENOENT;
-+		aead_request_set_tfm(subreq, ctx->soft_tfm);
-+		aead_request_set_callback(subreq, aead_req->base.flags,
-+					  aead_req->base.complete, aead_req->base.data);
-+		aead_request_set_crypt(subreq, aead_req->src, aead_req->dst,
-+				       aead_req->cryptlen, aead_req->iv);
-+		aead_request_set_ad(subreq, aead_req->assoclen);
-+		crypto_aead_setauthsize(ctx->soft_tfm, crypto_aead_authsize(tfm));
-+		return crypto_aead_decrypt(subreq);
-+	}
-+
-+	return ycc_aead_submit_desc(aead_req, YCC_CMD_GCM_DEC);
-+}
-+
-+static int ycc_aead_ccm_decrypt(struct aead_request *aead_req)
-+{
-+	struct crypto_aead *tfm = crypto_aead_reqtfm(aead_req);
-+	struct ycc_crypto_ctx *ctx = crypto_aead_ctx(tfm);
-+	struct aead_request *subreq =
-+		&((struct ycc_crypto_req *)aead_request_ctx(aead_req))->aead_subreq;
-+
-+	if (ycc_aead_do_soft(aead_req, 0)) {
-+		if (!ctx->soft_tfm)
-+			return -ENOENT;
-+		aead_request_set_tfm(subreq, ctx->soft_tfm);
-+		aead_request_set_callback(subreq, aead_req->base.flags,
-+					  aead_req->base.complete, aead_req->base.data);
-+		aead_request_set_crypt(subreq, aead_req->src, aead_req->dst,
-+				       aead_req->cryptlen, aead_req->iv);
-+		aead_request_set_ad(subreq, aead_req->assoclen);
-+		crypto_aead_setauthsize(ctx->soft_tfm, crypto_aead_authsize(tfm));
-+		return crypto_aead_decrypt(subreq);
-+	}
-+
-+	return ycc_aead_submit_desc(aead_req, YCC_CMD_CCM_DEC);
-+}
-+
-+static struct aead_alg ycc_aeads[] = {
-+	{
-+		.base = {
-+			.cra_name = "gcm(aes)",
-+			.cra_driver_name = "gcm-aes-ycc",
-+			.cra_priority = 350,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = 1,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_aead_init,
-+		.exit = ycc_aead_exit,
-+		.setkey = ycc_aead_setkey,
-+		.decrypt = ycc_aead_gcm_decrypt,
-+		.encrypt = ycc_aead_gcm_encrypt,
-+		.ivsize = AES_BLOCK_SIZE,
-+		.maxauthsize = AES_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "gcm(sm4)",
-+			.cra_driver_name = "gcm-sm4-ycc",
-+			.cra_priority = 350,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = 1,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_aead_init,
-+		.exit = ycc_aead_exit,
-+		.setkey = ycc_aead_setkey,
-+		.decrypt = ycc_aead_gcm_decrypt,
-+		.encrypt = ycc_aead_gcm_encrypt,
-+		.ivsize = SM4_BLOCK_SIZE,
-+		.maxauthsize = SM4_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "ccm(aes)",
-+			.cra_driver_name = "ccm-aes-ycc",
-+			.cra_priority = 350,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = 1,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_aead_init,
-+		.exit = ycc_aead_exit,
-+		.setkey = ycc_aead_setkey,
-+		.decrypt = ycc_aead_ccm_decrypt,
-+		.encrypt = ycc_aead_ccm_encrypt,
-+		.ivsize = AES_BLOCK_SIZE,
-+		.maxauthsize = AES_BLOCK_SIZE,
-+	},
-+	{
-+		.base = {
-+			.cra_name = "ccm(sm4)",
-+			.cra_driver_name = "ccm-sm4-ycc",
-+			.cra_priority = 350,
-+			.cra_flags = CRYPTO_ALG_ASYNC,
-+			.cra_blocksize = 1,
-+			.cra_ctxsize = sizeof(struct ycc_crypto_ctx),
-+			.cra_module = THIS_MODULE,
-+		},
-+		.init = ycc_aead_init,
-+		.exit = ycc_aead_exit,
-+		.setkey = ycc_aead_setkey,
-+		.decrypt = ycc_aead_ccm_decrypt,
-+		.encrypt = ycc_aead_ccm_encrypt,
-+		.ivsize = SM4_BLOCK_SIZE,
-+		.maxauthsize = SM4_BLOCK_SIZE,
-+	},
-+};
-+
-+int ycc_aead_register(void)
-+{
-+	return crypto_register_aeads(ycc_aeads, ARRAY_SIZE(ycc_aeads));
-+}
-+
-+void ycc_aead_unregister(void)
-+{
-+	crypto_unregister_aeads(ycc_aeads, ARRAY_SIZE(ycc_aeads));
-+}
-diff --git a/drivers/crypto/ycc/ycc_algs.h b/drivers/crypto/ycc/ycc_algs.h
-index 6c7b0dc..e3be83ec 100644
---- a/drivers/crypto/ycc/ycc_algs.h
-+++ b/drivers/crypto/ycc/ycc_algs.h
-@@ -3,6 +3,7 @@
- #define __YCC_ALG_H
- 
- #include <crypto/skcipher.h>
-+#include <crypto/aead.h>
- 
- #include "ycc_ring.h"
- #include "ycc_dev.h"
-@@ -70,6 +71,11 @@ enum ycc_ske_alg_mode {
- enum ycc_cmd_id {
- 	YCC_CMD_SKE_ENC = 0x23,
- 	YCC_CMD_SKE_DEC,
-+
-+	YCC_CMD_GCM_ENC = 0x25,
-+	YCC_CMD_GCM_DEC,
-+	YCC_CMD_CCM_ENC,
-+	YCC_CMD_CCM_DEC, /* 0x28 */
- };
- 
- struct ycc_crypto_ctx {
-@@ -92,8 +98,10 @@ struct ycc_crypto_req {
- 	dma_addr_t key_paddr;
- 
- 	struct ycc_cmd_desc desc;
--	struct skcipher_request *ske_req;
--	struct skcipher_request ske_subreq;
-+	union {
-+		struct skcipher_request *ske_req;
-+		struct aead_request *aead_req;
-+	};
- 
- 	void *src_vaddr;
- 	dma_addr_t src_paddr;
-@@ -105,10 +113,18 @@ struct ycc_crypto_req {
- 	int aad_offset;
- 	struct ycc_crypto_ctx *ctx;
- 	u8 last_block[16]; /* used to store iv out when decrypt */
-+
-+	/* soft request for fallback, keep at the end */
-+	union {
-+		struct skcipher_request ske_subreq;
-+		struct aead_request aead_subreq;
-+	};
- };
- 
- #define YCC_DEV(ctx)		(&(ctx)->ring->ydev->pdev->dev)
- 
- int ycc_sym_register(void);
- void ycc_sym_unregister(void);
-+int ycc_aead_register(void);
-+void ycc_aead_unregister(void);
- #endif
-diff --git a/drivers/crypto/ycc/ycc_drv.c b/drivers/crypto/ycc/ycc_drv.c
-index 79c1e18..cd583d7 100644
---- a/drivers/crypto/ycc/ycc_drv.c
-+++ b/drivers/crypto/ycc/ycc_drv.c
-@@ -94,8 +94,14 @@ int ycc_algorithm_register(void)
- 	if (ret)
- 		goto err;
- 
-+	ret = ycc_aead_register();
-+	if (ret)
-+		goto unregister_sym;
-+
- 	return 0;
- 
-+unregister_sym:
-+	ycc_sym_unregister();
- err:
- 	atomic_dec(&ycc_algs_refcnt);
- 	return ret;
-@@ -109,6 +115,7 @@ void ycc_algorithm_unregister(void)
- 	if (atomic_dec_return(&ycc_algs_refcnt))
- 		return;
- 
-+	ycc_aead_unregister();
- 	ycc_sym_unregister();
- }
- 
-diff --git a/drivers/crypto/ycc/ycc_ring.h b/drivers/crypto/ycc/ycc_ring.h
-index 78ba959..2caa9e0 100644
---- a/drivers/crypto/ycc/ycc_ring.h
-+++ b/drivers/crypto/ycc/ycc_ring.h
-@@ -87,8 +87,22 @@ struct ycc_skcipher_cmd {
- 	u8 padding;
- } __packed;
- 
-+struct ycc_aead_cmd {
-+	u8 cmd_id;
-+	u8 mode;
-+	u64 sptr:48;	/* include aad + payload */
-+	u64 dptr:48;	/* encrypted/decrypted + tag */
-+	u32 dlen;	/* data size */
-+	u16 key_idx;
-+	u16 kek_idx;
-+	u64 keyptr:48;
-+	u16 aadlen;
-+	u8 taglen;	/* authenc size */
-+} __packed;
-+
- union ycc_real_cmd {
- 	struct ycc_skcipher_cmd ske_cmd;
-+	struct ycc_aead_cmd aead_cmd;
- 	u8 padding[32];
- };
- 
--- 
-1.8.3.1
-
+Looks good,=0A=
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>=0A=
