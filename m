@@ -2,203 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2861D5ED7D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7225ED7CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233240AbiI1IcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
+        id S231804AbiI1Ibw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiI1IcJ (ORCPT
+        with ESMTP id S233501AbiI1Ibq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:32:09 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on20605.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1a::605])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3643E895CC;
-        Wed, 28 Sep 2022 01:32:08 -0700 (PDT)
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
- b=iVDwA+5Y2uTxTRF95K87irnbwhZ3IPd3OGDuKx1/qkEa4nI8nCs1YHYh6vBSa9XB5bSPRR8bzwxb0irg8Ldcno4Gv3TYKl+VRSKG2hzpPxlZxX0aiTghJnJzHnWAFVENszkrlxOlJ8zi7M8nnnZs2E68wit5qzRLtQBSOgoyWCIvv8nNDjtEXQmOrpreP5VCxYzzJymcFmfF0vatF+7ahNYR0eE0isCxPx3HII+q9B8cziPCpWXVaWkQYbGwCE+SHO+2l8hATp8GCoGT+A95hql8heQl9jbCip/6IN0hV5UQMPrab/cH6rUP5JsTSCQUaMnb1a4dJhQaclM1B0qy+Q==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lLmNAV9UVIWJOsUKxpqrYQjU5/MJMCaxXtLsBy32TVQ=;
- b=lmn4v8gTpgS/twf4EPPH6S/OK7UHwbhf66PKllA6wJ3Ar+qA7WERcEZxDrgtI39bVKfV5BoP70mny+3YIYEnKZOmZ7LjoEXu33VievV3q2LQNosNFIjleljkjW/b7QK1hDa2EkGLYsqxgvuHBE4DzqWcWhComX7jk231RrALhBb0rcX+aoVLcz/l/fBLZJvQiUZVkV9HvOIRC76OOx+4c/xunsd34KDbNCoSBD4E+ROYRNpkJXI/hr/x0UHKWgLfOBetzPkemnw7F/iozUykvAdf9DroudJlHPrEozM/c27k9owvfHlvDBc1H/Mi70kW8Mg1W0EdSzURgfnxb9K2EA==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 63.35.35.123) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=pass (signature was verified) header.d=armh.onmicrosoft.com; arc=pass (0
- oda=1 ltdi=1 spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lLmNAV9UVIWJOsUKxpqrYQjU5/MJMCaxXtLsBy32TVQ=;
- b=QPTdbE87XYNquL+MmeNjzn99kpST7Scco2BBHjaVgLtoTZrJeqbWMrR7uMBkjFRnlMdC8MQ3VRVOTKZpDlliy0wPZYFfG5iPTD9YAmluCw0JdlUE/xnqFJ9pfz9OEVz64cWv/Z7m2t4kr2rGC+2qma4gMLeex+jONHlMjYjRDE4=
-Received: from AM6PR10CA0021.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:209:89::34)
- by AS1PR08MB7610.eurprd08.prod.outlook.com (2603:10a6:20b:475::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Wed, 28 Sep
- 2022 08:32:03 +0000
-Received: from AM7EUR03FT018.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:209:89:cafe::86) by AM6PR10CA0021.outlook.office365.com
- (2603:10a6:209:89::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17 via Frontend
- Transport; Wed, 28 Sep 2022 08:32:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- AM7EUR03FT018.mail.protection.outlook.com (100.127.140.97) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5654.14 via Frontend Transport; Wed, 28 Sep 2022 08:32:01 +0000
-Received: ("Tessian outbound c2c2da38ad67:v128"); Wed, 28 Sep 2022 08:32:01 +0000
-X-CR-MTA-TID: 64aa7808
-Received: from 930896290dad.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id C747B4F4-DCA2-43ED-8386-E298E63AE711.1;
-        Wed, 28 Sep 2022 08:31:51 +0000
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 930896290dad.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Wed, 28 Sep 2022 08:31:51 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LXPbVyWHMwpdG8ZfZaEDO8w8DPL76D2GFDHKtC90VVw4GTfR0rmGRj0eF0FkK6KCfKLCt0Qiwv07Pdfip5R9jhHSQHxgEGgSRBkZWLMLpfEU2jdHftzUkXW/clcKLGrDHWCIie8yEdn3WSW3SIXVTrexMJ4T5Rwe9PXdCu0bhoXW7xyvlzhdAlWRMmj4+W+ldJRBLLv3I4x0ZHOf960ARYiVM/ITHXUVfMpQUuV51MBLRzxu3iQXi5Y5BD8VzjZy2rk0eSiLttFM3K0JD+06w1EIrBiSrp3L5MyH68C03+oh6orhsFjtdvrxjsQRfYKHFPZK+C2f8qokNH5jx/oY8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lLmNAV9UVIWJOsUKxpqrYQjU5/MJMCaxXtLsBy32TVQ=;
- b=mCwcbwWobY5eQ0unFpI1Tl5krvrmfAK/yqT4RThoJiZLRIA+D5sNJxpAb8P5pQZGuce56lpUyh0a5jO6TnGNg+YbdFIP1c3BegSC1p+AM1uoqldKJKFZVlThugI83afnRmxAEBBBhhrW0AOu35HWQWBIN13hkBR4NHLyZTJZHy/lf9NBAOFresX7Dz9N6+r45qeXGLhyT2TIeE2oks0Oc83KVhNAIon6+sOHYnLbxCwBrPlW2alOWFwelTAESiQ68t/Lcd/q/YBqDTA7/bHw0k55Go2u57m+UmpdUHnqYxxu++Prr1Wv/bvMxd2jvNAyEZOPUGxs/ry0fHJmb2VkzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lLmNAV9UVIWJOsUKxpqrYQjU5/MJMCaxXtLsBy32TVQ=;
- b=QPTdbE87XYNquL+MmeNjzn99kpST7Scco2BBHjaVgLtoTZrJeqbWMrR7uMBkjFRnlMdC8MQ3VRVOTKZpDlliy0wPZYFfG5iPTD9YAmluCw0JdlUE/xnqFJ9pfz9OEVz64cWv/Z7m2t4kr2rGC+2qma4gMLeex+jONHlMjYjRDE4=
-Received: from AS2PR08MB8576.eurprd08.prod.outlook.com (2603:10a6:20b:55f::9)
- by DB8PR08MB5436.eurprd08.prod.outlook.com (2603:10a6:10:111::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Wed, 28 Sep
- 2022 08:31:47 +0000
-Received: from AS2PR08MB8576.eurprd08.prod.outlook.com
- ([fe80::2851:6fde:6262:5b76]) by AS2PR08MB8576.eurprd08.prod.outlook.com
- ([fe80::2851:6fde:6262:5b76%3]) with mapi id 15.20.5654.025; Wed, 28 Sep 2022
- 08:31:47 +0000
-From:   "Michael Williams (ATG)" <Michael.Williams@arm.com>
-To:     Will Deacon <will@kernel.org>,
-        Besar Wicaksono <bwicaksono@nvidia.com>
-CC:     Suzuki Poulose <Suzuki.Poulose@arm.com>,
-        Robin Murphy <Robin.Murphy@arm.com>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Sudeep Holla <Sudeep.Holla@arm.com>,
-        Thanu Rangarajan <Thanu.Rangarajan@arm.com>,
-        "treding@nvidia.com" <treding@nvidia.com>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "vsethi@nvidia.com" <vsethi@nvidia.com>,
-        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
-        "mike.leach@linaro.org" <mike.leach@linaro.org>,
-        "leo.yan@linaro.org" <leo.yan@linaro.org>
-Subject: RE: [PATCH v4 1/2] perf: arm_cspmu: Add support for ARM CoreSight PMU
- driver
-Thread-Topic: [PATCH v4 1/2] perf: arm_cspmu: Add support for ARM CoreSight
- PMU driver
-Thread-Index: AQHYsAsiCzQrPgyEQ0K9q7o3XCKJDa3rtSeAgAkRkUA=
-Date:   Wed, 28 Sep 2022 08:31:24 +0000
-Deferred-Delivery: Wed, 28 Sep 2022 08:31:12 +0000
-Message-ID: <AS2PR08MB8576965E67E5C4B31487011E8A549@AS2PR08MB8576.eurprd08.prod.outlook.com>
-References: <20220814182351.8861-1-bwicaksono@nvidia.com>
- <20220814182351.8861-2-bwicaksono@nvidia.com>
- <20220922135257.GD12095@willie-the-truck>
-In-Reply-To: <20220922135257.GD12095@willie-the-truck>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ts-tracking-id: C51E2B6074B41B46B1EB7454A261E962.0
-x-checkrecipientchecked: true
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-x-ms-traffictypediagnostic: AS2PR08MB8576:EE_|DB8PR08MB5436:EE_|AM7EUR03FT018:EE_|AS1PR08MB7610:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a767059-4e74-42bb-741a-08daa12bea5c
-x-ld-processed: f34e5979-57d9-4aaa-ad4d-b122a662184d,ExtAddr
-x-checkrecipientrouted: true
-nodisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: IFLjUgrPo0/qOhNxazxoy49RICbqvn2mrlrRwrxnFtBoTX5tq155S/shPNTInu366OzWNmoKClL4/cgTN0gMk+yn3yOb/dpf39VLsuZZmpM/mqUqG1XstDn3jNH87wu+g1/HGwdnUKq5xf1tRLfrn06pC23UucrKWuAbKGmFQdEPwZkcHVWxwE9XSne9kW59c6DZFSFN0n4Vo0zjou6+7mYKO8gkUOvIRZwxdi/f8kOKUgTkVSr8U7nI7Bs6SFnCLzYE1IEzEpUJE7PZoMVgZ3R/1tmQS02sP+nBn3iClZ0CdJQ6Thy0nLO4oyNp9IyUIA/0lxOVnkoQJoOguyGFYQe+u2bSy8hzPeGCTYunX02Bc/QwQ9mOpg8u+dIyCBHzspQlC0tpyrC3FHOadq8AuphIy2lVhKLGMvzlFsNiHDBALcKwtOk03H1y/N1JPoEgboZA26hLuSTfH7ccssBE04IezaUo8gNhhBUKHtn3BFL34z2jxY+qERaKgzXsfy9u++BLavF8aZTscgSxMaxjAt1DTf4G5UNl+hPX1xIhWSA7gD63CT+ubSW2NpWO3j6X58h3ADJ9hti59iQu+0D13nduigzFHSRPVXhqnN1uZb2xZzY6yVa1oCBQu8+ilMhN+eopleIjebADseJTiO9DVceaxsJjFRzryztY8rklmsU7OP9gvXRQkF6tny8EqmQRHf1UDB2e5I2l58IDfASqv9oDpZc1icGL3rGN4UXknkXvA5PyY+SGADVCUBt3s5rB8sLUJlOmZbIQdGjeMOv/bg==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2PR08MB8576.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(366004)(376002)(39860400002)(451199015)(52536014)(86362001)(76116006)(4326008)(8936002)(33656002)(66556008)(7416002)(66946007)(8676002)(64756008)(66476007)(54906003)(38100700002)(316002)(5660300002)(38070700005)(110136005)(122000001)(53546011)(7696005)(6506007)(41300700001)(66446008)(83380400001)(71200400001)(2906002)(9686003)(55016003)(478600001)(6666004)(186003);DIR:OUT;SFP:1101;
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 28 Sep 2022 04:31:46 -0400
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D09088A09;
+        Wed, 28 Sep 2022 01:31:43 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 130-20020a1c0288000000b003b494ffc00bso164388wmc.0;
+        Wed, 28 Sep 2022 01:31:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:cc:to:from:content-language:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=ueJxdck7hKcZeFo8WGIQFZqWuWyNs8oLQTDGNzuINkg=;
+        b=LwVOUx/1UrNxzp4lWFkMJupkRc+dnDO99BHng5ipaMd80tEfAR4ucYFuoM+Pn5nNgw
+         iwPFt7SBuGJLWFMS+C4Q+UXaqqr5oQbSDA7hPIPgsI+qGRYvkUiTqYOKo+xJC5gNDXOS
+         BCn4hdC/+VVf/X5w11tLiE77XUJr/DtcWRvq7lcXRIZ7eP7ka55nY0bAvZucS0elDFlD
+         hCf3ZTekEgBq9gaa4mVpmKKxsP24q+OqSy1ORs6/olzBK7IT3mYi2BMD9Xk6eMaq3wt1
+         ckuHTr03O3LWolLwawYw1lHtfd/BovjUGNKq6PBWdsNyUBN+4QlEstYOLes+yrNLZTjd
+         3kvA==
+X-Gm-Message-State: ACrzQf3vMjf132JenVvqNmCouXLV2A4aq0crQElBS1sLSxIOq/xAZK3j
+        EwpBbaqJKnGeTVWsjvKqExk=
+X-Google-Smtp-Source: AMsMyM53aP8IjHC0zPw3a9vv33BKMndVPixb8TLTuO9a41VPh8h1D9FaV0BVer9h+5lH0GYAp86htQ==
+X-Received: by 2002:a05:600c:5254:b0:3b5:99c:9be1 with SMTP id fc20-20020a05600c525400b003b5099c9be1mr5982210wmb.172.1664353901692;
+        Wed, 28 Sep 2022 01:31:41 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id v15-20020adfedcf000000b00228cbac7a25sm3648516wro.64.2022.09.28.01.31.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 01:31:41 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------0vtBb7FM7oUJt59bIjiHZKlR"
+Message-ID: <498a9097-8ecf-0a47-abbb-8b64fb7ee2de@kernel.org>
+Date:   Wed, 28 Sep 2022 10:31:39 +0200
 MIME-Version: 1.0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR08MB5436
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM7EUR03FT018.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: c661b004-2d81-4089-2496-08daa12be1bd
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wMsVTdhBKaQqj8qgD/AyU0Ya/JnRYsNfxo+7TN71cLx2BKM5s3yb0vHesq+zvfUPIbs2fRMGnO2FjH9lkjORsPG3Ghfiwv7xHHHFZ5+y2ARhByTqVemlPbJyszSaeArAjkiqMuElalOcYK94AnYvkMbqgMw2CUBaOFJZRrYBtT3AH5MIHt2kvUWnZ/jWgUdKeWVCMEJbKm+KhEjP2f+MJ9sTDS8qig0mR3SOEPCHG7tpJmniNdGUCPBQFbOuYskit4bJZYTOPBZg8XPM8UawsPJYMitj78HONab3lHjf1DObBENMQp/5zaHNLwOLCpxkhXrNbaUKWvxL9KA3gWzNDKK+BsnqX/Ii+z8Gb9HfUhxY37R3PqUYx6nByauPbBynx0+oyxpWSkPwoc4VTShXbxxQrc8kbu14pN9tfSMHWNaxCSCz80BU5dagkPGAFOS6GHrvvllATy+vQC1h3sYRlMj7XQ5MgLtJ8d7RE3B8SaXxTVSYv8yqmJFHdpbk7uEH1yWUPVmpL2WOK9ukBiwyz2tkWq5tpWg9baOzrfk/hliOCvkvrEGFsS3cepLntl6/84QSVaoPeJxmRPb3cc9oDOq707m72PEOCaCP4wWnEcufKqPQocVNjNF6uN01MEsm5mw1INlUMgCVxaB0WY7fOo75IkF79EOu2iqi6qPMXujGZnYWQ30DSxI4eDjO7hilUD6nlf7q7C8DOp3WeRclUs+pf4XHC7nb+R8q8kUDEbZQbFr+2949dShMWXbNR9TwbCj0PByE1Ro8Q3RvhLTvTA==
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(376002)(346002)(136003)(451199015)(40470700004)(36840700001)(46966006)(47076005)(336012)(26005)(9686003)(186003)(478600001)(6506007)(7696005)(82740400003)(316002)(2906002)(36860700001)(83380400001)(53546011)(33656002)(107886003)(6666004)(54906003)(110136005)(8936002)(52536014)(5660300002)(41300700001)(70586007)(356005)(40460700003)(81166007)(70206006)(4326008)(8676002)(450100002)(40480700001)(55016003)(86362001)(82310400005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 08:32:01.3158
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a767059-4e74-42bb-741a-08daa12bea5c
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM7EUR03FT018.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR08MB7610
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v6] ACPI: skip IRQ override on AMD Zen platforms
+Content-Language: en-US
+From:   Jiri Slaby <jirislaby@kernel.org>
+To:     Chuanhong Guo <gch981213@gmail.com>, linux-acpi@vger.kernel.org
+Cc:     Tighe Donnelly <tighe.donnelly@protonmail.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220712020058.90374-1-gch981213@gmail.com>
+ <0450c7c0-4787-2aa2-de3e-c71522e467ce@kernel.org>
+In-Reply-To: <0450c7c0-4787-2aa2-de3e-c71522e467ce@kernel.org>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Will,
+This is a multi-part message in MIME format.
+--------------0vtBb7FM7oUJt59bIjiHZKlR
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-> -----Original Message-----
-> From: Will Deacon <will@kernel.org>
-> Sent: 22 September 2022 14:53
-> To: Besar Wicaksono <bwicaksono@nvidia.com>
-> Subject: Re: [PATCH v4 1/2] perf: arm_cspmu: Add support for ARM CoreSigh=
-t
-> PMU driver
+On 28. 09. 22, 8:20, Jiri Slaby wrote:
+> Hi,
+> 
+> On 12. 07. 22, 4:00, Chuanhong Guo wrote:
+>> IRQ override isn't needed on modern AMD Zen systems.
+>> There's an active low keyboard IRQ on AMD Ryzen 6000 and it will stay
+>> this way on newer platforms. This IRQ override breaks keyboards for
+>> almost all Ryzen 6000 laptops currently on the market.
+>>
+>> Skip this IRQ override for all AMD Zen platforms because this IRQ
+>> override is supposed to be a workaround for buggy ACPI DSDT and we can't
+>> have a long list of all future AMD CPUs/Laptops in the kernel code.
+>> If a device with buggy ACPI DSDT shows up, a separated list containing
+>> just them should be created.
+> 
+> This breaks pads on IdeaPad 5 Flex:
+> https://bugzilla.suse.com/show_bug.cgi?id=1203794
+> 
+>  > [    1.058135] hid-generic 0020:1022:0001.0001: hidraw0: SENSOR HUB 
+> HID v0.00 Device [hid-amdsfh 1022:0001] on pcie_mp2_amd
+>  > [    2.038937] i2c_designware AMDI0010:00: controller timed out
+>  > [    2.146627] i2c_designware AMDI0010:03: controller timed out
+>  > [    6.166859] i2c_hid_acpi i2c-MSFT0001:00: failed to reset device: -61
+>  > [    8.279604] i2c_designware AMDI0010:03: controller timed out
+>  > [   12.310897] i2c_hid_acpi i2c-MSFT0001:00: failed to reset device: -61
+>  > [   14.429372] i2c_designware AMDI0010:03: controller timed out
+>  > [   18.462629] i2c_hid_acpi i2c-MSFT0001:00: failed to reset device: -61
+>  > [   20.579183] i2c_designware AMDI0010:03: controller timed out
+>  > [   24.598703] i2c_hid_acpi i2c-MSFT0001:00: failed to reset device: -61
+>  > [   25.629071] i2c_hid_acpi i2c-MSFT0001:00: can't add hid device: -61
+>  > [   25.629430] i2c_hid_acpi: probe of i2c-MSFT0001:00 failed with 
+> error -61
+> 
+> The diff of good and bad dmesgs:
+> -ACPI: IRQ 10 override to edge, high
+> -ACPI: IRQ 6 override to edge, high
+> 
+> The diff of /proc/interrupts:
+>       6: ...  IR-IO-APIC    [-6-fasteoi-]    {+6-edge+}      AMDI0010:03
+>      10: ...  IR-IO-APIC   [-10-fasteoi-]   {+10-edge+}      AMDI0010:00
+> 
+> And:
+>    i2c_designware: /devices/platform/AMDI0010:00
+>    i2c_designware: /devices/platform/AMDI0010:03
+> 
+> 
+> So the if needs to be fine-tuned, apparently. Maybe introduce some list 
+> as suggested in the commit log. Based on the below?
 
-[...]
+Something like the attached. It's:
+1) untested yet
+2) contains more debug messaging
+3) contains both cases for ACPI_ACTIVE_* as I don't know the original 
+polarity
 
-> > +/* Check if PMU supports 64-bit single copy atomic. */ static inline
-> > +bool supports_64bit_atomics(const struct arm_cspmu *cspmu) {
-> > +	return CHECK_APMT_FLAG(cspmu->apmt_node->flags, ATOMIC, SUPP); }
->=20
-> Is this just there because the architecture permits it, or are folks
-> actually hanging these things off 32-bit MMIO buses on arm64 SoCs?
+I don't know how widely this is spread -- maybe it would be worth a 
+commandline parameter so that people can work around this until this is 
+fixed by a DMI entry permanently?
 
-The CPU PMU is often exposed on the CoreSight APB bus (32-bit), and althoug=
-h this driver wouldn't normally be used to access that PMU, I wouldn't rule=
- out similar legacy APB and AHB interfaces being used for other PMUs. A fur=
-ther issue is that the CoreSight PMU model includes a number of 32-bit cont=
-rol registers.
+> DMI says:
+>    System Info: #14
+>      Manufacturer: "LENOVO"
+>      Product: "82RA"
+>      Version: "IdeaPad Flex 5 16ALC7"
+>      Serial: "PW02359K"
+>      UUID: 6b2d54d9-cd80-11ec-83eb-e00af665fbac
+>      Wake-up: 0x06 (Power Switch)
+>    Board Info: #15
+>      Manufacturer: "LENOVO"
+>      Product: "LNVNB161216"
+>      Version: "SDK0T76463 WIN"
+>      Serial: "PW02359K"
+>      Asset Tag: "No Asset Tag"
+>      Type: 0x0a (Motherboard)
+>      Features: 0x09
+>        Hosting Board
+>        Replaceable
+>      Location: "Chassis Location Unknown"
+>    Chassis Info: #16
+>      Manufacturer: "LENOVO"
+>      Version: "IdeaPad Flex 5 16ALC7"
+>      Serial: "PW02359K"
+>      Asset Tag: "No Asset Tag"
+>      Type: 0x1f (Other)
+>      Bootup State: 0x03 (Safe)
+>      Power Supply State: 0x03 (Safe)
+>      Thermal State: 0x01 (Other)
+>      Security Status: 0x01 (Other)
+> 
+>> Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
+>> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+>> ---
+>> Change sice v5: reworked
+>>
+>>   drivers/acpi/resource.c | 10 ++++++++++
+>>   1 file changed, 10 insertions(+)
+>>
+>> diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
+>> index c2d494784425..510cdec375c4 100644
+>> --- a/drivers/acpi/resource.c
+>> +++ b/drivers/acpi/resource.c
+>> @@ -416,6 +416,16 @@ static bool acpi_dev_irq_override(u32 gsi, u8 
+>> triggering, u8 polarity,
+>>   {
+>>       int i;
+>> +#ifdef CONFIG_X86
+>> +    /*
+>> +     * IRQ override isn't needed on modern AMD Zen systems and
+>> +     * this override breaks active low IRQs on AMD Ryzen 6000 and
+>> +     * newer systems. Skip it.
+>> +     */
+>> +    if (boot_cpu_has(X86_FEATURE_ZEN))
+>> +        return false;
+>> +#endif
+>> +
+>>       for (i = 0; i < ARRAY_SIZE(skip_override_table); i++) {
+>>           const struct irq_override_cmp *entry = &skip_override_table[i];
+> 
+> thanks,
 
-Since issue H.a there is an alternative 64-bit native PMU interface describ=
-ed in the Arm ARM, which must support 64-bit atomic accesses. You might exp=
-ect this to also appear in CoreSight PMU at some point soon. That would nee=
-d some additional updates to this driver because all the registers are now =
-64 bit, which changes some offsets.
+-- 
+js
 
-Regards,
-Mike.
+--------------0vtBb7FM7oUJt59bIjiHZKlR
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-ACPI-resource-do-IRQ-override-on-LENOVO-IdeaPad.patch"
+Content-Disposition: attachment;
+ filename*0="0001-ACPI-resource-do-IRQ-override-on-LENOVO-IdeaPad.patch"
+Content-Transfer-Encoding: base64
 
+RnJvbSA0ODVkZDEyMjliOWQyZjMyMjg3OWQ4NTczMWFmNGE3OTUyYjljYzRiIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBKaXJpIFNsYWJ5IDxqc2xhYnlAc3VzZS5jej4KRGF0
+ZTogV2VkLCAyOCBTZXAgMjAyMiAwOTo0MzowNSArMDIwMApTdWJqZWN0OiBbUEFUQ0hdIEFD
+UEk6IHJlc291cmNlOiBkbyBJUlEgb3ZlcnJpZGUgb24gTEVOT1ZPIElkZWFQYWQKCkxFTk9W
+TyBJZGVhUGFkIEZsZXggNSBpcyByeXplbi01IGJhc2VkIGFuZCB0aGUgY29tbWl0IGJlbG93
+IHJlbW92ZWQgaXJxCm92ZXJyaWRpbmcgZm9yIHRob3NlLiBUaGlzIGJyb2tlIHRvdWNoc2Ny
+ZWVuIGFuZCB0cmFja3BhZDoKIGkyY19kZXNpZ253YXJlIEFNREkwMDEwOjAwOiBjb250cm9s
+bGVyIHRpbWVkIG91dAogaTJjX2Rlc2lnbndhcmUgQU1ESTAwMTA6MDM6IGNvbnRyb2xsZXIg
+dGltZWQgb3V0CiBpMmNfaGlkX2FjcGkgaTJjLU1TRlQwMDAxOjAwOiBmYWlsZWQgdG8gcmVz
+ZXQgZGV2aWNlOiAtNjEKIGkyY19kZXNpZ253YXJlIEFNREkwMDEwOjAzOiBjb250cm9sbGVy
+IHRpbWVkIG91dAogLi4uCiBpMmNfaGlkX2FjcGkgaTJjLU1TRlQwMDAxOjAwOiBjYW4ndCBh
+ZGQgaGlkIGRldmljZTogLTYxCiBpMmNfaGlkX2FjcGk6IHByb2JlIG9mIGkyYy1NU0ZUMDAw
+MTowMCBmYWlsZWQgd2l0aCBlcnJvciAtNjEKCldoaXRlIGxpc3QgdGhpcyBzcGVjaWZpYyBt
+b2RlbCBpbiB0aGUgb3ZlcnJpZGVfdGFibGUuCgpGb3IgdGhpcyB0byB3b3JrLCB0aGUgWkVO
+IHRlc3QgbmVlZHMgdG8gYmUgcHV0IGJlbG93IHRoZSB0YWJsZSB3YWxrLgoKRml4ZXM6IDM3
+YzgxZDlmMWQxYiAoQUNQSTogcmVzb3VyY2U6IHNraXAgSVJRIG92ZXJyaWRlIG9uIEFNRCBa
+ZW4gcGxhdGZvcm1zKQpTaWduZWQtb2ZmLWJ5OiBKaXJpIFNsYWJ5IDxqc2xhYnlAc3VzZS5j
+ej4KLS0tCiBkcml2ZXJzL2FjcGkvcmVzb3VyY2UuYyB8IDUxICsrKysrKysrKysrKysrKysr
+KysrKysrKysrKystLS0tLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgMzUgaW5zZXJ0aW9u
+cygrKSwgMTYgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9hY3BpL3Jlc291
+cmNlLmMgYi9kcml2ZXJzL2FjcGkvcmVzb3VyY2UuYwppbmRleCBlNDBiMjE1MzkxMWQuLmFi
+MjVlOTNjZjIyYSAxMDA2NDQKLS0tIGEvZHJpdmVycy9hY3BpL3Jlc291cmNlLmMKKysrIGIv
+ZHJpdmVycy9hY3BpL3Jlc291cmNlLmMKQEAgLTQxNywxNyArNDE3LDMzIEBAIHN0YXRpYyBj
+b25zdCBzdHJ1Y3QgZG1pX3N5c3RlbV9pZCBhc3VzX2xhcHRvcFtdID0gewogCXsgfQogfTsK
+IAorc3RhdGljIGNvbnN0IHN0cnVjdCBkbWlfc3lzdGVtX2lkIGxlbm92b19sYXB0b3BbXSA9
+IHsKKwl7CisJCS5pZGVudCA9ICJMRU5PVk8gSWRlYVBhZCBGbGV4IDUgMTZBTEM3IiwKKwkJ
+Lm1hdGNoZXMgPSB7CisJCQlETUlfTUFUQ0goRE1JX1NZU19WRU5ET1IsICJMRU5PVk8iKSwK
+KwkJCURNSV9NQVRDSChETUlfUFJPRFVDVF9OQU1FLCAiODJSQSIpLAorCQl9LAorCX0sCisJ
+eyB9Cit9OworCiBzdHJ1Y3QgaXJxX292ZXJyaWRlX2NtcCB7CiAJY29uc3Qgc3RydWN0IGRt
+aV9zeXN0ZW1faWQgKnN5c3RlbTsKIAl1bnNpZ25lZCBjaGFyIGlycTsKIAl1bnNpZ25lZCBj
+aGFyIHRyaWdnZXJpbmc7CiAJdW5zaWduZWQgY2hhciBwb2xhcml0eTsKIAl1bnNpZ25lZCBj
+aGFyIHNoYXJlYWJsZTsKKwlib29sIG92ZXJyaWRlOwogfTsKIAotc3RhdGljIGNvbnN0IHN0
+cnVjdCBpcnFfb3ZlcnJpZGVfY21wIHNraXBfb3ZlcnJpZGVfdGFibGVbXSA9IHsKLQl7IG1l
+ZGlvbl9sYXB0b3AsIDEsIEFDUElfTEVWRUxfU0VOU0lUSVZFLCBBQ1BJX0FDVElWRV9MT1cs
+IDAgfSwKLQl7IGFzdXNfbGFwdG9wLCAxLCBBQ1BJX0xFVkVMX1NFTlNJVElWRSwgQUNQSV9B
+Q1RJVkVfTE9XLCAwIH0sCitzdGF0aWMgY29uc3Qgc3RydWN0IGlycV9vdmVycmlkZV9jbXAg
+b3ZlcnJpZGVfdGFibGVbXSA9IHsKKwl7IG1lZGlvbl9sYXB0b3AsIDEsIEFDUElfTEVWRUxf
+U0VOU0lUSVZFLCBBQ1BJX0FDVElWRV9MT1csIDAsIGZhbHNlIH0sCisJeyBhc3VzX2xhcHRv
+cCwgMSwgQUNQSV9MRVZFTF9TRU5TSVRJVkUsIEFDUElfQUNUSVZFX0xPVywgMCwgZmFsc2Ug
+fSwKKwl7IGxlbm92b19sYXB0b3AsIDYsIEFDUElfRURHRV9TRU5TSVRJVkUsIEFDUElfQUNU
+SVZFX0xPVywgMCwgdHJ1ZSB9LAorCXsgbGVub3ZvX2xhcHRvcCwgMTAsIEFDUElfRURHRV9T
+RU5TSVRJVkUsIEFDUElfQUNUSVZFX0xPVywgMCwgdHJ1ZSB9LAorCXsgbGVub3ZvX2xhcHRv
+cCwgNiwgQUNQSV9FREdFX1NFTlNJVElWRSwgQUNQSV9BQ1RJVkVfSElHSCwgMCwgdHJ1ZSB9
+LAorCXsgbGVub3ZvX2xhcHRvcCwgMTAsIEFDUElfRURHRV9TRU5TSVRJVkUsIEFDUElfQUNU
+SVZFX0hJR0gsIDAsIHRydWUgfSwKIH07CiAKIHN0YXRpYyBib29sIGFjcGlfZGV2X2lycV9v
+dmVycmlkZSh1MzIgZ3NpLCB1OCB0cmlnZ2VyaW5nLCB1OCBwb2xhcml0eSwKQEAgLTQzNSw2
+ICs0NTEsMTcgQEAgc3RhdGljIGJvb2wgYWNwaV9kZXZfaXJxX292ZXJyaWRlKHUzMiBnc2ks
+IHU4IHRyaWdnZXJpbmcsIHU4IHBvbGFyaXR5LAogewogCWludCBpOwogCisJZm9yIChpID0g
+MDsgaSA8IEFSUkFZX1NJWkUob3ZlcnJpZGVfdGFibGUpOyBpKyspIHsKKwkJY29uc3Qgc3Ry
+dWN0IGlycV9vdmVycmlkZV9jbXAgKmVudHJ5ID0gJm92ZXJyaWRlX3RhYmxlW2ldOworCisJ
+CWlmIChkbWlfY2hlY2tfc3lzdGVtKGVudHJ5LT5zeXN0ZW0pICYmCisJCSAgICBlbnRyeS0+
+aXJxID09IGdzaSAmJgorCQkgICAgZW50cnktPnRyaWdnZXJpbmcgPT0gdHJpZ2dlcmluZyAm
+JgorCQkgICAgZW50cnktPnBvbGFyaXR5ID09IHBvbGFyaXR5ICYmCisJCSAgICBlbnRyeS0+
+c2hhcmVhYmxlID09IHNoYXJlYWJsZSkKKwkJCXJldHVybiBlbnRyeS0+b3ZlcnJpZGU7CisJ
+fQorCiAjaWZkZWYgQ09ORklHX1g4NgogCS8qCiAJICogSVJRIG92ZXJyaWRlIGlzbid0IG5l
+ZWRlZCBvbiBtb2Rlcm4gQU1EIFplbiBzeXN0ZW1zIGFuZApAQCAtNDQ1LDE3ICs0NzIsNiBA
+QCBzdGF0aWMgYm9vbCBhY3BpX2Rldl9pcnFfb3ZlcnJpZGUodTMyIGdzaSwgdTggdHJpZ2dl
+cmluZywgdTggcG9sYXJpdHksCiAJCXJldHVybiBmYWxzZTsKICNlbmRpZgogCi0JZm9yIChp
+ID0gMDsgaSA8IEFSUkFZX1NJWkUoc2tpcF9vdmVycmlkZV90YWJsZSk7IGkrKykgewotCQlj
+b25zdCBzdHJ1Y3QgaXJxX292ZXJyaWRlX2NtcCAqZW50cnkgPSAmc2tpcF9vdmVycmlkZV90
+YWJsZVtpXTsKLQotCQlpZiAoZG1pX2NoZWNrX3N5c3RlbShlbnRyeS0+c3lzdGVtKSAmJgot
+CQkgICAgZW50cnktPmlycSA9PSBnc2kgJiYKLQkJICAgIGVudHJ5LT50cmlnZ2VyaW5nID09
+IHRyaWdnZXJpbmcgJiYKLQkJICAgIGVudHJ5LT5wb2xhcml0eSA9PSBwb2xhcml0eSAmJgot
+CQkgICAgZW50cnktPnNoYXJlYWJsZSA9PSBzaGFyZWFibGUpCi0JCQlyZXR1cm4gZmFsc2U7
+Ci0JfQotCiAJcmV0dXJuIHRydWU7CiB9CiAKQEAgLTQ4Nyw4ICs1MDMsMTEgQEAgc3RhdGlj
+IHZvaWQgYWNwaV9kZXZfZ2V0X2lycXJlc291cmNlKHN0cnVjdCByZXNvdXJjZSAqcmVzLCB1
+MzIgZ3NpLAogCQl1OCBwb2wgPSBwID8gQUNQSV9BQ1RJVkVfTE9XIDogQUNQSV9BQ1RJVkVf
+SElHSDsKIAogCQlpZiAodHJpZ2dlcmluZyAhPSB0cmlnIHx8IHBvbGFyaXR5ICE9IHBvbCkg
+ewotCQkJcHJfd2FybigiQUNQSTogSVJRICVkIG92ZXJyaWRlIHRvICVzLCAlc1xuIiwgZ3Np
+LAotCQkJCXQgPyAibGV2ZWwiIDogImVkZ2UiLCBwID8gImxvdyIgOiAiaGlnaCIpOworCQkJ
+cHJfd2FybigiQUNQSTogSVJRICVkIG92ZXJyaWRlIHRvICVzJXMsICVzJXNcbiIsIGdzaSwK
+KwkJCQl0ID8gImxldmVsIiA6ICJlZGdlIiwKKwkJCQl0cmlnID09IHRyaWdnZXJpbmcgPyAi
+IiA6ICIoISkiLAorCQkJCXAgPyAibG93IiA6ICJoaWdoIiwKKwkJCQlwb2wgPT0gcG9sYXJp
+dHkgPyAiIiA6ICIoISkiKTsKIAkJCXRyaWdnZXJpbmcgPSB0cmlnOwogCQkJcG9sYXJpdHkg
+PSBwb2w7CiAJCX0KLS0gCjIuMzcuMwoK
+
+--------------0vtBb7FM7oUJt59bIjiHZKlR--
