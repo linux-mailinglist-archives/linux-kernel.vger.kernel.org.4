@@ -2,127 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D62B5EE9CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5395EE9CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233957AbiI1XAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 19:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
+        id S234302AbiI1XA0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 28 Sep 2022 19:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiI1XAH (ORCPT
+        with ESMTP id S229508AbiI1XAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 19:00:07 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF81A7FFA4;
-        Wed, 28 Sep 2022 16:00:04 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id sb3so30026446ejb.9;
-        Wed, 28 Sep 2022 16:00:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=qUQYN10e4QRgkYQrbGoxNXOkqQlHKW3Ltpu72/uBXD0=;
-        b=oX717eqTwi1rhghvz8SxfnxS2kiue9cKy0SJ4k5wy5OrtexJIsdsllJ6G/5fvMfcpC
-         /GW4FsmAPyzrc3CGMXpXCu0kZqabRUWE/eZ24ZUS0ZTEtkJ2btK6QVaDbfZrT+rsV2Ro
-         kJHdQS2pD+c32+JRwmxEfwYwSpBJOzefiFnHsBVsWOFQGeITetHIT5op1OGDeR7W9tv9
-         UKhyjQzTA2t7D2q0rMEf0APBUw3+dr07GoL4Ci40wypPKYdzZfwwa7YvfUfVF1G+sPVU
-         56XA21qrfFiyyeguEfjtaLOIKSGv1LzSCXr4M8uUnrlQfIzq02/3pqWBAX18qdgDF6pO
-         9xpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=qUQYN10e4QRgkYQrbGoxNXOkqQlHKW3Ltpu72/uBXD0=;
-        b=vWuatzO1HSuQJRZBcR+7IYBNtOICwUO7jEEyF+1q/RkoQXjhWZsU0a0MKIpxculmwy
-         8FWedWEwrztx/O6sgP0ugwuqWAK9ssXKdKtw6Oa3iUFmhdw1hHtB5Wu90KuP5a3+cXqP
-         C7vo+fIDk3GdFqaXzYD4i+ac0TFo0JdBA64ZdAik8VT/2QhiTcADiCDj1swDJ2d4r3ZX
-         uDun05Vq12lhoL2tiStUZ2q3c9YqP8HF+7gRFQVPumSlNYN8itfAhm3WsBTDnpFqaJU+
-         vL+KqTxcjEoL8KV27MDRJ9o26caQjx69e1sfTboJu20kikvSzL8mXDD+I8HC9/oIK4hT
-         AFlw==
-X-Gm-Message-State: ACrzQf0L5tnVbhAw4DZ/iACAnM0wBQzHVagwYt2CYZ9GJ7sXbACO3WiM
-        T3QT2bJcDlGC2Ui33vvr3bBJf9RcOlAnkLF80ww=
-X-Google-Smtp-Source: AMsMyM4fz4rtZaf8UYDQRFWIe7TK9YImEZLgNG8j1ECSDniF0kd6Mr5nJWvbLj3sKoaQW1q1p+gXthNnvDWGWZayAjk=
-X-Received: by 2002:a17:907:72c1:b0:783:34ce:87b9 with SMTP id
- du1-20020a17090772c100b0078334ce87b9mr182779ejc.115.1664406003394; Wed, 28
- Sep 2022 16:00:03 -0700 (PDT)
+        Wed, 28 Sep 2022 19:00:15 -0400
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A5D83F09
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:00:07 -0700 (PDT)
+Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay07.hostedemail.com (Postfix) with ESMTP id 58E99160E52;
+        Wed, 28 Sep 2022 23:00:05 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf07.hostedemail.com (Postfix) with ESMTPA id 7ECB72002C;
+        Wed, 28 Sep 2022 22:59:56 +0000 (UTC)
+Message-ID: <8101cb98ab2993bf24720507be13f8d54233a161.camel@perches.com>
+Subject: Re: [PATCH linux-next] net: atm: Convert to use
+ sysfs_emit()/sysfs_emit_at() APIs
+From:   Joe Perches <joe@perches.com>
+To:     Jakub Kicinski <kuba@kernel.org>, zhangsongyi.cgel@gmail.com
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        zhang.songyi@zte.com.cn, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Date:   Wed, 28 Sep 2022 16:00:02 -0700
+In-Reply-To: <20220927070134.7cde492d@kernel.org>
+References: <20220927064649.257988-1-zhang.songyi@zte.com.cn>
+         <20220927070134.7cde492d@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-References: <20220924101209.50653-1-liuxin350@huawei.com> <20220924101209.50653-2-liuxin350@huawei.com>
-In-Reply-To: <20220924101209.50653-2-liuxin350@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 28 Sep 2022 15:59:50 -0700
-Message-ID: <CAEf4BzZp1oGtOy56noPtx+MimQq5ua7X25mB4Sf05CHLx=1m0g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] libbpf: add fPIC option for static library
-To:     Xin Liu <liuxin350@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yanan@huawei.com,
-        wuchangye@huawei.com, xiesongyang@huawei.com, zhudi2@huawei.com,
-        kongweibin2@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: nx7gnb8wofr4s6pb9yy8gkff9qni1bjy
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 7ECB72002C
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/vpFXlWlXx/p7iE1oC4hX+AXIdI5C4TU8=
+X-HE-Tag: 1664405996-276980
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 3:13 AM Xin Liu <liuxin350@huawei.com> wrote:
->
-> Some programs depned on libbpf.a(eg:bpftool). If libbpf.a miss -fPIC,
-> this will cause a similar error at compile time:
->
-> /usr/bin/ld: .../libbpf.a(libbpf-in.o): relocation
-> R_AARCH64_ADR_PREL_PG_HI21 against symbol `stderr@@GLIBC_2.17' which
-> may bind externally can not be used when making a sharedobject;
-> recompile with -fPIC
->
-> Use -fPIC for static library compilation to solve this problem.
->
-> Signed-off-by: Xin Liu <liuxin350@huawei.com>
-> ---
->  tools/lib/bpf/Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index 4c904ef0b47e..427e971f4fcd 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -91,9 +91,10 @@ override CFLAGS += $(INCLUDES)
->  override CFLAGS += -fvisibility=hidden
->  override CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
->  override CFLAGS += $(CLANG_CROSS_FLAGS)
-> +override CFLAGS += -fPIC
->
+On Tue, 2022-09-27 at 07:01 -0700, Jakub Kicinski wrote:
+> On Tue, 27 Sep 2022 06:46:49 +0000 zhangsongyi.cgel@gmail.com wrote:
+> > From: zhang songyi <zhang.songyi@zte.com.cn>
+> > 
+> > Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> > should only use sysfs_emit() or sysfs_emit_at() when formatting the value
+> > to be returned to user space.
+> 
+> Is there an end goal to this?
 
-It seems wrong to force -fPIC for static library just because in some
-situations users might want to statically link their *shared* library
-with *static* libbpf. It's a bit unconventional, even though I see
-situations in which this might be useful.
+To make it easier to validate all other kernel uses of
+sprintf/snprintf/scnprintf.
 
-But I don't think this can be a default. I see three possible solutions:
+> If the code is correct let's leave 
+> it as is. ATM is hopefully going to be deleted soon.
 
-1. Do nothing. Let users specify EXTRA_CFLAGS=-fPIC if they need
-position-independent static lib
-2. Let packagers decide this (again, through EXTRA_CFLAGS or by
-patching Makefile, whichever is best). Or maybe build both PIC and
-non-PIC static libraries and package both?
-3. Produce PIC and non-PIC libbpf.a libraries from libbpf's Makefile.
-
-I'm not sure which one is the best answer, would be nice to hear
-opinions of people who do the packaging and distribution of libbpf in
-distros.
-
->  # flags specific for shared library
-> -SHLIB_FLAGS := -DSHARED -fPIC
-> +SHLIB_FLAGS := -DSHARED
->
->  ifeq ($(VERBOSE),1)
->    Q =
-> --
-> 2.33.0
->
+<shrug>  The code is correct as-is.
