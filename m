@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B864C5EE26A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9E55EE279
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232866AbiI1Q7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
+        id S234221AbiI1RBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiI1Q7E (ORCPT
+        with ESMTP id S234247AbiI1RBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:59:04 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C277D783;
-        Wed, 28 Sep 2022 09:59:04 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id g2so8269578qkk.1;
-        Wed, 28 Sep 2022 09:59:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Au941G7l7BgqQ/wE2oSbMdBllGGF8B4MeZUvzUpdMXA=;
-        b=ABYUHFhN4/WtrDIGyD9Eyb9+xb7CvD5L+/2LwO7wTjjanycyJAJaTkfL8maQWXf5zA
-         ZZTWGwGKpPPFD+J0nd2DIzxf9XBsHP9JTXrIvK9FPRTf3U8SOC681bXif6YN5EKkT6uo
-         T3+KbyvSBMmB9MN7REaES+J5zGAVcm0WTDT28CeIVAZMRwfqZeB6XWY3TFZEHvcMRPDV
-         dUajJ/XqZ4no0ZMNorQa3ylgMO2fm4jARnLlwIP3I+gDtXfjkgFfghCm0TLjV37SsWxv
-         dPvGDT+aPFfPXLlBpmlbU+Svkuiv6kEBEZjdzwcxyyepKVhVP/4cf/T5evjhS+RAttzR
-         /eaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Au941G7l7BgqQ/wE2oSbMdBllGGF8B4MeZUvzUpdMXA=;
-        b=Iwy2fDscEE+mXp0XQYOxDW5ZRjIqoAIkFKuTv6D+3LxHxBSISg9dS1J/rFhwCDkfJ0
-         H5QtG4C+4gdIfy+my2UzOCjUoyioX9j7WJ2/MLg3OdwqBF+TjYRtcoWQBM+tyU1d4kXA
-         xQABdhpHX1RF+yFA0vTGcx9CGMFp0VXckcPe4GQA+iS6RHuTPfjJKnUAoCkxLD3VmC9i
-         fyDDQmQSHbkwyi2LP68s8/sY/qfoEa5zssWBd1TpTmUMTk8dwrYuMZyu8c++pJgul+sc
-         UivH9+Kqb2iW7WMyMubqoB9taQzzfRVVll1+r21X4tvzWImIzemwplfz/t9HSqu6it8I
-         ROhw==
-X-Gm-Message-State: ACrzQf000snSzT5hNXuzSri6yUwrw0OxSDRJNtKoqUwHrQy4WzrnviFN
-        Q0TXrYUEzXXOFcunG+NQEkA=
-X-Google-Smtp-Source: AMsMyM73YhIVgNdyVXFvOvr7hz+MtrfrH12dFBPodOm+DrlyyZXWSYZtHiaN8ACohotTHJad7iiu1g==
-X-Received: by 2002:a05:620a:c90:b0:6ce:710:eefe with SMTP id q16-20020a05620a0c9000b006ce0710eefemr22514785qki.419.1664384342972;
-        Wed, 28 Sep 2022 09:59:02 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id v32-20020a05622a18a000b0035cf2995ad8sm3416236qtc.51.2022.09.28.09.59.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 09:59:02 -0700 (PDT)
-Message-ID: <beb1fe93-5ef5-0cb0-c375-7fa99d8650c6@gmail.com>
-Date:   Wed, 28 Sep 2022 09:59:00 -0700
+        Wed, 28 Sep 2022 13:01:15 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FAD85A9F
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:01:12 -0700 (PDT)
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 28SH0c4G031805
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:00:38 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 28SH0c4G031805
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664384438;
+        bh=tCJmf3EpTV35WjXn2+DIeB+r4N+wrQ9T/PusSzDEUs4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pVBsNOBG9xP/uzzgUQkANr8c5ghSqzZOdJFoj7xWNCNd8ayz35CZVFkU8lJMfWpvD
+         kJFFo19Oy4XZNrvZPX2b6wGowYwi5EKmJoItioE3pActndVo7ObHmzw6DfA7A6CuJ7
+         BW8tqHC33NWZpnaRcJMY6Mod+tXCsM2y0N0U1Qdd7CyzCRBUTfD8LefBSDnzjf6xkw
+         zvh//IWSHLkQu3eVHSA0GBlWCv4wvgUAUb5drNMLjQa3RenSTrS5fLHRfzcS358MKV
+         jhfpw7pyR8kECUSWMsD5oIfP1RlgNBvAHsSGqU2gKLEMeDBq/Mb9IbPbq+oLwA6D5G
+         0ODVHD3zb2bFw==
+X-Nifty-SrcIP: [209.85.160.54]
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-131a17bf7fdso3404514fac.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:00:38 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0A8yEc9v+WpicW+/YjOHHupRZfHHItlQ9K0FB7FaneYcMaW9rx
+        U/0+kF2bfMkLyRkD2RC0EEch4GyCuGb2+R1T4+A=
+X-Google-Smtp-Source: AMsMyM51XB4LYPrBu1PFCEEk/qwLk11r17By6C0PuZ28DoIA4ArbJbiHA1BZBoWXlLYAPF+ROuzHc1CEOOpDRNgW7uI=
+X-Received: by 2002:a05:6870:6326:b0:131:9200:c99d with SMTP id
+ s38-20020a056870632600b001319200c99dmr4361288oao.194.1664384437349; Wed, 28
+ Sep 2022 10:00:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH -next] net: cpmac: Add __init/__exit annotations to module
- init/exit funcs
-Content-Language: en-US
-To:     ruanjinjie <ruanjinjie@huawei.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220928031708.89120-1-ruanjinjie@huawei.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220928031708.89120-1-ruanjinjie@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220429053329.2278740-1-aik@ozlabs.ru> <YoLjpivvU7dRVTuL@dev-arch.thelio-3990X>
+ <7d30583e-7e58-5184-be2d-773882dd9092@ozlabs.ru> <ba973bf8-fee6-ba17-244e-32c00d6a06e4@ozlabs.ru>
+ <CAK7LNARNMhTn-+GcOHZrVj=viQxTMUS_7syat4icaPXUGtYkVw@mail.gmail.com>
+In-Reply-To: <CAK7LNARNMhTn-+GcOHZrVj=viQxTMUS_7syat4icaPXUGtYkVw@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 29 Sep 2022 02:00:00 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARgfw7K+hKrsKVb9AEQHEQP308kp5dpiyFqzLg5URrcyQ@mail.gmail.com>
+Message-ID: <CAK7LNARgfw7K+hKrsKVb9AEQHEQP308kp5dpiyFqzLg5URrcyQ@mail.gmail.com>
+Subject: Re: [PATCH kernel v2] zstd: Fixing mixed module-builtin objects
+To:     Alexey Kardashevskiy <aik@ozlabs.ru>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Terrell <terrelln@fb.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,11 +63,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/27/22 20:17, ruanjinjie wrote:
-> Add __init/__exit annotations to module init/exit funcs
-> 
-> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
+On Mon, Sep 19, 2022 at 9:53 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Wed, Jun 22, 2022 at 3:56 PM Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
+> >
+> > Ping? It's about 2 months now :)
+> >
+> >
+> > On 6/6/22 15:12, Alexey Kardashevskiy wrote:
+> > > Ping?
+> > >
+> > >
+>
+>
+>
+>
+> Applied to linux-kbuild.
+> Thanks.
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+
+I dropped the patch from my tree because
+I confirmed that the mainline + this patch
+breaks the build.
+
+Please check the 0day report:
+
+https://lore.kernel.org/lkml/202209221359.0J5ktdOy-lkp@intel.com/
+
+
+
+
 -- 
-Florian
+Best Regards
+Masahiro Yamada
