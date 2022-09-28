@@ -2,75 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC335EEA46
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D5B5EEA49
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234325AbiI1XnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 19:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        id S234554AbiI1XpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 19:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234259AbiI1XnB (ORCPT
+        with ESMTP id S234284AbiI1XpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 19:43:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF91F08AA;
-        Wed, 28 Sep 2022 16:43:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48FB5601B5;
-        Wed, 28 Sep 2022 23:43:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E92FC433C1;
-        Wed, 28 Sep 2022 23:42:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664408579;
-        bh=NaykREuRBBPpeJBtk+CLEf+97EYWNNqVH6121J8EZRU=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=icHtNeOeVcY5Yyr5KbjX9VLE0HNZ2i7DK6Dy+oxCiJ2djz0wE5TpZcuIY7aOjQ7Vi
-         pMB8yuEn76VpWmpoLW7YVtZ7N0QW2GDGC4+cOCDRzn18/ndV4dSGPTHZhm+EggPPG/
-         LYVjJVADbPIeoYq7MIhLaxMt0td+aiH2D/Wj61x05bdE8RMedtDf4cjVZiGNBSUrK7
-         nEcmb9blSuNfrUsaX9lK07fzijbgvihR981s9uVPC9UfLQBb4ZKAWRWpVnqC0LIN8E
-         Yns159I2ZDPy2qQrLrQcYI4kMFOJemittcoD7SmoPQVEGCDvHXR2siVjwDwvywypDa
-         QWqmgZJDL9YFw==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 28 Sep 2022 19:45:08 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5358FB33B
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:45:06 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id cy15-20020a056830698f00b0065c530585afso1457538otb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ESo7dYY6GfSDr+r4KK+gGMltslb0uxWselTUsHs3b/I=;
+        b=oItvueHC9rGpEb1pjDREbzHBF4FsxPszjkSVzhJXqpPU49y/K5jjrfmA7oddFNQfmP
+         sR629g48JwNN9T6R8G660mC9vUqTrrGYcg30Wdo+KgVe2AEYXxT0AqJRF6IxQCT7U3wz
+         HN8BVD0i673m0Llrhm1mnVpn5n0b9H+HvrBP+p43/3wVnBLIluaF6JazpmqonSDZmMSx
+         rcazm5CE45xgvNTlQGaHPuiick8amlxtoYzCvslzqE8f/L9VW5Mi7TziUCMHaDlzKyj+
+         LnLxsGsboagft/aX9Aanz8y41bPYUD6i/5aiU+zhx4vN6qQjNMp+6HtDmMytNC2gdTlu
+         GM0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ESo7dYY6GfSDr+r4KK+gGMltslb0uxWselTUsHs3b/I=;
+        b=sacKV7422VyDRkzfoLPsvSuKKCbSpo8f7cLsyqc0JxPYb9VQgXbEJZdBOJHoKEeZjQ
+         hLJQHPaACrMC9v5X6+KEzXRj9FFHl1hIeLJG/5DAdRUG8xpb/UId3yR0wHWnmQjrDYfW
+         dt+I17l8UWHMypt4P2j8B99JscwZmVuTA1VChVe2OEXPjROgEjHNap7CqkQkWCtrdLKE
+         exUk1oLAQartmeZ+tsD3WW/hbKpvNlINIBR8nx3guVFPPh6zzXIsPZSQLUnLN3joB2UU
+         Umsm1H8bcDL3HJJNqJjHACa9sBdxheuzeBAdjsck6m6elc6EuxU/z9hth9NUgtA1KsY7
+         USEA==
+X-Gm-Message-State: ACrzQf1gv0wNqM/r25HZnlwHaJNpR4nmAcBJPVGF7MotKxb2N9ppU04h
+        j+YfthWKiMhVba6kts/e0Hk+1pnLv4Rtu+MdukbGbiz/CME=
+X-Google-Smtp-Source: AMsMyM5BEgYUYkwCxhv/sZA35LzbvEoRuf+YYFHT4kB7vvwY9taFoIle4rOgzDexyQJ331I5KruMLo+4Blr6HuHoaCo=
+X-Received: by 2002:a9d:6296:0:b0:656:761:28bc with SMTP id
+ x22-20020a9d6296000000b00656076128bcmr172073otk.14.1664408705832; Wed, 28 Sep
+ 2022 16:45:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220928200122.3963509-1-jernej.skrabec@gmail.com>
-References: <20220928200122.3963509-1-jernej.skrabec@gmail.com>
-Subject: Re: [PATCH] clk: sunxi-ng: h6: Fix default PLL GPU rate
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     mturquette@baylibre.com, r.stratiienko@gmail.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>, samuel@sholland.org,
-        wens@csie.org
-Date:   Wed, 28 Sep 2022 16:42:56 -0700
-User-Agent: alot/0.10
-Message-Id: <20220928234259.9E92FC433C1@smtp.kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220928233652.783504-1-seanjc@google.com> <20220928233652.783504-8-seanjc@google.com>
+In-Reply-To: <20220928233652.783504-8-seanjc@google.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 28 Sep 2022 16:44:53 -0700
+Message-ID: <CALMp9eTysg_AdBi3BsbMzj4uKjsHLOOa1B3x+j8=CH=Lvzr8jQ@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] Revert "KVM: selftests: Fix nested SVM tests when
+ built with clang"
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Jernej Skrabec (2022-09-28 13:01:22)
-> In commit 4167ac8a657e ("clk: sunxi-ng: sun50i: h6: Modify GPU clock
-> configuration to support DFS") divider M0 was forced to be 1 in order to
-> support DFS. However, that left N as it is, at high value of 36. On
-> boards without devfreq enabled (all of them in kernel 6.0), this
-> effectively sets GPU frequency to 864 MHz. This is about 100 MHz above
-> maximum supported frequency.
->=20
-> In order to fix this, let's set N to 18 (register value 17). That way
-> default frequency of 432 MHz is preserved.
->=20
-> Fixes: 4167ac8a657e ("clk: sunxi-ng: sun50i: h6: Modify GPU clock configu=
-ration to support DFS")
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
+On Wed, Sep 28, 2022 at 4:37 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> Revert back to using memset() in generic_svm_setup() now that KVM
+> selftests override memset() and friends specifically to prevent the
+> compiler from generating fancy code and/or linking to the libc
+> implementation.
+>
+> This reverts commit ed290e1c20da19fa100a3e0f421aa31b65984960.
+>
+> Suggested-by: Jim Mattson <jmattson@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+I love it!
 
-Applied to clk-fixes
+Reviewed-by: Jim Mattson <jmattson@google.com>
