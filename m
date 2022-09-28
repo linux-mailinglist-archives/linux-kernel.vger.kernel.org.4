@@ -2,134 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C145EDBDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F715EDBE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233496AbiI1Lfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
+        id S233483AbiI1Lhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 07:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbiI1Lfk (ORCPT
+        with ESMTP id S233468AbiI1Lhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:35:40 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D093F1D7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:35:39 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id h17-20020a056e021d9100b002f81bc83425so8184161ila.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:35:39 -0700 (PDT)
+        Wed, 28 Sep 2022 07:37:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B79DBB
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:37:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664365060;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0T5p0Y493/N1/pFQ05/rtmN/mCGm71H3Y3YBZL6Swqk=;
+        b=eRZ3KYfffdOqzw+0qQ9A5eOC33IM5lrHCrkZoIg1KV06iwXErgt0XlI7LrGmJYxLaf9tXu
+        5qEzirTiOcKpE4lzoWuAgVdYE9MgRkLF2Q1y0HLG8/yeArdMqtFyB72zvqWUhtGZ9RNQDU
+        Lk93hpsWhZQFxxez49GCRR9immalOXE=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-447-LGOxNiOzM8OUaEga5sYMLw-1; Wed, 28 Sep 2022 07:37:39 -0400
+X-MC-Unique: LGOxNiOzM8OUaEga5sYMLw-1
+Received: by mail-ej1-f72.google.com with SMTP id qf38-20020a1709077f2600b00783ac0b15f0so4115655ejc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:37:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=pRZJ1OlsJSNPMbfM7HJvwOM1y5KXyx9UDn2zTMz2krQ=;
-        b=If9JFYYCT9aAVYrwRbw3qP7/CBclYCAKIk7Tt7ygmh20YNyV9KUPqIqDW+aQczg5Xt
-         VnJuh0RlQkGZnaDzaOa4+HyG8fP1igyYuLXFr26kVcDqJT+eeCH4uFfMiUDh0I0/fnX/
-         vJ60oQH2iArISCIJOUqyBzQBWOTH5mtjz4gRjViAmzIDhqkmIT0t4lSdTIlcno+f8Ytf
-         6W63FKHXi+5mpeqroeI4EIzqoBUDQq2C9r20m+gwZmxTqTcSc2q5v9zSLKzp2JcJcwTk
-         1hzUa9uYqoruyoX/GqAwK5sgIspCyhpm4WMbuuMVCHg/JsVpNlNrp+K5ynaeqdaDg7rI
-         nEvA==
-X-Gm-Message-State: ACrzQf3jNtAH8cFiYHdQcRN/4O4CWjPkq2bKKx/ce/jOuERYGdj9UNkR
-        SNjBaEXi42/YY1c/eLPIQWaWAKdTmq3wAGBO40+b7ELW/jkp
-X-Google-Smtp-Source: AMsMyM6li4R36u/SPMJT8QqfPWAd8mDFnmkYbMN0aBRezWz8+9oPgT9vlVDycKlx9AqEKKj8JrRC54fS+7wc2/TO712hp/ikx0qd
+        bh=0T5p0Y493/N1/pFQ05/rtmN/mCGm71H3Y3YBZL6Swqk=;
+        b=TsfmwX0corYIehf+eYT0aa8C0T4fz081+9/SXMm3NXcHhnAUy3YRE2LLiOvUbohi7N
+         JbSXdD0eav8PjkW9UOHjNJLS+8ihwwh12mAxdLOiu+A+SQrwiur4FjeyL9rIrzoUtILm
+         cxKrBtD7wOYbWoyqSg/3sLj/tUSGuO83ysPHBYf7wyHMUWhAglKqUphBZpFVcQiBeR/+
+         1OkJKA/i1SyQdBszW0AaXg6EKeAbb4OnQyNTXLPdWyADcCZIuC6tcIojxBJRa6roxoEs
+         PksSdcK1oa2otSVP00BQkg9z6vWYFwgWqNb5kcTFs6mwCHeCwNoLUZp0xCapJ5tAY+ra
+         CAdw==
+X-Gm-Message-State: ACrzQf2BDxAfQS/N3Z8x/pnycUags8GfTin7UF3P1WkNprImY/y6wn94
+        ZZYDddGxjfopOU4tNX9/pQfN7+yP3hWCSMGZjEVrCQdPOAGyJpXKi0e8MOXdouwpqhVS/ktaSPX
+        vIgD2LtpNE56DcDcZQD1Au38i
+X-Received: by 2002:a05:6402:26d3:b0:451:6ca9:bc5e with SMTP id x19-20020a05640226d300b004516ca9bc5emr32273447edd.325.1664365057839;
+        Wed, 28 Sep 2022 04:37:37 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6J5SyvliErxGF0qTfW1ornZaChW4ObCnJt1VQvxNMBQ1ccJSZzHeSK4pKYUynVHmeoQmY29A==
+X-Received: by 2002:a05:6402:26d3:b0:451:6ca9:bc5e with SMTP id x19-20020a05640226d300b004516ca9bc5emr32273402edd.325.1664365057231;
+        Wed, 28 Sep 2022 04:37:37 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id p14-20020a17090653ce00b0077f20a722dfsm2225594ejo.165.2022.09.28.04.37.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 04:37:36 -0700 (PDT)
+Message-ID: <4e579766-5b95-d44a-c482-e629889b482b@redhat.com>
+Date:   Wed, 28 Sep 2022 13:37:35 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:164d:b0:2f1:9b43:9157 with SMTP id
- v13-20020a056e02164d00b002f19b439157mr15185688ilu.94.1664364938555; Wed, 28
- Sep 2022 04:35:38 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 04:35:38 -0700
-In-Reply-To: <000000000000f121b705df9f5a0a@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f07a0e05e9bb2866@google.com>
-Subject: Re: [syzbot] WARNING in folio_account_dirtied
-From:   syzbot <syzbot+8d1d62bfb63d6a480be1@syzkaller.appspotmail.com>
-To:     agruenba@redhat.com, akpm@linux-foundation.org,
-        cluster-devel@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        rpeterso@redhat.com, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v2 0/2] platform/x86: dell: Add new dell-wmi-ddv driver
+Content-Language: en-US, nl
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org,
+        rafael@kernel.org, lenb@kernel.org, hmh@hmh.eng.br,
+        matan@svgalib.org, corentin.chary@gmail.com, jeremy@system76.com,
+        productdev@system76.com, mario.limonciello@amd.com,
+        pobrn@protonmail.com, coproscefalo@gmail.com,
+        platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220927204521.601887-1-W_Armin@gmx.de>
+ <8d976e9c-8fea-8a67-1331-7993705c60d9@redhat.com>
+ <YzQmdwTE2XcratWr@smile.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YzQmdwTE2XcratWr@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi,
 
-HEAD commit:    46452d3786a8 Merge tag 'sound-6.0-rc8' of git://git.kernel..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=160fa19c880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
-dashboard link: https://syzkaller.appspot.com/bug?extid=8d1d62bfb63d6a480be1
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1208f950880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14864e9c880000
+On 9/28/22 12:48, Andy Shevchenko wrote:
+> On Wed, Sep 28, 2022 at 11:52:51AM +0200, Hans de Goede wrote:
+>> On 9/27/22 22:45, Armin Wolf wrote:
+>>> This patch series adds a new driver for a WMI interface found in
+>>> many newer Dell machines. This interface allows to read battery
+>>> properties like temperature and the ePPID (Dell-specific), while
+>>> also providing fan and thermal sensor information.
+>>>
+>>> The interface does support multiple batteries which are indentified
+>>> by an "index", which appears to be the battery ACPI UID. Since
+>>> the interface also appears to omit any bounts checking of the
+>>> index, the ACPI battery hook mechanism is used to discover batteries.
+>>>
+>>> Since the information returned when querying fan/thermal sensor
+>>> information is currently unknown, a debugfs entry is created to
+>>> allow for easier reverse engineering. The interface is likely
+>>> to be replaced by a proper hwmon interface in the future.
+>>>
+>>> Since the driver can potentially be instantiated multiple times,
+>>> the ACPI battery hook mechanism had to be extended.
+>>>
+>>> The first patch passes a pointer to the battery hook to the
+>>> hook callbacks, so that they can access instance-specific data
+>>> with container_of().
+>>>
+>>> The second patch finally adds the new driver. It was called
+>>> dell-wmi-ddv since the interface is called "DDV" by Dell software,
+>>> likely meaning "Dell Data Vault".
+>>>
+>>> The driver was tested, together with the changes made to the
+>>> ACPI battery driver, on a Dell Inspiron 3505. Other drivers
+>>> already using the battery hook mechanism where changed as well,
+>>> but could only be compile-tested due to missing hardware.
+>>>
+>>> ---
+>>> Changes in v2:
+>>> - Significantly lower the amount of changes being made to the
+>>> acpi battery driver
+>>> - drop unnecessary ABI description of the temp attribute
+>>> - return 0 when a unsupported battery is found to avoid being
+>>> unloaded
+>>>
+>>> Armin Wolf (2):
+>>>   ACPI: battery: Pass battery hook pointer to hook callbacks
+>>>   platform/x86: dell: Add new dell-wmi-ddv driver
+>>
+>> Thanks.
+>>
+>> The new version looks good to me:
+>>
+>> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>>
+>> for the series.
+>>
+>> Rafael, from my POV this can be merged through either your
+>> tree or mine. Feel free to merge this through your tree,
+>> or please give your Ack for merging through mine
+>> (assuming you are ok with the changes of course).
+> 
+> I gave some comments, but it's up to you if they have to be addressed now or as
+> a follow up.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/a6170e8216df/disk-46452d37.raw.xz
-vmlinux: https://storage.googleapis.com/cbd307bfbc89/vmlinux-46452d37.xz
+I have answered a couple of your comments.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8d1d62bfb63d6a480be1@syzkaller.appspotmail.com
+What remains is very small / trivial. So IMHO this can go in as
+is and then a follow-up patch can be done to address your remaining
+comments. Armin, can you do a follow-up patch addressing Andy's
+remaining comments please?
 
-gfs2: fsid=loop0.0: found 19 quota changes
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3609 at include/linux/backing-dev.h:246 folio_account_dirtied+0x61a/0x720 mm/page-writeback.c:2564
-Modules linked in:
-CPU: 1 PID: 3609 Comm: syz-executor421 Not tainted 6.0.0-rc7-syzkaller-00042-g46452d3786a8 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-RIP: 0010:inode_to_wb include/linux/backing-dev.h:243 [inline]
-RIP: 0010:folio_account_dirtied+0x61a/0x720 mm/page-writeback.c:2564
-Code: ff ff e9 6e fd ff ff e8 a4 48 d1 ff 4c 89 f7 4c 89 e6 48 83 c4 18 5b 41 5c 41 5d 41 5e 41 5f 5d e9 3b ed 2a 00 e8 86 48 d1 ff <0f> 0b 43 80 3c 3c 00 0f 85 36 fd ff ff e9 39 fd ff ff 48 c7 c1 54
-RSP: 0018:ffffc90003b3f6b8 EFLAGS: 00010093
-RAX: ffffffff81b640fa RBX: 0000000000000000 RCX: ffff88807c9a1d80
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffff888012427578 R08: ffffffff81b640be R09: ffffed1002484eb0
-R10: ffffed1002484eb0 R11: 1ffff11002484eaf R12: 1ffff11002484eaf
-R13: 0000000000000001 R14: ffffea0001f30480 R15: dffffc0000000000
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffdce840000 CR3: 0000000027af8000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __folio_mark_dirty+0x125/0x260 mm/page-writeback.c:2615
- __set_page_dirty include/linux/pagemap.h:1057 [inline]
- mark_buffer_dirty+0x253/0x550 fs/buffer.c:1105
- gfs2_unpin+0x10b/0xa20 fs/gfs2/lops.c:111
- buf_lo_after_commit+0x172/0x1d0 fs/gfs2/lops.c:747
- lops_after_commit fs/gfs2/lops.h:49 [inline]
- gfs2_log_flush+0x1179/0x26a0 fs/gfs2/log.c:1107
- do_sync+0xa3c/0xc80 fs/gfs2/quota.c:979
- gfs2_quota_sync+0x3da/0x8b0 fs/gfs2/quota.c:1322
- gfs2_sync_fs+0x49/0xb0 fs/gfs2/super.c:642
- sync_filesystem+0xe8/0x220 fs/sync.c:56
- generic_shutdown_super+0x6b/0x300 fs/super.c:474
- kill_block_super+0x79/0xd0 fs/super.c:1427
- deactivate_locked_super+0xa7/0xf0 fs/super.c:332
- cleanup_mnt+0x4ce/0x560 fs/namespace.c:1186
- task_work_run+0x146/0x1c0 kernel/task_work.c:177
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0x55e/0x20a0 kernel/exit.c:795
- do_group_exit+0x23b/0x2f0 kernel/exit.c:925
- __do_sys_exit_group kernel/exit.c:936 [inline]
- __se_sys_exit_group kernel/exit.c:934 [inline]
- __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:934
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f8d10697139
-Code: Unable to access opcode bytes at RIP 0x7f8d1069710f.
-RSP: 002b:00007ffdce83f9e8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f8d10745330 RCX: 00007f8d10697139
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
-RBP: 0000000000000001 R08: ffffffffffffffc0 R09: 00005555574d02c0
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f8d10745330
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
+I guess it also depends on Rafael and if Rafael is ok with taking
+this for 6.1 or if this is going to be 6.2 material.
+
+If this is going to be delayed till 6.2, then we can squash in
+the follow-up patch while merging.
+
+Regards,
+
+Hans
+
+
 
