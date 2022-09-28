@@ -2,269 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFDBA5EEA39
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E435EEA36
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234580AbiI1Xhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 19:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
+        id S234473AbiI1Xhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 19:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234166AbiI1Xh2 (ORCPT
+        with ESMTP id S234117AbiI1XhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 19:37:28 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29887118DE2;
-        Wed, 28 Sep 2022 16:37:10 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28SNb17J009059;
-        Wed, 28 Sep 2022 23:37:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=Zd45c/hgZZuCLai6o7t3FSRC6D70oFwVVFawrcbyb50=;
- b=YpJDx3c9hPQxl+gvVz0AZU6xZhIw9PQ/+tey1otVnoDZuRjxAhGJwmNe1D2AYmajRxbd
- F/mdiBG3HDGPU1JcyJT2x1gufkuD9P8ZDxi6nbYB3uxHX5zY0kRnzN5oFh680lh3aG2e
- Hk/j80IBNXbwbB8dVPkgVy5RyR22OJIDiokN26RczoQqJkw4FUSQM00gtlu9cmcYzf7Q
- Iy+Lo5bs5eZNwEXxZ1MWEd62cOpVH55GOr+2Vo8EtFA3d41GYlcXGz31JSpVmEW6LYyU
- Nwn1AsQl9FspZ4tR4wqFGuwqHvvlGbs0wy9aGgZtf/hV9T4MhCjVQJO0j6iwxkj+WFwu KA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jvfp3tyq1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 23:37:01 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28SNb0UM007855
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Sep 2022 23:37:00 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 28 Sep 2022 16:37:00 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6] drm/msm/dp: add atomic_check to bridge ops
-Date:   Wed, 28 Sep 2022 16:36:51 -0700
-Message-ID: <1664408211-25314-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: IopRrCuWW5FYaS8Q40SyQtIbsBSj-xjF
-X-Proofpoint-GUID: IopRrCuWW5FYaS8Q40SyQtIbsBSj-xjF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-28_11,2022-09-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- malwarescore=0 lowpriorityscore=0 phishscore=0 mlxscore=0 bulkscore=0
- priorityscore=1501 suspectscore=0 mlxlogscore=999 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209280139
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 19:37:12 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42C6F1910
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:37:04 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id k2-20020a170902c40200b001782bd6c416so9144977plk.20
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:37:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date;
+        bh=Od/67DGfgSZdEk0wltT/TSsm6XolwmXbW+lbYagDoWo=;
+        b=XzIVUy26GrCltEvq+B8Fi+I95dgx07XyVD742iCpjVYeLCfh8Z68YuSLk+o4Y8n0yY
+         WvywMCozmLkVsTKzeUc6yqeR3scqPyvBLIyyUoF8Rh3wvJryo5rD5mNXERMShAyWW5SX
+         1cfGBK4W0TeAXEP7URjKTLvBNWvzIux3DnIbnE4Nkmvn/LzX+whLUL9tEYDp0KPWAOV/
+         dS1NJh4PgI0jSr3g/xERgWcQi/QEkQxV0PAUoZaIaAAmXchWKzPDCaRLqTyZChBz/ARe
+         IpZV6e0dTaG0nVmlENgoI+nMsMHzPHajf+jfKPLlnaLaf3jcW/fKf4W8e6JQv4oR19+q
+         Vvyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date;
+        bh=Od/67DGfgSZdEk0wltT/TSsm6XolwmXbW+lbYagDoWo=;
+        b=Iy+zD6AeLMA5ZeCdMUpC4sREfkVPUFB7Zd3GwG75/P8gXnT63RB5R4U2ToZULV7otO
+         0w9gUxLCO/zT4ry7euB9yIeFtNXPFxNZpXd3fwAAe4cMEdiIGKjWtcwhgwSKL8pc+iMj
+         2M8naxxDn+AGX2sRMB51vGG0vTiEu5k2VbBwDE+wze2ZTUkTfhTR8xIxuySTVRvXfpoY
+         8EUhaK8EDlAQyHGQ21Cpf3b81I9SKzuJanRyt+HO6TBxa8vL4S8UsMr7P1MEjc08EldL
+         otndmphzJplfXuMaRuVNaeJ2xaCm+2ctMd1evBvI8dFG0xYtbc85ftOoOHYzmxM7/vbe
+         WQdQ==
+X-Gm-Message-State: ACrzQf2UiZyQht6XxbUJvfpzKbhL4oBs9srOVCldlRaquwpuVtxO55nI
+        jX3IYYyxH8K7kzbktT44BkhFNEgJ2CE=
+X-Google-Smtp-Source: AMsMyM5zJT1Nj1nzZ5R05TcpmNKxRck0zM4yF/L/JbUVM5GJqLR+hU0xD5VCJG+SWpF+AAqpJoQ8XUanJsg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:33c9:b0:200:a0ca:e6c8 with SMTP id
+ lk9-20020a17090b33c900b00200a0cae6c8mr12941934pjb.147.1664408224370; Wed, 28
+ Sep 2022 16:37:04 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed, 28 Sep 2022 23:36:51 +0000
+In-Reply-To: <20220928233652.783504-1-seanjc@google.com>
+Mime-Version: 1.0
+References: <20220928233652.783504-1-seanjc@google.com>
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+Message-ID: <20220928233652.783504-7-seanjc@google.com>
+Subject: [PATCH v2 6/7] KVM: selftests: Dedup subtests of fix_hypercall_test
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Jim Mattson <jmattson@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DRM commit_tails() will disable downstream crtc/encoder/bridge if
-both disable crtc is required and crtc->active is set before pushing
-a new frame downstream.
+Combine fix_hypercall_test's two subtests into a common routine, the only
+difference between the two is whether or not the quirk is disabled.
+Passing a boolean is a little gross, but using an enum to make it super
+obvious that the callers are enabling/disabling the quirk seems like
+overkill.
 
-There is a rare case that user space display manager issue an extra
-screen update immediately followed by close DRM device while down
-stream display interface is disabled. This extra screen update will
-timeout due to the downstream interface is disabled but will cause
-crtc->active be set. Hence the followed commit_tails() called by
-drm_release() will pass the disable downstream crtc/encoder/bridge
-conditions checking even downstream interface is disabled.
-This cause the crash to happen at dp_bridge_disable() due to it trying
-to access the main link register to push the idle pattern out while main
-link clocks is disabled.
+No functional change intended.
 
-This patch adds atomic_check to prevent the extra frame will not
-be pushed down if display interface is down so that crtc->active
-will not be set neither. This will fail the conditions checking
-of disabling down stream crtc/encoder/bridge which prevent
-drm_release() from calling dp_bridge_disable() so that crash
-at dp_bridge_disable() prevented.
-
-There is no protection in the DRM framework to check if the display
-pipeline has been already disabled before trying again. The only
-check is the crtc_state->active but this is controlled by usermode
-using UAPI. Hence if the usermode sets this and then crashes, the
-driver needs to protect against double disable.
-
-SError Interrupt on CPU7, code 0x00000000be000411 -- SError
-CPU: 7 PID: 3878 Comm: Xorg Not tainted 5.19.0-stb-cbq #19
-Hardware name: Google Lazor (rev3 - 8) (DT)
-pstate: a04000c9 (NzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __cmpxchg_case_acq_32+0x14/0x2c
-lr : do_raw_spin_lock+0xa4/0xdc
-sp : ffffffc01092b6a0
-x29: ffffffc01092b6a0 x28: 0000000000000028 x27: 0000000000000038
-x26: 0000000000000004 x25: ffffffd2973dce48 x24: 0000000000000000
-x23: 00000000ffffffff x22: 00000000ffffffff x21: ffffffd2978d0008
-x20: ffffffd2978d0008 x19: ffffff80ff759fc0 x18: 0000000000000000
-x17: 004800a501260460 x16: 0441043b04600438 x15: 04380000089807d0
-x14: 07b0089807800780 x13: 0000000000000000 x12: 0000000000000000
-x11: 0000000000000438 x10: 00000000000007d0 x9 : ffffffd2973e09e4
-x8 : ffffff8092d53300 x7 : ffffff808902e8b8 x6 : 0000000000000001
-x5 : ffffff808902e880 x4 : 0000000000000000 x3 : ffffff80ff759fc0
-x2 : 0000000000000001 x1 : 0000000000000000 x0 : ffffff80ff759fc0
-Kernel panic - not syncing: Asynchronous SError Interrupt
-CPU: 7 PID: 3878 Comm: Xorg Not tainted 5.19.0-stb-cbq #19
-Hardware name: Google Lazor (rev3 - 8) (DT)
-Call trace:
- dump_backtrace.part.0+0xbc/0xe4
- show_stack+0x24/0x70
- dump_stack_lvl+0x68/0x84
- dump_stack+0x18/0x34
- panic+0x14c/0x32c
- nmi_panic+0x58/0x7c
- arm64_serror_panic+0x78/0x84
- do_serror+0x40/0x64
- el1h_64_error_handler+0x30/0x48
- el1h_64_error+0x68/0x6c
- __cmpxchg_case_acq_32+0x14/0x2c
- _raw_spin_lock_irqsave+0x38/0x4c
- lock_timer_base+0x40/0x78
- __mod_timer+0xf4/0x25c
- schedule_timeout+0xd4/0xfc
- __wait_for_common+0xac/0x140
- wait_for_completion_timeout+0x2c/0x54
- dp_ctrl_push_idle+0x40/0x88
- dp_bridge_disable+0x24/0x30
- drm_atomic_bridge_chain_disable+0x90/0xbc
- drm_atomic_helper_commit_modeset_disables+0x198/0x444
- msm_atomic_commit_tail+0x1d0/0x374
- commit_tail+0x80/0x108
- drm_atomic_helper_commit+0x118/0x11c
- drm_atomic_commit+0xb4/0xe0
- drm_client_modeset_commit_atomic+0x184/0x224
- drm_client_modeset_commit_locked+0x58/0x160
- drm_client_modeset_commit+0x3c/0x64
- __drm_fb_helper_restore_fbdev_mode_unlocked+0x98/0xac
- drm_fb_helper_set_par+0x74/0x80
- drm_fb_helper_hotplug_event+0xdc/0xe0
- __drm_fb_helper_restore_fbdev_mode_unlocked+0x7c/0xac
- drm_fb_helper_restore_fbdev_mode_unlocked+0x20/0x2c
- drm_fb_helper_lastclose+0x20/0x2c
- drm_lastclose+0x44/0x6c
- drm_release+0x88/0xd4
- __fput+0x104/0x220
- ____fput+0x1c/0x28
- task_work_run+0x8c/0x100
- do_exit+0x450/0x8d0
- do_group_exit+0x40/0xac
- __wake_up_parent+0x0/0x38
- invoke_syscall+0x84/0x11c
- el0_svc_common.constprop.0+0xb8/0xe4
- do_el0_svc+0x8c/0xb8
- el0_svc+0x2c/0x54
- el0t_64_sync_handler+0x120/0x1c0
- el0t_64_sync+0x190/0x194
-SMP: stopping secondary CPUs
-Kernel Offset: 0x128e800000 from 0xffffffc008000000
-PHYS_OFFSET: 0x80000000
-CPU features: 0x800,00c2a015,19801c82
-Memory Limit: none
-
-Changes in v2:
--- add more commit text
-
-Changes in v3:
--- add comments into dp_bridge_atomic_check()
-
-Changes in v4:
--- rewording the comment into dp_bridge_atomic_check()
-
-Changes in v5:
--- removed quote x at end of commit text
-
-Changes in v6:
--- removed quote x at end of comment in dp_bridge_atomic_check()
-
-Fixes: 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display enable and disable")
-Reported-by: Leonard Lausen <leonard@lausen.nl>
-Suggested-by: Rob Clark <robdclark@gmail.com>
-Closes: https://gitlab.freedesktop.org/drm/msm/-/issues/17
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
 ---
- drivers/gpu/drm/msm/dp/dp_drm.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ .../selftests/kvm/x86_64/fix_hypercall_test.c | 45 ++++++-------------
+ 1 file changed, 13 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-index 6df25f7..6db82f9 100644
---- a/drivers/gpu/drm/msm/dp/dp_drm.c
-+++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-@@ -31,6 +31,36 @@ static enum drm_connector_status dp_bridge_detect(struct drm_bridge *bridge)
- 					connector_status_disconnected;
+diff --git a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+index 10b9482fc4d7..32f7e09ef67c 100644
+--- a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
++++ b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+@@ -17,7 +17,7 @@
+ /* VMCALL and VMMCALL are both 3-byte opcodes. */
+ #define HYPERCALL_INSN_SIZE	3
+ 
+-static bool ud_expected;
++static bool quirk_disabled;
+ 
+ static void guest_ud_handler(struct ex_regs *regs)
+ {
+@@ -70,7 +70,7 @@ static void guest_main(void)
+ 	 * enabled, verify that the hypercall succeeded and that KVM patched in
+ 	 * the "right" hypercall.
+ 	 */
+-	if (ud_expected) {
++	if (quirk_disabled) {
+ 		GUEST_ASSERT(ret == (uint64_t)-EFAULT);
+ 		GUEST_ASSERT(!memcmp(other_hypercall_insn, hypercall_insn,
+ 			     HYPERCALL_INSN_SIZE));
+@@ -83,13 +83,6 @@ static void guest_main(void)
+ 	GUEST_DONE();
  }
  
-+static int dp_bridge_atomic_check(struct drm_bridge *bridge,
-+			    struct drm_bridge_state *bridge_state,
-+			    struct drm_crtc_state *crtc_state,
-+			    struct drm_connector_state *conn_state)
-+{
-+	struct msm_dp *dp;
-+
-+	dp = to_dp_bridge(bridge)->dp_display;
-+
-+	drm_dbg_dp(dp->drm_dev, "is_connected = %s\n",
-+		(dp->is_connected) ? "true" : "false");
-+
-+	/*
-+	 * There is no protection in the DRM framework to check if the display
-+	 * pipeline has been already disabled before trying to disable it again.
-+	 * Hence if the sink is unplugged, the pipeline gets disabled, but the
-+	 * crtc->active is still true. Any attempt to set the mode or manually
-+	 * disable this encoder will result in the crash.
-+	 *
-+	 * TODO: add support for telling the DRM subsystem that the pipeline is
-+	 * disabled by the hardware and thus all access to it should be forbidden.
-+	 * After that this piece of code can be removed.
-+	 */
-+	if (bridge->ops & DRM_BRIDGE_OP_HPD)
-+		return (dp->is_connected) ? 0 : -ENOTCONN;
-+
-+	return 0;
-+}
-+
-+
- /**
-  * dp_bridge_get_modes - callback to add drm modes via drm_mode_probed_add()
-  * @bridge: Poiner to drm bridge
-@@ -61,6 +91,9 @@ static int dp_bridge_get_modes(struct drm_bridge *bridge, struct drm_connector *
+-static void setup_ud_vector(struct kvm_vcpu *vcpu)
+-{
+-	vm_init_descriptor_tables(vcpu->vm);
+-	vcpu_init_descriptor_tables(vcpu);
+-	vm_install_exception_handler(vcpu->vm, UD_VECTOR, guest_ud_handler);
+-}
+-
+ static void enter_guest(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_run *run = vcpu->run;
+@@ -110,35 +103,23 @@ static void enter_guest(struct kvm_vcpu *vcpu)
+ 	}
  }
  
- static const struct drm_bridge_funcs dp_bridge_ops = {
-+	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-+	.atomic_destroy_state   = drm_atomic_helper_bridge_destroy_state,
-+	.atomic_reset           = drm_atomic_helper_bridge_reset,
- 	.enable       = dp_bridge_enable,
- 	.disable      = dp_bridge_disable,
- 	.post_disable = dp_bridge_post_disable,
-@@ -68,6 +101,7 @@ static const struct drm_bridge_funcs dp_bridge_ops = {
- 	.mode_valid   = dp_bridge_mode_valid,
- 	.get_modes    = dp_bridge_get_modes,
- 	.detect       = dp_bridge_detect,
-+	.atomic_check = dp_bridge_atomic_check,
- };
+-static void test_fix_hypercall(void)
++static void test_fix_hypercall(bool disable_quirk)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
  
- struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
+ 	vm = vm_create_with_one_vcpu(&vcpu, guest_main);
+-	setup_ud_vector(vcpu);
+ 
+-	ud_expected = false;
+-	sync_global_to_guest(vm, ud_expected);
++	vm_init_descriptor_tables(vcpu->vm);
++	vcpu_init_descriptor_tables(vcpu);
++	vm_install_exception_handler(vcpu->vm, UD_VECTOR, guest_ud_handler);
+ 
+-	virt_pg_map(vm, APIC_DEFAULT_GPA, APIC_DEFAULT_GPA);
++	if (disable_quirk)
++		vm_enable_cap(vm, KVM_CAP_DISABLE_QUIRKS2,
++			      KVM_X86_QUIRK_FIX_HYPERCALL_INSN);
+ 
+-	enter_guest(vcpu);
+-}
+-
+-static void test_fix_hypercall_disabled(void)
+-{
+-	struct kvm_vcpu *vcpu;
+-	struct kvm_vm *vm;
+-
+-	vm = vm_create_with_one_vcpu(&vcpu, guest_main);
+-	setup_ud_vector(vcpu);
+-
+-	vm_enable_cap(vm, KVM_CAP_DISABLE_QUIRKS2,
+-		      KVM_X86_QUIRK_FIX_HYPERCALL_INSN);
+-
+-	ud_expected = true;
+-	sync_global_to_guest(vm, ud_expected);
++	quirk_disabled = disable_quirk;
++	sync_global_to_guest(vm, quirk_disabled);
+ 
+ 	virt_pg_map(vm, APIC_DEFAULT_GPA, APIC_DEFAULT_GPA);
+ 
+@@ -149,6 +130,6 @@ int main(void)
+ {
+ 	TEST_REQUIRE(kvm_check_cap(KVM_CAP_DISABLE_QUIRKS2) & KVM_X86_QUIRK_FIX_HYPERCALL_INSN);
+ 
+-	test_fix_hypercall();
+-	test_fix_hypercall_disabled();
++	test_fix_hypercall(false);
++	test_fix_hypercall(true);
+ }
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.37.3.998.g577e59143f-goog
 
