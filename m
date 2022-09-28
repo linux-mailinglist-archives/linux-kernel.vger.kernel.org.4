@@ -2,169 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518C25ED94B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803C55ED94C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233849AbiI1Jjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
+        id S231680AbiI1Jk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233724AbiI1JjH (ORCPT
+        with ESMTP id S233299AbiI1Jjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:39:07 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4D7BE0C;
-        Wed, 28 Sep 2022 02:38:10 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id lh5so25902537ejb.10;
-        Wed, 28 Sep 2022 02:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=OT0UcdOVZ704hYlagMhzUyfbs4FTvkhpxGQx0JqAZVg=;
-        b=Amo0nva+2NirO5XNM7Mh8M1C0lByyvs3TLnlTE6m8unl9MZXLg8LAAePUQ/mq0njZf
-         v27aULO9LTMmjbnG5+6UdudTNeqLV2yn5zx62MQBga0IfwRCy+kMygguzMfRyYpki4DA
-         iaCO+V13upRTIzzut+bHeWMV/twmw7m2pJEp3TGj1t1mrAAWy/uF/jVDzNuqsgQCpiJY
-         EiQHoKWaQmaA02tW707mar54U9LqfsXp0S8CijQvZMom4mgwvXJrp66GAHGCKqXgEHhu
-         8zPfOQMnDXiJ+rUjVy1w7eFAidHYGD0h6dfRLODEnAdYLPHXl7TxTA20WdHpu1Wgo8Pt
-         RbBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=OT0UcdOVZ704hYlagMhzUyfbs4FTvkhpxGQx0JqAZVg=;
-        b=6D0//1awDyo3Mn5R6+cwAQKkUUSLy59B6N3brJ6T6/J5VYN77ychW4kgf67f/ZQJSw
-         pNOYMoxs9pWNstWnaVpSLRe0wcdBhuYqw7JijrCBxYKlf52EsgEXCT5h1tJu0sfMzQGg
-         +rJuBSr2dmlI8cSprkvvIJzAkb1PpF54e7wUQGaJhuxnDW6MHs8HQPAY+ewBV1jTshPY
-         u3PMBUxFL9/fjVPuUROzd6uPKHblnAbJDtMH+0+lZ+8hG4cgz2xq1zB6t5a/MVcdtTW7
-         TVKh0UdyUew9S2WVlV5kGeWIfKzXI0TRTsrQlklxRMi4sr2lVZdHmfHY7DCzqoyfqxq/
-         kZgQ==
-X-Gm-Message-State: ACrzQf2keUopb3iuURaAJwpBqDSAYGB9prIs7MorYblguQdbJN5nDbAF
-        Q3Ox21gLCzegyr2ZZ9vei0j9/7z46CVmMyf63YM=
-X-Google-Smtp-Source: AMsMyM5ZFzPjaekB01bh45DERBxAag+jwxS3Hff6nq9M7pi6wfq9zYdBVZ8bpfsy3yrqyCQ6xOU3MKiTaKlA1cV9Qdc=
-X-Received: by 2002:a17:907:60c7:b0:783:4fe0:dad0 with SMTP id
- hv7-20020a17090760c700b007834fe0dad0mr14511726ejc.342.1664357888173; Wed, 28
- Sep 2022 02:38:08 -0700 (PDT)
+        Wed, 28 Sep 2022 05:39:42 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB142661
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1664357967;
+        bh=3PAIiBxy0R6ZHl7Muf1mC94HPv5MJphBBSwkAzfvJiY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GcG7mjvawlKMxdLIpN17QOWMCe5ewhQj98CJGvOySPm5bfEsyIbt5EU9rF65dfUM2
+         LwG3cobkGZjxj0Tt7kYBNVca1vYTdTYKhwEYJwPB3uClzFpC/yjiSst9YRLOKTXOud
+         aOlhJ8ySoftPReLjyUYO2LnS9lkEjl0BqOBMmdLk=
+Received: from xry111-x57s1.. (unknown [124.115.222.149])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id D7374667F1;
+        Wed, 28 Sep 2022 05:39:24 -0400 (EDT)
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     linux-nvme@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Ning Wang <ningwang35@outlook.com>,
+        Xi Ruoyao <xry111@xry111.site>, Chang Feng <flukehn@gmail.com>
+Subject: [PATCH] nvme-pci: avoid the deepest sleep state on ZHITAI TiPro5000 SSDs
+Date:   Wed, 28 Sep 2022 17:39:13 +0800
+Message-Id: <20220928093913.45905-1-xry111@xry111.site>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20220927203044.751611-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220927203044.751611-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <OS0PR01MB5922BE73295E3562DC3FBA6E86549@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CA+V-a8s=wqGpfWBv7+=tG1pu6fZCL7EtRoTEmo-wjK5CGZyLnQ@mail.gmail.com> <OS0PR01MB5922D5A259A77D22ED91E87286549@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922D5A259A77D22ED91E87286549@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 28 Sep 2022 10:37:41 +0100
-Message-ID: <CA+V-a8sPQn4eNQ_RhPgxnbJ1L7S-v5SORDMsRrPOmPu93evLaQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] clk: renesas: rzg2l: Don't assume all CPG_MOD
- clocks support PM
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_PASS,SPF_PASS,T_PDS_OTHER_BAD_TLD
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Biju,
+ZHITAI TiPro5000 SSDs has the same APST sleep problem as its cousin,
+TiPro7000.  The quirk for TiPro7000 has been added in
+commit 6b961bce50e4 ("nvme-pci: avoid the deepest sleep state on
+ZHITAI TiPro7000 SSDs"), use the same quirk for TiPro5000.
 
-On Wed, Sep 28, 2022 at 9:42 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
->
-> > Subject: Re: [RFC PATCH 1/2] clk: renesas: rzg2l: Don't assume all
-> > CPG_MOD clocks support PM
-> >
-> > Hi Biju,
-> >
-> > Thank you for the review.
-> >
-> > On Wed, Sep 28, 2022 at 8:02 AM Biju Das <biju.das.jz@bp.renesas.com>
-> > wrote:
-> > >
-> > > Hi Prabhakar,
-> > >
-> > > > Subject: [RFC PATCH 1/2] clk: renesas: rzg2l: Don't assume all
-> > > > CPG_MOD clocks support PM
-> > > >
-> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > >
-> > > > There are cases where not all CPG_MOD clocks should be assumed to
-> > > > support PM. For example on the CRU block there is a particular
-> > > > sequence that needs to be followed to initialize the CSI-2 D-PHY
-> > in
-> > > > which individual clocks need to be turned ON/OFF, due to which
-> > > > Runtime PM support wasn't used by the CRU CSI-2 driver.
-> > > >
-> > > > This patch adds support to allow indicating if PM is supported by
-> > > > the CPG_MOD clocks. A new macro is DEF_NO_PM() is added which sets
-> > > > the no_pm flag in struct rzg2l_mod_clk and when the driver uses
-> > > > Runtime PM support no_pm flag is checked to see if the clk needs
-> > to
-> > > > included as part of Runtime PM.
-> > > >
-> > > > CPG_MOD clocks with no_pm flag set need to be individually turned
-> > > > ON/OFF depending on the requirement of the driver.
-> > > >
-> > > > Signed-off-by: Lad Prabhakar
-> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > ---
-> > > >  drivers/clk/renesas/rzg2l-cpg.c | 35
-> > > > +++++++++++++++++++++++++++++---
-> > > > -  drivers/clk/renesas/rzg2l-cpg.h | 12 ++++++++---
-> > > >  2 files changed, 40 insertions(+), 7 deletions(-)
-> > > >
-> > > > diff --git a/drivers/clk/renesas/rzg2l-cpg.c
-> > > > b/drivers/clk/renesas/rzg2l-cpg.c index 3ff6ecd61756..d275324909e7
-> > > > 100644
-> > > > --- a/drivers/clk/renesas/rzg2l-cpg.c
-> > > > +++ b/drivers/clk/renesas/rzg2l-cpg.c
-> > > > @@ -114,6 +114,8 @@ struct rzg2l_cpg_priv {
-> > > >       struct rzg2l_pll5_mux_dsi_div_param mux_dsi_div_params;  };
-> > > >
-> > > > +static struct rzg2l_cpg_priv *rzg2l_cpg_priv;
-> > > > +
-> > > >  static void rzg2l_cpg_del_clk_provider(void *data)  {
-> > > >       of_clk_del_provider(data);
-> > > > @@ -1223,18 +1225,42 @@ static int
-> > > > rzg2l_cpg_reset_controller_register(struct rzg2l_cpg_priv *priv)
-> > > >       return devm_reset_controller_register(priv->dev,
-> > > > &priv->rcdev); }
-> > > >
-> > > > +static inline const struct rzg2l_mod_clk *rzg2l_get_mod_clk(const
-> > > > +struct rzg2l_cpg_info *info, int id) {
-> > > > +     unsigned int i;
-> > > > +
-> > > > +     id += info->num_total_core_clks;
-> > > > +     for (i = 0; i < info->num_mod_clks; i++) {
-> > > > +             if (info->mod_clks[i].id == id)
-> > > > +                     return &info->mod_clks[i];
-> > > > +     }
-> > >
-> > > May be as an optimization add ID and clk to a separate list and
-> > > traverse that smaller list for DEF_NO_PM case.
-> > >
-> > > case CPG_MOD:
-> > >         return rzg2l_cpg_is_pm_mod(clkspec->args[1]);
-> > >
-> > Are you suggesting adding no_pm_mod_clks and no_pm_mod_clks or
-> > building an internal structure in struct rzg2l_cpg_priv while calling
-> > rzg2l_cpg_register_mod_clk() for each mod clock?
->
-> Later one. To have a smaller list of no_pm_mod_clks while registering as MOD
-> Clocks and later add PM clocks will check for the matching clock ID and
-> excludes it.
->
-Agreed.
+The ASPT data from "nvme id-ctrl /dev/nvme1":
 
-Cheers,
-Prabhakar
+vid       : 0x1e49
+ssvid     : 0x1e49
+sn        : ZTA21T0KA2227304LM
+mn        : ZHITAI TiPlus5000 1TB
+fr        : ZTA09139
+[...]
+ps    0 : mp:6.50W operational enlat:0 exlat:0 rrt:0 rrl:0
+         rwt:0 rwl:0 idle_power:- active_power:-
+ps    1 : mp:5.80W operational enlat:0 exlat:0 rrt:1 rrl:1
+         rwt:1 rwl:1 idle_power:- active_power:-
+ps    2 : mp:3.60W operational enlat:0 exlat:0 rrt:2 rrl:2
+         rwt:2 rwl:2 idle_power:- active_power:-
+ps    3 : mp:0.0500W non-operational enlat:5000 exlat:10000 rrt:3 rrl:3
+         rwt:3 rwl:3 idle_power:- active_power:-
+ps    4 : mp:0.0025W non-operational enlat:8000 exlat:45000 rrt:4 rrl:4
+         rwt:4 rwl:4 idle_power:- active_power:-
+
+Reported-and-tested-by: Chang Feng <flukehn@gmail.com>
+Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+---
+ drivers/nvme/host/pci.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 98864b853eef..65481d1975cc 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -3513,6 +3513,8 @@ static const struct pci_device_id nvme_id_table[] = {
+ 		.driver_data = NVME_QUIRK_BOGUS_NID, },
+ 	{ PCI_DEVICE(0x1dbe, 0x5236),   /* ADATA XPG GAMMIX S70 */
+ 		.driver_data = NVME_QUIRK_BOGUS_NID, },
++	{ PCI_DEVICE(0x1e49, 0x0021),   /* ZHITAI TiPro5000 NVMe SSD */
++		.driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
+ 	{ PCI_DEVICE(0x1e49, 0x0041),   /* ZHITAI TiPro7000 NVMe SSD */
+ 		.driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
+ 	{ PCI_DEVICE(0xc0a9, 0x540a),   /* Crucial P2 */
+-- 
+2.37.3
+
