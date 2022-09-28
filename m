@@ -2,182 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9585ED7D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96A15ED7DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233941AbiI1Ici (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
+        id S233241AbiI1Iek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233252AbiI1Icc (ORCPT
+        with ESMTP id S233700AbiI1IeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:32:32 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9A78E0E8
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:32:27 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id u59-20020a17090a51c100b00205d3c44162so1335187pjh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=AnfHroM50E8P0Ii+iSU31sgRh6u2MaB02I2cVNNuq8I=;
-        b=CfEdIZt8l1WQDjOyQeWDMyKnvk4S7PxcJFyRFVhbdYdCj4+oumy2rfrw2svHEvFosM
-         0YwVNJfK/5UCtOQO7rhnbQWs0BxHkcRGp+07m8J1nbKZ2R1p1HX3KE3Ac25PmhufYIWS
-         bm0o324L/Xfg7OcOyc1cUkiz43Lsz2SKgSsN7e39qw1HBrYi6ZEcORTNwdY18gyBXdPy
-         hkSX+wFNH5YVKZ0+1jKMoU3YlJdrvo6snbz6SD9PoDA7ik6QHgrqMOgebo10BuEbSuj9
-         s0nrkc6fwAe6/lLOcMj5RzzPCqEsCIuINiTsZwiAU6wbnfn5DfzefbFPVlWRWNMFskH2
-         f7Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=AnfHroM50E8P0Ii+iSU31sgRh6u2MaB02I2cVNNuq8I=;
-        b=kfSQZKO58DG0OK9bvxlhYM9/jDAfqxXB9+UOrJXiYPJj09ctSRUogAzJ1oEvdip/4H
-         J+/jb4YxDJWHSFi4L7NDJmn7GZrrk6U1CdPktfTV9OREOxk+oXFbhGZmgMhhSD6zTdQA
-         u0eQlclVKz4NAR2R9ZHoP0nXkiUz8qNbGaxBN1IVIfN1ynXP3E6tEVxKJce3eam7/vzq
-         oKJtglR/h2IQJPCwWNPvcm0HtAMpkPpZ4fkvKnW9dH15GiwAgflGcKUBL8MxsCco55mw
-         kpbqPONO0puLgzFvHfc1EMndV3hEgL0QnohZ3FfZlg4qpM6uGgSNMZYpOs8bE2EI1vsf
-         pxdQ==
-X-Gm-Message-State: ACrzQf2I3QqSiIKDNXrK80hQgIGCPI8vVGB7EVh/dAPJgaobH7g+idQQ
-        f3DPvv+pk66Lg/lvITEuK8dgKA==
-X-Google-Smtp-Source: AMsMyM5LGu2rD0qQqLi/ZxdXqiVouuXIGTsKuwQkqeI9oSkcI/4nd83sN8JuM2eiL086bz1TLAJQCQ==
-X-Received: by 2002:a17:903:40cc:b0:177:e44f:1fff with SMTP id t12-20020a17090340cc00b00177e44f1fffmr32460026pld.133.1664353946549;
-        Wed, 28 Sep 2022 01:32:26 -0700 (PDT)
-Received: from [10.2.223.68] ([61.120.150.77])
-        by smtp.gmail.com with ESMTPSA id n9-20020aa79849000000b0055abc22a1absm647459pfq.209.2022.09.28.01.32.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 01:32:26 -0700 (PDT)
-Message-ID: <e0a1b90d-8e60-bf04-1335-ec194049da31@bytedance.com>
-Date:   Wed, 28 Sep 2022 16:32:18 +0800
+        Wed, 28 Sep 2022 04:34:23 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA5788DDF;
+        Wed, 28 Sep 2022 01:34:13 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4McqRx2qbnzWgnn;
+        Wed, 28 Sep 2022 16:30:05 +0800 (CST)
+Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 16:34:11 +0800
+Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
+ (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 28 Sep
+ 2022 16:34:10 +0800
+From:   Xin Liu <liuxin350@huawei.com>
+To:     <quentin@isovalent.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <haoluo@google.com>,
+        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
+        <kongweibin2@huawei.com>, <kpsingh@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <liuxin350@huawei.com>,
+        <martin.lau@linux.dev>, <sdf@google.com>, <song@kernel.org>,
+        <wuchangye@huawei.com>, <xiesongyang@huawei.com>,
+        <yanan@huawei.com>, <yhs@fb.com>, <zhudi2@huawei.com>
+Subject: Re: [PATCH 1/2] libbpf: add fPIC option for static library
+Date:   Wed, 28 Sep 2022 16:32:56 +0800
+Message-ID: <20220928083256.57679-1-liuxin350@huawei.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <c5c5cedb-4b32-2569-1d55-fc95cad1b260@isovalent.com>
+References: <c5c5cedb-4b32-2569-1d55-fc95cad1b260@isovalent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.0
-Subject: Re: [PATCH v2 1/9] PCI/AER: Add
- pci_aer_clear_uncorrect_error_status() to PCI core
-Content-Language: en-US
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     bhelgaas@google.com, ruscur@russell.cc, oohall@gmail.com,
-        fancer.lancer@gmail.com, jdmason@kudzu.us, dave.jiang@intel.com,
-        allenbh@gmail.com, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linuxppc-dev@lists.ozlabs.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntb@lists.linux.dev, linux-scsi@vger.kernel.org
-References: <20220927153524.49172-1-chenzhuo.1@bytedance.com>
- <20220927153524.49172-2-chenzhuo.1@bytedance.com>
- <564e778a-4ed8-3907-1cb3-34af109d0ce0@linux.intel.com>
-From:   Zhuo Chen <chenzhuo.1@bytedance.com>
-In-Reply-To: <564e778a-4ed8-3907-1cb3-34af109d0ce0@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500010.china.huawei.com (7.185.36.155)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 27 Sep 2022 at 6:21:20 PM Quentin <quentin@isovalent.com> wrote:
+> Sat Sep 24 2022 11:12:08 GMT+0100 ~ Xin Liu <liuxin350@huawei.com>
+> > Some programs depned on libbpf.a(eg:bpftool). If libbpf.a miss -fPIC,
+> 
+> Typo "depned"
+> 
+> > this will cause a similar error at compile time:
+> > 
+> > /usr/bin/ld: .../libbpf.a(libbpf-in.o): relocation
+> > R_AARCH64_ADR_PREL_PG_HI21 against symbol `stderr@@GLIBC_2.17' which
+> > may bind externally can not be used when making a sharedobject;
+> > recompile with -fPIC
+> > 
+> > Use -fPIC for static library compilation to solve this problem.
+> > 
+> > Signed-off-by: Xin Liu <liuxin350@huawei.com>
+> > ---
+> >  tools/lib/bpf/Makefile | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> > index 4c904ef0b47e..427e971f4fcd 100644
+> > --- a/tools/lib/bpf/Makefile
+> > +++ b/tools/lib/bpf/Makefile
+> > @@ -91,9 +91,10 @@ override CFLAGS += $(INCLUDES)
+> >  override CFLAGS += -fvisibility=hidden
+> >  override CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> >  override CFLAGS += $(CLANG_CROSS_FLAGS)
+> > +override CFLAGS += -fPIC
+> >  
+> >  # flags specific for shared library
+> > -SHLIB_FLAGS := -DSHARED -fPIC
+> > +SHLIB_FLAGS := -DSHARED
+> >  
+> >  ifeq ($(VERBOSE),1)
+> >    Q =
+> 
+> Hi, the two patches look OK to me, but it would be nice to have a bit
+> more context on what the flags do other than “fixing this particular
+> issue” and how they improve bpftool security. It would also be
+> interesting to have a note on what it does on various architectures, my
+> understanding is that only some archs are supported (I read AArch64,
+> m68k, PowerPC and SPARC), I guess the flags are silently ignored on x86
+> for example?
+> 
+> Thanks,
+> Quentin
+> 
+This advice is very useful to me. Thank you very much for your reply.
+I'll fix it in the V2 version.
 
-
-On 9/28/22 3:31 AM, Sathyanarayanan Kuppuswamy wrote:
-> Hi,
-> 
-> On 9/27/22 8:35 AM, Zhuo Chen wrote:
->> Sometimes we need to clear aer uncorrectable error status, so we add
-> 
-> Adding n actual use case will help.
-> 
->> pci_aer_clear_uncorrect_error_status() to PCI core.
-> 
-> If possible, try to avoid "we" usage in commit log. Just say "so add
-> pci_aer_clear_uncorrect_error_status() function"
-> 
->>
->> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
->> ---
->>   drivers/pci/pcie/aer.c | 16 ++++++++++++++++
->>   include/linux/aer.h    |  5 +++++
->>   2 files changed, 21 insertions(+)
->>
->> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
->> index e2d8a74f83c3..4e637121be23 100644
->> --- a/drivers/pci/pcie/aer.c
->> +++ b/drivers/pci/pcie/aer.c
->> @@ -286,6 +286,22 @@ void pci_aer_clear_fatal_status(struct pci_dev *dev)
->>   		pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, status);
->>   }
->>   
->> +int pci_aer_clear_uncorrect_error_status(struct pci_dev *dev)
->> +{
->> +	int aer = dev->aer_cap;
->> +	u32 status;
->> +
->> +	if (!pcie_aer_is_native(dev))
->> +		return -EIO;
->> +
->> +	pci_read_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, &status);
->> +	if (status)
->> +		pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, status);
-> 
-> Why not just write all '1' and clear it? Why read and write?
-
-Hi Sathyanarayanan,
-
-The current implementation and the previous implementation are all first 
-read and then write to clear the status. Currently just be consistent 
-with them:
-  - aer_enable_rootport()
-  - pci_aer_raw_clear_status()
-  - pcibios_plat_dev_init() in arch/mips/pci/pci-octeon.c
-  - commit fd3362cb73de ("PCI/AER: Squash aerdrv_core.c into aerdrv.c")
-    pci_cleanup_aer_uncorrect_error_status
-> 
->> +
->> +	return 0;
->> +}
->> +EXPORT_SYMBOL_GPL(pci_aer_clear_uncorrect_error_status);
-> 
-> Add details about why you want to export in commit log.
-
-Thanks,
-
-I will add details and improve commit log in next version.
-> 
->> +
->>   /**
->>    * pci_aer_raw_clear_status - Clear AER error registers.
->>    * @dev: the PCI device
->> diff --git a/include/linux/aer.h b/include/linux/aer.h
->> index 97f64ba1b34a..154690c278cb 100644
->> --- a/include/linux/aer.h
->> +++ b/include/linux/aer.h
->> @@ -45,6 +45,7 @@ struct aer_capability_regs {
->>   int pci_enable_pcie_error_reporting(struct pci_dev *dev);
->>   int pci_disable_pcie_error_reporting(struct pci_dev *dev);
->>   int pci_aer_clear_nonfatal_status(struct pci_dev *dev);
->> +int pci_aer_clear_uncorrect_error_status(struct pci_dev *dev);
->>   void pci_save_aer_state(struct pci_dev *dev);
->>   void pci_restore_aer_state(struct pci_dev *dev);
->>   #else
->> @@ -60,6 +61,10 @@ static inline int pci_aer_clear_nonfatal_status(struct pci_dev *dev)
->>   {
->>   	return -EINVAL;
->>   }
->> +static inline int pci_aer_clear_uncorrect_error_status(struct pci_dev *dev)
->> +{
->> +	return -EINVAL;
->> +}
->>   static inline void pci_save_aer_state(struct pci_dev *dev) {}
->>   static inline void pci_restore_aer_state(struct pci_dev *dev) {}
->>   #endif
-> 
-
--- 
-Thanks,
-Zhuo Chen
+Thansk,
+Xin Liu
