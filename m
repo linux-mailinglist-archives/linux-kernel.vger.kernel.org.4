@@ -2,87 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933DC5ED95F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48E15ED961
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbiI1JpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
+        id S233208AbiI1Jp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiI1JpH (ORCPT
+        with ESMTP id S233090AbiI1Jpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:45:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92DC3A145;
-        Wed, 28 Sep 2022 02:45:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D6C361DA1;
-        Wed, 28 Sep 2022 09:45:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A839AC433D6;
-        Wed, 28 Sep 2022 09:45:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664358305;
-        bh=1uTau1MwtuGWxrix0wbBApS6NpbmWi3b2Yso8vdhkF0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VWmh4j16lZcbVGHbvpRkJrAquaCsbPHptyth0yfnELqqWCip463YZ9pgIQC700wsl
-         uVk2O0McEmRAgANJa9kxwjje9ZmxpvyPUDg4GvZEmaiXeqc/UAdtuQ01fma91EUS6p
-         mH0mdXDmGGC5hooyMsAQK3vtW64lDqIgQ720UjbJM25ekBGcWZJjkCj8I17yCdXXkr
-         m5q7PdGJ5E9pJKM9Fmq1GT6vZXlbQ7cAO5NnDJ/UNru8TUvEzz/mx0jDTblPvp39Lp
-         zMHYvY3bByHvUkgDhqDO3PdoSuAw5iUKkrq8L2Gc5ILOlkDkzgplUY++ci82m7nwtp
-         dpDPOzmn2W7PA==
-Date:   Wed, 28 Sep 2022 10:45:00 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] dt-bindings: mfd: qcom,tcsr: drop simple-mfd from
- IPQ6018
-Message-ID: <YzQXnLBiv/nfnf31@google.com>
-References: <20220909091056.128949-1-krzysztof.kozlowski@linaro.org>
+        Wed, 28 Sep 2022 05:45:52 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E5693537;
+        Wed, 28 Sep 2022 02:45:49 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id DF05967373; Wed, 28 Sep 2022 11:45:45 +0200 (CEST)
+Date:   Wed, 28 Sep 2022 11:45:45 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Angus Chen <angus.chen@jaguarmicro.com>, jasowang@redhat.com,
+        pbonzini@redhat.com, axboe@kernel.dk,
+        virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liming Wu <liming.wu@jaguarmicro.com>, stefanha@redhat.com,
+        tglx@linutronix.de
+Subject: Re: [PATCH v1] virtio_blk: should not use IRQD_AFFINITY_MANAGED in
+ init_rq
+Message-ID: <20220928094545.GA19646@lst.de>
+References: <20220924034854.323-1-angus.chen@jaguarmicro.com> <20220927163723-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220909091056.128949-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220927163723-mutt-send-email-mst@kernel.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 09 Sep 2022, Krzysztof Kozlowski wrote:
-
-> Commit 7677ed11e9fa ("dt-bindings: mfd: qcom,tcsr: Convert to dtschema")
-> converted bindings to DT schema literally - including the
-> qcom,tcsr-ipq6018 expecting syscon and simple-mfd.  Such configuration
-> is not used in DTS and there is no actual need of it.  The TCSR block is
-> purely configuration block and should not have children.  Any child
-> device should be simply moved outside of TCSR syscon block.
+On Tue, Sep 27, 2022 at 04:47:20PM -0400, Michael S. Tsirkin wrote:
+> > The log :
+> > "genirq: Flags mismatch irq 0. 00000080 (virtio418) vs. 00015a00 (timer)"
+> > was print because of the irq 0 is used by timer exclusive,and when
+> > vp_find_vqs called vp_find_vqs_msix and return false twice,then it will
+> > call vp_find_vqs_intx for the last try.
+> > Because vp_dev->pci_dev->irq is zero,so it will be request irq 0 with
+> > flag IRQF_SHARED.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> First this is a bug. We can fix that so it will fail more cleanly.
 > 
-> ---
+> We should check pci_dev->pin and if 0 do not try to use INT#x
+> at all.
+> It will still fail, just with a nicer backtrace.
+
+How do we end up with a pci_dev without a valid PIN?  Btw, that whole
+vp_find_* code looks extremely fucked up to me.  The whole point of
+pci_alloc_irq_vectors* API is that it keeps drivers from poling into
+details of MSI-X v MSI vs INTX.
+
+> - because of auto affinity, we try to reserve an interrupt on all CPUs
+> - as there are 512 devices with a single vector per VQ we would
+>   have no issue as they would be spread between CPUs,
+>   but allocating on all CPUs fails.
 > 
-> Changes since v2
-> ================
-> 1. Rebase on current MFD changes.
-> 2. Split from the series. Nothing depends on it, AFAIK.
-> v2: https://lore.kernel.org/all/20220817145901.865977-2-krzysztof.kozlowski@linaro.org/
-> ---
->  .../devicetree/bindings/mfd/qcom,tcsr.yaml    | 46 +++++++++----------
->  1 file changed, 21 insertions(+), 25 deletions(-)
+> 
+> I don't think the issue should be fixed at blk level - it is not
+> blk specifix - but yes this looks like a problem.
+> Christoph, any idea?
 
-Applied, thanks.
-
--- 
-Lee Jones [李琼斯]
+I think this goes into the low-level interrupt vector allocator.  I think
+Thomas is still the expert on it.
