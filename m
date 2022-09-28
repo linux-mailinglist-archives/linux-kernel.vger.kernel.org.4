@@ -2,78 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110165EDBF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 592C35EDBF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233387AbiI1Llp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S233557AbiI1Ll6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 07:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbiI1Llm (ORCPT
+        with ESMTP id S233558AbiI1Lly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:41:42 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD4627177;
-        Wed, 28 Sep 2022 04:41:40 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id b6so13994671ljr.10;
-        Wed, 28 Sep 2022 04:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=M5mCF6ziBXfD5EgO9VcMjVbGRktThpK45PX3gGjrmso=;
-        b=RrDbSzLtd35h9ODJaGvZ37irLEhhbK+6ztug7KgRPlpWr4g5xIcqbGM61uNeUVGiPj
-         NP55u1cpyhdwf6f2S0ixV8UeVDB66xwhyM68wi1J4DHJTAj2htLMmmHq8nmf4JY/vKXA
-         0Sl1SLV9xiyGQCXdlAzzovyMxWYoP1CEHw3qTXPxuAvTF1co71FrHKEbnfeQb1rvKUkK
-         yBVqwVPRhNd2FXNEOiSm7uP2uDCYL61BmejJzXMQ7x9Po8Hz2ZEaDJymyXvVqfFd8bkV
-         PoCjY6QdBb3vd13FvcK0JsM0Wf8MkdaKSnqEycmlB1/g4K5n0OC0kox0wh9arDOYmJJB
-         U09Q==
+        Wed, 28 Sep 2022 07:41:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA10B31EF9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664365311;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XC67SJ3XDTOlROMlv59qhDGypCtFKH7Px8QsqpEz0sM=;
+        b=X/ymLqj7F/F7/rIEY+WABMDJdlbpXfMVQaoQ/G1N912mokHwp2ic+JY7QVIT5fQ/diW4iw
+        X+dWUvW6QM5KghXHc6yv/3hsSgBmbEYk0N9WEHr87dTo5ZH+ppIF5EOp4JdmNsQd/eBzHl
+        5k0Wo1UInLm0jpqrkTAdBPW7Z5yFxQY=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-532-ZQR-6WHaMgm9yfUU2t4-Dw-1; Wed, 28 Sep 2022 07:41:50 -0400
+X-MC-Unique: ZQR-6WHaMgm9yfUU2t4-Dw-1
+Received: by mail-ej1-f72.google.com with SMTP id gv43-20020a1709072beb00b0077c3f58a03eso5253878ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:41:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=M5mCF6ziBXfD5EgO9VcMjVbGRktThpK45PX3gGjrmso=;
-        b=UB58vXu5rVenyTsOze7DPVhrc4L1FO60sQNKweVHU0FKf7nvaVTP3dHLNWCgIsSMZB
-         d2IrWHCwwU3CmQPggrXSxxg1HXbPWJd+vtZBAHBfZ4K58R4HVENaqPUjLyPyE8l7Hc9m
-         nAKuodVx584M3rXVToVhH3KfnULqmZTr8eMdzYc5HTAr89vytcLkxPzWSWkFMaXmgVo0
-         xfO0wJa63pzxfY9fRdBfLpPSCNXTQYChSA9D/DZ5mdqqx43x6/xtJIxZLYZIQDkHfppI
-         xhFVWrjy8ItUaNpyLnwLYEyNfwSEKvsl6X0H1LTo6vVWNCzHJlcr0djEzSpn4HePUiUZ
-         fXCQ==
-X-Gm-Message-State: ACrzQf10IWnQkWq69yh6QeN3oLep/vxgUjMW5VqU8LKl9cxlolpFHrkK
-        /chf+2HnTX5/oDmzyyCC11A=
-X-Google-Smtp-Source: AMsMyM4bZnbmeYtC3e9ASll75zLYHPJwlYQvHT7PHxhWZCf1qGxhH0x4pxMGbk76axUgruz1w0eE9A==
-X-Received: by 2002:a05:651c:12c7:b0:26d:90a8:791e with SMTP id 7-20020a05651c12c700b0026d90a8791emr6294718lje.251.1664365299115;
-        Wed, 28 Sep 2022 04:41:39 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05651c128b00b0026c4305e5e2sm420624ljc.53.2022.09.28.04.41.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 04:41:38 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 14:41:36 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Will McVicker <willmcvicker@google.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Robin Murphy <robin.murphy@arm.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Isaac J . Manjarres" <isaacmanjarres@google.com>
-Subject: Re: [PATCH v5 1/2] PCI: dwc: Drop dependency on ZONE_DMA32
-Message-ID: <20220928114136.4yvtfnrcril3jkgg@mobilestation>
-References: <20220825185026.3816331-1-willmcvicker@google.com>
- <20220825185026.3816331-2-willmcvicker@google.com>
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=XC67SJ3XDTOlROMlv59qhDGypCtFKH7Px8QsqpEz0sM=;
+        b=FapI3bSlji2Vbw4BCw5WBOLK1OioWcfw3APTmTE8ugmDPWoQRHARrllmOzD1ZKf8zZ
+         aES9lGy1CNHem1UVnydwZF4JJhtC1zEdqyZ9aAj5ovd0hlxyk+qCwBWuDpkypQWOkNkp
+         ETUlOPzMNm231Mya6JDV6PZ24h0NAT9v3n2LnjzcVPoFgpUc1RhHLRvpi8HxTZnkM96g
+         ZVYr2QOLddnY5IP3cdRaiIRjwRFJ827AbgmgvRj4SXJvo+i9cKrAy9YCMPQmMW8Z2yhh
+         duhaVLc3qWiOYfBfYIlXZS67FYvh5jZH/r5fr32N5RZxqdOQ//2If7AIPGiQQ61ba22V
+         57TA==
+X-Gm-Message-State: ACrzQf37lWT9iUfa6bv8JdmTx8EnwFOwexeHROkpuzLasu9aiL93wyQi
+        bAaoKYMGMJIgvVKS0mn2KIzopm8OiOrCBUA5eGa0kKgyY3wuZwFJxMGBZOP/ZLRKBaAoNVycwHP
+        w1niETe0k3fFsr7PcfH3P69tO
+X-Received: by 2002:a17:907:9807:b0:781:feee:f87c with SMTP id ji7-20020a170907980700b00781feeef87cmr27477176ejc.101.1664365309438;
+        Wed, 28 Sep 2022 04:41:49 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM68sNi9SdtuWqttYMynS5Szr9EoGEJaZpf4gaxO8d/kIpewfaCdOMKBYdCWPnt+ufOi8mpHlw==
+X-Received: by 2002:a17:907:9807:b0:781:feee:f87c with SMTP id ji7-20020a170907980700b00781feeef87cmr27477157ejc.101.1664365309143;
+        Wed, 28 Sep 2022 04:41:49 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:2f4b:62da:3159:e077? ([2001:b07:6468:f312:2f4b:62da:3159:e077])
+        by smtp.googlemail.com with ESMTPSA id gh30-20020a1709073c1e00b0077a11b79b9bsm2236165ejc.133.2022.09.28.04.41.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 04:41:48 -0700 (PDT)
+Message-ID: <f708d769-5d93-351f-ea24-8fa7deb9f689@redhat.com>
+Date:   Wed, 28 Sep 2022 13:41:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825185026.3816331-2-willmcvicker@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220927152241.194900-1-pbonzini@redhat.com>
+ <YzM55hqavzENQq7I@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH] KVM: allow compiling out SMM support
+In-Reply-To: <YzM55hqavzENQq7I@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,123 +81,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 06:50:24PM +0000, Will McVicker wrote:
-> Re-work the msi_msg DMA allocation logic to use dmam_alloc_coherent() which
-> uses the coherent DMA mask to try to return an allocation within the DMA
-> mask limits. With that, we now can drop the msi_page parameter in struct
-> dw_pcie_rp. This allows kernel configurations that disable ZONE_DMA32 to
-> continue supporting a 32-bit DMA mask. Without this patch, the PCIe host
-> device will fail to probe when ZONE_DMA32 is disabled.
-
-As Rob already said here
-https://lore.kernel.org/all/CAL_JsqJh=d-B51b6yPBRq0tOwbChN=AFPr-a19U1QdQZAE7c1A@mail.gmail.com/
-and I mentioned in this thread
-https://lore.kernel.org/linux-pci/20220912000211.ct6asuhhmnatje5e@mobilestation/
-DW PCIe MSI doesn't cause any DMA due to the way the iMSI-RX engine is
-designed. So reserving any real system memory is a waste of one in
-this case. Reserving DMA-coherent even more inappropriate since it
-can be expensive on some platforms (see note in Part Ia of
-Documentation/core-api/dma-api.rst). For instance on MIPS32 with
-non-corehent common DMA.
-
+On 9/27/22 19:59, Sean Christopherson wrote:
+>> 	The patch isn't pretty.  I could skip all the changes to add WARNs
+>> 	to called functions, but the point of adding the config symbol is
+>> 	to make sure that those functions, and all the baggage they bring,
+>> 	are dead.
 > 
-> Fixes: 35797e672ff0 ("PCI: dwc: Fix MSI msi_msg DMA mapping")
-> Reported-by: Isaac J. Manjarres <isaacmanjarres@google.com>
-> Signed-off-by: Will McVicker <willmcvicker@google.com>
-> Acked-by: Jingoo Han <jingoohan1@gmail.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../pci/controller/dwc/pcie-designware-host.c | 28 +++++--------------
->  drivers/pci/controller/dwc/pcie-designware.h  |  1 -
->  2 files changed, 7 insertions(+), 22 deletions(-)
+> I would much rather we go even further and completely kill off those functions
+> at compile time.
+
+Ok, but then we should go all the way and move as much as possible to a 
+separate file.  This also means moving the out-of-SMM flow away from the 
+emulator, which in turn enables using ctxt only for the GPRs and not for 
+ctxt->ops.
+
+I have already done all that and it's quite a bit nicer; I'll send it 
+once I've tested it with more than just smm_test.  I left a couple stubs 
+behind where the balance seemed to be better that way (mostly for use in 
+kvm_vcpu_ioctl_x86_set_vcpu_events), but most of the code is compiled out.
+
+> There are side effects that should also be eliminated, e.g. x86 should not define
+> __KVM_VCPU_MULTIPLE_ADDRESS_SPACE so that usersepace can't create memslots for
+> SMM.  Dropping the functions entirely wrapping those #defines in #ifdef as well,
+> and so makes it all but impossible for KVM to do anything SMM related.
 > 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index 7746f94a715f..39f3b37d4033 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -267,15 +267,6 @@ static void dw_pcie_free_msi(struct dw_pcie_rp *pp)
->  
->  	irq_domain_remove(pp->msi_domain);
->  	irq_domain_remove(pp->irq_domain);
-> -
-> -	if (pp->msi_data) {
-> -		struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-> -		struct device *dev = pci->dev;
-> -
-> -		dma_unmap_page(dev, pp->msi_data, PAGE_SIZE, DMA_FROM_DEVICE);
-> -		if (pp->msi_page)
-> -			__free_page(pp->msi_page);
-> -	}
->  }
->  
->  static void dw_pcie_msi_init(struct dw_pcie_rp *pp)
-> @@ -336,6 +327,7 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
->  	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
->  	struct device *dev = pci->dev;
->  	struct platform_device *pdev = to_platform_device(dev);
-> +	u64 *msi_vaddr;
->  	int ret;
->  	u32 ctrl, num_ctrls;
->  
-> @@ -375,22 +367,16 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
->  						    dw_chained_msi_isr, pp);
->  	}
->  
+> Eliminating those at compile time requires a bit more #ifdeffery, but it's not
+> awful, and IMO it's better than sprinkling WARNs in a bunch of paths.  KVM_REQ_SMI
+> in particular might be going too far, but even for that one I vote to kill it.
 
-> -	ret = dma_set_mask(dev, DMA_BIT_MASK(32));
-> +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+Sounds good, though of course some of the various cleanups are best done 
+in separate patches.
 
-This has been redundant in the first place since none of the DW PCIe
-low-level drivers update the mask, and it's of 32-bits wide by default
-anyway:
-https://elixir.bootlin.com/linux/latest/source/drivers/of/platform.c#L167
-
->  	if (ret)
->  		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
->  
-> -	pp->msi_page = alloc_page(GFP_DMA32);
-> -	pp->msi_data = dma_map_page(dev, pp->msi_page, 0,
-> -				    PAGE_SIZE, DMA_FROM_DEVICE);
-> -	ret = dma_mapping_error(dev, pp->msi_data);
-> -	if (ret) {
-> -		dev_err(pci->dev, "Failed to map MSI data\n");
-> -		__free_page(pp->msi_page);
-> -		pp->msi_page = NULL;
-> -		pp->msi_data = 0;
-> +	msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
-> +					GFP_KERNEL);
-
-Changing the whole device DMA-mask due to something that doesn't
-perform seems inappropriate. I'd suggest to preserve the ZONE_DMA32
-here until there is something like suggested by @Robin
-https://lore.kernel.org/linux-pci/1e63a581-14ae-b4b5-a5bf-ca8f09c33af6@arm.com/
-in the last paragraph is implemented. Especially seeing there still
-common drivers in kernel which still rely on that zone.
-
--Sergey
-
-> +	if (!msi_vaddr) {
-> +		dev_err(dev, "Failed to alloc and map MSI data\n");
->  		dw_pcie_free_msi(pp);
-> -
-> -		return ret;
-> +		return -ENOMEM;
->  	}
->  
->  	return 0;
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-> index 09b887093a84..a871ae7eb59e 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.h
-> +++ b/drivers/pci/controller/dwc/pcie-designware.h
-> @@ -243,7 +243,6 @@ struct dw_pcie_rp {
->  	struct irq_domain	*irq_domain;
->  	struct irq_domain	*msi_domain;
->  	dma_addr_t		msi_data;
-> -	struct page		*msi_page;
->  	struct irq_chip		*msi_irq_chip;
->  	u32			num_vectors;
->  	u32			irq_mask[MAX_MSI_CTRLS];
-> -- 
-> 2.37.2.672.g94769d06f0-goog
+>>  static int kvm_vcpu_ioctl_smi(struct kvm_vcpu *vcpu)
+>>  {
+>> -	kvm_make_request(KVM_REQ_SMI, vcpu);
+>> -
+>> +	if (IS_ENABLED(CONFIG_KVM_SMM))
+>> +		kvm_make_request(KVM_REQ_SMI, vcpu);
+>>  	return 0;
 > 
-> 
+> This should return -EINVAL, not 0.
+
+I'm a bit wary of changing this in case userspace is relying on it not 
+failing, because the paths that lead to the failing ioctl are most 
+likely controlled by the guest.
+
+Paolo
+
