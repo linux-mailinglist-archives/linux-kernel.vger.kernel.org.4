@@ -2,150 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73D45EEA12
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5AAB5EEA14
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 01:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiI1XU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 19:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
+        id S231577AbiI1XUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 19:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiI1XUV (ORCPT
+        with ESMTP id S230431AbiI1XUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 19:20:21 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0117F27FD9
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:20:19 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id h62-20020a636c41000000b0043cc1874c79so4913756pgc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:20:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date;
-        bh=1BcvkZblEoh81UGBvcbacOXFb2nRKlIjpIAm5OdbSA8=;
-        b=Xk8jpCAp7kAIuzwk7BIrTBWEa1j4mAf0fiyNchS/feUtRG57b/rQVM9QarpWa9NP0B
-         XFEhW7pOb7H/nYHmczRTjoELvh3S/cY6sekhURDN2N5y69ljts5bXEwWS9ULvqEATSXx
-         8/HurJTtyAboLQfzBk2/w8I9te4jVhTMgRXZq2puvhkRRpnavVrCl5xyMbAzvrW3fOzj
-         LKoGpCXWnSLxkZF66UBHebmttqXXVYEvE60N4MB5YCjgXyV2uNepsSMh2Or/bbXt1xR1
-         myqQwp8jG9tSx90nJl6syWtYPxTwX6HacZ3T4bJkv/8phDkqkX0o+T38xD5xF3Xuhd9Z
-         g3EA==
+        Wed, 28 Sep 2022 19:20:40 -0400
+Received: from mail-pj1-x1062.google.com (mail-pj1-x1062.google.com [IPv6:2607:f8b0:4864:20::1062])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCEF28718
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:20:36 -0700 (PDT)
+Received: by mail-pj1-x1062.google.com with SMTP id bu5-20020a17090aee4500b00202e9ca2182so4422805pjb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 16:20:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=1BcvkZblEoh81UGBvcbacOXFb2nRKlIjpIAm5OdbSA8=;
-        b=2gFJOE+Mv9E9YqiKVA72S4FoxAf3fB2wGftF3RWcm6bQ3jbEBM1/2eRnoJi/H7i5CW
-         boZFushtnrr4PvCZD6e3WqZm6qClLjbnoQoBZJWhdoUnHs7UH6F31rHCbjp4h55aFCVQ
-         k5VdI8yFiO/Z5eldDRVEkQpGQqceKiVLkD5IkpzrgIFdmUjAyJZtHLUUveMjuuUdm4aL
-         2zayqbFhEL+zbXznwPK5SNhBItGHuHoFlYLZ5ocf0FzD6ipFXTzfhC9R84bRWBPHL08+
-         jQmgqRM+CtSrmvj42WpRpJpxIdbZ8fBUmcttWDUSEbG4dvEtB+BC/flZEAhE+hMpb12T
-         7STw==
-X-Gm-Message-State: ACrzQf3MlAV+OtRpQRYukyVEagTjlk/7e6qcoU5HoekaHHcLeu4EsC4v
-        pOGgmAc49mGe8YvcaTtIhpUwyfSNpVY=
-X-Google-Smtp-Source: AMsMyM7wvxCBb8zWCK0CcdiW+UMbMYc8u643F2ltwA5W/bmQ3Mq+yYFDMGhidW94hvR/6yHGKZK1ZccUaJY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:aa7:8704:0:b0:542:5288:5e32 with SMTP id
- b4-20020aa78704000000b0054252885e32mr153082pfo.84.1664407219578; Wed, 28 Sep
- 2022 16:20:19 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 28 Sep 2022 23:20:15 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
-Message-ID: <20220928232015.745948-1-seanjc@google.com>
-Subject: [PATCH] KVM: VMX: Make vmread_error_trampoline() uncallable from C code
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Uros Bizjak <ubizjak@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=in-reply-to:content-disposition:references:message-id:subject:cc:to
+         :from:date:dkim-signature:x-gm-message-state:from:to:cc:subject:date;
+        bh=P+xjXaurwhtJmqmMf0PJEzjAO1MMXyc/q6GQ8sS6wLs=;
+        b=IdZXp152gThz8VgSGp+PGWhipLw7ECFgb/mibfrc7X2VYLYoW2xDvtgRvrWDoT9fby
+         sPnnhAuSRZmjyQWgxv3h0/94OfIVjXJ6NaltaLSAC5Hvyf+1824sWCxmpmHu1CDepUU3
+         D/h/oErTJqfuFKQZ84Wk4A3Tul6WibTNu6IAuYs1eQZ/F7wt5dBVQPg9keew0BUJOgaJ
+         25JWH2ZjsRCf5RrjvZOtOuzOo8p3D4I9snov2i86IwDPTIFCJ0pUdrfSutQ/6IF6MRzh
+         P0HLF5NEpQ1Lfp60oThOsbW0SD4KfqzIjHnqsKN8pR9MTKLgS3B+krpLnElRbR5HsrM6
+         EFyA==
+X-Gm-Message-State: ACrzQf2y04qhyZzDjLaC6z9+e7SvJ5ruC17Ol1qNhhpvfrgSU9DtXZyd
+        YePLDlTT1sKGNBTF3H45dZQlT971mKDo/W3E4nHzrTs27N+m
+X-Google-Smtp-Source: AMsMyM4Psc2ub1XLhg771C+RWiqbj5BvQWHnC6aLQRGXvnUrNmcInm+SYK4mMjkHMWwToI5/HHnXGWMgS48Z
+X-Received: by 2002:a17:903:11cf:b0:178:a8f4:d511 with SMTP id q15-20020a17090311cf00b00178a8f4d511mr410333plh.72.1664407235579;
+        Wed, 28 Sep 2022 16:20:35 -0700 (PDT)
+Received: from smtp.aristanetworks.com (smtp.aristanetworks.com. [54.193.82.35])
+        by smtp-relay.gmail.com with ESMTPS id u11-20020a170902714b00b0016ee647ca85sm223889plm.93.2022.09.28.16.20.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 28 Sep 2022 16:20:35 -0700 (PDT)
+X-Relaying-Domain: arista.com
+Received: from chmeee (unknown [10.95.71.70])
+        by smtp.aristanetworks.com (Postfix) with ESMTPS id 23A60301BD94;
+        Wed, 28 Sep 2022 16:20:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
+        s=Arista-B; t=1664407235;
+        bh=P+xjXaurwhtJmqmMf0PJEzjAO1MMXyc/q6GQ8sS6wLs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EKAGIolPTBrjq14fjU+yv8WHtOnQNJEyyjVWQRvq230g1uiLby3q4VxaAWbqI31jP
+         np9Jthr79J0qp/NGRmhzcT7gBnApItlwuM+igi7XdudHhMYVFqa7NWHMxAYYhAzPH7
+         04jcvxWW0K/W7AHNaqgn8WEMnNO5C+gXumZQ19Ic=
+Received: from kevmitch by chmeee with local (Exim 4.96)
+        (envelope-from <kevmitch@arista.com>)
+        id 1odgLx-000WEQ-2s;
+        Wed, 28 Sep 2022 16:20:33 -0700
+Date:   Wed, 28 Sep 2022 16:20:33 -0700
+From:   Kevin Mitchell <kevmitch@arista.com>
+To:     Antoine Tenart <atenart@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: new warning caused by ("net-sysfs: update the queue counts in
+ the unregistration path")
+Message-ID: <YzTWwf/FyzBKGaww@chmeee>
+References: <YzOjEqBMtF+Ib72v@chmeee>
+ <166435838013.3919.14607521178984182789@kwain>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166435838013.3919.14607521178984182789@kwain>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Declare vmread_error_trampoline() as an opaque symbol so that it cannot
-be called from C code, at least not without some serious fudging.  The
-trampoline always passes parameters on the stack so that the inline
-VMREAD sequence doesn't need to clobber registers.  regparm(0) was
-originally added to document the stack behavior, but it ended up being
-confusing because regparm(0) is a nop for 64-bit targets.
+On Wed, Sep 28, 2022 at 11:46:20AM +0200, Antoine Tenart wrote:
+> Quoting Kevin Mitchell (2022-09-28 03:27:46)
+> > With the inclusion of d7dac083414e ("net-sysfs: update the queue counts in the
+> > unregistration path"), we have started see the following message during one of
+> > our stress tests that brings an interface up and down while continuously
+> > trying to send out packets on it:
+> >
+> > et3_11_1 selects TX queue 0, but real number of TX queues is 0
+> >
+> > It seems that this is a result of a race between remove_queue_kobjects() and
+> > netdev_cap_txqueue() for the last packets before setting dev->flags &= ~IFF_UP
+> > in __dev_close_many(). When this message is displayed, netdev_cap_txqueue()
+> > selects queue 0 anyway (the noop queue at this point). As it did before the
+> > above commit, that queue (which I guess is still around due to reference
+> > counting) proceeds to drop the packet and return NET_XMIT_CN. So there doesn't
+> > appear to be a functional change. However, the warning message seems to be
+> > spurious if not slightly confusing.
+>
+> Do you know the call traces leading to this? Also I'm not 100% sure to
+> follow as remove_queue_kobjects is called in the unregistration path
+> while the test is setting the iface up & down. What driver is used?
 
-Opportunustically wrap the trampoline and its declaration in #ifdeffery
-to make it even harder to invoke incorrectly, to document why it exists,
-and so that it's not left behind if/when CONFIG_CC_HAS_ASM_GOTO_OUTPUT
-is true for all supported toolchains.
+Sorry, my language was imprecise. The device is being unregistered and
+re-registered. The driver is out of tree for our front panel ports. I don't
+think this is specific to the driver, but I'd be happy to be convinced
+otherwise.
 
-No functional change intended.
+The call trace to the queue removal is
 
-Cc: Uros Bizjak <ubizjak@gmail.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/vmenter.S |  2 ++
- arch/x86/kvm/vmx/vmx_ops.h | 18 ++++++++++++++++--
- 2 files changed, 18 insertions(+), 2 deletions(-)
+[  628.165565]  dump_stack+0x74/0x90
+(remove_queue_kobject)
+[  628.165569]  netdev_unregister_kobject+0x7a/0xb3
+[  628.165572]  rollback_registered_many+0x560/0x5c4
+[  628.165576]  unregister_netdevice_queue+0xa3/0xfc
+[  628.165578]  unregister_netdev+0x1e/0x25
+[  628.165589]  fdev_free+0x26e/0x29d [strata_dma_drv]
 
-diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-index 8477d8bdd69c..24c54577ac84 100644
---- a/arch/x86/kvm/vmx/vmenter.S
-+++ b/arch/x86/kvm/vmx/vmenter.S
-@@ -269,6 +269,7 @@ SYM_FUNC_END(__vmx_vcpu_run)
- 
- .section .text, "ax"
- 
-+#ifndef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
- /**
-  * vmread_error_trampoline - Trampoline from inline asm to vmread_error()
-  * @field:	VMCS field encoding that failed
-@@ -317,6 +318,7 @@ SYM_FUNC_START(vmread_error_trampoline)
- 
- 	RET
- SYM_FUNC_END(vmread_error_trampoline)
-+#endif
- 
- SYM_FUNC_START(vmx_do_interrupt_nmi_irqoff)
- 	/*
-diff --git a/arch/x86/kvm/vmx/vmx_ops.h b/arch/x86/kvm/vmx/vmx_ops.h
-index ec268df83ed6..80ad6b0a5599 100644
---- a/arch/x86/kvm/vmx/vmx_ops.h
-+++ b/arch/x86/kvm/vmx/vmx_ops.h
-@@ -11,14 +11,28 @@
- #include "../x86.h"
- 
- void vmread_error(unsigned long field, bool fault);
--__attribute__((regparm(0))) void vmread_error_trampoline(unsigned long field,
--							 bool fault);
- void vmwrite_error(unsigned long field, unsigned long value);
- void vmclear_error(struct vmcs *vmcs, u64 phys_addr);
- void vmptrld_error(struct vmcs *vmcs, u64 phys_addr);
- void invvpid_error(unsigned long ext, u16 vpid, gva_t gva);
- void invept_error(unsigned long ext, u64 eptp, gpa_t gpa);
- 
-+#ifndef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
-+/*
-+ * The VMREAD error trampoline _always_ uses the stack to pass parameters, even
-+ * for 64-bit targets.  Preserving all registers allows the VMREAD inline asm
-+ * blob to avoid clobbering GPRs, which in turn allows the compiler to better
-+ * optimize sequences of VMREADs.
-+ *
-+ * Declare the trampoline as an opaque label as it's not safe to call from C
-+ * code; there is no way to tell the compiler to pass params on the stack for
-+ * 64-bit targets.
-+ *
-+ * void vmread_error_trampoline(unsigned long field, bool fault);
-+ */
-+extern unsigned long vmread_error_trampoline;
-+#endif
-+
- static __always_inline void vmcs_check16(unsigned long field)
- {
- 	BUILD_BUG_ON_MSG(__builtin_constant_p(field) && ((field) & 0x6001) == 0x2000,
+The call trace to the warning message is
 
-base-commit: c59fb127583869350256656b7ed848c398bef879
--- 
-2.37.3.998.g577e59143f-goog
+[ 1094.355489]  dump_stack+0x74/0x90
+(netdev_cap_txqueue)
+[ 1094.355495]  netdev_core_pick_tx+0x91/0xaf
+[ 1094.355500]  __dev_queue_xmit+0x249/0x602
+[ 1094.355503]  ? printk+0x58/0x6f
+[ 1094.355510]  dev_queue_xmit+0x10/0x12
+[ 1094.355518]  packet_sendmsg+0xe88/0xeee
+[ 1094.355524]  ? update_curr+0x6b/0x15d
+[ 1094.355530]  sock_sendmsg_nosec+0x12/0x1d
+[ 1094.355533]  sock_write_iter+0x8a/0xb6
+[ 1094.355539]  new_sync_write+0x7c/0xb4
+[ 1094.355543]  vfs_write+0xfe/0x12a
+[ 1094.355547]  ksys_write+0x6e/0xb9
+[ 1094.355552]  ? exit_to_user_mode_prepare+0xd3/0xf0
+[ 1094.355555]  __x64_sys_write+0x1a/0x1c
+[ 1094.355559]  do_syscall_64+0x31/0x40
+[ 1094.355564]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
+>
+> As you said and looking around queue 0 is somewhat special and used as a
+> fallback. My suggestion would be to 1) check if the above race is
+> expected 2) if yes, a possible solution would be not to warn when
+> real_num_tx_queues == 0 as in such cases selecting queue 0 would be the
+> expected fallback (and you might want to check places like [1]).
+
+Yes this is exactly where this is happening and that sounds like a good idea to
+me. As far as I can tell, the message is completely innocuous. If there really
+are no cases where it is useful to have this warning for real_num_tx_queues ==
+0, I could submit a patch to not emit it in that case.
+
+>
+> Thanks,
+> Antoine
+>
+> [1] https://elixir.bootlin.com/linux/latest/source/net/core/dev.c#L4126
