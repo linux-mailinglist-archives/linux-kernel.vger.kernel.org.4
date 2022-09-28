@@ -2,123 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225025EDA58
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 12:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49DF95EDA5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 12:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233746AbiI1KrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 06:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
+        id S233778AbiI1Krp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 06:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233100AbiI1KrQ (ORCPT
+        with ESMTP id S233083AbiI1Krk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 06:47:16 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B9D0ACA0F;
-        Wed, 28 Sep 2022 03:47:15 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7E631595;
-        Wed, 28 Sep 2022 03:47:21 -0700 (PDT)
-Received: from [10.57.66.102] (unknown [10.57.66.102])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B49C93F792;
-        Wed, 28 Sep 2022 03:47:12 -0700 (PDT)
-Message-ID: <739570af-b90a-aea6-ee56-cb1d5da48c97@arm.com>
-Date:   Wed, 28 Sep 2022 11:47:11 +0100
+        Wed, 28 Sep 2022 06:47:40 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817BAAD980;
+        Wed, 28 Sep 2022 03:47:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664362058; x=1695898058;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fhubWlwUsGUzDWRnGfcUX6CVIlztpMxnVINR5fDR++A=;
+  b=f9bd60NOBYJl7RfUnmCXImXsQFQeP5zYSjfl05LppRrZGmNbcU4ORxPl
+   IbHxaUDGLXJrm1GwPyHo5rvHekZunv38KkdPPfvYiBgpED9KTGnqvpzya
+   iQCFZ/x04nLP5rCVGjFdz1yz1zsI/W101lK+I2alyvPCHooa4dIaz9icg
+   aJ0lEr4NuUhtSllXPzVlMW8WiZbR4Zjt+DYMARC0FjjwcVPyEc6oMWepn
+   NGgYoAHmJJvad8dRwr2fUhT95dyBDy72Hr/h4l5S5Lm9L7+rb2brFWA+T
+   wZiDL5q5VKuuIxxw1dDeE5uSgCW1PAKWhuU9ZugxanyJNEAiekzjtzKaL
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="284701046"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="284701046"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 03:47:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="725902045"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="725902045"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 28 Sep 2022 03:47:33 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1odUbD-008u6f-2f;
+        Wed, 28 Sep 2022 13:47:31 +0300
+Date:   Wed, 28 Sep 2022 13:47:31 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     hdegoede@redhat.com, markgross@kernel.org, rafael@kernel.org,
+        lenb@kernel.org, hmh@hmh.eng.br, matan@svgalib.org,
+        corentin.chary@gmail.com, jeremy@system76.com,
+        productdev@system76.com, mario.limonciello@amd.com,
+        pobrn@protonmail.com, coproscefalo@gmail.com,
+        platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] platform/x86: dell: Add new dell-wmi-ddv driver
+Message-ID: <YzQmQw0hEwzXV/iz@smile.fi.intel.com>
+References: <20220927204521.601887-1-W_Armin@gmx.de>
+ <20220927204521.601887-3-W_Armin@gmx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH v4 2/2] perf: arm_cspmu: Add support for NVIDIA SCF and
- MCF attribute
-To:     Besar Wicaksono <bwicaksono@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        "thanu.rangarajan@arm.com" <thanu.rangarajan@arm.com>,
-        "Michael.Williams@arm.com" <Michael.Williams@arm.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Vikram Sethi <vsethi@nvidia.com>,
-        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
-        "mike.leach@linaro.org" <mike.leach@linaro.org>,
-        "leo.yan@linaro.org" <leo.yan@linaro.org>
-References: <20220814182351.8861-1-bwicaksono@nvidia.com>
- <20220814182351.8861-3-bwicaksono@nvidia.com>
- <7082762d-2d4d-aa7b-656c-75593b0697f0@arm.com>
- <SJ0PR12MB5676A36BC125A9873F74E697A0549@SJ0PR12MB5676.namprd12.prod.outlook.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <SJ0PR12MB5676A36BC125A9873F74E697A0549@SJ0PR12MB5676.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927204521.601887-3-W_Armin@gmx.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 02:38, Besar Wicaksono wrote:
+On Tue, Sep 27, 2022 at 10:45:21PM +0200, Armin Wolf wrote:
+> The dell-wmi-ddv driver adds support for reading
+> the current temperature and ePPID of ACPI batteries
+> on supported Dell machines.
 > 
+> Since the WMI interface used by this driver does not
+> do any input validation and thus cannot be used for probing,
+> the driver depends on the ACPI battery extension machanism
+> to discover batteries.
 > 
->> -----Original Message-----
->> From: Suzuki K Poulose <suzuki.poulose@arm.com>
->> Sent: Tuesday, September 27, 2022 6:43 AM
->> To: Besar Wicaksono <bwicaksono@nvidia.com>; robin.murphy@arm.com;
->> catalin.marinas@arm.com; will@kernel.org; mark.rutland@arm.com
->> Cc: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
->> linux-tegra@vger.kernel.org; sudeep.holla@arm.com;
->> thanu.rangarajan@arm.com; Michael.Williams@arm.com; Thierry Reding
->> <treding@nvidia.com>; Jonathan Hunter <jonathanh@nvidia.com>; Vikram
->> Sethi <vsethi@nvidia.com>; mathieu.poirier@linaro.org;
->> mike.leach@linaro.org; leo.yan@linaro.org
->> Subject: Re: [PATCH v4 2/2] perf: arm_cspmu: Add support for NVIDIA SCF
->> and MCF attribute
->>
->> External email: Use caution opening links or attachments
->>
->>
->> On 14/08/2022 19:23, Besar Wicaksono wrote:
->>> Add support for NVIDIA System Cache Fabric (SCF) and Memory Control
->>> Fabric (MCF) PMU attributes for CoreSight PMU implementation in
->>> NVIDIA devices.
->>>
->>> Signed-off-by: Besar Wicaksono <bwicaksono@nvidia.com>
+> The driver also supports a debugfs interface for retrieving
+> buffers containing fan and thermal sensor information.
+> Since the meaing of the content of those buffers is currently
+> unknown, the interface is meant for reverse-engineering and
+> will likely be replaced with an hwmon interface once the
+> meaning has been understood.
+> 
+> The driver was tested on a Dell Inspiron 3505.
 
->>> +struct nv_cspmu_match {
->>> +     u32 prodid;
->>> +     u32 prodid_mask;
->>> +     u64 filter_mask;
->>> +     const char *name_pattern;
->>> +     enum nv_cspmu_name_fmt name_fmt;
->>> +     struct attribute **event_attr;
->>> +     struct attribute **format_attr;
->>> +};
->>> +
->>> +static const struct nv_cspmu_match nv_cspmu_match[] = {
->>
->> Similar coding style nit below.
->>
-> 
-> Sure, I will update this.
-> 
->>
->> Otherwise,
->>
->> Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> 
-> Thanks!
-> 
-> Unfortunately, we need to update the name of the PMUs and remove
-> some of the attributes in NVIDIA implementation. This requires a change
-> in nvidia_cspmu.c and nvidia-pmu.rst. I hope you are fine if I include this
-> change on v5 patch.
+...
 
-That should be fine.
+> +config DELL_WMI_DDV
+> +	tristate "Dell WMI sensors Support"
 
-Suzuki
+> +	default m
+
+Why? (Imagine I have Dell, but old machine)
+
+(And yes, I see that other Kconfig options are using it, but we shall avoid
+ cargo cult and each default choice like this has to be explained at least.)
+
+...
+
+> + * dell-wmi-ddv.c -- Linux driver for WMI sensor information on Dell notebooks.
+
+Please, remove file name from the file. This will be an additional burden in
+the future in case it will be renamed.
+
+...
+
+> +#include <acpi/battery.h>
+
+Is it required to be the first? Otherwise it seems ACPI specific to me and the
+general rule is to put inclusions from generic towards custom. I.o.w. can you
+move it after linux/wmi.h with a blank line in between?
+
+> +#include <linux/acpi.h>
+> +#include <linux/debugfs.h>
+> +#include <linux/device.h>
+> +#include <linux/kernel.h>
+> +#include <linux/kstrtox.h>
+> +#include <linux/math.h>
+> +#include <linux/module.h>
+> +#include <linux/limits.h>
+> +#include <linux/power_supply.h>
+> +#include <linux/seq_file.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/wmi.h>
+
+...
+
+> +struct dell_wmi_ddv_data {
+> +	struct acpi_battery_hook hook;
+> +	struct device_attribute temp_attr, eppid_attr;
+
+It's hard to read and easy to miss that the data type has two members here.
+Please, put one member per one line.
+
+> +	struct wmi_device *wdev;
+> +};
+
+...
+
+> +	if (obj->type != type) {
+> +		kfree(obj);
+> +		return -EIO;
+
+EINVAL?
+
+> +	}
+
+...
+
+> +	kfree(obj);
+
+I'm wondering what is the best to use in the drivers:
+ 1) kfree()
+ 2) acpi_os_free()
+ 3) ACPI_FREE()
+
+?
+
+...
+
+> +static int dell_wmi_ddv_battery_index(struct acpi_device *acpi_dev, u32 *index)
+> +{
+
+> +	const char *uid_str = acpi_device_uid(acpi_dev);
+> +
+> +	if (!uid_str)
+> +		return -ENODEV;
+
+It will be better for maintaining to have
+
+	const char *uid_str...;
+
+	uid_str = ...
+	if (!uid_str)
+		...
+
+> +	return kstrtou32(uid_str, 10, index);
+> +}
+
+...
+
+> +	/* Return 0 instead of error to avoid being unloaded */
+> +	ret = dell_wmi_ddv_battery_index(to_acpi_device(battery->dev.parent), &index);
+> +	if (ret < 0)
+> +		return 0;
+
+How index is used?
+
+...
+
+> +	ret = device_create_file(&battery->dev, &data->temp_attr);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = device_create_file(&battery->dev, &data->eppid_attr);
+> +	if (ret < 0) {
+> +		device_remove_file(&battery->dev, &data->temp_attr);
+> +
+> +		return ret;
+> +	}
+
+Why dev_groups member can't be utilized?
+
+...
+
+> +static void dell_wmi_ddv_debugfs_init(struct wmi_device *wdev)
+
+Strictly speaking this should return int (see below).
+
+> +{
+> +	struct dentry *entry;
+> +	char name[64];
+> +
+> +	scnprintf(name, ARRAY_SIZE(name), "%s-%s", DRIVER_NAME, dev_name(&wdev->dev));
+> +	entry = debugfs_create_dir(name, NULL);
+> +
+> +	debugfs_create_devm_seqfile(&wdev->dev, "fan_sensor_information", entry,
+> +				    dell_wmi_ddv_fan_read);
+> +	debugfs_create_devm_seqfile(&wdev->dev, "thermal_sensor_information", entry,
+> +				    dell_wmi_ddv_temp_read);
+> +
+> +	devm_add_action_or_reset(&wdev->dev, dell_wmi_ddv_debugfs_remove, entry);
+
+return devm...
+
+This is not related to debugfs and there is no rule to avoid checking error
+codes from devm_add_action_or_reset().
+
+> +}
+
+...
+
+> +static struct wmi_driver dell_wmi_ddv_driver = {
+> +	.driver = {
+> +		.name = DRIVER_NAME,
+
+I would use explicit literal since this is a (semi-) ABI, and having it as
+a define feels not fully right.
+
+> +	},
+> +	.id_table = dell_wmi_ddv_id_table,
+> +	.probe = dell_wmi_ddv_probe,
+> +};
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
