@@ -2,165 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10655ED2F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 04:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 789415ED308
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 04:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232326AbiI1CVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 22:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
+        id S232010AbiI1C01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 22:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbiI1CVJ (ORCPT
+        with ESMTP id S229862AbiI1C0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 22:21:09 -0400
-Received: from p3plwbeout25-03.prod.phx3.secureserver.net (p3plsmtp25-03-2.prod.phx3.secureserver.net [216.69.139.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FB19C7D5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 19:21:03 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.142])
-        by :WBEOUT: with ESMTP
-        id dMh2oD5S2109PdMh3okY8A; Tue, 27 Sep 2022 19:21:01 -0700
-X-CMAE-Analysis: v=2.4 cv=M+qIlw8s c=1 sm=1 tr=0 ts=6333af8f
- a=s1hRAmXuQnGNrIj+3lWWVA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=xOM3xZuef0cA:10 a=i0EeH86SAAAA:8
- a=IFiPfz1IdY6BvD80mjEA:9 a=QEXdDO2ut3YA:10 a=PeBjCNOBO-z05RTt9keq:22
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  dMh2oD5S2109P
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
-        by smtp10.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1odMh1-0002lq-Ot; Wed, 28 Sep 2022 03:21:00 +0100
-Message-ID: <b3018490-b951-01f0-2b86-84049d9470a0@squashfs.org.uk>
-Date:   Wed, 28 Sep 2022 03:20:56 +0100
+        Tue, 27 Sep 2022 22:26:25 -0400
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4857D7BE
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 19:26:23 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id WBC00017;
+        Wed, 28 Sep 2022 10:26:17 +0800
+Received: from jtjnmail201622.home.langchao.com (10.100.2.22) by
+ jtjnmail201623.home.langchao.com (10.100.2.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 28 Sep 2022 10:26:16 +0800
+Received: from jtjnmail201622.home.langchao.com ([fe80::15c3:8d74:3aa6:25f6])
+ by jtjnmail201622.home.langchao.com ([fe80::15c3:8d74:3aa6:25f6%7]) with mapi
+ id 15.01.2507.012; Wed, 28 Sep 2022 10:26:16 +0800
+From:   =?gb2312?B?Qm8gTGl1ICjB9bKoKS3Ay7Ox0MXPog==?= <liubo03@inspur.com>
+To:     "mst@redhat.com" <mst@redhat.com>
+CC:     "jasowang@redhat.com" <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] virtio_ring: remove unnecessary to_vvq() call
+Thread-Topic: [PATCH] virtio_ring: remove unnecessary to_vvq() call
+Thread-Index: AdjS4Zx0/N5OqZd2RUuR6qRzZTowzg==
+Date:   Wed, 28 Sep 2022 02:26:16 +0000
+Message-ID: <4366e621c74e46bfa642d6802187ad44@inspur.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.200.104.97]
+Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
+        micalg=SHA1; boundary="----=_NextPart_000_000B_01D8D324.BCEE0AF0"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v4 1/2] squashfs: add the mount parameter
- theads=<single|multi|percpu>
-To:     Xiaoming Ni <nixiaoming@huawei.com>, linux-kernel@vger.kernel.org
-Cc:     wangle6@huawei.com, yi.zhang@huawei.com, wangbing6@huawei.com,
-        zhongjubin@huawei.com, chenjianguo3@huawei.com
-References: <20220902094855.22666-1-nixiaoming@huawei.com>
- <20220916083604.33408-1-nixiaoming@huawei.com>
- <20220916083604.33408-2-nixiaoming@huawei.com>
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-In-Reply-To: <20220916083604.33408-2-nixiaoming@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfLt+YC+V61+bPXwx1hXMcvUwR0BP9Fdt0Nv/ik/vGhROr+UCVdcIFai9UPRrHbOCOi0AY7+CflQNiT7wYYH/nmeNgq6qstbVKqWUeJwfMc8gwyxaOUw0
- lUf0n9qunJC6VUzKUqFLKmxqKC0zdx5a3bj8p2Gmlou+S6YZ8FxUxm45pxv63T4h/AqNSiFdRBJ7eshtWfLsPF19MA1imqpYC2Q=
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+tUid:   20229281026174bd7aaf6d4e75d1e67812d60185b7270
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/09/2022 09:36, Xiaoming Ni wrote:
-> Squashfs supports three decompression concurrency modes:
-> 	Single-thread mode: concurrent reads are blocked and the memory
-> 		overhead is small.
-> 	Multi-thread mode/percpu mode: reduces concurrent read blocking but
-> 		increases memory overhead.
-> 
-> The corresponding schema must be fixed at compile time. During mounting,
-> the concurrent decompression mode cannot be adjusted based on file read
-> blocking.
-> 
-> The mount parameter theads=<single|multi|percpu> is added to select
-> the concurrent decompression mode of a single SquashFS file system
-> image.
-> 
-> Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
->   
-> +#ifdef CONFIG_SQUASHFS_DECOMP_SINGLE
-> +	opts->thread_ops = &squashfs_decompressor_single;
-> +#elif CONFIG_SQUASHFS_DECOMP_MULTI
-> +	opts->thread_ops = &squashfs_decompressor_multi;
-> +#elif CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU
+------=_NextPart_000_000B_01D8D324.BCEE0AF0
+Content-Type: text/plain;
+	charset="gb2312"
+Content-Transfer-Encoding: 7bit
 
-In my previous review I asked you to fix the above two #elif
-lines.  You have done so in this patch series, but, only in the
-second patch which seems perverse.
+>On Mon, Sep 26, 2022 at 05:11:30AM -0400, Bo Liu wrote:
+>> It passes '_vq' to vring_free(), which still calls to_vvq() to get
+>> 'vq', let's directly pass 'vq'. It can avoid unnecessary call of
+>> to_vvq() in hot path.
+>>
+>> Signed-off-by: Bo Liu <liubo03@inspur.com>
+>
+>What is the point of this change?
+>
+>__vring_new_virtqueue returns struct virtqueue *, so vring_free matches
+that.
+>No?
+>
 
-The reason why this isn't a good approach.  If you *only* apply this 
-patch, with the following Squashfs configuration options
+Hi
+In function vring_free(), to_vvq() js unnecessary, we can directly pass
+struct vring_virtqueue * to avoid this and remove the unnecessary code.
 
-phillip@phoenix:/external/stripe/linux$ grep SQUASHFS .config
-CONFIG_SQUASHFS=y
-# CONFIG_SQUASHFS_FILE_CACHE is not set
-CONFIG_SQUASHFS_FILE_DIRECT=y
-CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU=y
-# CONFIG_SQUASHFS_CHOICE_DECOMP_BY_MOUNT is not set
-# CONFIG_SQUASHFS_COMPILE_DECOMP_SINGLE is not set
-# CONFIG_SQUASHFS_COMPILE_DECOMP_MULTI is not set
-CONFIG_SQUASHFS_COMPILE_DECOMP_MULTI_PERCPU=y
-CONFIG_SQUASHFS_XATTR=y
-CONFIG_SQUASHFS_ZLIB=y
-CONFIG_SQUASHFS_LZ4=y
-CONFIG_SQUASHFS_LZO=y
-CONFIG_SQUASHFS_XZ=y
-CONFIG_SQUASHFS_ZSTD=y
-# CONFIG_SQUASHFS_4K_DEVBLK_SIZE is not set
-# CONFIG_SQUASHFS_EMBEDDED is not set
-CONFIG_SQUASHFS_FRAGMENT_CACHE_SIZE=3
+>> ---
+>>  drivers/virtio/virtio_ring.c | 12 +++++-------
+>>  1 file changed, 5 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/virtio/virtio_ring.c
+>> b/drivers/virtio/virtio_ring.c index 8974c34b40fd..d6d77bf58802 100644
+>> --- a/drivers/virtio/virtio_ring.c
+>> +++ b/drivers/virtio/virtio_ring.c
+>> @@ -221,7 +221,7 @@ static struct virtqueue
+>*__vring_new_virtqueue(unsigned int index,
+>>  					       void (*callback)(struct
+virtqueue *),
+>>  					       const char *name);
+>>  static struct vring_desc_extra *vring_alloc_desc_extra(unsigned int
+>> num); -static void vring_free(struct virtqueue *_vq);
+>> +static void vring_free(struct vring_virtqueue *vq);
+>>
+>>  /*
+>>   * Helpers.
+>> @@ -1140,7 +1140,7 @@ static int virtqueue_resize_split(struct virtqueue
+>*_vq, u32 num)
+>>  	if (err)
+>>  		goto err_state_extra;
+>>
+>> -	vring_free(&vq->vq);
+>> +	vring_free(vq);
+>>
+>>  	virtqueue_vring_init_split(&vring_split, vq);
+>>
+>> @@ -2059,7 +2059,7 @@ static int virtqueue_resize_packed(struct virtqueue
+>*_vq, u32 num)
+>>  	if (err)
+>>  		goto err_state_extra;
+>>
+>> -	vring_free(&vq->vq);
+>> +	vring_free(vq);
+>>
+>>  	virtqueue_vring_init_packed(&vring_packed, !!vq->vq.callback);
+>>
+>> @@ -2649,10 +2649,8 @@ struct virtqueue *vring_new_virtqueue(unsigned
+>> int index,  }  EXPORT_SYMBOL_GPL(vring_new_virtqueue);
+>>
+>> -static void vring_free(struct virtqueue *_vq)
+>> +static void vring_free(struct vring_virtqueue *vq)
+>>  {
+>> -	struct vring_virtqueue *vq = to_vvq(_vq);
+>> -
+>>  	if (vq->we_own_ring) {
+>>  		if (vq->packed_ring) {
+>>  			vring_free_queue(vq->vq.vdev,
+>> @@ -2693,7 +2691,7 @@ void vring_del_virtqueue(struct virtqueue *_vq)
+>>  	list_del(&_vq->list);
+>>  	spin_unlock(&vq->vq.vdev->vqs_list_lock);
+>>
+>> -	vring_free(_vq);
+>> +	vring_free(vq);
+>>
+>>  	kfree(vq);
+>>  }
+>> --
+>> 2.27.0
 
 
-You will get the following build warning
+------=_NextPart_000_000B_01D8D324.BCEE0AF0
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
 
-phillip@phoenix:/external/stripe/linux$ make bzImage
-   SYNC    include/config/auto.conf.cmd
-   CALL    scripts/checksyscalls.sh
-   CALL    scripts/atomic/check-atomics.sh
-   DESCEND objtool
-   CHK     include/generated/compile.h
-   UPD     kernel/config_data
-   GZIP    kernel/config_data.gz
-   CC      kernel/configs.o
-   AR      kernel/built-in.a
-   CC      fs/squashfs/block.o
-   CC      fs/squashfs/cache.o
-   CC      fs/squashfs/dir.o
-   CC      fs/squashfs/export.o
-   CC      fs/squashfs/file.o
-   CC      fs/squashfs/fragment.o
-   CC      fs/squashfs/id.o
-   CC      fs/squashfs/inode.o
-   CC      fs/squashfs/namei.o
-   CC      fs/squashfs/super.o
-fs/squashfs/super.c: In function ‘squashfs_init_fs_context’:
-fs/squashfs/super.c:492:7: warning: "CONFIG_SQUASHFS_DECOMP_MULTI" is 
-not defined, evaluates to 0 [-Wundef]
-   492 | #elif CONFIG_SQUASHFS_DECOMP_MULTI
-       |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+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
+9w0DAgICAIAwDgYIKoZIhvcNAwQCAgCAMAcGBSsOAwIHMAoGCCqGSIb3DQMHMB0GA1UdDgQWBBTk
+Hdp/y3+DuDJ13Q1YzgU9iV7NdzAfBgNVHSMEGDAWgBReWQOmtExYYJFO9h61pTmmMsE1ajCCAQ8G
+A1UdHwSCAQYwggECMIH/oIH8oIH5hoG6bGRhcDovLy9DTj1JTlNQVVItQ0EsQ049SlRDQTIwMTIs
+Q049Q0RQLENOPVB1YmxpYyUyMEtleSUyMFNlcnZpY2VzLENOPVNlcnZpY2VzLENOPUNvbmZpZ3Vy
+YXRpb24sREM9aG9tZSxEQz1sYW5nY2hhbyxEQz1jb20/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlz
+dD9iYXNlP29iamVjdENsYXNzPWNSTERpc3RyaWJ1dGlvblBvaW50hjpodHRwOi8vSlRDQTIwMTIu
+aG9tZS5sYW5nY2hhby5jb20vQ2VydEVucm9sbC9JTlNQVVItQ0EuY3JsMIIBKQYIKwYBBQUHAQEE
+ggEbMIIBFzCBsQYIKwYBBQUHMAKGgaRsZGFwOi8vL0NOPUlOU1BVUi1DQSxDTj1BSUEsQ049UHVi
+bGljJTIwS2V5JTIwU2VydmljZXMsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1ob21l
+LERDPWxhbmdjaGFvLERDPWNvbT9jQUNlcnRpZmljYXRlP2Jhc2U/b2JqZWN0Q2xhc3M9Y2VydGlm
+aWNhdGlvbkF1dGhvcml0eTBhBggrBgEFBQcwAoZVaHR0cDovL0pUQ0EyMDEyLmhvbWUubGFuZ2No
+YW8uY29tL0NlcnRFbnJvbGwvSlRDQTIwMTIuaG9tZS5sYW5nY2hhby5jb21fSU5TUFVSLUNBLmNy
+dDBBBgNVHREEOjA4oCIGCisGAQQBgjcUAgOgFAwSbGl1Ym8wM0BpbnNwdXIuY29tgRJsaXVibzAz
+QGluc3B1ci5jb20wDQYJKoZIhvcNAQELBQADggEBAA+BaY3B3qXmvZq7g7tZLzq2VQjU//XHTmyl
+58GLDWdVHsuX3lrAGwEfLVnUodpvthjtb7T7xEUzJh4F62zLFSm8HOBPH1B+6SFQKChHZeM0pauv
+Xr1krRtVv82RgLsU26XrXFUPN+NcPwt7vOw1zHOiDic4anL3A9gsuDljAi2l+CA5RY05yL+8oras
+EAhOYL6+ks9aB8QiCxbZzShkDTMkrh0N1DjoBLaibtnlI/fxOUYM6vgdiI+FC02G41B364ZAc1ma
+bSFvGIP6cIdr/olprPQOj9cq6zMi05qUBUj22hDvhcY0TlT4fEJSrvblp/LG6qTtVI3ilUAxhe8i
+9cIxggOTMIIDjwIBATBwMFkxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZFghs
+YW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUxEjAQBgNVBAMTCUlOU1BVUi1DQQITfgAA0dHV
+TGwIT1/wiwAAAADR0TAJBgUrDgMCGgUAoIIB+DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwG
+CSqGSIb3DQEJBTEPFw0yMjA5MjgwMjI2MTRaMCMGCSqGSIb3DQEJBDEWBBQ0lYCqlGk/ld4SVvYB
+pGxllNyKbjB/BgkrBgEEAYI3EAQxcjBwMFkxEzARBgoJkiaJk/IsZAEZFgNjb20xGDAWBgoJkiaJ
+k/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUxEjAQBgNVBAMTCUlOU1BVUi1D
+QQITfgAA0dHVTGwIT1/wiwAAAADR0TCBgQYLKoZIhvcNAQkQAgsxcqBwMFkxEzARBgoJkiaJk/Is
+ZAEZFgNjb20xGDAWBgoJkiaJk/IsZAEZFghsYW5nY2hhbzEUMBIGCgmSJomT8ixkARkWBGhvbWUx
+EjAQBgNVBAMTCUlOU1BVUi1DQQITfgAA0dHVTGwIT1/wiwAAAADR0TCBkwYJKoZIhvcNAQkPMYGF
+MIGCMAoGCCqGSIb3DQMHMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMA4G
+CCqGSIb3DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUrDgMCGjALBglghkgBZQMEAgMwCwYJYIZI
+AWUDBAICMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCHLHl/cs+6lcLaqjmtWasTW80g
+Dj7VpzZ7DmGCYvJoKzK+mNLR6fZqO+Q/uKylk3YQwjS8iqBds8FD9QxpvbZxMUtLSoEw+bG61dsC
+zJacCP8nRGUVjmiMJ0Cr/z8OYHZyuDMn32qYahQ49hQ3thTA4tw1S/7wfqy0mNaZqHB6UfIhLAyv
+uj2qKA13EDB9UZBFgRx/Jy8EnDwR3kN0D0GhXE+jfIR83wCT9HMkKNspbQkwofBCooNmoSjL0ytd
+wbIuJMK+jhm3FsR+lzBCH5O/n0TmAowiTDDrC//4b6W7t2b8VSNGtZ4OOinX322T0+PvbveAsXPA
+g1an0fi6oL8hAAAAAAAA
 
-This strictly breaks the git bisectability rule.  Every patch should
-be compilable and not break the build or produce warnings.  If not
-it makes git bisect difficult to use to find regressions.
-
-This can be avoided by fixing the issue in *this* patch.  So
-please do so.
-
-Thanks
-
-Phillip
-
-> +	opts->thread_ops = &squashfs_decompressor_percpu;
-> +#endif
->   	fc->fs_private = opts;
->   	fc->ops = &squashfs_context_ops;
->   	return 0;
-> @@ -478,7 +526,7 @@ static void squashfs_put_super(struct super_block *sb)
->   		squashfs_cache_delete(sbi->block_cache);
->   		squashfs_cache_delete(sbi->fragment_cache);
->   		squashfs_cache_delete(sbi->read_page);
-> -		squashfs_decompressor_destroy(sbi);
-> +		sbi->thread_ops->destroy(sbi);
->   		kfree(sbi->id_table);
->   		kfree(sbi->fragment_index);
->   		kfree(sbi->meta_index);
-
+------=_NextPart_000_000B_01D8D324.BCEE0AF0--
