@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A145B5ED2C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3708C5ED2C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbiI1BsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 21:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S231726AbiI1BtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 21:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiI1BsD (ORCPT
+        with ESMTP id S229771AbiI1BtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 21:48:03 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07B8110EC9;
-        Tue, 27 Sep 2022 18:47:57 -0700 (PDT)
-X-UUID: 2798c900a05b4374ac9f07e832846b2e-20220928
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=A+qXPRA7ywTuXXDRS+dWtKCRO57wsD96NnkHKCFHm4w=;
-        b=EiKXtB0fDGaYwn+THx+6Mzrwx6ggIQwjZnKD4BXrTg4V+C6GFmPcyqv8WsCxgK40PZ1BHDQ5yXO67jebzMgTq3Jnf8+nWMlbFj5k3ZXgInWeBjC1PBHlYgfcrBsjUYsxVcDWhGjQm2qazVwmOKDliXIqfu/jl4v3I7Youc6eWPY=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:98814aa8-e18f-4e2b-bbef-61184b346dae,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:c97c4aa3-dc04-435c-b19b-71e131a5fc35,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:-5,EDM:-3,IP:nil,
-        URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 2798c900a05b4374ac9f07e832846b2e-20220928
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 362543260; Wed, 28 Sep 2022 09:47:52 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 28 Sep 2022 09:47:50 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 28 Sep 2022 09:47:50 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <macpaul.lin@mediatek.com>
-CC:     <bear.wang@mediatek.com>, <devicetree@vger.kernel.org>,
-        <fparent@baylibre.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <macpaul@gmail.com>, <matthias.bgg@gmail.com>,
-        <miles.chen@mediatek.com>, <pablo.sun@mediatek.com>,
-        <robh+dt@kernel.org>, <stable@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8195-demo: fix the memory size of
-Date:   Wed, 28 Sep 2022 09:47:50 +0800
-Message-ID: <20220928014750.17054-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <664f3b7d-d629-5af1-cae4-cb5b638a5da1@mediatek.com>
-References: <664f3b7d-d629-5af1-cae4-cb5b638a5da1@mediatek.com>
+        Tue, 27 Sep 2022 21:49:04 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBB61EE74E;
+        Tue, 27 Sep 2022 18:49:03 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d11so10585304pll.8;
+        Tue, 27 Sep 2022 18:49:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=5Vg9DwF7vi5Rl3xXxBWJzxL4mqinTrC7c17A9WSWn9I=;
+        b=ScSGb+e6Kdbh97BaYYrf5xnUPg2TUlcgJWbl6QelkJeycbjW9RUSF79cPDe0w/ku8T
+         zbhNo/Bm/asCb6cI01SABPnxaHjaHelIz1TJ8BH2s6Bv+AIkrTwKbpI8XsKevXPQ3EsN
+         AQpfWxVLltbQcEfKLW9vBDGQVN8hRb9KvjU1JIrup2xg9HacHsU3/rpAm5kYdbiZkIqj
+         PakmYCb9SqfCeBw0yqwYxFJtZhDEL7Jn8+QGaEnQCY+KpZMQh1x1VfpRoWrmLuDrNbS3
+         Wvxrox8k5DKMYNclpAYwX3pJJdwumdLApoT8JzvTeLHKqEQj5Iov+9192QuYoyIml9Tu
+         a9Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=5Vg9DwF7vi5Rl3xXxBWJzxL4mqinTrC7c17A9WSWn9I=;
+        b=pI2xSUZiL80xOKli5BvgEUAT6tayWETPpqvKSoNMAcOD0ZW9F+v/2S29B8is/r98B1
+         jI7FI5AQZlU6MmULMbJhXBwIxTndmtGZyj5WnAJQIyqcSqqpKoMU47PQMEasVFoGHKlV
+         9WIPT8VOeaofSncqijkkApK0mx2huywCzY19sZfQdYHek9xEXS/Qzq899LHJaLQzFQwC
+         so2vFutwRqC2fQz8NhHjkx98a1sBBFxz3C2smwYMnRNdnJvfG1OXzRrJanxQrybwJah5
+         L3fla3i0ePoPp5JpsTQGJcoVD8sxLgfJYzvqMvNgFvMagMyPx3PuQ4vUf0HZz1WX9a9N
+         GsvA==
+X-Gm-Message-State: ACrzQf0jI4Uxjtpb9JECH1GpdFaSrldbnC1pL0ok1rzPNGfXAWjfkUz6
+        6tdj7MQpunnXTO+GND6JKJgjN2RyQtSgAXvaB20=
+X-Google-Smtp-Source: AMsMyM4FsOphlNPc27yHcJFuFy/eZgOUk4rcOBHq3sWv00e0XJ1giG/PqpsP9+UnYyO+P5aXIycnRDgwOU5M0xE/ooA=
+X-Received: by 2002:a17:902:e744:b0:178:6d7b:6d08 with SMTP id
+ p4-20020a170902e74400b001786d7b6d08mr30585585plf.128.1664329743194; Tue, 27
+ Sep 2022 18:49:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
+References: <20220927014823.11439-1-zhouzhouyi@gmail.com> <CN6WCMKCWHOG.LT2QV3910UJ2@bobo>
+In-Reply-To: <CN6WCMKCWHOG.LT2QV3910UJ2@bobo>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Wed, 28 Sep 2022 09:48:52 +0800
+Message-ID: <CAABZP2wYcNXkTo=tgX-ARziwgD2rng+-wCZ-qfQ6M30+vmLEug@mail.gmail.com>
+Subject: Re: [PATCH linux-next][RFC] powerpc: avoid lockdep when we are offline
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     mpe@ellerman.id.au, christophe.leroy@csgroup.eu,
+        atrajeev@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, lance@osuosl.org, paulmck@kernel.org,
+        rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,33 +70,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On 9/26/22 15:05, Miles Chen wrote:
->> Hi Macpaul,
->> 
->>> The size of device tree node secmon (bl31_secmon_reserved) was
->>> incorrect. It should be increased to 2MiB (0x200000).
->> 
->> 192K should work when the patch(6147314aeedc) was accepted.
->> Does the trusted-firmware-a get larger now, so we need to
->> increase the size to 2MiB?
->> 
->> thanks,
->> Miles
+Thank Nick for reviewing my patch
+
+On Tue, Sep 27, 2022 at 12:25 PM Nicholas Piggin <npiggin@gmail.com> wrote:
 >
->When mt8195-demo.dts sent to the upstream, at that time the size of
->BL31 was small. Because supported functions and modules in BL31 are 
->basic sets when the board was under early development stage.
+> On Tue Sep 27, 2022 at 11:48 AM AEST, Zhouyi Zhou wrote:
+> > This is second version of my fix to PPC's  "WARNING: suspicious RCU usa=
+ge",
+> > I improved my fix under Paul E. McKenney's guidance:
+> > Link: https://lore.kernel.org/lkml/20220914021528.15946-1-zhouzhouyi@gm=
+ail.com/T/
+> >
+> > During the cpu offlining, the sub functions of xive_teardown_cpu will
+> > call __lock_acquire when CONFIG_LOCKDEP=3Dy. The latter function will
+> > travel RCU protected list, so "WARNING: suspicious RCU usage" will be
+> > triggered.
+> >
+> > Avoid lockdep when we are offline.
 >
->Now BL31 includes more firmwares of coprocessors and maturer functions
->so the size has grown bigger in real applications. According to the 
->value reported by customers, we think reserved 2MiB for BL31 might be 
->enough for maybe the following 2 or 3 years.
+> I don't see how this is safe. If RCU is no longer watching the CPU then
+> the memory it is accessing here could be concurrently freed. I think the
+> warning is valid.
+Agree
+>
+> powerpc's problem is that cpuhp_report_idle_dead() is called before
+> arch_cpu_idle_dead(), so it must not rely on any RCU protection there.
+> I would say xive cleanup just needs to be done earlier. I wonder why it
+> is not done in __cpu_disable or thereabouts, that's where the interrupt
+> controller is supposed to be stopped.
+Yes, I learn flowing events sequence from kgdb debugging
+__cpu_disable -> pseries_cpu_disable -> set_cpu_online(cpu, false)  =3D
+leads to =3D>  do_idle: if (cpu_is_offline(cpu) -> arch_cpu_idle_dead
+so xive cleanup should be done in pseries_cpu_disable.
+But as a beginner, I afraid that I am incompetent to do above
+sophisticated work without error although I am very like to,
+Could any expert do this for us?
 
-Thanks for your explanation,
-please add this to the commit message and submit next version.
-
-With that, feel free to add:
-Reviewed-by: Miles Chen <miles.chen@mediatek.com> 
-
-thanks,
-Miles
+Thanks a lot
+Cheers
+Zhouyi
+>
+> Thanks,
+> Nick
+>
+> >
+> > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > ---
+> > Dear PPC and RCU developers
+> >
+> > I found this bug when trying to do rcutorture tests in ppc VM of
+> > Open Source Lab of Oregon State University
+> >
+> > console.log report following bug:
+> > [   37.635545][    T0] WARNING: suspicious RCU usage^M
+> > [   37.636409][    T0] 6.0.0-rc4-next-20220907-dirty #8 Not tainted^M
+> > [   37.637575][    T0] -----------------------------^M
+> > [   37.638306][    T0] kernel/locking/lockdep.c:3723 RCU-list traversed=
+ in non-reader section!!^M
+> > [   37.639651][    T0] ^M
+> > [   37.639651][    T0] other info that might help us debug this:^M
+> > [   37.639651][    T0] ^M
+> > [   37.641381][    T0] ^M
+> > [   37.641381][    T0] RCU used illegally from offline CPU!^M
+> > [   37.641381][    T0] rcu_scheduler_active =3D 2, debug_locks =3D 1^M
+> > [   37.667170][    T0] no locks held by swapper/6/0.^M
+> > [   37.668328][    T0] ^M
+> > [   37.668328][    T0] stack backtrace:^M
+> > [   37.669995][    T0] CPU: 6 PID: 0 Comm: swapper/6 Not tainted 6.0.0-=
+rc4-next-20220907-dirty #8^M
+> > [   37.672777][    T0] Call Trace:^M
+> > [   37.673729][    T0] [c000000004653920] [c00000000097f9b4] dump_stack=
+_lvl+0x98/0xe0 (unreliable)^M
+> > [   37.678579][    T0] [c000000004653960] [c0000000001f2eb8] lockdep_rc=
+u_suspicious+0x148/0x16c^M
+> > [   37.680425][    T0] [c0000000046539f0] [c0000000001ed9b4] __lock_acq=
+uire+0x10f4/0x26e0^M
+> > [   37.682450][    T0] [c000000004653b30] [c0000000001efc2c] lock_acqui=
+re+0x12c/0x420^M
+> > [   37.684113][    T0] [c000000004653c20] [c0000000010d704c] _raw_spin_=
+lock_irqsave+0x6c/0xc0^M
+> > [   37.686154][    T0] [c000000004653c60] [c0000000000c7b4c] xive_spapr=
+_put_ipi+0xcc/0x150^M
+> > [   37.687879][    T0] [c000000004653ca0] [c0000000010c72a8] xive_clean=
+up_cpu_ipi+0xc8/0xf0^M
+> > [   37.689856][    T0] [c000000004653cf0] [c0000000010c7370] xive_teard=
+own_cpu+0xa0/0xf0^M
+> > [   37.691877][    T0] [c000000004653d30] [c0000000000fba5c] pseries_cp=
+u_offline_self+0x5c/0x100^M
+> > [   37.693882][    T0] [c000000004653da0] [c00000000005d2c4] arch_cpu_i=
+dle_dead+0x44/0x60^M
+> > [   37.695739][    T0] [c000000004653dc0] [c0000000001c740c] do_idle+0x=
+16c/0x3d0^M
+> > [   37.697536][    T0] [c000000004653e70] [c0000000001c7a1c] cpu_startu=
+p_entry+0x3c/0x40^M
+> > [   37.699694][    T0] [c000000004653ea0] [c00000000005ca20] start_seco=
+ndary+0x6c0/0xb50^M
+> > [   37.701742][    T0] [c000000004653f90] [c00000000000d054] start_seco=
+ndary_prolog+0x10/0x14^M
+> >
+> >
+> > Tested on PPC VM of Open Source Lab of Oregon State University.
+> > Test results show that although "WARNING: suspicious RCU usage" has gon=
+e,
+> > and there are less "BUG: soft lockup" reports than the original kernel
+> > (9 vs 13), which sounds good ;-)
+> >
+> > But after my modification, results-rcutorture-kasan/SRCU-P/console.log.=
+diags
+> > shows a new warning:
+> > [  222.289242][  T110] WARNING: CPU: 6 PID: 110 at kernel/rcu/rcutortur=
+e.c:2806 rcu_torture_fwd_prog+0xc88/0xdd0
+> >
+> > I guess above new warning also exits in original kernel, so I write a t=
+iny test script as follows:
+> >
+> > #!/bin/sh
+> >
+> > COUNTER=3D0
+> > while [ $COUNTER -lt 1000 ] ; do
+> >     qemu-system-ppc64 -nographic -smp cores=3D8,threads=3D1 -net none -=
+M pseries -nodefaults -device spapr-vscsi -serial file:/tmp/console.log -m =
+2G -kernel /tmp/vmlinux -append "debug_boot_weak_hash panic=3D-1 console=3D=
+ttyS0 rcupdate.rcu_cpu_stall_suppress_at_boot=3D1 torture.disable_onoff_at_=
+boot rcupdate.rcu_task_stall_timeout=3D30000 rcutorture.torture_type=3Dsrcu=
+d rcupdate.rcu_self_test=3D1 rcutorture.fwd_progress=3D3 srcutree.big_cpu_l=
+im=3D5 rcutorture.onoff_interval=3D1000 rcutorture.onoff_holdoff=3D30 rcuto=
+rture.n_barrier_cbs=3D4 rcutorture.stat_interval=3D15 rcutorture.shutdown_s=
+ecs=3D420 rcutorture.test_no_idle_hz=3D1 rcutorture.verbose=3D1"&
+> >     qemu_pid=3D$!
+> >     cd ~/next1/linux-next
+> >     make clean
+> > #I use "make vmlinux -j 8" to create heavy background jitter
+> >     make vmlinux -j 8  > /dev/null 2>&1
+> >     make_pid=3D$!
+> >     wait $qemu_pid
+> >     kill $qemu_pid
+> >     kill $make_id
+> >     if grep -q WARN /tmp/console.log;
+> >     then
+> >         echo $COUNTER > /tmp/counter
+> >         exit
+> >     fi
+> >     COUNTER=3D$(($COUNTER+1))
+> > done
+> >
+> > Above test shows that original kernel also warn about
+> > "WARNING: CPU: 6 PID: 110 at kernel/rcu/rcutorture.c:2806 rcu_torture_f=
+wd_prog+0xc88/0xdd0"
+> >
+> > But I am not very sure about my results, so I still add a [RFC] to my s=
+ubject line.
+> >
+> > Thank all of you for your guidance and encouragement ;-)
+> >
+> > Cheers
+> > Zhouyi
+> > --
+> >  arch/powerpc/platforms/pseries/hotplug-cpu.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/arch/powerpc/platforms/pseries/hotplug-cpu.c b/arch/powerp=
+c/platforms/pseries/hotplug-cpu.c
+> > index e0a7ac5db15d..e47098f00da1 100644
+> > --- a/arch/powerpc/platforms/pseries/hotplug-cpu.c
+> > +++ b/arch/powerpc/platforms/pseries/hotplug-cpu.c
+> > @@ -64,10 +64,15 @@ static void pseries_cpu_offline_self(void)
+> >
+> >       local_irq_disable();
+> >       idle_task_exit();
+> > +     /* prevent lockdep code from traveling RCU protected list
+> > +      * when we are offline.
+> > +      */
+> > +     lockdep_off();
+> >       if (xive_enabled())
+> >               xive_teardown_cpu();
+> >       else
+> >               xics_teardown_cpu();
+> > +     lockdep_on();
+> >
+> >       unregister_slb_shadow(hwcpu);
+> >       rtas_stop_self();
+> > --
+> > 2.25.1
+>
