@@ -2,857 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E3A5EE67B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 22:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 120C05EE685
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 22:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233724AbiI1UQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 16:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
+        id S233942AbiI1UTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 16:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbiI1UQA (ORCPT
+        with ESMTP id S230015AbiI1UTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 16:16:00 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C716762ED;
-        Wed, 28 Sep 2022 13:15:51 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.49.177]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N1fag-1pNimD0d1E-0121k6; Wed, 28 Sep 2022 22:15:25 +0200
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id 6F3C73C0EE;
-        Wed, 28 Sep 2022 22:15:23 +0200 (CEST)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 65B7D41C6; Wed, 28 Sep 2022 22:15:22 +0200 (CEST)
-Date:   Wed, 28 Sep 2022 22:15:22 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH v3 6/7] kbuild: use obj-y instead extra-y for objects
- placed at the head
-Message-ID: <YzSrWvVEt5fjpvlT@bergen.fjasle.eu>
-References: <20220924181915.3251186-1-masahiroy@kernel.org>
- <20220924181915.3251186-7-masahiroy@kernel.org>
+        Wed, 28 Sep 2022 16:19:01 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D295C6E88F;
+        Wed, 28 Sep 2022 13:19:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l5ha0Q349MX4vegeTGktgyEzMjpv9peC8GEBIlaPJzkO4o1i8VAuzzsnurlK+5jj70qkygtIk4i8xkMZX+2xCtg0ppBUYDtr3rvKmz/IU+zZJsQOLoqCE4oPIvqQuzhJwaAC4e1C6PvFHAmm+kmWHKO93p2kQzR8tER1mF5d4E43c0mjmC8OdURKEjuV4mLCqe6vgGvpMk8yt2+nfSVG08XCsvZ6qX++lOxxHEhhSyfY1SK1dN7u9+JtR7BYYzOXHUxs17s/PjCSR4YS/8iAJOpWUQ+6+bAsvfpKlBzdsOezpqIZHNuLqOs7Yd1wQbGPvXEO/l7P8nmH3VuGcUwjvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bxEAvJtGK4/vz4fCmWglij/cpCcK7WpQtMybnTRh+HQ=;
+ b=kMRQIgqAbl7BJcNnAvpRymj8ox8rCzgDhggsV88BgiHGTQ9dwbHdfwblghdQOyTycyqXO1FhVRE1zOx8f3oNQPgodRGFoBMdVORqOIiyZxM93KsMNXRtbvZp+HPG87rpyYN0xLDx9RpugewK2GQZCtFv42nXchaHJnqVn1GXGLT/flBuNGRD5ZsNQayWakzqVW5cFZ5lYeezhLlfoMPhZRWPRx1HACkXVLRbCe43DFgaJpd0fWuO+rYhhWb9t9TZ6vJdJygg21Ei3pt6UnQN5OVXzPX/Vx/fK73cO7v4YE4Ix2V3SglQZWe9qAEkXor1zC7JO7lDowjuK+HQ0/i/sA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bxEAvJtGK4/vz4fCmWglij/cpCcK7WpQtMybnTRh+HQ=;
+ b=SW97fFfDlRSY4domQiFhAlHE1M4O4oA15x3s8+2pV/tW7/d6BugV19/wfOM4lO4femG5E2foGOn7ZJMqIqTPnSi67dmSi+OcseMNQkdnFZIz06L4xvueHVf2aFRDHhf7TNhTK9y4rA5YXqW7HtaVG3sbE+4LajtS9nSLdq55ZQIRNRiXaaFjUGgZz8aApTTYh7vvNM30FtAPNk0PKD5E1ZAP0iBQ/IHRSmr7rhl1JATAFkWQKk6UADv/bLBd56xTuQjv9Ge74Yzaci//CCywhJRbaCf+VuHHhA8kiUvxCKNxdPh2r39W89/rrlET9mgXWtaJk0zYFceDKQXN29F9pA==
+Received: from DS7PR06CA0012.namprd06.prod.outlook.com (2603:10b6:8:2a::22) by
+ IA1PR12MB6307.namprd12.prod.outlook.com (2603:10b6:208:3e5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20; Wed, 28 Sep
+ 2022 20:18:59 +0000
+Received: from DM6NAM11FT108.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2a:cafe::5f) by DS7PR06CA0012.outlook.office365.com
+ (2603:10b6:8:2a::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17 via Frontend
+ Transport; Wed, 28 Sep 2022 20:18:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT108.mail.protection.outlook.com (10.13.172.95) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5676.17 via Frontend Transport; Wed, 28 Sep 2022 20:18:58 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 28 Sep
+ 2022 13:18:49 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 28 Sep
+ 2022 13:18:49 -0700
+Received: from msst-build.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Wed, 28 Sep 2022 13:18:47 -0700
+From:   Besar Wicaksono <bwicaksono@nvidia.com>
+To:     <suzuki.poulose@arm.com>, <robin.murphy@arm.com>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <mark.rutland@arm.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <sudeep.holla@arm.com>, <thanu.rangarajan@arm.com>,
+        <Michael.Williams@arm.com>, <treding@nvidia.com>,
+        <jonathanh@nvidia.com>, <vsethi@nvidia.com>,
+        <mathieu.poirier@linaro.org>, <mike.leach@linaro.org>,
+        <leo.yan@linaro.org>, Besar Wicaksono <bwicaksono@nvidia.com>
+Subject: [PATCH v5 0/2] perf: ARM CoreSight PMU support
+Date:   Wed, 28 Sep 2022 15:18:28 -0500
+Message-ID: <20220928201830.45637-1-bwicaksono@nvidia.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/QPoIt3ndWsR+Znz"
-Content-Disposition: inline
-In-Reply-To: <20220924181915.3251186-7-masahiroy@kernel.org>
-Jabber-ID: nicolas@jabber.no
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:WCBaLdhDVR9+yc8dlgjPqUOZcia4YS1y26092HMRpAyxRjRru3i
- bWc/jARp0KliQTGteEQUatpjrkVHUaPEzzF3dJzS8pbZ7sdEDvM4MAME+KWggKj5BXBvpJy
- yNKkqy3eQTvw7wkxkmOBFsE1L0vtFQvd3Fiu8AxSdVB6scVxzw9IMntyh8MGiB7poyefftG
- WQJMd5gnCDZlA7c5sEhrg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mgCUwzPsIdU=:qhAnBFGk+Euo61ixTd3o57
- Un20JFfAuPlcg54wWvM2cltxkpj8KZIzgNEQn9TkGw4WShhvLHKXNjJq/Edz/qxBRsHlTFNsY
- cC/p/xkBWFLDEI9Lswi8Tv3+71eQBuHHkeCzbTyLnnsAW2888ccqG8RWiGe6b7U1TKkQSwVgI
- WJ8tGDUfiUL27Pw5/EuD4BHusMm9/IQrdD0MnDO3FDGZS2sgVgjDMi1cfp128/gpdx0l3UfC9
- 05+Obkw+LXzHKLv7OKfIUzxOrqW/SV7vVMHnsKg6lokUn1q/k1qPcF6mS2c7OGOL8dqXSd+IA
- pDyJ1QTjEPQiv2/bwBAe/hDXuz4DXvHW2+973QY7e4usnjv6C9eMZQO4T+KJZxK4T/ZrO4/Ar
- dzDrRpKsK395rUMb1Z0zWuL4kwVkQbAb7wQuKfGApuEmY4ffGhCYjERNHcCwdQ0tmfOZe0fNj
- 3n/aVPwexWIiNRU6v6wVKU6UbdiOaSITE9VCnHF4M1LlH90CzErcCrPJXYCB8rDf79MZoc2OX
- wJrsJdwjSo6vklCyfXnUg2cZTQWizRpPtimlb4FFNNIRqD64WGI/4a+7bKjsmeF9f3cSNQ8bT
- 8jyFI1/4WcX0rzy8+0jttrqDfp0Ue4dRiCPpiHifdizx5P5euL1MBSdbnfwEmG+jIGgDREz/G
- oIsb9GzAj7TbGUAIrKLiDLOm0MGtlCR5vbinyOqG1rSim7a+0un20l/g0Swg6rgi306oi4+mc
- vBwve7WDwfyrzNSNdyrtY2/Hn5Gq2sDiOgw0rOhP5pm0s+0YLWYBeyV9o23oU/qsQlaeqGA/O
- DlPcGcM
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT108:EE_|IA1PR12MB6307:EE_
+X-MS-Office365-Filtering-Correlation-Id: afb37fd0-4973-4d15-971e-08daa18ead1c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W0f/jZLxc6O2wgW4z9bXkOEH/JrDFQnqBSrBSq47vgxxYZfnwnoiMNj8Qf5FbMKhJyzt9ll5xbc4eeKrykXPf7t0YI8eAHFrUVVj+02LoqsGQ4TvDFrm0p3AIidYEvopshEZVTUIP24B3QgPtnwZfnfOqJrWxoFQiK+dpeAqjNSrf6pDRHGir8UaQTyxsXmPz3YQ42hIP5SjCnuJuyPaYBl6hWDnhwjA5mXnsfmocSCDcYBneigzR+xErfALI+dchcSVEUXpng4G2XyoxiN4+zwFsbSFZectTv6MuKCKqVzqb2FaF19ihkbgOgr+8HW3KsnKA3he8e+0THlwX+lcGgskeaLSZs6YnzEcDVj66iquRgVkeEWUQtoTyBHVb5Kb7NpNHkqcZ1+sUktcQeUiSnPIPcdGfWMmkhV3/yLlFWr7SrHNVLkoEAdKOUZaXZATx9pT5fC6MWloTV/U4fFU8D9JmCzgjYGB5zwTmtJ5gB1mHQk5WQU1D+0X4l/e8/xNeATjS+l5YPd6lqRNdBuw6aAnwLca7PlIB3c3XVhmZ0HZkyiNYLfCf+md7nH3q44K8yAlxbzfw/sg5gJe6vMBEO5k7zYHkdi8/jbIOIvUKQa8MBV2CgDnUzNjNNfc3Bv08r+T5TAD8X/6B/ltGgk6jn464KCfz4J2WBbySXqCiiRX63uzQ8HsTxKRTaPX42hQtbwF1BpxOqvFitKhSbVypZwSy139dCKrU++7e7cDWhrOMy3fsB+BmX054F0Qm2Fl5f7GfRJd0UXGuAu+g7i74HsgRdpA/oDjfpNkXdZiueM+tdaHsQhAUaR7diHYxl67Bq5yQmQWm/9dUnqab0stNYNpFNBAtWqaQNp+CUWFv1e3dmcE5PORyc9lR+WfaWwk/mqIKWDg/MY6gqgSqf+ROQ==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199015)(40470700004)(36840700001)(46966006)(7636003)(2906002)(7696005)(41300700001)(336012)(5660300002)(40480700001)(36860700001)(7416002)(6666004)(82310400005)(2616005)(356005)(186003)(36756003)(47076005)(83380400001)(8936002)(26005)(1076003)(82740400003)(107886003)(316002)(70586007)(110136005)(426003)(54906003)(86362001)(70206006)(478600001)(4326008)(40460700003)(966005)(8676002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 20:18:58.6700
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: afb37fd0-4973-4d15-971e-08daa18ead1c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT108.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6307
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add driver support for ARM CoreSight PMU device and event attributes for NVIDIA
+implementation. The code is based on ARM Coresight PMU architecture and ACPI ARM
+Performance Monitoring Unit table (APMT) specification below:
+ * ARM Coresight PMU:
+        https://developer.arm.com/documentation/ihi0091/latest
+ * APMT: https://developer.arm.com/documentation/den0117/latest
 
---/QPoIt3ndWsR+Znz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The patchset applies on top of
+  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  master next-20220524
 
-On Sun, 25 Sep 2022 03:19:14 +0900 Masahiro Yamada wrote:
-> The objects placed at the head of vmlinux need special treatments:
->=20
->  - arch/$(SRCARCH)/Makefile adds them to head-y in order to place
->    them before other archives in the linker command line.
->=20
->  - arch/$(SRCARCH)/kernel/Makefile adds them to extra-y instead of
->    obj-y to avoid them going into built-in.a.
->=20
-> This commit gets rid of the latter.
->=20
-> Create vmlinux.a to collect all the objects that are unconditionally
-> linked to vmlinux. The objects listed in head-y are moved to the head
-> of vmlinux.a by using 'ar m'.
->=20
-> With this, arch/$(SRCARCH)/kernel/Makefile can consistently use obj-y
-> for builtin objects.
->=20
-> There is no *.o that is directly linked to vmlinux. Drop unneeded code
-> in scripts/clang-tools/gen_compile_commands.py.
->=20
-> $(AR) mPi needs 'T' to workaround the llvm-ar bug. The fix was suggested
-> by Nathan Chancellor [1].
->=20
-> [1]: https://lore.kernel.org/llvm/YyjjT5gQ2hGMH0ni@dev-arch.thelio-3990X/
->=20
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
+For APMT support, please see patchset: https://lkml.org/lkml/2022/4/19/1395 
 
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+Changes from v4:
+ * Fix code formatting
+ * Add timeout to read register function with high-low-high sequence
+ * Add NO_INTERRUPT capability on PMU that does not have IRQ
+ * Fix the name of NVIDIA PMUs
+ * Drop filter attribute for NVLink-C2C PMUs
+ * Added Reviewed/Acked-by from Suzuki
+Thanks to suzuki.poulose@arm.com and will@kernel.org for the review comments.
+v4: https://lore.kernel.org/linux-arm-kernel/20220814182351.8861-1-bwicaksono@nvidia.com/
+
+Changes from v3:
+ * Driver is now probing "arm-cs-arch-pmu" device.
+ * The driver files, directory, functions are renamed with "arm_cspmu" prefix.
+ * Use Kconfig ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU.
+ * Add kernel doc for NVIDIA Uncore PMU.
+ * Use GENMASK and FIELD_GET macros everywhere.
+Thanks to suzuki.poulose@arm.com and will@kernel.org for the review comments.
+v3: https://lore.kernel.org/linux-arm-kernel/20220621055035.31766-1-bwicaksono@nvidia.com/
+
+Changes from v2:
+ * Driver is now probing "arm-system-pmu" device.
+ * Change default PMU naming to "arm_<APMT node type>_pmu".
+ * Add implementor ops to generate custom name.
+Thanks to suzuki.poulose@arm.com for the review comments.
+v2: https://lore.kernel.org/linux-arm-kernel/20220515163044.50055-1-bwicaksono@nvidia.com/
+
+Changes from v1:
+ * Remove CPU arch dependency.
+ * Remove 32-bit read/write helper function and just use read/writel.
+ * Add .is_visible into event attribute to filter out cycle counter event.
+ * Update pmiidr matching.
+ * Remove read-modify-write on PMCR since the driver only writes to PMCR.E.
+ * Assign default cycle event outside the 32-bit PMEVTYPER range.
+ * Rework the active event and used counter tracking.
+Thanks to robin.murphy@arm.com for the review comments.
+v1: https://lore.kernel.org/linux-arm-kernel/20220509002810.12412-1-bwicaksono@nvidia.com/
+
+Besar Wicaksono (2):
+  perf: arm_cspmu: Add support for ARM CoreSight PMU driver
+  perf: arm_cspmu: Add support for NVIDIA SCF and MCF attribute
+
+ Documentation/admin-guide/perf/index.rst      |    1 +
+ Documentation/admin-guide/perf/nvidia-pmu.rst |  299 ++++
+ arch/arm64/configs/defconfig                  |    1 +
+ drivers/perf/Kconfig                          |    2 +
+ drivers/perf/Makefile                         |    1 +
+ drivers/perf/arm_cspmu/Kconfig                |   13 +
+ drivers/perf/arm_cspmu/Makefile               |    7 +
+ drivers/perf/arm_cspmu/arm_cspmu.c            | 1285 +++++++++++++++++
+ drivers/perf/arm_cspmu/arm_cspmu.h            |  151 ++
+ drivers/perf/arm_cspmu/nvidia_cspmu.c         |  398 +++++
+ drivers/perf/arm_cspmu/nvidia_cspmu.h         |   17 +
+ 11 files changed, 2175 insertions(+)
+ create mode 100644 Documentation/admin-guide/perf/nvidia-pmu.rst
+ create mode 100644 drivers/perf/arm_cspmu/Kconfig
+ create mode 100644 drivers/perf/arm_cspmu/Makefile
+ create mode 100644 drivers/perf/arm_cspmu/arm_cspmu.c
+ create mode 100644 drivers/perf/arm_cspmu/arm_cspmu.h
+ create mode 100644 drivers/perf/arm_cspmu/nvidia_cspmu.c
+ create mode 100644 drivers/perf/arm_cspmu/nvidia_cspmu.h
 
 
-> Changes in v3:
->   - Fix build error for m68k
->   - Fix the bug for llvm-ar <=3D 14
->=20
->  Documentation/kbuild/makefiles.rst          | 18 +---------------
->  Makefile                                    | 23 ++++++++++++++++-----
->  arch/alpha/kernel/Makefile                  |  4 ++--
->  arch/arc/kernel/Makefile                    |  4 ++--
->  arch/arm/kernel/Makefile                    |  4 ++--
->  arch/arm64/kernel/Makefile                  |  4 ++--
->  arch/csky/kernel/Makefile                   |  4 ++--
->  arch/hexagon/kernel/Makefile                |  3 ++-
->  arch/ia64/kernel/Makefile                   |  4 ++--
->  arch/loongarch/kernel/Makefile              |  4 ++--
->  arch/m68k/68000/Makefile                    |  2 +-
->  arch/m68k/coldfire/Makefile                 |  2 +-
->  arch/m68k/kernel/Makefile                   | 23 +++++++++++----------
->  arch/microblaze/kernel/Makefile             |  4 ++--
->  arch/mips/kernel/Makefile                   |  4 ++--
->  arch/nios2/kernel/Makefile                  |  2 +-
->  arch/openrisc/kernel/Makefile               |  4 ++--
->  arch/parisc/kernel/Makefile                 |  4 ++--
->  arch/powerpc/kernel/Makefile                | 20 +++++++++---------
->  arch/riscv/kernel/Makefile                  |  2 +-
->  arch/s390/kernel/Makefile                   |  4 ++--
->  arch/sh/kernel/Makefile                     |  4 ++--
->  arch/sparc/kernel/Makefile                  |  3 +--
->  arch/x86/kernel/Makefile                    | 10 ++++-----
->  arch/xtensa/kernel/Makefile                 |  4 ++--
->  scripts/Makefile.modpost                    |  5 ++---
->  scripts/Makefile.vmlinux_o                  |  6 +++---
->  scripts/clang-tools/gen_compile_commands.py | 19 +----------------
->  scripts/link-vmlinux.sh                     | 10 ++++-----
->  29 files changed, 91 insertions(+), 113 deletions(-)
->=20
-> diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/ma=
-kefiles.rst
-> index ee7e3ea1fbe1..5a6a8426cc97 100644
-> --- a/Documentation/kbuild/makefiles.rst
-> +++ b/Documentation/kbuild/makefiles.rst
-> @@ -340,19 +340,7 @@ more details, with real examples.
-> =20
->  	Examples are:
-> =20
-> -	1) head objects
-> -
-> -	    Some objects must be placed at the head of vmlinux. They are
-> -	    directly linked to vmlinux without going through built-in.a
-> -	    A typical use-case is an object that contains the entry point.
-> -
-> -	    arch/$(SRCARCH)/Makefile should specify such objects as head-y.
-> -
-> -	    Discussion:
-> -	      Given that we can control the section order in the linker script,
-> -	      why do we need head-y?
-> -
-> -	2) vmlinux linker script
-> +	1) vmlinux linker script
-> =20
->  	    The linker script for vmlinux is located at
->  	    arch/$(SRCARCH)/kernel/vmlinux.lds
-> @@ -360,10 +348,6 @@ more details, with real examples.
->  	Example::
-> =20
->  		# arch/x86/kernel/Makefile
-> -		extra-y	:=3D head_$(BITS).o
-> -		extra-y	+=3D head$(BITS).o
-> -		extra-y	+=3D ebda.o
-> -		extra-y	+=3D platform-quirks.o
->  		extra-y	+=3D vmlinux.lds
-> =20
->  	$(extra-y) should only contain targets needed for vmlinux.
-> diff --git a/Makefile b/Makefile
-> index cf9d7b1d8c14..a8c19f92ac9e 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -645,6 +645,8 @@ else
->  __all: modules
->  endif
-> =20
-> +targets :=3D
-> +
->  # Decide whether to build built-in, modular, or both.
->  # Normally, just do built-in.
-> =20
-> @@ -1107,7 +1109,7 @@ export ARCH_LIB		:=3D $(filter %/, $(libs-y))
->  export ARCH_DRIVERS	:=3D $(drivers-y) $(drivers-m)
->  # Externally visible symbols (used by link-vmlinux.sh)
-> =20
-> -KBUILD_VMLINUX_OBJS :=3D $(head-y) ./built-in.a
-> +KBUILD_VMLINUX_OBJS :=3D ./built-in.a
->  ifdef CONFIG_MODULES
->  KBUILD_VMLINUX_OBJS +=3D $(patsubst %/, %/lib.a, $(filter %/, $(libs-y)))
->  KBUILD_VMLINUX_LIBS :=3D $(filter-out %/, $(libs-y))
-> @@ -1115,7 +1117,7 @@ else
->  KBUILD_VMLINUX_LIBS :=3D $(patsubst %/,%/lib.a, $(libs-y))
->  endif
-> =20
-> -export KBUILD_VMLINUX_OBJS KBUILD_VMLINUX_LIBS
-> +export KBUILD_VMLINUX_LIBS
->  export KBUILD_LDS          :=3D arch/$(SRCARCH)/kernel/vmlinux.lds
-> =20
->  vmlinux-deps :=3D $(KBUILD_LDS) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_=
-LIBS)
-> @@ -1142,7 +1144,18 @@ quiet_cmd_autoksyms_h =3D GEN     $@
->  $(autoksyms_h):
->  	$(call cmd,autoksyms_h)
-> =20
-> -vmlinux.o: autoksyms_recursive $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_L=
-IBS) FORCE
-> +# '$(AR) mPi' needs 'T' to workaround the bug of llvm-ar <=3D 14
-> +quiet_cmd_ar_vmlinux.a =3D AR      $@
-> +      cmd_ar_vmlinux.a =3D \
-> +	rm -f $@; \
-> +	$(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
-> +	$(AR) mPiT $$($(AR) t $@ | head -n1) $@ $(head-y)
-> +
-> +targets +=3D vmlinux.a
-> +vmlinux.a: $(KBUILD_VMLINUX_OBJS) FORCE
-> +	$(call if_changed,ar_vmlinux.a)
-> +
-> +vmlinux.o: autoksyms_recursive vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
->  	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux_o
-> =20
->  ARCH_POSTLINK :=3D $(wildcard $(srctree)/arch/$(SRCARCH)/Makefile.postli=
-nk)
-> @@ -1155,7 +1168,7 @@ cmd_link-vmlinux =3D                               =
-                  \
->  vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) modpost FORCE
->  	+$(call if_changed_dep,link-vmlinux)
-> =20
-> -targets :=3D vmlinux
-> +targets +=3D vmlinux
-> =20
->  # The actual objects are generated when descending,
->  # make sure no implicit rule kicks in
-> @@ -1880,7 +1893,7 @@ quiet_cmd_gen_compile_commands =3D GEN     $@
->        cmd_gen_compile_commands =3D $(PYTHON3) $< -a $(AR) -o $@ $(filter=
--out $<, $(real-prereqs))
-> =20
->  $(extmod_prefix)compile_commands.json: scripts/clang-tools/gen_compile_c=
-ommands.py \
-> -	$(if $(KBUILD_EXTMOD),,$(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)) \
-> +	$(if $(KBUILD_EXTMOD),, vmlinux.a $(KBUILD_VMLINUX_LIBS)) \
->  	$(if $(CONFIG_MODULES), $(MODORDER)) FORCE
->  	$(call if_changed,gen_compile_commands)
-> =20
-> diff --git a/arch/alpha/kernel/Makefile b/arch/alpha/kernel/Makefile
-> index 5a74581bf0ee..5a5b0a8b7c6a 100644
-> --- a/arch/alpha/kernel/Makefile
-> +++ b/arch/alpha/kernel/Makefile
-> @@ -3,11 +3,11 @@
->  # Makefile for the linux kernel.
->  #
-> =20
-> -extra-y		:=3D head.o vmlinux.lds
-> +extra-y		:=3D vmlinux.lds
->  asflags-y	:=3D $(KBUILD_CFLAGS)
->  ccflags-y	:=3D -Wno-sign-compare
-> =20
-> -obj-y    :=3D entry.o traps.o process.o osf_sys.o irq.o \
-> +obj-y    :=3D head.o entry.o traps.o process.o osf_sys.o irq.o \
->  	    irq_alpha.o signal.o setup.o ptrace.o time.o \
->  	    systbls.o err_common.o io.o bugs.o
-> =20
-> diff --git a/arch/arc/kernel/Makefile b/arch/arc/kernel/Makefile
-> index 8c4fc4b54c14..0723d888ac44 100644
-> --- a/arch/arc/kernel/Makefile
-> +++ b/arch/arc/kernel/Makefile
-> @@ -3,7 +3,7 @@
->  # Copyright (C) 2004, 2007-2010, 2011-2012 Synopsys, Inc. (www.synopsys.=
-com)
->  #
-> =20
-> -obj-y	:=3D arcksyms.o setup.o irq.o reset.o ptrace.o process.o devtree.o
-> +obj-y	:=3D head.o arcksyms.o setup.o irq.o reset.o ptrace.o process.o de=
-vtree.o
->  obj-y	+=3D signal.o traps.o sys.o troubleshoot.o stacktrace.o disasm.o
->  obj-$(CONFIG_ISA_ARCOMPACT)		+=3D entry-compact.o intc-compact.o
->  obj-$(CONFIG_ISA_ARCV2)			+=3D entry-arcv2.o intc-arcv2.o
-> @@ -31,4 +31,4 @@ else
->  obj-y +=3D ctx_sw_asm.o
->  endif
-> =20
-> -extra-y :=3D vmlinux.lds head.o
-> +extra-y :=3D vmlinux.lds
-> diff --git a/arch/arm/kernel/Makefile b/arch/arm/kernel/Makefile
-> index 553866751e1a..8feaa3217ec5 100644
-> --- a/arch/arm/kernel/Makefile
-> +++ b/arch/arm/kernel/Makefile
-> @@ -89,7 +89,7 @@ obj-$(CONFIG_VDSO)		+=3D vdso.o
->  obj-$(CONFIG_EFI)		+=3D efi.o
->  obj-$(CONFIG_PARAVIRT)	+=3D paravirt.o
-> =20
-> -head-y			:=3D head$(MMUEXT).o
-> +obj-y			+=3D head$(MMUEXT).o
->  obj-$(CONFIG_DEBUG_LL)	+=3D debug.o
->  obj-$(CONFIG_EARLY_PRINTK)	+=3D early_printk.o
->  obj-$(CONFIG_ARM_PATCH_PHYS_VIRT)	+=3D phys2virt.o
-> @@ -109,4 +109,4 @@ obj-$(CONFIG_HAVE_ARM_SMCCC)	+=3D smccc-call.o
-> =20
->  obj-$(CONFIG_GENERIC_CPU_VULNERABILITIES) +=3D spectre.o
-> =20
-> -extra-y :=3D $(head-y) vmlinux.lds
-> +extra-y :=3D vmlinux.lds
-> diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
-> index 1add7b01efa7..b619ff207a57 100644
-> --- a/arch/arm64/kernel/Makefile
-> +++ b/arch/arm64/kernel/Makefile
-> @@ -85,8 +85,8 @@ $(obj)/vdso-wrap.o: $(obj)/vdso/vdso.so
->  $(obj)/vdso32-wrap.o: $(obj)/vdso32/vdso.so
-> =20
->  obj-y					+=3D probes/
-> -head-y					:=3D head.o
-> -extra-y					+=3D $(head-y) vmlinux.lds
-> +obj-y					+=3D head.o
-> +extra-y					+=3D vmlinux.lds
-> =20
->  ifeq ($(CONFIG_DEBUG_EFI),y)
->  AFLAGS_head.o +=3D -DVMLINUX_PATH=3D"\"$(realpath $(objtree)/vmlinux)\""
-> diff --git a/arch/csky/kernel/Makefile b/arch/csky/kernel/Makefile
-> index 6f14c924b20d..8a868316b912 100644
-> --- a/arch/csky/kernel/Makefile
-> +++ b/arch/csky/kernel/Makefile
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
-> -extra-y :=3D head.o vmlinux.lds
-> +extra-y :=3D vmlinux.lds
-> =20
-> -obj-y +=3D entry.o atomic.o signal.o traps.o irq.o time.o vdso.o vdso/
-> +obj-y +=3D head.o entry.o atomic.o signal.o traps.o irq.o time.o vdso.o =
-vdso/
->  obj-y +=3D power.o syscall.o syscall_table.o setup.o io.o
->  obj-y +=3D process.o cpu-probe.o ptrace.o stacktrace.o
->  obj-y +=3D probes/
-> diff --git a/arch/hexagon/kernel/Makefile b/arch/hexagon/kernel/Makefile
-> index fae3dce32fde..e73cb321630e 100644
-> --- a/arch/hexagon/kernel/Makefile
-> +++ b/arch/hexagon/kernel/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -extra-y :=3D head.o vmlinux.lds
-> +extra-y :=3D vmlinux.lds
-> =20
-> +obj-y +=3D head.o
->  obj-$(CONFIG_SMP) +=3D smp.o
-> =20
->  obj-y +=3D setup.o irq_cpu.o traps.o syscalltab.o signal.o time.o
-> diff --git a/arch/ia64/kernel/Makefile b/arch/ia64/kernel/Makefile
-> index 08d4a2ba0652..4a1fcb121dda 100644
-> --- a/arch/ia64/kernel/Makefile
-> +++ b/arch/ia64/kernel/Makefile
-> @@ -7,9 +7,9 @@ ifdef CONFIG_DYNAMIC_FTRACE
->  CFLAGS_REMOVE_ftrace.o =3D -pg
->  endif
-> =20
-> -extra-y	:=3D head.o vmlinux.lds
-> +extra-y	:=3D vmlinux.lds
-> =20
-> -obj-y :=3D entry.o efi.o efi_stub.o gate-data.o fsys.o irq.o irq_ia64.o	\
-> +obj-y :=3D head.o entry.o efi.o efi_stub.o gate-data.o fsys.o irq.o irq_=
-ia64.o	\
->  	 irq_lsapic.o ivt.o pal.o patch.o process.o ptrace.o sal.o		\
->  	 salinfo.o setup.o signal.o sys_ia64.o time.o traps.o unaligned.o \
->  	 unwind.o mca.o mca_asm.o topology.o dma-mapping.o iosapic.o acpi.o \
-> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makef=
-ile
-> index e5be17009fe8..6c33b5c45573 100644
-> --- a/arch/loongarch/kernel/Makefile
-> +++ b/arch/loongarch/kernel/Makefile
-> @@ -3,9 +3,9 @@
->  # Makefile for the Linux/LoongArch kernel.
->  #
-> =20
-> -extra-y		:=3D head.o vmlinux.lds
-> +extra-y		:=3D vmlinux.lds
-> =20
-> -obj-y		+=3D cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
-> +obj-y		+=3D head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o=
- \
->  		   traps.o irq.o idle.o process.o dma.o mem.o io.o reset.o switch.o \
->  		   elf.o syscall.o signal.o time.o topology.o inst.o ptrace.o vdso.o
-> =20
-> diff --git a/arch/m68k/68000/Makefile b/arch/m68k/68000/Makefile
-> index 674541fdf5b8..279560add577 100644
-> --- a/arch/m68k/68000/Makefile
-> +++ b/arch/m68k/68000/Makefile
-> @@ -17,4 +17,4 @@ obj-$(CONFIG_DRAGEN2)	+=3D dragen2.o
->  obj-$(CONFIG_UCSIMM)	+=3D ucsimm.o
->  obj-$(CONFIG_UCDIMM)	+=3D ucsimm.o
-> =20
-> -extra-y 		:=3D head.o
-> +obj-y			+=3D head.o
-> diff --git a/arch/m68k/coldfire/Makefile b/arch/m68k/coldfire/Makefile
-> index 9419a6c1f036..c56bc0dc7f2e 100644
-> --- a/arch/m68k/coldfire/Makefile
-> +++ b/arch/m68k/coldfire/Makefile
-> @@ -45,4 +45,4 @@ obj-$(CONFIG_STMARK2)	+=3D stmark2.o
->  obj-$(CONFIG_PCI)	+=3D pci.o
-> =20
->  obj-y			+=3D gpio.o
-> -extra-y :=3D head.o
-> +obj-y			+=3D head.o
-> diff --git a/arch/m68k/kernel/Makefile b/arch/m68k/kernel/Makefile
-> index c0833da6a2ca..af015447dfb4 100644
-> --- a/arch/m68k/kernel/Makefile
-> +++ b/arch/m68k/kernel/Makefile
-> @@ -3,19 +3,20 @@
->  # Makefile for the linux kernel.
->  #
-> =20
-> -extra-$(CONFIG_AMIGA)	:=3D head.o
-> -extra-$(CONFIG_ATARI)	:=3D head.o
-> -extra-$(CONFIG_MAC)	:=3D head.o
-> -extra-$(CONFIG_APOLLO)	:=3D head.o
-> -extra-$(CONFIG_VME)	:=3D head.o
-> -extra-$(CONFIG_HP300)	:=3D head.o
-> -extra-$(CONFIG_Q40)	:=3D head.o
-> -extra-$(CONFIG_SUN3X)	:=3D head.o
-> -extra-$(CONFIG_VIRT)	:=3D head.o
-> -extra-$(CONFIG_SUN3)	:=3D sun3-head.o
->  extra-y			+=3D vmlinux.lds
-> =20
-> -obj-y	:=3D entry.o irq.o module.o process.o ptrace.o
-> +obj-$(CONFIG_AMIGA)	:=3D head.o
-> +obj-$(CONFIG_ATARI)	:=3D head.o
-> +obj-$(CONFIG_MAC)	:=3D head.o
-> +obj-$(CONFIG_APOLLO)	:=3D head.o
-> +obj-$(CONFIG_VME)	:=3D head.o
-> +obj-$(CONFIG_HP300)	:=3D head.o
-> +obj-$(CONFIG_Q40)	:=3D head.o
-> +obj-$(CONFIG_SUN3X)	:=3D head.o
-> +obj-$(CONFIG_VIRT)	:=3D head.o
-> +obj-$(CONFIG_SUN3)	:=3D sun3-head.o
-> +
-> +obj-y	+=3D entry.o irq.o module.o process.o ptrace.o
->  obj-y	+=3D setup.o signal.o sys_m68k.o syscalltable.o time.o traps.o
-> =20
->  obj-$(CONFIG_MMU_MOTOROLA) +=3D ints.o vectors.o
-> diff --git a/arch/microblaze/kernel/Makefile b/arch/microblaze/kernel/Mak=
-efile
-> index 15a20eb814ce..4393bee64eaf 100644
-> --- a/arch/microblaze/kernel/Makefile
-> +++ b/arch/microblaze/kernel/Makefile
-> @@ -12,9 +12,9 @@ CFLAGS_REMOVE_ftrace.o =3D -pg
->  CFLAGS_REMOVE_process.o =3D -pg
->  endif
-> =20
-> -extra-y :=3D head.o vmlinux.lds
-> +extra-y :=3D vmlinux.lds
-> =20
-> -obj-y +=3D dma.o exceptions.o \
-> +obj-y +=3D head.o dma.o exceptions.o \
->  	hw_exception_handler.o irq.o \
->  	process.o prom.o ptrace.o \
->  	reset.o setup.o signal.o sys_microblaze.o timer.o traps.o unwind.o
-> diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
-> index 7c96282bff2e..5d1addac5e28 100644
-> --- a/arch/mips/kernel/Makefile
-> +++ b/arch/mips/kernel/Makefile
-> @@ -3,9 +3,9 @@
->  # Makefile for the Linux/MIPS kernel.
->  #
-> =20
-> -extra-y		:=3D head.o vmlinux.lds
-> +extra-y		:=3D vmlinux.lds
-> =20
-> -obj-y		+=3D branch.o cmpxchg.o elf.o entry.o genex.o idle.o irq.o \
-> +obj-y		+=3D head.o branch.o cmpxchg.o elf.o entry.o genex.o idle.o irq.o=
- \
->  		   process.o prom.o ptrace.o reset.o setup.o signal.o \
->  		   syscall.o time.o topology.o traps.o unaligned.o watch.o \
->  		   vdso.o cacheinfo.o
-> diff --git a/arch/nios2/kernel/Makefile b/arch/nios2/kernel/Makefile
-> index 0b645e1e3158..78a913181fa1 100644
-> --- a/arch/nios2/kernel/Makefile
-> +++ b/arch/nios2/kernel/Makefile
-> @@ -3,9 +3,9 @@
->  # Makefile for the nios2 linux kernel.
->  #
-> =20
-> -extra-y	+=3D head.o
->  extra-y	+=3D vmlinux.lds
-> =20
-> +obj-y	+=3D head.o
->  obj-y	+=3D cpuinfo.o
->  obj-y	+=3D entry.o
->  obj-y	+=3D insnemu.o
-> diff --git a/arch/openrisc/kernel/Makefile b/arch/openrisc/kernel/Makefile
-> index 2d172e79f58d..79129161f3e0 100644
-> --- a/arch/openrisc/kernel/Makefile
-> +++ b/arch/openrisc/kernel/Makefile
-> @@ -3,9 +3,9 @@
->  # Makefile for the linux kernel.
->  #
-> =20
-> -extra-y	:=3D head.o vmlinux.lds
-> +extra-y	:=3D vmlinux.lds
-> =20
-> -obj-y	:=3D setup.o or32_ksyms.o process.o dma.o \
-> +obj-y	:=3D head.o setup.o or32_ksyms.o process.o dma.o \
->  	   traps.o time.o irq.o entry.o ptrace.o signal.o \
->  	   sys_call_table.o unwinder.o
-> =20
-> diff --git a/arch/parisc/kernel/Makefile b/arch/parisc/kernel/Makefile
-> index d0bfac89a842..3d138c9cf9ce 100644
-> --- a/arch/parisc/kernel/Makefile
-> +++ b/arch/parisc/kernel/Makefile
-> @@ -3,9 +3,9 @@
->  # Makefile for arch/parisc/kernel
->  #
-> =20
-> -extra-y			:=3D head.o vmlinux.lds
-> +extra-y		:=3D vmlinux.lds
-> =20
-> -obj-y	     	:=3D cache.o pacache.o setup.o pdt.o traps.o time.o irq.o \
-> +obj-y		:=3D head.o cache.o pacache.o setup.o pdt.o traps.o time.o irq.o \
->  		   pa7300lc.o syscall.o entry.o sys_parisc.o firmware.o \
->  		   ptrace.o hardware.o inventory.o drivers.o alternative.o \
->  		   signal.o hpmc.o real2.o parisc_ksyms.o unaligned.o \
-> diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
-> index 06d2d1f78f71..ad3decb9f20b 100644
-> --- a/arch/powerpc/kernel/Makefile
-> +++ b/arch/powerpc/kernel/Makefile
-> @@ -118,12 +118,12 @@ obj-$(CONFIG_PPC_FSL_BOOK3E)	+=3D cpu_setup_fsl_boo=
-ke.o
->  obj-$(CONFIG_PPC_DOORBELL)	+=3D dbell.o
->  obj-$(CONFIG_JUMP_LABEL)	+=3D jump_label.o
-> =20
-> -extra-$(CONFIG_PPC64)		:=3D head_64.o
-> -extra-$(CONFIG_PPC_BOOK3S_32)	:=3D head_book3s_32.o
-> -extra-$(CONFIG_40x)		:=3D head_40x.o
-> -extra-$(CONFIG_44x)		:=3D head_44x.o
-> -extra-$(CONFIG_FSL_BOOKE)	:=3D head_fsl_booke.o
-> -extra-$(CONFIG_PPC_8xx)		:=3D head_8xx.o
-> +obj-$(CONFIG_PPC64)		+=3D head_64.o
-> +obj-$(CONFIG_PPC_BOOK3S_32)	+=3D head_book3s_32.o
-> +obj-$(CONFIG_40x)		+=3D head_40x.o
-> +obj-$(CONFIG_44x)		+=3D head_44x.o
-> +obj-$(CONFIG_FSL_BOOKE)		+=3D head_fsl_booke.o
-> +obj-$(CONFIG_PPC_8xx)		+=3D head_8xx.o
->  extra-y				+=3D vmlinux.lds
-> =20
->  obj-$(CONFIG_RELOCATABLE)	+=3D reloc_$(BITS).o
-> @@ -198,10 +198,10 @@ KCOV_INSTRUMENT_paca.o :=3D n
->  CFLAGS_setup_64.o		+=3D -fno-stack-protector
->  CFLAGS_paca.o			+=3D -fno-stack-protector
-> =20
-> -extra-$(CONFIG_PPC_FPU)		+=3D fpu.o
-> -extra-$(CONFIG_ALTIVEC)		+=3D vector.o
-> -extra-$(CONFIG_PPC64)		+=3D entry_64.o
-> -extra-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)	+=3D prom_init.o
-> +obj-$(CONFIG_PPC_FPU)		+=3D fpu.o
-> +obj-$(CONFIG_ALTIVEC)		+=3D vector.o
-> +obj-$(CONFIG_PPC64)		+=3D entry_64.o
-> +obj-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)	+=3D prom_init.o
-> =20
->  extra-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)	+=3D prom_init_check
-> =20
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index 33bb60a354cd..db6e4b1294ba 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -28,9 +28,9 @@ KASAN_SANITIZE_cpufeature.o :=3D n
->  endif
->  endif
-> =20
-> -extra-y +=3D head.o
->  extra-y +=3D vmlinux.lds
-> =20
-> +obj-y	+=3D head.o
->  obj-y	+=3D soc.o
->  obj-$(CONFIG_RISCV_ALTERNATIVE) +=3D alternative.o
->  obj-y	+=3D cpu.o
-> diff --git a/arch/s390/kernel/Makefile b/arch/s390/kernel/Makefile
-> index 3cbfa9fddd9a..7ce00816b8df 100644
-> --- a/arch/s390/kernel/Makefile
-> +++ b/arch/s390/kernel/Makefile
-> @@ -33,7 +33,7 @@ CFLAGS_stacktrace.o	+=3D -fno-optimize-sibling-calls
->  CFLAGS_dumpstack.o	+=3D -fno-optimize-sibling-calls
->  CFLAGS_unwind_bc.o	+=3D -fno-optimize-sibling-calls
-> =20
-> -obj-y	:=3D traps.o time.o process.o earlypgm.o early.o setup.o idle.o vt=
-ime.o
-> +obj-y	:=3D head64.o traps.o time.o process.o earlypgm.o early.o setup.o =
-idle.o vtime.o
->  obj-y	+=3D processor.o syscall.o ptrace.o signal.o cpcmd.o ebcdic.o nmi.o
->  obj-y	+=3D debug.o irq.o ipl.o dis.o diag.o vdso.o cpufeature.o
->  obj-y	+=3D sysinfo.o lgr.o os_info.o machine_kexec.o
-> @@ -42,7 +42,7 @@ obj-y	+=3D entry.o reipl.o relocate_kernel.o kdebugfs.o=
- alternative.o
->  obj-y	+=3D nospec-branch.o ipl_vmparm.o machine_kexec_reloc.o unwind_bc.o
->  obj-y	+=3D smp.o text_amode31.o stacktrace.o
-> =20
-> -extra-y				+=3D head64.o vmlinux.lds
-> +extra-y				+=3D vmlinux.lds
-> =20
->  obj-$(CONFIG_SYSFS)		+=3D nospec-sysfs.o
->  CFLAGS_REMOVE_nospec-branch.o	+=3D $(CC_FLAGS_EXPOLINE)
-> diff --git a/arch/sh/kernel/Makefile b/arch/sh/kernel/Makefile
-> index aa0fbc9202b1..69cd9ac4b2ab 100644
-> --- a/arch/sh/kernel/Makefile
-> +++ b/arch/sh/kernel/Makefile
-> @@ -3,7 +3,7 @@
->  # Makefile for the Linux/SuperH kernel.
->  #
-> =20
-> -extra-y	:=3D head_32.o vmlinux.lds
-> +extra-y	:=3D vmlinux.lds
-> =20
->  ifdef CONFIG_FUNCTION_TRACER
->  # Do not profile debug and lowlevel utilities
-> @@ -12,7 +12,7 @@ endif
-> =20
->  CFLAGS_REMOVE_return_address.o =3D -pg
-> =20
-> -obj-y	:=3D debugtraps.o dumpstack.o 		\
-> +obj-y	:=3D head_32.o debugtraps.o dumpstack.o				\
->  	   idle.o io.o irq.o irq_32.o kdebugfs.o			\
->  	   machvec.o nmi_debug.o process.o				\
->  	   process_32.o ptrace.o ptrace_32.o				\
-> diff --git a/arch/sparc/kernel/Makefile b/arch/sparc/kernel/Makefile
-> index d3a0e072ebe8..b328e4a0bd57 100644
-> --- a/arch/sparc/kernel/Makefile
-> +++ b/arch/sparc/kernel/Makefile
-> @@ -7,8 +7,6 @@
->  asflags-y :=3D -ansi
->  ccflags-y :=3D -Werror
-> =20
-> -extra-y     :=3D head_$(BITS).o
-> -
->  # Undefine sparc when processing vmlinux.lds - it is used
->  # And teach CPP we are doing $(BITS) builds (for this case)
->  CPPFLAGS_vmlinux.lds :=3D -Usparc -m$(BITS)
-> @@ -22,6 +20,7 @@ CFLAGS_REMOVE_perf_event.o :=3D -pg
->  CFLAGS_REMOVE_pcr.o :=3D -pg
->  endif
-> =20
-> +obj-y                   :=3D head_$(BITS).o
->  obj-$(CONFIG_SPARC64)   +=3D urtt_fill.o
->  obj-$(CONFIG_SPARC32)   +=3D entry.o wof.o wuf.o
->  obj-$(CONFIG_SPARC32)   +=3D etrap_32.o
-> diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-> index a20a5ebfacd7..956e50ca06e0 100644
-> --- a/arch/x86/kernel/Makefile
-> +++ b/arch/x86/kernel/Makefile
-> @@ -3,10 +3,6 @@
->  # Makefile for the linux kernel.
->  #
-> =20
-> -extra-y	:=3D head_$(BITS).o
-> -extra-y	+=3D head$(BITS).o
-> -extra-y	+=3D ebda.o
-> -extra-y	+=3D platform-quirks.o
->  extra-y	+=3D vmlinux.lds
-> =20
->  CPPFLAGS_vmlinux.lds +=3D -U$(UTS_MACHINE)
-> @@ -42,7 +38,11 @@ KCOV_INSTRUMENT		:=3D n
-> =20
->  CFLAGS_irq.o :=3D -I $(srctree)/$(src)/../include/asm/trace
-> =20
-> -obj-y			:=3D process_$(BITS).o signal.o
-> +obj-y			+=3D head_$(BITS).o
-> +obj-y			+=3D head$(BITS).o
-> +obj-y			+=3D ebda.o
-> +obj-y			+=3D platform-quirks.o
-> +obj-y			+=3D process_$(BITS).o signal.o
->  obj-$(CONFIG_COMPAT)	+=3D signal_compat.o
->  obj-y			+=3D traps.o idt.o irq.o irq_$(BITS).o dumpstack_$(BITS).o
->  obj-y			+=3D time.o ioport.o dumpstack.o nmi.o
-> diff --git a/arch/xtensa/kernel/Makefile b/arch/xtensa/kernel/Makefile
-> index 897c1c741058..f28b8e3d717e 100644
-> --- a/arch/xtensa/kernel/Makefile
-> +++ b/arch/xtensa/kernel/Makefile
-> @@ -3,9 +3,9 @@
->  # Makefile for the Linux/Xtensa kernel.
->  #
-> =20
-> -extra-y :=3D head.o vmlinux.lds
-> +extra-y :=3D vmlinux.lds
-> =20
-> -obj-y :=3D align.o coprocessor.o entry.o irq.o platform.o process.o \
-> +obj-y :=3D head.o align.o coprocessor.o entry.o irq.o platform.o process=
-=2Eo \
->  	 ptrace.o setup.o signal.o stacktrace.o syscall.o time.o traps.o \
->  	 vectors.o
-> =20
-> diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-> index 2daf760eeb25..ceb1d78140e7 100644
-> --- a/scripts/Makefile.modpost
-> +++ b/scripts/Makefile.modpost
-> @@ -70,13 +70,12 @@ quiet_cmd_vmlinux_objs =3D GEN     $@
->  	for f in $(real-prereqs); do	\
->  		case $${f} in		\
->  		*libgcc.a) ;;		\
-> -		*.a) $(AR) t $${f} ;;	\
-> -		*) echo $${f} ;;	\
-> +		*) $(AR) t $${f} ;;	\
->  		esac			\
->  	done > $@
-> =20
->  targets +=3D .vmlinux.objs
-> -.vmlinux.objs: $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
-> +.vmlinux.objs: vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
->  	$(call if_changed,vmlinux_objs)
-> =20
->  vmlinux.o-if-present :=3D $(wildcard vmlinux.o)
-> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-> index 84019814f33f..81a4e0484457 100644
-> --- a/scripts/Makefile.vmlinux_o
-> +++ b/scripts/Makefile.vmlinux_o
-> @@ -18,7 +18,7 @@ quiet_cmd_gen_initcalls_lds =3D GEN     $@
->  	$(PERL) $(real-prereqs) > $@
-> =20
->  .tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
-> -		$(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
-> +		vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
->  	$(call if_changed,gen_initcalls_lds)
-> =20
->  targets :=3D .tmp_initcalls.lds
-> @@ -55,7 +55,7 @@ quiet_cmd_ld_vmlinux.o =3D LD      $@
->        cmd_ld_vmlinux.o =3D \
->  	$(LD) ${KBUILD_LDFLAGS} -r -o $@ \
->  	$(addprefix -T , $(initcalls-lds)) \
-> -	--whole-archive $(KBUILD_VMLINUX_OBJS) --no-whole-archive \
-> +	--whole-archive vmlinux.a --no-whole-archive \
->  	--start-group $(KBUILD_VMLINUX_LIBS) --end-group \
->  	$(cmd_objtool)
-> =20
-> @@ -64,7 +64,7 @@ define rule_ld_vmlinux.o
->  	$(call cmd,gen_objtooldep)
->  endef
-> =20
-> -vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS=
-) FORCE
-> +vmlinux.o: $(initcalls-lds) vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
->  	$(call if_changed_rule,ld_vmlinux.o)
-> =20
->  targets +=3D vmlinux.o
-> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-=
-tools/gen_compile_commands.py
-> index 47da25b3ba7d..d800b2c0af97 100755
-> --- a/scripts/clang-tools/gen_compile_commands.py
-> +++ b/scripts/clang-tools/gen_compile_commands.py
-> @@ -109,20 +109,6 @@ def to_cmdfile(path):
->      return os.path.join(dir, '.' + base + '.cmd')
-> =20
-> =20
-> -def cmdfiles_for_o(obj):
-> -    """Generate the iterator of .cmd files associated with the object
-> -
-> -    Yield the .cmd file used to build the given object
-> -
-> -    Args:
-> -        obj: The object path
-> -
-> -    Yields:
-> -        The path to .cmd file
-> -    """
-> -    yield to_cmdfile(obj)
-> -
-> -
->  def cmdfiles_for_a(archive, ar):
->      """Generate the iterator of .cmd files associated with the archive.
-> =20
-> @@ -211,13 +197,10 @@ def main():
->      for path in paths:
->          # If 'path' is a directory, handle all .cmd files under it.
->          # Otherwise, handle .cmd files associated with the file.
-> -        # Most of built-in objects are linked via archives (built-in.a o=
-r lib.a)
-> -        # but some objects are linked to vmlinux directly.
-> +        # built-in objects are linked via vmlinux.a
->          # Modules are listed in modules.order.
->          if os.path.isdir(path):
->              cmdfiles =3D cmdfiles_in_dir(path)
-> -        elif path.endswith('.o'):
-> -            cmdfiles =3D cmdfiles_for_o(path)
->          elif path.endswith('.a'):
->              cmdfiles =3D cmdfiles_for_a(path, ar)
->          elif path.endswith('modules.order'):
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index 6a197d8a88ac..23ac13fd9d89 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -3,17 +3,15 @@
->  #
->  # link vmlinux
->  #
-> -# vmlinux is linked from the objects selected by $(KBUILD_VMLINUX_OBJS) =
-and
-> -# $(KBUILD_VMLINUX_LIBS). Most are built-in.a files from top-level direc=
-tories
-> -# in the kernel tree, others are specified in arch/$(ARCH)/Makefile.
-> +# vmlinux is linked from the objects in vmlinux.a and $(KBUILD_VMLINUX_L=
-IBS).
-> +# vmlinux.a contains objects that are linked unconditionally.
->  # $(KBUILD_VMLINUX_LIBS) are archives which are linked conditionally
->  # (not within --whole-archive), and do not require symbol indexes added.
->  #
->  # vmlinux
->  #   ^
->  #   |
-> -#   +--< $(KBUILD_VMLINUX_OBJS)
-> -#   |    +--< init/built-in.a drivers/built-in.a mm/built-in.a + more
-> +#   +--< vmlinux.a
->  #   |
->  #   +--< $(KBUILD_VMLINUX_LIBS)
->  #   |    +--< lib/lib.a + more
-> @@ -67,7 +65,7 @@ vmlinux_link()
->  		objs=3Dvmlinux.o
->  		libs=3D
->  	else
-> -		objs=3D"${KBUILD_VMLINUX_OBJS}"
-> +		objs=3Dvmlinux.a
->  		libs=3D"${KBUILD_VMLINUX_LIBS}"
->  	fi
-> =20
-> --=20
-> 2.34.1
+base-commit: 09ce5091ff971cdbfd67ad84dc561ea27f10d67a
+-- 
+2.17.1
 
---=20
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
-
---/QPoIt3ndWsR+Znz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmM0q1UACgkQB1IKcBYm
-EmnRYQ//bYokMQAP3LVzCMyRt/KZry5l5IWk22+hS+VReJ/1LuN2V+fpi443x93s
-Wz80BtP2FNCrUPoeRyI70BOoF1MeLw4KAfXF4qzRn+6c8O6dBWGP28f6/6DsP6yl
-MowSHRsBNJznQiU3lGXHStrcvDd9+5euym0D1+v89ZuduH12zsLpv1VzFIeC2msv
-EW09lK9H/JzjocbyX3HgxMLM8W0Y7cWA42/CzVYWSl9fbbwOonox4X8zVFARmFgf
-BKJbLHGBjCFR0nMaaINe0DLsJRZaHVbch2viW+WurTuCTZts8Eh9U4YRMRvGEYNi
-QnxFWPeGg39IaWWwbWuv8DQHmvyC0LPkVCPr3qjI3PND6fJZYQj78MA1uVQydQBz
-xKlq68XEflsWHvIJTBdEDTeeQgvyDmoi+DJbpS/eFcnCqQ43uJsFQnQyOaO0W5US
-j9W4uTj+glmK7bajFiKNG0pJFp4NOFMIc9PuATgGphu/xM0eNoifV8/8DBLgBC6V
-rG7zyOFvu2HhALSZFHHi6zwBQFKCMnKoRZv2HO9jzZmlX+54oLgQZQuIxwQmTo/a
-GRBs2JGlMZ5QueCZET92CDdOi7tTCseHqdGE5Ss6NsarhtzyaMiZNnhg1e5uygPf
-FD5ag3CG8PeW9e3LVuJS2kzsHW8g5yVKHKKrQGpXjgCPqEbRS1g=
-=lZFY
------END PGP SIGNATURE-----
-
---/QPoIt3ndWsR+Znz--
