@@ -2,55 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90115ED582
+	by mail.lfdr.de (Postfix) with ESMTP id 005A05ED583
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233076AbiI1G6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 02:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
+        id S233023AbiI1G6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 02:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233448AbiI1G53 (ORCPT
+        with ESMTP id S233407AbiI1G5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 02:57:29 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFF19E68C;
-        Tue, 27 Sep 2022 23:57:25 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 06:57:22 -0000
+        Wed, 28 Sep 2022 02:57:39 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C5550517;
+        Tue, 27 Sep 2022 23:57:34 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 06:57:32 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664348243;
+        s=2020; t=1664348253;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o0Y1yQ9BhuRCSCMO1panr5YNLkexoW/peOxW4bcpB1A=;
-        b=ggPvGTw7JX26D5si9ADHi1U0uV1V9m6hf2Kf0plmGLNZ1N8uJmbFgkQ1q8zhjcv9bdW9gO
-        R3xXralDmrlSS2ShtMogRflcfg/m+c4SlnR/bRqv12DzCRMm1Yokjv615A9Hwdx+PXTXyd
-        gj4rafmNa4XJZXcTVSJJVJy8qCFSh/9kDUYoyjzC3CnDkhsWHESPld8j0tYOVtRoAKuU26
-        KarqpsKvY1BYUzW89fmQlnZ9unmQO8DaxxpGk0PHeawij1GCH0wkrojcQ16WP/ChdUySsb
-        ErQsPWmzhOEoVJxsB2o4p3zyoQ4E6qa1VSScyJLdcg0tFhjvC69xdUa/mCORrg==
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=TsmxYEtytSJnVTZi4gE35k0qzyAnHrjit4BoiqWVBWc=;
+        b=dlfFql8hmLuPot5w8SWKicdPYW2hoX/qyGaSPAF28I6y1yPS5TbqT1YEbxDOzbP2BOCqFH
+        kGa2ih9k7Rr9YugyXAsK2kyXMio2pVsnrCfVGVErKtenwfhbOx1UGQgFl8vqUJcQqkjq95
+        HNg6qeEKGsUxAM3WHVPIFTUurxZeZ5UmsgatTH/dABRqsRCFggb073cRIqirbtIi/Voa46
+        dVUkCla3DHEJVrZ0a//X3K5AJ9zy5uGH1uPXdZkIIfZKNa2WLCNG7DqD9Y0dZd7CCit+Z/
+        WvR41hFFEs6SDbshuYjzEPAV7M3WALccyDuZM25cB8hmtagfWVVOf1YkRcsKrQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664348243;
+        s=2020e; t=1664348253;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o0Y1yQ9BhuRCSCMO1panr5YNLkexoW/peOxW4bcpB1A=;
-        b=ZkfBD8mG/9AmPKnsUYwdpVbWN42hOEWgHguntZ3p9muGCZFAh0WvqPATq4VD8tINceiRV6
-        KLMimonlbLhnwPDQ==
-From:   "tip-bot2 for Namhyung Kim" <tip-bot2@linutronix.de>
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=TsmxYEtytSJnVTZi4gE35k0qzyAnHrjit4BoiqWVBWc=;
+        b=pSGhJxNh25ItAqVujfq9wNizcHk/vA6KjWLQQrweWpl4Y/W3G26vE5AL9OECL2HK6ijn8p
+        hQFsJkUsHUPDnLCQ==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf: Use sample_flags for addr
-Cc:     Namhyung Kim <namhyung@kernel.org>,
+Subject: [tip: sched/core] sched: Fix TASK_state comparisons
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220921220032.2858517-1-namhyung@kernel.org>
-References: <20220921220032.2858517-1-namhyung@kernel.org>
 MIME-Version: 1.0
-Message-ID: <166434824254.401.581163246945360838.tip-bot2@tip-bot2>
+Message-ID: <166434825206.401.11834487719624700924.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -64,107 +58,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/core branch of tip:
+The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     7b084630153152239d84990ac4540c2dd360186f
-Gitweb:        https://git.kernel.org/tip/7b084630153152239d84990ac4540c2dd360186f
-Author:        Namhyung Kim <namhyung@kernel.org>
-AuthorDate:    Wed, 21 Sep 2022 15:00:31 -07:00
+Commit-ID:     543f82fee0c531c8386f776a6050878a5bfe96f4
+Gitweb:        https://git.kernel.org/tip/543f82fee0c531c8386f776a6050878a5bfe96f4
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Tue, 27 Sep 2022 21:02:34 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 27 Sep 2022 22:50:24 +02:00
+CommitterDate: Tue, 27 Sep 2022 22:50:22 +02:00
 
-perf: Use sample_flags for addr
+sched: Fix TASK_state comparisons
 
-Use the new sample_flags to indicate whether the addr field is filled by
-the PMU driver.  As most PMU drivers pass 0, it can set the flag only if
-it has a non-zero value.  And use 0 in perf_sample_output() if it's not
-filled already.
+Task state is fundamentally a bitmask; direct comparisons are probably
+not working as intended. Specifically the normal wait-state have
+a number of possible modifiers:
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+  TASK_UNINTERRUPTIBLE:	TASK_WAKEKILL, TASK_NOLOAD, TASK_FREEZABLE
+  TASK_INTERRUPTIBLE:   TASK_FREEZABLE
+
+Specifically, the addition of TASK_FREEZABLE wrecked
+__wait_is_interruptible(). This however led to an audit of direct
+comparisons yielding the rest of the changes.
+
+Fixes: f5d39b020809 ("freezer,sched: Rewrite core freezer logic")
+Reported-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+Debugged-by: Christian Borntraeger <borntraeger@linux.ibm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220921220032.2858517-1-namhyung@kernel.org
+Tested-by: Christian Borntraeger <borntraeger@linux.ibm.com>
 ---
- arch/x86/events/intel/ds.c | 8 ++++++--
- include/linux/perf_event.h | 8 ++++++--
- kernel/events/core.c       | 5 +++++
- 3 files changed, 17 insertions(+), 4 deletions(-)
+ include/linux/wait.h | 2 +-
+ kernel/hung_task.c   | 8 ++++++--
+ kernel/sched/core.c  | 2 +-
+ 3 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-index 4ba6ab6..d2e9ff1 100644
---- a/arch/x86/events/intel/ds.c
-+++ b/arch/x86/events/intel/ds.c
-@@ -1621,8 +1621,10 @@ static void setup_pebs_fixed_sample_data(struct perf_event *event,
+diff --git a/include/linux/wait.h b/include/linux/wait.h
+index 14ad8a0..7f5a51a 100644
+--- a/include/linux/wait.h
++++ b/include/linux/wait.h
+@@ -281,7 +281,7 @@ static inline void wake_up_pollfree(struct wait_queue_head *wq_head)
  
+ #define ___wait_is_interruptible(state)						\
+ 	(!__builtin_constant_p(state) ||					\
+-		state == TASK_INTERRUPTIBLE || state == TASK_KILLABLE)		\
++	 (state & (TASK_INTERRUPTIBLE | TASK_WAKEKILL)))
  
- 	if ((sample_type & PERF_SAMPLE_ADDR_TYPE) &&
--	    x86_pmu.intel_cap.pebs_format >= 1)
-+	    x86_pmu.intel_cap.pebs_format >= 1) {
- 		data->addr = pebs->dla;
-+		data->sample_flags |= PERF_SAMPLE_ADDR;
-+	}
+ extern void init_wait_entry(struct wait_queue_entry *wq_entry, int flags);
  
- 	if (x86_pmu.intel_cap.pebs_format >= 2) {
- 		/* Only set the TSX weight when no memory weight. */
-@@ -1783,8 +1785,10 @@ static void setup_pebs_adaptive_sample_data(struct perf_event *event,
- 			data->sample_flags |= PERF_SAMPLE_DATA_SRC;
+diff --git a/kernel/hung_task.c b/kernel/hung_task.c
+index f1321c0..4a8a713 100644
+--- a/kernel/hung_task.c
++++ b/kernel/hung_task.c
+@@ -191,6 +191,8 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+ 	hung_task_show_lock = false;
+ 	rcu_read_lock();
+ 	for_each_process_thread(g, t) {
++		unsigned int state;
++
+ 		if (!max_count--)
+ 			goto unlock;
+ 		if (time_after(jiffies, last_break + HUNG_TASK_LOCK_BREAK)) {
+@@ -198,8 +200,10 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+ 				goto unlock;
+ 			last_break = jiffies;
  		}
- 
--		if (sample_type & PERF_SAMPLE_ADDR_TYPE)
-+		if (sample_type & PERF_SAMPLE_ADDR_TYPE) {
- 			data->addr = meminfo->address;
-+			data->sample_flags |= PERF_SAMPLE_ADDR;
-+		}
- 
- 		if (sample_type & PERF_SAMPLE_TRANSACTION) {
- 			data->txn = intel_get_tsx_transaction(meminfo->tsx_tuning,
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index 368bdc4..f4a1357 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1028,7 +1028,6 @@ struct perf_sample_data {
- 	 * minimize the cachelines touched.
+-		/* use "==" to skip the TASK_KILLABLE tasks waiting on NFS */
+-		if (READ_ONCE(t->__state) == TASK_UNINTERRUPTIBLE)
++		/* skip the TASK_KILLABLE tasks -- these can be killed */
++		state == READ_ONCE(t->__state);
++		if ((state & TASK_UNINTERRUPTIBLE) &&
++		    !(state & TASK_WAKEKILL))
+ 			check_hung_task(t, timeout);
+ 	}
+  unlock:
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 4fa4a3d..02dc1b8 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -8884,7 +8884,7 @@ state_filter_match(unsigned long state_filter, struct task_struct *p)
+ 	 * When looking for TASK_UNINTERRUPTIBLE skip TASK_IDLE (allows
+ 	 * TASK_KILLABLE).
  	 */
- 	u64				sample_flags;
--	u64				addr;
- 	struct perf_raw_record		*raw;
- 	u64				period;
+-	if (state_filter == TASK_UNINTERRUPTIBLE && state == TASK_IDLE)
++	if (state_filter == TASK_UNINTERRUPTIBLE && (state & TASK_NOLOAD))
+ 		return false;
  
-@@ -1040,6 +1039,7 @@ struct perf_sample_data {
- 	union perf_sample_weight	weight;
- 	union  perf_mem_data_src	data_src;
- 	u64				txn;
-+	u64				addr;
- 
- 	u64				type;
- 	u64				ip;
-@@ -1079,9 +1079,13 @@ static inline void perf_sample_data_init(struct perf_sample_data *data,
- {
- 	/* remaining struct members initialized in perf_prepare_sample() */
- 	data->sample_flags = 0;
--	data->addr = addr;
- 	data->raw  = NULL;
- 	data->period = period;
-+
-+	if (addr) {
-+		data->addr = addr;
-+		data->sample_flags |= PERF_SAMPLE_ADDR;
-+	}
- }
- 
- /*
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index c07e9a3..a91f74d 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -7414,6 +7414,11 @@ void perf_prepare_sample(struct perf_event_header *header,
- 	if (filtered_sample_type & PERF_SAMPLE_TRANSACTION)
- 		data->txn = 0;
- 
-+	if (sample_type & (PERF_SAMPLE_ADDR | PERF_SAMPLE_PHYS_ADDR | PERF_SAMPLE_DATA_PAGE_SIZE)) {
-+		if (filtered_sample_type & PERF_SAMPLE_ADDR)
-+			data->addr = 0;
-+	}
-+
- 	if (sample_type & PERF_SAMPLE_REGS_INTR) {
- 		/* regs dump ABI info */
- 		int size = sizeof(u64);
+ 	return true;
