@@ -2,159 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE535EE34B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B80E5EE359
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234598AbiI1Rii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
+        id S234610AbiI1Rkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233787AbiI1Ria (ORCPT
+        with ESMTP id S234567AbiI1Rks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:38:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E49CF3916
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:38:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 28 Sep 2022 13:40:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCAD89945
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664386844;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fnnu4D0Chbk/Z8+NCjwUENwpIgx/DjGxPGd2Oiee5Pw=;
+        b=GJmMBJs8GqX9zNc+xAEXXaooKlhcNaJSTdLwc4Vfm2AAPl0hEzQo61dWU6Y45NlYRJsR5+
+        6lFn0uFfSeNWHQa3utFnx0ybbz/OPrEotGbCygl9TODekwzSVB2hontV7I46n/0YkvbhHU
+        opAELG61v92978Snl9i365JErFlG9Tk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-97-Te2Iw04rMlO5noLvfgVdUQ-1; Wed, 28 Sep 2022 13:40:41 -0400
+X-MC-Unique: Te2Iw04rMlO5noLvfgVdUQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DFD961F64
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 17:38:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4378DC433D6;
-        Wed, 28 Sep 2022 17:38:27 +0000 (UTC)
-Date:   Wed, 28 Sep 2022 13:39:38 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v2] ring-buffer: Add ring_buffer_wake_waiters()
-Message-ID: <20220928133938.28dc2c27@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA82429DD99A;
+        Wed, 28 Sep 2022 17:40:40 +0000 (UTC)
+Received: from starship (unknown [10.40.193.233])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A44FE1121314;
+        Wed, 28 Sep 2022 17:40:38 +0000 (UTC)
+Message-ID: <2ca1b7c59e2abe661dd03309ad13eca7d692ff05.camel@redhat.com>
+Subject: Re: [PATCH v3 07/28] KVM: x86: Inhibit APIC memslot if x2APIC and
+ AVIC are enabled
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Wed, 28 Sep 2022 20:40:37 +0300
+In-Reply-To: <YzR3PaZokwIPDoXb@google.com>
+References: <20220920233134.940511-1-seanjc@google.com>
+         <20220920233134.940511-8-seanjc@google.com>
+         <e84ebf0a7ac9322bd0cfa742ef6dd2bbfdac0df9.camel@redhat.com>
+         <YzHawRN8vpEzP7XD@google.com>
+         <bcc3c67abc3b2c3d896b800c5f8f7295b7238271.camel@redhat.com>
+         <YzR3PaZokwIPDoXb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Wed, 2022-09-28 at 16:33 +0000, Sean Christopherson wrote:
+> On Wed, Sep 28, 2022, Maxim Levitsky wrote:
+> > On Mon, 2022-09-26 at 17:00 +0000, Sean Christopherson wrote:
+> > > Given the SRCU problem, I'd prefer to keep the management of the memslot in common
+> > > code, even though I agree it's a bit silly.  And KVM_REQ_UNBLOCK is a perfect fit
+> > > for dealing with the SRCU issue, i.e. handling this in AVIC code would require
+> > > another hook on top of spreading the memslot management across x86 and SVM code.
+> > 
+> > OK, I am not going to argue about this. But what about at least not using an inhibit
+> > bit for that but something else like a boolean, or maybe really add 'I am AVIC bit'
+> > or rather something like vcpu->arch.apicv_type enum?
+> > 
+> > Or we can make SVM code just call a common function - just put these in a
+> > function and call it from avic_set_virtual_apic_mode?
+> 
+> The issue is that kvm_vcpu_update_apicv() is called from kvm_lapic_set_base(),
+> which is the one that may or may not hold SRCU.
 
-On closing of a file that represents a ring buffer or flushing the file,
-there may be waiters on the ring buffer that needs to be woken up and exit
-the ring_buffer_wait() function.
+Makes sense now.
 
-Add ring_buffer_wake_waiters() to wake up the waiters on the ring buffer
-and allow them to exit the wait loop.
+> 
+> > > > You are about to remove the KVM_REQ_UNBLOCK in other patch series.
+> > > 
+> > > No, KVM_REQ_UNHALT is being removed.  KVM_REQ_UNBLOCK needs to stay, although it
+> > > has a rather weird name, e.g. KVM_REQ_WORK would probably be better.
+> > 
+> > Roger that!
+> > And I guess lets rename it while we are at it.
+> 
+> I'll prep a patch.
+> 
+> > > > How about just raising KVM_REQ_APICV_UPDATE on current vCPU
+> > > > and having a special case in kvm_vcpu_update_apicv of 
+> > > > 
+> > > > if (apic_access_memslot_enabled == false && apic_access_memslot_allocaed == true) {
+> > > > 	drop srcu lock
+> > > 
+> > > This was my initial thought as well, but the issue is that SRCU may or may not be
+> > > held, and so the unlock+lock would need to be conditional.  That's technically a
+> > > solvable problem, as it's possible to detect if SRCU is held, but I really don't
+> > > want to rely on kvm_vcpu.srcu_depth for anything other than proving that KVM doesn't
+> > > screw up SRCU.
+> > 
+> > Why though? the KVM_REQ_APICV_UPDATE is only handled AFAIK in vcpu_enter_guest
+> > which drops the srcu lock few lines afterwards, and therefore the
+> > kvm_vcpu_update_apicv is always called with the lock held and it means that it
+> > can drop it for the duration of slot update.
+> > 
+> > The original issue we had was that we tried to drop the srcu lock in 
+> > 'kvm_set_apicv_inhibit' which indeed is called from various places,
+> > with, or without the lock held.
+> > 
+> > Moving the memslot disable code to kvm_vcpu_update_apicv would actually solve
+> > that, but it was not possible because kvm_vcpu_update_apicv is called
+> > simultaneously on all vCPUs, and created various races, including toggling
+> > the memslot twice.
+> 
+> As above, kvm_vcpu_update_apicv() can be called without SRCU held.  Oh, but that
+> was a recent addition, commit 8fc9c7a3079e ("KVM: x86: Deactivate APICv on vCPU
+> with APIC disabled").  I was wary of using KVM_REQ_APICV_UPDATE in kvm_lapic_set_base(),
+> e.g. in case there was some dependency on updating _immediately, but since that's
+> such a new addition I have no objection to switching to the request.
+> 
+> Similarly, is there a good reason for having nested_svm_vmexit() invoke
+> kvm_vcpu_update_apicv() directly?  I'm confused by the "so that other vCPUs can
+> start to benefit from it right away".  The nested inhibit is per-vCPU and so
+> should only affect the current vCPU, no?  I.e. for all intents and purposes, using
+> a request should be functionally equivalent.
 
-Cc: stable@vger.kernel.org
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Fixes: 15693458c4bc0 ("tracing/ring-buffer: Move poll wake ups into ring buffer code")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-Changes since v1: https://lkml.kernel.org/r/20220927231824.700269106@goodmis.org
-  - Wake up all waiters on the individual CPU queues on ALL cpus wakeups.
+It is kind of the other way around:
 
- include/linux/ring_buffer.h |  2 +-
- kernel/trace/ring_buffer.c  | 39 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 40 insertions(+), 1 deletion(-)
+The mere fact of switching to vmcb02 *inhibits* the AVIC on the current vCPU,
+but the AVIC inhibit is there only to set the is_running bits in the physid table
+and in IOMMU to prevent its *peers* to try and send interrupts to it via AVIC.
 
-diff --git a/include/linux/ring_buffer.h b/include/linux/ring_buffer.h
-index dac53fd3afea..2504df9a0453 100644
---- a/include/linux/ring_buffer.h
-+++ b/include/linux/ring_buffer.h
-@@ -101,7 +101,7 @@ __ring_buffer_alloc(unsigned long size, unsigned flags, struct lock_class_key *k
- int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full);
- __poll_t ring_buffer_poll_wait(struct trace_buffer *buffer, int cpu,
- 			  struct file *filp, poll_table *poll_table);
--
-+void ring_buffer_wake_waiters(struct trace_buffer *buffer, int cpu);
- 
- #define RING_BUFFER_ALL_CPUS -1
- 
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index 5a7d818ca3ea..3046deacf7b3 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -413,6 +413,7 @@ struct rb_irq_work {
- 	struct irq_work			work;
- 	wait_queue_head_t		waiters;
- 	wait_queue_head_t		full_waiters;
-+	long				wait_index;
- 	bool				waiters_pending;
- 	bool				full_waiters_pending;
- 	bool				wakeup_full;
-@@ -924,6 +925,37 @@ static void rb_wake_up_waiters(struct irq_work *work)
- 	}
- }
- 
-+/**
-+ * ring_buffer_wake_waiters - wake up any waiters on this ring buffer
-+ * @buffer: The ring buffer to wake waiters on
-+ *
-+ * In the case of a file that represents a ring buffer is closing,
-+ * it is prudent to wake up any waiters that are on this.
-+ */
-+void ring_buffer_wake_waiters(struct trace_buffer *buffer, int cpu)
-+{
-+	struct ring_buffer_per_cpu *cpu_buffer;
-+	struct rb_irq_work *rbwork;
-+
-+	if (cpu == RING_BUFFER_ALL_CPUS) {
-+
-+		/* Wake up individual ones too. One level recursion */
-+		for_each_buffer_cpu(buffer, cpu)
-+			ring_buffer_wake_waiters(buffer, cpu);
-+
-+		rbwork = &buffer->irq_work;
-+	} else {
-+		cpu_buffer = buffer->buffers[cpu];
-+		rbwork = &cpu_buffer->irq_work;
-+	}
-+
-+	rbwork->wait_index++;
-+	/* make sure the waiters see the new index */
-+	smp_wmb();
-+
-+	rb_wake_up_waiters(&rbwork->work);
-+}
-+
- /**
-  * ring_buffer_wait - wait for input to the ring buffer
-  * @buffer: buffer to wait on
-@@ -939,6 +971,7 @@ int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full)
- 	struct ring_buffer_per_cpu *cpu_buffer;
- 	DEFINE_WAIT(wait);
- 	struct rb_irq_work *work;
-+	long wait_index;
- 	int ret = 0;
- 
- 	/*
-@@ -957,6 +990,7 @@ int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full)
- 		work = &cpu_buffer->irq_work;
- 	}
- 
-+	wait_index = READ_ONCE(work->wait_index);
- 
- 	while (true) {
- 		if (full)
-@@ -1021,6 +1055,11 @@ int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full)
- 		}
- 
- 		schedule();
-+
-+		/* Make sure to see the new wait index */
-+		smp_rmb();
-+		if (wait_index != work->wait_index)
-+			break;
- 	}
- 
- 	if (full)
--- 
-2.35.1
+It is the reason why APICv doesn't need it - the posted interrupts still work
+just fine when a vCPU doens't use APICv, or uses a different posted interrupt vector
+when it uses the nested APICv.
+
+So it makes sense to remove that inhibit as soon as possible that the peers
+could stop getting 'unaccellerated IPI' vmexits for nothing.
+
+
+However back to the discussion, I don't think this is a problem.
+
+We can just call both the kvm_vcpu_update_apicv() and a new function that
+does the memslot disable from KVM_REQ_APICV_UPDATE, then 
+plain kvm_vcpu_update_apicv() won't need to drop the srcu lock.
+
+It is pretty much the same that you proposed, just instead of piggybacking on 
+KVM_REQ_UNBLOCK, I proposed to piggyback on KVM_REQ_APICV_UPDATE.
+
+
+Best regards,
+	Maxim Levitsky
+
+
+> 
+> 	/*
+> 	 * Un-inhibit the AVIC right away, so that other vCPUs can start
+> 	 * to benefit from it right away.
+> 	 */
+> 	if (kvm_apicv_activated(vcpu->kvm))
+> 		kvm_vcpu_update_apicv(vcpu);
+> 
+
 
