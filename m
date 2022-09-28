@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95DA5EE256
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF055EE25C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233826AbiI1Qyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
+        id S234291AbiI1Qym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbiI1Qyb (ORCPT
+        with ESMTP id S233790AbiI1Qyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:54:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D928E9CF5;
-        Wed, 28 Sep 2022 09:54:30 -0700 (PDT)
+        Wed, 28 Sep 2022 12:54:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C2EB4A3;
+        Wed, 28 Sep 2022 09:54:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18517B82174;
-        Wed, 28 Sep 2022 16:54:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75D5C433D6;
-        Wed, 28 Sep 2022 16:54:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 031BEB82175;
+        Wed, 28 Sep 2022 16:54:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F034FC433C1;
+        Wed, 28 Sep 2022 16:54:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664384067;
-        bh=9ieKrZ0kEy9+GmqajkIGyMGgIizGgDSihdd1eBCLfJU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Y7z7TnxCeygSgevrUVEukmqOLSpLUkC2fprjDa0Gp2NgRAfQnwV4qOkI5gGr/Ui3P
-         u4r8fUdI3SYKtVch0OWVPy6XuiQZrKrvv3aI4kh3dnoo31RWF0WvEwrtpdTa2gdx5Z
-         tw4idgOSBMy53VUsatFFlHfMvbGShQOCGm9mWgiQ1HVAnBkSm0gjUCoeS8YABnM8ek
-         ICId8KI+ZgbswShVfDggedJ53HYdwt41zJx+Mkm9BhUWV8NOx0Z6aez4CNMl9ZGEIV
-         4ZDTlYJcDK/SBBsBZo4wHdyI8LmVHGxPPBYrxPzH5EkmMDgssgSMlKd3CGw+VlQ8Ex
-         yTYoqt+r9vrjA==
+        s=k20201202; t=1664384068;
+        bh=qNsNf0Y2IMdPzUUe1aoueCoe35u/MaerMo6JhdAxXAM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jQ4SzL1vxYt+e6BS4E+9GtIMqVSfoW9eKXqvSTjJ+PJfD1i+FFVxIh5Cw87tLIJZ0
+         QylpSyLwvLNVkO4BqZ2h8XvKAZ92UaTpxgCwQWK/oIxRx0j5F0dTQs/MMM0Mx2Z63Z
+         gtlj6atMXTKdkZV7/9BkSfTNcqsd9yKteZVH+YI220PA8ZzRCwUlp9ZpkouiIYFcTK
+         L8ri+a5wNzUcWaXrkCX6JmecZH3o9sWrXHlCA1ogWB4mwA+WSseC47LvPLkhjx37dl
+         N9oiTQ50vHxESW2FgSnTArsoVQxKAF7N23KFKBivH95oU/yJahW3c00sxRJ2/cH7sG
+         Rq0ZcnuJyRqXA==
 From:   Dinh Nguyen <dinguyen@kernel.org>
 To:     jh80.chung@samsung.com
 Cc:     dinguyen@kernel.org, ulf.hansson@linaro.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCHv4 1/3] dt-bindings: mmc: synopsys-dw-mshc: document "altr,sysmgr-syscon"
-Date:   Wed, 28 Sep 2022 11:54:18 -0500
-Message-Id: <20220928165420.1212284-1-dinguyen@kernel.org>
+Subject: [PATCHv4 2/3] arm64: dts: socfpga: Add clk-phase-sd-hs property to the sdmmc node
+Date:   Wed, 28 Sep 2022 11:54:19 -0500
+Message-Id: <20220928165420.1212284-2-dinguyen@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220928165420.1212284-1-dinguyen@kernel.org>
+References: <20220928165420.1212284-1-dinguyen@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -52,69 +54,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the optional "altr,sysmgr-syscon" binding that is used to
-access the System Manager register that controls the SDMMC clock
-phase.
+The sdmmc controller's CIU(Card Interface Unit) clock's phase can be
+adjusted through the register in the system manager. Add the binding
+"altr,sysmgr-syscon" to the SDMMC node for the driver to access the
+system manager. Add the "clk-phase-sd-hs" property in the SDMMC node to
+designate the smpsel and drvsel properties for the CIU clock.
 
 Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 ---
-v4: add else statement
-v3: document that the "altr,sysmgr-syscon" binding is only applicable to
-    "altr,socfpga-dw-mshc"
-v2: document "altr,sysmgr-syscon" in the MMC section
+v4: no change
+v3: removed unnecessary property in "altr,sysmgr-syscon"
 ---
- .../bindings/mmc/synopsys-dw-mshc.yaml        | 31 +++++++++++++++++--
- 1 file changed, 28 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi      | 1 +
+ arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts | 1 +
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi          | 1 +
+ arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts     | 1 +
+ arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts        | 1 +
+ 5 files changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-index ae6d6fca79e2..b73324273464 100644
---- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-+++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-@@ -6,9 +6,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+index 14c220d87807..ff2906672deb 100644
+--- a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
++++ b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+@@ -309,6 +309,7 @@ mmc: mmc@ff808000 {
+ 				 <&clkmgr STRATIX10_SDMMC_CLK>;
+ 			clock-names = "biu", "ciu";
+ 			iommus = <&smmu 5>;
++			altr,sysmgr-syscon = <&sysmgr 0x28>;
+ 			status = "disabled";
+ 		};
  
- title: Synopsys Designware Mobile Storage Host Controller Binding
+diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
+index 48424e459f12..19e7284b4cd5 100644
+--- a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
++++ b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
+@@ -105,6 +105,7 @@ &mmc {
+ 	cap-mmc-highspeed;
+ 	broken-cd;
+ 	bus-width = <4>;
++	clk-phase-sd-hs = <0>, <135>;
+ };
  
--allOf:
--  - $ref: "synopsys-dw-mshc-common.yaml#"
--
- maintainers:
-   - Ulf Hansson <ulf.hansson@linaro.org>
+ &osc1 {
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+index 7bbec8aafa62..3f694d6fc338 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+@@ -313,6 +313,7 @@ mmc: mmc@ff808000 {
+ 				 <&clkmgr AGILEX_SDMMC_CLK>;
+ 			clock-names = "biu", "ciu";
+ 			iommus = <&smmu 5>;
++			altr,sysmgr-syscon = <&sysmgr 0x28>;
+ 			status = "disabled";
+ 		};
  
-@@ -38,6 +35,34 @@ properties:
-       - const: biu
-       - const: ciu
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+index 26cd3c121757..07c3f8876613 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+@@ -83,6 +83,7 @@ &mmc {
+ 	cap-sd-highspeed;
+ 	broken-cd;
+ 	bus-width = <4>;
++	clk-phase-sd-hs = <0>, <135>;
+ };
  
-+  altr,sysmgr-syscon:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    items:
-+      - items:
-+          - description: phandle to the sysmgr node
-+          - description: register offset that controls the SDMMC clock phase
-+    description:
-+      Contains the phandle to System Manager block that contains
-+      the SDMMC clock-phase control register. The first value is the pointer
-+      to the sysmgr and the 2nd value is the register offset for the SDMMC
-+      clock phase register.
-+
-+allOf:
-+  - $ref: "synopsys-dw-mshc-common.yaml#"
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const:
-+              - altr,socfpga-dw-mshc
-+    then:
-+      required:
-+        - altr,sysmgr-syscon
-+    else:
-+      properties:
-+        altr,sysmgr-syscon: false
-+
- required:
-   - compatible
-   - reg
+ &osc1 {
+diff --git a/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
+index 62c66e52b656..08c088571270 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
++++ b/arch/arm64/boot/dts/intel/socfpga_n5x_socdk.dts
+@@ -74,6 +74,7 @@ &mmc {
+ 	cap-sd-highspeed;
+ 	broken-cd;
+ 	bus-width = <4>;
++	clk-phase-sd-hs = <0>, <135>;
+ };
+ 
+ &osc1 {
 -- 
 2.25.1
 
