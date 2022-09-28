@@ -2,75 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512075ED2CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C875ED2D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232509AbiI1Btu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 21:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S232478AbiI1BzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 21:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232679AbiI1Btm (ORCPT
+        with ESMTP id S232084AbiI1BzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 21:49:42 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A3124083
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 18:49:40 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id s206so10960721pgs.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 18:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=1Vfi7AWXnCaO1Cvd6Mq1uY3je2KBMWFZikWbaMnkxjs=;
-        b=IYgVPuHGVgqxXqBtQ4CxDDSitmzKee8iPhjwCnhB5LqwP0ZVxGeasHxlxZAZYeq6lA
-         31OX8D8oVX7srZsi6Uxggwg9OgePvurQahGvY9h0OjYmh0mqFUYc6omFw38WUNwfPEtV
-         vSYv6BuQ6O/z2mxVNPXO/F++1as6A/Vk+f8cCBX6MF7GbHLqkXZJSzvrC5QK9D/HdpWL
-         jIs0MnvXbDwvlRn0q5ax+iY+h+2HOz5KG/Dc+PONBZftxCHiDUx4zq/0+i2cHyHUok9c
-         SgykyqlCcypggE8IZR/mKQjBhM+mTuZmQpYPJxKOE/oC0npO8xLTKpDsH5vhAoGJzrMM
-         4wOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1Vfi7AWXnCaO1Cvd6Mq1uY3je2KBMWFZikWbaMnkxjs=;
-        b=tQ5L+eCgzQjf0K0VAZNrcQp+RUdPh3v7CX/NPpGb1DbYZQTjm7Oio/EZC3Y5MlU6qA
-         aj3z5w8d3sNZkF3KRRkpK1yWbZS6fxAbUurZna8n/E1JK3kGa/6Q3vg6O4nrE3UFLj2X
-         +xtbiHBWBdWBJt5nVIvHlAru3j2Tq+X+hy4WrP0+ez2ZC0CGkVgfaFYPW/CQZajhYOSz
-         hPzvEdY+NnDlg075CdXquJRL58kEI0juWho3Kjwxp4jtNKuzrR32SFMp9mi6ag4COtVi
-         p6y4lvrmWIbw/e4VnH28+fr8y4rPBi5MMuP/qKxFsYGtDv75Xa1YNCNvUNmq5rUk9Cvg
-         mYZg==
-X-Gm-Message-State: ACrzQf34z2KoPKBHD6/lR8mPPCw+JFJSuCc0febyVQGGf0wVyQCBVRSJ
-        c75N9SUNqRdYcxj73eaecOhe/34Ijvynds4AsjWJcx7/q5M=
-X-Google-Smtp-Source: AMsMyM7RPrYtnz+qDp9SF9zc6a+NCzoGQQItskFz2opRNwqaDk1x3Q1i5kdwn4kq5aetoXezYMNrwvX9bNIBDHpdkYk=
-X-Received: by 2002:aa7:88c9:0:b0:541:2b7:d655 with SMTP id
- k9-20020aa788c9000000b0054102b7d655mr32420304pff.72.1664329779633; Tue, 27
- Sep 2022 18:49:39 -0700 (PDT)
+        Tue, 27 Sep 2022 21:55:17 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BF012A498;
+        Tue, 27 Sep 2022 18:55:13 -0700 (PDT)
+X-UUID: 56581198f8804c66ad9867f9bce5d267-20220928
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Q+fSEED8koFMBB0jhsQvQ1pjxAX/BH3bjI3pxMvhkOY=;
+        b=kvqbjCwTZkhD8fLHDJ89Tpy1GezdmvKZ0bsJr8r5aZVfWFaPWsSOHsX5g6Uzs905e8Z2HgSoICMeaGdOjqXOSU8qVDBOGfPXSR5Caf9DdrxTCH//LiJqvnnLxxhutySTL3WnVVWAAb/lRnrkynBwxVqhGLsx3S3hAvt/vhYgd4o=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:4f0ea6a4-0693-47ab-8eb9-f31fe0b748e8,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.11,REQID:4f0ea6a4-0693-47ab-8eb9-f31fe0b748e8,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:39a5ff1,CLOUDID:ab253d07-1cee-4c38-b21b-a45f9682fdc0,B
+        ulkID:220928095508MKCOI7IO,BulkQuantity:0,Recheck:0,SF:28|17|19|48|102,TC:
+        nil,Content:-5,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 56581198f8804c66ad9867f9bce5d267-20220928
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1738987356; Wed, 28 Sep 2022 09:55:08 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 28 Sep 2022 09:55:06 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 28 Sep 2022 09:55:06 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <angelogioacchino.delregno@collabora.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <wenst@chromium.org>
+Subject: Re: [PATCH 3/6] clk: mediatek: mt8192: Do not re-register top_early_divs in probe function
+Date:   Wed, 28 Sep 2022 09:55:07 +0800
+Message-ID: <20220928015507.17206-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <0a1618c4-b808-56bd-e89f-560b0423191d@collabora.com>
+References: <0a1618c4-b808-56bd-e89f-560b0423191d@collabora.com>
 MIME-Version: 1.0
-References: <20220921060616.73086-1-ying.huang@intel.com> <20220921060616.73086-3-ying.huang@intel.com>
- <87o7v2lbn4.fsf@nvdebian.thelocal> <CAHbLzkpPNbggD+AaT7wFQXkKqCS2cXnq=Xv3m4WuHLMBWGTmpQ@mail.gmail.com>
- <87fsgdllmb.fsf@nvdebian.thelocal> <87ill937qe.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <46807002-c42c-1232-0938-5b48050171ee@nvidia.com> <CAHbLzkqRyav0fZ5gzaKbkTfGBxkQXTpu0NJz-A9j7UaHhVBxEQ@mail.gmail.com>
- <87pmfgjnpj.fsf@nvdebian.thelocal> <87czbg2s3b.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <240bbb01-1f26-71ee-233a-ad65313ac358@nvidia.com>
-In-Reply-To: <240bbb01-1f26-71ee-233a-ad65313ac358@nvidia.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Tue, 27 Sep 2022 18:49:26 -0700
-Message-ID: <CAHbLzkpnCTD_c60QPu25hPymCYwLP6fYRMxp1EWmzX0SBF4g1w@mail.gmail.com>
-Subject: Re: [RFC 2/6] mm/migrate_pages: split unmap_and_move() to _unmap()
- and _move()
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SORTED_RECIPS,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,37 +67,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 6:45 PM John Hubbard <jhubbard@nvidia.com> wrote:
+>> top_early_divs are registered in the CLK_OF_DECLARE_DRIVER() half of the
+>> topckgen clk driver. Don't try to register it again in the actual probe
+>> function. This gets rid of the "Trying to register duplicate clock ..."
+>> warning.
+>> 
+>> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 >
-> On 9/27/22 18:41, Huang, Ying wrote:
-> >>>> I also agree that we cannot make any rules such as "do not lock > 1 page
-> >>>> at the same time, elsewhere in the kernel", because it is already
-> >>>> happening, for example in page-writeback.c, which locks PAGEVEC_SIZE
-> >>>> (15) pages per batch [1].
-> >>
-> >> That's not really the case though. The inner loop of write_cache_page()
-> >> only ever locks one page at a time, either directly via the
-> >> unlock_page() on L2338 (those goto's are amazing) or indirectly via
-> >> (*writepage)() on L2359.
-> >>
-> >> So there's no deadlock potential there because unlocking any previously
-> >> locked page(s) doesn't depend on obtaining the lock for another page.
-> >> Unless I've missed something?
-> >
-> > Yes.  This is my understanding too after checking ext4_writepage().
-> >
->
-> Yes, I missed the ".writepage() shall unlock the page" design point. Now
-> it seems much more reasonable and safer. :)
+>Can't we simply remove the CLK_OF_DECLARE_DRIVER() and top_init_early entirely,
+>and transfer TOP_CSW_F26M_D2 to top_divs[] instead?
+>I get that systimer concern and we have something similar in MT8195, where the
+>TOP_CLK26M_D2 is registered "late".
 
-.writepage is deprecated (see
-https://lore.kernel.org/linux-fsdevel/20220719041311.709250-1-hch@lst.de/),
-write back actually uses .writepages.
+Another reason for this:
+Removing the CLK_OF_DECLARE_DRIVER() is good when we want to build our driver as
+kernel modules because it does not work with kernel modules.
 
+thanks,
+Miles
 >
-> thanks,
+>Getting back to MT8192, TOP_CSW_F26M_D2 seems to be used only for:
+>1. systimer
+>2. SPMI MST (registered "late").
 >
-> --
-> John Hubbard
-> NVIDIA
+>Being it a fixed factor clock, parented to another fixed clock, it doesn't
+>even have any ON/OFF switch, so I think it would be actually possible to go
+>for the proposed removal... which would further improve this cleanup.
+>
+>Regards,
+>Angelo
 >
