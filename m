@@ -2,100 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC815EE5A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 21:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C215EE5A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 21:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233360AbiI1T0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 15:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S233720AbiI1T1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 15:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbiI1T0N (ORCPT
+        with ESMTP id S232702AbiI1T1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 15:26:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3014C7AC0D;
-        Wed, 28 Sep 2022 12:26:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E33E5B821BC;
-        Wed, 28 Sep 2022 19:26:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDB29C433D6;
-        Wed, 28 Sep 2022 19:26:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664393168;
-        bh=6KaHYyVgNJBnxu1VOT1yXinaZkI6YtsKP0s3EUBlwI8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HpVyNzJIpEMrxiDXWeIUCloMmP4JoDwkSowIxpwhj/0cNByUebBdasUQ984etm++3
-         flW9VGYQTIacesUV4YdCOpiA8c2fG7JrA+QUfZ1F/LWDn3dqGWCZVsfTuAjaY2srx2
-         /drIv8K9ki0E2LUbyz4uzoJnbFIjZyCLrjLcwDsd9Nef1nEi0iIWQkzu4WBmuyeIQO
-         ZMvWza85X9BUc4pnoJDIpAp4rDcS9bl448GYeC3mhjz2MFe9oJ4K8pRL7VZJq+0ona
-         2fxChRTHF5TpEIboGXAInYxMIjX4hoX6+pbUN8T4zehHVk9EPWgunP8+7U6CPb0Z1i
-         7FqPW8PyGZnUQ==
-From:   broonie@kernel.org
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Sep 28
-Date:   Wed, 28 Sep 2022 20:26:05 +0100
-Message-Id: <20220928192605.247546-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 28 Sep 2022 15:27:11 -0400
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58627D7A8;
+        Wed, 28 Sep 2022 12:27:10 -0700 (PDT)
+Received: by mail-pg1-f170.google.com with SMTP id s206so13101822pgs.3;
+        Wed, 28 Sep 2022 12:27:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=fi13tgaUqw4cLZkJIZHH5F/+Kj1zVWfq2Z8e4osB/qU=;
+        b=0zU2HIySj7frGQNyGeg8RTBZQzZvq6D8JnqIT5hMxoKXMd7F2eFp/tmsnANZvDGklX
+         lR/sQcDipyBkygoBsRBPPylk8ETmkEfPsCBQnRpKCnTFeidzvyNorFhN0Atr8CaBgjyK
+         Goopw0grWFJvIsiVoK5Vv1O5Evv/q29VxkcZfg1Seu7HY/dz1LmC/DRujKtCCveqaBxq
+         e4YkZstqLYMZ8wIIZJDdXtqAKfO9VfGgnGm72l2VxlySZFgqtZu9ly8uANq0ssAgO2Kp
+         cYALGmGM6DHFwX8e/Fu7Cn0UqX27nzJ/zAdTNmFvfcTwilv3GftU48/MIjD6GWJXfdEN
+         lIYA==
+X-Gm-Message-State: ACrzQf0lUP9bXtpTAOmrRuvO6NeYe2m4i3uyL3sMOUO3T5j+x7/jPx5x
+        b2gsNARySmIQG6WRRKeF67c=
+X-Google-Smtp-Source: AMsMyM4Wq/ODU6oLlycsV/TSsGP3st5KOplktf0lq4S7Inz58H2pIA8EPZXkLTHsTxDYidYXSbH0fA==
+X-Received: by 2002:a05:6a00:2314:b0:546:ce91:89a3 with SMTP id h20-20020a056a00231400b00546ce9189a3mr35734387pfh.77.1664393230024;
+        Wed, 28 Sep 2022 12:27:10 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:4cba:f1a9:6ef8:3759? ([2620:15c:211:201:4cba:f1a9:6ef8:3759])
+        by smtp.gmail.com with ESMTPSA id 5-20020a170902c20500b00176d347e9a7sm4090106pll.233.2022.09.28.12.27.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 12:27:09 -0700 (PDT)
+Message-ID: <2acc2220-65dc-4af5-ffd3-997f779d41c0@acm.org>
+Date:   Wed, 28 Sep 2022 12:27:07 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
+ exit code
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Tejun Heo <tj@kernel.org>
+References: <20220914225621.415631-1-bvanassche@acm.org>
+ <20220914225621.415631-7-bvanassche@acm.org> <YzOe3pYmn5qO9lFb@T590>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <YzOe3pYmn5qO9lFb@T590>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 9/27/22 18:09, Ming Lei wrote:
+> On Wed, Sep 14, 2022 at 03:56:20PM -0700, Bart Van Assche wrote:
+>> Some kernel modules call device_del() from their module exit code and
+>> schedule asynchronous work from inside the .release callback without waiting
+>> until that callback has finished. As an example, many SCSI LLD drivers call
+> 
+> It isn't only related with device, any kobject has such issue, or any
+> reference counter usage has similar potential risk, see previous discussion:
+> 
+> https://lore.kernel.org/lkml/YsZm7lSXYAHT14ui@T590/
+> 
+> IMO, it is one fundamental problem wrt. module vs. reference counting or
+> kobject uses at least, since the callback depends on module code
+> segment.
+> 
+>> scsi_remove_host() from their module exit code. scsi_remove_host() may
+>> invoke scsi_device_dev_release_usercontext() asynchronously.
+>> scsi_device_dev_release_usercontext() uses the host template pointer and
+>> that pointer usually exists in static storage in the SCSI LLD. Support
+>> using the module reference count to keep the module around until
+>> asynchronous module exiting has completed by waiting in the delete_module()
+>> system call until the module reference count drops to zero.
+> 
+> The issue can't be addressed by the normal mod->refcnt, since user need
+> to unload module when the device isn't used.
 
-Changes since 20220927:
+Hi Ming,
 
-The various DRM trees gained even more conflicts with each other.
+How about removing support for calling scsi_device_put() from atomic context
+as is done in the untested patch below?
 
-The counter tree gained a conflict with the counter-current tree.
+Thanks,
 
-Non-merge commits (relative to Linus' tree): 10124
- 10571 files changed, 575990 insertions(+), 217896 deletions(-)
+Bart.
 
-----------------------------------------------------------------------------
+diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
+index c59eac7a32f2..661753a10b47 100644
+--- a/drivers/scsi/scsi.c
++++ b/drivers/scsi/scsi.c
+@@ -561,6 +561,8 @@ EXPORT_SYMBOL(scsi_report_opcode);
+   */
+  int scsi_device_get(struct scsi_device *sdev)
+  {
++	might_sleep();
++
+  	if (sdev->sdev_state == SDEV_DEL || sdev->sdev_state == SDEV_CANCEL)
+  		goto fail;
+  	if (!get_device(&sdev->sdev_gendev))
+@@ -588,6 +590,7 @@ void scsi_device_put(struct scsi_device *sdev)
+  {
+  	struct module *mod = sdev->host->hostt->module;
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
++	might_sleep();
+  	put_device(&sdev->sdev_gendev);
+  	module_put(mod);
+  }
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index a3aaafdeac1d..4cfc9317b4ad 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -441,7 +441,7 @@ static void scsi_device_cls_release(struct device *class_dev)
+  	put_device(&sdev->sdev_gendev);
+  }
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386,
-arm64, sparc and sparc64 defconfig and htmldocs. And finally, a simple
-boot test of the powerpc pseries_le_defconfig kernel in qemu (with and
-without kvm enabled).
+-static void scsi_device_dev_release_usercontext(struct work_struct *work)
++static void scsi_device_dev_release(struct device *dev)
+  {
+  	struct scsi_device *sdev;
+  	struct device *parent;
+@@ -450,11 +450,8 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
+  	struct scsi_vpd *vpd_pg0 = NULL, *vpd_pg89 = NULL;
+  	struct scsi_vpd *vpd_pgb0 = NULL, *vpd_pgb1 = NULL, *vpd_pgb2 = NULL;
+  	unsigned long flags;
+-	struct module *mod;
+-
+-	sdev = container_of(work, struct scsi_device, ew.work);
 
-Below is a summary of the state of the merge.
+-	mod = sdev->host->hostt->module;
++	sdev = to_scsi_device(dev);
 
-I am currently merging 362 trees (counting Linus' and 100 trees of bug
-fix patches pending for the current merge release).
+  	parent = sdev->sdev_gendev.parent;
 
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
+@@ -516,19 +513,6 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
 
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
+  	if (parent)
+  		put_device(parent);
+-	module_put(mod);
+-}
+-
+-static void scsi_device_dev_release(struct device *dev)
+-{
+-	struct scsi_device *sdp = to_scsi_device(dev);
+-
+-	/* Set module pointer as NULL in case of module unloading */
+-	if (!try_module_get(sdp->host->hostt->module))
+-		sdp->host->hostt->module = NULL;
+-
+-	execute_in_process_context(scsi_device_dev_release_usercontext,
+-				   &sdp->ew);
+  }
 
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+  static struct class sdev_class = {
