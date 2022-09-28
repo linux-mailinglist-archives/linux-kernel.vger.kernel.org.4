@@ -2,55 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F90F5EE208
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1ED25EE206
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbiI1Qkf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 28 Sep 2022 12:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        id S233784AbiI1QkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233856AbiI1QkX (ORCPT
+        with ESMTP id S233745AbiI1QkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:40:23 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC41E66A7F;
-        Wed, 28 Sep 2022 09:40:16 -0700 (PDT)
-Received: from smtpclient.apple ([109.40.240.166]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MiaHf-1p8EQS412t-00flX6; Wed, 28 Sep 2022 18:40:08 +0200
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-From:   Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v3] usb: xhci: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a V0.96 controller
-Date:   Wed, 28 Sep 2022 18:39:55 +0200
-Message-Id: <69D84895-3353-46F6-A21B-3A448003DCB8@oldschoolsolutions.biz>
-References: <c1d537ad-5a2d-24b1-bfc3-165deebbbfa7@linux.intel.com>
-Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stern@rowland.harvard.edu
-In-Reply-To: <c1d537ad-5a2d-24b1-bfc3-165deebbbfa7@linux.intel.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-X-Mailer: iPhone Mail (20A362)
-X-Provags-ID: V03:K1:wExZY3q2lutRVqbdwcEZYRhiGk+LpmQOKcootgLCqhQALqyb0Ea
- NmZsidz0wIU6G9NxQTcI5jdcbmr7kmfsHt1+CkbEEdcOIycXdqXkwHeXWI9zc9yaXgd7HCz
- 2Z1Hz0oSfrfZYYepl+sP8oWA+gEP4k28AKNfwfQ9w+Fgokm1uHUbp/6Umwv5WGx8P+uHGW4
- 5Zg0uygO48yrC1uSrnkUQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KHAVkK0XIi0=:Ip6Vle55wNrPO8Rbbn3MFS
- fLeKUhyz7EJ8SIBFBZ1XD70zaur5as1W1izWiRUX64ckJ5fMX7jueqIp6sxh6mpf+TVnQBsUi
- MZi9Pq1GeO+RWUJhhGmGeukWwNyrl7HN441ovMtXgQJEuI7qI+/FHHEAwsJSydn9pyq8Et9jD
- ho7XVcdICZmnq3s3vnZ/CzCFPjLgBSpQQp61Jk3kjUy7m18KXDhBI+VW+qix6YQwYLoeKPe5a
- GakboXO7kpszQn370HmLvl2IrNJQ0SmJ5EjnCmAxzQQEn4y1P9pObx1rDG4do2mdEFxvMlcTX
- L2AIXrKEm+FDL4N9frcGwOd4OHmDI0nbd5hVciEghea6ZRZHQBlqonThavDun4/25z/IeOfvR
- vaNYKnvH6OME4m5qIdcbBYC2eLmdQ/bz4Wz01bQ1XhOyd2wvn4osw5x3+zHqPIADsUeG8QtDq
- 0hj9131f8EhUhK36ZQx5b/HpLM+VkGy8nXX2RGIOyc5GEpdMs9ENxLMjyp+2Xkx0IpnzQK93f
- P6/DH5aBvqSUmr0RH3G65E//+/0blfSooqTnT/XNVBK7+hPK7qaZ4+9iBtxdcQYmY8XAqRTfB
- +pVJYupCV6UMBboEa4kl+FTdK4ldYVM/+BlPse2y4x0pBW4lwp8Xe9+4Mdgnzgsm+Lb5p9dhg
- l8eIjpP165N7S4oiy5huf/nco7J7YostFO73l4Ooc27ru4NuIeJlFG132Wq5A8qEz6ipIWayZ
- XKfz7gpWxlbbxHy60ATAVv1ZyfTMQoByCf5ZTo5+Ryvb8pJGbCyV+RcoaW7uClo8lTpv9ohoL
- akuecYqzUcayWQZC9EkvkHAaegm6g==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Wed, 28 Sep 2022 12:40:15 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5324B659E3;
+        Wed, 28 Sep 2022 09:40:09 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id p202so10595836iod.6;
+        Wed, 28 Sep 2022 09:40:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=urdLMOPMUq7F9WjH0EioiT8rQ4CBbbV9/KBUGHS9AVA=;
+        b=jmU83kIJIkGdg1zmHRWqZ1AH0T8R5/6s10x9NxEdRjyCnS2eSN9C9gP7aC+llzT3ux
+         ZSLawfFu0NqgpEknC1+PHq/2yeBOA7V8eYXdIFzfgCPljHDOkK4wr9pXrHl9W+CPNpGj
+         ZaQFSCWLDsWLfi0cpSCBG5V64G/TnZWPw9JtQWL9oAHy83o8v2RxkagVWb6jh8HElpt8
+         vGk3G+00+VVpw3H2OBlDafb4NP66XLve5mqy05Eas+lsRBhzhf57LWbLMgOxQFkpFINS
+         FbU4iv5SpCc19biR5QbawCsg3UOjFkhO/WK8p9nkOPh7R4Z12R8H2VHtX42O38fLE0qm
+         DQug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=urdLMOPMUq7F9WjH0EioiT8rQ4CBbbV9/KBUGHS9AVA=;
+        b=7gWGV4c5dKbYNCPGr2NjyLwls/AEX2TW+Pxdzga04TWS9HQ7MzTS7NieOcH8/a/H8Q
+         K9Fg5uvVUQrpKbRx+LS7tXagqzUdc3pwKEZ7j+Qx+tnfCXeqkBkQFiwUPePJxd7n/Yxp
+         0lGC485Ahc5AwUTYATXfDWGsISwrQS/cOtpM+gn9jWtAepoLPdR2O/kfxfXn5+NjF8mP
+         kFeTZue7e5N1ikzBOpz7NOdOa91SpCTsWeI5WC+Zszfj9FmapowTAGXE82c3svWnFnjB
+         FuWrsbfSOq8OCyTbDZVmg0nWDyOmfVwW4Kk4SYygJ7sgpmMehOGwM+t7rcoLRxf8FeG7
+         pVHA==
+X-Gm-Message-State: ACrzQf08mh9bnVT9TZKeEg+vOfYw0mMlYYHYN3+ZYruYRMLCnECJg3Kg
+        8G76SYn41sqgwyeygnRqGCaBJ48YmNDxUlRYaA0=
+X-Google-Smtp-Source: AMsMyM64rUq1Pv1q6n0ivrz3KN1pFP1NrH3qpOx9cBqmktLgiYVrwusr5+CWkNW+CqcEo/peGe5WtBX3XIZFRvKNFOs=
+X-Received: by 2002:a6b:6f11:0:b0:69f:db1b:f4a7 with SMTP id
+ k17-20020a6b6f11000000b0069fdb1bf4a7mr14316958ioc.177.1664383208508; Wed, 28
+ Sep 2022 09:40:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220927131518.30000-1-ojeda@kernel.org> <20220927131518.30000-26-ojeda@kernel.org>
+ <YzRa4U9iFMm0FAVf@liuwe-devbox-debian-v2>
+In-Reply-To: <YzRa4U9iFMm0FAVf@liuwe-devbox-debian-v2>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 28 Sep 2022 18:39:57 +0200
+Message-ID: <CANiq72m+3gfo=L4T7WY5MeSxZckQKeV+kVdvRhEAVtxcz9cC7g@mail.gmail.com>
+Subject: Re: [PATCH v10 25/27] x86: enable initial Rust support
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        David Gow <davidgow@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,33 +82,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you, will do. This us part of the mail, not the patch, right?
+On Wed, Sep 28, 2022 at 4:32 PM Wei Liu <wei.liu@kernel.org> wrote:
+>
+> I do wonder how many more things you will need to list here. As far as
+> I can tell there is also other avx512* flags for the x86_64 target.
 
-Von meinem iPhone gesendet
+Yeah, there are a lot of target features, but they are not getting enabled.
 
-> Am 28.09.2022 um 17:23 schrieb Mathias Nyman <mathias.nyman@linux.intel.com>:
-> 
-> ﻿On 26.9.2022 22.31, Jens Glathe wrote:
->> This appears to fix the error:
->> "xhci_hcd <address>; ERROR Transfer event TRB DMA ptr not part of
->> current TD ep_index 2 comp_code 13" that appear spuriously (or pretty
->> often) when using a r8152 USB3 ethernet adapter with integrated hub.
->> ASM1042 reports as a 0.96 controller, but appears to behave more like 1.0
->> Inspred by this email thread: https://markmail.org/thread/7vzqbe7t6du6qsw3
->> Signed-off-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-> 
-> Adding this to queue
-> 
->> ---
-> 
-> In the future, As Alan also pointed out, please list the changes since last version here.
-> 
-> Something like:
-> 
-> changes since v2
-> - add subsystem to subject line
-> - removed host 0.96 version check
-> 
-> Thanks
-> -Mathias
+Eventually, a stable target spec alternative (e.g. all relevant target
+feature flags) should be available, and then we can know what the
+guaranteed behavior will be and thus decide better which flags to keep
+or not depending on how explicit we want to be with respect to that.
 
+For the moment I went for consistency with the line above, since that
+was enough to disable everything we needed, though as you may have
+noticed, 3dnow and mmx are not there, because I had to move them back
+to the target spec [1].
+
+[1] https://github.com/Rust-for-Linux/linux/commit/c5eae3a6e69c63dc8d69f51f74f74b853831ec71
+
+Cheers,
+Miguel
