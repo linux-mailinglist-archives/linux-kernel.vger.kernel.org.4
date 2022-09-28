@@ -2,84 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4775ED4D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA0B5ED4CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbiI1GYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 02:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
+        id S232069AbiI1GYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 02:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232892AbiI1GYt (ORCPT
+        with ESMTP id S229885AbiI1GYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 02:24:49 -0400
-Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17B234331C;
-        Tue, 27 Sep 2022 23:24:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=PRqQy
-        Goq9wOWzgyinUTHIHWFfyBK2VGJdHeSaidSayw=; b=SQtzEpegast2VoLmoC6v9
-        9AEvPVntyyr+cyLnxxT8nOeoRWsUbqk0nTZatEgwv83GL9klT1OtUyirragTHymZ
-        7ljUr7qRuAmM2ZWK+8540BytbCIy4pYhpG5PXqmO5HoX9D7c6ZybPBseg9B4CM99
-        G6L4ZSyGXWPBFXT1wgF5M4=
-Received: from localhost.localdomain (unknown [36.112.3.106])
-        by smtp3 (Coremail) with SMTP id G9xpCgBHz4BH6DNjsnURhA--.18298S4;
-        Wed, 28 Sep 2022 14:23:10 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     gregkh@linuxfoundation.org, tzimmermann@suse.de,
-        andriy.shevchenko@linux.intel.com, javierm@redhat.com,
-        sam@ravnborg.org, steve@sk2.org, noralf@tronnes.org,
-        u.kleine-koenig@pengutronix.de
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] staging: fbtft: core: fix potential memory leak in fbtft_probe_common()
-Date:   Wed, 28 Sep 2022 14:23:01 +0800
-Message-Id: <20220928062301.6399-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 28 Sep 2022 02:24:06 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26C01CE143;
+        Tue, 27 Sep 2022 23:24:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664346245; x=1695882245;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7FLHSBXoiS06JuG6EqRx15SI9cmNTfHvEBkXB15O4aY=;
+  b=EXd8FQ6MSpNbnpCzvEWsUdI8jRFvOlsqYHF0kFdFhclgUJqNUGg9C9hJ
+   xOlLQx5wFrvil51upj9E4wtSNI+Ti11zlRYLaAQXpS96h15WskqWnzEOU
+   PXGtJBURGoh6TjyTUHvd4lrsKcWbfbBtQmx+RjPw0ms9PnJzSTKA5sEIA
+   eVE3jvCiAcB51/+MybXhSC1LlM34hMsutl+nq7tlLU7pOSYM+maq6+073
+   rVy02To+xrbyrptJa5vncZ3U6jO/Jwt0/NTjLqqgfiocz0a6SCuDwpyJO
+   yJuINlBjF1F1c8T97L6WJg06u1KwAd4n6fF0+pIu/u/hH/UeC8mKViRRj
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="281236265"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="281236265"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 23:23:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="764163919"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="764163919"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 27 Sep 2022 23:23:47 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 28 Sep 2022 09:23:46 +0300
+Date:   Wed, 28 Sep 2022 09:23:46 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, quic_linyyuan@quicinc.com,
+        quic_jackp@quicinc.com, saranya.gopal@intel.com, tiwai@suse.de,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] usb: typec: ucsi: Don't warn on probe deferral
+Message-ID: <YzPocs9hMZBuQ3Pp@kuha.fi.intel.com>
+References: <20220927134512.2651067-1-waynec@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgBHz4BH6DNjsnURhA--.18298S4
-X-Coremail-Antispam: 1Uf129KBjvdXoWrury8Ww1UtFW3WrWrXF15twb_yoWfCrXEvw
-        1jvryxJrW8Cwn2kw48KFW5XFWSvr1fZr4rJFyUtas8Xay5ur15J3ykXwsxKa1Ut3yjq34S
-        kr4rJr4jgw15WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRKpnQ7UUUUU==
-X-Originating-IP: [36.112.3.106]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiPg6KjFxBuOAwbgAAst
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927134512.2651067-1-waynec@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fbtft_probe_common() allocates a memory chunk for "info" with
-fbtft_framebuffer_alloc(). When "display->buswidth == 0" is true, the
-function returns without releasing the "info", which will lead to a
-memory leak.
+On Tue, Sep 27, 2022 at 09:45:12PM +0800, Wayne Chang wrote:
+> Deferred probe is an expected return value for fwnode_usb_role_switch_get().
+> Given that the driver deals with it properly, there's no need to output a
+> warning that may potentially confuse users.
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
 
-Fix it by calling fbtft_framebuffer_release() when "display->buswidth
-== 0" is true.
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- drivers/staging/fbtft/fbtft-core.c | 1 +
- 1 file changed, 1 insertion(+)
+> --
+> V2 -> V3: remove the Fixes and Cc
+> V1 -> V2: adjust the coding style for better reading format.
+>  drivers/usb/typec/ucsi/ucsi.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 7f2624f42724..e961ebecd7df 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1069,11 +1069,9 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  
+>  	cap->fwnode = ucsi_find_fwnode(con);
+>  	con->usb_role_sw = fwnode_usb_role_switch_get(cap->fwnode);
+> -	if (IS_ERR(con->usb_role_sw)) {
+> -		dev_err(ucsi->dev, "con%d: failed to get usb role switch\n",
+> -			con->num);
+> -		return PTR_ERR(con->usb_role_sw);
+> -	}
+> +	if (IS_ERR(con->usb_role_sw))
+> +		return dev_err_probe(ucsi->dev, PTR_ERR(con->usb_role_sw),
+> +			"con%d: failed to get usb role switch\n", con->num);
+>  
+>  	/* Delay other interactions with the con until registration is complete */
+>  	mutex_lock(&con->lock);
 
-diff --git a/drivers/staging/fbtft/fbtft-core.c b/drivers/staging/fbtft/fbtft-core.c
-index afaba94d1d1c..ecf595aff786 100644
---- a/drivers/staging/fbtft/fbtft-core.c
-+++ b/drivers/staging/fbtft/fbtft-core.c
-@@ -1225,6 +1225,7 @@ int fbtft_probe_common(struct fbtft_display *display,
- 
- 	if (display->buswidth == 0) {
- 		dev_err(dev, "buswidth is not set\n");
-+		fbtft_framebuffer_release(info);
- 		return -EINVAL;
- 	}
- 
+thanks,
+
 -- 
-2.25.1
-
+heikki
