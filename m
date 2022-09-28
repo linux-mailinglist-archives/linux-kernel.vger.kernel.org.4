@@ -2,70 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86545EDEF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32EF5EDEF3
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234439AbiI1Ois (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
+        id S233070AbiI1OjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234438AbiI1Oij (ORCPT
+        with ESMTP id S234427AbiI1OjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:38:39 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEED0AD9B5;
-        Wed, 28 Sep 2022 07:38:37 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h7so7728726wru.10;
-        Wed, 28 Sep 2022 07:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=jzb2tlFDO7113hwXJyTmEyrv070pVMBorQWNbdu3q1M=;
-        b=pBx0BuzdgJDgcsZ8f57VP8/c2/uyQYL9ycGYHrIIRZDcL1Ro2p68mQIBRfzCgvNjnY
-         VqKRqE/z07+oRnE+K4Wxw1BU5KlQ3fzHUdPOG1sc7nA94tOjZbyyyJU+e8xXEaHqKpX0
-         kKtdPXKPTHNSNxIsowDyubr5YzqTW/XAmPFYC85wX4bgz+nzXHIHreN3SbBV2Z8WgX/F
-         wjg29IJrg4y0IGZUDqO6AEYezVmWt1CY5iTzwiiHUfX2Wa1Qosh97IcEJI1FqeMBUtsc
-         hWWwAXRbwYVW1/Rq7AMxeMvImunrzyX7Puxj0RnZDi4SlUxIJhKa5bVsy5ngu0Qt8dyK
-         JcmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=jzb2tlFDO7113hwXJyTmEyrv070pVMBorQWNbdu3q1M=;
-        b=yHLXzJDrIIa4JBA1QrsR5Zuq+F1gRXrADqu5ys41F98JdedtnriDz12vuVJkOvBynK
-         z09XUX1FgKQ+LsGpcuDgPi2lTmOsvUfXvOrx5iEj29H7MhwspNVlLtpd7ijO/KwKe0wB
-         XN5YmANdA7OA2DTUS36SNuZ3i1uc1WeoyftC9fQWsRbJNQFIXQCn5+abIG91HjLYuqMt
-         /uT22kTm0BJy7W2m4bSQw2d7KS58M+ftz9lHQWyPvBObV9MXJUoRd/z9x65eyDF3phEM
-         3KnvotYkGC0EAjQb2B3dbh2OekwWzBeq3yFwCypdN0XunGOMMzzKbbuXklS2u+459qmA
-         gF1w==
-X-Gm-Message-State: ACrzQf2+4VKS+MAuIhroH2fbiBq6cNVc7E1AYZr6JxW2evnwYDVtenHX
-        HDhfDy1iiqQp7XfP9F/YEKFbrpq5sjKLpnEi
-X-Google-Smtp-Source: AMsMyM7D4vDM49WeiylJ/FA5Xb/66OVGI9cD1+tX27Tc7I3mrmERqFSLMPH9fv7f7EwlHDt/UpfGAg==
-X-Received: by 2002:a5d:6484:0:b0:226:dd0e:b09c with SMTP id o4-20020a5d6484000000b00226dd0eb09cmr21343882wri.388.1664375916303;
-        Wed, 28 Sep 2022 07:38:36 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id p25-20020a1c5459000000b003a5c7a942edsm1940253wmi.28.2022.09.28.07.38.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 07:38:35 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] wifi: ath11k: Fix spelling mistake "chnange" -> "change"
-Date:   Wed, 28 Sep 2022 15:38:34 +0100
-Message-Id: <20220928143834.35189-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 28 Sep 2022 10:39:11 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CBAAF0F2;
+        Wed, 28 Sep 2022 07:39:04 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MczZD1g41zpV9G;
+        Wed, 28 Sep 2022 22:36:04 +0800 (CST)
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 22:38:59 +0800
+Subject: Re: [PATCH 1/6] scsi: libsas: Add sas_task_find_rq()
+To:     John Garry <john.garry@huawei.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <jinpu.wang@cloud.ionos.com>,
+        <damien.lemoal@wdc.com>
+CC:     <hare@suse.de>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+        <ipylypiv@google.com>, <changyuanl@google.com>, <hch@lst.de>
+References: <1664368034-114991-1-git-send-email-john.garry@huawei.com>
+ <1664368034-114991-2-git-send-email-john.garry@huawei.com>
+ <e47fe754-c8a7-99ff-88f2-8b09d98306ab@huawei.com>
+ <e264e099-8492-5ba5-ae66-4c71c146ba22@huawei.com>
+From:   Jason Yan <yanaijie@huawei.com>
+Message-ID: <cad2134a-5b25-963c-592a-45c49fdcfc66@huawei.com>
+Date:   Wed, 28 Sep 2022 22:38:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <e264e099-8492-5ba5-ae66-4c71c146ba22@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Originating-IP: [10.174.179.14]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,26 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in an ath11k_dbg debug message. Fix it.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/wireless/ath/ath11k/wmi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2022/9/28 21:50, John Garry wrote:
+> On 28/09/2022 14:13, Jason Yan wrote:
+>>> +++ b/include/scsi/libsas.h
+>>> @@ -644,6 +644,28 @@ static inline bool sas_is_internal_abort(struct 
+>>> sas_task *task)
+>>>       return task->task_proto == SAS_PROTOCOL_INTERNAL_ABORT;
+>>>   }
+>>> +static inline struct request *sas_task_find_rq(struct sas_task *task)
+>>> +{
+>>> +    struct scsi_cmnd *scmd;
+>>> +
+>>> +    if (!task || !task->uldd_task)
+>>> +        return NULL;
+>>> +
+>>> +    if (task->task_proto & SAS_PROTOCOL_STP_ALL) {
+>>> +        struct ata_queued_cmd *qc;
+>>> +
+>>> +        qc = task->uldd_task;
+>>> +        scmd = qc->scsicmd;
+>>
+>> Can we remove that local qc?
+>>
+> 
+> We could...
+> 
+>> and
+>>      scmd = ((struct ata_queued_cmd *)task->uldd_task)->scsicmd;
+> 
+> ... but I am not really sure that this is much better, specifically 
+> because of the casting from void. If you feel really strongly about it I 
+> could.
+> 
 
-diff --git a/drivers/net/wireless/ath/ath11k/wmi.c b/drivers/net/wireless/ath/ath11k/wmi.c
-index fad9f8d308a2..2a8a3e3dcff6 100644
---- a/drivers/net/wireless/ath/ath11k/wmi.c
-+++ b/drivers/net/wireless/ath/ath11k/wmi.c
-@@ -6829,7 +6829,7 @@ static void ath11k_wmi_event_peer_sta_ps_state_chg(struct ath11k_base *ab,
- 	}
- 
- 	ath11k_dbg(ab, ATH11K_DBG_WMI,
--		   "peer sta ps chnange ev addr %pM state %u sup_bitmap %x ps_valid %u ts %u\n",
-+		   "peer sta ps change ev addr %pM state %u sup_bitmap %x ps_valid %u ts %u\n",
- 		   ev->peer_macaddr.addr, ev->peer_ps_state,
- 		   ev->ps_supported_bitmap, ev->peer_ps_valid,
- 		   ev->peer_ps_timestamp);
--- 
-2.37.1
+There are plenty of examples in the kernel, and in scsi itself. Such as
 
+#define fc_host_node_name(x) \
+	(((struct fc_host_attrs *)(x)->shost_data)->node_name)
+
+
+> thanks,
+> John
+> .
