@@ -2,105 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896465EE21A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2E65EE22C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbiI1QmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
+        id S234349AbiI1Qns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234007AbiI1QmU (ORCPT
+        with ESMTP id S234353AbiI1QnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:42:20 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828A1D4DD4;
-        Wed, 28 Sep 2022 09:42:18 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 732B947C;
-        Wed, 28 Sep 2022 18:42:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1664383335;
-        bh=7KA1n0RAEw+lqCsVliprwKrAzzAI6PKXJUVUTsE8vvI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jhf5yymccXEDElBwJIt9EVPsMTJhdaS+OPOIzhAFb0KKYTCWvhXBCXPVq0m0n32Sw
-         rpu+rVv2WBSXKIBQc7SBwG+tCmDelTn/2MDcQNB+cLRLCfNdajVo7oyzBCQ5WlTJkW
-         1v1iGNAwQSsnpksEPl/MA7pMSfUlB4hJOx2kwMsc=
-Date:   Wed, 28 Sep 2022 19:42:14 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        git@xilinx.com, saikrishna12468@gmail.com
-Subject: Re: [PATCH 0/4] pinctrl: pinctrl-zynqmp: Add tri-state configuration
- support
-Message-ID: <YzR5ZoAbaYONnmPS@pendragon.ideasonboard.com>
-References: <1655462819-28801-1-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
- <YzRvEPUWUXP4x7+h@pendragon.ideasonboard.com>
+        Wed, 28 Sep 2022 12:43:15 -0400
+X-Greylist: delayed 14595 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Sep 2022 09:43:14 PDT
+Received: from mail-4324.protonmail.ch (mail-4324.protonmail.ch [185.70.43.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8593CE7C30;
+        Wed, 28 Sep 2022 09:43:14 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 16:42:58 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1664383392; x=1664642592;
+        bh=o11CrCXx0Cb6C3dCffIEI1V7Knf/291iZPlpw60/k7s=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=ND23sbLU5butRIwTVoikUa3Do09MRayFc/fZy7pOzj6blGZpLrAi+l0RdLDt/Tfg3
+         ZtC0BTVOi6HFR9+lGHvI89FZHbxUaBdr1e8QVkuuwMKLBviG8wqdL9EQRipnCK3pOT
+         Fddlv1pQ8vX01hH3JNrZGvRffOEoED7GCAgYrQjpM77tE6fDg2+mAumE+6H5ZUs8Cv
+         b6xDdIFkXvbX8TIAONXVHUkYiyg2rsjVQXPbW5WrK4CxcDdoT5LIbw3X7mf8YmlLAo
+         jW9SJvtbULhGgM5jHteaN0uWo8Sw9DJYc6qzhIp/P4sust8ooYioLHcD0gDoOCY7pe
+         P5nim3cXZgqfQ==
+To:     devicetree@vger.kernel.org
+From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>,
+        Josef W Menad <JosefWMenad@protonmail.ch>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: [PATCH v2 0/4] arm64: dts: qcom: msm8916-samsung-j5: Use common device tree
+Message-ID: <20220928164243.178777-1-linmengbo0689@protonmail.com>
+Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YzRvEPUWUXP4x7+h@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 06:58:10PM +0300, Laurent Pinchart wrote:
-> Hi Sai,
-> 
-> On Fri, Jun 17, 2022 at 04:16:55PM +0530, Sai Krishna Potthuri wrote:
-> > This series update the Xilinx firmware, ZynqMP dt-binding and ZynqMP
-> > pinctrl driver to handle 'output-enable' and 'bias-high-impedance'
-> > configurations. As part of these configurations, ZynqMP pinctrl driver
-> > takes care of pin tri-state setting.
-> > Also fix the kernel doc warning in ZynqMP pinctrl driver.
-> 
-> I'm afraid this causes a regression :-( With this series applied, boot
-> breaks with the following message being printed to the serial console:
-> 
-> Received exception
-> MSR: 0x200, EAR: 0xFF180198, EDR: 0x0, ESR: 0x64
-> 
-> I've traced that to the probe of the UART, when it calls into the
-> firmware to set pin MIO18 to high impedance. According to v1.7 of the
-> ZynqMP registers reference (UG1087), there is no register at address
-> 0xFF180198.
-> 
-> I am using the VCU TRD 2021.1 for testing. Does this series require a
-> firmware update ? If so backward compatibility needs to be preserved.
-> It's very late in the v6.0-rc cycle for a fix, a revert may be best at
-> this point, to give us time to fix the issue properly.
+v3: Drop msm8916-samsung-j5.dts temporarily before moving it.
+Minor rewords.
+v2: Reword and resend. Split common dtsi patch.
+Add missing suffix state in pinctrl.
 
-I've now tested the VCU TRD 2022.1 (which AFAIK is the latest available
-version), and the problem doesn't occue then. It thus seems this depends
-on a firmware update, which is impractical at best for all old designs
-:-(
+The smartphones below are using the MSM8916 SoC,
+which are released in 2015-2016:
 
-> > Note: Resending the series as i see this series didn't went out due
-> > to some issue with my mail client. Please ignore if this series is 
-> > already received.
-> > 
-> > Sai Krishna Potthuri (4):
-> >   firmware: xilinx: Add configuration values for tri-state
-> >   dt-bindings: pinctrl-zynqmp: Add output-enable configuration
-> >   pinctrl: pinctrl-zynqmp: Add support for output-enable and
-> >     bias-high-impedance
-> >   pinctrl: pinctrl-zynqmp: Fix kernel-doc warning
-> > 
-> >  .../bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml         |  4 ++++
-> >  drivers/pinctrl/pinctrl-zynqmp.c                      | 11 +++++++++++
-> >  include/linux/firmware/xlnx-zynqmp.h                  |  5 +++++
-> >  3 files changed, 20 insertions(+)
+Samsung Galaxy J5 2015 (SM-J500*)
+Samsung Galaxy J5 2016 (SM-J510*)
+Samsung Galaxy J3 2016
+- SM-J3109/SM-J320Y/SM-J320YZ
+- SM-J320N0/SM-J320ZN
+- SM-J320P/SM-J320R4/SM-J320V/SM-S320VL
 
--- 
-Regards,
+Add a common device tree for with initial support for:
 
-Laurent Pinchart
+- GPIO keys
+- SDHCI (internal and external storage)
+- USB Device Mode
+- UART (on USB connector via the SM5703 MUIC)
+- WCNSS (WiFi/BT)
+- Regulators
+
+The three devices (some varints of J3, all other variants of J5 released
+in 2015 and J5X released in 2016) are very similar, with some differences
+in display and GPIO pins. The common parts are shared in
+msm8916-samsung-j5-common.dtsi to reduce duplication.
+
