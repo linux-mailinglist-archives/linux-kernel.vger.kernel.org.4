@@ -2,111 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C5D5ED3AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 05:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402A05ED3B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 06:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232823AbiI1D55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 23:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
+        id S229534AbiI1EAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 00:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiI1D5y (ORCPT
+        with ESMTP id S230445AbiI1D76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 23:57:54 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2076.outbound.protection.outlook.com [40.107.117.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA24115A56
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 20:57:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iT62my6hRgWoMm6U8H8mj7a9BI2+FTkA4KjoRTk7d7BVrHsZLK6yMPQrdacHbOay7PnmuqyzoWices9VB4NFp+Uv4o936vUe9qRCP7eO87SbH6Ize4dnQROtSdxHTEPJO45l2lswJ7/CKUhAkHCsLTiZ+gSQSNQb9Zuq3gzHSK+Uo/Ag5t+8UPT7gg5jB1e+N4cyOHKgWa/YwtUONzOnxqjox5tjfMsOhZJkB/uSEdeADO88WqiLElBncQ6vbQNMNQMK8C4MsuKdE/SgRFMwBE4OCc2b8ZTQRoroWYEm7hnB45lMKkjK5c/hMZr8ufToD90naDrNyfeuYATj66T2/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BBzeEsXyc0ePtquYrH8jdpIGKiueek75CcOtEBSOSOQ=;
- b=X4bQe9mIF2iCssiHSfpPk/QHqWXNmKf4H18Fj9GGluSQC4RnbPp58vFgblGXvl9HCOCpY83b8pmDZ1cVa+nq+MYuZLpeYKBhwDc/kdWFmVnn0eBsEe9DMrvwNVY0vAezck+0EjQLdRG6d46zthLsEqUXe87lximIudABl88S5OLMJYHZSHbPm7kUBQft7mvHk+FTkp9rVg6BNQR6b7SYVqKb/YtHmwD3ZyUt8siT0WASdcsrOy20D1yY2mh3mEtE2OHbo5RCQPxcUYHR+7DwMFUcHY/B58cDGav3CWmpEHYXyxGH5Gk8rwmL8EisPjAeWqt8DKACvogxFy79XxEIRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=jaguarmicro.com; dmarc=pass action=none
- header.from=jaguarmicro.com; dkim=pass header.d=jaguarmicro.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jaguarmicro.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BBzeEsXyc0ePtquYrH8jdpIGKiueek75CcOtEBSOSOQ=;
- b=Sk1FLY4gfvjxzvxgD7Xqd8n+VhIqshIfYG768RN/jH65oYji40VkpbMLKx9ozvCkxrb+mgIJxaq9SArSqv8Ws4zPdDOMtpAzPw+zoOLNuuYpb+bHRtb6PE0wiby2QnTqZCVCv/HAMHh2iW0zvzzx+If8c02057+B3n4l2cKGzy5xC6Npkq9rLtrPNOB+s6HHaQeF9NovIOMEJj+1FZtzWP7MRj60SUis2azUItiJNjfx8FbKM3EAsvZgT2B/m7n8LWnP9h0OdSE9MELQKa0UffpY4Al8b1+VxsBxptjt2FCyl7e/f/GJxaz3F+FjkvoRFUPW4rD409uHbkzsU1jVcg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=jaguarmicro.com;
-Received: from TY2PR06MB3424.apcprd06.prod.outlook.com (2603:1096:404:104::19)
- by TY0PR06MB5308.apcprd06.prod.outlook.com (2603:1096:400:213::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Wed, 28 Sep
- 2022 03:57:50 +0000
-Received: from TY2PR06MB3424.apcprd06.prod.outlook.com
- ([fe80::aa83:33dc:435c:cb5d]) by TY2PR06MB3424.apcprd06.prod.outlook.com
- ([fe80::aa83:33dc:435c:cb5d%6]) with mapi id 15.20.5654.026; Wed, 28 Sep 2022
- 03:57:50 +0000
-From:   Angus Chen <angus.chen@jaguarmicro.com>
-To:     jasowang@redhat.com, mst@redhat.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Angus Chen <angus.chen@jaguarmicro.com>
-Subject: [PATCH] virtio_pci: avoid to request intx irq if irq is zero
-Date:   Wed, 28 Sep 2022 11:57:06 +0800
-Message-Id: <20220928035706.419-1-angus.chen@jaguarmicro.com>
-X-Mailer: git-send-email 2.33.0.windows.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0032.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::18) To TY2PR06MB3424.apcprd06.prod.outlook.com
- (2603:1096:404:104::19)
+        Tue, 27 Sep 2022 23:59:58 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229C8167068
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 20:59:50 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id q10so6522695oib.5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 20:59:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date;
+        bh=cKg3c7GVCjfn7CupnMnZ/SCSyFG5IPfos7eN/2zVwG8=;
+        b=sHFs1Cooi2y5xXA0BL/6+6Waz0HuHk9jIF06Fx4P4A7WWhuUj2ptbrYtbHwJVVY1cR
+         /tORdisbPuPUtriRGPRjua2G3N4xnV37aFT/NiJJxIfdXGfqG5akb9S/dv8ujedArwvI
+         JM0sp6LLNhtI/knTj97Y3ecT4q63XITO/Gx0CdTV27UtsxCLYMm/WmgEDj31LfMTRSpk
+         R3wg0M6pZmvZxz+LDkifiG6on/W1b2wH6VC0Colf/cENGwsYXP6msXL4azPjLA3p8Z1G
+         r1lXbcFgk8HrPDyrreXOE2zKNgENl+2v2ddp56Lyey5RaqIUlq2cC8ihHusuJg8lwYus
+         ABjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=cKg3c7GVCjfn7CupnMnZ/SCSyFG5IPfos7eN/2zVwG8=;
+        b=PWZDvAE0AqPlrWTqvyvAFeLQIZnOU3vDmMCZFBTdNik7XZ0bQcsDo+4FVht4QZgWL6
+         zf47nNjP8PVOcIE2TsOPckMdg4rwqQV41z/dtDjghi9bgMqKOxpJGliCRdZddji+RzI9
+         nqfYOipf1FXNgDTA5C4eOfHG149ONhgOzS+rPmmI1fcrQSCDk1kieciDoYLxk0j9T3GP
+         LibTQx68slPIF6VM20+JOeZGc5wTS1hEeMoon3cK3nmkqqdSTMxmcHAwIyzlkmFSlgzd
+         fEEHUQBYPya3gus75GH8f1SkeDx/8AgscbDP9fkjMZnzfnCNRkFmH04Fx3p8JLKBvwDk
+         sCKQ==
+X-Gm-Message-State: ACrzQf0MDWXz93PIJrZM2SZUoxiob47FK9IQdVYpHIbIFvUn1vIlDsYC
+        wx5xbTmLp1wYMrAsGeAbgqoOAw==
+X-Google-Smtp-Source: AMsMyM6Oiw0ZdSUZmTEBtMh2zFrN+RYkMMdT/KyVolkNoP2lwZXhk7I8dpQCmCwu5He3YGRE67Z7dg==
+X-Received: by 2002:a05:6808:3007:b0:351:3de7:82f4 with SMTP id ay7-20020a056808300700b003513de782f4mr3211800oib.103.1664337589114;
+        Tue, 27 Sep 2022 20:59:49 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id q16-20020a9d6550000000b00636fd78dd57sm1628961otl.41.2022.09.27.20.59.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 20:59:48 -0700 (PDT)
+Date:   Tue, 27 Sep 2022 20:59:47 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Jens Axboe <axbod@kernel.dk>
+cc:     Jan Kara <jack@suse.cz>, Keith Busch <kbusch@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Yu Kuai <yukuai1@huaweicloud.com>,
+        Liu Song <liusong@linux.alibaba.com>,
+        Hillf Danton <hdanton@sina.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH next v2] sbitmap: fix lockup while swapping
+In-Reply-To: <2b931ee7-1bc9-e389-9d9f-71eb778dcf1@google.com>
+Message-ID: <f975dddf-6ec-b3cb-3746-e91f61b22ea@google.com>
+References: <YyjdiKC0YYUkI+AI@kbusch-mbp> <f2d130d2-f3af-d09d-6fd7-10da28d26ba9@google.com> <20220921164012.s7lvklp2qk6occcg@quack3> <20220923144303.fywkmgnkg6eken4x@quack3> <d83885c9-2635-ef45-2ccc-a7e06421e1cc@google.com> <Yy4D54kPpenBkjHz@kbusch-mbp.dhcp.thefacebook.com>
+ <391b1763-7146-857-e3b6-dc2a8e797162@google.com> <929a3aba-72b0-5e-5b80-824a2b7f5dc7@google.com> <20220926114416.t7t65u66ze76aiz7@quack3> <4539e48-417-edae-d42-9ef84602af0@google.com> <20220927103123.cvjbdx6lqv7jxa2w@quack3>
+ <2b931ee7-1bc9-e389-9d9f-71eb778dcf1@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY2PR06MB3424:EE_|TY0PR06MB5308:EE_
-X-MS-Office365-Filtering-Correlation-Id: f365f9c2-0ed3-4caf-00bc-08daa1059c7c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z1caXH8JdqDPQGLJE65ChwBI1u5IaOp3+ql74KxOvGyfoYV6QPOXVof1YpDF4jSzBqqz/A5iVw9GLIX6cnyiGT0o6o1diiGqIH/et5G9PmR0C6Xb0L9B8ziD4Yltd3qNZpTZcpNRiLPHgcV6a1uHl7upvS88Pf4ISkq4V7KbOqxZNR/PlieN/WT3H0PzDeT6FjmAeYI4l5csJm4je96f9Tg1tUYW+rTz2TILgxlrRY+rPUmWUpoXVrnXPHOkurYIyQADTmlH8pJ81WB+fkGLeQSisc/9RQ7016a3uGK4HAaD3KS8T46Ny6dFvRLix0jSCXR9ZzgW07eWNrUnscfni/M4vUljwG7kIIbHscgjsrzJQUO7/Q8tur2x8ESM/xCZVcv6meSTWB+UUqPO6yQ1n1h0J8UAhmvLyN+svRPSoTJsZoK4TyoUfeEE5md2SetWdtjtSvhlWL8flWcQCSWPba5TIE9fcteK5UvCTAvQ/f2vjwwlId9hsAz9FryiClp5BbMlEqggTYj3hHKTqYYEKn6yVWGii/jyX2ZXTROqqSRPuTzczPKEVe1GugC4TcJ23KRxV/Cy2iRDNeWfpM46fxdvUbMSOJ6G9cPBpr/YHxzLMsl+rViGl1+zv0+RXIlEMroaBfUFkEhB+AYjvOymo/eJSbuU2Lp3Cd+5LLn++3FDbiEiTiyuCm+IkKIM9BM7K5tibPaNRuMsUwHeDFJK8BRxKEaKme5m3bS8vLgTgj2wcczwpiVu1Td3Nr3tssrg5RenZZbjWLjZ+4DTIJOWww==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR06MB3424.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39840400004)(136003)(376002)(366004)(396003)(346002)(451199015)(2616005)(107886003)(6506007)(36756003)(41300700001)(186003)(2906002)(5660300002)(316002)(6486002)(8676002)(66946007)(6512007)(26005)(66476007)(66556008)(4326008)(6666004)(52116002)(478600001)(38100700002)(38350700002)(8936002)(83380400001)(86362001)(1076003)(44832011);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nUT0Lg5WxMQJ69mis/39942bNn1kuudLkLJB8LkNjXrkCocz14FIPbgP/XzL?=
- =?us-ascii?Q?eRMGYoo9uGUF+yYVxLxFCChH+iJtvKuSBNyyfwaNfcNK9yJeWokaud0+Jbnw?=
- =?us-ascii?Q?JXjs0w7ZKQ4mU0T2NyhGILjbfz2jFXrj1kCCJCZMARe5RFQqEH9XPUs+04Fk?=
- =?us-ascii?Q?BlEuxdWUt3eVWnrDg/8mcrk0Gb+n9S0ppKL4rYAHKgWcW+Os8s1oBFYwXtG+?=
- =?us-ascii?Q?xtzp5abtvYL7/+YNfg2l8mLYFYn6C7HIiEThOpZNIUFWJANRwUyHz4DPgmcl?=
- =?us-ascii?Q?QlJ9H/ZTEsj2QgZympC2YsStuqI5kZbH27hOdk7fpeMbSCj960qqF9alDTK5?=
- =?us-ascii?Q?WqSAowx2tprn4pQ08xyT3PaZt0Oc4s6u1+t2TwNJ7nDdegpfJ+jh5V5lj0my?=
- =?us-ascii?Q?vkuvDNGxkKXa1z9woyXLnra+RCct8hIWD6FMHBSlpUJOyyWVf+w4ix54JV/e?=
- =?us-ascii?Q?Q97OjRDlZ7t30lYyBYQbbXnp5eiCtE6lpsdwPyL7PP4TIMyFcGF+gJRqI+oN?=
- =?us-ascii?Q?SAByrji1ALlcNu0ZGUvYRD0/3U3DlMKQbpnULCWtwyzKNHYtLywFz7LUD9Dg?=
- =?us-ascii?Q?Cv8Lcg8On7bPQS42+Fb+502jNlU4NxrN7ajX+4g2xm46WA55RGoaaT325Hf4?=
- =?us-ascii?Q?AtBbNeiDfhZCMluHwJ+GwkIDukxJJZUU1fZMJQQZxE9s80dCIqR5WKjwCza4?=
- =?us-ascii?Q?+J7+cr1pun6wFBhD2wpjnq+G0Fyvpes+Ou93q7Jc7WtUBgWhpTGLcPLIlRHE?=
- =?us-ascii?Q?7PE0T1OjlYSu/XugbkGelCh8PHpnAY801Be5bw7csrxZ3Fy4Xih5QIdjW5hG?=
- =?us-ascii?Q?PDyJJNwvdvWTwMLiAhOmz9Bx84nYK6XDHKk6RhZSvrBr9kRkwLuwYMFaL9nh?=
- =?us-ascii?Q?e9RCdzCmvYElBlo3YTy0BE60Jq8eXCOZ56zu21hO0SnCc6eGb7PbSB8dbvLB?=
- =?us-ascii?Q?aCPwI05ZncsiK0se1P5CLpbG5SyjpibDekxqUfrKRw9fKQ+9RYC36yGELwbx?=
- =?us-ascii?Q?0LnwEcSdsJ5UpMsAd/L/FJPn4CP42CXlEUWXGY82O+F6rgjc686+6TdiBqdR?=
- =?us-ascii?Q?I5fdzRv/Tw06QkfJFnYtKwDP29pdBdZ0otWSCOFDwfi993v5tAVkpYyb7a6d?=
- =?us-ascii?Q?JVgU+WX41iJAZMHcWm/sdCjjfU4oz5Zz4++NqcvmPU52Fi1brxoORlKqGcqA?=
- =?us-ascii?Q?G6GuBQKCu5RTyXwDHnMKd8H9nxILzZr813BIcBE/4QxuTy5aHyIql2cLM32E?=
- =?us-ascii?Q?jTMaoocT1dxPU4P4w9hpObgqHuomzKP4qN961Nu65U0rFHkt1Hk0y57yzb6e?=
- =?us-ascii?Q?pI1FtTETXRxWS0O7bdRZL1fUpRjRgQCLBgfnPVJRxprDhw4NwcQb1w5Rr3L+?=
- =?us-ascii?Q?19JvOuNIZXRlBe8pPPk51gN6ctnwXkZUF1c70KDj98PzntRTmcjGz+HENrDU?=
- =?us-ascii?Q?kh+RR1RxM7kjZyWmuRI/sg4vcWJCOr/BpUH4BpvzbhQ9g7EQu53FD7qunpEU?=
- =?us-ascii?Q?Fr1dSEQJ2muK6Gy4UZ2bzLMOA/AZsYZqhDpKWx5ncM894liVESHWhzitGKQQ?=
- =?us-ascii?Q?PXtCpWdRTtrwlHd+gYh7WJWxcAzeXu9avpiq73p1PDPLRHeDUXy7/G3lP3HO?=
- =?us-ascii?Q?KQ=3D=3D?=
-X-OriginatorOrg: jaguarmicro.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f365f9c2-0ed3-4caf-00bc-08daa1059c7c
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR06MB3424.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 03:57:50.3783
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 1e45a5c2-d3e1-46b3-a0e6-c5ebf6d8ba7b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m/+YY5l7DkTduTLP0Lb2BKypFKZ/m/jC2k6O4O0XzRNxuatv6Wr9Bt9cY+uUJkOq3IHZbJSYy9lqUqzFBHkuFVEAACLKqtnizHwtgqojfmQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5308
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,79 +77,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The background is that we use dpu in cloud computing,the arch is x86,80
-cores.We will have a lots of virtio devices,like 512 or more.
-When we probe about 200 virtio_blk devices,it will fail and
-the stack is print as follows:
+Commit 4acb83417cad ("sbitmap: fix batched wait_cnt accounting")
+is a big improvement: without it, I had to revert to before commit
+040b83fcecfb ("sbitmap: fix possible io hung due to lost wakeup")
+to avoid the high system time and freezes which that had introduced.
 
-[25338.485128] virtio-pci 0000:b3:00.0: virtio_pci: leaving for legacy driver
-[25338.496174] genirq: Flags mismatch irq 0. 00000080 (virtio418) vs. 00015a00 (timer)
-[25338.503822] CPU: 20 PID: 5431 Comm: kworker/20:0 Kdump: loaded Tainted: G           OE    --------- -  - 4.18.0-305.30.1.el8.x86_64
-[25338.516403] Hardware name: Inspur NF5280M5/YZMB-00882-10E, BIOS 4.1.21 08/25/2021
-[25338.523881] Workqueue: events work_for_cpu_fn
-[25338.528235] Call Trace:
-[25338.530687]  dump_stack+0x5c/0x80
-[25338.534000]  __setup_irq.cold.53+0x7c/0xd3
-[25338.538098]  request_threaded_irq+0xf5/0x160
-[25338.542371]  vp_find_vqs+0xc7/0x190
-[25338.545866]  init_vq+0x17c/0x2e0 [virtio_blk]
-[25338.550223]  ? ncpus_cmp_func+0x10/0x10
-[25338.554061]  virtblk_probe+0xe6/0x8a0 [virtio_blk]
-[25338.558846]  virtio_dev_probe+0x158/0x1f0
-[25338.562861]  really_probe+0x255/0x4a0
-[25338.566524]  ? __driver_attach_async_helper+0x90/0x90
-[25338.571567]  driver_probe_device+0x49/0xc0
-[25338.575660]  bus_for_each_drv+0x79/0xc0
-[25338.579499]  __device_attach+0xdc/0x160
-[25338.583337]  bus_probe_device+0x9d/0xb0
-[25338.587167]  device_add+0x418/0x780
-[25338.590654]  register_virtio_device+0x9e/0xe0
-[25338.595011]  virtio_pci_probe+0xb3/0x140
-[25338.598941]  local_pci_probe+0x41/0x90
-[25338.602689]  work_for_cpu_fn+0x16/0x20
-[25338.606443]  process_one_work+0x1a7/0x360
-[25338.610456]  ? create_worker+0x1a0/0x1a0
-[25338.614381]  worker_thread+0x1cf/0x390
-[25338.618132]  ? create_worker+0x1a0/0x1a0
-[25338.622051]  kthread+0x116/0x130
-[25338.625283]  ? kthread_flush_work_fn+0x10/0x10
-[25338.629731]  ret_from_fork+0x1f/0x40
-[25338.633395] virtio_blk: probe of virtio418 failed with error -16
+Now okay on the NVME laptop, but 4acb83417cad is a disaster for heavy
+swapping (kernel builds in low memory) on another: soon locking up in
+sbitmap_queue_wake_up() (into which __sbq_wake_up() is inlined), cycling
+around with waitqueue_active() but wait_cnt 0 .  Here is a backtrace,
+showing the common pattern of outer sbitmap_queue_wake_up() interrupted
+before setting wait_cnt 0 back to wake_batch (in some cases other CPUs
+are idle, in other cases they're spinning for a lock in dd_bio_merge()):
 
-The log :
-"genirq: Flags mismatch irq 0. 00000080 (virtio418) vs. 00015a00 (timer)"
-was print because of the irq 0 is used by timer exclusive,and when
-vp_find_vqs call vp_find_vqs_msix and return false twice for
-whatever reason,then it will call vp_find_vqs_intx for the last try.
-Because vp_dev->pci_dev->irq is zero,so it will be request irq 0 with
-flag IRQF_SHARED,we will get a backtrace like above.
+sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
+__blk_mq_free_request < blk_mq_free_request < __blk_mq_end_request <
+scsi_end_request < scsi_io_completion < scsi_finish_command <
+scsi_complete < blk_complete_reqs < blk_done_softirq < __do_softirq <
+__irq_exit_rcu < irq_exit_rcu < common_interrupt < asm_common_interrupt <
+_raw_spin_unlock_irqrestore < __wake_up_common_lock < __wake_up <
+sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
+__blk_mq_free_request < blk_mq_free_request < dd_bio_merge <
+blk_mq_sched_bio_merge < blk_mq_attempt_bio_merge < blk_mq_submit_bio <
+__submit_bio < submit_bio_noacct_nocheck < submit_bio_noacct <
+submit_bio < __swap_writepage < swap_writepage < pageout <
+shrink_folio_list < evict_folios < lru_gen_shrink_lruvec <
+shrink_lruvec < shrink_node < do_try_to_free_pages < try_to_free_pages <
+__alloc_pages_slowpath < __alloc_pages < folio_alloc < vma_alloc_folio <
+do_anonymous_page < __handle_mm_fault < handle_mm_fault <
+do_user_addr_fault < exc_page_fault < asm_exc_page_fault
 
-When the pci device is vf,the intx
-is not allowed and it will be 0.Even if the pci device is a pf,
-we should remind that
-irq 0 is almost be reserved or used for some device fixed
-like timer in x86 without IRQF_SHARED,so we can avoid call it.
+See how the process-context sbitmap_queue_wake_up() has been interrupted,
+after bringing wait_cnt down to 0 (and in this example, after doing its
+wakeups), before advancing wake_index and refilling wake_cnt: an
+interrupt-context sbitmap_queue_wake_up() of the same sbq gets stuck.
 
-Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
-Suggested-by: Michael S. Tsirkin <mst@redhat.com>
+I have almost no grasp of all the possible sbitmap races, and their
+consequences: but __sbq_wake_up() can do nothing useful while wait_cnt 0,
+so it is better if sbq_wake_ptr() skips on to the next ws in that case:
+which fixes the lockup and shows no adverse consequence for me.
+
+Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- drivers/virtio/virtio_pci_common.c | 3 +++
- 1 file changed, 3 insertions(+)
+v2: - v1 to __sbq_wake_up() broke out when this happens, but
+      v2 to sbq_wake_ptr() does better by skipping on to the next.
+    - added more comment and deleted dubious Fixes attribution.
 
-diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
-index ad258a9d3b9f..3208a2b149b9 100644
---- a/drivers/virtio/virtio_pci_common.c
-+++ b/drivers/virtio/virtio_pci_common.c
-@@ -362,6 +362,9 @@ static int vp_find_vqs_intx(struct virtio_device *vdev, unsigned int nvqs,
- 	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
- 	int i, err, queue_idx = 0;
+ lib/sbitmap.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/lib/sbitmap.c
++++ b/lib/sbitmap.c
+@@ -587,7 +587,7 @@ static struct sbq_wait_state *sbq_wake_p
+ 	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
+ 		struct sbq_wait_state *ws = &sbq->ws[wake_index];
  
-+	if (vp_dev->pci_dev->irq == 0)
-+		return -EINVAL;
-+
- 	vp_dev->vqs = kcalloc(nvqs, sizeof(*vp_dev->vqs), GFP_KERNEL);
- 	if (!vp_dev->vqs)
- 		return -ENOMEM;
--- 
-2.17.1
-
+-		if (waitqueue_active(&ws->wait)) {
++		if (waitqueue_active(&ws->wait) && atomic_read(&ws->wait_cnt)) {
+ 			if (wake_index != atomic_read(&sbq->wake_index))
+ 				atomic_set(&sbq->wake_index, wake_index);
+ 			return ws;
