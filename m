@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62675EE984
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 00:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 195A85EE9C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 00:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234133AbiI1Wh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 18:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
+        id S234419AbiI1WzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 18:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234758AbiI1Wha (ORCPT
+        with ESMTP id S231949AbiI1WzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 18:37:30 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA26FF3CB;
-        Wed, 28 Sep 2022 15:37:25 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id cm7-20020a056830650700b006587fe87d1aso9073563otb.10;
-        Wed, 28 Sep 2022 15:37:25 -0700 (PDT)
+        Wed, 28 Sep 2022 18:55:01 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1F64E869
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 15:55:00 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-131b7bb5077so2521740fac.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 15:55:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=PvzZb/nWICcprKW+/UE1OuAMGD5iEigV3jBljtssS0c=;
+        b=RCevJ0ybVc8g0Wqnq8u+Y7WbQOcPgEwCodLVYErhb/GSjvx51ESsOTOlJBioMlWWU+
+         O+O08KHalLRnV5z7Qm/dlp4q9KYj01EsTkk9fEl238yCtfFOxe/eGoO49zUnD8Uy6UWi
+         UV9YOOQsMK3LGJkCQrBOxbmu+zd9heeow0yMWS5bFs+9BoHK7fmcxzUmk3lJuaVFh6ec
+         jqF9otkW5PH32dteHT347gsVeUsMvFMEfQlq0y1RrwV53pYUPTRRhdGn4ZDLhuy3ZUiZ
+         AA+qJIt2r4wvlXbKOrlY3G2DkVsR5dix4Bfj+7nHZSKVNBOI7Z7ZnBckrw6RAd0zvGUx
+         ZKgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=o9gZyjiSadqdv6mxfxQft+qOXfye+FPw5i97r+Tzn8A=;
-        b=anVPY9iSbIp6kplQjdn1U1/v8AticV+/uCjQt1tXDRu5RPCxiUXOdzGJtQPSbSkUaw
-         8Os3TPMRdhFHlbUXAz8xSGnLU6LnY5azg5e8wE0PsrVeNzs/0Rtk7AGoWR7v1VwDNgBy
-         QEWHDO+lFFLik8idUMfL6MUPU+2iNhkSuyzPnfHLJPEfEPVjgQf+cYwTGeImy1k2jEI4
-         ki7iIoc4j4YheysYR86qkY/JnTPqTvmQ7UyNFeClemouGklb7eWIWHuaQyBBSZ2H75Ib
-         FPv/I9Wp0aTq3LOLffYtTULtsP/wj8H9TlPd1f4EnbftUdez+m9JLulOuDebWiAyD5qh
-         7xbg==
-X-Gm-Message-State: ACrzQf1IuTG93o6gFAhMFIKdGx/EXv80xIWSr1zRcGH7F77xKJfLe60i
-        Fi+ejcYo0XjCpMSXO4zhkf6dF/hG4Q==
-X-Google-Smtp-Source: AMsMyM5H9jK6oqeqXok/cqzftUY221G7BgEdMfyoyL+nY6rOhKsS2nbUIDTFWV3cljSso/Od/TG9SA==
-X-Received: by 2002:a9d:394:0:b0:65c:3f7f:a6b7 with SMTP id f20-20020a9d0394000000b0065c3f7fa6b7mr28605otf.179.1664404644667;
-        Wed, 28 Sep 2022 15:37:24 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w7-20020a4aa987000000b0044b491ccf97sm2385428oom.25.2022.09.28.15.37.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 15:37:23 -0700 (PDT)
-Received: (nullmailer pid 87026 invoked by uid 1000);
-        Wed, 28 Sep 2022 22:37:22 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, jh80.chung@samsung.com,
-        linux-mmc@vger.kernel.org, ulf.hansson@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org
-In-Reply-To: <20220928165420.1212284-1-dinguyen@kernel.org>
-References: <20220928165420.1212284-1-dinguyen@kernel.org>
-Subject: Re: [PATCHv4 1/3] dt-bindings: mmc: synopsys-dw-mshc: document "altr,sysmgr-syscon"
-Date:   Wed, 28 Sep 2022 17:37:22 -0500
-Message-Id: <1664404642.110424.87025.nullmailer@macbook.herring.priv>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=PvzZb/nWICcprKW+/UE1OuAMGD5iEigV3jBljtssS0c=;
+        b=6mQSBC0ej/NyqkAxtpzS7/zcPLE53NtfbdQZHD+vYYOP4s1H476zdtIA1QLlLfJoqg
+         ouia218+vZ6BJpmG73FuHhYScO2Fz30AoTpREQ5u/kAE2o0vVTJeVbGd3tPwrRlj9855
+         ugTMVJQ0/Xs9/f2u5l3cIqQZYOZlzChWbEhF9CfEhHmcbnrFqBbY3kN/JRm6bJFNDe8g
+         A23hN2OpIyZkWrIFRv8yAHOlXnxIEXQSiS8yMLXLKy8lwUuLtlySYQbRbo9fFbPyW83D
+         LBcQNhbInNLhvBNL+JSVnDnjBZ0UnUJqzmj1JtEMgTKr6zSZTg6GKM5yCzKAlOun2CQ2
+         vxTA==
+X-Gm-Message-State: ACrzQf1XSJ6LNGnCkTrNTPtfhzsMci7+nFinz3Vxn0tOFDdsQZPH5igB
+        au20EdeS8DRcAauS2wZAV1FJknGDDKo4pIjoCkcY
+X-Google-Smtp-Source: AMsMyM4V8lNNjhhv2Ja8yyosbeUoQGfr097xBpeF5j/+xhdyk78uzlBFaTu2zmyDLPzbetRzXIHn0IArFGKEM004+cY=
+X-Received: by 2002:a05:6870:a916:b0:131:9361:116a with SMTP id
+ eq22-20020a056870a91600b001319361116amr114330oab.172.1664405699174; Wed, 28
+ Sep 2022 15:54:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220927225944.2254360-1-ankur.a.arora@oracle.com> <20220927225944.2254360-4-ankur.a.arora@oracle.com>
+In-Reply-To: <20220927225944.2254360-4-ankur.a.arora@oracle.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 28 Sep 2022 18:54:48 -0400
+Message-ID: <CAHC9VhSY+ELJ_yX+U+ZzAPOtjJ=eGxtmLTtgpm6NhkYE3Yffuw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] audit: unify audit_filter_{uring(),inode_name(),syscall()}
+To:     Ankur Arora <ankur.a.arora@oracle.com>
+Cc:     linux-audit@redhat.com, eparis@redhat.com,
+        linux-kernel@vger.kernel.org, boris.ostrovsky@oracle.com,
+        konrad.wilk@oracle.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,45 +66,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Sep 2022 11:54:18 -0500, Dinh Nguyen wrote:
-> Document the optional "altr,sysmgr-syscon" binding that is used to
-> access the System Manager register that controls the SDMMC clock
-> phase.
-> 
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+On Tue, Sep 27, 2022 at 7:00 PM Ankur Arora <ankur.a.arora@oracle.com> wrote:
+>
+> audit_filter_uring(), audit_filter_inode_name() are substantially similar
+> to audit_filter_syscall(). Move the core logic to __audit_filter() which
+> can be parametrized for all three.
+>
+> On a Skylakex system, getpid() latency (all results aggregated
+> across 12 boot cycles):
+>
+>          Min     Mean    Median   Max      pstdev
+>          (ns)    (ns)    (ns)     (ns)
+>
+>  -    173.11   182.51  179.65  202.09     (+- 4.34%)
+>  +    162.11   175.26  173.71  190.56     (+- 4.33%)
+>
+> Performance counter stats for 'bin/getpid' (3 runs) go from:
+>     cycles               706.13  (  +-  4.13% )
+>     instructions        1654.70  (  +-   .06% )
+>     IPC                    2.35  (  +-  4.25% )
+>     branches             430.99  (  +-   .06% )
+>     branch-misses          0.50  (  +-  2.00% )
+>     L1-dcache-loads      440.02  (  +-   .07% )
+>     L1-dcache-load-misses  5.22  (  +- 82.75% )
+>
+>  to:
+>     cycles               678.79  (  +-  4.22% )
+>     instructions        1657.79  (  +-   .05% )
+>     IPC                    2.45  (  +-  4.08% )
+>     branches             432.00  (  +-   .05% )
+>     branch-misses          0.38  (  +- 23.68% )
+>     L1-dcache-loads      444.96  (  +-   .03% )
+>     L1-dcache-load-misses  5.13  (  +- 73.09% )
+>
+> (Both aggregated over 12 boot cycles.)
+>
+> Unclear if the improvement is just run-to-run variation or because of
+> a slightly denser loop (the list parameter in the list_for_each_entry_rcu()
+> exit check now comes from a register rather than a constant as before.)
+>
+> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
 > ---
-> v4: add else statement
-> v3: document that the "altr,sysmgr-syscon" binding is only applicable to
->     "altr,socfpga-dw-mshc"
-> v2: document "altr,sysmgr-syscon" in the MMC section
-> ---
->  .../bindings/mmc/synopsys-dw-mshc.yaml        | 31 +++++++++++++++++--
->  1 file changed, 28 insertions(+), 3 deletions(-)
-> 
+>  kernel/auditsc.c | 86 +++++++++++++++++++++++++-----------------------
+>  1 file changed, 44 insertions(+), 42 deletions(-)
+>
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index bf26f47b5226..dd89a52988b0 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -805,6 +805,41 @@ static bool audit_in_mask(const struct audit_krule *rule, unsigned long val)
+>         return rule->mask[word] & bit;
+>  }
+>
+> +/**
+> + * __audit_filter - common filter
+> + *
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Please remove the vertical whitespace between the function description
+line and the parameter descriptions.
 
-yamllint warnings/errors:
+I'd also suggest renaming this function to "__audit_filter_op(...)"
+since we have a few audit filtering functions and a generic
+"__audit_filter()" function with no qualification in the name seems
+just a bit too generic to not be misleading ... at least I think so.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml: allOf:1:if:properties:compatible:contains:const: ['altr,socfpga-dw-mshc'] is not of type 'integer', 'string'
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml: ignoring, error in schema: allOf: 1: if: properties: compatible: contains: const
-Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.example.dtb:0:0: /example-0/mmc@12200000: failed to match any schema with compatible: ['snps,dw-mshc']
+I also might try to be just a bit more descriptive in the text above,
+for example:
 
-doc reference errors (make refcheckdocs):
+"__audit_filter_op - filter helper function for operations (syscall/uring/etc.)"
 
-See https://patchwork.ozlabs.org/patch/
+> + * @tsk: associated task
+> + * @ctx: audit context
+> + * @list: audit filter list
+> + * @op: current syscall/uring_op
+> + * @name: name to be filtered (used by audit_filter_inode_name)
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+I would change this to "@name: audit_name to use in filtering (can be
+NULL)" and leave it at that.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+> + *
+> + * return: 1 if we hit a filter, 0 if we don't
 
-pip3 install dtschema --upgrade
+The function header block comment description should be in regular
+English sentences.  Perhaps something like this:
 
-Please check and re-submit.
+"Run the audit filters specified in @list against @tsk using @ctx,
+@op, and @name as necessary; the caller is responsible for ensuring
+that the call is made while the RCU read lock is held.  The @name
+parameter can be NULL, but all others must be specified.  Returns
+1/true if the filter finds a match, 0/false if none are found."
 
+> + */
+> +static int __audit_filter(struct task_struct *tsk,
+> +                          struct audit_context *ctx,
+> +                          struct list_head *list,
+> +                          unsigned long op,
+> +                          struct audit_names *name)
+> +{
+> +       struct audit_entry *e;
+> +       enum audit_state state;
+> +
+> +       rcu_read_lock();
+
+I would move the RCU locking to the callers since not every caller requires it.
+
+> +       list_for_each_entry_rcu(e, list, list) {
+> +               if (unlikely(audit_in_mask(&e->rule, op))) {
+
+As discussed in patch 2/3, please remove the unlikely() call.
+
+> +                       if (audit_filter_rules(tsk, &e->rule, ctx, name,
+> +                                              &state, false)) {
+> +                               rcu_read_unlock();
+> +                               ctx->current_state = state;
+> +                               return 1;
+>  +                       }
+> +               }
+> +       }
+> +       rcu_read_unlock();
+> +       return 0;
+> +}
+> +
+
+-- 
+paul-moore.com
