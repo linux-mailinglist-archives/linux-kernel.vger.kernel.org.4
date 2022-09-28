@@ -2,103 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A27415EE3C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67725EE42A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234115AbiI1SB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 14:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
+        id S234377AbiI1SQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 14:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbiI1SBy (ORCPT
+        with ESMTP id S234316AbiI1SPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 14:01:54 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4B5100AA4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:01:52 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id a29so13203435pfk.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=JdaNct/G2JycPe4ErZLD0bdcxF7sV3x5ZSzi26f0LVc=;
-        b=g/UF8+sjAIowCdq+SbQGgr58qUNEKqBINYp4gqmYRYyPJljH+zWtiS21cPbYkdN8t9
-         aYtwiPIvqEad/zl6L8HgmGt1e7rIECz71QbIFeC+3JrKeNwmiec4liXTlqqnVUfUoFYt
-         EMF4+V7VxUx8Ss7MtYo0k8hUOUMHmOU3bN6Pw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=JdaNct/G2JycPe4ErZLD0bdcxF7sV3x5ZSzi26f0LVc=;
-        b=eoIZs1n40ahmk+LTn6EyA9Vb0L11iITcBNMMC1f+fy6hjNBo+VXYxrMNmZGl/Zj58G
-         13K1DBNqPBzJO3l6BhlOP4Jk/xEDCXvNPFUxNJijojVmyIQzktORZPCwxmIZ/nKeVuho
-         S+QMUBEXEoMzwHcOfOTx/61K9zzM04KduGaTjJYkqH/bIHj4InGBSd6DA/tpomFo3xWA
-         HtmTgc9ycqxMizdAJ2+0tmH819rKrKiqBHi1yhACpnOXDVtSDTS5zmDE3xXO0iJ3OxuB
-         PVStLBI6t2ngyOSzkELNmGpoA/D5bn6Kmv228eqMwRDFjp+XLR0k/K+q/qs8fTLRk0wE
-         FQpw==
-X-Gm-Message-State: ACrzQf0j4hYuzyqY5AwVCpjMZM8uOr40EFIUWg41Vc6SlgO/qHWO/KS4
-        HZQnPyQRKlB9cv2Y0NhvBkYY2w==
-X-Google-Smtp-Source: AMsMyM6F0wUKd7/8qdqNwZVIIaRh5M4pwKa8t+qDZ9gM0fXutw7SwWVeHX0LkCx4/OjjgR/QVrS9YA==
-X-Received: by 2002:a63:2bcc:0:b0:434:eb77:28a with SMTP id r195-20020a632bcc000000b00434eb77028amr29658693pgr.168.1664388112280;
-        Wed, 28 Sep 2022 11:01:52 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c3-20020a170903234300b001732a019dddsm1822508plh.174.2022.09.28.11.01.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 11:01:51 -0700 (PDT)
-Date:   Wed, 28 Sep 2022 11:01:50 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Wed, 28 Sep 2022 14:15:52 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD61AED9C;
+        Wed, 28 Sep 2022 11:15:49 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 828BB1884BD2;
+        Wed, 28 Sep 2022 18:15:41 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 6E77B2500370;
+        Wed, 28 Sep 2022 18:15:41 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 0)
+        id 383439EC000A; Wed, 28 Sep 2022 18:15:41 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 1D24A9120FED;
+        Wed, 28 Sep 2022 15:06:27 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org,
+        "Hans J. Schultz" <netdev@kapio-technology.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        John Crispin <john@phrozen.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <n.schier@avm.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, anand.gore@broadcom.com,
-        william.zhang@broadcom.com
-Subject: Re: [PATCH] ARM: ubsan: select ARCH_HAS_UBSAN_SANITIZE_ALL
-Message-ID: <202209281100.5311EE081B@keescook>
-References: <20220928174739.802806-1-f.fainelli@gmail.com>
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v6 net-next 6/9] net: dsa: mv88e6xxx: allow reading FID when handling ATU violations
+Date:   Wed, 28 Sep 2022 17:02:53 +0200
+Message-Id: <20220928150256.115248-7-netdev@kapio-technology.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220928150256.115248-1-netdev@kapio-technology.com>
+References: <20220928150256.115248-1-netdev@kapio-technology.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220928174739.802806-1-f.fainelli@gmail.com>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 10:47:39AM -0700, Florian Fainelli wrote:
-> From: Seung-Woo Kim <sw0312.kim@samsung.com>
-> 
-> To enable UBSAN on ARM, this patch enables ARCH_HAS_UBSAN_SANITIZE_ALL
-> from arm confiuration. Basic kernel bootup test is passed on arm with
-> CONFIG_UBSAN_SANITIZE_ALL enabled.
-> 
-> Signed-off-by: Seung-Woo Kim <sw0312.kim@samsung.com>
-> [florian: rebased against v6.0-rc7]
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+From: "Hans J. Schultz" <netdev@kapio-technology.com>
 
-Ah-ha, thanks for testing this. What devices did you check this on? I
-know boot-up on arm32 can be very device-specific.
+The FID is needed to get hold of which VID was involved in a violation,
+thus the need to be able to read the FID.
 
-Which UBSAN configs did you try?
+For convenience the function mv88e6xxx_g1_atu_op() has been used to read
+ATU violations, but the function invalidates reading the fid, so to both
+read ATU violations without zeroing the fid, and read the fid, functions
+have been added to ensure both are done correctly.
 
-Thanks!
+Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+---
+ drivers/net/dsa/mv88e6xxx/global1_atu.c | 60 ++++++++++++++++++++++---
+ 1 file changed, 55 insertions(+), 5 deletions(-)
 
--Kees
-
+diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c b/drivers/net/dsa/mv88e6xxx/global1_atu.c
+index 40bd67a5c8e9..d9dfa1159cde 100644
+--- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
++++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
+@@ -114,6 +114,19 @@ static int mv88e6xxx_g1_atu_op_wait(struct mv88e6xxx_chip *chip)
+ 	return mv88e6xxx_g1_wait_bit(chip, MV88E6XXX_G1_ATU_OP, bit, 0);
+ }
+ 
++static int mv88e6xxx_g1_read_atu_violation(struct mv88e6xxx_chip *chip)
++{
++	int err;
++
++	err = mv88e6xxx_g1_write(chip, MV88E6XXX_G1_ATU_OP,
++				 MV88E6XXX_G1_ATU_OP_BUSY |
++				 MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
++	if (err)
++		return err;
++
++	return mv88e6xxx_g1_atu_op_wait(chip);
++}
++
+ static int mv88e6xxx_g1_atu_op(struct mv88e6xxx_chip *chip, u16 fid, u16 op)
+ {
+ 	u16 val;
+@@ -159,6 +172,41 @@ int mv88e6xxx_g1_atu_get_next(struct mv88e6xxx_chip *chip, u16 fid)
+ 	return mv88e6xxx_g1_atu_op(chip, fid, MV88E6XXX_G1_ATU_OP_GET_NEXT_DB);
+ }
+ 
++static int mv88e6xxx_g1_atu_fid_read(struct mv88e6xxx_chip *chip, u16 *fid)
++{
++	u16 val = 0, upper = 0, op = 0;
++	int err = -EOPNOTSUPP;
++
++	if (mv88e6xxx_num_databases(chip) > 256) {
++		err = mv88e6xxx_g1_read(chip, MV88E6352_G1_ATU_FID, &val);
++		val &= 0xfff;
++		if (err)
++			return err;
++	} else {
++		err = mv88e6xxx_g1_read(chip, MV88E6XXX_G1_ATU_OP, &op);
++		if (err)
++			return err;
++		if (mv88e6xxx_num_databases(chip) > 64) {
++			/* ATU DBNum[7:4] are located in ATU Control 15:12 */
++			err = mv88e6xxx_g1_read(chip, MV88E6XXX_G1_ATU_CTL, &upper);
++			if (err)
++				return err;
++
++			upper = (upper >> 8) & 0x00f0;
++		} else if (mv88e6xxx_num_databases(chip) > 16) {
++			/* ATU DBNum[5:4] are located in ATU Operation 9:8 */
++
++			upper = (op >> 4) & 0x30;
++		}
++		/* ATU DBNum[3:0] are located in ATU Operation 3:0 */
++
++		val = (op & 0xf) | upper;
++	}
++	*fid = val;
++
++	return err;
++}
++
+ /* Offset 0x0C: ATU Data Register */
+ 
+ static int mv88e6xxx_g1_atu_data_read(struct mv88e6xxx_chip *chip,
+@@ -353,14 +401,12 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+ {
+ 	struct mv88e6xxx_chip *chip = dev_id;
+ 	struct mv88e6xxx_atu_entry entry;
+-	int spid;
+-	int err;
+-	u16 val;
++	int err, spid;
++	u16 val, fid;
+ 
+ 	mv88e6xxx_reg_lock(chip);
+ 
+-	err = mv88e6xxx_g1_atu_op(chip, 0,
+-				  MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
++	err = mv88e6xxx_g1_read_atu_violation(chip);
+ 	if (err)
+ 		goto out;
+ 
+@@ -368,6 +414,10 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+ 	if (err)
+ 		goto out;
+ 
++	err = mv88e6xxx_g1_atu_fid_read(chip, &fid);
++	if (err)
++		goto out;
++
+ 	err = mv88e6xxx_g1_atu_data_read(chip, &entry);
+ 	if (err)
+ 		goto out;
 -- 
-Kees Cook
+2.34.1
+
