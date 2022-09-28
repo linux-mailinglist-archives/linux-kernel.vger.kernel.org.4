@@ -2,127 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543325EE3D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1E05EE3D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 20:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234532AbiI1SFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 14:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49710 "EHLO
+        id S234519AbiI1SFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 14:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbiI1SFP (ORCPT
+        with ESMTP id S234550AbiI1SFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 14:05:15 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F1D7AC36;
-        Wed, 28 Sep 2022 11:05:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1664388308;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=6ww6vEm2Ci8TeM1f1oxHc+4j/zU9WsPV4VXaGwkCDa8=;
-    b=sSejvT8OYastO5cXoMEf5gxUVNyboP2C+TX2mTeSIcFyt5Av2JKbOrMsGLHlvsIkj2
-    ncF9bEBBd/QPvULA91ZsOi6ydbVULxGp6FQ1vu/rHST9JV5LCLk3G3M8ilsOUyq0E+hs
-    RnjdSUjKJXsbYUGa1F0Vs9qY36r7Ye4PJjPaCQa7oOYqMhJkh4IRtMLZc/PNYMAu2Y6U
-    Jhva7F7w8L9d2O2tl5eerrA6UC0hzOmIm0xwzdeQ6vEgxcL4coAsC+/FoubqXyFTt51J
-    2WIYKH6c5k26fmPRBPdhTRdR5JLlhQM+rDiraDGWvnXp5xX9TKTK7z5ZlEY+VRZ1kMer
-    eYaw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrK88/6Y="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 48.1.3 AUTH)
-    with ESMTPSA id 06b848y8SI580jR
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 28 Sep 2022 20:05:08 +0200 (CEST)
-Date:   Wed, 28 Sep 2022 20:04:57 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 07/34] dt-bindings: pinctrl: qcom,tlmm-common: add
- common check for function
-Message-ID: <YzSMlGXIIXvAR5He@gerhold.net>
-References: <20220927173702.5200-1-krzysztof.kozlowski@linaro.org>
- <20220927173702.5200-8-krzysztof.kozlowski@linaro.org>
+        Wed, 28 Sep 2022 14:05:41 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE31CEBBCB
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:05:38 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id t16so11205760ljh.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 11:05:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=avQKUOu4lw23cs6/x3clKxPoK1YDt7piZdaJ0NJGp/k=;
+        b=TjxUe8bDn3svsRCLEBMTTyN0VEWN1k0f2//DOPUg1nlcMcAYIXwpjPJfLHfHlz9ujG
+         lDi/HeCLa4pTnYZO9GaFm9rOFkc456VSFy043LG8CGGriYFQtBpixfGul7Jxmpi2XXsT
+         FMj9x6FCnIHaUCOioKf8i2Z4f78d/hwD0A40Fb3LuZrxegxNkfP0+OyY9gYzcEXAN08b
+         cSrD6RQPIUy9w0QAJYbKGqk63l6iglupgrvJshHafR+yB9UT7pYqn7/1X6VtJnXv//Zn
+         W2kFyjaLCSEGADdeKaZgNxOyTwaFyFLWO01S+MrKgFcjgaUH51UDY4VyMCNEULtUkezk
+         sI2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=avQKUOu4lw23cs6/x3clKxPoK1YDt7piZdaJ0NJGp/k=;
+        b=zeP8KmnLPL8gfw3HSiNJplRCSNjHWvQHhlHY332RsQ437SukEtSCm20laTSl7VlO3P
+         nra229Izi2OAspzD9fbcr5/FhmIAZGG2PhNopigx6QE++wrFmSXkWkmWwAIHQfjZ9bbU
+         XLRaGP2i4MPCrvt96YsnZ4+7vFfm9/X1WGo9DHl47EPRmDWaHKL1Au8L1Lo4DfIngfrG
+         otITqsDcCaSV4aD6bCWvX/eRLpLB0TDKyDrw+QbD/WOYVqVmdQ2VeBrbKGgOayg5q78j
+         Hsl3nKdi7d/9HDI6bM3OjFc5A+/1mBUHiB9OlQTYvoZl9Tfb4aW82Ey7BXK8MokW3yRj
+         UkFg==
+X-Gm-Message-State: ACrzQf1NxJQO/WV8s59EOfwYkyPyFB9BM8sFyV5I9+Rx6z7Dq43ZxGdd
+        82PJXYxAwWkwCcQfhCiuDuZ2DA==
+X-Google-Smtp-Source: AMsMyM4+buYUScbjJTuUsqd2b5ZcwP9zA8s+Us5xv5W/jZ8S/NjX7o/Sf546NPdx76G/1l5Dug51wA==
+X-Received: by 2002:a2e:a887:0:b0:26a:ba85:8fbe with SMTP id m7-20020a2ea887000000b0026aba858fbemr11599034ljq.14.1664388337086;
+        Wed, 28 Sep 2022 11:05:37 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id a28-20020ac25e7c000000b0048a8c907fe9sm537098lfr.167.2022.09.28.11.05.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 11:05:36 -0700 (PDT)
+Message-ID: <1d859da3-89c6-d08f-bc10-e5f39c1cd2d4@linaro.org>
+Date:   Wed, 28 Sep 2022 20:05:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927173702.5200-8-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v1 7/7] arm: dts: qcom: mdm9615: remove useless amba
+ subnode
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v1-7-b6e63a7df1e8@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v1-7-b6e63a7df1e8@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 07:36:35PM +0200, Krzysztof Kozlowski wrote:
-> Certain pins, like SDcard related, do not have functions and such should
-> not be required.  Add a check for this in common Qualcomm TLMM pin
-> controller schema.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+On 28/09/2022 11:14, Neil Armstrong wrote:
+> Since amba node type has been deprecated, remove this subnode and
 
-Thanks for moving this to the common schema!
+How device node can be deprecated? simple-bus is still supported, isn't it?
 
-FWIW:
-Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
 
-> ---
->  .../bindings/pinctrl/qcom,tlmm-common.yaml    | 20 +++++++++++++++----
->  1 file changed, 16 insertions(+), 4 deletions(-)
+> move the mmc nodes in the main soc node.
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
-> index c88c8dcb69d9..e1354f0c64f8 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,tlmm-common.yaml
-> @@ -65,10 +65,6 @@ additionalProperties: true
->  
->  $defs:
->    qcom-tlmm-state:
-> -    allOf:
-> -      - $ref: pincfg-node.yaml#
-> -      - $ref: pinmux-node.yaml#
-> -
->      properties:
->        drive-strength:
->          enum: [2, 4, 6, 8, 10, 12, 14, 16]
-> @@ -82,5 +78,21 @@ $defs:
->        output-high: true
->        output-low: true
->  
-> +    allOf:
-> +      - $ref: pincfg-node.yaml#
-> +      - $ref: pinmux-node.yaml#
-> +
-> +      - if:
-> +          properties:
-> +            pins:
-> +              items:
-> +                pattern: "^gpio"
-> +        then:
-> +          required:
-> +            - function
-> +        else:
-> +          properties:
-> +            function: false
-> +
->      additionalProperties: true
->  ...
-> -- 
-> 2.34.1
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+While reshuffling maybe move properties to match common style:
+1. compatible
+2. reg
+3. ...
+4. status (last)
+
 > 
+Best regards,
+Krzysztof
+
