@@ -2,131 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8D65ED7F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78895ED7FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbiI1IhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
+        id S232972AbiI1Ihs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbiI1Ig4 (ORCPT
+        with ESMTP id S232937AbiI1IhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:36:56 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580E59F0ED
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:36:53 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id v2so15432452edc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:36:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=MBektPIlMNaA94hBUX0CqK9rztppqrFQ5yZw6cU5GA0=;
-        b=nPowmBvi0n48oK8YdWwlNpwVqzUohZDIbZ6IeTiNfgHLlJ8NYAlh/4Pyluc7lIAa/L
-         16N1y+rHrLvENsNatjnSGhKwwvXZMs/i/qcAv9hRPCfDorku4qTRB0xoh/OwE4WpFVl+
-         5syX9koK47487SX4eughY8qYHorRRQykNPlusQrBoJhQTkSgo5Ws9Y4e/ek0gHCXfQ9f
-         UWl5dvf85g7MpHjezxrovZ/ktB/Un3GxYG/jYT3zgq8T9AgYpE7PLwmxr5/ofJF8joiF
-         NpMLrA6HnUVs/7RW87NzdUUfbfkekVaP1f+8Y/DC+jqu3WQwMc2KUa3y+PprukqCJcHU
-         8uRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=MBektPIlMNaA94hBUX0CqK9rztppqrFQ5yZw6cU5GA0=;
-        b=ByzpP9eucCW4aq9U0Jx+fnQprOACe5U9h3Mx+ECmx06PsS2EmrWgLiI07F+Ybwlhug
-         NkfcbcT/AziirxjABnbx7ED1lgnyMC9J5f9kzIzZz6s/hHOIbr4AQ/aSgiSHFf7zmU87
-         dUqR7svNcwXs3n2Lkw4AQR1/ey5OI7VGvPcOOuKi9UShf9NsaTdO4TfRHAcW9ru93wET
-         96vjIb+eyDTPsFIMc6pbxXEaFtsjPIgispDrxqN9qBjoozI1CmucfM8dR5cJtcA+nCtw
-         qDokRoKmbRedCDKKMK+y2u9eKd0dNuauJOEXmd66lpgkVAqWcP2adNQDtPrzSjjObqCw
-         xktw==
-X-Gm-Message-State: ACrzQf2z+daoqICJhE/PEDa+7tpYHeCNxpRWQI5+VMbmhOzpH2JIlYKW
-        umDsq9ilQWEmdxapLMTHxcU=
-X-Google-Smtp-Source: AMsMyM4twxMuvjaYsmnTWGMP/Jsa+DOULJ4IT+cCUr07gRi+SeVNi1RRVmEet7caj68BkC4mHllRSA==
-X-Received: by 2002:aa7:c6d6:0:b0:457:d8cd:abb5 with SMTP id b22-20020aa7c6d6000000b00457d8cdabb5mr3999708eds.382.1664354211697;
-        Wed, 28 Sep 2022 01:36:51 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abb59.dynamic.kabel-deutschland.de. [95.90.187.89])
-        by smtp.gmail.com with ESMTPSA id gy23-20020a170906f25700b00730b3bdd8d7sm2024526ejb.179.2022.09.28.01.36.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 01:36:51 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 2/2] staging: r8188eu: remove PHY_RFConfig8188E()
-Date:   Wed, 28 Sep 2022 10:36:41 +0200
-Message-Id: <20220928083641.8275-3-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220928083641.8275-1-straube.linux@gmail.com>
-References: <20220928083641.8275-1-straube.linux@gmail.com>
+        Wed, 28 Sep 2022 04:37:24 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A1719DFA4;
+        Wed, 28 Sep 2022 01:37:14 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxbWuwBzRjdjMjAA--.18971S2;
+        Wed, 28 Sep 2022 16:37:10 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v5 1/3] MAINTAINERS: add maintainer for thermal driver for loongson2 SoCs
+Date:   Wed, 28 Sep 2022 16:37:00 +0800
+Message-Id: <20220928083702.17309-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8CxbWuwBzRjdjMjAA--.18971S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKw1DCw17Cr4ruF1rXry3twb_yoWftrb_CF
+        1Iqa1xZw48AF13K3ykuryxJ343Zrs7JF15A3Z7t397A34Dta43AF98A3Zxu348Cr4UuFyf
+        taykGr1S9r12qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbskFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
+        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+        IFyTuYvjfUF9a9DUUUU
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function PHY_RFConfig8188E() is just a wrapper around
-phy_RF6052_Config_ParaFile(). Remove the wrapper.
+Add zhanghongchen and myself as maintainer of the loongson2 SoC
+series thermal driver.
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 ---
- drivers/staging/r8188eu/hal/rtl8188e_phycfg.c    | 9 ---------
- drivers/staging/r8188eu/hal/usb_halinit.c        | 2 +-
- drivers/staging/r8188eu/include/Hal8188EPhyCfg.h | 1 -
- 3 files changed, 1 insertion(+), 11 deletions(-)
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-index cb2788bc383b..731179635c54 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-@@ -507,15 +507,6 @@ PHY_BBConfig8188E(
- 	return rtStatus;
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 589517372408..0be0f520c032 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11899,6 +11899,14 @@ F:	drivers/*/*loongarch*
+ F:	Documentation/loongarch/
+ F:	Documentation/translations/zh_CN/loongarch/
  
--int PHY_RFConfig8188E(struct adapter *Adapter)
--{
--	int		rtStatus = _SUCCESS;
--
--	/*  RF config */
--	rtStatus = phy_RF6052_Config_ParaFile(Adapter);
--	return rtStatus;
--}
--
- static void getTxPowerIndex88E(struct adapter *Adapter, u8 channel, u8 *cckPowerLevel,
- 			       u8 *ofdmPowerLevel, u8 *BW20PowerLevel,
- 			       u8 *BW40PowerLevel)
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index a478b83dcbf3..d28b4dc2a767 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -611,7 +611,7 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
- 	if (status == _FAIL)
- 		goto exit;
- 
--	status = PHY_RFConfig8188E(Adapter);
-+	status = phy_RF6052_Config_ParaFile(Adapter);
- 	if (status == _FAIL)
- 		goto exit;
- 
-diff --git a/drivers/staging/r8188eu/include/Hal8188EPhyCfg.h b/drivers/staging/r8188eu/include/Hal8188EPhyCfg.h
-index 9e6f2361b090..4a0b782c33be 100644
---- a/drivers/staging/r8188eu/include/Hal8188EPhyCfg.h
-+++ b/drivers/staging/r8188eu/include/Hal8188EPhyCfg.h
-@@ -80,7 +80,6 @@ void rtl8188e_PHY_SetRFReg(struct adapter *adapter, u32 regaddr, u32 mask, u32 d
- /* MAC/BB/RF HAL config */
- int PHY_MACConfig8188E(struct adapter *adapter);
- int PHY_BBConfig8188E(struct adapter *adapter);
--int PHY_RFConfig8188E(struct adapter *adapter);
- 
- /*  BB TX Power R/W */
- void PHY_SetTxPowerLevel8188E(struct adapter *adapter, u8 channel);
++LOONGSON2 SOC SERIES THERMAL DRIVER
++M:	zhanghongchen <zhanghongchen@loongson.cn>
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-pm@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
++F:	drivers/thermal/loongson2_thermal.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 -- 
-2.37.3
+2.31.1
 
