@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872485ED3EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 06:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9005ED3ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 06:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbiI1Eb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 00:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S232410AbiI1EeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 00:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiI1Ebx (ORCPT
+        with ESMTP id S232020AbiI1EeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 00:31:53 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CB2A50EA;
-        Tue, 27 Sep 2022 21:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1664339511; x=1695875511;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CWf7VARnQCzFwuxSdraCBsk89iMRdWRvl9DeIDkSbWE=;
-  b=OLSjjlNwNaJBYSLnw+5Hw2YoFz1egzFXzor1gw569O7e2xDxYwY+ao6U
-   sdcL/DhObTIbf9gOJt0+9PzBj39rQiTfQsBr+N8lAGXpYuoE0n6NhrGoD
-   YSxghf2nMkjzlgYKXnnx7x7XUapzc0JzDzTIUCRH9+qNaXg/Cyvvf4LY2
-   g=;
-X-IronPort-AV: E=Sophos;i="5.93,351,1654560000"; 
-   d="scan'208";a="263925596"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-d803d33a.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 04:31:35 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-d803d33a.us-west-2.amazon.com (Postfix) with ESMTPS id 44146931F4;
-        Wed, 28 Sep 2022 04:31:34 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Wed, 28 Sep 2022 04:31:31 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.162.55) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Wed, 28 Sep 2022 04:31:29 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <edumazet@google.com>
-CC:     <davem@davemloft.net>, <dsahern@kernel.org>, <kuba@kernel.org>,
-        <kuni1840@gmail.com>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: [PATCH v2 net 3/5] tcp/udp: Call inet6_destroy_sock() in IPv6 sk->sk_destruct().
-Date:   Tue, 27 Sep 2022 21:31:21 -0700
-Message-ID: <20220928043121.79393-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <CANn89iKZg3y41TXJgv3UPD-puOhtZ=NqVBU6G-RL8TPONEwy_Q@mail.gmail.com>
-References: <CANn89iKZg3y41TXJgv3UPD-puOhtZ=NqVBU6G-RL8TPONEwy_Q@mail.gmail.com>
+        Wed, 28 Sep 2022 00:34:09 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19C0F8C2F
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 21:34:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664339648; x=1695875648;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XBf1OJAEQCXrpN+dmbGuJvECsb2rwRN/HMmFQYTcU/Y=;
+  b=MvuWVNqhwKTAuoEiJiKol1K+p3U7cdgKmYr/3psEjJqd19lpC+0PpAIy
+   pv38Hgb5/rldfb4NpFtUpjJZM7F+EPNntLtoP3ZOi4PRkoFaGMGe7Orxe
+   D/dsgy1XmRbFecXsY+PGKLT1wO81FP2qKwYIijZSJ/P8J19KlqABVB4r6
+   AdLMpsESrs6SSzKJVxJoEOOTPWBEpIzh1yrSociAll0PHQoFVB7479GKn
+   iNc1cUr1KE0i5Gv+QuEKFm7KNC8yfo60XQlB3kj12TRZT0vWTLU//YH5+
+   y38RGpNDdrP6aRi/nHinuG/taTM62txlRYUkC06VpnxbZf9cL/kiJCD7e
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="288658657"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="288658657"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 21:34:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="710817321"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="710817321"
+Received: from lkp-server02.sh.intel.com (HELO dfa2c9fcd321) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Sep 2022 21:34:06 -0700
+Received: from kbuild by dfa2c9fcd321 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1odOlq-0001yd-07;
+        Wed, 28 Sep 2022 04:34:06 +0000
+Date:   Wed, 28 Sep 2022 12:33:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:irq/urgent] BUILD SUCCESS
+ c0cca6a66458a0daa627774de7ca2b678a6bb3d8
+Message-ID: <6333ce91.3yGgWIK4clPMdQEC%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.55]
-X-ClientProxiedBy: EX13D17UWC002.ant.amazon.com (10.43.162.61) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,193 +64,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 27 Sep 2022 21:10:22 -0700
-> On Tue, Sep 27, 2022 at 9:00 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
-> >
-> > From:   Eric Dumazet <edumazet@google.com>
-> > Date:   Tue, 27 Sep 2022 20:43:51 -0700
-> > > On Tue, Sep 27, 2022 at 5:29 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
-> > > >
-> > > > Originally, inet6_sk(sk)->XXX were changed under lock_sock(), so we were
-> > > > able to clean them up by calling inet6_destroy_sock() during the IPv6 ->
-> > > > IPv4 conversion by IPV6_ADDRFORM.  However, commit 03485f2adcde ("udpv6:
-> > > > Add lockless sendmsg() support") added a lockless memory allocation path,
-> > > > which could cause a memory leak:
-> > > >
-> > > > setsockopt(IPV6_ADDRFORM)                 sendmsg()
-> > > > +-----------------------+                 +-------+
-> > > > - do_ipv6_setsockopt(sk, ...)             - udpv6_sendmsg(sk, ...)
-> > > >   - lock_sock(sk)                           ^._ called via udpv6_prot
-> > > >   - WRITE_ONCE(sk->sk_prot, &tcp_prot)          before WRITE_ONCE()
-> > > >   - inet6_destroy_sock()
-> > > >   - release_sock(sk)                        - ip6_make_skb(sk, ...)
-> > > >                                               ^._ lockless fast path for
-> > > >                                                   the non-corking case
-> > > >
-> > > >                                               - __ip6_append_data(sk, ...)
-> > > >                                                 - ipv6_local_rxpmtu(sk, ...)
-> > > >                                                   - xchg(&np->rxpmtu, skb)
-> > > >                                                     ^._ rxpmtu is never freed.
-> > > >
-> > > >                                             - lock_sock(sk)
-> > > >
-> > > > For now, rxpmtu is only the case, but let's call inet6_destroy_sock()
-> > > > in IPv6 sk->sk_destruct() not to miss the future change and a similar
-> > > > bug fixed in commit e27326009a3d ("net: ping6: Fix memleak in
-> > > > ipv6_renew_options().")
-> > >
-> > > I do not see how your patches prevent rxpmtu to be created at the time
-> > > of IPV6_ADDRFROM ?
-> > >
-> > > There seem to be races.
-> > >
-> > > lockless UDP sendmsg() is a disaster really.
-> >
-> > I think we are never able to prevent it and races exist unless we remove
-> > the lockless path itself, so the patch makes sure to free rxpmtu at least
-> > when we close() the socket.  Currently, we can not even free it.
-> 
-> I am saying your patches do not guarantee the rxpmtu is freed at close() time.
-> 
-> Once the v6 socket has been transformed to IPv4 one,
-> inet6_sock_destruct() is not going to be called.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
+branch HEAD: c0cca6a66458a0daa627774de7ca2b678a6bb3d8  Merge tag 'irqchip-fixes-6.0-2' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent
 
-inet6_sock_destruct() is set to sk->sk_destruct(), which is not changed
-by the transformation and will be called from __sk_destruct().
+elapsed time: 878m
 
-But I might be missing something.
-The lockless sendmsg() keeps sk_wmem_alloc > 0 after the conversion and
-prevents sk_free() ?
+configs tested: 60
+configs skipped: 2
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> > > > We can now remove all inet6_destroy_sock() calls from IPv6 protocol
-> > > > specific ->destroy() functions, but such changes are invasive to
-> > > > backport.  So they can be posted as a follow-up later for net-next.
-> > > >
-> > > > Fixes: 03485f2adcde ("udpv6: Add lockless sendmsg() support")
-> > > > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-> > > > ---
-> > > >  include/net/ipv6.h  |  1 +
-> > > >  include/net/udp.h   |  2 +-
-> > > >  net/ipv4/udp.c      |  8 ++++++--
-> > > >  net/ipv6/af_inet6.c |  9 ++++++++-
-> > > >  net/ipv6/udp.c      | 15 ++++++++++++++-
-> > > >  5 files changed, 30 insertions(+), 5 deletions(-)
-> > > >
-> > > > diff --git a/include/net/ipv6.h b/include/net/ipv6.h
-> > > > index de9dcc5652c4..11f1a9a8b066 100644
-> > > > --- a/include/net/ipv6.h
-> > > > +++ b/include/net/ipv6.h
-> > > > @@ -1178,6 +1178,7 @@ void ipv6_icmp_error(struct sock *sk, struct sk_buff *skb, int err, __be16 port,
-> > > >  void ipv6_local_error(struct sock *sk, int err, struct flowi6 *fl6, u32 info);
-> > > >  void ipv6_local_rxpmtu(struct sock *sk, struct flowi6 *fl6, u32 mtu);
-> > > >
-> > > > +void inet6_sock_destruct(struct sock *sk);
-> > > >  int inet6_release(struct socket *sock);
-> > > >  int inet6_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len);
-> > > >  int inet6_getname(struct socket *sock, struct sockaddr *uaddr,
-> > > > diff --git a/include/net/udp.h b/include/net/udp.h
-> > > > index 5ee88ddf79c3..fee053bcd17c 100644
-> > > > --- a/include/net/udp.h
-> > > > +++ b/include/net/udp.h
-> > > > @@ -247,7 +247,7 @@ static inline bool udp_sk_bound_dev_eq(struct net *net, int bound_dev_if,
-> > > >  }
-> > > >
-> > > >  /* net/ipv4/udp.c */
-> > > > -void udp_destruct_sock(struct sock *sk);
-> > > > +void udp_destruct_common(struct sock *sk);
-> > > >  void skb_consume_udp(struct sock *sk, struct sk_buff *skb, int len);
-> > > >  int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb);
-> > > >  void udp_skb_destructor(struct sock *sk, struct sk_buff *skb);
-> > > > diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> > > > index 560d9eadeaa5..a84ae44db7e2 100644
-> > > > --- a/net/ipv4/udp.c
-> > > > +++ b/net/ipv4/udp.c
-> > > > @@ -1598,7 +1598,7 @@ int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb)
-> > > >  }
-> > > >  EXPORT_SYMBOL_GPL(__udp_enqueue_schedule_skb);
-> > > >
-> > > > -void udp_destruct_sock(struct sock *sk)
-> > > > +void udp_destruct_common(struct sock *sk)
-> > > >  {
-> > > >         /* reclaim completely the forward allocated memory */
-> > > >         struct udp_sock *up = udp_sk(sk);
-> > > > @@ -1611,10 +1611,14 @@ void udp_destruct_sock(struct sock *sk)
-> > > >                 kfree_skb(skb);
-> > > >         }
-> > > >         udp_rmem_release(sk, total, 0, true);
-> > > > +}
-> > > > +EXPORT_SYMBOL_GPL(udp_destruct_common);
-> > > >
-> > > > +static void udp_destruct_sock(struct sock *sk)
-> > > > +{
-> > > > +       udp_destruct_common(sk);
-> > > >         inet_sock_destruct(sk);
-> > > >  }
-> > > > -EXPORT_SYMBOL_GPL(udp_destruct_sock);
-> > > >
-> > > >  int udp_init_sock(struct sock *sk)
-> > > >  {
-> > > > diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-> > > > index dbb1430d6cc2..0774cff62f2d 100644
-> > > > --- a/net/ipv6/af_inet6.c
-> > > > +++ b/net/ipv6/af_inet6.c
-> > > > @@ -109,6 +109,13 @@ static __inline__ struct ipv6_pinfo *inet6_sk_generic(struct sock *sk)
-> > > >         return (struct ipv6_pinfo *)(((u8 *)sk) + offset);
-> > > >  }
-> > > >
-> > > > +void inet6_sock_destruct(struct sock *sk)
-> > > > +{
-> > > > +       inet6_destroy_sock(sk);
-> > > > +       inet_sock_destruct(sk);
-> > > > +}
-> > > > +EXPORT_SYMBOL_GPL(inet6_sock_destruct);
-> > > > +
-> > > >  static int inet6_create(struct net *net, struct socket *sock, int protocol,
-> > > >                         int kern)
-> > > >  {
-> > > > @@ -201,7 +208,7 @@ static int inet6_create(struct net *net, struct socket *sock, int protocol,
-> > > >                         inet->hdrincl = 1;
-> > > >         }
-> > > >
-> > > > -       sk->sk_destruct         = inet_sock_destruct;
-> > > > +       sk->sk_destruct         = inet6_sock_destruct;
-> > > >         sk->sk_family           = PF_INET6;
-> > > >         sk->sk_protocol         = protocol;
-> > > >
-> > > > diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-> > > > index 3366d6a77ff2..a5256f7184ab 100644
-> > > > --- a/net/ipv6/udp.c
-> > > > +++ b/net/ipv6/udp.c
-> > > > @@ -56,6 +56,19 @@
-> > > >  #include <trace/events/skb.h>
-> > > >  #include "udp_impl.h"
-> > > >
-> > > > +static void udpv6_destruct_sock(struct sock *sk)
-> > > > +{
-> > > > +       udp_destruct_common(sk);
-> > > > +       inet6_sock_destruct(sk);
-> > > > +}
-> > > > +
-> > > > +static int udpv6_init_sock(struct sock *sk)
-> > > > +{
-> > > > +       skb_queue_head_init(&udp_sk(sk)->reader_queue);
-> > > > +       sk->sk_destruct = udpv6_destruct_sock;
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > >  static u32 udp6_ehashfn(const struct net *net,
-> > > >                         const struct in6_addr *laddr,
-> > > >                         const u16 lport,
-> > > > @@ -1723,7 +1736,7 @@ struct proto udpv6_prot = {
-> > > >         .connect                = ip6_datagram_connect,
-> > > >         .disconnect             = udp_disconnect,
-> > > >         .ioctl                  = udp_ioctl,
-> > > > -       .init                   = udp_init_sock,
-> > > > +       .init                   = udpv6_init_sock,
-> > > >         .destroy                = udpv6_destroy_sock,
-> > > >         .setsockopt             = udpv6_setsockopt,
-> > > >         .getsockopt             = udpv6_getsockopt,
-> > > > --
-> > > > 2.30.2
+gcc tested configs:
+arc                                 defconfig
+alpha                               defconfig
+s390                             allmodconfig
+s390                                defconfig
+s390                             allyesconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+powerpc                           allnoconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+m68k                             allmodconfig
+x86_64                           rhel-8.3-kvm
+x86_64                              defconfig
+sh                               allmodconfig
+alpha                            allyesconfig
+powerpc                          allmodconfig
+arc                              allyesconfig
+i386                 randconfig-a001-20220926
+x86_64                               rhel-8.3
+mips                             allyesconfig
+x86_64               randconfig-a002-20220926
+x86_64                           allyesconfig
+m68k                             allyesconfig
+i386                 randconfig-a002-20220926
+x86_64               randconfig-a005-20220926
+i386                 randconfig-a003-20220926
+arc                  randconfig-r043-20220926
+x86_64               randconfig-a004-20220926
+i386                 randconfig-a004-20220926
+x86_64               randconfig-a006-20220926
+x86_64               randconfig-a001-20220926
+i386                 randconfig-a005-20220926
+x86_64               randconfig-a003-20220926
+i386                 randconfig-a006-20220926
+arm                                 defconfig
+i386                                defconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+arm                              allyesconfig
+i386                             allyesconfig
+arm64                            allyesconfig
+x86_64                        randconfig-a015
+ia64                             allmodconfig
+
+clang tested configs:
+hexagon              randconfig-r045-20220926
+riscv                randconfig-r042-20220926
+s390                 randconfig-r044-20220926
+hexagon              randconfig-r041-20220926
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+x86_64                        randconfig-a014
+i386                 randconfig-a011-20220926
+i386                 randconfig-a014-20220926
+i386                 randconfig-a013-20220926
+i386                 randconfig-a012-20220926
+i386                 randconfig-a015-20220926
+i386                 randconfig-a016-20220926
+hexagon              randconfig-r041-20220925
+hexagon              randconfig-r045-20220925
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
