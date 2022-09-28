@@ -2,150 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501FC5EDD30
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFD65EDD31
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 14:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234030AbiI1MxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 08:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
+        id S234002AbiI1MxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 08:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233798AbiI1MxK (ORCPT
+        with ESMTP id S233998AbiI1MxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 08:53:10 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2051.outbound.protection.outlook.com [40.107.223.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EF94D814;
-        Wed, 28 Sep 2022 05:53:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bdjd8DuSNcv+/AgzYFq8cn85nFPk7EnGDs3cQpnBLF1e3cCvI7maqfPNdrxqygH7L1yUDwqckgXjbG2QK6uuWx1qHBY5gBqzVaklrc7ppSddW5yLIf+q/MLV17zdhPV3axMek5TKA+jZZPGIJ7SkEKjInQfDjN/iBdgn+xhYLp+Q5sQXU5OZmqrdHBG8MMHCRmIrcMcXogXidnbKL5OQiKOOf1tPUI8t1Z1ANHME7HWvXHCaBq1MVoeBZil56ArFfr1X6/lETyE82IKl6o07zRDVYT/1fEGHB2RSZBnPON1BkE3VGWSZORRMND0yMxWl0L7+mCvVmZbvP4lNBYvucA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n+Qwn/6V+Eeag8u6hIfJjZnfcOgRGzErwHqXHjEfjCg=;
- b=k0YClwTwDRSutpLXk+VBiI16nRFiMOU30ToB9Ws096XRlRjTj7OYs/8YFvJS/Da7qFIVTsdYBAmEdiKUTi+2aK7+4OC8ULnAhYtUDjHwm0NJ28tuWqXLv5qSN2RmN2VyBTwbFszCaMWrPS7mRjCEuJ4habbqoEa9vg4fNryb63fEDXXGvW5WKQY6y/YyrL8/HYpPywPV4fAX3v6LvFoMnX7UfvmARxloYq4nDoh7D6untGDTAJDQUuWa2m1nWr5ES7BUoN0eDO7KKPRGlyqK+mnQozQKMM5K1eN9GS+yoRUscIJHskZJ9X3NY3RLKcRP5JymsA71IvLWIYO7bpAMxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n+Qwn/6V+Eeag8u6hIfJjZnfcOgRGzErwHqXHjEfjCg=;
- b=eqBTqLnmGRwpwuDlRCxffPZPBDLeWP9vCrfZP9t3Yk5qjMoEsvVhBl+r9RnJzAVZpoy26vaZINSZ0vtqz9iiXDFzlB8n9fhkSrQvQfVkkAQG1aH4zuXVBrruY88s/S7yZeOmKnpskWzW/ywDHnRI++JoBzk1ukk3pFJWwYkG2RJ46YkpB9qbD/N7UnERfHhzYieYoAHSnj/oFsPGhf9rVMp+M8uPIB6Wn/RnVRHSmJ5hsRFqBlwQ3LRdO/obvJIErmjbx5B7yGq4R2jW11weYc6ZCRj24RxM5g2MfBLloCkziQpO7T3+27sfu3377db2BE2wPd8SpQHdor7cXYaEiQ==
-Received: from MW4PR04CA0288.namprd04.prod.outlook.com (2603:10b6:303:89::23)
- by DM4PR12MB5037.namprd12.prod.outlook.com (2603:10b6:5:39a::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Wed, 28 Sep
- 2022 12:53:05 +0000
-Received: from CO1NAM11FT098.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:89:cafe::df) by MW4PR04CA0288.outlook.office365.com
- (2603:10b6:303:89::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17 via Frontend
- Transport; Wed, 28 Sep 2022 12:53:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT098.mail.protection.outlook.com (10.13.174.207) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.17 via Frontend Transport; Wed, 28 Sep 2022 12:53:05 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 28 Sep
- 2022 05:52:56 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 28 Sep
- 2022 05:52:56 -0700
-Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
- mail.nvidia.com (10.129.68.6) with Microsoft SMTP Server id 15.2.986.29 via
- Frontend Transport; Wed, 28 Sep 2022 05:52:54 -0700
-From:   Wayne Chang <waynec@nvidia.com>
-To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC:     <waynec@nvidia.com>, <Sanket.Goswami@amd.com>,
-        <singhanc@nvidia.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/1] usb: typec: ucsi_ccg: Add OF support
-Date:   Wed, 28 Sep 2022 20:52:27 +0800
-Message-ID: <20220928125227.3045703-1-waynec@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 28 Sep 2022 08:53:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB697A520
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 05:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664369575;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qw69+PrzJ+2+9QRJKVTJ19LmNv5Ecvv+R+yRw3efh/0=;
+        b=C1gylgAl/IM42+Z26Jvffj03XwIOuVJv/HRLZl7lsmAghcChAG3UNwkoB0JEotI0Ywp1Eq
+        OVPx0Qy1U3Ia3jl0WIFUJ51mwywopvh86INC83wXGAdHXZt+RqRiXkaN/k03RYXXzF/FCw
+        eVSvU7Lk1Ks8zWduWh3mXXEBaRe7nkY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-314-rfQgzvUUPm6fznqmjvrBzg-1; Wed, 28 Sep 2022 08:52:54 -0400
+X-MC-Unique: rfQgzvUUPm6fznqmjvrBzg-1
+Received: by mail-wm1-f69.google.com with SMTP id b5-20020a05600c4e0500b003b499f99aceso1167257wmq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 05:52:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=Qw69+PrzJ+2+9QRJKVTJ19LmNv5Ecvv+R+yRw3efh/0=;
+        b=AA3K0oKXqwgnv6wqWY8PfHaxRwQYDDaB+ej/ZInZMHNCP/xKfSArLScHoLiWWURDGK
+         yVUCXLaZ/Sgup6XIdIOliNSwv6DF5XqOe7rVsoFktf6Iw+cQvkwElKRBQY2ft81HLNO0
+         bpYCEYRLHZuuFjhY1qqCAHvDR3eSzeTUK4KluXBPOkokdbgQwzUIxFcm1dyViJ6YD7oZ
+         mdsO/lm/9cIvBsRwUrx/I9HCAg9vfod1p0F0Zc3vY6JubMFELTCZt7rAeBN4h0rmYLUR
+         q/qOCdMxt6ETb9z6+/q0+7QM8APRd/4QTylH/p0K0m4WHJbUqol1EJ0wwWs+v2kfVUfL
+         PyDw==
+X-Gm-Message-State: ACrzQf317K25gqmQAaGuCso9xHFh+f42kF5+zLHmjNCm3EciqxXD6kL/
+        scDUFGM5KpFPvGwrEjjJncfEKJNzFqTnDgdjYziAQ2TQsZlQWRfDrRFplrTRn7RhTk9aHaOsvUU
+        OKawc/qucaTfkeNwSXRfCdIum
+X-Received: by 2002:a5d:49c8:0:b0:22a:35a1:1755 with SMTP id t8-20020a5d49c8000000b0022a35a11755mr19562617wrs.180.1664369573150;
+        Wed, 28 Sep 2022 05:52:53 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7ZQ+POWxq2bVQSaNUD4B0CIXYpDRJ5eA85WTdHeL+eMv35Rdf6vBmDpYViCv+zorjgMYiiRA==
+X-Received: by 2002:a5d:49c8:0:b0:22a:35a1:1755 with SMTP id t8-20020a5d49c8000000b0022a35a11755mr19562584wrs.180.1664369572851;
+        Wed, 28 Sep 2022 05:52:52 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:1100:add9:5f61:6b94:7540? (p200300cbc7041100add95f616b947540.dip0.t-ipconnect.de. [2003:cb:c704:1100:add9:5f61:6b94:7540])
+        by smtp.gmail.com with ESMTPSA id co4-20020a0560000a0400b00228d6bc8450sm5090561wrb.108.2022.09.28.05.52.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 05:52:52 -0700 (PDT)
+Message-ID: <dfe26896-6469-fa3c-744e-67c81efbee93@redhat.com>
+Date:   Wed, 28 Sep 2022 14:52:51 +0200
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT098:EE_|DM4PR12MB5037:EE_
-X-MS-Office365-Filtering-Correlation-Id: c65a151e-c7d1-4d95-2546-08daa15062d2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h4927P7893oFapJ0ERPARNXI/0TbxzWVHrWCGS23m+PU1xMd+Apy2GEQQtGDiBGWP3hC/ZyGnTgic8wbgem6NRNlyV9dzmvrZjiPRJWVRk+yVLy+jEfEoG4vmqRupaG6YZakD0DvEBDizITMBZjJZmzRJDD0h2ejbZdLq4bbhSP9Mpu6P+CYvpAhVfVKwDpEE0Yqfa2UWllJlHm8u+hT2VKDkO94zyzjieItffId1c1nLtYdZj2jRNGK0HzTLefCJiUbEDVCIUF7QmT0Sl76MQp77p/wfLTG3WpqCC80RUVHvEVsoceKpuR6kcHRWhYW18cKaQBmDZWVH8krzm6qfacY74YP5/ZOlAFdftP+gb3ceiuXTJqjdKQdsAWZz78XYOIopAy547G1zutZveF5a9r+zKpxs/adb7yZC6kpP6b+Su86BQR4ysfi2Q76iqQsnHkgOXppc4AxTn6LqfTeTkQ+zek+vlZ7PYNZT/CCS8cmUgKcx85MB9uP7vOSlmH/P8V79oV401A0zftBmU/4L2cutsJxAIuxyjwz+cN4YbavGstxxKSnxUu1Mfbw0aRdCLyfI9Zni79X/zrehchsTJb09m3ZjAnAXrGXzZKxZls0ogXdQu6uyqrKO9wLbH7oNqflzOevbMzuNQoob1o65ZzteziGJkrBMzpNE1zs1nuVr79sPczB6O1wcac0T9GOiPOa1jfKBc0Pixt+foisZlRwToCwYfV/BECTHp0klB71M0HQ4n/b4Z+DxEm6pc8+sfcpp9el4SW1+Ad1Hhjk1w==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(376002)(396003)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(7696005)(36756003)(316002)(336012)(54906003)(82740400003)(110136005)(26005)(1076003)(186003)(2616005)(36860700001)(86362001)(8936002)(70586007)(2906002)(40480700001)(41300700001)(83380400001)(426003)(47076005)(8676002)(4326008)(70206006)(478600001)(40460700003)(82310400005)(7636003)(5660300002)(356005)(6666004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 12:53:05.2803
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c65a151e-c7d1-4d95-2546-08daa15062d2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT098.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5037
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Like Xu <like.xu.linux@gmail.com>
+References: <YxtOEgJhe4EcAJsE@google.com>
+ <5f0345d2-d4d1-f4fe-86ba-6e22561cb6bd@redhat.com>
+ <37b3162e-7b3a-919f-80e2-f96eca7d4b4c@redhat.com>
+ <dfcbdf1d-b078-ec6c-7706-6af578f79ec2@redhat.com>
+ <55d7f0bd-ace1-506b-ea5b-105a86290114@redhat.com>
+ <f753391e-7bdc-bada-856a-87344e75bd74@redhat.com>
+ <111a46c1-7082-62e3-4f3a-860a95cd560a@redhat.com>
+ <14d5b8f2-7cb6-ce24-c7a7-32aa9117c953@redhat.com>
+ <YzIZhn47brWBfQah@google.com>
+ <3b04db9d-0177-7e6e-a54c-a28ada8b1d36@redhat.com>
+ <YzMdjSkKaJ8HyWXh@google.com>
+ <b3dc9505-9a5c-a631-065a-85bf86b1d071@redhat.com>
+ <e3a7ab12e3941e17c033e172eb063cc645d70eb4.camel@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
+In-Reply-To: <e3a7ab12e3941e17c033e172eb063cc645d70eb4.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The change enables the device tree infrastructure support on Cypress
-cypd4226.
+On 28.09.22 13:14, Maxim Levitsky wrote:
+> On Wed, 2022-09-28 at 11:11 +0200, Emanuele Giuseppe Esposito wrote:
+>>
+>> Am 27/09/2022 um 17:58 schrieb Sean Christopherson:
+>>> On Tue, Sep 27, 2022, Emanuele Giuseppe Esposito wrote:
+>>>> Am 26/09/2022 um 23:28 schrieb Sean Christopherson:
+>>>>> On Mon, Sep 26, 2022, David Hildenbrand wrote:
+>>>>>> As Sean said "This is an awful lot of a complexity to take on for something
+>>>>>> that appears to be solvable in userspace."
+>>>>>
+>>>>> And if the userspace solution is unpalatable for whatever reason, I'd like to
+>>>>> understand exactly what KVM behavior is problematic for userspace.  E.g. the
+>>>>> above RHBZ bug should no longer be an issue as the buggy commit has since been
+>>>>> reverted.
+>>>>
+>>>> It still is because I can reproduce the bug, as also pointed out in
+>>>> multiple comments below.
+>>>
+>>> You can reproduce _a_ bug, but it's obviously not the original bug, because the
+>>> last comment says:
+>>>
+>>>    Second, indeed the patch was reverted and somehow accepted without generating
+>>>    too much noise:
+>>>
+>>>    ...
+>>>
+>>>    The underlying issue of course as we both know is still there.
+>>>
+>>>    You might have luck reproducing it with this bug
+>>>
+>>>    https://bugzilla.redhat.com/show_bug.cgi?id=1855298
+>>>
+>>>    But for me it looks like it is 'working' as well, so you might have
+>>>    to write a unit test to trigger the issue.
+>>>
+>>>>> If the issue is KVM doing something nonsensical on a code fetch to MMIO, then I'd
+>>>>> much rather fix _that_ bug and improve KVM's user exit ABI to let userspace handle
+>>>>> the race _if_ userspace chooses not to pause vCPUs.
+>>>>>
+>>>>
+>>>> Also on the BZ they all seem (Paolo included) to agree that the issue is
+>>>> non-atomic memslots update.
+>>>
+>>> Yes, non-atomic memslot likely results in the guest fetching from a GPA without a
+>>> memslot.  I'm asking for an explanation of exactly what happens when that occurs,
+>>> because it should be possible to adjust KVM and/or QEMU to play nice with the
+>>> fetch, e.g. to resume the guest until the new memslot is installed, in which case
+>>> an atomic update isn't needed.
+>>>
+>>> I assume the issue is that KVM exits with KVM_EXIT_INTERNAL_ERROR because the
+>>> guest is running at CPL=0, and QEMU kills the guest in response.  If that's correct,
+>>> then that problem can be solved by exiting to userspace with KVM_EXIT_MMIO instead
+>>> of KVM_EXIT_INTERNAL_ERROR so that userspace can do something sane in response to
+>>> the MMIO code fetch.
+>>>
+>>> I'm pretty sure this patch will Just Work for QEMU, because QEMU simply resumes
+>>> the vCPU if mmio.len==0.  It's a bit of a hack, but I don't think it violates KVM's
+>>> ABI in any way, and it can even become "official" behavior since KVM x86 doesn't
+>>> otherwise exit with mmio.len==0.
+>>>
+>>> Compile tested only...
+>>
+>> So basically you are just making KVM catch the failed
+>> kvm_vcpu_read_guest_page() by retuning mmio.len = 0 to QEMU which
+>> basically ends up in doing nothing and retry again executing the
+>> instruction?
+>>
+>> I wonder if there are some performance implications in this, but it's
+>> definitely simpler than what I did.
+>>
+>> Tested on the same failing machine used for the BZ, fixes the bug.
+>>
+>> Do you want me to re-send the patch on your behalf (and add probably a
+>> small documentation on Documentation/virt/kvm/api.rst)?
+>>
+>> Emanuele
+>>> ---
+>>> From: Sean Christopherson <seanjc@google.com>
+>>> Date: Tue, 27 Sep 2022 08:16:03 -0700
+>>> Subject: [PATCH] KVM: x86: Exit to userspace with zero-length MMIO "read" on
+>>>   MMIO fetch
+>>>
+>>> Exit to userspace with KVM_EXIT_MMIO if emulation fails due to not being
+>>> able to fetch instruction bytes, e.g. if the resolved GPA isn't backed by
+>>> a memslot.  If userspace is manipulating memslots without pausing vCPUs,
+>>> e.g. to emulate BIOS relocation, then a vCPU may fetch while there is no
+>>> valid memslot installed.  Depending on guest context, KVM will either
+>>> exit to userspace with KVM_EXIT_INTERNAL_ERROR (L1, CPL=0) or simply
+>>> resume the guest (L2 or CPL>0), neither of which is desirable as exiting
+>>> with "emulation error" effectively kills the VM, and resuming the guest
+>>> doesn't provide userspace an opportunity to react the to fetch.
+>>>
+>>> Use "mmio.len == 0" to indicate "fetch".  This is a bit of a hack, but
+>>> there is no other way to communicate "fetch" to userspace without
+>>> defining an entirely new exit reason, e.g. "mmio.is_write" is a boolean
+>>> and not a flag, and there is no known use case for actually supporting
+>>> code fetches from MMIO, i.e. there's no need to allow userspace to fill
+>>> in the instruction bytes.
+>>>
+>>> Signed-off-by: Sean Christopherson <seanjc@google.com>
+>>> ---
+>>>   arch/x86/kvm/emulate.c     | 2 ++
+>>>   arch/x86/kvm/kvm_emulate.h | 1 +
+>>>   arch/x86/kvm/x86.c         | 9 ++++++++-
+>>>   3 files changed, 11 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+>>> index f092c54d1a2f..e141238d93b0 100644
+>>> --- a/arch/x86/kvm/emulate.c
+>>> +++ b/arch/x86/kvm/emulate.c
+>>> @@ -5353,6 +5353,8 @@ int x86_decode_insn(struct x86_emulate_ctxt *ctxt, void *insn, int insn_len, int
+>>>   done:
+>>>   	if (rc == X86EMUL_PROPAGATE_FAULT)
+>>>   		ctxt->have_exception = true;
+>>> +	if (rc == X86EMUL_IO_NEEDED)
+>>> +		return EMULATION_IO_FETCH;
+>>>   	return (rc != X86EMUL_CONTINUE) ? EMULATION_FAILED : EMULATION_OK;
+>>>   }
+>>>   
+>>> diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
+>>> index 89246446d6aa..3cb2e321fcd2 100644
+>>> --- a/arch/x86/kvm/kvm_emulate.h
+>>> +++ b/arch/x86/kvm/kvm_emulate.h
+>>> @@ -516,6 +516,7 @@ bool x86_page_table_writing_insn(struct x86_emulate_ctxt *ctxt);
+>>>   #define EMULATION_OK 0
+>>>   #define EMULATION_RESTART 1
+>>>   #define EMULATION_INTERCEPTED 2
+>>> +#define EMULATION_IO_FETCH 3
+>>>   void init_decode_cache(struct x86_emulate_ctxt *ctxt);
+>>>   int x86_emulate_insn(struct x86_emulate_ctxt *ctxt);
+>>>   int emulator_task_switch(struct x86_emulate_ctxt *ctxt,
+>>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>>> index aa5ab0c620de..7eb72694c601 100644
+>>> --- a/arch/x86/kvm/x86.c
+>>> +++ b/arch/x86/kvm/x86.c
+>>> @@ -7129,8 +7129,13 @@ static int kvm_fetch_guest_virt(struct x86_emulate_ctxt *ctxt,
+>>>   		bytes = (unsigned)PAGE_SIZE - offset;
+>>>   	ret = kvm_vcpu_read_guest_page(vcpu, gpa >> PAGE_SHIFT, val,
+>>>   				       offset, bytes);
+>>> -	if (unlikely(ret < 0))
+>>> +	if (unlikely(ret < 0)) {
+>>> +		vcpu->run->mmio.phys_addr = gpa;
+>>> +		vcpu->run->mmio.len = 0;
+>>> +		vcpu->run->mmio.is_write = 0;
+>>> +		vcpu->run->exit_reason = KVM_EXIT_MMIO;
+>>>   		return X86EMUL_IO_NEEDED;
+>>> +	}
+>>>   
+>>>   	return X86EMUL_CONTINUE;
+>>>   }
+>>> @@ -8665,6 +8670,8 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>>>   		r = x86_decode_emulated_instruction(vcpu, emulation_type,
+>>>   						    insn, insn_len);
+>>>   		if (r != EMULATION_OK)  {
+>>> +			if (r == EMULATION_IO_FETCH)
+>>> +				return 0;
+>>>   			if ((emulation_type & EMULTYPE_TRAP_UD) ||
+>>>   			    (emulation_type & EMULTYPE_TRAP_UD_FORCED)) {
+>>>   				kvm_queue_exception(vcpu, UD_VECTOR);
+>>>
+>>> base-commit: 39d9b48cc777bdf6d67d01ed24f1f89b13f5fbb2
+>>>
+> 
+> Note that AFAIK, there is another case (and probably more), if TDP is disabled,
+> and MMU root is in mmio, we kill the guest.
+> 
+> 
+> mmu_alloc_shadow_roots -> mmu_check_root
+> 
+> 
+> I used to have few hacks in KVM to cope with this, but AFAIK,
+> I gave up on it, because the issue would show up again and again.
 
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
----
- drivers/usb/typec/ucsi/ucsi_ccg.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+IIRC, s390x can have real problems if we temporarily remove a memslot. 
+In case the emulation/interpretation code tries accessing guest memory 
+and fails because there is no memslot describing that portion of guest RAM.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 5c0bf48be766..36442508bc37 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -631,7 +631,7 @@ static int ccg_request_irq(struct ucsi_ccg *uc)
- {
- 	unsigned long flags = IRQF_ONESHOT;
- 
--	if (!has_acpi_companion(uc->dev))
-+	if (!has_acpi_companion(uc->dev) && !uc->dev->of_node)
- 		flags |= IRQF_TRIGGER_HIGH;
- 
- 	return request_threaded_irq(uc->irq, NULL, ccg_irq_handler, flags, dev_name(uc->dev), uc);
-@@ -1417,6 +1417,12 @@ static int ucsi_ccg_remove(struct i2c_client *client)
- 	return 0;
- }
- 
-+static const struct of_device_id ucsi_ccg_of_match_table[] = {
-+		{ .compatible = "cypress,cypd4226", },
-+		{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ucsi_ccg_of_match_table);
-+
- static const struct i2c_device_id ucsi_ccg_device_id[] = {
- 	{"ccgx-ucsi", 0},
- 	{}
-@@ -1471,6 +1477,7 @@ static struct i2c_driver ucsi_ccg_driver = {
- 		.pm = &ucsi_ccg_pm,
- 		.dev_groups = ucsi_ccg_groups,
- 		.acpi_match_table = amd_i2c_ucsi_match,
-+		.of_match_table = ucsi_ccg_of_match_table,
- 	},
- 	.probe = ucsi_ccg_probe,
- 	.remove = ucsi_ccg_remove,
+Note that resizing/merging/splitting currently shouldn't happen on 
+s390x, though. But resizing of memslots might happen in the near future 
+with virtio-mem in QEMU.
+
 -- 
-2.25.1
+Thanks,
+
+David / dhildenb
 
