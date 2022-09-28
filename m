@@ -2,326 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF1B5EDFCF
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790765EDFD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233914AbiI1PKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
+        id S233473AbiI1PLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234597AbiI1PK3 (ORCPT
+        with ESMTP id S234671AbiI1PKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:10:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3822E0F6
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:10:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BE2561EBB
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 15:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55C69C433D6;
-        Wed, 28 Sep 2022 15:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1664377826;
-        bh=+HOKwcbw1B0WEYgcZtf8z/9nr2ZbysRiKOhYfv9YVTE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IS5sTNnyxfit75fuP9+CKivhPVfr5MuCYX5xkSMvaIHcwj3YlHPHGiuReVZRtFCkO
-         k/7JXAzqhj8lkEcOv3/FuRDU4yiHUhnPML+lIIGP/0mxsk6qSXMxUXyYBHHEAPpFJk
-         OVh6CdYsxMDrs090m2k5tYCYUY4q6QAKNz+LjBGQ=
-Date:   Wed, 28 Sep 2022 08:10:17 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Jason Gunthorpe <jgg@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>
-Subject: Re: [PATCH v2 8/8] hmm-tests: Add test for migrate_device_range()
-Message-Id: <20220928081017.3bf0b67d34a674b0a6df6b0d@linux-foundation.org>
-In-Reply-To: <a73cf109de0224cfd118d22be58ddebac3ae2897.1664366292.git-series.apopple@nvidia.com>
-References: <cover.60659b549d8509ddecafad4f498ee7f03bb23c69.1664366292.git-series.apopple@nvidia.com>
-        <a73cf109de0224cfd118d22be58ddebac3ae2897.1664366292.git-series.apopple@nvidia.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 11:10:55 -0400
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08C219C17;
+        Wed, 28 Sep 2022 08:10:54 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id v28so7451704wrd.3;
+        Wed, 28 Sep 2022 08:10:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=a7vLBMT/E4442MupPoT+pHag9Mp/Q4EXWsrU1jJIFGw=;
+        b=tAAMt2itvPRyxJJmUqv3YkESszzuv7uTdb2AuIijFAh3+XY5e94/6s90e8hqqGF54k
+         xFxW7UpWTymbyDnJtStLY14GABtyNKkZBwn1VpvNWb9IsHfz9yQWMaEfLqzv9avXCflG
+         L4N0ztZb4kHlpOnj26eXT/7Bp2IvSiITl97kgpLSG3D1ikaZFaxBmEq0iwdZFZQPjF9l
+         yZlZ8NwIq8z6GSeTHJLEHkAzgtyvcZQDriShTQvB+R3dvADWvLgJK0eVD8S6eT0WokXX
+         rQZ/gVtmjI3Rf+8FbqrFqqTbfYNKoDuuPH/sZQwCHyExsV3Wj8Cf/bwpRRijpUOsjGz8
+         pKYw==
+X-Gm-Message-State: ACrzQf0nwxYWCCk2GdCFKp8Q8tGR6ufdOR4blHRK4ux6ZhRPbbhMBdbe
+        IBA/VChqtFmnbOZwp+U41KU=
+X-Google-Smtp-Source: AMsMyM7LFfPMWiwrUKZs1m9whot2DEqwso07KVrBGjYZYygeqa1Kb9evcZNTDI1rLZa8b6y5zBrQ7g==
+X-Received: by 2002:adf:f58a:0:b0:22c:be20:24e8 with SMTP id f10-20020adff58a000000b0022cbe2024e8mr5903192wro.245.1664377853246;
+        Wed, 28 Sep 2022 08:10:53 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id y3-20020a5d4ac3000000b0022ac672654dsm4642497wrs.58.2022.09.28.08.10.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 08:10:52 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 15:10:51 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Matthew Bakhtiari <dev@mtbk.me>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH v10 08/27] rust: adapt `alloc` crate to the kernel
+Message-ID: <YzRj+47LIz2G9omo@liuwe-devbox-debian-v2>
+References: <20220927131518.30000-1-ojeda@kernel.org>
+ <20220927131518.30000-9-ojeda@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927131518.30000-9-ojeda@kernel.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Sep 2022 22:01:22 +1000 Alistair Popple <apopple@nvidia.com> wrote:
+On Tue, Sep 27, 2022 at 03:14:39PM +0200, Miguel Ojeda wrote:
+> +    /// Tries to append an element to the back of a collection.
+> +    ///
+> +    /// # Examples
+> +    ///
+> +    /// ```
+> +    /// let mut vec = vec![1, 2];
+> +    /// vec.try_push(3).unwrap();
+> +    /// assert_eq!(vec, [1, 2, 3]);
+> +    /// ```
+> +    #[inline]
+> +    #[stable(feature = "kernel", since = "1.0.0")]
+> +    pub fn try_push(&mut self, value: T) -> Result<(), TryReserveError> {
+> +        if self.len == self.buf.capacity() {
+> +            self.buf.try_reserve_for_push(self.len)?;
+> +        }
+> +        unsafe {
+> +            let end = self.as_mut_ptr().add(self.len);
+> +            ptr::write(end, value);
+> +            self.len += 1;
+> +        }
 
-> @@ -1401,22 +1494,7 @@ static int dmirror_device_init(struct dmirror_device *mdevice, int id)
->  
->  static void dmirror_device_remove(struct dmirror_device *mdevice)
->  {
-> -	unsigned int i;
-> -
-> -	if (mdevice->devmem_chunks) {
-> -		for (i = 0; i < mdevice->devmem_count; i++) {
-> -			struct dmirror_chunk *devmem =
-> -				mdevice->devmem_chunks[i];
-> -
-> -			memunmap_pages(&devmem->pagemap);
-> -			if (devmem->pagemap.type == MEMORY_DEVICE_PRIVATE)
-> -				release_mem_region(devmem->pagemap.range.start,
-> -						   range_len(&devmem->pagemap.range));
-> -			kfree(devmem);
-> -		}
-> -		kfree(mdevice->devmem_chunks);
-> -	}
-> -
-> +	dmirror_device_remove_chunks(mdevice);
->  	cdev_del(&mdevice->cdevice);
->  }
+Missing safety comment here?
 
-Needed a bit or rework due to
-https://lkml.kernel.org/r/20220826050631.25771-1-mpenttil@redhat.com. 
-Please check my resolution.
+With a safety comment added:
 
+Reviewed-by: Wei Liu <wei.liu@kernel.org>
 
---- a/lib/test_hmm.c~hmm-tests-add-test-for-migrate_device_range
-+++ a/lib/test_hmm.c
-@@ -100,6 +100,7 @@ struct dmirror {
- struct dmirror_chunk {
- 	struct dev_pagemap	pagemap;
- 	struct dmirror_device	*mdevice;
-+	bool remove;
- };
- 
- /*
-@@ -192,11 +193,15 @@ static int dmirror_fops_release(struct i
- 	return 0;
- }
- 
-+static struct dmirror_chunk *dmirror_page_to_chunk(struct page *page)
-+{
-+	return container_of(page->pgmap, struct dmirror_chunk, pagemap);
-+}
-+
- static struct dmirror_device *dmirror_page_to_device(struct page *page)
- 
- {
--	return container_of(page->pgmap, struct dmirror_chunk,
--			    pagemap)->mdevice;
-+	return dmirror_page_to_chunk(page)->mdevice;
- }
- 
- static int dmirror_do_fault(struct dmirror *dmirror, struct hmm_range *range)
-@@ -1218,6 +1223,85 @@ static int dmirror_snapshot(struct dmirr
- 	return ret;
- }
- 
-+static void dmirror_device_evict_chunk(struct dmirror_chunk *chunk)
-+{
-+	unsigned long start_pfn = chunk->pagemap.range.start >> PAGE_SHIFT;
-+	unsigned long end_pfn = chunk->pagemap.range.end >> PAGE_SHIFT;
-+	unsigned long npages = end_pfn - start_pfn + 1;
-+	unsigned long i;
-+	unsigned long *src_pfns;
-+	unsigned long *dst_pfns;
-+
-+	src_pfns = kcalloc(npages, sizeof(*src_pfns), GFP_KERNEL);
-+	dst_pfns = kcalloc(npages, sizeof(*dst_pfns), GFP_KERNEL);
-+
-+	migrate_device_range(src_pfns, start_pfn, npages);
-+	for (i = 0; i < npages; i++) {
-+		struct page *dpage, *spage;
-+
-+		spage = migrate_pfn_to_page(src_pfns[i]);
-+		if (!spage || !(src_pfns[i] & MIGRATE_PFN_MIGRATE))
-+			continue;
-+
-+		if (WARN_ON(!is_device_private_page(spage) &&
-+			    !is_device_coherent_page(spage)))
-+			continue;
-+		spage = BACKING_PAGE(spage);
-+		dpage = alloc_page(GFP_HIGHUSER_MOVABLE | __GFP_NOFAIL);
-+		lock_page(dpage);
-+		copy_highpage(dpage, spage);
-+		dst_pfns[i] = migrate_pfn(page_to_pfn(dpage));
-+		if (src_pfns[i] & MIGRATE_PFN_WRITE)
-+			dst_pfns[i] |= MIGRATE_PFN_WRITE;
-+	}
-+	migrate_device_pages(src_pfns, dst_pfns, npages);
-+	migrate_device_finalize(src_pfns, dst_pfns, npages);
-+	kfree(src_pfns);
-+	kfree(dst_pfns);
-+}
-+
-+/* Removes free pages from the free list so they can't be re-allocated */
-+static void dmirror_remove_free_pages(struct dmirror_chunk *devmem)
-+{
-+	struct dmirror_device *mdevice = devmem->mdevice;
-+	struct page *page;
-+
-+	for (page = mdevice->free_pages; page; page = page->zone_device_data)
-+		if (dmirror_page_to_chunk(page) == devmem)
-+			mdevice->free_pages = page->zone_device_data;
-+}
-+
-+static void dmirror_device_remove_chunks(struct dmirror_device *mdevice)
-+{
-+	unsigned int i;
-+
-+	mutex_lock(&mdevice->devmem_lock);
-+	if (mdevice->devmem_chunks) {
-+		for (i = 0; i < mdevice->devmem_count; i++) {
-+			struct dmirror_chunk *devmem =
-+				mdevice->devmem_chunks[i];
-+
-+			spin_lock(&mdevice->lock);
-+			devmem->remove = true;
-+			dmirror_remove_free_pages(devmem);
-+			spin_unlock(&mdevice->lock);
-+
-+			dmirror_device_evict_chunk(devmem);
-+			memunmap_pages(&devmem->pagemap);
-+			if (devmem->pagemap.type == MEMORY_DEVICE_PRIVATE)
-+				release_mem_region(devmem->pagemap.range.start,
-+						   range_len(&devmem->pagemap.range));
-+			kfree(devmem);
-+		}
-+		mdevice->devmem_count = 0;
-+		mdevice->devmem_capacity = 0;
-+		mdevice->free_pages = NULL;
-+		kfree(mdevice->devmem_chunks);
-+		mdevice->devmem_chunks = NULL;
-+	}
-+	mutex_unlock(&mdevice->devmem_lock);
-+}
-+
- static long dmirror_fops_unlocked_ioctl(struct file *filp,
- 					unsigned int command,
- 					unsigned long arg)
-@@ -1272,6 +1356,11 @@ static long dmirror_fops_unlocked_ioctl(
- 		ret = dmirror_snapshot(dmirror, &cmd);
- 		break;
- 
-+	case HMM_DMIRROR_RELEASE:
-+		dmirror_device_remove_chunks(dmirror->mdevice);
-+		ret = 0;
-+		break;
-+
- 	default:
- 		return -EINVAL;
- 	}
-@@ -1326,9 +1415,13 @@ static void dmirror_devmem_free(struct p
- 
- 	mdevice = dmirror_page_to_device(page);
- 	spin_lock(&mdevice->lock);
--	mdevice->cfree++;
--	page->zone_device_data = mdevice->free_pages;
--	mdevice->free_pages = page;
-+
-+	/* Return page to our allocator if not freeing the chunk */
-+	if (!dmirror_page_to_chunk(page)->remove) {
-+		mdevice->cfree++;
-+		page->zone_device_data = mdevice->free_pages;
-+		mdevice->free_pages = page;
-+	}
- 	spin_unlock(&mdevice->lock);
- }
- 
-@@ -1408,22 +1501,7 @@ static int dmirror_device_init(struct dm
- 
- static void dmirror_device_remove(struct dmirror_device *mdevice)
- {
--	unsigned int i;
--
--	if (mdevice->devmem_chunks) {
--		for (i = 0; i < mdevice->devmem_count; i++) {
--			struct dmirror_chunk *devmem =
--				mdevice->devmem_chunks[i];
--
--			memunmap_pages(&devmem->pagemap);
--			if (devmem->pagemap.type == MEMORY_DEVICE_PRIVATE)
--				release_mem_region(devmem->pagemap.range.start,
--						   range_len(&devmem->pagemap.range));
--			kfree(devmem);
--		}
--		kfree(mdevice->devmem_chunks);
--	}
--
-+	dmirror_device_remove_chunks(mdevice);
- 	cdev_device_del(&mdevice->cdevice, &mdevice->device);
- }
- 
---- a/lib/test_hmm_uapi.h~hmm-tests-add-test-for-migrate_device_range
-+++ a/lib/test_hmm_uapi.h
-@@ -36,6 +36,7 @@ struct hmm_dmirror_cmd {
- #define HMM_DMIRROR_SNAPSHOT		_IOWR('H', 0x04, struct hmm_dmirror_cmd)
- #define HMM_DMIRROR_EXCLUSIVE		_IOWR('H', 0x05, struct hmm_dmirror_cmd)
- #define HMM_DMIRROR_CHECK_EXCLUSIVE	_IOWR('H', 0x06, struct hmm_dmirror_cmd)
-+#define HMM_DMIRROR_RELEASE		_IOWR('H', 0x07, struct hmm_dmirror_cmd)
- 
- /*
-  * Values returned in hmm_dmirror_cmd.ptr for HMM_DMIRROR_SNAPSHOT.
---- a/tools/testing/selftests/vm/hmm-tests.c~hmm-tests-add-test-for-migrate_device_range
-+++ a/tools/testing/selftests/vm/hmm-tests.c
-@@ -1054,6 +1054,55 @@ TEST_F(hmm, migrate_fault)
- 	hmm_buffer_free(buffer);
- }
- 
-+TEST_F(hmm, migrate_release)
-+{
-+	struct hmm_buffer *buffer;
-+	unsigned long npages;
-+	unsigned long size;
-+	unsigned long i;
-+	int *ptr;
-+	int ret;
-+
-+	npages = ALIGN(HMM_BUFFER_SIZE, self->page_size) >> self->page_shift;
-+	ASSERT_NE(npages, 0);
-+	size = npages << self->page_shift;
-+
-+	buffer = malloc(sizeof(*buffer));
-+	ASSERT_NE(buffer, NULL);
-+
-+	buffer->fd = -1;
-+	buffer->size = size;
-+	buffer->mirror = malloc(size);
-+	ASSERT_NE(buffer->mirror, NULL);
-+
-+	buffer->ptr = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+			   MAP_PRIVATE | MAP_ANONYMOUS, buffer->fd, 0);
-+	ASSERT_NE(buffer->ptr, MAP_FAILED);
-+
-+	/* Initialize buffer in system memory. */
-+	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
-+		ptr[i] = i;
-+
-+	/* Migrate memory to device. */
-+	ret = hmm_migrate_sys_to_dev(self->fd, buffer, npages);
-+	ASSERT_EQ(ret, 0);
-+	ASSERT_EQ(buffer->cpages, npages);
-+
-+	/* Check what the device read. */
-+	for (i = 0, ptr = buffer->mirror; i < size / sizeof(*ptr); ++i)
-+		ASSERT_EQ(ptr[i], i);
-+
-+	/* Release device memory. */
-+	ret = hmm_dmirror_cmd(self->fd, HMM_DMIRROR_RELEASE, buffer, npages);
-+	ASSERT_EQ(ret, 0);
-+
-+	/* Fault pages back to system memory and check them. */
-+	for (i = 0, ptr = buffer->ptr; i < size / (2 * sizeof(*ptr)); ++i)
-+		ASSERT_EQ(ptr[i], i);
-+
-+	hmm_buffer_free(buffer);
-+}
-+
- /*
-  * Migrate anonymous shared memory to device private memory.
-  */
-_
-
+> +        Ok(())
+> +    }
