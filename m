@@ -2,61 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703FC5EE81F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 23:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE965EE812
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 23:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234459AbiI1VQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 17:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
+        id S233478AbiI1VOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 17:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234388AbiI1VPv (ORCPT
+        with ESMTP id S234494AbiI1VNQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 17:15:51 -0400
-Received: from condef-01.nifty.com (condef-01.nifty.com [202.248.20.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A46476D9;
-        Wed, 28 Sep 2022 14:10:33 -0700 (PDT)
-Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-01.nifty.com with ESMTP id 28SL6gC7000770;
-        Thu, 29 Sep 2022 06:06:42 +0900
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 28SL5q68001910;
-        Thu, 29 Sep 2022 06:05:53 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28SL5q68001910
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664399153;
-        bh=9up+bTK5BWQ+kwLY4kLOa7NGKSwEXLj5uD5cGziJ5To=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=l3lK4KpEimBu9kNN3NdsTgWZYUiRP6a7evwtiMaAed7gzcGZk1vlv4lwASNgN08ez
-         q+A+DR7SHnqJFBdBj+AJXKhaOB4FHXIOeY82ygyJgElxazdlSVFkQCoqf7XKcgRUPi
-         qUw2gO/lULtJCu7Lj6Ad1PLo1npHKWo42VSVM9f6538MOkFkcn4qn0YqZRrnlJibBb
-         SxoadZyn7VuaEp53OpYL2UK0Gm0z9g8lPr9Cnj/PMx8Gla8T2HHJJ3KkGBCc2GVZCj
-         csKUWv60JDvWXNkeoDYXgUbCaErF0yCzzB1JuAaE7kIP0+/QXo8K53n0Uekyp1AxAe
-         +j48axC9FlBlQ==
-X-Nifty-SrcIP: [209.85.167.181]
-Received: by mail-oi1-f181.google.com with SMTP id s125so16797537oie.4;
-        Wed, 28 Sep 2022 14:05:53 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3Pd69jcEclYFnIXBLan3MmFcH7fIGEkDOZPpEx5ZiUNwuOcOIx
-        E+YfozMARUrgFy6Ttw35d5CW13gcRUTXKQ9P4BA=
-X-Google-Smtp-Source: AMsMyM6Vv0mXNByGI64xVVwo+ve0W4Oeq9motr7ErKJeVs+xPXBnbO2weKAtdYXWjczfclkJ8MDFyuRIPMKH14k/VZY=
-X-Received: by 2002:a54:400c:0:b0:34f:9913:262 with SMTP id
- x12-20020a54400c000000b0034f99130262mr5193714oie.287.1664399152276; Wed, 28
- Sep 2022 14:05:52 -0700 (PDT)
+        Wed, 28 Sep 2022 17:13:16 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E040DE7C1F
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 14:07:53 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id b75so13570637pfb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 14:07:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=3wPW0+piPk2ft9dooMQAz6w02q2w62WYhl87gRVkcTk=;
+        b=tFiYW+OO4Yhq8CWdSEEMserzAGfUiLRpFoMuZe4H2LGXXlSfchoSBIXEMNt9ZHpXTR
+         djRYatUXy47bNPz2w2FLoS70Hn8RJHJlNw6a8w5720BeBoCn2qmw/p4leFZHYZQqYRDl
+         7hJHU/XgNhDu4v0dXEmqEGn7dNckdljIFsI6t3iVJrKs7DzGOntJ+QzPU9xG2rjjNZNz
+         myNl6WwWJa2OXJc1c+79dOSzL5NCrZ0QdVw2t4IJ6zA4Dpf68zz0XQwoorfxw2yWaxCH
+         7h4pNAf0H2tICxFSF7O9cG+inyqo7PDHGdq8wpfhtLjmrQ1Tpo2fReyQ2uxdfr+adoIf
+         iJeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=3wPW0+piPk2ft9dooMQAz6w02q2w62WYhl87gRVkcTk=;
+        b=wKnxlRQcCi4DTgBl+leiDeLkPn6yU/p9b5oRNYdiWrWML/2trKaDcepafmz0PID25J
+         LPHlrdgz0GgIbhWyBD4s+wH5YTuvwp8V71gXgkfeGa5Kz48CjhjOtj38zbCD6HiDoqTt
+         rMoHqqvMZbW0ApWyeGj8kilpb0InmLsHp9q98KRHIb9jHf7sKZm12w+x/GNGrhv1cGYL
+         JmDVgvsr2gTBWuehsqk7PlkkoRejh7RUpkulkaC/MTEx8al11dS1mm05TodOjz0TvpEA
+         kKcr1nUhfgRfxfluBHO6SVZeI9wp0RuFogEnic7yGbedxDqT+5l1T3biswIDKd+AhK3x
+         AqnQ==
+X-Gm-Message-State: ACrzQf0UKliGHqqk5kSPPrt9ea7R3+/k43Cf0WbpdDfthYBYSu0VA055
+        gyu3tZeufYmRhcwkyYooN71EMQ0+9r+Y+g==
+X-Google-Smtp-Source: AMsMyM7LMkw20qPvTa56SDUcXFflMvnX8Lei8QyhuQ6kpz2mcN0LXeikDdVmf37JfFyB3Dar3TZsRQ==
+X-Received: by 2002:a63:85c3:0:b0:43a:4c05:c313 with SMTP id u186-20020a6385c3000000b0043a4c05c313mr31375133pgd.418.1664399181658;
+        Wed, 28 Sep 2022 14:06:21 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id mp3-20020a17090b190300b00200558540a3sm1983196pjb.53.2022.09.28.14.06.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 14:06:21 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 21:06:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, avagin@gmail.com
+Subject: Re: [PATCH v2 4/4] x86/fpu: Correct the legacy state offset and size
+ information
+Message-ID: <YzS3SXVxJOrC/k5X@google.com>
+References: <20220922200034.23759-1-chang.seok.bae@intel.com>
+ <20220922200034.23759-5-chang.seok.bae@intel.com>
 MIME-Version: 1.0
-References: <20220924181915.3251186-1-masahiroy@kernel.org>
- <20220924181915.3251186-6-masahiroy@kernel.org> <YzSnlIChHmKdKFt8@bergen.fjasle.eu>
-In-Reply-To: <YzSnlIChHmKdKFt8@bergen.fjasle.eu>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 29 Sep 2022 06:05:15 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQm9CQe26=rgid36KX3JTfwP0zOhZBXCjssj_hOvFePDw@mail.gmail.com>
-Message-ID: <CAK7LNAQm9CQe26=rgid36KX3JTfwP0zOhZBXCjssj_hOvFePDw@mail.gmail.com>
-Subject: Re: [PATCH v3 5/7] kbuild: unify two modpost invocations
-To:     Nicolas Schier <nicolas@fjasle.eu>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922200034.23759-5-chang.seok.bae@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,134 +74,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 4:59 AM Nicolas Schier <nicolas@fjasle.eu> wrote:
->
-> On Sun, 25 Sep 2022 03:19:13 +0900 Masahiro Yamada wrote:
-> > Currently, modpost is executed twice; first for vmlinux, second
-> > for modules.
-> >
-> > This commit merges them.
-> >
-> > Current build flow
-> > ==================
-> >
-> >   1) build obj-y and obj-m objects
-> >     2) link vmlinux.o
-> >       3) modpost for vmlinux
-> >         4) link vmlinux
-> >           5) modpost for modules
-> >             6) link modules (*.ko)
-> >
-> > The build steps 1) through 6) are serialized, that is, modules are
-> > built after vmlinux. You do not get benefits of parallel builds when
-> > scripts/link-vmlinux.sh is being run.
-> >
-> > New build flow
-> > ==============
-> >
-> >   1) build obj-y and obj-m objects
-> >     2) link vmlinux.o
-> >       3) modpost for vmlinux and modules
-> >         4a) link vmlinux
-> >         4b) link modules (*.ko)
-> >
-> > In the new build flow, modpost is invoked just once.
-> >
-> > vmlinux and modules are built in parallel. One exception is
-> > CONFIG_DEBUG_INFO_BTF_MODULES=y, where modules depend on vmlinux.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> > (no changes since v1)
-> >
-> >  Makefile                  | 30 ++++++++++---
-> >  scripts/Makefile.modfinal |  2 +-
-> >  scripts/Makefile.modpost  | 93 ++++++++++++---------------------------
-> >  scripts/link-vmlinux.sh   |  3 --
-> >  4 files changed, 53 insertions(+), 75 deletions(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index b5dfb54b1993..cf9d7b1d8c14 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1152,7 +1152,7 @@ cmd_link-vmlinux =                                                 \
-> >       $(CONFIG_SHELL) $< "$(LD)" "$(KBUILD_LDFLAGS)" "$(LDFLAGS_vmlinux)";    \
-> >       $(if $(ARCH_POSTLINK), $(MAKE) -f $(ARCH_POSTLINK) $@, true)
-> >
-> > -vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) FORCE
-> > +vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) modpost FORCE
-> >       +$(call if_changed_dep,link-vmlinux)
-> >
-> >  targets := vmlinux
-> > @@ -1428,7 +1428,13 @@ endif
-> >  # Build modules
-> >  #
-> >
-> > -modules: $(if $(KBUILD_BUILTIN),vmlinux) modules_prepare
-> > +# *.ko are usually independent of vmlinux, but CONFIG_DEBUG_INFOBTF_MODULES
-> > +# is an exception.
-> > +ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> > +modules: vmlinux
-> > +endif
-> > +
-> > +modules: modules_prepare
-> >
-> >  # Target to prepare building external modules
-> >  modules_prepare: prepare
-> > @@ -1741,8 +1747,12 @@ ifdef CONFIG_MODULES
-> >  $(MODORDER): $(build-dir)
-> >       @:
-> >
-> > -modules: modules_check
-> > -     $(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
-> > +# KBUILD_MODPOST_NOFINAL can be set to skip the final link of modules.
-> > +# This is solely useful to speed up test compiles.
-> > +modules: modpost
-> > +ifneq ($(KBUILD_MODPOST_NOFINAL),1)
-> > +     $(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
-> > +endif
-> >
-> >  PHONY += modules_check
-> >  modules_check: $(MODORDER)
-> > @@ -1773,6 +1783,11 @@ KBUILD_MODULES :=
-> >
-> >  endif # CONFIG_MODULES
-> >
-> > +PHONY += modpost
-> > +modpost: $(if $(single-build),, $(if $(KBUILD_BUILTIN), vmlinux.o)) \
-> > +      $(if $(KBUILD_MODULES), modules_check)
-> > +     $(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
-> > +
-> >  # Single targets
-> >  # ---------------------------------------------------------------------------
-> >  # To build individual files in subdirectories, you can do like this:
-> > @@ -1792,16 +1807,19 @@ single-ko := $(sort $(filter %.ko, $(MAKECMDGOALS)))
-> >  single-no-ko := $(filter-out $(single-ko), $(MAKECMDGOALS)) \
-> >               $(foreach x, o mod, $(patsubst %.ko, %.$x, $(single-ko)))
-> >
-> > -$(single-ko): single_modpost
-> > +$(single-ko): single_modules
-> >       @:
-> >  $(single-no-ko): $(build-dir)
-> >       @:
-> >
-> >  # Remove MODORDER when done because it is not the real one.
-> >  PHONY += single_modpost
->
-> PHONY += single_modules
+On Thu, Sep 22, 2022, Chang S. Bae wrote:
+> MXCSR is architecturally part of the SSE state. But, the kernel code
+> presumes it as part of the FP component. Adjust the offset and size for
+> these legacy states.
+> 
+> Notably, each legacy component area is not contiguous, unlike extended
+> components. Add a warning message when these offset and size are
+> referenced.
+> 
+> Fixes: ac73b27aea4e ("x86/fpu/xstate: Fix xstate_offsets, xstate_sizes for non-extended xstates")
+> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+> Cc: x86@kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>  arch/x86/kernel/fpu/xstate.c | 21 +++++++++++++++------
+>  1 file changed, 15 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+> index a3f7045d1f8e..ac2ec5d6e7e4 100644
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -143,8 +143,13 @@ static unsigned int xfeature_get_offset(u64 xcomp_bv, int xfeature)
+>  	 * offsets.
+>  	 */
+>  	if (!cpu_feature_enabled(X86_FEATURE_XCOMPACTED) ||
+> -	    xfeature <= XFEATURE_SSE)
+> +	    xfeature <= XFEATURE_SSE) {
+> +		if (xfeature <= XFEATURE_SSE)
+> +			pr_warn("The legacy state (%d) is discontiguously located.\n",
+> +				xfeature);
 
-
-Thank you for your close review!
-I will fix it locally.
-
-
-
-
->
-> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
->
-
--- 
-Best Regards
-Masahiro Yamada
+pr_warn() here isn't warranted.  copy_uabi_to_xstate() calls this with non-extended
+features, which is perfectly fine since it manually handles MXCSR.  And that helper
+is directly reachable by userspace, i.e. userspace can spam the pr_warn().
