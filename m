@@ -2,93 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700285EE68E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 22:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D83B5EE690
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 22:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233399AbiI1UUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 16:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
+        id S234261AbiI1UVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 16:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234484AbiI1UUR (ORCPT
+        with ESMTP id S234582AbiI1UUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 16:20:17 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261F06E8BC
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 13:20:04 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id j10so8681293qtv.4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 13:20:04 -0700 (PDT)
+        Wed, 28 Sep 2022 16:20:25 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDE2BEB;
+        Wed, 28 Sep 2022 13:20:22 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id v1so12653546plo.9;
+        Wed, 28 Sep 2022 13:20:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=MXeDMHLUELvAe5XHkVOHWbbRpG/jdLEqo2Af5kPyfsY=;
+        b=lmuWvWSR3NxhmCJZK82ALeaL/obSiEchFl+ZNxDMEfaFmAnf1RzfYEEZfLlfukLf8p
+         31UphFnM01eC4l3vOvPGFceusnYeijgz4vMha4kA241PPDeSNTY6ucAUQCdF1JzJxAyC
+         75NPrQgKfIw74AgguDxZRbSnP27DJDbEf8Co3prInoui3a87eDPdTjOQxR5Y6MPAy7Zh
+         SN2LM6fRxQvKyS12FEH+R0w/I0gDYtReBafcfbjxDUU01moQh/W/0kc1V35Mrk1Pvtro
+         JscL6eaH4lWdJQ0bg15EfOIUAkRhwPMCvzmLRdO9ZSZ+q5WkkcqyDLb3McMgOCFV54xS
+         1e6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=910BBTQr5adgJwQHpSIQOnfPtqGf4FO7r1/P+t7eo0c=;
-        b=Y3iaQ2YYlSqa8vkkMsEBi1XYR4rXcL7kLH1dytBT5aEfxTUeDXnY/4m/ZJ3R/dtZMM
-         t/pP36VkSaGCSOEPqfRduz8zZmrBVIxVL2uIxK/IXwW0INuVIPsivDbLNCuckpZwYDei
-         v00Ap6HOXS2ux8XfCQbsgeuOEFGudjskFTdwOHlWiJnopH+r7zChoyPvzflZjb7n2XU3
-         Vxz10jQvQIobj6QcT8IjWAGzTrVOQwvlnsPy6HRFoJXw6sL63oEvoxraFQ+0AsY6T9og
-         ASmKOTQ6Dk02W7xh0qmW/amqNBFO4TNQJkqlEAVxpXfUttYq8reca/SrS2niXIr4Df0q
-         iVFw==
-X-Gm-Message-State: ACrzQf3tMR9g0nxJ7go3klEGrIhlP5Q4ZY79DQ7ETw+Afp8MrTsOflqI
-        7MatRLbJcVARDKSg+zz/uRQv/UC8aqzF3w==
-X-Google-Smtp-Source: AMsMyM5O/DvuEA937aVBngGLK1kuTy3GpOoHGFsCVE5pqCrYadj36AiGZFQGMW13Roeaum2zvKvBUg==
-X-Received: by 2002:ac8:7dc6:0:b0:35c:c9b1:9f98 with SMTP id c6-20020ac87dc6000000b0035cc9b19f98mr29033140qte.170.1664396403151;
-        Wed, 28 Sep 2022 13:20:03 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id f8-20020a05620a280800b006b929a56a2bsm3832893qkp.3.2022.09.28.13.20.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 13:20:02 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id 63so17338049ybq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 13:20:02 -0700 (PDT)
-X-Received: by 2002:a25:8e84:0:b0:696:466c:baa with SMTP id
- q4-20020a258e84000000b00696466c0baamr30857137ybl.604.1664396402294; Wed, 28
- Sep 2022 13:20:02 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=MXeDMHLUELvAe5XHkVOHWbbRpG/jdLEqo2Af5kPyfsY=;
+        b=TXw8wlBmx1FOMjutxhXdfCJQpJT1Q41DOYextcbR/N3X3t/rzWeENynmro8MfarZs9
+         3tCjyt136OR62f3CBmVXSQFffwqKc/lBvuGbbmudxir6U+istiaA1w1SGV/7MRwjw4DH
+         BmHymhH/SoBw3Cb0XePYL3cyqoBgViKzmNc/zPUZyKgMofNl8+bGalD9p1SdFYyXgmSH
+         rQ8BKylBwf4k8NsE88LrAVnwlOaqAqx9gVEmwrFt7AllJCqwlARlBOI5W3X8mw/0/CdW
+         xy0crE5us26i1RQ5e+pDjezEi72zPkAOh8trCJTo8sCvx3BSJmrdhaNC6y4wOwk7XnpH
+         u3Ow==
+X-Gm-Message-State: ACrzQf3dRyFFIXxKLYzqo5tCSiUTlYShVmYmdyOboze/GYni6kUivnwO
+        02+YZ/TZJ9Xwo+Zc2IrVDeGoScW/ynI=
+X-Google-Smtp-Source: AMsMyM6ZCPhOlFf9kNCBJe5F8CGDMSRmVni7H4heKCaETLCjc0CJ92R4sIOebBq1IJQXNnmbx2bFcw==
+X-Received: by 2002:a17:90b:1bc7:b0:202:52ce:a1d with SMTP id oa7-20020a17090b1bc700b0020252ce0a1dmr12538209pjb.110.1664396422061;
+        Wed, 28 Sep 2022 13:20:22 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:1a91:59b8:faf:7b4f])
+        by smtp.gmail.com with ESMTPSA id y8-20020a17090322c800b00179c99eb815sm4197815plg.33.2022.09.28.13.20.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 13:20:21 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 13:20:18 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] pinctrl: st: stop abusing of_get_named_gpio()
+Message-ID: <YzSsgoVoJn4+mSpv@google.com>
 MIME-Version: 1.0
-References: <20220927130835.1629806-1-Jason@zx2c4.com> <20220927130835.1629806-2-Jason@zx2c4.com>
-In-Reply-To: <20220927130835.1629806-2-Jason@zx2c4.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 28 Sep 2022 22:19:50 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUxQYYRh9oa-Ro791RynVrPZT07u9-HrFLe8RR-+Vj3_A@mail.gmail.com>
-Message-ID: <CAMuHMdUxQYYRh9oa-Ro791RynVrPZT07u9-HrFLe8RR-+Vj3_A@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] m68k: rework BI_VIRT_RNG_SEED as BI_RNG_SEED
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
-        Laurent Vivier <laurent@vivier.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 3:09 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> This is useful on !virt platforms for kexec, so change things from
-> BI_VIRT_RNG_SEED to be BI_RNG_SEED, and simply remove BI_VIRT_RNG_SEED
-> because it only ever lasted one release, and nothing is broken by not
-> having it. At the same time, keep a comment noting that it's been
-> removed, so that ID isn't reused. In addition, we previously documented
-> 2-byte alignment, but 4-byte alignment is actually necessary, so update
-> that comment.
->
-> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Laurent Vivier <laurent@vivier.eu>
-> Fixes: a1ee38ab1a75 ("m68k: virt: Use RNG seed from bootinfo block")
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Pin descriptions for this chip only look like standard GPIO device tree
+descriptions, while in fact they contain additional data (in excess of
+number of cells specified in description of gpio controllers). They also
+refer to only pins/gpios belonging to the driver and not to arbitrary
+gpio in the system.
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-i.e. will queue in the m68k for-v6.1 branch.
+Because we want to stop exporting OF-specific handlers from gpiolib-of,
+let's parse the pin reference ourself instead of trying to call
+of_get_named_gpio().
 
-Gr{oetje,eeting}s,
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
 
-                        Geert
+Just compiled, not tested on real hardware.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+ drivers/pinctrl/pinctrl-st.c | 34 ++++++++++++++++++++++++++++++----
+ 1 file changed, 30 insertions(+), 4 deletions(-)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+diff --git a/drivers/pinctrl/pinctrl-st.c b/drivers/pinctrl/pinctrl-st.c
+index 0fea71fd9a00..cf7f9cbe6044 100644
+--- a/drivers/pinctrl/pinctrl-st.c
++++ b/drivers/pinctrl/pinctrl-st.c
+@@ -12,7 +12,6 @@
+ #include <linux/io.h>
+ #include <linux/of.h>
+ #include <linux/of_irq.h>
+-#include <linux/of_gpio.h> /* of_get_named_gpio() */
+ #include <linux/of_address.h>
+ #include <linux/gpio/driver.h>
+ #include <linux/regmap.h>
+@@ -1162,6 +1161,31 @@ static void st_parse_syscfgs(struct st_pinctrl *info, int bank,
+ 	return;
+ }
+ 
++static int st_pctl_dt_calculate_pin(struct st_pinctrl *info,
++				    phandle bank, unsigned int offset)
++{
++	struct device_node *np;
++	struct gpio_chip *chip;
++	int retval = -EINVAL;
++	int i;
++
++	np = of_find_node_by_phandle(bank);
++	if (!np)
++		return -EINVAL;
++
++	for (i = 0; i < info->nbanks; i++) {
++		chip = &info->banks[i].gpio_chip;
++		if (chip->of_node == np) {
++			if (offset < chip->ngpio)
++				retval = chip->base + offset;
++			break;
++		}
++	}
++
++	of_node_put(np);
++	return retval;
++}
++
+ /*
+  * Each pin is represented in of the below forms.
+  * <bank offset mux direction rt_type rt_delay rt_clk>
+@@ -1175,6 +1199,8 @@ static int st_pctl_dt_parse_groups(struct device_node *np,
+ 	struct device *dev = info->dev;
+ 	struct st_pinconf *conf;
+ 	struct device_node *pins;
++	phandle bank;
++	unsigned int offset;
+ 	int i = 0, npins = 0, nr_props, ret = 0;
+ 
+ 	pins = of_get_child_by_name(np, "st,pins");
+@@ -1214,9 +1240,9 @@ static int st_pctl_dt_parse_groups(struct device_node *np,
+ 		conf = &grp->pin_conf[i];
+ 
+ 		/* bank & offset */
+-		be32_to_cpup(list++);
+-		be32_to_cpup(list++);
+-		conf->pin = of_get_named_gpio(pins, pp->name, 0);
++		bank = be32_to_cpup(list++);
++		offset = be32_to_cpup(list++);
++		conf->pin = st_pctl_dt_calculate_pin(info, bank, offset);
+ 		conf->name = pp->name;
+ 		grp->pins[i] = conf->pin;
+ 		/* mux */
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
+
+
+-- 
+Dmitry
