@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9505ED62B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 737605ED63F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233643AbiI1HeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        id S233661AbiI1HgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233501AbiI1HeS (ORCPT
+        with ESMTP id S233709AbiI1HfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:34:18 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E145AEB138;
-        Wed, 28 Sep 2022 00:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664350441; x=1695886441;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CemS3SbJ4Y7mcmGZ3q6D0TMYCXLcTmaPwaze2uSljn4=;
-  b=Kc7SASIzDOvs+DCYvC71UXqAy5ChjeuXMUSQPIAUDMkfI44XxfJ9+3De
-   R7cJ1SkXlbAr7aK5usleh5B1h3bqmNa61SL4qapZb5meE23tobKd0CYag
-   XuE+1v2njnudaytYQ5CV6+llWcpiN2Mrf2k4wA4rsRtGRFbCoYtPc/WJl
-   RdmOszbCVQI7K5q12slnWG8N7XMI7uQCRdrwKAMuceOnwfs9fNDP5Gr1R
-   Wf1g38PcTJ4wPQV2O3BeE4eGEq/I4anvgUcsHCnm6kuTDHxLnfchirEXv
-   gVVHDL4xUOkcEyFtRwDsPRmU/vA/+ukLj7u5dFVVlURjNTCblErTaoU7v
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="299130774"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="299130774"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 00:33:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="764185921"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="764185921"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 28 Sep 2022 00:33:34 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 28 Sep 2022 10:33:34 +0300
-Date:   Wed, 28 Sep 2022 10:33:34 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 1/1] usb: typec: Replace custom implementation of
- device_match_fwnode()
-Message-ID: <YzP4znoUSFTbSp55@kuha.fi.intel.com>
-References: <20220927171924.61908-1-andriy.shevchenko@linux.intel.com>
+        Wed, 28 Sep 2022 03:35:25 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D917FFA56;
+        Wed, 28 Sep 2022 00:35:13 -0700 (PDT)
+Received: from toolbox.int.toradex.com ([81.221.243.92]) by mrelay.perfora.net
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MVNfs-1okTEt3tqY-00YiWI;
+ Wed, 28 Sep 2022 09:33:54 +0200
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 3/5] arm: dts: colibri-imx6: specify usbh_pen gpio being active-low
+Date:   Wed, 28 Sep 2022 09:33:34 +0200
+Message-Id: <20220928073336.63881-4-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220928073336.63881-1-marcel@ziswiler.com>
+References: <20220928073336.63881-1-marcel@ziswiler.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927171924.61908-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:FGWmuOY2YK1iqQS2bXQ2FTeM1v9QsAVrOrGS++SDPzuGV3rfHzw
+ WDLJqWJUr2BT6I3wmREor0EGfU3eS9+Ly4NtRP8cKDO5IdxI9GPZqcnrHWKljVKIgpqNBVP
+ 3eZU34mIUsLt9thp4571uhaF5u7cTAWPtiYuxw9NIwEmxxFbNb/TvafJcOO8OoWH05ZEC+G
+ Nc9GdZH5wlaTIo805ZH4Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2AlgoefTcdw=:ywpl96VcQ+KljZju0P/gB5
+ AgkPuetedxm57Wo8/Z3quESGIX20WUQhW5F2ua+5KrN0HuTn3OIG1kiSa5O+sNfNzPB3Omdu5
+ OXiUlWqZFA2MQ2Pdk0lbx7WcuPF3SF62ByCES4AUbDcIqdgmpl2xrrojR3jkeQ+gWZq/F21rt
+ tlwHJw5tJlqH6huRwS7H9+6xyRatQBjTuVZ1wvj3PoIlpCQ2aHwEGRPQxL9ebQlRkPWvAbZxh
+ bb8w66BJqREmFMRfcnj/Hn/7b7NLzIaemkUwGkiyGav8KJPkF4cO7bClGq1b3DSHtsq+iq1Wx
+ o4YdbyhZrIopR1o9E9zSg5lUPZigqPFHXg8OKIZyE3/dTvuoxPe/7mFzlMAkDM6b7s/mjibd/
+ HQlznwPjPxdmOtwLdwQ++ktpH+ch1P4/ycQCbMW6I/PDfg1r2wyiYGWCkL9B76HKBtTqxpIJP
+ /RidQ28iSMpJxIVdmCeW5mMp9IDUHheJ8lDW2wgMy1deBUG2Pubwr70dpsz13cZErPkpBMFPm
+ nodNr/T4swAXzJNOcCg8FG35O/zl2A2iIo9bsSv6/N4q5JdGvBfIRf0500PlAdKFYh3xrA6pK
+ zBfszAzUrXDEXgDQBlSVdUJncYIRINIFNbBksRDQGQUqragPIr+Iw1H+g7FT/78icC+gTl8si
+ JHdZNTXkzIhOR+NX+ZOHUuP+6UgXpkBErXoXs2hO9gkXfFwt9yxVOl7RejK/mRik556D7+0zJ
+ O1MG354uAx4XDR5OrL8FZGkcZR3ylX63/seA8unSVc/HiurIlLzwUtFaPWOGQsjHOWAqKiZ8d
+ tBze3Fp
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 08:19:24PM +0300, Andy Shevchenko wrote:
-> Replace custom implementation of the device_match_fwnode().
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Specify USBH_PEN GPIO being active-low rather than active-high.
 
-> ---
->  drivers/usb/typec/mux.c     | 4 ++--
->  drivers/usb/typec/retimer.c | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-> index f81ea26ab389..c7177ddd4f12 100644
-> --- a/drivers/usb/typec/mux.c
-> +++ b/drivers/usb/typec/mux.c
-> @@ -29,7 +29,7 @@ static int switch_fwnode_match(struct device *dev, const void *fwnode)
->  	if (!is_typec_switch_dev(dev))
->  		return 0;
->  
-> -	return dev_fwnode(dev) == fwnode;
-> +	return device_match_fwnode(dev, fwnode);
->  }
->  
->  static void *typec_switch_match(const struct fwnode_handle *fwnode,
-> @@ -259,7 +259,7 @@ static int mux_fwnode_match(struct device *dev, const void *fwnode)
->  	if (!is_typec_mux_dev(dev))
->  		return 0;
->  
-> -	return dev_fwnode(dev) == fwnode;
-> +	return device_match_fwnode(dev, fwnode);
->  }
->  
->  static void *typec_mux_match(const struct fwnode_handle *fwnode,
-> diff --git a/drivers/usb/typec/retimer.c b/drivers/usb/typec/retimer.c
-> index 8edfdc709a28..8e1055783fe2 100644
-> --- a/drivers/usb/typec/retimer.c
-> +++ b/drivers/usb/typec/retimer.c
-> @@ -31,7 +31,7 @@ static bool dev_name_ends_with(struct device *dev, const char *suffix)
->  
->  static int retimer_fwnode_match(struct device *dev, const void *fwnode)
->  {
-> -	return dev_fwnode(dev) == fwnode && dev_name_ends_with(dev, "-retimer");
-> +	return device_match_fwnode(dev, fwnode) && dev_name_ends_with(dev, "-retimer");
->  }
->  
->  static void *typec_retimer_match(const struct fwnode_handle *fwnode, const char *id, void *data)
+Note that this should not have any functional impact as for fixed
+regulators the regular GPIO polarity is ignored and a true active-high
+enable GPIO would need an additional enable-active-high property which
+is/was not the case here. However, this may be rather confusing which
+this patch fixes.
 
-thanks,
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
 
+(no changes since v1)
+
+ arch/arm/boot/dts/imx6qdl-colibri.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx6qdl-colibri.dtsi b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
+index 21c5049bda4e..d8f985f297e4 100644
+--- a/arch/arm/boot/dts/imx6qdl-colibri.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
+@@ -112,7 +112,7 @@ reg_module_3v3_audio: regulator-module-3v3-audio {
+ 
+ 	reg_usb_host_vbus: regulator-usb-host-vbus {
+ 		compatible = "regulator-fixed";
+-		gpio = <&gpio3 31 GPIO_ACTIVE_HIGH>; /* SODIMM 129 / USBH_PEN */
++		gpio = <&gpio3 31 GPIO_ACTIVE_LOW>; /* SODIMM 129 / USBH_PEN */
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_regulator_usbh_pwr>;
+ 		regulator-max-microvolt = <5000000>;
 -- 
-heikki
+2.36.1
+
