@@ -2,125 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFAF5ED722
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC805ED727
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbiI1IJN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 28 Sep 2022 04:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
+        id S233936AbiI1IJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232879AbiI1IJJ (ORCPT
+        with ESMTP id S233760AbiI1IJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:09:09 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C877118B0F
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:09:07 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-67-6zoHn3j4OHOXZQky11Y5mw-1; Wed, 28 Sep 2022 09:09:05 +0100
-X-MC-Unique: 6zoHn3j4OHOXZQky11Y5mw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Wed, 28 Sep
- 2022 09:09:01 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Wed, 28 Sep 2022 09:09:01 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'YingChi Long' <me@inclyc.cn>
-CC:     "bp@alien8.de" <bp@alien8.de>,
-        "chang.seok.bae@intel.com" <chang.seok.bae@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: RE: [PATCH v2] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
-Thread-Topic: [PATCH v2] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
-Thread-Index: AQHY0oauCPu6lqkmBkuKoE4b1f9eoq3zbbUQ///9N4CAARHtMA==
-Date:   Wed, 28 Sep 2022 08:09:01 +0000
-Message-ID: <fc12d0d4c1064832955543217d0dbe4a@AcuMS.aculab.com>
-References: <38114d1b752c497eba1640360daf5b9e@AcuMS.aculab.com>
- <20220927164411.99297-1-me@inclyc.cn>
-In-Reply-To: <20220927164411.99297-1-me@inclyc.cn>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 04:09:44 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D17B15720
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:09:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3A8371F891;
+        Wed, 28 Sep 2022 08:09:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664352581; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PIQ+FJs0HQ8QyIlSJ2KSVusuJMisiIhJxGfcIFhT/8Y=;
+        b=JRezNoV2wwiYfw8gPKPe7K5T94HJWGh7/NR9STR1hBad5sI5o8sRbRPcH4d1VnehCxTHoy
+        3hKnX+3DCvNah0Uzl6mcWP5Wl1w5utpJyPhbztUrXuKvBAA9IeNCoC0XxZOFn+sMuWly1n
+        E4L01pCwDT/qJh7t6We1cvy1lTnmGrk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664352581;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PIQ+FJs0HQ8QyIlSJ2KSVusuJMisiIhJxGfcIFhT/8Y=;
+        b=huK3x/UYtm9pHOMGjpw+E1ydDNjNE+IMmiPxEdpV/bAA1oaS4GcJnw/UwrASvSGsrbkOLY
+        w09q//rC8RMPtsBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0777813A84;
+        Wed, 28 Sep 2022 08:09:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eHXfAEUBNGMqSwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 28 Sep 2022 08:09:41 +0000
+Date:   Wed, 28 Sep 2022 10:09:40 +0200
+Message-ID: <871qrvgbsr.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Lu, Brent" <brent.lu@intel.com>
+Cc:     "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "Jaroslav Kysela" <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mohan Kumar <mkumard@nvidia.com>,
+        Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>, "Zhi, Yong" <yong.zhi@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ALSA: hda/hdmi: run eld notify in delay work
+In-Reply-To: <875yh8ezs9.wl-tiwai@suse.de>
+References: <20220927135807.4097052-1-brent.lu@intel.com>
+        <87ill8gb5c.wl-tiwai@suse.de>
+        <CY5PR11MB6257CB33E1EDA90CE2B2F99D97549@CY5PR11MB6257.namprd11.prod.outlook.com>
+        <875yh8ezs9.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: YingChi Long
-> Sent: 27 September 2022 17:44
+On Wed, 28 Sep 2022 09:14:30 +0200,
+Takashi Iwai wrote:
 > 
-> > Interesting - what justification do they give?
-> > Linux kernel requires that the compiler add no unnecessary padding
-> > so that structure definitions are well defined.
+> On Wed, 28 Sep 2022 04:06:45 +0200,
+> Lu, Brent wrote:
+> > 
+> > > >
+> > > > During resolution change, display driver would disable HDMI audio then
+> > > > enable it in a short time. There is possibility that eld notify for
+> > > > HDMI audio enable is called when previous runtime suspend is still
+> > > > running. In this case, the elf nofity just returns and not updating
+> > > > the status of corresponding HDMI pin/port. Here we move the eld nofity
+> > > > to a delay work so we don't lose it.
+> > > >
+> > > > Signed-off-by: Brent Lu <brent.lu@intel.com>
+> > > 
+> > > We have already a dedicated per-pin work for the delayed ELD check.
+> > > Can we reuse it instead of inventing yet another work?
+> > > More work needs more cares, and better to avoid unless really needed (e.g.
+> > > you forgot cleanup at suspend/removal in this patch).
+> > > 
+> > > 
+> > > thanks,
+> > > 
+> > > Takashi
+> > 
+> > Hi Takashi,
+> > 
+> > I've checked the hdmi_repoll_eld() and check_presence_and_report() function to see
+> > if we can reuse the per-pin work. I've some questions about reusing the per-pin work:
+> > 
+> > 1. hdmi_repoll_eld() calls snd_hda_jack_tbl_get_mst() function while
+> >    check_presence_and_report() doesn't. Is it ok? 
 > 
-> Yes, that's a clarification given in 2019.
+> For the system with the audio component, there is no jack entry, hence
+> this will be ignored.
 > 
-> > So using a type definition inside offsetof() won't give a
-> > useful value - but it still isn't really UB.
+> > 2. snd_hdac_i915_set_bclk() is called in intel_pin_eld_notify() function. Since it's
+> >    skipped, we need to call it in the per-pin work. Need to add a flag in hdmi_spec_per_pin
+> >    to indicate this situation.
 > 
-> WG14 may worry about commas and the scope of new definitions. So they provide
-> new words into the standard and said:
+> Yeah, I guess this was already a bug.  It implies that the set_bclk()
+> call is missing in the suspend/resume case, too.  We need to call it
+> more consistently.
 > 
-> > If the specified type defines a new type or if the specified member is a
-> > bit-field, the behavior is undefined.
+> > 3. We can schedule the per-pin work in intel_pin_eld_notify() when snd_hdac_is_in_pm()
+> >    returns true but there is no guarantee the runtime suspend will finished when the per-pin
+> >   work is schedule to run.
 > 
-> https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
+> On the second thought, we may simply proceed the notification if it's
+> in a valid context.  The only period to prohibit the update is during
+> the suspend/resume until the ELD is updated by the resume itself.
+> So, something like below may work instead.  Could you give it a try?
 
-Except that the kernel requires it to be defined.
+A correction in the patch, it still has to check in-pm state;
+otherwise it won't be handled when runtime-suspended.
 
-Did they clarify the clause that required offsetof() to return
-a compile-time constant?
-That stops you doing offsetof(struct x, member->array[expression]).
-(Oh and the compiler for a common OS disallows any version of that
-even when expression in an integer constant!)
 
-> 
-> I've provided this link in the patch.
-> 
-> > Has that ever worked?
-> > Given:
-> > 	struct foo {
-> > 		int a;
-> > 		char b;
-> > 		char c;
-> > 	};
-> 
-> TYPE_ALIGN(struct foo) evaluates to 4 in the previous approach (based on
-> offsetof). _Align(struct foo) evaluates to the same value.
-> 
-> See https://godbolt.org/z/sqebhEnsq
-> 
-> > I think CHECK_MEMBER_AT_END_OF_TYPE(struct foo, b) is true.
-> 
-> Hmm, both the previous version and after this patch the macro gives me
-> false. (See the godbolt link).
+Takashi
 
-See https://godbolt.org/z/95shMx44j
-
-It return 1 for a and 0 for b and c (and char d,e following b).
-NFI what it is trying to do!
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-- 8< --
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -83,6 +83,7 @@ struct hdmi_spec_per_pin {
+ 	int pcm_idx; /* which pcm is attached. -1 means no pcm is attached */
+ 	int repoll_count;
+ 	bool setup; /* the stream has been set up by prepare callback */
++	bool eld_update_frozen;
+ 	bool silent_stream;
+ 	int channels; /* current number of channels */
+ 	bool non_pcm;
+@@ -788,16 +789,28 @@ static void hdmi_setup_audio_infoframe(struct hda_codec *codec,
+ 
+ static void hdmi_present_sense(struct hdmi_spec_per_pin *per_pin, int repoll);
+ 
+-static void check_presence_and_report(struct hda_codec *codec, hda_nid_t nid,
+-				      int dev_id)
++static struct hdmi_spec_per_pin *
++get_pin_from_nid(struct hda_codec *codec, hda_nid_t nid, int dev_id)
+ {
+ 	struct hdmi_spec *spec = codec->spec;
+ 	int pin_idx = pin_id_to_pin_index(codec, nid, dev_id);
+ 
+ 	if (pin_idx < 0)
++		return NULL;
++	return get_pin(spec, pin_idx);
++}
++
++static void check_presence_and_report(struct hda_codec *codec, hda_nid_t nid,
++				      int dev_id)
++{
++	struct hdmi_spec *spec = codec->spec;
++	struct hdmi_spec_per_pin *per_pin;
++
++	per_pin = get_pin_from_nid(codec, nid, dev_id);
++	if (!per_pin)
+ 		return;
+ 	mutex_lock(&spec->pcm_lock);
+-	hdmi_present_sense(get_pin(spec, pin_idx), 1);
++	hdmi_present_sense(per_pin, 1);
+ 	mutex_unlock(&spec->pcm_lock);
+ }
+ 
+@@ -1582,6 +1595,7 @@ static void update_eld(struct hda_codec *codec,
+ 		snd_jack_report(pcm_jack,
+ 				(eld->monitor_present && eld->eld_valid) ?
+ 				SND_JACK_AVOUT : 0);
++	per_pin->eld_update_frozen = false;
+ }
+ 
+ /* update ELD and jack state via HD-audio verbs */
+@@ -2494,6 +2508,7 @@ static int generic_hdmi_suspend(struct hda_codec *codec)
+ 	for (pin_idx = 0; pin_idx < spec->num_pins; pin_idx++) {
+ 		struct hdmi_spec_per_pin *per_pin = get_pin(spec, pin_idx);
+ 		cancel_delayed_work_sync(&per_pin->work);
++		per_pin->eld_update_frozen = true;
+ 	}
+ 	return 0;
+ }
+@@ -2656,6 +2671,7 @@ static void generic_acomp_pin_eld_notify(void *audio_ptr, int port, int dev_id)
+ 	struct hda_codec *codec = audio_ptr;
+ 	struct hdmi_spec *spec = codec->spec;
+ 	hda_nid_t pin_nid = spec->port2pin(codec, port);
++	struct hdmi_spec_per_pin *per_pin;
+ 
+ 	if (!pin_nid)
+ 		return;
+@@ -2667,7 +2683,9 @@ static void generic_acomp_pin_eld_notify(void *audio_ptr, int port, int dev_id)
+ 	if (codec->core.dev.power.power_state.event == PM_EVENT_SUSPEND)
+ 		return;
+ 	/* ditto during suspend/resume process itself */
+-	if (snd_hdac_is_in_pm(&codec->core))
++	per_pin = get_pin_from_nid(codec, pin_nid, dev_id);
++	if (!per_pin || (per_pin->eld_update_frozen &&
++			 snd_hdac_is_in_pm(&codec->core)))
+ 		return;
+ 
+ 	check_presence_and_report(codec, pin_nid, dev_id);
+@@ -2841,6 +2859,7 @@ static int intel_port2pin(struct hda_codec *codec, int port)
+ static void intel_pin_eld_notify(void *audio_ptr, int port, int pipe)
+ {
+ 	struct hda_codec *codec = audio_ptr;
++	struct hdmi_spec_per_pin *per_pin;
+ 	int pin_nid;
+ 	int dev_id = pipe;
+ 
+@@ -2853,7 +2872,9 @@ static void intel_pin_eld_notify(void *audio_ptr, int port, int pipe)
+ 	if (codec->core.dev.power.power_state.event == PM_EVENT_SUSPEND)
+ 		return;
+ 	/* ditto during suspend/resume process itself */
+-	if (snd_hdac_is_in_pm(&codec->core))
++	per_pin = get_pin_from_nid(codec, pin_nid, dev_id);
++	if (!per_pin || (per_pin->eld_update_frozen &&
++			 snd_hdac_is_in_pm(&codec->core)))
+ 		return;
+ 
+ 	snd_hdac_i915_set_bclk(&codec->bus->core);
