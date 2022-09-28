@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BDA5EDEE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7551A5EDEED
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234099AbiI1Ogb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        id S234425AbiI1Oif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234419AbiI1Og0 (ORCPT
+        with ESMTP id S234418AbiI1Oid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:36:26 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DECACA35;
-        Wed, 28 Sep 2022 07:36:22 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id k3-20020a05600c1c8300b003b4fa1a85f8so1126030wms.3;
-        Wed, 28 Sep 2022 07:36:21 -0700 (PDT)
+        Wed, 28 Sep 2022 10:38:33 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74E1AE211;
+        Wed, 28 Sep 2022 07:38:31 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id c30so16391241edn.2;
+        Wed, 28 Sep 2022 07:38:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=on2LHm8sMZDl8Rn8YgnIjYrpIKwexiS2g2UGbQmLvu8=;
-        b=OtDX/zk9k72UiiyoEZTOBtXSIbHTwpwXMHkM5svnDUDNm1jcfl6ZQwOZ534YSnEvSt
-         OCBgEpy3/OpsH9lodFAfkO26I5BMd0QgVRGewJtqk15FZ1xDfuMNHZnqVs2/XoirK7Yj
-         IGNzCHhqpmHs0Bimr/c3Dh/NM+BmowVtUBVqOSaYpDnAqUVMPTgZDsH0sAwQqkePa7ox
-         YbxJDfqbe62aLrK0IJFz0kJILSkDE+rJqXdhIbjm+j5LcvC1Zn9Q7QJERp59hd0O6vDP
-         Im386L19K9TChfDPdWCrHHXzkv2LIp5aFqhPbJjaTVZt3bW8/IhoZEg5K2cl4DBClzby
-         MKYQ==
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=8DnDko/nUiaNQfilebzmtyXvqhSN9KVnALbnVAuYDqY=;
+        b=WgvQ11R+E2jsOCPT8ZNGJjq2pseCnFfA1rrwcat2ovY/RqY6+BNQ7i5E83cuRSedBe
+         fXZ4WpYRCddesrDjbvOu+snt1NOyX8KTgiS6p3AuUzOmOGZlyB35e1XKyx3gXwGrxXUZ
+         xHmOm5yClT7SHgmmZakm0WWiWCMxmjc184Nh7XQ0XCe5tLmeXNml9Og2T9m6KKlWNZg2
+         QMSO066GUcY4K0PY0X2SgVFgC+i+yyHURlMepAAkd9X73P6Y2v9MT7/zcKZlVJNdgNt1
+         BZXO3fvTN8pnQWSjkFrTXMgrjX+VtClkUUGfKg03eVoL540aoE7LSriP9D0v/i91w51f
+         tPmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=on2LHm8sMZDl8Rn8YgnIjYrpIKwexiS2g2UGbQmLvu8=;
-        b=0InD+AWKYbbsWXlVmRGQU+yOhK8vK1Hj5ZNzObCpdd6tk6FFkoFcZMmxraE8sIVUE/
-         uEtu303xI60x871510ba6GOHMVwQ3y4Aa2jYHsubbmyzTjIKP62cFNxAG4JwkTVfRkkc
-         2hN9aI4kAJXxR+bIjiefgApCgr3/TkA1HW/qEiAmfs2grnXv1DIO8B/2Fe0q2cQontf+
-         1TG+i3zOUw97r8OVSEM9VUwALsBP+dp1ygtXN2JyGXLCUlvlbc9H7TmPTG4voc8td+20
-         /jCxdmHh/MMZ/eHsigYy/Y8oq1E2AyHmvXUZTE81zspep1I6vPiaP2dyuZntKQ4lJM85
-         tSQQ==
-X-Gm-Message-State: ACrzQf3tkNMgLDDBPxPSiA5Tnjb+Lx5tMNkqr77Ml3dt5xz/XZybFn5p
-        ubGwDux0TQrwepLbHq9g1FM=
-X-Google-Smtp-Source: AMsMyM4jE7GOPkysZy5M8IOwFhjjMPYF3GUVzy8WQUB82HYJN1KpazDuVRTUIxOK8y6j9G8tTH6HVg==
-X-Received: by 2002:a05:600c:1c84:b0:3b3:ef37:afd3 with SMTP id k4-20020a05600c1c8400b003b3ef37afd3mr6861272wms.155.1664375780454;
-        Wed, 28 Sep 2022 07:36:20 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id g14-20020adff3ce000000b0022af9555669sm5132242wrp.99.2022.09.28.07.36.19
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=8DnDko/nUiaNQfilebzmtyXvqhSN9KVnALbnVAuYDqY=;
+        b=7AgFrpjrMsjY1KwU3WXpFf4eE1PCFLDBmnDSRoF/TQH9qBrxLM9IKAq311p/38nE60
+         5Kwao3uJ85jbeJUfFtL4RzEdvoMO9dxlrdmvjN/g5kmC+lN9Cnao3XhAUy69RerRkCEx
+         p0e7OTv5+xPT302VSPMPUmIVeFKv/yvhxlUVmN1VhodBTbcpXRzUwwxrfPsL5J/Kjyod
+         PO5TnmzWZGcJuySV0xg8dR6KbkZvLsPpM+IHG8Yf5XjTzJlDLqRAv2uKixRlyJgesgPW
+         ySvUS1xoEy2VL2x4lLQCKrZTnx3tNkie56lO1trsAdWLif4lxAWUW6GYKY50kp6VUoUL
+         l2Ag==
+X-Gm-Message-State: ACrzQf2HJPRwtFH75lzpIiSMIh0znZFnBdw7lq1nSZNeLujvHKmEhSar
+        MhrYmKxGGnc3QizX1wvsm2c=
+X-Google-Smtp-Source: AMsMyM7CRrMZVNMHkmmpmNiBvIwdWVrrsRiJWkkGrnazyApe61Bk6BWnrn+7kLLA0mP/it3HOZnSig==
+X-Received: by 2002:aa7:da08:0:b0:456:ea2b:3ce3 with SMTP id r8-20020aa7da08000000b00456ea2b3ce3mr24742806eds.181.1664375910066;
+        Wed, 28 Sep 2022 07:38:30 -0700 (PDT)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id x2-20020a1709060ee200b0073dde62713asm2493593eji.89.2022.09.28.07.38.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 07:36:19 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] net: lan966x: Fix spelling mistake "tarffic" -> "traffic"
-Date:   Wed, 28 Sep 2022 15:36:18 +0100
-Message-Id: <20220928143618.34947-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 28 Sep 2022 07:38:28 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 16:38:27 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: tegra: Update comment about config space
+Message-ID: <YzRcYwQYlawV10QS@orome>
+References: <20220911113216.14892-1-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="PBUmyu+1rqqoAJH+"
+Content-Disposition: inline
+In-Reply-To: <20220911113216.14892-1-pali@kernel.org>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,26 +78,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a netdev_err message. Fix it.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--PBUmyu+1rqqoAJH+
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c b/drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c
-index 950ea4807eb6..7fa76e74f9e2 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_mqprio.c
-@@ -7,7 +7,7 @@ int lan966x_mqprio_add(struct lan966x_port *port, u8 num_tc)
- 	u8 i;
- 
- 	if (num_tc != NUM_PRIO_QUEUES) {
--		netdev_err(port->dev, "Only %d tarffic classes supported\n",
-+		netdev_err(port->dev, "Only %d traffic classes supported\n",
- 			   NUM_PRIO_QUEUES);
- 		return -EINVAL;
- 	}
--- 
-2.37.1
+On Sun, Sep 11, 2022 at 01:32:16PM +0200, Pali Roh=C3=A1r wrote:
+> Like many other ARM PCIe controllers, it uses old PCI Configuration
+> Mechanism #1 from PCI Local Bus for accessing PCI config space.
+> It is not PCIe ECAM in any case.
+>=20
+> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+> ---
+>  drivers/pci/controller/pci-tegra.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 
+Perhaps this should be rolled into the PCI_CONF1_EXT_ADDRESS patch? On
+the other hand there's really no use in keeping this comment around
+after that other patch because the documentation for the new macro lays
+out the details already.
+
+Thierry
+
+--PBUmyu+1rqqoAJH+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmM0XGMACgkQ3SOs138+
+s6EUKw//e6+EBVbBjmdErmRkedqQRSc8/R4Y7cyWp8xtevza46OFYc837j7g+Lmp
+wqru1VugD6Zz0+t/ppR/84mjEr5EcsOnXJmbvz0QCq0oGUkvUfYULtMUpLPCy59n
+pbLQ/buBsGaE9kbGs0QWE+A1dBr7AWigRv5osD0ahl7OkkIuXSfYA5j0EgkTfslf
+jSoIrw4jyfiXTF01FMdb1Qsnq3qcOYsoCgwXXRoarhoVtS/NvN71hUQbohBrV675
+Y/C8zwngKIx0EO1X9VmcxpyWtgdTG5HgbdTS0eN7QckLFyATCoz1FsZ8tPwwAWix
+iY3iV5lpjCr7JCC7rNj1tTtNpdfaqpnb/sRDNLKu2E2RDomueKkO+YzRTMLqTacF
+6tEZk+W1evdPfTnfc/Oo6IIEEGhbMViQS4sYKiNiHG0NxjWoy/I0mt/JJ5uAapY6
+0LMD+hqHTl+E0VMsd0Q0n9bMMW/qloZKW8Fgm6P8Eu9WtXQ3W7EnR76q6/Zn1a9Z
+3u27DfG39rebzY0mAAHbqZDz70kU9XxHXrH1TJ6YPytyKBg5Oqwcp66IJ1B8qDqr
+Xy1sthcegoYWjpaIHRCN5R7eTX8LKQnqdqtNfBb4GnGoCFzXwB430Mdfao5w+wBZ
+79PqcMXD/v03WiUhthfZor8sA8gxb9R5BBp8hU92D6MTeqR4LIw=
+=KBC4
+-----END PGP SIGNATURE-----
+
+--PBUmyu+1rqqoAJH+--
