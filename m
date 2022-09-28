@@ -2,50 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF685EE247
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1665EE24C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234357AbiI1Quk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
+        id S233277AbiI1Qvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbiI1Quc (ORCPT
+        with ESMTP id S234386AbiI1Qvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:50:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2FD7754A;
-        Wed, 28 Sep 2022 09:50:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 887B061F2D;
-        Wed, 28 Sep 2022 16:50:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AE28C433D6;
-        Wed, 28 Sep 2022 16:50:26 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BtbkVSOz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1664383824;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MPljTNW527gCkehfhx8+XdIZwq9wSOk7roP1gIrDLuo=;
-        b=BtbkVSOzwf0mLL7A4X2f+vXElefHugzoYFA0h0lt2b6NqsFsPkYD5Vju2wkvDmmW8X8jSC
-        GxUeZzLv2cKZ4dngbOw6SPyH4Z2gW+DFa7/DUWw3yVK7NuRGF6KOeyDEq/x/G23+grpgxc
-        32Icf+qZ/9i78XsM+sRklrylcE9Q0Qs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ef8b7b80 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 28 Sep 2022 16:50:24 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH] random: add 8-bit and 16-bit batches
-Date:   Wed, 28 Sep 2022 18:50:18 +0200
-Message-Id: <20220928165018.73496-1-Jason@zx2c4.com>
+        Wed, 28 Sep 2022 12:51:42 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4A8E9525;
+        Wed, 28 Sep 2022 09:51:41 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id x13so1418134qvn.4;
+        Wed, 28 Sep 2022 09:51:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=mbxRn007Ip2c/fdHqU/bp/LXy4PPcd8ySvUFUqzEX6s=;
+        b=KDSVQ1oMBKRLgWEH0InLjPc/aLqNu0zJv9KCeb8pdE0nGiSRyuKb+9DE+EiYJnbcj/
+         5W1QoMNbFR8fVhpkgXjoUmwOHLLwmX0oCbXvktWasxGC3jQReTgauOcAnmNu6PeNALaT
+         UqcmXt9f/k5KyHbejcWPZGCuaX758i59+J3Ih/oqrzRUSd40tW8vWxku8ZEFNkA5tVAf
+         LlbTu/3PjEkZlVfhoqC/toTBWPSvXO4D+eLotlQz+TXjWh/O8HKOj+XbHQ6/PsZ7mkeh
+         kbW1JxtOwjFtbNfwAa5yVKWxeFkEXKz56IXX77UAuUH5jPopvluRUhwSGTqgneWCsw8d
+         ug9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=mbxRn007Ip2c/fdHqU/bp/LXy4PPcd8ySvUFUqzEX6s=;
+        b=NQ8k83/U315P7XE81G6UFgRmRMaxTWtR6TUYfEZt08N8//8Tts80K0FGya5KSakk5c
+         16ha7Qyg9+TGoqWfrKUnhHWEqtTkE+Pil3DL4InbWSpyree5fFZDAv4WSkJphSDqoG2m
+         ppsyMHUBW2Vr68AMKkYNeIOfoHwMp7klX/SFlekFlOQsFh9pP2+RgHrWBkXtrNgbn1yw
+         RSFlblpVgCtbG+V9T1444h4Vm9W3uNnZzqd9a3fvqWq7E/Nswj4VpzoBhRoyaSkwRTjC
+         wuSnUFW3GsNebvkbIuzSh+0nzUsrQgRymHovwKKLIxOynS9GWAlrYcDBZm8STOsMu10+
+         seNA==
+X-Gm-Message-State: ACrzQf01/Bbx8QJs5KepS5+Di+rOlSMn27zA/p/imKYDHo9jwoiAKV5I
+        43+jL527ePER1CSuEHLGeDALaBM94REvof6K49cIor6R8EQ=
+X-Google-Smtp-Source: AMsMyM7wXSmHKlE03PtWvNbyVtg+Z/ygdLMTLfA2/MG8cnEF6SrXoChIYY1ksHA/b/6JHXHhXq/pPCj/E7DaDVv2w6I=
+X-Received: by 2002:a05:6214:c63:b0:4ad:6b45:8235 with SMTP id
+ t3-20020a0562140c6300b004ad6b458235mr26846114qvj.48.1664383900664; Wed, 28
+ Sep 2022 09:51:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220928164114.48339-1-olivier.moysan@foss.st.com> <20220928164114.48339-2-olivier.moysan@foss.st.com>
+In-Reply-To: <20220928164114.48339-2-olivier.moysan@foss.st.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 28 Sep 2022 19:51:04 +0300
+Message-ID: <CAHp75Vf1rJRVK5Emuwk4863DTb9JjTswJefJM-1oX+2gQvLMRg@mail.gmail.com>
+Subject: Re: [PATCH 1/8] iio: adc: stm32-adc: fix channel sampling time init
+To:     Olivier Moysan <olivier.moysan@foss.st.com>
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        nuno.sa@analog.com, Paul Cercueil <paul@crapouillou.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        Yannick Brosseau <yannick.brosseau@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,45 +76,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are numerous places in the kernel that would be sped up by having
-smaller batches. Currently those callsites do `get_random_u32() & 0xff`
-or similar. Since these are pretty spread out, and will require patches
-to multiple different trees, let's get ahead of the curve and lay the
-foundation for `get_random_u8()` and `get_random_u16()`, so that it's
-then possible to start submitting conversion patches leisurely.
+On Wed, Sep 28, 2022 at 7:42 PM Olivier Moysan
+<olivier.moysan@foss.st.com> wrote:
+>
+> Fix channel init for ADC generic channel bindings.
+> In generic channel initialization, stm32_adc_smpr_init() is called
+> to initialize channel sampling time. The "st,min-sample-time-ns"
+> property is an optional property. If it is not defined,
+> stm32_adc_smpr_init() is currently skipped. However stm32_adc_smpr_init()
+> must always be called, to force a minimum sampling time for
+> the internal channels, as the minimum sampling time is known.
+> Make stm32_adc_smpr_init() call unconditional.
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c  | 2 ++
- include/linux/random.h | 2 ++
- 2 files changed, 4 insertions(+)
+What is the text width here? It's okay to use Up to ~72 (or slightly
+more) as a limit and format accordingly.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index f2aa3ab1b458..64ee16ffb8b7 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -506,6 +506,8 @@ EXPORT_SYMBOL(get_random_ ##type);
- 
- DEFINE_BATCHED_ENTROPY(u64)
- DEFINE_BATCHED_ENTROPY(u32)
-+DEFINE_BATCHED_ENTROPY(u16)
-+DEFINE_BATCHED_ENTROPY(u8)
- 
- #ifdef CONFIG_SMP
- /*
-diff --git a/include/linux/random.h b/include/linux/random.h
-index a9e6e16f9774..2c130f8f18e5 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -38,6 +38,8 @@ static inline int unregister_random_vmfork_notifier(struct notifier_block *nb) {
- #endif
- 
- void get_random_bytes(void *buf, size_t len);
-+u8 get_random_u8(void);
-+u16 get_random_u16(void);
- u32 get_random_u32(void);
- u64 get_random_u64(void);
- static inline unsigned int get_random_int(void)
+> Fixes: 796e5d0b1e9b ("iio: adc: stm32-adc: use generic binding for sample-time")
+>
+> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+
+Tag blocks mustn't have the blank lines.
+
 -- 
-2.37.3
-
+With Best Regards,
+Andy Shevchenko
