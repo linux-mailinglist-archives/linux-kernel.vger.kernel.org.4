@@ -2,113 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4D05ED2BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A145B5ED2C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbiI1Bqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 21:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        id S232629AbiI1BsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 21:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbiI1Bqj (ORCPT
+        with ESMTP id S229771AbiI1BsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 21:46:39 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6B1110EC9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 18:46:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664329598; x=1695865598;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=wKxma6gGKHcNExPVyGZahd3ehBcvdZoLL+UplMnLgpo=;
-  b=lrMmT+2SECxx0Fxus4rJdLfC234NTM9a+ko6adY22p7QUQKJQqO7g7tM
-   G6pHdkCE8fA2sntIttW3b552EmAbrXBuXTtEFr6zfEIl2csvrA+/sTbUW
-   NXX7isT5wvpQXD08rf0JG3ZAmJzyaaFPzyTXNUF9f2R7cXZwh0T3d8yTp
-   7xySI8DjdrP0LSpIVrQKMypKBNvdjTZKGuwh3JPqtiHfzLu3TCsoMQIHL
-   88YH8vY/DytYlgdOLTuRxQ7E6XM30BMt/WB+X11eDhnSFGVE7yN5ys9Hc
-   Q5kKkr8uHwh573GC0Li7NCaUnVJyHUYsX0t1H0m7akAPZ2bdnrykyYBnp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="302389794"
-X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
-   d="scan'208";a="302389794"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 18:46:38 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="747253258"
-X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
-   d="scan'208";a="747253258"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 18:46:34 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Bharata B Rao <bharata@amd.com>
-Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Oscar Salvador" <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [RFC 0/6] migrate_pages(): batch TLB flushing
-References: <20220921060616.73086-1-ying.huang@intel.com>
-        <477e50ab-9045-0ca2-6979-e2dca71be263@amd.com>
-        <87bkr6jzmz.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <b9fc8a52-74b5-2f78-fbf6-8b473c6a8a36@amd.com>
-Date:   Wed, 28 Sep 2022 09:46:01 +0800
-In-Reply-To: <b9fc8a52-74b5-2f78-fbf6-8b473c6a8a36@amd.com> (Bharata B. Rao's
-        message of "Tue, 27 Sep 2022 16:16:42 +0530")
-Message-ID: <878rm42rvq.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 27 Sep 2022 21:48:03 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07B8110EC9;
+        Tue, 27 Sep 2022 18:47:57 -0700 (PDT)
+X-UUID: 2798c900a05b4374ac9f07e832846b2e-20220928
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=A+qXPRA7ywTuXXDRS+dWtKCRO57wsD96NnkHKCFHm4w=;
+        b=EiKXtB0fDGaYwn+THx+6Mzrwx6ggIQwjZnKD4BXrTg4V+C6GFmPcyqv8WsCxgK40PZ1BHDQ5yXO67jebzMgTq3Jnf8+nWMlbFj5k3ZXgInWeBjC1PBHlYgfcrBsjUYsxVcDWhGjQm2qazVwmOKDliXIqfu/jl4v3I7Youc6eWPY=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:98814aa8-e18f-4e2b-bbef-61184b346dae,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:c97c4aa3-dc04-435c-b19b-71e131a5fc35,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:-5,EDM:-3,IP:nil,
+        URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 2798c900a05b4374ac9f07e832846b2e-20220928
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 362543260; Wed, 28 Sep 2022 09:47:52 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 28 Sep 2022 09:47:50 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 28 Sep 2022 09:47:50 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <macpaul.lin@mediatek.com>
+CC:     <bear.wang@mediatek.com>, <devicetree@vger.kernel.org>,
+        <fparent@baylibre.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <macpaul@gmail.com>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <pablo.sun@mediatek.com>,
+        <robh+dt@kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8195-demo: fix the memory size of
+Date:   Wed, 28 Sep 2022 09:47:50 +0800
+Message-ID: <20220928014750.17054-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <664f3b7d-d629-5af1-cae4-cb5b638a5da1@mediatek.com>
+References: <664f3b7d-d629-5af1-cae4-cb5b638a5da1@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bharata B Rao <bharata@amd.com> writes:
-
-> On 9/23/2022 1:22 PM, Huang, Ying wrote:
->> Bharata B Rao <bharata@amd.com> writes:
->>>
->>> Thanks for the patchset. I find it hitting the following BUG() when
->>> running mmtests/autonumabench:
->>>
->>> kernel BUG at mm/migrate.c:2432!
->>>
->>> This is BUG_ON(!list_empty(&migratepages)) in migrate_misplaced_page().
+>On 9/26/22 15:05, Miles Chen wrote:
+>> Hi Macpaul,
 >> 
->> Thank you very much for reporting!  I haven't reproduced this yet.  But
->> I will pay special attention to this when develop the next version, even
->> if I cannot reproduce this finally.
+>>> The size of device tree node secmon (bl31_secmon_reserved) was
+>>> incorrect. It should be increased to 2MiB (0x200000).
+>> 
+>> 192K should work when the patch(6147314aeedc) was accepted.
+>> Does the trusted-firmware-a get larger now, so we need to
+>> increase the size to 2MiB?
+>> 
+>> thanks,
+>> Miles
 >
-> The following change fixes the above reported BUG_ON().
+>When mt8195-demo.dts sent to the upstream, at that time the size of
+>BL31 was small. Because supported functions and modules in BL31 are 
+>basic sets when the board was under early development stage.
 >
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index a0de0d9b4d41..c11dd82245e5 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1197,7 +1197,7 @@ static int migrate_page_unmap(new_page_t get_new_page, free_page_t put_new_page,
->          * references and be restored.
->          */
->         /* restore the page to right list. */
-> -       if (rc != -EAGAIN)
-> +       if (rc == -EAGAIN)
->                  ret = NULL;
->  
->         migrate_page_undo_page(page, page_was_mapped, anon_vma, locked, ret);
->
-> The pages that returned from unmapping stage with -EAGAIN used to
-> end up on "ret" list rather than continuing on the "from" list.
+>Now BL31 includes more firmwares of coprocessors and maturer functions
+>so the size has grown bigger in real applications. According to the 
+>value reported by customers, we think reserved 2MiB for BL31 might be 
+>enough for maybe the following 2 or 3 years.
 
-Yes.  You are right.  Thank you very much!
+Thanks for your explanation,
+please add this to the commit message and submit next version.
 
-Digging some history, it is found that the code was correct in previous
-versions, but became wrong for mistake during code rebasing.  Will be
-more careful in the future and try to organize the patchset better to
-make it easier to review the changes.
+With that, feel free to add:
+Reviewed-by: Miles Chen <miles.chen@mediatek.com> 
 
-Best Regards,
-Huang, Ying
+thanks,
+Miles
