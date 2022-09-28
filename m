@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC90A5EE003
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B685EE005
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234675AbiI1PUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S234696AbiI1PUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234323AbiI1PUi (ORCPT
+        with ESMTP id S234663AbiI1PUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:20:38 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A89657880
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:20:37 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id a3so20833229lfk.9
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:20:37 -0700 (PDT)
+        Wed, 28 Sep 2022 11:20:41 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7218858095
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:20:38 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id s6so20860654lfo.7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 08:20:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=8gAb0vttvsZ8wRV0w5Eu2WIvLvAPbZHBztrbwSwM8vY=;
-        b=xgs6vT8teutOSFqb0VQposP83OTGki/PknCXsIbr5xGNEZGDaOfRYMEyn97Ilvol+S
-         +LRGnzc51DCEPl3tfFTHWxUwiAemmxvdNqC5yP95YW9o6ZrUqNQzAcHQupC5o5ky7OQE
-         dIN+7/+x+rvTQxTs76tT/7GVSd3nh+QgBDAj+B7YJJ6+pOe6bB7zpm7rQRS1a4U/h4d4
-         3cuMvVAi9sCxqw0zHYFSxHJSaLw+XRyscJ0FNeGWuLTQ/GK9d1TJ1zsyeVOGR0ffgsN9
-         BwS8g7Z2/UkpYKC3lEKwS+EXytz+d55aNonu54ly7MTu8PaeVBQNfE3Xr/mU3KY7m6x/
-         7NHw==
+        bh=nJKdZtRvq8vBlaQZJuT8tYogYRM3UsmdrKTxy6xD2iw=;
+        b=ECypbLZlEBc3Z0/O30Pgb3Wuvkjh6iruZJgk/EF/uCk7saaGA/yDzvJh62ro/qVt6b
+         w01CCdQr1JDsRaOPdeIjbE3+gz4trI87d/gth247bcrjHFq2fF4ReuPcsU4FJhyzc9Sa
+         jA0K66MaRwnzATCEm4PGvHFGm+YruNrK0uL+i6Md0v18eMAsriPGIBotwuMkPP3eD6vR
+         m0VnTQbvUSyC9rH7zICG0YKNWVqINMlo5nCcc4maDICcnj8vuoAsLv3h1M+UK/2Jyu17
+         fZhjp9Bb14lKA7ykxL/Iq/mGneg/12VAp7kG5MKPSa//z8tEHSRaUt5D08ua1R05CKmw
+         qvpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=8gAb0vttvsZ8wRV0w5Eu2WIvLvAPbZHBztrbwSwM8vY=;
-        b=KPI19FPKpXM4IZdTc8VmZg+gcwz1W+LimK67U/D7iBRHRQ0r5onBXBwkCvUN9bqOE1
-         cfHu85b6LRdzUGtNpTjbwr0cw2I3NXMlec1dkdmVmQjpJ2Djr4y4n+ONgJdZHmqrmDbJ
-         IhHgb9bebNbvEW3JrvJ2oKl6bWmA4UgaXtBtA6tzR+nFFJg5m4JEn47r7hJoV2TWYsCA
-         HNKXw6i8snIVjmrEpItBO6ziBc7BdEwaCzvRFJ45HtxvjGi9YRaHIx6Xz6n/7m7Zmbe8
-         eL9jIpU3ugLLiStbMjxhRdCvJjM8zG+Vi9dgNWRbOJOUVxKoN/7BTFNEAOMaECCvUcSJ
-         1CGg==
-X-Gm-Message-State: ACrzQf22skBqw+vGtDI1QeuBQPOJ7LwIcNLqrZym+p6WAyoi5WPhQ4yr
-        nGK1BWVNsg7A4Q5l++55mCjm8Q==
-X-Google-Smtp-Source: AMsMyM4bMv8X2l3axxRXBvUc+yU6M49iZMEsYIEYQjPgxc8If280c7PBFJL+iGRW+647aZKCgEPsng==
-X-Received: by 2002:a05:6512:6c3:b0:49a:d227:1b5b with SMTP id u3-20020a05651206c300b0049ad2271b5bmr13138341lff.386.1664378435773;
-        Wed, 28 Sep 2022 08:20:35 -0700 (PDT)
+        bh=nJKdZtRvq8vBlaQZJuT8tYogYRM3UsmdrKTxy6xD2iw=;
+        b=2NeJXvjhoZMIhQJpWLcATpC5hSW/vtB8wfyu70qaIFo1kKF8Blg1X8iZYiFwLdD2FO
+         hiCvAw2HxnEAK1cp2XmvJ/hRgUp1ahoLeCEaA+vIcuAwBJLqgw2tycRg60XyOmUN/NHj
+         48Rv1z6EI87wFLRGPgr6r+Qc5c6ArOrN8/v7CrbUJzLc8d+vVl/dz7CY1overwqLHjdR
+         EiiIIlYJXA2/NdrRIvPQEM7VSO9hYzw3y8saw7331QW14es9rhym2jMgtqSuX0ds8Ozi
+         IhgA0o2NT6EoJT0AsfStxfzH8wggNnzzBa3WnR2+SmPmyskgpVOiyQjbiQ9kTbNYguPt
+         VPlQ==
+X-Gm-Message-State: ACrzQf3bfpeKnp8FR3qK3FY4jKg4YDitDAiyZ2whRFC8/02WhDPHD8za
+        ZviQyFslZQpwGo6Py/a2JzSQBpSaR/zr9Q==
+X-Google-Smtp-Source: AMsMyM4OvHn5df/1ZdYKcsHcWuHyLKD/5xwVshBRv1ealxyNmTVpj9vuLVX96fYV7ZzhhZFuf2GAZQ==
+X-Received: by 2002:ac2:518d:0:b0:4a1:c4ad:fe2d with SMTP id u13-20020ac2518d000000b004a1c4adfe2dmr7519443lfi.222.1664378436849;
+        Wed, 28 Sep 2022 08:20:36 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v2-20020a056512048200b00497a41b3a42sm503023lfq.88.2022.09.28.08.20.34
+        by smtp.gmail.com with ESMTPSA id v2-20020a056512048200b00497a41b3a42sm503023lfq.88.2022.09.28.08.20.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 08:20:35 -0700 (PDT)
+        Wed, 28 Sep 2022 08:20:36 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -58,11 +58,10 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>
-Subject: [PATCH v2 03/11] arm64: dts: qcom: sdm845: correct slimbus children unit addresses
-Date:   Wed, 28 Sep 2022 17:20:19 +0200
-Message-Id: <20220928152027.489543-4-krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 04/11] arm64: dts: qcom: mms8996: correct slimbus children unit addresses
+Date:   Wed, 28 Sep 2022 17:20:20 +0200
+Message-Id: <20220928152027.489543-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220928152027.489543-1-krzysztof.kozlowski@linaro.org>
 References: <20220928152027.489543-1-krzysztof.kozlowski@linaro.org>
@@ -77,33 +76,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-slimbus uses address-cells=2, so correct children unit addresses.
+Correct slimbus address/size cells to match bindings.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Tested-by: Steev Klimaszewski <steev@kali.org>
 ---
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/msm8996.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 9db1fce6b198..2264bba69f84 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -3841,12 +3841,12 @@ ngd@1 {
- 				#address-cells = <2>;
- 				#size-cells = <0>;
+diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+index 903c443a867f..2c5908d104f7 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+@@ -3320,15 +3320,15 @@ slim_msm: slim@91c0000 {
+ 			#size-cells = <0>;
+ 			ngd@1 {
+ 				reg = <1>;
+-				#address-cells = <1>;
+-				#size-cells = <1>;
++				#address-cells = <2>;
++				#size-cells = <0>;
  
--				wcd9340_ifd: ifd@0{
-+				wcd9340_ifd: ifd@0,0 {
- 					compatible = "slim217,250";
+-				tasha_ifd: tas-ifd {
++				tasha_ifd: tas-ifd@0,0 {
+ 					compatible = "slim217,1a0";
  					reg = <0 0>;
  				};
  
--				wcd9340: codec@1{
-+				wcd9340: codec@1,0 {
- 					compatible = "slim217,250";
- 					reg = <1 0>;
- 					slim-ifc-dev = <&wcd9340_ifd>;
+-				wcd9335: codec@1{
++				wcd9335: codec@1,0 {
+ 					pinctrl-0 = <&cdc_reset_active &wcd_intr_default>;
+ 					pinctrl-names = "default";
+ 
 -- 
 2.34.1
 
