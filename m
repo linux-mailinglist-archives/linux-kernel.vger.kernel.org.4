@@ -2,70 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AF95ED48C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559E85ED48B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 08:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbiI1GQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 02:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
+        id S231268AbiI1GQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 02:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiI1GQa (ORCPT
+        with ESMTP id S231278AbiI1GQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 02:16:30 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B493B1114FB
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:16:29 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id e9-20020a6b7309000000b006a27af93e45so7145498ioh.9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 23:16:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Z339FYdU9+iXNfue2zmLUxx6HUu2Sr2qDtiusHT0KhY=;
-        b=cwqBd/kw20aO2RLM9c9zZQZO1Q11J6OSshg7Td/ocEYuOQD7doyQdGfCyF7kO7rWGg
-         5pOL3/rcvUMCtyGdukFkb+TS7GkzUWhxwiSkTRMXwYT2PpP5jAP3g/0n6PvflMXx7J/i
-         Y8/WLsufMBtl3+8x1ZHYL/+6EXhPMq5WjxVmTytwYiC2gTKkwdXxJqETIu8P4R2/ku1y
-         Vz0cZIifJ9/fcahXhAOzWwtQvLoNvL5RHXW+g1IOCO+gAgxL/o0wIiVqmXy8CceTGPd3
-         KrQlsVs/FjRtuN4Jl+15dxPNbHDCKWyt5fARyNjexIPprad3ScQcCFrD+6ja82P8JujP
-         JQPw==
-X-Gm-Message-State: ACrzQf1ZAQxKv/rLd/6RHwpx3nSXvWpknyWfT1CSk7IrRUboWpDOzBi9
-        qg0LlyRdh0y4+nzH2TcCSIuf/wBR6k05u++EqE+GccN0meLo
-X-Google-Smtp-Source: AMsMyM7UwJJT5yH/iid3vvJWyCpOQ2n41iNMeCecYUkoPWmZmdwPlLmvfYJB9HWXT/pIbyvnM0tR8ovSkpM/Fl2BRemSL8VKgIGs
+        Wed, 28 Sep 2022 02:16:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099E91114ED;
+        Tue, 27 Sep 2022 23:16:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9991C61D05;
+        Wed, 28 Sep 2022 06:16:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02370C433D6;
+        Wed, 28 Sep 2022 06:16:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664345788;
+        bh=LJ9f0Td4pC/PwOOx+1Koup4UTrM2b9rxSdN1wHR8l7o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YUcoEH0L4QtFW691ED3O7SySHUiXfrmEPPDpjrftf3wUe/TTnq/T8WmeZUYKToDnB
+         DTWKAXV+Bx1LzEQCsZhPrEHQr7Xmz89mlGxGXZc913XWIM0ApBW3k0Soh7uPm97tsB
+         Tt66bE6234qsiquPfWPxd99eRRsV2f/2H6j8eSQKAKGYZW1D/OYBMzCKHSES5OzYyI
+         vFVXQOjWmubwad4C8RiUxovNH0o16Vxikin8T5i1TjEBmoyXKrD7WaSF5/6dmLEFnd
+         yICv5GnXhvVSO0DHUL9zcmZSg1ZD5gtPNoLOItCO2Rjwe//nFsIMNZwI43SIB5oWcZ
+         UyEJXhcuix0+w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1odQMz-0005ku-LX; Wed, 28 Sep 2022 08:16:33 +0200
+Date:   Wed, 28 Sep 2022 08:16:33 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: qcom: Add support for modular builds
+Message-ID: <YzPmwWeSu9OVWwMf@hovoldconsulting.com>
+References: <20220721064720.10762-1-johan+linaro@kernel.org>
+ <Yyl+PNcbtSwzlgvh@hovoldconsulting.com>
+ <YzL6aS6mktksLnqn@lpieralisi>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:300b:b0:341:d28e:871 with SMTP id
- r11-20020a056638300b00b00341d28e0871mr17168181jak.140.1664345789060; Tue, 27
- Sep 2022 23:16:29 -0700 (PDT)
-Date:   Tue, 27 Sep 2022 23:16:29 -0700
-In-Reply-To: <20220928060450.1989643-1-eadavis@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008a5cad05e9b6b3fa@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_get_ea
-From:   syzbot <syzbot+c4d950787fd5553287b7@syzkaller.appspotmail.com>
-To:     eadaivs@sina.com, eadavis@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzL6aS6mktksLnqn@lpieralisi>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Sep 27, 2022 at 03:28:09PM +0200, Lorenzo Pieralisi wrote:
+> On Tue, Sep 20, 2022 at 10:47:56AM +0200, Johan Hovold wrote:
+> > Hi Lorenzo,
+> > 
+> > On Thu, Jul 21, 2022 at 08:47:20AM +0200, Johan Hovold wrote:
+> > > Allow the Qualcomm PCIe controller driver to be built as a module, which
+> > > is useful for multi-platform kernels as well as during development.
+> > > 
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > ---
+> > > 
+> > > Changes in v2
+> > >  - rebase on next-20220720 (adjust context)
+> > >  - add Rob and Mani's reviewed-by tags
+> > 
+> > Have you had a change to look at this one since you got back from
+> > vacation?
+> > 
+> > I believe this should be uncontroversial as we already have other
+> > modular dwc drivers and there's no mapping of legacy INTx interrupts
+> > involved.
+> 
+> Sincere apologies for the delay.
+> 
+> I am afraid it does look controversial - I need some time to go through
+> the full discussion and make up my mind, unfortunately we are late in
+> the cycle and I am dealing with the patch backlog, I believe this may
+> end up being a discussion targeting the v6.2 merge window I am afraid.
 
-syzbot tried to test the proposed patch but the build/boot failed:
+No worries. Thanks for taking a look.
 
-fs/ntfs3/xattr.c:55:7: error: assignment of read-only location '*ea'
-
-
-Tested on:
-
-commit:         e47eb90a Add linux-next specific files for 20220901
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-dashboard link: https://syzkaller.appspot.com/bug?extid=c4d950787fd5553287b7
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=13898c04880000
-
+Johan
