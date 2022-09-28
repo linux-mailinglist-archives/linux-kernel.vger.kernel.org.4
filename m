@@ -2,71 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED975EDB22
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 005385EDB28
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234102AbiI1LGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
+        id S233715AbiI1LHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 07:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234085AbiI1LGO (ORCPT
+        with ESMTP id S233989AbiI1LG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:06:14 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DF1FAC7C
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:03:19 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id o20-20020a05600c4fd400b003b4a516c479so803902wmq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:03:19 -0700 (PDT)
+        Wed, 28 Sep 2022 07:06:56 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCACEB109;
+        Wed, 28 Sep 2022 04:04:00 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id d42so19899337lfv.0;
+        Wed, 28 Sep 2022 04:04:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=dswzrHyWlFIOKHF2fLmgLiJS7Gb8005fvifIB4yuJASyKlVGlNwRT9iFRPNYrPxBil
-         C8RQSFAkHDjzvG/Lkl+PvaK5l77+cxNNsDmkiqk4f3cNeLVm/51RT02R8N9Of4eUwuhz
-         CBI4ArJ+dbZzrXPkfeCk7u5Mj/6HZivOl0JDEfEUpYpUWeq82KpJnj/vzHj3C1pBF1gD
-         QAjjG0SfFrzA6bMfaCUcMzvFCc0nzUq6iHeUhka5lIeOK9U2J+zzo37t9nGHzDS5fqFd
-         bYlWko0wwhNPauh4GaSaMGEs+LrOtG6a3GdOylaWtYI/7m9/CY6K/tUm5olg6YiTwtRU
-         XDeQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=CLhAIIvy9Y2ruJAf9+yREPotjEO2NIAIDlqLdK6fCj8=;
+        b=S4MsPIJVPO+68AA+mS05lXRQC4HVgjwJ18Vc/QUIEVxLoxPcUeof2CnaBJzMoDIYk8
+         M+0qyGNpb9Ao1b8c/uPDjbouH/PWRh0M7CyODt4MMq+D6p1t9Bib4bOlYt75fthcpF9H
+         PQptnubFI1DM8bmWsNON6U6pvQZHrzaZp54LJ8FxuXuOH0GuNjIfHruOlbixT0kcXJrx
+         xUjTxARLE521qTa/R7nKswBdwb+OIFaEB6tEUKOzcGHf/wmA1RsUacAM0+lX1Ha7QATb
+         IIF3HH+/f7NPdtnTcowx7IEbxm55j5n29Ohz485aiWwO/zm5RPs8Cv5m6EJBPxpbi2L8
+         H7hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=r7EXvo4xleo4vt64XtfFCWy7m9A8w3tXRZQXVPAuIdOiG0k8N8/Bu8BULObz/xiLLz
-         h8uH7LjLGi3me/sKSaD34g1zj3C3GSbWjHTZ490D/czKUoJ9h/EqDAfsCq/dEVBcgOth
-         WKBvnkifzwQhbLnZAWjiQjAuyE6kyskzVdtfpAEcwEmBEqt9StRPPuiMiJ2v3jR6ZbEi
-         T/B6bWujftoEpHN1wrXmVr55aNuLeRxkz3KKCCylnNGy5StnBsLpEAdo3D364XvZJQyQ
-         ArMTwjJi+pcPo4QhFjjeGle9nis919BiJnhlVwkgbbvSfCv1EbPvFMLcs2DBDT7qjIsw
-         uQgA==
-X-Gm-Message-State: ACrzQf1cmuejwfX3facexXuGfY1kdyV5o5fAuFw8sNzCP5TuF5Gqn5pF
-        txfCUnyC11y1Li0dBmlILQo+eNa6oTUL6KTtZmw=
-X-Google-Smtp-Source: AMsMyM7HK4X9SqPRMqMky8GstwBujzQsfTJb2UgOCO7L0A8gdjCQcFd3/0ZWFryD9PgbhtM9jVW2l/4uXbNg89ws8Sk=
-X-Received: by 2002:a05:600c:1ca0:b0:3a8:41cf:a31f with SMTP id
- k32-20020a05600c1ca000b003a841cfa31fmr6479890wms.161.1664362998113; Wed, 28
- Sep 2022 04:03:18 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=CLhAIIvy9Y2ruJAf9+yREPotjEO2NIAIDlqLdK6fCj8=;
+        b=diRIN2jT8976cwaIu4xSGMf+QsxWKknnG+dvq9jr5mVwUBywocnqaKMmjZpac9l791
+         ViwXMNlBxl8T5k/7BwvUm+QPMRga6qJByhwHFtGWiioMvMT0U8PUbf5JlEopSXfWBDh+
+         Q5hdFKLIjcM70MiPGkNaLAJqzc6bDYFVTbOTT+UDyMFavgJ50crsv0inbLd+ghD6E8St
+         3YBOKauV/aiK/pSWUdoxQqRDq8V6wIGLp7jQEqF/JJ6rrBHbFD70Hv/5ftjrT/xMJosz
+         Xqr9Ln5DjuGI9Fwz7eqwIoMCkIF2TDFQJIyVNDn9jrZ/atJpCq5H4MD2VTmRZAYJGRaa
+         AE4w==
+X-Gm-Message-State: ACrzQf35S8Ph1IobQvFBG2AgPGza8bnzs0lndPB/JlGPP4DwxT0mDha7
+        FQdBwWGdsHjVAUa634XTgMg=
+X-Google-Smtp-Source: AMsMyM468iUduFFvtvCoOKe8j5rLxxlMzuyn20KnDLob97Sp2PgkxoG9AeKGHuYJJU8EdjFEAHHOOg==
+X-Received: by 2002:ac2:4e09:0:b0:499:1e3a:54ab with SMTP id e9-20020ac24e09000000b004991e3a54abmr12665761lfr.170.1664363038738;
+        Wed, 28 Sep 2022 04:03:58 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id v6-20020a197406000000b00499d70c0310sm446966lfe.3.2022.09.28.04.03.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 04:03:58 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 14:03:55 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Zhuo Chen <chenzhuo.1@bytedance.com>
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, bhelgaas@google.com,
+        ruscur@russell.cc, oohall@gmail.com, jdmason@kudzu.us,
+        dave.jiang@intel.com, allenbh@gmail.com, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linuxppc-dev@lists.ozlabs.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntb@lists.linux.dev, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v3 3/9] NTB: Remove pci_aer_clear_nonfatal_status() call
+Message-ID: <20220928110355.emf2nucmdmpb3vbu@mobilestation>
+References: <20220928105946.12469-1-chenzhuo.1@bytedance.com>
+ <20220928105946.12469-4-chenzhuo.1@bytedance.com>
 MIME-Version: 1.0
-Received: by 2002:adf:e242:0:0:0:0:0 with HTTP; Wed, 28 Sep 2022 04:03:17
- -0700 (PDT)
-Reply-To: linadavid0089@gmail.com
-From:   Lina David <edithbrown052@gmail.com>
-Date:   Wed, 28 Sep 2022 12:03:17 +0100
-Message-ID: <CAPGw1A6tJK70vAQ+6vJLQ81kcdvghGthuK6CBouOm-cC8vBj+g@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928105946.12469-4-chenzhuo.1@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
-how are you?
+On Wed, Sep 28, 2022 at 06:59:40PM +0800, Zhuo Chen wrote:
+> There is no need to clear error status during init code, so remove it.
+
+Why do you think there isn't? Justify in more details.
+
+-Sergey
+
+> 
+> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+> ---
+>  drivers/ntb/hw/idt/ntb_hw_idt.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/ntb/hw/idt/ntb_hw_idt.c b/drivers/ntb/hw/idt/ntb_hw_idt.c
+> index 0ed6f809ff2e..fed03217289d 100644
+> --- a/drivers/ntb/hw/idt/ntb_hw_idt.c
+> +++ b/drivers/ntb/hw/idt/ntb_hw_idt.c
+> @@ -2657,8 +2657,6 @@ static int idt_init_pci(struct idt_ntb_dev *ndev)
+>  	ret = pci_enable_pcie_error_reporting(pdev);
+>  	if (ret != 0)
+>  		dev_warn(&pdev->dev, "PCIe AER capability disabled\n");
+> -	else /* Cleanup nonfatal error status before getting to init */
+> -		pci_aer_clear_nonfatal_status(pdev);
+>  
+>  	/* First enable the PCI device */
+>  	ret = pcim_enable_device(pdev);
+> -- 
+> 2.30.1 (Apple Git-130)
+> 
