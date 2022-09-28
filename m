@@ -2,158 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8EC5ED2B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12C55ED2B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbiI1Bl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 21:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S231332AbiI1BmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 21:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbiI1BlZ (ORCPT
+        with ESMTP id S231684AbiI1BmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 21:41:25 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9451BB6C0;
-        Tue, 27 Sep 2022 18:41:24 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id 9so11191277pfz.12;
-        Tue, 27 Sep 2022 18:41:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=eAwgA8BGMVVMxNp7JTXLjpsmeLFwCAL7NP0XLkLYUBE=;
-        b=kNzBXFh17EpTe4Zm/ykApJYQG1VxxzwJhYHGO2Q7jLKFkEmSQNED69jo+lGj6MsB/i
-         JWn9VNX8ZgzEfXwbHmxTs1PxHZ7SBp7w/WDc6DjmteAEORlcatEdAqoOK3HvQptCy/fT
-         61ZrQxTzq0lHt5lMIPqgGTuecVT+r/BuBw/ifkRLgFDoTy3l4sQ7fpZgIodAS0c8KjNJ
-         dCHSIkQFF82Wd/gKighQpP3aBKrC7hymDevYMe/n5HpkBPMYwlqL0QrPsDwsOhTex7TC
-         W5E+sNcugFEEZB+50Txc6Y4MBQdhIGJcrVvqzG3rFMBYmMX1i44gzCYHoLByO0LSlr1C
-         qosw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=eAwgA8BGMVVMxNp7JTXLjpsmeLFwCAL7NP0XLkLYUBE=;
-        b=GzsgEOczpiQV0i19paP3KH8D56wrYrDPV6JkULmm4mFXV6pVG4qQ8AiV+fAN4+LnKD
-         OVGwZ1iWeBxabGGsrcC69vEWaGcoQT8CEUM1mphuXBcD9Jm5Et1x0F5qoBJljrMwJf52
-         wLo8yql2Sbh8YLLxriC4Lc4WMa/u0pbYJ2W5a9wn4O+PHAQDybTvPgAr5xhnhTwKKhd+
-         R5YxajJw+IaIfiZpFJxYteqWi23zJY19t8o4A0f3go4b8AN9hEq4FmumARWNROK4dGBM
-         5BFTBa4B6PqtrRc5O1HLTwe3G6dQICjlQe8h5048g64S1viqhFY/OQ6gCpcyKRXroHGM
-         MsFw==
-X-Gm-Message-State: ACrzQf3C48qlq94ihJZUuZLJaCVVE1pCOR01E0VHNUc9+ZdVbspUrANQ
-        2/i7fBUcHbDwDDwWyz9b3zU=
-X-Google-Smtp-Source: AMsMyM6KFgNRR2OZXGm1nYTwzsxxG1ueDqktGrPUjgpkdhgBtOMApvbIh2x6bSImTsuWTbLiAZ/Qqg==
-X-Received: by 2002:a05:6a00:acc:b0:530:e79e:fc27 with SMTP id c12-20020a056a000acc00b00530e79efc27mr32313608pfl.61.1664329283732;
-        Tue, 27 Sep 2022 18:41:23 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id k13-20020a170902c40d00b00176d218889esm2272516plk.228.2022.09.27.18.41.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 18:41:23 -0700 (PDT)
-From:   yexingchen116@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     jingoohan1@gmail.com
-Cc:     lee@kernel.org, daniel.thompson@linaro.org, deller@gmx.de,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [PATCH linux-next v2] backlight: use sysfs_emit() to instead of scnprintf()
-Date:   Wed, 28 Sep 2022 01:41:15 +0000
-Message-Id: <20220928014115.261470-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 27 Sep 2022 21:42:06 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383B61DCC76
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 18:42:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664329325; x=1695865325;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=VdnIAay/pNa3J+uoxCjvYQR/wUDLr3pNkvZzDguZ7Fk=;
+  b=YG9F2XXKZx+wmMvHKrFZJIXEYE/2X9Twcwrl7MVUDNvaCYB9aQhRG1zP
+   HSh5Pq3/kfAwY56Lcj1egL0c1R3FYEbKMl7NOLRit+Oe1hxBSERpoSpLq
+   qzZyG2FwqIPXCYZtfWBjVZs4S7rP0PyWEOvwSlWf702W6Fqdm897QgsDm
+   34bdcaaazNJpiPhpGIi1/FBGj5eY4HRr6CPUACos6YCABCkY0fl6JQTDH
+   /TUWQ5rAeZVQUek0ihAuxhHGaHLfNAenxhgslb4zviTIxBpEhz3mcu6GJ
+   qtu0KveXtryomVOlKa/Uh/Anj+Y4BU/tTDTlQwyVLt570aCIqxNVnUK2r
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="327841436"
+X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
+   d="scan'208";a="327841436"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 18:42:04 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="654939615"
+X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
+   d="scan'208";a="654939615"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 18:42:02 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     Yang Shi <shy828301@gmail.com>, John Hubbard <jhubbard@nvidia.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zi Yan <ziy@nvidia.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Matthew Wilcox" <willy@infradead.org>
+Subject: Re: [RFC 2/6] mm/migrate_pages: split unmap_and_move() to _unmap()
+ and _move()
+In-Reply-To: <87pmfgjnpj.fsf@nvdebian.thelocal> (Alistair Popple's message of
+        "Wed, 28 Sep 2022 10:59:08 +1000")
+References: <20220921060616.73086-1-ying.huang@intel.com>
+        <20220921060616.73086-3-ying.huang@intel.com>
+        <87o7v2lbn4.fsf@nvdebian.thelocal>
+        <CAHbLzkpPNbggD+AaT7wFQXkKqCS2cXnq=Xv3m4WuHLMBWGTmpQ@mail.gmail.com>
+        <87fsgdllmb.fsf@nvdebian.thelocal>
+        <87ill937qe.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <46807002-c42c-1232-0938-5b48050171ee@nvidia.com>
+        <CAHbLzkqRyav0fZ5gzaKbkTfGBxkQXTpu0NJz-A9j7UaHhVBxEQ@mail.gmail.com>
+        <87pmfgjnpj.fsf@nvdebian.thelocal>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Wed, 28 Sep 2022 09:41:28 +0800
+Message-ID: <87czbg2s3b.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Alistair Popple <apopple@nvidia.com> writes:
 
-Replace the open-code with sysfs_emit() to simplify the code.
+> Yang Shi <shy828301@gmail.com> writes:
+>
+>> On Tue, Sep 27, 2022 at 1:35 PM John Hubbard <jhubbard@nvidia.com> wrote:
+>>>
+>>> On 9/26/22 18:51, Huang, Ying wrote:
+>>> >>> But there might be other cases which may incur deadlock, for example,
+>>> >>> filesystem writeback IIUC. Some filesystems may lock a bunch of pages
+>>> >>> then write them back in a batch. The same pages may be on the
+>>> >>> migration list and they are also dirty and seen by writeback. I'm not
+>>> >>> sure whether I miss something that could prevent such a deadlock from
+>>> >>> happening.
+>>> >>
+>>> >> I'm not overly familiar with that area but I would assume any filesystem
+>>> >> code doing this would already have to deal with deadlock potential.
+>>> >
+>>> > Thank you very much for pointing this out.  I think the deadlock is a
+>>> > real issue.  Anyway, we shouldn't forbid other places in kernel to lock
+>>> > 2 pages at the same time.
+>>> >
+>>>
+>>> I also agree that we cannot make any rules such as "do not lock > 1 page
+>>> at the same time, elsewhere in the kernel", because it is already
+>>> happening, for example in page-writeback.c, which locks PAGEVEC_SIZE
+>>> (15) pages per batch [1].
+>
+> That's not really the case though. The inner loop of write_cache_page()
+> only ever locks one page at a time, either directly via the
+> unlock_page() on L2338 (those goto's are amazing) or indirectly via
+> (*writepage)() on L2359.
+>
+> So there's no deadlock potential there because unlocking any previously
+> locked page(s) doesn't depend on obtaining the lock for another page.
+> Unless I've missed something?
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
-v1 -> v2
-Add the rest of this fixes for this pattern in the 'drivers/video/backlight' directory.
- drivers/video/backlight/lm3533_bl.c | 10 +++++-----
- drivers/video/backlight/lp855x_bl.c |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Yes.  This is my understanding too after checking ext4_writepage().
 
-diff --git a/drivers/video/backlight/lm3533_bl.c b/drivers/video/backlight/lm3533_bl.c
-index 1df1b6643c0b..5e2ce9285245 100644
---- a/drivers/video/backlight/lm3533_bl.c
-+++ b/drivers/video/backlight/lm3533_bl.c
-@@ -66,7 +66,7 @@ static ssize_t show_id(struct device *dev,
- {
- 	struct lm3533_bl *bl = dev_get_drvdata(dev);
- 
--	return scnprintf(buf, PAGE_SIZE, "%d\n", bl->id);
-+	return sysfs_emit(buf, "%d\n", bl->id);
- }
- 
- static ssize_t show_als_channel(struct device *dev,
-@@ -75,7 +75,7 @@ static ssize_t show_als_channel(struct device *dev,
- 	struct lm3533_bl *bl = dev_get_drvdata(dev);
- 	unsigned channel = lm3533_bl_get_ctrlbank_id(bl);
- 
--	return scnprintf(buf, PAGE_SIZE, "%u\n", channel);
-+	return sysfs_emit(buf, "%u\n", channel);
- }
- 
- static ssize_t show_als_en(struct device *dev,
-@@ -95,7 +95,7 @@ static ssize_t show_als_en(struct device *dev,
- 	mask = 1 << (2 * ctrlbank);
- 	enable = val & mask;
- 
--	return scnprintf(buf, PAGE_SIZE, "%d\n", enable);
-+	return sysfs_emit(buf, "%d\n", enable);
- }
- 
- static ssize_t store_als_en(struct device *dev,
-@@ -147,7 +147,7 @@ static ssize_t show_linear(struct device *dev,
- 	else
- 		linear = 0;
- 
--	return scnprintf(buf, PAGE_SIZE, "%x\n", linear);
-+	return sysfs_emit(buf, "%x\n", linear);
- }
- 
- static ssize_t store_linear(struct device *dev,
-@@ -190,7 +190,7 @@ static ssize_t show_pwm(struct device *dev,
- 	if (ret)
- 		return ret;
- 
--	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
-+	return sysfs_emit(buf, "%u\n", val);
- }
- 
- static ssize_t store_pwm(struct device *dev,
-diff --git a/drivers/video/backlight/lp855x_bl.c b/drivers/video/backlight/lp855x_bl.c
-index bd0bdeae23a4..fafc1a9e76ef 100644
---- a/drivers/video/backlight/lp855x_bl.c
-+++ b/drivers/video/backlight/lp855x_bl.c
-@@ -293,7 +293,7 @@ static ssize_t lp855x_get_chip_id(struct device *dev,
- {
- 	struct lp855x *lp = dev_get_drvdata(dev);
- 
--	return scnprintf(buf, PAGE_SIZE, "%s\n", lp->chipname);
-+	return sysfs_emit(buf, "%s\n", lp->chipname);
- }
- 
- static ssize_t lp855x_get_bl_ctl_mode(struct device *dev,
-@@ -307,7 +307,7 @@ static ssize_t lp855x_get_bl_ctl_mode(struct device *dev,
- 	else if (lp->mode == REGISTER_BASED)
- 		strmode = "register based";
- 
--	return scnprintf(buf, PAGE_SIZE, "%s\n", strmode);
-+	return sysfs_emit(buf, "%s\n", strmode);
- }
- 
- static DEVICE_ATTR(chip_id, S_IRUGO, lp855x_get_chip_id, NULL);
--- 
-2.25.1
+Best Regards,
+Huang, Ying
 
-
+>>> The only deadlock prevention convention that I see is the convention of
+>>> locking the pages in order of ascending address. That only helps if
+>>> everything does it that way, and migrate code definitely does not.
+>>> However...I thought that up until now, at least, the migrate code relied
+>>> on trylock (which can fail, and so migration can fail, too), to avoid
+>>> deadlock. Is that changing somehow, I didn't see it?
+>>
+>> The trylock is used by async mode which does try to avoid blocking.
+>> But sync mode does use lock. The current implementation of migration
+>> does migrate one page at a time, so it is not a problem.
+>>
+>>>
+>>>
+>>> [1] https://elixir.bootlin.com/linux/latest/source/mm/page-writeback.c#L2296
+>>>
+>>> thanks,
+>>>
+>>> --
+>>> John Hubbard
+>>> NVIDIA
+>>>
+>>> > The simplest solution is to batch page migration only if mode ==
+>>> > MIGRATE_ASYNC.  Then we may consider to fall back to non-batch mode if
+>>> > mode != MIGRATE_ASYNC and trylock page fails.
+>>> >
+>>>
+>>>
