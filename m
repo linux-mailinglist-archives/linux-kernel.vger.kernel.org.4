@@ -2,76 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F615EE1F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6384E5EE1FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbiI1QgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
+        id S233383AbiI1QiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbiI1QgQ (ORCPT
+        with ESMTP id S231301AbiI1QiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:36:16 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22007A75C;
-        Wed, 28 Sep 2022 09:36:15 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id e205so10614579iof.1;
-        Wed, 28 Sep 2022 09:36:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=TzxuSkFY1lkU+KFzHI4Ik/1IQbyTkGI/h/ZDb60baw0=;
-        b=ghh0QCywbcq9KUctQSaKs+ZzF6e5x1tsi7CRIHXbI+VxyVjv28yERT2n9Bd2auhS3C
-         L0JLhdZq3yI6hteiem5oShET5qpTbX6vU0KLg/xR96SkCedgU0H1pR0H5cUP4DoVX8FQ
-         GAy+AQpq+uGZnnBfJoUmIPi2AIy+X7Sw1dqDjzFFt0IBxCOYbuE9InEdf5/v3vAv66t+
-         R/DEdTwIrqzbhpEjtT4nC5VEo8uyC24+gKTDYIbI7ws2j/rdgvg7bd/NZG0FUzSv/yhf
-         xP4fiPZoTQtQXWJJXAJJ7GNC2JXKan8kug1kSWuQgT8x37t6IYa2G5ECC0a1u+0tnZmk
-         9KUA==
+        Wed, 28 Sep 2022 12:38:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC241B6D57
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:38:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664383086;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KfA3AE1gLjSHcUh55RKqlSmKAY8wUZMHb6XyxojjA7M=;
+        b=NNYa6SYRFa6Vz3bSM+a1IZ1zCK7gYWLpkG+qPjHlejg+ET4BC8SdXbMjSNLQL4fJ6zzfE9
+        oCOQILba5DGb1DRCXFNjItoGVPUTvjpQGTjfrkm962KJYKGUbfuPcBv52QKHBxHaL2s+4U
+        AUJPTmRdBMv4ZFKfo0zAcIQgMJFhMj4=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-346-I_dhXhcZOICELsOeqD5f-w-1; Wed, 28 Sep 2022 12:38:04 -0400
+X-MC-Unique: I_dhXhcZOICELsOeqD5f-w-1
+Received: by mail-ed1-f71.google.com with SMTP id z2-20020a056402274200b004516734e755so10684440edd.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:38:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=TzxuSkFY1lkU+KFzHI4Ik/1IQbyTkGI/h/ZDb60baw0=;
-        b=dyzM62BXObbUZqxl0ufv0zk98r4KgQjxbwe0yJemCXMGpo/MEBAZzqXAB/91L46V2c
-         Fi37aAVJPXG9lzlhftYet1ptspEJujc9QQSX7T848lOvwbD8G3n05bHwcydRQluA3XRN
-         Bw68FyZtghM/lX/gYa+CKyuXkfmDobCHQdnGjmTDdxWyky/0nQL8H2YmhlO18vYt5NOv
-         xYr5MIbXLybip88JT9bw6dTE8wSKrOYG37kUXbnj/dioMBunnjme4/LILMrs9UCiwwso
-         vpY6RLZrQt1JK+9iBtxRlK2jwLdPilwxy6Z0vvD+db0CJOoG8EXwQkvvz4lfzZMW2COE
-         kDIA==
-X-Gm-Message-State: ACrzQf1vZ3Uf5iMXvm32LPOcF/uze4Z9QJnQO7Jc4qlp2ZAs7ehvDXVa
-        nAPYTRqH5pi1U2rLlwl0dP18Fac79cicLIXUc+0=
-X-Google-Smtp-Source: AMsMyM7s7gTrjG5ymH3U15IUsSK/Ewsk3Nv/sC9qIh/OUwZPjVtqqFjgvJyAbTuiV9RabeXQphO5cy2c2GW3Yq+W2es=
-X-Received: by 2002:a05:6638:25cb:b0:35b:b1cd:c411 with SMTP id
- u11-20020a05663825cb00b0035bb1cdc411mr395294jat.308.1664382975350; Wed, 28
- Sep 2022 09:36:15 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=KfA3AE1gLjSHcUh55RKqlSmKAY8wUZMHb6XyxojjA7M=;
+        b=7mXYbrMg3DS2BTkB2gOmMYXNaA9aFtbHfFZVqfsfhSegVHIpMHOyvwc3QKhOox9XWk
+         InahAzL95+PkcD3Qf7jNhTXJYS5XaxbPwNWuEeTr+xS8Zbqt/FOMlmRddwjJkhL2dmof
+         N1vhmp2bP7I0JOb0/4n86Rn13d52R+5Jj0Kj/S7RzzSQfbxSE2P0VhPpBzzpOMQsDBpk
+         NGqvDk8E4++k3kjyQwA0rQ9EzGqKUOTf39gbJ1W0jUnEqJ1Sslne2IKhr2PgJef+w6kZ
+         6S3XuXBQusv79w5gk89ICnUkU+2xlVdirjuN+4x9CQA94J2wuaW//WM7WjVzP9skYJGL
+         NJvg==
+X-Gm-Message-State: ACrzQf0eoKY23qcGpEJlTWcdUnQFJXi7LG8Nwyfi8mpG2ab7XB35mDK1
+        Ow5bIO/dU9QPvtaB3JowQvt5JsZdcUqFv2R7tLZkycBE+qP6S4h1Upgqt4zDQ2lGKlNqKoG0w+3
+        8Eck/P6SZ0i3MaaqAH6n4ZjBM
+X-Received: by 2002:a17:907:8693:b0:783:a776:ce86 with SMTP id qa19-20020a170907869300b00783a776ce86mr12834968ejc.243.1664383083449;
+        Wed, 28 Sep 2022 09:38:03 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7spf7rZI5JZmQqO2z0gdul9SCLQxL0tiDgUirwLau5dTewaGrfOYjH4OE4cXcCdnHHB0dSHA==
+X-Received: by 2002:a17:907:8693:b0:783:a776:ce86 with SMTP id qa19-20020a170907869300b00783a776ce86mr12834945ejc.243.1664383083180;
+        Wed, 28 Sep 2022 09:38:03 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:2f4b:62da:3159:e077? ([2001:b07:6468:f312:2f4b:62da:3159:e077])
+        by smtp.googlemail.com with ESMTPSA id m5-20020a1709062ac500b00773dbdd8205sm2596968eje.168.2022.09.28.09.38.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 09:38:02 -0700 (PDT)
+Message-ID: <8534dfe4-bc71-2c14-b268-e610a3111d14@redhat.com>
+Date:   Wed, 28 Sep 2022 18:38:00 +0200
 MIME-Version: 1.0
-References: <20220927131518.30000-1-ojeda@kernel.org> <20220927131518.30000-11-ojeda@kernel.org>
- <YzRoZwhxE4182cm2@liuwe-devbox-debian-v2>
-In-Reply-To: <YzRoZwhxE4182cm2@liuwe-devbox-debian-v2>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 28 Sep 2022 18:36:04 +0200
-Message-ID: <CANiq72kXHQSbGjavdOKgDK4FnGYCeC3B4ZfgZDU5KD_ZLKn7RQ@mail.gmail.com>
-Subject: Re: [PATCH v10 10/27] rust: add `macros` crate
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Sumera Priyadarsini <sylphrenadin@gmail.com>,
-        Gary Guo <gary@garyguo.net>, Matthew Bakhtiari <dev@mtbk.me>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Like Xu <like.xu.linux@gmail.com>
+References: <37b3162e-7b3a-919f-80e2-f96eca7d4b4c@redhat.com>
+ <dfcbdf1d-b078-ec6c-7706-6af578f79ec2@redhat.com>
+ <55d7f0bd-ace1-506b-ea5b-105a86290114@redhat.com>
+ <f753391e-7bdc-bada-856a-87344e75bd74@redhat.com>
+ <111a46c1-7082-62e3-4f3a-860a95cd560a@redhat.com>
+ <14d5b8f2-7cb6-ce24-c7a7-32aa9117c953@redhat.com>
+ <YzIZhn47brWBfQah@google.com>
+ <3b04db9d-0177-7e6e-a54c-a28ada8b1d36@redhat.com>
+ <YzMdjSkKaJ8HyWXh@google.com>
+ <dd6db8c9-80b1-b6c5-29b8-5eced48f1303@redhat.com>
+ <YzRvMZDoukMbeaxR@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
+In-Reply-To: <YzRvMZDoukMbeaxR@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,29 +101,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 5:29 PM Wei Liu <wei.liu@kernel.org> wrote:
->
-> Just a general question: what is the house rule for adding new proc
-> macros? They are powerful tools. I can see their value in `module!`
-> because writing all that boilerplate by hand is just painful. Yet they
-> are not straightforward to understand. It is difficult, just by looking
-> at the macro, to fully grasp what the final code looks like (though the
-> rsi target will help). Is there a concern that proc macro gets abused?
+On 9/28/22 17:58, Sean Christopherson wrote:
+> On Wed, Sep 28, 2022, Paolo Bonzini wrote:
+>> On 9/27/22 17:58, Sean Christopherson wrote:
+>>> I'm pretty sure this patch will Just Work for QEMU, because QEMU simply resumes
+>>> the vCPU if mmio.len==0.  It's a bit of a hack, but I don't think it violates KVM's
+>>> ABI in any way, and it can even become "official" behavior since KVM x86 doesn't
+>>> otherwise exit with mmio.len==0.
+>>
+>> I think this patch is not a good idea for two reasons:
+>>
+>> 1) we don't know how userspace behaves if mmio.len is zero.  It is of course
+>> reasonable to do nothing, but an assertion failure is also a valid behavior
+> 
+> Except that KVM currently does neither.  If the fetch happens at CPL>0 and/or in
+> L2, KVM injects #UD.  That's flat out architecturally invalid.  If it's a sticking
+> point, the mmio.len==0 hack can be avoided by defining a new exit reason.
 
-The rule is "use them as last resort". That is, they are not banned,
-but they need to be justified: if there is an alternative that is not
-too bad (e.g. in terms of ergonomics or implementation), then the
-alternative should be used instead.
+I agree that doing this at CPL>0 or in L2 is invalid and makes little 
+sense (because either way the invalid address cannot be reached without 
+help from the supervisor or L1's page tables).
 
-Nevertheless, sometimes they are very handy. Apart from `module!`
-here, we are currently using them in the full repo for vtables [1] and
-the Asahi M1 GPU driver is using them for versioning [2].
+>> 2) more important, there is no way to distinguish a failure due to the guest
+>> going in the weeds (and then KVM_EXIT_INTERNAL_ERROR is fine) from one due
+>> to the KVM_SET_USER_MEMORY_REGION race condition.  So this will cause a
+>> guest that correctly caused an internal error to loop forever.
+> 
+> Userspace has the GPA and absolutely should be able to detect if the MMIO may have
+> been due to its memslot manipulation versus the guest jumping into the weeds.
+> 
+>> While the former could be handled in a "wait and see" manner, the latter in
+>> particular is part of the KVM_RUN contract.  Of course it is possible for a
+>> guest to just loop forever, but in general all of KVM, QEMU and upper
+>> userspace layers want a crashed guest to be detected and stopped forever.
+>>
+>> Yes, QEMU could loop only if memslot updates are in progress, but honestly
+>> all the alternatives I have seen to atomic memslot updates are really
+>> *awful*.  David's patches even invent a new kind of mutex for which I have
+>> absolutely no idea what kind of deadlocks one should worry about and why
+>> they should not exist; QEMU's locking is already pretty crappy, it's
+>> certainly not on my wishlist to make it worse!
+>>
+>> This is clearly a deficiency in the KVM kernel API, and (thanks to SRCU) the
+>> kernel is the only place where you can have a *good* fix.  It should have
+>> been fixed years ago.
+> 
+> I don't disagree that the memslots API is lacking, but IMO that is somewhat
+> orthogonal to fixing KVM x86's "code fetch to MMIO" mess.  Such a massive new API
+> should be viewed and prioritized as a new feature, not as a bug fix, e.g. I'd
+> like to have the luxury of being able to explore ideas beyond "let userspace
+> batch memslot updates", and I really don't want to feel pressured to get this
+> code reviewed and merge.
 
-It is also possible to make proc macros easier to handle, for instance
-if we end up deciding to allow utilities like the `syn` crate.
+I absolutely agree that this is not a bugfix.  Most new features for KVM 
+can be seen as bug fixes if you squint hard enough, but they're still 
+features.
 
-[1] https://github.com/Rust-for-Linux/linux/blob/fcad53ca9071c7bf6a412640a82e679bad6d1cd4/rust/macros/lib.rs#L99-L148
-[2] https://github.com/AsahiLinux/linux/blob/3c8982e2c78c219bf96761445c8b73c2b3034fba/drivers/gpu/drm/asahi/fw/buffer.rs#L43-L56
+> E.g. why do a batch update and not provide KVM_SET_ALL_USER_MEMORY_REGIONS to
+> do wholesale replacement?  That seems like it would be vastly simpler to handle
+> on KVM's end.  Or maybe there's a solution in the opposite direction, e.g. an
+> API that allows 1->N or N->1 conversions but not arbitrary batching.
 
-Cheers,
-Miguel
+Wholesale replacement was my first idea when I looked at the issue, I 
+think at the end of 2020.  I never got to a full implementation, but my 
+impression was that allocating/deallocating dirty bitmaps, rmaps etc. 
+would make it any easier than arbitrary batch updates.
+
+> And just because QEMU's locking is "already pretty crappy", that's not a good
+> reason to drag KVM down into the mud.  E.g. taking a lock and conditionally
+> releasing it...  I get that this is an RFC, but IMO anything that requires such
+> shenanigans simply isn't acceptable.
+> 
+>    /*
+>     * Takes kvm->slots_arch_lock, and releases it only if
+>     * invalid_slot allocation, kvm_prepare_memory_region failed
+>     * or batch->is_move_delete is true.
+>     */
+>    static int kvm_prepare_memslot(struct kvm *kvm,
+> 			         struct kvm_internal_memory_region_list *batch)
+> 
+
+No objection about that. :)
+
+Paolo
+
