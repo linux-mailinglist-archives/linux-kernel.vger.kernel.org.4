@@ -2,80 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0845EE2DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF90D5EE2E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234584AbiI1RQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S234546AbiI1RRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234500AbiI1RP6 (ORCPT
+        with ESMTP id S234681AbiI1RQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:15:58 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704D7B856
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:14:58 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id s6so21335739lfo.7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:14:58 -0700 (PDT)
+        Wed, 28 Sep 2022 13:16:37 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1819DEEB64
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:15:56 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id d42so21460513lfv.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:15:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=Lst2h60nLeZJR9My1LZ1Q189d4nio5lVLP5z2V/PmZ8=;
-        b=UTz5Rq0k+/9D9uHOoIBm07Ri3OFCQuX9ipw2Ht5vd72Uat5H9EZDzdWIwkeqpQtFzD
-         8pgGQZdu004nqThUPmEtGMV9zjWEEuk3aAX43Gqe+UcYaYdETIn0VsOoLe3tDJrEcTPr
-         /2WYld0PUqxYirixfIstgtoN4Ko8zIbDyZToQzY0oBTdU4GwfqkQPUpDi5QvWrFlrsBF
-         YKDhqzMyY9ZpqwU2fr+sTHMpn5g/2YiPZ8dF4KFy1qId+kygsmDsrKMnoQIOnKsEAn6L
-         bQYHNHyQM4T58s8Pqqn+DSfL/0usyrsHdOZKMBw2GqWS+n+CaWv/BmqYXWicqmkJQ1yy
-         GR0w==
+        bh=yvPLxoKxASU1oV0ydqT/WaUJJZ+f2nyTFfImwwyybhM=;
+        b=gZyEjk+n32pMC2gI++dHQxgG17ROlFc/Rvb3c+K/AU/nl1uoFy1H+qW8pkv5UpGjat
+         yRPMAize2tCACO120SCUKuMSbs91+q47z684UJUN+g7du2TnFk9W/GJrlxKFg5i7gavZ
+         qiIrM2WqXYGW4dJhFlcDFKrOzX1DyoV3Auae5yQUg+F/gYwv5bgnxnjCn5WEk4O595Wo
+         ft6MEtg6k0x2ScwiLtw269gdKeVxZkYWxChZnCKuP7JVU+lNz7gZD5zFdPP6oXMSguDb
+         uNsqKomugM/GpErZEuvJnUIKZWjI7md5ngpT9GaGkzSlZ/t1qSRNoOtOxejjFG3uo1Sj
+         Zv8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=Lst2h60nLeZJR9My1LZ1Q189d4nio5lVLP5z2V/PmZ8=;
-        b=y3HBOk26hWsALkGuhLS/subcKZPGnrseEACJ+o439iBPYicpWbeJqNFKOJgshcQODS
-         jwRc6o6wJgcnehnh9ldBhLa2yPpRmytTapJT/LfTewNsZkXE8NDL75fw88GXd8fL9+Bu
-         JiYaE+n2GRP89QpgDauhTn4NjHrs7o64/h2mTSAV/EqVXQmtO/DobpiAqi0B86Gg25/l
-         hAT86TkX1fGhsZmQJ5FRX41TOpfoyQH0riGtfT3IkH44AG/D7b58sK/boo1DOiNTqQFn
-         8TsEQzMfW8iOUtfEXbWCJ+uLAUvVs4UXQYnqkoKZk/cvyGpD/PsTNestK938hEbwUu4J
-         5ouA==
-X-Gm-Message-State: ACrzQf0yYjB1Pf0u6hTLJchoFpHv6Iu5LUJh07GJVGl8gKEsRzMSGL1V
-        XmXhzmz3f/2LwG6b3MUhpypJHQ==
-X-Google-Smtp-Source: AMsMyM6G1z4IMeKq+lGMvDfdaJn1qYn3PomKrIkF4P3N0jXtuHoIc6CAkb2g5Eb+nQOpLuuj2Mxltg==
-X-Received: by 2002:ac2:5e69:0:b0:497:a698:1acc with SMTP id a9-20020ac25e69000000b00497a6981accmr14454097lfr.316.1664385295996;
-        Wed, 28 Sep 2022 10:14:55 -0700 (PDT)
+        bh=yvPLxoKxASU1oV0ydqT/WaUJJZ+f2nyTFfImwwyybhM=;
+        b=b5mDCvOw+qyUkOvOoWfSanfruWfEwY13OMAnx3//V+1RGyfRrucANSgamdeDuFRiZk
+         IwxW4x9+y5mb1f0L06mjEzqHsCTdRtIOiq1NzazYg0KoMSvHqSuQl5/x6G2cEtEuN6Uq
+         AYsptnL7jbrmgCr+GH6yvVzMaB686d3pAAw8xSbB5y8dhh4NikYTjMeF9LOlGCQZxH89
+         526PnfbtJELnQuZr72NrbneIIWbE8DxZbWvzMbNF12hkUKv6Rl+VuANyZ1VTiNK86yW9
+         VfYGTr+CwR0Jl4LP/oJ/5xV6zDQjR656EhZbuH9eajH10aTehJFr1OPtCHh/E8C0CkRt
+         RqCw==
+X-Gm-Message-State: ACrzQf28jRiMcKF65L7n57s2FyFYKjVhW5ZF8xym/H0spwBr2rLJS4bR
+        p7pAgIIO+2Yf8TdKa0++Brht7g==
+X-Google-Smtp-Source: AMsMyM6CMlioEhHvKg/S6bggNWBpvr4jWCPRIj3BoalVJONNliyV8cxuDdIf4DcvQdjpOTg7fZti5g==
+X-Received: by 2002:a05:6512:401f:b0:49e:ea65:cd49 with SMTP id br31-20020a056512401f00b0049eea65cd49mr13368705lfb.419.1664385353790;
+        Wed, 28 Sep 2022 10:15:53 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q12-20020ac25a0c000000b00494a1b242dasm528178lfn.14.2022.09.28.10.14.54
+        by smtp.gmail.com with ESMTPSA id q6-20020a2eb4a6000000b00264b292232asm476672ljm.63.2022.09.28.10.15.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 10:14:55 -0700 (PDT)
-Message-ID: <309ff92e-16ef-09c0-5ed6-fb2e13f2d62b@linaro.org>
-Date:   Wed, 28 Sep 2022 19:14:54 +0200
+        Wed, 28 Sep 2022 10:15:52 -0700 (PDT)
+Message-ID: <ef396764-af53-8e5a-5203-f3e103bbb7a3@linaro.org>
+Date:   Wed, 28 Sep 2022 19:15:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH v3 3/5] arm64: dts: qcom: msm8916-samsung-j5-common: Add
- initial common device tree
+Subject: Re: [PATCHv4 1/3] dt-bindings: mmc: synopsys-dw-mshc: document
+ "altr,sysmgr-syscon"
 Content-Language: en-US
-To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        devicetree@vger.kernel.org
-Cc:     Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>,
-        Julian Ribbeck <julian.ribbeck@gmx.de>,
-        Josef W Menad <JosefWMenad@protonmail.ch>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220928164806.179314-1-linmengbo0689@protonmail.com>
- <20220928165920.181087-1-linmengbo0689@protonmail.com>
+To:     Dinh Nguyen <dinguyen@kernel.org>, jh80.chung@samsung.com
+Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220928165420.1212284-1-dinguyen@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220928165920.181087-1-linmengbo0689@protonmail.com>
+In-Reply-To: <20220928165420.1212284-1-dinguyen@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,37 +77,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 19:00, Lin, Meng-Bo wrote:
-> The smartphones below are using the MSM8916 SoC,
-> which are released in 2015-2016:
+On 28/09/2022 18:54, Dinh Nguyen wrote:
+> Document the optional "altr,sysmgr-syscon" binding that is used to
+> access the System Manager register that controls the SDMMC clock
+> phase.
 > 
-> Samsung Galaxy J5 2015 (SM-J500*)
-> Samsung Galaxy J5 2016 (SM-J510*)
-> Samsung Galaxy J3 2016
-> - SM-J3109/SM-J320Y/SM-J320YZ
-> - SM-J320N0/SM-J320ZN
-> - SM-J320P/SM-J320R4/SM-J320V/SM-S320VL
-> 
-> Add a common device tree for with initial support for:
-> 
-> - GPIO keys
-> - SDHCI (internal and external storage)
-> - USB Device Mode
-> - UART (on USB connector via the SM5703 MUIC)
-> - WCNSS (WiFi/BT)
-> - Regulators
-> 
-> The three devices (some varints of J3, all other variants of J5 released
-> in 2015 and J5X released in 2016) are very similar, with some differences
-> in display and GPIO pins. The common parts are shared in
-> msm8916-samsung-j5-common.dtsi to reduce duplication.
-> 
-> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 > ---
->  ...6-samsung-j5.dts => msm8916-samsung-j5-common.dtsi} | 10 ++--------
 
-Nope, we loose a board in this commit. Your changes are still not
-bisectable - board is gone.
+Thank you for your patch. There is something to discuss/improve.
+
+> +
+> +allOf:
+> +  - $ref: "synopsys-dw-mshc-common.yaml#"
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const:
+> +              - altr,socfpga-dw-mshc
+
+It still should not be an array, even if there is no warning.
+
+> +    then:
+> +      required:
+> +        - altr,sysmgr-syscon
+> +    else:
+> +      properties:
+> +        altr,sysmgr-syscon: false
 
 Best regards,
 Krzysztof
