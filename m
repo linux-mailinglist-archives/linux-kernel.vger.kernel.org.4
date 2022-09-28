@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456835ED5AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3FB5ED5AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233201AbiI1HII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
+        id S233250AbiI1HIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiI1HIE (ORCPT
+        with ESMTP id S229951AbiI1HIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:08:04 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEBEDB94B
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 00:07:58 -0700 (PDT)
-X-UUID: df875b12b93d41ecb29a565b6e5e535c-20220928
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=z93vs5MNpoShVM3NXCv352HhKZSF+mhz1gZ7jjrNYU0=;
-        b=hbAjAo+YWwMpfyaSToJNHCbscGpWxM2yC/CA9PlRL2u5gohNBD5zWFk1Pcqg2kjuCC1qxXdB5zbBMWdRlGTjcPl3bShMUxARIk55lVKRbs3W6O8Lj+FFCKhqgd4EjufuyK8aGAVhx3KeiD/exJ39TVoGhFGREXvFaNmUOR+AEXg=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:ce1bf6c3-9ded-48e3-8a47-fe8f1a4947f3,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:3c1556a3-dc04-435c-b19b-71e131a5fc35,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: df875b12b93d41ecb29a565b6e5e535c-20220928
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 303319835; Wed, 28 Sep 2022 15:07:54 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 28 Sep 2022 15:07:52 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 28 Sep 2022 15:07:52 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH next v2] phy: mediatek: fix build warning of FIELD_PREP()
-Date:   Wed, 28 Sep 2022 15:07:46 +0800
-Message-ID: <20220928070746.5393-1-chunfeng.yun@mediatek.com>
+        Wed, 28 Sep 2022 03:08:40 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A3EE3EF3;
+        Wed, 28 Sep 2022 00:08:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664348919; x=1695884919;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=k8LpqHay4HmwnWtui8VFFgLfp9KP1+BML4qzqAIm0So=;
+  b=r6HaQFOCv2jdyhpuIl+g5YAlcWhzmVlcOEZPvpbAFGR6nZE/4McqjwuH
+   Kop2l25MOXm5ThCzIGOoxaL3B4Jp4lynnfhNcdrPuzbY+m5v+CdKrx7N6
+   GXDWqgrTMT4X/bI5wc69G2DfQ0gu1ClK0IU5O9e1hS9EOsVj5+DvLQb3i
+   BD/wh9HD1lpjUL988zirq20jfbLadMNkRLNeqsmd3eleheBXAXgb8CLA2
+   oJbtPCaN7MvkWwVbg3jhDnrE8TkrQwxP2K1tu5L6Cb91vAHUfudWFt2ll
+   i225xrYB11saggfRW6GaV2xafRXDE4XnyiE4YLuaHS85bs3LdXLdApIEX
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="182278536"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Sep 2022 00:08:39 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 28 Sep 2022 00:08:37 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 28 Sep 2022 00:08:34 -0700
+From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+To:     <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>
+Subject: [PATCH net V3] eth: lan743x: reject extts for non-pci11x1x devices
+Date:   Wed, 28 Sep 2022 12:38:30 +0530
+Message-ID: <20220928070830.22517-1-Raju.Lakkaraju@microchip.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change the inline function mtk_phy_update_field() into a macro to
-avoid check warning of FIELD_PREP() with compiler parameter
--Wtautological-constant-out-of-range-compare
+Remove PTP_PF_EXTTS support for non-PCI11x1x devices since they do not support
+the PTP-IO Input event triggered timestamping mechanisms added
 
-the warning is caused by mask check:
-"BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \"
+Fixes: 60942c397af6 ("Add support for PTP-IO Event Input External  Timestamp
+ (extts)")
 
-Fixes: 29c07477556e ("phy: mediatek: add a new helper to update bitfield")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
 ---
-v2: v1 will cause merge conflict, change comment, s/should/shall
----
- drivers/phy/mediatek/phy-mtk-io.h | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Changes:                                                                        
+========
+V2 -> V3:
+ - Correct the Fixes tag
 
-diff --git a/drivers/phy/mediatek/phy-mtk-io.h b/drivers/phy/mediatek/phy-mtk-io.h
-index a723d4afc9b4..d20ad5e5be81 100644
---- a/drivers/phy/mediatek/phy-mtk-io.h
-+++ b/drivers/phy/mediatek/phy-mtk-io.h
-@@ -36,10 +36,11 @@ static inline void mtk_phy_update_bits(void __iomem *reg, u32 mask, u32 val)
- 	writel(tmp, reg);
- }
+V1 -> V2:
+ - Repost against net with a Fixes tag
+
+ drivers/net/ethernet/microchip/lan743x_ptp.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/net/ethernet/microchip/lan743x_ptp.c b/drivers/net/ethernet/microchip/lan743x_ptp.c
+index 6a11e2ceb013..da3ea905adbb 100644
+--- a/drivers/net/ethernet/microchip/lan743x_ptp.c
++++ b/drivers/net/ethernet/microchip/lan743x_ptp.c
+@@ -1049,6 +1049,10 @@ static int lan743x_ptpci_verify_pin_config(struct ptp_clock_info *ptp,
+ 					   enum ptp_pin_function func,
+ 					   unsigned int chan)
+ {
++	struct lan743x_ptp *lan_ptp =
++		container_of(ptp, struct lan743x_ptp, ptp_clock_info);
++	struct lan743x_adapter *adapter =
++		container_of(lan_ptp, struct lan743x_adapter, ptp);
+ 	int result = 0;
  
--/* field @mask should be constant and continuous */
--static inline void mtk_phy_update_field(void __iomem *reg, u32 mask, u32 val)
--{
--	mtk_phy_update_bits(reg, mask, FIELD_PREP(mask, val));
--}
-+/* field @mask shall be constant and continuous */
-+#define mtk_phy_update_field(reg, mask, val) \
-+({ \
-+	typeof(mask) mask_ = (mask);	\
-+	mtk_phy_update_bits(reg, mask_, FIELD_PREP(mask_, val)); \
-+})
- 
- #endif
+ 	/* Confirm the requested function is supported. Parameter
+@@ -1057,7 +1061,10 @@ static int lan743x_ptpci_verify_pin_config(struct ptp_clock_info *ptp,
+ 	switch (func) {
+ 	case PTP_PF_NONE:
+ 	case PTP_PF_PEROUT:
++		break;
+ 	case PTP_PF_EXTTS:
++		if (!adapter->is_pci11x1x)
++			result = -1;
+ 		break;
+ 	case PTP_PF_PHYSYNC:
+ 	default:
 -- 
-2.18.0
+2.25.1
 
