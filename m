@@ -2,126 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3375ED90B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 343485ED90C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 11:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbiI1JdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 05:33:01 -0400
+        id S233879AbiI1Jcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 05:32:45 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233859AbiI1Jcl (ORCPT
+        with ESMTP id S233338AbiI1JcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 05:32:41 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23826DF3B2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:32:35 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 4AE84580557;
-        Wed, 28 Sep 2022 05:32:32 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 28 Sep 2022 05:32:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1664357552; x=
-        1664361152; bh=qzh7AjvEfcvhQkxA/UL1+bOv++GlorS+C7InU5cHRYU=; b=e
-        B8BGzXv0nkCdkoUNnYypgS+VcPJrxJZlDD69TK6oA40d+lqkDDeVzzkvSj27rucX
-        YK/O4BZEyHHCvnWTvdx29AklODN29AriSRv4KdP1NTV6TypIx5viX1LPiVS3Tljj
-        ZFVhTQhzUyYqesGf8QtYNXw77ddh/XEqfZzRjAofqbf5C7t8oVfGm7wZfmNuvKBu
-        ygPkoajcNWLCO76QOqHzCxBEZ8uDFwT/Dx98wtsi/YSY7PfqdotG4ErfJJDTY5a5
-        GNZT5kbOiDdUdGudGNA/0C7akZ3U6JpvRIKirOx1mgSSERKFJFFd9jwZ9FbGxKcE
-        i9gUOz3B3mQiDdUybxL+g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1664357552; x=
-        1664361152; bh=qzh7AjvEfcvhQkxA/UL1+bOv++GlorS+C7InU5cHRYU=; b=h
-        a1TYICxmBm0bfTbFtC7hs5EgZXCiMLAuMTgdwFRCbEpfDXGUEuM90b6rruOXB4wk
-        QNbe5lf+uX0CDQmHjEL7mca+cCQZhIABg+R0JFmza0hu9MSI5/U/Riz4j29BJJtN
-        Mep9d6r4lemXljn9mB+0VvS5Gd0fawz/V8XyWbIOADcPmmnHny+8LT/ikwRn9A18
-        ucGV/ZWGNI8jWu0+jdILSH5b7gIbWzeVJ3UbleCvKROy0lMHkVoxIN5ajSVt1g6t
-        kDM7STJtct4sEsSoqZoqGi0O+J0Q8aVK1EyjCYiFQIVTWG3OSsE5QykSLZ4bHuVe
-        rpws53yeZ1ZZAlNFkrMwQ==
-X-ME-Sender: <xms:rxQ0YzJXJkJ8kc2Ln-J76QyxXxocGx0_nhpUy3JGFsThuQW-bBTr1Q>
-    <xme:rxQ0Y3IouKL8i4oR4xo6h7gxLEQlzz8PAfNp9saqSzdhY-lgiNBB5UDJuauZwISmY
-    JD1O12F83D09RdlGK4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegkedgudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:rxQ0Y7v8N9lghDLM5FfUJ4b3nsmtFZv5rua774dxh4zHyyxMoOyTqg>
-    <xmx:rxQ0Y8YJLjUoICAqXcnmD6Uz3imYZcvHIrGFAsQbQ4F2rNLh83VcXg>
-    <xmx:rxQ0Y6bRLfR7RQA4PZGyPkfc5Pl0YaWeChqe2415gPZnoRGHJIAU7A>
-    <xmx:sBQ0YwxguqRV244kTcp-IRLuFQghVxNyLb175DLuuFGG9oV8OPYIRQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8646CB60086; Wed, 28 Sep 2022 05:32:31 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-968-g04df58079d-fm-20220921.001-g04df5807
-Mime-Version: 1.0
-Message-Id: <e33cc08b-612b-4786-9b68-262c43af5ccb@www.fastmail.com>
-In-Reply-To: <YzQQfW3h70OIiT14@linutronix.de>
-References: <20220928064934.70867-1-renzhijie2@huawei.com>
- <YzPxMvjdjVEK1/b1@linutronix.de>
- <CAKXUXMxGt9UGhw9Ap_M3U2AF1vw2dX7WpDO71=UwV0Be3t4sNw@mail.gmail.com>
- <YzQQfW3h70OIiT14@linutronix.de>
-Date:   Wed, 28 Sep 2022 11:32:11 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
-        "Lukas Bulwahn" <lukas.bulwahn@gmail.com>
-Cc:     "Ren Zhijie" <renzhijie2@huawei.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Masahiro Yamada" <masahiroy@kernel.org>, seanjc@google.com,
-        "Johannes Weiner" <hannes@cmpxchg.org>, ojeda@kernel.org,
-        "Masami Hiramatsu" <mhiramat@kernel.org>,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>, atomlin@redhat.com,
-        ddiss@suse.de, "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] init/Kconfig: fix unmet direct dependencies
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Sep 2022 05:32:17 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31316B8E5
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 02:32:14 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mcrkh712Jz1P6t8;
+        Wed, 28 Sep 2022 17:27:56 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 17:32:12 +0800
+Subject: Re: [PATCH v3 1/4] mm,hwpoison,hugetlb,memory_hotplug: hotremove
+ memory section with hwpoisoned hugepage
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+CC:     <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20220921091359.25889-1-naoya.horiguchi@linux.dev>
+ <20220921091359.25889-2-naoya.horiguchi@linux.dev>
+ <91a4759f-88e4-f9ac-aff5-41d2db5ecfdd@huawei.com>
+ <20220928012647.GA597297@u2004.lan>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <e75128b5-ea83-48b4-8371-d146ed391f86@huawei.com>
+Date:   Wed, 28 Sep 2022 17:32:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <20220928012647.GA597297@u2004.lan>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022, at 11:14 AM, Sebastian Andrzej Siewior wrote:
-> On 2022-09-28 09:20:42 [+0200], Lukas Bulwahn wrote:
->> > Couldn't this become a depends?
->> It could also be a depends (to resolve the warning).
-> =E2=80=A6
->> It is just the question whether:
->>=20
->> When PROC_FS is not set, should the CHECKPOINT_RESTORE still be
->> visible as a config option to add (and then automatically add
->> PROC_FS)? Then select is right here.
->
-> then CHECKPOINT_RESTORE is the only option selecting PROC_FS while
-> everyone else depends on it _or_ avoids using it in the absence of
-> PROC_FS.
+On 2022/9/28 9:26, Naoya Horiguchi wrote:
+> On Sat, Sep 24, 2022 at 07:43:16PM +0800, Miaohe Lin wrote:
+>> On 2022/9/21 17:13, Naoya Horiguchi wrote:
+>>> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>>
+>>> HWPoisoned page is not supposed to be accessed once marked, but currently
+>>> such accesses can happen during memory hotremove because do_migrate_range()
+>>> can be called before dissolve_free_huge_pages() is called.
+>>>
+>>> Clear HPageMigratable for hwpoisoned hugepages to prevent them from being
+>>> migrated.  This should be done in hugetlb_lock to avoid race against
+>>> isolate_hugetlb().
+>>>
+>>> get_hwpoison_huge_page() needs to have a flag to show it's called from
+>>> unpoison to take refcount of hwpoisoned hugepages, so add it.
+>>>
+>>> Reported-by: Miaohe Lin <linmiaohe@huawei.com>
+>>> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>
+>> Thanks for your work, Naoya. Maybe something to improve below.
+>>
+>>> ---
+>>> ChangeLog v2 -> v3
+>>> - move to the approach of clearing HPageMigratable instead of shifting
+>>>   dissolve_free_huge_pages.
+>>> ---
+>>>  include/linux/hugetlb.h |  4 ++--
+>>>  mm/hugetlb.c            |  4 ++--
+>>>  mm/memory-failure.c     | 12 ++++++++++--
+>>>  3 files changed, 14 insertions(+), 6 deletions(-)
+>>>
+>>
+>> <snip>
+>>
+>>> @@ -7267,7 +7267,7 @@ int get_hwpoison_huge_page(struct page *page, bool *hugetlb)
+>>>  		*hugetlb = true;
+>>>  		if (HPageFreed(page))
+>>>  			ret = 0;
+>>> -		else if (HPageMigratable(page))
+>>> +		else if (HPageMigratable(page) || unpoison)
+>>
+>> Is unpoison_memory() expected to restore the HPageMigratable flag as well ?
+> 
+> No it isn't. When unpoison_memory() unpoisons a hugepage, the hugepage
+> is sent back to free hugepage pool, so I think that there's no need to
+> restore HPageMigratable for it.
 
-Right, we should not mix 'select' and 'depends on' for the same
-symbol, as that leads to circular dependencies and general
-confusion.
+I tend to agree with you.
 
-If there is no way to use CHECKPOINT_RESTORE without procfs,
-then the symbol should just not be visible (it will still show
-up with the dependency when one searches in menuconfig).
-Force-enabling a major subsystem like procfs from another
-symbol is not a good solution.
+> 
+>>
+>>>  			ret = get_page_unless_zero(page);
+>>>  		else
+>>>  			ret = -EBUSY;
+>>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>>> index 145bb561ddb3..5942e1c0407e 100644
+>>> --- a/mm/memory-failure.c
+>>> +++ b/mm/memory-failure.c
+>>> @@ -1244,7 +1244,7 @@ static int __get_hwpoison_page(struct page *page, unsigned long flags)
+>>>  	int ret = 0;
+>>>  	bool hugetlb = false;
+>>>  
+>>> -	ret = get_hwpoison_huge_page(head, &hugetlb);
+>>> +	ret = get_hwpoison_huge_page(head, &hugetlb, false);
+>>>  	if (hugetlb)
+>>>  		return ret;
+>>>  
+>>> @@ -1334,7 +1334,7 @@ static int __get_unpoison_page(struct page *page)
+>>>  	int ret = 0;
+>>>  	bool hugetlb = false;
+>>>  
+>>> -	ret = get_hwpoison_huge_page(head, &hugetlb);
+>>> +	ret = get_hwpoison_huge_page(head, &hugetlb, true);
+>>>  	if (hugetlb)
+>>>  		return ret;
+>>>  
+>>> @@ -1815,6 +1815,13 @@ int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
+>>>  		goto out;
+>>>  	}
+>>>  
+>>> +	/*
+>>> +	 * Clearing HPageMigratable for hwpoisoned hugepages to prevent them
+>>> +	 * from being migrated by memory hotremove.
+>>> +	 */
+>>> +	if (count_increased)
+>>> +		ClearHPageMigratable(head);
+>>
+>> I believe this can prevent hwpoisoned hugepages from being migrated though there still be some windows.
+> 
+> I'm not sure of "still racy" part, so could you elaborate it?
+> Main scenario this patch tries to handle is like below:
+> 
+>   CPU 0                                   CPU 1                                   
+>   get_huge_page_for_hwpoison                                                      
+>     // take hugetlb_lock                                                          
+>     __get_huge_page_for_hwpoison                                                  
+>                                           scan_movable_pages                      
+>                                             if HPageMigratable                    
+>                                               goto found                          
+>                                           do_migrate_range                        
+>       if HPageMigratable                                                          
+>         get_page_unless_zero                                                      
+>       hugetlb_set_page_hwpoison                                                   
+>       ClearHPageMigratable                                                        
+>     // release hugetlb_lock                                                       
+>                                             isolate_hugetlb                       
+>                                               // take hugetlb_lock                
+>                                               if !HPageMigratable                 
+>                                                 // fails to isolate the hwpoisoned hugetlb.
+> 
+> Maybe the following could be possible.
+> 
+>   CPU 0                                   CPU 1
+>                                           scan_movable_pages
+>                                             if HPageMigratable
+>                                               goto found
+>                                           do_migrate_range
+>                                             isolate_hugetlb
+>                                               // the hugetlb is isolated,
+>                                               // but it's not hwpoisoned yet.
+>   get_huge_page_for_hwpoison
+>     // take hugetlb_lock
+>     __get_huge_page_for_hwpoison
+>       if HPageMigratable
+>         get_page_unless_zero
+>       hugetlb_set_page_hwpoison
+>       ClearHPageMigratable
+>     // release hugetlb_lock
 
-    Arnd
+Yes, this is what I mean. For already isolated hugetlb pages, HPageMigratable flags can't help much.
+
+> 
+> In this case, the hugepage is maybe broken but not marked as hwpoison yet,
+> so it's not detectable.
+> 
+>>
+>>> +
+>>>  	return ret;
+>>>  out:
+>>>  	if (count_increased)
+>>> @@ -1862,6 +1869,7 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+>>>  
+>>>  	if (hwpoison_filter(p)) {
+>>>  		hugetlb_clear_page_hwpoison(head);
+>>> +		SetHPageMigratable(head);
+>>
+>> Would we set HPageMigratable flag for free hugetlb pages here? IIUC, they're not expected to have this flag set.
+> 
+> Thank you, you're right.  This should be done in "if (res == 1)" block.
+
+If res == 1, it means hugetlb page refcnt is incremented. But it seems this does not necessarily mean
+HPageMigratable is cleared by __get_huge_page_for_hwpoison() if the hugetlb page is already isolated.
+If so, we might set HPageMigratable flag back for already isolated hugetlb pages?
+
+> (hwpoison_filter often bothers me ...)
+
+Agree, hwpoison_filter() makes things more complicated. ;)
+
+Thanks,
+Miaohe Lin
+
+> 
+>>
+>> Thanks,
+>> Miaohe Lin
+> 
+> Thank you very much!
+> - Naoya Horiguchi
+> .
+> 
+
