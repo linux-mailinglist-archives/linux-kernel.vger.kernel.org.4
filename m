@@ -2,102 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28ADD5EDE8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E28C85EDE8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234275AbiI1OPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S234279AbiI1OPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233482AbiI1OO6 (ORCPT
+        with ESMTP id S233482AbiI1OPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:14:58 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4496F3640E
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 07:14:56 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id d42so20676361lfv.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 07:14:56 -0700 (PDT)
+        Wed, 28 Sep 2022 10:15:39 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE97F5F22E
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 07:15:37 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so1821741pjh.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 07:15:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=cspDeevpPJ1L2vxkt9oS5ElGKDzO8T58Eksezra9JNU=;
-        b=Gc5rPQV2F/mvkZ2LrFAvaLv7zTokv0/af0pGD5W5w1/+bZj6HXHGkwR3ntyw1qw4Tl
-         07sR8w3GfByDEAIlbyLhlFZdhNpAJMjfZSYe107GxK0OqXGpUuOfqH+yHZ5EdsQTJ2WC
-         UoZyvbzw3PW/HjcxHnam+N+Rp0ZxQUPmnQTH1UkB3tn11U2/0hI6VrDdfTD2EawGWdoN
-         Du6t2rHBHNVKMJDyJRaLOn6LtrsQWt7pTKU2o1mXobKBG4CRVYomr8tyXclH9mXQc39k
-         SwiKtpEYist1pMjWKuItihkebPkOQuk1uU354DM0e6sxJ/OS2JpSl652tmUphzjcu+Xs
-         oUeg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hktgs1ApCFso4Lgx9S/kJQ05/BGQ8OgyJMNxMyrvQBs=;
+        b=F/6RrXPN2Oh00MjZTjWUsUmGG7qMPExV/sPvicQ1PPTbu6hbeu6/yb9iMjMeubGQK3
+         9ge9yEp0QjKJQ2RF+MCAo7wZtkh4ertFYACSS1KE84tGVhMGdvkFipbkACSgBrCod9ZX
+         eHRMTY5kv3GZ3X4Wu1Lrj7oRakgo4PKOartXs0AxAILL+fZsy4nz4lbqMhADKVurrLLb
+         VSsuqlKDxQVWhDau0rveQ3WOMuKK6SdWPTdp+SICBF0VllWW0ej+gsfnPOe9xKmgIHWy
+         02RtBjxNFfp2ZSce/juDLS0h0O68Gtfr56PMu7G6j04b5Z2IIuWKExodhEDsYOaio+8L
+         ADyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=cspDeevpPJ1L2vxkt9oS5ElGKDzO8T58Eksezra9JNU=;
-        b=WT1KABQr1Uk6C1g97O1DBgJcSAUPiWQvOsFNP3/IGOxv0zze65tsEaZRfwnRBhS7sN
-         N+GhimEBNetm/aPx386e1LyUamTTl8W234a7esJnaTtzKxejdFzv17kl1mvFbZSz+/r8
-         xs5Mz12QLDy/o2mkbV/OStjde/liEksi+MjvjiPPm21npVqr8B7dgJEeoiW//ijK1YXq
-         umG3B5YDkEk3iEmQg5gjorv/oWETGtSM20SzMk4lAqrEUyb48xaKqqTcNErqDj5qMlAr
-         rk8AlTVmOQ6Ka0Lt/vG5EUAmyS/KUSl4LuzKyuD34PSzp2wG/ZmaH8g4Jvnkw+h/tUbn
-         EFGQ==
-X-Gm-Message-State: ACrzQf1mOeyahA898O1RVZUnWLplvhT+gGqSBdH8B2MY5ofE66JO0GmT
-        zApxaa47b21pB68rCStC8fUr6w==
-X-Google-Smtp-Source: AMsMyM7TkgecYP0kzsTwnJuuUBJ+m4BurndPCyCih7w/L9uizfXh+LeQ5hSAyxIN8hdiXkTH5PbCyw==
-X-Received: by 2002:a05:6512:3b86:b0:499:4d:2c0b with SMTP id g6-20020a0565123b8600b00499004d2c0bmr12870796lfv.607.1664374495836;
-        Wed, 28 Sep 2022 07:14:55 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g5-20020a2eb5c5000000b0026bfc8d4bbbsm451726ljn.125.2022.09.28.07.14.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 07:14:55 -0700 (PDT)
-Message-ID: <265c74d0-ded6-fceb-9978-b46b167f7626@linaro.org>
-Date:   Wed, 28 Sep 2022 16:14:54 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hktgs1ApCFso4Lgx9S/kJQ05/BGQ8OgyJMNxMyrvQBs=;
+        b=70nK0TuuYl6hXxA6EEFMc8VwAuG/+xW45sBe0EYDXnmdnXZUBnO2TA0bL8peiykcTc
+         hcUElZQ/DIC4d85ejSzj5mh6dgL8LUBmqdFmlI6llDkGID2lO/AmTfcIxXyBjsLnmA/A
+         26eejKMCmz6y6Wt8BjDRLRnm7GtL2bOj+Qp9H1su2MZhxJfrsYds9wAct6xwBCurhT4F
+         J+AYvitb2kIJDnWDwq/TMGF3rcKEXcA8r7qDQdvXoQMIvbGbnd2Yzq0l7PwkqlRlFimh
+         PGAQkw5s9I+CWPNfNpYEGTVbRdet+vXuDQyX85+GYQu6wK4Qj51iC9Al0T517ImlN4C2
+         OEjQ==
+X-Gm-Message-State: ACrzQf0tfrbxwFJbpYZuSNlDIHHQT4YdMIx9lNaBGRaCcx1cZamjS0PF
+        R/wj/IzF4srPUVF4hK3RUVAfcoBjdD8E1fr8UR0=
+X-Google-Smtp-Source: AMsMyM6eOj8LLGBi2HGME8r2zF3t5LKk+ytYQdxJy9ugdQyWFmbXQahIMQrXp5vpgu8JE7yPVjc3WkJGvvt/g0279Ko=
+X-Received: by 2002:a17:902:6b8b:b0:178:7cf5:ad62 with SMTP id
+ p11-20020a1709026b8b00b001787cf5ad62mr48527plk.13.1664374537372; Wed, 28 Sep
+ 2022 07:15:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 1/4] dt-bindings: qcom: Document bindings for new
- msm8916-samsung-j5 devices
-Content-Language: en-US
-To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        devicetree@vger.kernel.org
-Cc:     Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>,
-        Josef W Menad <JosefWMenad@protonmail.ch>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        "Lin, Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220928110049.96047-1-linmengbo0689@protonmail.com>
- <20220928121717.102402-1-linmengbo0689@protonmail.com>
- <20220928123759.104582-1-linmengbo0689@protonmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220928123759.104582-1-linmengbo0689@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220819032706.695212-1-xiehuan09@gmail.com> <20220819032706.695212-3-xiehuan09@gmail.com>
+ <20220924160136.5029e942@rorschach.local.home> <CAEr6+ECbocOnr_fSp_rwnu7ugg_q0wrYWShYsW3XOJffqwSOYA@mail.gmail.com>
+ <20220925115335.44b58732@rorschach.local.home> <CAEr6+EDft-pFrCdatd1ypWbjk9_KkMpBXcS6q4zaUgmkQuW0Eg@mail.gmail.com>
+In-Reply-To: <CAEr6+EDft-pFrCdatd1ypWbjk9_KkMpBXcS6q4zaUgmkQuW0Eg@mail.gmail.com>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Wed, 28 Sep 2022 22:15:24 +0800
+Message-ID: <CAEr6+EAHVUntQMVAC0_Rm7A2wWWC9TZsYi4PgV-tdO0bvUKguA@mail.gmail.com>
+Subject: Re: [PATCH v15 2/4] trace/objtrace: Get the value of the object
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mingo@redhat.com, mhiramat@kernel.org, zanussi@kernel.org,
+        linux-kernel@vger.kernel.org, chensong_2000@189.cn
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 14:39, Lin, Meng-Bo wrote:
-> Document the new samsung,j3/j5/j5x device tree bindings used in their
-> device trees.
-> 
-> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
+On Mon, Sep 26, 2022 at 12:49 AM Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> On Sun, Sep 25, 2022 at 11:53 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > On Sun, 25 Sep 2022 13:27:10 +0800
+> > Jeff Xie <xiehuan09@gmail.com> wrote:
+> >
+> > >
+> > > It also looks like the "add" command field has been removed,
+> > > Masami previously suggested I to add a reserved command field for the
+> > > future (see [1] and [2]):
+> > >
+> > > [1]:
+> > > https://lore.kernel.org/lkml/20211026225234.549ec8e9eb59f1fd1671edbc@kernel.org/
+> > >
+> > > [2]:
+> > > https://lore.kernel.org/lkml/20211105004704.3f4aa456c2c537a56f64e65a@kernel.org/
+> >
+> > Ah, I see. add means enable the tracing and del means disable.
+> >
+> > Masami, perhaps we should call it "enable/disable" instead? Because, to
+> > me "del" means to remove it (permanently), where as "enable/disable"
+> > matches other triggers like the "enable/disable event" that starts and
+> > stops another event.
+> >
+> > >
+> > >
+> > > > This code is available in the kprobe code that eprobes also uses:
+> > > >
+> > > > See process_fetch_insn() in kernel/trace/trace_eprobe.c
+> > > >
+> > > > and the parsing of the string is in kernel/trace/trace_probe.c:
+> > > >
+> > > >   parse_probe_arg()
+
+I guess I won't be able to finish it until the next merge window, I've
+been trying it for a few days
+In my spare time recently, with no progress, it looks like it's really
+more complicated to implement ;-)
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > >
+> > > Thanks for your guidance, but the next merge window is coming soon,
+> > > and since I'm not doing full-time kernel development,
+> > > I can't guarantee that the development and testing of this change will
+> > > be completed before the next window merge.
+> > >
+> > >  Anyone familiar with this code providing a patch is welcome ;-)
+> >
+> > If I get a chance, I may see if I can quickly implement it.
+>
+> Thanks a lot ;-)
+>
+> >
+> > >
+> > > >
+> > > > I think doing this will make it much more extensive, not to mention it
+> > > > will match the syntax of other code in the tracing infrastructure.
+> > >
+> > > I super agree.
+> >
+> > Thanks for you patience, and I'm sorry it took so long for me to review
+> > it.
+>
+> Nevermind, I've always been a fan of ftrace.
+>
+> >
+> > -- Steve
+>
+>
+>
+> --
+> Thanks,
+> JeffXie
 
-Best regards,
-Krzysztof
 
+-- 
+Thanks,
+JeffXie
