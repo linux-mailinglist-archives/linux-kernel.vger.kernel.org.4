@@ -2,62 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C43825ED839
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125155ED835
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 10:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233403AbiI1IuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 04:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
+        id S233510AbiI1IuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 04:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233454AbiI1Itc (ORCPT
+        with ESMTP id S233716AbiI1ItX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 04:49:32 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E709923EE
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:49:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664354969; x=1695890969;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=qKQIq21NKAdBYO/NiB/2nQyRgzRAJfVSm/FkW9deYnM=;
-  b=Fj6tWnUQ1azOeFnGE2TCSb30lXjvvC+i2BA/WsZzmCjW0jq3x1dfwdmc
-   s7V5aTfBb4v6135CS4KFUNcabmk2JFiR0hyFqqPwOZjYGyvw+pT7ss6Dp
-   yOxbKPdAwMnStepxY8rJ73gpTCElQc4y7Okj+eBZ+nYzwip12ZGI1Ue95
-   JU1Q3yqRLyOrxmyweI7qWkJ1EwIOgzmgFAwxOJ3PP6L/CHl/7oq4oVmOc
-   ec54fkYDy+bBBLjqBkE8H173UgGbgjL/r7N0FjANzfRraQvPTSzsXAnC1
-   Ov6XAQTq+jd/8ZAnj9VTzh11n9V3ahGTtJ6L0BKCO0nqK5ZOPM2TY1Z9T
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="302457560"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="302457560"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 01:49:29 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="655051213"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="655051213"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 01:49:27 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     <alexlzhu@fb.com>
-Cc:     <linux-mm@kvack.org>, <willy@infradead.org>,
-        <akpm@linux-foundation.org>, <riel@surriel.com>,
-        <hannes@cmpxchg.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-team@fb.com>
-Subject: Re: [PATCH 2/3] mm: changes to split_huge_page() to free zero
- filled tail pages
-References: <cover.1664347167.git.alexlzhu@fb.com>
-        <94de34378bb748196e7709205a75331569d1d28e.1664347167.git.alexlzhu@fb.com>
-Date:   Wed, 28 Sep 2022 16:48:40 +0800
-In-Reply-To: <94de34378bb748196e7709205a75331569d1d28e.1664347167.git.alexlzhu@fb.com>
-        (alexlzhu@fb.com's message of "Tue, 27 Sep 2022 23:44:12 -0700")
-Message-ID: <87v8p728bb.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 28 Sep 2022 04:49:23 -0400
+Received: from out28-3.mail.aliyun.com (out28-3.mail.aliyun.com [115.124.28.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599521BEB9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 01:49:07 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436893|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.118326-0.0259815-0.855693;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.PQPBNkb_1664354942;
+Received: from SunxiBot.allwinnertech.com(mailfrom:victor@allwinnertech.com fp:SMTPD_---.PQPBNkb_1664354942)
+          by smtp.aliyun-inc.com;
+          Wed, 28 Sep 2022 16:49:03 +0800
+From:   Victor Hassan <victor@allwinnertech.com>
+To:     daniel.lezcano@linaro.org, tglx@linutronix.de, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+Subject: [RESEND] clocksource: sun4i: Fix the bug that tick_resume stucks
+Date:   Wed, 28 Sep 2022 16:48:57 +0800
+Message-Id: <20220928084857.49185-1-victor@allwinnertech.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,61 +39,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-<alexlzhu@fb.com> writes:
+Currently syscore_resume() will stuck on tick_resume().
+Fix this by changing  `.tick_resume` from
+sun4i_clkevt_shutdown() to a new function sun4i_tick_resume().
 
-> From: Alexander Zhu <alexlzhu@fb.com>
->
-> Currently, when /sys/kernel/mm/transparent_hugepage/enabled=always is set
-> there are a large number of transparent hugepages that are almost entirely
-> zero filled.  This is mentioned in a number of previous patchsets
-> including:
-> https://lore.kernel.org/all/20210731063938.1391602-1-yuzhao@google.com/
-> https://lore.kernel.org/all/
-> 1635422215-99394-1-git-send-email-ningzhang@linux.alibaba.com/
->
-> Currently, split_huge_page() does not have a way to identify zero filled
-> pages within the THP. Thus these zero pages get remapped and continue to
-> create memory waste. In this patch, we identify and free tail pages that
-> are zero filled in split_huge_page(). In this way, we avoid mapping these
-> pages back into page table entries and can free up unused memory within
-> THPs. This is based off the previously mentioned patchset by Yu Zhao.
-> However, we chose to free anonymous zero tail pages whenever they are
-> encountered instead of only on reclaim or migration.
->
-> We also add self tests to verify the RssAnon value to make sure zero
-> pages are not remapped except in the case of userfaultfd. In the case
-> of userfaultfd we remap to the shared zero page, similar to what is
-> done by KSM.
->
-> Signed-off-by: Alexander Zhu <alexlzhu@fb.com>
-> ---
->  include/linux/rmap.h                          |   2 +-
->  include/linux/vm_event_item.h                 |   3 +
->  mm/huge_memory.c                              |  44 ++++++-
->  mm/migrate.c                                  |  72 +++++++++--
->  mm/migrate_device.c                           |   4 +-
->  mm/vmstat.c                                   |   3 +
->  .../selftests/vm/split_huge_page_test.c       | 113 +++++++++++++++++-
->  tools/testing/selftests/vm/vm_util.c          |  23 ++++
->  tools/testing/selftests/vm/vm_util.h          |   1 +
->  9 files changed, 250 insertions(+), 15 deletions(-)
->
-> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-> index b89b4b86951f..f7d5d5639dea 100644
-> --- a/include/linux/rmap.h
-> +++ b/include/linux/rmap.h
-> @@ -372,7 +372,7 @@ int folio_mkclean(struct folio *);
->  int pfn_mkclean_range(unsigned long pfn, unsigned long nr_pages, pgoff_t pgoff,
->  		      struct vm_area_struct *vma);
->  
-> -void remove_migration_ptes(struct folio *src, struct folio *dst, bool locked);
-> +void remove_migration_ptes(struct folio *src, struct folio *dst, bool locked, bool unmap_clean);
+Signed-off-by: Victor Hassan <victor@allwinnertech.com>
+---
+ drivers/clocksource/timer-sun4i.c | 131 ++++++++++++++++++++++--------
+ 1 file changed, 96 insertions(+), 35 deletions(-)
 
-There are 2 bool parameters now.  How about use "flags" style
-parameters?  IMHO, well defined constants are more readable than a set
-of true/false.
+diff --git a/drivers/clocksource/timer-sun4i.c b/drivers/clocksource/timer-sun4i.c
+index 94dc6e42e983..574398c35a22 100644
+--- a/drivers/clocksource/timer-sun4i.c
++++ b/drivers/clocksource/timer-sun4i.c
+@@ -38,6 +38,19 @@
+ 
+ #define TIMER_SYNC_TICKS	3
+ 
++/* Registers which needs to be saved and restored before and after sleeping */
++static u32 sun4i_timer_regs_offset[] = {
++	TIMER_IRQ_EN_REG,
++	TIMER_CTL_REG(0),
++	TIMER_INTVAL_REG(0),
++	TIMER_CNTVAL_REG(0),
++	TIMER_CTL_REG(1),
++	TIMER_INTVAL_REG(1),
++	TIMER_CNTVAL_REG(1),
++};
++
++static void __iomem *sun4i_timer_sched_base __read_mostly;
++
+ /*
+  * When we disable a timer, we need to wait at least for 2 cycles of
+  * the timer source clock. We will use for that the clocksource timer
+@@ -79,10 +92,41 @@ static void sun4i_clkevt_time_start(void __iomem *base, u8 timer,
+ 	       base + TIMER_CTL_REG(timer));
+ }
+ 
++static inline void sun4i_timer_save_regs(struct timer_of *to)
++{
++	void __iomem *base = timer_of_base(to);
++	int i;
++	u32 *regs_backup = (u32 *)to->private_data;
++
++	for (i = 0; i < ARRAY_SIZE(sun4i_timer_regs_offset); i++)
++		regs_backup[i] = readl(base + sun4i_timer_regs_offset[i]);
++}
++
++static inline void sun4i_timer_restore_regs(struct timer_of *to)
++{
++	void __iomem *base = timer_of_base(to);
++	int i;
++	u32 *regs_backup = (u32 *)to->private_data;
++
++	for (i = 0; i < ARRAY_SIZE(sun4i_timer_regs_offset); i++)
++		writel(regs_backup[i], base + sun4i_timer_regs_offset[i]);
++}
++
+ static int sun4i_clkevt_shutdown(struct clock_event_device *evt)
+ {
+ 	struct timer_of *to = to_timer_of(evt);
+ 
++	sun4i_timer_save_regs(to);
++	sun4i_clkevt_time_stop(timer_of_base(to), 0);
++
++	return 0;
++}
++
++static int sun4i_tick_resume(struct clock_event_device *evt)
++{
++	struct timer_of *to = to_timer_of(evt);
++
++	sun4i_timer_restore_regs(to);
+ 	sun4i_clkevt_time_stop(timer_of_base(to), 0);
+ 
+ 	return 0;
+@@ -137,45 +181,54 @@ static irqreturn_t sun4i_timer_interrupt(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static struct timer_of to = {
+-	.flags = TIMER_OF_IRQ | TIMER_OF_CLOCK | TIMER_OF_BASE,
+-
+-	.clkevt = {
+-		.name = "sun4i_tick",
+-		.rating = 350,
+-		.features = CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT,
+-		.set_state_shutdown = sun4i_clkevt_shutdown,
+-		.set_state_periodic = sun4i_clkevt_set_periodic,
+-		.set_state_oneshot = sun4i_clkevt_set_oneshot,
+-		.tick_resume = sun4i_clkevt_shutdown,
+-		.set_next_event = sun4i_clkevt_next_event,
+-		.cpumask = cpu_possible_mask,
+-	},
+-
+-	.of_irq = {
+-		.handler = sun4i_timer_interrupt,
+-		.flags = IRQF_TIMER | IRQF_IRQPOLL,
+-	},
+-};
++static void __init sun4i_clockevent_init(struct timer_of *to)
++{
++	to->clkevt.name = "sun4i_tick";
++	to->clkevt.features = CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT;
++	to->clkevt.set_state_shutdown = sun4i_clkevt_shutdown;
++	to->clkevt.set_state_periodic = sun4i_clkevt_set_periodic;
++	to->clkevt.set_state_oneshot = sun4i_clkevt_set_oneshot;
++	to->clkevt.tick_resume = sun4i_tick_resume;
++	to->clkevt.set_next_event = sun4i_clkevt_next_event;
++	to->clkevt.cpumask = cpu_possible_mask;
++	to->of_irq.flags = IRQF_TIMER | IRQF_IRQPOLL;
++
++	sun4i_timer_sched_base = timer_of_base(to) + TIMER_CNTVAL_REG(1);
++}
+ 
+ static u64 notrace sun4i_timer_sched_read(void)
+ {
+-	return ~readl(timer_of_base(&to) + TIMER_CNTVAL_REG(1));
++	return (u64)~readl(sun4i_timer_sched_base);
+ }
+ 
+ static int __init sun4i_timer_init(struct device_node *node)
+ {
++	struct timer_of *to;
+ 	int ret;
+ 	u32 val;
+ 
+-	ret = timer_of_init(node, &to);
++	to = kzalloc(sizeof(*to), GFP_KERNEL);
++	if (!to)
++		return -ENOMEM;
++
++	to->flags = TIMER_OF_IRQ | TIMER_OF_CLOCK | TIMER_OF_BASE;
++	to->of_irq.handler = sun4i_timer_interrupt;
++	ret = timer_of_init(node, to);
+ 	if (ret)
+-		return ret;
++		goto err;
+ 
+-	writel(~0, timer_of_base(&to) + TIMER_INTVAL_REG(1));
++	sun4i_clockevent_init(to);
++
++	to->private_data = kcalloc(ARRAY_SIZE(sun4i_timer_regs_offset), sizeof(u32), GFP_KERNEL);
++	if (!to->private_data) {
++		ret = -ENOMEM;
++		goto err1;
++	}
++
++	writel(~0, timer_of_base(to) + TIMER_INTVAL_REG(1));
+ 	writel(TIMER_CTL_ENABLE | TIMER_CTL_RELOAD |
+ 	       TIMER_CTL_CLK_SRC(TIMER_CTL_CLK_SRC_OSC24M),
+-	       timer_of_base(&to) + TIMER_CTL_REG(1));
++	       timer_of_base(to) + TIMER_CTL_REG(1));
+ 
+ 	/*
+ 	 * sched_clock_register does not have priorities, and on sun6i and
+@@ -186,32 +239,40 @@ static int __init sun4i_timer_init(struct device_node *node)
+ 	    of_machine_is_compatible("allwinner,sun5i-a10s") ||
+ 	    of_machine_is_compatible("allwinner,suniv-f1c100s"))
+ 		sched_clock_register(sun4i_timer_sched_read, 32,
+-				     timer_of_rate(&to));
++				     timer_of_rate(to));
+ 
+-	ret = clocksource_mmio_init(timer_of_base(&to) + TIMER_CNTVAL_REG(1),
+-				    node->name, timer_of_rate(&to), 350, 32,
++	ret = clocksource_mmio_init(timer_of_base(to) + TIMER_CNTVAL_REG(1),
++				    node->name, timer_of_rate(to), 350, 32,
+ 				    clocksource_mmio_readl_down);
+ 	if (ret) {
+ 		pr_err("Failed to register clocksource\n");
+-		return ret;
++		goto err2;
+ 	}
+ 
+ 	writel(TIMER_CTL_CLK_SRC(TIMER_CTL_CLK_SRC_OSC24M),
+-	       timer_of_base(&to) + TIMER_CTL_REG(0));
++	       timer_of_base(to) + TIMER_CTL_REG(0));
+ 
+ 	/* Make sure timer is stopped before playing with interrupts */
+-	sun4i_clkevt_time_stop(timer_of_base(&to), 0);
++	sun4i_clkevt_time_stop(timer_of_base(to), 0);
+ 
+ 	/* clear timer0 interrupt */
+-	sun4i_timer_clear_interrupt(timer_of_base(&to));
++	sun4i_timer_clear_interrupt(timer_of_base(to));
+ 
+-	clockevents_config_and_register(&to.clkevt, timer_of_rate(&to),
++	clockevents_config_and_register(&to->clkevt, timer_of_rate(to),
+ 					TIMER_SYNC_TICKS, 0xffffffff);
+ 
+ 	/* Enable timer0 interrupt */
+-	val = readl(timer_of_base(&to) + TIMER_IRQ_EN_REG);
+-	writel(val | TIMER_IRQ_EN(0), timer_of_base(&to) + TIMER_IRQ_EN_REG);
++	val = readl(timer_of_base(to) + TIMER_IRQ_EN_REG);
++	writel(val | TIMER_IRQ_EN(0), timer_of_base(to) + TIMER_IRQ_EN_REG);
++
++	return ret;
+ 
++err2:
++	kfree(to->private_data);
++err1:
++	timer_of_cleanup(to);
++err:
++	kfree(to);
+ 	return ret;
+ }
+ TIMER_OF_DECLARE(sun4i, "allwinner,sun4i-a10-timer",
+-- 
+2.29.0
 
-Best Regards,
-Huang, Ying
-
-[snip]
