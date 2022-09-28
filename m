@@ -2,153 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CE05ED2E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 04:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA195ED2D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 03:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbiI1CBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Sep 2022 22:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
+        id S231985AbiI1By3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Sep 2022 21:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiI1CBl (ORCPT
+        with ESMTP id S229692AbiI1By1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Sep 2022 22:01:41 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EEF167040
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 19:01:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664330500; x=1695866500;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=mIDSfyD4C874NNhP2JbYFUb/z54En2t5heGm3o3CQLA=;
-  b=i3u6zc4WoggUc/GOdCqROl6rm3OiOJDDBeoBqvih++LaVzKaRUG2j3m8
-   CXmJDX/sfAzYhDOk7MulezPKITHEA2Q+SCd7WHvUfjm/FLnVTwfZoLgrc
-   N11YUiH06YiblOstgHAiUfIFel1hzlE8WIpvBsmQq4Ew4W+Cqvt2TQH6W
-   bsdXgO9SB5xFguCaY7mQn7zVzTiO2vjqQxJPjBb49nYY+N+rLupMNji6b
-   UNM8+tyVWtmPWBsfStl4h1OA4Est8kye/EXZzVoBE2d3Fsv4zmkjrxRQQ
-   bLnwmx+IkGVk0A47CCFBkhLRRzyM38xE7vfXg+nQCQSO/UtLMrL4IcIuz
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="299078077"
-X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
-   d="scan'208";a="299078077"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 19:01:39 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="764096492"
-X-IronPort-AV: E=Sophos;i="5.93,350,1654585200"; 
-   d="scan'208";a="764096492"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2022 19:01:37 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     haoxin <xhao@linux.alibaba.com>
-Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        "Matthew Wilcox" <willy@infradead.org>, <yangyicong@hisilicon.com>,
-        <v-songbaohua@oppo.com>, <21cnbao@gmail.com>
-Subject: Re: [RFC 0/6] migrate_pages(): batch TLB flushing
-References: <20220921060616.73086-1-ying.huang@intel.com>
-        <393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com>
-Date:   Wed, 28 Sep 2022 10:01:03 +0800
-In-Reply-To: <393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com>
-        (haoxin's message of "Tue, 27 Sep 2022 19:21:08 +0800")
-Message-ID: <874jws2r6o.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 27 Sep 2022 21:54:27 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D931F01B6
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Sep 2022 18:54:25 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4McfYr74rlzHtcy
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:49:36 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 09:54:24 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <akinobu.mita@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>, <wangyufen@huawei.com>
+Subject: [-next RESEND] fault-injection: using debugfs_create_xul() instead of debugfs_create_xl()
+Date:   Wed, 28 Sep 2022 10:14:59 +0800
+Message-ID: <1664331299-4976-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-haoxin <xhao@linux.alibaba.com> writes:
+Using debugfs_create_xul() instead of debugfs_create_xl(), and del the
+local define debugfs_create_xl().
 
-> Hi, Huang
->
-> ( 2022/9/21 H2:06, Huang Ying S:
->> From: "Huang, Ying" <ying.huang@intel.com>
->>
->> Now, migrate_pages() migrate pages one by one, like the fake code as
->> follows,
->>
->>    for each page
->>      unmap
->>      flush TLB
->>      copy
->>      restore map
->>
->> If multiple pages are passed to migrate_pages(), there are
->> opportunities to batch the TLB flushing and copying.  That is, we can
->> change the code to something as follows,
->>
->>    for each page
->>      unmap
->>    for each page
->>      flush TLB
->>    for each page
->>      copy
->>    for each page
->>      restore map
->>
->> The total number of TLB flushing IPI can be reduced considerably.  And
->> we may use some hardware accelerator such as DSA to accelerate the
->> page copying.
->>
->> So in this patch, we refactor the migrate_pages() implementation and
->> implement the TLB flushing batching.  Base on this, hardware
->> accelerated page copying can be implemented.
->>
->> If too many pages are passed to migrate_pages(), in the naive batched
->> implementation, we may unmap too many pages at the same time.  The
->> possibility for a task to wait for the migrated pages to be mapped
->> again increases.  So the latency may be hurt.  To deal with this
->> issue, the max number of pages be unmapped in batch is restricted to
->> no more than HPAGE_PMD_NR.  That is, the influence is at the same
->> level of THP migration.
->>
->> We use the following test to measure the performance impact of the
->> patchset,
->>
->> On a 2-socket Intel server,
->>
->>   - Run pmbench memory accessing benchmark
->>
->>   - Run `migratepages` to migrate pages of pmbench between node 0 and
->>     node 1 back and forth.
->>
-> As the pmbench can not run on arm64 machine, so i use lmbench instead.
-> I test case like this:  (i am not sure whether it is reasonable, but it seems worked)
-> ./bw_mem -N10000 10000m rd &
-> time migratepages pid node0 node1
->
-> o/patch      		w/patch
-> real	0m0.035s  	real	0m0.024s
-> user	0m0.000s  	user	0m0.000s
-> sys	0m0.035s        sys	0m0.024s
->
-> the migratepages time is reduced above 32%.
->
-> But there has a problem, i see the batch flush is called by
-> migrate_pages_batch
-> 	try_to_unmap_flush
-> 		arch_tlbbatch_flush(&tlb_ubc->arch); // there batch flush really work.
->
-> But in arm64, the arch_tlbbatch_flush are not supported, becasue it not support CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH yet.
->
-> So, the tlb batch flush means no any flush is did, it is a empty func.
+Suggested-by: Akinobu Mita <akinobu.mita@gmail.com>
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+---
+ lib/fault-inject.c | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
 
-Yes.  And should_defer_flush() will always return false too.  That is,
-the TLB will still be flushed, but will not be batched.
+diff --git a/lib/fault-inject.c b/lib/fault-inject.c
+index 9dd1dd1..dbb5409 100644
+--- a/lib/fault-inject.c
++++ b/lib/fault-inject.c
+@@ -185,14 +185,6 @@ static void debugfs_create_ul(const char *name, umode_t mode,
+ 
+ #ifdef CONFIG_FAULT_INJECTION_STACKTRACE_FILTER
+ 
+-DEFINE_SIMPLE_ATTRIBUTE(fops_xl, debugfs_ul_get, debugfs_ul_set, "0x%llx\n");
+-
+-static void debugfs_create_xl(const char *name, umode_t mode,
+-			      struct dentry *parent, unsigned long *value)
+-{
+-	debugfs_create_file(name, mode, parent, value, &fops_xl);
+-}
+-
+ static int debugfs_stacktrace_depth_set(void *data, u64 val)
+ {
+ 	*(unsigned long *)data =
+@@ -237,10 +229,10 @@ struct dentry *fault_create_debugfs_attr(const char *name,
+ #ifdef CONFIG_FAULT_INJECTION_STACKTRACE_FILTER
+ 	debugfs_create_stacktrace_depth("stacktrace-depth", mode, dir,
+ 					&attr->stacktrace_depth);
+-	debugfs_create_xl("require-start", mode, dir, &attr->require_start);
+-	debugfs_create_xl("require-end", mode, dir, &attr->require_end);
+-	debugfs_create_xl("reject-start", mode, dir, &attr->reject_start);
+-	debugfs_create_xl("reject-end", mode, dir, &attr->reject_end);
++	debugfs_create_xul("require-start", mode, dir, &attr->require_start);
++	debugfs_create_xul("require-end", mode, dir, &attr->require_end);
++	debugfs_create_xul("reject-start", mode, dir, &attr->reject_start);
++	debugfs_create_xul("reject-end", mode, dir, &attr->reject_end);
+ #endif /* CONFIG_FAULT_INJECTION_STACKTRACE_FILTER */
+ 
+ 	attr->dname = dget(dir);
+-- 
+1.8.3.1
 
-> Maybe this patch can help solve this problem.
-> https://lore.kernel.org/linux-arm-kernel/20220921084302.43631-1-yangyicong@huawei.com/T/
-
-Yes.  This will bring TLB flush batching to ARM64.
-
-Best Regards,
-Huang, Ying
