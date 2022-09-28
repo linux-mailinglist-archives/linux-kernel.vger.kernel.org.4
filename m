@@ -2,153 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275895ED63E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9505ED62B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbiI1HgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
+        id S233643AbiI1HeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233689AbiI1HfZ (ORCPT
+        with ESMTP id S233501AbiI1HeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:35:25 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C3E100ABA;
-        Wed, 28 Sep 2022 00:35:13 -0700 (PDT)
-Received: from toolbox.int.toradex.com ([81.221.243.92]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LaEeW-1p6PwX2lfK-00m0Cw;
- Wed, 28 Sep 2022 09:33:52 +0200
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/5] arm: dts: colibri-imx6: move vbus-supply to module level device tree
-Date:   Wed, 28 Sep 2022 09:33:33 +0200
-Message-Id: <20220928073336.63881-3-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220928073336.63881-1-marcel@ziswiler.com>
-References: <20220928073336.63881-1-marcel@ziswiler.com>
+        Wed, 28 Sep 2022 03:34:18 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E145AEB138;
+        Wed, 28 Sep 2022 00:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664350441; x=1695886441;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CemS3SbJ4Y7mcmGZ3q6D0TMYCXLcTmaPwaze2uSljn4=;
+  b=Kc7SASIzDOvs+DCYvC71UXqAy5ChjeuXMUSQPIAUDMkfI44XxfJ9+3De
+   R7cJ1SkXlbAr7aK5usleh5B1h3bqmNa61SL4qapZb5meE23tobKd0CYag
+   XuE+1v2njnudaytYQ5CV6+llWcpiN2Mrf2k4wA4rsRtGRFbCoYtPc/WJl
+   RdmOszbCVQI7K5q12slnWG8N7XMI7uQCRdrwKAMuceOnwfs9fNDP5Gr1R
+   Wf1g38PcTJ4wPQV2O3BeE4eGEq/I4anvgUcsHCnm6kuTDHxLnfchirEXv
+   gVVHDL4xUOkcEyFtRwDsPRmU/vA/+ukLj7u5dFVVlURjNTCblErTaoU7v
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="299130774"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="299130774"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 00:33:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="764185921"
+X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
+   d="scan'208";a="764185921"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 28 Sep 2022 00:33:34 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 28 Sep 2022 10:33:34 +0300
+Date:   Wed, 28 Sep 2022 10:33:34 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v1 1/1] usb: typec: Replace custom implementation of
+ device_match_fwnode()
+Message-ID: <YzP4znoUSFTbSp55@kuha.fi.intel.com>
+References: <20220927171924.61908-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:YYgeO2Gqz7zvBi5GyqCHTn+NZy5Nxr3/7DF7fy2w/Whp5pOrkvT
- 0tCY1fXuOzGg1y3+0ISslaS1rrIOAYgYoi5r4JzIdDePOi065NBp3iNEy9Kj6lDtLBSvGOT
- 9wftjF6CMqbjmA+5jt+ExMaHVCJlsKHdgJwx8v852XTzHRMVosTiClnrGev3pr3ZaZq0tzz
- EGjCBOkyXXPPtbkDvCrHw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lRVIgiyO3qk=:0RTQrr0nD4xN7XdWc1hD6F
- BLawpUKcTM9+WpuqG/TjEIIttMSbNltopGn9i67Vh9TtxZG9iiL9MR/d7LGmPHVPYrGmZEqoz
- bsewwe1sGNAJGIjfskSpTZtr06HEhgDAmhWbolt9jINqciMQy8JfCGwEClW71lWsGAqOSBlDj
- NZ+HW04I3n/W5Wg7yPrVWRlGRgZiTWsfl/n8qc1vNKhCbyXZeGMxLYzfYOSzfX8FUM9PIMvuy
- F7P1NW70f8z6TXetyaVRnGbegiYAp1BYxg3zZkoUVBy6Ph32W32hkajal3geZoy0zRLe0n1/x
- sG5DXlejCafpYf3YEAkjCWAAxoUHh5Eihxi04T33/6JCHOB08KcaEW/995Gaz75KjyBQmmlm5
- j/nyvClMXeGL38tkxAWwiSv4C7t9GBsRxtB94yxovTyPA+rNXcVDH5lF/fVqdowU7cLbw/PCY
- zEruL+9HWG2imaNlBZF9NZu0ain13AUXTw2pSSm1o5xJncOR3JH6gM9BZ7I7rmY9V9+zTAQPw
- 5/Bbzu0AMzGLbFLNYg2/sQZioeXTtwmLKQbdCRZmGQs3FjSCumZoyepBPVVBW+3RUU3iVMTEh
- LeoKTpSQdbSVyVtHiEnqPNRz+TxTcHBT3hkEzrUNDBGIm/JX3H1HAVDpA+EZTkP5kW3Bn1vu/
- Kb74OlOfy8qLCThXNbs/SPNpjJmpYJfCRpCvwJ2ifJne9Mad/Zityi4dkaW55xBLKld7dwsDV
- /7phmgjWyMZE1ndJTV8cwv2wIZdFhKv/Xu2HiK0izG0Zg+/OvCud0CGJ9qfRs4IF1xmvUmY4i
- IwuS0hk
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927171924.61908-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+On Tue, Sep 27, 2022 at 08:19:24PM +0300, Andy Shevchenko wrote:
+> Replace custom implementation of the device_match_fwnode().
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Move USB VBUS supply from single carrier board to module level device
-tree. This pin is as per Colibri module family standard.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
----
+> ---
+>  drivers/usb/typec/mux.c     | 4 ++--
+>  drivers/usb/typec/retimer.c | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
+> index f81ea26ab389..c7177ddd4f12 100644
+> --- a/drivers/usb/typec/mux.c
+> +++ b/drivers/usb/typec/mux.c
+> @@ -29,7 +29,7 @@ static int switch_fwnode_match(struct device *dev, const void *fwnode)
+>  	if (!is_typec_switch_dev(dev))
+>  		return 0;
+>  
+> -	return dev_fwnode(dev) == fwnode;
+> +	return device_match_fwnode(dev, fwnode);
+>  }
+>  
+>  static void *typec_switch_match(const struct fwnode_handle *fwnode,
+> @@ -259,7 +259,7 @@ static int mux_fwnode_match(struct device *dev, const void *fwnode)
+>  	if (!is_typec_mux_dev(dev))
+>  		return 0;
+>  
+> -	return dev_fwnode(dev) == fwnode;
+> +	return device_match_fwnode(dev, fwnode);
+>  }
+>  
+>  static void *typec_mux_match(const struct fwnode_handle *fwnode,
+> diff --git a/drivers/usb/typec/retimer.c b/drivers/usb/typec/retimer.c
+> index 8edfdc709a28..8e1055783fe2 100644
+> --- a/drivers/usb/typec/retimer.c
+> +++ b/drivers/usb/typec/retimer.c
+> @@ -31,7 +31,7 @@ static bool dev_name_ends_with(struct device *dev, const char *suffix)
+>  
+>  static int retimer_fwnode_match(struct device *dev, const void *fwnode)
+>  {
+> -	return dev_fwnode(dev) == fwnode && dev_name_ends_with(dev, "-retimer");
+> +	return device_match_fwnode(dev, fwnode) && dev_name_ends_with(dev, "-retimer");
+>  }
+>  
+>  static void *typec_retimer_match(const struct fwnode_handle *fwnode, const char *id, void *data)
 
-(no changes since v1)
+thanks,
 
- arch/arm/boot/dts/imx6dl-colibri-aster.dts   | 1 -
- arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts | 1 -
- arch/arm/boot/dts/imx6dl-colibri-iris.dts    | 1 -
- arch/arm/boot/dts/imx6qdl-colibri.dtsi       | 9 +++++++--
- 4 files changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/arch/arm/boot/dts/imx6dl-colibri-aster.dts b/arch/arm/boot/dts/imx6dl-colibri-aster.dts
-index 74e8a6cd8bed..a28e083f29d5 100644
---- a/arch/arm/boot/dts/imx6dl-colibri-aster.dts
-+++ b/arch/arm/boot/dts/imx6dl-colibri-aster.dts
-@@ -99,7 +99,6 @@ &uart3 {
- };
- 
- &usbh1 {
--	vbus-supply = <&reg_usb_host_vbus>;
- 	status = "okay";
- };
- 
-diff --git a/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts b/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
-index 7272edd85a49..a02981d4a3fc 100644
---- a/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
-+++ b/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
-@@ -111,7 +111,6 @@ &uart3 {
- };
- 
- &usbh1 {
--	vbus-supply = <&reg_usb_host_vbus>;
- 	status = "okay";
- };
- 
-diff --git a/arch/arm/boot/dts/imx6dl-colibri-iris.dts b/arch/arm/boot/dts/imx6dl-colibri-iris.dts
-index cf77d894f6d7..c5797ff35b71 100644
---- a/arch/arm/boot/dts/imx6dl-colibri-iris.dts
-+++ b/arch/arm/boot/dts/imx6dl-colibri-iris.dts
-@@ -138,7 +138,6 @@ &uart3 {
- };
- 
- &usbh1 {
--	vbus-supply = <&reg_usb_host_vbus>;
- 	status = "okay";
- };
- 
-diff --git a/arch/arm/boot/dts/imx6qdl-colibri.dtsi b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
-index 3e98b5da0cc6..21c5049bda4e 100644
---- a/arch/arm/boot/dts/imx6qdl-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
-@@ -112,7 +112,7 @@ reg_module_3v3_audio: regulator-module-3v3-audio {
- 
- 	reg_usb_host_vbus: regulator-usb-host-vbus {
- 		compatible = "regulator-fixed";
--		gpio = <&gpio3 31 GPIO_ACTIVE_HIGH>; /* USBH_PEN */
-+		gpio = <&gpio3 31 GPIO_ACTIVE_HIGH>; /* SODIMM 129 / USBH_PEN */
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_regulator_usbh_pwr>;
- 		regulator-max-microvolt = <5000000>;
-@@ -677,6 +677,11 @@ &uart3 {
- 	status = "disabled";
- };
- 
-+/* Colibri USBH */
-+&usbh1 {
-+	vbus-supply = <&reg_usb_host_vbus>;
-+};
-+
- /* Colibri USBC */
- &usbotg {
- 	disable-over-current;
-@@ -995,7 +1000,7 @@ MX6QDL_PAD_SD4_DAT2__PWM4_OUT	0x1b0b1
- 
- 	pinctrl_regulator_usbh_pwr: gpioregusbhpwrgrp {
- 		fsl,pins = <
--			/* USBH_EN */
-+			/* SODIMM 129 / USBH_PEN */
- 			MX6QDL_PAD_EIM_D31__GPIO3_IO31	0x0f058
- 		>;
- 	};
 -- 
-2.36.1
-
+heikki
