@@ -2,73 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1665EE24C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57AD5EE249
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233277AbiI1Qvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
+        id S233225AbiI1QvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234386AbiI1Qvm (ORCPT
+        with ESMTP id S234423AbiI1QvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:51:42 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4A8E9525;
-        Wed, 28 Sep 2022 09:51:41 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id x13so1418134qvn.4;
-        Wed, 28 Sep 2022 09:51:41 -0700 (PDT)
+        Wed, 28 Sep 2022 12:51:13 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D8FE7E34
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:51:12 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id y136so13053835pfb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 09:51:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=mbxRn007Ip2c/fdHqU/bp/LXy4PPcd8ySvUFUqzEX6s=;
-        b=KDSVQ1oMBKRLgWEH0InLjPc/aLqNu0zJv9KCeb8pdE0nGiSRyuKb+9DE+EiYJnbcj/
-         5W1QoMNbFR8fVhpkgXjoUmwOHLLwmX0oCbXvktWasxGC3jQReTgauOcAnmNu6PeNALaT
-         UqcmXt9f/k5KyHbejcWPZGCuaX758i59+J3Ih/oqrzRUSd40tW8vWxku8ZEFNkA5tVAf
-         LlbTu/3PjEkZlVfhoqC/toTBWPSvXO4D+eLotlQz+TXjWh/O8HKOj+XbHQ6/PsZ7mkeh
-         kbW1JxtOwjFtbNfwAa5yVKWxeFkEXKz56IXX77UAuUH5jPopvluRUhwSGTqgneWCsw8d
-         ug9w==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=h0/015q9L2PTjIc0Q6cg/qKsJjdE+BVvbhky4mrZGZM=;
+        b=PMsN7p0cKAT4VWUKKy/cQ5tldNzUKfl8S/iKkTeJd2YgRdYeuJp+T5PUfCv+fHny+d
+         hqnF0i1t43QpVhk6oUsPKh3o8uGSWVEn7Vf8ngPTvhmR6R4Bz8UtguBd+nlIiNUSiN/5
+         pHzNa2j6eGOH2COHhtWC71kdLHGPo0teUkL0IyAblnYmo3DPb2XaivaHU6ia0G6w5fBg
+         WRqrZfMSFPs71USTIU21Zzfjv0PGrOsXfaCHZ31OmS7Xt5Nm4pAoANf34lbGcM6Z2gBN
+         EK2Bn5+0ChzxYBRq9pBBOzxbP+1doa6IHmGaJ/0lS1RaPf1/XGlOzBCQX9FPYwisqp85
+         m7Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=mbxRn007Ip2c/fdHqU/bp/LXy4PPcd8ySvUFUqzEX6s=;
-        b=NQ8k83/U315P7XE81G6UFgRmRMaxTWtR6TUYfEZt08N8//8Tts80K0FGya5KSakk5c
-         16ha7Qyg9+TGoqWfrKUnhHWEqtTkE+Pil3DL4InbWSpyree5fFZDAv4WSkJphSDqoG2m
-         ppsyMHUBW2Vr68AMKkYNeIOfoHwMp7klX/SFlekFlOQsFh9pP2+RgHrWBkXtrNgbn1yw
-         RSFlblpVgCtbG+V9T1444h4Vm9W3uNnZzqd9a3fvqWq7E/Nswj4VpzoBhRoyaSkwRTjC
-         wuSnUFW3GsNebvkbIuzSh+0nzUsrQgRymHovwKKLIxOynS9GWAlrYcDBZm8STOsMu10+
-         seNA==
-X-Gm-Message-State: ACrzQf01/Bbx8QJs5KepS5+Di+rOlSMn27zA/p/imKYDHo9jwoiAKV5I
-        43+jL527ePER1CSuEHLGeDALaBM94REvof6K49cIor6R8EQ=
-X-Google-Smtp-Source: AMsMyM7wXSmHKlE03PtWvNbyVtg+Z/ygdLMTLfA2/MG8cnEF6SrXoChIYY1ksHA/b/6JHXHhXq/pPCj/E7DaDVv2w6I=
-X-Received: by 2002:a05:6214:c63:b0:4ad:6b45:8235 with SMTP id
- t3-20020a0562140c6300b004ad6b458235mr26846114qvj.48.1664383900664; Wed, 28
- Sep 2022 09:51:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220928164114.48339-1-olivier.moysan@foss.st.com> <20220928164114.48339-2-olivier.moysan@foss.st.com>
-In-Reply-To: <20220928164114.48339-2-olivier.moysan@foss.st.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 28 Sep 2022 19:51:04 +0300
-Message-ID: <CAHp75Vf1rJRVK5Emuwk4863DTb9JjTswJefJM-1oX+2gQvLMRg@mail.gmail.com>
-Subject: Re: [PATCH 1/8] iio: adc: stm32-adc: fix channel sampling time init
-To:     Olivier Moysan <olivier.moysan@foss.st.com>
-Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        nuno.sa@analog.com, Paul Cercueil <paul@crapouillou.net>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Yannick Brosseau <yannick.brosseau@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=h0/015q9L2PTjIc0Q6cg/qKsJjdE+BVvbhky4mrZGZM=;
+        b=Ox35pBbHIPtBiROXN5nRaPkxZKYg4VR+valUOz7c/IqfoH3oMKVXzQWhmO0JFZC37H
+         N3ecQ0D9JR1EGwxnp+XgoZIuFWDuEE9syHMo4oRgHn7/Olz45sRHE3fF5vV1FKyY3Dur
+         CuDzP5fLMG30jzCj+auxi+6um1gthHEBnL0uBnjFILLnztUlskKmx4LjKGQw5hhnlwGF
+         Ok+bjSPFUKfICfZDYPb2LFyEotExz2Z5RjwS5O6qr3UjLQU1muI5QKCIBC17lB6zo0b9
+         5e7En8DnGcLBYqXwTinwvSRxkMrO+IoD9UJBbxQGBM5qVyJs4+EzJEAavyljjEmA81Iv
+         HbhA==
+X-Gm-Message-State: ACrzQf3NRtTfRjBha88H34Z1JkMgI/Wuh/J2V+UrK8DXxiA0qA1SXP5S
+        Sqn2xdAn1REoDaVbs/suztlqGA==
+X-Google-Smtp-Source: AMsMyM5vVHEoIsYqOLkieF1u6g8g4gr3wk24/aXYtDofpThSTalf0iOgDSoFGIk5R3jqzqOF3L5cHA==
+X-Received: by 2002:a63:50e:0:b0:438:d16d:e8c1 with SMTP id 14-20020a63050e000000b00438d16de8c1mr28317051pgf.505.1664383871552;
+        Wed, 28 Sep 2022 09:51:11 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id d2-20020a170903230200b00176677a893bsm617874plh.82.2022.09.28.09.51.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 09:51:10 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 16:51:07 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Subject: Re: [PATCH v3 05/28] KVM: x86: Don't inhibit APICv/AVIC if xAPIC ID
+ mismatch is due to 32-bit ID
+Message-ID: <YzR7ezt67i1lH1/b@google.com>
+References: <20220920233134.940511-1-seanjc@google.com>
+ <20220920233134.940511-6-seanjc@google.com>
+ <d02d0b30-f29b-0ff6-98c7-89ddcd091c60@oracle.com>
+ <e5d54876b233dc71a69249c3d02d649da5040a14.camel@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e5d54876b233dc71a69249c3d02d649da5040a14.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,27 +78,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 7:42 PM Olivier Moysan
-<olivier.moysan@foss.st.com> wrote:
->
-> Fix channel init for ADC generic channel bindings.
-> In generic channel initialization, stm32_adc_smpr_init() is called
-> to initialize channel sampling time. The "st,min-sample-time-ns"
-> property is an optional property. If it is not defined,
-> stm32_adc_smpr_init() is currently skipped. However stm32_adc_smpr_init()
-> must always be called, to force a minimum sampling time for
-> the internal channels, as the minimum sampling time is known.
-> Make stm32_adc_smpr_init() call unconditional.
+On Wed, Sep 28, 2022, Maxim Levitsky wrote:
+> On Tue, 2022-09-27 at 23:15 -0400, Alejandro Jimenez wrote:
+> > 
+> > On 9/20/2022 7:31 PM, Sean Christopherson wrote:
+> > > Truncate the vcpu_id, a.k.a. x2APIC ID, to an 8-bit value when comparing
+> > > it against the xAPIC ID to avoid false positives (sort of) on systems
+> > > with >255 CPUs, i.e. with IDs that don't fit into a u8.  The intent of
+> > > APIC_ID_MODIFIED is to inhibit APICv/AVIC when the xAPIC is changed from
+> > > it's original value,
+> > > 
+> > > The mismatch isn't technically a false positive, as architecturally the
+> > > xAPIC IDs do end up being aliased in this scenario, and neither APICv
+> > > nor AVIC correctly handles IPI virtualization when there is aliasing.
+> > > However, KVM already deliberately does not honor the aliasing behavior
+> > > that results when an x2APIC ID gets truncated to an xAPIC ID.  I.e. the
+> > > resulting APICv/AVIC behavior is aligned with KVM's existing behavior
+> > > when KVM's x2APIC hotplug hack is effectively enabled.
+> > > 
+> > > If/when KVM provides a way to disable the hotplug hack, APICv/AVIC can
+> > > piggyback whatever logic disables the optimized APIC map (which is what
+> > > provides the hotplug hack), i.e. so that KVM's optimized map and APIC
+> > > virtualization yield the same behavior.
+> > > 
+> > > For now, fix the immediate problem of APIC virtualization being disabled
+> > > for large VMs, which is a much more pressing issue than ensuring KVM
+> > > honors architectural behavior for APIC ID aliasing.
+> > 
+> > I built a host kernel with this entire series on top of mainline 
+> > v6.0-rc6, and booting a guest with AVIC enabled works as expected on the 
+> > initial boot. The issue is that during the first reboot AVIC is 
+> > inhibited due to APICV_INHIBIT_REASON_APIC_ID_MODIFIED, and I see 
+> > constant inhibition events due to APICV_INHIBIT_REASON_IRQWIN as seen in 
+> 
+> 
+> APICV_INHIBIT_REASON_IRQWIN is OK, because that happens about every time
+> the good old PIT timer fires which happens on reboot.
+> 
+> APICV_INHIBIT_REASON_APIC_ID_MODIFIED should not happen as you noted,
+> this needs investigation.
 
-What is the text width here? It's okay to use Up to ~72 (or slightly
-more) as a limit and format accordingly.
+Ya, I'll take a look.
 
-> Fixes: 796e5d0b1e9b ("iio: adc: stm32-adc: use generic binding for sample-time")
->
-> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+> > It happens regardless of vCPU count (tested with 2, 32, 255, 380, and 
+> > 512 vCPUs). This state persists for all subsequent reboots, until the VM 
+> > is terminated. For vCPU counts < 256, when x2apic is disabled the 
+> > problem does not occur, and AVIC continues to work properly after reboots.
 
-Tag blocks mustn't have the blank lines.
+Bit of a shot in the dark, but does the below fix the issue?  There are two
+issues with calling kvm_lapic_xapic_id_updated() from kvm_apic_state_fixup():
 
+  1. The xAPIC ID should only be refreshed on "set".
+
+  2. The refresh needs to be noted after memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
+
+and a third bug in the helper itself, as changes to the ID should be ignored if
+the APIC is hardward disabled since the ID is reset to the vcpu_id when the APIC
+is hardware enabled (architecturally behavior).
+
+---
+ arch/x86/kvm/lapic.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 804d529d9bfb..b8b2faf5abc7 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2159,6 +2159,9 @@ static void kvm_lapic_xapic_id_updated(struct kvm_lapic *apic)
+ {
+ 	struct kvm *kvm = apic->vcpu->kvm;
+ 
++	if (!kvm_apic_hw_enabled(apic))
++		return;
++
+ 	if (KVM_BUG_ON(apic_x2apic_mode(apic), kvm))
+ 		return;
+ 
+@@ -2875,8 +2878,6 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
+ 			icr = __kvm_lapic_get_reg64(s->regs, APIC_ICR);
+ 			__kvm_lapic_set_reg(s->regs, APIC_ICR2, icr >> 32);
+ 		}
+-	} else {
+-		kvm_lapic_xapic_id_updated(vcpu->arch.apic);
+ 	}
+ 
+ 	return 0;
+@@ -2912,6 +2913,9 @@ int kvm_apic_set_state(struct kvm_vcpu *vcpu, struct kvm_lapic_state *s)
+ 	}
+ 	memcpy(vcpu->arch.apic->regs, s->regs, sizeof(*s));
+ 
++	if (!apic_x2apic_mode(vcpu->arch.apic))
++		kvm_lapic_xapic_id_updated(vcpu->arch.apic);
++
+ 	atomic_set_release(&apic->vcpu->kvm->arch.apic_map_dirty, DIRTY);
+ 	kvm_recalculate_apic_map(vcpu->kvm);
+ 	kvm_apic_set_version(vcpu);
+
+base-commit: 0b502152c0b8523f399bdb53096e2d620c5795b5
 -- 
-With Best Regards,
-Andy Shevchenko
+
