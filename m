@@ -2,136 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9DE5ED622
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6CE25ED6E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 09:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233603AbiI1HcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 03:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44108 "EHLO
+        id S233956AbiI1Hzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 03:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233501AbiI1HcS (ORCPT
+        with ESMTP id S233858AbiI1HzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:32:18 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DE7F313E;
-        Wed, 28 Sep 2022 00:31:48 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id D2A211883981;
-        Wed, 28 Sep 2022 07:29:00 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id C75842500370;
-        Wed, 28 Sep 2022 07:29:00 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id B3B719EC0019; Wed, 28 Sep 2022 07:29:00 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Wed, 28 Sep 2022 03:55:00 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECEF2DFF;
+        Wed, 28 Sep 2022 00:54:47 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Mcp3v0sPgzHqCq;
+        Wed, 28 Sep 2022 15:27:39 +0800 (CST)
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 15:29:55 +0800
+Subject: Re: [PATCH v6 3/8] scsi: pm8001: use sas_find_attached_phy_id()
+ instead of open coded
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <martin.petersen@oracle.com>, <jejb@linux.ibm.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
+        <john.garry@huawei.com>, <jinpu.wang@cloud.ionos.com>,
+        Jack Wang <jinpu.wang@ionos.com>
+References: <20220928070130.3657183-1-yanaijie@huawei.com>
+ <20220928070130.3657183-4-yanaijie@huawei.com>
+ <e3bfbe7e-baee-9f4a-7d55-c6dc27e3eba1@opensource.wdc.com>
+From:   Jason Yan <yanaijie@huawei.com>
+Message-ID: <9005bfd1-2812-f4c3-38e2-eb7aa5d61634@huawei.com>
+Date:   Wed, 28 Sep 2022 15:29:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Date:   Wed, 28 Sep 2022 09:29:00 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <YzPwwuCe0HkJpkQe@shredder>
-References: <Yxmgs7Du62V1zyjK@shredder>
- <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
- <20220908112044.czjh3xkzb4r27ohq@skbuf>
- <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
- <20220911001346.qno33l47i6nvgiwy@skbuf>
- <15ee472a68beca4a151118179da5e663@kapio-technology.com>
- <Yx73FOpN5uhPQhFl@shredder>
- <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
- <Yyq6BnUfctLeerqE@shredder>
- <7a4549d645f9bbbf41e814f087eb07d1@kapio-technology.com>
- <YzPwwuCe0HkJpkQe@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <d020fe746b30dd048970b3668ffad498@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <e3bfbe7e-baee-9f4a-7d55-c6dc27e3eba1@opensource.wdc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.179.14]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-28 08:59, Ido Schimmel wrote:
-> Sorry for the delay, was away.
 
-Good to have you back. :-)
+On 2022/9/28 15:02, Damien Le Moal wrote:
+> On 9/28/22 16:01, Jason Yan wrote:
+>> The attached phy id finding is open coded. Now we can replace it with
+>> sas_find_attached_phy_id(). To keep consistent, the return value of
+>> pm8001_dev_found_notify() is also changed to -ENODEV after calling
+>> sas_find_attathed_phy_id() failed.
+>>
+>> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+>> Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+>> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> 
+> Looks good.
+> 
+> Note for future patches: if you change a patch, it needs to be reviewed
+> again. So please drop any review tag from the patch commit message to make
+> that clear.
+
+OK. Thanks again.
+
+Jason
 
 > 
-> On Tue, Sep 27, 2022 at 10:33:10AM +0200, netdev@kapio-technology.com 
-> wrote:
->> On 2022-09-21 09:15, Ido Schimmel wrote:
->> > 	bridge fdb add `mac_get $h2` dev br0 blackhole
->> 
->> To make this work, I think we need to change the concept, so that 
->> blackhole
->> FDB entries are added to ports connected to the bridge, thus
->>      bridge fdb add MAC dev $swpX master blackhole
->> 
->> This makes sense as the driver adds them based on the port where the 
->> SMAC is
->> seen, even though the effect of the blackhole FDB entry is switch 
->> wide.
+>> ---
+>>   drivers/scsi/pm8001/pm8001_sas.c | 18 ++++++------------
+>>   1 file changed, 6 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+>> index 8e3f2f9ddaac..b4007c4f157d 100644
+>> --- a/drivers/scsi/pm8001/pm8001_sas.c
+>> +++ b/drivers/scsi/pm8001/pm8001_sas.c
+>> @@ -645,22 +645,16 @@ static int pm8001_dev_found_notify(struct domain_device *dev)
+>>   	pm8001_device->dcompletion = &completion;
+>>   	if (parent_dev && dev_is_expander(parent_dev->dev_type)) {
+>>   		int phy_id;
+>> -		struct ex_phy *phy;
+>> -		for (phy_id = 0; phy_id < parent_dev->ex_dev.num_phys;
+>> -		phy_id++) {
+>> -			phy = &parent_dev->ex_dev.ex_phy[phy_id];
+>> -			if (SAS_ADDR(phy->attached_sas_addr)
+>> -				== SAS_ADDR(dev->sas_addr)) {
+>> -				pm8001_device->attached_phy = phy_id;
+>> -				break;
+>> -			}
+>> -		}
+>> -		if (phy_id == parent_dev->ex_dev.num_phys) {
+>> +
+>> +		phy_id = sas_find_attached_phy_id(&parent_dev->ex_dev, dev);
+>> +		if (phy_id < 0) {
+>>   			pm8001_dbg(pm8001_ha, FAIL,
+>>   				   "Error: no attached dev:%016llx at ex:%016llx.\n",
+>>   				   SAS_ADDR(dev->sas_addr),
+>>   				   SAS_ADDR(parent_dev->sas_addr));
+>> -			res = -1;
+>> +			res = phy_id;
+>> +		} else {
+>> +			pm8001_device->attached_phy = phy_id;
+>>   		}
+>>   	} else {
+>>   		if (dev->dev_type == SAS_SATA_DEV) {
 > 
-> Asking user space to associate a blackhole entry with a bridge port 
-> does
-> not make sense to me because unlike regular entries, blackhole entries
-> do not forward packets out of this port. Blackhole routes and nexthops
-> are not associated with a device either.
-> 
->> Adding them to the bridge (e.g. f.ex. br0) will not work in the SW 
->> bridge as
->> the entries then are not found.
-> 
-> Why not found? This works:
-> 
->  # bridge fdb add 00:11:22:33:44:55 dev br0 self local
->  $ bridge fdb get 00:11:22:33:44:55 br br0
->  00:11:22:33:44:55 dev br0 master br0 permanent
-> 
-> With blackhole support I expect:
-> 
->  # bridge fdb add 00:11:22:33:44:55 dev br0 self local blackhole
->  $ bridge fdb get 00:11:22:33:44:55 br br0
->  00:11:22:33:44:55 dev br0 master br0 permanent blackhole
-
-In my previous replies, I have notified that fdb_find_rcu() does not 
-find the entry added with br0, and thus fdb_add_entry() that does the 
-replace does not replace but adds a new entry. I have been thinking that 
-it is because when added with br0 as dev it is added to dev br0's fdb, 
-which is not the same as 'dev <Dev> master' fdb...
-
-I think bridge fdb get works in a different way, as I know the get 
-functionality gets all fdb entries from all devices and filters them (if 
-I am not mistaken)...
