@@ -2,153 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC0A5EE1CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B2E5EE1C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234429AbiI1QXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
+        id S234505AbiI1QX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234554AbiI1QXS (ORCPT
+        with ESMTP id S233410AbiI1QXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:23:18 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8BA56B85;
-        Wed, 28 Sep 2022 09:23:10 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id d42so21249634lfv.0;
-        Wed, 28 Sep 2022 09:23:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ENny02jrZKVbgPfzbkbRE4ZovlzNI+xmygHZLGPqIBs=;
-        b=ZtknbgmU/wmbcYwSVkoJB+W1EHC/7KVOArUns8X67T/KOCkbeed1buC3ysC9Phfwfi
-         ifQ9jpg5aQLgZQEQvWcamMuhilITQTXz4qnEAuPQoouDK+5gcyTD0NinNArywTuVVGki
-         bnoCGDAX32g12eoedEj2Q5wE4jQ0Wzl+ZICavftNxBx0GTr6VAGnXkIQQnEqgPlN9h5F
-         PL1x61LC9+KI06GHyaPnwnfoPUlD/dkp6kSg/4uPADRgMrZfDv1Nt93sFjswxM8h6E+p
-         0LF0GiJ6bcvKD8phn8SNduNvjHAK5McCCqZmZbtc1WY+Dx3rJgQZNcGtCoCMhaysAb59
-         gLyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ENny02jrZKVbgPfzbkbRE4ZovlzNI+xmygHZLGPqIBs=;
-        b=QpMQUlu+Sjhh/W357+iACLr+yq9Rq02OAIpVprcaNtjJGoasA44NISGIzq7rgSnrSv
-         G+0muW/VGrIYsTuNdWpSDJiYJ8t6MTPpxUHrIRwNlQ4cGU9gmIXSvhRQ77KIuz2OwSa7
-         8QpdEm7jD/a0/7EkfrGOXV+vgL1D/7r32R4y7eZnAxBb6QbDn7QVIbagGMdbbxzCTdBd
-         9JaWgfW0mTqC33jhqMatTSNVW5N620Z3TcafsEcnXSEBdlLiDQ1Iw2WTh9DLJbkbB8V5
-         W2jt7Tcb9ZkEt2xp2s71zofFNMdFPiooWXWFF/WLUeq2UW688TiZfYAHzwZoMIaulKk6
-         vS9g==
-X-Gm-Message-State: ACrzQf1UQ5sdkU1Elp/Q8wNXRZgp4vouWYbWNFNcRlnjiIMxAoCDBk1R
-        NF1eCYceGpkr0AVwMMHi03A=
-X-Google-Smtp-Source: AMsMyM5gtxklHbrdm1xdQqDlFiUiLhPp7YuJAm3I62QCBKtAMamqNsiIC8L5zDr5KDF8j5icQVK0sA==
-X-Received: by 2002:a05:6512:104f:b0:4a1:b0e9:dd25 with SMTP id c15-20020a056512104f00b004a1b0e9dd25mr9371959lfb.454.1664382188690;
-        Wed, 28 Sep 2022 09:23:08 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id u20-20020a197914000000b0049ade93ad24sm511834lfc.156.2022.09.28.09.23.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 09:23:07 -0700 (PDT)
-Message-ID: <e3abc0a9-ad5b-f6ef-8cba-0b4c6c8325c0@gmail.com>
-Date:   Wed, 28 Sep 2022 19:23:06 +0300
+        Wed, 28 Sep 2022 12:23:25 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F20AE234A;
+        Wed, 28 Sep 2022 09:23:24 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28SGK5sK001882;
+        Wed, 28 Sep 2022 16:23:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : content-type :
+ mime-version; s=pp1; bh=YAtibWuc5oMzVqp55WCKs72Sw0/ah0i5PLNnJUPSc5w=;
+ b=k0FdBy8BRhsithYUgRc3uwuCPWhJJxiLNaPd8IPG96Z9dMHwvFhZPRZbvRFbDmxKorQ1
+ 6yRrX71etg1LdhU+rFuyiJOQ2qg8sZ4NOKF2nEypE3qzI+2XGpuxhAW/3FDkwLkYID8U
+ HZ5nZyQppHngxobcklqLspX1NLTjDvlhTZZurxCgdTq0RxYnfu0DwvAx++2kcA0GcgEy
+ dfcmBx2KpWDzoVPMQ6flYrnCxd7a8Rme5CtEr6cRge7xV/lwkI8+/J1Q49ZK28rDfqBg
+ yvBqF3d4tG0Bki9x7BFPKF1CtG+Ui1wjJ6Tq1TO/MKTm1sSkp1Ir/hWcTskPYtLO+NjH uQ== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jvqxp46c5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 16:23:11 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28SGLRaF011582;
+        Wed, 28 Sep 2022 16:23:10 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma03dal.us.ibm.com with ESMTP id 3jssha37fy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 16:23:10 +0000
+Received: from smtpav02.dal12v.mail.ibm.com ([9.208.128.128])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28SGN9YO46268826
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Sep 2022 16:23:10 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DE0195805C;
+        Wed, 28 Sep 2022 16:23:08 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CAE895805E;
+        Wed, 28 Sep 2022 16:23:08 +0000 (GMT)
+Received: from localhost (unknown [9.41.178.242])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Sep 2022 16:23:08 +0000 (GMT)
+From:   Nathan Lynch <nathanl@linux.ibm.com>
+To:     Andrew Donnellan <ajd@linux.ibm.com>
+Cc:     jmorris@namei.org, mpe@ellerman.id.au, paul@paul-moore.com,
+        serge@hallyn.com, gcwilson@linux.ibm.com, nayna@linux.ibm.com,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] powerpc/rtas: block error injection when locked
+ down
+In-Reply-To: <591a3e016605181e119496992027ae21700a2c3b.camel@linux.ibm.com>
+References: <20220926131643.146502-1-nathanl@linux.ibm.com>
+ <20220926131643.146502-3-nathanl@linux.ibm.com>
+ <591a3e016605181e119496992027ae21700a2c3b.camel@linux.ibm.com>
+Date:   Wed, 28 Sep 2022 11:23:08 -0500
+Message-ID: <87y1u3pixf.fsf@linux.ibm.com>
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0WZREWqYnhMhJI2Fp2k2r6ADwAiGOteU
+X-Proofpoint-GUID: 0WZREWqYnhMhJI2Fp2k2r6ADwAiGOteU
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC PATCH 4/5] iio: accel: Support Kionix/ROHM KX022A
- accelerometer
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>,
-        "Haikola, Heikki" <Heikki.Haikola@fi.rohmeurope.com>
-References: <cover.1663760018.git.mazziesaccount@gmail.com>
- <fe1088cebb0de70bcb99af517004c1816b696825.1663760018.git.mazziesaccount@gmail.com>
- <20220922180339.30138141@jic23-huawei>
- <3eea7954-3faf-3fc9-7507-c318488c5524@gmail.com>
- <YzRU9aRNReonSqbg@smile.fi.intel.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <YzRU9aRNReonSqbg@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-28_07,2022-09-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ mlxlogscore=771 impostorscore=0 mlxscore=0 suspectscore=0 spamscore=0
+ priorityscore=1501 phishscore=0 bulkscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209280096
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+Andrew Donnellan <ajd@linux.ibm.com> writes:
 
-On 9/28/22 17:06, Andy Shevchenko wrote:
-> On Wed, Sep 28, 2022 at 02:14:14PM +0300, Matti Vaittinen wrote:
->> On 9/22/22 20:03, Jonathan Cameron wrote:
->>> On Wed, 21 Sep 2022 14:45:35 +0300
-> 
-> ...
-> 
->>>> +		dev_err(dev, "no regmap\n");
->>>
->>> Use dev_err_probe() for all dev_err() stuff in probe paths.
->>> It ends up cleaner and we don't care about the tiny overhead
->>> of checking for deferred.
->>
->> This one bothers me a bit. It just does not feel correct to pass -EINVAL for
->> the dev_err_probe() so the dev_err_probe() can check if -EINVAL !=
->> -EPROBE_DEFER. I do understand perfectly well the consistent use of
->> dev_err_probe() for all cases where we get an error-code from a function and
->> return it - but using dev_err_probe() when we hard-code the return value in
->> code calling the dev_err_probe() does not feel like "the right thing to do"
->> (tm).
->>
->> Eg, I agree that
->> return dev_err_probe(dev, ret, "bar");
->> is nice even if we know the function that gave us the "ret" never requests
->> defer (as that can change some day).
->>
->> However, I don't like issuing:
->> return dev_err_probe(dev, -EINVAL, "bar");
-> 
-> This case specifically was added into documentation by 7065f92255bb ("driver
-> core: Clarify that dev_err_probe() is OK even w/out -EPROBE_DEFER").
+> On Mon, 2022-09-26 at 08:16 -0500, Nathan Lynch wrote:
+>> The error injection facility on pseries VMs allows corruption of
+>> arbitrary guest memory, potentially enabling a sufficiently
+>> privileged
+>> user to disable lockdown or perform other modifications of the
+>> running
+>> kernel via the rtas syscall.
+>> 
+>> Block the PAPR error injection facility from being opened or called
+>> when locked down.
+>> 
+>> Signed-off-by: Nathan Lynch <nathanl@linux.ibm.com>
+>
+> Is there any circumstance (short of arbitrary code execution etc) where
+> the rtas_call() check will actually trigger rather than the sys_rtas()
+> check? (Not that it matters, defence in depth is good.)
 
-Yes. And this is exactly what I meant with:
- >> Eg, I agree that
- >> return dev_err_probe(dev, ret, "bar");
- >> is nice even if we know the function that gave us the "ret" never 
-requests
- >> defer
-
-There is still (in my opinion) a significant difference if we call:
- >> return dev_err_probe(dev, -EINVAL, "bar");
-
-- where we really hard-code the -EINVAL as a parameter to the 
-dev_err_probe()
-
->> Well, please let me know if you think the dev_err_probe() should be used
->> even in cases where we hard code the return to something...
-> 
-> And this should be, of course, maintainer's decision.
-
-Ultimately, yes.
-
-Best Regards
-	--Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+Fair question! There are no in-kernel users of rtas_call() that pass the
+error injection tokens as far as I could tell. Nor am I aware of any
+out-of-tree users, for that matter. But rtas_call() is the likely most
+appropriate place to have the lockdown gate should that situation change
+(as it might, see https://github.com/ibm-power-utilities/librtas/issues/29).
