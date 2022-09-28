@@ -2,93 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765705EE1B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57285EE1B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 18:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbiI1QVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 12:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
+        id S234303AbiI1QVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 12:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiI1QVP (ORCPT
+        with ESMTP id S234324AbiI1QVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 12:21:15 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCBD30574;
-        Wed, 28 Sep 2022 09:21:14 -0700 (PDT)
+        Wed, 28 Sep 2022 12:21:38 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CC5E21C5;
+        Wed, 28 Sep 2022 09:21:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664382074; x=1695918074;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ot/k0+GJgqY2Cia6IZBVgLjo1TwaIpk5IaFk3oWJ/pA=;
-  b=CSES0dEroZpABP2FOQdp60fYlvGW+bcbfMK/VffFofGWr29cDziLJ3nC
-   EaPmdQyN1tONjmmR95VpyHL4iqONnlPEH4m8e5EUAhp/je11Hqp+HjiP1
-   OF3MPixctLhu7/WnKfyno605MZLrzKsSTa1HAm4Xqx0JU+iwbWzfyF6An
-   sBRsZ15DIMpyVw1eSk5x8cjtN1Kk9E7RnqxZ+98KYLkK94ymiUIHhU9c/
-   /DYCAqgVulDnDdsEETRnnQGRvHZDt5IE3b+BXdHbJp65MU9c9Q/AUXuoq
-   YS/rQ7bt+b8luRyK2NSQN+hxpfDM9uWcD+WpJbyr9LrWxncSEHnkf3Kr4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="288805365"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664382092; x=1695918092;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VFLlzbowANTEuTplVjxC4dIg9DEzjoClVyh1LPKwaoA=;
+  b=al0WrVlMYggAJMWUhnU8VCe65KKM6X5juciE44z3vYtpdO0TPj9xenMx
+   deRXyBXtW7uu2LQJt2PiKvNINVEJ7Z3APTiEzPDH+XpnXhkSX1tyQhlwQ
+   DMJ0pzlCZAReCbyf2O8GahOfvMPqe6K96FWiOCLzKcnAc8R0lItmaRT7n
+   bQV3aFowvQYlrvjy5B5Hlzpb3V4kypAIbMlNc7+Cya1dLOk4n4kDxBif2
+   FT+7fpuF/BJbv5tmEKjLfq4Lg2lsZL4MoaZwXM/JIl/fWqbA7CzxAEbtG
+   xdSxuONqlqI2Fkqxax+MlV2UDsqPGuQOytndIJCbPYC+gMMmfz95jP7Bj
+   g==;
 X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="288805365"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 09:21:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="599634417"
-X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
-   d="scan'208";a="599634417"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 28 Sep 2022 09:21:03 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 32D0E265; Wed, 28 Sep 2022 19:21:22 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>
-Subject: [PATCH v1 2/2] i2c: designware-pci: Use standard pattern for memory allocation
-Date:   Wed, 28 Sep 2022 19:21:16 +0300
-Message-Id: <20220928162116.66724-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220928162116.66724-1-andriy.shevchenko@linux.intel.com>
-References: <20220928162116.66724-1-andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="182355220"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Sep 2022 09:21:30 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 28 Sep 2022 09:21:29 -0700
+Received: from ATX-DK-C33025.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 28 Sep 2022 09:21:28 -0700
+From:   Jerry Ray <jerry.ray@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jerry Ray <jerry.ray@microchip.com>
+Subject: [net-next][PATCH v3] dt-bindings: dsa: lan9303: Add lan9303 yaml
+Date:   Wed, 28 Sep 2022 11:21:28 -0500
+Message-ID: <20220928162128.802-1-jerry.ray@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pattern
-	foo = kmalloc(sizeof(*foo), GFP_KERNEL);
-has an advantage when foo type is changed. Since we are planning a such,
-better to be prepared by using standard pattern for memory allocation.
+Adding the dt binding yaml for the lan9303 3-port ethernet switch.
+The microchip lan9354 3-port ethernet switch will also use the
+same binding.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
 ---
- drivers/i2c/busses/i2c-designware-pcidrv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2->v3:
+ - removed cpu labels
+ - now patching against latest net-next
+v1->v2:
+ - fixed dt_binding_check warning
+ - added max-speed setting on the switches 10/100 ports.
+---
+ .../devicetree/bindings/net/dsa/lan9303.txt   |  99 +-------------
+ .../bindings/net/dsa/microchip,lan9303.yaml   | 129 ++++++++++++++++++
+ MAINTAINERS                                   |   8 ++
+ 3 files changed, 139 insertions(+), 97 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
 
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 6e8a9d26563a..e499f96506c5 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -263,7 +263,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 		return dev_err_probe(&pdev->dev, r,
- 				     "I/O memory remapping failed\n");
+diff --git a/Documentation/devicetree/bindings/net/dsa/lan9303.txt b/Documentation/devicetree/bindings/net/dsa/lan9303.txt
+index 46a732087f5c..8c8fedd1f00e 100644
+--- a/Documentation/devicetree/bindings/net/dsa/lan9303.txt
++++ b/Documentation/devicetree/bindings/net/dsa/lan9303.txt
+@@ -1,100 +1,5 @@
+ SMSC/MicroChip LAN9303 three port ethernet switch
+ -------------------------------------------------
  
--	dev = devm_kzalloc(&pdev->dev, sizeof(struct dw_i2c_dev), GFP_KERNEL);
-+	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
- 	if (!dev)
- 		return -ENOMEM;
+-Required properties:
+-
+-- compatible: should be
+-  - "smsc,lan9303-i2c" for I2C managed mode
+-    or
+-  - "smsc,lan9303-mdio" for mdio managed mode
+-
+-Optional properties:
+-
+-- reset-gpios: GPIO to be used to reset the whole device
+-- reset-duration: reset duration in milliseconds, defaults to 200 ms
+-
+-Subnodes:
+-
+-The integrated switch subnode should be specified according to the binding
+-described in dsa/dsa.txt. The CPU port of this switch is always port 0.
+-
+-Note: always use 'reg = <0/1/2>;' for the three DSA ports, even if the device is
+-configured to use 1/2/3 instead. This hardware configuration will be
+-auto-detected and mapped accordingly.
+-
+-Example:
+-
+-I2C managed mode:
+-
+-	master: masterdevice@X {
+-
+-		fixed-link { /* RMII fixed link to LAN9303 */
+-			speed = <100>;
+-			full-duplex;
+-		};
+-	};
+-
+-	switch: switch@a {
+-		compatible = "smsc,lan9303-i2c";
+-		reg = <0xa>;
+-		reset-gpios = <&gpio7 6 GPIO_ACTIVE_LOW>;
+-		reset-duration = <200>;
+-
+-		ports {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			port@0 { /* RMII fixed link to master */
+-				reg = <0>;
+-				ethernet = <&master>;
+-			};
+-
+-			port@1 { /* external port 1 */
+-				reg = <1>;
+-				label = "lan1";
+-			};
+-
+-			port@2 { /* external port 2 */
+-				reg = <2>;
+-				label = "lan2";
+-			};
+-		};
+-	};
+-
+-MDIO managed mode:
+-
+-	master: masterdevice@X {
+-		phy-handle = <&switch>;
+-
+-		mdio {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			switch: switch-phy@0 {
+-				compatible = "smsc,lan9303-mdio";
+-				reg = <0>;
+-				reset-gpios = <&gpio7 6 GPIO_ACTIVE_LOW>;
+-				reset-duration = <100>;
+-
+-				ports {
+-					#address-cells = <1>;
+-					#size-cells = <0>;
+-
+-					port@0 {
+-						reg = <0>;
+-						ethernet = <&master>;
+-					};
+-
+-					port@1 { /* external port 1 */
+-						reg = <1>;
+-						label = "lan1";
+-					};
+-
+-					port@2 { /* external port 2 */
+-						reg = <2>;
+-						label = "lan2";
+-					};
+-				};
+-			};
+-		};
+-	};
++See Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml for the
++device tree documentation covering the LAN9303 and LAN9354 devices.
+diff --git a/Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml b/Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
+new file mode 100644
+index 000000000000..818770092a2c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
+@@ -0,0 +1,129 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/dsa/microchip,lan9303.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: LAN9303 Ethernet Switch Series Tree Bindings
++
++allOf:
++  - $ref: "dsa.yaml#"
++
++maintainers:
++  - UNGLinuxDriver@microchip.com
++
++properties:
++  compatible:
++    oneOf:
++      - enum:
++          - smsc,lan9303-mdio
++          - microchip,lan9354-mdio
++      - enum:
++          - smsc,lan9303-i2c
++
++  reg:
++    maxItems: 1
++
++  reset-gpios:
++    description: Optional gpio specifier for a reset line
++    maxItems: 1
++
++  reset-duration:
++    description: Reset duration in milliseconds, defaults to 200 ms
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    //Ethernet switch connected via mdio to the host
++    ethernet0 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        phy-handle = <&lan9303switch>;
++        phy-mode = "rmii";
++        fixed-link {
++            speed = <100>;
++            full-duplex;
++        };
++        mdio {
++            #address-cells = <1>;
++            #size-cells = <0>;
++            lan9303switch: switch@0 {
++                compatible = "smsc,lan9303-mdio";
++                dsa,member = <0 0>;
++                reg = <0>;
++                ethernet-ports {
++                    #address-cells = <1>;
++                    #size-cells = <0>;
++                        port@0 {
++                            reg = <0>;
++                            phy-mode = "rmii";
++                            ethernet = <&ethernet>;
++                            fixed-link {
++                                speed = <100>;
++                                full-duplex;
++                            };
++                        };
++                        port@1 {
++                            reg = <1>;
++                            max-speed = <100>;
++                            label = "lan1";
++                        };
++                        port@2 {
++                            reg = <2>;
++                            max-speed = <100>;
++                            label = "lan2";
++                        };
++                    };
++                };
++            };
++        };
++
++    //Ethernet switch connected via i2c to the host
++    ethernet1 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        phy-mode = "rmii";
++        fixed-link {
++            speed = <100>;
++            full-duplex;
++        };
++    };
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        lan9303: switch@1a {
++            compatible = "smsc,lan9303-i2c";
++            reg = <0x1a>;
++            ethernet-ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++                port@0 {
++                    reg = <0>;
++                    phy-mode = "rmii";
++                    ethernet = <&ethernet1>;
++                    fixed-link {
++                        speed = <100>;
++                        full-duplex;
++                    };
++                };
++                port@1 {
++                    reg = <1>;
++                    max-speed = <100>;
++                    label = "lan1";
++                };
++                port@2 {
++                    reg = <2>;
++                    max-speed = <100>;
++                    label = "lan2";
++                };
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5d58b55c5ae5..89055ff2838a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13386,6 +13386,14 @@ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	drivers/net/ethernet/microchip/lan743x_*
  
++MICROCHIP LAN9303/LAN9354 ETHERNET SWITCH DRIVER
++M:	Jerry Ray <jerry.ray@microchip.com>
++M:	UNGLinuxDriver@microchip.com
++L:	netdev@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/net/dsa/microchip,lan9303.yaml
++F:	drivers/net/dsa/lan9303*
++
+ MICROCHIP LAN966X ETHERNET DRIVER
+ M:	Horatiu Vultur <horatiu.vultur@microchip.com>
+ M:	UNGLinuxDriver@microchip.com
 -- 
-2.35.1
+2.25.1
 
