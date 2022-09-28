@@ -2,141 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B6A5EE890
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 23:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4FE5EE893
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 23:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233906AbiI1VqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 17:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
+        id S234557AbiI1Vra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 17:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234517AbiI1VqB (ORCPT
+        with ESMTP id S232958AbiI1Vr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 17:46:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E35090802;
-        Wed, 28 Sep 2022 14:45:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94E7B61FE6;
-        Wed, 28 Sep 2022 21:45:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA194C433D6;
-        Wed, 28 Sep 2022 21:45:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664401559;
-        bh=ZImTpZIu1Oe/UGX3YTfpv34oAqqGDVjjQAwxKC7tMS0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=MFj660pBOrMYHQoas/9wCNwNCnFH8hiE2aXMVVjE621A0IAbNHp9IDdTCc2/ymELq
-         EPKfRfEI6vwNjcDL0/72pbOhTpWWPv0D2We2IuSV8En7RBMUQK57X8ZG+XY7YEp8U1
-         cdZwKL3rLoI8euNyPPw6bITZQBDYNTGUW6rMdsbAFcp94IeGZvKvkyU3j/bI/OT7pZ
-         0evYbRVsI00MtictJpn/qLofVAYigAFymh6WrOisW0e5mHzc0Bi4EUv8dzFDbRPLoy
-         J5xbrKMorcy9XQPFt4ZSJjBUjFJMugBK/QMUvfu88XAOMgQgjlf29xTLu9TfMTLYfH
-         7ieEQ6DSQwILw==
-Date:   Wed, 28 Sep 2022 16:45:57 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     bhelgaas@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, koba.ko@canonical.com,
-        Oliver O'Halloran <oohall@gmail.com>,
-        mika.westerberg@linux.intel.com
-Subject: Re: [PATCH 2/3] PCI/AER: Disable AER service on suspend when IRQ is
- shared with PME
-Message-ID: <20220928214557.GA1840266@bhelgaas>
+        Wed, 28 Sep 2022 17:47:28 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA602B636;
+        Wed, 28 Sep 2022 14:47:27 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id d12-20020a05600c3acc00b003b4c12e47f3so1702804wms.4;
+        Wed, 28 Sep 2022 14:47:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=Y8BhmZH5AcD5sR0X65fMe7O7Q8DdK6Jv1JPYl8VWFjc=;
+        b=aFgpKSSMgo3BcTcIbuO1zVk6bjzrs432caB8kYplv5HZeO7e/hfLgujSDZYlmgjnEX
+         R84AGDVWlib/vLG64I7H3KtFOQzABh7H3iNXl+XvuF0QvlmrPe7L0/nYpOlAlYrMwnai
+         7jTVU49PE3fZ7jdk3vgLFc1BeaOAPcWT8DT/cf0qJ/VR+yURysrXCmdYL6Pg9Nc1qNJ8
+         zAtdzZUueZTyMia3bOKcC+8cqPzPryYb5zACq1Tz+0gSXjJOxVsPo8fSrS+4KVc2MLSK
+         4SL9Lda8/bQdVE0zkvmoEzslvLVn9fyGXkUfDpLB7fi1uwt9oX+OLEM/Cf1NdBmTkXCF
+         LaLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=Y8BhmZH5AcD5sR0X65fMe7O7Q8DdK6Jv1JPYl8VWFjc=;
+        b=b69VDFatrpfS6/AdZ3/AbW1v0k9aBat11XA0oU6aiRdHKiS5jIp7hTcSqgO5mmDoZP
+         uxNrjaKwdd0sGCNFNu06RPgXkIJXltuY2tiFs/WjK6ips/uSjAK2sSVpAJVSLsqtymJs
+         r5Z6+514fg9mckpPToguIrygncBXlqIPmLD+wPuXUFIzagEG873XZ8l8lAfJ+hKyhIcZ
+         /D7/fMXWDLgJ9WJMEop0TW6dgmlleNBZNIeG40aHJkvT47wZqYl9T/pACQTYkZRKNWYE
+         Z6PlnVTBYFckDFDttafYpjHoEQaE51JG0490b83mjggyFZJzS8n2LGSqm7gfomrhqk2L
+         Toww==
+X-Gm-Message-State: ACrzQf1bzDRIRbwjspsvB02wajWXXT+zd3SzsM1hoFFtV/ZnebedTzQX
+        kjaZBXq7G6y1BZiVxuHSo/M=
+X-Google-Smtp-Source: AMsMyM7G4H2NtzDKbo7S+PKWD54yHhOPk2DvlxWMTKeD9KUECeVw+ku6w7fmHsgjCTICsVqppObneQ==
+X-Received: by 2002:a05:600c:42d4:b0:3b3:3de1:7564 with SMTP id j20-20020a05600c42d400b003b33de17564mr45388wme.152.1664401646296;
+        Wed, 28 Sep 2022 14:47:26 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id d15-20020adffd8f000000b00228a6ce17b4sm5103333wrr.37.2022.09.28.14.47.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 14:47:25 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] freevxfs: Fix spelling mistake "ivalid" -> "invalid"
+Date:   Wed, 28 Sep 2022 22:47:25 +0100
+Message-Id: <20220928214725.65284-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220727013255.269815-2-kai.heng.feng@canonical.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 09:32:51AM +0800, Kai-Heng Feng wrote:
-> PCIe service that shares IRQ with PME may cause spurious wakeup on
-> system suspend.
-> 
-> PCIe Base Spec 5.0, section 5.2 "Link State Power Management" states
-> that TLP and DLLP transmission is disabled for a Link in L2/L3 Ready
-> (D3hot), L2 (D3cold with aux power) and L3 (D3cold), so we don't lose
-> much here to disable AER during system suspend.
-> 
-> This is very similar to previous attempts to suspend AER and DPC [1],
-> but with a different reason.
-> 
-> [1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.feng@canonical.com/
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216295
-> 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/pci/pcie/aer.c | 23 ++++++++++++++++++++++-
->  1 file changed, 22 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index 7952e5efd6cf3..60cc373754af2 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -1372,6 +1372,26 @@ static int aer_probe(struct pcie_device *dev)
->  	return 0;
->  }
->  
-> +static int aer_suspend(struct pcie_device *dev)
-> +{
-> +	struct aer_rpc *rpc = get_service_data(dev);
-> +
-> +	if (dev->shared_pme_irq)
-> +		aer_disable_rootport(rpc);
+There is a spelling mistake in a kernel message. Fix it.
 
-aer_disable_rootport() seems like it might be overkill.  IIUC, what
-we want to do here is disable AER interrupts, which should only
-require clearing ROOT_PORT_INTR_ON_MESG_MASK in PCI_ERR_ROOT_COMMAND.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/freevxfs/vxfs_olt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In addition to clearing ROOT_PORT_INTR_ON_MESG_MASK,
-aer_disable_rootport() traverses the whole hierarchy, clearing
-PCI_EXP_AER_FLAGS (CERE | NFERE | FERE | URRE) in PCI_EXP_DEVCTL.
-I don't think these DEVCTL bits control interrupt generation, so I
-don't know why we need to touch them.
+diff --git a/fs/freevxfs/vxfs_olt.c b/fs/freevxfs/vxfs_olt.c
+index 23f35187c289..48027a421fa3 100644
+--- a/fs/freevxfs/vxfs_olt.c
++++ b/fs/freevxfs/vxfs_olt.c
+@@ -63,7 +63,7 @@ vxfs_read_olt(struct super_block *sbp, u_long bsize)
+ 
+ 	op = (struct vxfs_olt *)bp->b_data;
+ 	if (fs32_to_cpu(infp, op->olt_magic) != VXFS_OLT_MAGIC) {
+-		printk(KERN_NOTICE "vxfs: ivalid olt magic number\n");
++		printk(KERN_NOTICE "vxfs: invalid olt magic number\n");
+ 		goto fail;
+ 	}
+ 
+-- 
+2.37.1
 
-aer_disable_rootport() also clears PCI_ERR_ROOT_STATUS, which I think
-we should not do during suspend either.  We might want to clear it
-on resume (which we already do in pci_restore_state()), but I think
-generally we should preserve error information as long as it doesn't
-cause trouble.
-
-Your thoughts please :)
-
-> +
-> +	return 0;
-> +}
-> +
-> +static int aer_resume(struct pcie_device *dev)
-> +{
-> +	struct aer_rpc *rpc = get_service_data(dev);
-> +
-> +	if (dev->shared_pme_irq)
-> +		aer_enable_rootport(rpc);
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * aer_root_reset - reset Root Port hierarchy, RCEC, or RCiEP
->   * @dev: pointer to Root Port, RCEC, or RCiEP
-> @@ -1441,8 +1461,9 @@ static struct pcie_port_service_driver aerdriver = {
->  	.name		= "aer",
->  	.port_type	= PCIE_ANY_PORT,
->  	.service	= PCIE_PORT_SERVICE_AER,
-> -
->  	.probe		= aer_probe,
-> +	.suspend	= aer_suspend,
-> +	.resume		= aer_resume,
->  	.remove		= aer_remove,
->  };
->  
-> -- 
-> 2.36.1
-> 
