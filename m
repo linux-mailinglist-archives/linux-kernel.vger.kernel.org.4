@@ -2,64 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDDC5EE31A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 181655EE31F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234431AbiI1R1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
+        id S234125AbiI1R2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234625AbiI1R1Y (ORCPT
+        with ESMTP id S234676AbiI1R2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:27:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA56E4D89;
-        Wed, 28 Sep 2022 10:27:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B6B1B8216E;
-        Wed, 28 Sep 2022 17:27:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B70C433D6;
-        Wed, 28 Sep 2022 17:27:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664386039;
-        bh=GH1UskgjZIUPQJb+x9CDmOVXsZCej5rWpjjvE5I/zpw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AAu5P64TFUrxKs3oC0J1oqmHOxwrUwzSAZ69obhwH9w2crmKuKqukX4gmzItsVpVl
-         gQYZf/VK7IT4SwAWcqa7UtrnOhgUbL8cVJG40t0o0EFjoqPi1u1HjFwfO9PiaEFKL5
-         vQguSJBRPOuW4d9P3JJKfPiP544zil80jqw9mUGmYE4lgc/+xquFIcnY4mRjFWMXkj
-         xjMJK0DQ4bBmta8zAzYYZe4OK2fqpUwUxcslwemiQpWdLOPiDTRR12OnbMxFdP68h0
-         nMtWEyl+tQ93sua2+M3CgyVAGNzoC1Gd/Eeuah8bgwxsVTuV809kC0bzB0K9iezokH
-         TGFElxsq77pdg==
-Date:   Wed, 28 Sep 2022 18:27:13 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Chunyan Zhang <zhang.lyra@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>, Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH v2 2/2] dt-bindings: regulator: Add bindings for Unisoc's
- SC2730 regulator
-Message-ID: <YzSD8cQrFpIWunls@sirena.org.uk>
-References: <20211008031953.339461-1-zhang.lyra@gmail.com>
- <20211008031953.339461-3-zhang.lyra@gmail.com>
- <YY5wPh0rwRvFjSRG@sirena.org.uk>
- <CAAfSe-uA3iowafC25zRqoTSaub1PbOzUvQgukLm=szEge_abvw@mail.gmail.com>
- <Yyw2nAAjN6NxmS09@google.com>
- <YyxKSjMPlGPfegpJ@sirena.org.uk>
- <YzFNvByGG7ADWfmd@google.com>
+        Wed, 28 Sep 2022 13:28:09 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBE5F1D5A
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:27:56 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id a13so3065257edj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=LoaCqW3jpS8TGypc4TVU/1rL8RVEj1gIc68KQRqm5M8=;
+        b=WQi3vRXWrLpV5LLIyL3HI0/XBIdEZDVlgeISWfa1H4KEcZU4m8LKG2wFPBnmJVmXAV
+         K2l0fhZq62LVNM3PRD0ZCTfA+8x6l4JygClEFkfTEu1sAeiSCN5h41vFkRLYVsllV3py
+         v9XQ/Zh7sZyFWHTbsMepsHHm4RyBiHiXn2BwE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=LoaCqW3jpS8TGypc4TVU/1rL8RVEj1gIc68KQRqm5M8=;
+        b=faJxTBWWQRoGBaqisL4LSxBn/wWPxlTygz5iYYe4LU5hoXU2uHLlWma2lp67QySd3r
+         skBfTtlkCLtADaBZAoiA/EwQ++cA/wjwCO2rNxSkGdaDBed9GksFVc3V+Jt41IpM9Zpn
+         06ps+XFCKvRpSR+PP9GLHwH08HhlfwPUfdn3HtYAEd9ZUyzKF6uBYHpFGCOfrqKmaKH0
+         uJiCbPwWPLy45GR4JMsBbqQWn26bUMtYaiPg05Tigqoda6nNGl/m/vgTJf2bfcVb5Sii
+         a3tUpPIkFhi0EzJKoZLDJ9lkVCdAMo0RhZdDtQ9EaZp8l8iCzAYZnSYpINWFgW1LJQgi
+         mv9g==
+X-Gm-Message-State: ACrzQf24lcjuZNy9OgQ24SJpDJFOsPDybFrxrdBjP3SDmKBqZO7zUx07
+        hMxpCnvpgEqC7f2+H/xYtEBz5K01hP0VhBVq
+X-Google-Smtp-Source: AMsMyM5VC3ruimVjWPCmAgCHIS3NG2thT/seL9VRct1iJGMFF5RUTTyz7snB9oDrmDvGFKVR4P0j0A==
+X-Received: by 2002:a05:6402:2947:b0:451:32a:2222 with SMTP id ed7-20020a056402294700b00451032a2222mr34162947edb.376.1664386074955;
+        Wed, 28 Sep 2022 10:27:54 -0700 (PDT)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
+        by smtp.gmail.com with ESMTPSA id k6-20020a50cb86000000b00456e98b7b7asm2656974edi.56.2022.09.28.10.27.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 10:27:53 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id l8so8964239wmi.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 10:27:53 -0700 (PDT)
+X-Received: by 2002:a05:600c:510e:b0:3b4:fed8:e65c with SMTP id
+ o14-20020a05600c510e00b003b4fed8e65cmr7575844wms.93.1664386073218; Wed, 28
+ Sep 2022 10:27:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a+ETSZRf0TrB1BfO"
-Content-Disposition: inline
-In-Reply-To: <YzFNvByGG7ADWfmd@google.com>
-X-Cookie: You look tired.
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220927063524.493591-1-sean.hong@quanta.corp-partner.google.com>
+ <CAD=FV=WQXOTJu-YUWyBjdoq4wPrwQYoo68FCJBF7EJfdf+9SrA@mail.gmail.com> <CAP19T+6SWu_siXom4EANarqSRGif7qnkUPwhfKgjASnFnYG+cQ@mail.gmail.com>
+In-Reply-To: <CAP19T+6SWu_siXom4EANarqSRGif7qnkUPwhfKgjASnFnYG+cQ@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 28 Sep 2022 10:27:41 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XRX5AuRcw9=0jw+9WnPfeXtYnPEu+iYgqQxXcJh4LvTg@mail.gmail.com>
+Message-ID: <CAD=FV=XRX5AuRcw9=0jw+9WnPfeXtYnPEu+iYgqQxXcJh4LvTg@mail.gmail.com>
+Subject: Re: [PATCH] drm/panel-edp: Add BOE NT116WHM-N4C (HW: V8.1)
+To:     Sean Hong <sean.hong@quanta.corp-partner.google.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,60 +77,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---a+ETSZRf0TrB1BfO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Tue, Sep 27, 2022 at 11:51 PM Sean Hong
+<sean.hong@quanta.corp-partner.google.com> wrote:
+>
+> On Tue, Sep 27, 2022 at 11:27 PM Doug Anderson <dianders@chromium.org> wrote:
+> >
+> > Hi,
+> >
+> > On Mon, Sep 26, 2022 at 11:35 PM Sean Hong
+> > <sean.hong@quanta.corp-partner.google.com> wrote:
+> > >
+> > > Add support for the BOE - NT116WHM-N4C (HW: V8.1) panel.
+> > >
+> > > Signed-off-by: Sean Hong <sean.hong@quanta.corp-partner.google.com>
+> > > ---
+> > >  drivers/gpu/drm/panel/panel-edp.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> >
+> > Wow, another panel?!?
+> >
+> > Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> >
+> > Pushed to drm-misc:
+> >
+> > 2f24fe8c54cc drm/panel-edp: Add BOE NT116WHM-N4C (HW: V8.1)
+>
+> Hi Anderson,
+>
+> I found some mistakes on this commit. I typed the wrong model name on
+> title and content.
+> The correct model name is NV116WHM-N4C and the code is correct.
+>
+> How can I fix it? Do I need to revert this commit and then submit a
+> new patch upstream?
 
-On Mon, Sep 26, 2022 at 07:59:08AM +0100, Lee Jones wrote:
-> On Thu, 22 Sep 2022, Mark Brown wrote:
+There's not much to be done at this point in time. Reverting /
+readding the same code with a slightly different commit message
+wouldn't be worth it. The code is correct and that's the important
+thing. The commit has a link to the mailing list post so anyone who's
+confused will hopefully click the link and can find this discussion.
 
-> > If people want to describe the individual regulators that'd be
-> > less of an issue, it's mainly when you're nesting what's
-> > effectively another MFD within a parent MFD that it's just noise
-> > that's being added to the DT.
-
-> As I say, I haven't studied this use-case.
-
-> These comments were designed to be more generic.
-
-> What do you mean by nested MFDs?
-
-Given that individual regulators tend to be separate physical IPs in the
-chip if you create a single device tree node that lumps them together
-you still need to also represent the individual regulators as well so
-that collection is functioning like a MFD does except not on a chip
-boundary.
-
-> > > Can you imagine describing an SoC, which can be considered as a huge
-> > > MFD, with only a single node?
-
-> > Honestly we should be arranging things so they're more like that,
-> > at least using overlays for the internals of the SoC so you don't
-> > have to rebuild the whole DT for updates to the SoC internals.
-
-> Right, there would be one device root node.  However each function;
-> clock providers, regulator controllers, PWMs, GPIOs, networking
-> (various), reset, watchdog, etc would have their own nodes.  Rather
-> than attempting to describe everything in the parent's node.
-
-We don't split things up by function, we split them up by IP - we don't
-just allocate a compatible for all the networking related functionality
-simply because there's a networking subsystem in Linux for example.
-
---a+ETSZRf0TrB1BfO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmM0g/AACgkQJNaLcl1U
-h9CUCAf/Q6E+WKiJ2KGknP5+06b4wxdfhbz+BpVH7gWrCq9iry5COPHP2d/vtR0D
-PywhTxxFTjxjL9AHcyxMpkrT7Vp2bHkQD1gdsRehHDgNbTAFMR0G2D8VU3MpxKPO
-d79P2y8PGARmVuITXGEOMpentnHb+tWYOzNCGKfpjzG8MWsukT0qVYPu9KKpI1d9
-2AwAmGy8axUtSUA5atMYN37HDtyB1aP5FaXPmY14MGr/QtifBpt/dNcEduZDxf50
-x1E4t6NIr2ratmhawivwudR6ModSXw4AyTYXgcsXuZvDnofhDyTEE44WrExgqbS+
-S0h8CtCK7sscoqwfNPXPcxEla76H/Q==
-=GLRW
------END PGP SIGNATURE-----
-
---a+ETSZRf0TrB1BfO--
+-Doug
