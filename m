@@ -2,94 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60815EE0FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99135EE0F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 17:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234080AbiI1PzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 11:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
+        id S233952AbiI1PzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 11:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234084AbiI1PzK (ORCPT
+        with ESMTP id S233247AbiI1Py7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 11:55:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C025075CFE;
-        Wed, 28 Sep 2022 08:55:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81166B82118;
-        Wed, 28 Sep 2022 15:55:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24AC4C433C1;
-        Wed, 28 Sep 2022 15:55:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664380506;
-        bh=19kRek0Nz/9dwB2Md/XXV+wwHSf8yk35FNl7Vooy73E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WAFJ9lBYsnTSpIwaiRaxIPRbLW1l2YWc8XmwdFpYAgA3Pm/qSOYKqhsiTGegfSBc4
-         nCCXulw0M3rA6zJ2ZpPwXs+rd3AHzdmzHIYn8TpQ9309JgLTsZYTLOesvoynC1rUCt
-         MYTb4nmRizlLpF+cizq1c27mC9lXY8qDlS49GTbrk2l7u28yhWqUNXo+lBw4zu4O0y
-         M8pua8XkBVPTrUBDuHrh8XYKG13rn7EVlLnBEtVgcZmlIzM62h5yGMdXT7UNoYzxPk
-         /rFpKm6ehQf2qWVv0qO1TK6XPcTlsTXR8L+9E6nypMCmQw4yinEDvTYl3gewvUClfv
-         XGXdJNRzoJAag==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1odZOy-0005eA-Sw; Wed, 28 Sep 2022 17:55:12 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v3 2/2] PCI: qcom: Rename host-init error label
-Date:   Wed, 28 Sep 2022 17:54:21 +0200
-Message-Id: <20220928155421.21660-3-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220928155421.21660-1-johan+linaro@kernel.org>
-References: <20220928155421.21660-1-johan+linaro@kernel.org>
+        Wed, 28 Sep 2022 11:54:59 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C93D6CD35;
+        Wed, 28 Sep 2022 08:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664380497; x=1695916497;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9MKHF7JkWunOqxKkhskGg+gBY8oemgkga1v6mW2c5o4=;
+  b=cr11p44tKyjGKvgqbI3BkMN0P747c4rcV2YEvuJS4z7Sf/chrihurO4p
+   LzjkmSz6RjK8K3sXeEwNG1sOOuejC6othRLwd786DAeZjuL/syfVOb6EJ
+   sMWz8fNVPdE+0SXaKe4l1V3q57TlVuKJREei5+FRo0RXqAopcVggfQZQr
+   heVmJHqI/BVWJ404rNMxRgvOVwG/evVl9pi9hprk3/K1MgoWeHCOIMeHz
+   lMn8ChOBbOYHuUx/7F2ApV7CT2UV/Zs5hXk4ggidfvh4XBUdEMnWcqK9J
+   sRQMv+UQtQVaLBneyiJE/KLS8rkUQ3g3MBSRjztI17pkvCpM1ITBDSZC2
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="281354778"
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="281354778"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 08:54:55 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="573084272"
+X-IronPort-AV: E=Sophos;i="5.93,352,1654585200"; 
+   d="scan'208";a="573084272"
+Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.108.153]) ([10.212.108.153])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 08:54:54 -0700
+Message-ID: <77b8714b-aa3f-3866-72a2-e706428d2657@intel.com>
+Date:   Wed, 28 Sep 2022 08:54:53 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.3.0
+Subject: Re: [PATCH v2 1/2] dmaengine: idxd: Set wq state to disabled in
+ idxd_wq_disable_cleanup()
+To:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>, Vinod Koul <vkoul@kernel.org>
+References: <20220928154856.623545-1-jsnitsel@redhat.com>
+ <20220928154856.623545-2-jsnitsel@redhat.com>
+Content-Language: en-US
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20220928154856.623545-2-jsnitsel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use a more descriptive name for the reset host-init error label for
-consistency.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 9/28/2022 8:48 AM, Jerry Snitselaar wrote:
+> If we are calling idxd_wq_disable_cleanup(), the workqueue should be
+> in a disabled state. So set the workqueue state to IDXD_WQ_DISABLED so
+> that the state reflects that. Currently if there is a device failure,
+> and a software reset is attempted the workqueues will not be
+> re-enabled due to idxd_wq_enable() seeing that state as already being
+> IDXD_WQ_ENABLED.
+>
+> Cc: Fenghua Yu <fenghua.yu@intel.com>
+> Cc: Dave Jiang <dave.jiang@intel.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 8d6df0db4ebb..f711acacaeaf 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1512,12 +1512,12 @@ static int qcom_pcie_host_init(struct dw_pcie_rp *pp)
- 	if (pcie->cfg->ops->config_sid) {
- 		ret = pcie->cfg->ops->config_sid(pcie);
- 		if (ret)
--			goto err;
-+			goto err_assert_reset;
- 	}
- 
- 	return 0;
- 
--err:
-+err_assert_reset:
- 	qcom_ep_reset_assert(pcie);
- err_disable_phy:
- 	phy_power_off(pcie->phy);
--- 
-2.35.1
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 
+
+> ---
+>   drivers/dma/idxd/device.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
+> index 5a8cc52c1abf..31911e255ac1 100644
+> --- a/drivers/dma/idxd/device.c
+> +++ b/drivers/dma/idxd/device.c
+> @@ -258,7 +258,6 @@ void idxd_wq_reset(struct idxd_wq *wq)
+>   	operand = BIT(wq->id % 16) | ((wq->id / 16) << 16);
+>   	idxd_cmd_exec(idxd, IDXD_CMD_RESET_WQ, operand, NULL);
+>   	idxd_wq_disable_cleanup(wq);
+> -	wq->state = IDXD_WQ_DISABLED;
+>   }
+>   
+>   int idxd_wq_map_portal(struct idxd_wq *wq)
+> @@ -378,6 +377,7 @@ static void idxd_wq_disable_cleanup(struct idxd_wq *wq)
+>   	struct idxd_device *idxd = wq->idxd;
+>   
+>   	lockdep_assert_held(&wq->wq_lock);
+> +	wq->state = IDXD_WQ_DISABLED;
+>   	memset(wq->wqcfg, 0, idxd->wqcfg_size);
+>   	wq->type = IDXD_WQT_NONE;
+>   	wq->threshold = 0;
