@@ -2,702 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89E35EDE87
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB145EDE8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 16:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234245AbiI1OOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 10:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
+        id S234228AbiI1OO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 10:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234228AbiI1OOD (ORCPT
+        with ESMTP id S233482AbiI1OOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 10:14:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3139E894;
-        Wed, 28 Sep 2022 07:14:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A9A161E91;
-        Wed, 28 Sep 2022 14:14:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12782C433D6;
-        Wed, 28 Sep 2022 14:13:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664374440;
-        bh=qokI1UHZPf3czrAYVK1Fpc1za1XINMSz4Cp8uETUY7c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SMncpH3AwZsU2W3PF5ZxTqV1djC0AovIXvUwtZcMqQyHNunK7fBMb3D2ySnKXDHqo
-         X0KShVR63uK0Zyvd6L170FSeG6eDtrTlS4r5/grJOlK7ClTSjtR1jXPhcx45lqSaZz
-         mV357TvUcUBhMhCkJF1BbFyJX51bKJlGDUnLUblk+Z5LTzteSBhn1VkUqXtc9Emgpe
-         It3eQU6OlEQb74OKpb/M8GkgZN0AIyztMj6vIiTyrO4qh4tUk1g7xxNSU5BSQ1wBa5
-         DTHVI8ixW2I0o3wdzPPXCyKAne12SrGV+iduhLyyw4UFme/vfwCxHM6Z7hHYBeAIio
-         Ju0+bCyI8Vf9w==
-Date:   Wed, 28 Sep 2022 15:13:53 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCHv3 07/14] mfd: rk808: split into core and i2c
-Message-ID: <YzRWoalictTKLAye@google.com>
-References: <20220909175522.179175-1-sebastian.reichel@collabora.com>
- <20220909175522.179175-8-sebastian.reichel@collabora.com>
+        Wed, 28 Sep 2022 10:14:54 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DF92F3A8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 07:14:52 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id d42so20676017lfv.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 07:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=OTPmRt98xA3kHqeuFiou7zsehbKe+hz1Lsg8cgktI8o=;
+        b=eI5zqZ9oj34395/K1AVbL/BpEEe+nM2dwo69rVgoNqazUG1qU3VSaaNeSoXAxY1/RV
+         dUN/tDClhDq1K5yFurg93Lke3olHKxUihimISCxd2KiZA8tNqBGMKy8yZmLUADVvdR9W
+         +cUHxcoWH9lmcDPYNHoQrhXHqztJqdpk5hbgdzf3lCJGW2Jdkt9jF7rEX1jtBrOmIOPk
+         CbDBZpYFI/rkotKemeBGyrGmg8MjKwzQtkgi0bGzn4RbDvgtDSMMCVGcSgpFeUl7IbAL
+         UwrtnhCZK9nN0d+FcLnGpCCQyabMJQ9yuSsqa1uymZkP+SiEZ4Qjf+PVFcLZECTzXIzR
+         z7LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=OTPmRt98xA3kHqeuFiou7zsehbKe+hz1Lsg8cgktI8o=;
+        b=Mf1nYbGlr1KUjHgjiykWhrj3kf/wM1QziKMuvk733F2HST2ioGJX2Y5clNRM4NQyR/
+         IeHp/EdT5vysMeBLT3gSXBM6efa2Ya/33nr/hb9P5gmz5FcECJw+Q0bPsuuktEo/+YNs
+         4OWIRBW14R1yGHqvyVImnpN6gb8RYCym3oBG/+dmCmLfweJZcS0/RISjNwFi7Y0UAaYP
+         53QjKQoHrI+MxbZIqoMsBcodEtdl5Ji2l9BvKClc1jQ8TLbHdBmQGhlSMbrlmzOrMSe1
+         i2AZLmgIRco5Y1aCLdXQkorGcPZsAH9pkXg8FeRQuuYR8Jb5U4bzK+gqXoak6mxfGiRB
+         xxFg==
+X-Gm-Message-State: ACrzQf051mTssA6UeS0AUhGRh3N+8ZK7WCxgm4H/9pX+f/yvmJ2zHdlt
+        33hq9+UueVKKC13cbhW6yn9pJw==
+X-Google-Smtp-Source: AMsMyM4Rd9kNIwum5szSAw6ZmVI6A0QszE+VdTWlDnD0Ivs7fHdME9wOBCJMfDBmxqT7cAOv2/8N1w==
+X-Received: by 2002:a05:6512:3e17:b0:49d:9fd5:da61 with SMTP id i23-20020a0565123e1700b0049d9fd5da61mr14295963lfv.270.1664374490428;
+        Wed, 28 Sep 2022 07:14:50 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id t6-20020a19ad06000000b00498f32ae907sm487217lfc.95.2022.09.28.07.14.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 07:14:49 -0700 (PDT)
+Message-ID: <1292244e-6e7f-4402-6418-add40772f5bc@linaro.org>
+Date:   Wed, 28 Sep 2022 16:14:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220909175522.179175-8-sebastian.reichel@collabora.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 0/4] arm64: dts: qcom: msm8916-samsung-j5: Use common
+ device tree
+Content-Language: en-US
+To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
+        devicetree@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Julian Ribbeck <julian.ribbeck@gmx.de>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>,
+        Josef W Menad <JosefWMenad@protonmail.ch>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20220928110049.96047-1-linmengbo0689@protonmail.com>
+ <20220928121717.102402-1-linmengbo0689@protonmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220928121717.102402-1-linmengbo0689@protonmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 09 Sep 2022, Sebastian Reichel wrote:
-
-> Split rk808 into a core and an i2c part in preperation for
-> SPI support.
+On 28/09/2022 14:19, Lin, Meng-Bo wrote:
+> v2: Reword and resend. Split common dtsi patch.
+> Add missing suffix state in pinctrl.
 > 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  drivers/mfd/Kconfig                   |   5 +
->  drivers/mfd/Makefile                  |   3 +-
->  drivers/mfd/{rk808.c => rk8xx-core.c} | 200 +++++--------------------
->  drivers/mfd/rk8xx-i2c.c               | 203 ++++++++++++++++++++++++++
->  include/linux/mfd/rk808.h             |   6 +
->  5 files changed, 249 insertions(+), 168 deletions(-)
->  rename drivers/mfd/{rk808.c => rk8xx-core.c} (76%)
->  create mode 100644 drivers/mfd/rk8xx-i2c.c
-> 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index abb58ab1a1a4..acb7133d6db6 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1143,11 +1143,16 @@ config MFD_RC5T583
->  	  different functionality of the device.
->  
->  config MFD_RK808
-> +	bool
-> +	select MFD_CORE
-> +
-> +config MFD_RK8XX_I2C
->  	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 Power Management Chip"
->  	depends on I2C && OF
->  	select MFD_CORE
->  	select REGMAP_I2C
->  	select REGMAP_IRQ
-> +	select MFD_RK808
->  	help
->  	  If you say yes here you get support for the RK805, RK808, RK809,
->  	  RK817 and RK818 Power Management chips.
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 858cacf659d6..25ac617a5e6b 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -215,7 +215,8 @@ obj-$(CONFIG_MFD_PALMAS)	+= palmas.o
->  obj-$(CONFIG_MFD_VIPERBOARD)    += viperboard.o
->  obj-$(CONFIG_MFD_NTXEC)		+= ntxec.o
->  obj-$(CONFIG_MFD_RC5T583)	+= rc5t583.o rc5t583-irq.o
-> -obj-$(CONFIG_MFD_RK808)		+= rk808.o
-> +obj-$(CONFIG_MFD_RK808)		+= rk8xx-core.o
-> +obj-$(CONFIG_MFD_RK8XX_I2C)	+= rk8xx-i2c.o
->  obj-$(CONFIG_MFD_RN5T618)	+= rn5t618.o
->  obj-$(CONFIG_MFD_SEC_CORE)	+= sec-core.o sec-irq.o
->  obj-$(CONFIG_MFD_SYSCON)	+= syscon.o
-> diff --git a/drivers/mfd/rk808.c b/drivers/mfd/rk8xx-core.c
-> similarity index 76%
-> rename from drivers/mfd/rk808.c
-> rename to drivers/mfd/rk8xx-core.c
-> index 518c6deec4b1..d0ce17d98fdc 100644
-> --- a/drivers/mfd/rk808.c
-> +++ b/drivers/mfd/rk8xx-core.c
-> @@ -12,7 +12,6 @@
->   * Author: Wadim Egorov <w.egorov@phytec.de>
->   */
->  
-> -#include <linux/i2c.h>
->  #include <linux/interrupt.h>
->  #include <linux/mfd/rk808.h>
->  #include <linux/mfd/core.h>
-> @@ -27,88 +26,6 @@ struct rk808_reg_data {
->  	int value;
->  };
->  
-> -static bool rk808_is_volatile_reg(struct device *dev, unsigned int reg)
-> -{
-> -	/*
-> -	 * Notes:
-> -	 * - Technically the ROUND_30s bit makes RTC_CTRL_REG volatile, but
-> -	 *   we don't use that feature.  It's better to cache.
-> -	 * - It's unlikely we care that RK808_DEVCTRL_REG is volatile since
-> -	 *   bits are cleared in case when we shutoff anyway, but better safe.
-> -	 */
-> -
-> -	switch (reg) {
-> -	case RK808_SECONDS_REG ... RK808_WEEKS_REG:
-> -	case RK808_RTC_STATUS_REG:
-> -	case RK808_VB_MON_REG:
-> -	case RK808_THERMAL_REG:
-> -	case RK808_DCDC_UV_STS_REG:
-> -	case RK808_LDO_UV_STS_REG:
-> -	case RK808_DCDC_PG_REG:
-> -	case RK808_LDO_PG_REG:
-> -	case RK808_DEVCTRL_REG:
-> -	case RK808_INT_STS_REG1:
-> -	case RK808_INT_STS_REG2:
-> -		return true;
-> -	}
-> -
-> -	return false;
-> -}
-> -
-> -static bool rk817_is_volatile_reg(struct device *dev, unsigned int reg)
-> -{
-> -	/*
-> -	 * Notes:
-> -	 * - Technically the ROUND_30s bit makes RTC_CTRL_REG volatile, but
-> -	 *   we don't use that feature.  It's better to cache.
-> -	 */
-> -
-> -	switch (reg) {
-> -	case RK817_SECONDS_REG ... RK817_WEEKS_REG:
-> -	case RK817_RTC_STATUS_REG:
-> -	case RK817_CODEC_DTOP_LPT_SRST:
-> -	case RK817_INT_STS_REG0:
-> -	case RK817_INT_STS_REG1:
-> -	case RK817_INT_STS_REG2:
-> -	case RK817_SYS_STS:
-> -		return true;
-> -	}
-> -
-> -	return true;
-> -}
-> -
-> -static const struct regmap_config rk818_regmap_config = {
-> -	.reg_bits = 8,
-> -	.val_bits = 8,
-> -	.max_register = RK818_USB_CTRL_REG,
-> -	.cache_type = REGCACHE_RBTREE,
-> -	.volatile_reg = rk808_is_volatile_reg,
-> -};
-> -
-> -static const struct regmap_config rk805_regmap_config = {
-> -	.reg_bits = 8,
-> -	.val_bits = 8,
-> -	.max_register = RK805_OFF_SOURCE_REG,
-> -	.cache_type = REGCACHE_RBTREE,
-> -	.volatile_reg = rk808_is_volatile_reg,
-> -};
-> -
-> -static const struct regmap_config rk808_regmap_config = {
-> -	.reg_bits = 8,
-> -	.val_bits = 8,
-> -	.max_register = RK808_IO_POL_REG,
-> -	.cache_type = REGCACHE_RBTREE,
-> -	.volatile_reg = rk808_is_volatile_reg,
-> -};
-> -
-> -static const struct regmap_config rk817_regmap_config = {
-> -	.reg_bits = 8,
-> -	.val_bits = 8,
-> -	.max_register = RK817_GPIO_INT_CFG,
-> -	.cache_type = REGCACHE_NONE,
-> -	.volatile_reg = rk817_is_volatile_reg,
-> -};
-> -
->  static const struct resource rtc_resources[] = {
->  	DEFINE_RES_IRQ(RK808_IRQ_RTC_ALARM),
->  };
-> @@ -584,9 +501,9 @@ static int rk808_restart(struct sys_off_data *data)
->  	return NOTIFY_DONE;
->  }
->  
-> -static void rk8xx_shutdown(struct i2c_client *client)
-> +void rk8xx_shutdown(struct device *dev)
->  {
-> -	struct rk808 *rk808 = i2c_get_clientdata(client);
-> +	struct rk808 *rk808 = dev_get_drvdata(dev);
->  	int ret;
->  
->  	switch (rk808->variant) {
-> @@ -607,62 +524,31 @@ static void rk8xx_shutdown(struct i2c_client *client)
->  		return;
->  	}
->  	if (ret)
-> -		dev_warn(&client->dev,
-> +		dev_warn(dev,
->  			 "Cannot switch to power down function\n");
->  }
-> +EXPORT_SYMBOL_GPL(rk8xx_shutdown);
->  
-> -static const struct of_device_id rk808_of_match[] = {
-> -	{ .compatible = "rockchip,rk805" },
-> -	{ .compatible = "rockchip,rk808" },
-> -	{ .compatible = "rockchip,rk809" },
-> -	{ .compatible = "rockchip,rk817" },
-> -	{ .compatible = "rockchip,rk818" },
-> -	{ },
-> -};
-> -MODULE_DEVICE_TABLE(of, rk808_of_match);
-> -
-> -static int rk808_probe(struct i2c_client *client,
-> -		       const struct i2c_device_id *id)
-> +int rk8xx_probe(struct device *dev, int variant, unsigned int irq, struct regmap *regmap)
->  {
-> -	struct device_node *np = client->dev.of_node;
->  	struct rk808 *rk808;
->  	const struct rk808_reg_data *pre_init_reg;
->  	const struct mfd_cell *cells;
->  	int nr_pre_init_regs;
->  	int nr_cells;
-> -	int msb, lsb;
-> -	unsigned char pmic_id_msb, pmic_id_lsb;
->  	int ret;
->  	int i;
->  
-> -	rk808 = devm_kzalloc(&client->dev, sizeof(*rk808), GFP_KERNEL);
-> +	rk808 = devm_kzalloc(dev, sizeof(*rk808), GFP_KERNEL);
->  	if (!rk808)
->  		return -ENOMEM;
-> -
-> -	if (of_device_is_compatible(np, "rockchip,rk817") ||
-> -	    of_device_is_compatible(np, "rockchip,rk809")) {
-> -		pmic_id_msb = RK817_ID_MSB;
-> -		pmic_id_lsb = RK817_ID_LSB;
-> -	} else {
-> -		pmic_id_msb = RK808_ID_MSB;
-> -		pmic_id_lsb = RK808_ID_LSB;
-> -	}
-> -
-> -	/* Read chip variant */
-> -	msb = i2c_smbus_read_byte_data(client, pmic_id_msb);
-> -	if (msb < 0)
-> -		return dev_err_probe(&client->dev, msb, "failed to read the chip id MSB\n");
-> -
-> -	lsb = i2c_smbus_read_byte_data(client, pmic_id_lsb);
-> -	if (lsb < 0)
-> -		return dev_err_probe(&client->dev, lsb, "failed to read the chip id LSB\n");
-> -
-> -	rk808->variant = ((msb << 8) | lsb) & RK8XX_ID_MSK;
-> -	dev_info(&client->dev, "chip id: 0x%x\n", (unsigned int)rk808->variant);
-> +	rk808->dev = dev;
-> +	rk808->variant = variant;
-> +	rk808->regmap = regmap;
-> +	dev_set_drvdata(dev, rk808);
->  
->  	switch (rk808->variant) {
->  	case RK805_ID:
-> -		rk808->regmap_cfg = &rk805_regmap_config;
->  		rk808->regmap_irq_chip = &rk805_irq_chip;
->  		pre_init_reg = rk805_pre_init_reg;
->  		nr_pre_init_regs = ARRAY_SIZE(rk805_pre_init_reg);
-> @@ -670,7 +556,6 @@ static int rk808_probe(struct i2c_client *client,
->  		nr_cells = ARRAY_SIZE(rk805s);
->  		break;
->  	case RK808_ID:
-> -		rk808->regmap_cfg = &rk808_regmap_config;
->  		rk808->regmap_irq_chip = &rk808_irq_chip;
->  		pre_init_reg = rk808_pre_init_reg;
->  		nr_pre_init_regs = ARRAY_SIZE(rk808_pre_init_reg);
-> @@ -678,7 +563,6 @@ static int rk808_probe(struct i2c_client *client,
->  		nr_cells = ARRAY_SIZE(rk808s);
->  		break;
->  	case RK818_ID:
-> -		rk808->regmap_cfg = &rk818_regmap_config;
->  		rk808->regmap_irq_chip = &rk818_irq_chip;
->  		pre_init_reg = rk818_pre_init_reg;
->  		nr_pre_init_regs = ARRAY_SIZE(rk818_pre_init_reg);
-> @@ -687,7 +571,6 @@ static int rk808_probe(struct i2c_client *client,
->  		break;
->  	case RK809_ID:
->  	case RK817_ID:
-> -		rk808->regmap_cfg = &rk817_regmap_config;
->  		rk808->regmap_irq_chip = &rk817_irq_chip;
->  		pre_init_reg = rk817_pre_init_reg;
->  		nr_pre_init_regs = ARRAY_SIZE(rk817_pre_init_reg);
-> @@ -695,27 +578,20 @@ static int rk808_probe(struct i2c_client *client,
->  		nr_cells = ARRAY_SIZE(rk817s);
->  		break;
->  	default:
-> -		dev_err(&client->dev, "Unsupported RK8XX ID %lu\n",
-> -			rk808->variant);
-> +		dev_err(dev, "Unsupported RK8XX ID %lu\n", rk808->variant);
->  		return -EINVAL;
->  	}
->  
-> -	rk808->dev = &client->dev;
-> -	i2c_set_clientdata(client, rk808);
-> +	dev_info(dev, "chip id: 0x%x\n", (unsigned int)rk808->variant);
->  
-> -	rk808->regmap = devm_regmap_init_i2c(client, rk808->regmap_cfg);
-> -	if (IS_ERR(rk808->regmap))
-> -		return dev_err_probe(&client->dev, PTR_ERR(rk808->regmap),
-> -				     "regmap initialization failed\n");
-> +	if (!irq)
-> +		return dev_err_probe(dev, -EINVAL, "No interrupt support, no core IRQ\n");
->  
-> -	if (!client->irq)
-> -		return dev_err_probe(&client->dev, -EINVAL, "No interrupt support, no core IRQ\n");
-> -
-> -	ret = devm_regmap_add_irq_chip(&client->dev, rk808->regmap, client->irq,
-> +	ret = devm_regmap_add_irq_chip(dev, rk808->regmap, irq,
->  				       IRQF_ONESHOT, -1,
->  				       rk808->regmap_irq_chip, &rk808->irq_data);
->  	if (ret)
-> -		return dev_err_probe(&client->dev, ret, "Failed to add irq_chip\n");
-> +		return dev_err_probe(dev, ret, "Failed to add irq_chip\n");
->  
->  	for (i = 0; i < nr_pre_init_regs; i++) {
->  		ret = regmap_update_bits(rk808->regmap,
-> @@ -723,45 +599,46 @@ static int rk808_probe(struct i2c_client *client,
->  					pre_init_reg[i].mask,
->  					pre_init_reg[i].value);
->  		if (ret)
-> -			return dev_err_probe(&client->dev, ret, "0x%x write err\n",
-> +			return dev_err_probe(dev, ret, "0x%x write err\n",
->  					     pre_init_reg[i].addr);
->  	}
->  
-> -	ret = devm_mfd_add_devices(&client->dev, PLATFORM_DEVID_NONE,
-> +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE,
->  			      cells, nr_cells, NULL, 0,
->  			      regmap_irq_get_domain(rk808->irq_data));
->  	if (ret)
-> -		return dev_err_probe(&client->dev, ret, "failed to add MFD devices\n");
-> +		return dev_err_probe(dev, ret, "failed to add MFD devices\n");
->  
-> -	if (of_property_read_bool(np, "rockchip,system-power-controller")) {
-> -		ret = devm_register_sys_off_handler(&client->dev,
-> +	if (device_property_read_bool(dev, "rockchip,system-power-controller")) {
-> +		ret = devm_register_sys_off_handler(dev,
->  				    SYS_OFF_MODE_POWER_OFF_PREPARE, SYS_OFF_PRIO_HIGH,
->  				    &rk808_power_off, rk808);
->  		if (ret)
-> -			return dev_err_probe(&client->dev, ret,
-> +			return dev_err_probe(dev, ret,
->  					     "failed to register poweroff handler\n");
->  
->  		switch (rk808->variant) {
->  		case RK809_ID:
->  		case RK817_ID:
-> -			ret = devm_register_sys_off_handler(&client->dev,
-> +			ret = devm_register_sys_off_handler(dev,
->  							    SYS_OFF_MODE_RESTART, SYS_OFF_PRIO_HIGH,
->  							    &rk808_restart, rk808);
->  			if (ret)
-> -				dev_warn(&client->dev, "failed to register rst handler, %d\n", ret);
-> +				dev_warn(dev, "failed to register rst handler, %d\n", ret);
->  			break;
->  		default:
-> -			dev_dbg(&client->dev, "pmic controlled board reset not supported\n");
-> +			dev_dbg(dev, "pmic controlled board reset not supported\n");
->  			break;
->  		}
->  	}
->  
->  	return 0;
->  }
-> +EXPORT_SYMBOL_GPL(rk8xx_probe);
->  
-> -static int __maybe_unused rk8xx_suspend(struct device *dev)
-> +int rk8xx_suspend(struct device *dev)
->  {
-> -	struct rk808 *rk808 = i2c_get_clientdata(to_i2c_client(dev));
-> +	struct rk808 *rk808 = dev_get_drvdata(dev);
->  	int ret = 0;
->  
->  	switch (rk808->variant) {
-> @@ -784,10 +661,11 @@ static int __maybe_unused rk8xx_suspend(struct device *dev)
->  
->  	return ret;
->  }
-> +EXPORT_SYMBOL_GPL(rk8xx_suspend);
->  
-> -static int __maybe_unused rk8xx_resume(struct device *dev)
-> +int rk8xx_resume(struct device *dev)
->  {
-> -	struct rk808 *rk808 = i2c_get_clientdata(to_i2c_client(dev));
-> +	struct rk808 *rk808 = dev_get_drvdata(dev);
->  	int ret = 0;
->  
->  	switch (rk808->variant) {
-> @@ -804,22 +682,10 @@ static int __maybe_unused rk8xx_resume(struct device *dev)
->  
->  	return ret;
->  }
-> -static SIMPLE_DEV_PM_OPS(rk8xx_pm_ops, rk8xx_suspend, rk8xx_resume);
-> -
-> -static struct i2c_driver rk808_i2c_driver = {
-> -	.driver = {
-> -		.name = "rk808",
-> -		.of_match_table = rk808_of_match,
-> -		.pm = &rk8xx_pm_ops,
-> -	},
-> -	.probe    = rk808_probe,
-> -	.shutdown = rk8xx_shutdown,
-> -};
-> -
-> -module_i2c_driver(rk808_i2c_driver);
-> +EXPORT_SYMBOL_GPL(rk8xx_resume);
->  
->  MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("Chris Zhong <zyw@rock-chips.com>");
->  MODULE_AUTHOR("Zhang Qing <zhangqing@rock-chips.com>");
->  MODULE_AUTHOR("Wadim Egorov <w.egorov@phytec.de>");
-> -MODULE_DESCRIPTION("RK808/RK818 PMIC driver");
-> +MODULE_DESCRIPTION("RK8xx PMIC core");
-> diff --git a/drivers/mfd/rk8xx-i2c.c b/drivers/mfd/rk8xx-i2c.c
-> new file mode 100644
-> index 000000000000..325d0e519325
-> --- /dev/null
-> +++ b/drivers/mfd/rk8xx-i2c.c
-> @@ -0,0 +1,203 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * MFD i2c driver for Rockchip RK808/RK818
+> The smartphones below are using the MSM8916 SoC,
+> which are released in 2015-2016:
 
-Please drop the "MFD" here, so:
+Thanks for the changes. Do not attach further versions to some other
+threads, because it messes up with our inboxes. Each patchset is a
+separate thread.
 
-  Rockchip RK808/RK818 Core (I2C) driver
-  
-> + * Copyright (c) 2014, Fuzhou Rockchip Electronics Co., Ltd
-> + *
-> + * Author: Chris Zhong <zyw@rock-chips.com>
-> + * Author: Zhang Qing <zhangqing@rock-chips.com>
-> + *
-> + * Copyright (C) 2016 PHYTEC Messtechnik GmbH
-> + *
-> + * Author: Wadim Egorov <w.egorov@phytec.de>
-> + */
+Best regards,
+Krzysztof
 
-This is a new file, right?  So this might need updating.
-
-> +#include <linux/i2c.h>
-> +#include <linux/mfd/rk808.h>
-
-You're missing includes here.
-
-> +static bool rk808_is_volatile_reg(struct device *dev, unsigned int reg)
-
-#include <linux/device.h>
-
-> +{
-> +	/*
-> +	 * Notes:
-> +	 * - Technically the ROUND_30s bit makes RTC_CTRL_REG volatile, but
-> +	 *   we don't use that feature.  It's better to cache.
-> +	 * - It's unlikely we care that RK808_DEVCTRL_REG is volatile since
-> +	 *   bits are cleared in case when we shutoff anyway, but better safe.
-> +	 */
-> +
-> +	switch (reg) {
-> +	case RK808_SECONDS_REG ... RK808_WEEKS_REG:
-> +	case RK808_RTC_STATUS_REG:
-> +	case RK808_VB_MON_REG:
-> +	case RK808_THERMAL_REG:
-> +	case RK808_DCDC_UV_STS_REG:
-> +	case RK808_LDO_UV_STS_REG:
-> +	case RK808_DCDC_PG_REG:
-> +	case RK808_LDO_PG_REG:
-> +	case RK808_DEVCTRL_REG:
-> +	case RK808_INT_STS_REG1:
-> +	case RK808_INT_STS_REG2:
-> +		return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +static bool rk817_is_volatile_reg(struct device *dev, unsigned int reg)
-> +{
-> +	/*
-> +	 * Notes:
-> +	 * - Technically the ROUND_30s bit makes RTC_CTRL_REG volatile, but
-> +	 *   we don't use that feature.  It's better to cache.
-> +	 */
-> +
-> +	switch (reg) {
-> +	case RK817_SECONDS_REG ... RK817_WEEKS_REG:
-> +	case RK817_RTC_STATUS_REG:
-> +	case RK817_CODEC_DTOP_LPT_SRST:
-> +	case RK817_INT_STS_REG0:
-> +	case RK817_INT_STS_REG1:
-> +	case RK817_INT_STS_REG2:
-> +	case RK817_SYS_STS:
-> +		return true;
-> +	}
-> +
-> +	return true;
-> +}
-> +
-> +static const struct regmap_config rk818_regmap_config = {
-
-#include <linux/regmap.h> etc - please look for others.
-
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.max_register = RK818_USB_CTRL_REG,
-> +	.cache_type = REGCACHE_RBTREE,
-> +	.volatile_reg = rk808_is_volatile_reg,
-> +};
-> +
-> +static const struct regmap_config rk805_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.max_register = RK805_OFF_SOURCE_REG,
-> +	.cache_type = REGCACHE_RBTREE,
-> +	.volatile_reg = rk808_is_volatile_reg,
-> +};
-> +
-> +static const struct regmap_config rk808_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.max_register = RK808_IO_POL_REG,
-> +	.cache_type = REGCACHE_RBTREE,
-> +	.volatile_reg = rk808_is_volatile_reg,
-> +};
-> +
-> +static const struct regmap_config rk817_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.max_register = RK817_GPIO_INT_CFG,
-> +	.cache_type = REGCACHE_NONE,
-> +	.volatile_reg = rk817_is_volatile_reg,
-> +};
-> +
-> +static int rk8xx_i2c_get_variant(struct i2c_client *client)
-> +{
-> +	u8 pmic_id_msb, pmic_id_lsb;
-> +	int msb, lsb;
-> +
-> +	if (of_device_is_compatible(client->dev.of_node, "rockchip,rk817") ||
-> +	    of_device_is_compatible(client->dev.of_node, "rockchip,rk809")) {
-> +		pmic_id_msb = RK817_ID_MSB;
-> +		pmic_id_lsb = RK817_ID_LSB;
-> +	} else {
-> +		pmic_id_msb = RK808_ID_MSB;
-> +		pmic_id_lsb = RK808_ID_LSB;
-> +	}
-> +
-> +	/* Read chip variant */
-> +	msb = i2c_smbus_read_byte_data(client, pmic_id_msb);
-> +	if (msb < 0)
-> +		return dev_err_probe(&client->dev, msb, "failed to read the chip id MSB\n");
-> +
-> +	lsb = i2c_smbus_read_byte_data(client, pmic_id_lsb);
-> +	if (lsb < 0)
-> +		return dev_err_probe(&client->dev, lsb, "failed to read the chip id LSB\n");
-> +
-> +	return ((msb << 8) | lsb) & RK8XX_ID_MSK;
-> +}
-> +
-> +static int rk8xx_i2c_probe(struct i2c_client *client)
-> +{
-> +	const struct regmap_config *regmap_cfg;
-> +	struct regmap *regmap;
-> +	int variant;
-> +
-> +	variant = rk8xx_i2c_get_variant(client);
-> +	if (variant < 0)
-> +		return variant;
-> +
-> +	switch (variant) {
-> +	case RK805_ID:
-> +		regmap_cfg = &rk805_regmap_config;
-> +		break;
-> +	case RK808_ID:
-> +		regmap_cfg = &rk808_regmap_config;
-> +		break;
-> +	case RK818_ID:
-> +		regmap_cfg = &rk818_regmap_config;
-> +		break;
-> +	case RK809_ID:
-> +	case RK817_ID:
-> +		regmap_cfg = &rk817_regmap_config;
-> +		break;
-> +	default:
-> +		return dev_err_probe(&client->dev, -EINVAL, "Unsupported RK8XX ID %x\n", variant);
-> +	}
-> +
-> +	regmap = devm_regmap_init_i2c(client, regmap_cfg);
-> +	if (IS_ERR(regmap))
-> +		return dev_err_probe(&client->dev, PTR_ERR(regmap),
-> +				     "regmap initialization failed\n");
-> +
-> +	return rk8xx_probe(&client->dev, variant, client->irq, regmap);
-> +}
-> +
-> +static void rk8xx_i2c_shutdown(struct i2c_client *client)
-> +{
-> +	rk8xx_shutdown(&client->dev);
-> +}
-> +
-> +static int __maybe_unused rk8xx_i2c_suspend(struct device *dev)
-> +{
-> +	return rk8xx_suspend(dev);
-> +}
-> +
-> +static int __maybe_unused rk8xx_i2c_resume(struct device *dev)
-> +{
-> +	return rk8xx_resume(dev);
-> +}
-> +static SIMPLE_DEV_PM_OPS(rk8xx_i2c_pm_ops, rk8xx_i2c_suspend, rk8xx_i2c_resume);
-> +
-> +static const struct of_device_id rk8xx_i2c_of_match[] = {
-> +	{ .compatible = "rockchip,rk805" },
-> +	{ .compatible = "rockchip,rk808" },
-> +	{ .compatible = "rockchip,rk809" },
-> +	{ .compatible = "rockchip,rk817" },
-> +	{ .compatible = "rockchip,rk818" },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, rk8xx_i2c_of_match);
-> +
-> +static struct i2c_driver rk8xx_i2c_driver = {
-> +	.driver = {
-> +		.name = "rk8xx-i2c",
-> +		.of_match_table = rk8xx_i2c_of_match,
-> +		.pm = &rk8xx_i2c_pm_ops,
-> +	},
-> +	.probe_new = rk8xx_i2c_probe,
-> +	.shutdown  = rk8xx_i2c_shutdown,
-> +};
-> +module_i2c_driver(rk8xx_i2c_driver);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Chris Zhong <zyw@rock-chips.com>");
-> +MODULE_AUTHOR("Zhang Qing <zhangqing@rock-chips.com>");
-> +MODULE_AUTHOR("Wadim Egorov <w.egorov@phytec.de>");
-
-Not mentioned in the header?
-
-> +MODULE_DESCRIPTION("RK8xx I2C PMIC driver");
-> diff --git a/include/linux/mfd/rk808.h b/include/linux/mfd/rk808.h
-> index 9937b068fa82..c5ddfb0e5353 100644
-> --- a/include/linux/mfd/rk808.h
-> +++ b/include/linux/mfd/rk808.h
-> @@ -703,4 +703,10 @@ struct rk808 {
->  	const struct regmap_config	*regmap_cfg;
->  	const struct regmap_irq_chip	*regmap_irq_chip;
->  };
-> +
-> +void rk8xx_shutdown(struct device *dev);
-> +int rk8xx_probe(struct device *dev, int variant, unsigned int irq, struct regmap *regmap);
-> +int rk8xx_suspend(struct device *dev);
-> +int rk8xx_resume(struct device *dev);
-> +
->  #endif /* __LINUX_REGULATOR_RK808_H */
-
--- 
-Lee Jones [李琼斯]
