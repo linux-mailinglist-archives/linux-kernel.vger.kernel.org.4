@@ -2,116 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F085EDBAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A555EDBAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 13:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233662AbiI1LXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 07:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
+        id S233699AbiI1LXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 07:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233625AbiI1LXm (ORCPT
+        with ESMTP id S229951AbiI1LXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 07:23:42 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772D3DCEA6;
-        Wed, 28 Sep 2022 04:23:40 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id D110EC022; Wed, 28 Sep 2022 13:23:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1664364217; bh=R+tt35RwTcDp8NVFqyIj6r8e594PICPVfST0BDBn7xk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tjAURJkUG3o+n3RG+G2zkCPBfuw65v9S0a7AySU6xqJmFpCWu2vhro9Jpjx9b2urX
-         lvZBUko6OF1huj7hLxqAM5OqqgyQwx1SrjNXatZfsqiPlYiL1BQUho608ft8BevLJY
-         HJ7RTBA2T565CJU5ihWEOK5uV4XB9SjxmQjTRLtJTCnT8A6nNIDyZwvjgKRzOoEO74
-         qU9ynhEl2KZ49SM3hPrYocxX3dCKEIyaMgX3vx6WD984t/ECs5/4bR9TdfAOSKARdc
-         vrBpjJyv0m+dAcSonnZ9LMit8CCERuMvmWlTBnhfDSa6GVILNyN+S7F1eKw2wSq/mZ
-         pQKF97Jmu5A2Q==
+        Wed, 28 Sep 2022 07:23:47 -0400
+Received: from mail-m118205.qiye.163.com (mail-m118205.qiye.163.com [115.236.118.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E31EDDCEBC
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 04:23:44 -0700 (PDT)
+Received: from lyc-workstation.. (unknown [221.212.176.62])
+        by mail-m118205.qiye.163.com (HMail) with ESMTPA id 342F32C0D19;
+        Wed, 28 Sep 2022 19:23:42 +0800 (CST)
+From:   YingChi Long <me@inclyc.cn>
+To:     david.laight@aculab.com
+Cc:     bp@alien8.de, chang.seok.bae@intel.com,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, me@inclyc.cn, mingo@redhat.com,
+        ndesaulniers@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+        x86@kernel.org
+Subject: RE: [PATCH v2] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
+Date:   Wed, 28 Sep 2022 19:23:41 +0800
+Message-Id: <20220928112341.2255320-1-me@inclyc.cn>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <fc12d0d4c1064832955543217d0dbe4a@AcuMS.aculab.com>
+References: <fc12d0d4c1064832955543217d0dbe4a@AcuMS.aculab.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFPN1dZLVlBSVdZDwkaFQgSH1lBWUIaSkhWHRhMTkNDGU1KHUNLVQIWExYaEhckFA4PWV
+        dZGBILWUFZSUlKVUlKSVVKTE1VTUlZV1kWGg8SFR0UWUFZT0tIVUpKS0hNSlVKS0tVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OhQ6Hgw6NjlNIzYUDAEBFw9D
+        MBkwCg5VSlVKTU1PSE1PSUlISUpPVTMWGhIXVRYeOxIVGBcCGFUYFUVZV1kSC1lBWUlJSlVJSklV
+        SkxNVU1JWVdZCAFZQUhCQks3Bg++
+X-HM-Tid: 0a8383d6992c2d27kusn342f32c0d19
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id F011DC009;
-        Wed, 28 Sep 2022 13:23:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1664364216; bh=R+tt35RwTcDp8NVFqyIj6r8e594PICPVfST0BDBn7xk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EKIEJoDTJ7Yc9jBpEtFLr2sp/gEB8RrIEQoj8Lu7A8jxb4E9DzbWsBvtcaFP0UCo9
-         y13FjvUHpuzgm1XG9JZmoCene6H6DMzMntMQEUgzT3XWBY+fF2unGl/mciRmc6a+9r
-         Exqk4x/OnmD1aAGxYBEGqoBItPVkSvABteTh1c+2FCAKDw4jr3gq5GwCLeMlDt/0VO
-         jKkkBToQ1UGz9xVg4EPZnnkFpvitZYmkpNQtu9GsOlb8jAZG4D0KkfDIaxSiXKo0vW
-         P0ftQJe6r6qocm5Qhz4DQf4iu6wBtSMvlaE18HVVdb4Cuhh5bUj+ylVhrayIMu8tvq
-         YagPFpHIVaKkA==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id d4a4fd30;
-        Wed, 28 Sep 2022 11:23:29 +0000 (UTC)
-Date:   Wed, 28 Sep 2022 20:23:14 +0900
-From:   asmadeus@codewreck.org
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     syzbot <syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com>,
-        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net
-Subject: Re: [syzbot] KASAN: use-after-free Read in rdma_close
-Message-ID: <YzQuoqyGsooyDfId@codewreck.org>
-References: <00000000000015ac7905e97ebaed@google.com>
- <YzQc2yaDufjp+rHc@unreal>
- <YzQlWq9EOi9jpy46@codewreck.org>
- <YzQmr8LVTmUj9+zB@unreal>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YzQmr8LVTmUj9+zB@unreal>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Leon Romanovsky wrote on Wed, Sep 28, 2022 at 01:49:19PM +0300:
-> > But I agree I did get that wrong: trans_mod->close() wasn't called if
-> > create failed.
-> > We do want the idr_for_each_entry() that is in p9_client_destroy so
-> > rather than revert the commit (fix a bug, create a new one..) I'd rather
-> > split it out in an internal function that takes a 'bool close' or
-> > something to not duplicate the rest.
-> > (Bit of a nitpick, sure)
-> 
-> Please do proper unwind without extra variable.
-> 
-> Proper unwind means that you will call to symmetrical functions in
-> destroy as you used in create:
-> alloc -> free
-> create -> close
-> e.t.c
-> 
-> When you use some global function like you did, there is huge chance
-> to see unwind bugs.
+> From: YingChi Long
+> > Sent: 27 September 2022 17:44
+> >
+> > > Interesting - what justification do they give?
+> > > Linux kernel requires that the compiler add no unnecessary padding
+> > > so that structure definitions are well defined.
+> >
+> > Yes, that's a clarification given in 2019.
+> >
+> > > So using a type definition inside offsetof() won't give a
+> > > useful value - but it still isn't really UB.
+> >
+> > WG14 may worry about commas and the scope of new definitions. So they provide
+> > new words into the standard and said:
+> >
+> > > If the specified type defines a new type or if the specified member is a
+> > > bit-field, the behavior is undefined.
+> >
+> > https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
+>
+> Except that the kernel requires it to be defined.
+>
+> Did they clarify the clause that required offsetof() to return
+> a compile-time constant?
+> That stops you doing offsetof(struct x, member->array[expression]).
+> (Oh and the compiler for a common OS disallows any version of that
+> even when expression in an integer constant!)
 
-No.
+WG14 N2350 may just not require implementation offsetof() accepts any type
+definitions within the first param of (not the second), and no further changes
+about whether it is compile-time constant?
 
-Duplicating complicated cleanup code leads to leaks like we used to
-have; that destroy function already frees up things in the right order.
+https://godbolt.org/z/9GsEPnPd6
 
-And, well, frankly 9p is a mess anyway; the problem here is that
-trans_mod->create() doesn't leave any trace we can rely on in a common
-cleanup function, but the original "proper unwind" missed:
- - p9_fid_destroy/tags cleanup for anything in the cache (because, yes,
-apparently fuzzers managed to use the client before it's fully
-initialized. I don't want to know.)
- - fcall cache destory
+    #include <stdio.h>
 
-I'm not duplicating all this mess. This is the only place that can call
-destroy before trans_mod create has been called, I wish we'd have a
-pattern like "clnt->trans = clnt->trans_mod->create()" so we could just
-check if trans is null, but a destroy parameter will do.
+    struct foo {
+        int a;
+        int b[100];
+    };
 
-... Well, I guess it's not like there are out of tree trans, I could
-just change create() to do that if I had infinite time...
+    int main() {
+        int i;
+        scanf("%d", &i);
+        printf("%d\n", __builtin_offsetof(struct foo, b[i]));
+    }
 
---
-Dominique
+We consider reject type definitions within the first parameter in clang.
 
+For example
 
+    offsetof(struct { int a, b;}, a)
+
+However
+
+    struct foo {
+        int a;
+        int b[20];
+    }
+    offsetof(struct foo, b[sizeof(struct { int a, b;})])
+
+Shall be fine.
+
+> >
+> > I've provided this link in the patch.
+> >
+> > > Has that ever worked?
+> > > Given:
+> > > 	struct foo {
+> > > 		int a;
+> > > 		char b;
+> > > 		char c;
+> > > 	};
+> >
+> > TYPE_ALIGN(struct foo) evaluates to 4 in the previous approach (based on
+> > offsetof). _Align(struct foo) evaluates to the same value.
+> >
+> > See https://godbolt.org/z/sqebhEnsq
+> >
+> > > I think CHECK_MEMBER_AT_END_OF_TYPE(struct foo, b) is true.
+> >
+> > Hmm, both the previous version and after this patch the macro gives me
+> > false. (See the godbolt link).
+>
+> See https://godbolt.org/z/95shMx44j
+>
+> It return 1 for a and 0 for b and c (and char d,e following b).
+> NFI what it is trying to do!
+
+Switch _Alignof back to TYPE_ALIGN, CME seems return exactly the same values. I
+don't know what CME do here, but seems TYPE_ALIGN and _Alignof have the same
+semantics here?
+
+https://godbolt.org/z/hYcT1M3ed
