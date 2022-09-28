@@ -2,51 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435985EE317
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CDDC5EE31A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Sep 2022 19:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234589AbiI1R1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 13:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        id S234431AbiI1R1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 13:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234550AbiI1R1L (ORCPT
+        with ESMTP id S234625AbiI1R1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 13:27:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4219EEB64;
-        Wed, 28 Sep 2022 10:27:10 -0700 (PDT)
+        Wed, 28 Sep 2022 13:27:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA56E4D89;
+        Wed, 28 Sep 2022 10:27:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46EDCB82181;
-        Wed, 28 Sep 2022 17:27:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F95C433C1;
-        Wed, 28 Sep 2022 17:27:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B6B1B8216E;
+        Wed, 28 Sep 2022 17:27:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B70C433D6;
+        Wed, 28 Sep 2022 17:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664386027;
-        bh=sEaAFlLGEgpXJHzFEUP5i9M3xMjSmcc2mK9p+3UtZfU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=TLle9aOTJxrdCiCqpEW7yXpGm160UG+b2YIyLicLAXcoZ77hFvlka3sLMUH7yCnHh
-         P70SOCzmt5UgGyH+DcAn0ubTLo2/MSHyp0Vcphfj3tJIgXY8UHJiZEPL7x0QXDBXEw
-         lppqCH6KUQ+zlWuUH1It40qgzpDZdr0tJMAnRvCuRXMWvhhd8u5vcicjHihlJfo8Hj
-         XjA4y3QNfsM1nWyJO8WWsrdTjIiQ3unf+m/n5BWqDpxXsWvDMnHSl3OH4LUnNIQQWy
-         40XgRcjrKCdEfCcONjrfTbTPXFYlQg+KqgFPZ1PbuT4hjwNT9jJo2JhWejvPh4zT5V
-         EgM+xcTX1TVFw==
+        s=k20201202; t=1664386039;
+        bh=GH1UskgjZIUPQJb+x9CDmOVXsZCej5rWpjjvE5I/zpw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AAu5P64TFUrxKs3oC0J1oqmHOxwrUwzSAZ69obhwH9w2crmKuKqukX4gmzItsVpVl
+         gQYZf/VK7IT4SwAWcqa7UtrnOhgUbL8cVJG40t0o0EFjoqPi1u1HjFwfO9PiaEFKL5
+         vQguSJBRPOuW4d9P3JJKfPiP544zil80jqw9mUGmYE4lgc/+xquFIcnY4mRjFWMXkj
+         xjMJK0DQ4bBmta8zAzYYZe4OK2fqpUwUxcslwemiQpWdLOPiDTRR12OnbMxFdP68h0
+         nMtWEyl+tQ93sua2+M3CgyVAGNzoC1Gd/Eeuah8bgwxsVTuV809kC0bzB0K9iezokH
+         TGFElxsq77pdg==
+Date:   Wed, 28 Sep 2022 18:27:13 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     andi@etezian.org, krzysztof.kozlowski@linaro.org,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     alim.akhtar@samsung.com, linux-samsung-soc@vger.kernel.org,
-        linux-spi@vger.kernel.org, kernel@axis.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220927112117.77599-1-vincent.whitchurch@axis.com>
-References: <20220927112117.77599-1-vincent.whitchurch@axis.com>
-Subject: Re: [PATCH v2 0/4] spi: Fix DMA bugs in (not only) spi-s3c64xx
-Message-Id: <166438602538.235891.3502300542597147263.b4-ty@kernel.org>
-Date:   Wed, 28 Sep 2022 18:27:05 +0100
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Chunyan Zhang <zhang.lyra@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        LKML <linux-kernel@vger.kernel.org>, Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v2 2/2] dt-bindings: regulator: Add bindings for Unisoc's
+ SC2730 regulator
+Message-ID: <YzSD8cQrFpIWunls@sirena.org.uk>
+References: <20211008031953.339461-1-zhang.lyra@gmail.com>
+ <20211008031953.339461-3-zhang.lyra@gmail.com>
+ <YY5wPh0rwRvFjSRG@sirena.org.uk>
+ <CAAfSe-uA3iowafC25zRqoTSaub1PbOzUvQgukLm=szEge_abvw@mail.gmail.com>
+ <Yyw2nAAjN6NxmS09@google.com>
+ <YyxKSjMPlGPfegpJ@sirena.org.uk>
+ <YzFNvByGG7ADWfmd@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="a+ETSZRf0TrB1BfO"
+Content-Disposition: inline
+In-Reply-To: <YzFNvByGG7ADWfmd@google.com>
+X-Cookie: You look tired.
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,49 +67,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Sep 2022 13:21:13 +0200, Vincent Whitchurch wrote:
-> v2:
-> - Drop merged patch adding new test to spi-loopback-test
-> - Fix compiler warning in !HAS_DMA builds
-> - Add support to split transfers to core
-> 
-> This series fixes some bugs I found while running spi-loopback-test with
-> spi-s3c64xx.  The first problem (which I actually noticed while trying to fix
-> the second problem with transfers >64KiB) seems to be a generic issue which
-> affects several drivers so I fixed it in the core.
-> 
-> [...]
 
-Applied to
+--a+ETSZRf0TrB1BfO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Mon, Sep 26, 2022 at 07:59:08AM +0100, Lee Jones wrote:
+> On Thu, 22 Sep 2022, Mark Brown wrote:
 
-Thanks!
+> > If people want to describe the individual regulators that'd be
+> > less of an issue, it's mainly when you're nesting what's
+> > effectively another MFD within a parent MFD that it's just noise
+> > that's being added to the DT.
 
-[1/4] spi: Save current RX and TX DMA devices
-      commit: f25723dcef4a38f6a39e17afeabd1adf6402230e
-[2/4] spi: Fix cache corruption due to DMA/PIO overlap
-      commit: 0c17ba73c08ff2690c1eff8df374b6709eed55ce
-[3/4] spi: Split transfers larger than max size
-      commit: 8d699ff95534747e394e0830399b8d5dcf03e738
-[4/4] spi: s3c64xx: Fix large transfers with DMA
-      commit: 1224e29572f655facfcd850cf0f0a4784f36a903
+> As I say, I haven't studied this use-case.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+> These comments were designed to be more generic.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> What do you mean by nested MFDs?
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Given that individual regulators tend to be separate physical IPs in the
+chip if you create a single device tree node that lumps them together
+you still need to also represent the individual regulators as well so
+that collection is functioning like a MFD does except not on a chip
+boundary.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+> > > Can you imagine describing an SoC, which can be considered as a huge
+> > > MFD, with only a single node?
 
-Thanks,
-Mark
+> > Honestly we should be arranging things so they're more like that,
+> > at least using overlays for the internals of the SoC so you don't
+> > have to rebuild the whole DT for updates to the SoC internals.
+
+> Right, there would be one device root node.  However each function;
+> clock providers, regulator controllers, PWMs, GPIOs, networking
+> (various), reset, watchdog, etc would have their own nodes.  Rather
+> than attempting to describe everything in the parent's node.
+
+We don't split things up by function, we split them up by IP - we don't
+just allocate a compatible for all the networking related functionality
+simply because there's a networking subsystem in Linux for example.
+
+--a+ETSZRf0TrB1BfO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmM0g/AACgkQJNaLcl1U
+h9CUCAf/Q6E+WKiJ2KGknP5+06b4wxdfhbz+BpVH7gWrCq9iry5COPHP2d/vtR0D
+PywhTxxFTjxjL9AHcyxMpkrT7Vp2bHkQD1gdsRehHDgNbTAFMR0G2D8VU3MpxKPO
+d79P2y8PGARmVuITXGEOMpentnHb+tWYOzNCGKfpjzG8MWsukT0qVYPu9KKpI1d9
+2AwAmGy8axUtSUA5atMYN37HDtyB1aP5FaXPmY14MGr/QtifBpt/dNcEduZDxf50
+x1E4t6NIr2ratmhawivwudR6ModSXw4AyTYXgcsXuZvDnofhDyTEE44WrExgqbS+
+S0h8CtCK7sscoqwfNPXPcxEla76H/Q==
+=GLRW
+-----END PGP SIGNATURE-----
+
+--a+ETSZRf0TrB1BfO--
