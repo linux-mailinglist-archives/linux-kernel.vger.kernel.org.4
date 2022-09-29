@@ -2,278 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9D15EEDF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E10A5EEDF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234847AbiI2GcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 02:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
+        id S232494AbiI2Gib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 02:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234778AbiI2GcP (ORCPT
+        with ESMTP id S232396AbiI2Gi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 02:32:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4EA12EDB4;
-        Wed, 28 Sep 2022 23:32:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A582AB8236B;
-        Thu, 29 Sep 2022 06:32:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1C28C433C1;
-        Thu, 29 Sep 2022 06:32:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664433129;
-        bh=lk/VaHPokpmBPqjQo9BUUd1mCJo94gTtsAkFfra/dt8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uwaelYiY1VxWiDtBcSOidUbr+fJAOiiJ3LkOM5MFLiBe4eKqV59dOvcZ/+byoP2OO
-         TghnO33WxYfehKa9zSGeHY6wGzWXxsbnuj3FYFdkNqbCs8HkTSlGmnq3Faxm2nLcbO
-         Fi+S5+cjsrEhJmPa5V+WRKw6d4P9XJE4a50RwRu7Ee1bNk/nq9y3gAOwShmz3GF8gG
-         Hxvq1+PedDdmd4rfCQXuanR6RoUGaAAUtbnoJiD0SWmnSo9MbYvTLbRUh6hz5WrHWp
-         UVlDy6vn5uZmLJ35oijHp2OiFZ/0kYwO1GUA3B2NioJEhx2uXxo03oyWADZNfQODmn
-         1YabrMQvJatuQ==
-Date:   Thu, 29 Sep 2022 12:02:03 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        shawnguo@kernel.org, alexander.stein@ew.tq-group.com,
-        marex@denx.de, richard.leitner@linux.dev,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Subject: Re: [PATCH v9 3/4] phy: freescale: imx8m-pcie: Refine i.MX8MM PCIe
- PHY driver
-Message-ID: <YzU747XfZ049pMx0@matsya>
-References: <1664174463-13721-1-git-send-email-hongxing.zhu@nxp.com>
- <1664174463-13721-4-git-send-email-hongxing.zhu@nxp.com>
+        Thu, 29 Sep 2022 02:38:28 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8C7121E69;
+        Wed, 28 Sep 2022 23:38:26 -0700 (PDT)
+X-UUID: a250e78d179044f0a2e057bb46142653-20220929
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=qOF134f0PLct94m+3f10JMRXW8VSgq0vHf2OsyIBf+c=;
+        b=ECu8Zeq+NazqPOROjxnWogSt7v3SYjlAEXYr60Yw8qbmINuR+8/LpzSL4LzOlrgQ9G66/61gto/K4J16RMvmXJR65BYQ1WHp//6xIkpmRfVnFVn5IdMVkxBJNhNg7teeXW3St0NZpp7/7PqP4fCUONtxkW/RwnGgMv4Sz1HV6Xg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:a880aa3e-2228-4d2f-83a7-49c3e3de8606,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:45
+X-CID-INFO: VERSION:1.1.11,REQID:a880aa3e-2228-4d2f-83a7-49c3e3de8606,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:45
+X-CID-META: VersionHash:39a5ff1,CLOUDID:72a99de4-87f9-4bb0-97b6-34957dc0fbbe,B
+        ulkID:220928214318FAL666HN,BulkQuantity:277,Recheck:0,SF:38|28|17|19|48|10
+        2,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil,
+        COL:0
+X-UUID: a250e78d179044f0a2e057bb46142653-20220929
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1993800352; Thu, 29 Sep 2022 14:38:20 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 29 Sep 2022 14:38:19 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 29 Sep 2022 14:38:19 +0800
+Message-ID: <63eaf6e3bc090f22ce82e2bb860a000fad655395.camel@mediatek.com>
+Subject: Re: [PATCH 1/2] usb: mtu3: fix ep0's stall of out data stage
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Min Guo <min.guo@mediatek.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        <Stable@vger.kernel.org>
+Date:   Thu, 29 Sep 2022 14:38:18 +0800
+In-Reply-To: <6d312360-55b7-ebd5-be86-14f6943e273f@collabora.com>
+References: <20220928091721.26112-1-chunfeng.yun@mediatek.com>
+         <6d312360-55b7-ebd5-be86-14f6943e273f@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1664174463-13721-4-git-send-email-hongxing.zhu@nxp.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26-09-22, 14:41, Richard Zhu wrote:
-> To make it more flexible and easy to expand. Refine i.MX8MM PCIe PHY
-> driver.
-> - Use gpr compatible string to avoid the codes duplications when add
->   another platform PCIe PHY support.
-> - Re-orange the codes to let it more flexible and easy to expand.
-> No functions changes basicly.
+On Wed, 2022-09-28 at 15:43 +0200, AngeloGioacchino Del Regno wrote:
+> Il 28/09/22 11:17, Chunfeng Yun ha scritto:
+> > It happens when enable uvc function, the flow as below:
+> > the controller switch to data stage, then call
+> >      -> foward_to_driver() -> composite_setup() ->
+> > uvc_function_setup(),
+> > it send out an event to user layer to notify it call
+> >      -> ioctl() -> uvc_send_response() -> usb_ep_queue(),
+> > but before the user call ioctl to queue ep0's buffer, the host
+> > already send
+> > out data, but the controller find that no buffer is queued to
+> > receive data,
+> > it send out STALL handshake.
+> > 
+> > To fix the issue, don't send out ACK of setup stage to switch to
+> > out data
+> > stage until the buffer is available.
+> > 
+> > Cc: <Stable@vger.kernel.org>
+> > Reported-by: Min Guo <min.guo@mediatek.com>
+> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > ---
+> >   drivers/usb/mtu3/mtu3.h            |  4 ++++
+> >   drivers/usb/mtu3/mtu3_gadget_ep0.c | 22 +++++++++++++++++++---
+> >   2 files changed, 23 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/usb/mtu3/mtu3.h b/drivers/usb/mtu3/mtu3.h
+> > index 2d7b57e07eee..6b64ad17724d 100644
+> > --- a/drivers/usb/mtu3/mtu3.h
+> > +++ b/drivers/usb/mtu3/mtu3.h
+> > @@ -318,6 +318,9 @@ static inline struct ssusb_mtk
+> > *dev_to_ssusb(struct device *dev)
+> >    *		for GET_STATUS and SET_SEL
+> >    * @setup_buf: ep0 response buffer for GET_STATUS and SET_SEL
+> > requests
+> >    * @u3_capable: is capable of supporting USB3
+> > + * @delayed_setup: delay the setup stage to avoid STALL handshake
+> > in
+> > + *		out data stage due to the class driver doesn't queue
+> > buffer
+> > + *		before the host send out data
+> >    */
+> >   struct mtu3 {
+> >   	spinlock_t lock;
+> > @@ -360,6 +363,7 @@ struct mtu3 {
+> >   	unsigned connected:1;
+> >   	unsigned async_callbacks:1;
+> >   	unsigned separate_fifo:1;
+> > +	unsigned delayed_setup:1;
+> >   
+> >   	u8 address;
+> >   	u8 test_mode_nr;
+> > diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> > b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> > index e4fd1bb14a55..f7a71cc83e15 100644
+> > --- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> > +++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+> > @@ -162,6 +162,19 @@ static void ep0_do_status_stage(struct mtu3
+> > *mtu)
+> >   	mtu3_writel(mbase, U3D_EP0CSR, value | EP0_SETUPPKTRDY |
+> > EP0_DATAEND);
+> >   }
+> >   
+> > +/* delay sending out ACK of setup stage to wait for OUT buffer
+> > queued */
+> > +static void ep0_setup_stage_send_ack(struct mtu3 *mtu)
+> > +{
+> > +	void __iomem *mbase = mtu->mac_base;
+> > +	u32 value;
+> > +
+> > +	if (mtu->delayed_setup) {
+> > +		value = mtu3_readl(mbase, U3D_EP0CSR) & EP0_W1C_BITS;
+> > +		mtu3_writel(mbase, U3D_EP0CSR, value |
+> > EP0_SETUPPKTRDY);
+> > +		mtu->delayed_setup = 0;
+> > +	}
+> > +}
+> > +
+> >   static int ep0_queue(struct mtu3_ep *mep0, struct mtu3_request
+> > *mreq);
+> >   
+> >   static void ep0_dummy_complete(struct usb_ep *ep, struct
+> > usb_request *req)
+> > @@ -628,8 +641,9 @@ static void ep0_read_setup(struct mtu3 *mtu,
+> > struct usb_ctrlrequest *setup)
+> >   			csr | EP0_SETUPPKTRDY | EP0_DPHTX);
+> >   		mtu->ep0_state = MU3D_EP0_STATE_TX;
+> >   	} else {
+> > -		mtu3_writel(mtu->mac_base, U3D_EP0CSR,
+> > -			(csr | EP0_SETUPPKTRDY) & (~EP0_DPHTX));
+> > +		mtu3_writel(mtu->mac_base, U3D_EP0CSR, csr &
+> > ~EP0_DPHTX);
+> > +		/* send ACK when the buffer is queued */
+> > +		mtu->delayed_setup = 1;
 > 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> Tested-by: Marek Vasut <marex@denx.de>
-> Tested-by: Richard Leitner <richard.leitner@skidata.com>
-> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
-> ---
->  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 108 +++++++++++++--------
->  1 file changed, 68 insertions(+), 40 deletions(-)
+> I don't think that you need this variable: you're calling the
+> function
+> ep0_setup_stage_send_ack() only when ep0_state == MU3D_EP0_STATE_RX
+> in
+> ep0_queue()...
 > 
-> diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> index 2377ed307b53..9752818fe990 100644
-> --- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> +++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> @@ -11,6 +11,7 @@
->  #include <linux/mfd/syscon.h>
->  #include <linux/mfd/syscon/imx7-iomuxc-gpr.h>
->  #include <linux/module.h>
-> +#include <linux/of_device.h>
->  #include <linux/phy/phy.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> @@ -45,6 +46,15 @@
->  #define IMX8MM_GPR_PCIE_SSC_EN		BIT(16)
->  #define IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE	BIT(9)
->  
-> +enum imx8_pcie_phy_type {
-> +	IMX8MM,
-> +};
-> +
-> +struct imx8_pcie_phy_drvdata {
-> +	enum		imx8_pcie_phy_type variant;
-> +	const char	*gpr;
-> +};
-> +
->  struct imx8_pcie_phy {
->  	void __iomem		*base;
->  	struct clk		*clk;
-> @@ -55,6 +65,7 @@ struct imx8_pcie_phy {
->  	u32			tx_deemph_gen1;
->  	u32			tx_deemph_gen2;
->  	bool			clkreq_unused;
-> +	const struct imx8_pcie_phy_drvdata	*drvdata;
->  };
->  
->  static int imx8_pcie_phy_init(struct phy *phy)
-> @@ -66,31 +77,17 @@ static int imx8_pcie_phy_init(struct phy *phy)
->  	reset_control_assert(imx8_phy->reset);
->  
->  	pad_mode = imx8_phy->refclk_pad_mode;
-> -	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
-> -			   imx8_phy->clkreq_unused ?
-> -			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_AUX_EN,
-> -			   IMX8MM_GPR_PCIE_AUX_EN);
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_SSC_EN, 0);
-> -
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
-> -			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
-> -			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
-> -			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
-> -	usleep_range(100, 200);
-> -
-> -	/* Do the PHY common block reset */
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_CMN_RST,
-> -			   IMX8MM_GPR_PCIE_CMN_RST);
-> -	usleep_range(200, 500);
-> +	switch (imx8_phy->drvdata->variant) {
-> +	case IMX8MM:
-> +		/* Tune PHY de-emphasis setting to pass PCIe compliance. */
-> +		if (imx8_phy->tx_deemph_gen1)
-> +			writel(imx8_phy->tx_deemph_gen1,
-> +			       imx8_phy->base + PCIE_PHY_TRSV_REG5);
-> +		if (imx8_phy->tx_deemph_gen2)
-> +			writel(imx8_phy->tx_deemph_gen2,
-> +			       imx8_phy->base + PCIE_PHY_TRSV_REG6);
-> +		break;
-> +	}
->  
->  	if (pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ||
->  	    pad_mode == IMX8_PCIE_REFCLK_PAD_UNUSED) {
-> @@ -118,15 +115,37 @@ static int imx8_pcie_phy_init(struct phy *phy)
->  		       imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG065);
->  	}
->  
-> -	/* Tune PHY de-emphasis setting to pass PCIe compliance. */
-> -	if (imx8_phy->tx_deemph_gen1)
-> -		writel(imx8_phy->tx_deemph_gen1,
-> -		       imx8_phy->base + PCIE_PHY_TRSV_REG5);
-> -	if (imx8_phy->tx_deemph_gen2)
-> -		writel(imx8_phy->tx_deemph_gen2,
-> -		       imx8_phy->base + PCIE_PHY_TRSV_REG6);
-> +	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
-> +			   imx8_phy->clkreq_unused ?
-> +			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_AUX_EN,
-> +			   IMX8MM_GPR_PCIE_AUX_EN);
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_SSC_EN, 0);
->  
-> -	reset_control_deassert(imx8_phy->reset);
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
-> +			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
-> +			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
-> +			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
-> +	usleep_range(100, 200);
-> +
-> +	/* Do the PHY common block reset */
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_CMN_RST,
-> +			   IMX8MM_GPR_PCIE_CMN_RST);
-> +
-> +	switch (imx8_phy->drvdata->variant) {
-> +	case IMX8MM:
-> +		reset_control_deassert(imx8_phy->reset);
-> +		usleep_range(200, 500);
-> +		break;
-> +	}
->  
->  	/* Polling to check the phy is ready or not. */
->  	ret = readl_poll_timeout(imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG075,
-> @@ -157,6 +176,19 @@ static const struct phy_ops imx8_pcie_phy_ops = {
->  	.owner		= THIS_MODULE,
->  };
->  
-> +static const struct imx8_pcie_phy_drvdata drvdata[] = {
-> +	[IMX8MM] = {
-> +		.variant = IMX8MM,
-> +		.gpr = "fsl,imx8mm-iomuxc-gpr",
-> +	},
-> +};
+> ..so you'll never get a call to ep0_setup_stage_send_ack() with
+> delayed_setup == 0!
+I'll abandon this patch, and try to use delayed_status as suggested by
+Alan, thanks a lot
 
-Pls drop the array...
+> 
+> Regards,
+> Angelo
+> 
+> >   		mtu->ep0_state = MU3D_EP0_STATE_RX;
+> >   	}
+> >   }
+> > @@ -804,9 +818,11 @@ static int ep0_queue(struct mtu3_ep *mep,
+> > struct mtu3_request *mreq)
+> >   
+> >   	switch (mtu->ep0_state) {
+> >   	case MU3D_EP0_STATE_SETUP:
+> > -	case MU3D_EP0_STATE_RX:	/* control-OUT data */
+> >   	case MU3D_EP0_STATE_TX:	/* control-IN data */
+> >   		break;
+> > +	case MU3D_EP0_STATE_RX:	/* control-OUT data */
+> > +		ep0_setup_stage_send_ack(mtu);
+> > +		break;
+> >   	default:
+> >   		dev_err(mtu->dev, "%s, error in ep0 state %s\n",
+> > __func__,
+> >   			decode_ep0_state(mtu));
+> 
+> 
+> 
 
-static const struct imx8_pcie_phy_drvdata imx8mm_drvdata = {
-        .variant = IMX8MM,
-        .gpr = "fsl,imx8mm-iomuxc-gpr",
-};
-
-
-
-> +
-> +static const struct of_device_id imx8_pcie_phy_of_match[] = {
-> +	{.compatible = "fsl,imx8mm-pcie-phy", .data = &drvdata[IMX8MM], },
-
-So this becomes:
-
-        {.compatible = "fsl,imx8mm-pcie-phy", .data = &imx8mm_drvdata },
-
-you can define new structs for newer SoCs
-
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
-> +
->  static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  {
->  	struct phy_provider *phy_provider;
-> @@ -169,6 +201,8 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  	if (!imx8_phy)
->  		return -ENOMEM;
->  
-> +	imx8_phy->drvdata = of_device_get_match_data(dev);
-> +
->  	/* get PHY refclk pad mode */
->  	of_property_read_u32(np, "fsl,refclk-pad-mode",
->  			     &imx8_phy->refclk_pad_mode);
-> @@ -194,7 +228,7 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  
->  	/* Grab GPR config register range */
->  	imx8_phy->iomuxc_gpr =
-> -		 syscon_regmap_lookup_by_compatible("fsl,imx6q-iomuxc-gpr");
-> +		 syscon_regmap_lookup_by_compatible(imx8_phy->drvdata->gpr);
->  	if (IS_ERR(imx8_phy->iomuxc_gpr)) {
->  		dev_err(dev, "unable to find iomuxc registers\n");
->  		return PTR_ERR(imx8_phy->iomuxc_gpr);
-> @@ -222,12 +256,6 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  	return PTR_ERR_OR_ZERO(phy_provider);
->  }
->  
-> -static const struct of_device_id imx8_pcie_phy_of_match[] = {
-> -	{.compatible = "fsl,imx8mm-pcie-phy",},
-> -	{ },
-> -};
-> -MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
-> -
->  static struct platform_driver imx8_pcie_phy_driver = {
->  	.probe	= imx8_pcie_phy_probe,
->  	.driver = {
-> -- 
-> 2.25.1
-
--- 
-~Vinod
