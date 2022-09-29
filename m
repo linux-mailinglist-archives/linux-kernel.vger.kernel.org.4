@@ -2,170 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1503B5EEC50
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 05:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53ADA5EEC53
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 05:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234842AbiI2DIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 23:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        id S234853AbiI2DJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 23:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234819AbiI2DIZ (ORCPT
+        with ESMTP id S234828AbiI2DIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 23:08:25 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00041.outbound.protection.outlook.com [40.107.0.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98412125D87;
-        Wed, 28 Sep 2022 20:08:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MONY5Gzu1qp5N5A45GC6Ls7vT6f6GI5oUZORj4+eBQkvon0zvVqhfOrdrXrUkW3ndCSaJkFFhL51RPVprgkEh0tjj0/L2LpRugfMoavIFyDbgYp/vuG5aYnGFHFAO+6hxutOy5SvqWM2tz2pnp47Am0nhGE51A81RovGEjKXf3F1I4QJQpsAUv4RJ+v+OTmSQvkFNwNbOGUemeOsNksX67b639T5onAOmq4jPOoDh0zF1+R8pD28rdw9juV8MfTNpYX//ZmceJvPdyWpIQBAS4WKT4SwxDCOAmLgkSYTg3mZsjWYiRRwjKGp4QHt7Vv0QbVznsv2mtrZA31sI6RAhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YMGHAgMM8iAKW07mzBx1oj8TIN+JjkrG8xYHi4iClh8=;
- b=Z3dR3DFLCC42EcMYqyCbJU6+k5qcCVKhl1e56AdyUEGRefWTWu/3jzOtWDGg0ftekOp5JKTSkGFmgTAUKZFYajPNiYvdyp77K/9UlKXb9VJqCirKNzSDvbR4n/dzKOpVdvhn6kUGOGkZp81SaIbti8mKjvLFTJs+EgG/y5blij8Vd5G+OY9Tu1EtAA5o163/mo02gAiop8abJYY+XcB1qvHOoP4XIQoV0Wd6CApsB5inO28Q/4Swme/H4JRZedrF5gVKGrEcWFIFYNUgQq4VBsMCcEY0bQUhdmv/GlYldoWYe+CrtHzTNVIw2bk4lOLv57xYboZRDCnDiNjfbaPe/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YMGHAgMM8iAKW07mzBx1oj8TIN+JjkrG8xYHi4iClh8=;
- b=EKPGpf5iIBBBb4jHQB6gWaxRfq8J0kiqM4PHDHnDSw5Ge0urslVvvWOm5+mXi5i5aUbbpo5LAsjeZtvuSVGLdlKdHYNAdubH1vAmsU1S3BVXE0CdQttNk4TxrTq141/vKHkxwGFiUk2NXE0455jhuI3AmwkdJ8domNyZyXbHlxMd9BImqS+LsQiIy3JknSQMg7bSJgDywrHFYbUAwoFSW0LWIytY5mBnFj4e/6dvcv8YF5m9DclVVOCxtWpdoTiSO87sSTqXyZWOvDQL8darWZmbUl0FaC74Ce4aWuL09RsViEH6PZrL1a8FECAbZYoEGpZT14/rzqguOcSBewjVZg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AS8PR04MB8465.eurprd04.prod.outlook.com (2603:10a6:20b:348::19)
- by PA4PR04MB7984.eurprd04.prod.outlook.com (2603:10a6:102:ce::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.19; Thu, 29 Sep
- 2022 03:08:20 +0000
-Received: from AS8PR04MB8465.eurprd04.prod.outlook.com
- ([fe80::3a32:8047:8c8a:85d9]) by AS8PR04MB8465.eurprd04.prod.outlook.com
- ([fe80::3a32:8047:8c8a:85d9%5]) with mapi id 15.20.5676.019; Thu, 29 Sep 2022
- 03:08:20 +0000
-Message-ID: <c4293742-06ba-8720-e2eb-d4d3bc4da044@suse.com>
-Date:   Thu, 29 Sep 2022 11:08:10 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     "Flint.Wang" <hmsjwzb@zoho.com>
-Cc:     stringbox8@zoho.com, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220929014402.2450-1-hmsjwzb@zoho.com>
-From:   Qu Wenruo <wqu@suse.com>
-Subject: Re: [PATCH] btrfs:remove redundant index_rbio_pages in
- raid56_rmw_stripe
-In-Reply-To: <20220929014402.2450-1-hmsjwzb@zoho.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR04CA0030.namprd04.prod.outlook.com
- (2603:10b6:a03:217::35) To AS8PR04MB8465.eurprd04.prod.outlook.com
- (2603:10a6:20b:348::19)
+        Wed, 28 Sep 2022 23:08:54 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFF412647C
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 20:08:51 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id r62so266059pgr.12
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 20:08:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=8yca42gpvOWRcNPhSb40oWPuRcE31ugOvkjTdRn+Mq8=;
+        b=O5spaRHmvJKFtZyyd1opgOtyv+QcTqB+xpgqHPIoZC5m/aw/TiHHfYyJce/aKbhLPr
+         9fvxHE+fhFyGGb5/bnz7OrMldWA6HwVpAv9qAjFRLYse26d0+L0HEjX8RhvsWesKJYMJ
+         38hx+6o9PQtUs/wyW1fET8S4UrLIa0TzXzHk0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=8yca42gpvOWRcNPhSb40oWPuRcE31ugOvkjTdRn+Mq8=;
+        b=ASoc6CTQx8ZWE9Gt7dNcbOb0mCejUUkrSS1XDqxNOWQUYsjSUThqZuMhUSoiJmZuS+
+         +KZEXjziYDZ9+JwVpWkLDqle15dXO5nrzY2UMEGiugGsPxAaXjFn9XW5YbWahv2vXPWy
+         GSVOOqmJX9QFOO0PB3iGwI3qjPGnYb18YKVbjOoQv7bEZXzROjfKVypKvhALfp7XdwjV
+         ABFf9UwooMejO2ymNvFEkXousmvuQFX8UEmYn1qAj8lCjhbadT2BuHQObdFgz1491/H4
+         vtClh20W0/jZrtMQftkwz7IpkVTQnL4zPpV6Fit34NMQeU5A27eoiylwWcgZOjI1ggLE
+         nfLw==
+X-Gm-Message-State: ACrzQf1GqRUJS/poFrrxjmfMTCHxlSr0i8DtJ1lrv9bHi3HhYtOjLe1k
+        xaOOmxTbpFLKD7kMIAFjQU+bOCXIELQCpQ==
+X-Google-Smtp-Source: AMsMyM4Lc6UXUZ1W8tsbIOm2T3omQShHPzi6AAT4My9wC2ffV4AvV6ZPaTYe16xPoJZY3r2rtfINFw==
+X-Received: by 2002:a05:6a00:2385:b0:544:c42d:8a72 with SMTP id f5-20020a056a00238500b00544c42d8a72mr1308578pfc.84.1664420930186;
+        Wed, 28 Sep 2022 20:08:50 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b001783a917b9asm4280054plk.127.2022.09.28.20.08.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 20:08:49 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] kunit/memcpy: Adding dynamic size and window tests
+Date:   Wed, 28 Sep 2022 20:08:46 -0700
+Message-Id: <20220929030846.1060818-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR04MB8465:EE_|PA4PR04MB7984:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5e7d167e-96e9-491d-890d-08daa1c7dd05
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V+LZ8yQHXVRC9S+9m3MMwRzNZ/G2ojWNqZIQAkLS9zFvH9nynWnAKM5DrSAPJfXahwxKMlgvPhvegBDAeyHKr2eplRHfezzG13dEHJ+sBwMSf1irgci2ZKd0nS+cZQ7Z7zKwk/Ik8BaXhO9IQbkErDFa+vX9DB5Y0WWgx74UPkAKjqrHX3wuFE+rTYTlMkUbZVo9pgNbFQEEe2+C0HR15NMn6GuWH7JLZV/bBO885I+GMwjVU0rCcvpUuTBR8NNvQsI9/gGwid/UEVLvmwMH+1yBNxE1IPopRQprUYA1y3RZQTYrfg0XAyHIbbff0RIggjd4mE0Ku5eoNH44vlD5HouFg3pfwAiF3mWhKw5tXsDNuHCF7CSkKqe6i4kcG4rRxA8GTtAR3hkkaqmIl115KvI7iy5y8utf7ZIww5DgcvgbXT3sg6P1EMfqYjWaXKQP6WGMd49O8gV4FN0PA2W84dF4yftGfnPxf3FA3NQ1EmJBsSsfLkKYK4zeFVbiWc/tEKFNltHdG+eNe6m24ks0couD0zhb4jCW4z3RVKuAcooC0ep05ooQpOqlwI50hK6f4bfT99d5f/Y1meXaOo6joaNFjiVaFkFPM2l4H+ZVtHnL0hxdi9fMmguUk/31RdIkr7xuEySOVaxoFuwZNqfR0y/Bs2WAFrMfSGRqog32jT5aoqtJrY2Q8jg/gticfZbGT+7bIBuFTkLOebOFUtteJFjKhNmWebBjoPRYltAabSKaupRA7TRWgir9lgFBzvJWYsI/slHPEOugGcZLgL3a1ihPrTJZ40w6aqYfG3src00=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8465.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(366004)(39860400002)(396003)(136003)(451199015)(54906003)(186003)(83380400001)(2616005)(38100700002)(53546011)(5660300002)(41300700001)(2906002)(6486002)(6666004)(478600001)(6512007)(66946007)(8936002)(66556008)(66476007)(6506007)(8676002)(4326008)(316002)(6916009)(36756003)(31696002)(86362001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bzZFaDkrMmNLWjhpM1E1NnZRVnZteVRlQ3ZrTUc5QlEwNUNJQlQ2eTdQNXRp?=
- =?utf-8?B?MGpVcTNDNGlEV0xJcHE3SzdtdS91VVU5V29WZHJHL1RVYU5JeDB5aGFMMko5?=
- =?utf-8?B?L0JzQlhQOXIzSnE5RURVZ2xCd1dNUStUSDZvamxPZUdsMG9ES1RON0ViZzZ1?=
- =?utf-8?B?ZTlXOW9scDNFVGp5VHBPVmdmZW9HYmw0YWx2OHh2bGcyUEdqQUZEaG1tNmwx?=
- =?utf-8?B?ZlZ2KzhJdm5hdVdBMXRONHp2MGgzRGNJQ2RSdlVPWDJ4SEYzUGoxZTVhV3Zr?=
- =?utf-8?B?YXV2dnB6bzFBcTZWd2hFemNxb3RqV2hvalI4RTFNNWFDSnAzRDh6UnhqUzVQ?=
- =?utf-8?B?TWFVR0x4YXlwcnVwMDBnNnZBVUZhdmtTUHJ5R3FKL2FjZHZ6MU50N1FPdFdD?=
- =?utf-8?B?ZDJaYXJOZkVLU3pkNWtsd2ZXQTdDNVVDbC94SkU3dVdSY1RZalRjN1d6MEw1?=
- =?utf-8?B?YjYzcTRyRXNTdHJ6R0JrbXorTE9BYXBTL1Y2MnNUL1owUmRTZXA1U2w0K3B2?=
- =?utf-8?B?VTNLUitMbEI0b3lEcnJZeUtVckJWQllkNXZoT1J3aC9zVVNVd0Q1RTE4VnlN?=
- =?utf-8?B?VUFSVGlNS1gzYk43U0ROcS9jVlA4WGZKODdKNEVsVE5NR0FaRnU4OFFxcG03?=
- =?utf-8?B?cFU1MnFMMCtwa1Rxd2cyLzNBb05ZYm96NEZIT1IyZHovd1JTRDE3UHNXN1F0?=
- =?utf-8?B?Q0tES3B3OUM2clk0eEVsSzlsc1luYjFwTnZvRktvU2VjV1c4eEptaGdBczVF?=
- =?utf-8?B?UW9jZzF2UXhub2NvWFo0VFUvNDZ6TGFjMVlkcmJjbjVrVE1EODQrcWNwM1VK?=
- =?utf-8?B?QjdZNVVRWTBwU1UvWiszR1NORm9BMVRMR2hOOElERUphcFVZVGNNSDVETC9O?=
- =?utf-8?B?dVlacWFIUmcwSWRqZkMzVXBYM2NYSDBKZVB4Tndhc2xYaHhaSlBBbEhKN29V?=
- =?utf-8?B?elRoU3dnb3htOHpwRTN1c3cxN1dnQzlhZm9ZV3BuWFk4Yy9FSkkxOGlJaWhq?=
- =?utf-8?B?ZkcwaVZzTkg5YmgzZStpVzhBZm9Ob0REblN3TjFpT3lXQ2RnZkplSzNpWjY5?=
- =?utf-8?B?Y3YzSldqd3g0SGVlekdJM3ZuQmtjVXZIdk41RzZhTGk0WFJFaS9pYi9jVmJm?=
- =?utf-8?B?aGdTNUpvUVFDU0ZQM3Jscm1KcWxDZzBRajFGdEJTVTdqNHNLTDFjT0FQSEdl?=
- =?utf-8?B?YlY0bU5ubW1mbW45R296ZDRSOG5kMHdDRG5NYmJkTkszSnFHSVRSVEYyNHhS?=
- =?utf-8?B?SUR3eE1GaU5DY29HTFpmQjNTM2dZMGdLbnJ6TDVoMWQ4L09FRFJnN0RSRThQ?=
- =?utf-8?B?cXc4ZVJqaGF6M1A3eXVBTjNwK1Z4eExEWlRmRVBjbSt6S2lndzZJNERDaFA3?=
- =?utf-8?B?aWF3dWN3djNKTmxEY2J0amRETThTdUhIYXhYNnQrbWE2YTV2bnprajZoa2hy?=
- =?utf-8?B?L2xrdGhFRjRKRHlOVHo1N2ZLMjdRU3o5R3NSR21TbXhaOGdCVncyL0dSQVNh?=
- =?utf-8?B?RTZyVElETzU1TXI5TVh4OWwrbzlVRXJKWXpLZlY0MEpHckxkNzRyMEo2eVlz?=
- =?utf-8?B?UDBSREVLTEcybHU1QmJOdzZZYzJxVnNDcmFHSDA2bVhDMVZUUUFEMXV1K0xS?=
- =?utf-8?B?OE5xbm5HVGhCdzI2ZitBMW4xNjlWQXFUZlNFVXBwakw5T3U0bE90ZFNxMWJQ?=
- =?utf-8?B?R05LVVNKN0wzenZuL3F4Y29YUGtRbFhoOHU5UTY1UlE0RU9TSWozb0x1MTFP?=
- =?utf-8?B?YkhWUHNON2JXdzB6YW52bkl6WWt5SFBHMmpxamFWNmUrUStuZjdOSVZITWl4?=
- =?utf-8?B?c3VjNHZCWDY3VWtkWXdXZHZ0TjBMam5KeGtCWEhsQjB1ZEFHVFVGYU4rMzVa?=
- =?utf-8?B?Nk9MY2dxSjBRNExHcnl5U3UxdFlwSjdTeFNMM251a3FOSzR0RHB2alNXdG1p?=
- =?utf-8?B?Sm5kdFA0YnQ3Rkx2TTdYcmJlemYzWTFVUDZnWGtHU0tlVG9IL3RFUVkxNjZx?=
- =?utf-8?B?eDNtWWhmTVE5MWVNVEdWSDg1bEJtK0JtTS9rWmNEVXE4SkRqS1dSb0tiUmJ3?=
- =?utf-8?B?NEFrbnpibmlOVGxDOVgzTllMeSthc3p0d1FIaHc5eStxMERtOVh4aGtVRllX?=
- =?utf-8?B?Ymd4QkphVzl4UWczZms0cTFIRnVyMmxkS1p4TlZUL3M2N1cxdUQ2RUdhb1lO?=
- =?utf-8?Q?yoBvtYWy+pPuzr/krTQeLSg=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e7d167e-96e9-491d-890d-08daa1c7dd05
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8465.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 03:08:20.7693
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6Uxan5Cba4HJ0jT70fHmyPAIhdW1ecuSvTWuarr4zWms57HfX0urBc/pZ2890dcI
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7984
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7487; h=from:subject; bh=Pye2ul4IL81wuXiXNLB1/uzjad7esLmZJ2BsfjKW3o0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjNQw++oNYNS5NFICpGKQhObIvZOVxSkpej8HGlQTN FdlUNd2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYzUMPgAKCRCJcvTf3G3AJj0xD/ 4hAQLxTamEXjxsg4LTJ2limFqp/OLrPW/4ZSOl59PaKRGo3kZ5TNcvgv6QH8klIzQD73wnDuk8KpE+ 28zpLs+CwC8d4778UZ0/SjuZS1JZfB0qEUBmFS7IQ1/k38Y/pgxQ2StdfDFFCrcmQuoySESNOwPrXH Tw3Mi6bPPhN7rFYlY2AIvjc3YrtMnQShXz+5q4L6WaX3UiiyJkPs59L42lOKtSCNEM7F6T+67Zz8mB TUO9zfv3L2OZazwNUub89EIKkfUgHaM4+dtN8w87O1DfMDoJQ1gH+iuG7lj2wAdmkcQLAsd10FQKTG M/9dv3dJlef/tbzzrOypy30rZs277kwbf56mU4TQzSOep0FXlz8+1dFVRG71QJBX/hRe94QSlrJKFA YJQUqtLvOdAj3QpJS0dcb8tmQMkit9h6z260V0gNIsZCUOqT8FqUIkp7rzDYdV15EnmX4u26QRkZYY C433MIwCiVmYo3RkAEuZ6p85wyQf7aRIt+6sZRd2PYSlfdZb5GMyeh3Pws+MgnK6qeAXR/bTdikTSK Y3/sTXfX/zZVYeco+S67RMflhlhwplABF1Ko93JgNo2t2k7XjQff1L7pnTt26D64j/117SZ1F+HVpm x7ud6GrAI1SmUTgUjFcU/oeoOXpVqYmh3QIv6M1S7xLL54q3KJStTl9vrU9w==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The "side effects" memmove() test accidentally found a corner case in
+the recent refactoring of the i386 assembly memmove(), but missed
+another corner case. Instead of hoping to get lucky next time, implement
+much more complete tests of memcpy() and memmove() -- especially the
+moving window overlap for memmove() -- which catches all the issues
+encountered and should catch anything new.
 
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Link: https://lore.kernel.org/lkml/CAKwvOdkaKTa2aiA90VzFrChNQM6O_ro+b7VWs=op70jx-DKaXA@mail.gmail.com
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ lib/memcpy_kunit.c | 187 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 187 insertions(+)
 
-On 2022/9/29 09:44, Flint.Wang wrote:
->    The index_rbio_pages in raid56_rmw_stripe is redundant.
+diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
+index 2b5cc70ac53f..f15daa66c6a6 100644
+--- a/lib/memcpy_kunit.c
++++ b/lib/memcpy_kunit.c
+@@ -270,6 +270,190 @@ static void memset_test(struct kunit *test)
+ #undef TEST_OP
+ }
+ 
++static u8 large_src[1024];
++static u8 large_dst[2048];
++static const u8 large_zero[2048];
++
++static void init_large(struct kunit *test)
++{
++	int failed_rng = 0;
++
++	/* Get many bit patterns. */
++	get_random_bytes(large_src, sizeof(large_src));
++
++	/* Make sure we have non-zero edges. */
++	while (large_src[0] == 0) {
++		get_random_bytes(large_src, 1);
++		KUNIT_ASSERT_LT_MSG(test, failed_rng++, 100,
++				    "Is the RNG broken?");
++	}
++	while (large_src[sizeof(large_src) - 1] == 0) {
++		get_random_bytes(&large_src[sizeof(large_src) - 1], 1);
++		KUNIT_ASSERT_LT_MSG(test, failed_rng++, 100,
++				    "Is the RNG broken?");
++	}
++
++	/* Explicitly zero the entire destination. */
++	memset(large_dst, 0, sizeof(large_dst));
++}
++
++/*
++ * Instead of an indirect function call for "copy" or a giant macro,
++ * use a bool to pick memcpy or memmove.
++ */
++static void copy_large_test(struct kunit *test, bool use_memmove)
++{
++	init_large(test);
++
++	/* Copy a growing number of non-overlapping bytes ... */
++	for (int bytes = 1; bytes <= sizeof(large_src); bytes++) {
++		/* Over a shifting destination window ... */
++		for (int offset = 0; offset < sizeof(large_src); offset++) {
++			int right_zero_pos = offset + bytes;
++			int right_zero_size = sizeof(large_dst) - right_zero_pos;
++
++			/* Copy! */
++			if (use_memmove)
++				memmove(large_dst + offset, large_src, bytes);
++			else
++				memcpy(large_dst + offset, large_src, bytes);
++
++			/* Did we touch anything before the copy area? */
++			KUNIT_ASSERT_EQ_MSG(test, memcmp(large_dst, large_zero, offset), 0,
++					    "with size %d at offset %d", bytes, offset);
++			/* Did we touch anything after the copy area? */
++			KUNIT_ASSERT_EQ_MSG(test, memcmp(&large_dst[right_zero_pos], large_zero, right_zero_size), 0,
++					    "with size %d at offset %d", bytes, offset);
++
++			/* Are we byte-for-byte exact across the copy? */
++			KUNIT_ASSERT_EQ_MSG(test, memcmp(large_dst + offset, large_src, bytes), 0,
++					    "with size %d at offset %d", bytes, offset);
++
++			/* Zero out what we copied for the next cycle. */
++			memset(large_dst + offset, 0, bytes);
++		}
++		/* Avoid stall warnings. */
++		cond_resched();
++	}
++}
++
++static void memcpy_large_test(struct kunit *test)
++{
++	copy_large_test(test, false);
++}
++
++static void memmove_large_test(struct kunit *test)
++{
++	copy_large_test(test, true);
++}
++
++/*
++ * Take a single step if within "inc" of the start or end,
++ * otherwise, take a full "inc" steps.
++ */
++static inline int next_step(int idx, int start, int end, int inc)
++{
++	start += inc;
++	end -= inc;
++
++	if (idx < start || idx + inc > end)
++		inc = 1;
++	return idx + inc;
++}
++
++static void memmove_overlap_test(struct kunit *test)
++{
++	/*
++	 * Running all possible offset and overlap combinations takes a
++	 * very long time. Instead, only check up to 128 bytes offset
++	 * into the destintation buffer (which should result in crossing
++	 * cachelines), with a step size of 1 through 7 to try to skip some
++	 * redundancy.
++	 */
++	static const int offset_max = 128; /* sizeof(large_src); */
++	static const int bytes_step = 7;
++	static const int window_step = 7;
++
++	static const int bytes_start = 1;
++	static const int bytes_end = sizeof(large_src) + 1;
++
++	init_large(test);
++
++	/* Copy a growing number of overlapping bytes ... */
++	for (int bytes = bytes_start; bytes < bytes_end;
++	     bytes = next_step(bytes, bytes_start, bytes_end, bytes_step)) {
++
++		/* Over a shifting destination window ... */
++		for (int d_off = 0; d_off < offset_max; d_off++) {
++			int s_start = max(d_off - bytes, 0);
++			int s_end = min_t(int, d_off + bytes, sizeof(large_src));
++
++			/* Over a shifting source window ... */
++			for (int s_off = s_start; s_off < s_end;
++			     s_off = next_step(s_off, s_start, s_end, window_step)) {
++				int left_zero_pos, left_zero_size;
++				int right_zero_pos, right_zero_size;
++				int src_pos, src_orig_pos, src_size;
++				int pos;
++
++				/* Place the source in the destination buffer. */
++				memcpy(&large_dst[s_off], large_src, bytes);
++
++				/* Copy to destination offset. */
++				memmove(&large_dst[d_off], &large_dst[s_off], bytes);
++
++				/* Make sure destination entirely matches. */
++				KUNIT_ASSERT_EQ_MSG(test, memcmp(&large_dst[d_off], large_src, bytes), 0,
++					"with size %d at src offset %d and dest offset %d",
++					bytes, s_off, d_off);
++
++				/* Calculate the expected zero spans. */
++				if (s_off < d_off) {
++					left_zero_pos = 0;
++					left_zero_size = s_off;
++
++					right_zero_pos = d_off + bytes;
++					right_zero_size = sizeof(large_dst) - right_zero_pos;
++
++					src_pos = s_off;
++					src_orig_pos = 0;
++					src_size = d_off - s_off;
++				} else {
++					left_zero_pos = 0;
++					left_zero_size = d_off;
++
++					right_zero_pos = s_off + bytes;
++					right_zero_size = sizeof(large_dst) - right_zero_pos;
++
++					src_pos = d_off + bytes;
++					src_orig_pos = src_pos - s_off;
++					src_size = right_zero_pos - src_pos;
++				}
++
++				/* Check non-overlapping source is unchanged.*/
++				KUNIT_ASSERT_EQ_MSG(test, memcmp(&large_dst[src_pos], &large_src[src_orig_pos], src_size), 0,
++					"with size %d at src offset %d and dest offset %d",
++					bytes, s_off, d_off);
++
++				/* Check leading buffer contents are zero. */
++				KUNIT_ASSERT_EQ_MSG(test, memcmp(&large_dst[left_zero_pos], large_zero, left_zero_size), 0,
++					"with size %d at src offset %d and dest offset %d",
++					bytes, s_off, d_off);
++				/* Check trailing buffer contents are zero. */
++				KUNIT_ASSERT_EQ_MSG(test, memcmp(&large_dst[right_zero_pos], large_zero, right_zero_size), 0,
++					"with size %d at src offset %d and dest offset %d",
++					bytes, s_off, d_off);
++
++				/* Zero out everything not already zeroed.*/
++				pos = left_zero_pos + left_zero_size;
++				memset(&large_dst[pos], 0, right_zero_pos - pos);
++			}
++			/* Avoid stall warnings. */
++			cond_resched();
++		}
++	}
++}
++
+ static void strtomem_test(struct kunit *test)
+ {
+ 	static const char input[sizeof(unsigned long)] = "hi";
+@@ -325,7 +509,10 @@ static void strtomem_test(struct kunit *test)
+ static struct kunit_case memcpy_test_cases[] = {
+ 	KUNIT_CASE(memset_test),
+ 	KUNIT_CASE(memcpy_test),
++	KUNIT_CASE(memcpy_large_test),
+ 	KUNIT_CASE(memmove_test),
++	KUNIT_CASE(memmove_large_test),
++	KUNIT_CASE(memmove_overlap_test),
+ 	KUNIT_CASE(strtomem_test),
+ 	{}
+ };
+-- 
+2.34.1
 
-index_rbio_pages() is to populate the rbio->bio_sectors array.
-
-In raid56_rmw_stripe() we later calls sector_in_rbio(), which will check 
-if a sector is belonging to bio_lists.
-
-If not called, all sector will be returned using the sectors in 
-rbio->bio_sectors, not using the sectors in bio lists.
-
-Have you tried your patch with fstests runs?
-
-IMHO it should fail a lot of very basic writes in RAID56.
-
-Thanks,
-Qu
-
->    It is invoked in finish_rmw anyway.
-> 
-> Signed-off-by: Flint.Wang <hmsjwzb@zoho.com>
-> ---
->   fs/btrfs/raid56.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/fs/btrfs/raid56.c b/fs/btrfs/raid56.c
-> index f6395e8288d69..44266b2c5b86e 100644
-> --- a/fs/btrfs/raid56.c
-> +++ b/fs/btrfs/raid56.c
-> @@ -1546,8 +1546,6 @@ static int raid56_rmw_stripe(struct btrfs_raid_bio *rbio)
->   	if (ret)
->   		goto cleanup;
->   
-> -	index_rbio_pages(rbio);
-> -
->   	atomic_set(&rbio->error, 0);
->   	/* Build a list of bios to read all the missing data sectors. */
->   	for (total_sector_nr = 0; total_sector_nr < nr_data_sectors;
