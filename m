@@ -2,174 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6251E5EF4DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8965EF4E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 14:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235050AbiI2L7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
+        id S235467AbiI2MAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 08:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbiI2L7X (ORCPT
+        with ESMTP id S235502AbiI2L7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:59:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CB382602
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:59:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C17501A9A;
-        Thu, 29 Sep 2022 04:59:28 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.81.100])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F11E33F73B;
-        Thu, 29 Sep 2022 04:59:19 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 12:59:17 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Li Huafei <lihuafei1@huawei.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, Julia.Lawall@inria.fr, akpm@linux-foundation.org,
-        andreyknvl@gmail.com, elver@google.com, wangkefeng.wang@huawei.com,
-        zhouchengming@bytedance.com, ardb@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] arm64: module/ftrace: Fix mcount-based ftrace
- initialization failure
-Message-ID: <YzWIlcM249P+ZzVs@FVFF77S0Q05N>
-References: <20220929094134.99512-1-lihuafei1@huawei.com>
- <20220929094134.99512-4-lihuafei1@huawei.com>
- <YzWA/GCdcLX31+rI@FVFF77S0Q05N>
+        Thu, 29 Sep 2022 07:59:55 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8A11055C
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:59:53 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id bq9so1826950wrb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date;
+        bh=dUJSDU18CYMRaGiSwsSx0be26VdLB2sB4pmCGCZ1IG8=;
+        b=gfZLQB37F/ECpiUTEE8nEiJ2ocsiIimYEgyMYu3pK6czkZ5QdczYpdFtLKhvfvhvOz
+         Tn6T3q8mjioWtK17djtkQuE7zbz7j5h9rrdNk9L/sw/Il0sZ3ixTBx6Q7dOWLb9siC1/
+         hP76CTuydLQuQ/bIzpRWqnCjCuMuMxFUzhNAiuQQHWK110LYZld6UOw9/xetGEA0GiRm
+         avaKhLDoVAPfezd3dNoJopyRkwPc8tT3nobuLnATM/ikj3dj1hFlA5SxcBUqrjtXJU/T
+         7Q7ZAPFj2Ijgs51r+mQ20RoRVa7ULENXM9zsw+gDhY0JWwSQsY8ZvfsrJ67IQ9rLuqSh
+         rHMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=dUJSDU18CYMRaGiSwsSx0be26VdLB2sB4pmCGCZ1IG8=;
+        b=ms+2A6nhPk5Hu+51QU5/+zZSu2gZWkLV4cBhONJvVlHsUd0Q92jZriLof28NcF51T3
+         rwYOujFydleEAvwkPWahd//EdtMLkTqmrpLCXdv2ddMwzfdrvf/RlewIuroFzMCe4nVp
+         vdPAcO7K2kpLN9v9SHf6HQ4rqf5/0l3CyTuQ7uWjMtccxAb8d/+c3x/f9nMRAQ3eyVWV
+         5cCmhuirmPdSGsiKslx69WhcByOuQRqgBhnINLm3DKzNZChrXMpoVRsOjWrccMzEdQbo
+         M9+T2Afdx7Q+7Qa6FKVCNlrDmedU1FIKoENC6ioBkpZyrG/aSGwP28B/TEmCDHwzt1VD
+         stxA==
+X-Gm-Message-State: ACrzQf3Qb8OZ17muLr3w8YkaZPRjLrV+YV1qnw8aYCZNoFRU4AsOcn3V
+        VRrZjd0aPgKf6AS5afapfrMMmw==
+X-Google-Smtp-Source: AMsMyM5cAPD48p7fBfvz6VufLlQU5vLDMODK8UJznutNylTtmYB0V/mkXII3h//CZtHgtgBAo11pvA==
+X-Received: by 2002:adf:f482:0:b0:22c:c0f3:f067 with SMTP id l2-20020adff482000000b0022cc0f3f067mr1953249wro.517.1664452791959;
+        Thu, 29 Sep 2022 04:59:51 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:1f17:3ea3:4e46:dff? ([2a01:e0a:982:cbb0:1f17:3ea3:4e46:dff])
+        by smtp.gmail.com with ESMTPSA id iv16-20020a05600c549000b003b4c40378casm4673941wmb.39.2022.09.29.04.59.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 04:59:51 -0700 (PDT)
+Message-ID: <3fa19362-118b-232e-0baf-ee365fa2f2e2@linaro.org>
+Date:   Thu, 29 Sep 2022 13:59:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzWA/GCdcLX31+rI@FVFF77S0Q05N>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 5/7] arm: dts: qcom: mdm9615: remove invalid pmic
+ subnodes compatibles
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v1-5-b6e63a7df1e8@linaro.org>
+ <0636d53f-508f-8a86-0973-2641c9020622@linaro.org>
+ <6ed642ea-424d-49ed-eb30-e09588720373@linaro.org>
+ <1a3c6766-9be5-1e55-95eb-bc9656e5c9a3@linaro.org>
+ <7f8572ab-ff97-54bd-a5f3-fe0e179ee48e@linaro.org>
+ <84cb8941-eb15-1bbf-59b7-bbcd6c15c30d@linaro.org>
+ <07405d0d-8534-6470-21d1-26b85dbd7de0@linaro.org>
+ <f54377f0-a152-9367-1b06-f49df7466282@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <f54377f0-a152-9367-1b06-f49df7466282@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 12:26:52PM +0100, Mark Rutland wrote:
-> On Thu, Sep 29, 2022 at 05:41:34PM +0800, Li Huafei wrote:
-> > The commit a6253579977e ("arm64: ftrace: consistently handle PLTs.")
-> > makes ftrace_make_nop() always validate the 'old' instruction that will
-> > be replaced. However, in the mcount-based implementation,
-> > ftrace_init_nop() also calls ftrace_make_nop() to do the initialization,
-> > and the 'old' target address is MCOUNT_ADDR at this time. with
-> > CONFIG_MODULE_PLT support, the distance between MCOUNT_ADDR and callsite
-> > may exceed 128M, at which point ftrace_find_callable_addr() will fail
-> > because it cannot find an available PLT.
+On 29/09/2022 13:47, Krzysztof Kozlowski wrote:
+> On 29/09/2022 13:39, Neil Armstrong wrote:
+>>>>> The DTS looks correct unless you have some real argument that it is not.
+>>>>>
+>>>>> How this should be fixed? First, drop bogus entries from drivers, then
+>>>>> document proper compatibles.
+>>>>
+>>>> What do you mean ? There's no point to keep the PM8921 compatibles, the gpio
+>>>
+>>> I asked at beginning - why? Why there is no point to keep them?
+>>
+>> Because the HW is an PM8018 and the addition of the PM8921 was for policy/organization/struggling-to-make-dt-merged-before-clear-dt-policy/...
+>> so you say I should modify the Bindings to reflect the actual "pm8018", "pm8921" situation instead of changing the DT even if incorrect ?
 > 
-> Ah, sorry about this.
+> Yes, this is what I already wrote:
 > 
-> > We can reproduce this problem by forcing the module to alloc memory away
-> > from the kernel:
-> > 
-> >   ftrace_test: loading out-of-tree module taints kernel.
-> >   ftrace: no module PLT for _mcount
-> >   ------------[ ftrace bug ]------------
-> >   ftrace failed to modify
-> >   [<ffff800029180014>] 0xffff800029180014
-> >    actual:   44:00:00:94
-> >   Initializing ftrace call sites
-> >   ftrace record flags: 2000000
-> >    (0)
-> >    expected tramp: ffff80000802eb3c
-> >   ------------[ cut here ]------------
-> >   WARNING: CPU: 3 PID: 157 at kernel/trace/ftrace.c:2120 ftrace_bug+0x94/0x270
-> >   Modules linked in:
-> >   CPU: 3 PID: 157 Comm: insmod Tainted: G           O       6.0.0-rc6-00151-gcd722513a189-dirty #22
-> >   Hardware name: linux,dummy-virt (DT)
-> >   pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> >   pc : ftrace_bug+0x94/0x270
-> >   lr : ftrace_bug+0x21c/0x270
-> >   sp : ffff80000b2bbaf0
-> >   x29: ffff80000b2bbaf0 x28: 0000000000000000 x27: ffff0000c4d38000
-> >   x26: 0000000000000001 x25: ffff800009d7e000 x24: ffff0000c4d86e00
-> >   x23: 0000000002000000 x22: ffff80000a62b000 x21: ffff8000098ebea8
-> >   x20: ffff0000c4d38000 x19: ffff80000aa24158 x18: ffffffffffffffff
-> >   x17: 0000000000000000 x16: 0a0d2d2d2d2d2d2d x15: ffff800009aa9118
-> >   x14: 0000000000000000 x13: 6333626532303830 x12: 3030303866666666
-> >   x11: 203a706d61727420 x10: 6465746365707865 x9 : 3362653230383030
-> >   x8 : c0000000ffffefff x7 : 0000000000017fe8 x6 : 000000000000bff4
-> >   x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 0000000000000001
-> >   x2 : ad2cb14bb5438900 x1 : 0000000000000000 x0 : 0000000000000022
-> >   Call trace:
-> >    ftrace_bug+0x94/0x270
-> >    ftrace_process_locs+0x308/0x430
-> >    ftrace_module_init+0x44/0x60
-> >    load_module+0x15b4/0x1ce8
-> >    __do_sys_init_module+0x1ec/0x238
-> >    __arm64_sys_init_module+0x24/0x30
-> >    invoke_syscall+0x54/0x118
-> >    el0_svc_common.constprop.4+0x84/0x100
-> >    do_el0_svc+0x3c/0xd0
-> >    el0_svc+0x1c/0x50
-> >    el0t_64_sync_handler+0x90/0xb8
-> >    el0t_64_sync+0x15c/0x160
-> >   ---[ end trace 0000000000000000 ]---
-> >   ---------test_init-----------
-> > 
-> > In fact, in .init.plt or .plt or both of them, we have the mcount PLT.
-> > If we save the mcount PLT entry address, we can determine what the 'old'
-> > instruction should be when initializing the nop instruction.
-> >
-> > Fixes: a6253579977e ("arm64: ftrace: consistently handle PLTs.")
-> > Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-> > ---
-> >  arch/arm64/include/asm/module.h |  7 +++++++
-> >  arch/arm64/kernel/ftrace.c      | 29 ++++++++++++++++++++++++++++-
-> >  arch/arm64/kernel/module-plts.c | 16 ++++++++++++++++
-> >  arch/arm64/kernel/module.c      | 11 +++++++++++
-> >  4 files changed, 62 insertions(+), 1 deletion(-)
+> "How this should be fixed? First, drop bogus entries from drivers, then
+> document proper compatibles."
 > 
-> Since this only matters for the initalization of a module callsite, I'd rather
-> we simply didn't check in this case, so that we don't have to go scanning for
-> the PLTs and keep that information around forever.
+>>>> and PMIC bindings already enforces to only have the PM8018 compatible.
+>>>
+>>> That is just partial argument because binding does not match DTS. So
+>>> something is not correct. Why do you assume bindings are correct?
+>>
+>> Because bindings accurately reflects HW and DT doesn't.
 > 
-> To be honest, I'd rather we simply didn't check when initializing an mcount
-> call-site for a module, as we used to do prior to commit a6253579977e.
+> That's not really an answer... Bindings are correct because they are
+> correct? What is exactly correct in the bindings? How they reflect the
+> HW in a proper way, while DTS does not?
 > 
-> Does the below work for you?
+> Or let's focus on actual hardware - what are the properties of the
+> hardware which indicate that DTS is wrong?
 
-Thinking some more, that's probably going to warn in the insn code when
-unconditionally generating the 'old' branch; I'll spin a new version after some
-testing.
-
-Thanks,
-Mark.
+The actual PMIC is an PM8018
 
 > 
-> Thanks,
-> Mark.
+> Best regards,
+> Krzysztof
 > 
-> ---->8----
-> diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-> index ea5dc7c90f46..ba9b76ea5e68 100644
-> --- a/arch/arm64/kernel/ftrace.c
-> +++ b/arch/arm64/kernel/ftrace.c
-> @@ -216,6 +216,17 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
->  {
->  	unsigned long pc = rec->ip;
->  	u32 old = 0, new;
-> +	bool validate = true;
-> +
-> +	/*
-> +	 * When using mcount, calls can be indirected via a PLT generated by
-> +	 * the toolchain. Ignore this when initializing the callsite.
-> +	 *
-> +	 * Note: `mod` is only set at module load time.
-> +	 */
-> +	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS) &&
-> +	    IS_ENABLED(CONFIG_ARM64_MODULE_PLTS) && mod)
-> +		validate = false;
->  
->  	if (!ftrace_find_callable_addr(rec, mod, &addr))
->  		return -EINVAL;
-> @@ -223,7 +234,7 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
->  	old = aarch64_insn_gen_branch_imm(pc, addr, AARCH64_INSN_BRANCH_LINK);
->  	new = aarch64_insn_gen_nop();
->  
-> -	return ftrace_modify_code(pc, old, new, true);
-> +	return ftrace_modify_code(pc, old, new, validate);
->  }
->  
->  void arch_ftrace_update_code(int command)
+
+Neil
