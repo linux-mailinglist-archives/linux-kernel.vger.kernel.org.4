@@ -2,102 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18DD5EFEA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 22:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 525085EFEA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 22:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiI2U0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 16:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
+        id S229604AbiI2Uam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 16:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiI2U0V (ORCPT
+        with ESMTP id S229493AbiI2Uaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 16:26:21 -0400
-Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EC4FB33E;
-        Thu, 29 Sep 2022 13:26:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sladewatkins.net; s=default; h=To:References:Message-Id:
-        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
-        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+AfdzDbB6qFHwhHUz93W6CYPO+fA//BDSU2BSgua2ic=; b=f6tN5l7rsIrslJiGjUQ686RN10
-        E+xInOf2oYk4nJKU571gUNBhesBhcAG9uCYE+N6V0QRBFAVQjsS9r06z+Xfzxm57BjC7jUjVQVcDO
-        zQ+v+kWFDvFUaa96L88/t7KUb7TE9gtrCa5II5AmQBZEktvZSN/jIy0Li/szoCWNA0P1ksMrw2BIS
-        nnrv3O/TooLFtpzhtU18ruso1XDggw0ZK9IREQVe3h24qQByXQLaEv7aD1+fNWax+Kove7W/JAzk5
-        r7EQBhkFOLvJ5/7YxCShyNCliWWHVekfjIbUa/jHpu2w4jy8W/44fXMqrsCXNYMjU2l7Pkjms8Kwv
-        JMHb5jrg==;
-Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:55375 helo=smtpclient.apple)
-        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <srw@sladewatkins.net>)
-        id 1oe06s-004cQC-Bb;
-        Thu, 29 Sep 2022 16:26:18 -0400
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-From:   Slade Watkins <srw@sladewatkins.net>
-In-Reply-To: <591ab7d4-b283-32bf-13d8-419a5b91c365@gmx.com>
-Date:   Thu, 29 Sep 2022 16:26:15 -0400
-Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F6A94603-563D-4627-A62F-9B9A48F3A3AD@sladewatkins.net>
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
- <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
- <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
- <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
- <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
- <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
- <20220929153135.vu43n5kgdj4a3at6@meerkat.local>
- <591ab7d4-b283-32bf-13d8-419a5b91c365@gmx.com>
-To:     "Artem S. Tashkinov" <aros@gmx.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - sladewatkins.net
-X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
-X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-From-Rewrite: unmodified, already matched
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 29 Sep 2022 16:30:39 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD16109605
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 13:30:38 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id x92so3460668ede.9
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 13:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=H9rd+oTv5GMGM1TPz7tjk3H33t9w0+zXf4MssGv+aVY=;
+        b=VGnB3aMFioBJTem01NR0YOvnGZlaiJTWAN8LUYpK5bFMUzeSgFrCzcx3EOwrKgT/kP
+         ckNmPuYiiUKi48Iyhz/GWYBeZtYGcW9Ho26wPxj9zpIBnPDlgIknxo0eSxpMIy8HBctY
+         wUWAbpJvRN/SnRG1ROO1SkbobnjlNftpCWcc1U6EtsaglrTNVd7v777H82EaDSpgFFAj
+         lSZE888tSozQ5tOFag6vKCTKBqapyDEwz/HDZQRIt5+Ln3lpiArmYfM2e1q+uX/02vih
+         JA3RHNqfnzH8NdLqmN2m39wEaIgQpXemobkL/jVsGlucTcN45mF9tzwMeUOBArkxCsXL
+         ujYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=H9rd+oTv5GMGM1TPz7tjk3H33t9w0+zXf4MssGv+aVY=;
+        b=qjueBdnURmfuKPTltMXPTzU0QQhD7gTONopWSychjjds12pp6hfhnn+hX7QrzdR4sf
+         WQNH5uL3RBLaI1W0pLZ/lhJnBXeaDutBwhkCTpj5rqlJlrLkB9BiGgP/VAWd7gAVYHAL
+         KXKdj4hJmQ8ANoByfJ49dm7YGEgJF/C1/eSSL5JYB+xMcJ48iu4S95v35D7dzvyi+/Jn
+         o9R3PsFzSoPA2v6rGbw7gNZp2IQfLlLHqnJT8jt9WDR5pKmTOQGlILAJOVDhJYR2+y6v
+         P3PzhS9i81tkY54FG2FGusMdIxVr/u2h0AI+asCSM4isv/teKB60UJaiSZDOHXVVJtzV
+         O6dg==
+X-Gm-Message-State: ACrzQf0vJG7qUobt5wqsJvHweh2sapLy8S1GYz3oGGlh2vbJMYNoBstJ
+        4RH9rGfx7rBkxQEuS/4hB4/BRT3fU40=
+X-Google-Smtp-Source: AMsMyM7YwaXyZCkAhDZChQE/PSwo0ArkF5UT2AlZFOB9epXTAvHenejXFnNRqxOP5f8q3W1LyzCGvg==
+X-Received: by 2002:a05:6402:14c3:b0:457:faf8:1880 with SMTP id f3-20020a05640214c300b00457faf81880mr4755317edx.118.1664483437110;
+        Thu, 29 Sep 2022 13:30:37 -0700 (PDT)
+Received: from [192.168.1.101] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id s16-20020a170906355000b0078015cebd8csm71864eja.117.2022.09.29.13.30.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 13:30:36 -0700 (PDT)
+Message-ID: <c6a4363f-efa5-febe-a38c-c172019c1903@gmail.com>
+Date:   Thu, 29 Sep 2022 22:30:35 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH v2 0/4] staging: vt6655: Implement allocation failure
+ handling
+Content-Language: en-US
+To:     Nam Cao <namcaov@gmail.com>, forest@alittletooquiet.net,
+        gregkh@linuxfoundation.org, dan.carpenter@oracle.com
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+References: <cover.1664384503.git.namcaov@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <cover.1664384503.git.namcaov@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 9/28/22 19:21, Nam Cao wrote:
+> This driver does not handle allocation failure when receiving data very
+> well. This patchset implements better handling in the case of allocation
+> failure.
+> 
+> Also do some necessary clean-up to implement this.
+> 
+> v2:
+>    - squash 3 commits that were doing a single thing
+>    - add new commit which removes a redundant assignment
+>    - take device_init_rx_desc() out of unnecessary else condition.
+>    - remove return statement at the end of void function
+>    - add a missing rd = rd->next statement in device_rx_srv(): because
+>      we already drop the current buffer, we should move on to the next
+>      buffer in the ring where new data will be written to.
+> 
+> Nam Cao (4):
+>    staging: vt6655: remove redundant if condition
+>    staging: vt6655: change vnt_receive_frame return type to void
+>    staging: vt6655: remove redundant assignment
+>    staging: vt6655: implement allocation failure handling
+> 
+>   drivers/staging/vt6655/device_main.c | 40 +++++++++++++++++-----------
+>   drivers/staging/vt6655/dpc.c         |  8 +++---
+>   drivers/staging/vt6655/dpc.h         |  2 +-
+>   3 files changed, 28 insertions(+), 22 deletions(-)
+> 
 
-> On Sep 29, 2022, at 12:06 PM, Artem S. Tashkinov <aros@gmx.com> wrote:
->=20
-> On 9/29/22 15:31, Konstantin Ryabitsev wrote:
->>=20
->>=20
->> In fact, he probably did this by replying to emails, not via the web
->> interface.
->=20
-> Nope, I CC'ed him.
-
-I think you can still reply via email if you=E2=80=99re a Cc. Been a =
-while though.=20
-
-Regardless =E2=80=94 not the point of the thread so it=E2=80=99s not =
-worth arguing about.
-
--srw
-
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
