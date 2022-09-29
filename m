@@ -2,146 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085375EF420
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BB85EF423
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234851AbiI2LSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
+        id S235002AbiI2LTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234798AbiI2LSa (ORCPT
+        with ESMTP id S234798AbiI2LTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:18:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DE613E7F6
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:18:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 900C21F8AC;
-        Thu, 29 Sep 2022 11:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1664450306; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=urbGd3LAjOpWbVvqm9mfXm+G/l17iKcXVGqxKpMeX5Q=;
-        b=STn+xmbiPxhW9r5zgAt4bVEVNMMc6jd8rXGxswLPtnG5S2JBWy+cHnwGMBxW3BMNKCorOe
-        YPkVb/Na44IdzaxsKDPsDLGNiqHjN7SMN600D2Yqjcqw4ds9zwz8aa4vFJb6qPzIMAx4M8
-        17ZMI733Payhh1jz/YlaxJYfEKQuciQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1664450306;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=urbGd3LAjOpWbVvqm9mfXm+G/l17iKcXVGqxKpMeX5Q=;
-        b=SuyCQFompQd0ZYx14elDUVk3xibRIRatzprS4Kx0v/d0SRop9JvAWHCXFnZb057DzgPIfa
-        rxqwRV1K/SGhTACg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 34C991348E;
-        Thu, 29 Sep 2022 11:18:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id s8pSDAJ/NWMiagAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 29 Sep 2022 11:18:26 +0000
-Message-ID: <621612d7-c537-3971-9520-a3dec7b43cb4@suse.cz>
-Date:   Thu, 29 Sep 2022 13:18:25 +0200
+        Thu, 29 Sep 2022 07:19:18 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B0014AD69;
+        Thu, 29 Sep 2022 04:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664450357; x=1695986357;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Whifblvle5Uq5hTKfSa28zbbpyf+/wOvfOuC9En91aQ=;
+  b=dWoYWeOfZPC5ztJOc26+L7kfGRRqAimIeLDvW4Sp12lEpVaxq3WqdH58
+   zZzqAXw8qWgNn7RbfymKngYlu5Kb//wnVxt3a/KfaHp8+C4DJu9G+fU5n
+   fjAEUzrZtzXSltez513T2CU/O5cYfoHHZE8q3J3QZhOjN/mWL4arVJ/xe
+   wJv8VzLMnROOpT07vgdWB3pR/vyS+W4QzoJrfDchnFiWwVvkHGHAPTYZa
+   kB06ESLCUJqkONgkj6q/UuUmpLwyd/3qIGTUutdXDHqZCUo+8S5kVzg+f
+   Qo48gyL7yjEB5CTHwVhE3M7sN20NTLlr98P6B8nMAHWxcRp13ZHUrTkJd
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="363708788"
+X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
+   d="scan'208";a="363708788"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 04:19:17 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="951091159"
+X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
+   d="scan'208";a="951091159"
+Received: from pramona-mobl1.ger.corp.intel.com ([10.252.60.139])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 04:19:10 -0700
+Date:   Thu, 29 Sep 2022 14:19:06 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Sherry Sun <sherry.sun@nxp.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH] Revert "serial: fsl_lpuart: Reset prior to
+ registration"
+In-Reply-To: <AS8PR04MB84044F397918A3475B5D8D1D92579@AS8PR04MB8404.eurprd04.prod.outlook.com>
+Message-ID: <39c68295-947-2353-d9b-3bd654c38c7@linux.intel.com>
+References: <20220929085318.5268-1-sherry.sun@nxp.com> <1265873d-28f9-d39c-5cce-858dbed1e8e8@linux.intel.com> <AS8PR04MB84044F397918A3475B5D8D1D92579@AS8PR04MB8404.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC PATCH RESEND 00/28] per-VMA locks proposal
-Content-Language: en-US
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michel Lespinasse <michel@lespinasse.org>,
-        Jerome Glisse <jglisse@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Laurent Dufour <laurent.dufour@fr.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>, dhowells@redhat.com,
-        Hugh Dickins <hughd@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Minchan Kim <minchan@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220901173516.702122-1-surenb@google.com>
- <20220901205819.emxnnschszqv4ahy@moria.home.lan>
- <CAJuCfpGNcZovncozo+Uxfhjwqh3BtGXsws+4QeT6Zy1mcQRJbQ@mail.gmail.com>
- <b5db3353-8aae-22d8-9598-eaa5eeb77cfc@suse.cz>
- <CAJuCfpEcTv5crNumhMTCf2yAJ5+86ph78-B+eyk_N84Ce=nr5w@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CAJuCfpEcTv5crNumhMTCf2yAJ5+86ph78-B+eyk_N84Ce=nr5w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/28/22 04:28, Suren Baghdasaryan wrote:
-> On Sun, Sep 11, 2022 at 2:35 AM Vlastimil Babka <vbabka@suse.cz> wrote:
->>
->> On 9/2/22 01:26, Suren Baghdasaryan wrote:
->> >
->> >>
->> >> Two complaints so far:
->> >>  - I don't like the vma_mark_locked() name. To me it says that the caller
->> >>    already took or is taking the lock and this function is just marking that
->> >>    we're holding the lock, but it's really taking a different type of lock. But
->> >>    this function can block, it really is taking a lock, so it should say that.
->> >>
->> >>    This is AFAIK a new concept, not sure I'm going to have anything good either,
->> >>    but perhaps vma_lock_multiple()?
->> >
->> > I'm open to name suggestions but vma_lock_multiple() is a bit
->> > confusing to me. Will wait for more suggestions.
->>
->> Well, it does act like a vma_write_lock(), no? So why not that name. The
->> checking function for it is even called vma_assert_write_locked().
->>
->> We just don't provide a single vma_write_unlock(), but a
->> vma_mark_unlocked_all(), that could be instead named e.g.
->> vma_write_unlock_all().
->> But it's called on a mm, so maybe e.g. mm_vma_write_unlock_all()?
+On Thu, 29 Sep 2022, Sherry Sun wrote:
+
+> > > This reverts commit 60f361722ad2ae5ee667d0b0545d40c42f754daf.
+> > >
+> > > commit 60f361722ad2 ("serial: fsl_lpuart: Reset prior to
+> > > registration") causes the lpuart console cannot work any more. Since
+> > > the console is registered in the uart_add_one_port(), the driver
+> > > cannot identify the console port before call uart_add_one_port(),
+> > > which causes all the uart ports including the console port will be global
+> > reset.
+> > > So need to revert this patch to avoid breaking the lpuart console.
+> > >
+> > > Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+> > > ---
+> > >  drivers/tty/serial/fsl_lpuart.c | 10 +++++-----
+> > >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/drivers/tty/serial/fsl_lpuart.c
+> > > b/drivers/tty/serial/fsl_lpuart.c index 67fa113f77d4..7da46557fcb3
+> > > 100644
+> > > --- a/drivers/tty/serial/fsl_lpuart.c
+> > > +++ b/drivers/tty/serial/fsl_lpuart.c
+> > > @@ -2722,10 +2722,6 @@ static int lpuart_probe(struct platform_device
+> > *pdev)
+> > >  		handler = lpuart_int;
+> > >  	}
+> > >
+> > > -	ret = lpuart_global_reset(sport);
+> > > -	if (ret)
+> > > -		goto failed_reset;
+> > > -
+> > 
+> > So the problem with this being so early is uart_console() in
+> > lpuart_global_reset() that doesn't detect a console because sport->cons is
+> > not yet assigned? Couldn't that be worked around differently?
+> > 
+> > Or is there something else in addition to that I'm missing?
+> > 
+> Hi Ilpo,
 > 
-> Thank you for your suggestions, Vlastimil! vma_write_lock() sounds
-> good to me. For vma_mark_unlocked_all() replacement, I would prefer
-> vma_write_unlock_all() which keeps the vma_write_XXX naming pattern to
+> Yes, the root cause of the console cannot work after apply the commit 
+> 60f361722ad2 ("serial: fsl_lpuart: Reset prior to registration") is 
+> lpuart_global_reset() cannot identify the console port, so reset all 
+> uart ports. 
 
-OK.
+This didn't answer my question. Is the main cause just lacking the ->cons
+from sport at this point which, I guess, could be just assigned from 
+lpuart_reg similar to what uart_add_one_port() does before calling to 
+reset?
 
-> indicate that these are operating on the same locks. If the fact that
-> it accepts mm_struct as a parameter is an issue then maybe
-> vma_write_unlock_mm() ?
+-- 
+ i.
 
-Sounds good!
-
->>
->>
+> Actually I've been thinking about any other workaround all afternoon, 
+ seems no other good options to me till now. And after a further check, I 
+ think the original patch is not needed, as uart_add_one_port() won't open 
+ the tty device, it should be safe to global reset the non-console ports 
+ after uart_add_one_port().
+> 
+> Best Regards
+> Sherry
+> 
 
