@@ -2,87 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE305EFF36
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 23:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7F15EFF38
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 23:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiI2VVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 17:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
+        id S229924AbiI2VXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 17:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiI2VVI (ORCPT
+        with ESMTP id S229551AbiI2VW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 17:21:08 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D50792DA;
-        Thu, 29 Sep 2022 14:21:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=82CVBJMMg98pUNlHUvfZc77iRO0SkRHuyncOXZOobb0=; b=gNmVA9qql9f+jgH9jCCrya+yQ9
-        iPMje2hMZ1ZSzQr8S2Ien0bIoiMdJCUAi7nOfsPyYCZ83wCWoCBXlR7gZFEHLM15XWGdWHtkcp1ZH
-        ZzQ7iAMDAqU8MyYl23SGseHPoZl/lSnOycCO4PneM5k9ZDWwuYlX3Uo/7dhpX7F1K28PhZHOaRpPh
-        C6i4et6apdoYHo/rbilXZz5lVFtuwRHVKbjLCZY+EKJxWaNT4qK+gRG8bvw2rc096AFjclk4brjxW
-        JkOuxbko4XUznNtchVGgJ9Sx0JJuU9vLLEjjfnxU5ykSWez+ZEdM1nw2KRRqjfsaT6IosmeE7Qcew
-        zv+qkzLg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1oe0xs-00562S-0g;
-        Thu, 29 Sep 2022 21:21:04 +0000
-Date:   Thu, 29 Sep 2022 22:21:04 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Subject: Re: [PATCH 3/4] proc: Point /proc/net at /proc/thread-self/net
- instead of /proc/self/net
-Message-ID: <YzYMQDTAYCCax0WZ@ZenIV>
-References: <dacfc18d6667421d97127451eafe4f29@AcuMS.aculab.com>
- <CAHk-=wgS_XpzEL140ovgLwGv6yXvV7Pu9nKJbCuo5pnRfcEbvg@mail.gmail.com>
- <YzXo/DIwq65ypHNH@ZenIV>
- <YzXrOFpPStEwZH/O@ZenIV>
- <CAHk-=wjLgM06JrS21W4g2VquqCLab+qu_My67cv6xuH7NhgHpw@mail.gmail.com>
- <YzXzXNAgcJeJ3M0d@ZenIV>
- <CAHk-=wgiBBXeY9ioZ8GtsxAcd42c265zwN7bYVY=cir01OimzA@mail.gmail.com>
+        Thu, 29 Sep 2022 17:22:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69DCD8E11
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 14:22:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A79DBB82677
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 21:22:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8B7BC433C1;
+        Thu, 29 Sep 2022 21:22:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664486575;
+        bh=ZQBrV7Cm8QPG0bNDPWceRvng7omwE0U4ca+kAIHCPbU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i+/oAj9nxCLSoekdUOdRgO4VR5NjohOWFkUcffpqOj0w0xbcl5XlmTWY5ZtvF0238
+         ish+m54d+veEyHjM1JaececphWaQeYNAjoX7+plpPQ425D9qNrqsVL2AmcokaAn6QL
+         JkUUSBjOCcBswXmGoW1uw/cyXU2SDsoNqWj+yaHvwItLeh2k4McbDSJFK8LlhHvGNj
+         7K3Cl/3ALcBJ8Tg06hDSbDtX9MGgAgeJGMBqxbHKzKjrjcVsnzbKAho27bOKlJuS58
+         JpJJ07MQgRTEoXVb4xKE8qExUrap1w8Nu9JYE5vxnL4DU3KET/ud/qcNSOFHQc+Cdm
+         W5oIvQlxNwlqg==
+Date:   Thu, 29 Sep 2022 22:22:50 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        senozhatsky@chromium.org, rostedt@goodmis.org,
+        linux-kernel@vger.kernel.org, regressions@lists.linux.dev
+Subject: Re: [resend][bug] low-probability console lockups since 5.19
+Message-ID: <YzYMqr5kEsKJ3cwn@spud>
+References: <Yy3dsSgpDnovBdEn@spud>
+ <YzR8fzyjhggO+/tT@spud>
+ <98f62903-3d6f-30b4-82ef-3b0460824907@leemhuis.info>
+ <YzVlYaUPcRmlfE7c@wendy>
+ <YzVvl+rv3iZS9vxk@alley>
+ <YzV40LbMHcW1S/9O@wendy>
+ <877d1m46c0.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgiBBXeY9ioZ8GtsxAcd42c265zwN7bYVY=cir01OimzA@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <877d1m46c0.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 02:13:57PM -0700, Linus Torvalds wrote:
-> On Thu, Sep 29, 2022 at 12:34 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > Apparmor takes mount+dentry and turns that into pathname.  Then acts
-> > upon the resulting string.  *AFTER* the original had been resolved.
+On Thu, Sep 29, 2022 at 04:19:03PM +0206, John Ogness wrote:
+> On 2022-09-29, Conor Dooley <conor.dooley@microchip.com> wrote:
+> > I will, possibly tonight but probably not, run the bisection again
+> > with the threaded printer merge reverted. Hopefully it is not filled
+> > with conflicts if I go that way...
 > 
-> Ok. So it would have to act like a bind mount.
+> It might be easier for you to just apply the following patch to run your
+> tests . This simple patch disables kthread usage.
+
+Thanks a million John, restarted bisection from master prior to the
+merge of the reverts & have ended up finding the actual issue thanks
+to your hack - a RISC-V specific clocksource change. I'll close the
+regzbot issue & open a new one against the actual source of my issues.
+
+#regzbot invalid: bisection lead me up the garden path
+
+It looks like I have an issue that's caused by the PCI controller driver
+on this SoC* which triggers RCU stalls - but thanks to the clocksource
+issue the RCU stalls never get reported & the system just locks up. The
+system locked up in the same place on the kthreads branch so I guess I
+just got unlucky with my bisection because of that.
+
+Thanks again for the hack to bisect with,
+Conor.
+
+* likely due to running the wrong FPGA bitstream, the root port's
+connection to the cpus is configured by the FPGA fabric.
+
 > 
-> Which is probably not too bad.
+> John Ogness
 > 
-> In fact, maybe it would be ok for this to act like a hardlink and just
-> fill in the inode - not safe for a filesystem in general due to the
-> whole rename loop issue, but for /proc it might be fine?
-
-_Which_ hardlink?
-
-Linus, where in dentry tree would you want it to be seen?  Because
-apparmor profile wants /proc/net/dev to land at /proc/<pid>/net/dev
-and will fail with anything else.
-
-Do you really want multiple dentries with the same name in the same
-parent, refering to different directory inodes with different contents?
-
-And that's different inodes with different contents - David's complaint
-is precisely about seeing the same thing for all threads and apparmor
-issue is with *NOT* seeing each of those things at the same location.
+> 
+> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+> index b095fb5f5f61..9679887c0805 100644
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -3605,6 +3605,10 @@ static int __init printk_activate_kthreads(void)
+>  {
+>  	struct console *con;
+>  
+> +	/* hack: never activate kthreads */
+> +	if (!printk_kthreads_available)
+> +		return 0;
+> +
+>  	console_lock();
+>  	printk_kthreads_available = true;
+>  	for_each_console(con)
