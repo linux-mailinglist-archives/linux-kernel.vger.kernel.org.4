@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EAC5EF396
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D365EF39B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235583AbiI2Khn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38384 "EHLO
+        id S235595AbiI2KiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbiI2Khl (ORCPT
+        with ESMTP id S235000AbiI2KiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:37:41 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6346A13D1DC;
-        Thu, 29 Sep 2022 03:37:41 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id u59-20020a17090a51c100b00205d3c44162so5539108pjh.2;
-        Thu, 29 Sep 2022 03:37:41 -0700 (PDT)
+        Thu, 29 Sep 2022 06:38:18 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E860B1432A4;
+        Thu, 29 Sep 2022 03:37:59 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id w2so1108868pfb.0;
+        Thu, 29 Sep 2022 03:37:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=VVaJ2WvZLMburg2aIHfT+C0+FDmiDT6jJc/acM+nMq0=;
-        b=drW2YEOywaDzYsNVrPwnW7g8e2Yrl+NdE4q8o7pU/qEMabkWBS6deJ2LxhBoxfMjdh
-         Maxj+d/WUnaKRWiiYe9W1dvC+DrqDd/VVhI1z+w90t2hkWRqEg4cl55VHrb7irt+YI2l
-         /d1QfW5JQt+hn2Mm7UvXb4lqitpJ19krNN/TGERxcGsURkyANaoRzG8lR594UJISRyRd
-         nRCzT0Nw15KzcC2swKnoqYKvre99VDKxzeaq/2IDLNwJSzOsjUL6xq6pg7luGFPFiJs3
-         QQHyedLjRxDxXYUzHBNcsdrvQul/OfVdSHMRYVKI1WP5fPSsZ0MNA4/HwwxmJ4gO+Y5x
-         rm+w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=jx8RfvPDI5yD/Mm9JzciycnHCqW+XwB94MO7H+ntjuY=;
+        b=SWhwwKjKmXIrvUCxy4ozDdsSFugPu9oEBWx7DvF8PItOW2DM0VdrTAAEnG8vWux6ZU
+         MMdyjwGUnZYBae9KCi3VzlQ1qFMPrG0IqcEbpgTSGTHwAgW+s4xBrQu4UklerI8CFxny
+         k1r0wFIzp5bwFZK4H/+tdBk5TVYqfS/3VoGjj9UoPeHtMn9B2HZSsoIuVjpMPNFq5xWl
+         nZ9znIwJ4+XQDocARrX+RLyNr4VdwKs81tqUpZRVWoIlJCT8hXNU3dHKS9LDNuX/wX2N
+         nc9jKQH+mQcqB2Ux+4IyByA9xD5TtrPr1nNWB8mtMVsBePDXD1kPJgpT5UziJjAgvTNp
+         5ziQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=VVaJ2WvZLMburg2aIHfT+C0+FDmiDT6jJc/acM+nMq0=;
-        b=jUP09V49L7fhg5h86E31HjbO9J+bI6jOLkFessjtCmb6NSOb+2CVsztd+HZo+bYHly
-         +qEkTw1eDSfWOK7opN33/gKBP3l8umO/RyEmZDaXnJU5WdZQbK6XzHxoEy6YVUwI4xSi
-         CCS9uwHxom28UupjHmac39PFoc7sNiVeDPhKO+5wKvkPL+npWeK/WFTmDlBGnadwH0YU
-         SLezhRB3mjPu5fRtx8ra58kHimkt6fdtKSedWp+0RgwIYHIWj0eN2ZvXxp7TifDeIAiV
-         t040F/Q+aJ2HNf/iSos/0bCsJg18FXuHNw4E+vQ0tv02/2KykG3F4PepNT/4UXm1qIDs
-         0eiQ==
-X-Gm-Message-State: ACrzQf0yy7BJmqE50zMi40Fitw7SO+sxoGFrxuz+sbQ6h22sv6wofoSE
-        0l8ObLieRyvvwrKfm+VJz1o=
-X-Google-Smtp-Source: AMsMyM4bvI8f8h6erzxSMgCphGbmfyqiiwBZb9eLfhOmAyvxOuiT93idYWlxYjxB6SeKN4lnBLdlPw==
-X-Received: by 2002:a17:90a:d908:b0:206:122:35d1 with SMTP id c8-20020a17090ad90800b00206012235d1mr2874543pjv.245.1664447860821;
-        Thu, 29 Sep 2022 03:37:40 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=jx8RfvPDI5yD/Mm9JzciycnHCqW+XwB94MO7H+ntjuY=;
+        b=2AE/PDgWmi/BjDHNfLfQHVNJDAk3KItuvxcCndYsLdqExm7N4ucmd5C+pFfQvMMhsG
+         e6YMGMa+nicEZmv9544Ks8EiYGjP4EZcVGYMHk8klr8q8D10oXmlySYifOViLdDJ5VMA
+         wMfvxF8QDduk78/uZll4+Ec2VipIzv4KaSxX3slQF14207KYR7L2fHT6aMp/ySXxrq3J
+         luzyoNxUjG4WPHmnDxoyjcf2OcxZBRoD4OmDvc4mQ/npxFWuQRIDI3lYZcQANQCIoe7x
+         IQOjSG2LwcxBjjj0J2gdmh3lC/UCt/s7/BgSuktcFTRyhTq2YXury3Jql6z0zAeHNbNe
+         ZubQ==
+X-Gm-Message-State: ACrzQf2Pu8sEr3sYhnerMFGZCPgljISAzqhBut/fDv4TsW2WLa6O+zHh
+        VaE+DIriQZxXWgzu9PSzF3k=
+X-Google-Smtp-Source: AMsMyM4YaqsrlKluOMYl5MiaoDCyBo89zfaC6jDwYKbRIwozxVm1bOsH79k//0+WhP4IwU67A3nwiQ==
+X-Received: by 2002:a63:e452:0:b0:42c:60ce:8b78 with SMTP id i18-20020a63e452000000b0042c60ce8b78mr2296513pgk.453.1664447879407;
+        Thu, 29 Sep 2022 03:37:59 -0700 (PDT)
 Received: from RD-3580-24288.rt.l (42-73-73-54.emome-ip.hinet.net. [42.73.73.54])
-        by smtp.gmail.com with ESMTPSA id k31-20020a17090a4ca200b001ef81574355sm3145861pjh.12.2022.09.29.03.37.38
+        by smtp.gmail.com with ESMTPSA id k31-20020a17090a4ca200b001ef81574355sm3145861pjh.12.2022.09.29.03.37.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 03:37:40 -0700 (PDT)
+        Thu, 29 Sep 2022 03:37:59 -0700 (PDT)
 From:   ChiaEn Wu <peterwu.pub@gmail.com>
 To:     sre@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org
 Cc:     chiaen_wu@richtek.com, cy_huang@richtek.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH 0/2] Add Richtek RT9467 5A Battery Charger support
-Date:   Thu, 29 Sep 2022 18:37:17 +0800
-Message-Id: <cover.1664475743.git.chiaen_wu@richtek.com>
+Subject: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9467 battery charger
+Date:   Thu, 29 Sep 2022 18:37:19 +0800
+Message-Id: <2590163cabaef9ece537c5453eeef9f259e56cef.1664475743.git.chiaen_wu@richtek.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1664475743.git.chiaen_wu@richtek.com>
+References: <cover.1664475743.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,38 +75,105 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ChiaEn Wu <chiaen_wu@richtek.com>
 
-This patch set is to add Richtek RT9467 5A Battery Charger support.
+Add bindings for the Richtek RT9467 battery charger.
 
-RT9467 is a switch-mode single cell Li-Ion/Li-Polymer battery charger
-for portable applications.
-
-It integrates a synchronous PWM controller, power MOSFETs,
-input current sensing and regulation, high-accuracy voltage regulation,
-and charge termination. The charge current is regulated through
-integrated sensing resistors.
-
-The RT9467 also features USB On-The-Go (OTG) support. It also integrates
-D+/D- pin for USB host/charging port detection.
-
-This charger driver is based on a 'linear_ranger' queued patch which adds
-'LINEAR_RANGE_IDX' macro for declaring the linear_range struct simply.
-https://lore.kernel.org/all/20220920161218.dkkfvfomrruebahi@mercury.elektranox.org/
-
-Thank you,
-ChiaEn Wu
-
-ChiaEn Wu (2):
-  dt-bindings: power: supply: Add Richtek RT9467 battery charger
-  power: supply: rt9467: Add Richtek RT9467 charger driver
-
- .../power/supply/richtek,rt9467-charger.yaml       |   83 ++
- drivers/power/supply/Kconfig                       |   19 +
- drivers/power/supply/Makefile                      |    1 +
- drivers/power/supply/rt9467-charger.c              | 1239 ++++++++++++++++++++
- 4 files changed, 1342 insertions(+)
+Co-developed-by: ChiYuan Huang <cy_huang@richtek.com>
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+---
+ .../power/supply/richtek,rt9467-charger.yaml       | 83 ++++++++++++++++++++++
+ 1 file changed, 83 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
- create mode 100644 drivers/power/supply/rt9467-charger.c
 
+diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
+new file mode 100644
+index 0000000..874bd01
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
+@@ -0,0 +1,83 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/supply/richtek,rt9467-charger.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Richtek RT9467 Switching Battery Charger with Power Path Management
++
++maintainers:
++  - ChiYuan Huang <cy_huang@richtek.com>
++  - ChiaEn Wu <chiaen_wu@richtek.com>
++
++description: |
++  RT9467 is a switch-mode single cell Li-Ion/Li-Polymer battery charger for
++  portable applications. It integrates a synchronous PWM controller, power
++  MOSFETs, input current sensing and regulation, high-accuracy voltage
++  regulation, and charge termination. The charge current is regulated through
++  integrated sensing resistors.
++
++  The RT9467 also features USB On-The-Go (OTG) support. It also integrates
++  D+/D- pin for USB host/charging port detection.
++
++  Datasheet is available at
++  https://www.richtek.com/assets/product_file/RT9467/DS9467-01.pdf
++
++properties:
++  compatible:
++    const: richtek,rt9467-charger
++
++  reg:
++    maxItems: 1
++
++  wakeup-source: true
++
++  interrupts:
++    maxItems: 1
++
++  charge-enable-gpios:
++    description: GPIO is used to turn on and off charging.
++    maxItems: 1
++
++  usb-otg-vbus-regulator:
++    type: object
++    description: OTG boost regulator.
++    unevaluatedProperties: false
++    $ref: /schemas/regulator/regulator.yaml#
++
++    properties:
++      enable-gpios:
++        maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - wakeup-source
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      rt9467@5b {
++        compatible = "richtek,rt9467-charger";
++        reg = <0x5b>;
++        wakeup-source;
++        interrupts-extended = <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
++        charge-enable-gpios = <&gpio26 1 0>;
++
++        rt9467_otg_vbus: usb-otg-vbus-regulator {
++          regulator-name = "rt9467-usb-otg-vbus";
++          regulator-min-microvolt = <4425000>;
++          regulator-max-microvolt = <5825000>;
++          regulator-min-microamp = <500000>;
++          regulator-max-microamp = <3000000>;
++        };
++      };
++    };
 -- 
 2.7.4
 
