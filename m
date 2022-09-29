@@ -2,78 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C965F0006
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 00:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0DE5F0014
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 00:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiI2WWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 18:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
+        id S229970AbiI2W1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 18:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiI2WWD (ORCPT
+        with ESMTP id S229991AbiI2W1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 18:22:03 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265E012BD90;
-        Thu, 29 Sep 2022 15:22:02 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id g130so2994086oia.13;
-        Thu, 29 Sep 2022 15:22:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=nwi21MnQaHdJlPOmY1nF+KNwtNvxXho+DAnFATZDOD4=;
-        b=Xehx9YGEDTMH4HrSnMXMf4xRTjKBl5qqraHg+dXQ5+oU9ZKlkob4B44hgZajOaE13+
-         FgDBTeOS4+QxpXcwLz1Wx+ksv8KdXCaycysgG5G1pTL3dvyRgM5x3soCJqihQ3nUd5k4
-         spnBO/USUHGEbpxhHkZEr9SNPvgw+ciW8d1BG/S/I8HNdWUVJI/zlOu7E5ZAQ/F+4uZx
-         Qz7O798wETbnDcph23j55Iv3P9x3B6DoCM6zXcFyxBJ592rYuUjonag48PmiRhuLVzcA
-         N9v4HN0xAqpuuoCHDo4+htuU/YLXmXE9sXq0KR9nfkAPO3Giible1IVXPt6YQWhcMHNj
-         xXAw==
-X-Gm-Message-State: ACrzQf28Z0amfJUR9MKOVKPSr/x5ZszEb5DZzQBMo1prhTKqXnRF342d
-        K19RId3zCpIOeD1xcLBhxw==
-X-Google-Smtp-Source: AMsMyM6ttsnbqtjCf/yyPwWQ3A2P5X4CWOUFq8T28o5HSGv5OQpUDuRKiY8sdc69vpKUuop47sDOlA==
-X-Received: by 2002:a05:6808:1b2a:b0:34f:f989:99c1 with SMTP id bx42-20020a0568081b2a00b0034ff98999c1mr7786648oib.173.1664490121352;
-        Thu, 29 Sep 2022 15:22:01 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m5-20020a9d7ac5000000b00655c6b2655esm203513otn.68.2022.09.29.15.22.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 15:22:00 -0700 (PDT)
-Received: (nullmailer pid 2870767 invoked by uid 1000);
-        Thu, 29 Sep 2022 22:21:59 -0000
-Date:   Thu, 29 Sep 2022 17:21:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Bert Vermeulen <bert@biot.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Thu, 29 Sep 2022 18:27:08 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA2A15E479;
+        Thu, 29 Sep 2022 15:27:04 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1664490413t16ssqjp
+Received: from localhost.localdomain ( [113.72.146.201])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 30 Sep 2022 06:26:52 +0800 (CST)
+X-QQ-SSF: 01000000002000305000B00A0000000
+X-QQ-FEAT: YHTLUubWl26ZkpaLq7zsbw4d8O56YD7LwT0wcBWFjGJFdn4RvGt4in89BcWGS
+        U6clL3z7tkZIWNwlFhVpyr0KfLiD+6L4Z0fsnaOfFw/ykvRIRzdXo9a4m3v4nLGj8OJ+6ro
+        wYOvz1LQ7AuWSC/crvH5NIKCF1oDmolC74QTQNe7YX2te+tAYPeHVxX0X6boWdm+YILDCy5
+        EGNDuwpkZufDYaJs308Z7yglt9m7hA1eOjXvVK4FqZBTPpaQbNJT9c1oSCt8c+h6GCZyVrs
+        TC0oRjlfZonYAs86W/lahhg+ftUX496LzCyngeyGzZAyomv583Kz7NO4o/43WjLEUz53IWj
+        W2nzW0C27gumiS9wusps+Y5af8OuauMG/u9rWp6ZGlkcSJoaLzFc94tbXu0W93b73GIXw4G
+        n9xRBLJPbl/z4Lah4K4BeQ==
+X-QQ-GoodBg: 0
+From:   Hal Feng <hal.feng@linux.starfivetech.com>
+To:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Benjamin Larsson <benjamin.larsson@iopsys.eu>,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 1/3] dt-bindings: arm: airoha: Add documentation for
- Airoha SPI controller
-Message-ID: <166449011940.2870705.14660966610426590404.robh@kernel.org>
-References: <20220927113229.1214224-1-bert@biot.com>
- <20220927113229.1214224-2-bert@biot.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927113229.1214224-2-bert@biot.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Hal Feng <hal.feng@linux.starfivetech.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 17/30] dt-bindings: clock: Add starfive,jh7110-clkgen-sys bindings
+Date:   Fri, 30 Sep 2022 06:26:47 +0800
+Message-Id: <20220929222647.23816-1-hal.feng@linux.starfivetech.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Sep 2022 13:32:27 +0200, Bert Vermeulen wrote:
-> Create documentation for accessing the Airoha EN7523 SPI controller.
-> 
-> Signed-off-by: Bert Vermeulen <bert@biot.com>
-> ---
->  .../bindings/spi/airoha,en7523-spi.yaml       | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/airoha,en7523-spi.yaml
-> 
+From: Emil Renner Berthing <kernel@esmil.dk>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Add bindings for the system clock generator on the JH7110
+RISC-V SoC by StarFive Technology Ltd.
+
+Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+---
+ .../clock/starfive,jh7110-clkgen-sys.yaml     | 69 +++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-sys.yaml
+
+diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-sys.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-sys.yaml
+new file mode 100644
+index 000000000000..290b730145ab
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-sys.yaml
+@@ -0,0 +1,69 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/starfive,jh7110-clkgen-sys.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: StarFive JH7110 System Clock Generator
++
++maintainers:
++  - Emil Renner Berthing <kernel@esmil.dk>
++  - Xingyu Wu <xingyu.wu@linux.starfivetech.com>
++
++properties:
++  compatible:
++    const: starfive,jh7110-clkgen-sys
++
++  clocks:
++    items:
++      - description: Main Oscillator (24 MHz)
++      - description: RMII reference clock
++      - description: RGMII RX clock
++      - description: I2S TX bit clock
++      - description: I2S TX left/right clock
++      - description: I2S RX bit clock
++      - description: I2S RX left/right clock
++      - description: TDM
++      - description: mclk
++
++  clock-names:
++    items:
++      - const: osc
++      - const: gmac1_rmii_refin
++      - const: gmac1_rgmii_rxin
++      - const: i2stx_bclk_ext
++      - const: i2stx_lrck_ext
++      - const: i2srx_bclk_ext
++      - const: i2srx_lrck_ext
++      - const: tdm_ext
++      - const: mclk_ext
++
++  '#clock-cells':
++    const: 1
++    description:
++      See <dt-bindings/clock/starfive-jh7110-sys.h> for valid indices.
++
++required:
++  - compatible
++  - clocks
++  - clock-names
++  - '#clock-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    syscrg_clk: clock-controller@13020000 {
++        compatible = "starfive,jh7110-clkgen-sys";
++        clocks = <&osc>, <&gmac1_rmii_refin>,
++                 <&gmac1_rgmii_rxin>,
++                 <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
++                 <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
++                 <&tdm_ext>, <&mclk_ext>;
++        clock-names = "osc", "gmac1_rmii_refin",
++                      "gmac1_rgmii_rxin",
++                      "i2stx_bclk_ext", "i2stx_lrck_ext",
++                      "i2srx_bclk_ext", "i2srx_lrck_ext",
++                      "tdm_ext", "mclk_ext";
++        #clock-cells = <1>;
++    };
+-- 
+2.17.1
+
