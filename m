@@ -2,36 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10565EEEBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F085EEEC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235180AbiI2HS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
+        id S235193AbiI2HT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235148AbiI2HS4 (ORCPT
+        with ESMTP id S235184AbiI2HTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:18:56 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B52116C2F
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:18:53 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=cruzzhao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VQyjp6T_1664435913;
-Received: from rt2b04371.sqa.tbc.tbsite.net(mailfrom:CruzZhao@linux.alibaba.com fp:SMTPD_---0VQyjp6T_1664435913)
-          by smtp.aliyun-inc.com;
-          Thu, 29 Sep 2022 15:18:50 +0800
-From:   Cruz Zhao <CruzZhao@linux.alibaba.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] sched/core: Optimize the process of picking the max prio task for the core
-Date:   Thu, 29 Sep 2022 15:18:33 +0800
-Message-Id: <1664435913-57227-1-git-send-email-CruzZhao@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        Thu, 29 Sep 2022 03:19:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF231166C3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:19:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664435961;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pahe0Oi4C4m9h6JwmtN0So34FXt/ImLGT/jbwYjYeWk=;
+        b=gWuOMJ/1zKrLQlGC2UnlEQeaQJo83D5cJTdqogmN+Wjzbjdd2F+RLvINFb3CG75vOZnGEu
+        KGRWqpj6oiTAuGSH/y73A3azFvWHX1Xb7Kkq7ES8IEYksvEFDRoFLChJYCllS9KHFX5tZD
+        e0dIh9wDllFDxz8CEvXmyd0hjwDHdC8=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-387-ROPyK-lrOZCcAAgq3ubqpQ-1; Thu, 29 Sep 2022 03:19:19 -0400
+X-MC-Unique: ROPyK-lrOZCcAAgq3ubqpQ-1
+Received: by mail-wr1-f71.google.com with SMTP id h20-20020adfaa94000000b0022cc1de1251so161256wrc.15
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:19:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Pahe0Oi4C4m9h6JwmtN0So34FXt/ImLGT/jbwYjYeWk=;
+        b=fwfCwoMpmO4lxJSxirVHHzNSUpH8MgbO2T+kIcQYo/V9kkvAjNHcJT0TT3Eu9Uerev
+         ptwo+QzIf6EYiLFvymlVulIctNx8t7t9YoOv+p9Z4PiykgHRLBAY2czAXmSB74S53jvI
+         3ey/us0YK6Yrw/cstszsNtYkVLnysyr+JrvAfAopZSoAzE+L59tac2YoBBnATjzBBac5
+         OsZ020Acei+Ze7VIR7QPiwy3ncQCs/WPz+PTWW5ZuApmLQWtmbVrGRDTs4fzjgXjMWqK
+         Co/vLWHY8Pn1LPOpIYaPhLMIn6SBL38KfVxz8WrNXQ9oLcnECEkIRyC7UJcecvxNnuJV
+         Yr7Q==
+X-Gm-Message-State: ACrzQf3e6snRA67uQeVhOfIJTUEOWSBETkXfqXusu6kJeMjXxK5H5NMB
+        grlCkHYkaROarLtBq41Nrcv5RisvS74qbrHpLRabmY5d2vzAkqYAIWFKHQEKSN0Vc+N9wUUYu2O
+        JFdsaCnNyYOCsGc2Pkncs9v5v
+X-Received: by 2002:a05:600c:4841:b0:3b4:76f0:99f with SMTP id j1-20020a05600c484100b003b476f0099fmr1218125wmo.85.1664435958808;
+        Thu, 29 Sep 2022 00:19:18 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6fAAMQAEw10LqeyomvQ2r46WQeZdX8Xh4sSb3tkzAaqxsTNtqXiZNJ+nRawX6R9Z621MuZlw==
+X-Received: by 2002:a05:600c:4841:b0:3b4:76f0:99f with SMTP id j1-20020a05600c484100b003b476f0099fmr1218099wmo.85.1664435958545;
+        Thu, 29 Sep 2022 00:19:18 -0700 (PDT)
+Received: from redhat.com ([2.55.47.213])
+        by smtp.gmail.com with ESMTPSA id p16-20020adfe610000000b00225239d9265sm6149634wrm.74.2022.09.29.00.19.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 00:19:17 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 03:19:14 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Junichi Uekawa =?utf-8?B?KOS4iuW3nee0lOS4gCk=?= 
+        <uekawa@google.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Bobby Eshleman <bobby.eshleman@gmail.com>
+Subject: Re: [PATCH] vhost/vsock: Use kvmalloc/kvfree for larger packets.
+Message-ID: <20220929031419-mutt-send-email-mst@kernel.org>
+References: <20220928064538.667678-1-uekawa@chromium.org>
+ <20220928082823.wyxplop5wtpuurwo@sgarzare-redhat>
+ <20220928052738-mutt-send-email-mst@kernel.org>
+ <20220928151135.pvrlsylg6j3hzh74@sgarzare-redhat>
+ <CADgJSGHxPWXJjbakEeWnqF42A03yK7Dpw6U1SKNLhk+B248Ymg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADgJSGHxPWXJjbakEeWnqF42A03yK7Dpw6U1SKNLhk+B248Ymg@mail.gmail.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,268 +90,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we pick the max prio task for the core in the case of
-sched_core_enabled(), if there's a task with a higher prio sched
-class in the runqueue of a SMT, it's not necessary for other SMTs
-to traverse lower prio sched classes. So we can change the traversal
-order: for each sched class, if there exists a max prio task among
-the core, pick it and break the loop.
+On Thu, Sep 29, 2022 at 08:14:24AM +0900, Junichi Uekawa (上川純一) wrote:
+> 2022年9月29日(木) 0:11 Stefano Garzarella <sgarzare@redhat.com>:
+> >
+> > On Wed, Sep 28, 2022 at 05:31:58AM -0400, Michael S. Tsirkin wrote:
+> > >On Wed, Sep 28, 2022 at 10:28:23AM +0200, Stefano Garzarella wrote:
+> > >> On Wed, Sep 28, 2022 at 03:45:38PM +0900, Junichi Uekawa wrote:
+> > >> > When copying a large file over sftp over vsock, data size is usually 32kB,
+> > >> > and kmalloc seems to fail to try to allocate 32 32kB regions.
+> > >> >
+> > >> > Call Trace:
+> > >> >  [<ffffffffb6a0df64>] dump_stack+0x97/0xdb
+> > >> >  [<ffffffffb68d6aed>] warn_alloc_failed+0x10f/0x138
+> > >> >  [<ffffffffb68d868a>] ? __alloc_pages_direct_compact+0x38/0xc8
+> > >> >  [<ffffffffb664619f>] __alloc_pages_nodemask+0x84c/0x90d
+> > >> >  [<ffffffffb6646e56>] alloc_kmem_pages+0x17/0x19
+> > >> >  [<ffffffffb6653a26>] kmalloc_order_trace+0x2b/0xdb
+> > >> >  [<ffffffffb66682f3>] __kmalloc+0x177/0x1f7
+> > >> >  [<ffffffffb66e0d94>] ? copy_from_iter+0x8d/0x31d
+> > >> >  [<ffffffffc0689ab7>] vhost_vsock_handle_tx_kick+0x1fa/0x301 [vhost_vsock]
+> > >> >  [<ffffffffc06828d9>] vhost_worker+0xf7/0x157 [vhost]
+> > >> >  [<ffffffffb683ddce>] kthread+0xfd/0x105
+> > >> >  [<ffffffffc06827e2>] ? vhost_dev_set_owner+0x22e/0x22e [vhost]
+> > >> >  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
+> > >> >  [<ffffffffb6eb332e>] ret_from_fork+0x4e/0x80
+> > >> >  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
+> > >> >
+> > >> > Work around by doing kvmalloc instead.
+> > >> >
+> > >> > Signed-off-by: Junichi Uekawa <uekawa@chromium.org>
+> > >
+> > >My worry here is that this in more of a work around.
+> > >It would be better to not allocate memory so aggressively:
+> > >if we are so short on memory we should probably process
+> > >packets one at a time. Is that very hard to implement?
+> >
+> > Currently the "virtio_vsock_pkt" is allocated in the "handle_kick"
+> > callback of TX virtqueue. Then the packet is multiplexed on the right
+> > socket queue, then the user space can de-queue it whenever they want.
+> >
+> > So maybe we can stop processing the virtqueue if we are short on memory,
+> > but when can we restart the TX virtqueue processing?
+> >
+> > I think as long as the guest used only 4K buffers we had no problem, but
+> > now that it can create larger buffers the host may not be able to
+> > allocate it contiguously. Since there is no need to have them contiguous
+> > here, I think this patch is okay.
+> >
+> > However, if we switch to sk_buff (as Bobby is already doing), maybe we
+> > don't have this problem because I think there is some kind of
+> > pre-allocated pool.
+> >
+> 
+> Thank you for the review! I was wondering if this is a reasonable workaround (as
+> we found that this patch makes a reliably crashing system into a
+> reliably surviving system.)
+> 
+> 
+> ... Sounds like it is a reasonable patch to use backported to older kernels?
 
-To compare the prio of the tasks with the same sched class, we
-introduce sched_class::prio_less().
+Hmm. Good point about stable. OK.
 
-Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
----
- kernel/sched/core.c      | 33 ++++++++++++++++++++++-----------
- kernel/sched/deadline.c  | 11 +++++++++++
- kernel/sched/fair.c      |  5 ++++-
- kernel/sched/idle.c      | 10 ++++++++++
- kernel/sched/rt.c        | 10 ++++++++++
- kernel/sched/sched.h     |  5 +++--
- kernel/sched/stop_task.c | 10 ++++++++++
- 7 files changed, 70 insertions(+), 14 deletions(-)
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index a2d8a1f..50e28c8 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -189,7 +189,7 @@ static inline bool prio_less(struct task_struct *a, struct task_struct *b, bool
- 		return !dl_time_before(a->dl.deadline, b->dl.deadline);
- 
- 	if (pa == MAX_RT_PRIO + MAX_NICE)	/* fair */
--		return cfs_prio_less(a, b, in_fi);
-+		return fair_sched_class.prio_less(a, b, in_fi);
- 
- 	return false;
- }
-@@ -5886,6 +5886,7 @@ static inline struct task_struct *pick_task(struct rq *rq)
- 	int i, cpu, occ = 0;
- 	struct rq *rq_i;
- 	bool need_sync;
-+	struct sched_class *class;
- 
- 	if (!sched_core_enabled(rq))
- 		return __pick_next_task(rq, prev, rf);
-@@ -5978,12 +5979,6 @@ static inline struct task_struct *pick_task(struct rq *rq)
- 		}
- 	}
- 
--	/*
--	 * For each thread: do the regular task pick and find the max prio task
--	 * amongst them.
--	 *
--	 * Tie-break prio towards the current CPU
--	 */
- 	for_each_cpu_wrap(i, smt_mask, cpu) {
- 		rq_i = cpu_rq(i);
- 
-@@ -5994,12 +5989,28 @@ static inline struct task_struct *pick_task(struct rq *rq)
- 		 */
- 		if (i != cpu && (rq_i != rq->core || !core_clock_updated))
- 			update_rq_clock(rq_i);
-+	}
- 
--		p = rq_i->core_pick = pick_task(rq_i);
--		if (!max || prio_less(max, p, fi_before))
--			max = p;
-+	/*
-+	 * For each thread: do the regular task pick and find the max prio task
-+	 * amongst them.
-+	 *
-+	 * Tie-break prio towards the current CPU
-+	 */
-+	for_each_class(class) {
-+		for_each_cpu_wrap(i, smt_mask, cpu) {
-+			rq_i = cpu_rq(i);
-+			p = rq_i->core_pick = class->pick_task(rq_i);
-+			if (!max || (p && class->prio_less(max, p, fi_before)))
-+				max = p;
-+		}
-+		if (max)
-+			break;
- 	}
- 
-+	if (!max)
-+		BUG();
-+
- 	cookie = rq->core->core_cookie = max->core_cookie;
- 
- 	/*
-@@ -6010,7 +6021,7 @@ static inline struct task_struct *pick_task(struct rq *rq)
- 		rq_i = cpu_rq(i);
- 		p = rq_i->core_pick;
- 
--		if (!cookie_equals(p, cookie)) {
-+		if (!p || !cookie_equals(p, cookie)) {
- 			p = NULL;
- 			if (cookie)
- 				p = sched_core_find(rq_i, cookie);
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 86dea6a..8e7aa7d 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -1942,6 +1942,7 @@ static int balance_dl(struct rq *rq, struct task_struct *p, struct rq_flags *rf)
- 
- 	return sched_stop_runnable(rq) || sched_dl_runnable(rq);
- }
-+
- #endif /* CONFIG_SMP */
- 
- /*
-@@ -2054,6 +2055,13 @@ static void put_prev_task_dl(struct rq *rq, struct task_struct *p)
- 		enqueue_pushable_dl_task(rq, p);
- }
- 
-+#ifdef CONFIG_SCHED_CORE
-+static bool prio_less_dl(struct task_struct *a, struct task_struct *b, bool in_fi)
-+{
-+	return !dl_time_before(a->dl.deadline, b->dl.deadline);
-+}
-+#endif
-+
- /*
-  * scheduler tick hitting a task of our scheduling class.
-  *
-@@ -2704,6 +2712,9 @@ static void prio_changed_dl(struct rq *rq, struct task_struct *p,
- 	.pick_next_task		= pick_next_task_dl,
- 	.put_prev_task		= put_prev_task_dl,
- 	.set_next_task		= set_next_task_dl,
-+#ifdef CONFIG_SCHED_CORE
-+	.prio_less		= prio_less_dl,
-+#endif
- 
- #ifdef CONFIG_SMP
- 	.balance		= balance_dl,
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index e4a0b8b..eca2636 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -11516,7 +11516,7 @@ void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
- 	se_fi_update(se, rq->core->core_forceidle_seq, in_fi);
- }
- 
--bool cfs_prio_less(struct task_struct *a, struct task_struct *b, bool in_fi)
-+static bool prio_less_fair(struct task_struct *a, struct task_struct *b, bool in_fi)
- {
- 	struct rq *rq = task_rq(a);
- 	struct sched_entity *sea = &a->se;
-@@ -12159,6 +12159,9 @@ static unsigned int get_rr_interval_fair(struct rq *rq, struct task_struct *task
- 	.pick_next_task		= __pick_next_task_fair,
- 	.put_prev_task		= put_prev_task_fair,
- 	.set_next_task          = set_next_task_fair,
-+#ifdef CONFIG_SCHED_CORE
-+	.prio_less		= prio_less_fair,
-+#endif
- 
- #ifdef CONFIG_SMP
- 	.balance		= balance_fair,
-diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-index f26ab26..a3c3e37 100644
---- a/kernel/sched/idle.c
-+++ b/kernel/sched/idle.c
-@@ -436,6 +436,13 @@ static void set_next_task_idle(struct rq *rq, struct task_struct *next, bool fir
- 	schedstat_inc(rq->sched_goidle);
- }
- 
-+#ifdef CONFIG_SCHED_CORE
-+static bool prio_less_idle(struct task_struct *a, struct task_struct *b, bool in_fi)
-+{
-+	return false;
-+}
-+#endif
-+
- #ifdef CONFIG_SMP
- static struct task_struct *pick_task_idle(struct rq *rq)
- {
-@@ -507,6 +514,9 @@ static void update_curr_idle(struct rq *rq)
- 	.pick_next_task		= pick_next_task_idle,
- 	.put_prev_task		= put_prev_task_idle,
- 	.set_next_task          = set_next_task_idle,
-+#ifdef CONFIG_SCHED_CORE
-+	.prio_less		= prio_less_idle,
-+#endif
- 
- #ifdef CONFIG_SMP
- 	.balance		= balance_idle,
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index d869bcf..4459a90 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -1838,6 +1838,13 @@ static void put_prev_task_rt(struct rq *rq, struct task_struct *p)
- 		enqueue_pushable_task(rq, p);
- }
- 
-+static bool prio_less_rt(struct task_struct *a, struct task_struct *b, bool in_fi)
-+{
-+	int pa = rt_prio(a->prio), pb = rt_prio(b->prio);
-+
-+	return -pa < -pb;
-+}
-+
- #ifdef CONFIG_SMP
- 
- /* Only try algorithms three times */
-@@ -2685,6 +2692,9 @@ static unsigned int get_rr_interval_rt(struct rq *rq, struct task_struct *task)
- 	.pick_next_task		= pick_next_task_rt,
- 	.put_prev_task		= put_prev_task_rt,
- 	.set_next_task          = set_next_task_rt,
-+#ifdef CONFIG_SCHED_CORE
-+	.prio_less		= prio_less_rt,
-+#endif
- 
- #ifdef CONFIG_SMP
- 	.balance		= balance_rt,
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 1644242..6d8055c 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1218,8 +1218,6 @@ static inline raw_spinlock_t *__rq_lockp(struct rq *rq)
- 	return &rq->__lock;
- }
- 
--bool cfs_prio_less(struct task_struct *a, struct task_struct *b, bool fi);
--
- /*
-  * Helpers to check if the CPU's core cookie matches with the task's cookie
-  * when core scheduling is enabled.
-@@ -2155,6 +2153,9 @@ struct sched_class {
- 
- 	void (*put_prev_task)(struct rq *rq, struct task_struct *p);
- 	void (*set_next_task)(struct rq *rq, struct task_struct *p, bool first);
-+#ifdef CONFIG_SCHED_CORE
-+	bool prio_less(struct task_struct *a, struct task_struct *b, bool in_fi);
-+#endif
- 
- #ifdef CONFIG_SMP
- 	int (*balance)(struct rq *rq, struct task_struct *prev, struct rq_flags *rf);
-diff --git a/kernel/sched/stop_task.c b/kernel/sched/stop_task.c
-index 8559059..c9ddaaa 100644
---- a/kernel/sched/stop_task.c
-+++ b/kernel/sched/stop_task.c
-@@ -84,6 +84,13 @@ static void put_prev_task_stop(struct rq *rq, struct task_struct *prev)
- 	update_current_exec_runtime(curr, now, delta_exec);
- }
- 
-+#ifdef CONFIG_SCHED_CORE
-+static bool prio_less_stop(struct task_struct *a, struct task_struct *b, bool in_fi)
-+{
-+	return false;
-+}
-+#endif
-+
- /*
-  * scheduler tick hitting a task of our scheduling class.
-  *
-@@ -125,6 +132,9 @@ static void update_curr_stop(struct rq *rq)
- 	.pick_next_task		= pick_next_task_stop,
- 	.put_prev_task		= put_prev_task_stop,
- 	.set_next_task          = set_next_task_stop,
-+#ifdef CONFIG_SCHED_CORE
-+	.prio_less		= prio_less_stop,
-+#endif
- 
- #ifdef CONFIG_SMP
- 	.balance		= balance_stop,
--- 
-1.8.3.1
+
+> > >
+> > >
+> > >
+> > >> > ---
+> > >> >
+> > >> > drivers/vhost/vsock.c                   | 2 +-
+> > >> > net/vmw_vsock/virtio_transport_common.c | 2 +-
+> > >> > 2 files changed, 2 insertions(+), 2 deletions(-)
+> > >> >
+> > >> > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+> > >> > index 368330417bde..5703775af129 100644
+> > >> > --- a/drivers/vhost/vsock.c
+> > >> > +++ b/drivers/vhost/vsock.c
+> > >> > @@ -393,7 +393,7 @@ vhost_vsock_alloc_pkt(struct vhost_virtqueue *vq,
+> > >> >            return NULL;
+> > >> >    }
+> > >> >
+> > >> > -  pkt->buf = kmalloc(pkt->len, GFP_KERNEL);
+> > >> > +  pkt->buf = kvmalloc(pkt->len, GFP_KERNEL);
+> > >> >    if (!pkt->buf) {
+> > >> >            kfree(pkt);
+> > >> >            return NULL;
+> > >> > diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+> > >> > index ec2c2afbf0d0..3a12aee33e92 100644
+> > >> > --- a/net/vmw_vsock/virtio_transport_common.c
+> > >> > +++ b/net/vmw_vsock/virtio_transport_common.c
+> > >> > @@ -1342,7 +1342,7 @@ EXPORT_SYMBOL_GPL(virtio_transport_recv_pkt);
+> > >> >
+> > >> > void virtio_transport_free_pkt(struct virtio_vsock_pkt *pkt)
+> > >> > {
+> > >> > -  kfree(pkt->buf);
+> > >> > +  kvfree(pkt->buf);
+> > >>
+> > >> virtio_transport_free_pkt() is used also in virtio_transport.c and
+> > >> vsock_loopback.c where pkt->buf is allocated with kmalloc(), but IIUC
+> > >> kvfree() can be used with that memory, so this should be fine.
+> > >>
+> > >> >    kfree(pkt);
+> > >> > }
+> > >> > EXPORT_SYMBOL_GPL(virtio_transport_free_pkt);
+> > >> > --
+> > >> > 2.37.3.998.g577e59143f-goog
+> > >> >
+> > >>
+> > >> This issue should go away with the Bobby's work about introducing sk_buff
+> > >> [1], but we can queue this for now.
+> > >>
+> > >> I'm not sure if we should do the same also in the virtio-vsock driver
+> > >> (virtio_transport.c). Here in vhost-vsock the buf allocated is only used in
+> > >> the host, while in the virtio-vsock driver the buffer is exposed to the
+> > >> device emulated in the host, so it should be physically contiguous (if not,
+> > >> maybe we need to adjust virtio_vsock_rx_fill()).
+> > >
+> > >More importantly it needs to support DMA API which IIUC kvmalloc
+> > >memory does not.
+> > >
+> >
+> > Right, good point!
+> >
+> > Thanks,
+> > Stefano
+> >
+> 
+> 
+> -- 
+> Junichi Uekawa
+> Google
 
