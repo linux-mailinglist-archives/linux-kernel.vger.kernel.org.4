@@ -2,115 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF9F5EFD24
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 457C05EFD2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235018AbiI2SjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
+        id S234024AbiI2Skk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbiI2SjA (ORCPT
+        with ESMTP id S235089AbiI2Skh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:39:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6751280E1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:38:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664476738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TDV2GeYg3Ie1RbywMBT9ty+ML1gHVHsPl0YHmqgqQMA=;
-        b=JOE2nrA9iDcPLZ7qa6Zl6PBRd9zDkiIjybraurugL6FpryEy9MYcTYPwv7tL0Dzry+2Fms
-        MiS+qJYBW21GUwa+BDIHtNplPzuJCBnQIDbzvMSTO6jdFg5Wz8kio8h9i/WQjZXn81Cnag
-        Ots3cuLn5LXAuQVkUWc4mhhYTKalZmU=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-633-uov0RPA_Mh-ho0XZeYoQGA-1; Thu, 29 Sep 2022 14:38:57 -0400
-X-MC-Unique: uov0RPA_Mh-ho0XZeYoQGA-1
-Received: by mail-wm1-f69.google.com with SMTP id h187-20020a1c21c4000000b003b51369ff1bso3315469wmh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:38:56 -0700 (PDT)
+        Thu, 29 Sep 2022 14:40:37 -0400
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE629A4B00;
+        Thu, 29 Sep 2022 11:40:36 -0700 (PDT)
+Received: by mail-oo1-f51.google.com with SMTP id u3-20020a4ab5c3000000b0044b125e5d9eso701311ooo.12;
+        Thu, 29 Sep 2022 11:40:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=TDV2GeYg3Ie1RbywMBT9ty+ML1gHVHsPl0YHmqgqQMA=;
-        b=P+A9of6vwnAYsRRnR8uAtC+3h20gQNgamsxcfCE9hqQAdEmmKsRflHx1zeXOe/n8ou
-         e36s6Fngs4NmB9gOdiRgZDmswbY8R0jSxEN11MmDxH3HH1HjsKXQcCGzEi9U3Zwph/GB
-         a7MZVREoQuECAbsEAI1ztpVemOGr41hnEgtPJ6BgbUUfbwm1oiE5g6kb8iQlk87uFVis
-         gcEw4oItEUgH2U68zJNjutVo4hGJyyasNH1hnF+hy1QzGOdqzHbGzDn8UNMxsO4McloQ
-         1EN/mElSwKZpcsq+5OECktt9YqWCu9h6bQrzvHhNdVj5qYXNQUarAuv0FFWTSA1GiUxS
-         MGqA==
-X-Gm-Message-State: ACrzQf3PvatlYSSV72LV3crx+Sm2MH+40QL0n1HQqs4wZDFjvCUh5idZ
-        vkPk0qpcZNkLv7Bhfbcg+FK86B2XhLW9qZBuqj66fZ9+Jomfj30ajhSgCpTYbma1kYBvb9puMTe
-        oiN2mWgRA2HzHhv8iFZM4WBBN
-X-Received: by 2002:a05:600c:a4b:b0:3b5:5267:6aad with SMTP id c11-20020a05600c0a4b00b003b552676aadmr3557010wmq.110.1664476735681;
-        Thu, 29 Sep 2022 11:38:55 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6NMkOD5mQ9M9IpIZXsPLMxPV8wr7nCiRR0NrNHRJFnWd1pRxY806ZkNxQLnKmIKJU2g7i+iw==
-X-Received: by 2002:a05:600c:a4b:b0:3b5:5267:6aad with SMTP id c11-20020a05600c0a4b00b003b552676aadmr3556986wmq.110.1664476735371;
-        Thu, 29 Sep 2022 11:38:55 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:ce00:b5d:2b28:1eb5:9245? (p200300cbc705ce000b5d2b281eb59245.dip0.t-ipconnect.de. [2003:cb:c705:ce00:b5d:2b28:1eb5:9245])
-        by smtp.gmail.com with ESMTPSA id m64-20020a1ca343000000b003a6125562e1sm100188wme.46.2022.09.29.11.38.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 11:38:54 -0700 (PDT)
-Message-ID: <834c258d-4c0e-1753-3608-8a7e28c14d07@redhat.com>
-Date:   Thu, 29 Sep 2022 20:38:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US
-To:     Chih-En Lin <shiyn.lin@gmail.com>
-Cc:     Nadav Amit <namit@vmware.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Xu <peterx@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Li kunyu <kunyu@nfschina.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <shy828301@gmail.com>, Song Liu <song@kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=JUknpPDEYJa9Cq2iz50zjd2tB2wnF+7kU0AIJz4j5e0=;
+        b=Yytm68gdwfQobn5DR7aKeQcPNb38dEoNvrv3YQf5W0nJ7+AX1lrPB013woBZpYn7a+
+         +yclmLcK7YavyJ+YGYUDnUmJKk8gA2q7hXCMs5/dY/bHaMpAYFLcZ2zfHItKxNDqFRgF
+         ABoXLcjbE+UzZ5bmTRym9pZkyNCiMSCbgzwUbn3fTeJPIAyWBE6faDbwo42AYicyt0gz
+         9CwNuw0y5dvpA4LgJtBAW5vePwDYAoa2NY2JxerFrcFjke1ivzU9UAndhxl6bq0u/2R3
+         UQrwoHpF5wuDjD0gdKk7D0kN82uOdMLtPzL8nUxnFodesIScvSGOntaWlNu237Lbzz8C
+         g87A==
+X-Gm-Message-State: ACrzQf1O/JAGRKI8zmyU0muvvOwD6Psz/iM/WeYPrngQ3mgs+7GoGl+Z
+        CHc7p90isQUebhWxbc+yJe2+I3ec8g==
+X-Google-Smtp-Source: AMsMyM6Qwd/fCldskNnRa938IC4Gy8WNyKg9DAcQiW8XIA6ZypiOLor4C+h5FDq8rJOyuTG7W+BVJw==
+X-Received: by 2002:a9d:6258:0:b0:655:f63e:8e6d with SMTP id i24-20020a9d6258000000b00655f63e8e6dmr2033084otk.166.1664476836064;
+        Thu, 29 Sep 2022 11:40:36 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 188-20020aca06c5000000b0034d14c6ce3dsm31215oig.16.2022.09.29.11.40.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 11:40:35 -0700 (PDT)
+Received: (nullmailer pid 2551224 invoked by uid 1000);
+        Thu, 29 Sep 2022 18:40:33 -0000
+Date:   Thu, 29 Sep 2022 13:40:33 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Hal Feng <hal.feng@linux.starfivetech.com>
+Cc:     devicetree@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org,
         Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dinglan Peng <peng301@purdue.edu>,
-        Pedro Fonseca <pfonseca@purdue.edu>,
-        Jim Huang <jserv@ccns.ncku.edu.tw>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>
-References: <20220927162957.270460-1-shiyn.lin@gmail.com>
- <20220927162957.270460-10-shiyn.lin@gmail.com>
- <3D21021E-490F-4FE0-9C75-BB3A46A66A26@vmware.com>
- <YzNUwxU44mq+KnCm@strix-laptop>
- <c12f848d-cb54-2998-8650-2c2a5707932d@redhat.com>
- <YzWf7V5qzMjzMAk4@strix-laptop>
- <39c5ef18-1138-c879-2c6d-c013c79fa335@redhat.com>
- <YzXkDKr6plbJZgG4@strix-laptop>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC PATCH v2 9/9] mm: Introduce Copy-On-Write PTE table
-In-Reply-To: <YzXkDKr6plbJZgG4@strix-laptop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Marc Zyngier <maz@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>
+Subject: Re: [PATCH v1 12/30] dt-bindings: reset: Add starfive,jh7110-reset
+ bindings
+Message-ID: <20220929184033.GA2539242-robh@kernel.org>
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220929175147.19749-1-hal.feng@linux.starfivetech.com>
+ <166447556924.2514425.231552070734010562.robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166447556924.2514425.231552070734010562.robh@kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,141 +78,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.09.22 20:29, Chih-En Lin wrote:
-> On Thu, Sep 29, 2022 at 07:24:31PM +0200, David Hildenbrand wrote:
->>>> IMHO, a relaxed form that focuses on only the memory consumption reduction
->>>> could *possibly* be accepted upstream if it's not too invasive or complex.
->>>> During fork(), we'd do exactly what we used to do to PTEs (increment
->>>> mapcount, refcount, trying to clear PageAnonExclusive, map the page R/O,
->>>> duplicate swap entries; all while holding the page table lock), however,
->>>> sharing the prepared page table with the child process using COW after we
->>>> prepared it.
->>>>
->>>> Any (most once we want to *optimize* rmap handling) modification attempts
->>>> require breaking COW -- copying the page table for the faulting process. But
->>>> at that point, the PTEs are already write-protected and properly accounted
->>>> (refcount/mapcount/PageAnonExclusive).
->>>>
->>>> Doing it that way might not require any questionable GUP hacks and swapping,
->>>> MMU notifiers etc. "might just work as expected" because the accounting
->>>> remains unchanged" -- we simply de-duplicate the page table itself we'd have
->>>> after fork and any modification attempts simply replace the mapped copy.
->>>
->>> Agree.
->>> However for GUP hacks, if we want to do the COW to page table, we still
->>> need the hacks in this patch (using the COW_PTE_OWN_EXCLUSIVE flag to
->>> check whether the PTE table is available or not before we do the COW to
->>> the table). Otherwise, it will be more complicated since it might need
->>> to handle situations like while preparing the COW work, it just figuring
->>> out that it needs to duplicate the whole table and roll back (recover
->>> the state and copy it to new table). Hopefully, I'm not wrong here.
->>
->> The nice thing is that GUP itself *usually* doesn't modify page tables. One
->> corner case is follow_pfn_pte(). All other modifications should happen in
->> the actual fault handler that has to deal with such kind of unsharing either
->> way when modifying the PTE.
->>
->> If the pages are already in a COW-ed pagetable in the desired "shared" state
->> (e.g., PageAnonExclusive cleared on an anonymous page), R/O pinning of such
->> pages will just work as expected and we shouldn't be surprised by another
->> set of GUP+COW CVEs.
->>
->> We'd really only deduplicate the page table and not play other tricks with
->> the actual page table content that differ from the existing way of handling
->> fork().
->>
->> I don't immediately see why we need COW_PTE_OWN_EXCLUSIVE in GUP code when
->> not modifying the page table. I think we only need "we have to unshare this
->> page table now" in follow_pfn_pte() and inside the fault handling when GUP
->> triggers a fault.
->>
->> I hope my assumption is correct, or am I missing something?
->>
+On Thu, Sep 29, 2022 at 01:21:56PM -0500, Rob Herring wrote:
+> On Fri, 30 Sep 2022 01:51:47 +0800, Hal Feng wrote:
+> > Add bindings for the reset controller on the JH7110 RISC-V
+> > SoC by StarFive Technology Ltd.
+> > 
+> > Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+> > ---
+> >  .../bindings/reset/starfive,jh7110-reset.yaml | 54 +++++++++++++++++++
+> >  1 file changed, 54 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/reset/starfive,jh7110-reset.yaml
+> > 
 > 
-> My consideration is when we pinned the page and did the COW to make the
-> page table be shared. It might not allow mapping the pinned page to R/O)
-> into both processes.
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 > 
-> So, if the fork is working on the shared state, it needs to recover the
-> table and copy to a new one since that pinned page will need to copy
-> immediately. We can hold the shared state after occurring such a
-> situation. So we still need some trick to let the fork() know which page
-> table already has the pinned page (or such page won't let us share)
-> before going to duplicate.
+> yamllint warnings/errors:
 > 
-> Am I wrong here?
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/reset/starfive,jh7110-reset.example.dts:18:18: fatal error: dt-bindings/reset/starfive-jh7110.h: No such file or directory
+>    18 |         #include <dt-bindings/reset/starfive-jh7110.h>
+>       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> compilation terminated.
+> make[1]: *** [scripts/Makefile.lib:384: Documentation/devicetree/bindings/reset/starfive,jh7110-reset.example.dtb] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:1420: dt_binding_check] Error 2
 
-I think you might be overthinking this. Let's keep it simple:
+Looks to be because this series got moderated and came in waves. In any 
+case, patches 11 and 12 can be combined. Same for any other bindings and 
+binding headers.
 
-1) Handle pinned anon pages just as I described below, falling back to 
-the "slow" path of page table copying.
-
-2) Once we passed that stage, you can be sure that the COW-ed page table 
-cannot have actually pinned anon pages. All anon pages in such a page 
-table have PageAnonExclusive cleared and are "maybe shared". GUP cannot 
-succeed in pinning these pages anymore, because it will only pin 
-exclusive anon pages!
-
-3) If anybody wants to take a R/O pin on a shared anon page that is 
-mapped into a COW-ed page table, we trigger a fault with 
-FAULT_FLAG_UNSHARE instead of pinning the page. This has to break COW on 
-the page table and properly map an exclusive anon page into it, breaking 
-COW.
-
-Do you see a problem with that?
-
-> 
-> After that, since we handled the accounting in fork(), we don't need
-> ownership (pmd_t pointer) anymore. We have to find another way to mark
-> the table to be exclusive. (Right now, COW_PTE_OWNER_EXCLUSIVE flag is
-> stored at that space.)
-> 
->>>
->>>> But devil is in the detail (page table lock, TLB flushing).
->>>
->>> Sure, it might be an overhead in the page fault and needs to be handled
->>> carefully. ;)
->>>
->>>> "will make fork() even have more overhead" is not a good excuse for such
->>>> complexity/hacks -- sure, it will make your benchmark results look better in
->>>> comparison ;)
->>>
->>> ;);)
->>> I think that, even if we do the accounting with the COW page table, it
->>> still has a little bit improve.
->>
->> :)
->>
->> My gut feeling is that this is true. While we have to do a pass over the
->> parent page table during fork and wrprotect all PTEs etc., we don't have to
->> duplicate the page table content and allocate/free memory for that.
->>
->> One interesting case is when we cannot share an anon page with the child
->> process because it maybe pinned -- and we have to copy it via
->> copy_present_page(). In that case, the page table between the parent and the
->> child would differ and we'd not be able to share the page table.
-> 
-> That is what I want to say above.
-> The case might happen in the middle of the shared page table progress.
-> It might cost more overhead to recover it. Therefore, if GUP wants to
-> pin the mapped page we can mark the PTE table first, so fork() won't
-> waste time doing the work for sharing.
-
-Having pinned pages is a corner case for most apps. No need to worry 
-about optimizing this corner case for now.
-
-I see what you are trying to optimize, but I don't think this is needed 
-in a first version, and probably never is needed.
-
-
-Any attempts to mark page tables in a certain way from GUP 
-(COW_PTE_OWNER_EXCLUSIVE) is problematic either way: GUP-fast 
-(get_user_pages_fast) can race with pretty much anything, even with 
-concurrent fork. I suspect your current code might be really racy in 
-that regard.
-
--- 
-Thanks,
-
-David / dhildenb
-
+Rob
