@@ -2,63 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36035EEC9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 05:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F9A5EECA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 06:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234640AbiI2D7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 23:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
+        id S234595AbiI2ECX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 00:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233695AbiI2D7T (ORCPT
+        with ESMTP id S229651AbiI2ECU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 23:59:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94CDF5963
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 20:59:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FF0FB8232D
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:59:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9EBFC433D7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:59:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664423953;
-        bh=XOD2tRg3K+Mi1S8FGjXss48nG6ZOBDiplumgb8d5atI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vQL/1FfWBEQBWWjd6iue8tl1RqG5V6gjV+VdRwdBJgqHDinR36dkBW+7sVDgfrOHm
-         yt0582JgT2RpaXJzZgGlu67LiM8JWiK9v2Mbgu24aSsmsPI0q7JrMaoZm4Fm0HIN3S
-         IVANIK3WPtcuZw1+ztVK1EeA1q+bJF+Y94U8e+nt57rslWH6JhdMaSdgc50W45WToB
-         wjwcih7/OnVRf18sIp1Mp4FYtATbaw8ev1wdaSsMz3u0wU9kAjGh/wIrM4ti/oCqDu
-         lk5b/1aA0H6tvJamSFNai59k0fd9HixV7Z+BE2KI0bjToBkizo81HfOCvbZ+dpSxFb
-         SiZ+aweC4wd0w==
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-127dca21a7dso419128fac.12
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 20:59:13 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0wSQ2jzQqEkErb9K79wWbsbhzrg72KfdW8GQEG7POZjJVQDne5
-        s6kYL1Nq7/2E4EzT/U8INAjLf+o8WyRtwXd+5DI=
-X-Google-Smtp-Source: AMsMyM7FE/g6U6bfnW4OnoVKQxP4lrWveOlhh3IhnehLt0qZPyatLHOEhEtYnl/UbBvNB23SjsokJzZJgx4XUazQV00=
-X-Received: by 2002:a05:6870:5803:b0:12c:c3e0:99dc with SMTP id
- r3-20020a056870580300b0012cc3e099dcmr7072889oap.19.1664423952849; Wed, 28 Sep
- 2022 20:59:12 -0700 (PDT)
+        Thu, 29 Sep 2022 00:02:20 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582ACF1934;
+        Wed, 28 Sep 2022 21:02:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1664424139; x=1695960139;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PQTvPdtfbIJpzPf1F/SRY//WCyK26Mw3kEBkRj9QTyQ=;
+  b=RFunYgSTDYOkxozPb9phlK8pXZXMbqKkOcf29MPWGL+uSQotmXu0YH7z
+   SKZvRIGxljQ0j8DORnvWyrgXC/LjC6kxQBYmtV98Yw9iKJHpbqz8P4iZ9
+   5h3Uu2e8CWPqqt5vqd4yf3GzsQg22csL7aTMaHAqRYX1w2p2s0Zo8oV4o
+   0=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Sep 2022 21:02:19 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 21:02:18 -0700
+Received: from [10.110.116.67] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 28 Sep
+ 2022 21:02:17 -0700
+Message-ID: <e6502af5-73c1-6b06-5da7-28185477aefe@quicinc.com>
+Date:   Wed, 28 Sep 2022 21:02:17 -0700
 MIME-Version: 1.0
-References: <20220928162007.3791-1-jszhang@kernel.org> <20220928162007.3791-5-jszhang@kernel.org>
-In-Reply-To: <20220928162007.3791-5-jszhang@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 29 Sep 2022 11:59:00 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTADq-JpUtitSr0nw1aDPZrsB6f1jA-04WmOVcrxYeakw@mail.gmail.com>
-Message-ID: <CAJF2gTTADq-JpUtitSr0nw1aDPZrsB6f1jA-04WmOVcrxYeakw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] riscv: entry: consolidate general regs saving into save_gp
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 01/14] docs: gunyah: Introduce Gunyah Hypervisor
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Marc Zyngier" <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <devicetree@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
+ <20220928195633.2348848-2-quic_eberman@quicinc.com>
+ <YzUUaIx+azyzFDNX@debian.me>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <YzUUaIx+azyzFDNX@debian.me>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,303 +82,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 12:29 AM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> Consolidate the saving/restoring GPs(except ra, sp and tp) into
-> save_gp/restore_gp macro.
->
-> No functional change intended.
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/include/asm/asm.h   | 65 +++++++++++++++++++++++++
->  arch/riscv/kernel/entry.S      | 87 ++--------------------------------
->  arch/riscv/kernel/mcount-dyn.S | 58 +----------------------
->  3 files changed, 70 insertions(+), 140 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-> index 1b471ff73178..2f3b49536e9d 100644
-> --- a/arch/riscv/include/asm/asm.h
-> +++ b/arch/riscv/include/asm/asm.h
-> @@ -68,6 +68,7 @@
->  #endif
->
->  #ifdef __ASSEMBLY__
-> +#include <asm/asm-offsets.h>
->
->  /* Common assembly source macros */
->
-> @@ -80,6 +81,70 @@
->         .endr
->  .endm
->
-> +       /* save all GPs except ra, sp and tp */
-> +       .macro save_gp
-How about leave x3(gp) out of the macro, and define:
-.marco save_from_x5_to_x31
-.marco restore_from_x5_to_x31
 
-> +       REG_S x3,  PT_GP(sp)
-> +       REG_S x5,  PT_T0(sp)
-> +       REG_S x6,  PT_T1(sp)
-> +       REG_S x7,  PT_T2(sp)
-> +       REG_S x8,  PT_S0(sp)
-> +       REG_S x9,  PT_S1(sp)
-> +       REG_S x10, PT_A0(sp)
-> +       REG_S x11, PT_A1(sp)
-> +       REG_S x12, PT_A2(sp)
-> +       REG_S x13, PT_A3(sp)
-> +       REG_S x14, PT_A4(sp)
-> +       REG_S x15, PT_A5(sp)
-> +       REG_S x16, PT_A6(sp)
-> +       REG_S x17, PT_A7(sp)
-> +       REG_S x18, PT_S2(sp)
-> +       REG_S x19, PT_S3(sp)
-> +       REG_S x20, PT_S4(sp)
-> +       REG_S x21, PT_S5(sp)
-> +       REG_S x22, PT_S6(sp)
-> +       REG_S x23, PT_S7(sp)
-> +       REG_S x24, PT_S8(sp)
-> +       REG_S x25, PT_S9(sp)
-> +       REG_S x26, PT_S10(sp)
-> +       REG_S x27, PT_S11(sp)
-> +       REG_S x28, PT_T3(sp)
-> +       REG_S x29, PT_T4(sp)
-> +       REG_S x30, PT_T5(sp)
-> +       REG_S x31, PT_T6(sp)
-> +       .endm
+
+On 9/28/2022 8:43 PM, Bagas Sanjaya wrote:
+> On Wed, Sep 28, 2022 at 12:56:20PM -0700, Elliot Berman wrote:
+>> diff --git a/Documentation/virt/gunyah/index.rst b/Documentation/virt/gunyah/index.rst
+>> new file mode 100644
+>> index 000000000000..959f451caccd
+>> --- /dev/null
+>> +++ b/Documentation/virt/gunyah/index.rst
+>> @@ -0,0 +1,114 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +=================
+>> +Gunyah Hypervisor
+>> +=================
+>> +
+>> +.. toctree::
+>> +   :maxdepth: 1
+>> +
+>> +   message-queue
+>> +
+>> +Gunyah is a Type-1 hypervisor which is independent of any OS kernel, and runs in
+>> +a higher CPU privilege level. It does not depend on any lower-privileged operating system
+>> +for its core functionality. This increases its security and can support a much smaller
+>> +trusted computing base than a Type-2 hypervisor.
+>> +
+>> +Gunyah is an open source hypervisor. The source repo is available at
+>> +https://github.com/quic/gunyah-hypervisor.
+>> +
+>> +Gunyah provides these following features.
+>> +
+>> +- Scheduling:
+>> +
+>> +  A scheduler for virtual CPUs (vCPUs) on physical CPUs and enables time-sharing
+>> +  of the CPUs. Gunyah supports two models of scheduling:
+>> +
+>> +    1. "Behind the back" scheduling in which Gunyah hypervisor schedules vCPUS on its own
+>> +    2. "Proxy" scheduling in which a delegated VM can donate part of one of its vCPU slice
+>> +       to another VM's vCPU via a hypercall.
+>> +
+>> +- Memory Management:
+>> +
+>> +  APIs handling memory, abstracted as objects, limiting direct use of physical
+>> +  addresses. Memory ownership and usage tracking of all memory under its control.
+>> +  Memory partitioning between VMs is a fundamental security feature.
+>> +
+>> +- Interrupt Virtualization:
+>> +
+>> +  Uses CPU hardware interrupt virtualization capabilities. Interrupts are handled
+>> +  in the hypervisor and routed to the assigned VM.
+>> +
+>> +- Inter-VM Communication:
+>> +
+>> +  There are several different mechanisms provided for communicating between VMs.
+>> +
+>> +- Virtual platform:
+>> +
+>> +  Architectural devices such as interrupt controllers and CPU timers are directly provided
+>> +  by the hypervisor as well as core virtual platform devices and system APIs such as ARM PSCI.
+>> +
+>> +- Device Virtualization:
+>> +
+>> +  Para-virtualization of devices is supported using inter-VM communication.
+>> +
+>> +Architectures supported
+>> +=======================
+>> +AArch64 with a GIC
+>> +
+>> +Resources and Capabilities
+>> +==========================
+>> +
+>> +Some services or resources provided by the Gunyah hypervisor are described to a virtual machine by
+>> +capability IDs. For instance, inter-VM communication is performed with doorbells and message queues.
+>> +Gunyah allows access to manipulate that doorbell via the capability ID. These devices are described
+>> +in Linux as a struct gunyah_resource.
+>> +
+>> +High level management of these resources is performed by the resource manager VM. RM informs a
+>> +guest VM about resources it can access through either the device tree or via guest-initiated RPC.
+>> +
+>> +For each virtual machine, Gunyah maintains a table of resources which can be accessed by that VM.
+>> +An entry in this table is called a "capability" and VMs can only access resources via this
+>> +capability table. Hence, virtual Gunyah devices are referenced by a "capability IDs" and not a
+>> +"resource IDs". A VM can have multiple capability IDs mapping to the same resource. If 2 VMs have
+>> +access to the same resource, they may not be using the same capability ID to access that resource
+>> +since the tables are independent per VM.
+>> +
+>> +Resource Manager
+>> +================
+>> +
+>> +The resource manager (RM) is a privileged application VM supporting the Gunyah Hypervisor.
+>> +It provides policy enforcement aspects of the virtualization system. The resource manager can
+>> +be treated as an extension of the Hypervisor but is separated to its own partition to ensure
+>> +that the hypervisor layer itself remains small and secure and to maintain a separation of policy
+>> +and mechanism in the platform. On arm64, RM runs at NS-EL1 similar to other virtual machines.
+>> +
+>> +Communication with the resource manager from each guest VM happens with message-queue.rst. Details
+>> +about the specific messages can be found in drivers/virt/gunyah/rsc_mgr.c
+>> +
+>> +::
+>> +
+>> +  +-------+   +--------+   +--------+
+>> +  |  RM   |   |  VM_A  |   |  VM_B  |
+>> +  +-.-.-.-+   +---.----+   +---.----+
+>> +    | |           |            |
+>> +  +-.-.-----------.------------.----+
+>> +  | | \==========/             |    |
+>> +  |  \========================/     |
+>> +  |            Gunyah               |
+>> +  +---------------------------------+
+>> +
+>> +The source for the resource manager is available at https://github.com/quic/gunyah-resource-manager.
+>> +
+>> +The resource manager provides the following features:
+>> +
+>> +- VM lifecycle management: allocating a VM, starting VMs, destruction of VMs
+>> +- VM access control policy, including memory sharing and lending
+>> +- Interrupt routing configuration
+>> +- Forwarding of system-level events (e.g. VM shutdown) to owner VM
+>> +
+>> +When booting a virtual machine which uses a devicetree, resource manager overlays a
+>> +/hypervisor node. This node can let Linux know it is running as a Gunyah guest VM,
+>> +how to communicate with resource manager, and basic description and capabilities of
+>> +this VM. See Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml for a description
+>> +of this node.
+> 
+> The documentation LGTM.
+> 
+>> diff --git a/Documentation/virt/gunyah/message-queue.rst b/Documentation/virt/gunyah/message-queue.rst
+>> new file mode 100644
+>> index 000000000000..e130f124ed52
+>> --- /dev/null
+>> +++ b/Documentation/virt/gunyah/message-queue.rst
+>> <snipped>...
+>> +The diagram below shows how message queue works. A typical configuration involves
+>> +2 message queues. Message queue 1 allows VM_A to send messages to VM_B. Message
+>> +queue 2 allows VM_B to send messages to VM_A.
+>> +
+>> +1. VM_A sends a message of up to 1024 bytes in length. It raises a hypercall
+>> +   with the message to inform the hypervisor to add the message to
+>> +   message queue 1's queue.
+>> +2. Gunyah raises the corresponding interrupt for VM_B when any of these happens:
+>> +   a. gh_msgq_send has PUSH flag. Queue is immediately flushed. This is the typical case.
+>> +   b. Explicility with gh_msgq_push command from VM_A.
+>> +   c. Message queue has reached a threshold depth.
+>> +3. VM_B calls gh_msgq_recv and Gunyah copies message to requested buffer.
+>> +
+> 
+> The nested list above should be separated with blank lines to be
+> rendered properly:
+> 
+> ---- >8 ----
+> 
+> diff --git a/Documentation/virt/gunyah/message-queue.rst b/Documentation/virt/gunyah/message-queue.rst
+> index e130f124ed525a..afaad99db215e6 100644
+> --- a/Documentation/virt/gunyah/message-queue.rst
+> +++ b/Documentation/virt/gunyah/message-queue.rst
+> @@ -20,9 +20,11 @@ queue 2 allows VM_B to send messages to VM_A.
+>      with the message to inform the hypervisor to add the message to
+>      message queue 1's queue.
+>   2. Gunyah raises the corresponding interrupt for VM_B when any of these happens:
 > +
-> +       /* restore all GPs except ra, sp and tp */
-> +       .macro restore_gp
-> +       REG_L x3,  PT_GP(sp)
-> +       REG_L x5,  PT_T0(sp)
-> +       REG_L x6,  PT_T1(sp)
-> +       REG_L x7,  PT_T2(sp)
-> +       REG_L x8,  PT_S0(sp)
-> +       REG_L x9,  PT_S1(sp)
-> +       REG_L x10, PT_A0(sp)
-> +       REG_L x11, PT_A1(sp)
-> +       REG_L x12, PT_A2(sp)
-> +       REG_L x13, PT_A3(sp)
-> +       REG_L x14, PT_A4(sp)
-> +       REG_L x15, PT_A5(sp)
-> +       REG_L x16, PT_A6(sp)
-> +       REG_L x17, PT_A7(sp)
-> +       REG_L x18, PT_S2(sp)
-> +       REG_L x19, PT_S3(sp)
-> +       REG_L x20, PT_S4(sp)
-> +       REG_L x21, PT_S5(sp)
-> +       REG_L x22, PT_S6(sp)
-> +       REG_L x23, PT_S7(sp)
-> +       REG_L x24, PT_S8(sp)
-> +       REG_L x25, PT_S9(sp)
-> +       REG_L x26, PT_S10(sp)
-> +       REG_L x27, PT_S11(sp)
-> +       REG_L x28, PT_T3(sp)
-> +       REG_L x29, PT_T4(sp)
-> +       REG_L x30, PT_T5(sp)
-> +       REG_L x31, PT_T6(sp)
-> +       .endm
+>      a. gh_msgq_send has PUSH flag. Queue is immediately flushed. This is the typical case.
+>      b. Explicility with gh_msgq_push command from VM_A.
+>      c. Message queue has reached a threshold depth.
 > +
->  #endif /* __ASSEMBLY__ */
->
->  #endif /* _ASM_RISCV_ASM_H */
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index 5a6171a90d81..a90f17ed2822 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -40,34 +40,7 @@ _save_context:
->         REG_L sp, TASK_TI_KERNEL_SP(tp)
->         addi sp, sp, -(PT_SIZE_ON_STACK)
->         REG_S x1,  PT_RA(sp)
-> -       REG_S x3,  PT_GP(sp)
-> -       REG_S x5,  PT_T0(sp)
-> -       REG_S x6,  PT_T1(sp)
-> -       REG_S x7,  PT_T2(sp)
-> -       REG_S x8,  PT_S0(sp)
-> -       REG_S x9,  PT_S1(sp)
-> -       REG_S x10, PT_A0(sp)
-> -       REG_S x11, PT_A1(sp)
-> -       REG_S x12, PT_A2(sp)
-> -       REG_S x13, PT_A3(sp)
-> -       REG_S x14, PT_A4(sp)
-> -       REG_S x15, PT_A5(sp)
-> -       REG_S x16, PT_A6(sp)
-> -       REG_S x17, PT_A7(sp)
-> -       REG_S x18, PT_S2(sp)
-> -       REG_S x19, PT_S3(sp)
-> -       REG_S x20, PT_S4(sp)
-> -       REG_S x21, PT_S5(sp)
-> -       REG_S x22, PT_S6(sp)
-> -       REG_S x23, PT_S7(sp)
-> -       REG_S x24, PT_S8(sp)
-> -       REG_S x25, PT_S9(sp)
-> -       REG_S x26, PT_S10(sp)
-> -       REG_S x27, PT_S11(sp)
-> -       REG_S x28, PT_T3(sp)
-> -       REG_S x29, PT_T4(sp)
-> -       REG_S x30, PT_T5(sp)
-> -       REG_S x31, PT_T6(sp)
-> +       save_gp
->
->         /*
->          * Disable user-mode memory access as it should only be set in the
-> @@ -182,35 +155,8 @@ ENTRY(ret_from_exception)
->         csrw CSR_STATUS, a0
->
->         REG_L x1,  PT_RA(sp)
-> -       REG_L x3,  PT_GP(sp)
->         REG_L x4,  PT_TP(sp)
-> -       REG_L x5,  PT_T0(sp)
-> -       REG_L x6,  PT_T1(sp)
-> -       REG_L x7,  PT_T2(sp)
-> -       REG_L x8,  PT_S0(sp)
-> -       REG_L x9,  PT_S1(sp)
-> -       REG_L x10, PT_A0(sp)
-> -       REG_L x11, PT_A1(sp)
-> -       REG_L x12, PT_A2(sp)
-> -       REG_L x13, PT_A3(sp)
-> -       REG_L x14, PT_A4(sp)
-> -       REG_L x15, PT_A5(sp)
-> -       REG_L x16, PT_A6(sp)
-> -       REG_L x17, PT_A7(sp)
-> -       REG_L x18, PT_S2(sp)
-> -       REG_L x19, PT_S3(sp)
-> -       REG_L x20, PT_S4(sp)
-> -       REG_L x21, PT_S5(sp)
-> -       REG_L x22, PT_S6(sp)
-> -       REG_L x23, PT_S7(sp)
-> -       REG_L x24, PT_S8(sp)
-> -       REG_L x25, PT_S9(sp)
-> -       REG_L x26, PT_S10(sp)
-> -       REG_L x27, PT_S11(sp)
-> -       REG_L x28, PT_T3(sp)
-> -       REG_L x29, PT_T4(sp)
-> -       REG_L x30, PT_T5(sp)
-> -       REG_L x31, PT_T6(sp)
-> +       restore_gp
->
->         REG_L x2,  PT_SP(sp)
->
-> @@ -237,34 +183,7 @@ ENTRY(handle_kernel_stack_overflow)
->
->         //save context to overflow stack
->         REG_S x1,  PT_RA(sp)
-> -       REG_S x3,  PT_GP(sp)
-> -       REG_S x5,  PT_T0(sp)
-> -       REG_S x6,  PT_T1(sp)
-> -       REG_S x7,  PT_T2(sp)
-> -       REG_S x8,  PT_S0(sp)
-> -       REG_S x9,  PT_S1(sp)
-> -       REG_S x10, PT_A0(sp)
-> -       REG_S x11, PT_A1(sp)
-> -       REG_S x12, PT_A2(sp)
-> -       REG_S x13, PT_A3(sp)
-> -       REG_S x14, PT_A4(sp)
-> -       REG_S x15, PT_A5(sp)
-> -       REG_S x16, PT_A6(sp)
-> -       REG_S x17, PT_A7(sp)
-> -       REG_S x18, PT_S2(sp)
-> -       REG_S x19, PT_S3(sp)
-> -       REG_S x20, PT_S4(sp)
-> -       REG_S x21, PT_S5(sp)
-> -       REG_S x22, PT_S6(sp)
-> -       REG_S x23, PT_S7(sp)
-> -       REG_S x24, PT_S8(sp)
-> -       REG_S x25, PT_S9(sp)
-> -       REG_S x26, PT_S10(sp)
-> -       REG_S x27, PT_S11(sp)
-> -       REG_S x28, PT_T3(sp)
-> -       REG_S x29, PT_T4(sp)
-> -       REG_S x30, PT_T5(sp)
-> -       REG_S x31, PT_T6(sp)
-> +       save_gp
->
->         REG_L s0, TASK_TI_KERNEL_SP(tp)
->         csrr s1, CSR_STATUS
-> diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-> index d171eca623b6..1b4b0aecf4f5 100644
-> --- a/arch/riscv/kernel/mcount-dyn.S
-> +++ b/arch/riscv/kernel/mcount-dyn.S
-> @@ -68,35 +68,8 @@
->         REG_L x1,  PT_EPC(sp)
->
->         REG_S x2,  PT_SP(sp)
-> -       REG_S x3,  PT_GP(sp)
->         REG_S x4,  PT_TP(sp)
-> -       REG_S x5,  PT_T0(sp)
-> -       REG_S x6,  PT_T1(sp)
-> -       REG_S x7,  PT_T2(sp)
-> -       REG_S x8,  PT_S0(sp)
-> -       REG_S x9,  PT_S1(sp)
-> -       REG_S x10, PT_A0(sp)
-> -       REG_S x11, PT_A1(sp)
-> -       REG_S x12, PT_A2(sp)
-> -       REG_S x13, PT_A3(sp)
-> -       REG_S x14, PT_A4(sp)
-> -       REG_S x15, PT_A5(sp)
-> -       REG_S x16, PT_A6(sp)
-> -       REG_S x17, PT_A7(sp)
-> -       REG_S x18, PT_S2(sp)
-> -       REG_S x19, PT_S3(sp)
-> -       REG_S x20, PT_S4(sp)
-> -       REG_S x21, PT_S5(sp)
-> -       REG_S x22, PT_S6(sp)
-> -       REG_S x23, PT_S7(sp)
-> -       REG_S x24, PT_S8(sp)
-> -       REG_S x25, PT_S9(sp)
-> -       REG_S x26, PT_S10(sp)
-> -       REG_S x27, PT_S11(sp)
-> -       REG_S x28, PT_T3(sp)
-> -       REG_S x29, PT_T4(sp)
-> -       REG_S x30, PT_T5(sp)
-> -       REG_S x31, PT_T6(sp)
-> +       save_gp
->         .endm
->
->         .macro RESTORE_ALL
-> @@ -106,35 +79,8 @@
->         addi    sp, sp, -PT_SIZE_ON_STACK
->         REG_L x1,  PT_EPC(sp)
->         REG_L x2,  PT_SP(sp)
-> -       REG_L x3,  PT_GP(sp)
->         REG_L x4,  PT_TP(sp)
-> -       REG_L x5,  PT_T0(sp)
-> -       REG_L x6,  PT_T1(sp)
-> -       REG_L x7,  PT_T2(sp)
-> -       REG_L x8,  PT_S0(sp)
-> -       REG_L x9,  PT_S1(sp)
-> -       REG_L x10, PT_A0(sp)
-> -       REG_L x11, PT_A1(sp)
-> -       REG_L x12, PT_A2(sp)
-> -       REG_L x13, PT_A3(sp)
-> -       REG_L x14, PT_A4(sp)
-> -       REG_L x15, PT_A5(sp)
-> -       REG_L x16, PT_A6(sp)
-> -       REG_L x17, PT_A7(sp)
-> -       REG_L x18, PT_S2(sp)
-> -       REG_L x19, PT_S3(sp)
-> -       REG_L x20, PT_S4(sp)
-> -       REG_L x21, PT_S5(sp)
-> -       REG_L x22, PT_S6(sp)
-> -       REG_L x23, PT_S7(sp)
-> -       REG_L x24, PT_S8(sp)
-> -       REG_L x25, PT_S9(sp)
-> -       REG_L x26, PT_S10(sp)
-> -       REG_L x27, PT_S11(sp)
-> -       REG_L x28, PT_T3(sp)
-> -       REG_L x29, PT_T4(sp)
-> -       REG_L x30, PT_T5(sp)
-> -       REG_L x31, PT_T6(sp)
-> +       restore_gp
->
->         addi    sp, sp, PT_SIZE_ON_STACK
->         addi    sp, sp, SZREG
-> --
-> 2.34.1
->
+>   3. VM_B calls gh_msgq_recv and Gunyah copies message to requested buffer.
+>   
+>   For VM_B to send a message to VM_A, the process is identical, except that hypercalls
+> 
+> Thanks.
+> 
 
+Thanks! Applied for next version.
 
--- 
-Best Regards
- Guo Ren
