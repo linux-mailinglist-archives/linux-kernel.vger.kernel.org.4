@@ -2,144 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742835EEDE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AC95EEDE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbiI2G32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 02:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
+        id S234784AbiI2G3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 02:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232519AbiI2G3Z (ORCPT
+        with ESMTP id S234737AbiI2G3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 02:29:25 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358DC127C8D
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:29:24 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id nb11so714224ejc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:29:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=9sMUB+ufmO/jB91L+Cnkm2YRBNvfPUGNsKA+nqPeMho=;
-        b=Smds3S9XWiIBc98H2XCEGckTjhx/FBf1xzTVoxJqjvdxbov9Zg4ycsowcLPDcUScM0
-         NI/E7gh0g0jf4rjXTY55tBUfle+7azTt6UETy1ZrthkrKwFskTdJ3T9+7uToDdoCgVJk
-         y5gKkkzUZLrIyq/9U1SMchrSQDKaA0mcUEv2tvLLJcXX2/Wu+Q8zzpdnrNkXQBPVNo65
-         8N0GInKtZctPo6ADCU4/Gqi+Oj6lEKRuxHEX/KjHivtk1qlA/erg3F7FRGCLljU/xgAf
-         W6JetwSWMFg+i2NaTA9I6pyDgVcxF17uBcxFfdAVvuYVY+L4ZKYBSSUTtTqR3RbHhcZb
-         t/Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=9sMUB+ufmO/jB91L+Cnkm2YRBNvfPUGNsKA+nqPeMho=;
-        b=pdBhrBhCSuW2jUo7wEfpoG/zhxSqaRKLpUAyRcxF3w8JFhuihpt3ue93VHYwmolo4+
-         C6FeQmwL+eHoye94C+UeL4/9XZfY2InC6yOzGBNMianXsiAO7v+Phmj7v998eY1ifFPN
-         n9ewxizD7b1WoyhZ5fAvz9X54xA8aF7G0C/5hGR8TElO3bsPihFeQaApbYydpVpXrx2T
-         oiJOR8Ele1R6fY32bYZhAOCb27NQPNP9Pp5UTFICevrEWqTLdRrxLy35MAaUEg7GOA1i
-         oPurQLwbfItYHKANiQv+HdM2kYWbffpriSNzSsZooQpvcsbBSRxBlxzL+nSdBQRfbQef
-         1dYQ==
-X-Gm-Message-State: ACrzQf334mnExb0Zo1NfNErrVAZb3xY8HTnh6pm6Xw4tuk4GPZusqePs
-        JlMNwgXrYGeYlwEM13huBcds+DKmh8Cv4tdJZKFdfw==
-X-Google-Smtp-Source: AMsMyM5ZtREGqxKZKOpbmXG+0pP6ay1c4N1+fNX5kP26dzgQ5hEt5obAeIIeMF0AAim5INRGtCyTdjPD/2tdO9yci7s=
-X-Received: by 2002:a17:907:a05:b0:77b:b538:6476 with SMTP id
- bb5-20020a1709070a0500b0077bb5386476mr1430811ejc.324.1664432962669; Wed, 28
- Sep 2022 23:29:22 -0700 (PDT)
+        Thu, 29 Sep 2022 02:29:49 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AA023BC7;
+        Wed, 28 Sep 2022 23:29:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=QlBqQ64wnLSOtZ6WaJVazq9vcYmGSriwpedjzHHAGU0=; b=UMIzTycAQc+4Cl3qGTM7QcB/V4
+        lhW8GfjhHz50dZhgK2JpdkoAqNkFVy7xd7hATnJzt1ZlfocBpfYBTxxWndo4W0Wl1WEc38M0cU2qU
+        HVe2UxTNVaKHXkkO81dSkp+LsS3eEc73b/Bm+ikqvQr6VKktyi7WmQOAH/PpBXD0e44DuDCCFqOMr
+        0tALHCRYTu5i5ImCEX4nbGA+PdlQ1M3XmhE2q+RV+saXN680Dkv4+rCmqiJ2DF7hWlpISGjXdbM77
+        B6PoPFAOQxmfyjxAoWEIHJ5P4jHdn56petQ1nqSvEKLwoMQ0jYbdGUQHlfczC6cFdQQ4cQ+Okm9gK
+        ZjDtsd2Q==;
+Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1odn3L-00D2jY-5r; Thu, 29 Sep 2022 06:29:47 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] power: supply: mt6370: uses IIO interfaces, depends on IIO
+Date:   Wed, 28 Sep 2022 23:29:40 -0700
+Message-Id: <20220929062940.27538-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20220925220319.12572-1-zev@bewilderbeest.net>
-In-Reply-To: <20220925220319.12572-1-zev@bewilderbeest.net>
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-Date:   Thu, 29 Sep 2022 08:29:19 +0200
-Message-ID: <CALNFmy1tnrJWKwGjdGOjjqB9XDS2DhAPq1rcDPgMdY3xXNoXAw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] regulator: Add DT support for regulator-output connectors
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Mike Rapoport <rppt@kernel.org>, openbmc@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zev,
-Thanks for picking this up.
-I cannot answer the first question, but the second:
-It's sufficient for us to just have one supply per userspace-consumer instance.
+The mt6370-charger driver uses IIO interfaces and produces build
+errors when CONFIG_IIO is not set, so it should depend on IIO.
 
-The optional property is fine and could be useful in the future.
+ERROR: modpost: "iio_read_channel_processed" [drivers/power/supply/mt6370-charger.ko] undefined!
+ERROR: modpost: "devm_iio_channel_get_all" [drivers/power/supply/mt6370-charger.ko] undefined!
 
-Regards,
-Patrick
+Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 charger driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: ChiaEn Wu <chiaen_wu@richtek.com>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: linux-pm@vger.kernel.org
+---
+ drivers/power/supply/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
-On Mon, Sep 26, 2022 at 12:04 AM Zev Weiss <zev@bewilderbeest.net> wrote:
->
-> Hello,
->
-> This series is another attempt at implementing support for
-> userspace-controlled regulator-supplied power outputs.  This is an
-> important feature for some kinds of BMC (baseboard management
-> controller) systems where the BMC provides an operator with manual
-> control of a set of DC power outputs.
->
-> As in a broadly similar patchset that was recently almost merged [0],
-> this takes the approach of providing support by extending the existing
-> userspace-consumer regulator driver.  A couple questions about the
-> userspace-consumer driver came up along the way, however.
->
-> First, how (if at all) is it currently being used?  It appears the
-> last in-tree use of it was removed a bit over two years ago in commit
-> 9d3239147d6d ("ARM: pxa: remove Compulab pxa2xx boards").  Aside from
-> just adding DT support I've made a couple small tweaks to the driver
-> in patch 3 that I hope are compatible with any current usage, but
-> without any extant examples to look at it's kind of hard to say.
->
-> Second, how critical is its support for controlling multiple
-> regulators?  (i.e. its use of regulator_bulk_data and friends instead
-> of a single struct regulator.)  As far as I can see every in-tree use
-> of it that's ever existed has used num_supplies = 1.  If it's not
-> important to retain, patch 1 of this series could be supplanted by one
-> that instead simplifies the driver slightly by removing that
-> functionality.
->
-> The DT binding added in patch 2 is very similar to one I posted in a
-> previous patchset that had an R-B from Rob [1], but has had some minor
-> rewording and gained one new (optional) property.
->
-> Laxman, Naresh, Patrick -- please let me know if there are any aspects
-> of this implementation that would be incompatible with your needs.
->
->
-> Thanks,
-> Zev
->
-> [0] https://lore.kernel.org/all/20220707081826.953449-4-Naresh.Solanki@9elements.com/
-> [1] https://lore.kernel.org/linux-kernel/20220505232557.10936-2-zev@bewilderbeest.net/
->
-> Zev Weiss (3):
->   regulator: devres: Add devm_regulator_bulk_get_exclusive()
->   dt-bindings: regulator: Add regulator-output binding
->   regulator: userspace-consumer: Handle regulator-output DT nodes
->
->  .../bindings/regulator/regulator-output.yaml  | 47 +++++++++++++
->  drivers/regulator/core.c                      | 42 +++++++-----
->  drivers/regulator/devres.c                    | 66 ++++++++++++++-----
->  drivers/regulator/internal.h                  |  2 +
->  drivers/regulator/userspace-consumer.c        | 43 ++++++++++--
->  include/linux/regulator/consumer.h            |  2 +
->  include/linux/regulator/userspace-consumer.h  |  1 +
->  7 files changed, 162 insertions(+), 41 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/regulator/regulator-output.yaml
->
-> --
-> 2.37.3
->
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -623,6 +623,7 @@ config CHARGER_MT6370
+ 	tristate "MediaTek MT6370 Charger Driver"
+ 	depends on MFD_MT6370
+ 	depends on REGULATOR
++	depends on IIO
+ 	select LINEAR_RANGES
+ 	help
+ 	  Say Y here to enable MT6370 Charger Part.
