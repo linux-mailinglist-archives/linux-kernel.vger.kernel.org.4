@@ -2,147 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56CF5EEB52
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 03:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3125EEB60
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 03:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234777AbiI2Bzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 21:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
+        id S234603AbiI2B6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 21:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234768AbiI2BzV (ORCPT
+        with ESMTP id S234052AbiI2B6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 21:55:21 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155DE61B21;
-        Wed, 28 Sep 2022 18:55:04 -0700 (PDT)
-X-UUID: 4266164f268f4afabd20f67373882c42-20220929
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=KLeXZkzgR5Ay7eOUvGeW+A2UOiV7iAhJfQA6fiC/fas=;
-        b=SHqr0Cunqo5xnMTy2hauXSokoFUcURgPaoM913LTUazCm4o97CKrIJLs3234Cul2LSmmJ/gEA5I7WKKbQA3LlwcufLD31RAv+LAo/QcNTGsHUzbkbAMkwYs59K8SdTIn5BqKcgITpoD3m7TfNWuo3nXw/spYZdWgqpqebgLVVvE=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:8a6505e5-d9de-4399-84a9-3df7d0a4b147,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:39a5ff1,CLOUDID:35d85e07-1cee-4c38-b21b-a45f9682fdc0,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 4266164f268f4afabd20f67373882c42-20220929
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1924392031; Thu, 29 Sep 2022 09:55:00 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 29 Sep 2022 09:54:58 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 29 Sep 2022 09:54:57 +0800
-Message-ID: <7d8fb7ea78ae2a850d26bba7b08f621b8494df5e.camel@mediatek.com>
-Subject: Re: [PATCH] media: mediatek: vcodec: Skip unsupported h264 encoder
- profile
-From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
-To:     Allen-KH Cheng =?UTF-8?Q?=28=E7=A8=8B=E5=86=A0=E5=8B=B3=29?= 
-        <Allen-KH.Cheng@mediatek.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Tiffany Lin =?UTF-8?Q?=28=E6=9E=97=E6=85=A7=E7=8F=8A=29?= 
-        <tiffany.lin@mediatek.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "nicolas.dufresne@collabora.com" <nicolas.dufresne@collabora.com>,
-        Irui Wang =?UTF-8?Q?=28=E7=8E=8B=E7=91=9E=29?= 
-        <Irui.Wang@mediatek.com>,
-        "hsinyi@chromium.org" <hsinyi@chromium.org>,
-        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "acourbot@chromium.org" <acourbot@chromium.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Longfei Wang =?UTF-8?Q?=28=E7=8E=8B=E9=BE=99=E9=A3=9E=29?= 
-        <Longfei.Wang@mediatek.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Maoguang Meng =?UTF-8?Q?=28=E5=AD=9F=E6=AF=9B=E5=B9=BF=29?= 
-        <Maoguang.Meng@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Thu, 29 Sep 2022 09:54:56 +0800
-In-Reply-To: <e8bb661ec83129a1c660e876cb4fe9aaad41adfd.camel@mediatek.com>
-References: <20220926093501.26466-1-irui.wang@mediatek.com>
-         <e8bb661ec83129a1c660e876cb4fe9aaad41adfd.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 28 Sep 2022 21:58:20 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D203122604
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 18:58:19 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r7so22374303wrm.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 18:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=posI89+zac0UiwvW1mDf5OWiDQy0Yhxv/IzxtHly9yA=;
+        b=hKmYgXZfI3hL4Jg9MuVFiNNSwaoKZ8j4cSjeKGniv2b8ke9kXx5aAXP2DxWCJvii/+
+         Q93DCrnd/wh3Vdt1Y22T3F+DhPjVPKD4HbIlYHiKkcddMB6Se3GgCwF4ggWlJXR/661I
+         qZP0jU8YmJz53p1zOrXYFD0JJSWKC0/4Qc2JnM79MLbvcd+C9087cNCEfhpdGKTIyNbi
+         hhsa9GKSDk3daHw5Pb5VOV78FK88GbhhS/9bdZjte3dbb51H2KY5IKqI/AYaAY0XuJzt
+         zVSuTg9os9bzUqAshxOwfQTF4VlZgA/h0OENCNRYQdwoPzRO1mmeyPfSSrgRySq2hdKC
+         YMgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=posI89+zac0UiwvW1mDf5OWiDQy0Yhxv/IzxtHly9yA=;
+        b=sldwPStWFLwkbkR/Z2VhcuSAQJR16HIhIf3sEFO424vhsaRaychOIniO2zpn+cunnE
+         TXb/Tffg0iLdqgsn8w5dFEEFIclSLysU55uEO1NYyZDHwoYuW9Q53hZLpPgkzhG6p4O5
+         0+3SaJ08SG1v0KlYswaVtXF1+OcFSicBaR5me6Gig162ItbIq/gsZ7gbsHtEZdhkWjcE
+         8xWmNXSi7yaapfrAIneNzQ31Bb1cXmRB3zHc7KYo/SjwOiMznxDoxzjBM1zH3gCCaTuT
+         Fwu3zvfJ4Y/H0e14W5dy3CTN2eXGAvdxyrgHjjpUD3aQqwsJkJgowEzJuoqRd+F4MvuS
+         BCpA==
+X-Gm-Message-State: ACrzQf1ZTAgx/xYbJceRupzHOE6JgCwSsPyAL6nU1cjshhnabG8yEdfb
+        3j3+8CstLTJmnSahvuJO7E2ikE8eSI0lvpKwzn9V0Q==
+X-Google-Smtp-Source: AMsMyM43TSvqdPcJcgxgsxb3hfRE7WlT0poI9Ru7d1//tjKEU/9C69LlHOg7sVx/3Ydrm3Fq6Y8dWiKrSDTEP7lMqWg=
+X-Received: by 2002:adf:dd8f:0:b0:22a:84ab:4be3 with SMTP id
+ x15-20020adfdd8f000000b0022a84ab4be3mr426011wrl.40.1664416697616; Wed, 28 Sep
+ 2022 18:58:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220926200757.1161448-1-namhyung@kernel.org> <20220926200757.1161448-4-namhyung@kernel.org>
+ <288ee488-c50f-252d-b886-1bef89b5e883@arm.com> <CAM9d7chvH8fxOCXL3XUfez-7wsB7jjYyUDBUO10jqcWe+GcSFA@mail.gmail.com>
+In-Reply-To: <CAM9d7chvH8fxOCXL3XUfez-7wsB7jjYyUDBUO10jqcWe+GcSFA@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 28 Sep 2022 18:58:05 -0700
+Message-ID: <CAP-5=fW+a_hiwc08kwfsiOuLF+hStDyBGZkQQ-oQP-ChPLAF3w@mail.gmail.com>
+Subject: Re: [PATCH 3/6] perf stat: Rename saved_value->cpu_map_idx
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     James Clark <james.clark@arm.com>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Irui,
-
-Reviewed-by: Yunfei Dong <yunfei.dong@mediatek.com>
-
-Thanks
-Yunfei Dong
-
-On Wed, 2022-09-28 at 21:38 +0800, Allen-KH Cheng (程冠勳) wrote:
-> Hi Irui,
-> 
-> Tested-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> 
-> Tested for CTS cases on the mt8186 corsola board.
-> 
+On Wed, Sep 28, 2022 at 4:57 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> Hello,
+>
+> On Wed, Sep 28, 2022 at 3:50 AM James Clark <james.clark@arm.com> wrote:
+> >
+> >
+> >
+> > On 26/09/2022 21:07, Namhyung Kim wrote:
+> > > The cpu_map_idx fields is just to differentiate values from other
+> > > entries.  It doesn't need to be strictly cpu map index.  Actually we can
+> > > pass thread map index or aggr map index.  So rename the fields first.
+> > >
+> > > No functional change intended.
+> > >
+> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > > ---
+> > >  tools/perf/util/stat-shadow.c | 308 +++++++++++++++++-----------------
+> > >  1 file changed, 154 insertions(+), 154 deletions(-)
+> > >
+> > > diff --git a/tools/perf/util/stat-shadow.c b/tools/perf/util/stat-shadow.c
+> > > index 9e1eddeff21b..99d05262055c 100644
+> > > --- a/tools/perf/util/stat-shadow.c
+> > > +++ b/tools/perf/util/stat-shadow.c
+> > > @@ -33,7 +33,7 @@ struct saved_value {
+> > >       struct evsel *evsel;
+> > >       enum stat_type type;
+> > >       int ctx;
+> > > -     int cpu_map_idx;
+> > > +     int map_idx;
+> >
+> > Do the same variables in stat.c and stat.h also need to be updated? The
+> > previous change to do this exact thing (5b1af93dbc7e) changed more than
+> > just these ones.
+>
+> Thanks for your review!  I'll change the header too.
+>
+> Note that callers of perf_stat__update_shadow_stats() are free
+> to use cpu_map_idx as they want.  The previous change fixed
+> confusion between cpu number and map index.  Actually either
+> is fine for us as long as it's used consistently.  But we use the
+> cpu map index for most cases.
+>
 > Thanks,
-> Allen
-> 
-> On Mon, 2022-09-26 at 17:35 +0800, Irui Wang wrote:
-> > The encoder driver support h264 baseline, main, high encoder
-> > profile, set mask for V4L2_CID_MPEG_VIDEO_H264_PROFILE to skip
-> > the unsupported profile.
-> > 
-> > get supported h264_profile by command: v4l2-ctl -d /dev/videoX -L
-> > h264_profile 0x00990a6b (menu) : min=0 max=4 default=4 value=4
-> >         0: Baseline
-> >         2: Main
-> >         4: High
-> > 
-> > Signed-off-by: Irui Wang <irui.wang@mediatek.com>
-> > ---
-> >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git
-> > a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> > b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> > index d810a78dde51..d65800a3b89d 100644
-> > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> > @@ -1397,7 +1397,10 @@ int mtk_vcodec_enc_ctrls_setup(struct
-> > mtk_vcodec_ctx *ctx)
-> >  			0, V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE);
-> >  	v4l2_ctrl_new_std_menu(handler, ops,
-> > V4L2_CID_MPEG_VIDEO_H264_PROFILE,
-> >  			V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
-> > -			0, V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
-> > +			~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE)
-> > > 
-> > 
-> > +			  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
-> > +			  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
-> > +			V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
-> >  	v4l2_ctrl_new_std_menu(handler, ops,
-> > V4L2_CID_MPEG_VIDEO_H264_LEVEL,
-> >  			       h264_max_level,
-> >  			       0, V4L2_MPEG_VIDEO_H264_LEVEL_4_0);
+> Namhyung
 
+It is only fine to interchange CPU and CPU map index if the CPU map
+contains all CPUs and not the any CPU entry. I wonder if we should
+introduce a 'struct thread' to wrap the pid_t in thread maps to avoid
+swapping threads and indices? Given pids are not generally in the same
+range as indices (unlike CPU numbers which substantially broke
+aggregation) it is much less likely this is broken. In any case it is
+worth documenting map_idx to say what indices it is expected to hold.
+
+Thanks,
+Ian
