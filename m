@@ -2,130 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC255EF97E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC785EF985
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235563AbiI2Pu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        id S235756AbiI2PwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235329AbiI2Puw (ORCPT
+        with ESMTP id S231199AbiI2PwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:50:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3C7B2A945;
-        Thu, 29 Sep 2022 08:50:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BCBFE15BF;
-        Thu, 29 Sep 2022 08:50:54 -0700 (PDT)
-Received: from [10.57.65.170] (unknown [10.57.65.170])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CEE953F792;
-        Thu, 29 Sep 2022 08:50:44 -0700 (PDT)
-Message-ID: <7ae39c9c-8424-8b65-ac09-c0e87f3b0f01@arm.com>
-Date:   Thu, 29 Sep 2022 16:50:43 +0100
+        Thu, 29 Sep 2022 11:52:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0767B30F41;
+        Thu, 29 Sep 2022 08:52:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5691B824DB;
+        Thu, 29 Sep 2022 15:52:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A76B4C433D6;
+        Thu, 29 Sep 2022 15:52:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664466730;
+        bh=clRcnKf1WONrAa1bzGZb2yasmRWTlVtEWiks0sdwbdc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=cxeURFuUb4P1ZC3vqanKViHKD4YaFWxG4pJfTCVXvN+sK+sXfVArHFFyrbnJmUqfn
+         FXnp9/sjzjm8cbLJrvkvGGpdkUn5k9uJBqIZJ1OWH+vghbC6AbAvL24uHk+pLio4uk
+         2SbarryATFKNkSB6ZnB6hFEjs+eAsOIU2FIQWtE8BFm/nlekqCztGb27GdRIIxpZ+C
+         v2hXdK0MT9lERjrvzjIUVgdIEkfFQC1s8A0Cr9vK7QBw10KRyiT1X+0ps5L0/1GxeZ
+         lIyIgiqtu19BAENCvsrXRqnU3XlQKX2yowdaWqyu/wsXE0l2TXa0UlZph2MIkYkDbC
+         dnqMA6/sA2wMA==
+From:   Mark Brown <broonie@kernel.org>
+To:     krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
+        Jerome Neanne <jneanne@baylibre.com>, robh+dt@kernel.org
+Cc:     linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        msp@baylibre.com, devicetree@vger.kernel.org
+In-Reply-To: <20220929132526.29427-1-jneanne@baylibre.com>
+References: <20220929132526.29427-1-jneanne@baylibre.com>
+Subject: Re: [PATCH 0/2] Add input_supply support in gpio_regulator_config
+Message-Id: <166446672840.175965.2897291078173491886.b4-ty@kernel.org>
+Date:   Thu, 29 Sep 2022 16:52:08 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC PATCH v1 2/2] ARM: dts: rk3288: add the interrupts property
- for PWM
-Content-Language: en-GB
-To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de
-Cc:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        sebastian.reichel@collabora.com, wxt@rock-chips.com,
-        kever.yang@rock-chips.com, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <6eba6c10-9c96-b40f-937a-e02d43b04cd7@gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <6eba6c10-9c96-b40f-937a-e02d43b04cd7@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-29 15:04, Johan Jonker wrote:
-> The Rockchip rk3288 SoC has 4-built-in PWM channels.
+On Thu, 29 Sep 2022 15:25:24 +0200, Jerome Neanne wrote:
+> This is simillar needs and implementation as fixed-regulator.
+> Used to extract regulator parent from the device tree.
 > 
-> Configurable to operate in capture mode.
-> Measures the high/low polarity effective cycles of this input waveform
-> Generates a single interrupt at the transition of input waveform polarity
+> Provide implementation and bindings for vin-supply property.
 > 
-> Configurable to operate in continuous mode or one-shot mode.
-> One-shot operation will produce N + 1 periods of the waveform,
-> where N is the repeat counter value, and generates a single interrupt at
-> the end of operation.
-> Continuous mode generates the waveform continuously and
-> do not generates any interrupts.
+> Jerome Neanne (2):
+>   regulator: gpio: Add input_supply support in gpio_regulator_config
+>   dt-bindings: gpio-regulator: add vin-supply property support
 > 
-> Add interrupts property to rk3288 PWM nodes.
+> [...]
 
-As far as I can make out from the TRM, these are only valid when 
-GRF_SOC_CON2[0] = 0, otherwise it's in "new" RK_PWM mode using SPI 78 
-for all channels. Which apparently will be the case for anyone using 
-upstream U-Boot:
+Applied to
 
-https://source.denx.de/u-boot/u-boot/-/blob/master/arch/arm/mach-rockchip/rk3288/rk3288.c#L83
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+
+Thanks!
+
+[1/2] regulator: gpio: Add input_supply support in gpio_regulator_config
+      commit: adfdfcbdbd32b356323a3db6d3a683270051a7e6
+[2/2] dt-bindings: gpio-regulator: add vin-supply property support
+      commit: 392cc0a4a0c4b25534f3148b192f18be468f67bd
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-Robin.
-
-> Signed-off-by: Caesar Wang <wxt@rock-chips.com>
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> 
-> ---
-> 
-> Original patch location:
->    ARM: dts: rk3288: add the interrupts property for PWM
->    https://github.com/rockchip-linux/kernel/commit/16b7b284618d1652e694f6286f575ce82f5f03e5
-> 
-> ---
-> 
-> "rockchip,rk3288-pwm" is in use as fall back string for Rockchip SoCs with combined
-> PWM interrupt.
-> ---
->   arch/arm/boot/dts/rk3288.dtsi | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
-> index 487b0e03d..1223aa369 100644
-> --- a/arch/arm/boot/dts/rk3288.dtsi
-> +++ b/arch/arm/boot/dts/rk3288.dtsi
-> @@ -675,6 +675,7 @@
->   	pwm0: pwm@ff680000 {
->   		compatible = "rockchip,rk3288-pwm";
->   		reg = <0x0 0xff680000 0x0 0x10>;
-> +		interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
->   		#pwm-cells = <3>;
->   		pinctrl-names = "default";
->   		pinctrl-0 = <&pwm0_pin>;
-> @@ -685,6 +686,7 @@
->   	pwm1: pwm@ff680010 {
->   		compatible = "rockchip,rk3288-pwm";
->   		reg = <0x0 0xff680010 0x0 0x10>;
-> +		interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
->   		#pwm-cells = <3>;
->   		pinctrl-names = "default";
->   		pinctrl-0 = <&pwm1_pin>;
-> @@ -695,6 +697,7 @@
->   	pwm2: pwm@ff680020 {
->   		compatible = "rockchip,rk3288-pwm";
->   		reg = <0x0 0xff680020 0x0 0x10>;
-> +		interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
->   		#pwm-cells = <3>;
->   		pinctrl-names = "default";
->   		pinctrl-0 = <&pwm2_pin>;
-> @@ -705,6 +708,7 @@
->   	pwm3: pwm@ff680030 {
->   		compatible = "rockchip,rk3288-pwm";
->   		reg = <0x0 0xff680030 0x0 0x10>;
-> +		interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
->   		#pwm-cells = <3>;
->   		pinctrl-names = "default";
->   		pinctrl-0 = <&pwm3_pin>;
+Mark
