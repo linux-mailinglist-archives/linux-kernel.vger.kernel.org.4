@@ -2,163 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36965EF0B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49FEF5EF0B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235176AbiI2Ijt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
+        id S235649AbiI2Ij4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235578AbiI2Ijq (ORCPT
+        with ESMTP id S235625AbiI2Ijr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:39:46 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764E8175B6;
-        Thu, 29 Sep 2022 01:39:42 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 351E721BE6;
-        Thu, 29 Sep 2022 08:39:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1664440781; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=edxlyO0DI/XbqT4f94AuU5/d2duw9Yhmd6WUepUXs+M=;
-        b=CdYlBh0R4T8C4JQSnr4ybe6PJuDRU1jSW+8CJbnXwHv88aUpErLnpZLxIEJTnSWslBBxSo
-        pp3FS2cvmCCXDwtjEOKO7DgJR3KTn+yU3se7bc+/mnngAMEXWwNm3r8te6tcD2XvBY9swV
-        9tfOVOT0CGLzuhEe4nkMyE06yrc0cC0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1664440781;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=edxlyO0DI/XbqT4f94AuU5/d2duw9Yhmd6WUepUXs+M=;
-        b=DouwamspXNxBSjKfFx/GGJArug1SbCVLlg3Vj4yp469JdgG9YYrmF7ftTnGj61Ff9nILzj
-        twgeNYOY1gF4rGBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 137F613A71;
-        Thu, 29 Sep 2022 08:39:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id L8u6BM1ZNWPEHwAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 29 Sep 2022 08:39:41 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CEC40A0680; Thu, 29 Sep 2022 10:39:39 +0200 (CEST)
-Date:   Thu, 29 Sep 2022 10:39:39 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Keith Busch <kbusch@kernel.org>,
-        Yu Kuai <yukuai1@huaweicloud.com>,
-        Liu Song <liusong@linux.alibaba.com>,
-        Hillf Danton <hdanton@sina.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH next v2] sbitmap: fix lockup while swapping
-Message-ID: <20220929083939.ioytch563qikyflz@quack3>
-References: <d83885c9-2635-ef45-2ccc-a7e06421e1cc@google.com>
- <Yy4D54kPpenBkjHz@kbusch-mbp.dhcp.thefacebook.com>
- <391b1763-7146-857-e3b6-dc2a8e797162@google.com>
- <929a3aba-72b0-5e-5b80-824a2b7f5dc7@google.com>
- <20220926114416.t7t65u66ze76aiz7@quack3>
- <4539e48-417-edae-d42-9ef84602af0@google.com>
- <20220927103123.cvjbdx6lqv7jxa2w@quack3>
- <2b931ee7-1bc9-e389-9d9f-71eb778dcf1@google.com>
- <f975dddf-6ec-b3cb-3746-e91f61b22ea@google.com>
- <9f68731-e699-5679-6a71-77634767b8dd@google.com>
+        Thu, 29 Sep 2022 04:39:47 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 393261A236
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:39:45 -0700 (PDT)
+Received: from [10.20.42.32] (unknown [10.20.42.32])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxReLPWTVjQbEjAA--.2638S3;
+        Thu, 29 Sep 2022 16:39:44 +0800 (CST)
+Subject: Re: [PATCH] LoongArch: Fix cpu name after s3/s4
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev
+References: <20220929073623.7604-1-lvjianmin@loongson.cn>
+ <CAAhV-H4qJROB+EXORsbc9Y0i_Myp543-3PmDsA=GQAtTu4v9Mw@mail.gmail.com>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <45b252d1-2f8d-2c7c-8d62-a990dbbcf6bf@loongson.cn>
+Date:   Thu, 29 Sep 2022 16:39:43 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f68731-e699-5679-6a71-77634767b8dd@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAAhV-H4qJROB+EXORsbc9Y0i_Myp543-3PmDsA=GQAtTu4v9Mw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxReLPWTVjQbEjAA--.2638S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxZF1DAry3ury5WrW8WrWxZwb_yoW5uFyrpF
+        4vkF4DAFsFgr9xKasxtr1UGrWDXrnrGw12g3Z5tayrZF4UXF1DXr18trs8WF15u3WxWrWF
+        qFZ3WasrtFW7Ja7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvGb7Iv0xC_tr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+        cIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2
+        AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v2
+        6r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14
+        v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
+        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
+        v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK
+        82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjxU2rcTDUUUU
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 27-09-22 21:07:46, Hugh Dickins wrote:
-> Commit 4acb83417cad ("sbitmap: fix batched wait_cnt accounting")
-> is a big improvement: without it, I had to revert to before commit
-> 040b83fcecfb ("sbitmap: fix possible io hung due to lost wakeup")
-> to avoid the high system time and freezes which that had introduced.
-> 
-> Now okay on the NVME laptop, but 4acb83417cad is a disaster for heavy
-> swapping (kernel builds in low memory) on another: soon locking up in
-> sbitmap_queue_wake_up() (into which __sbq_wake_up() is inlined), cycling
-> around with waitqueue_active() but wait_cnt 0 .  Here is a backtrace,
-> showing the common pattern of outer sbitmap_queue_wake_up() interrupted
-> before setting wait_cnt 0 back to wake_batch (in some cases other CPUs
-> are idle, in other cases they're spinning for a lock in dd_bio_merge()):
-> 
-> sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
-> __blk_mq_free_request < blk_mq_free_request < __blk_mq_end_request <
-> scsi_end_request < scsi_io_completion < scsi_finish_command <
-> scsi_complete < blk_complete_reqs < blk_done_softirq < __do_softirq <
-> __irq_exit_rcu < irq_exit_rcu < common_interrupt < asm_common_interrupt <
-> _raw_spin_unlock_irqrestore < __wake_up_common_lock < __wake_up <
-> sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
-> __blk_mq_free_request < blk_mq_free_request < dd_bio_merge <
-> blk_mq_sched_bio_merge < blk_mq_attempt_bio_merge < blk_mq_submit_bio <
-> __submit_bio < submit_bio_noacct_nocheck < submit_bio_noacct <
-> submit_bio < __swap_writepage < swap_writepage < pageout <
-> shrink_folio_list < evict_folios < lru_gen_shrink_lruvec <
-> shrink_lruvec < shrink_node < do_try_to_free_pages < try_to_free_pages <
-> __alloc_pages_slowpath < __alloc_pages < folio_alloc < vma_alloc_folio <
-> do_anonymous_page < __handle_mm_fault < handle_mm_fault <
-> do_user_addr_fault < exc_page_fault < asm_exc_page_fault
-> 
-> See how the process-context sbitmap_queue_wake_up() has been interrupted,
-> after bringing wait_cnt down to 0 (and in this example, after doing its
-> wakeups), before advancing wake_index and refilling wake_cnt: an
-> interrupt-context sbitmap_queue_wake_up() of the same sbq gets stuck.
-> 
-> I have almost no grasp of all the possible sbitmap races, and their
-> consequences: but __sbq_wake_up() can do nothing useful while wait_cnt 0,
-> so it is better if sbq_wake_ptr() skips on to the next ws in that case:
-> which fixes the lockup and shows no adverse consequence for me.
-> 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
+Good idea, agree, I'll change it, thanks.
 
-Perhaps we could add a note here like: "The check for wait_cnt being 0 is
-obviously racy and ultimately can lead to lost wakeups for example when
-there is only single waitqueue with waiters. However in these cases lost
-wakeups are unlikely to matter and proper fix requires redesign (and
-benchmarking) of batched wakeup code so let's plug the hole with this band
-aid for now."
-
-Otherwise feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
-> v2: - v1 to __sbq_wake_up() broke out when this happens, but
->       v2 to sbq_wake_ptr() does better by skipping on to the next.
->     - added more comment and deleted dubious Fixes attribution.
->     - and apologies to Mr Axboe and all for my axbod typo
+On 2022/9/29 下午4:31, Huacai Chen wrote:
+> Hi, Jianmin,
 > 
->  lib/sbitmap.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> How about do it like this?
 > 
-> --- a/lib/sbitmap.c
-> +++ b/lib/sbitmap.c
-> @@ -587,7 +587,7 @@ static struct sbq_wait_state *sbq_wake_p
->  	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
->  		struct sbq_wait_state *ws = &sbq->ws[wake_index];
->  
-> -		if (waitqueue_active(&ws->wait)) {
-> +		if (waitqueue_active(&ws->wait) && atomic_read(&ws->wait_cnt)) {
->  			if (wake_index != atomic_read(&sbq->wake_index))
->  				atomic_set(&sbq->wake_index, wake_index);
->  			return ws;
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> diff --git a/arch/loongarch/kernel/cpu-probe.c
+> b/arch/loongarch/kernel/cpu-probe.c
+> index 1bc9fec4e474..1734362d1fa9 100644
+> --- a/arch/loongarch/kernel/cpu-probe.c
+> +++ b/arch/loongarch/kernel/cpu-probe.c
+> @@ -265,7 +265,9 @@ static inline void cpu_probe_loongson(struct
+> cpuinfo_loongarch *c, unsigned int
+>          uint64_t *vendor = (void *)(&cpu_full_name[VENDOR_OFFSET]);
+>          uint64_t *cpuname = (void *)(&cpu_full_name[CPUNAME_OFFSET]);
+> 
+> -       __cpu_full_name[cpu] = cpu_full_name;
+> +       if (!__cpu_full_name[cpu])
+> +               __cpu_full_name[cpu] = cpu_full_name;
+> +
+>          *vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
+>          *cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
+> 
+> Huacai
+> 
+> On Thu, Sep 29, 2022 at 3:36 PM Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>>
+>> On coming back from s3/s4, the cpu name will be overwritten
+>> in cpu_probe path of seconary cpu, so we adjust the postion
+>> of using cpu name existed in cpu hardware register, and only
+>> use it while failing to get cpu name from SMBIOS.
+>>
+>> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+>>
+>> diff --git a/arch/loongarch/include/asm/cpu-info.h b/arch/loongarch/include/asm/cpu-info.h
+>> index b6c4f96079df..937dce2a930a 100644
+>> --- a/arch/loongarch/include/asm/cpu-info.h
+>> +++ b/arch/loongarch/include/asm/cpu-info.h
+>> @@ -64,6 +64,7 @@ extern void cpu_probe(void);
+>>
+>>   extern const char *__cpu_family[];
+>>   extern const char *__cpu_full_name[];
+>> +extern char cpu_full_name[];
+>>   #define cpu_family_string()    __cpu_family[raw_smp_processor_id()]
+>>   #define cpu_full_name_string() __cpu_full_name[raw_smp_processor_id()]
+>>
+>> diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
+>> index 529ab8f44ec6..a548b2197224 100644
+>> --- a/arch/loongarch/kernel/cpu-probe.c
+>> +++ b/arch/loongarch/kernel/cpu-probe.c
+>> @@ -180,14 +180,13 @@ static void cpu_probe_common(struct cpuinfo_loongarch *c)
+>>   #define VENDOR_OFFSET  0
+>>   #define CPUNAME_OFFSET 9
+>>
+>> -static char cpu_full_name[MAX_NAME_LEN] = "        -        ";
+>> +char cpu_full_name[MAX_NAME_LEN] = "        -        ";
+>>
+>>   static inline void cpu_probe_loongson(struct cpuinfo_loongarch *c, unsigned int cpu)
+>>   {
+>>          uint64_t *vendor = (void *)(&cpu_full_name[VENDOR_OFFSET]);
+>>          uint64_t *cpuname = (void *)(&cpu_full_name[CPUNAME_OFFSET]);
+>>
+>> -       __cpu_full_name[cpu] = cpu_full_name;
+>>          *vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
+>>          *cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
+>>
+>> diff --git a/arch/loongarch/kernel/env.c b/arch/loongarch/kernel/env.c
+>> index 82b478a5c665..955d82aa298e 100644
+>> --- a/arch/loongarch/kernel/env.c
+>> +++ b/arch/loongarch/kernel/env.c
+>> @@ -44,6 +44,9 @@ static int __init init_cpu_fullname(void)
+>>          if (loongson_sysconf.cpuname && !strncmp(loongson_sysconf.cpuname, "Loongson", 8)) {
+>>                  for (cpu = 0; cpu < NR_CPUS; cpu++)
+>>                          __cpu_full_name[cpu] = loongson_sysconf.cpuname;
+>> +       } else {
+>> +               for (cpu = 0; cpu < NR_CPUS; cpu++)
+>> +                       __cpu_full_name[cpu] = cpu_full_name;
+>>          }
+>>          return 0;
+>>   }
+>> --
+>> 2.31.1
+>>
+
