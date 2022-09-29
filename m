@@ -2,97 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF765EFEF4
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 22:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF175EFEF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 23:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiI2U7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 16:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
+        id S229807AbiI2VAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 17:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiI2U7M (ORCPT
+        with ESMTP id S229606AbiI2VAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 16:59:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F746186994;
-        Thu, 29 Sep 2022 13:59:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B57E2621A0;
-        Thu, 29 Sep 2022 20:59:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C76DC433C1;
-        Thu, 29 Sep 2022 20:59:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664485151;
-        bh=soq0OTgA0FIpZWEKxp2teYlokoB9uKr06vqY3Z10nWo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lM7bNPrpWoGPd2Vmh3nf4TnaH4AMaxoWrz5sZdKoI0djXA5x0v0nOOJSDXlKDL76U
-         Nc0KHcBtMPeX0L9OCdKaNfo3aHkTkJuFeETkGh+xfLB/gwn5Z8vTTk609BvkLLfNaf
-         kXxiSC/OkuA49DwkUCsy+/eni7LLfq9ovugGrw4gbaCRE4cIjJA+nTcrK+rHg1bKJN
-         F1ULB2bJPG0AqO7NO4rHhuT4Yc6snQ8rYALlKkffQA51PpwqBcS3ORI1Zhlv600Drz
-         kWoiC0tJZZVoIsJrWKAEeVFB7cycA8pv5aH2N/9nbQaAGJCN+Jm7T0xxOA5isBf/W/
-         RKx54N9nB4rSg==
-Date:   Thu, 29 Sep 2022 22:59:03 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Mani Milani <mani@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-i2c@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH] i2c: i801: Prefer async probe
-Message-ID: <YzYHF5qPMEMZu6WB@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>, Mani Milani <mani@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-i2c@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-References: <20220826074430.1333272-1-mani@chromium.org>
- <20220929174334.44d3e6d9@endymion.delvare>
+        Thu, 29 Sep 2022 17:00:44 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C440B656E;
+        Thu, 29 Sep 2022 14:00:42 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id r14so1679256qvn.3;
+        Thu, 29 Sep 2022 14:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=uiZ0nDSBuPQeGax2QW8uIowyQEtsCVx+PfyYzMy0ISY=;
+        b=EreWa1r6XpdL6bowUpMjkw6DfsOUGP6iltR2y+/PKBCjCHkk2zneenpwIHJO5wWlHP
+         uIJ+Db7wpEZvV3Dy943JAQDdeVNfuYMb807k//3SpBCSAez6kNsLeS4HndXqLv4f0qYc
+         Bz08pZZHlnsaQ95ebaWGlq0uY2k3lw0PONyqp53vDJ09j7CNIUL5VKJFCliGyX5eatNH
+         ROWOmZAznpWqOeDyHARVuZA0REPyG/FaSwZtsqcATrM4vWlk0KMcttLESowu1PWFC1Xc
+         oNQnbJOKQhsUe+FoS+g0TR6ghfyuwjc6DA3QNX6fonaHPKbwAAmU/qIhzv9KMYSTBNnO
+         lWlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=uiZ0nDSBuPQeGax2QW8uIowyQEtsCVx+PfyYzMy0ISY=;
+        b=4IQzequyis6Hzp/nMObH+joNknJf2Ry2qgUxLOjyCgQfx6oglVaEdoU78g5FDixBul
+         xg2+R9iIQTHCqCVlWjNYrJmnr0CGycXSYgwmWw0iPPLYcuooAymi//Xu5QzrtECoHl0z
+         YYWcrspmuY+y92K+3nv8PIhQwj8HJvGfGZhnMQ4TQMRasEBqo3vRyELM6Cguulu2KABE
+         riQTrz9lSFIWMuiW+3nbj3ERBFNWCU3Tshsqkw2Pj3ezcGSCmW4DaeidllS1G/62c7Fw
+         6qIfo3ADi7Ds/HFes7ea3o2kpMOvd1HlVL+d5isebtKdKK3WeYnjeefDKsWrKUvJZTDV
+         NIMQ==
+X-Gm-Message-State: ACrzQf0v1YbtXq8GRgXsio7cWZMlQYpHdkkDVP3DUwu+SWnkEL0pvCOq
+        hp0J3oSat4y6pG7eFXmRrr0=
+X-Google-Smtp-Source: AMsMyM6nyxQDEZJp6exJKamOA5+s7k1arGd1CWwyd9PKVu935KcCRfSpU+aKIRmeM5eO4JskphEKhw==
+X-Received: by 2002:ad4:4eac:0:b0:4af:8718:3b55 with SMTP id ed12-20020ad44eac000000b004af87183b55mr4168794qvb.72.1664485241585;
+        Thu, 29 Sep 2022 14:00:41 -0700 (PDT)
+Received: from localhost.localdomain ([177.222.37.214])
+        by smtp.googlemail.com with ESMTPSA id z2-20020ac875c2000000b0035cf2995ad8sm190362qtq.51.2022.09.29.14.00.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 14:00:41 -0700 (PDT)
+From:   Henry Castro <hcvcastro@gmail.com>
+To:     namhyung@kernel.org
+Cc:     Henry Castro <hcvcastro@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] perf: fix the probe finder location (.dwo files)
+Date:   Thu, 29 Sep 2022 16:59:57 -0400
+Message-Id: <20220929205958.22225-1-hcvcastro@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yXKve1oIjQxEgUHU"
-Content-Disposition: inline
-In-Reply-To: <20220929174334.44d3e6d9@endymion.delvare>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If the file object is compiled using -gsplit-dwarf,
+the probe finder location will fail.
 
---yXKve1oIjQxEgUHU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Henry Castro <hcvcastro@gmail.com>
+---
+ tools/perf/util/probe-finder.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
+diff --git a/tools/perf/util/probe-finder.c b/tools/perf/util/probe-finder.c
+index 50d861a80f57..6d7c5461251d 100644
+--- a/tools/perf/util/probe-finder.c
++++ b/tools/perf/util/probe-finder.c
+@@ -1161,7 +1161,8 @@ static int debuginfo__find_probe_location(struct debuginfo *dbg,
+ 	struct perf_probe_point *pp = &pf->pev->point;
+ 	Dwarf_Off off, noff;
+ 	size_t cuhl;
+-	Dwarf_Die *diep;
++	Dwarf_Die *diep, cudie, subdie;
++	uint8_t unit_type;
+ 	int ret = 0;
+ 
+ 	off = 0;
+@@ -1200,6 +1201,14 @@ static int debuginfo__find_probe_location(struct debuginfo *dbg,
+ 			continue;
+ 		}
+ 
++		/* Check separate debug information file. */
++		if (dwarf_cu_info(pf->cu_die.cu, NULL, &unit_type, &cudie,
++				  &subdie, NULL, NULL, NULL))
++			continue;
++
++		if (unit_type == DW_UT_skeleton)
++			pf->cu_die = subdie;
++
+ 		/* Check if target file is included. */
+ 		if (pp->file)
+ 			pf->fname = cu_find_realpath(&pf->cu_die, pp->file);
+-- 
+2.20.1
 
-> Jarkko, Heiner, Wolfram, can you think of any reason why we should NOT
-> apply this change?
-
-Nope. Even if we overlooked something, we can still revert and figure
-out what went wrong.
-
-
---yXKve1oIjQxEgUHU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmM2BxQACgkQFA3kzBSg
-KbY4iRAAqjInleMYw5m7vaQ2psULANRofUZKLAxEqRBYFVWhP0d1emErS1YxbOAl
-b4ZB1eB3wpszOTvu9OngbGNIkIgGTsadLkT8Zfcq1jLYNXNYiaYGGMB/z4p6+wQE
-wJEE84SxBf4rNfTV7pf0mSu/jMAjWIpP43TF5jY1kC/h+2xJHcwxB/6BuHceHpP2
-lH1GYdWo6uoWysk6yEt0Bt3FmJ7JwRQeaDQzTMbd499kzJQ0vUceGR1r1SkyUlzm
-lMjC5errZoZZli+SI1HniqxwoylGaKBf55LqDLCAHmMHVo9D3twNtwxQfdAauf7k
-TNkts0YQYZuAEISaPkpH5c0c6cIk1srr5TZoKDQU0swfXzSpsagU3r64ZPYw2Vpc
-j2r6lp6aTD/aujzB/okcEZk74r1UikboE/OM1653Ll+AsH40jN+HTU/vScQsDw70
-T3QfwY9W8sJleQw09QM8Dw0zhT7REIgd6vcczKpe+XWbBGbVum5cWcFI49BXmoNk
-c1FJSAaJhfrW2agpfejLSngLisQ/REPRUlWEMYpQrMmOpTZBgZDHmkMvr5puZ6A2
-NeJ04C1Hc5ABCKT7Wdw/h5RtI9NBTAp34fZYcWKDT8FoaUq6Yg9s/9lthmDkx25M
-o+0A1MApnSywBdkjq6gLrkOYA5YcorFj5c3kzrFHjW5e07T3Blo=
-=IGiT
------END PGP SIGNATURE-----
-
---yXKve1oIjQxEgUHU--
