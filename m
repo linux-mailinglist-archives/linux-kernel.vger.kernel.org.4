@@ -2,98 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB0A5EFB03
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29895EFB07
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235120AbiI2QhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
+        id S235717AbiI2QhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235657AbiI2QhO (ORCPT
+        with ESMTP id S235662AbiI2QhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:37:14 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2D626F5;
-        Thu, 29 Sep 2022 09:37:12 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 3B0671884CC9;
-        Thu, 29 Sep 2022 16:37:10 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 2AB242500370;
-        Thu, 29 Sep 2022 16:37:10 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 0C5179EC0002; Thu, 29 Sep 2022 16:37:10 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 29 Sep 2022 12:37:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0301288AF;
+        Thu, 29 Sep 2022 09:37:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B232EB823E0;
+        Thu, 29 Sep 2022 16:37:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C50C433D6;
+        Thu, 29 Sep 2022 16:37:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664469436;
+        bh=vNYtvUwZ3HUq8cwYA19NVMmvgmpcrt5d+/MrssAtMJQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d6anIAoCx3kZr1zafAJ0CY9NGHSvOaCHXAXVV1BAvAhKOfkxWtOeZsXUNnvt1TN6c
+         6XBWgMSAcST0XVlIv5tiV4OW06GsnIQI7RN5CdOf26nUv5fMqJ6a2U2vWA2GdJiZsp
+         kWjZL+V70yM+cPvrwRh4aH8KTC2Zn+tZbN3+RFdTDum/jDVWGPa5GA67ebnmFEDWq+
+         otr/qSGFGzBndUSeq23jQU+a96xr14rCuD2U3AHc6tMozT/xsp+Q9xTbmpLlLNVLaw
+         PlXJWBiNedJTD7xgbJ1hhRCrZ6pWLD96SX9PinHLyZhssSJO8ghDu5Pon4s8DhAzTT
+         q/4pvUHiti2bA==
+Date:   Thu, 29 Sep 2022 22:07:12 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rafael Mendonca <rafaelmendsr@gmail.com>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: idxd: Fix memory leak in idxd_alloc()
+Message-ID: <YzXJuI5lwF10JguR@matsya>
+References: <20220914230815.700702-1-rafaelmendsr@gmail.com>
 MIME-Version: 1.0
-Date:   Thu, 29 Sep 2022 18:37:09 +0200
-From:   netdev@kapio-technology.com
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 0/9] Extend locked port feature with FDB
- locked flag (MAC-Auth/MAB)
-In-Reply-To: <20220929091036.3812327f@kernel.org>
-References: <20220928150256.115248-1-netdev@kapio-technology.com>
- <20220929091036.3812327f@kernel.org>
-User-Agent: Gigahost Webmail
-Message-ID: <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220914230815.700702-1-rafaelmendsr@gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-29 18:10, Jakub Kicinski wrote:
-> On Wed, 28 Sep 2022 17:02:47 +0200 Hans Schultz wrote:
->> From: "Hans J. Schultz" <netdev@kapio-technology.com>
->> 
->> This patch set extends the locked port feature for devices
->> that are behind a locked port, but do not have the ability to
->> authorize themselves as a supplicant using IEEE 802.1X.
->> Such devices can be printers, meters or anything related to
->> fixed installations. Instead of 802.1X authorization, devices
->> can get access based on their MAC addresses being whitelisted.
-> 
-> Try a allmodconfig build on latest net-next, seems broken.
+On 14-09-22, 20:08, Rafael Mendonca wrote:
+> If the IDA id allocation fails, then the allocated memory for the
+> idxd_device struct doesn't get freed before returning NULL, which leads to
+> a memleak.
 
-I have all different switch drivers enabled and I see no compile 
-warnings or errors. I guess I will get a robot update if that is the 
-case, but please be specific as to what does not build.
+Applied, thanks
+
+-- 
+~Vinod
