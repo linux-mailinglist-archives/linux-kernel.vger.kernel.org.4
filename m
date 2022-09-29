@@ -2,145 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF7D5EF303
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BF35EF305
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235209AbiI2KGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
+        id S235214AbiI2KH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234798AbiI2KGo (ORCPT
+        with ESMTP id S234845AbiI2KHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:06:44 -0400
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45FB142E3B;
-        Thu, 29 Sep 2022 03:06:42 -0700 (PDT)
-Received: by mail-qk1-f170.google.com with SMTP id g2so517148qkk.1;
-        Thu, 29 Sep 2022 03:06:42 -0700 (PDT)
+        Thu, 29 Sep 2022 06:07:25 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F759147CDC
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:07:24 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 126so937858ybw.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:07:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=6P2cTknVyAGavRlD+4eMAUvWg3EU64xB/MzdvQ6eJEo=;
+        b=Mr0hHY25uWS/mzDOzdRpAXl8R7VGuP4kg0xBwT4V/d9SnLCA0A5tHrk1adD7v3SnJ/
+         s0zDwqEB0WKkZRrH6hMCHUMaJk9kpNyjChl9BeFHaBYweiCfARHmKqKA3QhBxeFX6OA+
+         D/5yN1FzmTqzKM8bS68xBJ++Pzb0TcBAC7gI3mKmmwBJiYt9HZ1jnVPFqSs4GB5L0exU
+         1W4M6NO6ERECu0iETHzedRPGyYirhLtBBBlbumILi3wkfYl3Eo6dL/+CbtkIjiK5JdY3
+         ZZAiloIEalCuQJ7QFRyrT/ZacJzKHF6Pt68RK61ov017ULboqSJwwm2YiBhZ+lgF9vme
+         kykw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=0kCa6jTfE848WGHyQOi/qrbS8sATrhTFphLUVNaFX8Q=;
-        b=dTBNP5KKwzaESHxlZTXaKrEibySV9KBWmhcUP//s3H7c3+sfNGJSUOw5xP8W5lvz7x
-         NpQ+qEHFeiVsYlqG1yiwBwSuW2OwLY9AGwcmbFfKbPEA0VSIJtyCv+rWdo7oRltPbqCK
-         Jyn039kJOaBNxw2BxKsqS7yX456/1o8ZH5WpDFGA16iwYxYpRalSv7lfUF4k7mCcNiLC
-         ooUE1yKLNtlS6P2QoaolxfAib7hHN81CM9JHqi7uEhxTxE2gOjFCL+Hq+YGDXNNlG57Z
-         Ovesjsnq03bsTGQWdgDUtVsw8B4/VX6WAAhuG/2GKU6bcUVaLBULl4snCkAe/9neoTwa
-         uNNA==
-X-Gm-Message-State: ACrzQf19y+rW/EH2Frj8e4aQq00Fv0njy2HuAUXhi7PAlG5F1vQqLqOT
-        2qisxNCtx6fJ5gwwHnVDD33hddpEwh7fBNMaZ38=
-X-Google-Smtp-Source: AMsMyM4t+VHeXvfc0oxR5u5rgQbzvQXJbf+Qmt3ftRYCv7lZgD9+ONOm3P8z3DYu0LifaO4xhboMJzl7GEXLC4lSijk=
-X-Received: by 2002:a05:620a:2988:b0:6ce:cc3f:73b9 with SMTP id
- r8-20020a05620a298800b006cecc3f73b9mr1503211qkp.9.1664446001328; Thu, 29 Sep
- 2022 03:06:41 -0700 (PDT)
+        bh=6P2cTknVyAGavRlD+4eMAUvWg3EU64xB/MzdvQ6eJEo=;
+        b=d0xCdFe1y8uRIaam49Jzod+Ch2DJGEjVDQxINnBT44im+ciTic9r0C8AUbRQExUhbW
+         DcCfVEaaSCmOXgTGNDz97vgyH/m8XmUYd7mKvTMi6nHjo3QpDDAoLyjCgYYpiKA2pOUN
+         Wi9TmRAxwrjINHrsCVsY7K9TE0Q4/BcXbBjuPF5fle4HSzaEFKYGgMEWxLYjQFCqr7P9
+         YPNt/ig8cOk/1to3Dvza/GYqaNW/oJjErzpCJq2me0ANxH1+bSx1sL40wb/FIYFXYr2t
+         DBU7oPIDTCAZy2RFYE+iSsZBCD5+vFHO28da7dlpZm0Hs0+Fa21Dv3HLwh7/qoqznv/2
+         JAgQ==
+X-Gm-Message-State: ACrzQf3nIMsGutiE4TL37lf74MZNSxa30F4lWXSzTJBgxJnax/R8dChi
+        68giHUSGh+3GdsE5rZibnAzQap7r3KflGvSZfAbp/Q==
+X-Google-Smtp-Source: AMsMyM6D7SqrPmQfsbrIbYDPacs/gjDFTKXsYNUovfxlVQCoXY4xCWnklSmGugX8OW+YECAv0AUBs3whESatrlacJZY=
+X-Received: by 2002:a25:a502:0:b0:6bc:2835:a88a with SMTP id
+ h2-20020a25a502000000b006bc2835a88amr2355273ybi.15.1664446043618; Thu, 29 Sep
+ 2022 03:07:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220921155205.1332614-1-rrangel@chromium.org>
- <20220921094736.v5.8.I7d9202463f08373feccd6e8fd87482c4f40ece5d@changeid>
- <CAJZ5v0g57mF-4ZC2ajL5+JE+q9y=fW1G-OXR8tuOk4TYxHPWtQ@mail.gmail.com> <CAHQZ30BZ5jnTY4DQD5mxpnLcLxn5Oo=izB1+f06JOqXU5VGz_A@mail.gmail.com>
-In-Reply-To: <CAHQZ30BZ5jnTY4DQD5mxpnLcLxn5Oo=izB1+f06JOqXU5VGz_A@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 29 Sep 2022 12:06:29 +0200
-Message-ID: <CAJZ5v0gwU81_QX9JJSRyEVY9NABGxczYpp1w6OrOVGrJ8Xdmcg@mail.gmail.com>
-Subject: Re: [PATCH v5 08/13] ACPI: PM: Take wake IRQ into consideration when
- entering suspend-to-idle
-To:     Raul Rangel <rrangel@chromium.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        Tim Van Patten <timvp@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "jingle.wu" <jingle.wu@emc.com.tw>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Len Brown <lenb@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220929092916.23068-1-johan+linaro@kernel.org> <20220929092916.23068-7-johan+linaro@kernel.org>
+In-Reply-To: <20220929092916.23068-7-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 29 Sep 2022 13:07:12 +0300
+Message-ID: <CAA8EJppf5JkYYiCvjdZkPvKQLSP+F=fwEu93U8yD325ES8Mzcw@mail.gmail.com>
+Subject: Re: [PATCH v2 06/11] phy: qcom-qmp-pcie-msm8996: clean up power-down handling
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 11:10 PM Raul Rangel <rrangel@chromium.org> wrote:
+On Thu, 29 Sept 2022 at 12:29, Johan Hovold <johan+linaro@kernel.org> wrote:
 >
-> On Sat, Sep 24, 2022 at 11:00 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Wed, Sep 21, 2022 at 5:52 PM Raul E Rangel <rrangel@chromium.org> wrote:
-> > >
-> > > This change adds support for ACPI devices that use ExclusiveAndWake or
-> > > SharedAndWake in their _CRS GpioInt definition (instead of using _PRW),
-> > > and also provide power resources. Previously the ACPI subsystem had no
-> > > idea if the device had a wake capable interrupt armed. This resulted
-> > > in the ACPI device PM system placing the device into D3Cold, and thus
-> > > cutting power to the device. With this change we will now query the
-> > > _S0W method to figure out the appropriate wake capable D-state.
-> > >
-> > > Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-> > > ---
-> > >
-> > > Changes in v5:
-> > > - Go back to using adev->wakeup.flags.valid to keep the diff cleaner
-> > > - Fix a typo in comment
-> > >
-> > >  drivers/acpi/device_pm.c | 19 +++++++++++++++++--
-> > >  1 file changed, 17 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
-> > > index 9dce1245689ca2..3111fc426e04fd 100644
-> > > --- a/drivers/acpi/device_pm.c
-> > > +++ b/drivers/acpi/device_pm.c
+> This driver uses v2 registers only so drop the unnecessary
+> POWER_DOWN_CONTROL override.
 >
-> > > @@ -681,8 +681,23 @@ static int acpi_dev_pm_get_state(struct device *dev, struct acpi_device *adev,
-> > >                 d_min = ret;
-> > >                 wakeup = device_may_wakeup(dev) && adev->wakeup.flags.valid
-> > >                         && adev->wakeup.sleep_state >= target_state;
-> Just an FYI, I didn't update the code that handles the target state >
-> S0. I need to get a
-> device that has S3 capabilities and the correct firmware to test this.
-> I figure I can do
-> that as a different patch when I have time to test with an S3 device.
-
-That's fine.
-
-> > > -       } else {
-> > > -               wakeup = adev->wakeup.flags.valid;
-> > > +       } else if (adev->wakeup.flags.valid) {
-> > > +               /* ACPI GPE specified in _PRW. */
-> > > +               wakeup = true;
+> Note that this register is already hard-coded when powering on the PHY.
 >
-> >
-> > I would retain the "else" clause as it was and just add a new "else
-> > if" one before it.
-> >
-> Done
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Thanks!
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> > > +       } else if (device_may_wakeup(dev) && dev->power.wakeirq) {
-> > > +               /*
-> > > +                * The ACPI subsystem doesn't manage the wake bit for IRQs
-> > > +                * defined with ExclusiveAndWake and SharedAndWake. Instead we
-> > > +                * expect them to be managed via the PM subsystem. Drivers
-> > > +                * should call dev_pm_set_wake_irq to register an IRQ as a wake
-> > > +                * source.
-> > > +                *
-> > > +                * If a device has a wake IRQ attached we need to check the
-> > > +                * _S0W method to get the correct wake D-state. Otherwise we
-> > > +                * end up putting the device into D3Cold which will more than
-> > > +                * likely disable wake functionality.
-> > > +                */
-> > > +               wakeup = true;
-> > >         }
-> > >
-> > >         /*
-> > > --
->
-> I'll send out v6 soon unless anyone else has any comments.
+> ---
+>  drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 10 ++--------
+>  1 file changed, 2 insertions(+), 8 deletions(-)
+
+
+-- 
+With best wishes
+Dmitry
