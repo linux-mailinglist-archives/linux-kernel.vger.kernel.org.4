@@ -2,109 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 913825EFCF1
+	by mail.lfdr.de (Postfix) with ESMTP id DCD2C5EFCF2
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235334AbiI2SV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
+        id S235824AbiI2SWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234163AbiI2SV5 (ORCPT
+        with ESMTP id S234163AbiI2SWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:21:57 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C323C13F2A9
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:21:55 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id v130so2456101oie.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:21:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=hxDmnM1IL2wJ6pbSJipbjQaG4VApgtgIvJlR8md9+aM=;
-        b=PenDZ4du+ECiK5JkhEN/8v2etfVrHhJu4FghACXwbcptNy/wJ70A8VBSZT9NkSkTWz
-         65vvWHEwnH8ygm1rMdIUcQ5V5pwA3WRX3FrNxMbeLYUxHwne4hNdXGhX0d1rE7XDH+WL
-         m38r0MlN5hRKyvv9BMtAFTNTtBfUfjwsz3DP4=
+        Thu, 29 Sep 2022 14:22:01 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592FE142E25;
+        Thu, 29 Sep 2022 11:21:59 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-127dca21a7dso2757789fac.12;
+        Thu, 29 Sep 2022 11:21:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=hxDmnM1IL2wJ6pbSJipbjQaG4VApgtgIvJlR8md9+aM=;
-        b=mA9x5cM/vzjwTvVOfMQJtGcx1+c83OL9zjl0fhwq1H9pwE7TbZlcM8MWOB7fhCiBlj
-         Zq+npdTtVqPSZuisgF3pQiJmPhu2reWRzbgZuJ2dibRhsOvaEKQS5YCJ9DuJZP+MU/KQ
-         4WfniO6sdLPJiYeMaGExKGK4iQdda+EFytxfFZOjfZq5EFlRLwzsXuQ1nvOof0DEwHn+
-         7M9Py1BSxc3Z3jE7xOSBFmmsnw5Ye3SaN/Gdf/WYEOe0ZRo54UqB6xAqyzqlyeIUZCXe
-         M9KVztLBVDWQdf9OF3gvO9PC27Vng3LIzzb/28xz/IcatVjF1P4BTi6/S6ymtW7om6qC
-         zuaw==
-X-Gm-Message-State: ACrzQf0iXJh7rAEPVyQilXuUs5Bk6QfvGQtfldP8icVFq1aWsxUl0oJo
-        MOEsfwroxeZTIc1zLe2Rq7udcMCtCnABJg==
-X-Google-Smtp-Source: AMsMyM7BB6QrqLKtHllbIhVZRYtXWRTFPaIdwVLrHGt0dKLyplFxcYR0RTy6u5cWVFW/yKrp3SpWdg==
-X-Received: by 2002:a05:6808:118b:b0:34d:8f58:d95 with SMTP id j11-20020a056808118b00b0034d8f580d95mr7634955oil.22.1664475713940;
-        Thu, 29 Sep 2022 11:21:53 -0700 (PDT)
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com. [209.85.161.41])
-        by smtp.gmail.com with ESMTPSA id e12-20020a4ab98c000000b0047634c1c419sm55622oop.12.2022.09.29.11.21.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 11:21:52 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id d74-20020a4a524d000000b004755f8aae16so665078oob.11
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:21:52 -0700 (PDT)
-X-Received: by 2002:a05:6830:611:b0:65c:26ce:5dc with SMTP id
- w17-20020a056830061100b0065c26ce05dcmr1952667oti.176.1664475712268; Thu, 29
- Sep 2022 11:21:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <dacfc18d6667421d97127451eafe4f29@AcuMS.aculab.com>
-In-Reply-To: <dacfc18d6667421d97127451eafe4f29@AcuMS.aculab.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 29 Sep 2022 11:21:36 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgS_XpzEL140ovgLwGv6yXvV7Pu9nKJbCuo5pnRfcEbvg@mail.gmail.com>
-Message-ID: <CAHk-=wgS_XpzEL140ovgLwGv6yXvV7Pu9nKJbCuo5pnRfcEbvg@mail.gmail.com>
-Subject: Re: [PATCH 3/4] proc: Point /proc/net at /proc/thread-self/net
- instead of /proc/self/net
-To:     David Laight <David.Laight@aculab.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=E1E+aVkZps6nOEgD+k57dmty/5orHNqHkP5Ys8i20lo=;
+        b=CQT3EtS0HUYwJbX7+yFjdAUI7cLNVpTOjQuYGDMu6B25m/qulkf5oR3j2w0kxf23nc
+         /WXvEF7qRQkdhgywv1ks79YQTjPXNwgwNIetv5iwUvyeUNDO/mN5e+3QcFgCGJfavvjd
+         YsM7mXTQRVGmd2VN0ZTH6Qj+bE0MAALzsJjBPJGn2oa/ngxH42RKKZdZHl16NkQjIK/5
+         t9S38kQyETISqRKpP8uSbVo8uZph970qSPm7IoFAcVyWg0U2BklymdVB9UuKViIvsk6+
+         UxFpw06WS4cSrT+kTaXuGt3HweNwiSO+TXUdAQksEI+RBviH5atrtqzHQUDQ+Bih9tpT
+         MHzA==
+X-Gm-Message-State: ACrzQf2peakMSaXvcAvWDDPCsF0fXOzeHIRvDOT3rA2DmThfNKpxj8tF
+        u5WC4AVZI1UTfo/ZhrkRvw==
+X-Google-Smtp-Source: AMsMyM4PK1n2ewUg+rNJ24uv50FuD1odSQ6JC0CCIugoQsg1BgUKiJGYVAauz0ozKB3EAsP9iiimfg==
+X-Received: by 2002:a05:6870:d0c1:b0:131:8c96:a1d with SMTP id k1-20020a056870d0c100b001318c960a1dmr8382943oaa.117.1664475718330;
+        Thu, 29 Sep 2022 11:21:58 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h8-20020acab708000000b003511cab9cb1sm21121oif.19.2022.09.29.11.21.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 11:21:57 -0700 (PDT)
+Received: (nullmailer pid 2518000 invoked by uid 1000);
+        Thu, 29 Sep 2022 18:21:56 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Hal Feng <hal.feng@linux.starfivetech.com>
+Cc:     devicetree@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>
+In-Reply-To: <20220929175147.19749-1-hal.feng@linux.starfivetech.com>
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com> <20220929175147.19749-1-hal.feng@linux.starfivetech.com>
+Message-Id: <166447556924.2514425.231552070734010562.robh@kernel.org>
+Subject: Re: [PATCH v1 12/30] dt-bindings: reset: Add starfive,jh7110-reset bindings
+Date:   Thu, 29 Sep 2022 13:21:56 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 8:22 AM David Laight <David.Laight@aculab.com> wrote:
->
-> This was applied and then reverted by Linus (I can't find anything
-> in the LKML archive) - see git show 155134fef - because of
-> issues with apparmor and dhclient.
+On Fri, 30 Sep 2022 01:51:47 +0800, Hal Feng wrote:
+> Add bindings for the reset controller on the JH7110 RISC-V
+> SoC by StarFive Technology Ltd.
+> 
+> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+> ---
+>  .../bindings/reset/starfive,jh7110-reset.yaml | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/reset/starfive,jh7110-reset.yaml
+> 
 
-lkml archive link:
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-  https://lore.kernel.org/all/CADDKRnDD_W5yJLo2otWXH8oEgmGdMP0N_p7wenBQbh17xKGZJg@mail.gmail.com/
+yamllint warnings/errors:
 
-in case anybody cares.
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/reset/starfive,jh7110-reset.example.dts:18:18: fatal error: dt-bindings/reset/starfive-jh7110.h: No such file or directory
+   18 |         #include <dt-bindings/reset/starfive-jh7110.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:384: Documentation/devicetree/bindings/reset/starfive,jh7110-reset.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1420: dt_binding_check] Error 2
 
-I wonder if the fix is to replace the symlink with a hardcoded lookup
-(ie basically make it *act* like a hardlink - we don't really support
-hardlinked directories, but we could basically fake the lookup in
-proc). Since the problem was AppArmor reacting to the name in the
-symlink.
+doc reference errors (make refcheckdocs):
 
-Al added the participants so that he can say "hell no".
+See https://patchwork.ozlabs.org/patch/
 
-Actually, it might be cleaner to make it act like a dynamic
-mount-point instead - kind of "automount" style. Again, Al would be
-the person who can say "sure, that makes sense" or "over my dead
-body".
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-Al?
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-Or maybe that crazy AppArmor rule just doesn't exist any more. It's
-been 8 years, after all.
+pip3 install dtschema --upgrade
 
-                   Linus
+Please check and re-submit.
+
