@@ -2,46 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB6C5F017A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 01:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE27D5F017C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 01:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiI2Xic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 19:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S229437AbiI2XjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 19:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiI2Xi2 (ORCPT
+        with ESMTP id S229522AbiI2XjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 19:38:28 -0400
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF88614F8E7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:38:26 -0700 (PDT)
-Received: from [192.168.1.101] (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id BC2EF1F5E1;
-        Fri, 30 Sep 2022 01:38:23 +0200 (CEST)
-Message-ID: <48af9193-452f-ffb8-39c7-0d17068af658@somainline.org>
-Date:   Fri, 30 Sep 2022 01:38:21 +0200
+        Thu, 29 Sep 2022 19:39:22 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5974D14DAE1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:39:21 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id c24so2551903plo.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=406PHi1E3zQxmMChBF9K8IG+zjCzhZM2d2hHmY4Q4BA=;
+        b=cgJgHsUAGCFMQ3CFDi3AgcrQiOvlEV35DecVLMmwLMl3Mdex18zzkKu24C3g+oYUwQ
+         ukCPFcotbaV/BQzlbkBhRM+bc9mGQ6dyCFZWcSLWR25OPAR8PrOXVwhT+RUET4sjXMF0
+         nw7RCJvzf1x3Ti9JDeG3d3bCcjISPfBUfs/vU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=406PHi1E3zQxmMChBF9K8IG+zjCzhZM2d2hHmY4Q4BA=;
+        b=12LCx48uN5zN94IVA6Bf2gUievRDrkVGE0aP63apIjo+2QQZetEFtNqKHHkfv4mYcG
+         ASdImgbFtVJ38TL6r3Zqlk7R2nLEXQlu4WXdi/jhRoBvYRrGyAjgDHxOBPRAaQJalFP9
+         YBipvXBTGCeKtsi/Wj7fUGusabmucR1huoGH+4NLuqfPMn6oypiARR3YkwFBwH8zl9ly
+         8a2nyquiX0Z2vJ6HnKy2X8/KaM9rM5XFIQ9YW2TgXSe52bw8r5B79ta1CBhkJ9BI7PHL
+         PHCUK4yfzRD778CYSXl7reORFNHebh3uNFSKn8p7DyTVRZh8O11B03PeJO4C7rzEhfzT
+         QPew==
+X-Gm-Message-State: ACrzQf1+CRn96t3NnQzmS+h61qal764+KpRPm/oB2N3TOTnSw9hqLrlk
+        qfUEGtPSM/24fyzO3Wfvn7Na/RbXqy9VMw==
+X-Google-Smtp-Source: AMsMyM4zpLGflr4v7oe8USvwOdE1CTEZ8QnadhucyD+2vGwk217VqucBLy0urdyL+4oHeHdsyaYTrg==
+X-Received: by 2002:a17:902:a606:b0:178:57e4:a0c1 with SMTP id u6-20020a170902a60600b0017857e4a0c1mr5805722plq.83.1664494760865;
+        Thu, 29 Sep 2022 16:39:20 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s13-20020a17090302cd00b00172dc6e1916sm427601plk.220.2022.09.29.16.39.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 16:39:20 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 16:39:19 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>, linux-mm@kvack.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] binfmt: remove taso from linux_binprm struct
+Message-ID: <202209291638.BD0B8639@keescook>
+References: <20220929203903.9475-1-lukas.bulwahn@gmail.com>
+ <87tu4p3jwn.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] clk: gcc-sc8280xp: use retention for USB power domains
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220929161124.18138-1-johan+linaro@kernel.org>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220929161124.18138-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87tu4p3jwn.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,74 +67,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 29, 2022 at 05:17:28PM -0500, Eric W. Biederman wrote:
+> Lukas Bulwahn <lukas.bulwahn@gmail.com> writes:
+> 
+> > With commit 987f20a9dcce ("a.out: Remove the a.out implementation"), the
+> > use of the special taso flag for alpha architectures in the linux_binprm
+> > struct is gone.
+> >
+> > Remove the definition of taso in the linux_binprm struct.
+> >
+> > No functional change.
+> 
+> Reviewed-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> 
+> Alphas binfmt_loader is the only use I can find of that variable
+> so let's kill it as well.
 
+Ah, sorry, misparsed this -- you mean, alpha's use (now removed) was the
+only place it was accessed. Agreed. :)
 
-On 29.09.2022 18:11, Johan Hovold wrote:
-> Since commit d399723950c4 ("clk: qcom: gdsc: Fix the handling of
-> PWRSTS_RET support) retention mode can be used on sc8280xp to maintain
-> state during suspend instead of leaving the domain always on.
-> 
-> This is needed to eventually allow the parent CX domain to be powered
-> down during suspend.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-
-Konrad
->  drivers/clk/qcom/gcc-sc8280xp.c | 13 +++----------
->  1 file changed, 3 insertions(+), 10 deletions(-)
-> 
-> While we're not yet able to fully test this (since we're not hitting CX
-> power down) this can still go in as we'll need it in some form
-> eventually.
-> 
-> Note that the PCIe domains should remain always-on until we have driver
-> support for suspend in place.
-> 
-> Johan
-> 
-> 
-> diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
-> index 7768e6901dcc..a18ed88f3b82 100644
-> --- a/drivers/clk/qcom/gcc-sc8280xp.c
-> +++ b/drivers/clk/qcom/gcc-sc8280xp.c
-> @@ -6843,17 +6843,12 @@ static struct gdsc ufs_phy_gdsc = {
->  	.pwrsts = PWRSTS_OFF_ON,
->  };
->  
-> -/*
-> - * The Qualcomm DWC3 driver suspend implementation appears to be incomplete
-> - * for sc8280xp so keep the USB power domains always-on for now.
-> - */
->  static struct gdsc usb30_mp_gdsc = {
->  	.gdscr = 0xab004,
->  	.pd = {
->  		.name = "usb30_mp_gdsc",
->  	},
-> -	.pwrsts = PWRSTS_OFF_ON,
-> -	.flags = ALWAYS_ON,
-> +	.pwrsts = PWRSTS_RET_ON,
->  };
->  
->  static struct gdsc usb30_prim_gdsc = {
-> @@ -6861,8 +6856,7 @@ static struct gdsc usb30_prim_gdsc = {
->  	.pd = {
->  		.name = "usb30_prim_gdsc",
->  	},
-> -	.pwrsts = PWRSTS_OFF_ON,
-> -	.flags = ALWAYS_ON,
-> +	.pwrsts = PWRSTS_RET_ON,
->  };
->  
->  static struct gdsc usb30_sec_gdsc = {
-> @@ -6870,8 +6864,7 @@ static struct gdsc usb30_sec_gdsc = {
->  	.pd = {
->  		.name = "usb30_sec_gdsc",
->  	},
-> -	.pwrsts = PWRSTS_OFF_ON,
-> -	.flags = ALWAYS_ON,
-> +	.pwrsts = PWRSTS_RET_ON,
->  };
->  
->  static struct clk_regmap *gcc_sc8280xp_clocks[] = {
+-- 
+Kees Cook
