@@ -2,150 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C6B5EF129
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4D45EF12B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234948AbiI2JCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 05:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S234973AbiI2JCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 05:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234929AbiI2JCU (ORCPT
+        with ESMTP id S234714AbiI2JCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:02:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F529138F08
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:02:19 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 40EAA660229F;
-        Thu, 29 Sep 2022 10:02:17 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664442137;
-        bh=N0m7GBoyHiib0OgCMmTseGmbEmSpvEwOlrrxgDsGcqw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oa2JJqk3rJEZ5c8IJ8fmkQp64qx1xIha2YVgIZrpoiu4eUhp62/3ettvq7GKxehUg
-         3onKr6oRJ/XMv3S8+x38pZPW0EwOlav0y+bhJ14+ziSFPVplqa+lFD8ooJ1u+mHge9
-         hsGYpcV5eEExNHrQ12eSL7g2nnUkuBCIhKT7+b3eMPMbMHcqXBQmnOLY28+MNUBo4E
-         rjQzZJXD3SIj3IAuMGs3tve9iyuKXEM34DuXwUZGQsriiPtYeNo00Ms8XVVXT971xO
-         MPZ7c4tL3myG/HL5RSDvC5n93u/kb4qzSqA/iVNc+hUaV9KvAktq6kpJfysuDSXL/6
-         Bn8d4yjnatgcQ==
-Message-ID: <09bc1393-dd30-3c96-3309-f822994f4aab@collabora.com>
-Date:   Thu, 29 Sep 2022 11:02:14 +0200
+        Thu, 29 Sep 2022 05:02:37 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1504A138F08
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:02:35 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 63so766962ybq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:02:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=yKPB55kqrYfeN1gOA599C3nAwB2kg/l4ZAUq+bshASA=;
+        b=eiuwK3T0g179jNPxt3DC04h7S5HSU+dYiVOlj8DYf1hxjgAkcEkGf4yYbFUbmCgvY6
+         RkwGR6unYdoX/DvCR2zdf/M8V/3dqeXA5Zh9CawoNLLNoBO1Qc+e1rTK6SL5JZiHJ7zO
+         tmt6CvE+5ZpzxEKodj/tmoOwpRZVc1fXWTxGMc77ylNKC/aZ/zlS47etImuGiYwclMvr
+         U2Y28+Fjckwf/N13JazRvxbBkMfj41Bm6nyf+WYrC5DiGEe6bt7jutlCve0+6gU7twh3
+         EdP3yxzLb4Tsp0l0ZE4v0F0+C+e2nUx7kerl9d06tYDXLiChRg6OoRYKaoG7XojV9e9y
+         NHZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=yKPB55kqrYfeN1gOA599C3nAwB2kg/l4ZAUq+bshASA=;
+        b=TugtOe3MfmhEn51lc3auJimGJQj+5NXtxRVDi/+pwlBdp5Xwbxv+rcgyckjZzflXFp
+         A6rvcfnHr371ronn5kLxqp/TmO+3MLrU+MREm86if/dGEee3tyj7uGgjutWkhSAII7aM
+         WL15Haar08G6DK8qcedZf5zorfpgGdawW5YvCpOAh96Z+NUXP6qL1+41nq7bm6ero+3z
+         BjuL8ck8YUv6oKa3xD7KYyK8w295SBmWfB1tPuxWomE/gawEgVagH6jmf+XVyTHMVCHd
+         jrWVt9XBZHBamp/fO1ZkRX1T6te9IM/JUyT7t06m/1abRMLAUIoGjObDB8ezPCcQAKYk
+         KdnA==
+X-Gm-Message-State: ACrzQf2ZCiKtnRSZMP7EQ6YRZbZ6vdhDQGBKfm5kmcuI4Dtlw3BJ12zd
+        32ksOUCYDHp81ZIKU/qSBX4aNRwBs+h/QJu642nGrQ==
+X-Google-Smtp-Source: AMsMyM7fcwdsOzxi4Y/A4abn1a2Rw6OsEt4ShseX5ARSzqORDdAnULDTqq+5gcxWyE2gQIQjHNZR2gXdAR3KGdesMWY=
+X-Received: by 2002:a25:3f86:0:b0:6bc:998:873e with SMTP id
+ m128-20020a253f86000000b006bc0998873emr2255866yba.152.1664442155175; Thu, 29
+ Sep 2022 02:02:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 2/2] phy: mediatek: tphy: add debugfs files
-Content-Language: en-US
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Eddie Hung <eddie.hung@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>
-References: <20220929080926.1272-1-chunfeng.yun@mediatek.com>
- <20220929080926.1272-2-chunfeng.yun@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220929080926.1272-2-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1664435628-4011-1-git-send-email-quic_kriskura@quicinc.com>
+ <CAA8EJpr9pcN-SG-yQNUGEoHCmv74prChprj4f42PKpSAzGzVKQ@mail.gmail.com> <0cc382cb-b76e-a5a5-3480-47a451bdc958@quicinc.com>
+In-Reply-To: <0cc382cb-b76e-a5a5-3480-47a451bdc958@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 29 Sep 2022 12:02:24 +0300
+Message-ID: <CAA8EJprvHSFKS2ZOLyeYgUpj4Fzec01RhQ7=nUh=qDpYBe0hrA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/09/22 10:09, Chunfeng Yun ha scritto:
-> These debugfs files are mainly used to make eye diagram test easier,
-> especially helpful to do HQA test for a new IC without efuse enabled.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v2: add CONFIG_PHY_MTK_TPHY_DEBUGFS suggested by AngeloGioacchino
-> ---
->   drivers/phy/mediatek/Kconfig        |   5 +
->   drivers/phy/mediatek/phy-mtk-tphy.c | 403 +++++++++++++++++++++++++++-
->   2 files changed, 407 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/phy/mediatek/Kconfig b/drivers/phy/mediatek/Kconfig
-> index 3125ecb5d119..e9fdfe9f519f 100644
-> --- a/drivers/phy/mediatek/Kconfig
-> +++ b/drivers/phy/mediatek/Kconfig
-> @@ -27,6 +27,11 @@ config PHY_MTK_TPHY
->   	  multi-ports is first version, otherwise is second version,
->   	  so you can easily distinguish them by banks layout.
->   
-> +config PHY_MTK_TPHY_DEBUGFS
-> +	bool "Add T-PHY Debugfs Files"
-> +	help
-> +	  Say Y here to add debugfs files mainly for T-PHY HQA test.
-> +
->   config PHY_MTK_UFS
->   	tristate "MediaTek UFS M-PHY driver"
->   	depends on ARCH_MEDIATEK || COMPILE_TEST
-> diff --git a/drivers/phy/mediatek/phy-mtk-tphy.c b/drivers/phy/mediatek/phy-mtk-tphy.c
-> index e906a82791bd..d9509e1314a4 100644
-> --- a/drivers/phy/mediatek/phy-mtk-tphy.c
-> +++ b/drivers/phy/mediatek/phy-mtk-tphy.c
-> @@ -7,6 +7,7 @@
->   
->   #include <dt-bindings/phy/phy.h>
->   #include <linux/clk.h>
-> +#include <linux/debugfs.h>
->   #include <linux/delay.h>
->   #include <linux/iopoll.h>
->   #include <linux/mfd/syscon.h>
-> @@ -264,6 +265,8 @@
->   
->   #define TPHY_CLKS_CNT	2
->   
-> +#define USER_BUF_LEN(count) min_t(size_t, 8, (count))
-> +
->   enum mtk_phy_version {
->   	MTK_PHY_V1 = 1,
->   	MTK_PHY_V2,
-> @@ -310,6 +313,7 @@ struct mtk_phy_instance {
->   	struct clk_bulk_data clks[TPHY_CLKS_CNT];
->   	u32 index;
->   	u32 type;
-> +	struct dentry *dbgfs;
+On Thu, 29 Sept 2022 at 11:54, Krishna Kurapati PSSNV
+<quic_kriskura@quicinc.com> wrote:
+>
+>
+> On 9/29/2022 1:29 PM, Dmitry Baryshkov wrote:
+> > On Thu, 29 Sept 2022 at 10:14, Krishna Kurapati
+> > <quic_kriskura@quicinc.com> wrote:
+> >>
+> >> Override the SNPS Phy tuning parameters for SC7280 devices. These
+> >> values are common for both trogdor and herobrine variants.
+> >
+> > They are common for trogdor and herobrine, but should these parameters
+> > be a default? In other words, a random new device based on sc7280
+> > would more likely use these overrides or the hardware defaults?
+> >
+> Hi Dmitry,
+>
+>    Currently there are only two platforms, so I made these changes on
+> common dtsi. If a new platform comes (mostly it won't) we can override
+> them in platform specific file is what I thought.
 
-Unused when !IS_ENABLED(CONFIG_PHY_MTK_TPHY_DEBUGFS)
+This is not how it usually works. The 'sc7280.dtsi' is not a 'common
+dtsi' for trogdor and herobrine. It describes the SoC.
+Thus in my opinion if these overrides should be a default to all
+sc7280 platforms, this patch is fine. If these overrides are
+applicable only to the two mentioned platforms, they should go to
+respective platform-specific DT files.
 
->   	struct regmap *type_sw;
->   	u32 type_sw_reg;
->   	u32 type_sw_index;
-> @@ -332,10 +336,389 @@ struct mtk_tphy {
->   	const struct mtk_phy_pdata *pdata;
->   	struct mtk_phy_instance **phys;
->   	int nphys;
-> +	struct dentry *dbgfs_root;
+>
+> Regards,
+> Krishna,
+> >>
+> >> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> >> ---
+> >>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 7 +++++++
+> >>   1 file changed, 7 insertions(+)
+> >>
+> >> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> >> index 2125803..ae2c23e 100644
+> >> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> >> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> >> @@ -3310,6 +3310,13 @@
+> >>                          clock-names = "ref";
+> >>
+> >>                          resets = <&gcc GCC_QUSB2PHY_SEC_BCR>;
+> >> +
+> >> +                       qcom,hs-rise-fall-time-bp = <0>;
+> >> +                       qcom,squelch-detector-bp = <(-2090)>;
+> >> +                       qcom,hs-disconnect-bp = <1743>;
+> >> +                       qcom,hs-amplitude-bp = <1780>;
+> >> +                       qcom,hs-crossover-voltage-microvolt = <(-31000)>;
+> >> +                       qcom,hs-output-impedance-micro-ohms = <2600000>;
+> >>                  };
+> >>
+> >>                  usb_1_qmpphy: phy-wrapper@88e9000 {
+> >> --
+> >> 2.7.4
+> >>
+> >
+> >
 
-Same here
 
->   	int src_ref_clk; /* MHZ, reference clock for slew rate calibrate */
->   	int src_coef; /* coefficient for slew rate calibrate */
->   };
->   
-> +#if IS_ENABLED(CONFIG_PHY_MTK_TPHY_DEBUGFS)
-> +
 
-..snip..
-
-> +
-> +static void tphy_debufs_init(struct mtk_tphy *tphy, struct mtk_phy_instance *inst)
-
-Please fix typo "debufs" -> "debugfs", here and everywhere else.
-
-Apart from that, it looks good to me.
-
-Regards,
-Angelo
+-- 
+With best wishes
+Dmitry
