@@ -2,107 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14915EF7C9
+	by mail.lfdr.de (Postfix) with ESMTP id 767855EF7C8
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235743AbiI2Oij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60360 "EHLO
+        id S235748AbiI2Oil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235310AbiI2Oib (ORCPT
+        with ESMTP id S235726AbiI2Oig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:38:31 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674A11C054B;
-        Thu, 29 Sep 2022 07:38:30 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28TDYdUr006399;
-        Thu, 29 Sep 2022 14:38:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=52aDO7sc8xh1IFxCGL8wvxVs6NekKF0/qHOVASUm0+0=;
- b=BsmMA+SKEvF9PQxYg3pXRZIadafZb+fhyzQ9U4tihTP/jyqXWxVhX6THHYDfl6ncdyCl
- kRShjJVc9i9yoV4mX4d5CZ9jwNVqI5b+kUnXGsriK0WKCiGHm6n18jBl7cD8Rebg8xn3
- bycYi/DTJxh2hgYyZ5FVlhp/9q1PMJqfb3Pv+tvX9lcgXNKWUtdEotGkQexMSoSFG/rL
- fwY1MIFEtPNi+QTy9lirOp6/4bzwhuchjWuhKaqv4AecrWzwc+R84wJzrPsCBJa6taRL
- WxvNSfP+U8vGuz5garKyU2GbMgYk5DjJbud51O+qv979tMkbq/1d76zuWLQnzmWmIlgA 8w== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jvm75bf7x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 14:38:19 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28TEcHdL018660
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 14:38:17 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Thu, 29 Sep 2022 07:38:14 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v2] arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280
-Date:   Thu, 29 Sep 2022 20:08:10 +0530
-Message-ID: <1664462290-29869-1-git-send-email-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 29 Sep 2022 10:38:36 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1311C054B
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:38:34 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id s10so1777359ljp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=j0oWhXN2ZUd4COh7520YadSBs3lWzKCaGNiRYIIVCPU=;
+        b=mcyHw/JXKkRWeKdTRipuWpdhKIdeRs7z/+yLr6sInNo7TR0aH42e14aN1KVAcXwe07
+         wT12VHvxJ0Nu68qak+4LfFZfC7jnigLtkosYoecDks+Os5/GwK7NTtPYA8G6C+3Nx5Hg
+         xLkbm7oKmZC/wvq1Qg0BS00R91Z/ni6dBtUbVEQw3mHcyG/+U0cfTpGxBmwGUsWSLVEN
+         CgxTyV5zipdVqylGNH/vlOeZbqaWqu7oScxfaCnVpb2QYsTWu12rzLC5h1jEelDihZ//
+         dgos0d5J+C2AzkcUHk7etK7vgJvNEf2F2Q9VxNsQFoj7O/dSKw1YLLznQB/rDPIn2oFQ
+         bWgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=j0oWhXN2ZUd4COh7520YadSBs3lWzKCaGNiRYIIVCPU=;
+        b=soYDX2PlqTTPH2jJu/wmXBVajNfLEJjGdzXUY81NbWpYafYgIFgbeieQamMGzXSTiy
+         qWDYwkP1xBdJhJWgpjnc5fY3inYh87El4fj1w5BstpkUASl6ABrSlRbXNA8Ag2GhMDen
+         GE2kPow1YN8+sypDHVz4uToX86u0cSeG/axeD1mxoWjJFExi159oDhhv0w6jMnBHCgdF
+         Q+fj+OkSCV9k/3J93NXWIT2Y8zFs3iu4SgbvCpBvCpZCG4WPsVM58UW2zUAu+lUSVHzw
+         D8nnIqxDMxP6FlH0hY11KXRMPoxVBnvgv0t1vsFgkYyCpOwxFZyL06wHG1iBmYUMDDh1
+         L6eg==
+X-Gm-Message-State: ACrzQf1PmM/4jSVQqcQPUgU/A0rxpDNP+c+8+ELXn0597wBGSZICziET
+        Brk4gGH2JPxltOENGEnvI7UlLA==
+X-Google-Smtp-Source: AMsMyM6DfRuuk5kpoptytoVkIDXi2xRmhOg3yGtMP6fD6LB0TNCoWSpxXSG34U4iX5ZBnhCmC8HEPg==
+X-Received: by 2002:a2e:b744:0:b0:26c:40bf:eaba with SMTP id k4-20020a2eb744000000b0026c40bfeabamr1430188ljo.367.1664462312649;
+        Thu, 29 Sep 2022 07:38:32 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id c6-20020a056512074600b004948b667d95sm800772lfs.265.2022.09.29.07.38.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 07:38:32 -0700 (PDT)
+Message-ID: <bd024e66-25bb-0463-b346-b110c1b46681@linaro.org>
+Date:   Thu, 29 Sep 2022 16:38:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: oUaDJz4hLK35zO1YfAjjUtM-gnufZj6O
-X-Proofpoint-GUID: oUaDJz4hLK35zO1YfAjjUtM-gnufZj6O
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-29_08,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- phishscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0
- mlxlogscore=726 adultscore=0 priorityscore=1501 mlxscore=0 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209290091
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCHv4 1/3] dt-bindings: mmc: synopsys-dw-mshc: document
+ "altr,sysmgr-syscon"
+Content-Language: en-US
+To:     Dinh Nguyen <dinguyen@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     jh80.chung@samsung.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220928165420.1212284-1-dinguyen@kernel.org>
+ <CAPDyKFp5oPuOz9A=37pRTvq7JPtJRdduEgmU9g+eUm0K=dZjUg@mail.gmail.com>
+ <20cbd2a2-752e-8537-4cbd-6665ef9afd69@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20cbd2a2-752e-8537-4cbd-6665ef9afd69@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SNPS HS Phy tuning parameters for herobrine variant of
-SC7280 devices.
+On 29/09/2022 16:20, Dinh Nguyen wrote:
+>>
+>> So this change will not be backwards compatible with existing DTBs. I
+>> noticed that patch2 updates the DTS files for the arm64 platforms, but
+>> there seems to be some arm32 platforms too. Isn't this going to be a
+>> problem?
+>>
+> 
+> The arm32 platforms makes the clk-phase adjustment through the clock 
+> driver. There was a discussion when I originally submitted the support 
+> for the arm32 platforms, and we landed on going through the clock driver 
+> instead of using the MMC driver. The updates to the arm32 platforms can 
+> be done after this patch series.
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+How the update "can be done after"? Didn't you break all boards in- and
+out-of-tree?
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-index c11e371..2ad881d 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-@@ -627,6 +627,13 @@ ap_ec_spi: &spi10 {
- 
- &usb_1_hsphy {
- 	status = "okay";
-+
-+	qcom,hs-rise-fall-time-bp = <0>;
-+	qcom,squelch-detector-bp = <(-2090)>;
-+	qcom,hs-disconnect-bp = <1743>;
-+	qcom,hs-amplitude-bp = <1780>;
-+	qcom,hs-crossover-voltage-microvolt = <(-31000)>;
-+	qcom,hs-output-impedance-micro-ohms = <2600000>;
- };
- 
- &usb_1_qmpphy {
--- 
-2.7.4
+Best regards,
+Krzysztof
 
