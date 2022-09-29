@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA465EF325
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DA25EF326
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235412AbiI2KOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
+        id S235444AbiI2KPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235259AbiI2KOm (ORCPT
+        with ESMTP id S235320AbiI2KOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:14:42 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07461C104;
-        Thu, 29 Sep 2022 03:14:39 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 130-20020a1c0288000000b003b494ffc00bso2387973wmc.0;
-        Thu, 29 Sep 2022 03:14:39 -0700 (PDT)
+        Thu, 29 Sep 2022 06:14:46 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E88275E7;
+        Thu, 29 Sep 2022 03:14:43 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id x15so909198wrv.1;
+        Thu, 29 Sep 2022 03:14:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=12eQhE2PY0OlduRrQeOAHEPmadytun891QhnQWUKARo=;
-        b=In7gcwx2oRj7FOh5UaUT4AiM9oZqR5yhFHDZ5CxelJTZpu4ryf4yMCXHCQeE2ppI4t
-         vrYduSGEosVdvW0CCrOon3vlC/iSkfIVjHs4j3qvYmwWsRZuAYeSOlTuM6TEqr1H759a
-         YV4M8IP2uYGWvr3XIip7Bi+oqbM4pX91k/3/IuAzfJCPb2snkD2jYy7sH9Xj8gEMpVsL
-         4YiTA2dWruS5Md6VyWkMEAH4DDRSYomtXEoTnpslMI5+a0GZjM2ssse3Gc0h4H7SjaWp
-         Rp1YEr5wQHUHUCwxILffa5QBxp7NAr6IYwpnDDYWp/ee5TDm37h7vZGSpZWeotVcSzHR
-         t0MA==
+        bh=H/fjjauboM76AsKEJYN+l5mLtFMVtLVkrmfPN6VbpaE=;
+        b=KkDI0lFljwhEBtPZ5YgOj5zul4ksZb6EPM03zfuGM0XXNNv5d4e4ZSCDs+AatqLGd5
+         tT4CMHTpv28JLCvQHisqJqqAd0NdKRucuCWAJA33hnZS0OoDUeIOhWCpfWY8+oaPZwtg
+         mR4vrIklX3FY0IkQOpjh+IRdKJEImtAKjLkZhmJ9lWjBUdRsIbgQqb/vJIVGLBtYMuBn
+         3gUJINaH7Q1ZMElZRroQYHmltCyXjm4v193dRBJH8uVoeFE10JjIH+e/5fFKkjgvoKv0
+         +VSewndZ/KaiG7p0kTc124EtAbXzmFYbYyka2hn69QSTeZ9OTCfG8EhNCBoDDkU0sAgA
+         2anQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=12eQhE2PY0OlduRrQeOAHEPmadytun891QhnQWUKARo=;
-        b=M0id6lWgnb+lLgWEX4a0XsCYVV9J3Mc2pIwHox6XDXbnkDRMgHZ4DVjWzaOC7AxrBS
-         ME9s3mZ3n1RBiKh8xU4HKXTV6OscLRaAqL0+u6Lrz0P+2eyafNDfS+nD+MJhVfu8xyfl
-         zqCE+7666c2Ykk6G+WeYzlW/NDqa2dHoFX0d4U7sRn87tvUjGXQNZIcBYo04XrQ2kf+1
-         FCgI5+ITuH61lT7ekmi1LfT27r/8BEZS4gJEVnYdJpNYIVo+ZTQptaaaj9ltwNWd8Qeu
-         sCsteY6nyzEXl38bse+40lO9Bn16+dove6hoeLNwWtlW4COFwZCIFUVWwhgk54vbqCof
-         8Qhw==
-X-Gm-Message-State: ACrzQf01NwFOvIr9MZKV89jeqzZevpPpDNoBX/PEHtMaG4GZ5fSVsLoJ
-        KleGnx5SKFTvtZnJxm6zlqIG5iMtun8=
-X-Google-Smtp-Source: AMsMyM4yu7i7f21/RisYXNYU33L7DSjERybpxGpuWdGGtQo9R8DqVaTE2DucLprr6xGNff4B1yNk1g==
-X-Received: by 2002:a05:600c:5014:b0:3b5:889:58a5 with SMTP id n20-20020a05600c501400b003b5088958a5mr1660328wmr.140.1664446477349;
-        Thu, 29 Sep 2022 03:14:37 -0700 (PDT)
+        bh=H/fjjauboM76AsKEJYN+l5mLtFMVtLVkrmfPN6VbpaE=;
+        b=5z8BaEw1dnKAKsbIN7Ax6eV2fi8fAbqRlT4Ep+aDvJa5KtS+gqlIf3FEcUbtdnLRpH
+         tdne3Xh6e/4KDYB76f3dcxmeN18uYmjcaIMsW9BZjbVXwucqOVuSS1Xi9JnSElQpQUVj
+         1ksa6f7utaeypWFYPHj7fCzwGRq09ADtr6o0kEpdY8v/l7136UFxuVAPy+VcYBjOoBOR
+         x/GuYBoU2lNE8wJTUxzxGQVNhlugY5dffSyflchykBd9gUTVrQP5niudK8qEDDQXeE/r
+         WLSdlqnp/t/H56OuqCbK2p69I7iwMv0eQe/l5rdiJSSRgihh+BrLcargBrqxCBubC8+a
+         qpBg==
+X-Gm-Message-State: ACrzQf125NT1o7scq13UvIvdIsycQzQyRscyrUfVXTuje2miyYtzXskf
+        SAlTT1RWUwtcxN6sKkgVCXOksk7OZPY=
+X-Google-Smtp-Source: AMsMyM7+ToFJI8DyFO+EjzdRBkK7+s9M9T9IdC+QRHCC0wtDPw+aWHrUzcUutNx9bCbxNvgpTnnf1A==
+X-Received: by 2002:a05:6000:1acb:b0:22a:d11b:5eb9 with SMTP id i11-20020a0560001acb00b0022ad11b5eb9mr1664198wry.492.1664446481325;
+        Thu, 29 Sep 2022 03:14:41 -0700 (PDT)
 Received: from felia.fritz.box (200116b826e11200b190ebfd45660ea6.dip.versatel-1u1.de. [2001:16b8:26e1:1200:b190:ebfd:4566:ea6])
-        by smtp.gmail.com with ESMTPSA id u5-20020a5d4685000000b0022a3a887ceasm6313592wrq.49.2022.09.29.03.14.36
+        by smtp.gmail.com with ESMTPSA id a7-20020adfe5c7000000b0022cd6e852a2sm1274122wrn.45.2022.09.29.03.14.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 03:14:36 -0700 (PDT)
+        Thu, 29 Sep 2022 03:14:40 -0700 (PDT)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
+        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org
 Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] config: android: update config files
-Date:   Thu, 29 Sep 2022 12:14:33 +0200
-Message-Id: <20220929101433.31801-1-lukas.bulwahn@gmail.com>
+Subject: [PATCH] hexagon: update config files
+Date:   Thu, 29 Sep 2022 12:14:37 +0200
+Message-Id: <20220929101437.31902-1-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,7 +67,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Clean up config files by:
   - removing configs that were deleted in the past
-  - removing configs that are not in tree withot recently pending patches
+  - removing configs not in tree and without recently pending patches
   - adding new configs that are replacements for old configs in the file
 
 For some detailed information, see Link.
@@ -76,114 +76,57 @@ Link: https://lore.kernel.org/kernel-janitors/20220929090645.1389-1-lukas.bulwah
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- kernel/configs/android-base.config        | 9 ---------
- kernel/configs/android-recommended.config | 5 -----
- 2 files changed, 14 deletions(-)
+ arch/hexagon/configs/comet_defconfig | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/kernel/configs/android-base.config b/kernel/configs/android-base.config
-index 44b0f0146a3f..07b45571a8ff 100644
---- a/kernel/configs/android-base.config
-+++ b/kernel/configs/android-base.config
+diff --git a/arch/hexagon/configs/comet_defconfig b/arch/hexagon/configs/comet_defconfig
+index 9b2b1cc0794a..59e3a128b897 100644
+--- a/arch/hexagon/configs/comet_defconfig
++++ b/arch/hexagon/configs/comet_defconfig
 @@ -1,7 +1,6 @@
- #  KEEP ALPHABETICALLY SORTED
- # CONFIG_DEVMEM is not set
- # CONFIG_FHANDLE is not set
--# CONFIG_INET_LRO is not set
- # CONFIG_NFSD is not set
- # CONFIG_NFS_FS is not set
- # CONFIG_OABI_COMPAT is not set
-@@ -9,9 +8,7 @@
- # CONFIG_USELIB is not set
- CONFIG_ANDROID_BINDER_IPC=y
- CONFIG_ANDROID_BINDER_DEVICES=binder,hwbinder,vndbinder
--CONFIG_ANDROID_LOW_MEMORY_KILLER=y
- CONFIG_ARMV8_DEPRECATED=y
--CONFIG_ASHMEM=y
- CONFIG_AUDIT=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_CGROUPS=y
-@@ -34,7 +31,6 @@ CONFIG_INET6_IPCOMP=y
- CONFIG_INET=y
- CONFIG_INET_DIAG_DESTROY=y
- CONFIG_INET_ESP=y
--CONFIG_INET_XFRM_MODE_TUNNEL=y
- CONFIG_IP6_NF_FILTER=y
- CONFIG_IP6_NF_IPTABLES=y
- CONFIG_IP6_NF_MANGLE=y
-@@ -71,7 +67,6 @@ CONFIG_MODVERSIONS=y
- CONFIG_NET=y
+ CONFIG_SMP=y
+ CONFIG_DEFAULT_MMAP_MIN_ADDR=0
+ CONFIG_HZ_100=y
+-CONFIG_CROSS_COMPILE="hexagon-"
+ CONFIG_LOCALVERSION="-smp"
+ # CONFIG_LOCALVERSION_AUTO is not set
+ CONFIG_SYSVIPC=y
+@@ -25,9 +24,6 @@ CONFIG_BLK_DEV_NBD=y
  CONFIG_NETDEVICES=y
- CONFIG_NETFILTER=y
--CONFIG_NETFILTER_TPROXY=y
- CONFIG_NETFILTER_XT_MATCH_COMMENT=y
- CONFIG_NETFILTER_XT_MATCH_CONNLIMIT=y
- CONFIG_NETFILTER_XT_MATCH_CONNMARK=y
-@@ -115,8 +110,6 @@ CONFIG_NF_CONNTRACK_AMANDA=y
- CONFIG_NF_CONNTRACK_EVENTS=y
- CONFIG_NF_CONNTRACK_FTP=y
- CONFIG_NF_CONNTRACK_H323=y
--CONFIG_NF_CONNTRACK_IPV4=y
--CONFIG_NF_CONNTRACK_IPV6=y
- CONFIG_NF_CONNTRACK_IRC=y
- CONFIG_NF_CONNTRACK_NETBIOS_NS=y
- CONFIG_NF_CONNTRACK_PPTP=y
-@@ -148,12 +141,10 @@ CONFIG_SECURITY_SELINUX=y
- CONFIG_SETEND_EMULATION=y
- CONFIG_STAGING=y
- CONFIG_SWP_EMULATION=y
--CONFIG_SYNC=y
- CONFIG_TUN=y
+ CONFIG_MII=y
+ CONFIG_PHYLIB=y
+-CONFIG_NET_ETHERNET=y
+-# CONFIG_NETDEV_1000 is not set
+-# CONFIG_NETDEV_10000 is not set
+ # CONFIG_INPUT_MOUSEDEV is not set
+ # CONFIG_INPUT_KEYBOARD is not set
+ # CONFIG_INPUT_MOUSE is not set
+@@ -40,14 +36,12 @@ CONFIG_SPI_DEBUG=y
+ CONFIG_SPI_BITBANG=y
+ # CONFIG_HWMON is not set
+ # CONFIG_VGA_CONSOLE is not set
+-# CONFIG_HID_SUPPORT is not set
+ # CONFIG_USB_SUPPORT is not set
+ CONFIG_EXT2_FS=y
+ CONFIG_EXT2_FS_XATTR=y
+ CONFIG_EXT2_FS_POSIX_ACL=y
+ CONFIG_EXT2_FS_SECURITY=y
+ CONFIG_EXT3_FS=y
+-# CONFIG_EXT3_DEFAULTS_TO_ORDERED is not set
+ CONFIG_EXT3_FS_POSIX_ACL=y
+ CONFIG_EXT3_FS_SECURITY=y
+ CONFIG_QUOTA=y
+@@ -63,10 +57,6 @@ CONFIG_NET=y
+ CONFIG_PACKET=y
  CONFIG_UNIX=y
- CONFIG_USB_GADGET=y
- CONFIG_USB_CONFIGFS=y
- CONFIG_USB_CONFIGFS_F_FS=y
- CONFIG_USB_CONFIGFS_F_MIDI=y
--CONFIG_USB_OTG_WAKELOCK=y
- CONFIG_XFRM_USER=y
-diff --git a/kernel/configs/android-recommended.config b/kernel/configs/android-recommended.config
-index e400fbbc8aba..fae090812da6 100644
---- a/kernel/configs/android-recommended.config
-+++ b/kernel/configs/android-recommended.config
-@@ -7,7 +7,6 @@
- # CONFIG_PM_WAKELOCKS_GC is not set
- # CONFIG_VT is not set
- CONFIG_ARM64_SW_TTBR0_PAN=y
--CONFIG_BACKLIGHT_LCD_SUPPORT=y
- CONFIG_BLK_DEV_DM=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_RAM=y
-@@ -76,7 +75,6 @@ CONFIG_HID_WIIMOTE=y
- CONFIG_HID_ZEROPLUS=y
- CONFIG_HID_ZYDACRON=y
- CONFIG_INPUT_EVDEV=y
--CONFIG_INPUT_GPIO=y
- CONFIG_INPUT_JOYSTICK=y
- CONFIG_INPUT_MISC=y
- CONFIG_INPUT_TABLET=y
-@@ -96,7 +94,6 @@ CONFIG_PANIC_TIMEOUT=5
- CONFIG_PANTHERLORD_FF=y
- CONFIG_PERF_EVENTS=y
- CONFIG_PM_DEBUG=y
--CONFIG_PM_RUNTIME=y
- CONFIG_PM_WAKELOCKS_LIMIT=0
- CONFIG_POWER_SUPPLY=y
- CONFIG_PSTORE=y
-@@ -107,7 +104,6 @@ CONFIG_SMARTJOYPLUS_FF=y
- CONFIG_SND=y
- CONFIG_SOUND=y
- CONFIG_STRICT_KERNEL_RWX=y
--CONFIG_SUSPEND_TIME=y
- CONFIG_TABLET_USB_ACECAD=y
- CONFIG_TABLET_USB_AIPTEK=y
- CONFIG_TABLET_USB_HANWANG=y
-@@ -116,7 +112,6 @@ CONFIG_TASKSTATS=y
- CONFIG_TASK_DELAY_ACCT=y
- CONFIG_TASK_IO_ACCOUNTING=y
- CONFIG_TASK_XACCT=y
--CONFIG_TIMER_STATS=y
- CONFIG_TMPFS=y
- CONFIG_TMPFS_POSIX_ACL=y
- CONFIG_UHID=y
+ CONFIG_INET=y
+-# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET_XFRM_MODE_BEET is not set
+-# CONFIG_INET_LRO is not set
+ # CONFIG_INET_DIAG is not set
+ # CONFIG_IPV6 is not set
+ CONFIG_CRYPTO_MD5=y
 -- 
 2.17.1
 
