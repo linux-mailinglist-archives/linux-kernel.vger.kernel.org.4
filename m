@@ -2,158 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB955EF246
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A9E5EF24F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235275AbiI2JjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 05:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S235363AbiI2JkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 05:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235290AbiI2JjF (ORCPT
+        with ESMTP id S232298AbiI2JkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:39:05 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898E611DFFE
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:39:02 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id a3so1374043lfk.9
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:39:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=kCZ4Pz5Na1L5rg+BCeSLukrf0LAH8BPG3NztvAytJ0Y=;
-        b=EnhQRapMdIIxrVNiesoKMYgH2QA2B7VgT3sVjo2pIipQYrifNQfYIExcwmgyONZVPR
-         pNznMI41AZ3qRYIUKH7Zm4N3fIdFXAiOksFVt9aS4mx4U13ubueTrGNGLIVkxI4dczEq
-         soqda72d0ClvgGb3wibLvoIl8xPIRWJigsQnyFbD//hmiFe8wiogJiOGxQoOJdWvqKuC
-         mZHJVj4cOrABxKr1pTk7s8qNB/Bv2jGRpDOAirMx7eM6jiQFteC7c1Rxf+gKR2RzlF5N
-         Btl9pbzhi9TMFU8ZwqRGw54O/uDK82HOrxUIB9O5IiXG9Rh1kjEbTB/bXbkeWRqvx3Y9
-         Nj0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=kCZ4Pz5Na1L5rg+BCeSLukrf0LAH8BPG3NztvAytJ0Y=;
-        b=j//kY2pj30QVdaP1x3WKkgG4h3219vqZqNscOCHgdX906hNDr2+xZduJjej0U8wkWe
-         +7CN2DRSvYIrWrthEU4S+pZtvWGO6IUZ0oHX9lpM8BwivRQt2luJAR6C5jodMWzJ0IqZ
-         nKFFIgOwb1/jhBaL7atjAk2oWrCpxTz/7Re9M7mwd/Ojmmn342kvnGu0JIWa57rWV3Ti
-         Y/MveJX9iJBF0YS9L+b5RKWGFVSZYyQwRAI4ZB2cCwoj3PMMUAHYilcWCJLvMVn3Q0P0
-         oBlcv4mkmb4DX1Uyuif8pE438mZthsgBGAHl97PAJPFk0PAQbjtGTGiCsoFqjHu0eW1U
-         dctw==
-X-Gm-Message-State: ACrzQf3eBC5zDAnWxKIGiERPj2GnJAQBZxn9RkVaP/xNrwSVDaArSO1o
-        7cLu+biGZd6dVIiUPcCl8gtLWw==
-X-Google-Smtp-Source: AMsMyM7T8oKUZtlfNO3LqEKKqsfZycyI7KzJAN9PiOq28dhUgTbRJ0jLBas2YrP9hD+SezXLSRPglg==
-X-Received: by 2002:a19:5e4f:0:b0:497:aa47:86b8 with SMTP id z15-20020a195e4f000000b00497aa4786b8mr885795lfi.261.1664444340939;
-        Thu, 29 Sep 2022 02:39:00 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g22-20020a056512119600b00498f3ebffb2sm736362lfr.25.2022.09.29.02.39.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 02:39:00 -0700 (PDT)
-Message-ID: <0fff7922-7932-dda7-f476-32f4b0d09fa0@linaro.org>
-Date:   Thu, 29 Sep 2022 11:38:59 +0200
+        Thu, 29 Sep 2022 05:40:08 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCFA201B0;
+        Thu, 29 Sep 2022 02:40:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1664444390;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=4r6d7TA8bBCazYvCoKpiujWyeKoJPnxgRZEoTRwhV6c=;
+    b=i1uMyc33d6XMTy/xPTtjVpcd3BUw1qzUV8bAZw3KTnjduGNTx3okENol9sPRHrMPCh
+    WTs4nB8mqmztwBDGZ+IDnqMS0LAV7N2wLm0xmlZyN6MK2U0wAgkfDP+zOi4HTc69g/kP
+    hJSzeoZ8D1IWupgjQ+YvOYiQQ+k2TpsAB9BEB9myh53CmGrpXD3hDZfMFd8GmV35abas
+    cAC1m2azJdLO3D/MB34U//9Gq4ODJi+yo6yZ8pSUM0uiZ/RJdp+xHxw2861xJTpGALv4
+    zVnu/qyREFV1r2iPjb5WLnp5cfLXUpz5EYHNeb1De+RsOaaIuVeuPS/ItirQ2Y7gZFUL
+    /cnQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrK8+86Y="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 48.1.3 AUTH)
+    with ESMTPSA id 06b848y8T9dn2t9
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 29 Sep 2022 11:39:49 +0200 (CEST)
+Date:   Thu, 29 Sep 2022 11:39:41 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Sireesh Kodali <sireeshkodali1@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-kernel@vger.kernel.org, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: Re: [PATCH v5 1/5] remoteproc: qcom: qcom_wcnss: Add support for
+ pronto-v3
+Message-ID: <YzVn3Q81bCo4l/aQ@gerhold.net>
+References: <20220929050209.1464526-1-sireeshkodali1@gmail.com>
+ <20220929050209.1464526-2-sireeshkodali1@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCHv4 1/3] dt-bindings: mmc: synopsys-dw-mshc: document
- "altr,sysmgr-syscon"
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     jh80.chung@samsung.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220928165420.1212284-1-dinguyen@kernel.org>
- <CAPDyKFp5oPuOz9A=37pRTvq7JPtJRdduEgmU9g+eUm0K=dZjUg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAPDyKFp5oPuOz9A=37pRTvq7JPtJRdduEgmU9g+eUm0K=dZjUg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929050209.1464526-2-sireeshkodali1@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 11:24, Ulf Hansson wrote:
-> On Wed, 28 Sept 2022 at 18:54, Dinh Nguyen <dinguyen@kernel.org> wrote:
->>
->> Document the optional "altr,sysmgr-syscon" binding that is used to
->> access the System Manager register that controls the SDMMC clock
->> phase.
->>
->> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
->> ---
->> v4: add else statement
->> v3: document that the "altr,sysmgr-syscon" binding is only applicable to
->>     "altr,socfpga-dw-mshc"
->> v2: document "altr,sysmgr-syscon" in the MMC section
->> ---
->>  .../bindings/mmc/synopsys-dw-mshc.yaml        | 31 +++++++++++++++++--
->>  1 file changed, 28 insertions(+), 3 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
->> index ae6d6fca79e2..b73324273464 100644
->> --- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
->> +++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
->> @@ -6,9 +6,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->>
->>  title: Synopsys Designware Mobile Storage Host Controller Binding
->>
->> -allOf:
->> -  - $ref: "synopsys-dw-mshc-common.yaml#"
->> -
->>  maintainers:
->>    - Ulf Hansson <ulf.hansson@linaro.org>
->>
->> @@ -38,6 +35,34 @@ properties:
->>        - const: biu
->>        - const: ciu
->>
->> +  altr,sysmgr-syscon:
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->> +    items:
->> +      - items:
->> +          - description: phandle to the sysmgr node
->> +          - description: register offset that controls the SDMMC clock phase
->> +    description:
->> +      Contains the phandle to System Manager block that contains
->> +      the SDMMC clock-phase control register. The first value is the pointer
->> +      to the sysmgr and the 2nd value is the register offset for the SDMMC
->> +      clock phase register.
->> +
->> +allOf:
->> +  - $ref: "synopsys-dw-mshc-common.yaml#"
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const:
->> +              - altr,socfpga-dw-mshc
->> +    then:
->> +      required:
->> +        - altr,sysmgr-syscon
->> +    else:
->> +      properties:
->> +        altr,sysmgr-syscon: false
+On Thu, Sep 29, 2022 at 10:32:05AM +0530, Sireesh Kodali wrote:
+> From: Vladimir Lypak <vladimir.lypak@gmail.com>
 > 
-> So this change will not be backwards compatible with existing DTBs. I
-> noticed that patch2 updates the DTS files for the arm64 platforms, but
-> there seems to be some arm32 platforms too. Isn't this going to be a
-> problem?
+> Pronto-v3 is similar to pronto-v2. It requires two power domains, and it
+> requires the xo clock. It is used on the MSM8953 platform.
 > 
+> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+> ---
+>  drivers/remoteproc/qcom_wcnss.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
+> index 68f37296b151..ff18bfae5eb6 100644
+> --- a/drivers/remoteproc/qcom_wcnss.c
+> +++ b/drivers/remoteproc/qcom_wcnss.c
+> @@ -141,6 +141,18 @@ static const struct wcnss_data pronto_v2_data = {
+>  	.num_vregs = 1,
+>  };
+>  
+> +static const struct wcnss_data pronto_v3_data = {
+> +	.pmu_offset = 0x1004,
+> +	.spare_offset = 0x1088,
+> +
+> +	.pd_names = { "mx", "cx" },
+> +	.vregs = (struct wcnss_vreg_info[]) {
+> +		{ "vddpx", 1800000, 1800000, 0 },
+> +	},
+> +	.num_pd_vregs = 2,
 
-The backwards compatibility is actually expressed by the driver. If the
-driver keeps ABI, we can change bindings so that all DTS are being
-updated to pass the checks.
+Can you try dropping this line? num_pd_vregs = 2 means:
+"If power domains are specified in the device tree, skip the first two
+ entries in 'vregs'." For pronto-v1/v2 it would skip the "vddmx" and
+"vddcx" entry, since those are already covered by the power domains.
 
-On the other hand, the commit should express why it changes the bindings
-in incompatible way - this is lacking here.
+However, since pronto-v3 should always have power domains in DT and
+"vregs" has just a single entry this means that it would always access
+the array out of bounds at runtime and request some garbage regulator.
+I'm confused why this does not crash more spectacularly...
 
-Best regards,
-Krzysztof
+Thanks,
+Stephan
 
+> +	.num_vregs = 1,
+> +};
+> +
+>  static int wcnss_load(struct rproc *rproc, const struct firmware *fw)
+>  {
+>  	struct qcom_wcnss *wcnss = (struct qcom_wcnss *)rproc->priv;
+> @@ -675,6 +687,7 @@ static const struct of_device_id wcnss_of_match[] = {
+>  	{ .compatible = "qcom,riva-pil", &riva_data },
+>  	{ .compatible = "qcom,pronto-v1-pil", &pronto_v1_data },
+>  	{ .compatible = "qcom,pronto-v2-pil", &pronto_v2_data },
+> +	{ .compatible = "qcom,pronto-v3-pil", &pronto_v3_data },
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(of, wcnss_of_match);
+> -- 
+> 2.37.3
+> 
