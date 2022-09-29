@@ -2,115 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B69FD5EFCF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 500D85EFCF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234037AbiI2SXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S235766AbiI2SYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbiI2SXQ (ORCPT
+        with ESMTP id S234863AbiI2SYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:23:16 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8172142E25;
-        Thu, 29 Sep 2022 11:23:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1664475795; x=1696011795;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=SA5Zv3CFmymWcqoF3kgJhVL3n30g1TRkOiD3YxTlFFM=;
-  b=Vq4bNPnknL+/IWxZVw03yDGy2U0DJVeR8iE8J5Yjksra8jZzUqhAC8Id
-   lWV4GAxOWm290WsUSUGZtZG0/CGP6kA0iaPzvxt1fgq1v6tFHPF4e1+KL
-   Bz6VL9rhYZO1/a+D53MBBVwqBSp8qbnImsB5VQiOyvj/aiJZ7t3ZACw1b
-   A=;
-X-IronPort-AV: E=Sophos;i="5.93,356,1654560000"; 
-   d="scan'208";a="1059364674"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 18:23:12 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com (Postfix) with ESMTPS id 2457281255;
-        Thu, 29 Sep 2022 18:23:12 +0000 (UTC)
-Received: from EX19D012UWB001.ant.amazon.com (10.13.138.50) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 29 Sep 2022 18:23:11 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX19D012UWB001.ant.amazon.com (10.13.138.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.12; Thu, 29 Sep 2022 18:23:11 +0000
-Received: from dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com
- (10.189.73.169) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Thu, 29 Sep 2022 18:23:10
- +0000
-Received: by dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com (Postfix, from userid 22673075)
-        id 98CF927B3; Thu, 29 Sep 2022 18:23:09 +0000 (UTC)
-From:   Rishabh Bhatnagar <risbhat@amazon.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
-        <stable@vger.kernel.org>
-CC:     <hch@lst.de>, <sagi@grimberg.me>, <axboe@fb.com>,
-        <kbusch@kernel.org>, <mbacco@amazon.com>, <benh@amazon.com>,
-        <sjpark@amazon.com>, "Rishabh Bhatnagar" <risbhat@amazon.com>
-Subject: [PATCH v2] nvme-pci: Set min align mask before calculating max_hw_sectors
-Date:   Thu, 29 Sep 2022 18:22:59 +0000
-Message-ID: <20220929182259.22523-1-risbhat@amazon.com>
-X-Mailer: git-send-email 2.37.1
+        Thu, 29 Sep 2022 14:24:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4017CBC2F
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:24:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664475874;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BoITIusWH1pgiQYYyYgg2aTCkDBnXRgVNx9UWZzrGmA=;
+        b=OqcMvHd+HH89EI8UXhMCTpgc95JY4q2oPDPDMHN+rG+xKoIKL6KQo3Q1ABrYRtnFvu41+l
+        JiJvhpYBHgd7ITHa6cpubjXPTQdb3dxfutlcJURTUvmseF9waOP0/Zdcov0RCPcG3FaM2e
+        gjF7RIegpRW3AWLNPVEbMpYzSyCj2xY=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-595-iobG7LLSPgeqOwTGfASlgQ-1; Thu, 29 Sep 2022 14:24:33 -0400
+X-MC-Unique: iobG7LLSPgeqOwTGfASlgQ-1
+Received: by mail-io1-f72.google.com with SMTP id j20-20020a6b3114000000b006a3211a0ff0so1222747ioa.7
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:24:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=BoITIusWH1pgiQYYyYgg2aTCkDBnXRgVNx9UWZzrGmA=;
+        b=M60sh5vR308rwJbBZQkYXgDoDlsS47UL/zdYkMXcoKcrF3nliwwSRX91RsvtYm0YKt
+         /pCNaTdJ/jq6V2oFxItGyR/R6W4FLNGKLBAm8gTgMWyvfo+JUB5uR8HmRvEyM9J5d4ax
+         EF/Fs8WnoYEe6ApGH7P8T4AJWpv1H98zt2dFQh2cY/fun4A0LEu8rcoyg5si/q9OpbrE
+         IXBaKq0uMaKnhxs2VDwaqzo4dgHVoVjveZcwbTHUROZR4Gn+RnW7kFjJUb4ZuAoHtlw/
+         KzBL3wmu4vg92IkbWBwqwPJLBzXBGSavdy0NNafE8xO1UiW0R9OZNh3ZKXGIMlGh/BrP
+         ozGg==
+X-Gm-Message-State: ACrzQf3lXpyz68MQLw1yGvsCbhj80SNHd56JK7O+/y+/q/aKFIkMattj
+        UXFYde74sl0sbQ7hQfgXu3GImjqc2wyY0/anhaxDjK9JCJ+YQ8+QZFWDQ6Ei3ifvRZ0ClhkjFKd
+        NvW9oYPBD4rrTOSyvAY6oNPcw
+X-Received: by 2002:a05:6e02:19ce:b0:2f1:68a6:3bec with SMTP id r14-20020a056e0219ce00b002f168a63becmr2392077ill.78.1664475872942;
+        Thu, 29 Sep 2022 11:24:32 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7KUOQo8AbbarGobEgnbxdcS5bS2mn744LEcpjpU+rvkCIe35jyhAfEJ5Pm5FWlRH0iLBHEPg==
+X-Received: by 2002:a05:6e02:19ce:b0:2f1:68a6:3bec with SMTP id r14-20020a056e0219ce00b002f168a63becmr2392060ill.78.1664475872712;
+        Thu, 29 Sep 2022 11:24:32 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id f13-20020a05660215cd00b006a1fed36549sm96051iow.10.2022.09.29.11.24.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 11:24:31 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 12:24:27 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Kevin Tian <kevin.tian@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Longfang Liu <liulongfang@huawei.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, Yi Liu <yi.l.liu@intel.com>
+Subject: Re: [PATCH v4 15/15] vfio: Add struct device to vfio_device
+Message-ID: <20220929122427.3a3bca9a.alex.williamson@redhat.com>
+In-Reply-To: <YzXaxPpkc+90Xx+T@ziepe.ca>
+References: <20220921104401.38898-1-kevin.tian@intel.com>
+        <20220921104401.38898-16-kevin.tian@intel.com>
+        <20220929105519.5c9ae1d8.alex.williamson@redhat.com>
+        <YzXaxPpkc+90Xx+T@ziepe.ca>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In cases where swiotlb is enabled dma_max_mapping_size takes into
-account the min align mask for the device. Right now the mask is
-set after the max hw sectors are calculated which might result in
-a request size that overflows the swiotlb buffer.
-Set the min align mask for nvme driver before calling
-dma_max_mapping_size while calculating max hw sectors.
+On Thu, 29 Sep 2022 14:49:56 -0300
+Jason Gunthorpe <jgg@ziepe.ca> wrote:
 
-Fixes: 7637de311bd2 ("nvme-pci: limit max_hw_sectors based on the DMA max mapping size")
-Cc: stable@vger.kernel.org
-Signed-off-by: Rishabh Bhatnagar <risbhat@amazon.com>
----
- Changes in V2:
- - Add Cc: <stable@vger.kernel.org> tag
- - Improve the commit text
- - Add patch version
+> On Thu, Sep 29, 2022 at 10:55:19AM -0600, Alex Williamson wrote:
+> > Hi Kevin,
+> > 
+> > This introduced the regression discovered here:
+> > 
+> > https://lore.kernel.org/all/20220928125650.0a2ea297.alex.williamson@redhat.com/
+> > 
+> > Seems we're not releasing the resources when removing an mdev.  This is
+> > a regression, so it needs to be fixed or reverted before the merge
+> > window.  Thanks,  
+> 
+> My guess at the fix for this:
+> 
+> https://lore.kernel.org/r/0-v1-013609965fe8+9d-vfio_gvt_unregister_jgg@nvidia.com
 
- Changes in V1:
- - Add fixes tag
+Indeed this seems to work  I'll look for acks and further reviews from
+Intel folks. Thanks!
 
- drivers/nvme/host/pci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 98864b853eef..30e71e41a0a2 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -2834,6 +2834,8 @@ static void nvme_reset_work(struct work_struct *work)
- 		nvme_start_admin_queue(&dev->ctrl);
- 	}
- 
-+	dma_set_min_align_mask(dev->dev, NVME_CTRL_PAGE_SIZE - 1);
-+
- 	/*
- 	 * Limit the max command size to prevent iod->sg allocations going
- 	 * over a single page.
-@@ -2846,7 +2848,6 @@ static void nvme_reset_work(struct work_struct *work)
- 	 * Don't limit the IOMMU merged segment size.
- 	 */
- 	dma_set_max_seg_size(dev->dev, 0xffffffff);
--	dma_set_min_align_mask(dev->dev, NVME_CTRL_PAGE_SIZE - 1);
- 
- 	mutex_unlock(&dev->shutdown_lock);
- 
--- 
-2.37.1
+Alex
 
