@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0BD5F0154
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 01:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD095F0157
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 01:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiI2XW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 19:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
+        id S229704AbiI2XWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 19:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiI2XW1 (ORCPT
+        with ESMTP id S229505AbiI2XWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 19:22:27 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C4D13D1CE
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:22:24 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so2720431pjk.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:22:24 -0700 (PDT)
+        Thu, 29 Sep 2022 19:22:46 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD9F135044;
+        Thu, 29 Sep 2022 16:22:45 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id v4so2712707pgi.10;
+        Thu, 29 Sep 2022 16:22:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=SlBvqIbtpL0VufXgwK7uhVH38JuonCmEli0InnRVEwc=;
-        b=WuAt0WRwYyROULHsLoKuJv2kXZVaCxvv5se5SYxucmOEgMFUNx2D57LgdDwCei2x1H
-         BHZJk6cnqMJ9lpHSGjIAQZn0y8BmTQuG82WIZcNgoFeD7LG4pqgoDjfwNUvpxX0kJLxv
-         Dw+WsZzJyUYdaQkT0re+VcE6b51zajqB6Pihs0d5Dm06lt/3y15zlDRlEVhaJYcITjqq
-         kxupICcV/19shZioX2psCPJiZdpZ4ysq5/1T3jM0Xx0pSi+GIDFyiPzVO05s6m98CDTT
-         tOo/5JDD8RVKU0DNuMgu6l56RXQ8C5tSDlMssCXWcmrz1Q8KJiW+10QJLFQH8nbm/WCu
-         b7Pw==
+        bh=k9iVNCg81C1n4ax6HQVaWzPvcQNvg+2Jo/FvkuXEunA=;
+        b=ZG7Il9MJjhiZYW6rmuir8dLrJp8mtTxzNUqHaNt2KJbdXb0Vqv0ZZwEq4xwit/7/kx
+         hxkzj/nOKCWNHp72GCvO/DCoYljFBbXN3J3vBy/4DJrdwk2amR1P1fOSm3hKsWejd76U
+         lC6h1j4tQfJ9oM03CSqKfETN+fvlytyBlGiw5vXQ6ZEmrG7BA1ISkOg50x7taHsy3tiQ
+         OpCroDSUw+mnxyBOGKwEEuMV4FYnwkyHtdBgcwmHCAyRbwOQH5sYQ4+B23q6EemAOpmE
+         K9dq+jajWeU+uERQ0gYfz1lSFNRLdbgAMsRNs8LcTTmOsD+WfjzKuXR9IcbL2t3/6vtV
+         AWwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=SlBvqIbtpL0VufXgwK7uhVH38JuonCmEli0InnRVEwc=;
-        b=JSwKqIR/QnT7aTnjYI0v0NftCleMgtRwSOMXOcIi6ZyWejcZ0Qkwb8Dn2fLQkuN3Mp
-         AiGgxTC9re5i2YJ5nYqW0HuwWESvUBUZnkZeuhr6l7G9prN+AzxrRSiI0u9zwQ3WGLfw
-         LBVCbLz+sHxlE9bYNou6IGzsCb4g2IGvAyl7uSSF1ynzfdwxRDZmj+CjI8QXsLRnG3sZ
-         fDch4LmA9CsS6uXu9rLYa/ONgsgRt1vZfkP7314E6bUu3jhw2RwRDm6O/tiby4PUUTKT
-         I0tQwlGb0BJEwbksM2++8jhns85huc4Jnm5ibi7IcpZ//y+w+7FSftrYWDia9aYXD9MC
-         cYdQ==
-X-Gm-Message-State: ACrzQf3yG4jJ5Z4jV7llkvOfgmk5DpUx4KrCGWgvNmFxSG6j7X+mRwkT
-        QIiXRJXHHnTp+TcCDj1oJYXa25yhNCDz0A==
-X-Google-Smtp-Source: AMsMyM75zZcPQQjlBQckiGdn+LExa+Ehm1TbE+ovPavYyibrIT8X85CNF5p+NDaTg0PkeD+6UnKilA==
-X-Received: by 2002:a17:90b:1d81:b0:205:f381:7372 with SMTP id pf1-20020a17090b1d8100b00205f3817372mr11503541pjb.165.1664493743484;
-        Thu, 29 Sep 2022 16:22:23 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id g11-20020a17090a290b00b001f319e9b9e5sm4062149pjd.16.2022.09.29.16.22.22
+        bh=k9iVNCg81C1n4ax6HQVaWzPvcQNvg+2Jo/FvkuXEunA=;
+        b=x93sHllHFUETSWlhwgbyAyMgtXsMD7R3WxjlO7/gykduPnW87cp4LsmjT5VyWu3jE3
+         8Xkzot2cWPUQEnlfCPde4jA+dgp9UT+606vPmK/IVFZOAVg+PdkihQphHhig32rufSfI
+         QWlpCV5vYFwQHhSNwoPWESQiNtr7cJ26UobbL+uvRsjcPMfAptycyazv+RNV7UZ9ChD0
+         QiAVkRe4dJBRvRt8OGXY3wul13z1BBOzHGWXRzIlmmLkVxSrh4auE0xHlEcNqr9wNkSE
+         GNzPEiOViKgUqWeodM+cAivvHntJ3GjYFsOdwxVRg6+KzpsPQNa+XyrKuLterYE42W7M
+         SH+g==
+X-Gm-Message-State: ACrzQf35rX2r2clpxyoTVbaGQdCRFsuPNxF7LbckgFoqaVtZkFFTsNim
+        tWgmTsA91dANT3gW3T8jYNQ=
+X-Google-Smtp-Source: AMsMyM6cJj++MIqaW87//ChnT4eL4aY2b767/mhIM9iIEtDKUNST2lQzIBwjf2ER9kGasWWjIpHLLA==
+X-Received: by 2002:a63:5243:0:b0:43c:96a:8528 with SMTP id s3-20020a635243000000b0043c096a8528mr4982707pgl.47.1664493765171;
+        Thu, 29 Sep 2022 16:22:45 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:637c:7f23:f348:a9e6])
+        by smtp.gmail.com with ESMTPSA id g3-20020a170902d1c300b0017a00216965sm414776plb.218.2022.09.29.16.22.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 16:22:22 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 23:22:19 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 2/8] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <YzYoq/4AcWGS/noD@google.com>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-3-chao.p.peng@linux.intel.com>
- <20220929224516.GA2260388@ls.amr.corp.intel.com>
+        Thu, 29 Sep 2022 16:22:44 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 16:22:41 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Raul Rangel <rrangel@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Tim Van Patten <timvp@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "jingle.wu" <jingle.wu@emc.com.tw>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Len Brown <lenb@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to
+ acpi_dev_irq_flags
+Message-ID: <YzYowYJpRTImmg4m@google.com>
+References: <20220929161917.2348231-1-rrangel@chromium.org>
+ <20220929093200.v6.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid>
+ <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
+ <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
+ <CAJZ5v0gcJRoMSODbTevRdK1zaEZHJcPxvG6XMy9-T_jvwxPFBw@mail.gmail.com>
+ <CAHQZ30CQd-0YnQgYG_OJVWn9_aUjvDAuT_DRGsxQF-q+bjr5BA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929224516.GA2260388@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <CAHQZ30CQd-0YnQgYG_OJVWn9_aUjvDAuT_DRGsxQF-q+bjr5BA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,42 +93,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022, Isaku Yamahata wrote:
-> On Thu, Sep 15, 2022 at 10:29:07PM +0800,
-> Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> > @@ -4645,14 +4672,20 @@ static long kvm_vm_ioctl(struct file *filp,
-> >  		break;
-> >  	}
-> >  	case KVM_SET_USER_MEMORY_REGION: {
-> > -		struct kvm_userspace_memory_region kvm_userspace_mem;
-> > +		struct kvm_user_mem_region mem;
-> > +		unsigned long size = sizeof(struct kvm_userspace_memory_region);
-> > +
-> > +		kvm_sanity_check_user_mem_region_alias();
-> >  
-> >  		r = -EFAULT;
-> > -		if (copy_from_user(&kvm_userspace_mem, argp,
-> > -						sizeof(kvm_userspace_mem)))
-> > +		if (copy_from_user(&mem, argp, size);
-> > +			goto out;
-> > +
-> > +		r = -EINVAL;
-> > +		if (mem.flags & KVM_MEM_PRIVATE)
-> >  			goto out;
+On Thu, Sep 29, 2022 at 03:20:12PM -0600, Raul Rangel wrote:
+> On Thu, Sep 29, 2022 at 1:38 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Thu, Sep 29, 2022 at 9:27 PM Raul Rangel <rrangel@chromium.org> wrote:
+> > >
+> > > On Thu, Sep 29, 2022 at 1:18 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > >
+> > > > On Thu, Sep 29, 2022 at 6:19 PM Raul E Rangel <rrangel@chromium.org> wrote:
+> > > > >
+> > > > > ACPI IRQ/Interrupt resources contain a bit that describes if the
+> > > > > interrupt should wake the system. This change exposes that bit via
+> > > > > a new IORESOURCE_IRQ_WAKECAPABLE flag. Drivers should check this flag
+> > > >
+> > > > I would call this IORESOURCE_IRQ_WAKE which is (a) simpler and easier
+> > > > to read and (b) it sort of matches the "wakeirq" naming convention.
+> > >
+> > > It was Dmitry who originally suggested the name. I personally like the
+> > > CAPABLE in the name. It makes it clear that it's capable of acting as
+> > > a wake source, not to be confused with being enabled as a wake source.
+> >
+> > Well, so be it then.
+> >
+> > As I said elsewhere, I can apply this patch too if that's useful at this point.
+> >
 > 
-> Nit:  It's better to check if padding is zero.  Maybe rename it to reserved.
-> 
-> +               if (mem.pad1 || memchr_inv(mem.pad2, 0, sizeof(mem.pad2)))
-> +                       goto out;
+> We just need to make sure the ACPI patches 5-8 land before the i2c
+> patches 9-13. The i2c patches 1-4 can land before or after the ACPI
+> changes. I'm not sure how things get coordinated across subsystems.
 
-No need, KVM has more or less settled on using flags instead "reserving" bytes.
-E.g. if/when another fancy feature comes along, we'll add another KVM_MEM_XYZ
-and only consume the relevant fields when the flag is set.  Reserving bytes
-doesn't work very well because it assumes that '0' is an invalid value, e.g. if
-the future expansion is for a non-private file descriptor, then we'd need a new
-flag even if KVM reserved bytes since fd=0 is valid.
+I am fine with all input stuff going through ACPI tree to ease landing.
+Or I can pick up everything if Rafael and Jiri/Benjamin agree.
 
-The only reason to bother with pad2[14] at this time is to avoid having to define
-yet another struct if/when the struct needs to expand again.  The struct definition
-will still need to be changed, but at least we won't end up with struct
-kvm_userspace_memory_region_really_extended.
+-- 
+Dmitry
