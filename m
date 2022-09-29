@@ -2,65 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8195EF711
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 886135EF716
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235481AbiI2OCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
+        id S235103AbiI2ODD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235342AbiI2OB7 (ORCPT
+        with ESMTP id S235485AbiI2ODB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:01:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D2014F804;
-        Thu, 29 Sep 2022 07:01:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F43661357;
-        Thu, 29 Sep 2022 14:01:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2D65C433D6;
-        Thu, 29 Sep 2022 14:01:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664460117;
-        bh=NbQBK0K88I2R53On1jgQPc/QM3SMeQ/eMk4dHm80OcQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gmTbcvC1yEmw7F1GRoHapSzLYj+IdmomGJ9jUk7Jl8mdnbYj+Dm3ElgvlF0dA/jWb
-         Svrd/TMipM3+QYV7JkG62nFhywTSSJmdSz2fZmVlKMZwHM95FaFw/pARM+5J/b0LKw
-         MAGMKL+5ywEvTN4waqtEaf+3qJsNdBAbS5BswiOI/O7l8JizhSmMsRFgo3Le4V0wSt
-         0/Uct1OMyKAuIUo31E1sLbPdqyIGvDYKFXfR322owxrU83lW4fGVETV2CBXM0VA/t7
-         /7JdEZbyIZyui75PabnkE1VD21g+weqdYESr1JfN1KIpHXpi1CZM/eYyHZGFDQm0zO
-         Gp6A25qEFK/kg==
-Date:   Thu, 29 Sep 2022 15:01:51 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] ASoC: wcd-mbhc-v2: Revert "ASoC: wcd-mbhc-v2: use
- pm_runtime_resume_and_get()"
-Message-ID: <YzWlT11jj0ES0Alv@sirena.org.uk>
-References: <20220929131528.217502-1-krzysztof.kozlowski@linaro.org>
- <YzWgescSJMKzYTAo@sirena.org.uk>
- <88035bdd-3aeb-640e-c001-8823013e5929@linaro.org>
+        Thu, 29 Sep 2022 10:03:01 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2061591CA;
+        Thu, 29 Sep 2022 07:02:59 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1odu7t-0007ZW-A8; Thu, 29 Sep 2022 16:02:57 +0200
+Message-ID: <4f704d2f-12b5-8d6a-357e-d79b1e871ed7@leemhuis.info>
+Date:   Thu, 29 Sep 2022 16:02:56 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ri3zr+BP8FJRoKsl"
-Content-Disposition: inline
-In-Reply-To: <88035bdd-3aeb-640e-c001-8823013e5929@linaro.org>
-X-Cookie: Last week's pet, this week's special.
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US, de-DE
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "Artem S. Tashkinov" <aros@gmx.com>, workflows@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <20220929094753.6bba89d8@gandalf.local.home>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+In-Reply-To: <20220929094753.6bba89d8@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664460180;fe8703b0;
+X-HE-SMSGID: 1odu7t-0007ZW-A8
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,39 +51,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 29.09.22 15:47, Steven Rostedt wrote:
+> On Thu, 29 Sep 2022 13:33:53 +0200
+> Thorsten Leemhuis <linux@leemhuis.info> wrote:
+> 
+> Thanks Thorsten for doing this.
 
---Ri3zr+BP8FJRoKsl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thx for saying this, as I fear it in the end will again be more work
+then anticipated -- but well, that's how life often is :-D
 
-On Thu, Sep 29, 2022 at 04:00:26PM +0200, Krzysztof Kozlowski wrote:
-> On 29/09/2022 15:41, Mark Brown wrote:
-> > On Thu, Sep 29, 2022 at 03:15:28PM +0200, Krzysztof Kozlowski wrote:
-> >=20
-> >> Cc: <stable@vger.kernel.org>
-> >> Fixes: ddea4bbf287b ("ASoC: wcd-mbhc-v2: use pm_runtime_resume_and_get=
-()")
-> >=20
-> > That commit isn't in a released kernel.
->=20
-> Oh, indeed, thanks. I'll send a v2 without it.
+>>>  * In the kernel summit sessions (recording:
+>>> https://youtu.be/e2SZoUPhDRg?t=5370 ) Len Brown stated that he and
+>>> fellow ACPI/PM developers rely on bugzilla.kernel.org and would need
+>>> some replacement if it's decommissioned.
+> 
+> I also use bugzilla.kernel.org with trace-cmd/kernelshark and the
+> libraries, although I don't really use it for the Linux tracing subsystem
+> (but I probably should :-/).
+> 
+> That is, the tools portion of bugzilla is not part of the MAINTAINERS file
+> (that I know of), so probably shouldn't be affected by this.
 
-It's fine.
+Ohh, yeah, sorry, should have mentioned this. Don't worry, I'm aware of
+this particular and a few similar products/components in bugzilla. I
+don't plan changing any of them, unless something unforeseen or a very
+good reason comes up (for example if they're obviously unused for years
+or something like that).
 
---Ri3zr+BP8FJRoKsl
-Content-Type: application/pgp-signature; name="signature.asc"
+Ciao, Thorsten
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmM1pU8ACgkQJNaLcl1U
-h9CMAAf9Fc6oFeIp3nEEwGKdOHM5vdwkRlxMVNCluVg7AYY64AweWItcTH5zClZA
-mBq8cw1B5aHq+4P8XPgXpfIxw32ITy2mHSIp2B71RAc6RU3mf3ZTFQWCf6WACEl5
-/CcBVxTBFthM2OGUWLjlut3BI6X0bC3V25KQCll3B285BYnE5hZdD52Eq8RO5/e4
-zJ/B7ltFz9EHIIFvtdYbJsz8JQLKlNGgwNQwAovvgT6JdW/P4QlPad8ZQEzA0hNk
-tLn0cC650U9ju/qb9nvVBhkdBt+Hfc+moyjp8obA6JJrC29Ce+hRserfZZlQaj+m
-UetNBjR8IsIrJhMffTaNUTPiJRJXaQ==
-=PNpT
------END PGP SIGNATURE-----
-
---Ri3zr+BP8FJRoKsl--
