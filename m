@@ -2,117 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF0E5EEE72
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641115EEE7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235054AbiI2HHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
+        id S235032AbiI2HH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235050AbiI2HHZ (ORCPT
+        with ESMTP id S234890AbiI2HHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:07:25 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CB993846C;
-        Thu, 29 Sep 2022 00:07:21 -0700 (PDT)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxYOIaRDVjm6kjAA--.2760S2;
-        Thu, 29 Sep 2022 15:07:06 +0800 (CST)
-Subject: Re: [PATCH v5 2/3] dt-bindings: thermal: add loongson2k thermal
- binding
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
-References: <20220928083702.17309-1-zhuyinbo@loongson.cn>
- <20220928083702.17309-2-zhuyinbo@loongson.cn>
- <066b55cf-4a28-89a2-56ab-572590c97c30@linaro.org>
- <9b2f2d43-981d-3ffb-7526-dc3e58a9f367@linaro.org>
- <f0946817-cc2c-449b-d93b-0dd94a0f51f1@loongson.cn>
- <ed762d71-7104-b1ad-009d-51c1a4407472@loongson.cn>
- <9b62594f-7473-9974-8ab3-4c93aae5fa64@linaro.org>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <abaf9b69-487c-0f1e-7a94-201155f5e3d2@loongson.cn>
-Date:   Thu, 29 Sep 2022 15:07:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 29 Sep 2022 03:07:36 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FF318E3D;
+        Thu, 29 Sep 2022 00:07:35 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1odndu-0003bE-3P; Thu, 29 Sep 2022 09:07:34 +0200
+Message-ID: <828c7a9b-66b7-c936-a79a-91d43eaa4a9a@leemhuis.info>
+Date:   Thu, 29 Sep 2022 09:07:33 +0200
 MIME-Version: 1.0
-In-Reply-To: <9b62594f-7473-9974-8ab3-4c93aae5fa64@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxYOIaRDVjm6kjAA--.2760S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tr1kGry5XrWDtFWDXF43ZFb_yoW8Xry7pF
-        y8Ja1qkFWDJrW3Kw48Kw1xtF1Yvws7tr45Xr1rGr4UArWqqw15tF1DZr1jkryDWrWfXFW7
-        trW5K3srJr4UZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9l14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I
-        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-        xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-        cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r
-        4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: linux-5.15.69 breaks nfs client #forregzbot
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-nfs <linux-nfs@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <f6755107-b62c-a388-0ab5-0a6633bf9082@garloff.de>
+ <d9a3460b-0ed6-4bfa-5bdd-032f4bc4ebce@leemhuis.info>
+In-Reply-To: <d9a3460b-0ed6-4bfa-5bdd-032f4bc4ebce@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1664435255;184123c3;
+X-HE-SMSGID: 1odndu-0003bE-3P
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+TWIMC: this mail is primarily send for documentation purposes and for
+regzbot, my Linux kernel regression tracking bot. These mails usually
+contain '#forregzbot' in the subject, to make them easy to spot and filter.
 
-
-在 2022/9/29 下午3:00, Krzysztof Kozlowski 写道:
-> On 29/09/2022 05:57, Yinbo Zhu wrote:
+On 23.09.22 09:46, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker. CCing the regression
+> mailing list, as it should be in the loop for all regressions, as
+> explained here:
+> https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+> Also CCing the stable ml, the NFS maintainers, and the authors of
+> 31b992b3c39b, too.
+> 
+> On 22.09.22 23:46, Kurt Garloff wrote:
 >>
+>> a freshly compiled 5.15.69 kernel showed hangs with NFS.
+>> Typically mkdir would end up in a 'D' process state, but I
+>> have seen ls -l hanging as well.
+>> Server is kernel NFS 5.15.69.
 >>
->> 在 2022/9/29 上午11:42, Yinbo Zhu 写道:
->>>
->>>
->>> 在 2022/9/28 下午10:18, Krzysztof Kozlowski 写道:
->>>> On 28/09/2022 10:37, Krzysztof Kozlowski wrote:
->>>>> On 28/09/2022 10:37, Yinbo Zhu wrote:
->>>>>> Add the loongson2k thermal binding with DT schema format using
->>>>>> json-schema.
->>>>>>
->>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>>>
->>>>> Please add Acked-by/Reviewed-by tags when posting new versions. However,
->>>>> there's no need to repost patches *only* to add the tags. The upstream
->>>>> maintainer will do that for acks received on the version they apply.
->>>>>
->>>>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
->>>>>
->>>>>
->>>>> If a tag was not added on purpose, please state why and what changed.
->>>>>
->>>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>
->>>> ... and please test your patches before sending :(
->> You said is refer that "reg: [[0, 534779136], [0, 48]] is too long" ?
->> Need fix that warning, right?
+>> After reverting the last three NFS related commits,
+>> a68a734b19af NFS: Fix WARN_ON due to unionization of nfs_inode.nrequests
+>> 3b97deb4abf5 NFS: Fix another fsync() issue after a server reboot
+>> 31b992b3c39b NFS: Save some space in the inode
+>>
+>> things work normally again.
+>>
+>> As you can see, I suspected 31b992b3c39b ...
 > 
-> Yes. You said you tested it but then sent with an error... so it's not
-> really a testing.
-sorry, I did do some testing. but I think It is okay that can generate a 
-dtb  without reporting an error when compile yaml file, in fact, I 
-ignore the warning,  I will fix it in v6.
+> FWIW, that's e591b298d7ec in mainline.
 > 
-> Best regards,
-> Krzysztof
+>> I know this report is light on details; if nothing like this has been
+>> reported yet, let me know and I'll try to find some time to investigate
+>> further.
+>>
+>> PS: Please keep me on Cc, I'm not subscribed to linux-nfs.
 > 
+> [...]
+> 
+> #regzbot ^introduced 31b992b3c39b
+> #regzbot ignore-activity
 
+#regzbot fixed-by: 27bf7a5d11987
