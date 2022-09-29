@@ -2,604 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53AA55F00C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 00:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC42B5F00D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 00:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiI2WiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 18:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
+        id S229655AbiI2Wjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 18:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiI2Wgt (ORCPT
+        with ESMTP id S230210AbiI2WjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 18:36:49 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1C2402C1;
-        Thu, 29 Sep 2022 15:32:36 -0700 (PDT)
+        Thu, 29 Sep 2022 18:39:11 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD63A4B2D
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 15:33:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664490756; x=1696026756;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qC94pWx3ETPKg6Jl0TVzncTVpDWyMDjZ00/mG9Fm96U=;
-  b=efKfdBUjIieOmKhkHqNAsjFfJ/bpYDmzo8b3rMlyCCtNOUjVRgsTNAb2
-   TdjZ3GX5QWCZto1dWd8O0jMVBi8t0SmG/pbgWgK00DyJK2X1MZd2BFP7D
-   kqTANRsuMwn4aEB8bL8CMTIaHA4mFb5u+qYtdMEc63BFWArL6M2iVXUze
-   kpi/bXCWNbiKtbEGjVPFuyXlNZFa1imqMSTEJjYiGs+UYvrI/d7WgD8DZ
-   KYbEdBGNodYCetdxQ1/v1sHyz1oSSljZi/AhSf4o2cUCZCWl5I1WaS9H7
-   FN5WJBtVdHRO4gWEtCv1uI0mkKExkLfnd6p8CbdjpyXnjxefgLCvvB/27
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="285182233"
+  t=1664490823; x=1696026823;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=R2vU33QfWaMUxdCWGWk9dcuafKeqQMpCoTHXwG2x3kg=;
+  b=BY+1IwYJ8Gznn8TomR0pQCeKdk0AcfgzD/xdTCuTpGTsi9H9BEleabkb
+   Q3xPyB95NkYCU9JDY0viQENuOJWYRdZMGcMbGOQEtq66qs017nblSRK8m
+   7NXEqPdkDfvogg4tVqjR89xu+QjUQvP6q5RqsmMT2lb+QzYlOBluKaFn6
+   50DRxTcj9jl3UAAAmnNACZLTEWZ8+OrNv2RUNUC3h9GawETg5hS6bqcN7
+   lUpzl7uV7/HiZo/7J3I7nRy9IVacvGew2dOM8WhLvkdoHj1FFDWK8tJtd
+   Dspk9pD6rSzgo/mJY/dTa6Z3kbs4WXs86Kao7Jpb7v3xIwNE3saVhHfDc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="299645410"
 X-IronPort-AV: E=Sophos;i="5.93,356,1654585200"; 
-   d="scan'208";a="285182233"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 15:31:07 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="691016422"
+   d="scan'208";a="299645410"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 15:33:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="685042096"
 X-IronPort-AV: E=Sophos;i="5.93,356,1654585200"; 
-   d="scan'208";a="691016422"
-Received: from sergungo-mobl.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.251.25.88])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 15:31:06 -0700
-From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
-To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com
-Cc:     rick.p.edgecombe@intel.com
-Subject: [OPTIONAL/RFC v2 39/39] x86: Add alt shadow stack support
-Date:   Thu, 29 Sep 2022 15:29:36 -0700
-Message-Id: <20220929222936.14584-40-rick.p.edgecombe@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+   d="scan'208";a="685042096"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Sep 2022 15:33:40 -0700
+Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 15:33:40 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 15:33:40 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 29 Sep 2022 15:33:40 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.109)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 29 Sep 2022 15:33:39 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HNQ8qih+plDv/iPSza3A2sZpLUJGQKgS9o/U612faIih2StekR/fRSWttlNnidV1wp7NQW6oinpVVfuD5tGaDX/bAO8fpvPNJJ661M0cpJpfi3znGrUh5hu4nbMaubrDO1JVT4zJIW9dNoh9uPoZmQDfz7CbaxXCN7VHrEQL7XDITrJsGqjiiHlPOKaQ97hylt4woLlLRXjD/zb2SGxj5Lh+lh3j/I+J1dl/96kYSJ1hhTz2SvVUBt32rMEs8Co3Z+jWcF+fgoYMO5UvXQ5w8mV97S05NJXjYt/aZ3nKgD+0LScm1E39xc2smG6gwc4KN/OFRMIUV734HmHmO5fdaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Sz6gFrO83rg83IxrIMnULcpmlcht9TV638SWfVyGWl8=;
+ b=mUkXI5vSbpMDJdAYEH/AVPD9B3hoIAX35+lX095sqQqQ+Y5iKbP3NPsRxRLx0pADGxL9m2mSee0bru/cFjuGRqtvpU9w8eJkDnm0eea5UmsibRKDNTIxgyVuVIVuuanAqUd8OVoqlNeAB96urYGu3BimFYtd30Sx383cPL4veCNzAQ1f9eKwRfWMMBD2Y2Xk58J/Gc9YRPGeTImSw+xYFVgEpciEUc1uyT+SBuUHo6WoSVE8bh9ondrfRHzUT9RYjeniZW4Esf0fUi2HkToOlM1frKtflCHCS9ggN9qzzxvt+Y5jZIv2xW1hCzuU0HuqXCoNV5Hy5qbNK7oHjnEhaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com (2603:10b6:5:394::7) by
+ DM4PR11MB6504.namprd11.prod.outlook.com (2603:10b6:8:8d::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5676.17; Thu, 29 Sep 2022 22:33:38 +0000
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::5145:64b6:db32:b424]) by DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::5145:64b6:db32:b424%6]) with mapi id 15.20.5676.020; Thu, 29 Sep 2022
+ 22:33:38 +0000
+Date:   Fri, 30 Sep 2022 00:33:33 +0200
+From:   =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
+To:     =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>
+CC:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        "Melissa Wen" <mwen@igalia.com>,
+        =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        David Gow <davidgow@google.com>,
+        "Arthur Grillo" <arthur.grillo@usp.br>,
+        Isabella Basso <isabbasso@riseup.net>,
+        <magalilemes00@gmail.com>, <tales.aparecida@gmail.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] drm/tests: Split
+ drm_test_dp_mst_sideband_msg_req_decode into parameterized tests
+Message-ID: <20220929223333.vh6wy45mfx6kccds@nostramo>
+References: <20220927221206.55930-1-mcanal@igalia.com>
+ <20220927221206.55930-2-mcanal@igalia.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220927221206.55930-2-mcanal@igalia.com>
+X-ClientProxiedBy: FR0P281CA0138.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:96::7) To DM4PR11MB5373.namprd11.prod.outlook.com
+ (2603:10b6:5:394::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5373:EE_|DM4PR11MB6504:EE_
+X-MS-Office365-Filtering-Correlation-Id: e6b67272-51a6-4c69-e733-08daa26aa6db
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ClrtT9WHmeEnMuUB4WL8C95laeiYC5yGK7P1kH+YISIVXOTvfC3UDit/QnhixuCtcpum/5l8YSA1easifO0ppslVBKcogFweQluuxL3dMzBZs4bKtmgFYaPEvgpjT93Kh6U7Fflkgm1YTtr9Z6oskHazz/yUxv1TmKTubGN38r3Hp8YmzduTUAFstUCTJ0zzXFhWelhhsDLmpILGT/gomHxcbuYh3TifEUGUrY0gkWth7CA0yN5jiTdY70zCRBoVRAAUQhaqIud+WuY+zvYdnrqwgPkcNb/xjU6IrW5AHEDMBgmv0HoWELhHmpDFh1xZ60nBqemPrqh/HVPOqM/jahflCxpPaQ6vpvI0gGGsA7kaA45Uv5IElFKtU8j0gmb1xqu4KmucR36EYVqkSppLKRbngN9AETOWIDdM7Z9khFPxq/+qNXwfN/a7RBrCKletYcsbn397ZE4yQe86smX1juBhTwSjTR9mu6koD8Qa7XS88ugAKpKN2e157xCdNQTuSR62+IK8PbxCBJ0ZOzMudxe7y5J77/3KVOtoZUtfySpJ42T8m0Hs/JaQBurlBJWgoSc6OvMWyX2omTwmEmzYT/dXjB9BlKh5+tEtvWCQ2ots3WrNS0SH5z5arq0Dizb9BBXQFrAa5Nvjgm0vEz2+pVsWQJnYQtJZdIHNJviZkZYSlGBVjjJQ/+a3DSZJrK4NzXOArUxDerXxmD+23srHlmTFwqNT44gyWsJJzh+PQOf9cTfp6u3enwvoHPkYXeV7zPBdjZr3RvYHroRGmdaKEQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(396003)(376002)(346002)(39860400002)(136003)(451199015)(83380400001)(6512007)(66574015)(38100700002)(26005)(9686003)(54906003)(316002)(6916009)(1076003)(33716001)(2906002)(186003)(86362001)(5660300002)(7416002)(41300700001)(82960400001)(66476007)(4326008)(8676002)(66946007)(966005)(478600001)(6486002)(66556008)(6506007)(6666004)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UTNneXRHUzJLQVdQcitoc1diK1hPMDBBWUxUK1R4VmljWEFDWURPRk5kQ1Fx?=
+ =?utf-8?B?NmZrWDMvek5FV3hDZGdtTTdPa1dNb25GT2YvRStaN2tKYnMreUxYYXQwck4y?=
+ =?utf-8?B?U0ZSb3dWWXhzYWlrR05sRlltSms0dnMxZE1SOE5VTHBDUFBCV1dzcWk0MDFs?=
+ =?utf-8?B?enFITWljRWM2YVMyeWZkNEJHOElVT05Ja1JNN2dVRjhpYXhkVEliMlV1U0pt?=
+ =?utf-8?B?a2N4VWpmYm9UOVBqQkdVd2IvZDQ0dmxUQmRDbkVpYUtiUkgxTXdtN3h6OFI0?=
+ =?utf-8?B?dHAxZGx3T3ZQeTNuYnRsVHY5QUtvbmhzNyt6bEF2Q25Ya1B1UGpaNUhDdUJv?=
+ =?utf-8?B?OTFLeHpwMmVyYlV0NWZUeVF6cU9GTnlHNnh2TzYxbXE5QmFUQ21hQitDSUhl?=
+ =?utf-8?B?R2lXMHFSWnRDTGpxcXMzMnVta0pLM0FRcVNrem5IT2NuTUVsN1JZRkxLWXJL?=
+ =?utf-8?B?VFZocWNpN2Z2ZFVkOGdkSnZXUWtTRmxaZkRGMGdjdVVVZ0cvV09zcERCUWxa?=
+ =?utf-8?B?NnYxK25hd01ST05UZ3NCNWM3WWhsWGZ0OFZzT3lnMU1IVHpPVUdsWXhpaW1a?=
+ =?utf-8?B?RUZoamsvNm9xSnMranBpcjFZU2ZlaEFEM1R5TlpKSjdNWStCc3hGbC9OZkpM?=
+ =?utf-8?B?cnZsWmFSRGd4ampzVUN6THVxRnNORmIzVDZQSGlXUkVwUEQyb2RwdGNkZ01l?=
+ =?utf-8?B?dElwWTBIczNLRnVmY1FDZVorMlllMURMQm5YVVEwUkFKbDNib25ta3Q1YkZn?=
+ =?utf-8?B?Yjh0MUxpSVhhN3hIOUg4YVYzb1ZGRzFveWFjU2psUTNPWUwxRExZT1pCQUdJ?=
+ =?utf-8?B?T3ZtblNzSzRuaTNUdlUxUUtMUWY5S2tlZDNRQ21QVWpUblJMQ3NNQUg3WGtU?=
+ =?utf-8?B?RzFOVTN1OTlpSS9iUlo2eFlEN0tXVkxOTkpHNi9aeGdkeWhQcXg3eFhLYkxB?=
+ =?utf-8?B?cklyKzhTYmlPSGlRSytjZ3JWWEdndTRmTkpqTGFLd3ZoU1A0ejBycG15NVNl?=
+ =?utf-8?B?WVEyYVFjWWFhTmIrYzRiVnoyTzdFRFZ3ZWhQbVZaZ01hRkZra1V0OVFlMHlS?=
+ =?utf-8?B?MWg3RHVjazlKeHJZSndYWTRtbFVCTmJjSmZyVXppK3I1SnN5UXlaWHpBdER3?=
+ =?utf-8?B?OUllMDNvQ2I0a3NCelNoYTBvdzBEdkVIUmorL3d3WXpQMS96ZU5zSndFaHRT?=
+ =?utf-8?B?R2x1ekNyNXN5ajlwRHJoRFNCYjNaZnBuMVAwaEYxODhhZWE0aHJIcHNFSkVx?=
+ =?utf-8?B?THJDOWJvNzFhUFVaQ3VtbVdTYksvRkZET3VYdlFBaGN3dCtUVGd6TnpGS2U3?=
+ =?utf-8?B?WnBndVNoSnB1RkVORGtIRmNQVjVCalBBTzNIbEJNM0tqd2hJRWxiQjlNK2pI?=
+ =?utf-8?B?MEo0cHIxaVJBbWgzNllOSmQxZW90RWdlVU1IZ0JNc0ZzeVMzd3FxZ3dWSXlj?=
+ =?utf-8?B?SUlMYm1xcUZXOTBWb3ljMGYwK25HNXNQWE8veTRuNCthcGxGVW10R2lXeE5r?=
+ =?utf-8?B?ZE1DaFAwMU9vSWlBdmdEeEkzc2VRenduUjVrWFJNdjYzZ1VEN2V0cy9vSDhO?=
+ =?utf-8?B?b0g2OGhVTmh0d0pNQnBrUkVzQjByMktiQnpJb2pJeEFzdHZ0aTRnLzdGNXhM?=
+ =?utf-8?B?SStOQkpzejZneU9GVHNPYzB4enpuWTRQOVFGVVNWTW5hcUo4UFpMQkFqTGt1?=
+ =?utf-8?B?VzZXL2pmTmFQRlRlckFhQ1FtVWRPZHNnemJrNzBKVGFRMG5qYk5aelNMWTMv?=
+ =?utf-8?B?aEVEOU54b1JpYTY1ZXEzTUk0Nzl5R2hEcGdub05FYVd2Y0FWYU5OVVdpN2Jn?=
+ =?utf-8?B?MElxQ2RaV2dJMjhGem80bEFOcFltazNEbzZTZzVGKzZFVmVLdlNuNEdOTlB1?=
+ =?utf-8?B?ZWcxSVBNTlBGb3cvOERUREpDOVBqaXhHbHBzUE5ma0cyVjNMRnhSS0F6cStj?=
+ =?utf-8?B?QThXK1dJek0ranZWZFNsSDdFWGVyV2VlL0VzdUduMjI3cjljY1lXOFhGYk5h?=
+ =?utf-8?B?OVNsUXdMOEJEc296NmNVdFlyUnc2TDl6eHZFbkNBOXdVeUsvTXlTQWQ4SlNo?=
+ =?utf-8?B?bVBhemNSL29Ic3NTVEpwWDNtM0lwMEFyRXVXY1ZGWWMycEVPS2RrdjQ0dTla?=
+ =?utf-8?B?MmRqQU9kajZYZUwvT3hjOTZQOGRzMEpHSmV0YlRVRE1jVmE2OWlNVlZmSldh?=
+ =?utf-8?B?bWc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e6b67272-51a6-4c69-e733-08daa26aa6db
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5373.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 22:33:38.3133
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KN6/7ani4qqp3/8oH6NzmQKTj0p8X3h/iUnClkhbQwa6SIlqqNOo73F5ZXiCQ0MaQWv6fem7X9AMd3rH1xCNJNE4OXoOtomlfKX9eilKPCY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6504
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To handle stack overflows, applications can register a separate signal alt
-stack to use for the stack to handle signals. To handle shadow stack
-overflows the kernel can similarly provide the ability to have an alt
-shadow stack.
+On Tue, Sep 27, 2022 at 07:12:06PM -0300, Maíra Canal wrote:
+> The drm_test_dp_mst_sideband_msg_req_decode repeats the same test
+> structure with different parameters. This could be better represented
+> by parameterized tests, provided by KUnit.
+> 
+> In order to convert the tests to parameterized tests, the test case for
+> the client ID was changed: instead of using get_random_bytes to generate
+> the client ID, the client ID is now hardcoded in the test case.
 
-Signals push information about the execution context to the stack that
-will handle the signal. The data pushed is use to restore registers
-and other state after the signal. In the case of handling the signal on
-a normal stack, the stack just needs to be unwound over the stack frame,
-but in the case of alt stacks, the saved stack pointer is important for
-the sigreturn to find it’s way back to the thread. With shadow stack
-there is a new type of stack pointer, the shadow stack pointer (SSP), that
-needs to be restored. Just like the regular stack pointer, it needs to be
-saved somewhere in order to implement shadow alt stacks. This is already
-done as part of the token placed to prevent SROP attacks, so on sigreturn
-from an alt shadow stack, the kernel can easily know which SSP to restore.
+Generally "random" usage is not incompatible with parameterized tests, we can
+create parameterized tests that use random data.
+The idea is to pass a function that generates the actual param (where we have a
+pointer to function as one of the members in "params" struct).
 
-But to enable SS_AUTODISARM like functionality, the kernel also needs to
-push the shadow alt stack and size somewhere, like happens in regular
-alt stacks. So push this data using the same format. In the end the
-shadow stack sigframe looks like this:
-|1...old SSP|1...alt stack size|1...alt stack base| 0|
+For example, see "random_dp_query_enc_client_id" usage here:
+https://lore.kernel.org/dri-devel/20220117232259.180459-7-michal.winiarski@intel.com/
 
-In the future, any other data could come between the alt stack base and
-the guard zero. The guard zero is to prevent tricking the kernel into
-processing half of one frame and half of the adjacent frame.
+In this case, we just compare data going in with data going out (and the data
+itself is not transformed in any way), so it doesn't really matter for coverage
+and we can hardcode.
 
-In past designs for userspace shadow stacks, shadow alt stacks were not
-supported. Since there was only one shadow stack, longjmp() could jump out
-of a signal by using incssp to unwind the SSP to the place where the
-setjmp() was called. Since alt shadow stacks are a new thing, simply don't
-support longjmp()ing from an alt shadow stacks.
+-Michał
 
-Introduce a new syscall "sigaltshstk" that behaves similarly to
-sigaltstack. Have it take new and old stack_t's to specify the base and
-length of the alt shadow stack. Don't have it adopt the same flag
-semantics though, because not all alt stack flags will necessarily apply
-to alt shadow stacks. As long as the syscall is getting new flag meanings
-make SS_AUTODISARM the default behavior for sigaltshstk(), and not require
-a flag. Today the only flag supported is SS_DISABLE, and a !SS_AUTODISARM
-mode is not supported.
-
-So when a signal hits it will jump to the location specified in
-sigaltshstk(). Currently (without WRSS), userspace doesn’t have the
-ability to arbitrarily set the SSP. But telling the kernel to set the
-SSP to an arbitrary point on signal is kind of like that. So there would
-be a weakening of the shadow stack protections unless additional checks
-are made. With the SS_AUTODISARM-style behavior, the SSP will only jump to
-the shadow stack if the SSP is not already on the shadow stack, otherwise
-it will just push the SSP. So have the kernel checks for a token
-whenever transitioning to the alt stack from a place other than the alt
-stack. This token can be written by the kernel during shadow stack
-allocation, using the map_shadow_stack syscall.
-
-Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-
----
-
-v2:
- - New patch
-
- arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
- arch/x86/include/asm/cet.h                    |   2 +
- arch/x86/include/asm/processor.h              |   3 +
- arch/x86/kernel/process.c                     |   3 +
- arch/x86/kernel/shstk.c                       | 178 +++++++++++++++---
- include/linux/syscalls.h                      |   1 +
- kernel/sys_ni.c                               |   1 +
- .../testing/selftests/x86/test_shadow_stack.c |  75 ++++++++
- 8 files changed, 240 insertions(+), 24 deletions(-)
-
-diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-index d9639e3e0a33..a2dd5d56caa4 100644
---- a/arch/x86/entry/syscalls/syscall_64.tbl
-+++ b/arch/x86/entry/syscalls/syscall_64.tbl
-@@ -373,6 +373,7 @@
- 449	common	futex_waitv		sys_futex_waitv
- 450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
- 451	common	map_shadow_stack	sys_map_shadow_stack
-+452	common	sigaltshstk		sys_sigaltshstk
- 
- #
- # Due to a historical design error, certain syscalls are numbered differently
-diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-index edf681d4843a..52119b913ed6 100644
---- a/arch/x86/include/asm/cet.h
-+++ b/arch/x86/include/asm/cet.h
-@@ -26,6 +26,7 @@ void reset_thread_shstk(void);
- int setup_signal_shadow_stack(struct ksignal *ksig);
- int restore_signal_shadow_stack(void);
- int wrss_control(bool enable);
-+void reset_alt_shstk(void);
- #else
- static inline long cet_prctl(struct task_struct *task, int option,
- 		      unsigned long features) { return -EINVAL; }
-@@ -40,6 +41,7 @@ static inline void reset_thread_shstk(void) {}
- static inline int setup_signal_shadow_stack(struct ksignal *ksig) { return 0; }
- static inline int restore_signal_shadow_stack(void) { return 0; }
- static inline int wrss_control(bool enable) { return -EOPNOTSUPP; }
-+static inline void reset_alt_shstk(void) {}
- #endif /* CONFIG_X86_SHADOW_STACK */
- 
- #endif /* __ASSEMBLY__ */
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 3a0c9d9d4d1d..b9fb966edec7 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -536,6 +536,9 @@ struct thread_struct {
- 
- #ifdef CONFIG_X86_SHADOW_STACK
- 	struct thread_shstk	shstk;
-+	unsigned long			sas_shstk_sp;
-+	size_t				sas_shstk_size;
-+	unsigned int			sas_shstk_flags;
- #endif
- 
- 	/* Floating point and extended processor state */
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index 5e63d190becd..b71eb2d6a20f 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -176,6 +176,9 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 	frame->flags = X86_EFLAGS_FIXED;
- #endif
- 
-+	if ((clone_flags & (CLONE_VM|CLONE_VFORK)) == CLONE_VM)
-+		reset_alt_shstk();
-+
- 	/* Allocate a new shadow stack for pthread if needed */
- 	ret = shstk_alloc_thread_stack(p, clone_flags, args->flags, &shstk_addr);
- 	if (ret)
-diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index af1255164f0c..05ee3793b60f 100644
---- a/arch/x86/kernel/shstk.c
-+++ b/arch/x86/kernel/shstk.c
-@@ -25,6 +25,7 @@
- #include <asm/special_insns.h>
- #include <asm/fpu/api.h>
- #include <asm/prctl.h>
-+#include <asm/signal.h>
- 
- #define SS_FRAME_SIZE 8
- 
-@@ -149,11 +150,18 @@ int shstk_setup(void)
- 	return 0;
- }
- 
-+void reset_alt_shstk(void)
-+{
-+	current->thread.sas_shstk_sp = 0;
-+	current->thread.sas_shstk_size = 0;
-+}
-+
- void reset_thread_shstk(void)
- {
- 	memset(&current->thread.shstk, 0, sizeof(struct thread_shstk));
- 	current->thread.features = 0;
- 	current->thread.features_locked = 0;
-+	reset_alt_shstk();
- }
- 
- int shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
-@@ -238,39 +246,67 @@ static int get_shstk_data(unsigned long *data, unsigned long __user *addr)
- 	return 0;
- }
- 
-+static bool on_alt_shstk(unsigned long ssp)
-+{
-+	unsigned long alt_ss_start = current->thread.sas_shstk_sp;
-+	unsigned long alt_ss_end = alt_ss_start + current->thread.sas_shstk_size;
-+
-+	return ssp >= alt_ss_start && ssp < alt_ss_end;
-+}
-+
-+static bool alt_shstk_active(void)
-+{
-+	return current->thread.sas_shstk_sp;
-+}
-+
-+static bool alt_shstk_valid(unsigned long ssp, size_t size)
-+{
-+	if (ssp && (size < PAGE_SIZE || size >= TASK_SIZE_MAX))
-+		return -EINVAL;
-+
-+	if (ssp >= TASK_SIZE_MAX)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
- /*
-- * Create a restore token on shadow stack, and then push the user-mode
-- * function return address.
-+ * Verify the user shadow stack has a valid token on it, and then set
-+ * *new_ssp according to the token.
-  */
--static int shstk_setup_rstor_token(unsigned long ret_addr, unsigned long *new_ssp)
-+static int shstk_check_rstor_token(unsigned long token_addr, unsigned long *new_ssp)
- {
--	unsigned long ssp, token_addr;
--	int err;
-+	unsigned long token;
- 
--	if (!ret_addr)
-+	if (get_user(token, (unsigned long __user *)token_addr))
-+		return -EFAULT;
-+
-+	/* Is mode flag correct? */
-+	if (!(token & BIT(0)))
- 		return -EINVAL;
- 
--	ssp = get_user_shstk_addr();
--	if (!ssp)
-+	/* Is busy flag set? */
-+	if (token & BIT(1))
- 		return -EINVAL;
- 
--	err = create_rstor_token(ssp, &token_addr);
--	if (err)
--		return err;
-+	/* Mask out flags */
-+	token &= ~3UL;
-+
-+	/* Restore address aligned? */
-+	if (!IS_ALIGNED(token, 8))
-+		return -EINVAL;
- 
--	ssp = token_addr - sizeof(u64);
--	err = write_user_shstk_64((u64 __user *)ssp, (u64)ret_addr);
-+	/* Token placed properly? */
-+	if (((ALIGN_DOWN(token, 8) - 8) != token_addr) || token >= TASK_SIZE_MAX)
-+		return -EINVAL;
- 
--	if (!err)
--		*new_ssp = ssp;
-+	*new_ssp = token;
- 
--	return err;
-+	return 0;
- }
- 
--static int shstk_push_sigframe(unsigned long *ssp)
-+static int shstk_push_sigframe(unsigned long *ssp, unsigned long target_ssp)
- {
--	unsigned long target_ssp = *ssp;
--
- 	/* Token must be aligned */
- 	if (!IS_ALIGNED(*ssp, 8))
- 		return -EINVAL;
-@@ -278,17 +314,32 @@ static int shstk_push_sigframe(unsigned long *ssp)
- 	if (!IS_ALIGNED(target_ssp, 8))
- 		return -EINVAL;
- 
-+	*ssp -= SS_FRAME_SIZE;
-+	if (write_user_shstk_64((u64 __user *)*ssp, 0))
-+		return -EFAULT;
-+
-+	*ssp -= SS_FRAME_SIZE;
-+	if (put_shstk_data((u64 __user *)*ssp, current->thread.sas_shstk_sp))
-+		return -EFAULT;
-+
-+	*ssp -= SS_FRAME_SIZE;
-+	if (put_shstk_data((u64 __user *)*ssp, current->thread.sas_shstk_size))
-+		return -EFAULT;
-+
- 	*ssp -= SS_FRAME_SIZE;
- 	if (put_shstk_data((void *__user)*ssp, target_ssp))
- 		return -EFAULT;
- 
-+	current->thread.sas_shstk_sp = 0;
-+	current->thread.sas_shstk_size = 0;
-+
- 	return 0;
- }
- 
- 
- static int shstk_pop_sigframe(unsigned long *ssp)
- {
--	unsigned long token_addr;
-+	unsigned long token_addr, shstk_sp, shstk_size;
- 	int err;
- 
- 	err = get_shstk_data(&token_addr, (unsigned long __user *)*ssp);
-@@ -303,7 +354,38 @@ static int shstk_pop_sigframe(unsigned long *ssp)
- 	if (unlikely(token_addr >= TASK_SIZE_MAX))
- 		return -EINVAL;
- 
-+	*ssp += SS_FRAME_SIZE;
-+	err = get_shstk_data(&shstk_size, (void __user *)*ssp);
-+	if (unlikely(err))
-+		return err;
-+
-+	*ssp += SS_FRAME_SIZE;
-+	err = get_shstk_data(&shstk_sp, (void __user *)*ssp);
-+	if (unlikely(err))
-+		return err;
-+
-+	if (unlikely(alt_shstk_valid((unsigned long)shstk_sp, shstk_size)))
-+		return -EINVAL;
-+
- 	*ssp = token_addr;
-+	current->thread.sas_shstk_sp = shstk_sp;
-+	current->thread.sas_shstk_size = shstk_size;
-+
-+	return 0;
-+}
-+
-+static unsigned long get_sig_start_ssp(unsigned long orig_ssp, unsigned long *ssp)
-+{
-+	unsigned long sp_end = (current->thread.sas_shstk_sp +
-+				current->thread.sas_shstk_size) - SS_FRAME_SIZE;
-+
-+	if (!alt_shstk_active() || on_alt_shstk(*ssp)) {
-+		*ssp = orig_ssp;
-+		return 0;
-+	}
-+
-+	if (shstk_check_rstor_token(sp_end, ssp))
-+		return -EINVAL;
- 
- 	return 0;
- }
-@@ -311,7 +393,7 @@ static int shstk_pop_sigframe(unsigned long *ssp)
- int setup_signal_shadow_stack(struct ksignal *ksig)
- {
- 	void __user *restorer = ksig->ka.sa.sa_restorer;
--	unsigned long ssp;
-+	unsigned long ssp, orig_ssp;
- 	int err;
- 
- 	if (!cpu_feature_enabled(X86_FEATURE_SHSTK) ||
-@@ -321,11 +403,15 @@ int setup_signal_shadow_stack(struct ksignal *ksig)
- 	if (!restorer)
- 		return -EINVAL;
- 
--	ssp = get_user_shstk_addr();
--	if (unlikely(!ssp))
-+	orig_ssp = get_user_shstk_addr();
-+	if (unlikely(!orig_ssp))
- 		return -EINVAL;
- 
--	err = shstk_push_sigframe(&ssp);
-+	err = get_sig_start_ssp(orig_ssp, &ssp);
-+	if (unlikely(err))
-+		return err;
-+
-+	err = shstk_push_sigframe(&ssp, orig_ssp);
- 	if (unlikely(err))
- 		return err;
- 
-@@ -496,3 +582,47 @@ long cet_prctl(struct task_struct *task, int option, unsigned long features)
- 		return wrss_control(true);
- 	return -EINVAL;
- }
-+
-+SYSCALL_DEFINE2(sigaltshstk, const stack_t __user *, uss, stack_t __user *, uoss)
-+{
-+	unsigned long ssp;
-+	stack_t new, old;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-+		return -ENOSYS;
-+
-+	ssp = get_user_shstk_addr();
-+
-+	if (unlikely(!ssp || on_alt_shstk(ssp)))
-+		return -EPERM;
-+
-+	if (uss) {
-+		if (unlikely(copy_from_user(&new, uss, sizeof(stack_t))))
-+			return -EFAULT;
-+
-+		if (unlikely(alt_shstk_valid((unsigned long)new.ss_sp,
-+					     new.ss_size)))
-+			return -EINVAL;
-+
-+		if (new.ss_flags & SS_DISABLE) {
-+			current->thread.sas_shstk_sp = 0;
-+			current->thread.sas_shstk_size = 0;
-+			return 0;
-+		}
-+
-+		current->thread.sas_shstk_sp = (unsigned long) new.ss_sp;
-+		current->thread.sas_shstk_size = new.ss_size;
-+		/* No saved flags for now */
-+	}
-+
-+	if (!uoss)
-+		return 0;
-+
-+	memset(&old, 0, sizeof(stack_t));
-+	old.ss_sp = (void __user *)current->thread.sas_shstk_sp;
-+	old.ss_size = current->thread.sas_shstk_size;
-+	if (copy_to_user(uoss, &old, sizeof(stack_t)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 3ae05cbdea5b..7b7e7bb992c2 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -1057,6 +1057,7 @@ asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long l
- 					    unsigned long home_node,
- 					    unsigned long flags);
- asmlinkage long sys_map_shadow_stack(unsigned long addr, unsigned long size, unsigned int flags);
-+asmlinkage long sys_sigaltshstk(const struct sigaltstack *uss, struct sigaltstack *uoss);
- 
- /*
-  * Architecture-specific system calls
-diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-index cb9aebd34646..3a5f8b76e7a4 100644
---- a/kernel/sys_ni.c
-+++ b/kernel/sys_ni.c
-@@ -382,6 +382,7 @@ COND_SYSCALL(modify_ldt);
- COND_SYSCALL(vm86);
- COND_SYSCALL(kexec_file_load);
- COND_SYSCALL(map_shadow_stack);
-+COND_SYSCALL(sigaltshstk);
- 
- /* s390 */
- COND_SYSCALL(s390_pci_mmio_read);
-diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
-index 249397736d0d..22b856de5cdd 100644
---- a/tools/testing/selftests/x86/test_shadow_stack.c
-+++ b/tools/testing/selftests/x86/test_shadow_stack.c
-@@ -492,6 +492,76 @@ int test_userfaultfd(void)
- 	return 1;
- }
- 
-+volatile bool segv_pass;
-+
-+long sigaltshstk(stack_t *uss, stack_t *ouss)
-+{
-+	return syscall(__NR_sigaltshstk, uss, ouss);
-+}
-+
-+void segv_alt_handler(int signum, siginfo_t *si, void *uc)
-+{
-+	unsigned long min = (unsigned long)shstk_ptr;
-+	unsigned long max = (unsigned long)shstk_ptr + SS_SIZE;
-+	unsigned long ssp = get_ssp();
-+	stack_t alt_shstk_stackt;
-+
-+	if (sigaltshstk(NULL, &alt_shstk_stackt))
-+		goto fail;
-+
-+	if (alt_shstk_stackt.ss_sp || alt_shstk_stackt.ss_size)
-+		goto fail;
-+
-+	if (ssp < min || ssp > max - 8)
-+		goto fail;
-+
-+	segv_pass = true;
-+	return;
-+fail:
-+	segv_pass = false;
-+}
-+
-+int test_shstk_alt_stack(void)
-+{
-+	stack_t alt_shstk_stackt;
-+	struct sigaction sa;
-+	int ret = 1;
-+
-+	sa.sa_sigaction = segv_alt_handler;
-+	if (sigaction(SIGUSR1, &sa, NULL))
-+		return 1;
-+	sa.sa_flags = SA_SIGINFO;
-+
-+	shstk_ptr = create_shstk(0);
-+	if (shstk_ptr == MAP_FAILED)
-+		goto err_sig;
-+
-+	alt_shstk_stackt.ss_sp = shstk_ptr;
-+	alt_shstk_stackt.ss_size = SS_SIZE;
-+	if (sigaltshstk(&alt_shstk_stackt, NULL) == -1)
-+		goto err_shstk;
-+
-+	segv_pass = false;
-+
-+	/* Make sure segv_was_on_alt is set before signal */
-+	asm volatile("" : : : "memory");
-+
-+	raise(SIGUSR1);
-+
-+	if (segv_pass) {
-+		printf("[OK]\tAlt shadow stack test.\n");
-+		ret = 0;
-+	}
-+
-+err_shstk:
-+	alt_shstk_stackt.ss_flags = SS_DISABLE;
-+	sigaltshstk(&alt_shstk_stackt, NULL);
-+	free_shstk(shstk_ptr);
-+err_sig:
-+	signal(SIGUSR1, SIG_DFL);
-+	return ret;
-+}
-+
- int main(int argc, char *argv[])
- {
- 	int ret = 0;
-@@ -556,6 +626,11 @@ int main(int argc, char *argv[])
- 		printf("[FAIL]\tUserfaultfd test\n");
- 	}
- 
-+	if (test_shstk_alt_stack()) {
-+		ret = 1;
-+		printf("[FAIL]\tAlt shadow stack test\n");
-+	}
-+
- out:
- 	/*
- 	 * Disable shadow stack before the function returns, or there will be a
--- 
-2.17.1
-
+> So, convert drm_test_dp_mst_sideband_msg_req_decode into parameterized
+> tests and make the tests' allocations and prints completely managed by KUnit.
+> 
+> Signed-off-by: Maíra Canal <mcanal@igalia.com>
+> ---
+> v1 -> v2: https://lore.kernel.org/dri-devel/20220925222719.345424-1-mcanal@igalia.com/T/#m056610a23a63109484afeafefb5846178c4d36b2
+> - Mention on the commit message the change on the test case for the client ID (Michał Winiarski).
+> ---
+>  .../gpu/drm/tests/drm_dp_mst_helper_test.c    | 370 ++++++++++++------
+>  1 file changed, 243 insertions(+), 127 deletions(-)
