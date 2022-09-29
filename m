@@ -2,99 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7885C5EEB3B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 03:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484105EEB3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 03:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234744AbiI2Bto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 21:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
+        id S233733AbiI2Bv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 21:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234611AbiI2BtR (ORCPT
+        with ESMTP id S234361AbiI2BvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 21:49:17 -0400
-Received: from sender4-pp-o92.zoho.com (sender4-pp-o92.zoho.com [136.143.188.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7019120581;
-        Wed, 28 Sep 2022 18:49:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1664416145; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=VgE3+C2kAd55uGmaCqdTxux2Ui0BbOkaZQqtwBcwL9WAp5zmVG0+FXYWCuDST29ftIV+7CAse4SPGILL0pLHvtU00M3UOppXZS2sD6dxHaO2rbRaJb+p40I2XHaAgfdxsTKMRuDPBTNuGB6T3p8Nn+yzenLJNrSVkOjlJnT+k7s=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1664416145; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=nFQOJc4dHrCYblidg4L4WaQoJSYbi9B+73Gd5rjkAxM=; 
-        b=oDFFdLDERnRt+jCDvvK3CQutasHR1EfE1jc99Oc6p3TRzjay0ROxfyRwCZrNxWqcox/1vALE1M4L7C5yl02Pz5S6VthX9ol7AQljLjnVvgXBZD2F+FP1DuMt58ST7cR2qlemRQchygwWu6ufgQAdHSxAVU6vN55EOWnUKea8zY0=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zoho.com;
-        spf=pass  smtp.mailfrom=hmsjwzb@zoho.com;
-        dmarc=pass header.from=<hmsjwzb@zoho.com>
-DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
-  s=zapps768; d=zoho.com; 
-  h=message-id:date:mime-version:user-agent:subject:to:cc:references:from:in-reply-to:content-type; 
-  b=jBEi5o0Dapas/Y3gTqXE7Urbrun/d0qv8B5NLr4wFxdJ0rOe2Lz+DQJQj6goKU8avYvEGgH5FLsE
-    PpeXkUD5h8gP87WSkaDoDynZJh1244+Yl+Pf6AfK0KpWbtVy0nQb  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1664416145;
-        s=zm2022; d=zoho.com; i=hmsjwzb@zoho.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=nFQOJc4dHrCYblidg4L4WaQoJSYbi9B+73Gd5rjkAxM=;
-        b=Kx2WfgIKfAlZXqAe+fdXHFRHVSJolc5xXqrzA1WtjpcpabcLnasWc/00MpS/H2nB
-        MlHXY8YGEGkDRsHpzRfOImihdjRzueRt4fE69ENhtyuE2iJSrJTQKVa08Ab5/I9mrdU
-        B7jDO5PYmZs8FL1vzO7uxLzHf3M4f44B0bpvY/rI=
-Received: from [192.168.0.103] (58.247.201.74 [58.247.201.74]) by mx.zohomail.com
-        with SMTPS id 1664416144498797.9205126469951; Wed, 28 Sep 2022 18:49:04 -0700 (PDT)
-Message-ID: <6104df01-4190-5c18-ddbf-6694e1e14900@zoho.com>
-Date:   Wed, 28 Sep 2022 21:49:00 -0400
+        Wed, 28 Sep 2022 21:51:05 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F5F760E5;
+        Wed, 28 Sep 2022 18:51:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=oGBNk7ehsr6naNZyndXMCMbMLWq4E6sNqHzKAcVK0R0=; b=N2j6it1iwchaJQ6Jw5RQXNCHoj
+        J19EWqrL0hSDlTAcP+QEHawdH5d9OYTsG2zhQz+nKNZQvrIqxGbdX96gmADamfWO72dBAMcTHAG+X
+        1ymlj6tsvfo8H0xh2dr/nR2RfxrLSJ9HzQuMG8dofHR2oGtgu/KTM2NAlpu6YLyE2T8Y=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1odihJ-000ZSE-Nb; Thu, 29 Sep 2022 03:50:45 +0200
+Date:   Thu, 29 Sep 2022 03:50:45 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        imx@lists.linux.dev
+Subject: Re: [PATCH 1/1] net: fec: add initial XDP support
+Message-ID: <YzT59R+zx4dA5G5Q@lunn.ch>
+References: <20220928152509.141490-1-shenwei.wang@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] btrfs:remove redundant index_rbio_pages in
- raid56_rmw_stripe
-Content-Language: en-US
-To:     wqu@suse.com
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220929014402.2450-1-hmsjwzb@zoho.com>
-From:   hmsjwzb <hmsjwzb@zoho.com>
-In-Reply-To: <20220929014402.2450-1-hmsjwzb@zoho.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928152509.141490-1-shenwei.wang@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> +struct fec_enet_xdp_stats {
+> +	u64	xdp_pass;
+> +	u64	xdp_drop;
+> +	u64	xdp_xmit;
+> +	u64	xdp_redirect;
+> +	u64	xdp_xmit_err;
+> +	u64	xdp_tx;
+> +	u64	xdp_tx_err;
+> +};
+> +
+> +	switch (act) {
+> +	case XDP_PASS:
+> +		rxq->stats.xdp_pass++;
 
+Since the stats are u64, and most machines using the FEC are 32 bit,
+you cannot just do an increment. Took a look at u64_stats_sync.h.
 
-On 9/28/22 21:44, Flint.Wang wrote:
->   The index_rbio_pages in raid56_rmw_stripe is redundant.
->   It is invoked in finish_rmw anyway.
-> 
-> Signed-off-by: Flint.Wang <hmsjwzb@zoho.com>
-> ---
->  fs/btrfs/raid56.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/fs/btrfs/raid56.c b/fs/btrfs/raid56.c
-> index f6395e8288d69..44266b2c5b86e 100644
-> --- a/fs/btrfs/raid56.c
-> +++ b/fs/btrfs/raid56.c
-> @@ -1546,8 +1546,6 @@ static int raid56_rmw_stripe(struct btrfs_raid_bio *rbio)
->  	if (ret)
->  		goto cleanup;
->  
-> -	index_rbio_pages(rbio);
-> -
->  	atomic_set(&rbio->error, 0);
->  	/* Build a list of bios to read all the missing data sectors. */
->  	for (total_sector_nr = 0; total_sector_nr < nr_data_sectors;
-Hi Qu,
+> -#define FEC_STATS_SIZE		(ARRAY_SIZE(fec_stats) * sizeof(u64))
+> +static struct fec_xdp_stat {
+> +	char name[ETH_GSTRING_LEN];
+> +	u32 count;
+> +} fec_xdp_stats[] = {
+> +	{ "rx_xdp_redirect", 0 },
+> +	{ "rx_xdp_pass", 0 },
+> +	{ "rx_xdp_drop", 0 },
+> +	{ "rx_xdp_tx", 0 },
+> +	{ "rx_xdp_tx_errors", 0 },
+> +	{ "tx_xdp_xmit", 0 },
+> +	{ "tx_xdp_xmit_errors", 0 },
+> +};
+> +
+> +#define FEC_STATS_SIZE	((ARRAY_SIZE(fec_stats) + \
+> +			ARRAY_SIZE(fec_xdp_stats)) * sizeof(u64))
 
-	I am doing some experiment on the destroy RMW. It seems the index_rbio_pages in raid56_rmw_stripe is redundant. We will do it in finish_rmw anyway.
+The page pool also has some stats. See page_pool_get_stats(),
+page_pool_ethtool_stats_get_strings() etc.
 
-Thanks,
-Flint
+      Andrew
