@@ -2,74 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB9B5EF2E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048CD5EF2EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235168AbiI2KAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33660 "EHLO
+        id S235190AbiI2KBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235011AbiI2KAp (ORCPT
+        with ESMTP id S235170AbiI2KBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:00:45 -0400
+        Thu, 29 Sep 2022 06:01:09 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C61AEC54B;
-        Thu, 29 Sep 2022 03:00:41 -0700 (PDT)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxBOLDbDVjMrsjAA--.1941S2;
-        Thu, 29 Sep 2022 18:00:36 +0800 (CST)
-Subject: Re: [PATCH v5 2/3] dt-bindings: thermal: add loongson2k thermal
- binding
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B55D13791D;
+        Thu, 29 Sep 2022 03:01:06 -0700 (PDT)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxvmvdbDVjQrsjAA--.56357S3;
+        Thu, 29 Sep 2022 18:01:02 +0800 (CST)
+Subject: Re: [PATCH] docs, kprobes: Fix the wrong location of Kprobes
+To:     Steven Rostedt <rostedt@goodmis.org>
+References: <1663322106-12178-1-git-send-email-yangtiezhu@loongson.cn>
+ <20220926142218.100e0d9b@gandalf.local.home>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
-References: <20220928083702.17309-1-zhuyinbo@loongson.cn>
- <20220928083702.17309-2-zhuyinbo@loongson.cn>
- <066b55cf-4a28-89a2-56ab-572590c97c30@linaro.org>
- <9b2f2d43-981d-3ffb-7526-dc3e58a9f367@linaro.org>
- <f0946817-cc2c-449b-d93b-0dd94a0f51f1@loongson.cn>
- <ed762d71-7104-b1ad-009d-51c1a4407472@loongson.cn>
- <9b62594f-7473-9974-8ab3-4c93aae5fa64@linaro.org>
- <abaf9b69-487c-0f1e-7a94-201155f5e3d2@loongson.cn>
- <f54a40ea-99bf-e341-3bbd-851b250cc9cd@linaro.org>
- <a205592c-9e5b-0cf2-88d7-aabe0bdcc2ae@loongson.cn>
- <06fa0bd2-c447-d705-01be-791207a4be8a@linaro.org>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <550a852b-0ee4-8179-48a2-6cb11a3dd800@loongson.cn>
-Date:   Thu, 29 Sep 2022 18:00:35 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <75c28f07-4bc7-6094-d264-d7657c40ba88@loongson.cn>
+Date:   Thu, 29 Sep 2022 18:01:01 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <06fa0bd2-c447-d705-01be-791207a4be8a@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxBOLDbDVjMrsjAA--.1941S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF43AryxKF1Uuw4DuFW3Wrg_yoW8tF1xpF
-        yDK3WDKF45ZFn29w10ya1SqF1jywn3t3y5XryfWr17K3yqvasxXFy7tr4UurZ0ga1IqFW0
-        q345trWxuF4qv37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9G14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I
-        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-        xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-        cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
-        4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+In-Reply-To: <20220926142218.100e0d9b@gandalf.local.home>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8DxvmvdbDVjQrsjAA--.56357S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF1UZrWUtrW8XF1kZr4xWFg_yoW8XF48pF
+        1kJa4S9F1kJ348JrW7Zr1xWryIkFn7uay7GF1kta4rJ3WDZwn7Crn2gr4agFyfursayay7
+        Za4kKFyj9w1av37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
+        c2xSY4AK67AK6r4DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU8XJ55UUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,59 +62,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2022/9/29 下午5:04, Krzysztof Kozlowski 写道:
-> On 29/09/2022 10:23, Yinbo Zhu wrote:
+On 09/27/2022 02:22 AM, Steven Rostedt wrote:
+> On Fri, 16 Sep 2022 17:55:06 +0800
+> Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+>> After commit 22471e1313f2 ("kconfig: use a menu in arch/Kconfig to reduce
+>> clutter"), the location of Kprobes is under "General architecture-dependent
+>> options" rather than "General setup".
 >>
+>
+> Probably add a "Fixes:" tag for the above mentioned commit.
+>
+> Anyway, Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+
+Thank you.
+
+Do you know which tree this patch will go through?
+Is it necessary to send v2 with "Fixes:" tag?
+
+Thanks,
+Tiezhu
+
+>
+> -- Steve
+>
+>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>  Documentation/trace/kprobes.rst | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
 >>
->> 在 2022/9/29 下午3:45, Krzysztof Kozlowski 写道:
->>> On 29/09/2022 09:07, Yinbo Zhu wrote:
->>>>>>>>
->>>>>>>> ... and please test your patches before sending :(
->>>>>> You said is refer that "reg: [[0, 534779136], [0, 48]] is too long" ?
->>>>>> Need fix that warning, right?
->>>>>
->>>>> Yes. You said you tested it but then sent with an error... so it's not
->>>>> really a testing.
->>>> sorry, I did do some testing. but I think It is okay that can generate a
->>>> dtb  without reporting an error when compile yaml file, in fact, I
->>>> ignore the warning,  I will fix it in v6.
->>>
->>>
->>> Do you also send the code with warnings reported by GCC? Judging by
->>> number of kernel test robot reports, it could be. So just to be very,
->>> very clear: do not send any code which generates any warning. For GCC
->>> this means W=1 builds.
->> I don't find about the warning about GCC when compile yaml file.
->> and I dont't know the meaning about W=1, you said about "W=1" is to execute
->> following command to compile the yaml, right?
-> 
-> GCC is about your C code. You were sending patches knowing that they
-> have warnings. It's not good. All warnings must be fixed.
-what you said about C code warning whether is follows ? If is it, and I 
-had add a static for loongson2_thermal_remove in v3 version code, I
-think it shoud be fixed  about the warning.
- >> drivers/thermal/loongson2_thermal.c:183:5: warning: no previous 
-prototype for function 'loongson2_thermal_remove' [-Wmissing-prototypes]
-    int loongson2_thermal_remove(struct platform_device *pdev)
-        ^
-    drivers/thermal/loongson2_thermal.c:183:1: note: declare 'static' if 
-the function is not intended to be used outside of this translation unit
-    int loongson2_thermal_remove(struct platform_device *pdev)
-    ^
-    static
-    1 warning generated.
-
-If you said about C code warning isn't about about 
-"loongson2_thermal_remove" and I may be loss a mail about that C code 
-warning, Could you foward a mail about that C code warning. because I 
-don't find any C code warning when compile C code.
-
-About the C code warning, it was base on v6 code?
-
-TKs,
-Yinbo Zhu.
-> 
-> Best regards,
-> Krzysztof
-> 
+>> diff --git a/Documentation/trace/kprobes.rst b/Documentation/trace/kprobes.rst
+>> index f318bce..48cf778 100644
+>> --- a/Documentation/trace/kprobes.rst
+>> +++ b/Documentation/trace/kprobes.rst
+>> @@ -328,8 +328,8 @@ Configuring Kprobes
+>>  ===================
+>>
+>>  When configuring the kernel using make menuconfig/xconfig/oldconfig,
+>> -ensure that CONFIG_KPROBES is set to "y". Under "General setup", look
+>> -for "Kprobes".
+>> +ensure that CONFIG_KPROBES is set to "y", look for "Kprobes" under
+>> +"General architecture-dependent options".
+>>
+>>  So that you can load and unload Kprobes-based instrumentation modules,
+>>  make sure "Loadable module support" (CONFIG_MODULES) and "Module
 
