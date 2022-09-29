@@ -2,87 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235535EFA0A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC0F5EFA0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236074AbiI2QQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        id S236098AbiI2QRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234737AbiI2QQh (ORCPT
+        with ESMTP id S235091AbiI2QRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:16:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D116BFAC9
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664468195;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SK8jnl25GfBurW867juBk8Hvi+Y8sy3LVuiGjVel2EA=;
-        b=JfY+UIzSZrkUD4yb993CbyErlacwwcF/pLjE6aHASlVRvQh4ctq0ce6DBRUoIsEI8DnUuH
-        xFPC/m1ebwHcDalpsJpsf+zZAAi4ouVA3fSK5xI9dgka8GRcq4ikDOB5Q1aSZfv3ODTL77
-        izB83lwj5U/zNJFjc/QgAy7gdMom6G0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-tWxvPbKKOv-UAw5fd6zNXg-1; Thu, 29 Sep 2022 12:16:32 -0400
-X-MC-Unique: tWxvPbKKOv-UAw5fd6zNXg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5441868A2E;
-        Thu, 29 Sep 2022 16:16:31 +0000 (UTC)
-Received: from starship (unknown [10.40.193.233])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 33A50140EBF4;
-        Thu, 29 Sep 2022 16:16:30 +0000 (UTC)
-Message-ID: <a2825beac032fd6a76838164d4e2753d30305897.camel@redhat.com>
-Subject: Re: Commit 'iomap: add support for dma aligned direct-io' causes
- qemu/KVM boot failures
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>, qemu-devel@nongnu.org,
-        kvm@vger.kernel.org
-Date:   Thu, 29 Sep 2022 19:16:29 +0300
-In-Reply-To: <YzW+Mz12JT1BXoZA@kbusch-mbp.dhcp.thefacebook.com>
-References: <fb869c88bd48ea9018e1cc349918aa7cdd524931.camel@redhat.com>
-         <YzW+Mz12JT1BXoZA@kbusch-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 29 Sep 2022 12:17:43 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2369F1D9284;
+        Thu, 29 Sep 2022 09:17:42 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id C3F251884D0E;
+        Thu, 29 Sep 2022 16:17:40 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id B9E4D2500370;
+        Thu, 29 Sep 2022 16:17:40 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id AFFD09EC0002; Thu, 29 Sep 2022 16:17:40 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
+Date:   Thu, 29 Sep 2022 18:17:40 +0200
+From:   netdev@kapio-technology.com
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 net-next 9/9] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <20220929091143.468546f2@kernel.org>
+References: <20220928174904.117131-1-netdev@kapio-technology.com>
+ <20220929091143.468546f2@kernel.org>
+User-Agent: Gigahost Webmail
+Message-ID: <6811b44516cf8bf37678bab23bca80ba@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-29 at 09:48 -0600, Keith Busch wrote:
-> I am aware, and I've submitted the fix to qemu here:
+On 2022-09-29 18:11, Jakub Kicinski wrote:
+> On Wed, 28 Sep 2022 19:49:04 +0200 Hans Schultz wrote:
+>> From: "Hans J. Schultz" <netdev@kapio-technology.com>
+>> 
+>> Verify that the MAC-Auth mechanism works by adding a FDB entry with 
+>> the
+>> locked flag set, denying access until the FDB entry is replaced with a
+>> FDB entry without the locked flag set.
+>> 
+>> Add test of blackhole fdb entries, verifying that there is no 
+>> forwarding
+>> to a blackhole entry from any port, and that the blackhole entry can 
+>> be
+>> replaced.
+>> 
+>> Also add a test that verifies that sticky FDB entries cannot roam 
+>> (this
+>> is not needed for now, but should in general be present anyhow for 
+>> future
+>> applications).
 > 
->   https://lists.nongnu.org/archive/html/qemu-block/2022-09/msg00398.html
-> 
+> If you were trying to repost just the broken patches - that's not gonna
+> work :(
 
+Sorry, I do not understand what 'broken' patches you are referring to?
 
-Thanks for quick response!
-
-Question is though, isn't this an kernel ABI breakage?
-
-(I myself don't care, I would be happy to patch my qemu), 
-
-but I afraid that this will break *lots* of users that only updated the kernel
-and not the qemu.
-
-What do you think?
-
-Best regards,
-	Maxim Levitsky
-
+I think that the locked port tests should be working?
