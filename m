@@ -2,155 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2480C5F016A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 01:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540F85F0170
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 01:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiI2XdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 19:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
+        id S229691AbiI2XeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 19:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiI2XdP (ORCPT
+        with ESMTP id S229538AbiI2XeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 19:33:15 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAD9148A38
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:33:13 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A5C8747C;
-        Fri, 30 Sep 2022 01:33:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1664494389;
-        bh=rsXQPfoODOoV2YweOgK8vKwcfwOCqbxKs2G25NITsXE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wm76qp2D4KHujb8qnUUTH+dm4zmzZn2BKqGocvRED6/EcWRUtfKQUnL8Cm+vxm/Xm
-         NY4r/893XoVIsInA/tSKO3nseZpmblPZ5ojyodhs3mfwPIBZBNUZ/kzx30uFHZd+lX
-         6IFzsk5SGu61QuHzRQqGGr49o3TStmnpvwfY/nWM=
-Date:   Fri, 30 Sep 2022 02:33:08 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michael Rodin <mrodin@de.adit-jv.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Paul <seanpaul@chromium.org>,
-        Vincent Abriou <vincent.abriou@st.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        michael@rodin.online, erosca@de.adit-jv.com
-Subject: Re: [PATCH] drm: do not call detect for connectors which are forced
- on
-Message-ID: <YzYrNJbfGcch1UtX@pendragon.ideasonboard.com>
-References: <20220826091121.389315-1-mrodin@de.adit-jv.com>
+        Thu, 29 Sep 2022 19:34:04 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5691497BF
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:34:03 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id o123so3428037yba.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:34:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=6r6atmtOyqYNX1oT7hMWpG0XFA+N4NNf/Oecr1qRj1c=;
+        b=pZaMtQKGDF9ewKVl+yJRNhN/Euy8kp2Npafbm4uJnTkNGnXfXgRt23c8S2PCZSigYg
+         vfemiTfkwKz7KhDsqDBICxrsiFCdqEMydTpA0lccrBwDG4lrIzmSijguDMWpJmrj1bUd
+         DrC5MLngGQWW0Eo6UbB4oxojul2EpUc6gzUnEtvvDVb6D6s601Gn+OKJ50CdrC7iX7T4
+         Nommvqs9rqj5scykwdp9gRaMzU6M2PtDb26P0d+QvAiG5PpwJFeeXsL4UA0uTdw5ULjk
+         7ZvWYvvQqoT6+y62wL7GS/nM3YpOqK52lMl5nr+r+Kmi5/5RBQQAbZbmd5MJv/Xl46tY
+         g78Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=6r6atmtOyqYNX1oT7hMWpG0XFA+N4NNf/Oecr1qRj1c=;
+        b=IwwHuOwyBidpf7QNDuxdVNM8cam2JgmYmO+Pnnk1+ohXs91eCsslF3RH3sJ9G0fp21
+         PIPEyoLlLshWPVC9fWOFcH4CPI/5kb0m+bLKSErAohNBn9vGgAApEHpq9J95LRKIjnKF
+         2+NXUuQ5VW4qwaK3JvFmEga5qLMNHp41H+O1D3Nx3GJ2vyZNUvs6e66l2O8NR1vzgP+m
+         H4923+6Jb4c6DWHX+IhVYdtf3zIZioCfV+CoS3ted1DK2+nABVUPnLWhcA0gO+b/DL0x
+         IpWwIU8YlCEDzQ84p9ZCAfoZ2bKUuN10ItJc/nsrnBaQQ31rinKuWPliRPePIspv8mg8
+         TV3Q==
+X-Gm-Message-State: ACrzQf1AI/WHJYauzvFRKYP6iNhvtrYPX5u8YP7fcEPtRvf1b0b6rrCX
+        //nmligIETnox3GFYexCoVx5+BGrfrEDVRf2kaMKGB7tr38M7A==
+X-Google-Smtp-Source: AMsMyM79mmqcAXkSmbBS27kTk1Ir7h4tThYrB+j22RBSw4oiK0XIfs0Pi/laoDJBVNkYjpsyj8EcGfbPJdtUVId68n8=
+X-Received: by 2002:a5b:842:0:b0:6a3:cf26:755d with SMTP id
+ v2-20020a5b0842000000b006a3cf26755dmr5502720ybq.608.1664494442696; Thu, 29
+ Sep 2022 16:34:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220826091121.389315-1-mrodin@de.adit-jv.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220920014036.2295853-1-daeho43@gmail.com> <f4ce9486-f104-b0e2-25ed-f6de96316b76@kernel.org>
+ <CACOAw_z=9H6jEQNd8C99c6xO55PJXWJOW7Q=78qtppgysebN2A@mail.gmail.com> <4aca0d00-d3b7-975f-6b72-ccd6f07d22e5@kernel.org>
+In-Reply-To: <4aca0d00-d3b7-975f-6b72-ccd6f07d22e5@kernel.org>
+From:   Daeho Jeong <daeho43@gmail.com>
+Date:   Thu, 29 Sep 2022 16:33:50 -0700
+Message-ID: <CACOAw_wVU1gmH1gyWHYNqCpgy4KGKB+EZK6pbGL-h_1ToDV=vg@mail.gmail.com>
+Subject: Re: [f2fs-dev] [PATCH v2] f2fs: introduce F2FS_IOC_START_ATOMIC_REPLACE
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
+        Daeho Jeong <daehojeong@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Michael,
+On Thu, Sep 29, 2022 at 3:54 PM Chao Yu <chao@kernel.org> wrote:
+>
+> On 2022/9/30 0:13, Daeho Jeong wrote:
+> > On Thu, Sep 29, 2022 at 12:36 AM Chao Yu <chao@kernel.org> wrote:
+> >>
+> >> On 2022/9/20 9:40, Daeho Jeong wrote:
+> >>> From: Daeho Jeong <daehojeong@google.com>
+> >>>
+> >>> introduce a new ioctl to replace the whole content of a file atomically,
+> >>> which means it induces truncate and content update at the same time.
+> >>> We can start it with F2FS_IOC_START_ATOMIC_REPLACE and complete it with
+> >>> F2FS_IOC_COMMIT_ATOMIC_WRITE. Or abort it with
+> >>> F2FS_IOC_ABORT_ATOMIC_WRITE.
+> >>>
+> >>> Signed-off-by: Daeho Jeong <daehojeong@google.com>
+> >>> ---
+> >>> v2: add undefined ioctl number reported by <lkp@intel.com>
+> >>> ---
+> >>>    fs/f2fs/data.c            |  3 +++
+> >>>    fs/f2fs/f2fs.h            |  1 +
+> >>>    fs/f2fs/file.c            | 12 ++++++++++--
+> >>>    fs/f2fs/segment.c         | 14 +++++++++++++-
+> >>>    include/uapi/linux/f2fs.h |  1 +
+> >>>    5 files changed, 28 insertions(+), 3 deletions(-)
+> >>>
+> >>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> >>> index 6cd29a575105..d3d32db3a25d 100644
+> >>> --- a/fs/f2fs/data.c
+> >>> +++ b/fs/f2fs/data.c
+> >>> @@ -3438,6 +3438,9 @@ static int prepare_atomic_write_begin(struct f2fs_sb_info *sbi,
+> >>>        else if (*blk_addr != NULL_ADDR)
+> >>>                return 0;
+> >>>
+> >>> +     if (is_inode_flag_set(inode, FI_ATOMIC_REPLACE))
+> >>> +             goto reserve_block;
+> >>> +
+> >>>        /* Look for the block in the original inode */
+> >>>        err = __find_data_block(inode, index, &ori_blk_addr);
+> >>>        if (err)
+> >>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> >>> index 539da7f12cfc..2c49da12d6d8 100644
+> >>> --- a/fs/f2fs/f2fs.h
+> >>> +++ b/fs/f2fs/f2fs.h
+> >>> @@ -764,6 +764,7 @@ enum {
+> >>>        FI_COMPRESS_RELEASED,   /* compressed blocks were released */
+> >>>        FI_ALIGNED_WRITE,       /* enable aligned write */
+> >>>        FI_COW_FILE,            /* indicate COW file */
+> >>> +     FI_ATOMIC_REPLACE,      /* indicate atomic replace */
+> >>>        FI_MAX,                 /* max flag, never be used */
+> >>>    };
+> >>>
+> >>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> >>> index 4f9b80c41b1e..4abd9d2a55b3 100644
+> >>> --- a/fs/f2fs/file.c
+> >>> +++ b/fs/f2fs/file.c
+> >>> @@ -1982,7 +1982,7 @@ static int f2fs_ioc_getversion(struct file *filp, unsigned long arg)
+> >>>        return put_user(inode->i_generation, (int __user *)arg);
+> >>>    }
+> >>>
+> >>> -static int f2fs_ioc_start_atomic_write(struct file *filp)
+> >>> +static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
+> >>>    {
+> >>>        struct inode *inode = file_inode(filp);
+> >>>        struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
+> >>> @@ -2051,6 +2051,12 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
+> >>>
+> >>>        isize = i_size_read(inode);
+> >>>        fi->original_i_size = isize;
+> >>> +     if (truncate) {
+> >>> +             set_inode_flag(inode, FI_ATOMIC_REPLACE);
+> >>> +             truncate_inode_pages_final(inode->i_mapping);
+> >>> +             f2fs_i_size_write(inode, 0);
+> >>> +             isize = 0;
+> >>> +     }
+> >>
+> >> Hi Daeho,
+> >>
+> >> isize should be updated after tagging inode as atomic_write one?
+> >> otherwise f2fs_mark_inode_dirty_sync() may update isize to inode page,
+> >> latter checkpoint may persist that change? IIUC...
+> >>
+> >> Thanks,
+> >
+> > Hi Chao,
+> >
+> > The first patch of this patchset prevents the inode page from being
+> > updated as dirty for atomic file cases.
+> > Is there any other chances for the inode page to be marked as dirty?
+>
+> I mean:
+>
+> Thread A                                Thread B
+> - f2fs_ioc_start_atomic_write
+>   - f2fs_i_size_write(inode, 0)
+>    - f2fs_mark_inode_dirty_sync
+>                                         - checkpoint
+>                                          - persist inode with incorrect zero isize
+>
+>   - set_inode_flag(inode, FI_ATOMIC_FILE)
+>
+> Am I missing something?
+>
 
-Thank you for the patch. Sorry for the late reply, I wasn't on the CC
-list so I didn't notice it.
+So, f2fs_mark_inode_dirty_sync() will not work for atomic files
+anymore, which means it doesn't make the inode dirty.
+Plz, refer to the first patch of this patchset. Or I might be confused
+with something. :(
 
-On Fri, Aug 26, 2022 at 11:11:21AM +0200, Michael Rodin wrote:
-> "detect" should not be called and its return value shall not be used when a
-> connector is forced as hinted in the commit d50ba256b5f1 ("drm/kms: start
-> adding command line interface using fb.") and the commit 6fe14acd496e
-> ("drm: Document drm_connector_funcs"). One negative side effect of doing
-> this is observed on the RCar3 SoCs which use the dw-hdmi driver. It
-> continues executing drm_helper_hpd_irq_event even if its connector is
-> forced to ON. As consequence drm_helper_hpd_irq_event calls "detect" so the
-> connector status is updated to "disconnected":
-> 
-> [  420.201527] [drm:drm_helper_hpd_irq_event] [CONNECTOR:76:HDMI-A-1] status updated from connected to disconnected
-> 
-> This status is corrected by drm_helper_probe_single_connector_modes shortly
-> after this because this function checks if a connector is forced:
-> 
-> [  420.218703] [drm:drm_helper_probe_single_connector_modes] [CONNECTOR:76:HDMI-A-1] status updated from disconnected to connected
-> 
-> To avoid similar issues this commit adapts functions which call "detect"
-> so they check if a connector is forced and return the correct status.
-> 
-> Fixes: 949f08862d66 ("drm: Make the connector .detect() callback optional")
+@@ -30,6 +30,9 @@ void f2fs_mark_inode_dirty_sync(struct inode *inode,
+bool sync)
+        if (f2fs_inode_dirtied(inode, sync))
+                return;
 
-Is this really the right fixes tag ? The call to .detect() in
-drm_helper_hpd_irq_event() predates that commit.
++       if (f2fs_is_atomic_file(inode))
++               return;
++
+        mark_inode_dirty_sync(inode);
+ }
 
-> Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
-> ---
->  drivers/gpu/drm/drm_probe_helper.c | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
-> index bb427c5a4f1f..1691047d0472 100644
-> --- a/drivers/gpu/drm/drm_probe_helper.c
-> +++ b/drivers/gpu/drm/drm_probe_helper.c
-> @@ -289,7 +289,12 @@ drm_helper_probe_detect_ctx(struct drm_connector *connector, bool force)
->  retry:
->  	ret = drm_modeset_lock(&connector->dev->mode_config.connection_mutex, &ctx);
->  	if (!ret) {
-> -		if (funcs->detect_ctx)
-> +		if (connector->force == DRM_FORCE_ON ||
-> +		    connector->force == DRM_FORCE_ON_DIGITAL)
-> +			ret = connector_status_connected;
-> +		else if (connector->force == DRM_FORCE_OFF)
-> +			ret = connector_status_disconnected;
-> +		else if (funcs->detect_ctx)
->  			ret = funcs->detect_ctx(connector, &ctx, force);
->  		else if (connector->funcs->detect)
->  			ret = connector->funcs->detect(connector, force);
-> @@ -340,7 +345,14 @@ drm_helper_probe_detect(struct drm_connector *connector,
->  	if (ret)
->  		return ret;
->  
-> -	if (funcs->detect_ctx)
-> +	if (connector->force == DRM_FORCE_ON ||
-> +	    connector->force == DRM_FORCE_ON_DIGITAL)
-> +		ret = connector_status_connected;
-> +	else if (connector->force == DRM_FORCE_OFF)
-> +		ret = connector_status_disconnected;
-> +	else if (funcs->detect_ctx)
-> +		ret = funcs->detect_ctx(connector, ctx, force);
-> +	else if (funcs->detect_ctx)
->  		ret = funcs->detect_ctx(connector, ctx, force);
 
-Those two conditions are identical.
 
->  	else if (connector->funcs->detect)
->  		ret = connector->funcs->detect(connector, force);
 
-The same logic is used in two places in this patch. Could this be
-factored out to a separate function ? It may even be possible to
-refactor drm_helper_probe_detect() and drm_helper_probe_detect_ctx() to
-share more code between the two functions.
 
-This being said, I'm not sure this is the right fix. Beside the i915 and
-nouveau drivers, the only callers of drm_helper_probe_detect() are
-drm_helper_probe_single_connector_modes(), output_poll_execute() and
-check_connector_changed() in this file. The first two functions already
-check connector->force and skip the call to drm_helper_probe_detect() if
-the connector is forced. Only check_connector_changed() is missing that
-check. Wouldn't it be simpler to return false in that function if
-connector->force is set ?
-
-Another question is whether it is valid for the dw-hdmi driver to call
-drm_helper_hpd_irq_event() when the connector status is forced.
-Shouldn't HPD events be ignored in that case ?
-
-The detection code has grown quite complex over time, I would really
-appreciate input from Maxime and Maarten on this.
-
--- 
-Regards,
-
-Laurent Pinchart
+> Thanks,
+>
+> >
+> > Thanks,
+> >
+> >>
+> >>>        f2fs_i_size_write(fi->cow_inode, isize);
+> >>>
+> >>>        spin_lock(&sbi->inode_lock[ATOMIC_FILE]);
+> >>> @@ -4080,7 +4086,9 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+> >>>        case FS_IOC_GETVERSION:
+> >>>                return f2fs_ioc_getversion(filp, arg);
+> >>>        case F2FS_IOC_START_ATOMIC_WRITE:
+> >>> -             return f2fs_ioc_start_atomic_write(filp);
+> >>> +             return f2fs_ioc_start_atomic_write(filp, false);
+> >>> +     case F2FS_IOC_START_ATOMIC_REPLACE:
+> >>> +             return f2fs_ioc_start_atomic_write(filp, true);
+> >>>        case F2FS_IOC_COMMIT_ATOMIC_WRITE:
+> >>>                return f2fs_ioc_commit_atomic_write(filp);
+> >>>        case F2FS_IOC_ABORT_ATOMIC_WRITE:
+> >>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> >>> index 143b7ea0fb8e..c524538a9013 100644
+> >>> --- a/fs/f2fs/segment.c
+> >>> +++ b/fs/f2fs/segment.c
+> >>> @@ -263,14 +263,26 @@ static void __complete_revoke_list(struct inode *inode, struct list_head *head,
+> >>>                                        bool revoke)
+> >>>    {
+> >>>        struct revoke_entry *cur, *tmp;
+> >>> +     pgoff_t start_index = 0;
+> >>> +     bool truncate = is_inode_flag_set(inode, FI_ATOMIC_REPLACE);
+> >>>
+> >>>        list_for_each_entry_safe(cur, tmp, head, list) {
+> >>> -             if (revoke)
+> >>> +             if (revoke) {
+> >>>                        __replace_atomic_write_block(inode, cur->index,
+> >>>                                                cur->old_addr, NULL, true);
+> >>> +             } else if (truncate) {
+> >>> +                     f2fs_truncate_hole(inode, start_index, cur->index);
+> >>> +                     start_index = cur->index + 1;
+> >>> +             }
+> >>> +
+> >>>                list_del(&cur->list);
+> >>>                kmem_cache_free(revoke_entry_slab, cur);
+> >>>        }
+> >>> +
+> >>> +     if (!revoke && truncate) {
+> >>> +             f2fs_do_truncate_blocks(inode, start_index * PAGE_SIZE, false);
+> >>> +             clear_inode_flag(inode, FI_ATOMIC_REPLACE);
+> >>> +     }
+> >>>    }
+> >>>
+> >>>    static int __f2fs_commit_atomic_write(struct inode *inode)
+> >>> diff --git a/include/uapi/linux/f2fs.h b/include/uapi/linux/f2fs.h
+> >>> index 3121d127d5aa..955d440be104 100644
+> >>> --- a/include/uapi/linux/f2fs.h
+> >>> +++ b/include/uapi/linux/f2fs.h
+> >>> @@ -42,6 +42,7 @@
+> >>>                                                struct f2fs_comp_option)
+> >>>    #define F2FS_IOC_DECOMPRESS_FILE    _IO(F2FS_IOCTL_MAGIC, 23)
+> >>>    #define F2FS_IOC_COMPRESS_FILE              _IO(F2FS_IOCTL_MAGIC, 24)
+> >>> +#define F2FS_IOC_START_ATOMIC_REPLACE        _IO(F2FS_IOCTL_MAGIC, 25)
+> >>>
+> >>>    /*
+> >>>     * should be same as XFS_IOC_GOINGDOWN.
