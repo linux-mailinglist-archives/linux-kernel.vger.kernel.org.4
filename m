@@ -2,79 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149C45EF76E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324015EF77A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234926AbiI2OY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
+        id S235348AbiI2O0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231620AbiI2OYx (ORCPT
+        with ESMTP id S235661AbiI2OZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:24:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C2A1A071;
-        Thu, 29 Sep 2022 07:24:52 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 16:24:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664461491;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xsnz1CPyHg7fip2P3ukxoL3NjBLtoXu7CInHbewXJRY=;
-        b=KynjMfTsthMMkazZIoXqMMlyUpykKSLtTKB61F+QM3Y2du1qSNAMgbl+AKQPbG2Jl8Fxt0
-        2RD7NfYg/pXqJ0Gyn05o8XfmO7d44J4eHD5or1AYSpAKgcQo9EilB1NNm8DgeNteIn8i6c
-        cw9YWElVvMS5BRxIw5jIG/UKb3KfhrV8lwFnFAs0DUaXmoUbHqKmG4/t/TqLZObV2bZelw
-        74OOogbQ4g6o7JI3+BTXuMhi3iU5V7QTb6fTJncTfgzektRIUrUn3pmxxdjMXew8YTd9t7
-        Ld1GZCBGm+bXNS12W3KbZ6AiGrlUh7aVHJ9HrI4jpF7qFjMcaqXeqljn9hCu+Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664461491;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xsnz1CPyHg7fip2P3ukxoL3NjBLtoXu7CInHbewXJRY=;
-        b=7f4uxMMSNzHHZMB6f8cbpHG4Wcok74vNJG+t896bZPakpyjo60hNoEezrPRRYkBv9KKbFg
-        r3hvTJ1v4oVp6DDQ==
-From:   "bigeasy@linutronix.de" <bigeasy@linutronix.de>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "dinggao.pan" <dinggao.pan@horizon.ai>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "ming.yu" <ming.yu@horizon.ai>,
-        "yunqian.wang" <yunqian.wang@horizon.ai>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rt-users@vger.kernel.org" <linux-rt-users@vger.kernel.org>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-Subject: Re: [PATCH RFC stable 4.14 1/1] mmc: core: fix hung task caused by
- race condition on context_info
-Message-ID: <YzWqsm9sRv0f6fTy@linutronix.de>
-References: <21f604139a9a4675b9ed49292839dcfb@horizon.ai>
- <dd8d212c48944cb4ba3b58af2efe3723@horizon.ai>
- <CAPDyKFo_izPD7z-GmSEZ_8H_AX+KiVuLqN7JcD2Kdjjuukk-7g@mail.gmail.com>
- <20220929100750.172e53d4@gandalf.local.home>
- <20220929101349.25c835db@gandalf.local.home>
+        Thu, 29 Sep 2022 10:25:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6F2B07CA;
+        Thu, 29 Sep 2022 07:25:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1A9E613B3;
+        Thu, 29 Sep 2022 14:25:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A10FC433C1;
+        Thu, 29 Sep 2022 14:25:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664461538;
+        bh=dbabHMGfEfLEGS3hjsP2RvaXwXtnmcqRdOWhJhnHSRI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TyomQpdILBEerbw0vhH5xbo1BouQ0M6mV9uzRxefVwGwM7DpyEaql6PvfaABIfucv
+         YbsbbfNQHNK9Kl4aRQ3t7Wd1pr0tXvz7OxlqumKV8AuqSG46XCc+CPYlavIRw4tUDC
+         IsDjjA0M0GK+4xdnNd1Tk2TJRx2u1EZVENDrpbgWj3lbSJdDrIsuXtQiCeNmgIrPwU
+         aIrZQ2ZUSDGw8TSrwITGqFjSh6UTURBa6/RxRWDhWAt8gl6YuM73i4ybJOT5RU4nxe
+         DJnyzWO76CRh13Orojanbu4XXm69YYB6Wo2ieArDL8jeaW9pzkiICbZEv6gLwWamcK
+         DHGzRKhxJPwNA==
+Date:   Thu, 29 Sep 2022 17:25:33 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Christian Langrock <christian.langrock@secunet.com>
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH ipsec v4] xfrm: replay: Fix ESN wrap around for GSO
+Message-ID: <YzWq3aENyZe4RksO@unreal>
+References: <778339a5-e069-0755-8287-75e39d8050e0@secunet.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929101349.25c835db@gandalf.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <778339a5-e069-0755-8287-75e39d8050e0@secunet.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-29 10:13:49 [-0400], Steven Rostedt wrote:
-> It appears that I have an old email address for Luis, and it bounced.
-> Updated with his redhat one.
+On Thu, Sep 29, 2022 at 01:52:07PM +0200, Christian Langrock wrote:
+> When using GSO it can happen that the wrong seq_hi is used for the last
+> packets before the wrap around. This can lead to double usage of a
+> sequence number. To avoid this, we should serialize this last GSO
+> packet.
+> 
+> Fixes: d7dbefc45cf5 ("xfrm: Add xfrm_replay_overflow functions for...")
 
-It would be to know if this affects mainline. If not, does it affect
-4.14 or just 4.14-RT. If it is not limited to RT then it should be sent
--stable once we know how it is fixed mainline.
+Sorry that I missed it in previous reviews, but please never truncate
+fixes line.
 
-> -- Steve
-
-Sebastian
+> Signed-off-by: Christian Langrock <christian.langrock@secunet.com>
+> Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+> ---
+> Changes in v4:
+>  - move changelog within comment
+>  - add reviewer
+> 
+> Changes in v3:
+> - fix build
+> - remove wrapper function
+> 
+> Changes in v2:
+> - switch to bool as return value
+> - remove switch case in wrapper function
+> ---
+>  include/net/xfrm.h     |  1 +
+>  net/xfrm/xfrm_output.c |  2 +-
+>  net/xfrm/xfrm_replay.c | 26 ++++++++++++++++++++++++++
+>  3 files changed, 28 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/net/xfrm.h b/include/net/xfrm.h
+> index 6e8fa98f786f..b845f911767c 100644
+> --- a/include/net/xfrm.h
+> +++ b/include/net/xfrm.h
+> @@ -1749,6 +1749,7 @@ void xfrm_replay_advance(struct xfrm_state *x, __be32 net_seq);
+>  int xfrm_replay_check(struct xfrm_state *x, struct sk_buff *skb, __be32 net_seq);
+>  void xfrm_replay_notify(struct xfrm_state *x, int event);
+>  int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb);
+> +bool xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb);
+>  int xfrm_replay_recheck(struct xfrm_state *x, struct sk_buff *skb, __be32 net_seq);
+>  
+>  static inline int xfrm_aevent_is_on(struct net *net)
+> diff --git a/net/xfrm/xfrm_output.c b/net/xfrm/xfrm_output.c
+> index 9a5e79a38c67..c470a68d9c88 100644
+> --- a/net/xfrm/xfrm_output.c
+> +++ b/net/xfrm/xfrm_output.c
+> @@ -738,7 +738,7 @@ int xfrm_output(struct sock *sk, struct sk_buff *skb)
+>  		skb->encapsulation = 1;
+>  
+>  		if (skb_is_gso(skb)) {
+> -			if (skb->inner_protocol)
+> +			if (skb->inner_protocol || xfrm_replay_overflow_check(x, skb))
+>  				return xfrm_output_gso(net, sk, skb);
+>  
+>  			skb_shinfo(skb)->gso_type |= SKB_GSO_ESP;
+> diff --git a/net/xfrm/xfrm_replay.c b/net/xfrm/xfrm_replay.c
+> index 9277d81b344c..23858eb5eab4 100644
+> --- a/net/xfrm/xfrm_replay.c
+> +++ b/net/xfrm/xfrm_replay.c
+> @@ -750,6 +750,27 @@ int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb)
+>  
+>  	return xfrm_replay_overflow_offload(x, skb);
+>  }
+> +
+> +static bool xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb)
+> +{
+> +	struct xfrm_replay_state_esn *replay_esn = x->replay_esn;
+> +	__u32 oseq = replay_esn->oseq;
+> +
+> +	/* We assume that this function is called with
+> +	 * skb_is_gso(skb) == true
+> +	 */
+> +
+> +	if (x->repl_mode == XFRM_REPLAY_MODE_ESN) {
+> +		if (x->type->flags & XFRM_TYPE_REPLAY_PROT) {
+> +			oseq = oseq + 1 + skb_shinfo(skb)->gso_segs;
+> +			if (unlikely(oseq < replay_esn->oseq))
+> +				return true;
+> +		}
+> +	}
+> +
+> +	return false;
+> +}
+> +
+>  #else
+>  int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb)
+>  {
+> @@ -764,6 +785,11 @@ int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb)
+>  
+>  	return __xfrm_replay_overflow(x, skb);
+>  }
+> +
+> +bool xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb)
+> +{
+> +	return false;
+> +}
+>  #endif
+>  
+>  int xfrm_init_replay(struct xfrm_state *x)
+> -- 
+> 2.37.1.223.g6a475b71f8
+> 
+> 
