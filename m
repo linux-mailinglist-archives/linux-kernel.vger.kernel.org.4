@@ -2,116 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA095EEE77
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4C25EEEB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234976AbiI2HHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
+        id S235122AbiI2HRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbiI2HHf (ORCPT
+        with ESMTP id S235095AbiI2HRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:07:35 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196E611A0D;
-        Thu, 29 Sep 2022 00:07:34 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MdPTH0W25z1P6vt;
-        Thu, 29 Sep 2022 15:03:15 +0800 (CST)
-Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
- (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 29 Sep
- 2022 15:07:32 +0800
-From:   Weilong Chen <chenweilong@huawei.com>
-To:     <wsa@kernel.org>, <chenweilong@huawei.com>,
-        <yangyicong@hisilicon.com>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH next v4] i2c: hisi: Add support to get clock frequency from clock property
-Date:   Thu, 29 Sep 2022 15:15:47 +0800
-Message-ID: <20220929071547.135913-1-chenweilong@huawei.com>
-X-Mailer: git-send-email 2.31.GIT
+        Thu, 29 Sep 2022 03:17:15 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F541166C3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:17:13 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id i26so896148lfp.11
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:17:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=VV14SN0wq48/xruHCsu1VKPTfNLR6vqna8T/ci26yZ4=;
+        b=InfhY58eTl/Cv7rMpEYc1moFqD3wqvorMh+S24CCzRrdabIne33Oj1aH2ZEThb16yS
+         HPO+0v57kGlh/QCU01lOPa+W0lh1ACQ0x23VeTOcjCDV1T9sy8LXwKat6uyhTH+zDNVI
+         ZloslMv9UEocJOgIP6HFtBskJkRvZRaQ3/M5RVreuHjQDYm+3C2uy2oadVlkbDCAX6s2
+         sQYkWlmkFlepWunQejGBbrYRdBkevTefWSg3QaN6k3wxQo1PFrxaQfFh7NhH+RW5eqkW
+         xmSI/IlLcW/omwTyvdIxYj+gKLUDgAjIqk7avSTNyp5eBYhp4c4Gkl1yqc0eFwaw884w
+         +zmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=VV14SN0wq48/xruHCsu1VKPTfNLR6vqna8T/ci26yZ4=;
+        b=H8VF16mbV041jSuOR7Vh5s696u+tQtr3zwldRrUEv/qGinEouD3Ng3nrNUPXQM5LYT
+         dskUlzWf4JwPARXayIsUi9DaU7l6ia9KYEtQeAF69rD/ZS5MPj8wXrKljlNAfOzFX1L4
+         41NdSudb53bMbSYmeaaCLOTunu2LHh+ksgBhRDwye1B3Ub5qI5AJYZusdHLV7YzIIEOB
+         JjdIOwor0iB7kt4orLIM7Hv/FZr5HJVzEJtL/Bwg6PJJjLfcHrZO7q+ZxaLZGjJAmNwX
+         bZf21/cEpYtIWEVvcbANAhMr6DckL0uuAhKXH2fYszRvkWZYIb5/UM1/THFYFm12w8zR
+         ER2A==
+X-Gm-Message-State: ACrzQf3Hm1XR6L1QOoLeZGTpmJ988WRuzpoASofwKP055IhDxXs96tT8
+        BT5gw5Xgl65izdk9AbfV4cwTkoo1qHELww==
+X-Google-Smtp-Source: AMsMyM4Ve26xtYplTF/bm8INXv398LABxanI2DUP5ewhXXX6KeYoVcNAI8xF4H5umOsN0/OliXb4Ww==
+X-Received: by 2002:ac2:4f03:0:b0:496:d15:e70c with SMTP id k3-20020ac24f03000000b004960d15e70cmr717138lfr.102.1664435831518;
+        Thu, 29 Sep 2022 00:17:11 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id 9-20020ac25f09000000b004977e865220sm701306lfq.55.2022.09.29.00.17.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 00:17:11 -0700 (PDT)
+Message-ID: <288e0496-7411-138f-4494-20a38d1195c1@linaro.org>
+Date:   Thu, 29 Sep 2022 09:17:10 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 1/4] dt-bindings: net: snps,dwmac: Update
+ interrupt-names
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        devicetree@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, netdev@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        David Miller <davem@davemloft.net>
+References: <20220929060405.2445745-1-bhupesh.sharma@linaro.org>
+ <20220929060405.2445745-2-bhupesh.sharma@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220929060405.2445745-2-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clk_rate attribute is not generic device tree bindings for I2C
-busses described in Documentation/devicetree/bindings/i2c/i2c.txt.
-It can be managed by clock binding.
+On 29/09/2022 08:04, Bhupesh Sharma wrote:
+> As commit fc191af1bb0d ("net: stmmac: platform: Fix misleading
+> interrupt error msg") noted, not every stmmac based platform
+> makes use of the 'eth_wake_irq' or 'eth_lpi' interrupts.
+> 
+> So, update the 'interrupt-names' inside 'snps,dwmac' YAML
 
-Support the driver to obtain clock information by clk_rate or
-clock property. Find clock first, if not, fall back to clk_rate.
 
-Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-Acked-by: Yicong Yang <yangyicong@hisilicon.com>
----
-Change since v1:
-- Ordered struct field to inverted triangle.
-- Use devm_clk_get_optional_enabled().
-- Use IS_ERR_OR_NULL.
-Link: https://lore.kernel.org/lkml/20220921101540.352553-1-chenweilong@huawei.com/
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Change since v2:
-- Remove redundant blank line
-Link: https://lore.kernel.org/all/20220923011417.78994-1-chenweilong@huawei.com/
-
-Change since v3:
-- Commit message update
-Link: https://lore.kernel.org/lkml/20220926091503.199474-1-chenweilong@huawei.com/T/
-
- drivers/i2c/busses/i2c-hisi.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
-index 67031024217c..e4b0ebe54f6f 100644
---- a/drivers/i2c/busses/i2c-hisi.c
-+++ b/drivers/i2c/busses/i2c-hisi.c
-@@ -8,6 +8,7 @@
- #include <linux/acpi.h>
- #include <linux/bits.h>
- #include <linux/bitfield.h>
-+#include <linux/clk.h>
- #include <linux/completion.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
-@@ -90,6 +91,7 @@ struct hisi_i2c_controller {
- 	struct i2c_adapter adapter;
- 	void __iomem *iobase;
- 	struct device *dev;
-+	struct clk *clk;
- 	int irq;
- 
- 	/* Intermediates for recording the transfer process */
-@@ -456,10 +458,15 @@ static int hisi_i2c_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
--	if (ret) {
--		dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
--		return ret;
-+	ctlr->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
-+	if (IS_ERR_OR_NULL(ctlr->clk)) {
-+		ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
-+		if (ret) {
-+			dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
-+			return ret;
-+		}
-+	} else {
-+		clk_rate_hz = clk_get_rate(ctlr->clk);
- 	}
- 
- 	ctlr->clk_rate_khz = DIV_ROUND_UP_ULL(clk_rate_hz, HZ_PER_KHZ);
--- 
-2.31.GIT
+Best regards,
+Krzysztof
 
