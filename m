@@ -2,113 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C715EF9F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BBF5EF9FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236091AbiI2QON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48686 "EHLO
+        id S236080AbiI2QOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236068AbiI2QOI (ORCPT
+        with ESMTP id S236102AbiI2QOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:14:08 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCF11D929A;
-        Thu, 29 Sep 2022 09:14:03 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id b5so1858178pgb.6;
-        Thu, 29 Sep 2022 09:14:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=vOkUW7MJ8/7Rwwrghxwplno9BIDga3iCPCaKB4/B+FU=;
-        b=VfUwk4stmlVUWGySZzO/lxmvw7oWW7BwskBGCDqha4lJ1BpYt4mELcvRb6FuSpyrP/
-         3sqtAxrMrlCI3tuS5xoNLSTBH57R3WWvIJE7XwLuwHFEU8/FGJQ8HURGTQtcXSwuwcMP
-         Pv6vN4qq8J8BDJJeVZZoTf54zmD4vxzk9hXrrTxWPgLo73aZ3R2GPXC91wn483uHicaC
-         qZE4+FyoLA/w6fASZIiG9E+uIl8p6EAJ8+8i8KrzP5CmVwXsVOe+A0PvhyjTQ2ztmN/W
-         kwnBxxdh0XXjEqi/XR55CY3BSO34eA0FXPfgrg5Ugc4MEkYqvZtYtVnDObBbCfUibToo
-         4GnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=vOkUW7MJ8/7Rwwrghxwplno9BIDga3iCPCaKB4/B+FU=;
-        b=W8xiavNKIs9Pi5M9LnBXVjbvunf7X6xhnFX+0XvYxTgRejZFwBI0GvP5Uvgf/4dBiy
-         08TKcm3wB+P6z7kRwwwwqq/uQhX9ku6A5toUH4ncMQjKZ/YBvNw9Z0C4DIgRPkFje8pQ
-         JNON/yuUEFAbW8q+8vq+KbINkm6UpzA9HjjxiWp0AJpo5MeV9UAiV/kM1N7H4U4VG1UT
-         uob1o7t/Ib9z2emY3CjtCl5LKj5hBfzxP+vfBgNU97ix0dbnDW+shNsN9CMFQ/FesteI
-         w/qIOvFPcTU+/feMGaxiBbu63xKmgLOiusIGywq3Rmrs26GolNcARQdYqvkKZ1tPCtcx
-         BlvA==
-X-Gm-Message-State: ACrzQf2GNILGS7hrTwtsQkc8EjHH+gh648mzcjUi5jtpOfMx6//tZpJc
-        zXJoBnt+RE6CJPo2G9bqR5I=
-X-Google-Smtp-Source: AMsMyM5amldVaXPN9Z05f++c7BLsLXiBctbKghsSeOA9pPHmgribXjiC6YCiy3jT6WLTJpm3YlFvNA==
-X-Received: by 2002:a63:8942:0:b0:43b:e87e:3fc0 with SMTP id v63-20020a638942000000b0043be87e3fc0mr3577693pgd.531.1664468042016;
-        Thu, 29 Sep 2022 09:14:02 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id l6-20020a6542c6000000b004277f43b736sm29618pgp.92.2022.09.29.09.14.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 09:14:01 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Dave Airlie <airlied@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm: Fix build break with recent mm tree
-Date:   Thu, 29 Sep 2022 09:14:04 -0700
-Message-Id: <20220929161404.2769414-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Thu, 29 Sep 2022 12:14:19 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5231DADE0;
+        Thu, 29 Sep 2022 09:14:13 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 462101884BA5;
+        Thu, 29 Sep 2022 16:14:11 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 3F4F32500370;
+        Thu, 29 Sep 2022 16:14:11 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 34F409EC0002; Thu, 29 Sep 2022 16:14:11 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Thu, 29 Sep 2022 18:14:11 +0200
+From:   netdev@kapio-technology.com
+To:     Stephen Hemminger <stephen@networkplumber.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kselftest@vger.kernel.org,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>,
+        bridge@lists.linux-foundation.org,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Jiri Pirko <jiri@resnulli.us>, Amit Cohen <amcohen@nvidia.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>
+Subject: Re: [Bridge] [PATCH iproute2-next 2/2] bridge: fdb: enable FDB
+ blackhole feature
+In-Reply-To: <20220929084312.2a216698@hermes.local>
+References: <20220929152137.167626-1-netdev@kapio-technology.com>
+ <20220929152137.167626-2-netdev@kapio-technology.com>
+ <20220929084312.2a216698@hermes.local>
+User-Agent: Gigahost Webmail
+Message-ID: <6de8a39832ebb15fc5e8c2f19e469514@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On 2022-09-29 17:43, Stephen Hemminger wrote:
+> On Thu, 29 Sep 2022 17:21:37 +0200
+> Hans Schultz <netdev@kapio-technology.com> wrote:
+> 
+>> 
+>> @@ -493,6 +496,8 @@ static int fdb_modify(int cmd, int flags, int 
+>> argc, char **argv)
+>>  			req.ndm.ndm_flags |= NTF_EXT_LEARNED;
+>>  		} else if (matches(*argv, "sticky") == 0) {
+>>  			req.ndm.ndm_flags |= NTF_STICKY;
+>> +		} else if (matches(*argv, "blackhole") == 0) {
+>> +			ext_flags |= NTF_EXT_BLACKHOLE;
+>>  		} else {
+>>  			if (strcmp(*argv, "to") == 0)
+>>  				NEXT_ARG();
+> 
+> The parsing of flags is weird here, most of the flags are compared with 
+> strcmp()
+> but some use matches()..  I should have used strcmp() all the time; but 
+> at the
+> time did not realize what kind of confusion matches() can cause.
 
-9178e3dcb121 ("mm: discard __GFP_ATOMIC") removed __GFP_ATOMIC,
-replacing it with a check for not __GFP_DIRECT_RECLAIM.
-
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
-Sorry, this was reported by Stephen earlier in the month, while
-I was on the other side of the globe and jetlagged.  Unfortunately
-I forgot about it by the time I got back home.  Applying this patch
-after 025d27239a2f ("drm/msm/gem: Evict active GEM objects when necessary")
-but before or after 9178e3dcb121 ("mm: discard __GFP_ATOMIC") should
-resolve the build breakage.
-
- drivers/gpu/drm/msm/msm_gem_shrinker.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/msm/msm_gem_shrinker.c b/drivers/gpu/drm/msm/msm_gem_shrinker.c
-index 473ced14e520..8f83454ceedf 100644
---- a/drivers/gpu/drm/msm/msm_gem_shrinker.c
-+++ b/drivers/gpu/drm/msm/msm_gem_shrinker.c
-@@ -27,7 +27,7 @@ static bool can_swap(void)
- 
- static bool can_block(struct shrink_control *sc)
- {
--	if (sc->gfp_mask & __GFP_ATOMIC)
-+	if (!(sc->gfp_mask & __GFP_DIRECT_RECLAIM))
- 		return false;
- 	return current_is_kswapd() || (sc->gfp_mask & __GFP_RECLAIM);
- }
--- 
-2.37.2
-
+Maybe just change all of them then, and then how about using strncmp() 
+and maybe also strnlen() instead?
