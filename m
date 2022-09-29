@@ -2,127 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BB85EF423
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 835F15EF424
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235002AbiI2LTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
+        id S235003AbiI2LTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234798AbiI2LTS (ORCPT
+        with ESMTP id S234798AbiI2LT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:19:18 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B0014AD69;
-        Thu, 29 Sep 2022 04:19:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664450357; x=1695986357;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Whifblvle5Uq5hTKfSa28zbbpyf+/wOvfOuC9En91aQ=;
-  b=dWoYWeOfZPC5ztJOc26+L7kfGRRqAimIeLDvW4Sp12lEpVaxq3WqdH58
-   zZzqAXw8qWgNn7RbfymKngYlu5Kb//wnVxt3a/KfaHp8+C4DJu9G+fU5n
-   fjAEUzrZtzXSltez513T2CU/O5cYfoHHZE8q3J3QZhOjN/mWL4arVJ/xe
-   wJv8VzLMnROOpT07vgdWB3pR/vyS+W4QzoJrfDchnFiWwVvkHGHAPTYZa
-   kB06ESLCUJqkONgkj6q/UuUmpLwyd/3qIGTUutdXDHqZCUo+8S5kVzg+f
-   Qo48gyL7yjEB5CTHwVhE3M7sN20NTLlr98P6B8nMAHWxcRp13ZHUrTkJd
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="363708788"
-X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
-   d="scan'208";a="363708788"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 04:19:17 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="951091159"
-X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
-   d="scan'208";a="951091159"
-Received: from pramona-mobl1.ger.corp.intel.com ([10.252.60.139])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 04:19:10 -0700
-Date:   Thu, 29 Sep 2022 14:19:06 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Sherry Sun <sherry.sun@nxp.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH] Revert "serial: fsl_lpuart: Reset prior to
- registration"
-In-Reply-To: <AS8PR04MB84044F397918A3475B5D8D1D92579@AS8PR04MB8404.eurprd04.prod.outlook.com>
-Message-ID: <39c68295-947-2353-d9b-3bd654c38c7@linux.intel.com>
-References: <20220929085318.5268-1-sherry.sun@nxp.com> <1265873d-28f9-d39c-5cce-858dbed1e8e8@linux.intel.com> <AS8PR04MB84044F397918A3475B5D8D1D92579@AS8PR04MB8404.eurprd04.prod.outlook.com>
+        Thu, 29 Sep 2022 07:19:29 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC6114B841;
+        Thu, 29 Sep 2022 04:19:27 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1odrZc-0002Qp-Ti; Thu, 29 Sep 2022 13:19:24 +0200
+Message-ID: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+Date:   Thu, 29 Sep 2022 13:19:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US, de-DE
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     "Artem S. Tashkinov" <aros@gmx.com>,
+        ksummit <ksummit-discuss@lists.linuxfoundation.org>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664450367;defc13b9;
+X-HE-SMSGID: 1odrZc-0002Qp-Ti
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sep 2022, Sherry Sun wrote:
+Hi!
 
-> > > This reverts commit 60f361722ad2ae5ee667d0b0545d40c42f754daf.
-> > >
-> > > commit 60f361722ad2 ("serial: fsl_lpuart: Reset prior to
-> > > registration") causes the lpuart console cannot work any more. Since
-> > > the console is registered in the uart_add_one_port(), the driver
-> > > cannot identify the console port before call uart_add_one_port(),
-> > > which causes all the uart ports including the console port will be global
-> > reset.
-> > > So need to revert this patch to avoid breaking the lpuart console.
-> > >
-> > > Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> > > ---
-> > >  drivers/tty/serial/fsl_lpuart.c | 10 +++++-----
-> > >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/drivers/tty/serial/fsl_lpuart.c
-> > > b/drivers/tty/serial/fsl_lpuart.c index 67fa113f77d4..7da46557fcb3
-> > > 100644
-> > > --- a/drivers/tty/serial/fsl_lpuart.c
-> > > +++ b/drivers/tty/serial/fsl_lpuart.c
-> > > @@ -2722,10 +2722,6 @@ static int lpuart_probe(struct platform_device
-> > *pdev)
-> > >  		handler = lpuart_int;
-> > >  	}
-> > >
-> > > -	ret = lpuart_global_reset(sport);
-> > > -	if (ret)
-> > > -		goto failed_reset;
-> > > -
-> > 
-> > So the problem with this being so early is uart_console() in
-> > lpuart_global_reset() that doesn't detect a console because sport->cons is
-> > not yet assigned? Couldn't that be worked around differently?
-> > 
-> > Or is there something else in addition to that I'm missing?
-> > 
-> Hi Ilpo,
-> 
-> Yes, the root cause of the console cannot work after apply the commit 
-> 60f361722ad2 ("serial: fsl_lpuart: Reset prior to registration") is 
-> lpuart_global_reset() cannot identify the console port, so reset all 
-> uart ports. 
+TLDR: Core Linux kernel developers are unhappy with the state of
+bugzilla.kernel.org; to improve things I plan to change a few important
+aspects of its configuration, unless somebody comes up with better ideas
+to tackle current problems: (1) Create a catch-all product making it
+totally obvious to submitters that likely nobody will look into the
+ticket. (2) Remove or hide all products & components where the subsystem
+didn't fully commit to look into newly submitted reports. (3) Change the
+text on the front page to make it clear that most kernel bug reports
+need to be sent by mail.
 
-This didn't answer my question. Is the main cause just lacking the ->cons
-from sport at this point which, I guess, could be just assigned from 
-lpuart_reg similar to what uart_add_one_port() does before calling to 
-reset?
+I recently brought the state of bugzilla.kernel.org up for discussion on
+the kernel summit and the kernel maintainers summit in sessions about my
+regression tracking efforts. Long story short and rough: in both
+sessions attendees were quite unhappy about the current state and wanted
+things to change for the better. As I brought that topic up, I guess I
+have to get things rolling now.
 
--- 
- i.
+But before getting into the details, a quick & rough reminder about the
+current state of bugzilla.kernel.org:
 
-> Actually I've been thinking about any other workaround all afternoon, 
- seems no other good options to me till now. And after a further check, I 
- think the original patch is not needed, as uart_add_one_port() won't open 
- the tty device, it should be safe to global reset the non-console ports 
- after uart_add_one_port().
-> 
-> Best Regards
-> Sherry
-> 
+ * The server and the software running on it are well maintained by the
+the infrastructure team (Konstantin et al.); many thx for this!
 
+ * Products, components, default assignees, et al. OTOH are heavily
+outdated, incomplete, or wrong: maintaining this is not the job of the
+infrastructure team and nobody else has stepped up to take care of this
+(for a few more details see:
+https://lore.kernel.org/lkml/20220420163223.kz32qomzj3y4hjj5@nitro.local/).
+
+ * To the best of my knowledge bugzilla.kernel.org was never really
+sanctioned as the official place to report all sorts of kernel bugs:
+only 20 (most of them from the area of ACPI/PM and PCI) out of ~2500
+entries in MAINTAINERS currently tell users to report issues there; most
+other subsystems just mention email contacts, a few (like the DRM
+developers) point reporters to external bugtrackers.
+
+ * Developers of subsystems committed to the bug-tracker afaics usually
+react to reports submitted in bugzilla.kernel.org. A few other
+developers & subsystems keep an eye on reports, too; some do this
+directly, others rely on bugzilla forwarding reports for certain
+products/components by mail to the subsystem's mailing list. Quite some
+or a lot of tickets are not forwarded to any developer or mailing list
+at all.
+
+ * In the end lots of bug and regression reports (even good ones!) never
+get a reply from a developer, as a brief analysis of mine showed
+(https://lore.kernel.org/lkml/6808cd17-b48c-657d-de60-ef9d8bfa151e@leemhuis.info/
+). I at least currently try to work a bit against this by briefly
+looking at each new report and forwarding any by mail that looks like a
+regression worth forwarding (I ignore everything else). Artem S.
+Tashkinov also looks into some (all?) reports and tries to help reporters.
+
+The sessions on kernel summit and the kernel maintainers summit
+discussed the current state only for a few minutes. It's hard to
+summarize these discussions, but let me try to mention the aspects that
+are important for now:
+
+ * In both sessions members of the audience seemed pretty unhappy to me
+about the current state of things.
+
+ * In the kernel summit sessions (recording:
+https://youtu.be/e2SZoUPhDRg?t=5370 ) Len Brown stated that he and
+fellow ACPI/PM developers rely on bugzilla.kernel.org and would need
+some replacement if it's decommissioned.
+
+ * On the maintainers summit (see the last section of
+https://lwn.net/Articles/908324/ for a brief write-up that coined the
+term "Bugzilla blues") someone brought up the upstream development of
+bugzilla the software seems to be dead; there was not even one strong
+advocate for bugzilla.kernel.org and the general vibe tented into the
+direction of "let's get rid of it". But it was also mentioned that
+bugzilla.kernel.org does something useful which will need a replacement:
+a place where reporters can upload big files needed for debugging problems.
+
+In the end that made me settle on this plan of action:
+
+ 1. Finding a replacement for bugzilla will take a while, so for now
+let's try to reduce some of its aspects that are bothering people:
+
+  1a. Create a new product/component that can act as a catch-all bug,
+but makes it pretty clear that nobody might see the report because it's
+not forwarded to anyone. People can use it to upload files for debugging
+and link to them in mailed reports. People unable or unwilling to report
+issues my mail (see 1c) could use it to submit issues, too. The outcome
+then is the same as before, but at least people were told upfront about
+the likely outcome; it also gives users a chance to help each other or
+to coordinate before properly reporting an issue.
+
+  1b. Go through the list of products and components and hide or remove
+*all* where the subsystem didn't fully commit to look into newly
+submitted reports. Minimum requirements to remain listed will be along
+these lines: subsystem mentions bugzilla.kernel.org in MAINTAINERS or a
+developer listed in MAINTAINERS is one of the default assignees in
+bugzilla. Subsystems where bugzilla forwards mails to a mailing list can
+remain listed as well, if the recent history shows the developers look
+into newly filed bugs. I'll use my best judgment in the transition
+process and will file "anyone listening?" bugs if in a doubt.
+
+  1c. Make it obvious on the front-page of bugzilla.kernel.org that most
+kernel developers want bug reports to be submitted by mail; mention the
+subsystems that accept reports there and point to the catch-all bug (see
+1a) as a last straw.
+
+ 2. See if everybody is happy with the new state for the time being; if
+not further fine-tune things or speed up step (3).
+
+ 3. Work out what we want as replacement.
+
+Anyone any comments on this or helpful ideas how to make things even
+better? Otherwise, I'll in a week or two get down and start working on
+realizing the points listed under step (1).
+
+Ciao, Thorsten
