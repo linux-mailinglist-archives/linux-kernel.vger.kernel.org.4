@@ -2,118 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD615EF960
+	by mail.lfdr.de (Postfix) with ESMTP id 16FDC5EF95F
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233495AbiI2PpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
+        id S235838AbiI2Pp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235532AbiI2Poh (ORCPT
+        with ESMTP id S235641AbiI2Poi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:44:37 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4396118B26;
-        Thu, 29 Sep 2022 08:43:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 677FD1F45B;
-        Thu, 29 Sep 2022 15:43:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664466216; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XMX0opDW1weizrJ2O1PE0gj/yt969FsH/JBATNIMUIM=;
-        b=qL3XVhT3qb2PpQ780oQUXZjYNd+SR1BvcVGQIl2dhi0Xz5qBu9OhSRAnJ5OSC4/DTXlNdf
-        y5CYBalwWexyq3Ay9zrB5aLgqJb6488qywATviAyfF0SKdYlLiH/GyYL3KWvYS2eJgrVwL
-        AQw1EoGi4xHOJwTDyBxKW8hQFOHFDkk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664466216;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XMX0opDW1weizrJ2O1PE0gj/yt969FsH/JBATNIMUIM=;
-        b=624bqGxSV2ZnMhq1xqNdIAA0AgYXjety9CvDgT4tz1vxMz1JLIeiF5nyUJGZM6BXeIx2OH
-        vVW3N6pYX5chr9Bw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3182A1348E;
-        Thu, 29 Sep 2022 15:43:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ea+vCii9NWPXYwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Thu, 29 Sep 2022 15:43:36 +0000
-Date:   Thu, 29 Sep 2022 17:43:34 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Mani Milani <mani@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-i2c@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH] i2c: i801: Prefer async probe
-Message-ID: <20220929174334.44d3e6d9@endymion.delvare>
-In-Reply-To: <20220826074430.1333272-1-mani@chromium.org>
-References: <20220826074430.1333272-1-mani@chromium.org>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Thu, 29 Sep 2022 11:44:38 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833EE87FB8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:43:51 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id y8so2516065edc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=A0NjTGEuE29trCtKX2eLnjxa8Mm0a3CsC5jYLBIM+dc=;
+        b=o6H/zz7ovjMpa0D51Tl8P7yeScD7KTQNIJbUYN/ynwtP0u4zISrWCvrT0OqrmvPeNR
+         0srCIBh900R+inQdU2H+7KA7Fe95bBSXUTg6jjnnEGLMfuRTZfToppTRk6OhzqUyg1cJ
+         qIMCibx6KjlmbXEMo8X1oYuadUkSE8TvPTrFL5l1s53HWOlqcZuCVgNeEe1auMSB5/oM
+         DSVGpSbeLL0TXDXCeRIYWrueEZaHjLXJoFEz4FDrRgi3uca521AkjSHb51QjhZYT3UWx
+         yz79J0JpNaULr3tbwbwiOeSHpi5zBt2wqaL0t2aOO7xxpGnZ0LZgZz/zCOySIcWypS5X
+         WlSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=A0NjTGEuE29trCtKX2eLnjxa8Mm0a3CsC5jYLBIM+dc=;
+        b=efRwJ1AIXHnGhJy2Eyq4DUtmNInpwcTHY+1eHicEInIb7kiVfpnPSPJ4NdVL5Dip8G
+         36QxTjNsu8DvBcqBp7Zx4g8Dz5nrWJMM2Ytp/NMQeZTB3gDXPpjhc7WVK0wSqFN49bFM
+         XI7th1Lg8lmkKeQsv0SW/DeR59v/04TJv2SFjKt8UbAjA7YjLUj5UR4dJFONiEn9ya0c
+         7MQsO5EC/cjohpfBfjF6k1vR5ya+G5QRr9DjByqRagidTKhYcBIph1tZ19LISljKWspq
+         2zt0PH9vsz3BrHhdiVnF9/OTNNbEg4ks9LF1fyaGOYZVPpOaj6rbab7uSj0xwfUS2c/C
+         kFEA==
+X-Gm-Message-State: ACrzQf3nFlyv0aS5z0IF7gZwLHNtmlqZMeebepOdJJ2PhM60y3h9vVlH
+        CWN5M9xNeqbe6DljZvjcMM1Q1TMk80ioh8vWl4hvSw==
+X-Google-Smtp-Source: AMsMyM7Yj69V1v6CwVdslSeZ5ofFtjlDEQl0B9VtLPg+2SdG+j7DCpX4AaHJ4QrapAGXUDr4oCl4TT/pxcnOy05BPIs=
+X-Received: by 2002:a05:6402:2989:b0:44e:90d0:b9ff with SMTP id
+ eq9-20020a056402298900b0044e90d0b9ffmr3944162edb.110.1664466229907; Thu, 29
+ Sep 2022 08:43:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220926100806.522017616@linuxfoundation.org> <CA+G9fYtxogp--B0Em6VCL0C3wwVFXa6xW-Rq2kQk3br+FPGLgg@mail.gmail.com>
+ <YzKyIfQUq9eRbomG@kroah.com>
+In-Reply-To: <YzKyIfQUq9eRbomG@kroah.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 29 Sep 2022 21:13:38 +0530
+Message-ID: <CA+G9fYu1L_qwCQ9x0FukJ=0J5sg5z0ttejT9BT_bPAgCEtmAnQ@mail.gmail.com>
+Subject: Re: [PATCH 5.19 000/207] 5.19.12-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mani,
+Hi Greg,
 
-On Fri, 26 Aug 2022 17:44:30 +1000, Mani Milani wrote:
-> This i801 driver probe can take more than ~190ms in some devices, since
-> the "i2c_register_spd()" call was added inside
-> "i801_probe_optional_slaves()".
+On Tue, 27 Sept 2022 at 13:49, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Sep 27, 2022 at 01:25:52PM +0530, Naresh Kamboju wrote:
+> > On Mon, 26 Sept 2022 at 16:13, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > This is the start of the stable review cycle for the 5.19.12 release.
+> > > There are 207 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > >
+> > > Responses should be made by Wed, 28 Sep 2022 10:07:26 +0000.
+> > > Anything received after that time might be too late.
+> > >
+> > > The whole patch series can be found in one patch at:
+> > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.12-rc1.gz
+> > > or in the git tree and branch at:
+> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> > > and the diffstat can be found below.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> >
+> > Results from Linaro's test farm.
+> > No regressions on arm, x86_64, and i386.
+> > Following deadlock warning noticed on arm64 with kselftests Kconfigs.
+>
+> Is this new?  If so, what commit causes it?
 
-Is there anything special about this 190 ms value?
+Anders bisected this reported problem [1] and found this commit caused
+deadlock on all arm64 devices.
 
-> Prefer async probe so that other drivers can be probed and boot can
-> continue in parallel while this driver loads, to reduce boot time. There is
-> no reason to block other drivers from probing while this driver is
-> loading.
-> 
-> Signed-off-by: Mani Milani <mani@chromium.org>
-> ---
-> 
->  drivers/i2c/busses/i2c-i801.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index a176296f4fff..e06509edc5f3 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -1838,6 +1838,7 @@ static struct pci_driver i801_driver = {
->  	.shutdown	= i801_shutdown,
->  	.driver		= {
->  		.pm	= &i801_pm_ops,
-> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
->  	},
->  };
->  
+> Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+>     workqueue: don't skip lockdep work dependency in cancel_work_sync()
 
-Seems reasonable. I can't foresee any problem that would occur from
-this change, and preliminary testing on my own workstation is OK.
 
-Jarkko, Heiner, Wolfram, can you think of any reason why we should NOT
-apply this change?
+[1] https://lore.kernel.org/stable/CA+G9fYtxogp--B0Em6VCL0C3wwVFXa6xW-Rq2kQk3br+FPGLgg@mail.gmail.com/
 
-Thanks,
--- 
-Jean Delvare
-SUSE L3 Support
+- Naresh
+
+--
+Linaro LKFT
+https://lkft.linaro.org
