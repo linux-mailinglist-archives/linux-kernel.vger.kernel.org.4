@@ -2,92 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596825EF351
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0041E5EF355
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235016AbiI2KTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
+        id S235401AbiI2KUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234822AbiI2KTR (ORCPT
+        with ESMTP id S235415AbiI2KTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:19:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8613D1A23F
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:19:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rxft7ndABZ9qipjmBrDh9jvHt6lSVgY5Ltx6M5fli+k=; b=m62FxX2Xjy07MFozwP9i95kRSB
-        pfbC9DBqcK76cT2Qjux3Nz1NzHu4bfmWdyNXoKCbfx6GD/uAR9cJ3gmmHT2caOP1b8Wd1RuZpwxdB
-        SIfKZkPa/LrqKwqgHFdxHZAS8F4qbwLhYEKEn57XOI5xtBD4vT/RK+spliUrKpWaX3XoyAUwWhTDE
-        J5vdOmPHZ85AtQ3vGzdfZ+3IAv9r/ZSxN+j9oEM+6QhBMsd+4bYkKmLgEOqijITx4S08XY1/Pup/l
-        TJaGhqBTe5913R0cTi++3RYBPT7sSfNTo/gkTPX0dyqg6lZSQbpIVWCMIbiwyBz0frI6YYdFbn7vc
-        EdkL64Gg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1odqdP-00DBpE-Ak; Thu, 29 Sep 2022 10:19:15 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1E33530008D;
-        Thu, 29 Sep 2022 12:19:11 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 032B6203D391A; Thu, 29 Sep 2022 12:19:10 +0200 (CEST)
-Date:   Thu, 29 Sep 2022 12:19:10 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        linux-kernel@vger.kernel.org, ananth.narayan@amd.com,
-        ravi.bangoria@amd.com
-Subject: Re: [PATCH 0/2] perf/x86/amd/lbr: fix LBR filtering support
-Message-ID: <YzVxHn4PPnMTlZxi@hirez.programming.kicks-ass.net>
-References: <20220928184043.408364-1-eranian@google.com>
- <YzVT/TQtkoerDPFV@hirez.programming.kicks-ass.net>
- <388f2491-3b66-50ca-6f65-b5003bf3257a@amd.com>
+        Thu, 29 Sep 2022 06:19:42 -0400
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FB2EE0F;
+        Thu, 29 Sep 2022 03:19:39 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id g23so475748qtu.2;
+        Thu, 29 Sep 2022 03:19:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=8GLG7G2DpP05n4xk1niTNKCRQjlEFDZ0ccIwrCXFgQA=;
+        b=k2vqzLW/HsoWhWIq/V2jZO8/HE7h7dLgTYzJuIi0vNvME7lCpX5rgPXMgYwHjsxqss
+         jmcxMth+GEonyN12lSCx+/Nj7LHSPWx6Ir1FgnPUwsicZQ3fDCiACvkAqVSoOxlN9Q+I
+         xQMdidjl0NQOaLFayVE98NnHm/kvrjnx6TQUNl48plEBwfc8Nt3clZxIwIXhAhERp3UF
+         IcRR38Ga5QFbevStQCj7Pux7mhi3pIOPDh7lzf0BBcu9w7EKNvf+VIURIN1gMIGEl5gA
+         eWWGN7bI9y8suPzU5DghLmtDePaFL37hNN9u4Vu+xA2ssOYeZS63wizgFqbfO9Ry5LNX
+         Llfg==
+X-Gm-Message-State: ACrzQf0qgrRHm9qJDsWqRTBIXAxPjMbvt0Ba+NPX+XrmjZFLVbQwxroD
+        6xl/3hFREj7sujBd5SxiuWsyp260ChxgNw==
+X-Google-Smtp-Source: AMsMyM7ZHy3F6fA0JxaZxnbWD4g7bd/3nDAM4SaBww9vvEKZ4p2h7X7WgYB3MV4/1qmTdvoAhJO+PQ==
+X-Received: by 2002:a05:622a:1a01:b0:35b:a454:dd01 with SMTP id f1-20020a05622a1a0100b0035ba454dd01mr1704917qtb.350.1664446778653;
+        Thu, 29 Sep 2022 03:19:38 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id y123-20020a379681000000b006aedb35d8a1sm5506595qkd.74.2022.09.29.03.19.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 03:19:38 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-349c4310cf7so9811867b3.3;
+        Thu, 29 Sep 2022 03:19:38 -0700 (PDT)
+X-Received: by 2002:a81:5a57:0:b0:353:6de6:3263 with SMTP id
+ o84-20020a815a57000000b003536de63263mr2384552ywb.358.1664446777926; Thu, 29
+ Sep 2022 03:19:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <388f2491-3b66-50ca-6f65-b5003bf3257a@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220929101448.32177-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220929101448.32177-1-lukas.bulwahn@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 29 Sep 2022 12:19:25 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWwrUKc-o1i85n=BWDutYBS1LSwhZdkXME6hWw+7bmhsw@mail.gmail.com>
+Message-ID: <CAMuHMdWwrUKc-o1i85n=BWDutYBS1LSwhZdkXME6hWw+7bmhsw@mail.gmail.com>
+Subject: Re: [PATCH] m68k: update config files
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, Greg Ungerer <gerg@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 02:00:07PM +0530, Sandipan Das wrote:
-> On 9/29/2022 1:44 PM, Peter Zijlstra wrote:
-> > On Wed, Sep 28, 2022 at 11:40:41AM -0700, Stephane Eranian wrote:
-> >> Short patch series to address some kernel issues with the AMD LBrv2
-> >> enablement which were introduced in Linux 6.0.
-> >>
-> >> Stephane Eranian (2):
-> >>   perf/x86/utils: fix uninitialized var in get_branch_type()
-> >>   perf/x86/amd/lbr: adjust LBR regardless of filtering
-> >>
-> >>  arch/x86/events/amd/lbr.c | 8 ++++++--
-> >>  arch/x86/events/utils.c   | 4 ++++
-> >>  2 files changed, 10 insertions(+), 2 deletions(-)
-> > 
-> > If you want this in perf/urgent you're missing Fixes tags.
-> 
-> That would be:
-> 
-> Fixes: df3e9612f758 ("perf/x86: Make branch classifier fusion-aware")
-> 
-> and 
-> 
-> Fixes: 245268c19f70 ("perf/x86/amd/lbr: Use fusion-aware branch classifier")
-> 
-> for the 1st and 2nd patch respectively.
+CC Greg, as these are all coldfire or nommu defconfigs
 
-Thanks; but trying to queue then in /urgent resulted in me finding out
-they're not at all slated for 6.0. The AMD LBRv2 stuff is in perf/core,
-waiting for 6.1 to start. So I'll just go queue them there.
-
-Still, good to have Fixes tags on them.
+On Thu, Sep 29, 2022 at 12:14 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+>
+> Clean up config files by:
+>   - removing configs that were deleted in the past
+>   - removing configs not in tree and without recently pending patches
+>   - adding new configs that are replacements for old configs in the file
+>
+> For some detailed information, see Link.
+>
+> Link: https://lore.kernel.org/kernel-janitors/20220929090645.1389-1-lukas.bulwahn@gmail.com/
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  arch/m68k/configs/amcore_defconfig   | 4 ----
+>  arch/m68k/configs/m5208evb_defconfig | 3 ---
+>  arch/m68k/configs/m5249evb_defconfig | 3 ---
+>  arch/m68k/configs/m5272c3_defconfig  | 3 ---
+>  arch/m68k/configs/m5275evb_defconfig | 3 ---
+>  arch/m68k/configs/m5307c3_defconfig  | 3 ---
+>  arch/m68k/configs/m5407c3_defconfig  | 3 ---
+>  7 files changed, 22 deletions(-)
+>
+> diff --git a/arch/m68k/configs/amcore_defconfig b/arch/m68k/configs/amcore_defconfig
+> index 6d9ed2198170..041adcf6ecfc 100644
+> --- a/arch/m68k/configs/amcore_defconfig
+> +++ b/arch/m68k/configs/amcore_defconfig
+> @@ -27,9 +27,6 @@ CONFIG_PACKET=y
+>  CONFIG_UNIX=y
+>  CONFIG_INET=y
+>  CONFIG_SYN_COOKIES=y
+> -# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+> -# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+> -# CONFIG_INET_XFRM_MODE_BEET is not set
+>  # CONFIG_IPV6 is not set
+>  # CONFIG_WIRELESS is not set
+>  # CONFIG_UEVENT_HELPER is not set
+> @@ -85,7 +82,6 @@ CONFIG_ROMFS_FS=y
+>  CONFIG_ROMFS_BACKED_BY_BOTH=y
+>  # CONFIG_NETWORK_FILESYSTEMS is not set
+>  CONFIG_PRINTK_TIME=y
+> -# CONFIG_ENABLE_MUST_CHECK is not set
+>  # CONFIG_SECTION_MISMATCH_WARN_ONLY is not set
+>  CONFIG_PANIC_ON_OOPS=y
+>  # CONFIG_SCHED_DEBUG is not set
+> diff --git a/arch/m68k/configs/m5208evb_defconfig b/arch/m68k/configs/m5208evb_defconfig
+> index 0ee3079f6ca9..31035a0b9247 100644
+> --- a/arch/m68k/configs/m5208evb_defconfig
+> +++ b/arch/m68k/configs/m5208evb_defconfig
+> @@ -21,9 +21,6 @@ CONFIG_NET=y
+>  CONFIG_PACKET=y
+>  CONFIG_UNIX=y
+>  CONFIG_INET=y
+> -# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+> -# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+> -# CONFIG_INET_XFRM_MODE_BEET is not set
+>  # CONFIG_INET_DIAG is not set
+>  # CONFIG_IPV6 is not set
+>  # CONFIG_FW_LOADER is not set
+> diff --git a/arch/m68k/configs/m5249evb_defconfig b/arch/m68k/configs/m5249evb_defconfig
+> index f84f68c04065..5706d7a1daba 100644
+> --- a/arch/m68k/configs/m5249evb_defconfig
+> +++ b/arch/m68k/configs/m5249evb_defconfig
+> @@ -22,9 +22,6 @@ CONFIG_NET=y
+>  CONFIG_PACKET=y
+>  CONFIG_UNIX=y
+>  CONFIG_INET=y
+> -# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+> -# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+> -# CONFIG_INET_XFRM_MODE_BEET is not set
+>  # CONFIG_INET_DIAG is not set
+>  # CONFIG_IPV6 is not set
+>  # CONFIG_FW_LOADER is not set
+> diff --git a/arch/m68k/configs/m5272c3_defconfig b/arch/m68k/configs/m5272c3_defconfig
+> index eca65020aae3..f02fe144f4ad 100644
+> --- a/arch/m68k/configs/m5272c3_defconfig
+> +++ b/arch/m68k/configs/m5272c3_defconfig
+> @@ -22,9 +22,6 @@ CONFIG_NET=y
+>  CONFIG_PACKET=y
+>  CONFIG_UNIX=y
+>  CONFIG_INET=y
+> -# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+> -# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+> -# CONFIG_INET_XFRM_MODE_BEET is not set
+>  # CONFIG_INET_DIAG is not set
+>  # CONFIG_IPV6 is not set
+>  # CONFIG_FW_LOADER is not set
+> diff --git a/arch/m68k/configs/m5275evb_defconfig b/arch/m68k/configs/m5275evb_defconfig
+> index 9402c7a3e9c7..781f307ff330 100644
+> --- a/arch/m68k/configs/m5275evb_defconfig
+> +++ b/arch/m68k/configs/m5275evb_defconfig
+> @@ -22,9 +22,6 @@ CONFIG_NET=y
+>  CONFIG_PACKET=y
+>  CONFIG_UNIX=y
+>  CONFIG_INET=y
+> -# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+> -# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+> -# CONFIG_INET_XFRM_MODE_BEET is not set
+>  # CONFIG_INET_DIAG is not set
+>  # CONFIG_IPV6 is not set
+>  # CONFIG_FW_LOADER is not set
+> diff --git a/arch/m68k/configs/m5307c3_defconfig b/arch/m68k/configs/m5307c3_defconfig
+> index bb8b0eb4bdfc..6eac482356ca 100644
+> --- a/arch/m68k/configs/m5307c3_defconfig
+> +++ b/arch/m68k/configs/m5307c3_defconfig
+> @@ -22,9 +22,6 @@ CONFIG_NET=y
+>  CONFIG_PACKET=y
+>  CONFIG_UNIX=y
+>  CONFIG_INET=y
+> -# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+> -# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+> -# CONFIG_INET_XFRM_MODE_BEET is not set
+>  # CONFIG_INET_DIAG is not set
+>  # CONFIG_IPV6 is not set
+>  # CONFIG_FW_LOADER is not set
+> diff --git a/arch/m68k/configs/m5407c3_defconfig b/arch/m68k/configs/m5407c3_defconfig
+> index ce9ccf13c7c0..496dcccb1c18 100644
+> --- a/arch/m68k/configs/m5407c3_defconfig
+> +++ b/arch/m68k/configs/m5407c3_defconfig
+> @@ -23,9 +23,6 @@ CONFIG_NET=y
+>  CONFIG_PACKET=y
+>  CONFIG_UNIX=y
+>  CONFIG_INET=y
+> -# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+> -# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+> -# CONFIG_INET_XFRM_MODE_BEET is not set
+>  # CONFIG_INET_DIAG is not set
+>  # CONFIG_IPV6 is not set
+>  # CONFIG_FW_LOADER is not set
+> --
+> 2.17.1
