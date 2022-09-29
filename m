@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A475EFDA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E75B5EFDA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiI2TJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 15:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
+        id S229950AbiI2TL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 15:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbiI2TJ0 (ORCPT
+        with ESMTP id S229449AbiI2TL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 15:09:26 -0400
+        Thu, 29 Sep 2022 15:11:28 -0400
 Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D371914FE0B;
-        Thu, 29 Sep 2022 12:09:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60721ADCEB;
+        Thu, 29 Sep 2022 12:11:26 -0700 (PDT)
 Received: from localhost (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 6E5D02C5;
-        Thu, 29 Sep 2022 19:09:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 6E5D02C5
+        by ms.lwn.net (Postfix) with ESMTPSA id 0DE282C5;
+        Thu, 29 Sep 2022 19:11:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0DE282C5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1664478565; bh=k5z3F0/xzWULuI2Tv5PQzUKwfSUJnGgVlsClzxy7Fac=;
+        t=1664478686; bh=AtRs6p9PVV0p7iZSTv/3A/XTlDYNnrz1n/NZHsi0NUo=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=XW0sRaxynQ3YPDubaI1qOGKoZqRdAYpHHtrZAq7I/17jvtYPoSX4cmrrqRMUJP8h+
-         DbyXMfDSDGrVpeWHwuilwI8BtXub/v/8rVtW1qAQYbSoRTqnKjT2fonFDtdERV8+0y
-         0iqwXZGk92IrgQv7Qpbrxc8AYtGEM+irKN9IHfXzvRNXzEAMxfbWA43OXzwym8bR7Z
-         Ufi555s79KAzWDfLUYIYlB8DjfI9R6ezoBHd+518edkLZXXaB2sx++r/LKxrxOCUuv
-         9g9l4EqBrEkIUBr7lCyPc767yg9YEoDAJpSoHk++LegT45X5xDfpvRbAkPEElGkyiv
-         +6Yu5QQ5EXdCQ==
+        b=MFTfuqrLi1CwXQkFi6PKyHjnwtEEOkjy6weShw/Eq0WoiWQdUt59/nfY7t6hAtRYd
+         fcZF0DABcx/sz7PQ97yTIJHeOrfDwdgNZsvX4vcTOw6j1ZaGs057jaZyA1WCEGmWlm
+         PPDblpxYRfZPffFKzFwK5GbTphmA2F024PpWmVSbD0S7OdoVx7F6e8k47Yf5u0piif
+         9pSOeE/b6POX6Apt/5dEYEheHXHNLx527ECK0ZqS95ZURxcjRYslRL1XxDmfA0qnrt
+         HbiRzUnNECkXx63K946LqtCvTuYgxupFiYfGNb3prb3s1dcgP6nBJZYn1w64xvSQR+
+         0Mma51Ev5JRYw==
 From:   Jonathan Corbet <corbet@lwn.net>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs, kprobes: Fix the wrong location of Kprobes
-In-Reply-To: <20220926142218.100e0d9b@gandalf.local.home>
-References: <1663322106-12178-1-git-send-email-yangtiezhu@loongson.cn>
- <20220926142218.100e0d9b@gandalf.local.home>
-Date:   Thu, 29 Sep 2022 13:09:24 -0600
-Message-ID: <87edvuhuaj.fsf@meer.lwn.net>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] docs: process/5.Posting.rst: clarify use of
+ Reported-by: tag
+In-Reply-To: <2fc7162dfb76e04da5ea903c9c170d913e735dad.1664372256.git.linux@leemhuis.info>
+References: <2fc7162dfb76e04da5ea903c9c170d913e735dad.1664372256.git.linux@leemhuis.info>
+Date:   Thu, 29 Sep 2022 13:11:25 -0600
+Message-ID: <87a66ihu76.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -52,22 +51,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Steven Rostedt <rostedt@goodmis.org> writes:
+Thorsten Leemhuis <linux@leemhuis.info> writes:
 
-> On Fri, 16 Sep 2022 17:55:06 +0800
-> Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+> Bring the description on when to use the Reported-by: tag found in
+> Documentation/process/5.Posting.rst more in line with the description in
+> Documentation/process/submitting-patches.rst: before this change the two
+> were contradicting each other, as the latter is way more permissive and
+> only states '[...] if the bug was reported in private, then ask for
+> permission first before using the Reported-by tag.'
 >
->> After commit 22471e1313f2 ("kconfig: use a menu in arch/Kconfig to reduce
->> clutter"), the location of Kprobes is under "General architecture-dependent
->> options" rather than "General setup".
->> 
+> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
 >
-> Probably add a "Fixes:" tag for the above mentioned commit.
->
-> Anyway, Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-When you embed a tag like that, b4 doesn't pick it up anymore...but I
-was amending the commit to add the Fixes tag so I put it in too...:)
+> ---
+> Hi! I noticed some confusion in our development community on when to use
+> the Reported-by: tag. Some of this apparently is caused by the
+> inconsistency fixed in this patch. Ciao, Thorsten
+> ---
+>  Documentation/process/5.Posting.rst | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
