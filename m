@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781A85EF7DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 744E95EF7ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235389AbiI2OmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
+        id S234988AbiI2OoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233488AbiI2OmC (ORCPT
+        with ESMTP id S234956AbiI2OoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:42:02 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B0611332F3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:42:01 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8912D1650;
-        Thu, 29 Sep 2022 07:42:07 -0700 (PDT)
-Received: from e126311.manchester.arm.com (unknown [10.57.64.220])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE7D03F792;
-        Thu, 29 Sep 2022 07:41:57 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 15:41:47 +0100
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Jian-Min Liu <jian-min.liu@mediatek.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Patrick Bellasi <patrick.bellasi@matbug.net>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Jonathan JMChen <jonathan.jmchen@mediatek.com>
-Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
-Message-ID: <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com>
-References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
- <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
- <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
- <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
- <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net>
+        Thu, 29 Sep 2022 10:44:18 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C432D13D63
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:44:15 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id s6so2574660lfo.7
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:44:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=LkSm2C56o8tzD3kdFz9Q2YFb7DwLBiu4clfDJbl3WmE=;
+        b=t9DQlHsq4peMX5nFQVuP+vxQAPp4QbqlqnbBY0+/JvHu3ewoOoATFKVpR2AMYRLjTV
+         BozrgV9yNKY8V8vXDs35S3zJD1S8KBd8hCSVSw5EEN1tI7yIx5OmQGrPk23fIVgZftD8
+         md3CruqOqBUGUXEbopgNI/rho7z9DsI8k402PXgHxAd26opMxTiWgStbnT3rCcxtSPg1
+         0Qq3L6NCZS04fbF4Xi4zkfScfCCKX5MFg59lYUuK3LdcmjQ/aazupohVqJs4iI/g6zZx
+         sSnSxyA8F3wh+mAmuIDvHit+qNn4SezBrvQ49dPRwW9Bry2Ahg/anhe3CeHm3fp+UbPR
+         TMgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=LkSm2C56o8tzD3kdFz9Q2YFb7DwLBiu4clfDJbl3WmE=;
+        b=iJV2BS2WLRwxnDlGtQORn4vaL6Z+LwZvrAr/ap1lwbH8d3Bcyc0F9c36WQVu5cDvYW
+         9hsOvURRDyZKMLWlLj+4UldCo8mJrb5yFiIzXqxFFcGSYXNGxpv53SPqVDVkNSzicJWY
+         Clb2hqeYn8eMNiv4/MvI9+xzGhqRaNnUjPktvjc6sCepRkZTcqV07hYDAVSJNNlI6U9A
+         Mvf1IXFAzn6Tty68eG1GAT6jUhPxlPAIdgQrTSOgckkUrdWma9bko2ofv5Px9pky9/iF
+         5TJvyhZ+Fo7symxE/mlPLpZPWIy4sS5tzy/ZCUMT/f0QEPVBY3YpGPZv5d2FkAnL7IIX
+         IB6Q==
+X-Gm-Message-State: ACrzQf3bbePUOdoMhW0pCNtpINxDmIfpx258cG/DN6kh0LWx8iCK0ncH
+        et5rRihQobfLJ2E5apTfFZRewQ==
+X-Google-Smtp-Source: AMsMyM4A2Ji8bAd/eqHnyAOt7Yu02yXyV2POMDi/Exr3ksTpf9Rg8m5p0TiCMGNCeWUVS/EEqglGSA==
+X-Received: by 2002:a05:6512:688:b0:498:fe57:b5f with SMTP id t8-20020a056512068800b00498fe570b5fmr1571633lfe.209.1664462654201;
+        Thu, 29 Sep 2022 07:44:14 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id m4-20020ac24ac4000000b0049313f77755sm525234lfp.213.2022.09.29.07.44.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 07:44:13 -0700 (PDT)
+Message-ID: <c49ac105-f96f-fdc4-a629-fe34c85f557a@linaro.org>
+Date:   Thu, 29 Sep 2022 16:44:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: Update SNPS Phy params for
+ SC7280
+Content-Language: en-US
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1664462290-29869-1-git-send-email-quic_kriskura@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1664462290-29869-1-git-send-email-quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 01:21:45PM +0200, Peter Zijlstra wrote:
-> On Thu, Sep 29, 2022 at 12:10:17PM +0100, Kajetan Puchalski wrote:
+On 29/09/2022 16:38, Krishna Kurapati wrote:
+> Add SNPS HS Phy tuning parameters for herobrine variant of
+> SC7280 devices.
 > 
-> > Overall, the problem being solved here is that based on our testing the
-> > PELT half life can occasionally be too slow to keep up in scenarios
-> > where many frames need to be rendered quickly, especially on high-refresh
-> > rate phones and similar devices.
-> 
-> But it is a problem of DVFS not ramping up quick enough; or of the
-> load-balancer not reacting to the increase in load, or what aspect
-> controlled by PELT is responsible for the improvement seen?
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
 
-Based on all the tests we've seen, jankbench or otherwise, the
-improvement can mainly be attributed to the faster ramp up of frequency
-caused by the shorter PELT window while using schedutil. Alongside that
-the signals rising faster also mean that the task would get migrated
-faster to bigger CPUs on big.LITTLE systems which improves things too
-but it's mostly the frequency aspect of it.
 
-To establish that this benchmark is sensitive to frequency I ran some
-tests using the 'performance' cpufreq governor.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Max frame duration (ms)
+Best regards,
+Krzysztof
 
-+------------------+-------------+----------+
-| kernel           |   iteration |    value |
-|------------------+-------------+----------|
-| pelt_1           |          10 | 157.426  |
-| pelt_4           |          10 |  85.2713 |
-| performance      |          10 |  40.9308 |
-+------------------+-------------+----------+
-
-Mean frame duration (ms)
-
-+---------------+------------------+---------+-------------+
-| variable      | kernel           |   value | perc_diff   |
-|---------------+------------------+---------+-------------|
-| mean_duration | pelt_1           |    14.6 | 0.0%        |
-| mean_duration | pelt_4           |    14.5 | -0.58%      |
-| mean_duration | performance      |     4.4 | -69.75%     |
-+---------------+------------------+---------+-------------+
-
-Jank percentage
-
-+------------+------------------+---------+-------------+
-| variable   | kernel           |   value | perc_diff   |
-|------------+------------------+---------+-------------|
-| jank_perc  | pelt_1           |     2.1 | 0.0%        |
-| jank_perc  | pelt_4           |     2   | -3.46%      |
-| jank_perc  | performance      |     0.1 | -97.25%     |
-+------------+------------------+---------+-------------+
-
-As you can see, bumping up frequency can hugely improve the results
-here. This is what's happening when we decrease the PELT window, just on
-a much smaller and not as drastic scale. It also explains specifically
-where the increased power usage is coming from.
