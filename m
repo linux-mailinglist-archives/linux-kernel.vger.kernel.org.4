@@ -2,70 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6C95EFA01
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E625EF9FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236118AbiI2QPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
+        id S236135AbiI2QPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236114AbiI2QOv (ORCPT
+        with ESMTP id S236111AbiI2QOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:14:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FB71B784;
-        Thu, 29 Sep 2022 09:14:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 29 Sep 2022 12:14:44 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86F0CE36
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:14:41 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C43BCB81E59;
-        Thu, 29 Sep 2022 16:14:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3966C433B5;
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1724C2197E;
+        Thu, 29 Sep 2022 16:14:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1664468080; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=As/OAtjAybrvjP0EinXvUSzkP8e20KVDEibOtPxtOXk=;
+        b=WEfU42mgY8wWXWklPfLOcxwt1eKUciDdzWXcD8QJ93E4e0joJFf9JTj1v4Cjk8McaSu/Lo
+        HVsqoaWUUYON8ddZSD7Eq+YWiX/mqDva8zYkCm63Ya75A4CXDML0L+JcFcTISeSWHJx0vG
+        L48cKUbRVbtsAg63DEJD0SbNeKd9XsQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1664468080;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=As/OAtjAybrvjP0EinXvUSzkP8e20KVDEibOtPxtOXk=;
+        b=TfiU9VLfxEnBSnp5aRYCCReoVtrglwnC6OXJrydeQz21Fsf3iTBXJr4ESRtFw+bznJ5F3R
+        ZROBLW4jg5x+F0Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D8EF01348E;
         Thu, 29 Sep 2022 16:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664468080;
-        bh=N/dxcUsikEjlv9lELYdCoUo6xsUVTNhUjYMniWeGUlg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JL6YYK+kRd+FBXxO+1TFstS9lD1vl7jXboq9MO8AuSpc2uBNAZpgzwap787vx/Dl0
-         VqL3KLSZgNf5EPYTiDhdDMFll+98CTM1gEj2m7VQqGMmkDukEmU7sO72B0jKlEFD7J
-         ApMdpyn7F9idP0xe/QU3y4CV+rsrpeaXGYyrIHmP/V7uq4S02+ls9awsTX8hfJNf1e
-         +Qn26Z4Vn8uHtOXx4kVQNF96pYrc7AE25rLBbiz7nIEVj0ALruVJ7xPxMaesClkVKC
-         Vce7xMUEK/eygKKq4eMbenzCuhskCVSnCpXqCSUirluN5GCERvcVgOHlSHVzlFiZR8
-         SVWqAkXQPoYmA==
-Date:   Thu, 29 Sep 2022 21:44:36 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        asahi@lists.linux.dev, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] dmaengine: apple-admac: Do not use devres for IRQs
-Message-ID: <YzXEbI7D+Z+YzwDJ@matsya>
-References: <20220918095845.68860-1-povik+lin@cutebit.org>
- <20220918095845.68860-4-povik+lin@cutebit.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220918095845.68860-4-povik+lin@cutebit.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3cmbM2/ENWPXbwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 29 Sep 2022 16:14:39 +0000
+Date:   Thu, 29 Sep 2022 18:14:39 +0200
+Message-ID: <87tu4q6tu8.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     butt3rflyh4ck <butterflyhuangxx@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com,
+        pierre-louis.bossart@linux.intel.com, broonie@kernel.org,
+        alsa-devel@alsa-project.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: A divide error bug in snd_pcm_write
+In-Reply-To: <CAFcO6XNsqKCzNBiBF4eYyh+RCSGBp_5HSzxF0gw0kgfQ2FDAiQ@mail.gmail.com>
+References: <CAFcO6XNk5Wtjju=DBOcJr46miBbaWT7jL+zjhWMp+xnz7k5K9A@mail.gmail.com>
+        <87v8pa306x.wl-tiwai@suse.de>
+        <CAFcO6XP2MpiAsF7YXYjgh7FMq+hyzFJjK8iBf=ccZ2B6BpNvOg@mail.gmail.com>
+        <87leq6gglm.wl-tiwai@suse.de>
+        <CAFcO6XNsqKCzNBiBF4eYyh+RCSGBp_5HSzxF0gw0kgfQ2FDAiQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18-09-22, 11:58, Martin Povišer wrote:
-> This is in advance of adding support for triggering the reset signal to
-> the peripheral, since registering the IRQ handler will have to be
-> sequenced with it.
+On Thu, 29 Sep 2022 16:52:10 +0200,
+butt3rflyh4ck wrote:
+> 
+> This one fixes the problem.
+> https://lore.kernel.org/all/20220926135558.26580-2-tiwai@suse.de/
 
-Applied 3-4, thanks
+Thanks for confirmation!  The fix should be included in 6.1-rc1.
 
--- 
-~Vinod
+
+Takashi
+
+> 
+> Regards,
+>  butt3rflyh4ck.
+> 
+> On Tue, Sep 27, 2022 at 2:01 AM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Mon, 26 Sep 2022 19:16:48 +0200,
+> > butt3rflyh4ck wrote:
+> > >
+> > > The latest kernel upstream.
+> > > Yes, but using mmap, you can map the runtime->status page, and then
+> > > copy the data through memcpy to overwrite the status->state data, or
+> > > even more, which is incredible.
+> >
+> > Ah, then that's exactly the case my latest patch set covers.
+> > Either the first patch or the second patch alone should work.
+> >   https://lore.kernel.org/r/20220926135558.26580-2-tiwai@suse.de
+> >   https://lore.kernel.org/r/20220926135558.26580-3-tiwai@suse.de
+> >
+> > Could you verify either of them fixes the problem?
+> >
+> >
+> > thanks,
+> >
+> > Takashi
+> 
+> 
+> 
+> -- 
+> Active Defense Lab of Venustech
+> 
