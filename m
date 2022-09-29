@@ -2,56 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6095EFB00
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB0A5EFB03
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235641AbiI2Qg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
+        id S235120AbiI2QhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235120AbiI2Qgw (ORCPT
+        with ESMTP id S235657AbiI2QhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:36:52 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076411288AF;
-        Thu, 29 Sep 2022 09:36:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Xaq4k1m7DmXrhS0yatltQ3u7OYSHA8MZ+pTtIuY0h+o=; b=t2WNTiWbOULZA+DVCue417StiQ
-        9U6hQkWbnCD21t9/FLjeLQj4tmLUtClIkf9wAqmQsheoyPFGDQSLjgvdNkQkbwzjjZkDH/526kSiR
-        bDBlx0E+ttCTXvW/SidO5w7Bp7BZ/bQpY/WYc8b6kHeCAKFxjOd+0Df1KjGJAxk9ixavA3Tsb7ybh
-        YfDQkEWfUbMJgBF/0CIrZHbdMY9szPy3+a8HwgP5daod3Xf6m5SsyeOx285hTuJeKEQgWIcfZdBpS
-        aiZTuy0FMI9hopRg5NYdmR7wE7X5rXKWK9G6Lp5bBtrjXuzR6jmPzOCghtyfVczc2GFNJmplq0mEW
-        hUfMOASg==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1odwWm-004EZI-R7; Thu, 29 Sep 2022 16:36:48 +0000
-Message-ID: <81f8b954-ebb7-fcb6-4bdf-d5992e2be80a@infradead.org>
-Date:   Thu, 29 Sep 2022 09:36:45 -0700
+        Thu, 29 Sep 2022 12:37:14 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2D626F5;
+        Thu, 29 Sep 2022 09:37:12 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 3B0671884CC9;
+        Thu, 29 Sep 2022 16:37:10 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 2AB242500370;
+        Thu, 29 Sep 2022 16:37:10 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 0C5179EC0002; Thu, 29 Sep 2022 16:37:10 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] drm/msm: Fix build break with recent mm tree
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Dave Airlie <airlied@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220929161404.2769414-1-robdclark@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220929161404.2769414-1-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 29 Sep 2022 18:37:09 +0200
+From:   netdev@kapio-technology.com
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 net-next 0/9] Extend locked port feature with FDB
+ locked flag (MAC-Auth/MAB)
+In-Reply-To: <20220929091036.3812327f@kernel.org>
+References: <20220928150256.115248-1-netdev@kapio-technology.com>
+ <20220929091036.3812327f@kernel.org>
+User-Agent: Gigahost Webmail
+Message-ID: <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,46 +81,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/29/22 09:14, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
+On 2022-09-29 18:10, Jakub Kicinski wrote:
+> On Wed, 28 Sep 2022 17:02:47 +0200 Hans Schultz wrote:
+>> From: "Hans J. Schultz" <netdev@kapio-technology.com>
+>> 
+>> This patch set extends the locked port feature for devices
+>> that are behind a locked port, but do not have the ability to
+>> authorize themselves as a supplicant using IEEE 802.1X.
+>> Such devices can be printers, meters or anything related to
+>> fixed installations. Instead of 802.1X authorization, devices
+>> can get access based on their MAC addresses being whitelisted.
 > 
-> 9178e3dcb121 ("mm: discard __GFP_ATOMIC") removed __GFP_ATOMIC,
-> replacing it with a check for not __GFP_DIRECT_RECLAIM.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> Try a allmodconfig build on latest net-next, seems broken.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
-Thanks.
-
-> ---
-> Sorry, this was reported by Stephen earlier in the month, while
-> I was on the other side of the globe and jetlagged.  Unfortunately
-> I forgot about it by the time I got back home.  Applying this patch
-> after 025d27239a2f ("drm/msm/gem: Evict active GEM objects when necessary")
-> but before or after 9178e3dcb121 ("mm: discard __GFP_ATOMIC") should
-> resolve the build breakage.
-> 
->  drivers/gpu/drm/msm/msm_gem_shrinker.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/msm_gem_shrinker.c b/drivers/gpu/drm/msm/msm_gem_shrinker.c
-> index 473ced14e520..8f83454ceedf 100644
-> --- a/drivers/gpu/drm/msm/msm_gem_shrinker.c
-> +++ b/drivers/gpu/drm/msm/msm_gem_shrinker.c
-> @@ -27,7 +27,7 @@ static bool can_swap(void)
->  
->  static bool can_block(struct shrink_control *sc)
->  {
-> -	if (sc->gfp_mask & __GFP_ATOMIC)
-> +	if (!(sc->gfp_mask & __GFP_DIRECT_RECLAIM))
->  		return false;
->  	return current_is_kswapd() || (sc->gfp_mask & __GFP_RECLAIM);
->  }
-
--- 
-~Randy
+I have all different switch drivers enabled and I see no compile 
+warnings or errors. I guess I will get a robot update if that is the 
+case, but please be specific as to what does not build.
