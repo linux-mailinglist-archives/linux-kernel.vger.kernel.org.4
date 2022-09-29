@@ -2,132 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E535C5EF131
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5556B5EF136
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235034AbiI2JDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 05:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
+        id S235227AbiI2JES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 05:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234996AbiI2JDN (ORCPT
+        with ESMTP id S235062AbiI2JEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:03:13 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730DC13F732
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:03:11 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id k10so1277327lfm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:03:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=ekkQC7GJQ81cuqn7yaJIyO9eK5D2lUXQODNhfljx0EI=;
-        b=fNxGAx0KYpQEIJjdm4n8d4KHSovl2yvg1lawgOmCH1yEP2bkcO4mlF7ZAmlB9iuvjR
-         vktrPrjflKnBQx2vPEE3Zouv/G9Snpd2uOkiB4mwZRiQ3PNxQNRMETp8erbb/lzpbzn8
-         Mo+Wwvhy/OhVJa1935pFBjfc7xgkR05fhPFD/nx5ddAQ1BVXYs86eA0JmcOyPzK2KIWa
-         t1nxNtGUPbW7LhuVQYqi8xEYAlFUGGjYW71fTceDy5fFzrbTTpnS3L+26mDQOPrgQ0/q
-         ovk9V4dvCqmB7d0CaJVVCEVjpdP/Jes6E2uX7uG5sRbNuc81A7jMFZC1JmCkOGb+4wz0
-         Mgtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ekkQC7GJQ81cuqn7yaJIyO9eK5D2lUXQODNhfljx0EI=;
-        b=CX2REECiZ88Q2t3dM+k3c/JDJZSGfbQ3YTPJUFuf9BrFC8GOZHHzqloBJXbdqgeSq1
-         vHEVoEoJHC4z4VTWzxG7CgWgj2qdMoktj8iiEii6gM1DpnNNapNFQhS8V83GSbCTtaRt
-         vDculSoHAet2woqtiDAVl24tkpO3AHu4VgAtmlVtCdqbfpIwJ3W/qVuRlrADrjCQhcBG
-         yReXlgjRtdvhpdOxvKjiTCIGDi+YVeYrVPKzNaoQyw7X5BxsVHhD6jglSXDNFd6f9l5f
-         zOEQLIpVCjxYh3bgWSRaIjQ95xkG5pWLKStwwX4jouTApKUxPV2bHbtlLa3VMb2BaWpQ
-         s1rQ==
-X-Gm-Message-State: ACrzQf2/9FP2fgCv4dxssVFrl+n+XxFN6Ti9RZLEq+BWWFtk9JP1ZNVm
-        PIMVIcRbxhUCS6A5vMo1s2RYn8qy40xW3Q==
-X-Google-Smtp-Source: AMsMyM6sWJPWobcdhsezk/UkFUJMWSsPWVIRNRtarpZ/N/yPz1yP4zKWe6iDX0IS1NUHjrNfMQbVow==
-X-Received: by 2002:ac2:508b:0:b0:4a0:5d6b:ff14 with SMTP id f11-20020ac2508b000000b004a05d6bff14mr897827lfm.409.1664442189815;
-        Thu, 29 Sep 2022 02:03:09 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id e8-20020a05651c038800b0026c5ab1883dsm651010ljp.16.2022.09.29.02.03.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 02:03:09 -0700 (PDT)
-Message-ID: <37c6c5f9-fbdd-3a44-15f7-e28915cbb7c0@linaro.org>
-Date:   Thu, 29 Sep 2022 11:03:08 +0200
+        Thu, 29 Sep 2022 05:04:15 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A0F138F08;
+        Thu, 29 Sep 2022 02:04:13 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 09:04:09 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1664442250;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W4VtPc3IUbEA1iZLSCZHOROAem8/WmUPd60NhJr4UTI=;
+        b=STyWG2ig2DPzX1N9FbbKqnbso4i7Zm4gjooKPt7iOUWb7eJY7b1yw/aDioyr2oKnCdGKmM
+        rzAf3dJX5pHw/iYNnn4nNeYwrgR0Jl6KZiyUflS8j2sh8Q2UysBgVw0IstIgWGFgxpWPi6
+        UOXfmG9fOPshspSz88NmaJHzxgURnxcledH/CvII+He4BOtweAG1Ei5qQYy30MzfwJ4xnf
+        Ay2AQokbMCmeb5FIQzcpO0I7TSIVY96FvYjQKlL71d9F6R8R3jKHMQjN3UehpoujYrQnHy
+        x1+DwXs0s6I1GlOIwQFWfUAKi5yJC0wsToa5enXUo2Spq5ljUrxl2nnizzNx3w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1664442250;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W4VtPc3IUbEA1iZLSCZHOROAem8/WmUPd60NhJr4UTI=;
+        b=xycAQUARueWj7+9o4Ud0ooklqmXvWqgoupJJfqC2sr/4XgyAKrEmPvXCkWMNjojCDBEA7t
+        g1r7c1K5AZAlRSAA==
+From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/cacheinfo: Add a cpu_llc_shared_mask() UP variant
+Cc:     Saurabh Sengar <ssengar@linux.microsoft.com>,
+        Borislav Petkov <bp@suse.de>, <stable@vger.kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <1660148115-302-1-git-send-email-ssengar@linux.microsoft.com>
+References: <1660148115-302-1-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: it6505: add properties to restrict
- output bandwidth
-Content-Language: en-US
-To:     allen <allen.chen@ite.com.tw>
-Cc:     Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Pin-yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220929014456.30077-1-allen.chen@ite.com.tw>
- <20220929014456.30077-2-allen.chen@ite.com.tw>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220929014456.30077-2-allen.chen@ite.com.tw>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <166444224911.401.15542526000823963244.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 03:44, allen wrote:
-> From: allen chen <allen.chen@ite.com.tw>
-> 
-> Add properties to restrict dp output data-lanes and clock.
-> 
-> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
-> ---
->  .../devicetree/bindings/display/bridge/ite,it6505.yaml | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
-> index 833d11b2303a..62b9f2192202 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
-> @@ -52,6 +52,14 @@ properties:
->      maxItems: 1
->      description: extcon specifier for the Power Delivery
->  
-> +  data-lanes:
-> +    maxItems: 1
-> +    description: restrict the dp output data-lanes with value of 1-4
+The following commit has been merged into the x86/urgent branch of tip:
 
-Where is the definition of this property?
+Commit-ID:     df5b035b5683d6a25f077af889fb88e09827f8bc
+Gitweb:        https://git.kernel.org/tip/df5b035b5683d6a25f077af889fb88e09827f8bc
+Author:        Borislav Petkov <bp@suse.de>
+AuthorDate:    Fri, 19 Aug 2022 19:47:44 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Wed, 28 Sep 2022 18:35:37 +02:00
 
-> +
-> +  max-pixel-clock-khz:
-> +    maxItems: 1
-> +    description: restrict max pixel clock
+x86/cacheinfo: Add a cpu_llc_shared_mask() UP variant
 
-This looks wrong. You do not use proper unit suffix
-(https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml),
-no vendor prefix, no type and weird maxItems like it was array. Is it
-coming from any other schema?
+On a CONFIG_SMP=n kernel, the LLC shared mask is 0, which prevents
+__cache_amd_cpumap_setup() from doing the L3 masks setup, and more
+specifically from setting up the shared_cpu_map and shared_cpu_list
+files in sysfs, leading to lscpu from util-linux getting confused and
+segfaulting.
 
-Best regards,
-Krzysztof
+Add a cpu_llc_shared_mask() UP variant which returns a mask with a
+single bit set, i.e., for CPU0.
 
+Fixes: 2b83809a5e6d ("x86/cpu/amd: Derive L3 shared_cpu_map from cpu_llc_shared_mask")
+Reported-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/1660148115-302-1-git-send-email-ssengar@linux.microsoft.com
+---
+ arch/x86/include/asm/smp.h | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
+
+diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
+index 81a0211..a73bced 100644
+--- a/arch/x86/include/asm/smp.h
++++ b/arch/x86/include/asm/smp.h
+@@ -21,16 +21,6 @@ DECLARE_PER_CPU_READ_MOSTLY(u16, cpu_llc_id);
+ DECLARE_PER_CPU_READ_MOSTLY(u16, cpu_l2c_id);
+ DECLARE_PER_CPU_READ_MOSTLY(int, cpu_number);
+ 
+-static inline struct cpumask *cpu_llc_shared_mask(int cpu)
+-{
+-	return per_cpu(cpu_llc_shared_map, cpu);
+-}
+-
+-static inline struct cpumask *cpu_l2c_shared_mask(int cpu)
+-{
+-	return per_cpu(cpu_l2c_shared_map, cpu);
+-}
+-
+ DECLARE_EARLY_PER_CPU_READ_MOSTLY(u16, x86_cpu_to_apicid);
+ DECLARE_EARLY_PER_CPU_READ_MOSTLY(u32, x86_cpu_to_acpiid);
+ DECLARE_EARLY_PER_CPU_READ_MOSTLY(u16, x86_bios_cpu_apicid);
+@@ -172,6 +162,16 @@ extern int safe_smp_processor_id(void);
+ # define safe_smp_processor_id()	smp_processor_id()
+ #endif
+ 
++static inline struct cpumask *cpu_llc_shared_mask(int cpu)
++{
++	return per_cpu(cpu_llc_shared_map, cpu);
++}
++
++static inline struct cpumask *cpu_l2c_shared_mask(int cpu)
++{
++	return per_cpu(cpu_l2c_shared_map, cpu);
++}
++
+ #else /* !CONFIG_SMP */
+ #define wbinvd_on_cpu(cpu)     wbinvd()
+ static inline int wbinvd_on_all_cpus(void)
+@@ -179,6 +179,11 @@ static inline int wbinvd_on_all_cpus(void)
+ 	wbinvd();
+ 	return 0;
+ }
++
++static inline struct cpumask *cpu_llc_shared_mask(int cpu)
++{
++	return (struct cpumask *)cpumask_of(0);
++}
+ #endif /* CONFIG_SMP */
+ 
+ extern unsigned disabled_cpus;
