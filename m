@@ -2,171 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546B45EF0DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1615EF0E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235041AbiI2Iut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        id S233911AbiI2IvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235615AbiI2Iuf (ORCPT
+        with ESMTP id S235023AbiI2IvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:50:35 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD2CEC54B;
-        Thu, 29 Sep 2022 01:50:33 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id x1so699751plv.5;
-        Thu, 29 Sep 2022 01:50:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=wyRrlcXzeH4HfHGAImk3NaXe74TrWSFA0ErQXL3Lurc=;
-        b=Z6oEko58X6cyAidL5cdLdPtKhJkWxMzfPWazsgsBy2UGktfhzdoqIRABYzT1KRxekx
-         bVgp28KwDTcUK/6IHsIfklW1ZhMtkSg36n+zMTH0wfnUORl18OOEcMEz2ddavj8BSEFy
-         9RMRyzJ10828D5WFtdqtWUZcPUQ1oQIoqrh9qgAy997yp9S/8gOSAuFgEywGiqWHmVYV
-         jqg+AZ8zSyT7LpIZpJxBuMHkTYayRWDaeH4+OIjJn8w4A8v0cKDMeZ2UKJJ/b/2GPLq4
-         IkM3jTz5Sux5fwUnw4aJTYUBY9ygMg3mOp/OOBvLkr19needaXPyYlKqtT1UbYCLbNmB
-         nYbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=wyRrlcXzeH4HfHGAImk3NaXe74TrWSFA0ErQXL3Lurc=;
-        b=QbJJwU7zA7EUzlK1iN7CqxRGYEUM4tRpfcHu07FTfUtzo+91eH3Z9MXpvhlLKWW18E
-         Qpj4mCaYbTiR4YUst7SbFcwxItO6WZPFzUHeU7VCx1ZKqeQeuqX9HV4VBoqZCk7+aP1d
-         vEkOguMoWlsHTmSYtN9BHn1blk4FLf/KckpnZg5PMLjnBWcO5ELaq0E6w+VM4XcNzOfY
-         lt3PTrxOoonjHxom5R7ETmaQXdl3oPBMw1gg71LQ17veBuRKJmUGIJAdruYZOQlPIYfh
-         LRNO6wJBwZTnKlqxeRHRJAnreIIrYbRN8N12akAbkKCYDgx4Wtm4WewqGSSyFoHZlDV9
-         QYzw==
-X-Gm-Message-State: ACrzQf38q08nS7tyn76gL/rK8dcyvgHYp57Cf1bmKDZHDwqHHEbx9Orv
-        mwaEnLCgJBB9Jzyj4CXdfws=
-X-Google-Smtp-Source: AMsMyM403XL05GVHUaJT8ocLDAA2Z1Prgmxaf+M7UlldPke0HpTgHrpCYBoEoYdvRv1R3vhpLLZj4Q==
-X-Received: by 2002:a17:902:8e84:b0:178:71f2:113c with SMTP id bg4-20020a1709028e8400b0017871f2113cmr2324788plb.79.1664441433296;
-        Thu, 29 Sep 2022 01:50:33 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-28.three.co.id. [180.214.232.28])
-        by smtp.gmail.com with ESMTPSA id d18-20020a170902ced200b0017808db132bsm5365039plg.137.2022.09.29.01.50.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 01:50:32 -0700 (PDT)
-Message-ID: <71effcc8-7345-28cd-6585-eb729fb4c6db@gmail.com>
-Date:   Thu, 29 Sep 2022 15:50:29 +0700
+        Thu, 29 Sep 2022 04:51:08 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B07211F132
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:51:06 -0700 (PDT)
+Received: from loongson-pc.loongson.cn (unknown [10.20.42.32])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxXWt5XDVjObIjAA--.5864S2;
+        Thu, 29 Sep 2022 16:51:05 +0800 (CST)
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+Subject: [PATCH V2] LoongArch: Fix cpu name after s3/s4
+Date:   Thu, 29 Sep 2022 16:51:05 +0800
+Message-Id: <20220929085105.8653-1-lvjianmin@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v3 1/4] serial: Convert serial_rs485 to kernel doc
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <20220928110509.13544-1-ilpo.jarvinen@linux.intel.com>
- <20220928110509.13544-2-ilpo.jarvinen@linux.intel.com>
- <YzURJa1RnxP+uj5/@debian.me>
- <75f07dbe-d1dd-ac18-5c8e-e6972e7fb28b@linux.intel.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <75f07dbe-d1dd-ac18-5c8e-e6972e7fb28b@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8BxXWt5XDVjObIjAA--.5864S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZF4xZr4rAF1rCrykZFykGrg_yoWDXFc_Ga
+        n293ZrGFn3Ga4vva4DWF18Wr43A3W8XFyYv3y2y3y3Cr13Aw45Jr1qkw13AryayF4rWrZ8
+        uw4S93Wq9F4jkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckYjsxI4VWkKwAYFVCjjxCrM7CY07I20VC2zVCF04k26cxKx2IY
+        s7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4
+        kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_
+        Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxV
+        W0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE
+        74AGY7Cv6cx26ryrJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07b0a0QUUUUU=
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/29/22 15:39, Ilpo Järvinen wrote:
-> On Thu, 29 Sep 2022, Bagas Sanjaya wrote:
-> 
->> On Wed, Sep 28, 2022 at 02:05:06PM +0300, Ilpo Järvinen wrote:
->>> diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
->>> index cea06924b295..6e347eb10b1f 100644
->>> --- a/include/uapi/linux/serial.h
->>> +++ b/include/uapi/linux/serial.h
->>> @@ -107,37 +107,57 @@ struct serial_icounter_struct {
->>>  	int reserved[9];
->>>  };
->>>  
->>> -/*
->>> +/**
->>> + * struct serial_rs485 - serial interface for controlling RS485 settings.
->>> + * @flags:			RS485 feature flags.
->>> + * @delay_rts_before_send:	Delay before send (milliseconds).
->>> + * @delay_rts_after_send:	Delay after send (milliseconds).
->>> + * @addr_recv:			Receive filter for RS485 addressing mode
->>> + *				(used only when %SER_RS485_ADDR_RECV is set).
->>> + * @addr_dest:			Destination address for RS485 addressing mode
->>> + *				(used only when %SER_RS485_ADDR_DEST is set).
->>> + * @padding0:			Padding (set to zero).
->>> + * @padding1:			Padding (set to zero).
->>> + * @padding:			Deprecated, use @padding0 and @padding1 instead.
->>> + *				Do not use with @addr_recv and @addr_dest (due to
->>> + *				overlap).
->>> + *
->>
->> I don't see definition of fields after @delay_rts_after_send in the
->> htmldocs output.
-> 
-> So it seems, this one I had missed. I guess the reason is that those 
-> members are inside anonymous unions. But the formatting follows what 
-> is documented here AFAICT:
-> 
-> https://www.kernel.org/doc/html/latest/doc-guide/kernel-doc.html#nested-structs-unions
-> 
-> Kerneldoc doesn't seem to live up to what is documented about it. It's a 
-> bit ironic that documentation system fails to document even itself to 
-> sufficient level, and what's worse, seems to be full of faulty examples.
-> 
-> Any suggestions how to make it work?
-> 
+On coming back from s3/s4, the cpu name will be overwritten
+in cpu_probe path of seconary cpu, so we adjust the postion
+of using cpu name existed in cpu hardware register, and only
+use it while failing to get cpu name from SMBIOS.
 
-CC'ing Akira.
+Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
 
->>>   * Serial interface for controlling RS485 settings on chips with suitable
->>>   * support. Set with TIOCSRS485 and get with TIOCGRS485 if supported by your
->>>   * platform. The set function returns the new state, with any unsupported bits
->>>   * reverted appropriately.
->>> + *
->>> + * serial_rs485::flags bits are:
->>> + *
->>> + * * %SER_RS485_ENABLED		- RS485 enabled.
->>> + * * %SER_RS485_RTS_ON_SEND	- Logical level for RTS pin when sending.
->>> + * * %SER_RS485_RTS_AFTER_SEND	- Logical level for RTS pin after sent.
->>> + * * %SER_RS485_RX_DURING_TX	- Full-duplex RS485 line.
->>> + * * %SER_RS485_TERMINATE_BUS	- Enable bus termination (if supported).
->>> + * * %SER_RS485_ADDRB		- Enable RS485 addressing mode.
->>> + * * %SER_RS485_ADDR_RECV	- Receive address filter (enables @addr_recv).
->>> + *				  Requires %SER_RS485_ADDRB.
->>> + * * %SER_RS485_ADDR_DEST	- Destination address (enables @addr_dest).
->>> + *				  Requires %SER_RS485_ADDRB.
->>
->> The last two items are rendered as bold text instead (maybe due to missing
->> fields rendering above?)
-> 
-> It just goes into some random formatting mode here. Even if I remove those 
-> field markers (@) it doesn't do formatting differently so your guesss is 
-> wrong.
-> 
-> I found now a way to make it work though. It works when I put the whole 
-> description on a single line but it comes at the cost of removing the 
-> alignment of those "-". The other way to make it work would be like this:
-> 
-> * * %SER_RS485_ADDR_RECV - Receive address filter (enables @addr_recv).
->     Requires %SER_RS485_ADDRB.
-> 
-> ...And that's no good. I guess the single-line approach is an acceptable 
-> compromise for this case.
-> 
-
-OK, thanks for explaining.
-
+diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
+index 529ab8f44ec6..255a09876ef2 100644
+--- a/arch/loongarch/kernel/cpu-probe.c
++++ b/arch/loongarch/kernel/cpu-probe.c
+@@ -187,7 +187,9 @@ static inline void cpu_probe_loongson(struct cpuinfo_loongarch *c, unsigned int
+ 	uint64_t *vendor = (void *)(&cpu_full_name[VENDOR_OFFSET]);
+ 	uint64_t *cpuname = (void *)(&cpu_full_name[CPUNAME_OFFSET]);
+ 
+-	__cpu_full_name[cpu] = cpu_full_name;
++	if (!__cpu_full_name[cpu])
++		__cpu_full_name[cpu] = cpu_full_name;
++
+ 	*vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
+ 	*cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
+ 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.31.1
+
