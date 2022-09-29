@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51DC5EF35A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD03B5EF365
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235175AbiI2KV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+        id S235274AbiI2KZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233870AbiI2KVP (ORCPT
+        with ESMTP id S235124AbiI2KYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:21:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BB341A397
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:21:15 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD5C22309;
-        Thu, 29 Sep 2022 03:21:21 -0700 (PDT)
-Received: from [10.57.66.102] (unknown [10.57.66.102])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F403D3F73B;
-        Thu, 29 Sep 2022 03:21:12 -0700 (PDT)
-Message-ID: <0007218f-96f0-c348-0dfb-7cb54f014b1c@arm.com>
-Date:   Thu, 29 Sep 2022 11:21:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH linux-next] coresight: use sysfs_emit() to instead of
- scnprintf()
-To:     James Clark <james.clark@arm.com>, zhangsongyi.cgel@gmail.com
-Cc:     mike.leach@linaro.org, leo.yan@linaro.org,
-        alexander.shishkin@linux.intel.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org,
-        zhang songyi <zhang.songyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-References: <20220927115136.259926-1-zhang.songyi@zte.com.cn>
- <b8ad73ea-a20e-0e74-766e-eeb4cdeb1890@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <b8ad73ea-a20e-0e74-766e-eeb4cdeb1890@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 29 Sep 2022 06:24:51 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C7B42ED49;
+        Thu, 29 Sep 2022 03:24:50 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1134)
+        id 22B7B20DEE6F; Thu, 29 Sep 2022 03:24:50 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 22B7B20DEE6F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1664447090;
+        bh=33c+IysfP1nl2vviiqkB7+1UrsmV1vFHMMgfRpYodcc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mdfXJ5M4B75XJz3s4dQNhleREvvlToHImVy+O05Ec3I5zejCyXnDMiWv9qk3V6yiX
+         7mpum4UwPQICSwyrMrqhCzzAEd0W0thHeDybTz3FeHz8s0wmz/cKOFiCqk3ORy377Z
+         fBsX8ueWxhLDK/F2r5i2+m4k+Gozr8uBTRUJIMeM=
+From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Shradha Gupta <shradhagupta@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: [PATCH 0/2] Configurable order free page reporting in hyper-v
+Date:   Thu, 29 Sep 2022 03:24:39 -0700
+Message-Id: <1664447081-14744-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 15:56, James Clark wrote:
-> 
-> 
-> On 27/09/2022 12:51, zhangsongyi.cgel@gmail.com wrote:
->> From: zhang songyi <zhang.songyi@zte.com.cn>
->>
->> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
->> should only use sysfs_emit() or sysfs_emit_at() when formatting the value
->> to be returned to user space.
->>
->> Reported-by: Zeal Robot <zealci@zte.com.cn>
->> Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
+Configurable order free page reporting is enabled in page_reporting
+driver in mm tree. However, changes need to be made in drivers like
+hyper-v's hv_balloon to make it aware of the page order.
+These patches add support for the same.
+In the page_reporting driver we export the page_reporting_order module
+parameter. Following precedence is added in setting the reporting order
+        a. Value of page_reporting_order parameter
+        b. Value of order passed while registering with the driver
+        c. default value (pageblock_order)
+Besides this, in the page_reporting module a check is added to ensure
+that whenever the page_reporting_order value is changed, it is within
+the prescribed limits.
 
+The hv_balloon side changes include consuming the exported
+page_reporting_order. Making changes in reporting these variable order
+free pages as cold discard hints to hyper-v and dropping and refining
+checks that restrict the order to a minimum of 9(default).
 
->> ---
->>   drivers/hwtracing/coresight/coresight-stm.c | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
-> 
-> Reviewed-by: James Clark <james.clark@arm.com>
+Shradha Gupta (2):
+  mm/page_reporting: Add checks for page_reporting_order param value
+  hv_balloon: Add support for configurable order free page reporting
 
+ drivers/hv/hv_balloon.c | 94 ++++++++++++++++++++++++++++++++---------
+ mm/page_reporting.c 	 | 50 ++++++++++++++++++++++++++++++++++++++++-----
+ 2 file changed, 118 insertions(+), 26 deletions(-)
 
-I have queued this locally for now, will push it once the next
-cycle is out.
+-- 
+2.37.2
 
-Suzuki
