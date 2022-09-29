@@ -2,127 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E755EF1E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79515EF1E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235269AbiI2J0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 05:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
+        id S234967AbiI2J0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 05:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235154AbiI2JZs (ORCPT
+        with ESMTP id S234932AbiI2JZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:25:48 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB63610FE16;
-        Thu, 29 Sep 2022 02:25:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664443545; x=1695979545;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=mOKSZ4gt8N3oR2TFgzHf+H1VytXoQVKrtFoK/lXXaQ4=;
-  b=AO45MrGI3bWm9dmOJYsjQEuMNeTCSLuAYRBVITr44LOU7W97Pk84qh9A
-   ftfVJjkDEUdWy67WMUsiGYCehmZsCpge4IrQSmOiHiMGHn1XN8l/heiZl
-   S+edYX189Syzd5vnnZWP/gsTu8/GPVgrtUCt8wAxYyOMl1NX3TqzWhVSo
-   aX6eZIZUfJM0gIIN6+qfiY6MkuokmMqW0UXWg4azTBGCYLKD9NcprkEbI
-   KFhYBipuevjcOVo+YT5jMh7ihwU02j09gszMcPx6azbyNOHTg8meuQJcu
-   sAOu7/zxIqV1DU2wr8vu2rglVDbbXWroXrUbZQQ7eiobaeJclf6ZklLC8
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="303329359"
-X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
-   d="scan'208";a="303329359"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 02:25:43 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="573386024"
-X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
-   d="scan'208";a="573386024"
-Received: from pramona-mobl1.ger.corp.intel.com ([10.252.60.139])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 02:25:40 -0700
-Date:   Thu, 29 Sep 2022 12:25:38 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH v3 1/4] serial: Convert serial_rs485 to kernel doc
-In-Reply-To: <71effcc8-7345-28cd-6585-eb729fb4c6db@gmail.com>
-Message-ID: <f05c437b-db3c-ad3-f393-3ff369d8f1c9@linux.intel.com>
-References: <20220928110509.13544-1-ilpo.jarvinen@linux.intel.com> <20220928110509.13544-2-ilpo.jarvinen@linux.intel.com> <YzURJa1RnxP+uj5/@debian.me> <75f07dbe-d1dd-ac18-5c8e-e6972e7fb28b@linux.intel.com> <71effcc8-7345-28cd-6585-eb729fb4c6db@gmail.com>
+        Thu, 29 Sep 2022 05:25:51 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80B776967
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:25:49 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id a10so908879ljq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=5OAeuM1FnE6AhSjbe1EwzxAODDZoh1JPm+uuRMZhdcc=;
+        b=N56MGK+wRZuXVYnDwL+bG0fpn5Ti5QhwFFC1VfnJ2HReDecXwThSvQvwg+/qShQfOa
+         oXDfC/nLfmrC1qYaEHT0Ni1IACMUnWCHQjrDZWmW1CzR5iYoSUisDXg/INEAcvrNPZ0b
+         dsTqezYlp9y3Cb4hd+pJpcUeG20XfAtjyz7P1dNzatg3yf3bF7ASFdB8gE/u5fUcGVJm
+         G7sQb5pw8Ha9KFj29+DkPchhITzKnd7MVbpuDIwRSwgQj5z2Gecw1gQkSCYGn8WHatV+
+         sbDIALMOeZmcNQmTXKWkRV7eGnEvBWyeL3GEct0LUzbTpyxG9BzOuhXRRfoVCKk/ca+6
+         NsgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=5OAeuM1FnE6AhSjbe1EwzxAODDZoh1JPm+uuRMZhdcc=;
+        b=ffsWsK2cM/iHcTd/qgk/lNBRSRVyXJC2/UOHbwMcpO9fgJVsqiwKWllPqKDhnWGGx4
+         nuTJ65HfGGY8YPMhTtp/CZkepdLy2LfA/PfU+yWN/b7lA7ploJlIS4LUw+gsLlVzsESp
+         RtM3aiAggpKXoFf+oYWBCnd7ZrpnuKJAu9PGX/8YfiA4iY3RVLyddvAxTGKoaAhjINGE
+         n+gjhaUvBksxUFU8RqIluvTlVJL3uu8GqB3cHCVXm598jKa9P26dq0EcxDH2ZYWARBkJ
+         giWiJXj/q2u5+mNcbHLoQIQ7ttjEhj3znM/HK4ONsVYBmXOXijBBfosl1PYN06e3JEWS
+         uVcw==
+X-Gm-Message-State: ACrzQf0VBaKyrrj5axy0CLmBrJ622D3/vnIN0kep7IHgxb3y8TrpajRC
+        JjszhSfOqFRSURH9gibI+xWh7A==
+X-Google-Smtp-Source: AMsMyM7BYHZMI+ch9uGsYDSjZf4sjzV84RY8eytjxT5N2U21RwYGh4HG977++CvYhmF58mY6rDwdUQ==
+X-Received: by 2002:a2e:91d3:0:b0:26a:bb23:8f81 with SMTP id u19-20020a2e91d3000000b0026abb238f81mr765603ljg.60.1664443548335;
+        Thu, 29 Sep 2022 02:25:48 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id cf31-20020a056512281f00b00497a3e11608sm728244lfb.303.2022.09.29.02.25.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 02:25:47 -0700 (PDT)
+Message-ID: <f7d78734-f23f-ba5c-9e75-7a7b76d9473c@linaro.org>
+Date:   Thu, 29 Sep 2022 11:25:47 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-209069814-1664443542=:1640"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v5 3/4] arm64: dts: qcom: msm8916-samsung-j5-common: Add
+ new device trees
+Content-Language: en-US
+To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
+        devicetree@vger.kernel.org
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>,
+        Julian Ribbeck <julian.ribbeck@gmx.de>,
+        Josef W Menad <JosefWMenad@protonmail.ch>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20220928184155.186632-1-linmengbo0689@protonmail.com>
+ <20220928184314.186805-1-linmengbo0689@protonmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220928184314.186805-1-linmengbo0689@protonmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-209069814-1664443542=:1640
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 29 Sep 2022, Bagas Sanjaya wrote:
-
-> On 9/29/22 15:39, Ilpo Järvinen wrote:
-> > On Thu, 29 Sep 2022, Bagas Sanjaya wrote:
-> > 
-> >> On Wed, Sep 28, 2022 at 02:05:06PM +0300, Ilpo Järvinen wrote:
-> >>> diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
-> >>> index cea06924b295..6e347eb10b1f 100644
-> >>> --- a/include/uapi/linux/serial.h
-> >>> +++ b/include/uapi/linux/serial.h
-> >>> @@ -107,37 +107,57 @@ struct serial_icounter_struct {
-> >>>  	int reserved[9];
-> >>>  };
-> >>>  
-> >>> -/*
-> >>> +/**
-> >>> + * struct serial_rs485 - serial interface for controlling RS485 settings.
-> >>> + * @flags:			RS485 feature flags.
-> >>> + * @delay_rts_before_send:	Delay before send (milliseconds).
-> >>> + * @delay_rts_after_send:	Delay after send (milliseconds).
-> >>> + * @addr_recv:			Receive filter for RS485 addressing mode
-> >>> + *				(used only when %SER_RS485_ADDR_RECV is set).
-> >>> + * @addr_dest:			Destination address for RS485 addressing mode
-> >>> + *				(used only when %SER_RS485_ADDR_DEST is set).
-> >>> + * @padding0:			Padding (set to zero).
-> >>> + * @padding1:			Padding (set to zero).
-> >>> + * @padding:			Deprecated, use @padding0 and @padding1 instead.
-> >>> + *				Do not use with @addr_recv and @addr_dest (due to
-> >>> + *				overlap).
-> >>> + *
-> >>
-> >> I don't see definition of fields after @delay_rts_after_send in the
-> >> htmldocs output.
-> > 
-> > So it seems, this one I had missed. I guess the reason is that those 
-> > members are inside anonymous unions. But the formatting follows what 
-> > is documented here AFAICT:
-> > 
-> > https://www.kernel.org/doc/html/latest/doc-guide/kernel-doc.html#nested-structs-unions
-> > 
-> > Kerneldoc doesn't seem to live up to what is documented about it. It's a 
-> > bit ironic that documentation system fails to document even itself to 
-> > sufficient level, and what's worse, seems to be full of faulty examples.
-> > 
-> > Any suggestions how to make it work?
-> > 
+On 28/09/2022 20:44, Lin, Meng-Bo wrote:
+> After moving msm8916-samsung-j5.dts to msm8916-samsung-j5-common.dtsi,
+> Add new J3 and J5 2016 device trees.
 > 
-> CC'ing Akira.
+> [Add j5x device tree]
+> Co-developed-by: Josef W Menad <JosefWMenad@protonmail.ch>
+> Signed-off-by: Josef W Menad <JosefWMenad@protonmail.ch>
+> [Use &pm8916_usbin as USB extcon and add chassis-type for j5x]
+> Co-developed-by: Stephan Gerhold <stephan@gerhold.net>
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> [Use common init device tree and add j3 device tree]
+> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
 
-Nevermind, I figured out where the problem is (my incorrect use of 
-private: markers).
 
--- 
- i.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
---8323329-209069814-1664443542=:1640--
+Best regards,
+Krzysztof
+
