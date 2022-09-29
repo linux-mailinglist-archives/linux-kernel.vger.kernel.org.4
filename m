@@ -2,195 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5320F5EFB15
+	by mail.lfdr.de (Postfix) with ESMTP id 9E57F5EFB16
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235782AbiI2QkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S235871AbiI2QkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235866AbiI2QkO (ORCPT
+        with ESMTP id S235729AbiI2QkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:40:14 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695412AE0F
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:40:11 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 05EF63200926;
-        Thu, 29 Sep 2022 12:40:09 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 29 Sep 2022 12:40:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1664469609; x=1664556009; bh=Ee
-        I5ZyqSWevp3ALbdw0H7PBzG6BJRTt+WN9M56QhsbY=; b=VAfprg9OniIkrEbZkD
-        OIIOg8dtbhBFwd5Mb38ArJimU0q+562wIykbE7oqmG4xbhoZA7qRNsrtOfDCXHVQ
-        46ZINhZnbS7QZ3Fsq3nh9ALkCeEq/4ow7TFpsxV9NI1rTpxMNEKZhxqWLrbVOm+n
-        pQDpMgJ9da85n7nKMNzyFGodZXN+8Mm0L1rKxW5314DnlH5jIKz3r2/XJY5FCj0V
-        HF6WooEI2Umy2hLjdsBBLekumZlvbOeXxrKGf3OwEEEAtO09tMaS1y6mRmNmtbwW
-        UKVsRKrILs6WNq34nmwWeevkmjMUXYyMoeazvhDF0yJdMJQ71HgqyN7hMwILYcY5
-        z86g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1664469609; x=1664556009; bh=EeI5ZyqSWevp3
-        ALbdw0H7PBzG6BJRTt+WN9M56QhsbY=; b=BMSADXNsQkqfQGff2vFd6w8v2iIQK
-        q/RAy+ESRe6KuTyPN9sURbIOV/f6l6ztGbisRu7EISacujpVXxGNRZkpE+HiLaIn
-        ImomfIKv5rQJOywa6cBi12ODKp+yklKjz4g2YHyRhjDRA1Ujj37Q/htjElkwKBOE
-        +oYwCzEy5nEUuF/tNisuHSxWyngEbtrc0Yc7LE5ChjTPV/l0RyuvQVes++sBeMaY
-        skl9DXm+gzuUVBWwT/SdksdG8YoeF0qvCkYlfEYyv6Fjhtaxkw8QpuoTOeO9DDtB
-        2x3Iq8W2q2XVDMhmK7yZzBlYqFQa9LniPxnHYN8itz9KeAu5qCXLoJe6A==
-X-ME-Sender: <xms:aMo1Y-w-acwpn67_zpJWqW7x1Nhk6TC7s0F4WulPE2wQMfaChjdWYg>
-    <xme:aMo1Y6Tu3YhcvEbaDNO1HXmxFrecYPSq66PEvhEnSZooJU4WjSOnrU6gZ63Fo-9ht
-    O63HSnw-2K2wA0K1yk>
-X-ME-Received: <xmr:aMo1YwVMdtnUoPAjrcjNqjmDtVk5X35COOl_sy8gtF0V05l67KoCg-cI_Wxzz9Ksw2HmwS7z>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehtddguddthecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefvhigt
-    hhhoucetnhguvghrshgvnhcuoehthigthhhosehthigthhhordhpihiiiigrqeenucggtf
-    frrghtthgvrhhnpefhvefhvddvffeufffgffejheelffeffeffueehgeevvdeggfeufeek
-    udeikefgleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepthihtghhohesthihtghhohdrphhi
-    iiiirg
-X-ME-Proxy: <xmx:aMo1Y0hIKo-RvAHkeofWbcf1qnfKQ9UlO1qeMe2PU7a99eK-JaPe6w>
-    <xmx:aMo1YwA7lUANrPeLtTzsQdyIkQLUMHPnfBzI6rtToB7OQTAQuH8AIg>
-    <xmx:aMo1Y1K7cncWJfd74VLDOwFDzaDgaven_BvC1VQOM7kbd4yp3br8aw>
-    <xmx:aco1Yz8Mg06d4AExTEaV4XxChgkCl_iNPTf4NqQHNPKZpQ30G7gbzg>
-Feedback-ID: i21f147d5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 29 Sep 2022 12:40:07 -0400 (EDT)
-From:   Tycho Andersen <tycho@tycho.pizza>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
-        fuse-devel@lists.sourceforge.net,
-        Tycho Andersen <tycho@tycho.pizza>
-Subject: [PATCH v2] fuse: In fuse_flush only wait if someone wants the return code
-Date:   Thu, 29 Sep 2022 10:39:44 -0600
-Message-Id: <20220929163944.195913-1-tycho@tycho.pizza>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAJfpegswSAeUdxHR1Z8jC_nQtUm7_mD=ZZC_LyQczaoJWTPe3g@mail.gmail.com>
-References: <CAJfpegswSAeUdxHR1Z8jC_nQtUm7_mD=ZZC_LyQczaoJWTPe3g@mail.gmail.com>
+        Thu, 29 Sep 2022 12:40:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2269237D1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664469603;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L6vXI1WS0UxzQeZpA4OgRrRLeEgBfGYudqcjKdjRj7M=;
+        b=TJu5WBQlN7rYlZSGpbBnpQwfU39CO66Qg3tONs0XE8Wtmq8G7Om3OCmm8oblHwIeOaPhgo
+        ZT/6jLk9UNq0HkFV/sv6Ik8575MCR/sIKy69ftC1Q5ujGuUGEDpATRQk7IpEs8Q8AyMk0q
+        GJ0uqUbkfWPBAU93VXOELHaT3DfVfhg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-582-6I3q8TJ0Pm2bKTmHsCLDzQ-1; Thu, 29 Sep 2022 12:40:00 -0400
+X-MC-Unique: 6I3q8TJ0Pm2bKTmHsCLDzQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9C5FB85A5B6;
+        Thu, 29 Sep 2022 16:39:59 +0000 (UTC)
+Received: from localhost (unknown [10.22.11.90])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F310F1731B;
+        Thu, 29 Sep 2022 16:39:58 +0000 (UTC)
+Date:   Thu, 29 Sep 2022 13:39:57 -0300
+From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "dinggao.pan" <dinggao.pan@horizon.ai>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "ming.yu" <ming.yu@horizon.ai>,
+        "yunqian.wang" <yunqian.wang@horizon.ai>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rt-users@vger.kernel.org" <linux-rt-users@vger.kernel.org>
+Subject: Re: [PATCH RFC stable 4.14 1/1] mmc: core: fix hung task caused by
+ race condition on context_info
+Message-ID: <YzXKXQOw5FtNmy/J@uudg.org>
+References: <21f604139a9a4675b9ed49292839dcfb@horizon.ai>
+ <dd8d212c48944cb4ba3b58af2efe3723@horizon.ai>
+ <CAPDyKFo_izPD7z-GmSEZ_8H_AX+KiVuLqN7JcD2Kdjjuukk-7g@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAPDyKFo_izPD7z-GmSEZ_8H_AX+KiVuLqN7JcD2Kdjjuukk-7g@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a fuse filesystem is mounted inside a container, there is a problem
-during pid namespace destruction. The scenario is:
+On Thu, Sep 29, 2022 at 02:41:26PM +0200, Ulf Hansson wrote:
+> On Mon, 5 Sept 2022 at 08:22, dinggao.pan <dinggao.pan@horizon.ai> wrote:
+> >
+> > Hi,
+> > After applying rt patches to our 4.14 kernel and enabling preempt-rt, we met a hung task during boot caused by race condition on context_info stored in struct mmc_host.
+> > From our investigation, context_info should not be changed by threads that have not claimed the host, hence the following fix.
+> >
+> > Any comments are much appreciated.
+> > Dinggao Pan
+> 
+> Hi Dinggao,
+> 
+> Apologize for the delay.
+> 
+> The 4.14 kernel is too old for me to be able to comment. In
+> particular, the mmc block layer moved to blk-mq in v4.16, which means
+> the path you are investigating doesn't exist any more, sorry.
 
-1. task (a thread in the fuse server, with a fuse file open) starts
-   exiting, does exit_signals(), goes into fuse_flush() -> wait
-2. fuse daemon gets killed, tries to wake everyone up
-3. task from 1 is stuck because complete_signal() doesn't wake it up, since
-   it has PF_EXITING.
+And the new code has the queue operations protected by a spinlock
+(queue_lock), which I believe is necessary to fix the issue reported
+here.
 
-The result is that the thread will never be woken up, and pid namespace
-destruction will block indefinitely.
-
-To add insult to injury, nobody is waiting for these return codes, since
-the pid namespace is being destroyed.
-
-To fix this, let's not block on flush operations when the current task has
-PF_EXITING.
-
-This does change the semantics slightly: the wait here is for posix locks
-to be unlocked, so the task will exit before things are unlocked. To quote
-Miklos: https://lore.kernel.org/all/CAJfpegsTmiO-sKaBLgoVT4WxDXBkRES=HF1YmQN1ES7gfJEJ+w@mail.gmail.com/
-
-> "remote" posix locks are almost never used due to problems like this,
-> so I think it's safe to do this.
-
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Signed-off-by: Tycho Andersen <tycho@tycho.pizza>
-Link: https://lore.kernel.org/all/YrShFXRLtRt6T%2Fj+@risky/
----
-v2: drop the fuse_flush_async() function and just re-use the already
-    prepared args; add a description of the problem+note about posix locks
----
- fs/fuse/file.c | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
-
-diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-index 05caa2b9272e..20bbe3e1afc7 100644
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -464,6 +464,34 @@ static void fuse_sync_writes(struct inode *inode)
- 	fuse_release_nowrite(inode);
- }
+Luis
  
-+struct fuse_flush_args {
-+	struct fuse_args args;
-+	struct fuse_flush_in inarg;
-+	struct inode *inode;
-+	struct fuse_file *ff;
-+};
-+
-+static void fuse_flush_end(struct fuse_mount *fm, struct fuse_args *args, int err)
-+{
-+	struct fuse_flush_args *fa = container_of(args, typeof(*fa), args);
-+
-+	if (err == -ENOSYS) {
-+		fm->fc->no_flush = 1;
-+		err = 0;
-+	}
-+
-+	/*
-+	 * In memory i_blocks is not maintained by fuse, if writeback cache is
-+	 * enabled, i_blocks from cached attr may not be accurate.
-+	 */
-+	if (!err && fm->fc->writeback_cache)
-+		fuse_invalidate_attr_mask(fa->inode, STATX_BLOCKS);
-+
-+
-+	fuse_file_put(fa->ff, false, false);
-+	kfree(fa);
-+}
-+
- static int fuse_flush(struct file *file, fl_owner_t id)
- {
- 	struct inode *inode = file_inode(file);
-@@ -505,6 +533,28 @@ static int fuse_flush(struct file *file, fl_owner_t id)
- 	args.in_args[0].value = &inarg;
- 	args.force = true;
- 
-+	if (current->flags & PF_EXITING) {
-+		struct fuse_flush_args *fa;
-+
-+		err = -ENOMEM;
-+		fa = kzalloc(sizeof(*fa), GFP_KERNEL);
-+		if (!fa)
-+			goto inval_attr_out;
-+
-+		memcpy(&fa->args, &args, sizeof(args));
-+		memcpy(&fa->inarg, &inarg, sizeof(inarg));
-+		fa->args.nocreds = true;
-+		fa->args.end = fuse_flush_end;
-+		fa->ff = fuse_file_get(ff);
-+		fa->inode = inode;
-+
-+		err = fuse_simple_background(fm, &fa->args, GFP_KERNEL);
-+		if (err)
-+			fuse_flush_end(fm, &fa->args, err);
-+
-+		return err;
-+	}
-+
- 	err = fuse_simple_request(fm, &args);
- 	if (err == -ENOSYS) {
- 		fm->fc->no_flush = 1;
-
-base-commit: 3d7cb6b04c3f3115719235cc6866b10326de34cd
--- 
-2.34.1
+> Kind regards
+> Uffe
+> 
+> >
+> > From: "Dinggao Pan" <mailto:dinggao.pan@horizon.ai>
+> >
+> > 　　A race condition happens under following circumstances:
+> >     (mmc_thread1)               |              (mmc_thread2)
+> >     mmc_issue_rq(req1)          |
+> >       > qcnt++ for req1         |
+> >         host handling req1      |
+> >     mmc_queue_thread(req=null)  |
+> >       > enter queue thread      |
+> >         again, fetches blk req  |
+> >         (return null), sets     |
+> >         is_waiting_last_req 1   |  mmc_request_fn(req1) -> set is_new_req 1
+> >                                 |                   and wake_up wait_queue
+> >     mmc_issue_rq(req2)          |   > mmc_thread2 tries to claim host
+> >       > **qcnt++ for req2**     |
+> >       mmc_finalize_req(req2)    |
+> >         > should wait for req1  |
+> >           done but req2 return  |
+> >           MMC_BLK_NEW_REQ       |
+> >           due to is_new_req     |
+> >           already set to 1      |
+> >                                 |
+> >                                 |
+> >     req1 done                   |
+> >       > qcnt-- for req1         |
+> >     mmc_issue_rq(req3)          |
+> >       > qcnt++ for req3         |
+> > req2 is not handled but qcnt is already added(noted by **),
+> > thus mmc_thread1 will never release host, causing mmc_threads
+> > except thread1 to hung. Fix race by moving wake_up to the front of
+> > context_info update.
+> >
+> > Reviewed By: Yunqian Wang <mailto:yunqian.wang@horizon.ai>
+> > Signed-off-by: Dinggao Pan <mailto:dinggao.pan@horizon.ai>
+> > Signed-off-by: Ming Yu <mailto:ming.yu@horizon.ai>
+> > ---
+> > drivers/mmc/core/queue.c | 7 +++++--
+> > 1 file changed, 5 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
+> > index 0a4e77a5b..58318c102 100644
+> > --- a/drivers/mmc/core/queue.c
+> > +++ b/drivers/mmc/core/queue.c
+> > @@ -107,6 +107,11 @@ static void mmc_request_fn(struct request_queue *q)
+> >                return;
+> >       }
+> >
+> > +      if (mq->asleep) {
+> > +               wake_up_process(mq->thread);
+> > +               return;
+> > +      }
+> > +
+> >       cntx = &mq->card->host->context_info;
+> >
+> >       if (cntx->is_waiting_last_req) {
+> > @@ -114,8 +119,6 @@ static void mmc_request_fn(struct request_queue *q)
+> >                wake_up_interruptible(&cntx->wait);
+> >       }
+> >
+> > -       if (mq->asleep)
+> > -                wake_up_process(mq->thread);
+> > }
+> >
+> > static struct scatterlist *mmc_alloc_sg(int sg_len, gfp_t gfp)
+> > --
+> > 2.36.1
+> 
+---end quoted text---
 
