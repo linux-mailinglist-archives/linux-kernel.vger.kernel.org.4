@@ -2,138 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5AA5EF5B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 14:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 257275EF5AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 14:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234714AbiI2Msw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 08:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235256AbiI2Msr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S235235AbiI2Msr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 29 Sep 2022 08:48:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB13615E4E4;
-        Thu, 29 Sep 2022 05:48:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D89F91A32;
-        Thu, 29 Sep 2022 05:48:51 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5162A3F792;
-        Thu, 29 Sep 2022 05:48:44 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     robh+dt@kernel.org, frowand.list@gmail.com
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: [PATCH v2] of: Fix "dma-ranges" handling for bus controllers
-Date:   Thu, 29 Sep 2022 13:48:38 +0100
-Message-Id: <112e8f3d3e7c054ecf5e12b5ac0aa5596ec00681.1664455433.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.36.1.dirty
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234971AbiI2Mso (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Sep 2022 08:48:44 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA033160E5C
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 05:48:42 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id i203-20020a1c3bd4000000b003b3df9a5ecbso3172917wma.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 05:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date;
+        bh=RTh6Jh7foBvpZUwlr8i45KWrX5TaOjqxs0vxrakIbik=;
+        b=X4/Ix33GrpYpIdhmhwPVXrpN4zFL1fe8qw5LptmI7s57boWioFKy6Wio27lXYW58zD
+         2HQBFJ5y9jZxJPFBjnkYDbCdINOty9WDG1YZdbcjsjUzfMJF820nIBdRrslXmsT5exet
+         3RXyteA07EpdoVv5uRVJ31C8qfZNtJzl4TCPGxJX2u3XeO6Z2ZF4+wFJ276sIPbsxI2d
+         WM9vmtVhMcLLMdgxjdGW4lpwIrjXbrIotXldt4pf5N7oRs8ggMspsBALCBOgyfUCBDE+
+         dEycT80zkOZS/FWVOvDYWTEGOQGI+hrC8bSQUYaCFcOr70AtnhLMzIJUDdSERPub7CCJ
+         nHTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=RTh6Jh7foBvpZUwlr8i45KWrX5TaOjqxs0vxrakIbik=;
+        b=B60h0yS5xYSM9kW48cqeKnpUv/M7oML5JssrY5b107biPrwH1R3UYeNILtEqzJYYAJ
+         dwWGXxmAlknYf+0Dz7dRCYQHNIdtfxLgzJYPtFt3042RnhhWZDsTaVnSCrr0+ULW+e0a
+         CcO+m7JJC5RRjUR1j4oUmkBpl9ED9J+fJFfBkv7em/J0hVpkHlsX1nr/6b7seL7BigIS
+         foWJekIX0/HOkiQEXuPkBQ/pWosOXswR21gPa4kli1sPJ0F7R0YDzVya2ZWuq2B58G6I
+         3cU/3rzINBFn8HVOFH1lXJMu4l0ns8oeC4eZS+cPVv8vKWBnNr7UAHJVyfWoZfZbw0g+
+         v9Dg==
+X-Gm-Message-State: ACrzQf2oKEeuT53kf42tsnZ25lQfEe6OO54TMdPwDBIj2lLuiGS0j5Jt
+        SeUj6sQ/CTJZutRYo04k2klmeGHCiyJfLYMh
+X-Google-Smtp-Source: AMsMyM5QdlrG59bq5kgnMgzyzNnDabiZ0EU3o6UW21hHGi8mdF26IuOMR1PjjfrUGjrDYbDj7L/hZw==
+X-Received: by 2002:a7b:c447:0:b0:3b4:8977:4186 with SMTP id l7-20020a7bc447000000b003b489774186mr2226076wmi.74.1664455721407;
+        Thu, 29 Sep 2022 05:48:41 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:1f17:3ea3:4e46:dff? ([2a01:e0a:982:cbb0:1f17:3ea3:4e46:dff])
+        by smtp.gmail.com with ESMTPSA id l18-20020a05600c2cd200b003a63a3b55c3sm4686351wmc.14.2022.09.29.05.48.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 05:48:40 -0700 (PDT)
+Message-ID: <051ccc1c-ae56-932c-0be8-19abae562615@linaro.org>
+Date:   Thu, 29 Sep 2022 14:48:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 5/7] arm: dts: qcom: mdm9615: remove invalid pmic
+ subnodes compatibles
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v1-5-b6e63a7df1e8@linaro.org>
+ <0636d53f-508f-8a86-0973-2641c9020622@linaro.org>
+ <6ed642ea-424d-49ed-eb30-e09588720373@linaro.org>
+ <1a3c6766-9be5-1e55-95eb-bc9656e5c9a3@linaro.org>
+ <7f8572ab-ff97-54bd-a5f3-fe0e179ee48e@linaro.org>
+ <84cb8941-eb15-1bbf-59b7-bbcd6c15c30d@linaro.org>
+ <07405d0d-8534-6470-21d1-26b85dbd7de0@linaro.org>
+ <f54377f0-a152-9367-1b06-f49df7466282@linaro.org>
+ <3fa19362-118b-232e-0baf-ee365fa2f2e2@linaro.org>
+ <07c75827-b8e5-7c70-315b-48617b9818e0@linaro.org>
+ <9067ca94-cd5d-6883-d0e0-374ed7f599ad@linaro.org>
+ <65c5ee36-8651-8a42-b6b1-3b8041c7edb8@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <65c5ee36-8651-8a42-b6b1-3b8041c7edb8@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 951d48855d86 ("of: Make of_dma_get_range() work on bus nodes")
-relaxed the handling of "dma-ranges" for any leaf node on the assumption
-that it would still represent a usage error for the property to be
-present on a non-bus leaf node. However there turns out to be a fiddly
-case where a bus also represents a DMA-capable device in its own right,
-such as a PCIe root complex with an integrated DMA engine on its
-platform side. In such cases, "dma-ranges" translation is entirely valid
-for devices discovered behind the bus, but should not be erroneously
-applied to the bus controller device itself which operates in its
-parent's address space. Fix this by restoring the previous behaviour for
-the specific case where a device is configured via its own OF node,
-since it is logical to assume that a device should never represent its
-own parent bus.
+Hi,
 
-Reported-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
+On 29/09/2022 14:27, Krzysztof Kozlowski wrote:
+> 
+> We are making circles and discussion takes too much. 
 
-v2: Fix !HAS_DMA build error
+I'm sorry this happens, but I really want solve this stuff which in suspend since 2015.
 
- drivers/of/address.c    | 4 +++-
- drivers/of/device.c     | 9 ++++++++-
- drivers/of/of_private.h | 5 +++++
- 3 files changed, 16 insertions(+), 2 deletions(-)
+So let me recall the original issue:
 
-diff --git a/drivers/of/address.c b/drivers/of/address.c
-index 96f0a12e507c..c34ac33b7338 100644
---- a/drivers/of/address.c
-+++ b/drivers/of/address.c
-@@ -579,7 +579,8 @@ u64 of_translate_address(struct device_node *dev, const __be32 *in_addr)
- }
- EXPORT_SYMBOL(of_translate_address);
- 
--static struct device_node *__of_get_dma_parent(const struct device_node *np)
-+#ifdef CONFIG_HAS_DMA
-+struct device_node *__of_get_dma_parent(const struct device_node *np)
- {
- 	struct of_phandle_args args;
- 	int ret, index;
-@@ -596,6 +597,7 @@ static struct device_node *__of_get_dma_parent(const struct device_node *np)
- 
- 	return of_node_get(args.np);
- }
-+#endif
- 
- static struct device_node *of_get_next_dma_parent(struct device_node *np)
- {
-diff --git a/drivers/of/device.c b/drivers/of/device.c
-index 75b6cbffa755..8cefe5a7d04e 100644
---- a/drivers/of/device.c
-+++ b/drivers/of/device.c
-@@ -116,12 +116,19 @@ int of_dma_configure_id(struct device *dev, struct device_node *np,
- {
- 	const struct iommu_ops *iommu;
- 	const struct bus_dma_region *map = NULL;
-+	struct device_node *bus_np;
- 	u64 dma_start = 0;
- 	u64 mask, end, size = 0;
- 	bool coherent;
- 	int ret;
- 
--	ret = of_dma_get_range(np, &map);
-+	if (np == dev->of_node)
-+		bus_np = __of_get_dma_parent(np);
-+	else
-+		bus_np = of_node_get(np);
-+
-+	ret = of_dma_get_range(bus_np, &map);
-+	of_node_put(bus_np);
- 	if (ret < 0) {
- 		/*
- 		 * For legacy reasons, we have to assume some devices need
-diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
-index 9324483397f6..fb6792d381a6 100644
---- a/drivers/of/of_private.h
-+++ b/drivers/of/of_private.h
-@@ -155,12 +155,17 @@ struct bus_dma_region;
- #if defined(CONFIG_OF_ADDRESS) && defined(CONFIG_HAS_DMA)
- int of_dma_get_range(struct device_node *np,
- 		const struct bus_dma_region **map);
-+struct device_node *__of_get_dma_parent(const struct device_node *np);
- #else
- static inline int of_dma_get_range(struct device_node *np,
- 		const struct bus_dma_region **map)
- {
- 	return -ENODEV;
- }
-+static inline struct device_node *__of_get_dma_parent(const struct device_node *np)
-+{
-+	return of_get_parent(np);
-+}
- #endif
- 
- void fdt_init_reserved_mem(void);
--- 
-2.36.1.dirty
+DTBS check reports:
 
+arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb: pmic@0: compatible: ['qcom,pm8018', 'qcom,pm8921'] is too long
+         From schema: Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
+
+arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb: pmic@0: rtc@11d:compatible: ['qcom,pm8018-rtc', 'qcom,pm8921-rtc'] is too long
+         From schema: Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
+
+arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb:0:0: /soc/qcom,ssbi@500000/pmic@0/pwrkey@1c: failed to match any schema with compatible: ['qcom,pm8018-pwrkey', 'qcom,pm8921-pwrkey']
+
+arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb:0:0: /soc/qcom,ssbi@500000/pmic@0/pwrkey@1c: failed to match any schema with compatible: ['qcom,pm8018-pwrkey', 'qcom,pm8921-pwrkey']
+
+arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dtb: rtc@11d: compatible: ['qcom,pm8018-rtc', 'qcom,pm8921-rtc'] is too long
+         From schema: Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
+
+So trying to solve those, and since the PMIC in the wp8548 module is a PM8018, and it happens to be (partially ?? potentially ??) compatible
+with the PM8921, and I had issues adding per-HW compatible for the pwrkey, the obvious solution would be to
+drop the PM8921 compatibility since it's only probable and nothing proves it's right.
+
+But what's sure: it's a PM8018 PMIC.
+
+But since the PM8018 PWRKEY interface is compatible with the PM8921 PWRKEY interface,
+it's perfectly ok to the the MP8921 compatible here.
+
+OK, so as you quoted multiple times:
+"How this should be fixed? First, drop bogus entries from drivers, then
+document proper compatibles."
+
+OK so there's no bogus entries to remove here, and the only compatible to
+potentially document is the pm8018-pwrkey but it seems to be wrong.
+
+I'll be happy to have an hint on how to handle that to I can go forward and
+stop the noise, there's still plenty of stuff to fix in the MDM9615 DT.
+
+> 
+> Best regards,
+> Krzysztof
+> 
+
+Thanks,
+Neil
