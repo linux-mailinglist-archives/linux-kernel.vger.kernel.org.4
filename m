@@ -2,140 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 500D85EFCF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429145EFCFE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235766AbiI2SYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        id S235653AbiI2SZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234863AbiI2SYi (ORCPT
+        with ESMTP id S232750AbiI2SZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:24:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4017CBC2F
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:24:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664475874;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BoITIusWH1pgiQYYyYgg2aTCkDBnXRgVNx9UWZzrGmA=;
-        b=OqcMvHd+HH89EI8UXhMCTpgc95JY4q2oPDPDMHN+rG+xKoIKL6KQo3Q1ABrYRtnFvu41+l
-        JiJvhpYBHgd7ITHa6cpubjXPTQdb3dxfutlcJURTUvmseF9waOP0/Zdcov0RCPcG3FaM2e
-        gjF7RIegpRW3AWLNPVEbMpYzSyCj2xY=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-595-iobG7LLSPgeqOwTGfASlgQ-1; Thu, 29 Sep 2022 14:24:33 -0400
-X-MC-Unique: iobG7LLSPgeqOwTGfASlgQ-1
-Received: by mail-io1-f72.google.com with SMTP id j20-20020a6b3114000000b006a3211a0ff0so1222747ioa.7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:24:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=BoITIusWH1pgiQYYyYgg2aTCkDBnXRgVNx9UWZzrGmA=;
-        b=M60sh5vR308rwJbBZQkYXgDoDlsS47UL/zdYkMXcoKcrF3nliwwSRX91RsvtYm0YKt
-         /pCNaTdJ/jq6V2oFxItGyR/R6W4FLNGKLBAm8gTgMWyvfo+JUB5uR8HmRvEyM9J5d4ax
-         EF/Fs8WnoYEe6ApGH7P8T4AJWpv1H98zt2dFQh2cY/fun4A0LEu8rcoyg5si/q9OpbrE
-         IXBaKq0uMaKnhxs2VDwaqzo4dgHVoVjveZcwbTHUROZR4Gn+RnW7kFjJUb4ZuAoHtlw/
-         KzBL3wmu4vg92IkbWBwqwPJLBzXBGSavdy0NNafE8xO1UiW0R9OZNh3ZKXGIMlGh/BrP
-         ozGg==
-X-Gm-Message-State: ACrzQf3lXpyz68MQLw1yGvsCbhj80SNHd56JK7O+/y+/q/aKFIkMattj
-        UXFYde74sl0sbQ7hQfgXu3GImjqc2wyY0/anhaxDjK9JCJ+YQ8+QZFWDQ6Ei3ifvRZ0ClhkjFKd
-        NvW9oYPBD4rrTOSyvAY6oNPcw
-X-Received: by 2002:a05:6e02:19ce:b0:2f1:68a6:3bec with SMTP id r14-20020a056e0219ce00b002f168a63becmr2392077ill.78.1664475872942;
-        Thu, 29 Sep 2022 11:24:32 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7KUOQo8AbbarGobEgnbxdcS5bS2mn744LEcpjpU+rvkCIe35jyhAfEJ5Pm5FWlRH0iLBHEPg==
-X-Received: by 2002:a05:6e02:19ce:b0:2f1:68a6:3bec with SMTP id r14-20020a056e0219ce00b002f168a63becmr2392060ill.78.1664475872712;
-        Thu, 29 Sep 2022 11:24:32 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id f13-20020a05660215cd00b006a1fed36549sm96051iow.10.2022.09.29.11.24.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 11:24:31 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 12:24:27 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Kevin Tian <kevin.tian@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Eric Farman <farman@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Longfang Liu <liulongfang@huawei.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, Yi Liu <yi.l.liu@intel.com>
-Subject: Re: [PATCH v4 15/15] vfio: Add struct device to vfio_device
-Message-ID: <20220929122427.3a3bca9a.alex.williamson@redhat.com>
-In-Reply-To: <YzXaxPpkc+90Xx+T@ziepe.ca>
-References: <20220921104401.38898-1-kevin.tian@intel.com>
-        <20220921104401.38898-16-kevin.tian@intel.com>
-        <20220929105519.5c9ae1d8.alex.williamson@redhat.com>
-        <YzXaxPpkc+90Xx+T@ziepe.ca>
-Organization: Red Hat
+        Thu, 29 Sep 2022 14:25:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFBE72FFC4;
+        Thu, 29 Sep 2022 11:25:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71BE715BF;
+        Thu, 29 Sep 2022 11:25:17 -0700 (PDT)
+Received: from [10.57.65.170] (unknown [10.57.65.170])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FE853F73B;
+        Thu, 29 Sep 2022 11:25:08 -0700 (PDT)
+Message-ID: <4dc31a63-00b1-f379-c5ac-7dc9425937f4@arm.com>
+Date:   Thu, 29 Sep 2022 19:25:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v5 1/2] PCI: dwc: Drop dependency on ZONE_DMA32
+Content-Language: en-GB
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Will McVicker <willmcvicker@google.com>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Isaac J . Manjarres" <isaacmanjarres@google.com>
+References: <20220825185026.3816331-1-willmcvicker@google.com>
+ <20220825185026.3816331-2-willmcvicker@google.com>
+ <20220928114136.4yvtfnrcril3jkgg@mobilestation>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220928114136.4yvtfnrcril3jkgg@mobilestation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sep 2022 14:49:56 -0300
-Jason Gunthorpe <jgg@ziepe.ca> wrote:
-
-> On Thu, Sep 29, 2022 at 10:55:19AM -0600, Alex Williamson wrote:
-> > Hi Kevin,
-> > 
-> > This introduced the regression discovered here:
-> > 
-> > https://lore.kernel.org/all/20220928125650.0a2ea297.alex.williamson@redhat.com/
-> > 
-> > Seems we're not releasing the resources when removing an mdev.  This is
-> > a regression, so it needs to be fixed or reverted before the merge
-> > window.  Thanks,  
+On 2022-09-28 12:41, Serge Semin wrote:
+> On Thu, Aug 25, 2022 at 06:50:24PM +0000, Will McVicker wrote:
+>> Re-work the msi_msg DMA allocation logic to use dmam_alloc_coherent() which
+>> uses the coherent DMA mask to try to return an allocation within the DMA
+>> mask limits. With that, we now can drop the msi_page parameter in struct
+>> dw_pcie_rp. This allows kernel configurations that disable ZONE_DMA32 to
+>> continue supporting a 32-bit DMA mask. Without this patch, the PCIe host
+>> device will fail to probe when ZONE_DMA32 is disabled.
 > 
-> My guess at the fix for this:
+> As Rob already said here
+> https://lore.kernel.org/all/CAL_JsqJh=d-B51b6yPBRq0tOwbChN=AFPr-a19U1QdQZAE7c1A@mail.gmail.com/
+> and I mentioned in this thread
+> https://lore.kernel.org/linux-pci/20220912000211.ct6asuhhmnatje5e@mobilestation/
+> DW PCIe MSI doesn't cause any DMA due to the way the iMSI-RX engine is
+> designed. So reserving any real system memory is a waste of one in
+> this case. Reserving DMA-coherent even more inappropriate since it
+> can be expensive on some platforms (see note in Part Ia of
+> Documentation/core-api/dma-api.rst). For instance on MIPS32 with
+> non-corehent common DMA.
+
+This has been discussed before - in general it is difficult to pick an 
+arbitrary MSI address that is *guaranteed* not to overlap any valid DMA 
+address that somebody may try to use later. However there is a very easy 
+way to guarantee that the DMA API won't give anyone a particular DMA 
+address, which is to get an address directly from the DMA API and keep 
+it. Yes, that can technically be done with a streaming mapping *if* you 
+already have some memory allocated in a suitable physical location, but 
+coherent allocations are even more foolproof, simpler to clean up 
+(particularly with devres), and unlikely to be an issue on relevant 
+platforms (do any MIPS32 systems use this driver?)
+
+>> Fixes: 35797e672ff0 ("PCI: dwc: Fix MSI msi_msg DMA mapping")
+>> Reported-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+>> Signed-off-by: Will McVicker <willmcvicker@google.com>
+>> Acked-by: Jingoo Han <jingoohan1@gmail.com>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> ---
+>>   .../pci/controller/dwc/pcie-designware-host.c | 28 +++++--------------
+>>   drivers/pci/controller/dwc/pcie-designware.h  |  1 -
+>>   2 files changed, 7 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+>> index 7746f94a715f..39f3b37d4033 100644
+>> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+>> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+>> @@ -267,15 +267,6 @@ static void dw_pcie_free_msi(struct dw_pcie_rp *pp)
+>>   
+>>   	irq_domain_remove(pp->msi_domain);
+>>   	irq_domain_remove(pp->irq_domain);
+>> -
+>> -	if (pp->msi_data) {
+>> -		struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+>> -		struct device *dev = pci->dev;
+>> -
+>> -		dma_unmap_page(dev, pp->msi_data, PAGE_SIZE, DMA_FROM_DEVICE);
+>> -		if (pp->msi_page)
+>> -			__free_page(pp->msi_page);
+>> -	}
+>>   }
+>>   
+>>   static void dw_pcie_msi_init(struct dw_pcie_rp *pp)
+>> @@ -336,6 +327,7 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+>>   	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+>>   	struct device *dev = pci->dev;
+>>   	struct platform_device *pdev = to_platform_device(dev);
+>> +	u64 *msi_vaddr;
+>>   	int ret;
+>>   	u32 ctrl, num_ctrls;
+>>   
+>> @@ -375,22 +367,16 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+>>   						    dw_chained_msi_isr, pp);
+>>   	}
+>>   
 > 
-> https://lore.kernel.org/r/0-v1-013609965fe8+9d-vfio_gvt_unregister_jgg@nvidia.com
+>> -	ret = dma_set_mask(dev, DMA_BIT_MASK(32));
+>> +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+> 
+> This has been redundant in the first place since none of the DW PCIe
+> low-level drivers update the mask, and it's of 32-bits wide by default
+> anyway:
+> https://elixir.bootlin.com/linux/latest/source/drivers/of/platform.c#L167
 
-Indeed this seems to work  I'll look for acks and further reviews from
-Intel folks. Thanks!
+No, in general drivers should always explicitly set their mask(s) and 
+check the return value to make sure DMA is possible at all before trying 
+any other DMA API calls. There's no guarantee that the default mask is 
+usable (e.g. some systems don't have any 32-bit addressable RAM), or 
+that it's even always 32 bits (due to crufty reasons of something 
+of_dma_configure() tried to do a long time ago).
 
-Alex
+Thanks,
+Robin.
 
+>>   	if (ret)
+>>   		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
+>>   
+>> -	pp->msi_page = alloc_page(GFP_DMA32);
+>> -	pp->msi_data = dma_map_page(dev, pp->msi_page, 0,
+>> -				    PAGE_SIZE, DMA_FROM_DEVICE);
+>> -	ret = dma_mapping_error(dev, pp->msi_data);
+>> -	if (ret) {
+>> -		dev_err(pci->dev, "Failed to map MSI data\n");
+>> -		__free_page(pp->msi_page);
+>> -		pp->msi_page = NULL;
+>> -		pp->msi_data = 0;
+>> +	msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
+>> +					GFP_KERNEL);
+> 
+> Changing the whole device DMA-mask due to something that doesn't
+> perform seems inappropriate. I'd suggest to preserve the ZONE_DMA32
+> here until there is something like suggested by @Robin
+> https://lore.kernel.org/linux-pci/1e63a581-14ae-b4b5-a5bf-ca8f09c33af6@arm.com/
+> in the last paragraph is implemented. Especially seeing there still
+> common drivers in kernel which still rely on that zone.
+> 
+> -Sergey
+> 
+>> +	if (!msi_vaddr) {
+>> +		dev_err(dev, "Failed to alloc and map MSI data\n");
+>>   		dw_pcie_free_msi(pp);
+>> -
+>> -		return ret;
+>> +		return -ENOMEM;
+>>   	}
+>>   
+>>   	return 0;
+>> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+>> index 09b887093a84..a871ae7eb59e 100644
+>> --- a/drivers/pci/controller/dwc/pcie-designware.h
+>> +++ b/drivers/pci/controller/dwc/pcie-designware.h
+>> @@ -243,7 +243,6 @@ struct dw_pcie_rp {
+>>   	struct irq_domain	*irq_domain;
+>>   	struct irq_domain	*msi_domain;
+>>   	dma_addr_t		msi_data;
+>> -	struct page		*msi_page;
+>>   	struct irq_chip		*msi_irq_chip;
+>>   	u32			num_vectors;
+>>   	u32			irq_mask[MAX_MSI_CTRLS];
+>> -- 
+>> 2.37.2.672.g94769d06f0-goog
+>>
+>>
