@@ -2,95 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472F05EF419
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61595EF41B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234868AbiI2LPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
+        id S234105AbiI2LQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234807AbiI2LPM (ORCPT
+        with ESMTP id S233870AbiI2LQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:15:12 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD7F58DD0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:15:09 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 10so1737363lfy.5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=llQA2gLNCc2d4HEow4TpeRHEJ5+62j9pkjl4MachT58=;
-        b=qhb8B+kOBX2pgpF4oVAMYha0qjBvIvF/258CLWiA/nbGuRaA3PQ3v9kGCvQ8Urrq7G
-         1G/GYUUMFwZHro0T47u7eKtT2qYGhFedkCmC14OQB1UEsruNjsC22BmU2bjNfu2Cjzye
-         BNlMZBk7Uk1a7HukB7GwPK/wvNdUaratbb4g4XM0kXIh/uq+/sH6NEcHdHSJHk40L1d4
-         xjWxo9ZaefRr7rtSo7URIVnstve8a7xzLPUsVvfzQxqE/fNXyMn0+rPO2PLK/HSN/VGQ
-         5gCL4EnYRjuwg4423c+oOksGSi87uP5WnCJqdfz+y7IQ7E7CkQrcqrYpNnYflynp+6fq
-         3KRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=llQA2gLNCc2d4HEow4TpeRHEJ5+62j9pkjl4MachT58=;
-        b=uqzzPdzDfP9pmb+JkJwPa3WwJgHnUrYH6dDqynyEnXhuALEClNMSY+sm4aualeXrKA
-         3AirMEbIX0MpVZMuslewfn2lVjH1/uCbxGcfKvoLc0Lo83SavlDRqXr/GXsUD4cTaRD7
-         i9Q/9UJEaxyJmB+XjW6CLl2LMnQbJza7zqYXD+UlI/eXAbwKOwgOu8J087v5bnT2tIjA
-         /WASJxl7nU5esNyOYAPGHxt/d3mglrfX5dXE2qEKRaUOJc053X/2ICcdiMcSODOaVEm2
-         N0H3JI4K5XByTbKTyJ8sVO/kCLgIbPVI7SKqelJhyXMYmAeru7UW3DhRWTXkuWhoT4Jb
-         RTOA==
-X-Gm-Message-State: ACrzQf0AsF/vwbU4lp8uRJ6H1Afe+Dk1RxcDXOXvs4oApLQITEXmvZ+e
-        XQZ9yJfIYPdjARo+AUC1MNmmwA==
-X-Google-Smtp-Source: AMsMyM4WYyCpb05WmvkjmQdNPSJVQHLcZkQDiSV+zvECWVXmgKMpa4hdVNUSHDRCnwblcxjwJe9HOA==
-X-Received: by 2002:a05:6512:3612:b0:499:aea7:8bed with SMTP id f18-20020a056512361200b00499aea78bedmr1103047lfs.26.1664450108204;
-        Thu, 29 Sep 2022 04:15:08 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id j14-20020a05651231ce00b0047f7722b73csm753859lfe.142.2022.09.29.04.15.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 04:15:07 -0700 (PDT)
-Message-ID: <4820a854-5d73-d6f1-fd77-7a7f5dc7f67b@linaro.org>
-Date:   Thu, 29 Sep 2022 13:15:07 +0200
+        Thu, 29 Sep 2022 07:16:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BA413E7D5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664450203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nwUR8ZUx03O4k7AXQqgEr6oJcUg1sZbXu+yFA3Igo1g=;
+        b=gTSdRYWLLDRz982SJb7mTmtSC1c+WMdD9QKIVPgf1igDHxxSzccf6h4MkFznRB7ZNema+i
+        Ow1g7FWqzSuYxjtsWEzcmrLkwH/cGIPWAdr2V5Gm7lZW+brrr+98t4LkfIG9pPR1wAq5Ui
+        suj4Jn2XPZ5lA2T9GiTretMOsyQvUu0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-623-w4yGM6joNZKIyZAGRjrRjA-1; Thu, 29 Sep 2022 07:16:40 -0400
+X-MC-Unique: w4yGM6joNZKIyZAGRjrRjA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF7538582B9;
+        Thu, 29 Sep 2022 11:16:39 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.39.192.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A91C62166B2A;
+        Thu, 29 Sep 2022 11:16:38 +0000 (UTC)
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Networking for 6.0-rc8
+Date:   Thu, 29 Sep 2022 13:16:05 +0200
+Message-Id: <20220929111605.32358-1-pabeni@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 2/2] Documentation/process: Add text to indicate
- supporters should be mailed
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, corbet@lwn.net,
-        linux@leemhuis.info, konstantin@linuxfoundation.org,
-        linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220929002500.283481-1-bryan.odonoghue@linaro.org>
- <20220929002500.283481-3-bryan.odonoghue@linaro.org>
- <54a19490-aa0d-2dcd-8407-319d6167add4@linaro.org>
- <b36887f5-ffb8-1665-f959-be1e632e5206@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b36887f5-ffb8-1665-f959-be1e632e5206@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 12:33, Bryan O'Donoghue wrote:
-> On 29/09/2022 08:29, Krzysztof Kozlowski wrote:
->> As I said before, this still ignores reviewers. I don't think it is
->> going to good direction. The submitter is expected to CC
->> everyone/everything which is pointed by get_maintainers.pl except the
->> Git-fallback entries.
-> 
-> Isn't LKML considered optional at this point though ?
+Hi Linus!
 
-No, it's the only list for certain subsystems. If you do not cc it, the
-patch might never get public.
+This includes the fix for the phy regression mentioned in the
+previous net PR.
+There are no other known left-over regressions.
 
-Best regards,
-Krzysztof
+The following changes since commit 504c25cb76a9cb805407f7701b25a1fbd48605fa:
+
+  Merge tag 'net-6.0-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-09-22 10:58:13 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.0-rc8
+
+for you to fetch changes up to 3b04cba7add093d0d8267cf70a333ca8fe8233ca:
+
+  Merge branch 'mptcp-properly-clean-up-unaccepted-subflows' (2022-09-28 19:05:40 -0700)
+
+----------------------------------------------------------------
+Networking fixes for 6.0-rc8, including fixes from wifi and can.
+
+Current release - regressions:
+
+ - phy: don't WARN for PHY_UP state in mdio_bus_phy_resume()
+
+ - wifi: fix locking in mac80211 mlme
+
+ - eth:
+   - revert "net: mvpp2: debugfs: fix memory leak when using debugfs_lookup()"
+   - mlxbf_gige: fix an IS_ERR() vs NULL bug in mlxbf_gige_mdio_probe
+
+Previous releases - regressions:
+
+ - wifi: fix regression with non-QoS drivers
+
+Previous releases - always broken:
+
+ - mptcp: fix unreleased socket in accept queue
+
+ - wifi:
+   - don't start TX with fq->lock to fix deadlock
+   - fix memory corruption in minstrel_ht_update_rates()
+
+ - eth:
+   - macb: fix ZynqMP SGMII non-wakeup source resume failure
+   - mt7531: only do PLL once after the reset
+   - usbnet: fix memory leak in usbnet_disconnect()
+
+Misc:
+
+ - usb: qmi_wwan: add new usb-id for Dell branded EM7455
+
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+
+----------------------------------------------------------------
+Alexander Couzens (2):
+      net: mt7531: only do PLL once after the reset
+      net: mt7531: ensure all MACs are powered down before reset
+
+Alexander Wetzel (2):
+      wifi: mac80211: don't start TX with fq->lock to fix deadlock
+      wifi: mac80211: ensure vif queues are operational after start
+
+Andy Moreton (1):
+      sfc: correct filter_table_remove method for EF10 PFs
+
+Daniel Golle (1):
+      net: ethernet: mtk_eth_soc: fix mask of RX_DMA_GET_SPORT{,_V2}
+
+Frank Wunderlich (1):
+      net: usb: qmi_wwan: Add new usb-id for Dell branded EM7455
+
+Hangyu Hua (1):
+      net: sched: act_ct: fix possible refcount leak in tcf_ct_init()
+
+Hans de Goede (1):
+      wifi: mac80211: fix regression with non-QoS drivers
+
+Jakub Kicinski (5):
+      Merge branch 'net-mt7531-pll-reset-fixes'
+      Merge tag 'wireless-2022-09-27' of git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless
+      Merge tag 'linux-can-fixes-for-6.0-20220928' of git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can
+      Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
+      Merge branch 'mptcp-properly-clean-up-unaccepted-subflows'
+
+Junxiao Chang (1):
+      net: stmmac: power up/down serdes in stmmac_open/release
+
+Lukas Bulwahn (1):
+      MAINTAINERS: rectify file entry in TEAM DRIVER
+
+Lukas Wunner (1):
+      net: phy: Don't WARN for PHY_UP state in mdio_bus_phy_resume()
+
+Maciej Fijalkowski (2):
+      ice: xsk: change batched Tx descriptor cleaning
+      ice: xsk: drop power of 2 ring size restriction for AF_XDP
+
+Marc Kleine-Budde (1):
+      can: c_can: don't cache TX messages for C_CAN cores
+
+Menglong Dong (2):
+      mptcp: factor out __mptcp_close() without socket lock
+      mptcp: fix unreleased socket in accept queue
+
+Patrick Rohr (1):
+      tun: support not enabling carrier in TUNSETIFF
+
+Paweł Lenkow (1):
+      wifi: mac80211: fix memory corruption in minstrel_ht_update_rates()
+
+Peilin Ye (1):
+      usbnet: Fix memory leak in usbnet_disconnect()
+
+Peng Wu (1):
+      net/mlxbf_gige: Fix an IS_ERR() vs NULL bug in mlxbf_gige_mdio_probe
+
+Radhey Shyam Pandey (1):
+      net: macb: Fix ZynqMP SGMII non-wakeup source resume failure
+
+Rafael Mendonca (3):
+      cxgb4: fix missing unlock on ETHOFLD desc collect fail path
+      wifi: mac80211: mlme: Fix missing unlock on beacon RX
+      wifi: mac80211: mlme: Fix double unlock on assoc success handling
+
+Sasha Levin (1):
+      Revert "net: mvpp2: debugfs: fix memory leak when using debugfs_lookup()"
+
+Tamizh Chelvam Raja (1):
+      wifi: cfg80211: fix MCS divisor value
+
+Vladimir Oltean (1):
+      net: mscc: ocelot: fix tagged VLAN refusal while under a VLAN-unaware bridge
+
+Wang Yufen (1):
+      selftests: Fix the if conditions of in test_extra_filter()
+
+ruanjinjie (1):
+      net: hippi: Add missing pci_disable_device() in rr_init_one()
+
+ MAINTAINERS                                        |   2 +-
+ drivers/net/can/c_can/c_can.h                      |  17 ++-
+ drivers/net/can/c_can/c_can_main.c                 |  11 +-
+ drivers/net/dsa/mt7530.c                           |  19 ++-
+ drivers/net/ethernet/cadence/macb_main.c           |   4 +
+ drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c     |  28 ++--
+ drivers/net/ethernet/intel/ice/ice_txrx.c          |   2 +-
+ drivers/net/ethernet/intel/ice/ice_xsk.c           | 163 +++++++++------------
+ drivers/net/ethernet/intel/ice/ice_xsk.h           |   7 +-
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c |   4 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h        |   4 +-
+ .../ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c |   4 +-
+ drivers/net/ethernet/mscc/ocelot.c                 |   7 +
+ drivers/net/ethernet/sfc/ef10.c                    |   2 +-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  |  23 +--
+ drivers/net/hippi/rrunner.c                        |   1 +
+ drivers/net/phy/phy_device.c                       |  10 +-
+ drivers/net/tun.c                                  |   9 +-
+ drivers/net/usb/qmi_wwan.c                         |   1 +
+ drivers/net/usb/usbnet.c                           |   7 +-
+ include/uapi/linux/if_tun.h                        |   2 +
+ net/mac80211/mlme.c                                |   9 +-
+ net/mac80211/rc80211_minstrel_ht.c                 |   6 +-
+ net/mac80211/status.c                              |   2 +-
+ net/mac80211/tx.c                                  |   4 +
+ net/mac80211/util.c                                |   4 +-
+ net/mptcp/protocol.c                               |  16 +-
+ net/mptcp/protocol.h                               |   2 +
+ net/mptcp/subflow.c                                |  33 +----
+ net/sched/act_ct.c                                 |   5 +-
+ net/wireless/util.c                                |   4 +-
+ tools/testing/selftests/net/reuseport_bpf.c        |   2 +-
+ 32 files changed, 223 insertions(+), 191 deletions(-)
 
