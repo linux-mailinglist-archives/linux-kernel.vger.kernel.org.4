@@ -2,70 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282735EFA05
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235535EFA0A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236139AbiI2QQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
+        id S236074AbiI2QQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236095AbiI2QPb (ORCPT
+        with ESMTP id S234737AbiI2QQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:15:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6955A3C0;
-        Thu, 29 Sep 2022 09:15:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 29 Sep 2022 12:16:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D116BFAC9
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664468195;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SK8jnl25GfBurW867juBk8Hvi+Y8sy3LVuiGjVel2EA=;
+        b=JfY+UIzSZrkUD4yb993CbyErlacwwcF/pLjE6aHASlVRvQh4ctq0ce6DBRUoIsEI8DnUuH
+        xFPC/m1ebwHcDalpsJpsf+zZAAi4ouVA3fSK5xI9dgka8GRcq4ikDOB5Q1aSZfv3ODTL77
+        izB83lwj5U/zNJFjc/QgAy7gdMom6G0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-tWxvPbKKOv-UAw5fd6zNXg-1; Thu, 29 Sep 2022 12:16:32 -0400
+X-MC-Unique: tWxvPbKKOv-UAw5fd6zNXg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28C216199B;
-        Thu, 29 Sep 2022 16:15:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47336C433D6;
-        Thu, 29 Sep 2022 16:15:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664468128;
-        bh=Lr5Bwe8VTXw9ymJz//fWnPNzMpaU/u/0B7OKy4k+U+k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=R5PC+fwbnTG2Eq1gny8hRMLmjfptqsftAqgAhV3XZHRh5qYHvSaaU8C1F3vs6mTaj
-         9t0c9kcDKWpt5u8ASczsMlAHZIiL38rDJ+SJfvgmCf7cA3cHB/lIM5/I8Lfzb56UMp
-         Q0UzaWO79XfqubO8wPM2Wu8B+OTlqxRawXvsZrpMKMlcsV8wArE7zO68lzP4jw1u13
-         bOPf3GAoOZhjdlt3Sw/yioGiLgvkk3gYgwNpVVXvwYvIeOeNkOWlznbOm9DcHZ3Xg2
-         YzOrUVjb60IZXLbuKqli/VM87aL2y62kaLY88cmAPb2Rr+7phCwjXUHlBoMeVOTvCt
-         f1rwiXnEfoq1A==
-Date:   Thu, 29 Sep 2022 09:15:27 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     tchornyi@marvell.com, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: prestera: acl: Add check for kmemdup
-Message-ID: <20220929091527.370b39a4@kernel.org>
-In-Reply-To: <20220928092024.6996-1-jiasheng@iscas.ac.cn>
-References: <20220928092024.6996-1-jiasheng@iscas.ac.cn>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5441868A2E;
+        Thu, 29 Sep 2022 16:16:31 +0000 (UTC)
+Received: from starship (unknown [10.40.193.233])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 33A50140EBF4;
+        Thu, 29 Sep 2022 16:16:30 +0000 (UTC)
+Message-ID: <a2825beac032fd6a76838164d4e2753d30305897.camel@redhat.com>
+Subject: Re: Commit 'iomap: add support for dma aligned direct-io' causes
+ qemu/KVM boot failures
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>, qemu-devel@nongnu.org,
+        kvm@vger.kernel.org
+Date:   Thu, 29 Sep 2022 19:16:29 +0300
+In-Reply-To: <YzW+Mz12JT1BXoZA@kbusch-mbp.dhcp.thefacebook.com>
+References: <fb869c88bd48ea9018e1cc349918aa7cdd524931.camel@redhat.com>
+         <YzW+Mz12JT1BXoZA@kbusch-mbp.dhcp.thefacebook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Sep 2022 17:20:24 +0800 Jiasheng Jiang wrote:
-> As the kemdup could return NULL, it should be better to check the return
-> value and return error if fails.
-> Moreover, the return value of prestera_acl_ruleset_keymask_set() should
-> be checked by cascade.
+On Thu, 2022-09-29 at 09:48 -0600, Keith Busch wrote:
+> I am aware, and I've submitted the fix to qemu here:
 > 
-> Fixes: 604ba230902d ("net: prestera: flower template support")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+>   https://lists.nongnu.org/archive/html/qemu-block/2022-09/msg00398.html
+> 
 
-You must CC the authors of patch you're fixing. 
-get_maintainer will do that for you I don't understand why people can't
-simply run that script :/ You CC linux-kernel for no apparent reason
-yet you don't CC the guy who wrote the original patch.
-If you could please explain what is going on maybe we can improve the
-tooling or something.
+
+Thanks for quick response!
+
+Question is though, isn't this an kernel ABI breakage?
+
+(I myself don't care, I would be happy to patch my qemu), 
+
+but I afraid that this will break *lots* of users that only updated the kernel
+and not the qemu.
+
+What do you think?
+
+Best regards,
+	Maxim Levitsky
+
