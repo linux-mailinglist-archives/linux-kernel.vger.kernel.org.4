@@ -2,161 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A311E5EF459
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9495EF461
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235294AbiI2LcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
+        id S235284AbiI2LeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbiI2LcE (ORCPT
+        with ESMTP id S234916AbiI2Ld5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:32:04 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7D81432AF;
-        Thu, 29 Sep 2022 04:32:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D447621C08;
-        Thu, 29 Sep 2022 11:32:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1664451121; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jeGyVzxEPfCc3Ba6i0mzqGwb3fxnvxrlnA7gUpxqvlE=;
-        b=MnQn5C1fuvzrzKKTEyLL0eltGlUXjNy+RtBzsis8lMZsfBgnYKwhM0jnAfA16CDAxCkHid
-        nXCxJRbCIe0QTpu+9GKGev8fe71FmxIYb0eAcM8q9gY+TPpQ4LGt/GbaesOvNxP1rGd9hN
-        5weYlHb6jMfHRMRO10mAcU/72bFgRJo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1664451121;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jeGyVzxEPfCc3Ba6i0mzqGwb3fxnvxrlnA7gUpxqvlE=;
-        b=3/J8ojuXmWeDuCancxCdwkBH745Wgt9vLLjio8YMLp2QOo2M4LkVFEnCAgU08zzCg37V3b
-        hDzkiyZ2TNhZpnBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C57DF1348E;
-        Thu, 29 Sep 2022 11:32:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Vvg0MDGCNWNrcAAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 29 Sep 2022 11:32:01 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 39211A0681; Thu, 29 Sep 2022 13:32:01 +0200 (CEST)
-Date:   Thu, 29 Sep 2022 13:32:01 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, rookxu <brookxu.cn@gmail.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [RFC v3 4/8] ext4: Move overlap assert logic into a separate
- function
-Message-ID: <20220929113201.2fbwzw2c7vecnduc@quack3>
-References: <cover.1664269665.git.ojaswin@linux.ibm.com>
- <a762293342ceadc5c49870db0394a15ca53eebaa.1664269665.git.ojaswin@linux.ibm.com>
+        Thu, 29 Sep 2022 07:33:57 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4D314F824;
+        Thu, 29 Sep 2022 04:33:55 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1odrne-0006cQ-4R; Thu, 29 Sep 2022 13:33:54 +0200
+Message-ID: <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+Date:   Thu, 29 Sep 2022 13:33:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a762293342ceadc5c49870db0394a15ca53eebaa.1664269665.git.ojaswin@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     "Artem S. Tashkinov" <aros@gmx.com>, workflows@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+In-Reply-To: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664451235;c267a4fa;
+X-HE-SMSGID: 1odrne-0006cQ-4R
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 27-09-22 14:46:44, Ojaswin Mujoo wrote:
-> Abstract out the logic to double check for overlaps in normalize_pa to
-> a separate function. Since there has been no reports in past where we
-> have seen any overlaps which hits this bug_on(), in future we can
-> consider calling this function under "#ifdef AGGRESSIVE_CHECK" only.
+[resent with the right ksummit list in CC]
+
+On 29.09.22 13:19, Thorsten Leemhuis wrote:
+> Hi!
 > 
-> There are no functional changes in this patch
+> TLDR: Core Linux kernel developers are unhappy with the state of
+> bugzilla.kernel.org; to improve things I plan to change a few important
+> aspects of its configuration, unless somebody comes up with better ideas
+> to tackle current problems: (1) Create a catch-all product making it
+> totally obvious to submitters that likely nobody will look into the
+> ticket. (2) Remove or hide all products & components where the subsystem
+> didn't fully commit to look into newly submitted reports. (3) Change the
+> text on the front page to make it clear that most kernel bug reports
+> need to be sent by mail.
 > 
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-
-Looks good. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-And I agree it might be interesting to move this code under appropriate
-ifdef.
-
-								Honza
-
-> ---
->  fs/ext4/mballoc.c | 36 ++++++++++++++++++++++++------------
->  1 file changed, 24 insertions(+), 12 deletions(-)
+> I recently brought the state of bugzilla.kernel.org up for discussion on
+> the kernel summit and the kernel maintainers summit in sessions about my
+> regression tracking efforts. Long story short and rough: in both
+> sessions attendees were quite unhappy about the current state and wanted
+> things to change for the better. As I brought that topic up, I guess I
+> have to get things rolling now.
 > 
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 84950df709bb..d1ce34888dcc 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -3985,6 +3985,29 @@ static void ext4_mb_normalize_group_request(struct ext4_allocation_context *ac)
->  	mb_debug(sb, "goal %u blocks for locality group\n", ac->ac_g_ex.fe_len);
->  }
->  
-> +static inline void
-> +ext4_mb_pa_assert_overlap(struct ext4_allocation_context *ac,
-> +			  ext4_lblk_t start, ext4_lblk_t end)
-> +{
-> +	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
-> +	struct ext4_inode_info *ei = EXT4_I(ac->ac_inode);
-> +	struct ext4_prealloc_space *tmp_pa;
-> +	ext4_lblk_t tmp_pa_start, tmp_pa_end;
-> +
-> +	rcu_read_lock();
-> +	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_inode_list) {
-> +		spin_lock(&tmp_pa->pa_lock);
-> +		if (tmp_pa->pa_deleted == 0) {
-> +			tmp_pa_start = tmp_pa->pa_lstart;
-> +			tmp_pa_end = tmp_pa->pa_lstart + EXT4_C2B(sbi, tmp_pa->pa_len);
-> +
-> +			BUG_ON(!(start >= tmp_pa_end || end <= tmp_pa_start));
-> +		}
-> +		spin_unlock(&tmp_pa->pa_lock);
-> +	}
-> +	rcu_read_unlock();
-> +}
-> +
->  /*
->   * Normalization means making request better in terms of
->   * size and alignment
-> @@ -4141,18 +4164,7 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
->  	size = end - start;
->  
->  	/* XXX: extra loop to check we really don't overlap preallocations */
-> -	rcu_read_lock();
-> -	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_inode_list) {
-> -		spin_lock(&tmp_pa->pa_lock);
-> -		if (tmp_pa->pa_deleted == 0) {
-> -			tmp_pa_start = tmp_pa->pa_lstart;
-> -			tmp_pa_end = tmp_pa->pa_lstart + EXT4_C2B(sbi, tmp_pa->pa_len);
-> -
-> -			BUG_ON(!(start >= tmp_pa_end || end <= tmp_pa_start));
-> -		}
-> -		spin_unlock(&tmp_pa->pa_lock);
-> -	}
-> -	rcu_read_unlock();
-> +	ext4_mb_pa_assert_overlap(ac, start, end);
->  
->  	/*
->  	 * In this function "start" and "size" are normalized for better
-> -- 
-> 2.31.1
+> But before getting into the details, a quick & rough reminder about the
+> current state of bugzilla.kernel.org:
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+>  * The server and the software running on it are well maintained by the
+> the infrastructure team (Konstantin et al.); many thx for this!
+> 
+>  * Products, components, default assignees, et al. OTOH are heavily
+> outdated, incomplete, or wrong: maintaining this is not the job of the
+> infrastructure team and nobody else has stepped up to take care of this
+> (for a few more details see:
+> https://lore.kernel.org/lkml/20220420163223.kz32qomzj3y4hjj5@nitro.local/).
+> 
+>  * To the best of my knowledge bugzilla.kernel.org was never really
+> sanctioned as the official place to report all sorts of kernel bugs:
+> only 20 (most of them from the area of ACPI/PM and PCI) out of ~2500
+> entries in MAINTAINERS currently tell users to report issues there; most
+> other subsystems just mention email contacts, a few (like the DRM
+> developers) point reporters to external bugtrackers.
+> 
+>  * Developers of subsystems committed to the bug-tracker afaics usually
+> react to reports submitted in bugzilla.kernel.org. A few other
+> developers & subsystems keep an eye on reports, too; some do this
+> directly, others rely on bugzilla forwarding reports for certain
+> products/components by mail to the subsystem's mailing list. Quite some
+> or a lot of tickets are not forwarded to any developer or mailing list
+> at all.
+> 
+>  * In the end lots of bug and regression reports (even good ones!) never
+> get a reply from a developer, as a brief analysis of mine showed
+> (https://lore.kernel.org/lkml/6808cd17-b48c-657d-de60-ef9d8bfa151e@leemhuis.info/
+> ). I at least currently try to work a bit against this by briefly
+> looking at each new report and forwarding any by mail that looks like a
+> regression worth forwarding (I ignore everything else). Artem S.
+> Tashkinov also looks into some (all?) reports and tries to help reporters.
+> 
+> The sessions on kernel summit and the kernel maintainers summit
+> discussed the current state only for a few minutes. It's hard to
+> summarize these discussions, but let me try to mention the aspects that
+> are important for now:
+> 
+>  * In both sessions members of the audience seemed pretty unhappy to me
+> about the current state of things.
+> 
+>  * In the kernel summit sessions (recording:
+> https://youtu.be/e2SZoUPhDRg?t=5370 ) Len Brown stated that he and
+> fellow ACPI/PM developers rely on bugzilla.kernel.org and would need
+> some replacement if it's decommissioned.
+> 
+>  * On the maintainers summit (see the last section of
+> https://lwn.net/Articles/908324/ for a brief write-up that coined the
+> term "Bugzilla blues") someone brought up the upstream development of
+> bugzilla the software seems to be dead; there was not even one strong
+> advocate for bugzilla.kernel.org and the general vibe tented into the
+> direction of "let's get rid of it". But it was also mentioned that
+> bugzilla.kernel.org does something useful which will need a replacement:
+> a place where reporters can upload big files needed for debugging problems.
+> 
+> In the end that made me settle on this plan of action:
+> 
+>  1. Finding a replacement for bugzilla will take a while, so for now
+> let's try to reduce some of its aspects that are bothering people:
+> 
+>   1a. Create a new product/component that can act as a catch-all bug,
+> but makes it pretty clear that nobody might see the report because it's
+> not forwarded to anyone. People can use it to upload files for debugging
+> and link to them in mailed reports. People unable or unwilling to report
+> issues my mail (see 1c) could use it to submit issues, too. The outcome
+> then is the same as before, but at least people were told upfront about
+> the likely outcome; it also gives users a chance to help each other or
+> to coordinate before properly reporting an issue.
+> 
+>   1b. Go through the list of products and components and hide or remove
+> *all* where the subsystem didn't fully commit to look into newly
+> submitted reports. Minimum requirements to remain listed will be along
+> these lines: subsystem mentions bugzilla.kernel.org in MAINTAINERS or a
+> developer listed in MAINTAINERS is one of the default assignees in
+> bugzilla. Subsystems where bugzilla forwards mails to a mailing list can
+> remain listed as well, if the recent history shows the developers look
+> into newly filed bugs. I'll use my best judgment in the transition
+> process and will file "anyone listening?" bugs if in a doubt.
+> 
+>   1c. Make it obvious on the front-page of bugzilla.kernel.org that most
+> kernel developers want bug reports to be submitted by mail; mention the
+> subsystems that accept reports there and point to the catch-all bug (see
+> 1a) as a last straw.
+> 
+>  2. See if everybody is happy with the new state for the time being; if
+> not further fine-tune things or speed up step (3).
+> 
+>  3. Work out what we want as replacement.
+> 
+> Anyone any comments on this or helpful ideas how to make things even
+> better? Otherwise, I'll in a week or two get down and start working on
+> realizing the points listed under step (1).
+> 
+> Ciao, Thorsten
