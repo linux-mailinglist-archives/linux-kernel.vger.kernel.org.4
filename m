@@ -2,75 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2545EECFA
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 07:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72055EECFF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 07:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbiI2FD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 01:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S234753AbiI2FEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 01:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234847AbiI2FDC (ORCPT
+        with ESMTP id S233252AbiI2FEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 01:03:02 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7406D1284A6;
-        Wed, 28 Sep 2022 22:03:00 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id bh13so469876pgb.4;
-        Wed, 28 Sep 2022 22:03:00 -0700 (PDT)
+        Thu, 29 Sep 2022 01:04:36 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121BFEE2B;
+        Wed, 28 Sep 2022 22:04:31 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id r8-20020a17090a560800b00205eaaba073so306534pjf.1;
+        Wed, 28 Sep 2022 22:04:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=MAxX3HwZPoIUthNG89lC4GJ6X33ElvjGpgppMP4s59I=;
-        b=ninWtnFr+PZBgoMjKfPm2KhI7Eek3iq7i0ShTtqXXCTWq/ViTXoEomk1Ns+cN/67U9
-         cguqetWzOJB4M+fcUqekaxXbCr8WuQPPm82o47td59ScllerSWC2nTFDJ608sJKHTNEr
-         CTItMegI7UhtkYpnDBzIZ17KHOlA+I9UNBdtsED2waoN0dk22givZAygMYMBDPYIacKl
-         Hi5Yww4qWtVKKAqAq6yaLBbVK2HhtZkUrLH80nES2BDVJR80aEczepZ3iC8/GFteWnzo
-         GUtikUpn1CKjOvAgc4AIrpII0GeZe83drnnXM1/07mkhY7J4uuxo5PLUx47PhSz2Dxaa
-         I0cg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=MC+eI3i/t3K9Sg+2EGrsVaTd5iJWGGfd3bEqBpabEg8=;
+        b=NfU5l7/HjCD7GuH1ULRdff8ER+2hDIJ6pqibCeYUZb+zXyJX5Y+ScIP3OMkflrllJ/
+         kWe7puQbTcdwmzBxkUjDqrKzCPBAuCwmIo3d62G0mQp2HKP+QKZ4JjWuSsZWobCB0C2v
+         QCSlOkU87NGhwR4A25RD+DU+6jpKGIvytxevXgSn91IVokNPNK+c3vtdQwidLOcn9b1i
+         1gEAqgBNI/Ko3nipmGGTIifiEi0KZLZgRYtedVs8WS0/ihfKg4sZhqznF6S7l7n5BeNV
+         OIIbJrZ2C5ueFZIU2i4Q7BWk5tBChtU6oX/gK5DF7U6sjhsaxP+VPc389puuLWTtdPat
+         F3PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=MAxX3HwZPoIUthNG89lC4GJ6X33ElvjGpgppMP4s59I=;
-        b=C+JNNMbNgcm7KomLrZa5NmygkaZJCRg+b5TOiceSv2rE6xD+7bPjsg11nXLCy7vRQ3
-         kbs8RI/dgUdSN9KDbMpxynPWtflCBnXzbEmzEgea+cBldGZ+qdsKQHTfG0Y/OM6qFEsS
-         foV/1H1G0A3qIDlLa7svdfZFQj94TK/tRpN6v6AodwyfH+X3nnGzfzyg1ocv0Z1CoT/P
-         qcHMtrXiVk65WA5G+Qy1qzH439zU66bWkPOz/iF/TPqK+DBfKcn9rlkBsbHDTlpQHCSp
-         cx8iz/E5Ib2+BMrdroikjTNwUe94g+69AZCp3qrkHlu6kVUTfbVUBypeVTeKcq4D7rHW
-         pFkA==
-X-Gm-Message-State: ACrzQf2APssLR3PlDaKBSFUAqHp9dT5KM5jRkN97eB0oqIW/ZYWYERUK
-        QOu4XKpcZ/9/V002lfm/wAfBRwl6Fy8SOm0I
-X-Google-Smtp-Source: AMsMyM4bry2WOb170Y/tBalWnaBobFDexndbojNbGL6Z3HYWbWbeCb131hsk8dxYRwIrCrPjOVi/Gg==
-X-Received: by 2002:a05:6a00:14d5:b0:542:9c32:ab27 with SMTP id w21-20020a056a0014d500b005429c32ab27mr1682903pfu.64.1664427779439;
-        Wed, 28 Sep 2022 22:02:59 -0700 (PDT)
-Received: from skynet-linux.local ([2a09:bac0:579::681d:4237])
-        by smtp.googlemail.com with ESMTPSA id rm13-20020a17090b3ecd00b0020263b7177csm1895962pjb.3.2022.09.28.22.02.55
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=MC+eI3i/t3K9Sg+2EGrsVaTd5iJWGGfd3bEqBpabEg8=;
+        b=Pc17IPs6k4hglLMT2eYfMI4ZZqWtkY/Zej/bYFVWuXdI8j7jOhb0IkKfHYUJK3tNGL
+         HNxXTCCWR357VzrfYPdvsswF/fx2IDW5WNhCeKQm0wn3Sk3iRNGDAEqPhzneomFPvzsU
+         ffyxK9NF5N+VdeHtCewO3yK4uuj9Op2Sz/rCyTBzvdvZF5f35+DlCeuNW466jJOau/BT
+         69epSY/UVBCgQH9G2NfRfXvZ4Mj2QiM9YmqazBN5U6IshfeFi45btHaNRjpknUwibM9j
+         6VNBMhGNRQIcnt3XIOyPyyG2vEuQcsDOytj7NSDnQUrrNmyAL96JyUJvOZ1JoPubtBsy
+         F4Cw==
+X-Gm-Message-State: ACrzQf2HBUOWjB5JltnSWUA1diGR7PMUGC8JjCir2jDJXnydepCCpinD
+        cYSPhfG9on/dGE4tLxRWDwY=
+X-Google-Smtp-Source: AMsMyM5rOVFb4ynre9HopT1jJsgN4ddXCwc8yTdodHFoxR+3Veih0rzdqSYyGBwPBfLZsFC7iQ9iWg==
+X-Received: by 2002:a17:90a:6887:b0:203:5861:fc5d with SMTP id a7-20020a17090a688700b002035861fc5dmr14561604pjd.132.1664427870380;
+        Wed, 28 Sep 2022 22:04:30 -0700 (PDT)
+Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:637c:7f23:f348:a9e6])
+        by smtp.gmail.com with ESMTPSA id ij25-20020a170902ab5900b00179f370dbe7sm4314330plb.287.2022.09.28.22.04.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 22:02:58 -0700 (PDT)
-From:   Sireesh Kodali <sireeshkodali1@gmail.com>
-To:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, linux-kernel@vger.kernel.org
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Sireesh Kodali <sireeshkodali1@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v5 5/5] dt-bindings: remoteproc: wcnss-pil: Make supplies optionally required
-Date:   Thu, 29 Sep 2022 10:32:09 +0530
-Message-Id: <20220929050209.1464526-6-sireeshkodali1@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220929050209.1464526-1-sireeshkodali1@gmail.com>
-References: <20220929050209.1464526-1-sireeshkodali1@gmail.com>
+        Wed, 28 Sep 2022 22:04:29 -0700 (PDT)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Opasiak <k.opasiak@samsung.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 1/2] nfc: s3fwrn5: fix order of freeing resources
+Date:   Wed, 28 Sep 2022 22:04:25 -0700
+Message-Id: <20220929050426.955139-1-dmitry.torokhov@gmail.com>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,36 +68,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On MSM8974, power domains are not yet supported. The platform uses
-regulators. This patch marks either the power-domains or *-supply as
-required (instead of always requiring the power domains).
+Caution needs to be exercised when mixing together regular and managed
+resources. In case of this driver devm_request_threaded_irq() should
+not be used, because it will result in the interrupt being freed too
+late, and there being a chance that it fires up at an inopportune
+moment and reference already freed data structures.
 
-Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- .../devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/nfc/s3fwrn5/i2c.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
-index 2ba2b6cf11fb..45eb42bd3c2c 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
-@@ -196,9 +196,13 @@ allOf:
-           deprecated: true
-           description: Deprecated for qcom,pronto-v1/2-pil
+diff --git a/drivers/nfc/s3fwrn5/i2c.c b/drivers/nfc/s3fwrn5/i2c.c
+index f824dc7099ce..fb36860df81c 100644
+--- a/drivers/nfc/s3fwrn5/i2c.c
++++ b/drivers/nfc/s3fwrn5/i2c.c
+@@ -231,9 +231,9 @@ static int s3fwrn5_i2c_probe(struct i2c_client *client,
+ 	if (ret < 0)
+ 		goto disable_clk;
  
--      required:
--        - power-domains
--        - power-domain-names
-+      oneOf:
-+        - required:
-+            - power-domains
-+            - power-domain-names
-+        - required:
-+            - vddmx-supply
-+            - vddcx-supply
+-	ret = devm_request_threaded_irq(&client->dev, phy->i2c_dev->irq, NULL,
+-		s3fwrn5_i2c_irq_thread_fn, IRQF_ONESHOT,
+-		S3FWRN5_I2C_DRIVER_NAME, phy);
++	ret = request_threaded_irq(phy->i2c_dev->irq,
++				   NULL, s3fwrn5_i2c_irq_thread_fn,
++				   IRQF_ONESHOT, S3FWRN5_I2C_DRIVER_NAME, phy);
+ 	if (ret)
+ 		goto s3fwrn5_remove;
  
-   - if:
-       properties:
+@@ -250,6 +250,7 @@ static void s3fwrn5_i2c_remove(struct i2c_client *client)
+ {
+ 	struct s3fwrn5_i2c_phy *phy = i2c_get_clientdata(client);
+ 
++	free_irq(phy->i2c_dev->irq, phy);
+ 	s3fwrn5_remove(phy->common.ndev);
+ 	clk_disable_unprepare(phy->clk);
+ }
 -- 
-2.37.3
+2.38.0.rc1.362.ged0d419d3c-goog
 
