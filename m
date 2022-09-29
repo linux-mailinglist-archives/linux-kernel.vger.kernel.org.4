@@ -2,109 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 062375EF2AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36965EF0B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235058AbiI2JuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 05:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
+        id S235176AbiI2Ijt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbiI2Jtm (ORCPT
+        with ESMTP id S235578AbiI2Ijq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:49:42 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269C01183D
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664444903; x=1695980903;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=URHxb8lU81RnkvovOLqWHu3JtwNm+uTnov0gAOxG9/M=;
-  b=nUb6kUNkCYUcAu2RxCvetqnjecxreNT+PHVz+D2vdLaJvbYcsM9gMjqT
-   dlxs7iht2m1yq1YJzV7cXG7ylm4dOK0yjzEZyJdSTh5u6abNFGt3ETxyJ
-   70F1WBbQuB65X4izE8/JrLOuCsbkcEQaXZ1sDSU5IR4sCPagUkyyqvWJE
-   ndMHolB2qkLKgH33lAclr83SBCCooZZ/ghPGXm7kQVDd/7xWbyDu+vuWx
-   GlA1HaNlxhWHbu7Zj5o9Pg7Nwol9kWbAJXcLrRttGZJYQJlOdoRUvkvA5
-   f2t5A7b1lt9LM20qrhDkX/bBkMZ6vT+sghNmijNaCo7IM2JbCSzOqeODG
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="302760932"
-X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
-   d="scan'208";a="302760932"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 02:48:22 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="690754011"
-X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
-   d="scan'208";a="690754011"
-Received: from crijnder-mobl.ger.corp.intel.com (HELO [10.251.211.131]) ([10.251.211.131])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 02:48:18 -0700
-Message-ID: <3bddff5a-78ed-a3fa-841c-2f2f6a8f8bbb@linux.intel.com>
-Date:   Thu, 29 Sep 2022 10:39:26 +0200
+        Thu, 29 Sep 2022 04:39:46 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764E8175B6;
+        Thu, 29 Sep 2022 01:39:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 351E721BE6;
+        Thu, 29 Sep 2022 08:39:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1664440781; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=edxlyO0DI/XbqT4f94AuU5/d2duw9Yhmd6WUepUXs+M=;
+        b=CdYlBh0R4T8C4JQSnr4ybe6PJuDRU1jSW+8CJbnXwHv88aUpErLnpZLxIEJTnSWslBBxSo
+        pp3FS2cvmCCXDwtjEOKO7DgJR3KTn+yU3se7bc+/mnngAMEXWwNm3r8te6tcD2XvBY9swV
+        9tfOVOT0CGLzuhEe4nkMyE06yrc0cC0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1664440781;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=edxlyO0DI/XbqT4f94AuU5/d2duw9Yhmd6WUepUXs+M=;
+        b=DouwamspXNxBSjKfFx/GGJArug1SbCVLlg3Vj4yp469JdgG9YYrmF7ftTnGj61Ff9nILzj
+        twgeNYOY1gF4rGBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 137F613A71;
+        Thu, 29 Sep 2022 08:39:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id L8u6BM1ZNWPEHwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 29 Sep 2022 08:39:41 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id CEC40A0680; Thu, 29 Sep 2022 10:39:39 +0200 (CEST)
+Date:   Thu, 29 Sep 2022 10:39:39 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
+        Keith Busch <kbusch@kernel.org>,
+        Yu Kuai <yukuai1@huaweicloud.com>,
+        Liu Song <liusong@linux.alibaba.com>,
+        Hillf Danton <hdanton@sina.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next v2] sbitmap: fix lockup while swapping
+Message-ID: <20220929083939.ioytch563qikyflz@quack3>
+References: <d83885c9-2635-ef45-2ccc-a7e06421e1cc@google.com>
+ <Yy4D54kPpenBkjHz@kbusch-mbp.dhcp.thefacebook.com>
+ <391b1763-7146-857-e3b6-dc2a8e797162@google.com>
+ <929a3aba-72b0-5e-5b80-824a2b7f5dc7@google.com>
+ <20220926114416.t7t65u66ze76aiz7@quack3>
+ <4539e48-417-edae-d42-9ef84602af0@google.com>
+ <20220927103123.cvjbdx6lqv7jxa2w@quack3>
+ <2b931ee7-1bc9-e389-9d9f-71eb778dcf1@google.com>
+ <f975dddf-6ec-b3cb-3746-e91f61b22ea@google.com>
+ <9f68731-e699-5679-6a71-77634767b8dd@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH] ASoC: Intel: sof_rt5682: remove
- SOF_RT1015_SPEAKER_AMP_100FS flag
-Content-Language: en-US
-To:     "Lu, Brent" <brent.lu@intel.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
-Cc:     "Rojewski, Cezary" <cezary.rojewski@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Ajye Huang <ajye.huang@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        "Chiang, Mac" <mac.chiang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        "Gopal, Vamshi Krishna" <vamshi.krishna.gopal@intel.com>,
-        "Zhi, Yong" <yong.zhi@intel.com>
-References: <20220913074906.926774-1-brent.lu@intel.com>
- <2577e4db-8593-cf37-135b-aa51b6268cd7@linux.intel.com>
- <CY5PR11MB6257A5CC3976FAEA2C713A4997559@CY5PR11MB6257.namprd11.prod.outlook.com>
- <d94a9abd-95ca-09ba-ab24-e4c38b832678@linux.intel.com>
- <CY5PR11MB6257AF53395DDF069A43D28E97579@CY5PR11MB6257.namprd11.prod.outlook.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <CY5PR11MB6257AF53395DDF069A43D28E97579@CY5PR11MB6257.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9f68731-e699-5679-6a71-77634767b8dd@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/29/22 08:25, Lu, Brent wrote:
->>>
->>> I think TDM slot number is possible but not TX/RX mask. What we have
->>> in topology is union of tx/rx mask of all channels. We don't know the
->>> mask of specific channel in DAI_CONFIG.
->>>
->>> DAI_CONFIG(SSP, 0, BOARD_HP_BE_ID, SSP0-Codec,
->>>         SSP_CONFIG(I2S, SSP_CLOCK(mclk, 19200000, codec_mclk_in),
->>>                 SSP_CLOCK(bclk, 2400000, codec_slave),
->>>                 SSP_CLOCK(fsync, 48000, codec_slave),
->>>                 SSP_TDM(2, 25, 3, 3),
->>
->> the 3 3 is precisely the channel mask!
->>
+On Tue 27-09-22 21:07:46, Hugh Dickins wrote:
+> Commit 4acb83417cad ("sbitmap: fix batched wait_cnt accounting")
+> is a big improvement: without it, I had to revert to before commit
+> 040b83fcecfb ("sbitmap: fix possible io hung due to lost wakeup")
+> to avoid the high system time and freezes which that had introduced.
 > 
-> Yes, but what we need in the hw_params() is the mask for individual channel,
-> like 0x1 for left and 0x2 for right.
+> Now okay on the NVME laptop, but 4acb83417cad is a disaster for heavy
+> swapping (kernel builds in low memory) on another: soon locking up in
+> sbitmap_queue_wake_up() (into which __sbq_wake_up() is inlined), cycling
+> around with waitqueue_active() but wait_cnt 0 .  Here is a backtrace,
+> showing the common pattern of outer sbitmap_queue_wake_up() interrupted
+> before setting wait_cnt 0 back to wake_batch (in some cases other CPUs
+> are idle, in other cases they're spinning for a lock in dd_bio_merge()):
+> 
+> sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
+> __blk_mq_free_request < blk_mq_free_request < __blk_mq_end_request <
+> scsi_end_request < scsi_io_completion < scsi_finish_command <
+> scsi_complete < blk_complete_reqs < blk_done_softirq < __do_softirq <
+> __irq_exit_rcu < irq_exit_rcu < common_interrupt < asm_common_interrupt <
+> _raw_spin_unlock_irqrestore < __wake_up_common_lock < __wake_up <
+> sbitmap_queue_wake_up < sbitmap_queue_clear < blk_mq_put_tag <
+> __blk_mq_free_request < blk_mq_free_request < dd_bio_merge <
+> blk_mq_sched_bio_merge < blk_mq_attempt_bio_merge < blk_mq_submit_bio <
+> __submit_bio < submit_bio_noacct_nocheck < submit_bio_noacct <
+> submit_bio < __swap_writepage < swap_writepage < pageout <
+> shrink_folio_list < evict_folios < lru_gen_shrink_lruvec <
+> shrink_lruvec < shrink_node < do_try_to_free_pages < try_to_free_pages <
+> __alloc_pages_slowpath < __alloc_pages < folio_alloc < vma_alloc_folio <
+> do_anonymous_page < __handle_mm_fault < handle_mm_fault <
+> do_user_addr_fault < exc_page_fault < asm_exc_page_fault
+> 
+> See how the process-context sbitmap_queue_wake_up() has been interrupted,
+> after bringing wait_cnt down to 0 (and in this example, after doing its
+> wakeups), before advancing wake_index and refilling wake_cnt: an
+> interrupt-context sbitmap_queue_wake_up() of the same sbq gets stuck.
+> 
+> I have almost no grasp of all the possible sbitmap races, and their
+> consequences: but __sbq_wake_up() can do nothing useful while wait_cnt 0,
+> so it is better if sbq_wake_ptr() skips on to the next ws in that case:
+> which fixes the lockup and shows no adverse consequence for me.
+> 
+> Signed-off-by: Hugh Dickins <hughd@google.com>
 
-Ah yes, you're talking about the mask configuration on the codec side,
-sorry I was confused with your reference to DAI_CONFIG. That would be
-platform-level information, not DSP topology information indeed.
+Perhaps we could add a note here like: "The check for wait_cnt being 0 is
+obviously racy and ultimately can lead to lost wakeups for example when
+there is only single waitqueue with waiters. However in these cases lost
+wakeups are unlikely to matter and proper fix requires redesign (and
+benchmarking) of batched wakeup code so let's plug the hole with this band
+aid for now."
 
-Sounds good then, thanks for the explanations.
+Otherwise feel free to add:
 
-Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
 
+								Honza
+
+> ---
+> v2: - v1 to __sbq_wake_up() broke out when this happens, but
+>       v2 to sbq_wake_ptr() does better by skipping on to the next.
+>     - added more comment and deleted dubious Fixes attribution.
+>     - and apologies to Mr Axboe and all for my axbod typo
+> 
+>  lib/sbitmap.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- a/lib/sbitmap.c
+> +++ b/lib/sbitmap.c
+> @@ -587,7 +587,7 @@ static struct sbq_wait_state *sbq_wake_p
+>  	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
+>  		struct sbq_wait_state *ws = &sbq->ws[wake_index];
+>  
+> -		if (waitqueue_active(&ws->wait)) {
+> +		if (waitqueue_active(&ws->wait) && atomic_read(&ws->wait_cnt)) {
+>  			if (wake_index != atomic_read(&sbq->wake_index))
+>  				atomic_set(&sbq->wake_index, wake_index);
+>  			return ws;
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
