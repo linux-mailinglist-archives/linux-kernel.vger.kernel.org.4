@@ -2,62 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCE35EFD23
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF9F5EFD24
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbiI2SiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
+        id S235018AbiI2SjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbiI2SiD (ORCPT
+        with ESMTP id S230418AbiI2SjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:38:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5009612112A;
-        Thu, 29 Sep 2022 11:38:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD42E6215B;
-        Thu, 29 Sep 2022 18:38:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 150AEC433D6;
-        Thu, 29 Sep 2022 18:38:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664476681;
-        bh=+cp10QalntLANvJDrlD/o8CXEGGdD/OGJ35ESRtZxMM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qe7nWhINkdTjc5ImGliaFl4sr8POetibPZpNU9Gu1n0DB5OsRIpYeKVd8MdjW9pwg
-         Orl8iTpQj0E3+Kxkw3NTRkPZlTT4vNk0jObi7N75JzeKbs6/ZDnqXw/N0qup4zL1Wm
-         6r/MlyfDUT3JMIip9Ew9VCsJBCe7fBLpE7aq+HOkLAK8Ifag3ab0u3bbfNst9ccXy3
-         iHKzQ5vLYlFzqdkrD4wC9W0+ftEQg3PsocIjfphcVq+f/yRz7m+T/1U73cpxvAOAW0
-         ihMfSQLNgDhDU70KIR4OBqT2XK+aHzdx8y0rhYd3UG3pLdqiB/zGDtNOlT72DOIjj0
-         SmDN5yIFYWhQA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A977B405F0; Thu, 29 Sep 2022 15:37:58 -0300 (-03)
-Date:   Thu, 29 Sep 2022 15:37:58 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
-Subject: Re: [PATCH 1/2] perf tools: Fix bison object compilation with clang
- 15
-Message-ID: <YzXmBrvLY23z4zB4@kernel.org>
-References: <20220929140514.226807-1-jolsa@kernel.org>
- <YzXdjNNh+jbYDnYz@kernel.org>
- <CAM9d7cia_Hsqsj=J4rSM68TQADMAt=at5SWRMYTGv4FJxNGpTg@mail.gmail.com>
+        Thu, 29 Sep 2022 14:39:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6751280E1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:38:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664476738;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TDV2GeYg3Ie1RbywMBT9ty+ML1gHVHsPl0YHmqgqQMA=;
+        b=JOE2nrA9iDcPLZ7qa6Zl6PBRd9zDkiIjybraurugL6FpryEy9MYcTYPwv7tL0Dzry+2Fms
+        MiS+qJYBW21GUwa+BDIHtNplPzuJCBnQIDbzvMSTO6jdFg5Wz8kio8h9i/WQjZXn81Cnag
+        Ots3cuLn5LXAuQVkUWc4mhhYTKalZmU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-633-uov0RPA_Mh-ho0XZeYoQGA-1; Thu, 29 Sep 2022 14:38:57 -0400
+X-MC-Unique: uov0RPA_Mh-ho0XZeYoQGA-1
+Received: by mail-wm1-f69.google.com with SMTP id h187-20020a1c21c4000000b003b51369ff1bso3315469wmh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:38:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=TDV2GeYg3Ie1RbywMBT9ty+ML1gHVHsPl0YHmqgqQMA=;
+        b=P+A9of6vwnAYsRRnR8uAtC+3h20gQNgamsxcfCE9hqQAdEmmKsRflHx1zeXOe/n8ou
+         e36s6Fngs4NmB9gOdiRgZDmswbY8R0jSxEN11MmDxH3HH1HjsKXQcCGzEi9U3Zwph/GB
+         a7MZVREoQuECAbsEAI1ztpVemOGr41hnEgtPJ6BgbUUfbwm1oiE5g6kb8iQlk87uFVis
+         gcEw4oItEUgH2U68zJNjutVo4hGJyyasNH1hnF+hy1QzGOdqzHbGzDn8UNMxsO4McloQ
+         1EN/mElSwKZpcsq+5OECktt9YqWCu9h6bQrzvHhNdVj5qYXNQUarAuv0FFWTSA1GiUxS
+         MGqA==
+X-Gm-Message-State: ACrzQf3PvatlYSSV72LV3crx+Sm2MH+40QL0n1HQqs4wZDFjvCUh5idZ
+        vkPk0qpcZNkLv7Bhfbcg+FK86B2XhLW9qZBuqj66fZ9+Jomfj30ajhSgCpTYbma1kYBvb9puMTe
+        oiN2mWgRA2HzHhv8iFZM4WBBN
+X-Received: by 2002:a05:600c:a4b:b0:3b5:5267:6aad with SMTP id c11-20020a05600c0a4b00b003b552676aadmr3557010wmq.110.1664476735681;
+        Thu, 29 Sep 2022 11:38:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6NMkOD5mQ9M9IpIZXsPLMxPV8wr7nCiRR0NrNHRJFnWd1pRxY806ZkNxQLnKmIKJU2g7i+iw==
+X-Received: by 2002:a05:600c:a4b:b0:3b5:5267:6aad with SMTP id c11-20020a05600c0a4b00b003b552676aadmr3556986wmq.110.1664476735371;
+        Thu, 29 Sep 2022 11:38:55 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:ce00:b5d:2b28:1eb5:9245? (p200300cbc705ce000b5d2b281eb59245.dip0.t-ipconnect.de. [2003:cb:c705:ce00:b5d:2b28:1eb5:9245])
+        by smtp.gmail.com with ESMTPSA id m64-20020a1ca343000000b003a6125562e1sm100188wme.46.2022.09.29.11.38.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 11:38:54 -0700 (PDT)
+Message-ID: <834c258d-4c0e-1753-3608-8a7e28c14d07@redhat.com>
+Date:   Thu, 29 Sep 2022 20:38:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9d7cia_Hsqsj=J4rSM68TQADMAt=at5SWRMYTGv4FJxNGpTg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NUMERIC_HTTP_ADDR,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Content-Language: en-US
+To:     Chih-En Lin <shiyn.lin@gmail.com>
+Cc:     Nadav Amit <namit@vmware.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Peter Xu <peterx@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Li kunyu <kunyu@nfschina.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Yang Shi <shy828301@gmail.com>, Song Liu <song@kernel.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dinglan Peng <peng301@purdue.edu>,
+        Pedro Fonseca <pfonseca@purdue.edu>,
+        Jim Huang <jserv@ccns.ncku.edu.tw>,
+        Huichun Feng <foxhoundsk.tw@gmail.com>
+References: <20220927162957.270460-1-shiyn.lin@gmail.com>
+ <20220927162957.270460-10-shiyn.lin@gmail.com>
+ <3D21021E-490F-4FE0-9C75-BB3A46A66A26@vmware.com>
+ <YzNUwxU44mq+KnCm@strix-laptop>
+ <c12f848d-cb54-2998-8650-2c2a5707932d@redhat.com>
+ <YzWf7V5qzMjzMAk4@strix-laptop>
+ <39c5ef18-1138-c879-2c6d-c013c79fa335@redhat.com>
+ <YzXkDKr6plbJZgG4@strix-laptop>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFC PATCH v2 9/9] mm: Introduce Copy-On-Write PTE table
+In-Reply-To: <YzXkDKr6plbJZgG4@strix-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,60 +118,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Sep 29, 2022 at 11:22:41AM -0700, Namhyung Kim escreveu:
-> On Thu, Sep 29, 2022 at 11:01 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Thu, Sep 29, 2022 at 04:05:13PM +0200, Jiri Olsa escreveu:
-> > > Arnaldo reported compilation fail with clang 15:
-> > >
-> > >     CC      util/parse-events-bison.o
-> > >   util/parse-events-bison.c:1401:9: error: variable 'parse_events_nerrs'
-> > >   set but not used [-Werror,-Wunused-but-set-variable]
-> > >       int yynerrs = 0;
-> > >         ^
-> > >   util/parse-events-bison.c:72:25: note: expanded from macro 'yynerrs'
-> > >   #define yynerrs         parse_events_nerrs
-> > >                         ^
-> > >   1 error generated.
-> > >
-> > > Disabling -Wunused-but-set-variable check for bison object compilation.
-> >
-> > So we have to disable something else:
-> >
-> >   37    44.92 fedora:32                     : FAIL clang version 10.0.1 (Fedora 10.0.1-3.fc32)
-> >     error: unknown warning option '-Wno-unused-but-set-variable'; did you mean '-Wno-unused-const-variable'? [-Werror,-Wunknown-warning-option]
-> >     make[3]: *** [/git/perf-6.0.0-rc7/tools/build/Makefile.build:139: util] Error 2
-> >   38    61.77 fedora:33                     : FAIL clang version 11.0.0 (Fedora 11.0.0-3.fc33)
-> >     error: unknown warning option '-Wno-unused-but-set-variable'; did you mean '-Wno-unused-const-variable'? [-Werror,-Wunknown-warning-option]
-> >     make[3]: *** [/git/perf-6.0.0-rc7/tools/build/Makefile.build:139: util] Error 2
-> >   39    66.59 fedora:34                     : FAIL clang version 12.0.1 (Fedora 12.0.1-1.fc34)
-> >     error: unknown warning option '-Wno-unused-but-set-variable'; did you mean '-Wno-unused-const-variable'? [-Werror,-Wunknown-warning-option]
-> >     make[3]: *** [/git/perf-6.0.0-rc7/tools/build/Makefile.build:139: util] Error 2
-> >
-> >
-> > I'll try yours + -Wno-unknown-warning-option
+On 29.09.22 20:29, Chih-En Lin wrote:
+> On Thu, Sep 29, 2022 at 07:24:31PM +0200, David Hildenbrand wrote:
+>>>> IMHO, a relaxed form that focuses on only the memory consumption reduction
+>>>> could *possibly* be accepted upstream if it's not too invasive or complex.
+>>>> During fork(), we'd do exactly what we used to do to PTEs (increment
+>>>> mapcount, refcount, trying to clear PageAnonExclusive, map the page R/O,
+>>>> duplicate swap entries; all while holding the page table lock), however,
+>>>> sharing the prepared page table with the child process using COW after we
+>>>> prepared it.
+>>>>
+>>>> Any (most once we want to *optimize* rmap handling) modification attempts
+>>>> require breaking COW -- copying the page table for the faulting process. But
+>>>> at that point, the PTEs are already write-protected and properly accounted
+>>>> (refcount/mapcount/PageAnonExclusive).
+>>>>
+>>>> Doing it that way might not require any questionable GUP hacks and swapping,
+>>>> MMU notifiers etc. "might just work as expected" because the accounting
+>>>> remains unchanged" -- we simply de-duplicate the page table itself we'd have
+>>>> after fork and any modification attempts simply replace the mapped copy.
+>>>
+>>> Agree.
+>>> However for GUP hacks, if we want to do the COW to page table, we still
+>>> need the hacks in this patch (using the COW_PTE_OWN_EXCLUSIVE flag to
+>>> check whether the PTE table is available or not before we do the COW to
+>>> the table). Otherwise, it will be more complicated since it might need
+>>> to handle situations like while preparing the COW work, it just figuring
+>>> out that it needs to duplicate the whole table and roll back (recover
+>>> the state and copy it to new table). Hopefully, I'm not wrong here.
+>>
+>> The nice thing is that GUP itself *usually* doesn't modify page tables. One
+>> corner case is follow_pfn_pte(). All other modifications should happen in
+>> the actual fault handler that has to deal with such kind of unsharing either
+>> way when modifying the PTE.
+>>
+>> If the pages are already in a COW-ed pagetable in the desired "shared" state
+>> (e.g., PageAnonExclusive cleared on an anonymous page), R/O pinning of such
+>> pages will just work as expected and we shouldn't be surprised by another
+>> set of GUP+COW CVEs.
+>>
+>> We'd really only deduplicate the page table and not play other tricks with
+>> the actual page table content that differ from the existing way of handling
+>> fork().
+>>
+>> I don't immediately see why we need COW_PTE_OWN_EXCLUSIVE in GUP code when
+>> not modifying the page table. I think we only need "we have to unshare this
+>> page table now" in follow_pfn_pte() and inside the fault handling when GUP
+>> triggers a fault.
+>>
+>> I hope my assumption is correct, or am I missing something?
+>>
 > 
-> Is `-Wno-unknown-warning-option` known to older versions? ;-)
+> My consideration is when we pinned the page and did the COW to make the
+> page table be shared. It might not allow mapping the pinned page to R/O)
+> into both processes.
+> 
+> So, if the fork is working on the shared state, it needs to recover the
+> table and copy to a new one since that pinned page will need to copy
+> immediately. We can hold the shared state after occurring such a
+> situation. So we still need some trick to let the fork() know which page
+> table already has the pinned page (or such page won't let us share)
+> before going to duplicate.
+> 
+> Am I wrong here?
 
-Excellent question! ;-)
+I think you might be overthinking this. Let's keep it simple:
 
-And one we should learn something from, so that we
-can prep tools/perf/ (and other projects we contribute to) for the
-future:
+1) Handle pinned anon pages just as I described below, falling back to 
+the "slow" path of page table copying.
 
-So far, so good:
+2) Once we passed that stage, you can be sure that the COW-ed page table 
+cannot have actually pinned anon pages. All anon pages in such a page 
+table have PageAnonExclusive cleared and are "maybe shared". GUP cannot 
+succeed in pinning these pages anymore, because it will only pin 
+exclusive anon pages!
 
-[perfbuilder@five ~]$ echo `grep FAIL dm.log/summary | cut -c15- | cut -d: -f1,2`
-alpine:3.12 alpine:3.13 alpine:3.14 alpine:3.15 alt:p10 amazonlinux:devel debian:11 fedora:32 fedora:33 fedora:34 fedora:37 fedora:38 fedora:rawhide ubuntu:21.04
-[perfbuilder@five ~]$ export BUILD_TARBALL=http://192.168.86.14/perf/perf-6.0.0-rc7.tar.xz
-[perfbuilder@five ~]$ time dm debian:experimental alpine:3.12 alpine:3.13 alpine:3.14 alpine:3.15 alt:p10 amazonlinux:devel debian:11 fedora:32 fedora:33 fedora:34 fedora:37 fedora:38 fedora:rawhide ubuntu:21.04
-   1   140.66 debian:experimental           : Ok   gcc (Debian 12.2.0-3) 12.2.0 , Debian clang version 14.0.6-2
-   2   132.82 alpine:3.12                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 10.0.0 (https://gitlab.alpinelinux.org/alpine/aports.git 7445adce501f8473efdb93b17b5eaf2f1445ed4c)
-   3   140.40 alpine:3.13                   : Ok   gcc (Alpine 10.2.1_pre1) 10.2.1 20201203 , Alpine clang version 10.0.1
-   4   143.75 alpine:3.14                   : Ok   gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424 , Alpine clang version 11.1.0
-   5   147.77 alpine:3.15                   : Ok   gcc (Alpine 10.3.1_git20211027) 10.3.1 20211027 , Alpine clang version 12.0.1
-   6    98.79 alt:p10                       : Ok   x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
-   7: amazonlinux:devel
+3) If anybody wants to take a R/O pin on a shared anon page that is 
+mapped into a COW-ed page table, we trigger a fault with 
+FAULT_FLAG_UNSHARE instead of pinning the page. This has to break COW on 
+the page table and properly map an exclusive anon page into it, breaking 
+COW.
 
-- Arnaldo
+Do you see a problem with that?
+
+> 
+> After that, since we handled the accounting in fork(), we don't need
+> ownership (pmd_t pointer) anymore. We have to find another way to mark
+> the table to be exclusive. (Right now, COW_PTE_OWNER_EXCLUSIVE flag is
+> stored at that space.)
+> 
+>>>
+>>>> But devil is in the detail (page table lock, TLB flushing).
+>>>
+>>> Sure, it might be an overhead in the page fault and needs to be handled
+>>> carefully. ;)
+>>>
+>>>> "will make fork() even have more overhead" is not a good excuse for such
+>>>> complexity/hacks -- sure, it will make your benchmark results look better in
+>>>> comparison ;)
+>>>
+>>> ;);)
+>>> I think that, even if we do the accounting with the COW page table, it
+>>> still has a little bit improve.
+>>
+>> :)
+>>
+>> My gut feeling is that this is true. While we have to do a pass over the
+>> parent page table during fork and wrprotect all PTEs etc., we don't have to
+>> duplicate the page table content and allocate/free memory for that.
+>>
+>> One interesting case is when we cannot share an anon page with the child
+>> process because it maybe pinned -- and we have to copy it via
+>> copy_present_page(). In that case, the page table between the parent and the
+>> child would differ and we'd not be able to share the page table.
+> 
+> That is what I want to say above.
+> The case might happen in the middle of the shared page table progress.
+> It might cost more overhead to recover it. Therefore, if GUP wants to
+> pin the mapped page we can mark the PTE table first, so fork() won't
+> waste time doing the work for sharing.
+
+Having pinned pages is a corner case for most apps. No need to worry 
+about optimizing this corner case for now.
+
+I see what you are trying to optimize, but I don't think this is needed 
+in a first version, and probably never is needed.
+
+
+Any attempts to mark page tables in a certain way from GUP 
+(COW_PTE_OWNER_EXCLUSIVE) is problematic either way: GUP-fast 
+(get_user_pages_fast) can race with pretty much anything, even with 
+concurrent fork. I suspect your current code might be really racy in 
+that regard.
+
+-- 
+Thanks,
+
+David / dhildenb
+
