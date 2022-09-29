@@ -2,123 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DFA45EF065
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0C95EF06A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235521AbiI2I0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
+        id S231419AbiI2I1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235434AbiI2I0T (ORCPT
+        with ESMTP id S235563AbiI2I1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:26:19 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8546B1114E0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:26:17 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 29 Sep 2022 04:27:34 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8C8126B52
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:27:02 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9F60B6601EB5;
-        Thu, 29 Sep 2022 09:26:15 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664439976;
-        bh=DVzLEPop4CuCNatrUBECX75Ksw2U4KOEH2nhFf8Ak84=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=L5+R2TdKe+UVbDcG5czLQSYYGs5azJgidjWS3No9OjOXO4fmF+DEYaRb6bESyZV/b
-         XK8gf4A6VWxQ45/D6Xz6fuK4gzh2XAMoRhHYhUjRdH/900QAwYodj9E4Q2ebY6oF0g
-         PmMK1mXgTgFaL7AGmEJPcWh6Ksk66PuxW2pMvX6n+X+MbDyfb0Eg7/Z+BiOLeRup9M
-         G1BcrfeTcgY04HX/UKvQQd5oNlLBhXw+ytbz3AQHc7CF2OyScy2rwZ8k0lmV/WEG2B
-         Se0fq8uc1J6wM7WvDFoKVFJiJC8cNWwlKO/FfLgJJ7qEWQxJ+4Z1Y6ivyEohEFA3kQ
-         xif/Gb4ARe6zg==
-Message-ID: <66e1ddad-a7c2-215c-28b6-49e2b7f583a6@collabora.com>
-Date:   Thu, 29 Sep 2022 10:26:12 +0200
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 813131F85D;
+        Thu, 29 Sep 2022 08:27:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664440020; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xRyhuXmwMkLW8QlZukWqPWaxqTYhVhbGpA0KQ8ifdM8=;
+        b=BgIt661n2anXdyW6D7SP+svUANLeuiq0//ITS+gu1sg7eJWk+x88v0xanYrnYQVHgYKMm4
+        1RwFbUSKfQMOStAOle29m0/GjUln8WBlPSISsW5vElok9L5MrqC5QwgH0d+H2hFPMxYuZg
+        xAyvskX13zdmv3C91BNkm+tlqvXt/I0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 43F6213A71;
+        Thu, 29 Sep 2022 08:27:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1TH3DtRWNWOBGQAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 29 Sep 2022 08:27:00 +0000
+Message-ID: <b707e459-4e21-80f5-c676-c275528c06ae@suse.com>
+Date:   Thu, 29 Sep 2022 10:26:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 8/8] soc: mtk-svs: mt8192: fix bank data
+ Thunderbird/102.2.2
 Content-Language: en-US
-To:     matthias.bgg@kernel.org, roger.lu@mediatek.com,
-        jia-wei.chang@mediatek.com
-Cc:     nfraprado@collabora.com, khilman@baylibre.com,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-References: <20220928155519.31977-1-matthias.bgg@kernel.org>
- <20220928155519.31977-9-matthias.bgg@kernel.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220928155519.31977-9-matthias.bgg@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   Juergen Gross <jgross@suse.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <d3cd5c50-24e7-ffba-de2d-cf00400f6e38@suse.com>
+ <YzLo9IFDYW1T8BVZ@zn.tnic> <314e3bd3-3405-c0c3-225c-646d88cbfb1a@suse.com>
+ <YzOEYsqM0UEsiFuS@zn.tnic> <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
+ <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com> <YzQmeh50ne8dyR2P@zn.tnic>
+ <f8da6988-afa3-1e85-b47d-d91fc4113803@suse.com> <YzQui+rOGrM6otzp@zn.tnic>
+ <c67d3887-498b-6e4d-857d-1cef7835421d@suse.com> <YzRyaLRqWd6YSgeJ@zn.tnic>
+ <6d37c273-423c-fdce-c140-e5b90d723b9e@suse.com>
+Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
+ mtrr_aps_delayed_init
+In-Reply-To: <6d37c273-423c-fdce-c140-e5b90d723b9e@suse.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------LWnRAw3GXgBlglJ5NNsTIBeg"
 X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/09/22 17:55, matthias.bgg@kernel.org ha scritto:
-> From: Matthias Brugger <matthias.bgg@gmail.com>
-> 
-> Values vmax and dvt_fixed are not changed at runtime, set them as needed
-> in the svs_banks struct.
-> 
-> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------LWnRAw3GXgBlglJ5NNsTIBeg
+Content-Type: multipart/mixed; boundary="------------5WxHoVEGcQnJX10ESZlcFax9";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: xen-devel@lists.xenproject.org, x86@kernel.org,
+ linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <b707e459-4e21-80f5-c676-c275528c06ae@suse.com>
+Subject: Re: [PATCH v3 08/10] x86/mtrr: let cache_aps_delayed_init replace
+ mtrr_aps_delayed_init
+References: <d3cd5c50-24e7-ffba-de2d-cf00400f6e38@suse.com>
+ <YzLo9IFDYW1T8BVZ@zn.tnic> <314e3bd3-3405-c0c3-225c-646d88cbfb1a@suse.com>
+ <YzOEYsqM0UEsiFuS@zn.tnic> <73d8fabd-8b93-2e65-da4b-ea509818e666@suse.com>
+ <24088a15-50a1-f818-8c3e-6010925bffbf@suse.com> <YzQmeh50ne8dyR2P@zn.tnic>
+ <f8da6988-afa3-1e85-b47d-d91fc4113803@suse.com> <YzQui+rOGrM6otzp@zn.tnic>
+ <c67d3887-498b-6e4d-857d-1cef7835421d@suse.com> <YzRyaLRqWd6YSgeJ@zn.tnic>
+ <6d37c273-423c-fdce-c140-e5b90d723b9e@suse.com>
+In-Reply-To: <6d37c273-423c-fdce-c140-e5b90d723b9e@suse.com>
 
-Honestly, I'm undecided on this one... because the vmax += dvt_fixed is something
-descriptive of how the SVS works.
-Since you're simply removing one addition, in a path that gets executed only once
-in a kernel boot life, that's not even going to improve performance at all...
+--------------5WxHoVEGcQnJX10ESZlcFax9
+Content-Type: multipart/mixed; boundary="------------Pvv00nTI34oY5YpXg9t0w1ip"
 
-Right now, I'm more for dropping this change than keeping it.
+--------------Pvv00nTI34oY5YpXg9t0w1ip
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Cheers,
-Angelo
+T24gMjguMDkuMjIgMTg6MzIsIEp1ZXJnZW4gR3Jvc3Mgd3JvdGU6DQo+IE9uIDI4LjA5LjIy
+IDE4OjEyLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6DQo+PiBPbiBXZWQsIFNlcCAyOCwgMjAy
+MiBhdCAwMzo0Mzo1NlBNICswMjAwLCBKdWVyZ2VuIEdyb3NzIHdyb3RlOg0KPj4+IFdvdWxk
+IHlvdSBmZWVsIGJldHRlciB3aXRoIGFkZGluZyBhIG5ldyBlbnVtIG1lbWJlciBDUFVIUF9B
+UF9DQUNIRUNUUkxfT05MSU5FPw0KPj4+DQo+Pj4gVGhpcyB3b3VsZCBhdm9pZCBhIHBvc3Np
+YmxlIHNvdXJjZSBvZiBmYWlsdXJlIGR1cmluZyByZXN1bWUgaW4gY2FzZSBubyBzbG90DQo+
+Pj4gZm9yIENQVUhQX0FQX09OTElORV9EWU4gaXMgZm91bmQgKHF1aXRlIGltcHJvYmFibGUs
+IGJ1dCBpbiB0aGVvcnkgcG9zc2libGUpLg0KPj4NCj4+IExldCdzIGtlZXAgdGhhdCBpbiB0
+aGUgYmFnIGZvciB0aGUgdGltZSB3aGVuIHdlIGdldCB0byBjcm9zcyB0aGF0IGJyaWRnZS4N
+Cj4+DQo+Pj4gWW91IHdvdWxkbid0IHdhbnQgdG8gZG8gdGhhdCB0aGVyZSwgYXMgdGhlcmUg
+YXJlIG11bHRpcGxlIHBsYWNlcyB3aGVyZQ0KPj4+IHBtX3NsZWVwX2VuYWJsZV9zZWNvbmRh
+cnlfY3B1cygpIGlzIGJlaW5nIGNhbGxlZC4NCj4+DQo+PiBXZSB3YW50IGFsbCBvZiB0aGVt
+LCBJJ2Qgc2F5LiBUaGV5J3JlIGFsbCBzb21lIHNvcnQgb2Ygc3VzcGVuZCBBRkFJQ1QuDQo+
+PiBCdXQgeWVzLCBpZiB3ZSBnZXQgdG8gZG8gaXQsIHRoYXQgd291bGQgbmVlZCBhIHByb3Bl
+ciBhdWRpdC4NCj4+DQo+Pj4gQWRkaXRpb25hbGx5IG5vdCBhbGwgY2FzZXMgYXJlIGNvbWlu
+ZyBpbiB2aWENCj4+PiBwbV9zbGVlcF9lbmFibGVfc2Vjb25kYXJ5X2NwdXMoKSwgYXMgdGhl
+cmUgaXMgZS5nLiBhIGNhbGwgb2YNCj4+PiBzdXNwZW5kX2VuYWJsZV9zZWNvbmRhcnlfY3B1
+cygpIGZyb20ga2VybmVsX2tleGVjKCksIHdoaWNoIHdhbnRzIHRvDQo+Pj4gaGF2ZSB0aGUg
+c2FtZSBoYW5kbGluZy4NCj4+DQo+PiBXaGljaCBtZWFucywgbW9yZSBoYWlyeS4NCj4+DQo+
+Pj4gYXJjaF90aGF3X3NlY29uZGFyeV9jcHVzX2JlZ2luKCkgYW5kIGFyY2hfdGhhd19zZWNv
+bmRhcnlfY3B1c19lbmQoKSBhcmUNCj4+PiB0aGUgZnVuY3Rpb25zIHRvIG1hcmsgc3RhcnQg
+YW5kIGVuZCBvZiB0aGUgc3BlY2lhbCByZWdpb24gd2hlcmUgdGhlDQo+Pj4gZGVsYXllZCBN
+VFJSIHNldHVwIHNob3VsZCBoYXBwZW4uDQo+Pg0KPj4gWWFwLCBpdCBzZWVtcyBsaWtlIHRo
+ZSBiZXN0IHNvbHV0aW9uIGF0IHRoZSBtb21lbnQuIFdhbnQgbWUgdG8gZG8gYQ0KPj4gcHJv
+cGVyIHBhdGNoIGFuZCB0ZXN0IGl0IG9uIHJlYWwgaHc/DQo+IA0KPiBJIGNhbiBkbyB0aGF0
+Lg0KDQpPa2F5LCBsZXRzIGRlZmluZSB3aGF0IGlzIG1lYW50IGJ5ICJ0aGF0IiBqdXN0IHRv
+IGJlIG9uIHRoZSBzYW1lIHBhZ2UuDQoNClRoZSBpZGVhIHRvIHVzZSBhIGhvdHBsdWcgY2Fs
+bGJhY2sgc2VlbXMgdG8gYmUgcmF0aGVyIHJpc2t5IElNSE8uIEF0IGxlYXN0DQpDUFVIUF9B
+UF9PTkxJTkVfRFlOIHNlZW1zIHRvIGJlIHdheSB0b28gbGF0ZSwgYXMgdGhlcmUgYXJlIHNl
+dmVyYWwgZGV2aWNlDQpkcml2ZXJzIGhvb2tpbmcgaW4gd2l0aCB0aGUgc2FtZSBvciBsb3dl
+ciBwcmlvcml0eSBhbHJlYWR5LiBBbmQgZGV2aWNlDQpkcml2ZXJzIG1pZ2h0IHJlbHkgb24g
+UEFUIHNldHRpbmdzIGluIFBURXMgb2YgTVRSUiBiZWluZyBzZXR1cCBjb3JyZWN0bHkuDQoN
+CkFub3RoZXIgcHJvYmxlbWF0aWMgY2FzZSBpcyBDUFVIUF9BUF9NSUNST0NPREVfTE9BREVS
+LCB3aGljaCBpcyBleHBsaWNpdGx5DQpkb2luZyBjYWNoZSB3cml0ZWJhY2sgYW5kIGludmFs
+aWRhdGlvbiwgd2hpY2ggc2VlbXMgdG8gYmUgcmlza3kgd2l0aG91dA0KaGF2aW5nIGEgc2Fu
+ZSBQQVQvTVRSUiBzdGF0ZSBvZiB0aGUgcHJvY2Vzc29yLiBJdCBzaG91bGQgYmUgbm90ZWQg
+dGhhdCB0aGUNCm1pY3JvY29kZSBsb2FkZXIgaXMgcmVnaXN0ZXJlZCB2aWEgbGF0ZV9pbml0
+Y2FsbCgpLCBzbyBib290IGlzbid0IGFmZmVjdGVkDQpieSB0aGUgZGVsYXllZCBNVFJSL1BB
+VCBpbml0IHdoZW4gYm9vdGluZy4NCg0KU28gdGhlIG9ubHkgc2VjdXJlIHdheSB0byB1c2Ug
+YSBob3RwbHVnIGNhbGxiYWNrIHdvdWxkIGJlIHRvIGhhdmUgYSByYXRoZXINCmVhcmx5IHBy
+ZXJlZ2lzdGVyZWQgc2xvdCBpbiBlbnVtIGNwdWhwX3N0YXRlLg0KDQpSZWdhcmRpbmcgcmVz
+dW1lIGFuZCBrZXhlYyBJJ20gbm8gbG9uZ2VyIHN1cmUgZG9pbmcgdGhlIGRlbGF5ZWQgTVRS
+Ui9QQVQNCmluaXQgaXMgc3VjaCBhIGdyZWF0IGlkZWEuIEl0IG1pZ2h0IHNhdmUgc29tZSBt
+aWxsaXNlY29uZHMsIGJ1dCB0aGUgcmlza3MNCm1lbnRpb25lZCBhYm92ZSB3aXRoIGUuZy4g
+bWljcm9jb2RlIGxvYWRpbmcgc2hvdWxkIGFwcGx5Lg0KDQpTbyByaWdodCBub3cgSSdtIGlu
+Y2xpbmVkIHRvIGJlIGJldHRlciBvbiB0aGUgc2FmZSBzaWRlIGJ5IG5vdCBhZGRpbmcgYW55
+DQpjcHUgaG90cGx1ZyBob29rLCBidXQgdG8gdXNlIGp1c3QgdGhlIHNhbWUgImRlbGF5ZWQg
+QVAgaW5pdCIgZmxhZyBhcyB0b2RheSwNCmp1c3QgcmVuYW1pbmcgaXQuIFRoaXMgd291bGQg
+bGVhdmUgdGhlIGRlbGF5ZWQgTVRSUi9QQVQgaW5pdCBpbiBwbGFjZSBmb3INCnJlc3VtZSBh
+bmQga2V4ZWMgY2FzZXMsIGJ1dCBkZWZlcnJpbmcgdGhlIE1UUlIvUEFUIGNsZWFudXAgZHVl
+IHRvIHRoaXMNCnBvdGVudGlhbCBpc3N1ZSBzZWVtcyBub3QgYXBwcm9wcmlhdGUsIGFzIHRo
+ZSBjbGVhbnVwIGlzbid0IGNoYW5naW5nIHRoZQ0KYmVoYXZpb3IgaGVyZS4NCg0KV2Ugc2hv
+dWxkLCBob3dldmVyLCBoYXZlIGEgZGlzY3Vzc2lvbiBpbiBwYXJhbGxlbCBvciBsYXRlciwg
+d2hldGhlciB0aGUNCndob2xlIHRoYXdfc2Vjb25kYXJ5X2NwdXMoKSBoYW5kbGluZyBpcyBy
+ZWFsbHkgb2theSBvciB3aGV0aGVyIGl0IHNob3VsZA0KYmUgY2hhbmdlZCBpbiBzb21lIHdh
+eS4NCg0KDQpKdWVyZ2VuDQo=
+--------------Pvv00nTI34oY5YpXg9t0w1ip
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-> ---
-> 
->   drivers/soc/mediatek/mt8192-svs.h     | 4 ++--
->   drivers/soc/mediatek/mtk-svs-mt8192.c | 2 --
->   2 files changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/soc/mediatek/mt8192-svs.h b/drivers/soc/mediatek/mt8192-svs.h
-> index 6571ebcb2c0f..bf8c6030428f 100644
-> --- a/drivers/soc/mediatek/mt8192-svs.h
-> +++ b/drivers/soc/mediatek/mt8192-svs.h
-> @@ -16,7 +16,7 @@ static struct svs_bank svs_mt8192_banks[] = {
->   		.turn_freq_base		= 688000000,
->   		.volt_step		= 6250,
->   		.volt_base		= 400000,
-> -		.vmax			= 0x60,
-> +		.vmax			= 0x61,
->   		.vmin			= 0x1a,
->   		.age_config		= 0x555555,
->   		.dc_config		= 0x1,
-> @@ -41,7 +41,7 @@ static struct svs_bank svs_mt8192_banks[] = {
->   		.turn_freq_base		= 688000000,
->   		.volt_step		= 6250,
->   		.volt_base		= 400000,
-> -		.vmax			= 0x60,
-> +		.vmax			= 0x66,
->   		.vmin			= 0x1a,
->   		.age_config		= 0x555555,
->   		.dc_config		= 0x1,
-> diff --git a/drivers/soc/mediatek/mtk-svs-mt8192.c b/drivers/soc/mediatek/mtk-svs-mt8192.c
-> index 838a94834741..183acf2829f0 100644
-> --- a/drivers/soc/mediatek/mtk-svs-mt8192.c
-> +++ b/drivers/soc/mediatek/mtk-svs-mt8192.c
-> @@ -40,8 +40,6 @@ bool svs_mt8192_efuse_parsing(struct svs_platform *svsp)
->   			svsb->dcbdet = (svsp->efuse[17] >> 16) & GENMASK(7, 0);
->   			svsb->dcmdet = (svsp->efuse[17] >> 24) & GENMASK(7, 0);
->   		}
-> -
-> -		svsb->vmax += svsb->dvt_fixed;
->   	}
->   
->   	ret = svs_thermal_efuse_get_data(svsp);
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------Pvv00nTI34oY5YpXg9t0w1ip--
+
+--------------5WxHoVEGcQnJX10ESZlcFax9--
+
+--------------LWnRAw3GXgBlglJ5NNsTIBeg
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmM1VtMFAwAAAAAACgkQsN6d1ii/Ey9S
+Gwf+M4ca1gLNxUnvM+fmZIU2oIjgjBJ8/gX6wP3u15uRs3/Nmn/gcSfxWAP44hsxI7niAs7Xi9S6
+QLjCNnpYIczLk/6OTycvn4Zt/FiCZhka2Iqwok/9EDtBH6w99vkPribqkKjSB/Ys/LGpxjrg+kML
+7NEu9DLFAhrjO28FHRfzdNmu8MOIw6KFUHBQqWsCi0xrs1BDXkAcdaQ07zz8fBC2XjXAQyyx72me
+C7N8xDlim/lWs40PkvwR0DQ6st6FH+CDVPAICM5Ik7CVDL1KJMJxpKiweRzc3QQ6SbC/bAimt554
+J7g6rxmfyuMoBEmyyFsqsEDTCMzsDxcfejMpk67FYw==
+=NUqX
+-----END PGP SIGNATURE-----
+
+--------------LWnRAw3GXgBlglJ5NNsTIBeg--
