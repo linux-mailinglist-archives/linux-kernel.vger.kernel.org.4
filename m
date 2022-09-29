@@ -2,190 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15E45EF6CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CD65EF6D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234998AbiI2NmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 09:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47406 "EHLO
+        id S235157AbiI2Nne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 09:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234946AbiI2Nl5 (ORCPT
+        with ESMTP id S232380AbiI2Nn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 09:41:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A23F71B0524
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:41:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15CF51A32;
-        Thu, 29 Sep 2022 06:42:03 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.81.100])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5066B3F792;
-        Thu, 29 Sep 2022 06:41:54 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 14:41:51 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Li Huafei <lihuafei1@huawei.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, Julia.Lawall@inria.fr, akpm@linux-foundation.org,
-        andreyknvl@gmail.com, elver@google.com, wangkefeng.wang@huawei.com,
-        zhouchengming@bytedance.com, ardb@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] arm64: module/ftrace: Fix mcount-based ftrace
- initialization failure
-Message-ID: <YzWgnyCNO4tEl4JT@FVFF77S0Q05N>
-References: <20220929094134.99512-1-lihuafei1@huawei.com>
- <20220929094134.99512-4-lihuafei1@huawei.com>
- <YzWA/GCdcLX31+rI@FVFF77S0Q05N>
- <YzWIlcM249P+ZzVs@FVFF77S0Q05N>
- <06bd1acd-bb27-79ce-a55a-663857d2c06e@huawei.com>
+        Thu, 29 Sep 2022 09:43:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AEE51B2614;
+        Thu, 29 Sep 2022 06:43:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 015386140B;
+        Thu, 29 Sep 2022 13:43:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF558C433C1;
+        Thu, 29 Sep 2022 13:43:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664459007;
+        bh=XvEUSpy5gFWS2rJxFuOwPGvDngmGQsgTXpxLcU+BZX8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=igC9Dt3YW9FOLDnmDrDSUzUAkZj6CzmYZDoToVO+Jvu5uAKfi5Ka7ciQqFnWO5uGG
+         Y/25/GbLH8W6VYRV8q2DqoJBBY3jFbOw5Y2C128KMkDnT9A+AvpGVWgS58gH4bc4HU
+         YWAmUAVLlEaYMxRySfisKqWEOMDZiUO7SfBc26oM=
+Date:   Thu, 29 Sep 2022 15:43:24 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Artem S. Tashkinov" <aros@gmx.com>
+Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Message-ID: <YzWg/GjvPGvhhPkB@kroah.com>
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+ <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
+ <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <06bd1acd-bb27-79ce-a55a-663857d2c06e@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 08:26:17PM +0800, Li Huafei wrote:
+On Thu, Sep 29, 2022 at 01:31:49PM +0000, Artem S. Tashkinov wrote:
 > 
 > 
-> On 2022/9/29 19:59, Mark Rutland wrote:
-> > On Thu, Sep 29, 2022 at 12:26:52PM +0100, Mark Rutland wrote:
-> >> On Thu, Sep 29, 2022 at 05:41:34PM +0800, Li Huafei wrote:
-> >>> The commit a6253579977e ("arm64: ftrace: consistently handle PLTs.")
-> >>> makes ftrace_make_nop() always validate the 'old' instruction that will
-> >>> be replaced. However, in the mcount-based implementation,
-> >>> ftrace_init_nop() also calls ftrace_make_nop() to do the initialization,
-> >>> and the 'old' target address is MCOUNT_ADDR at this time. with
-> >>> CONFIG_MODULE_PLT support, the distance between MCOUNT_ADDR and callsite
-> >>> may exceed 128M, at which point ftrace_find_callable_addr() will fail
-> >>> because it cannot find an available PLT.
-> >>
-> >> Ah, sorry about this.
-> >>
-> >>> We can reproduce this problem by forcing the module to alloc memory away
-> >>> from the kernel:
-> >>>
-> >>>   ftrace_test: loading out-of-tree module taints kernel.
-> >>>   ftrace: no module PLT for _mcount
-> >>>   ------------[ ftrace bug ]------------
-> >>>   ftrace failed to modify
-> >>>   [<ffff800029180014>] 0xffff800029180014
-> >>>    actual:   44:00:00:94
-> >>>   Initializing ftrace call sites
-> >>>   ftrace record flags: 2000000
-> >>>    (0)
-> >>>    expected tramp: ffff80000802eb3c
-> >>>   ------------[ cut here ]------------
-> >>>   WARNING: CPU: 3 PID: 157 at kernel/trace/ftrace.c:2120 ftrace_bug+0x94/0x270
-> >>>   Modules linked in:
-> >>>   CPU: 3 PID: 157 Comm: insmod Tainted: G           O       6.0.0-rc6-00151-gcd722513a189-dirty #22
-> >>>   Hardware name: linux,dummy-virt (DT)
-> >>>   pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> >>>   pc : ftrace_bug+0x94/0x270
-> >>>   lr : ftrace_bug+0x21c/0x270
-> >>>   sp : ffff80000b2bbaf0
-> >>>   x29: ffff80000b2bbaf0 x28: 0000000000000000 x27: ffff0000c4d38000
-> >>>   x26: 0000000000000001 x25: ffff800009d7e000 x24: ffff0000c4d86e00
-> >>>   x23: 0000000002000000 x22: ffff80000a62b000 x21: ffff8000098ebea8
-> >>>   x20: ffff0000c4d38000 x19: ffff80000aa24158 x18: ffffffffffffffff
-> >>>   x17: 0000000000000000 x16: 0a0d2d2d2d2d2d2d x15: ffff800009aa9118
-> >>>   x14: 0000000000000000 x13: 6333626532303830 x12: 3030303866666666
-> >>>   x11: 203a706d61727420 x10: 6465746365707865 x9 : 3362653230383030
-> >>>   x8 : c0000000ffffefff x7 : 0000000000017fe8 x6 : 000000000000bff4
-> >>>   x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 0000000000000001
-> >>>   x2 : ad2cb14bb5438900 x1 : 0000000000000000 x0 : 0000000000000022
-> >>>   Call trace:
-> >>>    ftrace_bug+0x94/0x270
-> >>>    ftrace_process_locs+0x308/0x430
-> >>>    ftrace_module_init+0x44/0x60
-> >>>    load_module+0x15b4/0x1ce8
-> >>>    __do_sys_init_module+0x1ec/0x238
-> >>>    __arm64_sys_init_module+0x24/0x30
-> >>>    invoke_syscall+0x54/0x118
-> >>>    el0_svc_common.constprop.4+0x84/0x100
-> >>>    do_el0_svc+0x3c/0xd0
-> >>>    el0_svc+0x1c/0x50
-> >>>    el0t_64_sync_handler+0x90/0xb8
-> >>>    el0t_64_sync+0x15c/0x160
-> >>>   ---[ end trace 0000000000000000 ]---
-> >>>   ---------test_init-----------
-> >>>
-> >>> In fact, in .init.plt or .plt or both of them, we have the mcount PLT.
-> >>> If we save the mcount PLT entry address, we can determine what the 'old'
-> >>> instruction should be when initializing the nop instruction.
-> >>>
-> >>> Fixes: a6253579977e ("arm64: ftrace: consistently handle PLTs.")
-> >>> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-> >>> ---
-> >>>  arch/arm64/include/asm/module.h |  7 +++++++
-> >>>  arch/arm64/kernel/ftrace.c      | 29 ++++++++++++++++++++++++++++-
-> >>>  arch/arm64/kernel/module-plts.c | 16 ++++++++++++++++
-> >>>  arch/arm64/kernel/module.c      | 11 +++++++++++
-> >>>  4 files changed, 62 insertions(+), 1 deletion(-)
-> >>
-> >> Since this only matters for the initalization of a module callsite, I'd rather
-> >> we simply didn't check in this case, so that we don't have to go scanning for
-> >> the PLTs and keep that information around forever.
-> >>
-> >> To be honest, I'd rather we simply didn't check when initializing an mcount
-> >> call-site for a module, as we used to do prior to commit a6253579977e.
-> 
-> Yes, I agree. If it's just for the initialization phase validation, my patch does make a bit of a fuss.
-> 
-> >>
-> >> Does the below work for you?
+> On 9/29/22 13:04, Konstantin Ryabitsev wrote:
+> > On Thu, Sep 29, 2022 at 12:22:35PM +0000, Artem S. Tashkinov wrote:
+> > > AFAIK, the kernel bugzilla is a Linux Foundation project and the
+> > > organization receives funding from its very rich members including
+> > > Google, Meta, Intel, and even Microsoft. The fact that no one is
+> > > seriously working on it looks shameful and sad. We are not talking about
+> > > a minor odd library with a dozen users we are talking about the kernel.
 > > 
-> > Thinking some more, that's probably going to warn in the insn code when
-> > unconditionally generating the 'old' branch; I'll spin a new version after some
-> > testing.
+> > The bugzilla as a software platform is a Mozilla product, not Linux
+> > Foundation. Unfortunately, it's pretty much dead:
 > > 
+> > 1. all development has stopped years ago
+> > 2. it doesn't even work with recent MySQL servers
+> > 3. it is written in perl5 and can only pretty much run with mod_perl
+> > 
+> > We're committed to running it as far as we can, but we all must also admit
+> > that the platform is near-death and probably will become an ever-increasing
+> > burden to keep it operating. Heck, one of our IT staff is currently trying to
+> > convert bugzilla.kernel.org to use Postgres just so we can keep operating it
+> > past the end of 2022.
+> > 
+> > The Linux Foundation IT is in charge of running infrastructure -- we're not a
+> > development shop. All of our software projects are pretty much "skunkworks"
+> > efforts (and yes, this includes b4).
+> > 
+> > We do have ability to fund development efforts -- LF has been the primary
+> > sponsor behind public-inbox.org over the past 3 years. However, there must be
+> > a clear, strong, and well-articulated mandate from the community. From what I
+> > heard, the vast majority of maintainers simply want a web form that would
+> > allow someone to:
+> > 
+> > 1. clearly state what kernel version they are using
+> > 2. clearly describe what they were trying to do
+> > 3. explain what they expected vs. what they got
+> > 4. attach any files
+> > 5. give this bug report a unique identifier
+> > 
+> > Then a designated person would look through the bug report and either:
+> > 
+> > a. quick-close it (with the usual "talk to your distro" or "don't use a
+> >     tainted kernel" etc)
+> > b. identify the responsible maintainers and notify them
+> > 
+> > The hard part is not technical -- the hard part is that "designated person."
+> > Being a bugmaster is a thankless job that leads to burnout, regardless of how
+> > well you are paid. Everyone is constantly irate at you from both ends -- the
+> > users are annoyed because their stuff doesn't work, and the maintainers are
+> > annoyed because you keep yanking them to work on dull problems that require a
+> > ton of back-and-forth with people who aren't capable of applying patches and
+> > booting custom kernels.
+> > 
+> > Before we try to fix/replace bugzilla, we really need to figure out the entire
+> > process and pinpoint who is going to be the one in charge of bug reports. If
+> > you think that LF should establish a fund for a position like that, then you
+> > should probably approach LF fellows (Greg KH, Shuah Khan), who can then talk
+> > to LF management. The IT team will be happy to support you with the tooling,
+> > but tooling should come second to that -- otherwise we'll just be replacing an
+> > old and rusty dumpster on fire with a new and shiny dumpster on fire.
+> > 
+> > -K
 > 
-> I see it. And ftrace_find_callable_addr() would still fail.
+> To me it sounds like the best way to keep moving forward is simply
+> convert git.kernel.org + patchwork.kernel.org + bugzilla to
+> gitlab.kernel.org and that will solve all the issues immediately. That
+> will require of course a ton of work but:
 
-Ah, yes, since that points to the `_mcount` stub, but we'll generate the
-address of the module's ftrace PLT.
+For loads of reasons that have been stated before, we aren't going to
+move everything to gitlab, sorry.  That's a non-starter for a wide range
+of reasons, not the least being you are trying to solve a "we have no
+one who wants to wrangle bugs in bugzilla" problem with "move all of our
+code hosting infrastructure to a totally different thing that can't even
+provide the basic things that we have today".
 
-> 
-> With a slight modification, it worked for me:
-> 
-> diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-> index ea5dc7c90f46..621c62238d96 100644
-> --- a/arch/arm64/kernel/ftrace.c
-> +++ b/arch/arm64/kernel/ftrace.c
-> @@ -216,14 +216,28 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
->  {
->         unsigned long pc = rec->ip;
->         u32 old = 0, new;
-> +       bool validate = true;
-> +
-> +       /*
-> +        * When using mcount, calls can be indirected via a PLT generated by
-> +        * the toolchain. Ignore this when initializing the callsite.
-> +        *
-> +        * Note: `mod` is only set at module load time.
-> +        */
-> +       if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS) &&
-> +           IS_ENABLED(CONFIG_ARM64_MODULE_PLTS) && mod) {
-> +               validate = false;
-> +               goto make_nop;
-> +       }
-> 
->         if (!ftrace_find_callable_addr(rec, mod, &addr))
->                 return -EINVAL;
-> 
->         old = aarch64_insn_gen_branch_imm(pc, addr, AARCH64_INSN_BRANCH_LINK);
-> +make_nop:
->         new = aarch64_insn_gen_nop();
-> 
-> -       return ftrace_modify_code(pc, old, new, true);
-> +       return ftrace_modify_code(pc, old, new, validate);
->  }
+Sorry, not going to happen, gitlab is not the solution here.
 
-Great; I'll clean this up a bit and post as a patch shortly.
-
-Thanks,
-Mark.
+greg k-h
