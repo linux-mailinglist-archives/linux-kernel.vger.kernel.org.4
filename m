@@ -2,186 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA465EF443
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489265EF446
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235225AbiI2L0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35788 "EHLO
+        id S235244AbiI2L1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235238AbiI2L0Q (ORCPT
+        with ESMTP id S232298AbiI2L07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:26:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EB114D499;
-        Thu, 29 Sep 2022 04:26:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 999F121AC4;
-        Thu, 29 Sep 2022 11:26:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1664450773; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xR0Nk/sNdu7ZIksq1QM9BpsUZ7c9WAN9HzxGcxznGh8=;
-        b=eWZ6pckQkn9K9so0gwaSOPZYDVisZoKZCRWvlgJqKa91lxa6/rMj8cF5cLlb4Oz/xClmMh
-        ayOMr/thsavR1xSGL2VS9/g4ekWEjCpbQpAbDyAwE+eaQm79eQI5ykdQ0vhmms120wegKs
-        s8h8Qd1OzsoOt2vvoRCN1DjYW/fd+8Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1664450773;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xR0Nk/sNdu7ZIksq1QM9BpsUZ7c9WAN9HzxGcxznGh8=;
-        b=0vrkJcKs5owgAhMtnaaFjHjz8yhK07c0yKtelN1aE1gcPn/xzsi/FHy+fRq0jBFlduGhOs
-        +JsRklu3ycgtc9DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8B86B1348E;
-        Thu, 29 Sep 2022 11:26:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6n8OItWANWPobQAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 29 Sep 2022 11:26:13 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 27719A0681; Thu, 29 Sep 2022 13:26:13 +0200 (CEST)
-Date:   Thu, 29 Sep 2022 13:26:13 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, rookxu <brookxu.cn@gmail.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [RFC v3 2/8] ext4: Refactor code related to freeing PAs
-Message-ID: <20220929112613.3pwvxod3tpkbvmc2@quack3>
-References: <cover.1664269665.git.ojaswin@linux.ibm.com>
- <dd083c3e6db5c2938bcaecbd247bc9ecd6646d89.1664269665.git.ojaswin@linux.ibm.com>
+        Thu, 29 Sep 2022 07:26:59 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5B1E43E7E
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:26:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47E6315BF;
+        Thu, 29 Sep 2022 04:27:04 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.81.100])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FCBD3F73B;
+        Thu, 29 Sep 2022 04:26:55 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 12:26:52 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Li Huafei <lihuafei1@huawei.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, Julia.Lawall@inria.fr, akpm@linux-foundation.org,
+        andreyknvl@gmail.com, elver@google.com, wangkefeng.wang@huawei.com,
+        zhouchengming@bytedance.com, ardb@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] arm64: module/ftrace: Fix mcount-based ftrace
+ initialization failure
+Message-ID: <YzWA/GCdcLX31+rI@FVFF77S0Q05N>
+References: <20220929094134.99512-1-lihuafei1@huawei.com>
+ <20220929094134.99512-4-lihuafei1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dd083c3e6db5c2938bcaecbd247bc9ecd6646d89.1664269665.git.ojaswin@linux.ibm.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220929094134.99512-4-lihuafei1@huawei.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 27-09-22 14:46:42, Ojaswin Mujoo wrote:
-> This patch makes the following changes:
-> 
-> *  Rename ext4_mb_pa_free to ext4_mb_pa_put_free
->    to better reflect its purpose
-> 
-> *  Add new ext4_mb_pa_free() which only handles freeing
-> 
-> *  Refactor ext4_mb_pa_callback() to use ext4_mb_pa_free()
-> 
-> There are no functional changes in this patch
-> 
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+On Thu, Sep 29, 2022 at 05:41:34PM +0800, Li Huafei wrote:
+> The commit a6253579977e ("arm64: ftrace: consistently handle PLTs.")
+> makes ftrace_make_nop() always validate the 'old' instruction that will
+> be replaced. However, in the mcount-based implementation,
+> ftrace_init_nop() also calls ftrace_make_nop() to do the initialization,
+> and the 'old' target address is MCOUNT_ADDR at this time. with
+> CONFIG_MODULE_PLT support, the distance between MCOUNT_ADDR and callsite
+> may exceed 128M, at which point ftrace_find_callable_addr() will fail
+> because it cannot find an available PLT.
 
-Looks good. Feel free to add:
+Ah, sorry about this.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+> We can reproduce this problem by forcing the module to alloc memory away
+> from the kernel:
+> 
+>   ftrace_test: loading out-of-tree module taints kernel.
+>   ftrace: no module PLT for _mcount
+>   ------------[ ftrace bug ]------------
+>   ftrace failed to modify
+>   [<ffff800029180014>] 0xffff800029180014
+>    actual:   44:00:00:94
+>   Initializing ftrace call sites
+>   ftrace record flags: 2000000
+>    (0)
+>    expected tramp: ffff80000802eb3c
+>   ------------[ cut here ]------------
+>   WARNING: CPU: 3 PID: 157 at kernel/trace/ftrace.c:2120 ftrace_bug+0x94/0x270
+>   Modules linked in:
+>   CPU: 3 PID: 157 Comm: insmod Tainted: G           O       6.0.0-rc6-00151-gcd722513a189-dirty #22
+>   Hardware name: linux,dummy-virt (DT)
+>   pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>   pc : ftrace_bug+0x94/0x270
+>   lr : ftrace_bug+0x21c/0x270
+>   sp : ffff80000b2bbaf0
+>   x29: ffff80000b2bbaf0 x28: 0000000000000000 x27: ffff0000c4d38000
+>   x26: 0000000000000001 x25: ffff800009d7e000 x24: ffff0000c4d86e00
+>   x23: 0000000002000000 x22: ffff80000a62b000 x21: ffff8000098ebea8
+>   x20: ffff0000c4d38000 x19: ffff80000aa24158 x18: ffffffffffffffff
+>   x17: 0000000000000000 x16: 0a0d2d2d2d2d2d2d x15: ffff800009aa9118
+>   x14: 0000000000000000 x13: 6333626532303830 x12: 3030303866666666
+>   x11: 203a706d61727420 x10: 6465746365707865 x9 : 3362653230383030
+>   x8 : c0000000ffffefff x7 : 0000000000017fe8 x6 : 000000000000bff4
+>   x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 0000000000000001
+>   x2 : ad2cb14bb5438900 x1 : 0000000000000000 x0 : 0000000000000022
+>   Call trace:
+>    ftrace_bug+0x94/0x270
+>    ftrace_process_locs+0x308/0x430
+>    ftrace_module_init+0x44/0x60
+>    load_module+0x15b4/0x1ce8
+>    __do_sys_init_module+0x1ec/0x238
+>    __arm64_sys_init_module+0x24/0x30
+>    invoke_syscall+0x54/0x118
+>    el0_svc_common.constprop.4+0x84/0x100
+>    do_el0_svc+0x3c/0xd0
+>    el0_svc+0x1c/0x50
+>    el0t_64_sync_handler+0x90/0xb8
+>    el0t_64_sync+0x15c/0x160
+>   ---[ end trace 0000000000000000 ]---
+>   ---------test_init-----------
+> 
+> In fact, in .init.plt or .plt or both of them, we have the mcount PLT.
+> If we save the mcount PLT entry address, we can determine what the 'old'
+> instruction should be when initializing the nop instruction.
+>
+> Fixes: a6253579977e ("arm64: ftrace: consistently handle PLTs.")
+> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 > ---
->  fs/ext4/mballoc.c | 29 ++++++++++++++++++++---------
->  1 file changed, 20 insertions(+), 9 deletions(-)
-> 
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 2e3eb632a216..8be6f8765a6f 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -4531,16 +4531,21 @@ static void ext4_mb_mark_pa_deleted(struct super_block *sb,
->  	}
->  }
->  
-> -static void ext4_mb_pa_callback(struct rcu_head *head)
-> +static void inline ext4_mb_pa_free(struct ext4_prealloc_space *pa)
->  {
-> -	struct ext4_prealloc_space *pa;
-> -	pa = container_of(head, struct ext4_prealloc_space, u.pa_rcu);
-> -
-> +	BUG_ON(!pa);
->  	BUG_ON(atomic_read(&pa->pa_count));
->  	BUG_ON(pa->pa_deleted == 0);
->  	kmem_cache_free(ext4_pspace_cachep, pa);
->  }
->  
-> +static void ext4_mb_pa_callback(struct rcu_head *head)
-> +{
-> +	struct ext4_prealloc_space *pa;
-> +	pa = container_of(head, struct ext4_prealloc_space, u.pa_rcu);
-> +	ext4_mb_pa_free(pa);
-> +}
-> +
->  /*
->   * drops a reference to preallocated space descriptor
->   * if this was the last reference and the space is consumed
-> @@ -5067,14 +5072,20 @@ static int ext4_mb_pa_alloc(struct ext4_allocation_context *ac)
->  	return 0;
->  }
->  
-> -static void ext4_mb_pa_free(struct ext4_allocation_context *ac)
-> +static void ext4_mb_pa_put_free(struct ext4_allocation_context *ac)
->  {
->  	struct ext4_prealloc_space *pa = ac->ac_pa;
->  
->  	BUG_ON(!pa);
->  	ac->ac_pa = NULL;
->  	WARN_ON(!atomic_dec_and_test(&pa->pa_count));
-> -	kmem_cache_free(ext4_pspace_cachep, pa);
-> +	/*
-> +	 * current function is only called due to an error or due to
-> +	 * len of found blocks < len of requested blocks hence the PA has not
-> +	 * been added to grp->bb_prealloc_list. So we don't need to lock it
-> +	 */
-> +	pa->pa_deleted = 1;
-> +	ext4_mb_pa_free(pa);
->  }
->  
->  #ifdef CONFIG_EXT4_DEBUG
-> @@ -5623,13 +5634,13 @@ ext4_fsblk_t ext4_mb_new_blocks(handle_t *handle,
->  		 * So we have to free this pa here itself.
->  		 */
->  		if (*errp) {
-> -			ext4_mb_pa_free(ac);
-> +			ext4_mb_pa_put_free(ac);
->  			ext4_discard_allocated_blocks(ac);
->  			goto errout;
->  		}
->  		if (ac->ac_status == AC_STATUS_FOUND &&
->  			ac->ac_o_ex.fe_len >= ac->ac_f_ex.fe_len)
-> -			ext4_mb_pa_free(ac);
-> +			ext4_mb_pa_put_free(ac);
->  	}
->  	if (likely(ac->ac_status == AC_STATUS_FOUND)) {
->  		*errp = ext4_mb_mark_diskspace_used(ac, handle, reserv_clstrs);
-> @@ -5648,7 +5659,7 @@ ext4_fsblk_t ext4_mb_new_blocks(handle_t *handle,
->  		 * If block allocation fails then the pa allocated above
->  		 * needs to be freed here itself.
->  		 */
-> -		ext4_mb_pa_free(ac);
-> +		ext4_mb_pa_put_free(ac);
->  		*errp = -ENOSPC;
->  	}
->  
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+>  arch/arm64/include/asm/module.h |  7 +++++++
+>  arch/arm64/kernel/ftrace.c      | 29 ++++++++++++++++++++++++++++-
+>  arch/arm64/kernel/module-plts.c | 16 ++++++++++++++++
+>  arch/arm64/kernel/module.c      | 11 +++++++++++
+>  4 files changed, 62 insertions(+), 1 deletion(-)
+
+Since this only matters for the initalization of a module callsite, I'd rather
+we simply didn't check in this case, so that we don't have to go scanning for
+the PLTs and keep that information around forever.
+
+To be honest, I'd rather we simply didn't check when initializing an mcount
+call-site for a module, as we used to do prior to commit a6253579977e.
+
+Does the below work for you?
+
+Thanks,
+Mark.
+
+---->8----
+diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+index ea5dc7c90f46..ba9b76ea5e68 100644
+--- a/arch/arm64/kernel/ftrace.c
++++ b/arch/arm64/kernel/ftrace.c
+@@ -216,6 +216,17 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+ {
+ 	unsigned long pc = rec->ip;
+ 	u32 old = 0, new;
++	bool validate = true;
++
++	/*
++	 * When using mcount, calls can be indirected via a PLT generated by
++	 * the toolchain. Ignore this when initializing the callsite.
++	 *
++	 * Note: `mod` is only set at module load time.
++	 */
++	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS) &&
++	    IS_ENABLED(CONFIG_ARM64_MODULE_PLTS) && mod)
++		validate = false;
+ 
+ 	if (!ftrace_find_callable_addr(rec, mod, &addr))
+ 		return -EINVAL;
+@@ -223,7 +234,7 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+ 	old = aarch64_insn_gen_branch_imm(pc, addr, AARCH64_INSN_BRANCH_LINK);
+ 	new = aarch64_insn_gen_nop();
+ 
+-	return ftrace_modify_code(pc, old, new, true);
++	return ftrace_modify_code(pc, old, new, validate);
+ }
+ 
+ void arch_ftrace_update_code(int command)
