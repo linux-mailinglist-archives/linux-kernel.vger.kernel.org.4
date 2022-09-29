@@ -2,113 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7E45EEE63
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B885EEE80
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235146AbiI2HFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
+        id S235060AbiI2HJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235088AbiI2HE7 (ORCPT
+        with ESMTP id S234255AbiI2HJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:04:59 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2073.outbound.protection.outlook.com [40.107.220.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32004D4D7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:04:53 -0700 (PDT)
+        Thu, 29 Sep 2022 03:09:18 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2056.outbound.protection.outlook.com [40.107.223.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F7533A12;
+        Thu, 29 Sep 2022 00:09:15 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=byb8DHhSp41RLv2gd7YEluYWc+UQ1s0VqHSlETCuEcDe6K9LDnxC/0WEbr0RXipwLP5U4JYaqeyZLIvWKf5HwI/NeiMX8s1XCZgC2E/onrQkeeaxpYfr4g+8rCB4NbqxdW74IIgpBdvEcFiWATfoeiugAEEzhhNrGFmxvRTZA/gIAwzlVV43dhIDwETHo9g4hMb9srrg3wWayhMoeBpzPpuq75IF/mSG9MJsl3NtNG+JJ3ZVoJVdckndDwMsq2SyYgWV0dqKZQuad0gfeSGpbB8ARuHNXsJtOg0Gdr5Fr/hQE1mKx7CYjONC0dznE7m4GiHDAiI7V9RHkC8kVdHC6g==
+ b=Eel/3b1Nqez88prSHKaMrXNw4nQ1tJrU1B4aRFHFgHo1gjRRCrq1Ct8qDE31ZSOvFdgIxiPBe0VKb1kGNlMvuv6ndvwE9WY5gDN3JJIJCYIX/Ozee0NT8Ko1zP+6TkQP3BWIsIJnlDWUy9kFjquZDXV9tukpHkepavke+1pY3+YVXaV8iTUBoQfagP77DGfFUk+qrwR27QTizWLRb9l7OSvc3AZhQ5wQ5IHey/MbHnpB9ZwKdkO3RgfKbugt0HX0DrAMfxnqgJaDx0BzXcceGqfViNtuekHerIrw2Z+7d8+1QTv+IOiAOprHRpJi8Qxw52c073QhbLM2N0HctDTiQw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SRBvrNbhaekA6FzbEIf/QMK2T8FBx1p60Iq7a30WkuM=;
- b=m8lScyfLXWfMbphE0KQHMg1w6/pl/nrYcValQ21Et6brzKiO7Gl+HfZl/w93tEFZ8uRaWjaIFzZPWqxTW1OjoEue45eOSFNHWe1XJDVUGc5mPw1aMJ1uPJYhdDlMtZarCnewdMQj7cooK+VMTnGhcwOxZeyrM0nSx0f5Neh2E/dW4iGTNECio2Jw9xMjVDPuRkzYA2CyQkEwJ+msGmcW7Uz+ch7tIR/mUhNFgj2709B0dWUy6B2cZXeLXGO3Wr6dfJw7+kL+Ff1+UNrgdiEsTdsPoen5iIZkZKRxQ+kEApZCqz5iT1kWFVedlPDNvuHdX4DvQD5abH4FUqvNFz0FpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 165.204.84.17) smtp.rcpttodomain=kernel.org
- smtp.mailfrom=amd.corp-partner.google.com; dmarc=fail (p=reject sp=reject
- pct=100) action=oreject header.from=amd.corp-partner.google.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector1-amdcloud-onmicrosoft-com;
+ bh=RKR4/fPMjwzOEEtojeWIv1ux/SYRoCv8jyMQF9irRBc=;
+ b=D4pEryuyXywg/e4WHJxmvbJnZWZ/dSMHPUvdzBC9tXV1k0nsAm2v4mSldGxcd/3R/soJ757pC5MdZS0WBN4yZPebLOwWCVWzMzK9zkVxP3F6HgpPZie0sJLS/WnPOx/xyej9dUJocCvUpnyuxQW1Q0lQySeftAS0RWUOVym/aJYKWbbDByDil7lTxibKdUs3A2hLkRh3te7/dm90u3kHL7JO0OD18yLKdiV90/V28s8Mf/+CWFx1RLh46MF/UKHQOPZ/3bjmYzNblnQfwMrXglGGeWsCtH5Qjv/vgQT/zaH48Uw7DAyz1ScduY3NmqzIU07k0xTMhIeNfCzb7Sd7pw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=ideasonboard.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SRBvrNbhaekA6FzbEIf/QMK2T8FBx1p60Iq7a30WkuM=;
- b=b3MxUawjYwJegZR6ipHTsz0uVpG090Auj98BKrBiaXAu7IvoNVuMyxow8yC6Nt/5ywG/d5zRDdAJU7FhmMuPciVe8Q3kKDhtyXLa2ob8pj3xCWip1dH6rXpfMJ43lR5xfaJgxBBKJdUDhl3UwqWpwSEG20758jwNId44P0NCXJOamDdffg856UvoD0HFQFuQvcB7CSByAvvQbAdJTvhnXopz2bBUKLGdFxFmOc8BrrBbU3RYRL0etDCuiVUnI+QvomzyTGUgzv8UWqDu0eBXp5K2PodY6Xk6+5/DasYWyozW0PIetTAAGXbs81p7v8VBPWja+msLW36twcZao7SZJQ==
-Received: from BN9PR03CA0293.namprd03.prod.outlook.com (2603:10b6:408:f5::28)
- by BN9PR12MB5258.namprd12.prod.outlook.com (2603:10b6:408:11f::20) with
+ bh=RKR4/fPMjwzOEEtojeWIv1ux/SYRoCv8jyMQF9irRBc=;
+ b=DLs25qjU/yqXr0ZQmJnwiIHb6CWH15SwNJHHs4SZ3+NIUROAeUYE3yg0bKlrB+cFS2YjCMlRjQT2lA+AWn3+xEvRDqDZGpvst7dKrXbPDAX8wCKgYoPPIKzatrIuAoXn7k9BQKW5u87rzyF9n5ucXE9r5hgDpuYN/rktSUrdP4M=
+Received: from MW4PR03CA0141.namprd03.prod.outlook.com (2603:10b6:303:8c::26)
+ by CY5PR12MB6036.namprd12.prod.outlook.com (2603:10b6:930:2c::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.20; Thu, 29 Sep
- 2022 07:04:51 +0000
-Received: from BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f5:cafe::51) by BN9PR03CA0293.outlook.office365.com
- (2603:10b6:408:f5::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Thu, 29 Sep
+ 2022 07:09:13 +0000
+Received: from CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8c:cafe::72) by MW4PR03CA0141.outlook.office365.com
+ (2603:10b6:303:8c::26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17 via Frontend
- Transport; Thu, 29 Sep 2022 07:04:51 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 165.204.84.17) smtp.mailfrom=amd.corp-partner.google.com; dkim=none (message
- not signed) header.d=none;dmarc=fail action=oreject
- header.from=amd.corp-partner.google.com;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- amd.corp-partner.google.com discourages use of 165.204.84.17 as permitted
- sender)
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT064.mail.protection.outlook.com (10.13.176.160) with Microsoft SMTP
+ Transport; Thu, 29 Sep 2022 07:09:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT019.mail.protection.outlook.com (10.13.175.57) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5676.17 via Frontend Transport; Thu, 29 Sep 2022 07:04:51 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.5676.17 via Frontend Transport; Thu, 29 Sep 2022 07:09:12 +0000
+Received: from [10.254.241.52] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 29 Sep
- 2022 02:04:50 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 29 Sep
- 2022 00:04:49 -0700
-Received: from amd-System-Product-Name.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28
- via Frontend Transport; Thu, 29 Sep 2022 02:04:40 -0500
-From:   Venkata Prasad Potturu 
-        <venkataprasad.potturu@amd.corp-partner.google.com>
-To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
-CC:     <vsujithkumar.reddy@amd.com>, <Vijendar.Mukunda@amd.com>,
-        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
-        <ssabakar@amd.com>,
-        Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [RESEND] ASoC: amd: acp: Add setbias level for rt5682s codec in machine driver
-Date:   Thu, 29 Sep 2022 12:38:22 +0530
-Message-ID: <20220929070828.3950101-1-venkataprasad.potturu@amd.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
+ 2022 02:09:07 -0500
+Message-ID: <9b7fac69-265e-52f2-21e4-83d9da0f257b@amd.com>
+Date:   Thu, 29 Sep 2022 09:08:26 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH 0/4] pinctrl: pinctrl-zynqmp: Add tri-state configuration
+ support
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        "Kannan, Arun Balaji" <arun.balaji.kannan@amd.com>,
+        "Mutthareddyvari, Jyotheeswar Reddy" 
+        <jyotheeswar.reddy.mutthareddyvari@amd.com>
+CC:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <git@xilinx.com>,
+        <saikrishna12468@gmail.com>
+References: <1655462819-28801-1-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
+ <YzRvEPUWUXP4x7+h@pendragon.ideasonboard.com>
+ <YzR5ZoAbaYONnmPS@pendragon.ideasonboard.com>
+From:   Michal Simek <michal.simek@amd.com>
+In-Reply-To: <YzR5ZoAbaYONnmPS@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT064:EE_|BN9PR12MB5258:EE_
-X-MS-Office365-Filtering-Correlation-Id: e749195f-f870-4edb-1837-08daa1e8e753
-X-MS-Exchange-SenderADCheck: 2
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT019:EE_|CY5PR12MB6036:EE_
+X-MS-Office365-Filtering-Correlation-Id: e156bd2f-1305-4a1b-cc92-08daa1e98341
+X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vWpZ/IXrcZnVNCisRoyXdRXTbPIxsJIwFP4Wq9gJ6zfVI2IdU/d0U3MmekhZbu3gYhiGRaOU56+Hrl/DzpTdUhzxvkc56Nysk0sNyzr7WRMS0xM/6O+L99r5udDdQK6SKQuJslyRp2orkVuZPC8S6Gl2o1plKHkzPO+6sJfuDvsQLMi7G2OyHJYT0YwrJCb47M5GfheAWhnEBcn0Cb2dR6qw6nX/K1EC78bbxX1/meXa+iB4i/f1RoH2x7mLoBvdZSsgxONavwgy6imse7CwW6Juhbw5Nhv9diiRtkINELWAif2kBZg2efGkQ2j75037TCjU4dae6spvhgakbW2hZVdhFrAiGTOeMxAj9+Tc6jlgXE8Ey5VMnbPux5UVotEi6FeNedATYXI/J19Bp7K32APDPUcIgUVh1JXm1+pjnrKWlZIdy8tWxQSoaWk3cG5REdbT+wO4u2j7OwVK4BPWOPdV/0td25+TA8zSF05KAmNVguYqTqMvi8KLCwcDjPl/yBcSa5V1NBVO006QrIB9OKHArHHqqoo8teGQGl0e9L/DcXFdPQI2Q3vMzQLX/xeyscuejD95s/Jucd7L+AO9zfq2xzUEcd444VB74kIxjO5MBlWeVgKWuZ6jCF4/TrQ3NS+fUaa+atzcxdmIVj87mfXbO/DkQvyp6k9cnR5DRRvlkCqOdNcv+5MRg8iYdDezp4z9YUkp+Doy0lhNmaceQ4jZLoZpgjnfRTZwcMq7MinY7D8IuXiJtayZIhvEyBiJtI5c03ZqqUnH7Gn+aIDSOg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(136003)(346002)(39860400002)(451199015)(40470700004)(46966006)(47076005)(35950700001)(356005)(83380400001)(81166007)(1076003)(2616005)(336012)(86362001)(82740400003)(5660300002)(8936002)(70206006)(70586007)(4326008)(41300700001)(82310400005)(2906002)(6666004)(498600001)(40460700003)(26005)(316002)(54906003)(110136005)(40480700001)(8676002)(76482006);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amdcloud.onmicrosoft.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 07:04:51.1188
+X-Microsoft-Antispam-Message-Info: Edit3xWIKF6cbHoBo+hbL/R7cVOOQwdPTzJIFLH/5giym8QNQCUO/p+0ttdl7xrAPVSSYH9+/cNd5GfbSW4e5IwHiiMnca2evSimJRa23uHpVue8JMeBhzYiOSqB0vcLTl65RHOlao0Mo0OPc5x4gIjfaqB0if0nv1764ReijS210YGPzkkrLFd4owrKLLfpsgK2pvEwRDfsfWm8eS8vYEv9ZVvohDTePC8iLbmJNDYM+qRBUDIiDHcxd36WxK5iWf32gmrRrMR+7w4dAwf6pdP81AYmOHxZgAiXRTyaEme4+HBxO9MZTygVfLIhirT7m5kqknrq5PrL2waqRDy4LQRLF8AIUIqporcjfLQIsnrFvsjKZmLhr2UbHIT9VNEtkBzOjVtX8VclOQwxA0Cy2Je4lEYOiZz71YeexbcEBAdDDbkN7wSa/OvwSxhpGQ68DqjN61NL8Oudmh/K6rtBDzgoCy++7uHJOqSyvUDtYkpksXZsQ3KDVPMAUztzuQL+7qFcoNVGc1nPpySmjumO7dhl+ethyldPV1JmWq2Z0IDuFugJ/kLTvQaLV+Hcy8SHNHKuORMQTMD5umCnFY1BIq5to7bA7nJbNM3/MAmeQge5k8vcKAoB3p0GkJeLO+AUP+IDINU4oHLyM4/aMDYAA6skvJora29IZEpXT8hLGmbEozFUVXk1ZI83LjjzpXFgndXw/jolhLoA0767b/5G6xvVbzrZXsL0bCN/PAMqNrLTEgdRO5XV+hXQlnr3Q4S+ckh+kWuqkcbzvNSxGtyhVIYHWmvV4WQIXu/jVDdT0qb8g9me0XHzFMWSlyrrvLZ3V9Mv7VLBpYLZEh1KCP3DsA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(396003)(39860400002)(136003)(451199015)(40470700004)(36840700001)(46966006)(70586007)(6636002)(70206006)(44832011)(5660300002)(8676002)(4326008)(8936002)(31696002)(110136005)(86362001)(2906002)(81166007)(36756003)(356005)(40460700003)(82740400003)(336012)(186003)(82310400005)(41300700001)(40480700001)(6666004)(478600001)(16526019)(16576012)(54906003)(26005)(53546011)(47076005)(2616005)(316002)(36860700001)(426003)(83380400001)(31686004)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 07:09:12.5894
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e749195f-f870-4edb-1837-08daa1e8e753
+X-MS-Exchange-CrossTenant-Network-Message-Id: e156bd2f-1305-4a1b-cc92-08daa1e98341
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5258
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6036
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,118 +114,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
+Hi Laurent,
 
-Add set_bais_level function for rt5682s codec to enable bclk and lrclk
-before codec widgets power on and disable bclk and lrclk after widgets
-power down, to avoid pop noise
+On 9/28/22 18:42, Laurent Pinchart wrote:
+> 
+> On Wed, Sep 28, 2022 at 06:58:10PM +0300, Laurent Pinchart wrote:
+>> Hi Sai,
+>>
+>> On Fri, Jun 17, 2022 at 04:16:55PM +0530, Sai Krishna Potthuri wrote:
+>>> This series update the Xilinx firmware, ZynqMP dt-binding and ZynqMP
+>>> pinctrl driver to handle 'output-enable' and 'bias-high-impedance'
+>>> configurations. As part of these configurations, ZynqMP pinctrl driver
+>>> takes care of pin tri-state setting.
+>>> Also fix the kernel doc warning in ZynqMP pinctrl driver.
+>>
+>> I'm afraid this causes a regression :-( With this series applied, boot
+>> breaks with the following message being printed to the serial console:
+>>
+>> Received exception
+>> MSR: 0x200, EAR: 0xFF180198, EDR: 0x0, ESR: 0x64
+>>
+>> I've traced that to the probe of the UART, when it calls into the
+>> firmware to set pin MIO18 to high impedance. According to v1.7 of the
+>> ZynqMP registers reference (UG1087), there is no register at address
+>> 0xFF180198.
+>>
+>> I am using the VCU TRD 2021.1 for testing. Does this series require a
+>> firmware update ? If so backward compatibility needs to be preserved.
+>> It's very late in the v6.0-rc cycle for a fix, a revert may be best at
+>> this point, to give us time to fix the issue properly.
+> 
+> I've now tested the VCU TRD 2022.1 (which AFAIK is the latest available
+> version), and the problem doesn't occue then. It thus seems this depends
+> on a firmware update, which is impractical at best for all old designs
+> :-(
 
-Signed-off-by: Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
----
- sound/soc/amd/acp/acp-mach-common.c | 62 ++++++++++++++++++++++++++---
- 1 file changed, 56 insertions(+), 6 deletions(-)
+That's correct observation. Supporting these two properties requires newer pmufw 
+or that message is received.
+I will let Arun and Jyotheeswar to comment it. I don't think there is a way to 
+detect which firmware has implementation for it available.
 
-diff --git a/sound/soc/amd/acp/acp-mach-common.c b/sound/soc/amd/acp/acp-mach-common.c
-index 4c69cb6e3400..a78cf29387a7 100644
---- a/sound/soc/amd/acp/acp-mach-common.c
-+++ b/sound/soc/amd/acp/acp-mach-common.c
-@@ -167,11 +167,14 @@ static int acp_card_hs_startup(struct snd_pcm_substream *substream)
- 				      &constraints_channels);
- 	snd_pcm_hw_constraint_list(runtime, 0, SNDRV_PCM_HW_PARAM_RATE,
- 				      &constraints_rates);
--	if (!drvdata->soc_mclk) {
--		ret = acp_clk_enable(drvdata);
--		if (ret < 0) {
--			dev_err(rtd->card->dev, "Failed to enable HS clk: %d\n", ret);
--			return ret;
-+
-+	if (strcmp(codec_dai->name, "rt5682s-aif1") && strcmp(codec_dai->name, "rt5682s-aif2")) {
-+		if (!drvdata->soc_mclk) {
-+			ret = acp_clk_enable(drvdata);
-+			if (ret < 0) {
-+				dev_err(rtd->card->dev, "Failed to enable HS clk: %d\n", ret);
-+				return ret;
-+			}
- 		}
- 	}
- 
-@@ -280,7 +283,6 @@ static int acp_card_rt5682s_init(struct snd_soc_pcm_runtime *rtd)
- 
- static const struct snd_soc_ops acp_card_rt5682s_ops = {
- 	.startup = acp_card_hs_startup,
--	.shutdown = acp_card_shutdown,
- };
- 
- static const unsigned int dmic_channels[] = {
-@@ -570,6 +572,52 @@ SND_SOC_DAILINK_DEF(sof_dmic,
- SND_SOC_DAILINK_DEF(pdm_dmic,
- 	DAILINK_COMP_ARRAY(COMP_CPU("acp-pdm-dmic")));
- 
-+static int acp_rtk_set_bias_level(struct snd_soc_card *card,
-+				  struct snd_soc_dapm_context *dapm,
-+				  enum snd_soc_bias_level level)
-+{
-+	struct snd_soc_component *component = dapm->component;
-+	struct acp_card_drvdata *drvdata = card->drvdata;
-+	int ret = 0;
-+
-+	if (!component)
-+		return 0;
-+
-+	if (strncmp(component->name, "i2c-RTL5682", 11) &&
-+	    strncmp(component->name, "i2c-10EC1019", 12))
-+		return 0;
-+
-+	/*
-+	 * For Realtek's codec and amplifier components,
-+	 * the lrck and bclk must be enabled brfore their all dapms be powered on,
-+	 * and must be disabled after their all dapms be powered down
-+	 * to avoid any pop.
-+	 */
-+	switch (level) {
-+	case SND_SOC_BIAS_STANDBY:
-+		if (snd_soc_dapm_get_bias_level(dapm) == SND_SOC_BIAS_OFF) {
-+			clk_set_rate(drvdata->wclk, 48000);
-+			clk_set_rate(drvdata->bclk, 48000 * 64);
-+
-+			/* Increase bclk's enable_count */
-+			ret = clk_prepare_enable(drvdata->bclk);
-+			if (ret < 0)
-+				dev_err(component->dev, "Failed to enable bclk %d\n", ret);
-+		} else {
-+			/*
-+			 * Decrease bclk's enable_count.
-+			 * While the enable_count is 0, the bclk would be closed.
-+			 */
-+			clk_disable_unprepare(drvdata->bclk);
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
- int acp_sofdsp_dai_links_create(struct snd_soc_card *card)
- {
- 	struct snd_soc_dai_link *links;
-@@ -730,6 +778,7 @@ int acp_sofdsp_dai_links_create(struct snd_soc_card *card)
- 
- 	card->dai_link = links;
- 	card->num_links = num_links;
-+	card->set_bias_level = acp_rtk_set_bias_level;
- 
- 	return 0;
- }
-@@ -907,6 +956,7 @@ int acp_legacy_dai_links_create(struct snd_soc_card *card)
- 
- 	card->dai_link = links;
- 	card->num_links = num_links;
-+	card->set_bias_level = acp_rtk_set_bias_level;
- 
- 	return 0;
- }
--- 
-2.25.1
-
+Thanks,
+Michal
