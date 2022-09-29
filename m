@@ -2,97 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D77455EFD79
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FAF5EFD7B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiI2S4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53794 "EHLO
+        id S229888AbiI2S5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiI2S4S (ORCPT
+        with ESMTP id S229866AbiI2S5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:56:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEBC3A49F
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:56:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664477777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ii/zdDDzioDeAg4ijCoWLsXuT0PoJynFMmsjY+6iNyY=;
-        b=HfVQRjVhlMcB9LU9zSbyZOJNh9OlxRE2kiqV3ApMCGYF76pKpEoMPPlqay8Z6ULdrLT9Fj
-        waEq/vGSXP/RdnF63uy34pZsVb9v25pM1E2i8KZhZ4OEFajltZ33FgXkeu26mtL3MKfvxf
-        C2IhEZNWaUcNIJqG8mIbi7/mEv0zWS0=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-400-6laqsQL5Pk-L4u71UaKsDw-1; Thu, 29 Sep 2022 14:55:24 -0400
-X-MC-Unique: 6laqsQL5Pk-L4u71UaKsDw-1
-Received: by mail-ed1-f72.google.com with SMTP id y1-20020a056402358100b00451b144e23eso1867363edc.18
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:55:23 -0700 (PDT)
+        Thu, 29 Sep 2022 14:57:49 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B068145CB8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:57:48 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id i6so2248226pfb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:57:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=MPKXDe/4Z1BXklCL+wTKgd8YdLgG1d0/bq9BWTsLDnI=;
+        b=kh6RN9IZGAGzL52O8pWBf25xA+9pL1xEdR03q9YULZIhO/rEtg8tL5d6dksYy7Q1SL
+         T+xyCgZPah/rNxBuGlOS8wqlsz2uJk5Bks3lhbLnnnZgTvG3Y5ogWmwreX7y+OWBNcTM
+         GMy4hPHoLjOXRldnCyrEXSmajHIDDsxd8pj/i4bG7YZt+pxqeEr6Tweg6wuIMmmPGjic
+         ES6gtYME4Wq1EAl5dbvJWMjtIlE3j8NgagtkrPBdpp39JrE5Jolc/UeT5N1kJBQBLHMU
+         6e+P7kPCNWxgzC33J6a39E1E0Hj8EbnZCp4p9PbMOW6+yiMK29H1fUs5F/vdxj9BkSNI
+         dBGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ii/zdDDzioDeAg4ijCoWLsXuT0PoJynFMmsjY+6iNyY=;
-        b=FQFBvDxphKrrestX800EZomx/0z1Z16oMvwTXk0J8DO8n9jWKzGas5hs6SRaDmhfXE
-         OiZOQ2Qy/vM+TRTcPlWGhgpuQj0SXexQN6xebsa8XLySNoJ5+MiSbT7WjI7IEf1XOs+0
-         6YBfikMwvMBkM9/22ByFLFCzWku1vCN43Uou5BUtN0kTRBjB+Ftw+22V727Negyq7hBR
-         qiYKYAbajUg6to6U1nhP2+qqpix5RMUHPIJz5LkFY/j6Qe/AGdDIZmjdFndO4lG09hmX
-         wC69ue3CABdCKkBs9IUBgusgMqMw0Gi1SHRgbUebaZ7wie6Ns9H0H29p2+YbQCndwDDR
-         ZbHA==
-X-Gm-Message-State: ACrzQf1SPXAvWh9Dqj3Lpx9/8HJamsmEEKLAa3A6jTgmD964MaXqtrXv
-        aCn0OSrOD+DIh4GN8De6no0gpEUsJF83cT/GjgKkJVGrSjgQ5paxmYwysxVOyPNjnt3prLP62q4
-        MESkskrDyLDj1NlMXwCJKI6M/
-X-Received: by 2002:a17:906:eec1:b0:782:6384:76be with SMTP id wu1-20020a170906eec100b00782638476bemr3829799ejb.756.1664477722947;
-        Thu, 29 Sep 2022 11:55:22 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM42IrmOoNBkxw7IFK/Fcf3fs7srHeyKhwzHkAPoxCYkxOO/VTiZbG6+F2H6PCnMvcmycfKlHA==
-X-Received: by 2002:a17:906:eec1:b0:782:6384:76be with SMTP id wu1-20020a170906eec100b00782638476bemr3829779ejb.756.1664477722669;
-        Thu, 29 Sep 2022 11:55:22 -0700 (PDT)
-Received: from [192.168.41.81] (83-90-141-187-cable.dk.customer.tdc.net. [83.90.141.187])
-        by smtp.gmail.com with ESMTPSA id m17-20020a170906581100b0073a644ef803sm4383184ejq.101.2022.09.29.11.55.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 11:55:22 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <afb652db-05fc-d3d6-6774-bfd9830414d9@redhat.com>
-Date:   Thu, 29 Sep 2022 20:55:20 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Cc:     brouer@redhat.com, Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=MPKXDe/4Z1BXklCL+wTKgd8YdLgG1d0/bq9BWTsLDnI=;
+        b=YjUVILefgnTWPN1BkAtbWQCuszO2th7vN5lgft5Ywen5D6JBJfMbUGA9+9GtdA6IRK
+         eV/iDGzpUP/9Oa5Qlv2MkBRs7dOkSuZ5isjSHSIUnUgPgYSjLzPZfjv0wKpq/X40n5lb
+         1OREhSgOx7YmK0pqDmy3w/NoNl+Sbw+MytHZCDI2Jxv1DUzQQDYpOMVTaelPHsNk4/Fp
+         WCuEDtTjBBBZLC2PT04ey6gSkm211bF6e5kT4gz70JgDlxD4PUZec11m6qGC4cgnzTMc
+         4JQTI5HDncoLl80Ih3pYPwnlwJcRqhDyzJQFeLj5BbkTtL/ZxfbvRSkrFHYfl5glPZhv
+         TzLQ==
+X-Gm-Message-State: ACrzQf1VZ2qGjF2yOGTjWOnmc1kE59LV3ShhI5JINBpctGcTlFHzkMjm
+        smrViHp9fR+GqU+MH2PC4dk=
+X-Google-Smtp-Source: AMsMyM7KahqHAdmUB7UdN83AxqwnKIAauwCWsOlH7de+r6DvfN5kPmhprCdhtVBTIWO2ORp+pLASJg==
+X-Received: by 2002:a63:2bcc:0:b0:439:36bb:c036 with SMTP id r195-20020a632bcc000000b0043936bbc036mr4060428pgr.447.1664477867656;
+        Thu, 29 Sep 2022 11:57:47 -0700 (PDT)
+Received: from strix-laptop (2001-b011-20e0-1b9a-f5f9-665b-0715-9cc1.dynamic-ip6.hinet.net. [2001:b011:20e0:1b9a:f5f9:665b:715:9cc1])
+        by smtp.gmail.com with ESMTPSA id f14-20020a170902684e00b00178b06fea7asm225050pln.148.2022.09.29.11.57.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 11:57:47 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 02:57:40 +0800
+From:   Chih-En Lin <shiyn.lin@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Nadav Amit <namit@vmware.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>
-Subject: Re: [EXT] Re: [PATCH 1/1] net: fec: add initial XDP support
-Content-Language: en-US
-To:     Shenwei Wang <shenwei.wang@nxp.com>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        Andrew Lunn <andrew@lunn.ch>
-References: <20220928152509.141490-1-shenwei.wang@nxp.com>
- <YzT2An2J5afN1w3L@lunn.ch>
- <PAXPR04MB9185141B58499FD00C43BB6889579@PAXPR04MB9185.eurprd04.prod.outlook.com>
- <YzWcI+U1WYJuZIdk@lunn.ch>
- <PAXPR04MB918545B92E493CB57CDE612B89579@PAXPR04MB9185.eurprd04.prod.outlook.com>
- <ae658987-8763-c6de-7198-1a418e4728b4@redhat.com>
- <PAXPR04MB918584422BE4ECAF79C0295A89579@PAXPR04MB9185.eurprd04.prod.outlook.com>
-In-Reply-To: <PAXPR04MB918584422BE4ECAF79C0295A89579@PAXPR04MB9185.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Peter Xu <peterx@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Li kunyu <kunyu@nfschina.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Yang Shi <shy828301@gmail.com>, Song Liu <song@kernel.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dinglan Peng <peng301@purdue.edu>,
+        Pedro Fonseca <pfonseca@purdue.edu>,
+        Jim Huang <jserv@ccns.ncku.edu.tw>,
+        Huichun Feng <foxhoundsk.tw@gmail.com>
+Subject: Re: [RFC PATCH v2 9/9] mm: Introduce Copy-On-Write PTE table
+Message-ID: <YzXqpN5bnG9HSGyI@strix-laptop>
+References: <20220927162957.270460-1-shiyn.lin@gmail.com>
+ <20220927162957.270460-10-shiyn.lin@gmail.com>
+ <3D21021E-490F-4FE0-9C75-BB3A46A66A26@vmware.com>
+ <YzNUwxU44mq+KnCm@strix-laptop>
+ <c12f848d-cb54-2998-8650-2c2a5707932d@redhat.com>
+ <YzWf7V5qzMjzMAk4@strix-laptop>
+ <39c5ef18-1138-c879-2c6d-c013c79fa335@redhat.com>
+ <YzXkDKr6plbJZgG4@strix-laptop>
+ <834c258d-4c0e-1753-3608-8a7e28c14d07@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <834c258d-4c0e-1753-3608-8a7e28c14d07@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,164 +107,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 29, 2022 at 08:38:52PM +0200, David Hildenbrand wrote:
+> On 29.09.22 20:29, Chih-En Lin wrote:
+> > On Thu, Sep 29, 2022 at 07:24:31PM +0200, David Hildenbrand wrote:
+> > > > > IMHO, a relaxed form that focuses on only the memory consumption reduction
+> > > > > could *possibly* be accepted upstream if it's not too invasive or complex.
+> > > > > During fork(), we'd do exactly what we used to do to PTEs (increment
+> > > > > mapcount, refcount, trying to clear PageAnonExclusive, map the page R/O,
+> > > > > duplicate swap entries; all while holding the page table lock), however,
+> > > > > sharing the prepared page table with the child process using COW after we
+> > > > > prepared it.
+> > > > > 
+> > > > > Any (most once we want to *optimize* rmap handling) modification attempts
+> > > > > require breaking COW -- copying the page table for the faulting process. But
+> > > > > at that point, the PTEs are already write-protected and properly accounted
+> > > > > (refcount/mapcount/PageAnonExclusive).
+> > > > > 
+> > > > > Doing it that way might not require any questionable GUP hacks and swapping,
+> > > > > MMU notifiers etc. "might just work as expected" because the accounting
+> > > > > remains unchanged" -- we simply de-duplicate the page table itself we'd have
+> > > > > after fork and any modification attempts simply replace the mapped copy.
+> > > > 
+> > > > Agree.
+> > > > However for GUP hacks, if we want to do the COW to page table, we still
+> > > > need the hacks in this patch (using the COW_PTE_OWN_EXCLUSIVE flag to
+> > > > check whether the PTE table is available or not before we do the COW to
+> > > > the table). Otherwise, it will be more complicated since it might need
+> > > > to handle situations like while preparing the COW work, it just figuring
+> > > > out that it needs to duplicate the whole table and roll back (recover
+> > > > the state and copy it to new table). Hopefully, I'm not wrong here.
+> > > 
+> > > The nice thing is that GUP itself *usually* doesn't modify page tables. One
+> > > corner case is follow_pfn_pte(). All other modifications should happen in
+> > > the actual fault handler that has to deal with such kind of unsharing either
+> > > way when modifying the PTE.
+> > > 
+> > > If the pages are already in a COW-ed pagetable in the desired "shared" state
+> > > (e.g., PageAnonExclusive cleared on an anonymous page), R/O pinning of such
+> > > pages will just work as expected and we shouldn't be surprised by another
+> > > set of GUP+COW CVEs.
+> > > 
+> > > We'd really only deduplicate the page table and not play other tricks with
+> > > the actual page table content that differ from the existing way of handling
+> > > fork().
+> > > 
+> > > I don't immediately see why we need COW_PTE_OWN_EXCLUSIVE in GUP code when
+> > > not modifying the page table. I think we only need "we have to unshare this
+> > > page table now" in follow_pfn_pte() and inside the fault handling when GUP
+> > > triggers a fault.
+> > > 
+> > > I hope my assumption is correct, or am I missing something?
+> > > 
+> > 
+> > My consideration is when we pinned the page and did the COW to make the
+> > page table be shared. It might not allow mapping the pinned page to R/O)
+> > into both processes.
+> > 
+> > So, if the fork is working on the shared state, it needs to recover the
+> > table and copy to a new one since that pinned page will need to copy
+> > immediately. We can hold the shared state after occurring such a
+> > situation. So we still need some trick to let the fork() know which page
+> > table already has the pinned page (or such page won't let us share)
+> > before going to duplicate.
+> > 
+> > Am I wrong here?
+> 
+> I think you might be overthinking this. Let's keep it simple:
+> 
+> 1) Handle pinned anon pages just as I described below, falling back to the
+> "slow" path of page table copying.
+> 
+> 2) Once we passed that stage, you can be sure that the COW-ed page table
+> cannot have actually pinned anon pages. All anon pages in such a page table
+> have PageAnonExclusive cleared and are "maybe shared". GUP cannot succeed in
+> pinning these pages anymore, because it will only pin exclusive anon pages!
+> 
+> 3) If anybody wants to take a R/O pin on a shared anon page that is mapped
+> into a COW-ed page table, we trigger a fault with FAULT_FLAG_UNSHARE instead
+> of pinning the page. This has to break COW on the page table and properly
+> map an exclusive anon page into it, breaking COW.
+> 
+> Do you see a problem with that?
+> 
+> > 
+> > After that, since we handled the accounting in fork(), we don't need
+> > ownership (pmd_t pointer) anymore. We have to find another way to mark
+> > the table to be exclusive. (Right now, COW_PTE_OWNER_EXCLUSIVE flag is
+> > stored at that space.)
+> > 
+> > > > 
+> > > > > But devil is in the detail (page table lock, TLB flushing).
+> > > > 
+> > > > Sure, it might be an overhead in the page fault and needs to be handled
+> > > > carefully. ;)
+> > > > 
+> > > > > "will make fork() even have more overhead" is not a good excuse for such
+> > > > > complexity/hacks -- sure, it will make your benchmark results look better in
+> > > > > comparison ;)
+> > > > 
+> > > > ;);)
+> > > > I think that, even if we do the accounting with the COW page table, it
+> > > > still has a little bit improve.
+> > > 
+> > > :)
+> > > 
+> > > My gut feeling is that this is true. While we have to do a pass over the
+> > > parent page table during fork and wrprotect all PTEs etc., we don't have to
+> > > duplicate the page table content and allocate/free memory for that.
+> > > 
+> > > One interesting case is when we cannot share an anon page with the child
+> > > process because it maybe pinned -- and we have to copy it via
+> > > copy_present_page(). In that case, the page table between the parent and the
+> > > child would differ and we'd not be able to share the page table.
+> > 
+> > That is what I want to say above.
+> > The case might happen in the middle of the shared page table progress.
+> > It might cost more overhead to recover it. Therefore, if GUP wants to
+> > pin the mapped page we can mark the PTE table first, so fork() won't
+> > waste time doing the work for sharing.
+> 
+> Having pinned pages is a corner case for most apps. No need to worry about
+> optimizing this corner case for now.
+> 
+> I see what you are trying to optimize, but I don't think this is needed in a
+> first version, and probably never is needed.
+> 
+> 
+> Any attempts to mark page tables in a certain way from GUP
+> (COW_PTE_OWNER_EXCLUSIVE) is problematic either way: GUP-fast
+> (get_user_pages_fast) can race with pretty much anything, even with
+> concurrent fork. I suspect your current code might be really racy in that
+> regard.
 
+I see.
+Now, I know why optimizing that corner case is not worth it.
+Thank you for explaining that.
 
-On 29/09/2022 17.52, Shenwei Wang wrote:
-> 
->> From: Jesper Dangaard Brouer <jbrouer@redhat.com>
->>
->> On 29/09/2022 15.26, Shenwei Wang wrote:
->>>
->>>> From: Andrew Lunn <andrew@lunn.ch>
->>>> Sent: Thursday, September 29, 2022 8:23 AM
->> [...]
->>>>
->>>>> I actually did some compare testing regarding the page pool for
->>>>> normal traffic.  So far I don't see significant improvement in the
->>>>> current implementation. The performance for large packets improves a
->>>>> little, and the performance for small packets get a little worse.
->>>>
->>>> What hardware was this for? imx51? imx6? imx7 Vybrid? These all use the FEC.
->>>
->>> I tested on imx8qxp platform. It is ARM64.
->>
->> On mvneta driver/platform we saw huge speedup replacing:
->>
->>     page_pool_release_page(rxq->page_pool, page); with
->>     skb_mark_for_recycle(skb);
->>
->> As I mentioned: Today page_pool have SKB recycle support (you might have
->> looked at drivers that didn't utilize this yet), thus you don't need to release the
->> page (page_pool_release_page) here.  Instead you could simply mark the SKB
->> for recycling, unless driver does some page refcnt tricks I didn't notice.
->>
->> On the mvneta driver/platform the DMA unmap (in page_pool_release_page)
->> was very expensive. This imx8qxp platform might have faster DMA unmap in
->> case is it cache-coherent.
->>
->> I would be very interested in knowing if skb_mark_for_recycle() helps on this
->> platform, for normal network stack performance.
->>
-> 
-> Did a quick compare testing for the following 3 scenarios:
-
-Thanks for doing this! :-)
-
-> 1. original implementation
-> 
-> shenwei@5810:~$ iperf -c 10.81.16.245 -w 2m -i 1
-> ------------------------------------------------------------
-> Client connecting to 10.81.16.245, TCP port 5001
-> TCP window size:  416 KByte (WARNING: requested 1.91 MByte)
-> ------------------------------------------------------------
-> [  1] local 10.81.17.20 port 49154 connected with 10.81.16.245 port 5001
-> [ ID] Interval       Transfer     Bandwidth
-> [  1] 0.0000-1.0000 sec   104 MBytes   868 Mbits/sec
-> [  1] 1.0000-2.0000 sec   105 MBytes   878 Mbits/sec
-> [  1] 2.0000-3.0000 sec   105 MBytes   881 Mbits/sec
-> [  1] 3.0000-4.0000 sec   105 MBytes   879 Mbits/sec
-> [  1] 4.0000-5.0000 sec   105 MBytes   878 Mbits/sec
-> [  1] 5.0000-6.0000 sec   105 MBytes   878 Mbits/sec
-> [  1] 6.0000-7.0000 sec   104 MBytes   875 Mbits/sec
-> [  1] 7.0000-8.0000 sec   104 MBytes   875 Mbits/sec
-> [  1] 8.0000-9.0000 sec   104 MBytes   873 Mbits/sec
-> [  1] 9.0000-10.0000 sec   104 MBytes   875 Mbits/sec
-> [  1] 0.0000-10.0073 sec  1.02 GBytes   875 Mbits/sec
-> 
-> 2. Page pool with page_pool_release_page
-> 
-> shenwei@5810:~$ iperf -c 10.81.16.245 -w 2m -i 1
-> ------------------------------------------------------------
-> Client connecting to 10.81.16.245, TCP port 5001
-> TCP window size:  416 KByte (WARNING: requested 1.91 MByte)
-> ------------------------------------------------------------
-> [  1] local 10.81.17.20 port 35924 connected with 10.81.16.245 port 5001
-> [ ID] Interval       Transfer     Bandwidth
-> [  1] 0.0000-1.0000 sec   101 MBytes   849 Mbits/sec
-> [  1] 1.0000-2.0000 sec   102 MBytes   860 Mbits/sec
-> [  1] 2.0000-3.0000 sec   102 MBytes   860 Mbits/sec
-> [  1] 3.0000-4.0000 sec   102 MBytes   859 Mbits/sec
-> [  1] 4.0000-5.0000 sec   103 MBytes   863 Mbits/sec
-> [  1] 5.0000-6.0000 sec   103 MBytes   864 Mbits/sec
-> [  1] 6.0000-7.0000 sec   103 MBytes   863 Mbits/sec
-> [  1] 7.0000-8.0000 sec   103 MBytes   865 Mbits/sec
-> [  1] 8.0000-9.0000 sec   103 MBytes   862 Mbits/sec
-> [  1] 9.0000-10.0000 sec   102 MBytes   856 Mbits/sec
-> [  1] 0.0000-10.0246 sec  1.00 GBytes   858 Mbits/sec
-> 
-> 
-> 3. page pool with skb_mark_for_recycle
-> 
-> shenwei@5810:~$ iperf -c 10.81.16.245 -w 2m -i 1
-> ------------------------------------------------------------
-> Client connecting to 10.81.16.245, TCP port 5001
-> TCP window size:  416 KByte (WARNING: requested 1.91 MByte)
-> ------------------------------------------------------------
-> [  1] local 10.81.17.20 port 42724 connected with 10.81.16.245 port 5001
-> [ ID] Interval       Transfer     Bandwidth
-> [  1] 0.0000-1.0000 sec   111 MBytes   931 Mbits/sec
-> [  1] 1.0000-2.0000 sec   112 MBytes   935 Mbits/sec
-> [  1] 2.0000-3.0000 sec   111 MBytes   934 Mbits/sec
-> [  1] 3.0000-4.0000 sec   111 MBytes   934 Mbits/sec
-> [  1] 4.0000-5.0000 sec   111 MBytes   934 Mbits/sec
-> [  1] 5.0000-6.0000 sec   112 MBytes   935 Mbits/sec
-> [  1] 6.0000-7.0000 sec   111 MBytes   934 Mbits/sec
-> [  1] 7.0000-8.0000 sec   111 MBytes   933 Mbits/sec
-> [  1] 8.0000-9.0000 sec   112 MBytes   935 Mbits/sec
-> [  1] 9.0000-10.0000 sec   111 MBytes   933 Mbits/sec
-> [  1] 0.0000-10.0069 sec  1.09 GBytes   934 Mbits/sec
-
-This is a very significant performance improvement (page pool with
-skb_mark_for_recycle).  This is very close to the max goodput for a
-1Gbit/s link.
-
-
-> For small packet size (64 bytes), all three cases have almost the same result:
-> 
-
-To me this indicate, that the DMA map/unmap operations on this platform
-are indeed more expensive on larger packets.  Given this is what
-page_pool does, keeping the DMA mapping intact when recycling.
-
-Driver still need DMA-sync, although I notice you set page_pool feature
-flag PP_FLAG_DMA_SYNC_DEV, this is good as page_pool will try to reduce
-sync size where possible. E.g. in this SKB case will reduce the DMA-sync
-to the max_len=FEC_ENET_RX_FRSIZE which should also help on performance.
-
-
-> shenwei@5810:~$ iperf -c 10.81.16.245 -w 2m -i 1 -l 64
-> ------------------------------------------------------------
-> Client connecting to 10.81.16.245, TCP port 5001
-> TCP window size:  416 KByte (WARNING: requested 1.91 MByte)
-> ------------------------------------------------------------
-> [  1] local 10.81.17.20 port 58204 connected with 10.81.16.245 port 5001
-> [ ID] Interval       Transfer     Bandwidth
-> [  1] 0.0000-1.0000 sec  36.9 MBytes   309 Mbits/sec
-> [  1] 1.0000-2.0000 sec  36.6 MBytes   307 Mbits/sec
-> [  1] 2.0000-3.0000 sec  36.6 MBytes   307 Mbits/sec
-> [  1] 3.0000-4.0000 sec  36.5 MBytes   307 Mbits/sec
-> [  1] 4.0000-5.0000 sec  37.1 MBytes   311 Mbits/sec
-> [  1] 5.0000-6.0000 sec  37.2 MBytes   312 Mbits/sec
-> [  1] 6.0000-7.0000 sec  37.1 MBytes   311 Mbits/sec
-> [  1] 7.0000-8.0000 sec  37.1 MBytes   311 Mbits/sec
-> [  1] 8.0000-9.0000 sec  37.1 MBytes   312 Mbits/sec
-> [  1] 9.0000-10.0000 sec  37.2 MBytes   312 Mbits/sec
-> [  1] 0.0000-10.0097 sec   369 MBytes   310 Mbits/sec
-> 
-> Regards,
-> Shenwei
-> 
-> 
->>>> By small packets, do you mean those under the copybreak limit?
->>>>
->>>> Please provide some benchmark numbers with your next patchset.
->>>
->>> Yes, the packet size is 64 bytes and it is under the copybreak limit.
->>> As the impact is not significant, I would prefer to remove the
->>> copybreak  logic.
->>
->> +1 to removing this logic if possible, due to maintenance cost.
->>
->> --Jesper
-> 
-
+Thanks,
+Chih-En Lin
