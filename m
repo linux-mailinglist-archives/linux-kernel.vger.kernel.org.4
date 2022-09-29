@@ -2,33 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285575EFC7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 19:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5D65EFC84
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 19:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbiI2R5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 13:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
+        id S235039AbiI2R5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 13:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234707AbiI2R5I (ORCPT
+        with ESMTP id S235009AbiI2R5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 13:57:08 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FBD1B86BD;
-        Thu, 29 Sep 2022 10:57:05 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1664474217ts168a6a
-Received: from localhost.localdomain ( [113.72.145.157])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Sep 2022 01:56:55 +0800 (CST)
-X-QQ-SSF: 01000000002000303000B00A0000000
-X-QQ-FEAT: LpuzoIPF5uueL4mAWbCVnN/ELJbjdGL6bZA9pPKr3ZF2aVO424vJKOqc2uLhD
-        2ZPNnrE2eY53hkvrdgtNCX9RKbN9uyKEwe0q2NGnkVa62W/skvMIZLi57Yfpks1LwsnGVN9
-        V1dfUmiey11+VIZeWqDqnsbSPdpRdWFWj/KrHf7XDrNKO613ZCcIKYSK/T901NL7Ca1Lnf7
-        UCWm6TfmRlLPUVwDAz58YllnqF+twKgL4bsMJHIK7IUKvxx2lbBcDOoMDgCsmx65jIu0T8B
-        XTUwc+4epWqTmtsd6iIraSa05F2Q0fa+x8d092ZuvkcYhz/KFVRrotHpjAbKky7Z4nz+ko5
-        +SCq///Or3v3xoorIH5WHQP/z624w3emRPUPUvqE8LPKDmDHVudsYL97UBfvAkyZUV1PmuG
-X-QQ-GoodBg: 0
-From:   Hal Feng <hal.feng@linux.starfivetech.com>
-To:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Thu, 29 Sep 2022 13:57:39 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C702F50B5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 10:57:37 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id u59-20020a17090a51c100b00205d3c44162so6691678pjh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 10:57:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=+yNiT9IW9rypDA3SBFF/X+2wnJNYacifHzWzldOuinY=;
+        b=Aetb/CwF11lPf/BgyiLTDgC8JGAaSG3oEF/tQX8vhLxLW0MbXKVhFm1mUzsv1WBE/6
+         OisHisnewGD66vc0zOogVUldL58/ZmXTCRvdAzMYPrKUPgfANhINn7yNUzZrDFXGvS1K
+         1kbn/5nClHsbCoH044/VkelXa19hpGkof0ItVqFy4T87WiplzWwKBZcr9Y4z7oDH+l7M
+         CXgizZPFXNjslweHfPogRHWVoLQFLr1Nh2PKevqWxctIb6A6tuQR1AvGCn1vEi8ldPua
+         KZurFcDK6W+1u/RNerrexpe6r2orOnZJlEdUhBKIRZx5Y6GDzl9oO8MYnc4jRI17mu17
+         9cUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=+yNiT9IW9rypDA3SBFF/X+2wnJNYacifHzWzldOuinY=;
+        b=eKM+YqcwK5HjyakcheV/2Wq3tPwz3INonrRv/IyQIdCZyXA6Jr9RV2RFmzvIPIbZ2p
+         hOhBowtxVcb4u/nZjxQbku86WOYIjSMKEAdHd1eO3A0kDnCJtOYecuLd1ONnPUX/FKPW
+         pXAs3xfX2SE+ZRNO8pXtJ5VemySHORzpZyGzJaqQdWpaLO9t5gNZoDTays2rFLyr1kJo
+         Whg+MTM6zbzMq6UHCNQsPZm1rbh932KR036w20Rf3LfLdSYy4iW0OfbAHy2XqICsEKem
+         Bnzpi+r33GFvpHjd/4Dq0xFfE5qIYf550WqErF1ENu4obT/TrCpwhMRxAhQq8FeSapks
+         aSrA==
+X-Gm-Message-State: ACrzQf09NtEeGPY4XakE/OafP4moI6m3HnnekQVOIdDfWNqkwdT9Hbqy
+        orr8dXeiCrpZ59ozKisT+Hldew==
+X-Google-Smtp-Source: AMsMyM5fOjCL0nDiei3D/4TzCIHjodyRTeL4unQHD5Jj55LtLWqygLKO/RRCiGi/g1lFAFmGj9d4uQ==
+X-Received: by 2002:a17:90b:384f:b0:202:e1b9:5921 with SMTP id nl15-20020a17090b384f00b00202e1b95921mr17831610pjb.130.1664474256689;
+        Thu, 29 Sep 2022 10:57:36 -0700 (PDT)
+Received: from [172.20.4.240] ([12.199.201.12])
+        by smtp.gmail.com with ESMTPSA id w18-20020a170902e89200b00176b63535ccsm154047plg.193.2022.09.29.10.57.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 10:57:36 -0700 (PDT)
+Message-ID: <40d0abb6-88dc-d315-f768-27a623f60986@sifive.com>
+Date:   Thu, 29 Sep 2022 18:57:33 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v1 05/30] soc: sifive: l2 cache: Convert to platform
+ driver
+Content-Language: en-GB
+To:     Hal Feng <hal.feng@linux.starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -43,18 +74,16 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Emil Renner Berthing <kernel@esmil.dk>,
-        Hal Feng <hal.feng@linux.starfivetech.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 16/30] dt-bindings: clock: Add StarFive JH7110 system clock definitions
-Date:   Fri, 30 Sep 2022 01:56:51 +0800
-Message-Id: <20220929175651.20006-1-hal.feng@linux.starfivetech.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+        linux-kernel@vger.kernel.org, Zong Li <zong.li@sifive.com>
 References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75 autolearn=no autolearn_force=no
+ <20220929143225.17907-6-hal.feng@linux.starfivetech.com>
+From:   Ben Dooks <ben.dooks@sifive.com>
+In-Reply-To: <20220929143225.17907-6-hal.feng@linux.starfivetech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,238 +91,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emil Renner Berthing <kernel@esmil.dk>
+On 29/09/2022 15:32, Hal Feng wrote:
+> From: Emil Renner Berthing <kernel@esmil.dk>
+> 
+> This converts the driver to use the builtin_platform_driver_probe macro
+> to initialize the driver. This macro ends up calling device_initcall as
+> was used previously, but also allocates a platform device which gives us
+> access to much nicer APIs such as platform_ioremap_resource,
+> platform_get_irq and dev_err_probe.
 
-Add all clock outputs for the StarFive JH7110 system clock generator.
+This is useful, but also there are other changes currently being sorted
+out by Zong Li (cc'd into this message) which have already been reviewed
+and are hopefully queued for the next kernel release.
 
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
----
- .../dt-bindings/clock/starfive-jh7110-sys.h   | 215 ++++++++++++++++++
- 1 file changed, 215 insertions(+)
- create mode 100644 include/dt-bindings/clock/starfive-jh7110-sys.h
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+> ---
+>   drivers/soc/sifive/sifive_l2_cache.c | 79 ++++++++++++++--------------
+>   1 file changed, 40 insertions(+), 39 deletions(-)
+> 
+> diff --git a/drivers/soc/sifive/sifive_l2_cache.c b/drivers/soc/sifive/sifive_l2_cache.c
+> index 59640a1d0b28..010d612f7420 100644
+> --- a/drivers/soc/sifive/sifive_l2_cache.c
+> +++ b/drivers/soc/sifive/sifive_l2_cache.c
+> @@ -7,9 +7,9 @@
+>    */
+>   #include <linux/debugfs.h>
+>   #include <linux/interrupt.h>
+> -#include <linux/of_irq.h>
+> -#include <linux/of_address.h>
+> -#include <linux/device.h>
+> +#include <linux/io.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/platform_device.h>
+>   #include <asm/cacheinfo.h>
+>   #include <soc/sifive/sifive_l2_cache.h>
+>   
+> @@ -96,12 +96,6 @@ static void l2_config_read(void)
+>   	pr_info("L2CACHE: Index of the largest way enabled: %d\n", regval);
+>   }
+>   
+> -static const struct of_device_id sifive_l2_ids[] = {
+> -	{ .compatible = "sifive,fu540-c000-ccache" },
+> -	{ .compatible = "sifive,fu740-c000-ccache" },
+> -	{ /* end of table */ },
+> -};
+> -
+>   static ATOMIC_NOTIFIER_HEAD(l2_err_chain);
+>   
+>   int register_sifive_l2_error_notifier(struct notifier_block *nb)
+> @@ -192,36 +186,29 @@ static irqreturn_t l2_int_handler(int irq, void *device)
+>   	return IRQ_HANDLED;
+>   }
+>   
+> -static int __init sifive_l2_init(void)
+> +static int __init sifive_l2_probe(struct platform_device *pdev)
+>   {
+> -	struct device_node *np;
+> -	struct resource res;
+> -	int i, rc, intr_num;
+> -
+> -	np = of_find_matching_node(NULL, sifive_l2_ids);
+> -	if (!np)
+> -		return -ENODEV;
+> -
+> -	if (of_address_to_resource(np, 0, &res))
+> -		return -ENODEV;
+> -
+> -	l2_base = ioremap(res.start, resource_size(&res));
+> -	if (!l2_base)
+> -		return -ENOMEM;
+> -
+> -	intr_num = of_property_count_u32_elems(np, "interrupts");
+> -	if (!intr_num) {
+> -		pr_err("L2CACHE: no interrupts property\n");
+> -		return -ENODEV;
+> -	}
+> -
+> -	for (i = 0; i < intr_num; i++) {
+> -		g_irq[i] = irq_of_parse_and_map(np, i);
+> -		rc = request_irq(g_irq[i], l2_int_handler, 0, "l2_ecc", NULL);
+> -		if (rc) {
+> -			pr_err("L2CACHE: Could not request IRQ %d\n", g_irq[i]);
+> -			return rc;
+> -		}
+> +	struct device *dev = &pdev->dev;
+> +	int nirqs;
+> +	int ret;
+> +	int i;
+> +
+> +	l2_base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(l2_base))
+> +		return PTR_ERR(l2_base);
+> +
+> +	nirqs = platform_irq_count(pdev);
+> +	if (nirqs <= 0)
+> +		return dev_err_probe(dev, -ENODEV, "no interrupts\n");
 
-diff --git a/include/dt-bindings/clock/starfive-jh7110-sys.h b/include/dt-bindings/clock/starfive-jh7110-sys.h
-new file mode 100644
-index 000000000000..d1186abd732b
---- /dev/null
-+++ b/include/dt-bindings/clock/starfive-jh7110-sys.h
-@@ -0,0 +1,215 @@
-+/* SPDX-License-Identifier: GPL-2.0 OR MIT */
-+/*
-+ * Copyright 2022 Emil Renner Berthing <kernel@esmil.dk>
-+ */
-+
-+#ifndef __DT_BINDINGS_CLOCK_STARFIVE_JH7110_SYS_H__
-+#define __DT_BINDINGS_CLOCK_STARFIVE_JH7110_SYS_H__
-+
-+#define JH7110_SYSCLK_CPU_ROOT			  0
-+#define JH7110_SYSCLK_CPU_CORE			  1
-+#define JH7110_SYSCLK_CPU_BUS			  2
-+#define JH7110_SYSCLK_GPU_ROOT			  3
-+#define JH7110_SYSCLK_PERH_ROOT			  4
-+#define JH7110_SYSCLK_BUS_ROOT			  5
-+#define JH7110_SYSCLK_NOCSTG_BUS		  6
-+#define JH7110_SYSCLK_AXI_CFG0			  7
-+#define JH7110_SYSCLK_STG_AXIAHB		  8
-+#define JH7110_SYSCLK_AHB0			  9
-+#define JH7110_SYSCLK_AHB1			 10
-+#define JH7110_SYSCLK_APB_BUS_FUNC		 11
-+#define JH7110_SYSCLK_APB0			 12
-+#define JH7110_SYSCLK_PLL0_DIV2			 13
-+#define JH7110_SYSCLK_PLL1_DIV2			 14
-+#define JH7110_SYSCLK_PLL2_DIV2			 15
-+#define JH7110_SYSCLK_AUDIO_ROOT		 16
-+#define JH7110_SYSCLK_MCLK_INNER		 17
-+#define JH7110_SYSCLK_MCLK			 18
-+#define JH7110_SYSCLK_MCLK_OUT			 19
-+#define JH7110_SYSCLK_ISP_2X			 20
-+#define JH7110_SYSCLK_ISP_AXI			 21
-+#define JH7110_SYSCLK_GCLK0			 22
-+#define JH7110_SYSCLK_GCLK1			 23
-+#define JH7110_SYSCLK_GCLK2			 24
-+#define JH7110_SYSCLK_CORE			 25
-+#define JH7110_SYSCLK_CORE1			 26
-+#define JH7110_SYSCLK_CORE2			 27
-+#define JH7110_SYSCLK_CORE3			 28
-+#define JH7110_SYSCLK_CORE4			 29
-+#define JH7110_SYSCLK_DEBUG			 30
-+#define JH7110_SYSCLK_RTC_TOGGLE		 31
-+#define JH7110_SYSCLK_TRACE0			 32
-+#define JH7110_SYSCLK_TRACE1			 33
-+#define JH7110_SYSCLK_TRACE2			 34
-+#define JH7110_SYSCLK_TRACE3			 35
-+#define JH7110_SYSCLK_TRACE4			 36
-+#define JH7110_SYSCLK_TRACE_COM			 37
-+#define JH7110_SYSCLK_NOC_BUS_CPU_AXI		 38
-+#define JH7110_SYSCLK_NOC_BUS_AXICFG0_AXI	 39
-+#define JH7110_SYSCLK_OSC_DIV2			 40
-+#define JH7110_SYSCLK_PLL1_DIV4			 41
-+#define JH7110_SYSCLK_PLL1_DIV8			 42
-+#define JH7110_SYSCLK_DDR_BUS			 43
-+#define JH7110_SYSCLK_DDR_AXI			 44
-+#define JH7110_SYSCLK_GPU_CORE			 45
-+#define JH7110_SYSCLK_GPU_CORE_CLK		 46
-+#define JH7110_SYSCLK_GPU_SYS_CLK		 47
-+#define JH7110_SYSCLK_GPU_APB			 48
-+#define JH7110_SYSCLK_GPU_RTC_TOGGLE		 49
-+#define JH7110_SYSCLK_NOC_BUS_GPU_AXI		 50
-+#define JH7110_SYSCLK_ISP_TOP_ISPCORE_2X	 51
-+#define JH7110_SYSCLK_ISP_TOP_ISP_AXI		 52
-+#define JH7110_SYSCLK_NOC_BUS_ISP_AXI		 53
-+#define JH7110_SYSCLK_HIFI4_CORE		 54
-+#define JH7110_SYSCLK_HIFI4_AXI			 55
-+#define JH7110_SYSCLK_AXI_CFG1_DEC_MAIN		 56
-+#define JH7110_SYSCLK_AXI_CFG1_DEC_AHB		 57
-+#define JH7110_SYSCLK_VOUT_SRC			 58
-+#define JH7110_SYSCLK_VOUT_AXI			 59
-+#define JH7110_SYSCLK_NOC_BUS_DISP_AXI		 60
-+#define JH7110_SYSCLK_VOUT_TOP_VOUT_AHB		 61
-+#define JH7110_SYSCLK_VOUT_TOP_VOUT_AXI		 62
-+#define JH7110_SYSCLK_VOUT_TOP_HDMITX0_MCLK	 63
-+#define JH7110_SYSCLK_VOUT_TOP_MIPIPHY_REF	 64
-+#define JH7110_SYSCLK_JPEGC_AXI			 65
-+#define JH7110_SYSCLK_CODAJ12_AXI		 66
-+#define JH7110_SYSCLK_CODAJ12_CORE		 67
-+#define JH7110_SYSCLK_CODAJ12_APB		 68
-+#define JH7110_SYSCLK_VDEC_AXI			 69
-+#define JH7110_SYSCLK_WAVE511_AXI		 70
-+#define JH7110_SYSCLK_WAVE511_BPU		 71
-+#define JH7110_SYSCLK_WAVE511_VCE		 72
-+#define JH7110_SYSCLK_WAVE511_APB		 73
-+#define JH7110_SYSCLK_VDEC_JPG_ARB_JPG		 74
-+#define JH7110_SYSCLK_VDEC_JPG_ARB_MAIN		 75
-+#define JH7110_SYSCLK_NOC_BUS_VDEC_AXI		 76
-+#define JH7110_SYSCLK_VENC_AXI			 77
-+#define JH7110_SYSCLK_WAVE420L_AXI		 78
-+#define JH7110_SYSCLK_WAVE420L_BPU		 79
-+#define JH7110_SYSCLK_WAVE420L_VCE		 80
-+#define JH7110_SYSCLK_WAVE420L_APB		 81
-+#define JH7110_SYSCLK_NOC_BUS_VENC_AXI		 82
-+#define JH7110_SYSCLK_AXI_CFG0_DEC_MAIN_DIV	 83
-+#define JH7110_SYSCLK_AXI_CFG0_DEC_MAIN		 84
-+#define JH7110_SYSCLK_AXI_CFG0_DEC_HIFI4	 85
-+#define JH7110_SYSCLK_AXIMEM2_128B_AXI		 86
-+#define JH7110_SYSCLK_QSPI_AHB			 87
-+#define JH7110_SYSCLK_QSPI_APB			 88
-+#define JH7110_SYSCLK_QSPI_REF_SRC		 89
-+#define JH7110_SYSCLK_QSPI_REF			 90
-+#define JH7110_SYSCLK_SDIO0_AHB			 91
-+#define JH7110_SYSCLK_SDIO1_AHB			 92
-+#define JH7110_SYSCLK_SDIO0_SDCARD		 93
-+#define JH7110_SYSCLK_SDIO1_SDCARD		 94
-+#define JH7110_SYSCLK_USB_125M			 95
-+#define JH7110_SYSCLK_NOC_BUS_STG_AXI		 96
-+#define JH7110_SYSCLK_GMAC1_AHB			 97
-+#define JH7110_SYSCLK_GMAC1_AXI			 98
-+#define JH7110_SYSCLK_GMAC_SRC			 99
-+#define JH7110_SYSCLK_GMAC1_GTXCLK		100
-+#define JH7110_SYSCLK_GMAC1_RMII_RTX		101
-+#define JH7110_SYSCLK_GMAC1_PTP			102
-+#define JH7110_SYSCLK_GMAC1_RX			103
-+#define JH7110_SYSCLK_GMAC1_RX_INV		104
-+#define JH7110_SYSCLK_GMAC1_TX			105
-+#define JH7110_SYSCLK_GMAC1_TX_INV		106
-+#define JH7110_SYSCLK_GMAC1_GTXC		107
-+#define JH7110_SYSCLK_GMAC0_GTXCLK		108
-+#define JH7110_SYSCLK_GMAC0_PTP			109
-+#define JH7110_SYSCLK_GMAC_PHY			110
-+#define JH7110_SYSCLK_GMAC0_GTXC		111
-+#define JH7110_SYSCLK_IOMUX			112
-+#define JH7110_SYSCLK_MAILBOX			113
-+#define JH7110_SYSCLK_INT_CTRL_APB		114
-+#define JH7110_SYSCLK_CAN0_APB			115
-+#define JH7110_SYSCLK_CAN0_TIMER		116
-+#define JH7110_SYSCLK_CAN0_CAN			117
-+#define JH7110_SYSCLK_CAN1_APB			118
-+#define JH7110_SYSCLK_CAN1_TIMER		119
-+#define JH7110_SYSCLK_CAN1_CAN			120
-+#define JH7110_SYSCLK_PWM_APB			121
-+#define JH7110_SYSCLK_WDT_APB			122
-+#define JH7110_SYSCLK_WDT_CORE			123
-+#define JH7110_SYSCLK_TIMER_APB			124
-+#define JH7110_SYSCLK_TIMER0			125
-+#define JH7110_SYSCLK_TIMER1			126
-+#define JH7110_SYSCLK_TIMER2			127
-+#define JH7110_SYSCLK_TIMER3			128
-+#define JH7110_SYSCLK_TEMP_APB			129
-+#define JH7110_SYSCLK_TEMP_CORE			130
-+#define JH7110_SYSCLK_SPI0_APB			131
-+#define JH7110_SYSCLK_SPI1_APB			132
-+#define JH7110_SYSCLK_SPI2_APB			133
-+#define JH7110_SYSCLK_SPI3_APB			134
-+#define JH7110_SYSCLK_SPI4_APB			135
-+#define JH7110_SYSCLK_SPI5_APB			136
-+#define JH7110_SYSCLK_SPI6_APB			137
-+#define JH7110_SYSCLK_I2C0_APB			138
-+#define JH7110_SYSCLK_I2C1_APB			139
-+#define JH7110_SYSCLK_I2C2_APB			140
-+#define JH7110_SYSCLK_I2C3_APB			141
-+#define JH7110_SYSCLK_I2C4_APB			142
-+#define JH7110_SYSCLK_I2C5_APB			143
-+#define JH7110_SYSCLK_I2C6_APB			144
-+#define JH7110_SYSCLK_UART0_APB			145
-+#define JH7110_SYSCLK_UART0_CORE		146
-+#define JH7110_SYSCLK_UART1_APB			147
-+#define JH7110_SYSCLK_UART1_CORE		148
-+#define JH7110_SYSCLK_UART2_APB			149
-+#define JH7110_SYSCLK_UART2_CORE		150
-+#define JH7110_SYSCLK_UART3_APB			151
-+#define JH7110_SYSCLK_UART3_CORE		152
-+#define JH7110_SYSCLK_UART4_APB			153
-+#define JH7110_SYSCLK_UART4_CORE		154
-+#define JH7110_SYSCLK_UART5_APB			155
-+#define JH7110_SYSCLK_UART5_CORE		156
-+#define JH7110_SYSCLK_PWMDAC_APB		157
-+#define JH7110_SYSCLK_PWMDAC_CORE		158
-+#define JH7110_SYSCLK_SPDIF_APB			159
-+#define JH7110_SYSCLK_SPDIF_CORE		160
-+#define JH7110_SYSCLK_I2STX0_APB		161
-+#define JH7110_SYSCLK_I2STX0_BCLK_MST		162
-+#define JH7110_SYSCLK_I2STX0_BCLK_MST_INV	163
-+#define JH7110_SYSCLK_I2STX0_LRCK_MST		164
-+#define JH7110_SYSCLK_I2STX0_BCLK		165
-+#define JH7110_SYSCLK_I2STX0_BCLK_INV		166
-+#define JH7110_SYSCLK_I2STX0_LRCK		167
-+#define JH7110_SYSCLK_I2STX1_APB		168
-+#define JH7110_SYSCLK_I2STX1_BCLK_MST		169
-+#define JH7110_SYSCLK_I2STX1_BCLK_MST_INV	170
-+#define JH7110_SYSCLK_I2STX1_LRCK_MST		171
-+#define JH7110_SYSCLK_I2STX1_BCLK		172
-+#define JH7110_SYSCLK_I2STX1_BCLK_INV		173
-+#define JH7110_SYSCLK_I2STX1_LRCK		174
-+#define JH7110_SYSCLK_I2SRX_APB			175
-+#define JH7110_SYSCLK_I2SRX_BCLK_MST		176
-+#define JH7110_SYSCLK_I2SRX_BCLK_MST_INV	177
-+#define JH7110_SYSCLK_I2SRX_LRCK_MST		178
-+#define JH7110_SYSCLK_I2SRX_BCLK		179
-+#define JH7110_SYSCLK_I2SRX_BCLK_INV		180
-+#define JH7110_SYSCLK_I2SRX_LRCK		181
-+#define JH7110_SYSCLK_PDM_DMIC			182
-+#define JH7110_SYSCLK_PDM_APB			183
-+#define JH7110_SYSCLK_TDM_AHB			184
-+#define JH7110_SYSCLK_TDM_APB			185
-+#define JH7110_SYSCLK_TDM_INTERNAL		186
-+#define JH7110_SYSCLK_TDM_CLK_TDM		187
-+#define JH7110_SYSCLK_TDM_CLK_TDM_N		188
-+#define JH7110_SYSCLK_JTAG_CERTIFICATION_TRNG	189
-+
-+#define JH7110_SYSCLK_PLL0_OUT			190
-+#define JH7110_SYSCLK_PLL1_OUT			191
-+#define JH7110_SYSCLK_PLL2_OUT			192
-+#define JH7110_SYSCLK_PCLK2_MUX_FUNC_PCLK	193
-+#define JH7110_SYSCLK_U2_PCLK_MUX_PCLK		194
-+#define JH7110_SYSCLK_APB_BUS			195
-+#define JH7110_SYSCLK_AXI_CFG1			196
-+#define JH7110_SYSCLK_APB12			197
-+#define JH7110_SYSCLK_VOUT_ROOT			198
-+#define JH7110_SYSCLK_VENC_ROOT			199
-+#define JH7110_SYSCLK_VDEC_ROOT			200
-+#define JH7110_SYSCLK_GMACUSB_ROOT		201
-+
-+#define JH7110_SYSCLK_END			202
-+
-+#endif /* __DT_BINDINGS_CLOCK_STARFIVE_JH7110_SYS_H__ */
--- 
-2.17.1
+I wonder if zero irqs is an actual issue here?
+
+> +	for (i = 0; i < nirqs; i++) {
+> +		g_irq[i] = platform_get_irq(pdev, i);
+
+I wonder if we need to keep g_irq[] around now? Is it going to be useful 
+in the future?
+
+> +		if (g_irq[i] < 0)
+> +			return g_irq[i];
+> +
+> +		ret = devm_request_irq(dev, g_irq[i], l2_int_handler, 0, pdev->name, NULL);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret, "Could not request IRQ %d\n", g_irq[i]);
+>   	}
+>   
+>   	l2_config_read();
+> @@ -234,4 +221,18 @@ static int __init sifive_l2_init(void)
+>   #endif
+>   	return 0;
+>   }
+> -device_initcall(sifive_l2_init);
+> +
+> +static const struct of_device_id sifive_l2_match[] = {
+> +	{ .compatible = "sifive,fu540-c000-ccache" },
+> +	{ .compatible = "sifive,fu740-c000-ccache" },
+> +	{ /* sentinel */ }
+> +};
+> +
+> +static struct platform_driver sifive_l2_driver = {
+> +	.driver = {
+> +		.name = "sifive_l2_cache",
+> +		.of_match_table = sifive_l2_match,
+> +		.suppress_bind_attrs = true,
+> +	},
+> +};
+> +builtin_platform_driver_probe(sifive_l2_driver, sifive_l2_probe);
 
