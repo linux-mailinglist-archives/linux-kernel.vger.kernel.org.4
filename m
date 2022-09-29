@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC6F5EEF1E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C144B5EEF1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235328AbiI2Hdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
+        id S235260AbiI2Hds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235272AbiI2Hdf (ORCPT
+        with ESMTP id S235003AbiI2Hdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:33:35 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7CB137E49
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:33:33 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id m4so770490wrr.5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:to:from:date:from:to:cc
-         :subject:date;
-        bh=atACqxLtygvoatmuSiOUnja6i+2u6x+rxoy2apBcCBk=;
-        b=hsOEJmFhBKFbH0GhXrJKHUxne+LtxAIa76tyBJcZVLXdKpf4nNr26PhlcBT0DRGqsm
-         u4nuyhxyohof8xdQKBda/RvQmhKqfjCx8qM5PEasl4ZvbvmxGbni5+mHouFrF/43VcRM
-         pSBwbvxUWK4SSh9wc+kYLKRJUXOx4r1Nb3x51OvHtGu+/6qrLq3Ug5Vebf5RDlo+FDcU
-         LHybNFRvEDSCPfiDF0nKF+DPjqPto6PRCqG7jkfKwHgg3dgAISMTNaYA+qTCvDg9zqQG
-         CF0s8xmsf/Tbm4azqMxygMUlqueRh71Bd8kORz1GFVoFS69QrqS4/VZdBmHwIj0bEbLq
-         ClDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=atACqxLtygvoatmuSiOUnja6i+2u6x+rxoy2apBcCBk=;
-        b=hqgiJAuazcKjkAhCGrPeFiRAvcmce9ZcHpEsjTtstnnJzHbsr/gyhP6GBYf8yxhXkX
-         OauCv5NGZme90y8gkYqc/ozkhSf8hiu0+YX2+DA+JpoO+fKuN1y5TmsppKzJFfZDR68I
-         K9MXz6s4pxyrKFv01neXDMzjgWAJ8Rqbz304hW3Jtx8FtkJdZbkx/2Cs3AKvaL3dIp0X
-         kYjYpsyAnwksLTQQixsaFi3G5udUIEdoNyKMAVc8dfO1S42bLMtgpdY7eL+qyInsrYFT
-         SG/meqotJOLN/42XrMQFMNeQ1Ji4y2z1jUFVTj4yv4OB4V2TkMK8ooPnUeDBOzUd7itS
-         GXIw==
-X-Gm-Message-State: ACrzQf2FPnDs5owN8oJjuqaf28OebNFfvi07FdTjUrAWlNyRm76x6Ae2
-        oGVc/HIE13UR9Ik3uhCy2Be0Iw==
-X-Google-Smtp-Source: AMsMyM6sIk+geTplcvfjy0CSHqROztZRtQXufyAJK/PvCo/0f+wQZHMLaRAfjTq5ogK56olIr125cA==
-X-Received: by 2002:a5d:4c4c:0:b0:22c:cb1f:f7dc with SMTP id n12-20020a5d4c4c000000b0022ccb1ff7dcmr1077874wrt.504.1664436811363;
-        Thu, 29 Sep 2022 00:33:31 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id u4-20020adff884000000b0022a2dbc80fdsm5950328wrp.10.2022.09.29.00.33.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 00:33:30 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 09:33:27 +0200
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     heiko@sntech.de, davem@davemloft.net, herbert@gondor.apana.org.au,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH RFT 0/5] crypto: rockchip: add crypto offloader V2
-Message-ID: <YzVKR0DjpXT/bB8J@Red>
-References: <20220927080048.3151911-1-clabbe@baylibre.com>
- <YzNsgjPFwVEDo4E4@aurel32.net>
+        Thu, 29 Sep 2022 03:33:32 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0C7137E49;
+        Thu, 29 Sep 2022 00:33:29 -0700 (PDT)
+Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MdQ5f1qHtz6J6BD;
+        Thu, 29 Sep 2022 15:31:18 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 09:33:26 +0200
+Received: from [10.126.170.84] (10.126.170.84) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 08:33:25 +0100
+Message-ID: <1356c5b0-5cd7-b006-1b34-a66a34e23fb4@huawei.com>
+Date:   Thu, 29 Sep 2022 08:33:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YzNsgjPFwVEDo4E4@aurel32.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 1/6] scsi: libsas: Add sas_task_find_rq()
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <jinpu.wang@cloud.ionos.com>, <damien.lemoal@wdc.com>
+CC:     <hare@suse.de>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+        <ipylypiv@google.com>, <changyuanl@google.com>, <hch@lst.de>
+References: <1664368034-114991-1-git-send-email-john.garry@huawei.com>
+ <1664368034-114991-2-git-send-email-john.garry@huawei.com>
+ <0c0306d7-2645-874a-9745-8aa5dcfeede1@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <0c0306d7-2645-874a-9745-8aa5dcfeede1@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.170.84]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, Sep 27, 2022 at 11:34:58PM +0200, Aurelien Jarno a écrit :
-> On 2022-09-27 08:00, Corentin Labbe wrote:
-> > Hello
-> > 
-> > Rockchip rk3568 and rk3588 have a common crypto offloader IP different
-> > than rk3228 one.
-> > I started to work the driver for this IP on a rk3588 based board, but this SoC
-> > is still not upstream.
-> > So it is why I send this serie asking for test since I own no rk3568 and
-> > I need to be sure datasheet is right.
+On 29/09/2022 03:09, Damien Le Moal wrote:
+> On 9/28/22 21:27, John Garry wrote:
+>> blk-mq already provides a unique tag per request. Some libsas LLDDs - like
+>> hisi_sas - already use this tag as the unique per-IO HW tag.
+>>
+>> Add a common function to provide the request associated with a sas_task
+>> for all libsas LLDDs.
+>>
+>> Signed-off-by: John Garry <john.garry@huawei.com>
+>> ---
+>>   include/scsi/libsas.h | 22 ++++++++++++++++++++++
+>>   1 file changed, 22 insertions(+)
+>>
+>> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
+>> index f86b56bf7833..bc51756a3317 100644
+>> --- a/include/scsi/libsas.h
+>> +++ b/include/scsi/libsas.h
+>> @@ -644,6 +644,28 @@ static inline bool sas_is_internal_abort(struct sas_task *task)
+>>   	return task->task_proto == SAS_PROTOCOL_INTERNAL_ABORT;
+>>   }
+>>   
+>> +static inline struct request *sas_task_find_rq(struct sas_task *task)
+>> +{
+>> +	struct scsi_cmnd *scmd;
+>> +
+>> +	if (!task || !task->uldd_task)
+>> +		return NULL;
+>> +
+>> +	if (task->task_proto & SAS_PROTOCOL_STP_ALL) {
+>> +		struct ata_queued_cmd *qc;
+>> +
+>> +		qc = task->uldd_task;
 > 
-> I did a quick test, and it doesn't seem to work. I get:
+> I would change these 2 lines into a single line:
 > 
-> rk3588-crypto fe380000.crypto: DMA timeout
-> rk3588-crypto fe380000.crypto: DMA timeout
+> 		struct ata_queued_cmd *qc = task->uldd_task;
 > 
-> That's on an ODROID-M1 board, so with the set of patches I sent
-> yesterday to support it.
+> And no cast as suggested.
+> 
+>> +		scmd = qc->scsicmd;
 
-Thanks for testing it, probably I did something wrong because I got a successfull test by someone on #linux-rockchip.
-But I dont know on which board it is, and it was on my debug tree, so probably cleaned something wrong before sending the patchs.
+So do you prefer:
 
-If I sent you a link to my tree, could you retry ?
+  scmd = ((struct ata_queued_cmd *)task->uldd_task)->scsicmd
 
-Regards
+As Jason suggested?
+
+Thanks,
+John
