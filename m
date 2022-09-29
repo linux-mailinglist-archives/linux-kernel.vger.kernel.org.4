@@ -2,123 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9B15EF38A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741FE5EF38E
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235558AbiI2KbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
+        id S235534AbiI2KdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235511AbiI2KbP (ORCPT
+        with ESMTP id S232166AbiI2KdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:31:15 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCDC12AEF6;
-        Thu, 29 Sep 2022 03:31:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8D59ACE2165;
-        Thu, 29 Sep 2022 10:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E296C433D6;
-        Thu, 29 Sep 2022 10:31:07 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZGVo5oIP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1664447464;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=h81hop0B1+xC7B49mum+yJfc8MsW0yx1h63GCp9GbX0=;
-        b=ZGVo5oIPwO8k0ZCAj61ZkruJKe3SGg+nTBUvLkVnBYuR5ud4KF937Q/pVvImUWXCcBZFCX
-        Jk6kZrC7B4AW7WcGH06OkP7M0FXCHQB0FtXmVghCm+g8JFS8gJbT8Ua0PyfhwDpEpkfzzY
-        lfHfE+7WBwtk+/mz+BeEJ8YVVy/zpHw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c3102c19 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 29 Sep 2022 10:31:03 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Marco Elver <elver@google.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH] prandom: make use of smaller types in prandom_u32_max
-Date:   Thu, 29 Sep 2022 12:30:59 +0200
-Message-Id: <20220929103059.277230-1-Jason@zx2c4.com>
+        Thu, 29 Sep 2022 06:33:13 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D2313AF1C
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:33:12 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id u16-20020a05600c211000b003b5152ebf09so2943693wml.5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=0jUTfFIgKk/2yeo2BJNDMeJhuO1PB3sjcqaadJwgKho=;
+        b=hpmTeMR/CKDwh+ce3mVXd4Qf37umw+QQYOURtg0a6TuyYWWRJi63eCiK/8AK8dJW8t
+         q6cB+YFZt3sUUEZA+A4Za2mA/sbs7P6T1rmO1ptBJKKQD9+pYP346ar2uaxUWLLB+FiB
+         nWHy+Np06JX6m8ScNAWQcGHkN4dJBj+CxS/NBnYHUkNHwx3SSmpC4+yTNF5c/eugY3w4
+         KEQFosCOrVNbcT8v6vN7u6bmjN9sZLTeOETE8G3Tz34xlrHYewOoBVKgfG0r6/4VB607
+         gu6yVC58JsNdd5EFwKhTHN2hcvVP/QvpdXTZKZYsFVRz+hxu6JytgY1LNTehQrUwxBf5
+         fM0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=0jUTfFIgKk/2yeo2BJNDMeJhuO1PB3sjcqaadJwgKho=;
+        b=hJLgMTmt0qRD6NSip5spOa8+7fnfOfElrA0u4VUm8SZHrsUjmr9s8/GPC0cF1QeAUN
+         hArtp2tt7drfhKFxAdSLCU/2PT3lGhtIooD2GjqRy1l3xS/pXmNYg8uILapyDjDCakkY
+         gE27vOKqZd3MES5Amha6hcjkJx0K1FUeiNbYelVVZzvR4OPzeAC4M42biHyiHIwO3/7H
+         xZPSfGu5drtdRNz3CKQ1cjraIrCBDGRJPLWedkEOJa8BdcLVKYJbcp3dvFUSeSOM0hOJ
+         DmaBuM1RrGb5kwqsFSNSB9JPkBEKn35NeaVjaQa/UNKhpH1zsSBMamgdJBcyLMjEOiXM
+         xC/A==
+X-Gm-Message-State: ACrzQf2QRnXbgD0yzEYqzGjTwJgm/VezhkN6BhaqyXgh6t+ymt0cOw9V
+        7n0/dlDadKjXkwi1eC2JY9uyqw==
+X-Google-Smtp-Source: AMsMyM7MLU2KgC9V6qnhrTEYTwAuXkAO8U/+9DVEppc6EoPIiQucMB88PC0ET3pAluuAo6vV/dCDug==
+X-Received: by 2002:a05:600c:3595:b0:3b4:8378:98d2 with SMTP id p21-20020a05600c359500b003b4837898d2mr1840165wmq.64.1664447590345;
+        Thu, 29 Sep 2022 03:33:10 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id u16-20020a5d5150000000b0021f131de6aesm6085202wrt.34.2022.09.29.03.33.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 03:33:09 -0700 (PDT)
+Message-ID: <b36887f5-ffb8-1665-f959-be1e632e5206@linaro.org>
+Date:   Thu, 29 Sep 2022 11:33:08 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 2/2] Documentation/process: Add text to indicate
+ supporters should be mailed
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        corbet@lwn.net, linux@leemhuis.info,
+        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220929002500.283481-1-bryan.odonoghue@linaro.org>
+ <20220929002500.283481-3-bryan.odonoghue@linaro.org>
+ <54a19490-aa0d-2dcd-8407-319d6167add4@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <54a19490-aa0d-2dcd-8407-319d6167add4@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When possible at compile-time, make use of smaller types in
-prandom_u32_max(), so that we can use smaller batches from random.c,
-which in turn leads to a 2x or 4x performance boost. This makes a
-difference, for example, in kfence, which needs a fast stream of small
-numbers (booleans).
+On 29/09/2022 08:29, Krzysztof Kozlowski wrote:
+> As I said before, this still ignores reviewers. I don't think it is
+> going to good direction. The submitter is expected to CC
+> everyone/everything which is pointed by get_maintainers.pl except the
+> Git-fallback entries.
 
-At the same time, we use the occasion to update the old documentation on
-these functions. prandom_u32() and prandom_bytes() have direct
-replacements now in random.h, while prandom_u32_max() remains useful as
-a prandom.h function, since it's not cryptographically secure by virtue
-of not being evenly distributed.
+Isn't LKML considered optional at this point though ?
 
-Cc: Marco Elver <elver@google.com>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- include/linux/prandom.h | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/prandom.h b/include/linux/prandom.h
-index deace5fb4e62..78db003bc290 100644
---- a/include/linux/prandom.h
-+++ b/include/linux/prandom.h
-@@ -12,11 +12,13 @@
- #include <linux/percpu.h>
- #include <linux/random.h>
- 
-+/* Deprecated: use get_random_u32 instead. */
- static inline u32 prandom_u32(void)
- {
- 	return get_random_u32();
- }
- 
-+/* Deprecated: use get_random_bytes instead. */
- static inline void prandom_bytes(void *buf, size_t nbytes)
- {
- 	return get_random_bytes(buf, nbytes);
-@@ -37,17 +39,20 @@ void prandom_seed_full_state(struct rnd_state __percpu *pcpu_state);
-  * prandom_u32_max - returns a pseudo-random number in interval [0, ep_ro)
-  * @ep_ro: right open interval endpoint
-  *
-- * Returns a pseudo-random number that is in interval [0, ep_ro). Note
-- * that the result depends on PRNG being well distributed in [0, ~0U]
-- * u32 space. Here we use maximally equidistributed combined Tausworthe
-- * generator, that is, prandom_u32(). This is useful when requesting a
-- * random index of an array containing ep_ro elements, for example.
-+ * Returns a pseudo-random number that is in interval [0, ep_ro). This is
-+ * useful when requesting a random index of an array containing ep_ro elements,
-+ * for example. The result is somewhat biased when ep_ro is not a power of 2,
-+ * so do not use this for cryptographic purposes.
-  *
-  * Returns: pseudo-random number in interval [0, ep_ro)
-  */
- static inline u32 prandom_u32_max(u32 ep_ro)
- {
--	return (u32)(((u64) prandom_u32() * ep_ro) >> 32);
-+	if (__builtin_constant_p(ep_ro <= 1U << 8) && ep_ro <= 1U << 8)
-+		return (get_random_u8() * ep_ro) >> 8;
-+	if (__builtin_constant_p(ep_ro <= 1U << 16) && ep_ro <= 1U << 16)
-+		return (get_random_u16() * ep_ro) >> 16;
-+	return ((u64)get_random_u32() * ep_ro) >> 32;
- }
- 
- /*
--- 
-2.37.3
-
+bod
