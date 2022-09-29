@@ -2,100 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6427D5EF3BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4F75EF3BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235087AbiI2Kxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
+        id S234875AbiI2K4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234974AbiI2Kxf (ORCPT
+        with ESMTP id S234320AbiI2K4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:53:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36D2109629;
-        Thu, 29 Sep 2022 03:53:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 604F0B82428;
-        Thu, 29 Sep 2022 10:53:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 748E2C433D6;
-        Thu, 29 Sep 2022 10:53:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664448812;
-        bh=sZuIjfSp6Vx+HwrCQ+D8Xsx9v7jNEhaZgxEAhP0d0Lo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UIGYnWCORoxVctFfgurybpC7Qcu+d8brtglYNBF4Kor8mm0CuuF3IVyXdhuYWpYBR
-         Pahdn4Yq2lFl38tW0TxZYqu+athqnnuqL2oy5SjHYDpA8yvFpc2fL+zteX5Ky9h2S2
-         3W656moZ/R66QyK+2ao3kziqvXHy3aKALshwMi167k/by/UHIgGCNZwKWCx063JlGJ
-         u2EIf1QREk6MTKS0Mk/8sfnhW3DEDPs6S0QmRNDuJeUFo7oGzI+5xEvN+nXquDsjze
-         8t6DVOh8VwiTWSuLHY2rgtFnJnnmmnUPo/6Z6TdIChRH5SfkAMz+wMYvoEvvNfcSqy
-         yyf+YJ2p1pkKA==
-Date:   Thu, 29 Sep 2022 13:53:27 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     v9fs-developer@lists.sourceforge.net, linux_oss@crudebyte.com,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com,
-        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
-        kuba@kernel.org, lucho@ionkov.net, netdev@vger.kernel.org,
-        syzbot+de52531662ebb8823b26@syzkaller.appspotmail.com
-Subject: Re: [PATCH 2/2] 9p: destroy client in symmetric order
-Message-ID: <YzV5J9NmL7hijFTR@unreal>
-References: <cover.1664442592.git.leonro@nvidia.com>
- <743fc62b2e8d15c84e234744e3f3f136c467752d.1664442592.git.leonro@nvidia.com>
- <YzVzjR4Yz3Oo3JS+@codewreck.org>
+        Thu, 29 Sep 2022 06:56:08 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E47512519F
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:56:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jBAf0KE8iX8Qho8Azh49RNNh62otABcBwnWgDAQYM6w=; b=lufQ6KmTFZ00FWgUu0dcQ2B2JB
+        CFoCZLX0nQlx3Tf0JnJX0OTgolxR7+3BAhHNyKnmaM/ToCOiNZAKvPZrAOOjth9j5wK0sOJ830MzU
+        z3qreXoSrC5jb4fMIPwPBoX6lsD/4PGgiS3QQd92SKHgP6v2eP1VbZrTaxVlvBjyYbh5LWMdqJ1bo
+        QqjSuq49zvFozPOZHNMcky7u3DgWmNvUQElCQdgkXWhqeJiwIV0SkXBpFqdLfV2KS83sZiU2iKBzY
+        2FZS58G/HScxpWkg7r1Do3JFuZPxbsadP9zUx1SyjX7wy4fD2X+p+D/nPfC8CleiLqlL4StEqkgUT
+        vlwnddLw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1odrD0-00DDBX-EQ; Thu, 29 Sep 2022 10:56:02 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 91C5C30007E;
+        Thu, 29 Sep 2022 12:55:58 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 787752019CD2C; Thu, 29 Sep 2022 12:55:58 +0200 (CEST)
+Date:   Thu, 29 Sep 2022 12:55:58 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: RCU vs NOHZ
+Message-ID: <YzV5vqoLInptafJm@hirez.programming.kicks-ass.net>
+References: <YyLksEr05QTNo05Q@hirez.programming.kicks-ass.net>
+ <20220915160600.GA246308@paulmck-ThinkPad-P17-Gen-1>
+ <YyN0BKEoDbe4hcIl@hirez.programming.kicks-ass.net>
+ <20220915191427.GC246308@paulmck-ThinkPad-P17-Gen-1>
+ <YyOnilnwnLKA9ghN@hirez.programming.kicks-ass.net>
+ <20220916075817.GE246308@paulmck-ThinkPad-P17-Gen-1>
+ <YyQ/zn54D1uoaIc1@hirez.programming.kicks-ass.net>
+ <20220917142508.GF246308@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YzVzjR4Yz3Oo3JS+@codewreck.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220917142508.GF246308@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 07:29:33PM +0900, Dominique Martinet wrote:
-> Leon Romanovsky wrote on Thu, Sep 29, 2022 at 12:37:56PM +0300:
-> > Make sure that all variables are initialized and released in correct
-> > order.
-> 
-> Haven't tried running or compiling, comments out of my head that might
-> be wrong below
-> 
+On Sat, Sep 17, 2022 at 07:25:08AM -0700, Paul E. McKenney wrote:
+> On Fri, Sep 16, 2022 at 11:20:14AM +0200, Peter Zijlstra wrote:
+> > On Fri, Sep 16, 2022 at 12:58:17AM -0700, Paul E. McKenney wrote:
 > > 
-> > Reported-by: syzbot+de52531662ebb8823b26@syzkaller.appspotmail.com
-> 
-> You're adding this report tag but I don't see how you fix that failure.
-> What you need is p9_tag_cleanup(clnt) from p9_client_destroy -- I assume
-> this isn't possible for any fid to be allocated at this point so the fid
-> destroying loop is -probably- optional.
-> 
-> I would assume it is needed from p9_client_version failures.
-> 
-> 
-> > Signed-off-by: Leon Romanovsky <leon@kernel.org>
-> > ---
-> >  net/9p/client.c | 37 ++++++++++++-------------------------
-> >  1 file changed, 12 insertions(+), 25 deletions(-)
+> > > To the best of my knowledge at this point in time, agreed.  Who knows
+> > > what someone will come up with next week?  But for people running certain
+> > > types of real-time and HPC workloads, context tracking really does handle
+> > > both idle and userspace transitions.
 > > 
-> > diff --git a/net/9p/client.c b/net/9p/client.c
-> > index aaa37b07e30a..8277e33506e7 100644
-> > --- a/net/9p/client.c
-> > +++ b/net/9p/client.c
-> > @@ -179,7 +179,6 @@ static int parse_opts(char *opts, struct p9_client *clnt)
-> >  				goto free_and_return;
-> >  			}
-> >  
-> > -			v9fs_put_trans(clnt->trans_mod);
+> > Sure, but idle != nohz. Nohz is where we disable the tick, and currently
+> > RCU can inhibit this -- rcu_needs_cpu().
 > 
-> Pretty sure you'll be "leaking transports" if someone tries to pass
-> trans=foo multiple times; this can't be removed...(continues below)...
+> Exactly.  For non-nohz userspace execution, the tick is still running
+> anyway, so RCU of course won't be inhibiting its disabling.  And in that
+> case, RCU's hook is the tick interrupt itself.  RCU's hook is passed a
+> flag saying whether the interrupt came from userspace or from kernel.
 
-It is pity, you are right.
+I'm not sure how we ended up here; this is completely irrelevant and I'm
+not disagreeing with it.
 
-Thanks
+> > AFAICT there really isn't an RCU hook for this, not through context
+> > tracking not through anything else.
+> 
+> There is a directly invoked RCU hook for any transition that enables or
+> disables the tick, namely the ct_*_enter() and ct_*_exit() functions,
+> that is, those functions formerly known as rcu_*_enter() and rcu_*_exit().
+
+Context tracking doesn't know about NOHZ, therefore RCU can't either.
+Context tracking knows about IDLE, but not all IDLE is NOHZ-IDLE.
+
+Specifically we have:
+
+	ct_{idle,irq,nmi,user,kernel}_enter()
+
+And none of them are related to NOHZ in the slightest. So no, RCU does
+not have a NOHZ callback.
+
+I'm still thikning you're conflating NOHZ_FULL (stopping the tick when
+in userspace) and regular NOHZ (stopping the tick when idle).
+
+> And this of course means that any additional schemes to reduce RCU's
+> power consumption must be compared (with real measurements on real
+> hardware!) to Joel et al.'s work, whether in combination or as an
+> alternative.  And either way, the power savings must of course justify
+> the added code and complexity.
+
+Well, Joel's lazy scheme has the difficulty that you can wreck things by
+improperly marking the callback as lazy when there's an explicit
+dependency on it. The talk even called that out.
+
+I was hoping to construct a scheme that doesn't need the whole lazy
+approach.
+
+
+To recap; we want the CPU to go into deeper idle states, no?
+
+RCU can currently inhibit this by having callbacks pending for this CPU
+-- in this case RCU inhibits NOHZ-IDLE and deep power states are not
+selected or less effective.
+
+Now, deep idle states actually purge the caches, so cache locality
+cannot be an argument to keep the callbacks local.
+
+We know when we're doing deep idle we stop the tick.
+
+So why not, when stopping the tick, move the RCU pending crud elsewhere
+and let the CPU get on with going idle instead of inhibiting the
+stopping of the tick and wrecking deep idle?
