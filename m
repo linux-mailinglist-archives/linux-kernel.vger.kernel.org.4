@@ -2,107 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C435EEE9C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA095EEE77
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235169AbiI2HOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+        id S234976AbiI2HHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235163AbiI2HON (ORCPT
+        with ESMTP id S232380AbiI2HHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:14:13 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D3F132FCF;
-        Thu, 29 Sep 2022 00:14:05 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28T5I9ts008739;
-        Thu, 29 Sep 2022 07:13:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=LEG2Dy3CKJ9OxR193VFBeLxSkB0ek88zkaBViONOeew=;
- b=DS/fudyg+fLRlfC/OEhtbZDpofp9joSaCT2fmQLch/Bg1p4QyIh6ylhk9WALuBumPnUY
- /l0eTOAf0JNeGrxsXeXcNAo1OLWSy9+rH5z8zfDcSLSE7hdYuv8x8QvJE4FS8HJCbfsO
- vrOY5URLt2O/abP9xo2Q7GwlQ0zhHCTXeQ7Quo9BuN64VqfwhFglAjgMjqM247oL3II8
- XG482ipeie2E3wllQRyJCIYAJKKXbaOhatFWKNiQwmppk1LeatRMYicXq3lqYxi+zQm7
- DVik2OlrrArZth54LXuO4/ZArngtCoapY5RGZXo/KxsnHKIjvuOlEUr2jHohcFUTNMnX XQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jw29u0saj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 07:13:59 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28T7DwDx019423
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 07:13:58 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Thu, 29 Sep 2022 00:13:55 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH] arm64: dts: qcom: sc7280: Update SNPS Phy params for SC7280
-Date:   Thu, 29 Sep 2022 12:43:48 +0530
-Message-ID: <1664435628-4011-1-git-send-email-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 29 Sep 2022 03:07:35 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196E611A0D;
+        Thu, 29 Sep 2022 00:07:34 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MdPTH0W25z1P6vt;
+        Thu, 29 Sep 2022 15:03:15 +0800 (CST)
+Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 29 Sep
+ 2022 15:07:32 +0800
+From:   Weilong Chen <chenweilong@huawei.com>
+To:     <wsa@kernel.org>, <chenweilong@huawei.com>,
+        <yangyicong@hisilicon.com>
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH next v4] i2c: hisi: Add support to get clock frequency from clock property
+Date:   Thu, 29 Sep 2022 15:15:47 +0800
+Message-ID: <20220929071547.135913-1-chenweilong@huawei.com>
+X-Mailer: git-send-email 2.31.GIT
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: b2ZwlycUoJ_da6xy9JqN6AFIFvKTuR2I
-X-Proofpoint-ORIG-GUID: b2ZwlycUoJ_da6xy9JqN6AFIFvKTuR2I
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-29_04,2022-09-29_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 impostorscore=0 adultscore=0 suspectscore=0
- priorityscore=1501 phishscore=0 spamscore=0 clxscore=1011 mlxlogscore=906
- bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209290042
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Override the SNPS Phy tuning parameters for SC7280 devices. These
-values are common for both trogdor and herobrine variants.
+The clk_rate attribute is not generic device tree bindings for I2C
+busses described in Documentation/devicetree/bindings/i2c/i2c.txt.
+It can be managed by clock binding.
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+Support the driver to obtain clock information by clk_rate or
+clock property. Find clock first, if not, fall back to clk_rate.
+
+Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+Acked-by: Yicong Yang <yangyicong@hisilicon.com>
 ---
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+Change since v1:
+- Ordered struct field to inverted triangle.
+- Use devm_clk_get_optional_enabled().
+- Use IS_ERR_OR_NULL.
+Link: https://lore.kernel.org/lkml/20220921101540.352553-1-chenweilong@huawei.com/
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 2125803..ae2c23e 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -3310,6 +3310,13 @@
- 			clock-names = "ref";
+Change since v2:
+- Remove redundant blank line
+Link: https://lore.kernel.org/all/20220923011417.78994-1-chenweilong@huawei.com/
+
+Change since v3:
+- Commit message update
+Link: https://lore.kernel.org/lkml/20220926091503.199474-1-chenweilong@huawei.com/T/
+
+ drivers/i2c/busses/i2c-hisi.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+index 67031024217c..e4b0ebe54f6f 100644
+--- a/drivers/i2c/busses/i2c-hisi.c
++++ b/drivers/i2c/busses/i2c-hisi.c
+@@ -8,6 +8,7 @@
+ #include <linux/acpi.h>
+ #include <linux/bits.h>
+ #include <linux/bitfield.h>
++#include <linux/clk.h>
+ #include <linux/completion.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+@@ -90,6 +91,7 @@ struct hisi_i2c_controller {
+ 	struct i2c_adapter adapter;
+ 	void __iomem *iobase;
+ 	struct device *dev;
++	struct clk *clk;
+ 	int irq;
  
- 			resets = <&gcc GCC_QUSB2PHY_SEC_BCR>;
-+
-+			qcom,hs-rise-fall-time-bp = <0>;
-+			qcom,squelch-detector-bp = <(-2090)>;
-+			qcom,hs-disconnect-bp = <1743>;
-+			qcom,hs-amplitude-bp = <1780>;
-+			qcom,hs-crossover-voltage-microvolt = <(-31000)>;
-+			qcom,hs-output-impedance-micro-ohms = <2600000>;
- 		};
+ 	/* Intermediates for recording the transfer process */
+@@ -456,10 +458,15 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
  
- 		usb_1_qmpphy: phy-wrapper@88e9000 {
+-	ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
+-	if (ret) {
+-		dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
+-		return ret;
++	ctlr->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
++	if (IS_ERR_OR_NULL(ctlr->clk)) {
++		ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
++		if (ret) {
++			dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
++			return ret;
++		}
++	} else {
++		clk_rate_hz = clk_get_rate(ctlr->clk);
+ 	}
+ 
+ 	ctlr->clk_rate_khz = DIV_ROUND_UP_ULL(clk_rate_hz, HZ_PER_KHZ);
 -- 
-2.7.4
+2.31.GIT
 
