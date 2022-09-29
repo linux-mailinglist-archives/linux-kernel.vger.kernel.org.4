@@ -2,119 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DE85EEC74
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 05:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8575A5EEC76
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 05:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234351AbiI2D2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 23:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
+        id S234197AbiI2D3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 23:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbiI2D2G (ORCPT
+        with ESMTP id S234032AbiI2D33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 23:28:06 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 706E91280CC
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 20:28:03 -0700 (PDT)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxYOK6EDVjMZ0jAA--.2614S3;
-        Thu, 29 Sep 2022 11:27:55 +0800 (CST)
-Message-ID: <e5cd4c46-71fd-8edb-098c-2ac839d5c5d2@loongson.cn>
-Date:   Thu, 29 Sep 2022 11:27:54 +0800
+        Wed, 28 Sep 2022 23:29:29 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1494E10C7A4;
+        Wed, 28 Sep 2022 20:29:26 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 28T3TBwC018263
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 23:29:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1664422153; bh=TRSL2t4DwLkaCnpc4HSshjbsEcacNr1HHbEImcnj6YM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=mbu/LqXAS9v+wyQBaICa6onb7HRnsq9Nanc9fD6PAHFNu+SvvWMsD30yQzK2SkE+z
+         OPWFeUYOb9bBjwqwFVMCk4gk9lEa5i4+QQhBWwwJzIRNdtCS8ZzaCE09wsd4oH3zDz
+         pkk1wicmzP5CxjoiRB2jQB2R0wVvDK+9x2qvfmGUVfAGGj/4FLMUZxmI70QN0uRKWU
+         Kc6ORlKXtGbitoEKMj8T7qlqCucNpmltOh0P3B+rKUNdqeNKQQ9YN4eh4T2koC6Rki
+         1/ASrIu8C39tZtaFlmh0AdbFydftHz4j1h7PxWzWWpsrit+cXDb5rqlIfszlNIxGgD
+         gnPYSU1pAoHxw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 0663F15C00C9; Wed, 28 Sep 2022 23:29:11 -0400 (EDT)
+Date:   Wed, 28 Sep 2022 23:29:10 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc:     corbet@lwn.net, linux@leemhuis.info,
+        konstantin@linuxfoundation.org, krzysztof.kozlowski@linaro.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] get_maintainer: Describe supporters and
+ maintainers as required email recipients
+Message-ID: <YzURBpkWU1hHM7rN@mit.edu>
+References: <20220929002500.283481-1-bryan.odonoghue@linaro.org>
+ <20220929002500.283481-2-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2] mm: use update_mmu_tlb() on the second thread
-Content-Language: en-US
-To:     Qi Zheng <zhengqi.arch@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        akpm@linux-foundation.org, muchun.song@linux.dev,
-        =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
-Cc:     chris@zankel.net, jcmvbkbc@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20220926115621.13849-1-zhengqi.arch@bytedance.com>
- <b5823e18-6139-c16e-a2df-1aa3e88927fa@redhat.com>
- <c41a3cb6-aef9-d8a9-ab0b-b9c8013ee1d8@bytedance.com>
-From:   maobibo <maobibo@loongson.cn>
-In-Reply-To: <c41a3cb6-aef9-d8a9-ab0b-b9c8013ee1d8@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxYOK6EDVjMZ0jAA--.2614S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7uw18tr17ZF4rCry8XFy5Jwb_yoW8Zr1xpr
-        97G3WqqFWjqr1kCr1IqF1Dury0qw1UWa4UXryaya40qrnIqwn2grWUW3yv9w4UZr4kJa1U
-        Jr42gr13ZFWUZw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9G14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
-        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrw
-        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
-        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
-        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxK
-        x2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
-        0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929002500.283481-2-bryan.odonoghue@linaro.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/9/29 11:07, Qi Zheng 写道:
+On Thu, Sep 29, 2022 at 01:24:59AM +0100, Bryan O'Donoghue wrote:
+> The output of get_maintainer.pl doesn't make clear that a supporter is a
+> type of maintainer who should be mailed when generating a patch.
 > 
+> In various places in the documentation we make reference to the necessity
+> to remember to include the appropriate maintainers when sending your patch
+> but, we confusingly don't call out supporters as maintainers in our
+> automation utility.
 > 
-> On 2022/9/26 22:34, David Hildenbrand wrote:
->> On 26.09.22 13:56, Qi Zheng wrote:
->>> As message in commit 7df676974359 ("mm/memory.c: Update local TLB
->>> if PTE entry exists") said, we should update local TLB only on the
->>> second thread. So in the do_anonymous_page() here, we should use
->>> update_mmu_tlb() instead of update_mmu_cache() on the second thread.
->>>
->>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->>> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
->>> ---
->>> v1: https://lore.kernel.org/lkml/20220924053239.91661-1-zhengqi.arch@bytedance.com/
->>>
->>> Changelog in v1 -> v2:
->>>   - change the subject and commit message (David)
->>>
->>>   mm/memory.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/mm/memory.c b/mm/memory.c
->>> index 118e5f023597..9e11c783ba0e 100644
->>> --- a/mm/memory.c
->>> +++ b/mm/memory.c
->>> @@ -4122,7 +4122,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
->>>       vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
->>>               &vmf->ptl);
->>>       if (!pte_none(*vmf->pte)) {
->>> -        update_mmu_cache(vma, vmf->address, vmf->pte);
->>> +        update_mmu_tlb(vma, vmf->address, vmf->pte);
->>>           goto release;
->>>       }
->>
->>
->> Staring at 7df676974359, it indeed looks like an accidental use [nothing else in that patch uses update_mmu_cache].
->>
->> So it looks good to me, but a confirmation from Bibo Mao might be good.
-> 
-> Thanks, and Hi Bibo, any comments here? :)
+> Fix that up now by having get_maintainers.pl print 'maintainer[volunteer]'
+> or 'maintainer[supporter]'.
 
-update_mmu_tlb is defined as empty on loongarch, maybe some lines should
-be added in file arch/loongarch/include/asm/pgtable.h like this:
+I really don't think this is correct.  Or at least, I don't think it's
+consistent with how we've historically understood the S: term in the
+MAINTAINERS file.  First of all, the Status field is a property of the
+*subsystem*, not of the *maintainer*.
 
-+#define __HAVE_ARCH_UPDATE_MMU_TLB
-+#define update_mmu_tlb  update_mmu_cache
+	S: *Status*, one of the following:
+	   Supported:	Someone is actually paid to look after this.
+	   Maintained:	Someone actually looks after it.
+	   Odd Fixes:	It has a maintainer but they don't have time to do
+			much other than throw the odd patch in. See below..
+	   Orphan:	No current maintainer [but maybe you could take the
+			role as you write your new code].
+	   Obsolete:	Old code. Something tagged obsolete generally means
+			it has been replaced by a better system and you
+			should be using that.
 
-regards
-bibo mao
-> 
->>
-> 
+There are also plenty of projects which are marked "Maintained" where
+one or more the maintainers are paid to support that subsystem (while
+others might be volunteers).
 
+So to have get_maintainers.pl print that someone is a
+maintainer[volunteer] versus maintainer[supporter] is going to be
+highly misleading.  What if one of the maintainers is paid by some
+larger company (say, Google or Facebook or Red Hat), while the other
+maintainer is a hobbists?  And what for the maintainer who is paid by
+a large company, there are multiple levels of "supported".  They might
+be allowed to spend up to 50% of the paid time working on upstream
+work.  Does that make them a "supported" or a "volunteer"?  And how
+should the subsystem's S: be marked?
+
+I understand that get_maintinaer.pl has had this get_maintainer_role
+function for a long time; it's not been introduced by this patch.  But
+I'd suggest that we not try to make a distinction between a subsystem
+which is "Supported" versus "Maintained", and certainly we should not
+be treating an attribute of the subsystem as being attached to all of
+the entities listed under M:.  That is really a category error, IMHO.
+
+    	     	    	       	       - Ted
