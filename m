@@ -2,98 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8989C5EFA74
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6088D5EFA78
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236275AbiI2Q1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
+        id S235617AbiI2Q2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236173AbiI2Q1S (ORCPT
+        with ESMTP id S236227AbiI2Q1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:27:18 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AF8149D16
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:26:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664468801; x=1696004801;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Omj4s+TYR9HP2Mo9RreV0sozGn4K2bgnUI3UDLk6NsI=;
-  b=dylUSpaF4v2UO6L7bNUeCTv4aFJc/knrk04/qGVB1N1svNo+oRiHD4MD
-   2AwnUgA/i5QwJQh97u+/rwe/Mb6E+vkSo3GHZXHjNNHDTjrCSPfVpwAA+
-   tuDCtSgRBe1EMitpPXtnj5xTEtgBVDq9tqCbLGJxku8SVyRw8D3C1m/3J
-   VLmWbhFs7YptPPKRvYHMOyqfySv/YSyg4lrXVdQ+Z6N+UCZrT34HMFT2g
-   eTTe/byIEWxfEHzFIHhUDFWin6TUcEsnTmjBILKwELHLq5zD6S7GhxqOK
-   wchoSLsYyeWJLTYfPdRsuPG5Q5PaPx108xdzL3qv85rA6/Hq2XYILR/Xi
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="289112364"
-X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
-   d="scan'208";a="289112364"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 09:26:40 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="867455516"
-X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
-   d="scan'208";a="867455516"
-Received: from ticela-or-324.amr.corp.intel.com (HELO [10.251.13.128]) ([10.251.13.128])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 09:26:39 -0700
-Message-ID: <ecbc58bc-a250-cf39-dea6-9b0b1c3e6503@intel.com>
-Date:   Thu, 29 Sep 2022 09:26:38 -0700
+        Thu, 29 Sep 2022 12:27:22 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0A11181FC;
+        Thu, 29 Sep 2022 09:27:10 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id d12-20020a05600c3acc00b003b4c12e47f3so985340wms.4;
+        Thu, 29 Sep 2022 09:27:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=icV6cxvXLdy/u1P61WPyBZFENlozm8iS3OoyNfd2f5Q=;
+        b=Lqili1lHrpn0yuYSaYBPZxkVMnlBUFLeI2TVXfPPNP8+mAlJOLfQ5y6B2JArvg6zAf
+         BrBgP5YflGzmsZ4Im+u5YXxPC5njXfyUnYblj/z7eRcveVKot+tjr4IWqGEFmb3mjKIi
+         PbQtxa6iPVUlYXtZkzWlKUyUUYWDHgTQ5hrMagrEAgYsnjDRoiSct9ajfXr1wnbdHgwN
+         sSs9cF+Xxv6widRyjBMBlHGUk0QhbE3uGr1UKQEW+KVZNOlImKX28x82tubE1YAFLrd1
+         vduscc6FbrQZ1q1El5KSptqIGMhAj9aYJju/iJD4EO9TV8/UsNyxPAV2EL6MyV40x0ra
+         4uDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=icV6cxvXLdy/u1P61WPyBZFENlozm8iS3OoyNfd2f5Q=;
+        b=2bKn71mVt63Rog4iA6Ouvu6Ml2cdV4nzE/+B52UGx35ves09C/182rZVi9Zmx+SzaW
+         RhkyZUc4PTuS0QaV0eOq1wepn6Mf1CIHeq7gBgp1OeZ6nUQHeuAs4BNXm+TzRiouHJjl
+         qHpmdPzk0vx7Q2Hk67qWkTQgN7Gj+054qZGh8B7RNAi7fdc10ExS/ahSK91uueewSzRD
+         dSuQemxkd6CN9qMZI3myZAVOB4wiEiNYgSUfqIg2k+31WGkIlW3EuhH+O7e+jo7Z5Uw7
+         e8v0AhgR9pHLX2UPgAEaDxNSlSkrDF3oteRDxc8Qyjic2ZJCwgiico+CMuyGe3F6TGB0
+         hmMw==
+X-Gm-Message-State: ACrzQf3TQag+RBjBWQiERzylLT9QlEola0t6HgpEzDNsRAe0YfAydP3L
+        UsMv0QzveYv0h44LZm/POKE=
+X-Google-Smtp-Source: AMsMyM7WsNBU8dNmdrnrV6FryYuT3bRv7UJ5WDgSBEi2W+cfzeMgqEXo5xk+WrXjvI9JpkAwxAEiKQ==
+X-Received: by 2002:a05:600c:4f46:b0:3b4:fed8:331e with SMTP id m6-20020a05600c4f4600b003b4fed8331emr11585833wmq.198.1664468829288;
+        Thu, 29 Sep 2022 09:27:09 -0700 (PDT)
+Received: from localhost ([2a03:b0c0:1:d0::dee:c001])
+        by smtp.gmail.com with ESMTPSA id d22-20020a05600c34d600b003b49ab8ff53sm4987940wmq.8.2022.09.29.09.27.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 09:27:07 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 16:27:06 +0000
+From:   Stafford Horne <shorne@gmail.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jonas Bonn <jonas@southpole.se>, openrisc@lists.librecores.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] openrisc: update config files
+Message-ID: <YzXHWteIFh2kUOXY@oscomms1>
+References: <20220929101458.32434-1-lukas.bulwahn@gmail.com>
+ <YzWp+p+1V1UmCAb3@oscomms1>
+ <YzWr+mmtLy2DRYEA@oscomms1>
+ <CAMuHMdWx5RKP8WfNAyOofGFTGQNfOtDYMOJmvPgPhtyvRPG1Bw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] x86/split_lock: Restore warn mode (and add a new one) to
- avoid userspace regression
-Content-Language: en-US
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>, tony.luck@intel.com,
-        tglx@linutronix.de, linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, luto@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, Fenghua Yu <fenghua.yu@intel.com>,
-        Joshua Ashton <joshua@froggi.es>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Pavel Machek <pavel@denx.de>,
-        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
-        Melissa Wen <mwen@igalia.com>
-References: <20220928142109.150263-1-gpiccoli@igalia.com>
- <24f31510-5b33-ada5-9f0e-117420403e8c@intel.com>
- <1c742ae1-98cb-a5c1-ba3f-5e79b8861f0b@igalia.com>
- <cc8d0101-73b9-b286-a7a7-e9305cdc1bd9@intel.com>
- <7917fde2-a381-5404-c5ae-6ffd433f85ec@igalia.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <7917fde2-a381-5404-c5ae-6ffd433f85ec@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWx5RKP8WfNAyOofGFTGQNfOtDYMOJmvPgPhtyvRPG1Bw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/29/22 08:30, Guilherme G. Piccoli wrote:
->> How about we give it a few weeks and see if the current behavior impacts
->> anyone else?  Maybe the best route will be more clear then.
-> ...I disagree in just letting it fly for weeks with all players of God
-> of War 2 running modern Intel chips unable to play in 5.19+ because of
-> this change.
+Hi Geert,
 
-Let's be precise here, though.  It isn't that folks can't play.  It's
-that we *intentionally* put something in place that kept them from
-playing.  They can play just fine after disabling split lock detection.
+On Thu, Sep 29, 2022 at 05:07:40PM +0200, Geert Uytterhoeven wrote:
+> Hi Stafford,
+> 
+> On Thu, Sep 29, 2022 at 4:30 PM Stafford Horne <shorne@gmail.com> wrote:
+> > On Thu, Sep 29, 2022 at 02:21:46PM +0000, Stafford Horne wrote:
+> > > On Thu, Sep 29, 2022 at 12:14:58PM +0200, Lukas Bulwahn wrote:
+> > > > Clean up config files by:
+> > > >   - removing configs that were deleted in the past
+> > > >   - removing configs not in tree and without recently pending patches
+> > > >   - adding new configs that are replacements for old configs in the file
+> 
+> > > > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > >
+> > > Thanks for the patch this looks fine to me.  Usually I just generate this
+> > > defcnfigs using make savedefconfig.  If there is some better way which
+> > > doesn't generate the file with the # comment's I haven't found it.
+> > >
+> > > I will queue this.
+> >
+> > Actually..
+> >
+> > About the subject 'openrisc: update config files' and description.  Can you be
+> > more specific about what updates you are making for this patch?
+> >
+> > For example: remove comments from config files.
+> 
+> These are not comments, but options that default to y or m, and
+> are overriden to n by "commenting them out".
+> 
+> This syntax dates back to the days Kconfig was a collection of
+> shell scripts. Nowadays, switching to "CONFIG_<FOO>=n" would
+> perhaps make sense, as Kconfig already recognizes that syntax.
 
-> Certainly we have more games/applications that are impacted, I just 
-> don't think we should wait on having 3 userspace breakages reported,
-> for example, to take an action - why should gamers live with this for
-> an arbitrary amount of time, until others report more issues?
-They don't have to live with it.  They can turn it off.  That's why the
-command-line disable is there.
+Right, I remember the *comment's* do actually are material to the config files.
+In this patch not everything is removed, just old non-existent configs.
 
-The real question in my head is whether the misery is intentional or
-not.  Is breaking games what folks _intended_ with
-split_lock_detect=warn?  Or, is this a more severe penalty than we
-expected and maybe we should back off for the default?
+I sill prefer having a more descriptive subject.
+
+-Stafford
+
+> > > > --- a/arch/openrisc/configs/or1ksim_defconfig
+> > > > +++ b/arch/openrisc/configs/or1ksim_defconfig
+> > > > @@ -19,9 +19,6 @@ CONFIG_NET=y
+> > > >  CONFIG_PACKET=y
+> > > >  CONFIG_UNIX=y
+> > > >  CONFIG_INET=y
+> > > > -# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+> > > > -# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+> > > > -# CONFIG_INET_XFRM_MODE_BEET is not set
+> > > >  # CONFIG_INET_DIAG is not set
+> > > >  CONFIG_TCP_CONG_ADVANCED=y
+> > > >  # CONFIG_TCP_CONG_BIC is not set
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
