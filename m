@@ -2,146 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FEF5EF0B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 561275EF0BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235649AbiI2Ij4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60440 "EHLO
+        id S235599AbiI2Ikh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235625AbiI2Ijr (ORCPT
+        with ESMTP id S235598AbiI2IkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:39:47 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 393261A236
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:39:45 -0700 (PDT)
-Received: from [10.20.42.32] (unknown [10.20.42.32])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxReLPWTVjQbEjAA--.2638S3;
-        Thu, 29 Sep 2022 16:39:44 +0800 (CST)
-Subject: Re: [PATCH] LoongArch: Fix cpu name after s3/s4
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev
-References: <20220929073623.7604-1-lvjianmin@loongson.cn>
- <CAAhV-H4qJROB+EXORsbc9Y0i_Myp543-3PmDsA=GQAtTu4v9Mw@mail.gmail.com>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <45b252d1-2f8d-2c7c-8d62-a990dbbcf6bf@loongson.cn>
-Date:   Thu, 29 Sep 2022 16:39:43 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 29 Sep 2022 04:40:22 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9DC2EF3E
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:40:17 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id u10so904736wrq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:reply-to:from
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date;
+        bh=9yCHudwWTs8iGGjOW2yzGpZ+XsTes14RKtIMcMyggXE=;
+        b=YFayQv5zccBSzwC1ZnIbDUZbLsM5Aw0c4lFGDl4BO08Fpc4xl1cSeF9XXRqN5P5wBe
+         rUvsdp0+jezwGpqFcH1QtaHdcASZqq7taW1fiJdA9oSjTXpvHWhdwa/CoOO9UXMZBZ7w
+         577un9+SStHkbJq2UtdLIG+55k8dJPgURuKlXUvVybFvIDYQnf5aWia3bF5ivDeCRVsW
+         YV0IeKrGlCWORDAyaSR278Awgf8LrUJyhCdsMhgZcEpy0rUK5tEf5qaGZAdddCm9czVw
+         645Ecj0rvYLRyzmy5GTcIB6sEWkKytHF34Tikwf4yGojhiBUIuOUewdrRPhOibhw8imB
+         hxig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:reply-to:from
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=9yCHudwWTs8iGGjOW2yzGpZ+XsTes14RKtIMcMyggXE=;
+        b=vDMY87b8IeO9dcfsQy48YiVghnKnzocWIqwiejuqvoRmJrasrYIem6e3GC4fJ4jLRO
+         9gWm0bk8VPXBRCrDNsRGeEycT2GylHDawhE8bs8da8+pcnSf4ab39PvRu4rwkcldIIQy
+         D4MjrmQMl7VePNZBezoWDBbXwqk4mrUOcOf2s2eYzuyvKLb6o1cQQLXXNhtvcVLQ69fV
+         Dy64GPFxgIsjDFSsO2Uo+WAbnNAKLEGuvE30+A/7dctbvsHXhOZ6PTXUAYnUxa4+1w7X
+         peLklzjD44O0j5vGXvdGNubCgGqGSQy7eyWgy0pS5IzpBaotkLNCD6E04RHHd4dyfAwq
+         dLQQ==
+X-Gm-Message-State: ACrzQf3PxD+BUNvK/ffe96MTGzjJL/lgOF3tDyr77LJM2bj25q4G6VUX
+        FWfe88yS4kVA7VmA62bsQ1wo3w==
+X-Google-Smtp-Source: AMsMyM6dwuUJdxC7BENyYXPsQCOd+CranHMYc70MqG9BZMnC1YgoC1MsI3vRIn9cBDMtsz0FCbVOkg==
+X-Received: by 2002:a05:6000:98b:b0:22c:c3b1:3f2a with SMTP id by11-20020a056000098b00b0022cc3b13f2amr1359248wrb.11.1664440815789;
+        Thu, 29 Sep 2022 01:40:15 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:1f17:3ea3:4e46:dff? ([2a01:e0a:982:cbb0:1f17:3ea3:4e46:dff])
+        by smtp.gmail.com with ESMTPSA id e16-20020a05600c2dd000b003b47e8a5d22sm3963146wmh.23.2022.09.29.01.40.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 01:40:15 -0700 (PDT)
+Message-ID: <aaf68eff-17da-3f27-c8dc-48b9659e7b50@linaro.org>
+Date:   Thu, 29 Sep 2022 10:40:14 +0200
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H4qJROB+EXORsbc9Y0i_Myp543-3PmDsA=GQAtTu4v9Mw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxReLPWTVjQbEjAA--.2638S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxZF1DAry3ury5WrW8WrWxZwb_yoW5uFyrpF
-        4vkF4DAFsFgr9xKasxtr1UGrWDXrnrGw12g3Z5tayrZF4UXF1DXr18trs8WF15u3WxWrWF
-        qFZ3WasrtFW7Ja7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvGb7Iv0xC_tr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-        cIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2
-        AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v2
-        6r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14
-        v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
-        v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK
-        82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjxU2rcTDUUUU
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     allen <allen.chen@ite.com.tw>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
+        David Airlie <airlied@linux.ie>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Hermes Wu <Hermes.Wu@ite.com.tw>,
+        Rob Herring <robh+dt@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Jonas Karlman <jonas@kwiboo.se>
+References: <20220929014456.30077-1-allen.chen@ite.com.tw>
+ <20220929014456.30077-2-allen.chen@ite.com.tw>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Organization: Linaro Developer Services
+In-Reply-To: <20220929014456.30077-2-allen.chen@ite.com.tw>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good idea, agree, I'll change it, thanks.
+Hi,
 
-On 2022/9/29 下午4:31, Huacai Chen wrote:
-> Hi, Jianmin,
+On 29/09/2022 03:44, allen wrote:
+> From: allen chen <allen.chen@ite.com.tw>
 > 
-> How about do it like this?
+> Add properties to restrict dp output data-lanes and clock.
 > 
-> diff --git a/arch/loongarch/kernel/cpu-probe.c
-> b/arch/loongarch/kernel/cpu-probe.c
-> index 1bc9fec4e474..1734362d1fa9 100644
-> --- a/arch/loongarch/kernel/cpu-probe.c
-> +++ b/arch/loongarch/kernel/cpu-probe.c
-> @@ -265,7 +265,9 @@ static inline void cpu_probe_loongson(struct
-> cpuinfo_loongarch *c, unsigned int
->          uint64_t *vendor = (void *)(&cpu_full_name[VENDOR_OFFSET]);
->          uint64_t *cpuname = (void *)(&cpu_full_name[CPUNAME_OFFSET]);
+> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
+> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
+> ---
+>   .../devicetree/bindings/display/bridge/ite,it6505.yaml | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
 > 
-> -       __cpu_full_name[cpu] = cpu_full_name;
-> +       if (!__cpu_full_name[cpu])
-> +               __cpu_full_name[cpu] = cpu_full_name;
+> diff --git a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> index 833d11b2303a..62b9f2192202 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> @@ -52,6 +52,14 @@ properties:
+>       maxItems: 1
+>       description: extcon specifier for the Power Delivery
+>   
+> +  data-lanes:
+> +    maxItems: 1
+> +    description: restrict the dp output data-lanes with value of 1-4
+
+Can't you use the data-lanes property in the first port endpoint ?
+
+Look at Documentation/devicetree/bindings/display/bridge/ti,sn65dsi83.yaml
+
 > +
->          *vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
->          *cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
-> 
-> Huacai
-> 
-> On Thu, Sep 29, 2022 at 3:36 PM Jianmin Lv <lvjianmin@loongson.cn> wrote:
->>
->> On coming back from s3/s4, the cpu name will be overwritten
->> in cpu_probe path of seconary cpu, so we adjust the postion
->> of using cpu name existed in cpu hardware register, and only
->> use it while failing to get cpu name from SMBIOS.
->>
->> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
->>
->> diff --git a/arch/loongarch/include/asm/cpu-info.h b/arch/loongarch/include/asm/cpu-info.h
->> index b6c4f96079df..937dce2a930a 100644
->> --- a/arch/loongarch/include/asm/cpu-info.h
->> +++ b/arch/loongarch/include/asm/cpu-info.h
->> @@ -64,6 +64,7 @@ extern void cpu_probe(void);
->>
->>   extern const char *__cpu_family[];
->>   extern const char *__cpu_full_name[];
->> +extern char cpu_full_name[];
->>   #define cpu_family_string()    __cpu_family[raw_smp_processor_id()]
->>   #define cpu_full_name_string() __cpu_full_name[raw_smp_processor_id()]
->>
->> diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
->> index 529ab8f44ec6..a548b2197224 100644
->> --- a/arch/loongarch/kernel/cpu-probe.c
->> +++ b/arch/loongarch/kernel/cpu-probe.c
->> @@ -180,14 +180,13 @@ static void cpu_probe_common(struct cpuinfo_loongarch *c)
->>   #define VENDOR_OFFSET  0
->>   #define CPUNAME_OFFSET 9
->>
->> -static char cpu_full_name[MAX_NAME_LEN] = "        -        ";
->> +char cpu_full_name[MAX_NAME_LEN] = "        -        ";
->>
->>   static inline void cpu_probe_loongson(struct cpuinfo_loongarch *c, unsigned int cpu)
->>   {
->>          uint64_t *vendor = (void *)(&cpu_full_name[VENDOR_OFFSET]);
->>          uint64_t *cpuname = (void *)(&cpu_full_name[CPUNAME_OFFSET]);
->>
->> -       __cpu_full_name[cpu] = cpu_full_name;
->>          *vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
->>          *cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
->>
->> diff --git a/arch/loongarch/kernel/env.c b/arch/loongarch/kernel/env.c
->> index 82b478a5c665..955d82aa298e 100644
->> --- a/arch/loongarch/kernel/env.c
->> +++ b/arch/loongarch/kernel/env.c
->> @@ -44,6 +44,9 @@ static int __init init_cpu_fullname(void)
->>          if (loongson_sysconf.cpuname && !strncmp(loongson_sysconf.cpuname, "Loongson", 8)) {
->>                  for (cpu = 0; cpu < NR_CPUS; cpu++)
->>                          __cpu_full_name[cpu] = loongson_sysconf.cpuname;
->> +       } else {
->> +               for (cpu = 0; cpu < NR_CPUS; cpu++)
->> +                       __cpu_full_name[cpu] = cpu_full_name;
->>          }
->>          return 0;
->>   }
->> --
->> 2.31.1
->>
+> +  max-pixel-clock-khz:
+> +    maxItems: 1
+> +    description: restrict max pixel clock
 
+New vendor specific properties should have the ite, prefix.
+
+> +
+>     port:
+>       $ref: /schemas/graph.yaml#/properties/port
+>       description: A port node pointing to DPI host port node
+> @@ -84,6 +92,8 @@ examples:
+>               pwr18-supply = <&it6505_pp18_reg>;
+>               reset-gpios = <&pio 179 1>;
+>               extcon = <&usbc_extcon>;
+> +            data-lanes = <2>;
+> +            max-pixel-clock-khz = <150000>;
+>   
+>               port {
+>                   it6505_in: endpoint {
+
+Thanks,
+Neil
