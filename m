@@ -2,201 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC42B5F00D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 00:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6885F00D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 00:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiI2Wjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 18:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
+        id S230114AbiI2WoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 18:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiI2WjL (ORCPT
+        with ESMTP id S230246AbiI2WnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 18:39:11 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD63A4B2D
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 15:33:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664490823; x=1696026823;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=R2vU33QfWaMUxdCWGWk9dcuafKeqQMpCoTHXwG2x3kg=;
-  b=BY+1IwYJ8Gznn8TomR0pQCeKdk0AcfgzD/xdTCuTpGTsi9H9BEleabkb
-   Q3xPyB95NkYCU9JDY0viQENuOJWYRdZMGcMbGOQEtq66qs017nblSRK8m
-   7NXEqPdkDfvogg4tVqjR89xu+QjUQvP6q5RqsmMT2lb+QzYlOBluKaFn6
-   50DRxTcj9jl3UAAAmnNACZLTEWZ8+OrNv2RUNUC3h9GawETg5hS6bqcN7
-   lUpzl7uV7/HiZo/7J3I7nRy9IVacvGew2dOM8WhLvkdoHj1FFDWK8tJtd
-   Dspk9pD6rSzgo/mJY/dTa6Z3kbs4WXs86Kao7Jpb7v3xIwNE3saVhHfDc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="299645410"
-X-IronPort-AV: E=Sophos;i="5.93,356,1654585200"; 
-   d="scan'208";a="299645410"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 15:33:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="685042096"
-X-IronPort-AV: E=Sophos;i="5.93,356,1654585200"; 
-   d="scan'208";a="685042096"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Sep 2022 15:33:40 -0700
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 29 Sep 2022 15:33:40 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 29 Sep 2022 15:33:40 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 29 Sep 2022 15:33:40 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.109)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 29 Sep 2022 15:33:39 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HNQ8qih+plDv/iPSza3A2sZpLUJGQKgS9o/U612faIih2StekR/fRSWttlNnidV1wp7NQW6oinpVVfuD5tGaDX/bAO8fpvPNJJ661M0cpJpfi3znGrUh5hu4nbMaubrDO1JVT4zJIW9dNoh9uPoZmQDfz7CbaxXCN7VHrEQL7XDITrJsGqjiiHlPOKaQ97hylt4woLlLRXjD/zb2SGxj5Lh+lh3j/I+J1dl/96kYSJ1hhTz2SvVUBt32rMEs8Co3Z+jWcF+fgoYMO5UvXQ5w8mV97S05NJXjYt/aZ3nKgD+0LScm1E39xc2smG6gwc4KN/OFRMIUV734HmHmO5fdaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Sz6gFrO83rg83IxrIMnULcpmlcht9TV638SWfVyGWl8=;
- b=mUkXI5vSbpMDJdAYEH/AVPD9B3hoIAX35+lX095sqQqQ+Y5iKbP3NPsRxRLx0pADGxL9m2mSee0bru/cFjuGRqtvpU9w8eJkDnm0eea5UmsibRKDNTIxgyVuVIVuuanAqUd8OVoqlNeAB96urYGu3BimFYtd30Sx383cPL4veCNzAQ1f9eKwRfWMMBD2Y2Xk58J/Gc9YRPGeTImSw+xYFVgEpciEUc1uyT+SBuUHo6WoSVE8bh9ondrfRHzUT9RYjeniZW4Esf0fUi2HkToOlM1frKtflCHCS9ggN9qzzxvt+Y5jZIv2xW1hCzuU0HuqXCoNV5Hy5qbNK7oHjnEhaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5373.namprd11.prod.outlook.com (2603:10b6:5:394::7) by
- DM4PR11MB6504.namprd11.prod.outlook.com (2603:10b6:8:8d::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.17; Thu, 29 Sep 2022 22:33:38 +0000
-Received: from DM4PR11MB5373.namprd11.prod.outlook.com
- ([fe80::5145:64b6:db32:b424]) by DM4PR11MB5373.namprd11.prod.outlook.com
- ([fe80::5145:64b6:db32:b424%6]) with mapi id 15.20.5676.020; Thu, 29 Sep 2022
- 22:33:38 +0000
-Date:   Fri, 30 Sep 2022 00:33:33 +0200
-From:   =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
-To:     =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>
-CC:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        "Melissa Wen" <mwen@igalia.com>,
-        =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        David Gow <davidgow@google.com>,
-        "Arthur Grillo" <arthur.grillo@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>,
-        <magalilemes00@gmail.com>, <tales.aparecida@gmail.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] drm/tests: Split
- drm_test_dp_mst_sideband_msg_req_decode into parameterized tests
-Message-ID: <20220929223333.vh6wy45mfx6kccds@nostramo>
-References: <20220927221206.55930-1-mcanal@igalia.com>
- <20220927221206.55930-2-mcanal@igalia.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220927221206.55930-2-mcanal@igalia.com>
-X-ClientProxiedBy: FR0P281CA0138.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:96::7) To DM4PR11MB5373.namprd11.prod.outlook.com
- (2603:10b6:5:394::7)
+        Thu, 29 Sep 2022 18:43:10 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F23917DC2E
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 15:38:48 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id gf8so79371pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 15:38:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=uRYofiYnG47hAF2aDgziR8isJuYRbsZpgovud56j32A=;
+        b=JZPVhVcSMWJOlPWPeuO7TIk2QE8xzCYuAuPJMIvNL9e/7DEG7nT1s/j0a++TuIXoJt
+         W5tOkUQ3APGpHGPx2aDs0EQFmPuIgBA+4T0avm1Lg0UJhYZ3xUC1RzFzgaGhbslD+zEA
+         8NgZgevTkenFB0f0XOWYHbeCZsUerfUuHJ0MRFMwXM5XuUFT0t5SADRdJ0rMU3iZnQpx
+         iMve53x366pyZVcyz/wlrlsM3/1JBISjrdscSFwoyHMKAyPnzbLjIdZA8bJqQmwrTVBh
+         qX5XlvQpPaLRv1P2ont+Bp7rvzNsL9me5BwcB/JytVGVWSrVmlRW7tys/zv1TCWNsOeo
+         isHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=uRYofiYnG47hAF2aDgziR8isJuYRbsZpgovud56j32A=;
+        b=XTemdimQ6D2Rt6Y8+ShL1Yf8Gpd9XrTY+dN8YScC/vFS9ovgeOOfxJ+KuGGVJWr8cp
+         nue+KXnZJe163W7awEqAMlTxPWU5fnGKua6Rv+BVs5wky6lFGVLByd0F5Qd4P96y6+4y
+         o4YBd4IZ2uJ4YBvxgEO5aOBRLbepul3CxzFuiC0VTTXZEKvk6OzPpVKA/2fIbcgyF7mg
+         DSP41jIEI6gtK+Nuk7LOkNOm9FXPKNp5bkN15W/oZRe6IZYvYqQSzXTPy7bFXd6T8a4k
+         M6CUOJbQp+L41OLcBm8aDXwNrpYE6MLgvuEZpbXS9THvs8u5wyZaVG25yKkSIY0JFfKj
+         ht6w==
+X-Gm-Message-State: ACrzQf3GvD6nw8eRjPEWgL69jIAwSIHQX0DBKRvIHDTr4dowAIcDHbqF
+        YZet/J+a24X8g9PSM+JAWtzJ0A==
+X-Google-Smtp-Source: AMsMyM6yC6NkaBuBd+HCYZGGqRfzh1aqwwfKXWPEPMxkZ/E1X0XuzRLSKCq/ziAdT/GnArgh0pqgvg==
+X-Received: by 2002:a17:903:441:b0:179:f1cc:ba89 with SMTP id iw1-20020a170903044100b00179f1ccba89mr5683259plb.146.1664491089036;
+        Thu, 29 Sep 2022 15:38:09 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id w2-20020a170902e88200b0017829a3df46sm384797plg.204.2022.09.29.15.38.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 15:38:08 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 22:38:04 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: Nested AVIC design (was:Re: [RFC PATCH v3 04/19] KVM: x86: mmu:
+ allow to enable write tracking externally)
+Message-ID: <YzYeTCsNfQWccKJ9@google.com>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+ <20220427200314.276673-5-mlevitsk@redhat.com>
+ <YoZyWOh4NPA0uN5J@google.com>
+ <5ed0d0e5a88bbee2f95d794dbbeb1ad16789f319.camel@redhat.com>
+ <c22a18631c2067871b9ed8a9246ad58fa1ab8947.camel@redhat.com>
+ <Yt6/9V0S9of7dueW@google.com>
+ <7c4cf32dca42ab84bdb427a9e4862dbf5509f961.camel@redhat.com>
+ <YugLc5LLPJkt89z6@google.com>
+ <fe76ea902a38a10e2d8078fd9e5a71a0c7724d84.camel@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5373:EE_|DM4PR11MB6504:EE_
-X-MS-Office365-Filtering-Correlation-Id: e6b67272-51a6-4c69-e733-08daa26aa6db
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ClrtT9WHmeEnMuUB4WL8C95laeiYC5yGK7P1kH+YISIVXOTvfC3UDit/QnhixuCtcpum/5l8YSA1easifO0ppslVBKcogFweQluuxL3dMzBZs4bKtmgFYaPEvgpjT93Kh6U7Fflkgm1YTtr9Z6oskHazz/yUxv1TmKTubGN38r3Hp8YmzduTUAFstUCTJ0zzXFhWelhhsDLmpILGT/gomHxcbuYh3TifEUGUrY0gkWth7CA0yN5jiTdY70zCRBoVRAAUQhaqIud+WuY+zvYdnrqwgPkcNb/xjU6IrW5AHEDMBgmv0HoWELhHmpDFh1xZ60nBqemPrqh/HVPOqM/jahflCxpPaQ6vpvI0gGGsA7kaA45Uv5IElFKtU8j0gmb1xqu4KmucR36EYVqkSppLKRbngN9AETOWIDdM7Z9khFPxq/+qNXwfN/a7RBrCKletYcsbn397ZE4yQe86smX1juBhTwSjTR9mu6koD8Qa7XS88ugAKpKN2e157xCdNQTuSR62+IK8PbxCBJ0ZOzMudxe7y5J77/3KVOtoZUtfySpJ42T8m0Hs/JaQBurlBJWgoSc6OvMWyX2omTwmEmzYT/dXjB9BlKh5+tEtvWCQ2ots3WrNS0SH5z5arq0Dizb9BBXQFrAa5Nvjgm0vEz2+pVsWQJnYQtJZdIHNJviZkZYSlGBVjjJQ/+a3DSZJrK4NzXOArUxDerXxmD+23srHlmTFwqNT44gyWsJJzh+PQOf9cTfp6u3enwvoHPkYXeV7zPBdjZr3RvYHroRGmdaKEQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(396003)(376002)(346002)(39860400002)(136003)(451199015)(83380400001)(6512007)(66574015)(38100700002)(26005)(9686003)(54906003)(316002)(6916009)(1076003)(33716001)(2906002)(186003)(86362001)(5660300002)(7416002)(41300700001)(82960400001)(66476007)(4326008)(8676002)(66946007)(966005)(478600001)(6486002)(66556008)(6506007)(6666004)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UTNneXRHUzJLQVdQcitoc1diK1hPMDBBWUxUK1R4VmljWEFDWURPRk5kQ1Fx?=
- =?utf-8?B?NmZrWDMvek5FV3hDZGdtTTdPa1dNb25GT2YvRStaN2tKYnMreUxYYXQwck4y?=
- =?utf-8?B?U0ZSb3dWWXhzYWlrR05sRlltSms0dnMxZE1SOE5VTHBDUFBCV1dzcWk0MDFs?=
- =?utf-8?B?enFITWljRWM2YVMyeWZkNEJHOElVT05Ja1JNN2dVRjhpYXhkVEliMlV1U0pt?=
- =?utf-8?B?a2N4VWpmYm9UOVBqQkdVd2IvZDQ0dmxUQmRDbkVpYUtiUkgxTXdtN3h6OFI0?=
- =?utf-8?B?dHAxZGx3T3ZQeTNuYnRsVHY5QUtvbmhzNyt6bEF2Q25Ya1B1UGpaNUhDdUJv?=
- =?utf-8?B?OTFLeHpwMmVyYlV0NWZUeVF6cU9GTnlHNnh2TzYxbXE5QmFUQ21hQitDSUhl?=
- =?utf-8?B?R2lXMHFSWnRDTGpxcXMzMnVta0pLM0FRcVNrem5IT2NuTUVsN1JZRkxLWXJL?=
- =?utf-8?B?VFZocWNpN2Z2ZFVkOGdkSnZXUWtTRmxaZkRGMGdjdVVVZ0cvV09zcERCUWxa?=
- =?utf-8?B?NnYxK25hd01ST05UZ3NCNWM3WWhsWGZ0OFZzT3lnMU1IVHpPVUdsWXhpaW1a?=
- =?utf-8?B?RUZoamsvNm9xSnMranBpcjFZU2ZlaEFEM1R5TlpKSjdNWStCc3hGbC9OZkpM?=
- =?utf-8?B?cnZsWmFSRGd4ampzVUN6THVxRnNORmIzVDZQSGlXUkVwUEQyb2RwdGNkZ01l?=
- =?utf-8?B?dElwWTBIczNLRnVmY1FDZVorMlllMURMQm5YVVEwUkFKbDNib25ta3Q1YkZn?=
- =?utf-8?B?Yjh0MUxpSVhhN3hIOUg4YVYzb1ZGRzFveWFjU2psUTNPWUwxRExZT1pCQUdJ?=
- =?utf-8?B?T3ZtblNzSzRuaTNUdlUxUUtMUWY5S2tlZDNRQ21QVWpUblJMQ3NNQUg3WGtU?=
- =?utf-8?B?RzFOVTN1OTlpSS9iUlo2eFlEN0tXVkxOTkpHNi9aeGdkeWhQcXg3eFhLYkxB?=
- =?utf-8?B?cklyKzhTYmlPSGlRSytjZ3JWWEdndTRmTkpqTGFLd3ZoU1A0ejBycG15NVNl?=
- =?utf-8?B?WVEyYVFjWWFhTmIrYzRiVnoyTzdFRFZ3ZWhQbVZaZ01hRkZra1V0OVFlMHlS?=
- =?utf-8?B?MWg3RHVjazlKeHJZSndYWTRtbFVCTmJjSmZyVXppK3I1SnN5UXlaWHpBdER3?=
- =?utf-8?B?OUllMDNvQ2I0a3NCelNoYTBvdzBEdkVIUmorL3d3WXpQMS96ZU5zSndFaHRT?=
- =?utf-8?B?R2x1ekNyNXN5ajlwRHJoRFNCYjNaZnBuMVAwaEYxODhhZWE0aHJIcHNFSkVx?=
- =?utf-8?B?THJDOWJvNzFhUFVaQ3VtbVdTYksvRkZET3VYdlFBaGN3dCtUVGd6TnpGS2U3?=
- =?utf-8?B?WnBndVNoSnB1RkVORGtIRmNQVjVCalBBTzNIbEJNM0tqd2hJRWxiQjlNK2pI?=
- =?utf-8?B?MEo0cHIxaVJBbWgzNllOSmQxZW90RWdlVU1IZ0JNc0ZzeVMzd3FxZ3dWSXlj?=
- =?utf-8?B?SUlMYm1xcUZXOTBWb3ljMGYwK25HNXNQWE8veTRuNCthcGxGVW10R2lXeE5r?=
- =?utf-8?B?ZE1DaFAwMU9vSWlBdmdEeEkzc2VRenduUjVrWFJNdjYzZ1VEN2V0cy9vSDhO?=
- =?utf-8?B?b0g2OGhVTmh0d0pNQnBrUkVzQjByMktiQnpJb2pJeEFzdHZ0aTRnLzdGNXhM?=
- =?utf-8?B?SStOQkpzejZneU9GVHNPYzB4enpuWTRQOVFGVVNWTW5hcUo4UFpMQkFqTGt1?=
- =?utf-8?B?VzZXL2pmTmFQRlRlckFhQ1FtVWRPZHNnemJrNzBKVGFRMG5qYk5aelNMWTMv?=
- =?utf-8?B?aEVEOU54b1JpYTY1ZXEzTUk0Nzl5R2hEcGdub05FYVd2Y0FWYU5OVVdpN2Jn?=
- =?utf-8?B?MElxQ2RaV2dJMjhGem80bEFOcFltazNEbzZTZzVGKzZFVmVLdlNuNEdOTlB1?=
- =?utf-8?B?ZWcxSVBNTlBGb3cvOERUREpDOVBqaXhHbHBzUE5ma0cyVjNMRnhSS0F6cStj?=
- =?utf-8?B?QThXK1dJek0ranZWZFNsSDdFWGVyV2VlL0VzdUduMjI3cjljY1lXOFhGYk5h?=
- =?utf-8?B?OVNsUXdMOEJEc296NmNVdFlyUnc2TDl6eHZFbkNBOXdVeUsvTXlTQWQ4SlNo?=
- =?utf-8?B?bVBhemNSL29Ic3NTVEpwWDNtM0lwMEFyRXVXY1ZGWWMycEVPS2RrdjQ0dTla?=
- =?utf-8?B?MmRqQU9kajZYZUwvT3hjOTZQOGRzMEpHSmV0YlRVRE1jVmE2OWlNVlZmSldh?=
- =?utf-8?B?bWc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6b67272-51a6-4c69-e733-08daa26aa6db
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5373.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 22:33:38.3133
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KN6/7ani4qqp3/8oH6NzmQKTj0p8X3h/iUnClkhbQwa6SIlqqNOo73F5ZXiCQ0MaQWv6fem7X9AMd3rH1xCNJNE4OXoOtomlfKX9eilKPCY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6504
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fe76ea902a38a10e2d8078fd9e5a71a0c7724d84.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 07:12:06PM -0300, Maíra Canal wrote:
-> The drm_test_dp_mst_sideband_msg_req_decode repeats the same test
-> structure with different parameters. This could be better represented
-> by parameterized tests, provided by KUnit.
-> 
-> In order to convert the tests to parameterized tests, the test case for
-> the client ID was changed: instead of using get_random_bytes to generate
-> the client ID, the client ID is now hardcoded in the test case.
+On Mon, Aug 08, 2022, Maxim Levitsky wrote:
+> Hi Sean, Paolo, and everyone else who wants to review my nested AVIC work.
 
-Generally "random" usage is not incompatible with parameterized tests, we can
-create parameterized tests that use random data.
-The idea is to pass a function that generates the actual param (where we have a
-pointer to function as one of the members in "params" struct).
+Before we dive deep into design details, I think we should first decide whether
+or not nested AVIC is worth pursing/supporting.
 
-For example, see "random_dp_query_enc_client_id" usage here:
-https://lore.kernel.org/dri-devel/20220117232259.180459-7-michal.winiarski@intel.com/
+  - Rome has a ucode/silicon bug with no known workaround and no anticipated fix[*];
+    AMD's recommended "workaround" is to disable AVIC.
+  - AVIC is not available in Milan, which may or may not be related to the
+    aforementioned bug.
+  - AVIC is making a comeback on Zen4, but Zen4 comes with x2AVIC.
+  - x2APIC is likely going to become ubiquitous, e.g. Intel is effectively
+    requiring x2APIC to fudge around xAPIC bugs.
+  - It's actually quite realistic to effectively force the guest to use x2APIC,
+    at least if it's a Linux guest.  E.g. turn x2APIC on in BIOS, which is often
+    (always?) controlled by the host, and Linux will use x2APIC.
 
-In this case, we just compare data going in with data going out (and the data
-itself is not transformed in any way), so it doesn't really matter for coverage
-and we can hardcode.
+In other words, given that AVIC is well on its way to becoming a "legacy" feature,
+IMO there needs to be a fairly strong use case to justify taking on this much code
+and complexity.  ~1500 lines of code to support a feature that has historically
+been buggy _without_ nested support is going to require a non-trivial amount of
+effort to review, stabilize, and maintain.
 
--Michał
-
-> So, convert drm_test_dp_mst_sideband_msg_req_decode into parameterized
-> tests and make the tests' allocations and prints completely managed by KUnit.
-> 
-> Signed-off-by: Maíra Canal <mcanal@igalia.com>
-> ---
-> v1 -> v2: https://lore.kernel.org/dri-devel/20220925222719.345424-1-mcanal@igalia.com/T/#m056610a23a63109484afeafefb5846178c4d36b2
-> - Mention on the commit message the change on the test case for the client ID (Michał Winiarski).
-> ---
->  .../gpu/drm/tests/drm_dp_mst_helper_test.c    | 370 ++++++++++++------
->  1 file changed, 243 insertions(+), 127 deletions(-)
+[*] 1235 "Guest With AVIC (Advanced Virtual Interrupt Controller) Enabled May Fail
+    to Process IPI (Inter-Processor Interrupt) Until Guest Is Re-Scheduled" in
+    https://www.amd.com/system/files/TechDocs/56323-PUB_1.00.pdf
