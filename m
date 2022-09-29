@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22E335EF30B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6938E5EF30F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235239AbiI2KIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
+        id S235252AbiI2KJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235253AbiI2KIU (ORCPT
+        with ESMTP id S235191AbiI2KJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:08:20 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B45B147F33
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:08:20 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id f189so919663yba.12
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:08:19 -0700 (PDT)
+        Thu, 29 Sep 2022 06:09:02 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD32B147F28
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:09:00 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-352ffac3941so9432947b3.6
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:09:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=ydGq/fPOdVjN/NSWHeJ2DxbY7fBp6o6MA/HFKMNqxgU=;
-        b=AHHAs497vvbguPlXv7XHKDPBy/Di8mERVLRtJr6se1OXYNV4By1TAyWPXLp5A7mMel
-         MpClPx+X43T1zrGG5JoQcPUEEHuA16XKqkCqtmfuEknM7GNANPQmBkdkshLFTUOMfkOF
-         giogsSMyQmWV7j43RqgZ9wQXRqU46KN2hzxq0qUBNj9D2vwR+jlUwc/+s+Hf/HeNkhVo
-         jQmQUY1xoYJqoMrBbMjHxczrDmORvqvUS/D8gPiWhfBH0nYz9l5KTPdqRYm+mhSysyz/
-         5ANjBDd89CAkmP1titLwj6cudheqAQ+bBwppe7JkQMGweSqOjA2i4h60cXG/yqj8Jwcy
-         QoqA==
+        bh=MXQESY1mHG8/5D/ME7ABQ5lBEKvt6gTe2x7xG90vFx8=;
+        b=X2iymI2EEZhUIAYurukNRtZnYgro5MMmDG53TG8dBHxQ3R/Re3ZvfAt1sZpPhOTI3v
+         hq7jJRQWZi6iCNANUCkgAwMZ8qSF3bYR2w1CBGOj/W1Ezgqxf06HKSV70s4X4jJoIHTh
+         l0k8Yfk1J+MTZXJQPWiJxT5AHikQbNT9jk5s+oGpetr7gE+AFZ/tMQtA2CaTe9Tnggo4
+         B/M8Ol7YYAR6ESa52OuByK7w4tm1eZFylKGDtf2k+Kn64MxHw9U5SwUwa9WNBH+wdrWt
+         PvSemi1i1QbdPm/Bqe7K/C5/VRfPxVBdlIRADk8shXjcbi0NV29CK6ra/MtcgEzCAJim
+         WZGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ydGq/fPOdVjN/NSWHeJ2DxbY7fBp6o6MA/HFKMNqxgU=;
-        b=DOnIkz+8KMtr+RxMrdkI/CqGVtlLSufkMi6WTbdLFkj1UKvq6Pz2Gz5+JkAWFSrZBP
-         WBcW/Gv8aX4OVWEfmjHkQLNElLhRofyxvZmIctgwz9qRnv9OX3gDEvmJO2sKisHgTde/
-         w8xFzsGngHdXtON5CNJgKIqY0X6l4mVrk8pL9twnJGOO4XRVuCFYb/AZepAZtZXRYJps
-         QqngZrItDwN39NJL+t0Gl22VhDe4naV9yUt//C5geO6vFJPQpQKuq9TmjNhbra+xaJ7b
-         KQn9iLsqTCMRMMI+ULFgNiR+mxgDJrbcU+D92xVhnl++6Eg9Hnwp8A/ZtUeDc+lMknEB
-         oJ0g==
-X-Gm-Message-State: ACrzQf09dflYdw3WI/OzE9ssukpRfb2/ucP1vT6lQ2edfahoPdgx7a9g
-        R6DQeaFiqL26Ge3oXbVdRz0qHzFvNPAKEEbVQO3mFQ==
-X-Google-Smtp-Source: AMsMyM7ieyTxTTA6uPOVN42Yh8JamyiN03of0aSAkU5rfnFNvnB/25KQmZu9RYp8Jp/ffCRaoA5jEKsedRKVz9CMqvU=
-X-Received: by 2002:a05:6902:102f:b0:6b4:7cba:b77a with SMTP id
- x15-20020a056902102f00b006b47cbab77amr2433124ybt.516.1664446099269; Thu, 29
- Sep 2022 03:08:19 -0700 (PDT)
+        bh=MXQESY1mHG8/5D/ME7ABQ5lBEKvt6gTe2x7xG90vFx8=;
+        b=cYzYAe4egwrJb3mN6GdcnxmXwQ1ChlXQYFoyJMv5sh68kaM7vR7i1mdGIAmtu3MaSx
+         Xl4FlWvezl4NOQoPBeisstIHFoDLSRykEiQGc/Wp+JmHkZKsU5Gu7Wiid06hzUwKp/r3
+         4B4fo9cyOAtpKiayP10+nBeOQkDOi9UnCFiKlIchKVIv7NJzDWvge8HF0C/xmvQPAe43
+         30ylYmCnDkXstTQ6LM9cuSzB0OPMOi8zFPY+J2xL/NJ53ljIPrtpTW2mTxrIlBvJjA6N
+         FvNspMpUM/wEa2JIFdX31A75DJ3v/HUQah5he1GFfJlKn19DyVahGs8DbAA/YRTXXHzl
+         dFDA==
+X-Gm-Message-State: ACrzQf3slDfMLT2Yzk7vP/Pckr60RHl7APmhVEpOHfNYv7wCU5jk+fec
+        OOdwh1xcZUGqyEtzKPI1jFH2yBV57nv1xllEmXVvhw==
+X-Google-Smtp-Source: AMsMyM7s37ylpy85RJLyzF4hNLN92DAViFRfIK0/3RnisNb3gJYZ94sOIWj8I9K0VQ4WODCIH9aXlyRdcfwv1rMknns=
+X-Received: by 2002:a0d:f685:0:b0:343:bd3d:80b2 with SMTP id
+ g127-20020a0df685000000b00343bd3d80b2mr2221076ywf.485.1664446140144; Thu, 29
+ Sep 2022 03:09:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220929092916.23068-1-johan+linaro@kernel.org> <20220929092916.23068-11-johan+linaro@kernel.org>
-In-Reply-To: <20220929092916.23068-11-johan+linaro@kernel.org>
+References: <20220929092916.23068-1-johan+linaro@kernel.org> <20220929092916.23068-8-johan+linaro@kernel.org>
+In-Reply-To: <20220929092916.23068-8-johan+linaro@kernel.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 29 Sep 2022 13:08:08 +0300
-Message-ID: <CAA8EJpqirdWwWp7HJw8B3Wpnxzt9-rY+NmoKHPsRQ20LMscWZg@mail.gmail.com>
-Subject: Re: [PATCH v2 10/11] phy: qcom-qmp-pcie: clean up clock lists
+Date:   Thu, 29 Sep 2022 13:08:49 +0300
+Message-ID: <CAA8EJpr9_1V8nb_VBn9cBsb1VvVpUh=Necv0ZK3f9t+X_Lbs1A@mail.gmail.com>
+Subject: Re: [PATCH v2 07/11] phy: qcom-qmp-combo: clean up power-down handling
 To:     Johan Hovold <johan+linaro@kernel.org>
 Cc:     Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -72,15 +72,18 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Thu, 29 Sept 2022 at 12:29, Johan Hovold <johan+linaro@kernel.org> wrote:
 >
-> Keep the clock lists together and sorted by symbol name.
+> Always define the POWER_DOWN_CONTROL register instead of falling back to
+> the v2 (and v3) offset during power on and power off.
 >
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 > ---
->  drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 19 +++++--------------
+>  1 file changed, 5 insertions(+), 14 deletions(-)
+
+
 
 --
 With best wishes
