@@ -2,160 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD995EF745
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8415EF752
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234255AbiI2OMr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Sep 2022 10:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S235619AbiI2OTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235606AbiI2OMk (ORCPT
+        with ESMTP id S234340AbiI2OS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:12:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F361B85E4;
-        Thu, 29 Sep 2022 07:12:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21E3A614C1;
-        Thu, 29 Sep 2022 14:12:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66699C433D6;
-        Thu, 29 Sep 2022 14:12:37 +0000 (UTC)
-Date:   Thu, 29 Sep 2022 10:13:49 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "dinggao.pan" <dinggao.pan@horizon.ai>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "ming.yu" <ming.yu@horizon.ai>,
-        "yunqian.wang" <yunqian.wang@horizon.ai>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rt-users@vger.kernel.org" <linux-rt-users@vger.kernel.org>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-Subject: Re: [PATCH RFC stable 4.14 1/1] mmc: core: fix hung task caused by
- race condition on context_info
-Message-ID: <20220929101349.25c835db@gandalf.local.home>
-In-Reply-To: <20220929100750.172e53d4@gandalf.local.home>
-References: <21f604139a9a4675b9ed49292839dcfb@horizon.ai>
-        <dd8d212c48944cb4ba3b58af2efe3723@horizon.ai>
-        <CAPDyKFo_izPD7z-GmSEZ_8H_AX+KiVuLqN7JcD2Kdjjuukk-7g@mail.gmail.com>
-        <20220929100750.172e53d4@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 29 Sep 2022 10:18:58 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD52A17A5FE;
+        Thu, 29 Sep 2022 07:18:57 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 16:18:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1664461136;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8zj0w2Vgi49HfUr/IZs8+gOkOwPoTluB/6siD/jB8/k=;
+        b=lfO4rmZLV2Wi5LX2ZcCR9f5RLRCxPy1zaUwTPlXdl+hg+mYBx3MrzZLWWobgHsD98CGv7H
+        MOEw6ZantZNpc+vThhTT+nyFqPlB0DCu9b9Qx3egJo8RsLKYBXY0GCZd3Sxgbl6KcBkSKr
+        Rt4A+5+QyDooU3e+RDugj1cILWg/HJ00pe6KScvCm7vxv1JIRFS2k4nbTx7JuTQxrzhpPC
+        HAVFBvnUByyRAtDrbSMqfJNzD3gX1s3EhsvnafIVYwEjatH3jttJTG4E2dY4A5Ii+Av9lz
+        eGn9Fj1RNNgXMVJlvoXKmA2Bhva2+QAfDRfKhbE/KHwx861t34y4Ed718n0how==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1664461136;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8zj0w2Vgi49HfUr/IZs8+gOkOwPoTluB/6siD/jB8/k=;
+        b=0eZRfOeH9xxXlSrlwKeTWege4p8EQ4DpWyt/GbShjyrjyv77pQsbMUZqaIeMR3iHPK21dn
+        yht3X5Ve6H3MudCQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sherry Yang <sherry.yang@oracle.com>,
+        Paul Webb <paul.x.webb@oracle.com>,
+        Phillip Goerl <phillip.goerl@oracle.com>,
+        Jack Vogel <jack.vogel@oracle.com>,
+        Nicky Veitch <nicky.veitch@oracle.com>,
+        Colm Harrington <colm.harrington@oracle.com>,
+        Ramanan Govindarajan <ramanan.govindarajan@oracle.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Tejun Heo <tj@kernel.org>,
+        Sultan Alsawaf <sultan@kerneltoast.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v3] random: use expired per-cpu timer rather than wq for
+ mixing fast pool
+Message-ID: <YzWpT/NfDzhnsiTI@linutronix.de>
+References: <YzKy+bNedt2vu+a1@zx2c4.com>
+ <20220927104233.1605507-1-Jason@zx2c4.com>
+ <YzQ41ZhCojbyZq6L@linutronix.de>
+ <YzRzMsORHpzFydO7@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YzRzMsORHpzFydO7@zx2c4.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sep 2022 10:07:50 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On 2022-09-28 18:15:46 [+0200], Jason A. Donenfeld wrote:
+> Hi Sebastian,
+Hi Jason,
 
-> On Thu, 29 Sep 2022 14:41:26 +0200
-> Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> 
-> > On Mon, 5 Sept 2022 at 08:22, dinggao.pan <dinggao.pan@horizon.ai> wrote:  
-> > >
-> > > Hi,
-> > > After applying rt patches to our 4.14 kernel and enabling preempt-rt, we met a hung task during boot caused by race condition on context_info stored in struct mmc_host.
-> > > From our investigation, context_info should not be changed by threads that have not claimed the host, hence the following fix.
-> > >
-> > > Any comments are much appreciated.
-> > > Dinggao Pan    
-> > 
-> > Hi Dinggao,
-> > 
-> > Apologize for the delay.
-> > 
-> > The 4.14 kernel is too old for me to be able to comment. In
-> > particular, the mmc block layer moved to blk-mq in v4.16, which means
-> > the path you are investigating doesn't exist any more, sorry.  
-> 
-> Luis (Cc'd) is still supporting the 4.14-rt kernel.
+> On Wed, Sep 28, 2022 at 02:06:45PM +0200, Sebastian Andrzej Siewior wrote:
+> > On 2022-09-27 12:42:33 [+0200], Jason A. Donenfeld wrote:
+> > =E2=80=A6
+> > > This is an ordinary pattern done all over the kernel. However, Sherry
+> > > noticed a 10% performance regression in qperf TCP over a 40gbps
+> > > InfiniBand card. Quoting her message:
+> > >=20
+> > > > MT27500 Family [ConnectX-3] cards:
+> > > > Infiniband device 'mlx4_0' port 1 status:
+> > =E2=80=A6
+> >=20
+> > While looking at the mlx4 driver, it looks like they don't use any NAPI
+> > handling in their interrupt handler which _might_ be the case that they
+> > handle more than 1k interrupts a second. I'm still curious to get that
+> > ACKed from Sherry's side.
+>=20
+> Are you sure about that? So far as I can tell drivers/net/ethernet/
+> mellanox/mlx4 has plenty of napi_schedule/napi_enable and such. Or are
+> you looking at the infiniband driver instead? I don't really know how
+> these interact.
 
-It appears that I have an old email address for Luis, and it bounced.
-Updated with his redhat one.
+I've been looking at mlx4_msi_x_interrupt() and it appears that it
+iterates over a ring buffer. I guess that mlx4_cq_completion() will
+invoke mlx4_en_rx_irq() which schedules NAPI.
 
--- Steve
+> But yea, if we've got a driver not using NAPI at 40gbps that's obviously
+> going to be a problem.
 
-> 
-> > 
-> > Kind regards
-> > Uffe
-> >   
-> > >
-> > > From: "Dinggao Pan" <mailto:dinggao.pan@horizon.ai>
-> > >
-> > > 　　A race condition happens under following circumstances:
-> > >     (mmc_thread1)               |              (mmc_thread2)
-> > >     mmc_issue_rq(req1)          |    
-> > >       > qcnt++ for req1         |    
-> > >         host handling req1      |
-> > >     mmc_queue_thread(req=null)  |    
-> > >       > enter queue thread      |    
-> > >         again, fetches blk req  |
-> > >         (return null), sets     |
-> > >         is_waiting_last_req 1   |  mmc_request_fn(req1) -> set is_new_req 1
-> > >                                 |                   and wake_up wait_queue
-> > >     mmc_issue_rq(req2)          |   > mmc_thread2 tries to claim host    
-> > >       > **qcnt++ for req2**     |    
-> > >       mmc_finalize_req(req2)    |    
-> > >         > should wait for req1  |    
-> > >           done but req2 return  |
-> > >           MMC_BLK_NEW_REQ       |
-> > >           due to is_new_req     |
-> > >           already set to 1      |
-> > >                                 |
-> > >                                 |
-> > >     req1 done                   |    
-> > >       > qcnt-- for req1         |    
-> > >     mmc_issue_rq(req3)          |    
-> > >       > qcnt++ for req3         |    
-> > > req2 is not handled but qcnt is already added(noted by **),
-> > > thus mmc_thread1 will never release host, causing mmc_threads
-> > > except thread1 to hung. Fix race by moving wake_up to the front of
-> > > context_info update.
-> > >
-> > > Reviewed By: Yunqian Wang <mailto:yunqian.wang@horizon.ai>
-> > > Signed-off-by: Dinggao Pan <mailto:dinggao.pan@horizon.ai>
-> > > Signed-off-by: Ming Yu <mailto:ming.yu@horizon.ai>
-> > > ---
-> > > drivers/mmc/core/queue.c | 7 +++++--
-> > > 1 file changed, 5 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
-> > > index 0a4e77a5b..58318c102 100644
-> > > --- a/drivers/mmc/core/queue.c
-> > > +++ b/drivers/mmc/core/queue.c
-> > > @@ -107,6 +107,11 @@ static void mmc_request_fn(struct request_queue *q)
-> > >                return;
-> > >       }
-> > >
-> > > +      if (mq->asleep) {
-> > > +               wake_up_process(mq->thread);
-> > > +               return;
-> > > +      }
-> > > +
-> > >       cntx = &mq->card->host->context_info;
-> > >
-> > >       if (cntx->is_waiting_last_req) {
-> > > @@ -114,8 +119,6 @@ static void mmc_request_fn(struct request_queue *q)
-> > >                wake_up_interruptible(&cntx->wait);
-> > >       }
-> > >
-> > > -       if (mq->asleep)
-> > > -                wake_up_process(mq->thread);
-> > > }
-> > >
-> > > static struct scatterlist *mmc_alloc_sg(int sg_len, gfp_t gfp)
-> > > --
-> > > 2.36.1    
-> 
+So I'm wondering if we get 1 worker a second which kills the performance
+or if we get more than 1k interrupts in less than second resulting in
+more wakeups within a second..
 
+> > Jason, from random's point of view: deferring until 1k interrupts + 1sec
+> > delay is not desired due to low entropy, right?
+>=20
+> Definitely || is preferable to &&.
+>=20
+> >=20
+> > > Rather than incur the scheduling latency from queue_work_on, we can
+> > > instead switch to running on the next timer tick, on the same core. T=
+his
+> > > also batches things a bit more -- once per jiffy -- which is okay now
+> > > that mix_interrupt_randomness() can credit multiple bits at once.
+> >=20
+> > Hmmm. Do you see higher contention on input_pool.lock? Just asking
+> > because if more than once CPUs invokes this timer callback aligned, then
+> > they block on the same lock.
+>=20
+> I've been doing various experiments, sending mini patches to Oracle and
+> having them test this in their rig. So far, it looks like the cost of
+> the body of the worker itself doesn't matter much, but rather the cost
+> of the enqueueing function is key. Still investigating though.
+>=20
+> It's a bit frustrating, as all I have to work with are results from the
+> tests, and no perf analysis. It'd be great if an engineer at Oracle was
+> capable of tackling this interactively, but at the moment it's just me
+> sending them patches. So we'll see. Getting closer though, albeit very
+> slowly.
+
+Oh boy. Okay.
+
+> Jason
+
+Sebastian
