@@ -2,75 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCBA5EEBC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 04:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C469A5EEBC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 04:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234658AbiI2CdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 22:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S231455AbiI2Cd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 22:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233488AbiI2CdM (ORCPT
+        with ESMTP id S234470AbiI2CdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Sep 2022 22:33:12 -0400
-Received: from rcdn-iport-4.cisco.com (rcdn-iport-4.cisco.com [173.37.86.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FE6124756
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 19:33:09 -0700 (PDT)
+Received: from rcdn-iport-8.cisco.com (rcdn-iport-8.cisco.com [173.37.86.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA85B1251A8;
+        Wed, 28 Sep 2022 19:33:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=8964; q=dns/txt; s=iport;
-  t=1664418789; x=1665628389;
+  d=cisco.com; i=@cisco.com; l=1774; q=dns/txt; s=iport;
+  t=1664418791; x=1665628391;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Ie6EtdAViAiALCeFYxNqsCsTGUdiUZbe/6PrULxlkAo=;
-  b=LpXhLVMHA0rcrT7kHek2En6NFLLUO9HWBjPf9L4Mvs9cvw73kIx1sCRR
-   iw9Zakeu/8p9jzohy+iGVVYmbB7hl7kRV7I01a5ELx3sWjQ76uiVAvy40
-   ddQrosDMWYoO5L7IM9EyDcLBSJN7CW1IbS6i15AYABtcrI7HxxRgptvzJ
-   Y=;
-IronPort-Data: =?us-ascii?q?A9a23=3AGR8q6KwBLHetJ1Wwz996t+dyxyrEfRIJ4+Muj?=
- =?us-ascii?q?C+fZmUNrF6WrkUDzzBOD2CGa6vca2rwKI10OYm+8BxQ6sTTmNI1GgA/+FhgH?=
- =?us-ascii?q?ilAwSbn6Xt1DatR0xt/paQvdWo/hyklQoSGfZlcokP0/E/3aOC89CckjMlke?=
- =?us-ascii?q?5KlYAL6EnEpLeNbYH9JZSJLw4bVs6Yw6TSLK1rlVeDa+6UzDGSYNwtcaQr43?=
- =?us-ascii?q?U4sRCRH55wesBtA1rA3iGsiUFX2zxH5B7pHTU29wueRf2VaIgK6b76rILCR5?=
- =?us-ascii?q?GjV+VImDcmo1+a9eUwRSbmUNg+L4pZUc/H92V4Z+WpjieBiaKZ0hUR/011lm?=
- =?us-ascii?q?/h9wdNMuJivQC8iP7bHn6IWVBww/yRWZPUbo+eXeyLu6aR/yGWDKRMA2c5GC?=
- =?us-ascii?q?EAwIJ1d+ettB2xK3eIXJSpLbR2Zge+yhrWhRYFEnckqKo/iOo8SoGpnyxnCA?=
- =?us-ascii?q?P0hB5vERs3i7NxA2R80h8ZTDbPQYNcfZTNzbRPGJRpVNT8/BJs4neqsrnb+d?=
- =?us-ascii?q?iVVrF+LpKE3pXPaykl/yrHrO9vOcdvMTswTg13wjnjB9WTRARwAMtGbjz2f/?=
- =?us-ascii?q?RqEje/VnDjnX5oSGfu8++RtkXWY3WMJDwAOE1amydGmi0q6c9FSMUoZ/mwpt?=
- =?us-ascii?q?6dayaABZrERRDWiq3KC+xUbQdcVQ6sx6RqGzezf5APxO4TNdRYZAPROiSP8b?=
- =?us-ascii?q?WVCOoe1ou7U?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A5cHFxaBVTlETZYblHemX55DYdb4zR+YMi2?=
- =?us-ascii?q?TDGXocdfUzSL39qynAppomPHPP4gr5HUtQ+uxoW5PwJE80i6QV3WB5B97LNz?=
- =?us-ascii?q?UO+lHYTr2KhrGM/9SPIUDDH8dmpMBdmtBFaOEZyTNB/L/HCM7SKadH/OW6?=
+  bh=FUmn4h/jHcavrMs8olxHnFY+3B+4DhAb+5+8neZPgLo=;
+  b=EaRGEF4OKXL5bBZ/p35JkHphhaDY9j7Ba0IljivzEXqDL0T27poUXcFw
+   dVGcGB7LpbzFnB7kpVBbS1lrwAtMKQDZOtW1WK0t09ygoMs7XM4pK+wql
+   BeuTt1s12k/tpNUKWf2bai8Yl6dtU2w4MPH5nIOIJC3C9OKaUJG+9JTTN
+   k=;
+IronPort-Data: =?us-ascii?q?A9a23=3A2okHEquGjomQFDMpJRyqOt7YyufnVHVfMUV32?=
+ =?us-ascii?q?f8akzHdYApBsoF/qtZmKT/XPqyPZzOnLo8lOYW080pUsZPRmoUwGgRsqS02Q?=
+ =?us-ascii?q?XwSgMeUXt7xwmUckM+xwmwvdK/shiknQoGowPscEzmN/39BDpC79SMmjfzRG?=
+ =?us-ascii?q?OKlYAL5EnkZqTFMGX9JZS1Lw4bVsqYw6TSIK1vlVeHa+qUzC3f9s9JACV/43?=
+ =?us-ascii?q?orYwP9ZUFsejxtD1rA2TagjUFYzDBD5BrpHTU26ByOQroW5goeHq+j/ILGRp?=
+ =?us-ascii?q?gs1/j83Ad+j1738aEBPEvjZPBOFjTxdXK3Kbhpq/3NplP1kcqtHLx4L111ln?=
+ =?us-ascii?q?PgpoDlJnZC5TwYkOrLFsO8cSBJfVSp5OMWq/ZeeeSjk65TMlBaWG5fr67A0Z?=
+ =?us-ascii?q?K0sBqUc++BqESRN+OYeJTQlcB+OnaS1zai9R+0qgd4sROHvPYUCqjRjxyzYC?=
+ =?us-ascii?q?foOX5/OWePJ6MVe0TN2gdpBdd7Ya8cCYCdrahXNeQZnNVAQB5Yz2uyvgxHXd?=
+ =?us-ascii?q?jxTqFuR46405mz7yQVr07/zMZzTd8DibcBchU+Yp3jB7kz6DwscOdjZziCKm?=
+ =?us-ascii?q?lq3i+bJ2yr9VI8ID7q+3uVni1rVzWsWYDUfVkO+if24jFOuHtxYNkoY8zYvq?=
+ =?us-ascii?q?q5081akJvHxVhu5rXqssR8ZQ9dUHvM74wHL0aPSpgiDD24PTyVKb5otvYkrX?=
+ =?us-ascii?q?lQCzFiDn/vqCCZpvbnTTmiSnp+frSmzIjQSNW8PIysJVwwUy9L4r5s0kwqJQ?=
+ =?us-ascii?q?8sLOLG0itndGjzqxT2O6i8kiN0uYWQjv0mg1UrMjzTprZ/TQ0tloA7WRWmiq?=
+ =?us-ascii?q?Ah+YeaYi0WTwQCzxZ59wEyxFzFtZEQ5pvU=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3ALkR3UK5pZQfRW8BMTQPXwPPXdLJyesId70?=
+ =?us-ascii?q?hD6qm+c3Bom6uj5qSTdZsguyMc5Ax6ZJhko6HiBEDiewK4yXcK2+gs1N6ZNW?=
+ =?us-ascii?q?GMhILrFvAB0WKI+VLd8kPFm9K1/J0QFJSWcOeRMbC/5vyKmTVR1L0bsb+6zJ?=
+ =?us-ascii?q?w=3D?=
 X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0BZAAAHbIJi/5BdJa1aHAEBAQEBAQc?=
- =?us-ascii?q?BARIBAQQEAQGBfQUBAQsBgiqBSz1DlVmBFptRgXwLAQEBD0IEAQGFAgKFPgI?=
- =?us-ascii?q?lNgcOAQIEAQEBEgEBBQEBAQIBBwSBCROFdYZDBicLAUYQUVcGARKCfYMYq1a?=
- =?us-ascii?q?BeTKBAYgZgWUUgSgBiUOFHCccgUlEgRWCc3WKfwSWHgMJBgcFgT4SgSFxAQg?=
- =?us-ascii?q?GBgcKBTIGAgwYFAQCExJNBgwSAhMMCgYWDg40EhkMDwMSAxEBBwILEggVLAg?=
- =?us-ascii?q?DAgMIAwIDIwsCAxgJBwoDHQgKHBIQFAIEEx8LCAMaHy0JAgQOA0MICwoDEQQ?=
- =?us-ascii?q?DExgLFggQBAYDCS8NKAsDBQ8PAQYDBgIFBQEDIAMUAwUnBwMhBwsmDQ0EIx0?=
- =?us-ascii?q?DAwUmAwICGwcCAgMCBhcGAgIZJzEKKA0IBAgEGAQeJQ4FBQIHMQUELwIeBAU?=
- =?us-ascii?q?GEQkCFgIGBAUCBAQWAgISCAIIJxsHFjYZAQVdBgsJIxYGLBEFBhYDJlIGIh2?=
- =?us-ascii?q?WcGsFAQF7E0OBQ2WST44PghaeKoNWgUOeLRoxg3WMPpgklmYgogU0hE6BaAM?=
- =?us-ascii?q?ygVkzGggbFYMjURkPjikDFo1xAVwkMTsCBgsBAQMJkRoBAQ?=
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0A8AAB2bIJi/5BdJa1aHQEBAQEJARI?=
+ =?us-ascii?q?BBQUBgXsIAQsBgiqBSz1DjG+lUYF8CwEBAQ9CBAEBgg6CdAKFPgIlNAkOAQI?=
+ =?us-ascii?q?EAQEBEgEBBQEBAQIBBwSBCROFdYZDBjIBRhBRVwYBEoJ9gxirVoIrgQGIGYF?=
+ =?us-ascii?q?lFIEoAYlDhRwnHIFJRIQIdYp/BI1TiEsDCQYHBYE+EoEhcQEIBgYHCgUyBgI?=
+ =?us-ascii?q?MGBQEAhMSTQYMEgITDAoGFg4ONBIZDA8DEgMRAQcCCxIIFSwIAwIDCAMCAyM?=
+ =?us-ascii?q?LAgMYCQcKAx0IChwSEBQCBBMfCwgDGh8tCQIEDgNDCAsKAxEEAxMYCxYIEAQ?=
+ =?us-ascii?q?GAwkvDSgLAwUPDwEGAwYCBQUBAyADFAMFJwcDIQcLJg0NBCMdAwMFJgMCAhs?=
+ =?us-ascii?q?HAgIDAgYXBgICGScxCigNCAQIBBgEHiUOBQUCBzEFBC8CHgQFBhEJAhYCBgQ?=
+ =?us-ascii?q?FAgQEFgICEggCCCcbBxY2GQEFXQYLCSMWBiwRBQYWAyZSBiIdl2EBgQ4Bo0i?=
+ =?us-ascii?q?CFp4qg1aBQ54tGjGDdaRilmYggiqkXYFhPIFZMxoIGxWDI1EZD5wzAVwkMTs?=
+ =?us-ascii?q?CBgsBAQMJkRoBAQ?=
 X-IronPort-AV: E=Sophos;i="5.91,230,1647302400"; 
-   d="scan'208";a="1053082290"
+   d="scan'208";a="1083207338"
 Received: from rcdn-core-8.cisco.com ([173.37.93.144])
-  by rcdn-iport-4.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 29 Sep 2022 02:33:08 +0000
+  by rcdn-iport-8.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 29 Sep 2022 02:33:10 +0000
 Received: from zorba.cisco.com ([10.25.129.98])
-        by rcdn-core-8.cisco.com (8.15.2/8.15.2) with ESMTP id 28T2X1Yr007711;
-        Thu, 29 Sep 2022 02:33:07 GMT
+        by rcdn-core-8.cisco.com (8.15.2/8.15.2) with ESMTP id 28T2X1Ys007711;
+        Thu, 29 Sep 2022 02:33:09 GMT
 From:   Daniel Walker <danielwa@cisco.com>
 To:     Will Deacon <will@kernel.org>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Rob Herring <robh@kernel.org>,
         Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Sean Anderson <sean.anderson@seco.com>
-Cc:     xe-linux-external@cisco.com, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/8] scripts: insert-sys-cert: add command line insert capability
-Date:   Wed, 28 Sep 2022 19:32:48 -0700
-Message-Id: <20220929023301.3344694-3-danielwa@cisco.com>
+        Sean Anderson <sean.anderson@seco.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     xe-linux-external@cisco.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 3/8] scripts: insert-sys-cert: change name to insert-symbol
+Date:   Wed, 28 Sep 2022 19:32:49 -0700
+Message-Id: <20220929023301.3344694-4-danielwa@cisco.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220929023301.3344694-1-danielwa@cisco.com>
 References: <20220929023301.3344694-1-danielwa@cisco.com>
@@ -81,338 +88,57 @@ X-Outbound-SMTP-Client: 10.25.129.98, [10.25.129.98]
 X-Outbound-Node: rcdn-core-8.cisco.com
 X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds changes to the insert-sys-cert tool to allow updating
-the cmdline_prepend and cmdline_append symbols in addition to
-adding certificates.
+Since the tool is used to update the command line and/or
+to update the certificates, I think it makes sense to
+changes the name of this tool.
 
-Updating the cmdline symbols was tested on a PVH virtual machine
-with a vmlinux, and with a bzImage which was repackaged on x86.
-
-This commit intentionally keeps the tool filename the same to allow
-the changes to be seen more easily. The next commit will change
-the name of the tool.
+Update the name of the tool to better reflect it's new use.
 
 Cc: xe-linux-external@cisco.com
 Signed-off-by: Daniel Walker <danielwa@cisco.com>
 ---
- scripts/insert-sys-cert.c | 241 +++++++++++++++++++++++++++-----------
- 1 file changed, 170 insertions(+), 71 deletions(-)
+ scripts/Makefile                               | 2 +-
+ scripts/{insert-sys-cert.c => insert-symbol.c} | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename scripts/{insert-sys-cert.c => insert-symbol.c} (99%)
 
-diff --git a/scripts/insert-sys-cert.c b/scripts/insert-sys-cert.c
-index 8902836c2342..77d3306cfbfb 100644
+diff --git a/scripts/Makefile b/scripts/Makefile
+index f084f08ed176..57a02ccce92c 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -9,7 +9,7 @@ hostprogs-always-$(BUILD_C_RECORDMCOUNT)		+= recordmcount
+ hostprogs-always-$(CONFIG_BUILDTIME_TABLE_SORT)		+= sorttable
+ hostprogs-always-$(CONFIG_ASN1)				+= asn1_compiler
+ hostprogs-always-$(CONFIG_MODULE_SIG_FORMAT)		+= sign-file
+-hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
++hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-symbol
+ 
+ HOSTCFLAGS_sorttable.o = -I$(srctree)/tools/include
+ HOSTLDLIBS_sorttable = -lpthread
+diff --git a/scripts/insert-sys-cert.c b/scripts/insert-symbol.c
+similarity index 99%
+rename from scripts/insert-sys-cert.c
+rename to scripts/insert-symbol.c
+index 77d3306cfbfb..6866e3a84974 100644
 --- a/scripts/insert-sys-cert.c
-+++ b/scripts/insert-sys-cert.c
-@@ -30,6 +30,9 @@
- #define USED_SYM  "system_extra_cert_used"
- #define LSIZE_SYM "system_certificate_list_size"
++++ b/scripts/insert-symbol.c
+@@ -7,7 +7,7 @@
+  * This software may be used and distributed according to the terms
+  * of the GNU General Public License, incorporated herein by reference.
+  *
+- * Usage: insert-sys-cert [-s <System.map> -b <vmlinux> -c <certfile>
++ * Usage: insert-symbol [-s <System.map> -b <vmlinux> -c <certfile>
+  */
  
-+#define CMDLINE_APPEND "cmdline_append"
-+#define CMDLINE_PREPEND "cmdline_prepend"
-+
- #define info(format, args...) fprintf(stderr, "INFO:    " format, ## args)
- #define warn(format, args...) fprintf(stdout, "WARNING: " format, ## args)
- #define  err(format, args...) fprintf(stderr, "ERROR:   " format, ## args)
-@@ -267,95 +270,46 @@ static void print_sym(Elf_Ehdr *hdr, struct sym *s)
- 
- static void print_usage(char *e)
- {
--	printf("Usage %s [-s <System.map>] -b <vmlinux> -c <certfile>\n", e);
-+	printf("Usage %s [-s <System.map>] -b <vmlinux> [ -c <certfile> | -p <command line prepend> | -a <command line append> ]-\n", e);
- }
- 
--int main(int argc, char **argv)
-+static char *cmdline_prepend, *cmdline_append;
-+static char *system_map_file;
-+static char *cert_file;
-+static char *cli_name;
-+
-+static int insert_certificate(Elf_Ehdr *hdr)
- {
--	char *system_map_file = NULL;
--	char *vmlinux_file = NULL;
--	char *cert_file = NULL;
--	int vmlinux_size;
-+	struct sym cert_sym, lsize_sym, used_sym;
-+	Elf_Shdr *symtab = NULL;
-+	unsigned long *lsize;
-+	FILE *system_map;
- 	int cert_size;
--	Elf_Ehdr *hdr;
- 	char *cert;
--	FILE *system_map;
--	unsigned long *lsize;
- 	int *used;
--	int opt;
--	Elf_Shdr *symtab = NULL;
--	struct sym cert_sym, lsize_sym, used_sym;
--
--	while ((opt = getopt(argc, argv, "b:c:s:")) != -1) {
--		switch (opt) {
--		case 's':
--			system_map_file = optarg;
--			break;
--		case 'b':
--			vmlinux_file = optarg;
--			break;
--		case 'c':
--			cert_file = optarg;
--			break;
--		default:
--			break;
--		}
--	}
- 
--	if (!vmlinux_file || !cert_file) {
--		print_usage(argv[0]);
--		exit(EXIT_FAILURE);
-+	if (!cert_file) {
-+		print_usage(cli_name);
-+		return EXIT_FAILURE;
- 	}
- 
- 	cert = read_file(cert_file, &cert_size);
- 	if (!cert)
--		exit(EXIT_FAILURE);
--
--	hdr = map_file(vmlinux_file, &vmlinux_size);
--	if (!hdr)
--		exit(EXIT_FAILURE);
--
--	if (vmlinux_size < sizeof(*hdr)) {
--		err("Invalid ELF file.\n");
--		exit(EXIT_FAILURE);
--	}
--
--	if ((hdr->e_ident[EI_MAG0] != ELFMAG0) ||
--	    (hdr->e_ident[EI_MAG1] != ELFMAG1) ||
--	    (hdr->e_ident[EI_MAG2] != ELFMAG2) ||
--	    (hdr->e_ident[EI_MAG3] != ELFMAG3)) {
--		err("Invalid ELF magic.\n");
--		exit(EXIT_FAILURE);
--	}
--
--	if (hdr->e_ident[EI_CLASS] != CURRENT_ELFCLASS) {
--		err("ELF class mismatch.\n");
--		exit(EXIT_FAILURE);
--	}
--
--	if (hdr->e_ident[EI_DATA] != endianness()) {
--		err("ELF endian mismatch.\n");
--		exit(EXIT_FAILURE);
--	}
--
--	if (hdr->e_shoff > vmlinux_size) {
--		err("Could not find section header.\n");
--		exit(EXIT_FAILURE);
--	}
-+		return EXIT_FAILURE;
- 
- 	symtab = get_symbol_table(hdr);
- 	if (!symtab) {
- 		warn("Could not find the symbol table.\n");
- 		if (!system_map_file) {
- 			err("Please provide a System.map file.\n");
--			print_usage(argv[0]);
--			exit(EXIT_FAILURE);
-+			print_usage(cli_name);
-+			return EXIT_FAILURE;
- 		}
- 
- 		system_map = fopen(system_map_file, "r");
- 		if (!system_map) {
- 			perror(system_map_file);
--			exit(EXIT_FAILURE);
-+			return EXIT_FAILURE;
- 		}
- 		get_symbol_from_map(hdr, system_map, CERT_SYM, &cert_sym);
- 		get_symbol_from_map(hdr, system_map, USED_SYM, &used_sym);
-@@ -371,7 +325,7 @@ int main(int argc, char **argv)
- 	}
- 
- 	if (!cert_sym.offset || !lsize_sym.offset || !used_sym.offset)
--		exit(EXIT_FAILURE);
-+		return EXIT_FAILURE;
- 
- 	print_sym(hdr, &cert_sym);
- 	print_sym(hdr, &used_sym);
-@@ -382,14 +336,14 @@ int main(int argc, char **argv)
- 
- 	if (cert_sym.size < cert_size) {
- 		err("Certificate is larger than the reserved area!\n");
--		exit(EXIT_FAILURE);
-+		return EXIT_FAILURE;
- 	}
- 
- 	/* If the existing cert is the same, don't overwrite */
- 	if (cert_size == *used &&
- 	    strncmp(cert_sym.content, cert, cert_size) == 0) {
- 		warn("Certificate was already inserted.\n");
--		exit(EXIT_SUCCESS);
-+		return EXIT_SUCCESS;
- 	}
- 
- 	if (*used > 0)
-@@ -406,5 +360,150 @@ int main(int argc, char **argv)
- 						cert_sym.address);
- 	info("Used %d bytes out of %d bytes reserved.\n", *used,
- 						 cert_sym.size);
--	exit(EXIT_SUCCESS);
-+	return EXIT_SUCCESS;
-+}
-+
-+static int insert_cmdline(Elf_Ehdr *hdr)
-+{
-+	struct sym cmdline_prepend_sym, cmdline_append_sym;
-+	Elf_Shdr *symtab = NULL;
-+	FILE *system_map;
-+
-+	symtab = get_symbol_table(hdr);
-+	if (!symtab) {
-+		warn("Could not find the symbol table.\n");
-+		if (!system_map_file) {
-+			err("Please provide a System.map file.\n");
-+			print_usage(cli_name);
-+			return EXIT_FAILURE;
-+		}
-+
-+		system_map = fopen(system_map_file, "r");
-+		if (!system_map) {
-+			perror(system_map_file);
-+			return EXIT_FAILURE;
-+		}
-+		get_symbol_from_map(hdr, system_map, CMDLINE_PREPEND, &cmdline_prepend_sym);
-+		get_symbol_from_map(hdr, system_map, CMDLINE_APPEND, &cmdline_append_sym);
-+	} else {
-+		info("Symbol table found.\n");
-+		if (system_map_file)
-+			warn("System.map is ignored.\n");
-+		get_symbol_from_table(hdr, symtab, CMDLINE_PREPEND, &cmdline_prepend_sym);
-+		get_symbol_from_table(hdr, symtab, CMDLINE_APPEND, &cmdline_append_sym);
-+	}
-+
-+	print_sym(hdr, &cmdline_prepend_sym);
-+	print_sym(hdr, &cmdline_append_sym);
-+
-+
-+	if (cmdline_prepend) {
-+		if ((strlen(cmdline_prepend) + 1) > cmdline_prepend_sym.size) {
-+			err("cmdline prepend is larger than the reserved area!\n");
-+			return EXIT_FAILURE;
-+		}
-+
-+		memcpy(cmdline_prepend_sym.content, cmdline_prepend, strlen(cmdline_prepend) + 1);
-+		if ((strlen(cmdline_prepend) + 1) < cmdline_prepend_sym.size)
-+			memset(cmdline_prepend_sym.content + strlen(cmdline_prepend) + 1,
-+				0, cmdline_prepend_sym.size - (strlen(cmdline_prepend) + 1));
-+
-+		info("Inserted cmdline prepend of \"%s\" into vmlinux.\n", cmdline_prepend);
-+
-+	}
-+	if (cmdline_append) {
-+		if ((strlen(cmdline_append) + 1) > cmdline_append_sym.size) {
-+			err("cmdline append is larger than the reserved area!\n");
-+			return EXIT_FAILURE;
-+		}
-+
-+		memcpy(cmdline_append_sym.content, cmdline_append, strlen(cmdline_append) + 1);
-+		if ((strlen(cmdline_append) + 1) < cmdline_append_sym.size)
-+			memset(cmdline_append_sym.content + strlen(cmdline_append) + 1,
-+				0, cmdline_append_sym.size - (strlen(cmdline_append) + 1));
-+
-+		info("Inserted cmdline append of \"%s\" into vmlinux.\n", cmdline_append);
-+
-+	}
-+	return EXIT_SUCCESS;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	char *vmlinux_file = NULL;
-+	int vmlinux_size;
-+	Elf_Ehdr *hdr;
-+	int opt;
-+	int ret = EXIT_SUCCESS;
-+
-+	while ((opt = getopt(argc, argv, "b:c:s:p:a:")) != -1) {
-+		switch (opt) {
-+		case 's':
-+			system_map_file = optarg;
-+			break;
-+		case 'b':
-+			vmlinux_file = optarg;
-+			break;
-+		case 'c':
-+			cert_file = optarg;
-+			break;
-+		case 'p':
-+			cmdline_prepend = optarg;
-+			break;
-+		case 'a':
-+			cmdline_append = optarg;
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	cli_name = argv[0];
-+
-+	if (!vmlinux_file) {
-+		print_usage(cli_name);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	hdr = map_file(vmlinux_file, &vmlinux_size);
-+	if (!hdr)
-+		exit(EXIT_FAILURE);
-+
-+	if (vmlinux_size < sizeof(*hdr)) {
-+		err("Invalid ELF file.\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if ((hdr->e_ident[EI_MAG0] != ELFMAG0) ||
-+	    (hdr->e_ident[EI_MAG1] != ELFMAG1) ||
-+	    (hdr->e_ident[EI_MAG2] != ELFMAG2) ||
-+	    (hdr->e_ident[EI_MAG3] != ELFMAG3)) {
-+		err("Invalid ELF magic.\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (hdr->e_ident[EI_CLASS] != CURRENT_ELFCLASS) {
-+		err("ELF class mismatch.\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (hdr->e_ident[EI_DATA] != endianness()) {
-+		err("ELF endian mismatch.\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (hdr->e_shoff > vmlinux_size) {
-+		err("Could not find section header.\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (cert_file) {
-+		ret = insert_certificate(hdr);
-+		printf("%s\n", cert_file);
-+	}
-+
-+	if (cmdline_append || cmdline_prepend)
-+		ret = insert_cmdline(hdr);
-+
-+	exit(ret);
- }
+ #define _GNU_SOURCE
 -- 
 2.25.1
 
