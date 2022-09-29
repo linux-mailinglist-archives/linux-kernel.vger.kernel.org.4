@@ -2,90 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351945EF81A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 154845EF816
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235703AbiI2O6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S234836AbiI2O50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235618AbiI2O5y (ORCPT
+        with ESMTP id S235584AbiI2O5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:57:54 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D645413EAEB
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:57:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=0t8EXEN0WMFHzgw2HOC2b2lqxM9pZob9VZMkm7q5ttw=; b=hYRhPbGHnUjnN6D4Olr5bK4XEw
-        cFXYyk0poQFBFBUlK1/ZL02TDImDZEJnB8LiNHitDiZZfVch1xsCaf01PaAOJ+7V+uS/tWyoMVBhk
-        xd3Bjq8Dsc4G+OXtrOkhYwwUwpBSg2mbb2E7mHrOJM81gVkN//qQLTtejMP8+4v1VNekptq038wrT
-        h4NcaPJDmTSMhTV+1ylTgGGA1Uwco3PJvCUDuvXynkH7DCuDcg/UuPjpgOFB8+uWtom0nTCUFr/aV
-        Vuk8CwaU8EuOaCJalGco0HRoVaYrKQ0o9CscakFApodGPfbzVSIR714Gypq6p8G8Rs+WlJzc8FK/S
-        VAJBtlQQ==;
-Received: from [179.232.144.59] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oduyk-00GdKB-Kr; Thu, 29 Sep 2022 16:57:34 +0200
-Message-ID: <1c742ae1-98cb-a5c1-ba3f-5e79b8861f0b@igalia.com>
-Date:   Thu, 29 Sep 2022 11:57:15 -0300
+        Thu, 29 Sep 2022 10:57:23 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370B913EAEB
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:57:21 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id cc5so2615875wrb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:57:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=nMnoSaH++1jbxSRlI1i6ADibQaQmTqMy1EUBbqCTBb4=;
+        b=Vv38lf5pdCpNoqOoAP120tgQ2KJMA7ZXY3zRv5IFf/18Ka+QYWp8iVvfDHwGWrUURq
+         XMcDVzCN67NfLLBvXneNU5Hkez1866vy2rJVUYu1vKryg0jxvA42QIHMFr7FwGNaV9n6
+         +IocjwdpayeRbeM2/sZgvPjKG7ythoaKpeUuXczusJJEcfS9wVBWcjyCRFl0D/sVgICw
+         2J5a8U1veuMcYYFjAV1q0dwyuM/YnZan597rCZ3Ds+v2h0MHW6JxifLG9t4Ao/8M6lM7
+         dZ4dzrfOEAf3pCEuuCr6J1A5XSYwp2pNtFtcBkJ2x/vFTyXVLC2qrq4yFh7WpEiVWHAy
+         sp4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=nMnoSaH++1jbxSRlI1i6ADibQaQmTqMy1EUBbqCTBb4=;
+        b=1KnyI0LaPy1yZiPxq73KyEzIZ3In1rES3JzH7vWZqyTouh4y0Mjm6f6YNziaWzIvOH
+         8tchG3C6Uv0ZzqS8ZiKXuFmMO+Zi/s3FjHOqr/k92vd5iOKnLJeU3pZX62WcuEjbwccx
+         DuSFAlczoPKDHjo+cO/dX+nh2SKJlljKw6QImsw4kU1LXF+yMr4Q01SX1LrRTmnBePfd
+         4pwZL32fY7PNTE4kMTGVANrTNY1UsNA1c0Qi8DnU1XixdLvfgmM40G5Fk0/34jK19PR+
+         3MsQLl+/AZy1LS2nrT9VB0N6KHfX3xi0/S5Vmmo4e6g3gseAEiqRrIWXeCijlmYMQi66
+         bwhg==
+X-Gm-Message-State: ACrzQf1Y3L8sZlZ33MOUIMEUSsKA93lDugSZxDnPisRQKgzKPhR9p32C
+        qGvUsJxw6huBMzCVkQ/royIU+kWHyb5R1Q==
+X-Google-Smtp-Source: AMsMyM4axP40VuENGb1cdsZ/JJas2+un/fCosaf9j+YjtgOlism/1wYOdarXHCbv/7WEnKLKyS9PoQ==
+X-Received: by 2002:a05:6000:2a3:b0:226:dff3:b031 with SMTP id l3-20020a05600002a300b00226dff3b031mr2687409wry.495.1664463439654;
+        Thu, 29 Sep 2022 07:57:19 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:48a2:39eb:9d1b:8b8d? ([2a05:6e02:1041:c10:48a2:39eb:9d1b:8b8d])
+        by smtp.googlemail.com with ESMTPSA id t187-20020a1c46c4000000b003b4a699ce8esm4646084wma.6.2022.09.29.07.57.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 07:57:19 -0700 (PDT)
+Message-ID: <ae86fc5a-0521-3dde-c2ea-8679c0ec4831@linaro.org>
+Date:   Thu, 29 Sep 2022 16:57:16 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] x86/split_lock: Restore warn mode (and add a new one) to
- avoid userspace regression
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v7 00/29] Rework the trip points creation
 Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>, tony.luck@intel.com,
-        tglx@linutronix.de, linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, luto@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, Fenghua Yu <fenghua.yu@intel.com>,
-        Joshua Ashton <joshua@froggi.es>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Pavel Machek <pavel@denx.de>,
-        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
-        Melissa Wen <mwen@igalia.com>
-References: <20220928142109.150263-1-gpiccoli@igalia.com>
- <24f31510-5b33-ada5-9f0e-117420403e8c@intel.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <24f31510-5b33-ada5-9f0e-117420403e8c@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com, Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Kaestle <peter@piie.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Antoine Tenart <atenart@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Dmitry Osipenko <digetx@gmail.com>, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org
+References: <20220928210059.891387-1-daniel.lezcano@linaro.org>
+ <d0be3159-8094-aed1-d9b1-c4b16d88d67c@linaro.org>
+ <CAJZ5v0hOFoe0KqEimFv9pgmiAOzuRoLjdqoScr53ErNFU4AAPA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0hOFoe0KqEimFv9pgmiAOzuRoLjdqoScr53ErNFU4AAPA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 18:50, Dave Hansen wrote:
->[...]
-> It boils down to either:
->  * The misery is good and we keep it as-is, or
->  * The misery is bad and we kill it
+On 29/09/2022 15:58, Rafael J. Wysocki wrote:
+> On Thu, Sep 29, 2022 at 2:26 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>>
+>> Hi Rafael,
+>>
+>> are you happy with the changes?
 > 
-> My gut says we should keep the warnings and kill the misery.  The folks
-> who are going to be able to fix the issues are probably also the ones
-> looking at dmesg and don't need the extra hint from the misery.  The
-> folks running Windows games don't look at dmesg and just want to play
-> their game without misery.
+> I'll have a look and let you know.
+
+Great, thanks
 > 
+>> I would like to integrate those changes with the thermal pull request
+> 
+> Sure, but it looks like you've got only a few ACKs for these patches
+> from the driver people.
+> 
+> Wouldn't it be prudent to give them some more time to review the changes?
 
-Hi Dave, thanks for your response. I really appreciated your reasoning,
-and I think it's a good argument. In the end, adding misery would harm
-the users that are unlikely to be able to fix (or at least, fix quickly)
-the split lock situation, like games or legacy/proprietary code.
+Well I would say I received the ACKs from the drivers which are actively 
+maintained. Others are either not with a dedicated maintainer or not a 
+reactive one. The first iteration of the series is from August 5th. So 
+it has been 2 months.
 
-I have a revert removing the misery ready and tested, let me know if I
-should submit it.
+I pinged for imx, armada and tegra two weeks ago.
 
-Cheers,
+The st, hisilicon drivers fall under the thermal maintainers umbrella
 
+There are three series coming after this series to be posted. I would 
+like to go forward in the process of cleaning up the framework. IMO two 
+months is enough to let the maintainers pay attention to the changes, 
+especially if we do a gentle ping and there are seven versions.
 
-Guilherme
+And after that comes the thermal_zone_device_register() parameters 
+simplification :)
+
+[ ... ]
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
