@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEB75EF941
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067AF5EF949
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236058AbiI2PlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S235918AbiI2PlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235568AbiI2Pk3 (ORCPT
+        with ESMTP id S234315AbiI2Pkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:40:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D522637F81;
-        Thu, 29 Sep 2022 08:38:40 -0700 (PDT)
+        Thu, 29 Sep 2022 11:40:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAD040BCE;
+        Thu, 29 Sep 2022 08:38:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F9136124B;
-        Thu, 29 Sep 2022 15:38:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AC6CEC433C1;
-        Thu, 29 Sep 2022 15:38:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 295EF6194B;
+        Thu, 29 Sep 2022 15:38:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D9DDC433D6;
+        Thu, 29 Sep 2022 15:38:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664465919;
-        bh=acgyhNSys2is9NlFNTNVZ0K6XqURLdltY6ge9xvy5ao=;
+        s=k20201202; t=1664465923;
+        bh=m62MJOeG0bPZl/sajcqU1aFz5U2SQ6VtUTQBzgeCeSg=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=YY67izfAGqoU/bM6OQdwHjIM99T0Gno+/+KWo8U5pyVle2oeK3C0c1Z/52W6TCIMt
-         3NX2sebH7SNAwMdIDAfVmZBaQqyMnu5WY7wU2vaj4K0j4CFkIoemRwbP1495Hc/G5M
-         CRykoUFXcIFisyB5/veXjoRbZl14OKFZIyGOILXtwMyU0quy4CIYvfXmIuVcs5Gbdy
-         q1mhHhBDjl1deN0oPo4tQf9RwrtsyCL7h+SnlEjffOS/2QAZsGxKyme44HaXwmiCbr
-         0K5CSS4S4GNYU9kY8V9sp156aSA+spLnsuIvUDlytUzEKns2I8VYvIQdCZl3loIVUv
-         dZ0IDDD4GwEyw==
+        b=DsVuxbH6tW2YBqyKlEmJ+bDvOteMGa4shrNuZdyE0NQMCmcKrr4ucLEEPnLAMkblH
+         IYkkVPyGaNNMXRUrtRM83TR9bbh4ot9SpKjEGuLoIfeNCAa0LZApzmE3kQs9hD1v/S
+         6c6pSBnkfFT+PslAecNuC7SGlclPOXJ/nvaT4itmSX9DWyStCVZCastbZCh8vA/Mxt
+         24UyNPJCE6nr+5puFxSAsh1LEfdYJ4aZHpIKJw7beStai8NBT/N/5ehwv0DRAhfwRd
+         +QOfJ4v5zrJaY0inz5WFI7QyvI93FTm07flvZXDzP/cK2IAex0N23Gs2KqCUpfT6Il
+         J/X+eS9aSWLbg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99233C070C8;
-        Thu, 29 Sep 2022 15:38:39 +0000 (UTC)
-Subject: Re: [GIT PULL] LoongArch fixes for v6.0-final
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 78780C395DA;
+        Thu, 29 Sep 2022 15:38:43 +0000 (UTC)
+Subject: Re: [GIT PULL] Networking for 6.0-rc8
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220929024256.319721-1-chenhuacai@loongson.cn>
-References: <20220929024256.319721-1-chenhuacai@loongson.cn>
-X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220929024256.319721-1-chenhuacai@loongson.cn>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.0-3
-X-PR-Tracked-Commit-Id: 4f196cb64b693c64f8f981432b1ff326b7ea1c28
+In-Reply-To: <20220929111605.32358-1-pabeni@redhat.com>
+References: <20220929111605.32358-1-pabeni@redhat.com>
+X-PR-Tracked-List-Id: <netdev.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220929111605.32358-1-pabeni@redhat.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.0-rc8
+X-PR-Tracked-Commit-Id: 3b04cba7add093d0d8267cf70a333ca8fe8233ca
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 81bcd4b522cf1dc312385b79b144153aff0cf0c6
-Message-Id: <166446591962.14842.7614636797930881077.pr-tracker-bot@kernel.org>
-Date:   Thu, 29 Sep 2022 15:38:39 +0000
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
+X-PR-Merge-Commit-Id: 511cce163b75bc3933fa3de769a82bb7e8663f2b
+Message-Id: <166446592348.14842.13821393257354064108.pr-tracker-bot@kernel.org>
+Date:   Thu, 29 Sep 2022 15:38:43 +0000
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 29 Sep 2022 10:42:56 +0800:
+The pull request you sent on Thu, 29 Sep 2022 13:16:05 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.0-3
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.0-rc8
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/81bcd4b522cf1dc312385b79b144153aff0cf0c6
+https://git.kernel.org/torvalds/c/511cce163b75bc3933fa3de769a82bb7e8663f2b
 
 Thank you!
 
