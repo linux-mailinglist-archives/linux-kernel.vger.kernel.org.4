@@ -2,205 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5325EF9EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DD55EF9F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235768AbiI2QN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
+        id S235924AbiI2QNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235290AbiI2QNZ (ORCPT
+        with ESMTP id S236096AbiI2QNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:13:25 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399FB1D35BE
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:13:24 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id d14so944155ilf.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:13:24 -0700 (PDT)
+        Thu, 29 Sep 2022 12:13:44 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2881D73DA
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:13:42 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id a13so2681798edj.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:13:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=2/Sh/v9WLQ5DacoeCo5LR01Tpb6RXV73Us2dj8jMEgg=;
-        b=Fw7CFHoqbIneHRGW1eSzygncQww0Nzr+13COSVf/LuaJXbMsGVbWr2JwANb/NZY7cw
-         IpMmrX8xtoPKi0vCSFChe1T9LUihF8v98KKbZkQqp5p+Fdl7hypt3C2YYhClYj9wpsT/
-         ru/Gk4dlWn5p2GGuFVngT45Qc6okNOm50vGB8=
+        bh=V7QLJZSIzhY9dr2OFvy6n8FCoALGEpJ2vGDHHoAqT/I=;
+        b=U5nWZ+zCnE6ObM1a1HTcsz5fUlLj7t9tsv+E5+LhXtnz9e4+xVV3xDQOTnsLxYF47t
+         2ZD30c3FM7IESBJDjIyKdNG1CIQ3oPQsfMBa45Rch5e+Fgg7012WK4guAP0mWiXKAOHg
+         TK5WpXxFwsqpDoq6d1yO9pR9vCsxPFGrv9CUo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=2/Sh/v9WLQ5DacoeCo5LR01Tpb6RXV73Us2dj8jMEgg=;
-        b=sAua3KXPzeBkllDbhNjnzxpYlqrJ47THb0/Jdm6zaCkTMlgtcbm1Obkd1Nk7NUOFZ/
-         Z/HbzWd8Th58pKFb8zUTMKF8wxSgnPYvldm4J2CCO2FY1QBByKoaqfWFiPaltQSdMUIU
-         xzLJiC5DxnI4a7ROQ56PSS8MK4CdKfUfn9Hp5XrUkFbGpT1FK9EFP+kh5kFwh3IrsYQV
-         1paXz/MDORijpUx/KV8wO/CaWnSvXLJcAFMiuPHkYDxiN8MHpNdEAPSdXiPvKycvd5gj
-         870NvnGtM1xsmLvgsN6mdg5nHzcGY8eu8NCx36heb119SkvXmC4Ea7HAgJ5t55ZR2YnJ
-         bNhw==
-X-Gm-Message-State: ACrzQf2QT3nlxhiiLIpE2yd9cN0rXtTpgJ+jJPRCTkP5ud68dCPm5/qc
-        BpbhQG3Cv2CErVi0LKnif3P4eCO1HftI63rETSL+Iw==
-X-Google-Smtp-Source: AMsMyM5Xp6QV/gtVq6nfq38rfm0HFlPCG++1YgV5/2Las3rfpesEcOIm0y5DnS+EK3kcktlg/qc98KnIYXyEMrRhv6E=
-X-Received: by 2002:a05:6e02:b45:b0:2f8:ab79:fc70 with SMTP id
- f5-20020a056e020b4500b002f8ab79fc70mr1980049ilu.214.1664468003604; Thu, 29
- Sep 2022 09:13:23 -0700 (PDT)
+        bh=V7QLJZSIzhY9dr2OFvy6n8FCoALGEpJ2vGDHHoAqT/I=;
+        b=elC779aLCivt+ijc6g7wDkaf6HH+L8KmfKT4WjVYzWsaO2jrmqPrb7q9kKnR7ARrUk
+         52rzKe4pYgTKBKahKxljYmo+L4zEtB20WOYyhpk0036BcF6jNaluxiyn3ygNVNJjDsiu
+         51zWABc+aTWXuUxoWFwkOzoB+QtGWKBp4nQ5vLQWdmd44HKvY+64K/Wf1iiockpB+s51
+         hDq8eYb4cHq7ej+Qgm2SQAsRkiLauwbrCq61Q3IZJO72cILOJIsA0m7sDqC0mNoRe0u7
+         svgR3CXXtisBn9CxvapyFpIXRkTFyUlGaSXgPAT43FSfcaQ11tJA+lv6j4WBRZNy/WTr
+         PpmA==
+X-Gm-Message-State: ACrzQf0P8lKe5OZX4/ZqWzgPAPAesPrbuBOq9RrScgTVNmlj9blhM7DR
+        EAAhB3MeTDYBA+22gsG7uHrpZSDXtA6Zg0VC
+X-Google-Smtp-Source: AMsMyM4AcdMP0+8QT7NAqg2uFRAGSjoDIPLsxjJmnCbcw+LuJyajruBVVIBm4oGqGx3aLY8OJrECxQ==
+X-Received: by 2002:aa7:d8cc:0:b0:457:f8be:d5c4 with SMTP id k12-20020aa7d8cc000000b00457f8bed5c4mr4174576eds.261.1664468020269;
+        Thu, 29 Sep 2022 09:13:40 -0700 (PDT)
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
+        by smtp.gmail.com with ESMTPSA id qw29-20020a1709066a1d00b0073dddffbe70sm4249558ejc.224.2022.09.29.09.13.38
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 09:13:38 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id v28so2973189wrd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:13:38 -0700 (PDT)
+X-Received: by 2002:a05:6000:168c:b0:226:f4c2:d6db with SMTP id
+ y12-20020a056000168c00b00226f4c2d6dbmr2895434wrd.659.1664468017868; Thu, 29
+ Sep 2022 09:13:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220920082005.2459826-1-denik@chromium.org> <20220922053145.944786-1-denik@chromium.org>
- <87h70zk83g.wl-maz@kernel.org> <CADDJ8CW0QgHtp1rwk=ZqrcuWZ4_L8KQh26VaEfcBQS0Tx9+ZYg@mail.gmail.com>
- <CAH=Qcsi3aQ51AsAE0WmAH9VmpqjOaQQt=ru5Nav4+d8F3fMPwQ@mail.gmail.com>
-In-Reply-To: <CAH=Qcsi3aQ51AsAE0WmAH9VmpqjOaQQt=ru5Nav4+d8F3fMPwQ@mail.gmail.com>
-From:   Denis Nikitin <denik@chromium.org>
-Date:   Thu, 29 Sep 2022 09:13:12 -0700
-Message-ID: <CADDJ8CXObkhMvOx+L29awjtt7tiaTWxFrRxOmhUqvzku1wswHw@mail.gmail.com>
-Subject: Re: [PATCH v2] KVM: arm64: nvhe: Fix build with profile optimization
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        David Brazdil <dbrazdil@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, Manoj Gupta <manojgupta@google.com>
+References: <1663157784-22232-1-git-send-email-quic_kalyant@quicinc.com>
+In-Reply-To: <1663157784-22232-1-git-send-email-quic_kalyant@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 29 Sep 2022 09:13:20 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UT-GmAOYrCBRU0bhGeXU=pOGDbk=Jq7JEk40tyEH0zLA@mail.gmail.com>
+Message-ID: <CAD=FV=UT-GmAOYrCBRU0bhGeXU=pOGDbk=Jq7JEk40tyEH0zLA@mail.gmail.com>
+Subject: Re: [v5] drm/msm/disp/dpu1: add support for dspp sub block flush in sc7280
+To:     Kalyan Thota <quic_kalyant@quicinc.com>
+Cc:     y@qualcomm.com, dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+Hi,
 
-Please let me know what you think about this approach.
+On Wed, Sep 14, 2022 at 5:16 AM Kalyan Thota <quic_kalyant@quicinc.com> wrote:
+>
+> Flush mechanism for DSPP blocks has changed in sc7280 family, it
+> allows individual sub blocks to be flushed in coordination with
+> master flush control.
+>
+> Representation: master_flush && (PCC_flush | IGC_flush .. etc )
+>
+> This change adds necessary support for the above design.
+>
+> Changes in v1:
+> - Few nits (Doug, Dmitry)
+> - Restrict sub-block flush programming to dpu_hw_ctl file (Dmitry)
+>
+> Changes in v2:
+> - Move the address offset to flush macro (Dmitry)
+> - Seperate ops for the sub block flush (Dmitry)
+>
+> Changes in v3:
+> - Reuse the DPU_DSPP_xx enum instead of a new one (Dmitry)
+>
+> Changes in v4:
+> - Use shorter version for unsigned int (Stephen)
+>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c       |  2 +-
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  5 +++-
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  4 +++
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c     | 35 ++++++++++++++++++++++++--
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h     | 10 ++++++--
+>  5 files changed, 50 insertions(+), 6 deletions(-)
 
-Thanks,
-Denis
+Breadcrumbs: though this is tagged in the subject as v5 I think the
+newest version is actually "resend v4" [1] which just fixes the
+Signed-off-by.
 
-On Thu, Sep 22, 2022 at 11:04 PM Manoj Gupta <manojgupta@google.com> wrote:
->
->
->
-> On Thu, Sep 22, 2022 at 10:01 PM Denis Nikitin <denik@chromium.org> wrote:
->>
->> Hi Mark,
->>
->> On Thu, Sep 22, 2022 at 3:38 AM Marc Zyngier <maz@kernel.org> wrote:
->> >
->> > I was really hoping that you'd just drop the flags from the CFLAGS
->> > instead of removing the generated section. Something like:
->> >
->> > diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
->> > index b5c5119c7396..e5b2d43925b4 100644
->> > --- a/arch/arm64/kvm/hyp/nvhe/Makefile
->> > +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
->> > @@ -88,7 +88,7 @@ quiet_cmd_hypcopy = HYPCOPY $@
->> >
->> >  # Remove ftrace, Shadow Call Stack, and CFI CFLAGS.
->> >  # This is equivalent to the 'notrace', '__noscs', and '__nocfi' annotations.
->> > -KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
->> > +KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI) -fprofile-sample-use, $(KBUILD_CFLAGS))
->> >
->> >  # KVM nVHE code is run at a different exception code with a different map, so
->> >  # compiler instrumentation that inserts callbacks or checks into the code may
->>
->> Sorry, I moved on with a different approach and didn't explain the rationale.
->>
->> Like you mentioned before, the flag `-fprofile-sample-use` does not appear
->> in the kernel. And it looks confusing when the flag is disabled or filtered out
->> here. This was the first reason.
->>
->> The root cause of the build failure wasn't the compiler profile guided
->> optimization but the extra metadata in SHT_REL section which llvm injected
->> into kvm_nvhe.tmp.o for further link optimization.
->> If we remove the .llvm.call-graph-profile section we fix the build and avoid
->> potential problems with relocations optimized by the linker. The profile
->> guided optimization will still be applied by the compiler.
->>
->> Let me know what you think about it.
->>
->> >
->> > However, I even failed to reproduce your problem using LLVM 14 as
->> > packaged by Debian (if that matters, I'm using an arm64 build
->> > machine). I build the kernel with:
->> >
->> > $ make LLVM=1 KCFLAGS=-fprofile-sample-use -j8 vmlinux
->> >
->> > and the offending object only contains the following sections:
->> >
->
->
-> Just some comments based on my ChromeOS build experience.
->
-> fprofile-sample-use needs the profile file name argument to read the pgo data from
-> i.e. -fprofile-sample-use=/path/to/gcov.profile.
->
-> Since the path to filename can change, it makes filtering out more difficult.
-> It is certainly possible to find and filter the exact argument by some string search of KCFLAGS.
-> But passing  -fno-profile-sample-use is easier and less error prone which I believe the previous patch version tried to do.
->
->
->> > arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o:     file format elf64-littleaarch64
->> >
->> > Sections:
->> > Idx Name          Size      VMA               LMA               File off  Algn
->> >   0 .hyp.idmap.text 00000ae4  0000000000000000  0000000000000000  00000800  2**11
->> >                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
->> >   1 .hyp.text     0000e988  0000000000000000  0000000000000000  00001800  2**11
->> >                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
->> >   2 .hyp.data..ro_after_init 00000820  0000000000000000  0000000000000000  00010188  2**3
->> >                   CONTENTS, ALLOC, LOAD, DATA
->> >   3 .hyp.rodata   00002e70  0000000000000000  0000000000000000  000109a8  2**3
->> >                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
->> >   4 .hyp.data..percpu 00001ee0  0000000000000000  0000000000000000  00013820  2**4
->> >                   CONTENTS, ALLOC, LOAD, DATA
->> >   5 .hyp.bss      00001158  0000000000000000  0000000000000000  00015700  2**3
->> >                   ALLOC
->> >   6 .comment      0000001f  0000000000000000  0000000000000000  00017830  2**0
->> >                   CONTENTS, READONLY
->> >   7 .llvm_addrsig 000000b8  0000000000000000  0000000000000000  0001784f  2**0
->> >                   CONTENTS, READONLY, EXCLUDE
->> >   8 .altinstructions 00001284  0000000000000000  0000000000000000  00015700  2**0
->> >                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
->> >   9 __jump_table  00000960  0000000000000000  0000000000000000  00016988  2**3
->> >                   CONTENTS, ALLOC, LOAD, RELOC, DATA
->> >  10 __bug_table   0000051c  0000000000000000  0000000000000000  000172e8  2**2
->> >                   CONTENTS, ALLOC, LOAD, RELOC, DATA
->> >  11 __kvm_ex_table 00000028  0000000000000000  0000000000000000  00017808  2**3
->> >                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
->> >  12 .note.GNU-stack 00000000  0000000000000000  0000000000000000  00027370  2**0
->> >                   CONTENTS, READONLY
->> >
->> > So what am I missing to trigger this issue? Does it rely on something
->> > like PGO, which is not upstream yet? A bit of handholding would be
->> > much appreciated.
->>
->> Right, it relies on the PGO profile.
->> On ChromeOS we collect the sample PGO profile from Arm devices with
->> enabled CoreSight/ETM. You can find more details on ETM at
->> https://www.kernel.org/doc/Documentation/trace/coresight/coresight.rst.
->>
->> https://github.com/Linaro/OpenCSD/blob/master/decoder/tests/auto-fdo/autofdo.md
->> contains information about the pipeline of collecting, processing, and applying
->> the profile.
->>
->
-> Generally the difficult part is in collecting a good matching profile for the workload.
-> So I think this patch is better than previous since it still keeps the compiler optimization for the hot code paths
-> in the file but removes the problematic section.
->
-> Thanks,
-> Manoj
->
->
->>
->> >
->> > Thanks,
->> >
->> >         M.
->> >
->> > --
->> > Without deviation from the norm, progress is not possible.
->>
->> Thanks,
->> Denis
+[1] https://lore.kernel.org/r/1663825463-6715-1-git-send-email-quic_kalyant@quicinc.com
