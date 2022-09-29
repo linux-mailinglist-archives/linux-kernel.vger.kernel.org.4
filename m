@@ -2,95 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C67055EFBFA
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 19:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76FB5EFBFE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 19:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235859AbiI2R1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 13:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
+        id S236155AbiI2R2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 13:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234100AbiI2R1V (ORCPT
+        with ESMTP id S235382AbiI2R2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 13:27:21 -0400
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A771D88F7;
-        Thu, 29 Sep 2022 10:27:20 -0700 (PDT)
-Received: by mail-pj1-f50.google.com with SMTP id h8-20020a17090a054800b00205ccbae31eso6592934pjf.5;
-        Thu, 29 Sep 2022 10:27:20 -0700 (PDT)
+        Thu, 29 Sep 2022 13:28:40 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFA31EC995
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 10:28:38 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id k3-20020a056e02156300b002f5623faa62so1624497ilu.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 10:28:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=49qp+heZEryBDi4E6l3bbGg+YlRJd6kyFipm/Dx+3lY=;
-        b=dc95+uQVTKjlIlgvPzgv2fkEIhseGULh8viBdR8+iEmfcxs/L7VMU/qQ1RU4xJw7+U
-         ImXQzpZgRaP+iGCJDr6J/D/DyW8DDUgtC/1l+Mc1hwuto3rCpj4GIolv4eNI8sOUu1Mk
-         3rZPkD/wt7a0eRBgVxXUK6P/QLQUS2ueK+QzhWRkxa3rHYLjD1G4C1DD898zWnxI+PD7
-         Svmt/m0lcaUrq3dIx2ROg3lMPeT/bpffQlfyyLNZs4SMcWtEs11oL2ERxKeLaV+j7DPK
-         SL36amiUQt7KF8PmLN9AtgMfgAIb/4plUlNUH0pBNe+NoI7mSz8Y5gjhyvGyzCjCHzE7
-         4gvw==
-X-Gm-Message-State: ACrzQf3O+sbiIw8Nrv5ZGSyIKF6ZcdF0lGiVJj4qGJxj/JjgFIsBoRJ9
-        YSVV82h4ctRsOSYdMIZpVE4=
-X-Google-Smtp-Source: AMsMyM49r2YsAcmEWTWdQjIsGDmiiWsT/TgxuLjKU5yytl15VTnKDIxrm5yBxG1+a+3LDN/5jBnthQ==
-X-Received: by 2002:a17:902:f548:b0:178:44b:4ea9 with SMTP id h8-20020a170902f54800b00178044b4ea9mr4509518plf.77.1664472439943;
-        Thu, 29 Sep 2022 10:27:19 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:2e63:ed10:2841:950e? ([2620:15c:211:201:2e63:ed10:2841:950e])
-        by smtp.gmail.com with ESMTPSA id q17-20020a170902f35100b0017a1145eec7sm132225ple.157.2022.09.29.10.27.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 10:27:19 -0700 (PDT)
-Message-ID: <67e70e00-3a79-c8b0-525a-92071a015366@acm.org>
-Date:   Thu, 29 Sep 2022 10:27:16 -0700
+        bh=Z807byplhOGZeSne3bS7/T5I0SV4CoEzJ41CZMrCPjU=;
+        b=CeXWoIAHweiChIYD08I6d6kQ6ZVG77HLcuchqMkE0DN8SqwSjUIOLXzmNXivHssBO9
+         Xovaz+cs7hmun62dnusFBETFTTAMfKEGHAIcv1ozYTka58+Uofb2WWWdYJoOhE8wwkYD
+         D38Bp0rbu2bp1DaBlU9OFNArfJk78++o0CXl8DmbjwsDr4fZf9u/q7vG2ml5K63kuF6f
+         p1FREOGwUX3zSGtCu+4MGIfdaZrSnIKWc69IKxUuaTHZCd1L037O/zinMg9KQZu9V5H6
+         XPJbZ1NC2/5qKfV+TivGUF6yj7gooYJPCoztSRX7yGZNgxei8zNZ7qanVw2nKS+TN/MZ
+         TRaw==
+X-Gm-Message-State: ACrzQf3qLn4autyoBmN62cGNtWqh1KxjUyIhvPcEUsmLIJbekXwZBPbl
+        1AGTiQIAxdlMm8CHNI/lPytfFvdQSARQ5JqXJ52psR2GL1/x
+X-Google-Smtp-Source: AMsMyM6h+HKCxdz50xpWjeagQWWb6eVYQwOvxxOGx127EMSPRUCrwyGYyT89g9Fiww3+Nt/C1/wQopT36G/UGvY63eexiU9BIxOb
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
- exit code
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Tejun Heo <tj@kernel.org>
-References: <20220914225621.415631-1-bvanassche@acm.org>
- <20220914225621.415631-7-bvanassche@acm.org> <YzOe3pYmn5qO9lFb@T590>
- <2acc2220-65dc-4af5-ffd3-997f779d41c0@acm.org> <YzTwgxX+WMuJyAJy@T590>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <YzTwgxX+WMuJyAJy@T590>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:448d:b0:35a:81aa:939d with SMTP id
+ bv13-20020a056638448d00b0035a81aa939dmr2332302jab.312.1664472518262; Thu, 29
+ Sep 2022 10:28:38 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 10:28:38 -0700
+In-Reply-To: <00000000000019db4e05e9712237@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000308e1605e9d4351e@google.com>
+Subject: Re: [syzbot] kernel panic: stack is corrupted in lock_acquire (2)
+From:   syzbot <syzbot+db99576f362a5c1e9f7a@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/28/22 18:10, Ming Lei wrote:
-> On Wed, Sep 28, 2022 at 12:27:07PM -0700, Bart Van Assche wrote:
->> How about removing support for calling scsi_device_put() from atomic context
->> as is done in the untested patch below?
-> 
-> That can't work.
-> 
-> The problem is that no existed mechanism can guarantee that kobject reference
-> drops to zero inside module_exit().
+syzbot has found a reproducer for the following issue on:
 
-Hi Ming,
+HEAD commit:    c3e0e1e23c70 Merge tag 'irq_urgent_for_v6.0' of git://git...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16bfb000880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
+dashboard link: https://syzkaller.appspot.com/bug?extid=db99576f362a5c1e9f7a
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=136be2bc880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1595fe98880000
 
-I agree that the patch in my previous email won't address potential calls of
-.release functions while a module is being unloaded or after a module has been
-unloaded. However, that's not the purpose of that patch. The purpose of that
-patch is to rework all code that modifies members of the scsi host template.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e7f1f925f94e/disk-c3e0e1e2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/830dabeedf0d/vmlinux-c3e0e1e2.xz
 
-Thanks,
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+db99576f362a5c1e9f7a@syzkaller.appspotmail.com
 
-Bart.
+loop0: detected capacity change from 0 to 8226
+Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: lock_acquire+0x3b6/0x3c0
+CPU: 0 PID: 9298 Comm: syz-executor656 Not tainted 6.0.0-rc7-syzkaller-00081-gc3e0e1e23c70 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ panic+0x2d6/0x715 kernel/panic.c:274
+ __stack_chk_fail+0x12/0x20 kernel/panic.c:706
+ lock_acquire+0x3b6/0x3c0
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:349 [inline]
+ inode_wait_for_writeback+0x89/0x2c0 fs/fs-writeback.c:1472
+ evict+0x277/0x620 fs/inode.c:662
+ ntfs_fill_super+0x3af3/0x42a0 fs/ntfs3/super.c:1190
+ get_tree_bdev+0x400/0x620 fs/super.c:1323
+ vfs_get_tree+0x88/0x270 fs/super.c:1530
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f1b636bcdda
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 d8 00 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f1b63666078 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f1b636bcdda
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f1b63666090
+RBP: 0000000000000004 R08: 00007f1b636660d0 R09: 00007f1b636666b8
+R10: 0000000000000000 R11: 0000000000000286 R12: 00007f1b636660d0
+R13: 0000000000000015 R14: 00007f1b63666090 R15: 0000000020000db8
+ </TASK>
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
