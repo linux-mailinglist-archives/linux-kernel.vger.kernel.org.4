@@ -2,116 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD255EF56B
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9995EF56A
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 14:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234810AbiI2M0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 08:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
+        id S235527AbiI2M02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 08:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234940AbiI2M0A (ORCPT
+        with ESMTP id S235383AbiI2M0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 08:26:00 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F09EF0A4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 05:25:57 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id o5so851328wms.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 05:25:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=NbDaoX4gV0r+47K4xMd3g5Ou3lbNgQYB+MGdJOvpQD8=;
-        b=aVqdXxGe3hjPidzSFD5huhDDctOrTqR6bMOBGpa0DcKqyp6EVNg6KQo3O51gbLwz4p
-         5bLgLrLGBysw+PdI3AzZe48rUTGN3vNq5k68cDeix4wXlZcIPxJ3KLUT1tDckB9WmhZr
-         4J4EZPQoFNf55CQrO6buwhDr5g0xcxUXUYv9aULhDC7Nc5pgacjYhFRNWM8O4+UQz98D
-         tv9L8aO3PJdd4giWHw18CYMDDICUQEyeOw+OLjLwGknIPNu5ye5yY2RgckxCiBFdsFqE
-         Y1gC2zSawRebw3Y8PSFlrmwDuA/Lcytnh1WR2YItMeW3Kp1zA3VZ66AvsJilMqgARAi6
-         jRWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=NbDaoX4gV0r+47K4xMd3g5Ou3lbNgQYB+MGdJOvpQD8=;
-        b=VC9TCnUxSQDHP+qeQZP0lTOXXSZgtwX7KSDs2vCUvhBeqQEB9a7j++WW7hZQghXD8p
-         /MYGVr7UxfAK7YwDkCqXd6rvI4PhJt50eckG9pi8WsrswcZx5Xu35P9rb/hSo8zHL0wp
-         lqbhM9wOKKf1g7HnG9/bDYYfnrkhI3ef29THQiD0PC3GU9rU+XXponD5i8wpABERw68b
-         pwJcUIgPYK69a+alRMGljHVeaF5a+nISeeleYJhRQC8CSwGtAMomUIDcRvF5Fyzf2qSk
-         QWqOtT1DUX7p9fubRJ8BgAd6HS1egyolJVZ9jnl7kgKzTywzy2GlxxaA3M9ToQwRtOxO
-         DDSw==
-X-Gm-Message-State: ACrzQf2U84IrmW9bTle4O7KlnhPwg0WnmNTEIoGaSAoUHBDRuV8dc0Q2
-        anDxciRVqMk9XdYgJda8SZ6a+A==
-X-Google-Smtp-Source: AMsMyM5D/Mwl8jCDLB1JztAjhICzFFtZl7IFXEk6s7QLb+LbOBiYX3iKh8BMXSwkEf0gDFvfcEubXg==
-X-Received: by 2002:a05:600c:3ba0:b0:3b4:8ad0:6c with SMTP id n32-20020a05600c3ba000b003b48ad0006cmr10372001wms.186.1664454355463;
-        Thu, 29 Sep 2022 05:25:55 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:48a2:39eb:9d1b:8b8d? ([2a05:6e02:1041:c10:48a2:39eb:9d1b:8b8d])
-        by smtp.googlemail.com with ESMTPSA id q17-20020adff511000000b002253fd19a6asm8358816wro.18.2022.09.29.05.25.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 05:25:54 -0700 (PDT)
-Message-ID: <d0be3159-8094-aed1-d9b1-c4b16d88d67c@linaro.org>
-Date:   Thu, 29 Sep 2022 14:25:51 +0200
+        Thu, 29 Sep 2022 08:26:25 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A586912DEEE
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 05:26:22 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MdXYH4KJzzWgyd;
+        Thu, 29 Sep 2022 20:22:11 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 20:26:19 +0800
+Received: from [10.67.110.237] (10.67.110.237) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 20:26:18 +0800
+Subject: Re: [PATCH 3/3] arm64: module/ftrace: Fix mcount-based ftrace
+ initialization failure
+To:     Mark Rutland <mark.rutland@arm.com>
+CC:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <rostedt@goodmis.org>, <mingo@redhat.com>, <Julia.Lawall@inria.fr>,
+        <akpm@linux-foundation.org>, <andreyknvl@gmail.com>,
+        <elver@google.com>, <wangkefeng.wang@huawei.com>,
+        <zhouchengming@bytedance.com>, <ardb@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220929094134.99512-1-lihuafei1@huawei.com>
+ <20220929094134.99512-4-lihuafei1@huawei.com> <YzWA/GCdcLX31+rI@FVFF77S0Q05N>
+ <YzWIlcM249P+ZzVs@FVFF77S0Q05N>
+From:   Li Huafei <lihuafei1@huawei.com>
+Message-ID: <06bd1acd-bb27-79ce-a55a-663857d2c06e@huawei.com>
+Date:   Thu, 29 Sep 2022 20:26:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v7 00/29] Rework the trip points creation
+In-Reply-To: <YzWIlcM249P+ZzVs@FVFF77S0Q05N>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com, Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org
-References: <20220928210059.891387-1-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220928210059.891387-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.237]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -119,204 +63,178 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Hi Rafael,
 
-are you happy with the changes? I would like to integrate those changes 
-with the thermal pull request
+On 2022/9/29 19:59, Mark Rutland wrote:
+> On Thu, Sep 29, 2022 at 12:26:52PM +0100, Mark Rutland wrote:
+>> On Thu, Sep 29, 2022 at 05:41:34PM +0800, Li Huafei wrote:
+>>> The commit a6253579977e ("arm64: ftrace: consistently handle PLTs.")
+>>> makes ftrace_make_nop() always validate the 'old' instruction that will
+>>> be replaced. However, in the mcount-based implementation,
+>>> ftrace_init_nop() also calls ftrace_make_nop() to do the initialization,
+>>> and the 'old' target address is MCOUNT_ADDR at this time. with
+>>> CONFIG_MODULE_PLT support, the distance between MCOUNT_ADDR and callsite
+>>> may exceed 128M, at which point ftrace_find_callable_addr() will fail
+>>> because it cannot find an available PLT.
+>>
+>> Ah, sorry about this.
+>>
+>>> We can reproduce this problem by forcing the module to alloc memory away
+>>> from the kernel:
+>>>
+>>>   ftrace_test: loading out-of-tree module taints kernel.
+>>>   ftrace: no module PLT for _mcount
+>>>   ------------[ ftrace bug ]------------
+>>>   ftrace failed to modify
+>>>   [<ffff800029180014>] 0xffff800029180014
+>>>    actual:   44:00:00:94
+>>>   Initializing ftrace call sites
+>>>   ftrace record flags: 2000000
+>>>    (0)
+>>>    expected tramp: ffff80000802eb3c
+>>>   ------------[ cut here ]------------
+>>>   WARNING: CPU: 3 PID: 157 at kernel/trace/ftrace.c:2120 ftrace_bug+0x94/0x270
+>>>   Modules linked in:
+>>>   CPU: 3 PID: 157 Comm: insmod Tainted: G           O       6.0.0-rc6-00151-gcd722513a189-dirty #22
+>>>   Hardware name: linux,dummy-virt (DT)
+>>>   pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>>   pc : ftrace_bug+0x94/0x270
+>>>   lr : ftrace_bug+0x21c/0x270
+>>>   sp : ffff80000b2bbaf0
+>>>   x29: ffff80000b2bbaf0 x28: 0000000000000000 x27: ffff0000c4d38000
+>>>   x26: 0000000000000001 x25: ffff800009d7e000 x24: ffff0000c4d86e00
+>>>   x23: 0000000002000000 x22: ffff80000a62b000 x21: ffff8000098ebea8
+>>>   x20: ffff0000c4d38000 x19: ffff80000aa24158 x18: ffffffffffffffff
+>>>   x17: 0000000000000000 x16: 0a0d2d2d2d2d2d2d x15: ffff800009aa9118
+>>>   x14: 0000000000000000 x13: 6333626532303830 x12: 3030303866666666
+>>>   x11: 203a706d61727420 x10: 6465746365707865 x9 : 3362653230383030
+>>>   x8 : c0000000ffffefff x7 : 0000000000017fe8 x6 : 000000000000bff4
+>>>   x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 0000000000000001
+>>>   x2 : ad2cb14bb5438900 x1 : 0000000000000000 x0 : 0000000000000022
+>>>   Call trace:
+>>>    ftrace_bug+0x94/0x270
+>>>    ftrace_process_locs+0x308/0x430
+>>>    ftrace_module_init+0x44/0x60
+>>>    load_module+0x15b4/0x1ce8
+>>>    __do_sys_init_module+0x1ec/0x238
+>>>    __arm64_sys_init_module+0x24/0x30
+>>>    invoke_syscall+0x54/0x118
+>>>    el0_svc_common.constprop.4+0x84/0x100
+>>>    do_el0_svc+0x3c/0xd0
+>>>    el0_svc+0x1c/0x50
+>>>    el0t_64_sync_handler+0x90/0xb8
+>>>    el0t_64_sync+0x15c/0x160
+>>>   ---[ end trace 0000000000000000 ]---
+>>>   ---------test_init-----------
+>>>
+>>> In fact, in .init.plt or .plt or both of them, we have the mcount PLT.
+>>> If we save the mcount PLT entry address, we can determine what the 'old'
+>>> instruction should be when initializing the nop instruction.
+>>>
+>>> Fixes: a6253579977e ("arm64: ftrace: consistently handle PLTs.")
+>>> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+>>> ---
+>>>  arch/arm64/include/asm/module.h |  7 +++++++
+>>>  arch/arm64/kernel/ftrace.c      | 29 ++++++++++++++++++++++++++++-
+>>>  arch/arm64/kernel/module-plts.c | 16 ++++++++++++++++
+>>>  arch/arm64/kernel/module.c      | 11 +++++++++++
+>>>  4 files changed, 62 insertions(+), 1 deletion(-)
+>>
+>> Since this only matters for the initalization of a module callsite, I'd rather
+>> we simply didn't check in this case, so that we don't have to go scanning for
+>> the PLTs and keep that information around forever.
+>>
+>> To be honest, I'd rather we simply didn't check when initializing an mcount
+>> call-site for a module, as we used to do prior to commit a6253579977e.
 
+Yes, I agree. If it's just for the initialization phase validation, my patch does make a bit of a fuss.
 
-On 28/09/2022 23:00, Daniel Lezcano wrote:
-> This work is the pre-requisite of handling correctly when the trip
-> point are crossed. For that we need to rework how the trip points are
-> declared and assigned to a thermal zone.
+>>
+>> Does the below work for you?
 > 
-> Even if it appears to be a common sense to have the trip points being
-> ordered, this no guarantee neither documentation telling that is the
-> case.
-> 
-> One solution could have been to create an ordered array of trips built
-> when registering the thermal zone by calling the different get_trip*
-> ops. However those ops receive a thermal zone pointer which is not
-> known as it is in the process of creating it.
-> 
-> This cyclic dependency shows we have to rework how we manage the trip
-> points.
-> 
-> Actually, all the trip points definition can be common to the backend
-> sensor drivers and we can factor out the thermal trip structure in all
-> of them.
-> 
-> Then, as we register the thermal trips array, they will be available
-> in the thermal zone structure and a core function can return the trip
-> given its id.
-> 
-> The get_trip_* ops won't be needed anymore and could be removed. The
-> resulting code will be another step forward to a self encapsulated
-> generic thermal framework.
-> 
-> Most of the drivers can be converted more or less easily. This series
-> does a first round with most of the drivers. Some remain and will be
-> converted but with a smaller set of changes as the conversion is a bit
-> more complex.
-> 
-> Changelog:
->   v7:
->      - Added missing return 0 in the x86_pkg_temp driver
->   v6:
->      - Improved the code for the get_crit_temp() function as suggested by Rafael
->      - Removed inner parenthesis in the set_trip_temp() function and invert the
->        conditions. Check the type of the trip point is unchanged
->      - Folded patch 4 with 1
->      - Add per thermal zone info message in the bang-bang governor
->      - Folded the fix for an uninitialized variable in int340x_thermal_zone_add()
->   v5:
->      - Fixed a deadlock when calling thermal_zone_get_trip() while
->        handling the thermal zone lock
->      - Remove an extra line in the sysfs change
->      - Collected tags
-> v4:
->     - Remove extra lines on exynos changes as reported by Krzysztof Kozlowski
->     - Collected tags
->   v3:
->     - Reorg the series to be git-bisect safe
->     - Added the set_trip generic function
->     - Added the get_crit_temp generic function
->     - Removed more dead code in the thermal-of
->     - Fixed the exynos changelog
->     - Fixed the error check for the exynos drivers
->     - Collected tags
->   v2:
->     - Added missing EXPORT_SYMBOL_GPL() for thermal_zone_get_trip()
->     - Removed tab whitespace in the acerhdf driver
->     - Collected tags
-> 
-> Cc: Raju Rangoju <rajur@chelsio.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Peter Kaestle <peter@piie.net>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Mark Gross <markgross@kernel.org>
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Amit Kucheria <amitk@kernel.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Nicolas Saenz Julienne <nsaenz@kernel.org>
-> Cc: Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Ray Jui <rjui@broadcom.com>
-> Cc: Scott Branden <sbranden@broadcom.com>
-> Cc: Support Opensource <support.opensource@diasemi.com>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: Thara Gopinath <thara.gopinath@linaro.org>
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
-> Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Cc: Alim Akhtar <alim.akhtar@samsung.com>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Eduardo Valentin <edubezval@gmail.com>
-> Cc: Keerthy <j-keerthy@ti.com>
-> Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Antoine Tenart <atenart@kernel.org>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Dmitry Osipenko <digetx@gmail.com>
-> Cc: netdev@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: platform-driver-x86@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-rpi-kernel@lists.infradead.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: linux-renesas-soc@vger.kernel.org
-> Cc: linux-samsung-soc@vger.kernel.org
-> Cc: linux-tegra@vger.kernel.org
-> Cc: linux-omap@vger.kernel.org
-> 
-> Daniel Lezcano (29):
->    thermal/core: Add a generic thermal_zone_get_trip() function
->    thermal/sysfs: Always expose hysteresis attributes
->    thermal/core: Add a generic thermal_zone_set_trip() function
->    thermal/core/governors: Use thermal_zone_get_trip() instead of ops
->      functions
->    thermal/of: Use generic thermal_zone_get_trip() function
->    thermal/of: Remove unused functions
->    thermal/drivers/exynos: Use generic thermal_zone_get_trip() function
->    thermal/drivers/exynos: of_thermal_get_ntrips()
->    thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by
->      thermal_zone_get_trip()
->    thermal/drivers/tegra: Use generic thermal_zone_get_trip() function
->    thermal/drivers/uniphier: Use generic thermal_zone_get_trip() function
->    thermal/drivers/hisi: Use generic thermal_zone_get_trip() function
->    thermal/drivers/qcom: Use generic thermal_zone_get_trip() function
->    thermal/drivers/armada: Use generic thermal_zone_get_trip() function
->    thermal/drivers/rcar_gen3: Use the generic function to get the number
->      of trips
->    thermal/of: Remove of_thermal_get_ntrips()
->    thermal/of: Remove of_thermal_is_trip_valid()
->    thermal/of: Remove of_thermal_set_trip_hyst()
->    thermal/of: Remove of_thermal_get_crit_temp()
->    thermal/drivers/st: Use generic trip points
->    thermal/drivers/imx: Use generic thermal_zone_get_trip() function
->    thermal/drivers/rcar: Use generic thermal_zone_get_trip() function
->    thermal/drivers/broadcom: Use generic thermal_zone_get_trip() function
->    thermal/drivers/da9062: Use generic thermal_zone_get_trip() function
->    thermal/drivers/ti: Remove unused macros ti_thermal_get_trip_value() /
->      ti_thermal_trip_is_valid()
->    thermal/drivers/acerhdf: Use generic thermal_zone_get_trip() function
->    thermal/drivers/cxgb4: Use generic thermal_zone_get_trip() function
->    thermal/intel/int340x: Replace parameter to simplify
->    thermal/drivers/intel: Use generic thermal_zone_get_trip() function
-> 
->   drivers/net/ethernet/chelsio/cxgb4/cxgb4.h    |   2 -
->   .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |  41 +----
->   drivers/platform/x86/acerhdf.c                |  73 +++-----
->   drivers/thermal/armada_thermal.c              |  39 ++---
->   drivers/thermal/broadcom/bcm2835_thermal.c    |   8 +-
->   drivers/thermal/da9062-thermal.c              |  52 +-----
->   drivers/thermal/gov_bang_bang.c               |  39 +++--
->   drivers/thermal/gov_fair_share.c              |  18 +-
->   drivers/thermal/gov_power_allocator.c         |  51 +++---
->   drivers/thermal/gov_step_wise.c               |  22 ++-
->   drivers/thermal/hisi_thermal.c                |  11 +-
->   drivers/thermal/imx_thermal.c                 |  72 +++-----
->   .../int340x_thermal/int340x_thermal_zone.c    |  33 ++--
->   .../int340x_thermal/int340x_thermal_zone.h    |   4 +-
->   .../processor_thermal_device.c                |  10 +-
->   drivers/thermal/intel/x86_pkg_temp_thermal.c  | 120 +++++++------
->   drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |  39 ++---
->   drivers/thermal/rcar_gen3_thermal.c           |   2 +-
->   drivers/thermal/rcar_thermal.c                |  53 +-----
->   drivers/thermal/samsung/exynos_tmu.c          |  57 +++----
->   drivers/thermal/st/st_thermal.c               |  47 +----
->   drivers/thermal/tegra/soctherm.c              |  33 ++--
->   drivers/thermal/tegra/tegra30-tsensor.c       |  17 +-
->   drivers/thermal/thermal_core.c                | 161 +++++++++++++++---
->   drivers/thermal/thermal_core.h                |  24 +--
->   drivers/thermal/thermal_helpers.c             |  28 +--
->   drivers/thermal/thermal_netlink.c             |  21 +--
->   drivers/thermal/thermal_of.c                  | 116 -------------
->   drivers/thermal/thermal_sysfs.c               | 133 +++++----------
->   drivers/thermal/ti-soc-thermal/ti-thermal.h   |  15 --
->   drivers/thermal/uniphier_thermal.c            |  27 ++-
->   include/linux/thermal.h                       |  10 ++
->   32 files changed, 560 insertions(+), 818 deletions(-)
+> Thinking some more, that's probably going to warn in the insn code when
+> unconditionally generating the 'old' branch; I'll spin a new version after some
+> testing.
 > 
 
+I see it. And ftrace_find_callable_addr() would still fail.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+With a slight modification, it worked for me:
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+index ea5dc7c90f46..621c62238d96 100644
+--- a/arch/arm64/kernel/ftrace.c
++++ b/arch/arm64/kernel/ftrace.c
+@@ -216,14 +216,28 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+ {
+        unsigned long pc = rec->ip;
+        u32 old = 0, new;
++       bool validate = true;
++
++       /*
++        * When using mcount, calls can be indirected via a PLT generated by
++        * the toolchain. Ignore this when initializing the callsite.
++        *
++        * Note: `mod` is only set at module load time.
++        */
++       if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS) &&
++           IS_ENABLED(CONFIG_ARM64_MODULE_PLTS) && mod) {
++               validate = false;
++               goto make_nop;
++       }
+
+        if (!ftrace_find_callable_addr(rec, mod, &addr))
+                return -EINVAL;
+
+        old = aarch64_insn_gen_branch_imm(pc, addr, AARCH64_INSN_BRANCH_LINK);
++make_nop:
+        new = aarch64_insn_gen_nop();
+
+-       return ftrace_modify_code(pc, old, new, true);
++       return ftrace_modify_code(pc, old, new, validate);
+ }
+
+Thanks,
+Huafei
+
+> Thanks,
+> Mark.
+> 
+>>
+>> Thanks,
+>> Mark.
+>>
+>> ---->8----
+>> diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+>> index ea5dc7c90f46..ba9b76ea5e68 100644
+>> --- a/arch/arm64/kernel/ftrace.c
+>> +++ b/arch/arm64/kernel/ftrace.c
+>> @@ -216,6 +216,17 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+>>  {
+>>  	unsigned long pc = rec->ip;
+>>  	u32 old = 0, new;
+>> +	bool validate = true;
+>> +
+>> +	/*
+>> +	 * When using mcount, calls can be indirected via a PLT generated by
+>> +	 * the toolchain. Ignore this when initializing the callsite.
+>> +	 *
+>> +	 * Note: `mod` is only set at module load time.
+>> +	 */
+>> +	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS) &&
+>> +	    IS_ENABLED(CONFIG_ARM64_MODULE_PLTS) && mod)
+>> +		validate = false;
+>>  
+>>  	if (!ftrace_find_callable_addr(rec, mod, &addr))
+>>  		return -EINVAL;
+>> @@ -223,7 +234,7 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+>>  	old = aarch64_insn_gen_branch_imm(pc, addr, AARCH64_INSN_BRANCH_LINK);
+>>  	new = aarch64_insn_gen_nop();
+>>  
+>> -	return ftrace_modify_code(pc, old, new, true);
+>> +	return ftrace_modify_code(pc, old, new, validate);
+>>  }
+>>  
+>>  void arch_ftrace_update_code(int command)
+> 
+> .
+> 
