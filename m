@@ -2,234 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FCB5EF012
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 343115EF016
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235149AbiI2ILZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
+        id S235151AbiI2IND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234934AbiI2ILW (ORCPT
+        with ESMTP id S234998AbiI2INA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:11:22 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124B313AF37
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:11:20 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id v128so333110ioe.12
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:11:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Y/ouPO+8ggCR5XfiR9vvBUlZSYI49RbT/rsnOPSR8Rg=;
-        b=Jd3yUrIuLUuBGk3SrYhc2WzVt+g9kcDw2xlpyLmcctfuqAi4yyhINFoOXVhn7Lw+VM
-         xsVuQW/Rqvm2UizfwCBAQp0ZznjKHSm5X4ckphwe5PQ4S03OpNYrVjntnciR/e0tBQ+1
-         Q+PZFbNZhpOWK1NHTl42OgE6cWuLVhlTwfYlA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Y/ouPO+8ggCR5XfiR9vvBUlZSYI49RbT/rsnOPSR8Rg=;
-        b=td0ZvlPtYbbatUQBiSrHDzLzeQFguAVnvhZaTd/I7psT4Xdx43XO0Xt2u3MtUv77wy
-         vMfOkWm0xBsyvFTWYRB3PKbKBY5w3GYyF6n77Uyz965PIMHCsRUQAl5LFACzHebwaEcF
-         0psf0+Hk4kLEnrYTx/kwDDXVPCGOrVaUVKrNAefRO73JQ3Bx6xRU6YBL+uaKtMoqCsZ0
-         Wwt2A1W0E2L9+hyw5bROCbvmmrcXNT/g2IjBGG/eW+JgiOpNO1ZYwuXEtBMIoJEF6YqU
-         X15hWxeexI/HDlJ53tWZJb7q9swwWma63LvDK8xEr/c8+8k4yg2R5I1+3k5aIHxfF/07
-         2PEg==
-X-Gm-Message-State: ACrzQf34/CXz9iJO3DvNYL+w+Ky4AA924b1aI/oN6FaQJHuM+9YzLKka
-        P4bcTjdHxOIoJ1VWJnwSiJ6xvVW4JVmV27xjFOx+
-X-Google-Smtp-Source: AMsMyM4iB7bqNu9AVpHcTK6CBUrARbJ2zy0wYAW9dBBK8iB9whhsHJj3ZWdUR5CTscix10ClKTdxwkzW4uMEVfgVOEU=
-X-Received: by 2002:a05:6602:15c7:b0:6a1:c3fc:98fd with SMTP id
- f7-20020a05660215c700b006a1c3fc98fdmr892233iow.151.1664439079361; Thu, 29 Sep
- 2022 01:11:19 -0700 (PDT)
+        Thu, 29 Sep 2022 04:13:00 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA59413BCC1;
+        Thu, 29 Sep 2022 01:12:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664439178; x=1695975178;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IQ7z/I+zLeVa5Aa6mLZ8ZxCc1tq6PQJIg4/ITcyKHNc=;
+  b=EiRV/+ei1DIliOEr1P5AbqFsdQpPMQNZUOPgGKHXGBwgKz9MWsaNI++T
+   TeQvSMg9RbRWAl5kQwpNorx7YftO301b/SUHYsLldUh5y82zI5msAIniq
+   RDYe4bpg4Idmr2vB8gKi6X8hiomWo7e3tpVMSJQqHUjVBmIwFqIMCcS75
+   3XRBUbT+HG8lhQeAwtoP1jPMj7IJ1JfCfBeUaUhmgFz9yvtzW1ilYENXm
+   H8/9c7mc+xB0k/yeQ2hCbHTSso2buA2Iu7uddoGOjCMDQg2V2kloeVS+W
+   a+e0klaL6QybS7oHi3eWfra5G9oTdRObuhg9SDqHUbfV0m+s0t/Wi3uSo
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="299428164"
+X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
+   d="scan'208";a="299428164"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 01:12:58 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="726296616"
+X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
+   d="scan'208";a="726296616"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.238.4.231]) ([10.238.4.231])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 01:12:53 -0700
+Message-ID: <dd33559e-5d55-9866-136f-554466c0c44f@linux.intel.com>
+Date:   Thu, 29 Sep 2022 16:12:51 +0800
 MIME-Version: 1.0
-References: <20220826151556.1708879-1-heiko@sntech.de> <CAOnJCU+e-rEN8AZ+5=owR4hVSq7jbYqcZUNwc7-8JbzgGK1d0Q@mail.gmail.com>
-In-Reply-To: <CAOnJCU+e-rEN8AZ+5=owR4hVSq7jbYqcZUNwc7-8JbzgGK1d0Q@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 29 Sep 2022 01:11:08 -0700
-Message-ID: <CAOnJCU+qrmTE3OEFhwvnTT6dQjVZn4jn5TEMz=8+TYahW4sdOw@mail.gmail.com>
-Subject: Re: [PATCH] drivers/perf: riscv_pmu_sbi: add perf_user_access sysctl
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     anup@brainfault.org, will@kernel.org, mark.rutland@arm.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        paul.walmsley@sifive.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        cmuellner@linux.com, philipp.tomsich@vrull.eu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v1 05/22] perf vendor events: Update Intel alderlake
+To:     Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Kan Liang <kan.liang@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>, perry.taylor@intel.com,
+        caleb.biggers@intel.com, kshipra.bopardikar@intel.com,
+        samantha.alt@intel.com, ahmad.yasin@intel.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+References: <20220928072204.1613330-1-irogers@google.com>
+ <20220928072204.1613330-6-irogers@google.com>
+ <44f59d7c-ced7-2d74-edbc-f354047339fe@linux.intel.com>
+ <YzRVOD4u2SI0K29Y@kernel.org>
+ <CAP-5=fUogKZx6JP_vg+6ti+BnbEcX+3Wnzi077s4VgxEKLpQeQ@mail.gmail.com>
+Content-Language: en-US
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <CAP-5=fUogKZx6JP_vg+6ti+BnbEcX+3Wnzi077s4VgxEKLpQeQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 3:10 PM Atish Patra <atishp@atishpatra.org> wrote:
->
->
->
-> On Fri, Aug 26, 2022 at 8:16 AM Heiko Stuebner <heiko@sntech.de> wrote:
->>
->> Add a sysctl similar to the one on arm64 to enable/disable
->> access to counter CSRs from u-mode on RISC-V.
->>
->> The default is of course set to disabled keeping the current
->> state of access - to only the TIME CSR.
->>
->> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
->> ---
->>  Documentation/admin-guide/sysctl/kernel.rst |  6 +--
->>  drivers/perf/riscv_pmu_sbi.c                | 43 ++++++++++++++++++++-
->>  2 files changed, 44 insertions(+), 5 deletions(-)
->>
->> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
->> index ee6572b1edad..efd4bc385e7a 100644
->> --- a/Documentation/admin-guide/sysctl/kernel.rst
->> +++ b/Documentation/admin-guide/sysctl/kernel.rst
->> @@ -894,15 +894,15 @@ enabled, otherwise writing to this file will return ``-EBUSY``.
->>  The default value is 8.
->>
->>
->> -perf_user_access (arm64 only)
->> -=================================
->> +perf_user_access (arm64 and riscv only)
->> +=======================================
->>
->>  Controls user space access for reading perf event counters. When set to 1,
->>  user space can read performance monitor counter registers directly.
->>
->>  The default value is 0 (access disabled).
->>
->> -See Documentation/arm64/perf.rst for more information.
->> +See Documentation/arm64/perf.rst for more information on arm64
->>
->>
->>  pid_max
->> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
->> index 6f6681bbfd36..7aab8d673357 100644
->> --- a/drivers/perf/riscv_pmu_sbi.c
->> +++ b/drivers/perf/riscv_pmu_sbi.c
->> @@ -41,6 +41,8 @@ static const struct attribute_group *riscv_pmu_attr_groups[] = {
->>         NULL,
->>  };
->>
->> +static int sysctl_perf_user_access __read_mostly;
->> +
->>  /*
->>   * RISC-V doesn't have hetergenous harts yet. This need to be part of
->>   * per_cpu in case of harts with different pmu counters
->> @@ -640,13 +642,22 @@ static irqreturn_t pmu_sbi_ovf_handler(int irq, void *dev)
->>         return IRQ_HANDLED;
->>  }
->>
->> +/*
->> + * Depending on the perf_user_access setting, enable the access
->> + * from usermode either for all counters or for TIME csr only.
->> + */
->> +static void riscv_pmu_update_user_access(void *info)
->> +{
->> +       csr_write(CSR_SCOUNTEREN, sysctl_perf_user_access ? GENMASK(31, 0) :
->> +                                                           0x2);
->> +}
->> +
->>  static int pmu_sbi_starting_cpu(unsigned int cpu, struct hlist_node *node)
->>  {
->>         struct riscv_pmu *pmu = hlist_entry_safe(node, struct riscv_pmu, node);
->>         struct cpu_hw_events *cpu_hw_evt = this_cpu_ptr(pmu->hw_events);
->>
->> -       /* Enable the access for TIME csr only from the user mode now */
->> -       csr_write(CSR_SCOUNTEREN, 0x2);
->> +       riscv_pmu_update_user_access(NULL);
->>
->>         /* Stop all the counters so that they can be enabled from perf */
->>         pmu_sbi_stop_all(pmu);
->> @@ -785,6 +796,32 @@ static void riscv_pmu_destroy(struct riscv_pmu *pmu)
->>         cpuhp_state_remove_instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
->>  }
->>
->> +static int riscv_pmu_proc_user_access_handler(struct ctl_table *table,
->> +                       int write, void *buffer, size_t *lenp, loff_t *ppos)
->> +{
->> +       int ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
->> +
->> +       if (ret || !write)
->> +               return ret;
->> +
->> +       on_each_cpu(riscv_pmu_update_user_access, NULL, 1);
->> +
->
->
-> This enables all the counter access from the user space. Not the ones that were being monitored through perf system calls.
-> Looking at ARM64 code, they clear out all other counters during the start to avoid the leakage.
->
-> This is a bit expensive to achieve with the current SBI interface as there is no simpler interface to clear out the mhpmcounter value without starting it.
-> We have to start the other counters with 0 value and stop it immediately which is very ugly.
->
-> There is a supervisor counter delegation proposal that is in discussion which can write the mhpmevent/mhpmcounter (via a different CSR) directly from S-mode.
-> Once that is in place, we can enable such functionality.
->
-> I am not sure how commonly this feature is used. Personally, I would prefer to not enable this until supervisor counter delegation is implemented.
-> But I would like to hear what others think.
->
-> If it is a very common feature that RISC-V should support immediately, we have to resort to the ugly route of enabling/disabling the unused counters.
->
-
-I just realized my above response was never delivered to the mailing
-list. In a way that's a good thing as I am trying to retract my above
-opinion :)
-There are some discussions around enabling cycle/instret for the user
-space unconditionally [1] and a patch from palmer[2]
-To allow userspace to selectively enable the cycle counter, we need
-this patch. Thus, it should be merged asap.
-
-I am still not sure how big the problem is for exposing the previously
-used counter values. We can have separate discussions on that and a
-follow up patch if required.
-
-[1] https://lore.kernel.org/all/YxEhC%2FmDW1lFt36J@aurel32.net/
-[2] https://lore.kernel.org/linux-riscv/YzS0RNzH2CprLSyc@spud/T/#ma8e0034fa9172a66820d6d5fbc3314619ff657a5
 
 
->> +       return 0;
->> +}
->> +
->> +static struct ctl_table sbi_pmu_sysctl_table[] = {
->> +       {
->> +               .procname       = "perf_user_access",
->> +               .data           = &sysctl_perf_user_access,
->> +               .maxlen         = sizeof(unsigned int),
->> +               .mode           = 0644,
->> +               .proc_handler   = riscv_pmu_proc_user_access_handler,
->> +               .extra1         = SYSCTL_ZERO,
->> +               .extra2         = SYSCTL_ONE,
->> +       },
->> +       { }
->> +};
->> +
->>  static int pmu_sbi_device_probe(struct platform_device *pdev)
->>  {
->>         struct riscv_pmu *pmu = NULL;
->> @@ -834,6 +871,8 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
->>         if (ret)
->>                 goto out_unregister;
+On 9/29/2022 10:23 AM, Ian Rogers wrote:
+> On Wed, Sep 28, 2022 at 7:08 AM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
 >>
->> +       register_sysctl("kernel", sbi_pmu_sysctl_table);
->> +
->>         return 0;
+>> Em Wed, Sep 28, 2022 at 04:22:53PM +0800, Xing Zhengjun escreveu:
+>>> On 9/28/2022 3:21 PM, Ian Rogers wrote:
+>>>> diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
+>>>> index 7f2d777fd97f..594c6e96f0ce 100644
+>>>> --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
+>>>> +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
+>>>> @@ -1,5 +1,5 @@
+>>>>    Family-model,Version,Filename,EventType
+>>>> -GenuineIntel-6-9[7A],v1.13,alderlake,core
+>>>> +GenuineIntel-6-(97|9A|B7|BA|BF),v1.15,alderlake,core
+>>>
+>>> The commit description should mention this change "Add more CPUID support
+>>> for ADL"
 >>
->>  out_unregister:
+>> I added this note, with that can I have your Reviewed-by or Acked-by?
+>>
+>> - Arnaldo
+> 
+> I think I should send a v2. I can add this then. Other things for v2 are:
+> - this week there will likely be an update to [1] which is implicitly
+> integrated here.
+> - the topdown metrics are all percentages but are currently values
+> zero to 1. It is straightforward to add a ScaleUnit of 100% to them
+> all.
+> - eyeballing topdown event metrics like:
+> 
+>      {
+>         "BriefDescription": "This category represents fraction of slots
+> utilized by useful work i.e. issued uops that eventually get retired",
+>         "MetricExpr": "topdown\\-retiring / (topdown\\-fe\\-bound +
+> topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound)",
+>         "MetricGroup": "TopdownL1;tma_L1_group",
+>         "MetricName": "tma_retiring",
+> ...
+> it looks like the group will fail due to the missing slots event. This
+> can be fixed with:
+>         "MetricExpr": "topdown\\-retiring / (topdown\\-fe\\-bound +
+> topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0
+> * TOPDOWN.SLOTS",
+> 
+> Thanks,
+> Ian
+
+I just test all the events for SPR/ADL, no error find.
+But there are a lots of metrics fail due to slots missed.
+
+|0929_005708.420|ERROR| common.sh:123:do_cmd() - perf stat -M 
+"tma_branch_mispredicts" -a sleep 0.1 failed. Return code is 255|
+|0929_005709.221|ERROR| common.sh:123:do_cmd() - perf stat -M 
+"tma_backend_bound" -a sleep 0.1 failed. Return code is 255|
+|0929_005709.544|ERROR| common.sh:123:do_cmd() - perf stat -M 
+"tma_memory_bound" -a sleep 0.1 failed. Return code is 255|
+|0929_005723.757|ERROR| common.sh:123:do_cmd() - perf stat -M 
+"tma_core_bound" -a sleep 0.1 failed. Return code is 255|
+|0929_005724.531|ERROR| common.sh:123:do_cmd() - perf stat -M 
+"tma_ports_utilization" -a sleep 0.1 failed. Return code is 255|
+|0929_005731.541|ERROR| common.sh:123:do_cmd() - perf stat -M 
+"tma_retiring" -a sleep 0.1 failed. Return code is 255|
+|0929_005731.860|ERROR| common.sh:123:do_cmd() - perf stat -M 
+"tma_light_operations" -a sleep 0.1 failed. Return code is 255|
+|0929_005732.811|ERROR| common.sh:123:do_cmd() - perf stat -M 
+"tma_x87_use" -a sleep 0.1 failed. Return code is 255|
+|0929_005741.026|ERROR| common.sh:123:do_cmd() - perf stat -M 
+"tma_heavy_operations" -a sleep 0.1 failed. Return code is 255|
+|0929_005746.165|ERROR| common.sh:123:do_cmd() - perf stat -M 
+"Memory_Latency" -a sleep 0.1 failed. Return code is 255|
+
+# perf stat -v  -M "tma_branch_mispredicts" -a sleep 1
+Using CPUID GenuineIntel-6-8F-3
+metric expr topdown\-br\-mispredict / (topdown\-fe\-bound + 
+topdown\-bad\-spec + topdown\-retiring + topdown\-be\-bound) for 
+tma_branch_mispredicts
+found event topdown-retiring
+found event topdown-fe-bound
+found event topdown-be-bound
+found event topdown-br-mispredict
+found event topdown-bad-spec
+Parsing metric events 
+'{topdown-retiring/metric-id=topdown!1retiring/,topdown-fe-bound/metric-id=topdown!1fe!1bound/,topdown-be-bound/metric-id=topdown!1be!1bound/,topdown-br-mispredict/metric-id=topdown!1br!1mispredict/,topdown-bad-spec/metric-id=topdown!1bad!1spec/}:W'
+topdown-retiring -> cpu/event=0,umask=0x80/
+topdown-fe-bound -> cpu/event=0,umask=0x82/
+topdown-be-bound -> cpu/event=0,umask=0x83/
+topdown-br-mispredict -> cpu/event=0,umask=0x85/
+topdown-bad-spec -> cpu/event=0,umask=0x81/
+Control descriptor is not initialized
+Warning:
+topdown-retiring event is not supported by the kernel.
+Error:
+The sys_perf_event_open() syscall returned with 22 (Invalid argument) 
+for event (topdown-retiring).
+/bin/dmesg | grep -i perf may provide additional information.
+
+
+> 
+> [1] https://github.com/intel/perfmon-metrics
+> 
+>>>>    GenuineIntel-6-(1C|26|27|35|36),v4,bonnell,core
+>>>>    GenuineIntel-6-(3D|47),v26,broadwell,core
+>>>>    GenuineIntel-6-56,v23,broadwellde,core
+>>>
+>>> --
+>>> Zhengjun Xing
+>>
 >> --
->> 2.35.1
 >>
->
->
-> --
-> Regards,
-> Atish
+>> - Arnaldo
 
-
-
---
-Regards,
-Atish
+-- 
+Zhengjun Xing
