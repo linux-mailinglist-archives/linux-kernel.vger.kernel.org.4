@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5375F169D
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A6A5F16CD
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Oct 2022 01:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiI3XYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Sep 2022 19:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
+        id S231867AbiI3Xoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Sep 2022 19:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232113AbiI3XYS (ORCPT
+        with ESMTP id S231420AbiI3XoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Sep 2022 19:24:18 -0400
+        Fri, 30 Sep 2022 19:44:17 -0400
 Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7411715A700;
-        Fri, 30 Sep 2022 16:24:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78DBE157FF6;
+        Fri, 30 Sep 2022 16:44:11 -0700 (PDT)
 Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 63B39E0EB5;
-        Fri, 30 Sep 2022 01:46:56 +0300 (MSK)
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 0BA24E0EBA;
+        Fri, 30 Sep 2022 01:54:12 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         baikalelectronics.ru; h=cc:cc:content-transfer-encoding
         :content-type:content-type:date:from:from:in-reply-to:message-id
         :mime-version:references:reply-to:subject:subject:to:to; s=post;
-         bh=wuhxWCVeXVlJVS/RfP/AZNvPaB2WtIt+hlprDEaQew8=; b=tp0ozYnJRVZb
-        3eOjGM6LN8TCwm25Q+QFgtbgIAcq6fonGNSvoBN/ax9zXSP9KuFKSHRRJhS6lHBY
-        Hp9D7/pv0NAdDxGCXECCbCHCzU+5HbRntTZwP29CWCnCUKnIXExi1hNXj9wDXbL1
-        rI4PnhJFrDkO3LC4RvuG+ywABgJbY1w=
+         bh=QhXvMjnOx6102hk68si/jM3uNphZAModevu0rZ90pxk=; b=fMsUKCwywZmD
+        QcHiDv1qLOqBBp3izG1G6f1pVWuunRUd/aG8O6PZuGkkpmn2H+Z1u+3i1na6x3iB
+        Eos8cF8zuX2+AAunWtGlSvvZ/zAZtNmKcfyle2i8GeftLxh26jXQTFGUtvhDGAMJ
+        KfTvik9GINam2YdDzVAMJZ10ho9JXus=
 Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 56706E0E6B;
-        Fri, 30 Sep 2022 01:46:56 +0300 (MSK)
+        by post.baikalelectronics.com (Proxmox) with ESMTP id EF27FE0E6B;
+        Fri, 30 Sep 2022 01:54:11 +0300 (MSK)
 Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 30 Sep 2022 01:46:57 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 30 Sep 2022 01:54:12 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Jonathan Derrick <jonathan.derrick@intel.com>,
-        Revanth Rajashekar <revanth.rajashekar@intel.com>,
-        Rafael Antognolli <Rafael.Antognolli@intel.com>,
-        Scott Bauer <scott.bauer@intel.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <linux-nvme@lists.infradead.org>, <linux-block@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-mips@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 3/3] block: sed-opal: Cache-line-align the cmd/resp buffers
-Date:   Fri, 30 Sep 2022 01:46:48 +0300
-Message-ID: <20220929224648.8997-4-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH RESEND v12 4/8] clk: baikal-t1: Add SATA internal ref clock buffer
+Date:   Fri, 30 Sep 2022 01:53:58 +0300
+Message-ID: <20220929225402.9696-5-Sergey.Semin@baikalelectronics.ru>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220929224648.8997-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220929224648.8997-1-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20220929225402.9696-1-Sergey.Semin@baikalelectronics.ru>
+References: <20220929225402.9696-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -66,46 +64,230 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In accordance with [1] the DMA-able memory buffers must be
-cacheline-aligned otherwise the cache writing-back and invalidation
-performed during the mapping may cause the adjacent data being lost. It's
-specifically required for the DMA-noncoherent platforms. Seeing the
-opal_dev.{cmd,resp} buffers are used for DMAs in the NVME and SCSI/SD
-drivers in framework of the nvme_sec_submit() and sd_sec_submit() methods
-respectively we must make sure the passed buffers are cacheline-aligned to
-prevent the denoted problem.
+It turns out the internal SATA reference clock signal will stay
+unavailable for the SATA interface consumer until the buffer on it's way
+is ungated. So aside with having the actual clock divider enabled we need
+to ungate a buffer placed on the signal way to the SATA controller (most
+likely some rudiment from the initial SoC release). Seeing the switch flag
+is placed in the same register as the SATA-ref clock divider at a
+non-standard ffset, let's implement it as a separate clock controller with
+the set-rate propagation to the parental clock divider wrapper. As such
+we'll be able to disable/enable and still change the original clock source
+rate.
 
-[1] Documentation/core-api/dma-api.rst
-
-Fixes: 455a7b238cd6 ("block: Add Sed-opal library")
+Fixes: 353afa3a8d2e ("clk: Add Baikal-T1 CCU Dividers driver")
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- block/sed-opal.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/block/sed-opal.c b/block/sed-opal.c
-index 9700197000f2..222acbd1f03a 100644
---- a/block/sed-opal.c
-+++ b/block/sed-opal.c
-@@ -73,6 +73,7 @@ struct parsed_resp {
- 	struct opal_resp_tok toks[MAX_TOKS];
+---
+
+Changelog v4:
+- This is a new patch created on v4 lap of the series.
+---
+ drivers/clk/baikal-t1/ccu-div.c     | 64 +++++++++++++++++++++++++++++
+ drivers/clk/baikal-t1/ccu-div.h     |  4 ++
+ drivers/clk/baikal-t1/clk-ccu-div.c | 18 +++++++-
+ 3 files changed, 85 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clk/baikal-t1/ccu-div.c b/drivers/clk/baikal-t1/ccu-div.c
+index bbfa3526ee10..a6642f3d33d4 100644
+--- a/drivers/clk/baikal-t1/ccu-div.c
++++ b/drivers/clk/baikal-t1/ccu-div.c
+@@ -34,6 +34,7 @@
+ #define CCU_DIV_CTL_CLKDIV_MASK(_width) \
+ 	GENMASK((_width) + CCU_DIV_CTL_CLKDIV_FLD - 1, CCU_DIV_CTL_CLKDIV_FLD)
+ #define CCU_DIV_CTL_LOCK_SHIFTED	BIT(27)
++#define CCU_DIV_CTL_GATE_REF_BUF	BIT(28)
+ #define CCU_DIV_CTL_LOCK_NORMAL		BIT(31)
+ 
+ #define CCU_DIV_RST_DELAY_US		1
+@@ -170,6 +171,40 @@ static int ccu_div_gate_is_enabled(struct clk_hw *hw)
+ 	return !!(val & CCU_DIV_CTL_EN);
+ }
+ 
++static int ccu_div_buf_enable(struct clk_hw *hw)
++{
++	struct ccu_div *div = to_ccu_div(hw);
++	unsigned long flags;
++
++	spin_lock_irqsave(&div->lock, flags);
++	regmap_update_bits(div->sys_regs, div->reg_ctl,
++			   CCU_DIV_CTL_GATE_REF_BUF, 0);
++	spin_unlock_irqrestore(&div->lock, flags);
++
++	return 0;
++}
++
++static void ccu_div_buf_disable(struct clk_hw *hw)
++{
++	struct ccu_div *div = to_ccu_div(hw);
++	unsigned long flags;
++
++	spin_lock_irqsave(&div->lock, flags);
++	regmap_update_bits(div->sys_regs, div->reg_ctl,
++			   CCU_DIV_CTL_GATE_REF_BUF, CCU_DIV_CTL_GATE_REF_BUF);
++	spin_unlock_irqrestore(&div->lock, flags);
++}
++
++static int ccu_div_buf_is_enabled(struct clk_hw *hw)
++{
++	struct ccu_div *div = to_ccu_div(hw);
++	u32 val = 0;
++
++	regmap_read(div->sys_regs, div->reg_ctl, &val);
++
++	return !(val & CCU_DIV_CTL_GATE_REF_BUF);
++}
++
+ static unsigned long ccu_div_var_recalc_rate(struct clk_hw *hw,
+ 					     unsigned long parent_rate)
+ {
+@@ -323,6 +358,7 @@ static const struct ccu_div_dbgfs_bit ccu_div_bits[] = {
+ 	CCU_DIV_DBGFS_BIT_ATTR("div_en", CCU_DIV_CTL_EN),
+ 	CCU_DIV_DBGFS_BIT_ATTR("div_rst", CCU_DIV_CTL_RST),
+ 	CCU_DIV_DBGFS_BIT_ATTR("div_bypass", CCU_DIV_CTL_SET_CLKDIV),
++	CCU_DIV_DBGFS_BIT_ATTR("div_buf", CCU_DIV_CTL_GATE_REF_BUF),
+ 	CCU_DIV_DBGFS_BIT_ATTR("div_lock", CCU_DIV_CTL_LOCK_NORMAL)
  };
  
-+/* Presumably DMA-able buffers must be cache-aligned */
- struct opal_dev {
- 	bool supported;
- 	bool mbr_enabled;
-@@ -88,8 +89,8 @@ struct opal_dev {
- 	u64 lowest_lba;
+@@ -441,6 +477,9 @@ static void ccu_div_var_debug_init(struct clk_hw *hw, struct dentry *dentry)
+ 			continue;
+ 		}
  
- 	size_t pos;
--	u8 cmd[IO_BUFFER_LENGTH];
--	u8 resp[IO_BUFFER_LENGTH];
-+	u8 cmd[IO_BUFFER_LENGTH] ____cacheline_aligned;
-+	u8 resp[IO_BUFFER_LENGTH] ____cacheline_aligned;
++		if (!strcmp("div_buf", name))
++			continue;
++
+ 		bits[didx] = ccu_div_bits[bidx];
+ 		bits[didx].div = div;
  
- 	struct parsed_resp parsed;
- 	size_t prev_d_len;
+@@ -477,6 +516,21 @@ static void ccu_div_gate_debug_init(struct clk_hw *hw, struct dentry *dentry)
+ 				   &ccu_div_dbgfs_fixed_clkdiv_fops);
+ }
+ 
++static void ccu_div_buf_debug_init(struct clk_hw *hw, struct dentry *dentry)
++{
++	struct ccu_div *div = to_ccu_div(hw);
++	struct ccu_div_dbgfs_bit *bit;
++
++	bit = kmalloc(sizeof(*bit), GFP_KERNEL);
++	if (!bit)
++		return;
++
++	*bit = ccu_div_bits[3];
++	bit->div = div;
++	debugfs_create_file_unsafe(bit->name, ccu_div_dbgfs_mode, dentry, bit,
++				   &ccu_div_dbgfs_bit_fops);
++}
++
+ static void ccu_div_fixed_debug_init(struct clk_hw *hw, struct dentry *dentry)
+ {
+ 	struct ccu_div *div = to_ccu_div(hw);
+@@ -489,6 +543,7 @@ static void ccu_div_fixed_debug_init(struct clk_hw *hw, struct dentry *dentry)
+ 
+ #define ccu_div_var_debug_init NULL
+ #define ccu_div_gate_debug_init NULL
++#define ccu_div_buf_debug_init NULL
+ #define ccu_div_fixed_debug_init NULL
+ 
+ #endif /* !CONFIG_DEBUG_FS */
+@@ -520,6 +575,13 @@ static const struct clk_ops ccu_div_gate_ops = {
+ 	.debug_init = ccu_div_gate_debug_init
+ };
+ 
++static const struct clk_ops ccu_div_buf_ops = {
++	.enable = ccu_div_buf_enable,
++	.disable = ccu_div_buf_disable,
++	.is_enabled = ccu_div_buf_is_enabled,
++	.debug_init = ccu_div_buf_debug_init
++};
++
+ static const struct clk_ops ccu_div_fixed_ops = {
+ 	.recalc_rate = ccu_div_fixed_recalc_rate,
+ 	.round_rate = ccu_div_fixed_round_rate,
+@@ -566,6 +628,8 @@ struct ccu_div *ccu_div_hw_register(const struct ccu_div_init_data *div_init)
+ 	} else if (div_init->type == CCU_DIV_GATE) {
+ 		hw_init.ops = &ccu_div_gate_ops;
+ 		div->divider = div_init->divider;
++	} else if (div_init->type == CCU_DIV_BUF) {
++		hw_init.ops = &ccu_div_buf_ops;
+ 	} else if (div_init->type == CCU_DIV_FIXED) {
+ 		hw_init.ops = &ccu_div_fixed_ops;
+ 		div->divider = div_init->divider;
+diff --git a/drivers/clk/baikal-t1/ccu-div.h b/drivers/clk/baikal-t1/ccu-div.h
+index b6a9c8e45318..4eb49ff4803c 100644
+--- a/drivers/clk/baikal-t1/ccu-div.h
++++ b/drivers/clk/baikal-t1/ccu-div.h
+@@ -15,8 +15,10 @@
+ 
+ /*
+  * CCU Divider private clock IDs
++ * @CCU_SYS_SATA_CLK: CCU SATA internal clock
+  * @CCU_SYS_XGMAC_CLK: CCU XGMAC internal clock
+  */
++#define CCU_SYS_SATA_CLK		-1
+ #define CCU_SYS_XGMAC_CLK		-2
+ 
+ /*
+@@ -37,11 +39,13 @@
+  * enum ccu_div_type - CCU Divider types
+  * @CCU_DIV_VAR: Clocks gate with variable divider.
+  * @CCU_DIV_GATE: Clocks gate with fixed divider.
++ * @CCU_DIV_BUF: Clock gate with no divider.
+  * @CCU_DIV_FIXED: Ungateable clock with fixed divider.
+  */
+ enum ccu_div_type {
+ 	CCU_DIV_VAR,
+ 	CCU_DIV_GATE,
++	CCU_DIV_BUF,
+ 	CCU_DIV_FIXED
+ };
+ 
+diff --git a/drivers/clk/baikal-t1/clk-ccu-div.c b/drivers/clk/baikal-t1/clk-ccu-div.c
+index 3953ae5664be..90f4fda406ee 100644
+--- a/drivers/clk/baikal-t1/clk-ccu-div.c
++++ b/drivers/clk/baikal-t1/clk-ccu-div.c
+@@ -76,6 +76,16 @@
+ 		.divider = _divider				\
+ 	}
+ 
++#define CCU_DIV_BUF_INFO(_id, _name, _pname, _base, _flags)	\
++	{							\
++		.id = _id,					\
++		.name = _name,					\
++		.parent_name = _pname,				\
++		.base = _base,					\
++		.type = CCU_DIV_BUF,				\
++		.flags = _flags					\
++	}
++
+ #define CCU_DIV_FIXED_INFO(_id, _name, _pname, _divider)	\
+ 	{							\
+ 		.id = _id,					\
+@@ -188,11 +198,14 @@ static const struct ccu_div_rst_map axi_rst_map[] = {
+  * for the SoC devices registers IO-operations.
+  */
+ static const struct ccu_div_info sys_info[] = {
+-	CCU_DIV_VAR_INFO(CCU_SYS_SATA_REF_CLK, "sys_sata_ref_clk",
++	CCU_DIV_VAR_INFO(CCU_SYS_SATA_CLK, "sys_sata_clk",
+ 			 "sata_clk", CCU_SYS_SATA_REF_BASE, 4,
+ 			 CLK_SET_RATE_GATE,
+ 			 CCU_DIV_SKIP_ONE | CCU_DIV_LOCK_SHIFTED |
+ 			 CCU_DIV_RESET_DOMAIN),
++	CCU_DIV_BUF_INFO(CCU_SYS_SATA_REF_CLK, "sys_sata_ref_clk",
++			 "sys_sata_clk", CCU_SYS_SATA_REF_BASE,
++			 CLK_SET_RATE_PARENT),
+ 	CCU_DIV_VAR_INFO(CCU_SYS_APB_CLK, "sys_apb_clk",
+ 			 "pcie_clk", CCU_SYS_APB_BASE, 5,
+ 			 CLK_IS_CRITICAL, CCU_DIV_RESET_DOMAIN),
+@@ -398,6 +411,9 @@ static int ccu_div_clk_register(struct ccu_div_data *data)
+ 			init.base = info->base;
+ 			init.sys_regs = data->sys_regs;
+ 			init.divider = info->divider;
++		} else if (init.type == CCU_DIV_BUF) {
++			init.base = info->base;
++			init.sys_regs = data->sys_regs;
+ 		} else {
+ 			init.divider = info->divider;
+ 		}
 -- 
 2.37.3
 
