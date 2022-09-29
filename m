@@ -2,114 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B825EEF73
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4C75EEF78
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235483AbiI2Hms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49616 "EHLO
+        id S235279AbiI2HoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235379AbiI2HmX (ORCPT
+        with ESMTP id S235520AbiI2Hnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:42:23 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22DBECCC9
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:42:11 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id z4so1015119lft.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:42:11 -0700 (PDT)
+        Thu, 29 Sep 2022 03:43:45 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCF27D789;
+        Thu, 29 Sep 2022 00:43:41 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id a4so209066uao.0;
+        Thu, 29 Sep 2022 00:43:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=kXmjrEaLlec7+gdoCuLabMghz8f21Tz9CFZIlFPg0Qo=;
-        b=dI/7FVNx0lYahIDhTsowid/xFSehN616UCnRe2mV4g0RRXOBhjPX29eGBlYr2OD5NW
-         l6IE/cbEeXEJiUv4eGnha4zDNsJ9rvdkOcxXo3doqlz8NGHCBWb0UGQuTNAae4PF1eRx
-         FiZrc45v7ZE2jrvtJTI/XXpm54JCuFWzP+wKJrvZgSyptapLzln9fEeZm+qStiWs48vH
-         m1xoMkqH/55iZHAtqGtAaFc9b7BazTDMKdh26iMKjHXYZ88A5d8wKJvMWK4wFBF6MlOm
-         b6U6PCK5ajY4re5eiMHM8DsxZTnbedzGKC4jQ4ayds+Qn6uXDJTaIx17o/Ti6ERUa63r
-         +EqQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hUW+w97bjwcMZAz2wEha3h2rI21nTjZgAo+7PEzzR7o=;
+        b=IE9LHSxpzmDUKXAXpwHaYnHjLj1WufJVEYfJ1hGOFxil3rrScoNoLneEmDUcqYGDo/
+         cmnDLwBy5pEenkueOTqCV+am/5vXym19TECHw5twZhfNwDVDerAskkddsMYTI5iyXcb9
+         DKeNtto5a2ndL2uhg4dGQ+GhgCdAK8SvkRUTbps0BQnaxHCtqGHEWrXW1L8fXhtkJtvK
+         xEbpRhYNxNBRsDCHgiwHkY7GxRqwABdkPK0KVFe4aKZvOyCNtvpSM5qwc9EXYZdj7Ccx
+         +pI87QqvzlYDGu6n8JKzdWzkbjB8p0Z8F352cBkYLNp5LL5IyZKCRiZJ4CAtoLvoTv3W
+         5eTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=kXmjrEaLlec7+gdoCuLabMghz8f21Tz9CFZIlFPg0Qo=;
-        b=4gkDN/YuI0/9n6GPPFmrb49i6K2bT5bXBeYgQxNp33LT4PZSTn4VXjBn4g2k4DDXrU
-         cdfUUuTojprA7biMf6TVg1Cdc216SkiboSfxY0HCGCzcDtaCpOWUhP0DUP1mHDV6xc4g
-         V9R7LkW8vtXcdQ6yFc8yc4KbKl7hyzxUAAI+cybht/AQ3iiMW17SEfgDHbL4+VBA0ev6
-         UgE8ii1wq6Bgqx7wlpAGg1V+ScNriGGxzZjTe4hl2hPhz/oQotcGaIfdPV3XD8SM5HgK
-         91Ouy7erNRbkDeNBwxxwavd/dnzN/iPvvHz4MKQWo93SZwc8ZswW201spmCOLWsgjNxB
-         xnoQ==
-X-Gm-Message-State: ACrzQf3XvtBtM8wCf4zuPwu58RGbbal0o4Fw7AIKcS3YJG76kvlfdmZl
-        LUjI0o8D6Z733RXOLey8vocU8A==
-X-Google-Smtp-Source: AMsMyM70EePOHmDIEssJp2wfplCnqghvpyBPntj6tkSU9ZJ5Ug6bzEipuEa63KEVcVoxoLMRyBJHTA==
-X-Received: by 2002:a05:6512:2586:b0:4a0:54f2:772e with SMTP id bf6-20020a056512258600b004a054f2772emr796758lfb.663.1664437329639;
-        Thu, 29 Sep 2022 00:42:09 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id n13-20020a05651203ed00b004978e51b691sm709115lfq.266.2022.09.29.00.42.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 00:42:09 -0700 (PDT)
-Message-ID: <1b81d1ec-3050-b983-654b-52c955091274@linaro.org>
-Date:   Thu, 29 Sep 2022 09:42:08 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hUW+w97bjwcMZAz2wEha3h2rI21nTjZgAo+7PEzzR7o=;
+        b=iA3hcRubxNaD3F5znpW2v21sAUQ02aV/Eme5ySqZHWX2XGMZ0hqc6PqrS2aNYJzCNM
+         7XOvA9WeLsxI9jSHdYHeYAUmcSjsTRoM3vxHH7+QNUAIXQhUPRmtN/p1fuQWuVwaY+yY
+         NqLdeyF/QAJmjpVkMMMVAuksYkSA7dTkMKpTXCQej3Rgmoq+bIg//oIsJuqJcTFSXN1r
+         97IbqBFpd5a90gMxtx/NJO6ArIouOZ17FKvICxpO6nIMeM+O298LNBshSr6kCFsg8oqn
+         tABsvapuLbbAg6Ba5zRcZcDTRyBDniyGf+wIk5KefrcvGObvxQA5EEAs9p+/5BzIRvy0
+         p03g==
+X-Gm-Message-State: ACrzQf1hS+urFFtsOMtrmsHyu8dYArGsdKXmUErK191kYZC4dOmVgEZT
+        yPsBZmS3mPj7refPDuVFDeUGfv+OConztQZYPD8=
+X-Google-Smtp-Source: AMsMyM7ZHbYAiRKbQseodi2xdbkJcMUR30vIeLDXSMJPODyQS/Sgc7Hny7j2kIzLs5PAY4GuSRRyTMEfCI5USrXqyrw=
+X-Received: by 2002:a9f:3767:0:b0:3d1:2de3:12a8 with SMTP id
+ a36-20020a9f3767000000b003d12de312a8mr881708uae.47.1664437420589; Thu, 29 Sep
+ 2022 00:43:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH net-next 1/2] nfc: s3fwrn5: fix order of freeing resources
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Opasiak <k.opasiak@samsung.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220929050426.955139-1-dmitry.torokhov@gmail.com>
- <f0982b75-ede3-cc56-1160-8fda0faae356@linaro.org>
- <26fd03ad-181c-97c5-f620-6ac296cf1829@linaro.org>
- <36AC4067-78C6-4986-8B97-591F93E266D8@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <36AC4067-78C6-4986-8B97-591F93E266D8@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220928092937.27120-1-zhang.lyra@gmail.com> <fca2b97c-9d4f-d372-ef2a-aae8b367bbe5@linaro.org>
+ <CAAfSe-t=-pZAcrY0o-ct1uJaNhtkCMQKNW5gOrJfE6DEOhSZDw@mail.gmail.com> <bb61ff78-182f-f4e2-bee8-556234ca07ee@linaro.org>
+In-Reply-To: <bb61ff78-182f-f4e2-bee8-556234ca07ee@linaro.org>
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+Date:   Thu, 29 Sep 2022 15:43:04 +0800
+Message-ID: <CAAfSe-veC5syRMLbDDxDsYXTx=OS09DEMGS-O=c_9PSa7r9tuA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: gpio: Conver Unisoc GPIO controller
+ binding to yaml
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 09:37, Dmitry Torokhov wrote:
-> On September 29, 2022 12:27:19 AM PDT, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->> On 29/09/2022 09:26, Krzysztof Kozlowski wrote:
->>> On 29/09/2022 07:04, Dmitry Torokhov wrote:
->>>> Caution needs to be exercised when mixing together regular and managed
->>>> resources. In case of this driver devm_request_threaded_irq() should
->>>> not be used, because it will result in the interrupt being freed too
->>>> late, and there being a chance that it fires up at an inopportune
->>>> moment and reference already freed data structures.
->>>
->>> Non-devm was so far recommended only for IRQF_SHARED, not for regular
->>> ones.
-> 
-> If we are absolutely sure there is no possibility of interrupts firing then devm
-> should be ok, but it is much safer not to use it. Or use custom devm actions
-> to free non-managed resources.
+On Thu, 29 Sept 2022 at 15:02, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 29/09/2022 04:29, Chunyan Zhang wrote:
+> > Hi Krzysztof,
+> >
+> > On Wed, 28 Sept 2022 at 19:31, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 28/09/2022 11:29, Chunyan Zhang wrote:
+> >>> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> >>>
+> >>> Convert the Unisoc gpio controller binding to DT schema format.
+> >>>
+> >>
+> >>
+> >> Thank you for your patch. There is something to discuss/improve.
+> >>
+> >>> diff --git a/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
+> >>> new file mode 100644
+> >>> index 000000000000..c0cd1ed9809b
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
+> >>> @@ -0,0 +1,70 @@
+> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>> +# Copyright 2022 Unisoc Inc.
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/gpio/sprd,gpio.yaml#
+> >>
+> >> Use compatible as filename, so sprd,sc9860-gpio.yaml
+> >
+> > Humm... This is not only for SC9860, also for other IPs, UMS512 as an
+> > example which added in this patchset.
+> >
+>
+>
+> Then it's ok. It seems you have also typo in commit subject (Conver).
 
-I am not sure and the pattern itself is a bit risky, I agree. However
-the driver calls s3fwrn5_remove() which then calls
-s3fwrn5_phy_power_ctrl() which cuts the power via GPIO pin. I assume
-that the hardware should stop generating interrupts at this point.
+Ah yes -_-||, will fix that.
 
-> 
->>> Otherwise you have to fix half of Linux kernel drivers... 
-> 
-> Yes, if they are doing the wrong thing.
-
-What I meant, that this pattern appears pretty often. If we agree that
-this driver has a risky pattern (hardware might not be off after
-remove() callback), then we should maybe document it somewhere and
-include it in usual reviews.
-
-Best regards,
-Krzysztof
-
+>
+> Best regards,
+> Krzysztof
+>
