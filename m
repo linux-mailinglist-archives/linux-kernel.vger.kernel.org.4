@@ -2,74 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3125EEB60
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 03:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433885EEB65
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 04:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234603AbiI2B6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 21:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
+        id S233060AbiI2CAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 22:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234052AbiI2B6U (ORCPT
+        with ESMTP id S231949AbiI2CA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 21:58:20 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D203122604
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 18:58:19 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id r7so22374303wrm.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 18:58:19 -0700 (PDT)
+        Wed, 28 Sep 2022 22:00:26 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2625F13F;
+        Wed, 28 Sep 2022 19:00:24 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id b21so11976plz.7;
+        Wed, 28 Sep 2022 19:00:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=posI89+zac0UiwvW1mDf5OWiDQy0Yhxv/IzxtHly9yA=;
-        b=hKmYgXZfI3hL4Jg9MuVFiNNSwaoKZ8j4cSjeKGniv2b8ke9kXx5aAXP2DxWCJvii/+
-         Q93DCrnd/wh3Vdt1Y22T3F+DhPjVPKD4HbIlYHiKkcddMB6Se3GgCwF4ggWlJXR/661I
-         qZP0jU8YmJz53p1zOrXYFD0JJSWKC0/4Qc2JnM79MLbvcd+C9087cNCEfhpdGKTIyNbi
-         hhsa9GKSDk3daHw5Pb5VOV78FK88GbhhS/9bdZjte3dbb51H2KY5IKqI/AYaAY0XuJzt
-         zVSuTg9os9bzUqAshxOwfQTF4VlZgA/h0OENCNRYQdwoPzRO1mmeyPfSSrgRySq2hdKC
-         YMgA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=C5vB9AdNpMbk+2uUPlTv1wvt0hrX4ZZuVlJ7vkkQRH8=;
+        b=hPDZmGiqxB9XD3Z6wxo4PZNRWs3oY/Iz5OeU+JgazAdaRNCYb0hY+XBfMT5h9LpDuK
+         sCGI7yR8/B5SquXIbmemuUwjvIDSrPu4q0TQj4VgxJpWiQUjdojJRHZNtrxDqXrzln0J
+         SC2HI4obfGuU+uLyFgsG6Jz52S87DuPUi+3oTAYb331UHYMDQuKvHA2vT1QADuBgiLVe
+         7VSIb6tXofr7qFnhoUnL5WuTwLGNHphva9ycidtoa1lkJdflmrIUQCf9iwfFzPojQGuX
+         dzg1bswH2ufICBvvHb6SrbK5MKAhZ6SJjKefrLNz0CNT44/RBeJw5+BJ9/93nNc0aH6Y
+         FW1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=posI89+zac0UiwvW1mDf5OWiDQy0Yhxv/IzxtHly9yA=;
-        b=sldwPStWFLwkbkR/Z2VhcuSAQJR16HIhIf3sEFO424vhsaRaychOIniO2zpn+cunnE
-         TXb/Tffg0iLdqgsn8w5dFEEFIclSLysU55uEO1NYyZDHwoYuW9Q53hZLpPgkzhG6p4O5
-         0+3SaJ08SG1v0KlYswaVtXF1+OcFSicBaR5me6Gig162ItbIq/gsZ7gbsHtEZdhkWjcE
-         8xWmNXSi7yaapfrAIneNzQ31Bb1cXmRB3zHc7KYo/SjwOiMznxDoxzjBM1zH3gCCaTuT
-         Fwu3zvfJ4Y/H0e14W5dy3CTN2eXGAvdxyrgHjjpUD3aQqwsJkJgowEzJuoqRd+F4MvuS
-         BCpA==
-X-Gm-Message-State: ACrzQf1ZTAgx/xYbJceRupzHOE6JgCwSsPyAL6nU1cjshhnabG8yEdfb
-        3j3+8CstLTJmnSahvuJO7E2ikE8eSI0lvpKwzn9V0Q==
-X-Google-Smtp-Source: AMsMyM43TSvqdPcJcgxgsxb3hfRE7WlT0poI9Ru7d1//tjKEU/9C69LlHOg7sVx/3Ydrm3Fq6Y8dWiKrSDTEP7lMqWg=
-X-Received: by 2002:adf:dd8f:0:b0:22a:84ab:4be3 with SMTP id
- x15-20020adfdd8f000000b0022a84ab4be3mr426011wrl.40.1664416697616; Wed, 28 Sep
- 2022 18:58:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220926200757.1161448-1-namhyung@kernel.org> <20220926200757.1161448-4-namhyung@kernel.org>
- <288ee488-c50f-252d-b886-1bef89b5e883@arm.com> <CAM9d7chvH8fxOCXL3XUfez-7wsB7jjYyUDBUO10jqcWe+GcSFA@mail.gmail.com>
-In-Reply-To: <CAM9d7chvH8fxOCXL3XUfez-7wsB7jjYyUDBUO10jqcWe+GcSFA@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 28 Sep 2022 18:58:05 -0700
-Message-ID: <CAP-5=fW+a_hiwc08kwfsiOuLF+hStDyBGZkQQ-oQP-ChPLAF3w@mail.gmail.com>
-Subject: Re: [PATCH 3/6] perf stat: Rename saved_value->cpu_map_idx
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     James Clark <james.clark@arm.com>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=C5vB9AdNpMbk+2uUPlTv1wvt0hrX4ZZuVlJ7vkkQRH8=;
+        b=ERZchNlRsbSdg8yM9YOz9lo2AjD7M0rU8vOpJSWyFw0l5zShYWzsmrhg+U4oHc9P2m
+         Hf7GGJGcpbMCD01+q7yRlOWhCzRu9aD+NA2zEtt1NGU4dclZ2yLZDxUiud/YvkBlGVwS
+         2vqd4rBHpjhzAEe2lxaATRCBleOWr7pKXRzVDvMDktWXEcG+qvV0EeFuz3v6bRtygAgO
+         8udTAD3fm9mT6GfC/QL+6QFipYegtoHHSevPVNWgEAActBXPE9l3gxCaxH7lfw4Zr9zW
+         7HhYS17+J7Y78eCt995LCN35jWZUk70+JxdFCwU6QSc1GZ9IRPBtey76tLhwENGZfZlA
+         SnAw==
+X-Gm-Message-State: ACrzQf2+ufi4VhYWf2BW8IgDOPX1kk1WOQsMruy9Bc9e4scxTVqrmSow
+        C3uTvolw2fsZL5ebCEnSUwZsHeAVVb63mg==
+X-Google-Smtp-Source: AMsMyM7ZzV1vVGJNs6nTmd5yrCePl3Paqmk+hVgLyyR8mFNJpaQU8/eOM+EA2rjQyhlE3+Pt5NXgtg==
+X-Received: by 2002:a17:903:11cc:b0:178:aec1:18c3 with SMTP id q12-20020a17090311cc00b00178aec118c3mr994449plh.91.1664416823981;
+        Wed, 28 Sep 2022 19:00:23 -0700 (PDT)
+Received: from localhost.localdomain ([2402:7500:579:1b3a:f99f:1552:d82e:aa5a])
+        by smtp.gmail.com with ESMTPSA id o6-20020a170902d4c600b00178bd916c64sm4512864plg.265.2022.09.28.19.00.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 28 Sep 2022 19:00:23 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     lee@kernel.org
+Cc:     matthias.bgg@gmail.com, gene_chen@richtek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ChiYuan Huang <cy_huang@richtek.com>, stable@vger.kernel.org
+Subject: [PATCH v2] mfd: mt6360: add bound check in regmap read/write function
+Date:   Thu, 29 Sep 2022 10:00:17 +0800
+Message-Id: <1664416817-31590-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,59 +67,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 4:57 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> Hello,
->
-> On Wed, Sep 28, 2022 at 3:50 AM James Clark <james.clark@arm.com> wrote:
-> >
-> >
-> >
-> > On 26/09/2022 21:07, Namhyung Kim wrote:
-> > > The cpu_map_idx fields is just to differentiate values from other
-> > > entries.  It doesn't need to be strictly cpu map index.  Actually we can
-> > > pass thread map index or aggr map index.  So rename the fields first.
-> > >
-> > > No functional change intended.
-> > >
-> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > > ---
-> > >  tools/perf/util/stat-shadow.c | 308 +++++++++++++++++-----------------
-> > >  1 file changed, 154 insertions(+), 154 deletions(-)
-> > >
-> > > diff --git a/tools/perf/util/stat-shadow.c b/tools/perf/util/stat-shadow.c
-> > > index 9e1eddeff21b..99d05262055c 100644
-> > > --- a/tools/perf/util/stat-shadow.c
-> > > +++ b/tools/perf/util/stat-shadow.c
-> > > @@ -33,7 +33,7 @@ struct saved_value {
-> > >       struct evsel *evsel;
-> > >       enum stat_type type;
-> > >       int ctx;
-> > > -     int cpu_map_idx;
-> > > +     int map_idx;
-> >
-> > Do the same variables in stat.c and stat.h also need to be updated? The
-> > previous change to do this exact thing (5b1af93dbc7e) changed more than
-> > just these ones.
->
-> Thanks for your review!  I'll change the header too.
->
-> Note that callers of perf_stat__update_shadow_stats() are free
-> to use cpu_map_idx as they want.  The previous change fixed
-> confusion between cpu number and map index.  Actually either
-> is fine for us as long as it's used consistently.  But we use the
-> cpu map index for most cases.
->
-> Thanks,
-> Namhyung
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-It is only fine to interchange CPU and CPU map index if the CPU map
-contains all CPUs and not the any CPU entry. I wonder if we should
-introduce a 'struct thread' to wrap the pid_t in thread maps to avoid
-swapping threads and indices? Given pids are not generally in the same
-range as indices (unlike CPU numbers which substantially broke
-aggregation) it is much less likely this is broken. In any case it is
-worth documenting map_idx to say what indices it is expected to hold.
+Fix the potential risk for null pointer if bank index is over the maximum.
 
-Thanks,
-Ian
+Refer to the discussion list for the experiment result on mt6370.
+https://lore.kernel.org/all/20220914013345.GA5802@cyhuang-hp-elitebook-840-g3.rt/
+If not to check the bound, there is the same issue on mt6360.
+
+Fixes: 3b0850440a06c (mfd: mt6360: Merge different sub-devices I2C read/write)
+Cc: stable@vger.kernel.org
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+---
+Since v2:
+- Assign i2c bank variable after bank index is already checked.
+
+---
+ drivers/mfd/mt6360-core.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/mfd/mt6360-core.c b/drivers/mfd/mt6360-core.c
+index 6eaa677..d3b32eb 100644
+--- a/drivers/mfd/mt6360-core.c
++++ b/drivers/mfd/mt6360-core.c
+@@ -402,7 +402,7 @@ static int mt6360_regmap_read(void *context, const void *reg, size_t reg_size,
+ 	struct mt6360_ddata *ddata = context;
+ 	u8 bank = *(u8 *)reg;
+ 	u8 reg_addr = *(u8 *)(reg + 1);
+-	struct i2c_client *i2c = ddata->i2c[bank];
++	struct i2c_client *i2c;
+ 	bool crc_needed = false;
+ 	u8 *buf;
+ 	int buf_len = MT6360_ALLOC_READ_SIZE(val_size);
+@@ -410,6 +410,11 @@ static int mt6360_regmap_read(void *context, const void *reg, size_t reg_size,
+ 	u8 crc;
+ 	int ret;
+ 
++	if (bank >= MT6360_SLAVE_MAX)
++		return -EINVAL;
++
++	i2c = ddata->i2c[bank];
++
+ 	if (bank == MT6360_SLAVE_PMIC || bank == MT6360_SLAVE_LDO) {
+ 		crc_needed = true;
+ 		ret = mt6360_xlate_pmicldo_addr(&reg_addr, val_size);
+@@ -453,13 +458,18 @@ static int mt6360_regmap_write(void *context, const void *val, size_t val_size)
+ 	struct mt6360_ddata *ddata = context;
+ 	u8 bank = *(u8 *)val;
+ 	u8 reg_addr = *(u8 *)(val + 1);
+-	struct i2c_client *i2c = ddata->i2c[bank];
++	struct i2c_client *i2c;
+ 	bool crc_needed = false;
+ 	u8 *buf;
+ 	int buf_len = MT6360_ALLOC_WRITE_SIZE(val_size);
+ 	int write_size = val_size - MT6360_REGMAP_REG_BYTE_SIZE;
+ 	int ret;
+ 
++	if (bank >= MT6360_SLAVE_MAX)
++		return -EINVAL;
++
++	i2c = ddata->i2c[bank];
++
+ 	if (bank == MT6360_SLAVE_PMIC || bank == MT6360_SLAVE_LDO) {
+ 		crc_needed = true;
+ 		ret = mt6360_xlate_pmicldo_addr(&reg_addr, val_size - MT6360_REGMAP_REG_BYTE_SIZE);
+-- 
+2.7.4
+
