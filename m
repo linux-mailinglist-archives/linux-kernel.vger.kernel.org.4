@@ -2,116 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E704F5EEF35
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38CD5EEF3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235281AbiI2HhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        id S235300AbiI2Hic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234856AbiI2HhR (ORCPT
+        with ESMTP id S235262AbiI2Hi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:37:17 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A6F139405;
-        Thu, 29 Sep 2022 00:37:16 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso4757286pjq.1;
-        Thu, 29 Sep 2022 00:37:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date;
-        bh=lRDabKlu0VBYKSU5QYLvJ9Pkx/efyXICUlVHkJ+J9pg=;
-        b=Nttqx33DDjsvYIs8B+hK2tXoTtHvH0ZKBEjCFvov78fIMR9/5CqDyljobcMqFdcm1E
-         KrpSJkvN6Uct9iJ5zcrQhb3xQ5sz7DgSQVgI5ANQuGm+HWJR0J2tK9sKPE9TrxV/XIxb
-         z3eNdyCFzSYFV4ZoIOiz9L4JlOqLcaGxTD81Uz+9TJFu37plCkW0CfT3gWVuNEG8ZGTb
-         z88hxGhlm0RNp0x7MlqdUA89f1y6i/hCd9/rTZ01qKJoluqKat8Z1e77wp6ql8Kzsa2v
-         rd0sIvoh/NpQmtrrNSePyfE/DEMpMmgzWNUzDUBQe72Wl5QeS8HXZTorwy47/31YFbbT
-         ULXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=lRDabKlu0VBYKSU5QYLvJ9Pkx/efyXICUlVHkJ+J9pg=;
-        b=BFtO8Ufjdvj8H9IoBfBHcnSuBo6ciTBKJxFKMgm3l0SJfhs7nEDmZ6K7ISRoGerFcr
-         QGpCV1Fn3zqKF510AfautKJ5/e5hj4S4EVMJ1wXEiSYE3HYj8pCfUPwc6n6mZu+l3cmB
-         MRtloLkSqdI58vy8resA5IQ689dFla4bBMSKaxToxYNraNLNmVoKyS0/5SDk9Z5jVgZK
-         iM0qe82NeApTKau4gpnAGwuorGoEYB3Eu7JZOeReFdwMuoAAMTIVotkDDSajBoUezz97
-         v44TOIWtoFFB2CgJZM7GGYYDMFYg9b5t8aIFIXmRpwiMJP44Lk6jL0Gb0bDC0cUO9pkI
-         XMHg==
-X-Gm-Message-State: ACrzQf0A3BG5DNUT/2WEFpH6DIBRQLrkzBMpPwQLuLlJQtgiwc/G8lW7
-        h3ts9oLu18caVvAJUm9qa+F1PMGqnv4=
-X-Google-Smtp-Source: AMsMyM4moUqGZRua5IKM6m7W7rYR6IQ3QyvLqfSU/Pqfs6qWCO/2zBBDv2nTKLgSuc+nXlVseq5hqQ==
-X-Received: by 2002:a17:90b:238c:b0:207:7040:9c6 with SMTP id mr12-20020a17090b238c00b00207704009c6mr2293079pjb.236.1664437035412;
-        Thu, 29 Sep 2022 00:37:15 -0700 (PDT)
-Received: from ?IPv6:::1? ([2601:647:5e00:1473:68e8:ad15:75fc:a64c])
-        by smtp.gmail.com with ESMTPSA id n4-20020a170903110400b0016dcbdf9492sm5218950plh.92.2022.09.29.00.37.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 29 Sep 2022 00:37:14 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 00:37:14 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Opasiak <k.opasiak@samsung.com>
-CC:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/2] nfc: s3fwrn5: fix order of freeing resources
-User-Agent: K-9 Mail for Android
-In-Reply-To: <26fd03ad-181c-97c5-f620-6ac296cf1829@linaro.org>
-References: <20220929050426.955139-1-dmitry.torokhov@gmail.com> <f0982b75-ede3-cc56-1160-8fda0faae356@linaro.org> <26fd03ad-181c-97c5-f620-6ac296cf1829@linaro.org>
-Message-ID: <36AC4067-78C6-4986-8B97-591F93E266D8@gmail.com>
+        Thu, 29 Sep 2022 03:38:28 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9764B139439;
+        Thu, 29 Sep 2022 00:38:27 -0700 (PDT)
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MdQFk1lYHz6HJZW;
+        Thu, 29 Sep 2022 15:38:18 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 09:38:25 +0200
+Received: from [10.126.170.84] (10.126.170.84) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 08:38:24 +0100
+Message-ID: <328e6482-52b7-a9e0-5b43-ff1566ec1641@huawei.com>
+Date:   Thu, 29 Sep 2022 08:38:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH 2/6] scsi: hisi_sas: Use sas_task_find_rq()
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <jinpu.wang@cloud.ionos.com>, <damien.lemoal@wdc.com>
+CC:     <hare@suse.de>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+        <ipylypiv@google.com>, <changyuanl@google.com>, <hch@lst.de>
+References: <1664368034-114991-1-git-send-email-john.garry@huawei.com>
+ <1664368034-114991-3-git-send-email-john.garry@huawei.com>
+ <4737cbca-6250-00b8-a2be-1d98e2b8d04a@opensource.wdc.com>
+In-Reply-To: <4737cbca-6250-00b8-a2be-1d98e2b8d04a@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.170.84]
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On September 29, 2022 12:27:19 AM PDT, Krzysztof Kozlowski <krzysztof=2Ekoz=
-lowski@linaro=2Eorg> wrote:
->On 29/09/2022 09:26, Krzysztof Kozlowski wrote:
->> On 29/09/2022 07:04, Dmitry Torokhov wrote:
->>> Caution needs to be exercised when mixing together regular and managed
->>> resources=2E In case of this driver devm_request_threaded_irq() should
->>> not be used, because it will result in the interrupt being freed too
->>> late, and there being a chance that it fires up at an inopportune
->>> moment and reference already freed data structures=2E
->>=20
->> Non-devm was so far recommended only for IRQF_SHARED, not for regular
->> ones=2E
+On 29/09/2022 03:11, Damien Le Moal wrote:
+> On 9/28/22 21:27, John Garry wrote:
+>> Use sas_task_find_rq() to lookup the request per task for its driver tag.
+>>
+>> Signed-off-by: John Garry <john.garry@huawei.com>
+> 
+> Looks good, modulo the question below.
+> 
+> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> 
 
-If we are absolutely sure there is no possibility of interrupts firing the=
-n devm
-should be ok, but it is much safer not to use it=2E Or use custom devm act=
-ions
-to free non-managed resources=2E
+Cheers
 
->> Otherwise you have to fix half of Linux kernel drivers=2E=2E=2E=20
+>> ---
+>>   drivers/scsi/hisi_sas/hisi_sas_main.c | 26 ++++++++------------------
+>>   1 file changed, 8 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> index 4c37ae9eb6b6..1011dffed51f 100644
+>> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> @@ -177,13 +177,13 @@ static void hisi_sas_slot_index_set(struct hisi_hba *hisi_hba, int slot_idx)
+>>   }
+>>   
+>>   static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba,
+>> -				     struct scsi_cmnd *scsi_cmnd)
+>> +				     struct request *rq)
+>>   {
+>>   	int index;
+>>   	void *bitmap = hisi_hba->slot_index_tags;
+>>   
+>> -	if (scsi_cmnd)
+>> -		return scsi_cmd_to_rq(scsi_cmnd)->tag;
+>> +	if (rq)
+>> +		return rq->tag;
+>>   
+>>   	spin_lock(&hisi_hba->lock);
+>>   	index = find_next_zero_bit(bitmap, hisi_hba->slot_index_count,
+>> @@ -461,11 +461,11 @@ static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
+>>   	struct asd_sas_port *sas_port = device->port;
+>>   	struct hisi_sas_device *sas_dev = device->lldd_dev;
+>>   	bool internal_abort = sas_is_internal_abort(task);
+>> -	struct scsi_cmnd *scmd = NULL;
+>>   	struct hisi_sas_dq *dq = NULL;
+>>   	struct hisi_sas_port *port;
+>>   	struct hisi_hba *hisi_hba;
+>>   	struct hisi_sas_slot *slot;
+>> +	struct request *rq = NULL;
+> 
+> Do you really need the NULL initialization here ?
 
-Yes, if they are doing the wrong thing=2E
+Yes, as rq is only set in one case of the switch statement and checked 
+outside the switch statement.
 
->> why is s3fwrn5 special?
->>=20
-
-I simply happened to look at it=2E
-
->
->> Please use scripts/get_maintainers=2Epl to Cc also netdev folks=2E
->
->Ah, they are not printed for NFC drivers=2E So never mind last comment=2E
->
->Best regards,
->Krzysztof
->
-
-Thanks=2E
-
---=20
-Dmitry
+Thanks,
+John
