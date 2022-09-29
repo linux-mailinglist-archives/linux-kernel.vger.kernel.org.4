@@ -2,147 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD105EFA6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E19A5EFA73
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236124AbiI2Q1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58396 "EHLO
+        id S235971AbiI2Q1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236217AbiI2Q0k (ORCPT
+        with ESMTP id S235310AbiI2Q1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:26:40 -0400
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE4EFA0F3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:25:37 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 72D6F5201DA;
-        Thu, 29 Sep 2022 18:25:34 +0200 (CEST)
-Received: from lxhi-065 (10.72.94.4) by hi2exch02.adit-jv.com (10.72.92.28)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.12; Thu, 29 Sep
- 2022 18:25:33 +0200
-Date:   Thu, 29 Sep 2022 18:25:29 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Cezary Rojewski <cezary.rojewski@intel.com>
-CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>,
-        Yanmin Zhang <yanmin_zhang@linux.intel.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>,
-        Jiada Wang <jiada_wang@mentor.com>,
-        Zhang Yanmin <yanmin.zhang@intel.com>,
-        Ramesh Babu <ramesh.babu@intel.com>,
-        Dean Jenkins <Dean_Jenkins@mentor.com>,
-        Ramesh Babu B <ramesh.babu.b@intel.com>,
-        xiao jin <jin.xiao@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>,
-        Rander Wang <rander.wang@linux.intel.com>
-Subject: Re: [PATCH] ASoC: soc-pcm: fix fe and be race when accessing
- substream->runtime
-Message-ID: <20220929162529.GA7982@lxhi-065>
-References: <1664210154-11552-1-git-send-email-erosca@de.adit-jv.com>
- <2f5a510b-082a-60e2-5770-58be086b5fc8@intel.com>
- <20220927110022.GA3802@lxhi-065>
- <21ffd91e-8089-0a57-bdb6-d73246079398@intel.com>
+        Thu, 29 Sep 2022 12:27:08 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E58A13A061
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:26:23 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 16:26:18 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1664468781;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4LAsNz8jL1zZ2kJLVm/0pZMkI5re6qTl5qguOofolbs=;
+        b=ABbQYnIrpZbGag80rue9iIvi5E/ef3BT31ZNt6nHr9+bcix7vU38LXYHecucN5xM8K6iNd
+        uEa8gvfvxP+nmMkXu44FHY4Og/mMOJjNeZb6ZLDOf+jzkq0VoOXHLalbPY3OULq6NavvDC
+        ySImlgxhrJ3sy01Ki+WAW2Zbf5/kALqKNGN6kMvQK6DmVwLAZUS9fJkM91OXbcCunORcXZ
+        m8jSc+xnCFK8bkB8wGd6d5U0cAIog6DgP88WVB0Su/iyzTWijEV9JBnDU3/u9SQ3Jqr6io
+        pCERlnnioUkoAdhM5m/WdPdtjRSBrlMjOKFwkRJol1VvrVAEavnV4MYZgMQGkw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1664468781;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4LAsNz8jL1zZ2kJLVm/0pZMkI5re6qTl5qguOofolbs=;
+        b=6xj+Bub5XUSlAvYD4miq2xRLcrfDXwnAsw9Z2JHGL4m+HYODVymLR6dxCePf/qcXQFxGtJ
+        Jx8mtZFni+xcX1Dg==
+From:   "irqchip-bot for Frank Li" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] dt-bindings: irqchip: Describe the IMX MU
+ block as a MSI controller
+Cc:     Rob Herring <robh@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220922161246.20586-5-Frank.Li@nxp.com>
+References: <20220922161246.20586-5-Frank.Li@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <21ffd91e-8089-0a57-bdb6-d73246079398@intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.72.94.4]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <166446877886.401.15287882873684191652.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Czarek,
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Thank you for your friendly feedback.
+Commit-ID:     7c025238b47a55c81c61dfe85a200ab82e6a6ece
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/7c025238b47a55c81c61dfe85a200ab82e6a6ece
+Author:        Frank Li <Frank.Li@nxp.com>
+AuthorDate:    Thu, 22 Sep 2022 11:12:44 -05:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Thu, 29 Sep 2022 17:19:36 +01:00
 
-On Mi, Sep 28, 2022 at 04:24:43 +0200, Cezary Rojewski wrote:
-> On 2022-09-27 1:00 PM, Eugeniu Rosca wrote:
-> >Hello Czarek,
-> 
-> ...
-> 
-> >>I'd like to know more about the scenario you guys reproduced the problem in.
-> >
-> >This patch was originally identified in the Intel Apollo Lake v4.1 KNLs.
-> >Given that the change itself is in the core sound subsystem, our internal
-> >assessment was that the patch might potentially be relevant/helpful
-> >on other HW platforms.
-> >
-> >Our intention is to confirm or invalidate this assumption with the
-> >original developers of the patch, as well as with the audio maintainers
-> >and the members of the alsa-devel ML.
-> >
-> >>Configuration details and kernel base would be good to know too. Since our
-> >>CI did not detect problem of such sort, if the problem actually exists, we
-> >>would like to append a test or two to cover it later on.
-> >
-> >If there is no evidence that the patch is fixing a real-life issue
-> >occurring in the latest vanilla, I agree to drop the patch.
-> >
-> >So far, I do not possess this evidence myself.
-> 
-> 
-> I've spent some time to locate the change. Found it and it seems obsolete.
-> Some tags are missing in the revision of yours and the original date does
-> not match either - it's Apr 2018 for the original. Won't be mentioning the
-> tags as some engineers no longer bear @intel.com.
-> 
-> soc-pcm and skylake-driver valuable bits from those trees are already part
-> of the upstream. Most of what is left was later proven obsolete or redundant
-> by my or Pierre's engineers. There seems to be no patch missing except for
-> few fixes from the recent SKL/KBL up-revs for our clients. Nothing APL
-> specific.
+dt-bindings: irqchip: Describe the IMX MU block as a MSI controller
 
-Thanks for this thorough check. That also gives us enough confidence
-to drop the patch in some of our downstream kernels.
+I.MX MU supports generating IRQs by writing to a register.
 
-> 
-> Following kernels related to APL are maintained by the IPG team from
-> software perspective:
-> 	4.1.42, 4.1.49, 4.4, 4.9, 4.14, 4.19
-> 
-> Multiple OSes. And then there are flavors for kernels/OS both. It's quite
-> likely kernel base of yours fits into one of these buckets or at least have
-> had changes ported from one of them.
+Describe its use as a MSI controller so that other blocks (such as a PCI EP)
+can use it directly.
 
-Good to know and yes, you are right w.r.t. the origin of the patch.
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+[maz: commit message]
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220922161246.20586-5-Frank.Li@nxp.com
+---
+ Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml |  99 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 99 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml
 
-> 
-> TLDR: I agree here with my colleagues - if you believe the change is
-> necessary, a proof e.g.: in form of reproduction steps, is needed. Otherwise
-> it's no-go. Happy to hop on a call should you need any additional
-> information.
-
-That's a very kind attitude and we will definitely share any empirical
-evidence if it turns out the patch is really contributing with healing
-of any future runtime issues.
-
-> 
-> Regards,
-> Czarek
-
-Best Regards
-Eugeniu
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml b/Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml
+new file mode 100644
+index 0000000..799ae5c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/fsl,mu-msi.yaml
+@@ -0,0 +1,99 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/fsl,mu-msi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Freescale/NXP i.MX Messaging Unit (MU) work as msi controller
++
++maintainers:
++  - Frank Li <Frank.Li@nxp.com>
++
++description: |
++  The Messaging Unit module enables two processors within the SoC to
++  communicate and coordinate by passing messages (e.g. data, status
++  and control) through the MU interface. The MU also provides the ability
++  for one processor (A side) to signal the other processor (B side) using
++  interrupts.
++
++  Because the MU manages the messaging between processors, the MU uses
++  different clocks (from each side of the different peripheral buses).
++  Therefore, the MU must synchronize the accesses from one side to the
++  other. The MU accomplishes synchronization using two sets of matching
++  registers (Processor A-side, Processor B-side).
++
++  MU can work as msi interrupt controller to do doorbell
++
++allOf:
++  - $ref: /schemas/interrupt-controller/msi-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - fsl,imx6sx-mu-msi
++      - fsl,imx7ulp-mu-msi
++      - fsl,imx8ulp-mu-msi
++      - fsl,imx8ulp-mu-msi-s4
++
++  reg:
++    items:
++      - description: a side register base address
++      - description: b side register base address
++
++  reg-names:
++    items:
++      - const: processor-a-side
++      - const: processor-b-side
++
++  interrupts:
++    description: a side interrupt number.
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  power-domains:
++    items:
++      - description: a side power domain
++      - description: b side power domain
++
++  power-domain-names:
++    items:
++      - const: processor-a-side
++      - const: processor-b-side
++
++  interrupt-controller: true
++
++  msi-controller: true
++
++  "#msi-cells":
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-controller
++  - msi-controller
++  - "#msi-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/firmware/imx/rsrc.h>
++
++    msi-controller@5d270000 {
++        compatible = "fsl,imx6sx-mu-msi";
++        msi-controller;
++        #msi-cells = <0>;
++        interrupt-controller;
++        reg = <0x5d270000 0x10000>,     /* A side */
++              <0x5d300000 0x10000>;     /* B side */
++        reg-names = "processor-a-side", "processor-b-side";
++        interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
++        power-domains = <&pd IMX_SC_R_MU_12A>,
++                        <&pd IMX_SC_R_MU_12B>;
++        power-domain-names = "processor-a-side", "processor-b-side";
++    };
