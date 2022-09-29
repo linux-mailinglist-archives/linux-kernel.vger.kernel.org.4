@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744E95EF7ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139025EF7F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234988AbiI2OoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
+        id S234788AbiI2Opl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234956AbiI2OoS (ORCPT
+        with ESMTP id S234299AbiI2Oph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:44:18 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C432D13D63
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:44:15 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id s6so2574660lfo.7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:44:15 -0700 (PDT)
+        Thu, 29 Sep 2022 10:45:37 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0AF2BE3D
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:45:29 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id a3so2570869lfk.9
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:45:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=LkSm2C56o8tzD3kdFz9Q2YFb7DwLBiu4clfDJbl3WmE=;
-        b=t9DQlHsq4peMX5nFQVuP+vxQAPp4QbqlqnbBY0+/JvHu3ewoOoATFKVpR2AMYRLjTV
-         BozrgV9yNKY8V8vXDs35S3zJD1S8KBd8hCSVSw5EEN1tI7yIx5OmQGrPk23fIVgZftD8
-         md3CruqOqBUGUXEbopgNI/rho7z9DsI8k402PXgHxAd26opMxTiWgStbnT3rCcxtSPg1
-         0Qq3L6NCZS04fbF4Xi4zkfScfCCKX5MFg59lYUuK3LdcmjQ/aazupohVqJs4iI/g6zZx
-         sSnSxyA8F3wh+mAmuIDvHit+qNn4SezBrvQ49dPRwW9Bry2Ahg/anhe3CeHm3fp+UbPR
-         TMgw==
+        bh=qzBDhl7t1REqzvir5ZdPbV96Uq1Uf8HIWsulX9tDLco=;
+        b=UE2OLueI9yxUnBykbJzpgEuis+WsG9HBCzYKdl7C4VHvvupku4ndsX3EytfCrNbNRo
+         WquUzKkuz2U/dFsQUlAodrirE42L7NPf6qa92U+V8TO9o4PverBizzi8iX1+3POTxt1R
+         ANI+tlbFXLD1gG9sNrARaoRZm4+m04SxRiDAey7sLbBG4tg/rleq/PJl3kQo6uOkOFrv
+         eaR+MJQQLYesrFvmelBq9OuWYn38PfkuArN98goynhBlWaOxblhDXyeY0Aamv2voLvUb
+         A2lmgNWpLxIino1vSaQT8P/v6u/UhfZXDnjrBLKjML2kbwY1TBTm2J/nouhZshh6jmFM
+         jEBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=LkSm2C56o8tzD3kdFz9Q2YFb7DwLBiu4clfDJbl3WmE=;
-        b=iJV2BS2WLRwxnDlGtQORn4vaL6Z+LwZvrAr/ap1lwbH8d3Bcyc0F9c36WQVu5cDvYW
-         9hsOvURRDyZKMLWlLj+4UldCo8mJrb5yFiIzXqxFFcGSYXNGxpv53SPqVDVkNSzicJWY
-         Clb2hqeYn8eMNiv4/MvI9+xzGhqRaNnUjPktvjc6sCepRkZTcqV07hYDAVSJNNlI6U9A
-         Mvf1IXFAzn6Tty68eG1GAT6jUhPxlPAIdgQrTSOgckkUrdWma9bko2ofv5Px9pky9/iF
-         5TJvyhZ+Fo7symxE/mlPLpZPWIy4sS5tzy/ZCUMT/f0QEPVBY3YpGPZv5d2FkAnL7IIX
-         IB6Q==
-X-Gm-Message-State: ACrzQf3bbePUOdoMhW0pCNtpINxDmIfpx258cG/DN6kh0LWx8iCK0ncH
-        et5rRihQobfLJ2E5apTfFZRewQ==
-X-Google-Smtp-Source: AMsMyM4A2Ji8bAd/eqHnyAOt7Yu02yXyV2POMDi/Exr3ksTpf9Rg8m5p0TiCMGNCeWUVS/EEqglGSA==
-X-Received: by 2002:a05:6512:688:b0:498:fe57:b5f with SMTP id t8-20020a056512068800b00498fe570b5fmr1571633lfe.209.1664462654201;
-        Thu, 29 Sep 2022 07:44:14 -0700 (PDT)
+        bh=qzBDhl7t1REqzvir5ZdPbV96Uq1Uf8HIWsulX9tDLco=;
+        b=p++WH+NLfIbIro5TYkAL/CKs5YbAucoS2prS7tHfw/oxxprFVKDkZyQywajZV7oTDY
+         AdxLN5yDDmMFChiHEgTrueOb53VR8jdzvGXNLoBqj+dshgOuuQnUxv/FHAg3q5Jm6lbW
+         4s47OBmNlybbr3f/GPRZAszWIQDO4/3tH0+0bvfulw6Bgx3/fXjuKxpOtisGgmSO6sPk
+         XgBULYNGyt6/62E3T/LpCI+m6kHVRap5o9lqHKI4oe/ba2iFbTNYt/NM7ZJqK+HdpAmS
+         EJ/Ji5CtRi87yOTFQvt/ilBRMh5kG1qIgsnJJb3lrBkK5CeJTyCVccmG0Y8aeyNwRVfq
+         4bPQ==
+X-Gm-Message-State: ACrzQf0G4axEWhJ04i2YGX8xGBfHrDN37dTyCoMqxloPXjbcxvMok6e7
+        Ic014/K8NhoQe21MCvkX7wQLcQ==
+X-Google-Smtp-Source: AMsMyM4KXJ2MlU8uJdcg/31skmTZciBaJAm9dGDzpXsimxBLfYQrpN6veJNIvTuoeeINPpRin+aQ/w==
+X-Received: by 2002:a05:6512:31d5:b0:498:f3dc:dd2 with SMTP id j21-20020a05651231d500b00498f3dc0dd2mr1451559lfe.101.1664462728238;
+        Thu, 29 Sep 2022 07:45:28 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m4-20020ac24ac4000000b0049313f77755sm525234lfp.213.2022.09.29.07.44.13
+        by smtp.gmail.com with ESMTPSA id u11-20020ac243cb000000b00497ad8e6d07sm801754lfl.222.2022.09.29.07.45.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 07:44:13 -0700 (PDT)
-Message-ID: <c49ac105-f96f-fdc4-a629-fe34c85f557a@linaro.org>
-Date:   Thu, 29 Sep 2022 16:44:12 +0200
+        Thu, 29 Sep 2022 07:45:27 -0700 (PDT)
+Message-ID: <4ddabe3a-9f55-2a6a-c1c1-ccc3fc74e98a@linaro.org>
+Date:   Thu, 29 Sep 2022 16:45:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: Update SNPS Phy params for
- SC7280
+Subject: Re: [PATCH v1 00/30] Basic StarFive JH7110 RISC-V SoC support
 Content-Language: en-US
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+To:     Hal Feng <hal.feng@linux.starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
         linux-kernel@vger.kernel.org
-References: <1664462290-29869-1-git-send-email-quic_kriskura@quicinc.com>
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1664462290-29869-1-git-send-email-quic_kriskura@quicinc.com>
+In-Reply-To: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,15 +89,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 16:38, Krishna Kurapati wrote:
-> Add SNPS HS Phy tuning parameters for herobrine variant of
-> SC7280 devices.
+On 29/09/2022 16:31, Hal Feng wrote:
+
+> This series is also available at 
+> https://github.com/hal-feng/linux/commits/visionfive2-minimal
 > 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
+> [1] https://www.cnx-software.com/2022/08/23/starfive-visionfive-2-quad-core-risc-v-sbc-linux/
+> [2] https://wiki.rvspace.org/
+> 
+> Emil Renner Berthing (17):
+>   dt-bindings: riscv: Add StarFive JH7110 bindings
+>   dt-bindings: timer: Add StarFive JH7110 clint
+>   dt-bindings: interrupt-controller: Add StarFive JH7110 plic
+>   dt-bindings: sifive-l2-cache: Support StarFive JH71x0 SoCs
+>   soc: sifive: l2 cache: Convert to platform driver
+>   soc: sifive: l2 cache: Add StarFive JH71x0 support
+>   reset: starfive: jh7100: Use 32bit I/O on 32bit registers
+>   dt-bindings: reset: Add StarFive JH7110 reset definitions
+>   clk: starfive: Factor out common clock driver code
+>   dt-bindings: clock: Add StarFive JH7110 system clock definitions
+>   dt-bindings: clock: Add starfive,jh7110-clkgen-sys bindings
+>   clk: starfive: Add StarFive JH7110 system clock driver
+>   dt-bindings: clock: Add StarFive JH7110 always-on definitions
+>   dt-bindings: clock: Add starfive,jh7110-clkgen-aon bindings
+>   clk: starfive: Add StarFive JH7110 always-on clock driver
+>   RISC-V: Add initial StarFive JH7110 device tree
+>   RISC-V: Add StarFive JH7110 VisionFive2 board device tree
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Where is the rest of patches? Lists got only 5 of them. Anyway this is a
+bit too big patchset. Split per subsystem.
 
 Best regards,
 Krzysztof
