@@ -2,136 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223DA5EEB6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 04:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B683D5EEB87
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 04:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233645AbiI2CIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 22:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
+        id S234548AbiI2CQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 22:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiI2CH7 (ORCPT
+        with ESMTP id S232599AbiI2CQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 22:07:59 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4501DF8C37
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 19:07:58 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id v28so9543191wrd.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 19:07:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=TL48+o+sJWgORfKvQPxwZdWzU7/LlXpQAEOT6jrxZNw=;
-        b=fcMrUXI9Ggrlxg6pYiMz3EA1bORG/aS245jXk83+EOopI9u0QCzL9+JA1w6qRqUE78
-         /bGMmXUP+dXgYRa5PTp2/+yayt//YHrw/uaJVRjopF+vrLglGaD/3MniCgkRKisuTm7w
-         ucwpaUfhtubVoWtfhJ8nkrCYEb38wWvRuJrU9t9WonfJGk7/wunw4NIxy113UYotIkGF
-         d5YLeCSckyUgxNIdYqJmWIX4PwwiXHWmN6X46mcPWulCoFLpeKWV3JdXeSQJuzHiYf8S
-         CfxEkcaekj/ypuPrprR53MifRh7Qh2xNErSYNB4YB8JRHt06MfR8ZfNQ/2hL3oVgoDUX
-         Rg9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=TL48+o+sJWgORfKvQPxwZdWzU7/LlXpQAEOT6jrxZNw=;
-        b=1Nm6fYsZb4+XnYeG7hqF4Yv5SQsgj3swIExSkbLcH0LLuneEGW4Ra4De9fLCSeIR7U
-         Gx0J4pjDVPLeUKIl1Nar9Lc76bbqBdx8Smq2iu+mxSNKHnDNuoEukoNy6sERIoh7UISL
-         Lmwd9+UgxkKm5HFIPKPm1yxyDHMnS94TAVX6g1MIgmTP4J+/elP2AwPenntIW3G9qpO1
-         aRyeriqFXzvvMijI2elVj0iR16AZwlsfNQvcZysxqJVLLqahiqx97iyY2fvMwnB3VASS
-         vewoJKIRZX0cEnAe55b3BDIjetuzJswxmwYFOYq0eOwd/gLng0VcuzLyv6CpYBQYQlXm
-         J/+Q==
-X-Gm-Message-State: ACrzQf0ULjUEgxY+rsA2NfZaAGEbdhcQgxtKtvokC0NYCvar9YdDyRxq
-        v8cjucgZa4Frkl9jkrZgvAvDdd4TEa4xkHeq4HzWkw==
-X-Google-Smtp-Source: AMsMyM50eS3y0STGCFHpd/0kp0A5EoWtNH2dd7zjSxABe88Mpb0+8WlLrfA6AXlxCyKX1r7VdRuFQ8PTOrnevY+CP4M=
-X-Received: by 2002:a5d:64a8:0:b0:226:f3f3:9914 with SMTP id
- m8-20020a5d64a8000000b00226f3f39914mr417338wrp.343.1664417276647; Wed, 28 Sep
- 2022 19:07:56 -0700 (PDT)
+        Wed, 28 Sep 2022 22:16:45 -0400
+X-Greylist: delayed 489 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Sep 2022 19:16:44 PDT
+Received: from ozlabs.ru (ozlabs.ru [107.174.27.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BCA710AB0E
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 19:16:43 -0700 (PDT)
+Received: from ole.1.ozlabs.ru (localhost [IPv6:::1])
+        by ozlabs.ru (Postfix) with ESMTP id 8D471831F4;
+        Wed, 28 Sep 2022 22:08:30 -0400 (EDT)
+From:   Alexey Kardashevskiy <aik@ozlabs.ru>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Nick Terrell <terrelln@fb.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH kernel v3] zstd: Fixing mixed module-builtin objects
+Date:   Thu, 29 Sep 2022 12:08:23 +1000
+Message-Id: <20220929020823.1373722-1-aik@ozlabs.ru>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20220924165737.956428-1-namhyung@kernel.org> <20220924165737.956428-3-namhyung@kernel.org>
- <d901f8c8-0dda-8f34-f963-09cf56d4924e@intel.com> <CAM9d7ciGFqSRO=J6FZmz=enML7eCyvRMQB+bm=nZ07GmozJwbw@mail.gmail.com>
- <ae609590-7d85-ee4b-3525-8eaa46ed240c@intel.com> <CAM9d7ciaOMOuJay5MzOYtg5paK_YmQskX1yqg=Oni1EzipPMwA@mail.gmail.com>
-In-Reply-To: <CAM9d7ciaOMOuJay5MzOYtg5paK_YmQskX1yqg=Oni1EzipPMwA@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 28 Sep 2022 19:07:43 -0700
-Message-ID: <CAP-5=fX-as0WNCXMyzOwY=ek0gR9yNXbonXHAu1hsd5wOuX-Vg@mail.gmail.com>
-Subject: Re: [PATCH 2/5] libperf: Propagate maps only if necessary
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 4:46 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> On Wed, Sep 28, 2022 at 12:54 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >
-> > On 27/09/22 20:28, Namhyung Kim wrote:
-> > > Hi Adrian,
-> > >
-> > > On Tue, Sep 27, 2022 at 12:06 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> > >>
-> > >> On 24/09/22 19:57, Namhyung Kim wrote:
-> > >>> The current code propagate evsel's cpu map settings to evlist when it's
-> > >>> added to an evlist.  But the evlist->all_cpus and each evsel's cpus will
-> > >>> be updated in perf_evlist__set_maps() later.  No need to do it before
-> > >>> evlist's cpus are set actually.
-> > >>>
-> > >>> Actually we discarded this intermediate all_cpus maps at the beginning
-> > >>> of perf_evlist__set_maps().  Let's not do this.  It's only needed when
-> > >>> an evsel is added after the evlist cpu maps are set.
-> > >>
-> > >> That might not be true.  Consider evlist__fix_hybrid_cpus() which fiddles
-> > >> with evsel->core.cpus and evsel->core.own_cpus after the evsel has been
-> > >> added to the evlist.  It can also remove an evsel from the evlist.
-> > >
-> > > Thanks for your review.  I think it's fine to change evsel cpus or to remove
-> > > an evsel from evlist before calling evlist__create_maps().  The function
-> > > will take care of setting evlist's all_cpus from the evsels in the evlist.
-> > > So previous changes in evsel/cpus wouldn't be any special.
-> > >
-> > > After this point, adding a new evsel needs to update evlist all cpus by
-> > > propagating cpu maps.  So I think hybrid cpus should be fine.
-> > > Did I miss something?
-> >
-> > I wondered how it might play out if evlist__fix_hybrid_cpus() reduced the
-> > cpus from the target->cpu_list (using perf record -C) , since after this
-> > patch all_cpus always starts with the target->cpu_list instead of an empty
-> > list.  But then, in the hybrid case, it puts a dummy event that uses the
-> > target cpu list anyway, so the result is the same.
-> >
-> > I don't know if there are any cases where all_cpus would actually need to
-> > exclude some of the cpus from target->cpu_list.
->
-> I'm not aware of other cases to reduce cpu list.  I think it'd be fine
-> if it has a cpu in the evlist->all_cpus even if it's not used.  The evsel
-> should have a correct list anyway and we mostly use the evsel cpus
-> to do the real work.
->
-> Thanks,
-> Namhyung
+With CONFIG_ZSTD_COMPRESS=m and CONFIG_ZSTD_DECOMPRESS=y we end up in
+a situation when files from lib/zstd/common/ are compiled once to be
+linked later for ZSTD_DECOMPRESS (build-in) and ZSTD_COMPRESS (module)
+even though CFLAGS are different for builtins and modules.
+So far somehow this was not a problem but enabling LLVM LTO exposes
+the problem as:
 
-The affinity changes made it so that we use all_cpus probably more
-often than the evsel CPU maps for real work. The reason being we want
-to avoid IPIs so we do all the work on 1 CPU and then move to the next
-CPU in evlist all_cpus. evsel CPU maps are used to make sure the
-indices are kept accurate - for example, if an uncore event is
-measured with a CPU event:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/evlist.h?h=perf/core#n366
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/evlist.c?h=perf/core#n404
+ld.lld: error: linking module flags 'Code Model': IDs have conflicting values in 'lib/built-in.a(zstd_common.o at 5868)' and 'ld-temp.o'
 
-Thanks,
-Ian
+This particular conflict is caused by KBUILD_CFLAGS=-mcmodel=medium vs.
+KBUILD_CFLAGS_MODULE=-mcmodel=large , modules use the large model on
+POWERPC as explained at
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/powerpc/Makefile?h=v5.18-rc4#n127
+but the current use of common files is wrong anyway.
+
+This works around the issue by introducing a zstd_common module with
+shared code.
+
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+[robot found a problem in v2]
+Reported-by: kernel test robot <lkp@intel.com>
+---
+Changes:
+v3:
+* added EXPORT_SYMBOL_GPL to compile with:
+CONFIG_ZSTD_COMMON=m
+CONFIG_ZSTD_COMPRESS=m
+CONFIG_ZSTD_DECOMPRESS=m
+Vast majority of cases have CONFIG_ZSTD_COMMON=y so this went unnoticed
+---
+ lib/zstd/Makefile                | 18 ++++++++----------
+ lib/zstd/common/entropy_common.c |  5 ++++-
+ lib/zstd/common/zstd_common.c    | 10 ++++++++++
+ lib/Kconfig                      |  8 ++++++--
+ 4 files changed, 28 insertions(+), 13 deletions(-)
+
+diff --git a/lib/zstd/Makefile b/lib/zstd/Makefile
+index fc45339fc3a3..440bd0007ae2 100644
+--- a/lib/zstd/Makefile
++++ b/lib/zstd/Makefile
+@@ -10,14 +10,10 @@
+ # ################################################################
+ obj-$(CONFIG_ZSTD_COMPRESS) += zstd_compress.o
+ obj-$(CONFIG_ZSTD_DECOMPRESS) += zstd_decompress.o
++obj-$(CONFIG_ZSTD_COMMON) += zstd_common.o
+ 
+ zstd_compress-y := \
+ 		zstd_compress_module.o \
+-		common/debug.o \
+-		common/entropy_common.o \
+-		common/error_private.o \
+-		common/fse_decompress.o \
+-		common/zstd_common.o \
+ 		compress/fse_compress.o \
+ 		compress/hist.o \
+ 		compress/huf_compress.o \
+@@ -33,12 +29,14 @@ zstd_compress-y := \
+ 
+ zstd_decompress-y := \
+ 		zstd_decompress_module.o \
+-		common/debug.o \
+-		common/entropy_common.o \
+-		common/error_private.o \
+-		common/fse_decompress.o \
+-		common/zstd_common.o \
+ 		decompress/huf_decompress.o \
+ 		decompress/zstd_ddict.o \
+ 		decompress/zstd_decompress.o \
+ 		decompress/zstd_decompress_block.o \
++
++zstd_common-y := \
++		common/debug.o \
++		common/entropy_common.o \
++		common/error_private.o \
++		common/fse_decompress.o \
++		common/zstd_common.o \
+diff --git a/lib/zstd/common/entropy_common.c b/lib/zstd/common/entropy_common.c
+index 53b47a2b52ff..a311808c0d56 100644
+--- a/lib/zstd/common/entropy_common.c
++++ b/lib/zstd/common/entropy_common.c
+@@ -15,6 +15,7 @@
+ /* *************************************
+ *  Dependencies
+ ***************************************/
++#include <linux/module.h>
+ #include "mem.h"
+ #include "error_private.h"       /* ERR_*, ERROR */
+ #define FSE_STATIC_LINKING_ONLY  /* FSE_MIN_TABLELOG */
+@@ -239,7 +240,7 @@ size_t FSE_readNCount(
+ {
+     return FSE_readNCount_bmi2(normalizedCounter, maxSVPtr, tableLogPtr, headerBuffer, hbSize, /* bmi2 */ 0);
+ }
+-
++EXPORT_SYMBOL_GPL(FSE_readNCount);
+ 
+ /*! HUF_readStats() :
+     Read compact Huffman tree, saved by HUF_writeCTable().
+@@ -255,6 +256,7 @@ size_t HUF_readStats(BYTE* huffWeight, size_t hwSize, U32* rankStats,
+     U32 wksp[HUF_READ_STATS_WORKSPACE_SIZE_U32];
+     return HUF_readStats_wksp(huffWeight, hwSize, rankStats, nbSymbolsPtr, tableLogPtr, src, srcSize, wksp, sizeof(wksp), /* bmi2 */ 0);
+ }
++EXPORT_SYMBOL_GPL(HUF_readStats);
+ 
+ FORCE_INLINE_TEMPLATE size_t
+ HUF_readStats_body(BYTE* huffWeight, size_t hwSize, U32* rankStats,
+@@ -355,3 +357,4 @@ size_t HUF_readStats_wksp(BYTE* huffWeight, size_t hwSize, U32* rankStats,
+     (void)bmi2;
+     return HUF_readStats_body_default(huffWeight, hwSize, rankStats, nbSymbolsPtr, tableLogPtr, src, srcSize, workSpace, wkspSize);
+ }
++EXPORT_SYMBOL_GPL(HUF_readStats_wksp);
+diff --git a/lib/zstd/common/zstd_common.c b/lib/zstd/common/zstd_common.c
+index 3d7e35b309b5..0f1f63be25d9 100644
+--- a/lib/zstd/common/zstd_common.c
++++ b/lib/zstd/common/zstd_common.c
+@@ -13,6 +13,7 @@
+ /*-*************************************
+ *  Dependencies
+ ***************************************/
++#include <linux/module.h>
+ #define ZSTD_DEPS_NEED_MALLOC
+ #include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free, ZSTD_memset */
+ #include "error_private.h"
+@@ -35,14 +36,17 @@ const char* ZSTD_versionString(void) { return ZSTD_VERSION_STRING; }
+  *  tells if a return value is an error code
+  *  symbol is required for external callers */
+ unsigned ZSTD_isError(size_t code) { return ERR_isError(code); }
++EXPORT_SYMBOL_GPL(ZSTD_isError);
+ 
+ /*! ZSTD_getErrorName() :
+  *  provides error code string from function result (useful for debugging) */
+ const char* ZSTD_getErrorName(size_t code) { return ERR_getErrorName(code); }
++EXPORT_SYMBOL_GPL(ZSTD_getErrorName);
+ 
+ /*! ZSTD_getError() :
+  *  convert a `size_t` function result into a proper ZSTD_errorCode enum */
+ ZSTD_ErrorCode ZSTD_getErrorCode(size_t code) { return ERR_getErrorCode(code); }
++EXPORT_SYMBOL_GPL(ZSTD_getErrorCode);
+ 
+ /*! ZSTD_getErrorString() :
+  *  provides error code string from enum */
+@@ -59,6 +63,7 @@ void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
+         return customMem.customAlloc(customMem.opaque, size);
+     return ZSTD_malloc(size);
+ }
++EXPORT_SYMBOL_GPL(ZSTD_customMalloc);
+ 
+ void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
+ {
+@@ -71,6 +76,7 @@ void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
+     }
+     return ZSTD_calloc(1, size);
+ }
++EXPORT_SYMBOL_GPL(ZSTD_customCalloc);
+ 
+ void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
+ {
+@@ -81,3 +87,7 @@ void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
+             ZSTD_free(ptr);
+     }
+ }
++EXPORT_SYMBOL_GPL(ZSTD_customFree);
++
++MODULE_LICENSE("Dual BSD/GPL");
++MODULE_DESCRIPTION("Zstd Common");
+diff --git a/lib/Kconfig b/lib/Kconfig
+index dc1ab2ed1dc6..3ea8941ab18d 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -343,12 +343,16 @@ config LZ4HC_COMPRESS
+ config LZ4_DECOMPRESS
+ 	tristate
+ 
++config ZSTD_COMMON
++	select XXHASH
++	tristate
++
+ config ZSTD_COMPRESS
+-	select XXHASH
++	select ZSTD_COMMON
+ 	tristate
+ 
+ config ZSTD_DECOMPRESS
+-	select XXHASH
++	select ZSTD_COMMON
+ 	tristate
+ 
+ source "lib/xz/Kconfig"
+-- 
+2.37.3
+
