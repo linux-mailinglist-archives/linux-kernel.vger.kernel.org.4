@@ -1,312 +1,99 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54AD55EF60C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:08:27 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id B370D5EF614
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235522AbiI2NIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 09:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
+        id S234870AbiI2NJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 09:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiI2NIA (ORCPT
+        with ESMTP id S234666AbiI2NI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 09:08:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8649155647;
-        Thu, 29 Sep 2022 06:07:57 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 29 Sep 2022 09:08:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CEA17D40D;
+        Thu, 29 Sep 2022 06:08:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0234A66022B2;
-        Thu, 29 Sep 2022 14:07:55 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664456876;
-        bh=RjlWLo52J1xNwaKPgALSVeCL23CVX4BxrRKCP/uj7qE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ASQJa+WfH5MA04whKpSPfFrM9asKFZ0w37qUq5KY6Vyn+4MSq5fxxwlNcDA9Eq3gn
-         MkwpQXOK1Y8utihd3I10ocrMrGYJu1fK+hOSs8fYHsaqv0/CZ3FgyU70jAV12vIrM4
-         ST7fBC8YXl6JllVli27C5pjGErQEv12Veos3SPbplvOhZJ59ZjytlqzPMA9MtCVd9m
-         ph8vIw/QLXuDzE4tKaAn5T6eVlagZD1mHu3W+MbNvJWQnWgTWsW9BtUbXiRRnQG3+C
-         rD7e5eWdG/iQlXRuzk4poiV6kwFJ3cKHE48yI/ukWccvExJITDhXgR/IcSWKG86tDz
-         5BzVdK7o/j/cQ==
-Message-ID: <7dff6595-f3e1-5a2e-0a81-2f3bf1903f12@collabora.com>
-Date:   Thu, 29 Sep 2022 15:07:53 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4459FB8247F;
+        Thu, 29 Sep 2022 13:08:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EED9C433C1;
+        Thu, 29 Sep 2022 13:08:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664456901;
+        bh=riOAsm3lzQkj+cjEbWOHZ+nQBRpg7+2HkYLykZVpJt8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lbpTyBJOwrg3CdQD1AH16Y7w0WKGK2Z3OZOiqpxC9VQQ6sXhVxiJ7qVYqoA9KrqFs
+         LRBFqfHBIs1OJR1rfaPWJaAUJ+tQ7IGH7QOkaw6YdvKC+R4ToawBGf7LBKs0oC2O+G
+         he3hOjdMbemI/iEVfIGPKZwK46vbKavKz+znEFjh8IxLqy6OlY7fMawHWDPu3nwN8e
+         uD645Ghd5Bu5onkVImKZY+VnqUD9bUepB8c8gNiA3O6AWrv6Gr1Y4HDP+UaOsOviGT
+         Jyg92XcjkxCsti7RcJf6Uw845H5extGQEyud20saGH1IKXy/ZYREqcZHJqPdan5aRR
+         DERfbERDsfakw==
+Date:   Thu, 29 Sep 2022 15:08:15 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+Cc:     Hyunchul Lee <hyc.lee@gmail.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <smfrench@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v1] ksmbd: Fix user namespace mapping
+Message-ID: <20220929130815.3l5piy446jyynpwa@wittgenstein>
+References: <20220929100447.108468-1-mic@digikod.net>
+ <20220929113735.7k6fdu75oz4jvsvz@wittgenstein>
+ <75d077ca-4f1d-50c4-10d2-0fb31fcd0c86@digikod.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 1/4] clk: mediatek: Export PLL operations symbols
-Content-Language: en-US
-To:     Johnson Wang <johnson.wang@mediatek.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        kuan-hsin.lee@mediatek.com, yu-chang.wang@mediatek.com,
-        Edward-JW Yang <edward-jw.yang@mediatek.com>
-References: <20220929114624.16809-1-johnson.wang@mediatek.com>
- <20220929114624.16809-2-johnson.wang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220929114624.16809-2-johnson.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <75d077ca-4f1d-50c4-10d2-0fb31fcd0c86@digikod.net>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/09/22 13:46, Johnson Wang ha scritto:
-> Export PLL operations and register functions for different type
-> of clock driver used.
+On Thu, Sep 29, 2022 at 02:18:43PM +0200, Mickaël Salaün wrote:
 > 
-> Co-developed-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
-> Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
-> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> ---
->   drivers/clk/mediatek/clk-pll.c | 84 ++++++++++++++--------------------
->   drivers/clk/mediatek/clk-pll.h | 56 +++++++++++++++++++++++
->   2 files changed, 90 insertions(+), 50 deletions(-)
+> On 29/09/2022 13:37, Christian Brauner wrote:
+> > On Thu, Sep 29, 2022 at 12:04:47PM +0200, Mickaël Salaün wrote:
+> > > A kernel daemon should not rely on the current thread, which is unknown
+> > > and might be malicious.  Before this security fix,
+> > > ksmbd_override_fsids() didn't correctly override FS UID/GID which means
+> > > that arbitrary user space threads could trick the kernel to impersonate
+> > > arbitrary users or groups for file system access checks, leading to
+> > > file system access bypass.
+> > > 
+> > > This was found while investigating truncate support for Landlock:
+> > > https://lore.kernel.org/r/CAKYAXd8fpMJ7guizOjHgxEyyjoUwPsx3jLOPZP=wPYcbhkVXqA@mail.gmail.com
+> > > 
+> > > Fixes: e2f34481b24d ("cifsd: add server-side procedures for SMB3")
+> > > Cc: Hyunchul Lee <hyc.lee@gmail.com>
+> > > Cc: Namjae Jeon <linkinjeon@kernel.org>
+> > > Cc: Steve French <smfrench@gmail.com>
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> > > Link: https://lore.kernel.org/r/20220929100447.108468-1-mic@digikod.net
+> > > ---
+> > 
+> > I think this is ok. The alternative would probably be to somehow use a
+> > relevant userns when struct ksmbd_user is created when the session is
+> > established. But these are deeper ksmbd design questions. The fix
+> > proposed here itself seems good.
 > 
-> diff --git a/drivers/clk/mediatek/clk-pll.c b/drivers/clk/mediatek/clk-pll.c
-> index 54e6cfd29dfc..a4eca5fd539c 100644
-> --- a/drivers/clk/mediatek/clk-pll.c
-> +++ b/drivers/clk/mediatek/clk-pll.c
-> @@ -27,37 +27,10 @@
->   
->   #define AUDPLL_TUNER_EN		BIT(31)
->   
-> -#define POSTDIV_MASK		0x7
-> -
->   /* default 7 bits integer, can be overridden with pcwibits. */
->   #define INTEGER_BITS		7
->   
-> -/*
-> - * MediaTek PLLs are configured through their pcw value. The pcw value describes
-> - * a divider in the PLL feedback loop which consists of 7 bits for the integer
-> - * part and the remaining bits (if present) for the fractional part. Also they
-> - * have a 3 bit power-of-two post divider.
-> - */
-> -
-> -struct mtk_clk_pll {
-> -	struct clk_hw	hw;
-> -	void __iomem	*base_addr;
-> -	void __iomem	*pd_addr;
-> -	void __iomem	*pwr_addr;
-> -	void __iomem	*tuner_addr;
-> -	void __iomem	*tuner_en_addr;
-> -	void __iomem	*pcw_addr;
-> -	void __iomem	*pcw_chg_addr;
-> -	void __iomem	*en_addr;
-> -	const struct mtk_pll_data *data;
-> -};
-> -
-> -static inline struct mtk_clk_pll *to_mtk_clk_pll(struct clk_hw *hw)
-> -{
-> -	return container_of(hw, struct mtk_clk_pll, hw);
-> -}
-> -
-> -static int mtk_pll_is_prepared(struct clk_hw *hw)
-> +int mtk_pll_is_prepared(struct clk_hw *hw)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   
-> @@ -161,8 +134,8 @@ static void mtk_pll_set_rate_regs(struct mtk_clk_pll *pll, u32 pcw,
->    * @fin:	The input frequency
->    *
->    */
-> -static void mtk_pll_calc_values(struct mtk_clk_pll *pll, u32 *pcw, u32 *postdiv,
-> -		u32 freq, u32 fin)
-> +void mtk_pll_calc_values(struct mtk_clk_pll *pll, u32 *pcw, u32 *postdiv,
-> +			 u32 freq, u32 fin)
->   {
->   	unsigned long fmin = pll->data->fmin ? pll->data->fmin : (1000 * MHZ);
->   	const struct mtk_pll_div_table *div_table = pll->data->div_table;
-> @@ -198,8 +171,8 @@ static void mtk_pll_calc_values(struct mtk_clk_pll *pll, u32 *pcw, u32 *postdiv,
->   	*pcw = (u32)_pcw;
->   }
->   
-> -static int mtk_pll_set_rate(struct clk_hw *hw, unsigned long rate,
-> -		unsigned long parent_rate)
-> +int mtk_pll_set_rate(struct clk_hw *hw, unsigned long rate,
-> +		     unsigned long parent_rate)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   	u32 pcw = 0;
-> @@ -211,8 +184,7 @@ static int mtk_pll_set_rate(struct clk_hw *hw, unsigned long rate,
->   	return 0;
->   }
->   
-> -static unsigned long mtk_pll_recalc_rate(struct clk_hw *hw,
-> -		unsigned long parent_rate)
-> +unsigned long mtk_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   	u32 postdiv;
-> @@ -227,8 +199,8 @@ static unsigned long mtk_pll_recalc_rate(struct clk_hw *hw,
->   	return __mtk_pll_recalc_rate(pll, parent_rate, pcw, postdiv);
->   }
->   
-> -static long mtk_pll_round_rate(struct clk_hw *hw, unsigned long rate,
-> -		unsigned long *prate)
-> +long mtk_pll_round_rate(struct clk_hw *hw, unsigned long rate,
-> +			unsigned long *prate)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   	u32 pcw = 0;
-> @@ -239,7 +211,7 @@ static long mtk_pll_round_rate(struct clk_hw *hw, unsigned long rate,
->   	return __mtk_pll_recalc_rate(pll, *prate, pcw, postdiv);
->   }
->   
-> -static int mtk_pll_prepare(struct clk_hw *hw)
-> +int mtk_pll_prepare(struct clk_hw *hw)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   	u32 r;
-> @@ -273,7 +245,7 @@ static int mtk_pll_prepare(struct clk_hw *hw)
->   	return 0;
->   }
->   
-> -static void mtk_pll_unprepare(struct clk_hw *hw)
-> +void mtk_pll_unprepare(struct clk_hw *hw)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   	u32 r;
-> @@ -301,7 +273,7 @@ static void mtk_pll_unprepare(struct clk_hw *hw)
->   	writel(r, pll->pwr_addr);
->   }
->   
-> -static const struct clk_ops mtk_pll_ops = {
-> +const struct clk_ops mtk_pll_ops = {
->   	.is_prepared	= mtk_pll_is_prepared,
->   	.prepare	= mtk_pll_prepare,
->   	.unprepare	= mtk_pll_unprepare,
-> @@ -310,18 +282,15 @@ static const struct clk_ops mtk_pll_ops = {
->   	.set_rate	= mtk_pll_set_rate,
->   };
->   
-> -static struct clk_hw *mtk_clk_register_pll(const struct mtk_pll_data *data,
-> -		void __iomem *base)
-> +struct clk_hw *mtk_clk_register_pll_ops(struct mtk_clk_pll *pll,
-> +					const struct mtk_pll_data *data,
-> +					void __iomem *base,
-> +					const struct clk_ops *pll_ops)
->   {
-> -	struct mtk_clk_pll *pll;
->   	struct clk_init_data init = {};
->   	int ret;
->   	const char *parent_name = "clk26m";
->   
-> -	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
-> -	if (!pll)
-> -		return ERR_PTR(-ENOMEM);
-> -
->   	pll->base_addr = base + data->reg;
->   	pll->pwr_addr = base + data->pwr_reg;
->   	pll->pd_addr = base + data->pd_reg;
-> @@ -343,7 +312,7 @@ static struct clk_hw *mtk_clk_register_pll(const struct mtk_pll_data *data,
->   
->   	init.name = data->name;
->   	init.flags = (data->flags & PLL_AO) ? CLK_IS_CRITICAL : 0;
-> -	init.ops = &mtk_pll_ops;
-> +	init.ops = pll_ops;
->   	if (data->parent_name)
->   		init.parent_names = &data->parent_name;
->   	else
-> @@ -360,7 +329,22 @@ static struct clk_hw *mtk_clk_register_pll(const struct mtk_pll_data *data,
->   	return &pll->hw;
->   }
->   
-> -static void mtk_clk_unregister_pll(struct clk_hw *hw)
-> +struct clk_hw *mtk_clk_register_pll(const struct mtk_pll_data *data,
-> +				    void __iomem *base)
-> +{
-> +	struct mtk_clk_pll *pll;
-> +	struct clk_hw *hw;
-> +
-> +	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
-> +	if (!pll)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	hw = mtk_clk_register_pll_ops(pll, data, base, &mtk_pll_ops);
-> +
-> +	return hw;
-> +}
-> +
-> +void mtk_clk_unregister_pll(struct clk_hw *hw)
->   {
->   	struct mtk_clk_pll *pll;
->   
-> @@ -423,8 +407,8 @@ int mtk_clk_register_plls(struct device_node *node,
->   }
->   EXPORT_SYMBOL_GPL(mtk_clk_register_plls);
->   
-> -static __iomem void *mtk_clk_pll_get_base(struct clk_hw *hw,
-> -					  const struct mtk_pll_data *data)
-> +__iomem void *mtk_clk_pll_get_base(struct clk_hw *hw,
-> +				   const struct mtk_pll_data *data)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   
-> diff --git a/drivers/clk/mediatek/clk-pll.h b/drivers/clk/mediatek/clk-pll.h
-> index fe3199715688..e87ab08eea9b 100644
-> --- a/drivers/clk/mediatek/clk-pll.h
-> +++ b/drivers/clk/mediatek/clk-pll.h
-> @@ -7,6 +7,7 @@
->   #ifndef __DRV_CLK_MTK_PLL_H
->   #define __DRV_CLK_MTK_PLL_H
->   
-> +#include <linux/clk-provider.h>
->   #include <linux/types.h>
->   
->   struct clk_ops;
-> @@ -20,6 +21,7 @@ struct mtk_pll_div_table {
->   
->   #define HAVE_RST_BAR	BIT(0)
->   #define PLL_AO		BIT(1)
-> +#define POSTDIV_MASK	0x7
+> That would be better indeed. I guess ksmbd works whenever the netlink peer
+> is not in a user namespace with mapped UID/GID, but it should result in
+> obvious access bugs otherwise (which is already the case anyway). It seems
+> that the netlink peer must be trusted because it is the source of truth for
+> account/user mapping anyway. This change fixes the more critical side of the
+> issue and it should fit well for backports.
 
-While moving this, can you please also fixup declaring this mask as GENMASK()?
-
-#define POSTDIV_MASK	GENMASK(2, 0)
-
->   
->   struct mtk_pll_data {
->   	int id;
-> @@ -48,10 +50,64 @@ struct mtk_pll_data {
->   	u8 pll_en_bit; /* Assume 0, indicates BIT(0) by default */
->   };
->   
-> +/*
-> + * MediaTek PLLs are configured through their pcw value. The pcw value describes
-> + * a divider in the PLL feedback loop which consists of 7 bits for the integer
-> + * part and the remaining bits (if present) for the fractional part. Also they
-> + * have a 3 bit power-of-two post divider.
-> + */
-> +
-> +struct mtk_clk_pll {
-> +	struct clk_hw	hw;
-> +	void __iomem	*base_addr;
-> +	void __iomem	*pd_addr;
-> +	void __iomem	*pwr_addr;
-> +	void __iomem	*tuner_addr;
-> +	void __iomem	*tuner_en_addr;
-> +	void __iomem	*pcw_addr;
-> +	void __iomem	*pcw_chg_addr;
-> +	void __iomem	*en_addr;
-> +	const struct mtk_pll_data *data;
-> +};
-> +
-> +
-
-Please drop this extra newline.
-
-Thanks,
-Angelo
+Sorry, I also forgot,
+Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
