@@ -2,194 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E385EEB86
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 04:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C25F5EEB8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 04:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234655AbiI2CQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 22:16:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60324 "EHLO
+        id S234704AbiI2CRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 22:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbiI2CQR (ORCPT
+        with ESMTP id S232599AbiI2CRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 22:16:17 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AAE870B7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 19:16:14 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MdH0X5YnYzHtgJ;
-        Thu, 29 Sep 2022 10:11:24 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 29 Sep 2022 10:16:12 +0800
-Received: from [10.67.111.176] (10.67.111.176) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 29 Sep 2022 10:16:12 +0800
-Message-ID: <2d57b0a4-e1ad-fbae-8c28-5db2299ea84e@huawei.com>
-Date:   Thu, 29 Sep 2022 10:16:11 +0800
+        Wed, 28 Sep 2022 22:17:47 -0400
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8943C123869
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 19:17:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1664417866; x=1695953866;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CIUQjZuJ5S1tNEwYC3STQUqYEIydxzUEzl4M0ki1vaY=;
+  b=BNB+zc+bFp8pgvIxNMDdEirI2mP14kbqL6ZOcjHz/f1FLESNK3rkpcRQ
+   s/la7e6GQtZwsbrZsOeW2g24LsBWxykTA0RRXxNG0fKMdfVaPL/6bS3Ar
+   V09OUIuyOs1ZFWzep33aJNk6f7wKzChTFRXXk8ABkA+Ao49kEQq9DTkHK
+   uQbQajdYqUlf/R/2c3NDtAnXVb4PE1VkJ8aVKwDeOvsA24Hh20Kq8g2Mx
+   mN/wh/Z0r1d5EGAozM7/KbD99ytsRsfEs0WwikUAW1tIGRQEOGEIKQ21U
+   pw2o4Rix5sVjO3V+oGLCzwsRmsZFy/l0sLYt3+bt3jrQD85kS2QP8jvNn
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,353,1654531200"; 
+   d="scan'208";a="324642462"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 29 Sep 2022 10:17:45 +0800
+IronPort-SDR: cyYqZZCAY2Uvf8Szse8iKS45wWQzO0Aeg7K/6mK/jy2UvYN40Np2DxIikM5gjY7V+6E6YFTy2i
+ WEYT8LYGkFWD3X5chHFC1La6NjoIucUjk620egPLdaN0ZyCNAwcvta73tqYRvgr/85Eo9FPEnT
+ vSm5LLj2BDAMLItXz0xjf9rq8ZbU7noAeYXT3iKdJthApnH4rdiUKUV3C0FuQ+rLDNufwoXMez
+ gzxHdADuvm4G+k0Ok/uUUISJRfdpn5PEgFhqgP7ZXUpfSu5dU5Py1H+PKNsQ93kSyKBrOIeER0
+ qYcLMS9jnKAPHNjMOX2AXM8l
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Sep 2022 18:37:40 -0700
+IronPort-SDR: 6rRQ5s4KSJMthGyAm7RYocyWUEkJAYp2EznIV97CLZTvj6OQh9LDlcrfWiVTmm5woV5Y/crPT5
+ A9RHAZfLXEgyQIA5+88M++YLYUCX8wtCBVFSXflWPFz4x4RPbvLqwe03YfhImnuQYKn8k6Horv
+ iCzl1Lm6wI7ph7GNcxbZ2uq6kTMrZh3ZNFownbzKHli4ErbC2ll/WJ+x94du3TLKLWDrmMg++h
+ /99FVSuFz5apRbIyv+QmwxCbm0KH27DPSVgO4LXM2FwI43WbUPiH/sfH/hBCM9+s6qeJxvmKUe
+ ncQ=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Sep 2022 19:17:45 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MdH7s2W9Bz1RwvL
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 19:17:45 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1664417864; x=1667009865; bh=CIUQjZuJ5S1tNEwYC3STQUqYEIydxzUEzl4
+        M0ki1vaY=; b=Sak3A4pmtNnrn74yjqbromsKmtjgOhVPa8JGyclEia44LycuvwM
+        c9TA/iOtKIGNUuysdPRKku062NmEYnCbRwBtylSVBbgjN58Zl8PxXjT4pLd4xHzt
+        jrQY5w4dPt8VMzOV1LI9ZES1/WhWICF/4TRmb74rIQQaPAurqukqjs3LPAumwTal
+        +VHjlSxXYMCxUr5HRzrbkeCpykfkLuSk6q9t77eaKA4KP0Si0Dz6CzVA9fFO+2+1
+        kEmpYkq1Q0OJ+06PhiIclWfZ+uccLURB1MxlyOW4Zky1TRxixBXumPQmyTBlgh/4
+        UR+iThnaBS4gLF+DAIJt9qhETqLEblGcnqg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id rVNEuqmDvb85 for <linux-kernel@vger.kernel.org>;
+        Wed, 28 Sep 2022 19:17:44 -0700 (PDT)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MdH7p2N8Rz1RvLy;
+        Wed, 28 Sep 2022 19:17:42 -0700 (PDT)
+Message-ID: <1303aefc-6a06-371d-5fc0-828bbce29ad4@opensource.wdc.com>
+Date:   Thu, 29 Sep 2022 11:17:41 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH -next v2 0/2] Remove unused variables in x86/boot
+Subject: Re: [PATCH 4/6] scsi: pm8001: Use sas_task_find_rq() for tagging
 Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <kirill.shutemov@linux.intel.com>, <akpm@linux-foundation.org>,
-        <ndesaulniers@google.com>, <masahiroy@kernel.org>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <michael.roth@amd.com>, <brijesh.singh@amd.com>,
-        <venu.busireddy@oracle.com>, <linux-kernel@vger.kernel.org>
-References: <20220927081512.2456624-1-lizetao1@huawei.com>
- <YzNwG3iWz+qfNCC9@dev-arch.thelio-3990X>
-From:   Li Zetao <lizetao1@huawei.com>
-In-Reply-To: <YzNwG3iWz+qfNCC9@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, jinpu.wang@cloud.ionos.com,
+        damien.lemoal@wdc.com
+Cc:     hare@suse.de, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
+        ipylypiv@google.com, changyuanl@google.com, hch@lst.de
+References: <1664368034-114991-1-git-send-email-john.garry@huawei.com>
+ <1664368034-114991-5-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1664368034-114991-5-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.176]
-X-ClientProxiedBy: dggpeml100001.china.huawei.com (7.185.36.47) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan,
+On 9/28/22 21:27, John Garry wrote:
+> The request associated with a scsi command coming from the block layer
+> has a unique tag, so use that when possible for getting a CCB.
+> 
+> Unfortunately we don't support reserved commands in the SCSI midlayer yet,
+> so in the interim continue to manage those tags internally (along with
+> tags for private commands).
+> 
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> ---
+>  drivers/scsi/pm8001/pm8001_init.c | 10 ++++------
+>  drivers/scsi/pm8001/pm8001_sas.c  |  8 ++++++++
+>  drivers/scsi/pm8001/pm8001_sas.h  |  6 +++++-
+>  3 files changed, 17 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
+> index 0edc9857a8bd..0868836e7391 100644
+> --- a/drivers/scsi/pm8001/pm8001_init.c
+> +++ b/drivers/scsi/pm8001/pm8001_init.c
+> @@ -1208,17 +1208,14 @@ static int pm8001_init_ccb_tag(struct pm8001_hba_info *pm8001_ha)
+>  	struct Scsi_Host *shost = pm8001_ha->shost;
+>  	struct device *dev = pm8001_ha->dev;
+>  	u32 max_out_io, ccb_count;
+> -	u32 can_queue;
+>  	int i;
+>  
+>  	max_out_io = pm8001_ha->main_cfg_tbl.pm80xx_tbl.max_out_io;
+>  	ccb_count = min_t(int, PM8001_MAX_CCB, max_out_io);
+>  
+> -	/* Update to the scsi host*/
+> -	can_queue = ccb_count - PM8001_RESERVE_SLOT;
+> -	shost->can_queue = can_queue;
+> +	shost->can_queue = ccb_count - PM8001_RESERVE_SLOT;
+>  
+> -	pm8001_ha->tags = bitmap_zalloc(ccb_count, GFP_KERNEL);
+> +	pm8001_ha->tags = bitmap_zalloc(PM8001_RESERVE_SLOT, GFP_KERNEL);
 
-On 2022/9/28 5:50, Nathan Chancellor wrote:
-> Hi Li,
->
-> On Tue, Sep 27, 2022 at 08:15:10AM +0000, Li Zetao wrote:
->> This patch set removes some unused variables in x86/boot, and add the
->> "-Wall" flag to Makefile, which is the old problem of x86 not sharing
->> makefiles.
->>
->> Changes since v1:
->> - Add "-Wall" flag to x86/boot/compressed/Makefile
->> - Remove unused variables "et" in efi_get_system_table() and "ret" in
->>    efi_get_conf_table()
->> - Remove unused variables "ret" in __efi_get_rsdp_addr() and
->>    "nr_tables" in efi_get_rsdp_addr()
->>
->> v1 at:
->> https://lore.kernel.org/all/20220923113209.3046960-1-lizetao1@huawei.com/
->>
->> Li Zetao (2):
->>    x86/boot/compressed: Add "-Wall" flag to Makefile
->>    x86/boot: Remove unused variables
->>
->>   arch/x86/boot/compressed/Makefile | 2 +-
->>   arch/x86/boot/compressed/acpi.c   | 2 --
->>   arch/x86/boot/compressed/efi.c    | 2 --
->>   arch/x86/boot/compressed/sev.c    | 1 -
->>   4 files changed, 1 insertion(+), 6 deletions(-)
-> I took this series for a spin with clang and found a few extra warnings.
->
-> 1.
->
->    In file included from arch/x86/boot/compressed/misc.c:15:
->    In file included from arch/x86/boot/compressed/misc.h:24:
->    In file included from ./include/linux/elf.h:6:
->    In file included from ./arch/x86/include/asm/elf.h:8:
->    In file included from ./include/linux/thread_info.h:60:
->    ./arch/x86/include/asm/thread_info.h:175:13: warning: calling '__builtin_frame_address' with a nonzero argument is unsafe [-Wframe-address]
->            oldframe = __builtin_frame_address(1);
->                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
->    ./arch/x86/include/asm/thread_info.h:177:11: warning: calling '__builtin_frame_address' with a nonzero argument is unsafe [-Wframe-address]
->                    frame = __builtin_frame_address(2);
->                            ^~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> This warning is disabled in the main Makefile for this reason so we
-> should just be able to disable it:
->
-> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-> index 10abb7c45d04..3f004567f3d5 100644
-> --- a/arch/x86/boot/compressed/Makefile
-> +++ b/arch/x86/boot/compressed/Makefile
-> @@ -43,6 +43,7 @@ KBUILD_CFLAGS += -mno-mmx -mno-sse
->   KBUILD_CFLAGS += -ffreestanding -fshort-wchar
->   KBUILD_CFLAGS += -fno-stack-protector
->   KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member)
-> +KBUILD_CFLAGS += $(call cc-disable-warning, frame-address)
->   KBUILD_CFLAGS += $(call cc-disable-warning, gnu)
->   KBUILD_CFLAGS += -Wno-pointer-sign
->   KBUILD_CFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
->
-> 2.
->
->    arch/x86/boot/compressed/kaslr.c:627:6: warning: unused variable 'i' [-Wunused-variable]
->            int i;
->                ^
->
-> This happens when CONFIG_MEMORY_HOTREMOVE or CONFIG_ACPI are 'n'. I
-> think it can just be fixed by aligning arch/x86/boot/compressed with the
-> rest of the kernel and explicitly compiling with '-std=gnu11', which
-> will allow us to declare the variable within the for loop, like so.
->
-> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-> index 3f004567f3d5..6c7e366a437b 100644
-> --- a/arch/x86/boot/compressed/Makefile
-> +++ b/arch/x86/boot/compressed/Makefile
-> @@ -34,7 +34,7 @@ targets := vmlinux vmlinux.bin vmlinux.bin.gz vmlinux.bin.bz2 vmlinux.bin.lzma \
->   # be valid.
->   KBUILD_CFLAGS := -m$(BITS) -O2 $(CLANG_FLAGS)
->   KBUILD_CFLAGS += -fno-strict-aliasing -fPIE
-> -KBUILD_CFLAGS += -Wundef -Wall
-> +KBUILD_CFLAGS += -Wundef -Wall -std=gnu11
->   KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
->   cflags-$(CONFIG_X86_32) := -march=i386
->   cflags-$(CONFIG_X86_64) := -mcmodel=small -mno-red-zone
-> diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
-> index 4a3f223973f4..be859c7e7f6b 100644
-> --- a/arch/x86/boot/compressed/kaslr.c
-> +++ b/arch/x86/boot/compressed/kaslr.c
-> @@ -624,7 +624,6 @@ static bool process_mem_region(struct mem_vector *region,
->   			       unsigned long minimum,
->   			       unsigned long image_size)
->   {
-> -	int i;
->   	/*
->   	 * If no immovable memory found, or MEMORY_HOTREMOVE disabled,
->   	 * use @region directly.
-> @@ -644,7 +643,7 @@ static bool process_mem_region(struct mem_vector *region,
->   	 * If immovable memory found, filter the intersection between
->   	 * immovable memory and @region.
->   	 */
-> -	for (i = 0; i < num_immovable_mem; i++) {
-> +	for (int i = 0; i < num_immovable_mem; i++) {
->   		u64 start, end, entry_end, region_end;
->   		struct mem_vector entry;
->   
->
-> Additionally, I think these two patches should be reordered so that the
-> warnings are fixed before they are enabled.
->
-> With those comments addressed, consider the series:
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->
-> Cheers,
-> Nathan
+The "tags" name for this field is really confusing as it seems to be
+implying "all tags". Could we rename that to reserved_tags or similar ?
 
-What is your clang compiler version and .config? My clang compiler is 
-14.0.0-1ubuntu1, and I can't reproduce
+>  	if (!pm8001_ha->tags)
+>  		goto err_out;
+>  
+> @@ -1244,9 +1241,10 @@ static int pm8001_init_ccb_tag(struct pm8001_hba_info *pm8001_ha)
+>  		pm8001_ha->ccb_info[i].task = NULL;
+>  		pm8001_ha->ccb_info[i].ccb_tag = PM8001_INVALID_TAG;
+>  		pm8001_ha->ccb_info[i].device = NULL;
+> -		++pm8001_ha->tags_num;
+>  	}
+>  
+> +	pm8001_ha->tags_num = PM8001_RESERVE_SLOT;
 
-problem 1("calling '__builtin_frame_address' with a nonzero argument is 
-unsafe"). Can you provide more
+Same here. reserved_tags_num ?
+But given that this seems to always be equal to PM8001_RESERVE_SLOT, do
+we even need this field at all ?
 
-information.
+> +
+>  	return 0;
+>  
+>  err_out_noccb:
+> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+> index 066dfa9f4683..9d25855af657 100644
+> --- a/drivers/scsi/pm8001/pm8001_sas.c
+> +++ b/drivers/scsi/pm8001/pm8001_sas.c
+> @@ -68,6 +68,11 @@ void pm8001_tag_free(struct pm8001_hba_info *pm8001_ha, u32 tag)
+>  	void *bitmap = pm8001_ha->tags;
+>  	unsigned long flags;
+>  
+> +	if (tag < pm8001_ha->shost->can_queue)
+> +		return;
+> +
+> +	tag -= pm8001_ha->shost->can_queue;
+> +
+>  	spin_lock_irqsave(&pm8001_ha->bitmap_lock, flags);
+>  	__clear_bit(tag, bitmap);
+>  	spin_unlock_irqrestore(&pm8001_ha->bitmap_lock, flags);
+> @@ -92,6 +97,9 @@ int pm8001_tag_alloc(struct pm8001_hba_info *pm8001_ha, u32 *tag_out)
+>  	}
+>  	__set_bit(tag, bitmap);
+>  	spin_unlock_irqrestore(&pm8001_ha->bitmap_lock, flags);
+> +
+> +	/* reserved tags are in the upper region of the tagset */
+> +	tag += pm8001_ha->shost->can_queue;
+>  	*tag_out = tag;
+>  	return 0;
+>  }
+> diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm8001_sas.h
+> index 9acaadf02150..9ff8d1fa84b0 100644
+> --- a/drivers/scsi/pm8001/pm8001_sas.h
+> +++ b/drivers/scsi/pm8001/pm8001_sas.h
+> @@ -737,9 +737,13 @@ pm8001_ccb_alloc(struct pm8001_hba_info *pm8001_ha,
+>  		 struct pm8001_device *dev, struct sas_task *task)
+>  {
+>  	struct pm8001_ccb_info *ccb;
+> +	struct request *rq = NULL;
 
+I do not think you need the NULL initialization...
 
-Thx.
+>  	u32 tag;
+>  
+> -	if (pm8001_tag_alloc(pm8001_ha, &tag)) {
+> +	rq = sas_task_find_rq(task);
+> +	if (rq) {
+> +		tag = rq->tag;
+> +	} else if (pm8001_tag_alloc(pm8001_ha, &tag)) {
+>  		pm8001_dbg(pm8001_ha, FAIL, "Failed to allocate a tag\n");
+>  		return NULL;
+>  	}
 
-
-Best regards,
-
-Li Zetao
+-- 
+Damien Le Moal
+Western Digital Research
 
