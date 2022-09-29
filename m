@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E4E5EF1A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E58BB5EF1A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234848AbiI2JRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 05:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S235396AbiI2JSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 05:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234939AbiI2JRT (ORCPT
+        with ESMTP id S234255AbiI2JSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:17:19 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A59214329E;
-        Thu, 29 Sep 2022 02:17:18 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C9F771F855;
-        Thu, 29 Sep 2022 09:17:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1664443036; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=71EGSfS37//o0vnm3QcXzqADuyadLykD8DwNAjDozNM=;
-        b=HYhHxvF5R9MZgs/n2dBHAoOW31tPKSK54FyKQWJLhuJa0/dmQ69jamOecI2ZMjy7rYjUiD
-        DS68vIxawtbYsHHd/Z84bIhw4fZ+4zyuf21I0K4nCWJZ9G4zGJ4tma3Yi6xfKWT+79o7Lj
-        Na8yGMGIbSV5gRSVxtr1wjCjhUU8G6I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1664443036;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=71EGSfS37//o0vnm3QcXzqADuyadLykD8DwNAjDozNM=;
-        b=uO6c1+sBJ0l+zWjlAlXoMSN5FkCeXfBxD0k80z1CZiVltvoS5N3/1MunDKgBzmYis1KohA
-        vHKg222nS4mY/HCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A06F61348E;
-        Thu, 29 Sep 2022 09:17:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8X5yJpxiNWPhMQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 29 Sep 2022 09:17:16 +0000
-Message-ID: <9db958ac-7e0c-5915-ffe1-7f809b7ed9ca@suse.cz>
-Date:   Thu, 29 Sep 2022 11:17:16 +0200
+        Thu, 29 Sep 2022 05:18:33 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01EAA1432BC
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:18:32 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id u18so1315422lfo.8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:18:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=kc3ZUAL7WQah+/Fhr7W6V5w2wd3MWGg+6pISLsDcInI=;
+        b=JbmOPO8O2IY9w37qC7AVYBpBYGgWcdUCkEiLm8j+zcd4hRAzkLPmZ+c3bnIosKBndN
+         wK9E3rxJR3x6JVVKBgsSD24SB7hLAzlfYm5Zti4nsPymgLjh34ONJr8ZvIhzIW8l0iRH
+         S/YDDAvInXynnGoumULv4WmWN4VcLm+8nQe6S4y0+S/9kugebPCatJ2TwiJfA3EgO7Zy
+         5TaExbvcociEVLuC2CTFYxkmbowZTquZEMXY7wVD6y8ygxGe72teB4jISwpqVSJYPvUr
+         kQWlGiETkGNtN4b9klUQgx+6YhEgaZ+5v+h3dgh5DJSIlodlzDGlMUf0olH2yUE7qq/y
+         2ccw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=kc3ZUAL7WQah+/Fhr7W6V5w2wd3MWGg+6pISLsDcInI=;
+        b=IioiYi5YSPfN+6ln+KDmcD1yND5eBIZcrcUfzNlEZS/m0w8xS0L3vDmdNHlzBku5z5
+         Rss5n0eMuIQeDvt6nui1qJQrj8+vHma+mXYUrNGsKYJi48X8t6WtBd8ztUeiP/9aSyqe
+         YGQIefrWfMAYuQ+OXxFz+ssoV/EM4zbYlIMuoKSyGNbHHT6Xum8Ws0uOYRzIL8+qkNVf
+         Ns8VetHF3NPDmnoTjO7RJLKceO0P8kCIdwoOV+GTzld3iSqWhindxAq27w5DRewErW+f
+         RCDbpVvLf7iL0x+pYoU40RVJY6hCigzS0NT0xg8P0U66zrVBhEH5GM9xjSaRgjoku8qE
+         twrA==
+X-Gm-Message-State: ACrzQf1kXE9O/nrb9SJR3XJPScqa8srXA+J6qCFgtWQU0RY1jylpKRm1
+        EGxxyvDRV6B8yvhv6N8K/i0D0w==
+X-Google-Smtp-Source: AMsMyM4EF0p2/Ik6h93Z4rtV/D0MipOZQ/7AOh7OhdvB4Fu2GeKp4pWrtAvsv9AbEbQt1WQhZM2aog==
+X-Received: by 2002:a19:5015:0:b0:498:fe6c:39de with SMTP id e21-20020a195015000000b00498fe6c39demr857252lfb.263.1664443110397;
+        Thu, 29 Sep 2022 02:18:30 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id k17-20020ac24f11000000b004896ed8dce3sm729637lfr.2.2022.09.29.02.18.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 02:18:30 -0700 (PDT)
+Message-ID: <3bef6840-9d68-68e5-0a7e-7e8c06c31025@linaro.org>
+Date:   Thu, 29 Sep 2022 11:18:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH -next] compiler.h: fix compile error with gcc-8 or lower
- version
+Subject: Re: [PATCH v5 2/5] dt-bindings: remoteproc: qcom: Convert wcnss
+ documentation to YAML
 Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        llvm@lists.linux.dev, linux-mm@kvack.org
-Cc:     keescook@chromium.org
-References: <20220929033845.485728-1-yangyingliang@huawei.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220929033845.485728-1-yangyingliang@huawei.com>
+To:     Sireesh Kodali <sireeshkodali1@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, linux-kernel@vger.kernel.org
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20220929050209.1464526-1-sireeshkodali1@gmail.com>
+ <20220929050209.1464526-3-sireeshkodali1@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220929050209.1464526-3-sireeshkodali1@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,48 +84,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/29/22 05:38, Yang Yingliang wrote:
-> I got the follow compile error in latest linux-next kernel with gcc-8.4:
+On 29/09/2022 07:02, Sireesh Kodali wrote:
+> This is a direct conversion of the existing txt documentation to YAML.
+> It is in preparation for the addition of pronto-v3 to the docs. This
+> patch doesn't document any of the existing subnodes/properties that are
+> not documented in the existing txt file. That is done in a separate
+> patch.
 > 
->   In file included from <command-line>:
->   ./include/linux/percpu.h: In function ‘__alloc_reserved_percpu’:
->   ././include/linux/compiler_types.h:279:30: error: expected declaration specifiers before ‘__alloc_size__’
->    #define __alloc_size(x, ...) __alloc_size__(x, ## __VA_ARGS__) __malloc
->                                 ^~~~~~~~~~~~~~
->   ./include/linux/percpu.h:120:74: note: in expansion of macro ‘__alloc_size’
->    extern void __percpu *__alloc_reserved_percpu(size_t size, size_t align) __alloc_size(1);
-> 
-> __alloc_size is not defined in gcc-8 or lower version, so add back the
-> conditional test for __alloc_size__ to fix it.
-> 
-> Fixes: 63caa04ec605 ("slab: Remove __malloc attribute from realloc functions")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
 > ---
->  include/linux/compiler_types.h | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index aa81da7a28eb..aae8852ccbdc 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -276,8 +276,13 @@ struct ftrace_likely_data {
->   * be performing a _reallocation_, as that may alias the existing pointer.
->   * For these, use __realloc_size().
->   */
-> +#ifdef __alloc_size__
->  #define __alloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__) __malloc
-> -#define __realloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__)
-> +#define __realloc_size(x, ...) __alloc_size__(x, ## __VA_ARGS__)
-> +#else
-> +#define __alloc_size(x, ...)	__malloc
-> +#define __realloc_size(x, ...) __malloc
 
-This would be wrong as with 63caa04ec605 we don't want __malloc in
-__realloc_size(). Anyway Kees sent the correct version and it's now merged,
-thanks.
 
-> +#endif
->  
->  #ifndef asm_volatile_goto
->  #define asm_volatile_goto(x...) asm goto(x)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
