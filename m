@@ -2,75 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F3B5EF6EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888525EF6EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234734AbiI2Nvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 09:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S235276AbiI2Nwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 09:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235210AbiI2Nvk (ORCPT
+        with ESMTP id S234943AbiI2Nwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 09:51:40 -0400
+        Thu, 29 Sep 2022 09:52:37 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB721432A2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:51:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322CF14D31C
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:52:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664459498;
+        s=mimecast20190719; t=1664459554;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IieW/qrMKIIc8eu7bzdu8OnHs0kBWGnniYBMz77goME=;
-        b=Vl8BdjECU+Q6hBAF5S537awrPizrlRH5aoqgkhv/+UZQ5hHlhvPpKPEZt5d2DRBGL3V8AB
-        guYGV3BXWWuku1IjK+HmP1pXGxYcz+JvStYR1b1dx/8rJjSxOWQxuH51Gq4Pm+bCh/NJuo
-        Xr+nj+oiz62PZH2X3/0WLAHy3Oicbw4=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-674-cEraDkRrNv2ClVUsig3rKw-1; Thu, 29 Sep 2022 09:51:37 -0400
-X-MC-Unique: cEraDkRrNv2ClVUsig3rKw-1
-Received: by mail-wm1-f70.google.com with SMTP id p24-20020a05600c1d9800b003b4b226903dso2987222wms.4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:51:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=IieW/qrMKIIc8eu7bzdu8OnHs0kBWGnniYBMz77goME=;
-        b=ygsXh7pTKyVt8fRbQ8vXnae4bjeqKDy/UusKJsYqzwSaJXclSttBcwYX2csqMW0MXE
-         e3FsDTCx3IQjWT+LsOe0ULrWI92/a9oPbUT12DCuBQKHlfmtnUYl5XusNwreCQ2+HjHn
-         jQpJKoQL2rZC6mrvkHvYVyFsB4FqHjphSa4uWBz3aEX+HhdE1K0W0npr/x1sf1ym5LzZ
-         XUjnZcBN+zt6PKK99zCZ1eaPcL4B6tLRjcc3LsSD3X8v4W14cdb2yrT5qCR9y1r098/b
-         y8P8Wuj3YGB2MQCvq1ykMwyKzKkT76MMiqgTH1fBl9hI1JyebnFxF2R/1EwvLf9TVmc6
-         GyUg==
-X-Gm-Message-State: ACrzQf2SGtqcc6YrN/5EBdZsMx1NjvIiGSwew5acT1WjM7gxpnaXRtBG
-        YFvvGnZH+qw2Ur7IE7gdWEDA14GU1E8IxXQBIme00KecpgvvlvSTXwAuV3vqoLXKNygsVdnSxx4
-        eAXntwdh6q7VTPbKQuhtyucY=
-X-Received: by 2002:a7b:ca46:0:b0:3b4:7ff2:1ca8 with SMTP id m6-20020a7bca46000000b003b47ff21ca8mr2470541wml.11.1664459493472;
-        Thu, 29 Sep 2022 06:51:33 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6BYA3SexgjmIbaHkskwniQiLaOlIBd8lGcGdjTQL2j/REfB/Qz243X0n7EN+MLVyG0I9pdOA==
-X-Received: by 2002:a7b:ca46:0:b0:3b4:7ff2:1ca8 with SMTP id m6-20020a7bca46000000b003b47ff21ca8mr2470525wml.11.1664459493312;
-        Thu, 29 Sep 2022 06:51:33 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id h18-20020adfaa92000000b00228dd80d78asm4662657wrc.86.2022.09.29.06.51.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 06:51:32 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 14:51:32 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, joro@8bytes.org, will@kernel.org,
-        dwmw2@infradead.org, baolu.lu@linux.intel.com, hpa@zytor.com
-Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        atomlin@atomlin.com, robin.murphy@arm.com, charlotte@extrahop.com
-Subject: Re: [RFC PATCH 1/3] x86/boot/e820: Make __e820__mapped_all() external
-Message-ID: <20220929135132.6qpit2dspyhs54vg@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220611204859.234975-1-atomlin@redhat.com>
- <20220929082551.2zrsayd2v3xhot7m@ava.usersys.com>
+        bh=ipdsBNiCU5QZTpFMyWEFqXQ10vbG8H1g103O/b01nPg=;
+        b=cS3OhcD08RMKgejOQpLTUjvU4Bx+3KVYNG9mJfcxpjfqt3pao7fzc4MSlprpikLDhX9cDQ
+        RVzjT/+hikcwTRC57qzEniMW+GPnq17YDQPea+2ZXXoNVsV/ijub9WOQcpqM3Oj8uXbo++
+        2eggpPeLOOUdnNdLK9A6PvMk5ws76c0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-644-x6rC90CZMa6qMaMfHVX-4Q-1; Thu, 29 Sep 2022 09:52:30 -0400
+X-MC-Unique: x6rC90CZMa6qMaMfHVX-4Q-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ACC79101A52A;
+        Thu, 29 Sep 2022 13:52:29 +0000 (UTC)
+Received: from starship (unknown [10.40.193.233])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7102C40C6EC2;
+        Thu, 29 Sep 2022 13:52:28 +0000 (UTC)
+Message-ID: <b8fa9561295bb6af2b7fcaa8125c6a3b89b305c7.camel@redhat.com>
+Subject: Re: [PATCH] KVM: x86: disable on 32-bit unless CONFIG_BROKEN
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Date:   Thu, 29 Sep 2022 16:52:26 +0300
+In-Reply-To: <08dab49f-9ca4-4978-4482-1815cf168e74@redhat.com>
+References: <20220926165112.603078-1-pbonzini@redhat.com>
+         <YzMt24/14n1BVdnI@google.com>
+         <ed74c9a9d6a0d2fd2ad8bd98214ad36e97c243a0.camel@redhat.com>
+         <15291c3f-d55c-a206-9261-253a1a33dce1@redhat.com>
+         <YzRycXDnWgMDgbD7@google.com>
+         <ad97d0671774a873175c71c6435763a33569f669.camel@redhat.com>
+         <YzSKhUEg3L1eMKOR@google.com>
+         <08dab49f-9ca4-4978-4482-1815cf168e74@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220929082551.2zrsayd2v3xhot7m@ava.usersys.com>
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -80,19 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-09-29 09:25 +0100, Aaron Tomlin wrote:
-> On Sat 2022-06-11 21:48 +0100, Aaron Tomlin wrote:
-> > No functional change.
+On Thu, 2022-09-29 at 15:26 +0200, Paolo Bonzini wrote:
+> On 9/28/22 19:55, Sean Christopherson wrote:
+> > > As far as my opinion goes I do volunteer to test this code more often,
+> > > and I do not want to see the 32 bit KVM support be removed*yet*.
 > > 
-> > This patch allows __e820__mapped_all() to be available for
-> > external use, in preparation to enhance the error message
-> > generated by arch_rmrr_sanity_check().
-> > 
+> > Yeah, I 100% agree that it shouldn't be removed until we have equivalent test
+> > coverage.  But I do think it should an "off-by-default" sort of thing.  Maybe
+> > BROKEN is the wrong dependency though?  E.g. would EXPERT be a better option?
 > 
-> Any more feedback?
+> Yeah, maybe EXPERT is better but I'm not sure of the equivalent test 
+> coverage.  32-bit VMX/SVM kvm-unit-tests are surely a good idea, but 
+> what's wrong with booting an older guest?
 
-[Adding iommu@lists.linux.dev and charlotte@extrahop.com on Cc]
+From my point of view, using the same kernel source for host and the guest
+is easier because you know that both kernels behave the same.
 
--- 
-Aaron Tomlin
+About EXPERT, IMHO these days most distros already dropped 32 bit suport thus anyway
+one needs to compile a recent 32 bit kernel manually - thus IMHO whoever
+these days compiles a 32 bit kernel, knows what they are doing.
+
+I personally would wait few more releases when there is a pressing reason to remove
+this support.
+
+AFAIK, it is not really possible to remove most of the legacy direct mmu
+because shadowing mmu still can use it (I think Sean told me that once).
+
+Best regards,
+	Maxim Levitsky
+
+> 
+> Paolo
+> 
+
 
