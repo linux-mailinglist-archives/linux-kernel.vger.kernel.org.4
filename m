@@ -2,135 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC17C5EF0F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2015EF0F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234872AbiI2IzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
+        id S235140AbiI2Izl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234788AbiI2Iy4 (ORCPT
+        with ESMTP id S234259AbiI2Izi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:54:56 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02FE2FFFC;
-        Thu, 29 Sep 2022 01:54:54 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28T7jbB5023403;
-        Thu, 29 Sep 2022 08:54:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ymFId9rk0VYVRNTJRUXusW4P91daBexoxJBCMtJmVsE=;
- b=TxbkkHQFnhhlxcfiZY8qmpspZSmxBCxcp1KgKfHnUpBjYt/BWRRTe98rOP7YQB/sGFse
- hznDTZ0FPBvwt/xD/hUcPV5Hom4qkAD7jIEOqPtLv0aQXFP0Nus1HGCg4Mn2Ctek1Q3Z
- cz4rzXHuFAC7rzz3RskyG6xPdKoNTCEutXssx/SBMjDpgfac+GY0hSxdnn6os2Kx3KTP
- iS7vND3zhnbjMKEVdC6Ub0usgdmtcl+L3kMbFIpKwpzWt4zAtufDcEEZFeFND2bYxHyZ
- TBXAW2kdA3mrDcAhJsMnLXPKxWFI0Yu0MU9f5Uwk4pXGBGpkbJiV1UxZtEX5MNUzDIn/ LA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jvv1ssyx3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 08:54:48 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28T8sl8a026001
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 08:54:47 GMT
-Received: from [10.216.29.250] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 29 Sep
- 2022 01:54:43 -0700
-Message-ID: <0cc382cb-b76e-a5a5-3480-47a451bdc958@quicinc.com>
-Date:   Thu, 29 Sep 2022 14:24:23 +0530
+        Thu, 29 Sep 2022 04:55:38 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC81A61736
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:55:32 -0700 (PDT)
+Received: from loongson-pc.loongson.cn (unknown [10.20.42.32])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxFeKCXTVjuLIjAA--.3552S2;
+        Thu, 29 Sep 2022 16:55:30 +0800 (CST)
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+Subject: [PATCH V3] LoongArch: Fix cpu name after s3/s4
+Date:   Thu, 29 Sep 2022 16:55:30 +0800
+Message-Id: <20220929085530.8742-1-lvjianmin@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Update SNPS Phy params for
- SC7280
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1664435628-4011-1-git-send-email-quic_kriskura@quicinc.com>
- <CAA8EJpr9pcN-SG-yQNUGEoHCmv74prChprj4f42PKpSAzGzVKQ@mail.gmail.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <CAA8EJpr9pcN-SG-yQNUGEoHCmv74prChprj4f42PKpSAzGzVKQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Cal0fDb_t370IOgCZ6HrsUhSET20IujE
-X-Proofpoint-ORIG-GUID: Cal0fDb_t370IOgCZ6HrsUhSET20IujE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-29_04,2022-09-29_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
- phishscore=0 bulkscore=0 spamscore=0 suspectscore=0 impostorscore=0
- clxscore=1011 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209290054
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxFeKCXTVjuLIjAA--.3552S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZF4xZry8Zr47Ar13GFWfXwb_yoWfCwb_Ga
+        n29anrG3Z3Ga40va4DXF18Ww43J3W8XFyYv3y2y39xCr43Aw45Xr4DKw13AryayF1rWrZ8
+        uw4S9FnruF4YkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcAYjsxI4VWkKwAYFVCjjxCrM7CY07I20VC2zVCF04k26cxKx2IY
+        s7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4
+        kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_
+        Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI
+        0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK82IY
+        6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUqs2-DUUUU
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On coming back from s3/s4, the cpu name will be overwritten
+in cpu_probe path of seconary cpu, so we don't overwrite it
+if it has been initialized.
 
-On 9/29/2022 1:29 PM, Dmitry Baryshkov wrote:
-> On Thu, 29 Sept 2022 at 10:14, Krishna Kurapati
-> <quic_kriskura@quicinc.com> wrote:
->>
->> Override the SNPS Phy tuning parameters for SC7280 devices. These
->> values are common for both trogdor and herobrine variants.
-> 
-> They are common for trogdor and herobrine, but should these parameters
-> be a default? In other words, a random new device based on sc7280
-> would more likely use these overrides or the hardware defaults?
-> 
-Hi Dmitry,
+Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
 
-   Currently there are only two platforms, so I made these changes on 
-common dtsi. If a new platform comes (mostly it won't) we can override 
-them in platform specific file is what I thought.
+diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
+index 529ab8f44ec6..255a09876ef2 100644
+--- a/arch/loongarch/kernel/cpu-probe.c
++++ b/arch/loongarch/kernel/cpu-probe.c
+@@ -187,7 +187,9 @@ static inline void cpu_probe_loongson(struct cpuinfo_loongarch *c, unsigned int
+ 	uint64_t *vendor = (void *)(&cpu_full_name[VENDOR_OFFSET]);
+ 	uint64_t *cpuname = (void *)(&cpu_full_name[CPUNAME_OFFSET]);
+ 
+-	__cpu_full_name[cpu] = cpu_full_name;
++	if (!__cpu_full_name[cpu])
++		__cpu_full_name[cpu] = cpu_full_name;
++
+ 	*vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
+ 	*cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
+ 
+-- 
+2.31.1
 
-Regards,
-Krishna,
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> index 2125803..ae2c23e 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> @@ -3310,6 +3310,13 @@
->>                          clock-names = "ref";
->>
->>                          resets = <&gcc GCC_QUSB2PHY_SEC_BCR>;
->> +
->> +                       qcom,hs-rise-fall-time-bp = <0>;
->> +                       qcom,squelch-detector-bp = <(-2090)>;
->> +                       qcom,hs-disconnect-bp = <1743>;
->> +                       qcom,hs-amplitude-bp = <1780>;
->> +                       qcom,hs-crossover-voltage-microvolt = <(-31000)>;
->> +                       qcom,hs-output-impedance-micro-ohms = <2600000>;
->>                  };
->>
->>                  usb_1_qmpphy: phy-wrapper@88e9000 {
->> --
->> 2.7.4
->>
-> 
-> 
