@@ -2,58 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA0D5EF00C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FB55EF00F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234840AbiI2IKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
+        id S235487AbiI2ILC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235074AbiI2IKT (ORCPT
+        with ESMTP id S235275AbiI2IKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:10:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435EE82752;
-        Thu, 29 Sep 2022 01:10:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4EE6B823AB;
-        Thu, 29 Sep 2022 08:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7A5B9C433D7;
-        Thu, 29 Sep 2022 08:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664439015;
-        bh=ky137os0hbVFN+1bPQnekE+YN/7mA238NtcGnLwxVQU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=XpaKGWJlb9Qe5aXk9cZ4n6yDkY7mFBAn1meGIym3g16XTr1HNyh331/SrtaPGG9xU
-         aMvo/TZMZ7GzoZq3Ftk3nRo/Y0lKzBQlsoicKWluDcHI/E+tl1W9YbyvmC1L1sF0SA
-         pHmROj59//TpEemof4mCqaecUvBbYEuIGo74g3vXpElziN+C75DnNPoRrGBnUHUBT6
-         O/twkfNTTtsABPKOIuyLUljvLV2Vkm+5aLg0I/qA3S40n6X+1UcE1Oak1j6pCsIpMe
-         LMwKbGnf6GAmySfh/xWdhNTXQ09HhkWnKPnQfA9EYAudxY57rWWzMi6G3PLGkYA0mn
-         S6UoIIOABRDVQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 59C39E4D01B;
-        Thu, 29 Sep 2022 08:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2] net: ethernet: mtk_eth_soc: use
- DEFINE_SHOW_ATTRIBUTE to simplify code
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166443901536.2321.13062051638346979105.git-patchwork-notify@kernel.org>
-Date:   Thu, 29 Sep 2022 08:10:15 +0000
-References: <20220927111925.2424100-1-liushixin2@huawei.com>
-In-Reply-To: <20220927111925.2424100-1-liushixin2@huawei.com>
-To:     Liu Shixin <liushixin2@huawei.com>
-Cc:     kuba@kernel.org, nbd@nbd.name, john@phrozen.org,
-        sean.wang@mediatek.com, Mark-MC.Lee@mediatek.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        matthias.bgg@gmail.com, netdev@vger.kernel.org,
+        Thu, 29 Sep 2022 04:10:54 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD4B10E5C2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:10:40 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 70so625289pjo.4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:10:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=PqlfwPujJPa5ILhcAEpjB2XsXFIbNicns4sglvBu2Nc=;
+        b=iik4pyUMcQXH0byUTH3UfkwH8RlaHqsQ5U3b4sybeBIPhtwbxsNQKtG+/BNrmOuF3o
+         um+XOEMBDn94QCGDcbNSZumApjt4JYx4n0BQguGBfEgr1Y0EtIhHLtjSomCCAK5PuIAR
+         cjAzyj5ceFJ9ImesfbZWOSzfQdfn8lWZHL7SY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=PqlfwPujJPa5ILhcAEpjB2XsXFIbNicns4sglvBu2Nc=;
+        b=6Ti2xe1fWWFM0XMwzYGaprTKneEwzUR2OtPi6bbh/tdRDFy+elPpEeGO684EyxyO3O
+         FlfsLjtmmqsvjsq20lb3RNjr2uKIeJC/Trwd/SB7EGr9A+FQdX2yhGVPKp33/eDuaXnB
+         Nj4YR6nIPznKJPoe/XEK9TTL/c24/w34IGP15rSGM2daVOeG6GaRkmyb2YwbZCmwbGpx
+         VEpmJ9MN2SDeDGiHeahg5KlikphVx18G6rwJtRQIu/Erwg9YTnefFCpOzkJAaBQP0qnn
+         4p0OjjgrjwKwKu7rSGRyOai2c8pDGWAHy1mBqJztdYQh9uBbEA4J10FF5VO1jy0HGGNp
+         mAPw==
+X-Gm-Message-State: ACrzQf2NQo+vPTRuM2WmR82LAFdrfsCSf3tyKGwPEQtXG/aBh16RR3f2
+        2sywW/R3eTAk4KFq+QksKllTrw==
+X-Google-Smtp-Source: AMsMyM6T5dB82wt7higNMwUVZBo8eq9IUm01DA0UgbxCIMi2sMaKyAvr86TcSZkBJXezzwNJaXIvRQ==
+X-Received: by 2002:a17:902:e88c:b0:176:a427:be6a with SMTP id w12-20020a170902e88c00b00176a427be6amr2233325plg.150.1664439039213;
+        Thu, 29 Sep 2022 01:10:39 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s2-20020a17090a764200b0020087d7e778sm2815639pjl.37.2022.09.29.01.10.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 01:10:38 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 01:10:37 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        John Crispin <john@phrozen.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <n.schier@avm.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, anand.gore@broadcom.com
+Subject: Re: [PATCH] ARM: ubsan: select ARCH_HAS_UBSAN_SANITIZE_ALL
+Message-ID: <202209290110.024DC2FE@keescook>
+References: <20220928174739.802806-1-f.fainelli@gmail.com>
+ <202209281100.5311EE081B@keescook>
+ <729030b4-c341-966f-05ed-3754122cb4f7@gmail.com>
+ <986bea84-7cc3-9c40-733c-0c766f7a9ebc@broadcom.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <986bea84-7cc3-9c40-733c-0c766f7a9ebc@broadcom.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,29 +83,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Tue, 27 Sep 2022 19:19:25 +0800 you wrote:
-> Use DEFINE_SHOW_ATTRIBUTE helper macro to simplify the code.
-> No functional change.
+On Wed, Sep 28, 2022 at 05:33:14PM -0700, William Zhang wrote:
 > 
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> ---
 > 
-> v1->v2: Rebase on net-next.
+> On 09/28/2022 04:06 PM, Florian Fainelli wrote:
+> > On 9/28/22 11:01, Kees Cook wrote:
+> > > On Wed, Sep 28, 2022 at 10:47:39AM -0700, Florian Fainelli wrote:
+> > > > From: Seung-Woo Kim <sw0312.kim@samsung.com>
+> > > > 
+> > > > To enable UBSAN on ARM, this patch enables ARCH_HAS_UBSAN_SANITIZE_ALL
+> > > > from arm confiuration. Basic kernel bootup test is passed on arm with
+> > > > CONFIG_UBSAN_SANITIZE_ALL enabled.
+> > > > 
+> > > > Signed-off-by: Seung-Woo Kim <sw0312.kim@samsung.com>
+> > > > [florian: rebased against v6.0-rc7]
+> > > > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> > > 
+> > > Ah-ha, thanks for testing this. What devices did you check this on? I
+> > > know boot-up on arm32 can be very device-specific.
+> > 
+> > This was tested on an ARCH_BRCMSTB system which is using an ARMv8 CPU
+> > booted in AArch32 mode, so virtually equivalent to armv7l. A raspberry
+> > Pi 4B is also happily booting with it.
+> > 
+> > > 
+> > > Which UBSAN configs did you try?
+> > 
+> > All CONFIG_UBSAN_* work with the exception of CONFIG_UBSAN_ALIGNMENT on
+> > my ARCH_BRCMSTB system, however it works fine on the Raspberry Pi 4B.
+> > Florian
 > 
-> [...]
+> I also tested on a BCM63138 board (ARM A9) under ARCH_BCMBCA using the
+> multi_v7_defconfig with all the UBSAN configs enabled except UBSAN_ALIGNMENT
+> and board boots up fine. Turning on UBSAN_ALIGNMENT results in flood of
+> false positive misaligned-access warnings. This is fine as ARM supports
+> unaligned access.
+> 
+> It did catch an out-of-band bug in mach-sunxi smp code.  I will submit a
+> separate patch to fix that bug.
 
-Here is the summary with links:
-  - [net-next,v2] net: ethernet: mtk_eth_soc: use DEFINE_SHOW_ATTRIBUTE to simplify code
-    https://git.kernel.org/netdev/net-next/c/1a0c667ea8e3
+Yay! :) Move coverage is great. :)
 
-You are awesome, thank you!
+> 
+> Tested-by: William Zhang <william.zhang@broadcom.com>
+
+Thanks!
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Kees Cook
