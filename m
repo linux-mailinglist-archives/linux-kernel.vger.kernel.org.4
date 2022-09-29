@@ -2,81 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886135EF716
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CBC5EF71C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235103AbiI2ODD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
+        id S235349AbiI2OEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235485AbiI2ODB (ORCPT
+        with ESMTP id S234453AbiI2OEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:03:01 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2061591CA;
-        Thu, 29 Sep 2022 07:02:59 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1odu7t-0007ZW-A8; Thu, 29 Sep 2022 16:02:57 +0200
-Message-ID: <4f704d2f-12b5-8d6a-357e-d79b1e871ed7@leemhuis.info>
-Date:   Thu, 29 Sep 2022 16:02:56 +0200
+        Thu, 29 Sep 2022 10:04:06 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A201577E5;
+        Thu, 29 Sep 2022 07:04:05 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id 13so3033649ejn.3;
+        Thu, 29 Sep 2022 07:04:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
+        bh=lOIr10qng5aLPZ0etG+Hq+3fdw3/2uRq+u/cuL1bsUo=;
+        b=pP4ha6IQQWSyGXsRFLlusYzCDGnGAoqkhrT0gaC/E/ELqjMzuZ1xCIQObAzd6VtWCz
+         WYVa8gavgTY4U1qICCz2uF837VFbIz2wXktnZhqn4Pa8sRLWiHVatF/SwCy+nj595AOu
+         C6Q8fzDACB64FKeRZE3kNR4TL8ph+t/boPeJXU1ZpCkkZaBSVuQ1eqI5SUrcB9EIUphy
+         htXn2i52Y8eo5Y4lfnTN2KqEbhbkxDE8N/PqOWRKGy5lO7bfKCTRBrnHh/9W5DnLi+/J
+         ObscbDs0p0P95mN893mIR0JC4xdHEfKTYfmBdq8c0Qf6zMZq/2p8ULwumQsEKYh/Z7Vp
+         /HFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date;
+        bh=lOIr10qng5aLPZ0etG+Hq+3fdw3/2uRq+u/cuL1bsUo=;
+        b=xo7weqSHOb+sRaUbCcKSjjBMqxmCCphz5m1LFg7o1/dQOwuEVYPsZ5odhB4qiu7YK3
+         YQdBzCrInAsqQX2wL+o86ZBKsPWUZuF29SomCMdUhMMDms7eyJBY70wF9md06csvuwwH
+         /DqpIcgWTLcVWuoWacbyj5CZt35ITFbKWLNyu8tZfy4kpIZ/r5VxHgB9YvPiv5bGSYtd
+         TYPrRxwA8biLzGfUqAsR95x5cruni+qWfc9oMB99XgqmENGAY5ugENsUmAe3P1WHKqN6
+         LPNwNitPUJLjg20GclQt0/L+axW6WrBO19i+U897xtYdvTGecIxqlRQc81uoygAzGABj
+         fPZg==
+X-Gm-Message-State: ACrzQf14nQH4v3MMtResjWV00EBTugF4/gJmng+j48k8KPiooW35vNNw
+        xzoC7BjG5e4U23yP83Pa6/Q=
+X-Google-Smtp-Source: AMsMyM5RqEf6W8++5Wd/dZ8xiTnvX4qBJZfJOg/gc26XMHarfk00dJSZvruYtjBdG2kEV798u2we9w==
+X-Received: by 2002:a17:907:6d03:b0:782:abba:936c with SMTP id sa3-20020a1709076d0300b00782abba936cmr2857513ejc.758.1664460242976;
+        Thu, 29 Sep 2022 07:04:02 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id y4-20020aa7d504000000b00456d2721d93sm5411275edq.64.2022.09.29.07.04.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 07:04:02 -0700 (PDT)
+Message-ID: <94bcb278-7bb9-d173-497c-fe12682c4a17@gmail.com>
+Date:   Thu, 29 Sep 2022 16:04:00 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Content-Language: en-US, de-DE
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        "Artem S. Tashkinov" <aros@gmx.com>, workflows@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
- <20220929094753.6bba89d8@gandalf.local.home>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-In-Reply-To: <20220929094753.6bba89d8@gandalf.local.home>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [RFC PATCH v1 1/2] dt-bindings: pwm: rockchip: add interrupts
+ property
+To:     heiko@sntech.de
+Cc:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sebastian.reichel@collabora.com, wxt@rock-chips.com,
+        kever.yang@rock-chips.com, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1664460180;fe8703b0;
-X-HE-SMSGID: 1odu7t-0007ZW-A8
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.09.22 15:47, Steven Rostedt wrote:
-> On Thu, 29 Sep 2022 13:33:53 +0200
-> Thorsten Leemhuis <linux@leemhuis.info> wrote:
-> 
-> Thanks Thorsten for doing this.
+The Rockchip SoCs have 4 or more built-in PWM channels.
 
-Thx for saying this, as I fear it in the end will again be more work
-then anticipated -- but well, that's how life often is :-D
+Configurable to operate in capture mode.
+Measures the high/low polarity effective cycles of this input waveform
+Generates a single interrupt at the transition of input waveform polarity
 
->>>  * In the kernel summit sessions (recording:
->>> https://youtu.be/e2SZoUPhDRg?t=5370 ) Len Brown stated that he and
->>> fellow ACPI/PM developers rely on bugzilla.kernel.org and would need
->>> some replacement if it's decommissioned.
-> 
-> I also use bugzilla.kernel.org with trace-cmd/kernelshark and the
-> libraries, although I don't really use it for the Linux tracing subsystem
-> (but I probably should :-/).
-> 
-> That is, the tools portion of bugzilla is not part of the MAINTAINERS file
-> (that I know of), so probably shouldn't be affected by this.
+Configurable to operate in continuous mode or one-shot mode.
+One-shot operation will produce N + 1 periods of the waveform,
+where N is the repeat counter value, and generates a single interrupt at
+the end of operation.
+Continuous mode generates the waveform continuously and
+do not generates any interrupts.
 
-Ohh, yeah, sorry, should have mentioned this. Don't worry, I'm aware of
-this particular and a few similar products/components in bugzilla. I
-don't plan changing any of them, unless something unforeseen or a very
-good reason comes up (for example if they're obviously unused for years
-or something like that).
+Older SoCs have an interrupt for each node.
+Newer models share an interrupt.
 
-Ciao, Thorsten
+Add interrupts property to the pwm-rockchip.yaml file.
+DT describes hardware. Rockchip PWM driver support for
+interrupts might not available.
+
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+ Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml b/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
+index f2d1dc7e7..f7634069d 100644
+--- a/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
++++ b/Documentation/devicetree/bindings/pwm/pwm-rockchip.yaml
+@@ -37,6 +37,9 @@ properties:
+   reg:
+     maxItems: 1
+ 
++  interrupts:
++    maxItems: 1
++
+   clocks:
+     minItems: 1
+     maxItems: 2
+-- 
+2.20.1
 
