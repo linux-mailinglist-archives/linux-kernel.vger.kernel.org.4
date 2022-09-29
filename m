@@ -2,209 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E10A5EEDF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508C55EEDFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbiI2Gib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 02:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
+        id S234855AbiI2Glj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 02:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232396AbiI2Gi2 (ORCPT
+        with ESMTP id S233404AbiI2Glh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 02:38:28 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8C7121E69;
-        Wed, 28 Sep 2022 23:38:26 -0700 (PDT)
-X-UUID: a250e78d179044f0a2e057bb46142653-20220929
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=qOF134f0PLct94m+3f10JMRXW8VSgq0vHf2OsyIBf+c=;
-        b=ECu8Zeq+NazqPOROjxnWogSt7v3SYjlAEXYr60Yw8qbmINuR+8/LpzSL4LzOlrgQ9G66/61gto/K4J16RMvmXJR65BYQ1WHp//6xIkpmRfVnFVn5IdMVkxBJNhNg7teeXW3St0NZpp7/7PqP4fCUONtxkW/RwnGgMv4Sz1HV6Xg=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:a880aa3e-2228-4d2f-83a7-49c3e3de8606,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:45
-X-CID-INFO: VERSION:1.1.11,REQID:a880aa3e-2228-4d2f-83a7-49c3e3de8606,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-        elease,TS:45
-X-CID-META: VersionHash:39a5ff1,CLOUDID:72a99de4-87f9-4bb0-97b6-34957dc0fbbe,B
-        ulkID:220928214318FAL666HN,BulkQuantity:277,Recheck:0,SF:38|28|17|19|48|10
-        2,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil,
-        COL:0
-X-UUID: a250e78d179044f0a2e057bb46142653-20220929
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1993800352; Thu, 29 Sep 2022 14:38:20 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 29 Sep 2022 14:38:19 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 29 Sep 2022 14:38:19 +0800
-Message-ID: <63eaf6e3bc090f22ce82e2bb860a000fad655395.camel@mediatek.com>
-Subject: Re: [PATCH 1/2] usb: mtu3: fix ep0's stall of out data stage
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Min Guo <min.guo@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        <Stable@vger.kernel.org>
-Date:   Thu, 29 Sep 2022 14:38:18 +0800
-In-Reply-To: <6d312360-55b7-ebd5-be86-14f6943e273f@collabora.com>
-References: <20220928091721.26112-1-chunfeng.yun@mediatek.com>
-         <6d312360-55b7-ebd5-be86-14f6943e273f@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 29 Sep 2022 02:41:37 -0400
+Received: from sender4-pp-o92.zoho.com (sender4-pp-o92.zoho.com [136.143.188.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8462D128704;
+        Wed, 28 Sep 2022 23:41:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1664433693; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=V+zipX7DGpNT0VfSsSnD8pEBivBRPN2as9BH3sG0fjD4iKbVt3BqOeJ99Lo4msja1Lu6MqwMfcx/oR756xBfcfWMgHeXOu4hFuALdeglxh0yo8+cDuSFPFYs3uYrqNMIIATm5cgStnUx93qbcdyLV8d5qSE8MUfyUn2cayx1NGk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1664433693; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=EXlFcHYEvuIDXaU+aP6eHFMdyT/gqxmC/nZG41wQWG8=; 
+        b=SIhOHBwQ86TPbgNCFd0kVUkXQFBWyqO7eh7w2tRX9Zmps8ek/rwWdcJC0MoJuoZDYv1ytxCmuPZlwqiL+jYCK0j7ZgjlQdh0TRaIvu3CrjJ2ufPPtRDJXCMg8bu/8rKOsamgQdAYA8UdxWGIdVDME9Ps3Vaiu7FsbCcbKb+MV4M=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zoho.com;
+        spf=pass  smtp.mailfrom=hmsjwzb@zoho.com;
+        dmarc=pass header.from=<hmsjwzb@zoho.com>
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
+  s=zapps768; d=zoho.com; 
+  h=message-id:date:mime-version:user-agent:subject:to:cc:references:from:in-reply-to:content-type; 
+  b=dsKVwXCus/vx4HZb8Ll7diczxweR21MnfPqtc2FJ3mUBRUyKECuXpvo5wIah+neHVNdgylrBv/Xn
+    QTSEnlB8APM+Vbbrwi0JS7KyXCkK8AV5Ao7k9XGd9DgIf7bdkL45  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1664433693;
+        s=zm2022; d=zoho.com; i=hmsjwzb@zoho.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=EXlFcHYEvuIDXaU+aP6eHFMdyT/gqxmC/nZG41wQWG8=;
+        b=WMr7uVM7JpKPho9Gq/y1lhxC2Kekix1/oEIZoVnfHYRSQfoQI3QsrNyrmw2Lh1ge
+        bjQeMrOFPOv+rLACJKDQdU47ti3U41ERo5FZRhhCvnGBdpABeMROv9JBHxmqnnoxc4h
+        0yzTZeJdxH898XIniAdaglzeH/Xjvc+vXrJKPe3E=
+Received: from [192.168.0.103] (58.247.201.74 [58.247.201.74]) by mx.zohomail.com
+        with SMTPS id 1664433692706875.4584232941247; Wed, 28 Sep 2022 23:41:32 -0700 (PDT)
+Message-ID: <b1687080-a702-e1f7-0fac-e837b0317aa4@zoho.com>
+Date:   Thu, 29 Sep 2022 02:41:28 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] btrfs:remove redundant index_rbio_pages in
+ raid56_rmw_stripe
+Content-Language: en-US
+To:     Qu Wenruo <wqu@suse.com>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220929014402.2450-1-hmsjwzb@zoho.com>
+ <c4293742-06ba-8720-e2eb-d4d3bc4da044@suse.com>
+ <18acd4e0-9d3d-77a7-a1de-b805bc259bcf@suse.com>
+From:   hmsjwzb <hmsjwzb@zoho.com>
+In-Reply-To: <18acd4e0-9d3d-77a7-a1de-b805bc259bcf@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-28 at 15:43 +0200, AngeloGioacchino Del Regno wrote:
-> Il 28/09/22 11:17, Chunfeng Yun ha scritto:
-> > It happens when enable uvc function, the flow as below:
-> > the controller switch to data stage, then call
-> >      -> foward_to_driver() -> composite_setup() ->
-> > uvc_function_setup(),
-> > it send out an event to user layer to notify it call
-> >      -> ioctl() -> uvc_send_response() -> usb_ep_queue(),
-> > but before the user call ioctl to queue ep0's buffer, the host
-> > already send
-> > out data, but the controller find that no buffer is queued to
-> > receive data,
-> > it send out STALL handshake.
-> > 
-> > To fix the issue, don't send out ACK of setup stage to switch to
-> > out data
-> > stage until the buffer is available.
-> > 
-> > Cc: <Stable@vger.kernel.org>
-> > Reported-by: Min Guo <min.guo@mediatek.com>
-> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > ---
-> >   drivers/usb/mtu3/mtu3.h            |  4 ++++
-> >   drivers/usb/mtu3/mtu3_gadget_ep0.c | 22 +++++++++++++++++++---
-> >   2 files changed, 23 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/usb/mtu3/mtu3.h b/drivers/usb/mtu3/mtu3.h
-> > index 2d7b57e07eee..6b64ad17724d 100644
-> > --- a/drivers/usb/mtu3/mtu3.h
-> > +++ b/drivers/usb/mtu3/mtu3.h
-> > @@ -318,6 +318,9 @@ static inline struct ssusb_mtk
-> > *dev_to_ssusb(struct device *dev)
-> >    *		for GET_STATUS and SET_SEL
-> >    * @setup_buf: ep0 response buffer for GET_STATUS and SET_SEL
-> > requests
-> >    * @u3_capable: is capable of supporting USB3
-> > + * @delayed_setup: delay the setup stage to avoid STALL handshake
-> > in
-> > + *		out data stage due to the class driver doesn't queue
-> > buffer
-> > + *		before the host send out data
-> >    */
-> >   struct mtu3 {
-> >   	spinlock_t lock;
-> > @@ -360,6 +363,7 @@ struct mtu3 {
-> >   	unsigned connected:1;
-> >   	unsigned async_callbacks:1;
-> >   	unsigned separate_fifo:1;
-> > +	unsigned delayed_setup:1;
-> >   
-> >   	u8 address;
-> >   	u8 test_mode_nr;
-> > diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> > b/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> > index e4fd1bb14a55..f7a71cc83e15 100644
-> > --- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> > +++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> > @@ -162,6 +162,19 @@ static void ep0_do_status_stage(struct mtu3
-> > *mtu)
-> >   	mtu3_writel(mbase, U3D_EP0CSR, value | EP0_SETUPPKTRDY |
-> > EP0_DATAEND);
-> >   }
-> >   
-> > +/* delay sending out ACK of setup stage to wait for OUT buffer
-> > queued */
-> > +static void ep0_setup_stage_send_ack(struct mtu3 *mtu)
-> > +{
-> > +	void __iomem *mbase = mtu->mac_base;
-> > +	u32 value;
-> > +
-> > +	if (mtu->delayed_setup) {
-> > +		value = mtu3_readl(mbase, U3D_EP0CSR) & EP0_W1C_BITS;
-> > +		mtu3_writel(mbase, U3D_EP0CSR, value |
-> > EP0_SETUPPKTRDY);
-> > +		mtu->delayed_setup = 0;
-> > +	}
-> > +}
-> > +
-> >   static int ep0_queue(struct mtu3_ep *mep0, struct mtu3_request
-> > *mreq);
-> >   
-> >   static void ep0_dummy_complete(struct usb_ep *ep, struct
-> > usb_request *req)
-> > @@ -628,8 +641,9 @@ static void ep0_read_setup(struct mtu3 *mtu,
-> > struct usb_ctrlrequest *setup)
-> >   			csr | EP0_SETUPPKTRDY | EP0_DPHTX);
-> >   		mtu->ep0_state = MU3D_EP0_STATE_TX;
-> >   	} else {
-> > -		mtu3_writel(mtu->mac_base, U3D_EP0CSR,
-> > -			(csr | EP0_SETUPPKTRDY) & (~EP0_DPHTX));
-> > +		mtu3_writel(mtu->mac_base, U3D_EP0CSR, csr &
-> > ~EP0_DPHTX);
-> > +		/* send ACK when the buffer is queued */
-> > +		mtu->delayed_setup = 1;
-> 
-> I don't think that you need this variable: you're calling the
-> function
-> ep0_setup_stage_send_ack() only when ep0_state == MU3D_EP0_STATE_RX
-> in
-> ep0_queue()...
-> 
-> ..so you'll never get a call to ep0_setup_stage_send_ack() with
-> delayed_setup == 0!
-I'll abandon this patch, and try to use delayed_status as suggested by
-Alan, thanks a lot
+Hi Qu,
 
-> 
-> Regards,
-> Angelo
-> 
-> >   		mtu->ep0_state = MU3D_EP0_STATE_RX;
-> >   	}
-> >   }
-> > @@ -804,9 +818,11 @@ static int ep0_queue(struct mtu3_ep *mep,
-> > struct mtu3_request *mreq)
-> >   
-> >   	switch (mtu->ep0_state) {
-> >   	case MU3D_EP0_STATE_SETUP:
-> > -	case MU3D_EP0_STATE_RX:	/* control-OUT data */
-> >   	case MU3D_EP0_STATE_TX:	/* control-IN data */
-> >   		break;
-> > +	case MU3D_EP0_STATE_RX:	/* control-OUT data */
-> > +		ep0_setup_stage_send_ack(mtu);
-> > +		break;
-> >   	default:
-> >   		dev_err(mtu->dev, "%s, error in ep0 state %s\n",
-> > __func__,
-> >   			decode_ep0_state(mtu));
-> 
-> 
-> 
+	Thanks for your reply.
+	Here is my plan about destructive RMW.
+	
+	1. Read all the stripes in through raid56_rmw_stripe.
+	2. Do xor operation in finish_rmw.
+	3. If the xor result matches, nothing happened.
+	4. If the xor result mismatches, we can recover the data or trigger some user space progress to fix the data corruption.
 
+	But here are some problems.
+	1. If the stripe is new allocated, the check will fail.
+	2. Is it convient for kernel get checksum in finish_rmw and recover data?
+
+Thanks,
+Flint
+
+On 9/28/22 23:13, Qu Wenruo wrote:
+> 
+> 
+> On 2022/9/29 11:08, Qu Wenruo wrote:
+>>
+>>
+>> On 2022/9/29 09:44, Flint.Wang wrote:
+>>>    The index_rbio_pages in raid56_rmw_stripe is redundant.
+>>
+>> index_rbio_pages() is to populate the rbio->bio_sectors array.
+>>
+>> In raid56_rmw_stripe() we later calls sector_in_rbio(), which will check if a sector is belonging to bio_lists.
+>>
+>> If not called, all sector will be returned using the sectors in rbio->bio_sectors, not using the sectors in bio lists.
+>>
+>> Have you tried your patch with fstests runs?
+> 
+> Well, for raid56_rmw_stripe() it's fine, as without the index_rbio_pages() call, we just read all the sectors from the disk.
+> 
+> This would include the new pages from bio lists.
+> 
+> It would only cause extra IO, but since they can all be merged into one 64K stripe, it should not cause performance problem.
+> 
+> Furthermore it would read all old sectors from disk, allowing us later to do the verification before doing the writes.
+> 
+> But it should really contain a more detailed explanation.
+> 
+> Thanks,
+> Qu
+>>
+>> IMHO it should fail a lot of very basic writes in RAID56.
+>>
+>> Thanks,
+>> Qu
+>>
+>>>    It is invoked in finish_rmw anyway.
+>>>
+>>> Signed-off-by: Flint.Wang <hmsjwzb@zoho.com>
+>>> ---
+>>>   fs/btrfs/raid56.c | 2 --
+>>>   1 file changed, 2 deletions(-)
+>>>
+>>> diff --git a/fs/btrfs/raid56.c b/fs/btrfs/raid56.c
+>>> index f6395e8288d69..44266b2c5b86e 100644
+>>> --- a/fs/btrfs/raid56.c
+>>> +++ b/fs/btrfs/raid56.c
+>>> @@ -1546,8 +1546,6 @@ static int raid56_rmw_stripe(struct btrfs_raid_bio *rbio)
+>>>       if (ret)
+>>>           goto cleanup;
+>>> -    index_rbio_pages(rbio);
+>>> -
+>>>       atomic_set(&rbio->error, 0);
+>>>       /* Build a list of bios to read all the missing data sectors. */
+>>>       for (total_sector_nr = 0; total_sector_nr < nr_data_sectors;
