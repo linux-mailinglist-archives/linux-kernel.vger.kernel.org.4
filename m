@@ -2,103 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3555EF411
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE2A5EF410
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233945AbiI2LNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
+        id S235126AbiI2LN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234542AbiI2LNS (ORCPT
+        with ESMTP id S235139AbiI2LNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:13:18 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FAA133C8A
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:13:14 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id u18so1711809lfo.8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:13:13 -0700 (PDT)
+        Thu, 29 Sep 2022 07:13:22 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4330E12112D
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:13:20 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id s26so1148795pgv.7
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:13:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=9XLTjcTfR7oKSD6FYuz8rsf9GaidwI4jkeOMp+Vcpgg=;
-        b=VILJW6FkPk1WbGBiCV8qFpKI6AtDdxlKMn1nkgynaFiFDYXgYALLkde01boSxSjc9y
-         VTtRPBQQuCYc66LY6UTkxgPNNKj1rBPnUmqHtovqRq/zmqOc4TmFThTC63sch0Oi2rQ2
-         kC8A98Hih5oPQpZyHRoNTdbdD9tyBEMbsgU+0aMyBeK2PUPsRJy+NDr69LTA9z+jkJ0L
-         k319ehu5cXosJQn++rTiqrw2IPS+PpgODfNUbhjuX9XZd1AmsSwcujSjIFjLQzjDZgE5
-         XjzssLtQ4wOvCZrxuIq2CY4VM4ahQR+LS9Ksb+c1OWiAvK2jXpeYWTOQAXanUCMbMdEy
-         7aVA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=1M4otbErkQwsCcWWge6AN/K/OZ3vG8NZphh6FyslJSs=;
+        b=qY21oUgR2rChPGf1JnQpAXyhW0MEMzMYkkt5oenaaWSrbYd/slLFU3PjRHkipX93JE
+         DB6xo6HFOj+Vi38gAISa2j3Jh89Jc7NaOp+AfI71/rc8GR/g/KPCmpXK55ZGc+m8sfIO
+         V4FKmS92eqQNC6LtGSOKe9TanTIKP0RzVDneqU3uA7do7por+CWboT4q1Pt29EuFw82g
+         HaHMnHvBGtPVuRjmVYg4qvcY/TTfKsAv1YaXW8iKmqAPia85zIigxZ3QDow4DytmEhzL
+         tc/7xqgMMePtinn6mGntin7yHqrhFTx1y6xEzPU7lI+zaXFRbkjaK53om6t84az05kdy
+         GOxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=9XLTjcTfR7oKSD6FYuz8rsf9GaidwI4jkeOMp+Vcpgg=;
-        b=48ewznhKpkUOXMMrKf8x5K5/tUCwLC5TvLvHr6dy57WYc6MB+CgWaTUJTqE0MOfASr
-         75+yPDaNEjOSxrS0dn0mWFOH72schn20iamQPaszIhOUBOzmbx+QbiJYRvbqMpkTzGYm
-         zaml4G/kLygLUViGrs+SnrndeCKRbZ3a4jOzAbgzQ3DNY1jXO5wVs0TLUEmOcRXsAd6J
-         wUoBR+08IUmS5wHuUcdQc3vkRkW4ADizXoSSa5GuRzYZU0AfZt47narbZTiGw+XV2hiD
-         4DSI9t4O/mGLAJaPkDyEPrRuRhvOldfH73/qUA92BMamzmcNA+rKePilg70wGjQJnobp
-         J+yg==
-X-Gm-Message-State: ACrzQf3G2PGFs9b82an5SNfIAF4IQXIFlkHQG0JggBZylgLEeBCDaIQ/
-        51sHL9OSp3Lpf6fKYOLo6aM5qg==
-X-Google-Smtp-Source: AMsMyM6Da2z1LE8/N7lc1Nv5jLptMuhM82djEkbuGMvc1Nn6mwOVTPATqxh0opJtTKeFH3DT2jNBgg==
-X-Received: by 2002:a05:6512:b17:b0:4a0:13c:9b3f with SMTP id w23-20020a0565120b1700b004a0013c9b3fmr1105109lfu.91.1664449992253;
-        Thu, 29 Sep 2022 04:13:12 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id k17-20020ac24f11000000b0048b365176d9sm753425lfr.286.2022.09.29.04.13.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 04:13:11 -0700 (PDT)
-Message-ID: <059dd56e-d778-5b10-0285-3555ba930410@linaro.org>
-Date:   Thu, 29 Sep 2022 13:13:11 +0200
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=1M4otbErkQwsCcWWge6AN/K/OZ3vG8NZphh6FyslJSs=;
+        b=QHiDcbrzizwXLJpzRW0hXb+Ym82TpJrBSKYLeUDFp6El+tizJwriinWc0FN8NjHEBt
+         /wzqCjnmrc4iVQaD6DalurGCMNt6cyphASrom1MSW8m71VsDNrhqCg7AqnVSixcxTd1Q
+         8Jp9ZNqK3MSJNfpJMsyGcxrbcK1wtgVMbN/XIz0GDtPcX7ncXo2qHFWX1tzb0pCwAZcV
+         GfG9C9JIdnNhj9aS9YlxU6L5q+HIxVaz8D0UydBCeRJMqSOUhAt+t/8+2mAI8C5yi9s1
+         htAejNmPr1enc09YoKaWXVQK2UZzrmlB1R0xMIUFLAF0RqjJLY/XbSiujJ0CE3XHYMMG
+         xYdA==
+X-Gm-Message-State: ACrzQf34zyyRtGGMVAwpx7VlNiWup+NZXMdt3IfjfVtrn0GBGyDo+bpR
+        8zsI7dMhco3crSg23sOEd+M=
+X-Google-Smtp-Source: AMsMyM4sMbWxVCuMTTWrY/4loMArjX5YJL8pT+fk2YDL6cZVdhUpt2RK9RpddofIfysdPsI8QG/Uxg==
+X-Received: by 2002:a63:4f19:0:b0:43b:ddc9:387c with SMTP id d25-20020a634f19000000b0043bddc9387cmr2374903pgb.333.1664449999527;
+        Thu, 29 Sep 2022 04:13:19 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id a4-20020a1709027e4400b001768b6f9a97sm5566823pln.147.2022.09.29.04.13.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 04:13:19 -0700 (PDT)
+From:   xu xin <xu.xin.sc@gmail.com>
+X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
+To:     david@redhat.com
+Cc:     akpm@linux-foundation.org, imbrenda@linux.vnet.ibm.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        xu.xin.sc@gmail.com, xu.xin16@zte.com.cn
+Subject: Reply:[PATCH 0/3] ksm: fix incorrect count of merged pages when enabling use_zero_pages
+Date:   Thu, 29 Sep 2022 11:13:15 +0000
+Message-Id: <20220929111315.284133-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <4a3daba6-18f9-d252-697c-197f65578c44@redhat.com>
+References: <4a3daba6-18f9-d252-697c-197f65578c44@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCHv4 1/3] dt-bindings: mmc: synopsys-dw-mshc: document
- "altr,sysmgr-syscon"
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Dinh Nguyen <dinguyen@kernel.org>, jh80.chung@samsung.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20220928165420.1212284-1-dinguyen@kernel.org>
- <CAPDyKFp5oPuOz9A=37pRTvq7JPtJRdduEgmU9g+eUm0K=dZjUg@mail.gmail.com>
- <0fff7922-7932-dda7-f476-32f4b0d09fa0@linaro.org>
- <CAPDyKFohA9gKu8qwR+YUCy46tepO3k7fQqcHPvjYMznDmckLzg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAPDyKFohA9gKu8qwR+YUCy46tepO3k7fQqcHPvjYMznDmckLzg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 13:04, Ulf Hansson wrote:
->>> So this change will not be backwards compatible with existing DTBs. I
->>> noticed that patch2 updates the DTS files for the arm64 platforms, but
->>> there seems to be some arm32 platforms too. Isn't this going to be a
->>> problem?
->>>
->>
->> The backwards compatibility is actually expressed by the driver. If the
->> driver keeps ABI, we can change bindings so that all DTS are being
->> updated to pass the checks.
-> 
-> Right.
-> 
-> So, I should probably have responded to patch3 instead, as backwards
-> compatibility doesn't seem to be supported, unless I am mistaken. 
+>> We need to add the count of empty pages to let users know how many empty
+>> pages are merged with kernel zero page(s).
+>> 
+>> Please see the subsequent patches for details.
 
-Yes, it looks like
+> Just raising the topic here because it's related to the KSM usage of the 
+> shared zero-page:
 
-Best regards,
-Krzysztof
+> MADV_UNMERGEABLE and other ways to trigger unsharing will *not* unshare 
+> the shared zeropage as placed by KSM (which is against the 
+> MADV_UNMERGEABLE documentation at least). It will only unshare actual 
+> KSM pages. We might not want want to blindly unshare all shared 
+> zeropages in applicable VMAs ... using a dedicated shared zero (KSM) 
+> page -- instead of the generic zero page --  might be one way to handle 
+> this cleaner.
 
+> Would that also fix some of the issues you describe above?
+
+Glad to see your reply. I think it depends.
+
+The way you said solves the issue you post, but maybe not help to solve the issue
+I post.
+
+The key lies in whether appending zeropage's rmap_items to stable tree. If
+appending their rmap_items to the stable tree, the issue I pointed can be fixed but
+that will degrade the performance of use_zero_pages.  If not appending their rmap_items
+to the stable tree, we have to choose this patches set (but I found some bugs now, later
+I will send v2 to fix it).
