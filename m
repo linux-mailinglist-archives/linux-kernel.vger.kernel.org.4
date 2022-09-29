@@ -2,83 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2E05EF9E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5325EF9EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235932AbiI2QL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
+        id S235768AbiI2QN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235705AbiI2QLt (ORCPT
+        with ESMTP id S235290AbiI2QNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:11:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618111D35B3;
-        Thu, 29 Sep 2022 09:11:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E71D6B8250D;
-        Thu, 29 Sep 2022 16:11:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0464AC433C1;
-        Thu, 29 Sep 2022 16:11:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664467905;
-        bh=3UNXmMc0XLFmLrPUUGDB5+gyNKMjhdigqOhQGHRSdrA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WNh5qrP20dU0231I3OsV82y6I7NXzOH1OEvW/U+XYIvzP9zf4bw9oKl+OUo6uu+fw
-         FEdMtq7advOwZCOCnuIAxfEsjRcIJB62ZnVUVy0dnTTUdFxBYKxByOiGEZ6F8NxUBZ
-         1gX6UkmBf/lwa9i8heosMZWm9LEmelnaiZ5KuJIG0P3eL7/tfQxpTZ32R60iec3q3g
-         HFlmvjS60DbN75pqxIRqlL54ivAOh4f1InBwTyEQiYjTFN2DT18W58v1pWsyVuin+j
-         9abrb1S1v2Pf8XlhIo0BVZPb1ypyfglLA12eHr04Uijk7zkzuUkuYb+f/b97lfuymk
-         6eqkF7ZPUwOyw==
-Date:   Thu, 29 Sep 2022 09:11:43 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Hans Schultz <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 9/9] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-Message-ID: <20220929091143.468546f2@kernel.org>
-In-Reply-To: <20220928174904.117131-1-netdev@kapio-technology.com>
-References: <20220928174904.117131-1-netdev@kapio-technology.com>
+        Thu, 29 Sep 2022 12:13:25 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399FB1D35BE
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:13:24 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id d14so944155ilf.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:13:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=2/Sh/v9WLQ5DacoeCo5LR01Tpb6RXV73Us2dj8jMEgg=;
+        b=Fw7CFHoqbIneHRGW1eSzygncQww0Nzr+13COSVf/LuaJXbMsGVbWr2JwANb/NZY7cw
+         IpMmrX8xtoPKi0vCSFChe1T9LUihF8v98KKbZkQqp5p+Fdl7hypt3C2YYhClYj9wpsT/
+         ru/Gk4dlWn5p2GGuFVngT45Qc6okNOm50vGB8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=2/Sh/v9WLQ5DacoeCo5LR01Tpb6RXV73Us2dj8jMEgg=;
+        b=sAua3KXPzeBkllDbhNjnzxpYlqrJ47THb0/Jdm6zaCkTMlgtcbm1Obkd1Nk7NUOFZ/
+         Z/HbzWd8Th58pKFb8zUTMKF8wxSgnPYvldm4J2CCO2FY1QBByKoaqfWFiPaltQSdMUIU
+         xzLJiC5DxnI4a7ROQ56PSS8MK4CdKfUfn9Hp5XrUkFbGpT1FK9EFP+kh5kFwh3IrsYQV
+         1paXz/MDORijpUx/KV8wO/CaWnSvXLJcAFMiuPHkYDxiN8MHpNdEAPSdXiPvKycvd5gj
+         870NvnGtM1xsmLvgsN6mdg5nHzcGY8eu8NCx36heb119SkvXmC4Ea7HAgJ5t55ZR2YnJ
+         bNhw==
+X-Gm-Message-State: ACrzQf2QT3nlxhiiLIpE2yd9cN0rXtTpgJ+jJPRCTkP5ud68dCPm5/qc
+        BpbhQG3Cv2CErVi0LKnif3P4eCO1HftI63rETSL+Iw==
+X-Google-Smtp-Source: AMsMyM5Xp6QV/gtVq6nfq38rfm0HFlPCG++1YgV5/2Las3rfpesEcOIm0y5DnS+EK3kcktlg/qc98KnIYXyEMrRhv6E=
+X-Received: by 2002:a05:6e02:b45:b0:2f8:ab79:fc70 with SMTP id
+ f5-20020a056e020b4500b002f8ab79fc70mr1980049ilu.214.1664468003604; Thu, 29
+ Sep 2022 09:13:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220920082005.2459826-1-denik@chromium.org> <20220922053145.944786-1-denik@chromium.org>
+ <87h70zk83g.wl-maz@kernel.org> <CADDJ8CW0QgHtp1rwk=ZqrcuWZ4_L8KQh26VaEfcBQS0Tx9+ZYg@mail.gmail.com>
+ <CAH=Qcsi3aQ51AsAE0WmAH9VmpqjOaQQt=ru5Nav4+d8F3fMPwQ@mail.gmail.com>
+In-Reply-To: <CAH=Qcsi3aQ51AsAE0WmAH9VmpqjOaQQt=ru5Nav4+d8F3fMPwQ@mail.gmail.com>
+From:   Denis Nikitin <denik@chromium.org>
+Date:   Thu, 29 Sep 2022 09:13:12 -0700
+Message-ID: <CADDJ8CXObkhMvOx+L29awjtt7tiaTWxFrRxOmhUqvzku1wswHw@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: arm64: nvhe: Fix build with profile optimization
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Brazdil <dbrazdil@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, Manoj Gupta <manojgupta@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,20 +70,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Sep 2022 19:49:04 +0200 Hans Schultz wrote:
-> From: "Hans J. Schultz" <netdev@kapio-technology.com>
-> 
-> Verify that the MAC-Auth mechanism works by adding a FDB entry with the
-> locked flag set, denying access until the FDB entry is replaced with a
-> FDB entry without the locked flag set.
-> 
-> Add test of blackhole fdb entries, verifying that there is no forwarding
-> to a blackhole entry from any port, and that the blackhole entry can be
-> replaced.
-> 
-> Also add a test that verifies that sticky FDB entries cannot roam (this
-> is not needed for now, but should in general be present anyhow for future
-> applications).
+Hi Marc,
 
-If you were trying to repost just the broken patches - that's not gonna
-work :(
+Please let me know what you think about this approach.
+
+Thanks,
+Denis
+
+On Thu, Sep 22, 2022 at 11:04 PM Manoj Gupta <manojgupta@google.com> wrote:
+>
+>
+>
+> On Thu, Sep 22, 2022 at 10:01 PM Denis Nikitin <denik@chromium.org> wrote:
+>>
+>> Hi Mark,
+>>
+>> On Thu, Sep 22, 2022 at 3:38 AM Marc Zyngier <maz@kernel.org> wrote:
+>> >
+>> > I was really hoping that you'd just drop the flags from the CFLAGS
+>> > instead of removing the generated section. Something like:
+>> >
+>> > diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
+>> > index b5c5119c7396..e5b2d43925b4 100644
+>> > --- a/arch/arm64/kvm/hyp/nvhe/Makefile
+>> > +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+>> > @@ -88,7 +88,7 @@ quiet_cmd_hypcopy = HYPCOPY $@
+>> >
+>> >  # Remove ftrace, Shadow Call Stack, and CFI CFLAGS.
+>> >  # This is equivalent to the 'notrace', '__noscs', and '__nocfi' annotations.
+>> > -KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI), $(KBUILD_CFLAGS))
+>> > +KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI) -fprofile-sample-use, $(KBUILD_CFLAGS))
+>> >
+>> >  # KVM nVHE code is run at a different exception code with a different map, so
+>> >  # compiler instrumentation that inserts callbacks or checks into the code may
+>>
+>> Sorry, I moved on with a different approach and didn't explain the rationale.
+>>
+>> Like you mentioned before, the flag `-fprofile-sample-use` does not appear
+>> in the kernel. And it looks confusing when the flag is disabled or filtered out
+>> here. This was the first reason.
+>>
+>> The root cause of the build failure wasn't the compiler profile guided
+>> optimization but the extra metadata in SHT_REL section which llvm injected
+>> into kvm_nvhe.tmp.o for further link optimization.
+>> If we remove the .llvm.call-graph-profile section we fix the build and avoid
+>> potential problems with relocations optimized by the linker. The profile
+>> guided optimization will still be applied by the compiler.
+>>
+>> Let me know what you think about it.
+>>
+>> >
+>> > However, I even failed to reproduce your problem using LLVM 14 as
+>> > packaged by Debian (if that matters, I'm using an arm64 build
+>> > machine). I build the kernel with:
+>> >
+>> > $ make LLVM=1 KCFLAGS=-fprofile-sample-use -j8 vmlinux
+>> >
+>> > and the offending object only contains the following sections:
+>> >
+>
+>
+> Just some comments based on my ChromeOS build experience.
+>
+> fprofile-sample-use needs the profile file name argument to read the pgo data from
+> i.e. -fprofile-sample-use=/path/to/gcov.profile.
+>
+> Since the path to filename can change, it makes filtering out more difficult.
+> It is certainly possible to find and filter the exact argument by some string search of KCFLAGS.
+> But passing  -fno-profile-sample-use is easier and less error prone which I believe the previous patch version tried to do.
+>
+>
+>> > arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o:     file format elf64-littleaarch64
+>> >
+>> > Sections:
+>> > Idx Name          Size      VMA               LMA               File off  Algn
+>> >   0 .hyp.idmap.text 00000ae4  0000000000000000  0000000000000000  00000800  2**11
+>> >                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+>> >   1 .hyp.text     0000e988  0000000000000000  0000000000000000  00001800  2**11
+>> >                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+>> >   2 .hyp.data..ro_after_init 00000820  0000000000000000  0000000000000000  00010188  2**3
+>> >                   CONTENTS, ALLOC, LOAD, DATA
+>> >   3 .hyp.rodata   00002e70  0000000000000000  0000000000000000  000109a8  2**3
+>> >                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+>> >   4 .hyp.data..percpu 00001ee0  0000000000000000  0000000000000000  00013820  2**4
+>> >                   CONTENTS, ALLOC, LOAD, DATA
+>> >   5 .hyp.bss      00001158  0000000000000000  0000000000000000  00015700  2**3
+>> >                   ALLOC
+>> >   6 .comment      0000001f  0000000000000000  0000000000000000  00017830  2**0
+>> >                   CONTENTS, READONLY
+>> >   7 .llvm_addrsig 000000b8  0000000000000000  0000000000000000  0001784f  2**0
+>> >                   CONTENTS, READONLY, EXCLUDE
+>> >   8 .altinstructions 00001284  0000000000000000  0000000000000000  00015700  2**0
+>> >                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+>> >   9 __jump_table  00000960  0000000000000000  0000000000000000  00016988  2**3
+>> >                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+>> >  10 __bug_table   0000051c  0000000000000000  0000000000000000  000172e8  2**2
+>> >                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+>> >  11 __kvm_ex_table 00000028  0000000000000000  0000000000000000  00017808  2**3
+>> >                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+>> >  12 .note.GNU-stack 00000000  0000000000000000  0000000000000000  00027370  2**0
+>> >                   CONTENTS, READONLY
+>> >
+>> > So what am I missing to trigger this issue? Does it rely on something
+>> > like PGO, which is not upstream yet? A bit of handholding would be
+>> > much appreciated.
+>>
+>> Right, it relies on the PGO profile.
+>> On ChromeOS we collect the sample PGO profile from Arm devices with
+>> enabled CoreSight/ETM. You can find more details on ETM at
+>> https://www.kernel.org/doc/Documentation/trace/coresight/coresight.rst.
+>>
+>> https://github.com/Linaro/OpenCSD/blob/master/decoder/tests/auto-fdo/autofdo.md
+>> contains information about the pipeline of collecting, processing, and applying
+>> the profile.
+>>
+>
+> Generally the difficult part is in collecting a good matching profile for the workload.
+> So I think this patch is better than previous since it still keeps the compiler optimization for the hot code paths
+> in the file but removes the problematic section.
+>
+> Thanks,
+> Manoj
+>
+>
+>>
+>> >
+>> > Thanks,
+>> >
+>> >         M.
+>> >
+>> > --
+>> > Without deviation from the norm, progress is not possible.
+>>
+>> Thanks,
+>> Denis
