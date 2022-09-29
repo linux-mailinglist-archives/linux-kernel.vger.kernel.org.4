@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F398B5EF337
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3F25EF339
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235384AbiI2KPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40316 "EHLO
+        id S235537AbiI2KQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235448AbiI2KPM (ORCPT
+        with ESMTP id S232259AbiI2KPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:15:12 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FA2FAC5A;
-        Thu, 29 Sep 2022 03:15:01 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id i203-20020a1c3bd4000000b003b3df9a5ecbso2933197wma.1;
-        Thu, 29 Sep 2022 03:15:01 -0700 (PDT)
+        Thu, 29 Sep 2022 06:15:15 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CB7121E44;
+        Thu, 29 Sep 2022 03:15:04 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id z13-20020a7bc7cd000000b003b5054c6f9bso2928990wmk.2;
+        Thu, 29 Sep 2022 03:15:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=oFhFsnv2zFbHavDk5ukJ0f+cEtw334EZ3u9Befhxfgs=;
-        b=nufnTRf6lPAcHyZM8cN9lE5yvSoo04rc/tpPJEI+waB6/5y9fy3scugiPC+U2Cn8is
-         i+Nfu0zm/JupHrcLfkbK3W/ad64Lz7jcZ4DbhMf8U1WPxarVKVqaEf2AWCXHFZfzzTii
-         InsbR3D4zoOP49z7Tr6buGSKxSUdOvI/S79ZDJ5IGxOMYekWizFPv8nPdSBao56aR+gT
-         TJ4l+fJcmXaGsLnbumksiHTl+vDB4jqjizt+72skO/3F+JxWKZreg1A+3S6dmjFZI6Ke
-         2BFUK8HJiOEVxsyNaUbgENkEAePLqFb/xhlfeM+XcUj1s4c0zxEoyhrh8XLGLjIYWQH1
-         R12w==
+        bh=Lc6s8nTaNgkoD4GXAuKRr/e01vV82I0xCYG4ndZR8mE=;
+        b=VdBznro6tQvY7Ra91sjpFkGp+23+ltMc0M1+HxUAvmurxDmHkN7xXAyapDHCQp2bYo
+         IcOHjVcB8XjCdHPEr0405NHKsQYIhAy6v715IoylVtkLVAibALifEmoyafDO2Q3t6xFw
+         Kwxpfc32BXs8sFIvB9JYqONOMyQKwWJ4SwQD98zGWDLyuLSi3zYSu4h2LIa0fLGBWfHN
+         rq2n46ZMetA5bVrlMAIJvCqpESIEO4qs0rqf3HqAzJvg6o1HvfKu3CN4wm5o0R8soN5e
+         1PMLSss+sDDLwNDP34n8rROTB0FJFJhXW2Cm5917WHeJnQ9AvzgKH+v+TpaIzvlYW2rp
+         YOzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=oFhFsnv2zFbHavDk5ukJ0f+cEtw334EZ3u9Befhxfgs=;
-        b=DjcjlLPaw7lkSX3aOItOIpbj8b+WPar6RW0+Vi1j64afjcoMyh1J16L3kF8g9Rv9jw
-         Bd0H2ajJJrRuHvr/7a+d3UBOup3bWmLn4xEPmBjQGcJpCL74LVa9h1Yemu1IFRnyGHo5
-         vL7tLpCv8ll7zJjgk5EFNjq9e2hJTtgBBIaU4KiEgzkHLfHp77oJJgeREuaIP10Q4D3P
-         Q7XKAr4O8bwSF5K28nCvC9mYPniRhCefM9+SG2IEgH9fS2lI56MeA5aycYp8rNbEF2WR
-         yeBI7btYiD/yBPB0Rofj/ohiAv5fntK0wrTp9NB5G6vZkBddtq7EzNGRmmmdu2/Id5Za
-         WZXw==
-X-Gm-Message-State: ACrzQf32qkK5G2pgmjLOltCaMFfnPoyyUbqEIqAtw+YcT49mhqLpIL6V
-        dncbMXfW32fLTaE6n1275LyfG8A0gbA=
-X-Google-Smtp-Source: AMsMyM57/sCbTU0OGubbQQa2Lp+0K2Ryy/WBkAAm2hYRkrNbxZBpv34hopRYrL6u2chDOy6cqL9w8Q==
-X-Received: by 2002:a05:600c:474c:b0:3b4:cbca:5677 with SMTP id w12-20020a05600c474c00b003b4cbca5677mr1661579wmo.76.1664446498659;
-        Thu, 29 Sep 2022 03:14:58 -0700 (PDT)
+        bh=Lc6s8nTaNgkoD4GXAuKRr/e01vV82I0xCYG4ndZR8mE=;
+        b=joTvENgOhCxoEHqWNdhu9+4Hl+zMksnjbSzVtn03XtKrLB/LnwQNgVHDRlXlTYdsJa
+         EQobLwNyu8XP3iUzrNE1Fw1dz7PXqUtnmc+i59QQgIMZ/MLmPZzGdFe7dEhofF9qviEM
+         C23vFddvWlTGSJBDg03jO9rYEZHCiBF/dhuYsIlEKbJ2h7vmkfQzA8HUvLfH9dQH1LSE
+         OZt5k1g/Ayptbsiut3jFF23TwbcTf9zYFoDHUoeWAvXdOaZdhuw1BaHdAvvzIGiMT4pZ
+         nF+pxpKv3DuVgt9LpPEpnGXjHvg2PDbiG/czBgCuuqx4DKwzV8JgqGwJMyaJlCbilCuS
+         oGsQ==
+X-Gm-Message-State: ACrzQf1vf+zfq7n7985Bc2LfXll0ysasv22lPXPxMdzBLJ7vg1VuGOiN
+        d7Hi9zRK0qeVs2GiVtnMwp4l2wbGrzGh9Q==
+X-Google-Smtp-Source: AMsMyM7FpPxLU4VpzfSVtrPr1gZyMHNeT29IKj9PKpbnj4eER3yeCC1DHIVY0fz/w9FO3cQ4tORCvA==
+X-Received: by 2002:a05:600c:3205:b0:3b3:3813:ae3f with SMTP id r5-20020a05600c320500b003b33813ae3fmr1777401wmp.158.1664446502451;
+        Thu, 29 Sep 2022 03:15:02 -0700 (PDT)
 Received: from felia.fritz.box (200116b826e11200b190ebfd45660ea6.dip.versatel-1u1.de. [2001:16b8:26e1:1200:b190:ebfd:4566:ea6])
-        by smtp.gmail.com with ESMTPSA id ca6-20020a056000088600b0022a293ab1e9sm6523543wrb.11.2022.09.29.03.14.57
+        by smtp.gmail.com with ESMTPSA id m6-20020adfe946000000b0022af63bb6f2sm4163241wrn.113.2022.09.29.03.15.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 03:14:57 -0700 (PDT)
+        Thu, 29 Sep 2022 03:15:02 -0700 (PDT)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dinh Nguyen <dinguyen@kernel.org>
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        openrisc@lists.librecores.org
 Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] nios2: update config files
-Date:   Thu, 29 Sep 2022 12:14:54 +0200
-Message-Id: <20220929101454.32333-1-lukas.bulwahn@gmail.com>
+Subject: [PATCH] openrisc: update config files
+Date:   Thu, 29 Sep 2022 12:14:58 +0200
+Message-Id: <20220929101458.32434-1-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -76,38 +79,57 @@ Link: https://lore.kernel.org/kernel-janitors/20220929090645.1389-1-lukas.bulwah
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- arch/nios2/configs/10m50_defconfig | 3 ---
- arch/nios2/configs/3c120_defconfig | 3 ---
- 2 files changed, 6 deletions(-)
+ arch/openrisc/configs/or1ksim_defconfig    | 5 -----
+ arch/openrisc/configs/simple_smp_defconfig | 4 ----
+ 2 files changed, 9 deletions(-)
 
-diff --git a/arch/nios2/configs/10m50_defconfig b/arch/nios2/configs/10m50_defconfig
-index 91c3fce4dc7f..e7ed52d55c94 100644
---- a/arch/nios2/configs/10m50_defconfig
-+++ b/arch/nios2/configs/10m50_defconfig
-@@ -29,9 +29,6 @@ CONFIG_IP_PNP=y
- CONFIG_IP_PNP_DHCP=y
- CONFIG_IP_PNP_BOOTP=y
- CONFIG_IP_PNP_RARP=y
+diff --git a/arch/openrisc/configs/or1ksim_defconfig b/arch/openrisc/configs/or1ksim_defconfig
+index 6e1e004047c7..af1164807206 100644
+--- a/arch/openrisc/configs/or1ksim_defconfig
++++ b/arch/openrisc/configs/or1ksim_defconfig
+@@ -19,9 +19,6 @@ CONFIG_NET=y
+ CONFIG_PACKET=y
+ CONFIG_UNIX=y
+ CONFIG_INET=y
 -# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
 -# CONFIG_INET_XFRM_MODE_TUNNEL is not set
 -# CONFIG_INET_XFRM_MODE_BEET is not set
- # CONFIG_IPV6 is not set
- # CONFIG_WIRELESS is not set
- CONFIG_DEVTMPFS=y
-diff --git a/arch/nios2/configs/3c120_defconfig b/arch/nios2/configs/3c120_defconfig
-index c42ad7e162a3..fa15db0c9ae4 100644
---- a/arch/nios2/configs/3c120_defconfig
-+++ b/arch/nios2/configs/3c120_defconfig
-@@ -31,9 +31,6 @@ CONFIG_IP_PNP=y
- CONFIG_IP_PNP_DHCP=y
- CONFIG_IP_PNP_BOOTP=y
- CONFIG_IP_PNP_RARP=y
+ # CONFIG_INET_DIAG is not set
+ CONFIG_TCP_CONG_ADVANCED=y
+ # CONFIG_TCP_CONG_BIC is not set
+@@ -34,7 +31,6 @@ CONFIG_DEVTMPFS=y
+ CONFIG_DEVTMPFS_MOUNT=y
+ # CONFIG_PREVENT_FIRMWARE_BUILD is not set
+ # CONFIG_FW_LOADER is not set
+-CONFIG_PROC_DEVICETREE=y
+ CONFIG_NETDEVICES=y
+ CONFIG_ETHOC=y
+ CONFIG_MICREL_PHY=y
+@@ -52,4 +48,3 @@ CONFIG_SERIAL_OF_PLATFORM=y
+ # CONFIG_DNOTIFY is not set
+ CONFIG_TMPFS=y
+ CONFIG_NFS_FS=y
+-# CONFIG_ENABLE_MUST_CHECK is not set
+diff --git a/arch/openrisc/configs/simple_smp_defconfig b/arch/openrisc/configs/simple_smp_defconfig
+index ff49d868e040..84ca3203af9c 100644
+--- a/arch/openrisc/configs/simple_smp_defconfig
++++ b/arch/openrisc/configs/simple_smp_defconfig
+@@ -27,9 +27,6 @@ CONFIG_NET=y
+ CONFIG_PACKET=y
+ CONFIG_UNIX=y
+ CONFIG_INET=y
 -# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
 -# CONFIG_INET_XFRM_MODE_TUNNEL is not set
 -# CONFIG_INET_XFRM_MODE_BEET is not set
- # CONFIG_IPV6 is not set
- # CONFIG_WIRELESS is not set
- CONFIG_DEVTMPFS=y
+ # CONFIG_INET_DIAG is not set
+ CONFIG_TCP_CONG_ADVANCED=y
+ # CONFIG_TCP_CONG_BIC is not set
+@@ -60,5 +57,4 @@ CONFIG_SERIAL_OF_PLATFORM=y
+ CONFIG_TMPFS=y
+ CONFIG_NFS_FS=y
+ CONFIG_XZ_DEC=y
+-# CONFIG_ENABLE_MUST_CHECK is not set
+ # CONFIG_RCU_TRACE is not set
 -- 
 2.17.1
 
