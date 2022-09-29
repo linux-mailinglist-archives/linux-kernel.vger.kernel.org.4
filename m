@@ -2,193 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F8A5EEAEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 03:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C625EEAF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 03:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbiI2B13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 21:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
+        id S233881AbiI2B30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 21:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234239AbiI2B1W (ORCPT
+        with ESMTP id S232166AbiI2B3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 21:27:22 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CCA11DFE6;
-        Wed, 28 Sep 2022 18:27:17 -0700 (PDT)
+        Wed, 28 Sep 2022 21:29:23 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D56118DEC
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 18:29:22 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id jm5so13138114plb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 18:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1664414839; x=1695950839;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DrD9QfW0x/rZm5fSojoBJwk3uyCiNuNcCC5/yuh+sRo=;
-  b=sVgppCavHt7xfjBSukHU/ojfn2mesodwKZU1FTZjlXY03po8VPMhEWY7
-   qs5/AJf6gVSdBfPBRMtUmm07voaYUlxszwYu+HUnkP0dLQpLtVIn9dPkJ
-   aGOrCZiVebvcIrZFePpTuoPqBWZhvzSBe3aJtcgjnAzCgVesfeTfvMvOW
-   w=;
-X-IronPort-AV: E=Sophos;i="5.93,353,1654560000"; 
-   d="scan'208";a="135110497"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-90d70b14.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 01:27:16 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-90d70b14.us-east-1.amazon.com (Postfix) with ESMTPS id 5E634C0326;
-        Thu, 29 Sep 2022 01:27:14 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 29 Sep 2022 01:27:13 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.162.55) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Thu, 29 Sep 2022 01:27:08 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>
-CC:     Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        <netdev@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, syzbot <syzkaller@googlegroups.com>
-Subject: [PATCH v3 net 5/5] tcp: Fix data races around icsk->icsk_af_ops.
-Date:   Wed, 28 Sep 2022 18:25:42 -0700
-Message-ID: <20220929012542.55424-6-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220929012542.55424-1-kuniyu@amazon.com>
-References: <20220929012542.55424-1-kuniyu@amazon.com>
+        d=paradetech-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=SM4jqQ6Il3GWV92a+UhDIXmom3xi+6T+8WqpFvA2YOI=;
+        b=BxwFbi7sJXlRrhgH0WVMvi9wNAqdJvg8wsDNaPA1Y2P8J7Odr3QtDlVrPzYeSs/Sb7
+         1SgoHrKtmewvv3/gCkL/k1lnuzNEgwIlxckRL/6YALlI758+YcuPXOtHDPVoupvBYhc2
+         o8lexPw9R3nHrQYXcgNdZWvqt1+bYPoXUESBJaAqQoaSoHquHNXmn1/MxhqyjpriQc4Z
+         EC2KupWYG30Gq6mHk8aKxGuSqGuAjWTlJJlYQgIsIy/c6P/oCG5AEeot3ttBv0mApLKr
+         XnsqIcn6FOoY11lCVT4KYgMj/o9WvGaAmMU7MzQWYPJbSwcCSXll4/ZW15hbmApdHD7p
+         vUrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=SM4jqQ6Il3GWV92a+UhDIXmom3xi+6T+8WqpFvA2YOI=;
+        b=csNpAU1rqM3MoNjPLqZuUsbwFFISljuQg0+VcGutJEXAOwcPzTIHjXEk4+V3Agy/XV
+         n3Cbj0NqCJ5ymFodk1yI/JdWkqHiR6A85KNHC33qgjGxQUIRBpnFISaQ94CB+JEaESrK
+         ibiJ1fks81qGsBnmpZ62r0CtW6C25qf4mYZ/FJUAknbP+MHmzntqrEiBUV6ECyOSxKNj
+         rFblu6AXb+zO1C3a+bczPC284LMImMTJ+rPmWB3ZBtoM9CDZunee6g2u2yJZILDWtN8W
+         ww+YcJPJE1ZBhgZX62TFW11w97wmrUGTz9NnBujisULaKYibhykPtl5CNul4KIoMrZsG
+         39ig==
+X-Gm-Message-State: ACrzQf2neVsyGVtJOey2ntKAahAsHycfMRVVDTwFIgqlDyF9wdpPq3YX
+        E/E3IBckouodBkdhn+8nKUUVk4nI9qnjTkXe
+X-Google-Smtp-Source: AMsMyM4/VlvMw8aYyDVMgL6aP4TCJ54nI5FUpLRLPgGUaN5WTsGzu1Zib90d70GDDRWiW7G0kbDSog==
+X-Received: by 2002:a17:902:b182:b0:178:8977:4013 with SMTP id s2-20020a170902b18200b0017889774013mr790987plr.27.1664414961796;
+        Wed, 28 Sep 2022 18:29:21 -0700 (PDT)
+Received: from jason-ThinkPad-L15-Gen-2.. ([203.67.103.146])
+        by smtp.gmail.com with ESMTPSA id a15-20020aa78e8f000000b00540f3ac5fb8sm4750848pfr.69.2022.09.28.18.29.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 18:29:21 -0700 (PDT)
+From:   Jason Yen <jason.yen@paradetech.corp-partner.google.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org
+Cc:     treapking@google.com,
+        Jason Yen <jason.yen@paradetech.corp-partner.google.com>
+Subject: [PATCH] drm/bridge: ps8640: Add software to support aux defer
+Date:   Thu, 29 Sep 2022 09:29:11 +0800
+Message-Id: <20220929012911.2521786-1-jason.yen@paradetech.corp-partner.google.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.55]
-X-ClientProxiedBy: EX13D30UWB004.ant.amazon.com (10.43.161.51) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-setsockopt(IPV6_ADDRFORM) and tcp_v6_connect() change icsk->icsk_af_ops
-under lock_sock(), but tcp_(get|set)sockopt() read it locklessly.  To
-avoid load/store tearing, we need to add READ_ONCE() and WRITE_ONCE()
-for the reads and writes.
+This chip can not handle aux defer if the host directly program
+its aux registers to access edid/dpcd. So we need let software
+to handle the aux defer situation.
 
-Thanks to Eric Dumazet for providing the syzbot report:
-
-BUG: KCSAN: data-race in tcp_setsockopt / tcp_v6_connect
-
-write to 0xffff88813c624518 of 8 bytes by task 23936 on cpu 0:
-tcp_v6_connect+0x5b3/0xce0 net/ipv6/tcp_ipv6.c:240
-__inet_stream_connect+0x159/0x6d0 net/ipv4/af_inet.c:660
-inet_stream_connect+0x44/0x70 net/ipv4/af_inet.c:724
-__sys_connect_file net/socket.c:1976 [inline]
-__sys_connect+0x197/0x1b0 net/socket.c:1993
-__do_sys_connect net/socket.c:2003 [inline]
-__se_sys_connect net/socket.c:2000 [inline]
-__x64_sys_connect+0x3d/0x50 net/socket.c:2000
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-read to 0xffff88813c624518 of 8 bytes by task 23937 on cpu 1:
-tcp_setsockopt+0x147/0x1c80 net/ipv4/tcp.c:3789
-sock_common_setsockopt+0x5d/0x70 net/core/sock.c:3585
-__sys_setsockopt+0x212/0x2b0 net/socket.c:2252
-__do_sys_setsockopt net/socket.c:2263 [inline]
-__se_sys_setsockopt net/socket.c:2260 [inline]
-__x64_sys_setsockopt+0x62/0x70 net/socket.c:2260
-do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-value changed: 0xffffffff8539af68 -> 0xffffffff8539aff8
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 23937 Comm: syz-executor.5 Not tainted
-6.0.0-rc4-syzkaller-00331-g4ed9c1e971b1-dirty #0
-
-Hardware name: Google Google Compute Engine/Google Compute Engine,
-BIOS Google 08/26/2022
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Reported-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: Jason Yen <jason.yen@paradetech.corp-partner.google.com>
 ---
- net/ipv4/tcp.c           | 10 ++++++----
- net/ipv6/ipv6_sockglue.c |  3 ++-
- net/ipv6/tcp_ipv6.c      |  6 ++++--
- 3 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index e373dde1f46f..76b80d81fd6a 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3795,8 +3795,9 @@ int tcp_setsockopt(struct sock *sk, int level, int optname, sockptr_t optval,
- 	const struct inet_connection_sock *icsk = inet_csk(sk);
- 
- 	if (level != SOL_TCP)
--		return icsk->icsk_af_ops->setsockopt(sk, level, optname,
--						     optval, optlen);
-+		/* Paired with WRITE_ONCE() in do_ipv6_setsockopt() and tcp_v6_connect() */
-+		return READ_ONCE(icsk->icsk_af_ops)->setsockopt(sk, level, optname,
-+								optval, optlen);
- 	return do_tcp_setsockopt(sk, level, optname, optval, optlen);
- }
- EXPORT_SYMBOL(tcp_setsockopt);
-@@ -4394,8 +4395,9 @@ int tcp_getsockopt(struct sock *sk, int level, int optname, char __user *optval,
- 	struct inet_connection_sock *icsk = inet_csk(sk);
- 
- 	if (level != SOL_TCP)
--		return icsk->icsk_af_ops->getsockopt(sk, level, optname,
--						     optval, optlen);
-+		/* Paired with WRITE_ONCE() in do_ipv6_setsockopt() and tcp_v6_connect() */
-+		return READ_ONCE(icsk->icsk_af_ops)->getsockopt(sk, level, optname,
-+								optval, optlen);
- 	return do_tcp_getsockopt(sk, level, optname, optval, optlen);
- }
- EXPORT_SYMBOL(tcp_getsockopt);
-diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
-index 2fb9ee413c53..19ac75c2cd54 100644
---- a/net/ipv6/ipv6_sockglue.c
-+++ b/net/ipv6/ipv6_sockglue.c
-@@ -479,7 +479,8 @@ static int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
- 
- 				/* Paired with READ_ONCE(sk->sk_prot) in inet6_stream_ops */
- 				WRITE_ONCE(sk->sk_prot, &tcp_prot);
--				icsk->icsk_af_ops = &ipv4_specific;
-+				/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+				WRITE_ONCE(icsk->icsk_af_ops, &ipv4_specific);
- 				sk->sk_socket->ops = &inet_stream_ops;
- 				sk->sk_family = PF_INET;
- 				tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
-diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-index e54eee80ce5f..8680aa83f0b9 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -237,7 +237,8 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr *uaddr,
- 		sin.sin_port = usin->sin6_port;
- 		sin.sin_addr.s_addr = usin->sin6_addr.s6_addr32[3];
- 
--		icsk->icsk_af_ops = &ipv6_mapped;
-+		/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+		WRITE_ONCE(icsk->icsk_af_ops, &ipv6_mapped);
- 		if (sk_is_mptcp(sk))
- 			mptcpv6_handle_mapped(sk, true);
- 		sk->sk_backlog_rcv = tcp_v4_do_rcv;
-@@ -249,7 +250,8 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr *uaddr,
- 
- 		if (err) {
- 			icsk->icsk_ext_hdr_len = exthdrlen;
--			icsk->icsk_af_ops = &ipv6_specific;
-+			/* Paired with READ_ONCE() in tcp_(get|set)sockopt() */
-+			WRITE_ONCE(icsk->icsk_af_ops, &ipv6_specific);
- 			if (sk_is_mptcp(sk))
- 				mptcpv6_handle_mapped(sk, false);
- 			sk->sk_backlog_rcv = tcp_v6_do_rcv;
+ drivers/gpu/drm/bridge/parade-ps8640.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
+index 31e88cb39f8a..967dec840b91 100644
+--- a/drivers/gpu/drm/bridge/parade-ps8640.c
++++ b/drivers/gpu/drm/bridge/parade-ps8640.c
+@@ -303,6 +303,14 @@ static ssize_t ps8640_aux_transfer_msg(struct drm_dp_aux *aux,
+ 	case SWAUX_STATUS_ACKM:
+ 		len = data & SWAUX_M_MASK;
+ 		break;
++	case SWAUX_STATUS_DEFER:
++	case SWAUX_STATUS_I2C_DEFER:
++		if (is_native_aux)
++			msg->reply |= DP_AUX_NATIVE_REPLY_DEFER;
++		else
++			msg->reply |= DP_AUX_I2C_REPLY_DEFER;
++		len = data & SWAUX_M_MASK;
++		break;
+ 	case SWAUX_STATUS_INVALID:
+ 		return -EOPNOTSUPP;
+ 	case SWAUX_STATUS_TIMEOUT:
 -- 
-2.30.2
+2.34.1
 
