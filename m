@@ -2,95 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AFD5EF6C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15E45EF6CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235066AbiI2Nlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 09:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
+        id S234998AbiI2NmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 09:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234998AbiI2Nl1 (ORCPT
+        with ESMTP id S234946AbiI2Nl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 09:41:27 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0871B2619;
-        Thu, 29 Sep 2022 06:41:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9CA20CE2047;
-        Thu, 29 Sep 2022 13:41:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02EFFC433D6;
-        Thu, 29 Sep 2022 13:41:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664458880;
-        bh=mxXXnA7AKPAULTlYNVPDjF57KXpljiAzFpErQ6L/1tY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kD99SUi9aD82aEpsa/ei1ebO1r29oG/ZVMDIk17nbHRVQGFi1N12sOp0DKTh0c8KA
-         9G2SvprS9iyhYSZ+vDeqcHxx5odZX1HRwcCGbnI58ZvVF51Z2eJlwa0JiKoyy1HTNO
-         mEj7/Vn/j+KGUuD1p+V8xQKSPgN5yY/+1vCMRAB+0S57fBePwVqLGkFfmRJTgs8bF0
-         zucU8dz729hhgBqOx0xW34hWfFmMpMKgpw2XRTWUxDbRuSCWdFmLfgcFBWh9cB37U+
-         iZdnhxMrK5OSmM4OTQ+VxPtvs34GHn1FZpsTw2iOB/U2rqEHvYW6OigptfWbQS9gmO
-         oLUculB7hHbeg==
-Date:   Thu, 29 Sep 2022 14:41:14 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] ASoC: wcd-mbhc-v2: Revert "ASoC: wcd-mbhc-v2: use
- pm_runtime_resume_and_get()"
-Message-ID: <YzWgescSJMKzYTAo@sirena.org.uk>
-References: <20220929131528.217502-1-krzysztof.kozlowski@linaro.org>
+        Thu, 29 Sep 2022 09:41:57 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A23F71B0524
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:41:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15CF51A32;
+        Thu, 29 Sep 2022 06:42:03 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.81.100])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5066B3F792;
+        Thu, 29 Sep 2022 06:41:54 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 14:41:51 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Li Huafei <lihuafei1@huawei.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, Julia.Lawall@inria.fr, akpm@linux-foundation.org,
+        andreyknvl@gmail.com, elver@google.com, wangkefeng.wang@huawei.com,
+        zhouchengming@bytedance.com, ardb@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] arm64: module/ftrace: Fix mcount-based ftrace
+ initialization failure
+Message-ID: <YzWgnyCNO4tEl4JT@FVFF77S0Q05N>
+References: <20220929094134.99512-1-lihuafei1@huawei.com>
+ <20220929094134.99512-4-lihuafei1@huawei.com>
+ <YzWA/GCdcLX31+rI@FVFF77S0Q05N>
+ <YzWIlcM249P+ZzVs@FVFF77S0Q05N>
+ <06bd1acd-bb27-79ce-a55a-663857d2c06e@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="N7/RendiH0c6BA6h"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929131528.217502-1-krzysztof.kozlowski@linaro.org>
-X-Cookie: Last week's pet, this week's special.
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <06bd1acd-bb27-79ce-a55a-663857d2c06e@huawei.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 29, 2022 at 08:26:17PM +0800, Li Huafei wrote:
+> 
+> 
+> On 2022/9/29 19:59, Mark Rutland wrote:
+> > On Thu, Sep 29, 2022 at 12:26:52PM +0100, Mark Rutland wrote:
+> >> On Thu, Sep 29, 2022 at 05:41:34PM +0800, Li Huafei wrote:
+> >>> The commit a6253579977e ("arm64: ftrace: consistently handle PLTs.")
+> >>> makes ftrace_make_nop() always validate the 'old' instruction that will
+> >>> be replaced. However, in the mcount-based implementation,
+> >>> ftrace_init_nop() also calls ftrace_make_nop() to do the initialization,
+> >>> and the 'old' target address is MCOUNT_ADDR at this time. with
+> >>> CONFIG_MODULE_PLT support, the distance between MCOUNT_ADDR and callsite
+> >>> may exceed 128M, at which point ftrace_find_callable_addr() will fail
+> >>> because it cannot find an available PLT.
+> >>
+> >> Ah, sorry about this.
+> >>
+> >>> We can reproduce this problem by forcing the module to alloc memory away
+> >>> from the kernel:
+> >>>
+> >>>   ftrace_test: loading out-of-tree module taints kernel.
+> >>>   ftrace: no module PLT for _mcount
+> >>>   ------------[ ftrace bug ]------------
+> >>>   ftrace failed to modify
+> >>>   [<ffff800029180014>] 0xffff800029180014
+> >>>    actual:   44:00:00:94
+> >>>   Initializing ftrace call sites
+> >>>   ftrace record flags: 2000000
+> >>>    (0)
+> >>>    expected tramp: ffff80000802eb3c
+> >>>   ------------[ cut here ]------------
+> >>>   WARNING: CPU: 3 PID: 157 at kernel/trace/ftrace.c:2120 ftrace_bug+0x94/0x270
+> >>>   Modules linked in:
+> >>>   CPU: 3 PID: 157 Comm: insmod Tainted: G           O       6.0.0-rc6-00151-gcd722513a189-dirty #22
+> >>>   Hardware name: linux,dummy-virt (DT)
+> >>>   pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> >>>   pc : ftrace_bug+0x94/0x270
+> >>>   lr : ftrace_bug+0x21c/0x270
+> >>>   sp : ffff80000b2bbaf0
+> >>>   x29: ffff80000b2bbaf0 x28: 0000000000000000 x27: ffff0000c4d38000
+> >>>   x26: 0000000000000001 x25: ffff800009d7e000 x24: ffff0000c4d86e00
+> >>>   x23: 0000000002000000 x22: ffff80000a62b000 x21: ffff8000098ebea8
+> >>>   x20: ffff0000c4d38000 x19: ffff80000aa24158 x18: ffffffffffffffff
+> >>>   x17: 0000000000000000 x16: 0a0d2d2d2d2d2d2d x15: ffff800009aa9118
+> >>>   x14: 0000000000000000 x13: 6333626532303830 x12: 3030303866666666
+> >>>   x11: 203a706d61727420 x10: 6465746365707865 x9 : 3362653230383030
+> >>>   x8 : c0000000ffffefff x7 : 0000000000017fe8 x6 : 000000000000bff4
+> >>>   x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 0000000000000001
+> >>>   x2 : ad2cb14bb5438900 x1 : 0000000000000000 x0 : 0000000000000022
+> >>>   Call trace:
+> >>>    ftrace_bug+0x94/0x270
+> >>>    ftrace_process_locs+0x308/0x430
+> >>>    ftrace_module_init+0x44/0x60
+> >>>    load_module+0x15b4/0x1ce8
+> >>>    __do_sys_init_module+0x1ec/0x238
+> >>>    __arm64_sys_init_module+0x24/0x30
+> >>>    invoke_syscall+0x54/0x118
+> >>>    el0_svc_common.constprop.4+0x84/0x100
+> >>>    do_el0_svc+0x3c/0xd0
+> >>>    el0_svc+0x1c/0x50
+> >>>    el0t_64_sync_handler+0x90/0xb8
+> >>>    el0t_64_sync+0x15c/0x160
+> >>>   ---[ end trace 0000000000000000 ]---
+> >>>   ---------test_init-----------
+> >>>
+> >>> In fact, in .init.plt or .plt or both of them, we have the mcount PLT.
+> >>> If we save the mcount PLT entry address, we can determine what the 'old'
+> >>> instruction should be when initializing the nop instruction.
+> >>>
+> >>> Fixes: a6253579977e ("arm64: ftrace: consistently handle PLTs.")
+> >>> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+> >>> ---
+> >>>  arch/arm64/include/asm/module.h |  7 +++++++
+> >>>  arch/arm64/kernel/ftrace.c      | 29 ++++++++++++++++++++++++++++-
+> >>>  arch/arm64/kernel/module-plts.c | 16 ++++++++++++++++
+> >>>  arch/arm64/kernel/module.c      | 11 +++++++++++
+> >>>  4 files changed, 62 insertions(+), 1 deletion(-)
+> >>
+> >> Since this only matters for the initalization of a module callsite, I'd rather
+> >> we simply didn't check in this case, so that we don't have to go scanning for
+> >> the PLTs and keep that information around forever.
+> >>
+> >> To be honest, I'd rather we simply didn't check when initializing an mcount
+> >> call-site for a module, as we used to do prior to commit a6253579977e.
+> 
+> Yes, I agree. If it's just for the initialization phase validation, my patch does make a bit of a fuss.
+> 
+> >>
+> >> Does the below work for you?
+> > 
+> > Thinking some more, that's probably going to warn in the insn code when
+> > unconditionally generating the 'old' branch; I'll spin a new version after some
+> > testing.
+> > 
+> 
+> I see it. And ftrace_find_callable_addr() would still fail.
 
---N7/RendiH0c6BA6h
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ah, yes, since that points to the `_mcount` stub, but we'll generate the
+address of the module's ftrace PLT.
 
-On Thu, Sep 29, 2022 at 03:15:28PM +0200, Krzysztof Kozlowski wrote:
+> 
+> With a slight modification, it worked for me:
+> 
+> diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+> index ea5dc7c90f46..621c62238d96 100644
+> --- a/arch/arm64/kernel/ftrace.c
+> +++ b/arch/arm64/kernel/ftrace.c
+> @@ -216,14 +216,28 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+>  {
+>         unsigned long pc = rec->ip;
+>         u32 old = 0, new;
+> +       bool validate = true;
+> +
+> +       /*
+> +        * When using mcount, calls can be indirected via a PLT generated by
+> +        * the toolchain. Ignore this when initializing the callsite.
+> +        *
+> +        * Note: `mod` is only set at module load time.
+> +        */
+> +       if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS) &&
+> +           IS_ENABLED(CONFIG_ARM64_MODULE_PLTS) && mod) {
+> +               validate = false;
+> +               goto make_nop;
+> +       }
+> 
+>         if (!ftrace_find_callable_addr(rec, mod, &addr))
+>                 return -EINVAL;
+> 
+>         old = aarch64_insn_gen_branch_imm(pc, addr, AARCH64_INSN_BRANCH_LINK);
+> +make_nop:
+>         new = aarch64_insn_gen_nop();
+> 
+> -       return ftrace_modify_code(pc, old, new, true);
+> +       return ftrace_modify_code(pc, old, new, validate);
+>  }
 
-> Cc: <stable@vger.kernel.org>
-> Fixes: ddea4bbf287b ("ASoC: wcd-mbhc-v2: use pm_runtime_resume_and_get()")
+Great; I'll clean this up a bit and post as a patch shortly.
 
-That commit isn't in a released kernel.
-
---N7/RendiH0c6BA6h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmM1oHkACgkQJNaLcl1U
-h9BOwAf9GBA+KS/sN5rGBNQyJN6J5INLcsm4sQA5Xpy6cOd6HMSadJEAsuW65BOd
-v/PwcFjX0g6TQwp7nz+RIOEJbyO3gpaOVYFniPMAnEc+79UzH+G4EYhIucoLpNGt
-Xz68t5S8OT5AkBKFojx0h0hqeLrWRyUGwAc4q1ZjEWKC4By7Yqu3cjWFbKhFAFKz
-iFl0jqVNkwzpEe/EFTnEBpF4s49xeDBf+wQPn3Bw6nPvCGEHi/cU0dB0YA/Zeiu9
-w7nqe+tkL8oBj1qcvJtpEl2VOp9tSxbr9oT6z8TYOE7umzdTIKWOzx9fgfZWH1B5
-zVc0fC8MrvnzwiscC2znHB//s6BoOg==
-=hpEo
------END PGP SIGNATURE-----
-
---N7/RendiH0c6BA6h--
+Thanks,
+Mark.
