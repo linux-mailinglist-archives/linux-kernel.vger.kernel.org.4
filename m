@@ -2,123 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5545EF9B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83395EF9C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235948AbiI2QGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S235993AbiI2QIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234951AbiI2QGq (ORCPT
+        with ESMTP id S235723AbiI2QID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:06:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3056713E21;
-        Thu, 29 Sep 2022 09:06:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A205C15BF;
-        Thu, 29 Sep 2022 09:06:51 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.81.100])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5C9E83F792;
-        Thu, 29 Sep 2022 09:06:43 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 17:06:40 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Peter Oskolkov <posk@posk.io>
-Subject: Re: [RFC PATCH] rseq: Use pr_warn_once() when deprecated/unknown ABI
- flags are encountered
-Message-ID: <YzXCkDJg8vEYqwJH@FVFF77S0Q05N>
-References: <20220929141227.205343-1-mathieu.desnoyers@efficios.com>
+        Thu, 29 Sep 2022 12:08:03 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31271D1E10;
+        Thu, 29 Sep 2022 09:07:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664467677; x=1696003677;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jHn9z+1lv3tK2fXTdGlOlF2iLuZnN9z+U8BA37mZtzw=;
+  b=OEl3SdZ0izF//pm2JZVcgRDg6NPD+GutRRvqF7hznjLjrleq1QH8tI23
+   Bv4k3KA6+MHdV2Oku2Wcvo1MWIDvj8B9S7fvsc+jUcH/Q+mYvLIcVJljQ
+   Acc92czUn7Rz2a0Bvvou1DT5WIDMaMgj2ouCh+FivVrfeVSS45eEMwBT0
+   MCY3AKv7PQJDwMBa8MppHqGE3F9qtfeVpI+qAFXD/Wu0LXPvuLWMBwveP
+   /sxjgbO+LHOK0T8Bl+JDy39cXj20m4WhdcSz+QRQJX8jY21BaIp9E8/Oe
+   dwfGSqXNJz5NRaSbzt1Bqszh24DZg6eATpYTtOeRzdsZVdCnTkelg2OPo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="363786503"
+X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
+   d="scan'208";a="363786503"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 09:06:58 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="684897729"
+X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
+   d="scan'208";a="684897729"
+Received: from andyjuye-mobl.amr.corp.intel.com (HELO kcaccard-desk.amr.corp.intel.com) ([10.209.4.224])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 09:06:56 -0700
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Cc:     ira.weiny@intel.com,
+        Kristen Carlson Accardi <kristen@linux.intel.com>
+Subject: [PATCH] x86/sgx: Replace kmap/kunmap_atomic calls
+Date:   Thu, 29 Sep 2022 09:06:46 -0700
+Message-Id: <20220929160647.362798-1-kristen@linux.intel.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929141227.205343-1-mathieu.desnoyers@efficios.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 10:12:27AM -0400, Mathieu Desnoyers wrote:
-> These commits use WARN_ON_ONCE() and kill the offending processes when
-> deprecated and unknown flags are encountered:
-> 
-> commit c17a6ff93213 ("rseq: Kill process when unknown flags are encountered in ABI structures")
-> commit 0190e4198e47 ("rseq: Deprecate RSEQ_CS_FLAG_NO_RESTART_ON_* flags")
-> 
-> The WARN_ON_ONCE() triggered by userspace input prevents use of
-> Syzkaller to fuzz the rseq system call.
-> 
-> Replace this WARN_ON_ONCE() by pr_warn_once() messages which contain
-> actually useful information.
-> 
-> Reported-by: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+It is not necessary to disable page faults or preemption when
+using kmap calls, so replace kmap_atomic() and kunmap_atomic()
+calls with more the more appropriate kmap_local_page() and
+kunmap_local() calls.
 
-Thanks for this!
+Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+---
+ arch/x86/kernel/cpu/sgx/encl.c  | 12 ++++++------
+ arch/x86/kernel/cpu/sgx/ioctl.c |  4 ++--
+ arch/x86/kernel/cpu/sgx/main.c  |  8 ++++----
+ 3 files changed, 12 insertions(+), 12 deletions(-)
 
-I've set off a Syzkaller run with this applied, and I'll be able to tell you in
-a day or two whether that's made it possible to spot anything more interesting.
+diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+index f40d64206ded..63dd92bd3288 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.c
++++ b/arch/x86/kernel/cpu/sgx/encl.c
+@@ -160,8 +160,8 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
+ 		return ret;
+ 
+ 	pginfo.addr = encl_page->desc & PAGE_MASK;
+-	pginfo.contents = (unsigned long)kmap_atomic(b.contents);
+-	pcmd_page = kmap_atomic(b.pcmd);
++	pginfo.contents = (unsigned long)kmap_local_page(b.contents);
++	pcmd_page = kmap_local_page(b.pcmd);
+ 	pginfo.metadata = (unsigned long)pcmd_page + b.pcmd_offset;
+ 
+ 	if (secs_page)
+@@ -187,8 +187,8 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
+ 	 */
+ 	pcmd_page_empty = !memchr_inv(pcmd_page, 0, PAGE_SIZE);
+ 
+-	kunmap_atomic(pcmd_page);
+-	kunmap_atomic((void *)(unsigned long)pginfo.contents);
++	kunmap_local(pcmd_page);
++	kunmap_local((void *)(unsigned long)pginfo.contents);
+ 
+ 	get_page(b.pcmd);
+ 	sgx_encl_put_backing(&b);
+@@ -197,10 +197,10 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
+ 
+ 	if (pcmd_page_empty && !reclaimer_writing_to_pcmd(encl, pcmd_first_page)) {
+ 		sgx_encl_truncate_backing_page(encl, PFN_DOWN(page_pcmd_off));
+-		pcmd_page = kmap_atomic(b.pcmd);
++		pcmd_page = kmap_local_page(b.pcmd);
+ 		if (memchr_inv(pcmd_page, 0, PAGE_SIZE))
+ 			pr_warn("PCMD page not empty after truncate.\n");
+-		kunmap_atomic(pcmd_page);
++		kunmap_local(pcmd_page);
+ 	}
+ 
+ 	put_page(b.pcmd);
+diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+index ebe79d60619f..f2f918b8b9b1 100644
+--- a/arch/x86/kernel/cpu/sgx/ioctl.c
++++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+@@ -221,11 +221,11 @@ static int __sgx_encl_add_page(struct sgx_encl *encl,
+ 	pginfo.secs = (unsigned long)sgx_get_epc_virt_addr(encl->secs.epc_page);
+ 	pginfo.addr = encl_page->desc & PAGE_MASK;
+ 	pginfo.metadata = (unsigned long)secinfo;
+-	pginfo.contents = (unsigned long)kmap_atomic(src_page);
++	pginfo.contents = (unsigned long)kmap_local_page(src_page);
+ 
+ 	ret = __eadd(&pginfo, sgx_get_epc_virt_addr(epc_page));
+ 
+-	kunmap_atomic((void *)pginfo.contents);
++	kunmap_local((void *)pginfo.contents);
+ 	put_page(src_page);
+ 
+ 	return ret ? -EIO : 0;
+diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+index 515e2a5f25bb..4efda5e8cadf 100644
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -159,17 +159,17 @@ static int __sgx_encl_ewb(struct sgx_epc_page *epc_page, void *va_slot,
+ 	pginfo.addr = 0;
+ 	pginfo.secs = 0;
+ 
+-	pginfo.contents = (unsigned long)kmap_atomic(backing->contents);
+-	pginfo.metadata = (unsigned long)kmap_atomic(backing->pcmd) +
++	pginfo.contents = (unsigned long)kmap_local_page(backing->contents);
++	pginfo.metadata = (unsigned long)kmap_local_page(backing->pcmd) +
+ 			  backing->pcmd_offset;
+ 
+ 	ret = __ewb(&pginfo, sgx_get_epc_virt_addr(epc_page), va_slot);
+ 	set_page_dirty(backing->pcmd);
+ 	set_page_dirty(backing->contents);
+ 
+-	kunmap_atomic((void *)(unsigned long)(pginfo.metadata -
++	kunmap_local((void *)(unsigned long)(pginfo.metadata -
+ 					      backing->pcmd_offset));
+-	kunmap_atomic((void *)(unsigned long)pginfo.contents);
++	kunmap_local((void *)(unsigned long)pginfo.contents);
+ 
+ 	return ret;
+ }
+-- 
+2.37.3
 
-Regardless, I think this is a good change, so FWIW:
-
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-Mark.
-
-> ---
->  kernel/rseq.c | 19 +++++++++++++++++--
->  1 file changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/rseq.c b/kernel/rseq.c
-> index bda8175f8f99..d38ab944105d 100644
-> --- a/kernel/rseq.c
-> +++ b/kernel/rseq.c
-> @@ -171,12 +171,27 @@ static int rseq_get_rseq_cs(struct task_struct *t, struct rseq_cs *rseq_cs)
->  	return 0;
->  }
->  
-> +static bool rseq_warn_flags(const char *str, u32 flags)
-> +{
-> +	u32 test_flags;
-> +
-> +	if (!flags)
-> +		return false;
-> +	test_flags = flags & RSEQ_CS_NO_RESTART_FLAGS;
-> +	if (test_flags)
-> +		pr_warn_once("Deprecated flags (%u) in %s ABI structure", test_flags, str);
-> +	test_flags = flags & ~RSEQ_CS_NO_RESTART_FLAGS;
-> +	if (test_flags)
-> +		pr_warn_once("Unknown flags (%u) in %s ABI structure", test_flags, str);
-> +	return true;
-> +}
-> +
->  static int rseq_need_restart(struct task_struct *t, u32 cs_flags)
->  {
->  	u32 flags, event_mask;
->  	int ret;
->  
-> -	if (WARN_ON_ONCE(cs_flags & RSEQ_CS_NO_RESTART_FLAGS) || cs_flags)
-> +	if (rseq_warn_flags("rseq_cs", cs_flags))
->  		return -EINVAL;
->  
->  	/* Get thread flags. */
-> @@ -184,7 +199,7 @@ static int rseq_need_restart(struct task_struct *t, u32 cs_flags)
->  	if (ret)
->  		return ret;
->  
-> -	if (WARN_ON_ONCE(flags & RSEQ_CS_NO_RESTART_FLAGS) || flags)
-> +	if (rseq_warn_flags("rseq", flags))
->  		return -EINVAL;
->  
->  	/*
-> -- 
-> 2.30.2
-> 
