@@ -2,53 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6992D5EF59D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 14:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764C55EF5A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 14:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbiI2Mkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 08:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        id S235145AbiI2MmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 08:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235531AbiI2MkS (ORCPT
+        with ESMTP id S234421AbiI2MmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 08:40:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3310D72873;
-        Thu, 29 Sep 2022 05:40:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91DA9B82472;
-        Thu, 29 Sep 2022 12:40:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A768C433D6;
-        Thu, 29 Sep 2022 12:40:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664455211;
-        bh=opJy4WGCjfCkazyMTKLVNlei3tkEp4TQKxWcany/vMU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=s/3dWTa78Ao0dVG7TQeevFQztcsyLNAqvkq3t1UX+Fc5VhkmEWrlE8EMx3mbw8lVK
-         d22VyOeQ+o9B6UxoffG73OpKrDuR9Vvu9Z0lYxAyeX0CYaH0N7hKhZA97R7xvGx0hM
-         /gPqjkTgSXl+xkTrgs+hgMcQiJCh81DEm85zBNtNooJMuWBF+IopSl2b9D/ljA4gCy
-         KkAgXYrSHI0we/QEtaD1c/rAWJh+yBBkRvyUjIM54MV1iOmIB59BXCUTtpaH5v3O88
-         0jiSkIyyJdVc7jwoibfekjZ9kE09Lxq+CN03SO+ov3AmrtZ84EABGCTj+jMVL3Kxwn
-         C4zkpHCQ/7Tsw==
-From:   broonie@kernel.org
-To:     Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@mellanox.com>
-Cc:     Haoyue Xu <xuhaoyue1@hisilicon.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the rdma tree with the origin tree
-Date:   Thu, 29 Sep 2022 13:40:05 +0100
-Message-Id: <20220929124005.105149-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Thu, 29 Sep 2022 08:42:05 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415CA15E453
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 05:42:03 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id y136so1347684pfb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 05:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=SwmTmZM4cNqpS1jNdiXo9u+cxg65tRQ/3yvkU0CfYPE=;
+        b=ZOYDj1n4QUXianLwU4/ysFeg33aNMmR5ebPyRpKQ5YcZfU3W07+B2J8Vnafxrcjz8/
+         jTyMGvoJzXQhgziPk7y1CgO/h058aO1EXsZ13F+QVBueuPjL+DLYmokPy3M08vDOTjrd
+         0fRw9k8IBIUswHZ18DYfkPVi/lbEAXot7wqkIds65OzVMurZ9eayxUbRMqd9ZFYBB2Gu
+         wIdi8BFZLN5yTtjHXvvfzn0GZBNZjml0DC3kEHjnQT+o95MyYP15S5j7w+i++JBS3UWH
+         NjUozmSjXL9HsePwqWc2jzyP1LJbiFQmveJfyHzB5kUvItQKtg+6rqok60sr8uuvDxJr
+         qCPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=SwmTmZM4cNqpS1jNdiXo9u+cxg65tRQ/3yvkU0CfYPE=;
+        b=O2bO4x0/cj0UU3HCgoUALuWrYri0VtzXqCwT2fABZjfbDVHgUVYrifOo90v2/v1dPZ
+         Sv8yMxyJgSygocImHzgXDC4tp2A9VOZH2lsPox5+Bzht+gIFV0w2AnOiYe1Ocp5+UhWW
+         tZ5wZf4rgB3hbZs/nsMi8ZaR7rpoc1SX7IEFyc6vwdiOHAWY6b9VvIUko6BSHsysoqTX
+         wsMsh4U7Bdh4OryDeY9y4xXIskT2SsuKpELvAnuImXYKySRdsKHwQV0s3CGc2Nptz2lj
+         CmPvmF4l/gtWF6gguAaDdCfuWZcyDEJipfCxsZxPyDnQfeesBWK7Egdkn35UwAozfk2I
+         0mMw==
+X-Gm-Message-State: ACrzQf0xSRdi3OJBtaXWD1e5Yrcgqf/inSbD4+EDX5zJIb6Nj2CevYaX
+        ljQZTC9T2OT0etOCUBeSPENa1zOPKdOCt+RddADyjOkVmaY=
+X-Google-Smtp-Source: AMsMyM5ZUb/2lWBCbsRRgg01oLCxyggEUP2L940cOJ4h0BKo9I4kzuXh3iyLffRgpIqyDbOXNi5nXm5cDl5aVMj2UYE=
+X-Received: by 2002:a05:6a00:24c2:b0:52e:7181:a8a0 with SMTP id
+ d2-20020a056a0024c200b0052e7181a8a0mr3331978pfv.57.1664455322742; Thu, 29 Sep
+ 2022 05:42:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <21f604139a9a4675b9ed49292839dcfb@horizon.ai> <dd8d212c48944cb4ba3b58af2efe3723@horizon.ai>
+In-Reply-To: <dd8d212c48944cb4ba3b58af2efe3723@horizon.ai>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 29 Sep 2022 14:41:26 +0200
+Message-ID: <CAPDyKFo_izPD7z-GmSEZ_8H_AX+KiVuLqN7JcD2Kdjjuukk-7g@mail.gmail.com>
+Subject: Re: [PATCH RFC stable 4.14 1/1] mmc: core: fix hung task caused by
+ race condition on context_info
+To:     "dinggao.pan" <dinggao.pan@horizon.ai>
+Cc:     "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "ming.yu" <ming.yu@horizon.ai>,
+        "yunqian.wang" <yunqian.wang@horizon.ai>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rt-users@vger.kernel.org" <linux-rt-users@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,59 +74,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Mon, 5 Sept 2022 at 08:22, dinggao.pan <dinggao.pan@horizon.ai> wrote:
+>
+> Hi,
+> After applying rt patches to our 4.14 kernel and enabling preempt-rt, we =
+met a hung task during boot caused by race condition on context_info stored=
+ in struct mmc_host.
+> From our investigation, context_info should not be changed by threads tha=
+t have not claimed the host, hence the following fix.
+>
+> Any comments are much appreciated.
+> Dinggao Pan
 
-Today's linux-next merge of the rdma tree got conflicts in:
+Hi Dinggao,
 
-  drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-  drivers/infiniband/hw/hns/hns_roce_main.c
+Apologize for the delay.
 
-between commit:
+The 4.14 kernel is too old for me to be able to comment. In
+particular, the mmc block layer moved to blk-mq in v4.16, which means
+the path you are investigating doesn't exist any more, sorry.
 
-  45baad7dd98f4 ("RDMA/hns: Remove the num_qpc_timer variable")
+Kind regards
+Uffe
 
-from the origin tree and commits:
-
-  29dc063596772 ("RDMA/hns: Remove redundant 'use_lowmem' argument from hns_roce_init_hem_table()")
-  5436272c8cf4e ("RDMA/hns: Remove redundant 'num_mtt_segs' and 'max_extend_sg'")
-
-from the rdma tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-index c780646bd60ac,2d0192057d1af..0000000000000
---- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-+++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-@@@ -2272,7 -2270,7 +2270,6 @@@ static int hns_roce_query_pf_caps(struc
-  	caps->max_sq_inline	     = le16_to_cpu(resp_a->max_sq_inline);
-  	caps->max_rq_sg		     = le16_to_cpu(resp_a->max_rq_sg);
-  	caps->max_rq_sg = roundup_pow_of_two(caps->max_rq_sg);
-- 	caps->max_extend_sg	     = le32_to_cpu(resp_a->max_extend_sg);
- -	caps->num_qpc_timer	     = le16_to_cpu(resp_a->num_qpc_timer);
-  	caps->max_srq_sges	     = le16_to_cpu(resp_a->max_srq_sges);
-  	caps->max_srq_sges = roundup_pow_of_two(caps->max_srq_sges);
-  	caps->num_aeq_vectors	     = resp_a->num_aeq_vectors;
-diff --cc drivers/infiniband/hw/hns/hns_roce_main.c
-index 4ccb217b2841d,53c53c20360d1..0000000000000
---- a/drivers/infiniband/hw/hns/hns_roce_main.c
-+++ b/drivers/infiniband/hw/hns/hns_roce_main.c
-@@@ -725,10 -734,10 +734,10 @@@ static int hns_roce_init_hem(struct hns
-  		ret = hns_roce_init_hem_table(hr_dev, &hr_dev->qpc_timer_table,
-  					      HEM_TYPE_QPC_TIMER,
-  					      hr_dev->caps.qpc_timer_entry_sz,
-- 					      hr_dev->caps.qpc_timer_bt_num, 1);
- -					      hr_dev->caps.num_qpc_timer);
-++					      hr_dev->caps.qpc_timer_bt_num);
-  		if (ret) {
-  			dev_err(dev,
-- 				"Failed to init QPC timer memory, aborting.\n");
-+ 				"failed to init QPC timer memory, aborting.\n");
-  			goto err_unmap_ctx;
-  		}
-  	}
+>
+> From: "Dinggao Pan" <mailto:dinggao.pan@horizon.ai>
+>
+> =E3=80=80=E3=80=80A race condition happens under following circumstances:
+>     (mmc_thread1)               |              (mmc_thread2)
+>     mmc_issue_rq(req1)          |
+>       > qcnt++ for req1         |
+>         host handling req1      |
+>     mmc_queue_thread(req=3Dnull)  |
+>       > enter queue thread      |
+>         again, fetches blk req  |
+>         (return null), sets     |
+>         is_waiting_last_req 1   |  mmc_request_fn(req1) -> set is_new_req=
+ 1
+>                                 |                   and wake_up wait_queu=
+e
+>     mmc_issue_rq(req2)          |   > mmc_thread2 tries to claim host
+>       > **qcnt++ for req2**     |
+>       mmc_finalize_req(req2)    |
+>         > should wait for req1  |
+>           done but req2 return  |
+>           MMC_BLK_NEW_REQ       |
+>           due to is_new_req     |
+>           already set to 1      |
+>                                 |
+>                                 |
+>     req1 done                   |
+>       > qcnt-- for req1         |
+>     mmc_issue_rq(req3)          |
+>       > qcnt++ for req3         |
+> req2 is not handled but qcnt is already added(noted by **),
+> thus mmc_thread1 will never release host, causing mmc_threads
+> except thread1 to hung. Fix race by moving wake_up to the front of
+> context_info update.
+>
+> Reviewed By: Yunqian Wang <mailto:yunqian.wang@horizon.ai>
+> Signed-off-by: Dinggao Pan <mailto:dinggao.pan@horizon.ai>
+> Signed-off-by: Ming Yu <mailto:ming.yu@horizon.ai>
+> ---
+> drivers/mmc/core/queue.c | 7 +++++--
+> 1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
+> index 0a4e77a5b..58318c102 100644
+> --- a/drivers/mmc/core/queue.c
+> +++ b/drivers/mmc/core/queue.c
+> @@ -107,6 +107,11 @@ static void mmc_request_fn(struct request_queue *q)
+>                return;
+>       }
+>
+> +      if (mq->asleep) {
+> +               wake_up_process(mq->thread);
+> +               return;
+> +      }
+> +
+>       cntx =3D &mq->card->host->context_info;
+>
+>       if (cntx->is_waiting_last_req) {
+> @@ -114,8 +119,6 @@ static void mmc_request_fn(struct request_queue *q)
+>                wake_up_interruptible(&cntx->wait);
+>       }
+>
+> -       if (mq->asleep)
+> -                wake_up_process(mq->thread);
+> }
+>
+> static struct scatterlist *mmc_alloc_sg(int sg_len, gfp_t gfp)
+> --
+> 2.36.1
