@@ -2,168 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F245EF44E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE145EF451
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235238AbiI2L3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
+        id S231232AbiI2LaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234289AbiI2L3s (ORCPT
+        with ESMTP id S235290AbiI2LaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:29:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C221F9DA;
-        Thu, 29 Sep 2022 04:29:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 29 Sep 2022 07:30:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C181076471;
+        Thu, 29 Sep 2022 04:30:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 634C9B8246E;
-        Thu, 29 Sep 2022 11:29:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8B0FC433C1;
-        Thu, 29 Sep 2022 11:29:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664450984;
-        bh=l123fFiBTIIG4boLDnbP/+WIQ9sZsWaaiSayKBcLVOU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nBS3qMl5DfZttE6IC6rRN5KGZ8vZ+D5sS1bFYD4+5l/bmW/OUaI6+y255j/KAtizm
-         /3juX6wMkr6lljUrivGbGHyzd7h+DrSuYwclOfGbYxmxj6os/44ZBOKosBVMgKGnJe
-         SyJ1S7Lv9uFsUugR2xyIhXU0cv6SOuHJBLWWwNMdrgeS2wAVtwUYlghGrUdLb3XUkO
-         +gI0eOY8/MhgmEC9sGl5IxQEPo/aV4E31suHK/zxqZJglhSSyIG6yvaynPkdpCauPj
-         6melQBWdqOEUVtPr/2vVwszdGvEsmd/FtnfQM/OXNuHIIkbtXrMfL/Ltj8Y3nR2FQZ
-         x5JSEIJKkMoPw==
-Date:   Thu, 29 Sep 2022 12:29:38 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com, Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH V3 1/7] arm64/perf: Add BRBE registers and fields
-Message-ID: <YzWBokiO1KSZNtcl@sirena.org.uk>
-References: <20220929075857.158358-1-anshuman.khandual@arm.com>
- <20220929075857.158358-2-anshuman.khandual@arm.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DE86321DD0;
+        Thu, 29 Sep 2022 11:30:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1664451002; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jnXmL/O9aqdai7am+y1p+Too1DWcLEj7ik/HMoGYMEY=;
+        b=DKhtSVwdo29fcXIwhOTYWiuyN5sP7LrFxcRQbeL1214svAgXs8QIlkVzAxTVX8WDkKXY8W
+        1KmnlhpvZuox3DEHrgO06glG6xlIROWf8aphU978/64pQA0hRvIQk5yPuAD0Vjk6Yox23P
+        kXCmlGzHKFnIt/iCq3yXkRINT2Du4Y4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1664451002;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jnXmL/O9aqdai7am+y1p+Too1DWcLEj7ik/HMoGYMEY=;
+        b=2XtbdcnUCa7T2wOHD62X/zoI9rYoa81Gxu+NvIbCi4KrxvclUiAQGDkwNOSwjEx0XVz57B
+        VDn9oifphgCfxaAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D174C1348E;
+        Thu, 29 Sep 2022 11:30:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LG8gM7qBNWOQbwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 29 Sep 2022 11:30:02 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 5AC71A0681; Thu, 29 Sep 2022 13:30:02 +0200 (CEST)
+Date:   Thu, 29 Sep 2022 13:30:02 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, rookxu <brookxu.cn@gmail.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Subject: Re: [RFC v3 3/8] ext4: Refactor code in ext4_mb_normalize_request()
+ and ext4_mb_use_preallocated()
+Message-ID: <20220929113002.wjoskqpvzamsxdht@quack3>
+References: <cover.1664269665.git.ojaswin@linux.ibm.com>
+ <8ec3ed728f046495c39f01881b57ef12fdabeb2a.1664269665.git.ojaswin@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+2mhFxwV4YkUyQZR"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929075857.158358-2-anshuman.khandual@arm.com>
-X-Cookie: Last week's pet, this week's special.
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <8ec3ed728f046495c39f01881b57ef12fdabeb2a.1664269665.git.ojaswin@linux.ibm.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue 27-09-22 14:46:43, Ojaswin Mujoo wrote:
+> Change some variable names to be more consistent and
+> refactor some of the code to make it easier to read.
+> 
+> There are no functional changes in this patch
+> 
+> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
 
---+2mhFxwV4YkUyQZR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Looks good, although I have to say I don't find renaming pa -> tmp_pa
+making the code any more readable. Anyways, feel free to add:
 
-On Thu, Sep 29, 2022 at 01:28:51PM +0530, Anshuman Khandual wrote:
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Thanks for doing this work - I did spot a few small issues though.
+								Honza
 
->  /* id_aa64dfr0 */
-> +#define ID_AA64DFR0_BRBE_SHIFT		52
->  #define ID_AA64DFR0_MTPMU_SHIFT		48
->  #define ID_AA64DFR0_TRBE_SHIFT		44
->  #define ID_AA64DFR0_TRACE_FILT_SHIFT	40
-> @@ -848,6 +952,9 @@
->  #define ID_AA64DFR0_PMSVER_8_2		0x1
->  #define ID_AA64DFR0_PMSVER_8_3		0x2
-> =20
-> +#define ID_AA64DFR0_BRBE		0x1
-> +#define ID_AA64DFR0_BRBE_V1P1		0x2
+> ---
+>  fs/ext4/mballoc.c | 97 ++++++++++++++++++++++++-----------------------
+>  1 file changed, 49 insertions(+), 48 deletions(-)
+> 
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 8be6f8765a6f..84950df709bb 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -4000,7 +4000,8 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
+>  	loff_t orig_size __maybe_unused;
+>  	ext4_lblk_t start;
+>  	struct ext4_inode_info *ei = EXT4_I(ac->ac_inode);
+> -	struct ext4_prealloc_space *pa;
+> +	struct ext4_prealloc_space *tmp_pa;
+> +	ext4_lblk_t tmp_pa_start, tmp_pa_end;
+>  
+>  	/* do normalize only data requests, metadata requests
+>  	   do not need preallocation */
+> @@ -4103,56 +4104,53 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
+>  
+>  	/* check we don't cross already preallocated blocks */
+>  	rcu_read_lock();
+> -	list_for_each_entry_rcu(pa, &ei->i_prealloc_list, pa_inode_list) {
+> -		ext4_lblk_t pa_end;
+> -
+> -		if (pa->pa_deleted)
+> +	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_inode_list) {
+> +		if (tmp_pa->pa_deleted)
+>  			continue;
+> -		spin_lock(&pa->pa_lock);
+> -		if (pa->pa_deleted) {
+> -			spin_unlock(&pa->pa_lock);
+> +		spin_lock(&tmp_pa->pa_lock);
+> +		if (tmp_pa->pa_deleted) {
+> +			spin_unlock(&tmp_pa->pa_lock);
+>  			continue;
+>  		}
+>  
+> -		pa_end = pa->pa_lstart + EXT4_C2B(EXT4_SB(ac->ac_sb),
+> -						  pa->pa_len);
+> +		tmp_pa_start = tmp_pa->pa_lstart;
+> +		tmp_pa_end = tmp_pa->pa_lstart + EXT4_C2B(sbi, tmp_pa->pa_len);
+>  
+>  		/* PA must not overlap original request */
+> -		BUG_ON(!(ac->ac_o_ex.fe_logical >= pa_end ||
+> -			ac->ac_o_ex.fe_logical < pa->pa_lstart));
+> +		BUG_ON(!(ac->ac_o_ex.fe_logical >= tmp_pa_end ||
+> +			ac->ac_o_ex.fe_logical < tmp_pa_start));
+>  
+>  		/* skip PAs this normalized request doesn't overlap with */
+> -		if (pa->pa_lstart >= end || pa_end <= start) {
+> -			spin_unlock(&pa->pa_lock);
+> +		if (tmp_pa_start >= end || tmp_pa_end <= start) {
+> +			spin_unlock(&tmp_pa->pa_lock);
+>  			continue;
+>  		}
+> -		BUG_ON(pa->pa_lstart <= start && pa_end >= end);
+> +		BUG_ON(tmp_pa_start <= start && tmp_pa_end >= end);
+>  
+>  		/* adjust start or end to be adjacent to this pa */
+> -		if (pa_end <= ac->ac_o_ex.fe_logical) {
+> -			BUG_ON(pa_end < start);
+> -			start = pa_end;
+> -		} else if (pa->pa_lstart > ac->ac_o_ex.fe_logical) {
+> -			BUG_ON(pa->pa_lstart > end);
+> -			end = pa->pa_lstart;
+> +		if (tmp_pa_end <= ac->ac_o_ex.fe_logical) {
+> +			BUG_ON(tmp_pa_end < start);
+> +			start = tmp_pa_end;
+> +		} else if (tmp_pa_start > ac->ac_o_ex.fe_logical) {
+> +			BUG_ON(tmp_pa_start > end);
+> +			end = tmp_pa_start;
+>  		}
+> -		spin_unlock(&pa->pa_lock);
+> +		spin_unlock(&tmp_pa->pa_lock);
+>  	}
+>  	rcu_read_unlock();
+>  	size = end - start;
+>  
+>  	/* XXX: extra loop to check we really don't overlap preallocations */
+>  	rcu_read_lock();
+> -	list_for_each_entry_rcu(pa, &ei->i_prealloc_list, pa_inode_list) {
+> -		ext4_lblk_t pa_end;
+> +	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_inode_list) {
+> +		spin_lock(&tmp_pa->pa_lock);
+> +		if (tmp_pa->pa_deleted == 0) {
+> +			tmp_pa_start = tmp_pa->pa_lstart;
+> +			tmp_pa_end = tmp_pa->pa_lstart + EXT4_C2B(sbi, tmp_pa->pa_len);
+>  
+> -		spin_lock(&pa->pa_lock);
+> -		if (pa->pa_deleted == 0) {
+> -			pa_end = pa->pa_lstart + EXT4_C2B(EXT4_SB(ac->ac_sb),
+> -							  pa->pa_len);
+> -			BUG_ON(!(start >= pa_end || end <= pa->pa_lstart));
+> +			BUG_ON(!(start >= tmp_pa_end || end <= tmp_pa_start));
+>  		}
+> -		spin_unlock(&pa->pa_lock);
+> +		spin_unlock(&tmp_pa->pa_lock);
+>  	}
+>  	rcu_read_unlock();
+>  
+> @@ -4362,7 +4360,8 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
+>  	int order, i;
+>  	struct ext4_inode_info *ei = EXT4_I(ac->ac_inode);
+>  	struct ext4_locality_group *lg;
+> -	struct ext4_prealloc_space *pa, *cpa = NULL;
+> +	struct ext4_prealloc_space *tmp_pa, *cpa = NULL;
+> +	ext4_lblk_t tmp_pa_start, tmp_pa_end;
+>  	ext4_fsblk_t goal_block;
+>  
+>  	/* only data can be preallocated */
+> @@ -4371,18 +4370,20 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
+>  
+>  	/* first, try per-file preallocation */
+>  	rcu_read_lock();
+> -	list_for_each_entry_rcu(pa, &ei->i_prealloc_list, pa_inode_list) {
+> +	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_inode_list) {
+>  
+>  		/* all fields in this condition don't change,
+>  		 * so we can skip locking for them */
+> -		if (ac->ac_o_ex.fe_logical < pa->pa_lstart ||
+> -		    ac->ac_o_ex.fe_logical >= (pa->pa_lstart +
+> -					       EXT4_C2B(sbi, pa->pa_len)))
+> +		tmp_pa_start = tmp_pa->pa_lstart;
+> +		tmp_pa_end = tmp_pa->pa_lstart + EXT4_C2B(sbi, tmp_pa->pa_len);
 > +
->  #define ID_DFR0_PERFMON_SHIFT		24
-> =20
->  #define ID_DFR0_PERFMON_8_0		0x3
-
-This is already done in -next as a result of ID_AA64DFR0_EL1 being
-converted, the enumberation define comes out as
-ID_AA64DFR0_EL1_BRBE_BRBE_V1P1.
-
-> +# This is just a dummy register declaration to get all common field mask=
-s and
-> +# shifts for accessing given BRBINF contents.
-> +Sysreg	BRBINF_EL1	2	1	8	0	0
-> +Res0	63:47
-> +Field	46	CCU
-> +Field	45:32	CC
-> +Res0	31:18
-> +Field	17	LASTFAILED
-> +Field	16	TX
-
-According to DDI0487I.a bit 16 is called T not TX.
-
-> +Res0	15:14
-> +Enum	13:8		TYPE
-
-It's probably worth noting in the comment the issue with Enums here
-that's meaning you're not using a SysregFields - I'm not sure what
-people will think of this but providing a definition using the ID for
-the 0th register does seem expedient.
-
-> +Enum	7:6	EL
-> +	0b00	EL0
-> +	0b01	EL1
-> +	0b10	EL2
-> +EndEnum
-
-According to DDI0487I.a 0b11 has the value EL3 (when FEAT_BRBEv1p1).
-
-> +Sysreg	BRBCR_EL1	2	1	9	0	0
-> +Res0	63:24
-> +Field	23 	EXCEPTION
-> +Field	22 	ERTN
-> +Res0	21:9
-> +Field	8 	FZP
-> +Field	7	ZERO
-
-According to DDI0487I.a bit 7 is Res0.
-
-> +Field	2	ZERO1
-
-According to DDI0487I.a bit 2 is Res0.
-
-> +Sysreg	BRBFCR_EL1	2	1	9	0	1
-
-> +Field	16	ENL
-
-Accoding to DDI0487I.a this is EnI (ie, an L not an I).
-
-> +Sysreg	BRBINFINJ_EL1	2	1	9	1	0
-
-> +Field	16	TX
-
-According to DDI0487I.a this is T not TX.
-
-> +Enum	7:6	EL
-> +	0b00	EL0
-> +	0b01	EL1
-> +	0b10	EL2
-> +EndEnum
-
-According to DDI0487I.a 0b11 has the value EL3 (when FEAT_BRBEv1p1).
-
---+2mhFxwV4YkUyQZR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmM1gaEACgkQJNaLcl1U
-h9AzPQf/dKcgs3a4B6Rec99BaeLxdCQFO3kmp8lU70mA29eD1BiGJGeLYm3D1Xzw
-+624rLJnWzTq9pWuVSrjwHCWFqy5VvgznRFGBj8gDw0HrWfVlg3kEJKcnidZob2q
-vX9m4OywI+r2UgwYDzwqDPysfQF98uBTRnaYvJkPGrWVQv+wfkVikvue8J11nx7J
-POxF0yrVxS+AiwXhJqnS093X5EItOpcf13/f51bToSOaAuTETn2fpO04QfB/+S5y
-w3bapIibWTUVr17fEgLpQiRL6k20Jy9iS2/jnzkW2JzmdpKDANVAiDD4UqeYIDa9
-TTP8FGWTPKgLsn88f91bWIc8S3aSZQ==
-=KmN6
------END PGP SIGNATURE-----
-
---+2mhFxwV4YkUyQZR--
+> +		if (ac->ac_o_ex.fe_logical < tmp_pa_start ||
+> +		    ac->ac_o_ex.fe_logical >= tmp_pa_end)
+>  			continue;
+>  
+>  		/* non-extent files can't have physical blocks past 2^32 */
+>  		if (!(ext4_test_inode_flag(ac->ac_inode, EXT4_INODE_EXTENTS)) &&
+> -		    (pa->pa_pstart + EXT4_C2B(sbi, pa->pa_len) >
+> +		    (tmp_pa->pa_pstart + EXT4_C2B(sbi, tmp_pa->pa_len) >
+>  		     EXT4_MAX_BLOCK_FILE_PHYS)) {
+>  			/*
+>  			 * Since PAs don't overlap, we won't find any
+> @@ -4392,16 +4393,16 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
+>  		}
+>  
+>  		/* found preallocated blocks, use them */
+> -		spin_lock(&pa->pa_lock);
+> -		if (pa->pa_deleted == 0 && pa->pa_free) {
+> -			atomic_inc(&pa->pa_count);
+> -			ext4_mb_use_inode_pa(ac, pa);
+> -			spin_unlock(&pa->pa_lock);
+> +		spin_lock(&tmp_pa->pa_lock);
+> +		if (tmp_pa->pa_deleted == 0 && tmp_pa->pa_free) {
+> +			atomic_inc(&tmp_pa->pa_count);
+> +			ext4_mb_use_inode_pa(ac, tmp_pa);
+> +			spin_unlock(&tmp_pa->pa_lock);
+>  			ac->ac_criteria = 10;
+>  			rcu_read_unlock();
+>  			return true;
+>  		}
+> -		spin_unlock(&pa->pa_lock);
+> +		spin_unlock(&tmp_pa->pa_lock);
+>  	}
+>  	rcu_read_unlock();
+>  
+> @@ -4425,16 +4426,16 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
+>  	 */
+>  	for (i = order; i < PREALLOC_TB_SIZE; i++) {
+>  		rcu_read_lock();
+> -		list_for_each_entry_rcu(pa, &lg->lg_prealloc_list[i],
+> +		list_for_each_entry_rcu(tmp_pa, &lg->lg_prealloc_list[i],
+>  					pa_inode_list) {
+> -			spin_lock(&pa->pa_lock);
+> -			if (pa->pa_deleted == 0 &&
+> -					pa->pa_free >= ac->ac_o_ex.fe_len) {
+> +			spin_lock(&tmp_pa->pa_lock);
+> +			if (tmp_pa->pa_deleted == 0 &&
+> +					tmp_pa->pa_free >= ac->ac_o_ex.fe_len) {
+>  
+>  				cpa = ext4_mb_check_group_pa(goal_block,
+> -								pa, cpa);
+> +								tmp_pa, cpa);
+>  			}
+> -			spin_unlock(&pa->pa_lock);
+> +			spin_unlock(&tmp_pa->pa_lock);
+>  		}
+>  		rcu_read_unlock();
+>  	}
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
