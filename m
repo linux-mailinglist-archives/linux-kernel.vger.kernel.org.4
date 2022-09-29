@@ -2,403 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0665EF2BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950855EF2C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234921AbiI2JxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 05:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        id S234978AbiI2Jxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 05:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbiI2JxT (ORCPT
+        with ESMTP id S235211AbiI2Jxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:53:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4A14D261;
-        Thu, 29 Sep 2022 02:53:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7B1560ACC;
-        Thu, 29 Sep 2022 09:53:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C93E8C433C1;
-        Thu, 29 Sep 2022 09:53:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664445197;
-        bh=R1NvDgZRtrXVFA3NssmHZXzvdQTGba15W5h1CTKdip8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TP+0EWB2thnu0XkLsi+Vrcx3gYJ+laRcE+nOsq+vSDXdSt10J+Ed4OXlHxt1bHW3E
-         fJSGWFBf77MH+Fbc9m3oFVbv3xyeXnkPNBNJknUWWzoWIBcb8ae7nK9dW8bUdmljKU
-         55+dmoe5i3yEcRyeNEdbZc2cccUDs0aiiNRe31GM=
-Date:   Thu, 29 Sep 2022 11:53:09 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     macro@orcam.me.uk, Lee Jones <lee@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thu Nguyen <thu@os.amperecomputing.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        thang@os.amperecomputing.com
-Subject: Re: [PATCH v9 3/9] misc: smpro-errmon: Add Ampere's SMpro error
- monitor driver
-Message-ID: <YzVrBZOatELcfDc5@kroah.com>
-References: <20220929094321.770125-1-quan@os.amperecomputing.com>
- <20220929094321.770125-4-quan@os.amperecomputing.com>
+        Thu, 29 Sep 2022 05:53:43 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348B312C6BD;
+        Thu, 29 Sep 2022 02:53:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664445222; x=1695981222;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vGkLjivaiR7LAJ5xwQ9O6hiKM41mqmslS4frekkTONo=;
+  b=cAnEEIg+RUf1jHhU8S3zofEnj/4dHIP0D/etm8znxVu5qFZ0akDJxUQw
+   4Ax441h/MfytRugFNIFv2f7XKSObZ3OcqPJWAo2Kf3yVoFZCjYH9BnnGp
+   MVtLX06DKceeFycYzvWg2qh3YxA3wNPzKybWPB72sXmjtipq2BJThzC7x
+   v43fTt1zThLG5sl0bGbMVySvVMfmx7KSMRr2jIsZ4v6IDj3mbC5cwK+cS
+   gAcHEdxrR1hnckla5QtdOtjocGVX3EkcVkcIklDBFdAj0RKjvSYOBmbaS
+   eTGmLR4UfWssPEpLmIZ/xnwo18H89D+W6YO2IxbKc6Z7vi2STe93k5ggj
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="363692961"
+X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
+   d="scan'208";a="363692961"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 02:53:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="655490428"
+X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
+   d="scan'208";a="655490428"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 29 Sep 2022 02:53:37 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1odqEZ-009KuU-2K;
+        Thu, 29 Sep 2022 12:53:35 +0300
+Date:   Thu, 29 Sep 2022 12:53:35 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     hdegoede@redhat.com, markgross@kernel.org, rafael@kernel.org,
+        lenb@kernel.org, hmh@hmh.eng.br, matan@svgalib.org,
+        corentin.chary@gmail.com, jeremy@system76.com,
+        productdev@system76.com, mario.limonciello@amd.com,
+        pobrn@protonmail.com, coproscefalo@gmail.com,
+        platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] platform/x86: dell: Minor style fixes
+Message-ID: <YzVrH8DYUQm+kvXD@smile.fi.intel.com>
+References: <20220928220952.2772-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929094321.770125-4-quan@os.amperecomputing.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220928220952.2772-1-W_Armin@gmx.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 04:43:15PM +0700, Quan Nguyen wrote:
-> This commit adds Ampere's SMpro error monitor driver for monitoring
-> and reporting RAS-related errors as reported by SMpro co-processor
-> found on Ampere's Altra processor family.
+On Thu, Sep 29, 2022 at 12:09:52AM +0200, Armin Wolf wrote:
+> Fix some style issues found during review to improve
+> code maintainability, no functional changes.
 > 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> Tested on a Dell Inspiron 3505.
+
+LGTM,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 > ---
-> Changes in v9:
->   + Fix ugly static struct define                               [Greg]
->   + Remove unused defines and update documentation              [Quan]
->   + Add minor refactor code                                     [Quan]
->   + Fix messy goto                                              [Greg]
->   + Update SPDX licence                                         [Greg]
->   + Use ATTRIBUTE_GROUPS()                                      [Greg]
->   + Use dev_groups instead of sysfs_create_group() to avoid
->   racing issue with user space                                  [Greg]
->   + Refactor code to fix unnecessary initialization issue       [Quan]
->   + Refactor code to avoid clever encoding issue                [Quan]
->   + Separate error_[smpro|pmpro] to error_* and warn_*          [Quan]
->   + Add minor code refactor                                     [Quan]
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
 > 
-> Changes in v8:
->   + Update wording for SMPRO_ERRMON on Kconfig file             [Quan]
->   + Avoid uninitialized variable use               [kernel test robot]
->   + Switch to use sysfs_emit()                                  [Greg]
->   + Make sysfs to return single value                           [Greg]
->   + Change errors_* sysfs to error_*                            [Quan]
->   + Add overflow_[core|mem|pcie|other]_[ce|ue] sysfs to report
->   overflow status of each type of HW errors                     [Quan]
->   + Add some minor refactor                                     [Quan]
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index 6ccce90f475d..699feae3c435 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -1,13 +1,12 @@
+>  // SPDX-License-Identifier: GPL-2.0-or-later
+>  /*
+> - * dell-wmi-ddv.c -- Linux driver for WMI sensor information on Dell notebooks.
+> + * Linux driver for WMI sensor information on Dell notebooks.
+>   *
+>   * Copyright (C) 2022 Armin Wolf <W_Armin@gmx.de>
+>   */
 > 
-> Changes in v7:
->   + Remove regmap_acquire/release_lock(), read_i2c_block_data() [Quan]
->   + Use regmap_noinc_read() instead of errmon_read_block()      [Quan]
->   + Validate number of errors before read                       [Quan]
->   + Fix wrong return type of *_show() function     [kernel test robot]
->   + Adjust patch order to avoid dependence with smpro-mfd  [Lee Jones]
->   + Use pointer instead of stack memory                         [Quan]
+>  #define pr_format(fmt) KBUILD_MODNAME ": " fmt
 > 
-> Changes in v6:
->   + First introduced in v6 [Quan]
+> -#include <acpi/battery.h>
+>  #include <linux/acpi.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/device.h>
+> @@ -21,6 +20,8 @@
+>  #include <linux/sysfs.h>
+>  #include <linux/wmi.h>
 > 
->  drivers/misc/Kconfig        |  12 +
->  drivers/misc/Makefile       |   1 +
->  drivers/misc/smpro-errmon.c | 529 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 542 insertions(+)
->  create mode 100644 drivers/misc/smpro-errmon.c
+> +#include <acpi/battery.h>
+> +
+>  #define DRIVER_NAME	"dell-wmi-ddv"
 > 
-> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> index 358ad56f6524..b9ceee949dab 100644
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@ -176,6 +176,18 @@ config SGI_XP
->  	  this feature will allow for direct communication between SSIs
->  	  based on a network adapter and DMA messaging.
->  
-> +config SMPRO_ERRMON
-> +	tristate "Ampere Computing SMPro error monitor driver"
-> +	depends on MFD_SMPRO || COMPILE_TEST
-> +	help
-> +	  Say Y here to get support for the SMpro error monitor function
-> +	  provided by Ampere Computing's Altra and Altra Max SoCs. Upon
-> +	  loading, the driver creates sysfs files which can be use to gather
-> +	  multiple HW error data reported via read and write system calls.
-> +
-> +	  To compile this driver as a module, say M here. The driver will be
-> +	  called smpro-errmon.
-> +
->  config CS5535_MFGPT
->  	tristate "CS5535/CS5536 Geode Multi-Function General Purpose Timer (MFGPT) support"
->  	depends on MFD_CS5535
-> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> index ac9b3e757ba1..bbe24d4511a3 100644
-> --- a/drivers/misc/Makefile
-> +++ b/drivers/misc/Makefile
-> @@ -23,6 +23,7 @@ obj-$(CONFIG_ENCLOSURE_SERVICES) += enclosure.o
->  obj-$(CONFIG_KGDB_TESTS)	+= kgdbts.o
->  obj-$(CONFIG_SGI_XP)		+= sgi-xp/
->  obj-$(CONFIG_SGI_GRU)		+= sgi-gru/
-> +obj-$(CONFIG_SMPRO_ERRMON)	+= smpro-errmon.o
->  obj-$(CONFIG_CS5535_MFGPT)	+= cs5535-mfgpt.o
->  obj-$(CONFIG_GEHC_ACHC)		+= gehc-achc.o
->  obj-$(CONFIG_HP_ILO)		+= hpilo.o
-> diff --git a/drivers/misc/smpro-errmon.c b/drivers/misc/smpro-errmon.c
-> new file mode 100644
-> index 000000000000..d1431d419aa4
-> --- /dev/null
-> +++ b/drivers/misc/smpro-errmon.c
-> @@ -0,0 +1,529 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Ampere Computing SoC's SMpro Error Monitoring Driver
-> + *
-> + * Copyright (c) 2022, Ampere Computing LLC
-> + *
-> + */
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +/* GPI RAS Error Registers */
-> +#define GPI_RAS_ERR		0x7E
-> +
-> +/* Core and L2C Error Registers */
-> +#define CORE_CE_ERR_CNT		0x80
-> +#define CORE_CE_ERR_LEN		0x81
-> +#define CORE_CE_ERR_DATA	0x82
-> +#define CORE_UE_ERR_CNT		0x83
-> +#define CORE_UE_ERR_LEN		0x84
-> +#define CORE_UE_ERR_DATA	0x85
-> +
-> +/* Memory Error Registers */
-> +#define MEM_CE_ERR_CNT		0x90
-> +#define MEM_CE_ERR_LEN		0x91
-> +#define MEM_CE_ERR_DATA		0x92
-> +#define MEM_UE_ERR_CNT		0x93
-> +#define MEM_UE_ERR_LEN		0x94
-> +#define MEM_UE_ERR_DATA		0x95
-> +
-> +/* RAS Error/Warning Registers */
-> +#define ERR_SMPRO_TYPE		0xA0
-> +#define ERR_PMPRO_TYPE		0xA1
-> +#define ERR_SMPRO_INFO_LO	0xA2
-> +#define ERR_SMPRO_INFO_HI	0xA3
-> +#define ERR_SMPRO_DATA_LO	0xA4
-> +#define ERR_SMPRO_DATA_HI	0xA5
-> +#define WARN_SMPRO_INFO_LO	0xAA
-> +#define WARN_SMPRO_INFO_HI	0xAB
-> +#define ERR_PMPRO_INFO_LO	0xA6
-> +#define ERR_PMPRO_INFO_HI	0xA7
-> +#define ERR_PMPRO_DATA_LO	0xA8
-> +#define ERR_PMPRO_DATA_HI	0xA9
-> +#define WARN_PMPRO_INFO_LO	0xAC
-> +#define WARN_PMPRO_INFO_HI	0xAD
-> +
-> +/* PCIE Error Registers */
-> +#define PCIE_CE_ERR_CNT		0xC0
-> +#define PCIE_CE_ERR_LEN		0xC1
-> +#define PCIE_CE_ERR_DATA	0xC2
-> +#define PCIE_UE_ERR_CNT		0xC3
-> +#define PCIE_UE_ERR_LEN		0xC4
-> +#define PCIE_UE_ERR_DATA	0xC5
-> +
-> +/* Other Error Registers */
-> +#define OTHER_CE_ERR_CNT	0xD0
-> +#define OTHER_CE_ERR_LEN	0xD1
-> +#define OTHER_CE_ERR_DATA	0xD2
-> +#define OTHER_UE_ERR_CNT	0xD8
-> +#define OTHER_UE_ERR_LEN	0xD9
-> +#define OTHER_UE_ERR_DATA	0xDA
-> +
-> +/* Event Data Registers */
-> +#define VRD_WARN_FAULT_EVENT_DATA	0x78
-> +#define VRD_HOT_EVENT_DATA		0x79
-> +#define DIMM_HOT_EVENT_DATA		0x7A
-> +
-> +#define MAX_READ_BLOCK_LENGTH	48
-> +
-> +#define RAS_SMPRO_ERR		0
-> +#define RAS_PMPRO_ERR		1
-> +
-> +enum RAS_48BYTES_ERR_TYPES {
-> +	CORE_CE_ERR,
-> +	CORE_UE_ERR,
-> +	MEM_CE_ERR,
-> +	MEM_UE_ERR,
-> +	PCIE_CE_ERR,
-> +	PCIE_UE_ERR,
-> +	OTHER_CE_ERR,
-> +	OTHER_UE_ERR,
-> +	NUM_48BYTES_ERR_TYPE,
-> +};
-> +
-> +struct smpro_error_hdr {
-> +	u8 count;	/* Number of the RAS errors */
-> +	u8 len;		/* Number of data bytes */
-> +	u8 data;	/* Start of 48-byte data */
-> +	u8 max_cnt;	/* Max num of errors */
-> +};
-> +
-> +/*
-> + * Included Address of registers to get Count, Length of data and Data
-> + * of the 48 bytes error data
-> + */
-> +static struct smpro_error_hdr smpro_error_table[] = {
-> +	[CORE_CE_ERR] = {
-> +		.count = CORE_CE_ERR_CNT,
-> +		.len = CORE_CE_ERR_LEN,
-> +		.data = CORE_CE_ERR_DATA,
-> +		.max_cnt = 32
-> +	},
-> +	[CORE_UE_ERR] = {
-> +		.count = CORE_UE_ERR_CNT,
-> +		.len = CORE_UE_ERR_LEN,
-> +		.data = CORE_UE_ERR_DATA,
-> +		.max_cnt = 32
-> +	},
-> +	[MEM_CE_ERR] = {
-> +		.count = MEM_CE_ERR_CNT,
-> +		.len = MEM_CE_ERR_LEN,
-> +		.data = MEM_CE_ERR_DATA,
-> +		.max_cnt = 16
-> +	},
-> +	[MEM_UE_ERR] = {
-> +		.count = MEM_UE_ERR_CNT,
-> +		.len = MEM_UE_ERR_LEN,
-> +		.data = MEM_UE_ERR_DATA,
-> +		.max_cnt = 16
-> +	},
-> +	[PCIE_CE_ERR] = {
-> +		.count = PCIE_CE_ERR_CNT,
-> +		.len = PCIE_CE_ERR_LEN,
-> +		.data = PCIE_CE_ERR_DATA,
-> +		.max_cnt = 96
-> +	},
-> +	[PCIE_UE_ERR] = {
-> +		.count = PCIE_UE_ERR_CNT,
-> +		.len = PCIE_UE_ERR_LEN,
-> +		.data = PCIE_UE_ERR_DATA,
-> +		.max_cnt = 96
-> +	},
-> +	[OTHER_CE_ERR] = {
-> +		.count = OTHER_CE_ERR_CNT,
-> +		.len = OTHER_CE_ERR_LEN,
-> +		.data = OTHER_CE_ERR_DATA,
-> +		.max_cnt = 8
-> +	},
-> +	[OTHER_UE_ERR] = {
-> +		.count = OTHER_UE_ERR_CNT,
-> +		.len = OTHER_UE_ERR_LEN,
-> +		.data = OTHER_UE_ERR_DATA,
-> +		.max_cnt = 8
-> +	},
-> +};
-> +
-> +/*
-> + * List of SCP registers which are used to get
-> + * one type of RAS Internal errors.
-> + */
-> +struct smpro_int_error_hdr {
-> +	u8 type;
-> +	u8 info_l;
-> +	u8 info_h;
-> +	u8 data_l;
-> +	u8 data_h;
-> +	u8 warn_l;
-> +	u8 warn_h;
-> +};
-> +
-> +static struct smpro_int_error_hdr list_smpro_int_error_hdr[] = {
-> +	[RAS_SMPRO_ERR] = {
-> +		.type = ERR_SMPRO_TYPE,
-> +		.info_l = ERR_SMPRO_INFO_LO,
-> +		.info_h = ERR_SMPRO_INFO_HI,
-> +		.data_l = ERR_SMPRO_DATA_LO,
-> +		.data_h = ERR_SMPRO_DATA_HI,
-> +		.warn_l = WARN_SMPRO_INFO_LO,
-> +		.warn_h = WARN_SMPRO_INFO_HI,
-> +	},
-> +	[RAS_PMPRO_ERR] = {
-> +		.type = ERR_PMPRO_TYPE,
-> +		.info_l = ERR_PMPRO_INFO_LO,
-> +		.info_h = ERR_PMPRO_INFO_HI,
-> +		.data_l = ERR_PMPRO_DATA_LO,
-> +		.data_h = ERR_PMPRO_DATA_HI,
-> +		.warn_l = WARN_PMPRO_INFO_LO,
-> +		.warn_h = WARN_PMPRO_INFO_HI,
-> +	},
-> +};
-> +
-> +struct smpro_errmon {
-> +	struct regmap *regmap;
-> +};
-> +
-> +enum EVENT_TYPES {
-> +	VRD_WARN_FAULT_EVENT,
-> +	VRD_HOT_EVENT,
-> +	DIMM_HOT_EVENT,
-> +	NUM_EVENTS_TYPE,
-> +};
-> +
-> +/* Included Address of event source and data registers */
-> +static u8 smpro_event_table[NUM_EVENTS_TYPE] = {
-> +	VRD_WARN_FAULT_EVENT_DATA,
-> +	VRD_HOT_EVENT_DATA,
-> +	DIMM_HOT_EVENT_DATA,
-> +};
-> +
-> +static ssize_t smpro_event_data_read(struct device *dev,
-> +				     struct device_attribute *da, char *buf,
-> +				     int channel)
-> +{
-> +	struct smpro_errmon *errmon = dev_get_drvdata(dev);
-> +	s32 event_data;
-> +	int ret;
-> +
-> +	ret = regmap_read(errmon->regmap, smpro_event_table[channel], &event_data);
-> +	if (ret)
-> +		return ret;
-> +	/* Clear event after read */
-> +	if (event_data != 0)
-> +		regmap_write(errmon->regmap, smpro_event_table[channel], event_data);
-> +
-> +	return sysfs_emit(buf, "%04x\n", event_data);
-> +}
-> +
-> +static ssize_t smpro_overflow_data_read(struct device *dev, struct device_attribute *da,
-> +					char *buf, int channel)
-> +{
-> +	struct smpro_errmon *errmon = dev_get_drvdata(dev);
-> +	struct smpro_error_hdr *err_info;
-> +	s32 err_count;
-> +	int ret;
-> +
-> +	err_info = &smpro_error_table[channel];
-> +
-> +	ret = regmap_read(errmon->regmap, err_info->count, &err_count);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Bit 8 indicates the overflow status */
-> +	return sysfs_emit(buf, "%d\n", (err_count & BIT(8)) ? 1 : 0);
-> +}
+>  #define DELL_DDV_SUPPORTED_INTERFACE 2
+> @@ -52,7 +53,8 @@ enum dell_ddv_method {
+> 
+>  struct dell_wmi_ddv_data {
+>  	struct acpi_battery_hook hook;
+> -	struct device_attribute temp_attr, eppid_attr;
+> +	struct device_attribute temp_attr;
+> +	struct device_attribute eppid_attr;
+>  	struct wmi_device *wdev;
+>  };
+> 
+> @@ -153,8 +155,9 @@ static int dell_wmi_ddv_query_string(struct wmi_device *wdev, enum dell_ddv_meth
+> 
+>  static int dell_wmi_ddv_battery_index(struct acpi_device *acpi_dev, u32 *index)
+>  {
+> -	const char *uid_str = acpi_device_uid(acpi_dev);
+> +	const char *uid_str;
+> 
+> +	uid_str = acpi_device_uid(acpi_dev);
+>  	if (!uid_str)
+>  		return -ENODEV;
+> 
+> --
+> 2.30.2
+> 
 
-Where is the Documentation/ABI/ entry for this field?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Please put that in the same commit so that it is easier to validate that
-you really did document everything properly.
 
-thanks,
-
-greg k-h
