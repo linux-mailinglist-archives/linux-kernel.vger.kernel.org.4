@@ -2,77 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08EF5EF096
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C71725EF09A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235564AbiI2IfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
+        id S235573AbiI2IgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234979AbiI2IfV (ORCPT
+        with ESMTP id S234979AbiI2IgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:35:21 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C3B301;
-        Thu, 29 Sep 2022 01:35:20 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id s18so369640ilj.5;
-        Thu, 29 Sep 2022 01:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=E5jCIqVqd7pvYDtG0r+uLFgxCDJIxgPYc2lxuyAfNlA=;
-        b=ZX02V6lCNRADn+rx87YVjRd6Cz5GeFcNOEhnuU9d55JDk0Sr1DQv/Bd8LdmKdIS0a1
-         mAy1Km4LXBQuCckgn+YakE1TriOqkuJNE8IYxwzNFaovgNyJgzDp9j6a1fTXGEcvn81V
-         PaLP+qDyFDhGIXlJGrSUxDZI9KbbjPde/ReX5YdwjBDutVaT1tUB6+uZcZHLIQKVScKY
-         59C4nT1Eih6xaozyv4u4efDgkCO3363PXp+Rv/ROqLKXgLjRfjxykFREC+XXjRJISZCK
-         47e2pVchck0cIc9gYU3PLv9Vg2YM7rG6BMSlumY/YiRza4OyPqnihANIn62sbI8PJLFb
-         4cZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=E5jCIqVqd7pvYDtG0r+uLFgxCDJIxgPYc2lxuyAfNlA=;
-        b=e7BYQHiO2QeG9zXxnSg3Vm5obMoG1Om6vMvinLJ/vfPduZ1UKIR+1nuJb4ZvGwincB
-         8yo1gkerit7gdLCNAnPNSeykfIPlIz6BWxF8V4IAGIE6xGq3Vb5oAstDwgV2O6+9teMo
-         xzb8d8we+Yl3GLhyB9Crkq0ihg/YwOoUQMuPZbpuIncwfY7AEoBMVo+Vs8v7s1fRSK9h
-         0JhRZpf17cFW3ITi2pkIsD2ubSikq3vcUHnXEQe2h09Y8f7ydE7j1wGH4txUiIIX6PrB
-         SK793CqO7kQFKqQAN7wLIloIrp+Gv8s+QT32xICun9/DFM8A40GszoMl2ZIh/PVO6inO
-         pqUA==
-X-Gm-Message-State: ACrzQf3gNe8T4H/2sOmXxW5ubAz1o8WR0IGSquVWgavmc38qbfP9mrgZ
-        4K06dnPn66NN647P938/iymCQ5TSWy4t6lSIVNc=
-X-Google-Smtp-Source: AMsMyM4O0xU7vZmBhDQxjK4qWrV9ddJm0DoD2VN+pbMvC/xEsSpubeMXTMxAQIW+wf+8SAjyJzftLCgRiCVhkwttaWI=
-X-Received: by 2002:a05:6e02:6c9:b0:2f6:40e0:ab8d with SMTP id
- p9-20020a056e0206c900b002f640e0ab8dmr1002289ils.259.1664440519705; Thu, 29
- Sep 2022 01:35:19 -0700 (PDT)
+        Thu, 29 Sep 2022 04:36:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE4BB1E4;
+        Thu, 29 Sep 2022 01:36:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58A28B823C0;
+        Thu, 29 Sep 2022 08:36:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC2E9C433C1;
+        Thu, 29 Sep 2022 08:36:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664440565;
+        bh=IWwdb6bfrNTHaSDjZf5Zq6LcjfEfOxyQQ8/I4mwHavo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ijdINw9nLYF2UOHTUk5P4A3xkIU5T+G0Y1Ktvgt0izJmndOK29JzovTOV5PM4gH99
+         hjBSqpO55R53I6FpRHEDFV54A0OrUFwuJfdlQYXgHqF4KfGkQcNRFmfNjQvS+4DdFB
+         wDs6VlbWjiXWhyDpOQHrQxiZgee6Vs7C40yJZD2hjkRqzNTCdxlM8URmS8XtIfOtOY
+         o2WKoH1u49PXWBBdOMM7VVgKHUAYWzMxFC/zjvTVlDVnEoM6aPTRnj4a8ZQmwC6Y9G
+         rEpFGREjf3tTItKnxD/3CtHTtJ25Eavftnd9L4JPOCeIPBFEhG3nVCzoYQLinnK9kB
+         NPt5j8HJojq9A==
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Johan Hovold <johan+linaro@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v3 0/2] PCI: qcom: Drop unused post_deinit callback
+Date:   Thu, 29 Sep 2022 10:35:59 +0200
+Message-Id: <166444053875.166182.16168492318251008339.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220928155421.21660-1-johan+linaro@kernel.org>
+References: <20220928155421.21660-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-References: <20220928040058.37422-1-khalid.masum.92@gmail.com> <be928578-6453-5cf1-32da-322aebe2cee5@gmail.com>
-In-Reply-To: <be928578-6453-5cf1-32da-322aebe2cee5@gmail.com>
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-Date:   Thu, 29 Sep 2022 14:35:08 +0600
-Message-ID: <CAABMjtGkn=WjtC-vrcrwJaEcESBT3PVEZmUjPMsYD_+zdma-aQ@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: Kunit: Use full path to .kunitconfig
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        "sadiyakazi@google.com" <sadiyakazi@google.com>,
-        David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Wed, 28 Sep 2022 17:54:19 +0200, Johan Hovold wrote:
+> This series drops the badly named post_deinit callback which is unused
+> after merging the PIPE clock series. Included is also a related
+> error-label cleanup.
+> 
+> Since the modular driver patch is held off for a while still, I've
+> rebased these cleanups so that they might make it into 6.1.
+> 
+> [...]
 
-Thanks for reviewing. I shall send a v2 with the suggested changes.
+Applied to pci/qcom, thanks!
+
+[1/2] PCI: qcom: Drop unused post_deinit callback
+      https://git.kernel.org/lpieralisi/pci/c/b623023225ab
+[2/2] PCI: qcom: Rename host-init error label
+      https://git.kernel.org/lpieralisi/pci/c/0e4d9a5cc767
 
 Thanks,
- -- Khalid Masum
+Lorenzo
