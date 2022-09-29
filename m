@@ -2,81 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA835EFFF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 00:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1019C5EFFFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 00:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiI2WQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 18:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
+        id S229759AbiI2WRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 18:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiI2WQ3 (ORCPT
+        with ESMTP id S229457AbiI2WRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 18:16:29 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44A1FCA6D
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 15:16:27 -0700 (PDT)
-Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 28TMGQK1040782;
-        Fri, 30 Sep 2022 07:16:26 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav119.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp);
- Fri, 30 Sep 2022 07:16:26 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 28TMGPbe040774
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 30 Sep 2022 07:16:25 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <b4979f46-89e4-e0bd-e0f5-0754169ad4bb@I-love.SAKURA.ne.jp>
-Date:   Fri, 30 Sep 2022 07:16:23 +0900
+        Thu, 29 Sep 2022 18:17:38 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE10FCA6D;
+        Thu, 29 Sep 2022 15:17:37 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:56266)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oe1qa-002lKm-T6; Thu, 29 Sep 2022 16:17:36 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:57822 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oe1qY-000QBy-Up; Thu, 29 Sep 2022 16:17:35 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220929203903.9475-1-lukas.bulwahn@gmail.com>
+Date:   Thu, 29 Sep 2022 17:17:28 -0500
+In-Reply-To: <20220929203903.9475-1-lukas.bulwahn@gmail.com> (Lukas Bulwahn's
+        message of "Thu, 29 Sep 2022 22:39:03 +0200")
+Message-ID: <87tu4p3jwn.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 5.19 000/207] 5.19.12-rc1 review
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Johannes Berg <johannes.berg@intel.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <20220926100806.522017616@linuxfoundation.org>
- <CA+G9fYtxogp--B0Em6VCL0C3wwVFXa6xW-Rq2kQk3br+FPGLgg@mail.gmail.com>
- <YzKyIfQUq9eRbomG@kroah.com>
- <CA+G9fYu1L_qwCQ9x0FukJ=0J5sg5z0ttejT9BT_bPAgCEtmAnQ@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <CA+G9fYu1L_qwCQ9x0FukJ=0J5sg5z0ttejT9BT_bPAgCEtmAnQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oe1qY-000QBy-Up;;;mid=<87tu4p3jwn.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19PmXCMvq3dJ4UVR1Zc7W458rz2Nb6AWpM=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Lukas Bulwahn <lukas.bulwahn@gmail.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 377 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 9 (2.4%), b_tie_ro: 8 (2.0%), parse: 0.75 (0.2%),
+        extract_message_metadata: 11 (2.8%), get_uri_detail_list: 0.98 (0.3%),
+        tests_pri_-1000: 13 (3.4%), tests_pri_-950: 1.24 (0.3%),
+        tests_pri_-900: 0.97 (0.3%), tests_pri_-90: 171 (45.3%), check_bayes:
+        169 (44.9%), b_tokenize: 5 (1.4%), b_tok_get_all: 5 (1.5%),
+        b_comp_prob: 2.8 (0.8%), b_tok_touch_all: 152 (40.4%), b_finish: 0.95
+        (0.3%), tests_pri_0: 160 (42.4%), check_dkim_signature: 0.50 (0.1%),
+        check_dkim_adsp: 2.8 (0.8%), poll_dns_idle: 0.92 (0.2%), tests_pri_10:
+        2.0 (0.5%), tests_pri_500: 7 (1.7%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] binfmt: remove taso from linux_binprm struct
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/09/30 0:43, Naresh Kamboju wrote:
-> Anders bisected this reported problem [1] and found this commit caused
-> deadlock on all arm64 devices.
-> 
->> Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
->>     workqueue: don't skip lockdep work dependency in cancel_work_sync()
+Lukas Bulwahn <lukas.bulwahn@gmail.com> writes:
 
-My patch itself is correct; just started reporting possibility of deadlock.
-You will see several reports like this, but that is an expected result.
+> With commit 987f20a9dcce ("a.out: Remove the a.out implementation"), the
+> use of the special taso flag for alpha architectures in the linux_binprm
+> struct is gone.
+>
+> Remove the definition of taso in the linux_binprm struct.
+>
+> No functional change.
 
-> 
-> 
-> [1] https://lore.kernel.org/stable/CA+G9fYtxogp--B0Em6VCL0C3wwVFXa6xW-Rq2kQk3br+FPGLgg@mail.gmail.com/
+Reviewed-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-The line which causes this report will be removed by commit bb87672562f871ed
-("Bluetooth: Remove update_scan hci_request dependancy").
+Alphas binfmt_loader is the only use I can find of that variable
+so let's kill it as well.
 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+> Kees, please pick this patch on top of the commit above.
+>
+>  include/linux/binfmts.h | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
+> index 3dc20c4f394c..8d51f69f9f5e 100644
+> --- a/include/linux/binfmts.h
+> +++ b/include/linux/binfmts.h
+> @@ -43,9 +43,6 @@ struct linux_binprm {
+>  		 * original userspace.
+>  		 */
+>  		point_of_no_return:1;
+> -#ifdef __alpha__
+> -	unsigned int taso:1;
+> -#endif
+>  	struct file *executable; /* Executable to pass to the interpreter */
+>  	struct file *interpreter;
+>  	struct file *file;
