@@ -2,160 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1295F014E
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 01:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0BD5F0154
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 01:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbiI2XVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 19:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48444 "EHLO
+        id S229652AbiI2XW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 19:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiI2XVM (ORCPT
+        with ESMTP id S229451AbiI2XW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 19:21:12 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBC51332D7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:21:10 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id dv25so5740669ejb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:21:10 -0700 (PDT)
+        Thu, 29 Sep 2022 19:22:27 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C4D13D1CE
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:22:24 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so2720431pjk.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:22:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=1Lm6VXmur+/4daoRRpAM76RIHFiAfUBxz6IdDWHuOY4=;
-        b=opHQOs3rn9EzBtb48ioD7yF3uif3JGhopAZuZ0xk3StZfZoWRuXDIFEccK1DuKuycm
-         CIj+XSdBVrmYkE/vF5GZIQjvVJS9zjADbj0bSCaBow/jJl4AG1RcnZ0YaO5nq6y2zTPu
-         WjJAJPc6YiyAp9SAtma5yabZkfBxCoVt3BLnR5HSULHrpYa8qoK3fB9M4rF8gPFECRe8
-         7jWmcgu7VZipwYA5GHytA3kKji4AklimVGYrbMvD3kqurfh0lwEq8xI2NaWv+I6go+Xq
-         cxMpv8H6bD5u4mRCQMgmxG8wZx4U/mYlfrsLojDKokJL4/Djrx0ckT6iB184vZdoxcSB
-         kIVA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=SlBvqIbtpL0VufXgwK7uhVH38JuonCmEli0InnRVEwc=;
+        b=WuAt0WRwYyROULHsLoKuJv2kXZVaCxvv5se5SYxucmOEgMFUNx2D57LgdDwCei2x1H
+         BHZJk6cnqMJ9lpHSGjIAQZn0y8BmTQuG82WIZcNgoFeD7LG4pqgoDjfwNUvpxX0kJLxv
+         Dw+WsZzJyUYdaQkT0re+VcE6b51zajqB6Pihs0d5Dm06lt/3y15zlDRlEVhaJYcITjqq
+         kxupICcV/19shZioX2psCPJiZdpZ4ysq5/1T3jM0Xx0pSi+GIDFyiPzVO05s6m98CDTT
+         tOo/5JDD8RVKU0DNuMgu6l56RXQ8C5tSDlMssCXWcmrz1Q8KJiW+10QJLFQH8nbm/WCu
+         b7Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1Lm6VXmur+/4daoRRpAM76RIHFiAfUBxz6IdDWHuOY4=;
-        b=b7CkPPyA3U/U+Jf0x3P8RhvzT8664BOskOFR7TBKgGYDl8r/UEDaoWIu8tRygdIsVO
-         EnfXP633R6FLoEsD2oDmhoo5PIVs3wWUWAwAUcbgai7vDoJRX102ah/sU1LhoJmWGbCP
-         gSdd29rPEyKuyrd0zhk0jL0RhhRy9RFASnd4w++m+7sZ5NlBtLHlWhqxWdYg3uNimhNz
-         mMENTA0fx9sQ8sz4vwT1w5XKm5EmZK7kS9CBTDofjdt6FXuNRypeiP4KXtTSgOwezXUh
-         m4AkW3qcqIDyxYUfggqS5cPLo+RJSEgMqow9JRVrZkRandbRjeVTHVJ+c0dg6wwsr5PM
-         g/lg==
-X-Gm-Message-State: ACrzQf3GKfje1IqJwvusEztgMPVzy6TLG/PfiEdqJ8mAUxZ7Hc7WREfs
-        X1Fvs089XiGQfgX5hIFbsoqD7x4gCAHXzFBu6sujAw==
-X-Google-Smtp-Source: AMsMyM7ou8R3GEJ4wdix9XuO7815aqFuta7V8VxGDSDUNoMGXaeSv+fUTi446omoon3NurqNc7oupYDZ18/IS4jZtmY=
-X-Received: by 2002:a17:907:e93:b0:782:da6:8c47 with SMTP id
- ho19-20020a1709070e9300b007820da68c47mr4501522ejc.741.1664493668489; Thu, 29
- Sep 2022 16:21:08 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=SlBvqIbtpL0VufXgwK7uhVH38JuonCmEli0InnRVEwc=;
+        b=JSwKqIR/QnT7aTnjYI0v0NftCleMgtRwSOMXOcIi6ZyWejcZ0Qkwb8Dn2fLQkuN3Mp
+         AiGgxTC9re5i2YJ5nYqW0HuwWESvUBUZnkZeuhr6l7G9prN+AzxrRSiI0u9zwQ3WGLfw
+         LBVCbLz+sHxlE9bYNou6IGzsCb4g2IGvAyl7uSSF1ynzfdwxRDZmj+CjI8QXsLRnG3sZ
+         fDch4LmA9CsS6uXu9rLYa/ONgsgRt1vZfkP7314E6bUu3jhw2RwRDm6O/tiby4PUUTKT
+         I0tQwlGb0BJEwbksM2++8jhns85huc4Jnm5ibi7IcpZ//y+w+7FSftrYWDia9aYXD9MC
+         cYdQ==
+X-Gm-Message-State: ACrzQf3yG4jJ5Z4jV7llkvOfgmk5DpUx4KrCGWgvNmFxSG6j7X+mRwkT
+        QIiXRJXHHnTp+TcCDj1oJYXa25yhNCDz0A==
+X-Google-Smtp-Source: AMsMyM75zZcPQQjlBQckiGdn+LExa+Ehm1TbE+ovPavYyibrIT8X85CNF5p+NDaTg0PkeD+6UnKilA==
+X-Received: by 2002:a17:90b:1d81:b0:205:f381:7372 with SMTP id pf1-20020a17090b1d8100b00205f3817372mr11503541pjb.165.1664493743484;
+        Thu, 29 Sep 2022 16:22:23 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id g11-20020a17090a290b00b001f319e9b9e5sm4062149pjd.16.2022.09.29.16.22.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 16:22:22 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 23:22:19 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 2/8] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <YzYoq/4AcWGS/noD@google.com>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-3-chao.p.peng@linux.intel.com>
+ <20220929224516.GA2260388@ls.amr.corp.intel.com>
 MIME-Version: 1.0
-References: <20220708013955.2340449-1-tanmay.shah@amd.com> <20220708013955.2340449-7-tanmay.shah@amd.com>
- <20220901202517.GB626605@p14s> <d1cfa787-9f8e-fe8a-d816-0bd8c3a3244d@amd.com>
- <20220929172200.GB3107608@p14s> <fa91ce5a-8c7e-850a-eede-1f6a61a3d651@amd.com>
-In-Reply-To: <fa91ce5a-8c7e-850a-eede-1f6a61a3d651@amd.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Thu, 29 Sep 2022 17:20:56 -0600
-Message-ID: <CANLsYkzG6REdGepd8pxH7bLWVLSEW_RJDaSmLqAMnGKPR_We4w@mail.gmail.com>
-Subject: Re: [PATCH v9 6/6] drivers: remoteproc: Add Xilinx r5 remoteproc driver
-To:     Tanmay Shah <tanmays@amd.com>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, michal.simek@xilinx.com,
-        ben.levinsky@xilinx.com, tanmay.shah@xilinx.com,
-        michal.simek@amd.com, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929224516.GA2260388@ls.amr.corp.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sept 2022 at 13:28, Tanmay Shah <tanmays@amd.com> wrote:
->
-> Thanks Mathieu.
->
-> Also, I see that last few revisions I have changed driver a lot based on
-> comments, but documentation in driver is not in sync.
->
-> I know we agreed initially, that I will address changes _only_ commented
-> in previous revision. However, in next revision I would like
->
-> to fix documentation all over the driver along with your comments. I
-> hope it's fine and I wanted to give you heads up so we stay on same page.
+On Thu, Sep 29, 2022, Isaku Yamahata wrote:
+> On Thu, Sep 15, 2022 at 10:29:07PM +0800,
+> Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> > @@ -4645,14 +4672,20 @@ static long kvm_vm_ioctl(struct file *filp,
+> >  		break;
+> >  	}
+> >  	case KVM_SET_USER_MEMORY_REGION: {
+> > -		struct kvm_userspace_memory_region kvm_userspace_mem;
+> > +		struct kvm_user_mem_region mem;
+> > +		unsigned long size = sizeof(struct kvm_userspace_memory_region);
+> > +
+> > +		kvm_sanity_check_user_mem_region_alias();
+> >  
+> >  		r = -EFAULT;
+> > -		if (copy_from_user(&kvm_userspace_mem, argp,
+> > -						sizeof(kvm_userspace_mem)))
+> > +		if (copy_from_user(&mem, argp, size);
+> > +			goto out;
+> > +
+> > +		r = -EINVAL;
+> > +		if (mem.flags & KVM_MEM_PRIVATE)
+> >  			goto out;
+> 
+> Nit:  It's better to check if padding is zero.  Maybe rename it to reserved.
+> 
+> +               if (mem.pad1 || memchr_inv(mem.pad2, 0, sizeof(mem.pad2)))
+> +                       goto out;
 
-I'm fine with that.  Thanks for the heads up.
+No need, KVM has more or less settled on using flags instead "reserving" bytes.
+E.g. if/when another fancy feature comes along, we'll add another KVM_MEM_XYZ
+and only consume the relevant fields when the flag is set.  Reserving bytes
+doesn't work very well because it assumes that '0' is an invalid value, e.g. if
+the future expansion is for a non-private file descriptor, then we'd need a new
+flag even if KVM reserved bytes since fd=0 is valid.
 
->
-> Thanks,
->
-> Tanmay
->
-> On 9/29/22 10:22 AM, Mathieu Poirier wrote:
-> > On Mon, Sep 26, 2022 at 03:02:22PM -0700, Tanmay Shah wrote:
-> >> On 9/1/22 1:25 PM, Mathieu Poirier wrote:
-> >>> On Thu, Jul 07, 2022 at 06:39:55PM -0700, Tanmay Shah wrote:
-> >> [ ... ]
-> >>>> --- /dev/null
-> >>>> +++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
-> >>>> @@ -0,0 +1,1055 @@
-> >>>> +// SPDX-License-Identifier: GPL-2.0
-> >> Hi Mathieu,
-> >>
-> >> I tried to fix SPDX-License-Identifier to GPL (same as MODULE_LICENSE
-> >> below), However checkpatch.pl reports this as following warning:
-> >>
-> >> "WARNING: 'SPDX-License-Identifier: GPL' is not supported in LICENSES/..."
-> >>
-> >> I see that GPL-1.0 is under LICENSE/deprecated directory.
-> >>
-> >>>> +/*
-> >>>> + * ZynqMP R5 Remote Processor driver
-> >>>> + *
-> >>>> + */
-> >>>> +
-> >>>> +#include <dt-bindings/power/xlnx-zynqmp-power.h>
-> >> [ ... ]
-> >>
-> >>>> +MODULE_DEVICE_TABLE(of, zynqmp_r5_remoteproc_match);
-> >>>> +
-> >>>> +static struct platform_driver zynqmp_r5_remoteproc_driver = {
-> >>>> +  .probe = zynqmp_r5_remoteproc_probe,
-> >>>> +  .driver = {
-> >>>> +          .name = "zynqmp_r5_remoteproc",
-> >>>> +          .of_match_table = zynqmp_r5_remoteproc_match,
-> >>>> +  },
-> >>>> +};
-> >>>> +module_platform_driver(zynqmp_r5_remoteproc_driver);
-> >>>> +
-> >>>> +MODULE_DESCRIPTION("Xilinx R5F remote processor driver");
-> >>>> +MODULE_AUTHOR("Xilinx Inc.");
-> >>>> +MODULE_LICENSE("GPL");
-> >>> There is a discrepency between the GPL-2.0 in the SPDS identifier and the above.
-> >> Also, changing to MODULE_LICENSE("GPL v2") gives following warning:
-> >>
-> >> WARNING: Prefer "GPL" over "GPL v2" - see commit bf7fbeeae6db ("module: Cure
-> >> the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
-> >> #1115: FILE: drivers/remoteproc/xlnx_r5_remoteproc.c:1034:
-> >> +MODULE_LICENSE("GPL v2");
-> >>
-> >> So, It looks like SPDX-License-Identifier should be GPL-2.0-only and
-> >> MODULE_LICENSE should be change to "GPL".
-> > Commit bf7fbeeae6db is an interesting read - thanks for pointing it out.
-> >
-> >> It this ok? Any other suggestions ?
-> > What you have looks good, in that regard there is no need to change anything
-> > from your patch.
-> >
-> >> Thanks,
-> >>
-> >> Tanmay
-> >>
-> >>> More comments tomorrow or Tuesday.
-> >>>
-> >>> Thanks,
-> >>> Mathieu
-> >>>
-> >>>> --
-> >>>> 2.25.1
-> >>>>
+The only reason to bother with pad2[14] at this time is to avoid having to define
+yet another struct if/when the struct needs to expand again.  The struct definition
+will still need to be changed, but at least we won't end up with struct
+kvm_userspace_memory_region_really_extended.
