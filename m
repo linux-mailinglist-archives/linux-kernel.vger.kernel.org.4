@@ -2,122 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BD55EF95B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0572F5EF959
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235694AbiI2Pot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
+        id S236003AbiI2Pom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235821AbiI2PoT (ORCPT
+        with ESMTP id S235731AbiI2PoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:44:19 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFD9286C7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:43:15 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id e68so1806533pfe.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:43:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=b7VI/lNtki3zEef+0LBeBHdkR7jGYNMrvxJja3PqG/c=;
-        b=Vzksrx3sniIo56OPl72BWHlU0/Df8j/JQCbDZvy1EGrf7kGm7B2aiZfENf5gW44D/J
-         gI9Z0IM1eNvyuoepwUgJtEreELCtd/Yi97PNwccOEhM6E0notm+GqKPkHLkR9oYsyKb8
-         Yoq/pleXGN8k4RyGciZfN2tWjdiAPNPkdJ0GRF8seENVYF2FOicZ45TlpxCNGouCgsOp
-         P0XmWHkJpwHysnW3nZxveeGX+rb2ESXrOcsYARReYp7X/HAFCqXhQu1KdtVjt8W5CRIo
-         QDL3OSbkonYl6GqgtkUeoFLMwgh1qC0e+3cPxCbPucD2iWViRSqwTxmu6i6Uq7X8iEVv
-         wfYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=b7VI/lNtki3zEef+0LBeBHdkR7jGYNMrvxJja3PqG/c=;
-        b=suS0+avmrs9uo4KwQrs4A4qBzdnENwssthIeNEZKPG85G6bMFKJtPbg08gkNnv3mBM
-         Fav7sC/qigRl7KwKFp1Kc4VgbCG2mu2yTxVZeEjb39CKAD/s/Q4rdm03fYSLSl81qtOe
-         PqeRgh2/ha0YCAkyS0QtvVshroZ5hwS4PABsoll1whWYL/uGeyYqX2V+yjr3fLWlUbtu
-         9dCLwEtqWBAjxh9IZq9xrQbmIACLG7kzOTTneNKO4QWf1xm5KB1ea2uXyYhHq8rdZ4Fi
-         9LKulkO/3Nky5tq0hVK4S1opfzJHZ4dr4n1pEqVPLgjJBMuR8bOQdzU00tcPrCTLkE7s
-         1WZQ==
-X-Gm-Message-State: ACrzQf1bjRtgKmJ9eFtLJyhtCRKl3u99nHe5hZh2N+gRq4TCWvSKUIhB
-        Ija9Wz6MEOwXYJqBNO3bpW/7mQ==
-X-Google-Smtp-Source: AMsMyM5rOGzlC007WW3U9p2PPqvx0IpfKhVuFQ42vcDUakNLelXGGyhbF2WyHTattavi5pSMM7s+ng==
-X-Received: by 2002:a05:6a00:1412:b0:557:d887:2025 with SMTP id l18-20020a056a00141200b00557d8872025mr4076191pfu.39.1664466194646;
-        Thu, 29 Sep 2022 08:43:14 -0700 (PDT)
-Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
-        by smtp.gmail.com with ESMTPSA id z3-20020a170903018300b001768452d4d7sm56745plg.14.2022.09.29.08.43.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 08:43:14 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 08:43:12 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Hans Schultz <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kselftest@vger.kernel.org,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>,
-        bridge@lists.linux-foundation.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Jiri Pirko <jiri@resnulli.us>, Amit Cohen <amcohen@nvidia.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>
-Subject: Re: [Bridge] [PATCH iproute2-next 2/2] bridge: fdb: enable FDB
- blackhole feature
-Message-ID: <20220929084312.2a216698@hermes.local>
-In-Reply-To: <20220929152137.167626-2-netdev@kapio-technology.com>
-References: <20220929152137.167626-1-netdev@kapio-technology.com>
-        <20220929152137.167626-2-netdev@kapio-technology.com>
+        Thu, 29 Sep 2022 11:44:13 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570471BB23C
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:43:18 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 8670721905;
+        Thu, 29 Sep 2022 15:43:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664466196; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zAcEDAeXByKAJJXb2Hk5mUl7jEDvdCepq+Gn9p2xl/A=;
+        b=ivB8DCvTah53CyexdRyV+LMZXNXZxkigoTAJzwuISaWXWL5llmLSefpYy2QdF4QmikzsUJ
+        r/BjX9Rwk8P1aQhGc5bBOdAySNAipqeQDT+rssG5P9yvYdt3GyrNMHn81lZ+D6JJ0HXNHf
+        3M3lDb82adqCVtrhQXwepAJnw8JkDdw=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 341DE2C14E;
+        Thu, 29 Sep 2022 15:43:16 +0000 (UTC)
+Date:   Thu, 29 Sep 2022 17:43:15 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk 06/18] printk: Protect [un]register_console() with
+ a mutex
+Message-ID: <YzW9ExRVjv6PzvWR@alley>
+References: <20220924000454.3319186-1-john.ogness@linutronix.de>
+ <20220924000454.3319186-7-john.ogness@linutronix.de>
+ <YzMT27FVllY3u05k@alley>
+ <87mtajkqvu.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87mtajkqvu.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sep 2022 17:21:37 +0200
-Hans Schultz <netdev@kapio-technology.com> wrote:
+On Thu 2022-09-29 01:48:29, John Ogness wrote:
+> On 2022-09-27, Petr Mladek <pmladek@suse.com> wrote:
+> > Hmm, the new mutex is really nasty. It has very strange semantic.
+> > It makes the locking even more complicated.
+> 
+> We are working to replace the BKL-console_lock with new separate clearly
+> defined mechanisms.
+>
+> The new mutex provides full synchronization for list changes as well as
+> changes to items of that list. (Really console->flags is the only change
+> to items of the list.)
 
->  
-> @@ -493,6 +496,8 @@ static int fdb_modify(int cmd, int flags, int argc, char **argv)
->  			req.ndm.ndm_flags |= NTF_EXT_LEARNED;
->  		} else if (matches(*argv, "sticky") == 0) {
->  			req.ndm.ndm_flags |= NTF_STICKY;
-> +		} else if (matches(*argv, "blackhole") == 0) {
-> +			ext_flags |= NTF_EXT_BLACKHOLE;
->  		} else {
->  			if (strcmp(*argv, "to") == 0)
->  				NEXT_ARG();
+OK.
 
-The parsing of flags is weird here, most of the flags are compared with strcmp()
-but some use matches()..  I should have used strcmp() all the time; but at the
-time did not realize what kind of confusion matches() can cause.
+
+> For some places in the code it is very clear that the console_lock can
+> be completely replaced (either with srcu or the new mutex). For other
+> places, it is not yet clear why the console_lock is being used and so
+> both console_lock and mutex are used.
+
+One important and tricky location is console_trylock() in
+vprintk_emit(). And the related for_each_console() called from
+console_unlock()->console_flush_all().
+
+It is the legacy mode that tries to print to the consoles immediately.
+I am not sure if we could _ever_ remove this mode.
+
+And it is most likely the main reason why semaphore is used instead
+of a mutex:
+
+    + printk() can be called in atomic context
+
+    + also there is the console_trylock_spinning() trick that allows
+      to transfer the semaphore to another owner without locking.
+
+
+Do you see any RT-friendly solution for the legacy mode, please?
+
+Maybe, an atomic variable (cmpxchg) can be used together with
+the SRCU list. But I am not sure if srcu_read_lock can be
+transferred to another context. Also this would not solve priority
+inversion. Not to say that it might kill SRCU performance on
+the entire system.
+
+
+> > The ideal solution would be take console_lock() here.
+>
+> We should be looking where we can remove console_lock, not identifying
+> new locations to add it.
+
+Yes, we do not want this big kernel lock. Honestly, I am not
+completely sure what is the exact purpose. My guess is that
+console_lock() is used to prevent calling con->write() when
+some internal console driver state is manipulated.
+
+If the above is true then it might be solvable by some
+driver-specific lock. The question is where the lock should
+be. It is possible that it might require adding
+the lock into struct console.
+
+Anyway, some lock will still be needed to synchronize the list.
+But could it be mutex? What about the legacy mode of printk_emit()?
+
+> > A good enough solution might be call this under the later added
+> > srcu_read_lock(&console_srcu) and use for_each_console_srcu().
+> 
+> @console_srcu does not allow safe reading of console->flags. It only
+> provides safe list iteration and reading of immutable fields. The new
+> mutex must be used for reading console->flags.
+> 
+> Note that for the NOBKL consoles (not part of this series), a new atomic
+> state variable is used so that console->flags is not needed. That means
+> for NOBKL consoles the new mutex is further reduced in scope to provide
+> only list synchronization.
+
+Good to know.
+
+> > Or is this part of some strategy to remove console_sem later, please?
+> 
+> Yes! One of the main points of this final phase of the rework is to
+> remove console_sem usage (for NOBKL consoles). If a system is running
+> with only NOBKL consoles registered, ideally that system should never
+> call console_lock()/console_trylock(). Once all drivers have converted
+> over to the NOBKL interface, console_sem will serve no purpose for the
+> printk and console frameworks, so it can be removed.
+
+Is this realistic?
+
+And even if we convert all console drivers then people still might
+want the legacy mode.
+
+My understanding is that some atomic consoles would be real hacks.
+They might be good enough for panic(). But what about running system.
+It seems that people might want the legacy more even on running
+system. Will it be doable with mutex?
+
+
+I am sorry. I was about to answer this mail with "fair enough". But
+then I thought more about it...
+
+I would really like to avoid state where we have two locks (semaphore
+and mutex) serializing the same thing (console list).
+
+Best Regards,
+Petr
