@@ -2,114 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABD35EEAB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 03:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E905EEACF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 03:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233803AbiI2BKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 21:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
+        id S233186AbiI2BQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 21:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233313AbiI2BKu (ORCPT
+        with ESMTP id S229940AbiI2BQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 21:10:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC0AB0B00
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 18:10:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664413847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2btDcA0Eb0Lbvuk+gmwVVQo3+wu4HeJ6n54Ununsy7E=;
-        b=hqNsHXMq9NyJL7OahbLzLF/J1rVmV/QL6GEmiwcjnuWhACWHPfVXlvMSfMu3g04nEPuaUS
-        1VfcYCqx/zjGvoeWCOjrORvclcS8IlRRk19DAvdYz/5fcaDYmSHQC9pDvhJmz5+3+o8Mxd
-        1UOVsrempkzgwlc/PbPWZD2npCpTMsM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-183-XS4IEKxKMMCpFzgb3vguXg-1; Wed, 28 Sep 2022 21:10:42 -0400
-X-MC-Unique: XS4IEKxKMMCpFzgb3vguXg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5C4D980206D;
-        Thu, 29 Sep 2022 01:10:41 +0000 (UTC)
-Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 13B301121315;
-        Thu, 29 Sep 2022 01:10:32 +0000 (UTC)
-Date:   Thu, 29 Sep 2022 09:10:27 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
- exit code
-Message-ID: <YzTwgxX+WMuJyAJy@T590>
-References: <20220914225621.415631-1-bvanassche@acm.org>
- <20220914225621.415631-7-bvanassche@acm.org>
- <YzOe3pYmn5qO9lFb@T590>
- <2acc2220-65dc-4af5-ffd3-997f779d41c0@acm.org>
+        Wed, 28 Sep 2022 21:16:02 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225BB1138E0;
+        Wed, 28 Sep 2022 18:16:02 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id v186so85612pfv.11;
+        Wed, 28 Sep 2022 18:16:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=BU+nDgTp4FzYVpuKCb0JHUgNuGWH3Om1JL3bunVELiE=;
+        b=A0x2qxxd7VgDTwVVmF44TCkowfDAT8LZM/ThFvomS1q6mGKiPpWLuHmLPozdAIQ6bk
+         8DGmPjWUuHqevrxLJRSxTeQz+ghGSlSFzb9V8IjihndL5lzA/gbT/jsLrSKbpIeAlxTM
+         iNvGazSV6E/BTLTq5+jUfMfh153cyZ24zEIaWdFp5eZOEd2HUF9It3wPdSjH4y5Bz7Ly
+         WL8HcE+xScGlqCiG89WS/xvsaTzmdMGBwHXSPtGLqaoQ3VXWo8Ru8wEfkAIOsexx7P0u
+         gn5Xsi7qHkrRcJOjofGsS6C8okv42dPYeXKuzuogvAmGAIkRBWK/JDVYBMJMBI4p93b3
+         ez1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=BU+nDgTp4FzYVpuKCb0JHUgNuGWH3Om1JL3bunVELiE=;
+        b=dYddea3TawRiIGoq617xL/st0pZoailueXuAx14EFbEeiHKgG5gYYrBgC1gaEInNIy
+         my/6Q+CJA8a9SJzggjwMISj8743P2M3YRN4D+YvRqOIVkHd1RJFS9Tag69fftl+42PWr
+         N7cuUcsLWsCWNEvhyKGoQb90ptnRZs5kYmgGOCqES+cddkxyrjyqXOp77ENxyOxVDpdS
+         puijlTpaw7SOP8Ea44vU80/FfWr1E758ytGf4r4/t0cjhVzqtUfm/O7YYv/7Cxs8ugdJ
+         dMSpxI7L8o1QWptqF11wNjLPedVTOedlYtM7DYU5mrRv99P8oveA367dVZDiTIVlbkEu
+         yUlw==
+X-Gm-Message-State: ACrzQf1WMU8gtjSkJmeg6d0+sR18sDPykCGIrUoWWuP/wyG88bfT8wyX
+        PrlB6Vo9WvTcD1RLBlPrwmM=
+X-Google-Smtp-Source: AMsMyM6hjulu0JTSOCybn1i/7qzxsqC/IdkN8d1HzIAGH28CBW+sxxckdBQvuc2a8V8BGBIRzXn/ow==
+X-Received: by 2002:a63:3348:0:b0:439:db24:8b02 with SMTP id z69-20020a633348000000b00439db248b02mr568358pgz.425.1664414161469;
+        Wed, 28 Sep 2022 18:16:01 -0700 (PDT)
+Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:637c:7f23:f348:a9e6])
+        by smtp.gmail.com with ESMTPSA id y16-20020aa78f30000000b00540a3252191sm4737655pfr.28.2022.09.28.18.16.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 18:16:00 -0700 (PDT)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] arm64: dts: exynos: fix polarity of "enable" line of NFC chip
+Date:   Wed, 28 Sep 2022 18:15:55 -0700
+Message-Id: <20220929011557.4165216-1-dmitry.torokhov@gmail.com>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2acc2220-65dc-4af5-ffd3-997f779d41c0@acm.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 12:27:07PM -0700, Bart Van Assche wrote:
-> On 9/27/22 18:09, Ming Lei wrote:
-> > On Wed, Sep 14, 2022 at 03:56:20PM -0700, Bart Van Assche wrote:
-> > > Some kernel modules call device_del() from their module exit code and
-> > > schedule asynchronous work from inside the .release callback without waiting
-> > > until that callback has finished. As an example, many SCSI LLD drivers call
-> > 
-> > It isn't only related with device, any kobject has such issue, or any
-> > reference counter usage has similar potential risk, see previous discussion:
-> > 
-> > https://lore.kernel.org/lkml/YsZm7lSXYAHT14ui@T590/
-> > 
-> > IMO, it is one fundamental problem wrt. module vs. reference counting or
-> > kobject uses at least, since the callback depends on module code
-> > segment.
-> > 
-> > > scsi_remove_host() from their module exit code. scsi_remove_host() may
-> > > invoke scsi_device_dev_release_usercontext() asynchronously.
-> > > scsi_device_dev_release_usercontext() uses the host template pointer and
-> > > that pointer usually exists in static storage in the SCSI LLD. Support
-> > > using the module reference count to keep the module around until
-> > > asynchronous module exiting has completed by waiting in the delete_module()
-> > > system call until the module reference count drops to zero.
-> > 
-> > The issue can't be addressed by the normal mod->refcnt, since user need
-> > to unload module when the device isn't used.
-> 
-> Hi Ming,
-> 
-> How about removing support for calling scsi_device_put() from atomic context
-> as is done in the untested patch below?
+According to s3fwrn5 driver code the "enable" GPIO line is driven "high"
+when chip is not in use (mode is S3FWRN5_MODE_COLD), and is driven "low"
+when chip is in use.
 
-That can't work.
+s3fwrn5_phy_power_ctrl():
 
-The problem is that no existed mechanism can guarantee that kobject reference
-drops to zero inside module_exit().
+	...
+	gpio_set_value(phy->gpio_en, 1);
+	...
+	if (mode != S3FWRN5_MODE_COLD) {
+		msleep(S3FWRN5_EN_WAIT_TIME);
+		gpio_set_value(phy->gpio_en, 0);
+		msleep(S3FWRN5_EN_WAIT_TIME);
+	}
 
+Therefore the line described by "en-gpios" property should be annotated
+as "active low".
 
-Thanks,
-Ming
+The wakeup gpio appears to have correct polarity (active high).
+
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi b/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
+index 91c9bd1b47dd..bde6a6bb8dfc 100644
+--- a/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
++++ b/arch/arm64/boot/dts/exynos/exynos5433-tm2-common.dtsi
+@@ -795,7 +795,7 @@ s3fwrn5: nfc@27 {
+ 		reg = <0x27>;
+ 		interrupt-parent = <&gpa1>;
+ 		interrupts = <3 IRQ_TYPE_EDGE_RISING>;
+-		en-gpios = <&gpf1 4 GPIO_ACTIVE_HIGH>;
++		en-gpios = <&gpf1 4 GPIO_ACTIVE_LOW>;
+ 		wake-gpios = <&gpj0 2 GPIO_ACTIVE_HIGH>;
+ 	};
+ };
+-- 
+2.38.0.rc1.362.ged0d419d3c-goog
 
