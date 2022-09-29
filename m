@@ -2,124 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5D05EF463
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BADB55EF46A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232959AbiI2Lej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
+        id S235335AbiI2Lgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234916AbiI2Leg (ORCPT
+        with ESMTP id S232380AbiI2Lgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:34:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A138248
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664451271;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 29 Sep 2022 07:36:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCB813C846;
+        Thu, 29 Sep 2022 04:36:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3B7F71F388;
+        Thu, 29 Sep 2022 11:36:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1664451391; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=xlKGV7zI8yovT8Qjaw1ezWS3Z9lVHmoWfs71GWUdoy4=;
-        b=XPuGtjI+uWbWYDDeNtt21VO/oybFUOHidW5all2oCrbj/Nd1Nsq2CV1TYyuKFGsIXFCYKG
-        GuvKq/KD4fiR8T0zeRQ3sjXxyJoEbh2b7e5pAMQdipmSjBK9eOcMSPgpFpM+N8SS0v5lXg
-        WPyIKOeDnee+207fYEWEFGJCZH+huFE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-434-pQaDUFMyPUelI1FKIZiPIw-1; Thu, 29 Sep 2022 07:34:28 -0400
-X-MC-Unique: pQaDUFMyPUelI1FKIZiPIw-1
-Received: by mail-wm1-f71.google.com with SMTP id 14-20020a05600c228e00b003b4d065282dso344130wmf.8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:34:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=xlKGV7zI8yovT8Qjaw1ezWS3Z9lVHmoWfs71GWUdoy4=;
-        b=J5IYdwT5lClW4f2Yr3QuN+30hiIZayNeboRE+Yu3n9GqR7dGDRwtSEZZp1iU+jxgEh
-         Gk/XwYmOIKs/O4in7l+TxkSB0j5qCGfAh1O+Ke3qr8OWMg9Aqq0IBQMTzEvDgp61J82Y
-         1GbS7KU1aEdxWnVfpK6tugnYbdU/eDGZvLxI8SYU11K2i3I9tjArS7M0ENraTH7s6fVl
-         MG3WmT9poWQU6UDsvQ0gaV0MeL6lgP8cgpMKEiKXUn5EjgurgrlpCMDmgBXS47bLyXrO
-         eFuERT19/MBAq0VWK5L2f4iaQsNP/ISxMJewbpaXMOIOo7f0y/VEjWv7AGeMq7Evwp3o
-         2lpw==
-X-Gm-Message-State: ACrzQf0sjYGV1JUobJqByu5XiyeaDLeuL0Y78VEXRJHrBecdQakvElFD
-        idZz593ggZq0cK1SbpByDd/mUv5YsOd6Ak9oghB85hgFSKR+R07mRSoEPO8hP8dXqFXC0hmZ14s
-        BFqEcOsSN+1g8o+MfeFPl4oFz
-X-Received: by 2002:a05:6000:86:b0:228:db07:24bc with SMTP id m6-20020a056000008600b00228db0724bcmr1903601wrx.204.1664451266818;
-        Thu, 29 Sep 2022 04:34:26 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4AKzy0m1AK1alKmeZNml2sx8JdsLKH3XBovmokuz24KFW2iqhUvLM4hqCNLY8UmOfW6StkFw==
-X-Received: by 2002:a05:6000:86:b0:228:db07:24bc with SMTP id m6-20020a056000008600b00228db0724bcmr1903572wrx.204.1664451266401;
-        Thu, 29 Sep 2022 04:34:26 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:ce00:b5d:2b28:1eb5:9245? (p200300cbc705ce000b5d2b281eb59245.dip0.t-ipconnect.de. [2003:cb:c705:ce00:b5d:2b28:1eb5:9245])
-        by smtp.gmail.com with ESMTPSA id q17-20020adff511000000b002253fd19a6asm8219675wro.18.2022.09.29.04.34.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 04:34:25 -0700 (PDT)
-Message-ID: <889909f6-f2db-f34a-0305-eb8500dd5453@redhat.com>
-Date:   Thu, 29 Sep 2022 13:34:24 +0200
+        bh=xMRJe1MU1ptYwTyQ+JepMZmanBEMC61aFRA+CflrhZU=;
+        b=rAISbCTn0I1rjrXjAraHtB+HRHHuhe3fp6fgjCjCHK6qP2I5fuppESrN5U2bKXOkQmxeed
+        BxqKDYqtb9Vc+EsvriwWuMaU4oZmHKOiq53AToxmve4hrlC5MWvIf0ZVj3K1B6qQ3SYRvq
+        325DWAoKxdSK8ksM0ZFR4FIz9Aou/os=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1664451391;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xMRJe1MU1ptYwTyQ+JepMZmanBEMC61aFRA+CflrhZU=;
+        b=x+MK6pVvnlyjLFCpv7YrIQQUYebfY/BJoIXqBNqZVzM1O3JHSyHJhivYZ6aQ0YwjO5Miqq
+        74JOf0iLBNteSODQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2D2041348E;
+        Thu, 29 Sep 2022 11:36:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id E576Cj+DNWNocgAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 29 Sep 2022 11:36:31 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 7DEECA0681; Thu, 29 Sep 2022 13:36:30 +0200 (CEST)
+Date:   Thu, 29 Sep 2022 13:36:30 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, rookxu <brookxu.cn@gmail.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Subject: Re: [RFC v3 5/8] ext4: Abstract out overlap fix/check logic in
+ ext4_mb_normalize_request()
+Message-ID: <20220929113630.xdergbnbru63q6s7@quack3>
+References: <cover.1664269665.git.ojaswin@linux.ibm.com>
+ <f6787e57f6deb1bff2a1d1c070dfe20d281ed5d1.1664269665.git.ojaswin@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 0/3] ksm: fix incorrect count of merged pages when
- enabling use_zero_pages
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, xu.xin.sc@gmail.com
-Cc:     akpm@linux-foundation.org, imbrenda@linux.vnet.ibm.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        xu xin <xu.xin16@zte.com.cn>
-References: <20220929025206.280970-1-xu.xin16@zte.com.cn>
- <20220929124242.60ef57ee@p-imbrenda>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220929124242.60ef57ee@p-imbrenda>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f6787e57f6deb1bff2a1d1c070dfe20d281ed5d1.1664269665.git.ojaswin@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.09.22 12:42, Claudio Imbrenda wrote:
-> On Thu, 29 Sep 2022 02:52:06 +0000
-> xu.xin.sc@gmail.com wrote:
+On Tue 27-09-22 14:46:45, Ojaswin Mujoo wrote:
+> Abstract out the logic of fixing PA overlaps in ext4_mb_normalize_request to
+> improve readability of code. This also makes it easier to make changes
+> to the overlap logic in future.
 > 
->> From: xu xin <xu.xin16@zte.com.cn>
->>
->> Before enabling use_zero_pages by setting /sys/kernel/mm/ksm/
->> use_zero_pages to 1, pages_sharing of KSM is basically accurate. But
->> after enabling use_zero_pages, all empty pages that are merged with
->> kernel zero page are not counted in pages_sharing or pages_shared.
+> There are no functional changes in this patch
 > 
-> that's because those pages are not shared between different processes.
+> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
 
-They are probably the most shared pages between processes in the kernel. 
-They are simply not KSM pages, that's what makes accounting tricky here.
+Looks good. Feel free to add:
 
-> 
->> That is because the rmap_items of these ksm zero pages are not
->> appended to The Stable Tree of KSM.
->>
->> We need to add the count of empty pages to let users know how many empty
->> pages are merged with kernel zero page(s).
-> 
-> why?
-> 
-> do you need to know how many untouched zero pages a process has?
-> 
-> does it make a difference if the zero page is really untouched or if it
-> was touched in the past but it is now zero?
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-I'd also like to understand the rationale. Is it about estimating memory 
-demands when each and every shared page could get unshared?
+								Honza
 
+> ---
+>  fs/ext4/mballoc.c | 110 +++++++++++++++++++++++++++++-----------------
+>  1 file changed, 69 insertions(+), 41 deletions(-)
+> 
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index d1ce34888dcc..dda9a72c81d9 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -4008,6 +4008,74 @@ ext4_mb_pa_assert_overlap(struct ext4_allocation_context *ac,
+>  	rcu_read_unlock();
+>  }
+>  
+> +/*
+> + * Given an allocation context "ac" and a range "start", "end", check
+> + * and adjust boundaries if the range overlaps with any of the existing
+> + * preallocatoins stored in the corresponding inode of the allocation context.
+> + *
+> + *Parameters:
+> + *	ac			allocation context
+> + *	start			start of the new range
+> + *	end			end of the new range
+> + */
+> +static inline void
+> +ext4_mb_pa_adjust_overlap(struct ext4_allocation_context *ac,
+> +			 ext4_lblk_t *start, ext4_lblk_t *end)
+> +{
+> +	struct ext4_inode_info *ei = EXT4_I(ac->ac_inode);
+> +	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
+> +	struct ext4_prealloc_space *tmp_pa;
+> +	ext4_lblk_t new_start, new_end;
+> +	ext4_lblk_t tmp_pa_start, tmp_pa_end;
+> +
+> +	new_start = *start;
+> +	new_end = *end;
+> +
+> +	/* check we don't cross already preallocated blocks */
+> +	rcu_read_lock();
+> +	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_inode_list) {
+> +		if (tmp_pa->pa_deleted)
+> +			continue;
+> +		spin_lock(&tmp_pa->pa_lock);
+> +		if (tmp_pa->pa_deleted) {
+> +			spin_unlock(&tmp_pa->pa_lock);
+> +			continue;
+> +		}
+> +
+> +		tmp_pa_start = tmp_pa->pa_lstart;
+> +		tmp_pa_end = tmp_pa->pa_lstart + EXT4_C2B(sbi, tmp_pa->pa_len);
+> +
+> +		/* PA must not overlap original request */
+> +		BUG_ON(!(ac->ac_o_ex.fe_logical >= tmp_pa_end ||
+> +			ac->ac_o_ex.fe_logical < tmp_pa_start));
+> +
+> +		/* skip PAs this normalized request doesn't overlap with */
+> +		if (tmp_pa_start >= new_end || tmp_pa_end <= new_start) {
+> +			spin_unlock(&tmp_pa->pa_lock);
+> +			continue;
+> +		}
+> +		BUG_ON(tmp_pa_start <= new_start && tmp_pa_end >= new_end);
+> +
+> +		/* adjust start or end to be adjacent to this pa */
+> +		if (tmp_pa_end <= ac->ac_o_ex.fe_logical) {
+> +			BUG_ON(tmp_pa_end < new_start);
+> +			new_start = tmp_pa_end;
+> +		} else if (tmp_pa_start > ac->ac_o_ex.fe_logical) {
+> +			BUG_ON(tmp_pa_start > new_end);
+> +			new_end = tmp_pa_start;
+> +		}
+> +		spin_unlock(&tmp_pa->pa_lock);
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	/* XXX: extra loop to check we really don't overlap preallocations */
+> +	ext4_mb_pa_assert_overlap(ac, new_start, new_end);
+> +
+> +	*start = new_start;
+> +	*end = new_end;
+> +	return;
+> +}
+> +
+>  /*
+>   * Normalization means making request better in terms of
+>   * size and alignment
+> @@ -4022,9 +4090,6 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
+>  	loff_t size, start_off;
+>  	loff_t orig_size __maybe_unused;
+>  	ext4_lblk_t start;
+> -	struct ext4_inode_info *ei = EXT4_I(ac->ac_inode);
+> -	struct ext4_prealloc_space *tmp_pa;
+> -	ext4_lblk_t tmp_pa_start, tmp_pa_end;
+>  
+>  	/* do normalize only data requests, metadata requests
+>  	   do not need preallocation */
+> @@ -4125,47 +4190,10 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
+>  
+>  	end = start + size;
+>  
+> -	/* check we don't cross already preallocated blocks */
+> -	rcu_read_lock();
+> -	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_inode_list) {
+> -		if (tmp_pa->pa_deleted)
+> -			continue;
+> -		spin_lock(&tmp_pa->pa_lock);
+> -		if (tmp_pa->pa_deleted) {
+> -			spin_unlock(&tmp_pa->pa_lock);
+> -			continue;
+> -		}
+> -
+> -		tmp_pa_start = tmp_pa->pa_lstart;
+> -		tmp_pa_end = tmp_pa->pa_lstart + EXT4_C2B(sbi, tmp_pa->pa_len);
+> -
+> -		/* PA must not overlap original request */
+> -		BUG_ON(!(ac->ac_o_ex.fe_logical >= tmp_pa_end ||
+> -			ac->ac_o_ex.fe_logical < tmp_pa_start));
+> -
+> -		/* skip PAs this normalized request doesn't overlap with */
+> -		if (tmp_pa_start >= end || tmp_pa_end <= start) {
+> -			spin_unlock(&tmp_pa->pa_lock);
+> -			continue;
+> -		}
+> -		BUG_ON(tmp_pa_start <= start && tmp_pa_end >= end);
+> +	ext4_mb_pa_adjust_overlap(ac, &start, &end);
+>  
+> -		/* adjust start or end to be adjacent to this pa */
+> -		if (tmp_pa_end <= ac->ac_o_ex.fe_logical) {
+> -			BUG_ON(tmp_pa_end < start);
+> -			start = tmp_pa_end;
+> -		} else if (tmp_pa_start > ac->ac_o_ex.fe_logical) {
+> -			BUG_ON(tmp_pa_start > end);
+> -			end = tmp_pa_start;
+> -		}
+> -		spin_unlock(&tmp_pa->pa_lock);
+> -	}
+> -	rcu_read_unlock();
+>  	size = end - start;
+>  
+> -	/* XXX: extra loop to check we really don't overlap preallocations */
+> -	ext4_mb_pa_assert_overlap(ac, start, end);
+> -
+>  	/*
+>  	 * In this function "start" and "size" are normalized for better
+>  	 * alignment and length such that we could preallocate more blocks.
+> -- 
+> 2.31.1
+> 
 -- 
-Thanks,
-
-David / dhildenb
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
