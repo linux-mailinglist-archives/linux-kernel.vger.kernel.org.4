@@ -2,117 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFACE5EEDEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 946E25EEDEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiI2Ga5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 02:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
+        id S234834AbiI2GcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 02:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiI2Gay (ORCPT
+        with ESMTP id S234606AbiI2GcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 02:30:54 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CF6ECCC9;
-        Wed, 28 Sep 2022 23:30:52 -0700 (PDT)
-X-UUID: 8919806823b145e6b5b1a48f52bed778-20220929
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=6kRxtmHTsdu+ZgQ5hqeQQZoJ5CfeIzgNxRzM6lCvc2I=;
-        b=oW907LWcPNEBpq4DeYfhe61SEQKBfIkZxYrueh9Diw/uKu5gXvXZ8QKRu5ReYPJA5WQdcgau2cAQrr9L6aAA6OS42sHI1siwmuIp0CDnbROaoJgzVORTIf319k6eAsEx802ZXPoyV7Ndboug5qfKyx/8p7Y204DHTXIrJRPmbhQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:ba016c60-ec2d-41f7-9e04-5fa4f433474f,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:45
-X-CID-INFO: VERSION:1.1.11,REQID:ba016c60-ec2d-41f7-9e04-5fa4f433474f,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-        elease,TS:45
-X-CID-META: VersionHash:39a5ff1,CLOUDID:6c8b76a3-dc04-435c-b19b-71e131a5fc35,B
-        ulkID:220928214318FAL666HN,BulkQuantity:208,Recheck:0,SF:28|17|19|48|823|8
-        24|102,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:ni
-        l,COL:0
-X-UUID: 8919806823b145e6b5b1a48f52bed778-20220929
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2096322386; Thu, 29 Sep 2022 14:30:47 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 29 Sep 2022 14:30:46 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 29 Sep 2022 14:30:45 +0800
-Message-ID: <cfd35493a293cf6f7ddd68fe3cc665989ea36015.camel@mediatek.com>
-Subject: Re: [PATCH 1/2] usb: mtu3: fix ep0's stall of out data stage
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Min Guo <min.guo@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        <Stable@vger.kernel.org>
-Date:   Thu, 29 Sep 2022 14:30:45 +0800
-In-Reply-To: <YzRofTAx+3pPCbrL@rowland.harvard.edu>
-References: <20220928091721.26112-1-chunfeng.yun@mediatek.com>
-         <YzRofTAx+3pPCbrL@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 29 Sep 2022 02:32:01 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEFA120BE9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:32:00 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220929063159euoutp02cd6389c808435debc41b1da092b9068f~ZQRqCJLfZ1528915289euoutp02a
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:31:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220929063159euoutp02cd6389c808435debc41b1da092b9068f~ZQRqCJLfZ1528915289euoutp02a
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1664433119;
+        bh=0ON8/mCjr5C3yURM9hVFRUO7gNPlxFnxKjNyT/NLCT8=;
+        h=Date:From:Subject:To:CC:In-Reply-To:References:From;
+        b=EP9zAC9LcGYRnvhaaHfv/har743gd6ShjZuscW8lFI7jdTEbX+epY957BWBXzxYRe
+         L2FvxqgTgVFAbune9jGxhomIs7OExDB63ieadLVb4BnFBPAUkOKao9c8dnxqEW/uQN
+         6Wql4fXVQMOLG9Sw17ofkXM8c2TEQh3V5GDfxxxc=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220929063158eucas1p2e9dfe7e042f4407b1a8bc83acf6b1bc2~ZQRpoIge52200622006eucas1p2v;
+        Thu, 29 Sep 2022 06:31:58 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 8D.CB.19378.EDB35336; Thu, 29
+        Sep 2022 07:31:58 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220929063158eucas1p1504a8b7423d26e3d427ff32a22f2d70b~ZQRpQs4MM1792417924eucas1p1V;
+        Thu, 29 Sep 2022 06:31:58 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220929063158eusmtrp192f85e25440ac5cdf854e3c85b84e268~ZQRpPvFps1200512005eusmtrp1J;
+        Thu, 29 Sep 2022 06:31:58 +0000 (GMT)
+X-AuditID: cbfec7f5-a35ff70000014bb2-2b-63353bdec0a6
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 31.79.10862.EDB35336; Thu, 29
+        Sep 2022 07:31:58 +0100 (BST)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220929063158eusmtip167fe71d619027c04012f0cb080b70c37~ZQRpBlKjj1340213402eusmtip15;
+        Thu, 29 Sep 2022 06:31:58 +0000 (GMT)
+Received: from [192.168.8.130] (106.210.248.168) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Thu, 29 Sep 2022 07:31:56 +0100
+Message-ID: <5e9d678f-ffea-e015-53d8-7e80f3deda1e@samsung.com>
+Date:   Thu, 29 Sep 2022 08:31:55 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+        Thunderbird/91.11.0
+From:   Pankaj Raghav <p.raghav@samsung.com>
+Subject: Re: [PATCH v15 00/13] support zoned block devices with
+ non-power-of-2 zone sizes
+To:     <axboe@kernel.dk>, <hch@lst.de>, Keith Busch <kbusch@kernel.org>
+CC:     <jaegeuk@kernel.org>, <agk@redhat.com>, <gost.dev@samsung.com>,
+        <snitzer@kernel.org>, <damien.lemoal@opensource.wdc.com>,
+        <bvanassche@acm.org>, <linux-kernel@vger.kernel.org>,
+        <hare@suse.de>, <matias.bjorling@wdc.com>,
+        <Johannes.Thumshirn@wdc.com>, <linux-block@vger.kernel.org>,
+        <linux-nvme@lists.infradead.org>, <pankydev8@gmail.com>,
+        <dm-devel@redhat.com>
+Content-Language: en-US
+In-Reply-To: <20220923173618.6899-1-p.raghav@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [106.210.248.168]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMKsWRmVeSWpSXmKPExsWy7djPc7r3rE2TDVY/NbZYf+oYs8Xqu/1s
+        FtM+/GS2+H32PLPF3nezWS32LJrEZLFy9VEmiyfrZzFb/O26x2Qx6dA1Rou9t7QtLu+aw2Yx
+        f9lTdosJbV+ZLdbcfMpiceKWtIOAx+Ur3h47Z91l97h8ttRj06pONo/NS+o9dt9sYPPY2Xqf
+        1eP9vqtAodPVHp83yXm0H+hmCuCO4rJJSc3JLEst0rdL4Mo4f+8dW8FlxorGPfoNjHMZuxg5
+        OSQETCQmbXvO2sXIxSEksIJR4sm1OewQzhdGif+L9zFDOJ8ZJWY+38MM09LW+ZUFIrGcUWJR
+        1xMWuKrOK01Q/bsZJXo79gK1cHDwCthJXD6bA9LNIqAq8XzHXLBJvAKCEidngjRzcogKREqs
+        2X2WHaScTUBLorGTHSQsLBAt8eDQFyYQW0TAReJm7yGwi5gFvjBJzL++mxUkwSwgLnHryXwm
+        kF5OAUuJ/sYaiLCmROv23+wQtrzE9rdzoB5Qllh+eiaUXSux9tgZsJMlBJ5xSvx5/YgNIuEi
+        8ebPOiYIW1ji1fEt7BC2jMTpyT0sEHa1xNMbv5khmlsYJfp3rmcDOUJCwFqi70wORI2jxMfD
+        T9ghwnwSN94KQtzDBwz36cwTGFVnIYXELCTfzELywiwkLyxgZFnFKJ5aWpybnlpsnJdarlec
+        mFtcmpeul5yfu4kRmA5P/zv+dQfjilcf9Q4xMnEwHmKU4GBWEuH9fdQwWYg3JbGyKrUoP76o
+        NCe1+BCjNAeLkjgv2wytZCGB9MSS1OzU1ILUIpgsEwenVAPTzLinYkkbJcWuWLmaTWic0pdS
+        Z/PB//u5c4cFrdsul/2bduqk/OqDhXFxM2ql9nyfa+sicMv4/c9v8srR8yRK51xeFbG478NJ
+        J4/OK893ijVOO1t4apeFw80g8/Taab9LF/+IuxSuvaqUxfiI9AFjruPJJw9/qlvAejv14k3e
+        cw83vl639y3/c4VnpWdFd7zOTFJtj9gg+Gk7+4qnS0NKPftDFt26yG+gxL9zf77NU70SId20
+        xiiuM22e5UbvdfOlJnVKuOd6CUgEpB891yNS9trtxZ9t/ww0p6xqmNXZFX4jtneybDTzmzaX
+        qQ9PqyufeLDJbavl8hvL+VPU6je785n4RlfZaa3+/KTj4gY9JZbijERDLeai4kQAaSGnVvYD
+        AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBKsWRmVeSWpSXmKPExsVy+t/xu7r3rE2TDY5ekrJYf+oYs8Xqu/1s
+        FtM+/GS2+H32PLPF3nezWS32LJrEZLFy9VEmiyfrZzFb/O26x2Qx6dA1Rou9t7QtLu+aw2Yx
+        f9lTdosJbV+ZLdbcfMpiceKWtIOAx+Ur3h47Z91l97h8ttRj06pONo/NS+o9dt9sYPPY2Xqf
+        1eP9vqtAodPVHp83yXm0H+hmCuCO0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7Uy
+        MlXSt7NJSc3JLEst0rdL0Ms4f+8dW8FlxorGPfoNjHMZuxg5OSQETCTaOr+ydDFycQgJLGWU
+        +LDtHRNEQkbi05WP7BC2sMSfa11sEEUfGSXOn9wA1bGbUWLWnZVAGQ4OXgE7ictnc0AaWARU
+        JZ7vmMsMYvMKCEqcnPmEBcQWFYiUeLisiQmknE1AS6KxE2y+sEC0xOUzT9hAbBEBF4mbvYeY
+        QcYzC3xhkph/fTcrxK4eRomFy7eCdTALiEvcejIfbBCngKVEf2MNRFhTonX7b6gSeYntb+cw
+        QzygLLH89Ewou1bi1f3djBMYRWchOW8WkqmzkIyahWTUAkaWVYwiqaXFuem5xUZ6xYm5xaV5
+        6XrJ+bmbGIFJZNuxn1t2MK589VHvECMTB+MhRgkOZiUR3t9HDZOFeFMSK6tSi/Lji0pzUosP
+        MZoCw2gis5Rocj4wjeWVxBuaGZgamphZGphamhkrifN6FnQkCgmkJ5akZqemFqQWwfQxcXBK
+        NTClHXvtNfHVFvEXvB5mL6dLqhZuKAlh/Wi05NxF5Z3fIv5XzDtzQCzpXpdNRDGD3K0SObZH
+        7Pwf7p0XnM/71ats1syjUdfXtVtqMij5Jr5MLHHpFzi45lBcmATjhdezFM43qYhsvFuvuPDd
+        ga2W+VekHm1Vcps1W26BR8OiLPfP5yNetqSnyq5/H52UP/Uyo4/ywvmdW/czneyaKKvosIYv
+        eP/UatPgwt/7phVNC536YI1b7OEf9tq2bT5bZytK/Xu3o6DCziLk0uqgvmi/qGjfBMM5me+/
+        b7U2EHb6E75t9Rnn5z2qijwh9ie+aRzPfKjPp2nqknCd/+tNPU9Vx2vxuR1aDaLls9d+/+4b
+        1aDEUpyRaKjFXFScCADA9Ta9qwMAAA==
+X-CMS-MailID: 20220929063158eucas1p1504a8b7423d26e3d427ff32a22f2d70b
+X-Msg-Generator: CA
+X-RootMTR: 20220923173619eucas1p13e645adbe1c8eb62fb48b52c0248ed65
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220923173619eucas1p13e645adbe1c8eb62fb48b52c0248ed65
+References: <CGME20220923173619eucas1p13e645adbe1c8eb62fb48b52c0248ed65@eucas1p1.samsung.com>
+        <20220923173618.6899-1-p.raghav@samsung.com>
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-09-28 at 11:30 -0400, Alan Stern wrote:
-> On Wed, Sep 28, 2022 at 05:17:20PM +0800, Chunfeng Yun wrote:
-> > It happens when enable uvc function, the flow as below:
-> > the controller switch to data stage, then call
-> >     -> foward_to_driver() -> composite_setup() ->
-> > uvc_function_setup(),
-> > it send out an event to user layer to notify it call
-> >     -> ioctl() -> uvc_send_response() -> usb_ep_queue(),
-> > but before the user call ioctl to queue ep0's buffer, the host
-> > already send
-> > out data, but the controller find that no buffer is queued to
-> > receive data,
-> > it send out STALL handshake.
-> > 
-> > To fix the issue, don't send out ACK of setup stage to switch to
-> > out data
-> > stage until the buffer is available.
+> Hi Jens,
+>   Please consider this patch series for the 6.1 release.
 > 
-> You might find it is better to use the delayed_status routines
-> already 
-> present in the Gadget core.  Instead of delaying the response to the 
-> Setup packet of the second control transfer, delay the status
-> response 
-> to the first control transfer.
-Ok, I'll try to use delayed_status to handle this issue.
 
-Thanks a lot.
+Hi Jens, Christoph, and Keith,
+ All the patches have a Reviewed-by tag at this point. Can we queue this up
+for 6.1?
 
-> 
-> This approach has the advantage of working even when the second
-> transfer 
-> is not control but something else, such as bulk.
-> 
-> Also it agrees better with the way the USB spec intends control 
-> transfers to work.  The UDC is not supposed to complete the status
-> stage 
-> of a control transfer until the gadget has fully processed the 
-> transfer's information and is ready to go forward.
-> 
-> Alan Stern
-
+--
+Pankaj
