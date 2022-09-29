@@ -2,40 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51F75EFC64
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 19:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AECE5EFC6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 19:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235091AbiI2Ry1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 13:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
+        id S230468AbiI2RzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 13:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234970AbiI2RyR (ORCPT
+        with ESMTP id S233125AbiI2Ry6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 13:54:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1CB153A7F
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 10:54:15 -0700 (PDT)
+        Thu, 29 Sep 2022 13:54:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4D45283B
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 10:54:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D47F5620EE
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 17:54:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93513C433D6;
-        Thu, 29 Sep 2022 17:54:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 602FD620E8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 17:54:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ABE6C433D7;
+        Thu, 29 Sep 2022 17:54:53 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     will@kernel.org, Li Huafei <lihuafei1@huawei.com>,
-        mark.rutland@arm.com
-Cc:     wangkefeng.wang@huawei.com, andreyknvl@gmail.com,
-        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
-        Julia.Lawall@inria.fr, linux-arm-kernel@lists.infradead.org,
-        elver@google.com, zhouchengming@bytedance.com, mingo@redhat.com,
-        ardb@kernel.org, akpm@linux-foundation.org
-Subject: Re: (subset) [PATCH 0/3] arm64: module/ftrace: Fix mcount-based ftrace initialization failure
-Date:   Thu, 29 Sep 2022 18:54:09 +0100
-Message-Id: <166447404204.3004179.896279920066200996.b4-ty@arm.com>
+To:     Mike Rapoport <rppt@kernel.org>, Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH] arm64/mm: fold check for KFENCE into can_set_direct_map()
+Date:   Thu, 29 Sep 2022 18:54:51 +0100
+Message-Id: <166447408706.3004635.13204666295846198645.b4-ty@arm.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220929094134.99512-1-lihuafei1@huawei.com>
-References: <20220929094134.99512-1-lihuafei1@huawei.com>
+In-Reply-To: <20220921074841.382615-1-rppt@kernel.org>
+References: <20220921074841.382615-1-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -48,24 +44,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sep 2022 17:41:31 +0800, Li Huafei wrote:
-> This series is mainly to fix the mcount-based ftrace initialization
-> failure during module loading (see patch 3). The first two are cleanup
-> patches.
+On Wed, 21 Sep 2022 10:48:41 +0300, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> Li Huafei (3):
->   arm64: module: Make plt_equals_entry() static
->   arm64: module: Remove unused plt_entry_is_initialized()
->   arm64: module/ftrace: Fix mcount-based ftrace initialization failure
+> KFENCE requires linear map to be mapped at page granularity, so that it
+> is possible to protect/unprotect single pages, just like with
+> rodata_full and DEBUG_PAGEALLOC.
+> 
+> Instead of repating
 > 
 > [...]
 
-Applied to arm64 (for-next/ftrace), thanks!
+Applied to arm64 (for-next/misc), thanks!
 
-[1/3] arm64: module: Make plt_equals_entry() static
-      https://git.kernel.org/arm64/c/3fb420f56cbf
-[2/3] arm64: module: Remove unused plt_entry_is_initialized()
-      https://git.kernel.org/arm64/c/5de229160508
+[1/1] arm64/mm: fold check for KFENCE into can_set_direct_map()
+      https://git.kernel.org/arm64/c/b9dd04a20f81
 
 -- 
 Catalin
