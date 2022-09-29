@@ -2,82 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A225EFE85
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 22:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9D65EFE86
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 22:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiI2URt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 16:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58326 "EHLO
+        id S229558AbiI2US2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 16:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiI2URq (ORCPT
+        with ESMTP id S229462AbiI2USZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 16:17:46 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7957D14C073;
-        Thu, 29 Sep 2022 13:17:46 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-131886d366cso3131975fac.10;
-        Thu, 29 Sep 2022 13:17:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=IVA+NrMANs4JcKoWxiGjDSoZB/KJJG5M2ElGXAEd1LQ=;
-        b=BDMWSj+7x6siv1+ejEfvi2SaQPvYV9DtSQGgROb55Zvf6l5ODcjChhw/5RTww0w7F5
-         1QSUFhgBPN2GVAU0CgC/qNE90szofIXND6qM7sMS2S9Uop6Q1lCana7MLd/dfmGcvtzX
-         zeYU1cKbl38HrseF1GwqkRwYkSZEWwrV58d55zQ5SXd7XtG5cVkJJTLhtlUdBiNuFysL
-         IiBjFAZhe1CedAKkuG52YnaT1Q5yk1SAp8+mbcCvn5MCfdjuz31ANyb5iJWvHCuvjl9v
-         yzKEzAqPMhRxM3g7U0xVsZvuk+UsE8N61Jnb4CkWKc1nfQTUR3OC98hPrYY5n52axv7z
-         k3GA==
-X-Gm-Message-State: ACrzQf2QzAcSyl9jNRgS3Kz2+b89sV4K5fuuDPNini2zNNs8RDvI29TH
-        m/zswDvmBR9NX9am2P6glQ==
-X-Google-Smtp-Source: AMsMyM5hetl0HHDC2qK6ExH1+h4F7f6dnhMO81xHxrvx3iFO5iw/K+DsIgpZIaC0Sw6VbUCwoC2ioA==
-X-Received: by 2002:a05:6870:ac0f:b0:127:c036:d61c with SMTP id kw15-20020a056870ac0f00b00127c036d61cmr2825034oab.278.1664482665739;
-        Thu, 29 Sep 2022 13:17:45 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x93-20020a9d20e6000000b00657865c9827sm149014ota.46.2022.09.29.13.17.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 13:17:45 -0700 (PDT)
-Received: (nullmailer pid 2668356 invoked by uid 1000);
-        Thu, 29 Sep 2022 20:17:44 -0000
-Date:   Thu, 29 Sep 2022 15:17:44 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 15/15] dt-bindings: pinctrl: qcom,sc7280: correct number
- of GPIOs
-Message-ID: <166448266385.2668307.7265164290114312879.robh@kernel.org>
-References: <20220925110608.145728-1-krzysztof.kozlowski@linaro.org>
- <20220925110608.145728-16-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Thu, 29 Sep 2022 16:18:25 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CEF14C077
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 13:18:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664482704; x=1696018704;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=aXTKP2hA4TTd5GOUtOlRrbGUNV3lymOTyksjJcpW+rc=;
+  b=LDngcD0XyicTFa32JP2qPkR2pvHb7vVK01iolc6J2T3WxfMZN+Uyhpyf
+   Ocbd+t73qteYwVv0aORhxHr4FyAjlhDv5lA9x3DRE3MPzGVR8GuX9mIdN
+   F/dxKwszMJ8kOZhjLfvbMfYJrAecSicqEYRxoj5SkkwStUJWLOjy5LfSW
+   2lM3VLNea8py1beZ9bplqpNzd23OlAdOO8re2bXOrPDOyBmyeBom+iXfZ
+   6W+FEKZ6rQwkPjIasBzbEMVqRZj1BAFM9AtSF9ONLDehhpQ3nCfxFY0FJ
+   6hZNt/yH+f2iK7a+GbcLlo2tkfZmByV6EmhVibSk+xRMttGUyg5ZRVKRu
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="301988623"
+X-IronPort-AV: E=Sophos;i="5.93,356,1654585200"; 
+   d="scan'208";a="301988623"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 13:18:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="622511041"
+X-IronPort-AV: E=Sophos;i="5.93,356,1654585200"; 
+   d="scan'208";a="622511041"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga002.jf.intel.com with ESMTP; 29 Sep 2022 13:18:23 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 13:18:23 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 13:18:22 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 29 Sep 2022 13:18:22 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.48) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 29 Sep 2022 13:18:22 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JxKg7JV5TbKxebG8X5nOT5H3+5v3aRhIYedr6eKWDAJYq4DCbnYCJk0inQjnrQd+KN74ke93Jf79Hl47G8W3i9nRUiVwuwBix+5qRnZ8cEQDMMPCIDTLk4Rx3/bPrE8ztrbEivJbUo6O/nfnokmqR/jBL59Rco2PmWAlosH6F9cMO2ppaH+ohOQVMNdHWfPOr+wvNFTa1qfg43tesSXNeyHkxP/Sdc/jcXoP/C2BjeL+2xoWJQIGO3t/86d9zAIeT5qn7kLV7UHukl8eUk2q/6vjBu6o/vlvYIwllW8d5riS9OrHQZrLX9khl5k2VQpWTp/n7gyX1GEmwOFbQc+xMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KNKrqr1uzlYR5GE864X3DtFeAzdFM7zR0O2O0WKvmMY=;
+ b=Ww5+vvu/8wvz1Iu7LO2o1xeTOMJJfFupmgYgNDMTpr2FaLiS7sN7PbAEfMhYF6qfsVxE5triWJhDMMxTy3WkW/PyklXE/3r0x+No6vypUQkoAGoun0xOuxj/i5tzkB7LWx2lsPAUmjHniTxK3NWZ8Scr2mhzf1DgBxPgRndfztCACHjGH4aarvKlTaEyNmFcih5kttEf31SVKM2vtwvZMKUBgJnxwhRyyqWvHbCVshNlSComeX/EQuDIkUCy4PcM2l0w8RwCaucskgiLDG/AAO3TefXHG6P7VjI7Fbkj+SL0C4apSnmcqozvKqdPOoQx7OHkakDnyNzvq0EnM+Ju4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20) by BL1PR11MB6028.namprd11.prod.outlook.com
+ (2603:10b6:208:393::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Thu, 29 Sep
+ 2022 20:18:19 +0000
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::7d5a:684d:99f7:4e83]) by MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::7d5a:684d:99f7:4e83%12]) with mapi id 15.20.5676.017; Thu, 29 Sep
+ 2022 20:18:19 +0000
+Date:   Thu, 29 Sep 2022 13:18:15 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Alistair Popple <apopple@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+CC:     <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Felix Kuehling" <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Alex Sierra <alex.sierra@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <amd-gfx@lists.freedesktop.org>, <nouveau@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH 2/7] mm: Free device private pages have zero refcount
+Message-ID: <6335fd87adc7f_f6c9d29474@dwillia2-xfh.jf.intel.com.notmuch>
+References: <cover.f15b25597fc3afd45b144df863eeca3b2c13f9f4.1664171943.git-series.apopple@nvidia.com>
+ <3d74bb439723c7e46cbe47d1711795308aee4ae3.1664171943.git-series.apopple@nvidia.com>
+ <YzG42766BJSxro0R@nvidia.com>
+ <877d1plfrm.fsf@nvdebian.thelocal>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220925110608.145728-16-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <877d1plfrm.fsf@nvdebian.thelocal>
+X-ClientProxiedBy: BY5PR16CA0014.namprd16.prod.outlook.com
+ (2603:10b6:a03:1a0::27) To MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|BL1PR11MB6028:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a3252f0-b0bf-4553-5aa5-08daa257c00a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jC3+dv6LeCP5V2fTY5TzsjeA9p+CpffiUwi+iLVJM8i+9FhXlrNWUEBprETz6AqMiSb5nnm5/WvVEFygTa4IdSgu+DMvxXhMKoVnZl2mxN3Odl5Kse9rykaYI921NvBVsu/MZcVTUrShKaO/e//a0iA3BSrTJUWxRrScVRq15vq6G9iOCQ1X81+X9GOzgq9W5i1BcllEKrwR+mChvJRPa2bzpXJD+zplDtbKdW8hJoiVN1IE8CZFx6xcB+2w7Q8SXcKnjVGrdbFzfKgp4n6YP3I0MNbevZtJ2yk7vY86FB4gW92uS2qmaDmq8EtlrpV2ft/XdAr2VdzUObpO5xXsIH3VvKHPqIGhxRYnHatcSfZTTdXg0aoWgNfgyKkVeYVfThrooV99RhzEIn4MfzPmuqvJenaT9OwjBA6ZkXWCw99LACVNVnmH5tqrGKp3bA6awYT2ruCgKpumjYOF/zgFmUD+HEGFTeSrWXsa0gMxMR6E9fGtZm2hSmJM3R+fRSHqh6GwcRgSBcNNpGgIG5Ch/oB2TY7lgpWWVYt4Apxc6aBvbiuoRBvycnlxiCrjB5mPVu9u8bikBLui1RgYMjJ7rH5vGKe52ApnP2f0chjtV+E7pIwmnl25Y0oprWHmOR5Vr8bKDzLhHlIMTMqMw0cnJ3bfSYNC6w8+eDdD7J3/kc7PvFgQ+VP1Uu8vU1zxThPPUyRl8/8OYR5Yly1AN7oTLgAuHLwmXy9B91sCiG4VKaty+3E77MSTjy/X4F5lC/Pl
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(39860400002)(136003)(366004)(376002)(396003)(451199015)(107886003)(6512007)(6506007)(6486002)(5660300002)(966005)(83380400001)(2906002)(186003)(6666004)(9686003)(41300700001)(54906003)(66946007)(26005)(478600001)(110136005)(8936002)(66556008)(4326008)(8676002)(7416002)(66476007)(316002)(86362001)(38100700002)(82960400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LiGQsplyDfZYEOhPFYCXv0SFaBOZ+4ygYv+dTXjYKjh3cU6N9ulQdbsX+bCw?=
+ =?us-ascii?Q?9RJ+gUD13bLzipJz6UcS3N7Xpd0UOfTjL3fFfpUHaZelqy5faMuBl9PDwXPU?=
+ =?us-ascii?Q?MkrtVjMH2xZSxGDK+MldgFy/Y/rrS/3xF5NvjS2suilpvVDaWiwem8/m1DIp?=
+ =?us-ascii?Q?Z6yOwx0pa/6DnkVXFXx+cpmYl0Dut6NusEbhYBuhL1oQQr6nDbImOJ1BIW7U?=
+ =?us-ascii?Q?xHIXTtEnoHtG+lpyRo9IV2p9z9ot6pcCa0aDXXwfZuYq2LKkDa9bt4O4BWPh?=
+ =?us-ascii?Q?SMDFMnDQ8BGyC8cv5R2iI7J0A784OWQV40XC3Jxrrwmk7Gim35GNbmondCQx?=
+ =?us-ascii?Q?TrxzJYkfc7I86jtsPY0GpWHZgIvz7uxKfcu802X6TKAh9rM/FFKtW0S1ZRLB?=
+ =?us-ascii?Q?Ly/BbHMA3+KZujYN0PAq9grjzcaHR7Hs8T/GnLOIjGj0EzamuCvjxVY1FxXW?=
+ =?us-ascii?Q?o4xswtxNS+6q2+IOs9949kTk3VssH/vl777PBBtEEBnE1ZUpHpYo6Qw5Sm8m?=
+ =?us-ascii?Q?2EYsXYZ5gJafOUUuPluOHzorAATFqrmygJOJpXEYAkRaujrHTMvhWDUGGb4C?=
+ =?us-ascii?Q?jM9PcJbpBQKsrkoFG8czaTngMzNc1vkPLQdlMeCCLs6f1UzbUM00zKFGx5Xk?=
+ =?us-ascii?Q?wvfBJOh37bYJmU9cdLj6pUgBQ4SgX5qodalDp0f6SFbcHh/g5twSnygxTssR?=
+ =?us-ascii?Q?qTFK20iB2L5I1LcpSrEp170HxQ0wjWmC814IlpMQBbUb4X0LLsixZgzfI5bO?=
+ =?us-ascii?Q?1CRoUgWqh5eW2Q2yA4QlHYKD0c9UZm98vvgiz5Bn3paKLui1F/aTzK/RKrey?=
+ =?us-ascii?Q?+c/vi7g+DyCUv5lLUYAPw5YnTFDv/jej46mJzIx6VrYX/hXyjGkLKAP4bV2S?=
+ =?us-ascii?Q?FZ4GXgDzkKcdEb7jvl1nilfgEC9Am1gfJ87GDjylwRecUShSJxYRzKVoOGya?=
+ =?us-ascii?Q?3im6umudUq1Ix8De76jCmVi96HtwWdZfjMsJA3cWcSm2sIsBC9KBx3aeirhn?=
+ =?us-ascii?Q?P19xc3n+n0IH9JKsCjfJrSYjmeAA2j+L77jf4HJv10Xs5t64OEo/Me6NvOft?=
+ =?us-ascii?Q?VKEm0ML+FrPbUzl6s0KwP3lF37EnqjuRDIWFcYh4qmOmbwCX0Ej8S81t96yb?=
+ =?us-ascii?Q?dAJk7vx5ZmD3YfucDQlbJTm1X9rP/QAzVqAGUv5htTKYUxM9DzJr75YjV1mc?=
+ =?us-ascii?Q?1exwB13Fs6SOd26iuoDBC9HhNpfFSHcUnuonQTVhTjTFl7clrW5GFu3/i7FY?=
+ =?us-ascii?Q?s/6oAIfItSH122Lu/5ftfktFBPbRhnjVwKZlIcvE1x7yPb15Z+SJLK3Z3qph?=
+ =?us-ascii?Q?EYzgE4Yl4raQN0gw8YADX1xU7Y6IMSBRLofZBH49NY58nZBPuh3Bs7EyPCol?=
+ =?us-ascii?Q?+hHl0OFHxn25/sTW9txcpgSUJBj5GlD2vz/jANMWakUCGOqMr0r/9l6L70CK?=
+ =?us-ascii?Q?h0jfnpDfDXIxiBfX+tDNHnuOrBN7QPaaH1MIQ1jW1KJfBbfksIuyLZ5jrdje?=
+ =?us-ascii?Q?/8mbctXH+IwYzSIwrTWQr26yhCfQJMXq68t/VNQdQve3siILAihwQYCPpyt+?=
+ =?us-ascii?Q?gq6g71oR4qqTvfHARlmZETnHLUGWP81FYc2yCPK6LiuRaEtbLQlbYt9neXiK?=
+ =?us-ascii?Q?bA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a3252f0-b0bf-4553-5aa5-08daa257c00a
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 20:18:19.6448
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RiqkXc8QDcfZweMsAuSV4Gj4przsyQTSaeziC1ABb1F0h3yzF9X/d5tB5QicY4aPgIFb/p1P4nMrgYLb5SfFAxA/R8jf+xMnjxbQJdo0aL8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB6028
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 25 Sep 2022 13:06:08 +0200, Krzysztof Kozlowski wrote:
-> SC7280 has 175 GPIOs (gpio0-174), so correct size of gpio-line-names and
-> narrow the pattern for matching pin names.
+Alistair Popple wrote:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml    | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> Jason Gunthorpe <jgg@nvidia.com> writes:
 > 
+> > On Mon, Sep 26, 2022 at 04:03:06PM +1000, Alistair Popple wrote:
+> >> Since 27674ef6c73f ("mm: remove the extra ZONE_DEVICE struct page
+> >> refcount") device private pages have no longer had an extra reference
+> >> count when the page is in use. However before handing them back to the
+> >> owning device driver we add an extra reference count such that free
+> >> pages have a reference count of one.
+> >>
+> >> This makes it difficult to tell if a page is free or not because both
+> >> free and in use pages will have a non-zero refcount. Instead we should
+> >> return pages to the drivers page allocator with a zero reference count.
+> >> Kernel code can then safely use kernel functions such as
+> >> get_page_unless_zero().
+> >>
+> >> Signed-off-by: Alistair Popple <apopple@nvidia.com>
+> >> ---
+> >>  arch/powerpc/kvm/book3s_hv_uvmem.c       | 1 +
+> >>  drivers/gpu/drm/amd/amdkfd/kfd_migrate.c | 1 +
+> >>  drivers/gpu/drm/nouveau/nouveau_dmem.c   | 1 +
+> >>  lib/test_hmm.c                           | 1 +
+> >>  mm/memremap.c                            | 5 -----
+> >>  mm/page_alloc.c                          | 6 ++++++
+> >>  6 files changed, 10 insertions(+), 5 deletions(-)
+> >
+> > I think this is a great idea, but I'm surprised no dax stuff is
+> > touched here?
+> 
+> free_zone_device_page() shouldn't be called for pgmap->type ==
+> MEMORY_DEVICE_FS_DAX so I don't think we should have to worry about DAX
+> there. Except that the folio code looks like it might have introduced a
+> bug. AFAICT put_page() always calls
+> put_devmap_managed_page(&folio->page) but folio_put() does not (although
+> folios_put() does!). So it seems folio_put() won't end up calling
+> __put_devmap_managed_page_refs() as I think it should.
+> 
+> I think you're right about the change to __init_zone_device_page() - I
+> should limit it to DEVICE_PRIVATE/COHERENT pages only. But I need to
+> look at Dan's patch series more closely as I suspect it might be better
+> to rebase this patch on top of that.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Apologies for the delay I was travelling the past few days. Yes, I think
+this patch slots in nicely to avoid the introduction of an init_mode
+[1]:
+
+https://lore.kernel.org/nvdimm/166329940343.2786261.6047770378829215962.stgit@dwillia2-xfh.jf.intel.com/
+
+Mind if I steal it into my series?
