@@ -2,98 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF425EEEF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581155EEF01
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234791AbiI2H11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
+        id S235205AbiI2H3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234948AbiI2H1Y (ORCPT
+        with ESMTP id S235236AbiI2H3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:27:24 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531C3132FCC
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:27:21 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id q17so568583lji.11
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:27:21 -0700 (PDT)
+        Thu, 29 Sep 2022 03:29:39 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E5EFD1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:29:32 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id a29so704489pfk.5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:29:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=XSO3srI6djp1POX1SyZaGqeBc+5SE0nSSjoY6i+WAuc=;
-        b=CtfynHm4KOmmGNVTynGggp0RbQnireLLKbmpXefD/v7PTjSOUbW8skOb3jvy9rvDK3
-         WFLXeq/FB18NRk1U+8QyiPdKc/mN7DlCGsXRSchTUjnMoNSLXCiuogfElxYgSPLZpH/3
-         0MdzlViuXEg//iQ/SmB9oCQqTgRhIl0HOVV+Q+L1TsHB+8tL9nfI6IJs2pcgE0TFhoUW
-         4Tf2FodCp5oFSTTauWJZpR34bAt1wqFXUki/DKBqvwXVpWiju59DFtQykxqHkV13QnAa
-         kiNqIZI3ggfkD9BC8Aiyhbw1L9QvgHN1VOCuBVuRZrTE+goDVRK2AVTjDqkLTE3AJDKn
-         weuA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=/tZNUqIuW2LgU2Y9VqaDgSpmLoQ9J9brfNhqe2zcUd4=;
+        b=TbtdNNzpWV35S/fp7qRYAa/xZ0A9UAnyY/vJ09WVw5b64FS8Kqscx6qcR56xV0MHc0
+         WNyigkhyYcUO8kHFJw7/MWS6iRdYDebD2nN5FV9095BtgrOsQQSEnNRxJq8YdU/+D0m2
+         L8rDOrhcfWRj2lbv5uKcP8wRgOk6WJ1j0AV+C4l9Mg1pt1bZdNI85sEKLPhIr1PZcQLx
+         ace/RLjSmrW2eBlPWIvjtxpNL7E5TSbLaiLZeb6i9qwC0iFbtCr5FDG5AAjITJx0DrtC
+         XSSN0mnajnXEY/g86XEnDiTbDON/bIz9WLoOGthqMdgONsC4v3d14lPhc1Jny/OcaG8A
+         ILuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=XSO3srI6djp1POX1SyZaGqeBc+5SE0nSSjoY6i+WAuc=;
-        b=rV2ZdXTNvrOHN85Uic+E2Oti+R8lHIhFfe04g+I8iry0fZabWzecCtIJXQIR95Mj5S
-         Mq8eiV+mKEHoqU4CXboeTlaw7wNrArn3oulgWlolqGrtKGwEyvLEcWBfx5boPD3EZjyk
-         HvgSeYsXZMlb0bKRy8QXuA7podmUyKleAqiBCcLA6Uncae2b7w1vMZiJnBSlA92wuDcC
-         WFBupsq4mNdn4L5adCoKd6t8oo0Fe0juXGRUkKyWsrWKXW4wrTd0FLbKv00GGY5BVxDZ
-         ArnDt5bRg9kSWEugSRkmaWnfaaFxKGBfWhzzUuvFv2d6nY0GUtu96pVlg1EJnjC5fGQg
-         Iatg==
-X-Gm-Message-State: ACrzQf0mtUGtUXFoIzhwq93x9se781dZCR3CsxORtsbJ5eaogHHlc/0f
-        st0aFikfdKs1O9XY2EzEgjYdbw==
-X-Google-Smtp-Source: AMsMyM6y+HQmJ4a8O3aoAn/ZcQ3ygGrxopppEf0m63FToAhyXe0hryOE23en8vxWlsinBlGHALuGNw==
-X-Received: by 2002:a2e:beaa:0:b0:26c:28a1:fd2a with SMTP id a42-20020a2ebeaa000000b0026c28a1fd2amr610588ljr.468.1664436440264;
-        Thu, 29 Sep 2022 00:27:20 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id bf34-20020a2eaa22000000b00261eb75fa5dsm644266ljb.41.2022.09.29.00.27.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 00:27:19 -0700 (PDT)
-Message-ID: <26fd03ad-181c-97c5-f620-6ac296cf1829@linaro.org>
-Date:   Thu, 29 Sep 2022 09:27:19 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=/tZNUqIuW2LgU2Y9VqaDgSpmLoQ9J9brfNhqe2zcUd4=;
+        b=Gh91dqS82NrtsqLiDeGXOfA32DO2YWeO4Zc0MBzCbSu9SjzJS2KB8ZavmjDI6/FafC
+         fo1MYoTJ2CpJQ9EMdzswoLFjWIvNdKsDRY+FO0SAk7u9WWP4xzNPBL51RPacYCYaVjqO
+         ShaRvcahnsI3+SaIa4Y4uPk3NPklVK2gn1nvQo3oZtb9UYgMgU74FXulAL7MPkmEYL+h
+         cE1GdU7/RAgA3GWmXRbAOky5CNyKMaCtcOnXK8luVzApwHcBkgibUfcGGflQWpzHYwd5
+         bWG6Z1t5fHGq5ANLUsquUotX8vpOCMrN1Y/N00/n4Qm6j0tlWb1EXLg4N7VSCs888ZUm
+         +slQ==
+X-Gm-Message-State: ACrzQf1k7Iw6Gsb1ViR6lkbE+sbye01WIOYl0zS9yY+N9T319SJwPSOx
+        3PUA5l2frmM9/tcGwIOr0sE=
+X-Google-Smtp-Source: AMsMyM6PDL1TFKiLzj869qO2hFoH0crHj9TTJXQQ1kQG1tFQrRVwd54oMzyOsq8V0HfgM5LPGooVwg==
+X-Received: by 2002:a05:6a00:cd6:b0:546:d03:3dd7 with SMTP id b22-20020a056a000cd600b005460d033dd7mr2182591pfv.19.1664436571966;
+        Thu, 29 Sep 2022 00:29:31 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id q4-20020a634304000000b0042b5095b7b4sm4861948pga.5.2022.09.29.00.29.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 00:29:31 -0700 (PDT)
+From:   xu.panda668@gmail.com
+To:     catalin.marinas@arm.com
+Cc:     will@kernel.org, broonie@kernel.org, maz@kernel.org,
+        kristina.martsenko@arm.com, vladimir.murzin@arm.com,
+        mark.rutland@arm.com, ardb@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        cgel.zte@gmail.com, Xu Panda <xu.panda@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>,
+        Xu Panda <xu.panda668@gmail.com>
+Subject: [PATCH linux-next] arm64/idreg: use strscpy() is more robust and safer
+Date:   Thu, 29 Sep 2022 07:29:06 +0000
+Message-Id: <20220929072905.282639-1-xu.panda668@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH net-next 1/2] nfc: s3fwrn5: fix order of freeing resources
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Opasiak <k.opasiak@samsung.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220929050426.955139-1-dmitry.torokhov@gmail.com>
- <f0982b75-ede3-cc56-1160-8fda0faae356@linaro.org>
-In-Reply-To: <f0982b75-ede3-cc56-1160-8fda0faae356@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 09:26, Krzysztof Kozlowski wrote:
-> On 29/09/2022 07:04, Dmitry Torokhov wrote:
->> Caution needs to be exercised when mixing together regular and managed
->> resources. In case of this driver devm_request_threaded_irq() should
->> not be used, because it will result in the interrupt being freed too
->> late, and there being a chance that it fires up at an inopportune
->> moment and reference already freed data structures.
-> 
-> Non-devm was so far recommended only for IRQF_SHARED, not for regular
-> ones. Otherwise you have to fix half of Linux kernel drivers... why is
-> s3fwrn5 special?
-> 
+From: Xu Panda <xu.panda@zte.com.cn>
 
+The implementation of strscpy() is more robust and safer.
+That's now the recommended way to copy NUL terminated strings.
 
-> Please use scripts/get_maintainers.pl to Cc also netdev folks.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Xu Panda <xu.panda668@gmail.com>
+---
+ arch/arm64/kernel/idreg-override.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ah, they are not printed for NFC drivers. So never mind last comment.
+diff --git a/arch/arm64/kernel/idreg-override.c b/arch/arm64/kernel/idreg-override.c
+index 95133765ed29..61bbec7ef62e 100644
+--- a/arch/arm64/kernel/idreg-override.c
++++ b/arch/arm64/kernel/idreg-override.c
+@@ -246,7 +246,7 @@ static __init void __parse_cmdline(const char *cmdline, bool parse_aliases)
+                        return;
 
-Best regards,
-Krzysztof
+                len = min(len, ARRAY_SIZE(buf) - 1);
+-               strncpy(buf, cmdline, len);
++               strscpy(buf, cmdline, len);
+                buf[len] = 0;
 
+                if (strcmp(buf, "--") == 0)
+-- 
+2.15.2
