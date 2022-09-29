@@ -2,367 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D125EF47A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F205EF480
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235365AbiI2Lke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
+        id S235392AbiI2LlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235165AbiI2Lkb (ORCPT
+        with ESMTP id S233190AbiI2LlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:40:31 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5C9D4A93;
-        Thu, 29 Sep 2022 04:40:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6AF2B21DE3;
-        Thu, 29 Sep 2022 11:40:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1664451628; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pIwyTN1Jhv9fSSoHPUNjp9dxNNEUkLpwamFPKZB26Fw=;
-        b=dxa3LUUjoCaJz0mPVHbxfJ2FyxBTvWSH4f6NdvKVbQmiCu30LEaY/NhNNaXMLSk5O/LFMx
-        AYAuc4sqs6gdI4F6Ijmni8tyNIfF8DVVncdhIKof9moicuxKXByhVKUYO9LFNoFAQpXQfB
-        5ZTZnWAUXaRUCvidHiTCyNvQRERGwPo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1664451628;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pIwyTN1Jhv9fSSoHPUNjp9dxNNEUkLpwamFPKZB26Fw=;
-        b=qPC0Lh4+D1b90Nl8ChVshSHuXSfr7LBWjgUnqq3GUFvB1b2srD1uhf8OptZgp1O4C5+sUk
-        MASE5I6XYONwo3CQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 51ECF1348E;
-        Thu, 29 Sep 2022 11:40:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7H//EyyENWMJdAAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 29 Sep 2022 11:40:28 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 995C2A0681; Thu, 29 Sep 2022 13:40:27 +0200 (CEST)
-Date:   Thu, 29 Sep 2022 13:40:27 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, rookxu <brookxu.cn@gmail.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [RFC v3 6/8] ext4: Convert pa->pa_inode_list and pa->pa_obj_lock
- into a union
-Message-ID: <20220929114027.xr6tlqlfbn4asaod@quack3>
-References: <cover.1664269665.git.ojaswin@linux.ibm.com>
- <68364daa1af99536695b9a1df07652c14caf7cac.1664269665.git.ojaswin@linux.ibm.com>
+        Thu, 29 Sep 2022 07:41:10 -0400
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130047.outbound.protection.outlook.com [40.107.13.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D73E130BC5;
+        Thu, 29 Sep 2022 04:41:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HGgo0qRuaVtvTXoRD7uSlrSOQO/gBZ9uZXLKdYe7tcOjG59jLQMevUs+358pAeKgrOlZ81GlXjKnr27UG6NLHuPiUSalHngwI8p3j6bCPLLCLbXscRG0scuEU4x+CoAS71KNshzl3L+5gRXqSKk0l9z5gXHuTwse0ywpp7Rk8obuIykGrw+Zg9Rvkr0ik/1W9rnqu3sOUIo0x//HZZLJzPi2CBm5JbWSBPuXP4QidIHy/P+EM5IPHQGSeAOqv3xCpEC1INZu28UFRUQSp16IrMD1GQmQVQLAaG+yCbrFAS7/frJ6ycydn4356AG6Og+9IN7AZ/ss78LLGb4wUjyP4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T4PzJbBiTRFM8h946NcWyVAwM/B1jXFoCTRZzOi1cm0=;
+ b=Aa4qRbNZCit7QQqZafyryKUUNTHrPRnJ/7V7dcJs6w738MPRW3gOMYRO9wv8h8Cpj9UkD+u7Fxus0WOQWWfBiHi11SpvdKlDJO9m3YrLPJVlbs+wT/lVhh/+jBXB1P67Vrc9yAtI41ZjmIvItcrTJiu7n16CROdrbJtvUwS3wso7Mkr4yP3MZEnLkAR7zrmzf6WerrQG1vT8uN/re9y4t5zjzgsnuLBhHxSsKv3fygAf3I2EwX6jZm6YBpfJn5IwWbem56efQCj0PGhRLgZdnZ01Hgej5NbJFnC6Fqs7k5i1bEP3VC5N7XxKwHFKYPBUAwKEw1nTbq64d2nWrCOdlA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T4PzJbBiTRFM8h946NcWyVAwM/B1jXFoCTRZzOi1cm0=;
+ b=ebhzUcqU81R4ORrnw6YV6T0x6+XSZNrDdR2UfZsLOpY+sas2ott8VPRVkGqEGcqlmxBJGdHJUS6L9yGe439OUNv9ir/Qlp4pYEs/i49NK9M1xy9A/JEkDPA5wfcD1gWZrQ+ITMrqx1ImsIHfmUfOXpKva8HKMnIZBJCl3CwlHI5b8vQpmjD7+Z0ck/6ei4IO/kAwd9kynd4L60C7tJCChcPCZKqod4UCDZe7ePK9+WGwayRvQwxHvMp+jwlWMv7gk0PxtODEKtWeSeU7t0LoY15Z4/CWQJ6r6gfQQxqnUits6UokgoqrB2adATRqT5k0KO/kmlMw2L/xEgWkAUxvAQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by VE1PR04MB7229.eurprd04.prod.outlook.com (2603:10a6:800:1a3::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Thu, 29 Sep
+ 2022 11:41:05 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::584:c4ea:a4f7:af1b]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::584:c4ea:a4f7:af1b%7]) with mapi id 15.20.5676.019; Thu, 29 Sep 2022
+ 11:41:05 +0000
+Message-ID: <4667816e-a093-4993-8d0d-332bde366f7d@suse.com>
+Date:   Thu, 29 Sep 2022 13:41:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: KASAN: use-after-free Write in keyspan_close
+Content-Language: en-US
+To:     Rondreis <linhaoguo86@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, johan@kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <CAB7eexKhQeqgpMaZoT=JD2EMwn=qTw4sWzF7hdU9XDFVsz3ooA@mail.gmail.com>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <CAB7eexKhQeqgpMaZoT=JD2EMwn=qTw4sWzF7hdU9XDFVsz3ooA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0057.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:49::14) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <68364daa1af99536695b9a1df07652c14caf7cac.1664269665.git.ojaswin@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|VE1PR04MB7229:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6f2afc6f-bffa-4fa0-b719-08daa20f7e56
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tGDvJcsx0rnOlq+sN5Di2pwb1VKzu3nwOss3b96XSDfYYF5H62e5R4SH2LZC7+dOTTnoyNnxI/JPRYWfZuTDZgIdQjQBhAYI7DRg2U4EQGPZLgt4aDEdnyq6Q3NUmfoxHhg1FTMQ7qTxfUuVLmxF63R/3QNTXC8MquW6Nbi5nPuzRUo5R+JeU1MASDxiD1UvXpupJnRzrx6NnUx30n6k5+GJqFA1K0LMP7zC0ui+DLoezovXJb1czl2EszGGU/PJpLD+O6GJI7Ph4aQH4XFs3nHAVmE1WuLMvL755xMKEmI4Kr90tgvvFCbo4XTkdoIKz5RmqpWDTd855M9uSNaGARSYOvYfYqxqfCtq+hZ0M0/wLdE2YofkRQkfHTy8s+v6neUGWdwPRaR5OkzJ1ofGncbt9ocoEcFbzbleZAZVkCj6ax81JWmJxwn3toGlLP1JLmTHORGGFuhpRhYAspmr5A9W72Roj6WGOSxr/b3GP/Uan637+yzf85xsabzPRpCyROZnqSNiBhHDWjEuY05mejV2dFhY8Yex2tWpaLIAkcNOJoRuwvzGWMBBumIJVB4gbQ4M+dlss8miSH9ne2038FsPPYXxS8yy1k5QZyNlL08t8+68egysuV5qhsVFWT4cgT7aTi/EVhQkN+BSnIQMl1EaUT5eeVOK+4L1aY+HFKTQLaJoc37BIfGU4RTazDxeXkTmJ2w2hfrNmBPExDhqDpBeiWBoSiJdfh5PvP0wBiiDQLoMTb3AVTiS6e8uGaSlD0JT4M1amRdZoutA6Cz+UCOaEKCHZL5D26JEm4sciXpS4Du1XQseb7mVoaMXaSQf1jPtlYEo/A/OMXf7aaDT/3pwMMpUWtmrHpaJMUzYFpc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(39850400004)(366004)(376002)(136003)(451199015)(6506007)(6512007)(53546011)(31686004)(38100700002)(8676002)(66476007)(66556008)(316002)(66946007)(110136005)(31696002)(86362001)(36756003)(478600001)(186003)(966005)(8936002)(2616005)(6486002)(5660300002)(41300700001)(2906002)(83380400001)(10126625003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dGh1dkRjMEE1VzhKa05wOElqUFBZdlF3dDB5WXR6TG9yRDZCRmlPQmJDTFEy?=
+ =?utf-8?B?a3pWWWFQeFVjOU5Kbk9xWk1aMnNhSm5seTRXUDFmTjZHUGZXMXVKUjhpZzBB?=
+ =?utf-8?B?K29UL1RXVVRFT1pZb0VUdE9BNTN3ck9mM3R3cStXcmF6QU1jK1QrdDBaN0Ra?=
+ =?utf-8?B?MzMwZS9zS2xuL2hXbVZqRmRYbS9OaGkxQS9ONGZtbVBUejVWZVp5LzZBRld0?=
+ =?utf-8?B?MHRqdUF4N3NpVDVzbzNKdDdYczU0NkRJNmxSQzYraWRhNnZ2dWVxL3JLRHdo?=
+ =?utf-8?B?eFR6a2hjZUVLNlFWWlhMenJpclJ0S1UyUExkcGJNSVhTYXFwUEs3ZmNPRTY2?=
+ =?utf-8?B?V0JiSmQ4SkgzV0d3cWwyUTVUM04zWXZUT2F2RXBBSTdpZi9uT2lUZlRQYktq?=
+ =?utf-8?B?Y3gvVGZ1bWtCR3pNeXQrQ3hWSXBRbWUwbXBOWkk4MUZsMWdSY2Q4cG5vLzEr?=
+ =?utf-8?B?TzFpMnh6YVNEUmI1dG5EVEJJUGNhR2FvOW5DNExjOE1lZCswM2MvcWZiUDlE?=
+ =?utf-8?B?U3FpelRXYUdWZGk3NjhPcFNDVkF4L0NldWduZWZ2OXMwTHZ2SG1aZUlRamFF?=
+ =?utf-8?B?c2RBbzd5N21TZ3ExbjB1VytiTEJVMzNhbzBWTThuTUZnQUVoaitYSUFmMEVj?=
+ =?utf-8?B?TzRiUjhTN0tXV3FYSUNhcS9pL1JmM1h1OWdaNHh4SEx6QlVmeUpxSytGQ1FM?=
+ =?utf-8?B?WkRtNThpU1hSSXlCZW40VXEvRVAyMUpGWmp1aHhZcFliaDkyQzg0MmZRUjJv?=
+ =?utf-8?B?TnVxMDJ1SVEyRGJ5NUpEZ1BhT0hsVmhtZFgzelMvQURXOTA4RlN4UURNa1Z0?=
+ =?utf-8?B?cm1VbG0rdkUzeEJlVWkybGQzeS9Ra2kwbm1LdndYUnpNTEx6ektSSDJ0SWk4?=
+ =?utf-8?B?YVd2UWV6b0l6SHRFNkdWTUNtZ0VsTUsydWphQWtlUGJhOE1lSFR0YWZucjVB?=
+ =?utf-8?B?b3dWdWxRK3VaMWtGMjJMWmZBU3hqK3U3UFlOc1lJcysxeGlzbEJERmN2SHY4?=
+ =?utf-8?B?bHhTWm03bTV2TXZFVjZ0anFtd3pqVFNKMUtsb2hzK2JFQ1pLd3d0WXYzakE2?=
+ =?utf-8?B?ajVJU0gxeElqbERQSVhoLzJmQXlNZXdDMjdJT3lMM2ZwMDl0UXlLelRNV1M0?=
+ =?utf-8?B?bUlGRjVkUk9WbWgyTFNDb1kwL3NMTTVDcFdNVkdtV01uTGRxSnIvQVNnR1dU?=
+ =?utf-8?B?NHZGNWVhK0JUOWwxeXU0dStsZHJFNGRBdExsY2NpbXU4VEtYQ2dBQkNKYTdo?=
+ =?utf-8?B?bXRzWnMyMWt3VTZlc1NoeEY0MVNCcXIxRWhrRUVza2ttWEZZc2ZwR1dzYXkw?=
+ =?utf-8?B?OXR5UFFGMlZUVnhmWUZmSkpCRGlEcjRhSWhOaWZnRWo5MW9YYUdsaWgyR1p0?=
+ =?utf-8?B?U0x0Nmt3QW9jNVUxRElNekljVkZSUkRVUi9OalhlaW5oSkR2RGpMWCtnSVNB?=
+ =?utf-8?B?NGl3ZmdGcU42YUhHRUwzZ2duRWJJRTZReThFRWpzbkYvVkJuNVgxVDJxQlJi?=
+ =?utf-8?B?MTA3My9HUDF2cXhHN2tmcTIvbVJsVmNBamo0R2twMnFXTTVrRXlELzRsczY1?=
+ =?utf-8?B?NFNzbHdLbGlLNVNYelQxSVE4YmlqcWJuVC9YTDgvTFNVUlJIeTFTb2tuUjgr?=
+ =?utf-8?B?RXhDbThBZ0ZlVms5V2d4L1BEb2xiMXVBUktIbk0yMXBBNHNWTFpJa3RBdzQ1?=
+ =?utf-8?B?MDFIaklDUnRIVlQxOVFBYU14TlJSNUc3VHRCYjNPY0tzc3RBNVRDVnRaV0FS?=
+ =?utf-8?B?SzhJdmdDY3Bkd3dBd3B2Y2JtS0x4SlJkL09OazBuSEw5ZlBCU2x0Wi9XbE1x?=
+ =?utf-8?B?ZDNHNlhINzJ5TEpOdWFFcENRY2hhY2NRYmlDUUh1WTdKak5MTE50djlwM2Ra?=
+ =?utf-8?B?bVRsWTZleHhVUWR1aFc0WThHOWt4UTcycGRmLzd0amphZTMwb0N4ZjJwZ3Zr?=
+ =?utf-8?B?QnY5eXVoWlBQdTVlSU84V0FLRHl5N1NDd2MyRXI5K0RtbklCa3BNV2FIQnFP?=
+ =?utf-8?B?ajgwaHFWNzFjdU9OOGoyejhBaVBBRXVOd3VPRlg1cDVzWTdLRVZuajl1QjAz?=
+ =?utf-8?B?QmZ3amg4S3FtUnFtdkp5MlRZRFprTTNlVTNtamxRakxiQTVnYzRVZE5KVUhM?=
+ =?utf-8?B?YzJCRGpFZmRzdmhTWG1hSjE2TTllY0hBQmVzVjNzKzg5UHkxOWg4ZzVDWDgw?=
+ =?utf-8?Q?bpt1gokaAy2DrF38+gp2pb6pI8zrp+sedXyc6O1+QQxm?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f2afc6f-bffa-4fa0-b719-08daa20f7e56
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 11:41:05.5111
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FOraNgxUq1FYIda6O2AeEd57i2fDjok/r6l1I/qDddA8u9IcAqoqWPOAGNDtjmUD1Ff6d8muBXy/XosWjejCbQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7229
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 27-09-22 14:46:46, Ojaswin Mujoo wrote:
-> ** Splitting pa->pa_inode_list **
-> 
-> Currently, we use the same pa->pa_inode_list to add a pa to either
-> the inode preallocation list or the locality group preallocation list.
-> For better clarity, split this list into a union of 2 list_heads and use
-> either of the them based on the type of pa.
-> 
-> ** Splitting pa->pa_obj_lock **
-> 
-> Currently, pa->pa_obj_lock is either assigned &ei->i_prealloc_lock for
-> inode PAs or lg_prealloc_lock for lg PAs, and is then used to lock the
-> lists containing these PAs. Make the distinction between the 2 PA types
-> clear by changing this lock to a union of 2 locks. Explicitly use the
-> pa_lock_node.inode_lock for inode PAs and pa_lock_node.lg_lock for lg
-> PAs.
-> 
-> This patch is required so that the locality group preallocation code
-> remains the same as in upcoming patches we are going to make changes to
-> inode preallocation code to move from list to rbtree based
-> implementation. This patch also makes it easier to review the upcoming
-> patches.
-> 
-> There are no functional changes in this patch.
-> 
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
 
-Nice intermediate step. Feel free to add:
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  fs/ext4/mballoc.c | 76 +++++++++++++++++++++++++++--------------------
->  fs/ext4/mballoc.h | 10 +++++--
->  2 files changed, 52 insertions(+), 34 deletions(-)
+On 20.09.22 16:47, Rondreis wrote:
+> Hello,
 > 
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index dda9a72c81d9..b91710fe881f 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -3995,7 +3995,7 @@ ext4_mb_pa_assert_overlap(struct ext4_allocation_context *ac,
->  	ext4_lblk_t tmp_pa_start, tmp_pa_end;
->  
->  	rcu_read_lock();
-> -	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_inode_list) {
-> +	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_node.inode_list) {
->  		spin_lock(&tmp_pa->pa_lock);
->  		if (tmp_pa->pa_deleted == 0) {
->  			tmp_pa_start = tmp_pa->pa_lstart;
-> @@ -4033,7 +4033,7 @@ ext4_mb_pa_adjust_overlap(struct ext4_allocation_context *ac,
->  
->  	/* check we don't cross already preallocated blocks */
->  	rcu_read_lock();
-> -	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_inode_list) {
-> +	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_node.inode_list) {
->  		if (tmp_pa->pa_deleted)
->  			continue;
->  		spin_lock(&tmp_pa->pa_lock);
-> @@ -4410,7 +4410,7 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
->  
->  	/* first, try per-file preallocation */
->  	rcu_read_lock();
-> -	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_inode_list) {
-> +	list_for_each_entry_rcu(tmp_pa, &ei->i_prealloc_list, pa_node.inode_list) {
->  
->  		/* all fields in this condition don't change,
->  		 * so we can skip locking for them */
-> @@ -4467,7 +4467,7 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
->  	for (i = order; i < PREALLOC_TB_SIZE; i++) {
->  		rcu_read_lock();
->  		list_for_each_entry_rcu(tmp_pa, &lg->lg_prealloc_list[i],
-> -					pa_inode_list) {
-> +					pa_node.lg_list) {
->  			spin_lock(&tmp_pa->pa_lock);
->  			if (tmp_pa->pa_deleted == 0 &&
->  					tmp_pa->pa_free >= ac->ac_o_ex.fe_len) {
-> @@ -4640,9 +4640,15 @@ static void ext4_mb_put_pa(struct ext4_allocation_context *ac,
->  	list_del(&pa->pa_group_list);
->  	ext4_unlock_group(sb, grp);
->  
-> -	spin_lock(pa->pa_obj_lock);
-> -	list_del_rcu(&pa->pa_inode_list);
-> -	spin_unlock(pa->pa_obj_lock);
-> +	if (pa->pa_type == MB_INODE_PA) {
-> +		spin_lock(pa->pa_node_lock.inode_lock);
-> +		list_del_rcu(&pa->pa_node.inode_list);
-> +		spin_unlock(pa->pa_node_lock.inode_lock);
-> +	} else {
-> +		spin_lock(pa->pa_node_lock.lg_lock);
-> +		list_del_rcu(&pa->pa_node.lg_list);
-> +		spin_unlock(pa->pa_node_lock.lg_lock);
-> +	}
->  
->  	call_rcu(&(pa)->u.pa_rcu, ext4_mb_pa_callback);
->  }
-> @@ -4710,7 +4716,7 @@ ext4_mb_new_inode_pa(struct ext4_allocation_context *ac)
->  	pa->pa_len = ac->ac_b_ex.fe_len;
->  	pa->pa_free = pa->pa_len;
->  	spin_lock_init(&pa->pa_lock);
-> -	INIT_LIST_HEAD(&pa->pa_inode_list);
-> +	INIT_LIST_HEAD(&pa->pa_node.inode_list);
->  	INIT_LIST_HEAD(&pa->pa_group_list);
->  	pa->pa_deleted = 0;
->  	pa->pa_type = MB_INODE_PA;
-> @@ -4725,14 +4731,14 @@ ext4_mb_new_inode_pa(struct ext4_allocation_context *ac)
->  	ei = EXT4_I(ac->ac_inode);
->  	grp = ext4_get_group_info(sb, ac->ac_b_ex.fe_group);
->  
-> -	pa->pa_obj_lock = &ei->i_prealloc_lock;
-> +	pa->pa_node_lock.inode_lock = &ei->i_prealloc_lock;
->  	pa->pa_inode = ac->ac_inode;
->  
->  	list_add(&pa->pa_group_list, &grp->bb_prealloc_list);
->  
-> -	spin_lock(pa->pa_obj_lock);
-> -	list_add_rcu(&pa->pa_inode_list, &ei->i_prealloc_list);
-> -	spin_unlock(pa->pa_obj_lock);
-> +	spin_lock(pa->pa_node_lock.inode_lock);
-> +	list_add_rcu(&pa->pa_node.inode_list, &ei->i_prealloc_list);
-> +	spin_unlock(pa->pa_node_lock.inode_lock);
->  	atomic_inc(&ei->i_prealloc_active);
->  }
->  
-> @@ -4764,7 +4770,7 @@ ext4_mb_new_group_pa(struct ext4_allocation_context *ac)
->  	pa->pa_len = ac->ac_b_ex.fe_len;
->  	pa->pa_free = pa->pa_len;
->  	spin_lock_init(&pa->pa_lock);
-> -	INIT_LIST_HEAD(&pa->pa_inode_list);
-> +	INIT_LIST_HEAD(&pa->pa_node.lg_list);
->  	INIT_LIST_HEAD(&pa->pa_group_list);
->  	pa->pa_deleted = 0;
->  	pa->pa_type = MB_GROUP_PA;
-> @@ -4780,7 +4786,7 @@ ext4_mb_new_group_pa(struct ext4_allocation_context *ac)
->  	lg = ac->ac_lg;
->  	BUG_ON(lg == NULL);
->  
-> -	pa->pa_obj_lock = &lg->lg_prealloc_lock;
-> +	pa->pa_node_lock.lg_lock = &lg->lg_prealloc_lock;
->  	pa->pa_inode = NULL;
->  
->  	list_add(&pa->pa_group_list, &grp->bb_prealloc_list);
-> @@ -4956,9 +4962,15 @@ ext4_mb_discard_group_preallocations(struct super_block *sb,
->  	list_for_each_entry_safe(pa, tmp, &list, u.pa_tmp_list) {
->  
->  		/* remove from object (inode or locality group) */
-> -		spin_lock(pa->pa_obj_lock);
-> -		list_del_rcu(&pa->pa_inode_list);
-> -		spin_unlock(pa->pa_obj_lock);
-> +		if (pa->pa_type == MB_GROUP_PA) {
-> +			spin_lock(pa->pa_node_lock.lg_lock);
-> +			list_del_rcu(&pa->pa_node.lg_list);
-> +			spin_unlock(pa->pa_node_lock.lg_lock);
-> +		} else {
-> +			spin_lock(pa->pa_node_lock.inode_lock);
-> +			list_del_rcu(&pa->pa_node.inode_list);
-> +			spin_unlock(pa->pa_node_lock.inode_lock);
-> +		}
->  
->  		if (pa->pa_type == MB_GROUP_PA)
->  			ext4_mb_release_group_pa(&e4b, pa);
-> @@ -5021,8 +5033,8 @@ void ext4_discard_preallocations(struct inode *inode, unsigned int needed)
->  	spin_lock(&ei->i_prealloc_lock);
->  	while (!list_empty(&ei->i_prealloc_list) && needed) {
->  		pa = list_entry(ei->i_prealloc_list.prev,
-> -				struct ext4_prealloc_space, pa_inode_list);
-> -		BUG_ON(pa->pa_obj_lock != &ei->i_prealloc_lock);
-> +				struct ext4_prealloc_space, pa_node.inode_list);
-> +		BUG_ON(pa->pa_node_lock.inode_lock != &ei->i_prealloc_lock);
->  		spin_lock(&pa->pa_lock);
->  		if (atomic_read(&pa->pa_count)) {
->  			/* this shouldn't happen often - nobody should
-> @@ -5039,7 +5051,7 @@ void ext4_discard_preallocations(struct inode *inode, unsigned int needed)
->  		if (pa->pa_deleted == 0) {
->  			ext4_mb_mark_pa_deleted(sb, pa);
->  			spin_unlock(&pa->pa_lock);
-> -			list_del_rcu(&pa->pa_inode_list);
-> +			list_del_rcu(&pa->pa_node.inode_list);
->  			list_add(&pa->u.pa_tmp_list, &list);
->  			needed--;
->  			continue;
-> @@ -5331,7 +5343,7 @@ ext4_mb_discard_lg_preallocations(struct super_block *sb,
->  
->  	spin_lock(&lg->lg_prealloc_lock);
->  	list_for_each_entry_rcu(pa, &lg->lg_prealloc_list[order],
-> -				pa_inode_list,
-> +				pa_node.lg_list,
->  				lockdep_is_held(&lg->lg_prealloc_lock)) {
->  		spin_lock(&pa->pa_lock);
->  		if (atomic_read(&pa->pa_count)) {
-> @@ -5354,7 +5366,7 @@ ext4_mb_discard_lg_preallocations(struct super_block *sb,
->  		ext4_mb_mark_pa_deleted(sb, pa);
->  		spin_unlock(&pa->pa_lock);
->  
-> -		list_del_rcu(&pa->pa_inode_list);
-> +		list_del_rcu(&pa->pa_node.lg_list);
->  		list_add(&pa->u.pa_tmp_list, &discard_list);
->  
->  		total_entries--;
-> @@ -5415,7 +5427,7 @@ static void ext4_mb_add_n_trim(struct ext4_allocation_context *ac)
->  	/* Add the prealloc space to lg */
->  	spin_lock(&lg->lg_prealloc_lock);
->  	list_for_each_entry_rcu(tmp_pa, &lg->lg_prealloc_list[order],
-> -				pa_inode_list,
-> +				pa_node.lg_list,
->  				lockdep_is_held(&lg->lg_prealloc_lock)) {
->  		spin_lock(&tmp_pa->pa_lock);
->  		if (tmp_pa->pa_deleted) {
-> @@ -5424,8 +5436,8 @@ static void ext4_mb_add_n_trim(struct ext4_allocation_context *ac)
->  		}
->  		if (!added && pa->pa_free < tmp_pa->pa_free) {
->  			/* Add to the tail of the previous entry */
-> -			list_add_tail_rcu(&pa->pa_inode_list,
-> -						&tmp_pa->pa_inode_list);
-> +			list_add_tail_rcu(&pa->pa_node.lg_list,
-> +						&tmp_pa->pa_node.lg_list);
->  			added = 1;
->  			/*
->  			 * we want to count the total
-> @@ -5436,7 +5448,7 @@ static void ext4_mb_add_n_trim(struct ext4_allocation_context *ac)
->  		lg_prealloc_count++;
->  	}
->  	if (!added)
-> -		list_add_tail_rcu(&pa->pa_inode_list,
-> +		list_add_tail_rcu(&pa->pa_node.lg_list,
->  					&lg->lg_prealloc_list[order]);
->  	spin_unlock(&lg->lg_prealloc_lock);
->  
-> @@ -5492,9 +5504,9 @@ static int ext4_mb_release_context(struct ext4_allocation_context *ac)
->  			 * doesn't grow big.
->  			 */
->  			if (likely(pa->pa_free)) {
-> -				spin_lock(pa->pa_obj_lock);
-> -				list_del_rcu(&pa->pa_inode_list);
-> -				spin_unlock(pa->pa_obj_lock);
-> +				spin_lock(pa->pa_node_lock.lg_lock);
-> +				list_del_rcu(&pa->pa_node.lg_list);
-> +				spin_unlock(pa->pa_node_lock.lg_lock);
->  				ext4_mb_add_n_trim(ac);
->  			}
->  		}
-> @@ -5504,9 +5516,9 @@ static int ext4_mb_release_context(struct ext4_allocation_context *ac)
->  			 * treat per-inode prealloc list as a lru list, then try
->  			 * to trim the least recently used PA.
->  			 */
-> -			spin_lock(pa->pa_obj_lock);
-> -			list_move(&pa->pa_inode_list, &ei->i_prealloc_list);
-> -			spin_unlock(pa->pa_obj_lock);
-> +			spin_lock(pa->pa_node_lock.inode_lock);
-> +			list_move(&pa->pa_node.inode_list, &ei->i_prealloc_list);
-> +			spin_unlock(pa->pa_node_lock.inode_lock);
->  		}
->  
->  		ext4_mb_put_pa(ac, ac->ac_sb, pa);
-> diff --git a/fs/ext4/mballoc.h b/fs/ext4/mballoc.h
-> index dcda2a943cee..398a6688c341 100644
-> --- a/fs/ext4/mballoc.h
-> +++ b/fs/ext4/mballoc.h
-> @@ -114,7 +114,10 @@ struct ext4_free_data {
->  };
->  
->  struct ext4_prealloc_space {
-> -	struct list_head	pa_inode_list;
-> +	union {
-> +		struct list_head	inode_list; /* for inode PAs */
-> +		struct list_head	lg_list;	/* for lg PAs */
-> +	} pa_node;
->  	struct list_head	pa_group_list;
->  	union {
->  		struct list_head pa_tmp_list;
-> @@ -128,7 +131,10 @@ struct ext4_prealloc_space {
->  	ext4_grpblk_t		pa_len;		/* len of preallocated chunk */
->  	ext4_grpblk_t		pa_free;	/* how many blocks are free */
->  	unsigned short		pa_type;	/* pa type. inode or group */
-> -	spinlock_t		*pa_obj_lock;
-> +	union {
-> +		spinlock_t		*inode_lock;	/* locks the inode list holding this PA */
-> +		spinlock_t		*lg_lock;	/* locks the lg list holding this PA */
-> +	} pa_node_lock;
->  	struct inode		*pa_inode;	/* hack, for history only */
->  };
->  
-> -- 
-> 2.31.1
+> When fuzzing the Linux kernel driver v6.0-rc6, the following crash was
+> triggered.
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> HEAD commit: 521a547ced6477c54b4b0cc206000406c221b4d6
+> git tree: upstream
+> 
+> kernel config: https://pastebin.com/raw/hekxU61F
+> console output: https://pastebin.com/raw/gvADdA0t
+> 
+> Sorry for failing to extract the reproducer. But on other versions of
+> Linux, I also triggered this crash.
+> 
+> I would appreciate it if you have any idea how to solve this bug.
+> 
+> The crash report is as follows:
+> ==================================================================
+> BUG: KASAN: use-after-free in keyspan_close+0x240/0x260
+
+> kasan_report+0x8a/0x1b0 mm/kasan/report.c:495
+> keyspan_close+0x240/0x260 drivers/usb/serial/keyspan.c:1589
+> serial_port_shutdown+0x89/0x110 drivers/usb/serial/usb-serial.c:309
+> tty_port_shutdown+0x1ec/0x270 drivers/tty/tty_port.c:379
+> tty_port_hangup+0x103/0x170 drivers/tty/tty_port.c:407
+> __tty_hangup.part.0+0x65b/0x770 drivers/tty/tty_io.c:660
+> __tty_hangup drivers/tty/tty_io.c:592 [inline]
+> tty_vhangup drivers/tty/tty_io.c:707 [inline]
+> tty_ioctl+0x956/0x1430 drivers/tty/tty_io.c:2718
+
+This is triggered regularly by the reproducer:
+r0 = openat$ttynull(0xffffffffffffff9c, 
+&(0x7f00000000c0)='/dev/ttyUSB1', 0x0, 0x0)
+[..]
+ioctl$TIOCVHANGUP(r0, 0x5437, 0x0)
+
+basically just the ioctl()
+
+> Freed by task 9889:
+
+> usb_serial_device_remove+0x13f/0x1a0 drivers/usb/serial/bus.c:97
+> device_remove+0xc8/0x170 drivers/base/dd.c:548
+> __device_release_driver drivers/base/dd.c:1249 [inline]
+> device_release_driver_internal+0x1a7/0x360 drivers/base/dd.c:1275
+> bus_remove_device+0x2e3/0x590 drivers/base/bus.c:529
+> device_del+0x5d2/0xe80 drivers/base/core.c:3704
+> usb_serial_disconnect+0x23e/0x3b0 drivers/usb/serial/usb-serial.c:1205
+> usb_unbind_interface+0x1bd/0x890 drivers/usb/core/driver.c:458
+> device_remove drivers/base/dd.c:550 [inline]
+
+Regular disconnect
+
+Looking at keyspan_close():
+
+static void keyspan_close(struct usb_serial_port *port)
+{
+         int                     i;
+         struct keyspan_port_private     *p_priv;
+
+         p_priv = usb_get_serial_port_data(port);
+
+         p_priv->rts_state = 0;
+         p_priv->dtr_state = 0;
+
+         keyspan_send_setup(port, 2);
+
+It is clearly written so that it must never run after
+usb_serial_disconnect(). I must say that I do not clearly
+understand how this is achieved.
+
+For testing purposes could you add a check for !serial->disconnected
+to the call of close() in serial_port_shutdown()?
+
+	Regards
+		Oliver
+
