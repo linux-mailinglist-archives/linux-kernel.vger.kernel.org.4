@@ -2,50 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59505EF2CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354EC5EF2CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235068AbiI2JzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 05:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S235096AbiI2Jz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 05:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235002AbiI2JzP (ORCPT
+        with ESMTP id S230133AbiI2Jzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:55:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9D9357F6;
-        Thu, 29 Sep 2022 02:55:13 -0700 (PDT)
+        Thu, 29 Sep 2022 05:55:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5394E9DFAB;
+        Thu, 29 Sep 2022 02:55:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5649AB82344;
-        Thu, 29 Sep 2022 09:55:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74417C433C1;
-        Thu, 29 Sep 2022 09:55:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664445311;
-        bh=SF7iV+1iV70j6hczBd2MAd5v2bFdyA/U9sYfAR6RpuE=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E449160BF0;
+        Thu, 29 Sep 2022 09:55:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C598DC433D6;
+        Thu, 29 Sep 2022 09:55:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1664445352;
+        bh=n00c4eeAjMCSUOYpZjK2HcCQN9bxyNQChU/4UPcuT58=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RBc51JmE3jFPSucRCA0lQO49jprDTX5qpVfxgv7dfCq1xqZrNXb6T7agCSPy/sogt
-         2lUzCeOY+n4CITVM6cZb98S5WB/M2Nm/+7O6xRvgPlwGNJ7naNLtNr94jfcHNM938k
-         C50RE1PypUX4xmv1wviCqoXKw4Rcw7qQFnFOTcl439KYE5XNC8ieV5DczfnISBys2q
-         Pg858cKj4745LXMBWpxkqfvH4U32eg1FTHaLqEtYAgwxcBQ8o1Vog9aBNCGkzc8Tu2
-         ikHlCSabpv2sI/K1ccLmLtyVBCTgL/Rm2JMrMgmgtui4S41Y/vJMYV0LzJxwHA6MUU
-         +BmmGnwRhgMyQ==
-Date:   Thu, 29 Sep 2022 12:54:52 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Christian Langrock <christian.langrock@secunet.com>
-Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH ipsec v3] xfrm: replay: Fix ESN wrap around for GSO
-Message-ID: <YzVrbHw9LMoTjYzI@unreal>
-References: <02b5650c-29f4-568f-b3be-689594dfacc2@secunet.com>
+        b=sD44uY+uXt+HgoIFBUjwnCKOBKC1bgtPcVmAVtP0XWaYvB0H+OlwLkenCEsPESrWg
+         6g+U6RIDZUKZqT9SYcC3PZF/Ib7ZmpQI7Ykc6tynbrqizVJcROODUl+pxM0w6AxCiW
+         UBTj2a50d5A4IFEZk+rFA4tk+MfZbYdzdqd6USRg=
+Date:   Thu, 29 Sep 2022 11:55:49 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     macro@orcam.me.uk, Lee Jones <lee@kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thu Nguyen <thu@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        thang@os.amperecomputing.com
+Subject: Re: [PATCH v9 5/9] misc: smpro-misc: Add Ampere's Altra SMpro misc
+ driver
+Message-ID: <YzVrpT6BD6qmu5ZG@kroah.com>
+References: <20220929094321.770125-1-quan@os.amperecomputing.com>
+ <20220929094321.770125-6-quan@os.amperecomputing.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <02b5650c-29f4-568f-b3be-689594dfacc2@secunet.com>
+In-Reply-To: <20220929094321.770125-6-quan@os.amperecomputing.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,80 +67,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 07:59:31AM +0200, Christian Langrock wrote:
-> When using GSO it can happen that the wrong seq_hi is used for the last
-> packets before the wrap around. This can lead to double usage of a
-> sequence number. To avoid this, we should serialize this last GSO
-> packet.
+On Thu, Sep 29, 2022 at 04:43:17PM +0700, Quan Nguyen wrote:
+> This commit adds driver support for accessing various information
+> reported by Ampere's SMpro co-processor such as Boot Progress and
+> other miscellaneous data.
 > 
-> Changes in v3:
-> - fix build
-> - remove wrapper function
-> 
-> Changes in v2:
-> - switch to bool as return value
-> - remove switch case in wrapper function
-> 
-> Fixes: d7dbefc45cf5 ("xfrm: Add xfrm_replay_overflow functions for...")
-> Signed-off-by: Christian Langrock <christian.langrock@secunet.com>
+> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
 > ---
-
-Please put changelog after "---" trailer.
-
->  include/net/xfrm.h     |  1 +
->  net/xfrm/xfrm_output.c |  2 +-
->  net/xfrm/xfrm_replay.c | 26 ++++++++++++++++++++++++++
->  3 files changed, 28 insertions(+), 1 deletion(-)
+> Changes in v9:
+>   + Update SPDX licence                                     [Greg]
+>   + Use ATTRIBUTE_GROUPS()                                  [Greg]
+>   + Use dev_groups instead of sysfs_create_group() to avoid
+>   racing issue with user space                              [Greg]
+>   + Refactor code to avoid clever encoding issue            [Quan]
 > 
-> diff --git a/include/net/xfrm.h b/include/net/xfrm.h
-> index 6e8fa98f786f..b845f911767c 100644
-> --- a/include/net/xfrm.h
-> +++ b/include/net/xfrm.h
-> @@ -1749,6 +1749,7 @@ void xfrm_replay_advance(struct xfrm_state *x, __be32 net_seq);
->  int xfrm_replay_check(struct xfrm_state *x, struct sk_buff *skb, __be32 net_seq);
->  void xfrm_replay_notify(struct xfrm_state *x, int event);
->  int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb);
-> +bool xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb);
->  int xfrm_replay_recheck(struct xfrm_state *x, struct sk_buff *skb, __be32 net_seq);
+> Changes in v8:
+>   + Update wording for SMPRO_MISC in Kconfig file           [Quan]
+>   + Switch to use sysfs_emit()                              [Quan]
+> 
+> Changes in v7:
+>   + Fix wrong return type of *_show/store()
+>   functions                                    [kernel robot test]
+>   + Adjust patch order to remove dependence with
+>   smpro-mfd                                            [Lee Jones]
+> 
+> Changes in v6:
+>   + First introduced in v6 [Quan]
+> 
+>  drivers/misc/Kconfig      |  10 +++
+>  drivers/misc/Makefile     |   1 +
+>  drivers/misc/smpro-misc.c | 145 ++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 156 insertions(+)
+>  create mode 100644 drivers/misc/smpro-misc.c
+> 
+> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> index b9ceee949dab..9947b7892bd5 100644
+> --- a/drivers/misc/Kconfig
+> +++ b/drivers/misc/Kconfig
+> @@ -188,6 +188,16 @@ config SMPRO_ERRMON
+>  	  To compile this driver as a module, say M here. The driver will be
+>  	  called smpro-errmon.
 >  
->  static inline int xfrm_aevent_is_on(struct net *net)
-> diff --git a/net/xfrm/xfrm_output.c b/net/xfrm/xfrm_output.c
-> index 9a5e79a38c67..c470a68d9c88 100644
-> --- a/net/xfrm/xfrm_output.c
-> +++ b/net/xfrm/xfrm_output.c
-> @@ -738,7 +738,7 @@ int xfrm_output(struct sock *sk, struct sk_buff *skb)
->  		skb->encapsulation = 1;
->  
->  		if (skb_is_gso(skb)) {
-> -			if (skb->inner_protocol)
-> +			if (skb->inner_protocol || xfrm_replay_overflow_check(x, skb))
->  				return xfrm_output_gso(net, sk, skb);
->  
->  			skb_shinfo(skb)->gso_type |= SKB_GSO_ESP;
-> diff --git a/net/xfrm/xfrm_replay.c b/net/xfrm/xfrm_replay.c
-> index 9277d81b344c..23858eb5eab4 100644
-> --- a/net/xfrm/xfrm_replay.c
-> +++ b/net/xfrm/xfrm_replay.c
-> @@ -750,6 +750,27 @@ int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb)
->  
->  	return xfrm_replay_overflow_offload(x, skb);
->  }
+> +config SMPRO_MISC
+> +	tristate "Ampere Computing SMPro miscellaneous driver"
+> +	depends on MFD_SMPRO || COMPILE_TEST
+> +	help
+> +	  Say Y here to get support for the SMpro error miscellalenous function
+> +	  provided by Ampere Computing's Altra and Altra Max SoCs.
 > +
-> +static bool xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb)
+> +	  To compile this driver as a module, say M here. The driver will be
+> +	  called smpro-misc.
+> +
+>  config CS5535_MFGPT
+>  	tristate "CS5535/CS5536 Geode Multi-Function General Purpose Timer (MFGPT) support"
+>  	depends on MFD_CS5535
+> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+> index bbe24d4511a3..87b54a4a4422 100644
+> --- a/drivers/misc/Makefile
+> +++ b/drivers/misc/Makefile
+> @@ -24,6 +24,7 @@ obj-$(CONFIG_KGDB_TESTS)	+= kgdbts.o
+>  obj-$(CONFIG_SGI_XP)		+= sgi-xp/
+>  obj-$(CONFIG_SGI_GRU)		+= sgi-gru/
+>  obj-$(CONFIG_SMPRO_ERRMON)	+= smpro-errmon.o
+> +obj-$(CONFIG_SMPRO_MISC)	+= smpro-misc.o
+>  obj-$(CONFIG_CS5535_MFGPT)	+= cs5535-mfgpt.o
+>  obj-$(CONFIG_GEHC_ACHC)		+= gehc-achc.o
+>  obj-$(CONFIG_HP_ILO)		+= hpilo.o
+> diff --git a/drivers/misc/smpro-misc.c b/drivers/misc/smpro-misc.c
+> new file mode 100644
+> index 000000000000..6c427141e51b
+> --- /dev/null
+> +++ b/drivers/misc/smpro-misc.c
+> @@ -0,0 +1,145 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Ampere Computing SoC's SMpro Misc Driver
+> + *
+> + * Copyright (c) 2022, Ampere Computing LLC
+> + */
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +
+> +/* Boot Stage/Progress Registers */
+> +#define BOOTSTAGE	0xB0
+> +#define BOOTSTAGE_LO	0xB1
+> +#define CUR_BOOTSTAGE	0xB2
+> +#define BOOTSTAGE_HI	0xB3
+> +
+> +/* SOC State Registers */
+> +#define SOC_POWER_LIMIT		0xE5
+> +
+> +struct smpro_misc {
+> +	struct regmap *regmap;
+> +};
+> +
+> +static ssize_t boot_progress_show(struct device *dev, struct device_attribute *da, char *buf)
 > +{
-> +	struct xfrm_replay_state_esn *replay_esn = x->replay_esn;
-> +	__u32 oseq = replay_esn->oseq;
+> +	struct smpro_misc *misc = dev_get_drvdata(dev);
+> +	u16 boot_progress[3] = { 0 };
+> +	u32 bootstage;
+> +	u8 boot_stage;
+> +	u8 cur_stage;
+> +	u32 reg_lo;
+> +	u32 reg;
+> +	int ret;
 > +
-> +	/* We assume that this function is called with
-> +	 * skb_is_gso(skb) == true
-> +	 */
+> +	/* Read current boot stage */
+> +	ret = regmap_read(misc->regmap, CUR_BOOTSTAGE, &reg);
+> +	if (ret)
+> +		return ret;
 > +
-> +	if (x->repl_mode == XFRM_REPLAY_MODE_ESN) {
-> +		if (x->type->flags & XFRM_TYPE_REPLAY_PROT) {
+> +	cur_stage = reg & 0xff;
+> +
+> +	ret = regmap_read(misc->regmap, BOOTSTAGE, &bootstage);
+> +	if (ret)
+> +		return ret;
+> +
+> +	boot_stage = (bootstage >> 8) & 0xff;
+> +
+> +	if (boot_stage > cur_stage)
+> +		return -EINVAL;
+> +
+> +	ret = regmap_read(misc->regmap,	BOOTSTAGE_LO, &reg_lo);
+> +	if (!ret)
+> +		ret = regmap_read(misc->regmap, BOOTSTAGE_HI, &reg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Firmware to report new boot stage next time */
+> +	if (boot_stage < cur_stage) {
+> +		ret = regmap_write(misc->regmap, BOOTSTAGE, ((bootstage & 0xff00) | 0x1));
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	boot_progress[0] = bootstage;
+> +	boot_progress[1] = swab16(reg);
+> +	boot_progress[2] = swab16(reg_lo);
+> +
+> +	return sysfs_emit(buf, "%*phN\n", (int)sizeof(boot_progress), boot_progress);
+> +}
 
-It can be one if( ... && ...), but not critical.
+Again, please put the Documentation/ABI/ entries in this commit so that
+we can verify they are all correct.  Putting them at the end of the
+series makes it pretty impossible to review.  Would you want to have to
+match them all up the way you sent them?
 
-Once you fix commit message, feel free to add my tag.
+thanks,
 
-Thanks,
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+greg k-h
