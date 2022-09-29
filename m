@@ -2,154 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A965EEBB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 04:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767335EEBB8
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 04:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234073AbiI2C2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 22:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
+        id S234262AbiI2Cad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 22:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbiI2C2I (ORCPT
+        with ESMTP id S231499AbiI2Cab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 22:28:08 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF1E106F65
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 19:28:07 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28T161j1016901;
-        Thu, 29 Sep 2022 02:27:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=HtXlvrbeHdiDOnPs6PRb5YdWRt2AZq9egCHt1luwPPo=;
- b=LbDboNjKzJIYkH5CjsMsmQp94Ol25n9Og8c7UTr1vTGFMSBtXJBmFF1nSQX83fyVvUM5
- oyX+5wl6iJj+xxvINL/vh7jOqzYoj8Z4T++NNDEp0fbqD3Zo5nvCv/xPkWyZjmlifU9k
- hU+MKgTdyffXDu0efVQuakgZX5WQcUzVZWWHRZTW73cHMeB5TXN7aCStp+G5klgrXeCB
- KEHG4zeMdc3zopYc4HAw3e4J0ar/RPjX4VkGk/76mKB/ZPVDMzgsS8AIX6+26NjWCUiZ
- 7/cTNxjqDmnrFQEE3ZE0vpdyfkGH6BVkZe8WqlJaFh7S4CIr6RPMzKEqefLN98BbFgcD Sg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jvpuva52x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 02:27:59 +0000
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28T2O9Zg013058;
-        Thu, 29 Sep 2022 02:27:58 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3jstyksbfe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 02:27:58 +0000
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28T2RwOA015810;
-        Thu, 29 Sep 2022 02:27:58 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 28T2RwdA015809
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 02:27:58 +0000
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 28 Sep 2022 19:27:56 -0700
-Date:   Thu, 29 Sep 2022 07:57:52 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Kassey Li <quic_yingangl@quicinc.com>
-CC:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <linux-kernel@vger.kernel.org>, <quic_namajain@quicinc.com>
-Subject: Re: [PATCH v2] kernel/hung_task: add option to ignore task
-Message-ID: <20220929022752.GA28684@hu-pkondeti-hyd.qualcomm.com>
-References: <20220928074841.22545-1-quic_yingangl@quicinc.com>
+        Wed, 28 Sep 2022 22:30:31 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49B310E5F9;
+        Wed, 28 Sep 2022 19:30:30 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id r193so4536480vke.13;
+        Wed, 28 Sep 2022 19:30:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=kfhHvPkJrYvpjcx9wrG7I5US83ZBRovptePYpc0nVPs=;
+        b=HblNEBMnM00VhREXEt5aynr7ML1dy+pc0MwCyrcDsYJOiY33+pheof43cBtr3PNfxK
+         gYBkI/9gdo1iUZwI1DKK3PChefb4XwIAH266v6cK7JuKuoOGlRTbdqL1tBn8CiHAKGeE
+         cqJIG1YCGr+AlJ82f8eyEkShp3TQfpwmUlEUkLe4ftWuYb7aVyaieMffXWOuDxeijE5q
+         Y7DasNsm0zLv6ZIikWzQaUOov+7Vwa+CuDQLEf6nrmOX2cEp9E0PV/mYVGKBVBUuW5bW
+         4GD04eJ2rUSzXcnuPCMJxbBF3AYZCUqNTSBaa545FI8Bf5CVWiRgoQNYt3tsVw5805Ho
+         zyhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=kfhHvPkJrYvpjcx9wrG7I5US83ZBRovptePYpc0nVPs=;
+        b=LAR0mpwLgaGmRcm4Qu3EetLddfl3xGrfs174jC0Z55/BgKDIREftzmhYOQmV/JN6e5
+         LhDX6X1TdiJPuD9UTPCbUadhlPopNgGAw1dbNMpKgCwtygxIK+Uo+7/pmnx4WccWNrYR
+         xOKbAz1sbm6/jvcR6VHVCToNqA0A2mJKk9CaMU6Z/xJBzC575ireopYEij+clBeHxLa0
+         P72XhRJFs93lpSaeRXm3vsrxNmDeDV1qri0RI3chUogAKtsASpkocdD1qmJthfdH5Boi
+         +LODheH+cziHtiVqVxyfHxrurQq3sK60BVDR5AHTHFVZV8Fra5T9CctMBXcND1llhY/Q
+         /Gqg==
+X-Gm-Message-State: ACrzQf2gXehX7ZzaNW3a5NBUnold6qMGlCR7yvFOeP5C4a5hdteTf4L1
+        0Aqr21LCtZTwwr4Bk/qCuLganS2/lLTJyARLmhKWBk2WtHp+IA==
+X-Google-Smtp-Source: AMsMyM6iyWsZaj4HsA0BsyqLCbhjxvp0u2xNOR3hLf6sYblldoJgTlo6MznK1QRfxmEF5wJ6izFJRQj20U304euHz6k=
+X-Received: by 2002:a1f:2596:0:b0:3a2:5864:697c with SMTP id
+ l144-20020a1f2596000000b003a25864697cmr361084vkl.37.1664418630041; Wed, 28
+ Sep 2022 19:30:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220928074841.22545-1-quic_yingangl@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 48KfgKXVaTBG248K02K505GSxBddqqkY
-X-Proofpoint-ORIG-GUID: 48KfgKXVaTBG248K02K505GSxBddqqkY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-29_01,2022-09-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 phishscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
- malwarescore=0 clxscore=1011 priorityscore=1501 mlxscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209290014
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220928092937.27120-1-zhang.lyra@gmail.com> <fca2b97c-9d4f-d372-ef2a-aae8b367bbe5@linaro.org>
+In-Reply-To: <fca2b97c-9d4f-d372-ef2a-aae8b367bbe5@linaro.org>
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+Date:   Thu, 29 Sep 2022 10:29:53 +0800
+Message-ID: <CAAfSe-t=-pZAcrY0o-ct1uJaNhtkCMQKNW5gOrJfE6DEOhSZDw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: gpio: Conver Unisoc GPIO controller
+ binding to yaml
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 03:48:41PM +0800, Kassey Li wrote:
-> By default, hung_task will iterate the tasklist and check
-> state in TASK_UNINTERRUPTIBLE with a given timeout value.
-> 
-> Here we add an option for task_struct so it can be ignored.
-> Set this flag to default true, it do not break the origin design.
-> 
-> This is useful when we set timeout value to 5s, where we just want
-> to detect some tasks interested.
-> 
-> Suggested-by: Naman Jain <quic_namajain@quicinc.com>
-> Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
-> ---
->  include/linux/sched.h | 1 +
->  kernel/fork.c         | 1 +
->  kernel/hung_task.c    | 3 ++-
->  3 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index e7b2f8a5c711..7c8596fea1f6 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1071,6 +1071,7 @@ struct task_struct {
->  #ifdef CONFIG_DETECT_HUNG_TASK
->  	unsigned long			last_switch_count;
->  	unsigned long			last_switch_time;
-> +	bool			hung_task_detect;
->  #endif
->  	/* Filesystem information: */
->  	struct fs_struct		*fs;
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 90c85b17bf69..5c461a37a26e 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -1552,6 +1552,7 @@ static int copy_mm(unsigned long clone_flags, struct task_struct *tsk)
->  #ifdef CONFIG_DETECT_HUNG_TASK
->  	tsk->last_switch_count = tsk->nvcsw + tsk->nivcsw;
->  	tsk->last_switch_time = 0;
-> +	tsk->hung_task_detect = 1;
->  #endif
->  
->  	tsk->mm = NULL;
-> diff --git a/kernel/hung_task.c b/kernel/hung_task.c
-> index bb2354f73ded..74bf4cef857f 100644
-> --- a/kernel/hung_task.c
-> +++ b/kernel/hung_task.c
-> @@ -119,7 +119,8 @@ static void check_hung_task(struct task_struct *t, unsigned long timeout)
->  	if (sysctl_hung_task_panic) {
->  		console_verbose();
->  		hung_task_show_lock = true;
-> -		hung_task_call_panic = true;
-> +		if (t->hung_task_detect)
-> +			hung_task_call_panic = true;
->  	}
->  
->  	/*
-> -- 
-> 2.17.1
-> 
+Hi Krzysztof,
 
-This patch does not seems to be complete. Do you plan to provide an interface
-to set/clear task_struct::hung_task_detect? Please explain the motivation and
-the problems solved by this interface.
+On Wed, 28 Sept 2022 at 19:31, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 28/09/2022 11:29, Chunyan Zhang wrote:
+> > From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> >
+> > Convert the Unisoc gpio controller binding to DT schema format.
+> >
+>
+>
+> Thank you for your patch. There is something to discuss/improve.
+>
+> > diff --git a/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
+> > new file mode 100644
+> > index 000000000000..c0cd1ed9809b
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/gpio/sprd,gpio.yaml
+> > @@ -0,0 +1,70 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +# Copyright 2022 Unisoc Inc.
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/gpio/sprd,gpio.yaml#
+>
+> Use compatible as filename, so sprd,sc9860-gpio.yaml
 
-Thanks,
-Pavan
+Humm... This is not only for SC9860, also for other IPs, UMS512 as an
+example which added in this patchset.
+
+Thanks for the review,
+Chunyan
+
+>
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Unisoc GPIO controller
+> > +
+>
+> Best regards,
+> Krzysztof
+>
