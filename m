@@ -2,103 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103175EF19D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649D35EF19B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235108AbiI2JOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 05:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
+        id S235440AbiI2JO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 05:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235694AbiI2JOZ (ORCPT
+        with ESMTP id S235187AbiI2JOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:14:25 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 879328276A
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:14:23 -0700 (PDT)
-Received: from [10.20.42.32] (unknown [10.20.42.32])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxvmvtYTVjv7QjAA--.56279S3;
-        Thu, 29 Sep 2022 17:14:22 +0800 (CST)
-Subject: Re: [PATCH V3] LoongArch: Fix cpu name after s3/s4
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-References: <20220929085530.8742-1-lvjianmin@loongson.cn>
- <1776fe36-b954-b2c9-a2c1-157363f25ce2@xen0n.name>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <05fcc572-8b58-629c-db9f-4c540c7b4f21@loongson.cn>
-Date:   Thu, 29 Sep 2022 17:14:21 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 29 Sep 2022 05:14:51 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9C933A3A
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:14:49 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id a8so1280189lff.13
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:14:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=oG4V5/QKWGgMxbROXthhVPDw1tYajaC1j8zKjAVTP/s=;
+        b=c+1JB19/ob7FNVZB/2s6KeGqwM+0h262yjV6pFpJoWRYNfkqsSKvy+yVJzknHkjfNU
+         lLfSzR97ENtQJy9aoN9v18N0H4QxmiZiFTx7/PZnEn0sykS6rDyzm28jeReR8HecnPha
+         6DYDrGQBn7eyY6Q4u1BNvmgjD5GbVUEW06P/wOY8+4uKEdx5F7mMS0XKBAv/Lo+AJpcJ
+         WGrM2HbkTlMoRAbQSueMKblT3ORqDufwswRs+MBHeiTvUxH8itXoNFH6y+3/+lsqEth5
+         6a6GTb5fJY5APEfI9aZEklCjB/RfFKGZI+NKeJMffrOroP7EMivYLJWboaXrThcgmjjc
+         Ddfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=oG4V5/QKWGgMxbROXthhVPDw1tYajaC1j8zKjAVTP/s=;
+        b=e2H7zUJmUG7QL/d+qN1iWI7jRLXOWUctBbiBOBAcpFutn3TDWMrOnsPIwcv6+wV5Gl
+         r5k76kpEKRUuAjRosRuSdMP3RS2/KCVyatwHTL6o4auoSmPcmor3VrBxeUCnaru0CW3X
+         nqDpqLa8BER6M+TqOTimr3HKNPPeowqLcgPT2CCv2XkxWFwxmuH6qQM2jy3GAKLaOjVD
+         gAi014tsB4qGvytCieSQYYQ/OCV0kgByPHlzxKseJ1A6KLX88yagKuvZcmHfTKmZQh+I
+         UAZzEoVBQI4RANiwD8au37rCNTEuS3NrYjMvqscICFbH9bQ7LbOeXEJ1FiraDkAJZcnP
+         kF1g==
+X-Gm-Message-State: ACrzQf2TQ/4Wdy9YguxGq1sRkEVf1WT4Lz5lauFkBn4OMLD0YEMO3th0
+        CqAGjmsojyO3k1IUQXxVYqAwHw==
+X-Google-Smtp-Source: AMsMyM6jS636wjyiYHep3uGw4IsbjoNSvQqDnO5vRLd2ADo8AYrRIjxlkUmi0s2cwHxd8kptP/2owg==
+X-Received: by 2002:a05:6512:1592:b0:4a0:2c52:d128 with SMTP id bp18-20020a056512159200b004a02c52d128mr916510lfb.288.1664442887396;
+        Thu, 29 Sep 2022 02:14:47 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id u22-20020ac243d6000000b00497a7dfe6a9sm729393lfl.64.2022.09.29.02.14.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 02:14:47 -0700 (PDT)
+Message-ID: <4d391a78-f524-5bb7-92e0-9778396ed0cb@linaro.org>
+Date:   Thu, 29 Sep 2022 11:14:46 +0200
 MIME-Version: 1.0
-In-Reply-To: <1776fe36-b954-b2c9-a2c1-157363f25ce2@xen0n.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Update SNPS Phy params for
+ SC7280
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxvmvtYTVjv7QjAA--.56279S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tr15JFy7GFy3Xw1xKry8Xwb_yoW8XFW8pF
-        n2yan8CrZF9r95Gasxtr13JryUZrn7G347Xas5J3W8ZF4UZr1qgryUXw4qgF15Aa1xKr40
-        vF4Dua92vFW7XaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvGb7Iv0xC_Kw4lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-        cIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2
-        AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v2
-        6r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14
-        v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
-        v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK
-        82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjxUqEoXUUUUU
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1664435628-4011-1-git-send-email-quic_kriskura@quicinc.com>
+ <CAA8EJpr9pcN-SG-yQNUGEoHCmv74prChprj4f42PKpSAzGzVKQ@mail.gmail.com>
+ <0cc382cb-b76e-a5a5-3480-47a451bdc958@quicinc.com>
+ <CAA8EJprvHSFKS2ZOLyeYgUpj4Fzec01RhQ7=nUh=qDpYBe0hrA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAA8EJprvHSFKS2ZOLyeYgUpj4Fzec01RhQ7=nUh=qDpYBe0hrA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/9/29 下午5:06, WANG Xuerui wrote:
-> On 9/29/22 16:55, Jianmin Lv wrote:
->> On coming back from s3/s4, the cpu name will be overwritten
->> in cpu_probe path of seconary cpu, so we don't overwrite it
->> if it has been initialized.
-> 
-> The sentences are confusing, first "the CPU name will be overwritten" 
-> then "don't overwrite it if initialized" -- seems the CPU name will get 
-> overwritten despite the patch's clear intent.
-> 
-> Better to keep it simple: "Don't overwrite the CPU name on coming back 
-> from S3/S4 if it is already initialized."
-> 
-
-Thanks, Xuerui, let me change it.
-
+On 29/09/2022 11:02, Dmitry Baryshkov wrote:
+> On Thu, 29 Sept 2022 at 11:54, Krishna Kurapati PSSNV
+> <quic_kriskura@quicinc.com> wrote:
 >>
->> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
 >>
->> diff --git a/arch/loongarch/kernel/cpu-probe.c 
->> b/arch/loongarch/kernel/cpu-probe.c
->> index 529ab8f44ec6..255a09876ef2 100644
->> --- a/arch/loongarch/kernel/cpu-probe.c
->> +++ b/arch/loongarch/kernel/cpu-probe.c
->> @@ -187,7 +187,9 @@ static inline void cpu_probe_loongson(struct 
->> cpuinfo_loongarch *c, unsigned int
->>       uint64_t *vendor = (void *)(&cpu_full_name[VENDOR_OFFSET]);
->>       uint64_t *cpuname = (void *)(&cpu_full_name[CPUNAME_OFFSET]);
->> -    __cpu_full_name[cpu] = cpu_full_name;
->> +    if (!__cpu_full_name[cpu])
->> +        __cpu_full_name[cpu] = cpu_full_name;
->> +
->>       *vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
->>       *cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
+>> On 9/29/2022 1:29 PM, Dmitry Baryshkov wrote:
+>>> On Thu, 29 Sept 2022 at 10:14, Krishna Kurapati
+>>> <quic_kriskura@quicinc.com> wrote:
+>>>>
+>>>> Override the SNPS Phy tuning parameters for SC7280 devices. These
+>>>> values are common for both trogdor and herobrine variants.
+>>>
+>>> They are common for trogdor and herobrine, but should these parameters
+>>> be a default? In other words, a random new device based on sc7280
+>>> would more likely use these overrides or the hardware defaults?
+>>>
+>> Hi Dmitry,
+>>
+>>    Currently there are only two platforms, so I made these changes on
+>> common dtsi. If a new platform comes (mostly it won't) we can override
+>> them in platform specific file is what I thought.
 > 
-> Otherwise LGTM.
-> 
-> Reviewed-by: WANG Xuerui <git@xen0n.name>
-> 
+> This is not how it usually works. The 'sc7280.dtsi' is not a 'common
+> dtsi' for trogdor and herobrine. It describes the SoC.
+> Thus in my opinion if these overrides should be a default to all
+> sc7280 platforms, this patch is fine. If these overrides are
+> applicable only to the two mentioned platforms, they should go to
+> respective platform-specific DT files.
+
+Dmitry's conclusion is correct here. The true question is whether these
+are properties of the SoC itself (so do not depend on the board or board
+layout) or these depend on design of board.
+
+Best regards,
+Krzysztof
 
