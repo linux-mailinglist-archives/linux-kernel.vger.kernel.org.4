@@ -2,108 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2475EFA46
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C6B5EFA4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236314AbiI2QVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
+        id S236259AbiI2QV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236202AbiI2QTo (ORCPT
+        with ESMTP id S236128AbiI2QUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:19:44 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F009D6336
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:19:36 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id z191so1284910iof.10
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:19:36 -0700 (PDT)
+        Thu, 29 Sep 2022 12:20:35 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBFB26AF4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:19:47 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-353fbfa727cso19698747b3.4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:19:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DWObYA2TtwBbzJGrssO5YEYPxOnVZ4pCjCKMQhd93g0=;
-        b=U3rIGTmVgdJ7GvqreNNqC0Ws6jBuabrs0OsqDzmY2fYjy6UvTcDXzF9QeKjy4ncJYv
-         XpZi2bIJMCeNZDcoY5p1X44jzergr2XPqcvYjuXC5PdQm2Dn+JjvfnBwRqGwRqY3vilx
-         j6rTCgKQNbk41Fzwvu2lvtHr/CVndEwxMd0r0=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=cZG4VxDd4FzBz/EOsma58nLK/qNyK8iWP/Ncqazkjcw=;
+        b=ia066oiLFSG4ooKCn0+TTOISUXJotPk/M95/srhxi0SdL8NN7xhHIKFtRLyHlrm9Lo
+         uZY3gmvTBrjkGxQMUqJj4fhop8hYpmzqmQFxAwsuvvR7iNaES//9VjNYrRYuLNnmf+LI
+         XcJi5TwxeuHSWkICh7IYBPrGWzP99gXAW1BGZtOTADuV0wFI6YA4aI5XU2E3t6l21MRE
+         zy3qMaUGKRJ+rybVBZTtZikfGa5WoHeNt48sTKhqzehvu89Ts9mCNce7cZTB1W77OLIN
+         A13pB32QJzEN02VrcxMuUj10iTRUgyj8KN88XdAzgd8nAe+AbujfvW7UKbLLiRlw3888
+         lLNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DWObYA2TtwBbzJGrssO5YEYPxOnVZ4pCjCKMQhd93g0=;
-        b=Vpfa7abUACDZd28hul9FByPKVEwhkK+znuOZCYNVp9ZgN6tgLgj1SBlC6XVEdz5e+i
-         bPtEoPpj5ICTUWKz5fTXX4jR1WNrpn1rAElAMjI3Og0C8Dvskyk+LlCweq70boUr5NxN
-         WxFM/p9JQnmqrt1ET73BmH1SJNbw7vd/MzigFXYXDnQ6sI3WvatGiORoOQWPjZVgE6sq
-         sqRWvxCSeWdhwpK8HzCX0pGQ5q0c4W1eAFWW65r00rNbEmm62orFD+/tpnYkjLTcLbvg
-         wUAMQoXoNhfulFn2EVwDEPND14xvZ/cJ5cx3f12bM/a8kFsU5F5LVDqyY8ar1qw+9iwe
-         bbOw==
-X-Gm-Message-State: ACrzQf1BxjXVRoZ2URC5mnK5IICHNviXAB1pNt78tUIhEr41vq0120cD
-        +XGR6VMl/h+on+SBRWwSE32uQA==
-X-Google-Smtp-Source: AMsMyM4JleXFGDxGYT3hWAGqXSdT1XJlP2po3hrSGBsUsLx93VozTys8BM85TIYiX2bRXPrfOtUKuA==
-X-Received: by 2002:a05:6638:1407:b0:35a:4d1c:10ef with SMTP id k7-20020a056638140700b0035a4d1c10efmr2231570jad.119.1664468376672;
-        Thu, 29 Sep 2022 09:19:36 -0700 (PDT)
-Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id f12-20020a02848c000000b0035aab2f1ab1sm2965451jai.134.2022.09.29.09.19.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 09:19:36 -0700 (PDT)
-From:   Raul E Rangel <rrangel@chromium.org>
-To:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org
-Cc:     andriy.shevchenko@linux.intel.com, dmitry.torokhov@gmail.com,
-        hdegoede@redhat.com, rafael@kernel.org,
-        mika.westerberg@linux.intel.com, mario.limonciello@amd.com,
-        timvp@google.com, linus.walleij@linaro.org, jingle.wu@emc.com.tw,
-        Raul E Rangel <rrangel@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6 13/13] Input: raydium_ts_i2c - Don't set wake_capable and wake_irq
-Date:   Thu, 29 Sep 2022 10:19:17 -0600
-Message-Id: <20220929093200.v6.13.Ia0b24ab02c22125c5fd686cc25872bd26c27ac23@changeid>
-X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
-In-Reply-To: <20220929161917.2348231-1-rrangel@chromium.org>
-References: <20220929161917.2348231-1-rrangel@chromium.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=cZG4VxDd4FzBz/EOsma58nLK/qNyK8iWP/Ncqazkjcw=;
+        b=Y27QvT2J0VW54MaMmdJ3UbVkeZcZiqg2jtNRcjLQubXx8wvtfWZsk0oVYeyatZlOYN
+         2XSj0GU/ECyORm+vmUNkrQGLo2LPjnSOsiQT+yVZMIIhhnMq9eKbv1kFcdSXgEfBfCzW
+         tY2rBfkjZgQyD+MaVHuViiaeZ6ImUcYc5Q/6c39lK49L2HMHBUh0KjsMl6pocgc/xnbm
+         fDJBZJIt2cqq2yHlDEwc2wcC5oTToctTVLwGtVaU4sMnWCPkr9PoMiMeG9reFpDyq81X
+         vPOS+/C/Sr4aruuwkZYSnQwmOiKENYpmGm63uH50RVTXcujnzjqAQmxVWzSpIly907bP
+         doNg==
+X-Gm-Message-State: ACrzQf1cu+0I85SG6gbgevY1X37YVuljyZCMxaXyJu0nO0dsGecb/Jos
+        26z3DloTLy2C9VmLQuQGgWlJ0t5cI3i9p0suBJ8nKw==
+X-Google-Smtp-Source: AMsMyM7k11Sfaya3SVmICF2kDIBihBAwUGo68c0f5VKKse+QC+PKe9le7kM/4m4rVpLmvfJ9+Vzew1v/JoSp1yy6fNg=
+X-Received: by 2002:a81:6756:0:b0:345:525e:38 with SMTP id b83-20020a816756000000b00345525e0038mr4057628ywc.47.1664468386499;
+ Thu, 29 Sep 2022 09:19:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220928221514.27350-1-yepeilin.cs@gmail.com>
+In-Reply-To: <20220928221514.27350-1-yepeilin.cs@gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 29 Sep 2022 09:19:34 -0700
+Message-ID: <CANn89iKJpWK9hWLPhfCYNcVUPucpgTf7s_aYv4uiQ=xocmE5WA@mail.gmail.com>
+Subject: Re: [PATCH net-next] net/sock: Introduce trace_sk_data_ready()
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i2c-core will now handle setting the wake_irq and wake capability
-for DT and ACPI systems.
+On Wed, Sep 28, 2022 at 3:15 PM Peilin Ye <yepeilin.cs@gmail.com> wrote:
+>
+> From: Peilin Ye <peilin.ye@bytedance.com>
+>
+> As suggested by Cong, introduce a tracepoint for all ->sk_data_ready()
+> and ->saved_data_ready() call sites.  For example:
+>
+> <...>
+>   cat-7011    [005] .....    92.018695: sk_data_ready: family=16 protocol=17 func=sock_def_readable
+>   cat-7012    [005] .....    93.612922: sk_data_ready: family=16 protocol=16 func=sock_def_readable
+>   cat-7013    [005] .....    94.653854: sk_data_ready: family=16 protocol=16 func=sock_def_readable
+> <...>
+>
+> Suggested-by: Cong Wang <cong.wang@bytedance.com>
+> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
 
-Signed-off-by: Raul E Rangel <rrangel@chromium.org>
----
+I will not comment on if/why these tracepoints are useful, only on the
+way you did this work.
 
-(no changes since v1)
+I would rather split this in two parts.
 
- drivers/input/touchscreen/raydium_i2c_ts.c | 9 ---------
- 1 file changed, 9 deletions(-)
+First patch adding and using a common helper.
 
-diff --git a/drivers/input/touchscreen/raydium_i2c_ts.c b/drivers/input/touchscreen/raydium_i2c_ts.c
-index 66c5b577b791d4f..88d187dc5d325f6 100644
---- a/drivers/input/touchscreen/raydium_i2c_ts.c
-+++ b/drivers/input/touchscreen/raydium_i2c_ts.c
-@@ -1185,15 +1185,6 @@ static int raydium_i2c_probe(struct i2c_client *client,
- 		return error;
- 	}
- 
--	/*
--	 * The wake IRQ should be declared via device tree instead of assuming
--	 * the IRQ can wake the system. This is here for legacy reasons and
--	 * will be removed once the i2c-core supports querying ACPI for wake
--	 * capabilities.
--	 */
--	if (!client->dev.power.wakeirq)
--		dev_pm_set_wake_irq(&client->dev, client->irq);
--
- 	error = devm_device_add_group(&client->dev,
- 				   &raydium_i2c_attribute_group);
- 	if (error) {
--- 
-2.37.3.998.g577e59143f-goog
+static inline void sock_data_ready(struct sock *sk)
+{
+     sk->sk_data_ready(sk);
+}
 
+s/sk->sk_data_ready(sk)/sock_data_ready(sk)/
+
+
+Second patch adding the tracing point once in the helper ?
+
+Alternatively, why not add the tracepoint directly in the called
+functions (we have few of them),
+instead of all call points ?
