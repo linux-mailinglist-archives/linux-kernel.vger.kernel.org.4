@@ -2,94 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B025EF5B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 14:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3C85EF5C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 14:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234984AbiI2MwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 08:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
+        id S235189AbiI2MxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 08:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbiI2MwW (ORCPT
+        with ESMTP id S232380AbiI2MxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 08:52:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EA01616E3;
-        Thu, 29 Sep 2022 05:52:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 29 Sep 2022 08:53:14 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23051616E3;
+        Thu, 29 Sep 2022 05:53:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2F54B82454;
-        Thu, 29 Sep 2022 12:52:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 457CFC433D7;
-        Thu, 29 Sep 2022 12:52:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1664455938;
-        bh=3KXnx140+ebopzLRmDbNTOZQnfZyF3doal4gX+uG4oM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yv9p6QBxDvM+CZttMUth9pzgGkFJL/JBlulx/GS/E8DkdMvay1l4zSL2ld9lVkXlJ
-         yg0Z0kfft896qQoQKvjan3krO/40utFU7JcnrMXome48UwaOIsJtmYXGtasJwngUzT
-         AxcWSUJDI7oHja/Z0hY4f+zDkl3KkwTNA9F/H1Zg=
-Date:   Thu, 29 Sep 2022 14:52:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Artem S. Tashkinov" <aros@gmx.com>
-Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        ksummit@lists.linux.dev
-Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
- blues"
-Message-ID: <YzWVJpqNq4UeeaoH@kroah.com>
-References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
- <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
- <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 86C5B219AF;
+        Thu, 29 Sep 2022 12:53:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1664455992; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fogQYmZZ4SF+4I88Ka/wpuRIld5RErTgLKiCdZOnp5k=;
+        b=c9F3vF6MFBCipNE+PXyAzF6JSFyKejP37pC1zWkTuQiwGL6RA129tk0PUkaSts1wk5XE4Z
+        36phdZr+1/lgsywExDcRqWlAE88g0tl7/+ze8M4Tu5OZeBu+EJvObQlwblf3GEGsMoV9DB
+        LTB5LG3O/2vw2BDT7Q/yKRcwPsdcplo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1664455992;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fogQYmZZ4SF+4I88Ka/wpuRIld5RErTgLKiCdZOnp5k=;
+        b=mk2BV8NT84yKZuCvQnHOWY40Qr7nNQxtDghqiM6p1VU3FQYDSXJEZKNRRO6UdWe3GZWcjv
+        MfxoO4esuRadLCAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7835A13A71;
+        Thu, 29 Sep 2022 12:53:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IKtMHTiVNWOQFgAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 29 Sep 2022 12:53:12 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 0445CA0681; Thu, 29 Sep 2022 14:53:11 +0200 (CEST)
+Date:   Thu, 29 Sep 2022 14:53:11 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, rookxu <brookxu.cn@gmail.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Subject: Re: [RFC v3 8/8] ext4: Remove the logic to trim inode PAs
+Message-ID: <20220929125311.bmkta7gp4a2hmcny@quack3>
+References: <cover.1664269665.git.ojaswin@linux.ibm.com>
+ <a26fdd12f4f60cf506a42b6a95e8014e5f380b05.1664269665.git.ojaswin@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a26fdd12f4f60cf506a42b6a95e8014e5f380b05.1664269665.git.ojaswin@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 12:22:35PM +0000, Artem S. Tashkinov wrote:
-> Let me be brutally honest here, if you're working on the kernel,
-> specially for a large company such as e.g. Intel, you're _expected_ to
-> address the issues which are related to the kernel component[s] you're
-> maintaining/developing otherwise it's not "development" it's "I'm
-> dumping my code because my employer pays me to do that". That also means
-> you're expected to address bug reports.
+On Tue 27-09-22 14:46:48, Ojaswin Mujoo wrote:
+> Earlier, inode PAs were stored in a linked list. This caused a need to
+> periodically trim the list down inorder to avoid growing it to a very
+> large size, as this would severly affect performance during list
+> iteration.
+> 
+> Recent patches changed this list to an rbtree, and since the tree scales
+> up much better, we no longer need to have the trim functionality, hence
+> remove it.
+> 
+> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
 
-I wish that were the case, unfortunately it is quite rare that
-maintainers of subsystems of the kernel are allowed to work on upstream
-issues like this all the time.  Heck, part of the time would be
-wonderful too, but that is also quite rare.  So while maintainers would
-love to be able to work like this, getting their management to agree to
-this is not very common, sadly.
+I'm kind of wondering: Now there won't be performance issues with much
+more inode PAs but probably we don't want to let them grow completely out
+of control? E.g. I can imagine that if we'd have 1 billion of inode PAs
+attached to an inode, things would get wonky both in terms of memory
+consumption and also in terms of CPU time spent for the cases where we
+still do iterate all of the PAs... Is there anything which keeps inode PAs
+reasonably bounded?
 
-> AFAIK, the kernel bugzilla is a Linux Foundation project and the
-> organization receives funding from its very rich members including
-> Google, Meta, Intel, and even Microsoft. The fact that no one is
-> seriously working on it looks shameful and sad. We are not talking about
-> a minor odd library with a dozen users we are talking about the kernel.
+								Honza
 
-bugzilla.kernel.org is _hosted_ by the LF, and does a great job of
-keeping it running and alive.  The LF has nothing to do with the content
-of the bugs in it, the reporting, the response of people to reported
-bugs, assigning bugs to anyone, getting them fixed, or anything else
-related to the content in the database at all.  Please don't get
-confused with the resources provided to host the system vs. the people
-who actually do the kernel development itself.
-
-Note, the LF does sponsor a few kernel developers to do work on the
-kernel, including myself, but we are a tiny drop in the bucket compared
-to the 4000+ developers who contribute to the kernel every year.
-
-thanks,
-
-greg k-h
+> ---
+>  Documentation/admin-guide/ext4.rst |  3 ---
+>  fs/ext4/ext4.h                     |  1 -
+>  fs/ext4/mballoc.c                  | 20 --------------------
+>  fs/ext4/mballoc.h                  |  5 -----
+>  fs/ext4/sysfs.c                    |  2 --
+>  5 files changed, 31 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/ext4.rst b/Documentation/admin-guide/ext4.rst
+> index 4c559e08d11e..5740d85439ff 100644
+> --- a/Documentation/admin-guide/ext4.rst
+> +++ b/Documentation/admin-guide/ext4.rst
+> @@ -489,9 +489,6 @@ Files in /sys/fs/ext4/<devname>:
+>          multiple of this tuning parameter if the stripe size is not set in the
+>          ext4 superblock
+>  
+> -  mb_max_inode_prealloc
+> -        The maximum length of per-inode ext4_prealloc_space list.
+> -
+>    mb_max_to_scan
+>          The maximum number of extents the multiblock allocator will search to
+>          find the best extent.
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index d54b972f1f0f..bca4b41cc192 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -1612,7 +1612,6 @@ struct ext4_sb_info {
+>  	unsigned int s_mb_stats;
+>  	unsigned int s_mb_order2_reqs;
+>  	unsigned int s_mb_group_prealloc;
+> -	unsigned int s_mb_max_inode_prealloc;
+>  	unsigned int s_max_dir_size_kb;
+>  	/* where last allocation was done - for stream allocation */
+>  	unsigned long s_mb_last_group;
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index cd19b9e84767..57e1ec88477a 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -3420,7 +3420,6 @@ int ext4_mb_init(struct super_block *sb)
+>  	sbi->s_mb_stats = MB_DEFAULT_STATS;
+>  	sbi->s_mb_stream_request = MB_DEFAULT_STREAM_THRESHOLD;
+>  	sbi->s_mb_order2_reqs = MB_DEFAULT_ORDER2_REQS;
+> -	sbi->s_mb_max_inode_prealloc = MB_DEFAULT_MAX_INODE_PREALLOC;
+>  	/*
+>  	 * The default group preallocation is 512, which for 4k block
+>  	 * sizes translates to 2 megabytes.  However for bigalloc file
+> @@ -5546,29 +5545,11 @@ static void ext4_mb_add_n_trim(struct ext4_allocation_context *ac)
+>  	return ;
+>  }
+>  
+> -/*
+> - * if per-inode prealloc list is too long, trim some PA
+> - */
+> -static void ext4_mb_trim_inode_pa(struct inode *inode)
+> -{
+> -	struct ext4_inode_info *ei = EXT4_I(inode);
+> -	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+> -	int count, delta;
+> -
+> -	count = atomic_read(&ei->i_prealloc_active);
+> -	delta = (sbi->s_mb_max_inode_prealloc >> 2) + 1;
+> -	if (count > sbi->s_mb_max_inode_prealloc + delta) {
+> -		count -= sbi->s_mb_max_inode_prealloc;
+> -		ext4_discard_preallocations(inode, count);
+> -	}
+> -}
+> -
+>  /*
+>   * release all resource we used in allocation
+>   */
+>  static int ext4_mb_release_context(struct ext4_allocation_context *ac)
+>  {
+> -	struct inode *inode = ac->ac_inode;
+>  	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
+>  	struct ext4_prealloc_space *pa = ac->ac_pa;
+>  	if (pa) {
+> @@ -5604,7 +5585,6 @@ static int ext4_mb_release_context(struct ext4_allocation_context *ac)
+>  	if (ac->ac_flags & EXT4_MB_HINT_GROUP_ALLOC)
+>  		mutex_unlock(&ac->ac_lg->lg_mutex);
+>  	ext4_mb_collect_stats(ac);
+> -	ext4_mb_trim_inode_pa(inode);
+>  	return 0;
+>  }
+>  
+> diff --git a/fs/ext4/mballoc.h b/fs/ext4/mballoc.h
+> index f8e8ee493867..6d85ee8674a6 100644
+> --- a/fs/ext4/mballoc.h
+> +++ b/fs/ext4/mballoc.h
+> @@ -73,11 +73,6 @@
+>   */
+>  #define MB_DEFAULT_GROUP_PREALLOC	512
+>  
+> -/*
+> - * maximum length of inode prealloc list
+> - */
+> -#define MB_DEFAULT_MAX_INODE_PREALLOC	512
+> -
+>  /*
+>   * Number of groups to search linearly before performing group scanning
+>   * optimization.
+> diff --git a/fs/ext4/sysfs.c b/fs/ext4/sysfs.c
+> index d233c24ea342..f0d42cf44c71 100644
+> --- a/fs/ext4/sysfs.c
+> +++ b/fs/ext4/sysfs.c
+> @@ -214,7 +214,6 @@ EXT4_RW_ATTR_SBI_UI(mb_min_to_scan, s_mb_min_to_scan);
+>  EXT4_RW_ATTR_SBI_UI(mb_order2_req, s_mb_order2_reqs);
+>  EXT4_RW_ATTR_SBI_UI(mb_stream_req, s_mb_stream_request);
+>  EXT4_RW_ATTR_SBI_UI(mb_group_prealloc, s_mb_group_prealloc);
+> -EXT4_RW_ATTR_SBI_UI(mb_max_inode_prealloc, s_mb_max_inode_prealloc);
+>  EXT4_RW_ATTR_SBI_UI(mb_max_linear_groups, s_mb_max_linear_groups);
+>  EXT4_RW_ATTR_SBI_UI(extent_max_zeroout_kb, s_extent_max_zeroout_kb);
+>  EXT4_ATTR(trigger_fs_error, 0200, trigger_test_error);
+> @@ -264,7 +263,6 @@ static struct attribute *ext4_attrs[] = {
+>  	ATTR_LIST(mb_order2_req),
+>  	ATTR_LIST(mb_stream_req),
+>  	ATTR_LIST(mb_group_prealloc),
+> -	ATTR_LIST(mb_max_inode_prealloc),
+>  	ATTR_LIST(mb_max_linear_groups),
+>  	ATTR_LIST(max_writeback_mb_bump),
+>  	ATTR_LIST(extent_max_zeroout_kb),
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
