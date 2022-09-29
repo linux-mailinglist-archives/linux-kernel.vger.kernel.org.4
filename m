@@ -2,56 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD515EF0D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E40395EF0D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235512AbiI2ItJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
+        id S234899AbiI2IuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235183AbiI2ItH (ORCPT
+        with ESMTP id S232166AbiI2IuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:49:07 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25BC133CBD;
-        Thu, 29 Sep 2022 01:49:05 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 10:48:55 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1664441343;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zM5eWlusI4fZeTPCTlJzvY2vl0b4z7Eo9YuNDNRRBfg=;
-        b=w8KL9UJaiGZ6rWz/TPpHN7naUgaciFFyEvmIwoltT/LPc4XLtYjE/MblKXB0gTKuZ/kegP
-        FZSLeSczifEN3rrwRG7tjjJqCldwsBokBeJru5d+KO0EayDeNbz69prIp4xan1MZSRDUx4
-        738oa4Rn1gipk1Mu49eLl0kpAKi0uOg=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Andrew Jones <andrew.jones@linux.dev>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v2 1/7] KVM: selftests: Implement memcmp(), memcpy(), and
- memset() for guest use
-Message-ID: <20220929084855.26t6r6aaurm2caum@kamzik>
-References: <20220928233652.783504-1-seanjc@google.com>
- <20220928233652.783504-2-seanjc@google.com>
+        Thu, 29 Sep 2022 04:50:04 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E7257569;
+        Thu, 29 Sep 2022 01:50:01 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28T3rrg9004118;
+        Thu, 29 Sep 2022 10:49:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Wiofu9rgpuc65f8rPaqHRSUum4t8vxulsqM/fN8xAIQ=;
+ b=g234rio/WSMJtn7ImOlYWED7msuragbYqoRTN/yYULxEHMeqp6jile9k1UgKq075AZko
+ keL7sIRshNQc/dPDPMsGBuog3J4z4qljDQpqf3wu6n1LbZt5gcAG85icT5ZG07pngC83
+ ii95L6LJa3xQDPcewAKkJVvzqxeKi1QjEyyxDkHIFENih375+BH+Al9+yAU0SmtozOB7
+ VBz5ruwcXM+7gfe6k6/1Gt5QfxHEYQN25bQR+6A/onR4RypEMAeFC7CwOdNU/rRSbA1N
+ qBgj8KQBJpm7JKBNlduw1Yujj4UXhuSMUIlkbi3crbb+NKg9fLUhN19k7C9RwMxKxMrM vw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jss82p4r3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Sep 2022 10:49:31 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2301B10002A;
+        Thu, 29 Sep 2022 10:49:30 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1AA1021A217;
+        Thu, 29 Sep 2022 10:49:30 +0200 (CEST)
+Received: from [10.201.21.72] (10.75.127.45) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Thu, 29 Sep
+ 2022 10:49:29 +0200
+Message-ID: <88c9109d-2c97-ac21-91dc-4025dd27b552@foss.st.com>
+Date:   Thu, 29 Sep 2022 10:49:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220928233652.783504-2-seanjc@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] pinctrl: st: stop abusing of_get_named_gpio()
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <YzSsgoVoJn4+mSpv@google.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <YzSsgoVoJn4+mSpv@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-29_04,2022-09-29_02,2022-06-22_01
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,127 +73,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 11:36:46PM +0000, Sean Christopherson wrote:
-> Implement memcmp(), memcpy(), and memset() to override the compiler's
-> built-in versions in order to guarantee that the compiler won't generate
-> out-of-line calls to external functions via the PLT.  This allows the
-> helpers to be safely used in guest code, as KVM selftests don't support
-> dynamic loading of guest code.
+Hi Dmitry
+
+On 9/28/22 22:20, Dmitry Torokhov wrote:
+> Pin descriptions for this chip only look like standard GPIO device tree
+> descriptions, while in fact they contain additional data (in excess of
+> number of cells specified in description of gpio controllers). They also
+> refer to only pins/gpios belonging to the driver and not to arbitrary
+> gpio in the system.
 > 
-> Steal the implementations from the kernel's generic versions, sans the
-> optimizations in memcmp() for unaligned accesses.
+> Because we want to stop exporting OF-specific handlers from gpiolib-of,
+> let's parse the pin reference ourself instead of trying to call
+> of_get_named_gpio().
 > 
-> Put the utilities in a separate compilation unit and build with
-> -ffreestanding to fudge around a gcc "feature" where it will optimize
-> memset(), memcpy(), etc... by generating a recursive call.  I.e. the
-> compiler optimizes itself into infinite recursion.  Alternatively, the
-> individual functions could be tagged with
-> optimize("no-tree-loop-distribute-patterns"), but using "optimize" for
-> anything but debug is discouraged, and Linus NAK'd the use of the flag
-> in the kernel proper[*].
-> 
-> https://lore.kernel.org/lkml/CAHk-=wik-oXnUpfZ6Hw37uLykc-_P0Apyn2XuX-odh-3Nzop8w@mail.gmail.com
-> 
-> Cc: Andrew Jones <andrew.jones@linux.dev>
-> Cc: Anup Patel <anup@brainfault.org>
-> Cc: Atish Patra <atishp@atishpatra.org>
-> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Cc: Janosch Frank <frankja@linux.ibm.com>
-> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 > ---
->  tools/testing/selftests/kvm/Makefile          | 11 +++++-
->  .../selftests/kvm/lib/string_override.c       | 39 +++++++++++++++++++
->  2 files changed, 49 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/kvm/lib/string_override.c
 > 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 8b1b32628ac8..681816df69cc 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -48,6 +48,8 @@ LIBKVM += lib/rbtree.c
->  LIBKVM += lib/sparsebit.c
->  LIBKVM += lib/test_util.c
+> Just compiled, not tested on real hardware.
+> 
+>  drivers/pinctrl/pinctrl-st.c | 34 ++++++++++++++++++++++++++++++----
+>  1 file changed, 30 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/pinctrl-st.c b/drivers/pinctrl/pinctrl-st.c
+> index 0fea71fd9a00..cf7f9cbe6044 100644
+> --- a/drivers/pinctrl/pinctrl-st.c
+> +++ b/drivers/pinctrl/pinctrl-st.c
+> @@ -12,7 +12,6 @@
+>  #include <linux/io.h>
+>  #include <linux/of.h>
+>  #include <linux/of_irq.h>
+> -#include <linux/of_gpio.h> /* of_get_named_gpio() */
+>  #include <linux/of_address.h>
+>  #include <linux/gpio/driver.h>
+>  #include <linux/regmap.h>
+> @@ -1162,6 +1161,31 @@ static void st_parse_syscfgs(struct st_pinctrl *info, int bank,
+>  	return;
+>  }
 >  
-> +LIBKVM_STRING += lib/string_override.c
-> +
->  LIBKVM_x86_64 += lib/x86_64/apic.c
->  LIBKVM_x86_64 += lib/x86_64/handlers.S
->  LIBKVM_x86_64 += lib/x86_64/perf_test_util.c
-> @@ -221,7 +223,8 @@ LIBKVM_C := $(filter %.c,$(LIBKVM))
->  LIBKVM_S := $(filter %.S,$(LIBKVM))
->  LIBKVM_C_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_C))
->  LIBKVM_S_OBJ := $(patsubst %.S, $(OUTPUT)/%.o, $(LIBKVM_S))
-> -LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ)
-> +LIBKVM_STRING_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_STRING))
-> +LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ) $(LIBKVM_STRING_OBJ)
->  
->  EXTRA_CLEAN += $(LIBKVM_OBJS) cscope.*
->  
-> @@ -232,6 +235,12 @@ $(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c
->  $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S
->  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
->  
-> +# Compile the string overrides as freestanding to prevent the compiler from
-> +# generating self-referential code, e.g. with "freestanding" the compiler may
-                                            ^ without
-
-> +# "optimize" memcmp() by invoking memcmp(), thus causing infinite recursion.
-> +$(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
-> +	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
-> +
->  x := $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
->  $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
->  $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
-> diff --git a/tools/testing/selftests/kvm/lib/string_override.c b/tools/testing/selftests/kvm/lib/string_override.c
-> new file mode 100644
-> index 000000000000..632398adc229
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/lib/string_override.c
-> @@ -0,0 +1,39 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include <stddef.h>
-> +
-> +/*
-> + * Override the "basic" built-in string helpers so that they can be used in
-> + * guest code.  KVM selftests don't support dynamic loading in guest code and
-> + * will jump into the weeds if the compiler decides to insert an out-of-line
-> + * call via the PLT.
-> + */
-> +int memcmp(const void *cs, const void *ct, size_t count)
+> +static int st_pctl_dt_calculate_pin(struct st_pinctrl *info,
+> +				    phandle bank, unsigned int offset)
 > +{
-> +	const unsigned char *su1, *su2;
-> +	int res = 0;
+> +	struct device_node *np;
+> +	struct gpio_chip *chip;
+> +	int retval = -EINVAL;
+> +	int i;
 > +
-> +	for (su1 = cs, su2 = ct; 0 < count; ++su1, ++su2, count--) {
-> +		if ((res = *su1 - *su2) != 0)
+> +	np = of_find_node_by_phandle(bank);
+> +	if (!np)
+> +		return -EINVAL;
+> +
+> +	for (i = 0; i < info->nbanks; i++) {
+> +		chip = &info->banks[i].gpio_chip;
+> +		if (chip->of_node == np) {
+> +			if (offset < chip->ngpio)
+> +				retval = chip->base + offset;
 > +			break;
+> +		}
 > +	}
-> +	return res;
+> +
+> +	of_node_put(np);
+> +	return retval;
 > +}
 > +
-> +void *memcpy(void *dest, const void *src, size_t count)
-> +{
-> +	char *tmp = dest;
-> +	const char *s = src;
-> +
-> +	while (count--)
-> +		*tmp++ = *s++;
-> +	return dest;
-> +}
-> +
-> +void *memset(void *s, int c, size_t count)
-> +{
-> +	char *xs = s;
-> +
-> +	while (count--)
-> +		*xs++ = c;
-> +	return s;
-> +}
-> -- 
-> 2.37.3.998.g577e59143f-goog
-> 
+>  /*
+>   * Each pin is represented in of the below forms.
+>   * <bank offset mux direction rt_type rt_delay rt_clk>
+> @@ -1175,6 +1199,8 @@ static int st_pctl_dt_parse_groups(struct device_node *np,
+>  	struct device *dev = info->dev;
+>  	struct st_pinconf *conf;
+>  	struct device_node *pins;
+> +	phandle bank;
+> +	unsigned int offset;
+>  	int i = 0, npins = 0, nr_props, ret = 0;
+>  
+>  	pins = of_get_child_by_name(np, "st,pins");
+> @@ -1214,9 +1240,9 @@ static int st_pctl_dt_parse_groups(struct device_node *np,
+>  		conf = &grp->pin_conf[i];
+>  
+>  		/* bank & offset */
+> -		be32_to_cpup(list++);
+> -		be32_to_cpup(list++);
+> -		conf->pin = of_get_named_gpio(pins, pp->name, 0);
+> +		bank = be32_to_cpup(list++);
+> +		offset = be32_to_cpup(list++);
+> +		conf->pin = st_pctl_dt_calculate_pin(info, bank, offset);
+>  		conf->name = pp->name;
+>  		grp->pins[i] = conf->pin;
+>  		/* mux */
 
-Otherwise
+I tested it on stih410-b2260 board
 
-Reviewed-by: Andrew Jones <andrew.jones@linux.dev>
+Tested-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+
+Thanks
+Patrice
