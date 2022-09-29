@@ -2,114 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C97A5EFDFC
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB0E5EFDEA
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiI2Tee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 15:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
+        id S229750AbiI2T2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 15:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiI2Teb (ORCPT
+        with ESMTP id S229582AbiI2T2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 15:34:31 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE397139423
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 12:34:30 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso5728601pjq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 12:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/2GwsSTauJmjYfkTPtC2/6DT6emkrfoGXZJnJAKA7Q4=;
-        b=foDx98KEnUwOdRff85G0E13/0WM6bs/iCCF+h2oxTRfhB7Y8cg42aTZN6jyESeGP+M
-         SMXoHJxaNBf/dU4aqoq9XMjty27bRq6o4egGu9mjF8HT6/tzgOCXTI19ixxEOtuJv4Hq
-         BZNIv06QP3dxoJFec7uxD64LNaJdcxUwDvWos=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/2GwsSTauJmjYfkTPtC2/6DT6emkrfoGXZJnJAKA7Q4=;
-        b=I2gn6QcuoXizkF/BbRshR0RV/maAJAO1Uv/za0XcRGYu0OM/OxudCjmrLQQ0UnE+EO
-         kwrDHrbneNUKzHg5XsGsxzZusbPjBFHCjV+9JfrN3vyqnnuIl8WxMjA4wmu2e7FBST0q
-         RU9GU90tf8fLBQGiBnr8EvlXu2g/UhtvQfZhD2wQoZMxWZOQFVfvNxvtGvNDRYeHbQCI
-         j781+zmW1hZKmZH740fhsfhq1KbSXseXe/3rDLXVwVodaDgNp05uQUu5vG9b2sdz8hnI
-         YjiiNeDeWhbm+YJ8JVa9PrJ6v9PFxdoVc/hu1a9GS5eFEpzfDRz008g9P9iv4WHfaESx
-         j6uQ==
-X-Gm-Message-State: ACrzQf3eslM+aQ8ghSciaYBIXIYgvn1yVb4+iR5FPdLdAYCOkWbPrD93
-        6BNDyttH4TbMHAZcuQcQdYawx8WHCXGrmg==
-X-Google-Smtp-Source: AMsMyM4Kv6VOAUfEczk1ES3269E4yRoMMK7PlDJn5A0yVSQTzS0ST30779DLaEBCMLxeLit6iPRqqg==
-X-Received: by 2002:a17:90b:1b09:b0:208:4e74:7315 with SMTP id nu9-20020a17090b1b0900b002084e747315mr4128556pjb.103.1664480070313;
-        Thu, 29 Sep 2022 12:34:30 -0700 (PDT)
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com. [209.85.210.181])
-        by smtp.gmail.com with ESMTPSA id nt9-20020a17090b248900b00200b12f2bf3sm118624pjb.51.2022.09.29.12.34.29
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 12:34:30 -0700 (PDT)
-Received: by mail-pf1-f181.google.com with SMTP id d10so2312152pfh.6
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 12:34:29 -0700 (PDT)
-X-Received: by 2002:a63:e16:0:b0:43b:d646:1bb7 with SMTP id
- d22-20020a630e16000000b0043bd6461bb7mr4327148pgl.53.1664479651010; Thu, 29
- Sep 2022 12:27:31 -0700 (PDT)
+        Thu, 29 Sep 2022 15:28:49 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C9615D653;
+        Thu, 29 Sep 2022 12:28:48 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 690632C5;
+        Thu, 29 Sep 2022 19:28:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 690632C5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1664479728; bh=OMEpyJnlKWszhdMzE67M6h33nAUrEjevo9H1lpZDZAE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=sJ6H7T/Ayt9Q4J0Kdx1tG+zyRnIveeGwuXqxrqTTSKJvLYM2foQe/xgs8izf8/QFm
+         gUO43N/aexHCErOIuarXppFgHCwOKunstUc8baQxG0jCD6daiBQdHG9PfzBX9rd2ZV
+         Hf8kKkE9NUA/oTnipfqmUErBksTiBKzJoqElPVLF2fg4SYLUDUhIoBwIe3Sw1VcyVr
+         Q4lcBUumsESVkQ2O1JqAENWxCvkH8eL5Cf3gr1es8UdDDQCskNAQBTrWn2hg2W5dLv
+         WpLAXMUEKZJ7IUplgbKFYqWTGIHeJPWQ+lhCBHMzdwusXmeU3uteRcVBfP8SmJVh/J
+         Tl2yfd+ymiOZQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Stephen Rothwell <sfr@rothwell.id.au>
+Subject: Re: [PATCH v3 0/7] Rewrite the top-level index.rst
+In-Reply-To: <87ill6hyt6.fsf@meer.lwn.net>
+References: <20220927160559.97154-1-corbet@lwn.net>
+ <87mtaii491.fsf@meer.lwn.net> <202209290858.4A3FC9082@keescook>
+ <87ill6hyt6.fsf@meer.lwn.net>
+Date:   Thu, 29 Sep 2022 13:28:47 -0600
+Message-ID: <87czbegets.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <20220929161917.2348231-1-rrangel@chromium.org>
- <20220929093200.v6.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid> <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
-In-Reply-To: <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Thu, 29 Sep 2022 13:27:19 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
-Message-ID: <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
-Subject: Re: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tim Van Patten <timvp@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "jingle.wu" <jingle.wu@emc.com.tw>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Len Brown <lenb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 1:18 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Sep 29, 2022 at 6:19 PM Raul E Rangel <rrangel@chromium.org> wrote:
-> >
-> > ACPI IRQ/Interrupt resources contain a bit that describes if the
-> > interrupt should wake the system. This change exposes that bit via
-> > a new IORESOURCE_IRQ_WAKECAPABLE flag. Drivers should check this flag
->
-> I would call this IORESOURCE_IRQ_WAKE which is (a) simpler and easier
-> to read and (b) it sort of matches the "wakeirq" naming convention.
+[Sending a copy to the linux-next folks as well in the hope that it
+helps when the conflict shows up there.]
 
-It was Dmitry who originally suggested the name. I personally like the
-CAPABLE in the name. It makes it clear that it's capable of acting as
-a wake source, not to be confused with being enabled as a wake source.
+Jonathan Corbet <corbet@lwn.net> writes:
 
+> Kees Cook <keescook@chromium.org> writes:
 >
-> This is not a big deal if you insist on this name and for a good
-> reason, but just something I would do differently.
+>> On Thu, Sep 29, 2022 at 09:34:18AM -0600, Jonathan Corbet wrote:
+>>> Jonathan Corbet <corbet@lwn.net> writes:
+>>> 
+>>> > The top-level index.rst file is the entry point for the kernel's
+>>> > documentation, especially for readers of the HTML output.  It is currently
+>>> > a mess containing everything we thought to throw in there.  Firefox says it
+>>> > would require 26 pages of paper to print it.  That is not a user-friendly
+>>> > introduction.
+>>> >
+>>> > This series aims to improve our documentation entry point with a focus on
+>>> > rewriting index.rst.  The result is, IMO, simpler and more approachable.
+>>> > For anybody who wants to see the rendered results without building the
+>>> > docs, have a look at:
+>>> >
+>>> >   https://static.lwn.net/kerneldoc/
+>>> 
+>>> So I think I'll go ahead and drop this into docs-next shortly.  Thanks
+>>> to everybody who has commented.
+>>> 
+>>> This, of course, has the potential to create conflicts with other 6.1
+>>> work that touches Documentation/index.rst.  Amazingly, as far as I can
+>>> tell, there is only one linux-next commit touching that file - the
+>>> addition of the Rust docs.  We'll want to be sure that doesn't get lost
+>>> during the merge window.  I'll be sure to include a suitable heads-up in
+>>> my pull request.
+>>
+>> I can add a note in my PR of Rust too -- how should I suggest it be
+>> resolved?
 >
-> The patch LGTM otherwise.
+> The Rust documentation change to Documentation/index.rst is simple
+> enough:
 >
+>> diff --git a/Documentation/index.rst b/Documentation/index.rst
+>> index 4737c18c97ff..00722aa20cd7 100644
+>> --- a/Documentation/index.rst
+>> +++ b/Documentation/index.rst
+>> @@ -82,6 +82,7 @@ merged much easier.
+>>     maintainer/index
+>>     fault-injection/index
+>>     livepatch/index
+>> +   rust/index
+>
+> The resolution should take the docs-next version of the file, but add
+> that line after "livepatch/index" in its new location.
+>
+> Thanks,
+>
+> jon
