@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318B95EF7A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFBA5EF7A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235681AbiI2OdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
+        id S235701AbiI2OdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235612AbiI2OdD (ORCPT
+        with ESMTP id S235656AbiI2OdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:33:03 -0400
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DFC1BBEC6;
-        Thu, 29 Sep 2022 07:33:00 -0700 (PDT)
-X-QQ-mid: bizesmtp84t1664461960tom9azgc
+        Thu, 29 Sep 2022 10:33:05 -0400
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA1E1BBEF2;
+        Thu, 29 Sep 2022 07:33:02 -0700 (PDT)
+X-QQ-mid: bizesmtp84t1664461963tizqyjas
 Received: from localhost.localdomain ( [113.72.145.157])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 29 Sep 2022 22:32:38 +0800 (CST)
+        id ; Thu, 29 Sep 2022 22:32:42 +0800 (CST)
 X-QQ-SSF: 01000000002000201000B00A0000000
-X-QQ-FEAT: D6RqbDSxuq4U0+4EPbhlMjbtgIHEmuIGrzAaZUV6P9r6ULT3ZXcYmfPkM7kLO
-        tBLQOMC8PMUU56VMKQOiMxHeN9VBI/RvAQs9VVbFXGv3lrEVcKX3LTtljDm4ynytHSwHqs7
-        IX+cDEieJ0sZzxp7ls2POaOH6vjec26x9BYYYtomP+zcVQQKje0Qmth/sFpONH6rLx4aRvC
-        +y7PlGtVz5/ARbDdaCeQeXir0ovYVGRyyRet/C2HxvOlkjl/QheEHbRSEAcxAkCltpPK4Ur
-        m0n5te34lTwwTWA+kHRCGIJP+SdRrmfGTnKe0DDh5lhVgdrLJBC7ThZNaNXNZLRtIwxGXVh
-        uOxYC8lsqfPf7eDftNwYZ6+J9MzLsqp1QZYjOmU8pwPvMBNvHIlPHE3LIyh6gDnibW++45W
-        Rv6JzftgGvNT3wHWmu/M5A==
+X-QQ-FEAT: +e7paLVVZUnbG35v+gPFnODE0sLRRis8MBeSEghj/OHzSpUygmlF89K3tDL82
+        9OW+vkt0iRIRPYWFbHdTx+nD8RFoO4CbzIjWaLRaCuNlPJakkUKzMoeOQW4hBfGIuXScvGw
+        w0Iz7di3FY67/4F/zaqgILgZMYdLQ9q00xXvkrqWgbUGrgyiQ4biufWDHRxuSrHVMVB9h5B
+        QnhrGhnVgEU9BmZ+m9pSdzcYzxHHAKN+ZzGJ4FKCOOd+UfT4LewSstFeO0mNai8ZZ9sikLd
+        wXK9ddtR8fyQZoUAUPJhT5jQqlKq9nFAa20FEtKc2ESdAzlBtSEGRTPHNpT90ymOAX5winP
+        NYEyoIoJhGk/vnJiMcSSIGgfY3DcGegMLst8k3dW9i11a5CSUqFzBAilWiFjZav0ETpqyv8
+        GmX6km3DSp+um7XgiZTAQw==
 X-QQ-GoodBg: 0
 From:   Hal Feng <hal.feng@linux.starfivetech.com>
 To:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
@@ -46,9 +46,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Emil Renner Berthing <kernel@esmil.dk>,
         Hal Feng <hal.feng@linux.starfivetech.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 02/30] dt-bindings: timer: Add StarFive JH7110 clint
-Date:   Thu, 29 Sep 2022 22:31:57 +0800
-Message-Id: <20220929143225.17907-3-hal.feng@linux.starfivetech.com>
+Subject: [PATCH v1 03/30] dt-bindings: interrupt-controller: Add StarFive JH7110 plic
+Date:   Thu, 29 Sep 2022 22:31:58 +0800
+Message-Id: <20220929143225.17907-4-hal.feng@linux.starfivetech.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
 References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
@@ -65,26 +65,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Emil Renner Berthing <kernel@esmil.dk>
 
-Add compatible string for the StarFive JH7110 clint.
+Add compatible string for StarFive JH7110 plic.
 
 Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
 Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
 ---
- Documentation/devicetree/bindings/timer/sifive,clint.yaml | 1 +
+ .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml         | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/timer/sifive,clint.yaml b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-index e64f46339079..f85e4982ad05 100644
---- a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-+++ b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-@@ -26,6 +26,7 @@ properties:
-       - enum:
-           - sifive,fu540-c000-clint
-           - starfive,jh7100-clint
-+          - starfive,jh7110-clint
-           - canaan,k210-clint
-       - const: sifive,clint0
- 
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+index 92e0f8c3eff2..cef0451c3a47 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+@@ -60,6 +60,7 @@ properties:
+           - enum:
+               - sifive,fu540-c000-plic
+               - starfive,jh7100-plic
++              - starfive,jh7110-plic
+               - canaan,k210-plic
+           - const: sifive,plic-1.0.0
+       - items:
 -- 
 2.17.1
 
