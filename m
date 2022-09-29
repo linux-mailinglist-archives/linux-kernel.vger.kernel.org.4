@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F0C5EFC8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 19:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49D55EFC93
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234931AbiI2R7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 13:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S235064AbiI2SBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234970AbiI2R7g (ORCPT
+        with ESMTP id S233332AbiI2SBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 13:59:36 -0400
+        Thu, 29 Sep 2022 14:01:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92899FD1;
-        Thu, 29 Sep 2022 10:59:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E32E1712;
+        Thu, 29 Sep 2022 11:01:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C13DB82617;
-        Thu, 29 Sep 2022 17:59:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D8C7C433D6;
-        Thu, 29 Sep 2022 17:59:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14957B8261E;
+        Thu, 29 Sep 2022 18:01:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0995CC433D6;
+        Thu, 29 Sep 2022 18:01:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664474370;
-        bh=q9pUnXr+y7ypf+y9MFvS031N4YM5aIIn48LYK2fF6ak=;
+        s=k20201202; t=1664474506;
+        bh=8kPx1R+nzlwzeGOnOVa6U8w+cN8OtIbZrTk9XJl4ZPo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NsesspPuNjiQpeaUs5Gl0Pc5mZrqIZrRFwrqNTM2SlBclmeg4Dh2fzkdW1q4jmPhF
-         dxWFzIvSoedHnZWGkpgjQHbM7jplc2ug/MXFq9CvXRCd8wgeynb9Mu1Sx19iyWdqNr
-         0bFP/QFI2R/jpoK0exdhgZ9PNLWtJ5n6JLMgevAMSthuiVBuGG3SwVI6oi31mLn38w
-         R0HwVpqYrP2eOs+eDNR344/s+xva+gSzcDPdUi02DGu8B1DCNcc+8gdj5XxchMTY2y
-         ZQa9FyasbW40mQ5ZZiIY6gHZHyrY1nNF7ziFOLnytHsqAxH8ozyhxp8XSyu+A8ktER
-         x4xt4YUxj4OkQ==
-Date:   Thu, 29 Sep 2022 18:59:24 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Hal Feng <hal.feng@linux.starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        b=mOeEtd3yQKKExfmgIbEwcT7E4lywbxhgdir4oc/A2OJQM0mX7hAkb6i/hiezadYe/
+         KQnkuzSxgz+BodeswtnfcLndYU89vEtGuq83G8eKN7TKfha8YgbgG3HB+avSpGJgJv
+         hJUlWOhsGvjDk9saNxPZhUa9JF6nSgIoHUlu74QY5FxbJ8cYnZEOJcUmVTr3uRZmMT
+         xA2AJLrZRtSi7tYa6GSMNkS+l81Glwn3+7wj79+suwPpJNMK0G7dVvLNealOTQ5eDu
+         UBxamd+Uwgwj5EHOwHycZALVDRIOYtGJUy13+pCZV7eJ12EMOVbpEzj0ye287fjnSI
+         bz2GbQx5xGl4w==
+Date:   Thu, 29 Sep 2022 19:01:41 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Satya Priya Kakitapalli <quic_c_skakit@quicinc.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 00/30] Basic StarFive JH7110 RISC-V SoC support
-Message-ID: <YzXc/FSbDpkElK0O@spud>
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <4ddabe3a-9f55-2a6a-c1c1-ccc3fc74e98a@linaro.org>
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
+        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
+Subject: Re: [PATCH V15 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
+Message-ID: <YzXdhVN/Zp7DDIzB@google.com>
+References: <YsLhxx+L3+GJDRyO@google.com>
+ <bcc5f059-b991-296a-bba6-9cb1236097f2@quicinc.com>
+ <Ys1tYAO39LKzEAOE@google.com>
+ <dc737abb-041b-491a-14f1-a584f9e64a3d@quicinc.com>
+ <CAE-0n528QaTtZFp=WAaHShegFRpKVN_67jQfUJTtsRPr6s--zA@mail.gmail.com>
+ <52039cd1-4390-7abb-d296-0eb7ac0c3b15@quicinc.com>
+ <Yuz2O+lZ5W7RviuA@google.com>
+ <CAE-0n507SLeYB7XVzGFk=RO6YjOPoGpux+_N2AyrmL354mQJ-g@mail.gmail.com>
+ <YzQf7hf15vvLeGse@google.com>
+ <CAE-0n50cX5ky3By976RTecKkpeMoAjoBA4tYuWSZ150JfS9wiQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4ddabe3a-9f55-2a6a-c1c1-ccc3fc74e98a@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAE-0n50cX5ky3By976RTecKkpeMoAjoBA4tYuWSZ150JfS9wiQ@mail.gmail.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,43 +70,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 04:45:26PM +0200, Krzysztof Kozlowski wrote:
-> On 29/09/2022 16:31, Hal Feng wrote:
+On Wed, 28 Sep 2022, Stephen Boyd wrote:
+
+> Quoting Lee Jones (2022-09-28 03:20:30)
+> > Wouldn't it make more sense to simply separate the instantiation of
+> > the 2 I2C devices?  Similar to what you suggested [0] in v9.  That way
+> > they can handle their own resources and we can avoid all of the I2C
+> > dummy / shared Regmap passing faff.
+> >
+> > [0] https://lore.kernel.org/all/CAE-0n53G-atsuwqcgNvi3nvWyiO3P=pSj5zDUMYj0ELVYJE54Q@mail.gmail.com/
+> >
 > 
-> > This series is also available at 
-> > https://github.com/hal-feng/linux/commits/visionfive2-minimal
-> > 
-> > [1] https://www.cnx-software.com/2022/08/23/starfive-visionfive-2-quad-core-risc-v-sbc-linux/
-> > [2] https://wiki.rvspace.org/
-> > 
-> > Emil Renner Berthing (17):
-> >   dt-bindings: riscv: Add StarFive JH7110 bindings
-> >   dt-bindings: timer: Add StarFive JH7110 clint
-> >   dt-bindings: interrupt-controller: Add StarFive JH7110 plic
-> >   dt-bindings: sifive-l2-cache: Support StarFive JH71x0 SoCs
-> >   soc: sifive: l2 cache: Convert to platform driver
-> >   soc: sifive: l2 cache: Add StarFive JH71x0 support
-> >   reset: starfive: jh7100: Use 32bit I/O on 32bit registers
-> >   dt-bindings: reset: Add StarFive JH7110 reset definitions
-> >   clk: starfive: Factor out common clock driver code
-> >   dt-bindings: clock: Add StarFive JH7110 system clock definitions
-> >   dt-bindings: clock: Add starfive,jh7110-clkgen-sys bindings
-> >   clk: starfive: Add StarFive JH7110 system clock driver
-> >   dt-bindings: clock: Add StarFive JH7110 always-on definitions
-> >   dt-bindings: clock: Add starfive,jh7110-clkgen-aon bindings
-> >   clk: starfive: Add StarFive JH7110 always-on clock driver
-> >   RISC-V: Add initial StarFive JH7110 device tree
-> >   RISC-V: Add StarFive JH7110 VisionFive2 board device tree
+> You can continue reading the thread[1]. My understanding is it's one
+> chip that responds on two i2c addresses, thus we don't describe that as
+> two i2c device nodes in DT. Instead we describe one node and use the
+> dummy API to make the second i2c device.
 > 
-> Where is the rest of patches? Lists got only 5 of them. Anyway this is a
-> bit too big patchset. Split per subsystem.
+> [1] https://lore.kernel.org/all/Yk3NkNK3e+fgj4eG@sirena.org.uk/
 
-They seem to be coming in over time in dribs and drabs. I assume it is
-not a mailing list problem given how many lists are CCed on the mail and
-the fact that they have different providers.
+As Mark says, it's probably 2 separate dies that have been encased in
+the same IC and are otherwise unconnected.  Not sure I understand the
+comment about not requiring another 'struct device'.  It will still
+require that whether it's a platform device or an I2C device, right?
 
-For v2 (or multiple v2s) please fix up your process so that this gets
-sent normally and not a couple of patches every hour.
-
-Thanks,
-Conor.
+-- 
+Lee Jones [李琼斯]
