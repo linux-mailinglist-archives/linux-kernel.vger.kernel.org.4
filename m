@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F05C5EF895
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F095EF8A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235896AbiI2PW2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Sep 2022 11:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
+        id S235909AbiI2P0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235897AbiI2PW0 (ORCPT
+        with ESMTP id S235808AbiI2P0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:22:26 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678341514D5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:22:16 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-215-KJpOk1o4M2ult_yIQyhK4w-1; Thu, 29 Sep 2022 16:22:11 +0100
-X-MC-Unique: KJpOk1o4M2ult_yIQyhK4w-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Thu, 29 Sep
- 2022 16:22:10 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Thu, 29 Sep 2022 16:22:10 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: re: [PATCH 3/4] proc: Point /proc/net at /proc/thread-self/net
- instead of /proc/self/net
-Thread-Topic: re: [PATCH 3/4] proc: Point /proc/net at /proc/thread-self/net
- instead of /proc/self/net
-Thread-Index: AdjUFaAzwFjoFpF4RWSGA65kFT23EA==
-Date:   Thu, 29 Sep 2022 15:22:10 +0000
-Message-ID: <dacfc18d6667421d97127451eafe4f29@AcuMS.aculab.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 29 Sep 2022 11:26:12 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DF0367BA;
+        Thu, 29 Sep 2022 08:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1664465170;
+        bh=oOgcX0s8xJS2rgnvpBHiYekzzFcyDIbHRcoPvSVK0Zw=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=WaElFH607ESo42Y7tCgfGymk0uHSGARUyOP2qqvssVYYzTyVUnXxV+8pFgsZ1WhPx
+         nl+VYXSkeTsPxWurMP8G7vIWEfYF295ehJV2Bxk9LNsMZZJDE9uaGHlBkbvwaP8Nh3
+         enhze5aDzMDxxGq1M54hxb8W5hhop6GjGZTw6hog=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 4376A12886E3;
+        Thu, 29 Sep 2022 11:26:10 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id X6BZT3-rZbUO; Thu, 29 Sep 2022 11:26:10 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1664465169;
+        bh=oOgcX0s8xJS2rgnvpBHiYekzzFcyDIbHRcoPvSVK0Zw=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=nHoTdAGWmcK1SDyXqr5/KC4re+Ex4xtUZi91ddeIPbRLGQfyV4A51a33QAbkbpQMt
+         b1w8rJn/ydplI93mCAjHxQozhk127bK8iIJM4/01s/tA7PbeXta6wjICJ7gNltoh5T
+         O4wKrOvZ1y9gvCeDXg+P25oPYBmCRikCfNhy8a6w=
+Received: from [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b] (unknown [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 0DDBB12886E2;
+        Thu, 29 Sep 2022 11:26:08 -0400 (EDT)
+Message-ID: <238f5350125e618c323f42e3885b5ff887241ae0.camel@HansenPartnership.com>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     "Artem S. Tashkinov" <aros@gmx.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+Date:   Thu, 29 Sep 2022 11:26:07 -0400
+In-Reply-To: <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+         <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+         <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 1
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I've just bumped into (the lack of) this change (from aug 2014):
+On Thu, 2022-09-29 at 12:22 +0000, Artem S. Tashkinov wrote:
+> Let me be brutally honest here, if you're working on the kernel,
+> specially for a large company such as e.g. Intel, you're _expected_
+> to address the issues which are related to the kernel component[s]
+> you're maintaining/developing otherwise it's not "development" it's
+> "I'm dumping my code because my employer pays me to do that". That
+> also means you're expected to address bug reports.
+> 
+> It's correct I've tried to help people with bug reports posted on
+> bugzilla.kernel.org but it's a tough task considering that absolute
+> most kernel developers are not signed up, thus most bug reports are
+> never seen by respective developers.
 
-> In oddball cases where the thread has a different network namespace
-> than the primary thread group leader or more likely in cases where
-> the thread remains and the thread group leader has exited this
-> ensures that /proc/net continues to work.
+The never seen/never responded to metric is rather bogus.  The sad fact
+is that a lot of bug reports aren't actionable, meaning the reporter
+can't give a reproducer and also can't easily test patches  sometimes
+by luck the maintainers can work out what the issue is but a lot of the
+time they have no idea.  Then there are ton's of bug reports with
+responses like "I think xxx commit fixes your problem, can you test it"
+for which the conversation dies there.  There's also the thundering
+herd problem: some bugs get reported by many different people (as
+different bug reports) but usually the subsystem only engages with one
+to fix the issue.  In theory bugzilla can mark the latter as dups, but
+that requires someone to spend an enormous amount of time on evaluation
+and admin.
 
-> -	proc_symlink("net", NULL, "self/net");
-> +	proc_symlink("net", NULL, "thread-self/net");
+That's not to say we can't improve our process, it's just to set
+expectations that we're never going to approach anywhere near a perfect
+bug process.  Most of the improvements that worked so far involve
+having someone coach bug reporters through the process of either
+testing patches or reproducing the problem in a more generic
+environment ... which I think most people would agree can't really fall
+wholly on maintainers.
 
-This was applied and then reverted by Linus (I can't find anything
-in the LKML archive) - see git show 155134fef - because of
-issues with apparmor and dhclient.
+Regards,
 
-In my case we have an application that is started in one
-network namespace (where most of what it needs to do exists)
-but needs one thread to revert to the 'init' namespace in
-order to accept TCP connections from applications.
+James
 
-The thread that reverts is the main thread.
-Until a change made in the last 6 months it actually worked.
-(I'm using 5.10 LTS kernels so I'm not sure when.)
-Then a fix was made to correctly update the mounts when the
-namespace changed - and it suddenly stopped working.
-
-So the 'oddball' case of different threads being in different
-namespaces and then accessing /proc/net (because that is what
-the code always did before being changed to run in a namespace)
-has happened to a real application.
-
-Fortunately it happened in testing and the application could
-be changed.
-
-(I was looking at the kernel sources to propose the change
-that got reverted!)
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
 
