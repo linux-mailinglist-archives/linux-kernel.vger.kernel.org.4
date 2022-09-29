@@ -2,131 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85FE5EED12
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 07:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9554A5EED19
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 07:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234526AbiI2FJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 01:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
+        id S234685AbiI2FLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 01:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbiI2FJk (ORCPT
+        with ESMTP id S229940AbiI2FL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 01:09:40 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2C0101B;
-        Wed, 28 Sep 2022 22:09:34 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id cy15-20020a056830698f00b0065c530585afso275616otb.2;
-        Wed, 28 Sep 2022 22:09:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=IydL5kbnqeXOevEVuS9ouWA+i4vymY53i4zI/bO3x9M=;
-        b=Q1XgaQB0b3+QsXJP4HbRf2OzKNWobak2y5ffXja08fG3K8EjVrUlYIqZaDpAvJwh0l
-         GkQ1I26BM2SuFaqOk/rldCJOJvcnmjF5zeVlY6qU6CXnaAcZI67UwcfmfrQE5s3AhPvg
-         mlgXdmxQH16JFbRqyzIPP4cwPG0qDF8BRf6DkmsVbHmEBM2yRCB59IM3pdnPrRHNHXok
-         5o3dKaoL5aFKMxs1xlzfLyePoCPbBq285zqGXgGps2SvNtLrO4u3huCTOKKq9ftR9tKX
-         3io/mK5qFfjOhrYXqz/ykx+TGyE09wPjhBDuFzoSqPvvFAi3XhYqtvHmEhWAL+q/N6YO
-         2tpw==
-X-Gm-Message-State: ACrzQf1KqTB42b11tU9vlD3EjSFS7MM90nFwBiB9W0oLsG6b8URCq/AH
-        n4fyCgTyzhfARxpmOixYsU8ndHDBpz2VLlO5mYo=
-X-Google-Smtp-Source: AMsMyM4hETyVV8KenOkqGDFFx4cZyAqRlRlhCjBEim/esahHSI2CxXS4UkYc5bxpLvYgsiqH+iyo3dVwlPQv/iUYS3g=
-X-Received: by 2002:a05:6830:1351:b0:65b:e0a8:d0e8 with SMTP id
- r17-20020a056830135100b0065be0a8d0e8mr611900otq.190.1664428173757; Wed, 28
- Sep 2022 22:09:33 -0700 (PDT)
+        Thu, 29 Sep 2022 01:11:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324A4C842D;
+        Wed, 28 Sep 2022 22:11:25 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28T4PHgl002837;
+        Thu, 29 Sep 2022 05:11:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=dU/SEjbxtKnvNwS9YPhhLnRPIVmG98hXeidNmM+5oUE=;
+ b=TpR8GCxaqs2I8MrVlxbN5T2ynyTfxuvACv8yLtXHVX5S/J8p6A7k0hv/S40jvt8MF8Zj
+ vaI5G3IdJL590+rVfCBNEinuy3n9Y1GrjH5gl/3hd+CbzqysvxYJJZE4HWGm+ZMXOOUD
+ F/uOPfhQSVpIceYOpT5nEHrg+9IVfhChqtlW/C2CZgR0sAKQnQ5NjX9daicIrtpnV0ZB
+ qqkxk/9N82mkVz5D5Bct1vco6ulsMnkOVDa/6qV5cseNNSJi/WKRQ3rherzOl1omexhz
+ 2OtCUHb2Qp9i+CZQJDnSa2McgsZ6re/j/mQtZJaBuOayP3T9w4FUnugRPKzWKh3D5yaT /A== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jva6qvp9x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Sep 2022 05:11:18 +0000
+Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28T5BH4m028392;
+        Thu, 29 Sep 2022 05:11:17 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 3jvm5sk7rw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Sep 2022 05:11:17 +0000
+Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28T56XWq023360;
+        Thu, 29 Sep 2022 05:11:17 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 28T5BHax028385
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Sep 2022 05:11:17 +0000
+Received: from hu-ppareek-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 28 Sep 2022 22:11:13 -0700
+Date:   Thu, 29 Sep 2022 10:41:10 +0530
+From:   Parikshit Pareek <quic_ppareek@quicinc.com>
+To:     Johan Hovold <johan@kernel.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Shazad Hussain <quic_shazhuss@quicinc.com>
+Subject: Re: [PATCH v4 3/3] arm64: dts: qcom: introduce sa8540p-ride dts
+Message-ID: <20220929051110.GA1397@hu-ppareek-blr.qualcomm.com>
+References: <20220920120802.14321-1-quic_ppareek@quicinc.com>
+ <20220920120802.14321-4-quic_ppareek@quicinc.com>
+ <Yyq0dFvCI54QMqAl@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <20220924165737.956428-1-namhyung@kernel.org> <20220924165737.956428-3-namhyung@kernel.org>
- <d901f8c8-0dda-8f34-f963-09cf56d4924e@intel.com> <CAM9d7ciGFqSRO=J6FZmz=enML7eCyvRMQB+bm=nZ07GmozJwbw@mail.gmail.com>
- <ae609590-7d85-ee4b-3525-8eaa46ed240c@intel.com> <CAM9d7ciaOMOuJay5MzOYtg5paK_YmQskX1yqg=Oni1EzipPMwA@mail.gmail.com>
- <CAP-5=fX-as0WNCXMyzOwY=ek0gR9yNXbonXHAu1hsd5wOuX-Vg@mail.gmail.com>
-In-Reply-To: <CAP-5=fX-as0WNCXMyzOwY=ek0gR9yNXbonXHAu1hsd5wOuX-Vg@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 28 Sep 2022 22:09:22 -0700
-Message-ID: <CAM9d7ciDvCOsFE68NG6jRb02DdDEOmRf_h7XizdDLGBz0RX95Q@mail.gmail.com>
-Subject: Re: [PATCH 2/5] libperf: Propagate maps only if necessary
-To:     Ian Rogers <irogers@google.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Yyq0dFvCI54QMqAl@hovoldconsulting.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8WecGTwbsWO7HLwSDrr4k4OuZcANW9Vq
+X-Proofpoint-ORIG-GUID: 8WecGTwbsWO7HLwSDrr4k4OuZcANW9Vq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-29_02,2022-09-29_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 phishscore=0 mlxlogscore=842 bulkscore=0
+ clxscore=1011 impostorscore=0 mlxscore=0 spamscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209290028
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 7:08 PM Ian Rogers <irogers@google.com> wrote:
->
-> On Wed, Sep 28, 2022 at 4:46 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > On Wed, Sep 28, 2022 at 12:54 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> > >
-> > > On 27/09/22 20:28, Namhyung Kim wrote:
-> > > > Hi Adrian,
-> > > >
-> > > > On Tue, Sep 27, 2022 at 12:06 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> > > >>
-> > > >> On 24/09/22 19:57, Namhyung Kim wrote:
-> > > >>> The current code propagate evsel's cpu map settings to evlist when it's
-> > > >>> added to an evlist.  But the evlist->all_cpus and each evsel's cpus will
-> > > >>> be updated in perf_evlist__set_maps() later.  No need to do it before
-> > > >>> evlist's cpus are set actually.
-> > > >>>
-> > > >>> Actually we discarded this intermediate all_cpus maps at the beginning
-> > > >>> of perf_evlist__set_maps().  Let's not do this.  It's only needed when
-> > > >>> an evsel is added after the evlist cpu maps are set.
-> > > >>
-> > > >> That might not be true.  Consider evlist__fix_hybrid_cpus() which fiddles
-> > > >> with evsel->core.cpus and evsel->core.own_cpus after the evsel has been
-> > > >> added to the evlist.  It can also remove an evsel from the evlist.
-> > > >
-> > > > Thanks for your review.  I think it's fine to change evsel cpus or to remove
-> > > > an evsel from evlist before calling evlist__create_maps().  The function
-> > > > will take care of setting evlist's all_cpus from the evsels in the evlist.
-> > > > So previous changes in evsel/cpus wouldn't be any special.
-> > > >
-> > > > After this point, adding a new evsel needs to update evlist all cpus by
-> > > > propagating cpu maps.  So I think hybrid cpus should be fine.
-> > > > Did I miss something?
-> > >
-> > > I wondered how it might play out if evlist__fix_hybrid_cpus() reduced the
-> > > cpus from the target->cpu_list (using perf record -C) , since after this
-> > > patch all_cpus always starts with the target->cpu_list instead of an empty
-> > > list.  But then, in the hybrid case, it puts a dummy event that uses the
-> > > target cpu list anyway, so the result is the same.
-> > >
-> > > I don't know if there are any cases where all_cpus would actually need to
-> > > exclude some of the cpus from target->cpu_list.
-> >
-> > I'm not aware of other cases to reduce cpu list.  I think it'd be fine
-> > if it has a cpu in the evlist->all_cpus even if it's not used.  The evsel
-> > should have a correct list anyway and we mostly use the evsel cpus
-> > to do the real work.
-> >
-> > Thanks,
-> > Namhyung
->
-> The affinity changes made it so that we use all_cpus probably more
-> often than the evsel CPU maps for real work. The reason being we want
-> to avoid IPIs so we do all the work on 1 CPU and then move to the next
-> CPU in evlist all_cpus. evsel CPU maps are used to make sure the
-> indices are kept accurate - for example, if an uncore event is
-> measured with a CPU event:
-> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/evlist.h?h=perf/core#n366
-> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/evlist.c?h=perf/core#n404
-
-Right, I meant it'd check the evsel cpus eventually even if it iterates
-on the evlist all_cpus.  The evlist_cpu_iterator__next() will skip a
-CPU if it's not in the evsel cpus.
-
-Thanks,
-Namhyung
+On Wed, Sep 21, 2022 at 08:51:32AM +0200, Johan Hovold wrote:
+> On Tue, Sep 20, 2022 at 05:38:02PM +0530, Parikshit Pareek wrote:
+> > Create new dts file specific for Qdrive board based on sa8540p chipset.
+> > Introduce common dtsi file sa8295p-adp.dtsi, to be included for adp and
+> > Qdrive board.
+> > 
+> > This is quite similar to sa8295 ADP development board. Main differences
+> > are related to connectors, and interface cards, like USB external ports,
+> > ethernet-switch, and PCIe switch etc.
+> > 
+> > Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> > Reported-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+> > ---
+> 
+> > diff --git a/arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
+> > new file mode 100644
+> > index 000000000000..bd79866b80e1
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
+> > @@ -0,0 +1,31 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause
+> > +/*
+> > + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> > + * Copyright (c) 2022, Linaro Limited
+> > + * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include "sa8540p-adp.dtsi"
+> > +
+> > +/ {
+> > +	model = "Qualcomm SA8540 ADP";
+> > +	compatible = "qcom,sa8540p-adp-ride", "qcom,sa8540p";
+> > +};
+> > +
+> > +&ufs_card_hc {
+> > +	status = "disabled";
+> > +};
+> 
+> What about the UFS phy, etc?
+Really missed that. Will add phy nodes too.
+> 
+> This opt-out scheme seems quite fragile.
+> 
+> > +&usb_1 {
+> > +	status = "disabled";
+> > +};
+> > +
+> > +&usb_1_hsphy {
+> > +	status = "disabled";
+> > +};
+> > +
+> > +&usb_1_qmpphy {
+> > +	status = "disabled";
+> > +};
+> 
+> Johan
+Regards,
+Parikshit Pareek
