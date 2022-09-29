@@ -2,373 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F115EF735
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089BB5EF73A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235608AbiI2OIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
+        id S235589AbiI2OMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbiI2OIg (ORCPT
+        with ESMTP id S235451AbiI2OL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:08:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5959A1B3493
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:08:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9EB921A32;
-        Thu, 29 Sep 2022 07:08:38 -0700 (PDT)
-Received: from [10.57.65.135] (unknown [10.57.65.135])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D9A2C3F792;
-        Thu, 29 Sep 2022 07:08:29 -0700 (PDT)
-Message-ID: <c262795e-c84c-3f8f-db1c-e46268525750@arm.com>
-Date:   Thu, 29 Sep 2022 16:08:19 +0200
+        Thu, 29 Sep 2022 10:11:57 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [IPv6:2607:5300:203:5aae::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F6916F9CB;
+        Thu, 29 Sep 2022 07:11:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1664460712;
+        bh=+v2ZYO1lkgc/LYM8PWe013yC+/t8ZcJu73Y8uuch+Ao=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QBykbJuapgDBnBDizKGTSHZjYL5TjwaoAhgwwiuhieMfnEfedrciQn2X7WO3v+Egp
+         xssoA17yPqRiMCK0tyAnNCrDhQqwW+SKMWfKgQjj/r1gqDzV8gCLoKnS8NCHQOZsou
+         uTCWaUILZRIfxZ2qleJE6YtT/qHhlUIRpKqKbgm57EgGKPGYKdhBmt4Q/xbMWcc1GK
+         TQCud6i5seza0IR9I4CUcX9//evSf5QDGxNJEJn7TkTW36toNm4ThroicySF3+v4rA
+         dmLudWCZcqwRRz7PeoqX9lPn5TqNtBrycAsn2ED3cfFh7nsBRZZrQ9ePeux17bUowr
+         vVaWhg2tuqHNg==
+Received: from thinkos.internal.efficios.com (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4MdZzq5tDSzP99;
+        Thu, 29 Sep 2022 10:11:51 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Peter Oskolkov <posk@posk.io>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: [RFC PATCH] rseq: Use pr_warn_once() when deprecated/unknown ABI flags are encountered
+Date:   Thu, 29 Sep 2022 10:12:27 -0400
+Message-Id: <20220929141227.205343-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 1/1] arm_pmu: acpi: Pre-allocate pmu structures
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220912155105.1443303-1-pierre.gondois@arm.com>
- <20220912155105.1443303-2-pierre.gondois@arm.com>
- <YzRsibv4Iqw2Kk0T@FVFF77S0Q05N>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <YzRsibv4Iqw2Kk0T@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Mark,
+These commits use WARN_ON_ONCE() and kill the offending processes when
+deprecated and unknown flags are encountered:
 
-On 9/28/22 17:47, Mark Rutland wrote:
-> Hi Pierre,
-> 
-> Thanks for this, and sorry for the delayed reply.
-> 
-> On Mon, Sep 12, 2022 at 05:51:04PM +0200, Pierre Gondois wrote:
->> On an Ampere Altra,
->> Running a preemp_rt kernel based on v5.19-rc3-rt4 on an Ampere Altra
->> triggers:
->> [   12.642389] BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
->> [   12.642402] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 24, name: cpuhp/0
->> [   12.642406] preempt_count: 0, expected: 0
->> [   12.642409] RCU nest depth: 0, expected: 0
->> [   12.642411] 3 locks held by cpuhp/0/24:
->> [   12.642414] #0: ffffd8a22c8870d0 (cpu_hotplug_lock){++++}-{0:0}, at: cpuhp_thread_fun (linux/kernel/cpu.c:754)
->> [   12.642429] #1: ffffd8a22c887120 (cpuhp_state-up){+.+.}-{0:0}, at: cpuhp_thread_fun (linux/kernel/cpu.c:754)
->> [   12.642436] #2: ffff083e7f0d97b8 ((&c->lock)){+.+.}-{3:3}, at: ___slab_alloc (linux/mm/slub.c:2954)
->> [   12.642458] irq event stamp: 42
->> [   12.642460] hardirqs last enabled at (41): finish_task_switch (linux/./arch/arm64/include/asm/irqflags.h:35)
->> [   12.642471] hardirqs last disabled at (42): cpuhp_thread_fun (linux/kernel/cpu.c:776 (discriminator 1))
->> [   12.642476] softirqs last enabled at (0): copy_process (linux/./include/linux/lockdep.h:191)
->> [   12.642484] softirqs last disabled at (0): 0x0
->> [   12.642495] CPU: 0 PID: 24 Comm: cpuhp/0 Tainted: G        W         5.19.0-rc3-rt4-custom-piegon01-rt_0 #142
->> [   12.642500] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
->> [   12.642506] Call trace:
->> [   12.642508] dump_backtrace (linux/arch/arm64/kernel/stacktrace.c:200)
->> [   12.642514] show_stack (linux/arch/arm64/kernel/stacktrace.c:207)
->> [   12.642517] dump_stack_lvl (linux/lib/dump_stack.c:107)
->> [   12.642523] dump_stack (linux/lib/dump_stack.c:114)
->> [   12.642527] __might_resched (linux/kernel/sched/core.c:9929)
->> [   12.642531] rt_spin_lock (linux/kernel/locking/rtmutex.c:1732 (discriminator 4))
->> [   12.642536] ___slab_alloc (linux/mm/slub.c:2954)
->> [   12.642539] __slab_alloc.isra.0 (linux/mm/slub.c:3116)
->> [   12.642543] kmem_cache_alloc_trace (linux/mm/slub.c:3207)
->> [   12.642549] __armpmu_alloc (linux/./include/linux/slab.h:600)
->> [   12.642558] armpmu_alloc_atomic (linux/drivers/perf/arm_pmu.c:927)
->> [   12.642562] arm_pmu_acpi_cpu_starting (linux/drivers/perf/arm_pmu_acpi.c:204)
->> [   12.642568] cpuhp_invoke_callback (linux/kernel/cpu.c:192)
->> [   12.642571] cpuhp_thread_fun (linux/kernel/cpu.c:777 (discriminator 3))
->> [   12.642573] smpboot_thread_fn (linux/kernel/smpboot.c:164 (discriminator 3))
->> [   12.642580] kthread (linux/kernel/kthread.c:376)
->> [   12.642584] ret_from_fork (linux/arch/arm64/kernel/entry.S:868)
->>
->> arm_pmu_acpi_cpu_starting() is called in the STARTING hotplug section,
->> which runs with interrupts disabled. To avoid allocating memory and
->> sleeping in this function, the pmu structures must be pre-allocated.
->>
->> On ACPI systems, the count of PMUs is unknown until CPUs are
->> hotplugged, cf:
->> commit 0dc1a1851af1 ("arm_pmu: add armpmu_alloc_atomic()")
->>
->> At most #PMU_IRQs pmu structures will be used and thus need to be
->> pre-allocated.
->> In arm_pmu_acpi_cpu_starting() subcalls, after checking the cpuid,
->> decide to use or re-use a pre-allocated pmu structure. Thus the
->> pre-allocated pmu struct can be seen as a pool.
->> When probing, search and free unused pmu structures.
-> 
-> I think in retrospect I was trying to be too clever with
-> arm_pmu_acpi_cpu_starting() handling boot-time CPUs and late hotplug, and we
-> can make this simpler by handling the boot-time probing synchronously within
-> arm_pmu_acpi_probe(), removing a bunch of state.
-> 
-> I had a go at that, and in testing (in a QEMU TCG VM) atop arm64/for-next/core,
-> that seems to work (even with a faked-up heterogenous config). I've pushed that
-> to my `arm_pmu/acpi/rework` branch at:
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm_pmu/acpi/rework
->    git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm_pmu/acpi/rework
-> 
-> ... does that work for you?
+commit c17a6ff93213 ("rseq: Kill process when unknown flags are encountered in ABI structures")
+commit 0190e4198e47 ("rseq: Deprecate RSEQ_CS_FLAG_NO_RESTART_ON_* flags")
 
-Thanks for the branch and for looking at this. I think there is an issue for late hotplug
-CPUs. Indeed the pmu structure allocation is done for the online CPUs at the
-time of probing. This let rooms for the case where none of the CPUs of a PMU is booted
-at startup.
-I tried the patch on a Juno-r2 with the 'maxcpus=1 apci=force' parameters. When late
-hotplugging CPU1 (which has a different pmu than CPU0), no pmu structure is found and
-the cpuhp state machine fails (since arm_pmu_acpi_cpu_starting() failed).
+The WARN_ON_ONCE() triggered by userspace input prevents use of
+Syzkaller to fuzz the rseq system call.
 
-This current patch is blindly allocating numerous pmu structures based on the number
-of pmu irq that can be seen in the MADT table. I currently don't see another solution.
+Replace this WARN_ON_ONCE() by pr_warn_once() messages which contain
+actually useful information.
 
-Regards,
-Pierre
+Reported-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ kernel/rseq.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-> 
-> Thanks,
-> Mark.
-> 
->>
->> Platforms used to test this patch:
->> - Juno-r2 (2 clusters: 2 big and 4 little CPUs) with 2 PMUs and
->>    one interrupt for each CPU
->> - Ampere Altra with 1 PMU and one interrupt for the 160 CPUs
->>
->> Link: https://lore.kernel.org/all/20210810134127.1394269-2-valentin.schneider@arm.com
->> Reported-by: Valentin Schneider <vschneid@redhat.com>
->> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
->> ---
->>   drivers/perf/arm_pmu.c       |  17 +-----
->>   drivers/perf/arm_pmu_acpi.c  | 114 ++++++++++++++++++++++++++++++-----
->>   include/linux/perf/arm_pmu.h |   1 -
->>   3 files changed, 103 insertions(+), 29 deletions(-)
->>
->> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
->> index 59d3980b8ca2..731e793dfef5 100644
->> --- a/drivers/perf/arm_pmu.c
->> +++ b/drivers/perf/arm_pmu.c
->> @@ -861,16 +861,16 @@ static void cpu_pmu_destroy(struct arm_pmu *cpu_pmu)
->>   					    &cpu_pmu->node);
->>   }
->>   
->> -static struct arm_pmu *__armpmu_alloc(gfp_t flags)
->> +struct arm_pmu *armpmu_alloc(void)
->>   {
->>   	struct arm_pmu *pmu;
->>   	int cpu;
->>   
->> -	pmu = kzalloc(sizeof(*pmu), flags);
->> +	pmu = kzalloc(sizeof(*pmu), GFP_KERNEL);
->>   	if (!pmu)
->>   		goto out;
->>   
->> -	pmu->hw_events = alloc_percpu_gfp(struct pmu_hw_events, flags);
->> +	pmu->hw_events = alloc_percpu_gfp(struct pmu_hw_events, GFP_KERNEL);
->>   	if (!pmu->hw_events) {
->>   		pr_info("failed to allocate per-cpu PMU data.\n");
->>   		goto out_free_pmu;
->> @@ -916,17 +916,6 @@ static struct arm_pmu *__armpmu_alloc(gfp_t flags)
->>   	return NULL;
->>   }
->>   
->> -struct arm_pmu *armpmu_alloc(void)
->> -{
->> -	return __armpmu_alloc(GFP_KERNEL);
->> -}
->> -
->> -struct arm_pmu *armpmu_alloc_atomic(void)
->> -{
->> -	return __armpmu_alloc(GFP_ATOMIC);
->> -}
->> -
->> -
->>   void armpmu_free(struct arm_pmu *pmu)
->>   {
->>   	free_percpu(pmu->hw_events);
->> diff --git a/drivers/perf/arm_pmu_acpi.c b/drivers/perf/arm_pmu_acpi.c
->> index 96ffadd654ff..599d8be78950 100644
->> --- a/drivers/perf/arm_pmu_acpi.c
->> +++ b/drivers/perf/arm_pmu_acpi.c
->> @@ -17,6 +17,8 @@
->>   
->>   static DEFINE_PER_CPU(struct arm_pmu *, probed_pmus);
->>   static DEFINE_PER_CPU(int, pmu_irqs);
->> +static unsigned int preallocated_pmus_count;
->> +static struct arm_pmu **preallocated_pmus;
->>   
->>   static int arm_pmu_acpi_register_irq(int cpu)
->>   {
->> @@ -187,30 +189,108 @@ static int arm_pmu_acpi_parse_irqs(void)
->>   	return err;
->>   }
->>   
->> +/* Count the number of different PMU IRQs for the input PMU. */
->> +static int count_pmu_irqs(struct arm_pmu *pmu)
->> +{
->> +	struct pmu_hw_events __percpu *hw_events = pmu->hw_events;
->> +	unsigned int num_irqs = 0;
->> +	int cpu, probed_cpu, irq;
->> +
->> +	for_each_cpu(cpu, &pmu->supported_cpus) {
->> +		irq = per_cpu(hw_events->irq, cpu);
->> +		for_each_cpu(probed_cpu, &pmu->supported_cpus) {
->> +			if (irq == per_cpu(hw_events->irq, probed_cpu)) {
->> +				if (probed_cpu == cpu)
->> +					num_irqs++;
->> +				break;
->> +			}
->> +		}
->> +	}
->> +
->> +	return num_irqs;
->> +}
->> +
->> +/*
->> + * Count the number of different PMU IRQs across all the PMUs of the system
->> + * to get an upper bound of the number of struct arm_pmu to pre-allocate.
->> + */
->> +static int count_all_pmu_irqs(void)
->> +{
->> +	unsigned int num_irqs = 0;
->> +	int cpu, probed_cpu, irq;
->> +
->> +	for_each_possible_cpu(cpu) {
->> +		irq = per_cpu(pmu_irqs, cpu);
->> +		for_each_possible_cpu(probed_cpu) {
->> +			if (irq == per_cpu(pmu_irqs, probed_cpu)) {
->> +				if (probed_cpu == cpu)
->> +					num_irqs++;
->> +				break;
->> +			}
->> +		}
->> +	}
->> +
->> +	return num_irqs;
->> +}
->> +
->> +static unsigned int pmu_preallocate(void)
->> +{
->> +	unsigned int i, num_irqs = count_all_pmu_irqs();
->> +
->> +	preallocated_pmus = kcalloc(num_irqs, sizeof(*preallocated_pmus),
->> +					GFP_KERNEL);
->> +	if (!preallocated_pmus) {
->> +		pr_err("Failed to pre-allocate %d pmu struct\n", num_irqs);
->> +		return -ENOMEM;
->> +	}
->> +
->> +	for (i = 0; i < num_irqs; i++) {
->> +		preallocated_pmus[i] = armpmu_alloc();
->> +		if (!preallocated_pmus[i])
->> +			return -ENOMEM;
->> +	}
->> +
->> +	preallocated_pmus_count = num_irqs;
->> +	return 0;
->> +}
->> +
->>   static struct arm_pmu *arm_pmu_acpi_find_alloc_pmu(void)
->>   {
->>   	unsigned long cpuid = read_cpuid_id();
->>   	struct arm_pmu *pmu;
->> -	int cpu;
->> +	unsigned int i;
->>   
->> -	for_each_possible_cpu(cpu) {
->> -		pmu = per_cpu(probed_pmus, cpu);
->> -		if (!pmu || pmu->acpi_cpuid != cpuid)
->> -			continue;
->> +	for (i = 0; i < preallocated_pmus_count; i++) {
->> +		pmu = preallocated_pmus[i];
->>   
->> -		return pmu;
->> +		if (!pmu->acpi_cpuid) {
->> +			pmu->acpi_cpuid = cpuid;
->> +			return pmu;
->> +		} else if (pmu->acpi_cpuid == cpuid)
->> +			return pmu;
->>   	}
->>   
->> -	pmu = armpmu_alloc_atomic();
->> -	if (!pmu) {
->> -		pr_warn("Unable to allocate PMU for CPU%d\n",
->> -			smp_processor_id());
->> -		return NULL;
->> -	}
->> +	pr_err("Unable to find pre-allocated PMU for CPU%d\n",
->> +		smp_processor_id());
->> +	return NULL;
->> +}
->>   
->> -	pmu->acpi_cpuid = cpuid;
->> +static void pmu_free_unused_preallocated(struct arm_pmu *pmu)
->> +{
->> +	int i, unused_num_irqs = count_pmu_irqs(pmu);
->>   
->> -	return pmu;
->> +	if (unused_num_irqs <= 1)
->> +		return;
->> +	else if (unused_num_irqs >= preallocated_pmus_count) {
->> +		pr_err("Trying to free %d pmu struct when %d are allocated\n",
->> +				unused_num_irqs, preallocated_pmus_count);
->> +		return;
->> +	}
->> +
->> +	unused_num_irqs--;
->> +	for (i = 0; i < unused_num_irqs; i++)
->> +		armpmu_free(preallocated_pmus[preallocated_pmus_count - i - 1]);
->> +	preallocated_pmus_count -= unused_num_irqs;
->>   }
->>   
->>   /*
->> @@ -311,6 +391,8 @@ int arm_pmu_acpi_probe(armpmu_init_fn init_fn)
->>   		if (!pmu || pmu->name)
->>   			continue;
->>   
->> +		pmu_free_unused_preallocated(pmu);
->> +
->>   		ret = init_fn(pmu);
->>   		if (ret == -ENODEV) {
->>   			/* PMU not handled by this driver, or not present */
->> @@ -351,6 +433,10 @@ static int arm_pmu_acpi_init(void)
->>   	if (ret)
->>   		return ret;
->>   
->> +	ret = pmu_preallocate();
->> +	if (ret)
->> +		return ret;
->> +
->>   	ret = cpuhp_setup_state(CPUHP_AP_PERF_ARM_ACPI_STARTING,
->>   				"perf/arm/pmu_acpi:starting",
->>   				arm_pmu_acpi_cpu_starting, NULL);
->> diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
->> index 0407a38b470a..049908af3595 100644
->> --- a/include/linux/perf/arm_pmu.h
->> +++ b/include/linux/perf/arm_pmu.h
->> @@ -173,7 +173,6 @@ void kvm_host_pmu_init(struct arm_pmu *pmu);
->>   
->>   /* Internal functions only for core arm_pmu code */
->>   struct arm_pmu *armpmu_alloc(void);
->> -struct arm_pmu *armpmu_alloc_atomic(void);
->>   void armpmu_free(struct arm_pmu *pmu);
->>   int armpmu_register(struct arm_pmu *pmu);
->>   int armpmu_request_irq(int irq, int cpu);
->> -- 
->> 2.25.1
->>
+diff --git a/kernel/rseq.c b/kernel/rseq.c
+index bda8175f8f99..d38ab944105d 100644
+--- a/kernel/rseq.c
++++ b/kernel/rseq.c
+@@ -171,12 +171,27 @@ static int rseq_get_rseq_cs(struct task_struct *t, struct rseq_cs *rseq_cs)
+ 	return 0;
+ }
+ 
++static bool rseq_warn_flags(const char *str, u32 flags)
++{
++	u32 test_flags;
++
++	if (!flags)
++		return false;
++	test_flags = flags & RSEQ_CS_NO_RESTART_FLAGS;
++	if (test_flags)
++		pr_warn_once("Deprecated flags (%u) in %s ABI structure", test_flags, str);
++	test_flags = flags & ~RSEQ_CS_NO_RESTART_FLAGS;
++	if (test_flags)
++		pr_warn_once("Unknown flags (%u) in %s ABI structure", test_flags, str);
++	return true;
++}
++
+ static int rseq_need_restart(struct task_struct *t, u32 cs_flags)
+ {
+ 	u32 flags, event_mask;
+ 	int ret;
+ 
+-	if (WARN_ON_ONCE(cs_flags & RSEQ_CS_NO_RESTART_FLAGS) || cs_flags)
++	if (rseq_warn_flags("rseq_cs", cs_flags))
+ 		return -EINVAL;
+ 
+ 	/* Get thread flags. */
+@@ -184,7 +199,7 @@ static int rseq_need_restart(struct task_struct *t, u32 cs_flags)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (WARN_ON_ONCE(flags & RSEQ_CS_NO_RESTART_FLAGS) || flags)
++	if (rseq_warn_flags("rseq", flags))
+ 		return -EINVAL;
+ 
+ 	/*
+-- 
+2.30.2
+
