@@ -2,129 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C67D85EFDED
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 720915EFDF5
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiI2T3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 15:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37040 "EHLO
+        id S229582AbiI2Tcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 15:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiI2T25 (ORCPT
+        with ESMTP id S229437AbiI2Tcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 15:28:57 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2057.outbound.protection.outlook.com [40.107.237.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A79315E4D4;
-        Thu, 29 Sep 2022 12:28:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dQXalQwt1zg7/bCU7iHwswuuIooulC07CgdJwfNplFomEAdrmbNZ1MPQXTk7gffxT4czt3/SY+1tsyNwq0fTOykAGw8a+16uqGjBdZK6aJdKw68DpUREITzhionkVry9bRN0eH68KBRS+WLO9aRdNVeTow9I+STWzp7uk2oQPCM3a8g88ZaS65XqBjfesAyj349ayAsda1mN2r1mth7vxIrGW4MhF1QbTodJN0Z/uqJX7fKScnq7B71tEYkoUt+JTPxuv8DXMLvqjxTlg3BDC7n2ciKpLuLFVL+AGd4zwV00MNGv3j1rSMCfzjTWrOwA563IEx6cCCk8ftttTKuf1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4AMugPJ5thtiPGcZ3zQxt+dLF+3jtw/7+G+MH/wRE54=;
- b=Igp3BnQ4EDEbnGe5f1cbhueqZde0re2Y88Z+qTygFIbRLNDLe+1xhmUp5ocF6iHdH10ZWSJUai67OzgOrldrbHfDHW+RdeAbi2q1NGwwO5fXBNXXm2DgSVrYMn8Q073dF9hNVtH1HW20aVe7mt8jYauMHnYuO1VopB8E9ha2ml8Fub3xPQKQSxkeX3xULjOGz6tNxylRIqhSHOzQ3lCphytjjVEkoEh2pSexfAs668CQ5eNRWi1MKfp93k3l7ZROJo4UUB1RKHwCBZIDUc4GhfJonj5f57jPu0rc4cI9HVck1vikuFEW7SWVNEgszWmX9nrronGN99t1Idlj0d8o7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4AMugPJ5thtiPGcZ3zQxt+dLF+3jtw/7+G+MH/wRE54=;
- b=FInZTZwmvSVUf6JIoFqaBEt2eHMZ/v12od/jBhqcN+0c9IYYTbbLzg/Q3O08eqKEQALdc+F1ZzyidKhtxaxgIXA+r1b5qFk6q1d+3KKpwn3XjMNn404LM5X711Go6uUQkDNMNpghiGBHXvWvnG9ENWGOMYRNgP86DkpzRFNs6xo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3683.namprd12.prod.outlook.com (2603:10b6:a03:1a5::16)
- by PH8PR12MB7230.namprd12.prod.outlook.com (2603:10b6:510:226::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.18; Thu, 29 Sep
- 2022 19:28:52 +0000
-Received: from BY5PR12MB3683.namprd12.prod.outlook.com
- ([fe80::3441:5a68:b4b7:e988]) by BY5PR12MB3683.namprd12.prod.outlook.com
- ([fe80::3441:5a68:b4b7:e988%6]) with mapi id 15.20.5676.017; Thu, 29 Sep 2022
- 19:28:51 +0000
-Message-ID: <fa91ce5a-8c7e-850a-eede-1f6a61a3d651@amd.com>
-Date:   Thu, 29 Sep 2022 12:28:49 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.0
-Subject: Re: [PATCH v9 6/6] drivers: remoteproc: Add Xilinx r5 remoteproc
- driver
-Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, michal.simek@xilinx.com,
-        ben.levinsky@xilinx.com, tanmay.shah@xilinx.com,
-        michal.simek@amd.com, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220708013955.2340449-1-tanmay.shah@amd.com>
- <20220708013955.2340449-7-tanmay.shah@amd.com> <20220901202517.GB626605@p14s>
- <d1cfa787-9f8e-fe8a-d816-0bd8c3a3244d@amd.com>
- <20220929172200.GB3107608@p14s>
-From:   Tanmay Shah <tanmays@amd.com>
-In-Reply-To: <20220929172200.GB3107608@p14s>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0087.namprd05.prod.outlook.com
- (2603:10b6:a03:332::32) To BY5PR12MB3683.namprd12.prod.outlook.com
- (2603:10b6:a03:1a5::16)
+        Thu, 29 Sep 2022 15:32:48 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8346412644D;
+        Thu, 29 Sep 2022 12:32:47 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id a2so3737963lfb.6;
+        Thu, 29 Sep 2022 12:32:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=cXkX2H9k3D7HLHbVxc2rCNU+15RLZHb5rgdEV0Qk9eA=;
+        b=dThX9s1Gd4gBefmvzUkQA2VisMXXBMw2u5LJFqbgG8o2GxKxCEr8sZjP+2CZS2llRW
+         nyeEYzMeMI/KR/m1tR6xc+Bh62vcorocQiYHD1JZaxMb3/i5VgfMEwgCm+PyEoK4MEbk
+         /quwDt3Kj82H8pqO2nYf+T8SQruRjWweCNjbiaxdlP5JD7HlLcwG/thlzqJ8hkOzs5AB
+         qCbUxVOB6PyJnDB/9ZK910wOc458FQNH/QjQ3LqYCMtV0SCdlzIzXJ+D90/AGbOIVzhL
+         k9xGYamAdmVwtOoqrS1H30zAXZwInYGtsyjj/EoBetCceNwL9bhy9uQVpzfFOYlenZ44
+         U51g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=cXkX2H9k3D7HLHbVxc2rCNU+15RLZHb5rgdEV0Qk9eA=;
+        b=nAHAeRJUwK4wxtuSMOpdGijNVMo5mWNR95DyKZzyo+h+iM5AvgZ1bq/otjJFYb95Kr
+         SCdrU9ij07neRNb3hIc+Oka7AVb7maGiwn5QPTCFT/jYfTxwDASqm23+xK1zkW6FfXJD
+         txRk4iEmz3EY0k2Bxp++/8PbgovcF/ryczM8zY4THvdqABJgM1626305dpEnJJZeUXRM
+         +50AZhV7+Bhvdcf0b63QtAb/WI//MQ+K7qJ8VqNyWxK/7OLI6cyYDFoZXQZRRoxozb8Z
+         pisNgBekSfb7I+NxmU7RWQVGdpG0Xv6cAKpTUx8h4t9EobemQAR03+/tum3z7tqCBrsZ
+         uRkg==
+X-Gm-Message-State: ACrzQf2y+gWuu2RVehStzVqqls+9/d/rUv1vEZSreBr6ArOPHTunn6f0
+        qhQ5AcGsOPFSO2+/ZGnfsMA=
+X-Google-Smtp-Source: AMsMyM4lSK5B+Hgq1SCBKPOrcbVfnB35EVyc7TA4ULFN6OEfoY7sOFM3XzVzQumLtgsYIrMNPZjqAQ==
+X-Received: by 2002:a05:6512:c2a:b0:497:a1ee:7a21 with SMTP id z42-20020a0565120c2a00b00497a1ee7a21mr2047880lfu.221.1664479965624;
+        Thu, 29 Sep 2022 12:32:45 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id a8-20020a2eb548000000b00268bfa6ffacsm25536ljn.108.2022.09.29.12.32.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 12:32:44 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 22:32:41 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Will McVicker <willmcvicker@google.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Isaac J . Manjarres" <isaacmanjarres@google.com>
+Subject: Re: [PATCH v5 1/2] PCI: dwc: Drop dependency on ZONE_DMA32
+Message-ID: <20220929193241.pdjj5ifm7vgpff42@mobilestation>
+References: <20220825185026.3816331-1-willmcvicker@google.com>
+ <20220825185026.3816331-2-willmcvicker@google.com>
+ <20220928114136.4yvtfnrcril3jkgg@mobilestation>
+ <4dc31a63-00b1-f379-c5ac-7dc9425937f4@arm.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3683:EE_|PH8PR12MB7230:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9a48fc20-174c-40d7-5cbb-08daa250d71c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TQ5SuWpPKBNMCxOhcHxK0EVqM1QqapF8oi54Kf4CxryiMieKwqpnFwKtxxtu5Zmsr4vYIPmF0u/cH2ItVp5eMMfyEaxxy2mBIvzGq1oSTHePLigKqUR0C0Pk+kslwgObc3/lY3zXuIDYyxHMGTP484KGBP4RJx1AwqnX+FTBU/M8/S/GBpQ5gBru7HQwJncPXkg7jnAW+KDTPUOTZ9qPXRG2KK/5Tp56FKOqtnKxWPZ9TOH1xX9iHRC64vCQaa8jrd0BXBkwHLGfwU/lsKAsf01Khlulq8mckJfaSvIG/78m5a+PZO8hKkJZKooZarf9czrNMY2WjSpewPmXyuli26qgrrLeIoraGMI2LpNeSiwo56355oIYt+19hkZ/1tIvRt+mzWu7VVA3RJoRFIjl3UZDuw2lxdpR1cI4cyaMgZXxqfIwaxIGpbRz4slw/emSIvcpPHivUNQBfEQW5yCV9lszIEhRaYkYjJgzIkfBNptj0p54YOhGj97HKjWm/8RC+NCaBq+sUeHFcTuKiW57mbfj3QQXEW+9ty26JfaCAEv5Lk8yzNNSQXAfJm9a+dg1nXDPyBjiFt4L/fAU7LvCoewUnhzdPfznW4gbv4L9u0fTHi9CTIM5/rqBGhZS+GOaiSl1r6wx+N6kpiyZkOaGyWZ1XxVYnJUSy4ui84Si9/dXsJ0F/nt/BHBUJcxTUh+MdauP/YdeyXJhCpBdqHP/tAFlvJ57/awxNlgS8h74CaOfY8VnrKwlapJG7/r/yZl+IpB4rAv1Wk9Ere3ykJtSi8ZFYehzGWw0lQFVtEisC+s=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3683.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(366004)(346002)(396003)(451199015)(31686004)(66476007)(26005)(6512007)(186003)(2616005)(83380400001)(36756003)(478600001)(6506007)(316002)(38100700002)(53546011)(4326008)(6486002)(2906002)(6916009)(8936002)(5660300002)(66556008)(8676002)(66946007)(41300700001)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?blVoekRuSGhXWlRiaGp3S3RqNTFUbkQrdFYxVU8zYWpGMXNRVXlJWlZzZkU3?=
- =?utf-8?B?Ky9DamtBMHpVbjFyZ09OOWJhaWJNNTBBdHdIbkRDL1F4OFhaT2twMjBhcDZo?=
- =?utf-8?B?ajlwUmE0aWdEQUh6Vmt6dWdMNXNPZDl2YkpDdEVzUENBZGpLcU0xSTQ1bFFx?=
- =?utf-8?B?Zm5tWFFwWTYxK1hQZGNCZzRRYURoMW9VRkhvdWgwWTZ4aklRZ3B1OHA1djMw?=
- =?utf-8?B?TGRvM3hCQTVRRUhndldZSlZhZVptWHZWK1hkV1lkTDJsbEE1Y0x0MlRuZFZ3?=
- =?utf-8?B?VUxxNVNKZnh3ZU56Yy9pN294djJ6NFA4aUtxalJnemJsV2lydWRBZHFhWWov?=
- =?utf-8?B?YmVjNkp5bHdmdGplbndHNmNULzVKTHdtNUtkY0kzbVFVNUtFbUlMcjg5RDh6?=
- =?utf-8?B?b0JRUXZBTmdFaGs1MjFNWG05eTA0ODZhNEVta21GSWkzTERaUnJMSE93LzhN?=
- =?utf-8?B?VkNMQzRHczNpWnc4RjlrMWNSTmNrQ0poTDNnbmtNVE5oOWhmRGdoeHdjNlZs?=
- =?utf-8?B?N09KdktsaE1DalAveThTWUpVY29DNWpNbDRiM2xFM3lRSFZlSTQxaUNWSWZ1?=
- =?utf-8?B?OXA1Z3A0bEp2Ti9XZUlCTUUra3IxNkQ3c2dPWFpzd2ZoTmNRMkNwSGx5UzJN?=
- =?utf-8?B?N091ajBvT1hJbHcvRndScEZDM1kxWmZXUU8zb1hrNGFLblhReCsxeHAyZXcv?=
- =?utf-8?B?ZW1mZFBCck9QZm5YQWNTQzRrdXh0SC84ODlZVmZmTFBDMnRDMWlJcWVFbGZy?=
- =?utf-8?B?cnZ3a0tZOVZYMzNmTjZNUzBCOUZLZ0tLVnRXWDIxZFZneTVjU3ZpNDViblFO?=
- =?utf-8?B?Tkw2SEx5QnowRXRNeWhsRDFvYSt4YUU4ZUwvMmttUm44WDFqbGNJNS8wMktP?=
- =?utf-8?B?cTFOelF5VGRsYVd3Q3ZaR2pyQURMN2pMTGhBdlFycHdRT2JxWmJ5SHd3TmRI?=
- =?utf-8?B?QkFIcFMzeXdPdmNXUWczZEdMSWY3a3pmZlU0R2RyRnk5clc2MEFVdmRYdWR5?=
- =?utf-8?B?SVg5RVRtbGtZQW84eEtselVXMVc0dDM4S1pvb253bFdpRHVCaUI2Ny9kaXVI?=
- =?utf-8?B?UC9WdnZxUUpHR2JVTlZhS1d4ZWg2dGI4ZlZaTy9kcVladjN2L3VGSGRrU0M3?=
- =?utf-8?B?YzExVHE1ekdVcnZubzJiT0ljU01PWU05RzQrdC9aaGo5WkdPMlcwb3pEL1J1?=
- =?utf-8?B?akZJc2pCZzdleWxCZGdDQUdSZDNoRVFTM1B0b2Z3Rnd6QU5Vd2daSFZkNmox?=
- =?utf-8?B?d0gzSjZCN3lDT0FvOCsraTQ3Zy95MjZhcDhadk9Ed3JTNlpIL0JFdko5S3R0?=
- =?utf-8?B?MVpTM3Brekg4eTVjZGU3Y3EzNExNSDNtbWFGcHpxcEpXWmZiVkZUY25wRTF5?=
- =?utf-8?B?TlVUQTM2a1FWYVlDS0EwMmI0bkxCbm9jTFhMRDB0NGlTVXZMejJhcXhXdEIr?=
- =?utf-8?B?b0hYbVQrZGp5NEtTR09MTGFaUS84M2RHNTFJTFNnR0JtTG9yVXlHclZKbllM?=
- =?utf-8?B?dEUyWjRneEdpS3E1bTJDL29aZ3N5cFFvbGMvbEdrb25PN2dYT21rRGljUkE1?=
- =?utf-8?B?bmlPeG9kYmQxamF5eHFCN1R0TmRoeTRuWUswRUtSOTdCT202MGNiMEdLMFpv?=
- =?utf-8?B?cm5OaEE0clBkc0dDQm5jR21SdmdZbkZTQ3E5N2ZnOGJWNmR6R1cya1Fvbk5q?=
- =?utf-8?B?UGZjSFRqV2RRQTM3Zk5QbnlmbUpLZGdiQWJzSVpXWi9Dc29Bd3luSHdNeFQ4?=
- =?utf-8?B?L0Y4Q3lPdU5kcnNSWWdaTzVGWWJlNXROcnhlUW1nWDZCN0FaeC96Q0NicE45?=
- =?utf-8?B?QXZhRk9ROG9rYTNXNC85WC9VMERuRTZwVUl1bHJ2ZHFRSHM3bWR3cEZzNGxG?=
- =?utf-8?B?blBoZ0E1bTVtMEsvbTNrRGZSYy9KVDVISlhEZnpPdkhadVZ2U1JJT0xrVTcw?=
- =?utf-8?B?MWcvdTNDdDFEcmpMTGoxTTNKZmtiVnp6N2pDcG5leGtzZkVacTRlZmRWSGpL?=
- =?utf-8?B?WWdzdEs3bm9jWEdoUlNjc0NCd0w5VHBEVjEvRVFPWTlrMVFWaEtJU2JiL0ht?=
- =?utf-8?B?MlhoM3pmekQ2VjF2ZzFRSmszYkt3R3BJaExqRmxVK3VHOVBtdUw4N0p1QzFz?=
- =?utf-8?Q?aWf7SV9QhlKdCw+UtfHOnskMM?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a48fc20-174c-40d7-5cbb-08daa250d71c
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3683.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 19:28:51.9046
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M4eQTY3K828cxchoZ0kUVbmwjU5Mm+AvpUsFjCsvPExzN/Q1RS/QFJ6hBE/R4UCQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7230
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4dc31a63-00b1-f379-c5ac-7dc9425937f4@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,86 +82,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Mathieu.
+On Thu, Sep 29, 2022 at 07:25:03PM +0100, Robin Murphy wrote:
+> On 2022-09-28 12:41, Serge Semin wrote:
+> > On Thu, Aug 25, 2022 at 06:50:24PM +0000, Will McVicker wrote:
+> > > Re-work the msi_msg DMA allocation logic to use dmam_alloc_coherent() which
+> > > uses the coherent DMA mask to try to return an allocation within the DMA
+> > > mask limits. With that, we now can drop the msi_page parameter in struct
+> > > dw_pcie_rp. This allows kernel configurations that disable ZONE_DMA32 to
+> > > continue supporting a 32-bit DMA mask. Without this patch, the PCIe host
+> > > device will fail to probe when ZONE_DMA32 is disabled.
+> > 
+> > As Rob already said here
+> > https://lore.kernel.org/all/CAL_JsqJh=d-B51b6yPBRq0tOwbChN=AFPr-a19U1QdQZAE7c1A@mail.gmail.com/
+> > and I mentioned in this thread
+> > https://lore.kernel.org/linux-pci/20220912000211.ct6asuhhmnatje5e@mobilestation/
+> > DW PCIe MSI doesn't cause any DMA due to the way the iMSI-RX engine is
+> > designed. So reserving any real system memory is a waste of one in
+> > this case. Reserving DMA-coherent even more inappropriate since it
+> > can be expensive on some platforms (see note in Part Ia of
+> > Documentation/core-api/dma-api.rst). For instance on MIPS32 with
+> > non-corehent common DMA.
+> 
 
-Also, I see that last few revisions I have changed driver a lot based on 
-comments, but documentation in driver is not in sync.
+> This has been discussed before - in general it is difficult to pick an
+> arbitrary MSI address that is *guaranteed* not to overlap any valid DMA
+> address that somebody may try to use later. However there is a very easy way
+> to guarantee that the DMA API won't give anyone a particular DMA address,
+> which is to get an address directly from the DMA API and keep it. Yes, that
+> can technically be done with a streaming mapping *if* you already have some
+> memory allocated in a suitable physical location, but coherent allocations
+> are even more foolproof, simpler to clean up (particularly with devres), and
+> unlikely to be an issue on relevant platforms (do any MIPS32 systems use
+> this driver?)
 
-I know we agreed initially, that I will address changes _only_ commented 
-in previous revision. However, in next revision I would like
+My patchset adds the DW PCIe RP controller support on MIPS32 arch:
+https://lore.kernel.org/linux-pci/20220822184701.25246-21-Sergey.Semin@baikalelectronics.ru/
 
-to fix documentation all over the driver along with your comments. I 
-hope it's fine and I wanted to give you heads up so we stay on same page.
+> 
+> > > Fixes: 35797e672ff0 ("PCI: dwc: Fix MSI msi_msg DMA mapping")
+> > > Reported-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+> > > Signed-off-by: Will McVicker <willmcvicker@google.com>
+> > > Acked-by: Jingoo Han <jingoohan1@gmail.com>
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > ---
+> > >   .../pci/controller/dwc/pcie-designware-host.c | 28 +++++--------------
+> > >   drivers/pci/controller/dwc/pcie-designware.h  |  1 -
+> > >   2 files changed, 7 insertions(+), 22 deletions(-)
+> > > 
+> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > index 7746f94a715f..39f3b37d4033 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > @@ -267,15 +267,6 @@ static void dw_pcie_free_msi(struct dw_pcie_rp *pp)
+> > >   	irq_domain_remove(pp->msi_domain);
+> > >   	irq_domain_remove(pp->irq_domain);
+> > > -
+> > > -	if (pp->msi_data) {
+> > > -		struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+> > > -		struct device *dev = pci->dev;
+> > > -
+> > > -		dma_unmap_page(dev, pp->msi_data, PAGE_SIZE, DMA_FROM_DEVICE);
+> > > -		if (pp->msi_page)
+> > > -			__free_page(pp->msi_page);
+> > > -	}
+> > >   }
+> > >   static void dw_pcie_msi_init(struct dw_pcie_rp *pp)
+> > > @@ -336,6 +327,7 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+> > >   	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+> > >   	struct device *dev = pci->dev;
+> > >   	struct platform_device *pdev = to_platform_device(dev);
+> > > +	u64 *msi_vaddr;
+> > >   	int ret;
+> > >   	u32 ctrl, num_ctrls;
+> > > @@ -375,22 +367,16 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+> > >   						    dw_chained_msi_isr, pp);
+> > >   	}
+> > 
+> > > -	ret = dma_set_mask(dev, DMA_BIT_MASK(32));
+> > > +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+> > 
+> > This has been redundant in the first place since none of the DW PCIe
+> > low-level drivers update the mask, and it's of 32-bits wide by default
+> > anyway:
+> > https://elixir.bootlin.com/linux/latest/source/drivers/of/platform.c#L167
+> 
 
-Thanks,
+> No, in general drivers should always explicitly set their mask(s) and check
+> the return value to make sure DMA is possible at all before trying any other
+> DMA API calls. There's no guarantee that the default mask is usable (e.g.
+> some systems don't have any 32-bit addressable RAM), or that it's even
+> always 32 bits (due to crufty reasons of something of_dma_configure() tried
+> to do a long time ago).
 
-Tanmay
+Suppose you are right and DMA-mask should be always set before any
+mapping. What do you suggest to do in this case? (1) The code above
+overrides the real DMA-mask which could be set by the platform
+drivers, which in its turn are normally aware of the device DMA
+capabilities. But in this case due to override afterwards any buffers
+above 4GB mapping will cause using the bounce buffers. (2) It's set
+here for something which isn't actual DMA. So to speak on one side is
+this patchset which overrides the mask for something which isn't DMA,
+and there are another patchsets:
+https://lore.kernel.org/linux-pci/20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru/
+and
+https://lore.kernel.org/linux-pci/20220728142841.12305-1-Sergey.Semin@baikalelectronics.ru/
+which add the real DMA support to DW PCIe driver and for which setting
+the real DMA-mask is crucial. What do you suggest? Setting the mask
+twice: before allocating MSI-buffer and afterwards for the sake of
+eDMA buffers mapping? Moving DMA-mask setting from the generic DW PCIe
+code to the platform drivers?
 
-On 9/29/22 10:22 AM, Mathieu Poirier wrote:
-> On Mon, Sep 26, 2022 at 03:02:22PM -0700, Tanmay Shah wrote:
->> On 9/1/22 1:25 PM, Mathieu Poirier wrote:
->>> On Thu, Jul 07, 2022 at 06:39:55PM -0700, Tanmay Shah wrote:
->> [ ... ]
->>>> --- /dev/null
->>>> +++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
->>>> @@ -0,0 +1,1055 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->> Hi Mathieu,
->>
->> I tried to fix SPDX-License-Identifier to GPL (same as MODULE_LICENSE
->> below), However checkpatch.pl reports this as following warning:
->>
->> "WARNING: 'SPDX-License-Identifier: GPL' is not supported in LICENSES/..."
->>
->> I see that GPL-1.0 is under LICENSE/deprecated directory.
->>
->>>> +/*
->>>> + * ZynqMP R5 Remote Processor driver
->>>> + *
->>>> + */
->>>> +
->>>> +#include <dt-bindings/power/xlnx-zynqmp-power.h>
->> [ ... ]
->>
->>>> +MODULE_DEVICE_TABLE(of, zynqmp_r5_remoteproc_match);
->>>> +
->>>> +static struct platform_driver zynqmp_r5_remoteproc_driver = {
->>>> +	.probe = zynqmp_r5_remoteproc_probe,
->>>> +	.driver = {
->>>> +		.name = "zynqmp_r5_remoteproc",
->>>> +		.of_match_table = zynqmp_r5_remoteproc_match,
->>>> +	},
->>>> +};
->>>> +module_platform_driver(zynqmp_r5_remoteproc_driver);
->>>> +
->>>> +MODULE_DESCRIPTION("Xilinx R5F remote processor driver");
->>>> +MODULE_AUTHOR("Xilinx Inc.");
->>>> +MODULE_LICENSE("GPL");
->>> There is a discrepency between the GPL-2.0 in the SPDS identifier and the above.
->> Also, changing to MODULE_LICENSE("GPL v2") gives following warning:
->>
->> WARNING: Prefer "GPL" over "GPL v2" - see commit bf7fbeeae6db ("module: Cure
->> the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
->> #1115: FILE: drivers/remoteproc/xlnx_r5_remoteproc.c:1034:
->> +MODULE_LICENSE("GPL v2");
->>
->> So, It looks like SPDX-License-Identifier should be GPL-2.0-only and
->> MODULE_LICENSE should be change to "GPL".
-> Commit bf7fbeeae6db is an interesting read - thanks for pointing it out.
->
->> It this ok? Any other suggestions ?
-> What you have looks good, in that regard there is no need to change anything
-> from your patch.
->
->> Thanks,
->>
->> Tanmay
->>
->>> More comments tomorrow or Tuesday.
->>>
->>> Thanks,
->>> Mathieu
->>>
->>>> -- 
->>>> 2.25.1
->>>>
+-Sergey
+
+> 
+> Thanks,
+> Robin.
+> 
+> > >   	if (ret)
+> > >   		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
+> > > -	pp->msi_page = alloc_page(GFP_DMA32);
+> > > -	pp->msi_data = dma_map_page(dev, pp->msi_page, 0,
+> > > -				    PAGE_SIZE, DMA_FROM_DEVICE);
+> > > -	ret = dma_mapping_error(dev, pp->msi_data);
+> > > -	if (ret) {
+> > > -		dev_err(pci->dev, "Failed to map MSI data\n");
+> > > -		__free_page(pp->msi_page);
+> > > -		pp->msi_page = NULL;
+> > > -		pp->msi_data = 0;
+> > > +	msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
+> > > +					GFP_KERNEL);
+> > 
+> > Changing the whole device DMA-mask due to something that doesn't
+> > perform seems inappropriate. I'd suggest to preserve the ZONE_DMA32
+> > here until there is something like suggested by @Robin
+> > https://lore.kernel.org/linux-pci/1e63a581-14ae-b4b5-a5bf-ca8f09c33af6@arm.com/
+> > in the last paragraph is implemented. Especially seeing there still
+> > common drivers in kernel which still rely on that zone.
+> > 
+> > -Sergey
+> > 
+> > > +	if (!msi_vaddr) {
+> > > +		dev_err(dev, "Failed to alloc and map MSI data\n");
+> > >   		dw_pcie_free_msi(pp);
+> > > -
+> > > -		return ret;
+> > > +		return -ENOMEM;
+> > >   	}
+> > >   	return 0;
+> > > diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+> > > index 09b887093a84..a871ae7eb59e 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-designware.h
+> > > +++ b/drivers/pci/controller/dwc/pcie-designware.h
+> > > @@ -243,7 +243,6 @@ struct dw_pcie_rp {
+> > >   	struct irq_domain	*irq_domain;
+> > >   	struct irq_domain	*msi_domain;
+> > >   	dma_addr_t		msi_data;
+> > > -	struct page		*msi_page;
+> > >   	struct irq_chip		*msi_irq_chip;
+> > >   	u32			num_vectors;
+> > >   	u32			irq_mask[MAX_MSI_CTRLS];
+> > > -- 
+> > > 2.37.2.672.g94769d06f0-goog
+> > > 
+> > > 
