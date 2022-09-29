@@ -2,144 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD375EF1DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB0B5EF1E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234665AbiI2JZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 05:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
+        id S234865AbiI2JZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 05:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbiI2JZE (ORCPT
+        with ESMTP id S234951AbiI2JZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:25:04 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E361739109
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:25:02 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id l9-20020a17090a4d4900b00205e295400eso782863pjh.4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:25:02 -0700 (PDT)
+        Thu, 29 Sep 2022 05:25:21 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E8E6D57F
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:25:15 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id q17so860559lji.11
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:25:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=1u95457ImSK7IT/OW0kMB2C3/yW1UVlDtXtAOxPIYzE=;
-        b=poGnVSGusP35IFp3mFe4IaXLOyomB2ncxVguPLDQDDC4AskRehuKsH6dCXZRF+DLdA
-         UFuVZvkzfIk/SuGZ9FEUAQ1GykDklyYkscSD63TxhY3653Ghgv38kXFfbtnWzTDKN3dC
-         vlboM3r0DZdINx0t04k7LmROOWsd0OUBqSeoZZYCxsf8g0ydW86C5KVGaKdtFAXV14Uq
-         /OeEXvCV1M4P+Cq1yIr4Rerx/YbK8EjEH/JfG1jvVDTstSuO/xiyyaX8Iy2aG1eCa6Bd
-         leoWdi0vimI559jxe3IU7f1FM9fVUB0GORj6LVkXqfs1kpPkC+dwrsJ3AC5PSJdbjET6
-         IKpg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=AZJetzueARLV/R2uCxssAIqr1V78CxcsKnl1/QIBe9s=;
+        b=LaRUPVxPmy/1yQ/y4DqAMqycQ69cAR1PBC9V0Bi/Y1f/4d7gr5PAsxfsmdvpadbUhj
+         LrrcZQQBE+FGjVI/ErHtQMC+FZNh1YVzQozidXKyGmK2VQB24rce5ItoDIaFoIeHdwwY
+         YPtl8Xpv4e+gApUQbXBDKgn/IKdBB8rFZqeyihwHNIL7I7YYo3ss79Kp+hpDDyiW//rA
+         RTDTbyouNqhXUbVqJ6GjcsG0YFgk7xBq+TPcvCeKpTo/X8KQ4+j0Mqx/qhO/lDMyok3j
+         dms6keyqyMo4oCjFHoqVzqCsDHBj0gJsIb/fd0do1uWNkI27ANjWTr9Px6ec7n5NcvQW
+         LTxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1u95457ImSK7IT/OW0kMB2C3/yW1UVlDtXtAOxPIYzE=;
-        b=wN2Qa0J9OWAp2nQuma+KE7p2hW/NL5ZYcnXwV1fmZEOrMlihqJK2HT0ldVhyqH1+Ls
-         M+RfF+Xuso2DAuDc79kB03OImq4EArDz5sqcIfwciQHs5WmEsUTZuIQiLLliJU3JMjdQ
-         XBlfV5kOxhIP/m6JOGZ3kzqyh0/Q/JIU23ybLeKTZEN+0bK3HPd446JFwt9sBLabv0f+
-         4lOafT7ZEkzlYC/t3su8mu4uetz1eLwLFjVl7BAM2HtpidI2Di7z1j4zV7QUVDPSMjN5
-         YN2hfD7+j+C8+ziunf6F4M1ByafqlbywAuedhjsn65jziwTx3r1J7fxKswYUs7IpnrGG
-         0fKA==
-X-Gm-Message-State: ACrzQf3XCMJEP1ZBohqr+qjadhjAhf/0w4xlelBMc+TxGAv7YQ8NnVGj
-        wXA3TshwQbpf3xqDZYWsEgaLU9mQ6Eim7QaIKymo7w==
-X-Google-Smtp-Source: AMsMyM5nEwK755O4EVFdHZ1YVXdjoPdmRUI4r48lBSfsjdgk2YUg7wxh9pzlZVDPVSun9kbE66thrfuzqWfxlW7MWCA=
-X-Received: by 2002:a17:90a:aa96:b0:205:bb67:a85f with SMTP id
- l22-20020a17090aaa9600b00205bb67a85fmr2654224pjq.202.1664443502430; Thu, 29
- Sep 2022 02:25:02 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=AZJetzueARLV/R2uCxssAIqr1V78CxcsKnl1/QIBe9s=;
+        b=JEIT07BQqrgtpzoF7XCj+g3dy0L9RW1WhWeJxaP35DqiQ2bzVvicmsy64BsQpoTxT9
+         dS22qPosQFjiDXSLpGXYnNILbqhsAnNZToWqF3wOAwJ7Nei+pWD/sFxGM561E3a1DzCu
+         b7Qs7TAubMVs8F9dcq9nzF2tMemLSNDogX3bwd7xguCnhL5hUfTn8k4kjobA+nLvvxKM
+         WnVyuNLkc67QUUUcZMlYMzV/XfJKtpWt/KmstXyn1M/X3WN83hMHgDhHhcOOJuAirPyM
+         BTGS5HKXS13ePl+3Fw6GhHlgWEKBdEBcFrIbuRGVCm0iasa9aStOcBPzauAKyKqdcHk+
+         1iKw==
+X-Gm-Message-State: ACrzQf0GmsLH14W0Sr3BALGgIAiDrqO5UW9ZWkIkskgQzDIgWtSvbQZv
+        xrcQzwWY8S4qe5i4r0LEm6w4UA==
+X-Google-Smtp-Source: AMsMyM4E4VCyaWuksnRP1K7pxpKAweoB3Gml7b93OCxy9fZY15W0aj9uoRb8X11MthVpzeheTGrZ1Q==
+X-Received: by 2002:a05:651c:178d:b0:261:bd23:a5f8 with SMTP id bn13-20020a05651c178d00b00261bd23a5f8mr738896ljb.411.1664443513480;
+        Thu, 29 Sep 2022 02:25:13 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id e3-20020a05651c038300b0026c3975f488sm654437ljp.26.2022.09.29.02.25.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 02:25:13 -0700 (PDT)
+Message-ID: <92a5e439-fe78-5072-a3fb-78625c7442b8@linaro.org>
+Date:   Thu, 29 Sep 2022 11:25:12 +0200
 MIME-Version: 1.0
-References: <20220928165420.1212284-1-dinguyen@kernel.org>
-In-Reply-To: <20220928165420.1212284-1-dinguyen@kernel.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 29 Sep 2022 11:24:24 +0200
-Message-ID: <CAPDyKFp5oPuOz9A=37pRTvq7JPtJRdduEgmU9g+eUm0K=dZjUg@mail.gmail.com>
-Subject: Re: [PATCHv4 1/3] dt-bindings: mmc: synopsys-dw-mshc: document "altr,sysmgr-syscon"
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     jh80.chung@samsung.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v5 2/4] arm64: dts: qcom: msm8916-samsung-j5-common: Add
+ initial common device tree
+Content-Language: en-US
+To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
+        devicetree@vger.kernel.org
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>,
+        Julian Ribbeck <julian.ribbeck@gmx.de>,
+        Josef W Menad <JosefWMenad@protonmail.ch>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20220928184155.186632-1-linmengbo0689@protonmail.com>
+ <20220928184302.186746-1-linmengbo0689@protonmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220928184302.186746-1-linmengbo0689@protonmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Sept 2022 at 18:54, Dinh Nguyen <dinguyen@kernel.org> wrote:
->
-> Document the optional "altr,sysmgr-syscon" binding that is used to
-> access the System Manager register that controls the SDMMC clock
-> phase.
->
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+On 28/09/2022 20:44, Lin, Meng-Bo wrote:
+> The smartphones below are using the MSM8916 SoC,
+> which are released in 2015-2016:
+> 
+> Samsung Galaxy J5 2015 (SM-J500*)
+> Samsung Galaxy J5 2016 (SM-J510*)
+> Samsung Galaxy J3 2016
+> - SM-J3109/SM-J320Y/SM-J320YZ
+> - SM-J320N0/SM-J320ZN
+> - SM-J320P/SM-J320R4/SM-J320V/SM-S320VL
+> 
+> Add a common device tree for with initial support for:
+> 
+> - GPIO keys
+> - SDHCI (internal and external storage)
+> - USB Device Mode
+> - UART (on USB connector via the SM5703 MUIC)
+> - WCNSS (WiFi/BT)
+> - Regulators
+> 
+> The three devices (some varints of J3, all other variants of J5 released
+> in 2015 and J5X released in 2016) are very similar, with some differences
+> in display and GPIO pins. The common parts are shared in
+> msm8916-samsung-j5-common.dtsi to reduce duplication.
+> 
+> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
 > ---
-> v4: add else statement
-> v3: document that the "altr,sysmgr-syscon" binding is only applicable to
->     "altr,socfpga-dw-mshc"
-> v2: document "altr,sysmgr-syscon" in the MMC section
-> ---
->  .../bindings/mmc/synopsys-dw-mshc.yaml        | 31 +++++++++++++++++--
->  1 file changed, 28 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-> index ae6d6fca79e2..b73324273464 100644
-> --- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-> @@ -6,9 +6,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->
->  title: Synopsys Designware Mobile Storage Host Controller Binding
->
-> -allOf:
-> -  - $ref: "synopsys-dw-mshc-common.yaml#"
+>  ...-j5.dts => msm8916-samsung-j5-common.dtsi} |   9 +-
+>  .../boot/dts/qcom/msm8916-samsung-j5.dts      | 224 ++----------------
+>  2 files changed, 16 insertions(+), 217 deletions(-)
+>  copy arch/arm64/boot/dts/qcom/{msm8916-samsung-j5.dts => msm8916-samsung-j5-common.dtsi} (94%)
+>  rewrite arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts (93%)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi
+> similarity index 94%
+> copy from arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts
+> copy to arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi
+> index eabeed18cfaa..502b38d4a61e 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dts
+> +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi
+> @@ -1,15 +1,9 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  
+> -/dts-v1/;
 > -
->  maintainers:
->    - Ulf Hansson <ulf.hansson@linaro.org>
->
-> @@ -38,6 +35,34 @@ properties:
->        - const: biu
->        - const: ciu
->
-> +  altr,sysmgr-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      - items:
-> +          - description: phandle to the sysmgr node
-> +          - description: register offset that controls the SDMMC clock phase
-> +    description:
-> +      Contains the phandle to System Manager block that contains
-> +      the SDMMC clock-phase control register. The first value is the pointer
-> +      to the sysmgr and the 2nd value is the register offset for the SDMMC
-> +      clock phase register.
-> +
-> +allOf:
-> +  - $ref: "synopsys-dw-mshc-common.yaml#"
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const:
-> +              - altr,socfpga-dw-mshc
-> +    then:
-> +      required:
-> +        - altr,sysmgr-syscon
-> +    else:
-> +      properties:
-> +        altr,sysmgr-syscon: false
+>  #include "msm8916-pm8916.dtsi"
+>  #include <dt-bindings/gpio/gpio.h>
+>  
+>  / {
+> -	model = "Samsung Galaxy J5 (2015)";
+> -	compatible = "samsung,j5", "qcom,msm8916";
+> -	chassis-type = "handset";
+> -
+>  	aliases {
+>  		serial0 = &blsp1_uart2;
+>  	};
+> @@ -92,7 +86,6 @@ &usb {
+>  
+>  &usb_hs_phy {
+>  	extcon = <&pm8916_usbin>;
+> -	qcom,init-seq = /bits/ 8 <0x1 0x19 0x2 0x0b>;
+>  };
+>  
+>  &smd_rpm_regulators {
+> @@ -199,7 +192,7 @@ l18 {
+>  };
+>  
+>  &msmgpio {
+> -	gpio_keys_default: gpio-keys-default {
+> +	gpio_keys_default: gpio-keys-default-state {
+>  		pins = "gpio107", "gpio109";
 
-So this change will not be backwards compatible with existing DTBs. I
-noticed that patch2 updates the DTS files for the arm64 platforms, but
-there seems to be some arm32 platforms too. Isn't this going to be a
-problem?
+This change looks unrelated, so probably should be a separate patch. I
+requested name change on your previous version when you were duplicating
+diff hunks, so it was not clear that it is a copy.
 
-> +
->  required:
->    - compatible
->    - reg
-> --
-> 2.25.1
->
+The truth is that msm8916 bindings were not yet converted to schema and
+other nodes were not aligned with common Qualcomm pinctrl schema, thus
+this is not actually necessary if you simply copy files.
 
-Kind regards
-Uffe
+Anyway, fine by me:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
