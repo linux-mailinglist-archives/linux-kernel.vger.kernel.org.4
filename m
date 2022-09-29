@@ -2,106 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7E55EF6B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7366F5EF6B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234731AbiI2Nee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 09:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
+        id S234985AbiI2NfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 09:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234634AbiI2Neb (ORCPT
+        with ESMTP id S233674AbiI2NfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 09:34:31 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F95145CA7;
-        Thu, 29 Sep 2022 06:34:30 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id b75so1463639pfb.7;
-        Thu, 29 Sep 2022 06:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=7WfdncdEGCadZJ3/QS+GtGXLT8IkfFnobfUtHRR5YNg=;
-        b=o44F1pPy1sJ/51HdRSxMd9Ao1GEYzBWXqikGK5QsnQ951c31zL0rYVlKeqUhWRoT2F
-         V+EPOqmFl8EcRF21EFQctLGbSWK3emZTXSDCUMLq65EUtKAwDGk5Acs8dreEaMo+VaRw
-         OZlD84TJhR5RXqjrfWZjSHSue44Z4Mlun1KzvZvfsybUVXBmdXAz9W6bv7vAZLnflCUH
-         bjHxEklZCWktw7u5WdqPouS9sdiQ/aF6TNF45bu30qZogdd5N6IP2vcM46Oqx11W0wIh
-         +XaLTvA1zLhFuF3IY7dDiKXDD+pqLVFr4r/dMMc6GSxkMiACMxRYKAMPVJ21yXq1OnOy
-         PaVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=7WfdncdEGCadZJ3/QS+GtGXLT8IkfFnobfUtHRR5YNg=;
-        b=myY0Fb28I9bxQmGv38M5SL2i4Oep6vm77EmUqhwERuPtQmdT72dFUsU9edyxM0AGcY
-         zDE6PCJxfj1/VVsUaVPtyZ6j5zT8FbPGpor4h0W+OsQTe7Suag47dcWfwDt8sfNiJ/3t
-         85XQS/t3dAlgktluoBfNS26fFMCZudLFk9h0LESFp5BrJpsZolsIz/MoC9qKGsHwG53L
-         6Au64EEQEuwDOfS57FbiLHkABfsjTMl5D5uBX3Yx8vYNO8K9obNu1o1vv5pPSmcITHgt
-         OxLXOuiXyqlXP7UIbY+S1llUEPHepnre4wOasrMakODpS0e+/NDfMgqX9OZjSMPP96pq
-         97cA==
-X-Gm-Message-State: ACrzQf1cT2l+fRJ+wrrWoK5RBhmDG6vuhehilFPXzWZZXC1a305gujUe
-        7+QpJAxW99TeSXhQzGEj+H0=
-X-Google-Smtp-Source: AMsMyM6idfvdXSqLXEQcJI3fBq6wvKSo0+7WepsYsxkGN1iKjzo7efaRzvF/glGmUf82Lf42CBesUg==
-X-Received: by 2002:a05:6a00:f04:b0:547:50b1:4f4e with SMTP id cr4-20020a056a000f0400b0054750b14f4emr3615696pfb.69.1664458469591;
-        Thu, 29 Sep 2022 06:34:29 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-65.three.co.id. [180.214.233.65])
-        by smtp.gmail.com with ESMTPSA id t8-20020a170902e84800b001766a3b2a26sm5957321plg.105.2022.09.29.06.34.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 06:34:29 -0700 (PDT)
-Message-ID: <8286def4-8086-9014-7893-afa805bd2afc@gmail.com>
-Date:   Thu, 29 Sep 2022 20:33:13 +0700
+        Thu, 29 Sep 2022 09:35:04 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1AD0D4DB35;
+        Thu, 29 Sep 2022 06:35:02 -0700 (PDT)
+Received: from [10.20.42.32] (unknown [10.20.42.32])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxTWv8njVj0dQjAA--.6155S3;
+        Thu, 29 Sep 2022 21:34:52 +0800 (CST)
+Subject: Re: [PATCH V1 1/2] irqchip/loongson-pch-pic: Support to set irq type
+ for ACPI path
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+References: <1660615291-35409-1-git-send-email-lvjianmin@loongson.cn>
+ <1660615291-35409-2-git-send-email-lvjianmin@loongson.cn>
+ <86leq37duw.wl-maz@kernel.org>
+ <71fc2d5b-fc3c-0a2d-65ce-df7d5bb26503@loongson.cn>
+ <86ill67bwt.wl-maz@kernel.org>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <ab89a8b3-9b92-6afb-f3d4-660b5826c87f@loongson.cn>
+Date:   Thu, 29 Sep 2022 21:34:52 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v5 12/12] Documentation/x86: Update resctrl_ui.rst for new
- features
+In-Reply-To: <86ill67bwt.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     babu.moger@amd.com
-Cc:     corbet@lwn.net, reinette.chatre@intel.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, fenghua.yu@intel.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        paulmck@kernel.org, akpm@linux-foundation.org,
-        quic_neeraju@quicinc.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
-        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
-        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
-        jmattson@google.com, daniel.sneddon@linux.intel.com,
-        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        eranian@google.com
-References: <166431016617.373387.1968875281081252467.stgit@bmoger-ubuntu>
- <166431042060.373387.8454967155095795574.stgit@bmoger-ubuntu>
- <YzPMorJQFKPY+n4d@debian.me> <99bfbeac-1454-a453-a2ef-36eee2aea34c@amd.com>
- <db30d4f1-31c7-6cbd-f87f-abefa7f4e781@gmail.com>
- <00e2440f-0f01-5d25-a5c0-d10ff52108ca@amd.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <00e2440f-0f01-5d25-a5c0-d10ff52108ca@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxTWv8njVj0dQjAA--.6155S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxKFW8Cw1kXryfAF1rCF1UAwb_yoW7uFy8pF
+        Wj9FW2yw4kJFyxArn29w18AFyaywnIkrWxWFs8t3WxXrnI9r1xCF17urWruF1vyF4fCr42
+        vr1vvFW7WFy7AFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
+        GwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4
+        x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCYjI0SjxkI62AI
+        1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r
+        yrJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
+        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
+        04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7
+        CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUq38nUUUUU=
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/29/22 20:22, Moger, Babu wrote:
->>>> Also, there isn't description of mapping from bits from the supported events
->>>> table to the bytes input for mbm_{total,local}_config.
->>> It is already there. Is that not clear?
->> No. I don't see why setting bits 0, 1, 4, and 5 on domain 0 translates to
->> `0:0x33`, for example.
+
+
+On 2022/9/29 下午5:44, Marc Zyngier wrote:
+> On Wed, 28 Sep 2022 22:35:17 -0400,
+> Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>>
+>> On 2022/9/28 下午10:49, Marc Zyngier wrote:
+>>> On Mon, 15 Aug 2022 22:01:30 -0400,
+>>> Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>>>>
+>>>> For ACPI path, the translate callback used IRQ_TYPE_NONE and ignored
+>>>> the irq type in fwspec->param[1]. For supporting to set type for
+>>>> irqs of the irqdomain, fwspec->param[1] should be used to get irq
+>>>> type.
+>>>>
+>>>> On Loongson platform, the irq trigger type of PCI devices is
+>>>> high level, so high level triggered type is inputed to acpi_register_gsi
+>>>> when create irq mapping for PCI devices.
+>>>>
+>>>> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+>>>> ---
+>>>>    drivers/acpi/pci_irq.c                 |  3 ++-
+>>>>    drivers/irqchip/irq-loongson-pch-pic.c | 10 ++++++----
+>>>>    2 files changed, 8 insertions(+), 5 deletions(-)
+>>>
+>>> $ ./scripts/get_maintainer.pl drivers/acpi/pci_irq.c
+>>> Bjorn Helgaas <bhelgaas@google.com> (supporter:PCI SUBSYSTEM)
+>>> "Rafael J. Wysocki" <rafael@kernel.org> (supporter:ACPI)
+>>> Len Brown <lenb@kernel.org> (reviewer:ACPI)
+>>> linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM)
+>>> linux-acpi@vger.kernel.org (open list:ACPI)
+>>> linux-kernel@vger.kernel.org (open list)
+>>>
+>>> How about you start Cc-ing some of the relevant people?
+>>>
+>> Ok, thanks, I'll cc relevant people list here.
+>>
+>>>>
+>>>> diff --git a/drivers/acpi/pci_irq.c b/drivers/acpi/pci_irq.c
+>>>> index 08e1577..34483b3 100644
+>>>> --- a/drivers/acpi/pci_irq.c
+>>>> +++ b/drivers/acpi/pci_irq.c
+>>>> @@ -393,7 +393,8 @@ int acpi_pci_irq_enable(struct pci_dev *dev)
+>>>>    	 * controller and must therefore be considered active high
+>>>>    	 * as default.
+>>>>    	 */
+>>>> -	int polarity = acpi_irq_model == ACPI_IRQ_MODEL_GIC ?
+>>>> +	int polarity = acpi_irq_model == ACPI_IRQ_MODEL_GIC ||
+>>>> +		       acpi_irq_model == ACPI_IRQ_MODEL_LPIC ?
+>>>>    				      ACPI_ACTIVE_HIGH : ACPI_ACTIVE_LOW;
+>>>
+>>> The comment just above this only talks about ARM. Should it be
+>>> updated?
+>>
+>> Ok, I'll update the comment.
+>>
+>>
+>>> Is this a limitation of the underlying interrupt controller?
+>>>
+>> It's the limitation that pci interrupt source of LoongArch only sends
+>> high level trigger signal to interrupt controller(though, pci spec
+>> requires asserted low).
 > 
-> It is 110011b(binary) which is 0x33. I can make that little more clear.
+> Right, so this is the opposite problem ARM has.
+> 
+> But is it *always* intended to be built like this? Or is it a one-off
+> for this generation of Loongarch systems, to be fixed at a later time?
 > 
 
-Ah! I see that flipping bits in order to to set the flag. Thanks for
-the explanation.
+Yes, new generations will always keep this unchanged.
 
--- 
-An old man doll... just what I always wanted! - Clara
+>>
+>>
+>>>>    	char *link = NULL;
+>>>>    	char link_desc[16];
+>>>> diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
+>>>> index b6f1392..5067010 100644
+>>>> --- a/drivers/irqchip/irq-loongson-pch-pic.c
+>>>> +++ b/drivers/irqchip/irq-loongson-pch-pic.c
+>>>> @@ -177,13 +177,15 @@ static int pch_pic_domain_translate(struct irq_domain *d,
+>>>>    	if (fwspec->param_count < 1)
+>>>>    		return -EINVAL;
+>>>>    -	if (of_node) {
+>>>> +	if (of_node)
+>>>>    		*hwirq = fwspec->param[0] + priv->ht_vec_base;
+>>>> -		*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
+>>>> -	} else {
+>>>> +	else
+>>>>    		*hwirq = fwspec->param[0] - priv->gsi_base;
+>>>> +
+>>>> +	if (fwspec->param_count > 1)
+>>>> +		*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
+>>>> +	else
+>>>>    		*type = IRQ_TYPE_NONE;
+>>>
+>>> Isn't that a change in behaviour if of_node is non-NULL and
+>>> param_count==1?
+>>>
+>>
+>> It seems that current code here has bug that if fwspec->param_count==1
+>> and of_node is non-null, fwspec->param[1] will be accessed, which is
+>> introduced from previous patch(irqchip/loongson-pch-pic: Add ACPI init
+>> support). Before the patch, for non-null of_node, translate
+>> callback(use irq_domain_translate_twocell) will return -EINVAL if
+>> fwspec->param_count < 2.
+>>
+>> For ACPI path, fwspec->param_count can be 1 or 2.
+>>
+>> So in this patch, I'll fix the bug and change the code as following:
+>>
+>>          if (fwspec->param_count < 1)
+>>                  return -EINVAL;
+>>
+>>          if (of_node) {
+>>                  if (fwspec->param_count < 2)
+>>                          return -EINVAL;
+>>
+>>                  *hwirq = fwspec->param[0] + priv->ht_vec_base;
+>>                  *type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
+>>          } else {
+>>                  *hwirq = fwspec->param[0] - priv->gsi_base;
+>>
+>>                  if (fwspec->param_count > 1)
+>>                          *type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
+>>                  else
+>>                          *type = IRQ_TYPE_NONE;
+>>          }
+>>
+>>
+>>>> -	}
+>>>>      	return 0;
+>>>>    }
+>>>
+>>> This irqchip change should probably be a separate patch.
+>>>
+>>
+>> As a separate patch, the input trigger type of pci devices will be low
+>> level because of lacking of workaround to acpi_pci_irq_enable, which
+>> will cause kernel hang, unless the patch of workaround to
+>> acpi_pci_irq_enable is in front of this separated patch.
+> 
+> That seems like a sensible requirement, but I really want to
+> understand whether PCI Loongarch will *always* generate INTx as
+> ACTIVE_HIGH or not. Because if that is ever going to change, we will
+> need a different way to inform the irqchip about the polarity
+> inversion.
+> 
+
+Above same. And in future, in case some generation use ACTIVE_LOW, I 
+think we can use use *Source*(means link) with triggering and polarity 
+property in pci route table of DSDT as following code to override 
+ACTIVE_HIGH, rather than *Source index*(gsi).
+
+       if (entry->link)
+             gsi = acpi_pci_link_allocate_irq(entry->link,
+                                               entry->index,
+                                               &triggering, &polarity,
+                                               &link);
+
+
+Because of a lot of machines outside have been shipped with firmware 
+using *Source index*, for compatibility with such firmware, the 
+workaround to acpi_pci_irq_enable is required.
+
+
+> 	M.
+> 
+
