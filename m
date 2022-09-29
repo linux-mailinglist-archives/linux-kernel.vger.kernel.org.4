@@ -2,111 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904345EFB1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 230865EFB1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235646AbiI2QmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49616 "EHLO
+        id S235770AbiI2QmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235195AbiI2QmH (ORCPT
+        with ESMTP id S235386AbiI2QmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:42:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAEE153A76
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:42:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A33A161F4D
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:42:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06195C433D7;
-        Thu, 29 Sep 2022 16:42:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664469725;
-        bh=9+JAay2KY6j6xm1jASu1ajjNIWxzcizOC1IRSt6Lr+Y=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Un/AED6AS11i7tJgaB2hRtq4bt2ttc7YmkXy57jcqWCA1uV4rMPOWSciZAeAyNXIR
-         0nz+5eVcKiMN2XHms0qyPGb5SZCt3HGYk3ynmKTf2qsc9LVGaKKud05B0jkF/frF08
-         okkzUArojzYLNOxi3ddsupQ0KThZuXEmp7lxm7lMDXCZskKIKqBm0ranYwFelCpjCU
-         KH7zPjpUdS+uzJAs/H4JzOh6CqCBK7VNmzj6sDmRvRiNfUReZohf0Kg0NKa02AWS7T
-         +oneqFjfktsaFdP4MsZs/yw4ejUtgFJX0K399pdWWOw9KDJi/o2BbpiG2ZUjec70Aa
-         yS7ixL17aHbJg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 9B7E15C0BCA; Thu, 29 Sep 2022 09:42:04 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 09:42:04 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: RCU vs NOHZ
-Message-ID: <20220929164204.GO4196@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YyN0BKEoDbe4hcIl@hirez.programming.kicks-ass.net>
- <20220915191427.GC246308@paulmck-ThinkPad-P17-Gen-1>
- <YyOnilnwnLKA9ghN@hirez.programming.kicks-ass.net>
- <20220916075817.GE246308@paulmck-ThinkPad-P17-Gen-1>
- <YyQ/zn54D1uoaIc1@hirez.programming.kicks-ass.net>
- <20220917142508.GF246308@paulmck-ThinkPad-P17-Gen-1>
- <YzV5vqoLInptafJm@hirez.programming.kicks-ass.net>
- <20220929152044.GE4196@paulmck-ThinkPad-P17-Gen-1>
- <20220929154618.GA2864141@paulmck-ThinkPad-P17-Gen-1>
- <YzXGdEzkiw+5X8pC@hirez.programming.kicks-ass.net>
+        Thu, 29 Sep 2022 12:42:23 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D048153ECF;
+        Thu, 29 Sep 2022 09:42:20 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 56E7347C;
+        Thu, 29 Sep 2022 18:42:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1664469738;
+        bh=Px3pAoyZFv/K9T1/keIuJOaFWik7BVMa7QB94t6qEaY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q2ZzK4gMg3E9B9ZR6xvzXzGvRf3wNBf8gkIZZr059sxmfRVfBU8xp0vaHNzlJLMo8
+         x50e43DtCHTUF8iH8d1kUcvxt8SMSuNTgA7q3QIf4JU6ioZLwXYP6WW2nKKWRsq4L+
+         IMAWZlBecfAB68wk9NZ6swRZZJN7HymAsoHeBOBg=
+Date:   Thu, 29 Sep 2022 19:42:16 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Slade Watkins <srw@sladewatkins.net>
+Cc:     "Artem S. Tashkinov" <aros@gmx.com>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+Message-ID: <YzXK6Px+BrNuuMZH@pendragon.ideasonboard.com>
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+ <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
+ <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
+ <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
+ <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
+ <F300ED64-5E8E-4060-89DC-C98BC5FF08E6@sladewatkins.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YzXGdEzkiw+5X8pC@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <F300ED64-5E8E-4060-89DC-C98BC5FF08E6@sladewatkins.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 06:23:16PM +0200, Peter Zijlstra wrote:
-> On Thu, Sep 29, 2022 at 08:46:18AM -0700, Paul E. McKenney wrote:
-> > On Thu, Sep 29, 2022 at 08:20:44AM -0700, Paul E. McKenney wrote:
+On Thu, Sep 29, 2022 at 10:54:17AM -0400, Slade Watkins wrote:
+> Hey!
 > 
-> > > > > There is a directly invoked RCU hook for any transition that enables or
-> > > > > disables the tick, namely the ct_*_enter() and ct_*_exit() functions,
-> > > > > that is, those functions formerly known as rcu_*_enter() and rcu_*_exit().
-> > > > 
-> > > > Context tracking doesn't know about NOHZ, therefore RCU can't either.
-> > > > Context tracking knows about IDLE, but not all IDLE is NOHZ-IDLE.
-> > > > 
-> > > > Specifically we have:
-> > > > 
-> > > > 	ct_{idle,irq,nmi,user,kernel}_enter()
-> > > > 
-> > > > And none of them are related to NOHZ in the slightest. So no, RCU does
-> > > > not have a NOHZ callback.
-> > > > 
-> > > > I'm still thikning you're conflating NOHZ_FULL (stopping the tick when
-> > > > in userspace) and regular NOHZ (stopping the tick when idle).
+> Jumping in here to offer my input...
+> 
+> > On Sep 29, 2022, at 10:22 AM, Artem S. Tashkinov <aros@gmx.com> wrote:
 > > 
-> > Exactly how are ct_user_enter() and ct_user_exit() completely unrelated
-> > to nohz_full CPUs?
+> > That leaves us with Bugzilla that no one wants to touch and some people
+> > actively want to delete altogether. In other words, no central place to
+> > report bugs or keep track of them.
 > 
-> That's the thing; I'm not talking about nohz_full. I'm talking about
-> regular nohz. World of difference there.
+> This is the current problem that seems to be appearing here. I get why
+> no one wants to touch it, but it doesn’t solve the problem. 
+> 
+> As you said:
+> 
+> > I've mentioned several times already that mailing lists are _even worse_
+> > in terms of reporting issues. Developers get emails and simply ignore
+> > them (for a multitude of reasons).
+> 
+> It’s 100% true that emails get _buried_ as waves of them come in (LKML
+> itself gets hundreds upon hundreds a day, as I’m sure all of you know)
+> and it just isn’t something I personally see as viable, especially for
+> issues that may or may not be high priority.
 
-And indeed, for !nohz_full CPUs, the tick continues throughout userspace
-execution.  But you really did have ct_user_enter() and ct_user_exit()
-on your list.
+E-mails are not that bad to report issues, but they can't provide the
+core feature that any bug tracker oughts to have: tracking. There's no
+way, with the tools we have at the moment (including public-inbox, b4
+and lei), to track the status of bug reports and fixes. Even for patches
+we need to rely on patchwork, and that's far from perfect.
 
-And for idle (as opposed to nohz_full userspace execution), there is still
-ct_{idle,irq,nmi}_enter().  And RCU does pay attention to these.
+When things fall through the cracks (and at the moment it's more of a
+sieve with very large holes, if not a bottom-less pot), we mostly assume
+that, if the problem is important enough, the submitter will ping time
+after time until a fix is produced and merged. There is no way to
+produce a list of open issues.
 
-So exactly what are you trying to tell me here?  ;-)
+I agree with the comment that was repeated multiple times: it's quite
+pointless to improve the tooling if we don't first improve the process,
+and find a way to allocate people and time to handling bug reports. Even
+if bugzilla has reached EOL upstream, and even if it isn't perfect, the
+instance runs today, and gives us a tracker that could be used to design
+a proper process and implement it, should we desire to do so. There's no
+chicken-and-egg issue to be solved where lack of tooling would prevent
+the implementation of a bug tracking process. I'm quite confident that,
+if we manage to implement a bug tracking process, we will find a way to
+get the tooling we need, be it through bugzilla or something else.
 
-> nohz_full is a gimmick that shouldn't be used outside of very specific
-> cases. Regular nohz otoh is used by everybody always.
+> > Getting back to my first message in this discussion,
+> > 
+> > * Let's refresh all the components in Bugzilla
+> > * Components may not have any people responsible for them at all. Bug
+> > reporters will have to CC the people they are interested in.
+> > * Let's subscribe the past six months of developers (using git commit logs)
+> > * Whoever wants to unsubscribe is free to do so.
+> 
+> Not a terrible idea to me, though obviously, that’s up for debate.
+> 
+> > If not for bugzilla, let's use something more modern. I don't know any
+> > comparable projects however. Trac is truly horrible. You cannot even
+> > unsubscribe from bug reports. Maybe I've missed something. Discourse?
+> > Not a bug tracker per se but can certainly work this way.
+> 
+> Discourse probably isn’t the best fit here, in my opinion. Jira and
+> YouTrack are the only ones I personally know of that are similar to
+> Bugzilla, although as far as I know, they aren’t open source...
 
-I will let you take that up with the people using it.
+-- 
+Regards,
 
-							Thanx, Paul
+Laurent Pinchart
