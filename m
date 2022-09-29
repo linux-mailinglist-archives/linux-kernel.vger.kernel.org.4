@@ -2,178 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DA95EFD11
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 962FC5EFD13
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232524AbiI2Sam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
+        id S235605AbiI2Sau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233125AbiI2Sai (ORCPT
+        with ESMTP id S235411AbiI2Sar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:30:38 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17657D33CA;
-        Thu, 29 Sep 2022 11:30:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R6hQOMVh7ZDVHkfpbG9E2KrksXPTdguDAqgzEaFjgCHlOg8wZ4rq/pHS33yl+9z4jFidIUYVKP263qm1o72qGVyOlcyostPgcQEH0NDWoNfHJv8WAt/B6RudBMYdKB0yh1u2xQFCudDYneOgy/BEeodx4ZytLXaUDZfPe831ql63XNn67y1TAHUlr9+ixafDDRzMvNKGe7aTrPFXkBjW1ZaXpRPzxMThSMf3YnRpNgxFIVbbuNVjvAM3AXqpNyX8dZvoRpCJ8ilyZhKOCZVp1FVNnTZpDYDcnZx9zvlhrn/cQ94WhjykB6y/RqK6cmf2nzDHfXe22bY8ekVA1WXgoA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+4v4uVZJjIna91Bf+VK3v4E6ftO3MLPNLBG+zHB4m5M=;
- b=H81K/ubUurg7uQWMPp5MFHG+IRzM7jt2AaLh8wxYqfEgoOl6PN7PxMYOOj5R3UcMv3VUDiJiFVpdm6h0ShQN6NgYE8myNbNUaD1f5J4fgQRwfkdh0lrG80mwv+/OCoe5x+u+xFx/YkLRBnqxVkvVwkwn2wEc3Z3pMIsqF0OwNu0Ng1+2T5Dh6sp+LN+AOexEYKb9Hf6FF/J764c3ojcl49G2zK0F9BcF11UzTuXyUSzUt+8TuOtVJpoXvLEt443TeiEyIZNRC9n6+O0d9lW22naFHOMN7tQH3YFyjSiy4s6BGFVmbyqvtLC4R6b9fmIdVbczwI3lF3BJOM5OUKgRJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+4v4uVZJjIna91Bf+VK3v4E6ftO3MLPNLBG+zHB4m5M=;
- b=SMLraqpG1yW44mma4db9q7zn/0TakLa5KvzlSAeFt2hVg+c92D8F7J/SRXtVo5qm0OQoF0/H9wdvWEU7SKimfzvJYCmSTd+W44WoI6xH+rCPfOrDnKQgsLE6V+Dmx86Mr7hU0BhriK0aPA2pGyS8U3Skv7+/r3f3Ujgxj6Ywc74=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5993.namprd12.prod.outlook.com (2603:10b6:208:399::9)
- by MN2PR12MB4581.namprd12.prod.outlook.com (2603:10b6:208:260::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.20; Thu, 29 Sep
- 2022 18:30:35 +0000
-Received: from BL1PR12MB5993.namprd12.prod.outlook.com
- ([fe80::eea4:efd:ad94:b0e7]) by BL1PR12MB5993.namprd12.prod.outlook.com
- ([fe80::eea4:efd:ad94:b0e7%8]) with mapi id 15.20.5654.025; Thu, 29 Sep 2022
- 18:30:35 +0000
-Message-ID: <52ed8ec2-bd90-ad40-fe85-83d60eda7e05@amd.com>
-Date:   Fri, 30 Sep 2022 00:00:22 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 3/3] dma-buf: Check status of enable-signaling bit on
- debug
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
-        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
-        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
-        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20220927172409.484061-1-Arvind.Yadav@amd.com>
- <20220927172409.484061-4-Arvind.Yadav@amd.com>
- <59d4d647-f451-061c-79b5-0ffc4e33fc58@amd.com>
-From:   "Yadav, Arvind" <arvyadav@amd.com>
-In-Reply-To: <59d4d647-f451-061c-79b5-0ffc4e33fc58@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0112.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:27::27) To BL1PR12MB5993.namprd12.prod.outlook.com
- (2603:10b6:208:399::9)
+        Thu, 29 Sep 2022 14:30:47 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37018F3717
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:30:46 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id s15-20020a056e021a0f00b002f1760d1437so1736132ild.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:30:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=nCnqXNalR9iIGXpPSclD1EyfxFkehYSCOstpd8agXRo=;
+        b=iz+zT3wP3d3weAskZXkzRsvoElcY2tSeFcsgiIAgghOJyufOhQyp3x5UQ7PbkCsClP
+         F+1m0kD0ibVZ1IgLrPpaoOnXoXw9exFA86pqMentxYxXEu7KNgdNHKU6ldVbQpn+OOt0
+         XbL1bMtv5iYSJt3pulsNpmYjQ2B6F2i8QG94jgM6MmAOMBPuZHdBmdaIOBb6x6L3/+g0
+         2ySZuJfkI8glQYTJrMcYWwQXoigcEnkfcBCWK+U5nnAthlXMdE6VoCnPbojRes6+T778
+         8UDYZuUR85nTUqcbGwzsbXlO7SqEVRUkU980QrtKhlqXhOUY6iHOAdnInG/IGWriCWHK
+         EiJw==
+X-Gm-Message-State: ACrzQf2N25FBJ/UsCrXjjtdxXfBHOdy/4LYXsw1QqSU1uxdBrQqtr6V8
+        ZDasCrj2zCejl8O46ppbg9+bgyxZjp4jOeIs+kbgxdshxRt2
+X-Google-Smtp-Source: AMsMyM7X+YZz+V3SPr3Pq0Zfo99JljV7ajBx+9NYUoHoz6ULafPMRNH8U/1l9c6OMU4kPAiotWWWQGMaX6DHfyD+XwOlCHT3LTLU
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5993:EE_|MN2PR12MB4581:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7b3e95d1-d180-4187-baff-08daa248b2ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5bbgSueQtm+E9rQXDPZUdSbKT74E1GfzwWpShycU+wTT983qBSr7+odL2X4a5eMRYA73pnWXUB6cHk1FO+v3+tXFlcV5bOILW5ljjfizv81S7frU+yDFqm4LyXguB8gTYTeguWdHWl3hH8n5nHfJHSTCla367JQ7gJECwqE+MRtr0R9HrN4JVXVbuD1e61wTnmIsf7573ahJsA6U/r9PD57JctK0zyMeGE3QxfHQf8guh4gDClRvTRPxYve804ZxlIPHZ6DyFiG7scX0VjDW0V1eu4JmDZe0Wv8Hco8Ea7p2/+87zWS5IWJtRyqG1mkVIF8cwFzeFz7hequ4AT8PzbYszfKPg9tIBntfwBivzNy+dPWMk1+FBzwfDVAKpc2ndf2JFpYYHf1jJZksuEqYBJze1kgcx4/hfB+ZU04mkHOVarrOyx4kIPsSMPWWS0BDDhuhZ4OYIwBHBjqC9HC5J9O5TiClPqoxfxJBdxnjgmeYnh69pPcrKw33ahQ6AifBGpm4h0i7FcHNS4uvJZXPI8bhRJnJkDFGxjyDH8/VqG2lTHnq6RPrwP4KJKosTKEWBbJN6gd9uoN8R7AALlYBI6nuQ6uWjs5hUFKP3PlPCTJnnEnK6zmdKnNsWnB/OAMsO0CLOIWVzww6mBjugEIha1f7uUfHyExwhea4Bk8Y2djEk8h776NihQaS0q/wbQAsR5qJSTOaPxnGQ+MvBmjwEXTrRhyOvD5qSWiq1S74eBlDHut48jGDFl1HH2VQ5kKN5qMRELyBaNpuzyqfeD4zCX0P76k83Rm5lfnQenvgEcqOfxxOgEmesAOq6sxPICMf
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5993.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(366004)(346002)(376002)(396003)(451199015)(6512007)(26005)(6486002)(6506007)(53546011)(2616005)(31686004)(38100700002)(8676002)(110136005)(316002)(31696002)(921005)(36756003)(186003)(83380400001)(478600001)(6666004)(2906002)(66574015)(5660300002)(66946007)(66476007)(66556008)(8936002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L2pZZWtQWkFtWDhMOXpQeHBYWHIrRkJSelkyT2hiZUc0ZmVIUmFvZXpYVTFB?=
- =?utf-8?B?bDdIUHBKRkJ0U0krRy9VcjhCMXNKREhPbXF5WGhOdFgya0FxNWdoa3JTelVP?=
- =?utf-8?B?T2NkOWlBQ0FCYTFPSFAxZ0dHY05BZ2tJeWZLTUVHMFRJRks3cEJYdG5LMGZh?=
- =?utf-8?B?aS8wSytFUTdhd1BXQTU1K0NMMHhWQkZXbWJuZlJjS3dYK25pRlp6QVFkTHJG?=
- =?utf-8?B?OGtwLzFXMGtDZ3M2dzNJZ2RWR0hJQk9oMWkzL2NKd1lSZ1JkcnRBRS94TXZa?=
- =?utf-8?B?UzdPeGV0MjcwODhORlkvaWE0ak5DM3kyRkYzWGovS3hGbUhOQVV2aXlpanJP?=
- =?utf-8?B?YTZtMmtHSnBLY2x1Vmo2VkVpeVBtMzJBOUd4UXZzdHc2OWdrSEQ2N01MNVNi?=
- =?utf-8?B?bjdSL3J1Nk9jQ0ZlNHdIc1hLdHYwYXZEeGtnOWZaczFERWJ2TStmRURIZk53?=
- =?utf-8?B?b0xITUdFODlHQ0VHeGRhVmwvMDJXRnpGZEo4OCtUcno2bnF3VFh1UXZ3c25I?=
- =?utf-8?B?czhQdDJUdWplOGJUbzJRVnIyaUcvTzNnWXhVSlpIbVVGdUg3OEs2cEFYaVpR?=
- =?utf-8?B?cXV0S1M4c3BkZUFuUERtblFVbmtMRTJNNFZnR1JxY3JZOWpsYWpmZncyekRw?=
- =?utf-8?B?Z2hnQjB2TUdzRzNIUjNoOUFTZFN0MVJPamVRNVA4ZjJtejdQcU1TZVNNek91?=
- =?utf-8?B?STM4NzQ5RkdTVHlqSXRvaHhjbFFsQkNVblJ4eUl1Ky9HNktsbkRkWkV0VEhl?=
- =?utf-8?B?YXM3N3NqalFBcm54RnlPelVFVitxYkxjV2Q5SXdnc1NLTUxCTnpXc2QvcGhR?=
- =?utf-8?B?WkY3amNFMGl4dE9YQmo1ZEw5MDRVQ2M2MFM5OVIzYWM0MDh6NThrWUtPL25j?=
- =?utf-8?B?RHJVNzVQL0ZXbkM1SG9UOU1oUUtnYVZaNCtwbWhvL3lsVWsyZzBlUjgxVzJt?=
- =?utf-8?B?YXJaeEtnWmxRYVJBVnRCQVpHTE9Qd2lrRVhHWDBLNkU3dksvR3Q3RSt2aFZJ?=
- =?utf-8?B?Z2dMWGVnT005cktrLzhkbllUVXdVTFJwY2gxQVkzMU5zZHZkQ1ZxK3ZZTVkw?=
- =?utf-8?B?akpLSkpEaWxLd1czaldNQVZmVXRHTU5FREJKTVBvSWVIbVI5QkxyMzZwN2hj?=
- =?utf-8?B?VHl3eGt3d2RzM2hlcUczc2w3dklSUE5JVjhlaTRYWktuZkhtcm1FUWlvWVRx?=
- =?utf-8?B?STNqN1JBMGRwSXRqZ0F6ME1SZG10b2xKQ1c4eHgreks4ZkVCRlQzOGEvRERm?=
- =?utf-8?B?Nkt4TlZ0ZFRKZUg0a2dVbzBzMWFvd0ZieWZPUFJZdnIxWUtKYlZaS1hRMHhH?=
- =?utf-8?B?cjJaWVo0YmwwNkNiZm1YZ0ZtYWx0RlNGSVR1Z0ZlRk5UZGg3aU13S1BTb3FZ?=
- =?utf-8?B?RXg4Z2ZCWFdCSXpjODU0MXhUZE9FSXZmeW9NL0RybzV5MHVtY0R2cEVMYU85?=
- =?utf-8?B?ZTBpS0gxVlNCcUNMUmN4ekFoZTVrQ1hsem4xUlk3WGs2Tlh0K1A3QnBsYU1z?=
- =?utf-8?B?V3I4cTZTSXZ4TVhrQVRPMFkvWVF2cmFRSmlVd1BQYTVINndqZjlMWDMxa3Rz?=
- =?utf-8?B?WllvcEVyaW1UenVpaDVMWng0c05OMWpJWDY2OHROUzVSRWFDMWVQNmpYSDhv?=
- =?utf-8?B?UmFHZjBqRjlzL0tmZHY2ay9zcEg4U0xNL2lhVmdSWUN6N0hCZG5GbTVMQzNl?=
- =?utf-8?B?SmJyY3V1QjVUSVg1N2dpZjJqdmZRZXliTWZVMDZUOThJQ0tMOENIT2lBaHZQ?=
- =?utf-8?B?K3IrbUIxMlF4L2pCOVJnWkNQNkFDMFFoWENLbi93dEVCNkk3MGk5TlR4OThN?=
- =?utf-8?B?SEFXd0JCdHByam81TFliRXROUXM2dXhveitGMHoxN2hlM0NHOS9xemQrS1p1?=
- =?utf-8?B?UEVJcVY3RitmRHU5TmxCZGtQalE0eW1aR1V4ZU85Mkd3NUVZdHBOSTVJeXZt?=
- =?utf-8?B?Yk9tcnpqWTJqMElPeThjblZTZE94Y1I3dUpLSXhlVDVmdnljay9UOUtiRDN1?=
- =?utf-8?B?MCtpd055QllUazlxZ0x6S3dyN0V1WWFOOWVIbDNkMElvbC9WSFZLM0dUSXlH?=
- =?utf-8?B?SXlZcmE3QWpDL0tKMHlncGVOTkhnWXV4NW5nTTNZR2xYU2M0WEJOSDRiSmE1?=
- =?utf-8?Q?S2ESUV8ZeFTk5UKpCz+vnG0iA?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b3e95d1-d180-4187-baff-08daa248b2ce
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5993.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 18:30:34.9146
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uWPvjhRyII4YJcA9d+covSsXQ8vjUkOapF1lkmNkNkaSi3rDjov8ozXch/urleoYWHarqDYBBOuz4J9a1KOr2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4581
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:344b:0:b0:35a:ffdb:4649 with SMTP id
+ z11-20020a02344b000000b0035affdb4649mr2592447jaz.8.1664476245610; Thu, 29 Sep
+ 2022 11:30:45 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 11:30:45 -0700
+In-Reply-To: <000000000000678d0f05e9931411@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005b564805e9d513dc@google.com>
+Subject: Re: [syzbot] kernel BUG in dbFindLeaf
+From:   syzbot <syzbot+dcea2548c903300a400e@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
-On 9/29/2022 11:48 PM, Christian König wrote:
-> Am 27.09.22 um 19:24 schrieb Arvind Yadav:
->> Fence signaling must be enabled to make sure that
->> the dma_fence_is_signaled_locked() function ever returns true.
->> Since drivers and implementations sometimes mess this up,
->> this ensures correct behaviour when DMABUF_DEBUG_ENABLE_SIGNALING
->> is used during debugging.
->> This should make any implementation bugs resulting in not
->> signaled fences much more obvious.
->
-> Are all IGT tests now passing with this? That would be a bit 
-> unfortunate because it means we still have missed the bug in drm_syncobj.
->
-IGT has these test cases related to syncobj (syncobj_basic, 
-syncobj_timeline and syncobj_wait)and all are passing.
+HEAD commit:    c3e0e1e23c70 Merge tag 'irq_urgent_for_v6.0' of git://git...
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=11b24c1f080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=755695d26ad09807
+dashboard link: https://syzkaller.appspot.com/bug?extid=dcea2548c903300a400e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15d5fe98880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e224b8880000
 
-I will check syncobj and let you know.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/67576e43d5c7/disk-c3e0e1e2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e568fb42b955/vmlinux-c3e0e1e2.xz
 
-~Arvind
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dcea2548c903300a400e@syzkaller.appspotmail.com
 
-> Christian.
->
->>
->> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
->> ---
->>   include/linux/dma-fence.h | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
->> index 775cdc0b4f24..5156dc6be0a6 100644
->> --- a/include/linux/dma-fence.h
->> +++ b/include/linux/dma-fence.h
->> @@ -398,6 +398,11 @@ void dma_fence_enable_sw_signaling(struct 
->> dma_fence *fence);
->>   static inline bool
->>   dma_fence_is_signaled_locked(struct dma_fence *fence)
->>   {
->> +#ifdef CONFIG_DMABUF_DEBUG_ENABLE_SIGNALING
->> +    if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
->> +        return false;
->> +#endif
->> +
->>       if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
->>           return true;
->
+loop0: detected capacity change from 0 to 32768
+BUG at fs/jfs/jfs_dmap.c:2984 assert(bitno < 32)
+------------[ cut here ]------------
+kernel BUG at fs/jfs/jfs_dmap.c:2984!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 3605 Comm: syz-executor593 Not tainted 6.0.0-rc7-syzkaller-00081-gc3e0e1e23c70 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:dbFindBits.cold+0xa1/0xa3 fs/jfs/jfs_dmap.c:2984
+Code: fa e9 92 e0 95 f9 e8 91 ac 38 f8 48 c7 c1 80 67 29 8a ba a8 0b 00 00 48 c7 c6 00 66 29 8a 48 c7 c7 40 66 29 8a e8 e9 80 f8 ff <0f> 0b e8 6b ac 38 f8 49 63 d4 48 89 ee 48 c7 c7 c0 fd 4b 8c e8 09
+RSP: 0018:ffffc9000393f000 EFLAGS: 00010282
+RAX: 0000000000000030 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888025469d80 RSI: ffffffff8161f2a8 RDI: fffff52000727df2
+RBP: 0000000000000000 R08: 0000000000000030 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000020 R14: 0000000000000000 R15: 0000000000000001
+FS:  0000555556112300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffef28f2000 CR3: 0000000072e93000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ dbAllocDmapLev+0x223/0x2c0 fs/jfs/jfs_dmap.c:1950
+ dbAllocCtl+0x131/0x780 fs/jfs/jfs_dmap.c:1793
+ dbAllocAG+0x8da/0xd20 fs/jfs/jfs_dmap.c:1334
+ dbAlloc+0x40d/0xa70 fs/jfs/jfs_dmap.c:858
+ dtSplitUp+0x365/0x5120 fs/jfs/jfs_dtree.c:974
+ dtInsert+0x82b/0xa10 fs/jfs/jfs_dtree.c:863
+ jfs_create+0x5b7/0xac0 fs/jfs/namei.c:137
+ lookup_open.isra.0+0xf05/0x12a0 fs/namei.c:3413
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x996/0x28f0 fs/namei.c:3688
+ do_filp_open+0x1b6/0x400 fs/namei.c:3718
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1313
+ do_sys_open fs/open.c:1329 [inline]
+ __do_sys_open fs/open.c:1337 [inline]
+ __se_sys_open fs/open.c:1333 [inline]
+ __x64_sys_open+0x119/0x1c0 fs/open.c:1333
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f954faecf09
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffef28f1458 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f954faecf09
+RDX: 0000000000000000 RSI: 00000000000000f0 RDI: 0000000020000140
+RBP: 00007f954faac6d0 R08: 00005555561122c0 R09: 0000000000000000
+R10: 00007ffef28f1320 R11: 0000000000000246 R12: 00000000f8008000
+R13: 0000000000000000 R14: 00083878000000f8 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:dbFindBits.cold+0xa1/0xa3 fs/jfs/jfs_dmap.c:2984
+Code: fa e9 92 e0 95 f9 e8 91 ac 38 f8 48 c7 c1 80 67 29 8a ba a8 0b 00 00 48 c7 c6 00 66 29 8a 48 c7 c7 40 66 29 8a e8 e9 80 f8 ff <0f> 0b e8 6b ac 38 f8 49 63 d4 48 89 ee 48 c7 c7 c0 fd 4b 8c e8 09
+RSP: 0018:ffffc9000393f000 EFLAGS: 00010282
+RAX: 0000000000000030 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888025469d80 RSI: ffffffff8161f2a8 RDI: fffff52000727df2
+RBP: 0000000000000000 R08: 0000000000000030 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000020 R14: 0000000000000000 R15: 0000000000000001
+FS:  0000555556112300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffef28f2000 CR3: 0000000072e93000 CR4: 0000000000350ef0
+
