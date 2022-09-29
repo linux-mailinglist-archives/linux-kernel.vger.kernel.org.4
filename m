@@ -2,142 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2555EF9B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BC25EF9B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235827AbiI2QFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
+        id S235876AbiI2QFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235811AbiI2QFc (ORCPT
+        with ESMTP id S235633AbiI2QFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:05:32 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2089.outbound.protection.outlook.com [40.107.94.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974D2D01F5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:05:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JspdDyTCTd1u3dxqvBKIBvCKhvXOAGctgdaaed3JTsq52Qs3FqYxSjJ7CBz5LGuPItOT9i4g7AmDawZxQ3FRRUhPI73NkuFyzqi4B8VhNmA2djdOK3q5f+kqmTtY8h0eMLyFIW3XRCCRI33qlFCfBwMK46L7z2VNTgIV4bM2xyEWam/DYg8icNmj990qXTHAwJOqd7a30RZYgB5XaTMDJSqJVqiNVTUwi4nJvK6qd+KpttxkJyB0d/Bi2ehHV2RFhEss9S9O/VOE3Oeqidhx1P7L7Vh4YVVYQhw9e6lnKgLpFXSO5J8Nunbor8BdGT2617uLjDtmoxxFf9ellNJgKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9YDOHE2pplnwJc9C9ifTHAumBxiLW9Q7yxuiL5O9OKE=;
- b=KArXbkero7baCBHTwnb2//do1J9GDYdm/M/mJibUQLSU3BVl4RPItvjp976A+95TBM06KWrtBGCDeKpSTsYyL+hgwD6yBC397v7IaHBvtIU8/p2VXHkfuVlghpeoc5KYjz6lDEWrvH0wKayY26B78mLzdaMV8QxUO73J3NL6EKIjfJf1/P33qEVcQPKAx/Kwm2zaTtpWT+FTj9enr3lZY3RU7uDOtrP1euGhYRRO8fa0vLTzaDfS3GQHml3sIA/RShBe3FepF6gN2bJaR5yl4OfZYtcpWmic/PLaHxmn2Y9qptKLRV8tUS+qz9EbZv1kIX1yx1UMc/mJStCjyGTJyQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9YDOHE2pplnwJc9C9ifTHAumBxiLW9Q7yxuiL5O9OKE=;
- b=bIuggwBWdsvYviep4CVhKGYidd6M9sjtBAYBocvQF26h1o8BAC/0W7DS+xDLyt8fJ0IBmIUH1E6tgQoq3f4OvEPujL3PztVjMzc4pEEWD3k7aQ9IIQt6301PG2Hy8IqDo9iosQ2QRemDl35vSMMAuwPGAOfBh56fQBeKE7hf5sE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by SJ0PR12MB6712.namprd12.prod.outlook.com (2603:10b6:a03:44e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Thu, 29 Sep
- 2022 16:05:28 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::3de4:456f:800d:e013]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::3de4:456f:800d:e013%5]) with mapi id 15.20.5676.020; Thu, 29 Sep 2022
- 16:05:28 +0000
-Message-ID: <36ad5d1c-b841-03bb-14cf-0b459df47749@amd.com>
-Date:   Thu, 29 Sep 2022 12:05:26 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/amd/display: fix array-bounds error in
- dc_stream_remove_writeback()
-Content-Language: en-US
-To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        "Pillai, Aurabindo" <Aurabindo.Pillai@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Wang, Chao-kai (Stylon)" <Stylon.Wang@amd.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
-        Po-Yu Hsieh Paul <Paul.Hsieh@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        "Hung, Alex" <Alex.Hung@amd.com>,
-        "Lee, Alvin" <Alvin.Lee2@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Wu, Hersen" <hersenxs.wu@amd.com>,
-        "Ma, Leo" <Hanghong.Ma@amd.com>,
-        Jimmy Kizito <Jimmy.Kizito@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Kotarac, Pavle" <Pavle.Kotarac@amd.com>
-References: <20220927191200.216488-1-hamza.mahfooz@amd.com>
- <CH0PR12MB5284EAC9E9D095B2624631228B559@CH0PR12MB5284.namprd12.prod.outlook.com>
- <13763d3b-bf7f-aaff-3bcd-60e69df86820@amd.com>
- <4b21a150-a567-dafa-1a55-8496cdb0cec6@amd.com>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-In-Reply-To: <4b21a150-a567-dafa-1a55-8496cdb0cec6@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT3PR01CA0039.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:82::16) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        Thu, 29 Sep 2022 12:05:51 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC7513F73D
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:05:49 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id e20so912515qts.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=/pJRNSV0HIheH8OrivaNHUmRgbgz5qcY3liUI4XTQgs=;
+        b=bIHFkn4ngRG9v2bNg6tu6tRSEUonb1cxJ2fTLcvmmPzoz7LQrQtobEos02MtVuDeIT
+         Dt3vA5GRksU80+2LvWrfPDbq5+m7arSGVcI6bukICsueKOoMHGvHt77YReu0Zpq5GzBL
+         MACXvRl0GvjJimrRIerjjVZyeznaWu5e3RAOo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/pJRNSV0HIheH8OrivaNHUmRgbgz5qcY3liUI4XTQgs=;
+        b=mee55qAqTuJKSKu500KuBp4vnrLFQnENoatn3PBCiSziu+B8NhnGSJv40324t/5Dmw
+         orwadYyV7DqpLxx+MaZ9Y0tybewsbCEQX+wO/C3kErf+WP0qc195vijvgkAuQrvOulOp
+         d6SwUdbzFN7KTxmJXMWIU0//ZJ5c9Lu66EqLMAubTRNdpkYS7lvks7SQymALb546MMSt
+         9eOBc8TUUlmPOlkcTmRv5XQ2RVmIwrRjjT/UxVJq6rOSKY12Z1IGdJrVILGZF8dIkARM
+         kbnDzpxGTZ0IPQ0c6037UD+V/rLmkr7OF1x3nIMVabaVApSgo80NX/rdjzxw4v+ZGacq
+         ZNCA==
+X-Gm-Message-State: ACrzQf05Nn2M0QrXkCUjd+Ka0qMa1vuaFsh3xakddVro3AqNQckzlp2K
+        hj4M672cs3itgmrW8SEuF3xKPI7IxwzOtVCc
+X-Google-Smtp-Source: AMsMyM45eYbXBXmqaFEIR/IgJFFxLSz7KdSIw3yvJqkyvmnjamJ6CjNtSsAb6RB9zPjGRfpVSQb4yA==
+X-Received: by 2002:ac8:5c01:0:b0:35c:d08b:25b with SMTP id i1-20020ac85c01000000b0035cd08b025bmr3009518qti.311.1664467548214;
+        Thu, 29 Sep 2022 09:05:48 -0700 (PDT)
+Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id k1-20020a05620a414100b006ce441816e0sm6686095qko.15.2022.09.29.09.05.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 09:05:47 -0700 (PDT)
+Message-ID: <809045ca-0adc-9ec2-af5b-03d68ff34c2b@joelfernandes.org>
+Date:   Thu, 29 Sep 2022 12:05:45 -0400
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|SJ0PR12MB6712:EE_
-X-MS-Office365-Filtering-Correlation-Id: 737560d7-3d2f-4e87-904d-08daa2346d67
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2NBje1gVrQnKNKxUINSZxtkBTuaIB855zZFWn4PvFV9Jk5aH1i70Abz3Lfm6AJsMkQYsjAp4SQkZkKNqEszg1IArgPtNVK5jSc8DhN0pYpFNzyvXCNQDiN7+yQW6aRDTJFLtVj17GYmffJ+KggkvnzfKRue1NemexxcRGpHES4+y6vJISCG0aZKnVaBzfr2yCWRXQKsiR3tSOlwu//1pzT8fpzJGvSs7yd/cKmwpI+mwb8OAL43VnNAoNge72rS2atYfBme02267F22pdLRAnLJYY9mirpZCxmXwWoKK/JTt3oPxjdjIz3C6At9j6B93ps34ba/2FmGG4kjXZljnnuKlW9sX5KzNNvZClOzFDeHAi2a/+0Kq6d3r+m55rHk0VEByaWg/zchgdfUNMbiGZcEn67tJ2yVdRyGsZ/2360poVD79bTncX4tw6WpT4ofiuaskdewtcLP8oNF9s14f7UIsSt+FXqZvgmL1XW0S78ulb66PKJqFTcFD9Tc/NVTji2SaW5r8bpV5OyPURqviasGtu2mgkDA7P6exU9HGUV2vnH+xfKZFXoAXUZH5+P6F0YdzsCjN5DDXDnwRKPZIVCEvuCy+jD/fNh7gI41eRvTW1Fu3uWsvloh712e3fZtyaspdho2aZ1xAxFdUMtaeLTfySsfewVGx2fBbWJ6bU1VjcNJQbp3Gb+ymYyrhuFhkeMny+VZDEEEz9xahF9G2bE3vlf/aKslJmkr3ma70zePcP9VHkz2bgMFOc5pALln5ZCLgg72BO5oTOEuqON+Ptz7r6ufXJI9jEMT1JqYsxRw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(396003)(136003)(346002)(39860400002)(451199015)(6486002)(478600001)(44832011)(5660300002)(2616005)(31696002)(6512007)(316002)(8936002)(6506007)(86362001)(66476007)(36756003)(186003)(26005)(110136005)(53546011)(54906003)(66946007)(38100700002)(4326008)(31686004)(8676002)(2906002)(66556008)(41300700001)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c2xnZTNOMFBEc3U2d1p2OXpJNWc1cGpyY3N2WEgwSDJSM3ZldnRTNDBBWlQ1?=
- =?utf-8?B?OVdWajUyb2s4Q1BrbUZUR3BydHdQTGQzVUZOOGgwUWJvd2R5NFFtL1hxTXBz?=
- =?utf-8?B?bDJJTnVZczc5TVhkVEpJTjFwcVYzQXlQZ0MxbTFiSCt2eWQzSUlRWEpRVDRp?=
- =?utf-8?B?b2FWdzVRZVQxTEdwaEZzQ2h4M29uUVRDQ1pSbmhYMlo3Z2dzWTBOdFVzTDcr?=
- =?utf-8?B?c0N5WUZJZjI3enVzZWtuYjVGb0dVSk92cmFxeU9WRXVVMGk1aERZOGRYUFhJ?=
- =?utf-8?B?YUNadFBpOStYRlFWSDNrTWU5YU1kaEgveUlPSC9HWW5NZE1JdHhxaGJ5SG04?=
- =?utf-8?B?MFVQVDdyUXk2ZjVJcUhwM1l6bTlKeno0M2ZDdytmV1ZaVXVSNkpJTWRkZis1?=
- =?utf-8?B?VG10OHlNeFl6WnlQNG5kZ2ZudnhMUHIxdlFiQmRwMWJlTXFwVDFyaGEvWE5O?=
- =?utf-8?B?Mmg3dVBRakxwNWJyb3VoQ2pQMHA0OUdQVWNjS3A5NTdPMzNKem16d0szdVdr?=
- =?utf-8?B?bkFsVTJPaUoxNWkyeTl0VEE0YUJ4Tk0yOUxrZ1Vha0hhWXlNQTQ2VDg4M3lm?=
- =?utf-8?B?N0NHSjNqRzk2U3lqYnpTMmhXcFpXM1NCWlRnRjI2SUJGNHB3Nnh6SUE1S293?=
- =?utf-8?B?RnhSMzR6MzFpTGJkLzNQTFE4cHhyZ1pNbXNRWTliRVNEZlVTaWk1WkZlOHdW?=
- =?utf-8?B?Vmk0OGhUeVREYXJiMjZFWk1DTDJabzZURWYzbm0xUnpjWGVPMHNVRHUxL0wr?=
- =?utf-8?B?S3hzQkJGd0poK0VzWGJYUENFM1NjQkdORVc5RVRjdCtSYzdIbS9HbVhiTmlS?=
- =?utf-8?B?TFpFbVExbmNvZnR3SE1GRWEvbXhySmprRkUyR2NCV1FXN3NGZzJRRnVlYkZ4?=
- =?utf-8?B?ZTdTbEl0cm5xaURySmdJQlczOE45c3EvenFQVURqbnVqT1ZiOC9XTDk1SDNp?=
- =?utf-8?B?ZTZkWUQzMEtlQ2xUVm42dGhGY0pvTWVwRmFpOWJBdEVVL1lNRTZ3WkVkL0ZE?=
- =?utf-8?B?WE5PdngvVW9HcXBYRkJNYmIrTmNBMnJmSHE3Ny9GSEMzOVZhaWZVV3ZlbEQv?=
- =?utf-8?B?NEZvNS9zZjQ4Tmg3L2lZcGFWRVI3akYzalYwQ0czYmJwSTJhWnVGcER0c2pG?=
- =?utf-8?B?RnlhazgyZFpQd2VGVDJMOVdUK2dpSExDV2VLc2NadW9leisyNy9EbmNEM2tE?=
- =?utf-8?B?WHYzQzBCNFl3amtDQUpiWEc3L0V1aDBlTU03cXhwd2xkeEIycE0wUWZyMW50?=
- =?utf-8?B?ekF0TDZqTlovMXk4ZHNBbklSSkU4aXBPUWliTkgxSlc5Mld6NjladHdaUGxm?=
- =?utf-8?B?WWpTZE9KOUc0c3Vmbmk3UWU3Rm9vQ2xiQkpJWU5sODdXVm03Y01MRDJha0Q3?=
- =?utf-8?B?UzlmWFpFMVI4UDNuNFNXdFJQZEMramZiajNqOCtFZkp6L2ZXbG03SjBKOXRq?=
- =?utf-8?B?WTJNeEhad2hjcU9WZGNGYmhYNVZTUmd0clYyaGIyUmplcW5SMmhFdm4zUzZj?=
- =?utf-8?B?REppSVNSa0VBcGR1REVNazhmcW0xYWszaWl0MkxHOWh4VktIdGFaQ0hPaCtM?=
- =?utf-8?B?V1czV2J1NnJ1S2RGZUM3cHZ6WWNrZFdHU3FaQVhVTERLazJId3ViRXdEcHdK?=
- =?utf-8?B?di9BdlB3K0dxSlNwOWRIV0FXQ3RjV2NHVUhwRHFsYlpuMFdoOHd6QlYzVDky?=
- =?utf-8?B?ZkJyKzN5UWhrZTc1dzQ5RDVkY2t6ditSNHVJZ0w0TVM0MkpCSE9EWmZDQ1VG?=
- =?utf-8?B?SUw3MnQ5a2NaRU5obVpFb0xiM2RVeDRLWldMYW1XYlRCaEFQYU1UdDdUTHUx?=
- =?utf-8?B?UG5vWlUzR2dpM1FqN1RBV3RacDMzb3A0a3ZCRHZCUGZZT0wvZDdwYVlMNUdu?=
- =?utf-8?B?RUJycXNXLzdQdUpDQ0VKWktuREtYeEJvaytscDRrTzMzR0V2Znh5V3NBRjZJ?=
- =?utf-8?B?djF0MHQvdW9jendUZitUS04zRjBaRDFLTktwaVVzSDR3OEloMVNMR2w4Rk9w?=
- =?utf-8?B?YWluL2x3bVJ4WGtZd2lNaUU3Q0Q3SlB4RHdoSTJDTm9QRWp6MVNVK1N5ZDIr?=
- =?utf-8?B?RXpJd2pLcEJLTWxhWjRpNVNieXd3Nk1HVTRhbHdRREVzK3lLNFVZWEI1VVIy?=
- =?utf-8?Q?/u1NzQei9Djgb427HjQhd9tke?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 737560d7-3d2f-4e87-904d-08daa2346d67
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 16:05:28.5737
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L7cDBwrrx0IB4mPTZilFv0JJmYWh8qAXjRg0XCzVLD9ZZV0qOmxkcR40sMVcetxfvhzRlJOnnwFdLudUIZlqow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6712
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: RCU vs NOHZ
+Content-Language: en-US
+To:     paulmck@kernel.org, Peter Zijlstra <peterz@infradead.org>
+Cc:     Frederic Weisbecker <fweisbec@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+References: <YyLksEr05QTNo05Q@hirez.programming.kicks-ass.net>
+ <20220915160600.GA246308@paulmck-ThinkPad-P17-Gen-1>
+ <YyN0BKEoDbe4hcIl@hirez.programming.kicks-ass.net>
+ <20220915191427.GC246308@paulmck-ThinkPad-P17-Gen-1>
+ <YyOnilnwnLKA9ghN@hirez.programming.kicks-ass.net>
+ <20220916075817.GE246308@paulmck-ThinkPad-P17-Gen-1>
+ <YyQ/zn54D1uoaIc1@hirez.programming.kicks-ass.net>
+ <20220917142508.GF246308@paulmck-ThinkPad-P17-Gen-1>
+ <YzV5vqoLInptafJm@hirez.programming.kicks-ass.net>
+ <20220929152044.GE4196@paulmck-ThinkPad-P17-Gen-1>
+ <20220929154618.GA2864141@paulmck-ThinkPad-P17-Gen-1>
+From:   Joel Fernandes <joel@joelfernandes.org>
+In-Reply-To: <20220929154618.GA2864141@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -145,117 +84,215 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Am 2022-09-29 um 11:41 schrieb Hamza Mahfooz:
->
->
-> On 2022-09-29 11:36, Felix Kuehling wrote:
->> I'm still seeing a warning even with this fix:
->>
->> /home/fkuehlin/compute/kernel/drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c: 
->> In function ?dc_stream_remove_writeback?:
->> /home/fkuehlin/compute/kernel/drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c:527:55: 
->> warning: array subscript 1 is above array bounds of ?struct 
->> dc_writeback_info[1]? [-Warray-bounds]
->>    527 |     stream->writeback_info[j] = stream->writeback_info[i];
->>        | ~~~~~~~~~~~~~~~~~~~~~~^~~
->>
->
-> What version of GCC are you using? I don't see it on GCC 12.2 with 
-> this patch applied.
 
-gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+On 9/29/2022 11:46 AM, Paul E. McKenney wrote:
+> On Thu, Sep 29, 2022 at 08:20:44AM -0700, Paul E. McKenney wrote:
+>> On Thu, Sep 29, 2022 at 12:55:58PM +0200, Peter Zijlstra wrote:
+>>> On Sat, Sep 17, 2022 at 07:25:08AM -0700, Paul E. McKenney wro
+[..]
+>>>> And this of course means that any additional schemes to reduce RCU's
+>>>> power consumption must be compared (with real measurements on real
+>>>> hardware!) to Joel et al.'s work, whether in combination or as an
+>>>> alternative.  And either way, the power savings must of course justify
+>>>> the added code and complexity.
+>>>
+>>> Well, Joel's lazy scheme has the difficulty that you can wreck things by
+>>> improperly marking the callback as lazy when there's an explicit
+>>> dependency on it. The talk even called that out.
+>>>
+>>> I was hoping to construct a scheme that doesn't need the whole lazy
+>>> approach.
 
-Regards,
-   Felix
+Peter, when constructing such scheme, please do consider that the power savings
+needs to be comparable to power testing done with large jiffies_till_first_fqs
+values. Otherwise, such solution is 'not that good' (IMO). In other words, the
+ideal savings is one you get when not having to ask for RCU's services too soon
+(rather than optimizing RCU itself).  Of course, the tick being turned off also
+could/should be optimized for when you do need RCU's services.
+
+> I agree that this is a risk that must be addressed.
+
+Right, it is encouraging to see that we're making good progress on this. And
+also Thomas mentioned in LPC that if call_rcu() users are expecting time-bounded
+callback invocation, then _that_ needs to be fixed.
+
+thanks,
+
+ - Joel
 
 
->
->> Regards,
->>    Felix
+> 
+>>> To recap; we want the CPU to go into deeper idle states, no?
+>>>
+>>> RCU can currently inhibit this by having callbacks pending for this CPU
+>>> -- in this case RCU inhibits NOHZ-IDLE and deep power states are not
+>>> selected or less effective.
+>>>
+>>> Now, deep idle states actually purge the caches, so cache locality
+>>> cannot be an argument to keep the callbacks local.
+>>>
+>>> We know when we're doing deep idle we stop the tick.
+>>>
+>>> So why not, when stopping the tick, move the RCU pending crud elsewhere
+>>> and let the CPU get on with going idle instead of inhibiting the
+>>> stopping of the tick and wrecking deep idle?
 >>
->>
->> Am 2022-09-27 um 16:35 schrieb Pillai, Aurabindo:
->>>
->>> [AMD Official Use Only - General]
->>>
->>>
->>> [AMD Official Use Only - General]
->>>
->>>
->>> Reviewed-by: Aurabindo Pillai <aurabindo.pillai@amd.com>
->>>
->>> -- 
->>>
->>> Regards,
->>> Jay
->>> ------------------------------------------------------------------------ 
->>>
->>> *From:* Mahfooz, Hamza <Hamza.Mahfooz@amd.com>
->>> *Sent:* Tuesday, September 27, 2022 3:12 PM
->>> *To:* linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>
->>> *Cc:* Mahfooz, Hamza <Hamza.Mahfooz@amd.com>; Wentland, Harry 
->>> <Harry.Wentland@amd.com>; Li, Sun peng (Leo) <Sunpeng.Li@amd.com>; 
->>> Siqueira, Rodrigo <Rodrigo.Siqueira@amd.com>; Deucher, Alexander 
->>> <Alexander.Deucher@amd.com>; Koenig, Christian 
->>> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David 
->>> Airlie <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Lee, 
->>> Alvin <Alvin.Lee2@amd.com>; Hung, Alex <Alex.Hung@amd.com>; Kotarac, 
->>> Pavle <Pavle.Kotarac@amd.com>; Wang, Chao-kai (Stylon) 
->>> <Stylon.Wang@amd.com>; Pillai, Aurabindo <Aurabindo.Pillai@amd.com>; 
->>> Ma, Leo <Hanghong.Ma@amd.com>; Wu, Hersen <hersenxs.wu@amd.com>; 
->>> Po-Yu Hsieh Paul <Paul.Hsieh@amd.com>; Jimmy Kizito 
->>> <Jimmy.Kizito@amd.com>; amd-gfx@lists.freedesktop.org 
->>> <amd-gfx@lists.freedesktop.org>; dri-devel@lists.freedesktop.org 
->>> <dri-devel@lists.freedesktop.org>
->>> *Subject:* [PATCH] drm/amd/display: fix array-bounds error in 
->>> dc_stream_remove_writeback()
->>> Address the following error:
->>> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c: In 
->>> function ‘dc_stream_remove_writeback’:
->>> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c:527:55: 
->>> error: array subscript [0, 0] is outside array bounds of ‘struct 
->>> dc_writeback_info[1]’ [-Werror=array-bounds]
->>>   527 | stream->writeback_info[j] = stream->writeback_info[i];
->>>       | ~~~~~~~~~~~~~~~~~~~~~~^~~
->>> In file included from 
->>> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dc.h:1269,
->>>                  from 
->>> ./drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:29,
->>>                  from 
->>> ./drivers/gpu/drm/amd/amdgpu/../display/dc/basics/dc_common.h:29,
->>>                  from 
->>> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c:27:
->>> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dc_stream.h:241:34: note: 
->>> while referencing ‘writeback_info’
->>>   241 |         struct dc_writeback_info writeback_info[MAX_DWB_PIPES];
->>>       |
->>>
->>> Currently, we aren't checking to see if j remains within
->>> writeback_info[]'s bounds. So, add a check to make sure that we aren't
->>> overflowing the buffer.
->>>
->>> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
->>> ---
->>>  drivers/gpu/drm/amd/display/dc/core/dc_stream.c | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c 
->>> b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
->>> index 3ca1592ce7ac..ae13887756bf 100644
->>> --- a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
->>> +++ b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
->>> @@ -520,7 +520,7 @@ bool dc_stream_remove_writeback(struct dc *dc,
->>>          }
->>>
->>>          /* remove writeback info for disabled writeback pipes from 
->>> stream */
->>> -       for (i = 0, j = 0; i < stream->num_wb_info; i++) {
->>> +       for (i = 0, j = 0; i < stream->num_wb_info && j < 
->>> MAX_DWB_PIPES; i++) {
->>>                  if (stream->writeback_info[i].wb_enabled) {
->>>                          if (i != j)
->>>                                  /* trim the array */
->>> -- 
->>> 2.37.2
->>>
->
+>> Because doing so in the past has cost more energy than is saved.
+> 
+> And I should hasten to add that I have no intention of sending this
+> commit upstream unless/until it is demonstrated to save real energy on
+> real hardware.  In the meantime, please see below for an updated version
+> that avoids indefinitely postponing the tick on systems having CPUs that
+> enter and exit idle frequently.
+> 
+> 							Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+> commit e30960e87d58db50bbe4fd09a2ff1e5eeeaad754
+> Author: Paul E. McKenney <paulmck@kernel.org>
+> Date:   Wed Sep 21 13:30:24 2022 -0700
+> 
+>     rcu: Let non-offloaded idle CPUs with callbacks defer tick
+>     
+>     When a CPU goes idle, rcu_needs_cpu() is invoked to determine whether or
+>     not RCU needs the scheduler-clock tick to keep interrupting.  Right now,
+>     RCU keeps the tick on for a given idle CPU if there are any non-offloaded
+>     callbacks queued on that CPU.
+>     
+>     But if all of these callbacks are waiting for a grace period to finish,
+>     there is no point in scheduling a tick before that grace period has any
+>     reasonable chance of completing.  This commit therefore delays the tick
+>     in the case where all the callbacks are waiting for a specific grace
+>     period to elapse.  In theory, this should result in a 50-70% reduction in
+>     RCU-induced scheduling-clock ticks on mostly-idle CPUs.  In practice, TBD.
+>     /bin/bash: fm: command not found
+>     
+>     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>     Cc: Peter Zijlstra <peterz@infradead.org>
+> 
+> diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
+> index 9bc025aa79a3..84e930c11065 100644
+> --- a/include/linux/rcutiny.h
+> +++ b/include/linux/rcutiny.h
+> @@ -133,7 +133,7 @@ static inline void rcu_softirq_qs(void)
+>  		rcu_tasks_qs(current, (preempt)); \
+>  	} while (0)
+>  
+> -static inline int rcu_needs_cpu(void)
+> +static inline int rcu_needs_cpu(u64 basemono, u64 *nextevt)
+>  {
+>  	return 0;
+>  }
+> diff --git a/include/linux/rcutree.h b/include/linux/rcutree.h
+> index 70795386b9ff..3066e0975022 100644
+> --- a/include/linux/rcutree.h
+> +++ b/include/linux/rcutree.h
+> @@ -19,7 +19,7 @@
+>  
+>  void rcu_softirq_qs(void);
+>  void rcu_note_context_switch(bool preempt);
+> -int rcu_needs_cpu(void);
+> +int rcu_needs_cpu(u64 basemono, u64 *nextevt);
+>  void rcu_cpu_stall_reset(void);
+>  
+>  /*
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 5ec97e3f7468..1930cee1ccdb 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -676,12 +676,40 @@ void __rcu_irq_enter_check_tick(void)
+>   * scheduler-clock interrupt.
+>   *
+>   * Just check whether or not this CPU has non-offloaded RCU callbacks
+> - * queued.
+> + * queued that need immediate attention.
+>   */
+> -int rcu_needs_cpu(void)
+> +int rcu_needs_cpu(u64 basemono, u64 *nextevt)
+>  {
+> -	return !rcu_segcblist_empty(&this_cpu_ptr(&rcu_data)->cblist) &&
+> -		!rcu_rdp_is_offloaded(this_cpu_ptr(&rcu_data));
+> +	unsigned long j;
+> +	unsigned long jlast;
+> +	unsigned long jwait;
+> +	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
+> +	struct rcu_segcblist *rsclp = &rdp->cblist;
+> +
+> +	// Disabled, empty, or offloaded means nothing to do.
+> +	if (!rcu_segcblist_is_enabled(rsclp) ||
+> +	    rcu_segcblist_empty(rsclp) || rcu_rdp_is_offloaded(rdp)) {
+> +		*nextevt = KTIME_MAX;
+> +		return 0;
+> +	}
+> +
+> +	// Callbacks ready to invoke or that have not already been
+> +	// assigned a grace period need immediate attention.
+> +	if (!rcu_segcblist_segempty(rsclp, RCU_DONE_TAIL) ||
+> +	    !rcu_segcblist_segempty(rsclp, RCU_NEXT_TAIL))
+> +		return 1;
+> +
+> +	// There are callbacks waiting for some later grace period.
+> +	// Wait for about a grace period or two since the last tick, at which
+> +	// point there is high probability that this CPU will need to do some
+> +	// work for RCU.
+> +	j = jiffies;
+> +	jlast = __this_cpu_read(rcu_data.last_sched_clock);
+> +	jwait = READ_ONCE(jiffies_till_first_fqs) + READ_ONCE(jiffies_till_next_fqs) + 1;
+> +	if (time_after(j, jlast + jwait))
+> +		return 1;
+> +	*nextevt = basemono + TICK_NSEC * (jlast + jwait - j);
+> +	return 0;
+>  }
+>  
+>  /*
+> @@ -2324,11 +2352,9 @@ void rcu_sched_clock_irq(int user)
+>  {
+>  	unsigned long j;
+>  
+> -	if (IS_ENABLED(CONFIG_PROVE_RCU)) {
+> -		j = jiffies;
+> -		WARN_ON_ONCE(time_before(j, __this_cpu_read(rcu_data.last_sched_clock)));
+> -		__this_cpu_write(rcu_data.last_sched_clock, j);
+> -	}
+> +	j = jiffies;
+> +	WARN_ON_ONCE(time_before(j, __this_cpu_read(rcu_data.last_sched_clock)));
+> +	__this_cpu_write(rcu_data.last_sched_clock, j);
+>  	trace_rcu_utilization(TPS("Start scheduler-tick"));
+>  	lockdep_assert_irqs_disabled();
+>  	raw_cpu_inc(rcu_data.ticks_this_gp);
+> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+> index b0e3c9205946..303ea15cdb96 100644
+> --- a/kernel/time/tick-sched.c
+> +++ b/kernel/time/tick-sched.c
+> @@ -784,7 +784,7 @@ static inline bool local_timer_softirq_pending(void)
+>  
+>  static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
+>  {
+> -	u64 basemono, next_tick, delta, expires;
+> +	u64 basemono, next_tick, next_tmr, next_rcu, delta, expires;
+>  	unsigned long basejiff;
+>  	unsigned int seq;
+>  
+> @@ -807,7 +807,7 @@ static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
+>  	 * minimal delta which brings us back to this place
+>  	 * immediately. Lather, rinse and repeat...
+>  	 */
+> -	if (rcu_needs_cpu() || arch_needs_cpu() ||
+> +	if (rcu_needs_cpu(basemono, &next_rcu) || arch_needs_cpu() ||
+>  	    irq_work_needs_cpu() || local_timer_softirq_pending()) {
+>  		next_tick = basemono + TICK_NSEC;
+>  	} else {
+> @@ -818,8 +818,10 @@ static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
+>  		 * disabled this also looks at the next expiring
+>  		 * hrtimer.
+>  		 */
+> -		next_tick = get_next_timer_interrupt(basejiff, basemono);
+> -		ts->next_timer = next_tick;
+> +		next_tmr = get_next_timer_interrupt(basejiff, basemono);
+> +		ts->next_timer = next_tmr;
+> +		/* Take the next rcu event into account */
+> +		next_tick = next_rcu < next_tmr ? next_rcu : next_tmr;
+>  	}
+>  
+>  	/*
