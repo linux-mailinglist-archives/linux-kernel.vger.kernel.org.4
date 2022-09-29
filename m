@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606E65EF7B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 255685EF7BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235509AbiI2OfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S235687AbiI2Ogx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235723AbiI2OfS (ORCPT
+        with ESMTP id S235556AbiI2Ogo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:35:18 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204B61C43A
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:35:15 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id i26so2525827lfp.11
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:35:15 -0700 (PDT)
+        Thu, 29 Sep 2022 10:36:44 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9DA1B0539
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:36:42 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id a2so2550829lfb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:36:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=t34inL3mEURDjRNQxEKzvsxMIvG4RSh3GAtajTmRDPU=;
-        b=YcWoA+b4WVs6MgkrxS21s1E18uylPZ6PSZ5jBiXNFCJXsMtKFeSe7TAehG+BiEvDAt
-         tNm7tQYIU0iXAlWwSHvBwVa0zpTr7WfWQmHzodN4CF+7EWZ2hftPhJmJfjBxBFznZI9Y
-         ZJf187D5qbb9H1deblpblToW6mdmEs4cuHgCCNXe6up/f2A4NCle9391cPiGRjdgRl4Y
-         199RCAOgDoyAfY0IlHQ+4Bmzn+AydJ+Pa8FbMZbrsGTdsrZjaHZ4PtRFpXsA1sQ31kk0
-         Ed2KbzdKjMHfitMT31tqIrj023lUxkHNrbq3BpCulX6GGQrwC8Al+ST45b3TIi3c6Sv1
-         ae4A==
+        bh=s4k7ZRcK6Gp/A9rk+5L7WMB7pBPWsHR6E4YWZnsnsFY=;
+        b=BzRL6P9E+x0ljQ/GjnXz24cJualfsUfAOT7lR2uqdBiMzfkKXgCVVawJACjTtHPUGR
+         9WcpW/3Pm4zV8GdU7+7joDXlMbqqlYok0leythazyg2oZYltwuw3mB4sirM1XBmwiq+K
+         nRsKuCHiPwP7ICkJnJS+B59VCuBWJwcn+h2ikqyCT0HhXS190BfM3lCJFPDqg7OTnevq
+         vmcOXaBXK9gq/umqRWFM5oHKyshhZJnIcck0JyYSwNE96YKUyn+R7v+BD8ZY84rl25WM
+         QXoPk3W0umkr1TzsJ5zSDAFKrB9ssprULlmYf/TU3juxQB9DeezLR01HbC1SG11TjO+A
+         FNyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=t34inL3mEURDjRNQxEKzvsxMIvG4RSh3GAtajTmRDPU=;
-        b=MivSLcXBy/mCkuxFUTGsKMFFkC0zBAW32/I7ZN4+KNqFmrWgOEofPSc/AFnqojdRMV
-         N9zRE4qrQ/RAD4/Gc29jDeBqipnmhQ+o2g+8N4g9EkUZ5WK/WrOrL8YW+kvt67geLRs0
-         MJZWClvw0cqQ+F0hC5HxOyTWWAraVW5zKB6VvN/ovWlbZTm1il6Pq+z/2GEiXmtabquw
-         QJYZV1P7r1wOHCRfnoOJsq4sqw0LRjPtfHR14V1sCIWF2nNvKA1hjG4u2ls1s/LNjd5x
-         h3OP7vsWriesS9b5f3eKfTujsE+Gd3ya1XUI87gp0olYw4lXLgTW6p0eNPiz2mmDaS0x
-         R9+Q==
-X-Gm-Message-State: ACrzQf3ySH3Lv8nXElScOEMwqyze/nWG0pt/nPHoXlrZrOLnezyvnq+T
-        XpDeAzNSmfHfuENgmkGdbJ7oPw==
-X-Google-Smtp-Source: AMsMyM6sdgTc5l/UsvqieH0nuKd6/kKfyFul3V7NmZ/KWsVg97bSXv9GJgkmAyeB/HeNIKQbq9MEVg==
-X-Received: by 2002:a05:6512:3c9f:b0:49d:d486:96d7 with SMTP id h31-20020a0565123c9f00b0049dd48696d7mr1578346lfv.596.1664462113700;
-        Thu, 29 Sep 2022 07:35:13 -0700 (PDT)
+        bh=s4k7ZRcK6Gp/A9rk+5L7WMB7pBPWsHR6E4YWZnsnsFY=;
+        b=7hTV5lyttXnBF+sv3uVHxyvTlUTpwZIVEXZlZ1Z/rMhD8PnhEWEqZuHG/BT4yAmXQJ
+         eW/iez4dgvEzcstHDkwwGjTukvAWxidf2NQN77PzsY8US/b1f4BtNv0c1NytLmM0naLC
+         TgDAWQ7XjfUJuBFoIfHDYT7FbO5MYMu3mzxE17zBONYP441cx8Tsx74KIamUTVYQGQgW
+         9YSOvFL3zKf047BQ/U5LuKUBvyKatsp4vPDMm5M0Jx7h7agOPvOd1C2QVNnO8VtDQd2r
+         1gto73yhQyCK5yWtTU8md75/WKkkluD4WuzIvkcjl8l9KT1IaEdzSBEUxP/HPu0Hh+jf
+         RqWA==
+X-Gm-Message-State: ACrzQf2FRJ0393bttzqRr0khfUTXxcQk3FGWLf5naTpqLOCi+2CUONgW
+        1McEJJG/4iMDfR24kvXDNrCICg==
+X-Google-Smtp-Source: AMsMyM454F9rJIE+M/q8VrZHdlpougBUdq2HV6F93yGSzajinuWq67hQyweHcERSBN9bF3l3CE3MBw==
+X-Received: by 2002:a05:6512:308e:b0:4a2:e1f:f08d with SMTP id z14-20020a056512308e00b004a20e1ff08dmr411971lfd.615.1664462199812;
+        Thu, 29 Sep 2022 07:36:39 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o14-20020a2e944e000000b00268cfcf841asm725961ljh.56.2022.09.29.07.35.12
+        by smtp.gmail.com with ESMTPSA id n10-20020a2e82ca000000b0026bf0d71b1esm728584ljh.93.2022.09.29.07.36.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 07:35:13 -0700 (PDT)
-Message-ID: <4f39cfed-9ca2-93e0-6410-fc395376fe6b@linaro.org>
-Date:   Thu, 29 Sep 2022 16:35:12 +0200
+        Thu, 29 Sep 2022 07:36:39 -0700 (PDT)
+Message-ID: <998432d0-7e67-0112-b130-bbf9eb1b8a27@linaro.org>
+Date:   Thu, 29 Sep 2022 16:36:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH v1 03/30] dt-bindings: interrupt-controller: Add StarFive
- JH7110 plic
+Subject: Re: [PATCH v1 04/30] dt-bindings: sifive-l2-cache: Support StarFive
+ JH71x0 SoCs
 Content-Language: en-US
 To:     Hal Feng <hal.feng@linux.starfivetech.com>,
         linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
@@ -76,15 +76,14 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Emil Renner Berthing <kernel@esmil.dk>,
         linux-kernel@vger.kernel.org
 References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220929143225.17907-4-hal.feng@linux.starfivetech.com>
+ <20220929143225.17907-5-hal.feng@linux.starfivetech.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220929143225.17907-4-hal.feng@linux.starfivetech.com>
+In-Reply-To: <20220929143225.17907-5-hal.feng@linux.starfivetech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -94,10 +93,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 29/09/2022 16:31, Hal Feng wrote:
 > From: Emil Renner Berthing <kernel@esmil.dk>
 > 
-> Add compatible string for StarFive JH7110 plic.
-> 
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
+> This cache controller is also used on the StarFive JH7100 and JH7110
+> SoCs.
 
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
