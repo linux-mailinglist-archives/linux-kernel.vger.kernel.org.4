@@ -2,35 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08565EF3F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 144505EF3FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235092AbiI2LHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S235304AbiI2LKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbiI2LHm (ORCPT
+        with ESMTP id S235105AbiI2LKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:07:42 -0400
+        Thu, 29 Sep 2022 07:10:33 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18F781928D
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:07:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87BD929825
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:10:32 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 061A315BF;
-        Thu, 29 Sep 2022 04:07:47 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1AB363F73B;
-        Thu, 29 Sep 2022 04:07:36 -0700 (PDT)
-Message-ID: <b9caf0c7-8f61-f5e3-b299-3ae5b76d8b63@arm.com>
-Date:   Thu, 29 Sep 2022 13:07:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Jian-Min Liu <jian-min.liu@mediatek.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B016B15BF;
+        Thu, 29 Sep 2022 04:10:38 -0700 (PDT)
+Received: from e126311.manchester.arm.com (unknown [10.57.64.220])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 962983F73B;
+        Thu, 29 Sep 2022 04:10:28 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 12:10:17 +0100
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Jian-Min Liu <jian-min.liu@mediatek.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Morten Rasmussen <morten.rasmussen@arm.com>,
         Vincent Donnefort <vdonnefort@google.com>,
@@ -40,83 +36,120 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Qais Yousef <qais.yousef@arm.com>,
         linux-kernel@vger.kernel.org,
         Jonathan JMChen <jonathan.jmchen@mediatek.com>
+Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
+Message-ID: <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
 References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
  <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
  <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 11:47, Peter Zijlstra wrote:
+On Thu, Sep 29, 2022 at 11:47:23AM +0200, Peter Zijlstra wrote:
 
 [...]
 
->> ---------------------------------------------------------------------
->> --|                      | PELT
->> halflife                                |
->> |                      |----------------------------------------------|
->> |                      |       32      |       16      |       8      |
->> |                      |----------------------------------------------|
->> |                      | avg  min  avg | avg  min  avg | avg  min  avg|
->> | Scenarios            | fps  fps  pwr | fps  fps  pwr | fps  fps  pwr|
->> |---------------------------------------------------------------------|
->> | HOK game 60fps       | 100  100  100 | 105 *134* 102 | 104 *152* 106|
->> | HOK game 90fps       | 100  100  100 | 101 *114* 101 | 103 *129* 105|
->> | HOK game 120fps      | 100  100  100 | 102 *124* 102 | 105 *134* 105|
-> 
-> You have your min and avg fps columns mixed up, your min cannot be larger
-> than avg.
-> 
-> Also, with min fps mostly above the actual screen fps, who cares. And
-> seriously 120fps on a phone !?!? for worse power usage! you gotta be
-> kidding me.
-
-I agree that since we don't know what 100% at 32 means its unclear what
-problem gets actually solved here by running with 16 or 8.
-
-> And I googled this game; it is some top-down tactical thing with
-> real-time combat (as opposed to turn-based) (DOTA like I suppose),
-> 60 fps locked should be plenty fine.
-> 
->> | FHD video rec. 60fps | 100  100  100 | n/a  n/a  n/a | 100  100  103|
->> | Camera snapshot      | 100  100  100 | n/a  n/a  n/a | 100  100  102|
-> 
 > Mostly I think you've demonstrated that none of this is worth it.
-
-I assume Jian-Min added those two lines to demonstrate that they would
-need the run-time switch.
-
->> -----------------------------------------------------------------------
->>
->> HOK ... Honour Of Kings, Video game
->> FHD ... Full High Definition
->> fps ... frame per second
->> pwr ... power consumption
->>
->> table values are in %
+> 
+> > -----------------------------------------------------------------------
+> > 
+> > HOK ... Honour Of Kings, Video game
+> > FHD ... Full High Definition
+> > fps ... frame per second
+> > pwr ... power consumption
+> > 
+> > table values are in %
 > 
 > Oh... that's bloody insane; that's why none of it makes sense.
-> 
-> 
+
+Hi,
+
+We have seen similar results to the ones provided by MTK while running
+Jankbench, a UI performance benchmark.
+
+For the following tables, the pelt numbers refer to multiplier values so
+pelt_1 -> 32ms, pelt_2 -> 16ms, pelt_4 -> 8ms.
+
+We can see the max frame durations decreasing significantly in line with
+changing the pelt multiplier. Having a faster-responding pelt lets us
+improve the worst-case scenario by a large margin which is why it can be
+useful in some cases where that worst-case scenario is important.
+
+Max frame duration (ms)
+
++------------------+----------+
+| kernel          |    value  |
+|------------------+----------|
+| pelt_1           | 157.426  |
+| pelt_2           | 111.975  |
+| pelt_4           | 85.2713  |
++------------------+----------+
+
+However, it is accompanied by a very noticeable increase in power usage.
+We have seen even bigger power usage increases for different workloads.
+This is why we think it makes much more sense as something that can be
+changed at runtime - if set at boot time the energy consumption increase
+would nullify any of the potential benefits. For limited workloads or
+scenarios, the tradeoff might be worth it.
+
+Power usage [mW]
+
++------------------+---------+-------------+
+| kernel           |   value | perc_diff   |
+|------------------+---------+-------------|
+| pelt_1           |   139.9 | 0.0%        |
+| pelt_2           |   146.4 | 4.62%       |
+| pelt_4           |   158.5 | 13.25%      |
++------------------+---------+-------------+
+
+At the same time we see that the average-case can improve slightly as
+well in the process and the consistency either doesn't get worse or
+improves a bit too.
+
+Mean frame duration (ms)
+
++---------------+------------------+---------+-------------+
+| variable      | kernel           |   value | perc_diff   |
+|---------------+------------------+---------+-------------|
+| mean_duration | pelt_1           |    14.6 | 0.0%        |
+| mean_duration | pelt_2           |    13.8 | -5.43%      |
+| mean_duration | pelt_4           |    14.5 | -0.58%      |
++---------------+------------------+---------+-------------+
+
+Jank percentage
+
++------------+------------------+---------+-------------+
+| variable   | kernel           |   value | perc_diff   |
+|------------+------------------+---------+-------------|
+| jank_perc  | pelt_1           |     2.1 | 0.0%        |
+| jank_perc  | pelt_2           |     2.1 | 0.11%       |
+| jank_perc  | pelt_4           |     2   | -3.46%      |
++------------+------------------+---------+-------------+
+
 > How is any of that an answer to:
-> 
+>
 >   "They want; I want an explanation of what exact problem is fixed how ;-)"
-> 
+>
 > This is just random numbers showing poking the number has some effect;
 > it has zero explaination of why poking the number changes the workload
 > and if that is in fact the right way to go about solving that particular
 > issue.
 
-Jian-Min, would you be able to show real numbers in comparison to the
-chosen fps here? And explain what the problem is which gets solved. What
-is the effect of this higher min fps values when running 16 or 8? And
-why is the default 32 not sufficient here?
+Overall, the problem being solved here is that based on our testing the
+PELT half life can occasionally be too slow to keep up in scenarios
+where many frames need to be rendered quickly, especially on high-refresh
+rate phones and similar devices. While it's not a problem most of the
+time and so it doesn't warrant changing the default or having it set at
+boot time, introducing this pelt multiplier would be very useful as a
+tool to be able to avoid the worst-case in limited scenarios.
+
+----
+Kajetan
