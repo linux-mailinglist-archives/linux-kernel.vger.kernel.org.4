@@ -2,185 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C6D5EFDF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1682A5EFDFE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiI2TdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 15:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        id S229776AbiI2Tew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 15:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiI2Tc4 (ORCPT
+        with ESMTP id S229763AbiI2Tes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 15:32:56 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794F713D1FF;
-        Thu, 29 Sep 2022 12:32:54 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1280590722dso3032237fac.1;
-        Thu, 29 Sep 2022 12:32:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=TxRiuJ829lvDQE6MzHjZpop4R9yzruWCxiqmDqEFGxU=;
-        b=ez6o4ZB17GvxR6NBJxIjv0Yvh/TXn0Lfm2t0XbL6+VhsEi6ZNwfzutPEiGVMPuqy3v
-         F+hCTdfdyItBk9+KPIqOJCAxmxymx0Kk+RuyALq+mvcmq+6gFDZysc+BnT3vEuQ/nzsa
-         0vMhx+f1+vYxht4Nx/wcsCHkeYoMeeRko9leMTG95Bn+qAmlz/RKyyCqKr2VvlmdPdA7
-         uFd7ya7+wkmebwJRO0X77rXTuigypA1ff5aGgKYsXZU3o7P030ik97EeejAzH9Z8tp5f
-         1QUrnIG4vqdb6LWfFNX4LTdI/zKpGfzpkM72VSz9MfSmsA/jZWujz7dwO8D8l8/x9TAH
-         4D4Q==
-X-Gm-Message-State: ACrzQf3jGHEMLB7pGxfA+7ZZWruZdfoXLCpLm9s9OkL+PsmXW2RUI7es
-        szRG16erAqzufX810AehAA==
-X-Google-Smtp-Source: AMsMyM6oGH3EsQkbKXhwfP4STXGmyq1qwqeuBO/cScEix1MGw+HPOwaySFikQlIGetU38yJNBcbHig==
-X-Received: by 2002:a05:6870:c148:b0:12b:542c:70f1 with SMTP id g8-20020a056870c14800b0012b542c70f1mr2951571oad.102.1664479972913;
-        Thu, 29 Sep 2022 12:32:52 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b20-20020a056870b25400b0012c52bd4369sm158773oam.19.2022.09.29.12.32.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 12:32:52 -0700 (PDT)
-Received: (nullmailer pid 2615299 invoked by uid 1000);
-        Thu, 29 Sep 2022 19:32:51 -0000
-Date:   Thu, 29 Sep 2022 14:32:51 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Roland Stigge <stigge@antcom.de>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add binding for max6639
-Message-ID: <20220929193251.GA2606428-robh@kernel.org>
-References: <20220922050718.1079651-1-Naresh.Solanki@9elements.com>
- <20220922050718.1079651-2-Naresh.Solanki@9elements.com>
+        Thu, 29 Sep 2022 15:34:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9697127B13;
+        Thu, 29 Sep 2022 12:34:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B7E562137;
+        Thu, 29 Sep 2022 19:34:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F64AC433C1;
+        Thu, 29 Sep 2022 19:34:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664480083;
+        bh=ftFtLtOspwgqgTbXDSLqy6SZVZ1aeu7XTbZXv9O9dLc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=MPsao7USOSJZOcWuvkBjbP+iLkkxCvLjpAtNSa//G7ewHh9HGu1wlHMb3Ik2AklsV
+         ERyQHpIACMnLGbvDLyxvYSqVhtbJKAVYZioMT5mmNVdpWht4wpi67jD3aeyZAE0SfN
+         /59hif1HupHFwlXyrtaUooHUcmmY41OZwQ5QHNTnxMlD1OMVoVpDeAMl+vRYJ+9nLm
+         fsw/DlGn80iTppE/Atsf/wSYbutbitAbonKrLgJMmcApO/4iNDcK9e/KcU2+fb71Sf
+         kGZ3OzPoTTbuOp063hC4xYktTIxNfk3/i82UibD0kJQkmIr/GonYdEqkzd/I53WK/8
+         JFFf/fzQiZBqA==
+Date:   Thu, 29 Sep 2022 14:34:41 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Will McVicker <willmcvicker@google.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
+        Sajid Dalvi <sdalvi@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] PCI/PM: Switch D3hot delay to use usleep_range()
+Message-ID: <20220929193441.GA1918838@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220922050718.1079651-2-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220921212735.2131588-1-willmcvicker@google.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 07:07:17AM +0200, Naresh Solanki wrote:
-> From: Marcello Sylvester Bauer <sylv@sylv.io>
+On Wed, Sep 21, 2022 at 09:27:35PM +0000, Will McVicker wrote:
+> From: Sajid Dalvi <sdalvi@google.com>
 > 
-> Add Devicetree binding documentation for Maxim MAX6639 temperature
-> monitor with PWM fan-speed controller.
+> The PCIe r6.0, sec 5.9 spec requires a 10ms D3hot delay (defined by
+> PCI_PM_D3HOT_WAIT) for transitions to or from D3hot. So let's switch to
+> usleep_range() for the delay time to improve the delay accuracy.
 > 
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> This patch is based off of a commit from Sajid Dalvi <sdalvi@google.com>
+> in the Pixel 6 kernel tree [1]. Testing on a Pixel 6, found that the
+> 10ms delay for the Exynos PCIe device was on average delaying for 19ms
+> when the spec requires 10ms. Switching from msleep() to usleep_range()
+> therefore decreases the resume time on a Pixel 6 on average by 9ms.
+> 
+> Note: some ancient Intel chips do have a quirk that sets the delay to
+> 120ms. Using usleep_delay() may add a few extra milliseconds for those
+> chips.
+> 
+> [1] https://android.googlesource.com/kernel/gs/+/18a8cad68d8e6d50f339a716a18295e6d987cee3
+> 
+> Signed-off-by: Sajid Dalvi <sdalvi@google.com>
+> Signed-off-by: Will McVicker <willmcvicker@google.com>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+
+Applied to pci/pm for v6.1, thanks, Will!
+
 > ---
->  .../bindings/hwmon/maxim,max6639.yaml         | 112 ++++++++++++++++++
->  1 file changed, 112 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
+>  drivers/pci/pci.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> new file mode 100644
-> index 000000000000..c845fb989af2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-> @@ -0,0 +1,112 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
+> v4:
+>  * Drop use of msleep() in favor of always using usleep_range().
+>  * Update the commit message.
+> 
+> v3:
+>  * Use DIV_ROUND_CLOSEST instead of bit manipulation.
+>  * Minor refactor to use max() where relavant.
+> 
+> v2:
+>  * Update to use 20-25% upper bound
+>  * Update to use usleep_range() for <=20ms, else use msleep()
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 516bf0c2ca02..2127aba3550b 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -66,13 +66,15 @@ struct pci_pme_device {
+>  
+>  static void pci_dev_d3_sleep(struct pci_dev *dev)
+>  {
+> -	unsigned int delay = dev->d3hot_delay;
+> -
+> -	if (delay < pci_pm_d3hot_delay)
+> -		delay = pci_pm_d3hot_delay;
+> -
+> -	if (delay)
+> -		msleep(delay);
+> +	unsigned int delay_ms = max(dev->d3hot_delay, pci_pm_d3hot_delay);
+> +	unsigned int upper;
 > +
-> +$id: http://devicetree.org/schemas/hwmon/maxim,max6639.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Maxim max6639
-> +
-> +maintainers:
-> +  - Roland Stigge <stigge@antcom.de>
-> +
-> +description: |
-> +  The MAX6639 is a 2-channel temperature monitor with dual, automatic, PWM
-> +  fan-speed controller.  It monitors its own temperature and one external
-> +  diode-connected transistor or the temperatures of two external diode-connected
-> +  transistors, typically available in CPUs, FPGAs, or GPUs.
-> +
-> +  Datasheets:
-> +    https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - maxim,max6639
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "fan@0"
-> +  - "fan@1"
-> +
-> +additionalProperties: false
-> +
-> +patternProperties:
-> +  "^fan@[0-1]$":
-> +    type: object
-> +    description: |
-> +      Represents the two fans and their specific configuration.
-> +
-> +    properties:
-> +      reg:
-> +        description: |
-> +          The fan number.
-
-Addresses are a property of the parent (the fan controller), not the 
-fan. 
-
-> +        items:
-> +          minimum: 0
-> +          maximum: 1
-> +
-> +      pwm-polarity:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [0, 1]
-> +        default: 1
-> +        description:
-> +          PWM output is low at 100% duty cycle when this bit is set to zero. PWM
-> +          output is high at 100% duty cycle when this bit is set to 1.
-
-IIRC, the PWM binding provides for this. The parent should probably be a 
-PWM provider.
-
-> +
-> +      pulses-per-revolution:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [1, 2, 3, 4]
-> +        default: 2
-> +        description:
-> +          Value specifying the number of pulses per revolution of the controlled
-> +          FAN.
-> +
-> +      maxim,rpm-range:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [2000, 4000, 8000, 16000]
-> +        default: 4000
-> +        description:
-> +          Scales the tachometer counter by setting the maximum (full-scale) value
-> +          of the RPM range for max6639.
-
-Is this a property of the fan? How is this maxim specific?
-
-
-The bigger issue here is we need a common fan binding. I'm not inclined 
-to accept any more fan controller bindings with fan properties until we 
-do.
-
-Rob
+> +	if (delay_ms) {
+> +		/* Use a 20% upper bound, 1ms minimum */
+> +		upper = max(DIV_ROUND_CLOSEST(delay_ms, 5), 1U);
+> +		usleep_range(delay_ms * USEC_PER_MSEC,
+> +			     (delay_ms + upper) * USEC_PER_MSEC);
+> +	}
+>  }
+>  
+>  bool pci_reset_supported(struct pci_dev *dev)
+> 
+> base-commit: fcf773ae8016c6bffe5d408d3eda50d981b946e6
+> -- 
+> 2.37.3.968.ga6b4b080e4-goog
+> 
