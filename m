@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76815EEF55
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9063D5EEF51
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235355AbiI2HkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
+        id S235358AbiI2HkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbiI2HkE (ORCPT
+        with ESMTP id S235350AbiI2HkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:40:04 -0400
+        Thu, 29 Sep 2022 03:40:07 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8044448E89;
-        Thu, 29 Sep 2022 00:40:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC10F41D22;
+        Thu, 29 Sep 2022 00:40:05 -0700 (PDT)
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxTWvOSzVjdKwjAA--.5668S2;
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxTWvOSzVjdKwjAA--.5668S3;
         Thu, 29 Sep 2022 15:39:59 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] Silence warning and simplify code
-Date:   Thu, 29 Sep 2022 15:39:56 +0800
-Message-Id: <1664437198-31260-1-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH 1/2] MIPS: Silence missing prototype warning
+Date:   Thu, 29 Sep 2022 15:39:57 +0800
+Message-Id: <1664437198-31260-2-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8AxTWvOSzVjdKwjAA--.5668S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYb7k0a2IF6w1UM7kC6x804xWl14x267AK
-        xVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGw
-        A2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj
-        6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26F
-        4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAa
-        Y2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4
-        A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Av
-        z4vE14v_GF4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jo_M
-        3UUUUU=
+In-Reply-To: <1664437198-31260-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1664437198-31260-1-git-send-email-yangtiezhu@loongson.cn>
+X-CM-TRANSID: AQAAf8AxTWvOSzVjdKwjAA--.5668S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw45Ar4ktF4kCF47Ary3twb_yoW8ZrWDpa
+        1j9an7KFW0g3W8KF98Zryvqr45Jrn0ka4jqFW2yr1jvFyDXa15Jr1xA3sxGr1fGr9ayFy2
+        kFy5XF1UKF4Iyw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUB0b7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
+        8067AKxVWUGwA2048vs2IY020Ec7CjxVAFwI0_Jrv_JF4l8cAvFVAK0II2c7xJM28CjxkF
+        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
+        CY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv
+        6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
+        02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
+        4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r4xMxAIw28IcxkI7V
+        AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
+        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6x
+        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAI
+        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+        0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU2MmhUUUUU
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -49,14 +53,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tiezhu Yang (2):
-  MIPS: Silence missing prototype warning
-  MIPS: Simplify __bswapdi2() and __bswapsi2()
+Silence the following two warnings when make W=1:
 
- arch/mips/lib/bswapdi.c | 14 +++++---------
- arch/mips/lib/bswapsi.c | 10 +++++-----
- 2 files changed, 10 insertions(+), 14 deletions(-)
+  CC      arch/mips/lib/bswapsi.o
+arch/mips/lib/bswapsi.c:5:22: warning: no previous prototype for '__bswapsi2' [-Wmissing-prototypes]
+ unsigned int notrace __bswapsi2(unsigned int u)
+                      ^~~~~~~~~~
+  CC      arch/mips/lib/bswapdi.o
+arch/mips/lib/bswapdi.c:5:28: warning: no previous prototype for '__bswapdi2' [-Wmissing-prototypes]
+ unsigned long long notrace __bswapdi2(unsigned long long u)
+                            ^~~~~~~~~~
+  AR      arch/mips/lib/built-in.a
 
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/lib/bswapdi.c | 4 +++-
+ arch/mips/lib/bswapsi.c | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/lib/bswapdi.c b/arch/mips/lib/bswapdi.c
+index fcef7408..1d020e1 100644
+--- a/arch/mips/lib/bswapdi.c
++++ b/arch/mips/lib/bswapdi.c
+@@ -2,6 +2,9 @@
+ #include <linux/export.h>
+ #include <linux/compiler.h>
+ 
++/* To silence -Wmissing-prototypes. */
++unsigned long long __bswapdi2(unsigned long long u);
++
+ unsigned long long notrace __bswapdi2(unsigned long long u)
+ {
+ 	return (((u) & 0xff00000000000000ull) >> 56) |
+@@ -13,5 +16,4 @@ unsigned long long notrace __bswapdi2(unsigned long long u)
+ 	       (((u) & 0x000000000000ff00ull) << 40) |
+ 	       (((u) & 0x00000000000000ffull) << 56);
+ }
+-
+ EXPORT_SYMBOL(__bswapdi2);
+diff --git a/arch/mips/lib/bswapsi.c b/arch/mips/lib/bswapsi.c
+index 22d8e4f..02d9df4 100644
+--- a/arch/mips/lib/bswapsi.c
++++ b/arch/mips/lib/bswapsi.c
+@@ -2,6 +2,9 @@
+ #include <linux/export.h>
+ #include <linux/compiler.h>
+ 
++/* To silence -Wmissing-prototypes. */
++unsigned int __bswapsi2(unsigned int u);
++
+ unsigned int notrace __bswapsi2(unsigned int u)
+ {
+ 	return (((u) & 0xff000000) >> 24) |
+@@ -9,5 +12,4 @@ unsigned int notrace __bswapsi2(unsigned int u)
+ 	       (((u) & 0x0000ff00) <<  8) |
+ 	       (((u) & 0x000000ff) << 24);
+ }
+-
+ EXPORT_SYMBOL(__bswapsi2);
 -- 
 2.1.0
 
