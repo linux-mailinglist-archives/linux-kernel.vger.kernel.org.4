@@ -2,170 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933C55F00F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 00:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AC95F0131
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 01:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiI2Wqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 18:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38396 "EHLO
+        id S229845AbiI2XET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 19:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiI2Wpw (ORCPT
+        with ESMTP id S229479AbiI2XER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 18:45:52 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FBB386AE;
-        Thu, 29 Sep 2022 15:45:20 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id w2so2719165pfb.0;
-        Thu, 29 Sep 2022 15:45:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ByScpYkyRiCU42lbuVk6qEFlopY8wZGmivn5KTd4TkE=;
-        b=lCAg7J5XBsmL67S4ZX++/AHEh9LqfKfUqfXAwLH9JogkhvyRO83RZ1Du9C4di0rODz
-         kLZh/NE3uWWM/16Hp3uljQIoX0MFNKNuV3C68eln7snytpYC2ZwiQ/V0cLeGd1eHLwBC
-         xZUPST6xsPprIa2dWHCykDOU91y140Q5KWomGApBmM0iNB3o1LdjW/DQ7VqhYIf1E8u2
-         h43ebHa7BCSKFwUduXxQhPuT5TwVny9wTPKsyTwC1K3cE1PDMdpfFs5LAi7yM1CLwhBA
-         SRQHTIlNp9clZhJVcQu1Dmhn2ngA/E21LXi/BXNoOBp9H7PEa/hZUshHWpvqrAmmDNji
-         +OWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ByScpYkyRiCU42lbuVk6qEFlopY8wZGmivn5KTd4TkE=;
-        b=kjGJVOCcN8AG7yVFyDxNPzY8T/qzqS7FUQRXn+39oAMuLBjlD3QR8c/55sEzQnEUm9
-         y6dvvb6YRIivQ73RJDaxQ627gm4Tza/V5HyoOOC8KU485mNmqQ77FfGHJnuGIKbPDujx
-         7FL6RvZfF9vFXuClVF7zYtHORtRZqXLZNmpv8T5GMQiHXb8+Ay9lM0lRw3V5vcUfjSr3
-         vrWWXr5+hjW8yavzgWL6bcPp12VMkPWT8CCcHPY9n+qC6DaMVU5MiPDczf73KV8Abib+
-         KlrLwW6G5I8yJyvAo/Z/FyohEZVVRS3m0peyJnTocE7EMvttS/TiI9IEMJK5c4XLmAEk
-         qs6Q==
-X-Gm-Message-State: ACrzQf1rFZDXllMfMqe4qYcA8bIkE6i3SFemGJmnR0ImVEO47eP3R36G
-        PnmtRcrmuG+jcdurKxNoIU4=
-X-Google-Smtp-Source: AMsMyM6MQvFe701ujja7rvZea79ByiauTnUf8YlkU9ZkqGQBYquDrfuLbNd+uGgJ3lljB5PQecL3LA==
-X-Received: by 2002:a63:4d4:0:b0:438:ce28:757f with SMTP id 203-20020a6304d4000000b00438ce28757fmr4873802pge.441.1664491520310;
-        Thu, 29 Sep 2022 15:45:20 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id u11-20020a170903124b00b001754cfb5e21sm415508plh.96.2022.09.29.15.45.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 15:45:18 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 15:45:16 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
-        isaku.yamahata@gmail.com
-Subject: Re: [PATCH v8 2/8] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <20220929224516.GA2260388@ls.amr.corp.intel.com>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-3-chao.p.peng@linux.intel.com>
+        Thu, 29 Sep 2022 19:04:17 -0400
+X-Greylist: delayed 602 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 29 Sep 2022 16:04:09 PDT
+Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69656125799;
+        Thu, 29 Sep 2022 16:04:09 -0700 (PDT)
+Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id B6FBEE0EB4;
+        Fri, 30 Sep 2022 01:46:55 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        baikalelectronics.ru; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:from:from:in-reply-to:message-id
+        :mime-version:references:reply-to:subject:subject:to:to; s=post;
+         bh=UkQr9fjSZTvQkPs/TdOJJ7ucByrB+5O3OiT3zCPhxos=; b=daxnT/Wt2lRx
+        LdfDcr8bocUrY/As/wrQG39sxic/sfkWdshgyzrgtjf9QJMcAo5I1pVo3qL7gvqQ
+        RRckRfjNCmcMye6Mw4idHhU/+pdesabAan7qsgh3EazGyxT0eg9Vc+vw50M6J80Y
+        EfH4/AnYtxYfqOIIK/Nu+Z3QQWvmKn8=
+Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id A8DEBE0E6B;
+        Fri, 30 Sep 2022 01:46:55 +0300 (MSK)
+Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 30 Sep 2022 01:46:56 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <linux-nvme@lists.infradead.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 2/3] nvme-hwmon: Kmalloc the NVME SMART log buffer
+Date:   Fri, 30 Sep 2022 01:46:47 +0300
+Message-ID: <20220929224648.8997-3-Sergey.Semin@baikalelectronics.ru>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220929224648.8997-1-Sergey.Semin@baikalelectronics.ru>
+References: <20220929224648.8997-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220915142913.2213336-3-chao.p.peng@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [192.168.168.10]
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 15, 2022 at 10:29:07PM +0800,
-Chao Peng <chao.p.peng@linux.intel.com> wrote:
-...
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 584a5bab3af3..12dc0dc57b06 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-...
-> @@ -4622,6 +4622,33 @@ static int kvm_vm_ioctl_get_stats_fd(struct kvm *kvm)
->  	return fd;
->  }
->  
-> +#define SANITY_CHECK_MEM_REGION_FIELD(field)					\
-> +do {										\
-> +	BUILD_BUG_ON(offsetof(struct kvm_user_mem_region, field) !=		\
-> +		     offsetof(struct kvm_userspace_memory_region, field));	\
-> +	BUILD_BUG_ON(sizeof_field(struct kvm_user_mem_region, field) !=		\
-> +		     sizeof_field(struct kvm_userspace_memory_region, field));	\
-> +} while (0)
-> +
-> +#define SANITY_CHECK_MEM_REGION_EXT_FIELD(field)					\
-> +do {											\
-> +	BUILD_BUG_ON(offsetof(struct kvm_user_mem_region, field) !=			\
-> +		     offsetof(struct kvm_userspace_memory_region_ext, field));		\
-> +	BUILD_BUG_ON(sizeof_field(struct kvm_user_mem_region, field) !=			\
-> +		     sizeof_field(struct kvm_userspace_memory_region_ext, field));	\
-> +} while (0)
-> +
-> +static void kvm_sanity_check_user_mem_region_alias(void)
-> +{
-> +	SANITY_CHECK_MEM_REGION_FIELD(slot);
-> +	SANITY_CHECK_MEM_REGION_FIELD(flags);
-> +	SANITY_CHECK_MEM_REGION_FIELD(guest_phys_addr);
-> +	SANITY_CHECK_MEM_REGION_FIELD(memory_size);
-> +	SANITY_CHECK_MEM_REGION_FIELD(userspace_addr);
-> +	SANITY_CHECK_MEM_REGION_EXT_FIELD(private_offset);
-> +	SANITY_CHECK_MEM_REGION_EXT_FIELD(private_fd);
-> +}
-> +
->  static long kvm_vm_ioctl(struct file *filp,
->  			   unsigned int ioctl, unsigned long arg)
->  {
-> @@ -4645,14 +4672,20 @@ static long kvm_vm_ioctl(struct file *filp,
->  		break;
->  	}
->  	case KVM_SET_USER_MEMORY_REGION: {
-> -		struct kvm_userspace_memory_region kvm_userspace_mem;
-> +		struct kvm_user_mem_region mem;
-> +		unsigned long size = sizeof(struct kvm_userspace_memory_region);
-> +
-> +		kvm_sanity_check_user_mem_region_alias();
->  
->  		r = -EFAULT;
-> -		if (copy_from_user(&kvm_userspace_mem, argp,
-> -						sizeof(kvm_userspace_mem)))
-> +		if (copy_from_user(&mem, argp, size);
-> +			goto out;
-> +
-> +		r = -EINVAL;
-> +		if (mem.flags & KVM_MEM_PRIVATE)
->  			goto out;
+Recent commit 52fde2c07da6 ("nvme: set dma alignment to dword") has caused
+a regression on our platform. It turned out that the nvme_get_log() method
+invocation caused the nvme_hwmon_data structure instance corruption. In
+particular the nvme_hwmon_data.ctrl pointer was overwritten either with
+zeros or with garbage. After some researches we discovered that the
+problem happened even before the actual NVME DMA execution, but during the
+buffer mapping. Since our platform was DMA-noncoherent the mapping implied
+the cache-lines invalidations or write-backs depending on the
+DMA-direction parameter. In case of the NVME SMART log getting the DMA was
+performed from-device-to-memory, thus the cache-invalidation was activated
+during the buffer mapping. Since the log-buffer wasn't cache-line aligned
+the cache-invalidation caused the neighbour data discard. The neighbouring
+data turned to be the data surrounding the buffer in the framework of the
+nvme_hwmon_data structure.
 
-Nit:  It's better to check if padding is zero.  Maybe rename it to reserved.
+In order to fix that we need to make sure that the whole log-buffer is
+defined within the cache-line-aligned memory region so the
+cache-invalidation procedure wouldn't involve the adjacent data. One of
+the option to guarantee that is to kmalloc the DMA-buffer [1]. Seeing the
+rest of the NVME core driver prefer that method it has been chosen to fix
+this problem too.
 
-+               if (mem.pad1 || memchr_inv(mem.pad2, 0, sizeof(mem.pad2)))
-+                       goto out;
+Note after a deeper researches we found out that the denoted commit wasn't
+a root cause of the problem. It just revealed the invalidity by activating
+the DMA-based NVME SMART log getting performed in the framework of the
+NVME hwmon driver. The problem was here since the initial commit of the
+driver.
+
+[1] Documentation/core-api/dma-api-howto.rst
+
+Fixes: 400b6a7b13a3 ("nvme: Add hardware monitoring support")
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+
+---
+
+Folks, I've thoroughly studied the whole NVME subsystem looking for
+similar problems. Turned out there is one more place which may cause the
+same issue. It's connected with the opal_dev.{cmd,req} buffers passed to
+the nvme_sec_submit() method. The rest of the buffers involved in the NVME
+DMA are either allocated by kmalloc (must be cache-line-aligned by design)
+or bounced-buffered if allocated on the stack (see the blk_rq_map_kern()
+method implementation). I am still not fully sure regarding the buffers
+coming from user-space though, but AFAICS based on our
+DMA-buffers-alignment sanity check procedure they haven't been detected as
+cache-unaligned so far.
+
+Changelog v2:
+- Convert to allocating the nvme_smart_log structure instance instead of
+  cache-aligning it. (@Christoph)
+---
+ drivers/nvme/host/hwmon.c | 32 +++++++++++++++++++++++---------
+ 1 file changed, 23 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/nvme/host/hwmon.c b/drivers/nvme/host/hwmon.c
+index 1afb24a64145..654309767e76 100644
+--- a/drivers/nvme/host/hwmon.c
++++ b/drivers/nvme/host/hwmon.c
+@@ -12,7 +12,7 @@
+ 
+ struct nvme_hwmon_data {
+ 	struct nvme_ctrl *ctrl;
+-	struct nvme_smart_log log;
++	struct nvme_smart_log *log;
+ 	struct mutex read_lock;
+ };
+ 
+@@ -60,14 +60,14 @@ static int nvme_set_temp_thresh(struct nvme_ctrl *ctrl, int sensor, bool under,
+ static int nvme_hwmon_get_smart_log(struct nvme_hwmon_data *data)
+ {
+ 	return nvme_get_log(data->ctrl, NVME_NSID_ALL, NVME_LOG_SMART, 0,
+-			   NVME_CSI_NVM, &data->log, sizeof(data->log), 0);
++			   NVME_CSI_NVM, data->log, sizeof(*data->log), 0);
+ }
+ 
+ static int nvme_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+ 			   u32 attr, int channel, long *val)
+ {
+ 	struct nvme_hwmon_data *data = dev_get_drvdata(dev);
+-	struct nvme_smart_log *log = &data->log;
++	struct nvme_smart_log *log = data->log;
+ 	int temp;
+ 	int err;
+ 
+@@ -163,7 +163,7 @@ static umode_t nvme_hwmon_is_visible(const void *_data,
+ 	case hwmon_temp_max:
+ 	case hwmon_temp_min:
+ 		if ((!channel && data->ctrl->wctemp) ||
+-		    (channel && data->log.temp_sensor[channel - 1])) {
++		    (channel && data->log->temp_sensor[channel - 1])) {
+ 			if (data->ctrl->quirks &
+ 			    NVME_QUIRK_NO_TEMP_THRESH_CHANGE)
+ 				return 0444;
+@@ -176,7 +176,7 @@ static umode_t nvme_hwmon_is_visible(const void *_data,
+ 		break;
+ 	case hwmon_temp_input:
+ 	case hwmon_temp_label:
+-		if (!channel || data->log.temp_sensor[channel - 1])
++		if (!channel || data->log->temp_sensor[channel - 1])
+ 			return 0444;
+ 		break;
+ 	default:
+@@ -232,14 +232,19 @@ int nvme_hwmon_init(struct nvme_ctrl *ctrl)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
++	data->log = kzalloc(sizeof(*data->log), GFP_KERNEL);
++	if (!data->log) {
++		err = -ENOMEM;
++		goto err_free_data;
++	}
++
+ 	data->ctrl = ctrl;
+ 	mutex_init(&data->read_lock);
+ 
+ 	err = nvme_hwmon_get_smart_log(data);
+ 	if (err) {
+ 		dev_warn(dev, "Failed to read smart log (error %d)\n", err);
+-		kfree(data);
+-		return err;
++		goto err_free_log;
+ 	}
+ 
+ 	hwmon = hwmon_device_register_with_info(dev, "nvme",
+@@ -247,11 +252,19 @@ int nvme_hwmon_init(struct nvme_ctrl *ctrl)
+ 						NULL);
+ 	if (IS_ERR(hwmon)) {
+ 		dev_warn(dev, "Failed to instantiate hwmon device\n");
+-		kfree(data);
+-		return PTR_ERR(hwmon);
++		err = PTR_ERR(hwmon);
++		goto err_free_log;
+ 	}
+ 	ctrl->hwmon_device = hwmon;
+ 	return 0;
++
++err_free_log:
++	kfree(data->log);
++
++err_free_data:
++	kfree(data);
++
++	return err;
+ }
+ 
+ void nvme_hwmon_exit(struct nvme_ctrl *ctrl)
+@@ -262,6 +275,7 @@ void nvme_hwmon_exit(struct nvme_ctrl *ctrl)
+ 
+ 		hwmon_device_unregister(ctrl->hwmon_device);
+ 		ctrl->hwmon_device = NULL;
++		kfree(data->log);
+ 		kfree(data);
+ 	}
+ }
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+2.37.3
+
+
