@@ -2,101 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3EB5EECBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 06:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014DC5EECC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 06:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234166AbiI2E3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 00:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
+        id S232792AbiI2E3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 00:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbiI2E3I (ORCPT
+        with ESMTP id S234352AbiI2E3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 00:29:08 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D49B128735
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 21:29:03 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id jm5so216423plb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 21:29:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=csie-ntu-edu-tw.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=fL/YVt32+LkMJ+jfDCGE6ZE2He6/7IYbDthzRh5pnvM=;
-        b=AElxDwUieDY8mEsTpWSXaFLpS8oD1MUWBAh1CUxxyJN+b6j24HSBv7JEUfKXlLtKsi
-         cLKDpROmRCvV+Y8sHJK16CF2LFU6uwC3oTLY2lEv9o6CpBqXMVkEGdyb3Ye3Ezaw5Er8
-         Cr7EVfedosxaTiCWZ65iB+E8a3taYuQuO/tqSukmM6YHH0hTU1baymPP6DQyNeCw5JK+
-         laOhBuSjhUpTb+e1e865wJTCld0dFM7M25UIgzp80BLmpZM7pnzyA5VqQepDBkH0nG4d
-         iCPitaf08/tc8YTN9CV1TTmICxcAgz9+yGmqEPeVCnTT2l/1DzHyNpvafoRgF5dE8/cY
-         xbCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=fL/YVt32+LkMJ+jfDCGE6ZE2He6/7IYbDthzRh5pnvM=;
-        b=gB/zXzLr1yjOm5PeKb2do6C3KxUEt+gYhk1QCR/uXylotlZRpbr7Ui3U8FxmOvxgXP
-         krYlc1cSkR/Az+CsMtUWY/V07MniRk+mNlbD+xO4vVEHmAUwpj+/MPwUxwY6kHaUOsda
-         IgsOgjqycfvVyjm7xaZfvyqpL+0r+02lQM64Nd4IWCNod0vZRhRQQFkDnidD5NForJsy
-         e9M704rS1E42rZZluxdgQLXU4xOVTYbwPfQwXKtIE9j+vDmD1SFcV4Xq7ekjWbrybq7u
-         Chd0FyZvFAnh5vtuTEjGE6zfxqHImmNDq+HWVzNF3ixlxCAwXCPUILoz3gkAX0RS7J6H
-         Fn+Q==
-X-Gm-Message-State: ACrzQf23OxsKyBUUefZDIkpAEYl9bCUQUXJvYbXX1yagOXplJs4SUVO1
-        xfkiZeDDprTXD3aUDucuLgaTpXI3EkUPRqL7DeW0nnEB4/Y9zEOw0RxU8XYypGblHH4TaqyoR5l
-        wbL+m8YBOG9WcXY0WPLSBvgW2FoH1pZFzBBJfISPizmDDOPvkAbUdfYj2xy1ZwsYvWvPcRoFtaa
-        rW4hHxvYC4qTg20+KFg25PfzY4z2M=
-X-Google-Smtp-Source: AMsMyM6qX0Qnf209vtdE+DFtjxiOkuDMuJSP5S1HwwY2rKsE82B67+H4BY9VlVAy93ptwYz9rWR4gg==
-X-Received: by 2002:a17:902:d88b:b0:178:264b:5aa4 with SMTP id b11-20020a170902d88b00b00178264b5aa4mr1494832plz.44.1664425742876;
-        Wed, 28 Sep 2022 21:29:02 -0700 (PDT)
-Received: from localhost.localdomain (2001-b011-3803-35e2-b9d6-2b48-c1fa-3056.dynamic-ip6.hinet.net. [2001:b011:3803:35e2:b9d6:2b48:c1fa:3056])
-        by smtp.gmail.com with ESMTPSA id h4-20020a63f904000000b00412a708f38asm4442441pgi.35.2022.09.28.21.28.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 21:29:02 -0700 (PDT)
-From:   Wei-Lin Chang <r09922117@csie.ntu.edu.tw>
-To:     maz@kernel.org
-Cc:     james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, oliver.upton@linux.dev,
-        catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org,
-        Wei-Lin Chang <r09922117@csie.ntu.edu.tw>
-Subject: [PATCH] KVM: arm64: Fix comment typo in nvhe/switch.c
-Date:   Thu, 29 Sep 2022 12:28:39 +0800
-Message-Id: <20220929042839.24277-1-r09922117@csie.ntu.edu.tw>
-X-Mailer: git-send-email 2.34.1
+        Thu, 29 Sep 2022 00:29:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1201C2F018
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 21:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664425788;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=M1eGJAy9JUkESfaO/ZbKwDLtqZLkZ000Az8C4hJ30SA=;
+        b=W26Uvkipjvor+94co9l3tIBRVMMm/0pWWPU4Vfn3zcXIQqMJLPk26PoRC907w2qspwwB9l
+        UJ1J292NSR9HgD2OgMNHsLW8p7dyFLtKdOPXApIZft+D3jNoGfImibQ9pcTltF0Mdw4vB0
+        bhNdEdKRxt/5q5d0PfJKlRwcVlIwxWk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-619-JvxKXV_XOnaIq5hBsAQyEw-1; Thu, 29 Sep 2022 00:29:44 -0400
+X-MC-Unique: JvxKXV_XOnaIq5hBsAQyEw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C20F85A583;
+        Thu, 29 Sep 2022 04:29:44 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-13-179.pek2.redhat.com [10.72.13.179])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 63AF07AE5;
+        Thu, 29 Sep 2022 04:29:39 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+Cc:     kexec@lists.infradead.org, ebiederm@xmission.com,
+        Baoquan He <bhe@redhat.com>
+Subject: [PATCH RESEND 0/4] Some minor cleanup patches resent
+Date:   Thu, 29 Sep 2022 12:29:32 +0800
+Message-Id: <20220929042936.22012-1-bhe@redhat.com>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Gm-Spam: 0
-X-Gm-Phishy: 0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SPF_PERMERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the comment of __hyp_vgic_restore_state() from saying VEH to VHE,
-also change the underscore to a dash to match the comment
-above __hyp_vgic_save_state().
+These three patches are reviewed and acked, are all trivial clean up
+patches.
 
-Signed-off-by: Wei-Lin Chang <r09922117@csie.ntu.edu.tw>
----
- arch/arm64/kvm/hyp/nvhe/switch.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+And for the patch "kexec: replace crash_mem_range with range", I got a
+ibm-p9wr ppc64le system to test, it works well.
 
-diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
-index 9f6385702..8e9d49a96 100644
---- a/arch/arm64/kvm/hyp/nvhe/switch.c
-+++ b/arch/arm64/kvm/hyp/nvhe/switch.c
-@@ -143,7 +143,7 @@ static void __hyp_vgic_save_state(struct kvm_vcpu *vcpu)
- 	}
- }
- 
--/* Restore VGICv3 state on non_VEH systems */
-+/* Restore VGICv3 state on non-VHE systems */
- static void __hyp_vgic_restore_state(struct kvm_vcpu *vcpu)
- {
- 	if (static_branch_unlikely(&kvm_vgic_global_state.gicv3_cpuif)) {
+Hi Andrew,
+
+Please help pick them into mm-nonmm-unstable branch.
+
+
+Chen Lifu (1):
+  ARM: kexec: Make machine_crash_nonpanic_core() static
+
+Jianglei Nie (1):
+  proc/vmcore: fix potential memory leak in vmcore_init()
+
+Li Chen (1):
+  kexec: replace crash_mem_range with range
+
+ye xingchen (1):
+  kexec: Remove the unneeded result variable
+
+ arch/arm/kernel/machine_kexec.c   |  2 +-
+ arch/powerpc/kexec/file_load_64.c |  2 +-
+ arch/powerpc/kexec/ranges.c       |  8 ++++----
+ fs/proc/vmcore.c                  |  1 +
+ include/linux/kexec.h             |  7 ++-----
+ kernel/kexec_core.c               | 10 ++--------
+ kernel/kexec_file.c               |  2 +-
+ 7 files changed, 12 insertions(+), 20 deletions(-)
+
 -- 
 2.34.1
 
