@@ -2,148 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D625EF78D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93405EF7A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235098AbiI2ObV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
+        id S235651AbiI2OeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234535AbiI2ObS (ORCPT
+        with ESMTP id S235829AbiI2Odj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:31:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E6EC840C
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:31:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8DCB614CD
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 14:31:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8396BC433C1;
-        Thu, 29 Sep 2022 14:31:14 +0000 (UTC)
-Date:   Thu, 29 Sep 2022 10:32:26 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Jiazi.Li" <jiazi.li@transsion.com>
-Subject: [PATCH] ring-buffer: Fix race between reset page and reading page
-Message-ID: <20220929103226.72ceb519@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 29 Sep 2022 10:33:39 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9945B1C00DA
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:33:27 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id i26so2517785lfp.11
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:33:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=1Du+LCP4zo2JIvr0KRiMiBlM15dglqZfGoGPYt4had4=;
+        b=X5fyPN/suqcgHeLtbGI2GxpL3HBgnu/OxfV5+pN0HPNynf/bXHC5BZ5rn619NrHC7+
+         jmBKTEb3MjfvOPVbqMhw7cE01/QMuvWz3v8sJXexiMqYTamHBxbSQAKtbXJ4R+2mfv43
+         6tH7CkMzmK0FxSEmfAfkULZhKyIUWXWP7Ms1Ng1m2ubiop/o2GnRHNsQcu7IPy8c5+jn
+         RBkHhXc3rf4QHi1sfb7r5kSgABjIKamw5mgdLtQxJ4+St2RrXaT22007dPjQT7XkeVTD
+         hfuq9kcoLlFfDOIMut7wVpPQKk5GJSH3kB9F/boaDGFGjFJSWMbyhYaF3sSNUFzUnJ9y
+         T8Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=1Du+LCP4zo2JIvr0KRiMiBlM15dglqZfGoGPYt4had4=;
+        b=a+Immd9VBSb8oK2/aIfdLz6rREH+pimvQngCe6zV9CwMqRli5DzXjxnmDNpDrz9+V8
+         IU8M5YoCEkfKkSfKFP1JU30IfLPTjPJvGoFXMG5/l7Hhybjj1SsbDJqyI8eHkYzcZd/H
+         PM11FoSfZ0pCMs4JcmGY1XdNKFWQFQIoLSkJCN9j1dFyKPKQV/5qXcNtm7+Gx1+cMbow
+         6Oldiy1+MDxvOZu4cCFXwRUc0ZAXO/sdfzcYNLZ0Ew7V0aQdEqZM6tdmKOplGYVusHwP
+         qRXgJRNIeW91trQtfb7AM6HfjHnxxZzf7KdeH94XE6hUXDClxbs8augsSJg2ZWh+WJ9w
+         uAKQ==
+X-Gm-Message-State: ACrzQf3VPD6vR+ZlIgnvumD7umaEXm/RyBSreC5yoFrwWFeL3xsRQKlk
+        G/+6YAnqACMQu3qy5joFAIaMgA==
+X-Google-Smtp-Source: AMsMyM78X6A0lJO+2KyzfxmyCRQIKMwSdmnQXFMMKcYiuOkV8KHto6m1G+GLQmFGKcMFzjFvOOLKjw==
+X-Received: by 2002:a05:6512:1047:b0:49d:a875:8d90 with SMTP id c7-20020a056512104700b0049da8758d90mr1589006lfb.630.1664462005219;
+        Thu, 29 Sep 2022 07:33:25 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id d15-20020ac244cf000000b00497ab39bcd0sm803711lfm.96.2022.09.29.07.33.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 07:33:24 -0700 (PDT)
+Message-ID: <0cb853c1-0c07-bf59-3c7b-e9366d7db5b0@linaro.org>
+Date:   Thu, 29 Sep 2022 16:33:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: rng: nuvoton,npcm-rng: Add npcm845
+ compatible string
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, olivia@selenic.com,
+        herbert@gondor.apana.org.au, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     openbmc@lists.ozlabs.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220929133111.73897-1-tmaimon77@gmail.com>
+ <20220929133111.73897-2-tmaimon77@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220929133111.73897-2-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On 29/09/2022 15:31, Tomer Maimon wrote:
+> Add a compatible string for Nuvoton BMC NPCM845 RNG.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 
-The ring buffer is broken up into sub buffers (currently of page size).
-Each sub buffer has a pointer to its "tail" (the last event written to the
-sub buffer). When a new event is requested, the tail is locally
-incremented to cover the size of the new event. This is done in a way that
-there is no need for locking.
 
-If the tail goes past the end of the sub buffer, the process of moving to
-the next sub buffer takes place. After setting the current sub buffer to
-the next one, the previous one that had the tail go passed the end of the
-sub buffer needs to be reset back to the original tail location (before
-the new event was requested) and the rest of the sub buffer needs to be
-"padded".
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-The race happens when a reader takes control of the sub buffer. As readers
-do a "swap" of sub buffers from the ring buffer to get exclusive access to
-the sub buffer, it replaces the "head" sub buffer with an empty sub buffer
-that goes back into the writable portion of the ring buffer. This swap can
-happen as soon as the writer moves to the next sub buffer and before it
-updates the last sub buffer with padding.
-
-Because the sub buffer can be released to the reader while the writer is
-still updating the padding, it is possible for the reader to see the event
-that goes past the end of the sub buffer. This can cause obvious issues.
-
-To fix this, add a few memory barriers so that the reader definitely sees
-the updates to the sub buffer, and also waits until the writer has put
-back the "tail" of the sub buffer back to the last event that was written
-on it.
-
-To be paranoid, it will only wait for 1 millisecond, otherwise it will
-warn and shutdown the ring buffer code. 1 millisecond should be enough as
-the writer does have preemption disabled. It may be necessary to increase
-this time if interrupts can delay it for more than 1 millisecond.
-
-Link: https://lore.kernel.org/all/20220830120854.7545-1-jiazi.li@transsion.com/
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216369
-
-Cc: stable@vger.kernel.org
-Fixes: c7b0930857e22 ("ring-buffer: prevent adding write in discarded area")
-Reported-by: Jiazi.Li <jiazi.li@transsion.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- kernel/trace/ring_buffer.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
-
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index 3046deacf7b3..46b6f4107428 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -2648,6 +2648,9 @@ rb_reset_tail(struct ring_buffer_per_cpu *cpu_buffer,
- 		/* Mark the rest of the page with padding */
- 		rb_event_set_padding(event);
- 
-+		/* Make sure the padding is visible before the write update */
-+		smp_wmb();
-+
- 		/* Set the write back to the previous setting */
- 		local_sub(length, &tail_page->write);
- 		return;
-@@ -2659,6 +2662,9 @@ rb_reset_tail(struct ring_buffer_per_cpu *cpu_buffer,
- 	/* time delta must be non zero */
- 	event->time_delta = 1;
- 
-+	/* Make sure the padding is visible before the tail_page->write update */
-+	smp_wmb();
-+
- 	/* Set write to end of buffer */
- 	length = (tail + length) - BUF_PAGE_SIZE;
- 	local_sub(length, &tail_page->write);
-@@ -4627,6 +4633,29 @@ rb_get_reader_page(struct ring_buffer_per_cpu *cpu_buffer)
- 	arch_spin_unlock(&cpu_buffer->lock);
- 	local_irq_restore(flags);
- 
-+	/* The writer has preempt disable, wait for it. But not forever */
-+        for (nr_loops = 0; nr_loops < 1000; nr_loops++) {
-+		/* If the write is past the end of page, a writer is still updating it */
-+		if (likely(!reader || rb_page_write(reader) <= BUF_PAGE_SIZE))
-+			break;
-+
-+		udelay(1);
-+
-+		/* Get the latest version of the reader write value */
-+		smp_rmb();
-+	}
-+
-+	/* The writer is not moving forward? Something is wrong */
-+	if (RB_WARN_ON(cpu_buffer, nr_loops == 1000))
-+		reader = NULL;
-+
-+	/*
-+	 * Make sure we see any padding after the write update
-+	 * (see rb_reset_tail())
-+	 */
-+	smp_rmb();
-+
-+
- 	return reader;
- }
- 
--- 
-2.35.1
+Best regards,
+Krzysztof
 
