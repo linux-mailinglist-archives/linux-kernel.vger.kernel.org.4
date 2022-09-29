@@ -2,191 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E3D5EFD08
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8026F5EFD0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235837AbiI2S2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
+        id S235886AbiI2S26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234987AbiI2S1w (ORCPT
+        with ESMTP id S235844AbiI2S21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:27:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1501438C8;
-        Thu, 29 Sep 2022 11:27:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DEB3B82646;
-        Thu, 29 Sep 2022 18:27:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D73EC433C1;
-        Thu, 29 Sep 2022 18:27:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664476067;
-        bh=peXm6EYz/EMFFA8zuW/FKucf85TPZxTNbaodSHoZ7Wg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Kv7xhea2uFIbwtuFQLZh9XSjU1NQfjbcVqi7NBdfo1YmhLPr/oFL/8Xy7h8nVd63Y
-         1QbyuerlojcUMR9UJXqyqMMe/stYLXuAEzjAn5YgYL+gSYYe2Mgq5Jy1q1QOi5phs9
-         LUXrQ/s2M+7o3FfgPVpda31wV2wVBaOYzo8yfTohR2fDzhGsJx5Pf63zWtPQKojM9F
-         jn5yUhRAxSZA/Yu9rBhiUcBtbQl8G7FuabZv9yLUhOJjlvUZ798HikAJYp4pUIjm//
-         HnqLKE0lE+TxmEdaYgq6OQOzGouYBxg3CmBkmarKcPIbw5qPRqYRZam7X/YTCqQye3
-         IoYyggPAxMHZw==
-Date:   Thu, 29 Sep 2022 11:27:44 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     netdev@kapio-technology.com
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 0/9] Extend locked port feature with FDB
- locked flag (MAC-Auth/MAB)
-Message-ID: <20220929112744.27cc969b@kernel.org>
-In-Reply-To: <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
-References: <20220928150256.115248-1-netdev@kapio-technology.com>
-        <20220929091036.3812327f@kernel.org>
-        <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
+        Thu, 29 Sep 2022 14:28:27 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0F3143286
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:28:26 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id e129so2156029pgc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=kmkU5eKx3bCGNBgsrw/HiECPrMWFtDQ93OEAZ05I5Zw=;
+        b=OqOoGfkG5celZzk8DoeCB0Z415XFc+acvqmoX8nBDnRxJgZpg8tGcRuwUEs+9xxChk
+         1Hu9orSfm438RdiaqE5SXGX+unJnOXQ8fweCClM5aky1wIdO63k+1n67zorgWReLZRRz
+         XDDORlnnR5dIjX1/FUHYRduZZtQBcu2RjAxzT1PHhAJZ4xRuZQ0a+bNPlwbBGagY3V9E
+         hsBFGmqWCZ0HoO+Lw7VoOJlgTQHjLePudthZrRONzfmUPWyzXj8DD62qR3aZEB/Q9hD0
+         kSxdoiY5KvnClKNNNO+8uBUlqZ0RxOaJJasuZIG4SPX1mPDtIORUcCimKvhwMe8iSP/m
+         OkGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=kmkU5eKx3bCGNBgsrw/HiECPrMWFtDQ93OEAZ05I5Zw=;
+        b=pKa9TOOYq2IFX7JCbXjQSIfftv3hfpnpBWGnFEAW3s4rBwKW1pfveJlTqpOe+cBYvR
+         oa18Q8X3UdSJJ2COjoAdp3JLdsbCkd81JAGFlILHi1etMiRD2mLfXkVUUA3fjPj3pGQQ
+         k+su5osq/eRWl908tMQSVPfm6kiDBOF4/f+wT9JiSjqgD21U7xFXEE2So01Fxbsirtud
+         0fFgXPO7rVzg0i5UbF8Z+IvJlhVumU60Qc75p2N/rkmt0H+LNZAXeobRWG8bosf7nWEO
+         VdXfJHnlxJ633CsaeM+HraSn/CpDaZoh1kfAWj1VdDa3FET0uRqf8h7rdD6Pk+TYmvuU
+         Gi3w==
+X-Gm-Message-State: ACrzQf01owANYlZ9Yc3F4ft19YBkQsSIYVVVZTOnzrasFoKJA8No6ch/
+        NT9iC8GYb+vxlCzs5prZIdDaARXz8ur4Q+4+XlH9+w==
+X-Google-Smtp-Source: AMsMyM6aYy/t89e8ZoJ8vAq/RDFkJ3JUmYiYBj+AqR8RM1wpoJNPrAqLhiGUBk3HkWio80GxowYRw1EQeeWp6uRum/4=
+X-Received: by 2002:a63:e709:0:b0:438:98e8:d1c with SMTP id
+ b9-20020a63e709000000b0043898e80d1cmr4115018pgi.403.1664476105851; Thu, 29
+ Sep 2022 11:28:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220929152010.835906-1-nathan@kernel.org>
+In-Reply-To: <20220929152010.835906-1-nathan@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 29 Sep 2022 11:28:14 -0700
+Message-ID: <CAKwvOdn61SYD81r5opTN1N8MAWe5YObPJ8wELei1qOySsoxJyA@mail.gmail.com>
+Subject: Re: [PATCH] x86/Kconfig: Drop check for '-mabi=ms' for CONFIG_EFI_STUB
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Tom Rix <trix@redhat.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sep 2022 18:37:09 +0200 netdev@kapio-technology.com wrote:
-> On 2022-09-29 18:10, Jakub Kicinski wrote:
-> > On Wed, 28 Sep 2022 17:02:47 +0200 Hans Schultz wrote: =20
-> >> From: "Hans J. Schultz" <netdev@kapio-technology.com>
-> >>=20
-> >> This patch set extends the locked port feature for devices
-> >> that are behind a locked port, but do not have the ability to
-> >> authorize themselves as a supplicant using IEEE 802.1X.
-> >> Such devices can be printers, meters or anything related to
-> >> fixed installations. Instead of 802.1X authorization, devices
-> >> can get access based on their MAC addresses being whitelisted. =20
-> >=20
-> > Try a allmodconfig build on latest net-next, seems broken. =20
->=20
-> I have all different switch drivers enabled and I see no compile=20
-> warnings or errors.=20
+On Thu, Sep 29, 2022 at 8:20 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> A recent change in LLVM made CONFIG_EFI_STUB unselectable because it no
+> longer pretends to support '-mabi=ms', breaking the dependency in
+> Kconfig. Lack of CONFIG_EFI_STUB can prevent kernels from booting via
+> EFI in certain circumstances.
+>
+> This check was added by commit 8f24f8c2fc82 ("efi/libstub: Annotate
+> firmware routines as __efiapi") to ensure that '__attribute__((ms_abi))'
+> was available, as '-mabi=ms' is not actually used in any cflags.
+> According to the GCC documentation, this attribute has been supported
+> since GCC 4.4.7. The kernel currently requires GCC 5.1 so this check is
+> not necessary; even when that change landed in 5.6, the kernel required
+> GCC 4.9 so it was unnecessary then as well.  Clang supports
+> '__attribute__((ms_abi))' for all versions that are supported for
+> building the kernel so no additional check is needed. Remove the
+> 'depends on' line altogether to allow CONFIG_EFI_STUB to be selected
+> when CONFIG_EFI is enabled, regardless of compiler.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 8f24f8c2fc82 ("efi/libstub: Annotate firmware routines as __efiapi")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1725
+> Link: https://gcc.gnu.org/onlinedocs/gcc-4.4.7/gcc/Function-Attributes.html
+> Link: https://github.com/llvm/llvm-project/commit/d1ad006a8f64bdc17f618deffa9e7c91d82c444d
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Just do what I told you - rebase on net-next, allmodconfig.
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-> I guess I will get a robot update if that is the=20
-> case but please be specific as to what does not build.
+> ---
+>  arch/x86/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index f9920f1341c8..81012154d9ed 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1956,7 +1956,6 @@ config EFI
+>  config EFI_STUB
+>         bool "EFI stub support"
+>         depends on EFI
+> -       depends on $(cc-option,-mabi=ms) || X86_32
+>         select RELOCATABLE
+>         help
+>           This kernel feature allows a bzImage to be loaded directly
+>
+> base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
+> --
+> 2.37.3
+>
 
-The maintainers simply don't have time to hold everyone by the hand.
-Sometimes I wish it was still okay to yell at people who post code
-which does not build. Oh well.
 
-../drivers/net/dsa/qca/qca8k-common.c:810:5: error: conflicting types for =
-=E2=80=98qca8k_port_fdb_del=E2=80=99
- int qca8k_port_fdb_del(struct dsa_switch *ds, int port,
-     ^~~~~~~~~~~~~~~~~~
-In file included from ../drivers/net/dsa/qca/qca8k-common.c:13:
-../drivers/net/dsa/qca/qca8k.h:483:5: note: previous declaration of =E2=80=
-=98qca8k_port_fdb_del=E2=80=99 was here
- int qca8k_port_fdb_del(struct dsa_switch *ds, int port,
-     ^~~~~~~~~~~~~~~~~~
-../drivers/net/dsa/qca/qca8k-common.c: In function =E2=80=98qca8k_port_fdb_=
-del=E2=80=99:
-../drivers/net/dsa/qca/qca8k-common.c:818:6: error: =E2=80=98fdb_flags=E2=
-=80=99 undeclared (first use in this function); did you mean =E2=80=98tsq_f=
-lags=E2=80=99?
-  if (fdb_flags)
-      ^~~~~~~~~
-      tsq_flags
-../drivers/net/dsa/qca/qca8k-common.c:818:6: note: each undeclared identifi=
-er is reported only once for each function it appears in
-make[5]: *** [../scripts/Makefile.build:249: drivers/net/dsa/qca/qca8k-comm=
-on.o] Error 1
-make[5]: *** Waiting for unfinished jobs....
-make[4]: *** [../scripts/Makefile.build:465: drivers/net/dsa/qca] Error 2
-make[4]: *** Waiting for unfinished jobs....
-../drivers/net/dsa/sja1105/sja1105_main.c: In function =E2=80=98sja1105_fas=
-t_age=E2=80=99:
-../drivers/net/dsa/sja1105/sja1105_main.c:1941:61: error: incompatible type=
- for argument 5 of =E2=80=98sja1105_fdb_del=E2=80=99
-   rc =3D sja1105_fdb_del(ds, port, macaddr, l2_lookup.vlanid, db);
-                                                             ^~
-../drivers/net/dsa/sja1105/sja1105_main.c:1831:11: note: expected =E2=80=98=
-u16=E2=80=99 {aka =E2=80=98short unsigned int=E2=80=99} but argument is of =
-type =E2=80=98struct dsa_db=E2=80=99
-       u16 fdb_flags, struct dsa_db db)
-       ~~~~^~~~~~~~~
-../drivers/net/dsa/sja1105/sja1105_main.c:1941:8: error: too few arguments =
-to function =E2=80=98sja1105_fdb_del=E2=80=99
-   rc =3D sja1105_fdb_del(ds, port, macaddr, l2_lookup.vlanid, db);
-        ^~~~~~~~~~~~~~~
-../drivers/net/dsa/sja1105/sja1105_main.c:1829:12: note: declared here
- static int sja1105_fdb_del(struct dsa_switch *ds, int port,
-            ^~~~~~~~~~~~~~~
-../drivers/net/dsa/sja1105/sja1105_main.c: In function =E2=80=98sja1105_mdb=
-_del=E2=80=99:
-../drivers/net/dsa/sja1105/sja1105_main.c:1962:56: error: incompatible type=
- for argument 5 of =E2=80=98sja1105_fdb_del=E2=80=99
-  return sja1105_fdb_del(ds, port, mdb->addr, mdb->vid, db);
-                                                        ^~
-../drivers/net/dsa/sja1105/sja1105_main.c:1831:11: note: expected =E2=80=98=
-u16=E2=80=99 {aka =E2=80=98short unsigned int=E2=80=99} but argument is of =
-type =E2=80=98struct dsa_db=E2=80=99
-       u16 fdb_flags, struct dsa_db db)
-       ~~~~^~~~~~~~~
-../drivers/net/dsa/sja1105/sja1105_main.c:1962:9: error: too few arguments =
-to function =E2=80=98sja1105_fdb_del=E2=80=99
-  return sja1105_fdb_del(ds, port, mdb->addr, mdb->vid, db);
-         ^~~~~~~~~~~~~~~
-../drivers/net/dsa/sja1105/sja1105_main.c:1829:12: note: declared here
- static int sja1105_fdb_del(struct dsa_switch *ds, int port,
-            ^~~~~~~~~~~~~~~
-../drivers/net/dsa/sja1105/sja1105_main.c:1963:1: error: control reaches en=
-d of non-void function [-Werror=3Dreturn-type]
- }
- ^
-cc1: some warnings being treated as errors
-make[5]: *** [../scripts/Makefile.build:249: drivers/net/dsa/sja1105/sja110=
-5_main.o] Error 1
-make[5]: *** Waiting for unfinished jobs....
-make[4]: *** [../scripts/Makefile.build:465: drivers/net/dsa/sja1105] Error=
- 2
-make[3]: *** [../scripts/Makefile.build:465: drivers/net/dsa] Error 2
-make[3]: *** Waiting for unfinished jobs....
-make[2]: *** [../scripts/Makefile.build:465: drivers/net] Error 2
-make[1]: *** [/home/kicinski/linux/Makefile:1852: drivers] Error 2
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:222: __sub-make] Error 2
+-- 
+Thanks,
+~Nick Desaulniers
