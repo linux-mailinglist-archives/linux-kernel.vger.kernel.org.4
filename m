@@ -2,223 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F085EEEC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 644CF5EEECF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235193AbiI2HT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
+        id S235192AbiI2HWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235184AbiI2HTX (ORCPT
+        with ESMTP id S234967AbiI2HWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:19:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF231166C3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664435961;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pahe0Oi4C4m9h6JwmtN0So34FXt/ImLGT/jbwYjYeWk=;
-        b=gWuOMJ/1zKrLQlGC2UnlEQeaQJo83D5cJTdqogmN+Wjzbjdd2F+RLvINFb3CG75vOZnGEu
-        KGRWqpj6oiTAuGSH/y73A3azFvWHX1Xb7Kkq7ES8IEYksvEFDRoFLChJYCllS9KHFX5tZD
-        e0dIh9wDllFDxz8CEvXmyd0hjwDHdC8=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-387-ROPyK-lrOZCcAAgq3ubqpQ-1; Thu, 29 Sep 2022 03:19:19 -0400
-X-MC-Unique: ROPyK-lrOZCcAAgq3ubqpQ-1
-Received: by mail-wr1-f71.google.com with SMTP id h20-20020adfaa94000000b0022cc1de1251so161256wrc.15
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:19:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Pahe0Oi4C4m9h6JwmtN0So34FXt/ImLGT/jbwYjYeWk=;
-        b=fwfCwoMpmO4lxJSxirVHHzNSUpH8MgbO2T+kIcQYo/V9kkvAjNHcJT0TT3Eu9Uerev
-         ptwo+QzIf6EYiLFvymlVulIctNx8t7t9YoOv+p9Z4PiykgHRLBAY2czAXmSB74S53jvI
-         3ey/us0YK6Yrw/cstszsNtYkVLnysyr+JrvAfAopZSoAzE+L59tac2YoBBnATjzBBac5
-         OsZ020Acei+Ze7VIR7QPiwy3ncQCs/WPz+PTWW5ZuApmLQWtmbVrGRDTs4fzjgXjMWqK
-         Co/vLWHY8Pn1LPOpIYaPhLMIn6SBL38KfVxz8WrNXQ9oLcnECEkIRyC7UJcecvxNnuJV
-         Yr7Q==
-X-Gm-Message-State: ACrzQf3e6snRA67uQeVhOfIJTUEOWSBETkXfqXusu6kJeMjXxK5H5NMB
-        grlCkHYkaROarLtBq41Nrcv5RisvS74qbrHpLRabmY5d2vzAkqYAIWFKHQEKSN0Vc+N9wUUYu2O
-        JFdsaCnNyYOCsGc2Pkncs9v5v
-X-Received: by 2002:a05:600c:4841:b0:3b4:76f0:99f with SMTP id j1-20020a05600c484100b003b476f0099fmr1218125wmo.85.1664435958808;
-        Thu, 29 Sep 2022 00:19:18 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6fAAMQAEw10LqeyomvQ2r46WQeZdX8Xh4sSb3tkzAaqxsTNtqXiZNJ+nRawX6R9Z621MuZlw==
-X-Received: by 2002:a05:600c:4841:b0:3b4:76f0:99f with SMTP id j1-20020a05600c484100b003b476f0099fmr1218099wmo.85.1664435958545;
-        Thu, 29 Sep 2022 00:19:18 -0700 (PDT)
-Received: from redhat.com ([2.55.47.213])
-        by smtp.gmail.com with ESMTPSA id p16-20020adfe610000000b00225239d9265sm6149634wrm.74.2022.09.29.00.19.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 00:19:17 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 03:19:14 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Junichi Uekawa =?utf-8?B?KOS4iuW3nee0lOS4gCk=?= 
-        <uekawa@google.com>
-Cc:     Stefano Garzarella <sgarzare@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Bobby Eshleman <bobby.eshleman@gmail.com>
-Subject: Re: [PATCH] vhost/vsock: Use kvmalloc/kvfree for larger packets.
-Message-ID: <20220929031419-mutt-send-email-mst@kernel.org>
-References: <20220928064538.667678-1-uekawa@chromium.org>
- <20220928082823.wyxplop5wtpuurwo@sgarzare-redhat>
- <20220928052738-mutt-send-email-mst@kernel.org>
- <20220928151135.pvrlsylg6j3hzh74@sgarzare-redhat>
- <CADgJSGHxPWXJjbakEeWnqF42A03yK7Dpw6U1SKNLhk+B248Ymg@mail.gmail.com>
+        Thu, 29 Sep 2022 03:22:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCCFDCEB9;
+        Thu, 29 Sep 2022 00:22:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2679261F88;
+        Thu, 29 Sep 2022 07:22:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0400DC433C1;
+        Thu, 29 Sep 2022 07:22:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664436131;
+        bh=5yUlZsBlhSSLMgY5U2rEuCCjJuZnbqFQEkw2xiVwspo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NgVcBTtjhA69DpmrwjWkA002BkIPHRxnYrXZDY+Sqa4P6k/oidxgH+MwcahR7TO9m
+         JN5fmvtPXOZORdmF7xdvjvn7Wi/p2ph1HvOc19rGvS3VhLVSGvu/SZtUmemn+SEfyW
+         Ymzq48aMwnrAUGV9gGG8AphE8o0OPat+Ew7g1UB5ojzp4513V6sdzwvihOMtOf9P6q
+         vMTN/Rg0EerssGfuinLstazA7FUUfRiB6M+mEMj9szR4E3nmLwe9CAkIeB7hrCR0dF
+         9/prOSgK56i0zScyGqBIoxyN7lTlM3icqNxGiGxDMBxkXbInbkyx+8t1u/dXawM2UW
+         X4cjRnaNgT/6g==
+Date:   Thu, 29 Sep 2022 10:22:07 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        isdn@linux-pingi.de, kuba@kernel.org
+Subject: Re: [PATCH V4] mISDN: fix use-after-free bugs in l1oip timer handlers
+Message-ID: <YzVHn6Gtfog6RyNR@unreal>
+References: <20220928133938.86143-1-duoming@zju.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADgJSGHxPWXJjbakEeWnqF42A03yK7Dpw6U1SKNLhk+B248Ymg@mail.gmail.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220928133938.86143-1-duoming@zju.edu.cn>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 08:14:24AM +0900, Junichi Uekawa (上川純一) wrote:
-> 2022年9月29日(木) 0:11 Stefano Garzarella <sgarzare@redhat.com>:
-> >
-> > On Wed, Sep 28, 2022 at 05:31:58AM -0400, Michael S. Tsirkin wrote:
-> > >On Wed, Sep 28, 2022 at 10:28:23AM +0200, Stefano Garzarella wrote:
-> > >> On Wed, Sep 28, 2022 at 03:45:38PM +0900, Junichi Uekawa wrote:
-> > >> > When copying a large file over sftp over vsock, data size is usually 32kB,
-> > >> > and kmalloc seems to fail to try to allocate 32 32kB regions.
-> > >> >
-> > >> > Call Trace:
-> > >> >  [<ffffffffb6a0df64>] dump_stack+0x97/0xdb
-> > >> >  [<ffffffffb68d6aed>] warn_alloc_failed+0x10f/0x138
-> > >> >  [<ffffffffb68d868a>] ? __alloc_pages_direct_compact+0x38/0xc8
-> > >> >  [<ffffffffb664619f>] __alloc_pages_nodemask+0x84c/0x90d
-> > >> >  [<ffffffffb6646e56>] alloc_kmem_pages+0x17/0x19
-> > >> >  [<ffffffffb6653a26>] kmalloc_order_trace+0x2b/0xdb
-> > >> >  [<ffffffffb66682f3>] __kmalloc+0x177/0x1f7
-> > >> >  [<ffffffffb66e0d94>] ? copy_from_iter+0x8d/0x31d
-> > >> >  [<ffffffffc0689ab7>] vhost_vsock_handle_tx_kick+0x1fa/0x301 [vhost_vsock]
-> > >> >  [<ffffffffc06828d9>] vhost_worker+0xf7/0x157 [vhost]
-> > >> >  [<ffffffffb683ddce>] kthread+0xfd/0x105
-> > >> >  [<ffffffffc06827e2>] ? vhost_dev_set_owner+0x22e/0x22e [vhost]
-> > >> >  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
-> > >> >  [<ffffffffb6eb332e>] ret_from_fork+0x4e/0x80
-> > >> >  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
-> > >> >
-> > >> > Work around by doing kvmalloc instead.
-> > >> >
-> > >> > Signed-off-by: Junichi Uekawa <uekawa@chromium.org>
-> > >
-> > >My worry here is that this in more of a work around.
-> > >It would be better to not allocate memory so aggressively:
-> > >if we are so short on memory we should probably process
-> > >packets one at a time. Is that very hard to implement?
-> >
-> > Currently the "virtio_vsock_pkt" is allocated in the "handle_kick"
-> > callback of TX virtqueue. Then the packet is multiplexed on the right
-> > socket queue, then the user space can de-queue it whenever they want.
-> >
-> > So maybe we can stop processing the virtqueue if we are short on memory,
-> > but when can we restart the TX virtqueue processing?
-> >
-> > I think as long as the guest used only 4K buffers we had no problem, but
-> > now that it can create larger buffers the host may not be able to
-> > allocate it contiguously. Since there is no need to have them contiguous
-> > here, I think this patch is okay.
-> >
-> > However, if we switch to sk_buff (as Bobby is already doing), maybe we
-> > don't have this problem because I think there is some kind of
-> > pre-allocated pool.
-> >
+On Wed, Sep 28, 2022 at 09:39:38PM +0800, Duoming Zhou wrote:
+> The l1oip_cleanup() traverses the l1oip_ilist and calls
+> release_card() to cleanup module and stack. However,
+> release_card() calls del_timer() to delete the timers
+> such as keep_tl and timeout_tl. If the timer handler is
+> running, the del_timer() will not stop it and result in
+> UAF bugs. One of the processes is shown below:
 > 
-> Thank you for the review! I was wondering if this is a reasonable workaround (as
-> we found that this patch makes a reliably crashing system into a
-> reliably surviving system.)
+>     (cleanup routine)          |        (timer handler)
+> release_card()                 | l1oip_timeout()
+>  ...                           |
+>  del_timer()                   | ...
+>  ...                           |
+>  kfree(hc) //FREE              |
+>                                | hc->timeout_on = 0 //USE
 > 
+> Fix by calling del_timer_sync() in release_card(), which
+> makes sure the timer handlers have finished before the
+> resources, such as l1oip and so on, have been deallocated.
 > 
-> ... Sounds like it is a reasonable patch to use backported to older kernels?
-
-Hmm. Good point about stable. OK.
-
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-
-
-> > >
-> > >
-> > >
-> > >> > ---
-> > >> >
-> > >> > drivers/vhost/vsock.c                   | 2 +-
-> > >> > net/vmw_vsock/virtio_transport_common.c | 2 +-
-> > >> > 2 files changed, 2 insertions(+), 2 deletions(-)
-> > >> >
-> > >> > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
-> > >> > index 368330417bde..5703775af129 100644
-> > >> > --- a/drivers/vhost/vsock.c
-> > >> > +++ b/drivers/vhost/vsock.c
-> > >> > @@ -393,7 +393,7 @@ vhost_vsock_alloc_pkt(struct vhost_virtqueue *vq,
-> > >> >            return NULL;
-> > >> >    }
-> > >> >
-> > >> > -  pkt->buf = kmalloc(pkt->len, GFP_KERNEL);
-> > >> > +  pkt->buf = kvmalloc(pkt->len, GFP_KERNEL);
-> > >> >    if (!pkt->buf) {
-> > >> >            kfree(pkt);
-> > >> >            return NULL;
-> > >> > diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-> > >> > index ec2c2afbf0d0..3a12aee33e92 100644
-> > >> > --- a/net/vmw_vsock/virtio_transport_common.c
-> > >> > +++ b/net/vmw_vsock/virtio_transport_common.c
-> > >> > @@ -1342,7 +1342,7 @@ EXPORT_SYMBOL_GPL(virtio_transport_recv_pkt);
-> > >> >
-> > >> > void virtio_transport_free_pkt(struct virtio_vsock_pkt *pkt)
-> > >> > {
-> > >> > -  kfree(pkt->buf);
-> > >> > +  kvfree(pkt->buf);
-> > >>
-> > >> virtio_transport_free_pkt() is used also in virtio_transport.c and
-> > >> vsock_loopback.c where pkt->buf is allocated with kmalloc(), but IIUC
-> > >> kvfree() can be used with that memory, so this should be fine.
-> > >>
-> > >> >    kfree(pkt);
-> > >> > }
-> > >> > EXPORT_SYMBOL_GPL(virtio_transport_free_pkt);
-> > >> > --
-> > >> > 2.37.3.998.g577e59143f-goog
-> > >> >
-> > >>
-> > >> This issue should go away with the Bobby's work about introducing sk_buff
-> > >> [1], but we can queue this for now.
-> > >>
-> > >> I'm not sure if we should do the same also in the virtio-vsock driver
-> > >> (virtio_transport.c). Here in vhost-vsock the buf allocated is only used in
-> > >> the host, while in the virtio-vsock driver the buffer is exposed to the
-> > >> device emulated in the host, so it should be physically contiguous (if not,
-> > >> maybe we need to adjust virtio_vsock_rx_fill()).
-> > >
-> > >More importantly it needs to support DMA API which IIUC kvmalloc
-> > >memory does not.
-> > >
-> >
-> > Right, good point!
-> >
-> > Thanks,
-> > Stefano
-> >
+> What's more, the hc->workq and hc->socket_thread can kick
+> those timers right back in. We add a bool flag to show
+> if card is released. Then, check this flag in hc->workq
+> and hc->socket_thread.
 > 
+> Fixes: 3712b42d4b1b ("Add layer1 over IP support")
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> ---
+> Changes in v4:
+>   - Use bool flag to judge whether card is released.
 > 
-> -- 
-> Junichi Uekawa
-> Google
+>  drivers/isdn/mISDN/l1oip.h      |  1 +
+>  drivers/isdn/mISDN/l1oip_core.c | 13 +++++++------
+>  2 files changed, 8 insertions(+), 6 deletions(-)
 
+It looks like it is ok now, but whole mISDN code doesn't look healthy,
+so it is hard to say for sure.
+
+Are you fixing real issue that you saw in field?
+
+Thanks,
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
