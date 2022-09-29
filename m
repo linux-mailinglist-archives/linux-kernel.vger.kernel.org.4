@@ -2,109 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC0F5EFA0F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1865EFA79
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236098AbiI2QRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
+        id S236046AbiI2Q2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235091AbiI2QRn (ORCPT
+        with ESMTP id S235910AbiI2Q1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:17:43 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2369F1D9284;
-        Thu, 29 Sep 2022 09:17:42 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id C3F251884D0E;
-        Thu, 29 Sep 2022 16:17:40 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id B9E4D2500370;
-        Thu, 29 Sep 2022 16:17:40 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id AFFD09EC0002; Thu, 29 Sep 2022 16:17:40 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 29 Sep 2022 12:27:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA13128A00
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:27:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B4B4B82520
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:27:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD83C433C1;
+        Thu, 29 Sep 2022 16:27:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664468858;
+        bh=zcRIiDMZOhjLCgp1CslgmZqWSDLMvCCHimAqZwZ4VWY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=naV80iJNZfqdUu1/Hrsqf7xBYeQcjycv6V3g8u91Cg/TXVulheKC9ZOmA+m1cslRa
+         5C14/QlYOpBFmSDne8VmjCgiYlktA75OyW3/DzCIAIbWBbSIhYmp1LmGecTJhpJtfO
+         +mq5hRbn18RKxPfYeqYJrMMEOjVzPdYufviuvneJseF3RR8oHI+HuyLWFvMQb1eDbY
+         6TklMRbAVDLn2FrgSM1a4V+ltW/qX6LmDN2YGARxPHsz0i8xjqNOewnzNlAi+PiCPt
+         rAVYoHq8BbIZ0o6ik9uYfFEH+cOoGjEPE43B/ilHpyPtbWvsgM2caVY9eOZxtTgMeQ
+         OQ4yzrGeE4OeQ==
+Date:   Fri, 30 Sep 2022 00:18:09 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v2 3/4] riscv: fix race when vmap stack overflow and
+ remove shadow_stack
+Message-ID: <YzXFQeyktIK5IQ7C@xhacker>
+References: <20220928162007.3791-1-jszhang@kernel.org>
+ <20220928162007.3791-4-jszhang@kernel.org>
+ <YzR8OUFuV+R1i1Y6@xhacker>
+ <CAJF2gTSaCGeMG06xrRxjkk2UnjqcgrRTwdch9Ug_TyH-9LsP4g@mail.gmail.com>
 MIME-Version: 1.0
-Date:   Thu, 29 Sep 2022 18:17:40 +0200
-From:   netdev@kapio-technology.com
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 9/9] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <20220929091143.468546f2@kernel.org>
-References: <20220928174904.117131-1-netdev@kapio-technology.com>
- <20220929091143.468546f2@kernel.org>
-User-Agent: Gigahost Webmail
-Message-ID: <6811b44516cf8bf37678bab23bca80ba@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTSaCGeMG06xrRxjkk2UnjqcgrRTwdch9Ug_TyH-9LsP4g@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-29 18:11, Jakub Kicinski wrote:
-> On Wed, 28 Sep 2022 19:49:04 +0200 Hans Schultz wrote:
->> From: "Hans J. Schultz" <netdev@kapio-technology.com>
->> 
->> Verify that the MAC-Auth mechanism works by adding a FDB entry with 
->> the
->> locked flag set, denying access until the FDB entry is replaced with a
->> FDB entry without the locked flag set.
->> 
->> Add test of blackhole fdb entries, verifying that there is no 
->> forwarding
->> to a blackhole entry from any port, and that the blackhole entry can 
->> be
->> replaced.
->> 
->> Also add a test that verifies that sticky FDB entries cannot roam 
->> (this
->> is not needed for now, but should in general be present anyhow for 
->> future
->> applications).
+On Thu, Sep 29, 2022 at 01:54:25PM +0800, Guo Ren wrote:
+> On Thu, Sep 29, 2022 at 1:03 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+> >
+> > On Thu, Sep 29, 2022 at 12:20:06AM +0800, Jisheng Zhang wrote:
+> > > Currently, when detecting vmap stack overflow, riscv firstly switches
+> > > to the so called shadow stack, then use this shadow stack to call the
+> > > get_overflow_stack() to get the overflow stack. However, there's
+> > > a race here if two or more harts use the same shadow stack at the same
+> > > time.
+> > >
+> > > To solve this race, we rely on two facts:
+> > > 1. the content of kernel thread pointer I.E "tp" register can still
+> > > be gotten from the the CSR_SCRATCH register, thus we can clobber tp
+> > > under the condtion that we restore tp from CSR_SCRATCH later.
+> > >
+> > > 2. Once vmap stack overflow happen, panic is comming soon, no
+> > > performance concern at all, so we don't need to define the overflow
+> > > stack as percpu var, we can simplify it into a pointer array which
+> > > points to allocated pages.
+> > >
+> > > Thus we can use tp as a tmp register to get the cpu id to calculate
+> > > the offset of overflow stack pointer array for each cpu w/o shadow
+> > > stack any more. Thus the race condition is removed as a side effect.
+> > >
+> > > NOTE: we can use similar mechanism to let each cpu use different shadow
+> > > stack to fix the race codition, but if we can remove shadow stack usage
+> > > totally, why not.
+> > >
+> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
+> > > ---
+> > >  arch/riscv/include/asm/asm-prototypes.h |  1 -
+> > >  arch/riscv/include/asm/thread_info.h    |  4 +-
+> > >  arch/riscv/kernel/asm-offsets.c         |  1 +
+> > >  arch/riscv/kernel/entry.S               | 56 ++++---------------------
+> > >  arch/riscv/kernel/traps.c               | 31 ++++++++------
+> > >  5 files changed, 29 insertions(+), 64 deletions(-)
+> > >
+> > > diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/include/asm/asm-prototypes.h
+> > > index ef386fcf3939..4a06fa0f6493 100644
+> > > --- a/arch/riscv/include/asm/asm-prototypes.h
+> > > +++ b/arch/riscv/include/asm/asm-prototypes.h
+> > > @@ -25,7 +25,6 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
+> > >  DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
+> > >  DECLARE_DO_ERROR_INFO(do_trap_break);
+> > >
+> > > -asmlinkage unsigned long get_overflow_stack(void);
+> > >  asmlinkage void handle_bad_stack(struct pt_regs *regs);
+> > >
+> > >  #endif /* _ASM_RISCV_PROTOTYPES_H */
+> > > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+> > > index c970d41dc4c6..c604a5212a73 100644
+> > > --- a/arch/riscv/include/asm/thread_info.h
+> > > +++ b/arch/riscv/include/asm/thread_info.h
+> > > @@ -28,14 +28,12 @@
+> > >
+> > >  #define THREAD_SHIFT            (PAGE_SHIFT + THREAD_SIZE_ORDER)
+> > >  #define OVERFLOW_STACK_SIZE     SZ_4K
+> > > -#define SHADOW_OVERFLOW_STACK_SIZE (1024)
+> > > +#define OVERFLOW_STACK_SHIFT 12
+> >
+> > oops, this should be removed, will update it in a newer version after
+> > collecting review comments.
+> >
+> > >
+> > >  #define IRQ_STACK_SIZE               THREAD_SIZE
+> > >
+> > >  #ifndef __ASSEMBLY__
+> > >
+> > > -extern long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE / sizeof(long)];
+> > > -
+> > >  #include <asm/processor.h>
+> > >  #include <asm/csr.h>
+> > >
+> > > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> > > index df9444397908..62bf3bacc322 100644
+> > > --- a/arch/riscv/kernel/asm-offsets.c
+> > > +++ b/arch/riscv/kernel/asm-offsets.c
+> > > @@ -37,6 +37,7 @@ void asm_offsets(void)
+> > >       OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
+> > >       OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+> > >       OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
+> > > +     OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
+> > >
+> > >       OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
+> > >       OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
+> > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > > index a3e1ed2fa2ac..5a6171a90d81 100644
+> > > --- a/arch/riscv/kernel/entry.S
+> > > +++ b/arch/riscv/kernel/entry.S
+> > > @@ -223,54 +223,16 @@ END(ret_from_exception)
+> > >
+> > >  #ifdef CONFIG_VMAP_STACK
+> > >  ENTRY(handle_kernel_stack_overflow)
+> > > -     la sp, shadow_stack
+> > > -     addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
+> > > -
+> > > -     //save caller register to shadow stack
+> > > -     addi sp, sp, -(PT_SIZE_ON_STACK)
+> > > -     REG_S x1,  PT_RA(sp)
+> > > -     REG_S x5,  PT_T0(sp)
+> > > -     REG_S x6,  PT_T1(sp)
+> > > -     REG_S x7,  PT_T2(sp)
+> > > -     REG_S x10, PT_A0(sp)
+> > > -     REG_S x11, PT_A1(sp)
+> > > -     REG_S x12, PT_A2(sp)
+> > > -     REG_S x13, PT_A3(sp)
+> > > -     REG_S x14, PT_A4(sp)
+> > > -     REG_S x15, PT_A5(sp)
+> > > -     REG_S x16, PT_A6(sp)
+> > > -     REG_S x17, PT_A7(sp)
+> > > -     REG_S x28, PT_T3(sp)
+> > > -     REG_S x29, PT_T4(sp)
+> > > -     REG_S x30, PT_T5(sp)
+> > > -     REG_S x31, PT_T6(sp)
+> > > -
+> > > -     la ra, restore_caller_reg
+> > > -     tail get_overflow_stack
+> > > -
+> > > -restore_caller_reg:
+> > > -     //save per-cpu overflow stack
+> > > -     REG_S a0, -8(sp)
+> > > -     //restore caller register from shadow_stack
+> > > -     REG_L x1,  PT_RA(sp)
+> > > -     REG_L x5,  PT_T0(sp)
+> > > -     REG_L x6,  PT_T1(sp)
+> > > -     REG_L x7,  PT_T2(sp)
+> > > -     REG_L x10, PT_A0(sp)
+> > > -     REG_L x11, PT_A1(sp)
+> > > -     REG_L x12, PT_A2(sp)
+> > > -     REG_L x13, PT_A3(sp)
+> > > -     REG_L x14, PT_A4(sp)
+> > > -     REG_L x15, PT_A5(sp)
+> > > -     REG_L x16, PT_A6(sp)
+> > > -     REG_L x17, PT_A7(sp)
+> > > -     REG_L x28, PT_T3(sp)
+> > > -     REG_L x29, PT_T4(sp)
+> > > -     REG_L x30, PT_T5(sp)
+> > > -     REG_L x31, PT_T6(sp)
+> > > +     la sp, overflow_stack
+> > > +     /* use tp as tmp register since we can restore it from CSR_SCRATCH */
+> > > +     REG_L tp, TASK_TI_CPU(tp)
+> > > +     slli tp, tp, RISCV_LGPTR
+> > > +     add tp, sp, tp
+> > > +     REG_L sp, 0(tp)
+> > > +
+> > > +     /* restore tp */
+> > > +     csrr tp, CSR_SCRATCH
+> > >
+> > > -     //load per-cpu overflow stack
+> > > -     REG_L sp, -8(sp)
+> > >       addi sp, sp, -(PT_SIZE_ON_STACK)
+> > >
+> > >       //save context to overflow stack
+> > > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> > > index 73f06cd149d9..b6c64f0fb70f 100644
+> > > --- a/arch/riscv/kernel/traps.c
+> > > +++ b/arch/riscv/kernel/traps.c
+> > > @@ -216,23 +216,12 @@ int is_valid_bugaddr(unsigned long pc)
+> > >  #endif /* CONFIG_GENERIC_BUG */
+> > >
+> > >  #ifdef CONFIG_VMAP_STACK
+> > > -static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
+> > > -             overflow_stack)__aligned(16);
+> > > -/*
+> > > - * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
+> > > - * to get per-cpu overflow stack(get_overflow_stack).
+> > > - */
+> > > -long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
+> > > -asmlinkage unsigned long get_overflow_stack(void)
+> > > -{
+> > > -     return (unsigned long)this_cpu_ptr(overflow_stack) +
+> > > -             OVERFLOW_STACK_SIZE;
+> > > -}
+> > > +void *overflow_stack[NR_CPUS] __ro_after_init __aligned(16);
+> Er... We've talked NR_CPUS = 8192, even a pointer would cause 64KB wasted.
 > 
-> If you were trying to repost just the broken patches - that's not gonna
-> work :(
+> I prefer the previous solution with a atomic flag.
 
-Sorry, I do not understand what 'broken' patches you are referring to?
+Hi guo,
 
-I think that the locked port tests should be working?
+I see your opinions. Here are my comments:
+
+Now the range of riscv's NR_CPUS is 2~32, given I have removed the 1KB
+shadow stack, so this patch saves 768Bytes or more rather than wastes
+memory. No mention that I also removed the shadow stack save and
+restore code.
+
+From another side, we didn't see such riscv system with huge(8192) CPU
+numbers. Even if we do have such system in the future, I belive such
+system should be powered by lots of memory, 64KB is trivial comapred
+with GBs or TBs memory size.
+
+Given the simplicity of my solution, I still prefer my solution. What
+do you think?
+
+Thanks
+> 
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index 5cbd6684ef52..42a3b14a20ab 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -223,6 +223,9 @@ END(ret_from_exception)
+> 
+>  #ifdef CONFIG_VMAP_STACK
+>  ENTRY(handle_kernel_stack_overflow)
+> +1:     la sp, spin_ shadow_stack
+> +       amoswap.w sp, sp, (sp)
+> +       bnez sp, 1b
+>         la sp, shadow_stack
+>         addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
+> 
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index 73f06cd149d9..9058a05cac53 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -229,11 +229,15 @@ asmlinkage unsigned long get_overflow_stack(void)
+>                 OVERFLOW_STACK_SIZE;
+>  }
+> 
+> +atomic_t spin_ shadow_stack __section(".sdata");
+> +
+>  asmlinkage void handle_bad_stack(struct pt_regs *regs)
+>  {
+>         unsigned long tsk_stk = (unsigned long)current->stack;
+>         unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
+> 
+> +       atomic_set_release(spin_ shadow_stack, 0);
+> +
+>         console_verbose();
+> 
+>         pr_emerg("Insufficient stack space to handle exception!\n");
