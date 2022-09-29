@@ -2,153 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7B65EFF0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 23:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1C75EFF03
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 23:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiI2VIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 17:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
+        id S229831AbiI2VHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 17:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiI2VID (ORCPT
+        with ESMTP id S229824AbiI2VHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 17:08:03 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864DE1B95D8;
-        Thu, 29 Sep 2022 14:08:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1664485682; x=1696021682;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1IsYayCedSM7HTg012kpgo5cTqRFAoi1LY9Aznp7xag=;
-  b=B+M1q30OkiucmDtdW6IZDiElb2j9QqnZrnkD3f2uPwIXa6hLdjzybc7g
-   SgRzMWDjKjxsGaxQDo9fUbC57ZHBtHVPgsAx504vepXWgpRjPQkw05z4c
-   DAr8DMUzpIGgj/Aurf9Hjby52m/1Y370Kaz9EE4Eb6mL8F/RhKbkwvR54
-   g=;
-X-IronPort-AV: E=Sophos;i="5.93,356,1654560000"; 
-   d="scan'208";a="264663829"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 21:08:01 +0000
-Received: from EX13MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com (Postfix) with ESMTPS id 9E1A5A28CB;
-        Thu, 29 Sep 2022 21:08:00 +0000 (UTC)
-Received: from EX19D002UWC003.ant.amazon.com (10.13.138.183) by
- EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 29 Sep 2022 21:08:00 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX19D002UWC003.ant.amazon.com (10.13.138.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Thu, 29 Sep 2022 21:07:54 +0000
-Received: from dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com
- (10.189.73.169) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Thu, 29 Sep 2022 21:07:53
- +0000
-Received: by dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com (Postfix, from userid 22673075)
-        id 2371826E8; Thu, 29 Sep 2022 21:07:52 +0000 (UTC)
-From:   Rishabh Bhatnagar <risbhat@amazon.com>
-To:     <stable@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <sashal@kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <benh@amazon.com>,
-        <mbacco@amazon.com>, Lukas Wunner <lukas@wunner.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        <linux-pci@vger.kernel.org>, Rishabh Bhatnagar <risbhat@amazon.com>
-Subject: [PATCH 1/6] genirq: Update code comments wrt recycled thread_mask
-Date:   Thu, 29 Sep 2022 21:06:46 +0000
-Message-ID: <20220929210651.12308-2-risbhat@amazon.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220929210651.12308-1-risbhat@amazon.com>
-References: <20220929210651.12308-1-risbhat@amazon.com>
+        Thu, 29 Sep 2022 17:07:48 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A7D1B8C82;
+        Thu, 29 Sep 2022 14:07:46 -0700 (PDT)
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 28TL7NGT003772;
+        Fri, 30 Sep 2022 06:07:24 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28TL7NGT003772
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664485644;
+        bh=iLVh07jKsWnF/nynGPwOpn80jqLcwNey7UtDaG17CHs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=izohTiN6tnHamGY3bka2pIwi9VZh9wJsLgD342C98radP3sA9XzYQmfWRxfAWjQ0K
+         KuHSa3XqK/awQQkGl11tuR0JsU9V/iiWiL401B1U5tlWPrElfwWJNWm1ju9alYO7kT
+         MChlb7gX5k0RkLkA8RLbVT1kUiZtllwetNvSY5YG5UTRcpHPPol5Z3boTf015kn8aO
+         dWHx+c+c4hmRT1NFO/B+8+cg1ntK5eUFgLiK2zJnmaGEcXmupYpaEEru3S/Mu5El64
+         zgW+NAujF+BBkEsTdFx2PEmgJxQGHB+4f8ZACdIeth4nSrziUZ56bSBuLYOf9SsH7A
+         REzIXfM9jmgbQ==
+X-Nifty-SrcIP: [209.85.160.45]
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-131b7bb5077so3303675fac.2;
+        Thu, 29 Sep 2022 14:07:24 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2CXNFBkb/83Xo5lqNatOaLRDBsa3c/KrHQVUbS5x0NSAo1Qotk
+        54cw7husbNTqgeCsisyEVIpm+/qJZbz44ew2Rrg=
+X-Google-Smtp-Source: AMsMyM4fem0edsXmUM889roku0P2y8yY3ZF1UrAPxL8lHPaqJ5cdkmOCnxKrnr52z6c1NhIQmiLfFBiTFbVcCQStdvg=
+X-Received: by 2002:a05:6870:6326:b0:131:9200:c99d with SMTP id
+ s38-20020a056870632600b001319200c99dmr8103058oao.194.1664485643280; Thu, 29
+ Sep 2022 14:07:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-14.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CANXV_XwgZMCGXijfoUyZ9+KyM6Rgeqiq-sCfubyj_16d-2CN=A@mail.gmail.com>
+ <20220815013317.26121-1-dmitrii.bundin.a@gmail.com> <CAKwvOdnnSAozX8bQ9HeSw12BV9OjpzyDmXk_BGczjVVQNN+7tQ@mail.gmail.com>
+ <CANXV_Xw2wzwDdJkyV1nHPQm2JTt48SLrNc7YwrfcxOwuFA-z3w@mail.gmail.com>
+ <CAKwvOdkiq_byi1QeCvSGb2fd+0AJ1k9WNnsHJMeaaQcPRy1Wxg@mail.gmail.com>
+ <CAKwvOdkPwbD-c0V-up2Ufzb-Uh7LLyD12X0FKeBa=hn+cSPA9Q@mail.gmail.com> <CANXV_XzdTTYc2w7Ur8zY=ijOofg91yfF7RLhedbVH0rmi3c2yA@mail.gmail.com>
+In-Reply-To: <CANXV_XzdTTYc2w7Ur8zY=ijOofg91yfF7RLhedbVH0rmi3c2yA@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 30 Sep 2022 06:06:46 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATeW+c5+Kxnj9M4N+yNSv+7ot7bLTHzO3Z0Xb_XEW_6Nw@mail.gmail.com>
+Message-ID: <CAK7LNATeW+c5+Kxnj9M4N+yNSv+7ot7bLTHzO3Z0Xb_XEW_6Nw@mail.gmail.com>
+Subject: Re: [PATCH v3] kbuild: add debug level and macro defs options
+To:     Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Fangrui Song <maskray@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Wunner <lukas@wunner.de>
+On Tue, Aug 23, 2022 at 7:42 AM Dmitrii Bundin
+<dmitrii.bundin.a@gmail.com> wrote:
+>
+> On Tue, Aug 23, 2022 at 12:36 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > or perhaps that simply needs to be `-g -gsplit-dwarf`?  In which case,
+> > that if/else could just be re-arranged.
+>
+> How about simply assigning DEBUG_CFLAGS   := -g at the very beginning
+> without any conditions? This would provide the default with the
+> possibility of overriding later and -gsplit-dwarf does not necessarily
+> come with -g implicitly.
 
-commit 836557bd58e5e65c05c73af9f6ebed885dbfccfc upstream.
+This was fixed by commit 32ef9e5054ec0321b9336058c58ec749e9c6b0fe,
+which is now in the mainline.
 
-Previously a race existed between __free_irq() and __setup_irq() wherein
-the thread_mask of a just removed action could be handed out to a newly
-added action and the freed irq thread would then tread on the oneshot
-mask bit of the newly added irq thread in irq_finalize_oneshot():
 
-time
- |  __free_irq()
- |    raw_spin_lock_irqsave(&desc->lock, flags);
- |    <remove action from linked list>
- |    raw_spin_unlock_irqrestore(&desc->lock, flags);
- |
- |  __setup_irq()
- |    raw_spin_lock_irqsave(&desc->lock, flags);
- |    <traverse linked list to determine oneshot mask bit>
- |    raw_spin_unlock_irqrestore(&desc->lock, flags);
- |
- |  irq_thread() of freed irq (__free_irq() waits in synchronize_irq())
- |    irq_thread_fn()
- |      irq_finalize_oneshot()
- |        raw_spin_lock_irq(&desc->lock);
- |        desc->threads_oneshot &= ~action->thread_mask;
- |        raw_spin_unlock_irq(&desc->lock);
- v
 
-The race was known at least since 2012 when it was documented in a code
-comment by commit e04268b0effc ("genirq: Remove paranoid warnons and bogus
-fixups"). The race itself is harmless as nothing touches any of the
-potentially freed data after synchronize_irq().
 
-In 2017 the race was close by commit 9114014cf4e6 ("genirq: Add mutex to
-irq desc to serialize request/free_irq()"), apparently inadvertantly so
-because the race is neither mentioned in the commit message nor was the
-code comment updated.  Make up for that.
+> > Honestly, I really don't think we need to be wrapping every compiler
+> > command line flag under the sun in a kconfig option.
+>
+> This indeed sounds reasonable to me. So the key point here is to not
+> bloat the kconfig with options related to every compiler flag. But I
+> think it still might be useful to provide some option that would
+> include sort of full debug information compilers may produce. With
+> this approach there would be, in fact 3 different levels of debug
+> information supported by Kconfig: reduced, default and full. The full
+> level would increase everything like -g3, and -fdebug-macro for Clang,
+> and probably others.
 
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-pci@vger.kernel.org
-Link: https://lkml.kernel.org/r/32fc25aa35ecef4b2692f57687bb7fc2a57230e2.1529828292.git.lukas@wunner.de
-Signed-off-by: Rishabh Bhatnagar <risbhat@amazon.com>
----
- kernel/irq/manage.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index 914b43f2255b..cb35db00fdf4 100644
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -1030,10 +1030,7 @@ static int irq_thread(void *data)
- 	 * This is the regular exit path. __free_irq() is stopping the
- 	 * thread via kthread_stop() after calling
- 	 * synchronize_irq(). So neither IRQTF_RUNTHREAD nor the
--	 * oneshot mask bit can be set. We cannot verify that as we
--	 * cannot touch the oneshot mask at this point anymore as
--	 * __setup_irq() might have given out currents thread_mask
--	 * again.
-+	 * oneshot mask bit can be set.
- 	 */
- 	task_work_cancel(current, irq_thread_dtor);
- 	return 0;
-@@ -1257,7 +1254,9 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
- 	/*
- 	 * Protects against a concurrent __free_irq() call which might wait
- 	 * for synchronize_irq() to complete without holding the optional
--	 * chip bus lock and desc->lock.
-+	 * chip bus lock and desc->lock. Also protects against handing out
-+	 * a recycled oneshot thread_mask bit while it's still in use by
-+	 * its previous owner.
- 	 */
- 	mutex_lock(&desc->request_mutex);
- 
+I think that would be much saner than this patch.
+
+
+
+CONFIG_DEBUG_INFO_LEVEL is a direct way to specify the debug level.
+
+CONFIG_DEBUG_MACRO_DEFINITIONS is feature-driven.
+
+Do not mix two different ways.
+
+
+
+
+
+
+CONFIG_DEBUG_INFO_LEVEL is here just because Andrew Morton suggested that.
+
+
+The debug level is compiler-specific. There is no guarantee
+that there is a common range.
+
+
+The debug level range of GCC is 0-3.
+Clang accepts 3, but -g3 has no effect.
+The debug level range of Rustc is 0-2.
+
+See how badly scripts/Makefile.debug looks in linux-next.
+
+
+
+
+
+How should Rustc behave for CONFIG_DEBUG_INFO_LEVEL=3 ?
+
+-Cdebuginfo=3 is a compile error.
+
+  RUSTC L rust/core.o
+error: debug info level needs to be between 0-2 (instead was `3`)
+
+
+
+You cannot directly specify the debug level number given that
+we support multiple compilers with different policy for
+debug level options.
+
+
+
+
+
+
+> > Or add -g1 to CONFIG_DEBUG_INFO_REDUCED.
+>
+> I ran some tests and there was indeed some decrease in size. That
+> combination probably might be useful.
+>
+> Any thoughts?
+>
+> Regards
+> Dmitrii
+
+
+
+
+
 -- 
-2.37.1
-
+Best Regards
+Masahiro Yamada
