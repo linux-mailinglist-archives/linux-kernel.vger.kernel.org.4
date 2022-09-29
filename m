@@ -2,103 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B07DF5EF948
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F805EF945
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235720AbiI2Plo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        id S236087AbiI2Plk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236013AbiI2Pkq (ORCPT
+        with ESMTP id S236015AbiI2Pkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 29 Sep 2022 11:40:46 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31CE38442;
-        Thu, 29 Sep 2022 08:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=gihPt2bKu+pozhoRu7JQZyvc66MP3qC1ZK9A68zwRwM=; b=1wW7lP2TaDcg9AXO2Kk7JN4pM6
-        jlDCOUAAun4zRV8fj8m0ZNgD8QauQO8aR/FcAX9UATuNp31jlKfcsweulrmO+AFYbGT6dKvwxPumA
-        GVqkn8lIruIaHI7Z1iK+np15l27nHFGf/kZ4mALioayC3Ro4mQlWtwFb++KVM6p3YHhE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1odvdk-000d5U-OT; Thu, 29 Sep 2022 17:39:56 +0200
-Date:   Thu, 29 Sep 2022 17:39:56 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
-Cc:     Shenwei Wang <shenwei.wang@nxp.com>, brouer@redhat.com,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>
-Subject: Re: [EXT] Re: [PATCH 1/1] net: fec: add initial XDP support
-Message-ID: <YzW8TBUufx5jM9bT@lunn.ch>
-References: <20220928152509.141490-1-shenwei.wang@nxp.com>
- <YzT2An2J5afN1w3L@lunn.ch>
- <PAXPR04MB9185141B58499FD00C43BB6889579@PAXPR04MB9185.eurprd04.prod.outlook.com>
- <YzWcI+U1WYJuZIdk@lunn.ch>
- <PAXPR04MB918545B92E493CB57CDE612B89579@PAXPR04MB9185.eurprd04.prod.outlook.com>
- <ae658987-8763-c6de-7198-1a418e4728b4@redhat.com>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DBF3E74F
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:40:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664466014;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WJBPjaoygV226ugYGvuBnTt19erm59o8C2parEHLZRs=;
+        b=R2El5uWRkPAt/zf6sn9nqLuse1cBDkvXqHlZICZvYuWVWrHJHju0WsHuSFsVpkRkslBmRB
+        dICDSyIXj+xnuje2TidcmgN8s83r+xQTs64qwmFeO0YYWQ5Mx68iLbKjhjna1Z4naR+nu4
+        n3LYdCChT4Qvjz0RSBscWVNxgNeMpLc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-581-iHr5RjBZNKiVdGCURU0WFg-1; Thu, 29 Sep 2022 11:40:12 -0400
+X-MC-Unique: iHr5RjBZNKiVdGCURU0WFg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 625B281172B;
+        Thu, 29 Sep 2022 15:40:10 +0000 (UTC)
+Received: from starship (unknown [10.40.193.233])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A01BB1121314;
+        Thu, 29 Sep 2022 15:40:05 +0000 (UTC)
+Message-ID: <58e0053747406a88310ad3d232d021f4ae01a687.camel@redhat.com>
+Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Like Xu <like.xu.linux@gmail.com>
+Date:   Thu, 29 Sep 2022 18:40:04 +0300
+In-Reply-To: <d8d2bd39-cbb3-010d-266a-4e967765a382@redhat.com>
+References: <55d7f0bd-ace1-506b-ea5b-105a86290114@redhat.com>
+         <f753391e-7bdc-bada-856a-87344e75bd74@redhat.com>
+         <111a46c1-7082-62e3-4f3a-860a95cd560a@redhat.com>
+         <14d5b8f2-7cb6-ce24-c7a7-32aa9117c953@redhat.com>
+         <YzIZhn47brWBfQah@google.com>
+         <3b04db9d-0177-7e6e-a54c-a28ada8b1d36@redhat.com>
+         <YzMdjSkKaJ8HyWXh@google.com>
+         <dd6db8c9-80b1-b6c5-29b8-5eced48f1303@redhat.com>
+         <YzRvMZDoukMbeaxR@google.com>
+         <8534dfe4-bc71-2c14-b268-e610a3111d14@redhat.com>
+         <YzSxhHzgNKHL3Cvm@google.com>
+         <d8d2bd39-cbb3-010d-266a-4e967765a382@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ae658987-8763-c6de-7198-1a418e4728b4@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 05:28:43PM +0200, Jesper Dangaard Brouer wrote:
-> 
-> 
-> On 29/09/2022 15.26, Shenwei Wang wrote:
-> > 
-> > > From: Andrew Lunn <andrew@lunn.ch>
-> > > Sent: Thursday, September 29, 2022 8:23 AM
-> [...]
+On Thu, 2022-09-29 at 17:28 +0200, Paolo Bonzini wrote:
+> On 9/28/22 22:41, Sean Christopherson wrote:
+> > On Wed, Sep 28, 2022, Paolo Bonzini wrote:
+> > > On 9/28/22 17:58, Sean Christopherson wrote:
+> > > > I don't disagree that the memslots API is lacking, but IMO that is somewhat
+> > > > orthogonal to fixing KVM x86's "code fetch to MMIO" mess.  Such a massive new API
+> > > > should be viewed and prioritized as a new feature, not as a bug fix, e.g. I'd
+> > > > like to have the luxury of being able to explore ideas beyond "let userspace
+> > > > batch memslot updates", and I really don't want to feel pressured to get this
+> > > > code reviewed and merge.
 > > > 
-> > > > I actually did some compare testing regarding the page pool for normal
-> > > > traffic.  So far I don't see significant improvement in the current
-> > > > implementation. The performance for large packets improves a little,
-> > > > and the performance for small packets get a little worse.
-> > > 
-> > > What hardware was this for? imx51? imx6? imx7 Vybrid? These all use the FEC.
+> > > I absolutely agree that this is not a bugfix.  Most new features for KVM can
+> > > be seen as bug fixes if you squint hard enough, but they're still features.
 > > 
-> > I tested on imx8qxp platform. It is ARM64.
+> > I guess I'm complaining that there isn't sufficient justification for this new
+> > feature.  The cover letter provides a bug that would be fixed by having batched
+> > updates, but as above, that's really due to deficiencies in a different KVM ABI.
 > 
-> On mvneta driver/platform we saw huge speedup replacing:
+> I disagree.  Failure to fetch should be fixed but is otherwise a red 
+> herring.  It's the whole memslot API (including dirty logging) that is a 
+> mess.
 > 
->   page_pool_release_page(rxq->page_pool, page);
-> with
->   skb_mark_for_recycle(skb);
+> If you think we should overhaul it even more than just providing atomic 
+> batched updates, that's fine.  But still, the impossibility to perform 
+> atomic updates in batches *is* a suboptimal part of the KVM API.
 > 
-> As I mentioned: Today page_pool have SKB recycle support (you might have
-> looked at drivers that didn't utilize this yet), thus you don't need to
-> release the page (page_pool_release_page) here.  Instead you could simply
-> mark the SKB for recycling, unless driver does some page refcnt tricks I
-> didn't notice.
+> >    - Why can't this be solved in userspace?
 > 
-> On the mvneta driver/platform the DMA unmap (in page_pool_release_page) was
-> very expensive. This imx8qxp platform might have faster DMA unmap in case is
-> it cache-coherent.
+> I don't think *can't* is the right word.  If the metric of choice was 
+> "what can be solved in userspace", we'd all be using microkernels.  The 
+> question is why userspace would be a better place to solve it.
+> 
+> The only reason to do it in userspace would be if failure to fetch is 
+> something that is interesting to userspace, other than between two 
+> KVM_SET_USER_MEMORY_REGION.  Unless you provide an API to pass failures 
+> to fetch down to userspace, the locking in userspace is going to be 
+> inferior, because it would have to be unconditional.  This means worse 
+> performance and more complication, not to mention having to do it N 
+> times instead of 1 for N implementations.
+> 
+> Not forcing userspace to do "tricks" is in my opinion a strong part of 
+> deciding whether an API belongs in KVM.
+> 
+> >    - What operations does userspace truly need?  E.g. if the only use case is to
+> >      split/truncate/hole punch an existing memslot, can KVM instead provide a
+> >      memslot flag and exit reason that allows kicking vCPUs to userspace if the
+> >      memslot is accessed?  E.g. KVM_MEM_DISABLED that acts like an invalid memslot,
+> >      but KVM exists with a dedicated exit reason instead of generating MMIO semantics.
+> 
+> The main cases are:
+> 
+> - for the boot case, splitting and merging existing memslots.  QEMU 
+> likes to merge adjacent memory regions into a single memslot, so if 
+> something goes from read-write to read-only it has to be split and vice 
+> versa.  I guess a "don't merge this memory region" flag would be the 
+> less hideous way to solve it in userspace.
+> 
+> - however, there is also the case of resizing an existing memslot which 
+> is what David would like to have for virtio-mem.  This is not really 
+> fixable because part of the appeal of virtio-mem is to have a single 
+> huge memslot instead of many smaller ones, in order to reduce the 
+> granularity of add/remove (David, correct me if I'm wrong).
+> 
+> (The latter _would_ be needed by other VMMs).
+> 
+> > If updates only need to be "atomic" for an address space, does the API allowing
+> > mixing non-SMM and SMM memslots?
+> 
+> I agree that the address space should be moved out of the single entries 
+> and into the header if we follow through with this approach.
+> 
+> > The update needs to be "atomic", i.e. vCPUs
+> > must never see an invalid/deleted memslot, but if the memslot is writable,
+> > how does KVM prevent some writes from hitting the old HVA and some from hitting
+> > the new HVA without a quiescent period?
+> 
+> (Heh, and I forgot likewise that non-x86 does not retry on 
+> KVM_MEMSLOT_INVALID.  Yes, that would be treated as a bug on other 
+> architectures).
+> 
+> > > Wholesale replacement was my first idea when I looked at the issue, I think
+> > > at the end of 2020.  I never got to a full implementation, but my impression
+> > > was that allocating/deallocating dirty bitmaps, rmaps etc. would make it any
+> > > easier than arbitrary batch updates.
+> > 
+> > It's not obvious to me that the memslot metadata is going to be easy to handle
+> > regardless of what we do.  E.g. I'm pretty sure that batching updates will "corrupt"
+> > the dirty bitmap if a hole is punched in a memslot that's being dirty logged.
+> 
+> Indeed; I would have thought that it is clear with the batch updates API 
+> (which requires the update to be split into delete and insert), but 
+> apparently it's not and it's by no means optimal.
 
-I don't know about imx8qxp, but i've played with imx6 and Vybrid, and
-cache flush and invalidate are very expensive.
 
-      Andrew
+I 100% agree with everything Paolo said.
+
+
+Best regards,
+	Maxim Levitsky
+> 
+> Paolo
+> 
+
 
