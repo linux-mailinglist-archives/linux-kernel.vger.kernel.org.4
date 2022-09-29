@@ -2,161 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83395EF9C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A86F5EF9BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235993AbiI2QIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
+        id S235961AbiI2QHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235723AbiI2QID (ORCPT
+        with ESMTP id S235960AbiI2QHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:08:03 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31271D1E10;
-        Thu, 29 Sep 2022 09:07:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664467677; x=1696003677;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jHn9z+1lv3tK2fXTdGlOlF2iLuZnN9z+U8BA37mZtzw=;
-  b=OEl3SdZ0izF//pm2JZVcgRDg6NPD+GutRRvqF7hznjLjrleq1QH8tI23
-   Bv4k3KA6+MHdV2Oku2Wcvo1MWIDvj8B9S7fvsc+jUcH/Q+mYvLIcVJljQ
-   Acc92czUn7Rz2a0Bvvou1DT5WIDMaMgj2ouCh+FivVrfeVSS45eEMwBT0
-   MCY3AKv7PQJDwMBa8MppHqGE3F9qtfeVpI+qAFXD/Wu0LXPvuLWMBwveP
-   /sxjgbO+LHOK0T8Bl+JDy39cXj20m4WhdcSz+QRQJX8jY21BaIp9E8/Oe
-   dwfGSqXNJz5NRaSbzt1Bqszh24DZg6eATpYTtOeRzdsZVdCnTkelg2OPo
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="363786503"
-X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
-   d="scan'208";a="363786503"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 09:06:58 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="684897729"
-X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
-   d="scan'208";a="684897729"
-Received: from andyjuye-mobl.amr.corp.intel.com (HELO kcaccard-desk.amr.corp.intel.com) ([10.209.4.224])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 09:06:56 -0700
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     ira.weiny@intel.com,
-        Kristen Carlson Accardi <kristen@linux.intel.com>
-Subject: [PATCH] x86/sgx: Replace kmap/kunmap_atomic calls
-Date:   Thu, 29 Sep 2022 09:06:46 -0700
-Message-Id: <20220929160647.362798-1-kristen@linux.intel.com>
-X-Mailer: git-send-email 2.37.3
+        Thu, 29 Sep 2022 12:07:03 -0400
+Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DD0A2625;
+        Thu, 29 Sep 2022 09:07:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1664467612;
+        bh=YnWkIqWh+3LQ4hERC7FwXLMumQkE9n7lG9QWXcIze4o=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=LCBMX2RyOKSE7T7FjqAMVC7nKd1ij/s2ZnY4cdxSUg7kLUITMfqVvbwcG6vaoQShW
+         F5G+czRUVLeNc6TRp9ujogp1iefhoxxJl1iuYwaAYDWR8bmRC7cxrGd7YuEefBWD36
+         nJ9DNPKZZySLTYfZbysCLMT6VFnsPjoKJ/kE2Xpo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.7.110.20] ([143.244.37.136]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MVvLB-1olKbh1oJB-00RsAX; Thu, 29
+ Sep 2022 18:06:52 +0200
+Message-ID: <591ab7d4-b283-32bf-13d8-419a5b91c365@gmx.com>
+Date:   Thu, 29 Sep 2022 16:06:50 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     Thorsten Leemhuis <linux@leemhuis.info>, workflows@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+ <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
+ <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
+ <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
+ <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
+ <20220929153135.vu43n5kgdj4a3at6@meerkat.local>
+From:   "Artem S. Tashkinov" <aros@gmx.com>
+In-Reply-To: <20220929153135.vu43n5kgdj4a3at6@meerkat.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:saJyJPn8PqIzQByG/rKBe2b89u6WU6DGo6IScjmTRLVj6tnx0bd
+ GxRsCY5GX6dc8ps/wXXoa2mwbBvU3tu5dRy86hvZQi9Zd1yXZzPYbiTsDvZMxl57N8QpbC+
+ S4J/3ielwbWQ7JAuR6R6HStpL1QXVbSExw46ME05Zaig3lrVnHB58VtfzJ/u+Eqbxjrtyf9
+ EzITY7noJggmujpUfdiaA==
+X-UI-Out-Filterresults: junk:10;V03:K0:8TYXXS9cfNw=:954dzzyDfQB2Nl7wkjBn1iiU
+ EI3zMysz4AZUdaZrMtpfOPIkrVPD/IIshSLRU+9SpC4TzOazAZvyDznNfQQ1D/LSmsgOdgX+E
+ JUm4S6ofcJ1cUt+g8RIILyq6v/yNRSzCO4zhFBEUp/hm0xHTPdY61bzEnDwlpSdtqP2DFvvcf
+ IK/kSuphb+d93izlZ+5Vk1wLMGqtmuyr3YZysjq0qYzjKYONRsyOur6m5IJ0b0E1Htk8KtzsP
+ I+DdJarXHxQAKPfcfgqAD+bZwYVBwz2YISXTpcvBlojgf0m8LcNPnzPnjajnI/MGKNyMYuPdV
+ +xnHRy42BB1tg1WUlU8edIuubDojtOUosMPworheBsOwmbg4qbxo/WYnuk6mQFllhj/G1zOXD
+ S6e3XW4SlcbTouJUjt0n/IUw++073zQwPVxNoEEXHC7vPceqceAxfVMVQR4dC2sVBR7z3qbDY
+ geBsDzTJ3nXO6pRdAH37rOt3hMwNrKTCCI5NlQ4E5o68bED4s4fxwsITfp/hB8e4V9lKurfxI
+ JIqnRW7dFWMZSg0pXn8/HbTT0/R5NVX7gL+q+45CVXMc/HxBQ5JEILzmwfBMVZxJ4OExw1A27
+ kIAIt7WhaGHCfSVINppWCq/WWzbVJGn8/iPl9JXFCWTQyjJWAxIYQDn1Vowiizmi5PUxoT8Mi
+ M5K5T5OTRZJAAd0HONNQm6RkQ/FhGNXgepzg7LC6sLVXcRNZGle0VaUwHencyoVPS/ZEOCmk1
+ EfqHnku0idIk1goIrcrAoOz2p/VseGYIPk3hoyEzTJS9/mZEm7zGqyEfb2akcPaK+HXoHzvPF
+ 7zrxbKHtJEBfD1Fwk3HkpcPijohefLscHMiYkQrEtaSrJM1sLWNK7bKBCNOqJbVAljD/ONayG
+ kp0F5lhVwxFr6TSG7rozdEvc3wZKwfO8toM8CAp9QpXKtl3NNFzSpU1TWrXMqylsF0YwuKNlu
+ mapYTbBFtgWAnqmhZFl0mJ8F4O99de3VifO5oT4uYmVOnYREpR0CefNAK5qExd34sS4ZmPQwe
+ KrQp0guCbuJvnMxxfEPWb/glTj6uBtX9J5BPudElgTNS6sTLtwRLRk+pERVfxsHgZWO+YfUpN
+ a/tWxbQdRRwGA3dUl7OV2LU4fy9DNKe/C6Zu1gJ6u8XWto9CdeSngDzZLN7kd9DPX0xo7t8iV
+ U2W0Fm1cJDpcQVX6IMO5g9h9pVleFP8FD32Zzihimqu25w==
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is not necessary to disable page faults or preemption when
-using kmap calls, so replace kmap_atomic() and kunmap_atomic()
-calls with more the more appropriate kmap_local_page() and
-kunmap_local() calls.
 
-Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
----
- arch/x86/kernel/cpu/sgx/encl.c  | 12 ++++++------
- arch/x86/kernel/cpu/sgx/ioctl.c |  4 ++--
- arch/x86/kernel/cpu/sgx/main.c  |  8 ++++----
- 3 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index f40d64206ded..63dd92bd3288 100644
---- a/arch/x86/kernel/cpu/sgx/encl.c
-+++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -160,8 +160,8 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
- 		return ret;
- 
- 	pginfo.addr = encl_page->desc & PAGE_MASK;
--	pginfo.contents = (unsigned long)kmap_atomic(b.contents);
--	pcmd_page = kmap_atomic(b.pcmd);
-+	pginfo.contents = (unsigned long)kmap_local_page(b.contents);
-+	pcmd_page = kmap_local_page(b.pcmd);
- 	pginfo.metadata = (unsigned long)pcmd_page + b.pcmd_offset;
- 
- 	if (secs_page)
-@@ -187,8 +187,8 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
- 	 */
- 	pcmd_page_empty = !memchr_inv(pcmd_page, 0, PAGE_SIZE);
- 
--	kunmap_atomic(pcmd_page);
--	kunmap_atomic((void *)(unsigned long)pginfo.contents);
-+	kunmap_local(pcmd_page);
-+	kunmap_local((void *)(unsigned long)pginfo.contents);
- 
- 	get_page(b.pcmd);
- 	sgx_encl_put_backing(&b);
-@@ -197,10 +197,10 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
- 
- 	if (pcmd_page_empty && !reclaimer_writing_to_pcmd(encl, pcmd_first_page)) {
- 		sgx_encl_truncate_backing_page(encl, PFN_DOWN(page_pcmd_off));
--		pcmd_page = kmap_atomic(b.pcmd);
-+		pcmd_page = kmap_local_page(b.pcmd);
- 		if (memchr_inv(pcmd_page, 0, PAGE_SIZE))
- 			pr_warn("PCMD page not empty after truncate.\n");
--		kunmap_atomic(pcmd_page);
-+		kunmap_local(pcmd_page);
- 	}
- 
- 	put_page(b.pcmd);
-diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-index ebe79d60619f..f2f918b8b9b1 100644
---- a/arch/x86/kernel/cpu/sgx/ioctl.c
-+++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-@@ -221,11 +221,11 @@ static int __sgx_encl_add_page(struct sgx_encl *encl,
- 	pginfo.secs = (unsigned long)sgx_get_epc_virt_addr(encl->secs.epc_page);
- 	pginfo.addr = encl_page->desc & PAGE_MASK;
- 	pginfo.metadata = (unsigned long)secinfo;
--	pginfo.contents = (unsigned long)kmap_atomic(src_page);
-+	pginfo.contents = (unsigned long)kmap_local_page(src_page);
- 
- 	ret = __eadd(&pginfo, sgx_get_epc_virt_addr(epc_page));
- 
--	kunmap_atomic((void *)pginfo.contents);
-+	kunmap_local((void *)pginfo.contents);
- 	put_page(src_page);
- 
- 	return ret ? -EIO : 0;
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 515e2a5f25bb..4efda5e8cadf 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -159,17 +159,17 @@ static int __sgx_encl_ewb(struct sgx_epc_page *epc_page, void *va_slot,
- 	pginfo.addr = 0;
- 	pginfo.secs = 0;
- 
--	pginfo.contents = (unsigned long)kmap_atomic(backing->contents);
--	pginfo.metadata = (unsigned long)kmap_atomic(backing->pcmd) +
-+	pginfo.contents = (unsigned long)kmap_local_page(backing->contents);
-+	pginfo.metadata = (unsigned long)kmap_local_page(backing->pcmd) +
- 			  backing->pcmd_offset;
- 
- 	ret = __ewb(&pginfo, sgx_get_epc_virt_addr(epc_page), va_slot);
- 	set_page_dirty(backing->pcmd);
- 	set_page_dirty(backing->contents);
- 
--	kunmap_atomic((void *)(unsigned long)(pginfo.metadata -
-+	kunmap_local((void *)(unsigned long)(pginfo.metadata -
- 					      backing->pcmd_offset));
--	kunmap_atomic((void *)(unsigned long)pginfo.contents);
-+	kunmap_local((void *)(unsigned long)pginfo.contents);
- 
- 	return ret;
- }
--- 
-2.37.3
+On 9/29/22 15:31, Konstantin Ryabitsev wrote:
+> On Thu, Sep 29, 2022 at 02:22:10PM +0000, Artem S. Tashkinov wrote:
+>> * Delete all the components.
+>> * Leave a catch-all one.
+>> * Let bug reports rot because no one will ever see them. Almost just
+>> like now. Don't remind me of mailing lists.
+>
+> This is my proposal, except also:
+>
+> 1. post all new bugs and comments to a public-inbox feed that people can=
+ query
+>     via lore.kernel.org and tooling like lei.
+>
+>> Sarcasm and pain aside, Linus Torvalds himself _via Bugzilla_ has helpe=
+d
+>> me resolve critical issues on several occasions while my messages to
+>> LKML were simply _ignored_. Think about that.
+>
+> In fact, he probably did this by replying to emails, not via the web
+> interface.
 
+Nope, I CC'ed him.
+
+>
+>> Mailing lists will not work for such a huge project. Period. In the
+>> early 90s they worked, but we are 25 years later with millions more
+>> users. With a ton more of a ton more complicated hardware.
+>
+> We've recognized this a while ago, which is why our efforts have been ta=
+rgeted
+> at query-based message feeds. Hence, tools like lore.kernel.org and lei.=
+ It's
+> a work in progress, for sure, but it doesn't require any "everyone must =
+switch
+> workflows today" kind of coordination, and avoids introducing single poi=
+nts of
+> failure by making it easy to replicate everything to mirrored systems.
+>
+> -K
