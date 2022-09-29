@@ -2,144 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5556B5EF136
+	by mail.lfdr.de (Postfix) with ESMTP id A01845EF137
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235227AbiI2JES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 05:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
+        id S235460AbiI2JEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 05:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235062AbiI2JEP (ORCPT
+        with ESMTP id S235258AbiI2JES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:04:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A0F138F08;
-        Thu, 29 Sep 2022 02:04:13 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 09:04:09 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664442250;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W4VtPc3IUbEA1iZLSCZHOROAem8/WmUPd60NhJr4UTI=;
-        b=STyWG2ig2DPzX1N9FbbKqnbso4i7Zm4gjooKPt7iOUWb7eJY7b1yw/aDioyr2oKnCdGKmM
-        rzAf3dJX5pHw/iYNnn4nNeYwrgR0Jl6KZiyUflS8j2sh8Q2UysBgVw0IstIgWGFgxpWPi6
-        UOXfmG9fOPshspSz88NmaJHzxgURnxcledH/CvII+He4BOtweAG1Ei5qQYy30MzfwJ4xnf
-        Ay2AQokbMCmeb5FIQzcpO0I7TSIVY96FvYjQKlL71d9F6R8R3jKHMQjN3UehpoujYrQnHy
-        x1+DwXs0s6I1GlOIwQFWfUAKi5yJC0wsToa5enXUo2Spq5ljUrxl2nnizzNx3w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664442250;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W4VtPc3IUbEA1iZLSCZHOROAem8/WmUPd60NhJr4UTI=;
-        b=xycAQUARueWj7+9o4Ud0ooklqmXvWqgoupJJfqC2sr/4XgyAKrEmPvXCkWMNjojCDBEA7t
-        g1r7c1K5AZAlRSAA==
-From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/cacheinfo: Add a cpu_llc_shared_mask() UP variant
-Cc:     Saurabh Sengar <ssengar@linux.microsoft.com>,
-        Borislav Petkov <bp@suse.de>, <stable@vger.kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <1660148115-302-1-git-send-email-ssengar@linux.microsoft.com>
-References: <1660148115-302-1-git-send-email-ssengar@linux.microsoft.com>
+        Thu, 29 Sep 2022 05:04:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC5A138F08;
+        Thu, 29 Sep 2022 02:04:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8D5060AC5;
+        Thu, 29 Sep 2022 09:04:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 458C3C433D6;
+        Thu, 29 Sep 2022 09:04:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664442256;
+        bh=/q+TNJym/lHWven3ai74Aj5zszRyvr0r5MVggf20tnk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nSkkvdE/RIh9/+SqQ9cCu4o8nygoNw+BMKGy+OP4WGbTT6bmbDgYVmUaQvFO90gim
+         ypOXkWuYzktjz176sw0FEhZf55g91wyzqPdwSNF5ObqAUuW3wfabcWgSRpU5731u+i
+         P6Z3ESQBltFRkXfyLtKBkq8HUz3tMr9gvLmONoS8rmTBBVLRYdBA6xwMjsgwaHlLV8
+         DH2ajwTImJricpoeSiCYDiELJArg6r6qzmuACj1xs1huBxjqhM+7GlTcd0cUz9YC0L
+         zDcOBuL3S8HYE2T5R9RAGNf84Uw8Gt5823tPP/XW8IDxkB0oImE0qjGM3HhVFIXXHB
+         RHLNKEZ6GW1mQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1odpSw-0001O8-NV; Thu, 29 Sep 2022 11:04:22 +0200
+Date:   Thu, 29 Sep 2022 11:04:22 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/13] phy: qcom-qmp-pcie: clean up power-down handling
+Message-ID: <YzVflom04uK0gojn@hovoldconsulting.com>
+References: <20220928152822.30687-1-johan+linaro@kernel.org>
+ <20220928152822.30687-8-johan+linaro@kernel.org>
+ <c3d39c4e-2099-b09a-8486-8abae7336611@linaro.org>
+ <YzVIhK5z3I6hjzLU@hovoldconsulting.com>
+ <7f577974-7433-107a-a43a-4a3a5f999018@linaro.org>
 MIME-Version: 1.0
-Message-ID: <166444224911.401.15542526000823963244.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7f577974-7433-107a-a43a-4a3a5f999018@linaro.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Thu, Sep 29, 2022 at 10:30:20AM +0300, Dmitry Baryshkov wrote:
+> On 29/09/2022 10:25, Johan Hovold wrote:
+> > On Wed, Sep 28, 2022 at 10:15:46PM +0300, Dmitry Baryshkov wrote:
+> >> On 28/09/2022 18:28, Johan Hovold wrote:
+> >>> Always define the POWER_DOWN_CONTROL register instead of falling back to
+> >>> the v2 offset during power on and power off.
+> >>>
+> >>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> >>> ---
+> >>>    drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 20 ++++++--------------
+> >>>    1 file changed, 6 insertions(+), 14 deletions(-)
+> >>>
+> >>> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> >>> index eea66c24cf7e..47cdb9ed80cd 100644
+> >>> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> >>> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> >>> @@ -90,12 +90,14 @@ static const unsigned int pciephy_regs_layout[QPHY_LAYOUT_SIZE] = {
+> >>>    	[QPHY_SW_RESET]			= 0x00,
+> >>>    	[QPHY_START_CTRL]		= 0x08,
+> >>>    	[QPHY_PCS_STATUS]		= 0x174,
+> >>> +	[QPHY_PCS_POWER_DOWN_CONTROL]	= 0x04,
+> >>>    };
+> >>
+> >> Without symbolic names it's not obvious that 0x04 (and thus this
+> >> regs_layout) can be used for v2 and v3, but not for v4.
+> > 
+> > It's no less obvious than it was when we were falling back to the v2
+> > define when it wasn't in the table.
+> 
+> Yes, that's without doubts. Anyway, I've sent my view on the regs 
+> layouts standing on top of your six patches from this series. Could you 
+> please take a glance?
 
-Commit-ID:     df5b035b5683d6a25f077af889fb88e09827f8bc
-Gitweb:        https://git.kernel.org/tip/df5b035b5683d6a25f077af889fb88e09827f8bc
-Author:        Borislav Petkov <bp@suse.de>
-AuthorDate:    Fri, 19 Aug 2022 19:47:44 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 28 Sep 2022 18:35:37 +02:00
+Sure, but I don't think doing that separate change should be a blocker
+for this series. Especially since you run into issues like it not
+always being clear which version of the IP is being used (IPQ).
 
-x86/cacheinfo: Add a cpu_llc_shared_mask() UP variant
+I'd rather respin this series and drop the two patches that merged the
+two redundant layout structs.
 
-On a CONFIG_SMP=n kernel, the LLC shared mask is 0, which prevents
-__cache_amd_cpumap_setup() from doing the L3 masks setup, and more
-specifically from setting up the shared_cpu_map and shared_cpu_list
-files in sysfs, leading to lscpu from util-linux getting confused and
-segfaulting.
+Then you can work on further clean ups on top for 6.2 since that's going
+to require some more careful review and thought.
 
-Add a cpu_llc_shared_mask() UP variant which returns a mask with a
-single bit set, i.e., for CPU0.
-
-Fixes: 2b83809a5e6d ("x86/cpu/amd: Derive L3 shared_cpu_map from cpu_llc_shared_mask")
-Reported-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/1660148115-302-1-git-send-email-ssengar@linux.microsoft.com
----
- arch/x86/include/asm/smp.h | 25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
-
-diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
-index 81a0211..a73bced 100644
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -21,16 +21,6 @@ DECLARE_PER_CPU_READ_MOSTLY(u16, cpu_llc_id);
- DECLARE_PER_CPU_READ_MOSTLY(u16, cpu_l2c_id);
- DECLARE_PER_CPU_READ_MOSTLY(int, cpu_number);
- 
--static inline struct cpumask *cpu_llc_shared_mask(int cpu)
--{
--	return per_cpu(cpu_llc_shared_map, cpu);
--}
--
--static inline struct cpumask *cpu_l2c_shared_mask(int cpu)
--{
--	return per_cpu(cpu_l2c_shared_map, cpu);
--}
--
- DECLARE_EARLY_PER_CPU_READ_MOSTLY(u16, x86_cpu_to_apicid);
- DECLARE_EARLY_PER_CPU_READ_MOSTLY(u32, x86_cpu_to_acpiid);
- DECLARE_EARLY_PER_CPU_READ_MOSTLY(u16, x86_bios_cpu_apicid);
-@@ -172,6 +162,16 @@ extern int safe_smp_processor_id(void);
- # define safe_smp_processor_id()	smp_processor_id()
- #endif
- 
-+static inline struct cpumask *cpu_llc_shared_mask(int cpu)
-+{
-+	return per_cpu(cpu_llc_shared_map, cpu);
-+}
-+
-+static inline struct cpumask *cpu_l2c_shared_mask(int cpu)
-+{
-+	return per_cpu(cpu_l2c_shared_map, cpu);
-+}
-+
- #else /* !CONFIG_SMP */
- #define wbinvd_on_cpu(cpu)     wbinvd()
- static inline int wbinvd_on_all_cpus(void)
-@@ -179,6 +179,11 @@ static inline int wbinvd_on_all_cpus(void)
- 	wbinvd();
- 	return 0;
- }
-+
-+static inline struct cpumask *cpu_llc_shared_mask(int cpu)
-+{
-+	return (struct cpumask *)cpumask_of(0);
-+}
- #endif /* CONFIG_SMP */
- 
- extern unsigned disabled_cpus;
+Johan
