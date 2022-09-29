@@ -2,214 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7140F5EF919
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5395EF92C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235946AbiI2Pe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
+        id S235895AbiI2Pf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235945AbiI2Pc7 (ORCPT
+        with ESMTP id S235382AbiI2Pdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:32:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B20814CC;
-        Thu, 29 Sep 2022 08:32:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAC04618EA;
-        Thu, 29 Sep 2022 15:32:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96E28C433B5;
-        Thu, 29 Sep 2022 15:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664465531;
-        bh=deF2FcKisyN76jbp5jOiTyccjfcKeOLLcy3mOidROng=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nr4IAOAuWHll+BmxomIWuzsHt/jkkrEtWJnnvDlUqzR1/5hSqWBnIKiDslsAv0XTg
-         MPpQvmbegbz1BxfgXdMgGubMwF2JW6H1guzPM5cgk82Th1nZs4Wt/I4335EqZag2Nr
-         +huxVfGn1jfDy44wjtXvI7EZcKW9KE3D2BZDLxtBGm+LNUaK/qnIIQMsWWvP/moaj7
-         WJx3t+N6koyWC+3LTf0i41TtlXHsCMSF2ELjt6u9bnVT2EWN/2h7sJYJnnsHPt8q64
-         T4eRudc4EFB3oz4fQBdnmmMCcGxMm1G/akxvk0HkZaL4AnjugLfu6ATMfIjyB1d8qF
-         scqeQ33I+OOgw==
-Date:   Thu, 29 Sep 2022 16:32:04 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Hal Feng <hal.feng@linux.starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 05/30] soc: sifive: l2 cache: Convert to platform
- driver
-Message-ID: <YzW6dEGsbSXKFtGu@spud>
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220929143225.17907-6-hal.feng@linux.starfivetech.com>
+        Thu, 29 Sep 2022 11:33:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1737FB300;
+        Thu, 29 Sep 2022 08:33:28 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28TFT930001030;
+        Thu, 29 Sep 2022 15:33:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=ea/B67kM5cKu/ilXsIFirbfCsRfFvbE8pGJg2IsNiyA=;
+ b=Psm7QDSKvCTOTlWEMW3uyo79CKNUH2JPCWn9lxxGavDgtuecaSkAno2D1vE28XqO43fU
+ 6J3S2mHpGdMj6BWRGNY4z+OBznbgsnc3TvLlMbopjhRExmeu7vSmgDmJNDDt/JZsdqWq
+ JivGISpRufQNhNUti0TIto3cbROaf2VgHNwCMkDSU7rA9+s77baQ2KjPzTngKRjnQNy1
+ 1hFxEuz/bY7+XCMNY5c733Cw7ns4z6P8Pli/ewRGHIld2YZ03wRtaUSSElexUHSRdkw9
+ N8y1xFLjezhpg5HZR8WUiJ1paPdlncB8bS4eybAwvTQT6rN8aBGYNEKh/TLty5Rnrdh7 CA== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jwe1yg39v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Sep 2022 15:33:08 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28TFM7SV014223;
+        Thu, 29 Sep 2022 15:33:06 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 3jssh8w5rk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Sep 2022 15:33:06 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28TFX2MU3736162
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Sep 2022 15:33:02 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ACF67AE057;
+        Thu, 29 Sep 2022 15:33:02 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3FEA1AE045;
+        Thu, 29 Sep 2022 15:33:02 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 29 Sep 2022 15:33:02 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev
+Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, jgg@nvidia.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/5] iommu/s390: Fixes related to attach and aperture handling
+Date:   Thu, 29 Sep 2022 17:32:57 +0200
+Message-Id: <20220929153302.3195115-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: RiDOH9cvB6X0Xrd0M6Y7dI_yFVukcfIZ
+X-Proofpoint-ORIG-GUID: RiDOH9cvB6X0Xrd0M6Y7dI_yFVukcfIZ
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929143225.17907-6-hal.feng@linux.starfivetech.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-29_08,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ suspectscore=0 spamscore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0
+ adultscore=0 impostorscore=0 phishscore=0 bulkscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209290097
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 10:32:00PM +0800, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
-> 
-> This converts the driver to use the builtin_platform_driver_probe macro
-> to initialize the driver. This macro ends up calling device_initcall as
-> was used previously, but also allocates a platform device which gives us
-> access to much nicer APIs such as platform_ioremap_resource,
-> platform_get_irq and dev_err_probe.
+Hi All,
 
-You should resend the series ignoring this comment, but for v2, I think
-you should pay attention to following patchset:
+This is v3 of a follow up to Matt's recent series[0] where he tackled a race
+that turned out to be outside of the s390 IOMMU driver itself as well as
+duplicate device attachments. After an internal discussion we came up with what
+I believe is a cleaner fix. Instead of actively checking for duplicates we
+instead detach from any previous domain on attach. From my cursory reading of
+the code this seems to be what the Intel IOMMU driver is doing as well.
 
-https://lore.kernel.org/linux-riscv/20220913061817.22564-1-zong.li@sifive.com/
+Moreover we drop the attempt to re-attach the device to its previous IOMMU
+domain on failure. This was fragile, unlikely to help and unexpected for
+calling code. Thanks Jason for the suggestion.
 
-Hopefully by the time you get to a v2, that patchset will have been
-applied as 6.1 material..
+During development of this fix we realized that we can get rid of struct
+s390_domain_device entirely if we instead thread the list through the attached
+struct zpci_devs. This saves us from having to allocate during attach and gets
+rid of one level of indirection during IOMMU operations.
 
-Thanks,
-Conor.
+Additionally 3 more fixes have been added that weren't in v2 of this series.
+One is for a potential situation where the aperture of a domain could shrink
+and leave invalid translations. The next one fixes an off by one in checking
+validity of an IOVA and the last one fixes a wrong value for pgsize_bitmap.
 
-> 
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
-> ---
->  drivers/soc/sifive/sifive_l2_cache.c | 79 ++++++++++++++--------------
->  1 file changed, 40 insertions(+), 39 deletions(-)
-> 
-> diff --git a/drivers/soc/sifive/sifive_l2_cache.c b/drivers/soc/sifive/sifive_l2_cache.c
-> index 59640a1d0b28..010d612f7420 100644
-> --- a/drivers/soc/sifive/sifive_l2_cache.c
-> +++ b/drivers/soc/sifive/sifive_l2_cache.c
-> @@ -7,9 +7,9 @@
->   */
->  #include <linux/debugfs.h>
->  #include <linux/interrupt.h>
-> -#include <linux/of_irq.h>
-> -#include <linux/of_address.h>
-> -#include <linux/device.h>
-> +#include <linux/io.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/platform_device.h>
->  #include <asm/cacheinfo.h>
->  #include <soc/sifive/sifive_l2_cache.h>
->  
-> @@ -96,12 +96,6 @@ static void l2_config_read(void)
->  	pr_info("L2CACHE: Index of the largest way enabled: %d\n", regval);
->  }
->  
-> -static const struct of_device_id sifive_l2_ids[] = {
-> -	{ .compatible = "sifive,fu540-c000-ccache" },
-> -	{ .compatible = "sifive,fu740-c000-ccache" },
-> -	{ /* end of table */ },
-> -};
-> -
->  static ATOMIC_NOTIFIER_HEAD(l2_err_chain);
->  
->  int register_sifive_l2_error_notifier(struct notifier_block *nb)
-> @@ -192,36 +186,29 @@ static irqreturn_t l2_int_handler(int irq, void *device)
->  	return IRQ_HANDLED;
->  }
->  
-> -static int __init sifive_l2_init(void)
-> +static int __init sifive_l2_probe(struct platform_device *pdev)
->  {
-> -	struct device_node *np;
-> -	struct resource res;
-> -	int i, rc, intr_num;
-> -
-> -	np = of_find_matching_node(NULL, sifive_l2_ids);
-> -	if (!np)
-> -		return -ENODEV;
-> -
-> -	if (of_address_to_resource(np, 0, &res))
-> -		return -ENODEV;
-> -
-> -	l2_base = ioremap(res.start, resource_size(&res));
-> -	if (!l2_base)
-> -		return -ENOMEM;
-> -
-> -	intr_num = of_property_count_u32_elems(np, "interrupts");
-> -	if (!intr_num) {
-> -		pr_err("L2CACHE: no interrupts property\n");
-> -		return -ENODEV;
-> -	}
-> -
-> -	for (i = 0; i < intr_num; i++) {
-> -		g_irq[i] = irq_of_parse_and_map(np, i);
-> -		rc = request_irq(g_irq[i], l2_int_handler, 0, "l2_ecc", NULL);
-> -		if (rc) {
-> -			pr_err("L2CACHE: Could not request IRQ %d\n", g_irq[i]);
-> -			return rc;
-> -		}
-> +	struct device *dev = &pdev->dev;
-> +	int nirqs;
-> +	int ret;
-> +	int i;
-> +
-> +	l2_base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(l2_base))
-> +		return PTR_ERR(l2_base);
-> +
-> +	nirqs = platform_irq_count(pdev);
-> +	if (nirqs <= 0)
-> +		return dev_err_probe(dev, -ENODEV, "no interrupts\n");
-> +
-> +	for (i = 0; i < nirqs; i++) {
-> +		g_irq[i] = platform_get_irq(pdev, i);
-> +		if (g_irq[i] < 0)
-> +			return g_irq[i];
-> +
-> +		ret = devm_request_irq(dev, g_irq[i], l2_int_handler, 0, pdev->name, NULL);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret, "Could not request IRQ %d\n", g_irq[i]);
->  	}
->  
->  	l2_config_read();
-> @@ -234,4 +221,18 @@ static int __init sifive_l2_init(void)
->  #endif
->  	return 0;
->  }
-> -device_initcall(sifive_l2_init);
-> +
-> +static const struct of_device_id sifive_l2_match[] = {
-> +	{ .compatible = "sifive,fu540-c000-ccache" },
-> +	{ .compatible = "sifive,fu740-c000-ccache" },
-> +	{ /* sentinel */ }
-> +};
-> +
-> +static struct platform_driver sifive_l2_driver = {
-> +	.driver = {
-> +		.name = "sifive_l2_cache",
-> +		.of_match_table = sifive_l2_match,
-> +		.suppress_bind_attrs = true,
-> +	},
-> +};
-> +builtin_platform_driver_probe(sifive_l2_driver, sifive_l2_probe);
-> -- 
-> 2.17.1
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+*Note*:
+This series is against the s390 features branch[1] which already contains
+the bus_next field removal that was part of v2.
+
+Best regards,
+Niklas
+
+Changes since v2:
+- The patch removing the unused bus_next field has been spun out and
+  already made it into the s390 feature branch on git.kernel.org
+- Make __s390_iommu_detach_device() return void (Jason)
+- Remove the re-attach on failure dance as it is unlikely to help
+  and complicates debug and recovery (Jason)
+- Ignore attempts to detach from domain that is not the active one
+- Add patch to fix potential shrinking of the aperture and use
+  reserved ranges per device instead of the aperture to respect
+  IOVA range restrictions (Jason)
+- Add a fix for an off by one error on checking an IOVA against
+  the aperture
+- Add a fix for wrong pgsize_bitmap
+
+Changes since v1:
+- After patch 3 we don't have to search in the devices list on detach as
+  we alreadz have hold of the zpci_dev (Jason)
+- Add a WARN_ON() if somehow ended up detaching a device from a domain that
+  isn't the device's current domain.
+- Removed the iteration and list delete from s390_domain_free() instead
+  just WARN_ON() when we're freeing without having detached
+- The last two points should help catching sequencing errors much more
+  quickly in the future.
+
+[0] https://lore.kernel.org/linux-iommu/20220831201236.77595-1-mjrosato@linux.ibm.com/
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/
+
+Niklas Schnelle (5):
+  iommu/s390: Fix duplicate domain attachments
+  iommu/s390: Get rid of s390_domain_device
+  iommu/s390: Fix potential s390_domain aperture shrinking
+  iommu/s390: Fix incorrect aperture check
+  iommu/s390: Fix incorrect pgsize_bitmap
+
+ arch/s390/include/asm/pci.h |   1 +
+ drivers/iommu/s390-iommu.c  | 147 ++++++++++++++++--------------------
+ 2 files changed, 64 insertions(+), 84 deletions(-)
+
+-- 
+2.34.1
+
