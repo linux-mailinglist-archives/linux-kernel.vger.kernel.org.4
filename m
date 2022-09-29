@@ -2,78 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9D65EF979
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC255EF97E
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235236AbiI2PuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
+        id S235563AbiI2Pu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235025AbiI2PuG (ORCPT
+        with ESMTP id S235329AbiI2Puw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:50:06 -0400
-Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1F71F62B;
-        Thu, 29 Sep 2022 08:50:01 -0700 (PDT)
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1odvnS-0005cZ-5r; Thu, 29 Sep 2022 17:49:58 +0200
-Message-ID: <bd4d7463-a960-3c49-9c56-a8bd5c1ea7f0@maciej.szmigiero.name>
-Date:   Thu, 29 Sep 2022 17:49:52 +0200
+        Thu, 29 Sep 2022 11:50:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3C7B2A945;
+        Thu, 29 Sep 2022 08:50:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BCBFE15BF;
+        Thu, 29 Sep 2022 08:50:54 -0700 (PDT)
+Received: from [10.57.65.170] (unknown [10.57.65.170])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CEE953F792;
+        Thu, 29 Sep 2022 08:50:44 -0700 (PDT)
+Message-ID: <7ae39c9c-8424-8b65-ac09-c0e87f3b0f01@arm.com>
+Date:   Thu, 29 Sep 2022 16:50:43 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Content-Language: en-US, pl-PL
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20220927152241.194900-1-pbonzini@redhat.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [PATCH] KVM: allow compiling out SMM support
-In-Reply-To: <20220927152241.194900-1-pbonzini@redhat.com>
+Subject: Re: [RFC PATCH v1 2/2] ARM: dts: rk3288: add the interrupts property
+ for PWM
+Content-Language: en-GB
+To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de
+Cc:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sebastian.reichel@collabora.com, wxt@rock-chips.com,
+        kever.yang@rock-chips.com, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <6eba6c10-9c96-b40f-937a-e02d43b04cd7@gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <6eba6c10-9c96-b40f-937a-e02d43b04cd7@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.09.2022 17:22, Paolo Bonzini wrote:
-> Some users of KVM implement the UEFI variable store through a paravirtual device
-> that does not require the "SMM lockbox" component of edk2; allow them to
-> compile out system management mode, which is not a full implementation
-> especially in how it interacts with nested virtualization.
+On 2022-09-29 15:04, Johan Jonker wrote:
+> The Rockchip rk3288 SoC has 4-built-in PWM channels.
 > 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
-> 	The patch isn't pretty.  I could skip all the changes to add WARNs
-> 	to called functions, but the point of adding the config symbol is
-> 	to make sure that those functions, and all the baggage they bring,
-> 	are dead.
+> Configurable to operate in capture mode.
+> Measures the high/low polarity effective cycles of this input waveform
+> Generates a single interrupt at the transition of input waveform polarity
 > 
+> Configurable to operate in continuous mode or one-shot mode.
+> One-shot operation will produce N + 1 periods of the waveform,
+> where N is the repeat counter value, and generates a single interrupt at
+> the end of operation.
+> Continuous mode generates the waveform continuously and
+> do not generates any interrupts.
+> 
+> Add interrupts property to rk3288 PWM nodes.
 
-Out of curiosity: why the SMM support is so special that it's worth to
-add a dedicated Kconfig entry for it?
+As far as I can make out from the TRM, these are only valid when 
+GRF_SOC_CON2[0] = 0, otherwise it's in "new" RK_PWM mode using SPI 78 
+for all channels. Which apparently will be the case for anyone using 
+upstream U-Boot:
 
-After all, the current typical way to disable stuff (for testing, etc)
-in KVM is to provide this possibility via a kvm module parameter.
-This way it also can be switched on or off without having to rebuild the
-kernel.
-
-Looking at the patch it doesn't seem to disable that much of code (like,
-significantly slim down the binary) and where it does disable something
-it mostly relies on compiler dead code removal rather than explicit
-#ifdefs (which would guarantee that the disabled code did not end in
-the binary).
+https://source.denx.de/u-boot/u-boot/-/blob/master/arch/arm/mach-rockchip/rk3288/rk3288.c#L83
 
 Thanks,
-Maciej
+Robin.
 
-
-
+> Signed-off-by: Caesar Wang <wxt@rock-chips.com>
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> 
+> ---
+> 
+> Original patch location:
+>    ARM: dts: rk3288: add the interrupts property for PWM
+>    https://github.com/rockchip-linux/kernel/commit/16b7b284618d1652e694f6286f575ce82f5f03e5
+> 
+> ---
+> 
+> "rockchip,rk3288-pwm" is in use as fall back string for Rockchip SoCs with combined
+> PWM interrupt.
+> ---
+>   arch/arm/boot/dts/rk3288.dtsi | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+> index 487b0e03d..1223aa369 100644
+> --- a/arch/arm/boot/dts/rk3288.dtsi
+> +++ b/arch/arm/boot/dts/rk3288.dtsi
+> @@ -675,6 +675,7 @@
+>   	pwm0: pwm@ff680000 {
+>   		compatible = "rockchip,rk3288-pwm";
+>   		reg = <0x0 0xff680000 0x0 0x10>;
+> +		interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
+>   		#pwm-cells = <3>;
+>   		pinctrl-names = "default";
+>   		pinctrl-0 = <&pwm0_pin>;
+> @@ -685,6 +686,7 @@
+>   	pwm1: pwm@ff680010 {
+>   		compatible = "rockchip,rk3288-pwm";
+>   		reg = <0x0 0xff680010 0x0 0x10>;
+> +		interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
+>   		#pwm-cells = <3>;
+>   		pinctrl-names = "default";
+>   		pinctrl-0 = <&pwm1_pin>;
+> @@ -695,6 +697,7 @@
+>   	pwm2: pwm@ff680020 {
+>   		compatible = "rockchip,rk3288-pwm";
+>   		reg = <0x0 0xff680020 0x0 0x10>;
+> +		interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
+>   		#pwm-cells = <3>;
+>   		pinctrl-names = "default";
+>   		pinctrl-0 = <&pwm2_pin>;
+> @@ -705,6 +708,7 @@
+>   	pwm3: pwm@ff680030 {
+>   		compatible = "rockchip,rk3288-pwm";
+>   		reg = <0x0 0xff680030 0x0 0x10>;
+> +		interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
+>   		#pwm-cells = <3>;
+>   		pinctrl-names = "default";
+>   		pinctrl-0 = <&pwm3_pin>;
