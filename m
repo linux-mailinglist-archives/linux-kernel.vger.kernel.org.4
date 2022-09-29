@@ -2,93 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA99B5EF92B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2AC5EF928
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236012AbiI2Pfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        id S235746AbiI2PgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235303AbiI2Pdz (ORCPT
+        with ESMTP id S234535AbiI2PeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:33:55 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD801B263F;
-        Thu, 29 Sep 2022 08:33:35 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id c9so1984617ybf.5;
-        Thu, 29 Sep 2022 08:33:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=aXaeQFl7WeBGM1OGQQKe5SOEmDdnmC4Z6lKLU12QUBw=;
-        b=g6RhftYXeZcYpBxrpOfyc4VefrqsfhcLmEVqC8sATZDdsTl9waWQlqIg7pTBDmTAhs
-         8rEV62yD1c8833Fk/ymXMAoLLb7EcbXJA+npk34Rk0WnQz07h+Blva3s5QnvtEBN5G/9
-         Po/I6b5uquQK9gfIr5StbAWqv1RzkI2KRcq/VAo34sQVBn34/xEeKKe/wBNoW+ssRkk8
-         wsk61DM1mHjJ0lKxe4NQQv/j4vwXjIv9CROt5jCStZAMhlX+wn6qIW//nxazrOjl8wRt
-         +f6CW/pO7kyEmQVVHVNAq0NgJizggmiS9JJJbAUQd5mROQOjHQjn2IkS/Gsh4D3eub7i
-         cNug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=aXaeQFl7WeBGM1OGQQKe5SOEmDdnmC4Z6lKLU12QUBw=;
-        b=GhjiyKYk+dLjmLA2FQF5yrQlT5eVNHIeggBmOAAGbkNaTth9O6O8tpvJSnonTVtFPo
-         3bR/qveAiEGVY28QOhM6PuoUs+5nA7eyJDnmoeJ1gjByLaBqB7hYZPryJnXtaqgU/RXp
-         kRM9klpBaYfVSTeuQYi9QDnn/ToYd/Nr1De5iH2ujkmRqtCF2BdSHs8zmJwm8yrL2pDc
-         6TNZdeM1Jjk/m6wyZspg6U2zdzywK6JN7MvHIPJNeLSFES8mDaeFwUFUozkTpQF/R/eg
-         d7tc5PSdD7C/5sPmVkCIUGADowwR4Qs7ADHPq8cHcpb98THfh8/IGNIgkjWwvGfs9Ug+
-         V2/g==
-X-Gm-Message-State: ACrzQf298m1JQDKiIgsDH9GUpySdJjBQHkXEmfEtr8GBs1ZNp0CC7ZNN
-        1p6YWbbd03hE+DQ5qA8ue7/cmQ2cJPzau80kgYg=
-X-Google-Smtp-Source: AMsMyM4Sdv0hIIfsBVFD5fjzLKQMsYtCX9dgkbEmSQRlCy0yCX0lUGRJa0EMdijIOlrV6c6c/UR3kKaykbj3FB+Q5kg=
-X-Received: by 2002:a25:9b43:0:b0:6b3:9cc2:a651 with SMTP id
- u3-20020a259b43000000b006b39cc2a651mr3606130ybo.485.1664465614724; Thu, 29
- Sep 2022 08:33:34 -0700 (PDT)
+        Thu, 29 Sep 2022 11:34:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25F01C00DD;
+        Thu, 29 Sep 2022 08:33:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90A7C61227;
+        Thu, 29 Sep 2022 15:33:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 665A5C433C1;
+        Thu, 29 Sep 2022 15:33:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664465623;
+        bh=+81bAoJyqC0ALTsR9tloD4BNLwube6I1s0Bczot21Xk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hq1NG+ARl0FcweRYLLtiF+pfBV56zxl92+e8Jox7KnYupArV9QTRLdTUAEo6Biyp2
+         Dsd0cqplyrzh72f33CMTb8897MZ3CI2BaHj3lStC8CQEZQh10IOrCMHjLfLGuhj+ZR
+         UhxQbnRj3matK9cJbNK93AB7UgQjPOi6+lVfGsJhpHl+jKFAUFSI0vD7MS0vlH70O6
+         tUZ5cbTv990KaRXWXYrYcc6WHaH+pVw6T8ZmYFUykcSlot6bwKYiJuhrW8YKf0YLVG
+         qsaSIMXcDY6vJTGqGQl/cdNG9pZPn8oxDv+K71DJqQlxdh3peuH4TbSXUJYbKHgsP/
+         jIZTsKGUKPU0w==
+Date:   Thu, 29 Sep 2022 16:33:36 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Hal Feng <hal.feng@linux.starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 04/30] dt-bindings: sifive-l2-cache: Support StarFive
+ JH71x0 SoCs
+Message-ID: <YzW60PDwnJ7GeLYK@spud>
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220929143225.17907-5-hal.feng@linux.starfivetech.com>
 MIME-Version: 1.0
-References: <20220929101515.354-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20220929101515.354-1-lukas.bulwahn@gmail.com>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Thu, 29 Sep 2022 08:33:23 -0700
-Message-ID: <CAMo8Bf+MHVLOh-U0EyP1DoJPDSHscC=st0TYZ9L76+xgfBxaOQ@mail.gmail.com>
-Subject: Re: [PATCH] xtensa: update config files
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Zankel <chris@zankel.net>, linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929143225.17907-5-hal.feng@linux.starfivetech.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 3:15 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
->
-> Clean up config files by:
->   - removing configs that were deleted in the past
->   - removing configs not in tree and without recently pending patches
->   - adding new configs that are replacements for old configs in the file
->
-> For some detailed information, see Link.
->
-> Link: https://lore.kernel.org/kernel-janitors/20220929090645.1389-1-lukas.bulwahn@gmail.com/
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+On Thu, Sep 29, 2022 at 10:31:59PM +0800, Hal Feng wrote:
+> From: Emil Renner Berthing <kernel@esmil.dk>
+> 
+> This cache controller is also used on the StarFive JH7100 and JH7110
+> SoCs.
+
+Ditto this patch, hopefully [0] will have landed as 6.1 material
+before you get around to an actual v2.
+
+Thanks,
+Conor
+
+0 - https://lore.kernel.org/linux-riscv/20220913061817.22564-1-zong.li@sifive.com/
+
+> 
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
 > ---
->  arch/xtensa/configs/audio_kc705_defconfig   | 1 -
->  arch/xtensa/configs/cadence_csp_defconfig   | 4 ----
->  arch/xtensa/configs/generic_kc705_defconfig | 1 -
->  arch/xtensa/configs/nommu_kc705_defconfig   | 1 -
->  arch/xtensa/configs/smp_lx200_defconfig     | 1 -
->  arch/xtensa/configs/xip_kc705_defconfig     | 1 -
->  6 files changed, 9 deletions(-)
-
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
-
--- 
-Thanks.
--- Max
+>  Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+> index ca3b9be58058..ba29ecfd3a92 100644
+> --- a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+> @@ -24,6 +24,8 @@ select:
+>          enum:
+>            - sifive,fu540-c000-ccache
+>            - sifive,fu740-c000-ccache
+> +          - starfive,jh7100-ccache
+> +          - starfive,jh7110-ccache
+>  
+>    required:
+>      - compatible
+> @@ -35,6 +37,8 @@ properties:
+>            - enum:
+>                - sifive,fu540-c000-ccache
+>                - sifive,fu740-c000-ccache
+> +              - starfive,jh7100-ccache
+> +              - starfive,jh7110-ccache
+>            - const: cache
+>        - items:
+>            - const: microchip,mpfs-ccache
+> -- 
+> 2.17.1
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
