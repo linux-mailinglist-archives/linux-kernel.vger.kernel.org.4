@@ -2,66 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E915EF804
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9E45EF80B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235052AbiI2OwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
+        id S235755AbiI2Oxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235011AbiI2OwW (ORCPT
+        with ESMTP id S235724AbiI2Oxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:52:22 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7909120BE2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:52:21 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 203so1828442ybc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:52:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=cRiBROZUMZ4RO1YIJbO8on2J/l8wLjUeU2JeFbV/Dvg=;
-        b=eFO3ZKn17a9Nj2KMJ8BZuiEauUPP79eUL5Y7Zv0Hzr0lDCsgTlwMY/0l73LiYi04rM
-         gYaOIBg3gFAHROiXHTBzeXAP4tCXrJvo8yr5k+y2ZCxASsBbA/V3IDXSPTCK1kC8shhQ
-         Dr7MjVdxXmZ2jRtmlOuJPM+M5WLuJ+4amXMd4hV3sLKoqyf5MkvHrHACqpSuKTbqm0Ln
-         lemZ/qdspDaWj9mzKCY4lK/hx6svh6vslyL//6GwGuJjQuvMhSOn1AUJ+jmUQMQHpdWH
-         NVn+6AQ/ce7DwhxKijlcZXDlK7SydJI1qw4WssR0RWd2aVl5niuGHyLWsLq+bbWaIyv1
-         e/vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=cRiBROZUMZ4RO1YIJbO8on2J/l8wLjUeU2JeFbV/Dvg=;
-        b=NXyUpJ7TO70IZgBeQqmwXyS3bmssn8j1KQ0WtZpNJdStkF7+5NK/l/qhqocM9twu/K
-         palX9RMiYSxsoHdw1EHOWISasEbiiAP7XIUUZH4DPGX2ZCtTdkpC8344s67jAXOxH/79
-         dItn/tFuDfCCeoaljLzIU1S/S2HdLHLTVVexBJlFkSt9nC3xbSWkISR7IAYIdXjGtL56
-         NsRJZDib/lP53voSj/dfBf0TWgRNQaO/73UP5yDybaBqnCF7jjzZHj+mKT+cwFVPxM6h
-         QsgKegEXMuXsa0Mx7sDkLTc4gGIhWTl0S7zzFm8yhU9qGpkhdU61fYiapejrXJpiAalC
-         LD5g==
-X-Gm-Message-State: ACrzQf3D1IM7VndYWI1iRaMpBO3Qw2RHPwe5uPBEuXBaJF8S4y4wvh2Z
-        CXSdqR+w0DkgrBqKL9viIlihz8GUnKxoBzspDoA=
-X-Google-Smtp-Source: AMsMyM4Pi401HcDMszsbINvIGNY9kue/h+QmEV05duXd1FVwVyf/RPxdSYURZclHgFbv9ejyeh+1r9ZeeoulZaxXy+A=
-X-Received: by 2002:a25:730a:0:b0:6bc:dbd6:8278 with SMTP id
- o10-20020a25730a000000b006bcdbd68278mr223301ybc.155.1664463140548; Thu, 29
- Sep 2022 07:52:20 -0700 (PDT)
+        Thu, 29 Sep 2022 10:53:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6387D13F2BB;
+        Thu, 29 Sep 2022 07:53:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CEC591650;
+        Thu, 29 Sep 2022 07:53:39 -0700 (PDT)
+Received: from [10.1.38.20] (e122027.cambridge.arm.com [10.1.38.20])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 693D83F792;
+        Thu, 29 Sep 2022 07:53:30 -0700 (PDT)
+Message-ID: <e613a225-dabf-7e87-2624-a3244df8a877@arm.com>
+Date:   Thu, 29 Sep 2022 15:53:28 +0100
 MIME-Version: 1.0
-References: <CAFcO6XNk5Wtjju=DBOcJr46miBbaWT7jL+zjhWMp+xnz7k5K9A@mail.gmail.com>
- <87v8pa306x.wl-tiwai@suse.de> <CAFcO6XP2MpiAsF7YXYjgh7FMq+hyzFJjK8iBf=ccZ2B6BpNvOg@mail.gmail.com>
- <87leq6gglm.wl-tiwai@suse.de>
-In-Reply-To: <87leq6gglm.wl-tiwai@suse.de>
-From:   butt3rflyh4ck <butterflyhuangxx@gmail.com>
-Date:   Thu, 29 Sep 2022 22:52:10 +0800
-Message-ID: <CAFcO6XNsqKCzNBiBF4eYyh+RCSGBp_5HSzxF0gw0kgfQ2FDAiQ@mail.gmail.com>
-Subject: Re: A divide error bug in snd_pcm_write
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     perex@perex.cz, tiwai@suse.com,
-        pierre-louis.bossart@linux.intel.com, broonie@kernel.org,
-        alsa-devel@alsa-project.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 5/6] drm/sched: Use parent fence instead of finished
+Content-Language: en-GB
+To:     Arvind Yadav <Arvind.Yadav@amd.com>, Christian.Koenig@amd.com,
+        andrey.grodzovsky@amd.com, shashank.sharma@amd.com,
+        amaranath.somalapuram@amd.com, Arunpravin.PaneerSelvam@amd.com,
+        sumit.semwal@linaro.org, gustavo@padovan.org, airlied@linux.ie,
+        daniel@ffwll.ch, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org
+References: <20220914164321.2156-1-Arvind.Yadav@amd.com>
+ <20220914164321.2156-6-Arvind.Yadav@amd.com>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <20220914164321.2156-6-Arvind.Yadav@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,35 +50,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This one fixes the problem.
-https://lore.kernel.org/all/20220926135558.26580-2-tiwai@suse.de/
+On 14/09/2022 17:43, Arvind Yadav wrote:
+> Using the parent fence instead of the finished fence
+> to get the job status. This change is to avoid GPU
+> scheduler timeout error which can cause GPU reset.
 
-Regards,
- butt3rflyh4ck.
+I'm able to reproduce crashes on Panfrost and I believe this commit is
+the cause. Specifically it's possible for job->s_fence->parent to be NULL.
 
-On Tue, Sep 27, 2022 at 2:01 AM Takashi Iwai <tiwai@suse.de> wrote:
->
-> On Mon, 26 Sep 2022 19:16:48 +0200,
-> butt3rflyh4ck wrote:
-> >
-> > The latest kernel upstream.
-> > Yes, but using mmap, you can map the runtime->status page, and then
-> > copy the data through memcpy to overwrite the status->state data, or
-> > even more, which is incredible.
->
-> Ah, then that's exactly the case my latest patch set covers.
-> Either the first patch or the second patch alone should work.
->   https://lore.kernel.org/r/20220926135558.26580-2-tiwai@suse.de
->   https://lore.kernel.org/r/20220926135558.26580-3-tiwai@suse.de
->
-> Could you verify either of them fixes the problem?
->
->
-> thanks,
->
-> Takashi
+The underlying issue seems to involve drm_sched_resubmit_jobs_ext() - if
+the run_jobs() callback returns an error it will set s_fence->parent to
+NULL after signalling s_fence->finished:
 
+> 		fence = sched->ops->run_job(s_job);
+> 		i++;
+> 
+> 		if (IS_ERR_OR_NULL(fence)) {
+> 			if (IS_ERR(fence))
+> 				dma_fence_set_error(&s_fence->finished, PTR_ERR(fence));
+> 
+> 			s_job->s_fence->parent = NULL;
 
+I don't understand the reasoning behind this change, but it doesn't seem
+right to be using the parent fence when we have code which can be
+setting that pointer to NULL.
 
--- 
-Active Defense Lab of Venustech
+Since I don't understand the reasoning my only suggestion is to revert
+this patch (and potentially the dependent patch "dma-buf: Check status
+of enable-signaling bit on debug"?).
+
+Can anyone suggest a better fix?
+
+Thanks,
+
+Steve
+
+> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+> Reviewed-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+> ---
+> 
+> changes in v1,v2 - Enable signaling for finished fence in sche_main()
+> is removed
+> 
+> ---
+>  drivers/gpu/drm/scheduler/sched_main.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+> index e0ab14e0fb6b..2ac28ad11432 100644
+> --- a/drivers/gpu/drm/scheduler/sched_main.c
+> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+> @@ -829,7 +829,7 @@ drm_sched_get_cleanup_job(struct drm_gpu_scheduler *sched)
+>  	job = list_first_entry_or_null(&sched->pending_list,
+>  				       struct drm_sched_job, list);
+>  
+> -	if (job && dma_fence_is_signaled(&job->s_fence->finished)) {
+> +	if (job && dma_fence_is_signaled(job->s_fence->parent)) {
+>  		/* remove job from pending_list */
+>  		list_del_init(&job->list);
+>  
+> @@ -841,7 +841,7 @@ drm_sched_get_cleanup_job(struct drm_gpu_scheduler *sched)
+>  
+>  		if (next) {
+>  			next->s_fence->scheduled.timestamp =
+> -				job->s_fence->finished.timestamp;
+> +				job->s_fence->parent->timestamp;
+>  			/* start TO timer for next job */
+>  			drm_sched_start_timeout(sched);
+>  		}
+
