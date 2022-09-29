@@ -2,242 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BED55EF364
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A561A5EF366
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235318AbiI2KZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        id S235497AbiI2KZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235210AbiI2KYv (ORCPT
+        with ESMTP id S235489AbiI2KZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:24:51 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D3102F01E;
-        Thu, 29 Sep 2022 03:24:50 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1134)
-        id 3BFF620E0A24; Thu, 29 Sep 2022 03:24:50 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3BFF620E0A24
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1664447090;
-        bh=977Jsx8ikA7Oogcgw8EBooG0nQxyqKCRquP1jxo5VVs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YlsiFBE6WYt+tCZuIO8FgIRnnqKACZ9O028o3iuBYw6VnTya1lUTWxFLxjhPLTuY9
-         098YVY/ia259YM7POhKtpAMXGf62hTglg03tmE2G3aX7v8OxeId3tilkIxQJZi0yP3
-         YX98gcc3StwD6GEhGKx2+7hfiYOcv19pfOwxCSmk=
-From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
-To:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Shradha Gupta <shradhagupta@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: [PATCH 2/2] hv_balloon: Add support for configurable order free page reporting
-Date:   Thu, 29 Sep 2022 03:24:41 -0700
-Message-Id: <1664447081-14744-3-git-send-email-shradhagupta@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1664447081-14744-1-git-send-email-shradhagupta@linux.microsoft.com>
-References: <1664447081-14744-1-git-send-email-shradhagupta@linux.microsoft.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 29 Sep 2022 06:25:28 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDF180F70
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:25:13 -0700 (PDT)
+Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 28TAOxeI086108;
+        Thu, 29 Sep 2022 19:24:59 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
+ Thu, 29 Sep 2022 19:24:59 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 28TAOxoW086105
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 29 Sep 2022 19:24:59 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <14313951-15f1-0ceb-259c-f251eb140706@I-love.SAKURA.ne.jp>
+Date:   Thu, 29 Sep 2022 19:24:59 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [syzbot] unexpected kernel reboot (8)
+Content-Language: en-US
+To:     Dmitry Vyukov <dvyukov@google.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+References: <0000000000008af58705e9b32b1d@google.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc:     linux-kernel@vger.kernel.org,
+        syzbot <syzbot+8346a1aeed52cb04c9ba@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com
+In-Reply-To: <0000000000008af58705e9b32b1d@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Newer versions of Hyper-V allow reporting unused guest pages in chunks
-smaller than 2 Mbytes.  Using smaller chunks allows reporting more
-unused guest pages, but with increased overhead in the finding the
-small chunks.  To make this tradeoff configurable, use the existing
-page_reporting_order module parameter to control the reporting order.
-Drop and refine checks that restricted the minimun page reporting order
-to 2Mbytes size pages. Add appropriate checks to make sure the
-underlying Hyper-V versions support cold discard hints of any order
-(and not just starting from 9)
+This is not a kernel bug but a fuzzer's bug.
 
-Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
----
- drivers/hv/hv_balloon.c | 94 ++++++++++++++++++++++++++++++++---------
- 1 file changed, 73 insertions(+), 21 deletions(-)
+Looking at https://syzkaller.appspot.com/text?tag=ReproC&x=155622df080000 ,
+this reproducer is reading data from /dev/vcs to [0x20001dc0,0x20003DE0) range,
+and passing subset of this range [0x20002300,0x20003300) as "const void *data"
+argument of mount() syscall which is interpreted as a string.
 
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index fdf6decacf06..7088ed056e50 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -469,12 +469,16 @@ static bool do_hot_add;
-  * the specified number of seconds.
-  */
- static uint pressure_report_delay = 45;
-+extern unsigned int page_reporting_order;
-+#define HV_MAX_FAILURES	2
- 
- /*
-  * The last time we posted a pressure report to host.
-  */
- static unsigned long last_post_time;
- 
-+static int hv_hypercall_multi_failure;
-+
- module_param(hot_add, bool, (S_IRUGO | S_IWUSR));
- MODULE_PARM_DESC(hot_add, "If set attempt memory hot_add");
- 
-@@ -579,6 +583,10 @@ static struct hv_dynmem_device dm_device;
- 
- static void post_status(struct hv_dynmem_device *dm);
- 
-+static void enable_page_reporting(void);
-+
-+static void disable_page_reporting(void);
-+
- #ifdef CONFIG_MEMORY_HOTPLUG
- static inline bool has_pfn_is_backed(struct hv_hotadd_state *has,
- 				     unsigned long pfn)
-@@ -1418,6 +1426,18 @@ static int dm_thread_func(void *dm_dev)
- 		 */
- 		reinit_completion(&dm_device.config_event);
- 		post_status(dm);
-+		/*
-+		 * disable free page reporting if multiple hypercall
-+		 * failure flag set. It is not done in the page_reporting
-+		 * callback context as that causes a deadlock between
-+		 * page_reporting_process() and page_reporting_unregister()
-+		 */
-+		if (hv_hypercall_multi_failure >= HV_MAX_FAILURES) {
-+			pr_err("Multiple failures in cold memory discard hypercall, disabling page reporting\n");
-+			disable_page_reporting();
-+			/* Reset the flag after disabling reporting */
-+			hv_hypercall_multi_failure = 0;
-+		}
- 	}
- 
- 	return 0;
-@@ -1593,20 +1613,20 @@ static void balloon_onchannelcallback(void *context)
- 
- }
- 
--/* Hyper-V only supports reporting 2MB pages or higher */
--#define HV_MIN_PAGE_REPORTING_ORDER	9
--#define HV_MIN_PAGE_REPORTING_LEN (HV_HYP_PAGE_SIZE << HV_MIN_PAGE_REPORTING_ORDER)
-+#define HV_LARGE_REPORTING_ORDER	9
-+#define HV_LARGE_REPORTING_LEN (HV_HYP_PAGE_SIZE << \
-+		HV_LARGE_REPORTING_ORDER)
- static int hv_free_page_report(struct page_reporting_dev_info *pr_dev_info,
- 		    struct scatterlist *sgl, unsigned int nents)
- {
- 	unsigned long flags;
- 	struct hv_memory_hint *hint;
--	int i;
-+	int i, order;
- 	u64 status;
- 	struct scatterlist *sg;
- 
- 	WARN_ON_ONCE(nents > HV_MEMORY_HINT_MAX_GPA_PAGE_RANGES);
--	WARN_ON_ONCE(sgl->length < HV_MIN_PAGE_REPORTING_LEN);
-+	WARN_ON_ONCE(sgl->length < (HV_HYP_PAGE_SIZE << page_reporting_order));
- 	local_irq_save(flags);
- 	hint = *(struct hv_memory_hint **)this_cpu_ptr(hyperv_pcpu_input_arg);
- 	if (!hint) {
-@@ -1621,21 +1641,53 @@ static int hv_free_page_report(struct page_reporting_dev_info *pr_dev_info,
- 
- 		range = &hint->ranges[i];
- 		range->address_space = 0;
--		/* page reporting only reports 2MB pages or higher */
--		range->page.largepage = 1;
--		range->page.additional_pages =
--			(sg->length / HV_MIN_PAGE_REPORTING_LEN) - 1;
--		range->page_size = HV_GPA_PAGE_RANGE_PAGE_SIZE_2MB;
--		range->base_large_pfn =
--			page_to_hvpfn(sg_page(sg)) >> HV_MIN_PAGE_REPORTING_ORDER;
-+		order = get_order(sg->length);
-+		/*
-+		 * Hyper-V expects the additional_pages field in the units
-+		 * of one of these 3 sizes, 4Kbytes, 2Mbytes or 1Gbytes.
-+		 * This is dictated by the values of the fields page.largesize
-+		 * and page_size.
-+		 * This code however, only uses 4Kbytes and 2Mbytes units
-+		 * and not 1Gbytes unit.
-+		 */
-+
-+		/* page reporting for pages 2MB or higher */
-+		if (order >= HV_LARGE_REPORTING_ORDER ) {
-+			range->page.largepage = 1;
-+			range->page_size = HV_GPA_PAGE_RANGE_PAGE_SIZE_2MB;
-+			range->base_large_pfn = page_to_hvpfn(
-+					sg_page(sg)) >> HV_LARGE_REPORTING_ORDER;
-+			range->page.additional_pages =
-+				(sg->length / HV_LARGE_REPORTING_LEN) - 1;
-+		} else {
-+			/* Page reporting for pages below 2MB */
-+			range->page.basepfn = page_to_hvpfn(sg_page(sg));
-+			range->page.largepage = false;
-+			range->page.additional_pages =
-+				(sg->length / HV_HYP_PAGE_SIZE) - 1;
-+		}
-+
- 	}
- 
- 	status = hv_do_rep_hypercall(HV_EXT_CALL_MEMORY_HEAT_HINT, nents, 0,
- 				     hint, NULL);
- 	local_irq_restore(flags);
--	if ((status & HV_HYPERCALL_RESULT_MASK) != HV_STATUS_SUCCESS) {
-+	if (!hv_result_success(status)) {
-+
- 		pr_err("Cold memory discard hypercall failed with status %llx\n",
--			status);
-+				status);
-+		if (hv_hypercall_multi_failure > 0)
-+			hv_hypercall_multi_failure++;
-+
-+		if (hv_result(status) == HV_STATUS_INVALID_PARAMETER) {
-+			pr_err("Underlying Hyper-V does not support order less than 9. Hypercall failed\n");
-+			pr_err("Defaulting to page_reporting_order %d\n",
-+					pageblock_order);
-+			page_reporting_order = pageblock_order;
-+			hv_hypercall_multi_failure++;
-+			return -EINVAL;
-+		}
-+
- 		return -EINVAL;
- 	}
- 
-@@ -1646,12 +1698,6 @@ static void enable_page_reporting(void)
- {
- 	int ret;
- 
--	/* Essentially, validating 'PAGE_REPORTING_MIN_ORDER' is big enough. */
--	if (pageblock_order < HV_MIN_PAGE_REPORTING_ORDER) {
--		pr_debug("Cold memory discard is only supported on 2MB pages and above\n");
--		return;
--	}
--
- 	if (!hv_query_ext_cap(HV_EXT_CAPABILITY_MEMORY_COLD_DISCARD_HINT)) {
- 		pr_debug("Cold memory discard hint not supported by Hyper-V\n");
- 		return;
-@@ -1659,12 +1705,18 @@ static void enable_page_reporting(void)
- 
- 	BUILD_BUG_ON(PAGE_REPORTING_CAPACITY > HV_MEMORY_HINT_MAX_GPA_PAGE_RANGES);
- 	dm_device.pr_dev_info.report = hv_free_page_report;
-+	/*
-+	 * We let the page_reporting_order parameter decide the order
-+	 * in the page_reporting code
-+	 */
-+	dm_device.pr_dev_info.order = 0;
- 	ret = page_reporting_register(&dm_device.pr_dev_info);
- 	if (ret < 0) {
- 		dm_device.pr_dev_info.report = NULL;
- 		pr_err("Failed to enable cold memory discard: %d\n", ret);
- 	} else {
--		pr_info("Cold memory discard hint enabled\n");
-+		pr_info("Cold memory discard hint enabled with order %d\n",
-+				page_reporting_order);
- 	}
- }
- 
--- 
-2.37.2
+That is, this problem happens when console screen buffer by chance contained
+kernel messages which the kernel has printk()ed upon boot.
+
+(I defer "#syz invalid" because we need to somehow fix this problem on the fuzzer side.)
+
+On 2022/09/28 11:03, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    1707c39ae309 Merge tag 'driver-core-6.0-rc7' of git://git...
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=17324288880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=122d7bd4fc8e0ecb
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8346a1aeed52cb04c9ba
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15ca1f54880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=155622df080000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+8346a1aeed52cb04c9ba@syzkaller.appspotmail.com
 
