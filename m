@@ -2,56 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47155EF664
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C285EF656
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235369AbiI2NYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 09:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
+        id S235074AbiI2NXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 09:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235476AbiI2NYU (ORCPT
+        with ESMTP id S234453AbiI2NW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 09:24:20 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548A81822D8;
-        Thu, 29 Sep 2022 06:24:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=GFmE0LoqXWikNphWZFYNpMrFo7yy2CuxJ2DWoSYNxVY=; b=MSKKijugu/O/kh0yv74PpZNETo
-        FF4caSWlOapcQmrDnXO9pL5Dd/CiQUrf6+NSvST1Ok5dnXEFDp6uU00URC6befQVI+aQrqRbcOsBH
-        Usf0YCKdxjk7EEKxrH4rGE5AWcqFU/T2q5euWd2SidkiRa6XNQAacj6tYNGd05C+OfDY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1odtWI-000cOg-9e; Thu, 29 Sep 2022 15:24:06 +0200
-Date:   Thu, 29 Sep 2022 15:24:06 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>
-Subject: Re: [EXT] Re: [PATCH 1/1] net: fec: add initial XDP support
-Message-ID: <YzWcdsGkq4x8VWbY@lunn.ch>
-References: <20220928152509.141490-1-shenwei.wang@nxp.com>
- <YzT59R+zx4dA5G5Q@lunn.ch>
- <PAXPR04MB91859C7C1F1C4FE94611D5A789579@PAXPR04MB9185.eurprd04.prod.outlook.com>
+        Thu, 29 Sep 2022 09:22:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055C5147CE8;
+        Thu, 29 Sep 2022 06:22:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F2C26136A;
+        Thu, 29 Sep 2022 13:22:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 290EFC433C1;
+        Thu, 29 Sep 2022 13:22:54 +0000 (UTC)
+Date:   Thu, 29 Sep 2022 09:24:06 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] docs, kprobes: Fix the wrong location of Kprobes
+Message-ID: <20220929092406.3383b5a1@gandalf.local.home>
+In-Reply-To: <75c28f07-4bc7-6094-d264-d7657c40ba88@loongson.cn>
+References: <1663322106-12178-1-git-send-email-yangtiezhu@loongson.cn>
+        <20220926142218.100e0d9b@gandalf.local.home>
+        <75c28f07-4bc7-6094-d264-d7657c40ba88@loongson.cn>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PAXPR04MB91859C7C1F1C4FE94611D5A789579@PAXPR04MB9185.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,28 +47,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > +struct fec_enet_xdp_stats {
-> > > +     u64     xdp_pass;
-> > > +     u64     xdp_drop;
-> > > +     u64     xdp_xmit;
-> > > +     u64     xdp_redirect;
-> > > +     u64     xdp_xmit_err;
-> > > +     u64     xdp_tx;
-> > > +     u64     xdp_tx_err;
-> > > +};
-> > > +
-> > > +     switch (act) {
-> > > +     case XDP_PASS:
-> > > +             rxq->stats.xdp_pass++;
-> > 
-> > Since the stats are u64, and most machines using the FEC are 32 bit, you cannot
-> > just do an increment. Took a look at u64_stats_sync.h.
-> > 
+On Thu, 29 Sep 2022 18:01:01 +0800
+Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+
+> On 09/27/2022 02:22 AM, Steven Rostedt wrote:
+> > On Fri, 16 Sep 2022 17:55:06 +0800
+> > Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+> >  
+> >> After commit 22471e1313f2 ("kconfig: use a menu in arch/Kconfig to reduce
+> >> clutter"), the location of Kprobes is under "General architecture-dependent
+> >> options" rather than "General setup".
+> >>  
+> >
+> > Probably add a "Fixes:" tag for the above mentioned commit.
+> >
+> > Anyway, Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>  
 > 
+> 
+> Thank you.
+> 
+> Do you know which tree this patch will go through?
 
-> As this increment is only executed under the NAPI kthread context,
-> is the protection still required?
+I believe that Jon can take it through his documentation tree.
 
-Are the statistics values read by ethtool under NAPI kthread context?
+> Is it necessary to send v2 with "Fixes:" tag?
 
-    Andrew
+No, Jon could add it.
+
+Thanks,
+
+-- Steve
