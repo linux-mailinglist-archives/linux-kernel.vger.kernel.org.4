@@ -2,91 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6F65EEBD0
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 04:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC665EEBD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 04:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234433AbiI2CeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 22:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44948 "EHLO
+        id S234616AbiI2Ceh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 22:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234813AbiI2Cdi (ORCPT
+        with ESMTP id S234197AbiI2CeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 22:33:38 -0400
-Received: from rcdn-iport-9.cisco.com (rcdn-iport-9.cisco.com [173.37.86.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2043D1257B1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 19:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=5564; q=dns/txt; s=iport;
-  t=1664418804; x=1665628404;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=J8FJpY07GQUODCXLNSH1A91a8Eozm/bUH4IvAo0MNTc=;
-  b=gIDfw2VZGHV83/PzqTk6p7dGMU8fbvCq1qfBaSnR1P1liEO03gBFPyCq
-   i0nH+Dye1bqhL3HmAzhKZ6uckhxmrKS37iysMj9pJ0VfFzc/X5hhrKS0g
-   Gd9JUuwDZt8F1tzRB7xnB5ZEFzwdvzMgtAO7MhbaT1RXDhC/qXhp9ucEF
-   Q=;
-IronPort-Data: =?us-ascii?q?A9a23=3AJhKOVKmfAHluLfib9LOpERfo5gz6J0RdPkR7X?=
- =?us-ascii?q?Q2eYbSJt1+Wr1GztxIXXjvTPf+NN2bzKNsnbtuyp0lSscXQmIQxGVFlrixkF?=
- =?us-ascii?q?ltH+JHPbTi7wugcHM8zwvUuxyuL1u1GAjX7BJ1yHya0SiuFaOC79yEhjP/QH?=
- =?us-ascii?q?9IQNcadUsxPbV48IMseoUoLd94R2uaEsPDha++/kYqaT/73YDdJ7wVJ3lc8s?=
- =?us-ascii?q?Mpvnv/AUMPa41v0tnRmDRxCUcS3e3M9VPrzLonpR5f0rxU9IwK0ewrD5OnRE?=
- =?us-ascii?q?mLx5RwhDJaulaz2Nx1MSb/JNg/IgX1TM0SgqkEd/WppjeBqb7xFNRs/Zzahx?=
- =?us-ascii?q?7idzP1BvJqxRAM2N4XHmf8WVF9TFCQW0ahuqe+aeCju7ZHOp6HBWz62qxl0N?=
- =?us-ascii?q?2kyPIsF6qN0DHtI+PgwNj8AdFaAiviwzbb9TfNj7uwnLc/2LMYWoHQlzjzDC?=
- =?us-ascii?q?/siaZTCWLnRo95e0i05is1HEbDZfcVxQTFmcB3EYhsJP14NCZQ3h8+hnHy5e?=
- =?us-ascii?q?DpdwHqOqKMxpWHVwAFry7/rGMHYcdvMTsJQ9m6RpXrD12D4BAwKcdKY1DyJ+?=
- =?us-ascii?q?26tgemJmjn0MKoeHbu5+/pCj1yW3mEXBQMXXlv9uvC/z0CkUtRUKlcf/Wwlp?=
- =?us-ascii?q?O4v7ySDVN73XzW7rWSCsxpaXMBfe8Ux6BuM0bbT+waUQGwJVDlQQNc9u9UxW?=
- =?us-ascii?q?CRs20Lht8zoAThHs7CPT3+ZsLCOoluP1YI9RYMZTTUPQQ1A6N75rcRjyBnOV?=
- =?us-ascii?q?d1kVqWyi7XI9fjL62jihEADa3871KbnD5mGwG0=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AvZpxsKutibipFjedVsQ4VExM7skDTdV00z?=
- =?us-ascii?q?EX/kB9WHVpmwKj+/xG+85rsSMc5wx+ZJhNo7q90ey7MBDhHP1OkOws1MmZPT?=
- =?us-ascii?q?UO0VHAROpfBMnZsl/d8kbFmdK1u50MT0FWMqyWMbEDt6bHCM3SKadY/DFBm5?=
- =?us-ascii?q?rY49vj8w=3D=3D?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0A5AADea4Ji/5BdJa1aHQEBAQEJARI?=
- =?us-ascii?q?BBQUBgXsIAQsBgiqBSz1DjG+lUYF8CwEBAQ9CBAEBhQIChT4CJTQJDgECBAE?=
- =?us-ascii?q?BARIBAQUBAQECAQcEgQkThXWGQwYyAUYQUVcGARKCfYMYq1aCK4EBiBmBZRS?=
- =?us-ascii?q?BKAGJQ4UcJxyBSUSCUYIsin8Ek3OCKwMJBgcFgT4SgSFxAQgGBgcKBTIGAgw?=
- =?us-ascii?q?YFAQCExJNBgwSAhMMCgYWDg40EhkMDwMSAxEBBwILEggVLAgDAgMIAwIDIws?=
- =?us-ascii?q?CAxgJBwoDHQgKHBIQFAIEEx8LCAMaHy0JAgQOA0MICwoDEQQDExgLFggQBAY?=
- =?us-ascii?q?DCS8NKAsDBQ8PAQYDBgIFBQEDIAMUAwUnBwMhBwsmDQ0EIx0DAwUmAwICGwc?=
- =?us-ascii?q?CAgMCBhcGAgIZJzEKKA0IBAgEGAQeJQ4FBQIHMQUELwIeBAUGEQkCFgIGBAU?=
- =?us-ascii?q?CBAQWAgISCAIIJxsHFjYZAQVdBgsJIxYGLBEFBhYDJlIGIh2XYQGBD4IFbpJ?=
- =?us-ascii?q?ABpAlniqDVoFDni0aMahXlmYgoVRlhE6BYTyBWTMaCBsVgyNRGQ+OLBaNcQF?=
- =?us-ascii?q?cJDE7AgYLAQEDCZEaAQE?=
-X-IronPort-AV: E=Sophos;i="5.91,230,1647302400"; 
-   d="scan'208";a="985189455"
-Received: from rcdn-core-8.cisco.com ([173.37.93.144])
-  by rcdn-iport-9.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 29 Sep 2022 02:33:22 +0000
-Received: from zorba.cisco.com ([10.25.129.98])
-        by rcdn-core-8.cisco.com (8.15.2/8.15.2) with ESMTP id 28T2X1Yx007711;
-        Thu, 29 Sep 2022 02:33:21 GMT
-From:   Daniel Walker <danielwa@cisco.com>
-To:     Will Deacon <will@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Rob Herring <robh@kernel.org>,
-        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     xe-linux-external@cisco.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] CMDLINE: arm64: convert to generic builtin command line
-Date:   Wed, 28 Sep 2022 19:32:54 -0700
-Message-Id: <20220929023301.3344694-9-danielwa@cisco.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220929023301.3344694-1-danielwa@cisco.com>
-References: <20220929023301.3344694-1-danielwa@cisco.com>
+        Wed, 28 Sep 2022 22:34:07 -0400
+Received: from out199-12.us.a.mail.aliyun.com (out199-12.us.a.mail.aliyun.com [47.90.199.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09764126B60;
+        Wed, 28 Sep 2022 19:33:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0VQy2tsA_1664418817;
+Received: from 30.240.121.51(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VQy2tsA_1664418817)
+          by smtp.aliyun-inc.com;
+          Thu, 29 Sep 2022 10:33:39 +0800
+Message-ID: <f09e6aee-5d7f-62c2-8a6e-d721d8b22699@linux.alibaba.com>
+Date:   Thu, 29 Sep 2022 10:33:36 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+Subject: Re: [PATCH v2] ACPI: APEI: do not add task_work to kernel thread to
+ avoid memory leak
+To:     "Luck, Tony" <tony.luck@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        James Morse <james.morse@arm.com>
+Cc:     Len Brown <lenb@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stable <stable@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "cuibixuan@linux.alibaba.com" <cuibixuan@linux.alibaba.com>,
+        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
+        "zhuo.song@linux.alibaba.com" <zhuo.song@linux.alibaba.com>
+References: <20220916050535.26625-1-xueshuai@linux.alibaba.com>
+ <20220924074953.83064-1-xueshuai@linux.alibaba.com>
+ <CAJZ5v0jAZC81Peowy0iKuq+cy68tyn0OK3a--nW=wWMbRojcxg@mail.gmail.com>
+ <f0735218-7730-c275-8cee-38df9bec427d@linux.alibaba.com>
+ <SJ1PR11MB6083FC6B8D64933C573CAB64FC529@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <79cb9aee-9ad5-00f4-3f7a-9c409f502685@linux.alibaba.com>
+ <SJ1PR11MB60830CBCB42CFF552A2B6CF0FC559@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Content-Language: en-US
+In-Reply-To: <SJ1PR11MB60830CBCB42CFF552A2B6CF0FC559@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-Outbound-SMTP-Client: 10.25.129.98, [10.25.129.98]
-X-Outbound-Node: rcdn-core-8.cisco.com
-X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,186 +64,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This removes arm64 from the device tree handling of the
-command line arguments.
 
-The boot_command_line variable is populated inside the earliest
-user of the command line, which is in idreg-override.c.
 
-The device tree should not be needed to do any further handling
-of the boot command line options.
+在 2022/9/28 AM1:47, Luck, Tony 写道:
+> I follow and agree with everything up until:
+> 
+>> In a conclusion, the error will be handled in a kworker with or without this fix.
 
-Cc: xe-linux-external@cisco.com
-Signed-off-by: Daniel Walker <danielwa@cisco.com>
----
- arch/arm64/Kconfig                  | 33 +----------------------------
- arch/arm64/include/asm/setup.h      |  4 ++++
- arch/arm64/include/uapi/asm/setup.h |  2 ++
- arch/arm64/kernel/idreg-override.c  |  9 ++++----
- arch/arm64/kernel/pi/kaslr_early.c  | 14 ++++++------
- 5 files changed, 19 insertions(+), 43 deletions(-)
+> 
+> It isn't handled during the interrupt (it can't be).
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 1ce7685ad5de..a3f38d88bfe6 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -123,6 +123,7 @@ config ARM64
- 	select GENERIC_ALLOCATOR
- 	select GENERIC_ARCH_TOPOLOGY
- 	select GENERIC_CLOCKEVENTS_BROADCAST
-+	select GENERIC_CMDLINE
- 	select GENERIC_CPU_AUTOPROBE
- 	select GENERIC_CPU_VULNERABILITIES
- 	select GENERIC_EARLY_IOREMAP
-@@ -2137,38 +2138,6 @@ config ARM64_ACPI_PARKING_PROTOCOL
- 	  protocol even if the corresponding data is present in the ACPI
- 	  MADT table.
- 
--config CMDLINE
--	string "Default kernel command string"
--	default ""
--	help
--	  Provide a set of default command-line options at build time by
--	  entering them here. As a minimum, you should specify the the
--	  root device (e.g. root=/dev/nfs).
--
--choice
--	prompt "Kernel command line type" if CMDLINE != ""
--	default CMDLINE_FROM_BOOTLOADER
--	help
--	  Choose how the kernel will handle the provided default kernel
--	  command line string.
--
--config CMDLINE_FROM_BOOTLOADER
--	bool "Use bootloader kernel arguments if available"
--	help
--	  Uses the command-line options passed by the boot loader. If
--	  the boot loader doesn't provide any, the default kernel command
--	  string provided in CMDLINE will be used.
--
--config CMDLINE_FORCE
--	bool "Always use the default kernel command string"
--	help
--	  Always use the default kernel command string, even if the boot
--	  loader passes other arguments to the kernel.
--	  This is useful if you cannot or don't want to change the
--	  command-line options your boot loader passes to the kernel.
--
--endchoice
--
- config EFI_STUB
- 	bool
- 
-diff --git a/arch/arm64/include/asm/setup.h b/arch/arm64/include/asm/setup.h
-index f4af547ef54c..5a8037262cbb 100644
---- a/arch/arm64/include/asm/setup.h
-+++ b/arch/arm64/include/asm/setup.h
-@@ -3,10 +3,13 @@
- #ifndef __ARM64_ASM_SETUP_H
- #define __ARM64_ASM_SETUP_H
- 
-+#ifndef __ASSEMBLY__
- #include <linux/string.h>
-+#endif
- 
- #include <uapi/asm/setup.h>
- 
-+#ifndef __ASSEMBLY__
- void *get_early_fdt_ptr(void);
- void early_fdt_map(u64 dt_phys);
- 
-@@ -30,5 +33,6 @@ static inline bool arch_parse_debug_rodata(char *arg)
- 	return false;
- }
- #define arch_parse_debug_rodata arch_parse_debug_rodata
-+#endif /* __ASSEMBLY__ */
- 
- #endif
-diff --git a/arch/arm64/include/uapi/asm/setup.h b/arch/arm64/include/uapi/asm/setup.h
-index 5d703888f351..f5fc5b806369 100644
---- a/arch/arm64/include/uapi/asm/setup.h
-+++ b/arch/arm64/include/uapi/asm/setup.h
-@@ -20,7 +20,9 @@
- #ifndef __ASM_SETUP_H
- #define __ASM_SETUP_H
- 
-+#ifndef __ASSEMBLY__
- #include <linux/types.h>
-+#endif
- 
- #define COMMAND_LINE_SIZE	2048
- 
-diff --git a/arch/arm64/kernel/idreg-override.c b/arch/arm64/kernel/idreg-override.c
-index 1b0542c69738..e1fc7f1d02c1 100644
---- a/arch/arm64/kernel/idreg-override.c
-+++ b/arch/arm64/kernel/idreg-override.c
-@@ -9,6 +9,7 @@
- #include <linux/ctype.h>
- #include <linux/kernel.h>
- #include <linux/libfdt.h>
-+#include <linux/cmdline.h>
- 
- #include <asm/cacheflush.h>
- #include <asm/cpufeature.h>
-@@ -287,11 +288,11 @@ static __init void parse_cmdline(void)
- {
- 	const u8 *prop = get_bootargs_cmdline();
- 
--	if (IS_ENABLED(CONFIG_CMDLINE_FORCE) || !prop)
--		__parse_cmdline(CONFIG_CMDLINE, true);
-+	strscpy(boot_command_line, prop, COMMAND_LINE_SIZE);
-+	cmdline_add_builtin(boot_command_line);
-+
-+	__parse_cmdline(boot_command_line, true);
- 
--	if (!IS_ENABLED(CONFIG_CMDLINE_FORCE) && prop)
--		__parse_cmdline(prop, true);
- }
- 
- /* Keep checkers quiet */
-diff --git a/arch/arm64/kernel/pi/kaslr_early.c b/arch/arm64/kernel/pi/kaslr_early.c
-index 17bff6e399e4..1e00bc01fa7a 100644
---- a/arch/arm64/kernel/pi/kaslr_early.c
-+++ b/arch/arm64/kernel/pi/kaslr_early.c
-@@ -11,6 +11,7 @@
- #include <linux/types.h>
- #include <linux/sizes.h>
- #include <linux/string.h>
-+#include <linux/cmdline.h>
- 
- #include <asm/archrandom.h>
- #include <asm/memory.h>
-@@ -42,7 +43,7 @@ static bool cmdline_contains_nokaslr(const u8 *cmdline)
- 
- static bool is_kaslr_disabled_cmdline(void *fdt)
- {
--	if (!IS_ENABLED(CONFIG_CMDLINE_FORCE)) {
-+	if (!IS_ENABLED(CONFIG_CMDLINE_OVERRIDE)) {
- 		int node;
- 		const u8 *prop;
- 
-@@ -54,16 +55,15 @@ static bool is_kaslr_disabled_cmdline(void *fdt)
- 		if (!prop)
- 			goto out;
- 
-+		if (cmdline_contains_nokaslr(CMDLINE_STATIC_APPEND))
-+			return true;
- 		if (cmdline_contains_nokaslr(prop))
- 			return true;
--
--		if (IS_ENABLED(CONFIG_CMDLINE_EXTEND))
--			goto out;
--
--		return false;
-+		if (cmdline_contains_nokaslr(CMDLINE_STATIC_PREPEND))
-+			return true;
- 	}
- out:
--	return cmdline_contains_nokaslr(CONFIG_CMDLINE);
-+	return cmdline_contains_nokaslr(cmdline_get_static_builtin());
- }
- 
- static u64 get_kaslr_seed(void *fdt)
--- 
-2.25.1
+Yes, it is not handled during the interrupt and it does not have to.
+
+>
+> Who handles the error if the interrupt happens during the execution of a kthread?
+
+As I mentioned, the GHES driver always queues work into workqueue to handle memory
+failure of a page in memory_failure_queue(), so the **worker will be scheduled and
+handle memory failure later**.
+
+> 
+> Can't use the task_work_add() trick to handle it (because this thread never returns to user mode).
+
+Yes, it can not. And this is the key point to fix.
+
+> 
+> So how is the error handled?
+> 
+
+The workflow to handle hardware error is summery as bellow:
+
+-----------------------------------------------------------------------------
+[ghes_sdei_critical_callback: current swapper/3, CPU 3]
+ghes_sdei_critical_callback
+    => __ghes_sdei_callback
+        => ghes_in_nmi_queue_one_entry 		// peak and read estatus
+        => irq_work_queue(&ghes_proc_irq_work) <=> ghes_proc_in_irq // irq_work
+[ghes_sdei_critical_callback: return]
+-----------------------------------------------------------------------------
+[ghes_proc_in_irq: current swapper/3, CPU 3]
+            => ghes_do_proc
+                => ghes_handle_memory_failure
+                    => ghes_do_memory_failure
+                        => memory_failure_queue	 // put work task on current CPU
+                            => if (kfifo_put(&mf_cpu->fifo, entry))
+                                  schedule_work_on(smp_processor_id(), &mf_cpu->work);
+            => task_work_add(current, &estatus_node->task_work, TWA_RESUME); // fix here, always added to current
+[ghes_proc_in_irq: return]
+-----------------------------------------------------------------------------
+// kworker preempts swapper/3 on CPU 3 due to RESCHED flag
+[memory_failure_work_func: current kworker, CPU 3]	
+     => memory_failure_work_func(&mf_cpu->work)
+        => while kfifo_get(&mf_cpu->fifo, &entry);	// until get no work
+            => soft/hard offline
+-----------------------------------------------------------------------------
+
+STEP 0: The firmware notifies hardware error to kernel through is SDEI
+(ACPI_HEST_NOTIFY_SOFTWARE_DELEGATED).
+
+STEP 1: In SDEI callback (or any NMI-like handler), memory from ghes_estatus_pool is
+used to save estatus, and added to the ghes_estatus_llist. The swapper running on
+CPU 3 is interrupted. irq_work_queue() causes ghes_proc_in_irq() to run in IRQ
+context where each estatus in ghes_estatus_llist is processed.
+
+STEP2: In IRQ context, ghes_proc_in_irq() queues memory failure work on current CPU
+in workqueue and add task work to sync with the workqueue.
+
+STEP3: The kworker preempts the current running thread and get CPU 3. Then memory failure
+is processed in kworker.
+
+(STEP4 for user thread: ghes_kick_task_work() is called as task_work to ensure any
+queued workqueue has been done before returning to user-space. The estatus_node is freed.)
+
+If the task work is not added, estatus_node->task_work.func will be NULL, and estatus_node
+is freed in STEP 2.
+
+Hope it helps to make the problem clearer. You can also check the stack dumped in key
+function in above flow.
+
+Best Regards,
+Shuai
+
+
+---------------------------------------------------------------------------------------
+dump_stack() is added in:
+- __ghes_sdei_callback()
+- ghes_proc_in_irq()
+- memory_failure_queue_kick()
+- memory_failure_work_func()
+- memory_failure()
+
+[  485.457761] CPU: 3 PID: 0 Comm: swapper/3 Tainted: G            E      6.0.0-rc5+ #33
+[  485.457769] Hardware name: xxxx
+[  485.457771] Call trace:
+[  485.457772]  dump_backtrace+0xe8/0x12c
+[  485.457779]  show_stack+0x20/0x50
+[  485.457781]  dump_stack_lvl+0x68/0x84
+[  485.457785]  dump_stack+0x18/0x34
+[  485.457787]  __ghes_sdei_callback+0x24/0x64
+[  485.457789]  ghes_sdei_critical_callback+0x5c/0x94
+[  485.457792]  sdei_event_handler+0x28/0x90
+[  485.457795]  do_sdei_event+0x74/0x160
+[  485.457797]  __sdei_handler+0x60/0xf0
+[  485.457799]  __sdei_asm_handler+0xbc/0x18c
+[  485.457801]  cpu_do_idle+0x14/0x80
+[  485.457802]  default_idle_call+0x50/0x114
+[  485.457804]  cpuidle_idle_call+0x16c/0x1c0
+[  485.457806]  do_idle+0xb8/0x110
+[  485.457808]  cpu_startup_entry+0x2c/0x34
+[  485.457809]  secondary_start_kernel+0xf0/0x144
+[  485.457812]  __secondary_switched+0xb0/0xb4
+
+[  485.459513] EDAC MC0: 1 UE multi-symbol chipkill ECC on unknown memory (node:0 card:3 module:0 rank:0 bank_group:0 bank_address:0 device:0 row:624 column:384 chip_id:0 page:0x89c033 offset:0x400 grain:1 - APEI location: node:0 card:3 module:0 rank:0 bank_group:0 bank_address:0 device:0 row:624 column:384 chip_id:0 status(0x0000000000000400): Storage error in DRAM memory)
+[  485.459523] {2}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 2
+[  485.470607] {2}[Hardware Error]: event severity: recoverable
+[  485.476252] {2}[Hardware Error]:  precise tstamp: 2022-09-29 09:31:27
+[  485.482678] {2}[Hardware Error]:  Error 0, type: recoverable
+[  485.488322] {2}[Hardware Error]:   section_type: memory error
+[  485.494052] {2}[Hardware Error]:    error_status: Storage error in DRAM memory (0x0000000000000400)
+[  485.503081] {2}[Hardware Error]:   physical_address: 0x000000089c033400
+[  485.509680] {2}[Hardware Error]:   node:0 card:3 module:0 rank:0 bank_group:0 bank_address:0 device:0 row:624 column:384 chip_id:0
+[  485.521487] {2}[Hardware Error]:   error_type: 5, multi-symbol chipkill ECC
+
+[  485.528439] CPU: 3 PID: 0 Comm: swapper/3 Tainted: G            E      6.0.0-rc5+ #33
+[  485.528440] Hardware name: AlibabaCloud AliServer-Xuanwu2.0AM-02-2UC1P-5B/M, BIOS 1.2.M1.AL.E.132.01 08/23/2022
+[  485.528441] Call trace:
+[  485.528441]  dump_backtrace+0xe8/0x12c
+[  485.528443]  show_stack+0x20/0x50
+[  485.528444]  dump_stack_lvl+0x68/0x84
+[  485.528446]  dump_stack+0x18/0x34
+[  485.528448]  ghes_proc_in_irq+0x220/0x250
+[  485.528450]  irq_work_single+0x30/0x80
+[  485.528453]  irq_work_run_list+0x4c/0x70
+[  485.528455]  irq_work_run+0x28/0x44
+[  485.528457]  do_handle_IPI+0x2b4/0x2f0
+[  485.528459]  ipi_handler+0x24/0x34
+[  485.528461]  handle_percpu_devid_irq+0x90/0x1c4
+[  485.528463]  generic_handle_domain_irq+0x34/0x50
+[  485.528465]  __gic_handle_irq_from_irqson.isra.0+0x130/0x230
+[  485.528468]  gic_handle_irq+0x2c/0x60
+[  485.528469]  call_on_irq_stack+0x2c/0x38
+[  485.528471]  do_interrupt_handler+0x88/0x90
+[  485.528472]  el1_interrupt+0x48/0xb0
+[  485.528475]  el1h_64_irq_handler+0x18/0x24
+[  485.528476]  el1h_64_irq+0x74/0x78
+[  485.528477]  __do_softirq+0xa4/0x358
+[  485.528478]  __irq_exit_rcu+0x110/0x13c
+[  485.528479]  irq_exit_rcu+0x18/0x24
+[  485.528480]  el1_interrupt+0x4c/0xb0
+[  485.528482]  el1h_64_irq_handler+0x18/0x24
+[  485.528483]  el1h_64_irq+0x74/0x78
+[  485.528484]  arch_cpu_idle+0x18/0x40
+[  485.528485]  default_idle_call+0x50/0x114
+[  485.528487]  cpuidle_idle_call+0x16c/0x1c0
+[  485.528488]  do_idle+0xb8/0x110
+[  485.528489]  cpu_startup_entry+0x2c/0x34
+[  485.528491]  secondary_start_kernel+0xf0/0x144
+[  485.528493]  __secondary_switched+0xb0/0xb4
+
+[  485.528511] CPU: 3 PID: 12696 Comm: kworker/3:0 Tainted: G            E      6.0.0-rc5+ #33
+[  485.528513] Hardware name: AlibabaCloud AliServer-Xuanwu2.0AM-02-2UC1P-5B/M, BIOS 1.2.M1.AL.E.132.01 08/23/2022
+[  485.528514] Workqueue: events memory_failure_work_func
+[  485.528518] Call trace:
+[  485.528519]  dump_backtrace+0xe8/0x12c
+[  485.528520]  show_stack+0x20/0x50
+[  485.528521]  dump_stack_lvl+0x68/0x84
+[  485.528523]  dump_stack+0x18/0x34
+[  485.528525]  memory_failure_work_func+0xec/0x180
+[  485.528527]  process_one_work+0x1f4/0x460
+[  485.528528]  worker_thread+0x188/0x3e4
+[  485.528530]  kthread+0xd0/0xd4
+[  485.528532]  ret_from_fork+0x10/0x20
+
+[  485.528533] CPU: 3 PID: 12696 Comm: kworker/3:0 Tainted: G            E      6.0.0-rc5+ #33
+[  485.528534] Hardware name: AlibabaCloud AliServer-Xuanwu2.0AM-02-2UC1P-5B/M, BIOS 1.2.M1.AL.E.132.01 08/23/2022
+[  485.528535] Workqueue: events memory_failure_work_func
+[  485.528537] Call trace:
+[  485.528538]  dump_backtrace+0xe8/0x12c
+[  485.528539]  show_stack+0x20/0x50
+[  485.528540]  dump_stack_lvl+0x68/0x84
+[  485.528541]  dump_stack+0x18/0x34
+[  485.528543]  memory_failure+0x50/0x438
+[  485.528544]  memory_failure_work_func+0x174/0x180
+[  485.528546]  process_one_work+0x1f4/0x460
+[  485.528547]  worker_thread+0x188/0x3e4
+[  485.528548]  kthread+0xd0/0xd4
+[  485.528550]  ret_from_fork+0x10/0x20
+[  485.530622] Memory failure: 0x89c033: recovery action for dirty LRU page: Recovered
+
+
+
+
 
