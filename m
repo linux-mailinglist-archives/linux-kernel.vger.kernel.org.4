@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D415EECF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 07:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2545EECFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 07:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiI2FDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 01:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
+        id S234914AbiI2FD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 01:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234810AbiI2FC5 (ORCPT
+        with ESMTP id S234847AbiI2FDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 01:02:57 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91996128A29;
-        Wed, 28 Sep 2022 22:02:55 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id f193so498204pgc.0;
-        Wed, 28 Sep 2022 22:02:55 -0700 (PDT)
+        Thu, 29 Sep 2022 01:03:02 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7406D1284A6;
+        Wed, 28 Sep 2022 22:03:00 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id bh13so469876pgb.4;
+        Wed, 28 Sep 2022 22:03:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=juW9wu13y489Hph7sR+dhrqUMWDs6TD8KFYBRB4JbO4=;
-        b=G3Xxu7ZvNGRd8fN9tX/5TWIr9fy++QsTZ7/ZckdyCHzJNHQfUX7TNkreWBeYtOP8SR
-         hoAr7VeQexpBA+KJBcyA4ooRQVKuRnItiwm+Lz6B4NtLW48Yuqq3gkxDG4SAmNiC38Z5
-         k+6mf3DANeiT4fNzOYMxwTtblfHZ546eCGhC5lK2rjhHPbzVdxfmfX1MGHlHn2PoDL8V
-         C0Nm6MSq5trXpO2gundC4+9xxldV14mISwzB0bPset6oV+XeWwqmmogEIJXle//clAle
-         vX/cKmuYQ6l6sw5ZocUxbfxz7L4++i7wJ9K1ghjEYj4Ct3a6XqcjpKxkGGb+vsTfCv6Z
-         kViA==
+        bh=MAxX3HwZPoIUthNG89lC4GJ6X33ElvjGpgppMP4s59I=;
+        b=ninWtnFr+PZBgoMjKfPm2KhI7Eek3iq7i0ShTtqXXCTWq/ViTXoEomk1Ns+cN/67U9
+         cguqetWzOJB4M+fcUqekaxXbCr8WuQPPm82o47td59ScllerSWC2nTFDJ608sJKHTNEr
+         CTItMegI7UhtkYpnDBzIZ17KHOlA+I9UNBdtsED2waoN0dk22givZAygMYMBDPYIacKl
+         Hi5Yww4qWtVKKAqAq6yaLBbVK2HhtZkUrLH80nES2BDVJR80aEczepZ3iC8/GFteWnzo
+         GUtikUpn1CKjOvAgc4AIrpII0GeZe83drnnXM1/07mkhY7J4uuxo5PLUx47PhSz2Dxaa
+         I0cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=juW9wu13y489Hph7sR+dhrqUMWDs6TD8KFYBRB4JbO4=;
-        b=lWpicdgrDIl0SWrmW5aJg2TEDRoxhhI/fdlt0bALFB/02cW0s9RmofUuA6BERb3RfG
-         yxSOCCBsBUE4aXi7M6KoQkDGIuOXoCwNWi/YQ9lpUtCpAnU+vz5u20M6EUw3yT957X4y
-         5/CbCwAQr3AbPfQwy8fRfJjPAsO9xBymCuefkt+2WveDMceBikt2D8TQr6hC6L+QYMVo
-         jzAThEZKMdBQPjsVAszWZVqL+p0PZ5/nFF6UWmhRcE2mUgZCcf28aEkarGwU5yvHYrnn
-         mCYZXMq++qs41W25KUhk7xOO6b+FejAjwAp8WVV7t0e7HaDxVPsohIwZZsXbppjnzLeu
-         ypUg==
-X-Gm-Message-State: ACrzQf0w6fOMJtrltGzKwDRTxBK7HCriefAYgsWC9iwSxvincd8lrPgq
-        i24NfvfOeGQkACiJxmDOZ5gpvqikA/Z9KqUK
-X-Google-Smtp-Source: AMsMyM7Zba0qfDZYMrALKSmvp8fAyCBvTGCUHZhEMQlQtnV4Em8sTbX+B3AA+sqFNC73wbg+wPAi4Q==
-X-Received: by 2002:a63:cc4a:0:b0:439:1c48:2fed with SMTP id q10-20020a63cc4a000000b004391c482fedmr1317619pgi.618.1664427774356;
-        Wed, 28 Sep 2022 22:02:54 -0700 (PDT)
+        bh=MAxX3HwZPoIUthNG89lC4GJ6X33ElvjGpgppMP4s59I=;
+        b=C+JNNMbNgcm7KomLrZa5NmygkaZJCRg+b5TOiceSv2rE6xD+7bPjsg11nXLCy7vRQ3
+         kbs8RI/dgUdSN9KDbMpxynPWtflCBnXzbEmzEgea+cBldGZ+qdsKQHTfG0Y/OM6qFEsS
+         foV/1H1G0A3qIDlLa7svdfZFQj94TK/tRpN6v6AodwyfH+X3nnGzfzyg1ocv0Z1CoT/P
+         qcHMtrXiVk65WA5G+Qy1qzH439zU66bWkPOz/iF/TPqK+DBfKcn9rlkBsbHDTlpQHCSp
+         cx8iz/E5Ib2+BMrdroikjTNwUe94g+69AZCp3qrkHlu6kVUTfbVUBypeVTeKcq4D7rHW
+         pFkA==
+X-Gm-Message-State: ACrzQf2APssLR3PlDaKBSFUAqHp9dT5KM5jRkN97eB0oqIW/ZYWYERUK
+        QOu4XKpcZ/9/V002lfm/wAfBRwl6Fy8SOm0I
+X-Google-Smtp-Source: AMsMyM4bry2WOb170Y/tBalWnaBobFDexndbojNbGL6Z3HYWbWbeCb131hsk8dxYRwIrCrPjOVi/Gg==
+X-Received: by 2002:a05:6a00:14d5:b0:542:9c32:ab27 with SMTP id w21-20020a056a0014d500b005429c32ab27mr1682903pfu.64.1664427779439;
+        Wed, 28 Sep 2022 22:02:59 -0700 (PDT)
 Received: from skynet-linux.local ([2a09:bac0:579::681d:4237])
-        by smtp.googlemail.com with ESMTPSA id rm13-20020a17090b3ecd00b0020263b7177csm1895962pjb.3.2022.09.28.22.02.49
+        by smtp.googlemail.com with ESMTPSA id rm13-20020a17090b3ecd00b0020263b7177csm1895962pjb.3.2022.09.28.22.02.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 22:02:53 -0700 (PDT)
+        Wed, 28 Sep 2022 22:02:58 -0700 (PDT)
 From:   Sireesh Kodali <sireeshkodali1@gmail.com>
 To:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-remoteproc@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht, linux-kernel@vger.kernel.org
 Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         Sireesh Kodali <sireeshkodali1@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v5 4/5] dt-bindings: remoteproc: qcom: wcnss: Add compatible for pronto v3
-Date:   Thu, 29 Sep 2022 10:32:08 +0530
-Message-Id: <20220929050209.1464526-5-sireeshkodali1@gmail.com>
+Subject: [PATCH v5 5/5] dt-bindings: remoteproc: wcnss-pil: Make supplies optionally required
+Date:   Thu, 29 Sep 2022 10:32:09 +0530
+Message-Id: <20220929050209.1464526-6-sireeshkodali1@gmail.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220929050209.1464526-1-sireeshkodali1@gmail.com>
 References: <20220929050209.1464526-1-sireeshkodali1@gmail.com>
@@ -79,51 +78,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pronto v3 remoteproc is similar to pronto v2. It is found on the
-MSM8953 platform, which is used by SDM450, SDM625, SDM626, APQ8053 and
-other SoCs. Since the configuration is same on all SoCs, a single
-compatible is used.
+On MSM8974, power domains are not yet supported. The platform uses
+regulators. This patch marks either the power-domains or *-supply as
+required (instead of always requiring the power domains).
 
 Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../bindings/remoteproc/qcom,wcnss-pil.yaml      | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ .../devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
-index 0eb2617e3482..2ba2b6cf11fb 100644
+index 2ba2b6cf11fb..45eb42bd3c2c 100644
 --- a/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.yaml
-@@ -22,6 +22,7 @@ properties:
-           - enum:
-               - qcom,pronto-v1-pil
-               - qcom,pronto-v2-pil
-+              - qcom,pronto-v3-pil
-           - const: qcom,pronto
-       - const: qcom,riva-pil
+@@ -196,9 +196,13 @@ allOf:
+           deprecated: true
+           description: Deprecated for qcom,pronto-v1/2-pil
  
-@@ -199,6 +200,21 @@ allOf:
-         - power-domains
-         - power-domain-names
+-      required:
+-        - power-domains
+-        - power-domain-names
++      oneOf:
++        - required:
++            - power-domains
++            - power-domain-names
++        - required:
++            - vddmx-supply
++            - vddcx-supply
  
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,pronto-v3-pil
-+    then:
-+      properties:
-+        vddmx-supply: false
-+        vddcx-supply: false
-+
-+      required:
-+        - power-domains
-+        - power-domain-names
-+
- examples:
-   - |
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
+   - if:
+       properties:
 -- 
 2.37.3
 
