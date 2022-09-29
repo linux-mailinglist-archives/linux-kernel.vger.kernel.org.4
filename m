@@ -2,130 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2219C5EF9B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5545EF9B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235798AbiI2QF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
+        id S235948AbiI2QGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234346AbiI2QFW (ORCPT
+        with ESMTP id S234951AbiI2QGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:05:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43274A5720
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:05:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D36A061A09
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 16:05:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5941C433D6;
-        Thu, 29 Sep 2022 16:05:19 +0000 (UTC)
-Date:   Thu, 29 Sep 2022 12:06:32 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v1 1/1] test_printf: Refactor fwnode_pointer() to make
- it more readable
-Message-ID: <20220929120632.2bc01e9f@gandalf.local.home>
-In-Reply-To: <20220824170542.18263-1-andriy.shevchenko@linux.intel.com>
-References: <20220824170542.18263-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 29 Sep 2022 12:06:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3056713E21;
+        Thu, 29 Sep 2022 09:06:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A205C15BF;
+        Thu, 29 Sep 2022 09:06:51 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.81.100])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5C9E83F792;
+        Thu, 29 Sep 2022 09:06:43 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 17:06:40 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Peter Oskolkov <posk@posk.io>
+Subject: Re: [RFC PATCH] rseq: Use pr_warn_once() when deprecated/unknown ABI
+ flags are encountered
+Message-ID: <YzXCkDJg8vEYqwJH@FVFF77S0Q05N>
+References: <20220929141227.205343-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929141227.205343-1-mathieu.desnoyers@efficios.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 Aug 2022 20:05:42 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+On Thu, Sep 29, 2022 at 10:12:27AM -0400, Mathieu Desnoyers wrote:
+> These commits use WARN_ON_ONCE() and kill the offending processes when
+> deprecated and unknown flags are encountered:
+> 
+> commit c17a6ff93213 ("rseq: Kill process when unknown flags are encountered in ABI structures")
+> commit 0190e4198e47 ("rseq: Deprecate RSEQ_CS_FLAG_NO_RESTART_ON_* flags")
+> 
+> The WARN_ON_ONCE() triggered by userspace input prevents use of
+> Syzkaller to fuzz the rseq system call.
+> 
+> Replace this WARN_ON_ONCE() by pr_warn_once() messages which contain
+> actually useful information.
+> 
+> Reported-by: Mark Rutland <mark.rutland@arm.com>
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-> Converting fwnode_pointer() to use better swnode API allows to
-> make code more readable.
-> 
-> While at it, rename full_name to full_name_third to show exact
-> relation in the hierarchy.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Thanks for this!
+
+I've set off a Syzkaller run with this applied, and I'll be able to tell you in
+a day or two whether that's made it possible to spot anything more interesting.
+
+Regardless, I think this is a good change, so FWIW:
+
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+Mark.
+
 > ---
->  lib/test_printf.c | 26 ++++++++++++--------------
->  1 file changed, 12 insertions(+), 14 deletions(-)
+>  kernel/rseq.c | 19 +++++++++++++++++--
+>  1 file changed, 17 insertions(+), 2 deletions(-)
 > 
-> diff --git a/lib/test_printf.c b/lib/test_printf.c
-> index fe13de1bed5f..6f7f179dd8f4 100644
-> --- a/lib/test_printf.c
-> +++ b/lib/test_printf.c
-> @@ -704,31 +704,29 @@ flags(void)
->  
->  static void __init fwnode_pointer(void)
->  {
-> -	const struct software_node softnodes[] = {
-> -		{ .name = "first", },
-> -		{ .name = "second", .parent = &softnodes[0], },
-> -		{ .name = "third", .parent = &softnodes[1], },
-> -		{ NULL /* Guardian */ }
-> -	};
-> -	const char * const full_name = "first/second/third";
-> +	const struct software_node first = { .name = "first" };
-> +	const struct software_node second = { .name = "second", .parent = &first };
-> +	const struct software_node third = { .name = "third", .parent = &second };
-
-I personally do not find the above more readable, but honestly, I'm not
-attached to this code at all.
-
-> +	const struct software_node *group[] = { &first, &second, &third, NULL };
-
-Could this just be:
-
-	const struct software_node *group[] = {
-		&softnodes[0], &softnodes[1], &softnodes[2], NULL };
-
-
->  	const char * const full_name_second = "first/second";
-> +	const char * const full_name_third = "first/second/third";
->  	const char * const second_name = "second";
->  	const char * const third_name = "third";
->  	int rval;
->  
-> -	rval = software_node_register_nodes(softnodes);
-> +	rval = software_node_register_node_group(group);
->  	if (rval) {
->  		pr_warn("cannot register softnodes; rval %d\n", rval);
->  		return;
->  	}
->  
-> -	test(full_name_second, "%pfw", software_node_fwnode(&softnodes[1]));
-> -	test(full_name, "%pfw", software_node_fwnode(&softnodes[2]));
-> -	test(full_name, "%pfwf", software_node_fwnode(&softnodes[2]));
-> -	test(second_name, "%pfwP", software_node_fwnode(&softnodes[1]));
-> -	test(third_name, "%pfwP", software_node_fwnode(&softnodes[2]));
-> +	test(full_name_second, "%pfw", software_node_fwnode(&second));
-> +	test(full_name_third, "%pfw", software_node_fwnode(&third));
-> +	test(full_name_third, "%pfwf", software_node_fwnode(&third));
-> +	test(second_name, "%pfwP", software_node_fwnode(&second));
-> +	test(third_name, "%pfwP", software_node_fwnode(&third));
-
-Then the above doesn't need to change.
-
-But again, I'm not maintaining this code, so I'm not attached. Just adding
-my $0.02 to this (as I'm triaging my inbox and found this email).
-
--- Steve
-
-
->  
-> -	software_node_unregister_nodes(softnodes);
-> +	software_node_unregister_node_group(group);
+> diff --git a/kernel/rseq.c b/kernel/rseq.c
+> index bda8175f8f99..d38ab944105d 100644
+> --- a/kernel/rseq.c
+> +++ b/kernel/rseq.c
+> @@ -171,12 +171,27 @@ static int rseq_get_rseq_cs(struct task_struct *t, struct rseq_cs *rseq_cs)
+>  	return 0;
 >  }
 >  
->  static void __init fourcc_pointer(void)
-
+> +static bool rseq_warn_flags(const char *str, u32 flags)
+> +{
+> +	u32 test_flags;
+> +
+> +	if (!flags)
+> +		return false;
+> +	test_flags = flags & RSEQ_CS_NO_RESTART_FLAGS;
+> +	if (test_flags)
+> +		pr_warn_once("Deprecated flags (%u) in %s ABI structure", test_flags, str);
+> +	test_flags = flags & ~RSEQ_CS_NO_RESTART_FLAGS;
+> +	if (test_flags)
+> +		pr_warn_once("Unknown flags (%u) in %s ABI structure", test_flags, str);
+> +	return true;
+> +}
+> +
+>  static int rseq_need_restart(struct task_struct *t, u32 cs_flags)
+>  {
+>  	u32 flags, event_mask;
+>  	int ret;
+>  
+> -	if (WARN_ON_ONCE(cs_flags & RSEQ_CS_NO_RESTART_FLAGS) || cs_flags)
+> +	if (rseq_warn_flags("rseq_cs", cs_flags))
+>  		return -EINVAL;
+>  
+>  	/* Get thread flags. */
+> @@ -184,7 +199,7 @@ static int rseq_need_restart(struct task_struct *t, u32 cs_flags)
+>  	if (ret)
+>  		return ret;
+>  
+> -	if (WARN_ON_ONCE(flags & RSEQ_CS_NO_RESTART_FLAGS) || flags)
+> +	if (rseq_warn_flags("rseq", flags))
+>  		return -EINVAL;
+>  
+>  	/*
+> -- 
+> 2.30.2
+> 
