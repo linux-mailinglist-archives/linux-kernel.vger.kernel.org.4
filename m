@@ -2,104 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56BB5EEC87
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 05:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C3A5EEC8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 05:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234677AbiI2Dm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 23:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
+        id S233963AbiI2Dnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 23:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234553AbiI2Dmt (ORCPT
+        with ESMTP id S229940AbiI2Dnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 23:42:49 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2066.outbound.protection.outlook.com [40.107.237.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D202F12871D;
-        Wed, 28 Sep 2022 20:42:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kva9cmhdNfwI/72xKCT6npI87Cn/XiM+rLNy0djMwv00DMPJx0VEumKnVo1mmJ5kVVy41YbOFLAqkvGBEhu7EGa94L/YIwiBi2Z9kElszDRGH+MerzIpB1SOyGzX1b2RGqCmgwOMkGSLnOYFBsZUVeH80nhdeDtOQhIpCooVJH/roneULNEX/iKuFzaC/2DnX0QvFaI8yP/9Ofx1+OsY45mcJeZ2M2gkkO6sPQIejMq48cf6bEawZ42E5BP6f++WCrNYprn/z4b9zPTqszOXJsgOMENbaf23yr4yuAc8YvLiG6G7xaqydndZKqpvQ1lozGAn+juQmPl477aNcrsF6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lHmjnRjP/lrgIGSqHOjb1dXP1ZYQJ0exFsi3rXEZMVI=;
- b=aY10HsT6tcdwr+SvxJMkrL2GIUdCY4aghOPmqcGAidf4JA8SboKlpYZtYXaXnf1AWjk5odw0VLuyCAnnCPZUp+8IfaegY7/Z1BJC1sucHEzJ0dDp9Q9RtRsndZVpBPXEUEetqd2eqqpb+ch5VJP5ZHwrE5BdoZWd2ZJjreRg6eYGkHL3Jc+GWvesNj6larWOZ8h/HJQFphb3cSxXB9biVzDmkn+2SwDH7jT+ZoGX1H3e2QT3PtaNvRiP4MK+cGwwJ2VotOcp6S3ky/cCbzv0Z9DY/ozuviYqtsDhT4Zv38Z0rIuDLkcI8IvIK1mxKyPcMJ7yX0R6s8cGJU4fDNnqNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lHmjnRjP/lrgIGSqHOjb1dXP1ZYQJ0exFsi3rXEZMVI=;
- b=thHwlu0dZWiYzcCoEBSsRmQ5nBZGZNm1PgbLIELawdbhy7+zDvUMygiecUs/YwVXBzuXwJoDbIA40YhJa7vj3Id0Wv080aKrtHDIde16H4QH81sXv+YF3yz921ccZHWoynC2Ob6sjK6aqVDLggWOjLnkUG1MLrayEkEs/mJUtPxPMLuhjMgWBdZtQvVNmMh1dVtkRJYbL+UJW2uQ93sVJGvJpG/ZxNQVjHVWKPaXk0Cp/NL9lB7r2Yg6jzyBsZ9Kz1DDZ9IRHUFHGldToj0lnMLwP0IAhcPhI2coq94iJNLojUqLKmwJJkaliURFbeiRzGchLUDDyXB7kAxXNkfoPQ==
-Received: from DM6PR03CA0092.namprd03.prod.outlook.com (2603:10b6:5:333::25)
- by SA1PR12MB5672.namprd12.prod.outlook.com (2603:10b6:806:23c::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.24; Thu, 29 Sep
- 2022 03:42:44 +0000
-Received: from DM6NAM11FT085.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:333:cafe::9c) by DM6PR03CA0092.outlook.office365.com
- (2603:10b6:5:333::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.18 via Frontend
- Transport; Thu, 29 Sep 2022 03:42:44 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT085.mail.protection.outlook.com (10.13.172.236) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.17 via Frontend Transport; Thu, 29 Sep 2022 03:42:43 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 28 Sep
- 2022 20:42:33 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 28 Sep
- 2022 20:42:32 -0700
-Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
- mail.nvidia.com (10.129.68.6) with Microsoft SMTP Server id 15.2.986.29 via
- Frontend Transport; Wed, 28 Sep 2022 20:42:30 -0700
-From:   Wayne Chang <waynec@nvidia.com>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <nkristam@nvidia.com>,
-        <jckuo@nvidia.com>
-CC:     <waynec@nvidia.com>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/1] dt-bindings: usb: tegra-xudc: Add Tegra234 XUSB controller support
-Date:   Thu, 29 Sep 2022 11:42:21 +0800
-Message-ID: <20220929034221.3817058-1-waynec@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 28 Sep 2022 23:43:43 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897011284BD;
+        Wed, 28 Sep 2022 20:43:41 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id c24so180769plo.3;
+        Wed, 28 Sep 2022 20:43:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=6xwVt7ZiN2nbV0+Qlx1V9YDad8//rzIzJA6lCQIJXog=;
+        b=VB+spiqzXsD9zSCD8e+BYc7iWQtg1Tmcx+GyyIdYYGZ9wWMpXUjModQucx73vxme56
+         +4CWik8D3Pkmq1A6/eDWPNljZFqlbr0GescNnLzn6mRd5tUZT4suIiOUad6EpXJKCbwB
+         r4vCmhLBp1qqId4EVtnpUR3xZOTR31qIEsakgpgwY1JbsHC5YhukDNkRWxlLsFZOTIs8
+         DXXBE1Dgpm0W4wZCsoyO8ydD9XcA6Qenteu/exAWCYHqQ6Fy17/1MyTHgfvdEogtfcTf
+         7kvllZgNTGkhkb2sJSft9c5q0/LCk4mZyEd13UGnAXRw4KOLHZbCB33uTkH8BNJMHAxG
+         azhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=6xwVt7ZiN2nbV0+Qlx1V9YDad8//rzIzJA6lCQIJXog=;
+        b=SB/Lz4D2FzH+HBDVw4U9/F1F2QiP9A/68AwuU9vUIfPRj5mDfHtItRwYiOwS3HRgZy
+         0nEuC+W4OM715j1PKK89nw8ororr3FOoiKuv4r1n0PmIdyaf/FIfAr0RhEyQpWHIj4ir
+         sNX3+DlgOefRP/5M8jZfK0WB0szBt9Hm0uwLZiQ5nfiDIlK2GRNMYrQwmkiF6+TY2JXe
+         JTBn+Qc/1H6WRH7gPpLqFzP9YdH2cVEq0HIn4FNIwQtkrHlt8nmoFS73f+PzJaGbkDUh
+         eQqYxu1C9BWP3IM0m4DHlWYEbmG2rOOBJyNJcTWCsvN8bPI9rYrbtg+AT49F8q/EuIkn
+         mg+A==
+X-Gm-Message-State: ACrzQf3LJk40vaRIg5Xu6lVUBQLd+NqyVKn4JEd0EAIMZUaqDOo69QzE
+        L6hxQuHMjXd/a8fijRlzoOA=
+X-Google-Smtp-Source: AMsMyM6zKzqFoBqfjiB84n87Cja7hoH+onGtwk1jfbZRPFfpUvf7ctYzOSmkiQGomduhCnEkRoCzXA==
+X-Received: by 2002:a17:90a:d908:b0:206:122:35d1 with SMTP id c8-20020a17090ad90800b00206012235d1mr1344435pjv.245.1664423020874;
+        Wed, 28 Sep 2022 20:43:40 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-79.three.co.id. [180.214.233.79])
+        by smtp.gmail.com with ESMTPSA id e1-20020a621e01000000b00537a8d2c2easm3557097pfe.80.2022.09.28.20.43.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 20:43:40 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 27FB410925C; Thu, 29 Sep 2022 10:43:37 +0700 (WIB)
+Date:   Thu, 29 Sep 2022 10:43:36 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 01/14] docs: gunyah: Introduce Gunyah Hypervisor
+Message-ID: <YzUUaIx+azyzFDNX@debian.me>
+References: <20220928195633.2348848-1-quic_eberman@quicinc.com>
+ <20220928195633.2348848-2-quic_eberman@quicinc.com>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT085:EE_|SA1PR12MB5672:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1644da25-6df8-476e-d678-08daa1ccaafc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Lh1304qNmVGm31hE/PWuvmDnftQ7iiaMnaC4XZXWNNf1uX45pqPJuxBCz5GZG1r7Ca1N7Q9MDa6iP+rLj0u7041PsnclMwlb2dp/lVvtOGhJ/hKKewCO0u4JJy/1LB0Is4rxLii1FIRnIBvDX2DqmcjjhLKdxqIxyUfZ+mVnnDqivJYvaiQlSuRiTmhut3NwR47nQsEpb+CmHdcReOfB0b2iJse8prNR49bbOudBlzVjJHGGfcIPwutl+NUK6HaICQDcG+9qKasuGXbgoMCiL5SmZs4yzEVGCutI1PwMT2aNIQvp9fpbDzJrfasnKm6rZAnFR4WKwpd+UBhEz5E6VqkXNwVVgH/hEVmoD653+w9nKeD0n0Bw0C2ntwsACC1Gua+VNBu02zxycn/+f0DjjEzbJnOaFOgA5HYozX7zW4oaner3kKmmeazxv4V1C8RTrjzN4fzHfSh/QNcO+UioFU2kTBc/AvslLjnAbQ5lTGC36Hus4wIFd64cCwfSLZZ6GTIhxlJcHWbi2Cxf/RgI0N/+KcS8yCuDyaF6aFPKxJhIPbOi91xxmrIr0c8MkgOnBO5KeUNxCTFuUOKE+UiX10ypLDvn22GH6jS9s9fy4ChK0GLHCB3m6PGNimZ5xQFuiwPyCmWXJYGtYbgWEShjsC8pkIm3WeqmPLfGftjK3m2wbF+Jvsc+OsRCRf4gSwJo0OMW1yTxn46nfznJZEmhZu/Cr2NCJmN3+wUtGa+m3K1PmozU2RrxxOo+M77k3C607+HrObuUVCxtpZr+7v7bJQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(396003)(376002)(39860400002)(451199015)(40470700004)(46966006)(36840700001)(86362001)(82310400005)(4744005)(41300700001)(40460700003)(8936002)(2906002)(82740400003)(1076003)(26005)(70586007)(336012)(6636002)(70206006)(2616005)(40480700001)(478600001)(356005)(8676002)(7636003)(316002)(4326008)(5660300002)(7696005)(47076005)(54906003)(36756003)(426003)(186003)(6666004)(36860700001)(110136005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 03:42:43.8881
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1644da25-6df8-476e-d678-08daa1ccaafc
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT085.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5672
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Q0eTYf0QdFrQIfAA"
+Content-Disposition: inline
+In-Reply-To: <20220928195633.2348848-2-quic_eberman@quicinc.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,34 +94,240 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend the Tegra XUSB controller device tree binding with Tegra234
-support.
 
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
----
- Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+--Q0eTYf0QdFrQIfAA
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-index fd6e7c81426e..7e4eb379bcf4 100644
---- a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-+++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-@@ -22,6 +22,7 @@ properties:
-           - nvidia,tegra210-xudc # For Tegra210
-           - nvidia,tegra186-xudc # For Tegra186
-           - nvidia,tegra194-xudc # For Tegra194
-+          - nvidia,tegra234-xudc # For Tegra194
- 
-   reg:
-     minItems: 2
-@@ -153,6 +154,7 @@ allOf:
-             enum:
-               - nvidia,tegra186-xudc
-               - nvidia,tegra194-xudc
-+              - nvidia,tegra234-xudc
-     then:
-       properties:
-         reg:
--- 
-2.25.1
+On Wed, Sep 28, 2022 at 12:56:20PM -0700, Elliot Berman wrote:
+> diff --git a/Documentation/virt/gunyah/index.rst b/Documentation/virt/gun=
+yah/index.rst
+> new file mode 100644
+> index 000000000000..959f451caccd
+> --- /dev/null
+> +++ b/Documentation/virt/gunyah/index.rst
+> @@ -0,0 +1,114 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Gunyah Hypervisor
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +.. toctree::
+> +   :maxdepth: 1
+> +
+> +   message-queue
+> +
+> +Gunyah is a Type-1 hypervisor which is independent of any OS kernel, and=
+ runs in
+> +a higher CPU privilege level. It does not depend on any lower-privileged=
+ operating system
+> +for its core functionality. This increases its security and can support =
+a much smaller
+> +trusted computing base than a Type-2 hypervisor.
+> +
+> +Gunyah is an open source hypervisor. The source repo is available at
+> +https://github.com/quic/gunyah-hypervisor.
+> +
+> +Gunyah provides these following features.
+> +
+> +- Scheduling:
+> +
+> +  A scheduler for virtual CPUs (vCPUs) on physical CPUs and enables time=
+-sharing
+> +  of the CPUs. Gunyah supports two models of scheduling:
+> +
+> +    1. "Behind the back" scheduling in which Gunyah hypervisor schedules=
+ vCPUS on its own
+> +    2. "Proxy" scheduling in which a delegated VM can donate part of one=
+ of its vCPU slice
+> +       to another VM's vCPU via a hypercall.
+> +
+> +- Memory Management:
+> +
+> +  APIs handling memory, abstracted as objects, limiting direct use of ph=
+ysical
+> +  addresses. Memory ownership and usage tracking of all memory under its=
+ control.
+> +  Memory partitioning between VMs is a fundamental security feature.
+> +
+> +- Interrupt Virtualization:
+> +
+> +  Uses CPU hardware interrupt virtualization capabilities. Interrupts ar=
+e handled
+> +  in the hypervisor and routed to the assigned VM.
+> +
+> +- Inter-VM Communication:
+> +
+> +  There are several different mechanisms provided for communicating betw=
+een VMs.
+> +
+> +- Virtual platform:
+> +
+> +  Architectural devices such as interrupt controllers and CPU timers are=
+ directly provided
+> +  by the hypervisor as well as core virtual platform devices and system =
+APIs such as ARM PSCI.
+> +
+> +- Device Virtualization:
+> +
+> +  Para-virtualization of devices is supported using inter-VM communicati=
+on.
+> +
+> +Architectures supported
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +AArch64 with a GIC
+> +
+> +Resources and Capabilities
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> +
+> +Some services or resources provided by the Gunyah hypervisor are describ=
+ed to a virtual machine by
+> +capability IDs. For instance, inter-VM communication is performed with d=
+oorbells and message queues.
+> +Gunyah allows access to manipulate that doorbell via the capability ID. =
+These devices are described
+> +in Linux as a struct gunyah_resource.
+> +
+> +High level management of these resources is performed by the resource ma=
+nager VM. RM informs a
+> +guest VM about resources it can access through either the device tree or=
+ via guest-initiated RPC.
+> +
+> +For each virtual machine, Gunyah maintains a table of resources which ca=
+n be accessed by that VM.
+> +An entry in this table is called a "capability" and VMs can only access =
+resources via this
+> +capability table. Hence, virtual Gunyah devices are referenced by a "cap=
+ability IDs" and not a
+> +"resource IDs". A VM can have multiple capability IDs mapping to the sam=
+e resource. If 2 VMs have
+> +access to the same resource, they may not be using the same capability I=
+D to access that resource
+> +since the tables are independent per VM.
+> +
+> +Resource Manager
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +The resource manager (RM) is a privileged application VM supporting the =
+Gunyah Hypervisor.
+> +It provides policy enforcement aspects of the virtualization system. The=
+ resource manager can
+> +be treated as an extension of the Hypervisor but is separated to its own=
+ partition to ensure
+> +that the hypervisor layer itself remains small and secure and to maintai=
+n a separation of policy
+> +and mechanism in the platform. On arm64, RM runs at NS-EL1 similar to ot=
+her virtual machines.
+> +
+> +Communication with the resource manager from each guest VM happens with =
+message-queue.rst. Details
+> +about the specific messages can be found in drivers/virt/gunyah/rsc_mgr.c
+> +
+> +::
+> +
+> +  +-------+   +--------+   +--------+
+> +  |  RM   |   |  VM_A  |   |  VM_B  |
+> +  +-.-.-.-+   +---.----+   +---.----+
+> +    | |           |            |
+> +  +-.-.-----------.------------.----+
+> +  | | \=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D/             |    |
+> +  |  \=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D/     |
+> +  |            Gunyah               |
+> +  +---------------------------------+
+> +
+> +The source for the resource manager is available at https://github.com/q=
+uic/gunyah-resource-manager.
+> +
+> +The resource manager provides the following features:
+> +
+> +- VM lifecycle management: allocating a VM, starting VMs, destruction of=
+ VMs
+> +- VM access control policy, including memory sharing and lending
+> +- Interrupt routing configuration
+> +- Forwarding of system-level events (e.g. VM shutdown) to owner VM
+> +
+> +When booting a virtual machine which uses a devicetree, resource manager=
+ overlays a
+> +/hypervisor node. This node can let Linux know it is running as a Gunyah=
+ guest VM,
+> +how to communicate with resource manager, and basic description and capa=
+bilities of
+> +this VM. See Documentation/devicetree/bindings/firmware/gunyah-hyperviso=
+r.yaml for a description
+> +of this node.
 
+The documentation LGTM.
+
+> diff --git a/Documentation/virt/gunyah/message-queue.rst b/Documentation/=
+virt/gunyah/message-queue.rst
+> new file mode 100644
+> index 000000000000..e130f124ed52
+> --- /dev/null
+> +++ b/Documentation/virt/gunyah/message-queue.rst
+> <snipped>...
+> +The diagram below shows how message queue works. A typical configuration=
+ involves
+> +2 message queues. Message queue 1 allows VM_A to send messages to VM_B. =
+Message
+> +queue 2 allows VM_B to send messages to VM_A.
+> +
+> +1. VM_A sends a message of up to 1024 bytes in length. It raises a hyper=
+call
+> +   with the message to inform the hypervisor to add the message to
+> +   message queue 1's queue.
+> +2. Gunyah raises the corresponding interrupt for VM_B when any of these =
+happens:
+> +   a. gh_msgq_send has PUSH flag. Queue is immediately flushed. This is =
+the typical case.
+> +   b. Explicility with gh_msgq_push command from VM_A.
+> +   c. Message queue has reached a threshold depth.
+> +3. VM_B calls gh_msgq_recv and Gunyah copies message to requested buffer.
+> +
+
+The nested list above should be separated with blank lines to be
+rendered properly:
+
+---- >8 ----
+
+diff --git a/Documentation/virt/gunyah/message-queue.rst b/Documentation/vi=
+rt/gunyah/message-queue.rst
+index e130f124ed525a..afaad99db215e6 100644
+--- a/Documentation/virt/gunyah/message-queue.rst
++++ b/Documentation/virt/gunyah/message-queue.rst
+@@ -20,9 +20,11 @@ queue 2 allows VM_B to send messages to VM_A.
+    with the message to inform the hypervisor to add the message to
+    message queue 1's queue.
+ 2. Gunyah raises the corresponding interrupt for VM_B when any of these ha=
+ppens:
++
+    a. gh_msgq_send has PUSH flag. Queue is immediately flushed. This is th=
+e typical case.
+    b. Explicility with gh_msgq_push command from VM_A.
+    c. Message queue has reached a threshold depth.
++
+ 3. VM_B calls gh_msgq_recv and Gunyah copies message to requested buffer.
+=20
+ For VM_B to send a message to VM_A, the process is identical, except that =
+hypercalls
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--Q0eTYf0QdFrQIfAA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYzUUZAAKCRD2uYlJVVFO
+o1q4APwP+/ERjbxXRPWCORGC4UT/SNYUj+eaww/Whwnueht3ogD/UzH9N4wlowyV
+bpGIEj6dozRHKf0F907Ypqs4bZQmLw4=
+=xA7F
+-----END PGP SIGNATURE-----
+
+--Q0eTYf0QdFrQIfAA--
