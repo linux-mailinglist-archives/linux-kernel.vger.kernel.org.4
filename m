@@ -2,143 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FAD35EEDC9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1DB5EEDCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233695AbiI2GVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 02:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
+        id S234700AbiI2GVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 02:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiI2GVI (ORCPT
+        with ESMTP id S234841AbiI2GVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 02:21:08 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187D15A2D6
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:21:07 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id l9-20020a17090a4d4900b00205e295400eso418226pjh.4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:21:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=sLe+12DYg/MsGOLMm2PiwRBOcXOJMIlCQlWuW8Bh/Z4=;
-        b=X0gRac3fkiIlOB2YGRyfd+Ue4Rv+jxwT9mPS6EUIoElqbASd7xqUn9sqCZn+G0SQph
-         asgx2+EpRRc+pU2dZMU+WsX9F25/8FybJXs+IJm6l9b+WDsxmZsmy4appAcS27YPaMGm
-         xm75j2xyadmgzAHLSN0POvKmKx2DQMUbbRVQljAy1Wc8FYx7GVCMTLtMnOWmLdeYoTlO
-         6QTYkph7oFAPEsLnpn9H55XyEiRyvlB6fRZ5XNKRKrcyLzq6kO5Cdwr94pjl5fYuDOQL
-         f8umul9nXybOJ4CJCHGhBck3KjH253ln+PeJ2tGH+0laVRMAlV8I71W1CMW835DJi6OE
-         plBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=sLe+12DYg/MsGOLMm2PiwRBOcXOJMIlCQlWuW8Bh/Z4=;
-        b=TnzHlww5aBGQdv0W803kiqdU5j+Cp69wwOi1oIqvK4/w6EGu0dZAlanF5n9VMAIvPt
-         4nVBNkpZF9mg1yFBTlYqm12H8HEYcS2PKpmZO1rTJML+zh9ZeRbeV4TeFlsm+CsDTHAg
-         /OHqtrhBLwMSdJNvoDWBXSYZzvnONYbttXiWGCj3YLT26GWp2T3pnvjQvOM9CxMYuuvC
-         DEmukhJO5l5ymDxCaBKaUIl5g46l7Ez59URAYtep3Y9vzwKVlSgs0PQd9QqDoICc4mQi
-         ugan7iMT9RUY0IOhXsgLngELEOd7Ple9s8auMFN/xa49+MI22LJ/LaTQ3h4DefZ+OGZI
-         40EA==
-X-Gm-Message-State: ACrzQf2bMExDDFAFIZ4t/0MS9p9hgUWPlEumn5PkLN98LpHuAcVr37LR
-        qRQj5+fXCudXu08PKWdLIFz9bQ==
-X-Google-Smtp-Source: AMsMyM5mA4SyvOWX5ikSyYkozPV7tSVOQb8hJV1XNYZGm319RXQ57g7obi9wIcFoods3WRR9VZiNaw==
-X-Received: by 2002:a17:902:f612:b0:178:a692:b20a with SMTP id n18-20020a170902f61200b00178a692b20amr1858371plg.55.1664432466534;
-        Wed, 28 Sep 2022 23:21:06 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1f3b:3adb:24f8:ac24:2282:1dc7? ([2401:4900:1f3b:3adb:24f8:ac24:2282:1dc7])
-        by smtp.gmail.com with ESMTPSA id n9-20020a170902e54900b0016d295888e3sm4936599plf.241.2022.09.28.23.21.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 23:21:05 -0700 (PDT)
-Message-ID: <11bb755c-b608-a13f-1da1-639c6b3f18d4@linaro.org>
-Date:   Thu, 29 Sep 2022 11:51:00 +0530
+        Thu, 29 Sep 2022 02:21:34 -0400
+Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A3812E433;
+        Wed, 28 Sep 2022 23:21:30 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="78367777"
+X-IronPort-AV: E=Sophos;i="5.93,354,1654527600"; 
+   d="scan'208";a="78367777"
+Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
+  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP; 29 Sep 2022 15:21:27 +0900
+Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
+        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 01E1ED6188;
+        Thu, 29 Sep 2022 15:21:27 +0900 (JST)
+Received: from kws-ab2.gw.nic.fujitsu.com (kws-ab2.gw.nic.fujitsu.com [192.51.206.12])
+        by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 1892614428;
+        Thu, 29 Sep 2022 15:21:26 +0900 (JST)
+Received: from [10.167.226.45] (unknown [10.167.226.45])
+        by kws-ab2.gw.nic.fujitsu.com (Postfix) with ESMTP id BB0632340193;
+        Thu, 29 Sep 2022 15:21:24 +0900 (JST)
+Message-ID: <942fdca3-2cd4-88d2-033c-6bd3f7bb258a@fujitsu.com>
+Date:   Thu, 29 Sep 2022 14:21:24 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 3/4] dt-bindings: net: snps,dwmac: Update reg maxitems
+ Thunderbird/91.11.0
+Subject: Re: [for-next PATCH v5 03/11] RDMA: Extend RDMA kernel verbs ABI to
+ support flush
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        David Miller <davem@davemloft.net>
-References: <20220907204924.2040384-1-bhupesh.sharma@linaro.org>
- <20220907204924.2040384-4-bhupesh.sharma@linaro.org>
- <da383499-fe9f-816e-8180-a9661a9c0496@linaro.org>
- <46087486-bacd-c408-7ead-5b120412412b@linaro.org>
- <20220912211447.GB1847448-robh@kernel.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <20220912211447.GB1847448-robh@kernel.org>
+To:     Bob Pearson <rpearsonhpe@gmail.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org
+Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>, yangx.jy@fujitsu.com,
+        y-goto@fujitsu.com, mbloch@nvidia.com, liangwenpeng@huawei.com,
+        tom@talpey.com, tomasz.gromadzki@intel.com,
+        dan.j.williams@intel.com, linux-kernel@vger.kernel.org
+References: <20220927055337.22630-1-lizhijian@fujitsu.com>
+ <20220927055337.22630-4-lizhijian@fujitsu.com>
+From:   Li Zhijian <lizhijian@fujitsu.com>
+In-Reply-To: <20220927055337.22630-4-lizhijian@fujitsu.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27170.005
+X-TM-AS-User-Approved-Sender: Yes
+X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27170.005
+X-TMASE-Result: 10--20.671100-10.000000
+X-TMASE-MatchedRID: 6Yvl3or3fgqPvrMjLFD6eK5i3jK3KDOoC/ExpXrHizyOVdQAiMmbZ9E0
+        8LKMDwXN0tx5yJ6Gw/oT8ltSZlOY+c2IoAvAG8CyqdwbW9Wx9tDdKRNjzo2IOExqTmWcX8+mPf4
+        Utpl5n+5+oRU2JbGSkcs9w9Jzk12Mdi55gM/Zl20D2WXLXdz+ARgff28UuvITZ8i/MdLSpTt8Uw
+        gzqe5YiFbNzmg4PDkRbT4Iw1SEvyXZOqUR+8hSwBmiTJb38WResk61leL8Ml/cOLFESLah/bTLc
+        NrcH2Gr585VzGMOFzABi3kqJOK62b+/RSFMoL2cxEHRux+uk8jpP8tMOyYmaA==
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Leon, Jason
 
-On 9/13/22 2:44 AM, Rob Herring wrote:
-> On Tue, Sep 13, 2022 at 12:23:42AM +0530, Bhupesh Sharma wrote:
->> On 9/8/22 8:11 PM, Krzysztof Kozlowski wrote:
->>> On 07/09/2022 22:49, Bhupesh Sharma wrote:
->>>> Since the Qualcomm dwmac based ETHQOS ethernet block
->>>> supports 64-bit register addresses, update the
->>>> reg maxitems inside snps,dwmac YAML bindings.
->>>
->>> Please wrap commit message according to Linux coding style / submission
->>> process:
->>> https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
->>>
->>>>
->>>> Cc: Bjorn Andersson <andersson@kernel.org>
->>>> Cc: Rob Herring <robh@kernel.org>
->>>> Cc: Vinod Koul <vkoul@kernel.org>
->>>> Cc: David Miller <davem@davemloft.net>
->>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>>> ---
->>>>    Documentation/devicetree/bindings/net/snps,dwmac.yaml | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>>> index 2b6023ce3ac1..f89ca308d55f 100644
->>>> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>>> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>>> @@ -94,7 +94,7 @@ properties:
->>>>      reg:
->>>>        minItems: 1
->>>> -    maxItems: 2
->>>> +    maxItems: 4
->>>
->>> Qualcomm ETHQOS schema allows only 2 in reg-names, so this does not make
->>> sense for Qualcomm and there are no users of 4 items.
->>
->> On this platform the two reg spaces are 64-bit, whereas for other
->> platforms based on dwmmac, for e.g. stm32 have 32-bit address space.
-> 
-> The schema for reg is how many addr/size entries regardless of cell
-> sizes.
-> 
->> Without this fix I was getting the following error with 'make dtbs_check':
->>
->> Documentation/devicetree/bindings/net/qcom,ethqos.example.dtb:
->> ethernet@20000: reg: [[0, 131072], [0, 65536], [0, 221184], [0, 256]] is too
->> long
->> 	From schema: /home/bhsharma/code/upstream/linux-bckup/linux/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> 
-> The default cell sizes for examples is 1 for addr/size. If you want it
-> to be 2, you have to write your own parent node. But why? It's just an
-> example. Use 1 cell like the example originally had.
 
-Got your point. Let me revert to the original example in v2.
+On 27/09/2022 13:53, Li Zhijian wrote:
+>   /*
+> @@ -4321,6 +4330,8 @@ int ib_dealloc_xrcd_user(struct ib_xrcd *xrcd, struct ib_udata *udata);
+>   static inline int ib_check_mr_access(struct ib_device *ib_dev,
+>   				     unsigned int flags)
+>   {
+> +	u64 device_cap = ib_dev->attrs.device_cap_flags;
+> +
+>   	/*
+>   	 * Local write permission is required if remote write or
+>   	 * remote atomic permission is also requested.
+> @@ -4335,6 +4346,13 @@ static inline int ib_check_mr_access(struct ib_device *ib_dev,
+>   	if (flags & IB_ACCESS_ON_DEMAND &&
+>   	    !(ib_dev->attrs.kernel_cap_flags & IBK_ON_DEMAND_PAGING))
+>   		return -EINVAL;
+> +
+> +	if ((flags & IB_ACCESS_FLUSH_GLOBAL &&
+> +	    !(device_cap & IB_DEVICE_FLUSH_GLOBAL)) ||
+> +	    (flags & IB_ACCESS_FLUSH_PERSISTENT &&
+> +	    !(device_cap & IB_DEVICE_FLUSH_PERSISTENT)))
+> +		return -EINVAL;
+> +
+Regarding of the return value of ib_check_mr_access. While updating the man page of ibv_reg_mr(3) of rdma-core,
+```
+        IBV_ACCESS_REMOTE_READ Enable Remote Read Access
+        IBV_ACCESS_REMOTE_ATOMIC Enable Remote Atomic Operation Access (if supported)
+        IBV_ACCESS_MW_BIND Enable Memory Window Binding
+        IBV_ACCESS_ZERO_BASED  Use  byte offset from beginning of MR to access this MR, instead of a pointer address
+        IBV_ACCESS_ON_DEMAND Create an on-demand paging MR (if supported)
+...
+RETURN VALUE
+        ibv_reg_mr() / ibv_reg_mr_iova() / ibv_reg_dmabuf_mr() returns a pointer to the registered MR, or NULL if the request fails.  The local key (L_Key) field lkey is used as the lkey field of struct  ibv_sge  when  posting
+        buffers  with  ibv_post_* verbs, and the the remote key (R_Key) field rkey is used by remote processes to perform Atomic and RDMA operations.  The remote process places this rkey as the rkey field of struct ibv_send_wr
+        passed to the ibv_post_send function.
+```
+we can see, IBV_ACCESS_REMOTE_ATOMIC and IBV_ACCESS_ON_DEMAND are tagged "if supported" . but currently kernel
+just returns EINVAL when user registers a MR with IB_ACCESS_ON_DEMAND to RXE.
 
-Thanks,
-Bhupesh
+I wonder we should return -EOPNOTSUPP if the device doesn't support requested capabilities
+
+Thanks
+Li
+
+
+>   	return 0;
+>   }
+>   
+
