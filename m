@@ -2,91 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A9E5EEC64
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 05:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C235EEC83
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 05:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234468AbiI2DXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 23:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S234475AbiI2Dmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 23:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbiI2DW6 (ORCPT
+        with ESMTP id S229940AbiI2Dm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 23:22:58 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F16127541;
-        Wed, 28 Sep 2022 20:22:56 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MdJTV64vQzHtmG;
-        Thu, 29 Sep 2022 11:18:06 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 29 Sep 2022 11:22:44 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 29 Sep
- 2022 11:22:44 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
-        <llvm@lists.linux.dev>, <linux-mm@kvack.org>
-CC:     <keescook@chromium.org>, <vbabka@suse.cz>
-Subject: [PATCH -next] compiler.h: fix compile error with gcc-8 or lower version
-Date:   Thu, 29 Sep 2022 11:38:45 +0800
-Message-ID: <20220929033845.485728-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 28 Sep 2022 23:42:29 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A720124775;
+        Wed, 28 Sep 2022 20:42:26 -0700 (PDT)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxnmsMFDVj754jAA--.52949S2;
+        Thu, 29 Sep 2022 11:42:19 +0800 (CST)
+Subject: Re: [PATCH v5 2/3] dt-bindings: thermal: add loongson2k thermal
+ binding
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
+References: <20220928083702.17309-1-zhuyinbo@loongson.cn>
+ <20220928083702.17309-2-zhuyinbo@loongson.cn>
+ <066b55cf-4a28-89a2-56ab-572590c97c30@linaro.org>
+ <9b2f2d43-981d-3ffb-7526-dc3e58a9f367@linaro.org>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <f0946817-cc2c-449b-d93b-0dd94a0f51f1@loongson.cn>
+Date:   Thu, 29 Sep 2022 11:42:03 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <9b2f2d43-981d-3ffb-7526-dc3e58a9f367@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8BxnmsMFDVj754jAA--.52949S2
+X-Coremail-Antispam: 1UD129KBjvJXoWrZw18CrW8CFy7Aw48JF48Crg_yoW8Jr4xpa
+        4xA3Z8KayDArya9w4xKa4xAF1F9wsIyFZrJr18KF48AFWDZwnxtF9Yyr1j9r1kurWFqFWx
+        Zay5urZxJw4DZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9C14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrw
+        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
+        x2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
+        0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I got the follow compile error in latest linux-next kernel with gcc-8.4:
 
-  In file included from <command-line>:
-  ./include/linux/percpu.h: In function ‘__alloc_reserved_percpu’:
-  ././include/linux/compiler_types.h:279:30: error: expected declaration specifiers before ‘__alloc_size__’
-   #define __alloc_size(x, ...) __alloc_size__(x, ## __VA_ARGS__) __malloc
-                                ^~~~~~~~~~~~~~
-  ./include/linux/percpu.h:120:74: note: in expansion of macro ‘__alloc_size’
-   extern void __percpu *__alloc_reserved_percpu(size_t size, size_t align) __alloc_size(1);
 
-__alloc_size is not defined in gcc-8 or lower version, so add back the
-conditional test for __alloc_size__ to fix it.
+在 2022/9/28 下午10:18, Krzysztof Kozlowski 写道:
+> On 28/09/2022 10:37, Krzysztof Kozlowski wrote:
+>> On 28/09/2022 10:37, Yinbo Zhu wrote:
+>>> Add the loongson2k thermal binding with DT schema format using
+>>> json-schema.
+>>>
+>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>
+>> Please add Acked-by/Reviewed-by tags when posting new versions. However,
+>> there's no need to repost patches *only* to add the tags. The upstream
+>> maintainer will do that for acks received on the version they apply.
+>>
+>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+>>
+>> If a tag was not added on purpose, please state why and what changed.
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ... and please test your patches before sending :(
+> 
+> Best regards,
+> Krzysztof
+Hi Krzysztof,
 
-Fixes: 63caa04ec605 ("slab: Remove __malloc attribute from realloc functions")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- include/linux/compiler_types.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+I have a function test for these three patch, that it's okay.
+for binding patch I have a compile test, as follow, it is okay.
+root@m-pc:/home/m/workspace/test/code/upstream# make DT_CHECKER_FLAGS=-m 
+dt_binding_check 
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/ls2k-thermal.yaml
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index aa81da7a28eb..aae8852ccbdc 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -276,8 +276,13 @@ struct ftrace_likely_data {
-  * be performing a _reallocation_, as that may alias the existing pointer.
-  * For these, use __realloc_size().
-  */
-+#ifdef __alloc_size__
- #define __alloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__) __malloc
--#define __realloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__)
-+#define __realloc_size(x, ...) __alloc_size__(x, ## __VA_ARGS__)
-+#else
-+#define __alloc_size(x, ...)	__malloc
-+#define __realloc_size(x, ...) __malloc
-+#endif
- 
- #ifndef asm_volatile_goto
- #define asm_volatile_goto(x...) asm goto(x)
--- 
-2.25.1
+BRs,
+Yinbo Zhu.
+> 
 
