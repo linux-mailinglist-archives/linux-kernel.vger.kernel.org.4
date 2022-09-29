@@ -2,102 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7737F5EFD0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DA95EFD11
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234417AbiI2S3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S232524AbiI2Sam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234453AbiI2S3m (ORCPT
+        with ESMTP id S233125AbiI2Sai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:29:42 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04D6E95
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:29:39 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id w20so1936559ply.12
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:29:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=r7x8U2WWuZqtH2rrIIcS2XynHY/yseYye2zrqMM6Et8=;
-        b=gDrN6VJe+mCeTqrI0ZJHo1vweqUHeLnG/QtkQ+DoIZUwHtCLrxLaLVwR+HfP0pk41R
-         oQkzMBxK6quJZhURlfZMiFJRRilyfqlTU8W3FeDE5jpIgCpMTH1M7HGSP0CTu3vAYn5G
-         4d67xxs/L19iljmPtkYgInGVP6V9KxOlxi/70U13iGVrCE7WIXayTIVsHTxti2WBr478
-         Eb9hLQuC1tEIztpaLGBKIG89t+D1Hw4bDR+UQHZL8Z4zX7fPHV4wIkMwRUEVkiEkmr9H
-         paogj3j45ErOKFiW3J3li+JkffObx3c5wCBMs995tNn43vcRmDI272qWCodVqbP24vec
-         gWdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=r7x8U2WWuZqtH2rrIIcS2XynHY/yseYye2zrqMM6Et8=;
-        b=vKyLsr+P72tww4Y9mfZETGzqhQnKTkR86dtfvZaD8PrdbzUQgiL/FTR15wUNJ56670
-         cyNgIDC28w6OEsQ597kAO+bSI/GFRzZMNLVUVv7Pg8UGiHbQv3lsiMQh9j2Z3HVhcW2F
-         Mw0hNBQs1RsBPXfUgsMfI8y+09h3j+7TTer73QV/bpl39Lxdy1O/kZTpK7aZ4vcJhITX
-         K3uM7ZZkSLXq2ckRIMPxYLwukerj0DXsEFFIHBGdxXC1dox1MOzmpxrcPdSNRzwo+1XT
-         BS9BgwPjxjwnGuoaOOF/Ud4lGoFB/mW8j+grB30Bh2AqlGeRr31CA+DyLjrF2kWBOSnk
-         Tzrw==
-X-Gm-Message-State: ACrzQf1rvf2jcT+6rerEesXyYM3BXbFhYBzoKWkMQS8qXuENvsbeEzVY
-        GCdCAfMzqNuW5L7ps11r3M4=
-X-Google-Smtp-Source: AMsMyM69Bm1HmjgbgetOCpH4aYTLjOTBB4jR0voRxC+PtRzFPtyZi2oqA4ER07OJGC3jLIcNy6908w==
-X-Received: by 2002:a17:902:d48d:b0:178:306d:f75c with SMTP id c13-20020a170902d48d00b00178306df75cmr4635850plg.73.1664476179293;
-        Thu, 29 Sep 2022 11:29:39 -0700 (PDT)
-Received: from strix-laptop (2001-b011-20e0-1b9a-f5f9-665b-0715-9cc1.dynamic-ip6.hinet.net. [2001:b011:20e0:1b9a:f5f9:665b:715:9cc1])
-        by smtp.gmail.com with ESMTPSA id m9-20020a170902db0900b0016c09a0ef87sm178417plx.255.2022.09.29.11.29.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 11:29:38 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 02:29:32 +0800
-From:   Chih-En Lin <shiyn.lin@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Nadav Amit <namit@vmware.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Xu <peterx@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Li kunyu <kunyu@nfschina.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <shy828301@gmail.com>, Song Liu <song@kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dinglan Peng <peng301@purdue.edu>,
-        Pedro Fonseca <pfonseca@purdue.edu>,
-        Jim Huang <jserv@ccns.ncku.edu.tw>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>
-Subject: Re: [RFC PATCH v2 9/9] mm: Introduce Copy-On-Write PTE table
-Message-ID: <YzXkDKr6plbJZgG4@strix-laptop>
-References: <20220927162957.270460-1-shiyn.lin@gmail.com>
- <20220927162957.270460-10-shiyn.lin@gmail.com>
- <3D21021E-490F-4FE0-9C75-BB3A46A66A26@vmware.com>
- <YzNUwxU44mq+KnCm@strix-laptop>
- <c12f848d-cb54-2998-8650-2c2a5707932d@redhat.com>
- <YzWf7V5qzMjzMAk4@strix-laptop>
- <39c5ef18-1138-c879-2c6d-c013c79fa335@redhat.com>
+        Thu, 29 Sep 2022 14:30:38 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17657D33CA;
+        Thu, 29 Sep 2022 11:30:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R6hQOMVh7ZDVHkfpbG9E2KrksXPTdguDAqgzEaFjgCHlOg8wZ4rq/pHS33yl+9z4jFidIUYVKP263qm1o72qGVyOlcyostPgcQEH0NDWoNfHJv8WAt/B6RudBMYdKB0yh1u2xQFCudDYneOgy/BEeodx4ZytLXaUDZfPe831ql63XNn67y1TAHUlr9+ixafDDRzMvNKGe7aTrPFXkBjW1ZaXpRPzxMThSMf3YnRpNgxFIVbbuNVjvAM3AXqpNyX8dZvoRpCJ8ilyZhKOCZVp1FVNnTZpDYDcnZx9zvlhrn/cQ94WhjykB6y/RqK6cmf2nzDHfXe22bY8ekVA1WXgoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+4v4uVZJjIna91Bf+VK3v4E6ftO3MLPNLBG+zHB4m5M=;
+ b=H81K/ubUurg7uQWMPp5MFHG+IRzM7jt2AaLh8wxYqfEgoOl6PN7PxMYOOj5R3UcMv3VUDiJiFVpdm6h0ShQN6NgYE8myNbNUaD1f5J4fgQRwfkdh0lrG80mwv+/OCoe5x+u+xFx/YkLRBnqxVkvVwkwn2wEc3Z3pMIsqF0OwNu0Ng1+2T5Dh6sp+LN+AOexEYKb9Hf6FF/J764c3ojcl49G2zK0F9BcF11UzTuXyUSzUt+8TuOtVJpoXvLEt443TeiEyIZNRC9n6+O0d9lW22naFHOMN7tQH3YFyjSiy4s6BGFVmbyqvtLC4R6b9fmIdVbczwI3lF3BJOM5OUKgRJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+4v4uVZJjIna91Bf+VK3v4E6ftO3MLPNLBG+zHB4m5M=;
+ b=SMLraqpG1yW44mma4db9q7zn/0TakLa5KvzlSAeFt2hVg+c92D8F7J/SRXtVo5qm0OQoF0/H9wdvWEU7SKimfzvJYCmSTd+W44WoI6xH+rCPfOrDnKQgsLE6V+Dmx86Mr7hU0BhriK0aPA2pGyS8U3Skv7+/r3f3Ujgxj6Ywc74=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5993.namprd12.prod.outlook.com (2603:10b6:208:399::9)
+ by MN2PR12MB4581.namprd12.prod.outlook.com (2603:10b6:208:260::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.20; Thu, 29 Sep
+ 2022 18:30:35 +0000
+Received: from BL1PR12MB5993.namprd12.prod.outlook.com
+ ([fe80::eea4:efd:ad94:b0e7]) by BL1PR12MB5993.namprd12.prod.outlook.com
+ ([fe80::eea4:efd:ad94:b0e7%8]) with mapi id 15.20.5654.025; Thu, 29 Sep 2022
+ 18:30:35 +0000
+Message-ID: <52ed8ec2-bd90-ad40-fe85-83d60eda7e05@amd.com>
+Date:   Fri, 30 Sep 2022 00:00:22 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 3/3] dma-buf: Check status of enable-signaling bit on
+ debug
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220927172409.484061-1-Arvind.Yadav@amd.com>
+ <20220927172409.484061-4-Arvind.Yadav@amd.com>
+ <59d4d647-f451-061c-79b5-0ffc4e33fc58@amd.com>
+From:   "Yadav, Arvind" <arvyadav@amd.com>
+In-Reply-To: <59d4d647-f451-061c-79b5-0ffc4e33fc58@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN2PR01CA0112.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:27::27) To BL1PR12MB5993.namprd12.prod.outlook.com
+ (2603:10b6:208:399::9)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <39c5ef18-1138-c879-2c6d-c013c79fa335@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5993:EE_|MN2PR12MB4581:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7b3e95d1-d180-4187-baff-08daa248b2ce
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5bbgSueQtm+E9rQXDPZUdSbKT74E1GfzwWpShycU+wTT983qBSr7+odL2X4a5eMRYA73pnWXUB6cHk1FO+v3+tXFlcV5bOILW5ljjfizv81S7frU+yDFqm4LyXguB8gTYTeguWdHWl3hH8n5nHfJHSTCla367JQ7gJECwqE+MRtr0R9HrN4JVXVbuD1e61wTnmIsf7573ahJsA6U/r9PD57JctK0zyMeGE3QxfHQf8guh4gDClRvTRPxYve804ZxlIPHZ6DyFiG7scX0VjDW0V1eu4JmDZe0Wv8Hco8Ea7p2/+87zWS5IWJtRyqG1mkVIF8cwFzeFz7hequ4AT8PzbYszfKPg9tIBntfwBivzNy+dPWMk1+FBzwfDVAKpc2ndf2JFpYYHf1jJZksuEqYBJze1kgcx4/hfB+ZU04mkHOVarrOyx4kIPsSMPWWS0BDDhuhZ4OYIwBHBjqC9HC5J9O5TiClPqoxfxJBdxnjgmeYnh69pPcrKw33ahQ6AifBGpm4h0i7FcHNS4uvJZXPI8bhRJnJkDFGxjyDH8/VqG2lTHnq6RPrwP4KJKosTKEWBbJN6gd9uoN8R7AALlYBI6nuQ6uWjs5hUFKP3PlPCTJnnEnK6zmdKnNsWnB/OAMsO0CLOIWVzww6mBjugEIha1f7uUfHyExwhea4Bk8Y2djEk8h776NihQaS0q/wbQAsR5qJSTOaPxnGQ+MvBmjwEXTrRhyOvD5qSWiq1S74eBlDHut48jGDFl1HH2VQ5kKN5qMRELyBaNpuzyqfeD4zCX0P76k83Rm5lfnQenvgEcqOfxxOgEmesAOq6sxPICMf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5993.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(366004)(346002)(376002)(396003)(451199015)(6512007)(26005)(6486002)(6506007)(53546011)(2616005)(31686004)(38100700002)(8676002)(110136005)(316002)(31696002)(921005)(36756003)(186003)(83380400001)(478600001)(6666004)(2906002)(66574015)(5660300002)(66946007)(66476007)(66556008)(8936002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L2pZZWtQWkFtWDhMOXpQeHBYWHIrRkJSelkyT2hiZUc0ZmVIUmFvZXpYVTFB?=
+ =?utf-8?B?bDdIUHBKRkJ0U0krRy9VcjhCMXNKREhPbXF5WGhOdFgya0FxNWdoa3JTelVP?=
+ =?utf-8?B?T2NkOWlBQ0FCYTFPSFAxZ0dHY05BZ2tJeWZLTUVHMFRJRks3cEJYdG5LMGZh?=
+ =?utf-8?B?aS8wSytFUTdhd1BXQTU1K0NMMHhWQkZXbWJuZlJjS3dYK25pRlp6QVFkTHJG?=
+ =?utf-8?B?OGtwLzFXMGtDZ3M2dzNJZ2RWR0hJQk9oMWkzL2NKd1lSZ1JkcnRBRS94TXZa?=
+ =?utf-8?B?UzdPeGV0MjcwODhORlkvaWE0ak5DM3kyRkYzWGovS3hGbUhOQVV2aXlpanJP?=
+ =?utf-8?B?YTZtMmtHSnBLY2x1Vmo2VkVpeVBtMzJBOUd4UXZzdHc2OWdrSEQ2N01MNVNi?=
+ =?utf-8?B?bjdSL3J1Nk9jQ0ZlNHdIc1hLdHYwYXZEeGtnOWZaczFERWJ2TStmRURIZk53?=
+ =?utf-8?B?b0xITUdFODlHQ0VHeGRhVmwvMDJXRnpGZEo4OCtUcno2bnF3VFh1UXZ3c25I?=
+ =?utf-8?B?czhQdDJUdWplOGJUbzJRVnIyaUcvTzNnWXhVSlpIbVVGdUg3OEs2cEFYaVpR?=
+ =?utf-8?B?cXV0S1M4c3BkZUFuUERtblFVbmtMRTJNNFZnR1JxY3JZOWpsYWpmZncyekRw?=
+ =?utf-8?B?Z2hnQjB2TUdzRzNIUjNoOUFTZFN0MVJPamVRNVA4ZjJtejdQcU1TZVNNek91?=
+ =?utf-8?B?STM4NzQ5RkdTVHlqSXRvaHhjbFFsQkNVblJ4eUl1Ky9HNktsbkRkWkV0VEhl?=
+ =?utf-8?B?YXM3N3NqalFBcm54RnlPelVFVitxYkxjV2Q5SXdnc1NLTUxCTnpXc2QvcGhR?=
+ =?utf-8?B?WkY3amNFMGl4dE9YQmo1ZEw5MDRVQ2M2MFM5OVIzYWM0MDh6NThrWUtPL25j?=
+ =?utf-8?B?RHJVNzVQL0ZXbkM1SG9UOU1oUUtnYVZaNCtwbWhvL3lsVWsyZzBlUjgxVzJt?=
+ =?utf-8?B?YXJaeEtnWmxRYVJBVnRCQVpHTE9Qd2lrRVhHWDBLNkU3dksvR3Q3RSt2aFZJ?=
+ =?utf-8?B?Z2dMWGVnT005cktrLzhkbllUVXdVTFJwY2gxQVkzMU5zZHZkQ1ZxK3ZZTVkw?=
+ =?utf-8?B?akpLSkpEaWxLd1czaldNQVZmVXRHTU5FREJKTVBvSWVIbVI5QkxyMzZwN2hj?=
+ =?utf-8?B?VHl3eGt3d2RzM2hlcUczc2w3dklSUE5JVjhlaTRYWktuZkhtcm1FUWlvWVRx?=
+ =?utf-8?B?STNqN1JBMGRwSXRqZ0F6ME1SZG10b2xKQ1c4eHgreks4ZkVCRlQzOGEvRERm?=
+ =?utf-8?B?Nkt4TlZ0ZFRKZUg0a2dVbzBzMWFvd0ZieWZPUFJZdnIxWUtKYlZaS1hRMHhH?=
+ =?utf-8?B?cjJaWVo0YmwwNkNiZm1YZ0ZtYWx0RlNGSVR1Z0ZlRk5UZGg3aU13S1BTb3FZ?=
+ =?utf-8?B?RXg4Z2ZCWFdCSXpjODU0MXhUZE9FSXZmeW9NL0RybzV5MHVtY0R2cEVMYU85?=
+ =?utf-8?B?ZTBpS0gxVlNCcUNMUmN4ekFoZTVrQ1hsem4xUlk3WGs2Tlh0K1A3QnBsYU1z?=
+ =?utf-8?B?V3I4cTZTSXZ4TVhrQVRPMFkvWVF2cmFRSmlVd1BQYTVINndqZjlMWDMxa3Rz?=
+ =?utf-8?B?WllvcEVyaW1UenVpaDVMWng0c05OMWpJWDY2OHROUzVSRWFDMWVQNmpYSDhv?=
+ =?utf-8?B?UmFHZjBqRjlzL0tmZHY2ay9zcEg4U0xNL2lhVmdSWUN6N0hCZG5GbTVMQzNl?=
+ =?utf-8?B?SmJyY3V1QjVUSVg1N2dpZjJqdmZRZXliTWZVMDZUOThJQ0tMOENIT2lBaHZQ?=
+ =?utf-8?B?K3IrbUIxMlF4L2pCOVJnWkNQNkFDMFFoWENLbi93dEVCNkk3MGk5TlR4OThN?=
+ =?utf-8?B?SEFXd0JCdHByam81TFliRXROUXM2dXhveitGMHoxN2hlM0NHOS9xemQrS1p1?=
+ =?utf-8?B?UEVJcVY3RitmRHU5TmxCZGtQalE0eW1aR1V4ZU85Mkd3NUVZdHBOSTVJeXZt?=
+ =?utf-8?B?Yk9tcnpqWTJqMElPeThjblZTZE94Y1I3dUpLSXhlVDVmdnljay9UOUtiRDN1?=
+ =?utf-8?B?MCtpd055QllUazlxZ0x6S3dyN0V1WWFOOWVIbDNkMElvbC9WSFZLM0dUSXlH?=
+ =?utf-8?B?SXlZcmE3QWpDL0tKMHlncGVOTkhnWXV4NW5nTTNZR2xYU2M0WEJOSDRiSmE1?=
+ =?utf-8?Q?S2ESUV8ZeFTk5UKpCz+vnG0iA?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b3e95d1-d180-4187-baff-08daa248b2ce
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5993.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 18:30:34.9146
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uWPvjhRyII4YJcA9d+covSsXQ8vjUkOapF1lkmNkNkaSi3rDjov8ozXch/urleoYWHarqDYBBOuz4J9a1KOr2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4581
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,118 +131,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 07:24:31PM +0200, David Hildenbrand wrote:
-> > > IMHO, a relaxed form that focuses on only the memory consumption reduction
-> > > could *possibly* be accepted upstream if it's not too invasive or complex.
-> > > During fork(), we'd do exactly what we used to do to PTEs (increment
-> > > mapcount, refcount, trying to clear PageAnonExclusive, map the page R/O,
-> > > duplicate swap entries; all while holding the page table lock), however,
-> > > sharing the prepared page table with the child process using COW after we
-> > > prepared it.
-> > > 
-> > > Any (most once we want to *optimize* rmap handling) modification attempts
-> > > require breaking COW -- copying the page table for the faulting process. But
-> > > at that point, the PTEs are already write-protected and properly accounted
-> > > (refcount/mapcount/PageAnonExclusive).
-> > > 
-> > > Doing it that way might not require any questionable GUP hacks and swapping,
-> > > MMU notifiers etc. "might just work as expected" because the accounting
-> > > remains unchanged" -- we simply de-duplicate the page table itself we'd have
-> > > after fork and any modification attempts simply replace the mapped copy.
-> > 
-> > Agree.
-> > However for GUP hacks, if we want to do the COW to page table, we still
-> > need the hacks in this patch (using the COW_PTE_OWN_EXCLUSIVE flag to
-> > check whether the PTE table is available or not before we do the COW to
-> > the table). Otherwise, it will be more complicated since it might need
-> > to handle situations like while preparing the COW work, it just figuring
-> > out that it needs to duplicate the whole table and roll back (recover
-> > the state and copy it to new table). Hopefully, I'm not wrong here.
-> 
-> The nice thing is that GUP itself *usually* doesn't modify page tables. One
-> corner case is follow_pfn_pte(). All other modifications should happen in
-> the actual fault handler that has to deal with such kind of unsharing either
-> way when modifying the PTE.
-> 
-> If the pages are already in a COW-ed pagetable in the desired "shared" state
-> (e.g., PageAnonExclusive cleared on an anonymous page), R/O pinning of such
-> pages will just work as expected and we shouldn't be surprised by another
-> set of GUP+COW CVEs.
-> 
-> We'd really only deduplicate the page table and not play other tricks with
-> the actual page table content that differ from the existing way of handling
-> fork().
-> 
-> I don't immediately see why we need COW_PTE_OWN_EXCLUSIVE in GUP code when
-> not modifying the page table. I think we only need "we have to unshare this
-> page table now" in follow_pfn_pte() and inside the fault handling when GUP
-> triggers a fault.
-> 
-> I hope my assumption is correct, or am I missing something?
-> 
 
-My consideration is when we pinned the page and did the COW to make the
-page table be shared. It might not allow mapping the pinned page to R/O)
-into both processes.
+On 9/29/2022 11:48 PM, Christian König wrote:
+> Am 27.09.22 um 19:24 schrieb Arvind Yadav:
+>> Fence signaling must be enabled to make sure that
+>> the dma_fence_is_signaled_locked() function ever returns true.
+>> Since drivers and implementations sometimes mess this up,
+>> this ensures correct behaviour when DMABUF_DEBUG_ENABLE_SIGNALING
+>> is used during debugging.
+>> This should make any implementation bugs resulting in not
+>> signaled fences much more obvious.
+>
+> Are all IGT tests now passing with this? That would be a bit 
+> unfortunate because it means we still have missed the bug in drm_syncobj.
+>
+IGT has these test cases related to syncobj (syncobj_basic, 
+syncobj_timeline and syncobj_wait)and all are passing.
 
-So, if the fork is working on the shared state, it needs to recover the
-table and copy to a new one since that pinned page will need to copy
-immediately. We can hold the shared state after occurring such a
-situation. So we still need some trick to let the fork() know which page
-table already has the pinned page (or such page won't let us share)
-before going to duplicate.
+I will check syncobj and let you know.
 
-Am I wrong here?
+~Arvind
 
-After that, since we handled the accounting in fork(), we don't need
-ownership (pmd_t pointer) anymore. We have to find another way to mark
-the table to be exclusive. (Right now, COW_PTE_OWNER_EXCLUSIVE flag is
-stored at that space.)
-
-> > 
-> > > But devil is in the detail (page table lock, TLB flushing).
-> > 
-> > Sure, it might be an overhead in the page fault and needs to be handled
-> > carefully. ;)
-> > 
-> > > "will make fork() even have more overhead" is not a good excuse for such
-> > > complexity/hacks -- sure, it will make your benchmark results look better in
-> > > comparison ;)
-> > 
-> > ;);)
-> > I think that, even if we do the accounting with the COW page table, it
-> > still has a little bit improve.
-> 
-> :)
-> 
-> My gut feeling is that this is true. While we have to do a pass over the
-> parent page table during fork and wrprotect all PTEs etc., we don't have to
-> duplicate the page table content and allocate/free memory for that.
-> 
-> One interesting case is when we cannot share an anon page with the child
-> process because it maybe pinned -- and we have to copy it via
-> copy_present_page(). In that case, the page table between the parent and the
-> child would differ and we'd not be able to share the page table.
-
-That is what I want to say above.
-The case might happen in the middle of the shared page table progress.
-It might cost more overhead to recover it. Therefore, if GUP wants to
-pin the mapped page we can mark the PTE table first, so fork() won't
-waste time doing the work for sharing.
-
-> That case could be caught in copy_pte_range(): in case we'd have to allocate
-> a page via page_copy_prealloc(), we'd have to fall back to the ordinary
-> "separate page table for the child" way of doing things.
-> 
-> But that looks doable to me.
-
-Sounds good. :)
-
-> -- 
-> Thanks,
-> 
-> David / dhildenb
-> 
-
-Thanks,
-Chih-En Lin
+> Christian.
+>
+>>
+>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+>> ---
+>>   include/linux/dma-fence.h | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+>> index 775cdc0b4f24..5156dc6be0a6 100644
+>> --- a/include/linux/dma-fence.h
+>> +++ b/include/linux/dma-fence.h
+>> @@ -398,6 +398,11 @@ void dma_fence_enable_sw_signaling(struct 
+>> dma_fence *fence);
+>>   static inline bool
+>>   dma_fence_is_signaled_locked(struct dma_fence *fence)
+>>   {
+>> +#ifdef CONFIG_DMABUF_DEBUG_ENABLE_SIGNALING
+>> +    if (!test_bit(DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT, &fence->flags))
+>> +        return false;
+>> +#endif
+>> +
+>>       if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
+>>           return true;
+>
