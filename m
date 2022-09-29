@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29895EFB07
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 034385EFB08
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235717AbiI2QhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
+        id S235858AbiI2Qhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235662AbiI2QhU (ORCPT
+        with ESMTP id S235742AbiI2Qhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:37:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0301288AF;
-        Thu, 29 Sep 2022 09:37:19 -0700 (PDT)
+        Thu, 29 Sep 2022 12:37:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909AD14FE3C;
+        Thu, 29 Sep 2022 09:37:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B232EB823E0;
-        Thu, 29 Sep 2022 16:37:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C50C433D6;
-        Thu, 29 Sep 2022 16:37:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 384F8B8252B;
+        Thu, 29 Sep 2022 16:37:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50188C433C1;
+        Thu, 29 Sep 2022 16:37:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664469436;
-        bh=vNYtvUwZ3HUq8cwYA19NVMmvgmpcrt5d+/MrssAtMJQ=;
+        s=k20201202; t=1664469446;
+        bh=hzaL69lrZXN9qsUmhHjQ061m+bkJjCOUB4MV0xP7wCs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d6anIAoCx3kZr1zafAJ0CY9NGHSvOaCHXAXVV1BAvAhKOfkxWtOeZsXUNnvt1TN6c
-         6XBWgMSAcST0XVlIv5tiV4OW06GsnIQI7RN5CdOf26nUv5fMqJ6a2U2vWA2GdJiZsp
-         kWjZL+V70yM+cPvrwRh4aH8KTC2Zn+tZbN3+RFdTDum/jDVWGPa5GA67ebnmFEDWq+
-         otr/qSGFGzBndUSeq23jQU+a96xr14rCuD2U3AHc6tMozT/xsp+Q9xTbmpLlLNVLaw
-         PlXJWBiNedJTD7xgbJ1hhRCrZ6pWLD96SX9PinHLyZhssSJO8ghDu5Pon4s8DhAzTT
-         q/4pvUHiti2bA==
-Date:   Thu, 29 Sep 2022 22:07:12 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rafael Mendonca <rafaelmendsr@gmail.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: idxd: Fix memory leak in idxd_alloc()
-Message-ID: <YzXJuI5lwF10JguR@matsya>
-References: <20220914230815.700702-1-rafaelmendsr@gmail.com>
+        b=NF0XqcwGK/lIgQ/kE2OUjjjes4BzMsQnCzlQ5YRZcpgFvi0brjsfadZ7Hq/r7EtaW
+         heDcFKfzGdZmNan1XFC1csss5Ht7wzgbAWAarPn/phu38MbsE/nuVQf8h8PvzKW/tI
+         Pi68pDwViXBSctMYtvHBsFKAy/2TmP6UuIJ5KCbZp0IkBiCMWAVYIDVJcRX9hwCeor
+         s8HkEsNaUSugaZdfNa/4xZ4nY9W4K+CmQYD6vtmlJpYDwGsoY2wXqbHBnKc2CUdB28
+         kHMSri3CwFUrS5Wm7mmnzJ0mRNL6thMrkm+Q9iWSbhqxXISE/VL743etQ7SAGxYSwT
+         AOyvtOIvp26LQ==
+Date:   Thu, 29 Sep 2022 10:37:22 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>, qemu-devel@nongnu.org,
+        kvm@vger.kernel.org, Kevin Wolf <kwolf@redhat.com>
+Subject: Re: Commit 'iomap: add support for dma aligned direct-io' causes
+ qemu/KVM boot failures
+Message-ID: <YzXJwmP8pa3WABEG@kbusch-mbp.dhcp.thefacebook.com>
+References: <fb869c88bd48ea9018e1cc349918aa7cdd524931.camel@redhat.com>
+ <YzW+Mz12JT1BXoZA@kbusch-mbp.dhcp.thefacebook.com>
+ <a2825beac032fd6a76838164d4e2753d30305897.camel@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220914230815.700702-1-rafaelmendsr@gmail.com>
+In-Reply-To: <a2825beac032fd6a76838164d4e2753d30305897.camel@redhat.com>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,12 +57,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14-09-22, 20:08, Rafael Mendonca wrote:
-> If the IDA id allocation fails, then the allocated memory for the
-> idxd_device struct doesn't get freed before returning NULL, which leads to
-> a memleak.
+On Thu, Sep 29, 2022 at 07:16:29PM +0300, Maxim Levitsky wrote:
+> On Thu, 2022-09-29 at 09:48 -0600, Keith Busch wrote:
+> > I am aware, and I've submitted the fix to qemu here:
+> > 
+> >   https://lists.nongnu.org/archive/html/qemu-block/2022-09/msg00398.html
+> > 
+> 
+> 
+> Thanks for quick response!
+> 
+> Question is though, isn't this an kernel ABI breakage?
 
-Applied, thanks
-
--- 
-~Vinod
+I don't think so. Memory alignment and length granularity are two completely
+different concepts. If anything, the kernel's ABI had been that the length
+requirement was also required for the memory alignment, not the other way
+around. That usage will continue working with this kernel patch.
