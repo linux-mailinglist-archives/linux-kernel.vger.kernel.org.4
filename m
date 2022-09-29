@@ -2,132 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A203A5EFB3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD465EFB40
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235922AbiI2Qrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
+        id S235638AbiI2Qrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235638AbiI2Qrf (ORCPT
+        with ESMTP id S235978AbiI2Qrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:47:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C5E1C6A43;
-        Thu, 29 Sep 2022 09:47:34 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 16:47:31 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664470052;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=VeXdpqz/lh/+Kphnno09Gfa6VE0YUSzpiNwMegRtrO8=;
-        b=mqKcZk9qf1uGFr0Oq7qMh0YE7zK2lqJE04qop0WSq+mSI8khYo5tCN70AFzkFG12QsfD5Y
-        1E6mAduqVNpnPVWNgzetveRaoK3nXJP+VPVkF3Aj+OXVYKDQDumQcEHd7teC2uJ8cLn42Q
-        15FcgqPjvvsbx8YMPkLZRfwuuu4YbxrcYYHsvAToHrC73jTxiKoAJ/DYFx4Ilyn79tdOyX
-        +KA+IQioDPNxNKjKw330NJNaZJWY0YDvqjIgSL5d9REWYEvpOI6Og6JjLcK3iOTF3tVqLo
-        t2utZKh80x9JWluKHOa0We6sRe72UEu8VX/ptcdY64bbyEIj+wsDFNDgI9KfrQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664470052;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=VeXdpqz/lh/+Kphnno09Gfa6VE0YUSzpiNwMegRtrO8=;
-        b=86g0y6FbLXjMRgt46IYxSrwrFLQW3hLGeQlUljEnIPgz36w+SNnGXKO7+mDpRUAJ3B/jj0
-        /QHP95LUy3RfdmBw==
-From:   "tip-bot2 for Linus Torvalds" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Add prot_sethuge() helper to abstract out
- _PAGE_PSE handling
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Thu, 29 Sep 2022 12:47:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2076A1CD123
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:47:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664470066;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rgklLOMQL7VylspPk97tlA/0goi9ks/sFgXajXuL5kw=;
+        b=iqARGNZuPbE951lHVVWqOdyNe/aLn18j95FqpyVPZ186v/wRIjsCx/azrkDdJ27gDBSfx+
+        NC+7I91OEs5L8KWeas1K0xAK1MRW8llg3nbOa65A2VPbNHzFpaedDfJFvTXQugnmTZbqBg
+        HI9FaVtxgq1sfaJzEnbPQAmuks9HISk=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-478-HJNA-3RXNvKKYts1mdYfaQ-1; Thu, 29 Sep 2022 12:47:45 -0400
+X-MC-Unique: HJNA-3RXNvKKYts1mdYfaQ-1
+Received: by mail-ed1-f71.google.com with SMTP id c6-20020a05640227c600b004521382116dso1696150ede.22
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:47:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=rgklLOMQL7VylspPk97tlA/0goi9ks/sFgXajXuL5kw=;
+        b=tvO5Au7IUMuWnYk9Eohu5rxVTD9GKAosbdL+xh3rWn2F5eAKZ4rvTpZDfTbOq4/bL/
+         t5Zl0Y6mk1ba1FMIWLVctZhtQo3jwID2S6ebSt5UWvaubMje9DXs5K5Mfy7TWkUFUqmX
+         cEtyli5AtWN37m2zHVKkT3jYLEz4bJ1MVRLlyg1vmHy3PG+fJroV3a5wfI5LYVJ+r3yg
+         +IMfzC9YKxkwS3b/K18cgZRgB4w8gaHcTg2E12PYu/d8wuhBQejeAFAFSl4jd8EnD6eW
+         yw4Pdiw15wOTo5ze9fAdPvl1JrjOFOG90jt7RrEMou3qmLlAFQtY3c1axLUxrgyomPjZ
+         ThNw==
+X-Gm-Message-State: ACrzQf0+vwACLenKlTUZAys0Woov9jBAtOZEkJJldax6uTh/29CzNM7R
+        wsW+l3fp4kfsr6+tCSbnYnDlpBxshwd9aAbLvczrZh89Urizz2wHtzL3yiFK1xCrWWNdgrItBMu
+        clHr7ZrdPNZIkpwqsweW7PIb8
+X-Received: by 2002:a05:6402:4503:b0:457:e6ac:9785 with SMTP id ez3-20020a056402450300b00457e6ac9785mr4140534edb.416.1664470063958;
+        Thu, 29 Sep 2022 09:47:43 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM63x3Fm95ysSCPsE9mdlZJVkjgIEF+Cn7dlN/X1FIKx3EnPya7MLzCiw7Rs+pmWclzNSsm2ow==
+X-Received: by 2002:a05:6402:4503:b0:457:e6ac:9785 with SMTP id ez3-20020a056402450300b00457e6ac9785mr4140520edb.416.1664470063686;
+        Thu, 29 Sep 2022 09:47:43 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id b18-20020a17090630d200b00780982d77d1sm4174040ejb.154.2022.09.29.09.47.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 09:47:43 -0700 (PDT)
+Message-ID: <56a125ab-f113-56f7-f8cb-de05127c92b7@redhat.com>
+Date:   Thu, 29 Sep 2022 18:47:41 +0200
 MIME-Version: 1.0
-Message-ID: <166447005137.401.6681051003676535352.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] KVM: allow compiling out SMM support
+Content-Language: en-US
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220927152241.194900-1-pbonzini@redhat.com>
+ <bd4d7463-a960-3c49-9c56-a8bd5c1ea7f0@maciej.szmigiero.name>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <bd4d7463-a960-3c49-9c56-a8bd5c1ea7f0@maciej.szmigiero.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/mm branch of tip:
+On 9/29/22 17:49, Maciej S. Szmigiero wrote:
+> On 27.09.2022 17:22, Paolo Bonzini wrote:
+>> Some users of KVM implement the UEFI variable store through a 
+>> paravirtual device
+>> that does not require the "SMM lockbox" component of edk2; allow them to
+>> compile out system management mode, which is not a full implementation
+>> especially in how it interacts with nested virtualization.
+>>
+>> Suggested-by: Sean Christopherson <seanjc@google.com>
+>> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+>> ---
+>>     The patch isn't pretty.  I could skip all the changes to add WARNs
+>>     to called functions, but the point of adding the config symbol is
+>>     to make sure that those functions, and all the baggage they bring,
+>>     are dead.
+> 
+> Out of curiosity: why the SMM support is so special that it's worth to
+> add a dedicated Kconfig entry for it?
 
-Commit-ID:     334b2cea811944df99ae2172bcc0effcdfdbe862
-Gitweb:        https://git.kernel.org/tip/334b2cea811944df99ae2172bcc0effcdfdbe862
-Author:        Linus Torvalds <torvalds@linux-foundation.org>
-AuthorDate:    Wed, 28 Sep 2022 09:30:31 +02:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Thu, 29 Sep 2022 18:01:40 +02:00
+Yeah, that's a good point.  In general the module parameters either:
 
-x86/mm: Add prot_sethuge() helper to abstract out _PAGE_PSE handling
+1) change between two behaviors (e.g. tdp_mmu) or
 
-We still have some historic cases of direct fiddling of page
-attributes with (dangerous & fragile) type casting and address shifting.
+2) can be toggled at runtime or
 
-Add the prot_sethuge() helper instead that gets the types right and
-doesn't have to transform addresses.
+3) disable _hardware_ features
 
-( Also add a debug check to make sure this doesn't get applied
-  to _PAGE_BIT_PAT/_PAGE_BIT_PAT_LARGE pages. )
+The two Kconfig entries for SMM and XEN are more for things that you 
+want to remove to reduce attack surface than for testing.
 
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Reviewed-by: Dave Hansen <dave.hansen@intel.com>
----
- arch/x86/mm/init_64.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+> Looking at the patch it doesn't seem to disable that much of code (like,
+> significantly slim down the binary) and where it does disable something
+> it mostly relies on compiler dead code removal rather than explicit
+> #ifdefs (which would guarantee that the disabled code did not end in
+> the binary).
 
-diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
-index 0fe690e..7ea7d47 100644
---- a/arch/x86/mm/init_64.c
-+++ b/arch/x86/mm/init_64.c
-@@ -90,6 +90,12 @@ DEFINE_ENTRY(pud, pud, init)
- DEFINE_ENTRY(pmd, pmd, init)
- DEFINE_ENTRY(pte, pte, init)
- 
-+static inline pgprot_t prot_sethuge(pgprot_t prot)
-+{
-+	WARN_ON_ONCE(pgprot_val(prot) & _PAGE_PAT);
-+
-+	return __pgprot(pgprot_val(prot) | _PAGE_PSE);
-+}
- 
- /*
-  * NOTE: pagetable_init alloc all the fixmap pagetables contiguous on the
-@@ -557,9 +563,8 @@ phys_pmd_init(pmd_t *pmd_page, unsigned long paddr, unsigned long paddr_end,
- 		if (page_size_mask & (1<<PG_LEVEL_2M)) {
- 			pages++;
- 			spin_lock(&init_mm.page_table_lock);
--			set_pte_init((pte_t *)pmd,
--				     pfn_pte((paddr & PMD_MASK) >> PAGE_SHIFT,
--					     __pgprot(pgprot_val(prot) | _PAGE_PSE)),
-+			set_pmd_init(pmd,
-+				     pfn_pmd(paddr >> PAGE_SHIFT, prot_sethuge(prot)),
- 				     init);
- 			spin_unlock(&init_mm.page_table_lock);
- 			paddr_last = paddr_next;
-@@ -644,12 +649,8 @@ phys_pud_init(pud_t *pud_page, unsigned long paddr, unsigned long paddr_end,
- 		if (page_size_mask & (1<<PG_LEVEL_1G)) {
- 			pages++;
- 			spin_lock(&init_mm.page_table_lock);
--
--			prot = __pgprot(pgprot_val(prot) | _PAGE_PSE);
--
--			set_pte_init((pte_t *)pud,
--				     pfn_pte((paddr & PUD_MASK) >> PAGE_SHIFT,
--					     prot),
-+			set_pud_init(pud,
-+				     pfn_pud(paddr >> PAGE_SHIFT, prot_sethuge(prot)),
- 				     init);
- 			spin_unlock(&init_mm.page_table_lock);
- 			paddr_last = paddr_next;
+Yeah, v2 will actually remove much more.
+
+Paolo
+
