@@ -2,164 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11DAA5EEB95
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 04:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FB05EEBAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 04:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234724AbiI2CSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 22:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
+        id S233313AbiI2CVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 22:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbiI2CSe (ORCPT
+        with ESMTP id S234837AbiI2CV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 22:18:34 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE81123869
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 19:18:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1664417911; x=1695953911;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3C7CtpOb0l54DwObhkR3R54ov4xRYh0NR5cxz71mUVw=;
-  b=UncAMXmRVUQ2PZkR8vXPmBxt58asxjgdN7G0RBgq2chnhR0SvilFp+VZ
-   Lnipzsbk8arT1Z5SiUdljgg4Rqsxxqlwma4X2o4oZBuUhLwf8ZqeVTatY
-   DKW2ZVBJsRocegpFqyowBpaV83Z+OvG4J0oKIOid3xvWcB4DiEc3JJPrU
-   44LRJfpYe5UTx2TDDey9y44D014ySEG+QGzvaEGKk/wQ3WZMf0Hto/tbw
-   q7X0J88a9uOHDDQSO49RUlGbElsa79V2+oUPLkFb3+etW6cjBfAQ3PEdB
-   PfP1N66dbpL07Q/V+VdoSJqUrMfV6363qd5+Zsw6eFvmVhpRD+9h7bL/J
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,353,1654531200"; 
-   d="scan'208";a="212947462"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 29 Sep 2022 10:18:30 +0800
-IronPort-SDR: lNAXpVL/tXsASWKd6pQOM+qAWjNsvhGlJudcAXuMdSZgI+mezSVr5Kc8RhppIJ8/JmfDw4JTxs
- olTXibJBONVD6Jyl5ZC5HIt4fM9JAq1d5ZTxFRl75yZvj8MSdiZH0umkc49QADrXw7id44zyp9
- 3ckcO9+Rvejl9nf0pxOZ46K7zKHQG21wa3IGuK/JnBCbdQNuseNTUayNZRNuD06IiuG2AmRJ6E
- jPZ75VJr+hPLTdRKMKQCosQuEMRZ4kEtUbZQqXz/j/S3a4cR/Iudt8+a7J4S+VHBek9Y8yQ4tH
- qbzn+20LbFm8Phfht8UJK/PY
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Sep 2022 18:38:25 -0700
-IronPort-SDR: /Wm5ASEt4XWaPksdY7wvZ+h1EGkEmhVFL1FrRI/WGlgI9K0WSH8kBeS76MKxOy9MgoliZwWVCm
- yQEf/Gk+MZL3k7i/UAqpXmgm+IXeD3bSarpkHCZuTZQ2+z82vf2CaF44RIIwhqvFBhQh2Z7xeT
- NPsqAripytFtii3gjD7Vt4epPkJEAqbFFKYisHiOTrOXzpWSQVR7bTIWfdLYLzs3FqK2JuWNGv
- MRnHaPJk/5yNBhJ5Bpy8F4SHONS7BEgzVj3ME9hV4UvsJLwb8yBIzUxy7fRYKnLOhsycoUdTz7
- cc8=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Sep 2022 19:18:30 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MdH8k1J1pz1RwtC
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 19:18:30 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1664417909; x=1667009910; bh=3C7CtpOb0l54DwObhkR3R54ov4xRYh0NR5c
-        xz71mUVw=; b=tI8DR50vqiC2j/8wIJUjpJtRnK6KvK0GZRlw1aE9mmaLzwCxePb
-        B8tLvpChjjEk1TM47jRMKRN7PHaptnNscM/v3sD8VaV8O5iXTqH7zjB3nrkwj5Qj
-        GUGfrTvG7LsGU0CQMU4L/npcc1Ya3plbh9wScKz/cvgnJfzZbL505M38pHSPXDCU
-        AuA8IxWMUNWPQKclYSM2TwB4+rCp4jYBilSftkl2jN9JFizDbwCIuTRjjiim21qz
-        CVgo/Fuhl5WaAzjZ5/HQmth6Fa2VcN9YHiK3B7Fqr2QBytPaJ5diQJLLpZ79DQSs
-        nn2ou/6Utx4fZi++LqYtX7blKc1/rPw2nAA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id zBplLxIyU4V6 for <linux-kernel@vger.kernel.org>;
-        Wed, 28 Sep 2022 19:18:29 -0700 (PDT)
-Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MdH8h010vz1RvLy;
-        Wed, 28 Sep 2022 19:18:27 -0700 (PDT)
-Message-ID: <f2c1bfa1-536b-7214-f997-b360d6db3207@opensource.wdc.com>
-Date:   Thu, 29 Sep 2022 11:18:26 +0900
+        Wed, 28 Sep 2022 22:21:26 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C72B124751;
+        Wed, 28 Sep 2022 19:20:59 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28SNTBBU008607;
+        Thu, 29 Sep 2022 02:20:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=hhwIaG05I+vjp+zpF69jrGv/z7cENff/DU0sjIfbwqI=;
+ b=jdvz8yZ4+gc4XK5k6+K+Q5uEinNdAq5u8Q0JZyBXm4cK7swVxzp/Fka9/pyFLYCIiXrl
+ QW0InxHBmR9wkNeV6R+oFkz7VaKGThh5y8q2CVr4tqoU2stLUaRrwioVwXSOb58Fo3h9
+ qn93qgNvwv3eH61mFSSM9eL0h9RQh/iFiQzVKtXFYuUlYY1E/TqsOKX6/j+Rrznb9qNq
+ inZ9TdT/XLByGrAFhjtpLzu0ERjW5ad/sU8XRpD3ozpD9ZXxSWXzNmVLlpZR2y9dfSW/
+ g9I5td3PPQVQYTFgN4chz6AA85KGOyee+HT6OBxDYlEe+d0cT9Ir+UzPR4zLsZTn1GVL iQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jvkbahy70-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Sep 2022 02:20:50 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28T2Km42017661
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Sep 2022 02:20:48 GMT
+Received: from [10.233.23.112] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 28 Sep
+ 2022 19:20:45 -0700
+Message-ID: <2d6fac8d-0ac1-75bb-0b4c-c2c34583b09e@quicinc.com>
+Date:   Thu, 29 Sep 2022 10:20:04 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 5/6] scsi: mvsas: Delete mvs_tag_init()
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v1 2/2] dt-bindings: add bindings for QCOM flash LED
 Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, jinpu.wang@cloud.ionos.com
-Cc:     hare@suse.de, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-        ipylypiv@google.com, changyuanl@google.com, hch@lst.de
-References: <1664368034-114991-1-git-send-email-john.garry@huawei.com>
- <1664368034-114991-6-git-send-email-john.garry@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <1664368034-114991-6-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>
+References: <20220928024239.3843909-1-quic_fenglinw@quicinc.com>
+ <20220928024239.3843909-3-quic_fenglinw@quicinc.com>
+ <6c0e5083-baae-3ed3-5eed-e08bbb9e7576@linaro.org>
+From:   Fenglin Wu <quic_fenglinw@quicinc.com>
+In-Reply-To: <6c0e5083-baae-3ed3-5eed-e08bbb9e7576@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: _U0xUoQlL-pRfK8IYpJAQoNQ7AI1AnVD
+X-Proofpoint-ORIG-GUID: _U0xUoQlL-pRfK8IYpJAQoNQ7AI1AnVD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-28_11,2022-09-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 impostorscore=0 bulkscore=0 mlxscore=0 adultscore=0
+ phishscore=0 mlxlogscore=999 priorityscore=1501 clxscore=1011
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2209290013
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/28/22 21:27, John Garry wrote:
-> All mvs_tag_init() does is zero the tag bitmap, but this is already done
-> with the kzalloc() call to alloc the tags, so delete this unneeded
-> function.
+
+
+On 2022/9/28 16:21, Krzysztof Kozlowski wrote:
+> On 28/09/2022 04:42, Fenglin Wu wrote:
+>> Add binding document for flash LED module inside Qualcomm Technologies,
+>> Inc. PMICs.
+>>
+>> Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
 > 
-> Signed-off-by: John Garry <john.garry@huawei.com>
+> You did not Cc me on first patch, so difficult to say how much it
+> matches the driver... There is also no DTS.
+Thanks for reviewing the binding change, I sent the driver changes in 
+the same series and you can check it here:
+https://lore.kernel.org/linux-leds/6c0e5083-baae-3ed3-5eed-e08bbb9e7576@linaro.org/T/#m97f71ce3f291f62d65f8107352d8ab9507093ab2
 
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
-> ---
->  drivers/scsi/mvsas/mv_init.c | 2 --
->  drivers/scsi/mvsas/mv_sas.c  | 7 -------
->  drivers/scsi/mvsas/mv_sas.h  | 1 -
->  3 files changed, 10 deletions(-)
+I will add you in email to list when sending next patchset.
 > 
-> diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
-> index 2fde496fff5f..c85fb812ad43 100644
-> --- a/drivers/scsi/mvsas/mv_init.c
-> +++ b/drivers/scsi/mvsas/mv_init.c
-> @@ -286,8 +286,6 @@ static int mvs_alloc(struct mvs_info *mvi, struct Scsi_Host *shost)
->  	}
->  	mvi->tags_num = slot_nr;
->  
-> -	/* Initialize tags */
-> -	mvs_tag_init(mvi);
->  	return 0;
->  err_out:
->  	return 1;
-> diff --git a/drivers/scsi/mvsas/mv_sas.c b/drivers/scsi/mvsas/mv_sas.c
-> index a6867dae0e7c..0810e6c930e1 100644
-> --- a/drivers/scsi/mvsas/mv_sas.c
-> +++ b/drivers/scsi/mvsas/mv_sas.c
-> @@ -51,13 +51,6 @@ inline int mvs_tag_alloc(struct mvs_info *mvi, u32 *tag_out)
->  	return 0;
->  }
->  
-> -void mvs_tag_init(struct mvs_info *mvi)
-> -{
-> -	int i;
-> -	for (i = 0; i < mvi->tags_num; ++i)
-> -		mvs_tag_clear(mvi, i);
-> -}
-> -
->  static struct mvs_info *mvs_find_dev_mvi(struct domain_device *dev)
->  {
->  	unsigned long i = 0, j = 0, hi = 0;
-> diff --git a/drivers/scsi/mvsas/mv_sas.h b/drivers/scsi/mvsas/mv_sas.h
-> index 509d8f32a04f..fe57665bdb50 100644
-> --- a/drivers/scsi/mvsas/mv_sas.h
-> +++ b/drivers/scsi/mvsas/mv_sas.h
-> @@ -428,7 +428,6 @@ void mvs_tag_clear(struct mvs_info *mvi, u32 tag);
->  void mvs_tag_free(struct mvs_info *mvi, u32 tag);
->  void mvs_tag_set(struct mvs_info *mvi, unsigned int tag);
->  int mvs_tag_alloc(struct mvs_info *mvi, u32 *tag_out);
-> -void mvs_tag_init(struct mvs_info *mvi);
->  void mvs_iounmap(void __iomem *regs);
->  int mvs_ioremap(struct mvs_info *mvi, int bar, int bar_ex);
->  void mvs_phys_reset(struct mvs_info *mvi, u32 phy_mask, int hard);
+>> ---
+>>   .../bindings/leds/leds-qcom-flash.yaml        | 108 ++++++++++++++++++
+>>   1 file changed, 108 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/leds/leds-qcom-flash.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/leds/leds-qcom-flash.yaml b/Documentation/devicetree/bindings/leds/leds-qcom-flash.yaml
+>> new file mode 100644
+>> index 000000000000..52a99182961b
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/leds/leds-qcom-flash.yaml
+> 
+> 
+> Filename matching compatible if there is one fallback (e.g.
+> qcom,spmi-flash-led.yaml).
+> 
+Sure, I will update the file name to match with the fallback compatible 
+string.
+>> @@ -0,0 +1,108 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/leds/leds-qcom-flash.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Flash LED device inside Qualcomm Technologies, Inc. PMICs
+>> +
+>> +maintainers:
+>> +  - Fenglin Wu <quic_fenglinw@quicinc.com>
+>> +
+>> +description: |
+>> +  Flash LED controller is present inside some Qualcomm Technologies, Inc. PMICs.
+>> +  The flash LED module can have different number of LED channels supported
+>> +  e.g. 3 or 4. There are some different registers between them but they can
+>> +  both support maximum current up to 1.5 A per channel and they can also support
+>> +  ganging 2 channels together to supply maximum current up to 2 A. The current
+>> +  will be split symmetrically on each channel and they will be enabled and
+>> +  disabled at the same time.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+>> +      - enum:
+>> +          - qcom,spmi-flash-led
+>> +          - qcom,pm8150c-flash-led
+>> +          - qcom,pm8150l-flash-led
+>> +          - qcom,pm8350c-flash-led
+> 
+> I doubt these are all different. You should use fallback, which also
+> will make use of the "items" you used...
+pm8150c and pm8150l are different PMIC variants which have same flash 
+LED module with 3 flash LED channels, while pm8350c has a different 
+flash LED module with 4 flash LED channels. They can all use 
+"qcom,spmi-flash-led" as the fallback because the driver has code logic 
+to detect HW sub-types. But I was thinking to give out the PMIC names 
+here so anyone who is using the driver could easily identify if the 
+driver is suitable for the HW that he/she is using.
+> 
+>> +
+>> +  reg:
+>> +    description: address offset of the flash LED controller
+>> +    maxItems: 1
+>> +
+>> +patternProperties:
+>> +  "^led@[0-3]$":
+>> +    type: object
+>> +    $ref: common.yaml#
+>> +    unevaluatedProperties: false
+>> +    description:
+>> +      Represents the physical LED components which are connected to the flash LED channels' output.
+> 
+> Does not look like wrapped at 80.
+> 
+> Other places as well.
+> Sure, will wrap the lines at 80, I thought not exceeding 110 is also 
+acceptable.
+>> +
+>> +    properties:
+> 
+> Does not look like you tested the bindings...
+> 
+> You miss here reg.
+> 
+will update the node name without using unit name.
 
--- 
-Damien Le Moal
-Western Digital Research
-
+>> +      led-sources:
+>> +        description: The HW indices of the flash LED channels that connect to the physical LED
+>> +        allOf:
+>> +          - minItems: 1
+>> +            maxItems: 2
+>> +            items:
+>> +              enum: [1, 2, 3, 4]
+>> +
+>> +      led-max-microamp:
+>> +        description: |
+>> +          The maximum current value when LED is not operating in flash mode (i.e. torch mode)
+>> +          Valid values when an LED is connected to one flash LED channel:
+>> +            5000 - 500000, step by 5000> +          Valid values when an LED is connected to two flash LED
+> channels:
+>> +            10000 - 1000000, step by 10000
+> 
+> You need minimum and maximum.
+> 
+Sure, I will add them
+>> +
+>> +      flash-max-microamp:
+>> +        description: |
+>> +          The maximum current value when LED is operating in flash mode.
+>> +          Valid values when an LED is connected to one flash LED channel:
+>> +            12500 - 1500000, step by 12500
+>> +          Valid values when an LED is connected to two flash LED channels:
+>> +            25000 - 2000000, step by 12500
+> 
+> You need minimum and maximum.
+Sure, I will add them
+> 
+> 
+>> +
+>> +      flash-max-timeout-us:
+>> +        description: |
+>> +          The maximum timeout value when LED is operating in flash mode.
+>> +          Valid values: 10000 - 1280000, step by 10000
+> 
+> You need minimum and maximum.
+> 
+>> +
+>> +    required:
+>> +      - led-sources
+>> +      - led-max-microamp
+> 
+> reg.
+> 
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/leds/common.h>
+>> +    flash-led@ee00 {
+> 
+> Node name: led-controller
+> 
+>> +            compatible = "qcom,spmi-flash-led";
+>> +            reg = <0xee00>;
+>> +
+>> +            led@0 {
+> 
+> Test your bindings...
+> 
+>> +                    function = LED_FUNCTION_FLASH;
+> 
+> Use 4 spaces for indentation of example.
+> 
+sure, I will update it.
+>> +                    color = <LED_COLOR_ID_WHITE>;
+>> +                    led-sources = <1>, <4>;
+>> +                    led-max-microamp = <300000>;
+>> +                    flash-max-microamp = <2000000>;
+>> +                    flash-max-timeout-us = <1280000>;
+>> +                    function-enumerator = <0>;
+>> +            };
+>> +
+> 
+> Best regards,
+> Krzysztof
+> 
