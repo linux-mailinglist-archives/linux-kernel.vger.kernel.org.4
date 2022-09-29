@@ -2,182 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7185EED6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 07:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DECD5EED74
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234876AbiI2F72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 01:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
+        id S234892AbiI2F7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 01:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbiI2F7Z (ORCPT
+        with ESMTP id S234865AbiI2F7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 01:59:25 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEFA12C1D1;
-        Wed, 28 Sep 2022 22:59:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664431164; x=1695967164;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=cdGQWGUEA+u5/put2EruHtG9aPsaU4daIzvArZhFYeE=;
-  b=DzHSDkcJTwzpjLJO0bj/+CGyR4vaOXf5o1qZvhLxwMN2kiml7VHgs2U6
-   EK4CP3QmWW3uDKWNFC95No0waQ0DPdb4LH2ZWVwC/EiEqvcwojHJp9GNz
-   7qSzIVdCJbxz1YI/i14hPMEwMwuqkfhqsRY2eLrUR3PiQcGHiw1ZDzRfb
-   s4nHTis5qseobTfVjQvH4j9UN7fV0n5llKO+RlJFH323FoQinSv3G2LKZ
-   MX4y54sIVnuvqhUlF4K8NvdCO08bO34ZFsO0K4M0o57zidRdGxBNQNEe7
-   CRePE0ucgrsI5UkaV0SXr1TZxj/tELKjutNEOP0+cNVGlsEBiDnh9hSjM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="388084034"
-X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
-   d="scan'208";a="388084034"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 22:59:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="573329789"
-X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
-   d="scan'208";a="573329789"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga003.jf.intel.com with ESMTP; 28 Sep 2022 22:59:17 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+        Thu, 29 Sep 2022 01:59:40 -0400
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5015F597;
+        Wed, 28 Sep 2022 22:59:36 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id E9171200AC;
+        Thu, 29 Sep 2022 07:59:33 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id bhf7aBP1-JV1; Thu, 29 Sep 2022 07:59:33 +0200 (CEST)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id 637442008D;
+        Thu, 29 Sep 2022 07:59:33 +0200 (CEST)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout2.secunet.com (Postfix) with ESMTP id 53F1C80004A;
+        Thu, 29 Sep 2022 07:59:33 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 28 Sep 2022 22:59:16 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 28 Sep 2022 22:59:16 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 28 Sep 2022 22:59:16 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 28 Sep 2022 22:59:16 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VXr1DyoOQbN9euMEtZX+Vx5g/ndoaq29K9pHrfXq5Z4abUp323lh20a9JUr6I17vIIUZg6vvRzCDV6cjMDsibFzanL63WInxKW4nrFI94nB7ar34rE070+eV1McmTW8dQzoM8z3AYQB7RSIusfz6nxLeKTt3bmeyDYvIATE9MAOyj2FNhChQAtg2jqhHnXhBbqdRiOg5jCMgRTe0i9d2lzLhEq5LOq7ECXGw1I7E7x4KFGy6opNBLEkPTPtZs3sgsj3Uafhk5mxsxo8bdSO7A3gicjXkfbKZNyiESLRlIWeirWl77scLX2fwbp9l1DoyEWUhOaHfxF7fTEIU+G481g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Grr6vdypZZjTkQIvm+wBUv/cbPaPJNyPYeAJLag4nyM=;
- b=UlvzDQthH+J67IoXmi3WZHRlx8r+e420UESuVteMXZ9G4vIh78YPUJaKo9xqJt5H2xSyiRTN/Wz0IC6mqe8dcQbCPiKK5qix5Y3vbcHIyv7ivgnIK6PxPor78Ry0wfpK6UyZCIF3rsBok5PBKYp7/EoIYeRXz2d4WSeveGJ2o2B3GwZChp+ORseX6EK9ngVBswwn+9QfV7JwdCc5avJWEY7CYOa297xN6Jafo0M24HDu6+rgfUN0wyEClEa5jKCu9cnya927fw+5v7mV3A/+aLwiSBDcaOUM6GysHZe3feBerBVppH700kqbGUPt+ITUAbueR46ZeEKFOYfDsKsW2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2221.namprd11.prod.outlook.com
- (2603:10b6:301:53::18) by CH0PR11MB5539.namprd11.prod.outlook.com
- (2603:10b6:610:d6::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Thu, 29 Sep
- 2022 05:59:09 +0000
-Received: from MWHPR1101MB2221.namprd11.prod.outlook.com
- ([fe80::a071:6245:5340:793b]) by MWHPR1101MB2221.namprd11.prod.outlook.com
- ([fe80::a071:6245:5340:793b%6]) with mapi id 15.20.5676.017; Thu, 29 Sep 2022
- 05:59:08 +0000
-Date:   Thu, 29 Sep 2022 13:59:07 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jon@nutanix.com>, <kevin.tian@intel.com>, <seanjc@google.com>
-CC:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v3] KVM: x86/vmx: Suppress posted interrupt notification
- when CPU is in host
-Message-ID: <YzU0KyTx2SPRadTm@gao-cwp>
-References: <20220928111604.180284-1-chao.gao@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220928111604.180284-1-chao.gao@intel.com>
-X-ClientProxiedBy: SG2PR02CA0113.apcprd02.prod.outlook.com
- (2603:1096:4:92::29) To MWHPR1101MB2221.namprd11.prod.outlook.com
- (2603:10b6:301:53::18)
+ 15.1.2375.31; Thu, 29 Sep 2022 07:59:33 +0200
+Received: from [172.18.157.49] (172.18.157.49) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 29 Sep
+ 2022 07:59:32 +0200
+To:     Steffen Klassert <steffen.klassert@secunet.com>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From:   Christian Langrock <christian.langrock@secunet.com>
+Subject: [PATCH ipsec v3] xfrm: replay: Fix ESN wrap around for GSO
+Autocrypt: addr=christian.langrock@secunet.com; keydata=
+ mQENBFee7jkBCACkeMIuzZu/KBA1q3kKGr7d9iiZGF5IpJnIE9dMiK3uaz7uM26VSTJVp6jd
+ GuSGGGmb81OSLEcIEIsYKXvjblAKUX1A74t3WMRcky3MwJbmN6AkN8QlP45mDddtPRf1ElB2
+ S32i9OrEkvw8xcvHYPwbaHenXic4/8fHWEh+vtd/5/5TDTIU/ag9tQfPea13ixXN0PuccMub
+ FeUMpwFCg324+Z19iGvfDWWZmQQGlBjc3Q6z0hXOb/deWL/+lPS4t+tTgpmmZO4XkIs+18Kq
+ xCVukCbnqV0y+04sj3G1GQ/DlGvZHxwywBceAL7BvmdeXQKAS0KRL5zrghIBCgnUyutDABEB
+ AAG0M0NocmlzdGlhbiBMYW5ncm9jayA8Y2hyaXN0aWFuLmxhbmdyb2NrQHNlY3VuZXQuY29t
+ PokBNwQTAQgAIQUCV57uOQIbAwULCQgHAgYVCAkKCwIEFgIDAQIeAQIXgAAKCRCjeMdfgutr
+ Xu3kCACIBx6UHReBtBciNUPkP3fRaGeSOADIrql72VKD9faLAHTt6w8kvyzb8Ctpa77jswJt
+ 21c349mF3maPlpNtpswqH27bTlXYhNcXxcmHPCbNtN3yGUy0UuIJfBMZc8PLqiqYoY5GKD3u
+ imeVbDYjgNhebO2f1cUvwY2wTwX6b0tgKVK0xYYTDpXI1/2MVGsjXqak7PQoqVq0sDu0gIAA
+ i1QO0Fbb6jIaHj6CEM2hpBTBk8qbkPs/MqYGdLl4oXvkWTLduQjm6dMtjxvIt6WJWZQbLjTe
+ QIfc21luNQKDmfT623pVTPPMMAciWfpdw63FblfGcfBnAKCJ8JBj0z9T6/PmuQENBFee7jkB
+ CADS7amJPbY2dWpeGtE+I9yLL53lSriP4L6rI9UoEwNM1OkjnB7wFnH8dm8N68K2OJogkHwo
+ X2OnzGhxJ28NHRuAh++3hIYY+gU4HMLaX3onDK1oqAdYczhJ7f6UCPbYaghkzJ6Vg/FEWpA8
+ u5vG/BX4y+F3/Y98l6mzAX5wLmTapRwdfuRCXRA6jlIHIOwP3NPKK4Pz2E7witsimV1ucN4u
+ XFiZ36CUPAiXXlER9iPZnQUSyCobqJOJKm4C7wUNQ1negCXDBd3KjSyzTIafw/oYG4RrWGul
+ iI2ig/qTUC8cZdAJTMBjUJR6ugJazMB1Rg17p2GRD0AzUOV2qdqYFqQFABEBAAGJAR8EGAEI
+ AAkFAlee7jkCGwwACgkQo3jHX4Lra17vtQgAg2g0JEXVTGT36BDJgVjIUY1evnm1fWwTPpco
+ kP/8/aO2ubmlxtWQ2hV5OPfL5nDday2S4Nq5j3kqQq+rvUrORVmvT4WxYZM1fr2nibuzaUbs
+ JtxphNpjahrsEcLLTzBW4CbHTaL4YTT+ZD/GDeHoxAh9JfMkdMBXHyWTuw+QSP0pp7WvNsDo
+ sukKFyQ0rve9PH2dry6A0oLP7UxtAzEERV2Se0BueZPQuVnU6Cvj3ZStK28JDhMjxIPkZPE5
+ kCV8QNF8OsiwymA3aoPKe5Bw0lOcjuuJkxRa5bazyuubX9pIIgTeGsecgpSgpfA9jsEHKFqo
+ LuxUA+77VQ5hSydVaQ==
+Message-ID: <02b5650c-29f4-568f-b3be-689594dfacc2@secunet.com>
+Date:   Thu, 29 Sep 2022 07:59:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2221:EE_|CH0PR11MB5539:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a0fe6eb-f1e3-4df5-bbe4-08daa1dfb8df
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: grLjUzCHI4ObAVf7gSUFfUWYPmVlW3/+9sZ7lEC7QKlHy5cAOfpI3ybm3/RdA7o8VSPaCB2iHgUqrQM1dVeW9Jbun00Ak+ybOUG+wVr4xCN0Vl/pC/punUnWhzcyYg8hFvZoGxXVVMWv4/VNYT2cDFKRISIVo/yM4XhnXFyO/BK1RwofcB/zSrhiW5eQoygfUtbmmADtjrNvM5AAr128E4HQN61R5EKrrlFfP7lBUXPpMl+18fpTmDIH7cDxYBKDVe2CJBTGhXugF8LNgvUvbzjX2MXezklRNNdXi5VqBOKlZGup3uYqpK+VNY9LWUmKIvQbprwue/oc2t9Xcfzeof3S1SSOx8jqf2apiEKVXKX+ga7Mn03gehV7+26NYFUkfFJUe9exBHHBQvMVEmNAYFsq8fyl9XdUsysk8T/TB0D9gmA/R47sCpywKIuO8VOixHve4Vj3ZVMNAleeAW9viEZQSK+gf2S7ENKQcR54ptYx4Nt3qcaiSGRxOCV+LEH86Iuw8+B9OaOq68GdgqYPRY/InSeGXuGPXNDox/6/tb4RwmDmnqbOGbM/Lop/OclUWmFu8O4xXOwvVM2hn59BgXUcA+3MdfLrgCTp/qSPSv95dHEczlSe5WFjmp4MNChN6Z9JQzcStniZuC5R49BB9ZBQSoEpOnHnpaFpg6PapbrCRW9P/h51BYusYdj0MNp80n0klbG5HnnFS0NMBLtBMw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2221.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(39860400002)(346002)(136003)(366004)(396003)(451199015)(54906003)(186003)(86362001)(41300700001)(316002)(44832011)(82960400001)(4744005)(26005)(6512007)(38100700002)(33716001)(7416002)(6486002)(9686003)(15650500001)(6506007)(478600001)(5660300002)(8936002)(2906002)(83380400001)(66946007)(8676002)(66476007)(66556008)(4326008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zq2e6N/Lf2FciTN4SzL1DRmro/nQCHLRLZgT+/pTeQfewAobbGtu9KoO9ZHp?=
- =?us-ascii?Q?LD43+4VRv86KioTD9DxjvRgHs5i9HVzJ/7gy6/AW9Dv9YkhFFegfJy0kR2EK?=
- =?us-ascii?Q?Djbw8umlaUaSwXkH9Equ3/0htkZzOFSGlQQpUqeR6IfKRBP9y7Wx47AQfUhk?=
- =?us-ascii?Q?iEnZm8tCNRrJxb4GZS2kOYdAyicq2Nnx5W28sLRM4qi/ZkA90biTIUKCeVHo?=
- =?us-ascii?Q?8pr0DXdD9KXMKa9Fa1+V28/MKbLFblQhlbNRWT4zPk792EgRD+H4VMJHo5FW?=
- =?us-ascii?Q?qUL4zTIf4WCzsYgRLN/20LJ4PAKxgQHrsZHgeXoy5JCevDNYqXIJDWw4FgUO?=
- =?us-ascii?Q?8cKzJ2I7xVpBOODac6HGmwjSv36ARc1Nbj1zU3jhHvokCYEcwXXWtQyrz9fT?=
- =?us-ascii?Q?5Ain/BM8t7kCrj+FUedLcNrtcjiFiitIoPHlhWSBX3d5NmK1p05sAmU9dLqv?=
- =?us-ascii?Q?6qGfjuEWes5Bk3xRvzpcV1w18eUUElv2f4BSW1ZvoLZKGO1wevwMaOvSv3Yy?=
- =?us-ascii?Q?JMnMA/sBVtf/3NKjCJJ0V7uIzVsVJgBNIE7RRBYI5s3iEYkHLLzhQKF+bIY0?=
- =?us-ascii?Q?G6MgnzS17Bi5oOZEb2ulHmx0zvcRF/Odml4jxYI7R5M6nTE2XPOGuWAL9eGI?=
- =?us-ascii?Q?0fzf4Pg47lrG58EYI1EDid57fbkL6AcOlYy+zvis6jj6ITtbkr5B+sl+D60d?=
- =?us-ascii?Q?AVmKxlFzakdbrDCy+rDmXYRTMO4uqJPtjCmZ1I7JISl+rayg/zBdFiipZyiN?=
- =?us-ascii?Q?LM/vUvz0EeNOL/B/vBbS9aRIdcNU9yIQcU2qT0zsHblp1/IYjU5bNXv5vX1M?=
- =?us-ascii?Q?R86Pf9OjNUC1ME5PT7bHTq5mbgJehNwZWlJzxAjfzUeFEZ89EaEPJ3UC7J/m?=
- =?us-ascii?Q?+i64TbTP1CZ8KT1RYdiQ5fx3zR4auB3vK7mGDpmO7nDIaTjekIo2Lsrugr57?=
- =?us-ascii?Q?sLu3V+EI5PJhPjl67G5msUEHRRKaNoq6+zrssaDYJKO5jdnGvVYeYSvt9y1Y?=
- =?us-ascii?Q?F+vm/586QEQ7RLml2wETlE3o72AIb/bW362n/G3BJIS1xLlIryxhU97gpEZS?=
- =?us-ascii?Q?gp+ZWjOTjnI5+/xdpH+kDQJXqVElUpJPCp3gPpSHGiuMqpiCk+zQVPe0B+2t?=
- =?us-ascii?Q?oNy0IC0Fzn/uy6PRmdhMNlpVstl5JrhdRHcrkxjjjZ3vj2BRNfuSno0cErww?=
- =?us-ascii?Q?2l3/5nae/vPcXtdacaR3YQ0Mj3nCZE2A3sVanf1ZkF4eDA8COU74+8HpnEsK?=
- =?us-ascii?Q?5oubG1jaP4GiInRc5K3k3ujl8cIOfweLT3lQk9FqeUdT28rO0N5FbS9nbmDX?=
- =?us-ascii?Q?qVkl9ylH3uIl38JnPVxcW/0tqz0hNK0+TRjBSxa6eduechdBVrfG5ZbRFJf8?=
- =?us-ascii?Q?tZ3spOA3V3z3Xo/7j9FgPUAw0W5ejhJXnONuEhhHoBcBWivdIlM/JCdn7sJw?=
- =?us-ascii?Q?vSkhrYcN2TW9HQH5+P+47H+Oaw0EGfwEpbUc/nN8423QRMwAPCmAGUhfXK/M?=
- =?us-ascii?Q?MwGRV6PyU9oOpW/a+kgDe74xV9HVi1xZwN9/OcUzpe76/2X3i0b6Xc3L/gxI?=
- =?us-ascii?Q?X0EKsF2txsm+G2+39a/7AntKo8rHaN3qz7Z36FJW?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a0fe6eb-f1e3-4df5-bbe4-08daa1dfb8df
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2221.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 05:59:08.3264
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nKxcBjKKuXPRMBvt3S5jSLBxOY+Salzewcs7oB8lMPaWFw38kEMeBeJiMs7PARpe4e+PFormH36NvAUICMogxQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5539
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 07:16:03PM +0800, Chao Gao wrote:
->@@ -10538,6 +10547,17 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
-> 
-> 	vcpu->mode = OUTSIDE_GUEST_MODE;
-> 	smp_wmb();
->+	/*
->+	 * Suppress notification when CPU is OUTSIDE_GUEST_MODE to avoid
->+	 * wasting time on handling interrupts. A notification to host/kvm
->+	 * just indicates some interrupts are posted for a vCPU. Since KVM
->+	 * always syncs pending interrupts in PIR to vAPIC IRR before guest
->+	 * entry (in ->sync_pir_to_irr()), notification isn't needed.
->+	 *
->+	 * Do this even if apicv is disabled for simplicity.
->+	 */
->+	if (kvm_lapic_enabled(vcpu))
->+		static_call_cond(kvm_x86_pi_suppress_notification)(vcpu, true);
+When using GSO it can happen that the wrong seq_hi is used for the last
+packets before the wrap around. This can lead to double usage of a
+sequence number. To avoid this, we should serialize this last GSO
+packet.
 
-I missed the other kvm's setting vcpu->mode to OUTSIDE_GUEST_MODE in
-this function (a few lines above). Will fix it in v4.
+Changes in v3:
+- fix build
+- remove wrapper function
 
-> 
-> 	/*
-> 	 * Sync xfd before calling handle_exit_irqoff() which may
->
->base-commit: 372d07084593dc7a399bf9bee815711b1fb1bcf2
->-- 
->2.25.1
->
+Changes in v2:
+- switch to bool as return value
+- remove switch case in wrapper function
+
+Fixes: d7dbefc45cf5 ("xfrm: Add xfrm_replay_overflow functions for...")
+Signed-off-by: Christian Langrock <christian.langrock@secunet.com>
+---
+ include/net/xfrm.h     |  1 +
+ net/xfrm/xfrm_output.c |  2 +-
+ net/xfrm/xfrm_replay.c | 26 ++++++++++++++++++++++++++
+ 3 files changed, 28 insertions(+), 1 deletion(-)
+
+diff --git a/include/net/xfrm.h b/include/net/xfrm.h
+index 6e8fa98f786f..b845f911767c 100644
+--- a/include/net/xfrm.h
++++ b/include/net/xfrm.h
+@@ -1749,6 +1749,7 @@ void xfrm_replay_advance(struct xfrm_state *x, __be32 net_seq);
+ int xfrm_replay_check(struct xfrm_state *x, struct sk_buff *skb, __be32 net_seq);
+ void xfrm_replay_notify(struct xfrm_state *x, int event);
+ int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb);
++bool xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb);
+ int xfrm_replay_recheck(struct xfrm_state *x, struct sk_buff *skb, __be32 net_seq);
+ 
+ static inline int xfrm_aevent_is_on(struct net *net)
+diff --git a/net/xfrm/xfrm_output.c b/net/xfrm/xfrm_output.c
+index 9a5e79a38c67..c470a68d9c88 100644
+--- a/net/xfrm/xfrm_output.c
++++ b/net/xfrm/xfrm_output.c
+@@ -738,7 +738,7 @@ int xfrm_output(struct sock *sk, struct sk_buff *skb)
+ 		skb->encapsulation = 1;
+ 
+ 		if (skb_is_gso(skb)) {
+-			if (skb->inner_protocol)
++			if (skb->inner_protocol || xfrm_replay_overflow_check(x, skb))
+ 				return xfrm_output_gso(net, sk, skb);
+ 
+ 			skb_shinfo(skb)->gso_type |= SKB_GSO_ESP;
+diff --git a/net/xfrm/xfrm_replay.c b/net/xfrm/xfrm_replay.c
+index 9277d81b344c..23858eb5eab4 100644
+--- a/net/xfrm/xfrm_replay.c
++++ b/net/xfrm/xfrm_replay.c
+@@ -750,6 +750,27 @@ int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb)
+ 
+ 	return xfrm_replay_overflow_offload(x, skb);
+ }
++
++static bool xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb)
++{
++	struct xfrm_replay_state_esn *replay_esn = x->replay_esn;
++	__u32 oseq = replay_esn->oseq;
++
++	/* We assume that this function is called with
++	 * skb_is_gso(skb) == true
++	 */
++
++	if (x->repl_mode == XFRM_REPLAY_MODE_ESN) {
++		if (x->type->flags & XFRM_TYPE_REPLAY_PROT) {
++			oseq = oseq + 1 + skb_shinfo(skb)->gso_segs;
++			if (unlikely(oseq < replay_esn->oseq))
++				return true;
++		}
++	}
++
++	return false;
++}
++
+ #else
+ int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb)
+ {
+@@ -764,6 +785,11 @@ int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb)
+ 
+ 	return __xfrm_replay_overflow(x, skb);
+ }
++
++bool xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb)
++{
++	return false;
++}
+ #endif
+ 
+ int xfrm_init_replay(struct xfrm_state *x)
+-- 
+2.37.1.223.g6a475b71f8
+
