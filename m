@@ -2,166 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154845EF816
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EE25EF81F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234836AbiI2O50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49738 "EHLO
+        id S235752AbiI2O6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235584AbiI2O5X (ORCPT
+        with ESMTP id S235618AbiI2O6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:57:23 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370B913EAEB
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:57:21 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id cc5so2615875wrb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=nMnoSaH++1jbxSRlI1i6ADibQaQmTqMy1EUBbqCTBb4=;
-        b=Vv38lf5pdCpNoqOoAP120tgQ2KJMA7ZXY3zRv5IFf/18Ka+QYWp8iVvfDHwGWrUURq
-         XMcDVzCN67NfLLBvXneNU5Hkez1866vy2rJVUYu1vKryg0jxvA42QIHMFr7FwGNaV9n6
-         +IocjwdpayeRbeM2/sZgvPjKG7ythoaKpeUuXczusJJEcfS9wVBWcjyCRFl0D/sVgICw
-         2J5a8U1veuMcYYFjAV1q0dwyuM/YnZan597rCZ3Ds+v2h0MHW6JxifLG9t4Ao/8M6lM7
-         dZ4dzrfOEAf3pCEuuCr6J1A5XSYwp2pNtFtcBkJ2x/vFTyXVLC2qrq4yFh7WpEiVWHAy
-         sp4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=nMnoSaH++1jbxSRlI1i6ADibQaQmTqMy1EUBbqCTBb4=;
-        b=1KnyI0LaPy1yZiPxq73KyEzIZ3In1rES3JzH7vWZqyTouh4y0Mjm6f6YNziaWzIvOH
-         8tchG3C6Uv0ZzqS8ZiKXuFmMO+Zi/s3FjHOqr/k92vd5iOKnLJeU3pZX62WcuEjbwccx
-         DuSFAlczoPKDHjo+cO/dX+nh2SKJlljKw6QImsw4kU1LXF+yMr4Q01SX1LrRTmnBePfd
-         4pwZL32fY7PNTE4kMTGVANrTNY1UsNA1c0Qi8DnU1XixdLvfgmM40G5Fk0/34jK19PR+
-         3MsQLl+/AZy1LS2nrT9VB0N6KHfX3xi0/S5Vmmo4e6g3gseAEiqRrIWXeCijlmYMQi66
-         bwhg==
-X-Gm-Message-State: ACrzQf1Y3L8sZlZ33MOUIMEUSsKA93lDugSZxDnPisRQKgzKPhR9p32C
-        qGvUsJxw6huBMzCVkQ/royIU+kWHyb5R1Q==
-X-Google-Smtp-Source: AMsMyM4axP40VuENGb1cdsZ/JJas2+un/fCosaf9j+YjtgOlism/1wYOdarXHCbv/7WEnKLKyS9PoQ==
-X-Received: by 2002:a05:6000:2a3:b0:226:dff3:b031 with SMTP id l3-20020a05600002a300b00226dff3b031mr2687409wry.495.1664463439654;
-        Thu, 29 Sep 2022 07:57:19 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:48a2:39eb:9d1b:8b8d? ([2a05:6e02:1041:c10:48a2:39eb:9d1b:8b8d])
-        by smtp.googlemail.com with ESMTPSA id t187-20020a1c46c4000000b003b4a699ce8esm4646084wma.6.2022.09.29.07.57.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 07:57:19 -0700 (PDT)
-Message-ID: <ae86fc5a-0521-3dde-c2ea-8679c0ec4831@linaro.org>
-Date:   Thu, 29 Sep 2022 16:57:16 +0200
-MIME-Version: 1.0
+        Thu, 29 Sep 2022 10:58:05 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2049.outbound.protection.outlook.com [40.107.244.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFCB13F720;
+        Thu, 29 Sep 2022 07:58:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y8KFm7V5Rp84QzUP/LhP+WwMyIRKoEYCg5N3l3aejJvaiD1MRPHpvhU3WJV7V1bZ2sgvsyTbD+aO9lak/9sqZRkQy6+l9AQV+6tmUKJ9vq2pdfCb4JxzDABy06LleEdZkuNsQ+TRfDGSqyi6uF0R++VGbtjgGMnnbPaN/EMBXR+h3DljSibTZYq6GX4q7MD4qPTgAvzG2QrqTVqyruYNzO0vx3a3PiHnXHFbACwoKfxKLCemApKU30uTIJNhuKkpEyxEgyFmuZQ+OjUD2fWiKY3FWZ6H/cVlkguYnCqSM/pvvBk+iEBqtQnbBO4W/bD8PCzGgWDcrQLr53Hmy6ibWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tJ52oMGAmOHgrY4VHT9nigUT7XRVXTwaV1ALlUtw6uM=;
+ b=jt9mzkhsXZm1XrF+JNTZohc9j1Wfv1x4AFhNG3q0iSOz3lS2EeeUynZK8ulPGIzNRzPg99DheJvpcNU0C7cDSiHFf8xcmfk/EHBNa7rDK8wyo/aKQViu9GVEmQnBciEsPdYo90vXmWpMJJsCn3agVtDQFNxO6KVemdGxIPYbzr9rO1G87c+2rvaUKeRXt37tI9JgrCLI0MXEgkt5kWJzr0nDL3ZYN4A12OFUcOW0/zwDps/PbGHVxwyYtJzCtSoLOkOEXr9y4+7Zuesh0++i/7Vto3gWqheT3odOOxZiL4dVGJtKovdze/UaKPabqXuGyr0wHNd8woku1UWbIHlnyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tJ52oMGAmOHgrY4VHT9nigUT7XRVXTwaV1ALlUtw6uM=;
+ b=vsI3mmWEdH8JRpGCudQGlZMb+Yg+etZoAlDPJA94kCh1nSmA/NbLYB9pFE3whIMOdxwQU1wlgp6xxF7Hx4MeyWKjFY7ni/MYJ6ErPRtvtYZABPAcRWc/IHfD9EGmfhrygIs+fj3tznDKkeb0SksXA8Je/x6wVKHS20jq66N63SI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DS7PR12MB6191.namprd12.prod.outlook.com (2603:10b6:8:98::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.22; Thu, 29 Sep
+ 2022 14:58:02 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::805b:58b6:1f27:d644]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::805b:58b6:1f27:d644%6]) with mapi id 15.20.5676.015; Thu, 29 Sep 2022
+ 14:58:02 +0000
+Message-ID: <5beff5e2-8589-28cf-40b4-9e6b9e45b307@amd.com>
+Date:   Thu, 29 Sep 2022 16:57:55 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v7 00/29] Rework the trip points creation
+Subject: Re: [PATCH v4 5/6] drm/sched: Use parent fence instead of finished
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com, Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org
-References: <20220928210059.891387-1-daniel.lezcano@linaro.org>
- <d0be3159-8094-aed1-d9b1-c4b16d88d67c@linaro.org>
- <CAJZ5v0hOFoe0KqEimFv9pgmiAOzuRoLjdqoScr53ErNFU4AAPA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0hOFoe0KqEimFv9pgmiAOzuRoLjdqoScr53ErNFU4AAPA@mail.gmail.com>
+To:     Steven Price <steven.price@arm.com>,
+        Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220914164321.2156-1-Arvind.Yadav@amd.com>
+ <20220914164321.2156-6-Arvind.Yadav@amd.com>
+ <e613a225-dabf-7e87-2624-a3244df8a877@arm.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <e613a225-dabf-7e87-2624-a3244df8a877@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR06CA0150.eurprd06.prod.outlook.com
+ (2603:10a6:20b:467::16) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DS7PR12MB6191:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4152e2aa-1101-408a-4c8f-08daa22b017c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cDx0UoRr4FAaSBEprZgX+I+wv9amEvIs9pPxNB2yZRzxx7gU7lbGcpJDcvJhJjtVoIaNRaPNN+Ug9NyzL8xyGpvEXj77joaMCufsNdPE54LSX/VUG9qUGId2KDKX8CE6qTOAjSWZLx/v95udoXYpRVvO+7oVC25nXN0FXtXPnhTrM0xQLtI/uuVth7Mr+ox+7ZrlDArT6+YeptoqWduM7z52m3hFtKppMC1w/h0oYSrN1fqytkfphr2nF3wSVJPbGeayPtjo96FFNxqM2uXt4XWt9G+g5ck0pvC8FpbuKOsd79nQ46jrYCg2hUPeJTnYQC2TZ/QO87wL7DnLmquULFlRpx4dnp7Y30NPdQ23keOyoBYwA1JmQDJgcLAw3xTrketdEIzI0vFgyNSBtMdVNDWyN2HtWA8O+HEe0nP4tc1QD5TjTNHt5IJehIijoavnUtO+y//TljwrGQmummLrIlmsqZ/ZMIJIMHorwzUbYPGiWFNIuE1PlkomyhcIzfF/q8GnBtU+Q7Jrth7bRWv7dx4qyTA+rcW2EpK5UJz2TxlEK+jlE+AG28oHcfw4rGoDl9griCWBiU0vHcbCuP1MXeWYqDdTBoD03Z/Xyrvezh5/joowt9nJzQx05Mwsg2kpd8vuoiPZM/7APtnOwgNqSdInCjd7VrvnPslfiMKOxs/lmrKUGBLhbqueI6/p4LMss4dnAGnkSkxaGXbGpcQxg63KBjZkktGFiD89EJeSSYBuZBJ8lbnZxZNK8w7JmHSf2UvsmxPo1+mfgM5swuUHrEecal1Mp9Q3+TR5knSyrixdShzpPQjn0h6Cxdpn44du
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(376002)(39860400002)(136003)(396003)(451199015)(6666004)(6506007)(6512007)(6486002)(53546011)(31686004)(36756003)(31696002)(66946007)(66556008)(110136005)(921005)(41300700001)(8676002)(66476007)(38100700002)(86362001)(5660300002)(186003)(2616005)(8936002)(83380400001)(316002)(2906002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TkNBYWdDZFJSSGhualRwcDdTTzJxdDVPNlRzUEFmTDh4Qkt0QmM2QTAvR0pX?=
+ =?utf-8?B?UVp3L1RzRDY4blM2eXg5Z3V5UGY5dGtpMFI2VWV0QVNkTHZkZ1lrOWVmWWsw?=
+ =?utf-8?B?R1RkZlZ2OXNNdk1CL0pIZGsxR0Z0RXlrTU9sZ1MxTWIzWStqOEdpOUNJb2ZQ?=
+ =?utf-8?B?WWo5cmpBNmpNRmthVGE2akZadTducXRITEpMU3pCRWJZeGxlYlhVSWt4UUFO?=
+ =?utf-8?B?YnBLTmR3N05LQnJpSXRxZUZLR2V1WUIzdmgyZmllM1BUZnNEeTZwR0FKSXIy?=
+ =?utf-8?B?Y09oNmNBSkJRZTROVjZsUDVQcW9nVFVoVHAyajRHUFFxR3V0ajUveVlGdzlC?=
+ =?utf-8?B?dm82ZUdmYjJYRk45QU1OZGQzY25Neng5LzMzY2ljcndoYm52UFpzSjRLYTlz?=
+ =?utf-8?B?Z0tFcGJSN2M1MUtwZ3RRaVBxSUtQVE9FdjMrcU9vemswSnorenF0S3hWLzFQ?=
+ =?utf-8?B?WWtDcVM5MGJGc21MZUZyNERmU2dUSXIxSGd5eW1KT1dIWFBjVDlqYmZjbVNU?=
+ =?utf-8?B?NS82VWVhVVhMRU9ydkxxU0tseTNlM2Rmekp4bXdkWmFmWWZUQUJsVlFMOWFD?=
+ =?utf-8?B?d1gwcjd1bUV2RGhJRlBHMVpCVFJzUDZCNlhaTUxGSXp1c2FHNjJjc3lBdDlN?=
+ =?utf-8?B?SmNrcUpPc0g1ZFg0dVh6V1JxSzRIcWFLUHdyT0t3ZitkbmZJeU96M04zTEM2?=
+ =?utf-8?B?ejRNSGFnVlJQTTZrSWgzeUlyc3RrN3dYWm5SdDVPWWFmaFJUK2c0Wll5ZWNZ?=
+ =?utf-8?B?VjhDMm1jOTI2bWtIYkVQRjBTUXRrWS82REtXQ3M0TjZIYktPVjNGZ2QwRjNp?=
+ =?utf-8?B?VE1XeU5uKzM3cnRQd2hQT2JFL21MWDFmQk56Y2JxRWZrTXkza0pFMk9CeFBI?=
+ =?utf-8?B?b0cySWx4RDlvVyt6dVoyb3hoeXpnU28yRlY3TzZ1QWZlZjd5dElQeURvTDBS?=
+ =?utf-8?B?R1BDVDZUcGtwallFTXg4ZUk4bnQvSEJpOW5Ic1hwNXE2clRQSUNiMmNpbzlv?=
+ =?utf-8?B?WUFyL0tXT1RoeWt5dWJZcGljOEZHS1RjNE4xTm4ybVRVaDJiTXVGclNHaVp5?=
+ =?utf-8?B?RW1LWi93blVKWDJmbjdiU3QyNkU4YjUzdGxnWDlrL3lnSzMwSW92R0RFaTl6?=
+ =?utf-8?B?d2NocFg2K1lnZHEzRGFKcndXYS9SUHZ5SmQ3YUNOVlRRQXFXd2RMeVd3ZVlO?=
+ =?utf-8?B?V3JxMmw1Q2hueGRGeW4ySXdIMkwrcnFrL0FEaWdoU2MxTVBrK2VCMXFyQUFD?=
+ =?utf-8?B?UXdtcWdsSjlLTmVVL1VwdDFHTG41eHRKcnlxcHhpRzZaajBBTVF4bldyT01Y?=
+ =?utf-8?B?R2JTZW1jcTE1RmZndUZ5Mno3YmdybXdLWlVKVE1HMlN1a2crUkRGc2NuRGpD?=
+ =?utf-8?B?K1BLVVhNT1Q1dHhXOW5Qa3ZMc2FTOWdrY0NFYkFsK1Q1TVUzUzYzMXpWeVBl?=
+ =?utf-8?B?YUl1cEttT2RONDFmUm9UNGhOTUpVYWEwR1FCa3VwTlNKMmJNb1JxVVBRRG9a?=
+ =?utf-8?B?Q1diZHltaHBycWlOeXpDUXVnSjAwOC8vWVNteDhSSFZnU2VCejZ5RlIya2ht?=
+ =?utf-8?B?NHpxWHdxR2ROSWg2TGhudW5QYXN0QUN5NTJjWE4zL0FIUUxoSHhzazBYV1Y3?=
+ =?utf-8?B?UzN5dmRkclJXZGtXRWR4N3p5TzQ3cU5pMzZJa0NSSVV5YzJrOUdENFpyWktx?=
+ =?utf-8?B?a1dvTldKR1NDamtSNS9rcDlxVHZmemNOVDZSNVdQNStzazhzeGpFL2lrN2hs?=
+ =?utf-8?B?Vm8yZ0ZqWjJxeWhBSXFHVWExM3pmMmFHVDRmZGJDSjhjQ3FIU1VZRGtKcFho?=
+ =?utf-8?B?RWVDZmhSSFluVzNWcWExcHlXSHVFQkNkQUNXdCs1b3VWYjBTKysrRTgrNGp6?=
+ =?utf-8?B?Z0IxQ1pEaXB3WmlkOWlMcTcxMmZuZEtKdDVYSm9TVUZzMEFYaUtaVTdOZ1FV?=
+ =?utf-8?B?Qi9VRm9SSWlXaVRjYzJsOEpvcm9nZ3lqTUxON2kwVUV2aHZIZmROU1RveGlP?=
+ =?utf-8?B?NFVJaFkvc01SZlY0WU1TbkwzeTl6MThZY3psZEg2aXhZamlnRWpCOUxqZFBx?=
+ =?utf-8?B?Qm5OakJCYXc1clMvNU9odjBEczdSNThURFlFREd6c1ZUcktyTXNMQk1Db0hQ?=
+ =?utf-8?B?dm1sQ2MzNWxJMkRUNEhOUnBuclF2ZjhZczRjQllFOGJVSmJYb3JJK3FwN2ti?=
+ =?utf-8?Q?OAmL7wLR4NeenO9HDSBOWtghzsPjhOnAO0BDaZwTPIgi?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4152e2aa-1101-408a-4c8f-08daa22b017c
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 14:58:02.0750
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TV57kVsLlkReHKhnMevbY9XJkhcBf4CDyimib0eLta7ySbBwUKtPNCardQDTCIRq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6191
 X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 15:58, Rafael J. Wysocki wrote:
-> On Thu, Sep 29, 2022 at 2:26 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
+Am 29.09.22 um 16:53 schrieb Steven Price:
+> On 14/09/2022 17:43, Arvind Yadav wrote:
+>> Using the parent fence instead of the finished fence
+>> to get the job status. This change is to avoid GPU
+>> scheduler timeout error which can cause GPU reset.
+> I'm able to reproduce crashes on Panfrost and I believe this commit is
+> the cause. Specifically it's possible for job->s_fence->parent to be NULL.
+>
+> The underlying issue seems to involve drm_sched_resubmit_jobs_ext() - if
+> the run_jobs() callback returns an error it will set s_fence->parent to
+> NULL after signalling s_fence->finished:
+>
+>> 		fence = sched->ops->run_job(s_job);
+>> 		i++;
 >>
+>> 		if (IS_ERR_OR_NULL(fence)) {
+>> 			if (IS_ERR(fence))
+>> 				dma_fence_set_error(&s_fence->finished, PTR_ERR(fence));
 >>
->> Hi Rafael,
+>> 			s_job->s_fence->parent = NULL;
+> I don't understand the reasoning behind this change, but it doesn't seem
+> right to be using the parent fence when we have code which can be
+> setting that pointer to NULL.
+>
+> Since I don't understand the reasoning my only suggestion is to revert
+> this patch (and potentially the dependent patch "dma-buf: Check status
+> of enable-signaling bit on debug"?).
+>
+> Can anyone suggest a better fix?
+
+Well, first of all please absolutely don't use 
+drm_sched_resubmit_jobs_ext()!
+
+It was an extremely bad idea in amdgpu to approach GPU by re-submitting 
+jobs and it was an even worse idea to push this into the scheduler.
+
+The design of dma_fence is that you submit that once and *only* once and 
+then get a result for this submission. If re-submission is desirable it 
+should be done in userspace or at least higher levels.
+
+Apart from that, yes a NULL check is missing here but that should be 
+trivial to fix.
+
+Thanks,
+Christian.
+
+>
+> Thanks,
+>
+> Steve
+>
+>> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+>> Reviewed-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+>> ---
 >>
->> are you happy with the changes?
-> 
-> I'll have a look and let you know.
+>> changes in v1,v2 - Enable signaling for finished fence in sche_main()
+>> is removed
+>>
+>> ---
+>>   drivers/gpu/drm/scheduler/sched_main.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+>> index e0ab14e0fb6b..2ac28ad11432 100644
+>> --- a/drivers/gpu/drm/scheduler/sched_main.c
+>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+>> @@ -829,7 +829,7 @@ drm_sched_get_cleanup_job(struct drm_gpu_scheduler *sched)
+>>   	job = list_first_entry_or_null(&sched->pending_list,
+>>   				       struct drm_sched_job, list);
+>>   
+>> -	if (job && dma_fence_is_signaled(&job->s_fence->finished)) {
+>> +	if (job && dma_fence_is_signaled(job->s_fence->parent)) {
+>>   		/* remove job from pending_list */
+>>   		list_del_init(&job->list);
+>>   
+>> @@ -841,7 +841,7 @@ drm_sched_get_cleanup_job(struct drm_gpu_scheduler *sched)
+>>   
+>>   		if (next) {
+>>   			next->s_fence->scheduled.timestamp =
+>> -				job->s_fence->finished.timestamp;
+>> +				job->s_fence->parent->timestamp;
+>>   			/* start TO timer for next job */
+>>   			drm_sched_start_timeout(sched);
+>>   		}
 
-Great, thanks
-> 
->> I would like to integrate those changes with the thermal pull request
-> 
-> Sure, but it looks like you've got only a few ACKs for these patches
-> from the driver people.
-> 
-> Wouldn't it be prudent to give them some more time to review the changes?
-
-Well I would say I received the ACKs from the drivers which are actively 
-maintained. Others are either not with a dedicated maintainer or not a 
-reactive one. The first iteration of the series is from August 5th. So 
-it has been 2 months.
-
-I pinged for imx, armada and tegra two weeks ago.
-
-The st, hisilicon drivers fall under the thermal maintainers umbrella
-
-There are three series coming after this series to be posted. I would 
-like to go forward in the process of cleaning up the framework. IMO two 
-months is enough to let the maintainers pay attention to the changes, 
-especially if we do a gentle ping and there are seven versions.
-
-And after that comes the thermal_zone_device_register() parameters 
-simplification :)
-
-[ ... ]
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
