@@ -2,137 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817D45EFD8E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 527F35EFDA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbiI2TCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 15:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
+        id S230288AbiI2TJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 15:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiI2TCj (ORCPT
+        with ESMTP id S230287AbiI2TJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 15:02:39 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DA513F29A
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 12:02:38 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id b75so2243632pfb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 12:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=VRWMAHYEyCYnit1DgorRCfjCV475mNFdc2il+dM3xyY=;
-        b=H6Kx+Ps/laRy7Elku5rdgLa0ErE+Jw9V14A2+tjsz5c5RM+7m1fFuJU7yity9lcpiq
-         dalHK68M/pEyCrSQrSQ74c/vqpgtSTW+w/VVONBSy3nHe7REYYy+GREGMLNXznm72blD
-         m1eNJocmu7QaSgJdP071cHPTWgKNQFw352MITlWOLA4ZVHYS3EX8LtH7lS+XRKVQPPXT
-         wlqk3t14bymOsU353YBk61cRQHVhYVXSNApuBW9xH/AubOPr7mXKSrZUHUgkf/1ZqYGl
-         iWGnbZNzwTqPqzf9/nLuPpdij+f4k0DdeinHVTu1oQk805HlcUZvNX8UMTpyTtHTUUHv
-         rZhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=VRWMAHYEyCYnit1DgorRCfjCV475mNFdc2il+dM3xyY=;
-        b=Zcn/bGRSikDF7d4BuVK44e+2AT+pbqDjY8LLUZ/TE6qlp1DDMhHxpDSAonYhT+VDKC
-         TOKvAv4562bueqagZwIBICaaakbDQZy+QhEd5PLjnMH7vqANmctohS+Bc6V2b6sjnIvy
-         5CyW9z/EOl4xWnwscCvREH5mhFFue/qUPPuImO0ElNk6nauGR7VWxKSTkbVN5ebQ3033
-         A9P9PTvcyXdxmGnKH8AfKMkyD/78LAy5e3hSviHNCEd7NZTIsUk8/E8igDijklqGOJ4M
-         8vlmOHfha6x1nn6ZYy0oIx1cc0A90kfv/xG11UTf5e0sPJmTzV11qJkV4aYCjAUQa4db
-         venQ==
-X-Gm-Message-State: ACrzQf2HomCKcM8AUyR3IQEj62NAJ9A3zQ1hL1sg2pc/wjuJKMzF3wU8
-        EfaCEJhEREawLBteHr6kqzQ=
-X-Google-Smtp-Source: AMsMyM52NtPaZCjmHJfGnjdOcx1m8tXP4rloiRSU164tOI5oywdQdY3BPtOCczVOtjDYHRTH4M46Tg==
-X-Received: by 2002:a63:ce17:0:b0:42a:bfb6:f218 with SMTP id y23-20020a63ce17000000b0042abfb6f218mr4066583pgf.484.1664478157417;
-        Thu, 29 Sep 2022 12:02:37 -0700 (PDT)
-Received: from strix-laptop (2001-b011-20e0-1b9a-f5f9-665b-0715-9cc1.dynamic-ip6.hinet.net. [2001:b011:20e0:1b9a:f5f9:665b:715:9cc1])
-        by smtp.gmail.com with ESMTPSA id t6-20020a17090a3b4600b002098f3b4c67sm137488pjf.34.2022.09.29.12.02.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 12:02:36 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 03:02:29 +0800
-From:   Chih-En Lin <shiyn.lin@gmail.com>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Xu <peterx@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Li kunyu <kunyu@nfschina.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <shy828301@gmail.com>, Song Liu <song@kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dinglan Peng <peng301@purdue.edu>,
-        Pedro Fonseca <pfonseca@purdue.edu>,
-        Jim Huang <jserv@ccns.ncku.edu.tw>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>
-Subject: Re: [RFC PATCH v2 9/9] mm: Introduce Copy-On-Write PTE table
-Message-ID: <YzXrxePakkc3eHXk@strix-laptop>
-References: <20220927162957.270460-1-shiyn.lin@gmail.com>
- <20220927162957.270460-10-shiyn.lin@gmail.com>
- <3D21021E-490F-4FE0-9C75-BB3A46A66A26@vmware.com>
- <YzNUwxU44mq+KnCm@strix-laptop>
- <c12f848d-cb54-2998-8650-2c2a5707932d@redhat.com>
- <YzWf7V5qzMjzMAk4@strix-laptop>
- <39c5ef18-1138-c879-2c6d-c013c79fa335@redhat.com>
- <YzXkDKr6plbJZgG4@strix-laptop>
- <C4CA4A1E-5553-422E-B8C0-8A5FF17DFCED@vmware.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <C4CA4A1E-5553-422E-B8C0-8A5FF17DFCED@vmware.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 29 Sep 2022 15:09:39 -0400
+X-Greylist: delayed 398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 29 Sep 2022 12:09:35 PDT
+Received: from sibelius.xs4all.nl (80-61-163-207.fixed.kpn.net [80.61.163.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFA32AC3;
+        Thu, 29 Sep 2022 12:09:33 -0700 (PDT)
+Received: from localhost (bloch.sibelius.xs4all.nl [local])
+        by bloch.sibelius.xs4all.nl (OpenSMTPD) with ESMTPA id 1aa38a8c;
+        Thu, 29 Sep 2022 21:02:51 +0200 (CEST)
+Date:   Thu, 29 Sep 2022 21:02:51 +0200 (CEST)
+From:   Mark Kettenis <mark.kettenis@xs4all.nl>
+To:     "Sven Peter" <sven@svenpeter.dev>
+Cc:     konrad.dybcio@somainline.org, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, towinchenmi@gmail.com,
+        marcan@marcan.st, alyssa@rosenzweig.io, tglx@linutronix.de,
+        maz@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <0dd4f0ad-62bd-42c3-9518-41675c7ffda8@app.fastmail.com>
+        (sven@svenpeter.dev)
+Subject: Re: [PATCH v2 2/2] irqchip/apple-aic: Add support for A7-A11 SoCs
+References: <20220929144039.40011-1-konrad.dybcio@somainline.org>
+ <20220929144039.40011-2-konrad.dybcio@somainline.org> <0dd4f0ad-62bd-42c3-9518-41675c7ffda8@app.fastmail.com>
+Message-ID: <d3cf1dd1add16afe@bloch.sibelius.xs4all.nl>
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 06:40:36PM +0000, Nadav Amit wrote:
-> On Sep 29, 2022, at 11:29 AM, Chih-En Lin <shiyn.lin@gmail.com> wrote:
+> Date: Thu, 29 Sep 2022 16:50:24 +0200
+> From: "Sven Peter" <sven@svenpeter.dev>
 > 
-> > That case could be caught in copy_pte_range(): in case we'd have to allocate
-> >> a page via page_copy_prealloc(), we'd have to fall back to the ordinary
-> >> "separate page table for the child" way of doing things.
-> >> 
-> >> But that looks doable to me.
+> On Thu, Sep 29, 2022, at 16:40, Konrad Dybcio wrote:
+> > Add support for A7-A11 SoCs by if-ing out some features only present
+> > on:
+> >
+> > * A11 & newer (implementation-defined IPI & UNCORE registers)
+> > * A11[1] & newer (fast IPI support).
+> >
+> > Also, annotate IPI regs support in the aic struct so that the driver
+> > can tell whether the SoC supports these, as they are written to,
+> > even if fast IPI is disabled. This in turn causes a crash on older
+> > platforms, as the implemention-defined registers either do
+> > something else or are not supposed to be touched - definitely not a
+> > NOP though.
+> >
+> > [1] A11 is supposed to use this feature, but it currently doesn't work
+> > for reasons unknown and hence remains disabled. It can easily be enabled
+> > on A11 only, as there is a SoC-specific compatible in the DT with a
+> > fallback to apple,aic, so that the interrupt controller gets to probe
+> > regardless of whether IPI Sn_... registers are used or not.
+> > That said, it is not yet necessary, especially with only one core up,
+> > and it has worked a-ok so far.
+> >
+> > Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > ---
+> > Changes since v1:
+> > - remove EL2 register check (dts change covered this)
+> > - use static_branch instead of ifs
+> > - rename "uncore2 registers" to "uncore registers" in added code and
+> > update the commit message accordingly
+> > - create a "legacy" config struct for pre-A11 targets
+> > - rewrite the commit message a bit to match actual status
+> >
+> >  drivers/irqchip/irq-apple-aic.c | 56 ++++++++++++++++++++++++---------
+> >  1 file changed, 41 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+> > index 1c2813ad8bbe..cdef99bfcfb3 100644
+> > --- a/drivers/irqchip/irq-apple-aic.c
+> > +++ b/drivers/irqchip/irq-apple-aic.c
+> > @@ -229,6 +229,7 @@
+> >  #define AIC_TMR_EL02_VIRT	AIC_TMR_GUEST_VIRT
 > > 
-> > Sounds good. :)
+> >  static DEFINE_STATIC_KEY_TRUE(use_fast_ipi);
+> > +static DEFINE_STATIC_KEY_TRUE(has_uncore_regs);
+> > 
+> >  struct aic_info {
+> >  	int version;
+> > @@ -246,6 +247,7 @@ struct aic_info {
+> > 
+> >  	/* Features */
+> >  	bool fast_ipi;
+> > +	bool uncore_regs;
+> >  };
+> > 
+> >  static const struct aic_info aic1_info = {
+> > @@ -253,6 +255,8 @@ static const struct aic_info aic1_info = {
+> > 
+> >  	.event		= AIC_EVENT,
+> >  	.target_cpu	= AIC_TARGET_CPU,
+> > +
+> > +	.uncore_regs	= true,
+> >  };
+> > 
+> >  static const struct aic_info aic1_fipi_info = {
+> > @@ -264,6 +268,13 @@ static const struct aic_info aic1_fipi_info = {
+> >  	.fast_ipi	= true,
+> >  };
+> > 
+> > +static const struct aic_info aic1_legacy_info = {
+> > +	.version	= 1,
+> > +
+> > +	.event		= AIC_EVENT,
+> > +	.target_cpu	= AIC_TARGET_CPU,
+> > +};
+> > +
+> >  static const struct aic_info aic2_info = {
+> >  	.version	= 2,
+> > 
+> > @@ -273,6 +284,10 @@ static const struct aic_info aic2_info = {
+> >  };
+> > 
+> >  static const struct of_device_id aic_info_match[] = {
+> > +	{
+> > +		.compatible = "apple,s5l8960x-aic",
+> > +		.data = &aic1_legacy_info,
+> > +	},
 > 
-> Chih-En, I admit I did not fully read the entire correspondence and got deep
-> into all the details.
-> 
-> I would note, however, that there are several additional components that I
-> did not see (and perhaps missed) in your patches. Basically, there are many
-> page-table manipulations that are done not through the page-fault handler or
-> reclamation mechanisms. I did not see any of them being addressed.
-> 
-> So if/when you send a new version, please have a look at mprotect(),
-> madvise(), soft-dirty, userfaultfd and THP. In these cases, I presume, you
-> would have to COW-break (aka COW-unshare) the page-tables.
-> 
+> Maybe I'm confused but shouldn't this be the apple,aic fallback and
+> uncore_regs should be enabled for e.g. t8103-aic then?
 
-Sure. Before I send the new version I will try to handle all of them.
-Thank you for the note.
+In principle, no.  Several Linux kernels shipped with a apple_aic
+irqchip driver that assumes the presence of the "uncore" registers for
+"apple,aic".  And that means the "apple,aic" shouldn't be used to
+represent the interrupt controllers on SoCs with older cores that
+don't have those uncore registers.
 
-Thanks,
-Chih-En Lin
+That said, given that there was no support for these older SoCs in
+those Linux kernels anyway, one could argue that the existing
+"apple,aic" support is unused and that we can redefine it to mean that
+the uncore registers are there.  I agree that would be a bit more
+logical.
+
+> >  	{
+> >  		.compatible = "apple,t8103-aic",
+> >  		.data = &aic1_fipi_info,
+> > @@ -524,12 +539,14 @@ static void __exception_irq_entry 
+> > aic_handle_fiq(struct pt_regs *regs)
+> >  	 * we check for everything here, even things we don't support yet.
+> >  	 */
+> > 
+> > -	if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
+> > -		if (static_branch_likely(&use_fast_ipi)) {
+> > -			aic_handle_ipi(regs);
+> > -		} else {
+> > -			pr_err_ratelimited("Fast IPI fired. Acking.\n");
+> > -			write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+> > +	if (static_branch_likely(&use_fast_ipi)) {
+> > +		if (read_sysreg_s(SYS_IMP_APL_IPI_SR_EL1) & IPI_SR_PENDING) {
+> > +			if (static_branch_likely(&use_fast_ipi)) {
+> > +				aic_handle_ipi(regs);
+> > +			} else {
+> > +				pr_err_ratelimited("Fast IPI fired. Acking.\n");
+> > +				write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+> > +			}
+> 
+> This doesn't make much sense:
+> 
+> if (A) {
+>     if (B) {
+>         if (A) { // A is already guaranteed to be true here, why check it again?
+>             // ...
+>         } else {
+>             // how can this ever be reached then?
+>         }
+>     }
+> }
+> 
+> >  		}
+> >  	}
+> > 
+> > @@ -566,12 +583,14 @@ static void __exception_irq_entry 
+> > aic_handle_fiq(struct pt_regs *regs)
+> >  					  AIC_FIQ_HWIRQ(irq));
+> >  	}
+> > 
+> > -	if (FIELD_GET(UPMCR0_IMODE, read_sysreg_s(SYS_IMP_APL_UPMCR0_EL1)) == 
+> > UPMCR0_IMODE_FIQ &&
+> > -			(read_sysreg_s(SYS_IMP_APL_UPMSR_EL1) & UPMSR_IACT)) {
+> > -		/* Same story with uncore PMCs */
+> > -		pr_err_ratelimited("Uncore PMC FIQ fired. Masking.\n");
+> > -		sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
+> > -				   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
+> > +	if (static_branch_likely(&has_uncore_regs)) {
+> > +		if (FIELD_GET(UPMCR0_IMODE, read_sysreg_s(SYS_IMP_APL_UPMCR0_EL1)) ==
+> > +			UPMCR0_IMODE_FIQ && (read_sysreg_s(SYS_IMP_APL_UPMSR_EL1) & 
+> > UPMSR_IACT)) {
+> > +			/* Same story with uncore PMCs */
+> > +			pr_err_ratelimited("Uncore PMC FIQ fired. Masking.\n");
+> > +			sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
+> > +					FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
+> > +		}
+> >  	}
+> >  }
+> > 
+> > @@ -944,7 +963,8 @@ static int aic_init_cpu(unsigned int cpu)
+> >  	/* Mask all hard-wired per-CPU IRQ/FIQ sources */
+> > 
+> >  	/* Pending Fast IPI FIQs */
+> > -	write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+> > +	if (static_branch_likely(&use_fast_ipi))
+> > +		write_sysreg_s(IPI_SR_PENDING, SYS_IMP_APL_IPI_SR_EL1);
+> > 
+> >  	/* Timer FIQs */
+> >  	sysreg_clear_set(cntp_ctl_el0, 0, ARCH_TIMER_CTRL_IT_MASK);
+> > @@ -965,8 +985,9 @@ static int aic_init_cpu(unsigned int cpu)
+> >  			   FIELD_PREP(PMCR0_IMODE, PMCR0_IMODE_OFF));
+> > 
+> >  	/* Uncore PMC FIQ */
+> > -	sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
+> > -			   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
+> > +	if (static_branch_likely(&has_uncore_regs))
+> > +		sysreg_clear_set_s(SYS_IMP_APL_UPMCR0_EL1, UPMCR0_IMODE,
+> > +				   FIELD_PREP(UPMCR0_IMODE, UPMCR0_IMODE_OFF));
+> > 
+> >  	/* Commit all of the above */
+> >  	isb();
+> > @@ -1125,6 +1146,11 @@ static int __init aic_of_ic_init(struct 
+> > device_node *node, struct device_node *p
+> >  	else
+> >  		static_branch_disable(&use_fast_ipi);
+> > 
+> > +	if (irqc->info.uncore_regs)
+> > +		static_branch_enable(&has_uncore_regs);
+> > +	else
+> > +		static_branch_disable(&has_uncore_regs);
+> > +
+> >  	irqc->info.die_stride = off - start_off;
+> > 
+> >  	irqc->hw_domain = irq_domain_create_tree(of_node_to_fwnode(node),
+> > -- 
+> > 2.30.2
+> 
+> 
+> Sven
+> 
+> 
