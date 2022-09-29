@@ -2,130 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2EB5EED09
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 07:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E85FE5EED12
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 07:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234455AbiI2FHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 01:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S234526AbiI2FJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 01:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbiI2FHb (ORCPT
+        with ESMTP id S232120AbiI2FJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 01:07:31 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73715E5FB2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 22:07:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MdLvZ196nz4xGh;
-        Thu, 29 Sep 2022 15:07:22 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1664428044;
-        bh=LNJLwf4icNuP92vlonmeVOhbmhMWAvb1KZSRpI5pNFE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=RmmwtB+Lq8bjkFuvWqmHzVzaEXURluSYEX7ndiVyuWqzynjHwOkXEd7d55TdcPdR3
-         AKsLc+bQH8LwodnZNM/TXhnavHNQdaIehmVr9TluOfPyWQZui7tDuKbQsH01FhSC8V
-         wr1p2UI1BPVSJA0f/V9l1JzFzgT04uDvRNZ3B9hv9k4fxW8theuwzRQdlgNILubYhq
-         ZK/ymFMP+bM4hv0Q2p4PRL+P9isFHyJhX6hL74EqHJrJiR4ExrEOSFWffFokEb+amQ
-         C7cL/kWRJkajfUPucTviskOUV95IRNe3nZ8ugIFg3iEXJ1+raAUC75VfQfduJLiaJD
-         XlroTz/ZLvaTw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Alex Sierra <alex.sierra@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Jason Gunthorpe <jgg@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH 1/7] mm/memory.c: Fix race when faulting a device
- private page
-In-Reply-To: <875yh7osye.fsf@nvdebian.thelocal>
-References: <cover.f15b25597fc3afd45b144df863eeca3b2c13f9f4.1664171943.git-series.apopple@nvidia.com>
- <af2ea89799b08e0a5e592df0da0dcb9a5bf8533b.1664171943.git-series.apopple@nvidia.com>
- <87fsgbf3gh.fsf@mpe.ellerman.id.au> <875yh7osye.fsf@nvdebian.thelocal>
-Date:   Thu, 29 Sep 2022 15:07:17 +1000
-Message-ID: <87bkqyg456.fsf@mpe.ellerman.id.au>
+        Thu, 29 Sep 2022 01:09:40 -0400
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2C0101B;
+        Wed, 28 Sep 2022 22:09:34 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id cy15-20020a056830698f00b0065c530585afso275616otb.2;
+        Wed, 28 Sep 2022 22:09:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=IydL5kbnqeXOevEVuS9ouWA+i4vymY53i4zI/bO3x9M=;
+        b=Q1XgaQB0b3+QsXJP4HbRf2OzKNWobak2y5ffXja08fG3K8EjVrUlYIqZaDpAvJwh0l
+         GkQ1I26BM2SuFaqOk/rldCJOJvcnmjF5zeVlY6qU6CXnaAcZI67UwcfmfrQE5s3AhPvg
+         mlgXdmxQH16JFbRqyzIPP4cwPG0qDF8BRf6DkmsVbHmEBM2yRCB59IM3pdnPrRHNHXok
+         5o3dKaoL5aFKMxs1xlzfLyePoCPbBq285zqGXgGps2SvNtLrO4u3huCTOKKq9ftR9tKX
+         3io/mK5qFfjOhrYXqz/ykx+TGyE09wPjhBDuFzoSqPvvFAi3XhYqtvHmEhWAL+q/N6YO
+         2tpw==
+X-Gm-Message-State: ACrzQf1KqTB42b11tU9vlD3EjSFS7MM90nFwBiB9W0oLsG6b8URCq/AH
+        n4fyCgTyzhfARxpmOixYsU8ndHDBpz2VLlO5mYo=
+X-Google-Smtp-Source: AMsMyM4hETyVV8KenOkqGDFFx4cZyAqRlRlhCjBEim/esahHSI2CxXS4UkYc5bxpLvYgsiqH+iyo3dVwlPQv/iUYS3g=
+X-Received: by 2002:a05:6830:1351:b0:65b:e0a8:d0e8 with SMTP id
+ r17-20020a056830135100b0065be0a8d0e8mr611900otq.190.1664428173757; Wed, 28
+ Sep 2022 22:09:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220924165737.956428-1-namhyung@kernel.org> <20220924165737.956428-3-namhyung@kernel.org>
+ <d901f8c8-0dda-8f34-f963-09cf56d4924e@intel.com> <CAM9d7ciGFqSRO=J6FZmz=enML7eCyvRMQB+bm=nZ07GmozJwbw@mail.gmail.com>
+ <ae609590-7d85-ee4b-3525-8eaa46ed240c@intel.com> <CAM9d7ciaOMOuJay5MzOYtg5paK_YmQskX1yqg=Oni1EzipPMwA@mail.gmail.com>
+ <CAP-5=fX-as0WNCXMyzOwY=ek0gR9yNXbonXHAu1hsd5wOuX-Vg@mail.gmail.com>
+In-Reply-To: <CAP-5=fX-as0WNCXMyzOwY=ek0gR9yNXbonXHAu1hsd5wOuX-Vg@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 28 Sep 2022 22:09:22 -0700
+Message-ID: <CAM9d7ciDvCOsFE68NG6jRb02DdDEOmRf_h7XizdDLGBz0RX95Q@mail.gmail.com>
+Subject: Re: [PATCH 2/5] libperf: Propagate maps only if necessary
+To:     Ian Rogers <irogers@google.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alistair Popple <apopple@nvidia.com> writes:
-> Michael Ellerman <mpe@ellerman.id.au> writes:
->> Alistair Popple <apopple@nvidia.com> writes:
->>> When the CPU tries to access a device private page the migrate_to_ram()
->>> callback associated with the pgmap for the page is called. However no
->>> reference is taken on the faulting page. Therefore a concurrent
->>> migration of the device private page can free the page and possibly the
->>> underlying pgmap. This results in a race which can crash the kernel due
->>> to the migrate_to_ram() function pointer becoming invalid. It also means
->>> drivers can't reliably read the zone_device_data field because the page
->>> may have been freed with memunmap_pages().
->>>
->>> Close the race by getting a reference on the page while holding the ptl
->>> to ensure it has not been freed. Unfortunately the elevated reference
->>> count will cause the migration required to handle the fault to fail. To
->>> avoid this failure pass the faulting page into the migrate_vma functions
->>> so that if an elevated reference count is found it can be checked to see
->>> if it's expected or not.
->>>
->>> Signed-off-by: Alistair Popple <apopple@nvidia.com>
->>> ---
->>>  arch/powerpc/kvm/book3s_hv_uvmem.c       | 15 ++++++-----
->>>  drivers/gpu/drm/amd/amdkfd/kfd_migrate.c | 17 +++++++------
->>>  drivers/gpu/drm/amd/amdkfd/kfd_migrate.h |  2 +-
->>>  drivers/gpu/drm/amd/amdkfd/kfd_svm.c     | 11 +++++---
->>>  include/linux/migrate.h                  |  8 ++++++-
->>>  lib/test_hmm.c                           |  7 ++---
->>>  mm/memory.c                              | 16 +++++++++++-
->>>  mm/migrate.c                             | 34 ++++++++++++++-----------
->>>  mm/migrate_device.c                      | 18 +++++++++----
->>>  9 files changed, 87 insertions(+), 41 deletions(-)
->>>
->>> diff --git a/arch/powerpc/kvm/book3s_hv_uvmem.c b/arch/powerpc/kvm/book3s_hv_uvmem.c
->>> index 5980063..d4eacf4 100644
->>> --- a/arch/powerpc/kvm/book3s_hv_uvmem.c
->>> +++ b/arch/powerpc/kvm/book3s_hv_uvmem.c
->>> @@ -508,10 +508,10 @@ unsigned long kvmppc_h_svm_init_start(struct kvm *kvm)
-...
->>> @@ -994,7 +997,7 @@ static vm_fault_t kvmppc_uvmem_migrate_to_ram(struct vm_fault *vmf)
->>>
->>>  	if (kvmppc_svm_page_out(vmf->vma, vmf->address,
->>>  				vmf->address + PAGE_SIZE, PAGE_SHIFT,
->>> -				pvt->kvm, pvt->gpa))
->>> +				pvt->kvm, pvt->gpa, vmf->page))
->>>  		return VM_FAULT_SIGBUS;
->>>  	else
->>>  		return 0;
->>
->> I don't have a UV test system, but as-is it doesn't even compile :)
+On Wed, Sep 28, 2022 at 7:08 PM Ian Rogers <irogers@google.com> wrote:
 >
-> Ugh, thanks. I did get as far as installing a PPC cross-compiler and
-> building a kernel. Apparently I did not get as far as enabling
-> CONFIG_PPC_UV :)
+> On Wed, Sep 28, 2022 at 4:46 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > On Wed, Sep 28, 2022 at 12:54 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> > >
+> > > On 27/09/22 20:28, Namhyung Kim wrote:
+> > > > Hi Adrian,
+> > > >
+> > > > On Tue, Sep 27, 2022 at 12:06 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> > > >>
+> > > >> On 24/09/22 19:57, Namhyung Kim wrote:
+> > > >>> The current code propagate evsel's cpu map settings to evlist when it's
+> > > >>> added to an evlist.  But the evlist->all_cpus and each evsel's cpus will
+> > > >>> be updated in perf_evlist__set_maps() later.  No need to do it before
+> > > >>> evlist's cpus are set actually.
+> > > >>>
+> > > >>> Actually we discarded this intermediate all_cpus maps at the beginning
+> > > >>> of perf_evlist__set_maps().  Let's not do this.  It's only needed when
+> > > >>> an evsel is added after the evlist cpu maps are set.
+> > > >>
+> > > >> That might not be true.  Consider evlist__fix_hybrid_cpus() which fiddles
+> > > >> with evsel->core.cpus and evsel->core.own_cpus after the evsel has been
+> > > >> added to the evlist.  It can also remove an evsel from the evlist.
+> > > >
+> > > > Thanks for your review.  I think it's fine to change evsel cpus or to remove
+> > > > an evsel from evlist before calling evlist__create_maps().  The function
+> > > > will take care of setting evlist's all_cpus from the evsels in the evlist.
+> > > > So previous changes in evsel/cpus wouldn't be any special.
+> > > >
+> > > > After this point, adding a new evsel needs to update evlist all cpus by
+> > > > propagating cpu maps.  So I think hybrid cpus should be fine.
+> > > > Did I miss something?
+> > >
+> > > I wondered how it might play out if evlist__fix_hybrid_cpus() reduced the
+> > > cpus from the target->cpu_list (using perf record -C) , since after this
+> > > patch all_cpus always starts with the target->cpu_list instead of an empty
+> > > list.  But then, in the hybrid case, it puts a dummy event that uses the
+> > > target cpu list anyway, so the result is the same.
+> > >
+> > > I don't know if there are any cases where all_cpus would actually need to
+> > > exclude some of the cpus from target->cpu_list.
+> >
+> > I'm not aware of other cases to reduce cpu list.  I think it'd be fine
+> > if it has a cpu in the evlist->all_cpus even if it's not used.  The evsel
+> > should have a correct list anyway and we mostly use the evsel cpus
+> > to do the real work.
+> >
+> > Thanks,
+> > Namhyung
+>
+> The affinity changes made it so that we use all_cpus probably more
+> often than the evsel CPU maps for real work. The reason being we want
+> to avoid IPIs so we do all the work on 1 CPU and then move to the next
+> CPU in evlist all_cpus. evsel CPU maps are used to make sure the
+> indices are kept accurate - for example, if an uncore event is
+> measured with a CPU event:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/evlist.h?h=perf/core#n366
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/evlist.c?h=perf/core#n404
 
-No worries, that's really on us. If we're going to keep the code in the
-tree then it should really be enabled in at least one of our defconfigs.
+Right, I meant it'd check the evsel cpus eventually even if it iterates
+on the evlist all_cpus.  The evlist_cpu_iterator__next() will skip a
+CPU if it's not in the evsel cpus.
 
-cheers
+Thanks,
+Namhyung
