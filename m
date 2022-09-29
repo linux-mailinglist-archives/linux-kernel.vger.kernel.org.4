@@ -2,138 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6705EEF07
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEBBC5EEF10
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235267AbiI2Haf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S235102AbiI2HbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235248AbiI2Ha0 (ORCPT
+        with ESMTP id S234851AbiI2HbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:30:26 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281FE186D1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:30:23 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id a14so583762ljj.8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:30:23 -0700 (PDT)
+        Thu, 29 Sep 2022 03:31:15 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40935123871
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:31:13 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id i26so941610lfp.11
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:31:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=OqkWyQYUuDRkm7zgyVEX1I32YrHW4vNoTuwMudpxXDQ=;
-        b=M/Of4/LnK1AKOSsdNO9WzfJyoy+sI5QdeIZBrmSLoV6q6cONr8NMF6++ud4b0nZG+0
-         1Wps92ejomNXmRTLhs/T6mzAVkiqDO8tICuzDTPYoll3Qi6Uk5RjkXNEZfiX8nTgsNWA
-         lNfH3p4+t/1H/1B9G6up7jplAXvEoZSyiQ/wvG7w7P1/U/auLaNBXrdb9qXnmO37+pub
-         pjRGwON+EuskIqrOrms7cdUFsQAAZVaYz0KWu54s1MMUgxBViPxLYzCP/cgg7u0NRzGE
-         cdFSX+O/d3fAhafn7JxYSvnBBLmvuYD3gM3ZbY0fhdpD26C1wUAoXw3yHU1ApJ70Y3nK
-         D9RQ==
+        bh=d2EazhJPJSbwMcP0nRzwyGojAz7jhGIxDxpFS+S8wS4=;
+        b=du0lWC60PB/jENlb0ba14brLNTgO/3DRWot41R5k3uTVz+24nP0HL0BjGYCMm95mr5
+         BNPOsJXPrBecasKO/4qlBapwV9Vk1MORFh/AI+5khaDupzZXiCRMLYlaPQmhPIs0fHC5
+         61a0SgFNd1bo75he6Oc53j8W4ssb2A1Xoerac/pU59704OyLHhAtMVxwnAmXul6rBN7/
+         dkDvQgvbCQvydmJigpKdMTvayu4WJ4qDzSy/jkoHCdjfNX7fCJ0lpySU5GjsxY1W5WRg
+         gPyi7UY8h0W+7uV9sa6V8XnVoTYDEBTwTchp9qibd2MzuQY1/sTmJIvsj0wjrl7NExbu
+         JHAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=OqkWyQYUuDRkm7zgyVEX1I32YrHW4vNoTuwMudpxXDQ=;
-        b=3T2f6h9jwyoPU9Q+e8ZA8FwdwmPpa7XTJ7La+pRFIfhi+jaPq4XDCyn3rhxyjF+QkH
-         qqkzDmCj62jycggaguN2/0yxT2AHdtRPeqZJjGFfQSsgKq0zbJBjsPL79mxKQmHkBDRA
-         qa+DTB4HmQzATOG7B08v7tc2sKPWYeDfy+ziiLWQGdd8t1Lrl0kGQqj359xR0oomnvd7
-         62L/8TSq/Ielq/6PG07s63319Kv+MSOe4k6wmnglQ/vukacJHEh+tCjP0YC9tfEW5d7c
-         vET5DWbYZy2noL6ikBo50PhdPm6770CCqPRg9VRmFu+53rdy4VkY0NGwnFyaLbtBLL3d
-         At7Q==
-X-Gm-Message-State: ACrzQf1Jlhzji8vENESI2miMbqVOvYD6l5TWsKaQRtfK6HbK4+THW5zL
-        m0uIvj1m+z++CooSAxyQxa3BHFML2EC6/w==
-X-Google-Smtp-Source: AMsMyM4ILN/PXRDClqWGg7oAxUN4BU0A6IzD09RlvPlrnNNjJZ4iA+Hmfs/JXaRi7sEpTeApVP+N0Q==
-X-Received: by 2002:a2e:be0a:0:b0:26b:eb1d:9651 with SMTP id z10-20020a2ebe0a000000b0026beb1d9651mr641868ljq.196.1664436621484;
-        Thu, 29 Sep 2022 00:30:21 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id a5-20020a056512200500b0049301e29e41sm700855lfb.233.2022.09.29.00.30.20
+        bh=d2EazhJPJSbwMcP0nRzwyGojAz7jhGIxDxpFS+S8wS4=;
+        b=dPQ/JUnwBfq5MOvpA22IFemcdMYKcfoYc9rGVAI/WxmS6lSnJSpUjo8eUUJFQVyd/h
+         LTTFPJ8AD7vQPO3+YzKhfH4R8eFY/fmA1xgVPX8fO/HAMyF++xWl7hEo6c9qIhpVMLRq
+         KoMR1aiz0Zk8YWfrLIwB0uKssWQkCP9sUkfgHh0Qe0dp/OI+fSxSBTkud6DXMpWGkAGw
+         CJ8OnxQZqvp1OTHBJIkTQyc1h53Ct/mipcygF/rsoOTnb3y1MmqRiWasHgRiJnphFXWH
+         JyYK2WXV9pVjr2RQp75zIESjKtUhK/ipEDPWrhbOfaX5oipa/pAKYty7O2OL6Wn6a+eG
+         qSzQ==
+X-Gm-Message-State: ACrzQf2kbB25TH11gV2bsmFJcOgkX2TDjpDRjTxf7F1oXD4MSW7IR1lK
+        JK2wtleZf7hnN2zu51NrFzoH7g==
+X-Google-Smtp-Source: AMsMyM5CKgW4S6Mj6aaX7feZSKj0JYhQYbjagNlBJnXfen43EhgyNrhEeSF02sHPuLu5XZa8/PUkvQ==
+X-Received: by 2002:a19:6b01:0:b0:499:b6fb:fcf2 with SMTP id d1-20020a196b01000000b00499b6fbfcf2mr753900lfa.622.1664436671624;
+        Thu, 29 Sep 2022 00:31:11 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id d22-20020a196b16000000b00497ac35ae1esm702592lfa.85.2022.09.29.00.31.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 00:30:21 -0700 (PDT)
-Message-ID: <7f577974-7433-107a-a43a-4a3a5f999018@linaro.org>
-Date:   Thu, 29 Sep 2022 10:30:20 +0300
+        Thu, 29 Sep 2022 00:31:11 -0700 (PDT)
+Message-ID: <1ddfd9c5-7986-3ff7-bcf8-409bc1250076@linaro.org>
+Date:   Thu, 29 Sep 2022 09:31:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH 07/13] phy: qcom-qmp-pcie: clean up power-down handling
-Content-Language: en-GB
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220928152822.30687-1-johan+linaro@kernel.org>
- <20220928152822.30687-8-johan+linaro@kernel.org>
- <c3d39c4e-2099-b09a-8486-8abae7336611@linaro.org>
- <YzVIhK5z3I6hjzLU@hovoldconsulting.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <YzVIhK5z3I6hjzLU@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v7 09/29] thermal/drivers/exynos: Replace
+ of_thermal_is_trip_valid() by thermal_zone_get_trip()
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com, Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Kaestle <peter@piie.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Antoine Tenart <atenart@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Dmitry Osipenko <digetx@gmail.com>, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org
+References: <20220928210059.891387-1-daniel.lezcano@linaro.org>
+ <20220928210059.891387-10-daniel.lezcano@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220928210059.891387-10-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 10:25, Johan Hovold wrote:
-> On Wed, Sep 28, 2022 at 10:15:46PM +0300, Dmitry Baryshkov wrote:
->> On 28/09/2022 18:28, Johan Hovold wrote:
->>> Always define the POWER_DOWN_CONTROL register instead of falling back to
->>> the v2 offset during power on and power off.
->>>
->>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
->>> ---
->>>    drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 20 ++++++--------------
->>>    1 file changed, 6 insertions(+), 14 deletions(-)
->>>
->>> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
->>> index eea66c24cf7e..47cdb9ed80cd 100644
->>> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
->>> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
->>> @@ -90,12 +90,14 @@ static const unsigned int pciephy_regs_layout[QPHY_LAYOUT_SIZE] = {
->>>    	[QPHY_SW_RESET]			= 0x00,
->>>    	[QPHY_START_CTRL]		= 0x08,
->>>    	[QPHY_PCS_STATUS]		= 0x174,
->>> +	[QPHY_PCS_POWER_DOWN_CONTROL]	= 0x04,
->>>    };
->>
->> Without symbolic names it's not obvious that 0x04 (and thus this
->> regs_layout) can be used for v2 and v3, but not for v4.
+On 28/09/2022 23:00, Daniel Lezcano wrote:
+> The thermal_zone_get_trip() does the same check as
+> of_thermal_is_trip_valid(). Replace the call to
+> of_thermal_is_trip_valid() by thermal_zone_get_trip().
 > 
-> It's no less obvious than it was when we were falling back to the v2
-> define when it wasn't in the table.
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Yes, that's without doubts. Anyway, I've sent my view on the regs 
-layouts standing on top of your six patches from this series. Could you 
-please take a glance?
+I think I acked it...
 
-> 
->> @@ -1872,13 +1874,8 @@ static int qmp_pcie_init(struct phy *phy)
->>        if (ret)
->>                goto err_assert_reset;
->> -     if (cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL])
->> -             qphy_setbits(pcs,
->> -                             cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
->> -                             cfg->pwrdn_ctrl);
->> -     else
->> -             qphy_setbits(pcs, QPHY_V2_PCS_POWER_DOWN_CONTROL,
->> -                             cfg->pwrdn_ctrl);
->> +     qphy_setbits(pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
->> +                     cfg->pwrdn_ctrl);
-> 
-> This is the cruft I'm getting rid of.
-> 
-> Johan
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-With best wishes
-Dmitry
+Best regards,
+Krzysztof
 
