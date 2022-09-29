@@ -2,144 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CD45EF3EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A08565EF3F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234907AbiI2LGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
+        id S235092AbiI2LHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbiI2LGr (ORCPT
+        with ESMTP id S232402AbiI2LHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:06:47 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F538125D85
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:06:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=isscZ9xZcb3X8C/grlpGX2flK1QyGsNT5yCD9AlT2y8=; b=YLRspUlrRsysRAL/e5xkVGkoon
-        QH3QOGf+U8Ocbys0UIgsJ2fAu0UbTP/MFlQqOyj3qhMaf3z3gSijx5IMI3CqEeAiXHMtO1mIUCS53
-        fwUKy4b5PA6S5BFvjuEIPEjmNWPRlBAwSbN69XeInhvB4hgS4UKp6iMjqIPwr0hH+GUIC/kxNYHrc
-        WpiI1VhcsPSnELuKlICJIvv6PHRCWClx7ciC8sNLdXog8e4+vUFkA9a/KErRSObigqZB2UKy0fI4j
-        lSh6quf68wJzZnd9eiei7fu1KRV8SnWgVxVi9K6lSE+9YUTv3bIgioDKHPREZDT5gftg3OTYF9l2j
-        c8J/7kyA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1odrN6-00GsdK-U4; Thu, 29 Sep 2022 11:06:30 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 05CCF30008D;
-        Thu, 29 Sep 2022 13:06:28 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E0F6C2019CD2C; Thu, 29 Sep 2022 13:06:27 +0200 (CEST)
-Date:   Thu, 29 Sep 2022 13:06:27 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: RCU vs NOHZ
-Message-ID: <YzV8M4OU2wj7L9W+@hirez.programming.kicks-ass.net>
-References: <YyLksEr05QTNo05Q@hirez.programming.kicks-ass.net>
- <20220915160600.GA246308@paulmck-ThinkPad-P17-Gen-1>
- <YyN0BKEoDbe4hcIl@hirez.programming.kicks-ass.net>
- <20220915191427.GC246308@paulmck-ThinkPad-P17-Gen-1>
- <YyOnilnwnLKA9ghN@hirez.programming.kicks-ass.net>
- <20220916075817.GE246308@paulmck-ThinkPad-P17-Gen-1>
- <YyQ/zn54D1uoaIc1@hirez.programming.kicks-ass.net>
- <20220917142508.GF246308@paulmck-ThinkPad-P17-Gen-1>
- <20220921213644.GA1609461@paulmck-ThinkPad-P17-Gen-1>
+        Thu, 29 Sep 2022 07:07:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18F781928D
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:07:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 061A315BF;
+        Thu, 29 Sep 2022 04:07:47 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1AB363F73B;
+        Thu, 29 Sep 2022 04:07:36 -0700 (PDT)
+Message-ID: <b9caf0c7-8f61-f5e3-b299-3ae5b76d8b63@arm.com>
+Date:   Thu, 29 Sep 2022 13:07:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921213644.GA1609461@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Jian-Min Liu <jian-min.liu@mediatek.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Patrick Bellasi <patrick.bellasi@matbug.net>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Jonathan JMChen <jonathan.jmchen@mediatek.com>
+References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
+ <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
+ <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 02:36:44PM -0700, Paul E. McKenney wrote:
+On 29/09/2022 11:47, Peter Zijlstra wrote:
 
-> commit 80fc02e80a2dfb6c7468217cff2d4494a1c4b58d
-> Author: Paul E. McKenney <paulmck@kernel.org>
-> Date:   Wed Sep 21 13:30:24 2022 -0700
+[...]
+
+>> ---------------------------------------------------------------------
+>> --|                      | PELT
+>> halflife                                |
+>> |                      |----------------------------------------------|
+>> |                      |       32      |       16      |       8      |
+>> |                      |----------------------------------------------|
+>> |                      | avg  min  avg | avg  min  avg | avg  min  avg|
+>> | Scenarios            | fps  fps  pwr | fps  fps  pwr | fps  fps  pwr|
+>> |---------------------------------------------------------------------|
+>> | HOK game 60fps       | 100  100  100 | 105 *134* 102 | 104 *152* 106|
+>> | HOK game 90fps       | 100  100  100 | 101 *114* 101 | 103 *129* 105|
+>> | HOK game 120fps      | 100  100  100 | 102 *124* 102 | 105 *134* 105|
 > 
->     rcu: Let non-offloaded idle CPUs with callbacks defer tick
->     
->     When a CPU goes idle, rcu_needs_cpu() is invoked to determine whether or
->     not RCU needs the scheduler-clock tick to keep interrupting.  Right now,
->     RCU keeps the tick on for a given idle CPU if there are any non-offloaded
->     callbacks queued on that CPU.
->     
->     But if all of these callbacks are waiting for a grace period to finish,
->     there is no point in scheduling a tick before that grace period has any
->     reasonable chance of completing.  This commit therefore delays the tick
->     in the case where all the callbacks are waiting for a specific grace
->     period to elapse.  In theory, this should result in a 50-70% reduction in
->     RCU-induced scheduling-clock ticks on mostly-idle CPUs.  In practice, TBD.
->     
->     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->     Cc: Peter Zijlstra <peterz@infradead.org>
+> You have your min and avg fps columns mixed up, your min cannot be larger
+> than avg.
+> 
+> Also, with min fps mostly above the actual screen fps, who cares. And
+> seriously 120fps on a phone !?!? for worse power usage! you gotta be
+> kidding me.
 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 5ec97e3f7468..47cd3b0d2a07 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -676,12 +676,33 @@ void __rcu_irq_enter_check_tick(void)
->   * scheduler-clock interrupt.
->   *
->   * Just check whether or not this CPU has non-offloaded RCU callbacks
-> - * queued.
-> + * queued that need immediate attention.
->   */
-> -int rcu_needs_cpu(void)
-> +int rcu_needs_cpu(u64 basemono, u64 *nextevt)
->  {
-> -	return !rcu_segcblist_empty(&this_cpu_ptr(&rcu_data)->cblist) &&
-> -		!rcu_rdp_is_offloaded(this_cpu_ptr(&rcu_data));
-> +	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
-> +	struct rcu_segcblist *rsclp = &rdp->cblist;
-> +
-> +	// Disabled, empty, or offloaded means nothing to do.
-> +	if (!rcu_segcblist_is_enabled(rsclp) ||
-> +	    rcu_segcblist_empty(rsclp) || rcu_rdp_is_offloaded(rdp)) {
-> +		*nextevt = KTIME_MAX;
-> +		return 0;
-> +	}
+I agree that since we don't know what 100% at 32 means its unclear what
+problem gets actually solved here by running with 16 or 8.
 
-So far agreed; however, I was arguing to instead:
+> And I googled this game; it is some top-down tactical thing with
+> real-time combat (as opposed to turn-based) (DOTA like I suppose),
+> 60 fps locked should be plenty fine.
+> 
+>> | FHD video rec. 60fps | 100  100  100 | n/a  n/a  n/a | 100  100  103|
+>> | Camera snapshot      | 100  100  100 | n/a  n/a  n/a | 100  100  102|
+> 
+> Mostly I think you've demonstrated that none of this is worth it.
 
-> +
-> +	// Callbacks ready to invoke or that have not already been
-> +	// assigned a grace period need immediate attention.
-> +	if (!rcu_segcblist_segempty(rsclp, RCU_DONE_TAIL) ||
-> +	    !rcu_segcblist_segempty(rsclp, RCU_NEXT_TAIL))
-> +		return 1;
-> +
-> +	// There are callbacks waiting for some later grace period.
-> +	// Wait for about a grace period or two for the next tick, at which
-> +	// point there is high probability that this CPU will need to do some
-> +	// work for RCU.
-> +	*nextevt = basemono + TICK_NSEC * (READ_ONCE(jiffies_till_first_fqs) +
-> +					   READ_ONCE(jiffies_till_next_fqs) + 1);
-> +	return 0;
->  }
+I assume Jian-Min added those two lines to demonstrate that they would
+need the run-time switch.
 
-force offload whatever you have in this case and always have it return
-false.
+>> -----------------------------------------------------------------------
+>>
+>> HOK ... Honour Of Kings, Video game
+>> FHD ... Full High Definition
+>> fps ... frame per second
+>> pwr ... power consumption
+>>
+>> table values are in %
+> 
+> Oh... that's bloody insane; that's why none of it makes sense.
+> 
+> 
+> How is any of that an answer to:
+> 
+>   "They want; I want an explanation of what exact problem is fixed how ;-)"
+> 
+> This is just random numbers showing poking the number has some effect;
+> it has zero explaination of why poking the number changes the workload
+> and if that is in fact the right way to go about solving that particular
+> issue.
 
-Except I don't think this is quite the right place; there's too much
-that can still get in the way of stopping the tick, I would delay the
-force offload to the place where we actually know we're going to stop
-the tick.
-
+Jian-Min, would you be able to show real numbers in comparison to the
+chosen fps here? And explain what the problem is which gets solved. What
+is the effect of this higher min fps values when running 16 or 8? And
+why is the default 32 not sufficient here?
