@@ -2,133 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29685EF06E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E31E15EF074
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235493AbiI2I2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
+        id S235202AbiI2I3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235546AbiI2I2J (ORCPT
+        with ESMTP id S235538AbiI2I32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:28:09 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466461162EC
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:28:08 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id s14so1013820wro.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:28:08 -0700 (PDT)
+        Thu, 29 Sep 2022 04:29:28 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F004B13EAFA
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:29:25 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id m4so985406wrr.5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:29:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=tKKWFXZii5QgbaLTyEujRe6CHc4wQgmQFi6wf2giT+8=;
-        b=KnYUG4kPRTFFu8OzI6Hrw91OKgj5cyB9qkOZakZjah6ri3UWJEBuqAQLjSD9RqcXLW
-         Sf1tkeA6beXxqhpDcY6NC4IhOTfegDjNBgCH3icDbgpezwJnmpY550mTVbDccSsrsVfy
-         Vjd2bYl2ieTHop5yZgl2qAeCdWYeLtv+cS9dzrUVUbq6nIABAXZavG13GdtoealwXpln
-         lTSNvaRLk3HIfWlThKbNfrYjhJLy0hDZL82pLBoTMsBetmC7YZjhESiWxzQw8It3MpNN
-         xoSxL5H7FBIA62CaH/upGlJ3bsHGrF1staTzeDBmh/Y7pj7Ub9quWENwO6iJtK92SKMn
-         bYHQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date;
+        bh=bpujdPbvMkKZc5tbT0tesQargul5oOFWG757hhJb/PI=;
+        b=S+MBQ80rqHpEy6NEzdghu7ouA0nlstzMZO9Saw2V8CTa/0OE+fpOyEtEpWnJ5a33MZ
+         2zwKxqsKiGGlhR/4NLysLq43VTA2zD4e1z9PcdNGWaTFDPTZoZgmMgJmpzQLLdSuXQki
+         3UxJ5CNla358jTuqu4ssay4iY3uunEAjeUnNzs6uH0RQbOux2hAcJgwpZcaRvKB2DW25
+         sHoBQ24LKekSRT/apOh73b0ZExISLGEUYJSiTewZC4btdD67F7IzGpGxTAlG4Ip+2Q/+
+         Udesxn69qPH0WMUMoGAmU2sl3+VyQpVoVmiDlE6MI4C5LpxdKhafAm7PkHE7RaOKPQGI
+         /8kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=tKKWFXZii5QgbaLTyEujRe6CHc4wQgmQFi6wf2giT+8=;
-        b=X3CSEOosYDNgfYRsVfmn223clbNp0svCeWu1MKul/YT8iMeDq2yOv1jPOF7Upk28RU
-         Mn+CJCfjLiI9MrhzFSBYhwYgQDrJXCt88hTFZa3e4omqEeFzstmpZNiiIg6V54ronDws
-         jU3QU6n/1PLA7ZH1aBvaVrNQs5XpjSNtM+9PyXEldSfNCjXKVXs8qyCpIpxeMvNzDlPQ
-         c762lOtD8ZQHjpZUtAzMrNBvm8Fy7Df/PK3MmCx50TTwD56csNvoo/2WK7iebXrQd52d
-         y4WOhYYhfKKFmrzxiOntOrTYzK51RCksNl9X4xfumJKAEv9Pv/XKov7e5ehaAbbYF4xh
-         EedA==
-X-Gm-Message-State: ACrzQf0FHYSXIebLZvHdu51B/p+6gvVeClNmFd5vsI0xIesPkzq33pRu
-        /wMe1cdroRm5ZxghXJ5OGioVbunIHw==
-X-Google-Smtp-Source: AMsMyM5yfPah1NB92S3pXTAH3L+8p8kIn26K+zETGFHadoeLv1KHzAVZHQbo9lkwWYrs2ZuaXwGvdg==
-X-Received: by 2002:adf:cd86:0:b0:22c:c7ce:1e5e with SMTP id q6-20020adfcd86000000b0022cc7ce1e5emr1248352wrj.462.1664440086632;
-        Thu, 29 Sep 2022 01:28:06 -0700 (PDT)
-Received: from octinomon ([2a00:23c8:2f02:3b01:3ea1:40:8650:189])
-        by smtp.gmail.com with ESMTPSA id fc10-20020a05600c524a00b003b435c41103sm5544486wmb.0.2022.09.29.01.28.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 01:28:06 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 09:28:04 +0100
-From:   Jules Irenge <jbi.octave@gmail.com>
-To:     David Sterba <dsterba@suse.cz>
-Cc:     peterz@infradead.org, Ingo Molnar <mingo@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [tip: perf/core] perf/core: Convert snprintf() to scnprintf()
-Message-ID: <YzVXFOFeGkl33Yjv@octinomon>
-References: <166374773592.401.16831946846027095231.tip-bot2@tip-bot2>
- <YyrMmyUPk+4t6OLm@hirez.programming.kicks-ass.net>
- <YyrrE8vpFSR+kdHQ@gmail.com>
- <20220921125535.GF32411@twin.jikos.cz>
+        h=content-transfer-encoding:in-reply-to:organization:from:reply-to
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=bpujdPbvMkKZc5tbT0tesQargul5oOFWG757hhJb/PI=;
+        b=HUwckgiTfT30W3hgtiVZKGo7KGW0wWVL2+tEJ/lhACLpFZracqs9JBzN8ClYbw1tLu
+         gWUZioSukC6nKThBGDaGwxcMyt9pc9wze30ueuPKDgBqwJA3jwy5XqE+Dfl8BvH2sDnD
+         o23T3O6zcvZH1dPemz432kF1OgM1MtqyF1kYrgf80dbbgPc05Uw0ROtDitMsFFuYxTu9
+         J+pDdtG0me0pWUakL7Zs5VOHSjxGzcSXZJzXGSMHLvkmcwO/4/hoOxytd71IEYFFCWMS
+         eb2jS3zyW60h3BfrrNgKXw7/bK6YPsPdwU8Dd4+0buh8p6UEg9U1maODSgilQ4QN92If
+         a0bw==
+X-Gm-Message-State: ACrzQf3lalBS8L6/CHUcUKiH/EJmXJY5GV6KFMfC5j1iOTliQbMfbqqJ
+        +wCARnFbppz73w6hUXX+7rJ+sg==
+X-Google-Smtp-Source: AMsMyM6kYyKnh1/JwTgKQ0f0DN5Ba74UeFtjFSwCtJ6Xed8FffnuPm3vCjv67+qK5DVvgDx79qu+mQ==
+X-Received: by 2002:a05:6000:797:b0:22c:be73:ff82 with SMTP id bu23-20020a056000079700b0022cbe73ff82mr1331315wrb.618.1664440164403;
+        Thu, 29 Sep 2022 01:29:24 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:1f17:3ea3:4e46:dff? ([2a01:e0a:982:cbb0:1f17:3ea3:4e46:dff])
+        by smtp.gmail.com with ESMTPSA id z2-20020a05600c0a0200b003a4efb794d7sm4102412wmp.36.2022.09.29.01.29.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 01:29:23 -0700 (PDT)
+Message-ID: <6ed642ea-424d-49ed-eb30-e09588720373@linaro.org>
+Date:   Thu, 29 Sep 2022 10:29:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921125535.GF32411@twin.jikos.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 5/7] arm: dts: qcom: mdm9615: remove invalid pmic
+ subnodes compatibles
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v1-5-b6e63a7df1e8@linaro.org>
+ <0636d53f-508f-8a86-0973-2641c9020622@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <0636d53f-508f-8a86-0973-2641c9020622@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 02:55:35PM +0200, David Sterba wrote:
-> On Wed, Sep 21, 2022 at 12:44:35PM +0200, Ingo Molnar wrote:
-> > 
-> > * Peter Zijlstra <peterz@infradead.org> wrote:
-> > 
-> > > On Wed, Sep 21, 2022 at 08:08:55AM -0000, tip-bot2 for Jules Irenge wrote:
-> > > > The following commit has been merged into the perf/core branch of tip:
-> > > > 
-> > > > Commit-ID:     678739d622ae7b75b62d550858b6bf104c43e2df
-> > > > Gitweb:        https://git.kernel.org/tip/678739d622ae7b75b62d550858b6bf104c43e2df
-> > > > Author:        Jules Irenge <jbi.octave@gmail.com>
-> > > > AuthorDate:    Sun, 18 Sep 2022 00:41:08 +01:00
-> > > > Committer:     Ingo Molnar <mingo@kernel.org>
-> > > > CommitterDate: Wed, 21 Sep 2022 10:01:20 +02:00
-> > > > 
-> > > > perf/core: Convert snprintf() to scnprintf()
-> > > > 
-> > > > Coccinelle reports a warning:
-> > > > 
-> > > >     WARNING: use scnprintf or sprintf
-> > > > 
-> > > > Adding to that, there has also been some slow migration from snprintf to scnprintf.
-> > > > 
-> > > > This LWN article explains the rationale for this change:
-> > > > 
-> > > >     https: //lwn.net/Articles/69419/
-> > > > 
-> > > > No change in behavior.
-> > > > 
-> > > > [ mingo: Improved the changelog. ]
-> > > 
-> > > And yet, at this point I still have no clue what's wrong with
-> > > snprintf(). So not much improvement :/
-> > 
-> > I've added this to the changelog:
-> > 
-> >     perf/core: Convert snprintf() to scnprintf()
+Hi,
+
+On 28/09/2022 20:03, Krzysztof Kozlowski wrote:
+> On 28/09/2022 11:14, Neil Armstrong wrote:
+>> The PMIC is an PM8018, but was compatible with the PM8921. Both compatibles
+>> was left but it makes no sense anymore the leave both.
 > 
-> I'm not sure if it would apply in this case as it's for a device
-> attribute, but there's another helper sysfs_emit that does the safe
-> print to string and one does not have to care which flavor of s*printf
-> it is. We had patches in btrfs converting from snprintf to scnprintf and
-> the latest one is sysfs_emit which is convenient to use but assumes the
-> PAGE_SIZE of the buffer.
+> Why? It makes sense for backwards compatibility. If you think it does
+> not make sense, please say why.
 
-Yes, you are right. I can resend the patch with sysfs_emit() if
+We had the same debate at submission 7y ago, some of the pm8018 new compatible
+were rejected in bindings & drivers so I left both...
 
-possible as the latest documentation on sysfs states that 
+As of today only the pwrkey bindings is missing, so should I resubmit the pm8018-pwrkey bidings and
+drop the pm8921-pwrkey compatible ?
 
-show() device function should only use sysfs_emit() or sysfs_emit_at() 
-when formatting the value to be returned to user space.
+> 
+>>
+>> The pwrkey compatible is left to PM8921, unlike the others because
+>> the interface is stricly compatible with the PM9821 pwrkey.
+> 
+> typo: strictly
+> typo: PM8921
+> 
+> Again, why? The old code looked correct. In all three places.
 
-* https://www.kernel.org/doc/html/latest/filesystems/sysfs.html
+The qcom,pm8018-rtc require a single compatible, same for qcom,pm8018, so what's the way to fix it ?
 
-I don't know whether it may apply to this subsystem.  I have to read
-more about it and test
+> 
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>
+> 
+> Best regards,
+> Krzysztof
+> 
+Thanks,
+Neil
 
-thanks
-jules
