@@ -2,78 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2015EF0F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8295EF10B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235140AbiI2Izl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
+        id S235668AbiI2I5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234259AbiI2Izi (ORCPT
+        with ESMTP id S235639AbiI2I5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:55:38 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC81A61736
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:55:32 -0700 (PDT)
-Received: from loongson-pc.loongson.cn (unknown [10.20.42.32])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxFeKCXTVjuLIjAA--.3552S2;
-        Thu, 29 Sep 2022 16:55:30 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-Subject: [PATCH V3] LoongArch: Fix cpu name after s3/s4
-Date:   Thu, 29 Sep 2022 16:55:30 +0800
-Message-Id: <20220929085530.8742-1-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Thu, 29 Sep 2022 04:57:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3688EEF085;
+        Thu, 29 Sep 2022 01:57:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22D2CB823C8;
+        Thu, 29 Sep 2022 08:57:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68BC2C433D6;
+        Thu, 29 Sep 2022 08:57:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664441826;
+        bh=AB9OBY5Q/XflWMZEjGozmUCmyCSOHdzr9/Xwke2HRv4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dffSs2Rj/KWFa80GhJnSSBe+iznLMBr3NPAxLCx0A1gjoxQlImpAsZnx1j5w9b40F
+         Eph18owQWi1Bxcge1T8ZNkpQphOqefizXcurvioFIbQH6Odqc9ggdpRUs57XcdtDb5
+         aM6aNtHoASOVZPgz5/ZmXjtXTlH8VV/oUN+fyjtcNz8yGMfJG2m0lnPRyhzAwvfrd6
+         Ez7/R1bUz+jaTTtueRhwBJRWoCa3MaAfedfpgyPdIEyShPScOTTBk4XPtnp3lUVjET
+         dhgg388O4vhnFwSAIs8BeLkBgeQoMnUj4H0M8BxXkapEeRSEaSVcgGQg8cdIN125wW
+         FL4gowVrJL4PA==
+Date:   Thu, 29 Sep 2022 10:57:00 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     a.fatoum@pengutronix.de, l.stach@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, vkoul@kernel.org,
+        marcel.ziswiler@toradex.com, kishon@ti.com,
+        linux-phy@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Subject: Re: [PATCH v3] phy: freescale: imx8m-pcie: Fix the wrong order of
+ phy_init() and phy_power_on()
+Message-ID: <YzVd3GAtpd0ipMAu@lpieralisi>
+References: <1662344583-18874-1-git-send-email-hongxing.zhu@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxFeKCXTVjuLIjAA--.3552S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZF4xZry8Zr47Ar13GFWfXwb_yoWfCwb_Ga
-        n29anrG3Z3Ga40va4DXF18Ww43J3W8XFyYv3y2y39xCr43Aw45Xr4DKw13AryayF1rWrZ8
-        uw4S9FnruF4YkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcAYjsxI4VWkKwAYFVCjjxCrM7CY07I20VC2zVCF04k26cxKx2IY
-        s7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4
-        kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_
-        Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI
-        0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK82IY
-        6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUqs2-DUUUU
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1662344583-18874-1-git-send-email-hongxing.zhu@nxp.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On coming back from s3/s4, the cpu name will be overwritten
-in cpu_probe path of seconary cpu, so we don't overwrite it
-if it has been initialized.
+On Mon, Sep 05, 2022 at 10:23:03AM +0800, Richard Zhu wrote:
+> Refer to phy_core driver, phy_init() must be called before phy_power_on().
+> Fix the wrong order of phy_init() and phy_power_on() here.
+> 
+> Fixes: 1aa97b002258 ("phy: freescale: pcie: Initialize the imx8 pcie standalone phy driver")
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Acked-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>  drivers/pci/controller/dwc/pci-imx6.c      | 6 +++---
+>  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 8 ++++----
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+Who is picking this up ? I believe this is supposed to
+go via the PHY tree, so:
 
-diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
-index 529ab8f44ec6..255a09876ef2 100644
---- a/arch/loongarch/kernel/cpu-probe.c
-+++ b/arch/loongarch/kernel/cpu-probe.c
-@@ -187,7 +187,9 @@ static inline void cpu_probe_loongson(struct cpuinfo_loongarch *c, unsigned int
- 	uint64_t *vendor = (void *)(&cpu_full_name[VENDOR_OFFSET]);
- 	uint64_t *cpuname = (void *)(&cpu_full_name[CPUNAME_OFFSET]);
- 
--	__cpu_full_name[cpu] = cpu_full_name;
-+	if (!__cpu_full_name[cpu])
-+		__cpu_full_name[cpu] = cpu_full_name;
-+
- 	*vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
- 	*cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
- 
--- 
-2.31.1
+Acked-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
 
+> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+> index 6e5debdbc55b..b5f0de455a7b 100644
+> --- a/drivers/pci/controller/dwc/pci-imx6.c
+> +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> @@ -935,7 +935,7 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
+>  	}
+>  
+>  	if (imx6_pcie->phy) {
+> -		ret = phy_power_on(imx6_pcie->phy);
+> +		ret = phy_init(imx6_pcie->phy);
+>  		if (ret) {
+>  			dev_err(dev, "pcie PHY power up failed\n");
+>  			goto err_clk_disable;
+> @@ -949,7 +949,7 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
+>  	}
+>  
+>  	if (imx6_pcie->phy) {
+> -		ret = phy_init(imx6_pcie->phy);
+> +		ret = phy_power_on(imx6_pcie->phy);
+>  		if (ret) {
+>  			dev_err(dev, "waiting for PHY ready timeout!\n");
+>  			goto err_phy_off;
+> @@ -961,7 +961,7 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
+>  
+>  err_phy_off:
+>  	if (imx6_pcie->phy)
+> -		phy_power_off(imx6_pcie->phy);
+> +		phy_exit(imx6_pcie->phy);
+>  err_clk_disable:
+>  	imx6_pcie_clk_disable(imx6_pcie);
+>  err_reg_disable:
+> diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> index ad7d2edfc414..c93286483b42 100644
+> --- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> +++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> @@ -59,7 +59,7 @@ struct imx8_pcie_phy {
+>  	bool			clkreq_unused;
+>  };
+>  
+> -static int imx8_pcie_phy_init(struct phy *phy)
+> +static int imx8_pcie_phy_power_on(struct phy *phy)
+>  {
+>  	int ret;
+>  	u32 val, pad_mode;
+> @@ -137,14 +137,14 @@ static int imx8_pcie_phy_init(struct phy *phy)
+>  	return ret;
+>  }
+>  
+> -static int imx8_pcie_phy_power_on(struct phy *phy)
+> +static int imx8_pcie_phy_init(struct phy *phy)
+>  {
+>  	struct imx8_pcie_phy *imx8_phy = phy_get_drvdata(phy);
+>  
+>  	return clk_prepare_enable(imx8_phy->clk);
+>  }
+>  
+> -static int imx8_pcie_phy_power_off(struct phy *phy)
+> +static int imx8_pcie_phy_exit(struct phy *phy)
+>  {
+>  	struct imx8_pcie_phy *imx8_phy = phy_get_drvdata(phy);
+>  
+> @@ -155,8 +155,8 @@ static int imx8_pcie_phy_power_off(struct phy *phy)
+>  
+>  static const struct phy_ops imx8_pcie_phy_ops = {
+>  	.init		= imx8_pcie_phy_init,
+> +	.exit		= imx8_pcie_phy_exit,
+>  	.power_on	= imx8_pcie_phy_power_on,
+> -	.power_off	= imx8_pcie_phy_power_off,
+>  	.owner		= THIS_MODULE,
+>  };
+>  
+> -- 
+> 2.25.1
+> 
