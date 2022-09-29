@@ -2,144 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7FE5EF4BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17745EF4BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235410AbiI2LvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
+        id S235478AbiI2LwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235090AbiI2LvL (ORCPT
+        with ESMTP id S235090AbiI2LwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:51:11 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7664C115A45
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:51:10 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28TAHABR010789;
-        Thu, 29 Sep 2022 11:51:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=A4zCAojyhaX0zj1bMbcNKc6QlqyIXmr15eUuzkx5w0s=;
- b=kxZ6yFlBmtnv4l2VX5aWSJPkvB/hVcaxeIRtS0dtOrtbjMIEoAm3scJ6Q36KJO7aW0R7
- RwFzbLLqxFB6zX7vPf55Ougyuv8ZbszpPlYIWbMqBMDywFFhVwmwf6OcV9pNMnD4d4xu
- 9fIqcwp+tr5CzwkZLWkdK1egl1qrE3tkXjy9UqpaLBfQZs8Elg9F743mX6UUP/jerj+i
- kmf2oViycp5A2ma8EKqrk53RB53VjPwAg5O2/PA/8O5RuLv+BhSHrJMd3Y8bnewaM3Gx
- EhvD59ZXekLpQDXfhBhwnbB1W/F1rnzjfYjr1OlM3JW0Qke7WtROpdc6XMPu/Od91Rm7 Yw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jw9fs2dmg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 11:51:07 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28TBIEkT028956;
-        Thu, 29 Sep 2022 11:51:07 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jw9fs2dkh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 11:51:06 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28TBZmZd018885;
-        Thu, 29 Sep 2022 11:51:05 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3jss5j6mur-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 11:51:05 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28TBp2dY27001252
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Sep 2022 11:51:02 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9B16B11C058;
-        Thu, 29 Sep 2022 11:51:02 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 58ACC11C052;
-        Thu, 29 Sep 2022 11:51:02 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.242])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 29 Sep 2022 11:51:02 +0000 (GMT)
-Date:   Thu, 29 Sep 2022 13:51:00 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     xu.xin.sc@gmail.com, akpm@linux-foundation.org,
-        imbrenda@linux.vnet.ibm.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, xu xin <xu.xin16@zte.com.cn>
-Subject: Re: [PATCH 0/3] ksm: fix incorrect count of merged pages when
- enabling use_zero_pages
-Message-ID: <20220929135100.5efe6229@p-imbrenda>
-In-Reply-To: <889909f6-f2db-f34a-0305-eb8500dd5453@redhat.com>
-References: <20220929025206.280970-1-xu.xin16@zte.com.cn>
-        <20220929124242.60ef57ee@p-imbrenda>
-        <889909f6-f2db-f34a-0305-eb8500dd5453@redhat.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 29 Sep 2022 07:52:14 -0400
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D3D151B10;
+        Thu, 29 Sep 2022 04:52:12 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id C4D0A20512;
+        Thu, 29 Sep 2022 13:52:09 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 7K7laf0zoUhi; Thu, 29 Sep 2022 13:52:09 +0200 (CEST)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id 351E12050A;
+        Thu, 29 Sep 2022 13:52:09 +0200 (CEST)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout2.secunet.com (Postfix) with ESMTP id 2557B80004A;
+        Thu, 29 Sep 2022 13:52:09 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 13:52:08 +0200
+Received: from [172.18.157.49] (172.18.157.49) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 29 Sep
+ 2022 13:52:08 +0200
+To:     Steffen Klassert <steffen.klassert@secunet.com>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From:   Christian Langrock <christian.langrock@secunet.com>
+Subject: [PATCH ipsec v4] xfrm: replay: Fix ESN wrap around for GSO
+Autocrypt: addr=christian.langrock@secunet.com; keydata=
+ mQENBFee7jkBCACkeMIuzZu/KBA1q3kKGr7d9iiZGF5IpJnIE9dMiK3uaz7uM26VSTJVp6jd
+ GuSGGGmb81OSLEcIEIsYKXvjblAKUX1A74t3WMRcky3MwJbmN6AkN8QlP45mDddtPRf1ElB2
+ S32i9OrEkvw8xcvHYPwbaHenXic4/8fHWEh+vtd/5/5TDTIU/ag9tQfPea13ixXN0PuccMub
+ FeUMpwFCg324+Z19iGvfDWWZmQQGlBjc3Q6z0hXOb/deWL/+lPS4t+tTgpmmZO4XkIs+18Kq
+ xCVukCbnqV0y+04sj3G1GQ/DlGvZHxwywBceAL7BvmdeXQKAS0KRL5zrghIBCgnUyutDABEB
+ AAG0M0NocmlzdGlhbiBMYW5ncm9jayA8Y2hyaXN0aWFuLmxhbmdyb2NrQHNlY3VuZXQuY29t
+ PokBNwQTAQgAIQUCV57uOQIbAwULCQgHAgYVCAkKCwIEFgIDAQIeAQIXgAAKCRCjeMdfgutr
+ Xu3kCACIBx6UHReBtBciNUPkP3fRaGeSOADIrql72VKD9faLAHTt6w8kvyzb8Ctpa77jswJt
+ 21c349mF3maPlpNtpswqH27bTlXYhNcXxcmHPCbNtN3yGUy0UuIJfBMZc8PLqiqYoY5GKD3u
+ imeVbDYjgNhebO2f1cUvwY2wTwX6b0tgKVK0xYYTDpXI1/2MVGsjXqak7PQoqVq0sDu0gIAA
+ i1QO0Fbb6jIaHj6CEM2hpBTBk8qbkPs/MqYGdLl4oXvkWTLduQjm6dMtjxvIt6WJWZQbLjTe
+ QIfc21luNQKDmfT623pVTPPMMAciWfpdw63FblfGcfBnAKCJ8JBj0z9T6/PmuQENBFee7jkB
+ CADS7amJPbY2dWpeGtE+I9yLL53lSriP4L6rI9UoEwNM1OkjnB7wFnH8dm8N68K2OJogkHwo
+ X2OnzGhxJ28NHRuAh++3hIYY+gU4HMLaX3onDK1oqAdYczhJ7f6UCPbYaghkzJ6Vg/FEWpA8
+ u5vG/BX4y+F3/Y98l6mzAX5wLmTapRwdfuRCXRA6jlIHIOwP3NPKK4Pz2E7witsimV1ucN4u
+ XFiZ36CUPAiXXlER9iPZnQUSyCobqJOJKm4C7wUNQ1negCXDBd3KjSyzTIafw/oYG4RrWGul
+ iI2ig/qTUC8cZdAJTMBjUJR6ugJazMB1Rg17p2GRD0AzUOV2qdqYFqQFABEBAAGJAR8EGAEI
+ AAkFAlee7jkCGwwACgkQo3jHX4Lra17vtQgAg2g0JEXVTGT36BDJgVjIUY1evnm1fWwTPpco
+ kP/8/aO2ubmlxtWQ2hV5OPfL5nDday2S4Nq5j3kqQq+rvUrORVmvT4WxYZM1fr2nibuzaUbs
+ JtxphNpjahrsEcLLTzBW4CbHTaL4YTT+ZD/GDeHoxAh9JfMkdMBXHyWTuw+QSP0pp7WvNsDo
+ sukKFyQ0rve9PH2dry6A0oLP7UxtAzEERV2Se0BueZPQuVnU6Cvj3ZStK28JDhMjxIPkZPE5
+ kCV8QNF8OsiwymA3aoPKe5Bw0lOcjuuJkxRa5bazyuubX9pIIgTeGsecgpSgpfA9jsEHKFqo
+ LuxUA+77VQ5hSydVaQ==
+Message-ID: <778339a5-e069-0755-8287-75e39d8050e0@secunet.com>
+Date:   Thu, 29 Sep 2022 13:52:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3t-joj1E5mP_f9Zr0iiO100prQXRdrQW
-X-Proofpoint-ORIG-GUID: SpT5_yv5EgnrGPhGOJUdrKpT7JLPOAdV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-29_06,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 mlxlogscore=642 spamscore=0 clxscore=1015
- lowpriorityscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
- mlxscore=0 adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2209290071
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sep 2022 13:34:24 +0200
-David Hildenbrand <david@redhat.com> wrote:
+When using GSO it can happen that the wrong seq_hi is used for the last
+packets before the wrap around. This can lead to double usage of a
+sequence number. To avoid this, we should serialize this last GSO
+packet.
 
-> On 29.09.22 12:42, Claudio Imbrenda wrote:
-> > On Thu, 29 Sep 2022 02:52:06 +0000
-> > xu.xin.sc@gmail.com wrote:
-> >   
-> >> From: xu xin <xu.xin16@zte.com.cn>
-> >>
-> >> Before enabling use_zero_pages by setting /sys/kernel/mm/ksm/
-> >> use_zero_pages to 1, pages_sharing of KSM is basically accurate. But
-> >> after enabling use_zero_pages, all empty pages that are merged with
-> >> kernel zero page are not counted in pages_sharing or pages_shared.  
-> > 
-> > that's because those pages are not shared between different processes.  
-> 
-> They are probably the most shared pages between processes in the kernel. 
+Fixes: d7dbefc45cf5 ("xfrm: Add xfrm_replay_overflow functions for...")
+Signed-off-by: Christian Langrock <christian.langrock@secunet.com>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+---
+Changes in v4:
+ - move changelog within comment
+ - add reviewer
 
-shared from the kernel, though, not from other processes (that's what I
-meant)
+Changes in v3:
+- fix build
+- remove wrapper function
 
-> They are simply not KSM pages, that's what makes accounting tricky here.
+Changes in v2:
+- switch to bool as return value
+- remove switch case in wrapper function
+---
+ include/net/xfrm.h     |  1 +
+ net/xfrm/xfrm_output.c |  2 +-
+ net/xfrm/xfrm_replay.c | 26 ++++++++++++++++++++++++++
+ 3 files changed, 28 insertions(+), 1 deletion(-)
 
-exactly. and those pages get shared all the time even without KSM, so
-why care about those now?
+diff --git a/include/net/xfrm.h b/include/net/xfrm.h
+index 6e8fa98f786f..b845f911767c 100644
+--- a/include/net/xfrm.h
++++ b/include/net/xfrm.h
+@@ -1749,6 +1749,7 @@ void xfrm_replay_advance(struct xfrm_state *x, __be32 net_seq);
+ int xfrm_replay_check(struct xfrm_state *x, struct sk_buff *skb, __be32 net_seq);
+ void xfrm_replay_notify(struct xfrm_state *x, int event);
+ int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb);
++bool xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb);
+ int xfrm_replay_recheck(struct xfrm_state *x, struct sk_buff *skb, __be32 net_seq);
+ 
+ static inline int xfrm_aevent_is_on(struct net *net)
+diff --git a/net/xfrm/xfrm_output.c b/net/xfrm/xfrm_output.c
+index 9a5e79a38c67..c470a68d9c88 100644
+--- a/net/xfrm/xfrm_output.c
++++ b/net/xfrm/xfrm_output.c
+@@ -738,7 +738,7 @@ int xfrm_output(struct sock *sk, struct sk_buff *skb)
+ 		skb->encapsulation = 1;
+ 
+ 		if (skb_is_gso(skb)) {
+-			if (skb->inner_protocol)
++			if (skb->inner_protocol || xfrm_replay_overflow_check(x, skb))
+ 				return xfrm_output_gso(net, sk, skb);
+ 
+ 			skb_shinfo(skb)->gso_type |= SKB_GSO_ESP;
+diff --git a/net/xfrm/xfrm_replay.c b/net/xfrm/xfrm_replay.c
+index 9277d81b344c..23858eb5eab4 100644
+--- a/net/xfrm/xfrm_replay.c
++++ b/net/xfrm/xfrm_replay.c
+@@ -750,6 +750,27 @@ int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb)
+ 
+ 	return xfrm_replay_overflow_offload(x, skb);
+ }
++
++static bool xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb)
++{
++	struct xfrm_replay_state_esn *replay_esn = x->replay_esn;
++	__u32 oseq = replay_esn->oseq;
++
++	/* We assume that this function is called with
++	 * skb_is_gso(skb) == true
++	 */
++
++	if (x->repl_mode == XFRM_REPLAY_MODE_ESN) {
++		if (x->type->flags & XFRM_TYPE_REPLAY_PROT) {
++			oseq = oseq + 1 + skb_shinfo(skb)->gso_segs;
++			if (unlikely(oseq < replay_esn->oseq))
++				return true;
++		}
++	}
++
++	return false;
++}
++
+ #else
+ int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb)
+ {
+@@ -764,6 +785,11 @@ int xfrm_replay_overflow(struct xfrm_state *x, struct sk_buff *skb)
+ 
+ 	return __xfrm_replay_overflow(x, skb);
+ }
++
++bool xfrm_replay_overflow_check(struct xfrm_state *x, struct sk_buff *skb)
++{
++	return false;
++}
+ #endif
+ 
+ int xfrm_init_replay(struct xfrm_state *x)
+-- 
+2.37.1.223.g6a475b71f8
 
-does it make a difference why a page is a zero page?
-
-> 
-> >   
-> >> That is because the rmap_items of these ksm zero pages are not
-> >> appended to The Stable Tree of KSM.
-> >>
-> >> We need to add the count of empty pages to let users know how many empty
-> >> pages are merged with kernel zero page(s).  
-> > 
-> > why?
-> > 
-> > do you need to know how many untouched zero pages a process has?
-> > 
-> > does it make a difference if the zero page is really untouched or if it
-> > was touched in the past but it is now zero?  
-> 
-> I'd also like to understand the rationale. Is it about estimating memory 
-> demands when each and every shared page could get unshared?
-> 
 
