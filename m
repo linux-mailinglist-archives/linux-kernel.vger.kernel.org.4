@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C6B5EFA4F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF605EFA48
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236259AbiI2QV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
+        id S236330AbiI2QVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236128AbiI2QUf (ORCPT
+        with ESMTP id S236248AbiI2QUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:20:35 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBFB26AF4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:19:47 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-353fbfa727cso19698747b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:19:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=cZG4VxDd4FzBz/EOsma58nLK/qNyK8iWP/Ncqazkjcw=;
-        b=ia066oiLFSG4ooKCn0+TTOISUXJotPk/M95/srhxi0SdL8NN7xhHIKFtRLyHlrm9Lo
-         uZY3gmvTBrjkGxQMUqJj4fhop8hYpmzqmQFxAwsuvvR7iNaES//9VjNYrRYuLNnmf+LI
-         XcJi5TwxeuHSWkICh7IYBPrGWzP99gXAW1BGZtOTADuV0wFI6YA4aI5XU2E3t6l21MRE
-         zy3qMaUGKRJ+rybVBZTtZikfGa5WoHeNt48sTKhqzehvu89Ts9mCNce7cZTB1W77OLIN
-         A13pB32QJzEN02VrcxMuUj10iTRUgyj8KN88XdAzgd8nAe+AbujfvW7UKbLLiRlw3888
-         lLNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=cZG4VxDd4FzBz/EOsma58nLK/qNyK8iWP/Ncqazkjcw=;
-        b=Y27QvT2J0VW54MaMmdJ3UbVkeZcZiqg2jtNRcjLQubXx8wvtfWZsk0oVYeyatZlOYN
-         2XSj0GU/ECyORm+vmUNkrQGLo2LPjnSOsiQT+yVZMIIhhnMq9eKbv1kFcdSXgEfBfCzW
-         tY2rBfkjZgQyD+MaVHuViiaeZ6ImUcYc5Q/6c39lK49L2HMHBUh0KjsMl6pocgc/xnbm
-         fDJBZJIt2cqq2yHlDEwc2wcC5oTToctTVLwGtVaU4sMnWCPkr9PoMiMeG9reFpDyq81X
-         vPOS+/C/Sr4aruuwkZYSnQwmOiKENYpmGm63uH50RVTXcujnzjqAQmxVWzSpIly907bP
-         doNg==
-X-Gm-Message-State: ACrzQf1cu+0I85SG6gbgevY1X37YVuljyZCMxaXyJu0nO0dsGecb/Jos
-        26z3DloTLy2C9VmLQuQGgWlJ0t5cI3i9p0suBJ8nKw==
-X-Google-Smtp-Source: AMsMyM7k11Sfaya3SVmICF2kDIBihBAwUGo68c0f5VKKse+QC+PKe9le7kM/4m4rVpLmvfJ9+Vzew1v/JoSp1yy6fNg=
-X-Received: by 2002:a81:6756:0:b0:345:525e:38 with SMTP id b83-20020a816756000000b00345525e0038mr4057628ywc.47.1664468386499;
- Thu, 29 Sep 2022 09:19:46 -0700 (PDT)
+        Thu, 29 Sep 2022 12:20:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44852253D;
+        Thu, 29 Sep 2022 09:19:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9EC2B81E59;
+        Thu, 29 Sep 2022 16:19:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E2BEC433D6;
+        Thu, 29 Sep 2022 16:19:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664468382;
+        bh=a2NGbV0KNZ4CqbaOXaD8TLvI2KNvPxg0PZC3tUgSAXs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YQQkiBB0DRXdQ2K9agjn79HAWa4krFA9RP2nzH5BOZUjA9v563VRs1jAXTryMyM84
+         JrNhfq4xfgy8RacwJzmibVTpEQ0IL0YSrzVLLaa4heLnw24y2I3Vhs3T6ez9iQRXX2
+         Vr5qGLq1xoWRoyQKQH35/LcwMDQhllgfPyoeegsNtLhxs2vaKew/05nGxwDzEKsmp9
+         C1Z9cTVf+KWAkj2XiiW0Itac70ENUM9yRKiez+PiQKO90f8e5WMNAPPxHmDiOpbBJW
+         ZeGwqWI4Wzf9ysRHoUhUXeYjhPpoL+Df5Q0n2ADiC86wa8XAZ8K48p6aHEXDkP0MwM
+         i4M3RwO1l5Fig==
+Date:   Thu, 29 Sep 2022 17:19:37 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
+Subject: Re: selftest: arm64: missing install files
+Message-ID: <YzXFmT1qYz6inFrC@sirena.org.uk>
+References: <CA+G9fYuw3Xn2wPc3_MXsJFNx7O4Zu91wFt+VsK4qwKMB7HdGow@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220928221514.27350-1-yepeilin.cs@gmail.com>
-In-Reply-To: <20220928221514.27350-1-yepeilin.cs@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 29 Sep 2022 09:19:34 -0700
-Message-ID: <CANn89iKJpWK9hWLPhfCYNcVUPucpgTf7s_aYv4uiQ=xocmE5WA@mail.gmail.com>
-Subject: Re: [PATCH net-next] net/sock: Introduce trace_sk_data_ready()
-To:     Peilin Ye <yepeilin.cs@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="33saO4ZIu08nOG3h"
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYuw3Xn2wPc3_MXsJFNx7O4Zu91wFt+VsK4qwKMB7HdGow@mail.gmail.com>
+X-Cookie: Last week's pet, this week's special.
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 3:15 PM Peilin Ye <yepeilin.cs@gmail.com> wrote:
->
-> From: Peilin Ye <peilin.ye@bytedance.com>
->
-> As suggested by Cong, introduce a tracepoint for all ->sk_data_ready()
-> and ->saved_data_ready() call sites.  For example:
->
-> <...>
->   cat-7011    [005] .....    92.018695: sk_data_ready: family=16 protocol=17 func=sock_def_readable
->   cat-7012    [005] .....    93.612922: sk_data_ready: family=16 protocol=16 func=sock_def_readable
->   cat-7013    [005] .....    94.653854: sk_data_ready: family=16 protocol=16 func=sock_def_readable
-> <...>
->
-> Suggested-by: Cong Wang <cong.wang@bytedance.com>
-> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
 
-I will not comment on if/why these tracepoints are useful, only on the
-way you did this work.
+--33saO4ZIu08nOG3h
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I would rather split this in two parts.
+On Thu, Sep 29, 2022 at 09:03:54PM +0530, Naresh Kamboju wrote:
 
-First patch adding and using a common helper.
+> While running kselftest arm64 tests the following list of tests
+> were missing which means those test binaries not installed on to the rootfs.
+> Not a part of "make install" do we need to fix Makefiles ?
+> or am I missing something on the build machine ?
 
-static inline void sock_data_ready(struct sock *sk)
-{
-     sk->sk_data_ready(sk);
-}
+There's probably an issue in either the build system or in how you're
+using it.  I'd guess if there is an issue in the source it's in the
+generic kselftest stuff rather than something arm64 specific.
 
-s/sk->sk_data_ready(sk)/sock_data_ready(sk)/
+> We are building on the one machine and testing on multiple arm64 target
+> devices. Please refer to build log [1] and test log [2].
 
+The build log does not seem to include the command used to start the
+kselftest build and I'm not clear that it includes anything from the
+install step at all, never mind the command for it.  As far as I can
+tell everything built fine and something that was done between the build
+and trying to run the tests didn't work as expected but there doesn't
+appear to be any information about that part of the process.
 
-Second patch adding the tracing point once in the helper ?
+An example of a build which builds all expected executables and installs
+them into a tarball for deployment on a system can be seen here:
 
-Alternatively, why not add the tracepoint directly in the called
-functions (we have few of them),
-instead of all call points ?
+https://storage.kernelci.org/mainline/master/v6.0-rc7/arm64/defconfig%2Bkselftest/gcc-10/logs/kselftest.log
+
+--33saO4ZIu08nOG3h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmM1xZgACgkQJNaLcl1U
+h9BzIggAhAO2Zs+LoHq9Y2Mv6ukTR9Ov5khaZ3FqGWR711cAKf6nH2I2A53kXs7A
+SAB1kfoymnsGkkKGD1XYchfcK5J+F+MAh9KTET878gWhHiF29AZzhWIX+LCn9xZ5
+nG2JE2mMb9lWTtlsUlRGXHQ8cRnkpq1dZIneVw6lqeQxMUZh8XFI9P4+l0pHcnPi
+EmWeLn69wV62Y+Zo8qdlAQfPjFtVYl1HEkdldnzbDZnWuGlZl4jJzqiQ/l9QrhLk
+S06FJF0h70rGrWiyQ7T3zcQ9qtOlSDqUqbqw71iN2sr1h5CPTMVw9cX3J9UVNTZQ
+yWTz03UbHESNlHnIYNfN2UE97ZsWiA==
+=2rQl
+-----END PGP SIGNATURE-----
+
+--33saO4ZIu08nOG3h--
