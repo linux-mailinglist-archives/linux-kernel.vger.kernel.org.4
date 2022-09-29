@@ -2,76 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A5E5EEB05
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2CD5EEB04
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 03:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbiI2Beo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 21:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
+        id S233739AbiI2Bet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 21:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234496AbiI2BeY (ORCPT
+        with ESMTP id S234386AbiI2BeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 21:34:24 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F3C11D618;
-        Wed, 28 Sep 2022 18:34:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=WgYp4kgX3yzN0Gagvg7OxRHJp7EnJoIu8HNLaefuSRI=; b=prISs92iTwutWRn1Fm3DmUw5Fu
-        2U1o9LPTgITB8C9gSMMzmcb6DqZMsRADRVEJj4aFKKRt0R0FzPKI/zcCb+2NGvNLIt2Qx12R0YvsM
-        2JRT1Oz+2pY/9iqN5VCfU5Qwg35TmA7I1TWmQUsBM25IdKKw2LAC0dkRxlFkQFQ3R0xU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1odiR0-000ZNQ-DM; Thu, 29 Sep 2022 03:33:54 +0200
-Date:   Thu, 29 Sep 2022 03:33:54 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev
-Subject: Re: [PATCH 1/1] net: fec: add initial XDP support
-Message-ID: <YzT2An2J5afN1w3L@lunn.ch>
-References: <20220928152509.141490-1-shenwei.wang@nxp.com>
+        Wed, 28 Sep 2022 21:34:25 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E809F11E5EC;
+        Wed, 28 Sep 2022 18:34:24 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id x1so13178180plv.5;
+        Wed, 28 Sep 2022 18:34:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=NZxJcimCXLVWvl+T+yH2DTD79AYos60dAJ+wLL/AOns=;
+        b=T3lUt1qgENC+2DKuD+zvICEpG19ijUbIICzufyC3DJ4sci671Lz6qquPCPDh7cm96z
+         caviaG+FExIvKJVFOW01C10vQhu3VOSpQrkoL2FBvL9wewG5jP9T3zuibTu3Ihuhq/XD
+         bRQL2CNew6ieAjPm1rrWnqyiTTTvvdnsw9PsiK0jsEuAKBDfrIcM7dpazVd0xoWuo8sE
+         1GgVcJ+fuowF4GX8iYMhiTcL4Kq8opLn/fGOzFgnbWNYla1358+bhDDKjEp3magtnKwb
+         yB65ubuGzZJiEQGw8v644A9+yYDjLmqt0o8TrQq8xyVCeD29d+E6INPlW0KU1lKUOTEZ
+         tOrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=NZxJcimCXLVWvl+T+yH2DTD79AYos60dAJ+wLL/AOns=;
+        b=CeMfTxxwuImzEupi4c1Zg3QFVEOVPeMaVW0iZKBlhoMfpfkt3hCAWknJimHRZNoarl
+         DO6J0tzYxW3ux2huR1y8ougFPk+93K2R7P5yOVM2FuVMisGfDg0arUKIP/fdPL4hFZuL
+         3YhSKLAHJCPoRSRJSAs94IVv6d0RriiAZyqTPi1w33G9xGUdfMt2Cmw8cd1+z8x4MEvh
+         Zv4RxG+qlKBNCvOB1Ie6RTrEjAn+gRGahdOnZ1ZUEGpTp4YNLqRhNSsUxU0xA1cSeONA
+         dCcxG9PcnWb753pfC6Fmn3n2boZJKh7hxeiujsKo90geFBTlVHGwgTZNqdH5dxBv1QSw
+         HoBw==
+X-Gm-Message-State: ACrzQf1FxFyb85WBYa3txFBebkcid18/XFCdjpPOYKJGESHUBiDWzMdt
+        d3cxMfA2yKj1iTDNkIpnjMA=
+X-Google-Smtp-Source: AMsMyM74d6NE2XzzWC0POoflHjXzdlavoKR8s/vtRHmBRvghpsj9JJpbJ01AHZZJHLn5VVrQpduqhg==
+X-Received: by 2002:a17:90b:2bd3:b0:203:1a03:6b1b with SMTP id ru19-20020a17090b2bd300b002031a036b1bmr941479pjb.58.1664415264251;
+        Wed, 28 Sep 2022 18:34:24 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:637c:7f23:f348:a9e6])
+        by smtp.gmail.com with ESMTPSA id e11-20020a17090301cb00b00172ea8ff334sm4546657plh.7.2022.09.28.18.34.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 18:34:23 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 18:34:21 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Nate Yocom <nate@yocom.org>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hadess@hadess.net, benjamin.tissoires@redhat.com
+Subject: Re: [PATCH v6 0/5] Input: joystick: xpad: Add X-Box Adaptive
+ Controller support
+Message-ID: <YzT2HZjEOd/sg1oB@google.com>
+References: <20220908173930.28940-1-nate@yocom.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220928152509.141490-1-shenwei.wang@nxp.com>
+In-Reply-To: <20220908173930.28940-1-nate@yocom.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 10:25:09AM -0500, Shenwei Wang wrote:
-> This patch adds the initial XDP support to Freescale driver. It supports
-> XDP_PASS, XDP_DROP and XDP_REDIRECT actions. Upcoming patches will add
-> support for XDP_TX and Zero Copy features.
+On Thu, Sep 08, 2022 at 10:39:25AM -0700, Nate Yocom wrote:
+> Adds support for the X-Box Adaptive Controller, which is protocol
+> compatible with the XTYPE_XBOXONE support in the driver with two deltas:
 > 
-> This patch also optimizes the RX buffers by using the page pool, which
-> uses one frame per page for easy management. In the future, it can be
-> further improved to use two frames per page.
+>  - The X-Box button sets 0x02 as its activation ID, where others set
+>    0x01
+>  - The controller has an additional Profile button with 4 active states,
+>    which this change maps to an Axis control with 4 possible values
+> 
+> Patch series adds device to the supported table, adds support for the
+> Profile button, and adds support for the X-Box button as distinct
+> changes.
+> 
+> Signed-off-by: Nate Yocom <nate@yocom.org>
+> 
+> Nate Yocom (5):
+>   Input: joystick: xpad: Add X-Box Adaptive support
+>   Input: joystick: xpad: Add X-Box Adaptive XBox button
+>   Input: joystick: xpad: Add ABS_PROFILE to uapi
+>   Input: joystick: xpad: Add ABS_PROFILE to Docs
+>   Input: joystick: xpad: Add X-Box Adaptive Profile button
 
-Please could you split this patch up. It is rather large and hard to
-review. I think you can first add support for the page pool, and then
-add XDP support, for example. 
+Combined patches 3 and 4 and applied the lot, thank you.
 
-I would be interesting to see how the page pool helps performance for
-normal traffic, since that is what most people use it for. And for a
-range of devices, since we need to make sure it does not cause any
-regressions for older devices.
-
-	    Andrew
+-- 
+Dmitry
