@@ -2,73 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA38F5EF1E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E755EF1E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235043AbiI2JZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 05:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
+        id S235269AbiI2J0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 05:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234886AbiI2JZ1 (ORCPT
+        with ESMTP id S235154AbiI2JZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:25:27 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0C676971;
-        Thu, 29 Sep 2022 02:25:24 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8446366022B4;
-        Thu, 29 Sep 2022 10:25:22 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664443523;
-        bh=qCJlWCzZUOjlbWhUBr+CjY4sGdMeJ1qenSLOO28pr3Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LO/GFqKuGCASvKu0rA1gy3hLof1Q7Ud3Oy1HSNPRtfDtnfSyP/cg6zkjBtI9uJJmH
-         b0+rhEmqlTR36W5AeatLZSTYpKtwXueOCXLuX2OCLIV6oF2I7GwcUi+G5tPxzSS96P
-         X7mnXMU766MFUsCwZSXr/IUjvD++RJy3h4EtWX+2K7AMjNX4az3cd5GuhTF7dHv4aj
-         Me9R0v8J2MdFArLgh928AQzFcfbf8owpK8jUFt1AWSWmubcK6NIolsse3jgVf2cUiX
-         ETRIdFG9wb7rkFWn3sEj+7ar2mJAf+iVYgSPt9o5dF/tQnrhB/GzzNabNSLeAMRXgZ
-         5Q0ICPrtRx1Zw==
-Message-ID: <aed50d17-3010-a5ee-a19d-14bfe5e6ac3d@collabora.com>
-Date:   Thu, 29 Sep 2022 11:25:20 +0200
+        Thu, 29 Sep 2022 05:25:48 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB63610FE16;
+        Thu, 29 Sep 2022 02:25:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664443545; x=1695979545;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=mOKSZ4gt8N3oR2TFgzHf+H1VytXoQVKrtFoK/lXXaQ4=;
+  b=AO45MrGI3bWm9dmOJYsjQEuMNeTCSLuAYRBVITr44LOU7W97Pk84qh9A
+   ftfVJjkDEUdWy67WMUsiGYCehmZsCpge4IrQSmOiHiMGHn1XN8l/heiZl
+   S+edYX189Syzd5vnnZWP/gsTu8/GPVgrtUCt8wAxYyOMl1NX3TqzWhVSo
+   aX6eZIZUfJM0gIIN6+qfiY6MkuokmMqW0UXWg4azTBGCYLKD9NcprkEbI
+   KFhYBipuevjcOVo+YT5jMh7ihwU02j09gszMcPx6azbyNOHTg8meuQJcu
+   sAOu7/zxIqV1DU2wr8vu2rglVDbbXWroXrUbZQQ7eiobaeJclf6ZklLC8
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="303329359"
+X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
+   d="scan'208";a="303329359"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 02:25:43 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="573386024"
+X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
+   d="scan'208";a="573386024"
+Received: from pramona-mobl1.ger.corp.intel.com ([10.252.60.139])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 02:25:40 -0700
+Date:   Thu, 29 Sep 2022 12:25:38 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Akira Yokosawa <akiyks@gmail.com>
+Subject: Re: [PATCH v3 1/4] serial: Convert serial_rs485 to kernel doc
+In-Reply-To: <71effcc8-7345-28cd-6585-eb729fb4c6db@gmail.com>
+Message-ID: <f05c437b-db3c-ad3-f393-3ff369d8f1c9@linux.intel.com>
+References: <20220928110509.13544-1-ilpo.jarvinen@linux.intel.com> <20220928110509.13544-2-ilpo.jarvinen@linux.intel.com> <YzURJa1RnxP+uj5/@debian.me> <75f07dbe-d1dd-ac18-5c8e-e6972e7fb28b@linux.intel.com> <71effcc8-7345-28cd-6585-eb729fb4c6db@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] ASoC: mediatek: mt8186: Fix spelling mistake "slect" ->
- "select"
-Content-Language: en-US
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220928220417.66799-1-colin.i.king@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220928220417.66799-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-209069814-1664443542=:1640"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/09/22 00:04, Colin Ian King ha scritto:
-> There are some spelling mistakes in dev_err messages. Fix them.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-209069814-1664443542=:1640
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+
+On Thu, 29 Sep 2022, Bagas Sanjaya wrote:
+
+> On 9/29/22 15:39, Ilpo Järvinen wrote:
+> > On Thu, 29 Sep 2022, Bagas Sanjaya wrote:
+> > 
+> >> On Wed, Sep 28, 2022 at 02:05:06PM +0300, Ilpo Järvinen wrote:
+> >>> diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
+> >>> index cea06924b295..6e347eb10b1f 100644
+> >>> --- a/include/uapi/linux/serial.h
+> >>> +++ b/include/uapi/linux/serial.h
+> >>> @@ -107,37 +107,57 @@ struct serial_icounter_struct {
+> >>>  	int reserved[9];
+> >>>  };
+> >>>  
+> >>> -/*
+> >>> +/**
+> >>> + * struct serial_rs485 - serial interface for controlling RS485 settings.
+> >>> + * @flags:			RS485 feature flags.
+> >>> + * @delay_rts_before_send:	Delay before send (milliseconds).
+> >>> + * @delay_rts_after_send:	Delay after send (milliseconds).
+> >>> + * @addr_recv:			Receive filter for RS485 addressing mode
+> >>> + *				(used only when %SER_RS485_ADDR_RECV is set).
+> >>> + * @addr_dest:			Destination address for RS485 addressing mode
+> >>> + *				(used only when %SER_RS485_ADDR_DEST is set).
+> >>> + * @padding0:			Padding (set to zero).
+> >>> + * @padding1:			Padding (set to zero).
+> >>> + * @padding:			Deprecated, use @padding0 and @padding1 instead.
+> >>> + *				Do not use with @addr_recv and @addr_dest (due to
+> >>> + *				overlap).
+> >>> + *
+> >>
+> >> I don't see definition of fields after @delay_rts_after_send in the
+> >> htmldocs output.
+> > 
+> > So it seems, this one I had missed. I guess the reason is that those 
+> > members are inside anonymous unions. But the formatting follows what 
+> > is documented here AFAICT:
+> > 
+> > https://www.kernel.org/doc/html/latest/doc-guide/kernel-doc.html#nested-structs-unions
+> > 
+> > Kerneldoc doesn't seem to live up to what is documented about it. It's a 
+> > bit ironic that documentation system fails to document even itself to 
+> > sufficient level, and what's worse, seems to be full of faulty examples.
+> > 
+> > Any suggestions how to make it work?
+> > 
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> CC'ing Akira.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Nevermind, I figured out where the problem is (my incorrect use of 
+private: markers).
 
+-- 
+ i.
 
+--8323329-209069814-1664443542=:1640--
