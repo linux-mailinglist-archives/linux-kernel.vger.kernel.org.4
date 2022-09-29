@@ -2,145 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2419F5EF6A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2230C5EF6AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235240AbiI2NcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 09:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
+        id S235105AbiI2Ncl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 09:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235424AbiI2Nbq (ORCPT
+        with ESMTP id S235726AbiI2NcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 09:31:46 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7FB137903
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:31:40 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id l12so1548164ljg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:31:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=X48j3G+qVEopzjYTA1H5u2rml5Mx/9RCCV/6TZYhcIQ=;
-        b=hrmIdsn5g/FpEqFeKHHnTpfCSNW5C5r4gCEHVeHwVR80GVFbZg97nDgi41R/Xf3Ymu
-         seJNwwjKnFyrmAgj3MKNLgRmGhEByKoLErdEa5A+ZqKkC9tAUD1c3Php845WLUOWrAjq
-         5ZlItbbiBVyAvLexJw8/YeEBPs4UYnQxHvSSzeGt5jWbcLDFTtLYDxbNNHFoiFOFzm9y
-         fp90/6MsNSvPK1y4kRGgbD0CjwGmTg2k+wqdhLQ/Uzby8fhWkNdV/rsq4WzbE1W2z4lu
-         8CC0AQf8cN0S6yZfRX9sm4vpUZbxuBgOKFxY+20QItfwWPCSJrb/2AhcvtR8BBiHcv1M
-         gavQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=X48j3G+qVEopzjYTA1H5u2rml5Mx/9RCCV/6TZYhcIQ=;
-        b=ddfQC9E0jbpN03gd1NJ0lp2sFcT1wltk0/xAeyXSR/wbRosVmu+lkNW1lLiFLvrZ4Q
-         xvYbFLl79Rz5EbJ63Sap005QohWK4/elMG/gX9vppADV6XB4YRLte8ZaFD1lIOo6L+gi
-         CUwIEcIugDQnpX4E/X2wkxMKY4oRPO+4MsUPSAloPbVcVGRohFtvuWGRaDnbiCNv1KRU
-         4JEMvLLVFfMW0xxn7/xmY2II0MyFCXZdg7NuR294ceBoJXsbHZjUJpiQs1Y5o8WK1LAc
-         EEr+BVlpms1vxjAeinDJhdRE7MX/cuAorPwvuWpetsEPMCEcp4tM+Jl2EXTUZ9MBBk06
-         lXqg==
-X-Gm-Message-State: ACrzQf0WiI32HQAZ2EsMidlMjVU2BGOZxgczRhj7hUAtjK1tbWVovQhU
-        ROxfQ32XT3nUfXE77G4B4bYOpg==
-X-Google-Smtp-Source: AMsMyM7JjhES7J8Rt6+czIznrc9iO1brCXpNmHy+QfoVtGLJY9kCDF+GU2VyflNmIbaVrNY4L7jUPw==
-X-Received: by 2002:a2e:84ca:0:b0:25d:77e0:2566 with SMTP id q10-20020a2e84ca000000b0025d77e02566mr1274760ljh.78.1664458298639;
-        Thu, 29 Sep 2022 06:31:38 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id u5-20020ac258c5000000b004a0232613desm784574lfo.205.2022.09.29.06.31.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 06:31:38 -0700 (PDT)
-Message-ID: <803d6c60-2e10-d831-bbdf-e1aaf9f8800f@linaro.org>
-Date:   Thu, 29 Sep 2022 16:31:37 +0300
+        Thu, 29 Sep 2022 09:32:20 -0400
+Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C5A1B0521;
+        Thu, 29 Sep 2022 06:32:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1664458311;
+        bh=JkHxh9W92WJM230LVDMdsu3OS9WtKyDpwbq54yzCMK4=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=EX8OkvO/ytMaykh5OU6WcCjOKjKb0QmyjwVlXzTo6NyPe/pIN/Z0+UQivq9AeatRH
+         X6ALboTALxtuZUY9EEl6zHGzqd9k8ImtLvISG0RJyCy+i6RUxB4L7ooRwyqx+2pYWo
+         gTea+FCZg69ymotLHtQHSPrPzVRxAeD4ERusmEgk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.7.110.20] ([143.244.37.136]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MG9kC-1oRnlj0SBY-00GVES; Thu, 29
+ Sep 2022 15:31:51 +0200
+Message-ID: <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
+Date:   Thu, 29 Sep 2022 13:31:49 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH v7 13/29] thermal/drivers/qcom: Use generic
- thermal_zone_get_trip() function
-Content-Language: en-GB
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com, Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-References: <20220928210059.891387-1-daniel.lezcano@linaro.org>
- <20220928210059.891387-14-daniel.lezcano@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220928210059.891387-14-daniel.lezcano@linaro.org>
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     Thorsten Leemhuis <linux@leemhuis.info>, workflows@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+ <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
+From:   "Artem S. Tashkinov" <aros@gmx.com>
+In-Reply-To: <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:UMFkQq+V7WKXBCQj1sXZb4YI9u1kT3xTYqTeQq2YP4hDWVl9/IL
+ SQOZbe4vrN9aCDKiD4RQ69kFHoQzxD9AhU1mE98E2nbz/CUH0zz+M2wuGTISZvVigCW8vQ1
+ G+Ir1PSt2A1/gqiq8xXW8m464qXDx5URtZMtem0ScXdB+ezAJaQm/mEXdlfAUCQLWzb2McM
+ eWCmfHkISScKV6FJ2LaLw==
+X-UI-Out-Filterresults: junk:10;V03:K0:spjduJ8pNV8=:sKctWCrZREGqkKnBY/2dAch+
+ quS1TFJqUyHRwE6d2NqEViblqBGDJelBKjheHB42dmC4uDYwVKIqSP/bevl9ey8NcNnmm+I7z
+ LkJhnzlIkN9vob3uq/fmT9TeZGeq+8Hkz9ybI0WvbOyM3l2yzAmxY5RFnhjh8O7lHkD/fdZkT
+ gapSTN5QXhSUhMSswq6BCz8k4eXEfQtKOjMV4UlevTCMtnL9xWORuJtSDDzWaZFoxyK7zuNu+
+ z6lX22zrrt/OogfHBEURt9tu05FZyOblbi4ZHsKbFUk3vVDJIwGpY58dsw+JLhWSKXi5RCpwy
+ ZcUzIj3WGGSwZFlxEqiBCeCwP+WiC4vB3zPnb4fES7kojQXRFKhLjPmft927knGHexVeH12fn
+ NWMhNRY/CzW2U3NECkQSmi6jn6Ff14JIx7rhZhlNuCiyT3oMxKZDQ+7ir7zoR2EjRXwBwlZWU
+ 1yQZxnbpsO04pCg1MUSxu+CgIfqrmNERKRCmv7/86dT3icjwscW+MYsSqqdcGBuDUNsLRIeVW
+ g8kXKHoWyAoleR/ZNo7bFtiMkxGdAwGzgnLQ6vtsQ1SylI+z/ONPlTpYGwIhlamHfHwkPPj6c
+ dqppqmEzXYRhRDbC04s5IIKPlkWcAdZBicueeHJqFAlCPfwDvBR+1cQ9F9lSj5lN0L2N9pki1
+ fOGrVoPZZzVWlxgbCVSJleeMQx6tYfu3b/D9xeJdonkj6Qz7+zVLVHPsn1n2rErXYd5ClRmyj
+ dbBG3ri63++Ome1/dE14crSDGJhktI2QWruYi73cHV5i3SS7qjfFDV63hF9p5Ffnkbm5/moBE
+ FceiIMKvwoDKrVTaVr805GG/i+4apiKbkymgAiihFqCrFXJ9vDr1EgGJ62UFX1m3a1QVYvO2x
+ iJBzritAUahSF/Y5+n/IvaZIjdX2u/+dDratx+46gmObSujwghiIEQYJ2Np3hEDxTmJrobrwd
+ /zTiEQBXqfySkcfw2SM4p9ozKSI8GAI4lcXFnngrx45joJ4x/0mAtLf9MApTrJ4n0Q9G/dGTX
+ iEe0XqlVdkes1ngww/PC0UCsudkoZXCzXkSkvkFzLtODzHpnNiuaN6DaJ0Zt3HxqiTSKmHeo4
+ wj/GLK5kuJrPS6jvVMk7k5hcp/rINwSOferwBjJbkv2UZMagaHKO//AbpvZ4v3lYLBEdbxlVg
+ baRSf/vdcwMHrqtZdpPqgQL3ZP7hETXYGknEmgqXqrZtzQ==
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 00:00, Daniel Lezcano wrote:
-> The thermal framework gives the possibility to register the trip
-> points with the thermal zone. When that is done, no get_trip_* ops are
-> needed and they can be removed.
-> 
-> Convert ops content logic into generic trip points and register them with the
-> thermal zone.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Acked-by: Amit Kucheria <amitk@kernel.org>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> ---
->   drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 39 +++++++++------------
->   1 file changed, 17 insertions(+), 22 deletions(-)
-> 
+On 9/29/22 13:04, Konstantin Ryabitsev wrote:
+> On Thu, Sep 29, 2022 at 12:22:35PM +0000, Artem S. Tashkinov wrote:
+>> AFAIK, the kernel bugzilla is a Linux Foundation project and the
+>> organization receives funding from its very rich members including
+>> Google, Meta, Intel, and even Microsoft. The fact that no one is
+>> seriously working on it looks shameful and sad. We are not talking abou=
+t
+>> a minor odd library with a dozen users we are talking about the kernel.
+>
+> The bugzilla as a software platform is a Mozilla product, not Linux
+> Foundation. Unfortunately, it's pretty much dead:
+>
+> 1. all development has stopped years ago
+> 2. it doesn't even work with recent MySQL servers
+> 3. it is written in perl5 and can only pretty much run with mod_perl
+>
+> We're committed to running it as far as we can, but we all must also adm=
+it
+> that the platform is near-death and probably will become an ever-increas=
+ing
+> burden to keep it operating. Heck, one of our IT staff is currently tryi=
+ng to
+> convert bugzilla.kernel.org to use Postgres just so we can keep operatin=
+g it
+> past the end of 2022.
+>
+> The Linux Foundation IT is in charge of running infrastructure -- we're =
+not a
+> development shop. All of our software projects are pretty much "skunkwor=
+ks"
+> efforts (and yes, this includes b4).
+>
+> We do have ability to fund development efforts -- LF has been the primar=
+y
+> sponsor behind public-inbox.org over the past 3 years. However, there mu=
+st be
+> a clear, strong, and well-articulated mandate from the community. From w=
+hat I
+> heard, the vast majority of maintainers simply want a web form that woul=
+d
+> allow someone to:
+>
+> 1. clearly state what kernel version they are using
+> 2. clearly describe what they were trying to do
+> 3. explain what they expected vs. what they got
+> 4. attach any files
+> 5. give this bug report a unique identifier
+>
+> Then a designated person would look through the bug report and either:
+>
+> a. quick-close it (with the usual "talk to your distro" or "don't use a
+>     tainted kernel" etc)
+> b. identify the responsible maintainers and notify them
+>
+> The hard part is not technical -- the hard part is that "designated pers=
+on."
+> Being a bugmaster is a thankless job that leads to burnout, regardless o=
+f how
+> well you are paid. Everyone is constantly irate at you from both ends --=
+ the
+> users are annoyed because their stuff doesn't work, and the maintainers =
+are
+> annoyed because you keep yanking them to work on dull problems that requ=
+ire a
+> ton of back-and-forth with people who aren't capable of applying patches=
+ and
+> booting custom kernels.
+>
+> Before we try to fix/replace bugzilla, we really need to figure out the =
+entire
+> process and pinpoint who is going to be the one in charge of bug reports=
+. If
+> you think that LF should establish a fund for a position like that, then=
+ you
+> should probably approach LF fellows (Greg KH, Shuah Khan), who can then =
+talk
+> to LF management. The IT team will be happy to support you with the tool=
+ing,
+> but tooling should come second to that -- otherwise we'll just be replac=
+ing an
+> old and rusty dumpster on fire with a new and shiny dumpster on fire.
+>
+> -K
 
--- 
-With best wishes
-Dmitry
+To me it sounds like the best way to keep moving forward is simply
+convert git.kernel.org + patchwork.kernel.org + bugzilla to
+gitlab.kernel.org and that will solve all the issues immediately. That
+will require of course a ton of work but:
 
+1) All the commiters will be automatically present and you can easily CC
+them
+
+2) All the kernel directories could be split into components with the
+respective developers being subscribed to them automatically. There's an
+issue though: sometimes directories/components are rearranged. Gitlab
+however is quite powerful, so issues can be easily moved between component=
+s.
+
+3) It's gonna be a ton easier to keep track of commits and
+discuss/review them. AFAIK it's now done using LKML +
+patchwork.kernel.org and then commits are merged by maintainers. So many
+places to keep track of.
+
+4) Gitlab probably can be integrated with other gitlabs (at least AMD,
+Intel and Nouveau drivers are developed on gitlab.freedesktop.org).
+
+Gitlab simplifies all of that tremendously. Github will work as well but
+I know many people don't like it.
+
+Linus, as a commander, may continue having his local git repo or using
+its own git website and get merge requests from gitlab.kernel.org. For
+him barely anything will change (aside from URLs to fetch from).
+
+Gitlab works as a docker container and requires only a Postgres backend
+which simplifies updates and backups.
+
+Best regards,
+Artem
