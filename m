@@ -2,103 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5320C5EFF50
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 23:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138795EFF56
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 23:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiI2VcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 17:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
+        id S229794AbiI2VhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 17:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiI2VcD (ORCPT
+        with ESMTP id S229671AbiI2VhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 17:32:03 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DAC14B866
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 14:32:00 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-131c8ccae75so3355270fac.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 14:32:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=sqNlv/OW7Vbqc+J0WaON3nruQmYPrMCiY8oE33vRgo0=;
-        b=WgvJ54039EW1s9ouY71PRlLjRB1AAPBaxK+LwSc9oBSBuBaQGbc1ZZJDQWfpYY+QFv
-         oewQ8Emcvlzop7PkUdnxxoLk0x1WLrTMBM5nb291V2CVFW8y9g4r0VJO6fiOGVqJ4/IT
-         oR15vgI9ORd7jixr/rCmTwDCitIcweh6MLPh8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=sqNlv/OW7Vbqc+J0WaON3nruQmYPrMCiY8oE33vRgo0=;
-        b=hVu+udX759GBbCCAIV9UCIB9pScM1SuCsmV6Gji2ijVzYSzIUcUcpGRGqk5hzfl5yN
-         ZML7UYb7PPkth1217mkxPFEXHcDk6dMq7tQYwxIxRUE7XGjkDZTnFZBgXLz2QlvufMMQ
-         SeIj1mzVNp7anTAOXjDUhpJ97CfIxzucWdEL9YaWQvxLHCk94xtZP/p6eh/jeYYlDXvv
-         iQPtp+3WkvegCCCRFROqBo2Dc0eo4yB7oxwE12+d4LxQRleJexjcuw4RgTlBwLl8rg3D
-         lz38gQPuZzkvabfELnyn+0fCxFA479CLB9YpldbFIk2IGHI6GXO86FM1V0+Xgo5J0+NL
-         7zmg==
-X-Gm-Message-State: ACrzQf3LUHzJ5qDb2jPUrdretXVnZNoPXwTo1xWxxFcPGvkq7Ckx471i
-        cGa/vFlhgF/o28vip0ickAzlERQwUZCGVA==
-X-Google-Smtp-Source: AMsMyM6fA7PNrw76rdwSXORKVUlC8pph1hasLIMbwBzfyNdHjyHeNeTvCGS9f10/AeMe3fzYiGV5xw==
-X-Received: by 2002:a05:6870:c59b:b0:131:8d2e:e808 with SMTP id ba27-20020a056870c59b00b001318d2ee808mr8244242oab.280.1664487119038;
-        Thu, 29 Sep 2022 14:31:59 -0700 (PDT)
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com. [209.85.161.41])
-        by smtp.gmail.com with ESMTPSA id b17-20020a056870d1d100b00127a6357bd5sm206977oac.49.2022.09.29.14.31.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 14:31:58 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id c13-20020a4ac30d000000b0047663e3e16bso999545ooq.6
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 14:31:57 -0700 (PDT)
-X-Received: by 2002:a05:6830:611:b0:65c:26ce:5dc with SMTP id
- w17-20020a056830061100b0065c26ce05dcmr2281262oti.176.1664487117634; Thu, 29
- Sep 2022 14:31:57 -0700 (PDT)
+        Thu, 29 Sep 2022 17:37:18 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715A511C15A
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 14:37:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=/v5uv/MN1Okoi7sbqFRNP3ZgEoChKUKNtV0vYzTFxUM=; b=jaH5lDgBJMkA2RCtvDReLzU6gn
+        dJnMI9bw78SVOf+viMLe8qDz9C8wMWWmw00rd37HhI7Dmu920o/aI2nCH7F+IYjUuSBFz9petPlwX
+        CkW12bU3JgVTxZsGfXHARPTIoObPualUN+d4B0QHTYyFWTMkQIoGkxkO4UYmtwcOikMJrYG8S8b2Z
+        ZOOsyiTI6yjDCEuIZ/3md//4zsmqeXOZiPsBnqhuBWGJLmuZ52EyjmecAHCPxgR/qACL1Rl8bPutu
+        AYqrQ3ezR0Mj/pwMMcPRK5wMbp0u8u7HUr1blV+9JvGfh90zMTs9l2xWFTKSd2PQ413Vqf3Jw8hTU
+        ucEQJB1g==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oe1DD-005XRl-9L; Thu, 29 Sep 2022 21:36:55 +0000
+Message-ID: <651530a9-2dc1-c781-a1b5-1e712684f94d@infradead.org>
+Date:   Thu, 29 Sep 2022 14:36:34 -0700
 MIME-Version: 1.0
-References: <dacfc18d6667421d97127451eafe4f29@AcuMS.aculab.com>
- <CAHk-=wgS_XpzEL140ovgLwGv6yXvV7Pu9nKJbCuo5pnRfcEbvg@mail.gmail.com>
- <YzXo/DIwq65ypHNH@ZenIV> <YzXrOFpPStEwZH/O@ZenIV> <CAHk-=wjLgM06JrS21W4g2VquqCLab+qu_My67cv6xuH7NhgHpw@mail.gmail.com>
- <YzXzXNAgcJeJ3M0d@ZenIV> <CAHk-=wgiBBXeY9ioZ8GtsxAcd42c265zwN7bYVY=cir01OimzA@mail.gmail.com>
- <YzYMQDTAYCCax0WZ@ZenIV> <YzYNtzDPZH1YWflz@ZenIV>
-In-Reply-To: <YzYNtzDPZH1YWflz@ZenIV>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 29 Sep 2022 14:31:41 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi2JKDawG44kpS-bbrATB6LDyRx64LwdXEzZk2RYwkzJg@mail.gmail.com>
-Message-ID: <CAHk-=wi2JKDawG44kpS-bbrATB6LDyRx64LwdXEzZk2RYwkzJg@mail.gmail.com>
-Subject: Re: [PATCH 3/4] proc: Point /proc/net at /proc/thread-self/net
- instead of /proc/self/net
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2] x86/mm/tlb: fix error word 'clleared' to 'cleared'
+Content-Language: en-US
+To:     Xin Hao <xhao@linux.alibaba.com>, namit@vmware.com
+Cc:     tglx@linutronix.de, peterz@infradead.org, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20220929091040.45390-1-xhao@linux.alibaba.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220929091040.45390-1-xhao@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 2:27 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> Put it another way:
->
-> David:
->         when I'm opening /proc/net/whatever, I want its contents to match
->         this thread's netns, not that of some other thread.
-> dhclient+apparmor:
->         whatever you get from /proc/net/dev, it would better be at
->         /proc/<pid>/net/dev, no matter which thread you happen to be.
+Hi--
 
-... which actually creates an opening for a truly disgusting solution:
+I would say let's fix the sentence grammar, but I don't know
+what "cleared set" means.
 
- - when an outsider else opens /proc/<pid>/net, they get the thread leader netns
 
- - when a thread opens its *own* thread group /proc/<pid>/net, it gets
-its own thread netns, not the thread leader one.
+On 9/29/22 02:10, Xin Hao wrote:
+> Just correct the wrong word 'clleared' to 'cleared'
+> 
+> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+> ---
+>  arch/x86/include/asm/tlbflush.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+> index cda3118f3b27..c80a15ef0cbc 100644
+> --- a/arch/x86/include/asm/tlbflush.h
+> +++ b/arch/x86/include/asm/tlbflush.h
+> @@ -291,7 +291,7 @@ static inline bool pte_flags_need_flush(unsigned long oldflags,
+>  		diff &= ~_PAGE_ACCESSED;
+> 
+>  	/*
+> -	 * Did any of the 'flush_on_clear' flags was clleared set from between
+> +	 * Did any of the 'flush_on_clear' flags was cleared set from between
 
-Disgusting.
+It should be more like:
 
-            Linus
+	 * Were any of the 'flush_on_clear' flags changed between
+
+X86 people, does that make sense to you?
+
+
+>  	 * 'oldflags' and 'newflags'?
+>  	 */
+>  	if (diff & oldflags & flush_on_clear)
+> --
+> 2.31.0
+
+-- 
+~Randy
