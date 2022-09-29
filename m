@@ -2,111 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699AD5EF359
+	by mail.lfdr.de (Postfix) with ESMTP id B51DC5EF35A
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235183AbiI2KVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
+        id S235175AbiI2KV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234708AbiI2KVF (ORCPT
+        with ESMTP id S233870AbiI2KVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:21:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77CD5A816
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:21:04 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 10:21:01 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664446863;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eg9qUWovxMRvNklVZSf7DVJEZEye63LDAuHmgVfnSE8=;
-        b=IZOsbzZKBPMOk0FQTBpAN2abp5TyfQAVvldORlsz3TyTsJenofmetzu2cQnnZY/Ghr0Uj2
-        ldWQDETytmKi7H94FL2qiip88ewz4wzy21TbUK7lU7yQiRuc5aHDTuknx2LQU14jKIczCx
-        69K/sR7vSGGGmFbup+og+wjqdyOHbzZBy5J8yzj6wHpjL8cEnJY+ZigXoJiaXKSwjMNPhb
-        EFKxjwRehPcWWstrztRs+CcXd6PQkK6DR87euBe3IMOMMNGF+N9WeLHfdDp+6IYSHfUesm
-        0x57g+bj22G2Xd570v6VpYwQ5xXsP86q0Ol774/7QugSXQM7w5XJEHsoh4wYlw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664446863;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eg9qUWovxMRvNklVZSf7DVJEZEye63LDAuHmgVfnSE8=;
-        b=5smwON3SDVNjgwWj3/V409HjQMWArjm64uX0IglRQPl2FPCxy7A04b7QAbz6q2afVQ8d0N
-        9QUNZgwi0k/ZnlDg==
-From:   "irqchip-bot for Apurva Nandan" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] dt-bindings: irqchip: ti,sci-inta: Fix
- warning for missing #interrupt-cells
-Cc:     Apurva Nandan <a-nandan@ti.com>, Rob Herring <robh@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220819190729.32358-2-a-nandan@ti.com>
-References: <20220819190729.32358-2-a-nandan@ti.com>
+        Thu, 29 Sep 2022 06:21:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BB341A397
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:21:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD5C22309;
+        Thu, 29 Sep 2022 03:21:21 -0700 (PDT)
+Received: from [10.57.66.102] (unknown [10.57.66.102])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F403D3F73B;
+        Thu, 29 Sep 2022 03:21:12 -0700 (PDT)
+Message-ID: <0007218f-96f0-c348-0dfb-7cb54f014b1c@arm.com>
+Date:   Thu, 29 Sep 2022 11:21:11 +0100
 MIME-Version: 1.0
-Message-ID: <166444686163.401.18116811923959898803.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [PATCH linux-next] coresight: use sysfs_emit() to instead of
+ scnprintf()
+To:     James Clark <james.clark@arm.com>, zhangsongyi.cgel@gmail.com
+Cc:     mike.leach@linaro.org, leo.yan@linaro.org,
+        alexander.shishkin@linux.intel.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org,
+        zhang songyi <zhang.songyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+References: <20220927115136.259926-1-zhang.songyi@zte.com.cn>
+ <b8ad73ea-a20e-0e74-766e-eeb4cdeb1890@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <b8ad73ea-a20e-0e74-766e-eeb4cdeb1890@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+On 28/09/2022 15:56, James Clark wrote:
+> 
+> 
+> On 27/09/2022 12:51, zhangsongyi.cgel@gmail.com wrote:
+>> From: zhang songyi <zhang.songyi@zte.com.cn>
+>>
+>> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+>> should only use sysfs_emit() or sysfs_emit_at() when formatting the value
+>> to be returned to user space.
+>>
+>> Reported-by: Zeal Robot <zealci@zte.com.cn>
+>> Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
 
-Commit-ID:     d9fc272bfd76acadf0537901549d07a1b81dbeed
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/d9fc272bfd76acadf0537901549d07a1b81dbeed
-Author:        Apurva Nandan <a-nandan@ti.com>
-AuthorDate:    Sat, 20 Aug 2022 00:37:27 +05:30
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Thu, 29 Sep 2022 11:10:10 +01:00
 
-dt-bindings: irqchip: ti,sci-inta: Fix warning for missing #interrupt-cells
+>> ---
+>>   drivers/hwtracing/coresight/coresight-stm.c | 8 ++++----
+>>   1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+> 
+> Reviewed-by: James Clark <james.clark@arm.com>
 
-ti,sci-inta nodes, or else we will have following warning when building
-device tree files with W=2 warning level.
 
-arch/arm64/boot/dts/ti/k3-j721e-main.dtsi:147.51-156.5: Warning (interrupt_provider): /bus@100000/main-navss/interrupt-controller@33d00000: Missing #interrupt-cells in interrupt provider
+I have queued this locally for now, will push it once the next
+cycle is out.
 
-And further, #interrupt-cells is required to be in yaml bindings as well
-to prevent following schema warnings:
-
-k3-j721e-common-proc-board.dtb: interrupt-controller@33d00000: Unevaluated properties are not allowed ('#interrupt-cells' was unexpected)
->From schema: linux/Documentation/devicetree/bindings/interrupt-controller/ti,sci-inta.yaml
-
-Add #interrupt-cells property in ti,sci-inta.yaml
-
-Signed-off-by: Apurva Nandan <a-nandan@ti.com>
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220819190729.32358-2-a-nandan@ti.com
----
- Documentation/devicetree/bindings/interrupt-controller/ti,sci-inta.yaml | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/ti,sci-inta.yaml b/Documentation/devicetree/bindings/interrupt-controller/ti,sci-inta.yaml
-index 88c46e6..1151518 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/ti,sci-inta.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/ti,sci-inta.yaml
-@@ -59,6 +59,9 @@ properties:
- 
-   interrupt-controller: true
- 
-+  '#interrupt-cells':
-+    const: 0
-+
-   msi-controller: true
- 
-   ti,interrupt-ranges:
+Suzuki
