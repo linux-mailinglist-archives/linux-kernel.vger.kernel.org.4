@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0758B5EFCEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 913825EFCF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235818AbiI2SUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34616 "EHLO
+        id S235334AbiI2SV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235771AbiI2STz (ORCPT
+        with ESMTP id S234163AbiI2SV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:19:55 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C221745F5B
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:19:53 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-354262a27c8so21323147b3.15
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:19:53 -0700 (PDT)
+        Thu, 29 Sep 2022 14:21:57 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C323C13F2A9
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:21:55 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id v130so2456101oie.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:21:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=SPo8cxe5Gv4Icg9WBrTrddqkcf882sEf/dI0Be8XuxM=;
-        b=DXJnnm+NdL8nSanlq3PhzlVA2yW8T9I3mOa4xTvpj42zBvFu66FIb2DtQDOjHeG+6v
-         HG3cK4hF922dwdGX+x8p7M6qxWMG+f6hDGB2TfxfIDs0H1DDPVDs5ZPI69y+pKxTDeMT
-         SpO1i5Gshc3VpB6UyQQDsQzCy3FgY7GG6NVmJ647J6qtYhmcaVPt+8gNr+34nTwANlSa
-         QbU/D0nreNEhATK9tXjmehbZPg/h6npv7o0zZWMdjdFVDdsBQQBUkwwgu0CxZL0FgOyG
-         duIQJBBQvHvR4F1IfLZu86vzbPpr/r1yF9N17o8yLu1I88CUq0ClhnYOWb683aA7tvTM
-         jwJQ==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hxDmnM1IL2wJ6pbSJipbjQaG4VApgtgIvJlR8md9+aM=;
+        b=PenDZ4du+ECiK5JkhEN/8v2etfVrHhJu4FghACXwbcptNy/wJ70A8VBSZT9NkSkTWz
+         65vvWHEwnH8ygm1rMdIUcQ5V5pwA3WRX3FrNxMbeLYUxHwne4hNdXGhX0d1rE7XDH+WL
+         m38r0MlN5hRKyvv9BMtAFTNTtBfUfjwsz3DP4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=SPo8cxe5Gv4Icg9WBrTrddqkcf882sEf/dI0Be8XuxM=;
-        b=Eqhjpkpng6iGDLaqG0L25DmfGRMZWYp7u4Z8dVR6w2QPDpRKJ20qRoI9OanieGUV9R
-         zuUEoi844izQzFcBw0C72dBXQ4gnH3m2K90r/md9N/rfnBHlPAJD+gUUoFgggm1ajNmb
-         JxghVaIJ288M97JnY9uQHoDUMvVgks1h6D4lHBFVeTQiFKq3kcybnXO/ADr75RpyHGY0
-         gzOQZbcC5Emw1jU4gZHHs/n+vcZmkNjMWQcnFkotIwQ1tDA2Yv12Ovg8jteA4LF4HVHo
-         xWAR0Klpo9DQ+z/ajxtBWk+zLVGbrivZchLFOOkpByYFEtTsyzDbPJriCCfCrkWsxTxK
-         4B2w==
-X-Gm-Message-State: ACrzQf2wPCA5zHaYXWWzy2L5Un9Nlk/5bzZzVnb5ktRCgFxfMFxMKxYY
-        WeQHfBr6Dd8lTZRtpIx6Anl3zBSffA==
-X-Google-Smtp-Source: AMsMyM7hNJtv8eCYHU7H8bJzKkzWK1XeHZnh/Mh4XMITraHR5mnwjiEVoe7+u4ihdbWsT8jjcmHhOIx6uQ==
-X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
- (user=nhuck job=sendgmr) by 2002:a81:c45:0:b0:34d:21de:b794 with SMTP id
- 66-20020a810c45000000b0034d21deb794mr4937456ywm.138.1664475593080; Thu, 29
- Sep 2022 11:19:53 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 11:19:47 -0700
-In-Reply-To: <20220920073003.5dab2753@kernel.org>
-Mime-Version: 1.0
-References: <20220920073003.5dab2753@kernel.org>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20220929181947.62909-1-nhuck@google.com>
-Subject: [PATCH v2] net: sparx5: Fix return type of sparx5_port_xmit_impl
-From:   Nathan Huckleberry <nhuck@google.com>
-To:     kuba@kernel.org
-Cc:     Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
-        casper.casan@gmail.com, davem@davemloft.net, edumazet@google.com,
-        error27@gmail.com, horatiu.vultur@microchip.com,
-        lars.povlsen@microchip.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org,
-        nhuck@google.com, pabeni@redhat.com, trix@redhat.com
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hxDmnM1IL2wJ6pbSJipbjQaG4VApgtgIvJlR8md9+aM=;
+        b=mA9x5cM/vzjwTvVOfMQJtGcx1+c83OL9zjl0fhwq1H9pwE7TbZlcM8MWOB7fhCiBlj
+         Zq+npdTtVqPSZuisgF3pQiJmPhu2reWRzbgZuJ2dibRhsOvaEKQS5YCJ9DuJZP+MU/KQ
+         4WfniO6sdLPJiYeMaGExKGK4iQdda+EFytxfFZOjfZq5EFlRLwzsXuQ1nvOof0DEwHn+
+         7M9Py1BSxc3Z3jE7xOSBFmmsnw5Ye3SaN/Gdf/WYEOe0ZRo54UqB6xAqyzqlyeIUZCXe
+         M9KVztLBVDWQdf9OF3gvO9PC27Vng3LIzzb/28xz/IcatVjF1P4BTi6/S6ymtW7om6qC
+         zuaw==
+X-Gm-Message-State: ACrzQf0iXJh7rAEPVyQilXuUs5Bk6QfvGQtfldP8icVFq1aWsxUl0oJo
+        MOEsfwroxeZTIc1zLe2Rq7udcMCtCnABJg==
+X-Google-Smtp-Source: AMsMyM7BB6QrqLKtHllbIhVZRYtXWRTFPaIdwVLrHGt0dKLyplFxcYR0RTy6u5cWVFW/yKrp3SpWdg==
+X-Received: by 2002:a05:6808:118b:b0:34d:8f58:d95 with SMTP id j11-20020a056808118b00b0034d8f580d95mr7634955oil.22.1664475713940;
+        Thu, 29 Sep 2022 11:21:53 -0700 (PDT)
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com. [209.85.161.41])
+        by smtp.gmail.com with ESMTPSA id e12-20020a4ab98c000000b0047634c1c419sm55622oop.12.2022.09.29.11.21.52
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 11:21:52 -0700 (PDT)
+Received: by mail-oo1-f41.google.com with SMTP id d74-20020a4a524d000000b004755f8aae16so665078oob.11
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:21:52 -0700 (PDT)
+X-Received: by 2002:a05:6830:611:b0:65c:26ce:5dc with SMTP id
+ w17-20020a056830061100b0065c26ce05dcmr1952667oti.176.1664475712268; Thu, 29
+ Sep 2022 11:21:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <dacfc18d6667421d97127451eafe4f29@AcuMS.aculab.com>
+In-Reply-To: <dacfc18d6667421d97127451eafe4f29@AcuMS.aculab.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 29 Sep 2022 11:21:36 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgS_XpzEL140ovgLwGv6yXvV7Pu9nKJbCuo5pnRfcEbvg@mail.gmail.com>
+Message-ID: <CAHk-=wgS_XpzEL140ovgLwGv6yXvV7Pu9nKJbCuo5pnRfcEbvg@mail.gmail.com>
+Subject: Re: [PATCH 3/4] proc: Point /proc/net at /proc/thread-self/net
+ instead of /proc/self/net
+To:     David Laight <David.Laight@aculab.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,61 +77,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ndo_start_xmit field in net_device_ops is expected to be of type
-netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
+On Thu, Sep 29, 2022 at 8:22 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> This was applied and then reverted by Linus (I can't find anything
+> in the LKML archive) - see git show 155134fef - because of
+> issues with apparmor and dhclient.
 
-The mismatched return type breaks forward edge kCFI since the underlying
-function definition does not match the function hook definition.
+lkml archive link:
 
-The return type of sparx5_port_xmit_impl should be changed from int to
-netdev_tx_t.
+  https://lore.kernel.org/all/CADDKRnDD_W5yJLo2otWXH8oEgmGdMP0N_p7wenBQbh17xKGZJg@mail.gmail.com/
 
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-Cc: llvm@lists.linux.dev
-Signed-off-by: Nathan Huckleberry <nhuck@google.com>
----
+in case anybody cares.
 
-Changes v1 -> v2
-- Updated header file
+I wonder if the fix is to replace the symlink with a hardcoded lookup
+(ie basically make it *act* like a hardlink - we don't really support
+hardlinked directories, but we could basically fake the lookup in
+proc). Since the problem was AppArmor reacting to the name in the
+symlink.
 
- drivers/net/ethernet/microchip/sparx5/sparx5_main.h   | 2 +-
- drivers/net/ethernet/microchip/sparx5/sparx5_packet.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Al added the participants so that he can say "hell no".
 
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_main.h b/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
-index 8b42cad0e49c..7a83222caa73 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
-@@ -305,7 +305,7 @@ struct frame_info {
- void sparx5_xtr_flush(struct sparx5 *sparx5, u8 grp);
- void sparx5_ifh_parse(u32 *ifh, struct frame_info *info);
- irqreturn_t sparx5_xtr_handler(int irq, void *_priv);
--int sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev);
-+netdev_tx_t sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev);
- int sparx5_manual_injection_mode(struct sparx5 *sparx5);
- void sparx5_port_inj_timer_setup(struct sparx5_port *port);
- 
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-index 21844beba72d..83c16ca5b30f 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-@@ -222,13 +222,13 @@ static int sparx5_inject(struct sparx5 *sparx5,
- 	return NETDEV_TX_OK;
- }
- 
--int sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev)
-+netdev_tx_t sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct net_device_stats *stats = &dev->stats;
- 	struct sparx5_port *port = netdev_priv(dev);
- 	struct sparx5 *sparx5 = port->sparx5;
- 	u32 ifh[IFH_LEN];
--	int ret;
-+	netdev_tx_t ret;
- 
- 	memset(ifh, 0, IFH_LEN * 4);
- 	sparx5_set_port_ifh(ifh, port->portno);
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+Actually, it might be cleaner to make it act like a dynamic
+mount-point instead - kind of "automount" style. Again, Al would be
+the person who can say "sure, that makes sense" or "over my dead
+body".
 
+Al?
+
+Or maybe that crazy AppArmor rule just doesn't exist any more. It's
+been 8 years, after all.
+
+                   Linus
