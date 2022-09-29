@@ -2,134 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A4B5EEE06
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AEFC5EEE07
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234884AbiI2GsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 02:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
+        id S234902AbiI2Gsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 02:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233899AbiI2GsK (ORCPT
+        with ESMTP id S234891AbiI2Gsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 02:48:10 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E155129696
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:48:09 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d82so615854pfd.10
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:48:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Y2jtn+YsX5psuE/71sdgLvbCvSb2B8wIQO3pPPOaBMU=;
-        b=DGMv8gpt078xYbXObstLocpu9x9DdBibz3qT7uIeJPUOznSsVgwQntQ+WJdvY9fTwS
-         dVAHay4BA6NHfzzWyRvqpFaKOC1KHwqW6fDSE1vbhjShXptPMOk+SRV4JCPrwDGE5yBa
-         vMjEaYkAG66Casvyiry8jguN6Zq63E7VL8XD3hJYlvr7lQUJFyn/lEytlLwgihHGOgX3
-         hZSVvPh1Km+uE8bLB/U+uDsJ6QEj2VAw8SeBkPg3czg0jKnlnFplsDmnfXAOGR8ryzcv
-         SJ3qS8ysSyVMKSOKfDI9quQTRn/zt1nkffIVSHjeVcKaBGauAFNFLXx7XVRCtP1G9axu
-         MbjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Y2jtn+YsX5psuE/71sdgLvbCvSb2B8wIQO3pPPOaBMU=;
-        b=Ax/3cqvDQDIBv6URXIF+E7Z3iDYn92JpbDb0pO2lr5skBlSVFFgjtFnhHIEA+GP02g
-         NmQRxPv5cseRBpBioUJmRQT/G/+sCy4oCUpNezouYFevUlYuEe2et040QRMwSXbdml3B
-         hTulzuZkEtikFfVTBLcVSG7MxTZAf+11fUk77eWL3Keg/Fz2zn3JagqONicYN7AahEe+
-         h+1ZlkwbQjj+CS9PtysPQWpwkObgCm6I26nN97YdQr+tl+M59ft1kVTFn9FO2KvZDm1X
-         8HFj9ILeFIPTdKXybtM4xUSgbLRzo3wAX1sdfSwHo4Q4JjAUFXoRDYyuurJRU8Ogj3OY
-         DIiQ==
-X-Gm-Message-State: ACrzQf1pDqZaDINpoLS2Y/Jhq7cU5DC1O0ooEcjix3Fy9JGjH8klU/fu
-        32JISAWXB/r8h7xfBGYwVmj9wQ==
-X-Google-Smtp-Source: AMsMyM5j6SlieS8WhzXlMCDit/9ENlLW9wBz60DdYObn9/Dux3ybEv8MDhzasmfU6daWQYDJmzQJnQ==
-X-Received: by 2002:aa7:88c7:0:b0:542:3229:8d11 with SMTP id k7-20020aa788c7000000b0054232298d11mr1909374pff.41.1664434088793;
-        Wed, 28 Sep 2022 23:48:08 -0700 (PDT)
-Received: from leoy-yangtze.lan (173.242.120.49.16clouds.com. [173.242.120.49])
-        by smtp.gmail.com with ESMTPSA id t13-20020a1709027fcd00b00176be23bbb3sm4979563plb.172.2022.09.28.23.48.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 23:48:08 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 14:48:03 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] perf: Skip and warn on unknown format 'configN'
- attrs
-Message-ID: <YzU/o3kxS/BYpJhn@leoy-yangtze.lan>
-References: <20220914-arm-perf-tool-spe1-2-v2-v3-0-8189fc04dcc6@kernel.org>
- <20220914-arm-perf-tool-spe1-2-v2-v3-1-8189fc04dcc6@kernel.org>
+        Thu, 29 Sep 2022 02:48:50 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF0112F749
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:48:49 -0700 (PDT)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MdP3d6mCqzlXCg;
+        Thu, 29 Sep 2022 14:44:29 +0800 (CST)
+Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 14:48:47 +0800
+Received: from [10.67.111.83] (10.67.111.83) by dggpeml500008.china.huawei.com
+ (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 29 Sep
+ 2022 14:48:47 +0800
+Message-ID: <0412bd8a-aa49-e2b1-ed9f-57ad37ecea19@huawei.com>
+Date:   Thu, 29 Sep 2022 14:48:46 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220914-arm-perf-tool-spe1-2-v2-v3-1-8189fc04dcc6@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next] init/Kconfig: fix unmet direct dependencies
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        Masahiro Yamada <masahiroy@kernel.org>, <seanjc@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, <ojeda@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        <atomlin@redhat.com>, <ddiss@suse.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        <linux-kernel@vger.kernel.org>
+References: <20220928064934.70867-1-renzhijie2@huawei.com>
+ <YzPxMvjdjVEK1/b1@linutronix.de>
+ <CAKXUXMxGt9UGhw9Ap_M3U2AF1vw2dX7WpDO71=UwV0Be3t4sNw@mail.gmail.com>
+ <YzQQfW3h70OIiT14@linutronix.de>
+ <e33cc08b-612b-4786-9b68-262c43af5ccb@www.fastmail.com>
+From:   Ren Zhijie <renzhijie2@huawei.com>
+In-Reply-To: <e33cc08b-612b-4786-9b68-262c43af5ccb@www.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.83]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500008.china.huawei.com (7.185.36.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
 
-On Wed, Sep 14, 2022 at 03:08:34PM -0500, Rob Herring wrote:
+在 2022/9/28 17:32, Arnd Bergmann 写道:
+> On Wed, Sep 28, 2022, at 11:14 AM, Sebastian Andrzej Siewior wrote:
+>> On 2022-09-28 09:20:42 [+0200], Lukas Bulwahn wrote:
+>>>> Couldn't this become a depends?
+>>> It could also be a depends (to resolve the warning).
+>> …
+>>> It is just the question whether:
+>>>
+>>> When PROC_FS is not set, should the CHECKPOINT_RESTORE still be
+>>> visible as a config option to add (and then automatically add
+>>> PROC_FS)? Then select is right here.
+>> then CHECKPOINT_RESTORE is the only option selecting PROC_FS while
+>> everyone else depends on it _or_ avoids using it in the absence of
+>> PROC_FS.
+> Right, we should not mix 'select' and 'depends on' for the same
+> symbol, as that leads to circular dependencies and general
+> confusion.
+>
+> If there is no way to use CHECKPOINT_RESTORE without procfs,
+> then the symbol should just not be visible (it will still show
+> up with the dependency when one searches in menuconfig).
+> Force-enabling a major subsystem like procfs from another
+> symbol is not a good solution.
 
-[...]
-
-> +void perf_pmu__warn_invalid_formats(struct perf_pmu *pmu)
-> +{
-> +	struct perf_pmu_format *format;
-> +
-> +	list_for_each_entry(format, &pmu->format, list)
-> +		if (format->value >= PERF_PMU_FORMAT_VALUE_CONFIG_END) {
-> +			pr_warning("WARNING: '%s' format '%s' requires 'perf_event_attr::config%d'"
-> +				   "which is not supported by this version of perf!\n",
-> +				   pmu->name, format->name, format->value);
-> +			return;
-> +		}
-> +}
-
-Though I saw you and Namhyung have discussion in underway, this patch
-set is fine for me.  I validated the patches at my side (with a bit
-hacking in Arm SPE driver for faking invert filter).  You could add my
-tested tag for this patch set:
-
-Tested-by: Leo Yan <leo.yan@linaro.org>
-
-But I want to remind two things after I used "perf test" to validate
-this patch set:
-
-  $ ./perf test list
-  6: Parse event definition strings
-  6:1: Test event parsing
-  6:2: Test parsing of "hybrid" CPU events
-  6:3: Parsing of all PMU events from sysfs
-  6:4: Parsing of given PMU events from sysfs
-  6:5: Parsing of aliased events from sysfs
-  6:6: Parsing of aliased events
-  6:7: Parsing of terms (event modifiers)
-  $ ./perf test -v 6
-
-The first one is this patch set introduces segmentation fault for the
-case "Parsing of aliased events" (See tests/parse-events.c).  But the
-issue is caused by the test case itself; we need to add below line into
-test_event_fake_pmu() for initialisation list header.
-
-    INIT_LIST_HEAD(&perf_pmu__fake.format);
-
-The second question is for testing config3 in "perf test".  You could
-see the file tests/parse-events.c has included several test cases for
-config/config1/config2.  It's good to add the same testing for config3
-as well, please see test__checkevent_pmu() and test__checkterms_simple()
-for relevant code.
+Agree that,  i will fix it in patch v2.
 
 Thanks,
-Leo
+
+Ren
+
+>      Arnd
+> .
