@@ -2,113 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4575EEF2B
+	by mail.lfdr.de (Postfix) with ESMTP id 99CF65EEF2C
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235272AbiI2Hgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
+        id S235277AbiI2Hgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235200AbiI2HgZ (ORCPT
+        with ESMTP id S235237AbiI2Hg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:36:25 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA351296B1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:36:24 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id e145so526368yba.11
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=HF5Uidh/azrCMm3aklUrXyZ8EuVDO+7z+qW3aO/ertw=;
-        b=LsGbKzgEwNZzNBO0rhERldTkuDy0qwLF8MGijzRgk97wJzegikv9b3b4U9ZTkMDeB3
-         lcdmEbdOWNMGxc/g1Q3v7XiXcla5YaAHnzm8tApSf8GJ4NhN154o5fjLwlG2X/r/q3eq
-         GfvLUSnCdh/H8B/RowoJ35FSs8XFDznvKxfBVNP7VvKPI7LNRuys8hn/AEDV70LoOubA
-         +UyfwDtmKwHBMUyjR9nKIUHZfjagE8ZWRRu/PZY24FWDKStCnsp4yITEaQT/AaXa1qj6
-         T4QqjDVt8hJrF4aZIBgz9eCHhHIJtmXul1jvYvmhDrgF6vl8+/j1SsPHiE6bmblgdLhj
-         upLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=HF5Uidh/azrCMm3aklUrXyZ8EuVDO+7z+qW3aO/ertw=;
-        b=P/vU7kGMgA1J6IsfKkqxmUPGvdKylti5GBfobdBzE+hpFQb8uz5J8YIN/NriYYqZEq
-         /tuq9EVI2J0188/G4yoHUqqBG5kT6q27QXu8/qkHFMx2bi7WodHijajpeOxO2eVT4Yj/
-         Rd9likHX3i2b6jAl1lfJps3xZpjGwuVRiz3Sv/Or7oGSoVAtSmH8qqKreLuPGz89p8zB
-         fLJS3oKy1EKZcCZAXXi+kaIyW1IlAA0wXK6FNj3zXwhxT2WrqXWnnmncLlx+S9uvQgrP
-         l2PY1yUP0SInjTySh75pN7V/owiXZ/yoFanIs8iJyHPFpHj+egvWhu19CAvuUVhahiMO
-         pUNg==
-X-Gm-Message-State: ACrzQf1CVb6fLxTkIXjXp8Vr+Dqr0tlL//qPp8LWxMgC0ZWfbVX4HM1O
-        fyGVx1QTV68ewPyQQleSUGYoVyiQnPSlYWadgAg=
-X-Google-Smtp-Source: AMsMyM74YdrxQ12K4Nc13OpFKTBwkzx6xmC3oEI/uiQjJzK3OZ/pFR5Q3apXLofvq1HdzhGXGM61Bc2ycLyYZBYN2IY=
-X-Received: by 2002:a25:ea08:0:b0:6bc:436f:6798 with SMTP id
- p8-20020a25ea08000000b006bc436f6798mr1933681ybd.31.1664436983343; Thu, 29 Sep
- 2022 00:36:23 -0700 (PDT)
+        Thu, 29 Sep 2022 03:36:27 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 921D8138F20
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:36:25 -0700 (PDT)
+Received: from loongson-pc.loongson.cn (unknown [10.20.42.32])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxT+D4SjVjDKwjAA--.3144S2;
+        Thu, 29 Sep 2022 15:36:24 +0800 (CST)
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+Subject: [PATCH] LoongArch: Fix cpu name after s3/s4
+Date:   Thu, 29 Sep 2022 15:36:23 +0800
+Message-Id: <20220929073623.7604-1-lvjianmin@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220929070057.59044-1-renzhijie2@huawei.com>
-In-Reply-To: <20220929070057.59044-1-renzhijie2@huawei.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Thu, 29 Sep 2022 09:36:12 +0200
-Message-ID: <CAKXUXMxHZtjr3-7vNtOm90u_dZ9M6SWy2+g6pDTwMo5C2fsyGg@mail.gmail.com>
-Subject: Re: [PATCH v2 -next] init/Kconfig: fix unmet direct dependencies
-To:     Ren Zhijie <renzhijie2@huawei.com>
-Cc:     bigeasy@linutronix.de, arnd@arndb.de, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxT+D4SjVjDKwjAA--.3144S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF1ktryDurWxKr1fGw17ZFb_yoW8tFykpF
+        s2kr4DAFZrWrn8K3s8try5WrWUZrnrGw12q3ZYkFWrZF4UXF1kXr48tr4DXF1UZa1kWrW0
+        qFZ3Wa9rtF47JwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkmb7Iv0xC_Kw4lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+        cIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2
+        AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v2
+        6F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI
+        0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK82IY
+        6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUqEoXUUUUU
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 9:04 AM Ren Zhijie <renzhijie2@huawei.com> wrote:
->
-> Commit 3c07bfce92a5 ("proc: make config PROC_CHILDREN depend on PROC_FS")
-> make config PROC_CHILDREN depend on PROC_FS.
->
-> When CONFIG_PROC_FS is not set and CONFIG_CHECKPOINT_RESTORE=y,
-> make menuconfig screams like this:
->
-> WARNING: unmet direct dependencies detected for PROC_CHILDREN
->   Depends on [n]: PROC_FS [=n]
->   Selected by [y]:
->   - CHECKPOINT_RESTORE [=y]
->
-> CHECKPOINT_RESTORE would select PROC_CHILDREN which depends on PROC_FS,
-> so add depends on PROC_FS to CHECKPOINT_RESTORE to fix this.
-> Fixes: 3c07bfce92a5 ("proc: make config PROC_CHILDREN depend on PROC_FS")
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
-> ---
-> Changes in v2:
->         - change dependency of CHECKPOINT_RESTORE to depends on PROC_FS
+On coming back from s3/s4, the cpu name will be overwritten
+in cpu_probe path of seconary cpu, so we adjust the postion
+of using cpu name existed in cpu hardware register, and only
+use it while failing to get cpu name from SMBIOS.
 
-Thanks.
+Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
 
-Reviewed-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+diff --git a/arch/loongarch/include/asm/cpu-info.h b/arch/loongarch/include/asm/cpu-info.h
+index b6c4f96079df..937dce2a930a 100644
+--- a/arch/loongarch/include/asm/cpu-info.h
++++ b/arch/loongarch/include/asm/cpu-info.h
+@@ -64,6 +64,7 @@ extern void cpu_probe(void);
+ 
+ extern const char *__cpu_family[];
+ extern const char *__cpu_full_name[];
++extern char cpu_full_name[];
+ #define cpu_family_string()	__cpu_family[raw_smp_processor_id()]
+ #define cpu_full_name_string()	__cpu_full_name[raw_smp_processor_id()]
+ 
+diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
+index 529ab8f44ec6..a548b2197224 100644
+--- a/arch/loongarch/kernel/cpu-probe.c
++++ b/arch/loongarch/kernel/cpu-probe.c
+@@ -180,14 +180,13 @@ static void cpu_probe_common(struct cpuinfo_loongarch *c)
+ #define VENDOR_OFFSET	0
+ #define CPUNAME_OFFSET	9
+ 
+-static char cpu_full_name[MAX_NAME_LEN] = "        -        ";
++char cpu_full_name[MAX_NAME_LEN] = "        -        ";
+ 
+ static inline void cpu_probe_loongson(struct cpuinfo_loongarch *c, unsigned int cpu)
+ {
+ 	uint64_t *vendor = (void *)(&cpu_full_name[VENDOR_OFFSET]);
+ 	uint64_t *cpuname = (void *)(&cpu_full_name[CPUNAME_OFFSET]);
+ 
+-	__cpu_full_name[cpu] = cpu_full_name;
+ 	*vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
+ 	*cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
+ 
+diff --git a/arch/loongarch/kernel/env.c b/arch/loongarch/kernel/env.c
+index 82b478a5c665..955d82aa298e 100644
+--- a/arch/loongarch/kernel/env.c
++++ b/arch/loongarch/kernel/env.c
+@@ -44,6 +44,9 @@ static int __init init_cpu_fullname(void)
+ 	if (loongson_sysconf.cpuname && !strncmp(loongson_sysconf.cpuname, "Loongson", 8)) {
+ 		for (cpu = 0; cpu < NR_CPUS; cpu++)
+ 			__cpu_full_name[cpu] = loongson_sysconf.cpuname;
++	} else {
++		for (cpu = 0; cpu < NR_CPUS; cpu++)
++			__cpu_full_name[cpu] = cpu_full_name;
+ 	}
+ 	return 0;
+ }
+-- 
+2.31.1
 
-Lukas
-
-> ---
->  init/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/init/Kconfig b/init/Kconfig
-> index e11307310fc1..a19314933e54 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -1273,6 +1273,7 @@ endif # NAMESPACES
->
->  config CHECKPOINT_RESTORE
->         bool "Checkpoint/restore support"
-> +       depends on PROC_FS
->         select PROC_CHILDREN
->         select KCMP
->         default n
-> --
-> 2.17.1
->
