@@ -2,114 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E63435EEF53
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC76A5EEF59
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235385AbiI2HkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
+        id S235413AbiI2Hko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235360AbiI2HkL (ORCPT
+        with ESMTP id S235359AbiI2Hke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:40:11 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34EB05A2D5;
-        Thu, 29 Sep 2022 00:40:08 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxTWvOSzVjdKwjAA--.5668S4;
-        Thu, 29 Sep 2022 15:40:00 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] MIPS: Simplify __bswapdi2() and __bswapsi2()
-Date:   Thu, 29 Sep 2022 15:39:58 +0800
-Message-Id: <1664437198-31260-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1664437198-31260-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1664437198-31260-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8AxTWvOSzVjdKwjAA--.5668S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr43JryfWFyUKF1fCFy3Jwb_yoW8CF1Up3
-        Wq9anrKFWvq3WxKFnxAry0qr15tFs0yFyUtFWUCr1YvryDXan8Jr4xArZ3tryUJr9YvFyx
-        CF9xXry5KF4Utw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBYb7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv
-        6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
-        02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
-        4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r4xMxAIw28IcxkI7V
-        AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
-        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6x
-        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAI
-        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
-        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8KhF7UUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 29 Sep 2022 03:40:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41EA7EFEE
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:40:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664437222;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oaCFqrQ5GzdKP7AhOQ10Zj7koIi79amAnF/+mMQ81sg=;
+        b=NwN/qMzmmcwF7ZZ97nGUA9u9JnnXcGUvDFPRYbeOKAvZnRLQyB6AYarC9RVJa7j1fnDojv
+        80GDMcIO7uLMOjRuCCXfPYpqd91L+qBN/PeyTLf8U6dtKPw9YhqXd9pEHC7DS0V0NZ920A
+        GHvBfHF/MWXvVwiwfG8nJKvqYONRuXg=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-612-_Fi2a6saP8SPcLLknrPuww-1; Thu, 29 Sep 2022 03:40:21 -0400
+X-MC-Unique: _Fi2a6saP8SPcLLknrPuww-1
+Received: by mail-qk1-f199.google.com with SMTP id h8-20020a05620a284800b006b5c98f09fbso473138qkp.21
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:40:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=oaCFqrQ5GzdKP7AhOQ10Zj7koIi79amAnF/+mMQ81sg=;
+        b=wsGLHH+XNYzArXOnrkGTF7s7QMxJKQBvMbviq2bsgbm+t6SUlsk25WgdrYBI9c4zJB
+         kmRAqiIoh7m/sO5i4O1Q8egIt6pHNEWU0JAkcbtWO382GxvZWsVcIzpA0JbJG06vm1RS
+         XcbRdmsHSF2T+e2KJzmKw3PJIY4AFt5GIh46kkRkHa4+pMp/Takal/SbK+ts1XFzrsEa
+         ELhYA7gluE13Ieg6kUSJfzbRMNRfdkr/cfYD7VHKI9VNnbXBu+7+T9byMeyFze8KAOTy
+         fSymWFaPF654zPUCxv4uKrB9hyr/zv1T9zILPwGmVh9tAh9OEMLFGZPNvqsNe+gL4wVw
+         6a8w==
+X-Gm-Message-State: ACrzQf2HZB845lJfE4IST2W4TQPj3yC1VH3AhLSHXVBNalwBym7RRroQ
+        umofiBWKK9yU7eHlbNxNnaP+F8cusg9ThmSfwWcTB0mmvRNSlIR9o7sJkQxu4OYXtbTuP0iJ1aD
+        F6v2foU3wXQ0Cm60hSyhrFhRp
+X-Received: by 2002:a05:620a:c15:b0:6ce:d1db:f7dc with SMTP id l21-20020a05620a0c1500b006ced1dbf7dcmr1200827qki.259.1664437221183;
+        Thu, 29 Sep 2022 00:40:21 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7ojPjmY7apjIi1WK+7gxu/7NwTtehomIcT45iZfLQ6HJTQ6dVYty87P02i03q/EK/PFipsQA==
+X-Received: by 2002:a05:620a:c15:b0:6ce:d1db:f7dc with SMTP id l21-20020a05620a0c1500b006ced1dbf7dcmr1200814qki.259.1664437220936;
+        Thu, 29 Sep 2022 00:40:20 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-222.retail.telecomitalia.it. [79.46.200.222])
+        by smtp.gmail.com with ESMTPSA id x11-20020a05620a258b00b006bac157ec19sm5392848qko.123.2022.09.29.00.40.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 00:40:20 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 09:40:10 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Junichi Uekawa <uekawa@chromium.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Bobby Eshleman <bobby.eshleman@gmail.com>
+Subject: Re: [PATCH] vhost/vsock: Use kvmalloc/kvfree for larger packets.
+Message-ID: <20220929074010.37mksjmwr3l4wlwt@sgarzare-redhat>
+References: <20220928064538.667678-1-uekawa@chromium.org>
+ <20220928082823.wyxplop5wtpuurwo@sgarzare-redhat>
+ <20220928052738-mutt-send-email-mst@kernel.org>
+ <20220928151135.pvrlsylg6j3hzh74@sgarzare-redhat>
+ <20220928160116-mutt-send-email-mst@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220928160116-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use macro definitions ___constant_swab64 and ___constant_swab32
-to simplify __bswapdi2() and __bswapsi2().
+On Wed, Sep 28, 2022 at 04:02:12PM -0400, Michael S. Tsirkin wrote:
+>On Wed, Sep 28, 2022 at 05:11:35PM +0200, Stefano Garzarella wrote:
+>> On Wed, Sep 28, 2022 at 05:31:58AM -0400, Michael S. Tsirkin wrote:
+>> > On Wed, Sep 28, 2022 at 10:28:23AM +0200, Stefano Garzarella wrote:
+>> > > On Wed, Sep 28, 2022 at 03:45:38PM +0900, Junichi Uekawa wrote:
+>> > > > When copying a large file over sftp over vsock, data size is usually 32kB,
+>> > > > and kmalloc seems to fail to try to allocate 32 32kB regions.
+>> > > >
+>> > > > Call Trace:
+>> > > >  [<ffffffffb6a0df64>] dump_stack+0x97/0xdb
+>> > > >  [<ffffffffb68d6aed>] warn_alloc_failed+0x10f/0x138
+>> > > >  [<ffffffffb68d868a>] ? __alloc_pages_direct_compact+0x38/0xc8
+>> > > >  [<ffffffffb664619f>] __alloc_pages_nodemask+0x84c/0x90d
+>> > > >  [<ffffffffb6646e56>] alloc_kmem_pages+0x17/0x19
+>> > > >  [<ffffffffb6653a26>] kmalloc_order_trace+0x2b/0xdb
+>> > > >  [<ffffffffb66682f3>] __kmalloc+0x177/0x1f7
+>> > > >  [<ffffffffb66e0d94>] ? copy_from_iter+0x8d/0x31d
+>> > > >  [<ffffffffc0689ab7>] vhost_vsock_handle_tx_kick+0x1fa/0x301 [vhost_vsock]
+>> > > >  [<ffffffffc06828d9>] vhost_worker+0xf7/0x157 [vhost]
+>> > > >  [<ffffffffb683ddce>] kthread+0xfd/0x105
+>> > > >  [<ffffffffc06827e2>] ? vhost_dev_set_owner+0x22e/0x22e [vhost]
+>> > > >  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
+>> > > >  [<ffffffffb6eb332e>] ret_from_fork+0x4e/0x80
+>> > > >  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
+>> > > >
+>> > > > Work around by doing kvmalloc instead.
+>> > > >
+>> > > > Signed-off-by: Junichi Uekawa <uekawa@chromium.org>
+>> >
+>> > My worry here is that this in more of a work around.
+>> > It would be better to not allocate memory so aggressively:
+>> > if we are so short on memory we should probably process
+>> > packets one at a time. Is that very hard to implement?
+>>
+>> Currently the "virtio_vsock_pkt" is allocated in the "handle_kick" callback
+>> of TX virtqueue. Then the packet is multiplexed on the right socket queue,
+>> then the user space can de-queue it whenever they want.
+>>
+>> So maybe we can stop processing the virtqueue if we are short on memory, but
+>> when can we restart the TX virtqueue processing?
+>
+>Assuming you added at least one buffer, the time to restart would be
+>after that buffer has been used.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/lib/bswapdi.c | 10 ++--------
- arch/mips/lib/bswapsi.c |  6 ++----
- 2 files changed, 4 insertions(+), 12 deletions(-)
+Yes, but we still might not have as many continuous pages to allocate, 
+so I would use kvmalloc the same.
 
-diff --git a/arch/mips/lib/bswapdi.c b/arch/mips/lib/bswapdi.c
-index 1d020e1..88242dc 100644
---- a/arch/mips/lib/bswapdi.c
-+++ b/arch/mips/lib/bswapdi.c
-@@ -1,19 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/export.h>
- #include <linux/compiler.h>
-+#include <uapi/linux/swab.h>
- 
- /* To silence -Wmissing-prototypes. */
- unsigned long long __bswapdi2(unsigned long long u);
- 
- unsigned long long notrace __bswapdi2(unsigned long long u)
- {
--	return (((u) & 0xff00000000000000ull) >> 56) |
--	       (((u) & 0x00ff000000000000ull) >> 40) |
--	       (((u) & 0x0000ff0000000000ull) >> 24) |
--	       (((u) & 0x000000ff00000000ull) >>  8) |
--	       (((u) & 0x00000000ff000000ull) <<  8) |
--	       (((u) & 0x0000000000ff0000ull) << 24) |
--	       (((u) & 0x000000000000ff00ull) << 40) |
--	       (((u) & 0x00000000000000ffull) << 56);
-+	return ___constant_swab64(u);
- }
- EXPORT_SYMBOL(__bswapdi2);
-diff --git a/arch/mips/lib/bswapsi.c b/arch/mips/lib/bswapsi.c
-index 02d9df4..2ed6554 100644
---- a/arch/mips/lib/bswapsi.c
-+++ b/arch/mips/lib/bswapsi.c
-@@ -1,15 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/export.h>
- #include <linux/compiler.h>
-+#include <uapi/linux/swab.h>
- 
- /* To silence -Wmissing-prototypes. */
- unsigned int __bswapsi2(unsigned int u);
- 
- unsigned int notrace __bswapsi2(unsigned int u)
- {
--	return (((u) & 0xff000000) >> 24) |
--	       (((u) & 0x00ff0000) >>  8) |
--	       (((u) & 0x0000ff00) <<  8) |
--	       (((u) & 0x000000ff) << 24);
-+	return ___constant_swab32(u);
- }
- EXPORT_SYMBOL(__bswapsi2);
--- 
-2.1.0
+I agree that we should do better, I hope that moving to sk_buff will 
+allow us to better manage allocation. Maybe after we merge that part we 
+should spend some time to solve these problems.
+
+Thanks,
+Stefano
 
