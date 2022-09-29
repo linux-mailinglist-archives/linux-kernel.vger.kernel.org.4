@@ -2,93 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7468A5EF8B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1120E5EF8B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233674AbiI2PaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
+        id S235719AbiI2P3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235916AbiI2P3y (ORCPT
+        with ESMTP id S235100AbiI2P24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:29:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10739167F4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:29:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664465387;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BWdtBthhznDnqjUu3vrXZ37rQDG7v0SPEu95AzFm5Vw=;
-        b=SCJujOjGq48CXccp1H4a0gKEiSf7WRbMSXpcvpbx4XshzwqMJKgCpykBOcVnLbBO+u6ZbO
-        j/rYcB8maqfbHsY0+DaMp/S5muZdhhImwj48YjnQ7gBp3uB0KgglaZ/JKsFzdo779UxH4N
-        cp1pLDSHt3EuUcw9pHoat9GvjmojMh0=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-435-x_lhRH70PuWtsnCZtez2fQ-1; Thu, 29 Sep 2022 11:28:48 -0400
-X-MC-Unique: x_lhRH70PuWtsnCZtez2fQ-1
-Received: by mail-ed1-f72.google.com with SMTP id y14-20020a056402440e00b0044301c7ccd9so1525600eda.19
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:28:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:subject:cc:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=BWdtBthhznDnqjUu3vrXZ37rQDG7v0SPEu95AzFm5Vw=;
-        b=maAA7oR/VnBmJTKRy1s8a9zBhZR6WOdw1FiI/UttddeCd6Hd9Id0A6F3t3yIs1mkUr
-         Of8emhW32SBmXDyt/b8JlAfP7gpPgPHxW83cjJTmrKH1/YDpt/TqYsWTtpGM4jujelrX
-         obZFL9qEb4rkbiQ7/I+q8epeAa9UE0zENv1BtfMIqQJ3CZ+SggUyZTNK5PWG8PgCCgf3
-         rLkF8pEgqMKxbnAY1cYDV8Li+zOruDoK0znHtKK4eUpp1GPM4iCTx01+ZSeOtHYfTlwO
-         3vn7NILxvXVqwFqT6qqnIDBmuuLlfpxgPzac2dxOvrIB4D7zK1auijhMu8NOcYXMgxzd
-         VK7g==
-X-Gm-Message-State: ACrzQf2AjvCQRL9WVrmb2OO6NRsgYTn9FL/Le5tHxY/EWFUaw8Kb3mim
-        40eqfNlCFxLDQJ8ZCUgc0F6YqZqZ+v4com+wJV5d0j7NNRFOo537df+P6fmvA2kVVdwYSxVXsi7
-        qKVMBMNI50ODeFBQTeyOSY7uq
-X-Received: by 2002:a17:906:974f:b0:780:4a3c:d179 with SMTP id o15-20020a170906974f00b007804a3cd179mr3306990ejy.289.1664465326157;
-        Thu, 29 Sep 2022 08:28:46 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM74/4NIsoCqtX6lSUOGXbmSxQA8hkyoxpaGVA5PqFDA+efJZxNcgUXt81Okw0Aqu121kZMQmQ==
-X-Received: by 2002:a17:906:974f:b0:780:4a3c:d179 with SMTP id o15-20020a170906974f00b007804a3cd179mr3306957ejy.289.1664465325887;
-        Thu, 29 Sep 2022 08:28:45 -0700 (PDT)
-Received: from [192.168.41.81] (83-90-141-187-cable.dk.customer.tdc.net. [83.90.141.187])
-        by smtp.gmail.com with ESMTPSA id d4-20020a1709061f4400b00783c545544fsm4150990ejk.215.2022.09.29.08.28.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 08:28:45 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <ae658987-8763-c6de-7198-1a418e4728b4@redhat.com>
-Date:   Thu, 29 Sep 2022 17:28:43 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Cc:     brouer@redhat.com, Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>
-Subject: Re: [EXT] Re: [PATCH 1/1] net: fec: add initial XDP support
-To:     Shenwei Wang <shenwei.wang@nxp.com>, Andrew Lunn <andrew@lunn.ch>
-References: <20220928152509.141490-1-shenwei.wang@nxp.com>
- <YzT2An2J5afN1w3L@lunn.ch>
- <PAXPR04MB9185141B58499FD00C43BB6889579@PAXPR04MB9185.eurprd04.prod.outlook.com>
- <YzWcI+U1WYJuZIdk@lunn.ch>
- <PAXPR04MB918545B92E493CB57CDE612B89579@PAXPR04MB9185.eurprd04.prod.outlook.com>
+        Thu, 29 Sep 2022 11:28:56 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D578B15D66E;
+        Thu, 29 Sep 2022 08:28:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664465335; x=1696001335;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ymVMs9YQAEHrUsOFD4p3QpRHL5ugTKg2ApMBGil5TDo=;
+  b=jutOxllCQVA4yvDbozvM3uVJH+g9mY17rWCEyn/tdKa6HFqrYUYV+yv1
+   sJyHHZYwdJ/4Z1phYzlSOxBeDKkvek0wRTFtqA8iQgeVQ6o2zqmjGyjed
+   WnZ/GX5CN2RHIBWyODi5DKcali08gourjcMGJUuBBHYnVM+ZGLCWqm5gG
+   iBXT0TC3pDQiZw9yi6JMDrkDp7mHgE+tlWoOXcg4qeL6zcXtIZ6Hg9j7I
+   zfOoUinGejUQ0Gsy99wMw+JeH+x3nYUejHk5dEznTToVhTQddkl88T/iq
+   FhFa6cp8sbdS7Za4sZVkuU+BUNM1BxS3jIWjGb6Ews4MRliMWl5g7OzHA
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="299526479"
+X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
+   d="scan'208";a="299526479"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 08:28:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="867432644"
+X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
+   d="scan'208";a="867432644"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga006.fm.intel.com with ESMTP; 29 Sep 2022 08:28:55 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 08:28:55 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 29 Sep 2022 08:28:54 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 29 Sep 2022 08:28:54 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 29 Sep 2022 08:28:54 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jD3HFEl5+pRH7YsKxTo9Oj0pIqQxf4VtyqSzUcirp8Kl7E/ah9ho5eIJ9znI4sxSQ/0fB7cmNZH0GlcGEGOaQOhoG10rSPfwMwBuKVQSi0VJIK+4EHM8YGEkwbpHV5NWHuqn43aDf49NqVozD8rYsAljRikhCEXN7R0Acz1UjT6XtwL4NseIbgMGeyGKRKFbj67fPjiDeAw/oiI7VPnfcgG/QFmnI7eDd1CtWhurFh1B0ryAZReRzgXaW+eAw3BVF2XruDXw59Tay0u9zMv9iB4aPLUN8LPhSXacKkCgQWeSgWVYT9KAE2ENwpbMr0Nd57jvpQybARtQzjsbZqkikA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+ENedHNF14K3f1nXrGOAAroR4D6UItq1bzc5qgCMWco=;
+ b=JGwovjr+HDT3xG2G02tE4EVKuVdlmpKVL9/rEg9JZ+Ygpxcms4F3YXMuXZ0vbWvfgKKQLKz374A7XoBVEclpn6NjBSDAGd91xx+imwT2XgzpCTjPnjAsmZ8MoXEfpBt5DKj3tyMsBeXdX+nyne9ur+a6OwD/s2ES4XJkDZg4KH5+Gbkbq3Zl+6KYxKzGXH8TlswQ59MhlrAO1Tb0bz2/crP2ic4KaWMbbQoMOjAaDbXigrlSaZlG920dYYW9zgVrFFM7k/Odt8srTZeJnBUpnXFU9RBgC5kJyQJm+gabviZxX13TApNcza2QkAnFAIZkqko0xk/1RRprswEF/PRXOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
+ by DS0PR11MB7191.namprd11.prod.outlook.com (2603:10b6:8:139::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Thu, 29 Sep
+ 2022 15:28:53 +0000
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::207e:ab0b:9e29:6a4b]) by CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::207e:ab0b:9e29:6a4b%12]) with mapi id 15.20.5676.015; Thu, 29 Sep
+ 2022 15:28:53 +0000
+Message-ID: <c1ab0387-ff56-a7a5-bfd5-93e53293a97b@intel.com>
+Date:   Thu, 29 Sep 2022 08:28:50 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.3.0
+Subject: Re: [PATCH 3/5] selftests/resctrl: Remove duplicate codes that clear
+ each test result file
 Content-Language: en-US
-In-Reply-To: <PAXPR04MB918545B92E493CB57CDE612B89579@PAXPR04MB9185.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+To:     "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <20220914015147.3071025-1-tan.shaopeng@jp.fujitsu.com>
+ <20220914015147.3071025-5-tan.shaopeng@jp.fujitsu.com>
+ <bdb19cf6-dd4b-2042-7cda-7f6108e543aa@intel.com>
+ <TYAPR01MB6330988D96E4CD00C9A03DAA8B559@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+ <a0841d1f-fcc1-f307-7e2d-b9cce534455d@intel.com>
+ <TYAPR01MB6330E178F0D86ED8ACE075378B579@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <TYAPR01MB6330E178F0D86ED8ACE075378B579@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR05CA0014.namprd05.prod.outlook.com
+ (2603:10b6:a03:33b::19) To CY4PR11MB1862.namprd11.prod.outlook.com
+ (2603:10b6:903:124::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|DS0PR11MB7191:EE_
+X-MS-Office365-Filtering-Correlation-Id: d883bacd-f9e0-42a5-57a5-08daa22f50b9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xlzafGhHLvbpKD3HmjHfrqH0mjTAx1lTl3ReSDeH5p3t5t1bODvDSamkY+UGxd9xHK8Lfqw8XcP+k2O1tKynjIFByS1gj05Ot9dHh49sYYx4jeCJHALK+lzYG3Mus3d4O/wn10bVj0uIKho3+RWTNrsTRlyalAsmnWhrvDe46W/nVGhMDTmLa/1j6htTMFWRbe2y63dfbDFX/ZUkJaikDLJzmCcnc9ymzY8YRpzJvLmt1kHhHS4Ay86k8eC+g46pHeMuSm1uasgbGhclQZjOcxOJHlxD2DxdRCZ0hVxedHev1jVL6r7wb060rqXyiqa5vkozYGSKQfXe1TyKgjBxG137vcKOmJyEXniDI/b1r+v8M5zaKeBRTJFVK06Azc+pMWpznpBRdJqCHUXFvkNHKhredsQXCSavhnnBBvwCH/Vpc9cgVkZVDdiDxRq3lczBhAvbs5/HNvRrYZ8ZgH14CJm1RPEQyFjP65q94P/gSWFXMomA8/TdEVQx6keZQcgcI7YWsNF18wvWhnbTHMwQ5pF4L3IM5Ohrdq2lDEJdKXpZKYMNr6zFLmX0aejDrBfH7d8aOp9Jp19R/rBWS8Igx4JNT8Baqc7aHeJjhfoDFrYXwFnBswrlE4sct2gSlUH5WKEmoj75WmsQYqtO/Yup7k3zdDzGM/KEjuMAzSd3DKUz4Tm2MonuvRoIYv8wT2OdAN08LOsY88lYzxyi+XY5+iEcuD9+DmgjE6l/tKeepLr/d4uSmGkzybt4O/4s9C5jyZEHKb4hlt4QvepYqswiZsMKi/g/AZbBBOf2o9w4TiI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(376002)(39860400002)(136003)(396003)(346002)(451199015)(66946007)(316002)(8936002)(6486002)(31686004)(41300700001)(110136005)(54906003)(6512007)(44832011)(6506007)(26005)(53546011)(5660300002)(2906002)(2616005)(82960400001)(36756003)(38100700002)(186003)(66556008)(4326008)(8676002)(31696002)(66476007)(86362001)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eFNJWGx6RlhUdm1xZGx6dTFzQmYzekVmQktLeit4SmJGMHpiaElxUUEraTd3?=
+ =?utf-8?B?NEhHekF6U29VTXkxbmhCcmMwc2E0V3gra3hTc3REM2dBMURZV0lzaFFlSUsz?=
+ =?utf-8?B?a3BUSE1Eam5YaE5OUHY0WGcrTEFnR3Q5bnVUeEJhZGNIM3JXVXB5RDB2MHhu?=
+ =?utf-8?B?bDhFaXlZemYrNW1aYVo1S2FsQklQbHVXWmh0cmkwOVZ4OFFtV2E5bEErZG9M?=
+ =?utf-8?B?SHorSlpQUitBRVFXMUM5ZmViamZrUTlEVzZzRnBDTXMxb1RTRkFPcmZDTVd4?=
+ =?utf-8?B?aG82WFliS1NuSmtsMFgxYXZ2eDZPREZTNWpSOFp2VXVvMTIwdGRTRDNKUUc5?=
+ =?utf-8?B?Q0NHYVUwamFKVUZqc3lXNHUwcXo4SVJZeW91a3NQTUduMkRzKzg5d2p5anJC?=
+ =?utf-8?B?aXoxMGpJVzZhVTFmc0pIUUlZQm5zUnVzS0NRVnVBWXYreXNrQkszbWRjSWFS?=
+ =?utf-8?B?eHo1Y3d6a0hhLzlIblVHOWR0S3JHclBTeWozMDBCU1JIdnk1eG5jYWlJazNh?=
+ =?utf-8?B?RHBveUJra1J2UlVUV2cyRGFveXVsbnNJdlRFc0YrMUMzNlU3eWk1YVNGZzJQ?=
+ =?utf-8?B?VXZNR0k4M0RSd3RmTUR4VUNPbjV2cXRKRHhIZ2dZOStPcHZMNVRoSkN1bEp4?=
+ =?utf-8?B?SU80aHFlakJHdE9oejB0OFpJbk5mQ3RpTFo2dFNkRFlaMTlaeDNkM3pYSHEz?=
+ =?utf-8?B?aUIwTXJub0htcFF5MUNROFNObHFkaFhMb0k1ejhMcVNxWDE4MjFVbmJSNmdQ?=
+ =?utf-8?B?UjdNQlRuVGlMaGl5S0wzbE1naXpyaHF4azdIV0pmQkIybnlKMnlpd010VUZ0?=
+ =?utf-8?B?WXdvTGRBamp0U0dkY3NtU1pJazZoei9OZDdpVEdGYzlqMEFma1JudmE3K1cr?=
+ =?utf-8?B?MWk1SUsvSnJYYWtoUjlNaWtqYU9FVVdjbWtIYUU1ZDhaeUgySlVsaWxoMW9Y?=
+ =?utf-8?B?L2hzYU9MVVlOZVNHbjJXVlY1M3orTVh0eFpLcmFYcnBDUXFDUWhoYmJzNGU5?=
+ =?utf-8?B?U3NIT3UzYSs2R1FySXJjQmpGZkxOU2VJUDk2WFpFMkJ5K3JvZW5yUUllTkx0?=
+ =?utf-8?B?NmowK3JubUwyWGRqbTBPRkFDL3FBKzlweFgrV0xySDRFMXBWekZLTENwUmJT?=
+ =?utf-8?B?L29YNU5VdTd0b1NucDk0ajhwMmlUZDVCVDY2TTFuNmY4ODVXdVZYRHUzeVBx?=
+ =?utf-8?B?WkovZENTbXg5R0NRdDQ4SU9pcUVQT1FnSW1qTWZiQWpsQjg1NHNOMHI3ZUgw?=
+ =?utf-8?B?RHA3VlgwQlMxVElRVXVXTGUvVFQzLzl6TjROYm1odU9sQVZYQWNaR0ZZbmlC?=
+ =?utf-8?B?ck9OcjBYTjhZbENVYWRZVlFNbnpzMnVTbzlvZVBWU0d3MVQ4bmJDU3g2dHlN?=
+ =?utf-8?B?TG5UUEg4bUZyNzhWQitsc2lsTVpubVlYT0N0ck1XckgxOEd2OTdraUhiQ3Zp?=
+ =?utf-8?B?TE5ndi95WjhWR0lOMkdlaUxxZnAybTljcGdRbld4Vk5LTTlxSkxJUWdUQk5H?=
+ =?utf-8?B?Tk9wZ21LNGxOczBHRGltZFRKNkF4SFNDZXJPUDdOcUpqbjNZcHJaOXcvWUg2?=
+ =?utf-8?B?Ym9KdklLOXFyQkFXK1d5V3JuVW53K1EvZ0xPZmFyMm02ckZFRUF2T2I1WUJK?=
+ =?utf-8?B?UVl2V01HMmN1ODcyK1BOSUNsQ1R4Q2tucXQvWTN6ak5IWVRsa25PdE90Ullr?=
+ =?utf-8?B?cnBtZFBlSDV6Nlg1ZVFvNHRYNVFVN2lyU3pDbjdwNEw2akNuVzFSemcvbmNY?=
+ =?utf-8?B?ZW1BRkx5bFB2cXUvZ2t2a0FLNlJHd1RPY3grL3dtc2doNHdHbTh5cWV0RHBL?=
+ =?utf-8?B?UmZjR2RTRFIwbld3VzhJRVFHNE5qY1pTVitzb0dqUXV5ZzRhYmJGT2dXVEdt?=
+ =?utf-8?B?VnlUWjRyd1ZGek8zbE5XS1FPQnE0T25sTFZpQkVlV1ljOU85eHl0TmVKTFFG?=
+ =?utf-8?B?Y0ZjNWtNOG56ZnAwZWNQT0JxL2tvUWE1WDhpWUN2ZTVmMWw1QWJFd1ZFOFFV?=
+ =?utf-8?B?VlpNQ1lNbEZzTTNVbS9rdkFhZk5Vcnl3ejd3bW81NXpQR1BKaDlxZGRHTWhW?=
+ =?utf-8?B?Y2hpdlNtZFhZVzA3M29NamJWU1YwYWV4b3VHM2w0THBMUkNmTG9ac2N6Z1ZC?=
+ =?utf-8?B?cnlJT3JwVy9QVWNmWTdLSkJnb29ualJIaUtMTndqUVFmMml2cUtuN29ZT1Yv?=
+ =?utf-8?B?RWc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d883bacd-f9e0-42a5-57a5-08daa22f50b9
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 15:28:52.9707
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MDQ3Zmb1OMH8Jlt9Yq/qdlHvYxKiyfZhrmVwACSC9JBZUUlQpE94ZWJiF5d6PZWu5xzstt0LmIQfGTwnfK1hXtHq+iMg4SBdKXSpjqYQYMg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7191
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,51 +169,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Shaopeng,
 
-
-On 29/09/2022 15.26, Shenwei Wang wrote:
-> 
->> From: Andrew Lunn <andrew@lunn.ch>
->> Sent: Thursday, September 29, 2022 8:23 AM
-[...]
+On 9/28/2022 10:28 PM, tan.shaopeng@fujitsu.com wrote:
+>> On 9/27/2022 2:01 AM, tan.shaopeng@fujitsu.com wrote:
+>>>> On 9/13/2022 6:51 PM, Shaopeng Tan wrote:
+>>>>> Before exiting each test function(run_cmt/cat/mbm/mba_test()),
+>>>>> test results are printed by ksft_print_msg() and then temporary
+>>>>> result files are cleaned by function cmt/cat/mbm/mba_test_cleanup().
+>>>>> However, before running ksft_print_msg(), function
+>>>>
+>>>> before -> after?
+>>>
+>>> I think it is "before".
 >>
->>> I actually did some compare testing regarding the page pool for normal
->>> traffic.  So far I don't see significant improvement in the current
->>> implementation. The performance for large packets improves a little,
->>> and the performance for small packets get a little worse.
->>
->> What hardware was this for? imx51? imx6? imx7 Vybrid? These all use the FEC.
+>> hmmm ... if cmt/cat/mbm/mba_test_cleanup() was run before
+>> ksft_print_msg() then there would be no test results to print, no?
+>> The current implementation runs cmt/cat/mbm/mba_test_cleanup() after
+>> ksft_print_msg() ... albeit twice.
 > 
-> I tested on imx8qxp platform. It is ARM64.
-
-On mvneta driver/platform we saw huge speedup replacing:
-
-   page_pool_release_page(rxq->page_pool, page);
-with
-   skb_mark_for_recycle(skb);
-
-As I mentioned: Today page_pool have SKB recycle support (you might have 
-looked at drivers that didn't utilize this yet), thus you don't need to 
-release the page (page_pool_release_page) here.  Instead you could 
-simply mark the SKB for recycling, unless driver does some page refcnt 
-tricks I didn't notice.
-
-On the mvneta driver/platform the DMA unmap (in page_pool_release_page) 
-was very expensive. This imx8qxp platform might have faster DMA unmap in 
-case is it cache-coherent.
-
-I would be very interested in knowing if skb_mark_for_recycle() helps on 
-this platform, for normal network stack performance.
-
->> By small packets, do you mean those under the copybreak limit?
->>
->> Please provide some benchmark numbers with your next patchset.
 > 
-> Yes, the packet size is 64 bytes and it is under the copybreak limit.
-> As the impact is not significant, I would prefer to remove the
-> copybreak  logic.
+> I am sorry I made a mistake in changelog.
+> It should be ksft_test_result() instead of ksft_print_msg().
+> 
+> Changelog:
+> Before exiting each test function(run_cmt/cat/mbm/mba_test()),
+> test results (“ok”/”not ok”) are printed by ksft_test_result() and then temporary result
+> files are cleaned by function cmt/cat/mbm/mba_test_cleanup().
+> However, before running ksft_test_result(), function cmt/cat/mbm/mba_test_cleanup()
+> has been run in each test function as follows:
+>   cmt_resctrl_val()
+>   cat_perf_miss_val()
+>   mba_schemata_change()
+>   mbm_bw_change()
+> 
+> Remove duplicate codes that clear each test result file.
 
-+1 to removing this logic if possible, due to maintenance cost.
+This is clear, thank you very much.
 
---Jesper
-
+Reinette
