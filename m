@@ -2,199 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 343115EF016
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389925EF01B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235151AbiI2IND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S235339AbiI2IN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234998AbiI2INA (ORCPT
+        with ESMTP id S234970AbiI2INZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:13:00 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA59413BCC1;
-        Thu, 29 Sep 2022 01:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664439178; x=1695975178;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IQ7z/I+zLeVa5Aa6mLZ8ZxCc1tq6PQJIg4/ITcyKHNc=;
-  b=EiRV/+ei1DIliOEr1P5AbqFsdQpPMQNZUOPgGKHXGBwgKz9MWsaNI++T
-   TeQvSMg9RbRWAl5kQwpNorx7YftO301b/SUHYsLldUh5y82zI5msAIniq
-   RDYe4bpg4Idmr2vB8gKi6X8hiomWo7e3tpVMSJQqHUjVBmIwFqIMCcS75
-   3XRBUbT+HG8lhQeAwtoP1jPMj7IJ1JfCfBeUaUhmgFz9yvtzW1ilYENXm
-   H8/9c7mc+xB0k/yeQ2hCbHTSso2buA2Iu7uddoGOjCMDQg2V2kloeVS+W
-   a+e0klaL6QybS7oHi3eWfra5G9oTdRObuhg9SDqHUbfV0m+s0t/Wi3uSo
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="299428164"
-X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
-   d="scan'208";a="299428164"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 01:12:58 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="726296616"
-X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
-   d="scan'208";a="726296616"
-Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.238.4.231]) ([10.238.4.231])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 01:12:53 -0700
-Message-ID: <dd33559e-5d55-9866-136f-554466c0c44f@linux.intel.com>
-Date:   Thu, 29 Sep 2022 16:12:51 +0800
+        Thu, 29 Sep 2022 04:13:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6208713D869;
+        Thu, 29 Sep 2022 01:13:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CC2462083;
+        Thu, 29 Sep 2022 08:13:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48FB4C433D6;
+        Thu, 29 Sep 2022 08:13:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664439202;
+        bh=miyTrsj657awCBET+ClskfH3PMYF2SXvq8BVWQnsBSg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OgbygpCRec1+zZcXlqPrZT5wyH+6jCGswxV2YGzldzDNXXaVmocD3yPgOiqA5lYo2
+         iCkX6WySPRgh44MKZbficx8A+vxFMOS57f9znnl5T2DQgy8kFauuPF/BeuJvhFjT8g
+         w3MTUP6fjLNvwdakkwF81N4Wz9EXZTR062+2Uh67IJ4jyFaOWTlnpUOB+oJMTC6N1D
+         4/R8DHOSM+qf9O5QxRtxWHAmPwfVoesa/dYrh64o2tr/8J+MjAVJc3ZynksdVTKKH6
+         IoHJUiSUV/KTr+4CbcuLXS7YvE7vcTSQV5LhHWwufEot6M8B+FjtFfLE20+kcJAp+v
+         YZviyI4wMrFQA==
+Date:   Thu, 29 Sep 2022 10:13:15 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     William McVicker <willmcvicker@google.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Robin Murphy <robin.murphy@arm.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v5 2/2] PCI: dwc: Add support for 64-bit MSI target
+ address
+Message-ID: <YzVTmy9MWh+AjshC@lpieralisi>
+References: <20220825185026.3816331-1-willmcvicker@google.com>
+ <20220825185026.3816331-3-willmcvicker@google.com>
+ <20220928120510.rkdlnczytxuioxcn@mobilestation>
+ <YzSJ2ioEeRhHC6zn@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v1 05/22] perf vendor events: Update Intel alderlake
-To:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>, perry.taylor@intel.com,
-        caleb.biggers@intel.com, kshipra.bopardikar@intel.com,
-        samantha.alt@intel.com, ahmad.yasin@intel.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-References: <20220928072204.1613330-1-irogers@google.com>
- <20220928072204.1613330-6-irogers@google.com>
- <44f59d7c-ced7-2d74-edbc-f354047339fe@linux.intel.com>
- <YzRVOD4u2SI0K29Y@kernel.org>
- <CAP-5=fUogKZx6JP_vg+6ti+BnbEcX+3Wnzi077s4VgxEKLpQeQ@mail.gmail.com>
-Content-Language: en-US
-From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
-In-Reply-To: <CAP-5=fUogKZx6JP_vg+6ti+BnbEcX+3Wnzi077s4VgxEKLpQeQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzSJ2ioEeRhHC6zn@google.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/29/2022 10:23 AM, Ian Rogers wrote:
-> On Wed, Sep 28, 2022 at 7:08 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
->>
->> Em Wed, Sep 28, 2022 at 04:22:53PM +0800, Xing Zhengjun escreveu:
->>> On 9/28/2022 3:21 PM, Ian Rogers wrote:
->>>> diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
->>>> index 7f2d777fd97f..594c6e96f0ce 100644
->>>> --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
->>>> +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
->>>> @@ -1,5 +1,5 @@
->>>>    Family-model,Version,Filename,EventType
->>>> -GenuineIntel-6-9[7A],v1.13,alderlake,core
->>>> +GenuineIntel-6-(97|9A|B7|BA|BF),v1.15,alderlake,core
->>>
->>> The commit description should mention this change "Add more CPUID support
->>> for ADL"
->>
->> I added this note, with that can I have your Reviewed-by or Acked-by?
->>
->> - Arnaldo
+On Wed, Sep 28, 2022 at 05:52:26PM +0000, William McVicker wrote:
+> On 09/28/2022, Serge Semin wrote:
+> > On Thu, Aug 25, 2022 at 06:50:25PM +0000, Will McVicker wrote:
+> > > Since not all devices require a 32-bit MSI address, add support to the
+> > > PCIe host driver to allow setting the DMA mask to 64-bits if the 32-bit
+> > > allocation fails. This allows kernels to disable ZONE_DMA32 and bounce
+> > > buffering (swiotlb) without risking not being able to get a 32-bit address
+> > > during DMA allocation.
+> > 
+> > What is a problem in having the ZONE_DMA32 enabled anyway?
 > 
-> I think I should send a v2. I can add this then. Other things for v2 are:
-> - this week there will likely be an update to [1] which is implicitly
-> integrated here.
-> - the topdown metrics are all percentages but are currently values
-> zero to 1. It is straightforward to add a ScaleUnit of 100% to them
-> all.
-> - eyeballing topdown event metrics like:
+> On Android most devices don't have a 32-bit limitation. Several Android OEMs
+> have reported significant enough performance improvements after disabling
+> ZONE_DMA32. These include reducing memory usage, improving the time spent by
+> kswapd, improving direct reclaim, and improving app launch time.
 > 
->      {
->         "BriefDescription": "This category represents fraction of slots
-> utilized by useful work i.e. issued uops that eventually get retired",
->         "MetricExpr": "topdown\\-retiring / (topdown\\-fe\\-bound +
-> topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound)",
->         "MetricGroup": "TopdownL1;tma_L1_group",
->         "MetricName": "tma_retiring",
-> ...
-> it looks like the group will fail due to the missing slots event. This
-> can be fixed with:
->         "MetricExpr": "topdown\\-retiring / (topdown\\-fe\\-bound +
-> topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0
-> * TOPDOWN.SLOTS",
+> So this patch series was introduced to remove the dependency on ZONE_DMA32 for
+> the DW PCIe drivers.
 > 
-> Thanks,
-> Ian
-
-I just test all the events for SPR/ADL, no error find.
-But there are a lots of metrics fail due to slots missed.
-
-|0929_005708.420|ERROR| common.sh:123:do_cmd() - perf stat -M 
-"tma_branch_mispredicts" -a sleep 0.1 failed. Return code is 255|
-|0929_005709.221|ERROR| common.sh:123:do_cmd() - perf stat -M 
-"tma_backend_bound" -a sleep 0.1 failed. Return code is 255|
-|0929_005709.544|ERROR| common.sh:123:do_cmd() - perf stat -M 
-"tma_memory_bound" -a sleep 0.1 failed. Return code is 255|
-|0929_005723.757|ERROR| common.sh:123:do_cmd() - perf stat -M 
-"tma_core_bound" -a sleep 0.1 failed. Return code is 255|
-|0929_005724.531|ERROR| common.sh:123:do_cmd() - perf stat -M 
-"tma_ports_utilization" -a sleep 0.1 failed. Return code is 255|
-|0929_005731.541|ERROR| common.sh:123:do_cmd() - perf stat -M 
-"tma_retiring" -a sleep 0.1 failed. Return code is 255|
-|0929_005731.860|ERROR| common.sh:123:do_cmd() - perf stat -M 
-"tma_light_operations" -a sleep 0.1 failed. Return code is 255|
-|0929_005732.811|ERROR| common.sh:123:do_cmd() - perf stat -M 
-"tma_x87_use" -a sleep 0.1 failed. Return code is 255|
-|0929_005741.026|ERROR| common.sh:123:do_cmd() - perf stat -M 
-"tma_heavy_operations" -a sleep 0.1 failed. Return code is 255|
-|0929_005746.165|ERROR| common.sh:123:do_cmd() - perf stat -M 
-"Memory_Latency" -a sleep 0.1 failed. Return code is 255|
-
-# perf stat -v  -M "tma_branch_mispredicts" -a sleep 1
-Using CPUID GenuineIntel-6-8F-3
-metric expr topdown\-br\-mispredict / (topdown\-fe\-bound + 
-topdown\-bad\-spec + topdown\-retiring + topdown\-be\-bound) for 
-tma_branch_mispredicts
-found event topdown-retiring
-found event topdown-fe-bound
-found event topdown-be-bound
-found event topdown-br-mispredict
-found event topdown-bad-spec
-Parsing metric events 
-'{topdown-retiring/metric-id=topdown!1retiring/,topdown-fe-bound/metric-id=topdown!1fe!1bound/,topdown-be-bound/metric-id=topdown!1be!1bound/,topdown-br-mispredict/metric-id=topdown!1br!1mispredict/,topdown-bad-spec/metric-id=topdown!1bad!1spec/}:W'
-topdown-retiring -> cpu/event=0,umask=0x80/
-topdown-fe-bound -> cpu/event=0,umask=0x82/
-topdown-be-bound -> cpu/event=0,umask=0x83/
-topdown-br-mispredict -> cpu/event=0,umask=0x85/
-topdown-bad-spec -> cpu/event=0,umask=0x81/
-Control descriptor is not initialized
-Warning:
-topdown-retiring event is not supported by the kernel.
-Error:
-The sys_perf_event_open() syscall returned with 22 (Invalid argument) 
-for event (topdown-retiring).
-/bin/dmesg | grep -i perf may provide additional information.
-
-
+> > 
+> > > 
+> > > Basically, in the slim chance that there are no 32-bit allocations
+> > > available, the current PCIe host driver will fail to allocate the msi_msg
+> > > page due to a DMA address overflow (seen in [1]). With this patch, the
+> > > PCIe host can retry the allocation with a 64-bit DMA mask if the current
+> > > PCIe device advertises 64-bit support via its MSI capabilities.
+> > > 
+> > > [1] https://lore.kernel.org/all/Yo0soniFborDl7+C@google.com/
+> > 
+> > Note the reported error isn't caused by the allocation procedure, but
+> > by the mapping procedure.
+> > 
+> > > 
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Signed-off-by: Will McVicker <willmcvicker@google.com>
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > Acked-by: Jingoo Han <jingoohan1@gmail.com>
+> > > ---
+> > >  .../pci/controller/dwc/pcie-designware-host.c | 38 ++++++++++++++-----
+> > >  drivers/pci/controller/dwc/pcie-designware.c  |  8 ++++
+> > >  drivers/pci/controller/dwc/pcie-designware.h  |  1 +
+> > >  3 files changed, 38 insertions(+), 9 deletions(-)
+> > > 
+> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > index 39f3b37d4033..8928a9a29d58 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > @@ -330,6 +330,9 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+> > >  	u64 *msi_vaddr;
+> > >  	int ret;
+> > >  	u32 ctrl, num_ctrls;
+> > > +	bool msi_64bit = false;
+> > > +	bool retry_64bit = false;
+> > > +	u16 msi_capabilities;
+> > >  
+> > >  	for (ctrl = 0; ctrl < MAX_MSI_CTRLS; ctrl++)
+> > >  		pp->irq_mask[ctrl] = ~0;
+> > > @@ -367,16 +370,33 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+> > >  						    dw_chained_msi_isr, pp);
+> > >  	}
+> > >  
+> > > -	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+> > > -	if (ret)
+> > > -		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
+> > 
+> > > +	msi_capabilities = dw_pcie_msi_capabilities(pci);
+> > > +	if (msi_capabilities & PCI_MSI_FLAGS_ENABLE)
+> > > +		msi_64bit = msi_capabilities & PCI_MSI_FLAGS_64BIT;
+> > 
+> > Note this capability flag has nothing to do with the DW PCIe iMSI-RX
+> > engine, which is used here to detect and report MSI TLPs. By design
+> > iMSI-RX always support 64-bit addresses. If you imply having that flag
+> > set by the DW PCIe platform drivers on the platform-specific probe
+> > stage as an indication of MSI address range, then ok.
 > 
-> [1] https://github.com/intel/perfmon-metrics
+> Right. The DW PCIe device driver can set this flag during probe before calling
+> dw_pcie_host init() to ensure that we will always successfully allocate and map
+> the MSI target address (as required to return successfully from
+> dw_pcie_host_init()).
 > 
->>>>    GenuineIntel-6-(1C|26|27|35|36),v4,bonnell,core
->>>>    GenuineIntel-6-(3D|47),v26,broadwell,core
->>>>    GenuineIntel-6-56,v23,broadwellde,core
->>>
->>> --
->>> Zhengjun Xing
->>
->> --
->>
->> - Arnaldo
+> > 
+> > >  
+> > > -	msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
+> > > -					GFP_KERNEL);
+> > > -	if (!msi_vaddr) {
+> > > -		dev_err(dev, "Failed to alloc and map MSI data\n");
+> > > -		dw_pcie_free_msi(pp);
+> > > -		return -ENOMEM;
+> > > +	while (true) {
+> > > +		dev_dbg(dev, "Setting MSI DMA mask to %s-bit.\n",
+> > > +			retry_64bit ? "64" : "32");
+> > 
+> > > +		ret = dma_set_mask_and_coherent(dev, retry_64bit ?
+> > > +						DMA_BIT_MASK(64) :
+> > > +						DMA_BIT_MASK(32));
+> > 
+> > I'd suggest to just drop this. No DMA actually performed on getting the
+> > MSI TLPs. So modifying the device DMA-mask due to something which
+> > doesn't cause DMA and based on the flag which doesn't indicates the
+> > device DMA-capability is at least inappropriate.
+> > 
+> > > +		if (ret)
+> > > +			dev_warn(dev, "Failed to set DMA mask to %s-bit.\n",
+> > > +				 retry_64bit ? "64" : "32");
+> > > +
+> > 
+> > > +		msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
+> > > +						GFP_KERNEL);
+> > 
+> > As I noted earlier the DMA-coherent memory can be too expensive. So
+> > it's a waste of one allocating with no intent of usage. Instead of this
+> > just get back the alloc_page() method here and pass the flag GFP_DMA32
+> > to that function if MSI-capability reported the PCI_MSI_FLAGS_64BIT
+> > unset.
+> 
+> As mentioned above, we don't want to force this driver to require the kernel to
+> enable ZONE_DMA32. Since no I/O happens to this buffer, could we use
+> dma_alloc_attrs() with the DMA_ATTR_SKIP_CPU_SYNC and
+> DMA_ATTR_NO_KERNEL_MAPPING attribute? Would that address the "too expensive"
+> issues you're referring to?
+> 
+> With regards to the DMA mask, I'm okay with moving that out of the host
+> controller and into the DW PCIe device driver. That would address all of my
+> issues and we could just drop the logic for checking the PCI_MSI_FLAGS_64BIT.
+> However, I'm not the one you to convince to do that.
 
--- 
-Zhengjun Xing
+We are late -rc7 and it does not look like we are converging on this
+discussion - I will wait till tomorrow but then I will have to drop
+
+https://lore.kernel.org/linux-pci/20220825235404.4132818-1-willmcvicker@google.com
+
+from the PCI queue for v6.1 so that we can restart from a clean slate.
+
+Lorenzo
+
+> Regards,
+> Will
+> 
+> > 
+> > -Sergey
+> > 
+> > > +		if (!msi_vaddr) {
+> > > +			dev_err(dev, "Failed to alloc and map MSI data\n");
+> > > +			if (msi_64bit && !retry_64bit) {
+> > > +				retry_64bit = true;
+> > > +				continue;
+> > > +			}
+> > > +
+> > > +			dw_pcie_free_msi(pp);
+> > > +			return -ENOMEM;
+> > > +		}
+> > > +		break;
+> > >  	}
+> > >  
+> > >  	return 0;
+> > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> > > index c6725c519a47..650a7f22f9d0 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-designware.c
+> > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> > > @@ -82,6 +82,14 @@ u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap)
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(dw_pcie_find_capability);
+> > >  
+> > > +u16 dw_pcie_msi_capabilities(struct dw_pcie *pci)
+> > > +{
+> > > +	u8 offset;
+> > > +
+> > > +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
+> > > +	return dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
+> > > +}
+> > > +
+> > >  static u16 dw_pcie_find_next_ext_capability(struct dw_pcie *pci, u16 start,
+> > >  					    u8 cap)
+> > >  {
+> > > diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+> > > index a871ae7eb59e..45fcdfc8c035 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-designware.h
+> > > +++ b/drivers/pci/controller/dwc/pcie-designware.h
+> > > @@ -332,6 +332,7 @@ void dw_pcie_version_detect(struct dw_pcie *pci);
+> > >  
+> > >  u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap);
+> > >  u16 dw_pcie_find_ext_capability(struct dw_pcie *pci, u8 cap);
+> > > +u16 dw_pcie_msi_capabilities(struct dw_pcie *pci);
+> > >  
+> > >  int dw_pcie_read(void __iomem *addr, int size, u32 *val);
+> > >  int dw_pcie_write(void __iomem *addr, int size, u32 val);
+> > > -- 
+> > > 2.37.2.672.g94769d06f0-goog
+> > > 
+> > > 
+> 
