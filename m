@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9204A5EFECA
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 22:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E364C5EFEC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 22:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiI2Ulx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 16:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
+        id S229611AbiI2Ulv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 16:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiI2Uls (ORCPT
+        with ESMTP id S229495AbiI2Uls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 29 Sep 2022 16:41:48 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EE1356ED
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 13:41:46 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id f11-20020a5d858b000000b006a17b75af65so1458357ioj.13
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 13:41:46 -0700 (PDT)
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24869C9965
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 13:41:47 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id f4-20020a056e020b4400b002f6681cca5bso1996764ilu.14
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 13:41:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date;
-        bh=jEEoHwmh0z4dknk+NtlY2fx8RmUtjpmPjMMYb+1QyX4=;
-        b=HHJXCGv/aBaQIBU5iuudFDVV3/jpTkdfmaH/RpEcwnhErLojckc2ammZvDSD2RCaol
-         o3/Orvs4RMeS6QtwoDpFrQxXTtgqpFx9bTdWAcXceWFPh+/b/8lJtl4YdtsM8nHu80zJ
-         KpQgN/DeWdv8E9lGaStjZxkcwcHgjKx5jregKlbpjFRtPF4v5EPXDAWMw41TIrKYU2cI
-         4u7IDt1lVnLHsv+lixQJCRy9xlts1eHgxFLbxOpni6mCg50vO7Z4E5Y5FMwFcnJhnoNk
-         mTHN42RW+hblp0HKGlgoBFULBFFQBRcLVlINZlRI7mAtWZfuPsbn0j6H87C6Xop9YwNx
-         kDmg==
-X-Gm-Message-State: ACrzQf1uoYuLtUmeEmaQdglBjAmlRftrvqfj13xkAJz1LpiT7JCSnKVa
-        r04T2IaQtsNwi1tHCEEboLU+Ugy+ZZY6cmwlWgwJc9+z6GIL
-X-Google-Smtp-Source: AMsMyM57Rx/9HOQeLnx36sU+MC2Dnlzw3YvcdQwUDDUpsd9XPIosdDxkQI3+Fd9rvxr330yek5itl9ut6GrodISexq74bBG9Og+g
+        bh=iXQk2tj4dtqq9gxh1uWeljXov6YC8nHDVx/k2gzE7CU=;
+        b=CXSSTqqICA2jwPN1xyTiJjsngptKPTXJI5IJdVYmfuzragFw+MOAa3DFC+1JXupUHH
+         fHS5W0c3Y8pusKGExKkLtDMeEDSb5AzTjfC28IO07P6TNXmAXrmg7aN/q8zYxc278hxd
+         Gs2/1GNKT8u+S53N6UYxKYRcrtIab8srg95T3M+qu8yuXY28GEzCH4dJRmgb0CXs7iAw
+         pnRyFGPwtj2ueNGEl0VqocUtr+clKlueSFHlsugHUrHRLjrqZq1TY68zBdM9C7GbN06U
+         hFW70JLS8Bzkh6dkdDYzSWibPNamY0W59Ldt573qJIkv9DGbv7crUmj6XLGUEXhrACXH
+         eUGw==
+X-Gm-Message-State: ACrzQf22wQaiq9H5ASb5vbI/v0rhA8gdaLwnLlH8Ic7UPprrPmHbiUko
+        /oPHB3ZyCr0zOkgA9d1GwoVqMAnPS3QWGuo2qbkWsQvp4fun
+X-Google-Smtp-Source: AMsMyM6iMY4PiMZ5C/1SXFdgfTnpnblnXD3Xt7uTmvzO0e+8i47Fh13NqejLuQPddeNYb+AdYrAGSPhvb4U5QqVpLzzNLENK7hhL
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2c89:b0:67b:7e8c:11c1 with SMTP id
- i9-20020a0566022c8900b0067b7e8c11c1mr2519326iow.101.1664484106273; Thu, 29
- Sep 2022 13:41:46 -0700 (PDT)
+X-Received: by 2002:a05:6638:1449:b0:35a:70ce:8a3f with SMTP id
+ l9-20020a056638144900b0035a70ce8a3fmr2805455jad.42.1664484106514; Thu, 29 Sep
+ 2022 13:41:46 -0700 (PDT)
 Date:   Thu, 29 Sep 2022 13:41:46 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e38e4105e9d6e741@google.com>
-Subject: [syzbot] WARNING in ea_get
-From:   syzbot <syzbot+5dd35da975e32d9df9ab@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000e7579c05e9d6e701@google.com>
+Subject: [syzbot] WARNING in btrfs_fileattr_set
+From:   syzbot <syzbot+5244d35be7f589cf093e@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -59,71 +60,55 @@ syzbot found the following issue on:
 
 HEAD commit:    49c13ed0316d Merge tag 'soc-fixes-6.0-rc7' of git://git.ke..
 git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=14407848880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=129847ff080000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
-dashboard link: https://syzkaller.appspot.com/bug?extid=5dd35da975e32d9df9ab
+dashboard link: https://syzkaller.appspot.com/bug?extid=5244d35be7f589cf093e
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1173d7ff080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16a2ea70880000
+
+Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
 disk image: https://storage.googleapis.com/syzbot-assets/418654aab051/disk-49c13ed0.raw.xz
 vmlinux: https://storage.googleapis.com/syzbot-assets/49c501fc7ae3/vmlinux-49c13ed0.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5dd35da975e32d9df9ab@syzkaller.appspotmail.com
+Reported-by: syzbot+5244d35be7f589cf093e@syzkaller.appspotmail.com
 
-loop0: detected capacity change from 0 to 32768
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3608 at mm/page_alloc.c:5525 __alloc_pages+0x30a/0x560 mm/page_alloc.c:5525
+WARNING: CPU: 0 PID: 29090 at fs/btrfs/ioctl.c:367 btrfs_fileattr_set+0xae4/0xbd0 fs/btrfs/ioctl.c:367
 Modules linked in:
-CPU: 1 PID: 3608 Comm: syz-executor264 Not tainted 6.0.0-rc7-syzkaller-00068-g49c13ed0316d #0
+CPU: 0 PID: 29090 Comm: syz-executor.0 Not tainted 6.0.0-rc7-syzkaller-00068-g49c13ed0316d #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:__alloc_pages+0x30a/0x560 mm/page_alloc.c:5525
-Code: 5c 24 04 0f 85 f3 00 00 00 44 89 e1 81 e1 7f ff ff ff a9 00 00 04 00 41 0f 44 cc 41 89 cc e9 e3 00 00 00 c6 05 73 17 29 0c 01 <0f> 0b 83 fb 0a 0f 86 c8 fd ff ff 31 db 48 c7 44 24 20 0e 36 e0 45
-RSP: 0018:ffffc900038cf000 EFLAGS: 00010246
-RAX: ffffc900038cf060 RBX: 0000000000000013 RCX: 0000000000000000
-RDX: 0000000000000028 RSI: 0000000000000000 RDI: ffffc900038cf088
-RBP: ffffc900038cf110 R08: dffffc0000000000 R09: ffffc900038cf060
-R10: fffff52000719e11 R11: 1ffff92000719e0c R12: 0000000000040cc0
-R13: 1ffff92000719e08 R14: dffffc0000000000 R15: 1ffff92000719e04
-FS:  0000555556726300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+RIP: 0010:btrfs_fileattr_set+0xae4/0xbd0 fs/btrfs/ioctl.c:367
+Code: 48 8b 3b 48 c7 c6 60 7c db 8a 89 ea 31 c0 e8 ea 4d 91 06 eb 17 e8 cc 14 f8 fd 48 c7 c7 60 7b db 8a 89 ee 31 c0 e8 9c a1 c0 fd <0f> 0b 48 8b 1c 24 48 89 df 48 c7 c6 e0 7b db 8a ba 6f 01 00 00 89
+RSP: 0018:ffffc9000eea7928 EFLAGS: 00010246
+RAX: 69a2f0c0e6d18a00 RBX: ffff888052ecdf68 RCX: 0000000000040000
+RDX: ffffc90003b21000 RSI: 0000000000003915 RDI: 0000000000003916
+RBP: 00000000fffffff4 R08: ffffffff816bd38d R09: ffffed1017344f14
+R10: ffffed1017344f14 R11: 1ffff11017344f13 R12: 1ffff1100a5d9bed
+R13: ffff88806b300001 R14: ffff88805581ac00 R15: 00000000fffffff4
+FS:  00007fa5d5c51700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055bf5095f740 CR3: 0000000070cdb000 CR4: 00000000003506f0
+CR2: 0000557a8f4c12f0 CR3: 000000007533c000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- kmalloc_order+0x41/0x140 mm/slab_common.c:933
- kmalloc_order_trace+0x15/0x70 mm/slab_common.c:949
- kmalloc_large include/linux/slab.h:529 [inline]
- __kmalloc+0x26e/0x370 mm/slub.c:4418
- kmalloc include/linux/slab.h:605 [inline]
- ea_get+0x408/0x1290 fs/jfs/xattr.c:487
- __jfs_getxattr+0xc4/0x400 fs/jfs/xattr.c:807
- vfs_getxattr_alloc+0x47f/0x5d0 fs/xattr.c:384
- ima_read_xattr+0x35/0x60 security/integrity/ima/ima_appraise.c:228
- process_measurement+0xd5d/0x1bd0 security/integrity/ima/ima_main.c:319
- ima_file_check+0xd8/0x130 security/integrity/ima/ima_main.c:517
- do_open fs/namei.c:3559 [inline]
- path_openat+0x2642/0x2df0 fs/namei.c:3691
- do_filp_open+0x264/0x4f0 fs/namei.c:3718
- do_sys_openat2+0x124/0x4e0 fs/open.c:1313
- do_sys_open fs/open.c:1329 [inline]
- __do_sys_openat fs/open.c:1345 [inline]
- __se_sys_openat fs/open.c:1340 [inline]
- __x64_sys_openat+0x243/0x290 fs/open.c:1340
+ vfs_fileattr_set+0x8be/0xd20 fs/ioctl.c:696
+ ioctl_setflags fs/ioctl.c:728 [inline]
+ do_vfs_ioctl+0x1d26/0x29a0 fs/ioctl.c:839
+ __do_sys_ioctl fs/ioctl.c:868 [inline]
+ __se_sys_ioctl+0x83/0x170 fs/ioctl.c:856
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f40146ebf59
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcbf7a6878 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0030656c69662f2e RCX: 00007f40146ebf59
-RDX: 0000000000161842 RSI: 000000002000c380 RDI: 00000000ffffff9c
-RBP: 00007f40146ab720 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000f8008000
-R13: 0000000000000000 R14: 0000000a00030083 R15: 0000000000000000
+RIP: 0033:0x7fa5d4a8a5a9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fa5d5c51168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007fa5d4babf80 RCX: 00007fa5d4a8a5a9
+RDX: 0000000020000000 RSI: 0000000040086602 RDI: 0000000000000003
+RBP: 00007fa5d5c511d0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+R13: 00007fff74cf8e8f R14: 00007fa5d5c51300 R15: 0000000000022000
  </TASK>
 
 
@@ -134,5 +119,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
