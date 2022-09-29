@@ -2,483 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A54A95EECDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 06:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A5E5EECDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 06:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234754AbiI2E4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 00:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
+        id S232339AbiI2E5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 00:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234289AbiI2E4H (ORCPT
+        with ESMTP id S232380AbiI2E5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 00:56:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA879A6A5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 21:56:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664427361;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/5EIyNaGDWgowp2h1SvHqhXjov1ATgPOoGzDZgZks0Q=;
-        b=DO7V4vTtLrHZQ9NEjGi2Pa2cpulAYN8NmnWN8JmecxQvWYAEB+1cj0IATZys9YWC/mBrJ2
-        WuSyDnfwDgs9wjWdMTVzUIoaozba/JLCGdtTp6674paz7kc2S6IqFnBsqwNlAFa7rlHCoq
-        Sx2jW42XA+4X/5LAJVvzqBdfNqAPpaw=
-Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
- [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-434-fXuJRdiUP7aKVunto9X1_A-1; Thu, 29 Sep 2022 00:56:00 -0400
-X-MC-Unique: fXuJRdiUP7aKVunto9X1_A-1
-Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-12d265203aeso292016fac.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 21:55:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=/5EIyNaGDWgowp2h1SvHqhXjov1ATgPOoGzDZgZks0Q=;
-        b=vnQsUOuAelX6079OPDVsvFHJgK/umSqNLYZsuf05Ba4ecqi80/RrZUD+2sG7ToBld7
-         hGkLHL0lhh8e4bEsuQK0SxuckAF6LakGxZVZWpQONBeBwVOxgAl0IYnEzrjNkwa165oL
-         MoDl6n9jWNBEpvurpQiaT5hB/aD106aRgFseoP4J/Ce/kIdau3TAlfJOVfFMuFrIOYC4
-         pMiNj8hvZ//FT5eu80duD7bzDLeC/HdGxJQrnoIi7T91/GYI2lA0M1FeG0jh/9/6YBM/
-         rGKGdJ1aDy6B9BpYgD4KGhkM8s97pF27TSG4CZvDDifzmFFUXbgKMrABmcZz3d7n833V
-         7QHA==
-X-Gm-Message-State: ACrzQf0OO6xtwwSujo6ViHvJOBYuiQtd0QOZPfkmdl38cMTFw0jq8VFI
-        IQSW16yJfkrBble1WC/jcBZB2Reb467JCfJuzt12wHeKSJA7XS1pKXOPS12QdVdAgLU5uSGBBex
-        CB0mGULbuUgo5yWr3cb2Yc1vTEU1qvlKc7tT3TXyQ
-X-Received: by 2002:a05:6808:1304:b0:350:649b:f8a1 with SMTP id y4-20020a056808130400b00350649bf8a1mr655139oiv.280.1664427358817;
-        Wed, 28 Sep 2022 21:55:58 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5Ja7AdvVhSiEfOQwC/DeJwKJHDAK0SrEqaMd2Y6StZD1kNSEPEKqTmB8AyOWDOs1Io1Ox3zg8f1KXpPi5r1zI=
-X-Received: by 2002:a05:6808:1304:b0:350:649b:f8a1 with SMTP id
- y4-20020a056808130400b00350649bf8a1mr655118oiv.280.1664427358386; Wed, 28 Sep
- 2022 21:55:58 -0700 (PDT)
+        Thu, 29 Sep 2022 00:57:42 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2040.outbound.protection.outlook.com [40.107.244.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F9711D621;
+        Wed, 28 Sep 2022 21:57:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CAA536uJmeY6awAvJGx54omWdZMpRUeKnNu32VK7FCRevSOG9rsVZpNkHIALdkE1j3Y4shlFa00R7Pgq7HTpSSAnanSIkyon4qwC8Y3JgcRqOCbRL6/OMtFJs0hMs2iIuARCwzLkRIZvo8XL2MsJPHGTwWKSy8kyfOaE3XC1k4WgXx3r9sBB9/oqQ1WkdUY+AgSVa/06NsiLipjSAT2FbHiEdNMYtSWhUAE6mFeBgeiqzEoKbmVJzCr2dfR3G9hcWzhzyXD12FmssVfiq760w57tJxeV9ZviPt3UpBQkZP97eLd3D+IpObh7jberUAxSJ/3Z3Gl7hSu3VtmN3ybWFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=e+yQiGHABdNeGHtYQOkkgI/1tB4u8tYY4V1fqr4v4aQ=;
+ b=QPyuWzrEu+c4IXX12v4XFxGqn8r/Y4x0q4iu7qQUD/MbF5KuQGnjav7/Ab5zeiYBssBG+7iO1OlZkrHqT5v4/gdnHEzVyD/SfEeJWZi9AO2Q5kn4eLFyNVdB6x0L6hB58nzMrNtqQjmfiCdPNl75Po8PzQAlodTzOwXkdwYl20vnrs6unOUGG8G/qf7nuVrTKhcPtiNjPprOyru3jtRbjd4Eu6/22Yj2MT/NEcMgtnSFbWOJXL+gYbiZr/M4BR7gSbRM4ceZI6WeSqg9LaNrg5MUgJxnp8eA2iEQNhUzVoWVHPFymueU/XigaTO/LTi/+HCcO0aHa2Veerr7/A+8tA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=e+yQiGHABdNeGHtYQOkkgI/1tB4u8tYY4V1fqr4v4aQ=;
+ b=lDGVWjfj9iOKMeJIdgO1HX15Dh6Qe9D1B0Vmi1+SJIcZxqMMw+zAgfLD7p+HZJjRpLEjR9qS/B3y3XrQItttL3+OLEph+3gBM0vWILTlyv/SBuh7Q8nyRSwP4eGQGib24NK2mxe1/zn7YKM7st7nTCVW9kgaW4M6E9+REVEOxgaV1I66ta0y8sHI03GItVjSGj569sY/qRt5vUeo09DEC2A4Cj70kvzQPOs7fWsaOrV/Td/3dwSI4ANe02oapfWczwtMvVfZ8BJiHYc1usyQFcc+AVNT62quKNMGcqDQdl/xz2/llw88OsbqIhck3W+KgUe3liO3/rIm7Lmz732k0g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com (2603:10b6:408:69::18)
+ by CY8PR12MB7635.namprd12.prod.outlook.com (2603:10b6:930:9e::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Thu, 29 Sep
+ 2022 04:57:37 +0000
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::d9ae:c30e:ce3d:9cb3]) by BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::d9ae:c30e:ce3d:9cb3%7]) with mapi id 15.20.5654.026; Thu, 29 Sep 2022
+ 04:57:37 +0000
+Message-ID: <09c23fbd-0319-5e06-6c10-dc73352131f8@nvidia.com>
+Date:   Thu, 29 Sep 2022 10:27:24 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V2] PCI: dwc: Fix n_fts[] array overrun
+Content-Language: en-US
+To:     Han Jingoo <jingoohan1@gmail.com>
+Cc:     gustavo.pimentel@synopsys.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+References: <20220919143123.28250-1-vidyas@nvidia.com>
+ <20220926111923.22487-1-vidyas@nvidia.com>
+ <CAPOBaE5X8iUTQW5QqTKFN78U=jnVvCzCj2mb4HG5S4uxBaCN1Q@mail.gmail.com>
+From:   Vidya Sagar <vidyas@nvidia.com>
+In-Reply-To: <CAPOBaE5X8iUTQW5QqTKFN78U=jnVvCzCj2mb4HG5S4uxBaCN1Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA1PR01CA0158.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:71::28) To BN8PR12MB2900.namprd12.prod.outlook.com
+ (2603:10b6:408:69::18)
 MIME-Version: 1.0
-References: <20220922024305.1718-1-jasowang@redhat.com> <20220922024305.1718-3-jasowang@redhat.com>
- <a1e98754-114e-b401-e927-5f2b71c3c641@oracle.com> <CACGkMEu9JfBDP4VkK76jdAnH225yUfTF+xMnqmy7_yDW3P0rKA@mail.gmail.com>
- <afe960d3-730a-b52c-e084-40bf080b27fa@oracle.com> <CACGkMEsWPbTs+D4PBHQL2hUOtGWj_6zo-669cUhYK5zK039QCQ@mail.gmail.com>
- <c5a96de5-699a-8b5e-0e89-bfe1822e1105@oracle.com>
-In-Reply-To: <c5a96de5-699a-8b5e-0e89-bfe1822e1105@oracle.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 29 Sep 2022 12:55:47 +0800
-Message-ID: <CACGkMEsJZshW6cMiGPBu4LBSAQYr3ZhsD006v2ncCvNgXW6RJw@mail.gmail.com>
-Subject: Re: [PATCH V2 2/3] vdpa_sim_net: support feature provisioning
-To:     Si-Wei Liu <si-wei.liu@oracle.com>
-Cc:     mst <mst@redhat.com>, Eli Cohen <elic@nvidia.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        eperezma <eperezma@redhat.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        Gautam Dawar <gdawar@xilinx.com>, Cindy Lu <lulu@redhat.com>,
-        Yongji Xie <xieyongji@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB2900:EE_|CY8PR12MB7635:EE_
+X-MS-Office365-Filtering-Correlation-Id: 70595236-2f6d-4dee-570d-08daa1d720d7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dDWjRyAmXtY032obxurptM+ctpgcsFxFjezYJePdpIu71qNZVuXbmK9/F4824+ifB4WsYuJ5uaiGI2y7AVbhTy6iaC9QxEQVj4e5eL3S/Qa5FfQt54fIjp5KV1B+qEJQuC/3aoI5YEhnx+0soMsBctArjBjup8mjRZf+hBMyjkbLk59p+dS+X8hU+6PaVOykz7clBWT3ND5z2DYgEGM8P6IFhXw3GHj+7DUalck6/Wf5y74K2u9W7aPS9HDRJ1tcWDomTc0fagemp8ncMGoun9Yf3jQcVlI4cyNftNEhRPV2ieAWteHphZa+eXNIb9LPhUpGCTxF6322Sx41HKngaTjOU/dH1zO1yVQ6UUf2JAyFzgta8SfL3ran77CvL20wxYzgug1tPZzj1O8Utfc5K/RNY4tm8eylTwrA4OXwaSJJwrzKt6TI2l450y/n+yKUxjoZPq2UXMJF3cknlpjWjN/G5ycofVYIF1LWYoHQgQlH7Fglpx93BEitODtsMJlaehLkc9zskBEP2OhIPqWuHMAmNHjKUflaRdd4CEOIie/LVDMjWEBeOLI7DleBKHhkOp2RCXLS7K2dkbUtwwR5yi6tx42QiGcLJklom9Bt+OAF8tzv2kr0lxGqas8R/PPBGLMbIPzPxKSlfS+q/ciM+LYav0aNp+TILJI7xf38391RGNRQU7ItMwvl3C53Cxh4Vj0hpIKBt/zwEMqDOlUFVQksQl/+HmXlnjh6940kqk+wZyb+IADGxl4fA8hlA+ReZjZU3BeqM8NIU+iFe4DB2XKHc8DKsZMydldDz/iuWFk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(396003)(346002)(366004)(451199015)(31686004)(66476007)(26005)(6512007)(2616005)(186003)(66899015)(6666004)(478600001)(36756003)(316002)(6506007)(38100700002)(6486002)(83380400001)(53546011)(2906002)(8936002)(6916009)(5660300002)(86362001)(4326008)(66556008)(66946007)(41300700001)(8676002)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z2lsTEpDanlkaFpMb2FnRmhUVXRBUlRyZzJNcENzdUV1V1N6ajl2RHRrTWl2?=
+ =?utf-8?B?dnB0d0VUcUN2MDIyaEozWXZsRFlmaEpZaHZQbTRqK001d1QwUCt0YmQybjV6?=
+ =?utf-8?B?dUFLOHZiVFEwbmdHSkphaGhYZi9IdzJkSTZZMDJkRUp3TEJUSXRHMExWZUc5?=
+ =?utf-8?B?WWJVNlBoWW5IS0ZPL2pBdE9tNUR4U0Q2NEtySHFOd0tMRlVKSXhFRXJzTGZE?=
+ =?utf-8?B?UGJuYk9IS3hvc3NRREdwdXFOb0dJdjV2RmcrdGNOTlNMQ2hnYVM4NTNKNDI1?=
+ =?utf-8?B?NFZ5M01BZkNqdkF6dnFnYm96REI4TlAvV2FoUU5rVDNjaFowRTZWVmppNzA3?=
+ =?utf-8?B?eUEwUk1uZTg3eTJINkI0K3djbVdvMW12MEl6WnU3NFRUdXRiZnhYWk9EMm5L?=
+ =?utf-8?B?bDg0R1gyblkxcDdveWp2cHYrbWxBVzFHT3p0ZE01VVRaVlIxb3hjSTFiOXNP?=
+ =?utf-8?B?TWk1TjRCbTdZc2RpT3N4NlgvMmlMRmVaU0p5ODRibFB0VTNwOFhzemhraEZT?=
+ =?utf-8?B?cm84Z3JiRkJ3TTREdU5OSTBKY2pSeTk3eHZpRHJnQndLdE5XMGMrM1FaOWc2?=
+ =?utf-8?B?UDZnOGFWb05sdUlzeXRrSzNNNkFXaUY2Vm00ZjJhYXd2Y0Jldkc5d3Y4cThH?=
+ =?utf-8?B?M1ZMWUdvOUswbGh4K3dnQUtZN09OS2pyY2FxT2NjNkZqQzdycjh5RkpoTVZp?=
+ =?utf-8?B?K1I2Zm8yZ0NpWFQ3eFoyenVXQXl0NlFzSExCWWh5K2FOYnZZdFNkT2ZKWGdE?=
+ =?utf-8?B?M3hJSjRoV0Vhemx4NW1GV1BKcDYweGp6ZjllekZtRFJpNVdvcmhUS2NrNHlr?=
+ =?utf-8?B?M3luYXozRGFIRFNDUUdnQ1JzRlhpTWlETUNXTFFRVUt1dlhtMjdyNjBFL01u?=
+ =?utf-8?B?R211MWhlVHBnTk10SXlER2c5R1NNWG8wOG1kR2gyZlhBMFNacmFEOGU2R3Fq?=
+ =?utf-8?B?U0oxTU9HY1hQU1U0RE9IYlZCbDBsZlBTNzlPdG9oaXdjTUMxSFBxTTVSMWhz?=
+ =?utf-8?B?SGtVSGs4TVFOSS9HdXpmTHRwNnlTaFBwSGEyYmw4eUloMytZazhzOE1GTWph?=
+ =?utf-8?B?bUVSSjdqNnZjU2s0K0VoaHQzNXM2bm80aHhCWkpMTVg5NXc5Zmo3MkpiVXFY?=
+ =?utf-8?B?SFJKZTRXN3NHZlZMSzhLVDBMN1VhVkQ5bHc1UkJpRGhPQXdNNjIrekVORkhh?=
+ =?utf-8?B?SjJYTnl1TllVZDlhV29HUldxWG9ySC9CYXlMUmE1OVBncVBmRkZoOEhxNE5k?=
+ =?utf-8?B?RVFxczdGR0t5Q0EvSldxMzJJYjV6YzAxTFFNc3Frc1l6UERHRWxSQWJuRklS?=
+ =?utf-8?B?TzRvZVVwYTkvMUZ1UXl5djc3ZzVpZFVLcHZqMC9MbEJNZUx2eW9IUUJBTlFE?=
+ =?utf-8?B?YXRoWUV5UFpXWUNHUnhlaU5nc21BMVB2eDRoVWxlQmNGNWhBYjlDZXdiSGxC?=
+ =?utf-8?B?d0RqR3p0a3J3K28rdGY3eGo5czRlbGFvNGNweTF4K0dMNlAzakdTQWlTTHI2?=
+ =?utf-8?B?UHllY2tDSUN1alE5aFdndTR2SDhnYjVzeTJhdHpEUnpjcU90dldQSllHUnBu?=
+ =?utf-8?B?Z0VRSXQ5WG1TdllsYjBZQWxwRmFSaXNZUHpvZnN1a3o1WVZpTkJkZytneSsz?=
+ =?utf-8?B?RG5PeGFnWTdCa0RsRGpRUDlybzljVUhEQ2FhS0VxM0VRcDBicmlnZnp5c0Zq?=
+ =?utf-8?B?VHlVT1lweGJPcm1qL0IwSDF6YVp0UjNtN1ZvdmJnZW03S0JxRlY0RG16amFR?=
+ =?utf-8?B?VXZEakJKTi9pbmFwS1VEa0tsQ0RCVUJKcWJ4Tmd2LzB5SmtqUy83M1NiOHNi?=
+ =?utf-8?B?cEhBR3RQY3VnNGdFK0Zxck4yRmJrbmo3cHdJc1Z6akM0ZHU4MGhBN2xFN3la?=
+ =?utf-8?B?enhJTTZqTUUySDR5ek1LRERRYUZCZ2lDYzU4b2NoMjlsa1Z4dDRab3lyRVJM?=
+ =?utf-8?B?ZE5nT3ZHaXBCSHVCQVZFZFhhM2h5VEh1cmhMZzA4Vzl1Tk41T0NOdld6UWhB?=
+ =?utf-8?B?MGFOaXNRcDZBNWt2SytwOUc2a3IzVjNzSGxCQzFSbUF1VkJveHUyKzVIRE9F?=
+ =?utf-8?B?bUoxUERobHR2d0lTMGJ5RjRTdWVZR1Fia25zbjk1NnB5a3ZBYWtMNmRkMjVv?=
+ =?utf-8?Q?UU25m0kkN0HcnhNVXFAPtQYDT?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70595236-2f6d-4dee-570d-08daa1d720d7
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2900.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 04:57:37.1432
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PkgesBW3WqIGHy2lU8QVCTCNDfStDeqrnyRxfdJSaGtAsnBI9SbG+Co+6dNm3JSDVhnzQa2Cy7TI/wlgxI9sOw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7635
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 5:41 PM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
->
->
->
-> On 9/26/2022 8:59 PM, Jason Wang wrote:
->
-> On Tue, Sep 27, 2022 at 9:02 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
->
->
-> On 9/26/2022 12:11 AM, Jason Wang wrote:
->
-> On Sat, Sep 24, 2022 at 4:01 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
->
->
-> On 9/21/2022 7:43 PM, Jason Wang wrote:
->
-> This patch implements features provisioning for vdpa_sim_net.
->
-> 1) validating the provisioned features to be a subset of the parent
->     features.
-> 2) clearing the features that is not wanted by the userspace
->
-> For example:
->
-> # vdpa mgmtdev show
-> vdpasim_net:
->    supported_classes net
->    max_supported_vqs 3
->    dev_features MTU MAC CTRL_VQ CTRL_MAC_ADDR ANY_LAYOUT VERSION_1 ACCESS=
-_PLATFORM
->
-> Sighs, not to blame any one and it's perhaps too late, but this
-> "dev_features" attr in "mgmtdev show" command output should have been
-> called "supported_features" in the first place.
->
-> Not sure I get this, but I guess this is the negotiated features actually=
-.
->
-> Actually no, that is why I said the name is a bit confusing and "supporte=
-d_features" might sound better.
->
-> You're right, it's an mgmtdev show actually.
->
-> This attribute in the parent device (mgmtdev) denotes the real device cap=
-ability for what virtio features can be supported by the parent device. Any=
- unprivileged user can check into this field to know parent device's capabi=
-lity without having to create a child vDPA device at all. The features that=
- child vDPA device may support should be a subset of, or at most up to what=
- the parent device offers. For e.g. the vdpa device dev1 you created below =
-can expose less or equal device_features bit than 0x308820028 (MTU MAC CTRL=
-_VQ CTRL_MAC_ADDR ANY_LAYOUT VERSION_1 ACCESS_PLATFORM), but shouldn't be n=
-o more than what the parent device can actually support.
->
-> Yes, I didn't see anything wrong with "dev_features",
->
-> Yep, it didn't appear to me anything wrong either at first sight, then I =
-gave my R-b on the series introduced this attribute. But it's not a perfect=
- name, either, on the other hand. Parav later pointed out that the correspo=
-nding enum definition for this attribute should follow pre-existing naming =
-convention that we should perhaps do s/VDPA_ATTR_DEV_SUPPORTED_FEATURES/VDP=
-A_ATTR_MGMTDEV_SUPPORTED_FEATURES/ to get it renamed, as this is a mgmtdev =
-level attribute, which I agree. Now that with the upcoming "device_features=
-" attribute (vdpa dev level) from this series, it's subject to another conf=
-usions between these two similar names, but actually would represent things=
- at different level. While all other attributes in "mgmtdev dev show" seem =
-to be aligned with the "supported_" prefix, e.g. supported_classes, max_sup=
-ported_vqs, from which I think the stance of device is already implied thro=
-ugh "mgmtdev" in the command. For the perspective of clarify and easy disti=
-nction, "supported_features" seems to be a better name than "dev_features".
 
-See another reply, I think I get your point,
 
-1) VDPA_ATTR_VDPA_DEV_SUPPORTED_FEATURES (lingshan's series) and
-VDPA_ATTR_VDPA_DEV_FEATURES should be equivalent and unified to a
-single attribute.
-2) A better name to "supported_features" should be fine, patches are welcom=
-ed
+On 9/29/2022 7:34 AM, Han Jingoo wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On Mon, Sep 26, 2022, Vidya Sagar <vidyas@nvidia.com> wrote:
+>>
+>> commit aeaa0bfe89654 ("PCI: dwc: Move N_FTS setup to common setup")
+>> incorrectly uses pci->link_gen in deriving the index to the
+>> n_fts[] array also introducing the issue of accessing beyond the
+>> boundaries of array for greater than Gen-2 speeds. This change fixes
+>> that issue.
+> 
+> Dear Vidya,
+> 
+> I am just ok with this patch. By the way, do we need another patch to generalize
+> this setting? Currently, this code targets only Gen1 and Gen2. But, in
+> my opinion,
+> it is possible that this driver can be  used for more than Gen2,
+> later. PCIe Gen6
+> standard is available and Synopsys has their solution for Gen6. So, would you
+> send a new patch to generalize this thing, later?
+> Thank you.
 
->
->  it aligns to the
-> virtio spec which means the features could be used to create a vdpa
-> device. But if everyone agree on the renaming, I'm fine.
->
-> Never mind, if it's late don't have to bother.
->
->
->
-> I think Ling Shan is working on reporting both negotiated features
-> with the device features.
->
-> Does it imply this series is connected to another work in parallel? Is it=
- possible to add a reference in the cover letter?
->
-> I'm not sure, I remember Ling Shan did some work to not block the
-> config show in this commit:
->
-> commit a34bed37fc9d3da319bb75dfbf02a7d3e95e12de
-> Author: Zhu Lingshan <lingshan.zhu@intel.com>
-> Date:   Fri Jul 22 19:53:07 2022 +0800
->
->     vDPA: !FEATURES_OK should not block querying device config space
->
-> We need some changes in the vdpa tool to show device_features
-> unconditionally in the "dev config show" command.
->
-> That's true, I think I ever pointed it out to Lingshan before, that it's =
-not needed to bother exposing those config space fields in "dev config show=
-" output, if the only intent is for live migration of device features betwe=
-en nodes. For vDPA live migration, what cares most is those configuration p=
-arameters specified on vdpa creation, and userspace VMM (QEMU) is supposed =
-to take care of saving and restoring live device states. I think it's easie=
-r to extend "vdpa dev show" output to include device_features and other con=
-fig params as well, rather than count on validity of various config space f=
-ields.
+As I mentioned in the commit message, current code is incorrectly using 
+'gen' in the index and ideally n_fts programming has nothing to do with 
+the speed and hence I tried to remove the 'gen' reference in the current 
+patch. So, the same code (after applying this patch) should work for any 
+future Synopsys IP versions supporting higher speeds.
 
-Probably, but for the migration it's more about the ability of the
-mgmtdev instead of the vDPA device itself I think.
+Thanks,
+Vidya Sagar
 
->
-> https://lore.kernel.org/virtualization/454bdf1b-daa1-aa67-2b8c-bc15351c18=
-51@oracle.com/
->
-> It's not just insufficient, but sometimes is incorrect to create vDPA dev=
-ice using the config space fields.  For instance, MAC address in config spa=
-ce can be changed temporarily (until device reset) via ctrl_vq VIRTIO_NET_C=
-TRL_MAC_ADDR_SET command. It's incorrect to create vDPA using the MAC addre=
-ss shown in the config space.
-
-I think it's still a must for create the mac with the exact mac address:
-
-1) VIRTIO_NET_F_CTRL_MAC is not a must
-2) there's no way for us to know whether or not the mac has been changed
-3) migration code can restore the mac during restore
-
-So exactly the same mac address is still required. (This is the same
-as we are doing for live migration on software virtio)
-
->  Another example, if the source vDPA device has MAC address table size li=
-mit of 100, then in the destination we should pick parent device with size =
-limit no smaller than that, and create vDPA on remote node matching the exa=
-ct same size. There's nothing config space field can assist here.
-
-Two ways:
-
-1) mgmtdev should show the mac table size so mgmt layer can provision
-the mac table size
-2) If the mac table exceeds what is supported in the destination, it
-needs to enable the all uni in this case.
-
->
-> One example further, in the future, if we are going to introduce mandator=
-y feature (for e.g. VERSION_1, RING_PACKED) that the device is unable to su=
-pport the opposite case, the destination device should be created with equa=
-lly same mandatory device features, which only vDPA creation parameters sho=
-uld matter. While I can't think of a case that the mgmt software or live mi=
-gration tool would have to count on config space fields only.
-
-Yes, in this case we need to introduce new netlink attributes for both
-getting mandatory features from the management device and provisioning
-those manadating features.
-
->
->
->
->
-> 1) provision vDPA device with all features that are supported by the
->     net simulator
->
-> # vdpa dev add name dev1 mgmtdev vdpasim_net
-> # vdpa dev config show
-> dev1: mac 00:00:00:00:00:00 link up link_announce false mtu 1500
->    negotiated_features MTU MAC CTRL_VQ CTRL_MAC_ADDR VERSION_1 ACCESS_PLA=
-TFORM
->
-> Maybe not in this patch, but for completeness for the whole series,
-> could we also add device_features to the output?
->
-> Lingshan, could you please share your thoughts or patch on this?
->
-> Noted here the device_features argument specified during vdpa creation is=
- introduced by this series itself, it somehow slightly changed the original=
- semantics of what device_features used to be.
->
-> I'm not sure I get this, we don't support device_features in the past
-> and it is used to provision device features to the vDPA device which
-> seems to be fine.
->
-> Before this change, only look at the dev_features in "mgmtdev show" and r=
-emember creation parameters is sufficient to get to all needed info for cre=
-ating vDPA at destination.
-
-Note that even with the same vendor, mgmtdev may support different features=
-.
-
-> After this change, dev_features in "mgmtdev show" becomes less relevant, =
-as it would need to remember vdpa creation parameters plus the device_featu=
-res attribute. While this series allows cross vendor live migration, it wou=
-ld complicate the implementation of mgmt software, on the other hand.
-
-To allow cross vendor live migration I couldn't find a better way.
-
->
->
->
-> When simply look at the "vdpa dev config show" output, I cannot really
-> tell the actual device_features that was used in vdpa creation. For e.g.
-> there is a missing feature ANY_LAYOUT from negotiated_features compared
-> with supported_features in mgmtdev, but the orchestration software
-> couldn't tell if the vdpa device on destination host should be created
-> with or without the ANY_LAYOUT feature.
->
-> I think VERSION_1 implies ANY_LAYOUT.
->
-> Right, ANY_LAYOUT is a bad example. A good example might be that, I knew =
-the parent mgmtdev on migration source node supports CTRL_MAC_ADDR, but I d=
-on't find it in negotiated_features.
->
-> I think we should use the features that we got from "mgmtdev show"
-> instead of "negotiated features".
->
-> That was how it's supposed to work previously, but with this series, I th=
-ink the newly introduced device_features will be needed instead of the one =
-in "mgmtdev show".
-
-Just to clarify, there won't be a device_features in mgmtdev show
-since it is device specific, each individual device can have its own
-device features which are subset of what is supported by the mgmtdev.
-
->
->
-> On the migration destination node, the parent device does support all fea=
-tures as the source offers, including CTRL_MAC_ADDR. What device features y=
-ou would expect the mgmt software to create destination vdpa device with, i=
-f not otherwise requiring mgmt software to remember all the arguments on de=
-vice creation?
-
-So the provisioning in the destination should use exactly the same
-device_feautres as what the vdpa device has in the source. But before
-this, management layer should guarantee to provision a vDPA device
-whose device_features can be supported on the destination in order to
-allow live migration.
-
->
-> So in this example, we need use "dev_features" so we get exact the
-> same features after and operation as either src or dst.
->
-> If the device_features vDPA created with at the source doesn't include CT=
-RL_MAC_ADDR even though parent supports it, then the vDPA to be created at =
-the destination shouldn't come with CTRL_MAC_ADDR either, regardless of whe=
-ther or not CTRL_MAC_ADDR is present in destination "mgmtdev show".
->
-> However, if just taking look at negotiated_features, some mgmt software i=
-mplementations which don't persist the creation parameters can't get the de=
-vice features a certain vDPA device at the source node was created with.
->
->
-> SOURCE# vdpa mgmtdev show
-> vdpasim_net:
->    supported_classes net
->    max_supported_vqs 3
->    dev_features MTU MAC CTRL_VQ CTRL_MAC_ADDR ANY_LAYOUT VERSION_1 ACCESS=
-_PLATFORM
-> SOURCE# vdpa dev config show
-> dev1: mac 00:00:00:00:00:00 link up link_announce false mtu 1500
->    negotiated_features MTU MAC CTRL_VQ VERSION_1 ACCESS_PLATFORM
->
-> DESTINATION# vdpa mgmtdev show
-> vdpasim_net:
->    supported_classes net
->    max_supported_vqs 3
->    dev_features MTU MAC CTRL_VQ CTRL_MAC_ADDR ANY_LAYOUT VERSION_1 ACCESS=
-_PLATFORM
->
->  But it should be sufficient to
-> use features_src & feature_dst in this case. Actually, it should work
-> similar as to the cpu flags, the management software should introduce
-> the concept of cluster which means the maximal set of common features
-> is calculated and provisioned during device creation to allow
-> migration among the nodes inside the cluster.
->
-> Yes, this is one way mgmt software may implement, but I am not sure if it=
-'s the only way. For e.g. for cpu flags, mgmt software can infer the guest =
-cpus features in use from all qemu command line arguments and host cpu feat=
-ures/capability, which doesn't need to remember creation arguments and is e=
-asy to recover from failure without having to make the VM config persistent=
- in data store. I thought it would be great if vdpa CLI design could offer =
-the same.
->
-> One minor difference is that we have cpu model abstraction, so we can
-> have things like:
->
-> ./qemu-system-x86_64 -cpu EPYC
->
-> Which implies the cpu features/flags where vDPA doesn't have. But
-> consider it's just a 64bit (or 128 in the future), it doesn't seems to
-> be too complex for the management to know, we probably need to start
-> from this and then we can try to introduce some generation/model after
-> it is agreed on most of the vendors.
->
-> What you refer to is the so-called named model for CPU flags. I think it'=
-s a good addition to have some generation or named model defined for vDPA. =
-But I don't get the point for how it relates to exposing the actual value o=
-f device features? Are you saying in this case you'd rather expose the mode=
-l name than the actual value of feature bits? Well, I think we can expose b=
-oth in different fields when there's really such a need.
-
-It's something like:
-
-vdpa dev add name dev1 mgmtdev vdpasim_net device_features VDPA_NET_MODEL_1
-
-and VDPA_NET_MODEL_1 implies some feature sets.
-
->
-> BTW with regard to the cpu model in mgmt software implementation, the one=
- implemented in libvirt is a mixed "Host model" [1] with taking advantage o=
-f QEMU named model and exposing additional individual CPU features that get=
-s close to what host CPU offers.
-
-So creating vDPA device without "device_features" is somehow the host
-model, it will have all features that is supported by the parent.
-
-> I think this implies that mgmt software should have to understand what th=
-e model name really means in terms of individual CPU features, so having fe=
-ature bit value exposed will just do more help if vDPA goes the same way.
-
-Exactly.
-
-Thanks
-
->
->
-> Regards,
-> -Siwei
->
-> [1] https://qemu-project.gitlab.io/qemu/system/qemu-cpu-models.html#two-w=
-ays-to-configure-cpu-models-with-qemu-kvm
->
->
-> Thanks
->
-> Thanks,
-> -Siwei
->
->
-> Thanks
->
-> Thanks,
-> -Siwei
->
->
-> 2) provision vDPA device with a subset of the features
->
-> # vdpa dev add name dev1 mgmtdev vdpasim_net device_features 0x300020000
-> # vdpa dev config show
-> dev1: mac 00:00:00:00:00:00 link up link_announce false mtu 1500
->    negotiated_features CTRL_VQ VERSION_1 ACCESS_PLATFORM
->
-> Reviewed-by: Eli Cohen <elic@nvidia.com>
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> ---
->   drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 11 ++++++++++-
->   1 file changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim=
-/vdpa_sim_net.c
-> index 886449e88502..a9ba02be378b 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> @@ -254,6 +254,14 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev =
-*mdev, const char *name,
->       dev_attr.work_fn =3D vdpasim_net_work;
->       dev_attr.buffer_size =3D PAGE_SIZE;
->
-> +     if (config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) {
-> +             if (config->device_features &
-> +                 ~dev_attr.supported_features)
-> +                     return -EINVAL;
-> +             dev_attr.supported_features &=3D
-> +                      config->device_features;
-> +     }
-> +
->       simdev =3D vdpasim_create(&dev_attr);
->       if (IS_ERR(simdev))
->               return PTR_ERR(simdev);
-> @@ -294,7 +302,8 @@ static struct vdpa_mgmt_dev mgmt_dev =3D {
->       .id_table =3D id_table,
->       .ops =3D &vdpasim_net_mgmtdev_ops,
->       .config_attr_mask =3D (1 << VDPA_ATTR_DEV_NET_CFG_MACADDR |
-> -                          1 << VDPA_ATTR_DEV_NET_CFG_MTU),
-> +                          1 << VDPA_ATTR_DEV_NET_CFG_MTU |
-> +                          1 << VDPA_ATTR_DEV_FEATURES),
->       .max_supported_vqs =3D VDPASIM_NET_VQ_NUM,
->       .supported_features =3D VDPASIM_NET_FEATURES,
->   };
->
->
->
-
+> 
+> Best regards,
+> Jingoo Han
+> 
+>>
+>> Fixes: aeaa0bfe8965 ("PCI: dwc: Move N_FTS setup to common setup")
+>> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+>> Acked-by: Jingoo Han <jingoohan1@gmail.com>
+>> ---
+>> V2:
+>> * Addressed review comments from Bjorn
+>> * Added "Acked-by: Jingoo Han <jingoohan1@gmail.com>"
+>>
+>>   drivers/pci/controller/dwc/pcie-designware.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+>> index 650a7f22f9d0..3df687667f27 100644
+>> --- a/drivers/pci/controller/dwc/pcie-designware.c
+>> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+>> @@ -649,7 +649,7 @@ void dw_pcie_setup(struct dw_pcie *pci)
+>>          if (pci->n_fts[1]) {
+>>                  val = dw_pcie_readl_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL);
+>>                  val &= ~PORT_LOGIC_N_FTS_MASK;
+>> -               val |= pci->n_fts[pci->link_gen - 1];
+>> +               val |= pci->n_fts[1];
+>>                  dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, val);
+>>          }
+>>
+>> --
+>> 2.17.1
+>>
