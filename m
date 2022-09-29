@@ -2,60 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9731D5EF881
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8A55EF883
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235823AbiI2PSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S235856AbiI2PS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235605AbiI2PS3 (ORCPT
+        with ESMTP id S235840AbiI2PSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:18:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A1A14F805;
-        Thu, 29 Sep 2022 08:18:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6B64B824B7;
-        Thu, 29 Sep 2022 15:18:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1235C433C1;
-        Thu, 29 Sep 2022 15:18:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664464705;
-        bh=yGsaOq9kyzvgGji/8EN1OKXb4Lsu/CQzHqSAuKNquJU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=rlop4KQiRbV4FLf3OtbnMhWNrGyei2AYFTiwHCsZCysnV2HV0hIg09ZsBiP7eWedX
-         KJjhFhhMQNfaqSQBQqqp6+hKBJqmw9ejR3tlSdILRiof25BoPkfVO7p7qd2auPI0pk
-         kISeVPEr/gW+N6LZ/UmetUeWt3hddSlb9cmkmmDLtq+qGbDyALCCoIe8mCRLLHaJhS
-         KtOVzBnqpd5pP8wAxUaSQSQnrzLA2wHow/qMxqG8QOC4onC2VARuGrk9Q35QE0Y4l1
-         iRIRx5OvqAJB4swQr/dkxE4kJwwfu56CwLhSd3nLcHu54TDA9ZIL6vhc5rYDX0BgkT
-         NnE2UMgyMBwTg==
-Message-ID: <76b5195a-a11c-0c75-b3dd-36aa78c58397@kernel.org>
-Date:   Thu, 29 Sep 2022 10:18:23 -0500
+        Thu, 29 Sep 2022 11:18:55 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8513F14F8FC
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:18:53 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id b21so1534301plz.7
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:18:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Ga7Wq6aD2ebMvSDNvAGT7MduWJCGTvC2mzBwQ2LHRCU=;
+        b=UgD3Cw43X1U5TDmVbCANXUxQimTv+mdSmfQ0CuqGXddG15c7j5qAp8Dmp3aFoH5eyz
+         3sh5foOmN0YCP1FzXrjOw6/CZt7cTSSE1YgUxnGLccS5gJYPw63aW4eES+BfivBlQaQz
+         Tvqy0fist8KREDnDjhXNxAnOx0CQKyt49tmHj+zxsUPraIooOmqp0o7JuawPf48eaGRd
+         vSN8iLvL9YCv7MXfNXNPbkPZp1glTmA5k8YvBYNKhBqde/uqj0Pp4xFv5JziD+8V4iu9
+         y8vyMZA2hto+sMTVkWoTtKMTrXqhwSyJct87hM8LHqL4b+LX0mF9qL3/nXzN3UBZgxKS
+         500g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ga7Wq6aD2ebMvSDNvAGT7MduWJCGTvC2mzBwQ2LHRCU=;
+        b=pZReeBNU0gbf1aWy2hlxVtTA0Nk0VOOa6I06yNN94LSc/b+Oh2KPOgWHUecAgP1rb4
+         H4Iy3FuZJ6dXRROiJIHepXJ1VGZHBd1emfuuJ4b0sq+RO8ejg/thqSs25+2fl/8jGILm
+         7CrLoykI4wTxsLoyHafQRBlw8aMgYMIhMk4XYBDlBftkUGfy+JP7ZCaI84PnT8JEsTaG
+         N0Oi0/fACtZpbq+Q71kcQD0kBVECbJONuQeeabjiPSWvFl/hsv5sCnkerSAsGZ5TWxpq
+         YqsVdUvlE9KvEWDDEHDARc5+1nvcXFJIAVb7Gp5uZjmF8aYglQOS3WRGsa7j21DJlafl
+         +bRg==
+X-Gm-Message-State: ACrzQf0wNJix61rzujc4l0/3J7lu6aAJo/riQVLmdjU/KIrMx/fTS+80
+        pkK1jsEue70OoYC4I3HzfMRdTA==
+X-Google-Smtp-Source: AMsMyM776dZC7Zy6WEQgOE8NUXltB/XDmd9NhL7eTPiJ3NIsvSIt/1hmAh0SJLF5hq3k0kl7GWaQ0Q==
+X-Received: by 2002:a17:902:848e:b0:178:2773:12d0 with SMTP id c14-20020a170902848e00b00178277312d0mr3799891plo.166.1664464732847;
+        Thu, 29 Sep 2022 08:18:52 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id t18-20020a17090340d200b0017315b11bb8sm5981283pld.213.2022.09.29.08.18.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 08:18:50 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 15:18:47 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Like Xu <like.xu.linux@gmail.com>
+Subject: Re: [RFC PATCH 0/9] kvm: implement atomic memslot updates
+Message-ID: <YzW3VxqZTb2hnXCy@google.com>
+References: <111a46c1-7082-62e3-4f3a-860a95cd560a@redhat.com>
+ <14d5b8f2-7cb6-ce24-c7a7-32aa9117c953@redhat.com>
+ <YzIZhn47brWBfQah@google.com>
+ <3b04db9d-0177-7e6e-a54c-a28ada8b1d36@redhat.com>
+ <YzMdjSkKaJ8HyWXh@google.com>
+ <dd6db8c9-80b1-b6c5-29b8-5eced48f1303@redhat.com>
+ <YzRvMZDoukMbeaxR@google.com>
+ <8534dfe4-bc71-2c14-b268-e610a3111d14@redhat.com>
+ <YzSxhHzgNKHL3Cvm@google.com>
+ <637e7ef3-e204-52fc-a4ff-1f0df5227a3e@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCHv4 1/3] dt-bindings: mmc: synopsys-dw-mshc: document
- "altr,sysmgr-syscon"
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     jh80.chung@samsung.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220928165420.1212284-1-dinguyen@kernel.org>
- <CAPDyKFp5oPuOz9A=37pRTvq7JPtJRdduEgmU9g+eUm0K=dZjUg@mail.gmail.com>
- <20cbd2a2-752e-8537-4cbd-6665ef9afd69@kernel.org>
- <bd024e66-25bb-0463-b346-b110c1b46681@linaro.org>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <bd024e66-25bb-0463-b346-b110c1b46681@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <637e7ef3-e204-52fc-a4ff-1f0df5227a3e@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,79 +90,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/29/22 09:38, Krzysztof Kozlowski wrote:
-> On 29/09/2022 16:20, Dinh Nguyen wrote:
->>>
->>> So this change will not be backwards compatible with existing DTBs. I
->>> noticed that patch2 updates the DTS files for the arm64 platforms, but
->>> there seems to be some arm32 platforms too. Isn't this going to be a
->>> problem?
->>>
->>
->> The arm32 platforms makes the clk-phase adjustment through the clock
->> driver. There was a discussion when I originally submitted the support
->> for the arm32 platforms, and we landed on going through the clock driver
->> instead of using the MMC driver. The updates to the arm32 platforms can
->> be done after this patch series.
+On Thu, Sep 29, 2022, Emanuele Giuseppe Esposito wrote:
 > 
-> How the update "can be done after"? Didn't you break all boards in- and
-> out-of-tree?
+> Am 28/09/2022 um 22:41 schrieb Sean Christopherson:
+> > Beyond that, there's no explanation of why this exact API is necessary, i.e. there
+> > are no requirements given.
+> > 
+> >   - Why can't this be solved in userspace?
 > 
+> Because this would provide the "feature" only to QEMU, leaving each
+> other hypervisor to implement its own.
 
-I don't think so! At least, I don't see how, for the arm32 boards, here 
-are the dts entry for setting the clock-phase:
+But there's no evidence that any other VMM actually needs this feature.
 
-sdmmc_clk: sdmmc_clk {
-	#clock-cells = <0>;
-	compatible = "altr,socfpga-gate-clk";
-	clocks = <&f2s_periph_ref_clk>, <&main_nand_sdmmc_clk>,<&per_nand_mmc_clk>;
-	clk-gate = <0xa0 8>;
-	clk-phase = <0 135>;   <-----
-};
+> >   - When is KVM required to invalidate and flush?  E.g. if a memslot is deleted
+> >     and recreated with a different HVA, how does KVM ensure that there are no
+> >     outstanding references to the old HVA without introducing non-determinstic
+> >     behavior.  The current API works by forcing userspace to fully delete the
+> >     memslot, i.e. KVM can ensure all references are gone in all TLBs before
+> >     allowing userspace to create new, conflicting entries.  I don't see how this
+> >     can work with batched updates.  The update needs to be "atomic", i.e. vCPUs
+> >     must never see an invalid/deleted memslot, but if the memslot is writable,
+> >     how does KVM prevent some writes from hitting the old HVA and some from hitting
+> >     the new HVA without a quiescent period?
+> 
+> Sorry this might be my fault in providing definitions, even though I
+> think I made plenty of examples. Delete/move operations are not really
+> "atomic" in the sense that the slot disappears immediately.
+> 
+> The slot(s) is/are first "atomically" invalidated, allowing the guest to
+> retry the page fault
 
-sdmmc_clk_divided: sdmmc_clk_divided {
-	#clock-cells = <0>;
-	compatible = "altr,socfpga-gate-clk";
-	clocks = <&sdmmc_clk>;
-	clk-gate = <0xa0 8>;
-	fixed-divider = <4>;
-	};
+I completely forgot that KVM x86 now retries on KVM_MEMSLOT_INVALID[*].  That is
+somewhat arbitrary behavior, e.g. if x86 didn't do MMIO SPTE caching it wouldn't
+be "necessary" and x86 would still treat INVALID as MMIO.  It's also x86 specific,
+no other architecture retries on invalid memslots, i.e. relying on that behavior
+to provide "atomicity" won't work without updating all other architectures.
 
-...
-mmc: dwmmc0@ff704000 {
-	compatible = "altr,socfpga-dw-mshc";
-	reg = <0xff704000 0x1000>;
-	interrupts = <0 139 4>;
-	fifo-depth = <0x400>;
-	#address-cells = <1>;
-	#size-cells = <0>;
-	clocks = <&l4_mp_clk>, <&sdmmc_clk_divided>;
-	clock-names = "biu", "ciu";
-	resets = <&rst SDMMC_RESET>;
-	status = "disabled";
-	};
+That's obviously doable, but since these updates aren't actually atomic, I don't
+see any meaningful benefit over adding e.g. KVM_MEM_DISABLED.
 
+[*] e0c378684b65 ("KVM: x86/mmu: Retry page faults that hit an invalid memslot")
 
-So the setting for the clk-phase is done in the clock driver, 
-(drivers/clk/socfpga/clk-gate.c). This has been done many years now, 
-before the clk-phase-hs-sd concept was added to the sdmmc driver.
+> >   - If a memslot is truncated while dirty logging is enabled, what happens to
+> >     the bitmap?  Is it preserved?  Dropped?
+> 
+> Can you explain what you mean with "truncated memslot"?
 
-When I originally submitted the patches for the ARM64 clock driver 
-support, I forgot to add the clk-phase support for the SD controller. 
-Now that I realized we needed it, the concept to set the clk-phase is in 
-the SD driver, thus I'm just adding the support for arm64.
+Shrink the size of the memslot.
 
-The arm32 support does not change in any way, so I don't see how it will 
-break it.
+> Regarding the bitmap, currently QEMU should (probably wrongly) update it
+> before even committing the changes to KVM. But I remember upstream
+> someone pointed that this could be solved later.
 
-I can update the arm32 support with the same function in patch3 after 
-this series. Because updating the arm32 will require me to remove the 
-support in the clock driver, thus, I want to break it out.
+These details can't be punted, as they affect the ABI.  My interpretation of
+"atomic" memslot updates was that KVM would truly honor the promise of atomic
+updates, e.g. that a DELETE=>CREATE sequence would effectively allow truncating
+a memslot without losing any data.  Those details aren't really something that
+can be punted down the road to be fixed at a later point because they very much
+matter from an ABI perspective.
 
-Dinh
+> > Again, I completely agree that the current memslots API is far from perfect, but
+> > I'm not convinced that simply extending the existing API to batch updates is the
+> > best solution from a KVM perspective.
+> > 
+> >>> E.g. why do a batch update and not provide KVM_SET_ALL_USER_MEMORY_REGIONS to
+> >>> do wholesale replacement?  That seems like it would be vastly simpler to handle
+> >>> on KVM's end.  Or maybe there's a solution in the opposite direction, e.g. an
+> >>> API that allows 1->N or N->1 conversions but not arbitrary batching.
+> >>
+> >> Wholesale replacement was my first idea when I looked at the issue, I think
+> >> at the end of 2020.  I never got to a full implementation, but my impression
+> >> was that allocating/deallocating dirty bitmaps, rmaps etc. would make it any
+> >> easier than arbitrary batch updates.
+> > 
+> > It's not obvious to me that the memslot metadata is going to be easy to handle
+> > regardless of what we do.  E.g. I'm pretty sure that batching updates will "corrupt"
+> > the dirty bitmap if a hole is punched in a memslot that's being dirty logged.
+> > 
+> 
+> Could you provide an example?
+> I mean I am not an expert but to me it looks like I preserved the same
+> old functionalities both here and in QEMU. I just batched and delayed
+> some operations, which in this case should cause no harm.
 
+As above, my confusion is due to calling these updates "atomic".  The new API is
+really just "allow batching memslot updates and subtly rely on restarting page
+faults on KVM_MEMSLOT_INVALID".
 
-
-
+IMO, KVM_MEM_DISABLED or similar is the way to go.  I.e. formalize the "restart
+page faults" semantics without taking on the complexity of batched updates.
