@@ -2,106 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79395EFC41
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 19:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA1B5EFC47
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 19:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbiI2RuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 13:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
+        id S232506AbiI2Rvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 13:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbiI2RuB (ORCPT
+        with ESMTP id S229780AbiI2Rvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 13:50:01 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879371E71A
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 10:49:59 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id ml1so1376694qvb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 10:49:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=xa8hoH9SnDPlJIeXGYh843CRJD1tjWdMf/dTq8TipPM=;
-        b=TTqX1qhbwY8oXLjTYWELHEsRERRC+tYA4I14qRpviPTnMPxxd/vPEPS/znbsofO0+c
-         4bwTdW8+z/pWbH07euOuLtVPnrXYN4FM3+Cx3+6df9BnwzMRVSyQ1vC15hIyhMjMipuQ
-         qlzZ7Fu4h7IQcnc4aD13PnswpHL+dCBN4e0DgSfgytTo+Borsg650FpgD3ZVlkkzogU1
-         opPTvDdjbXUTLZKa0F4b83jrDhZt81cEI/hRhpm0Bun+0Wq7SRl0wOcvarlvT3D7N0e1
-         b7XskLXtlA/O+SKSR/BQgRPL969bnpg4P6x3JIZubcOO7fHzsFTljemfyNnz/GZSpyiX
-         iL9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=xa8hoH9SnDPlJIeXGYh843CRJD1tjWdMf/dTq8TipPM=;
-        b=a7ytP2NJWk/sxUKEZX8cFxkw/ZIxY+4GMyANntqGMuMpUiTpzEnVwNrAndylPcHc6u
-         wuf/Qm0T0Q1aDiXpr4/IQeZJ1tOIx10/nRWVcCNunyMWLmrjTK6T2PobDF8YW9Y4kpXw
-         V4zPhAtCA+XhmOHAWw+jbWYgzAbTBEuaIwipg7KzxLNjfeBDms1U+yLVAHmsyW8eiHLC
-         Aa27F+XnZSP7+ruGEP2QW0qV2LfEwZmUQZH+9j9Eozp50RUtIS+dLRmd6ADtO/skHhXi
-         2ixs9lDoHGEd1pcYt40iO3oPZ43L2gxO9ahsVOaqMQfBuLx/PDOlCK4aHHTw4JB58Xqx
-         cirw==
-X-Gm-Message-State: ACrzQf2C5wlRss6VzrhZi4N8wfqfufMmdXj6r5x8quGwIGzwWqzvfnz0
-        FwNARGzF3QWh8j9rjwTCceJi9Q==
-X-Google-Smtp-Source: AMsMyM7Xarezc23TZVeEEbR3Uk9puQBAc1mIn47qgL8JGhJP31afpTjPWuOiERJgd9lOx+IPbEN2Vg==
-X-Received: by 2002:a05:6214:3006:b0:496:ad87:6784 with SMTP id ke6-20020a056214300600b00496ad876784mr3557984qvb.7.1664473798680;
-        Thu, 29 Sep 2022 10:49:58 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
-        by smtp.gmail.com with ESMTPSA id 85-20020a370758000000b006ceb8f36302sm6929qkh.71.2022.09.29.10.49.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 10:49:57 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1odxfY-003fcM-BW;
-        Thu, 29 Sep 2022 14:49:56 -0300
-Date:   Thu, 29 Sep 2022 14:49:56 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     Kevin Tian <kevin.tian@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Eric Farman <farman@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Longfang Liu <liulongfang@huawei.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, Yi Liu <yi.l.liu@intel.com>
-Subject: Re: [PATCH v4 15/15] vfio: Add struct device to vfio_device
-Message-ID: <YzXaxPpkc+90Xx+T@ziepe.ca>
-References: <20220921104401.38898-1-kevin.tian@intel.com>
- <20220921104401.38898-16-kevin.tian@intel.com>
- <20220929105519.5c9ae1d8.alex.williamson@redhat.com>
+        Thu, 29 Sep 2022 13:51:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089A813BCDC;
+        Thu, 29 Sep 2022 10:51:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A259620E1;
+        Thu, 29 Sep 2022 17:51:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05048C43141;
+        Thu, 29 Sep 2022 17:51:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664473900;
+        bh=/rgIw13/q7gyzY3HDMRyadzYlUbWim4MSs3xVb/+10A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cAPtwETm/aNpnZV6tOadVoZyzaLVgAp4tlpn3dyhJLP3q+4PFIkxYNT/0O8FRhkPn
+         l5q6g8iLtBP72jHr5JGT0tggqRRjsi6k4VVB0CrYu3whpcm+6sMtyQ7GVtr31R3sg9
+         zfC81dKmHz1WjsoFjX3nJ6bljXM2dcFpM+jY5UGQUR3++1AoWHsUPnZhZnPpQKKH+a
+         fzcHvsK+jjGVs5nZCGcsLrnUczCfF9jdhaorVLMaOhR29fIJ42H+P7mJVAFrz6Nl2Y
+         J0xljmp6Yc4eDfV4uWgCMKmy/FkyV2sjclCWf9sQ9hxWqdVb/VRoAZ3Nfi766oBrwa
+         xdRv+OghfH5Og==
+Date:   Thu, 29 Sep 2022 18:51:32 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        ChiaEn Wu <peterwu.pub@gmail.com>, pavel@ucw.cz,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        lars@metafoo.de, andriy.shevchenko@linux.intel.com,
+        chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, szunichen@gmail.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v12 3/5] iio: adc: mt6370: Add MediaTek MT6370 support
+Message-ID: <YzXbJM31s0P0nLD5@google.com>
+References: <cover.1663926551.git.chiaen_wu@richtek.com>
+ <9bf36f09bc5f002f2b09b7cc26edccf109516465.1663926551.git.chiaen_wu@richtek.com>
+ <20220924155525.5663bed8@jic23-huawei>
+ <YzFY5FI0PrZqdAiZ@google.com>
+ <CAL_JsqKKJGtacbzGqCupFniSGha610L1cay2V+AK8vehTA=F=g@mail.gmail.com>
+ <YzQSnuwPjzJIgsYq@google.com>
+ <20220929163418.GA2270491-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220929105519.5c9ae1d8.alex.williamson@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220929163418.GA2270491-robh@kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,19 +71,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 10:55:19AM -0600, Alex Williamson wrote:
-> Hi Kevin,
-> 
-> This introduced the regression discovered here:
-> 
-> https://lore.kernel.org/all/20220928125650.0a2ea297.alex.williamson@redhat.com/
-> 
-> Seems we're not releasing the resources when removing an mdev.  This is
-> a regression, so it needs to be fixed or reverted before the merge
-> window.  Thanks,
+On Thu, 29 Sep 2022, Rob Herring wrote:
 
-My guess at the fix for this:
+> On Wed, Sep 28, 2022 at 10:23:42AM +0100, Lee Jones wrote:
+> > On Mon, 26 Sep 2022, Rob Herring wrote:
+> > 
+> > > On Mon, Sep 26, 2022 at 2:46 AM Lee Jones <lee@kernel.org> wrote:
+> > > >
+> > > > On Sat, 24 Sep 2022, Jonathan Cameron wrote:
+> > > >
+> > > > > On Fri, 23 Sep 2022 10:51:24 +0800
+> > > > > ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+> > > > >
+> > > > > > From: ChiaEn Wu <chiaen_wu@richtek.com>
+> > > > > >
+> > > > > > MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
+> > > > > > with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
+> > > > > > driver, display bias voltage supply, one general purpose LDO, and the
+> > > > > > USB Type-C & PD controller complies with the latest USB Type-C and PD
+> > > > > > standards.
+> > > > > >
+> > > > > > Add support for the MT6370 ADC driver for system monitoring, including
+> > > > > > charger current, voltage, and temperature.
+> > > > > >
+> > > > > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > > > > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > > > > > Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > > > > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> > > > >
+> > > > > This will have to either wait for next cycle, or go through mfd because
+> > > > > of the dt-bindings include which is in the mfd tree.
+> > > > >
+> > > > > Please make those dependencies clear in new versions.
+> > > >
+> > > > If the bindings come together in -next, then subsequently in Mainline,
+> > > > it shouldn't really matter.
+> > > 
+> > > Except that the bindings haven't come together and at this point may
+> > > not for 6.1. linux-next has been warning for weeks because the child
+> > > device schemas haven't been applied. I've said it before, all the
+> > > schemas for MFD devices need to be applied together. Or at least the
+> > > MFD schema needs to get applied last.
+> > > 
+> > > Furthermore, subsequent versions of this don't get tested and we end
+> > > up with more warnings[1].
+> > > 
+> > > It's only your IIO tree that the DT
+> > > > tooling with complain about, right?
+> > > 
+> > > And the MFD tree...
+> > > 
+> > > Please apply the LED bindings (patches 1 and 2) so we can get the
+> > > existing warnings fixed and address any new warnings.
+> > 
+> > Who usually applies LED bindings?  Looks as though they're good to go.
+> 
+> Pavel. The issue would be I don't know if the driver side is ready and 
+> those usually go together. Other than my complaining here, how's he 
+> supposed to know that the bindings at least need to be applied?
+> 
+> Again, the process here is not working. I've said before, all the 
+> bindings for an MFD need to go via 1 tree. You obviously don't agree, so 
+> propose something. The current process of no coordination doesn't work.
 
-https://lore.kernel.org/r/0-v1-013609965fe8+9d-vfio_gvt_unregister_jgg@nvidia.com
+The solution would be for someone to create succinct immutable branches, like
+I do for real code.  If someone would be happy to do that, I'd be more than
+happy to pull from them.
 
-Jason
+I go to the effort of creating them to prevent actual build breakages,
+however doing so to keep a documentation helper script happy is a step
+too far for me personally, sorry.
+
+-- 
+Lee Jones [李琼斯]
