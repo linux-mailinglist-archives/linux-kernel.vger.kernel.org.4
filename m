@@ -2,139 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018B65EF697
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2419F5EF6A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbiI2Nbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 09:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
+        id S235240AbiI2NcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 09:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234920AbiI2Nbc (ORCPT
+        with ESMTP id S235424AbiI2Nbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 09:31:32 -0400
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0857213746B;
-        Thu, 29 Sep 2022 06:31:27 -0700 (PDT)
-Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 458B51C8121D;
-        Thu, 29 Sep 2022 21:31:27 +0800 (CST)
-Received: from NTHCCAS03.nuvoton.com (10.1.20.28) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Thu, 29 Sep
- 2022 21:31:27 +0800
-Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS03.nuvoton.com
- (10.1.20.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1847.3; Thu, 29 Sep
- 2022 21:31:26 +0800
-Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS04.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Thu, 29 Sep 2022 21:31:26 +0800
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id 0DAF163A20; Thu, 29 Sep 2022 16:31:25 +0300 (IDT)
-From:   Tomer Maimon <tmaimon77@gmail.com>
-To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
-        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <olivia@selenic.com>,
-        <herbert@gondor.apana.org.au>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <openbmc@lists.ozlabs.org>, <linux-crypto@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v2 2/2] hwrng: npcm: Add NPCM8XX support
-Date:   Thu, 29 Sep 2022 16:31:11 +0300
-Message-ID: <20220929133111.73897-3-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220929133111.73897-1-tmaimon77@gmail.com>
-References: <20220929133111.73897-1-tmaimon77@gmail.com>
+        Thu, 29 Sep 2022 09:31:46 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7FB137903
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:31:40 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id l12so1548164ljg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:31:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=X48j3G+qVEopzjYTA1H5u2rml5Mx/9RCCV/6TZYhcIQ=;
+        b=hrmIdsn5g/FpEqFeKHHnTpfCSNW5C5r4gCEHVeHwVR80GVFbZg97nDgi41R/Xf3Ymu
+         seJNwwjKnFyrmAgj3MKNLgRmGhEByKoLErdEa5A+ZqKkC9tAUD1c3Php845WLUOWrAjq
+         5ZlItbbiBVyAvLexJw8/YeEBPs4UYnQxHvSSzeGt5jWbcLDFTtLYDxbNNHFoiFOFzm9y
+         fp90/6MsNSvPK1y4kRGgbD0CjwGmTg2k+wqdhLQ/Uzby8fhWkNdV/rsq4WzbE1W2z4lu
+         8CC0AQf8cN0S6yZfRX9sm4vpUZbxuBgOKFxY+20QItfwWPCSJrb/2AhcvtR8BBiHcv1M
+         gavQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=X48j3G+qVEopzjYTA1H5u2rml5Mx/9RCCV/6TZYhcIQ=;
+        b=ddfQC9E0jbpN03gd1NJ0lp2sFcT1wltk0/xAeyXSR/wbRosVmu+lkNW1lLiFLvrZ4Q
+         xvYbFLl79Rz5EbJ63Sap005QohWK4/elMG/gX9vppADV6XB4YRLte8ZaFD1lIOo6L+gi
+         CUwIEcIugDQnpX4E/X2wkxMKY4oRPO+4MsUPSAloPbVcVGRohFtvuWGRaDnbiCNv1KRU
+         4JEMvLLVFfMW0xxn7/xmY2II0MyFCXZdg7NuR294ceBoJXsbHZjUJpiQs1Y5o8WK1LAc
+         EEr+BVlpms1vxjAeinDJhdRE7MX/cuAorPwvuWpetsEPMCEcp4tM+Jl2EXTUZ9MBBk06
+         lXqg==
+X-Gm-Message-State: ACrzQf0WiI32HQAZ2EsMidlMjVU2BGOZxgczRhj7hUAtjK1tbWVovQhU
+        ROxfQ32XT3nUfXE77G4B4bYOpg==
+X-Google-Smtp-Source: AMsMyM7JjhES7J8Rt6+czIznrc9iO1brCXpNmHy+QfoVtGLJY9kCDF+GU2VyflNmIbaVrNY4L7jUPw==
+X-Received: by 2002:a2e:84ca:0:b0:25d:77e0:2566 with SMTP id q10-20020a2e84ca000000b0025d77e02566mr1274760ljh.78.1664458298639;
+        Thu, 29 Sep 2022 06:31:38 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id u5-20020ac258c5000000b004a0232613desm784574lfo.205.2022.09.29.06.31.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 06:31:38 -0700 (PDT)
+Message-ID: <803d6c60-2e10-d831-bbdf-e1aaf9f8800f@linaro.org>
+Date:   Thu, 29 Sep 2022 16:31:37 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v7 13/29] thermal/drivers/qcom: Use generic
+ thermal_zone_get_trip() function
+Content-Language: en-GB
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com, Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Kaestle <peter@piie.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Antoine Tenart <atenart@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Dmitry Osipenko <digetx@gmail.com>, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+References: <20220928210059.891387-1-daniel.lezcano@linaro.org>
+ <20220928210059.891387-14-daniel.lezcano@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220928210059.891387-14-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding RNG NPCM8XX support to NPCM RNG driver.
-RNG NPCM8XX uses a different clock prescaler.
+On 29/09/2022 00:00, Daniel Lezcano wrote:
+> The thermal framework gives the possibility to register the trip
+> points with the thermal zone. When that is done, no get_trip_* ops are
+> needed and they can be removed.
+> 
+> Convert ops content logic into generic trip points and register them with the
+> thermal zone.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Acked-by: Amit Kucheria <amitk@kernel.org>
 
-As part of adding NPCM8XX support:
-- Add NPCM8XX specific compatible string.
-- Add data to handle architecture specific clock prescaler.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
----
- drivers/char/hw_random/npcm-rng.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+> ---
+>   drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 39 +++++++++------------
+>   1 file changed, 17 insertions(+), 22 deletions(-)
+> 
 
-diff --git a/drivers/char/hw_random/npcm-rng.c b/drivers/char/hw_random/npcm-rng.c
-index 1ec5f267a656..5bf7f370f985 100644
---- a/drivers/char/hw_random/npcm-rng.c
-+++ b/drivers/char/hw_random/npcm-rng.c
-@@ -13,11 +13,13 @@
- #include <linux/delay.h>
- #include <linux/of_irq.h>
- #include <linux/pm_runtime.h>
-+#include <linux/of_device.h>
- 
- #define NPCM_RNGCS_REG		0x00	/* Control and status register */
- #define NPCM_RNGD_REG		0x04	/* Data register */
- #define NPCM_RNGMODE_REG	0x08	/* Mode register */
- 
-+#define NPCM_RNG_CLK_SET_62_5MHZ	BIT(2) /* 60-80 MHz */
- #define NPCM_RNG_CLK_SET_25MHZ	GENMASK(4, 3) /* 20-25 MHz */
- #define NPCM_RNG_DATA_VALID	BIT(1)
- #define NPCM_RNG_ENABLE		BIT(0)
-@@ -31,14 +33,14 @@
- struct npcm_rng {
- 	void __iomem *base;
- 	struct hwrng rng;
-+	u32 clkp;
- };
- 
- static int npcm_rng_init(struct hwrng *rng)
- {
- 	struct npcm_rng *priv = to_npcm_rng(rng);
- 
--	writel(NPCM_RNG_CLK_SET_25MHZ | NPCM_RNG_ENABLE,
--	       priv->base + NPCM_RNGCS_REG);
-+	writel(priv->clkp | NPCM_RNG_ENABLE, priv->base + NPCM_RNGCS_REG);
- 
- 	return 0;
- }
-@@ -47,7 +49,7 @@ static void npcm_rng_cleanup(struct hwrng *rng)
- {
- 	struct npcm_rng *priv = to_npcm_rng(rng);
- 
--	writel(NPCM_RNG_CLK_SET_25MHZ, priv->base + NPCM_RNGCS_REG);
-+	writel(priv->clkp, priv->base + NPCM_RNGCS_REG);
- }
- 
- static int npcm_rng_read(struct hwrng *rng, void *buf, size_t max, bool wait)
-@@ -110,6 +112,7 @@ static int npcm_rng_probe(struct platform_device *pdev)
- 	priv->rng.read = npcm_rng_read;
- 	priv->rng.priv = (unsigned long)&pdev->dev;
- 	priv->rng.quality = 1000;
-+	priv->clkp = (u32)(uintptr_t)of_device_get_match_data(&pdev->dev);
- 
- 	writel(NPCM_RNG_M1ROSEL, priv->base + NPCM_RNGMODE_REG);
- 
-@@ -162,7 +165,10 @@ static const struct dev_pm_ops npcm_rng_pm_ops = {
- };
- 
- static const struct of_device_id rng_dt_id[] __maybe_unused = {
--	{ .compatible = "nuvoton,npcm750-rng",  },
-+	{ .compatible = "nuvoton,npcm750-rng",
-+		.data = (void *)NPCM_RNG_CLK_SET_25MHZ },
-+	{ .compatible = "nuvoton,npcm845-rng",
-+		.data = (void *)NPCM_RNG_CLK_SET_62_5MHZ },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, rng_dt_id);
 -- 
-2.33.0
+With best wishes
+Dmitry
 
