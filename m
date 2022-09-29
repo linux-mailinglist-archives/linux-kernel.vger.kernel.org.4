@@ -2,79 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A555EFFF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 00:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA835EFFF7
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 00:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiI2WPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 18:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54492 "EHLO
+        id S229880AbiI2WQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 18:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiI2WPi (ORCPT
+        with ESMTP id S229628AbiI2WQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 18:15:38 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3618AF50AF;
-        Thu, 29 Sep 2022 15:15:37 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id s125so3032069oie.4;
-        Thu, 29 Sep 2022 15:15:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=4BfKtAN74BiuLXzY75ghMuhJ1sBHsY4RPott4OBX9j8=;
-        b=Mm19t192ciYXmvGNJr/bx1kAXjYqPK65s9InjF2an94OQls3osMlRU2eB6BZQzUO5y
-         HAyBxQizcSxNntKAkGS3Sv8C8tyomDpp5z6PQGgCJHYN0wwYGeF0JQuXqvIYpiv20Y26
-         TOylEbQujFiCBvcxtxFTSWB0+bw33FyhfuSKpAdZKhPo/TqyJu60qA+wb/vg6gqCPGnf
-         P+mVh7o4/mcZULeG2/BLLeNxg86J5OiHQtbdfckDXsaQ9quUKsrX/SvNrz+fSNHW/dXC
-         cGIbAur4MooE47HR0Hy6J3TmJEfkWNcP/auZNiJ5qU9hCgXtgnDmlq+WazPOVq36Wyep
-         1EXQ==
-X-Gm-Message-State: ACrzQf2XeDr9nQq4cw7O3AYbtJYueP9RklhamU8zVIfI38PDmdt7fSjP
-        9HqtJrq0M38GEnLqrxQArA==
-X-Google-Smtp-Source: AMsMyM793Cd8u3q+sjWrpJjjLQ0fbvmUagt931/u0RIvCAWtOjG21n+skk3xFBtXE3Ry/fZOtKPL0Q==
-X-Received: by 2002:a05:6808:d46:b0:350:cba9:1981 with SMTP id w6-20020a0568080d4600b00350cba91981mr7922656oik.130.1664489736371;
-        Thu, 29 Sep 2022 15:15:36 -0700 (PDT)
-Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x65-20020a9d37c7000000b0065bf42c967fsm210418otb.19.2022.09.29.15.15.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 15:15:35 -0700 (PDT)
-Received: (nullmailer pid 2863698 invoked by uid 1000);
-        Thu, 29 Sep 2022 22:15:35 -0000
-Date:   Thu, 29 Sep 2022 17:15:35 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        herbert@gondor.apana.org.au, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH RFT 2/5] dt-bindings: crypto: add support for
- rockchip,crypto-rk3588
-Message-ID: <166448973449.2863631.5987990052207072258.robh@kernel.org>
-References: <20220927080048.3151911-1-clabbe@baylibre.com>
- <20220927080048.3151911-3-clabbe@baylibre.com>
+        Thu, 29 Sep 2022 18:16:29 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44A1FCA6D
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 15:16:27 -0700 (PDT)
+Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 28TMGQK1040782;
+        Fri, 30 Sep 2022 07:16:26 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav119.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp);
+ Fri, 30 Sep 2022 07:16:26 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 28TMGPbe040774
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 30 Sep 2022 07:16:25 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <b4979f46-89e4-e0bd-e0f5-0754169ad4bb@I-love.SAKURA.ne.jp>
+Date:   Fri, 30 Sep 2022 07:16:23 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927080048.3151911-3-clabbe@baylibre.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 5.19 000/207] 5.19.12-rc1 review
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Johannes Berg <johannes.berg@intel.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <20220926100806.522017616@linuxfoundation.org>
+ <CA+G9fYtxogp--B0Em6VCL0C3wwVFXa6xW-Rq2kQk3br+FPGLgg@mail.gmail.com>
+ <YzKyIfQUq9eRbomG@kroah.com>
+ <CA+G9fYu1L_qwCQ9x0FukJ=0J5sg5z0ttejT9BT_bPAgCEtmAnQ@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CA+G9fYu1L_qwCQ9x0FukJ=0J5sg5z0ttejT9BT_bPAgCEtmAnQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Sep 2022 08:00:45 +0000, Corentin Labbe wrote:
-> Add device tree binding documentation for the Rockchip cryptographic
-> offloader V2.
+On 2022/09/30 0:43, Naresh Kamboju wrote:
+> Anders bisected this reported problem [1] and found this commit caused
+> deadlock on all arm64 devices.
 > 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
->  .../crypto/rockchip,rk3588-crypto.yaml        | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/crypto/rockchip,rk3588-crypto.yaml
-> 
+>> Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+>>     workqueue: don't skip lockdep work dependency in cancel_work_sync()
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+My patch itself is correct; just started reporting possibility of deadlock.
+You will see several reports like this, but that is an expected result.
+
+> 
+> 
+> [1] https://lore.kernel.org/stable/CA+G9fYtxogp--B0Em6VCL0C3wwVFXa6xW-Rq2kQk3br+FPGLgg@mail.gmail.com/
+
+The line which causes this report will be removed by commit bb87672562f871ed
+("Bluetooth: Remove update_scan hci_request dependancy").
+
