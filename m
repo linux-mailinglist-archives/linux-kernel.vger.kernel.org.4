@@ -2,98 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0BED5EFD99
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B595E5EFD9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbiI2TGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 15:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
+        id S230252AbiI2TGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 15:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbiI2TFy (ORCPT
+        with ESMTP id S230191AbiI2TGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 15:05:54 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDBA1438F5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 12:05:51 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id q10so2573650oib.5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 12:05:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=d0crPrIiHDvTjv4ASul3Goxd2GrqWv18ntDF0Hrl2co=;
-        b=H5ifccgQ3ejZODwR+iA8IAzLi9dYu0f/LWjubXNYIvuq6neuxtgYbJuqppjEF2uYEm
-         XFRqX/6m+EvnCT042dj16sp22LNx4emifWUuDPPtKjkWMVmPKJQKgoy3MUns0MnhYiFa
-         ZyS1bB5jGNU78LB/vrVxnTpd2ZLgqzBlT8X7Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=d0crPrIiHDvTjv4ASul3Goxd2GrqWv18ntDF0Hrl2co=;
-        b=c6qjQHs+12f+xzTCly+Mz9+Vqn//iddkFWBkXo3gS7pFGA6DcI9R4p/7lTVn3S49Tv
-         ZFCLj1zW4hJnJ4N3g/Yh21SH8/zKY7RS9xUJzur/DgjAf7n8jCFHSklcp9Oi05/q0JN5
-         /oFvtMsXhGPkQ+9Ld8pnYTdXraBjtoADWQY5ZM9+ORLwLuXZX1xskT2D5gTJz37YSIIN
-         FCOy8tJCAZFws7H0+gfTHIn3mwkG/WkS2rQJojsyehnB/9lpD2AzXF+HHRQ4/XHh1die
-         nNk6fWVuPL+VBD08vtAlkcsOc98kzAHXrpCqrYkXjB18WYaQmSaeeQ1KAyfGqLeXOyV0
-         S9yw==
-X-Gm-Message-State: ACrzQf1tc5MDTj1moEpRxT1iJ8oyMzpJO9cNgahVkx3pRyTpfNryvHWr
-        DmEI+WQGI5RyCZ3wXKoOJFOTpXe1NxRd4A==
-X-Google-Smtp-Source: AMsMyM4XSDeJJZv/j25jepzBuutpZXsUjvYXDR1FQI8mT+2Delqm1P6PqG/w8FsNlLfT18GdwOc9fQ==
-X-Received: by 2002:a05:6808:3012:b0:351:3f4:d060 with SMTP id ay18-20020a056808301200b0035103f4d060mr7842740oib.241.1664478349486;
-        Thu, 29 Sep 2022 12:05:49 -0700 (PDT)
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com. [209.85.160.54])
-        by smtp.gmail.com with ESMTPSA id v32-20020a4a8c63000000b00475d676d2d4sm72260ooj.16.2022.09.29.12.05.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 12:05:48 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-131b7bb5077so2945622fac.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 12:05:48 -0700 (PDT)
-X-Received: by 2002:a05:6870:c888:b0:12c:7f3b:d67d with SMTP id
- er8-20020a056870c88800b0012c7f3bd67dmr2868462oab.229.1664478348247; Thu, 29
- Sep 2022 12:05:48 -0700 (PDT)
+        Thu, 29 Sep 2022 15:06:12 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EE54DB19;
+        Thu, 29 Sep 2022 12:06:11 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id CE9625C00DC;
+        Thu, 29 Sep 2022 15:06:08 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 29 Sep 2022 15:06:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wfchandler.org;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1664478368; x=
+        1664564768; bh=5iKGShl7bHTQjRCpR3Rp6BaSwCatu+rb0Y5UgnU1eOI=; b=b
+        jrvUMZDt1YwJthfV0Qdg1pP8nZ4FmTK4O2Kgie1W59wAZQUOwbnInXX6+yDOV4Wi
+        320UZAirBa3MqnVZ2aE6Cb02FuoVzav5HWwTjLISFdgS40eKjTjc3Sh8n+0BgaNN
+        oHTucHpyqZd8tjiYo79F+uUZiMXZM1xLELwLc1VstcU03zdUNydkMNd768X7F/F9
+        ZbBcSnVnb4zgeJFM5lbLDu56wCzeZjirQZlTa4fFfMwk1CCGPU9lOfinGWV6/ftZ
+        fj0EpExYXPSN23eF+hvGiQEJulQX4h4ARbKPntyxJ3/Syz8vrRb4rygpv6M1OimM
+        Nlmjowi7XwG0uUKgu0hqw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1664478368; x=
+        1664564768; bh=5iKGShl7bHTQjRCpR3Rp6BaSwCatu+rb0Y5UgnU1eOI=; b=g
+        CE1erlxOgz9e/8NSesIGMjsGGtZKUSnx1P+eMftneMNUoN1Qy/4wFNdxptmx1A2e
+        3eCegl44ve78g7uqOtsr8qyd7VnuNPK521x6Ns1cgNZp9AKfqqNyx1/UBoQVZ3xT
+        pnXXMAYzzyjflS/hw5GQWjAstMl/fSLYe2hTsrOkUXYgd7BRoavZ1WAWHkIrfpfV
+        yLB2gU/No/AjG68I2RHg8wTaLevQmiiCeWWBbCf6SsyoZGzby+I32TjQfP2boxJY
+        azykm7zKS2k0ivVqTvT5bKXvZT946ygpBd0jSAgvQgBrEps5m2NXcmxNMYakSaTo
+        KkR+Ee9CKCs17F5HlxNcw==
+X-ME-Sender: <xms:oOw1Y-_M43lu3v59LAVn-Wvuma4teIASMQM-RlC3gmF2FQXplHtGZA>
+    <xme:oOw1Y-sXZwaKiCo5umh65GeMXM9Z0iejVscfWSmo1Res8gOETRc7A3TKr066i7Doj
+    LrJ8SyhvsJGBsaW2-E>
+X-ME-Received: <xmr:oOw1Y0CpZic9AF2PCVMafAs6lODMC7cEJESnp3ZGAQ-pGvpIdOUOqReLBY3ksrtT8GA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehtddgudefhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffoffkjghfgggtgfesthhqmhdtredttdenucfhrhhomhephghi
+    lhhlucevhhgrnhgulhgvrhcuoeiffhgtseiffhgthhgrnhgulhgvrhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepgfeuvdduudfftdfgkedtffehkeeuhefhtdehtdfgkefhveehkeej
+    geeuhfeugffhnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiffhgtseiffhgthhgrnhgulhgv
+    rhdrohhrgh
+X-ME-Proxy: <xmx:oOw1Y2f8qM7kPlpQN_wIgtP96-ECrohv5jFIjEyCoFTYeamATejhvQ>
+    <xmx:oOw1YzPG7w0Ly2ZZ-n3OYR6jlX42W6cy7WBstYjwcGM4I81e5_HUEQ>
+    <xmx:oOw1YwnSE81F-dSFv7RneP7Yh9y8_aS5hCcw9MW8IK9QSg5244LXdQ>
+    <xmx:oOw1Y8hhEreVNdy2h1gPCDVLahul77WLeWU42taDNO9CbOK97Am6xA>
+Feedback-ID: ica594744:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 29 Sep 2022 15:06:07 -0400 (EDT)
+From:   Will Chandler <wfc@wfchandler.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf tools: Fix empty version number when building outside of a git repo
+Date:   Thu, 29 Sep 2022 15:06:06 -0400
+X-Mailer: MailMate (1.14r5852)
+Message-ID: <B89DF3DD-B07E-427F-8D4B-1F8251345A4C@wfchandler.org>
+In-Reply-To: <2a4a15a4-55cd-f98b-4b14-474f24e2c308@huawei.com>
+References: <20220927195228.47304-1-wfc@wfchandler.org>
+ <c5181877-2998-b952-abe6-26d733ae2aeb@huawei.com>
+ <87A1F5B6-3F60-4988-8BA6-A993E5789C80@wfchandler.org>
+ <2a4a15a4-55cd-f98b-4b14-474f24e2c308@huawei.com>
 MIME-Version: 1.0
-References: <dacfc18d6667421d97127451eafe4f29@AcuMS.aculab.com>
- <CAHk-=wgS_XpzEL140ovgLwGv6yXvV7Pu9nKJbCuo5pnRfcEbvg@mail.gmail.com>
- <YzXo/DIwq65ypHNH@ZenIV> <YzXrOFpPStEwZH/O@ZenIV>
-In-Reply-To: <YzXrOFpPStEwZH/O@ZenIV>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 29 Sep 2022 12:05:32 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjLgM06JrS21W4g2VquqCLab+qu_My67cv6xuH7NhgHpw@mail.gmail.com>
-Message-ID: <CAHk-=wjLgM06JrS21W4g2VquqCLab+qu_My67cv6xuH7NhgHpw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] proc: Point /proc/net at /proc/thread-self/net
- instead of /proc/self/net
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 12:00 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> Which is insane, especially since the entire problem is due to wanting
-> that directory to be different for different threads...
+On 29 Sep 2022, at 6:09, John Garry wrote:
 
-Absolutely. This is all due to Apparmor (a) basing things on pathnames
-and (b) then getting those pathnames wrong.
+> Hmmm... maybe someone would want to customise PERF-VERSION-FILE for the=
+ir own distro. Not sure. But then fiddling with PERF-VERSION-FILE might b=
+reak the parsing so...I guess not.
 
-Which is why I'm just suggesting we short-circuit the path-name part,
-and not make this be a real symlink that actually walks a real path.
+Yeah, seems like a bad idea. Doing a quick search, Void Linux does seem t=
+o be
+trying to set a custom version string in their build script[0], but I don=
+'t
+think passing PERF_VERSION as an argument to make has worked since 2013 w=
+ith
+3cecaa200227 ("perf tools: Do not include PERF-VERSION-FILE to Makefile, =
+2013-01-16").
 
-The proc <pid> handling uses "readlink" to make it *look* like a
-symlink, but then "get_link" to actually look it up (and never walk it
-as a path).
+[0] https://github.com/void-linux/void-packages/blob/fdb3515c33f2bb997392=
+ea6992e6bbb82c4376c5/srcpkgs/linux-tools/template#L56
 
-Something similar?
+> BTW, is there any other method of building the perf code not considered=
+? So far I know:
+> a. in git tree
+> b. perf-tar-src-pkg
+> c. tarball
 
-                 Linus
+Those are all that come to mind for me as well.
+
+Let me know if you'd like me to re-roll the patch using the pre-7572733b8=
+499
+approach.
