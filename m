@@ -2,68 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97F75EFCD2
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE975EFCE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235633AbiI2SPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
+        id S234954AbiI2SSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235660AbiI2SPQ (ORCPT
+        with ESMTP id S235785AbiI2SS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:15:16 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08B852DFD;
-        Thu, 29 Sep 2022 11:15:13 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id x18so1371355qkn.6;
-        Thu, 29 Sep 2022 11:15:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=xJrfHh9m1y1mjLWU8/W5I2WoXknkHmJK5KJTG4spzqE=;
-        b=UDIxp+LcQcJFtSSFzEIUAIGNalAcdctXkzZXb2q67hAIoObyOZxgIlJ2lGFFmtTToH
-         a1qctPZAz+4bJbqnokw/Dwq/J+s5Q8s6DeFDqdRyAImlE9k8QKd2VfxQRtjw8xSLnisp
-         1DJty/m6/9s4Qc9oSxgMz1861bMlaX0vf3AUcqCGC2S/AMSczIzM1G8YCBj2hHiLsfNO
-         jRWQg8lZNWiPI38aLIazZnunTR9EI1XXavz98ybUQBN+8dvD1E/zsbRQQQ5nDH2BxPRz
-         XHgaiMqwmy00DPyV3kG/2IFcpQK8XQdSTYBm/6vunQcDKb5vUIMkb5/gNa9RH82PADch
-         R2uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=xJrfHh9m1y1mjLWU8/W5I2WoXknkHmJK5KJTG4spzqE=;
-        b=GNdkNjbQYCf+YZlAqY1hdCBDazzO77yeX091AJcWh58ccOvYti1OYrmtYBZ2xZQUmO
-         J2DfgwMENJ4AIbhtvQaw3llxIILyWu0Stk8L9czmJ2hVLdg1cQILNCwOGQW6Ab1+vsRd
-         SpMq+HQAdHivZ8fWtbdl+xLYYcSEk3iWsio6BJDnadb0O3FCQ/oZ/c6IlFblECdW4Jax
-         SO5iuWac4cZ7ygUHqOpmDOD74NO5H4k/NyT7ftdVzBPXiWaBcoNEWUpn8VwjVnYcbzEI
-         KZpL5l1EfZNdu7KA9nTT2GUZ0zdouDgvGfIZCoIfdNFKZDOknfpEFziycRl8L65u+hLl
-         /t5g==
-X-Gm-Message-State: ACrzQf2xjbmgcj1qiiVKpvzxvs3mkiWgK/gcQoOMPPrbYdM+K1YbhDxp
-        CfpCfAH/YWvR+8WI0+gXPzBJHApKOhY=
-X-Google-Smtp-Source: AMsMyM7nKDCrdjQyyHNL3+Z9ZA/IbTGD9c5/dwe/hZ8iHGHVHU7+ZVvQLhULHKlC2duBXJPsq3mSmA==
-X-Received: by 2002:a05:620a:d83:b0:6ce:bcfb:c4fa with SMTP id q3-20020a05620a0d8300b006cebcfbc4famr3292803qkl.567.1664475311056;
-        Thu, 29 Sep 2022 11:15:11 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s13-20020a05622a1a8d00b003431446588fsm6246267qtc.5.2022.09.29.11.15.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 11:15:10 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org,
-        linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [PATCH] MAINTAINERS: Update TI bandgap and Davinci GPIO entries
-Date:   Thu, 29 Sep 2022 11:15:05 -0700
-Message-Id: <20220929181505.1100260-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 29 Sep 2022 14:18:26 -0400
+Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890091F7ED2;
+        Thu, 29 Sep 2022 11:18:21 -0700 (PDT)
+Received: from zoe.. (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id 28TIHKFu020165;
+        Fri, 30 Sep 2022 03:17:20 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 28TIHKFu020165
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664475441;
+        bh=im3I7uBc1WIhFbxXT+owODuKLCJ4ysSQNjRbCMjInPE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cXrfyvfavVvpa5eeLgTX9opdxrYkvqUYC2e5hBl4uJ1mWlwmfl0WSwF+uFVWNB3E6
+         IwT3dRcpD1h97NS684YjJ2b8bKE+x6UcdOgiWkKxBbrEnEx2gdZSLt7pH8Ze0XAV5O
+         otLOq40THZMS+FVg0/otqsiqqMeEtRJdQUFALDQeNXG3kHw1B0d2WkXhOAEAnSRhU4
+         xDW160Ti+hv7weH9gU+m9lZTBx7XI1xnY6x3OhmU0f2lxh1Mmks15EZ04vi9vPUHnG
+         YlWshr8M0LoO0/dNHChzogXfaSgjvT/mYr5dQVxAjzoU80VaBvHzNN8A8IcLZTbLfK
+         U4YDL+hp5WGSA==
+X-Nifty-SrcIP: [133.32.182.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Subject: [PATCH] ia64: simplify esi object addition in Makefile
+Date:   Fri, 30 Sep 2022 03:17:15 +0900
+Message-Id: <20220929181715.2504087-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,33 +50,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The email j-keerthy@ti.com is bouncing.
+CONFIG_IA64_ESI is a bool option. I do not know why the Makefile was
+written like this, but this should not have any functional change.
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- MAINTAINERS | 2 --
- 1 file changed, 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bf67ee939ab1..f1545b5755ba 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20477,7 +20477,6 @@ F:	drivers/media/platform/ti/am437x/
+ arch/ia64/kernel/Makefile | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/arch/ia64/kernel/Makefile b/arch/ia64/kernel/Makefile
+index 4a1fcb121dda..ae9ff07de4ab 100644
+--- a/arch/ia64/kernel/Makefile
++++ b/arch/ia64/kernel/Makefile
+@@ -34,10 +34,7 @@ mca_recovery-y			+= mca_drv.o mca_drv_asm.o
+ obj-$(CONFIG_IA64_MC_ERR_INJECT)+= err_inject.o
+ obj-$(CONFIG_STACKTRACE)	+= stacktrace.o
  
- TI BANDGAP AND THERMAL DRIVER
- M:	Eduardo Valentin <edubezval@gmail.com>
--M:	Keerthy <j-keerthy@ti.com>
- L:	linux-pm@vger.kernel.org
- L:	linux-omap@vger.kernel.org
- S:	Maintained
-@@ -20519,7 +20518,6 @@ F:	Documentation/devicetree/bindings/clock/ti/davinci/
- F:	drivers/clk/davinci/
+-obj-$(CONFIG_IA64_ESI)		+= esi.o
+-ifneq ($(CONFIG_IA64_ESI),)
+-obj-y				+= esi_stub.o	# must be in kernel proper
+-endif
++obj-$(CONFIG_IA64_ESI)		+= esi.o esi_stub.o # must be in kernel proper
+ obj-$(CONFIG_INTEL_IOMMU)	+= pci-dma.o
  
- TI DAVINCI SERIES GPIO DRIVER
--M:	Keerthy <j-keerthy@ti.com>
- L:	linux-gpio@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/gpio/gpio-davinci.yaml
+ obj-$(CONFIG_ELF_CORE)		+= elfcore.o
 -- 
-2.25.1
+2.34.1
 
