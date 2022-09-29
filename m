@@ -2,169 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E40395EF0D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 546B45EF0DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234899AbiI2IuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
+        id S235041AbiI2Iut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbiI2IuE (ORCPT
+        with ESMTP id S235615AbiI2Iuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:50:04 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E7257569;
-        Thu, 29 Sep 2022 01:50:01 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28T3rrg9004118;
-        Thu, 29 Sep 2022 10:49:32 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=Wiofu9rgpuc65f8rPaqHRSUum4t8vxulsqM/fN8xAIQ=;
- b=g234rio/WSMJtn7ImOlYWED7msuragbYqoRTN/yYULxEHMeqp6jile9k1UgKq075AZko
- keL7sIRshNQc/dPDPMsGBuog3J4z4qljDQpqf3wu6n1LbZt5gcAG85icT5ZG07pngC83
- ii95L6LJa3xQDPcewAKkJVvzqxeKi1QjEyyxDkHIFENih375+BH+Al9+yAU0SmtozOB7
- VBz5ruwcXM+7gfe6k6/1Gt5QfxHEYQN25bQR+6A/onR4RypEMAeFC7CwOdNU/rRSbA1N
- qBgj8KQBJpm7JKBNlduw1Yujj4UXhuSMUIlkbi3crbb+NKg9fLUhN19k7C9RwMxKxMrM vw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3jss82p4r3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 10:49:31 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2301B10002A;
-        Thu, 29 Sep 2022 10:49:30 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1AA1021A217;
-        Thu, 29 Sep 2022 10:49:30 +0200 (CEST)
-Received: from [10.201.21.72] (10.75.127.45) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.31; Thu, 29 Sep
- 2022 10:49:29 +0200
-Message-ID: <88c9109d-2c97-ac21-91dc-4025dd27b552@foss.st.com>
-Date:   Thu, 29 Sep 2022 10:49:29 +0200
+        Thu, 29 Sep 2022 04:50:35 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD2CEC54B;
+        Thu, 29 Sep 2022 01:50:33 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id x1so699751plv.5;
+        Thu, 29 Sep 2022 01:50:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=wyRrlcXzeH4HfHGAImk3NaXe74TrWSFA0ErQXL3Lurc=;
+        b=Z6oEko58X6cyAidL5cdLdPtKhJkWxMzfPWazsgsBy2UGktfhzdoqIRABYzT1KRxekx
+         bVgp28KwDTcUK/6IHsIfklW1ZhMtkSg36n+zMTH0wfnUORl18OOEcMEz2ddavj8BSEFy
+         9RMRyzJ10828D5WFtdqtWUZcPUQ1oQIoqrh9qgAy997yp9S/8gOSAuFgEywGiqWHmVYV
+         jqg+AZ8zSyT7LpIZpJxBuMHkTYayRWDaeH4+OIjJn8w4A8v0cKDMeZ2UKJJ/b/2GPLq4
+         IkM3jTz5Sux5fwUnw4aJTYUBY9ygMg3mOp/OOBvLkr19needaXPyYlKqtT1UbYCLbNmB
+         nYbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=wyRrlcXzeH4HfHGAImk3NaXe74TrWSFA0ErQXL3Lurc=;
+        b=QbJJwU7zA7EUzlK1iN7CqxRGYEUM4tRpfcHu07FTfUtzo+91eH3Z9MXpvhlLKWW18E
+         Qpj4mCaYbTiR4YUst7SbFcwxItO6WZPFzUHeU7VCx1ZKqeQeuqX9HV4VBoqZCk7+aP1d
+         vEkOguMoWlsHTmSYtN9BHn1blk4FLf/KckpnZg5PMLjnBWcO5ELaq0E6w+VM4XcNzOfY
+         lt3PTrxOoonjHxom5R7ETmaQXdl3oPBMw1gg71LQ17veBuRKJmUGIJAdruYZOQlPIYfh
+         LRNO6wJBwZTnKlqxeRHRJAnreIIrYbRN8N12akAbkKCYDgx4Wtm4WewqGSSyFoHZlDV9
+         QYzw==
+X-Gm-Message-State: ACrzQf38q08nS7tyn76gL/rK8dcyvgHYp57Cf1bmKDZHDwqHHEbx9Orv
+        mwaEnLCgJBB9Jzyj4CXdfws=
+X-Google-Smtp-Source: AMsMyM403XL05GVHUaJT8ocLDAA2Z1Prgmxaf+M7UlldPke0HpTgHrpCYBoEoYdvRv1R3vhpLLZj4Q==
+X-Received: by 2002:a17:902:8e84:b0:178:71f2:113c with SMTP id bg4-20020a1709028e8400b0017871f2113cmr2324788plb.79.1664441433296;
+        Thu, 29 Sep 2022 01:50:33 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-28.three.co.id. [180.214.232.28])
+        by smtp.gmail.com with ESMTPSA id d18-20020a170902ced200b0017808db132bsm5365039plg.137.2022.09.29.01.50.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 01:50:32 -0700 (PDT)
+Message-ID: <71effcc8-7345-28cd-6585-eb729fb4c6db@gmail.com>
+Date:   Thu, 29 Sep 2022 15:50:29 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] pinctrl: st: stop abusing of_get_named_gpio()
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v3 1/4] serial: Convert serial_rs485 to kernel doc
 Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <YzSsgoVoJn4+mSpv@google.com>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <YzSsgoVoJn4+mSpv@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-29_04,2022-09-29_02,2022-06-22_01
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20220928110509.13544-1-ilpo.jarvinen@linux.intel.com>
+ <20220928110509.13544-2-ilpo.jarvinen@linux.intel.com>
+ <YzURJa1RnxP+uj5/@debian.me>
+ <75f07dbe-d1dd-ac18-5c8e-e6972e7fb28b@linux.intel.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <75f07dbe-d1dd-ac18-5c8e-e6972e7fb28b@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry
+On 9/29/22 15:39, Ilpo Järvinen wrote:
+> On Thu, 29 Sep 2022, Bagas Sanjaya wrote:
+> 
+>> On Wed, Sep 28, 2022 at 02:05:06PM +0300, Ilpo Järvinen wrote:
+>>> diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
+>>> index cea06924b295..6e347eb10b1f 100644
+>>> --- a/include/uapi/linux/serial.h
+>>> +++ b/include/uapi/linux/serial.h
+>>> @@ -107,37 +107,57 @@ struct serial_icounter_struct {
+>>>  	int reserved[9];
+>>>  };
+>>>  
+>>> -/*
+>>> +/**
+>>> + * struct serial_rs485 - serial interface for controlling RS485 settings.
+>>> + * @flags:			RS485 feature flags.
+>>> + * @delay_rts_before_send:	Delay before send (milliseconds).
+>>> + * @delay_rts_after_send:	Delay after send (milliseconds).
+>>> + * @addr_recv:			Receive filter for RS485 addressing mode
+>>> + *				(used only when %SER_RS485_ADDR_RECV is set).
+>>> + * @addr_dest:			Destination address for RS485 addressing mode
+>>> + *				(used only when %SER_RS485_ADDR_DEST is set).
+>>> + * @padding0:			Padding (set to zero).
+>>> + * @padding1:			Padding (set to zero).
+>>> + * @padding:			Deprecated, use @padding0 and @padding1 instead.
+>>> + *				Do not use with @addr_recv and @addr_dest (due to
+>>> + *				overlap).
+>>> + *
+>>
+>> I don't see definition of fields after @delay_rts_after_send in the
+>> htmldocs output.
+> 
+> So it seems, this one I had missed. I guess the reason is that those 
+> members are inside anonymous unions. But the formatting follows what 
+> is documented here AFAICT:
+> 
+> https://www.kernel.org/doc/html/latest/doc-guide/kernel-doc.html#nested-structs-unions
+> 
+> Kerneldoc doesn't seem to live up to what is documented about it. It's a 
+> bit ironic that documentation system fails to document even itself to 
+> sufficient level, and what's worse, seems to be full of faulty examples.
+> 
+> Any suggestions how to make it work?
+> 
 
-On 9/28/22 22:20, Dmitry Torokhov wrote:
-> Pin descriptions for this chip only look like standard GPIO device tree
-> descriptions, while in fact they contain additional data (in excess of
-> number of cells specified in description of gpio controllers). They also
-> refer to only pins/gpios belonging to the driver and not to arbitrary
-> gpio in the system.
-> 
-> Because we want to stop exporting OF-specific handlers from gpiolib-of,
-> let's parse the pin reference ourself instead of trying to call
-> of_get_named_gpio().
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
-> 
-> Just compiled, not tested on real hardware.
-> 
->  drivers/pinctrl/pinctrl-st.c | 34 ++++++++++++++++++++++++++++++----
->  1 file changed, 30 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/pinctrl/pinctrl-st.c b/drivers/pinctrl/pinctrl-st.c
-> index 0fea71fd9a00..cf7f9cbe6044 100644
-> --- a/drivers/pinctrl/pinctrl-st.c
-> +++ b/drivers/pinctrl/pinctrl-st.c
-> @@ -12,7 +12,6 @@
->  #include <linux/io.h>
->  #include <linux/of.h>
->  #include <linux/of_irq.h>
-> -#include <linux/of_gpio.h> /* of_get_named_gpio() */
->  #include <linux/of_address.h>
->  #include <linux/gpio/driver.h>
->  #include <linux/regmap.h>
-> @@ -1162,6 +1161,31 @@ static void st_parse_syscfgs(struct st_pinctrl *info, int bank,
->  	return;
->  }
->  
-> +static int st_pctl_dt_calculate_pin(struct st_pinctrl *info,
-> +				    phandle bank, unsigned int offset)
-> +{
-> +	struct device_node *np;
-> +	struct gpio_chip *chip;
-> +	int retval = -EINVAL;
-> +	int i;
-> +
-> +	np = of_find_node_by_phandle(bank);
-> +	if (!np)
-> +		return -EINVAL;
-> +
-> +	for (i = 0; i < info->nbanks; i++) {
-> +		chip = &info->banks[i].gpio_chip;
-> +		if (chip->of_node == np) {
-> +			if (offset < chip->ngpio)
-> +				retval = chip->base + offset;
-> +			break;
-> +		}
-> +	}
-> +
-> +	of_node_put(np);
-> +	return retval;
-> +}
-> +
->  /*
->   * Each pin is represented in of the below forms.
->   * <bank offset mux direction rt_type rt_delay rt_clk>
-> @@ -1175,6 +1199,8 @@ static int st_pctl_dt_parse_groups(struct device_node *np,
->  	struct device *dev = info->dev;
->  	struct st_pinconf *conf;
->  	struct device_node *pins;
-> +	phandle bank;
-> +	unsigned int offset;
->  	int i = 0, npins = 0, nr_props, ret = 0;
->  
->  	pins = of_get_child_by_name(np, "st,pins");
-> @@ -1214,9 +1240,9 @@ static int st_pctl_dt_parse_groups(struct device_node *np,
->  		conf = &grp->pin_conf[i];
->  
->  		/* bank & offset */
-> -		be32_to_cpup(list++);
-> -		be32_to_cpup(list++);
-> -		conf->pin = of_get_named_gpio(pins, pp->name, 0);
-> +		bank = be32_to_cpup(list++);
-> +		offset = be32_to_cpup(list++);
-> +		conf->pin = st_pctl_dt_calculate_pin(info, bank, offset);
->  		conf->name = pp->name;
->  		grp->pins[i] = conf->pin;
->  		/* mux */
+CC'ing Akira.
 
-I tested it on stih410-b2260 board
+>>>   * Serial interface for controlling RS485 settings on chips with suitable
+>>>   * support. Set with TIOCSRS485 and get with TIOCGRS485 if supported by your
+>>>   * platform. The set function returns the new state, with any unsupported bits
+>>>   * reverted appropriately.
+>>> + *
+>>> + * serial_rs485::flags bits are:
+>>> + *
+>>> + * * %SER_RS485_ENABLED		- RS485 enabled.
+>>> + * * %SER_RS485_RTS_ON_SEND	- Logical level for RTS pin when sending.
+>>> + * * %SER_RS485_RTS_AFTER_SEND	- Logical level for RTS pin after sent.
+>>> + * * %SER_RS485_RX_DURING_TX	- Full-duplex RS485 line.
+>>> + * * %SER_RS485_TERMINATE_BUS	- Enable bus termination (if supported).
+>>> + * * %SER_RS485_ADDRB		- Enable RS485 addressing mode.
+>>> + * * %SER_RS485_ADDR_RECV	- Receive address filter (enables @addr_recv).
+>>> + *				  Requires %SER_RS485_ADDRB.
+>>> + * * %SER_RS485_ADDR_DEST	- Destination address (enables @addr_dest).
+>>> + *				  Requires %SER_RS485_ADDRB.
+>>
+>> The last two items are rendered as bold text instead (maybe due to missing
+>> fields rendering above?)
+> 
+> It just goes into some random formatting mode here. Even if I remove those 
+> field markers (@) it doesn't do formatting differently so your guesss is 
+> wrong.
+> 
+> I found now a way to make it work though. It works when I put the whole 
+> description on a single line but it comes at the cost of removing the 
+> alignment of those "-". The other way to make it work would be like this:
+> 
+> * * %SER_RS485_ADDR_RECV - Receive address filter (enables @addr_recv).
+>     Requires %SER_RS485_ADDRB.
+> 
+> ...And that's no good. I guess the single-line approach is an acceptable 
+> compromise for this case.
+> 
 
-Tested-by: Patrice Chotard <patrice.chotard@foss.st.com>
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+OK, thanks for explaining.
 
-Thanks
-Patrice
+-- 
+An old man doll... just what I always wanted! - Clara
