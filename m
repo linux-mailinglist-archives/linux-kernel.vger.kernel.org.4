@@ -2,186 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A545EFF05
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 23:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D12975EFEFF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 23:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiI2VIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 17:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        id S229587AbiI2VHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 17:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbiI2VIA (ORCPT
+        with ESMTP id S229515AbiI2VHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 17:08:00 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833071B913E;
-        Thu, 29 Sep 2022 14:07:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1664485679; x=1696021679;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7ISFbYYRDxr1/mXtnOCqoR2jsfb1I4SQ8DP09zVscdM=;
-  b=HIyhxwZTMHr28QQ/6IjqLihVvYCn7MF4hw095fMcXMDDpWcN9ceO0RgO
-   oooIfFkzO9gJG///RtyrlGOOQkx0ULfkh9ftV0AR2YQL6lHKzpA9+WQui
-   I+a92WcOML6Sh+7/xD0q3XOk/RgYxvzuD5lZVVddkuL/wXq425YQsdgXw
-   M=;
-X-IronPort-AV: E=Sophos;i="5.93,356,1654560000"; 
-   d="scan'208";a="1059419660"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 21:07:57 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com (Postfix) with ESMTPS id 25D5BC0886;
-        Thu, 29 Sep 2022 21:07:53 +0000 (UTC)
-Received: from EX19D021UWA003.ant.amazon.com (10.13.139.74) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 29 Sep 2022 21:07:53 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX19D021UWA003.ant.amazon.com (10.13.139.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.12; Thu, 29 Sep 2022 21:07:53 +0000
-Received: from dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com
- (10.189.73.169) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Thu, 29 Sep 2022 21:07:53
- +0000
-Received: by dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com (Postfix, from userid 22673075)
-        id 26386286B; Thu, 29 Sep 2022 21:07:52 +0000 (UTC)
-From:   Rishabh Bhatnagar <risbhat@amazon.com>
-To:     <stable@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <sashal@kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <benh@amazon.com>,
-        <mbacco@amazon.com>, Robert Hodaszi <Robert.Hodaszi@digi.com>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Rishabh Bhatnagar <risbhat@amazon.com>
-Subject: [PATCH 6/6] x86/ioapic: Implement irq_get_irqchip_state() callback
-Date:   Thu, 29 Sep 2022 21:06:51 +0000
-Message-ID: <20220929210651.12308-7-risbhat@amazon.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220929210651.12308-1-risbhat@amazon.com>
-References: <20220929210651.12308-1-risbhat@amazon.com>
+        Thu, 29 Sep 2022 17:07:20 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FAF1B2607;
+        Thu, 29 Sep 2022 14:07:16 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id m81so2883794oia.1;
+        Thu, 29 Sep 2022 14:07:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=u3B4AXMno9nb8iZf5zQNwk767aQTUKKU1v3oIRo2uIY=;
+        b=bFSuxmoBni6zPKmbPNAr8JQg/XOh5y1svc96TOhCV1YgIDGoRuPeNH9sHOqcI7l3u7
+         82RMBTVkp/+7CLWxdV9vPKQgo3O/alvcTda3v6Geos5+pSGze+YE8CDwaNGVe3N14Swt
+         gjTH+b+tblItj+SZ1WllgizS57COtmzc86D+IQihK7hMh0LnT1ERPdPlvRJQTvNticsW
+         fp3Jwu23Cv11aNFHUWYsjEKWSQE40RYSod3OB33Qr/SCB3ymyexI1eSyEpX1V9yELHIb
+         EPyahXp+jW6FmVB0FiDfnMQKtX9QvZNXUz9vA1FsnTNjlCdsAekXP8Cm1vGP4nO6atCN
+         K7eA==
+X-Gm-Message-State: ACrzQf0pMaqdI4VmkPwG2JnT/paori/A4nf5RHu+eZLYBXjhdPyA81c/
+        GBgzbYVOO18K0MZ8DhjhTg==
+X-Google-Smtp-Source: AMsMyM6TwJd0hAEFLH56WIO6Yzur03lHZly+x+08QITWC4ObpNv661/Odx7T56khaPygTvhv1Bdp5w==
+X-Received: by 2002:a05:6808:bd3:b0:350:e312:9abf with SMTP id o19-20020a0568080bd300b00350e3129abfmr8019360oik.78.1664485635979;
+        Thu, 29 Sep 2022 14:07:15 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id bx21-20020a056830601500b0065689e13f52sm165192otb.71.2022.09.29.14.07.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 14:07:15 -0700 (PDT)
+Received: (nullmailer pid 2721310 invoked by uid 1000);
+        Thu, 29 Sep 2022 21:07:14 -0000
+Date:   Thu, 29 Sep 2022 16:07:14 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        openbmc@lists.ozlabs.org
+Subject: Re: [PATCH 2/3] dt-bindings: regulator: Add regulator-output binding
+Message-ID: <20220929210714.GA2684335-robh@kernel.org>
+References: <20220925220319.12572-1-zev@bewilderbeest.net>
+ <20220925220319.12572-3-zev@bewilderbeest.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220925220319.12572-3-zev@bewilderbeest.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+On Sun, Sep 25, 2022 at 03:03:18PM -0700, Zev Weiss wrote:
+> This describes a power output supplied by a regulator, such as a
+> power outlet on a power distribution unit (PDU).
+> 
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> ---
+>  .../bindings/regulator/regulator-output.yaml  | 47 +++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/regulator-output.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/regulator-output.yaml b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+> new file mode 100644
+> index 000000000000..40953ec48e9e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/regulator/regulator-output.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Regulator output connector
+> +
+> +maintainers:
+> +  - Zev Weiss <zev@bewilderbeest.net>
+> +
+> +description: |
+> +  This describes a power output connector supplied by a regulator,
+> +  such as a power outlet on a power distribution unit (PDU).  The
+> +  connector may be standalone or merely one channel or set of pins
+> +  within a ganged physical connector carrying multiple independent
+> +  power outputs.
+> +
+> +properties:
+> +  compatible:
+> +    const: regulator-output
+> +
+> +  vout-supply:
+> +    description:
+> +      Phandle of the regulator supplying the output.
+> +
+> +  regulator-leave-on:
+> +    description: |
+> +      If the regulator is enabled when software relinquishes control
+> +      of it (such as when shutting down) it should be left enabled
+> +      instead of being turned off.
+> +    type: boolean
 
-commit dfe0cf8b51b07e56ded571e3de0a4a9382517231 upstream.
+I'm not too sure about this one as there could be various times when 
+control is relinquished. It is userspace closing its access? 
+driver unbind? module unload? Does a bootloader pay attention to this?
 
-When an interrupt is shut down in free_irq() there might be an inflight
-interrupt pending in the IO-APIC remote IRR which is not yet serviced. That
-means the interrupt has been sent to the target CPUs local APIC, but the
-target CPU is in a state which delays the servicing.
-
-So free_irq() would proceed to free resources and to clear the vector
-because synchronize_hardirq() does not see an interrupt handler in
-progress.
-
-That can trigger a spurious interrupt warning, which is harmless and just
-confuses users, but it also can leave the remote IRR in a stale state
-because once the handler is invoked the interrupt resources might be freed
-already and therefore acknowledgement is not possible anymore.
-
-Implement the irq_get_irqchip_state() callback for the IO-APIC irq chip. The
-callback is invoked from free_irq() via __synchronize_hardirq(). Check the
-remote IRR bit of the interrupt and return 'in flight' if it is set and the
-interrupt is configured in level mode. For edge mode the remote IRR has no
-meaning.
-
-As this is only meaningful for level triggered interrupts this won't cure
-the potential spurious interrupt warning for edge triggered interrupts, but
-the edge trigger case does not result in stale hardware state. This has to
-be addressed at the vector/interrupt entry level seperately.
-
-Fixes: 464d12309e1b ("x86/vector: Switch IOAPIC to global reservation mode")
-Reported-by: Robert Hodaszi <Robert.Hodaszi@digi.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Marc Zyngier <marc.zyngier@arm.com>
-Link: https://lkml.kernel.org/r/20190628111440.370295517@linutronix.de
-Signed-off-by: Rishabh Bhatnagar <risbhat@amazon.com>
----
- arch/x86/kernel/apic/io_apic.c | 46 ++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
-
-diff --git a/arch/x86/kernel/apic/io_apic.c b/arch/x86/kernel/apic/io_apic.c
-index de74bca6a8ff..7d1d393298d0 100644
---- a/arch/x86/kernel/apic/io_apic.c
-+++ b/arch/x86/kernel/apic/io_apic.c
-@@ -1860,6 +1860,50 @@ static int ioapic_set_affinity(struct irq_data *irq_data,
- 	return ret;
- }
- 
-+/*
-+ * Interrupt shutdown masks the ioapic pin, but the interrupt might already
-+ * be in flight, but not yet serviced by the target CPU. That means
-+ * __synchronize_hardirq() would return and claim that everything is calmed
-+ * down. So free_irq() would proceed and deactivate the interrupt and free
-+ * resources.
-+ *
-+ * Once the target CPU comes around to service it it will find a cleared
-+ * vector and complain. While the spurious interrupt is harmless, the full
-+ * release of resources might prevent the interrupt from being acknowledged
-+ * which keeps the hardware in a weird state.
-+ *
-+ * Verify that the corresponding Remote-IRR bits are clear.
-+ */
-+static int ioapic_irq_get_chip_state(struct irq_data *irqd,
-+				   enum irqchip_irq_state which,
-+				   bool *state)
-+{
-+	struct mp_chip_data *mcd = irqd->chip_data;
-+	struct IO_APIC_route_entry rentry;
-+	struct irq_pin_list *p;
-+
-+	if (which != IRQCHIP_STATE_ACTIVE)
-+		return -EINVAL;
-+
-+	*state = false;
-+	raw_spin_lock(&ioapic_lock);
-+	for_each_irq_pin(p, mcd->irq_2_pin) {
-+		rentry = __ioapic_read_entry(p->apic, p->pin);
-+		/*
-+		 * The remote IRR is only valid in level trigger mode. It's
-+		 * meaning is undefined for edge triggered interrupts and
-+		 * irrelevant because the IO-APIC treats them as fire and
-+		 * forget.
-+		 */
-+		if (rentry.irr && rentry.trigger) {
-+			*state = true;
-+			break;
-+		}
-+	}
-+	raw_spin_unlock(&ioapic_lock);
-+	return 0;
-+}
-+
- static struct irq_chip ioapic_chip __read_mostly = {
- 	.name			= "IO-APIC",
- 	.irq_startup		= startup_ioapic_irq,
-@@ -1869,6 +1913,7 @@ static struct irq_chip ioapic_chip __read_mostly = {
- 	.irq_eoi		= ioapic_ack_level,
- 	.irq_set_affinity	= ioapic_set_affinity,
- 	.irq_retrigger		= irq_chip_retrigger_hierarchy,
-+	.irq_get_irqchip_state	= ioapic_irq_get_chip_state,
- 	.flags			= IRQCHIP_SKIP_SET_WAKE,
- };
- 
-@@ -1881,6 +1926,7 @@ static struct irq_chip ioapic_ir_chip __read_mostly = {
- 	.irq_eoi		= ioapic_ir_ack_level,
- 	.irq_set_affinity	= ioapic_set_affinity,
- 	.irq_retrigger		= irq_chip_retrigger_hierarchy,
-+	.irq_get_irqchip_state	= ioapic_irq_get_chip_state,
- 	.flags			= IRQCHIP_SKIP_SET_WAKE,
- };
- 
--- 
-2.37.1
-
+Rob
