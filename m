@@ -2,110 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F06005EFD8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817D45EFD8E
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbiI2TCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 15:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
+        id S230061AbiI2TCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 15:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiI2TB6 (ORCPT
+        with ESMTP id S230036AbiI2TCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 15:01:58 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462B312059C
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 12:01:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8Z9l+iKfRNL4ZprThx3uP/VDdA1mXNoyK+Suc+haG4E=; b=iw/G8/+MmdIo+aBqx8qKIeRBuT
-        LwEs9SN4D2yL7KIu8lad6Rbc7ArfHYPlLtAwWv6SJfe59EHq21BPdzZiSv7VlpXHQr8eKJ5tTnHZh
-        h8XZgUmuMb74ZBkDpid3eqhkkIwMoS9/4191S7O9fteQ1ViloqOVx5gYuyLdlGMIMk5AYbx9MorVv
-        Xcs6p4T2ovAQxJae5TFBadcKAp49Lm4ZLtP9SDX2N5Pg2FhYWQglZXpiP0PzqB3h4Th2Z3ZZvB9jQ
-        vO5gisSL0ocZOF5HIzkDohCN6IeA+OxAvWW314rK5ONyGz5+aLSG0AGuFtx0akj6RNwjKGZfYwMba
-        8u4xI8nA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1odyn9-00DWxl-Nq; Thu, 29 Sep 2022 19:01:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2C3A5300110;
-        Thu, 29 Sep 2022 21:01:47 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 17F752BCD47B3; Thu, 29 Sep 2022 21:01:47 +0200 (CEST)
-Date:   Thu, 29 Sep 2022 21:01:46 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
+        Thu, 29 Sep 2022 15:02:39 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DA513F29A
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 12:02:38 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id b75so2243632pfb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 12:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=VRWMAHYEyCYnit1DgorRCfjCV475mNFdc2il+dM3xyY=;
+        b=H6Kx+Ps/laRy7Elku5rdgLa0ErE+Jw9V14A2+tjsz5c5RM+7m1fFuJU7yity9lcpiq
+         dalHK68M/pEyCrSQrSQ74c/vqpgtSTW+w/VVONBSy3nHe7REYYy+GREGMLNXznm72blD
+         m1eNJocmu7QaSgJdP071cHPTWgKNQFw352MITlWOLA4ZVHYS3EX8LtH7lS+XRKVQPPXT
+         wlqk3t14bymOsU353YBk61cRQHVhYVXSNApuBW9xH/AubOPr7mXKSrZUHUgkf/1ZqYGl
+         iWGnbZNzwTqPqzf9/nLuPpdij+f4k0DdeinHVTu1oQk805HlcUZvNX8UMTpyTtHTUUHv
+         rZhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=VRWMAHYEyCYnit1DgorRCfjCV475mNFdc2il+dM3xyY=;
+        b=Zcn/bGRSikDF7d4BuVK44e+2AT+pbqDjY8LLUZ/TE6qlp1DDMhHxpDSAonYhT+VDKC
+         TOKvAv4562bueqagZwIBICaaakbDQZy+QhEd5PLjnMH7vqANmctohS+Bc6V2b6sjnIvy
+         5CyW9z/EOl4xWnwscCvREH5mhFFue/qUPPuImO0ElNk6nauGR7VWxKSTkbVN5ebQ3033
+         A9P9PTvcyXdxmGnKH8AfKMkyD/78LAy5e3hSviHNCEd7NZTIsUk8/E8igDijklqGOJ4M
+         8vlmOHfha6x1nn6ZYy0oIx1cc0A90kfv/xG11UTf5e0sPJmTzV11qJkV4aYCjAUQa4db
+         venQ==
+X-Gm-Message-State: ACrzQf2HomCKcM8AUyR3IQEj62NAJ9A3zQ1hL1sg2pc/wjuJKMzF3wU8
+        EfaCEJhEREawLBteHr6kqzQ=
+X-Google-Smtp-Source: AMsMyM52NtPaZCjmHJfGnjdOcx1m8tXP4rloiRSU164tOI5oywdQdY3BPtOCczVOtjDYHRTH4M46Tg==
+X-Received: by 2002:a63:ce17:0:b0:42a:bfb6:f218 with SMTP id y23-20020a63ce17000000b0042abfb6f218mr4066583pgf.484.1664478157417;
+        Thu, 29 Sep 2022 12:02:37 -0700 (PDT)
+Received: from strix-laptop (2001-b011-20e0-1b9a-f5f9-665b-0715-9cc1.dynamic-ip6.hinet.net. [2001:b011:20e0:1b9a:f5f9:665b:715:9cc1])
+        by smtp.gmail.com with ESMTPSA id t6-20020a17090a3b4600b002098f3b4c67sm137488pjf.34.2022.09.29.12.02.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 12:02:36 -0700 (PDT)
+Date:   Fri, 30 Sep 2022 03:02:29 +0800
+From:   Chih-En Lin <shiyn.lin@gmail.com>
+To:     Nadav Amit <namit@vmware.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        William Kucharski <william.kucharski@oracle.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Peter Xu <peterx@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Li kunyu <kunyu@nfschina.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Yang Shi <shy828301@gmail.com>, Song Liu <song@kernel.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: RCU vs NOHZ
-Message-ID: <YzXrms/hMJgpa2JV@hirez.programming.kicks-ass.net>
-References: <20220915191427.GC246308@paulmck-ThinkPad-P17-Gen-1>
- <YyOnilnwnLKA9ghN@hirez.programming.kicks-ass.net>
- <20220916075817.GE246308@paulmck-ThinkPad-P17-Gen-1>
- <YyQ/zn54D1uoaIc1@hirez.programming.kicks-ass.net>
- <20220917142508.GF246308@paulmck-ThinkPad-P17-Gen-1>
- <YzV5vqoLInptafJm@hirez.programming.kicks-ass.net>
- <20220929152044.GE4196@paulmck-ThinkPad-P17-Gen-1>
- <20220929154618.GA2864141@paulmck-ThinkPad-P17-Gen-1>
- <YzXGdEzkiw+5X8pC@hirez.programming.kicks-ass.net>
- <20220929164204.GO4196@paulmck-ThinkPad-P17-Gen-1>
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dinglan Peng <peng301@purdue.edu>,
+        Pedro Fonseca <pfonseca@purdue.edu>,
+        Jim Huang <jserv@ccns.ncku.edu.tw>,
+        Huichun Feng <foxhoundsk.tw@gmail.com>
+Subject: Re: [RFC PATCH v2 9/9] mm: Introduce Copy-On-Write PTE table
+Message-ID: <YzXrxePakkc3eHXk@strix-laptop>
+References: <20220927162957.270460-1-shiyn.lin@gmail.com>
+ <20220927162957.270460-10-shiyn.lin@gmail.com>
+ <3D21021E-490F-4FE0-9C75-BB3A46A66A26@vmware.com>
+ <YzNUwxU44mq+KnCm@strix-laptop>
+ <c12f848d-cb54-2998-8650-2c2a5707932d@redhat.com>
+ <YzWf7V5qzMjzMAk4@strix-laptop>
+ <39c5ef18-1138-c879-2c6d-c013c79fa335@redhat.com>
+ <YzXkDKr6plbJZgG4@strix-laptop>
+ <C4CA4A1E-5553-422E-B8C0-8A5FF17DFCED@vmware.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929164204.GO4196@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <C4CA4A1E-5553-422E-B8C0-8A5FF17DFCED@vmware.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 09:42:04AM -0700, Paul E. McKenney wrote:
-> On Thu, Sep 29, 2022 at 06:23:16PM +0200, Peter Zijlstra wrote:
-> > On Thu, Sep 29, 2022 at 08:46:18AM -0700, Paul E. McKenney wrote:
-> > > On Thu, Sep 29, 2022 at 08:20:44AM -0700, Paul E. McKenney wrote:
+On Thu, Sep 29, 2022 at 06:40:36PM +0000, Nadav Amit wrote:
+> On Sep 29, 2022, at 11:29 AM, Chih-En Lin <shiyn.lin@gmail.com> wrote:
+> 
+> > That case could be caught in copy_pte_range(): in case we'd have to allocate
+> >> a page via page_copy_prealloc(), we'd have to fall back to the ordinary
+> >> "separate page table for the child" way of doing things.
+> >> 
+> >> But that looks doable to me.
 > > 
-> > > > > > There is a directly invoked RCU hook for any transition that enables or
-> > > > > > disables the tick, namely the ct_*_enter() and ct_*_exit() functions,
-> > > > > > that is, those functions formerly known as rcu_*_enter() and rcu_*_exit().
-> > > > > 
-> > > > > Context tracking doesn't know about NOHZ, therefore RCU can't either.
-> > > > > Context tracking knows about IDLE, but not all IDLE is NOHZ-IDLE.
-> > > > > 
-> > > > > Specifically we have:
-> > > > > 
-> > > > > 	ct_{idle,irq,nmi,user,kernel}_enter()
-> > > > > 
-> > > > > And none of them are related to NOHZ in the slightest. So no, RCU does
-> > > > > not have a NOHZ callback.
-> > > > > 
-> > > > > I'm still thikning you're conflating NOHZ_FULL (stopping the tick when
-> > > > > in userspace) and regular NOHZ (stopping the tick when idle).
-> > > 
-> > > Exactly how are ct_user_enter() and ct_user_exit() completely unrelated
-> > > to nohz_full CPUs?
-> > 
-> > That's the thing; I'm not talking about nohz_full. I'm talking about
-> > regular nohz. World of difference there.
+> > Sounds good. :)
 > 
-> And indeed, for !nohz_full CPUs, the tick continues throughout userspace
-> execution.  But you really did have ct_user_enter() and ct_user_exit()
-> on your list.
+> Chih-En, I admit I did not fully read the entire correspondence and got deep
+> into all the details.
 > 
-> And for idle (as opposed to nohz_full userspace execution), there is still
-> ct_{idle,irq,nmi}_enter().  And RCU does pay attention to these.
+> I would note, however, that there are several additional components that I
+> did not see (and perhaps missed) in your patches. Basically, there are many
+> page-table manipulations that are done not through the page-fault handler or
+> reclamation mechanisms. I did not see any of them being addressed.
 > 
-> So exactly what are you trying to tell me here?  ;-)
+> So if/when you send a new version, please have a look at mprotect(),
+> madvise(), soft-dirty, userfaultfd and THP. In these cases, I presume, you
+> would have to COW-break (aka COW-unshare) the page-tables.
+> 
 
-That RCU doens't have a nohz callback -- you were arguing it does
-through the ct_*_enter() things, I said none of them are related to
-nohz.
+Sure. Before I send the new version I will try to handle all of them.
+Thank you for the note.
+
+Thanks,
+Chih-En Lin
