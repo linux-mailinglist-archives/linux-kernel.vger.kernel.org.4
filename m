@@ -2,90 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E0D5EF51B
+	by mail.lfdr.de (Postfix) with ESMTP id D2BD65EF51C
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 14:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235360AbiI2MSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 08:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        id S235289AbiI2MTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 08:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235307AbiI2MSt (ORCPT
+        with ESMTP id S234940AbiI2MTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 08:18:49 -0400
-Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch [IPv6:2001:1600:4:17::1908])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2647212969F;
-        Thu, 29 Sep 2022 05:18:47 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MdXTJ6ZzszMqJhl;
-        Thu, 29 Sep 2022 14:18:44 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MdXTJ1MvNzMpnPm;
-        Thu, 29 Sep 2022 14:18:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1664453924;
-        bh=W7vslApTCphM95MlDuIkNlTGmBG0MHn06s5FtT+q6n4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=J9t6XXTrSZ+jmXbM/e0FUaS26/80lkVy1/MDSHtzVr40GTEErjt8EmT4uN9Wo2Zty
-         fl4wEiUCBr5fa9by5a+vLpZyXPchrmawM6hzuUmHEy8FhdryxNBStPZjDs4BaH5tfC
-         i6+hIILR6z4dw3J5UeBXe9xWN/ZAqYWPzBEck+iU=
-Message-ID: <75d077ca-4f1d-50c4-10d2-0fb31fcd0c86@digikod.net>
-Date:   Thu, 29 Sep 2022 14:18:43 +0200
+        Thu, 29 Sep 2022 08:19:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889F5147F30;
+        Thu, 29 Sep 2022 05:18:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D44B26113D;
+        Thu, 29 Sep 2022 12:18:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B96DC433D7;
+        Thu, 29 Sep 2022 12:18:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664453937;
+        bh=gKdjwVsfsr4wCSJDA0zSaFv6ty+qQPz23x9GYNS0JRg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=vAsVlZCsejM8/zUcf2vDobM0Xuax/zsy3ecI/C/EEnhLg4bwSRk7lXfqzw71lVji6
+         SpHG2a8itzakRAOGNon0byYG5IyrAaJDVOIe/NTlH/ihyzH03Yn4ZyyEyFwrNdHPZs
+         Fr0ta02/qgx6NWRj1OV/NhmvMLjfoV/J9jSboGf3vT43JgUJcI5LMlYVmTmriwbosK
+         gAFuvR8m6ANh/CyfbH7yZA+r2gH5lYu+JAxImyaah3lNKxKGsruANDuKkEA0Uy4LBo
+         Ww8ikqoMh427H9zH7fW/v4n9VM5stZefr/X1EaGDworTFtkw/NwqCjAdh5MAcx/fsh
+         vK7r3hu+TMIlw==
+From:   broonie@kernel.org
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@kernel.org>
+Subject: linux-next: manual merge of the pm tree with the i2c tree
+Date:   Thu, 29 Sep 2022 13:18:53 +0100
+Message-Id: <20220929121853.100271-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v1] ksmbd: Fix user namespace mapping
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Hyunchul Lee <hyc.lee@gmail.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <smfrench@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, stable@vger.kernel.org
-References: <20220929100447.108468-1-mic@digikod.net>
- <20220929113735.7k6fdu75oz4jvsvz@wittgenstein>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <20220929113735.7k6fdu75oz4jvsvz@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all,
 
-On 29/09/2022 13:37, Christian Brauner wrote:
-> On Thu, Sep 29, 2022 at 12:04:47PM +0200, Mickaël Salaün wrote:
->> A kernel daemon should not rely on the current thread, which is unknown
->> and might be malicious.  Before this security fix,
->> ksmbd_override_fsids() didn't correctly override FS UID/GID which means
->> that arbitrary user space threads could trick the kernel to impersonate
->> arbitrary users or groups for file system access checks, leading to
->> file system access bypass.
->>
->> This was found while investigating truncate support for Landlock:
->> https://lore.kernel.org/r/CAKYAXd8fpMJ7guizOjHgxEyyjoUwPsx3jLOPZP=wPYcbhkVXqA@mail.gmail.com
->>
->> Fixes: e2f34481b24d ("cifsd: add server-side procedures for SMB3")
->> Cc: Hyunchul Lee <hyc.lee@gmail.com>
->> Cc: Namjae Jeon <linkinjeon@kernel.org>
->> Cc: Steve French <smfrench@gmail.com>
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Mickaël Salaün <mic@digikod.net>
->> Link: https://lore.kernel.org/r/20220929100447.108468-1-mic@digikod.net
->> ---
-> 
-> I think this is ok. The alternative would probably be to somehow use a
-> relevant userns when struct ksmbd_user is created when the session is
-> established. But these are deeper ksmbd design questions. The fix
-> proposed here itself seems good.
+Today's linux-next merge of the pm tree got a conflict in:
 
-That would be better indeed. I guess ksmbd works whenever the netlink 
-peer is not in a user namespace with mapped UID/GID, but it should 
-result in obvious access bugs otherwise (which is already the case 
-anyway). It seems that the netlink peer must be trusted because it is 
-the source of truth for account/user mapping anyway. This change fixes 
-the more critical side of the issue and it should fit well for backports.
+  drivers/platform/x86/intel/int3472/tps68470.c
+
+between commit:
+
+  ed5c2f5fd10dd ("i2c: Make remove callback return void")
+
+from the i2c tree and commit:
+
+  06a659d1f0a0a ("platform/x86: int3472: Support multiple gpio lookups in board data")
+
+from the pm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc drivers/platform/x86/intel/int3472/tps68470.c
+index 5dd81bb05255b,49fc379fe680a..0000000000000
+--- a/drivers/platform/x86/intel/int3472/tps68470.c
++++ b/drivers/platform/x86/intel/int3472/tps68470.c
+@@@ -178,13 -227,18 +227,16 @@@ static int skl_int3472_tps68470_probe(s
+  	return ret;
+  }
+  
+ -static int skl_int3472_tps68470_remove(struct i2c_client *client)
+ +static void skl_int3472_tps68470_remove(struct i2c_client *client)
+  {
+  	const struct int3472_tps68470_board_data *board_data;
++ 	int i;
+  
+  	board_data = int3472_tps68470_get_board_data(dev_name(&client->dev));
+- 	if (board_data)
+- 		gpiod_remove_lookup_table(board_data->tps68470_gpio_lookup_table);
++ 	if (board_data) {
++ 		for (i = 0; i < board_data->n_gpiod_lookups; i++)
++ 			gpiod_remove_lookup_table(board_data->tps68470_gpio_lookup_tables[i]);
++ 	}
+ -
+ -	return 0;
+  }
+  
+  static const struct acpi_device_id int3472_device_id[] = {
