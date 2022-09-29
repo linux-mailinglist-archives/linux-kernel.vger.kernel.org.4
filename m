@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636C15EFB29
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51885EFB32
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235874AbiI2Qoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
+        id S235914AbiI2Qpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235802AbiI2Qov (ORCPT
+        with ESMTP id S235885AbiI2Qpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:44:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9D4627A;
-        Thu, 29 Sep 2022 09:44:41 -0700 (PDT)
+        Thu, 29 Sep 2022 12:45:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A802B2124F;
+        Thu, 29 Sep 2022 09:45:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3B2CB823CB;
-        Thu, 29 Sep 2022 16:44:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E30F2C433D6;
-        Thu, 29 Sep 2022 16:44:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9EB261EE1;
+        Thu, 29 Sep 2022 16:45:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7446FC4347C;
+        Thu, 29 Sep 2022 16:45:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664469878;
-        bh=08DZeiJIcmGMGqxP734VuYdAt4eOjHGyRG2ZlK6jCII=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l+z9UV3tEk6GZM38E8dzL+JQKVzwmK2yZV25zL4p1L6BYaQRMT52hQ2QaR1jQc0+W
-         5eAuZkTZfqmFlikwNnMswhqGk6hVrXV7QE0B2XtnwGyONEcOKfBk8N6yLVS2/uSFEc
-         K+T9vfurzt953JdfqkXyUKOQ9q1rvCYOBfAYZ4fuKr0H10bZhtjvfePlLJxwaKDINi
-         d40IP+fdhcaqBVgXtZ2rnXv/Z5ekcDbeVwmMGqJclkFQT/Bwc66/m4RvBDqegrU3Ue
-         aMpA5PVAO/rkEbCDrRKxDMgOeKxiT5P7yxDI8HGC6heJWeelrkfcVCGOj9S12CDk5u
-         W+NrTu/90JdFw==
-Date:   Thu, 29 Sep 2022 22:14:34 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
-        Thomas Pedersen <twp@codeaurora.org>,
-        Jonathan McDowell <noodles@earth.li>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: qcom-adm: fix wrong calling convention for
- prep_slave_sg
-Message-ID: <YzXLcvv1eiRXzrND@matsya>
-References: <20220916041256.7104-1-ansuelsmth@gmail.com>
+        s=k20201202; t=1664469937;
+        bh=qlqv1CfJrDbLQw6ClmshqwnAljjYeAx/NAaIi7qI+ko=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=aMb4T/ezkhjrKXVFgNcIHOe+DoJeL8pG5WdrbZdR5vLtpUSgU5OrIErOXGvFWwKCI
+         oIsU1uvLQIgRd16C4AzTx8IVViaqrwUcbtVMyjVnAoZgmsdYvNTbtPG+LdF0eDUX0m
+         sPPgddkUJjcK8xwPH0+912dHoAx1DqUzyatRIpPHE0mlfd4FEnJ3Ss2MpWuJHideTd
+         QYDn+sSYMjoFq85POT5FoDTDgUyk/6Ad6b7XZfyQ1qptzoRRppGFS5n4heZrjRPTM6
+         y274uq5Vn1W8U+LCNjFuuv1lyQZ5vWsHI4df3uvEDmEvRwgsxXv1TzvCDcLANWj+Aj
+         +jLFYOfVQk9BQ==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     johan+linaro@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        quic_rjendra@quicinc.com, mturquette@baylibre.com,
+        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
+        sboyd@kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH] clk: gcc-sc8280xp: use retention for USB power domains
+Date:   Thu, 29 Sep 2022 11:45:32 -0500
+Message-Id: <166446992872.1979534.2157531379392547494.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220929161124.18138-1-johan+linaro@kernel.org>
+References: <20220929161124.18138-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916041256.7104-1-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,23 +56,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16-09-22, 06:12, Christian Marangi wrote:
-> The calling convention for pre_slave_sg is to return NULL on error and
-> provide an error log to the system. Qcom-adm instead provide error
-> pointer when an error occur. This indirectly cause kernel panic for
-> example for the nandc driver that checks only if the pointer returned by
-> device_prep_slave_sg is not NULL. Returning an error pointer makes nandc
-> think the device_prep_slave_sg function correctly completed and makes
-> the kernel panics later in the code.
+On Thu, 29 Sep 2022 18:11:24 +0200, Johan Hovold wrote:
+> Since commit d399723950c4 ("clk: qcom: gdsc: Fix the handling of
+> PWRSTS_RET support) retention mode can be used on sc8280xp to maintain
+> state during suspend instead of leaving the domain always on.
 > 
-> While nandc is the one that makes the kernel crash, it was pointed out
-> that the real problem is qcom-adm not following calling convention for
-> that function.
+> This is needed to eventually allow the parent CX domain to be powered
+> down during suspend.
 > 
-> To fix this, drop returning error pointer and return NULL with an error
-> log.
+> [...]
 
-Applied, thanks
+Applied, thanks!
 
+[1/1] clk: gcc-sc8280xp: use retention for USB power domains
+      commit: 27da533af9b050e751a419c743096d06017daf0e
+
+Best regards,
 -- 
-~Vinod
+Bjorn Andersson <andersson@kernel.org>
