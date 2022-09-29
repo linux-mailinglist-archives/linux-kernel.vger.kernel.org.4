@@ -2,140 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8415EF752
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6385EF75B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 16:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235619AbiI2OTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 10:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S235308AbiI2OU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 10:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234340AbiI2OS6 (ORCPT
+        with ESMTP id S234708AbiI2OUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 10:18:58 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD52A17A5FE;
-        Thu, 29 Sep 2022 07:18:57 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 16:18:55 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1664461136;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8zj0w2Vgi49HfUr/IZs8+gOkOwPoTluB/6siD/jB8/k=;
-        b=lfO4rmZLV2Wi5LX2ZcCR9f5RLRCxPy1zaUwTPlXdl+hg+mYBx3MrzZLWWobgHsD98CGv7H
-        MOEw6ZantZNpc+vThhTT+nyFqPlB0DCu9b9Qx3egJo8RsLKYBXY0GCZd3Sxgbl6KcBkSKr
-        Rt4A+5+QyDooU3e+RDugj1cILWg/HJ00pe6KScvCm7vxv1JIRFS2k4nbTx7JuTQxrzhpPC
-        HAVFBvnUByyRAtDrbSMqfJNzD3gX1s3EhsvnafIVYwEjatH3jttJTG4E2dY4A5Ii+Av9lz
-        eGn9Fj1RNNgXMVJlvoXKmA2Bhva2+QAfDRfKhbE/KHwx861t34y4Ed718n0how==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1664461136;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8zj0w2Vgi49HfUr/IZs8+gOkOwPoTluB/6siD/jB8/k=;
-        b=0eZRfOeH9xxXlSrlwKeTWege4p8EQ4DpWyt/GbShjyrjyv77pQsbMUZqaIeMR3iHPK21dn
-        yht3X5Ve6H3MudCQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sherry Yang <sherry.yang@oracle.com>,
-        Paul Webb <paul.x.webb@oracle.com>,
-        Phillip Goerl <phillip.goerl@oracle.com>,
-        Jack Vogel <jack.vogel@oracle.com>,
-        Nicky Veitch <nicky.veitch@oracle.com>,
-        Colm Harrington <colm.harrington@oracle.com>,
-        Ramanan Govindarajan <ramanan.govindarajan@oracle.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Tejun Heo <tj@kernel.org>,
-        Sultan Alsawaf <sultan@kerneltoast.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v3] random: use expired per-cpu timer rather than wq for
- mixing fast pool
-Message-ID: <YzWpT/NfDzhnsiTI@linutronix.de>
-References: <YzKy+bNedt2vu+a1@zx2c4.com>
- <20220927104233.1605507-1-Jason@zx2c4.com>
- <YzQ41ZhCojbyZq6L@linutronix.de>
- <YzRzMsORHpzFydO7@zx2c4.com>
+        Thu, 29 Sep 2022 10:20:23 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D9739127
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 07:20:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664461221; x=1695997221;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dwVnlaUDqM4s3xZfOLfuk/eDmUhfdgVjnMrKt81F2UI=;
+  b=Nl8vlGt3zyH0/XgyBszL2UyFCBTpXtaFKHNUBgG/3G0oB5jaZQdK9lVb
+   ZAyE/t2lWMkAn5voHuM6Fo8jsisF6V2/uOZ/G4CEoMaFR5Xcf429dsJ7F
+   4pxTfadnWWnxiQsabgrwucvQR1LtHZKTL14JnrQUah3g80tMYIiPYCvvN
+   FQwzg9L3KQHZI3HjU+0oVtMEWKuQ3u3QZ+ToJnwj79ZaHzEajMnzNAPUU
+   VABmKvKn7rvaXttHgqGyc/hWSPjIR2tjGN6sqEsnysdMXie+Dn3z0fAWB
+   71k7CfxtLIF3atdEuQJlXf/FpaPQfFVz7/Lpo0YE38EJONhtCq7BQBQqE
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="388187920"
+X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
+   d="scan'208";a="388187920"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 07:20:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="655569084"
+X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
+   d="scan'208";a="655569084"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 29 Sep 2022 07:20:19 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oduOf-009Qcr-1r;
+        Thu, 29 Sep 2022 17:20:17 +0300
+Date:   Thu, 29 Sep 2022 17:20:17 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Andy Lutomirski <luto@kernel.org>, Ferry Toth <fntoth@gmail.com>
+Cc:     x86@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Brian Gerst <brgerst@gmail.com>, Joerg Roedel <jroedel@suse.de>
+Subject: Re: [PATCH v2 1/2] x86/stackprotector/32: Make the canary into a
+ regular percpu variable
+Message-ID: <YzWpob6MOf1SJr5I@smile.fi.intel.com>
+References: <cover.1613243844.git.luto@kernel.org>
+ <c0ff7dba14041c7e5d1cae5d4df052f03759bef3.1613243844.git.luto@kernel.org>
+ <YzWj9zjTJI3RCDf2@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YzRzMsORHpzFydO7@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YzWj9zjTJI3RCDf2@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-28 18:15:46 [+0200], Jason A. Donenfeld wrote:
-> Hi Sebastian,
-Hi Jason,
+On Thu, Sep 29, 2022 at 04:56:07PM +0300, Andy Shevchenko wrote:
+> +Cc: Ferry
+> 
+> On Sat, Feb 13, 2021 at 11:19:44AM -0800, Andy Lutomirski wrote:
+> > On 32-bit kernels, the stackprotector canary is quite nasty -- it is
+> > stored at %gs:(20), which is nasty because 32-bit kernels use %fs for
+> > percpu storage.  It's even nastier because it means that whether %gs
+> > contains userspace state or kernel state while running kernel code
+> > depends on whether stackprotector is enabled (this is
+> > CONFIG_X86_32_LAZY_GS), and this setting radically changes the way
+> > that segment selectors work.  Supporting both variants is a
+> > maintenance and testing mess.
+> > 
+> > Merely rearranging so that percpu and the stack canary
+> > share the same segment would be messy as the 32-bit percpu address
+> > layout isn't currently compatible with putting a variable at a fixed
+> > offset.
+> > 
+> > Fortunately, GCC 8.1 added options that allow the stack canary to be
+> > accessed as %fs:__stack_chk_guard, effectively turning it into an ordinary
+> > percpu variable.  This lets us get rid of all of the code to manage the
+> > stack canary GDT descriptor and the CONFIG_X86_32_LAZY_GS mess.
+> > 
+> > (That name is special.  We could use any symbol we want for the
+> >  %fs-relative mode, but for CONFIG_SMP=n, gcc refuses to let us use any
+> >  name other than __stack_chk_guard.)
+> > 
+> > This patch forcibly disables stackprotector on older compilers that
+> > don't support the new options and makes the stack canary into a
+> > percpu variable.  The "lazy GS" approach is now used for all 32-bit
+> > configurations.
+> > 
+> > This patch also makes load_gs_index() work on 32-bit kernels.  On
+> > 64-bit kernels, it loads the GS selector and updates the user
+> > GSBASE accordingly.  (This is unchanged.)  On 32-bit kernels,
+> > it loads the GS selector and updates GSBASE, which is now
+> > always the user base.  This means that the overall effect is
+> > the same on 32-bit and 64-bit, which avoids some ifdeffery.
+> 
+> This patch broke 32-bit boot on Intel Merrifield
+> 
+> git bisect start
+> # good: [9f4ad9e425a1d3b6a34617b8ea226d56a119a717] Linux 5.12
+> git bisect good 9f4ad9e425a1d3b6a34617b8ea226d56a119a717
+> # bad: [62fb9874f5da54fdb243003b386128037319b219] Linux 5.13
+> git bisect bad 62fb9874f5da54fdb243003b386128037319b219
+> # bad: [85f3f17b5db2dd9f8a094a0ddc665555135afd22] Merge branch 'md-fixes' of https://git.kernel.org/pub/scm/linux/kernel/git/song/md into block-5.13
+> git bisect bad 85f3f17b5db2dd9f8a094a0ddc665555135afd22
+> # good: [ca62e9090d229926f43f20291bb44d67897baab7] Merge tag 'regulator-v5.13' of git://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator
+> git bisect good ca62e9090d229926f43f20291bb44d67897baab7
+> # bad: [68a32ba14177d4a21c4a9a941cf1d7aea86d436f] Merge tag 'drm-next-2021-04-28' of git://anongit.freedesktop.org/drm/drm
+> git bisect bad 68a32ba14177d4a21c4a9a941cf1d7aea86d436f
+> # good: [49c70ece54b0d1c51bc31b2b0c1070777c992c26] drm/amd/display: Change input parameter for set_drr
+> git bisect good 49c70ece54b0d1c51bc31b2b0c1070777c992c26
+> # good: [0b276e470a4d43e1365d3eb53c608a3d208cabd4] media: coda: fix macroblocks count control usage
+> git bisect good 0b276e470a4d43e1365d3eb53c608a3d208cabd4
+> # bad: [c6536676c7fe3f572ba55842e59c3c71c01e7fb3] Merge tag 'x86_core_for_v5.13' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+> git bisect bad c6536676c7fe3f572ba55842e59c3c71c01e7fb3
+> # good: [d1466bc583a81830cef2399a4b8a514398351b40] Merge branch 'work.inode-type-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs
+> git bisect good d1466bc583a81830cef2399a4b8a514398351b40
+> # good: [fafe1e39ed213221c0bce6b0b31669334368dc97] Merge tag 'afs-netfs-lib-20210426' of git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs
+> git bisect good fafe1e39ed213221c0bce6b0b31669334368dc97
+> # bad: [b1f480bc0686e65d5413c035bd13af2ea4888784] Merge branch 'x86/cpu' into WIP.x86/core, to merge the NOP changes & resolve a semantic conflict
+> git bisect bad b1f480bc0686e65d5413c035bd13af2ea4888784
+> # bad: [0c925c61dae18ee3cb93a61cc9dd9562a066034d] x86/tools/insn_decoder_test: Convert to insn_decode()
+> git bisect bad 0c925c61dae18ee3cb93a61cc9dd9562a066034d
+> # bad: [514ef77607b9ff184c11b88e8f100bc27f07460d] x86/boot/compressed/sev-es: Convert to insn_decode()
+> git bisect bad 514ef77607b9ff184c11b88e8f100bc27f07460d
+> # bad: [9e761296c52dcdb1aaa151b65bd39accb05740d9] x86/insn: Rename insn_decode() to insn_decode_from_regs()
+> git bisect bad 9e761296c52dcdb1aaa151b65bd39accb05740d9
+> # bad: [d0962f2b24c99889a386f0658c71535f56358f77] x86/entry/32: Remove leftover macros after stackprotector cleanups
+> git bisect bad d0962f2b24c99889a386f0658c71535f56358f77
+> # bad: [3fb0fdb3bbe7aed495109b3296b06c2409734023] x86/stackprotector/32: Make the canary into a regular percpu variable
+> git bisect bad 3fb0fdb3bbe7aed495109b3296b06c2409734023
+> # first bad commit: [3fb0fdb3bbe7aed495109b3296b06c2409734023] x86/stackprotector/32: Make the canary into a regular percpu variable
+> 
+> Any suggestions how to fix are welcome!
+> 
+> Configuration is based on in-tree i386_defconfig with some drivers enabled
+> on top (no core stuff was altered, but if you wish to check, it's here:
+> https://github.com/andy-shev/linux/blob/eds-acpi/arch/x86/configs/i386_defconfig).
 
-> On Wed, Sep 28, 2022 at 02:06:45PM +0200, Sebastian Andrzej Siewior wrote:
-> > On 2022-09-27 12:42:33 [+0200], Jason A. Donenfeld wrote:
-> > =E2=80=A6
-> > > This is an ordinary pattern done all over the kernel. However, Sherry
-> > > noticed a 10% performance regression in qperf TCP over a 40gbps
-> > > InfiniBand card. Quoting her message:
-> > >=20
-> > > > MT27500 Family [ConnectX-3] cards:
-> > > > Infiniband device 'mlx4_0' port 1 status:
-> > =E2=80=A6
-> >=20
-> > While looking at the mlx4 driver, it looks like they don't use any NAPI
-> > handling in their interrupt handler which _might_ be the case that they
-> > handle more than 1k interrupts a second. I'm still curious to get that
-> > ACKed from Sherry's side.
->=20
-> Are you sure about that? So far as I can tell drivers/net/ethernet/
-> mellanox/mlx4 has plenty of napi_schedule/napi_enable and such. Or are
-> you looking at the infiniband driver instead? I don't really know how
-> these interact.
+For the record (and preventing some questions) the v6.0-rc7 still has this issue.
 
-I've been looking at mlx4_msi_x_interrupt() and it appears that it
-iterates over a ring buffer. I guess that mlx4_cq_completion() will
-invoke mlx4_en_rx_irq() which schedules NAPI.
+I can't test reverts, because it's huge pile of changes in that area happened
+for the last year or so.
 
-> But yea, if we've got a driver not using NAPI at 40gbps that's obviously
-> going to be a problem.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-So I'm wondering if we get 1 worker a second which kills the performance
-or if we get more than 1k interrupts in less than second resulting in
-more wakeups within a second..
 
-> > Jason, from random's point of view: deferring until 1k interrupts + 1sec
-> > delay is not desired due to low entropy, right?
->=20
-> Definitely || is preferable to &&.
->=20
-> >=20
-> > > Rather than incur the scheduling latency from queue_work_on, we can
-> > > instead switch to running on the next timer tick, on the same core. T=
-his
-> > > also batches things a bit more -- once per jiffy -- which is okay now
-> > > that mix_interrupt_randomness() can credit multiple bits at once.
-> >=20
-> > Hmmm. Do you see higher contention on input_pool.lock? Just asking
-> > because if more than once CPUs invokes this timer callback aligned, then
-> > they block on the same lock.
->=20
-> I've been doing various experiments, sending mini patches to Oracle and
-> having them test this in their rig. So far, it looks like the cost of
-> the body of the worker itself doesn't matter much, but rather the cost
-> of the enqueueing function is key. Still investigating though.
->=20
-> It's a bit frustrating, as all I have to work with are results from the
-> tests, and no perf analysis. It'd be great if an engineer at Oracle was
-> capable of tackling this interactively, but at the moment it's just me
-> sending them patches. So we'll see. Getting closer though, albeit very
-> slowly.
-
-Oh boy. Okay.
-
-> Jason
-
-Sebastian
