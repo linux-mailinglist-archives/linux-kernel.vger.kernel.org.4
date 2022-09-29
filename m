@@ -2,200 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FEC5EF678
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8D45EF674
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 15:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235671AbiI2N0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 09:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57402 "EHLO
+        id S235457AbiI2N0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 09:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235596AbiI2N02 (ORCPT
+        with ESMTP id S235680AbiI2N0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 09:26:28 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD08F11DFCD;
-        Thu, 29 Sep 2022 06:26:19 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 3so1462454pga.1;
-        Thu, 29 Sep 2022 06:26:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=tZqNyVFP8TilF+zyV4PYC5u7/K2JRWQ8RYWUuGAVbWU=;
-        b=cX4x36k3ftMZAj4wDt2XyX9s8mpa6T2cqgqfZVZR+aM1HnfxIY1D0N/oeEIylgPIsR
-         /s48GoP2v2XTVNoU73D3SNEfQN/EKIV2rg16OqpdizhFX9ds8y0XZWvv8SVml3iY3/jd
-         mVnHBivKIe9S/YU4AbEnrhQInJNlrhnlKXq5Kd67mbYJhkpbwZfiZYKPD9B0QBgNV8Se
-         UnLoJOIhrowLAooSsjasef/0KjFhaPDNe3mkH/b6fZFQJmF5UlcGaA6VCNWZqn17BuNq
-         R7hjSvqlaQW2oyjJDIHQHTG7rz7wTweSCC9r5VolAlNdzsBbHTZFgY8O4NX7sVbveYVQ
-         W2xg==
+        Thu, 29 Sep 2022 09:26:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995491166CD
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:26:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664457968;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cRppPu8Rg7//eJDTidhVUrVedsDey7PezTpFqKhKxns=;
+        b=hzojHKfjRpQVRfYybtqy2eUFC3yjiEpOvGIkNJFu/MwCxkj8rEj8RHeERF1Of4KP6KU02n
+        H7FE6KOAuZw9Yq6W7rkxLZJI9scrWeARTXOSB8mNXzkpD64Lj1FJWPfAvJQIf+5Aga/dzU
+        XPWe3xozmNEGTIqcxHioUO3rsIL2mkg=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-82-A5RBGA43MNeIsTP94Hb4SA-1; Thu, 29 Sep 2022 09:26:06 -0400
+X-MC-Unique: A5RBGA43MNeIsTP94Hb4SA-1
+Received: by mail-ed1-f72.google.com with SMTP id c6-20020a05640227c600b004521382116dso1287653ede.22
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:26:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=tZqNyVFP8TilF+zyV4PYC5u7/K2JRWQ8RYWUuGAVbWU=;
-        b=3J45kZ6Iz7+pjNpkE5uWW3kBC2tHw2tV63/8VsO05Dv/LhxebCZ0l7aEdvBHVxEjSO
-         nHRIUeYyv8Upj1nmqS/O1whpw/AvltEyXyhrcCWy7V6zUNWj0q+4l5hx5QG+GqHt1Av6
-         bYywWQmeM2fG4lGRGOwIkJmKA6M+/4W+IYPkXtocaF3j736IT3fPUf9kWN4Ot3AtoIuB
-         ypG73H/u9zfgYR3xpJ99heM0kYA92OyWKPlwGk0bw9SgIHA8MR4qyDjPL1yWKixdIaCU
-         sXUBSgo9cnzLBq0KZqxQ5uGijOe8d+4GkoKYP2fa448dOxgKJqrwgt74h22cmLAWnoy5
-         ZiMQ==
-X-Gm-Message-State: ACrzQf2aSe3O7Tmih8HAoGHHw0R4ZfeUkpmfCp51zwl5Qcfeda9F1JGg
-        KkHSobnAWnL0geWGavaA30KRBlS7gqAyLSvG
-X-Google-Smtp-Source: AMsMyM6E1lmgYBG3krlNTaNVmvfDxtih9qIcvbgskKpTf5Wihh+/0LcgP9LLmZIJ6wJF7d37f8P1tw==
-X-Received: by 2002:a65:5b05:0:b0:439:a0ae:7e6a with SMTP id y5-20020a655b05000000b00439a0ae7e6amr2981230pgq.16.1664457977896;
-        Thu, 29 Sep 2022 06:26:17 -0700 (PDT)
-Received: from debian.. (subs03-180-214-233-65.three.co.id. [180.214.233.65])
-        by smtp.gmail.com with ESMTPSA id d4-20020a170902654400b0016be834d54asm5886900pln.306.2022.09.29.06.26.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 06:26:17 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Khalid Masum <khalid.masum.92@gmail.com>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH v2] Documentation: kunit: rewrite writing first test instructions
-Date:   Thu, 29 Sep 2022 20:25:49 +0700
-Message-Id: <20220929132549.56452-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=cRppPu8Rg7//eJDTidhVUrVedsDey7PezTpFqKhKxns=;
+        b=8PFAg7qZG9SvECjQfygn7vshmcOH503BYuoY3Rmt8duoX7Ywh6cknyHKNQxwtSUdZ5
+         wwNo9fWfTNMoOwO5IERuynWth0u3o280miK9HcMkmkwaOyA80CVdW5CudmkK7ILagYd1
+         dgjV2mKmJ96wdUgZ2Hx5Na/phK25mmHzIOwD1jIKi2CVcYMw/+rUmVbv/deRzphqjbLg
+         XauEJDaD/trMO57+698yk6AhgNAAHVuE43+2CMOrtOUl6nhlzOcg4QMezjtbIva+Ekx7
+         DnUbBznGs7XxK/L6vpU7c10FpXFGxLto2K9Os1sT1ZnILH5gaveSV+2r0NLf/Xl/EzyL
+         r21w==
+X-Gm-Message-State: ACrzQf2NHIQDyRHm9WKd8MpDryx9vfgclugzRSaPSvjY5ZTcqtQHXeIe
+        +f6eFBH7rZm/bP67larSQnmnCNljYpdNkh1vlAdBO+Hx6dfPTF2frl7UTyFnXbCln/W3MCZ6q0a
+        Ae3k0z9FTMXWa6YmOBCg8xbP7
+X-Received: by 2002:a05:6402:1d48:b0:458:f29:798 with SMTP id dz8-20020a0564021d4800b004580f290798mr3412043edb.414.1664457965607;
+        Thu, 29 Sep 2022 06:26:05 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6m8ao/iBqJiTNgnUSG4lrRSPkOqbc3kShCZLMMNEpN8r9K6AkDxDEWTvQTjWe/qBTI7PveRw==
+X-Received: by 2002:a05:6402:1d48:b0:458:f29:798 with SMTP id dz8-20020a0564021d4800b004580f290798mr3412018edb.414.1664457965335;
+        Thu, 29 Sep 2022 06:26:05 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id r17-20020a17090609d100b00781d411a63csm3948244eje.151.2022.09.29.06.26.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 06:26:04 -0700 (PDT)
+Message-ID: <08dab49f-9ca4-4978-4482-1815cf168e74@redhat.com>
+Date:   Thu, 29 Sep 2022 15:26:03 +0200
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3901; i=bagasdotme@gmail.com; h=from:subject; bh=BF2ojZpfYeCZ/rD/w17Lk5r/0Jvd5HPV5sWmEkAa5r0=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMmmcy5VvnC0u2v8/f4p1o/BZgVBM5/+PLEmqszq7aRFYW6h ke9WdpSyMIhxMMiKKbJMSuRrOr3LSORC+1pHmDmsTCBDGLg4BWAiO34z/FM04vBJXarZe/+KxluDqd ombzgyE8wWyb0o8bTlcHZxucDIsHvSqqtFkmx9mycL7lc48nu1D+t1/p4HFj0sS3+cPa5bzAcA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] KVM: x86: disable on 32-bit unless CONFIG_BROKEN
+To:     Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220926165112.603078-1-pbonzini@redhat.com>
+ <YzMt24/14n1BVdnI@google.com>
+ <ed74c9a9d6a0d2fd2ad8bd98214ad36e97c243a0.camel@redhat.com>
+ <15291c3f-d55c-a206-9261-253a1a33dce1@redhat.com>
+ <YzRycXDnWgMDgbD7@google.com>
+ <ad97d0671774a873175c71c6435763a33569f669.camel@redhat.com>
+ <YzSKhUEg3L1eMKOR@google.com>
+Content-Language: en-US
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YzSKhUEg3L1eMKOR@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The wordings of step-by-step instructions on writing the first Kunit test
-are instructing readers to write codes without knowing what these are about.
-Rewrite these instructions to include the purpose of written code.
+On 9/28/22 19:55, Sean Christopherson wrote:
+>> As far as my opinion goes I do volunteer to test this code more often,
+>> and I do not want to see the 32 bit KVM support be removed*yet*.
+>
+> Yeah, I 100% agree that it shouldn't be removed until we have equivalent test
+> coverage.  But I do think it should an "off-by-default" sort of thing.  Maybe
+> BROKEN is the wrong dependency though?  E.g. would EXPERT be a better option?
 
-While at it, align the code blocks of these contents.
+Yeah, maybe EXPERT is better but I'm not sure of the equivalent test 
+coverage.  32-bit VMX/SVM kvm-unit-tests are surely a good idea, but 
+what's wrong with booting an older guest?
 
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Changes since v1 [1]:
-
-   - Fix jumped list numbering on writing the feature
-
- This patch is based on Khalid's full path to .kunitconfig patch [2].
-
- [1]: https://lore.kernel.org/linux-doc/20220929125458.52979-1-bagasdotme@gmail.com/
- [2]: https://lore.kernel.org/linux-doc/20220929085332.4155-1-khalid.masum.92@gmail.com/
-
- Documentation/dev-tools/kunit/start.rst | 40 ++++++++++++++-----------
- 1 file changed, 22 insertions(+), 18 deletions(-)
-
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index 7999874dc4ddb3..c0a5adf6d8d665 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -131,17 +131,19 @@ are built-in. Otherwise the module will need to be loaded.
- 
- Writing Your First Test
- =======================
--In your kernel repository, let's add some code that we can test.
-+In your kernel repository, let's add some code that we can test. For this
-+purpose, we are going to add simple addition driver.
- 
--1. Create a file ``drivers/misc/example.h``, which includes:
-+1. Write the feature that will be tested. First, write the declaration
-+   for ``misc_example_add()`` in ``drivers/misc/example.h``:
- 
--.. code-block:: c
-+   .. code-block:: c
- 
- 	int misc_example_add(int left, int right);
- 
--2. Create a file ``drivers/misc/example.c``, which includes:
-+   Then implement the function in ``drivers/misc/example.c``:
- 
--.. code-block:: c
-+   .. code-block:: c
- 
- 	#include <linux/errno.h>
- 
-@@ -152,24 +154,25 @@ In your kernel repository, let's add some code that we can test.
- 		return left + right;
- 	}
- 
--3. Add the following lines to ``drivers/misc/Kconfig``:
-+2. Add Kconfig menu entry for the feature to ``drivers/misc/Kconfig``:
- 
--.. code-block:: kconfig
-+   .. code-block:: kconfig
- 
- 	config MISC_EXAMPLE
- 		bool "My example"
- 
--4. Add the following lines to ``drivers/misc/Makefile``:
-+3. Add the kbuild goal that will build the feature to
-+   ``drivers/misc/Makefile``:
- 
--.. code-block:: make
-+   .. code-block:: make
- 
- 	obj-$(CONFIG_MISC_EXAMPLE) += example.o
- 
- Now we are ready to write the test cases.
- 
--1. Add the below test case in ``drivers/misc/example_test.c``:
-+1. Write the test in ``drivers/misc/example_test.c``:
- 
--.. code-block:: c
-+   .. code-block:: c
- 
- 	#include <kunit/test.h>
- 	#include "example.h"
-@@ -202,31 +205,32 @@ Now we are ready to write the test cases.
- 	};
- 	kunit_test_suite(misc_example_test_suite);
- 
--2. Add the following lines to ``drivers/misc/Kconfig``:
-+2. Add following Kconfig entry for the test to ``drivers/misc/Kconfig``:
- 
--.. code-block:: kconfig
-+   .. code-block:: kconfig
- 
- 	config MISC_EXAMPLE_TEST
- 		tristate "Test for my example" if !KUNIT_ALL_TESTS
- 		depends on MISC_EXAMPLE && KUNIT=y
- 		default KUNIT_ALL_TESTS
- 
--3. Add the following lines to ``drivers/misc/Makefile``:
-+3. Add kbuild goal of the test to ``drivers/misc/Makefile``:
- 
--.. code-block:: make
-+   .. code-block:: make
- 
- 	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example_test.o
- 
--4. Add following configuration fragments to ``.kunit/.kunitconfig``:
-+4. Add following configuration fragments for the test to
-+   ``.kunit/.kunitconfig``:
- 
--.. code-block:: none
-+   .. code-block:: none
- 
- 	CONFIG_MISC_EXAMPLE=y
- 	CONFIG_MISC_EXAMPLE_TEST=y
- 
- 5. Run the test:
- 
--.. code-block:: bash
-+   .. code-block:: bash
- 
- 	./tools/testing/kunit/kunit.py run
- 
--- 
-An old man doll... just what I always wanted! - Clara
+Paolo
 
