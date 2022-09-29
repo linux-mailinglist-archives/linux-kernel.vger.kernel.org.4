@@ -2,153 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B2D5EEAA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 02:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCFFE5EEAAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 03:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbiI2A40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Sep 2022 20:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
+        id S233585AbiI2BBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Sep 2022 21:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiI2A4W (ORCPT
+        with ESMTP id S229901AbiI2BBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Sep 2022 20:56:22 -0400
-Received: from esa6.hc1455-7.c3s2.iphmx.com (esa6.hc1455-7.c3s2.iphmx.com [68.232.139.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D78FE668;
-        Wed, 28 Sep 2022 17:56:20 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="90990129"
-X-IronPort-AV: E=Sophos;i="5.93,353,1654527600"; 
-   d="scan'208";a="90990129"
-Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
-  by esa6.hc1455-7.c3s2.iphmx.com with ESMTP; 29 Sep 2022 09:56:18 +0900
-Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
-        by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id E970CD5026;
-        Thu, 29 Sep 2022 09:56:16 +0900 (JST)
-Received: from kws-ab2.gw.nic.fujitsu.com (kws-ab2.gw.nic.fujitsu.com [192.51.206.12])
-        by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 2590610132;
-        Thu, 29 Sep 2022 09:56:16 +0900 (JST)
-Received: from [10.167.226.45] (unknown [10.167.226.45])
-        by kws-ab2.gw.nic.fujitsu.com (Postfix) with ESMTP id EA71A234036D;
-        Thu, 29 Sep 2022 09:56:14 +0900 (JST)
-Message-ID: <8b921394-e7c4-2c85-da76-0ebd05e6ef07@fujitsu.com>
-Date:   Thu, 29 Sep 2022 08:56:14 +0800
+        Wed, 28 Sep 2022 21:01:10 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86828F594F;
+        Wed, 28 Sep 2022 18:01:08 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2FEFC5C00B9;
+        Wed, 28 Sep 2022 21:01:06 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 28 Sep 2022 21:01:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1664413266; x=
+        1664499666; bh=1bzeay9T/xf/VGzfHLUYmp/sbMPH/2mBk8/Ri+FZl/k=; b=G
+        Ic9RYonaLiQpc2RTPn3KE1cXzv/bXu0ydKaSA+Pu9ZGEA0E88hedJoWWvQ+lYCYj
+        /kS//4jaNJYZwkgYiOOGJCWkaxNI2IcX8mi3cExZkZuGrfD5oGqV63kjqX54nUIR
+        rbZE0tlwnERVv2Fr0CTCfalyfkkaLCDhxTzkJrhoglF8uwnFL5y8CS2zfQuylkBK
+        ZZQkXQv9O8eM3AnjJxuKr0uprLAeIUW1ZBDclaQjg3kp4+LMbfyzS/o2BGiG8K+m
+        iW3vhnMff2I43kRn9kifLPPUao3wxj7zMgMnsDQifnAhnkaJxC7bqnwzrHJNYCIf
+        MB8bBxPEcjsnMGpbBZ8WQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1664413266; x=
+        1664499666; bh=1bzeay9T/xf/VGzfHLUYmp/sbMPH/2mBk8/Ri+FZl/k=; b=P
+        rJApjIy23iRgQygazkXHFrkfeOmc9NCtZXr6Keal0HwyEY63bhppx/9+acrXE5jr
+        X6vcwhcYJdS6CeLEWsdSpoGmzV4K1XKGBNdzugeHPKWdmkN9DJwOwPjFZUyUjeuM
+        tCuiuYr7Yl21mtdloE8BLpaCsU5J7x01hyuZdYUm1+X31biBB68GMSSbU+JpT4Ei
+        jOd9yms9n3BeLVWOG3AMi4n3Z/mNmsJoU0Q3Q/5hxfL5Gyun1HaXGo0mvq31Rg6R
+        r4/An8sWdNdU7p7XhZ84rJlGx2Xm4MBfrOKXe3hxbj2I7X8Q+SvNijml8rmoXi2x
+        OgXbUJzn3vC31rYxJO2dw==
+X-ME-Sender: <xms:Ue40Y2WKmtqCbT9ilrbQSwfLSJKu_slahH7JvHaeI4MCay99Cr0ugw>
+    <xme:Ue40YynHNV-ucaCTO3FrEd8p8p78X2gWc8of58WYeFN6sPWnjRwjm1eSHMUSm-vOG
+    nq5IGuC7glmYd0PIuo>
+X-ME-Received: <xmr:Ue40Y6b6APpq7yUBpizuujPX8Y4dlhq3hEzzsgfAVKvMZ4E0HT9byIQXmHh2wAl7-5wy5Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegledggedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkffuhffvveffjghftgfgfgggsehtsgertddtreejnecuhfhrohhmpefnuhhk
+    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
+    hnpeeluddtveejgefgjeekleevjeevjeetgeettdehheffffekheeiveeggedvjeffvden
+    ucffohhmrghinheprhgvugguihhtrdgtohhmpdhfrhgvvgguvghskhhtohhprdhorhhgpd
+    hgihhtlhgrsgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
+    ihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:Uu40Y9VIh510DJqoxTQT_lB-SaDwZf6tbameG24fvx98wkWblxKjFQ>
+    <xmx:Uu40YwklqbS7BbezZvpLVAHI0J_ruDjFbusroRZ15gBzQRPbOzE6Zg>
+    <xmx:Uu40Yyd3fVYy2UR_mY4ahC9LYt-WFJh5bAZHUoBmjgAsVn6JoXZxmA>
+    <xmx:Uu40Y6j6eGrvZqBH9XtWCnnIB8FWYHTHWaDug0cigb4yOJnG83UH-Q>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 28 Sep 2022 21:01:03 -0400 (EDT)
+Message-ID: <f49217c531a61d42d2cf370d2140cf57fe79ec34.camel@ljones.dev>
+Subject: Re: [PATCH 2/2] ACPI: x86: s2idle: Add another ID to
+ s2idle_dmi_table
+From:   Luke Jones <luke@ljones.dev>
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Shyam-sundar.S-k@amd.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
+Date:   Thu, 29 Sep 2022 14:00:53 +1300
+In-Reply-To: <20220928161935.31913-2-mario.limonciello@amd.com>
+References: <20220928161935.31913-1-mario.limonciello@amd.com>
+         <20220928161935.31913-2-mario.limonciello@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.0 (by Flathub.org)) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] ksefltests: pidfd: Fix wait_states: Test terminated by
- timeout
-Content-Language: en-US
-To:     brauner@kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Philip Li <philip.li@intel.com>
-References: <1662001807-7-1-git-send-email-lizhijian@fujitsu.com>
-From:   Li Zhijian <lizhijian@fujitsu.com>
-In-Reply-To: <1662001807-7-1-git-send-email-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27170.003
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27170.003
-X-TMASE-Result: 10--10.193700-10.000000
-X-TMASE-MatchedRID: PYYU0ZXim+GPvrMjLFD6eK5i3jK3KDOoC/ExpXrHizzvJ+necCyol7ow
-        i5z3C6ZAsBAAmnpYMTt751tTDA2z+CYX9xlRB3xlvR08UROkEAfQxDD776KHLzUvQN19brjgj+v
-        Rrcokg+XDeCYEpLFeRPMW54P2B2tdD7lLiXNUhrM8o3fwIs8rQUfLPdsHmQbnXtXt17pSeWDi0n
-        VT9rWZ+SimJNrMe3aRUUG0x+61aZEqXuKH5Jbj7O9S+n/TuQfm1KDIlODIu+VcvdqWtCoykpGHZ
-        85Onc+2J2o10m2bLBJaq/6AkfzLhNHpEovtNFNuEXjPIvKd74BMkOX0UoduuVaSZ4yU9Q2HXpMk
-        2W6rZUiRigXI/55G6lX71r5lUalZTX7PJ/OU3vKDGx/OQ1GV8rnUfzScNiR3DWKb6PcVvpiOhzO
-        a6g8KrUyblknw4+A9+LphlqyNPyaCBOUNmNaC6JbIkO7qU+b1eoiGkqreB1A=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping
-
-
-On 01/09/2022 11:10, Li Zhijian wrote:
-> 0Day/LKP observed that the kselftest blocks forever since one of the
-> pidfd_wait doesn't terminate in 1 of 30 runs. After digging into
-> the source, we found that it blocks at:
-> ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
->
-> wait_states has below testing flow:
->    CHILD                 PARENT
->    ---------------+--------------
-> 1 STOP itself
-> 2                   WAIT for CHILD STOPPED
-> 3                   SIGNAL CHILD to CONT
-> 4 CONT
-> 5 STOP itself
-> 5'                  WAIT for CHILD CONT
-> 6                   WAIT for CHILD STOPPED
->
-> The problem is that the kernel cannot ensure the order of 5 and 5', once
-> 5 goes first, the test will fail.
->
-> we can reproduce it by:
-> $ while true; do make run_tests -C pidfd; done
->
-> Introduce a blocking read in child process to make sure the parent can
-> check its WCONTINUED.
->
-> CC: Philip Li <philip.li@intel.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-> ---
-> I have almost forgotten this patch since the former version post over 6 months
-> ago. This time I just do a rebase and update the comments.
-> V3: fixes description and add review tag
-> V2: rewrite with pipe to avoid usleep
-> ---
->   tools/testing/selftests/pidfd/pidfd_wait.c | 10 ++++++++++
->   1 file changed, 10 insertions(+)
->
-> diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-> index 070c1c876df1..c3e2a3041f55 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_wait.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-> @@ -95,20 +95,28 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
->   		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
->   		.exit_signal = SIGCHLD,
->   	};
-> +	int pfd[2];
->   	pid_t pid;
->   	siginfo_t info = {
->   		.si_signo = 0,
->   	};
->   
-> +	ASSERT_EQ(pipe(pfd), 0);
->   	pid = sys_clone3(&args);
->   	ASSERT_GE(pid, 0);
->   
->   	if (pid == 0) {
-> +		char buf[2];
-> +
-> +		close(pfd[1]);
->   		kill(getpid(), SIGSTOP);
-> +		ASSERT_EQ(read(pfd[0], buf, 1), 1);
-> +		close(pfd[0]);
->   		kill(getpid(), SIGSTOP);
->   		exit(EXIT_SUCCESS);
->   	}
->   
-> +	close(pfd[0]);
->   	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WSTOPPED, NULL), 0);
->   	ASSERT_EQ(info.si_signo, SIGCHLD);
->   	ASSERT_EQ(info.si_code, CLD_STOPPED);
-> @@ -117,6 +125,8 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
->   	ASSERT_EQ(sys_pidfd_send_signal(pidfd, SIGCONT, NULL, 0), 0);
->   
->   	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
-> +	ASSERT_EQ(write(pfd[1], "C", 1), 1);
-> +	close(pfd[1]);
->   	ASSERT_EQ(info.si_signo, SIGCHLD);
->   	ASSERT_EQ(info.si_code, CLD_CONTINUED);
->   	ASSERT_EQ(info.si_pid, parent_tid);
+T24gV2VkLCAyMDIyLTA5LTI4IGF0IDExOjE5IC0wNTAwLCBNYXJpbyBMaW1vbmNpZWxsbyB3cm90
+ZToKPiBJdCdzIHJlcG9ydGVkIHRoYXQgIkFTVVNUZUsgQ09NUFVURVIgSU5DLiBST0cgRmxvdyBY
+MTYgR1Y2MDFSVyIgaGFzCj4gbm9uLWZ1bmN0aW9uYWwgZmFucyBhZnRlciByZXN1bWUgd2hlbiB1
+c2luZyB0aGUgQU1EIGNvZGVwYXRoLsKgIFRoaXMKPiBpc3N1ZSBpcyBmaXhlZCB1c2luZyB0aGUg
+TWljcm9zb2Z0IGNvZGVwYXRoLgo+IAo+IEFkZCB0aGUgMyB2YXJpYW50cyBvZiB0aGlzIHN5c3Rl
+bSB0byB0aGUgTWljcm9zb2Z0IGNvZGVwYXRoIERNSQo+IHRhYmxlLgo+ICogR1Y2MDFSVwo+ICog
+R1Y2MDFSTQo+ICogR1Y2MDFSRQo+IAo+IExpbms6Cj4gaHR0cHM6Ly93d3cucmVkZGl0LmNvbS9y
+L2xpbnV4aGFyZHdhcmUvY29tbWVudHMvd2g1MG5kL2NvbXBhdGliaWxpdHlfcmVwb3J0X2FzdXNf
+cm9nX2Zsb3dfeDE2X2d2NjAxcm0vCj4gTGluazoKPiBodHRwczovL2dpdGxhYi5mcmVlZGVza3Rv
+cC5vcmcvZHJtL2FtZC8tL2lzc3Vlcy8yMTQ4I25vdGVfMTU3MTI0MQo+IFJlcG9ydGVkLWJ5OiBM
+dWtlIEpvbmVzIDxsdWtlQGxqb25lcy5kZXY+Cj4gU2lnbmVkLW9mZi1ieTogTWFyaW8gTGltb25j
+aWVsbG8gPG1hcmlvLmxpbW9uY2llbGxvQGFtZC5jb20+Cj4gLS0tCj4gwqBkcml2ZXJzL2FjcGkv
+eDg2L3MyaWRsZS5jIHwgMTEgKysrKysrKysrKysKPiDCoDEgZmlsZSBjaGFuZ2VkLCAxMSBpbnNl
+cnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvYWNwaS94ODYvczJpZGxlLmMgYi9k
+cml2ZXJzL2FjcGkveDg2L3MyaWRsZS5jCj4gaW5kZXggM2FlMmJhNzRkZTkyLi4wMTU1YzFkMmQ2
+MDggMTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy9hY3BpL3g4Ni9zMmlkbGUuYwo+ICsrKyBiL2RyaXZl
+cnMvYWNwaS94ODYvczJpZGxlLmMKPiBAQCAtNDUxLDYgKzQ1MSwxNyBAQCBzdGF0aWMgY29uc3Qg
+c3RydWN0IGRtaV9zeXN0ZW1faWQKPiBzMmlkbGVfZG1pX3RhYmxlW10gX19pbml0Y29uc3QgPSB7
+Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgRE1JX01B
+VENIKERNSV9QUk9EVUNUX05BTUUsICJST0cgRmxvdyBYMTMKPiBHVjMwMSIpLAo+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfSwKPiDCoMKgwqDCoMKgwqDCoMKgfSwKPiArwqDCoMKg
+wqDCoMKgwqB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC8qCj4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIEFTVVNUZUsgQ09NUFVURVIgSU5DLiBST0cgRmxvdyBY
+MTYgR1Y2MDFSV19HVjYwMVJXCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqCj4g
+aHR0cHM6Ly9naXRsYWIuZnJlZWRlc2t0b3Aub3JnL2RybS9hbWQvLS9pc3N1ZXMvMjE0OAo+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgLmNhbGxiYWNrID0gbHBzMF9wcmVmZXJfbWljcm9zb2Z0LAo+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAubWF0Y2hlcyA9IHsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoERNSV9NQVRDSChETUlfU1lTX1ZFTkRPUiwgIkFTVVNU
+ZUsgQ09NUFVURVIKPiBJTkMuIiksCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBETUlfTUFUQ0goRE1JX1BST0RVQ1RfTkFNRSwgIlJPRyBGbG93IFgxNgo+
+IEdWNjAxIiksCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH0sCj4gK8KgwqDCoMKg
+wqDCoMKgfSwKPiDCoMKgwqDCoMKgwqDCoMKge30KPiDCoH07Cj4gwqAKCkhpIE1hcmlvLAoKcmVs
+YXRlZCBkdHMgaGVyZQpodHRwczovL2dpdGxhYi5jb20vYXN1cy1saW51eC9yZXZlcnNlLWVuZ2lu
+ZWVyaW5nLy0vdHJlZS9tYXN0ZXIvR1Y2MDFSCgo=
 
