@@ -2,122 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B595E5EFD9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95915EFD9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiI2TGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 15:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
+        id S230232AbiI2THN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 15:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbiI2TGM (ORCPT
+        with ESMTP id S230134AbiI2THJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 15:06:12 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EE54DB19;
-        Thu, 29 Sep 2022 12:06:11 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id CE9625C00DC;
-        Thu, 29 Sep 2022 15:06:08 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 29 Sep 2022 15:06:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wfchandler.org;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1664478368; x=
-        1664564768; bh=5iKGShl7bHTQjRCpR3Rp6BaSwCatu+rb0Y5UgnU1eOI=; b=b
-        jrvUMZDt1YwJthfV0Qdg1pP8nZ4FmTK4O2Kgie1W59wAZQUOwbnInXX6+yDOV4Wi
-        320UZAirBa3MqnVZ2aE6Cb02FuoVzav5HWwTjLISFdgS40eKjTjc3Sh8n+0BgaNN
-        oHTucHpyqZd8tjiYo79F+uUZiMXZM1xLELwLc1VstcU03zdUNydkMNd768X7F/F9
-        ZbBcSnVnb4zgeJFM5lbLDu56wCzeZjirQZlTa4fFfMwk1CCGPU9lOfinGWV6/ftZ
-        fj0EpExYXPSN23eF+hvGiQEJulQX4h4ARbKPntyxJ3/Syz8vrRb4rygpv6M1OimM
-        Nlmjowi7XwG0uUKgu0hqw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1664478368; x=
-        1664564768; bh=5iKGShl7bHTQjRCpR3Rp6BaSwCatu+rb0Y5UgnU1eOI=; b=g
-        CE1erlxOgz9e/8NSesIGMjsGGtZKUSnx1P+eMftneMNUoN1Qy/4wFNdxptmx1A2e
-        3eCegl44ve78g7uqOtsr8qyd7VnuNPK521x6Ns1cgNZp9AKfqqNyx1/UBoQVZ3xT
-        pnXXMAYzzyjflS/hw5GQWjAstMl/fSLYe2hTsrOkUXYgd7BRoavZ1WAWHkIrfpfV
-        yLB2gU/No/AjG68I2RHg8wTaLevQmiiCeWWBbCf6SsyoZGzby+I32TjQfP2boxJY
-        azykm7zKS2k0ivVqTvT5bKXvZT946ygpBd0jSAgvQgBrEps5m2NXcmxNMYakSaTo
-        KkR+Ee9CKCs17F5HlxNcw==
-X-ME-Sender: <xms:oOw1Y-_M43lu3v59LAVn-Wvuma4teIASMQM-RlC3gmF2FQXplHtGZA>
-    <xme:oOw1Y-sXZwaKiCo5umh65GeMXM9Z0iejVscfWSmo1Res8gOETRc7A3TKr066i7Doj
-    LrJ8SyhvsJGBsaW2-E>
-X-ME-Received: <xmr:oOw1Y0CpZic9AF2PCVMafAs6lODMC7cEJESnp3ZGAQ-pGvpIdOUOqReLBY3ksrtT8GA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehtddgudefhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffoffkjghfgggtgfesthhqmhdtredttdenucfhrhhomhephghi
-    lhhlucevhhgrnhgulhgvrhcuoeiffhgtseiffhgthhgrnhgulhgvrhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepgfeuvdduudfftdfgkedtffehkeeuhefhtdehtdfgkefhveehkeej
-    geeuhfeugffhnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiffhgtseiffhgthhgrnhgulhgv
-    rhdrohhrgh
-X-ME-Proxy: <xmx:oOw1Y2f8qM7kPlpQN_wIgtP96-ECrohv5jFIjEyCoFTYeamATejhvQ>
-    <xmx:oOw1YzPG7w0Ly2ZZ-n3OYR6jlX42W6cy7WBstYjwcGM4I81e5_HUEQ>
-    <xmx:oOw1YwnSE81F-dSFv7RneP7Yh9y8_aS5hCcw9MW8IK9QSg5244LXdQ>
-    <xmx:oOw1Y8hhEreVNdy2h1gPCDVLahul77WLeWU42taDNO9CbOK97Am6xA>
-Feedback-ID: ica594744:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 29 Sep 2022 15:06:07 -0400 (EDT)
-From:   Will Chandler <wfc@wfchandler.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf tools: Fix empty version number when building outside of a git repo
-Date:   Thu, 29 Sep 2022 15:06:06 -0400
-X-Mailer: MailMate (1.14r5852)
-Message-ID: <B89DF3DD-B07E-427F-8D4B-1F8251345A4C@wfchandler.org>
-In-Reply-To: <2a4a15a4-55cd-f98b-4b14-474f24e2c308@huawei.com>
-References: <20220927195228.47304-1-wfc@wfchandler.org>
- <c5181877-2998-b952-abe6-26d733ae2aeb@huawei.com>
- <87A1F5B6-3F60-4988-8BA6-A993E5789C80@wfchandler.org>
- <2a4a15a4-55cd-f98b-4b14-474f24e2c308@huawei.com>
+        Thu, 29 Sep 2022 15:07:09 -0400
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDF914DAD0;
+        Thu, 29 Sep 2022 12:07:08 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id c11so1378123qtw.8;
+        Thu, 29 Sep 2022 12:07:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=/e4BN6wCiFfjQq1fb+urfl5niKh5OtFO/d3wsAnUbtU=;
+        b=zWnOPQvvRpMvWMn0D/sw5LUl3JPKhfw1TyEP4hiuqaje/RhohgUu/Q44D8SJuMQXJ7
+         X0rdEFhiTXtTd/xrK4UqQWBu4H40MaGh66fRpE5bOlDnQa3IolC8i+Mpm+50hBP/H3Ls
+         on1cUtK/KLJoO5mfyEebeFC3E4iod6T/Y4UDJRs3wF42aU9VdLbeId8UYmu+CSqpLyam
+         sD8bbD8ZZcigDhrHzW6nso+4xdvmcBxx16vJlCmZop7vneaY57JsRJ1a97hZKYdbCNe/
+         kGOI5XuoPfMGkhWJ8adzfcvNzev0CC8pj5RW6rwh0Z1K0St0CePDmfch92Qe7hD7v3Ig
+         3PUQ==
+X-Gm-Message-State: ACrzQf0xU4C1ZtiuLZajmEBCCSKAp8N/uDqfc6sGGqCSaLzP7r0wC2u7
+        EgU7QqV6HKaI8MzsX8rHvSUe3ClVVff4Mlm5C3k=
+X-Google-Smtp-Source: AMsMyM7SWRiJu4fwFCzxYZvchqkbXcYT6R1hZ7xU9OCAzc1yovGJAYl3+iJMAUHVCSCSsqTzX1uEVwquv9bBsmTimAA=
+X-Received: by 2002:a05:622a:64e:b0:35d:5213:284f with SMTP id
+ a14-20020a05622a064e00b0035d5213284fmr3737115qtb.49.1664478427856; Thu, 29
+ Sep 2022 12:07:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220929161917.2348231-1-rrangel@chromium.org> <20220929093200.v6.8.I7d9202463f08373feccd6e8fd87482c4f40ece5d@changeid>
+In-Reply-To: <20220929093200.v6.8.I7d9202463f08373feccd6e8fd87482c4f40ece5d@changeid>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 29 Sep 2022 21:06:56 +0200
+Message-ID: <CAJZ5v0ho2vwoUDk_CFRi3ztA8mz3pWWY1OqwLK4NdXrHSbKjmw@mail.gmail.com>
+Subject: Re: [PATCH v6 08/13] ACPI: PM: Take wake IRQ into consideration when
+ entering suspend-to-idle
+To:     Raul E Rangel <rrangel@chromium.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Tim Van Patten <timvp@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "jingle.wu" <jingle.wu@emc.com.tw>, Len Brown <lenb@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29 Sep 2022, at 6:09, John Garry wrote:
+On Thu, Sep 29, 2022 at 6:19 PM Raul E Rangel <rrangel@chromium.org> wrote:
+>
+> This change adds support for ACPI devices that use ExclusiveAndWake or
+> SharedAndWake in their _CRS GpioInt definition (instead of using _PRW),
+> and also provide power resources. Previously the ACPI subsystem had no
+> idea if the device had a wake capable interrupt armed. This resulted
+> in the ACPI device PM system placing the device into D3Cold, and thus
+> cutting power to the device. With this change we will now query the
+> _S0W method to figure out the appropriate wake capable D-state.
+>
+> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+> ---
+>
+> Changes in v6:
+> - Refactored to leave else clause
+>
+> Changes in v5:
+> - Go back to using adev->wakeup.flags.valid to keep the diff cleaner
+> - Fix a typo in comment
+>
+>  drivers/acpi/device_pm.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>
+> diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
+> index 9dce1245689ca25..b657998ce728e4c 100644
+> --- a/drivers/acpi/device_pm.c
+> +++ b/drivers/acpi/device_pm.c
+> @@ -681,7 +681,22 @@ static int acpi_dev_pm_get_state(struct device *dev, struct acpi_device *adev,
+>                 d_min = ret;
+>                 wakeup = device_may_wakeup(dev) && adev->wakeup.flags.valid
+>                         && adev->wakeup.sleep_state >= target_state;
+> +       } else if (device_may_wakeup(dev) && dev->power.wakeirq) {
+> +               /*
+> +                * The ACPI subsystem doesn't manage the wake bit for IRQs
+> +                * defined with ExclusiveAndWake and SharedAndWake. Instead we
+> +                * expect them to be managed via the PM subsystem. Drivers
+> +                * should call dev_pm_set_wake_irq to register an IRQ as a wake
+> +                * source.
+> +                *
+> +                * If a device has a wake IRQ attached we need to check the
+> +                * _S0W method to get the correct wake D-state. Otherwise we
+> +                * end up putting the device into D3Cold which will more than
+> +                * likely disable wake functionality.
+> +                */
+> +               wakeup = true;
+>         } else {
+> +               /* ACPI GPE is specified in _PRW. */
+>                 wakeup = adev->wakeup.flags.valid;
+>         }
+>
+> --
 
-> Hmmm... maybe someone would want to customise PERF-VERSION-FILE for the=
-ir own distro. Not sure. But then fiddling with PERF-VERSION-FILE might b=
-reak the parsing so...I guess not.
+I can apply this one readily if that helps.
 
-Yeah, seems like a bad idea. Doing a quick search, Void Linux does seem t=
-o be
-trying to set a custom version string in their build script[0], but I don=
-'t
-think passing PERF_VERSION as an argument to make has worked since 2013 w=
-ith
-3cecaa200227 ("perf tools: Do not include PERF-VERSION-FILE to Makefile, =
-2013-01-16").
+It doesn't depend on anything else in the series AFAICS.
 
-[0] https://github.com/void-linux/void-packages/blob/fdb3515c33f2bb997392=
-ea6992e6bbb82c4376c5/srcpkgs/linux-tools/template#L56
+It looks like patch [01/13] could also be applied right away, but
+probably it is not for the ACPI tree.
 
-> BTW, is there any other method of building the perf code not considered=
-? So far I know:
-> a. in git tree
-> b. perf-tar-src-pkg
-> c. tarball
-
-Those are all that come to mind for me as well.
-
-Let me know if you'd like me to re-roll the patch using the pre-7572733b8=
-499
-approach.
+I have a small comment to patch [06/13], and after that is addressed
+it could be applied right away too I suppose, but the rest of the
+patches need ACKs from the respective maintainers.
