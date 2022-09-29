@@ -2,101 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC845EFDDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7A05EFDE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiI2TVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 15:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
+        id S229976AbiI2TYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 15:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiI2TVp (ORCPT
+        with ESMTP id S229727AbiI2TYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 15:21:45 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D320913F294;
-        Thu, 29 Sep 2022 12:21:44 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 5125A734;
-        Thu, 29 Sep 2022 19:21:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 5125A734
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1664479304; bh=bJcm9pawjNycjM+Nrq5TLidpXgcC/Xq62OwmjJR1/Ag=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=VTHiSta6QeIia+XRQG8Jgoq59d62Ak+77NcNkEEQFhwf/do+hoo/kDrBpCb7E9aAq
-         ffZYCfz3EqwR8VZrakRqJoIk+VlJcSyLogJ7edBgsY1P9ynbUqYzCqzqcwwRygEhg0
-         znZ54jtB6CMNb9WIjbh4MwhX6XGc17YJh4ftpRCoz8f8kJgkmUlm1fnVBjBIX0Yivy
-         vSuo7jeBRsOq/0DOZq6MZ9CndZ23DR1HTK72WvuXtCfV3RT7DKelhsdoD6JiE5WEqW
-         wId3HIz+jvUATz0bQlia5OlL/mf8XpjrvHdVd6YiwaVvDc9t3vil0gbKq8WZkfiCVt
-         TNazD9skBK6qg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>, "Daniel K ." <daniel@cluded.net>
-Subject: Re: [PATCH v2 0/2] coding-style.rst: document BUG() and WARN() rules
-In-Reply-To: <20220923113426.52871-1-david@redhat.com>
-References: <20220923113426.52871-1-david@redhat.com>
-Date:   Thu, 29 Sep 2022 13:21:43 -0600
-Message-ID: <87k05mgf5k.fsf@meer.lwn.net>
+        Thu, 29 Sep 2022 15:24:42 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07247271E;
+        Thu, 29 Sep 2022 12:24:37 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id e20so1272905qts.1;
+        Thu, 29 Sep 2022 12:24:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=t5RAjgqBVinL0gg/ikPUWLP0m949aK47G+LjUFu39q8=;
+        b=UloTEe5NJgWO2olSlTj0gH8a84nqII6zMI/8h497ofry2GjCokqYK/0EWt/FQJ1cil
+         q/NZSD4oPhic/Mh8mjkj53PDrS1yfndF7N6SBzvb0xWcfvdEBu7t1xZgEDpHuMym6W32
+         nyDeVSaepjsl+zMFIhoH87hyoC4vlDHg659SzH5lt/QOyfo0m1Ipgdiy5XwYi4JLDGN+
+         fAiHwt0s3GKm6auO15dKd9bnVVlsCQBoBflgObx7GBQz73FGIDICV4hwZ9gtokpgkeE+
+         ko/OZr8lXsfwpFPN5szoPU8ZLMcMsDvWymBDAdAc7qOR/dUoD60mnNDkXEfNyKX3GGuA
+         TISA==
+X-Gm-Message-State: ACrzQf1Zs2UcS6zBSpub65ufIf6zgOrJcuftcrwUbCP9N85wPoL8tu9X
+        nNIRiSXdLBLkmGL1c5KqeinjZzW1PiVbUJt6qB4=
+X-Google-Smtp-Source: AMsMyM7EbCRdw4rq413sDUU/vbxT01OSPElQabKE+XGQHbHl5+rnsObMvlOm09/Tuze5uTBp6+2HmqnzMo3P+8RF3pg=
+X-Received: by 2002:a05:622a:620a:b0:35c:bf9e:8748 with SMTP id
+ hj10-20020a05622a620a00b0035cbf9e8748mr3901594qtb.494.1664479476403; Thu, 29
+ Sep 2022 12:24:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <c09e06cf-2461-a3f9-9288-402fbdc94e0d@gmail.com>
+In-Reply-To: <c09e06cf-2461-a3f9-9288-402fbdc94e0d@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 29 Sep 2022 21:24:25 +0200
+Message-ID: <CAJZ5v0gr9HT2Hj=GWErLJxP=QcyauAhS3VVYDffsiLF2XcLa_Q@mail.gmail.com>
+Subject: Re: [GIT PULL] devfreq next for 6.1
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Hildenbrand <david@redhat.com> writes:
-
-> As it seems to be rather unclear if/when to use BUG(), BUG_ON(),
-> VM_BUG_ON(), WARN_ON_ONCE(), ... let's try to document the result of a
-> recent discussion.
+On Sun, Sep 25, 2022 at 9:31 PM Chanwoo Choi <cwchoi00@gmail.com> wrote:
 >
-> Details can be found in patch #1.
+> Dear Rafael,
 >
-> v1 -> v2:
-> * "coding-style.rst: document BUG() and WARN() rules ("do not crash the
->    kernel")"
->  -> Minor rephrasing / reference fix [John]
->  -> Compile fix [Akira]
-> * "powerpc/prom_init: drop PROM_BUG()"
->  -> Dropped because it will go upstream via a different tree
-> * "checkpatch: warn on usage of VM_BUG_ON() and other BUG variants"
->  -> Rephrase warning message and remove trailing period [John+Joe]
+> This is devfreq-next pull request for v6.1. I add detailed description of
+> this pull request on the following tag. Please pull devfreq with
+> following updates.
 >
-> RFC -> v1:
-> * "coding-style.rst: document BUG() and WARN() rules ("do not crash the
->    kernel")"
->  -> Rephrase/extend according to John
->  -> Add some details regarding the use of panic()
-> * powerpc/prom_init: drop PROM_BUG()
->  -> Added
-> * "checkpatch: warn on usage of VM_BUG_ON() and other BUG variants"
->  -> Warn on more variants
+> Best Regards,
+> Chanwoo Choi
+>
+> The following changes since commit 521a547ced6477c54b4b0cc206000406c221b4d6:
+>
+>   Linux 6.0-rc6 (2022-09-18 13:44:14 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-6.1
+>
+> for you to fetch changes up to fb2ac84f8acccdec644d26dfc8ba6554f30cd6c0:
+>
+>   PM / devfreq: rockchip-dfi: Fix an error message (2022-09-26 03:59:43 +0900)
+>
+> ----------------------------------------------------------------
+> Update devfreq next for v6.1
+>
+> Detailed description for this pull request:
+> 1. Handle -EPROBE_DEFER when regulator is not probed on mtk-ci-devfreq.c
+> 2. Use dev_err_probe to reduce the error log on rockchip-dfi.c
+>
+> ----------------------------------------------------------------
+> AngeloGioacchino Del Regno (1):
+>       PM / devfreq: mtk-cci: Handle sram regulator probe deferral
+>
+> Christophe JAILLET (1):
+>       PM / devfreq: rockchip-dfi: Fix an error message
+>
+>  drivers/devfreq/event/rockchip-dfi.c | 7 +++----
+>  drivers/devfreq/mtk-cci-devfreq.c    | 8 ++++++--
+>  2 files changed, 9 insertions(+), 6 deletions(-)
 
-It seems we've talked ourselves out on this one, so I've gone ahead and
-applied it.
-
-Thanks,
-
-jon
+Pulled, thanks!
