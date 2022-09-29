@@ -2,120 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450A55EEE03
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA1C5EEE05
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234879AbiI2GpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 02:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
+        id S234761AbiI2Grn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 02:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233770AbiI2GpN (ORCPT
+        with ESMTP id S233899AbiI2Grk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 02:45:13 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE6CF685A;
-        Wed, 28 Sep 2022 23:45:07 -0700 (PDT)
-X-UUID: 63e46b5a5e7a4cab9d0696260ab5ad3a-20220929
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=kiOzCeiwrP7bYeA7Uexju07lk5sFmybh+kBdygu2puM=;
-        b=gFYZIi5gSUr7I3TvqK+rdxFEECKXO9U/kZqmHQgXSFh1U9p+N3reU1v08wPTm5wXz58/ufN5QSVEzwfgbax+tWOIkxs1dHO2cTy/vnknXUF2ArznwLmPi6Mwbp+kxUzTMmho8sJRHZDW0U3oIEtLelszXfOTWr7KFXL4CGcgCLQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:548059a0-99ec-414a-8711-106fbf4a5cbd,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.11,REQID:548059a0-99ec-414a-8711-106fbf4a5cbd,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:39a5ff1,CLOUDID:bbec9de4-87f9-4bb0-97b6-34957dc0fbbe,B
-        ulkID:220929144504UZ6G4XJO,BulkQuantity:0,Recheck:0,SF:28|17|19|48|823|824
-        ,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,
-        COL:0
-X-UUID: 63e46b5a5e7a4cab9d0696260ab5ad3a-20220929
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1720333671; Thu, 29 Sep 2022 14:45:03 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 29 Sep 2022 14:45:02 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 29 Sep 2022 14:45:01 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2] usb: mtu3: fix failed runtime suspend in host only mode
-Date:   Thu, 29 Sep 2022 14:44:59 +0800
-Message-ID: <20220929064459.32522-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 29 Sep 2022 02:47:40 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2351512DEE4
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:47:39 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id l14so771949eja.7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:47:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
+         :to:cc:subject:date;
+        bh=k86UqHM3WchRgtW7PvceQFEbkD6R7toG3Vm8zGKJivA=;
+        b=kSu2z906T9cfvu+dKrcW6WxBzvtWKbmA+y7giR1OEuLETj6tpiB6m4mvxMou40+SvL
+         gSMk9ZhmsHrxZ19AyZNb4i2frZulPTXIdqJIEdQi5jR5W37ET2bNR1bqVpeR8U6Ny5M3
+         eBJRCJwdroKqvSkyX/ZLpFsv+K3zkYYx93eIFgnl+efIcZfrNV8bbzKgIaLsCyzmOBUo
+         5S6lYOG8aFT567PRQYDIpJIxmj7OAk+OZ2+mTBroF/3JX2SV0Hl/Ev3ipOt06JVUQF3d
+         nbv5l5Kbg2jmiT+wTrO3hOj1cKjjnP/jHCcIpj5zr5kcFLWvCbF5x0XOn47uNio218+3
+         Da4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=k86UqHM3WchRgtW7PvceQFEbkD6R7toG3Vm8zGKJivA=;
+        b=YXim3tRSSsd9fx1xiQFOLO4j/8FOevJHO0UgW8tE07vIHXvA1oJLw/vsvH8v3NWKlR
+         x5WMGnhwsrvVOyhwTKEofaLqdQLoUkAHkuaMshuwR07hHbOJ/QL5/Xk+iteldGen8Ja/
+         hjLx7mVWcpp0qzddWW5QIYouz6Eahre/Z+tTkQKrbNEe+wvSCvOElaRCL9VWFlT8nI4k
+         VXZaokIAmphwVyNdCeM0ODayHdh4Q2fzY2hJNMS1OcSB8p4VsL+t/jotNZoXKB8NVYp/
+         efwIzba3UEmwMo2c4mYUUzst52W0ziSNAUCTGksK95wjkjO5VSQk3tDXlP7gar8tTj8S
+         vrqw==
+X-Gm-Message-State: ACrzQf3pnaLSDf2AXXdwsLi/WuQJQ6G6PeDE+67Mx16JNLcHM2xFsxoi
+        e24Cgc5BQvmDhfIjleUNMWLkK1bAbu/CbdDLP4U=
+X-Google-Smtp-Source: AMsMyM4rUzgr1b+ehVqvhLfcYPLNXsun3CiuPShYmV9h3evVIG18qhr+HFb/8hsptothwH6/M80F7ebGLy8AQFY0uvA=
+X-Received: by 2002:a17:906:4ac1:b0:780:3448:ff06 with SMTP id
+ u1-20020a1709064ac100b007803448ff06mr1419768ejt.403.1664434057375; Wed, 28
+ Sep 2022 23:47:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
+Reply-To: bshambdh1@gmail.com
+Sender: riggsbeal2016@gmail.com
+Received: by 2002:a17:906:160a:b0:741:6768:2aea with HTTP; Wed, 28 Sep 2022
+ 23:47:36 -0700 (PDT)
+From:   Sakimoto Mayumi <bshambdh11@gmail.com>
+Date:   Thu, 29 Sep 2022 09:47:36 +0300
+X-Google-Sender-Auth: x6qK3scof5e-6cpDr7onl26TCgQ
+Message-ID: <CAAvtDjkMRXra4DBvOApi=thhMPRe3-KOxh0axGP_gHqjLxiiMQ@mail.gmail.com>
+Subject: Mrs. Sakimoto mayumi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:62e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [bshambdh1[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [riggsbeal2016[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [riggsbeal2016[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the dr_mode is "host", after the host enter runtime suspend,
-the mtu3 can't do it, because the mtu3's device wakeup function is
-not enabled, instead it's enabled in gadget init function, to fix
-the issue, init wakeup early in mtu3's probe()
+Peace be with you,
 
-Fixes: 6b587394c65c ("usb: mtu3: support suspend/resume for dual-role mode")
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reported-by: Tianping Fang <tianping.fang@mediatek.com>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v2: add Reviewed-by AngeloGioacchino
-    abandon another patch:
-       "[PATCH 1/2] usb: mtu3: fix ep0's stall of out data stage"
----
- drivers/usb/mtu3/mtu3_core.c | 2 --
- drivers/usb/mtu3/mtu3_plat.c | 2 ++
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/mtu3/mtu3_core.c b/drivers/usb/mtu3/mtu3_core.c
-index 0ca173af87bb..a3a6282893d0 100644
---- a/drivers/usb/mtu3/mtu3_core.c
-+++ b/drivers/usb/mtu3/mtu3_core.c
-@@ -978,8 +978,6 @@ int ssusb_gadget_init(struct ssusb_mtk *ssusb)
- 		goto irq_err;
- 	}
- 
--	device_init_wakeup(dev, true);
--
- 	/* power down device IP for power saving by default */
- 	mtu3_stop(mtu);
- 
-diff --git a/drivers/usb/mtu3/mtu3_plat.c b/drivers/usb/mtu3/mtu3_plat.c
-index 4cb65346789d..d78ae52b4e26 100644
---- a/drivers/usb/mtu3/mtu3_plat.c
-+++ b/drivers/usb/mtu3/mtu3_plat.c
-@@ -356,6 +356,8 @@ static int mtu3_probe(struct platform_device *pdev)
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
- 
-+	device_init_wakeup(dev, true);
-+
- 	ret = ssusb_rscs_init(ssusb);
- 	if (ret)
- 		goto comm_init_err;
--- 
-2.18.0
+Please I have something very i mportant to discuss with you. I have a
+human welfare project i want you to handel for me, Please reply to me
+as soon as possible.
 
+
+ Kind Regards,
+ sakimoto mayumi
