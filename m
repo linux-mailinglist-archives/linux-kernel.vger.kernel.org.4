@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508C55EEDFB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB66B5EEE01
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234855AbiI2Glj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 02:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
+        id S234844AbiI2GoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 02:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbiI2Glh (ORCPT
+        with ESMTP id S233770AbiI2GoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 02:41:37 -0400
-Received: from sender4-pp-o92.zoho.com (sender4-pp-o92.zoho.com [136.143.188.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8462D128704;
-        Wed, 28 Sep 2022 23:41:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1664433693; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=V+zipX7DGpNT0VfSsSnD8pEBivBRPN2as9BH3sG0fjD4iKbVt3BqOeJ99Lo4msja1Lu6MqwMfcx/oR756xBfcfWMgHeXOu4hFuALdeglxh0yo8+cDuSFPFYs3uYrqNMIIATm5cgStnUx93qbcdyLV8d5qSE8MUfyUn2cayx1NGk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1664433693; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=EXlFcHYEvuIDXaU+aP6eHFMdyT/gqxmC/nZG41wQWG8=; 
-        b=SIhOHBwQ86TPbgNCFd0kVUkXQFBWyqO7eh7w2tRX9Zmps8ek/rwWdcJC0MoJuoZDYv1ytxCmuPZlwqiL+jYCK0j7ZgjlQdh0TRaIvu3CrjJ2ufPPtRDJXCMg8bu/8rKOsamgQdAYA8UdxWGIdVDME9Ps3Vaiu7FsbCcbKb+MV4M=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zoho.com;
-        spf=pass  smtp.mailfrom=hmsjwzb@zoho.com;
-        dmarc=pass header.from=<hmsjwzb@zoho.com>
-DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
-  s=zapps768; d=zoho.com; 
-  h=message-id:date:mime-version:user-agent:subject:to:cc:references:from:in-reply-to:content-type; 
-  b=dsKVwXCus/vx4HZb8Ll7diczxweR21MnfPqtc2FJ3mUBRUyKECuXpvo5wIah+neHVNdgylrBv/Xn
-    QTSEnlB8APM+Vbbrwi0JS7KyXCkK8AV5Ao7k9XGd9DgIf7bdkL45  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1664433693;
-        s=zm2022; d=zoho.com; i=hmsjwzb@zoho.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=EXlFcHYEvuIDXaU+aP6eHFMdyT/gqxmC/nZG41wQWG8=;
-        b=WMr7uVM7JpKPho9Gq/y1lhxC2Kekix1/oEIZoVnfHYRSQfoQI3QsrNyrmw2Lh1ge
-        bjQeMrOFPOv+rLACJKDQdU47ti3U41ERo5FZRhhCvnGBdpABeMROv9JBHxmqnnoxc4h
-        0yzTZeJdxH898XIniAdaglzeH/Xjvc+vXrJKPe3E=
-Received: from [192.168.0.103] (58.247.201.74 [58.247.201.74]) by mx.zohomail.com
-        with SMTPS id 1664433692706875.4584232941247; Wed, 28 Sep 2022 23:41:32 -0700 (PDT)
-Message-ID: <b1687080-a702-e1f7-0fac-e837b0317aa4@zoho.com>
-Date:   Thu, 29 Sep 2022 02:41:28 -0400
+        Thu, 29 Sep 2022 02:44:14 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5922512AECB
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:44:12 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so473133pjk.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:44:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=/vsjYa0mVNB7hxEqcjh0e4fbj05c2V9q8r7ZQBxHpwM=;
+        b=taHM9fC3gawTMyKIp0dRgyeOgWlcE3tG7aO5KuMpgrd/uifguoPvOh9Ucdgdqupqe9
+         MTf9Es0cSWLJkL/G7L8vzaGpbwLXy6XHr6hGfD7pb4Y8PpSDARZcaVzh6dBhHP6NKtxn
+         eMHmQfoieDk+D2oS/owzPEqVgKnySxeztRglMXlm/ICt+QYTe34qqxVTqBP5Fl/7sWYL
+         JMB5nhFD2HCwOd2z7CF1zIa8MdvhH7u0s0YP8JKCW7TPNeKBIbE5pw3o5fBbaCUa/jl5
+         9bOvj5cuzbPZtT7plPkrMi/MeZCMBoKpM0/J1JH6VfbDnncbJFmjFv7wSyiSxonKcWjb
+         5e+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=/vsjYa0mVNB7hxEqcjh0e4fbj05c2V9q8r7ZQBxHpwM=;
+        b=Xgjlr/ENdkImeGPRk1Xr1lw+Q5O2SRp7gIYbvIrGHqla/IxS91gRkl/IT4JSzHVhRI
+         GZMF6LzpO8Xjc0QIhQtW4RFnzyoZjoZ4dD/a23+49si47JR1oL27PjYA2YSciLwyLxXq
+         VaMcBAE6HYL3wGz6/ELKG3WXDI1vmWV+c8cVieU4VoxSJY3kCZG4BQ94W58DVUnEDFCU
+         FvxTK0GaB4ZHmtqqZobejSSG/pvjBpfpZr6/ODIUYCY62C4qcwYsuAQwc+ynNNTKDG3r
+         Yg2Uy5NXbRBVZsvRDu8se54xsLxCYI/fm1Gy1a+XgMpS69ZWba6xdIidr2TNJWRRLMYm
+         zunw==
+X-Gm-Message-State: ACrzQf0D+KKU/gSwu7RFj9UzlQk1AhCr0Zv8BDSRvwnZxik9jsweJMl0
+        hDP/u9xAztgbPBSpSaGxEQqh3w==
+X-Google-Smtp-Source: AMsMyM7YBWdfkzRoRE4S/zqUvt7CLV44mC0samCAKxwGxcYZXq+hTWVlsCY1bMdyEMHyAcWmuIsi+w==
+X-Received: by 2002:a17:902:6943:b0:178:4751:a76b with SMTP id k3-20020a170902694300b001784751a76bmr1869132plt.37.1664433851784;
+        Wed, 28 Sep 2022 23:44:11 -0700 (PDT)
+Received: from C02FT5A6MD6R.bytedance.net ([61.120.150.75])
+        by smtp.gmail.com with ESMTPSA id s18-20020a170902ea1200b00172fad607b3sm5089387plg.207.2022.09.28.23.44.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 23:44:11 -0700 (PDT)
+From:   Gang Li <ligang.bdlg@bytedance.com>
+To:     Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Cc:     Gang Li <ligang.bdlg@bytedance.com>, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v4] sched/numa: add per-process numa_balancing
+Date:   Thu, 29 Sep 2022 14:43:58 +0800
+Message-Id: <20220929064359.46932-1-ligang.bdlg@bytedance.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] btrfs:remove redundant index_rbio_pages in
- raid56_rmw_stripe
-Content-Language: en-US
-To:     Qu Wenruo <wqu@suse.com>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220929014402.2450-1-hmsjwzb@zoho.com>
- <c4293742-06ba-8720-e2eb-d4d3bc4da044@suse.com>
- <18acd4e0-9d3d-77a7-a1de-b805bc259bcf@suse.com>
-From:   hmsjwzb <hmsjwzb@zoho.com>
-In-Reply-To: <18acd4e0-9d3d-77a7-a1de-b805bc259bcf@suse.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,74 +76,341 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qu,
+This patch add a new api PR_NUMA_BALANCING in prctl.
 
-	Thanks for your reply.
-	Here is my plan about destructive RMW.
-	
-	1. Read all the stripes in through raid56_rmw_stripe.
-	2. Do xor operation in finish_rmw.
-	3. If the xor result matches, nothing happened.
-	4. If the xor result mismatches, we can recover the data or trigger some user space progress to fix the data corruption.
+A large number of page faults will cause performance loss when numa
+balancing is performing. Thus those processes which care about worst-case
+performance need numa balancing disabled. Others, on the contrary, allow a
+temporary performance loss in exchange for higher average performance, so
+enable numa balancing is better for them.
 
-	But here are some problems.
-	1. If the stripe is new allocated, the check will fail.
-	2. Is it convient for kernel get checksum in finish_rmw and recover data?
+Numa balancing can only be controlled globally by
+/proc/sys/kernel/numa_balancing. Due to the above case, we want to
+disable/enable numa_balancing per-process instead.
 
-Thanks,
-Flint
+Add numa_balancing under mm_struct. Then use it in task_tick_fair.
 
-On 9/28/22 23:13, Qu Wenruo wrote:
-> 
-> 
-> On 2022/9/29 11:08, Qu Wenruo wrote:
->>
->>
->> On 2022/9/29 09:44, Flint.Wang wrote:
->>>    The index_rbio_pages in raid56_rmw_stripe is redundant.
->>
->> index_rbio_pages() is to populate the rbio->bio_sectors array.
->>
->> In raid56_rmw_stripe() we later calls sector_in_rbio(), which will check if a sector is belonging to bio_lists.
->>
->> If not called, all sector will be returned using the sectors in rbio->bio_sectors, not using the sectors in bio lists.
->>
->> Have you tried your patch with fstests runs?
-> 
-> Well, for raid56_rmw_stripe() it's fine, as without the index_rbio_pages() call, we just read all the sectors from the disk.
-> 
-> This would include the new pages from bio lists.
-> 
-> It would only cause extra IO, but since they can all be merged into one 64K stripe, it should not cause performance problem.
-> 
-> Furthermore it would read all old sectors from disk, allowing us later to do the verification before doing the writes.
-> 
-> But it should really contain a more detailed explanation.
-> 
-> Thanks,
-> Qu
->>
->> IMHO it should fail a lot of very basic writes in RAID56.
->>
->> Thanks,
->> Qu
->>
->>>    It is invoked in finish_rmw anyway.
->>>
->>> Signed-off-by: Flint.Wang <hmsjwzb@zoho.com>
->>> ---
->>>   fs/btrfs/raid56.c | 2 --
->>>   1 file changed, 2 deletions(-)
->>>
->>> diff --git a/fs/btrfs/raid56.c b/fs/btrfs/raid56.c
->>> index f6395e8288d69..44266b2c5b86e 100644
->>> --- a/fs/btrfs/raid56.c
->>> +++ b/fs/btrfs/raid56.c
->>> @@ -1546,8 +1546,6 @@ static int raid56_rmw_stripe(struct btrfs_raid_bio *rbio)
->>>       if (ret)
->>>           goto cleanup;
->>> -    index_rbio_pages(rbio);
->>> -
->>>       atomic_set(&rbio->error, 0);
->>>       /* Build a list of bios to read all the missing data sectors. */
->>>       for (total_sector_nr = 0; total_sector_nr < nr_data_sectors;
+Set per-process numa balancing:
+	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_DISABLE); //disable
+	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_ENABLE);  //enable
+	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_DEFAULT); //follow global
+Get numa_balancing state:
+	prctl(PR_NUMA_BALANCING, PR_GET_NUMAB, &ret);
+	cat /proc/<pid>/status | grep NumaB_enabled
+
+Cc: linux-api@vger.kernel.org
+Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
+---
+Changes in v4:
+- code clean: add wrapper function `numa_balancing_enabled`
+
+Changes in v3:
+- Fix compile error.
+
+Changes in v2:
+- Now PR_NUMA_BALANCING support three states: enabled, disabled, default.
+  enabled and disabled will ignore global setting, and default will follow
+  global setting.
+---
+ Documentation/filesystems/proc.rst   |  2 ++
+ fs/proc/task_mmu.c                   | 19 +++++++++++++++
+ include/linux/mm_types.h             |  3 +++
+ include/linux/sched/numa_balancing.h |  8 +++++++
+ include/uapi/linux/prctl.h           |  7 ++++++
+ kernel/fork.c                        |  3 +++
+ kernel/sched/core.c                  | 15 ++++++++++++
+ kernel/sched/fair.c                  | 32 ++++++++++++++++++++-----
+ kernel/sys.c                         | 35 ++++++++++++++++++++++++++++
+ 9 files changed, 118 insertions(+), 6 deletions(-)
+
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index e7aafc82be99..b2ddffad015f 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -192,6 +192,7 @@ read the file /proc/PID/status::
+   VmLib:      1412 kB
+   VmPTE:        20 kb
+   VmSwap:        0 kB
++  NumaB_enabled:  default
+   HugetlbPages:          0 kB
+   CoreDumping:    0
+   THP_enabled:	  1
+@@ -273,6 +274,7 @@ It's slow but very precise.
+  VmPTE                       size of page table entries
+  VmSwap                      amount of swap used by anonymous private data
+                              (shmem swap usage is not included)
++ NumaB_enabled               numa balancing state, set by prctl(PR_NUMA_BALANCING, ...)
+  HugetlbPages                size of hugetlb memory portions
+  CoreDumping                 process's memory is currently being dumped
+                              (killing the process may lead to a corrupted core)
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 8b4f3073f8f5..7358a5932e5a 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -19,6 +19,7 @@
+ #include <linux/shmem_fs.h>
+ #include <linux/uaccess.h>
+ #include <linux/pkeys.h>
++#include <linux/sched/numa_balancing.h>
+ 
+ #include <asm/elf.h>
+ #include <asm/tlb.h>
+@@ -75,6 +76,24 @@ void task_mem(struct seq_file *m, struct mm_struct *mm)
+ 		    " kB\nVmPTE:\t", mm_pgtables_bytes(mm) >> 10, 8);
+ 	SEQ_PUT_DEC(" kB\nVmSwap:\t", swap);
+ 	seq_puts(m, " kB\n");
++#ifdef CONFIG_NUMA_BALANCING
++	seq_puts(m, "NumaB_enabled:\t");
++	switch (mm->numab_enabled) {
++	case NUMAB_DEFAULT:
++		seq_puts(m, "default");
++		break;
++	case NUMAB_DISABLED:
++		seq_puts(m, "disabled");
++		break;
++	case NUMAB_ENABLED:
++		seq_puts(m, "enabled");
++		break;
++	default:
++		seq_puts(m, "unknown");
++		break;
++	}
++	seq_putc(m, '\n');
++#endif
+ 	hugetlb_report_usage(m, mm);
+ }
+ #undef SEQ_PUT_DEC
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 500e536796ca..d9bfa740d905 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -665,6 +665,9 @@ struct mm_struct {
+ 
+ 		/* numa_scan_seq prevents two threads remapping PTEs. */
+ 		int numa_scan_seq;
++
++		/* Controls whether NUMA balancing is active for this mm. */
++		int numab_enabled;
+ #endif
+ 		/*
+ 		 * An operation with batched TLB flushing is going on. Anything
+diff --git a/include/linux/sched/numa_balancing.h b/include/linux/sched/numa_balancing.h
+index 3988762efe15..f4a4cdf264bc 100644
+--- a/include/linux/sched/numa_balancing.h
++++ b/include/linux/sched/numa_balancing.h
+@@ -16,12 +16,20 @@
+ #define TNF_MIGRATE_FAIL 0x10
+ 
+ #ifdef CONFIG_NUMA_BALANCING
++enum {
++	NUMAB_DISABLED,
++	NUMAB_ENABLED,
++	NUMAB_DEFAULT
++};
++DECLARE_STATIC_KEY_FALSE(sched_numa_balancing);
+ extern void task_numa_fault(int last_node, int node, int pages, int flags);
+ extern pid_t task_numa_group_id(struct task_struct *p);
+ extern void set_numabalancing_state(bool enabled);
+ extern void task_numa_free(struct task_struct *p, bool final);
+ extern bool should_numa_migrate_memory(struct task_struct *p, struct page *page,
+ 					int src_nid, int dst_cpu);
++extern bool numa_balancing_enabled(struct task_struct *p);
++extern int numa_balancing_mode(struct mm_struct *mm);
+ #else
+ static inline void task_numa_fault(int last_node, int node, int pages,
+ 				   int flags)
+diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
+index a5e06dcbba13..4c57724b04c3 100644
+--- a/include/uapi/linux/prctl.h
++++ b/include/uapi/linux/prctl.h
+@@ -284,4 +284,11 @@ struct prctl_mm_map {
+ #define PR_SET_VMA		0x53564d41
+ # define PR_SET_VMA_ANON_NAME		0
+ 
++/* Set/get enabled per-process numa_balancing */
++#define PR_NUMA_BALANCING		65
++# define PR_SET_NUMAB_DISABLED		NUMAB_DISABLED
++# define PR_SET_NUMAB_ENABLED		NUMAB_ENABLED
++# define PR_SET_NUMAB_DEFAULT		NUMAB_DEFAULT
++# define PR_GET_NUMAB			3
++
+ #endif /* _LINUX_PRCTL_H */
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 844dfdc8c639..1b9254315770 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1133,6 +1133,9 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
+ 	init_tlb_flush_pending(mm);
+ #if defined(CONFIG_TRANSPARENT_HUGEPAGE) && !USE_SPLIT_PMD_PTLOCKS
+ 	mm->pmd_huge_pte = NULL;
++#endif
++#ifdef CONFIG_NUMA_BALANCING
++	mm->numab_enabled = NUMAB_DEFAULT;
+ #endif
+ 	mm_init_uprobes_state(mm);
+ 	hugetlb_count_init(mm);
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index a77e8bfbfb5b..12d171978538 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -4396,6 +4396,21 @@ void set_numabalancing_state(bool enabled)
+ 	__set_numabalancing_state(enabled);
+ }
+ 
++inline int numa_balancing_mode(struct mm_struct *mm)
++{
++	int numab = mm->numab_enabled;
++
++	switch (numab) {
++	case NUMAB_ENABLED:
++		return NUMA_BALANCING_NORMAL;
++	case NUMAB_DISABLED:
++		return NUMA_BALANCING_DISABLED;
++	case NUMAB_DEFAULT:
++	default:
++		return sysctl_numa_balancing_mode;
++	}
++}
++
+ #ifdef CONFIG_PROC_SYSCTL
+ static void reset_memory_tiering(void)
+ {
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index ef0e6b3e08ff..87215b3776c9 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -2818,6 +2818,24 @@ void task_numa_free(struct task_struct *p, bool final)
+ 	}
+ }
+ 
++inline bool numa_balancing_enabled(struct task_struct *p)
++{
++	if (p->mm) {
++		int numab = p->mm->numab_enabled;
++
++		switch (numab) {
++		case NUMAB_ENABLED:
++			return true;
++		case NUMAB_DISABLED:
++			return false;
++		case NUMAB_DEFAULT:
++			break;
++		}
++	}
++
++	return static_branch_unlikely(&sched_numa_balancing);
++}
++
+ /*
+  * Got a PROT_NONE fault for a page on @node.
+  */
+@@ -2830,13 +2848,13 @@ void task_numa_fault(int last_cpupid, int mem_node, int pages, int flags)
+ 	struct numa_group *ng;
+ 	int priv;
+ 
+-	if (!static_branch_likely(&sched_numa_balancing))
+-		return;
+-
+ 	/* for example, ksmd faulting in a user's mm */
+ 	if (!p->mm)
+ 		return;
+ 
++	if (!numa_balancing_enabled(p))
++		return;
++
+ 	/*
+ 	 * NUMA faults statistics are unnecessary for the slow memory
+ 	 * node for memory tiering mode.
+@@ -3151,7 +3169,7 @@ static void update_scan_period(struct task_struct *p, int new_cpu)
+ 	int src_nid = cpu_to_node(task_cpu(p));
+ 	int dst_nid = cpu_to_node(new_cpu);
+ 
+-	if (!static_branch_likely(&sched_numa_balancing))
++	if (!numa_balancing_enabled(p))
+ 		return;
+ 
+ 	if (!p->mm || !p->numa_faults || (p->flags & PF_EXITING))
+@@ -7996,7 +8014,7 @@ static int migrate_degrades_locality(struct task_struct *p, struct lb_env *env)
+ 	unsigned long src_weight, dst_weight;
+ 	int src_nid, dst_nid, dist;
+ 
+-	if (!static_branch_likely(&sched_numa_balancing))
++	if (!numa_balancing_enabled(p))
+ 		return -1;
+ 
+ 	if (!p->numa_faults || !(env->sd->flags & SD_NUMA))
+@@ -11581,8 +11599,10 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
+ 		entity_tick(cfs_rq, se, queued);
+ 	}
+ 
+-	if (static_branch_unlikely(&sched_numa_balancing))
++#ifdef CONFIG_NUMA_BALANCING
++	if (numa_balancing_enabled(curr))
+ 		task_tick_numa(rq, curr);
++#endif
+ 
+ 	update_misfit_status(curr, rq);
+ 	update_overutilized_status(task_rq(curr));
+diff --git a/kernel/sys.c b/kernel/sys.c
+index 8a6432465dc5..11720a35455a 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -59,6 +59,7 @@
+ #include <linux/sched/coredump.h>
+ #include <linux/sched/task.h>
+ #include <linux/sched/cputime.h>
++#include <linux/sched/numa_balancing.h>
+ #include <linux/rcupdate.h>
+ #include <linux/uidgid.h>
+ #include <linux/cred.h>
+@@ -2101,6 +2102,23 @@ static int prctl_set_auxv(struct mm_struct *mm, unsigned long addr,
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_NUMA_BALANCING
++static int prctl_pid_numa_balancing_write(int numa_balancing)
++{
++	if (numa_balancing != PR_SET_NUMAB_DEFAULT
++	    && numa_balancing != PR_SET_NUMAB_DISABLED
++	    && numa_balancing != PR_SET_NUMAB_ENABLED)
++		return -EINVAL;
++	current->mm->numab_enabled = numa_balancing;
++	return 0;
++}
++
++static int prctl_pid_numa_balancing_read(void)
++{
++	return current->mm->numab_enabled;
++}
++#endif
++
+ static int prctl_set_mm(int opt, unsigned long addr,
+ 			unsigned long arg4, unsigned long arg5)
+ {
+@@ -2615,6 +2633,23 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+ 		error = set_syscall_user_dispatch(arg2, arg3, arg4,
+ 						  (char __user *) arg5);
+ 		break;
++#ifdef CONFIG_NUMA_BALANCING
++	case PR_NUMA_BALANCING:
++		switch (arg2) {
++		case PR_SET_NUMAB_DEFAULT:
++		case PR_SET_NUMAB_DISABLED:
++		case PR_SET_NUMAB_ENABLED:
++			error = prctl_pid_numa_balancing_write((int)arg2);
++			break;
++		case PR_GET_NUMAB:
++			error = put_user(prctl_pid_numa_balancing_read(), (int __user *)arg3);
++			break;
++		default:
++			error = -EINVAL;
++			break;
++		}
++		break;
++#endif
+ #ifdef CONFIG_SCHED_CORE
+ 	case PR_SCHED_CORE:
+ 		error = sched_core_share_pid(arg2, arg3, arg4, arg5);
+-- 
+2.20.1
+
