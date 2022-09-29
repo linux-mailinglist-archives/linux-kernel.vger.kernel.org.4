@@ -2,236 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847F25EF36B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289775EF36D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235332AbiI2K0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
+        id S235375AbiI2K1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235124AbiI2K0l (ORCPT
+        with ESMTP id S235354AbiI2K1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:26:41 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB88A30566;
-        Thu, 29 Sep 2022 03:26:40 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id sb3so1826231ejb.9;
-        Thu, 29 Sep 2022 03:26:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=btW9hAxG6Y4tXj/jMqjRoxtSzkcRFAo4VxBjFE727ts=;
-        b=fB30Dvc4wrN0qIKz9b06hxpoQh+dfM6f/i3bIqJqnX12K4Z6G7Q345tTWm6fRbPitH
-         /Qj4RssS7DsqFmUGIt17aC3GYClpNkBpNSWY4hwNdK/YNkmwNlEhZo4U5I2BNlu1jgmy
-         zJSzwlrkWglJlc4P+3n+tBvQuz42jzN+s/kbILpgVBwx43OsjXJ7nbesEEVUtaIlx9CA
-         +35EIFuoj4KcGhOzIRrDo31xNLnv6K4yPxgaphQqQjOboOlcx7ls/BkomkNpCNIK2AJh
-         PAr+kqmgevci9CGCUZ4SJl3vCND0my03auKA0C6hd2p0U6p4++x/OygEuIhNreVCe6lw
-         0HhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=btW9hAxG6Y4tXj/jMqjRoxtSzkcRFAo4VxBjFE727ts=;
-        b=5zIuVkxMsoC9ovxTv5izAs/l9WleRzZD4KgodvxUgdZy7C1LPfgzh6oi6rMHDHZ2gn
-         UU1sLERv2V4w7JgjAKDqIcVR61YrvmSzGEU/PTU9nhVFqsVX/Ccb2nIhLd18VV6jJgAI
-         P/WcXkE266hPgOY43KVptCHUyQmn9SfGjzEuTpIMCAYFhYmZy8UjNIE12TzSK5sK78Sw
-         xFaVvmWT2JF87Q6nQeVOvcPbP08krGF8WoGx/BOwLKsnBBI+nPcgsByEF3/IxxBPKOfc
-         BMiH4UUTcXnQZstiTXPNHpgpUSGswzG4dY4oPu+77KjpkJ+aSSQai7J6d4tWzTUCpeti
-         ybaA==
-X-Gm-Message-State: ACrzQf2mXYkac8c8bQc1VWkTQyLmS3L3zkXvH3b209Pg3dqd6g2zv1ye
-        O1njhZV7f0cAZoNChOoyOYk=
-X-Google-Smtp-Source: AMsMyM6kdVvs51Cq0ExTA8Vn8DgYKzyBs69shxjd5W7YepZDuzen8GqN5Ks2stY+KME0/OB2K1jf9g==
-X-Received: by 2002:a17:907:6297:b0:72f:9aad:fcb with SMTP id nd23-20020a170907629700b0072f9aad0fcbmr2094425ejc.161.1664447199215;
-        Thu, 29 Sep 2022 03:26:39 -0700 (PDT)
-Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id ky21-20020a170907779500b0073ae9ba9ba8sm3804816ejc.3.2022.09.29.03.26.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 03:26:38 -0700 (PDT)
-Message-ID: <94d829a6-d8c2-2106-2d7d-91a8cd3875ae@gmail.com>
-Date:   Thu, 29 Sep 2022 12:26:37 +0200
+        Thu, 29 Sep 2022 06:27:03 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A1D3CBF4;
+        Thu, 29 Sep 2022 03:26:57 -0700 (PDT)
+X-UUID: bcc7d032271e47f48add8213f160e488-20220929
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=wsUKJLhSYIayaF4qEX2zqgtQ6cU740L96TzpS6CtFpA=;
+        b=GtzGu5MbFpFbH3TAwB+8CKet9xU29PZFBByKkseWDJ57UVIwY8tmZEvVx8xF9LSmcVQTtqLRNnArBdvfNoFS/KjwAZs0FJ4wSbIRRvbhdD0mkkzCUTiqMjefy3MWjhUQRl4geZkNkZEY0swrE1pn2uArtVyd2QrfOwFMgCvk03s=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:44004c8a-f821-4d07-948c-4ed5128db573,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:b7f9a5e4-87f9-4bb0-97b6-34957dc0fbbe,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: bcc7d032271e47f48add8213f160e488-20220929
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <xinlei.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 566671871; Thu, 29 Sep 2022 18:26:52 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 29 Sep 2022 18:26:51 +0800
+Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 29 Sep 2022 18:26:50 +0800
+From:   <xinlei.lee@mediatek.com>
+To:     <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
+        <matthias.bgg@gmail.com>, <jitao.shi@mediatek.com>
+CC:     <linux-pwm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        xinlei lee <xinlei.lee@mediatek.com>
+Subject: [PATCH v3] pwm: mtk-disp: Fix the parameters calculated by the enabled flag of disp_pwm
+Date:   Thu, 29 Sep 2022 18:26:49 +0800
+Message-ID: <1664447209-19417-1-git-send-email-xinlei.lee@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v1 03/11] dt-bindings: pwm: rockchip: add
- rockchip,rk3128-pwm
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, u.kleine-koenig@pengutronix.de,
-        linux-rockchip@lists.infradead.org, philipp.tomsich@vrull.eu,
-        linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-pwm@vger.kernel.org, kever.yang@rock-chips.com,
-        zhangqing@rock-chips.com, linux-kernel@vger.kernel.org,
-        heiko@sntech.de
-References: <20220909212543.17428-1-jbx6244@gmail.com>
- <f5dd0ee4-d97e-d878-ffde-c06e9b233e38@gmail.com>
- <1662821635.180247.34700.nullmailer@robh.at.kernel.org>
- <1c13181b-8421-69d8-21ee-9742dd5f55dd@gmail.com>
- <20220912162159.GA1397560-robh@kernel.org>
- <37fd8d4b-3a66-bc51-c2dc-76c9e756fed8@gmail.com> <YzQ3He2wyD2bgxz1@orome>
-From:   Johan Jonker <jbx6244@gmail.com>
-In-Reply-To: <YzQ3He2wyD2bgxz1@orome>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: xinlei lee <xinlei.lee@mediatek.com>
 
+In the original mtk_disp_pwm_get_state() function, the result of reading
+con0 & BIT(0) is enabled as disp_pwm.
+In order to conform to the register table, we should use the disp_pwm
+base address as the enabled judgment.
 
-On 9/28/22 13:59, Thierry Reding wrote:
-> On Tue, Sep 13, 2022 at 04:38:32PM +0200, Johan Jonker wrote:
->>
->>
->> On 9/12/22 18:21, Rob Herring wrote:
->>> On Sat, Sep 10, 2022 at 09:48:04PM +0200, Johan Jonker wrote:
->>>> Reduced CC.
->>>>
->>>> Hi Rob,
->>>>
->>>
->>> Seemed like a simple enough warning to fix...
->>
->> Some examples for comment.
->> Let us know what would be the better solution?
->>
->> ===========================================================================
->>
->> option1:
->>
->> 	combpwm0: combpwm0 {
->> 		compatible = "rockchip,rv1108-combpwm";
->> 		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
->> 		#address-cells = <2>;
->> 		#size-cells = <2>;
->>
->> 		pwm0: pwm@20040000 {
->> 			compatible = "rockchip,rv1108-pwm";
->> 			reg = <0x20040000 0x10>;
->> 		};
->>
->> 		pwm1: pwm@20040010 {
->> 			compatible = "rockchip,rv1108-pwm";
->> 			reg = <0x20040010 0x10>;
->> 		};
->>
->> 		pwm2: pwm@20040020 {
->> 			compatible = "rockchip,rv1108-pwm";
->> 			reg = <0x20040020 0x10>;
->> 		};
->>
->> 		pwm3: pwm@20040030 {
->> 			compatible = "rockchip,rv1108-pwm";
->> 			reg = <0x20040030 0x10>;
->> 		};
->> 	};
->>
->> PRO:
->> - Existing driver might still work.
->> CON:
->> - New compatible needed to service the combined interrupts.
->> - Driver change needed.
->>
->> ===========================================================================
->> option 2:
->>
->> 	combpwm0: pwm@10280000 {
->> 		compatible = "rockchip,rv1108-pwm";
->> 		reg = <0x10280000 0x40>;
->> 		interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
->> 		#address-cells = <1>;
->> 		#size-cells = <0>;
->>
->> 		pwm4: pwm-4@0 {
->> 			reg = <0x0>;
->> 		};
->>
->> 		pwm5: pwm-5@10 {
->> 			reg = <0x10>;
->> 		};
->>
->> 		pwm6: pwm-6@20 {
->> 			reg = <0x20>;
->> 		};
->>
->> 		pwm7: pwm-7@30 {
->> 			reg = <0x30>;
->> 		};
->> 	};
->>
->> CON:
->> - Driver change needed.
->> - Not compatible with current drivers.
->>
->> ===========================================================================
->>
->> Current situation:
->>
->> 	pwm0: pwm@20040000 {
->> 		compatible = "rockchip,rv1108-pwm", "rockchip,rk3288-pwm";
->> 		reg = <0x20040000 0x10>;
->> 		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
->> 	};
->>
->> 	pwm1: pwm@20040010 {
->> 		compatible = "rockchip,rv1108-pwm", "rockchip,rk3288-pwm";
->> 		reg = <0x20040010 0x10>;
->> 		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
->> 	};
->>
->> 	pwm2: pwm@20040020 {
->> 		compatible = "rockchip,rv1108-pwm", "rockchip,rk3288-pwm";
->> 		reg = <0x20040020 0x10>;
->> 		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
->> 	};
->>
->> 	pwm3: pwm@20040030 {
->> 		compatible = "rockchip,rv1108-pwm", "rockchip,rk3288-pwm";
->> 		reg = <0x20040030 0x10>;
->> 		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
->> 	};
->>
->> CON:
->> - The property "interrupts 39" can only be claimed ones by one probe function at the time.
->> - Has a fall-back string for rk3288, but unknown identical behavior for interrupts ???
-> 
+Fixes: 3f2b16734914 ("pwm: mtk-disp: Implement atomic API .get_state()")
 
-> To be honest, all three descriptions look wrong to me. From the above it
-> looks like this is simply one PWM controller with four channels, so it
-> should really be described as such, i.e.:
-> 
-> 	pwm@20040030 {
-> 		compatible = "rockchip,rv1108-pwm";
-> 		reg = <0x20040030 0x40>;
-> 		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-> 	};
-> 
+Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
+---
+Base on the branch of Linux-next/master.
 
-Each PWM channel has it's own pinctrl.
-Not all channel pins are always in use for PWM exclusively.
-Your proposal would not allow pins to be used for other functions.
-More ideas with this interrupt? Please advise.
+change since v2:
+1. Modify the code for readability.
 
-===
+change since v1:
+1. Modify the way to set disp_pwm enbale.
+---
+---
+ drivers/pwm/pwm-mtk-disp.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-The SoCs PWM are configurable to operate in continuous mode (default mainline) or one-shot mode or capture mode.
-Is there any good example for one-shot mode interrupt use?
+diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
+index c605013e4114..3fbb4bae93a4 100644
+--- a/drivers/pwm/pwm-mtk-disp.c
++++ b/drivers/pwm/pwm-mtk-disp.c
+@@ -178,7 +178,7 @@ static void mtk_disp_pwm_get_state(struct pwm_chip *chip,
+ {
+ 	struct mtk_disp_pwm *mdp = to_mtk_disp_pwm(chip);
+ 	u64 rate, period, high_width;
+-	u32 clk_div, con0, con1;
++	u32 clk_div, pwm_en, con0, con1;
+ 	int err;
+ 
+ 	err = clk_prepare_enable(mdp->clk_main);
+@@ -197,7 +197,8 @@ static void mtk_disp_pwm_get_state(struct pwm_chip *chip,
+ 	rate = clk_get_rate(mdp->clk_main);
+ 	con0 = readl(mdp->base + mdp->data->con0);
+ 	con1 = readl(mdp->base + mdp->data->con1);
+-	state->enabled = !!(con0 & BIT(0));
++	pwm_en = readl(mdp->base + DISP_PWM_EN);
++	state->enabled = !!(pwm_en & mdp->data->enable_mask);
+ 	clk_div = FIELD_GET(PWM_CLKDIV_MASK, con0);
+ 	period = FIELD_GET(PWM_PERIOD_MASK, con1);
+ 	/*
+-- 
+2.18.0
 
-
-> Looking through existing Rockchip SoC DTSI files, though, it looks like
-> this has been done the wrong way since the beginning, so not sure if you
-> still want to fix it up.
-> 
-> This whole problem of dealing with a shared interrupt wouldn't be a
-> problem if this was described properly.
-> 
-> Thierry
