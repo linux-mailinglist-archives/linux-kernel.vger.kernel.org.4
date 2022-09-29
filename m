@@ -2,173 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7995EF38B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9B15EF38A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235570AbiI2Kbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
+        id S235558AbiI2KbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235560AbiI2KbZ (ORCPT
+        with ESMTP id S235511AbiI2KbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:31:25 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC485130BDF
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:31:20 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 28TAURvZ039233
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Thu, 29 Sep 2022 18:30:27 +0800 (CST)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 29 Sep 2022 18:30:27 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>,
-        <steve.kang@unisoc.com>
-Subject: [PATCH] mm: use stack_depot for recording kmemleak's backtrace
-Date:   Thu, 29 Sep 2022 18:30:07 +0800
-Message-ID: <1664447407-8821-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Thu, 29 Sep 2022 06:31:15 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCDC12AEF6;
+        Thu, 29 Sep 2022 03:31:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8D59ACE2165;
+        Thu, 29 Sep 2022 10:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E296C433D6;
+        Thu, 29 Sep 2022 10:31:07 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZGVo5oIP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1664447464;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=h81hop0B1+xC7B49mum+yJfc8MsW0yx1h63GCp9GbX0=;
+        b=ZGVo5oIPwO8k0ZCAj61ZkruJKe3SGg+nTBUvLkVnBYuR5ud4KF937Q/pVvImUWXCcBZFCX
+        Jk6kZrC7B4AW7WcGH06OkP7M0FXCHQB0FtXmVghCm+g8JFS8gJbT8Ua0PyfhwDpEpkfzzY
+        lfHfE+7WBwtk+/mz+BeEJ8YVVy/zpHw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c3102c19 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 29 Sep 2022 10:31:03 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Marco Elver <elver@google.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: [PATCH] prandom: make use of smaller types in prandom_u32_max
+Date:   Thu, 29 Sep 2022 12:30:59 +0200
+Message-Id: <20220929103059.277230-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 28TAURvZ039233
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+When possible at compile-time, make use of smaller types in
+prandom_u32_max(), so that we can use smaller batches from random.c,
+which in turn leads to a 2x or 4x performance boost. This makes a
+difference, for example, in kfence, which needs a fast stream of small
+numbers (booleans).
 
-Using stack_depot to record kmemleak's backtrace which has been implemented
-on slub for reducing redundant information.
+At the same time, we use the occasion to update the old documentation on
+these functions. prandom_u32() and prandom_bytes() have direct
+replacements now in random.h, while prandom_u32_max() remains useful as
+a prandom.h function, since it's not cryptographically secure by virtue
+of not being evenly distributed.
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+Cc: Marco Elver <elver@google.com>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- mm/kmemleak.c | 42 ++++++++++++++++++++++++++++++++----------
- 1 file changed, 32 insertions(+), 10 deletions(-)
+ include/linux/prandom.h | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index 1eddc01..8bbcce8 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -79,6 +79,7 @@
- #include <linux/mutex.h>
- #include <linux/rcupdate.h>
- #include <linux/stacktrace.h>
-+#include <linux/stackdepot.h>
- #include <linux/cache.h>
+diff --git a/include/linux/prandom.h b/include/linux/prandom.h
+index deace5fb4e62..78db003bc290 100644
+--- a/include/linux/prandom.h
++++ b/include/linux/prandom.h
+@@ -12,11 +12,13 @@
  #include <linux/percpu.h>
- #include <linux/memblock.h>
-@@ -159,8 +160,7 @@ struct kmemleak_object {
- 	u32 checksum;
- 	/* memory ranges to be scanned inside an object (empty for all) */
- 	struct hlist_head area_list;
--	unsigned long trace[MAX_TRACE];
--	unsigned int trace_len;
-+	depot_stack_handle_t trace_handle;
- 	unsigned long jiffies;		/* creation timestamp */
- 	pid_t pid;			/* pid of the current task */
- 	char comm[TASK_COMM_LEN];	/* executable name */
-@@ -346,8 +346,11 @@ static void print_unreferenced(struct seq_file *seq,
- 			       struct kmemleak_object *object)
+ #include <linux/random.h>
+ 
++/* Deprecated: use get_random_u32 instead. */
+ static inline u32 prandom_u32(void)
  {
- 	int i;
-+	unsigned long *entries;
-+	unsigned int nr_entries;
- 	unsigned int msecs_age = jiffies_to_msecs(jiffies - object->jiffies);
- 
-+	nr_entries = stack_depot_fetch(object->trace_handle, &entries);
- 	warn_or_seq_printf(seq, "unreferenced object 0x%08lx (size %zu):\n",
- 		   object->pointer, object->size);
- 	warn_or_seq_printf(seq, "  comm \"%s\", pid %d, jiffies %lu (age %d.%03ds)\n",
-@@ -356,10 +359,10 @@ static void print_unreferenced(struct seq_file *seq,
- 	hex_dump_object(seq, object);
- 	warn_or_seq_printf(seq, "  backtrace:\n");
- 
--	for (i = 0; i < object->trace_len; i++) {
--		void *ptr = (void *)object->trace[i];
--		warn_or_seq_printf(seq, "    [<%p>] %pS\n", ptr, ptr);
--	}
-+       for (i = 0; i < nr_entries; i++) {
-+               void *ptr = (void *)entries[i];
-+               warn_or_seq_printf(seq, "    [<%p>] %pS\n", ptr, ptr);
-+       }
+ 	return get_random_u32();
  }
  
- /*
-@@ -378,7 +381,8 @@ static void dump_object_info(struct kmemleak_object *object)
- 	pr_notice("  flags = 0x%x\n", object->flags);
- 	pr_notice("  checksum = %u\n", object->checksum);
- 	pr_notice("  backtrace:\n");
--	stack_trace_print(object->trace, object->trace_len, 4);
-+	if(object->trace_handle)
-+		stack_depot_print(object->trace_handle);
- }
- 
- /*
-@@ -591,6 +595,25 @@ static struct kmemleak_object *find_and_remove_object(unsigned long ptr, int ali
- 	return object;
- }
- 
-+#ifdef CONFIG_STACKDEPOT
-+static noinline depot_stack_handle_t set_track_prepare(void)
-+{
-+	depot_stack_handle_t trace_handle;
-+	unsigned long entries[MAX_TRACE];
-+	unsigned int nr_entries;
-+
-+	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 3);
-+	trace_handle = stack_depot_save(entries, nr_entries, GFP_NOWAIT);
-+
-+	return trace_handle;
-+}
-+#else
-+static inline depot_stack_handle_t set_track_prepare(void)
-+{
-+	return 0;
-+}
-+#endif
-+
- /*
-  * Save stack trace to the given array of MAX_TRACE size.
++/* Deprecated: use get_random_bytes instead. */
+ static inline void prandom_bytes(void *buf, size_t nbytes)
+ {
+ 	return get_random_bytes(buf, nbytes);
+@@ -37,17 +39,20 @@ void prandom_seed_full_state(struct rnd_state __percpu *pcpu_state);
+  * prandom_u32_max - returns a pseudo-random number in interval [0, ep_ro)
+  * @ep_ro: right open interval endpoint
+  *
+- * Returns a pseudo-random number that is in interval [0, ep_ro). Note
+- * that the result depends on PRNG being well distributed in [0, ~0U]
+- * u32 space. Here we use maximally equidistributed combined Tausworthe
+- * generator, that is, prandom_u32(). This is useful when requesting a
+- * random index of an array containing ep_ro elements, for example.
++ * Returns a pseudo-random number that is in interval [0, ep_ro). This is
++ * useful when requesting a random index of an array containing ep_ro elements,
++ * for example. The result is somewhat biased when ep_ro is not a power of 2,
++ * so do not use this for cryptographic purposes.
+  *
+  * Returns: pseudo-random number in interval [0, ep_ro)
   */
-@@ -654,7 +677,7 @@ static struct kmemleak_object *__create_object(unsigned long ptr, size_t size,
- 	}
+ static inline u32 prandom_u32_max(u32 ep_ro)
+ {
+-	return (u32)(((u64) prandom_u32() * ep_ro) >> 32);
++	if (__builtin_constant_p(ep_ro <= 1U << 8) && ep_ro <= 1U << 8)
++		return (get_random_u8() * ep_ro) >> 8;
++	if (__builtin_constant_p(ep_ro <= 1U << 16) && ep_ro <= 1U << 16)
++		return (get_random_u16() * ep_ro) >> 16;
++	return ((u64)get_random_u32() * ep_ro) >> 32;
+ }
  
- 	/* kernel backtrace */
--	object->trace_len = __save_stack_trace(object->trace);
-+	object->trace_handle = set_track_prepare();
- 
- 	raw_spin_lock_irqsave(&kmemleak_lock, flags);
- 
-@@ -694,7 +717,6 @@ static struct kmemleak_object *__create_object(unsigned long ptr, size_t size,
- 	rb_link_node(&object->rb_node, rb_parent, link);
- 	rb_insert_color(&object->rb_node, is_phys ? &object_phys_tree_root :
- 					  &object_tree_root);
--
- 	list_add_tail_rcu(&object->object_list, &object_list);
- out:
- 	raw_spin_unlock_irqrestore(&kmemleak_lock, flags);
-@@ -1094,7 +1116,7 @@ void __ref kmemleak_update_trace(const void *ptr)
- 	}
- 
- 	raw_spin_lock_irqsave(&object->lock, flags);
--	object->trace_len = __save_stack_trace(object->trace);
-+	object->trace_handle = set_track_prepare();
- 	raw_spin_unlock_irqrestore(&object->lock, flags);
- 
- 	put_object(object);
+ /*
 -- 
-1.9.1
+2.37.3
 
