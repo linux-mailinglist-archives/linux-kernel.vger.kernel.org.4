@@ -2,102 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F795EFF41
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 23:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE125EFF3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 23:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiI2V1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 17:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
+        id S229942AbiI2V11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 17:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiI2V1X (ORCPT
+        with ESMTP id S229819AbiI2V1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 17:27:23 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8AB140F20;
-        Thu, 29 Sep 2022 14:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=K7HkydYtQjNwz29N2ZiCUMTHJkR3b/p2rE+Pb09h/o4=; b=CcSGLj4sMlhvqOt1nNry4YXbLV
-        5jUAawuSHfkDPsMHZXyM7tQ1XdWFhbEfsewPxBVdViE7Q/I9Gn0MQoV/fdRmpxgLrLJiGQj1iApIt
-        eleBkwN0r3UpZRVYwwn7VB+328R4JzinwjtF45pv8JwwNGaP5mDz3unhJwwoIbf6TMdmEDyea/JmV
-        4e3S/jaxfbCtFwp4ugft8Ck256yF6+Yj8WwdbTw6l8QjyAlM+lro0A1YuH6PgaFfbidVS/UNpWwnr
-        +hJ0XdhrEbwkkzm9NwOOZQOhfjGcAR1YVv8+5a2OkFOguNyUx7RtWJrMxrIodNXHrNsfDDYe6iUDh
-        pZ5uDLXA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1oe13v-00566n-2a;
-        Thu, 29 Sep 2022 21:27:19 +0000
-Date:   Thu, 29 Sep 2022 22:27:19 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Subject: Re: [PATCH 3/4] proc: Point /proc/net at /proc/thread-self/net
- instead of /proc/self/net
-Message-ID: <YzYNtzDPZH1YWflz@ZenIV>
-References: <dacfc18d6667421d97127451eafe4f29@AcuMS.aculab.com>
- <CAHk-=wgS_XpzEL140ovgLwGv6yXvV7Pu9nKJbCuo5pnRfcEbvg@mail.gmail.com>
- <YzXo/DIwq65ypHNH@ZenIV>
- <YzXrOFpPStEwZH/O@ZenIV>
- <CAHk-=wjLgM06JrS21W4g2VquqCLab+qu_My67cv6xuH7NhgHpw@mail.gmail.com>
- <YzXzXNAgcJeJ3M0d@ZenIV>
- <CAHk-=wgiBBXeY9ioZ8GtsxAcd42c265zwN7bYVY=cir01OimzA@mail.gmail.com>
- <YzYMQDTAYCCax0WZ@ZenIV>
+        Thu, 29 Sep 2022 17:27:22 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331A71449E7;
+        Thu, 29 Sep 2022 14:27:21 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (97-113-250-99.tukw.qwest.net [97.113.250.99])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 850171AE;
+        Thu, 29 Sep 2022 14:27:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1664486840;
+        bh=b7ggKpXybDmgL6F0AfyIfdapD1XXHgq7iG/LCrC6YMs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W1bS9uCT4yzKF9g2hLBcpxmkYOCrohSo0u/NEbH7fy2PKJULKmzgIL1DjF52KB2Ni
+         tFSRXFT/8b8yCUIoHbOUZYbVaBOlZAtFISGYDJBC40ntxyJ9sZFny1ibpsWFgFspun
+         tUmLXfEcjiU//IihfLDO2I7geZc+hk+XmfbbJx0Q=
+Date:   Thu, 29 Sep 2022 14:27:19 -0700
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        openbmc@lists.ozlabs.org
+Subject: Re: [PATCH 2/3] dt-bindings: regulator: Add regulator-output binding
+Message-ID: <YzYNt+IQRomycRLs@hatter.bewilderbeest.net>
+References: <20220925220319.12572-1-zev@bewilderbeest.net>
+ <20220925220319.12572-3-zev@bewilderbeest.net>
+ <20220929210714.GA2684335-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <YzYMQDTAYCCax0WZ@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220929210714.GA2684335-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 10:21:04PM +0100, Al Viro wrote:
-> On Thu, Sep 29, 2022 at 02:13:57PM -0700, Linus Torvalds wrote:
-> > On Thu, Sep 29, 2022 at 12:34 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> > >
-> > > Apparmor takes mount+dentry and turns that into pathname.  Then acts
-> > > upon the resulting string.  *AFTER* the original had been resolved.
-> > 
-> > Ok. So it would have to act like a bind mount.
-> > 
-> > Which is probably not too bad.
-> > 
-> > In fact, maybe it would be ok for this to act like a hardlink and just
-> > fill in the inode - not safe for a filesystem in general due to the
-> > whole rename loop issue, but for /proc it might be fine?
-> 
-> _Which_ hardlink?
-> 
-> Linus, where in dentry tree would you want it to be seen?  Because
-> apparmor profile wants /proc/net/dev to land at /proc/<pid>/net/dev
-> and will fail with anything else.
-> 
-> Do you really want multiple dentries with the same name in the same
-> parent, refering to different directory inodes with different contents?
-> 
-> And that's different inodes with different contents - David's complaint
-> is precisely about seeing the same thing for all threads and apparmor
-> issue is with *NOT* seeing each of those things at the same location.
+On Thu, Sep 29, 2022 at 02:07:14PM PDT, Rob Herring wrote:
+>On Sun, Sep 25, 2022 at 03:03:18PM -0700, Zev Weiss wrote:
+>> This describes a power output supplied by a regulator, such as a
+>> power outlet on a power distribution unit (PDU).
+>>
+>> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+>> ---
+>>  .../bindings/regulator/regulator-output.yaml  | 47 +++++++++++++++++++
+>>  1 file changed, 47 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/regulator/regulator-output.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/regulator/regulator-output.yaml b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+>> new file mode 100644
+>> index 000000000000..40953ec48e9e
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/regulator/regulator-output.yaml
+>> @@ -0,0 +1,47 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +
+>> +$id: http://devicetree.org/schemas/regulator/regulator-output.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Regulator output connector
+>> +
+>> +maintainers:
+>> +  - Zev Weiss <zev@bewilderbeest.net>
+>> +
+>> +description: |
+>> +  This describes a power output connector supplied by a regulator,
+>> +  such as a power outlet on a power distribution unit (PDU).  The
+>> +  connector may be standalone or merely one channel or set of pins
+>> +  within a ganged physical connector carrying multiple independent
+>> +  power outputs.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: regulator-output
+>> +
+>> +  vout-supply:
+>> +    description:
+>> +      Phandle of the regulator supplying the output.
+>> +
+>> +  regulator-leave-on:
+>> +    description: |
+>> +      If the regulator is enabled when software relinquishes control
+>> +      of it (such as when shutting down) it should be left enabled
+>> +      instead of being turned off.
+>> +    type: boolean
+>
+>I'm not too sure about this one as there could be various times when
+>control is relinquished. It is userspace closing its access?
+>driver unbind? module unload? Does a bootloader pay attention to this?
+>
+>Rob
 
-Put it another way:
+Thanks for the feedback, Rob -- I'll admit I was a bit unsure how to 
+approach that, and this may well not be the right answer.  What I'm 
+really aiming for is an appropriate way to express that regulator on/off 
+state should only ever be changed by explicit (external, e.g. userspace) 
+request, never as any sort of default/automatic action.  The two obvious 
+things to guard against there seem to be automatic enablement during 
+initialization and automatic disablement on de-init (shutdown, unbind, 
+etc.).  The former I think can be avoided by simply not setting 
+regulator-boot-on, so I added this as a corresponding property to avoid 
+the latter.
 
-David:
-	when I'm opening /proc/net/whatever, I want its contents to match
-	this thread's netns, not that of some other thread.
-dhclient+apparmor:
-	whatever you get from /proc/net/dev, it would better be at
-	/proc/<pid>/net/dev, no matter which thread you happen to be.
+I'm definitely open to suggestions for a better approach though.
 
-It's not that we want to see the same thing in several places; it's that
-we want to see *different* things in the same place.  Opposite to what
-hardlinks or bindings would be about.
+
+Thanks,
+Zev
+
