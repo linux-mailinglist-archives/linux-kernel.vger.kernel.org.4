@@ -2,154 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144505EF3FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3BC5EF3FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235304AbiI2LKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S235321AbiI2LKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235105AbiI2LKd (ORCPT
+        with ESMTP id S235126AbiI2LKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:10:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87BD929825
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:10:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B016B15BF;
-        Thu, 29 Sep 2022 04:10:38 -0700 (PDT)
-Received: from e126311.manchester.arm.com (unknown [10.57.64.220])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 962983F73B;
-        Thu, 29 Sep 2022 04:10:28 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 12:10:17 +0100
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Jian-Min Liu <jian-min.liu@mediatek.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Patrick Bellasi <patrick.bellasi@matbug.net>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Jonathan JMChen <jonathan.jmchen@mediatek.com>
-Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
-Message-ID: <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
-References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
- <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
- <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
+        Thu, 29 Sep 2022 07:10:35 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBE27E830
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:10:33 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id u18so1702177lfo.8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:10:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=TznUKUpOR5bT2ATdHCJ+/WNeel+FbNVXEkaira9S44s=;
+        b=W/EMeosjlY79B5ub5OzSbI6nWjVAxkO2wuduXHmuPfJIA+Q66yv4HKpFF1BLPDHYaZ
+         e7uZ4iSRb2YmLATy8AIorcxCzo6S4cnLLJLUtPQKEEGnZeUXc63XpaYood+YYEoXnsVs
+         l8gECi1RDH9gnCeBEMxIDh/NyoXoWU90LvQmKA3Kcq/ZsJ47k+UtLf6oCOx2M9h9Uel8
+         pDxeGliC5QwusCkmipJXIEvy4NxiC4UNEVNc0pkn2R3DzONHSqcxnY1CMkmlVUjH5RC7
+         AgONxxU1/S8i8NswIMxckitNpIQ064TIpA+GdNoJaymFxYi1o2J8KssWal9ww2QnkQ9S
+         kAUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=TznUKUpOR5bT2ATdHCJ+/WNeel+FbNVXEkaira9S44s=;
+        b=szQ3Hpo7SH7DwPWqk5GV50YtUKMvrxy5PPIjm3+mIp3cgwolidDNTdNOlS3RBRISzZ
+         mF5eKIO9Yc5ZPd5qBPuju7zfXS+hgUaE+4Ms+HfOdx/IJSj8sQYiqY3EfF5VyvQ7RY17
+         uMk/i8PjeTwIwlwgPXHpxGZO5J7bcQQHqMcjLP5BdI6aIqLzdCs/cx3yE9qPdM6EA8Dw
+         HThE8JYRoM1zF3+d0B5nYF7vAxcqHJEDooweoSTvAe21Y+G3ykGC0584yJuU1Y5W2i6k
+         /kyJqvp489JAQDtNK6rjvtpNgcZBOkVMJaNBkW6Mr5294yHJAKL+oRjM0pTA8SSWdo9C
+         PiYQ==
+X-Gm-Message-State: ACrzQf0k/OgC8VKlkqcGRGOHPwf/7eMxWugX+lqht1Qbx8mUliKqi16R
+        jJYuUXrTXc0wZXfvdEfLV0Slc1/DRby8ktuUKLRGI0SY8ZtAyg==
+X-Google-Smtp-Source: AMsMyM4bY1GS86CGyYczrTEEDATke+Pu9TNcvr+7vr3fP/R4xodtdUJsQXY5rPxsiXRLARFaOdlRfGxA14HlheT8IqQ=
+X-Received: by 2002:a05:6512:4016:b0:49a:81b3:808f with SMTP id
+ br22-20020a056512401600b0049a81b3808fmr1196726lfb.137.1664449831508; Thu, 29
+ Sep 2022 04:10:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <0000000000008af58705e9b32b1d@google.com> <14313951-15f1-0ceb-259c-f251eb140706@I-love.SAKURA.ne.jp>
+In-Reply-To: <14313951-15f1-0ceb-259c-f251eb140706@I-love.SAKURA.ne.jp>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 29 Sep 2022 13:10:19 +0200
+Message-ID: <CACT4Y+ZMXN=smH-0FN4Ui0zm6P-c=eEwG6fNJ9deTnc0M099UQ@mail.gmail.com>
+Subject: Re: [syzbot] unexpected kernel reboot (8)
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-kernel@vger.kernel.org,
+        syzbot <syzbot+8346a1aeed52cb04c9ba@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com,
+        Aleksandr Nogikh <nogikh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 11:47:23AM +0200, Peter Zijlstra wrote:
-
-[...]
-
-> Mostly I think you've demonstrated that none of this is worth it.
-> 
-> > -----------------------------------------------------------------------
-> > 
-> > HOK ... Honour Of Kings, Video game
-> > FHD ... Full High Definition
-> > fps ... frame per second
-> > pwr ... power consumption
-> > 
-> > table values are in %
-> 
-> Oh... that's bloody insane; that's why none of it makes sense.
-
-Hi,
-
-We have seen similar results to the ones provided by MTK while running
-Jankbench, a UI performance benchmark.
-
-For the following tables, the pelt numbers refer to multiplier values so
-pelt_1 -> 32ms, pelt_2 -> 16ms, pelt_4 -> 8ms.
-
-We can see the max frame durations decreasing significantly in line with
-changing the pelt multiplier. Having a faster-responding pelt lets us
-improve the worst-case scenario by a large margin which is why it can be
-useful in some cases where that worst-case scenario is important.
-
-Max frame duration (ms)
-
-+------------------+----------+
-| kernel          |    value  |
-|------------------+----------|
-| pelt_1           | 157.426  |
-| pelt_2           | 111.975  |
-| pelt_4           | 85.2713  |
-+------------------+----------+
-
-However, it is accompanied by a very noticeable increase in power usage.
-We have seen even bigger power usage increases for different workloads.
-This is why we think it makes much more sense as something that can be
-changed at runtime - if set at boot time the energy consumption increase
-would nullify any of the potential benefits. For limited workloads or
-scenarios, the tradeoff might be worth it.
-
-Power usage [mW]
-
-+------------------+---------+-------------+
-| kernel           |   value | perc_diff   |
-|------------------+---------+-------------|
-| pelt_1           |   139.9 | 0.0%        |
-| pelt_2           |   146.4 | 4.62%       |
-| pelt_4           |   158.5 | 13.25%      |
-+------------------+---------+-------------+
-
-At the same time we see that the average-case can improve slightly as
-well in the process and the consistency either doesn't get worse or
-improves a bit too.
-
-Mean frame duration (ms)
-
-+---------------+------------------+---------+-------------+
-| variable      | kernel           |   value | perc_diff   |
-|---------------+------------------+---------+-------------|
-| mean_duration | pelt_1           |    14.6 | 0.0%        |
-| mean_duration | pelt_2           |    13.8 | -5.43%      |
-| mean_duration | pelt_4           |    14.5 | -0.58%      |
-+---------------+------------------+---------+-------------+
-
-Jank percentage
-
-+------------+------------------+---------+-------------+
-| variable   | kernel           |   value | perc_diff   |
-|------------+------------------+---------+-------------|
-| jank_perc  | pelt_1           |     2.1 | 0.0%        |
-| jank_perc  | pelt_2           |     2.1 | 0.11%       |
-| jank_perc  | pelt_4           |     2   | -3.46%      |
-+------------+------------------+---------+-------------+
-
-> How is any of that an answer to:
+On Thu, 29 Sept 2022 at 12:25, Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
 >
->   "They want; I want an explanation of what exact problem is fixed how ;-)"
+> This is not a kernel bug but a fuzzer's bug.
 >
-> This is just random numbers showing poking the number has some effect;
-> it has zero explaination of why poking the number changes the workload
-> and if that is in fact the right way to go about solving that particular
-> issue.
+> Looking at https://syzkaller.appspot.com/text?tag=ReproC&x=155622df080000 ,
+> this reproducer is reading data from /dev/vcs to [0x20001dc0,0x20003DE0) range,
+> and passing subset of this range [0x20002300,0x20003300) as "const void *data"
+> argument of mount() syscall which is interpreted as a string.
+>
+> That is, this problem happens when console screen buffer by chance contained
+> kernel messages which the kernel has printk()ed upon boot.
+>
+> (I defer "#syz invalid" because we need to somehow fix this problem on the fuzzer side.)
 
-Overall, the problem being solved here is that based on our testing the
-PELT half life can occasionally be too slow to keep up in scenarios
-where many frames need to be rendered quickly, especially on high-refresh
-rate phones and similar devices. While it's not a problem most of the
-time and so it doesn't warrant changing the default or having it set at
-boot time, introducing this pelt multiplier would be very useful as a
-tool to be able to avoid the worst-case in limited scenarios.
+Oh, I see, I missed the read from /dev/vcs. Thanks for looking into it.
+Thinking of possible solutions I think the easiest thing is to
+stricten matching of the reboot message, e.g. require it to start from
+the beginning of the line, don't have anything at the end, etc. The
+real message should not be subject to any "corruptions".
 
-----
-Kajetan
++Aleksandr, please take care of this.
+
+Not sure if there should be a policy on printing user-provided strings
+to dmesg in general or not. Unpriv fs types like tmpfs/fuse
+effectively allow the injection of arbitrary messages into dmesg w/o
+the permission.
+
+
+> On 2022/09/28 11:03, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    1707c39ae309 Merge tag 'driver-core-6.0-rc7' of git://git...
+> > git tree:       upstream
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=17324288880000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=122d7bd4fc8e0ecb
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=8346a1aeed52cb04c9ba
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15ca1f54880000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=155622df080000
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+8346a1aeed52cb04c9ba@syzkaller.appspotmail.com
+>
