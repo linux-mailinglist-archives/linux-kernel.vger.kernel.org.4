@@ -2,176 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287FD5EEF70
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6635EEF6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235474AbiI2Hlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47930 "EHLO
+        id S235414AbiI2Hl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235357AbiI2HlU (ORCPT
+        with ESMTP id S235402AbiI2HlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:41:20 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3535E58DF8;
-        Thu, 29 Sep 2022 00:41:01 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MdQD44MHrzWh3G;
-        Thu, 29 Sep 2022 15:36:52 +0800 (CST)
-Received: from huawei.com (10.174.178.129) by kwepemi500016.china.huawei.com
- (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 29 Sep
- 2022 15:40:59 +0800
-From:   Kemeng Shi <shikemeng@huawei.com>
-To:     <tj@kernel.org>, <axboe@kernel.dk>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <shikemeng@huawei.com>
-Subject: [PATCH 3/3] block: Replace struct rq_depth with unsigned int in struct iolatency_grp
-Date:   Thu, 29 Sep 2022 15:40:55 +0800
-Message-ID: <20220929074055.30080-4-shikemeng@huawei.com>
-X-Mailer: git-send-email 2.14.1.windows.1
-In-Reply-To: <20220929074055.30080-1-shikemeng@huawei.com>
-References: <20220929074055.30080-1-shikemeng@huawei.com>
+        Thu, 29 Sep 2022 03:41:24 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2063.outbound.protection.outlook.com [40.107.102.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01F0139F63;
+        Thu, 29 Sep 2022 00:41:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ryx3yfXvtecTItWLsf2m+SiouZZjgMqWgnekfnO9wGVW7nvC7P3GLk/jeG2Irp6lAppjL0Svox4y114Ilf/Powokiy94v9KdiOsZ2YnE0yxBzhfGeF4WQT1Cb0c8GMM9O+waBr4I9zoqv1y7UUIi1NK81bcWJ4d0USIX0nGVs5z0IH5vLsBhvFHOKYVLx6+rxB+xBa2HwmARYtvlQ5cSI334wKvLrd42oC9r5GsZiaYS/FJGnJlfWg2rYdl2LgADk+SKLB4A9z+Yd8mSf/82yOhS8fewDhBAegH7nv1KpC2y/HmwhyuRLZyUWQaqO/iCQpYjRARGuwV2/e9+EJlK5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uutAxfsB8lTZgqcsUKcFWy7Wd5Mg0iAJzh4uOoSrvlg=;
+ b=mRHhbI3YDPo+gG41q2LftGenCaQ5RoA9SEab517JaRFvlhUgBWMzJJlqIYUMl3yGhaObku6PO6JY7ChkXACHqM/wZIRpjKS/6UEPM1rPJSphwlP+jqiNfBrkph1H858NGdthRGpU4Z4b+zLT5OZ1KXXgEHtlsW9HdOKzgMMtcwMT9z6W3IuXxArGYxHq00anCYtpX+861SqwKV0qwa5B2gPK3tQ2gblRQulhB9KqCQcVbzUtBicUnuzAuUKZ5PsKmBafdv73Yn3lNOx8/ufEmZa01Lg5x6g438NTgtFwZH+3gb6sZjuEp2ZMhZCpSzbiEURnPyoNyMwBbrJnM2de5Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uutAxfsB8lTZgqcsUKcFWy7Wd5Mg0iAJzh4uOoSrvlg=;
+ b=gOcqkHV0QOgVjmXF0mrAX8SksnjWuyXVb8AyU7pxF13jQPyvEkkWYswzdBdM5JCSPsmkj4zE9PyVj2TTxbujTujG/kcU+2WgLWPvUKoqQ+P8/17LXShBpgfALX7N9E4OfuEW2vFIlqEgKE8zbuVY+n/VXltciusa52gyLTQJs2thX0p5bLC14hHjK+wWEj6s9ZDbgQuy9zjsOUwvrdCs0Q6MblYc1W9U5UNC/U/pN/xcSflIcjPyM3PRO1rxAGPD328u8BSDoNcSYY5euQhsccoG88cPMPlHVkIQeD56k5FJ8XWHCrxc3c34IBYtK4mDaV+Py3nXvZEBHYgK+/Te+Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ DS0PR12MB7559.namprd12.prod.outlook.com (2603:10b6:8:133::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5654.25; Thu, 29 Sep 2022 07:41:02 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::b07f:53b1:426e:a29d]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::b07f:53b1:426e:a29d%5]) with mapi id 15.20.5676.017; Thu, 29 Sep 2022
+ 07:41:02 +0000
+Message-ID: <d9f3a797-3343-e868-b864-696cb3e7e878@nvidia.com>
+Date:   Thu, 29 Sep 2022 08:40:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/1] usb: gadget: tegra-xudc: Add Tegra234 SOC support
+Content-Language: en-US
+To:     Wayne Chang <waynec@nvidia.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>
+Cc:     Sing-Han Chen <singhanc@nvidia.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220928135502.3458833-1-waynec@nvidia.com>
+ <6648ece7-0a8e-2217-0c5a-5d58dd5a012c@nvidia.com>
+ <PH0PR12MB55006EF3D20D3A85062FAF85AF579@PH0PR12MB5500.namprd12.prod.outlook.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <PH0PR12MB55006EF3D20D3A85062FAF85AF579@PH0PR12MB5500.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0230.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:b::26) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.178.129]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|DS0PR12MB7559:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c867127-533d-4cb7-7d9f-08daa1edf56f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MgsRrAN6eVVMU6j+td+5uAYXst+Xs5g+F8c5Dt09Oy7Mx8MBCF9xjuVa1uRvwpzeF7Tv1sSiY+MaMyTBuiMs55zIJ5OjGYlyni/sjSIJ7y1RcNk7v/7Wk8FbIe2AIE1Eue03IYExu9raLEtiY3NFeLaXtQkMCxqe28f0mk3eLzTdebhoNOf0PS63SBGnPvypLrOiEt85T8nlHWEAXgUcUsVVoQ3dXA21fgzI6N2xu/LzvBRP4/uHo7NIMf3jdFDqO8fvBBJETYjX6hxeQ+PYyc3oFFxbvByfxU0Gn9c5g/3+3qRZgWub2SadMchBb5Zvn9HqbXSqDjjeGKEqNQIJgS6uYYNvBga667/4uJZroMC2FFpwx29QYqYjuAAmdCzy5OHyc5xTBvLa5sbMELSsQ+AayUI3KCGtNRwMyLVLCgTiMCKDU5WBFsadjNQgRhQHgee2PjfFltjQf5e7qjWrV3xqiQYmY2C3TLMrMyfLt8dqpkW5dLAly+XgT3/rC8OEuIX9Ug7iBACXRCgf7kXfLoo1Vf+tthiTnKI/XLDjp7rZXOMq9DssrfrH0ISeEBqpkov998RwHNHGAAgPuydCqPcRZEVrdFQ0ADlUe9+QnByG65M9FQQpTj2dc48YPBdX0kY/4DbT0/qvKb1UTzyI0+MYTWeh4wWdCcdV4hOPgr5iY2xMxzGGK/qZTuLAdPLPDemp7Z5kwXOmWiApoo3RFQeDO9BNjDyuLTJgcRpeIxOytl8QGe3mQkfP1/v0Tq2eeJNeRFrwn339aAkd4gLVdryHqm0O3sH9F5wx6SRqtzakx4zUT/3di7xRH5EFOp9RObBI0//SVyb69rpKLc6k87WSyv91z4f42f3dvYuM/rnQO79aFmg5lk56uc280jdB
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(376002)(396003)(39860400002)(136003)(451199015)(4326008)(316002)(6486002)(966005)(110136005)(478600001)(66946007)(66476007)(8676002)(66556008)(31686004)(186003)(6512007)(8936002)(6506007)(53546011)(2906002)(2616005)(36756003)(6666004)(41300700001)(38100700002)(54906003)(5660300002)(86362001)(31696002)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a0Q0OEM5VUhEMDVhYmIybjhEM21yVm9OS3k3Y3kzeU85M2Q0M3VFOWVRKytl?=
+ =?utf-8?B?azF2dVpYUTYzN2JnaG1zOFEzUVplV0Nocm5yOEdPNFkxTmxtYW1qUkMwYmtN?=
+ =?utf-8?B?S1lTeHBzNGZkWUhrcitJOUpqbnFOb252eDJkYlZuOHl3ajFaTmdFek9taW5q?=
+ =?utf-8?B?a3dnUUczSVRmTjd3UEdCTGY5aXVjL1YzWU9wY2lkOENyNyswYk5Ea0hwTGJm?=
+ =?utf-8?B?NEZjcDhuODJyZ3lpSExtUlJMWEZNM0tZRGhHdFAyZnFKZnVJNDJxbVE4eUlK?=
+ =?utf-8?B?S1FrWFBqRmNKc3FKcDlqYzJ1czBpRmFrbkV5VFhJZmVMa0tDYythcUVtMHFB?=
+ =?utf-8?B?ajZMTHRjMVFXS1BrOWZ6dU9rZVpkSFBETHRCTGxCa0tVZTRCd2RwR2hENmty?=
+ =?utf-8?B?L2hMckhvdDR5SzlZSGc5cmRaTDY2VEFYTHdsTVZZOUNPTUhYMGhtNlQvU2V6?=
+ =?utf-8?B?aTVpRjhQeHJqQmV1N3RaSXU3cnMzZWhFQW0yQ3J0ZlFwUVRlTzAzV3R0Ymgw?=
+ =?utf-8?B?TEJCYkwzQ2JZbFhGSHduL3llV2dsVEU3ei94OHVNbU9lSjFYTnUyNHYyd1Zn?=
+ =?utf-8?B?Nm9sYXA0V1dWNDRkaFVlcWdGeEptY2xBSXlaMHM2ejRlTzkzWjVhWklaYnA4?=
+ =?utf-8?B?bEF3NExEbnNYQks5M0EzaDIvdm45NENjaTdUaHAycUxTYnNwMjAreTA2NFM3?=
+ =?utf-8?B?NHZaa1JRcW9wdzhXWnNSL2Rwd1BHdWxLN3JqVlArT1J4NUtWT01sNmhDb1lI?=
+ =?utf-8?B?RGtsU256TTR5SENjS3JTTm1uNDNxbEhkN2w2ak1Tb1ZIa2JFMnkrNG51enVm?=
+ =?utf-8?B?Qy9abGdqdEx6N0hQVXNmSnNQV29sSDgrczNRV2p4K0QweUJ0SUc3VW1kRXZO?=
+ =?utf-8?B?Z21lQUxIQUlZT3h4ZzJNUm9WczMwNm9GMjRJdEs2RDNua1JaV1dJTUp4alVY?=
+ =?utf-8?B?M0ZoWTBYTk1WNThaR21SSjgxRUc4anlaZWxvQzBrUHlmZmhGa04zaDJMcEVI?=
+ =?utf-8?B?dmg1RTE2VGllRHdhUy8zRUxWQ0tKU3lzc3FiQXZLUnhtQzVRL3IvU1hoalNW?=
+ =?utf-8?B?ajcrZEt2Sll4N2c1dEg0WXh2c3AwSnlRYzQzd1JyMkU3bGVNTlRtNTg4SkJZ?=
+ =?utf-8?B?bFc0ZHlVdjJSdWlWTGpXS1hBMVlHMjVrM01JZ0JpRytNQUZPS0xSaUZrS3Ez?=
+ =?utf-8?B?YnpYbEpqZzQ4M0lrUStNZlF0dmpGRGxaK2hVMGpCWjkvR2tzVVpJZm44NU0x?=
+ =?utf-8?B?UnRPMGQ5Y1Bzc3RTT2JCQ3h2RXN5REh0ZG93NVJrTTRwQXg3VS9HUDVpT1Ex?=
+ =?utf-8?B?QmF4blRoYnU5Zmx0U0VTVm1wZ3Z3V3ZYL0FMYk54MVdEQ2hJVWhiSEJzcGFP?=
+ =?utf-8?B?UDFTWGRYbVdtUFAvcDFpZHBUY1dUd2tFeTNiSWE5dHd5ekNQUXZuUlpoM2l0?=
+ =?utf-8?B?NHJ2S2twcEZJVDFFR3BFSHBjbkNJSSsxZmVWemVudzNVbWR4OTRrRUVxWVQz?=
+ =?utf-8?B?MjdEaHdBTDIrUHpPREtab3AyZXlHYlRENXJwRHo0R1dwZEJYNWlTTUNuZGxj?=
+ =?utf-8?B?bnhDeDNrWDlXdG9GekRsQjlOMGxVRWlMLyttZVB1VG4waUNXMXRPcWd6R21I?=
+ =?utf-8?B?MWJMZTlCQXZPNk9WQW9UeHRHbVNxcU5LNXNVOE4yNG9ObHFLa1pGT2dwVnRE?=
+ =?utf-8?B?OWs1eGdLdTBMVGZhK2QxTXZBQ1QyeGQ1UE1xRm9qQkl6M3ViZHozdFhYYm12?=
+ =?utf-8?B?NG9ZRmhLRWRXZmwrZUcydDJYY1pSYnZiaU1KZVg3aGMzMWFzWDlkN0RzMzRz?=
+ =?utf-8?B?d1hEMG8wc1VwdTFtdXNsSE1DTkxwZ0NZQUcrbE9Pc08rVVk0N1RCRjFDbDBy?=
+ =?utf-8?B?Y1RNRDZHZTl6Nkd4dGVoaEljdFR1czhLdXJDYS9VNzZmazhSbEMzUkloY1lz?=
+ =?utf-8?B?RWtqek9CcUMrNnJUVS8zbHhUaEE1RUprOXFNTFZnYVJZN2xOZGQ2YWxKK0xU?=
+ =?utf-8?B?NUdGNnQ3Q3o3dzZaVVF0V3cwRFRQaTlRUnJVWWZRS3FlaHBiWTlHK2doSEFm?=
+ =?utf-8?B?WEg0U3JxemlVYzBwVm9UYzhWUG8vU3BUcTc4R0tmak03MGFzTGFwMk5GSnY1?=
+ =?utf-8?B?K3dPSVFvVktrNXdTSGRncW53Vm1IVDB1Vk02NXhrTkxiRlBtSVNLSDdjaHlQ?=
+ =?utf-8?Q?hTsvhQkt/1k5roxEhaWIJX8xVbJ6y8ZKC/QOD3pmEfyS?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c867127-533d-4cb7-7d9f-08daa1edf56f
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 07:41:02.6048
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wssn1HhEEXRSqYgpodnuTeHwD0sjDAi1FTPapo8njMJxKjn60GPMD3I1RDHT20nIPI9uE4/0noJ/FrX16DJXng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7559
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We only need a max queue depth for every iolatency to limit the inflight io
-number. Replace struct rq_depth with unsigned int to simplfy "struct
-iolatency_grp" and save memory.
 
-Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
----
- block/blk-iolatency.c | 28 +++++++++++++---------------
- 1 file changed, 13 insertions(+), 15 deletions(-)
+On 29/09/2022 04:46, Wayne Chang wrote:
+> Hi Jonathan,
+> 
+> Thanks for the review.
+> 
+> On 9/29/22 03:04, Jonathan Hunter wrote:
+>>
+>> On 28/09/2022 14:55, Wayne Chang wrote:
+>>> From: Sing-Han Chen <singhanc@nvidia.com>
+>>>
+>>> This commit adds XUSB device mode controller support on Tegra234 SoC.
+>>> Tegra234 XUDC is very similar to the existing Tegra194 XUDC.
+>>>
+>>> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
+>>> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+>>> ---
+>>>     drivers/usb/gadget/udc/tegra-xudc.c | 17 +++++++++++++++++
+>>>     1 file changed, 17 insertions(+)
+>>>
+>>> diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
+>>> index 3c37effdfa64..53277aa5a270 100644
+>>> --- a/drivers/usb/gadget/udc/tegra-xudc.c
+>>> +++ b/drivers/usb/gadget/udc/tegra-xudc.c
+>>> @@ -3656,6 +3656,19 @@ static struct tegra_xudc_soc tegra194_xudc_soc_data = {
+>>>     	.has_ipfs = false,
+>>>     };
+>>>     
+>>> +static struct tegra_xudc_soc tegra234_xudc_soc_data = {
+>>> +	.clock_names = tegra186_xudc_clock_names,
+>>> +	.num_clks = ARRAY_SIZE(tegra186_xudc_clock_names),
+>>> +	.num_phys = 4,
+>>> +	.u1_enable = true,
+>>> +	.u2_enable = true,
+>>> +	.lpm_enable = true,
+>>> +	.invalid_seq_num = false,
+>>> +	.pls_quirk = false,
+>>> +	.port_reset_quirk = false,
+>>> +	.has_ipfs = false,
+>>> +};
+>>> +
+>>>     static const struct of_device_id tegra_xudc_of_match[] = {
+>>>     	{
+>>>     		.compatible = "nvidia,tegra210-xudc",
+>>> @@ -3669,6 +3682,10 @@ static const struct of_device_id tegra_xudc_of_match[] = {
+>>>     		.compatible = "nvidia,tegra194-xudc",
+>>>     		.data = &tegra194_xudc_soc_data
+>>>     	},
+>>> +	{
+>>> +		.compatible = "nvidia,tegra234-xudc",
+>>> +		.data = &tegra234_xudc_soc_data
+>>> +	},
+>>
+>>
+>> The device-tree binding documentation is missing for this compatible
+>> string. Please send a patch to add this compatible string to the
+>> appropriate binding doc.
+> Thanks. Sent out the change to add the compatible string to xudc binding
+> doc.
+> 
+> https://lore.kernel.org/all/20220929034221.3817058-1-waynec@nvidia.com/T/#u
 
-diff --git a/block/blk-iolatency.c b/block/blk-iolatency.c
-index 2666afd7abdb..55bc742d3b66 100644
---- a/block/blk-iolatency.c
-+++ b/block/blk-iolatency.c
-@@ -141,7 +141,7 @@ struct iolatency_grp {
- 	struct latency_stat __percpu *stats;
- 	struct latency_stat cur_stat;
- 	struct blk_iolatency *blkiolat;
--	struct rq_depth rq_depth;
-+	unsigned int max_depth;
- 	struct rq_wait rq_wait;
- 	atomic64_t window_start;
- 	atomic_t scale_cookie;
-@@ -280,7 +280,7 @@ static void iolat_cleanup_cb(struct rq_wait *rqw, void *private_data)
- static bool iolat_acquire_inflight(struct rq_wait *rqw, void *private_data)
- {
- 	struct iolatency_grp *iolat = private_data;
--	return rq_wait_inc_below(rqw, iolat->rq_depth.max_depth);
-+	return rq_wait_inc_below(rqw, iolat->max_depth);
- }
- 
- static void __blkcg_iolatency_throttle(struct rq_qos *rqos,
-@@ -372,7 +372,7 @@ static void scale_change(struct iolatency_grp *iolat, bool up)
- {
- 	unsigned long qd = iolat->blkiolat->rqos.q->nr_requests;
- 	unsigned long scale = scale_amount(qd, up);
--	unsigned long old = iolat->rq_depth.max_depth;
-+	unsigned long old = iolat->max_depth;
- 
- 	if (old > qd)
- 		old = qd;
-@@ -384,12 +384,12 @@ static void scale_change(struct iolatency_grp *iolat, bool up)
- 		if (old < qd) {
- 			old += scale;
- 			old = min(old, qd);
--			iolat->rq_depth.max_depth = old;
-+			iolat->max_depth = old;
- 			wake_up_all(&iolat->rq_wait.wait);
- 		}
- 	} else {
- 		old >>= 1;
--		iolat->rq_depth.max_depth = max(old, 1UL);
-+		iolat->max_depth = max(old, 1UL);
- 	}
- }
- 
-@@ -442,7 +442,7 @@ static void check_scale_change(struct iolatency_grp *iolat)
- 	}
- 
- 	/* We're as low as we can go. */
--	if (iolat->rq_depth.max_depth == 1 && direction < 0) {
-+	if (iolat->max_depth == 1 && direction < 0) {
- 		blkcg_use_delay(lat_to_blkg(iolat));
- 		return;
- 	}
-@@ -450,7 +450,7 @@ static void check_scale_change(struct iolatency_grp *iolat)
- 	/* We're back to the default cookie, unthrottle all the things. */
- 	if (cur_cookie == DEFAULT_SCALE_COOKIE) {
- 		blkcg_clear_delay(lat_to_blkg(iolat));
--		iolat->rq_depth.max_depth = UINT_MAX;
-+		iolat->max_depth = UINT_MAX;
- 		wake_up_all(&iolat->rq_wait.wait);
- 		return;
- 	}
-@@ -505,7 +505,7 @@ static void iolatency_record_time(struct iolatency_grp *iolat,
- 	 * We don't want to count issue_as_root bio's in the cgroups latency
- 	 * statistics as it could skew the numbers downwards.
- 	 */
--	if (unlikely(issue_as_root && iolat->rq_depth.max_depth != UINT_MAX)) {
-+	if (unlikely(issue_as_root && iolat->max_depth != UINT_MAX)) {
- 		u64 sub = iolat->min_lat_nsec;
- 		if (req_time < sub)
- 			blkcg_add_delay(lat_to_blkg(iolat), now, sub - req_time);
-@@ -916,7 +916,7 @@ static void iolatency_ssd_stat(struct iolatency_grp *iolat, struct seq_file *s)
- 	}
- 	preempt_enable();
- 
--	if (iolat->rq_depth.max_depth == UINT_MAX)
-+	if (iolat->max_depth == UINT_MAX)
- 		seq_printf(s, " missed=%llu total=%llu depth=max",
- 			(unsigned long long)stat.ps.missed,
- 			(unsigned long long)stat.ps.total);
-@@ -924,7 +924,7 @@ static void iolatency_ssd_stat(struct iolatency_grp *iolat, struct seq_file *s)
- 		seq_printf(s, " missed=%llu total=%llu depth=%u",
- 			(unsigned long long)stat.ps.missed,
- 			(unsigned long long)stat.ps.total,
--			iolat->rq_depth.max_depth);
-+			iolat->max_depth);
- }
- 
- static void iolatency_pd_stat(struct blkg_policy_data *pd, struct seq_file *s)
-@@ -941,12 +941,12 @@ static void iolatency_pd_stat(struct blkg_policy_data *pd, struct seq_file *s)
- 
- 	avg_lat = div64_u64(iolat->lat_avg, NSEC_PER_USEC);
- 	cur_win = div64_u64(iolat->cur_win_nsec, NSEC_PER_MSEC);
--	if (iolat->rq_depth.max_depth == UINT_MAX)
-+	if (iolat->max_depth == UINT_MAX)
- 		seq_printf(s, " depth=max avg_lat=%llu win=%llu",
- 			avg_lat, cur_win);
- 	else
- 		seq_printf(s, " depth=%u avg_lat=%llu win=%llu",
--			iolat->rq_depth.max_depth, avg_lat, cur_win);
-+			iolat->max_depth, avg_lat, cur_win);
- }
- 
- static struct blkg_policy_data *iolatency_pd_alloc(gfp_t gfp,
-@@ -990,9 +990,7 @@ static void iolatency_pd_init(struct blkg_policy_data *pd)
- 	latency_stat_init(iolat, &iolat->cur_stat);
- 	rq_wait_init(&iolat->rq_wait);
- 	spin_lock_init(&iolat->child_lat.lock);
--	iolat->rq_depth.queue_depth = blkg->q->nr_requests;
--	iolat->rq_depth.max_depth = UINT_MAX;
--	iolat->rq_depth.default_depth = iolat->rq_depth.queue_depth;
-+	iolat->max_depth = UINT_MAX;
- 	iolat->blkiolat = blkiolat;
- 	iolat->cur_win_nsec = 100 * NSEC_PER_MSEC;
- 	atomic64_set(&iolat->window_start, now);
+OK. Always best to send out these patches in a series together. I see 
+Krzysztof asking for the driver and DTS change. Given that we are 
+already at v6.0-rc7 this will not make v6.1, and so good to put all the 
+patches together in a series and resend.
+
+Thanks
+Jon
+
 -- 
-2.30.0
-
+nvpublic
