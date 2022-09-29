@@ -2,122 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649D35EF19B
+	by mail.lfdr.de (Postfix) with ESMTP id AFB125EF19C
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 11:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235440AbiI2JO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 05:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
+        id S235577AbiI2JPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 05:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235187AbiI2JOv (ORCPT
+        with ESMTP id S235197AbiI2JOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 05:14:51 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9C933A3A
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:14:49 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id a8so1280189lff.13
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 02:14:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=oG4V5/QKWGgMxbROXthhVPDw1tYajaC1j8zKjAVTP/s=;
-        b=c+1JB19/ob7FNVZB/2s6KeGqwM+0h262yjV6pFpJoWRYNfkqsSKvy+yVJzknHkjfNU
-         lLfSzR97ENtQJy9aoN9v18N0H4QxmiZiFTx7/PZnEn0sykS6rDyzm28jeReR8HecnPha
-         6DYDrGQBn7eyY6Q4u1BNvmgjD5GbVUEW06P/wOY8+4uKEdx5F7mMS0XKBAv/Lo+AJpcJ
-         WGrM2HbkTlMoRAbQSueMKblT3ORqDufwswRs+MBHeiTvUxH8itXoNFH6y+3/+lsqEth5
-         6a6GTb5fJY5APEfI9aZEklCjB/RfFKGZI+NKeJMffrOroP7EMivYLJWboaXrThcgmjjc
-         Ddfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=oG4V5/QKWGgMxbROXthhVPDw1tYajaC1j8zKjAVTP/s=;
-        b=e2H7zUJmUG7QL/d+qN1iWI7jRLXOWUctBbiBOBAcpFutn3TDWMrOnsPIwcv6+wV5Gl
-         r5k76kpEKRUuAjRosRuSdMP3RS2/KCVyatwHTL6o4auoSmPcmor3VrBxeUCnaru0CW3X
-         nqDpqLa8BER6M+TqOTimr3HKNPPeowqLcgPT2CCv2XkxWFwxmuH6qQM2jy3GAKLaOjVD
-         gAi014tsB4qGvytCieSQYYQ/OCV0kgByPHlzxKseJ1A6KLX88yagKuvZcmHfTKmZQh+I
-         UAZzEoVBQI4RANiwD8au37rCNTEuS3NrYjMvqscICFbH9bQ7LbOeXEJ1FiraDkAJZcnP
-         kF1g==
-X-Gm-Message-State: ACrzQf2TQ/4Wdy9YguxGq1sRkEVf1WT4Lz5lauFkBn4OMLD0YEMO3th0
-        CqAGjmsojyO3k1IUQXxVYqAwHw==
-X-Google-Smtp-Source: AMsMyM6jS636wjyiYHep3uGw4IsbjoNSvQqDnO5vRLd2ADo8AYrRIjxlkUmi0s2cwHxd8kptP/2owg==
-X-Received: by 2002:a05:6512:1592:b0:4a0:2c52:d128 with SMTP id bp18-20020a056512159200b004a02c52d128mr916510lfb.288.1664442887396;
-        Thu, 29 Sep 2022 02:14:47 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id u22-20020ac243d6000000b00497a7dfe6a9sm729393lfl.64.2022.09.29.02.14.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 02:14:47 -0700 (PDT)
-Message-ID: <4d391a78-f524-5bb7-92e0-9778396ed0cb@linaro.org>
-Date:   Thu, 29 Sep 2022 11:14:46 +0200
+        Thu, 29 Sep 2022 05:14:52 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2043B85D;
+        Thu, 29 Sep 2022 02:14:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5E51421CB1;
+        Thu, 29 Sep 2022 09:14:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1664442888; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i1u8z4WmR9zvDM9UGZ0h0jsxTnAaUNDEIhFM4nyq/PM=;
+        b=pSTH0nuXGokqjtwOc1Njlcdjqhl3KZN82uo0aaMtdAnQh9KDLOmHiHAMvFBOLV4PYjbuRO
+        aL16iAi4Oc3JoQkx7iay2MszmfEjL9ZHcesPa/FCL8X/pZBlLC2riFRgV9XH/shGsSOT6O
+        2362irwz5VzSGBz2DCZ73j+c+pWIAvI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1664442888;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i1u8z4WmR9zvDM9UGZ0h0jsxTnAaUNDEIhFM4nyq/PM=;
+        b=6BtohXscIn2X7OHJ3UG1L7/Pz/2sL4WtXKuVPUfV03r1kEuJZnKjhOIxIVOSPC5oSsvxFM
+        LTlIDKMHwrMXJVDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1996A1348E;
+        Thu, 29 Sep 2022 09:14:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Aq94BQhiNWOpMAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 29 Sep 2022 09:14:48 +0000
+Message-ID: <0eb638e3-b9ac-6dec-6881-b885c7874b45@suse.cz>
+Date:   Thu, 29 Sep 2022 11:14:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Update SNPS Phy params for
- SC7280
+Subject: Re: [PATCH] compiler_types.h: Test for __alloc_size__ again
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
+        Marco Elver <elver@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20220929081642.1932200-1-keescook@chromium.org>
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1664435628-4011-1-git-send-email-quic_kriskura@quicinc.com>
- <CAA8EJpr9pcN-SG-yQNUGEoHCmv74prChprj4f42PKpSAzGzVKQ@mail.gmail.com>
- <0cc382cb-b76e-a5a5-3480-47a451bdc958@quicinc.com>
- <CAA8EJprvHSFKS2ZOLyeYgUpj4Fzec01RhQ7=nUh=qDpYBe0hrA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAA8EJprvHSFKS2ZOLyeYgUpj4Fzec01RhQ7=nUh=qDpYBe0hrA@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220929081642.1932200-1-keescook@chromium.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 11:02, Dmitry Baryshkov wrote:
-> On Thu, 29 Sept 2022 at 11:54, Krishna Kurapati PSSNV
-> <quic_kriskura@quicinc.com> wrote:
->>
->>
->> On 9/29/2022 1:29 PM, Dmitry Baryshkov wrote:
->>> On Thu, 29 Sept 2022 at 10:14, Krishna Kurapati
->>> <quic_kriskura@quicinc.com> wrote:
->>>>
->>>> Override the SNPS Phy tuning parameters for SC7280 devices. These
->>>> values are common for both trogdor and herobrine variants.
->>>
->>> They are common for trogdor and herobrine, but should these parameters
->>> be a default? In other words, a random new device based on sc7280
->>> would more likely use these overrides or the hardware defaults?
->>>
->> Hi Dmitry,
->>
->>    Currently there are only two platforms, so I made these changes on
->> common dtsi. If a new platform comes (mostly it won't) we can override
->> them in platform specific file is what I thought.
+On 9/29/22 10:16, Kees Cook wrote:
+> While the "alloc_size" attribute is available on all GCC versions, I
+> forgot that it gets disabled explicitly by the kernel in GCC < 9.1 due
+> to misbehaviors. Add a note to the compiler_attributes.h entry for it,
+> and restore the #ifdef in compiler_types.h.
 > 
-> This is not how it usually works. The 'sc7280.dtsi' is not a 'common
-> dtsi' for trogdor and herobrine. It describes the SoC.
-> Thus in my opinion if these overrides should be a default to all
-> sc7280 platforms, this patch is fine. If these overrides are
-> applicable only to the two mentioned platforms, they should go to
-> respective platform-specific DT files.
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: Hao Luo <haoluo@google.com>
+> Cc: Marco Elver <elver@google.com>
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Link: https://lore.kernel.org/lkml/CAMuHMdXK+UN1YVZm9DenuXAM8hZRUZJwp=SXsueP7sWiVU3a9A@mail.gmail.com
+> Fixes: 63caa04ec60583b1 ("slab: Remove __malloc attribute from realloc functions")
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Dmitry's conclusion is correct here. The true question is whether these
-are properties of the SoC itself (so do not depend on the board or board
-layout) or these depend on design of board.
+Thanks, I decided to late squash it so we don't needlessly cause issues for
+people doing bisections with gcc-8 later.
 
-Best regards,
-Krzysztof
+> ---
+> I swear I sent this earlier today, but I don't see it on lore still. Resending,
+> so apologies if this is a duplicate.
+> ---
+>  include/linux/compiler_attributes.h | 3 ++-
+>  include/linux/compiler_types.h      | 9 +++++++--
+>  2 files changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index 465be5f072ff..55fbb6091ecf 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -65,7 +65,8 @@
+>  
+>  /*
+>   * Note: do not use this directly. Instead, use __alloc_size() since it is conditionally
+> - * available and includes other attributes.
+> + * available and includes other attributes. For GCC < 9.1, __alloc_size__ gets undefined
+> + * in compiler-gcc.h, due to misbehaviors.
+>   *
+>   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-alloc_005fsize-function-attribute
+>   * clang: https://clang.llvm.org/docs/AttributeReference.html#alloc-size
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index f141a6f6b9f6..0717534f8364 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -275,8 +275,13 @@ struct ftrace_likely_data {
+>   * be performing a _reallocation_, as that may alias the existing pointer.
+>   * For these, use __realloc_size().
+>   */
+> -#define __alloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__) __malloc
+> -#define __realloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__)
+> +#ifdef __alloc_size__
+> +# define __alloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__) __malloc
+> +# define __realloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__)
+> +#else
+> +# define __alloc_size(x, ...)	__malloc
+> +# define __realloc_size(x, ...)
+> +#endif
+>  
+>  #ifndef asm_volatile_goto
+>  #define asm_volatile_goto(x...) asm goto(x)
 
