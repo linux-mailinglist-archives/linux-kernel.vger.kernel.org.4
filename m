@@ -2,79 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1615EF0E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAD95EF0E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 10:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbiI2IvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 04:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
+        id S235144AbiI2IwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 04:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235023AbiI2IvI (ORCPT
+        with ESMTP id S234687AbiI2IwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:51:08 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B07211F132
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:51:06 -0700 (PDT)
-Received: from loongson-pc.loongson.cn (unknown [10.20.42.32])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxXWt5XDVjObIjAA--.5864S2;
-        Thu, 29 Sep 2022 16:51:05 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-Subject: [PATCH V2] LoongArch: Fix cpu name after s3/s4
-Date:   Thu, 29 Sep 2022 16:51:05 +0800
-Message-Id: <20220929085105.8653-1-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Thu, 29 Sep 2022 04:52:05 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA99312ED89
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 01:52:04 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 74B1B21B9B;
+        Thu, 29 Sep 2022 08:52:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664441523; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ffWNYmFzwrjWe/3G6b1ASR1aTachXTJ2+796fvJOEPg=;
+        b=mkdGZEPVkeuo0nZiAXHPXQDBjcYkjILKqlyu9PP5fPa8TSAnOHSmaUh23EOcypGiMOU5zr
+        DDYDaI+NAxcWMgEzb/nncqpFRieZveBnnEFS6G3W5BAhh/gzBzHL/Cb8P3+ruQ2/hFd0eY
+        5UyUpukd8tA7fPd22QRNxCs4VCWJLq4=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 58F652C146;
+        Thu, 29 Sep 2022 08:51:56 +0000 (UTC)
+Date:   Thu, 29 Sep 2022 10:52:02 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Mike Galbraith <efault@gmx.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH v4 2/2] lib/vsprintf: Initialize vsprintf's pointer hash
+ once the random core is ready.
+Message-ID: <YzVcsvw3wv0FVOZO@alley>
+References: <20220927104912.622645-1-bigeasy@linutronix.de>
+ <20220927104912.622645-3-bigeasy@linutronix.de>
+ <YzMnb8NWlCpqsqSG@alley>
+ <YzQP2OEVKgWtwsD4@linutronix.de>
+ <CAHmME9qzBRDfUh1vN6qW6BFuFz_qcuaEOR13Ojx2CzC_+CHxUw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxXWt5XDVjObIjAA--.5864S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZF4xZr4rAF1rCrykZFykGrg_yoWDXFc_Ga
-        n293ZrGFn3Ga4vva4DWF18Wr43A3W8XFyYv3y2y3y3Cr13Aw45Jr1qkw13AryayF4rWrZ8
-        uw4S93Wq9F4jkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbckYjsxI4VWkKwAYFVCjjxCrM7CY07I20VC2zVCF04k26cxKx2IY
-        s7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4
-        kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_
-        Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxV
-        W0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE
-        74AGY7Cv6cx26ryrJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07b0a0QUUUUU=
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9qzBRDfUh1vN6qW6BFuFz_qcuaEOR13Ojx2CzC_+CHxUw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On coming back from s3/s4, the cpu name will be overwritten
-in cpu_probe path of seconary cpu, so we adjust the postion
-of using cpu name existed in cpu hardware register, and only
-use it while failing to get cpu name from SMBIOS.
+On Wed 2022-09-28 11:21:05, Jason A. Donenfeld wrote:
+> On 9/28/22, Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
+> >
+> >> I could replace "system_unbound_wq" with "system_wq" when
+> >> pushing. Is anybody against it, please?
+> >
+> > so schedule_delayed_work() then?
 
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+yup.
 
-diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
-index 529ab8f44ec6..255a09876ef2 100644
---- a/arch/loongarch/kernel/cpu-probe.c
-+++ b/arch/loongarch/kernel/cpu-probe.c
-@@ -187,7 +187,9 @@ static inline void cpu_probe_loongson(struct cpuinfo_loongarch *c, unsigned int
- 	uint64_t *vendor = (void *)(&cpu_full_name[VENDOR_OFFSET]);
- 	uint64_t *cpuname = (void *)(&cpu_full_name[CPUNAME_OFFSET]);
- 
--	__cpu_full_name[cpu] = cpu_full_name;
-+	if (!__cpu_full_name[cpu])
-+		__cpu_full_name[cpu] = cpu_full_name;
-+
- 	*vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
- 	*cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
- 
--- 
-2.31.1
+> > I don't mind at all. I used that one just because serialisation is not
+> > needed and neither is the CPU important.
+> 
+> Indeed, given that this very much is unbound, I think Sebastian's
+> original patch makes most sense.
 
+Yes, the work does not need any specific CPU. The thing is that the
+normal system_wq is the preferred one. Any other workqueues should
+be used only when there is a particular reason for it.
+
+The unbound_wq should be used only when:
+
+    + the work needs a lot of CPU time.
+
+    + there are waves on related (sleeping) work items that might be
+      triggered from different CPUs.
+
+In our case, the work is only one and short. The preferred
+system_wq is perfectly fine.
+
+Best Regards,
+Petr
+
+PS: It is not obvious. Tejun told me this when I converted a kthread
+    into the workqueue API. Also I spent quite some time understanding
+    the workqueue code recently.
