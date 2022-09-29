@@ -2,120 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CEC5EF94C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1DD5EF94F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236026AbiI2Pma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
+        id S235716AbiI2Pms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236102AbiI2PmJ (ORCPT
+        with ESMTP id S234959AbiI2PmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:42:09 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E06ED5F4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:41:19 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id lc7so3695055ejb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:41:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=T6/M92tDqAap2CUetFUNSvf5fKxFn0XgEHDjWBCcOpg=;
-        b=l15LngSHAiInxobzxdMyeRClT0LlMX2C5EMzDAX4h4hOcSc2OPrJpSm1VN9Nj/mtup
-         t2gMXWCsesW4EnV98234v4+dUkc3mSve1WX7qAIrJK9g83K1ZsCB3nMrHIhum3heG5Rw
-         bDSXx+n/bu5AuF8DGZaMRx8C/mMDHovX95VqI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=T6/M92tDqAap2CUetFUNSvf5fKxFn0XgEHDjWBCcOpg=;
-        b=JwCIq447lkaiY9GV5L5E9KZ1WZklVCOac4J3CVR2ntMg0Cz77FJmwHGqQDqFqmnbgt
-         M+3+9XH7J/OJuLVsLzQedzdC66nK4PDW/ogCTXfx+UwUyL365n6qdoHE6xOdvFc2I2un
-         F30EiyVue7ikF0iUzGwiudWJgTZTTl1PqCCHlAzbaBFEJUCCAx3cICJc9dRY4y7c0UUV
-         0tu4eHNlmJ94ZsMeK78spcfvRmWJ6qDZXdz3uW7B2e8jbAWtYotZo6yj49TxdS/Laebu
-         j08JTDeSEgdXpyj7Oh3BQYJ7/MBH2IR9u+LgHdbxYLC6lZGvuXU4rtrahrW0S78agvq4
-         JWiw==
-X-Gm-Message-State: ACrzQf1on8P8oKBTDnegNoOMBu1em2DnX3m2Aha1dJ+OclE6GJB/zp+m
-        fZ3zuQMMH2zwidPDaMcQEaqi97pKeGbRuNP+
-X-Google-Smtp-Source: AMsMyM4I6vq6pXL/VV1cbW1E1qsnKcewbyPGqhvN/BKkbbChnz6Cq1M3f8GSUVABD+fBbz/1gMIriA==
-X-Received: by 2002:a17:907:162a:b0:783:d11a:a553 with SMTP id hb42-20020a170907162a00b00783d11aa553mr3266524ejc.482.1664466078009;
-        Thu, 29 Sep 2022 08:41:18 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id f24-20020a50fc98000000b00456d40f6b73sm5622389edq.87.2022.09.29.08.41.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 08:41:17 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id s14so2862687wro.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:41:17 -0700 (PDT)
-X-Received: by 2002:a5d:522f:0:b0:228:dc7f:b9a8 with SMTP id
- i15-20020a5d522f000000b00228dc7fb9a8mr2928239wra.617.1664466077020; Thu, 29
- Sep 2022 08:41:17 -0700 (PDT)
+        Thu, 29 Sep 2022 11:42:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BDED110EF1;
+        Thu, 29 Sep 2022 08:41:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6DB6615BF;
+        Thu, 29 Sep 2022 08:41:36 -0700 (PDT)
+Received: from [10.57.65.170] (unknown [10.57.65.170])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB29C3F792;
+        Thu, 29 Sep 2022 08:41:27 -0700 (PDT)
+Message-ID: <946d8ac2-6ff2-093a-ad3c-aa755e00d1dd@arm.com>
+Date:   Thu, 29 Sep 2022 16:41:22 +0100
 MIME-Version: 1.0
-References: <20220929012911.2521786-1-jason.yen@paradetech.corp-partner.google.com>
-In-Reply-To: <20220929012911.2521786-1-jason.yen@paradetech.corp-partner.google.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 29 Sep 2022 08:41:05 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Xauvh1XhMUQZc8cp3-Wo4TRgD1waLiwAXP5z8EBW9Nrg@mail.gmail.com>
-Message-ID: <CAD=FV=Xauvh1XhMUQZc8cp3-Wo4TRgD1waLiwAXP5z8EBW9Nrg@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: ps8640: Add software to support aux defer
-To:     Jason Yen <jason.yen@paradetech.corp-partner.google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Pin-yen Lin <treapking@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v1 03/11] dt-bindings: pwm: rockchip: add
+ rockchip,rk3128-pwm
+Content-Language: en-GB
+To:     Johan Jonker <jbx6244@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>, u.kleine-koenig@pengutronix.de,
+        linux-rockchip@lists.infradead.org, philipp.tomsich@vrull.eu,
+        linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-pwm@vger.kernel.org, kever.yang@rock-chips.com,
+        zhangqing@rock-chips.com, linux-kernel@vger.kernel.org,
+        heiko@sntech.de
+References: <20220909212543.17428-1-jbx6244@gmail.com>
+ <f5dd0ee4-d97e-d878-ffde-c06e9b233e38@gmail.com>
+ <1662821635.180247.34700.nullmailer@robh.at.kernel.org>
+ <1c13181b-8421-69d8-21ee-9742dd5f55dd@gmail.com>
+ <20220912162159.GA1397560-robh@kernel.org>
+ <37fd8d4b-3a66-bc51-c2dc-76c9e756fed8@gmail.com> <YzQ3He2wyD2bgxz1@orome>
+ <94d829a6-d8c2-2106-2d7d-91a8cd3875ae@gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <94d829a6-d8c2-2106-2d7d-91a8cd3875ae@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 2022-09-29 11:26, Johan Jonker wrote:
+> 
+> 
+> On 9/28/22 13:59, Thierry Reding wrote:
+>> On Tue, Sep 13, 2022 at 04:38:32PM +0200, Johan Jonker wrote:
+>>>
+>>>
+>>> On 9/12/22 18:21, Rob Herring wrote:
+>>>> On Sat, Sep 10, 2022 at 09:48:04PM +0200, Johan Jonker wrote:
+>>>>> Reduced CC.
+>>>>>
+>>>>> Hi Rob,
+>>>>>
+>>>>
+>>>> Seemed like a simple enough warning to fix...
+>>>
+>>> Some examples for comment.
+>>> Let us know what would be the better solution?
+>>>
+>>> ===========================================================================
+>>>
+>>> option1:
+>>>
+>>> 	combpwm0: combpwm0 {
+>>> 		compatible = "rockchip,rv1108-combpwm";
+>>> 		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+>>> 		#address-cells = <2>;
+>>> 		#size-cells = <2>;
+>>>
+>>> 		pwm0: pwm@20040000 {
+>>> 			compatible = "rockchip,rv1108-pwm";
+>>> 			reg = <0x20040000 0x10>;
+>>> 		};
+>>>
+>>> 		pwm1: pwm@20040010 {
+>>> 			compatible = "rockchip,rv1108-pwm";
+>>> 			reg = <0x20040010 0x10>;
+>>> 		};
+>>>
+>>> 		pwm2: pwm@20040020 {
+>>> 			compatible = "rockchip,rv1108-pwm";
+>>> 			reg = <0x20040020 0x10>;
+>>> 		};
+>>>
+>>> 		pwm3: pwm@20040030 {
+>>> 			compatible = "rockchip,rv1108-pwm";
+>>> 			reg = <0x20040030 0x10>;
+>>> 		};
+>>> 	};
+>>>
+>>> PRO:
+>>> - Existing driver might still work.
+>>> CON:
+>>> - New compatible needed to service the combined interrupts.
+>>> - Driver change needed.
+>>>
+>>> ===========================================================================
+>>> option 2:
+>>>
+>>> 	combpwm0: pwm@10280000 {
+>>> 		compatible = "rockchip,rv1108-pwm";
+>>> 		reg = <0x10280000 0x40>;
+>>> 		interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+>>> 		#address-cells = <1>;
+>>> 		#size-cells = <0>;
+>>>
+>>> 		pwm4: pwm-4@0 {
+>>> 			reg = <0x0>;
+>>> 		};
+>>>
+>>> 		pwm5: pwm-5@10 {
+>>> 			reg = <0x10>;
+>>> 		};
+>>>
+>>> 		pwm6: pwm-6@20 {
+>>> 			reg = <0x20>;
+>>> 		};
+>>>
+>>> 		pwm7: pwm-7@30 {
+>>> 			reg = <0x30>;
+>>> 		};
+>>> 	};
+>>>
+>>> CON:
+>>> - Driver change needed.
+>>> - Not compatible with current drivers.
+>>>
+>>> ===========================================================================
+>>>
+>>> Current situation:
+>>>
+>>> 	pwm0: pwm@20040000 {
+>>> 		compatible = "rockchip,rv1108-pwm", "rockchip,rk3288-pwm";
+>>> 		reg = <0x20040000 0x10>;
+>>> 		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+>>> 	};
+>>>
+>>> 	pwm1: pwm@20040010 {
+>>> 		compatible = "rockchip,rv1108-pwm", "rockchip,rk3288-pwm";
+>>> 		reg = <0x20040010 0x10>;
+>>> 		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+>>> 	};
+>>>
+>>> 	pwm2: pwm@20040020 {
+>>> 		compatible = "rockchip,rv1108-pwm", "rockchip,rk3288-pwm";
+>>> 		reg = <0x20040020 0x10>;
+>>> 		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+>>> 	};
+>>>
+>>> 	pwm3: pwm@20040030 {
+>>> 		compatible = "rockchip,rv1108-pwm", "rockchip,rk3288-pwm";
+>>> 		reg = <0x20040030 0x10>;
+>>> 		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+>>> 	};
+>>>
+>>> CON:
+>>> - The property "interrupts 39" can only be claimed ones by one probe function at the time.
+>>> - Has a fall-back string for rk3288, but unknown identical behavior for interrupts ???
+>>
+> 
+>> To be honest, all three descriptions look wrong to me. From the above it
+>> looks like this is simply one PWM controller with four channels, so it
+>> should really be described as such, i.e.:
+>>
+>> 	pwm@20040030 {
+>> 		compatible = "rockchip,rv1108-pwm";
+>> 		reg = <0x20040030 0x40>;
+>> 		interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+>> 	};
+>>
+> 
+> Each PWM channel has it's own pinctrl.
+> Not all channel pins are always in use for PWM exclusively.
+> Your proposal would not allow pins to be used for other functions.
 
-On Wed, Sep 28, 2022 at 6:29 PM Jason Yen
-<jason.yen@paradetech.corp-partner.google.com> wrote:
->
-> This chip can not handle aux defer if the host directly program
-> its aux registers to access edid/dpcd. So we need let software
-> to handle the aux defer situation.
->
-> Signed-off-by: Jason Yen <jason.yen@paradetech.corp-partner.google.com>
-> ---
->
->  drivers/gpu/drm/bridge/parade-ps8640.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
-> index 31e88cb39f8a..967dec840b91 100644
-> --- a/drivers/gpu/drm/bridge/parade-ps8640.c
-> +++ b/drivers/gpu/drm/bridge/parade-ps8640.c
-> @@ -303,6 +303,14 @@ static ssize_t ps8640_aux_transfer_msg(struct drm_dp_aux *aux,
->         case SWAUX_STATUS_ACKM:
->                 len = data & SWAUX_M_MASK;
->                 break;
-> +       case SWAUX_STATUS_DEFER:
-> +       case SWAUX_STATUS_I2C_DEFER:
-> +               if (is_native_aux)
-> +                       msg->reply |= DP_AUX_NATIVE_REPLY_DEFER;
-> +               else
-> +                       msg->reply |= DP_AUX_I2C_REPLY_DEFER;
-> +               len = data & SWAUX_M_MASK;
-> +               break;
+Why would you think that? It would just mean moving the pinctrl 
+selection down to the board level like for GPIOs - we manage just fine 
+with a single DT node per GPIO bank, and semantically PWMs have no 
+reason do be different. In fact on newer SoCs some PWM channels can be 
+muxed to multiple pins, so pinctrl really has to be at the board level 
+already in those casesa.
 
-Overall this looks OK to me, but please send a v2 that removes the
-line above that states:
+The TRMs seem pretty clear that the "new" PWM block from RK3288 onwards 
+is a single module with 4 channels, not 4 independent controllers, so it 
+seems to have been an unfortunate mistake not to create a new binding 
+for it at that point. It would be a little fiddly, but far from 
+impossible, to make the driver support both the existing binding and a 
+new one (and I don't see how we could use the interrupt on newer SoCs 
+*without* a binding change, given that the interrupt status register is 
+outside any channel's current "reg"), but an old kernel with a new DT 
+would be more problematic. If we kept the existing compatibles then an 
+old driver would always use channel 0 regardless of what the consumer 
+requested; using new compatibles as well means the old kernel loses PWM 
+functionality entirely, which is arguably "safe", but I'm not sure if 
+it's really better or worse :/
 
-/* Ignore the DEFER cases as they are already handled in hardware */
+Robin.
 
--Doug
+> More ideas with this interrupt? Please advise.
+> 
+> ===
+> 
+> The SoCs PWM are configurable to operate in continuous mode (default mainline) or one-shot mode or capture mode.
+> Is there any good example for one-shot mode interrupt use?
+> 
+> 
+>> Looking through existing Rockchip SoC DTSI files, though, it looks like
+>> this has been done the wrong way since the beginning, so not sure if you
+>> still want to fix it up.
+>>
+>> This whole problem of dealing with a shared interrupt wouldn't be a
+>> problem if this was described properly.
+>>
+>> Thierry
+> 
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
