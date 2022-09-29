@@ -2,59 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0DE5F0014
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 00:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9209A5F000F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Sep 2022 00:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiI2W1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 18:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
+        id S229962AbiI2W07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 18:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiI2W1I (ORCPT
+        with ESMTP id S229608AbiI2W04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 18:27:08 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA2A15E479;
-        Thu, 29 Sep 2022 15:27:04 -0700 (PDT)
-X-QQ-mid: bizesmtp88t1664490413t16ssqjp
-Received: from localhost.localdomain ( [113.72.146.201])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Sep 2022 06:26:52 +0800 (CST)
-X-QQ-SSF: 01000000002000305000B00A0000000
-X-QQ-FEAT: YHTLUubWl26ZkpaLq7zsbw4d8O56YD7LwT0wcBWFjGJFdn4RvGt4in89BcWGS
-        U6clL3z7tkZIWNwlFhVpyr0KfLiD+6L4Z0fsnaOfFw/ykvRIRzdXo9a4m3v4nLGj8OJ+6ro
-        wYOvz1LQ7AuWSC/crvH5NIKCF1oDmolC74QTQNe7YX2te+tAYPeHVxX0X6boWdm+YILDCy5
-        EGNDuwpkZufDYaJs308Z7yglt9m7hA1eOjXvVK4FqZBTPpaQbNJT9c1oSCt8c+h6GCZyVrs
-        TC0oRjlfZonYAs86W/lahhg+ftUX496LzCyngeyGzZAyomv583Kz7NO4o/43WjLEUz53IWj
-        W2nzW0C27gumiS9wusps+Y5af8OuauMG/u9rWp6ZGlkcSJoaLzFc94tbXu0W93b73GIXw4G
-        n9xRBLJPbl/z4Lah4K4BeQ==
-X-QQ-GoodBg: 0
-From:   Hal Feng <hal.feng@linux.starfivetech.com>
-To:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Hal Feng <hal.feng@linux.starfivetech.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 17/30] dt-bindings: clock: Add starfive,jh7110-clkgen-sys bindings
-Date:   Fri, 30 Sep 2022 06:26:47 +0800
-Message-Id: <20220929222647.23816-1-hal.feng@linux.starfivetech.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        Thu, 29 Sep 2022 18:26:56 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB941514E0;
+        Thu, 29 Sep 2022 15:26:53 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 4FD0E1884CB0;
+        Thu, 29 Sep 2022 22:26:51 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 418CD2500370;
+        Thu, 29 Sep 2022 22:26:51 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 2A0289EC0007; Thu, 29 Sep 2022 22:26:51 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+MIME-Version: 1.0
+Date:   Fri, 30 Sep 2022 00:26:50 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <YzQJ5MRSL/ShRSgP@shredder>
+References: <20220908112044.czjh3xkzb4r27ohq@skbuf>
+ <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
+ <20220911001346.qno33l47i6nvgiwy@skbuf>
+ <15ee472a68beca4a151118179da5e663@kapio-technology.com>
+ <Yx73FOpN5uhPQhFl@shredder>
+ <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
+ <Yyq6BnUfctLeerqE@shredder>
+ <7a4549d645f9bbbf41e814f087eb07d1@kapio-technology.com>
+ <YzPwwuCe0HkJpkQe@shredder>
+ <0c6b93c828d9b52346ddb3d445446734@kapio-technology.com>
+ <YzQJ5MRSL/ShRSgP@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <e3ae7671490064eea8f548cb8769b573@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,93 +83,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emil Renner Berthing <kernel@esmil.dk>
+On 2022-09-28 10:46, Ido Schimmel wrote:
 
-Add bindings for the system clock generator on the JH7110
-RISC-V SoC by StarFive Technology Ltd.
+> "master" means manipulate the FDB of the master device. Therefore, the
+> replace command manipulates the FDB of br0.
+> 
+> "self" (which is the default [1]) means manipulate the FDB of the 
+> device
+> itself. In case of br0 it means manipulate the FDB of the bridge 
+> device.
+> For physical devices it usually translates to manipulating the unicast
+> address filter list.
 
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
----
- .../clock/starfive,jh7110-clkgen-sys.yaml     | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-sys.yaml
-
-diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-sys.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-sys.yaml
-new file mode 100644
-index 000000000000..290b730145ab
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-sys.yaml
-@@ -0,0 +1,69 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/starfive,jh7110-clkgen-sys.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: StarFive JH7110 System Clock Generator
-+
-+maintainers:
-+  - Emil Renner Berthing <kernel@esmil.dk>
-+  - Xingyu Wu <xingyu.wu@linux.starfivetech.com>
-+
-+properties:
-+  compatible:
-+    const: starfive,jh7110-clkgen-sys
-+
-+  clocks:
-+    items:
-+      - description: Main Oscillator (24 MHz)
-+      - description: RMII reference clock
-+      - description: RGMII RX clock
-+      - description: I2S TX bit clock
-+      - description: I2S TX left/right clock
-+      - description: I2S RX bit clock
-+      - description: I2S RX left/right clock
-+      - description: TDM
-+      - description: mclk
-+
-+  clock-names:
-+    items:
-+      - const: osc
-+      - const: gmac1_rmii_refin
-+      - const: gmac1_rgmii_rxin
-+      - const: i2stx_bclk_ext
-+      - const: i2stx_lrck_ext
-+      - const: i2srx_bclk_ext
-+      - const: i2srx_lrck_ext
-+      - const: tdm_ext
-+      - const: mclk_ext
-+
-+  '#clock-cells':
-+    const: 1
-+    description:
-+      See <dt-bindings/clock/starfive-jh7110-sys.h> for valid indices.
-+
-+required:
-+  - compatible
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    syscrg_clk: clock-controller@13020000 {
-+        compatible = "starfive,jh7110-clkgen-sys";
-+        clocks = <&osc>, <&gmac1_rmii_refin>,
-+                 <&gmac1_rgmii_rxin>,
-+                 <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
-+                 <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
-+                 <&tdm_ext>, <&mclk_ext>;
-+        clock-names = "osc", "gmac1_rmii_refin",
-+                      "gmac1_rgmii_rxin",
-+                      "i2stx_bclk_ext", "i2stx_lrck_ext",
-+                      "i2srx_bclk_ext", "i2srx_lrck_ext",
-+                      "tdm_ext", "mclk_ext";
-+        #clock-cells = <1>;
-+    };
--- 
-2.17.1
-
+Hi Ido, can you check the selftests of the v6 I have sent out using the 
+iproute2-next I have also sent?
