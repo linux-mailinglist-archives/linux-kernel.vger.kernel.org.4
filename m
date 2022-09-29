@@ -2,50 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B975EFCC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0495EFCC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235288AbiI2SOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S235402AbiI2SOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234024AbiI2SOK (ORCPT
+        with ESMTP id S235442AbiI2SOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:14:10 -0400
-Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EE31F4963;
-        Thu, 29 Sep 2022 11:14:09 -0700 (PDT)
-Received: from zoe.. (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-07.nifty.com with ESMTP id 28TICSkv009916;
-        Fri, 30 Sep 2022 03:12:29 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 28TICSkv009916
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664475149;
-        bh=/N85yOCsWCEX0gYKiIN6j0gQlvT6Zmx5QES3AFiJr2U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=0Gj46DYGz21vO+suWpGp4MkBwHqTb4FEzSuWHV/J21EgycYV34eZQGMAkjUgFMOf9
-         8eHKS8upXIiGxguZlNn7cX85bc5JxJImNuaL7lLxsE2lRvMip7isqyeGYcO7hXm5G2
-         7z5TBs2Wmm2cJOA2FahSUH4NC+qrpzYXEblZd3CykFLlXt2zyFogl4nwcC6VANIB+S
-         oH1UQFtihI5XY/pPYYOr1yHqNTzqDPyrU2ip2Qc1SGkzSWEoornqarBhxyyYAZY58F
-         0C12deiH0Z0DanvEV6HtPKp23o9KG/gvLSyxxXRTtvJu87YSeNPoly3vx8oXTo3St9
-         tWmlssaW3CF9Q==
-X-Nifty-SrcIP: [133.32.182.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
-Subject: [PATCH] Revert "kbuild: Check if linker supports the -X option"
-Date:   Fri, 30 Sep 2022 03:12:23 +0900
-Message-Id: <20220929181223.2502994-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        Thu, 29 Sep 2022 14:14:19 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEDC1F65EE
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:14:18 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3538689fc60so21384067b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=jYPKWuT1u5m0MnKr4TovJZUrMbudnfje+CzX8rxj9dY=;
+        b=Ury0CFn0zT2Q+dgdtmwk3iQr3s9PWnviEmpKdjL2ckeEaSmqrBmREvZyOZsYx7mfNx
+         ECzbRm2XMKNf8IHIfQieAGeVmFDIKL4DvNsgEpkMewEU+OzV/roiRamuWScwv9Oc1wRN
+         ijQp0mOci65LBvTFCA0oCNoNC8WlfpZsz+Tq7aVC8M0pO+Hj+OnGwI5r7GGQ2npv/b+V
+         21bRDiDcuTW39u8v2MFAmqGu/gcyiUSyN20+vWsHPh1gtHAvk8ThOVjIFxdOBhx8XTyc
+         jfszHIqgdfl0jAOVUeHhK+UvFa1CyD4djovV+L8K84r1YaiZsjc9wGyt7ZHsGqI8mieF
+         JEVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=jYPKWuT1u5m0MnKr4TovJZUrMbudnfje+CzX8rxj9dY=;
+        b=oVVhZXoJyf0RLnG9IfQuXV4WKxiP565a4DvAQz0LsbvgWHJaEXI2x0ACJJYgJxnxvr
+         fj+hl19n+9dhS/cUkZKC+TIYUBSUSb2dGGqVBODg43SMCDZuzqtebaNJ5Ou4rLnCU2L2
+         rsj5cqOic3BNonsLUj+khgPRpin8lBTNUv324Q+Ia2sdm+AKeQk1U4O16Hzdl9EOd5ER
+         BajfVQV6MdxgEXbogcFKQhbvW0e9FDHsy2YQ/2p/XmdVx1YBS+AZB9sskQJW2nCZpgGn
+         jNPVueM8aezc4pq6K9sDOGc0dkMBiwqBDgOUQZdvk5+vSAl87D/MJUYzOB7Sw6ynEuJR
+         oWtg==
+X-Gm-Message-State: ACrzQf02xVPLfeg0bVCpKeSExV0z0PWVZc6Q2iQQUIRA6cFgzdL+3WIq
+        JlmxO9Wkckp5JDrB8+EyIH0lTfI04w==
+X-Google-Smtp-Source: AMsMyM6Pf2IhccLpOcVpEi4t74u7CQmid4Z2TwcCudea8RUMSv/ibgUI3NSufaIAn+mbxQCtqU2gHTq9QA==
+X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
+ (user=nhuck job=sendgmr) by 2002:a25:9104:0:b0:6bc:5ecf:30b7 with SMTP id
+ v4-20020a259104000000b006bc5ecf30b7mr4758739ybl.293.1664475257510; Thu, 29
+ Sep 2022 11:14:17 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 11:14:11 -0700
+In-Reply-To: <20220919182832.158c0ea2@kernel.org>
+Mime-Version: 1.0
+References: <20220919182832.158c0ea2@kernel.org>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20220929181411.61331-1-nhuck@google.com>
+Subject: [PATCH v2] net: mana: Fix return type of mana_start_xmit
+From:   Nathan Huckleberry <nhuck@google.com>
+To:     kuba@kernel.org
+Cc:     davem@davemloft.net, decui@microsoft.com, edumazet@google.com,
+        error27@gmail.com, haiyangz@microsoft.com, kys@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        netdev@vger.kernel.org, nhuck@google.com, pabeni@redhat.com,
+        sthemmin@microsoft.com, trix@redhat.com, wei.liu@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,36 +72,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit d79a27195a33f4b5e591de5536799ad874ea6cf5.
+The ndo_start_xmit field in net_device_ops is expected to be of type
+netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 
-According to the commit description, this ld-option test was added for
-the gold linker at that time.
+The mismatched return type breaks forward edge kCFI since the underlying
+function definition does not match the function hook definition.
 
-Commit 75959d44f9dc ("kbuild: Fail if gold linker is detected") gave
-up the gold linker support after all.
+The return type of mana_start_xmit should be changed from int to
+netdev_tx_t.
 
-I tested the BFD linker from binutils 2.23 and LLD from LLVM 11.0.0.
-Both of them support the -X option.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+Cc: llvm@lists.linux.dev
+Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+Reviewed-by: Dexuan Cui <decui@microsoft.com>
 ---
 
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v1 -> v2
+- Update header file
 
-diff --git a/Makefile b/Makefile
-index 49dcae886c48..d7c85ec79000 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1037,7 +1037,7 @@ KBUILD_LDFLAGS	+= $(call ld-option,--no-warn-rwx-segments)
- endif
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 2 +-
+ include/net/mana/mana.h                       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+index 7ca313c7b7b3..a3df5678bb4f 100644
+--- a/drivers/net/ethernet/microsoft/mana/mana_en.c
++++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+@@ -141,7 +141,7 @@ static int mana_map_skb(struct sk_buff *skb, struct mana_port_context *apc,
+ 	return -ENOMEM;
+ }
  
- ifeq ($(CONFIG_STRIP_ASM_SYMS),y)
--LDFLAGS_vmlinux	+= $(call ld-option, -X,)
-+LDFLAGS_vmlinux	+= -X
- endif
+-int mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
++netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ {
+ 	enum mana_tx_pkt_format pkt_fmt = MANA_SHORT_PKT_FMT;
+ 	struct mana_port_context *apc = netdev_priv(ndev);
+diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
+index 20212ffeefb9..3bb579962a14 100644
+--- a/include/net/mana/mana.h
++++ b/include/net/mana/mana.h
+@@ -390,7 +390,7 @@ struct mana_port_context {
+ 	struct mana_ethtool_stats eth_stats;
+ };
  
- ifeq ($(CONFIG_RELR),y)
+-int mana_start_xmit(struct sk_buff *skb, struct net_device *ndev);
++netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev);
+ int mana_config_rss(struct mana_port_context *ac, enum TRI_STATE rx,
+ 		    bool update_hash, bool update_tab);
+ 
 -- 
-2.34.1
+2.38.0.rc1.362.ged0d419d3c-goog
 
