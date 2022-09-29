@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9541C5EEF21
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3103C5EEF24
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235285AbiI2HeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
+        id S235084AbiI2Hff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbiI2HeD (ORCPT
+        with ESMTP id S230015AbiI2Hfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:34:03 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39663138F3C
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:33:56 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id r6so756448wru.8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:33:56 -0700 (PDT)
+        Thu, 29 Sep 2022 03:35:30 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB9051402;
+        Thu, 29 Sep 2022 00:35:23 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id h7so753405wru.10;
+        Thu, 29 Sep 2022 00:35:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:to:from:date:from:to:cc
-         :subject:date;
-        bh=LGdaK3qy/JDlMc+f4v0ZcsQhNJbfdJpMi5Ol3/wPCKk=;
-        b=C7DW5l8OpKHmP6J6V6XnyMd4ELBO9nXmcVuh5O1Tuu/qJBKYpPWLDR1M36CCeg4kE2
-         jIMR3bON6AWvtvM3IRfICLSGx5mlYuHx/J1UOXL9MlX9qz6d1R7H9lx8yPn4Aqxqb/Un
-         ADycgQ1eJAkEd9cKoaSfQEqYPVMvNqCi7HVSN/efOIPDueo98/JjqZTSXcVHQ6BN9Rf7
-         93OkTEt2AzzGXOsKy67rKmC5iZyQifgAQQWVnuH18mZlFiG/8Ru/Pq/uUrWwMqJqTtUO
-         D6xd5InM5To3jRdClbT7qDwwTNEhTEgksZedemh4SG63you8vtotU5UhyiWZYZawaVsP
-         1+lA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=GRl+oMu7Ig6loanPDrU5KffQs98gJpdl7SVPVmkpeUs=;
+        b=XptR0Jko0ezYV8xZfhTNdfModNf63g9qzI2uE70iHH7JMDPV/Mey2Fr9Z1bwojW5Dx
+         Wr2tbrsMShd/hytA/qhsWyu2OllTuU45th9ttL1P438klGwOAy9E8kIl9jUlT930LGkE
+         MHFDaeTiX1XkAjfXR2pe8FtEv0R4LAUfF5g86ngPsIVUajnYxA2Doe6AvppEMvg6Mvlr
+         O4T46clxAg8BdZEpDYJYs2jiVt6QcnrFe5WJ/GeWgGqo80Qfpp7vNfUfjQlgT1dyAbym
+         AI6IcavxukZgrcMuyyTEUlujiw/B7nM+sU22BLxYRYc0Gajetj4u2LEyt2qlPJXWts4L
+         5+rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=LGdaK3qy/JDlMc+f4v0ZcsQhNJbfdJpMi5Ol3/wPCKk=;
-        b=IfOuV4pxUqhXd4BlkcwOL/+FCsONBgUS2fMZc6Dp8+LbH3Mf54A3ynxrnLHpCTea3B
-         4odzymhC/JhUu3L1okMi1Ck8GPAvjFawMzC3MyOR0sIKNZF8/inb4tqpQ5y0R1xOtNKW
-         kc8Z3J/VoCOLiqmGAeQhTfGYepgzL9xyGfE0197J5TQMgyZADu9fXk8gi2PzRL2RGVeY
-         4+yjn9UUR4UrgE4QQX+79QBDcBcm1LOMhtP/5FOI+NyAI5xyDUYrqS00nunqNBof8p2A
-         rT+ty3qTZQbmPdcWNuzYaDJcI4CRr7ri4iVRlfkqNHLJGSKWJo1KB1uW3WEsA+l5sOIU
-         RLQg==
-X-Gm-Message-State: ACrzQf1O0ryfQ9qfXtfclDb2pa5qqeW/WKdER6mDWFlg3kBmPFUXeHj2
-        DhekJQbIww5gPl3OaSAwofKMHw==
-X-Google-Smtp-Source: AMsMyM5HRXn6gLFEWsR4ZbAKJk9UifyyzLeCViBeeY4ueRh0LWXfbwVjiHlK38vaupC9+JIMdHfUEA==
-X-Received: by 2002:a05:6000:1d94:b0:22c:c4d1:3622 with SMTP id bk20-20020a0560001d9400b0022cc4d13622mr1095415wrb.63.1664436835053;
-        Thu, 29 Sep 2022 00:33:55 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id x12-20020a05600c2d0c00b003b51369fbbbsm3856730wmf.4.2022.09.29.00.33.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 00:33:54 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 09:33:53 +0200
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     heiko@sntech.de, davem@davemloft.net, herbert@gondor.apana.org.au,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH RFT 4/5] crypto: rockchip: support the new crypto IP for
- rk3568/rk3588
-Message-ID: <YzVKYWknb6EGEgyr@Red>
-References: <20220927080048.3151911-1-clabbe@baylibre.com>
- <20220927080048.3151911-5-clabbe@baylibre.com>
- <YzNtkiR/dD0aEZrv@aurel32.net>
+        bh=GRl+oMu7Ig6loanPDrU5KffQs98gJpdl7SVPVmkpeUs=;
+        b=omZH1iQe4nFnA08lvfehxSYqzxls8JNArZXaAH7ozL4n4YWLCIXN/gI3fclpaZtwQs
+         FN7Jqn/+xJZZKMKC4b5pYSeoWyyMsxgyjbOxCw0n4RbCBteOZi4tTfElaJ/rOUYUEiF/
+         RH4kqgUFIW/sRVV1znb91d83AoCOOgSWmWFk5txY3qUHG1CbdRSX70iGmPGMsZrsHyUB
+         I6s3RTQ9zcoLz3rrXHqvdpy5/zD9ic8U4f8aDL/MnvivArBj4nwPaCNiC0DfyWhiJL7A
+         HM65WkHA0psHnLN0r8o1/+A6xzW+uKrjKoPeIiQfPlUT+7S8779knmAHpjRPMQbEi/Ig
+         b8RQ==
+X-Gm-Message-State: ACrzQf20w5j2j5pLw6KjhElEup/V804dHPp6LmeXszsatlt3+1RLArum
+        YmMDjpg3es9x17wijpufwhg=
+X-Google-Smtp-Source: AMsMyM4EvRgq4gnZR1Iisps+1a9RfHGEa3bzDN7qrMsXr6sMPIvBaj2TODLQj9wFNMRjx2/q8J9W4A==
+X-Received: by 2002:a5d:6389:0:b0:22c:c497:4668 with SMTP id p9-20020a5d6389000000b0022cc4974668mr1132561wru.61.1664436921870;
+        Thu, 29 Sep 2022 00:35:21 -0700 (PDT)
+Received: from [192.168.178.202] (54.161.185.81.rev.sfr.net. [81.185.161.54])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003a5c244fc13sm4055195wms.2.2022.09.29.00.35.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 00:35:21 -0700 (PDT)
+Message-ID: <ceefc4c1-128b-6582-6074-378ad3ae7e0a@gmail.com>
+Date:   Thu, 29 Sep 2022 09:35:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH -next] tty: serial: atmel: driver depends on COMMON_CLK
+Content-Language: fr
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Sergiu Moga <sergiu.moga@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+References: <20220929054851.7723-1-rdunlap@infradead.org>
+From:   Richard Genoud <richard.genoud@gmail.com>
+In-Reply-To: <20220929054851.7723-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YzNtkiR/dD0aEZrv@aurel32.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,46 +77,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, Sep 27, 2022 at 11:39:30PM +0200, Aurelien Jarno a �crit :
-> On 2022-09-27 08:00, Corentin Labbe wrote:
-> > Rockchip rk3568 and rk3588 have a common crypto offloader IP.
-> > This driver adds support for it.
-> > 
-> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> > ---
-> >  drivers/crypto/rockchip/Kconfig               |  28 +
-> >  drivers/crypto/rockchip/Makefile              |   5 +
-> >  drivers/crypto/rockchip/rk3588_crypto.c       | 646 ++++++++++++++++++
-> >  drivers/crypto/rockchip/rk3588_crypto.h       | 221 ++++++
-> >  drivers/crypto/rockchip/rk3588_crypto_ahash.c | 346 ++++++++++
-> >  .../crypto/rockchip/rk3588_crypto_skcipher.c  | 340 +++++++++
-> >  6 files changed, 1586 insertions(+)
-> >  create mode 100644 drivers/crypto/rockchip/rk3588_crypto.c
-> >  create mode 100644 drivers/crypto/rockchip/rk3588_crypto.h
-> >  create mode 100644 drivers/crypto/rockchip/rk3588_crypto_ahash.c
-> >  create mode 100644 drivers/crypto/rockchip/rk3588_crypto_skcipher.c
-> > 
-> > diff --git a/drivers/crypto/rockchip/Kconfig b/drivers/crypto/rockchip/Kconfig
-> > index 1010d897d9ef..84ca1081fd0c 100644
-> > --- a/drivers/crypto/rockchip/Kconfig
-> > +++ b/drivers/crypto/rockchip/Kconfig
-> > @@ -26,3 +26,31 @@ config CRYPTO_DEV_ROCKCHIP_DEBUG
-> >  	  Say y to enable Rockchip crypto debug stats.
-> >  	  This will create /sys/kernel/debug/rk3288_crypto/stats for displaying
-> >  	  the number of requests per algorithm and other internal stats.
-> > +
-> > +config CRYPTO_DEV_ROCKCHIP2
-> > +	tristate "Rockchip's cryptographic offloader V2"
-> > +	depends on OF && ARCH_ROCKCHIP
-> > +	depends on PM
-> > +	select CRYPTO_ECB
-> > +	select CRYPTO_CBC
-> > +	select CRYPTO_AES
-> > +	select CRYPTO_MD5
-> > +	select CRYPTO_SHA1
-> > +	select CRYPTO_SHA256
-> > +	select CRYPTO_SM3
+Hi,
+Le 29/09/2022 à 07:48, Randy Dunlap a écrit :
+> Since atmel_serial.c uses interfaces that are provided by
+> the COMMON_CLK Kconfig symbol, the driver should depend on
+> COMMON_CLK to prevent build errors.
 > 
-> That should be CRYPTO_SM3_GENERIC
+> ld: drivers/tty/serial/atmel_serial.o: in function `atmel_serial_pm':
+> atmel_serial.c:(.text+0x1553): undefined reference to `__clk_is_enabled'
+> ld: drivers/tty/serial/atmel_serial.o: in function `atmel_set_termios':
+> atmel_serial.c:(.text+0x1dfe): undefined reference to `__clk_is_enabled'
+> 
+> Fixes: 5e3ce1f26129 ("tty: serial: atmel: Make the driver aware of the existence of GCLK")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Sergiu Moga <sergiu.moga@microchip.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Richard Genoud <richard.genoud@gmail.com>
+> Cc: linux-serial@vger.kernel.org
+> Cc: Jiri Slaby <jirislaby@kernel.org>
 
-Thanks I will fix it.
+There's already a patch fixing this, acked by Nicolas :
+https://lkml.org/lkml/2022/9/26/1587
+
+> ---
+>   drivers/tty/serial/Kconfig |    1 +
+>   1 file changed, 1 insertion(+)
+> 
+> --- a/drivers/tty/serial/Kconfig
+> +++ b/drivers/tty/serial/Kconfig
+> @@ -128,6 +128,7 @@ config SERIAL_SB1250_DUART_CONSOLE
+>   config SERIAL_ATMEL
+>   	bool "AT91 on-chip serial port support"
+>   	depends on ARCH_AT91 || COMPILE_TEST
+> +	depends on COMMON_CLK
+>   	select SERIAL_CORE
+>   	select SERIAL_MCTRL_GPIO if GPIOLIB
+>   	select MFD_AT91_USART
+
+Thanks !
+
+Regards,
+Richard
