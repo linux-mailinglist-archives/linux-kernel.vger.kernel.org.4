@@ -2,109 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F765EFEA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 22:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18DD5EFEA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 22:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiI2UZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 16:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S229616AbiI2U0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 16:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiI2UZj (ORCPT
+        with ESMTP id S229509AbiI2U0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 16:25:39 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA66773336
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 13:25:36 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id k5-20020a056e021a8500b002f62444c620so1957729ilv.21
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 13:25:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=UI22FiPQswYrRdyQExh609sgxrFQuRTQxjhukc8FmtY=;
-        b=MWhpSoZmfnWN9uJBoDhZF3Dm0ShAXZK6cjbDL2qWxAfGBTyKosH8w2fdE+8ybGX5rU
-         LaMCPAmLZNeJCVSDQ0Jfh1L1C4WyllRwvDHxppB6GonaMf70qewZkwPAlGSRAewwo9QP
-         s7zXFoCQ3foveDE7L7+YkvyymHVz04tHupBMqtzKJtmVYBf05pHIqj/LOH210czR7nB1
-         q8W7junSW5DxQHxO5KF8vp5uQ3JuGeYcFpwjRLzD6uFDmmKIYNnSKPI/UOvI9Cb/7wdA
-         XZmzhYEP8uRXTerUBDiugb6H3o+XT4uxscd5YcQtRrwgLXt+OoU0KaXuX2zNpOrVJfey
-         66/Q==
-X-Gm-Message-State: ACrzQf3kQkaOWf1OZMbOKZxwjimuTpUkf5rii/GnKZ7+yzuYxC2eGxsD
-        u/+ME8XruEASanM9tV8uafw3pummmn14PsOX/9PQmIBsKYdP
-X-Google-Smtp-Source: AMsMyM5o85Rtnb05obKIDqqaLPG8PtoP4p4Pi7MiqLywo05g05XZZOFyq+i6zqz91zZ1dXiExdOAJpR3Uw2LjPMKg3Zvk5nY1UwT
-MIME-Version: 1.0
-X-Received: by 2002:a92:c5b0:0:b0:2f6:a5f1:9311 with SMTP id
- r16-20020a92c5b0000000b002f6a5f19311mr2391742ilt.55.1664483136081; Thu, 29
- Sep 2022 13:25:36 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 13:25:36 -0700
-In-Reply-To: <0000000000008ea2da05e979435f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000f962805e9d6ae62@google.com>
-Subject: Re: [syzbot] kernel panic: stack is corrupted in writeback_single_inode
-From:   syzbot <syzbot+84b7b87a6430a152c1f4@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Thu, 29 Sep 2022 16:26:21 -0400
+Received: from premium237-5.web-hosting.com (premium237-5.web-hosting.com [66.29.146.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EC4FB33E;
+        Thu, 29 Sep 2022 13:26:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sladewatkins.net; s=default; h=To:References:Message-Id:
+        Content-Transfer-Encoding:Cc:Date:In-Reply-To:From:Subject:Mime-Version:
+        Content-Type:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+AfdzDbB6qFHwhHUz93W6CYPO+fA//BDSU2BSgua2ic=; b=f6tN5l7rsIrslJiGjUQ686RN10
+        E+xInOf2oYk4nJKU571gUNBhesBhcAG9uCYE+N6V0QRBFAVQjsS9r06z+Xfzxm57BjC7jUjVQVcDO
+        zQ+v+kWFDvFUaa96L88/t7KUb7TE9gtrCa5II5AmQBZEktvZSN/jIy0Li/szoCWNA0P1ksMrw2BIS
+        nnrv3O/TooLFtpzhtU18ruso1XDggw0ZK9IREQVe3h24qQByXQLaEv7aD1+fNWax+Kove7W/JAzk5
+        r7EQBhkFOLvJ5/7YxCShyNCliWWHVekfjIbUa/jHpu2w4jy8W/44fXMqrsCXNYMjU2l7Pkjms8Kwv
+        JMHb5jrg==;
+Received: from pool-108-4-135-94.albyny.fios.verizon.net ([108.4.135.94]:55375 helo=smtpclient.apple)
+        by premium237.web-hosting.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <srw@sladewatkins.net>)
+        id 1oe06s-004cQC-Bb;
+        Thu, 29 Sep 2022 16:26:18 -0400
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: Planned changes for bugzilla.kernel.org to reduce the "Bugzilla
+ blues"
+From:   Slade Watkins <srw@sladewatkins.net>
+In-Reply-To: <591ab7d4-b283-32bf-13d8-419a5b91c365@gmx.com>
+Date:   Thu, 29 Sep 2022 16:26:15 -0400
+Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        workflows@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        ksummit@lists.linux.dev
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F6A94603-563D-4627-A62F-9B9A48F3A3AD@sladewatkins.net>
+References: <aa876027-1038-3e4a-b16a-c144f674c0b0@leemhuis.info>
+ <05d149a0-e3de-8b09-ecc0-3ea73e080be3@leemhuis.info>
+ <93a37d72-9a88-2eec-5125-9db3d67f5b65@gmx.com>
+ <20220929130410.hxtmwmoogzkwcey7@meerkat.local>
+ <7b427b41-9446-063d-3161-e43eb2e353f9@gmx.com>
+ <20220929135325.4riz4ijva2vc7q5p@meerkat.local>
+ <95c3384b-53d0-fd6c-6ec5-a7e03fdeddfc@gmx.com>
+ <20220929153135.vu43n5kgdj4a3at6@meerkat.local>
+ <591ab7d4-b283-32bf-13d8-419a5b91c365@gmx.com>
+To:     "Artem S. Tashkinov" <aros@gmx.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - premium237.web-hosting.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - sladewatkins.net
+X-Get-Message-Sender-Via: premium237.web-hosting.com: authenticated_id: srw@sladewatkins.net
+X-Authenticated-Sender: premium237.web-hosting.com: srw@sladewatkins.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-From-Rewrite: unmodified, already matched
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi,
 
-HEAD commit:    c3e0e1e23c70 Merge tag 'irq_urgent_for_v6.0' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17ab519c880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ba0d23aa7e1ffaf5
-dashboard link: https://syzkaller.appspot.com/bug?extid=84b7b87a6430a152c1f4
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=157c2000880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=105224b8880000
+> On Sep 29, 2022, at 12:06 PM, Artem S. Tashkinov <aros@gmx.com> wrote:
+>=20
+> On 9/29/22 15:31, Konstantin Ryabitsev wrote:
+>>=20
+>>=20
+>> In fact, he probably did this by replying to emails, not via the web
+>> interface.
+>=20
+> Nope, I CC'ed him.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e7f1f925f94e/disk-c3e0e1e2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/830dabeedf0d/vmlinux-c3e0e1e2.xz
+I think you can still reply via email if you=E2=80=99re a Cc. Been a =
+while though.=20
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+84b7b87a6430a152c1f4@syzkaller.appspotmail.com
+Regardless =E2=80=94 not the point of the thread so it=E2=80=99s not =
+worth arguing about.
 
-loop0: detected capacity change from 0 to 8226
-Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: writeback_single_inode+0x8e7/0x8f0
-CPU: 0 PID: 10213 Comm: syz-executor262 Not tainted 6.0.0-rc7-syzkaller-00081-gc3e0e1e23c70 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- panic+0x2d6/0x715 kernel/panic.c:274
- __stack_chk_fail+0x12/0x20 kernel/panic.c:706
- writeback_single_inode+0x8e7/0x8f0
- write_inode_now+0x1cd/0x260 fs/fs-writeback.c:2723
- iput_final fs/inode.c:1735 [inline]
- iput+0x3e6/0x760 fs/inode.c:1774
- ntfs_fill_super+0x3af3/0x42a0 fs/ntfs3/super.c:1190
- get_tree_bdev+0x400/0x620 fs/super.c:1323
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5a7dd5549a
-Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 98 03 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffedfc06378 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f5a7dd5549a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffedfc06390
-RBP: 00007ffedfc06390 R08: 00007ffedfc063d0 R09: 00005555563ee2c0
-R10: 0000000000000000 R11: 0000000000000286 R12: 0000000000000004
-R13: 00007ffedfc063d0 R14: 0000000000000015 R15: 0000000020000db8
- </TASK>
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+-srw
 
