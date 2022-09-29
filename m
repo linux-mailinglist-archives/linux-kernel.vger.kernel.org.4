@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DAB5EEE66
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B415EEE67
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235109AbiI2HGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
+        id S234910AbiI2HG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234942AbiI2HFn (ORCPT
+        with ESMTP id S235072AbiI2HFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:05:43 -0400
+        Thu, 29 Sep 2022 03:05:44 -0400
 Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09CE7A741;
-        Thu, 29 Sep 2022 00:05:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06322131F55;
+        Thu, 29 Sep 2022 00:05:42 -0700 (PDT)
 Received: from ubuntu.. (1-171-217-173.dynamic-ip.hinet.net [1.171.217.173])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 7F7A33F13C;
-        Thu, 29 Sep 2022 07:05:33 +0000 (UTC)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 1940B3FC45;
+        Thu, 29 Sep 2022 07:05:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1664435137;
-        bh=EIO8RLHRUqUOMVMnjKNUomp/uVQ7oSnUxK82AjAnxrI=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=AzFkMiPG+l36uw459ut5KyH8qgBbKG9/LRE7GD6LaRWambFndjiJuQuWvnij3PLIX
-         2embg4g/3uz+Wq96VvpRJzSfgvouD6ldxqSBxmFKV/57/zusJiMyuN0H8miPslnfKl
-         p9gEdQn2cvrfb5gAJybr0QNace5WW4lyQm+0tgq1ZhUSaCz05RhQ4W1TpJz18rZV7Z
-         epqEtIsNZeZOhiJ2pcj88hW2G9YUPwb/b7gpfmfhqB17NRb7bTPUD3J80lbnv7uM1F
-         STvrTVgYOpwLfj+5aycRlEGkv0/OhR/vobTAYXM3pndt7/iyUoma7NvpFIPpp3NS++
-         m4+XisZ2YFLgw==
+        s=20210705; t=1664435141;
+        bh=prBpj7C9jqQogczh9/Q5N69YHwbujqAamyJ+7rRBut4=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=lHDOrvI76jV4t8HTbtjYmd5vfStwpoaTn0f5GRfD0uUZeaigGUeTgRBJ6HCLGJFUc
+         vKPijPOY4CzAb9sm7SKLYhhPvLFhz0eBGF62JdW5VCT9QtdWuDfR1ELGLoDNykd690
+         2r57hMz59lSBtZwjvaz5SOP7vHsKwYgb5Yck3UuZpAU9f3DWKT+kM00uHBAFewNu4Z
+         POfAS/xhCNRTLbRcuouRrumFUansDp+C58+VYmmLOs6K1Jn3QY6ZbpEgHFnPytEeF8
+         CDd3d7BExe9ocyRBrWI+46PShxJ6R0MC9nfNDnlbRn6mmeDc5Rg5k6RPbZWvtk2His
+         WJP/fVfjiiADw==
 From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
 To:     rafael.j.wysocki@intel.com, lenb@kernel.org
 Cc:     linux-acpi@vger.kernel.org,
         Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Josef Bacik <josef@toxicpanda.com>,
         Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        tangmeng <tangmeng@uniontech.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        YueHaibing <yuehaibing@huawei.com>, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v4 1/2] kernel/reboot: Add SYS_OFF_MODE_RESTART_PREPARE mode
-Date:   Thu, 29 Sep 2022 15:05:23 +0800
-Message-Id: <20220929070526.143907-1-kai.heng.feng@canonical.com>
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH v4 2/2] PM: ACPI: reboot: Reinstate S5 for reboot
+Date:   Thu, 29 Sep 2022 15:05:24 +0800
+Message-Id: <20220929070526.143907-2-kai.heng.feng@canonical.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220929070526.143907-1-kai.heng.feng@canonical.com>
+References: <20220929070526.143907-1-kai.heng.feng@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -55,85 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SYS_OFF_MODE_RESTART_PREPARE callbacks can be invoked before system
-restart.
+Commit d60cd06331a3 ("PM: ACPI: reboot: Use S5 for reboot") caused Dell
+PowerEdge r440 hangs at reboot.
 
-This is a preparation for next patch.
+The issue is fixed by commit 2ca1c94ce0b6 ("tg3: Disable tg3 device on
+system reboot to avoid triggering AER"), so use the new sysoff API to
+reinstate S5 for reboot on ACPI-based systems.
 
+Using S5 for reboot is default behavior under Windows, "A full shutdown
+(S5) occurs when a system restart is requested" [1].
+
+[1] https://docs.microsoft.com/en-us/windows/win32/power/system-power-state
+
+Cc: Josef Bacik <josef@toxicpanda.com>
 Suggested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
 v4:
- - Correct typo in comment.
+ - Add comment and add more info to commit message.
 v3:
- - New patch.
+ - Use new API to invoke ACPI S5.
+v2:
+ - Use do_kernel_power_off_prepare() instead.
 
- include/linux/reboot.h |  8 ++++++++
- kernel/reboot.c        | 17 +++++++++++++++++
- 2 files changed, 25 insertions(+)
+ drivers/acpi/sleep.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/include/linux/reboot.h b/include/linux/reboot.h
-index e5d9ef886179c..2b6bb593be5b6 100644
---- a/include/linux/reboot.h
-+++ b/include/linux/reboot.h
-@@ -105,6 +105,14 @@ enum sys_off_mode {
- 	 */
- 	SYS_OFF_MODE_POWER_OFF,
- 
-+	/**
-+	 * @SYS_OFF_MODE_RESTART_PREPARE:
-+	 *
-+	 * Handlers prepare system to be restarted. Handlers are
-+	 * allowed to sleep.
-+	 */
-+	SYS_OFF_MODE_RESTART_PREPARE,
+diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+index ad4b2987b3d6e..0b557c0d405ef 100644
+--- a/drivers/acpi/sleep.c
++++ b/drivers/acpi/sleep.c
+@@ -1088,6 +1088,14 @@ int __init acpi_sleep_init(void)
+ 		register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
+ 					 SYS_OFF_PRIO_FIRMWARE,
+ 					 acpi_power_off, NULL);
 +
- 	/**
- 	 * @SYS_OFF_MODE_RESTART:
- 	 *
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index 3c35445bf5ad3..3bba88c7ffc6b 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -243,6 +243,17 @@ void migrate_to_reboot_cpu(void)
- 	set_cpus_allowed_ptr(current, cpumask_of(cpu));
- }
- 
-+/*
-+ *	Notifier list for kernel code which wants to be called
-+ *	to prepare system for restart.
-+ */
-+static BLOCKING_NOTIFIER_HEAD(restart_prep_handler_list);
-+
-+static void do_kernel_restart_prepare(void)
-+{
-+	blocking_notifier_call_chain(&restart_prep_handler_list, 0, NULL);
-+}
-+
- /**
-  *	kernel_restart - reboot the system
-  *	@cmd: pointer to buffer containing command to execute for restart
-@@ -254,6 +265,7 @@ void migrate_to_reboot_cpu(void)
- void kernel_restart(char *cmd)
- {
- 	kernel_restart_prepare(cmd);
-+	do_kernel_restart_prepare();
- 	migrate_to_reboot_cpu();
- 	syscore_shutdown();
- 	if (!cmd)
-@@ -396,6 +408,11 @@ register_sys_off_handler(enum sys_off_mode mode,
- 		handler->list = &power_off_handler_list;
- 		break;
- 
-+	case SYS_OFF_MODE_RESTART_PREPARE:
-+		handler->list = &restart_prep_handler_list;
-+		handler->blocking = true;
-+		break;
-+
- 	case SYS_OFF_MODE_RESTART:
- 		handler->list = &restart_handler_list;
- 		break;
++		/*
++		 * Windows uses S5 for reboot, so some BIOSes depend on it to
++		 * perform proper reboot.
++		 */
++		register_sys_off_handler(SYS_OFF_MODE_RESTART_PREPARE,
++					 SYS_OFF_PRIO_FIRMWARE,
++					 acpi_power_off_prepare, NULL);
+ 	} else {
+ 		acpi_no_s5 = true;
+ 	}
 -- 
 2.37.2
 
