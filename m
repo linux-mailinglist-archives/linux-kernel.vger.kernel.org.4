@@ -2,143 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0A55EF393
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EAC5EF396
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbiI2Kgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
+        id S235583AbiI2Khn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235535AbiI2Kgm (ORCPT
+        with ESMTP id S232007AbiI2Khl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:36:42 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A23B13D1DC
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:36:41 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28TAM2td005732;
-        Thu, 29 Sep 2022 10:36:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=MlPAGWC974VFWedeJYZKhv+TzRCwfMG8iyZ078IdKCQ=;
- b=N/a9md72XcfdUB9ZiidvBKMXnwuAz5PwQI/F1EcjuNhh1dDyPEeD46Fe9uPonzmaNW5n
- vcZkKl4ItuIxmX5/2NOsxuGPfGXebkJUPplOlMupXv0d1fihfI9+igyBdfh6D4D/5Sl4
- WGJs+izvhWvLm4T5HhcYvTQ+Rv/4Bfdqh7AwqdIFq1lrj5MZ0r75tsUlHFHjOTMBe6vH
- UGedlrAN41FDrFnVWuwVityAnXWTTmoSR20oTPPs2LznB2lC/73drWtGLG7g0F5J7OZm
- sqiL6zIxy64sMKj7noJAqIxXXVfiYpGz6w37MMf4MHyOP2xAgOUgYeSPybovMh7XD2O0 JA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jw9j10bsw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 10:36:38 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28TAMaqr007811;
-        Thu, 29 Sep 2022 10:36:37 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jw9j10brv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 10:36:37 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28TAaCq3005466;
-        Thu, 29 Sep 2022 10:36:35 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3jss5j6jas-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Sep 2022 10:36:34 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28TAaWPw39321858
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Sep 2022 10:36:32 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8BB94A4069;
-        Thu, 29 Sep 2022 10:36:32 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4084AA4064;
-        Thu, 29 Sep 2022 10:36:32 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.242])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 29 Sep 2022 10:36:32 +0000 (GMT)
-Date:   Thu, 29 Sep 2022 12:36:30 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     xu.xin.sc@gmail.com, akpm@linux-foundation.org,
-        imbrenda@linux.vnet.ibm.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, xu xin <xu.xin16@zte.com.cn>
-Subject: Re: [PATCH 0/3] ksm: fix incorrect count of merged pages when
- enabling use_zero_pages
-Message-ID: <20220929123630.0951b199@p-imbrenda>
-In-Reply-To: <4a3daba6-18f9-d252-697c-197f65578c44@redhat.com>
-References: <20220929025206.280970-1-xu.xin16@zte.com.cn>
-        <4a3daba6-18f9-d252-697c-197f65578c44@redhat.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 29 Sep 2022 06:37:41 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6346A13D1DC;
+        Thu, 29 Sep 2022 03:37:41 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id u59-20020a17090a51c100b00205d3c44162so5539108pjh.2;
+        Thu, 29 Sep 2022 03:37:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=VVaJ2WvZLMburg2aIHfT+C0+FDmiDT6jJc/acM+nMq0=;
+        b=drW2YEOywaDzYsNVrPwnW7g8e2Yrl+NdE4q8o7pU/qEMabkWBS6deJ2LxhBoxfMjdh
+         Maxj+d/WUnaKRWiiYe9W1dvC+DrqDd/VVhI1z+w90t2hkWRqEg4cl55VHrb7irt+YI2l
+         /d1QfW5JQt+hn2Mm7UvXb4lqitpJ19krNN/TGERxcGsURkyANaoRzG8lR594UJISRyRd
+         nRCzT0Nw15KzcC2swKnoqYKvre99VDKxzeaq/2IDLNwJSzOsjUL6xq6pg7luGFPFiJs3
+         QQHyedLjRxDxXYUzHBNcsdrvQul/OfVdSHMRYVKI1WP5fPSsZ0MNA4/HwwxmJ4gO+Y5x
+         rm+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=VVaJ2WvZLMburg2aIHfT+C0+FDmiDT6jJc/acM+nMq0=;
+        b=jUP09V49L7fhg5h86E31HjbO9J+bI6jOLkFessjtCmb6NSOb+2CVsztd+HZo+bYHly
+         +qEkTw1eDSfWOK7opN33/gKBP3l8umO/RyEmZDaXnJU5WdZQbK6XzHxoEy6YVUwI4xSi
+         CCS9uwHxom28UupjHmac39PFoc7sNiVeDPhKO+5wKvkPL+npWeK/WFTmDlBGnadwH0YU
+         SLezhRB3mjPu5fRtx8ra58kHimkt6fdtKSedWp+0RgwIYHIWj0eN2ZvXxp7TifDeIAiV
+         t040F/Q+aJ2HNf/iSos/0bCsJg18FXuHNw4E+vQ0tv02/2KykG3F4PepNT/4UXm1qIDs
+         0eiQ==
+X-Gm-Message-State: ACrzQf0yy7BJmqE50zMi40Fitw7SO+sxoGFrxuz+sbQ6h22sv6wofoSE
+        0l8ObLieRyvvwrKfm+VJz1o=
+X-Google-Smtp-Source: AMsMyM4bvI8f8h6erzxSMgCphGbmfyqiiwBZb9eLfhOmAyvxOuiT93idYWlxYjxB6SeKN4lnBLdlPw==
+X-Received: by 2002:a17:90a:d908:b0:206:122:35d1 with SMTP id c8-20020a17090ad90800b00206012235d1mr2874543pjv.245.1664447860821;
+        Thu, 29 Sep 2022 03:37:40 -0700 (PDT)
+Received: from RD-3580-24288.rt.l (42-73-73-54.emome-ip.hinet.net. [42.73.73.54])
+        by smtp.gmail.com with ESMTPSA id k31-20020a17090a4ca200b001ef81574355sm3145861pjh.12.2022.09.29.03.37.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 03:37:40 -0700 (PDT)
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+To:     sre@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     chiaen_wu@richtek.com, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 0/2] Add Richtek RT9467 5A Battery Charger support
+Date:   Thu, 29 Sep 2022 18:37:17 +0800
+Message-Id: <cover.1664475743.git.chiaen_wu@richtek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: rw9PYcmB7cdoc5FCSt3K3DVh4ZmgNg8q
-X-Proofpoint-ORIG-GUID: W39x4KoEUMvY6iEbDi-S6ckETqe_BaZU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-29_06,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=860 malwarescore=0 suspectscore=0 adultscore=0 clxscore=1011
- impostorscore=0 lowpriorityscore=0 spamscore=0 phishscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209290064
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Sep 2022 11:21:44 +0200
-David Hildenbrand <david@redhat.com> wrote:
+From: ChiaEn Wu <chiaen_wu@richtek.com>
 
-> On 29.09.22 04:52, xu.xin.sc@gmail.com wrote:
-> > From: xu xin <xu.xin16@zte.com.cn>
-> > 
-> > Before enabling use_zero_pages by setting /sys/kernel/mm/ksm/
-> > use_zero_pages to 1, pages_sharing of KSM is basically accurate. But
-> > after enabling use_zero_pages, all empty pages that are merged with
-> > kernel zero page are not counted in pages_sharing or pages_shared.
-> > That is because the rmap_items of these ksm zero pages are not
-> > appended to The Stable Tree of KSM.
-> > 
-> > We need to add the count of empty pages to let users know how many empty
-> > pages are merged with kernel zero page(s).
-> > 
-> > Please see the subsequent patches for details.  
-> 
-> Just raising the topic here because it's related to the KSM usage of the 
-> shared zero-page:
-> 
-> MADV_UNMERGEABLE and other ways to trigger unsharing will *not* unshare 
-> the shared zeropage as placed by KSM (which is against the 
-> MADV_UNMERGEABLE documentation at least). It will only unshare actual 
-> KSM pages. We might not want want to blindly unshare all shared 
-> zeropages in applicable VMAs ... using a dedicated shared zero (KSM) 
-> page -- instead of the generic zero page --  might be one way to handle 
-> this cleaner.
+This patch set is to add Richtek RT9467 5A Battery Charger support.
 
-I don't understand why do you need this.
+RT9467 is a switch-mode single cell Li-Ion/Li-Polymer battery charger
+for portable applications.
 
-first of all, one zero page would not be enough (depending on the
-architecture, e.g. on s390x you need many). the whole point of zero
-page merging is that one zero page is not enough.
+It integrates a synchronous PWM controller, power MOSFETs,
+input current sensing and regulation, high-accuracy voltage regulation,
+and charge termination. The charge current is regulated through
+integrated sensing resistors.
 
-second, once a page is merged with a zero page, it's not really handled
-by KSM anymore. if you have a big allocation, of which you only touch a
-few pages, would the rest be considered "merged"? no, it's just zero
-pages, right?
-this is the same, except that we take present pages with zeroes in it
-and we discard them and map them to zero pages. it's kinda like if we
-had never touched them.
+The RT9467 also features USB On-The-Go (OTG) support. It also integrates
+D+/D- pin for USB host/charging port detection.
 
-> 
-> Would that also fix some of the issues you describe above?
-> 
+This charger driver is based on a 'linear_ranger' queued patch which adds
+'LINEAR_RANGE_IDX' macro for declaring the linear_range struct simply.
+https://lore.kernel.org/all/20220920161218.dkkfvfomrruebahi@mercury.elektranox.org/
+
+Thank you,
+ChiaEn Wu
+
+ChiaEn Wu (2):
+  dt-bindings: power: supply: Add Richtek RT9467 battery charger
+  power: supply: rt9467: Add Richtek RT9467 charger driver
+
+ .../power/supply/richtek,rt9467-charger.yaml       |   83 ++
+ drivers/power/supply/Kconfig                       |   19 +
+ drivers/power/supply/Makefile                      |    1 +
+ drivers/power/supply/rt9467-charger.c              | 1239 ++++++++++++++++++++
+ 4 files changed, 1342 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
+ create mode 100644 drivers/power/supply/rt9467-charger.c
+
+-- 
+2.7.4
 
