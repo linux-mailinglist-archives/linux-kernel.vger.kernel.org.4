@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D995EF864
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D9A5EF869
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235775AbiI2PK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
+        id S235794AbiI2PLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235489AbiI2PKz (ORCPT
+        with ESMTP id S234729AbiI2PL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:10:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4887B795;
-        Thu, 29 Sep 2022 08:10:53 -0700 (PDT)
+        Thu, 29 Sep 2022 11:11:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6382012518E;
+        Thu, 29 Sep 2022 08:11:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9AB8B824D7;
-        Thu, 29 Sep 2022 15:10:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2747C433D7;
-        Thu, 29 Sep 2022 15:10:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4871B824D3;
+        Thu, 29 Sep 2022 15:11:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B66E7C433D6;
+        Thu, 29 Sep 2022 15:11:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664464250;
-        bh=LYs8gbq9wOk+4E8dz7WVHNsgZrKBNxm+rh4gOlOaP28=;
+        s=k20201202; t=1664464284;
+        bh=TG7+rWU884/Oq8a/z1jdR74kaf5vTAccbPkrPjPqVj8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SImofIFQoxMQc2wnOX8M8BNkFmr/Y7GB4fvsXSybAg2BNtvGxXBM3AsZvK65+nvbT
-         kgxcSPU0DOkIjn+3DBbooaQjfL2t4JFgY4dhMqONXT3VYSyrV08fj+vU9NYAlhzkoi
-         sL9JjHvnuJzVlF7exL5D244QcwIZGaRFHqh8oDqn2AviVW5hLQh/D3Nxi8SelBWWKT
-         Ch1eFqZo4lVF5WFQg+9PfZQ4zMgBSvpHOmIAGNWoJujtAP9LHtO3F+RoOWGCk9gR49
-         qvRAl+zkR4cyGkawChkWPTrCijpr4hcyV+6D6Rlq6kzQ0JYP+Gic/+RIFAwXB0vBsO
-         CHRqy2YtMX0Kg==
-Date:   Thu, 29 Sep 2022 10:10:47 -0500
+        b=qSmzAfvm0466RLeAiUizse5MLIazXbDuAxg6k6HpHKqE/H9aXrRnTrSS9dMpGYHpj
+         MACq2v6s/Kd+npv9u1pbkvdR7VFMyi0vy60o55bJVJw4eolCMj6juH9KLir4RmNswk
+         TwcEX/mE5oOWy1dljls32bQHtuytAVwuiyhNaIM3MNtAL+kwVdidNkIBfqSrMvD5Uh
+         j69PY8SQvo9b07RnGhDiONpsmxalMlJf8brQOh1gHSib0N6Gp8+BDbPbER9DRqn3Fc
+         SzZdXgUVTalyc/VmKixcCaqodxhrSqT/j+hTFfYpipNsnucMiC+SKwsKoO0eyNX0gq
+         FdZ0LhiEfVYAA==
+Date:   Thu, 29 Sep 2022 10:11:21 -0500
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Abel Vesa <abel.vesa@linaro.org>
 Cc:     Mike Turquette <mturquette@baylibre.com>,
@@ -43,14 +43,15 @@ Cc:     Mike Turquette <mturquette@baylibre.com>,
         linux-clk@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arm-msm@vger.kernel.org
-Subject: Re: [RFC 1/2] clk: Add generic sync_state callback for disabling
- unused clocks
-Message-ID: <20220929151047.wom3m2ydgxme5nhh@builder.lan>
+Subject: Re: [RFC 2/2] clk: qcom: sdm845: Add clk_sync_state_disable_unused
+ as sync_state
+Message-ID: <20220929151121.a3nosyqh4jx3jjdt@builder.lan>
 References: <20220706150411.708213-1-abel.vesa@linaro.org>
+ <20220706150411.708213-2-abel.vesa@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220706150411.708213-1-abel.vesa@linaro.org>
+In-Reply-To: <20220706150411.708213-2-abel.vesa@linaro.org>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,203 +61,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 06:04:10PM +0300, Abel Vesa wrote:
-> There are unused clocks that need to stay enabled on clk_disable_unused,
-> but rather should be disabled later on on sync_state. Provide a generic
-> sync_state callback for the clock providers that register such clocks.
-> Then, use the same mechanism as clk_disable_unused from that generic
-> callback, but pass the device to make sure only the clocks belonging to
-> the current clock provider get disabled, if unused. Also, during the
-> default clk_disable_unused, if the driver that registered the clock has
-> the generic clk_sync_state_disable_unused callback set for sync_state,
-> leave its clocks enabled.
+On Wed, Jul 06, 2022 at 06:04:11PM +0300, Abel Vesa wrote:
+> By adding the newly added clk_sync_state_disable_unused as sync_state
+> callback to all sdm845 clock providers, we make sure that no clock
+> belonging to these providers gets disabled on clk_disable_unused,
+> but rather they are disabled on sync_state, when it is safe, since
+> all the consumers build as modules have their chance of enabling
+> their own clocks.
 > 
 
-Overall I like this, just a minor thing about ignoring CLK_IGNORE_UNUSED
-from the sync_stat path below.
-
-
-We've talked about this not being the whole solution, because there
-might be devices that will enable/disable clocks that will be used by
-later devices. It seems to me that this would be an additional issue
-that needs to be fixed - so I don't have a problem with us picking this
-up as a first step.
-
-But for boards where this would be a problem there's no longer a way to
-opt-out of the disabling of unused clocks. So perhaps we'd want
-clk_ignore_unused to affect the sync_state based case as well?
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
 > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
->  drivers/clk/clk.c            | 67 +++++++++++++++++++++++++++---------
->  include/linux/clk-provider.h |  1 +
->  2 files changed, 52 insertions(+), 16 deletions(-)
+>  drivers/clk/qcom/camcc-sdm845.c  | 1 +
+>  drivers/clk/qcom/dispcc-sdm845.c | 1 +
+>  drivers/clk/qcom/gcc-sdm845.c    | 1 +
+>  drivers/clk/qcom/gpucc-sdm845.c  | 1 +
+>  4 files changed, 4 insertions(+)
 > 
-> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> index 7fc191c15507..ea55806505c0 100644
-> --- a/drivers/clk/clk.c
-> +++ b/drivers/clk/clk.c
-> @@ -1218,19 +1218,31 @@ static void clk_core_disable_unprepare(struct clk_core *core)
->  	clk_core_unprepare_lock(core);
->  }
+> diff --git a/drivers/clk/qcom/camcc-sdm845.c b/drivers/clk/qcom/camcc-sdm845.c
+> index 27d44188a7ab..e5aeb832e47b 100644
+> --- a/drivers/clk/qcom/camcc-sdm845.c
+> +++ b/drivers/clk/qcom/camcc-sdm845.c
+> @@ -1743,6 +1743,7 @@ static struct platform_driver cam_cc_sdm845_driver = {
+>  	.driver	= {
+>  		.name = "sdm845-camcc",
+>  		.of_match_table = cam_cc_sdm845_match_table,
+> +		.sync_state = clk_sync_state_disable_unused,
+>  	},
+>  };
 >  
-> -static void __init clk_unprepare_unused_subtree(struct clk_core *core)
-> +static void clk_unprepare_unused_subtree(struct clk_core *core,
-> +						struct device *dev)
->  {
->  	struct clk_core *child;
+> diff --git a/drivers/clk/qcom/dispcc-sdm845.c b/drivers/clk/qcom/dispcc-sdm845.c
+> index 735adfefc379..1810d58bad09 100644
+> --- a/drivers/clk/qcom/dispcc-sdm845.c
+> +++ b/drivers/clk/qcom/dispcc-sdm845.c
+> @@ -869,6 +869,7 @@ static struct platform_driver disp_cc_sdm845_driver = {
+>  	.driver		= {
+>  		.name	= "disp_cc-sdm845",
+>  		.of_match_table = disp_cc_sdm845_match_table,
+> +		.sync_state = clk_sync_state_disable_unused,
+>  	},
+>  };
 >  
->  	lockdep_assert_held(&prepare_lock);
+> diff --git a/drivers/clk/qcom/gcc-sdm845.c b/drivers/clk/qcom/gcc-sdm845.c
+> index 58aa3ec9a7fc..5db75d5ba584 100644
+> --- a/drivers/clk/qcom/gcc-sdm845.c
+> +++ b/drivers/clk/qcom/gcc-sdm845.c
+> @@ -3624,6 +3624,7 @@ static struct platform_driver gcc_sdm845_driver = {
+>  	.driver		= {
+>  		.name	= "gcc-sdm845",
+>  		.of_match_table = gcc_sdm845_match_table,
+> +		.sync_state = clk_sync_state_disable_unused,
+>  	},
+>  };
 >  
->  	hlist_for_each_entry(child, &core->children, child_node)
-> -		clk_unprepare_unused_subtree(child);
-> +		clk_unprepare_unused_subtree(child, dev);
-> +
-> +	if (dev && core->dev != dev)
-> +		return;
-> +
-> +	/*
-> +	 * clock will be unprepared on sync_state,
-> +	 * so leave as is on clk_disable_unused
-> +	 */
-> +	if (!dev && dev_has_sync_state(core->dev) &&
-
-How about introducing a local variable bool from_sync_state = !!dev, to
-make these conditionals easier to read?
-
-> +		core->dev->driver->sync_state == clk_sync_state_disable_unused)
-> +		return;
+> diff --git a/drivers/clk/qcom/gpucc-sdm845.c b/drivers/clk/qcom/gpucc-sdm845.c
+> index 110b54401bc6..622a54a67d32 100644
+> --- a/drivers/clk/qcom/gpucc-sdm845.c
+> +++ b/drivers/clk/qcom/gpucc-sdm845.c
+> @@ -205,6 +205,7 @@ static struct platform_driver gpu_cc_sdm845_driver = {
+>  	.driver = {
+>  		.name = "sdm845-gpucc",
+>  		.of_match_table = gpu_cc_sdm845_match_table,
+> +		.sync_state = clk_sync_state_disable_unused,
+>  	},
+>  };
 >  
->  	if (core->prepare_count)
->  		return;
->  
-> -	if (core->flags & CLK_IGNORE_UNUSED)
-> +	if (!dev && core->flags & CLK_IGNORE_UNUSED)
-
-Iiuc, when being called from the sync_state path, CLK_IGNORE_UNUSED will
-now be ignored (and the clock will be disabled).
-
-We don't have a lot of users of this flag, but would it not make sense
-to adhere to this flag even in that case? As a continued means to
-describe a clock which shouldn't be automatically disabled...
-
->  		return;
->  
->  	if (clk_pm_runtime_get(core))
-> @@ -1248,7 +1260,8 @@ static void __init clk_unprepare_unused_subtree(struct clk_core *core)
->  	clk_pm_runtime_put(core);
->  }
->  
-> -static void __init clk_disable_unused_subtree(struct clk_core *core)
-> +static void clk_disable_unused_subtree(struct clk_core *core,
-> +					struct device *dev)
->  {
->  	struct clk_core *child;
->  	unsigned long flags;
-> @@ -1256,7 +1269,18 @@ static void __init clk_disable_unused_subtree(struct clk_core *core)
->  	lockdep_assert_held(&prepare_lock);
->  
->  	hlist_for_each_entry(child, &core->children, child_node)
-> -		clk_disable_unused_subtree(child);
-> +		clk_disable_unused_subtree(child, dev);
-> +
-> +	if (dev && core->dev != dev)
-> +		return;
-> +
-> +	/*
-> +	 * clock will be disabled on sync_state,
-> +	 * so leave as is on clk_disable_unused
-> +	 */
-> +	if (!dev && dev_has_sync_state(core->dev) &&
-> +		core->dev->driver->sync_state == clk_sync_state_disable_unused)
-> +		return;
->  
->  	if (core->flags & CLK_OPS_PARENT_ENABLE)
->  		clk_core_prepare_enable(core->parent);
-> @@ -1269,7 +1293,7 @@ static void __init clk_disable_unused_subtree(struct clk_core *core)
->  	if (core->enable_count)
->  		goto unlock_out;
->  
-> -	if (core->flags & CLK_IGNORE_UNUSED)
-> +	if (!dev && core->flags & CLK_IGNORE_UNUSED)
->  		goto unlock_out;
->  
->  	/*
-> @@ -1302,35 +1326,46 @@ static int __init clk_ignore_unused_setup(char *__unused)
->  }
->  __setup("clk_ignore_unused", clk_ignore_unused_setup);
->  
-> -static int __init clk_disable_unused(void)
-> +static void __clk_disable_unused(struct device *dev)
->  {
->  	struct clk_core *core;
->  
-> -	if (clk_ignore_unused) {
-> -		pr_warn("clk: Not disabling unused clocks\n");
-> -		return 0;
-> -	}
-
-As mentioned above, I think it's reasonable to keep this here.
-
-Regards,
-Bjorn
-
-> -
->  	clk_prepare_lock();
->  
->  	hlist_for_each_entry(core, &clk_root_list, child_node)
-> -		clk_disable_unused_subtree(core);
-> +		clk_disable_unused_subtree(core, dev);
->  
->  	hlist_for_each_entry(core, &clk_orphan_list, child_node)
-> -		clk_disable_unused_subtree(core);
-> +		clk_disable_unused_subtree(core, dev);
->  
->  	hlist_for_each_entry(core, &clk_root_list, child_node)
-> -		clk_unprepare_unused_subtree(core);
-> +		clk_unprepare_unused_subtree(core, dev);
->  
->  	hlist_for_each_entry(core, &clk_orphan_list, child_node)
-> -		clk_unprepare_unused_subtree(core);
-> +		clk_unprepare_unused_subtree(core, dev);
->  
->  	clk_prepare_unlock();
-> +}
-> +
-> +static int __init clk_disable_unused(void)
-> +{
-> +	if (clk_ignore_unused) {
-> +		pr_warn("clk: Not disabling unused clocks\n");
-> +		return 0;
-> +	}
-> +
-> +	__clk_disable_unused(NULL);
->  
->  	return 0;
->  }
->  late_initcall_sync(clk_disable_unused);
->  
-> +void clk_sync_state_disable_unused(struct device *dev)
-> +{
-> +	__clk_disable_unused(dev);
-> +}
-> +EXPORT_SYMBOL_GPL(clk_sync_state_disable_unused);
-> +
->  static int clk_core_determine_round_nolock(struct clk_core *core,
->  					   struct clk_rate_request *req)
->  {
-> diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-> index 72d937c03a3e..5d3ed2b14f2c 100644
-> --- a/include/linux/clk-provider.h
-> +++ b/include/linux/clk-provider.h
-> @@ -679,6 +679,7 @@ struct clk *clk_register_divider_table(struct device *dev, const char *name,
->  		void __iomem *reg, u8 shift, u8 width,
->  		u8 clk_divider_flags, const struct clk_div_table *table,
->  		spinlock_t *lock);
-> +void clk_sync_state_disable_unused(struct device *dev);
->  /**
->   * clk_register_divider - register a divider clock with the clock framework
->   * @dev: device registering this clock
 > -- 
 > 2.34.3
 > 
