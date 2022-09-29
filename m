@@ -2,335 +2,813 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1FE5EEE2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0A35EEE4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234965AbiI2G7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 02:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
+        id S235116AbiI2HCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233332AbiI2G7L (ORCPT
+        with ESMTP id S235099AbiI2HCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 02:59:11 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5333412FF1E
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:59:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A8C3FCE20D7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:59:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07B7DC43140
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 06:59:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664434747;
-        bh=C+WAtY8I1JyRlO6Uhyg5C/BMZb/xqfBVLwspYuGFDwQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WyRIvYWpwpGgwauR5vSBAaqZXO21QBYWyS59T0eCkT2mbfckmjfO6plRXbc7+feir
-         TWshFHAgwIpuB0ArcK40BUPsC+0wbP+ACXsFOoozK3aBaWhz182MmU08WbYog8drEb
-         /gKGMcP6DnPHXYT3RUlVd97ArY/IHHS3obpNEzAqTFGRPzet77izYId7j9luqQamzw
-         Ka75gR3Ihy7m5M2zGtkkV3xjmlgPKqsePjap5EXYaVQWQ4o2dlaI/EE8rY4mPAYYhL
-         im+LsEIF7zXrwGJSOCPoNafkpSneP2tLpezMgQqTAem1AOgxzWXwhS/9xCrb/8AyPz
-         aita5K3wK7Xtw==
-Received: by mail-ot1-f41.google.com with SMTP id cm7-20020a056830650700b006587fe87d1aso361256otb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:59:06 -0700 (PDT)
-X-Gm-Message-State: ACrzQf25fpGDgWPMRVH9zJWMTPoKvJdLd2AZl7qqDL5KsGG6ubtSetgA
-        +5QWhbMbc71V9yHnQK8N/4Uh2u/2NL1Ri/fP+Po=
-X-Google-Smtp-Source: AMsMyM7+BvCMRELmpObyzTYRmD00TTcAX2BXduuXOn8WX7CaW119iB1HJmJcBFnOXe5Ags6vmh9PtmKtsRJr6CZ+w4o=
-X-Received: by 2002:a9d:70c3:0:b0:65c:55fb:a153 with SMTP id
- w3-20020a9d70c3000000b0065c55fba153mr703738otj.308.1664434745178; Wed, 28 Sep
- 2022 23:59:05 -0700 (PDT)
+        Thu, 29 Sep 2022 03:02:06 -0400
+X-Greylist: delayed 122 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 29 Sep 2022 00:01:59 PDT
+Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id BEB9E13072F
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:01:58 -0700 (PDT)
+Received: from mail.didiglobal.com (unknown [10.79.64.13])
+        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 62C61110025C27;
+        Thu, 29 Sep 2022 14:59:53 +0800 (CST)
+Received: from [172.24.140.16] (10.79.65.101) by
+ ZJY01-ACTMBX-03.didichuxing.com (10.79.64.13) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 29 Sep 2022 14:59:52 +0800
+Message-ID: <a6e38a33-0003-d3ea-de9b-cf805aef647f@didichuxing.com>
+Date:   Thu, 29 Sep 2022 14:59:46 +0800
 MIME-Version: 1.0
-References: <20220928162007.3791-1-jszhang@kernel.org> <20220928162007.3791-4-jszhang@kernel.org>
- <YzR8OUFuV+R1i1Y6@xhacker> <CAJF2gTSaCGeMG06xrRxjkk2UnjqcgrRTwdch9Ug_TyH-9LsP4g@mail.gmail.com>
-In-Reply-To: <CAJF2gTSaCGeMG06xrRxjkk2UnjqcgrRTwdch9Ug_TyH-9LsP4g@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 29 Sep 2022 14:58:53 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRv5dMev8Y16ZaAqu=ph2EKCPNC79+Wz_FDEbwSg=0Q1g@mail.gmail.com>
-Message-ID: <CAJF2gTRv5dMev8Y16ZaAqu=ph2EKCPNC79+Wz_FDEbwSg=0Q1g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] riscv: fix race when vmap stack overflow and
- remove shadow_stack
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [RFC PATCH] sched/fair: Choose the CPU where short task is
+ running during wake up
+Content-Language: en-US
+To:     Chen Yu <yu.c.chen@intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Aaron Lu <aaron.lu@intel.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        <linux-kernel@vger.kernel.org>
+X-MD-Sfrom: wanghonglei@didiglobal.com
+X-MD-SrcIP: 10.79.64.13
+From:   Honglei Wang <wanghonglei@didichuxing.com>
+In-Reply-To: <YzUrITfUn96puCtv@chenyu5-mobl1>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.79.65.101]
+X-ClientProxiedBy: ZJY02-PUBMBX-01.didichuxing.com (10.79.65.31) To
+ ZJY01-ACTMBX-03.didichuxing.com (10.79.64.13)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 1:54 PM Guo Ren <guoren@kernel.org> wrote:
->
-> On Thu, Sep 29, 2022 at 1:03 AM Jisheng Zhang <jszhang@kernel.org> wrote:
-> >
-> > On Thu, Sep 29, 2022 at 12:20:06AM +0800, Jisheng Zhang wrote:
-> > > Currently, when detecting vmap stack overflow, riscv firstly switches
-> > > to the so called shadow stack, then use this shadow stack to call the
-> > > get_overflow_stack() to get the overflow stack. However, there's
-> > > a race here if two or more harts use the same shadow stack at the same
-> > > time.
-> > >
-> > > To solve this race, we rely on two facts:
-> > > 1. the content of kernel thread pointer I.E "tp" register can still
-> > > be gotten from the the CSR_SCRATCH register, thus we can clobber tp
-> > > under the condtion that we restore tp from CSR_SCRATCH later.
-> > >
-> > > 2. Once vmap stack overflow happen, panic is comming soon, no
-> > > performance concern at all, so we don't need to define the overflow
-> > > stack as percpu var, we can simplify it into a pointer array which
-> > > points to allocated pages.
-> > >
-> > > Thus we can use tp as a tmp register to get the cpu id to calculate
-> > > the offset of overflow stack pointer array for each cpu w/o shadow
-> > > stack any more. Thus the race condition is removed as a side effect.
-> > >
-> > > NOTE: we can use similar mechanism to let each cpu use different shadow
-> > > stack to fix the race codition, but if we can remove shadow stack usage
-> > > totally, why not.
-> > >
-> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
-> > > ---
-> > >  arch/riscv/include/asm/asm-prototypes.h |  1 -
-> > >  arch/riscv/include/asm/thread_info.h    |  4 +-
-> > >  arch/riscv/kernel/asm-offsets.c         |  1 +
-> > >  arch/riscv/kernel/entry.S               | 56 ++++---------------------
-> > >  arch/riscv/kernel/traps.c               | 31 ++++++++------
-> > >  5 files changed, 29 insertions(+), 64 deletions(-)
-> > >
-> > > diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/include/asm/asm-prototypes.h
-> > > index ef386fcf3939..4a06fa0f6493 100644
-> > > --- a/arch/riscv/include/asm/asm-prototypes.h
-> > > +++ b/arch/riscv/include/asm/asm-prototypes.h
-> > > @@ -25,7 +25,6 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
-> > >  DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
-> > >  DECLARE_DO_ERROR_INFO(do_trap_break);
-> > >
-> > > -asmlinkage unsigned long get_overflow_stack(void);
-> > >  asmlinkage void handle_bad_stack(struct pt_regs *regs);
-> > >
-> > >  #endif /* _ASM_RISCV_PROTOTYPES_H */
-> > > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-> > > index c970d41dc4c6..c604a5212a73 100644
-> > > --- a/arch/riscv/include/asm/thread_info.h
-> > > +++ b/arch/riscv/include/asm/thread_info.h
-> > > @@ -28,14 +28,12 @@
-> > >
-> > >  #define THREAD_SHIFT            (PAGE_SHIFT + THREAD_SIZE_ORDER)
-> > >  #define OVERFLOW_STACK_SIZE     SZ_4K
-> > > -#define SHADOW_OVERFLOW_STACK_SIZE (1024)
-> > > +#define OVERFLOW_STACK_SHIFT 12
-> >
-> > oops, this should be removed, will update it in a newer version after
-> > collecting review comments.
-> >
-> > >
-> > >  #define IRQ_STACK_SIZE               THREAD_SIZE
-> > >
-> > >  #ifndef __ASSEMBLY__
-> > >
-> > > -extern long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE / sizeof(long)];
-> > > -
-> > >  #include <asm/processor.h>
-> > >  #include <asm/csr.h>
-> > >
-> > > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-> > > index df9444397908..62bf3bacc322 100644
-> > > --- a/arch/riscv/kernel/asm-offsets.c
-> > > +++ b/arch/riscv/kernel/asm-offsets.c
-> > > @@ -37,6 +37,7 @@ void asm_offsets(void)
-> > >       OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
-> > >       OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
-> > >       OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
-> > > +     OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
-> > >
-> > >       OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
-> > >       OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
-> > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > > index a3e1ed2fa2ac..5a6171a90d81 100644
-> > > --- a/arch/riscv/kernel/entry.S
-> > > +++ b/arch/riscv/kernel/entry.S
-> > > @@ -223,54 +223,16 @@ END(ret_from_exception)
-> > >
-> > >  #ifdef CONFIG_VMAP_STACK
-> > >  ENTRY(handle_kernel_stack_overflow)
-> > > -     la sp, shadow_stack
-> > > -     addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
-> > > -
-> > > -     //save caller register to shadow stack
-> > > -     addi sp, sp, -(PT_SIZE_ON_STACK)
-> > > -     REG_S x1,  PT_RA(sp)
-> > > -     REG_S x5,  PT_T0(sp)
-> > > -     REG_S x6,  PT_T1(sp)
-> > > -     REG_S x7,  PT_T2(sp)
-> > > -     REG_S x10, PT_A0(sp)
-> > > -     REG_S x11, PT_A1(sp)
-> > > -     REG_S x12, PT_A2(sp)
-> > > -     REG_S x13, PT_A3(sp)
-> > > -     REG_S x14, PT_A4(sp)
-> > > -     REG_S x15, PT_A5(sp)
-> > > -     REG_S x16, PT_A6(sp)
-> > > -     REG_S x17, PT_A7(sp)
-> > > -     REG_S x28, PT_T3(sp)
-> > > -     REG_S x29, PT_T4(sp)
-> > > -     REG_S x30, PT_T5(sp)
-> > > -     REG_S x31, PT_T6(sp)
-> > > -
-> > > -     la ra, restore_caller_reg
-> > > -     tail get_overflow_stack
-> > > -
-> > > -restore_caller_reg:
-> > > -     //save per-cpu overflow stack
-> > > -     REG_S a0, -8(sp)
-> > > -     //restore caller register from shadow_stack
-> > > -     REG_L x1,  PT_RA(sp)
-> > > -     REG_L x5,  PT_T0(sp)
-> > > -     REG_L x6,  PT_T1(sp)
-> > > -     REG_L x7,  PT_T2(sp)
-> > > -     REG_L x10, PT_A0(sp)
-> > > -     REG_L x11, PT_A1(sp)
-> > > -     REG_L x12, PT_A2(sp)
-> > > -     REG_L x13, PT_A3(sp)
-> > > -     REG_L x14, PT_A4(sp)
-> > > -     REG_L x15, PT_A5(sp)
-> > > -     REG_L x16, PT_A6(sp)
-> > > -     REG_L x17, PT_A7(sp)
-> > > -     REG_L x28, PT_T3(sp)
-> > > -     REG_L x29, PT_T4(sp)
-> > > -     REG_L x30, PT_T5(sp)
-> > > -     REG_L x31, PT_T6(sp)
-> > > +     la sp, overflow_stack
-> > > +     /* use tp as tmp register since we can restore it from CSR_SCRATCH */
-> > > +     REG_L tp, TASK_TI_CPU(tp)
-> > > +     slli tp, tp, RISCV_LGPTR
-> > > +     add tp, sp, tp
-> > > +     REG_L sp, 0(tp)
-> > > +
-> > > +     /* restore tp */
-> > > +     csrr tp, CSR_SCRATCH
-> > >
-> > > -     //load per-cpu overflow stack
-> > > -     REG_L sp, -8(sp)
-> > >       addi sp, sp, -(PT_SIZE_ON_STACK)
-> > >
-> > >       //save context to overflow stack
-> > > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> > > index 73f06cd149d9..b6c64f0fb70f 100644
-> > > --- a/arch/riscv/kernel/traps.c
-> > > +++ b/arch/riscv/kernel/traps.c
-> > > @@ -216,23 +216,12 @@ int is_valid_bugaddr(unsigned long pc)
-> > >  #endif /* CONFIG_GENERIC_BUG */
-> > >
-> > >  #ifdef CONFIG_VMAP_STACK
-> > > -static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
-> > > -             overflow_stack)__aligned(16);
-> > > -/*
-> > > - * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
-> > > - * to get per-cpu overflow stack(get_overflow_stack).
-> > > - */
-> > > -long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
-> > > -asmlinkage unsigned long get_overflow_stack(void)
-> > > -{
-> > > -     return (unsigned long)this_cpu_ptr(overflow_stack) +
-> > > -             OVERFLOW_STACK_SIZE;
-> > > -}
-> > > +void *overflow_stack[NR_CPUS] __ro_after_init __aligned(16);
-> Er... We've talked NR_CPUS = 8192, even a pointer would cause 64KB wasted.
->
-> I prefer the previous solution with a atomic flag.
->
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index 5cbd6684ef52..42a3b14a20ab 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -223,6 +223,9 @@ END(ret_from_exception)
->
->  #ifdef CONFIG_VMAP_STACK
->  ENTRY(handle_kernel_stack_overflow)
-> +1:     la sp, spin_ shadow_stack
-> +       amoswap.w sp, sp, (sp)
-> +       bnez sp, 1b
->         la sp, shadow_stack
->         addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
->
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index 73f06cd149d9..9058a05cac53 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -229,11 +229,15 @@ asmlinkage unsigned long get_overflow_stack(void)
->                 OVERFLOW_STACK_SIZE;
->  }
->
-> +atomic_t spin_ shadow_stack __section(".sdata");
-> +
->  asmlinkage void handle_bad_stack(struct pt_regs *regs)
->  {
->         unsigned long tsk_stk = (unsigned long)current->stack;
->         unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
->
-> +       atomic_set_release(spin_ shadow_stack, 0);
-Sorry, it should be:
-   +       atomic_set_release(&spin_ shadow_stack, 0);
-
-> +
->         console_verbose();
->
->         pr_emerg("Insufficient stack space to handle exception!\n");
->
->
->
->
->
-> > >
-> > >  asmlinkage void handle_bad_stack(struct pt_regs *regs)
-> > >  {
-> > >       unsigned long tsk_stk = (unsigned long)current->stack;
-> > > -     unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
-> > > +     unsigned long ovf_stk = (unsigned long)overflow_stack[raw_smp_processor_id()];
-> > >
-> > >       console_verbose();
-> > >
-> > > @@ -248,4 +237,20 @@ asmlinkage void handle_bad_stack(struct pt_regs *regs)
-> > >       for (;;)
-> > >               wait_for_interrupt();
-> > >  }
-> > > +
-> > > +static int __init alloc_overflow_stacks(void)
-> > > +{
-> > > +     u8 *s;
-> > > +     int cpu;
-> > > +
-> > > +     for_each_possible_cpu(cpu) {
-> > > +             s = (u8 *)__get_free_pages(GFP_KERNEL, get_order(OVERFLOW_STACK_SIZE));
-> > > +             if (WARN_ON(!s))
-> > > +                     return -ENOMEM;
-> > > +             overflow_stack[cpu] = &s[OVERFLOW_STACK_SIZE];
-> >
-> > Since overflow_stack[cpu] points to the top of the slack, we need to
-> > update the ovf_stack dumping in handle_bad_stack(). will take care
-> > this in newer version.
-> >
-> > > +             printk("%px\n", overflow_stack[cpu]);
-> >
-> > forget to remove this printk :(
->
->
->
-> --
-> Best Regards
->  Guo Ren
 
 
+On 2022/9/29 13:25, Chen Yu wrote:
+> Hi Prateek,
+> On 2022-09-26 at 11:20:16 +0530, K Prateek Nayak wrote:
+>> Hello Chenyu,
+>>
+>> When testing the patch on a dual socket Zen3 system (3 x 64C/128T) we
+>> noticed some regressions in some standard benchmark.
+>>
+>> tl;dr
+>>
+>> o Hackbench shows noticeable regression in most cases. Looking at schedstat
+>>    data, we see there is an increased number of affine wakeup and an increase
+>>    in the average wait time. As the LLC size on the Zen3 machine is only
+>>    16 CPUs, there is good chance the LLC was overloaded and it required
+>>    intervention from load balancer to distribute tasks optimally.
+>>
+>> o There is a regression in Stream which is cause by piling up of more than
+>>    one Stream thread on the same LLC. This happens as a result of migration
+>>    in the wakeup path where the logic goes for an affine wakeup if the
+>>    waker is short lived task even if sync flag is not set and the previous
+>>    CPU might be idle.
+>>
+> Nice analysis and thanks for your testing.
+>> I'll inline the results are detailed observation below:
+>>
+>> On 9/15/2022 10:24 PM, Chen Yu wrote:
+>>> [Background]
+>>> At LPC 2022 Real-time and Scheduling Micro Conference we presented
+>>> the cross CPU wakeup issue. This patch is a text version of the
+>>> talk, and hopefully we can clarify the problem and appreciate for any
+>>> feedback.
+>>>
+>>> [re-send due to the previous one did not reach LKML, sorry
+>>>   for any inconvenience.]
+>>>
+>>> [Problem Statement]
+>>> For a workload that is doing frequent context switches, the throughput
+>>> scales well until the number of instances reaches a peak point. After
+>>> that peak point, the throughput drops significantly if the number of
+>>> instances continues to increase.
+>>>
+>>> The will-it-scale context_switch1 test case exposes the issue. The
+>>> test platform has 112 CPUs per LLC domain. The will-it-scale launches
+>>> 1, 8, 16 ... 112 instances respectively. Each instance is composed
+>>> of 2 tasks, and each pair of tasks would do ping-pong scheduling via
+>>> pipe_read() and pipe_write(). No task is bound to any CPU.
+>>> We found that, once the number of instances is higher than
+>>> 56(112 tasks in total, every CPU has 1 task), the throughput
+>>> drops accordingly if the instance number continues to increase:
+>>>
+>>>            ^
+>>> throughput|
+>>>            |                 X
+>>>            |               X   X X
+>>>            |             X         X X
+>>>            |           X               X
+>>>            |         X                   X
+>>>            |       X
+>>>            |     X
+>>>            |   X
+>>>            | X
+>>>            |
+>>>            +-----------------.------------------->
+>>>                              56
+>>>                                   number of instances
+>>>
+>>> [Symptom analysis]
+>>> Both perf profile and lockstat have shown that, the bottleneck
+>>> is the runqueue spinlock. Take perf profile for example:
+>>>
+>>> nr_instance          rq lock percentage
+>>> 1                    1.22%
+>>> 8                    1.17%
+>>> 16                   1.20%
+>>> 24                   1.22%
+>>> 32                   1.46%
+>>> 40                   1.61%
+>>> 48                   1.63%
+>>> 56                   1.65%
+>>> --------------------------
+>>> 64                   3.77%      |
+>>> 72                   5.90%      | increase
+>>> 80                   7.95%      |
+>>> 88                   9.98%      v
+>>> 96                   11.81%
+>>> 104                  13.54%
+>>> 112                  15.13%
+>>>
+>>> And the rq lock bottleneck is composed of two paths(perf profile):
+>>>
+>>> (path1):
+>>> raw_spin_rq_lock_nested.constprop.0;
+>>> try_to_wake_up;
+>>> default_wake_function;
+>>> autoremove_wake_function;
+>>> __wake_up_common;
+>>> __wake_up_common_lock;
+>>> __wake_up_sync_key;
+>>> pipe_write;
+>>> new_sync_write;
+>>> vfs_write;
+>>> ksys_write;
+>>> __x64_sys_write;
+>>> do_syscall_64;
+>>> entry_SYSCALL_64_after_hwframe;write
+>>>
+>>> (path2):
+>>> raw_spin_rq_lock_nested.constprop.0;
+>>> __sched_text_start;
+>>> schedule_idle;
+>>> do_idle;
+>>> cpu_startup_entry;
+>>> start_secondary;
+>>> secondary_startup_64_no_verify
+>>>
+>>> The idle percentage is around 30% when there are 112 instances:
+>>> %Cpu0  :  2.7 us, 66.7 sy,  0.0 ni, 30.7 id
+>>>
+>>> As a comparison, if we set CPU affinity to these workloads,
+>>> which stops them from migrating among CPUs, the idle percentage
+>>> drops to nearly 0%, and the throughput increases by about 300%.
+>>> This indicates that there is room for optimization.
+>>>
+>>> A possible scenario to describe the lock contention:
+>>> task A tries to wakeup task B on CPU1, then task A grabs the
+>>> runqueue lock of CPU1. If CPU1 is about to quit idle, it needs
+>>> to grab its own lock which has been taken by someone else. Then
+>>> CPU1 takes more time to quit which hurts the performance.
+>>>
+>>> TTWU_QUEUE could mitigate the cross CPU runqueue lock contention.
+>>> Since commit f3dd3f674555 ("sched: Remove the limitation of WF_ON_CPU
+>>> on wakelist if wakee cpu is idle"), TTWU_QUEUE offloads the work from
+>>> the waker and leverages the idle CPU to queue the wakee. However, a long
+>>> idle duration is still observed. The idle task spends quite some time
+>>> on sched_ttwu_pending() before it switches out. This long idle
+>>> duration would mislead SIS_UTIL, then SIS_UTIL suggests the waker scan
+>>> for more CPUs. The time spent searching for an idle CPU would make
+>>> wakee waiting for more time, which in turn leads to more idle time.
+>>> The NEWLY_IDLE balance fails to pull tasks to the idle CPU, which
+>>> might be caused by no runnable wakee being found.
+>>>
+>>> [Proposal]
+>>> If a system is busy, and if the workloads are doing frequent context
+>>> switches, it might not be a good idea to spread the wakee on different
+>>> CPUs. Instead, consider the task running time and enhance wake affine
+>>> might be applicable.
+>>>
+>>> This idea has been suggested by Rik at LPC 2019 when discussing
+>>> the latency nice. He asked the following question: if P1 is a small-time
+>>> slice task on CPU, can we put the waking task P2 on the CPU and wait for
+>>> P1 to release the CPU, without wasting time to search for an idle CPU?
+>>> At LPC 2021 Vincent Guittot has proposed:
+>>> 1. If the wakee is a long-running task, should we skip the short idle CPU?
+>>> 2. If the wakee is a short-running task, can we put it onto a lightly loaded
+>>>     local CPU?
+>>>
+>>> Current proposal is a variant of 2:
+>>> If the target CPU is running a short-time slice task, and the wakee
+>>> is also a short-time slice task, the target CPU could be chosen as the
+>>> candidate when the system is busy.
+>>>
+>>> The definition of a short-time slice task is: The average running time
+>>> of the task during each run is no more than sysctl_sched_min_granularity.
+>>> If a task switches in and then voluntarily relinquishes the CPU
+>>> quickly, it is regarded as a short-running task. Choosing
+>>> sysctl_sched_min_granularity because it is the minimal slice if there
+>>> are too many runnable tasks.
+>>>
+>>> Reuse the nr_idle_scan of SIS_UTIL to decide if the system is busy.
+>>> If yes, then a compromised "idle" CPU might be acceptable.
+>>>
+>>> The reason is that, if the waker is a short running task, it might
+>>> relinquish the CPU soon, the wakee has the chance to be scheduled.
+>>> On the other hand, if the wakee is also a short-running task, the
+>>> impact it brings to the target CPU is small. If the system is
+>>> already busy, maybe we could lower the bar to find an idle CPU.
+>>> The effect is, the wake affine is enhanced.
+>>>
+>>> [Benchmark results]
+>>> The baseline is 6.0-rc4.
+>>>
+>>> The throughput of will-it-scale.context_switch1 has been increased by
+>>> 331.13% with this patch applied.
+>>>
+>>> netperf
+>>> =======
+>>> case            	load    	baseline(std%)	compare%( std%)
+>>> TCP_RR          	28 threads	 1.00 (  0.57)	 +0.29 (  0.59)
+>>> TCP_RR          	56 threads	 1.00 (  0.49)	 +0.43 (  0.43)
+>>> TCP_RR          	84 threads	 1.00 (  0.34)	 +0.24 (  0.34)
+>>> TCP_RR          	112 threads	 1.00 (  0.26)	 +1.57 (  0.20)
+>>> TCP_RR          	140 threads	 1.00 (  0.20)	+178.05 (  8.83)
+>>> TCP_RR          	168 threads	 1.00 ( 10.14)	 +0.87 ( 10.03)
+>>> TCP_RR          	196 threads	 1.00 ( 13.51)	 +0.90 ( 11.84)
+>>> TCP_RR          	224 threads	 1.00 (  7.12)	 +0.66 (  8.28)
+>>> UDP_RR          	28 threads	 1.00 (  0.96)	 -0.10 (  0.97)
+>>> UDP_RR          	56 threads	 1.00 ( 10.93)	 +0.24 (  0.82)
+>>> UDP_RR          	84 threads	 1.00 (  8.99)	 +0.40 (  0.71)
+>>> UDP_RR          	112 threads	 1.00 (  0.15)	 +0.72 (  7.77)
+>>> UDP_RR          	140 threads	 1.00 ( 11.11)	+135.81 ( 13.86)
+>>> UDP_RR          	168 threads	 1.00 ( 12.58)	+147.63 ( 12.72)
+>>> UDP_RR          	196 threads	 1.00 ( 19.47)	 -0.34 ( 16.14)
+>>> UDP_RR          	224 threads	 1.00 ( 12.88)	 -0.35 ( 12.73)
+>>>
+>>> hackbench
+>>> =========
+>>> case            	load    	baseline(std%)	compare%( std%)
+>>> process-pipe    	1 group 	 1.00 (  1.02)	 +0.14 (  0.62)
+>>> process-pipe    	2 groups 	 1.00 (  0.73)	 +0.29 (  0.51)
+>>> process-pipe    	4 groups 	 1.00 (  0.16)	 +0.24 (  0.31)
+>>> process-pipe    	8 groups 	 1.00 (  0.06)	+11.56 (  0.11)
+>>> process-sockets 	1 group 	 1.00 (  1.59)	 +0.06 (  0.77)
+>>> process-sockets 	2 groups 	 1.00 (  1.13)	 -1.86 (  1.31)
+>>> process-sockets 	4 groups 	 1.00 (  0.14)	 +1.76 (  0.29)
+>>> process-sockets 	8 groups 	 1.00 (  0.27)	 +2.73 (  0.10)
+>>> threads-pipe    	1 group 	 1.00 (  0.43)	 +0.83 (  2.20)
+>>> threads-pipe    	2 groups 	 1.00 (  0.52)	 +1.03 (  0.55)
+>>> threads-pipe    	4 groups 	 1.00 (  0.44)	 -0.08 (  0.31)
+>>> threads-pipe    	8 groups 	 1.00 (  0.04)	+11.86 (  0.05)
+>>> threads-sockets 	1 groups 	 1.00 (  1.89)	 +3.51 (  0.57)
+>>> threads-sockets 	2 groups 	 1.00 (  0.04)	 -1.12 (  0.69)
+>>> threads-sockets 	4 groups 	 1.00 (  0.14)	 +1.77 (  0.18)
+>>> threads-sockets 	8 groups 	 1.00 (  0.03)	 +2.75 (  0.03)
+>>>
+>>> tbench
+>>> ======
+>>> case            	load    	baseline(std%)	compare%( std%)
+>>> loopback        	28 threads	 1.00 (  0.08)	 +0.51 (  0.25)
+>>> loopback        	56 threads	 1.00 (  0.15)	 -0.89 (  0.16)
+>>> loopback        	84 threads	 1.00 (  0.03)	 +0.35 (  0.07)
+>>> loopback        	112 threads	 1.00 (  0.06)	 +2.84 (  0.01)
+>>> loopback        	140 threads	 1.00 (  0.07)	 +0.69 (  0.11)
+>>> loopback        	168 threads	 1.00 (  0.09)	 +0.14 (  0.18)
+>>> loopback        	196 threads	 1.00 (  0.04)	 -0.18 (  0.20)
+>>> loopback        	224 threads	 1.00 (  0.25)	 -0.37 (  0.03)
+>>>
+>>> Other benchmarks are under testing.
+>>
+>> Discussed below are the results from running standard benchmarks on
+>> a dual socket Zen3 (2 x 64C/128T) machine configured in different
+>> NPS modes.
+>>
+>> NPS Modes are used to logically divide single socket into
+>> multiple NUMA region.
+>> Following is the NUMA configuration for each NPS mode on the system:
+>>
+>> NPS1: Each socket is a NUMA node.
+>>      Total 2 NUMA nodes in the dual socket machine.
+>>
+>>      Node 0: 0-63,   128-191
+>>      Node 1: 64-127, 192-255
+>>
+>> NPS2: Each socket is further logically divided into 2 NUMA regions.
+>>      Total 4 NUMA nodes exist over 2 socket.
+>>     
+>>      Node 0: 0-31,   128-159
+>>      Node 1: 32-63,  160-191
+>>      Node 2: 64-95,  192-223
+>>      Node 3: 96-127, 223-255
+>>
+>> NPS4: Each socket is logically divided into 4 NUMA regions.
+>>      Total 8 NUMA nodes exist over 2 socket.
+>>     
+>>      Node 0: 0-15,    128-143
+>>      Node 1: 16-31,   144-159
+>>      Node 2: 32-47,   160-175
+>>      Node 3: 48-63,   176-191
+>>      Node 4: 64-79,   192-207
+>>      Node 5: 80-95,   208-223
+>>      Node 6: 96-111,  223-231
+>>      Node 7: 112-127, 232-255
+>>
+>> Benchmark Results:
+>>
+>> Kernel versions:
+>> - tip:       5.19.0 tip sched/core
+>> - shortrun:  5.19.0 tip sched/core + this patch
+>>
+>> When we started testing, the tip was at:
+>> commit 7e9518baed4c ("sched/fair: Move call to list_last_entry() in detach_tasks")
+>>
+>> ~~~~~~~~~~~~~
+>> ~ hackbench ~
+>> ~~~~~~~~~~~~~
+>>
+>> NPS1
+>>
+>> Test:			tip			shortrun
+>>   1-groups:	   4.23 (0.00 pct)	   4.24 (-0.23 pct)
+>>   2-groups:	   4.93 (0.00 pct)	   5.68 (-15.21 pct)
+>>   4-groups:	   5.32 (0.00 pct)	   6.21 (-16.72 pct)
+>>   8-groups:	   5.46 (0.00 pct)	   6.49 (-18.86 pct)
+>> 16-groups:	   7.31 (0.00 pct)	   7.78 (-6.42 pct)
+>>
+>> NPS2
+>>
+>> Test:			tip			shortrun
+>>   1-groups:	   4.19 (0.00 pct)	   4.19 (0.00 pct)
+>>   2-groups:	   4.77 (0.00 pct)	   5.43 (-13.83 pct)
+>>   4-groups:	   5.15 (0.00 pct)	   6.20 (-20.38 pct)
+>>   8-groups:	   5.47 (0.00 pct)	   6.54 (-19.56 pct)
+>> 16-groups:	   6.63 (0.00 pct)	   7.28 (-9.80 pct)
+>>
+>> NPS4
+>>
+>> Test:			tip			shortrun
+>>   1-groups:	   4.23 (0.00 pct)	   4.39 (-3.78 pct)
+>>   2-groups:	   4.78 (0.00 pct)	   5.48 (-14.64 pct)
+>>   4-groups:	   5.17 (0.00 pct)	   6.14 (-18.76 pct)
+>>   8-groups:	   5.63 (0.00 pct)	   6.51 (-15.63 pct)
+>> 16-groups:	   7.88 (0.00 pct)	   7.03 (10.78 pct)
+>>
+>> ~~~~~~~~~~~~
+>> ~ schbench ~
+>> ~~~~~~~~~~~~
+>>
+>> NPS1
+>>
+>> #workers:       tip			shortrun
+>>    1:	  22.00 (0.00 pct)	  36.00 (-63.63 pct)
+>>    2:	  34.00 (0.00 pct)	  38.00 (-11.76 pct)
+>>    4:	  37.00 (0.00 pct)	  36.00 (2.70 pct)
+>>    8:	  55.00 (0.00 pct)	  51.00 (7.27 pct)
+>>   16:	  69.00 (0.00 pct)	  68.00 (1.44 pct)
+>>   32:	 113.00 (0.00 pct)	 116.00 (-2.65 pct)
+>>   64:	 219.00 (0.00 pct)	 232.00 (-5.93 pct)
+>> 128:	 506.00 (0.00 pct)	 1019.00 (-101.38 pct)
+>> 256:	 45440.00 (0.00 pct)	 44864.00 (1.26 pct)
+>> 512:	 76672.00 (0.00 pct)	 73600.00 (4.00 pct)
+>>
+>> NPS2
+>>
+>> #workers:	tip			shortrun
+>>    1:	  31.00 (0.00 pct)	  36.00 (-16.12 pct)
+>>    2:	  36.00 (0.00 pct)	  36.00 (0.00 pct)
+>>    4:	  45.00 (0.00 pct)	  39.00 (13.33 pct)
+>>    8:	  47.00 (0.00 pct)	  48.00 (-2.12 pct)
+>>   16:	  66.00 (0.00 pct)	  71.00 (-7.57 pct)
+>>   32:	 114.00 (0.00 pct)	 123.00 (-7.89 pct)
+>>   64:	 215.00 (0.00 pct)	 248.00 (-15.34 pct)
+>> 128:	 495.00 (0.00 pct)	 531.00 (-7.27 pct)
+>> 256:	 48576.00 (0.00 pct)	 47552.00 (2.10 pct)
+>> 512:	 79232.00 (0.00 pct)	 74624.00 (5.81 pct)
+>>
+>> NPS4
+>>
+>> #workers:	tip			shortrun
+>>    1:	  30.00 (0.00 pct)	  36.00 (-20.00 pct)
+>>    2:	  34.00 (0.00 pct)	  38.00 (-11.76 pct)
+>>    4:	  41.00 (0.00 pct)	  44.00 (-7.31 pct)
+>>    8:	  60.00 (0.00 pct)	  53.00 (11.66 pct)
+>>   16:	  68.00 (0.00 pct)	  73.00 (-7.35 pct)
+>>   32:	 116.00 (0.00 pct)	 125.00 (-7.75 pct)
+>>   64:	 224.00 (0.00 pct)	 248.00 (-10.71 pct)
+>> 128:	 495.00 (0.00 pct)	 569.00 (-14.94 pct)
+>> 256:	 45888.00 (0.00 pct)	 38720.00 (15.62 pct)
+>> 512:	 78464.00 (0.00 pct)	 73600.00 (6.19 pct)
+>>
+>>
+>> ~~~~~~~~~~
+>> ~ tbench ~
+>> ~~~~~~~~~~
+>>
+>> NPS1
+>>
+>> Clients:	tip			shortrun
+>>      1	 550.66 (0.00 pct)	 546.56 (-0.74 pct)
+>>      2	 1009.69 (0.00 pct)	 1010.01 (0.03 pct)
+>>      4	 1795.32 (0.00 pct)	 1782.71 (-0.70 pct)
+>>      8	 2971.16 (0.00 pct)	 3035.58 (2.16 pct)
+>>     16	 4627.98 (0.00 pct)	 4816.82 (4.08 pct)
+>>     32	 8065.15 (0.00 pct)	 9269.52 (14.93 pct)
+>>     64	 14994.32 (0.00 pct)	 14704.38 (-1.93 pct)
+>>    128	 5175.73 (0.00 pct)	 5174.77 (-0.01 pct)
+>>    256	 48763.57 (0.00 pct)	 49649.67 (1.81 pct)
+>>    512	 43780.78 (0.00 pct)	 44717.04 (2.13 pct)
+>>   1024	 40341.84 (0.00 pct)	 42078.99 (4.30 pct)
+>>
+>> NPS2
+>>
+>> Clients:	tip			shortrun
+>>      1	 551.06 (0.00 pct)	 549.17 (-0.34 pct)
+>>      2	 1000.76 (0.00 pct)	 993.75 (-0.70 pct)
+>>      4	 1737.02 (0.00 pct)	 1773.33 (2.09 pct)
+>>      8	 2992.31 (0.00 pct)	 2971.05 (-0.71 pct)
+>>     16	 4579.29 (0.00 pct)	 4470.71 (-2.37 pct)
+>>     32	 9120.73 (0.00 pct)	 8080.89 (-11.40 pct)
+>>     64	 14918.58 (0.00 pct)	 14395.57 (-3.50 pct)
+>>    128	 20830.61 (0.00 pct)	 20579.09 (-1.20 pct)
+>>    256	 47708.18 (0.00 pct)	 47416.37 (-0.61 pct)
+>>    512	 43721.79 (0.00 pct)	 43754.83 (0.07 pct)
+>>   1024	 40920.49 (0.00 pct)	 40701.90 (-0.53 pct)
+>>
+>> NPS4
+>>
+>> Clients:	tip			shortrun
+>>      1	 549.22 (0.00 pct)	 548.36 (-0.15 pct)
+>>      2	 1000.08 (0.00 pct)	 1037.74 (3.76 pct)
+>>      4	 1794.78 (0.00 pct)	 1802.11 (0.40 pct)
+>>      8	 3008.50 (0.00 pct)	 2989.22 (-0.64 pct)
+>>     16	 4804.71 (0.00 pct)	 4706.51 (-2.04 pct)
+>>     32	 9156.57 (0.00 pct)	 8253.84 (-9.85 pct)
+>>     64	 14901.45 (0.00 pct)	 15049.51 (0.99 pct)
+>>    128	 20771.20 (0.00 pct)	 13229.50 (-36.30 pct)
+>>    256	 47033.88 (0.00 pct)	 46737.17 (-0.63 pct)
+>>    512	 43429.01 (0.00 pct)	 43246.64 (-0.41 pct)
+>>   1024	 39271.27 (0.00 pct)	 42194.75 (7.44 pct)
+>>
+>>
+>> ~~~~~~~~~~
+>> ~ stream ~
+>> ~~~~~~~~~~
+>>
+>> NPS1
+>>
+>> 10 Runs:
+>>
+>> Test:	        tip			shortrun
+>>   Copy:	 336311.52 (0.00 pct)	 330116.75 (-1.84 pct)
+>> Scale:	 212955.82 (0.00 pct)	 215330.30 (1.11 pct)
+>>    Add:	 251518.23 (0.00 pct)	 250926.53 (-0.23 pct)
+>> Triad:	 262077.88 (0.00 pct)	 259618.70 (-0.93 pct)
+>>
+>> 100 Runs:
+>>
+>> Test:		tip			shortrun
+>>   Copy:	 339533.83 (0.00 pct)	 323452.74 (-4.73 pct)
+>> Scale:	 194736.72 (0.00 pct)	 215789.55 (10.81 pct)
+>>    Add:	 218294.54 (0.00 pct)	 244916.33 (12.19 pct)
+>> Triad:	 262371.40 (0.00 pct)	 252997.84 (-3.57 pct)
+>>
+>> NPS2
+>>
+>> 10 Runs:
+>>
+>> Test:		tip			shortrun
+>>   Copy:	 335277.15 (0.00 pct)	 305516.57 (-8.87 pct)
+>> Scale:	 220990.24 (0.00 pct)	 207061.22 (-6.30 pct)
+>>    Add:	 264156.13 (0.00 pct)	 243368.49 (-7.86 pct)
+>> Triad:	 268707.53 (0.00 pct)	 223486.30 (-16.82 pct)
+>>
+>> 100 Runs:
+>>
+>> Test:		tip			shortrun
+>>   Copy:	 334913.73 (0.00 pct)	 319677.81 (-4.54 pct)
+>> Scale:	 230522.47 (0.00 pct)	 222757.62 (-3.36 pct)
+>>    Add:	 264567.28 (0.00 pct)	 254883.62 (-3.66 pct)
+>> Triad:	 272974.23 (0.00 pct)	 260561.08 (-4.54 pct)
+>>
+>> NPS4
+>>
+>> 10 Runs:
+>>
+>> Test:		tip			shortrun
+>>   Copy:	 356452.47 (0.00 pct)	 255911.77 (-28.20 pct)
+>> Scale:	 242986.42 (0.00 pct)	 171587.28 (-29.38 pct)
+>>    Add:	 268512.09 (0.00 pct)	 188244.75 (-29.89 pct)
+>> Triad:	 281622.43 (0.00 pct)	 193271.97 (-31.37 pct)
+>>
+>> 100 Runs:
+>>
+>> Test:		tip			shortrun
+>>   Copy:	 367384.81 (0.00 pct)	 273101.20 (-25.66 pct)
+>> Scale:	 254289.04 (0.00 pct)	 189986.88 (-25.28 pct)
+>>    Add:	 273683.33 (0.00 pct)	 206384.96 (-24.58 pct)
+>> Triad:	 285696.90 (0.00 pct)	 217214.10 (-23.97 pct)
+>>
+>> ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> ~ Notes and Observations ~
+>> ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>> o Schedstat data for Hackbench with 2 groups in NPS1 mode:
+>>
+>>          ---------------------------------------------------------------------------------------------------
+>>          cpu:  all_cpus (avg) vs cpu:  all_cpus (avg)
+>>          ---------------------------------------------------------------------------------------------------
+>>          kernel:                                                    :           tip      shortrun
+>>          sched_yield count                                          :             0,            0
+>>          Legacy counter can be ignored                              :             0,            0
+>>          schedule called                                            :         53305,        40615  | -23.81|
+>>          schedule left the processor idle                           :         22406,        16919  | -24.49|
+>>          try_to_wake_up was called                                  :         30822,        23625  | -23.35|
+>>          try_to_wake_up was called to wake up the local cpu         :           984,         2583  | 162.50|
+>>          total runtime by tasks on this processor (in jiffies)      :     596998654,    481267347  | -19.39| *
+>>          total waittime by tasks on this processor (in jiffies)     :     514142630,    766745576  |  49.13| * Longer wait time
+> Agree, the wait length is 766745576 / 481267347 = 1.59 after patched, which is
+> much bigger than 514142630 / 596998654 = 0.86 before the patch.
+> 
+>>          total timeslices run on this cpu                           :         30893,        23691  | -23.31| *
+>>          ---------------------------------------------------------------------------------------------------
+>>
+>>
+>>          < --------------------------------------  Wakeup info:  -------------------------------------- >
+>>          kernel:                                                 :           tip      shortrun
+>>          Wakeups on same         SMT cpus = all_cpus (avg)       :          1470,         1301  | -11.50|
+>>          Wakeups on same         MC cpus = all_cpus (avg)        :         22913,        18606  | -18.80|
+>>          Wakeups on same         DIE cpus = all_cpus (avg)       :          3634,          693  | -80.93|
+>>          Wakeups on same         NUMA cpus = all_cpus (avg)      :          1819,          440  | -75.81|
+>>          Affine wakeups on same  SMT cpus = all_cpus (avg)       :          1025,         1421  |  38.63| * More affine wakeups on possibly
+>>          Affine wakeups on same  MC cpus = all_cpus (avg)        :         14455,        17514  |  21.16| * busy runqueue leading to longer
+>>          Affine wakeups on same  DIE cpus = all_cpus (avg)       :          2828,          701  | -75.21|   wait time
+>>          Affine wakeups on same  NUMA cpus = all_cpus (avg)      :          1194,          456  | -61.81|
+>>          ------------------------------------------------------------------------------------------------
+> Agree, for SMT and MC domain, the wake affine has been enhanced to suggest to pick
+> a short running CPU rather than an idle one. Then later SIS_UTIL would prefer to
+> pick this candidate CPU.
+>>
+>> 	We observe a larger wait time which which the patch which points
+>>          to the fact that the tasks are piling on the run queue. I believe
+>> 	Tim's suggestion will help here where we can avoid a pileup as a
+>> 	result of waker task being a short run task.
+> Yes, we'll raise the bar to pick a short running CPU.
+>>
+>> o Tracepoint data for Stream for 100 runs in NPS4
+>>
+>> 	Following tracepoints were enabled for Stream threads:
+>> 	  - sched_wakeup_new: To observe initial placement
+>> 	  - sched_waking: To check if migration is in wakeup context or lb contxt
+>> 	  - sched_wakeup: To check if migration is in wakeup context or lb contxt
+>> 	  - sched_migrate_task: To observe task movements
+>>
+>> 	--> tip:
+>>
+>>     run_stream.sh-3724    [057] d..2.   450.593407: sched_wakeup_new: comm=run_stream.sh pid=3733 prio=120 target_cpu=050 *LLC: 6
+>>            <idle>-0       [182] d.s4.   450.594375: sched_waking: comm=stream pid=3733 prio=120 target_cpu=050
+>>            <idle>-0       [050] dNh2.   450.594381: sched_wakeup: comm=stream pid=3733 prio=120 target_cpu=050
+>>            <idle>-0       [182] d.s4.   450.594657: sched_waking: comm=stream pid=3733 prio=120 target_cpu=050
+>>            <idle>-0       [050] dNh2.   450.594661: sched_wakeup: comm=stream pid=3733 prio=120 target_cpu=050
+>>            stream-3733    [050] d..2.   450.594893: sched_wakeup_new: comm=stream pid=3735 prio=120 target_cpu=057 *LLC: 7
+>>            stream-3733    [050] d..2.   450.594955: sched_wakeup_new: comm=stream pid=3736 prio=120 target_cpu=078 *LLC: 9
+>>            stream-3733    [050] d..2.   450.594988: sched_wakeup_new: comm=stream pid=3737 prio=120 target_cpu=045 *LLC: 5
+>>            stream-3733    [050] d..2.   450.595016: sched_wakeup_new: comm=stream pid=3738 prio=120 target_cpu=008 *LLC: 1
+>>            stream-3733    [050] d..2.   450.595029: sched_waking: comm=stream pid=3737 prio=120 target_cpu=045
+>>            <idle>-0       [045] dNh2.   450.595037: sched_wakeup: comm=stream pid=3737 prio=120 target_cpu=045
+>>            stream-3737    [045] d..2.   450.595072: sched_waking: comm=stream pid=3733 prio=120 target_cpu=050
+>>            <idle>-0       [050] dNh2.   450.595078: sched_wakeup: comm=stream pid=3733 prio=120 target_cpu=050
+>>            stream-3738    [008] d..2.   450.595102: sched_waking: comm=stream pid=3733 prio=120 target_cpu=050
+>>            <idle>-0       [050] dNh2.   450.595111: sched_wakeup: comm=stream pid=3733 prio=120 target_cpu=050
+>>            stream-3733    [050] d..2.   450.595151: sched_wakeup_new: comm=stream pid=3739 prio=120 target_cpu=097 *LLC: 12
+>>            stream-3733    [050] d..2.   450.595181: sched_wakeup_new: comm=stream pid=3740 prio=120 target_cpu=194 *LLC: 8
+>>            stream-3733    [050] d..2.   450.595221: sched_wakeup_new: comm=stream pid=3741 prio=120 target_cpu=080 *LLC: 10
+>>            stream-3733    [050] d..2.   450.595249: sched_wakeup_new: comm=stream pid=3742 prio=120 target_cpu=144 *LLC: 2
+>>            stream-3733    [050] d..2.   450.595285: sched_wakeup_new: comm=stream pid=3743 prio=120 target_cpu=239 *LLC: 13
+>>            stream-3733    [050] d..2.   450.595320: sched_wakeup_new: comm=stream pid=3744 prio=120 target_cpu=130 *LLC: 0
+>>            stream-3733    [050] d..2.   450.595364: sched_wakeup_new: comm=stream pid=3745 prio=120 target_cpu=113 *LLC: 14
+>>            stream-3744    [130] d..2.   450.595407: sched_waking: comm=stream pid=3733 prio=120 target_cpu=050
+>>            <idle>-0       [050] dNh2.   450.595416: sched_wakeup: comm=stream pid=3733 prio=120 target_cpu=050
+>>            stream-3733    [050] d..2.   450.595423: sched_waking: comm=stream pid=3745 prio=120 target_cpu=113
+>>            <idle>-0       [113] dNh2.   450.595433: sched_wakeup: comm=stream pid=3745 prio=120 target_cpu=113
+>>            stream-3733    [050] d..2.   450.595452: sched_wakeup_new: comm=stream pid=3746 prio=120 target_cpu=160 *LLC: 4
+>>            stream-3733    [050] d..2.   450.595486: sched_wakeup_new: comm=stream pid=3747 prio=120 target_cpu=255 *LLC: 15
+>>            stream-3733    [050] d..2.   450.595513: sched_wakeup_new: comm=stream pid=3748 prio=120 target_cpu=159 *LLC: 3
+>>            stream-3746    [160] d..2.   450.595533: sched_waking: comm=stream pid=3733 prio=120 target_cpu=050
+>>            <idle>-0       [050] dNh2.   450.595542: sched_wakeup: comm=stream pid=3733 prio=120 target_cpu=050
+>>            stream-3747    [255] d..2.   450.595562: sched_waking: comm=stream pid=3733 prio=120 target_cpu=050
+>>            <idle>-0       [050] dNh2.   450.595573: sched_wakeup: comm=stream pid=3733 prio=120 target_cpu=050
+>>            stream-3733    [050] d..2.   450.595614: sched_wakeup_new: comm=stream pid=3749 prio=120 target_cpu=222 *LLC: 11
+>>            stream-3740    [194] d..2.   451.140510: sched_waking: comm=stream pid=3747 prio=120 target_cpu=255
+>>            <idle>-0       [255] dNh2.   451.140523: sched_wakeup: comm=stream pid=3747 prio=120 target_cpu=255
+>>            stream-3733    [050] d..2.   451.617257: sched_waking: comm=stream pid=3740 prio=120 target_cpu=194
+>>            stream-3733    [050] d..2.   451.617267: sched_waking: comm=stream pid=3746 prio=120 target_cpu=160
+>>            stream-3733    [050] d..2.   451.617269: sched_waking: comm=stream pid=3739 prio=120 target_cpu=097
+>>            stream-3733    [050] d..2.   451.617272: sched_waking: comm=stream pid=3742 prio=120 target_cpu=144
+>>            stream-3733    [050] d..2.   451.617275: sched_waking: comm=stream pid=3749 prio=120 target_cpu=222
+>>            ... (No migrations observed)
+>>
+>>            In most cases, each LLCs is running only 1 stream thread leading to optimal performance.
+>>
+>> 	--> with patch:
+>>
+>>     run_stream.sh-4383    [070] d..2.  1237.764236: sched_wakeup_new: comm=run_stream.sh pid=4392 prio=120 target_cpu=206 *LLC: 9
+>>            stream-4392    [206] d..2.  1237.765121: sched_wakeup_new: comm=stream pid=4394 prio=120 target_cpu=070 *LLC: 8
+>>            stream-4392    [206] d..2.  1237.765171: sched_wakeup_new: comm=stream pid=4395 prio=120 target_cpu=169 *LLC: 5
+>>            stream-4392    [206] d..2.  1237.765204: sched_wakeup_new: comm=stream pid=4396 prio=120 target_cpu=111 *LLC: 13
+>>            stream-4392    [206] d..2.  1237.765243: sched_wakeup_new: comm=stream pid=4397 prio=120 target_cpu=130 *LLC: 0
+>>            stream-4392    [206] d..2.  1237.765249: sched_waking: comm=stream pid=4396 prio=120 target_cpu=111
+>>            <idle>-0       [111] dNh2.  1237.765260: sched_wakeup: comm=stream pid=4396 prio=120 target_cpu=111
+>>            stream-4392    [206] d..2.  1237.765281: sched_wakeup_new: comm=stream pid=4398 prio=120 target_cpu=182 *LLC: 6
+>>            stream-4392    [206] d..2.  1237.765318: sched_wakeup_new: comm=stream pid=4399 prio=120 target_cpu=060 *LLC: 7
+>>            stream-4392    [206] d..2.  1237.765368: sched_wakeup_new: comm=stream pid=4400 prio=120 target_cpu=124 *LLC: 15
+>>            stream-4392    [206] d..2.  1237.765408: sched_wakeup_new: comm=stream pid=4401 prio=120 target_cpu=031 *LLC: 3
+>>            stream-4392    [206] d..2.  1237.765439: sched_wakeup_new: comm=stream pid=4402 prio=120 target_cpu=095 *LLC: 11
+>>            stream-4392    [206] d..2.  1237.765475: sched_wakeup_new: comm=stream pid=4403 prio=120 target_cpu=015 *LLC: 1
+>>            stream-4401    [031] d..2.  1237.765497: sched_waking: comm=stream pid=4392 prio=120 target_cpu=206
+>>            stream-4401    [031] d..2.  1237.765506: sched_migrate_task: comm=stream pid=4392 prio=120 orig_cpu=206 dest_cpu=152 *LLC: 9 -> 3
+>>            <idle>-0       [152] dNh2.  1237.765540: sched_wakeup: comm=stream pid=4392 prio=120 target_cpu=152
+>>            stream-4403    [015] d..2.  1237.765562: sched_waking: comm=stream pid=4392 prio=120 target_cpu=152
+>>            stream-4403    [015] d..2.  1237.765570: sched_migrate_task: comm=stream pid=4392 prio=120 orig_cpu=152 dest_cpu=136 *LLC: 3 -> 1
+>>            <idle>-0       [136] dNh2.  1237.765602: sched_wakeup: comm=stream pid=4392 prio=120 target_cpu=136
+>>            stream-4392    [136] d..2.  1237.765799: sched_wakeup_new: comm=stream pid=4404 prio=120 target_cpu=097 *LLC: 12
+>>            stream-4392    [136] d..2.  1237.765893: sched_wakeup_new: comm=stream pid=4405 prio=120 target_cpu=084 *LLC: 10
+>>            stream-4392    [136] d..2.  1237.765957: sched_wakeup_new: comm=stream pid=4406 prio=120 target_cpu=119 *LLC: 14
+>>            stream-4392    [136] d..2.  1237.766018: sched_wakeup_new: comm=stream pid=4407 prio=120 target_cpu=038 *LLC: 4
+>>            stream-4406    [119] d..2.  1237.766044: sched_waking: comm=stream pid=4392 prio=120 target_cpu=136
+>>            stream-4406    [119] d..2.  1237.766050: sched_migrate_task: comm=stream pid=4392 prio=120 orig_cpu=136 dest_cpu=240 *LLC: 1 -> 14
+>>            <idle>-0       [240] dNh2.  1237.766154: sched_wakeup: comm=stream pid=4392 prio=120 target_cpu=240
+>>            stream-4392    [240] d..2.  1237.766361: sched_wakeup_new: comm=stream pid=4408 prio=120 target_cpu=023 *LLC: 2
+>>            stream-4399    [060] d..2.  1238.300605: sched_waking: comm=stream pid=4406 prio=120 target_cpu=119 *LLC: 14 <--- Two stream threads are
+>>            stream-4399    [060] d..2.  1238.300611: sched_waking: comm=stream pid=4392 prio=120 target_cpu=240 *LLC: 14 <--- on the same LLC leading to
+>>            <idle>-0       [119] dNh2.  1238.300620: sched_wakeup: comm=stream pid=4406 prio=120 target_cpu=119 *LLC: 14      cache contention, degrading
+>>            <idle>-0       [240] dNh2.  1238.300621: sched_wakeup: comm=stream pid=4392 prio=120 target_cpu=240 *LLC: 14      the Stream throughput.
+>>            ... (No more migrations observed)
+>>
+>>            After all the wakeups and migrations, LLC 14 contains two stream threads (pid: 4392 and 4406)
+>>            All the migrations happen between the events sched_waking and sched_wakeup showing the migrations
+>>            happens during a wakeup and not as a resutl of load balancing.
+>>
+>>>
+>>> This patch is more about enhancing the wake affine, rather than improving
+>>> the SIS efficiency, so Mel's SIS statistic patch was not deployed for now.
+>>>
+>>> [Limitations]
+>>> When the number of CPUs suggested by SIS_UTIL is lower than 60% of the LLC
+>>> CPUs, the LLC domain is regarded as relatively busy. However, the 60% is
+>>> somewhat hacky, because it indicates that the util_avg% is around 50%,
+>>> a half busy LLC. I don't have other lightweight/accurate method in mind to
+>>> check if the LLC domain is busy or not.
+>>>
+>>> [Misc]
+>>> At LPC we received useful suggestions. The first one is that we should look at
+>>> the time from the task is woken up, to the time the task goes back to sleep.
+>>> I assume this is aligned with what is proposed here - we consider the average
+>>> running time, rather than the total running time. The second one is that we
+>>> should consider the long-running task. And this is under investigation.
+>>>
+>>> Besides, Prateek has mentioned that the SIS_UTIL is unable to deal with
+>>> burst workload.  Because there is a delay to reflect the instantaneous
+>>> utilization and SIS_UTIL expects the workload to be stable. If the system
+>>> is idle most of the time, but suddenly the workloads burst, the SIS_UTIL
+>>> overscans. The current patch might mitigate this symptom somehow, as burst
+>>> workload is usually regarded as a short-running task.
+>>>
+>>> Suggested-by: Tim Chen <tim.c.chen@intel.com>
+>>> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+>>> ---
+>>>   kernel/sched/fair.c | 31 ++++++++++++++++++++++++++++++-
+>>>   1 file changed, 30 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>>> index 914096c5b1ae..7519ab5b911c 100644
+>>> --- a/kernel/sched/fair.c
+>>> +++ b/kernel/sched/fair.c
+>>> @@ -6020,6 +6020,19 @@ static int wake_wide(struct task_struct *p)
+>>>   	return 1;
+>>>   }
+>>>   
+>>> +/*
+>>> + * If a task switches in and then voluntarily relinquishes the
+>>> + * CPU quickly, it is regarded as a short running task.
+>>> + * sysctl_sched_min_granularity is chosen as the threshold,
+>>> + * as this value is the minimal slice if there are too many
+>>> + * runnable tasks, see __sched_period().
+>>> + */
+>>> +static int is_short_task(struct task_struct *p)
+>>> +{
+>>> +	return (p->se.sum_exec_runtime <=
+>>> +		(p->nvcsw * sysctl_sched_min_granularity));
+>>> +}
+>>> +
+>>>   /*
+>>>    * The purpose of wake_affine() is to quickly determine on which CPU we can run
+>>>    * soonest. For the purpose of speed we only consider the waking and previous
+>>> @@ -6050,7 +6063,8 @@ wake_affine_idle(int this_cpu, int prev_cpu, int sync)
+>>>   	if (available_idle_cpu(this_cpu) && cpus_share_cache(this_cpu, prev_cpu))
+>>>   		return available_idle_cpu(prev_cpu) ? prev_cpu : this_cpu;
+>>>   
+>>> -	if (sync && cpu_rq(this_cpu)->nr_running == 1)
+>>> +	if ((sync && cpu_rq(this_cpu)->nr_running == 1) ||
+>>> +	    is_short_task(cpu_curr(this_cpu)))
 
--- 
-Best Regards
- Guo Ren
+Seems it a bit breaks idle (or will be idle) purpose of 
+wake_affine_idle() here. Maybe we can do it something like this?
+
+if ((sync || is_short_task(cpu_curr(this_cpu))) && 
+cpu_rq(this_cpu)->nr_running == 1)
+
+Thanks,
+Honglei
+
+>>
+>> This change seems to optimize for affine wakeup which benefits
+>> tasks with producer-consumer pattern but is not ideal for Stream.
+>> Currently the logic ends will do an affine wakeup even if sync
+>> flag is not set:
+>>
+>>            stream-4135    [029] d..2.   353.580953: sched_waking: comm=stream pid=4129 prio=120 target_cpu=082
+>>            stream-4135    [029] d..2.   353.580957: select_task_rq_fair: wake_affine_idle: Select this_cpu: sync(0) rq->nr_running(1) is_short_task(1)
+>>            stream-4135    [029] d..2.   353.580960: sched_migrate_task: comm=stream pid=4129 prio=120 orig_cpu=82 dest_cpu=30
+>>            <idle>-0       [030] dNh2.   353.580993: sched_wakeup: comm=stream pid=4129 prio=120 target_cpu=030
+>>
+>> I believe a consideration should be made for the sync flag when
+>> going for an affine wakeup. Also the check for short running could
+>> be at the end after checking if prev_cpu is an available_idle_cpu.
+>>
+> We can move the short running check after the prev_cpu check. If we
+> add the sync flag check would it shrink the coverage of this change?
+> Since I found that there is limited scenario would enable the sync
+> flag and we want to make the short running check a generic optimization.
+> But yes, we can test with/without sync flag constrain to see which one
+> gives better data.
+>>>   		return this_cpu;
+>>>   
+>>>   	if (available_idle_cpu(prev_cpu))
+>>> @@ -6434,6 +6448,21 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>>>   			/* overloaded LLC is unlikely to have idle cpu/core */
+>>>   			if (nr == 1)
+>>>   				return -1;
+>>> +
+>>> +			/*
+>>> +			 * If nr is smaller than 60% of llc_weight, it
+>>> +			 * indicates that the util_avg% is higher than 50%.
+>>> +			 * This is calculated by SIS_UTIL in
+>>> +			 * update_idle_cpu_scan(). The 50% util_avg indicates
+>>> +			 * a half-busy LLC domain. System busier than this
+>>> +			 * level could lower its bar to choose a compromised
+>>> +			 * "idle" CPU. If the waker on target CPU is a short
+>>> +			 * task and the wakee is also a short task, pick
+>>> +			 * target directly.
+>>> +			 */
+>>> +			if (!has_idle_core && (5 * nr < 3 * sd->span_weight) &&
+>>> +			    is_short_task(p) && is_short_task(cpu_curr(target)))
+>>> +				return target;
+>>
+>> Pileup seen in hackbench could also be a result of an early
+>> bailout here for smaller LLCs but I don't have any data to
+>> substantiate that claim currently.
+>>
+>>>   		}
+>>>   	}
+>>>   
+>> Please let me know if you need any more data from the test
+>> system for any of the benchmarks covered or if you would like
+>> me to run any other benchmark on the test system.
+> Thank you for your testing, I'll enable SNC to divide the LLC domain
+> into smaller ones, and to see if the issue could be reproduced
+> on my platform too, then I'll update my finding on this.
+> 
+> thanks,
+> Chenyu
+>> --
+>> Thanks and Regards,
+>> Prateek
