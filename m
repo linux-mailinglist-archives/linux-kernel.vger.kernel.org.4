@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81325EF585
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 14:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171F75EF58B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 14:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235278AbiI2MfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 08:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
+        id S235397AbiI2MhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 08:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235025AbiI2MfB (ORCPT
+        with ESMTP id S234300AbiI2MhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 08:35:01 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B8FF8589;
-        Thu, 29 Sep 2022 05:34:59 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id x92so1753509ede.9;
-        Thu, 29 Sep 2022 05:34:59 -0700 (PDT)
+        Thu, 29 Sep 2022 08:37:18 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA14BEBD54;
+        Thu, 29 Sep 2022 05:37:16 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id cc5so1981388wrb.6;
+        Thu, 29 Sep 2022 05:37:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=G1eJs3Mljaulp10lM3s9KZwUJhSiD5Z54QoCFft9nj0=;
-        b=QjlvRE6HJ+8CONd62XKDkJ/YO+eolaQgiqltwxHKFo55/Sn56h5/VJVJsVTfyNXPo/
-         VpHg5bIlPfbFcPbx7tiVYP4w/SxBbyP8/L+TBnn28aD/wkwxId9Ndxz4lbSIqivrz1wG
-         KeBXVklYXhyTTHZCjMIghKCDJISc0R4H2dP/Q/d4CJIWgUzDhrXJehlxPCJiNB9nKPUy
-         00z0h7tJ3Bs93OlpkQ6PsiMZfrSTJxYtwfPGwDGawvgIOkp+VOLilccvdAB0SCM6RGD5
-         ESBqJjqzMPPiPmuHj5FTt/9vPN2FW70qWJRQD+/PshqhyJEh15thqc59WBK3d7atlBm9
-         +Fcg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=6Wu49/9oCmVJqWjYHFvdZgUkugLJmnwyVSJYmbaTsak=;
+        b=h6X2gpN/qqak2l9MaA5Wwjk1FX/cZ65M4lTsmyeyL4pd7ptt3a38nLWeXPCbqHOTdo
+         113Mfcy8wqBL7LDYV9O3izk/Z+b3W0NOglKRBIoihov03gx/9ACd9BD2DiLeHKNjfj4o
+         pPLnAkAczGoHjZ4BUHInuINSAxarDQ0l/1M2CTHzqJ8TSTl6kBlbLsBaYRM9hsqryjJ+
+         78Z+mzgrL/xz5csMSrK0MVg1eRH2EfxHbl4QZOgxFZlP6f0yhhnFk/vYCHUHaO0uB362
+         C7HV9n5u2LZAgfQsnlPQG0xBC5wxPk3mJ0cmA2dKRM7dHKBtxkFGj/kiCVM5Obl4UTG2
+         7ASg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=G1eJs3Mljaulp10lM3s9KZwUJhSiD5Z54QoCFft9nj0=;
-        b=yv5T0m9X1X929mkhzTbO2A72383yrB7hFjNZjgqCiOG5RYFfngX86o1mHrFEGHskxO
-         orNj9N9VvOuyiXaq2ZZ8woLPtOsiECcdELcjbH/Y+77HxZwRpr+3LamvOzvyyQ2nPIgr
-         lToQtQ8kVlhY1B42Y1WghuaiPVV7oEV6ECSgA+ZgKigd+F2sKm2+Wvu8tq9gx5rLNPWW
-         B35/iux+2AzJUhQgPmS+nB+RHAP4TsrPBOkZrO0mowLKCSt4IMVUEpxhn8aZRTxb48tV
-         9WPJ/536c8kNSoyz7HN4sjGl172IK/nCUlpgdkFynDhc7+S5DAMwQqSU9/wya3sGUX6r
-         BPhg==
-X-Gm-Message-State: ACrzQf26Uvv74MSsk1fUowY7NdSL5sghvkIyhSlTl+myXrhovomylpvW
-        Q4pqvG6UMpOWH0wgNZxT/78=
-X-Google-Smtp-Source: AMsMyM7ML/RyoD8oE90RBpNhAwROpSdGmW5R4R5Fdokjsu3StGo9bExGOLdoXvYBGAVhLFTZ6A9SAQ==
-X-Received: by 2002:a05:6402:2549:b0:452:8292:b610 with SMTP id l9-20020a056402254900b004528292b610mr3142739edb.199.1664454898120;
-        Thu, 29 Sep 2022 05:34:58 -0700 (PDT)
-Received: from felia.fritz.box (200116b826e11200b190ebfd45660ea6.dip.versatel-1u1.de. [2001:16b8:26e1:1200:b190:ebfd:4566:ea6])
-        by smtp.gmail.com with ESMTPSA id g1-20020a17090604c100b00787cb1de743sm763435eja.38.2022.09.29.05.34.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 05:34:57 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: rectify entry for MESON NAND CONTROLLER DRIVER FOR AMLOGIC SOCS
-Date:   Thu, 29 Sep 2022 14:34:31 +0200
-Message-Id: <20220929123431.23180-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=6Wu49/9oCmVJqWjYHFvdZgUkugLJmnwyVSJYmbaTsak=;
+        b=Stycl1gQExWV3NSVJNi1jmLi5EMfek6wqyM0AI2lVDxAnXX6GrKgTk7id2Jo+g+5w/
+         xiZ7RbI57+Q93eFAWmIGUqIvnbC+A0nv6eemgPvYHVDRbzpBep8zZ1nchnWwhxu+WLdx
+         ASRS3/QJ8FvCw3Wq2LVnNeaB7y1TqHwSZzQ9/oJK2XNifU5I2Z0z5iOoQZ3GQEZ8KpXJ
+         tN2dyNf/rxC9VZ3lrX92YF8YIXfASLNBFob/UjzTZ6F3nj6X1u20QlnvcEFJLfH4pdbC
+         Ib0gB54wwXD04KySUATKmXiyIvQf3ccywf8MC/eO3vVKjANTdV5arEekaXRVTeAY8Aun
+         8jhQ==
+X-Gm-Message-State: ACrzQf2hG8I5xLH8mVJVZQsDfdgD1KrA3gViP2/jzmsVQE9tS/BukcAN
+        bNnl/J1xjHyUAmc7wIQyqf+b4pS9w8Y=
+X-Google-Smtp-Source: AMsMyM6npaeOsc2MEuSPEwbp4GF99lIRn/lRvFdzFxWdNs9dbc2dPgyYlu1ChjODxsT78YunWammtQ==
+X-Received: by 2002:a5d:59a5:0:b0:22b:52:1c9f with SMTP id p5-20020a5d59a5000000b0022b00521c9fmr2179232wrr.576.1664455035335;
+        Thu, 29 Sep 2022 05:37:15 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id bi16-20020a05600c3d9000b003b4de550e34sm4097629wmb.40.2022.09.29.05.37.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 05:37:13 -0700 (PDT)
+Message-ID: <5b9e5ac9-b05b-b039-4aac-387b9f24a73d@gmail.com>
+Date:   Thu, 29 Sep 2022 14:37:12 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH,v2] dt-bindings: pwm: Add compatible for Mediatek MT8188
+Content-Language: en-US
+To:     xinlei.lee@mediatek.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jitao.shi@mediatek.com
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@list.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <1663915394-30091-1-git-send-email-xinlei.lee@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <1663915394-30091-1-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,34 +79,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit fbc00b5e746f ("dt-bindings: nand: meson: convert txt to yaml")
-converts amlogic,meson-nand.txt to yaml, but misses to adjust its reference
-in MAINTAINERS.
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
 
-Repair this file reference in MESON NAND CONTROLLER DRIVER FOR AMLOGIC
-SOCS.
+On 23/09/2022 08:43, xinlei.lee@mediatek.com wrote:
+> From: xinlei lee <xinlei.lee@mediatek.com>
+> 
+> Add dt-binding documentation of pwm for MediaTek MT8188 SoC.
+> 
+> Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e14e37c7c734..95caae5c2bb9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13360,7 +13360,7 @@ MESON NAND CONTROLLER DRIVER FOR AMLOGIC SOCS
- M:	Liang Yang <liang.yang@amlogic.com>
- L:	linux-mtd@lists.infradead.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
-+F:	Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
- F:	drivers/mtd/nand/raw/meson_*
- 
- MESON VIDEO DECODER DRIVER FOR AMLOGIC SOCS
--- 
-2.17.1
-
+> ---
+>   Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml b/Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml
+> index e4fe2d1..2dd93e8 100644
+> --- a/Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml
+> +++ b/Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml
+> @@ -27,6 +27,7 @@ properties:
+>         - items:
+>             - enum:
+>                 - mediatek,mt8186-disp-pwm
+> +              - mediatek,mt8188-disp-pwm
+>                 - mediatek,mt8192-disp-pwm
+>                 - mediatek,mt8195-disp-pwm
+>             - const: mediatek,mt8183-disp-pwm
