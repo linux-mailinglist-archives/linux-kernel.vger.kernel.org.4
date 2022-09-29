@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95FA5EEE0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D985EEE0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 08:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234925AbiI2GuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 02:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
+        id S234928AbiI2GvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 02:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234904AbiI2Gt6 (ORCPT
+        with ESMTP id S234890AbiI2GvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 02:49:58 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FF74F3B7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:49:54 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id b6so486804ljr.10
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:49:54 -0700 (PDT)
+        Thu, 29 Sep 2022 02:51:01 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F15861111
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:51:00 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 29so667484edv.7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Sep 2022 23:51:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=9riNZVJHHiGAu2Pt8+qgKwtbpAbtFPq/WEzep1qznjk=;
-        b=GFmvseWTnKL9Z9WgWeMRvQvhAoDiC5Lyhwr7cz9K0gAzBAeDsFp/EhpuesebdJ+Nhn
-         x8L4Pf2vSAkcuWbARrlA/ZL2RYZdr/mhTtf4rZCPHTlFWnCI10P/aIldX3ZRk0jVQ9Xn
-         4zdT0F0R6S9vXhxy0bjwTPJgkPqasWrLCQNZAoD74sFQY3pwy7ODiaIJf5yZfuEamrtr
-         SUilrWMZSGK14TKcRNp6a1Gf8rAY0+qUpWDZnrAFXyT6x//fdJULZSyTDNxVfDv2dgNg
-         dc2vaZF/BeRvBk6rDazFkrJWCejzjVbSK6J6eDfzQVHMZ02BzJweCxq9f6PHpxLtfvXq
-         OOJQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=kz+Hz89yA+A9oD9zEfvonQT4s+M88L6q5qK2Vlp3lgE=;
+        b=jPxlW2Gpq61LZNNd9XbbMxTif/2kP/CNqmt+e+8NGztRZwXJTJxhfX69UTbSWAjzjn
+         1j3t9YkS5Hjcd7JjuJfXOMTJHZVeEO4ArMzNK9cfdCJBBWREzxSQ+BnDr5+FkJZHQ9/z
+         IiOl86coXlXkGaE1WO96tnv90zLSBiTQQtTItJFnfS3keBSvNCJc8BnuL2x1VkvukzWQ
+         XSJDvEEushcnWpF3yt9Z+z0kLD+xMXjUOrZfF3gL1XYsbwjx3YBCTv0jxOjaX7y8WWg3
+         zYvjaPSGUIQBaBIBANHP/gOCKJAPNooKlzxWCStk1JdWgrJD5SsmT/LDhDpAf2zP0Mm2
+         gbeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=9riNZVJHHiGAu2Pt8+qgKwtbpAbtFPq/WEzep1qznjk=;
-        b=LqLdkhJ+PmA2SEb29jtWa+iqZbqSbeFYHLfoyDKthp1fzkr2YffheyzLtdPPPAMUNM
-         WiiPQp7Uw3HJTp5q+MPTITMRjvtR/dIi5JIiGVhARMVD+ws5Qe/s9908eLq+Mds4PXa0
-         tsyafYRhBmX/OSHOvCDJyPgI5AWXO/l+JWz4L9kWoMUQN41D0+j8Uua11YKktmG2+AgC
-         tmk16yEesXFNdPn+CCSl3QmWMGFRJaRAq9qQz7dLRA7Op778wVPnghqUS+uYbaBjBbIK
-         hc3W6E03lvOeuOSTk1V5FswCcBWDkc21pw9kzUVOU+afhQdI+a/AMjskH1KpwIb/A9Ev
-         r5+Q==
-X-Gm-Message-State: ACrzQf0PADhFNpwT3WgilYxUmEmiEz2BR0nPLQd9zfEWMaKgljbosJbV
-        0rq78K01n87Q8FzG7MvSlYD0ArKA5Rk+Mw==
-X-Google-Smtp-Source: AMsMyM6HQoJ5UNKRyCHBISkOOH4HujGYWPOKkoE98SUL/UFadadDiHyVoD70LSpaqusQ1YF5KVmSjQ==
-X-Received: by 2002:a05:651c:1504:b0:26c:6331:3463 with SMTP id e4-20020a05651c150400b0026c63313463mr607382ljf.30.1664434192564;
-        Wed, 28 Sep 2022 23:49:52 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id j14-20020a05651231ce00b0048af9576d30sm695743lfe.83.2022.09.28.23.49.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 23:49:52 -0700 (PDT)
-Message-ID: <dd887ce0-df72-2818-ecaf-1fcdcc0dfb42@linaro.org>
-Date:   Thu, 29 Sep 2022 08:49:51 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=kz+Hz89yA+A9oD9zEfvonQT4s+M88L6q5qK2Vlp3lgE=;
+        b=dG+PxHduwVoDv3XufFsFHZQqcbuqM9BpwqM/Aq9B7t5CaCOzhiNGx1apUajqx8HAJa
+         6fzYtKCrzHUt4Id5F448EuJ3u6FuncMBRnqSLa9j/KOl3QwrCgVqVtu2Ry8bZRqc70Tz
+         Lb5xZxi/dwYNOw4hr4X6Zn2uZyjXytm84MVQAVcm1EQinevO7w01RqTh0YPDSbgCvjZX
+         YfVJd7ngP1NQxlNTajI40ujfv9dJ009eFRb1ejv+SBrQ+QsTkZzwYcQSgjz/OvHrXpyV
+         xPPiX8J6zq3955rjDXFblzejgx+KofZ+9KJRTQvzI91XOmHymIIvFGARBJBcuBS7cgbn
+         Ik3g==
+X-Gm-Message-State: ACrzQf0d68a4AI/RfvJc3RH2vkdCdJ65DBY9KsH5DZwAztlDKot7wc+3
+        w2lAZahb8WsfION6JUglVePi3hh9/FCS4shY1CojXibUs5WqCyCL
+X-Google-Smtp-Source: AMsMyM7pAOByQ+JlAqWeadB7wDkmtiAkOJq9mbdDha5uTS8eKtGbIIWaoNoqMpecvObUgF7XAi0+59p3qe/tHleL0l4=
+X-Received: by 2002:a05:6402:380a:b0:451:ae08:7a6c with SMTP id
+ es10-20020a056402380a00b00451ae087a6cmr1714322edb.161.1664434258601; Wed, 28
+ Sep 2022 23:50:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCHv4 1/3] dt-bindings: mmc: synopsys-dw-mshc: document
- "altr,sysmgr-syscon"
-To:     Dinh Nguyen <dinguyen@kernel.org>, jh80.chung@samsung.com
-Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220928165420.1212284-1-dinguyen@kernel.org>
- <ef396764-af53-8e5a-5203-f3e103bbb7a3@linaro.org>
- <02967018-8a04-bd82-49e6-1ee475916ebb@kernel.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <02967018-8a04-bd82-49e6-1ee475916ebb@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CAFCwf12P6DckVUJL7V_Z7ASj+8A3yyx9eX5MpZPF47Rzg6CjEA@mail.gmail.com>
+ <7hh71uixd9.fsf@baylibre.com> <CAFCwf12mjshsf+GC-Y9irvPFT=W4Uis10OnZ4PNN1txjXyzLSA@mail.gmail.com>
+ <YzFfzWJYsuhpUiPG@infradead.org>
+In-Reply-To: <YzFfzWJYsuhpUiPG@infradead.org>
+From:   Oded Gabbay <oded.gabbay@gmail.com>
+Date:   Thu, 29 Sep 2022 09:50:31 +0300
+Message-ID: <CAFCwf11L2krr6Tzj6G+NO1Dsfp3drQ-+N4f+7xo6Ez-sVPgg8w@mail.gmail.com>
+Subject: Re: New subsystem for acceleration devices
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 20:37, Dinh Nguyen wrote:
-> Hi,
-> 
-> On 9/28/22 12:15, Krzysztof Kozlowski wrote:
->> On 28/09/2022 18:54, Dinh Nguyen wrote:
->>> Document the optional "altr,sysmgr-syscon" binding that is used to
->>> access the System Manager register that controls the SDMMC clock
->>> phase.
->>>
->>> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
->>> ---
->>
->> Thank you for your patch. There is something to discuss/improve.
->>
->>> +
->>> +allOf:
->>> +  - $ref: "synopsys-dw-mshc-common.yaml#"
->>> +
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            const:
->>> +              - altr,socfpga-dw-mshc
->>
->> It still should not be an array, even if there is no warning.
->>
-> 
-> I apologize, but I'm confused with the message. Do you mean it should 
-> not be a "const"?
+On Mon, Sep 26, 2022 at 11:16 AM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> Btw, there is another interesting thing around on the block:
+>
+> NVMe Computational Storage devices.  Don't be fooled by the name, much
+> of it is not about neither computation not storage, but it allows to
+> use the existing NVMe queuing model model to allow access to arbitrary
+> accelerators, including a way to expose access to on-device memory.
+>
+> The probably most current version is here:
+>
+> https://www.snia.org/educational-library/nvme-computational-storage-update-standard-2022
+Thanks for the link. Indeed, there were some people in the BOF that
+mentioned computational storage as something that is relevant.
+I'll watch the presentation to understand the direction it is going
+and how it maps to what we were planning to do.
 
-No, it should not be a const. Open any other schema and check how const
-is done there.
+>
+> The first version will be rather limited and miss some important
+> functionality like directly accessing host DRAM or CXL integration,
+> but much of that is planned.  The initial version also probably won't
+> be able to be supported by Linux at all, but we need to think hard about
+> how to support it.
+>
+> It woud also be really elpful to get more people with accelerator
+> experience into the NVMe working group.
+I will be happy to help and contribute.
 
-Best regards,
-Krzysztof
-
+Oded
