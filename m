@@ -2,123 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3084D5EF4A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 270C55EF4B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234470AbiI2LsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
+        id S235464AbiI2LuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235600AbiI2Lrr (ORCPT
+        with ESMTP id S235050AbiI2LuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:47:47 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F6A151B23
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:47:46 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id u18so1831410lfo.8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:47:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=aSlVEfb6wnDYtrnOuzX2ls16fh7KcS4K9DsHeur+Ejk=;
-        b=lUzCaviMsGgmGJ6hkXVUgsjKl1VLH2F4cyoNzNCcn1P544z/Rx3e4kBz1KVpKxdt6G
-         bkdTBKlAI90Wy12ivOwDhEaekVGKDTa38Pbzf5n0FdB75OOOEiTN8F95qTR7fXar12FI
-         Yabk3Duj+/kPLEilpkk2sNYKPExgsQGqP5zziCnF0UZ1sFcMqrMigpDKkv4TjGnaR5o5
-         mj8JIGIjI4GI8odFpY+BrAO0Tv1urQVJVF3wCuHfP68AeYuN7F7MqGsJHZJcoI+arBHI
-         cHhFo3GzFmmRrZ1yep3lJyrgjvgx+jBLoAKrcpmhdabNQ7xaMKmFoB9CurtkA+1qSRt7
-         aBnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=aSlVEfb6wnDYtrnOuzX2ls16fh7KcS4K9DsHeur+Ejk=;
-        b=a0OuGU9Cdw02qkkCXsqaPhpo5zYSwPq39cI5QWbKO36kPrGWunrJFT9nNgTMw7jxdj
-         3u8hSgiRvad64astorUzJRgiXSsoTC+zKg6TY/HcnEYpff8oXwqwtsJiEjLtFvUO7nyP
-         thrN7PKxTQiUVyVMVQA7qxHkXnpd44lE4OkMYx5KPQn2TztLeZduJEMNZUgFHnWKpUm1
-         GyxZSUwK7xsiGWYPrR1Ig0McMrNcaxA0KiXA9rcIc0bU2NYgseUfK+HX9IBAy4cEguJd
-         1hLpRG137MUmo0IjGqBZDKsddNUeGggNZ2HdarZpDsfypNzPuZdBK+IMo0EgXenYcLGU
-         4Z8w==
-X-Gm-Message-State: ACrzQf2igFC6ZGwkew9X+hyDP7+ZBNLzrDexLt+OSzF8G6z8PuiXkoQr
-        imeHIcMfUkxPqIQeroXpuisIdA==
-X-Google-Smtp-Source: AMsMyM5QerQ1m9hBoAB4XhpAEC/07Xcm5gSBvbF7Likl4rJSTnIN6znqFOVPa5mCe0srBo5E3lw8Fg==
-X-Received: by 2002:a05:6512:3f0e:b0:4a0:45b7:a8dc with SMTP id y14-20020a0565123f0e00b004a045b7a8dcmr1184988lfa.368.1664452064759;
-        Thu, 29 Sep 2022 04:47:44 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id w7-20020a05651204c700b004979da67114sm761370lfq.255.2022.09.29.04.47.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 04:47:44 -0700 (PDT)
-Message-ID: <f54377f0-a152-9367-1b06-f49df7466282@linaro.org>
-Date:   Thu, 29 Sep 2022 13:47:43 +0200
+        Thu, 29 Sep 2022 07:50:19 -0400
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1C2AE222;
+        Thu, 29 Sep 2022 04:50:08 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 11:49:56 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1664452202; x=1664711402;
+        bh=WtH1XiJMuAo2t7Ag08kalVAzbnlWzm46SLxhU7NTyU4=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=Mp2BmKbJWOuTGrcIJoPHC0MHj8lnJeeNTqljJjrOsuOCJ+Ez6hyCL4UtQwJjtsTXd
+         GHCEMsJF44x6y7o/G+wZmEDul2Vr+orSquypidICfFOc2IMgxFbF0H8neHs2bInJ5F
+         eXe7fHcQqlp3bzgS5K7qoID3/Hc5zme5zWlr92NxIvrD1YjXOn2w8MB0LeqkeEr53W
+         pRi/a4VzWQ3tyqOMPoIVPkV1JD0Xam6/PKC0tW/OPNyMH6iVEczKnIC7K19tqbBHCF
+         7TRx/ODy0XrvBhaZh4tV1OcKG8f4tdC7kN8hGk7iO0YS8qpJdvdnZX7spkEedd4QTL
+         dkPUjNfVseQkg==
+To:     linux-kernel@vger.kernel.org
+From:   Orlando Chamberlain <redecorating@protonmail.com>
+Cc:     jarkko@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        gargaditya08@live.com, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        stable@vger.kernel.org, Samuel Jiang <chyishian.jiang@gmail.com>
+Subject: [PATCHv2 RESEND] efi: Correct Macmini DMI match in uefi cert quirk
+Message-ID: <20220929114906.85021-1-redecorating@protonmail.com>
+Feedback-ID: 28131841:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v1 5/7] arm: dts: qcom: mdm9615: remove invalid pmic
- subnodes compatibles
-Content-Language: en-US
-To:     neil.armstrong@linaro.org, Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v1-5-b6e63a7df1e8@linaro.org>
- <0636d53f-508f-8a86-0973-2641c9020622@linaro.org>
- <6ed642ea-424d-49ed-eb30-e09588720373@linaro.org>
- <1a3c6766-9be5-1e55-95eb-bc9656e5c9a3@linaro.org>
- <7f8572ab-ff97-54bd-a5f3-fe0e179ee48e@linaro.org>
- <84cb8941-eb15-1bbf-59b7-bbcd6c15c30d@linaro.org>
- <07405d0d-8534-6470-21d1-26b85dbd7de0@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <07405d0d-8534-6470-21d1-26b85dbd7de0@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/09/2022 13:39, Neil Armstrong wrote:
->>>> The DTS looks correct unless you have some real argument that it is not.
->>>>
->>>> How this should be fixed? First, drop bogus entries from drivers, then
->>>> document proper compatibles.
->>>
->>> What do you mean ? There's no point to keep the PM8921 compatibles, the gpio
->>
->> I asked at beginning - why? Why there is no point to keep them?
-> 
-> Because the HW is an PM8018 and the addition of the PM8921 was for policy/organization/struggling-to-make-dt-merged-before-clear-dt-policy/...
-> so you say I should modify the Bindings to reflect the actual "pm8018", "pm8921" situation instead of changing the DT even if incorrect ?
+It turns out Apple doesn't capitalise the "mini" in "Macmini" in DMI, which
+is inconsistent with other model line names.
 
-Yes, this is what I already wrote:
+Correct the capitalisation of Macmini in the quirk for skipping loading
+platform certs on T2 Macs.
 
-"How this should be fixed? First, drop bogus entries from drivers, then
-document proper compatibles."
+Currently users get:
 
->>> and PMIC bindings already enforces to only have the PM8018 compatible.
->>
->> That is just partial argument because binding does not match DTS. So
->> something is not correct. Why do you assume bindings are correct?
-> 
-> Because bindings accurately reflects HW and DT doesn't.
+------------[ cut here ]------------
+[Firmware Bug]: Page fault caused by firmware at PA: 0xffffa30640054000
+WARNING: CPU: 1 PID: 8 at arch/x86/platform/efi/quirks.c:735 efi_crash_grac=
+efully_on_page_fault+0x55/0xe0
+Modules linked in:
+CPU: 1 PID: 8 Comm: kworker/u12:0 Not tainted 5.18.14-arch1-2-t2 #1 4535eb3=
+fc40fd08edab32a509fbf4c9bc52d111e
+Hardware name: Apple Inc. Macmini8,1/Mac-7BA5B2DFE22DDD8C, BIOS 1731.120.10=
+.0.0 (iBridge: 19.16.15071.0.0,0) 04/24/2022
+Workqueue: efi_rts_wq efi_call_rts
+...
+---[ end trace 0000000000000000 ]---
+efi: Froze efi_rts_wq and disabled EFI Runtime Services
+integrity: Couldn't get size: 0x8000000000000015
+integrity: MODSIGN: Couldn't get UEFI db list
+efi: EFI Runtime Services are disabled!
+integrity: Couldn't get size: 0x8000000000000015
+integrity: Couldn't get UEFI dbx list
 
-That's not really an answer... Bindings are correct because they are
-correct? What is exactly correct in the bindings? How they reflect the
-HW in a proper way, while DTS does not?
+Fixes: 155ca952c7ca ("efi: Do not import certificates from UEFI Secure Boot=
+ for T2 Macs")
+Cc: stable@vger.kernel.org
+Cc: Aditya Garg <gargaditya08@live.com>
+Tested-by: Samuel Jiang <chyishian.jiang@gmail.com>
+Signed-off-by: Orlando Chamberlain <redecorating@protonmail.com>
+---
+v1->v2: Clarified in commit message that this is for a dmi match string
+ security/integrity/platform_certs/load_uefi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Or let's focus on actual hardware - what are the properties of the
-hardware which indicate that DTS is wrong?
+diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integ=
+rity/platform_certs/load_uefi.c
+index 093894a640dc..b78753d27d8e 100644
+--- a/security/integrity/platform_certs/load_uefi.c
++++ b/security/integrity/platform_certs/load_uefi.c
+@@ -31,7 +31,7 @@ static const struct dmi_system_id uefi_skip_cert[] =3D {
+ =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,1") },
+ =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,2") },
+ =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir9,1") },
+-=09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacMini8,1") },
++=09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "Macmini8,1") },
+ =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacPro7,1") },
+ =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,1") },
+ =09{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,2") },
+--=20
+2.37.1
 
-Best regards,
-Krzysztof
 
