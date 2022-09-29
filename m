@@ -2,70 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE1D5EF87E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9731D5EF881
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235816AbiI2PRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
+        id S235823AbiI2PSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235807AbiI2PRi (ORCPT
+        with ESMTP id S235605AbiI2PS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:17:38 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CA914F2B7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 08:17:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664464657; x=1696000657;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XmiiWPRnuUVwiFQSk+HyHXdfQVUcXM170If6HYOLDE0=;
-  b=NeNTBI/3nu5nXbIb1c9CvcfaPeietQeC34tDuJEiheYk0jyqqd7saZAd
-   szoG3DSIHxUh7AD5EolfYMvwQYRE8th66cHJKh3SVYVZYslaohFzPYWH7
-   0Tvx1OWb5uGo2/ZRdugVM72O1oCL16gVaVLtGnHzi6CAp59z30awlg8h6
-   uDb914a9yFsNlYLpxB61kZbvdu5ngPWU7wZfrb1uXWws2n+sFpx8ehVLk
-   mtIcGxlgiXO0MxtZszq89jisWlSe3ftgWyQdmJCwA1Url+dg4qez3PT1c
-   13J45Qzm29cgl8RD8e6SUOogLLfdW1hhZjOSLaWwDqQPK2FKDSm8FIxpb
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="281637682"
-X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
-   d="scan'208";a="281637682"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 08:17:08 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="600036427"
-X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
-   d="scan'208";a="600036427"
-Received: from ticela-or-324.amr.corp.intel.com (HELO [10.251.13.128]) ([10.251.13.128])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 08:17:07 -0700
-Message-ID: <cc8d0101-73b9-b286-a7a7-e9305cdc1bd9@intel.com>
-Date:   Thu, 29 Sep 2022 08:17:07 -0700
+        Thu, 29 Sep 2022 11:18:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A1A14F805;
+        Thu, 29 Sep 2022 08:18:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6B64B824B7;
+        Thu, 29 Sep 2022 15:18:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1235C433C1;
+        Thu, 29 Sep 2022 15:18:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664464705;
+        bh=yGsaOq9kyzvgGji/8EN1OKXb4Lsu/CQzHqSAuKNquJU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=rlop4KQiRbV4FLf3OtbnMhWNrGyei2AYFTiwHCsZCysnV2HV0hIg09ZsBiP7eWedX
+         KJjhFhhMQNfaqSQBQqqp6+hKBJqmw9ejR3tlSdILRiof25BoPkfVO7p7qd2auPI0pk
+         kISeVPEr/gW+N6LZ/UmetUeWt3hddSlb9cmkmmDLtq+qGbDyALCCoIe8mCRLLHaJhS
+         KtOVzBnqpd5pP8wAxUaSQSQnrzLA2wHow/qMxqG8QOC4onC2VARuGrk9Q35QE0Y4l1
+         iRIRx5OvqAJB4swQr/dkxE4kJwwfu56CwLhSd3nLcHu54TDA9ZIL6vhc5rYDX0BgkT
+         NnE2UMgyMBwTg==
+Message-ID: <76b5195a-a11c-0c75-b3dd-36aa78c58397@kernel.org>
+Date:   Thu, 29 Sep 2022 10:18:23 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] x86/split_lock: Restore warn mode (and add a new one) to
- avoid userspace regression
+Subject: Re: [PATCHv4 1/3] dt-bindings: mmc: synopsys-dw-mshc: document
+ "altr,sysmgr-syscon"
 Content-Language: en-US
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>, tony.luck@intel.com,
-        tglx@linutronix.de, linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, luto@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, Fenghua Yu <fenghua.yu@intel.com>,
-        Joshua Ashton <joshua@froggi.es>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Pavel Machek <pavel@denx.de>,
-        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
-        Melissa Wen <mwen@igalia.com>
-References: <20220928142109.150263-1-gpiccoli@igalia.com>
- <24f31510-5b33-ada5-9f0e-117420403e8c@intel.com>
- <1c742ae1-98cb-a5c1-ba3f-5e79b8861f0b@igalia.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <1c742ae1-98cb-a5c1-ba3f-5e79b8861f0b@igalia.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     jh80.chung@samsung.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220928165420.1212284-1-dinguyen@kernel.org>
+ <CAPDyKFp5oPuOz9A=37pRTvq7JPtJRdduEgmU9g+eUm0K=dZjUg@mail.gmail.com>
+ <20cbd2a2-752e-8537-4cbd-6665ef9afd69@kernel.org>
+ <bd024e66-25bb-0463-b346-b110c1b46681@linaro.org>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <bd024e66-25bb-0463-b346-b110c1b46681@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,29 +63,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/29/22 07:57, Guilherme G. Piccoli wrote:
-> On 28/09/2022 18:50, Dave Hansen wrote:
->> [...]
->> It boils down to either:
->>  * The misery is good and we keep it as-is, or
->>  * The misery is bad and we kill it
+
+
+On 9/29/22 09:38, Krzysztof Kozlowski wrote:
+> On 29/09/2022 16:20, Dinh Nguyen wrote:
+>>>
+>>> So this change will not be backwards compatible with existing DTBs. I
+>>> noticed that patch2 updates the DTS files for the arm64 platforms, but
+>>> there seems to be some arm32 platforms too. Isn't this going to be a
+>>> problem?
+>>>
 >>
->> My gut says we should keep the warnings and kill the misery.  The folks
->> who are going to be able to fix the issues are probably also the ones
->> looking at dmesg and don't need the extra hint from the misery.  The
->> folks running Windows games don't look at dmesg and just want to play
->> their game without misery.
->>
-> Hi Dave, thanks for your response. I really appreciated your reasoning,
-> and I think it's a good argument. In the end, adding misery would harm
-> the users that are unlikely to be able to fix (or at least, fix quickly)
-> the split lock situation, like games or legacy/proprietary code.
+>> The arm32 platforms makes the clk-phase adjustment through the clock
+>> driver. There was a discussion when I originally submitted the support
+>> for the arm32 platforms, and we landed on going through the clock driver
+>> instead of using the MMC driver. The updates to the arm32 platforms can
+>> be done after this patch series.
 > 
-> I have a revert removing the misery ready and tested, let me know if I
-> should submit it.
+> How the update "can be done after"? Didn't you break all boards in- and
+> out-of-tree?
+> 
 
-I'm a bit of a late arrival to the split lock party, so I'm a bit
-hesitant to merge any changes immediately.
+I don't think so! At least, I don't see how, for the arm32 boards, here 
+are the dts entry for setting the clock-phase:
 
-How about we give it a few weeks and see if the current behavior impacts
-anyone else?  Maybe the best route will be more clear then.
+sdmmc_clk: sdmmc_clk {
+	#clock-cells = <0>;
+	compatible = "altr,socfpga-gate-clk";
+	clocks = <&f2s_periph_ref_clk>, <&main_nand_sdmmc_clk>,<&per_nand_mmc_clk>;
+	clk-gate = <0xa0 8>;
+	clk-phase = <0 135>;   <-----
+};
+
+sdmmc_clk_divided: sdmmc_clk_divided {
+	#clock-cells = <0>;
+	compatible = "altr,socfpga-gate-clk";
+	clocks = <&sdmmc_clk>;
+	clk-gate = <0xa0 8>;
+	fixed-divider = <4>;
+	};
+
+...
+mmc: dwmmc0@ff704000 {
+	compatible = "altr,socfpga-dw-mshc";
+	reg = <0xff704000 0x1000>;
+	interrupts = <0 139 4>;
+	fifo-depth = <0x400>;
+	#address-cells = <1>;
+	#size-cells = <0>;
+	clocks = <&l4_mp_clk>, <&sdmmc_clk_divided>;
+	clock-names = "biu", "ciu";
+	resets = <&rst SDMMC_RESET>;
+	status = "disabled";
+	};
+
+
+So the setting for the clk-phase is done in the clock driver, 
+(drivers/clk/socfpga/clk-gate.c). This has been done many years now, 
+before the clk-phase-hs-sd concept was added to the sdmmc driver.
+
+When I originally submitted the patches for the ARM64 clock driver 
+support, I forgot to add the clk-phase support for the SD controller. 
+Now that I realized we needed it, the concept to set the clk-phase is in 
+the SD driver, thus I'm just adding the support for arm64.
+
+The arm32 support does not change in any way, so I don't see how it will 
+break it.
+
+I can update the arm32 support with the same function in patch3 after 
+this series. Because updating the arm32 will require me to remove the 
+support in the clock driver, thus, I want to break it out.
+
+Dinh
+
+
+
+
