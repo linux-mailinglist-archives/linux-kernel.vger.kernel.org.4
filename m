@@ -2,109 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887C25EF310
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56EE5EF312
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 12:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235250AbiI2KJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 06:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S235299AbiI2KJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 06:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235327AbiI2KJN (ORCPT
+        with ESMTP id S234515AbiI2KJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 06:09:13 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77088148A30;
-        Thu, 29 Sep 2022 03:09:12 -0700 (PDT)
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MdTZL54HBz6H76J;
-        Thu, 29 Sep 2022 18:07:54 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Thu, 29 Sep 2022 12:09:09 +0200
-Received: from [10.126.170.84] (10.126.170.84) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 29 Sep 2022 11:09:09 +0100
-Message-ID: <2a4a15a4-55cd-f98b-4b14-474f24e2c308@huawei.com>
-Date:   Thu, 29 Sep 2022 11:09:12 +0100
+        Thu, 29 Sep 2022 06:09:43 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA64663B4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:09:34 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-352ffac3941so9445487b3.6
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 03:09:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=L4CXyRkfDdqPzt4BDFbLVWgyf8dxhN++1/fR935b4BQ=;
+        b=wsISCwsZ0H8bKDjajGftebLWZNGGdoT9cLT63qtRubzwDoqQUAtgoYSNb1CNeAc4bW
+         IM5SjCraUo6yCElCeuqfKdy6UZmhq7aAZeIPu2b6UEpaMW5UdG5gtHU9nBaCY+nLRuzU
+         bWFhs43Q3lKzkRqa9mIm8xZiz6Aq/WL2w+uiue24kCbrZXyA+CIrbwVBMo5CAdBg6OkX
+         11IgAsinAl7IUR0l/p1B8xpMZMkOa4rE+w5laUij9hdRFEEfUVl/dxBLsg7jBc97rt9M
+         x++H04UOxn5rw65+XTGFrVohnQrEM5vme6wrGOZg7TjPZd3t9S1f6TOflh1o/e7aMPkw
+         VfMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=L4CXyRkfDdqPzt4BDFbLVWgyf8dxhN++1/fR935b4BQ=;
+        b=OMMbvM5Ue8+tJla4wdfYXVJPUqCUKMIDa5N3IoDrEnfA9hrFDXPPOKt1a0M/buiHYk
+         W6/Kteoyoo7nBoDpj2R5OHyl2n6k1a4cf+0ONQop+rZR7tgEHfGhxRaKOHYhoRuJ9naU
+         Pl+nv/IBM0F+ZuoJ3WfhZPVYBqIXdZmTv8j3Ac3J3FG4MDnl2mC85DKjwwiDmQ4pmG3t
+         NIj/haM3npmcmMuiolSe1gM9k9Mpsht7fAn1hkBtR7r/C5RP586Htk5MTmRQFglrXx1R
+         1caaNswQMo7RIkaL/7fWGGuqog1KLQyEVU2zagzyy1uRWSg1v01xpkIRAqGGW30tf6qz
+         l0mQ==
+X-Gm-Message-State: ACrzQf3d8Ea/r7zNUa32i5zi/X9cjpQATVfZ3iVzslX9nZbrZwbITLWB
+        FrTbUAG3mx+T8lgwYDQj8OKBIoXuLtVkHU6Mnen5JmaQaBgaoA==
+X-Google-Smtp-Source: AMsMyM5Vk0BM+zVXvmz4Nb+GXJ9MIX2/6TtCfL1z6+EU/Ex+OQgPrqVXc/ab/Afwe0pHg5NyVpdqnXqSD1Kuzt2pAmA=
+X-Received: by 2002:a81:b40f:0:b0:352:477a:659e with SMTP id
+ h15-20020a81b40f000000b00352477a659emr2358745ywi.127.1664446173543; Thu, 29
+ Sep 2022 03:09:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] perf tools: Fix empty version number when building
- outside of a git repo
-To:     Will Chandler <wfc@wfchandler.org>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220927195228.47304-1-wfc@wfchandler.org>
- <c5181877-2998-b952-abe6-26d733ae2aeb@huawei.com>
- <87A1F5B6-3F60-4988-8BA6-A993E5789C80@wfchandler.org>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <87A1F5B6-3F60-4988-8BA6-A993E5789C80@wfchandler.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.170.84]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220929092916.23068-1-johan+linaro@kernel.org> <20220929092916.23068-10-johan+linaro@kernel.org>
+In-Reply-To: <20220929092916.23068-10-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 29 Sep 2022 13:09:22 +0300
+Message-ID: <CAA8EJppu162mrfdEv7zb0hC3n-2dWKafGe7iEt5NhXLrV_9FZQ@mail.gmail.com>
+Subject: Re: [PATCH v2 09/11] phy: qcom-qmp-usb: clean up power-down handling
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 18:26, Will Chandler wrote:
-> On 28 Sep 2022, at 5:21, John Garry wrote:
-> 
->> This looks ok. But did you consider going back to same flow as pre-7572733b8499 to avoid a Makefile check, like:
->>
->> ---8<----
->>
->> CID=
->> TAG=
->> if test -d ../../.git -o -f ../../.git
->> then
->> TAG=$(MAKEFLAGS= make -sC ../.. kernelversion)
->> CID=$(git log -1 --abbrev=12 --pretty=format:"%h" 2>/dev/null) && CID="-g$CID"
->> elif test -f ../../PERF-VERSION-FILE
->> then
->> TAG=$(cut -d' ' -f3 ../../PERF-VERSION-FILE | sed -e 's/\"//g')
->> fi
->> if test -z "$TAG"
->> then
->> TAG=$(MAKEFLAGS= make -sC ../.. kernelversion)
->> fi
->>
->> --->8---
->>
->> The evaluation for $TAG is not really needed in the first leg since the fallback does the same thing, but just added for clarity.
-> 
-> I think that would be fine as well. I don't have a strong opinion on which one
-> is easier to follow.
-> 
-> Looking at this more closely, there is a slight difference between the two
-> approaches. In the problem scenario my patch will always use `make kernelversion`,
-> while pre-7572733b8499 starts with PERF-VERSION-FILE if available, falling
-> back to the Makefile.
-> 
-> With the old approach PERF-VERSION-FILE could be used to manually
-> override the version, but this is inconsistent with how the version is
-> generated when building in a git repo. Is this relevant?
+On Thu, 29 Sept 2022 at 12:29, Johan Hovold <johan+linaro@kernel.org> wrote:
+>
+> Always define the POWER_DOWN_CONTROL register instead of falling back to
+> the v2 (and v3) offset during power on and power off.
 
-Hmmm... maybe someone would want to customise PERF-VERSION-FILE for 
-their own distro. Not sure. But then fiddling with PERF-VERSION-FILE 
-might break the parsing so...I guess not.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-BTW, is there any other method of building the perf code not considered? 
-So far I know:
-a. in git tree
-b. perf-tar-src-pkg
-c. tarball
+>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Thanks,
-John
+-- 
+With best wishes
+Dmitry
