@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7265EFE37
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38295EFE38
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 21:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiI2T4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 15:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        id S229576AbiI2T4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 15:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiI2T4i (ORCPT
+        with ESMTP id S229484AbiI2T4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 15:56:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1461EC9AF;
-        Thu, 29 Sep 2022 12:56:36 -0700 (PDT)
+        Thu, 29 Sep 2022 15:56:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06F41EC9B2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 12:56:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 490F7B825AC;
-        Thu, 29 Sep 2022 19:56:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53001C433D6;
-        Thu, 29 Sep 2022 19:56:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B66296216A
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 19:56:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25813C433C1;
+        Thu, 29 Sep 2022 19:56:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664481394;
-        bh=ueVyCyqKLOJheZs0NDcC8qb7bxKZZvsTV34Dzf1p6Zw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nJhA0InpN9reJZOjC/TGDB/nLPtLV8JUGfVKgpQWMjtdBejJKtnZLI72bJWz+Sr3F
-         CiakNlgJIa2xcSa/l868SpnL24xo8Q80fhB8ApxZ4S53BzJbaahI2FsTlK+n3WDfum
-         XOZ38+HLc+YdG7BD4fr8nZEtfhLtBlHCRzTzM12A+VAcyq2qL012b76O81XTzDkfm+
-         3T5NgiD63tY97CnkitXUuNEqBoZgzYSja+shvbJmCaoEsr+Xkn99m3qu+Mai6fO9bm
-         QDGP+TGqxb6xwl6VbDVhDKrPYrd7ZtgBTN2d06hvggmYH6Leph1NTwvbEQnklS6128
-         OjJ2Bz0lOeLGw==
-Date:   Thu, 29 Sep 2022 13:56:30 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Jan Kara <jack@suse.cz>,
-        Yu Kuai <yukuai1@huaweicloud.com>,
-        Liu Song <liusong@linux.alibaba.com>,
-        Hillf Danton <hdanton@sina.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH next v3] sbitmap: fix lockup while swapping
-Message-ID: <YzX4brqWfvoa/ErM@kbusch-mbp.dhcp.thefacebook.com>
-References: <391b1763-7146-857-e3b6-dc2a8e797162@google.com>
- <929a3aba-72b0-5e-5b80-824a2b7f5dc7@google.com>
- <20220926114416.t7t65u66ze76aiz7@quack3>
- <4539e48-417-edae-d42-9ef84602af0@google.com>
- <20220927103123.cvjbdx6lqv7jxa2w@quack3>
- <2b931ee7-1bc9-e389-9d9f-71eb778dcf1@google.com>
- <f975dddf-6ec-b3cb-3746-e91f61b22ea@google.com>
- <9f68731-e699-5679-6a71-77634767b8dd@google.com>
- <20220929083939.ioytch563qikyflz@quack3>
- <9c2038a7-cdc5-5ee-854c-fbc6168bf16@google.com>
+        s=k20201202; t=1664481402;
+        bh=nppm+sLoKjXXKAFW+4L5wobI8BPs7jkgM6v5WRbgCJM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=OsnKtNeihCRcHtHXa3pG5UO46PjSYEGQ6Eg4ZNcXYfnLZtD/7PJMEajaZvSSszvQD
+         PspL4PZEiN9bLkuPRe/Yp5qv9v3JjoAjVu67JYRu+7Avb2ziEjw9L5iwKk1R5HRkzy
+         zSOM1AMK7qly2qWR8WW158a+JrgmRbkFwGaPDbozv0yMoyiw/iT3z3+yBcD4hqHqrh
+         AxG/2qOmcHwjEygwHHpVX6pac4+BB+sQ7JFAYw1ZrbCkoYKBJiZSv6a92YV9STZIPd
+         I8AB7XDTac8/H7qHrJa6ZaJLYybJu/caHz3YxfrYqelcgM0XLmBzCwzhuELxS0xawG
+         h+SV+SQhaTwTQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C21855C0AC7; Thu, 29 Sep 2022 12:56:41 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 12:56:41 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: RCU vs NOHZ
+Message-ID: <20220929195641.GZ4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220915191427.GC246308@paulmck-ThinkPad-P17-Gen-1>
+ <YyOnilnwnLKA9ghN@hirez.programming.kicks-ass.net>
+ <20220916075817.GE246308@paulmck-ThinkPad-P17-Gen-1>
+ <YyQ/zn54D1uoaIc1@hirez.programming.kicks-ass.net>
+ <20220917142508.GF246308@paulmck-ThinkPad-P17-Gen-1>
+ <YzV5vqoLInptafJm@hirez.programming.kicks-ass.net>
+ <20220929152044.GE4196@paulmck-ThinkPad-P17-Gen-1>
+ <YzXFWEL52MRp2s5j@hirez.programming.kicks-ass.net>
+ <20220929163624.GN4196@paulmck-ThinkPad-P17-Gen-1>
+ <YzXtOi7rjjWI0ea0@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9c2038a7-cdc5-5ee-854c-fbc6168bf16@google.com>
+In-Reply-To: <YzXtOi7rjjWI0ea0@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,17 +68,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 12:50:12PM -0700, Hugh Dickins wrote:
-> @@ -587,7 +587,7 @@ static struct sbq_wait_state *sbq_wake_p
->  	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
->  		struct sbq_wait_state *ws = &sbq->ws[wake_index];
->  
-> -		if (waitqueue_active(&ws->wait)) {
-> +		if (waitqueue_active(&ws->wait) && atomic_read(&ws->wait_cnt)) {
->  			if (wake_index != atomic_read(&sbq->wake_index))
->  				atomic_set(&sbq->wake_index, wake_index);
->  			return ws;
+On Thu, Sep 29, 2022 at 09:08:42PM +0200, Peter Zijlstra wrote:
+> On Thu, Sep 29, 2022 at 09:36:24AM -0700, Paul E. McKenney wrote:
+> 
+> > > How has this been tried; and why did the energy cost go up? Is this
+> > > because the offload thread ends up waking up the CPU we just put to
+> > > sleep?
+> > 
+> > Because doing the additional work consumes energy.  I am not clear on
+> > exactly what you are asking for here, given the limitations of the tools
+> > that measure energy consumption.
+> 
+> What additional work? Splicing the cpu pending list onto another list
+> with or without atomic op barely qualifies for work. The main point is
+> making sure the pending list isn't in the way of going (deep) idle.
 
-This change makes sense and looks good. Thanks for the follow up.
+Very good.  Send a patch.
 
-Reviewed-by: Keith Busch <kbusch@kernel.org>
+After some time, its successor might correctly handle lock/memory
+contention, CPU hotplug, presumed upcoming runtime changes in CPUs'
+housekeeping status, frequent idle entry/exit, grace period begin/end,
+quiet embedded systems, and so on.
+
+Then we can see if it actually reduces power consumption.
+
+							Thanx, Paul
