@@ -2,388 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F9A5EFB67
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 056F75EFB6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 18:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235997AbiI2Qzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 12:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        id S235889AbiI2Q5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 12:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235731AbiI2Qz3 (ORCPT
+        with ESMTP id S235731AbiI2Q5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:55:29 -0400
+        Thu, 29 Sep 2022 12:57:16 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B234A0263
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:55:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5271BB201
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664470525;
+        s=mimecast20190719; t=1664470634;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RQjiwvr6S5lV8usREpdzXKjDN4TlUL9iWSrNpQhtESA=;
-        b=WSeZy1evygcHoX9xf+sjuKBxOC+xAUNfIogeLvs5lDzeMMFpZH4E4DxREjht2Jt9rMRXV+
-        kILffwgM1LbPTJwRwjUAZEG1XHBSHZEZ7gaB9t6Prx1dRp5ttwr5ovbw+u+wjwbvHiseMe
-        6l8RF3qgKLLtkAN1rX3jqFkcQ/RI++g=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Ls8n7hJsgg/XBEwdI7SfnN0PoDTYd4YkxLZXvfSpw6o=;
+        b=iGegMLL3tjNZ1nUUf3TQHcGJYQZXVXSvdU7HGLbmv3j5FPtY45SL6h79nsH7hNJOmgJ8cW
+        o28Ms1KDnZ/3vaONqM71LsNuzIujwmUSdlzxWHYI5JxIbsyWmGrcxIb440Vl1NtP9TQBo0
+        1Talu0zdyStPdWAVrgM9kVCtrBU2zEA=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-35-uxiHFj2fPSeNzeBFzCRGkQ-1; Thu, 29 Sep 2022 12:55:24 -0400
-X-MC-Unique: uxiHFj2fPSeNzeBFzCRGkQ-1
-Received: by mail-il1-f198.google.com with SMTP id l18-20020a056e02067200b002f6af976994so1528288ilt.16
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:55:24 -0700 (PDT)
+ us-mta-605-n-OYU5cVM-qv_HB58pp9ng-1; Thu, 29 Sep 2022 12:57:13 -0400
+X-MC-Unique: n-OYU5cVM-qv_HB58pp9ng-1
+Received: by mail-oo1-f71.google.com with SMTP id k3-20020a4a8503000000b0047463a13402so654655ooh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 09:57:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=RQjiwvr6S5lV8usREpdzXKjDN4TlUL9iWSrNpQhtESA=;
-        b=HVBfmgQTbLZHl6ASbWizUULG3AWSMcmoHour04/NU8N1yJOCZ8LBc2CEtU3+x4Eivx
-         9xCh2gen68cYbxuu1dUOYiKgSpwJ2TBqM6fy5A4FL0IVmwFlrHuLSXol0XIEjRwDEPFx
-         c6z92nMpsmWKML5Lr3lMksCvFCgfcy7PIQl+WSE3KI7srYCQAACdramzbqYSYfTlO+YT
-         T3b1PoHPSbnaE9Y0ofQQ/QkZnYfo8WJM0aVEgSq3oJgkvWYGPvgpker4TfJnyDTQ1jI7
-         p3jZ98dVgc5jmKq0HS9Hc3+SPT+g5PJAmFnT50OQVTVLsHoCWLtU2QQS/HlKxMgjh2R3
-         SGcg==
-X-Gm-Message-State: ACrzQf2p27bWEZ+dRavY6iUh9wov+UZtc/MY0Aia7j+tGFEv7VA7I6Ko
-        G/1aL7HAbi1Fy1zBqurqTbefG4S7vbzA8oUq/syrglW/v04Hi25wOYwbRI6zj3NZGLj83d9SEj1
-        CLNpajO9VtZTeB2uBd2HwuEM8
-X-Received: by 2002:a05:6638:1315:b0:35a:7c96:9737 with SMTP id r21-20020a056638131500b0035a7c969737mr2295859jad.302.1664470523414;
-        Thu, 29 Sep 2022 09:55:23 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6mkt2EWia9wOjOYtm7HS/78Deb0xTalFmW+HBr2mznlyx7ZjLzWBXZ2b3KtC8/dcDQ+raHsg==
-X-Received: by 2002:a05:6638:1315:b0:35a:7c96:9737 with SMTP id r21-20020a056638131500b0035a7c969737mr2295839jad.302.1664470523148;
-        Thu, 29 Sep 2022 09:55:23 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id e3-20020a0566380cc300b0034c164e05c4sm3107915jak.177.2022.09.29.09.55.20
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ls8n7hJsgg/XBEwdI7SfnN0PoDTYd4YkxLZXvfSpw6o=;
+        b=OixmdXh1FQEOfwSI5jrCgAkq8uTfMeC+2DJTvXGi3OoXwf2v40PGCX6oc9cUG4Xy8+
+         T7uIP9CajEm59erVhy4GT/dHrcpEi/uRKvakoqL0UEc6ND64PfWwexWsL5nb41tcD2PT
+         waLzRBWzrCamAUd5SHkWelrZfO6jTzi4FCGR0rE+u6G+oJ+4o3FO0R6Hs9vqY877eIEP
+         gbvXg5KjTi+gzF/U0v8ft0i22DSvgNBrNvP4UB8/pYXsVGcN+rsylkH/MB7iQXFprSjY
+         2/4H9QzgaUSPJAoNAsbgVG073UuagfQf2G4Sv7dOz2AiQdKXTuotEOnbeKpNwOqQLZy4
+         Scuw==
+X-Gm-Message-State: ACrzQf22ufwV5DI4d+tky0L6BZTA1ftpgd4+3fJzm+3hbqTFZInJrfbT
+        0fXQI5aknaAsOVGFpIy8aLcu0uvUvTA63lyXQPvRRjK/0t750kQYHQJrBvkMXS/DgCPXxJftVkG
+        /do51oDjbSmYKWPbyx6S68kFG
+X-Received: by 2002:a05:6870:630b:b0:128:828:5ec0 with SMTP id s11-20020a056870630b00b0012808285ec0mr2317764oao.249.1664470632611;
+        Thu, 29 Sep 2022 09:57:12 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4x3JwzAv6PQPpQPp1JZjAv+x3RvEW7j9oQVP9QC65qyJ+hDROU6NZC7rfkAVrZxmR+FSTEcQ==
+X-Received: by 2002:a05:6870:630b:b0:128:828:5ec0 with SMTP id s11-20020a056870630b00b0012808285ec0mr2317753oao.249.1664470632377;
+        Thu, 29 Sep 2022 09:57:12 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id a11-20020acab10b000000b003450abf4404sm2886036oif.21.2022.09.29.09.57.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 09:55:22 -0700 (PDT)
-Date:   Thu, 29 Sep 2022 10:55:19 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Kevin Tian <kevin.tian@intel.com>
-Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Eric Farman <farman@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Longfang Liu <liulongfang@huawei.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, Yi Liu <yi.l.liu@intel.com>
-Subject: Re: [PATCH v4 15/15] vfio: Add struct device to vfio_device
-Message-ID: <20220929105519.5c9ae1d8.alex.williamson@redhat.com>
-In-Reply-To: <20220921104401.38898-16-kevin.tian@intel.com>
-References: <20220921104401.38898-1-kevin.tian@intel.com>
-        <20220921104401.38898-16-kevin.tian@intel.com>
-Organization: Red Hat
+        Thu, 29 Sep 2022 09:57:12 -0700 (PDT)
+Date:   Thu, 29 Sep 2022 09:57:10 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Koba Ko <koba.ko@canonical.com>
+Subject: Re: [PATCH 3/3] dmaengine: Fix client_count is countered one more
+ incorrectly.
+Message-ID: <20220929165710.biw4yry4xuxv7jbh@cantor>
+References: <20220830093207.951704-1-koba.ko@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830093207.951704-1-koba.ko@canonical.com>
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
-
-This introduced the regression discovered here:
-
-https://lore.kernel.org/all/20220928125650.0a2ea297.alex.williamson@redhat.com/
-
-Seems we're not releasing the resources when removing an mdev.  This is
-a regression, so it needs to be fixed or reverted before the merge
-window.  Thanks,
-
-Alex
-
-On Wed, 21 Sep 2022 18:44:01 +0800
-Kevin Tian <kevin.tian@intel.com> wrote:
-
-> From: Yi Liu <yi.l.liu@intel.com>
+On Tue, Aug 30, 2022 at 05:32:07PM +0800, Koba Ko wrote:
+> If the passed client_count is 0,
+> it would be incremented by balance_ref_count first
+> then increment one more.
+> This would cause client_count to 2.
 > 
-> and replace kref. With it a 'vfio-dev/vfioX' node is created under the
-> sysfs path of the parent, indicating the device is bound to a vfio
-> driver, e.g.:
+> cat /sys/class/dma/dma0chan*/in_use
+> 2
+> 2
+> 2
 > 
-> /sys/devices/pci0000\:6f/0000\:6f\:01.0/vfio-dev/vfio0
-> 
-> It is also a preparatory step toward adding cdev for supporting future
-> device-oriented uAPI.
-> 
-> Add Documentation/ABI/testing/sysfs-devices-vfio-dev.
-> 
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Fixes: d2f4f99db3e9 ("dmaengine: Rework dma_chan_get")
+> Signed-off-by: Koba Ko <koba.ko@canonical.com>
 > ---
->  .../ABI/testing/sysfs-devices-vfio-dev        |  8 +++
->  MAINTAINERS                                   |  1 +
->  drivers/vfio/vfio_main.c                      | 64 +++++++++++++++----
->  include/linux/vfio.h                          |  6 +-
->  4 files changed, 65 insertions(+), 14 deletions(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-devices-vfio-dev
+>  drivers/dma/dmaengine.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-devices-vfio-dev b/Documentation/ABI/testing/sysfs-devices-vfio-dev
-> new file mode 100644
-> index 000000000000..e21424fd9666
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-devices-vfio-dev
-> @@ -0,0 +1,8 @@
-> +What:		 /sys/.../<device>/vfio-dev/vfioX/
-> +Date:		 September 2022
-> +Contact:	 Yi Liu <yi.l.liu@intel.com>
-> +Description:
-> +		 This directory is created when the device is bound to a
-> +		 vfio driver. The layout under this directory matches what
-> +		 exists for a standard 'struct device'. 'X' is a unique
-> +		 index marking this device in vfio.
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d30f26e07cd3..02c8f11b1c17 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21312,6 +21312,7 @@ R:	Cornelia Huck <cohuck@redhat.com>
->  L:	kvm@vger.kernel.org
->  S:	Maintained
->  T:	git git://github.com/awilliam/linux-vfio.git
-> +F:	Documentation/ABI/testing/sysfs-devices-vfio-dev
->  F:	Documentation/driver-api/vfio.rst
->  F:	drivers/vfio/
->  F:	include/linux/vfio.h
-> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-> index c27449613a1d..f9d10dbcf3e6 100644
-> --- a/drivers/vfio/vfio_main.c
-> +++ b/drivers/vfio/vfio_main.c
-> @@ -49,6 +49,8 @@ static struct vfio {
->  	struct mutex			group_lock; /* locks group_list */
->  	struct ida			group_ida;
->  	dev_t				group_devt;
-> +	struct class			*device_class;
-> +	struct ida			device_ida;
->  } vfio;
->  
->  struct vfio_iommu_driver {
-> @@ -485,12 +487,13 @@ static struct vfio_device *vfio_group_get_device(struct vfio_group *group,
->   * VFIO driver API
->   */
->  /* Release helper called by vfio_put_device() */
-> -void vfio_device_release(struct kref *kref)
-> +static void vfio_device_release(struct device *dev)
->  {
->  	struct vfio_device *device =
-> -			container_of(kref, struct vfio_device, kref);
-> +			container_of(dev, struct vfio_device, device);
->  
->  	vfio_release_device_set(device);
-> +	ida_free(&vfio.device_ida, device->index);
->  
->  	/*
->  	 * kvfree() cannot be done here due to a life cycle mess in
-> @@ -500,7 +503,6 @@ void vfio_device_release(struct kref *kref)
->  	 */
->  	device->ops->release(device);
->  }
-> -EXPORT_SYMBOL_GPL(vfio_device_release);
->  
->  /*
->   * Allocate and initialize vfio_device so it can be registered to vfio
-> @@ -548,6 +550,13 @@ int vfio_init_device(struct vfio_device *device, struct device *dev,
->  {
->  	int ret;
->  
-> +	ret = ida_alloc_max(&vfio.device_ida, MINORMASK, GFP_KERNEL);
-> +	if (ret < 0) {
-> +		dev_dbg(dev, "Error to alloc index\n");
-> +		return ret;
-> +	}
-> +
-> +	device->index = ret;
->  	init_completion(&device->comp);
->  	device->dev = dev;
->  	device->ops = ops;
-> @@ -558,11 +567,15 @@ int vfio_init_device(struct vfio_device *device, struct device *dev,
->  			goto out_uninit;
+> diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
+> index 2cfa8458b51be..78f8a9f3ad825 100644
+> --- a/drivers/dma/dmaengine.c
+> +++ b/drivers/dma/dmaengine.c
+> @@ -451,7 +451,8 @@ static int dma_chan_get(struct dma_chan *chan)
+>  	/* The channel is already in use, update client count */
+>  	if (chan->client_count) {
+>  		__module_get(owner);
+> -		goto out;
+> +		chan->client_count++;
+> +		return 0;
 >  	}
 >  
-> -	kref_init(&device->kref);
-> +	device_initialize(&device->device);
-> +	device->device.release = vfio_device_release;
-> +	device->device.class = vfio.device_class;
-> +	device->device.parent = device->dev;
+>  	if (!try_module_get(owner))
+> @@ -470,11 +471,11 @@ static int dma_chan_get(struct dma_chan *chan)
+>  			goto err_out;
+>  	}
+>  
+> +	chan->client_count++;
+> +
+>  	if (!dma_has_cap(DMA_PRIVATE, chan->device->cap_mask))
+>  		balance_ref_count(chan);
+>  
+> -out:
+> -	chan->client_count++;
 >  	return 0;
 >  
->  out_uninit:
->  	vfio_release_device_set(device);
-> +	ida_free(&vfio.device_ida, device->index);
->  	return ret;
->  }
->  EXPORT_SYMBOL_GPL(vfio_init_device);
-> @@ -659,6 +672,7 @@ static int __vfio_register_dev(struct vfio_device *device,
->  		struct vfio_group *group)
->  {
->  	struct vfio_device *existing_device;
-> +	int ret;
->  
->  	if (IS_ERR(group))
->  		return PTR_ERR(group);
-> @@ -675,16 +689,21 @@ static int __vfio_register_dev(struct vfio_device *device,
->  		dev_WARN(device->dev, "Device already exists on group %d\n",
->  			 iommu_group_id(group->iommu_group));
->  		vfio_device_put_registration(existing_device);
-> -		if (group->type == VFIO_NO_IOMMU ||
-> -		    group->type == VFIO_EMULATED_IOMMU)
-> -			iommu_group_remove_device(device->dev);
-> -		vfio_group_put(group);
-> -		return -EBUSY;
-> +		ret = -EBUSY;
-> +		goto err_out;
->  	}
->  
->  	/* Our reference on group is moved to the device */
->  	device->group = group;
->  
-> +	ret = dev_set_name(&device->device, "vfio%d", device->index);
-> +	if (ret)
-> +		goto err_out;
-> +
-> +	ret = device_add(&device->device);
-> +	if (ret)
-> +		goto err_out;
-> +
->  	/* Refcounting can't start until the driver calls register */
->  	refcount_set(&device->refcount, 1);
->  
-> @@ -693,6 +712,12 @@ static int __vfio_register_dev(struct vfio_device *device,
->  	mutex_unlock(&group->device_lock);
->  
->  	return 0;
-> +err_out:
-> +	if (group->type == VFIO_NO_IOMMU ||
-> +	    group->type == VFIO_EMULATED_IOMMU)
-> +		iommu_group_remove_device(device->dev);
-> +	vfio_group_put(group);
-> +	return ret;
->  }
->  
->  int vfio_register_group_dev(struct vfio_device *device)
-> @@ -779,6 +804,9 @@ void vfio_unregister_group_dev(struct vfio_device *device)
->  	list_del(&device->group_next);
->  	mutex_unlock(&group->device_lock);
->  
-> +	/* Balances device_add in register path */
-> +	device_del(&device->device);
-> +
->  	if (group->type == VFIO_NO_IOMMU || group->type == VFIO_EMULATED_IOMMU)
->  		iommu_group_remove_device(device->dev);
->  
-> @@ -2362,6 +2390,7 @@ static int __init vfio_init(void)
->  	int ret;
->  
->  	ida_init(&vfio.group_ida);
-> +	ida_init(&vfio.device_ida);
->  	mutex_init(&vfio.group_lock);
->  	mutex_init(&vfio.iommu_drivers_lock);
->  	INIT_LIST_HEAD(&vfio.group_list);
-> @@ -2377,11 +2406,18 @@ static int __init vfio_init(void)
->  	vfio.class = class_create(THIS_MODULE, "vfio");
->  	if (IS_ERR(vfio.class)) {
->  		ret = PTR_ERR(vfio.class);
-> -		goto err_class;
-> +		goto err_group_class;
->  	}
->  
->  	vfio.class->devnode = vfio_devnode;
->  
-> +	/* /sys/class/vfio-dev/vfioX */
-> +	vfio.device_class = class_create(THIS_MODULE, "vfio-dev");
-> +	if (IS_ERR(vfio.device_class)) {
-> +		ret = PTR_ERR(vfio.device_class);
-> +		goto err_dev_class;
-> +	}
-> +
->  	ret = alloc_chrdev_region(&vfio.group_devt, 0, MINORMASK + 1, "vfio");
->  	if (ret)
->  		goto err_alloc_chrdev;
-> @@ -2398,9 +2434,12 @@ static int __init vfio_init(void)
->  err_driver_register:
->  	unregister_chrdev_region(vfio.group_devt, MINORMASK + 1);
->  err_alloc_chrdev:
-> +	class_destroy(vfio.device_class);
-> +	vfio.device_class = NULL;
-> +err_dev_class:
->  	class_destroy(vfio.class);
->  	vfio.class = NULL;
-> -err_class:
-> +err_group_class:
->  	misc_deregister(&vfio_dev);
->  	return ret;
->  }
-> @@ -2412,8 +2451,11 @@ static void __exit vfio_cleanup(void)
->  #ifdef CONFIG_VFIO_NOIOMMU
->  	vfio_unregister_iommu_driver(&vfio_noiommu_ops);
->  #endif
-> +	ida_destroy(&vfio.device_ida);
->  	ida_destroy(&vfio.group_ida);
->  	unregister_chrdev_region(vfio.group_devt, MINORMASK + 1);
-> +	class_destroy(vfio.device_class);
-> +	vfio.device_class = NULL;
->  	class_destroy(vfio.class);
->  	vfio.class = NULL;
->  	misc_deregister(&vfio_dev);
-> diff --git a/include/linux/vfio.h b/include/linux/vfio.h
-> index 3cf857b1eec7..ee399a768070 100644
-> --- a/include/linux/vfio.h
-> +++ b/include/linux/vfio.h
-> @@ -47,7 +47,8 @@ struct vfio_device {
->  	struct kvm *kvm;
->  
->  	/* Members below here are private, not for driver use */
-> -	struct kref kref;	/* object life cycle */
-> +	unsigned int index;
-> +	struct device device;	/* device.kref covers object life circle */
->  	refcount_t refcount;	/* user count on registered device*/
->  	unsigned int open_count;
->  	struct completion comp;
-> @@ -178,10 +179,9 @@ struct vfio_device *_vfio_alloc_device(size_t size, struct device *dev,
->  int vfio_init_device(struct vfio_device *device, struct device *dev,
->  		     const struct vfio_device_ops *ops);
->  void vfio_free_device(struct vfio_device *device);
-> -void vfio_device_release(struct kref *kref);
->  static inline void vfio_put_device(struct vfio_device *device)
->  {
-> -	kref_put(&device->kref, vfio_device_release);
-> +	put_device(&device->device);
->  }
->  
->  int vfio_register_group_dev(struct vfio_device *device);
+>  err_out:
+> -- 
+> 2.25.1
+> 
+
+Hi Vinod,
+
+Any thoughts on this patch? We recently came across this issue as well.
+
+Thanks,
+Jerry
 
