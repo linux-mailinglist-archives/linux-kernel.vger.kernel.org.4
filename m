@@ -2,89 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241A75EF888
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02EB35EF88E
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 17:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235860AbiI2PTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 11:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
+        id S235883AbiI2PU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 11:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235840AbiI2PTs (ORCPT
+        with ESMTP id S235884AbiI2PUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 11:19:48 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1F7FD33;
-        Thu, 29 Sep 2022 08:19:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=U7bbJF0jn65LRvA7kkp1q5XkbyDAHF1u73Vxz4VnaPA=; b=TNYpi3AnzfGkywcOp8kSjesbBz
-        QBgo6A6sKjikfK3AsLDWfHNthnC0Vd6OwWM8O5Ahx8S2pCQpAKpJ1uvN2g+FDAFsE4YEZRv4kDguY
-        izSXcqmUjgB+upm+9lhXY+4N2mXxydDkMqlUgYeJmE72ax2mZXoliWsUYZaAbeQQMr58=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1odvK1-000cyu-5O; Thu, 29 Sep 2022 17:19:33 +0200
-Date:   Thu, 29 Sep 2022 17:19:33 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>
-Subject: Re: [EXT] Re: [PATCH 1/1] net: fec: add initial XDP support
-Message-ID: <YzW3hfyZAPvj58Tv@lunn.ch>
-References: <20220928152509.141490-1-shenwei.wang@nxp.com>
- <YzT2An2J5afN1w3L@lunn.ch>
- <PAXPR04MB9185141B58499FD00C43BB6889579@PAXPR04MB9185.eurprd04.prod.outlook.com>
- <YzWcI+U1WYJuZIdk@lunn.ch>
- <PAXPR04MB918545B92E493CB57CDE612B89579@PAXPR04MB9185.eurprd04.prod.outlook.com>
+        Thu, 29 Sep 2022 11:20:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E4E5F12E;
+        Thu, 29 Sep 2022 08:20:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EB50B824F2;
+        Thu, 29 Sep 2022 15:20:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 876D1C433C1;
+        Thu, 29 Sep 2022 15:20:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664464828;
+        bh=bZtdd37VqJjCVyqVFWFxsZ1BmVYfv83mHcIlp+XAedo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mv/lusf06cppsXLB1un/psyiQzzVLUBTz6IO19L2CrVFkHsesGteiNFIRIOlWQ2tX
+         E1osPvpkt3Hr6PGTXzK8DdQMbuqLR8gcMUBuxBVYPdeaKHZlCFl0azV+M+ciFeaRjg
+         Ef4Ere4bkba5NC/M38UmWVBhT7m3GEreGfbHfdDblfh0a2Tqhy0yt41pM69LIPHnJB
+         fmG6x6pfYVZbqdFiPGGKdTsDE5bf8Kyl2GfgukRoso4JEzmWpAzs3NxLUab8HuVoav
+         5svSoL/hRnxUliuVRqDkBB1gLBlhZkkeRPnd2p8LTMUZWR9c5jsWBOC3o+/ClwUkEq
+         o84pVud99QujA==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH] x86/Kconfig: Drop check for '-mabi=ms' for CONFIG_EFI_STUB
+Date:   Thu, 29 Sep 2022 08:20:10 -0700
+Message-Id: <20220929152010.835906-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PAXPR04MB918545B92E493CB57CDE612B89579@PAXPR04MB9185.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > I actually did some compare testing regarding the page pool for normal
-> > > traffic.  So far I don't see significant improvement in the current
-> > > implementation. The performance for large packets improves a little,
-> > > and the performance for small packets get a little worse.
-> > 
-> > What hardware was this for? imx51? imx6? imx7 Vybrid? These all use the FEC.
-> 
-> I tested on imx8qxp platform. It is ARM64.
+A recent change in LLVM made CONFIG_EFI_STUB unselectable because it no
+longer pretends to support '-mabi=ms', breaking the dependency in
+Kconfig. Lack of CONFIG_EFI_STUB can prevent kernels from booting via
+EFI in certain circumstances.
 
-Please also test the older platforms. imx8 is quite powerful, so some
-performance loss does not matter too much. But for the older systems,
-i know people has spent a lot of time and effort optimising network
-performance, and they will be unhappy if you make it slower.
+This check was added by commit 8f24f8c2fc82 ("efi/libstub: Annotate
+firmware routines as __efiapi") to ensure that '__attribute__((ms_abi))'
+was available, as '-mabi=ms' is not actually used in any cflags.
+According to the GCC documentation, this attribute has been supported
+since GCC 4.4.7. The kernel currently requires GCC 5.1 so this check is
+not necessary; even when that change landed in 5.6, the kernel required
+GCC 4.9 so it was unnecessary then as well.  Clang supports
+'__attribute__((ms_abi))' for all versions that are supported for
+building the kernel so no additional check is needed. Remove the
+'depends on' line altogether to allow CONFIG_EFI_STUB to be selected
+when CONFIG_EFI is enabled, regardless of compiler.
 
-> > By small packets, do you mean those under the copybreak limit?
-> > 
-> > Please provide some benchmark numbers with your next patchset.
-> 
+Cc: stable@vger.kernel.org
+Fixes: 8f24f8c2fc82 ("efi/libstub: Annotate firmware routines as __efiapi")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1725
+Link: https://gcc.gnu.org/onlinedocs/gcc-4.4.7/gcc/Function-Attributes.html
+Link: https://github.com/llvm/llvm-project/commit/d1ad006a8f64bdc17f618deffa9e7c91d82c444d
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/x86/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-> Yes, the packet size is 64 bytes and it is under the copybreak
-> limit. As the impact is not significant, I would prefer to remove
-> the copybreak logic.
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index f9920f1341c8..81012154d9ed 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1956,7 +1956,6 @@ config EFI
+ config EFI_STUB
+ 	bool "EFI stub support"
+ 	depends on EFI
+-	depends on $(cc-option,-mabi=ms) || X86_32
+ 	select RELOCATABLE
+ 	help
+ 	  This kernel feature allows a bzImage to be loaded directly
 
-Lets look at the benchmark numbers, what you actually mean by not
-significant, and across a range of hardware.
+base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
+-- 
+2.37.3
 
-	     Andrew
