@@ -2,66 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198F95EFCDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849255EFCE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 20:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235648AbiI2SR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 14:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S235686AbiI2SSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 14:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235182AbiI2SRy (ORCPT
+        with ESMTP id S235685AbiI2SSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:17:54 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714481F7B00
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:17:53 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 9so2136540pfz.12
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 11:17:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=nLT1oM8QWicP3ioul090HC9HcqJUN2HR9/MOAI6jcjw=;
-        b=PyxKzwY3Vk3cc+OoJNLY60fNm4G3oIvAzdZrg5zVSCSu9dJnpznTMv65rbq0o7bUs0
-         aftRtgYyKLbKbW1jsThHQvsCzscd4nmC6CpORmJ11/rWWk5Z0XXcjfbhiIRvlPBTYtTu
-         gfqnSfNydnHSwkxQCQv2yAcY6+mgM0PBw2YvUcZuI/+FLtAh6yUoYphJrSoporHYMaBF
-         3DoYLd05iu9KcIWKevhJhxS8DIynAEjsb4U6HeL1SNOtYXEIgY3Qijlx0977uB3GAT7V
-         EJ46jHXtSxVp5ByJoL+ioZ9j9X9NqrBWPyqMMVqXaztBO8N9fd4SXySfUo1erlfkBdAw
-         B4BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=nLT1oM8QWicP3ioul090HC9HcqJUN2HR9/MOAI6jcjw=;
-        b=vFBAHdAFycVgnHB6RuE4YLtF6/2r8rFv4tK+kPtTZ1ih3rXj3HZRY1uZ/S68BtqQ1B
-         IZCzWm/wlqgBuBGLXQIGKB+r9zEigOToCpgJMwzRCNjtl/zDRUajaDw9trs+2DUQY3/y
-         M5XEQGnM/G3IB1ytM+QuIAP9cVdeDGjlXTa3PaKZOIkE3HYqbfRA0j/SYd/7LsBFLIqA
-         psgF9a6Y0BxdB3UNb5RFARmHT0Rv/+Dj0yMphyhRk5DCxiSRdJRQtZSu/NW8zoG4afak
-         z/9z7sLHrO/LLH/sQMZ7kRqYh2J2M2CefNrcpMVUkP/2Xz/CkIfzZRnBpZVXx2WWexQV
-         7+6A==
-X-Gm-Message-State: ACrzQf3lQwb1TB5jw5G44ihl/vdmr+4PTBQCYBIR661TuZXfRjNeB/9w
-        SsbKChwky2U/hZ10F2L4EMTifKIymP66R09iP3/bng==
-X-Google-Smtp-Source: AMsMyM7Htg0TT1qjR6Zvm2wA+9REqCpnz2fgFHOVlNGiiiHdLp5ohVQXYYynbLE39Hk59fQajP+3G5cCM7ueJSrtW8Y=
-X-Received: by 2002:a63:e709:0:b0:438:98e8:d1c with SMTP id
- b9-20020a63e709000000b0043898e80d1cmr4077179pgi.403.1664475472752; Thu, 29
- Sep 2022 11:17:52 -0700 (PDT)
+        Thu, 29 Sep 2022 14:18:03 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8322F1F7B31;
+        Thu, 29 Sep 2022 11:18:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MyM0mOS42JG4DRdJ4HefZVLij4vpcmEYkMJ0oqH2nEYAuayNstGM57kRlP4w8rkILzEK4ImpytJntZavawjNr6U5vZyKA/khccke50jRq+sg0UtJCTAifeXq6L72XNmpBkgWiHJpfSdTfRPSypALm7mWWXgaSeEyQWyBqkSX8zpUaSiuFCGjbv+tmAXET9Glo/4ewo4vzE8v+whvz/n0avyjBTU9tHyCygBDQt+U4VPfEYW+JKbtFtMttq7FyIB/WCSoU9IktiXELaGFcHPSRlCH1GZ+29RHKLumi32mTjyzvKSsVa8LuCAurhkQmL8DeNOg6+vQsSgMQ3HZfy6leg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NB1XcMneQTW8uvP5t2qApO/nYxG1/VGADKbZY95AHiU=;
+ b=g9Icm1fdcSBsU3OfpQvLevGKTCeTnDrFiJFtDEgBKNhSMeHuM5PO9zeoymwkbEwQtRJ5QCbfJawf1O5KYWJ2Zpm+OxxlShH9d+Xp8KtY51sGut2lHafyrB5Qj/sw+ms6O652rmushG24KrBOzmv2TlzdNDsr+KPg6qwWoirXlbbC46lN7F5waQjihaeC5I7OjYSCh8apnAOt7uK7ZKbeo+pWNjUNtzNgycFMmLwlxl8g4h8WQ4tbrJIUo8DBDIGLY1/duYiPJI9D4kuAgi7dJlMzzNq2YOM6EbyQXnnNsSKJilofxDqSF1U1QdY4eiAiBLfhnbrCCaULQ4WL0BQOvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NB1XcMneQTW8uvP5t2qApO/nYxG1/VGADKbZY95AHiU=;
+ b=dY8UMR6r1XT94+hIRCStz7xHGPL9i3Z0x9nWnftknrME80nT727CQJBMmNLhOflufidTzwrY1UzOvlHImwHZRPn2zNRmVZWiC0fgvZcYrcYxscfHxEXDg4emUWXpEdDFB5BDgJmDgJWEbSUhOj28zS2ydgz9d2lgOWxdWr6rmOI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by PH0PR12MB5433.namprd12.prod.outlook.com (2603:10b6:510:e1::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.20; Thu, 29 Sep
+ 2022 18:17:59 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::805b:58b6:1f27:d644]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::805b:58b6:1f27:d644%6]) with mapi id 15.20.5676.015; Thu, 29 Sep 2022
+ 18:17:59 +0000
+Message-ID: <b6cfe4fd-2292-4b1b-b919-caba979dd0bc@amd.com>
+Date:   Thu, 29 Sep 2022 20:17:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/3] dma-buf: Enable signaling on fence for sw_sync
+Content-Language: en-US
+To:     Arvind Yadav <Arvind.Yadav@amd.com>, andrey.grodzovsky@amd.com,
+        shashank.sharma@amd.com, amaranath.somalapuram@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, sumit.semwal@linaro.org,
+        gustavo@padovan.org, airlied@linux.ie, daniel@ffwll.ch,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220927172409.484061-1-Arvind.Yadav@amd.com>
+ <20220927172409.484061-3-Arvind.Yadav@amd.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220927172409.484061-3-Arvind.Yadav@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0113.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a8::13) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-References: <20220929181223.2502994-1-masahiroy@kernel.org>
-In-Reply-To: <20220929181223.2502994-1-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 29 Sep 2022 11:17:41 -0700
-Message-ID: <CAKwvOdkTSns1oWzb9QG7_=DaNF2_QstdsJeKCgAEWVMmth0XWw@mail.gmail.com>
-Subject: Re: [PATCH] Revert "kbuild: Check if linker supports the -X option"
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|PH0PR12MB5433:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1253d504-a51e-446c-1695-08daa246efe5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DEqiLrb+QJztkhJyAq6LO6ZDMXFPYgzmLdkUvBlx5Kk8r4klpyiftJB9vUQcUfCgwDLfJpPvJ0uYTXD2AOWypJajIsae1ivawjI4H8fiNxscs8bjPVL5kGWC4B5t2qiR+XCOJkWwZPA6dbQmVvkRqwBCbgNZkgWKjSMA2rAqA2aMwMmcZ3+MJ3zfFqpS8QKLy0iEisexmT1Whgp+vbT4SHDhMei/3kq2rrCeYI+xrrMnsJonhRESfR+9bYIf1UmyA8y3nr1UNDOjfi5iLoSCJw7+eCLzNjQvm8tUx9VW56QJNBTUQNbWeFxzVC6LcOUA66jukSz3evUnPVLAdfDPEJHk9GbCqNA7QveVwTlOBQsUmJLC8udVRy8/hZLZTBauBVXh6LYkpepC4WDEM3P2nYkpK1YuuU3Ix3icsPyR2TRMn4g5Jiay+RtIwwqhC1/X0ahcMvcl0n4jFqiDBsn+PV0lTIz3TcQlEtc+YMMDCC2ROHdZSlBJsbj7EL1v6Cus9fBDIuLgIEqlJexOiYBTVUpzfJ0fm4P1VJMXbEMEBbvcvfUti/gaSPHlxqpPAR/JC2Ix4sJ+JEYlEJL6xcxmouSY7K2HY1DiI+c8eI5Wyy9nlPrxYWFkorlK4uTYp+TL0qZD/Tjk4L1AuNo7MYFJyKbugfuxEb1oIVWhoNATxMmOsfRlkabNK31MVPAxjT0xTQB7rUdOuxtJnDtmWHcQr6BIDMbrhat9+m4+EvGvjKLx+l8hKwET7884ALhgtvV19l2WV0O7N7tI1i++yd25ubM72RT8Yo0fgBO0JTLQ6iDGwBjTjQFhwcm81eiN7AF+
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(136003)(376002)(366004)(396003)(451199015)(4744005)(5660300002)(8936002)(41300700001)(316002)(38100700002)(6506007)(66574015)(6486002)(83380400001)(2906002)(921005)(31686004)(6512007)(6666004)(66556008)(66946007)(31696002)(86362001)(36756003)(8676002)(66476007)(186003)(2616005)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bjJ3cUNnd0xjSXJWZjFaOE8zbndJME5CcWVDNW5wendTN2VnY3NPYUR4QWZL?=
+ =?utf-8?B?N3poZ0t1eW1Wcks5c0V2c3g1Q1JZNWJ3dXQwZk1yNnAyT2dlSnVqVGlyNVZZ?=
+ =?utf-8?B?MVBSVUdERHZZRHQ4dVRITWw3eE04VU83OXhvWHJaVmdsSTlyZ3J5RnRWUjBQ?=
+ =?utf-8?B?em1oSmcwUXJZVUEzTVYyMDBVZ2UrS1YzczVCeUZ6U0ZlWlpmOU9xRzBXTjhL?=
+ =?utf-8?B?bkdsMG1pNkxWa0wwM2lZUGFNQUJjSVZ5R01ZZm5qKzFpTjdRcHVCTFJ2MCs2?=
+ =?utf-8?B?ckhkcEdEWGlZZ1hzTU1zaDB5dHh3NUd2Tyt1S2hJL2I3ejJveEUzcVkxYTFY?=
+ =?utf-8?B?eG9SSlFVczJDanJOcm5wbFZMU1o3dyt6Rmx6RWRqblBDaVVEQ0FTbE9ueU01?=
+ =?utf-8?B?YVhhYkFkVklMa21nVUtNZXE5WFArelkrU1B1bnRnQ3c1VlZoQm9QNFl2VHFQ?=
+ =?utf-8?B?cE9NZmdOWlBBZkt1K2ovVzVqY0hkUVJ0UnA3ZW5jVUV0Z3JqNCtSQVkrZ2lC?=
+ =?utf-8?B?NVpiSVRtMnhvdm9iSUE3S0cvRXJiT2ZYWVNiQXBFTmlteXpOT29pU2E4YWRw?=
+ =?utf-8?B?cmhJQ2RBMDczcUJCdEhCKzRXWHhQcE9tK3c4WGorTUx2Y042SDJPcnBPaFNx?=
+ =?utf-8?B?VDBUT2M1ejVpVTdjR3A5aEtaVVI1NFo2V2cvWC8zT2ZWZ3FoVndLMWNJdXo5?=
+ =?utf-8?B?dzN0MFdiUmh1ZURjQkd2NE1OejMzeVdZTng2YS9VYWd0eXlxaFcrZHlxeTAv?=
+ =?utf-8?B?Q1BGT2pRblJ3SWtBdEZQOU1hMUEySFJFSEdJVlgrUy9aY2ExR3NIM09rUkhX?=
+ =?utf-8?B?dEVsNm1EekU0aVA5bm9UQkpRR3g1a1JsVmJDNWp2WUtSeHFxMi8rcm4rcWxo?=
+ =?utf-8?B?Y1NOK1NyUWs2eHNUa0FHcEcwWkdzZjdWbThUdVVJOUxEN3dPSlhTYjk5eHNj?=
+ =?utf-8?B?c205T1p5QVljVWxPU3VlSE9yZXRtaElIZFBFelBMeVMxQlZTZktyYzYxV1Bv?=
+ =?utf-8?B?Rks0K2hQTVdhc09rYmJkYit1NXlmVTFWY3A1bkowVzN1VnB3cmZyTVpOQU5B?=
+ =?utf-8?B?OXJuMEl1MGo1dTNJRFBHTGNTdXNKTXRRL0tJcmIyMmV2Ui9vYnpidzU2Z0dG?=
+ =?utf-8?B?a1FxYjdaS09kQ1V6WDZsTjF5bjJwUWxKbER0TWlFVTgrcElhK25BSVJCalJl?=
+ =?utf-8?B?QXpQYisxZWVxL2txekczbWtPcUhwMnF5VDN5R2hPSnZJZTVjUmFZbVBSc24w?=
+ =?utf-8?B?S3VuaVhGb21RYlRLWmRqbS9zbGcxaXN4a1lNWkxwenBrU3d3ZGJUWHI3R3Bj?=
+ =?utf-8?B?WitrcWE4cEhTaGhUbVA2cjVHS0xqOTBHaUtlR3c3cS8xSGF2THhtMHFVVEM4?=
+ =?utf-8?B?YUVIMFBzZmhHdHJLODEwL0UwQ056NEZ2M0trNGlvbmtsaDZUdHhhaWxMQnJW?=
+ =?utf-8?B?Y2ROdkYvclNGczFmQ1RTUXZTR2lxcWZYdW5ZdHpIRGRnUXAwNlRlTG1WNk8x?=
+ =?utf-8?B?TExFTW9CSTdiaEpKZi83Z3hwT0FoTHZaZjl3a3FXQko4UVJvOGpoTmx2T01m?=
+ =?utf-8?B?dVg1U1djWXlCZjhXbjYxWWZvU3NyWkhOa2sxUGcwTU9uL044b0k5Z0lrVlRh?=
+ =?utf-8?B?azZPV3M3OE1lWEFSb2E3aEc2RHdmZ0ZkUHVGUjJtSHRLTnNoVktOWFdHK1pv?=
+ =?utf-8?B?VGt4QVpieVhLYmh3SExXZWw3NHM5QlNGZWNiSDVqQnA2TjdVN0ViQnVXcU56?=
+ =?utf-8?B?ZWZXVTV6Z1JYWUx5Y2I2S3liMW95M0dzV1FsL1NOL2RQR1FLLzduV3BIMHNw?=
+ =?utf-8?B?cFhlVW9qblJheE9ycDhCR1lYSTFROFhuajJjakQ5U0xUcWMrckREcDlIQjRX?=
+ =?utf-8?B?OGQ4citvSFFrYVU4QTduaHVrQS9wVXNrVCsvcnp4KzdhaEFnQUZlQW5uNW9I?=
+ =?utf-8?B?bGdtVWlUU2U5Nm1RZ1EzZUZBbVJRZ0R4dVIyVG8rRk5jOENNSmxVL2hndGxp?=
+ =?utf-8?B?bnVoVTZKaENvNzJxbldVZm02Wlo1d3dRRTlrbnlGNkNlM20zYU03T3BJNmtt?=
+ =?utf-8?B?bDlIcklOcm5rajRyWStQWHJ2WWcrNlVyUHJ3Uys0NVNpU1EwR0dLUkhQR010?=
+ =?utf-8?B?R2lCZ3pDbUhvU2JsTjErSWNiTStTKzFNTHQ4TUd3NDF6a1hrRENldXdDY3ZE?=
+ =?utf-8?Q?PLR8ne7X2pV1tAnberV6Z0AhNAZsb9DWWv1781tnndKW?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1253d504-a51e-446c-1695-08daa246efe5
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 18:17:58.8774
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6jzwaSboa9e61s3816uBQe1xmrSIJ1aOi+3t7p49ucZigSNLuNX1NAFoBBM8A9yi
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5433
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,47 +129,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 11:13 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+Am 27.09.22 um 19:24 schrieb Arvind Yadav:
+> Here's enabling software signaling on fence for sw_sync.
 >
-> This reverts commit d79a27195a33f4b5e591de5536799ad874ea6cf5.
->
-> According to the commit description, this ld-option test was added for
-> the gold linker at that time.
->
-> Commit 75959d44f9dc ("kbuild: Fail if gold linker is detected") gave
-> up the gold linker support after all.
->
-> I tested the BFD linker from binutils 2.23 and LLD from LLVM 11.0.0.
-> Both of them support the -X option.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Christian König <christian.koenig@amd.com>
 
 > ---
+>   drivers/dma-buf/sw_sync.c | 2 ++
+>   1 file changed, 2 insertions(+)
 >
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Makefile b/Makefile
-> index 49dcae886c48..d7c85ec79000 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1037,7 +1037,7 @@ KBUILD_LDFLAGS    += $(call ld-option,--no-warn-rwx-segments)
->  endif
->
->  ifeq ($(CONFIG_STRIP_ASM_SYMS),y)
-> -LDFLAGS_vmlinux        += $(call ld-option, -X,)
-> +LDFLAGS_vmlinux        += -X
->  endif
->
->  ifeq ($(CONFIG_RELR),y)
-> --
-> 2.34.1
->
+> diff --git a/drivers/dma-buf/sw_sync.c b/drivers/dma-buf/sw_sync.c
+> index 348b3a9170fa..d2a52ceac14e 100644
+> --- a/drivers/dma-buf/sw_sync.c
+> +++ b/drivers/dma-buf/sw_sync.c
+> @@ -244,6 +244,8 @@ static struct sync_pt *sync_pt_create(struct sync_timeline *obj,
+>   		       obj->context, value);
+>   	INIT_LIST_HEAD(&pt->link);
+>   
+> +	dma_fence_enable_sw_signaling(&pt->base);
+> +
+>   	spin_lock_irq(&obj->lock);
+>   	if (!dma_fence_is_signaled_locked(&pt->base)) {
+>   		struct rb_node **p = &obj->pt_tree.rb_node;
 
-
--- 
-Thanks,
-~Nick Desaulniers
