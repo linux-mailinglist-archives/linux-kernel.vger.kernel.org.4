@@ -2,101 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581155EEF01
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4235EEF04
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 09:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235205AbiI2H3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 03:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
+        id S234141AbiI2HaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 03:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235236AbiI2H3j (ORCPT
+        with ESMTP id S235249AbiI2H35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 03:29:39 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E5EFD1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:29:32 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id a29so704489pfk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:29:32 -0700 (PDT)
+        Thu, 29 Sep 2022 03:29:57 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1F61EAFA
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:29:51 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id p5so566393ljc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 00:29:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=/tZNUqIuW2LgU2Y9VqaDgSpmLoQ9J9brfNhqe2zcUd4=;
-        b=TbtdNNzpWV35S/fp7qRYAa/xZ0A9UAnyY/vJ09WVw5b64FS8Kqscx6qcR56xV0MHc0
-         WNyigkhyYcUO8kHFJw7/MWS6iRdYDebD2nN5FV9095BtgrOsQQSEnNRxJq8YdU/+D0m2
-         L8rDOrhcfWRj2lbv5uKcP8wRgOk6WJ1j0AV+C4l9Mg1pt1bZdNI85sEKLPhIr1PZcQLx
-         ace/RLjSmrW2eBlPWIvjtxpNL7E5TSbLaiLZeb6i9qwC0iFbtCr5FDG5AAjITJx0DrtC
-         XSSN0mnajnXEY/g86XEnDiTbDON/bIz9WLoOGthqMdgONsC4v3d14lPhc1Jny/OcaG8A
-         ILuw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=JPYvy93CWgU2khSZYKN1aQzD3T4YNwYIBEs2RfQWO6s=;
+        b=eflHmrY61qGstkuuycwzkkokq1KLWpHwYjIMMlKpXiQ8GqSNY+CEOoVDZXH8Dee3Ai
+         kGXlIJZ6FoR35MldQu5RlYEHE1SEl9muYv9gU75bTZytOVlCCmTzHr7UkyXWsdo6Z7sg
+         GpgwIM6kvLDGICTMggA5vL/0eyYL/lQS0tdAtDsVLyEVqL/4cGMmIqQO29eKV0JKXVd7
+         cxl2swx7EYJNb3cq8YQDG+l/N6KHirAjHs7HiBwX+a60rypw5/S6WWOXdPZhw0SLbWHL
+         YZBnk8I2GJKpDWnnU/N18yWjd1cycSfkylV18XBS5xInDdx2jLOdKBymyEtgfx7dr7kQ
+         +4Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=/tZNUqIuW2LgU2Y9VqaDgSpmLoQ9J9brfNhqe2zcUd4=;
-        b=Gh91dqS82NrtsqLiDeGXOfA32DO2YWeO4Zc0MBzCbSu9SjzJS2KB8ZavmjDI6/FafC
-         fo1MYoTJ2CpJQ9EMdzswoLFjWIvNdKsDRY+FO0SAk7u9WWP4xzNPBL51RPacYCYaVjqO
-         ShaRvcahnsI3+SaIa4Y4uPk3NPklVK2gn1nvQo3oZtb9UYgMgU74FXulAL7MPkmEYL+h
-         cE1GdU7/RAgA3GWmXRbAOky5CNyKMaCtcOnXK8luVzApwHcBkgibUfcGGflQWpzHYwd5
-         bWG6Z1t5fHGq5ANLUsquUotX8vpOCMrN1Y/N00/n4Qm6j0tlWb1EXLg4N7VSCs888ZUm
-         +slQ==
-X-Gm-Message-State: ACrzQf1k7Iw6Gsb1ViR6lkbE+sbye01WIOYl0zS9yY+N9T319SJwPSOx
-        3PUA5l2frmM9/tcGwIOr0sE=
-X-Google-Smtp-Source: AMsMyM6PDL1TFKiLzj869qO2hFoH0crHj9TTJXQQ1kQG1tFQrRVwd54oMzyOsq8V0HfgM5LPGooVwg==
-X-Received: by 2002:a05:6a00:cd6:b0:546:d03:3dd7 with SMTP id b22-20020a056a000cd600b005460d033dd7mr2182591pfv.19.1664436571966;
-        Thu, 29 Sep 2022 00:29:31 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id q4-20020a634304000000b0042b5095b7b4sm4861948pga.5.2022.09.29.00.29.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 00:29:31 -0700 (PDT)
-From:   xu.panda668@gmail.com
-To:     catalin.marinas@arm.com
-Cc:     will@kernel.org, broonie@kernel.org, maz@kernel.org,
-        kristina.martsenko@arm.com, vladimir.murzin@arm.com,
-        mark.rutland@arm.com, ardb@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        cgel.zte@gmail.com, Xu Panda <xu.panda@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Xu Panda <xu.panda668@gmail.com>
-Subject: [PATCH linux-next] arm64/idreg: use strscpy() is more robust and safer
-Date:   Thu, 29 Sep 2022 07:29:06 +0000
-Message-Id: <20220929072905.282639-1-xu.panda668@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=JPYvy93CWgU2khSZYKN1aQzD3T4YNwYIBEs2RfQWO6s=;
+        b=Lt4X70V2MFNxBqyVTDtubIeXt3XZQbg/eVV/UktYOyD5/TtUlsHeOY/CTFEnKTPf/7
+         BtPLiyHZXy9CawtKRBY5TNAEk+OiqWDZDRfMycUUBcn3euuE9hOJICmw1/JCGddmNBqC
+         8o1n84+GY0v4hYXCLYfxmV3STLz4WtR5WiA5MJU3/jfwIZOksG5idIYc9Y+P/WpkKOa7
+         nvtmFlMAbNpoTS+I551a7yCcP5odW4We1kahoKJDrv664S6W+y+Jca+WFzCZkYWiP4/l
+         fAacptWmXL1oOW1DssLX8tn0R+Zjpgp6a7cBOkgp63czDSKaTDdK1oKcsA4YGWAwf/1H
+         sOXQ==
+X-Gm-Message-State: ACrzQf29A0KpIBl/Q9F7kUu2n1F53arYidz+U0JXJC+crQhR3GXYzVr8
+        ox3+xMHuXP/vR21qYd1oF0sxuuBxvzwgNw==
+X-Google-Smtp-Source: AMsMyM6yXJn7Jim8QVPeAMyRjqVkElY9pE5G2ZV9AlrnuwNiIJ7ihQSMZWBVmIMkk6jjwxJhA1+nNw==
+X-Received: by 2002:a2e:9d94:0:b0:26b:de12:7c9 with SMTP id c20-20020a2e9d94000000b0026bde1207c9mr634387ljj.244.1664436589835;
+        Thu, 29 Sep 2022 00:29:49 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id e2-20020ac25462000000b0049fe6f36880sm706195lfn.51.2022.09.29.00.29.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 00:29:49 -0700 (PDT)
+Message-ID: <54a19490-aa0d-2dcd-8407-319d6167add4@linaro.org>
+Date:   Thu, 29 Sep 2022 09:29:48 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 2/2] Documentation/process: Add text to indicate
+ supporters should be mailed
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, corbet@lwn.net,
+        linux@leemhuis.info, konstantin@linuxfoundation.org,
+        linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220929002500.283481-1-bryan.odonoghue@linaro.org>
+ <20220929002500.283481-3-bryan.odonoghue@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220929002500.283481-3-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+On 29/09/2022 02:25, Bryan O'Donoghue wrote:
+> Recently when submitting a yaml change I found that I had omitted the
+> maintainer whose tree the change needed to go through.
+> 
+> The reason for that is the path in MAINTAINERS is marked as Supported not
+> Maintained. Reading MAINTAINERS we see quote:
+> 
+>            Supported:   Someone is actually paid to look after this.
+>            Maintained:  Someone actually looks after it.
+> 
+> The current submitting-patches.rst only says to mail maintainers though not
+> supporters. When we run scripts/get_maintainer.pl anybody who is denoted a
+> paid maintainer will appear as a supporter.
+> 
+> Let's add some text to the submitting-patches.rst to indicate that
+> supporters should similarly be mailed so that you can't do as I did and
+> mail every maintainer get_maintainer.pl tells you to, without actually
+> mailing the one supporter you need to.
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  Documentation/process/submitting-patches.rst | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+> index be49d8f2601b4..aabccaea93375 100644
+> --- a/Documentation/process/submitting-patches.rst
+> +++ b/Documentation/process/submitting-patches.rst
+> @@ -227,9 +227,11 @@ You should always copy the appropriate subsystem maintainer(s) on any patch
+>  to code that they maintain; look through the MAINTAINERS file and the
+>  source code revision history to see who those maintainers are.  The
+>  script scripts/get_maintainer.pl can be very useful at this step (pass paths to
+> -your patches as arguments to scripts/get_maintainer.pl).  If you cannot find a
+> -maintainer for the subsystem you are working on, Andrew Morton
+> -(akpm@linux-foundation.org) serves as a maintainer of last resort.
+> +your patches as arguments to scripts/get_maintainer.pl).  You should mail
+> +everyone who appears as "maintainer[volunteer]" or "maintainer[supporter]" as
 
-The implementation of strscpy() is more robust and safer.
-That's now the recommended way to copy NUL terminated strings.
+As I said before, this still ignores reviewers. I don't think it is
+going to good direction. The submitter is expected to CC
+everyone/everything which is pointed by get_maintainers.pl except the
+Git-fallback entries.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Xu Panda <xu.panda668@gmail.com>
----
- arch/arm64/kernel/idreg-override.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Best regards,
+Krzysztof
 
-diff --git a/arch/arm64/kernel/idreg-override.c b/arch/arm64/kernel/idreg-override.c
-index 95133765ed29..61bbec7ef62e 100644
---- a/arch/arm64/kernel/idreg-override.c
-+++ b/arch/arm64/kernel/idreg-override.c
-@@ -246,7 +246,7 @@ static __init void __parse_cmdline(const char *cmdline, bool parse_aliases)
-                        return;
-
-                len = min(len, ARRAY_SIZE(buf) - 1);
--               strncpy(buf, cmdline, len);
-+               strscpy(buf, cmdline, len);
-                buf[len] = 0;
-
-                if (strcmp(buf, "--") == 0)
--- 
-2.15.2
