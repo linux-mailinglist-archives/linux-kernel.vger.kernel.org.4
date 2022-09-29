@@ -2,232 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61595EF41B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085375EF420
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Sep 2022 13:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234105AbiI2LQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Sep 2022 07:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
+        id S234851AbiI2LSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Sep 2022 07:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233870AbiI2LQp (ORCPT
+        with ESMTP id S234798AbiI2LSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Sep 2022 07:16:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BA413E7D5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:16:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664450203;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=nwUR8ZUx03O4k7AXQqgEr6oJcUg1sZbXu+yFA3Igo1g=;
-        b=gTSdRYWLLDRz982SJb7mTmtSC1c+WMdD9QKIVPgf1igDHxxSzccf6h4MkFznRB7ZNema+i
-        Ow1g7FWqzSuYxjtsWEzcmrLkwH/cGIPWAdr2V5Gm7lZW+brrr+98t4LkfIG9pPR1wAq5Ui
-        suj4Jn2XPZ5lA2T9GiTretMOsyQvUu0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-w4yGM6joNZKIyZAGRjrRjA-1; Thu, 29 Sep 2022 07:16:40 -0400
-X-MC-Unique: w4yGM6joNZKIyZAGRjrRjA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 29 Sep 2022 07:18:30 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DE613E7F6
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Sep 2022 04:18:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF7538582B9;
-        Thu, 29 Sep 2022 11:16:39 +0000 (UTC)
-Received: from gerbillo.redhat.com (unknown [10.39.192.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A91C62166B2A;
-        Thu, 29 Sep 2022 11:16:38 +0000 (UTC)
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Networking for 6.0-rc8
-Date:   Thu, 29 Sep 2022 13:16:05 +0200
-Message-Id: <20220929111605.32358-1-pabeni@redhat.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 900C21F8AC;
+        Thu, 29 Sep 2022 11:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1664450306; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=urbGd3LAjOpWbVvqm9mfXm+G/l17iKcXVGqxKpMeX5Q=;
+        b=STn+xmbiPxhW9r5zgAt4bVEVNMMc6jd8rXGxswLPtnG5S2JBWy+cHnwGMBxW3BMNKCorOe
+        YPkVb/Na44IdzaxsKDPsDLGNiqHjN7SMN600D2Yqjcqw4ds9zwz8aa4vFJb6qPzIMAx4M8
+        17ZMI733Payhh1jz/YlaxJYfEKQuciQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1664450306;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=urbGd3LAjOpWbVvqm9mfXm+G/l17iKcXVGqxKpMeX5Q=;
+        b=SuyCQFompQd0ZYx14elDUVk3xibRIRatzprS4Kx0v/d0SRop9JvAWHCXFnZb057DzgPIfa
+        rxqwRV1K/SGhTACg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 34C991348E;
+        Thu, 29 Sep 2022 11:18:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id s8pSDAJ/NWMiagAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 29 Sep 2022 11:18:26 +0000
+Message-ID: <621612d7-c537-3971-9520-a3dec7b43cb4@suse.cz>
+Date:   Thu, 29 Sep 2022 13:18:25 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFC PATCH RESEND 00/28] per-VMA locks proposal
+Content-Language: en-US
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michel Lespinasse <michel@lespinasse.org>,
+        Jerome Glisse <jglisse@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Laurent Dufour <laurent.dufour@fr.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>, dhowells@redhat.com,
+        Hugh Dickins <hughd@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Minchan Kim <minchan@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220901173516.702122-1-surenb@google.com>
+ <20220901205819.emxnnschszqv4ahy@moria.home.lan>
+ <CAJuCfpGNcZovncozo+Uxfhjwqh3BtGXsws+4QeT6Zy1mcQRJbQ@mail.gmail.com>
+ <b5db3353-8aae-22d8-9598-eaa5eeb77cfc@suse.cz>
+ <CAJuCfpEcTv5crNumhMTCf2yAJ5+86ph78-B+eyk_N84Ce=nr5w@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <CAJuCfpEcTv5crNumhMTCf2yAJ5+86ph78-B+eyk_N84Ce=nr5w@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
+On 9/28/22 04:28, Suren Baghdasaryan wrote:
+> On Sun, Sep 11, 2022 at 2:35 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+>>
+>> On 9/2/22 01:26, Suren Baghdasaryan wrote:
+>> >
+>> >>
+>> >> Two complaints so far:
+>> >>  - I don't like the vma_mark_locked() name. To me it says that the caller
+>> >>    already took or is taking the lock and this function is just marking that
+>> >>    we're holding the lock, but it's really taking a different type of lock. But
+>> >>    this function can block, it really is taking a lock, so it should say that.
+>> >>
+>> >>    This is AFAIK a new concept, not sure I'm going to have anything good either,
+>> >>    but perhaps vma_lock_multiple()?
+>> >
+>> > I'm open to name suggestions but vma_lock_multiple() is a bit
+>> > confusing to me. Will wait for more suggestions.
+>>
+>> Well, it does act like a vma_write_lock(), no? So why not that name. The
+>> checking function for it is even called vma_assert_write_locked().
+>>
+>> We just don't provide a single vma_write_unlock(), but a
+>> vma_mark_unlocked_all(), that could be instead named e.g.
+>> vma_write_unlock_all().
+>> But it's called on a mm, so maybe e.g. mm_vma_write_unlock_all()?
+> 
+> Thank you for your suggestions, Vlastimil! vma_write_lock() sounds
+> good to me. For vma_mark_unlocked_all() replacement, I would prefer
+> vma_write_unlock_all() which keeps the vma_write_XXX naming pattern to
 
-This includes the fix for the phy regression mentioned in the
-previous net PR.
-There are no other known left-over regressions.
+OK.
 
-The following changes since commit 504c25cb76a9cb805407f7701b25a1fbd48605fa:
+> indicate that these are operating on the same locks. If the fact that
+> it accepts mm_struct as a parameter is an issue then maybe
+> vma_write_unlock_mm() ?
 
-  Merge tag 'net-6.0-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-09-22 10:58:13 -0700)
+Sounds good!
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.0-rc8
-
-for you to fetch changes up to 3b04cba7add093d0d8267cf70a333ca8fe8233ca:
-
-  Merge branch 'mptcp-properly-clean-up-unaccepted-subflows' (2022-09-28 19:05:40 -0700)
-
-----------------------------------------------------------------
-Networking fixes for 6.0-rc8, including fixes from wifi and can.
-
-Current release - regressions:
-
- - phy: don't WARN for PHY_UP state in mdio_bus_phy_resume()
-
- - wifi: fix locking in mac80211 mlme
-
- - eth:
-   - revert "net: mvpp2: debugfs: fix memory leak when using debugfs_lookup()"
-   - mlxbf_gige: fix an IS_ERR() vs NULL bug in mlxbf_gige_mdio_probe
-
-Previous releases - regressions:
-
- - wifi: fix regression with non-QoS drivers
-
-Previous releases - always broken:
-
- - mptcp: fix unreleased socket in accept queue
-
- - wifi:
-   - don't start TX with fq->lock to fix deadlock
-   - fix memory corruption in minstrel_ht_update_rates()
-
- - eth:
-   - macb: fix ZynqMP SGMII non-wakeup source resume failure
-   - mt7531: only do PLL once after the reset
-   - usbnet: fix memory leak in usbnet_disconnect()
-
-Misc:
-
- - usb: qmi_wwan: add new usb-id for Dell branded EM7455
-
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-
-----------------------------------------------------------------
-Alexander Couzens (2):
-      net: mt7531: only do PLL once after the reset
-      net: mt7531: ensure all MACs are powered down before reset
-
-Alexander Wetzel (2):
-      wifi: mac80211: don't start TX with fq->lock to fix deadlock
-      wifi: mac80211: ensure vif queues are operational after start
-
-Andy Moreton (1):
-      sfc: correct filter_table_remove method for EF10 PFs
-
-Daniel Golle (1):
-      net: ethernet: mtk_eth_soc: fix mask of RX_DMA_GET_SPORT{,_V2}
-
-Frank Wunderlich (1):
-      net: usb: qmi_wwan: Add new usb-id for Dell branded EM7455
-
-Hangyu Hua (1):
-      net: sched: act_ct: fix possible refcount leak in tcf_ct_init()
-
-Hans de Goede (1):
-      wifi: mac80211: fix regression with non-QoS drivers
-
-Jakub Kicinski (5):
-      Merge branch 'net-mt7531-pll-reset-fixes'
-      Merge tag 'wireless-2022-09-27' of git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless
-      Merge tag 'linux-can-fixes-for-6.0-20220928' of git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can
-      Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
-      Merge branch 'mptcp-properly-clean-up-unaccepted-subflows'
-
-Junxiao Chang (1):
-      net: stmmac: power up/down serdes in stmmac_open/release
-
-Lukas Bulwahn (1):
-      MAINTAINERS: rectify file entry in TEAM DRIVER
-
-Lukas Wunner (1):
-      net: phy: Don't WARN for PHY_UP state in mdio_bus_phy_resume()
-
-Maciej Fijalkowski (2):
-      ice: xsk: change batched Tx descriptor cleaning
-      ice: xsk: drop power of 2 ring size restriction for AF_XDP
-
-Marc Kleine-Budde (1):
-      can: c_can: don't cache TX messages for C_CAN cores
-
-Menglong Dong (2):
-      mptcp: factor out __mptcp_close() without socket lock
-      mptcp: fix unreleased socket in accept queue
-
-Patrick Rohr (1):
-      tun: support not enabling carrier in TUNSETIFF
-
-Paweł Lenkow (1):
-      wifi: mac80211: fix memory corruption in minstrel_ht_update_rates()
-
-Peilin Ye (1):
-      usbnet: Fix memory leak in usbnet_disconnect()
-
-Peng Wu (1):
-      net/mlxbf_gige: Fix an IS_ERR() vs NULL bug in mlxbf_gige_mdio_probe
-
-Radhey Shyam Pandey (1):
-      net: macb: Fix ZynqMP SGMII non-wakeup source resume failure
-
-Rafael Mendonca (3):
-      cxgb4: fix missing unlock on ETHOFLD desc collect fail path
-      wifi: mac80211: mlme: Fix missing unlock on beacon RX
-      wifi: mac80211: mlme: Fix double unlock on assoc success handling
-
-Sasha Levin (1):
-      Revert "net: mvpp2: debugfs: fix memory leak when using debugfs_lookup()"
-
-Tamizh Chelvam Raja (1):
-      wifi: cfg80211: fix MCS divisor value
-
-Vladimir Oltean (1):
-      net: mscc: ocelot: fix tagged VLAN refusal while under a VLAN-unaware bridge
-
-Wang Yufen (1):
-      selftests: Fix the if conditions of in test_extra_filter()
-
-ruanjinjie (1):
-      net: hippi: Add missing pci_disable_device() in rr_init_one()
-
- MAINTAINERS                                        |   2 +-
- drivers/net/can/c_can/c_can.h                      |  17 ++-
- drivers/net/can/c_can/c_can_main.c                 |  11 +-
- drivers/net/dsa/mt7530.c                           |  19 ++-
- drivers/net/ethernet/cadence/macb_main.c           |   4 +
- drivers/net/ethernet/chelsio/cxgb4/cudbg_lib.c     |  28 ++--
- drivers/net/ethernet/intel/ice/ice_txrx.c          |   2 +-
- drivers/net/ethernet/intel/ice/ice_xsk.c           | 163 +++++++++------------
- drivers/net/ethernet/intel/ice/ice_xsk.h           |   7 +-
- drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c |   4 +-
- drivers/net/ethernet/mediatek/mtk_eth_soc.h        |   4 +-
- .../ethernet/mellanox/mlxbf_gige/mlxbf_gige_mdio.c |   4 +-
- drivers/net/ethernet/mscc/ocelot.c                 |   7 +
- drivers/net/ethernet/sfc/ef10.c                    |   2 +-
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  |  23 +--
- drivers/net/hippi/rrunner.c                        |   1 +
- drivers/net/phy/phy_device.c                       |  10 +-
- drivers/net/tun.c                                  |   9 +-
- drivers/net/usb/qmi_wwan.c                         |   1 +
- drivers/net/usb/usbnet.c                           |   7 +-
- include/uapi/linux/if_tun.h                        |   2 +
- net/mac80211/mlme.c                                |   9 +-
- net/mac80211/rc80211_minstrel_ht.c                 |   6 +-
- net/mac80211/status.c                              |   2 +-
- net/mac80211/tx.c                                  |   4 +
- net/mac80211/util.c                                |   4 +-
- net/mptcp/protocol.c                               |  16 +-
- net/mptcp/protocol.h                               |   2 +
- net/mptcp/subflow.c                                |  33 +----
- net/sched/act_ct.c                                 |   5 +-
- net/wireless/util.c                                |   4 +-
- tools/testing/selftests/net/reuseport_bpf.c        |   2 +-
- 32 files changed, 223 insertions(+), 191 deletions(-)
+>>
+>>
 
